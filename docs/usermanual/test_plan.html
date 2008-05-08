@@ -162,8 +162,11 @@ is off by default).
 		<tr><td>
 		  <blockquote>
 		  									 				<p	>
-								Thread group elements are the beginning points of any test plan.  All elements
-of a test plan must be under a thread group.  As the name implies, the thread group
+								Thread group elements are the beginning points of any test plan.
+All controllers and samplers must be under a thread group.
+Other elements, e.g. Listeners, may be placed directly under the test plan,
+in which case they will apply to all the thread groups.  
+As the name implies, the thread group
 element controls the number of threads JMeter will use to execute your test.  The
 controls for a thread group allow you to:
 
@@ -205,7 +208,7 @@ the first ones finish (unless one wants that to happen).
 						</p>
 							  									 				<p	>
 								
-Start with Ramp-up = number of threads and adjust as needed.
+Start with Ramp-up = number of threads and adjust up or down as needed.
 
 						</p>
 							  									 				<p	>
@@ -240,7 +243,10 @@ Start with Ramp-up = number of threads and adjust as needed.
 		<tr><td>
 		  <blockquote>
 		  									 				<p	>
-								 JMeter has two types of Controllers: Samplers and Logical Controllers.
+								
+JMeter has two types of Controllers: Samplers and Logical Controllers.
+These drive the processing of a test.
+
 						</p>
 							  									 				<p	>
 								Samplers tell JMeter to send requests to a server. For
@@ -277,7 +283,14 @@ For more information, see
 		<tr><td>
 		  <blockquote>
 		  									 				<p	>
-								Samplers tell JMeter to send requests to a server. 
+								
+Samplers tell JMeter to send requests to a server and wait for a response.
+They are processed in the order they appear in the tree.
+Controllers can be used to modify the number of repetitions of a sampler.
+
+						</p>
+							  									 				<p	>
+								
 JMeter samplers include:
 
 												<ul	>
@@ -321,8 +334,8 @@ JMeter samplers include:
 						</ul>
 									
 Each sampler has several properties you can set.
-You can further customize a sampler by adding one or more Configuration Elements to it.
-Note that JMeter sends requests in the order that the samplers appear in the tree.
+You can further customize a sampler by adding one or more Configuration Elements to the Test Plan.
+
 						</p>
 							  									 				<p	>
 								If you are going to send multiple requests of the same type (for example,
@@ -330,7 +343,7 @@ HTTP Request) to the same server, consider using a Defaults Configuration
 Element. Each controller has one or more Defaults elements (see below). 
 						</p>
 							  									 				<p	>
-								Remember to add a Listener to your Thread Group to view and/or store the
+								Remember to add a Listener to your test plan to view and/or store the
 results of your requests to disk.
 						</p>
 							  									 				<p	>
@@ -340,7 +353,7 @@ the response of your request, add an
 								Assertion
 						</a>
 									 to
-the Request controller.  For example, in stress testing a web application, the server
+the sampler.  For example, in stress testing a web application, the server
 may return a successful "HTTP Response" code, but the page may have errors on it or
 may be missing sections. You could add assertions to check for certain HTML tags,
 common error strings, and so on. JMeter lets you create these assertions using regular
@@ -365,9 +378,8 @@ expressions.
 		  <blockquote>
 		  									 				<p	>
 								Logic Controllers let you customize the logic that JMeter uses to
-decide when to send requests.  Logic Controllers may have as child elements any
-of the following: Samplers (requests), Configuration Elements, and other Logic
-Controllers.  Logic Controllers can change the order of requests coming from their
+decide when to send requests.
+Logic Controllers can change the order of requests coming from their
 child elements.  They can modify the requests themselves, cause JMeter to repeat
 requests, etc.
 
@@ -564,13 +576,15 @@ There is also a Configuration button which can be used to choose which fields to
 
 						</p>
 							  									 				<p	>
-								Listeners can be added anywhere in the test.  They will collect data only from elements at or 
-below their level.  
+								
+Listeners can be added anywhere in the test, including directly under the test plan.
+They will collect data only from elements at or below their level.
+
 						</p>
 							  									 				<p	>
 								There are several 
 												<a	 href="component_reference.html#listeners">
-								interesting listeners
+								listeners
 						</a>
 									
 that come with JMeter.
@@ -594,13 +608,26 @@ your Thread Group. If you do not add a delay, JMeter could overwhelm your server
 making too many requests in a very short amount of time.
 						</p>
 							  									 				<p	>
-								The timer will cause JMeter to delay a certain amount of time before each
+								The timer will cause JMeter to delay a certain amount of time 
+												<b	>
+								before
+						</b>
+									 each
 request that a thread makes.
 						</p>
 							  									 				<p	>
 								
 If you choose to add more than one timer to a Thread Group, JMeter takes the sum of
-the timers and pauses for that amount of time before executing the samplers to which they apply.
+the timers and pauses for that amount of time before executing the samplers to which the timers apply.
+Timers can be added as children of samplers or controllers in order to restrict the samplers to which they are applied.
+
+						</p>
+							  									 				<p	>
+								
+To provide a pause at a single place in a test plan, one can use the 
+												<a href="../usermanual/component_reference.html#Test_Action">Test Action</a>
+									 Sampler.
+
 						</p>
 							  		  </blockquote>
 		</td></tr>
@@ -671,6 +698,16 @@ requests will use "Web Defaults 2", since we placed it in the Thread Group (the 
 	<font size="-1">						Figure 1 -
 	Test Plan Showing Accessability of Configuration Elements
 			</font></td></tr></table></p>
+							  									 				<p><table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+		<tr><td>						
+The 
+												<a href="../usermanual/component_reference.html#User_Defined_Variables">User Defined Variables</a>
+									 Configuration element is different. 
+It is processed at the start of a test, no matter where it is placed.
+For simplicity, it is suggested that the element is placed only at the start of a Thread Group.
+
+			</td></tr>
+	</table></p>
 							  		  </blockquote>
 		</td></tr>
 		<tr><td><br></td></tr>
@@ -731,8 +768,13 @@ See the
 		</td></tr>
 		<tr><td>
 		  <blockquote>
-		  									 				<ol	>
+		  									 				<ol	 start="0">
 								
+
+												<li	>
+								Configuration elements
+						</li>
+									
 
 												<li	>
 								Pre-Processors
@@ -885,7 +927,7 @@ JMeter
 												<br	>
 						</br>
 									
-Properties are global to jmeter, and are used to define some of the defaults JMeter uses.
+Properties are global to jmeter, and are mostly used to define some of the defaults JMeter uses.
 For example the property remote_hosts defines the servers that JMeter will try to run remotely.
 Properties can be referenced in test plans 
 - see 
@@ -918,6 +960,38 @@ For details of how to reference variables and functions, see
 								Functions and Variables
 						</a>
 									
+
+						</p>
+							  									 				<p	>
+								
+Note that the values defined by the 
+												<a href="../usermanual/component_reference.html#User_Defined_Variables">User Defined Variables</a>
+									 configuration element
+are handled differently. 
+Such variables are made available to the whole test plan at startup, and are not updated.
+Other elements such as the 
+
+												<a href="../usermanual/component_reference.html#User_Parameters">User Parameters</a>
+									 Pre-Processor or 
+												<a href="../usermanual/component_reference.html#Regular_Expression_Extractor">Regular Expression Extractor</a>
+									 Post-Processor
+may be used to define the same variables, but these will not affect the global values.
+For example if there is a global variable ABCD, its value will be visible to all threads.
+However if a thread defines the variable ABCD in a runtime element such as a User Parameters Pre-Processor,
+the new value will be seen by the thread, but only in the scope of the element.
+Local definitions of variables in a thread take precedence over the global version of the variable,
+but the global copy is unaffected.
+
+						</p>
+							  									 				<p	>
+								
+Note that global variables cannot be updated during a test.
+The 
+												<a	 href="functions.html#__setProperty">
+								setProperty
+						</a>
+									 function can be used to define a JMeter property.
+These are global to the test plan, so can be used to pass information between threads.
 
 						</p>
 							  		  </blockquote>
