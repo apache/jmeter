@@ -81,7 +81,7 @@ JMeter assumes the FTP server is listening on the default port.</property>
 
 </component>
 
-<component name="HTTP Request" index="&sect-num;.1.2"  width="683" height="590" screenshot="webtest/http-request.png">
+<component name="HTTP Request" index="&sect-num;.1.2"  width="682" height="619" screenshot="webtest/http-request.png">
 
 <description>
         <p>This sampler lets you send an HTTP/HTTPS request to a web server.  It
@@ -111,10 +111,13 @@ JMeter assumes the FTP server is listening on the default port.</property>
         them.  This can save you time if you have a lot of HTTP requests or requests with many
         parameters.</p>
 
-        <p><b>There are two versions of the sampler:</b>
+        <p><b>There are three versions of the sampler:</b>
         <ul>
         <li>HTTP Request - uses the default Java HTTP implementation</li>
         <li>HTTP Request HTTPClient - uses Apache Commons HttpClient</li>
+        <li>AJP/1.3 Sampler - uses the Tomcat mod_jk protocol (allows testing of Tomcat in AJP mode without needing Apache httpd)
+        The AJP Sampler does not support multiple file upload; only the first file will be used.
+        </li>
         </ul>
          </p>
          <p>The default (Java) implementation has some limitations:</p>
@@ -212,17 +215,18 @@ In this case, the server, port and protocol are ignored; parameters are also ign
         Additionally, you can specify whether each parameter should be URL encoded.  If you are not sure what this
         means, it is probably best to select it.  If your values contain characters such as &amp;amp; or spaces, or
         question marks, then encoding is usually required.</p></property>
-        <property name="Filename" required="No">Name of the file to send.  If left blank, JMeter
+        <property name="File Path:" required="No">Name of the file to send.  If left blank, JMeter
         does not send a file, if filled in, JMeter automatically sends the request as
         a multipart form request.
         <p>
-        If it is a POST or PUT request and the 'name' atribute (below) are omitted, then the file is sent as the entire body
+        If it is a POST or PUT request and there is a single file whose 'name' attribute (below) is omitted, 
+        then the file is sent as the entire body
         of the request, i.e. no wrappers are added. This allows arbitrary bodies to be sent. This functionality is present for POST requests
         after version 2.2, and also for PUT requests after version 2.3.
         <b>See below for some further information on parameter handling.</b>
         </p>
         </property>
-        <property name="Value for 'name' attribute" required="No">Value of the "name" web request parameter.</property>
+        <property name="Parameter name:" required="No">Value of the "name" web request parameter.</property>
         <property name="MIME Type" required="No">MIME type (for example, text/plain).
         If it is a POST or PUT request and either the 'name' atribute (below) are omitted or the request body is
         constructed from parameter values only, then the value of this field is used as the value of the

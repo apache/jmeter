@@ -422,9 +422,7 @@ public class HttpRequestHdr {
                 // Set the form data
                 sampler.setArguments(urlConfig.getArguments());
                 // Set the file uploads
-                sampler.setFileField(urlConfig.getFileFieldName());
-                sampler.setFilename(urlConfig.getFilename());
-                sampler.setMimetype(urlConfig.getMimeType());
+                sampler.setHTTPFiles(urlConfig.getHTTPFileArgs().asArray());
             } else if (postData.trim().startsWith("<?")) {
                 // Not sure if this is needed anymore. I assume these requests
                 // do not have HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED as content type,

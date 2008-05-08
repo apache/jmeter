@@ -135,7 +135,7 @@ public class SaveService {
 
     // This is written to JMX files by ScriptWrapperConverter
 	private static String propertiesVersion = "";// read from properties file; written to JMX files
-    private static final String PROPVERSION = "2.0";// Expected version $NON-NLS-1$
+    private static final String PROPVERSION = "2.1";// Expected version $NON-NLS-1$
 
     // Internal information only
     private static String fileVersion = ""; // read from properties file// $NON-NLS-1$
