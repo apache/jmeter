@@ -104,7 +104,7 @@ public class FileServer {
      * Creates an association between a filename and a File inputOutputObject,
      * and stores it for later use - unless it is already stored.
      * 
-     * @param filename - relative (to base) or absolute file name
+     * @param filename - relative (to base) or absolute file name (must not be null)
      */
 	public synchronized void reserveFile(String filename) {
 		reserveFile(filename,null);
@@ -114,18 +114,40 @@ public class FileServer {
      * Creates an association between a filename and a File inputOutputObject,
      * and stores it for later use - unless it is already stored.
      * 
-     * @param filename - relative (to base) or absolute file name
-     * @param charsetName - the character set encoding to use for the file
+     * @param filename - relative (to base) or absolute file name (must not be null)
+     * @param charsetName - the character set encoding to use for the file (may be null)
      */
 	public synchronized void reserveFile(String filename, String charsetName) {
-		if (!files.containsKey(filename)) {
+	    reserveFile(filename, charsetName, filename);
+	}
+
+    /**
+     * Creates an association between a filename and a File inputOutputObject,
+     * and stores it for later use - unless it is already stored.
+     * 
+     * @param filename - relative (to base) or absolute file name (must not be null)
+     * @param charsetName - the character set encoding to use for the file (may be null)
+     * @param alias - the name to be used to access the object (must not be null)
+     */
+    public synchronized void reserveFile(String filename, String charsetName, String alias) {
+        if (filename == null){
+            throw new IllegalArgumentException("Filename must not be null");
+        }
+        if (alias == null){
+            throw new IllegalArgumentException("Alias must not be null");
+        }
+        if (!files.containsKey(alias)) {
             File f = new File(filename); 
             FileEntry file = 
                 new FileEntry(f.isAbsolute() ? f : new File(base, filename),null,charsetName);
-            log.info("Stored: "+filename);
-			files.put(filename, file);
-		}
-	}
+            if (filename.equals(alias)){
+                log.info("Stored: "+filename);                
+            } else {
+                log.info("Stored: "+filename+" Alias: "+alias);
+            }
+            files.put(alias, file);
+        }
+    }
 
    /**
 	 * Get the next line of the named file, recycle by default.
