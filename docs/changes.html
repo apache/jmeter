@@ -177,6 +177,12 @@ This bug has been corrected.
 
 						</p>
 							  									 				<p	>
+								
+The CSV Dataset configuration element has new file sharing options: per thread group, per thread, per identifier.
+This allows for more flexible file processing, e.g. each thread can process the same data in the same order.
+
+						</p>
+							  									 				<p	>
 								Switch Controller now works properly with functions and variables, 
 and the condition can now be a name instead of a number.
 Simple Controller now works properly under a While Controller
@@ -649,6 +655,11 @@ For example, ${__Random(1,63, LOTTERY )} will use the variable 'LOTTERY' rather 
 
 												<li	>
 								Allow use of special name LAST to mean the last test run; applies to -t, -l, -j flags
+						</li>
+									
+
+												<li	>
+								Bug 44418/42178 - CSV Dataset file handling improvements
 						</li>
 									
 

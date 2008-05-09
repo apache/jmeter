@@ -28,6 +28,7 @@ import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testbeans.TestBean;
+import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -35,10 +36,35 @@ import org.apache.jorphan.util.JMeterStopThreadException;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
+/**
+ * Read lines from a file and split int variables.
+ * 
+ * The iterationStart() method is used to set up each set of values.
+ * 
+ * By default, the same file is shared between all threads 
+ * (and other thread groups, if they use the same file name).
+ * 
+ * The shareMode can be set to:
+ * <ul>
+ * <li>All threads - default, as described above</li>
+ * <li>Current thread group</li>
+ * <li>Current thread</li>
+ * <li>Identifier - all threads sharing the same identifier</li>
+ * </ul>
+ * 
+ * The class uses the FileServer alias mechanism to provide the different share modes.
+ * For all threads, the file alias is set to the file name.
+ * Otherwise, a suffix is appended to the filename to make it unique within the required context.
+ * For current thread group, the thread group identityHashcode is used;
+ * for individual threads, the thread hashcode is used as the suffix.
+ * Or the user can provide their own suffix, in which case the file is shared between all
+ * threads with the same suffix.
+ *  
+ */
 public class CSVDataSet extends ConfigTestElement implements TestBean, LoopIterationListener {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final long serialVersionUID = 2;
+	private static final long serialVersionUID = 232L;
 
     private static final String EOFVALUE = // value to return at EOF 
         JMeterUtils.getPropDefault("csvdataset.eofstring", "<EOF>"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -51,13 +77,17 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
 
     private transient String delimiter;
 
-    private transient boolean quoted = false;
+    private transient boolean quoted;
     
     private transient boolean recycle = true;
     
-    private transient boolean stopThread = false;
+    private transient boolean stopThread;
+    
+    private transient String[] vars;
+    
+    private transient String alias;
 
-    transient private String[] vars;
+    private transient String shareMode;
 
     private Object readResolve(){
         recycle = true;
@@ -70,9 +100,26 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
 	 */
 	public void iterationStart(LoopIterationEvent iterEvent) {
 		FileServer server = FileServer.getFileServer();
-		String _fileName = getFilename();
+        final JMeterContext context = getThreadContext();
 		if (vars == null) {
-			server.reserveFile(_fileName, getFileEncoding());
+	        String _fileName = getFilename();
+	        String mode = getShareMode();
+	        int modeInt = CSVDataSetBeanInfo.getShareModeAsInt(mode);
+	        switch(modeInt){
+    	        case CSVDataSetBeanInfo.SHARE_ALL:
+    	            alias = _fileName;
+    	            break;
+                case CSVDataSetBeanInfo.SHARE_GROUP:
+                    alias = _fileName+"@"+System.identityHashCode(context.getThreadGroup());
+                    break;
+                case CSVDataSetBeanInfo.SHARE_THREAD:
+                    alias = _fileName+"@"+System.identityHashCode(context.getThread());
+                    break;
+                default:
+                    alias = _fileName+"@"+mode; // user-specified key
+                    break;
+	        }
+			server.reserveFile(_fileName, getFileEncoding(), alias);
 			vars = JOrphanUtils.split(getVariableNames(), ","); // $NON-NLS-1$
 		}
 		try {
@@ -80,8 +127,9 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
 			if (delim.equals("\\t")) { // $NON-NLS-1$
 				delim = "\t";// Make it easier to enter a Tab // $NON-NLS-1$
 		    }
-            JMeterVariables threadVars = this.getThreadContext().getVariables();
-			String line = server.readLine(_fileName,getRecycle());
+			// TODO: fetch this once as per vars above?
+            JMeterVariables threadVars = context.getVariables();
+			String line = server.readLine(alias,getRecycle());
             if (line!=null) {// i.e. not EOF
                 String[] lineValues = getQuotedData() ? 
                         CSVSaveService.csvReadFile(new BufferedReader(new StringReader(line)), delim.charAt(0))
@@ -179,6 +227,14 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
 
     public void setStopThread(boolean value) {
         this.stopThread = value;
+    }
+    
+    public String getShareMode() {
+        return shareMode;
+    }
+
+    public void setShareMode(String value) {
+        this.shareMode = value;
     }
 
 }
