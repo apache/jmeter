@@ -6725,15 +6725,18 @@ This allows identical labels from different thread groups to be collated separat
 	
 												<p	>
 								
-	The file is only opened once, and each thread will use a different line from the file. 
-	Lines are read as the threads need them.
+	By default, the file is only opened once, and each thread will use a different line from the file.
+	See the description of the Share mode below for additional options (JMeter 2.3.2+).
+	Lines are read at the start of each test iteration.
+    The file name and mode are resolved in the first iteration.
 	
 						</p>
 									
 	
 												<p><table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
-		<tr><td>						CSV Dataset variables are defined after configuration processing is completed,
-	so they cannot be used for some configuration items - such as JDBC Config - 
+		<tr><td>						CSV Dataset variables are defined at the start of each test iteration.
+	As this is after configuration processing is completed,
+	they cannot be used for some configuration items - such as JDBC Config - 
 	that process their contents at configuration time (see 
 												<a	 href="http://issues.apache.org/bugzilla/show_bug.cgi?id=40934">
 								Bug 40394 
@@ -6783,7 +6786,7 @@ This allows identical labels from different thread groups to be collated separat
 									
 
 														<p><b>Control Panel</b></p>
-						<div align="center"><img width='308' height='278' src="../images/screenshots/csvdatasetconfig.png"></div>
+						<div align="center"><img width='396' height='301' src="../images/screenshots/csvdatasetconfig.png"></div>
 											  									 			 <p>
 	<b>Parameters</b>
 	<table border="1" cellspacing="0" cellpadding="2">
@@ -6806,6 +6809,9 @@ This allows identical labels from different thread groups to be collated separat
 									
   Absolute file names are also supported, but note that they are unlikely to work in remote mode, 
   unless the remote server has the same directory structure.
+  If the same physical file is referenced in two different ways - e.g. csvdata.txt and ./csvdata.txt -
+  then these are treated as different files.
+  If the OS does not distinguish between upper and lower case, csvData.TXT would also be opened separately. 
   
 			</td>
 			<td>
@@ -6857,6 +6863,45 @@ This allows identical labels from different thread groups to be collated separat
 			<tr>
 			<td>Stop thread on EOF?</td>
 			<td>						Should the thread be stopped on EOF, if Recycle is false? (default is false)
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Sharing mode</td>
+			<td>						
+  
+												<ul	>
+								
+  
+												<li	>
+								All threads - (the default) the file is shared between all the threads.
+						</li>
+									
+  
+												<li	>
+								Current thread group - each file is opened once for each thread group in which the element appears
+						</li>
+									
+  
+												<li	>
+								Current thread - each file is opened separately for each thread
+						</li>
+									
+  
+												<li	>
+								Identifier - all threads sharing the same identifier share the same file.
+  So for example if you have 4 thread groups, you could use a common id for two or more of the groups
+  to share the file between them.
+  Or you could use the thread number to share the file between the same thread numbers in different thread groups.
+  
+						</li>
+									
+  
+						</ul>
+									
+  
 			</td>
 			<td>
 											Yes
