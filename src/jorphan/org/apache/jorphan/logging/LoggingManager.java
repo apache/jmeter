@@ -57,7 +57,7 @@ public final class LoggingManager {
 			+ "%{category}: %{message} %{throwable}"; //$NON_NLS-1$
 
 	private static final String PATTERN_THREAD_PREFIX = "%{time:yyyy/MM/dd HH:mm:ss} %5.5{priority} "  //$NON_NLS-1$
-			+ "%12{thread} %{category}: %{message} %{throwable}";  //$NON_NLS-1$
+			+ "%20{thread} %{category}: %{message} %{throwable}";  //$NON_NLS-1$
 
 	private static final String PATTERN_THREAD_SUFFIX = "%{time:yyyy/MM/dd HH:mm:ss} %5.5{priority} "  //$NON_NLS-1$
 			+ "%{category}[%{thread}]: %{message} %{throwable}";  //$NON_NLS-1$
