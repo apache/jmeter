@@ -1195,10 +1195,11 @@ run JMeter unless all the JMeter jars are added.
   <target name="gump-test" 
       depends="_gump_properties,compile-tests,_test"
       description="Test JMeter in Gump">
-    <!-- Show the log file -->
+    <!-- Show the log file
     <concat>
       <filelist dir="bin" files="jmeter-test.log" />
     </concat>
+     -->
   	<!--antcall target="gump-check"/-->
   </target>
 
