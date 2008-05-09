@@ -21,9 +21,6 @@
 		Sample build file for use with ant-jmeter.jar
 		See http://www.programmerplanet.org/pages/projects/jmeter-ant-task.php
 		
-		Download the ant-jmeter.jar file and save it in the same directory as this build file
-		- or in the Ant lib directory
-		
 	To run a test and create the output report:
 		ant -Dtest=script
 	
@@ -75,14 +72,11 @@
 	  </not>
 	</condition>
 
-	<!-- 
-		See http://www.programmerplanet.org/pages/projects/jmeter-ant-task.php	
-		Download the ant-jmeter.jar file and save it in the same directory as this build file
-		- or in the Ant lib directory
-	-->
-	<!-- Allow jar to be picked up locally as well -->
+	<!-- Allow jar to be picked up locally -->
     <path id="jmeter.classpath">
-       <pathelement location="${basedir}/ant-jmeter.jar"/>
+        <fileset dir="${basedir}">
+          <include name="ant-jmeter*.jar"/>
+        </fileset>
     </path>
 
 	<taskdef
@@ -90,14 +84,9 @@
 	    classpathref="jmeter.classpath"
 	    classname="org.programmerplanet.ant.taskdefs.jmeter.JMeterTask"/>
 	
-	
-    <target name="init">
-    </target>
-
-
 	<target name="all" depends="run,report"/>
 
-	<target name="run" depends="init">
+	<target name="run">
 		<echo>funcMode = ${funcMode}</echo>
 		<delete file="${testpath}/${test}.html"/>
 		<jmeter
@@ -108,6 +97,7 @@
 			<jvmarg value="-Xincgc"/>
 			<jvmarg value="-Xmx128m"/>
 			<jvmarg value="-Dproperty=value"/>
+			<jmeterarg value="-qextra.properties"/>
 		-->
 			<!-- Force suitable defaults -->
 			<property name="jmeter.save.saveservice.output_format" value="xml"/>
