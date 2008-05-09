@@ -19,13 +19,10 @@
 package org.apache.jmeter.config;
 
 import java.beans.PropertyDescriptor;
+import java.util.ResourceBundle;
 
 import org.apache.jmeter.testbeans.BeanInfoSupport;
 
-/**
- * @author mstover
- * 
- */
 public class CSVDataSetBeanInfo extends BeanInfoSupport {
 
     // These names must agree case-wise with the variable and property names
@@ -36,11 +33,25 @@ public class CSVDataSetBeanInfo extends BeanInfoSupport {
     private static final String RECYCLE = "recycle";                 //$NON-NLS-1$
     private static final String STOPTHREAD = "stopThread";           //$NON-NLS-1$
     private static final String QUOTED_DATA = "quotedData";          //$NON-NLS-1$
-
+    private static final String SHAREMODE = "shareMode";             //$NON-NLS-1$
+    
+    private static final String[] SHARE_TAGS = new String[3];
+    static final int SHARE_ALL   = 0;
+    static final int SHARE_GROUP = 1;
+    static final int SHARE_THREAD  = 2;
+    
+    
 	public CSVDataSetBeanInfo() {
 		super(CSVDataSet.class);
+
+		ResourceBundle rb = (ResourceBundle) getBeanDescriptor().getValue(RESOURCE_BUNDLE);
+//      These must agree with the resources
+		SHARE_TAGS[SHARE_ALL] = rb.getString("shareMode.all"); //$NON-NLS-1$
+		SHARE_TAGS[SHARE_GROUP] = rb.getString("shareMode.group"); //$NON-NLS-1$
+		SHARE_TAGS[SHARE_THREAD] = rb.getString("shareMode.thread"); //$NON-NLS-1$
+		
 		createPropertyGroup("csv_data",             //$NON-NLS-1$
-                new String[] { FILENAME, FILE_ENCODING, VARIABLE_NAMES, DELIMITER, QUOTED_DATA, RECYCLE, STOPTHREAD });
+                new String[] { FILENAME, FILE_ENCODING, VARIABLE_NAMES, DELIMITER, QUOTED_DATA, RECYCLE, STOPTHREAD, SHAREMODE });
         
 		PropertyDescriptor p = property(FILENAME);
 		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
@@ -73,5 +84,25 @@ public class CSVDataSetBeanInfo extends BeanInfoSupport {
         p = property(STOPTHREAD);
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, Boolean.FALSE);
+        
+        p = property(SHAREMODE); //$NON-NLS-1$
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, SHARE_TAGS[0]);
+        p.setValue(NOT_OTHER, Boolean.FALSE);
+        p.setValue(NOT_EXPRESSION, Boolean.FALSE);
+        p.setValue(TAGS, SHARE_TAGS);
 	}
+	
+    // TODO need to find better way to do this
+    public static int getShareModeAsInt(String mode) {
+        if (mode.length() == 0){
+            return SHARE_ALL; // default (e.g. if test plan does not have definition) 
+        }
+        for (int i = 0; i < SHARE_TAGS.length; i++) {
+            if (SHARE_TAGS[i].equals(mode)) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }
