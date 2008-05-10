@@ -405,47 +405,40 @@ These variables can be referred to later on in the JMeter test plan, as ${MYREF}
 		<tr><td>
 		  <blockquote>
 		  									 				<p	>
-								The pattern matching behave in various slightly different ways, 
+								The pattern matching behaves in various slightly different ways, 
 depending on the setting of the multi-line and single-line modifiers.
+Note that the single-line and multi-line operators have nothing to do with each other;
+they can be specified independently.
+
+						</p>
+							  									 				<h3	>
+								Single-line mode
+						</h3>
+							  									 				<p	>
+								
+Single-line mode only affects how the '.' meta-character is interpreted.
 
 						</p>
 							  									 				<p	>
-								There are the four possible combinations:
+								
+Default behaviour is that '.' matches any character except newline. 
+In single-line mode, '.' also matches newline.
+
 						</p>
-							  									 				<ul	>
+							  									 				<h3	>
+								Multi-line mode
+						</h3>
+							  									 				<p	>
 								
+Multi-line mode only affects how the meta-characters '^' and '$' are interpreted.
 
-												<li	>
+						</p>
+							  									 				<p	>
 								
-Default behavior. '.' matches any character except "\n". ^ matches only at the beginning of the string and $ matches only at the end or before a newline at the end. 
-
-						</li>
-									
-
-												<li	>
-								
-Single-line modifier (?s): Treat string as a single long line. '.' matches any character, even "\n". ^ matches only at the beginning of the string and $ matches only at the end or before a newline at the end. 
-
-						</li>
-									
-
-												<li	>
-								
-
-Multi-line modifier (?m): Treat string as a set of multiple lines. '.' matches any character except "\n". ^ and $ are able to match at the start or end of any line within the string. 
-
-						</li>
-									
-
-												<li	>
-								
-
-Both modifiers (?sm): Treat string as a single long line, but detect multiple lines. '.' matches any character, even "\n". ^ and $, however, are able to match at the start or end of any line within the string. 
-
-						</li>
-									
-
-						</ul>
+Default behaviour is that '^' and '$' only match at the very beginning and end of the string. 
+When Multi-line mode is used, the '^' metacharacter matches at the beginning of every line,
+and the '$' metacharacter matches at the end of every line.
+						</p>
 							  		  </blockquote>
 		</td></tr>
 		<tr><td><br></td></tr>
@@ -512,6 +505,41 @@ Here is a list of the meta characters and their meaning (please check the ORO do
 							  									 				<p	>
 								Please note that ORO does not support the \Q and \E meta-characters.
 [In other RE engines, these can be used to quote a portion of an RE so that the meta-characters stand for themselves.]
+						</p>
+							  		  </blockquote>
+		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+							  									 			 	 <table border="0" cellspacing="0" cellpadding="2" width="100%">
+		<tr><td bgcolor="#828DA6">
+		  <font color="#ffffff" face="arial,helvetica,sanserif">
+			 <a name="placement"><strong>20.5 Placement of modifiers</strong></a>
+		  </font>
+		</td></tr>
+		<tr><td>
+		  <blockquote>
+		  									 				<p	>
+								
+Modifiers can be placed anywhere in the regex, and apply from that point onwards.
+
+						</p>
+							  									 				<p	>
+								
+The single-line (?s) and multi-line (?m) modifiers are normally placed at the start of the regex.
+
+						</p>
+							  									 				<p	>
+								
+The ignore-case modifier (?i) may be usefully applied to just part of a regex,
+for example:
+
+												<pre	>
+								
+Match ExAct case or (?i)ArBiTrARY(?-i) case
+
+						</pre>
+									
+
 						</p>
 							  		  </blockquote>
 		</td></tr>
