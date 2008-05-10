@@ -95,7 +95,7 @@ public class CSVDataSetBeanInfo extends BeanInfoSupport {
 	
     // TODO need to find better way to do this
     public static int getShareModeAsInt(String mode) {
-        if (mode.length() == 0){
+        if (mode == null || mode.length() == 0){
             return SHARE_ALL; // default (e.g. if test plan does not have definition) 
         }
         for (int i = 0; i < SHARE_TAGS.length; i++) {
