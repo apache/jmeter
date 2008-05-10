@@ -27,10 +27,6 @@ import java.io.OutputStream;
 
 import javax.swing.JComponent;
 
-//import com.sun.image.codec.jpeg.JPEGCodec;
-//import com.sun.image.codec.jpeg.JPEGEncodeParam;
-//import com.sun.image.codec.jpeg.JPEGImageEncoder;
-
 import org.apache.batik.ext.awt.image.codec.PNGEncodeParam;
 import org.apache.batik.ext.awt.image.codec.PNGImageEncoder;
 import org.apache.batik.ext.awt.image.codec.tiff.TIFFEncodeParam;
