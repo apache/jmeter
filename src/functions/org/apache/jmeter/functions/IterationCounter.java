@@ -52,9 +52,9 @@ public class IterationCounter extends AbstractFunction implements Serializable {
 		desc.add(JMeterUtils.getResString("function_name_paropt")); //$NON-NLS-1$
 	}
 
-	transient private Object[] variables;
+	private transient Object[] variables;
 
-	transient private int globalCounter;//MAXINT = 2,147,483,647
+	private transient int globalCounter;//MAXINT = 2,147,483,647
 
 	public IterationCounter() {
         init();

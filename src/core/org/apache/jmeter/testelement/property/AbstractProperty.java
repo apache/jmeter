@@ -32,7 +32,7 @@ public abstract class AbstractProperty implements JMeterProperty {
 
 	private String name;
 
-	transient private boolean runningVersion = false;
+	private transient boolean runningVersion = false;
 
 	// private static StringProperty defaultProperty = new StringProperty();
 
