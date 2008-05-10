@@ -23,7 +23,7 @@
     </head>
     <body bgcolor="white">
         Utility code for parsing command-line options.
-       <br><br>
+       <br></br>
 <p style="font-weight:bold">
 These classes were originally in the Avalon project in the package org.apache.avalon.excalibur.cli
 </p>
@@ -90,7 +90,7 @@ public class CLDemo {
         List clOptions = parser.getArguments();
         int size = clOptions.size();
 
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i &lt; size; i++) {
             CLOption option = (CLOption) clOptions.get(i);
 
             switch (option.getId()) {
