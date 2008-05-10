@@ -67,8 +67,8 @@ public class TimeFunction extends AbstractFunction implements Serializable {
     }
 
     // Ensure that these are set, even if no paramters are provided
-    transient private String format   = ""; //$NON-NLS-1$
-    transient private String variable = ""; //$NON-NLS-1$
+    private transient String format   = ""; //$NON-NLS-1$
+    private transient String variable = ""; //$NON-NLS-1$
     
     private Object readResolve(){
         format="";

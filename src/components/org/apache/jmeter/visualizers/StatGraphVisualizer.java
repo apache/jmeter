@@ -101,7 +101,7 @@ ActionListener {
 
 	protected JScrollPane myScrollPane;
 
-	transient private ObjectTableModel model;
+	private transient ObjectTableModel model;
 
 	Map tableRows = Collections.synchronizedMap(new HashMap());
     

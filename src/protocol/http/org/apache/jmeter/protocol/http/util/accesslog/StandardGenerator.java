@@ -62,9 +62,9 @@ public class StandardGenerator implements Generator, Serializable {
 
 	protected HTTPSamplerBase SAMPLE = null;
 
-	transient protected FileWriter WRITER = null;
+	protected transient FileWriter WRITER = null;
 
-	transient protected OutputStream OUTPUT = null;
+	protected transient OutputStream OUTPUT = null;
 
 	protected String FILENAME = null;
 

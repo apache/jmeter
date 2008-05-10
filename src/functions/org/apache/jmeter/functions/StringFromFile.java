@@ -90,20 +90,20 @@ public class StringFromFile extends AbstractFunction implements Serializable, Te
 
 	private static final int MAX_PARAM_COUNT = 4;
 
-	transient private String myValue;
+	private transient String myValue;
 
-	transient private String myName;
+	private transient String myName;
 
-	transient private Object[] values;
+	private transient Object[] values;
 
-	transient private BufferedReader myBread = null; // Buffered reader
+	private transient BufferedReader myBread = null; // Buffered reader
 
-	transient private FileReader fis; // keep this round to close it
+	private transient FileReader fis; // keep this round to close it
 
-	transient private boolean firstTime = false; // should we try to open the
+	private transient boolean firstTime = false; // should we try to open the
 													// file?
 
-	transient private String fileName; // needed for error messages
+	private transient String fileName; // needed for error messages
 
 	public StringFromFile() {
 		init();

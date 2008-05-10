@@ -49,9 +49,9 @@ public abstract class BeanShellTestElement extends AbstractTestElement
 	//-- For TestBean implementations only
 
     
-    transient private BeanShellInterpreter bshInterpreter = null;
+    private transient BeanShellInterpreter bshInterpreter = null;
 
-    transient private boolean hasInitFile = false;
+    private transient boolean hasInitFile = false;
 
     public BeanShellTestElement() {
         super();
