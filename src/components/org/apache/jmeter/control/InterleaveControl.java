@@ -33,7 +33,7 @@ public class InterleaveControl extends GenericController implements Serializable
 
 	private boolean skipNext;
 
-	transient private TestElement searchStart = null;
+	private transient TestElement searchStart = null;
 
 	private boolean currentReturnedAtLeastOne;
 

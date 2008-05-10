@@ -55,9 +55,9 @@ public class BeanShell extends AbstractFunction implements Serializable {
 		desc.add(JMeterUtils.getResString("function_name_paropt"));// $NON-NLS1$
 	}
 
-	transient private Object[] values;
+	private transient Object[] values;
 
-	transient private BeanShellInterpreter bshInterpreter = null;
+	private transient BeanShellInterpreter bshInterpreter = null;
 
 	public BeanShell() {
 	}

@@ -29,7 +29,7 @@ import org.apache.jmeter.visualizers.Visualizer;
 
 public abstract class AbstractListenerElement extends AbstractTestElement {
 	// TODO should class implement SampleListener?
-	transient private WeakReference listener;
+    private transient WeakReference listener;
 
 	public AbstractListenerElement() {
 	}

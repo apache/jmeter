@@ -44,15 +44,15 @@ import org.apache.log.Logger;
 public class TransactionController extends GenericController implements SampleListener, Controller, Serializable {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-    transient private TransactionSampler transactionSampler;
+    private transient TransactionSampler transactionSampler;
 
-	transient private ListenerNotifier lnf;
+	private transient ListenerNotifier lnf;
 
-	transient private SampleResult res;
+	private transient SampleResult res;
     
-    transient private int calls;
+    private transient int calls;
 
-    transient private int noFailingSamples;
+    private transient int noFailingSamples;
     
 	private static final String PARENT = "TransactionController.parent";// $NON-NLS-1$
 

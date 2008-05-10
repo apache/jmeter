@@ -53,7 +53,7 @@ public class GraphAccumVisualizer extends AbstractVisualizer implements ImageVis
 
 	protected transient GraphAccum graph;
 
-	transient protected JPanel legendPanel;
+	protected transient JPanel legendPanel;
 
 	/**
 	 * Constructor.
