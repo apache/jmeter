@@ -134,9 +134,9 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
      * The variables do not need to be synchronised,
      * as they are not shared between threads
 	 */
-	transient private Totals myTotals = null;
+	private transient Totals myTotals = null;
 
-	transient private String myName;
+	private transient String myName;
 
 	/*
 	 * Ensure that a report is not skipped if we are slightly late in checking

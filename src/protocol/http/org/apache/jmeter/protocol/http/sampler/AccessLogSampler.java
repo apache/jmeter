@@ -72,12 +72,12 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
 	public static final String DEFAULT_CLASS = "org.apache.jmeter.protocol.http.util.accesslog.TCLogParser"; // $NON-NLS-1$
 
 	/** private members used by class * */
-	transient private LogParser PARSER = null;
+	private transient LogParser PARSER = null;
 
 	// NOTUSED private Class PARSERCLASS = null;
 	private String logFile, parserClassName, filterClassName;
 
-	transient private Filter filter;
+	private transient Filter filter;
 
 	private int count = 0;
 

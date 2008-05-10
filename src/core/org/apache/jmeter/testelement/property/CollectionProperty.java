@@ -30,7 +30,7 @@ public class CollectionProperty extends MultiProperty {
 	
 	private Collection value;
 
-	transient private Collection savedValue;
+	private transient Collection savedValue;
 
 	public CollectionProperty(String name, Collection value) {
 		super(name);
