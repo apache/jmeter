@@ -96,7 +96,7 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
     private JCheckBox useGroupName = 
         new JCheckBox(JMeterUtils.getResString("aggregate_graph_use_group_name"));            //$NON-NLS-1$
     
-	transient private ObjectTableModel model;
+	private transient ObjectTableModel model;
 
 	Map tableRows = Collections.synchronizedMap(new HashMap());
 

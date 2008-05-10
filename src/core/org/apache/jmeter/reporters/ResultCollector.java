@@ -92,9 +92,9 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
 	private static final String SUCCESS_ONLY_LOGGING = "ResultCollector.success_only_logging"; // $NON-NLS-1$
 
-	transient private DefaultConfigurationSerializer serializer;
+	private transient DefaultConfigurationSerializer serializer;
 
-	transient private volatile PrintWriter out;
+	private transient volatile PrintWriter out;
 
 	private boolean inTest = false;
 
