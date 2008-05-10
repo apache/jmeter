@@ -90,4 +90,38 @@ public class TestCVSDataSet extends JMeterTestCase {
 		assertEquals("b1",threadVars.get("b"));
 		assertEquals("c1",threadVars.get("c"));
     }
+
+    private CSVDataSet initCSV(){
+        CSVDataSet csv = new CSVDataSet();
+        csv.setFilename("testfiles/test.csv");
+        csv.setVariableNames("a,b,c");
+        csv.setDelimiter(",");
+        return csv;
+    }
+    public void testShareMode(){
+        JMeterContext jmcx = JMeterContextService.getContext();
+        jmcx.setVariables(new JMeterVariables());
+        JMeterVariables threadVars = jmcx.getVariables();
+        threadVars.put("b", "value");
+        
+        CSVDataSetBeanInfo cbi = new CSVDataSetBeanInfo(); // needs to be initialised
+        CSVDataSet csv0 = initCSV();
+        CSVDataSet csv1 = initCSV();
+        assertNull(csv1.getShareMode());
+        csv1.setShareMode("abc");
+        assertEquals("abc",csv1.getShareMode());
+        csv1.iterationStart(null);
+        assertEquals("a1",threadVars.get("a"));
+        csv1.iterationStart(null);
+        assertEquals("a2",threadVars.get("a"));
+        CSVDataSet csv2 = initCSV();
+        csv2.setShareMode("abc");
+        assertEquals("abc",csv2.getShareMode());
+        csv2.iterationStart(null);
+        assertEquals("a3",threadVars.get("a"));        
+        csv0.iterationStart(null);
+        assertEquals("a1",threadVars.get("a"));        
+        csv1.iterationStart(null);
+        assertEquals("a4",threadVars.get("a"));
+    }
 }
