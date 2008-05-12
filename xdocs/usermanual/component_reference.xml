@@ -2602,15 +2602,17 @@ pattern. You can attach multiple assertions to any controller for additional fle
 	By default, the pattern is in multi-line mode, which means that the "." meta-character does not match newline.
     In multi-line mode, "^" and "$" match the start or end of any line anywhere within the string 
     - not just the start and end of the entire string. Note that \s does match new-line.
-	Case is also significant. To override these settings, one can use the extended regular expression syntax.
+	Case is also significant. To override these settings, one can use the <i>extended regular expression</i> syntax.
 	For example:
 </p>
 <pre>
 	(?i) - ignore case
 	(?s) - treat target as single line, i.e. "." matches new-line
 	(?is) - both the above
-    These can be used anywhere within the expression, e.g.
+    These can be used anywhere within the expression and remain in effect until overriden.  e.g.
     (?i)apple(?-i) Pie - matches "ApPLe Pie", but not "ApPLe pIe"
+    (?s)Apple.+?Pie - matches Apple followed by Pie, which may be on a subsequent line.
+    Apple(?s).+?Pie - same as above, but it's probably clearer to use the (?s) at the start.  
 </pre>
 
 </description>
@@ -3308,7 +3310,8 @@ generate the template string, and store the result into the given variable name.
 	</ul>
 	Note that the refName variable is always set to the default value in this case, 
 	and the associated group variables are not set.
-	<p>See also <a href="regular_expressions.html">further information on regular expressions.</a></p>
+	<p>See also <complink name="Response Assertion"/> for some examples of how to specify modifiers,
+	and <a href="regular_expressions.html"> for further information on JMeter regular expressions.</a></p>
 </p>
 </component>
 
