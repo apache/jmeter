@@ -376,6 +376,7 @@
     <pathelement location="${tidy.jar}"/>
     <pathelement location="${xstream.jar}"/>
     <pathelement location="${xpp3.jar}"/>
+    <pathelement location="${serializer.jar}"/>
     <pathelement location="${xalan.jar}"/>
     <pathelement location="${xerces.jar}"/>
     <pathelement location="${xml-apis.jar}"/>
