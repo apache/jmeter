@@ -8219,7 +8219,11 @@ pattern. You can attach multiple assertions to any controller for additional fle
 	By default, the pattern is in multi-line mode, which means that the "." meta-character does not match newline.
     In multi-line mode, "^" and "$" match the start or end of any line anywhere within the string 
     - not just the start and end of the entire string. Note that \s does match new-line.
-	Case is also significant. To override these settings, one can use the extended regular expression syntax.
+	Case is also significant. To override these settings, one can use the 
+												<i	>
+								extended regular expression
+						</i>
+									 syntax.
 	For example:
 
 						</p>
@@ -8230,8 +8234,10 @@ pattern. You can attach multiple assertions to any controller for additional fle
 	(?i) - ignore case
 	(?s) - treat target as single line, i.e. "." matches new-line
 	(?is) - both the above
-    These can be used anywhere within the expression, e.g.
+    These can be used anywhere within the expression and remain in effect until overriden.  e.g.
     (?i)apple(?-i) Pie - matches "ApPLe Pie", but not "ApPLe pIe"
+    (?s)Apple.+?Pie - matches Apple followed by Pie, which may be on a subsequent line.
+    Apple(?s).+?Pie - same as above, but it's probably clearer to use the (?s) at the start.  
 
 						</pre>
 									
@@ -10397,6 +10403,7 @@ generate the template string, and store the result into the given variable name.
 								Use a value of zero to indicate JMeter should choose a match at random.
 						</li>
 									
+
         		
 												<li	>
 								A positive number N means to select the nth match.
@@ -10517,8 +10524,11 @@ generate the template string, and store the result into the given variable name.
 	
 												<p	>
 								See also 
+												<a href="../usermanual/component_reference.html#Response_Assertion">Response Assertion</a>
+									 for some examples of how to specify modifiers,
+	and 
 												<a	 href="regular_expressions.html">
-								further information on regular expressions.
+								 for further information on JMeter regular expressions.
 						</a>
 							</p>
 									

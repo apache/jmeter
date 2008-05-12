@@ -403,17 +403,13 @@ by the same thread.
 For details of how to reference variables and functions, see <a href="functions.html">Functions and Variables</a>
 </p>
 <p>
-Note that the values defined by the <complink name="User Defined Variables"/> configuration element
-are handled differently. 
-Such variables are made available to the whole test plan at startup, and are not updated.
+Note that the values defined by the <complink name="Test Plan"/>  and the <complink name="User Defined Variables"/> configuration element
+are made available to the whole test plan at startup. 
+If the same variable is defined by multiple elements, then the last one takes effect.
+
 Other elements such as the 
 <complink name="User Parameters"/> Pre-Processor or <complink name="Regular Expression Extractor"/> Post-Processor
-may be used to define the same variables, but these will not affect the global values.
-For example if there is a global variable ABCD, its value will be visible to all threads.
-However if a thread defines the variable ABCD in a runtime element such as a User Parameters Pre-Processor,
-the new value will be seen by the thread, but only in the scope of the element.
-Local definitions of variables in a thread take precedence over the global version of the variable,
-but the global copy is unaffected.
+may be used to redefine the same variables. These redefinitions only apply to the current thread.
 </p>
 <p>
 Note that global variables cannot be updated during a test.
