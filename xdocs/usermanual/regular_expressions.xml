@@ -66,8 +66,11 @@ For example, the regular expression 'alp|.lp.*' is "contained" in 'alphabet', bu
 </p>
 <p>
 Note: unlike Perl, there is no need to (i.e. do not) enclose the regular expression in //. 
-So how does one use the Perl modifiers ismx etc if there is no trailing /? 
-The solution is to use Perl5 extended regular expressions, i.e. /abc/i becomes (?i)abc
+</p>
+<p>
+So how does one use the modifiers ismx etc if there is no trailing /? 
+The solution is to use <i>extended regular expressions</i>, i.e. /abc/i becomes (?i)abc.
+See also <a href="placement">Placement of modifiers</a> below.
 </p>
 </subsection>
 <subsection name="&sect-num;.2 Examples" anchor="examples">
@@ -174,6 +177,8 @@ Here is a list of the meta characters and their meaning (please check the ORO do
 <subsection name="&sect-num;.5 Placement of modifiers" anchor="placement">
 <p>
 Modifiers can be placed anywhere in the regex, and apply from that point onwards.
+[A bug in ORO means that they cannot be used at the very end of the regex.
+However they would have no effect there anyway.]
 </p>
 <p>
 The single-line (?s) and multi-line (?m) modifiers are normally placed at the start of the regex.
