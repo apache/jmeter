@@ -2848,7 +2848,7 @@ The non-tolerant parser can be quite slow, as it may need to download the DTD et
 </properties>
 </component>
 
-<component name="BSF Assertion" index="&sect-num;.5.10"  width="597" height="303" screenshot="bsf_assertion.png">
+<component name="BSF Assertion" index="&sect-num;.5.10"  width="529" height="382" screenshot="bsf_assertion.png">
 <description>
 <p>
 The BSF Assertion allows BSF script code to be used to check the status of the previous sample.
@@ -3294,7 +3294,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 <p>If the property <b>beanshell.preprocessor.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
 </component>
 
-<component name="BSF PreProcessor" index="&sect-num;.7.8"  width="597" height="303" screenshot="bsf_preprocessor.png">
+<component name="BSF PreProcessor" index="&sect-num;.7.8"  width="529" height="382" screenshot="bsf_preprocessor.png">
 <description>
 <p>
 The BSF PreProcessor allows BSF script code to be applied before taking a sample.
@@ -3575,7 +3575,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 <p>If the property <b>beanshell.postprocessor.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
 </component>
 
-<component name="BSF PostProcessor" index="&sect-num;.8.7"  width="597" height="303" screenshot="bsf_postprocessor.png">
+<component name="BSF PostProcessor" index="&sect-num;.8.7"  width="529" height="382" screenshot="bsf_postprocessor.png">
 <description>
 <p>
 The BSF PostProcessor allows BSF script code to be applied after taking a sample.
