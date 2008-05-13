@@ -460,7 +460,7 @@ Javascript is used as a scripting language, so you can do calculations etc.</p>
 For details of the language, please see <a href="http://www.mozilla.org/rhino/overview.html">Mozilla Rhino Overview</a>
 </p>
 <p>
-Versions of JMeter after 2.3 make the following variables available to the script:
+The following variables are made available to the script:
 </p>
 <ul>
 <li>ctx - JMeterContext object</li>
@@ -468,6 +468,7 @@ Versions of JMeter after 2.3 make the following variables available to the scrip
 <li>threadName - String</li>
 <li>sampler - current Sampler object (if any)</li>
 <li>sampleResult - previous SampleResult object (if any)</li>
+<li>props - JMeter Properties object</li>
 </ul>
 <note>
 JMeter is not a browser, and does not interpret the JavaScript in downloaded pages.
@@ -704,6 +705,7 @@ The following variables are set before the script is executed:
 <li>log - the logger for the BeanShell function (*)</li>
 <li>ctx - the current JMeter context variable</li>
 <li>vars - the current JMeter variables</li>
+<li>props - JMeter Properties object</li>
 <li>threadName - the threadName</li>
 <li>Sampler the current Sampler, if any</li>
 <li>SampleResult - the current SampleResult, if any</li>
@@ -865,11 +867,12 @@ time.YMD=yyMMdd
         <property name="Name of variable" required="No">The name of the variable to set.</property>
 </properties>
 <p>
-JMeter 2.3 (and later versions) make the following variables available to the script:
+The following variables are made available to the script:
 </p>
 <ul>
 <li>ctx - JMeterContext object</li>
 <li>vars - JMeterVariables object</li>
+<li>props - JMeter Properties object</li>
 <li>threadName - String</li>
 <li>sampler - current Sampler object (if any)</li>
 <li>sampleResult - previous SampleResult object (if any)</li>
