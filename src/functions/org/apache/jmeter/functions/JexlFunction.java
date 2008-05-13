@@ -20,6 +20,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.jexl.Expression;
 import org.apache.commons.jexl.ExpressionFactory;
@@ -77,11 +78,13 @@ public class JexlFunction extends AbstractFunction implements Serializable
         {
             Expression e = ExpressionFactory.createExpression(exp);
             JexlContext jc = JexlHelper.createContext();
-            jc.getVars().put("ctx", jmctx); //$NON-NLS-1$                
-            jc.getVars().put("vars", vars); //$NON-NLS-1$
-            jc.getVars().put("theadName", Thread.currentThread().getName()); //$NON-NLS-1$
-            jc.getVars().put("sampler", currentSampler); //$NON-NLS-1$ (may be null)
-            jc.getVars().put("sampleResult", previousResult); //$NON-NLS-1$ (may be null)
+            final Map jexlVars = jc.getVars();
+            jexlVars.put("ctx", jmctx); //$NON-NLS-1$                
+            jexlVars.put("vars", vars); //$NON-NLS-1$
+            jexlVars.put("props", JMeterUtils.getJMeterProperties()); //$NON-NLS-1$
+            jexlVars.put("theadName", Thread.currentThread().getName()); //$NON-NLS-1$
+            jexlVars.put("sampler", currentSampler); //$NON-NLS-1$ (may be null)
+            jexlVars.put("sampleResult", previousResult); //$NON-NLS-1$ (may be null)
 
             // Now evaluate the expression, getting the result
             Object o = e.evaluate(jc);

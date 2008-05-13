@@ -106,6 +106,7 @@ public class BeanShell extends AbstractFunction implements Serializable {
 			// Allow access to context and variables directly
 			bshInterpreter.set("ctx", jmctx); //$NON-NLS-1$
 			bshInterpreter.set("vars", vars); //$NON-NLS-1$
+            bshInterpreter.set("props", JMeterUtils.getJMeterProperties()); //$NON-NLS-1$
 			bshInterpreter.set("threadName", Thread.currentThread().getName()); //$NON-NLS-1$
 
 			// Execute the script
