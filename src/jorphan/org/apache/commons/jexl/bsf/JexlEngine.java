@@ -77,9 +77,15 @@ public class JexlEngine extends BSFEngineImpl {
             return null;
         }
         try {
-            Expression jExpr = ExpressionFactory
-                    .createExpression((String) expr);
-            return jExpr.evaluate(jc);
+            Script jExpr = null;
+            if (expr instanceof File) {
+                jExpr = ScriptFactory.createScript((File) expr);
+            } else if (expr instanceof URL) {
+                jExpr = ScriptFactory.createScript((URL) expr);
+            } else {
+                jExpr = ScriptFactory.createScript((String) expr);
+            }
+            return jExpr.execute(jc);
         } catch (Exception e) {
             // TODO Better messages
             throw new BSFException(e.getMessage());
