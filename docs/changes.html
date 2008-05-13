@@ -141,9 +141,10 @@
 						</h4>
 							  									 				<p	>
 								
-Version 2.3.1 changed the way binary and text content types were determined:
+Version 2.3.1 changed the way binary and text content types were determined as far as the View Results Tree Listener was concerned:
 originally everything except "image/" content types were considered text, but 2.3.1 introduced a check
-for specific content types. This has caused problems, as several popular types were omitted.
+for specific content types. This has caused problems,
+as several popular types were omitted and these were no longer shown by default in the Response tab.
 Rather than try to list all the possible text types, JMeter now just checks for the following binary types:
 
 												<ul	>
@@ -189,7 +190,11 @@ Simple Controller now works properly under a While Controller
 						</p>
 							  									 				<p	>
 								CSV fields in JTL files can now contain delimiters. 
-CSV and XML files can now contain additional variables (define the JMeter property sample_variables).
+CSV and XML files can now contain additional variables (define the JMeter property 
+												<b	>
+								sample_variables
+						</b>
+									).
 						</p>
 							  									 				<p	>
 								Response Assertion can now match on substrings (i.e. not regular expression). 
@@ -217,11 +222,23 @@ It also avoids the need to download remote DTD files, which can slow the renderi
 
 						</p>
 							  									 				<p	>
+								
+Various improvements to the BSF Sampler: now supports Jexl, and Javascript bug works properly.
+Added BSF PreProcessor, PostProcessor and Assertion test elements.
+
+						</p>
+							  									 				<p	>
 								Number of classes loaded in non-GUI mode is much reduced.
 						</p>
 							  									 				<h4	>
 								Known bugs
 						</h4>
+							  									 				<p	>
+								
+The Include Controller has some problems in non-GUI mode. 
+In particular, it can cause a NullPointerException if there are two include controllers with the same name.
+
+						</p>
 							  									 				<p	>
 								Once Only controller behaves OK under a Thread Group or Loop Controller,
 but otherwise its behaviour is not consistent (or clearly specified).
@@ -680,6 +697,16 @@ For example, ${__Random(1,63, LOTTERY )} will use the variable 'LOTTERY' rather 
 
 												<li	>
 								Give Beanshell test elements access to JMeter Properties via "props" object
+						</li>
+									
+
+												<li	>
+								Added BSF PreProcessor, PostProcessor and Assertion test elements
+						</li>
+									
+
+												<li	>
+								All BSF elements now have access to System.out via the variable "OUT"
 						</li>
 									
 
@@ -2512,7 +2539,6 @@ To revert to the previous behaviour, change the property
 							  									 				<p	>
 								
 The JMeter.BAT file no longer changes directory to JMeter home, but runs from the current working directory.
-
 The jmeter-n.bat and jmeter-t.bat files change to the directory containing the input file.
 
 						</p>

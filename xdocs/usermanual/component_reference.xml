@@ -2848,6 +2848,46 @@ The non-tolerant parser can be quite slow, as it may need to download the DTD et
 </properties>
 </component>
 
+<component name="BSF Assertion" index="&sect-num;.5.10"  width="597" height="303" screenshot="bsf_assertion.png">
+<description>
+<p>
+The BSF Assertion allows BSF script code to be used to check the status of the previous sample.
+</p>
+</description>
+<properties>
+    <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
+    <property name="Language" required="Yes">The BSF language to be used</property>
+    <property name="Parameters" required="No">Parameters to pass to the script.
+    The parameters are stored in the following variables:
+    <ul>
+        <li>Parameters - string containing the parameters as a single variable</li>
+        <li>args - String array containing parameters, split on white-space</li>
+    </ul></property>
+    <property name="Script file" required="No">A file containing the script to run.</property>
+    <property name="Script" required="Yes (unless script file is provided)">The script to run.</property>
+</properties>
+<p>
+The script (or file) is processed using the BSFEngine.exec() method, which does not return a value.
+</p>
+<p>The following variables are set up for use by the script:</p>
+<ul>
+<li>log - (Logger) - can be used to write to the log file</li>
+<li>ctx - (JMeterContext) - gives access to the context</li>
+<li>vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());</li>
+<li>props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
+<li>prev - (SampleResult) - gives access to the previous SampleResult (if any)</li>
+<li>sampler - (Sampler)- gives access to the current sampler</li>
+<li>OUT - System.out - e.g. OUT.println("message")</li>
+<li>SampleResult - the current sample result</li>
+<li>AssertionResult - the assertion result</li>
+</ul>
+<p>
+The script can check various aspects of the SampleResult.
+If an error is detected, the script should use AssertionResult.setFailureMessage("message") and AssertionResult.setFailure(true).
+</p>
+<p>For futher details of all the methods available on each of the above variables, please check the Javadoc</p>
+</component>
+
 <a href="#">^</a>
 
 </section>
@@ -3254,6 +3294,39 @@ See the file BeanShellListeners.bshrc for example definitions.
 <p>If the property <b>beanshell.preprocessor.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
 </component>
 
+<component name="BSF PreProcessor" index="&sect-num;.7.8"  width="597" height="303" screenshot="bsf_preprocessor.png">
+<description>
+<p>
+The BSF PreProcessor allows BSF script code to be applied before taking a sample.
+</p>
+</description>
+<properties>
+    <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
+    <property name="Language" required="Yes">The BSF language to be used</property>
+    <property name="Parameters" required="No">Parameters to pass to the script.
+    The parameters are stored in the following variables:
+    <ul>
+        <li>Parameters - string containing the parameters as a single variable</li>
+        <li>args - String array containing parameters, split on white-space</li>
+    </ul></property>
+    <property name="Script file" required="No">A file containing the script to run.</property>
+    <property name="Script" required="Yes (unless script file is provided)">The script to run.</property>
+</properties>
+<p>
+The script (or file) is processed using the BSFEngine.exec() method, which does not return a value.
+</p>
+<p>The following variables are set up for use by the script:</p>
+<ul>
+<li>log - (Logger) - can be used to write to the log file</li>
+<li>ctx - (JMeterContext) - gives access to the context</li>
+<li>vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());</li>
+<li>props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
+<li>prev - (SampleResult) - gives access to the previous SampleResult (if any)</li>
+<li>sampler - (Sampler)- gives access to the current sampler</li>
+<li>OUT - System.out - e.g. OUT.println("message")</li>
+</ul>
+<p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
+</component>
 
 <a href="#">^</a>
 
@@ -3502,6 +3575,39 @@ See the file BeanShellListeners.bshrc for example definitions.
 <p>If the property <b>beanshell.postprocessor.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
 </component>
 
+<component name="BSF PostProcessor" index="&sect-num;.8.7"  width="597" height="303" screenshot="bsf_postprocessor.png">
+<description>
+<p>
+The BSF PostProcessor allows BSF script code to be applied after taking a sample.
+</p>
+</description>
+<properties>
+    <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
+    <property name="Language" required="Yes">The BSF language to be used</property>
+    <property name="Parameters" required="No">Parameters to pass to the script.
+    The parameters are stored in the following variables:
+    <ul>
+        <li>Parameters - string containing the parameters as a single variable</li>
+        <li>args - String array containing parameters, split on white-space</li>
+    </ul></property>
+    <property name="Script file" required="No">A file containing the script to run.</property>
+    <property name="Script" required="Yes (unless script file is provided)">The script to run.</property>
+</properties>
+<p>
+The script (or file) is processed using the BSFEngine.exec() method, which does not return a value.
+</p>
+<p>The following variables are set up for use by the script:</p>
+<ul>
+<li>log - (Logger) - can be used to write to the log file</li>
+<li>ctx - (JMeterContext) - gives access to the context</li>
+<li>vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());</li>
+<li>props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
+<li>prev - (SampleResult) - gives access to the previous SampleResult (if any)</li>
+<li>sampler - (Sampler)- gives access to the current sampler</li>
+<li>OUT - System.out - e.g. OUT.println("message")</li>
+</ul>
+<p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
+</component>
 
 <a href="#">^</a>
 

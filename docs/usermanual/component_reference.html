@@ -217,6 +217,7 @@
 					<li><a href="#HTML_Assertion">HTML Assertion</a></li>
 					<li><a href="#XPath_Assertion">XPath Assertion</a></li>
 					<li><a href="#XML_Schema_Assertion">XML Schema Assertion</a></li>
+					<li><a href="#BSF_Assertion">BSF Assertion</a></li>
 				</ul>
 			<li><a href="#timers">18.6 Timers</a></li>
 		<ul>
@@ -236,6 +237,7 @@
 					<li><a href="#User_Parameters">User Parameters</a></li>
 					<li><a href="#Counter">Counter</a></li>
 					<li><a href="#BeanShell_PreProcessor">BeanShell PreProcessor</a></li>
+					<li><a href="#BSF_PreProcessor">BSF PreProcessor</a></li>
 				</ul>
 			<li><a href="#postprocessors">18.8 Post-Processors</a></li>
 		<ul>
@@ -245,6 +247,7 @@
 					<li><a href="#Save_Responses_to_a_file">Save Responses to a file</a></li>
 					<li><a href="#Generate_Summary_Results">Generate Summary Results</a></li>
 					<li><a href="#BeanShell_PostProcessor">BeanShell PostProcessor</a></li>
+					<li><a href="#BSF_PostProcessor">BSF PostProcessor</a></li>
 				</ul>
 			<li><a href="#Miscellaneous_Features">18.9 Miscellaneous Features</a></li>
 		<ul>
@@ -9074,6 +9077,156 @@ The non-tolerant parser can be quite slow, as it may need to download the DTD et
 		<tr><td><br></td></tr>
 	 </table>
 	<hr>
+							  									 						<table border="0" cellspacing="0" cellpadding="2">
+		<tr><td>
+		  <font face="arial,helvetica,sanserif">
+			 <a name="BSF_Assertion"><h3>18.5.10 BSF Assertion</h3></a>
+		  </font>
+		</td></tr>
+				<tr><td>
+		  															
+
+												<p	>
+								
+The BSF Assertion allows BSF script code to be used to check the status of the previous sample.
+
+						</p>
+									
+
+														<p><b>Control Panel</b></p>
+						<div align="center"><img width='597' height='303' src="../images/screenshots/bsf_assertion.png"></div>
+											  									 			 <p>
+	<b>Parameters</b>
+	<table border="1" cellspacing="0" cellpadding="2">
+	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+			<tr>
+			<td>Name</td>
+			<td>						Descriptive name for this element that is shown in the tree.
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+			<tr>
+			<td>Language</td>
+			<td>						The BSF language to be used
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Parameters</td>
+			<td>						Parameters to pass to the script.
+    The parameters are stored in the following variables:
+    
+												<ul	>
+								
+        
+												<li	>
+								Parameters - string containing the parameters as a single variable
+						</li>
+									
+        
+												<li	>
+								args - String array containing parameters, split on white-space
+						</li>
+									
+    
+						</ul>
+				</td>
+			<td>
+											No
+								</td>
+		</tr>
+			<tr>
+			<td>Script file</td>
+			<td>						A file containing the script to run.
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+			<tr>
+			<td>Script</td>
+			<td>						The script to run.
+			</td>
+			<td>
+											Yes (unless script file is provided)
+								</td>
+		</tr>
+		</table>
+	</p>
+							  									 				<p	>
+								
+The script (or file) is processed using the BSFEngine.exec() method, which does not return a value.
+
+						</p>
+							  									 				<p	>
+								The following variables are set up for use by the script:
+						</p>
+							  									 				<ul	>
+								
+
+												<li	>
+								log - (Logger) - can be used to write to the log file
+						</li>
+									
+
+												<li	>
+								ctx - (JMeterContext) - gives access to the context
+						</li>
+									
+
+												<li	>
+								vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());
+						</li>
+									
+
+												<li	>
+								props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");
+						</li>
+									
+
+												<li	>
+								prev - (SampleResult) - gives access to the previous SampleResult (if any)
+						</li>
+									
+
+												<li	>
+								sampler - (Sampler)- gives access to the current sampler
+						</li>
+									
+
+												<li	>
+								OUT - System.out - e.g. OUT.println("message")
+						</li>
+									
+
+												<li	>
+								SampleResult - the current sample result
+						</li>
+									
+
+												<li	>
+								AssertionResult - the assertion result
+						</li>
+									
+
+						</ul>
+							  									 				<p	>
+								
+The script can check various aspects of the SampleResult.
+If an error is detected, the script should use AssertionResult.setFailureMessage("message") and AssertionResult.setFailure(true).
+
+						</p>
+							  									 				<p	>
+								For futher details of all the methods available on each of the above variables, please check the Javadoc
+						</p>
+							  		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+	<hr>
 							  									 				<a	 href="#">
 								^
 						</a>
@@ -10344,6 +10497,140 @@ See the file BeanShellListeners.bshrc for example definitions.
 		<tr><td><br></td></tr>
 	 </table>
 	<hr>
+							  									 						<table border="0" cellspacing="0" cellpadding="2">
+		<tr><td>
+		  <font face="arial,helvetica,sanserif">
+			 <a name="BSF_PreProcessor"><h3>18.7.8 BSF PreProcessor</h3></a>
+		  </font>
+		</td></tr>
+				<tr><td>
+		  															
+
+												<p	>
+								
+The BSF PreProcessor allows BSF script code to be applied before taking a sample.
+
+						</p>
+									
+
+														<p><b>Control Panel</b></p>
+						<div align="center"><img width='597' height='303' src="../images/screenshots/bsf_preprocessor.png"></div>
+											  									 			 <p>
+	<b>Parameters</b>
+	<table border="1" cellspacing="0" cellpadding="2">
+	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+			<tr>
+			<td>Name</td>
+			<td>						Descriptive name for this element that is shown in the tree.
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+			<tr>
+			<td>Language</td>
+			<td>						The BSF language to be used
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Parameters</td>
+			<td>						Parameters to pass to the script.
+    The parameters are stored in the following variables:
+    
+												<ul	>
+								
+        
+												<li	>
+								Parameters - string containing the parameters as a single variable
+						</li>
+									
+        
+												<li	>
+								args - String array containing parameters, split on white-space
+						</li>
+									
+    
+						</ul>
+				</td>
+			<td>
+											No
+								</td>
+		</tr>
+			<tr>
+			<td>Script file</td>
+			<td>						A file containing the script to run.
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+			<tr>
+			<td>Script</td>
+			<td>						The script to run.
+			</td>
+			<td>
+											Yes (unless script file is provided)
+								</td>
+		</tr>
+		</table>
+	</p>
+							  									 				<p	>
+								
+The script (or file) is processed using the BSFEngine.exec() method, which does not return a value.
+
+						</p>
+							  									 				<p	>
+								The following variables are set up for use by the script:
+						</p>
+							  									 				<ul	>
+								
+
+												<li	>
+								log - (Logger) - can be used to write to the log file
+						</li>
+									
+
+												<li	>
+								ctx - (JMeterContext) - gives access to the context
+						</li>
+									
+
+												<li	>
+								vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());
+						</li>
+									
+
+												<li	>
+								props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");
+						</li>
+									
+
+												<li	>
+								prev - (SampleResult) - gives access to the previous SampleResult (if any)
+						</li>
+									
+
+												<li	>
+								sampler - (Sampler)- gives access to the current sampler
+						</li>
+									
+
+												<li	>
+								OUT - System.out - e.g. OUT.println("message")
+						</li>
+									
+
+						</ul>
+							  									 				<p	>
+								For details of all the methods available on each of the above variables, please check the Javadoc
+						</p>
+							  		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+	<hr>
 							  									 				<a	 href="#">
 								^
 						</a>
@@ -11158,6 +11445,140 @@ See the file BeanShellListeners.bshrc for example definitions.
 								beanshell.postprocessor.init
 						</b>
 									 is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.
+						</p>
+							  		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+	<hr>
+							  									 						<table border="0" cellspacing="0" cellpadding="2">
+		<tr><td>
+		  <font face="arial,helvetica,sanserif">
+			 <a name="BSF_PostProcessor"><h3>18.8.7 BSF PostProcessor</h3></a>
+		  </font>
+		</td></tr>
+				<tr><td>
+		  															
+
+												<p	>
+								
+The BSF PostProcessor allows BSF script code to be applied after taking a sample.
+
+						</p>
+									
+
+														<p><b>Control Panel</b></p>
+						<div align="center"><img width='597' height='303' src="../images/screenshots/bsf_postprocessor.png"></div>
+											  									 			 <p>
+	<b>Parameters</b>
+	<table border="1" cellspacing="0" cellpadding="2">
+	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+			<tr>
+			<td>Name</td>
+			<td>						Descriptive name for this element that is shown in the tree.
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+			<tr>
+			<td>Language</td>
+			<td>						The BSF language to be used
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Parameters</td>
+			<td>						Parameters to pass to the script.
+    The parameters are stored in the following variables:
+    
+												<ul	>
+								
+        
+												<li	>
+								Parameters - string containing the parameters as a single variable
+						</li>
+									
+        
+												<li	>
+								args - String array containing parameters, split on white-space
+						</li>
+									
+    
+						</ul>
+				</td>
+			<td>
+											No
+								</td>
+		</tr>
+			<tr>
+			<td>Script file</td>
+			<td>						A file containing the script to run.
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+			<tr>
+			<td>Script</td>
+			<td>						The script to run.
+			</td>
+			<td>
+											Yes (unless script file is provided)
+								</td>
+		</tr>
+		</table>
+	</p>
+							  									 				<p	>
+								
+The script (or file) is processed using the BSFEngine.exec() method, which does not return a value.
+
+						</p>
+							  									 				<p	>
+								The following variables are set up for use by the script:
+						</p>
+							  									 				<ul	>
+								
+
+												<li	>
+								log - (Logger) - can be used to write to the log file
+						</li>
+									
+
+												<li	>
+								ctx - (JMeterContext) - gives access to the context
+						</li>
+									
+
+												<li	>
+								vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());
+						</li>
+									
+
+												<li	>
+								props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");
+						</li>
+									
+
+												<li	>
+								prev - (SampleResult) - gives access to the previous SampleResult (if any)
+						</li>
+									
+
+												<li	>
+								sampler - (Sampler)- gives access to the current sampler
+						</li>
+									
+
+												<li	>
+								OUT - System.out - e.g. OUT.println("message")
+						</li>
+									
+
+						</ul>
+							  									 				<p	>
+								For details of all the methods available on each of the above variables, please check the Javadoc
 						</p>
 							  		</td></tr>
 		<tr><td><br></td></tr>
