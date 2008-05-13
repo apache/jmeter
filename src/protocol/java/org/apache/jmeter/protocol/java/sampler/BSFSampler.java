@@ -19,6 +19,7 @@
 package org.apache.jmeter.protocol.java.sampler;
 
 import java.io.FileInputStream;
+import java.util.Properties;
 
 import org.apache.bsf.BSFEngine;
 import org.apache.bsf.BSFException;
@@ -30,6 +31,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
@@ -53,6 +55,9 @@ public class BSFSampler extends AbstractSampler {
 	//- JMX file attributes
 
 	public BSFSampler() {
+	    BSFManager.registerScriptingEngine("jexl", //$NON-NLS-1$
+	            "org.apache.commons.jexl.bsf.JexlEngine", //$NON-NLS-1$
+	            new String[]{"jexl"}); //$NON-NLS-1$
 	}
 
 	public String getFilename() {
@@ -120,6 +125,7 @@ public class BSFSampler extends AbstractSampler {
 
         JMeterContext jmctx = JMeterContextService.getContext();
         JMeterVariables vars = jmctx.getVariables();
+        Properties props = JMeterUtils.getJMeterProperties();
 
         res.sampleStart();
 		try {
@@ -140,6 +146,7 @@ public class BSFSampler extends AbstractSampler {
 			// Add variables for access to context and variables
 			mgr.declareBean("ctx", jmctx, jmctx.getClass()); // $NON-NLS-1$
 			mgr.declareBean("vars", vars, vars.getClass()); // $NON-NLS-1$
+            mgr.declareBean("props", props, props.getClass()); // $NON-NLS-1$
 
 			// N.B. some engines (e.g. Javascript) cannot handle certain declareBean() calls
 			// after the engine has been initialised, so create the engine last
@@ -171,9 +178,10 @@ public class BSFSampler extends AbstractSampler {
 		} finally {
 			res.sampleEnd();
 			IOUtils.closeQuietly(is);
-			if (bsfEngine != null) {
-			    bsfEngine.terminate();
-			}
+// Will be done by mgr.terminate() anyway
+//			if (bsfEngine != null) {
+//			    bsfEngine.terminate();
+//			}
 	        mgr.terminate();
 		}
 
