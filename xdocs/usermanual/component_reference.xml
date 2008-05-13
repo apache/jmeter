@@ -906,6 +906,11 @@ Beware however that misuse of any methods can cause subtle faults that may be di
 		website for details of the languages supported.
 		You may need to download the appropriate jars for the language; they should be put in the JMeter <b>lib</b> directory.
 		</p>
+		<p>By default, JMeter supports the following languages:</p>
+		<ul>
+		<li>javascript</li>
+        <li>jexl (JMeter version 2.3.2 and later)</li>
+		</ul>
 	</description>
 <properties>
 	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
@@ -932,6 +937,7 @@ Before invoking the script, some variables are set up:
 <li>SampleResult - pointer to the current SampleResult</li>
 <li>ctx - JMeterContext</li>
 <li>vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.remove("VAR3"); vars.putObject("OBJ1",new Object());</li>
+<li>props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
 </ul>
 <p>
 The SampleResult ResponseData is set from the return value of the script.
