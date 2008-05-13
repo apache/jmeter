@@ -199,6 +199,7 @@ For example, ${__Random(1,63, LOTTERY )} will use the variable 'LOTTERY' rather 
 <li>Bug 19128 - Added multiple file POST support to HTTP Samplers</li>
 <li>Allow use of special name LAST to mean the last test run; applies to -t, -l, -j flags</li>
 <li>Bug 44418/42178 - CSV Dataset file handling improvements</li>
+<li>Give BeanShell, Javascript and Jexl functions access to JMeter properties via the "props" object</li>
 </ul>
 
 <h4>Non-functional changes</h4>
