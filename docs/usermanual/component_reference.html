@@ -2927,6 +2927,27 @@ Beware however that misuse of any methods can cause subtle faults that may be di
 		
 						</p>
 									
+		
+												<p	>
+								By default, JMeter supports the following languages:
+						</p>
+									
+		
+												<ul	>
+								
+		
+												<li	>
+								javascript
+						</li>
+									
+        
+												<li	>
+								jexl (JMeter version 2.3.2 and later)
+						</li>
+									
+		
+						</ul>
+									
 	
 														<p><b>Control Panel</b></p>
 						<div align="center"><img width='396' height='217' src="../images/screenshots/bsfsampler.png"></div>
@@ -3029,6 +3050,11 @@ Before invoking the script, some variables are set up:
 
 												<li	>
 								vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.remove("VAR3"); vars.putObject("OBJ1",new Object());
+						</li>
+									
+
+												<li	>
+								props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");
 						</li>
 									
 
@@ -10403,7 +10429,6 @@ generate the template string, and store the result into the given variable name.
 								Use a value of zero to indicate JMeter should choose a match at random.
 						</li>
 									
-
         		
 												<li	>
 								A positive number N means to select the nth match.
