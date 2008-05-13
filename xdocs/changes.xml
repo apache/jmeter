@@ -202,6 +202,7 @@ For example, ${__Random(1,63, LOTTERY )} will use the variable 'LOTTERY' rather 
 <li>Give BeanShell, Javascript and Jexl functions access to JMeter properties via the "props" object</li>
 <li>Give BSF Sampler access to JMeter Properties via "props" object</li>
 <li>Add Jexl as a supported BSF Sampler language</li>
+<li>Give Beanshell test elements access to JMeter Properties via "props" object</li>
 </ul>
 
 <h4>Non-functional changes</h4>
