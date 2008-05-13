@@ -65,10 +65,15 @@ public abstract class BeanShellTestElement extends AbstractTestElement
             try {
                 bshInterpreter.reset();
             } catch (ClassNotFoundException e) {
-                log.error("Cannot find BeanShell: "+e.toString());
+                log.error("Cannot reset BeanShell: "+e.toString());
             }
         }
 
+        try {
+            bshInterpreter.set("props", JMeterUtils.getJMeterProperties());
+        } catch (JMeterException e) {
+            log.error("Cannot set 'props' object: "+e.toString());
+        }
         return bshInterpreter;
     }
 

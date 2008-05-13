@@ -678,6 +678,11 @@ For example, ${__Random(1,63, LOTTERY )} will use the variable 'LOTTERY' rather 
 						</li>
 									
 
+												<li	>
+								Give Beanshell test elements access to JMeter Properties via "props" object
+						</li>
+									
+
 						</ul>
 							  									 				<h4	>
 								Non-functional changes
@@ -2507,6 +2512,7 @@ To revert to the previous behaviour, change the property
 							  									 				<p	>
 								
 The JMeter.BAT file no longer changes directory to JMeter home, but runs from the current working directory.
+
 The jmeter-n.bat and jmeter-t.bat files change to the directory containing the input file.
 
 						</p>
@@ -3080,7 +3086,6 @@ The XSL stylesheets also now accept either "rc" or "rs"
 								Bug 39533 - StatCalculator added wrong items
 						</li>
 									
-
 
 												<li	>
 								Bug 39599 - ConcurrentModificationException
