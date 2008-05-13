@@ -200,6 +200,8 @@ For example, ${__Random(1,63, LOTTERY )} will use the variable 'LOTTERY' rather 
 <li>Allow use of special name LAST to mean the last test run; applies to -t, -l, -j flags</li>
 <li>Bug 44418/42178 - CSV Dataset file handling improvements</li>
 <li>Give BeanShell, Javascript and Jexl functions access to JMeter properties via the "props" object</li>
+<li>Give BSF Sampler access to JMeter Properties via "props" object</li>
+<li>Add Jexl as a supported BSF Sampler language</li>
 </ul>
 
 <h4>Non-functional changes</h4>
