@@ -158,7 +158,7 @@ public class BSFSampler extends AbstractSampler {
 				is = new FileInputStream(fileName);
 				bsfOut = bsfEngine.eval(fileName, 0, 0, IOUtils.toString(is));
 			} else {
-				res.setSamplerData("[script]");
+				res.setSamplerData(request);
 			    bsfOut = bsfEngine.eval("script", 0, 0, request);
 			}
 
