@@ -22,6 +22,7 @@ import org.apache.jmeter.save.converters.ConversionHelp;
 import org.apache.jorphan.collections.HashTree;
 
 import com.thoughtworks.xstream.mapper.Mapper;
+import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
@@ -29,7 +30,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 /**
- * @author mstover
+ * Handles XStream conversion of Test Scripts
  * 
  */
 public class ScriptWrapperConverter implements Converter {
@@ -90,9 +91,32 @@ public class ScriptWrapperConverter implements Converter {
 		ConversionHelp.setInVersion(wrap.version);// Make sure decoding
 													// follows input file
 		reader.moveDown();
-		wrap.testPlan = (HashTree) context.convertAnother(wrap, getNextType(reader));
+		// Catch errors and rethrow as ConversionException so we get location details
+		try {
+            wrap.testPlan = (HashTree) context.convertAnother(wrap, getNextType(reader));
+        } catch (NoClassDefFoundError e) {
+            throw createConversionException(e);
+        } catch (Exception e) {
+            throw createConversionException(e);
+        }
 		return wrap;
 	}
+
+    private ConversionException createConversionException(Throwable e) {
+        final ConversionException conversionException = new ConversionException(e);
+        StackTraceElement[] ste = e.getStackTrace();
+        if (ste!=null){
+            for(int i=0; i<ste.length; i++){
+                StackTraceElement top=ste[i];
+                String className=top.getClassName();
+                if (className.startsWith("org.apache.jmeter.")){
+                    conversionException.add("first-jmeter-class", top.toString());
+                    break;
+                }
+            }
+        }
+        return conversionException;
+    }
 
 	protected Class getNextType(HierarchicalStreamReader reader) {
 		String classAttribute = reader.getAttribute(ConversionHelp.ATT_CLASS);
