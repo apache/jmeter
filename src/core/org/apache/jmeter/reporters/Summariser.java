@@ -21,14 +21,15 @@ package org.apache.jmeter.reporters;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.Hashtable;
+import java.util.Map;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
-import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.RunningSample;
 import org.apache.jorphan.logging.LoggingManager;
@@ -52,7 +53,7 @@ import org.apache.log.Logger;
  * Also, the sum of the delta intervals will be larger than the overall elapsed time.
  * 
  */
-public class Summariser extends AbstractTestElement implements Serializable, SampleListener, TestListener, Clearable {
+public class Summariser extends AbstractTestElement implements Serializable, SampleListener, TestListener, ThreadListener {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/** interval between summaries (in seconds) default 3 minutes */
@@ -64,13 +65,31 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 	/** Write messages to System.out ? */
 	private static final boolean TOOUT = JMeterUtils.getPropDefault("summariser.out", true); //$NON-NLS-1$
 
+    /*
+     * Ensure that a report is not skipped if we are slightly late in checking
+     * the time.
+     */
+    private static final int INTERVAL_WINDOW = 5; // in seconds
+
 	/**
 	 * Summariser elements are cloned for each thread in each group; this Map is
 	 * used to allow them to share the same statistics. The key is the
 	 * Summariser name, so all Summarisers with the same name will use the same
 	 * accumulators.
 	 */
+	//@GuardedBy("accumulators")
 	private static final Hashtable accumulators = new Hashtable();
+
+    /*
+     * Cached copy of Totals for this instance.
+     * The variables do not need to be synchronised,
+     * as they are not shared between threads
+     * However the contents do need to be synchronized.
+     */
+	//@GuardedBy("myTotals")
+    private transient Totals myTotals = null;
+
+    private transient String myName;
 
 	/*
 	 * Constructor is initially called once for each occurrence in the test plan.
@@ -81,9 +100,6 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 	 */
 	public Summariser() {
 		super();
-		// log.debug(Thread.currentThread().getName());
-		// System.out.println(">> "+me+" "+this.getName()+"
-		// "+Thread.currentThread().getName());
 	}
 
 	/**
@@ -96,10 +112,6 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 		setName(name);
 	}
 
-	public void clearData(){
-		// not used
-	}
-	
 	/*
 	 * Contains the items needed to collect stats for a summariser
 	 * 
@@ -107,42 +119,20 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 	private static class Totals {
 
 		/** Time of last summary (to prevent double reporting) */
-		private long last = 0;// set to -1 by TestEnded to prevent double
-								// reporting
+		private long last = 0;
 
-		private RunningSample delta = new RunningSample("DELTA",0);
+		private final RunningSample delta = new RunningSample("DELTA",0);
 
-		private RunningSample total = new RunningSample("TOTAL",0);
-
-		private void clear() {
-			delta.clear();
-			total.clear();
-			last = 0;
-		}
+		private final RunningSample total = new RunningSample("TOTAL",0);
 
 		/**
 		 * Add the delta values to the total values and clear the delta
 		 */
-		private synchronized void moveDelta() {
+		private void moveDelta() {
 			total.addSample(delta);
 			delta.clear();
 		}
 	}
-
-	/*
-	 * Cached copy of Totals for this instance.
-     * The variables do not need to be synchronised,
-     * as they are not shared between threads
-	 */
-	private transient Totals myTotals = null;
-
-	private transient String myName;
-
-	/*
-	 * Ensure that a report is not skipped if we are slightly late in checking
-	 * the time.
-	 */
-	private static final int INTERVAL_WINDOW = 5; // in seconds
 
 	/**
 	 * Accumulates the sample in two SampleResult objects - one for running
@@ -152,24 +142,6 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 	 */
 	public void sampleOccurred(SampleEvent e) {
 		SampleResult s = e.getResult();
-
-		// System.out.println("SO "+me+this.getName()+"
-		// "+Thread.currentThread().getName()
-		// +" "+s.getSampleLabel());
-
-		if (myName == null) {
-			myName = getName();
-		}
-
-		if (myTotals == null) {
-			synchronized (accumulators) {
-				myTotals = (Totals) accumulators.get(myName);
-			}
-		}
-
-		if (s != null) {
-			myTotals.delta.addSample(s);
-		}
 
 		long now = System.currentTimeMillis() / 1000;// in seconds
 
@@ -183,6 +155,10 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 		 * Also need to check we've not hit the window already
 		 */
 		synchronized (myTotals) {
+	        if (s != null) {
+	            myTotals.delta.addSample(s);
+	        }
+
 			if ((now > myTotals.last + INTERVAL_WINDOW) && (now % INTERVAL <= INTERVAL_WINDOW)) {
 				reportNow = true;
 				
@@ -191,12 +167,12 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 				myTotals.moveDelta();
 				myTotal = new RunningSample(myTotals.total);
 				
-				myTotals.last = now;
+				myTotals.last = now; // stop double-reporting
 			}
 		}
 		if (reportNow) {
 			String str;
-			str = format(myDelta, "+");
+			str = format(myName, myDelta, "+");
 			if (TOLOG) {
 				log.info(str);
 			}
@@ -206,7 +182,7 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 
 			// Only if we have updated them
 			if (myTotal != null && myDelta != null &&myTotal.getNumSamples() != myDelta.getNumSamples()) {
-				str = format(myTotal, "=");
+				str = format(myName, myTotal, "=");
 				if (TOLOG) {
 					log.info(str);
 				}
@@ -238,10 +214,10 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 	 * @param string
 	 * @return
 	 */
-	private String format(RunningSample s, String type) {
+	private String format(String name, RunningSample s, String type) {
 		StringBuffer tmp = new StringBuffer(20); // for intermediate use
 		StringBuffer sb = new StringBuffer(100); // output line buffer
-		sb.append(myName);
+		sb.append(name);
 		sb.append(" ");
 		sb.append(type);
 		sb.append(" ");
@@ -303,64 +279,59 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 	 */
 	public void testEnded() {
 		testEnded("local");
-
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
+	 * Called once for each Summariser in the test plan.
+	 * There may be more than one summariser with the same name,
+	 * however they will all be called before the test proper starts,
+	 * so it does not matter if the totals are reset again.
+	 * 
 	 * @see org.apache.jmeter.testelement.TestListener#testStarted(java.lang.String)
 	 */
 	public void testStarted(String host) {
-		myName = this.getName();
-
-		// Hashtable is synchronised, but there could be more than one Summariser
-		// with the same name, so we need to synchronise.
+	    // testStarted and testFinished are called from different threads,
+	    // so need to synch for visibility.
 		synchronized (accumulators) {
-			Totals tots = (Totals) accumulators.get(myName);
-			if (tots != null) {// This can be null (before first sample)
-				tots.clear();
-			} else {
-				// System.out.println("Creating totals for "+myName);
-				tots = new Totals();
-				accumulators.put(myName, tots);
-			}
+            accumulators.clear(); // Should not be needed, but just in case previous run does not clear up.
 		}
 	}
 
 	/*
-	 * (non-Javadoc) Can be called more than once with the same name, so need to
-	 * synch. However, there is no need to create copies, to shorten the synch
-	 * zone, as timing is not critical at the end of the test.
-	 * 
+	 * (non-Javadoc)
+	 * Called from a different thread as testStarted() but using the same instance.
+	 * So synch is needed to fetch the accumulator, and the myName field will already be set up.
 	 * @see org.apache.jmeter.testelement.TestListener#testEnded(java.lang.String)
 	 */
 	public void testEnded(String host) {
-		// System.out.println("TE "+me+this.getName()+"
-		// "+Thread.currentThread().getName());
+	    Object[] totals;
 		synchronized (accumulators) {
-			Totals t = (Totals) accumulators.get(myName);
-			if (t.last != -1) {
-				String str;
-				if (t.total.getNumSamples() != 0) {// Only print delta if different
-												// from total
-					str = format(t.delta, "+");
-					if (TOLOG) {
-						log.info(str);
-					}
-					if (TOOUT) {
-						System.out.println(str);
-					}
-				}
-				t.moveDelta();
-				str = format(t.total, "=");
+		    totals = accumulators.entrySet().toArray();
+			accumulators.clear(); // Instance is not needed anymore
+		}
+		for (int i=0; i<totals.length; i++) {
+		    Map.Entry me = (Map.Entry)totals[i];
+			String str;
+			String name = (String) me.getKey();
+			Totals total = (Totals) me.getValue();
+			if (total.total.getNumSamples() != 0) {// Only print delta if different from total
+				str = format(name, total.delta, "+");
 				if (TOLOG) {
 					log.info(str);
 				}
 				if (TOOUT) {
 					System.out.println(str);
 				}
-				t.last = -1;
+			}
+			total.moveDelta();
+			str = format(name, total.total, "=");
+			if (TOLOG) {
+				log.info(str);
+			}
+			if (TOOUT) {
+				System.out.println(str);
 			}
 		}
 	}
@@ -373,5 +344,20 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 	public void testIterationStart(LoopIterationEvent event) {
 		// not used
 	}
+
+    public void threadFinished() {
+        // not used
+    }
+
+    public void threadStarted() {
+        myName = getName();
+        synchronized (accumulators) {
+            myTotals = (Totals) accumulators.get(myName);
+            if (myTotals == null){
+                myTotals = new Totals();
+                accumulators.put(myName, myTotals);
+            }
+        }
+    }
 
 }
