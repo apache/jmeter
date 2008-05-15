@@ -220,6 +220,7 @@ For example, ${__Random(1,63, LOTTERY )} will use the variable 'LOTTERY' rather 
 <li>Give Beanshell test elements access to JMeter Properties via "props" object</li>
 <li>Added BSF PreProcessor, PostProcessor and Assertion test elements</li>
 <li>All BSF elements now have access to System.out via the variable "OUT"</li>
+<li>Summariser updated to handle variable names</li>
 </ul>
 
 <h4>Non-functional changes</h4>
