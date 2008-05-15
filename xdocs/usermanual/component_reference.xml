@@ -3500,10 +3500,9 @@ generate the template string, and store the result into the given variable name.
 Generates a summary of the test run so far to the log file and/or 
 standard output. Both running and differential totals are shown.
 Output is generated every n seconds (default 3 minutes) on the appropriate
-time boundary, so that multiple test runs on the same time will be
- synchronised.The interval is defined by the property "summariser.interval" - see jmeter.properties.
-
-This is mainly intended for batch (non-GUI) runs.
+time boundary, so that multiple test runs on the same time will be synchronised.
+The interval is defined by the property "summariser.interval" - see jmeter.properties.
+This element is mainly intended for batch (non-GUI) runs.
 The output looks like the following:
 <pre>
 label +   171 in  20.3s =    8.4/s Avg:  1129 Min:  1000 Max:  1250 Err:     0 (0.00%)
@@ -3514,18 +3513,32 @@ label =   697 in  80.3s =    8.7/s Avg:  1136 Min:  1000 Max:  1250 Err:     0 (
 label +   109 in  12.4s =    8.8/s Avg:  1092 Min:    47 Max:  1250 Err:     0 (0.00%)
 label =   806 in  91.6s =    8.8/s Avg:  1130 Min:    47 Max:  1250 Err:     0 (0.00%)
 </pre>
+The "label" is the the name of the element.
 The "+" means that the line is a delta line, i.e. shows the changes since the last output.
 The "=" means that the line is a totals line, i.e. it shows the running total.
 Entries in the jmeter log file also include time-stamps.
-The Avg, Min and Max times are in milliseonds.
+The example "806 in  91.6s =    8.8/s" means that there were 806 samples recorded in 91.6 seconds,
+and that works out at 8.8 samples per second.
+The Avg (Average), Min(imum) and Max(imum) times are in milliseonds.
+"Err" means number of errors (also shown as percentage).
 The last two lines will appear at the end of a test.
 They will not be synchronised to the appropriate time boundary.
 Note that the initial and final deltas may be for less than the interval (in the example above this is 30 seconds).
 The first delta will generally be lower, as JMeter synchronises to the interval boundary.
 The last delta will be lower, as the test will generally not finish on an exact interval boundary.
+<p>
+The label is used to group sample results together. 
+So if you have multiple Thread Groups and want to summarize across them all, then use the same label
+ - or add the summariser to the Test Plan (so all thread groups are in scope).
+Different summary groupings can be implemented
+by using suitable labels and adding the summarisers to appropriate parts of the test plan.
+</p>
+
 	</description>
  <properties>
- <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+ <property name="Name" required="Yes">Descriptive name for this element that is shown in the tree.
+ It appears as the "label" in the output. Details for all elements with the same label will be added together.
+ </property>
  </properties>
 </component>
 
