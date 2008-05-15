@@ -23,9 +23,17 @@ import java.text.DecimalFormat;
 import org.apache.jmeter.samplers.SampleResult;
 
 /**
- * Aggegate sample data container. Just instantiate a new instance of this
+ * <p>
+ * Running sample data container. Just instantiate a new instance of this
  * class, and then call {@link #addSample(SampleResult)} a few times, and pull
  * the stats out with whatever methods you prefer.
+ * </p>
+ * <p>
+ * Please note that this class is not thread-safe.
+ * The calling class is responsible for ensuring thread safety if required.
+ * Versions prior to 2.3.2 appeared to be thread-safe but weren't as label and index were not final.
+ * Also the caller needs to synchronize access in order to enure that variables are consistent.
+ * </p>
  * 
  */
 public class RunningSample {
@@ -34,25 +42,24 @@ public class RunningSample {
 
 	private static final DecimalFormat errorFormatter = new DecimalFormat("#0.00%"); // $NON-NLS-1$
 
-	// The counts all need to be volatile - or else the get() methods need to be synchronised.
-	
-	private volatile long counter;
+	private long counter;
 
-	private volatile long runningSum;
+	private long runningSum;
 
-	private volatile long max, min;
+	private long max, min;
 
-	private volatile long errorCount;
+	private long errorCount;
 
-	private volatile long firstTime;
+	private long firstTime;
 
-	private volatile long lastTime;
+	private long lastTime;
 
-	private String label;
+	private final String label;
 
-	private int index;
+	private final int index;
 
 	private RunningSample() {// Don't (can't) use this...
+	    this("", 0);
 	}
 
 	/**
