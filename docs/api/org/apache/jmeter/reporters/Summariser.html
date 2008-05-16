@@ -90,11 +90,11 @@ Class Summariser</H2>
       <IMG SRC="../../../../resources/inherit.gif" ALT="extended by"><B>org.apache.jmeter.reporters.Summariser</B>
 </PRE>
 <DL>
-<DT><B>All Implemented Interfaces:</B> <DD><A HREF="../../../../org/apache/jmeter/samplers/Clearable.html" title="interface in org.apache.jmeter.samplers">Clearable</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Cloneable.html" title="class or interface in java.lang">Cloneable</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleListener.html" title="interface in org.apache.jmeter.samplers">SampleListener</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/Serializable.html" title="class or interface in java.io">Serializable</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestListener.html" title="interface in org.apache.jmeter.testelement">TestListener</A></DD>
+<DT><B>All Implemented Interfaces:</B> <DD><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Cloneable.html" title="class or interface in java.lang">Cloneable</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleListener.html" title="interface in org.apache.jmeter.samplers">SampleListener</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/Serializable.html" title="class or interface in java.io">Serializable</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestListener.html" title="interface in org.apache.jmeter.testelement">TestListener</A>, <A HREF="../../../../org/apache/jmeter/testelement/ThreadListener.html" title="interface in org.apache.jmeter.testelement">ThreadListener</A></DD>
 </DL>
 <HR>
 <DL>
-<DT>public class <B>Summariser</B><DT>extends <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html" title="class in org.apache.jmeter.testelement">AbstractTestElement</A><DT>implements <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/Serializable.html" title="class or interface in java.io">Serializable</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleListener.html" title="interface in org.apache.jmeter.samplers">SampleListener</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestListener.html" title="interface in org.apache.jmeter.testelement">TestListener</A>, <A HREF="../../../../org/apache/jmeter/samplers/Clearable.html" title="interface in org.apache.jmeter.samplers">Clearable</A></DL>
+<DT>public class <B>Summariser</B><DT>extends <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html" title="class in org.apache.jmeter.testelement">AbstractTestElement</A><DT>implements <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/Serializable.html" title="class or interface in java.io">Serializable</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleListener.html" title="interface in org.apache.jmeter.samplers">SampleListener</A>, <A HREF="../../../../org/apache/jmeter/testelement/TestListener.html" title="interface in org.apache.jmeter.testelement">TestListener</A>, <A HREF="../../../../org/apache/jmeter/testelement/ThreadListener.html" title="interface in org.apache.jmeter.testelement">ThreadListener</A></DL>
 
 <P>
 Generate a summary of the test run so far to the log file and/or standard
@@ -170,14 +170,6 @@ Generate a summary of the test run so far to the log file and/or standard
 <TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
 <TD COLSPAN=2><FONT SIZE="+2">
 <B>Method Summary</B></FONT></TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>&nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../org/apache/jmeter/reporters/Summariser.html#clearData()">clearData</A></B>()</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Clears the current data of the object.</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -259,6 +251,22 @@ Generate a summary of the test run so far to the log file and/or standard
  
  </TD>
 </TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/reporters/Summariser.html#threadFinished()">threadFinished</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Called once for each thread at the end of a test</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/reporters/Summariser.html#threadStarted()">threadStarted</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Called just before the start of the thread</TD>
+</TR>
 </TABLE>
 &nbsp;<A NAME="methods_inherited_from_class_org.apache.jmeter.testelement.AbstractTestElement"><!-- --></A>
 <TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
@@ -320,23 +328,6 @@ public <B>Summariser</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/l
 <B>Method Detail</B></FONT></TD>
 </TR>
 </TABLE>
-
-<A NAME="clearData()"><!-- --></A><H3>
-clearData</H3>
-<PRE>
-public void <B>clearData</B>()</PRE>
-<DL>
-<DD><B>Description copied from interface: <CODE><A HREF="../../../../org/apache/jmeter/samplers/Clearable.html" title="interface in org.apache.jmeter.samplers">Clearable</A></CODE></B></DD>
-<DD>Clears the current data of the object.
-<P>
-<DD><DL>
-<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/samplers/Clearable.html#clearData()">clearData</A></CODE> in interface <CODE><A HREF="../../../../org/apache/jmeter/samplers/Clearable.html" title="interface in org.apache.jmeter.samplers">Clearable</A></CODE></DL>
-</DD>
-<DD><DL>
-</DL>
-</DD>
-</DL>
-<HR>
 
 <A NAME="sampleOccurred(org.apache.jmeter.samplers.SampleEvent)"><!-- --></A><H3>
 sampleOccurred</H3>
@@ -520,6 +511,40 @@ public void <B>testIterationStart</B>(<A HREF="../../../../org/apache/jmeter/eng
 </DD>
 <DD><DL>
 <DT><B>Parameters:</B><DD><CODE>event</CODE> - </DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="threadFinished()"><!-- --></A><H3>
+threadFinished</H3>
+<PRE>
+public void <B>threadFinished</B>()</PRE>
+<DL>
+<DD><B>Description copied from interface: <CODE><A HREF="../../../../org/apache/jmeter/testelement/ThreadListener.html" title="interface in org.apache.jmeter.testelement">ThreadListener</A></CODE></B></DD>
+<DD>Called once for each thread at the end of a test
+<P>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/testelement/ThreadListener.html#threadFinished()">threadFinished</A></CODE> in interface <CODE><A HREF="../../../../org/apache/jmeter/testelement/ThreadListener.html" title="interface in org.apache.jmeter.testelement">ThreadListener</A></CODE></DL>
+</DD>
+<DD><DL>
+<DT><B>See Also:</B><DD><CODE>org.apache.jmeter.threads.JMeterThread#threadFinished()</CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="threadStarted()"><!-- --></A><H3>
+threadStarted</H3>
+<PRE>
+public void <B>threadStarted</B>()</PRE>
+<DL>
+<DD><B>Description copied from interface: <CODE><A HREF="../../../../org/apache/jmeter/testelement/ThreadListener.html" title="interface in org.apache.jmeter.testelement">ThreadListener</A></CODE></B></DD>
+<DD>Called just before the start of the thread
+<P>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/testelement/ThreadListener.html#threadStarted()">threadStarted</A></CODE> in interface <CODE><A HREF="../../../../org/apache/jmeter/testelement/ThreadListener.html" title="interface in org.apache.jmeter.testelement">ThreadListener</A></CODE></DL>
+</DD>
+<DD><DL>
+<DT><B>See Also:</B><DD><CODE>org.apache.jmeter.threads.JMeterThread#threadStarted()</CODE></DL>
 </DD>
 </DL>
 <!-- ========= END OF CLASS DATA ========= -->
