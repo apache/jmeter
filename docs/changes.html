@@ -228,10 +228,13 @@ XPath processing is improved; Tidy errors are handled better.
 								Save Table Data buttons added to Summary and Aggregate reports to allow easy saving of the calculated data.
 						</p>
 							  									 				<p	>
-								HTTP(S) samplers can now save just the MD5 hash of responses, rather than the entire response.
-						</p>
-							  									 				<p	>
-								The HTTP Samplers can now POST multiple files
+								
+HTTP samplers can now save just the MD5 hash of responses, rather than the entire response.
+As a special case, if the HTTP Sampler path starts with "http://" or "https://" then this is used as the full URL,
+overriding the host and port fields.
+The HTTP Samplers can now POST multiple files.
+Webservice(SOAP) Sampler can now load local WSDL files using the "file:" protocol.
+
 						</p>
 							  									 				<p	>
 								
@@ -242,8 +245,14 @@ It also avoids the need to download remote DTD files, which can slow the renderi
 						</p>
 							  									 				<p	>
 								
+MailReader sampler now supports POP3S and IMAPS protocols. Individual mails are now added as sub-samples.
+
+						</p>
+							  									 				<p	>
+								
 Various improvements to the BSF Sampler: now supports Jexl, and Javascript bug works properly.
 Added BSF PreProcessor, PostProcessor and Assertion test elements.
+All now have access to "props" JMeter Properties object.
 
 						</p>
 							  									 				<p	>
