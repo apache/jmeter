@@ -28,6 +28,7 @@
 
 <subsection name="Section Summary" anchor="summary">
 <ul>
+  <li><a href="../changes.html">Changes</a></li>
   <li><a href="#intro">+</a>...<a href="intro.html">1. Introduction</a></li>
   <li><a href="#get-started">+</a>...<a href="get-started.html">2. Getting Started</a></li>
   <li><a href="#build-test-plan">+</a>...<a href="build-test-plan.html">3. Building a Test Plan</a></li>
