@@ -281,6 +281,14 @@ For example, ${__Random(1,63, LOTTERY )} will use the variable 'LOTTERY' rather 
 						</li>
 									
 
+												<li	>
+								
+Synchronization has been removed from the RunningSample class (it was not fully threadsafe anyway).
+Developers of 3rd party add-ons that use the class may need to synchronize access.
+
+						</li>
+									
+
 						</ul>
 							  									 				<h4	>
 								Bug fixes
@@ -707,6 +715,11 @@ For example, ${__Random(1,63, LOTTERY )} will use the variable 'LOTTERY' rather 
 
 												<li	>
 								All BSF elements now have access to System.out via the variable "OUT"
+						</li>
+									
+
+												<li	>
+								Summariser updated to handle variable names
 						</li>
 									
 
