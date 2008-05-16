@@ -152,9 +152,16 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
 				model.insertRow(row, model.getRowCount() - 1);
 			}
 		}
-		row.addSample(res);
+		/*
+		 * Synch is needed because multiple threads can update the counts.
+		 */
+		synchronized(row) {
+		    row.addSample(res);
+		}
 		Calculator tot = ((Calculator) tableRows.get(TOTAL_ROW_LABEL));
-        tot.addSample(res);
+		synchronized(tot) {
+		    tot.addSample(res);
+		}
 		model.fireTableDataChanged();
 	}
 
@@ -162,10 +169,12 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
 	 * Clears this visualizer and its model, and forces a repaint of the table.
 	 */
 	public void clearData() {
-		model.clearData();
-		tableRows.clear();
-		tableRows.put(TOTAL_ROW_LABEL, new Calculator(TOTAL_ROW_LABEL));
-		model.addRow(tableRows.get(TOTAL_ROW_LABEL));
+        synchronized (tableRows) {
+    		model.clearData();
+    		tableRows.clear();
+    		tableRows.put(TOTAL_ROW_LABEL, new Calculator(TOTAL_ROW_LABEL));
+    		model.addRow(tableRows.get(TOTAL_ROW_LABEL));
+        }
 	}
 
 	/**
