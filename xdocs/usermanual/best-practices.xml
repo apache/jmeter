@@ -208,6 +208,16 @@ between invocations unless the "Reset bsh.Interpreter before each call" option i
 <p>
 Some long-running tests may cause the interpreter to use lots of memory; if this is the case try using the reset option.
 </p>
+<p>
+You can test BeanShell scripts outside JMeter by using the command-line interpreter:
+<pre>
+$ java -cp bsh-xxx.jar[;other jars as needed] bsh.Interperter file.bsh [parameters]
+or
+$ java -cp bsh-xxx.jar bsh.Interperter
+bsh% source("file.bsh");
+bsh% exit(); // or use EOF key (e.g. ^Z or ^D)
+</pre>
+</p>
 </subsection>
 <subsection name="&sect-num;.8.2 Sharing Variables" anchor="bsh_variables">
 <p>
