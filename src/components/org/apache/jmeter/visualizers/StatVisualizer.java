@@ -159,8 +159,16 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
 				model.insertRow(row, model.getRowCount() - 1);
 			}
 		}
-		row.addSample(res);
-		((SamplingStatCalculator) tableRows.get(TOTAL_ROW_LABEL)).addSample(res);
+        /*
+         * Synch is needed because multiple threads can update the counts.
+         */
+        synchronized(row) { 
+            row.addSample(res);
+        }
+		SamplingStatCalculator tot = (SamplingStatCalculator) tableRows.get(TOTAL_ROW_LABEL);
+		synchronized(tot) {
+		    tot.addSample(res);
+		}
 		model.fireTableDataChanged();
 	}
 
@@ -168,10 +176,12 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
 	 * Clears this visualizer and its model, and forces a repaint of the table.
 	 */
 	public void clearData() {
-		model.clearData();
-		tableRows.clear();
-		tableRows.put(TOTAL_ROW_LABEL, new SamplingStatCalculator(TOTAL_ROW_LABEL));
-		model.addRow(tableRows.get(TOTAL_ROW_LABEL));
+	    synchronized (tableRows) {
+    		model.clearData();
+    		tableRows.clear();
+    		tableRows.put(TOTAL_ROW_LABEL, new SamplingStatCalculator(TOTAL_ROW_LABEL));
+    		model.addRow(tableRows.get(TOTAL_ROW_LABEL));
+	    }
 	}
 
 	/**
