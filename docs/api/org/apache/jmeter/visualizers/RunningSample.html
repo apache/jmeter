@@ -93,9 +93,17 @@ Class RunningSample</H2>
 <DT>public class <B>RunningSample</B><DT>extends <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A></DL>
 
 <P>
-Aggegate sample data container. Just instantiate a new instance of this
+<p>
+ Running sample data container. Just instantiate a new instance of this
  class, and then call <A HREF="../../../../org/apache/jmeter/visualizers/RunningSample.html#addSample(org.apache.jmeter.samplers.SampleResult)"><CODE>addSample(SampleResult)</CODE></A> a few times, and pull
  the stats out with whatever methods you prefer.
+ </p>
+ <p>
+ Please note that this class is not thread-safe.
+ The calling class is responsible for ensuring thread safety if required.
+ Versions prior to 2.3.2 appeared to be thread-safe but weren't as label and index were not final.
+ Also the caller needs to synchronize access in order to enure that variables are consistent.
+ </p>
 <P>
 
 <P>
