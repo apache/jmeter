@@ -205,7 +205,7 @@
   </path>
 
   <!-- Temporary build directories: where the .class live -->
-  <property name="build.dir" location="build"/>
+  <property name="build.dir" value="build"/>
   <property name="build.core" value="build/core"/>
   <property name="build.http" value="build/protocol/http"/>
   <property name="build.ftp" value="build/protocol/ftp"/>
@@ -215,15 +215,15 @@
   <property name="build.components" value="build/components"/>
   <property name="build.functions" value="build/functions"/>
   <property name="build.jorphan" value="build/jorphan"/>
-  <property name="build.ldap" location="build/protocol/ldap"/>
-  <property name="build.mail" location="build/protocol/mail"/>
-  <property name="build.tcp" location="build/protocol/tcp"/>
-  <property name="build.examples" location="build/examples"/>
-  <property name="build.monitor.components" location="build/monitor/components"/>
-  <property name="build.monitor.model" location="build/monitor/model"/>
-  <property name="build.jms" location="build/protocol/jms"/>
-  <property name="build.report" location="build/reports"/>
-  <property name="build.test" location="build/test"/>
+  <property name="build.ldap" value="build/protocol/ldap"/>
+  <property name="build.mail" value="build/protocol/mail"/>
+  <property name="build.tcp" value="build/protocol/tcp"/>
+  <property name="build.examples" value="build/examples"/>
+  <property name="build.monitor.components" value="build/monitor/components"/>
+  <property name="build.monitor.model" value="build/monitor/model"/>
+  <property name="build.jms" value="build/protocol/jms"/>
+  <property name="build.report" value="build/reports"/>
+  <property name="build.test" value="build/test"/>
   
   <!-- Path prefix to allow Anakia to find stylesheets if running under Eclipse -->
   <!--
@@ -292,7 +292,6 @@
     <include name="LICENSE*.txt"/>
     <include name="NOTICE"/>
     <include name="README"/>
-    <include name="MANIFEST"/>
     <include name="${avalon-framework.jar}"/>
     <include name="${apache-bsf.jar}"/>
     <include name="${jakarta-oro.jar}"/>
@@ -745,7 +744,29 @@ run JMeter unless all the JMeter jars are added.
 
 -->
   <target name="package-only" description="Package already-compiled classes (shortcut for IDE users)">
-    <mkdir dir="${dest.jar}"/>
+  	<manifest file="${build.dir}/MANIFEST_BIN.MF">
+        <attribute name="Built-By" value="${user.name}"/>
+  		<attribute name="Extension-Name" value=" JMeter"/>
+  		<attribute name="Specification-Title" value=" Apache Jakarta JMeter"/>
+  		<attribute name="Specification-Vendor" value=" Apache Software Foundation"/>
+  		<attribute name="Implementation-Vendor" value=" Apache Software Foundation"/>
+  		<attribute name="Implementation-Vendor-Id" value=" org.apache"/>
+  		<attribute name="Implementation-Version" value="${implementation.version}"/>
+        <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
+        <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
+    </manifest>
+
+    <manifest file="${build.dir}/MANIFEST_SRC.MF">
+       <attribute name="Built-By" value="${user.name}"/>
+       <attribute name="Extension-Name" value=" JMeter"/>
+       <attribute name="Specification-Title" value=" Apache Jakarta JMeter"/>
+       <attribute name="Specification-Vendor" value=" Apache Software Foundation"/>
+       <attribute name="Implementation-Vendor" value=" Apache Software Foundation"/>
+       <attribute name="Implementation-Vendor-Id" value=" org.apache"/>
+       <attribute name="Implementation-Version" value="${implementation.version}"/>
+   </manifest>
+
+  	<mkdir dir="${dest.jar}"/>
     
     <!-- perhaps ought to include a basic jmeter.properties file in one of the jars,
     given that JMeterUtils looks for it if it cannot find the external one
@@ -755,20 +776,16 @@ run JMeter unless all the JMeter jars are added.
     <jar jarfile="${dest.jar.jmeter}/ApacheJMeter.jar" 
     	includes="**/NewDriver*,**/DynamicClassLoader*" 
         basedir="${build.core}" 
-    	manifest="MANIFEST">
+    	manifest="${build.dir}/MANIFEST_BIN.MF">
         <metainf dir="." includes="LICENSE,NOTICE"/>
     	<manifest>
            <attribute name="Main-Class" value="org.apache.jmeter.NewDriver"/>
-           <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${implementation.version}"/>
-           <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
-           <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
     	</manifest>
     </jar>
 
     <!-- core -->    
     <jar jarfile="${dest.jar}/ApacheJMeter_core.jar" 
-    	manifest="MANIFEST">
+    	manifest="${build.dir}/MANIFEST_BIN.MF">
       <!-- Only include class files from build tree - see above -->
       <fileset dir="${build.core}" includes="**/*.class"
     	excludes="**/BeanShellClient*.class,**/NewDriver*,**/DynamicClassLoader*"/>
@@ -779,209 +796,115 @@ run JMeter unless all the JMeter jars are added.
       </fileset>
       <!-- This file is used by the jmeter -h option -->
       <fileset dir="${src.core}" includes="org/apache/jmeter/help.txt"/>
-        <metainf dir="." includes="LICENSE,NOTICE"/>
-    	<manifest>
-           <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${implementation.version}"/>
-           <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
-           <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
-    	</manifest>
+      <metainf dir="." includes="LICENSE,NOTICE"/>
     </jar>
     
     <!-- components -->
-    <jar jarfile="${dest.jar}/ApacheJMeter_components.jar" manifest="MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_components.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
       <fileset dir="${build.components}" includes="**/*.class" />
       <fileset dir="${src.components}" includes="**/*.properties" />
-        <metainf dir="." includes="LICENSE,NOTICE"/>
-    	<manifest>
-           <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${implementation.version}"/>
-           <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
-           <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
-    	</manifest>
+      <metainf dir="." includes="LICENSE,NOTICE"/>
     </jar>
     
     <!-- functions -->
-    <jar jarfile="${dest.jar}/ApacheJMeter_functions.jar" manifest="MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_functions.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
       <fileset dir="${build.functions}" includes="**/*.class" />
       <fileset dir="${src.functions}" includes="**/*.properties" />
-        <metainf dir="." includes="LICENSE,NOTICE"/>
-    	<manifest>
-           <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${implementation.version}"/>
-           <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
-           <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
-    	</manifest>
+      <metainf dir="." includes="LICENSE,NOTICE"/>
     </jar>
 
     <!-- http -->
-    <jar jarfile="${dest.jar}/ApacheJMeter_http.jar" manifest="MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_http.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
       <fileset dir="${build.http}" includes="**/*.class"/>
       <fileset dir="${src.http}" includes="**/*.properties" />
-        <metainf dir="." includes="LICENSE,NOTICE"/>
-    	<manifest>
-           <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${implementation.version}"/>
-           <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
-           <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
-    	</manifest>
+      <metainf dir="." includes="LICENSE,NOTICE"/>
     </jar>
   	  	    
     <!-- ftp -->
-    <jar jarfile="${dest.jar}/ApacheJMeter_ftp.jar" manifest="MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_ftp.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
       <fileset dir="${build.ftp}" includes="**/*.class" />
       <fileset dir="${src.ftp}" includes="**/*.properties" />
-        <metainf dir="." includes="LICENSE,NOTICE"/>
-    	<manifest>
-           <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${implementation.version}"/>
-           <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
-           <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
-    	</manifest>
+      <metainf dir="." includes="LICENSE,NOTICE"/>
     </jar>
     
     <!-- jdbc -->
-    <jar jarfile="${dest.jar}/ApacheJMeter_jdbc.jar" manifest="MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_jdbc.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
       <fileset dir="${build.jdbc}" includes="**/*.class" />
       <fileset dir="${src.jdbc}" includes="**/*.properties" />
-        <metainf dir="." includes="LICENSE,NOTICE"/>
-    	<manifest>
-           <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${implementation.version}"/>
-           <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
-           <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
-    	</manifest>
+      <metainf dir="." includes="LICENSE,NOTICE"/>
     </jar>
     
     <!-- java -->
-    <jar jarfile="${dest.jar}/ApacheJMeter_java.jar" manifest="MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_java.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
       <fileset dir="${build.java}" includes="**/*.class" />
       <fileset dir="${src.java}" includes="**/*.properties" />
-        <metainf dir="." includes="LICENSE,NOTICE"/>
-    	<manifest>
-           <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${implementation.version}"/>
-           <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
-           <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
-    	</manifest>
+      <metainf dir="." includes="LICENSE,NOTICE"/>
     </jar>
     
     <!-- BeanShell Client -->
-    <jar jarfile="${lib.dir}/bshclient.jar" manifest="MANIFEST">
+    <jar jarfile="${lib.dir}/bshclient.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
       <fileset dir="${build.core}" includes="**/BeanShellClient*.class" />
-        <metainf dir="." includes="LICENSE,NOTICE"/>
-    	<manifest>
-	   <attribute name="Main-Class" value="org.apache.jmeter.util.BeanShellClient"/>
-           <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${implementation.version}"/>
-           <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
-           <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
-    	</manifest>
+      <metainf dir="." includes="LICENSE,NOTICE"/>
+      <manifest>
+	     <attribute name="Main-Class" value="org.apache.jmeter.util.BeanShellClient"/>
+      </manifest>
     </jar>
   	    
     <!-- junit -->
-    <jar jarfile="${dest.jar}/ApacheJMeter_junit.jar" manifest="MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_junit.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
       <fileset dir="${build.junit}" includes="**/*.class" />
       <fileset dir="${src.junit}" includes="**/*.properties" />
-        <metainf dir="." includes="LICENSE,NOTICE"/>
-    	<manifest>
-           <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${implementation.version}"/>
-           <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
-           <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
-    	</manifest>
+      <metainf dir="." includes="LICENSE,NOTICE"/>
     </jar>
 
     <!-- report -->
-    <jar jarfile="${dest.jar}/ApacheJMeter_report.jar" manifest="MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_report.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
       <fileset dir="${build.report}" includes="**/*.class" />
       <fileset dir="${src.report}" includes="**/*.properties" />
-        <metainf dir="." includes="LICENSE,NOTICE"/>
-    	<manifest>
-           <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${implementation.version}"/>
-           <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
-           <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
-    	</manifest>
+      <metainf dir="." includes="LICENSE,NOTICE"/>
     </jar>
 
     <!-- ldap -->
-    <jar jarfile="${dest.jar}/ApacheJMeter_ldap.jar" manifest="MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_ldap.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
       <fileset dir="${build.ldap}" includes="**/*.class" />
       <fileset dir="${src.ldap}" includes="**/*.properties" />
-        <metainf dir="." includes="LICENSE,NOTICE"/>
-    	<manifest>
-           <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${implementation.version}"/>
-           <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
-           <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
-    	</manifest>
+      <metainf dir="." includes="LICENSE,NOTICE"/>
     </jar>
     
     <!-- mail -->
-    <jar jarfile="${dest.jar}/ApacheJMeter_mail.jar" manifest="MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_mail.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
       <fileset dir="${build.mail}" includes="**/*.class"  />
       <fileset dir="${src.mail}" includes="**/*.properties" />
-        <metainf dir="." includes="LICENSE,NOTICE"/>
-    	<manifest>
-           <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${implementation.version}"/>
-           <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
-           <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
-    	</manifest>
+      <metainf dir="." includes="LICENSE,NOTICE"/>
     </jar>
     
     <!-- tcp -->
-    <jar jarfile="${dest.jar}/ApacheJMeter_tcp.jar" manifest="MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_tcp.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
       <fileset dir="${build.tcp}" includes="**/*.class" />
       <fileset dir="${src.tcp}" includes="**/*.properties" />
-        <metainf dir="." includes="LICENSE,NOTICE"/>
-    	<manifest>
-           <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${implementation.version}"/>
-           <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
-           <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
-    	</manifest>
+      <metainf dir="." includes="LICENSE,NOTICE"/>
     </jar>
     
     <!-- monitor -->
-    <jar jarfile="${dest.jar}/ApacheJMeter_monitors.jar" manifest="MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_monitors.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
       <fileset dir="${build.monitor.model}" includes="**/*.class" />
       <fileset dir="${build.monitor.components}" includes="**/*.class" />
-        <metainf dir="." includes="LICENSE,NOTICE"/>
-    	<manifest>
-           <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${implementation.version}"/>
-           <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
-           <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
-    	</manifest>
+      <metainf dir="." includes="LICENSE,NOTICE"/>
     </jar>
 
     <!-- jms -->
     <!-- Ensure that build dir exists, even if JMS has not been built -->
     <mkdir dir="${build.jms}"/>
-    <jar jarfile="${dest.jar}/ApacheJMeter_jms.jar" manifest="MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_jms.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
       <fileset dir="${build.jms}" includes="**/*.class" />
       <fileset dir="${src.jms}" includes="**/*.properties" />
-        <metainf dir="." includes="LICENSE,NOTICE"/>
-    	<manifest>
-           <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${implementation.version}"/>
-           <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
-           <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
-    	</manifest>
+      <metainf dir="." includes="LICENSE,NOTICE"/>
     </jar>
  	
-    <jar jarfile="${lib.dir}/jorphan.jar" manifest="MANIFEST">
+    <jar jarfile="${lib.dir}/jorphan.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
         <fileset dir="${build.jorphan}" includes="**/*.class"/>
         <fileset dir="${src.jorphan}" includes="**/*.properties"/>
         <metainf dir="." includes="LICENSE,NOTICE"/>
-    	<manifest>
-           <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${implementation.version}"/>
-           <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
-           <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
-    	</manifest>
     </jar>
   </target>
 
@@ -1009,16 +932,10 @@ run JMeter unless all the JMeter jars are added.
     description="Default: build from source. Does not create docs."/>
 
   <target name="install-examples" depends="compile-examples" description="Build and installs the example components.">
-    <jar jarfile="${dest.jar}/ApacheJMeter_examples.jar" manifest="MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_examples.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
       <fileset dir="${build.examples}" includes="**/*.class" />
       <fileset dir="${src.examples}" includes="**/*.properties" />
-        <metainf dir="." includes="LICENSE,NOTICE"/>
-    	<manifest>
-           <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${implementation.version}"/>
-           <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
-           <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
-    	</manifest>
+      <metainf dir="." includes="LICENSE,NOTICE"/>
     </jar>
   </target>
 
@@ -1027,7 +944,6 @@ run JMeter unless all the JMeter jars are added.
     <include name="LICENSE"/>
     <include name="NOTICE"/>
     <include name="README"/>
-    <include name="MANIFEST"/>
     <include name="${dest.jar.jmeter}/ApacheJMeter.jar"/>
     <include name="${dest.jar.jmeter}/BeanShell*.bshrc"/>
     <include name="${dest.jar.jmeter}/jmeter*"/>
@@ -1061,7 +977,6 @@ run JMeter unless all the JMeter jars are added.
     <include name="LICENSE"/>
     <include name="NOTICE"/>
     <include name="README"/>
-    <include name="MANIFEST"/>
     <include name="STATUS"/>
     <include name="${src.dir}/**"/>
     <include name="${src.docs}/**"/>
@@ -1089,7 +1004,6 @@ run JMeter unless all the JMeter jars are added.
 
 	<!-- Files to be included in source download -->
 	<patternset id="dist_src_files">
-  		<!--patternset refid="external.jars"/-->
   		<patternset refid="dist.sources"/>
   		<include name="${dest.docs}/api/**"/>
 		<include name="${velocity.jar}"/>
@@ -1122,7 +1036,8 @@ run JMeter unless all the JMeter jars are added.
 	
 	<!-- Runtime archives -->
     <tar destfile="${dist.dir}/${pack.name}.tar" longfile="gnu">
-      <tarfileset dir="." prefix="${dist.name}" excludes="${dist.executables}" defaultexcludes="yes">
+     <tarfileset dir="." includes="${build.dir}/MANIFEST_BIN.MF" fullpath="${dist.name}/MANIFEST.MF"/>
+     <tarfileset dir="." prefix="${dist.name}" excludes="${dist.executables}" defaultexcludes="yes">
         <patternset refid="dist_bin_files"/>
       </tarfileset>
       <tarfileset mode="755" includes="${dist.executables}" dir="." prefix="${dist.name}" defaultexcludes="yes"/>
@@ -1137,6 +1052,7 @@ run JMeter unless all the JMeter jars are added.
 
 		
     <zip  zipfile="${dist.dir}/${pack.name}.zip">
+      <zipfileset dir="." includes="${build.dir}/MANIFEST_BIN.MF" fullpath="${dist.name}/MANIFEST.MF"/>
       <zipfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
         <patternset refid="dist_bin_files"/>
       </zipfileset>
@@ -1147,6 +1063,7 @@ run JMeter unless all the JMeter jars are added.
 
 	<!-- Source archives -->
     <tar destfile="${dist.dir}/${pack.name}_src.tar" longfile="gnu">
+      <tarfileset dir="." includes="${build.dir}/MANIFEST_SRC.MF" fullpath="${dist.name}/MANIFEST.MF"/>
       <tarfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
         <patternset refid="dist_src_files"/>
       </tarfileset>
@@ -1160,6 +1077,7 @@ run JMeter unless all the JMeter jars are added.
 	</antcall>
 
 	<zip  zipfile="${dist.dir}/${pack.name}_src.zip">
+	  <zipfileset dir="." includes="${build.dir}/MANIFEST_SRC.MF" fullpath="${dist.name}/MANIFEST.MF"/>
       <zipfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
         <patternset refid="dist_src_files"/>
       </zipfileset>
@@ -1266,6 +1184,7 @@ run JMeter unless all the JMeter jars are added.
     <property name="pack.name" value="${dist.name}_bin"/>
     <mkdir dir="${dist.dir}"/>
     <tar destfile="${dist.dir}/${pack.name}.tar" longfile="gnu">
+      <tarfileset dir="." includes="${build.dir}/MANIFEST_BIN.MF" fullpath="${dist.name}/MANIFEST.MF"/>
       <tarfileset dir="." prefix="${dist.name}" excludes="${dist.executables}" defaultexcludes="yes">
         <patternset refid="dist.binaries"/>
       </tarfileset>
@@ -1275,6 +1194,7 @@ run JMeter unless all the JMeter jars are added.
 	<!-- no longer needed -->
 	<delete file="${dist.dir}/${pack.name}.tar"/>
     <zip  zipfile="${dist.dir}/${pack.name}.zip">
+      <zipfileset dir="." includes="${build.dir}/MANIFEST_BIN.MF" fullpath="${dist.name}/MANIFEST.MF"/>
       <zipfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
         <patternset refid="dist.binaries"/>
       </zipfileset>
@@ -1285,6 +1205,7 @@ run JMeter unless all the JMeter jars are added.
     <property name="pack.name" value="${dist.name}_lib"/>
     <mkdir dir="${dist.dir}"/>
     <tar destfile="${dist.dir}/${pack.name}.tar" longfile="gnu">
+      <tarfileset dir="." includes="${build.dir}/MANIFEST_BIN.MF" fullpath="${dist.name}/MANIFEST.MF"/>
       <tarfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
         <patternset refid="external.jars"/>
       </tarfileset>
@@ -1293,6 +1214,7 @@ run JMeter unless all the JMeter jars are added.
 	<!-- no longer needed -->
 	<delete file="${dist.dir}/${pack.name}.tar"/>
     <zip  zipfile="${dist.dir}/${pack.name}.zip">
+      <zipfileset dir="." includes="${build.dir}/MANIFEST_BIN.MF" fullpath="${dist.name}/MANIFEST.MF"/>
       <zipfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
         <patternset refid="external.jars"/>
       </zipfileset>
@@ -1303,12 +1225,14 @@ run JMeter unless all the JMeter jars are added.
     <property name="pack.name" value="${dist.name}_api"/>
     <mkdir dir="${dist.dir}"/>
     <tar destfile="${dist.dir}/${pack.name}.tar" longfile="gnu">
+      <tarfileset dir="." includes="${build.dir}/MANIFEST_BIN.MF" fullpath="${dist.name}/MANIFEST.MF"/>
       <tarfileset includes="${dest.docs.api}/" dir="." prefix="${dist.name}" defaultexcludes="yes"/>
     </tar>
     <gzip zipfile="${dist.dir}/${pack.name}.tgz" src="${dist.dir}/${pack.name}.tar" />
 	<!-- no longer needed -->
 	<delete file="${dist.dir}/${pack.name}.tar"/>
     <zip  zipfile="${dist.dir}/${pack.name}.zip">
+       <zipfileset dir="." includes="${build.dir}/MANIFEST_BIN.MF" fullpath="${dist.name}/MANIFEST.MF"/>
       <zipfileset includes="${dest.docs.api}/" dir="." prefix="${dist.name}" defaultexcludes="yes"/>
     </zip>
     </target>
@@ -1317,6 +1241,7 @@ run JMeter unless all the JMeter jars are added.
     <property name="pack.name" value="${dist.name}_src"/>
     <mkdir dir="${dist.dir}"/>
     <tar destfile="${dist.dir}/${pack.name}.tar" longfile="gnu">
+      <tarfileset dir="." includes="${build.dir}/MANIFEST_SRC.MF" fullpath="${dist.name}/MANIFEST.MF"/>
       <tarfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
         <patternset refid="dist.sources"/>
       </tarfileset>
@@ -1325,6 +1250,7 @@ run JMeter unless all the JMeter jars are added.
 	<!-- no longer needed -->
 	<delete file="${dist.dir}/${pack.name}.tar"/>
     <zip  zipfile="${dist.dir}/${pack.name}.zip">
+      <zipfileset dir="." includes="${build.dir}/MANIFEST_SRC.MF" fullpath="${dist.name}/MANIFEST.MF"/>
       <zipfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
         <patternset refid="dist.sources"/>
       </zipfileset>
