@@ -409,7 +409,9 @@
   	-->
     <property name="jmeter.version" value="2.3.2.${DSTAMP}"/>
     <property name="implementation.version" value="${jmeter.version} r${svn.revision}"/>
+    <property name="display.version" value="${jmeter.version} r${svn.revision}"/>
    	<echo>jmeter.version = ${jmeter.version}</echo>
+    <echo>display.version = ${display.version}</echo>
    	<echo>implementation.version = ${implementation.version}</echo>
   </target>
 
@@ -422,7 +424,9 @@
    	<property name="jmeter.version" value="r${svn.revision}"/>
   	<!-- Copy the value to avoid duplication of revision in Manifests -->
     <property name="implementation.version" value="${jmeter.version}"/>
+    <property name="display.version" value="${jmeter.version}"/>
    	<echo>jmeter.version = ${jmeter.version}</echo>
+    <echo>display.version = ${display.version}</echo>
    	<echo>implementation.version = ${implementation.version}</echo>
   </target>
 
@@ -455,10 +459,10 @@
   </target>
 
   <target name="update-version" unless="version.noupdate">
-    <echo>Updating version string</echo>
+    <echo>Updating version string to "${display.version}"</echo>
     <replaceregexp file="${src.core}/org/apache/jmeter/util/JMeterVersion.java"
     	match="VERSION = &quot;.*?&quot;"
-	replace="VERSION = &quot;${jmeter.version}&quot;"/>
+	replace="VERSION = &quot;${display.version}&quot;"/>
   </target>
 
   <target name="compile-components" depends="compile-jorphan,compile-core" description="Compile generic (protocol-independent) components.">
@@ -1009,7 +1013,7 @@ run JMeter unless all the JMeter jars are added.
 		<include name="${velocity.jar}"/>
   	</patternset>
 
-	<!-- Invoke with -Djmeter.version=m.n -Duser.name=xyz@apache.org [-Dsvn.revision=nnnnn]
+	<!-- Invoke with -Djmeter.version=m.n -Duser.name=xyz@apache.org [-Dsvn.revision=nnnnn] [-Ddisplay.version=xxxx]
 	Creates clean build and all documentation
 	Creates runtime and source distributions and site documentation
 	-->
@@ -1028,10 +1032,10 @@ run JMeter unless all the JMeter jars are added.
 		description="Build JMeter for nightly dir (package docs-printable pack-nightly)"/>
 		
 	<!-- Internal target -->
-	<target name="_distribution">
+	<target name="_distribution" depends="check-versions">
   	<property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
   	<property name="pack.name" value="${dist.name}"/>
-	<echo>Creating JMeter distribution ${dist.name}</echo>
+	<echo>Creating JMeter distribution ${dist.name} ${svn.revision}</echo>
     <mkdir dir="${dist.dir}"/>
 	
 	<!-- Runtime archives -->
