@@ -1490,6 +1490,9 @@ run JMeter unless all the JMeter jars are added.
   	<property name="batchtest.out" location="${basedir}/bin"/>
     <property name="batchtest.name" value="BatchTestLocal"/>
 
+  	<!-- Fix the EOL in case the file was derived from the "wrong" archive type -->
+    <fixcrlf srcdir="${batchtest.inp}" includes="${batchtest.name}.csv"/>
+
   	<echo level="info" message="Starting ${batchtest.name} using ${remote}"/>
   	
   	<macrodef name="deleteworkfiles">
