@@ -359,22 +359,22 @@
     <pathelement location="${excalibur-instrument.jar}"/>
     <pathelement location="${excalibur-logger.jar}"/>
     <pathelement location="${excalibur-pool.jar}"/>
-    <pathelement location="${htmlparser.jar}"/>
     <pathelement location="${htmllexer.jar}"/>
+    <pathelement location="${htmlparser.jar}"/>
     <pathelement location="${jakarta-oro.jar}"/>
     <pathelement location="${jcharts.jar}"/>
     <pathelement location="${jdom.jar}"/>
     <pathelement location="${js_rhino.jar}"/>
     <pathelement location="${junit.jar}"/>
     <pathelement location="${logkit.jar}"/>
+    <pathelement location="${serializer.jar}"/>
     <pathelement location="${soap.jar}"/>
     <pathelement location="${tidy.jar}"/>
-    <pathelement location="${xstream.jar}"/>
-    <pathelement location="${xpp3.jar}"/>
-    <pathelement location="${serializer.jar}"/>
     <pathelement location="${xalan.jar}"/>
     <pathelement location="${xerces.jar}"/>
     <pathelement location="${xml-apis.jar}"/>
+    <pathelement location="${xpp3.jar}"/>
+    <pathelement location="${xstream.jar}"/>
   	<!-- Generated jars -->
     <fileset dir="${lib.dir}" includes="jorphan.jar"/>
   	<!-- API-only jars-->
