@@ -1349,6 +1349,7 @@ run JMeter unless all the JMeter jars are added.
 
 <!--
 	Run Doccheck: See http://java.sun.com/j2se/javadoc/doccheck/docs/DocCheck.html
+	and http://java.sun.com/j2se/javadoc/doccheck/
 	Download the doclet, and put the jar in lib/opt.
 	Output is in reports/ directory
 -->
