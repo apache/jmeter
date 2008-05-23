@@ -436,10 +436,20 @@
     -->
   <target name="check-anakia">
     <available classpathref="anakia.classpath" classname="org.apache.velocity.anakia.AnakiaTask" property="AnakiaTask.present"/>
+  	<!-- Check for Velocity version 1.5 -->
+    <available classpathref="anakia.classpath" classname="org.apache.velocity.io.UnicodeInputStream" property="velocity.version.15"/>
+  	<antcall target="report-old-velocity"></antcall>
   </target>
+
   <target name="report-anakia-missing" depends="check-anakia" unless="AnakiaTask.present">
     <echo>
       AnakiaTask is not present, documentation will not be generated.
+    </echo>
+  </target>
+
+  <target name="report-old-velocity" unless="velocity.version.15" if="AnakiaTask.present">
+    <echo>
+      Velocity version appears to be older than 1.5: the documentation may be generated with incorrect line endings.
     </echo>
   </target>
 
