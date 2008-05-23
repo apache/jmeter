@@ -304,8 +304,6 @@
     <include name="${commons-logging.jar}"/>
     <include name="${commons-net.jar}"/>
     <include name="${excalibur-logger.jar}"/>
-    <include name="${excalibur-i18n.jar}"/>
-    <include name="${excalibur-compatibility.jar}"/>
     <include name="${htmllexer.jar}"/>
     <include name="${htmlparser.jar}"/>
     <include name="${jcharts.jar}"/>
@@ -357,9 +355,7 @@
     <pathelement location="${commons-lang.jar}"/>
     <pathelement location="${commons-logging.jar}"/>
     <pathelement location="${commons-net.jar}"/>
-    <pathelement location="${excalibur-compatibility.jar}"/>
     <pathelement location="${excalibur-datasource.jar}"/>
-    <pathelement location="${excalibur-i18n.jar}"/>
     <pathelement location="${excalibur-instrument.jar}"/>
     <pathelement location="${excalibur-logger.jar}"/>
     <pathelement location="${excalibur-pool.jar}"/>
