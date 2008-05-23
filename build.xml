@@ -292,9 +292,9 @@
     <include name="LICENSE*.txt"/>
     <include name="NOTICE"/>
     <include name="README"/>
-    <include name="${avalon-framework.jar}"/>
     <include name="${apache-bsf.jar}"/>
-    <include name="${jakarta-oro.jar}"/>
+    <include name="${avalon-framework.jar}"/>
+    <include name="${batik-awt-util.jar}"/>
     <include name="${commons-codec.jar}"/>
     <include name="${commons-collections.jar}"/>
     <include name="${commons-httpclient.jar}"/>
@@ -303,26 +303,26 @@
     <include name="${commons-lang.jar}"/>
     <include name="${commons-logging.jar}"/>
     <include name="${commons-net.jar}"/>
+    <include name="${excalibur-datasource.jar}"/>
+    <include name="${excalibur-instrument.jar}"/>
     <include name="${excalibur-logger.jar}"/>
+    <include name="${excalibur-pool.jar}"/>
     <include name="${htmllexer.jar}"/>
     <include name="${htmlparser.jar}"/>
+    <include name="${jakarta-oro.jar}"/>
     <include name="${jcharts.jar}"/>
+    <include name="${jdom.jar}"/>
+    <include name="${js_rhino.jar}"/>
     <include name="${junit.jar}"/>
     <include name="${logkit.jar}"/>
     <include name="${serializer.jar}"/>
+    <include name="${soap.jar}"/>
+    <include name="${tidy.jar}"/>
     <include name="${xalan.jar}"/>
     <include name="${xerces.jar}"/>
     <include name="${xml-apis.jar}"/>
-    <include name="${jdom.jar}"/>
-    <include name="${js_rhino.jar}"/>
-    <include name="${soap.jar}"/>
-    <include name="${tidy.jar}"/>
-    <include name="${excalibur-datasource.jar}"/>
-    <include name="${excalibur-pool.jar}"/>
-    <include name="${excalibur-instrument.jar}"/>
-    <include name="${batik-awt-util.jar}"/>
-    <include name="${xstream.jar}"/>
     <include name="${xpp3.jar}"/>
+    <include name="${xstream.jar}"/>
   </patternset>
 
   <!--
