@@ -983,7 +983,6 @@ run JMeter unless all the JMeter jars are added.
     <include name="LICENSE"/>
     <include name="NOTICE"/>
     <include name="README"/>
-    <include name="STATUS"/>
     <include name="${src.dir}/**"/>
     <include name="${src.docs}/**"/>
     <include name="${velocity.jar}"/>
@@ -1174,6 +1173,7 @@ run JMeter unless all the JMeter jars are added.
     <antcall target="_pack-source"/>
   </target>
 
+  <!-- As pack-dist but without javadoc -->
   <target name="pack-nightly" depends="init-version">
     <property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
     <antcall target="_pack-binaries"/>
