@@ -965,6 +965,8 @@ run JMeter unless all the JMeter jars are added.
     <exclude name="${dest.jar.jmeter}/*.log"/>
     <include name="${dest.jar}/"/>
     <include name="${dest.printable_docs}/**"/>
+    <!-- We also need the images for the printable docs -->
+    <include name="${dest.docs}/images/**"/>
     <include name="${extras.dir}/**"/>
     <include name="${lib.dir}/bshclient.jar"/>
     <include name="${lib.dir}/jorphan.jar"/>
@@ -984,6 +986,7 @@ run JMeter unless all the JMeter jars are added.
     <include name="STATUS"/>
     <include name="${src.dir}/**"/>
     <include name="${src.docs}/**"/>
+    <include name="${velocity.jar}"/>
     <include name="${src.test}/**"/>
     <include name="build.xml"/>
     <include name="build.properties"/>
@@ -1001,17 +1004,11 @@ run JMeter unless all the JMeter jars are added.
 	<patternset id="dist_bin_files">
   		<patternset refid="dist.binaries"/>
   		<patternset refid="external.jars"/>
-  		<include name="${dest.docs}/**"/>
-  		<exclude name="${dest.docs}/api/**"/>
-  	</patternset>
-	<!-- TODO: find way to share images etc between the two document sets -->
-
-	<!-- Files to be included in source download -->
-	<patternset id="dist_src_files">
-  		<patternset refid="dist.sources"/>
+		<!-- We don't need the site docs, but we do want Javadoc (e.g. for BeanShell) -->
   		<include name="${dest.docs}/api/**"/>
-		<include name="${velocity.jar}"/>
   	</patternset>
+
+	<!-- NOTE: the site documents are not included in either archive -->
 
 	<!-- Invoke with -Djmeter.version=m.n -Duser.name=xyz@apache.org [-Dsvn.revision=nnnnn] [-Ddisplay.version=xxxx]
 	Creates clean build and all documentation
@@ -1069,7 +1066,7 @@ run JMeter unless all the JMeter jars are added.
     <tar destfile="${dist.dir}/${pack.name}_src.tar" longfile="gnu">
       <tarfileset dir="." includes="${build.dir}/MANIFEST_SRC.MF" fullpath="${dist.name}/MANIFEST.MF"/>
       <tarfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
-        <patternset refid="dist_src_files"/>
+        <patternset refid="dist.sources"/>
       </tarfileset>
     </tar>
 
@@ -1083,7 +1080,7 @@ run JMeter unless all the JMeter jars are added.
 	<zip  zipfile="${dist.dir}/${pack.name}_src.zip">
 	  <zipfileset dir="." includes="${build.dir}/MANIFEST_SRC.MF" fullpath="${dist.name}/MANIFEST.MF"/>
       <zipfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
-        <patternset refid="dist_src_files"/>
+        <patternset refid="dist.sources"/>
       </zipfileset>
     </zip>
 	<antcall target="_md5">
