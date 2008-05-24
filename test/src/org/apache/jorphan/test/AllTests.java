@@ -138,6 +138,7 @@ public final class AllTests {
 
 		log.info("JMeterVersion="+JMeterUtils.getJMeterVersion());
 		logprop("java.version", true);
+        logprop("java.vm.name");
 		logprop("java.vendor");
 		logprop("java.home", true);
 		logprop("user.home");
