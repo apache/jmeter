@@ -61,6 +61,9 @@ goto setupArgs
 rem This label provides a place for the argument list loop to break out 
 rem and for NT handling to skip to.
 
+rem The following link describes the -XX options:
+rem http://java.sun.com/javase/technologies/hotspot/vmoptions.jsp
+
 rem See the unix startup file for the rationale of the following parameters,
 rem including some tuning recommendations
 set HEAP=-Xms256m -Xmx256m
@@ -85,6 +88,7 @@ rem set DDRAW=%DDRAW% -Dsun.java2d.ddoffscreen=false
 rem Setting this flag to true enables hardware-accelerated scaling.
 rem set DDRAW=%DDRAW% -Dsun.java2d.ddscale=true
 
+rem Server mode
 rem Collect the settings defined above
 set ARGS=%HEAP% %NEW% %SURVIVOR% %TENURING% %EVACUATION% %RMIGC% %PERM% %DDRAW%
 
