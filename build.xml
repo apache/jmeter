@@ -991,7 +991,6 @@ run JMeter unless all the JMeter jars are added.
     <include name="README"/>
     <include name="${src.dir}/**"/>
     <include name="${src.docs}/**"/>
-    <include name="${velocity.jar}"/>
     <include name="${src.test}/**"/>
     <include name="build.xml"/>
     <include name="build.properties"/>
@@ -1000,11 +999,16 @@ run JMeter unless all the JMeter jars are added.
     <include name="eclipse.classpath"/>
     <include name="eclipse.readme"/>
     <include name="${lib.dir}/aareadme.txt"/>
-    <include name="${lib.api}/*.jar"/>
     <include name="fb-*.x*"/>
     <include name="KEYS.txt"/>
   </patternset>
   
+  <!-- Treat the jars separately -->
+  <patternset id="dist.sources.jars">
+    <include name="${velocity.jar}"/>
+    <include name="${lib.api}/*.jar"/>
+  </patternset>
+	  
   	<!-- Files to be included in full download -->
 	<patternset id="dist_bin_files">
   		<patternset refid="dist.binaries"/>
@@ -1072,6 +1076,7 @@ run JMeter unless all the JMeter jars are added.
       <tarfileset dir="." includes="${build.dir}/MANIFEST_SRC.MF" fullpath="${dist.name}/MANIFEST.MF"/>
       <tarfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
         <patternset refid="dist.sources"/>
+        <patternset refid="dist.sources.jars"/>
       </tarfileset>
     </tar>
 
@@ -1086,6 +1091,7 @@ run JMeter unless all the JMeter jars are added.
 	  <zipfileset dir="." includes="${build.dir}/MANIFEST_SRC.MF" fullpath="${dist.name}/MANIFEST.MF"/>
       <zipfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
         <patternset refid="dist.sources"/>
+        <patternset refid="dist.sources.jars"/>
       </zipfileset>
     </zip>
 	<antcall target="_md5">
@@ -1251,6 +1257,7 @@ run JMeter unless all the JMeter jars are added.
       <tarfileset dir="." includes="${build.dir}/MANIFEST_SRC.MF" fullpath="${dist.name}/MANIFEST.MF"/>
       <tarfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
         <patternset refid="dist.sources"/>
+        <patternset refid="dist.sources.jars"/>
       </tarfileset>
     </tar>
     <gzip zipfile="${dist.dir}/${pack.name}.tgz" src="${dist.dir}/${pack.name}.tar" />
@@ -1260,6 +1267,7 @@ run JMeter unless all the JMeter jars are added.
       <zipfileset dir="." includes="${build.dir}/MANIFEST_SRC.MF" fullpath="${dist.name}/MANIFEST.MF"/>
       <zipfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
         <patternset refid="dist.sources"/>
+        <patternset refid="dist.sources.jars"/>
       </zipfileset>
     </zip>
     </target>
@@ -1629,6 +1637,7 @@ run JMeter unless all the JMeter jars are added.
         <pathelement location="${build.test}"/>
     	<path refid="classpath"/>
       </classpath>
+   	  <jvmarg value="-server"/>
       <sysproperty key="java.awt.headless" value="${test.headless}"/>
       <sysproperty key="testsaveservice.saveout" value="${testsaveservice.saveout}" />
       <arg value="${build.test}"/>
