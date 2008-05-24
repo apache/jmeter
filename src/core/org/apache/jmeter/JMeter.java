@@ -284,6 +284,7 @@ public class JMeter implements JMeterPlugin {
             log.info(JMeterUtils.getJMeterCopyright());
             log.info("Version " + JMeterUtils.getJMeterVersion());
 			logProperty("java.version"); //$NON-NLS-1$
+            logProperty("java.vm.name"); //$NON-NLS-1$
 			logProperty("os.name"); //$NON-NLS-1$
 			logProperty("os.arch"); //$NON-NLS-1$
 			logProperty("os.version"); //$NON-NLS-1$

@@ -81,6 +81,7 @@ public abstract class JMeterTestCase extends TestCase {
 				System.out.println("** Can't find resources - continuing anyway **");
 			}
 			logprop("java.version");
+            logprop("java.vm.name");
 			logprop("java.vendor");
 			logprop("java.home");
 			logprop("user.home");
