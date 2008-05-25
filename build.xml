@@ -984,6 +984,8 @@ run JMeter unless all the JMeter jars are added.
     <include name="${dest.jar.jmeter}/jmeter*"/>
     <exclude name="${dest.jar.jmeter}/jmeter.properties"/>
     <include name="${dest.jar.jmeter}/mirror*"/>
+    <!-- Exclude any files that might be present from testing the release -->
+    <exclude name="${dest.jar.jmeter}/*.log"/>
     <include name="${dest.jar}/"/>
     <include name="${lib.dir}/bshclient.jar"/>
     <include name="${lib.dir}/jorphan.jar"/>
