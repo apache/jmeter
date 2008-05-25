@@ -994,12 +994,6 @@ run JMeter unless all the JMeter jars are added.
     <include name="${extras.dir}/*.jmx"/>
   </patternset>
   
-  <!-- Keep original name for nightly builds -->
-  <patternset id="dist.binaries">
-    <patternset refid="dist.binaries.native"/>
-    <patternset refid="dist.binaries.non.native"/>
-  </patternset>
-
   <!--
       List of Unix executable files in the binary distribution
       These need special handling to create the correct file mode
@@ -1337,7 +1331,10 @@ run JMeter unless all the JMeter jars are added.
     <tar destfile="${dist.dir}/${pack.name}.tar" longfile="gnu">
       <tarfileset dir="." includes="${build.dir}/MANIFEST_BIN.MF" fullpath="${dist.name}/MANIFEST.MF"/>
       <tarfileset dir="." prefix="${dist.name}" excludes="${dist.executables}" defaultexcludes="yes">
-        <patternset refid="dist.binaries"/>
+        <patternset refid="dist.binaries.native"/>
+      </tarfileset>
+      <tarfileset dir="." prefix="${dist.name}" excludes="${dist.executables}" defaultexcludes="yes">
+        <patternset refid="dist.binaries.non.native"/>
       </tarfileset>
       <tarfileset mode="755" includes="${dist.executables}" dir="." prefix="${dist.name}" defaultexcludes="yes"/>
     </tar>
@@ -1347,7 +1344,10 @@ run JMeter unless all the JMeter jars are added.
     <zip  zipfile="${dist.dir}/${pack.name}.zip">
       <zipfileset dir="." includes="${build.dir}/MANIFEST_BIN.MF" fullpath="${dist.name}/MANIFEST.MF"/>
       <zipfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
-        <patternset refid="dist.binaries"/>
+        <patternset refid="dist.binaries.native"/>
+      </zipfileset>
+      <zipfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
+        <patternset refid="dist.binaries.non.native"/>
       </zipfileset>
     </zip>
     </target>
