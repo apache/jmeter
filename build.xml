@@ -286,12 +286,15 @@
   <!-- 3rd party libraries to be included in the binary distribution -->
   <property file="build.properties"/>
 
+  <patternset id="external.jars.notices">
+	    <include name="LICENSE"/>
+	    <include name="LICENSE*.txt"/>
+	    <include name="NOTICE"/>
+	    <include name="README"/>
+  </patternset>
+
   <!-- Jars for binary release -->
   <patternset id="external.jars">
-    <include name="LICENSE"/>
-    <include name="LICENSE*.txt"/>
-    <include name="NOTICE"/>
-    <include name="README"/>
     <include name="${apache-bsf.jar}"/>
     <include name="${avalon-framework.jar}"/>
     <include name="${batik-awt-util.jar}"/>
@@ -950,15 +953,14 @@ run JMeter unless all the JMeter jars are added.
   </target>
 
   <!-- list of files needed for a binary distribution (excluding library files) -->
-  <patternset id="dist.binaries">
+  <patternset id="dist.binaries.native">
     <include name="LICENSE"/>
     <include name="NOTICE"/>
     <include name="README"/>
-    <include name="${dest.jar.jmeter}/ApacheJMeter.jar"/>
     <include name="${dest.jar.jmeter}/BeanShell*.bshrc"/>
-    <include name="${dest.jar.jmeter}/jmeter*"/>
     <include name="${dest.jar.jmeter}/log4j.conf"/>
     <include name="${dest.jar.jmeter}/logkit.xml"/>
+    <include name="${dest.jar.jmeter}/jmeter.properties"/>
     <include name="${dest.jar.jmeter}/upgrade.properties"/>
     <include name="${dest.jar.jmeter}/saveservice.properties"/>
     <include name="${dest.jar.jmeter}/users.dtd"/>
@@ -969,14 +971,32 @@ run JMeter unless all the JMeter jars are added.
     <include name="${dest.jar.jmeter}/user.properties"/>
     <!-- Exclude any files that might be present from testing the release -->
     <exclude name="${dest.jar.jmeter}/*.log"/>
-    <include name="${dest.jar}/"/>
     <include name="${dest.printable_docs}/**"/>
+    <include name="${extras.dir}/**"/>
+    <exclude name="${extras.dir}/*.jar"/>
+    <exclude name="${extras.dir}/*.jpg"/>
+    <exclude name="${extras.dir}/*.jmx"/>
+  </patternset>
+
+  <patternset id="dist.binaries.non.native">
     <!-- We also need the images for the printable docs -->
     <include name="${dest.docs}/images/**"/>
-    <include name="${extras.dir}/**"/>
+    <include name="${dest.jar.jmeter}/jmeter*"/>
+    <exclude name="${dest.jar.jmeter}/jmeter.properties"/>
+    <include name="${dest.jar}/"/>
     <include name="${lib.dir}/bshclient.jar"/>
     <include name="${lib.dir}/jorphan.jar"/>
     <include name="${lib.dir}/junit/test.jar"/>
+    <include name="${dest.jar.jmeter}/ApacheJMeter.jar"/>
+    <include name="${extras.dir}/*.jar"/>
+    <include name="${extras.dir}/*.jpg"/>
+    <include name="${extras.dir}/*.jmx"/>
+  </patternset>
+  
+  <!-- Keep original name for nightly builds -->
+  <patternset id="dist.binaries">
+    <patternset refid="dist.binaries.native"/>
+    <patternset refid="dist.binaries.non.native"/>
   </patternset>
 
   <!--
@@ -985,16 +1005,26 @@ run JMeter unless all the JMeter jars are added.
   -->
   <property name="dist.executables" value="${dest.jar.jmeter}/jmeter ${dest.jar.jmeter}/jmeter.sh ${dest.jar.jmeter}/jmeter-server"/>
 
-  <patternset id="dist.sources">
+  <!-- List of files in source distribution that are eol=native -->
+  <patternset id="dist.sources.native">
     <include name="LICENSE"/>
     <include name="NOTICE"/>
     <include name="README"/>
     <include name="${src.dir}/**"/>
+    <exclude name="${src.dir}/**/images/**"/>
     <include name="${src.docs}/**"/>
+    <exclude name="${src.docs}/images/**"/>
+    <exclude name="${src.docs}/**/*.jmx"/>
+    <exclude name="${src.docs}/**/*.pdf"/>
+    <exclude name="${src.docs}/**/*.sxi"/>
+    <exclude name="${src.docs}/**/*.sxw"/>
     <include name="${src.test}/**"/>
     <include name="build.xml"/>
     <include name="build.properties"/>
     <include name="${dest.jar.jmeter}/testfiles/**"/>
+    <exclude name="${dest.jar.jmeter}/testfiles/*.jmx"/>
+    <exclude name="${dest.jar.jmeter}/testfiles/*.jtl"/>
+  	<!-- Ignore unit test output -->
     <exclude name="${dest.jar.jmeter}/testfiles/*.out"/>
     <include name="eclipse.classpath"/>
     <include name="eclipse.readme"/>
@@ -1003,19 +1033,63 @@ run JMeter unless all the JMeter jars are added.
     <include name="KEYS.txt"/>
   </patternset>
   
-  <!-- Treat the jars separately -->
-  <patternset id="dist.sources.jars">
+  <!-- Non-native items -->
+  <patternset id="dist.sources.non.native">
     <include name="${velocity.jar}"/>
     <include name="${lib.api}/*.jar"/>
+    <include name="${src.dir}/**/images/**"/>
+    <include name="${src.docs}/images/**"/>
+    <include name="${src.docs}/**/*.jmx"/>
+    <include name="${src.docs}/**/*.pdf"/>
+    <include name="${src.docs}/**/*.sxi"/>
+    <include name="${src.docs}/**/*.sxw"/>
+    <include name="${dest.jar.jmeter}/testfiles/*.jmx"/>
+    <include name="${dest.jar.jmeter}/testfiles/*.jtl"/>
   </patternset>
-	  
+
+	<!-- Convert eol:native source files to appropriate format if required -->
+	<target name="_filter" unless="native.${eoltype}">
+		<property name="workdir" value="${dist.dir}/${eoltype}"/>
+		<echo>Copying files to work directory ${workdir}</echo>
+		<mkdir dir="${workdir}"/>
+		<copy includeemptydirs="false" todir="${workdir}">
+			<fileset dir=".">
+				<patternset refid="${fileset}"/>
+			</fileset>
+		</copy>
+        <echo>Converting work files to eol=${eoltype}</echo>
+		<fixcrlf eol="${eoltype}" srcdir="${workdir}">
+            <include name="*"/>
+            <include name="eclipse.classpath"/>
+            <include name="**/*.all"/>
+            <include name="**/*.bsh"/>
+            <include name="**/testfiles/*.csv"/>
+            <include name="**/testfiles/*.tsv"/>
+            <include name="**/*.properties"/>
+            <include name="**/*.html"/>
+			<include name="**/*.java"/>
+            <include name="**/*.readme"/>
+            <include name="**/*.set"/>
+            <include name="**/*.txt"/>
+            <include name="**/*.vsl"/>
+            <include name="**/*.xml"/>
+            <include name="**/*.xsd"/>
+            <include name="**/*.xsl"/>
+		</fixcrlf>
+	</target>
+	
   	<!-- Files to be included in full download -->
-	<patternset id="dist_bin_files">
-  		<patternset refid="dist.binaries"/>
-  		<patternset refid="external.jars"/>
+	<patternset id="dist_bin_files_native">
+  		<patternset refid="dist.binaries.native"/>
+        <patternset refid="external.jars.notices"/>
 		<!-- We don't need the site docs, but we do want Javadoc (e.g. for BeanShell) -->
   		<include name="${dest.docs}/api/**"/>
   	</patternset>
+
+    <patternset id="dist_bin_files_non_native">
+        <patternset refid="dist.binaries.non.native"/>
+        <patternset refid="external.jars"/>
+    </patternset>
 
 	<!-- NOTE: the site documents are not included in either archive -->
 
@@ -1037,21 +1111,59 @@ run JMeter unless all the JMeter jars are added.
 		depends="init-svnVersion,check-versions,package,docs-printable,pack-nightly"
 		description="Build JMeter for nightly dir (package docs-printable pack-nightly)"/>
 		
+	<target name="_eolcheck">
+		<!-- Determine if the native format is CRLF or LF (or neither) -->
+		<condition property="native.lf">
+			<os family="unix"/>
+		</condition>
+        <condition property="native.crlf">
+            <os family="dos"/>
+        </condition>
+		<!-- Define native.dir.x as either the source or updated directory as appropriate -->
+		<condition property="native.dir.lf" value=".">
+			<isset property="native.lf"/>
+		</condition>
+        <condition property="native.dir.crlf" value=".">
+            <isset property="native.crlf"/>
+        </condition>
+        <condition property="native.dir.lf" value="${dist.dir}/lf">
+            <not><isset property="native.lf"/></not>
+        </condition>
+        <condition property="native.dir.crlf" value="${dist.dir}/crlf">
+        	<not><isset property="native.crlf"/></not>
+        </condition>
+		<echoproperties prefix="native"></echoproperties>
+	</target>
+
 	<!-- Internal target -->
-	<target name="_distribution" depends="check-versions">
+	<target name="_distribution" depends="check-versions,_eolcheck">
   	<property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
   	<property name="pack.name" value="${dist.name}"/>
 	<echo>Creating JMeter distribution ${dist.name} ${svn.revision}</echo>
     <mkdir dir="${dist.dir}"/>
 	
+    <!-- Delete work directories just in case -->
+    <delete dir="${dist.dir}/crlf" quiet="true"/>
+    <delete dir="${dist.dir}/lf" quiet="true"/>
+
 	<!-- Runtime archives -->
-    <tar destfile="${dist.dir}/${pack.name}.tar" longfile="gnu">
-     <tarfileset dir="." includes="${build.dir}/MANIFEST_BIN.MF" fullpath="${dist.name}/MANIFEST.MF"/>
-     <tarfileset dir="." prefix="${dist.name}" excludes="${dist.executables}" defaultexcludes="yes">
-        <patternset refid="dist_bin_files"/>
+    <antcall target="_filter">
+        <param name="eoltype" value="lf"/>
+        <param name="fileset" value="dist_bin_files_native"/>
+    </antcall>
+
+	<tar destfile="${dist.dir}/${pack.name}.tar" longfile="gnu">
+      <tarfileset dir="." includes="${build.dir}/MANIFEST_BIN.MF" fullpath="${dist.name}/MANIFEST.MF"/>
+      <tarfileset dir="." prefix="${dist.name}" excludes="${dist.executables}" defaultexcludes="yes">
+         <patternset refid="dist_bin_files_non_native"/>
       </tarfileset>
       <tarfileset mode="755" includes="${dist.executables}" dir="." prefix="${dist.name}" defaultexcludes="yes"/>
+      <tarfileset dir="${native.dir.lf}" prefix="${dist.name}">
+         <patternset refid="dist_bin_files_native"/>
+      </tarfileset>
     </tar>
+	<!-- Delete work directory (may not exist) -->
+	<delete dir="${dist.dir}/lf" quiet="true"/>
 
 	<gzip zipfile="${dist.dir}/${pack.name}.tgz" src="${dist.dir}/${pack.name}.tar" />
 	<!-- no longer needed -->
@@ -1061,24 +1173,41 @@ run JMeter unless all the JMeter jars are added.
 	</antcall>
 
 		
+    <antcall target="_filter">
+        <param name="eoltype" value="crlf"/>
+        <param name="fileset" value="dist_bin_files_native"/>
+    </antcall>
     <zip  zipfile="${dist.dir}/${pack.name}.zip">
       <zipfileset dir="." includes="${build.dir}/MANIFEST_BIN.MF" fullpath="${dist.name}/MANIFEST.MF"/>
       <zipfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
-        <patternset refid="dist_bin_files"/>
+        <patternset refid="dist_bin_files_non_native"/>
+      </zipfileset>
+      <zipfileset dir="${native.dir.crlf}" prefix="${dist.name}">
+         <patternset refid="dist_bin_files_native"/>
       </zipfileset>
     </zip>
 	<antcall target="_md5">
 		<param name="path" value="${dist.dir}/${dist.name}.zip"/>
 	</antcall>
+    <!-- Delete work directory (may not exist) -->
+    <delete dir="${dist.dir}/crlf" quiet="true"/>
 
 	<!-- Source archives -->
+    <antcall target="_filter">
+        <param name="eoltype" value="lf"/>
+        <param name="fileset" value="dist.sources.native"/>
+    </antcall>
     <tar destfile="${dist.dir}/${pack.name}_src.tar" longfile="gnu">
       <tarfileset dir="." includes="${build.dir}/MANIFEST_SRC.MF" fullpath="${dist.name}/MANIFEST.MF"/>
+      <tarfileset dir="${native.dir.lf}" prefix="${dist.name}">
+         <patternset refid="dist.sources.native"/>
+      </tarfileset>
       <tarfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
-        <patternset refid="dist.sources"/>
-        <patternset refid="dist.sources.jars"/>
+        <patternset refid="dist.sources.non.native"/>
       </tarfileset>
     </tar>
+    <!-- Delete work directory (may not exist) -->
+    <delete dir="${dist.dir}/lf" quiet="true"/>
 
 	<gzip zipfile="${dist.dir}/${pack.name}_src.tgz" src="${dist.dir}/${pack.name}_src.tar" />
 	<!-- no longer needed -->
@@ -1087,17 +1216,25 @@ run JMeter unless all the JMeter jars are added.
 		<param name="path" value="${dist.dir}/${dist.name}_src.tgz"/>
 	</antcall>
 
+    <antcall target="_filter">
+        <param name="eoltype" value="crlf"/>
+        <param name="fileset" value="dist.sources.native"/>
+    </antcall>
+
 	<zip  zipfile="${dist.dir}/${pack.name}_src.zip">
 	  <zipfileset dir="." includes="${build.dir}/MANIFEST_SRC.MF" fullpath="${dist.name}/MANIFEST.MF"/>
+      <zipfileset dir="${native.dir.crlf}" prefix="${dist.name}">
+         <patternset refid="dist.sources.native"/>
+      </zipfileset>
       <zipfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
-        <patternset refid="dist.sources"/>
-        <patternset refid="dist.sources.jars"/>
+        <patternset refid="dist.sources.non.native"/>
       </zipfileset>
     </zip>
 	<antcall target="_md5">
 		<param name="path" value="${dist.dir}/${dist.name}_src.zip"/>
 	</antcall>
-
+    <!-- Delete work directory (may not exist) -->
+    <delete dir="${dist.dir}/crlf" quiet="true"/>
 </target>
 
   <!--
@@ -1220,6 +1357,9 @@ run JMeter unless all the JMeter jars are added.
     <tar destfile="${dist.dir}/${pack.name}.tar" longfile="gnu">
       <tarfileset dir="." includes="${build.dir}/MANIFEST_BIN.MF" fullpath="${dist.name}/MANIFEST.MF"/>
       <tarfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
+        <patternset refid="external.jars.notices"/>
+      </tarfileset>
+      <tarfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
         <patternset refid="external.jars"/>
       </tarfileset>
     </tar>
@@ -1228,6 +1368,9 @@ run JMeter unless all the JMeter jars are added.
 	<delete file="${dist.dir}/${pack.name}.tar"/>
     <zip  zipfile="${dist.dir}/${pack.name}.zip">
       <zipfileset dir="." includes="${build.dir}/MANIFEST_BIN.MF" fullpath="${dist.name}/MANIFEST.MF"/>
+      <zipfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
+        <patternset refid="external.jars.notices"/>
+      </zipfileset>
       <zipfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
         <patternset refid="external.jars"/>
       </zipfileset>
@@ -1256,8 +1399,8 @@ run JMeter unless all the JMeter jars are added.
     <tar destfile="${dist.dir}/${pack.name}.tar" longfile="gnu">
       <tarfileset dir="." includes="${build.dir}/MANIFEST_SRC.MF" fullpath="${dist.name}/MANIFEST.MF"/>
       <tarfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
-        <patternset refid="dist.sources"/>
-        <patternset refid="dist.sources.jars"/>
+        <patternset refid="dist.sources.native"/>
+        <patternset refid="dist.sources.non.native"/>
       </tarfileset>
     </tar>
     <gzip zipfile="${dist.dir}/${pack.name}.tgz" src="${dist.dir}/${pack.name}.tar" />
@@ -1266,8 +1409,8 @@ run JMeter unless all the JMeter jars are added.
     <zip  zipfile="${dist.dir}/${pack.name}.zip">
       <zipfileset dir="." includes="${build.dir}/MANIFEST_SRC.MF" fullpath="${dist.name}/MANIFEST.MF"/>
       <zipfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
-        <patternset refid="dist.sources"/>
-        <patternset refid="dist.sources.jars"/>
+        <patternset refid="dist.sources.native"/>
+        <patternset refid="dist.sources.non.native"/>
       </zipfileset>
     </zip>
     </target>
