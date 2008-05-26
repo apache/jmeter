@@ -1,170 +1,166 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<node>
-<testelement class="org.apache.jmeter.testelement.TestPlan">
-<property name="TestElement.test_class">org.apache.jmeter.testelement.TestPlan</property>
-<property name="TestElement.name">Test Plan</property>
-<property name="TestPlan.functional_mode">false</property>
-<collection name="TestPlan.thread_groups" class="java.util.LinkedList"/>
-<testelement name="TestPlan.user_defined_variables" class="org.apache.jmeter.config.Arguments">
-<property name="TestElement.name">Argument List</property>
-<property name="TestElement.test_class">org.apache.jmeter.config.Arguments</property>
-<collection name="Arguments.arguments" class="java.util.ArrayList"/>
-<property name="TestElement.gui_class">org.apache.jmeter.config.gui.ArgumentsPanel</property>
-</testelement>
-<property name="TestElement.gui_class">org.apache.jmeter.control.gui.TestPlanGui</property>
-</testelement>
-<node>
-<testelement class="org.apache.jmeter.threads.ThreadGroup">
-<property name="TestElement.name">Jakarta Users</property>
-<property name="TestElement.test_class">org.apache.jmeter.threads.ThreadGroup</property>
-<testelement name="ThreadGroup.main_controller" class="org.apache.jmeter.control.LoopController">
-<property name="TestElement.test_class">org.apache.jmeter.control.LoopController</property>
-<property name="TestElement.name">Loop Controller</property>
-<property name="LoopController.continue_forever">false</property>
-<property name="LoopController.loops">1</property>
-<property name="TestElement.gui_class">org.apache.jmeter.control.gui.LoopControlPanel</property>
-</testelement>
-<property name="ThreadGroup.num_threads">1</property>
-<property name="ThreadGroup.ramp_time">0</property>
-<property name="TestElement.gui_class">org.apache.jmeter.threads.gui.ThreadGroupGui</property>
-</testelement>
-<node>
-<testelement class="org.apache.jmeter.config.ConfigTestElement">
-<property name="HTTPSampler.method">GET</property>
-<property name="HTTPSampler.port"> </property>
-<property name="TestElement.test_class">org.apache.jmeter.config.ConfigTestElement</property>
-<property name="TestElement.name">Defaults</property>
-<testelement name="HTTPsampler.Arguments" class="org.apache.jmeter.config.Arguments">
-<property name="TestElement.name"> </property>
-<property name="TestElement.test_class">org.apache.jmeter.config.Arguments</property>
-<collection name="Arguments.arguments" class="java.util.LinkedList"/>
-<property name="TestElement.gui_class">org.apache.jmeter.config.gui.ArgumentsPanel</property>
-</testelement>
-<property name="HTTPSampler.follow_redirects">false</property>
-<property name="HTTPSampler.protocol">http</property>
-<property name="HTTPSampler.path">/</property>
-<property name="HTTPSampler.use_keepalive">false</property>
-<property name="HTTPSampler.domain">jakarta.apache.org</property>
-<property name="TestElement.gui_class">org.apache.jmeter.protocol.http.config.gui.UrlConfigGui</property>
-</testelement>
-</node>
-<node>
-<testelement class="org.apache.jmeter.control.GenericController">
-<property name="TestElement.test_class">org.apache.jmeter.control.GenericController</property>
-<property name="TestElement.name">Ant Pages</property>
-<property name="TestElement.gui_class">org.apache.jmeter.control.gui.LogicControllerGui</property>
-</testelement>
-<node>
-<testelement class="org.apache.jmeter.protocol.http.sampler.HTTPSampler">
-<property name="TestElement.name">Home Page</property>
-<property name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.HTTPSampler</property>
-<property name="HTTPSampler.port"> </property>
-<property name="HTTPSampler.method">GET</property>
-<property name="HTTPSampler.mimetype"> </property>
-<collection name="AbstractSampler.assertions" class="java.util.ArrayList"/>
-<testelement name="HTTPsampler.Arguments" class="org.apache.jmeter.config.Arguments">
-<property name="TestElement.test_class">org.apache.jmeter.config.Arguments</property>
-<property name="TestElement.name"> </property>
-<collection name="Arguments.arguments" class="java.util.ArrayList"/>
-<property name="TestElement.gui_class">org.apache.jmeter.config.gui.ArgumentsPanel</property>
-</testelement>
-<property name="HTTPSampler.follow_redirects">true</property>
-<property name="HTTPSampler.protocol">http</property>
-<property name="HTTPSampler.FILE_FIELD"> </property>
-<property name="HTTPSampler.path">/ant/index.html</property>
-<property name="HTTPSampler.domain"> </property>
-<property name="HTTPSampler.use_keepalive">false</property>
-<property name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui</property>
-<property name="HTTPSampler.FILE_NAME"> </property>
-</testelement>
-</node>
-<node>
-<testelement class="org.apache.jmeter.protocol.http.sampler.HTTPSampler">
-<property name="TestElement.name">News Page</property>
-<property name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.HTTPSampler</property>
-<property name="HTTPSampler.port"> </property>
-<property name="HTTPSampler.method">GET</property>
-<property name="HTTPSampler.mimetype"> </property>
-<collection name="AbstractSampler.assertions" class="java.util.ArrayList"/>
-<testelement name="HTTPsampler.Arguments" class="org.apache.jmeter.config.Arguments">
-<property name="TestElement.test_class">org.apache.jmeter.config.Arguments</property>
-<property name="TestElement.name"> </property>
-<collection name="Arguments.arguments" class="java.util.ArrayList"/>
-<property name="TestElement.gui_class">org.apache.jmeter.config.gui.ArgumentsPanel</property>
-</testelement>
-<property name="HTTPSampler.follow_redirects">true</property>
-<property name="HTTPSampler.protocol">http</property>
-<property name="HTTPSampler.FILE_FIELD"> </property>
-<property name="HTTPSampler.path">/ant/antnews.html</property>
-<property name="HTTPSampler.domain"> </property>
-<property name="HTTPSampler.use_keepalive">false</property>
-<property name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui</property>
-<property name="HTTPSampler.FILE_NAME"> </property>
-</testelement>
-</node>
-</node>
-<node>
-<testelement class="org.apache.jmeter.control.GenericController">
-<property name="TestElement.test_class">org.apache.jmeter.control.GenericController</property>
-<property name="TestElement.name">Log4J Pages</property>
-<property name="TestElement.gui_class">org.apache.jmeter.control.gui.LogicControllerGui</property>
-</testelement>
-<node>
-<testelement class="org.apache.jmeter.protocol.http.sampler.HTTPSampler">
-<property name="TestElement.name">Home Page</property>
-<property name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.HTTPSampler</property>
-<property name="HTTPSampler.port"> </property>
-<property name="HTTPSampler.method">GET</property>
-<property name="HTTPSampler.mimetype"> </property>
-<collection name="AbstractSampler.assertions" class="java.util.ArrayList"/>
-<testelement name="HTTPsampler.Arguments" class="org.apache.jmeter.config.Arguments">
-<property name="TestElement.test_class">org.apache.jmeter.config.Arguments</property>
-<property name="TestElement.name"> </property>
-<collection name="Arguments.arguments" class="java.util.ArrayList"/>
-<property name="TestElement.gui_class">org.apache.jmeter.config.gui.ArgumentsPanel</property>
-</testelement>
-<property name="HTTPSampler.follow_redirects">true</property>
-<property name="HTTPSampler.protocol">http</property>
-<property name="HTTPSampler.FILE_FIELD"> </property>
-<property name="HTTPSampler.path">/log4j/index.html</property>
-<property name="HTTPSampler.domain"> </property>
-<property name="HTTPSampler.use_keepalive">false</property>
-<property name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui</property>
-<property name="HTTPSampler.FILE_NAME"> </property>
-</testelement>
-</node>
-<node>
-<testelement class="org.apache.jmeter.protocol.http.sampler.HTTPSampler">
-<property name="TestElement.name">History Page</property>
-<property name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.HTTPSampler</property>
-<property name="HTTPSampler.port"> </property>
-<property name="HTTPSampler.method">GET</property>
-<property name="HTTPSampler.mimetype"> </property>
-<collection name="AbstractSampler.assertions" class="java.util.ArrayList"/>
-<testelement name="HTTPsampler.Arguments" class="org.apache.jmeter.config.Arguments">
-<property name="TestElement.test_class">org.apache.jmeter.config.Arguments</property>
-<property name="TestElement.name"> </property>
-<collection name="Arguments.arguments" class="java.util.ArrayList"/>
-<property name="TestElement.gui_class">org.apache.jmeter.config.gui.ArgumentsPanel</property>
-</testelement>
-<property name="HTTPSampler.follow_redirects">true</property>
-<property name="HTTPSampler.protocol">http</property>
-<property name="HTTPSampler.FILE_FIELD"> </property>
-<property name="HTTPSampler.path">/log4j/docs/history.html</property>
-<property name="HTTPSampler.domain"> </property>
-<property name="HTTPSampler.use_keepalive">false</property>
-<property name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui</property>
-<property name="HTTPSampler.FILE_NAME"> </property>
-</testelement>
-</node>
-</node>
-<node>
-<testelement class="org.apache.jmeter.reporters.ResultCollector">
-<property name="TestElement.name">File Reporter</property>
-<property name="TestElement.test_class">org.apache.jmeter.reporters.ResultCollector</property>
-<property name="filename">simple-test.dat</property>
-<property name="TestElement.gui_class">org.apache.jmeter.visualizers.GraphVisualizer</property>
-</testelement>
-</node>
-</node>
-</node>
+<jmeterTestPlan version="1.2" properties="2.1">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <collectionProp name="TestPlan.thread_groups"/>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="Argument List" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <stringProp name="TestPlan.comments"></stringProp>
+      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+    </TestPlan>
+    <hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Jakarta Users" enabled="true">
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">0</stringProp>
+        <longProp name="ThreadGroup.start_time">1211836583000</longProp>
+        <longProp name="ThreadGroup.end_time">1211836583000</longProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="Defaults" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">jakarta.apache.org</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">http</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/</stringProp>
+        </ConfigTestElement>
+        <hashTree/>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Ant Pages" enabled="true"/>
+        <hashTree>
+          <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Home Page" enabled="true">
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+              <collectionProp name="Arguments.arguments"/>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain"></stringProp>
+            <stringProp name="HTTPSampler.port"></stringProp>
+            <stringProp name="HTTPSampler.protocol">http</stringProp>
+            <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+            <stringProp name="HTTPSampler.path">/ant/index.html</stringProp>
+            <stringProp name="HTTPSampler.method">GET</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <stringProp name="HTTPSampler.FILE_NAME"></stringProp>
+            <stringProp name="HTTPSampler.FILE_FIELD"></stringProp>
+            <stringProp name="HTTPSampler.mimetype"></stringProp>
+            <stringProp name="HTTPSampler.monitor">false</stringProp>
+            <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          </HTTPSampler>
+          <hashTree/>
+          <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="News Page" enabled="true">
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+              <collectionProp name="Arguments.arguments"/>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain"></stringProp>
+            <stringProp name="HTTPSampler.port"></stringProp>
+            <stringProp name="HTTPSampler.protocol">http</stringProp>
+            <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+            <stringProp name="HTTPSampler.path">/ant/antnews.html</stringProp>
+            <stringProp name="HTTPSampler.method">GET</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <stringProp name="HTTPSampler.FILE_NAME"></stringProp>
+            <stringProp name="HTTPSampler.FILE_FIELD"></stringProp>
+            <stringProp name="HTTPSampler.mimetype"></stringProp>
+            <stringProp name="HTTPSampler.monitor">false</stringProp>
+            <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          </HTTPSampler>
+          <hashTree/>
+        </hashTree>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Log4J Pages" enabled="true"/>
+        <hashTree>
+          <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Home Page" enabled="true">
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+              <collectionProp name="Arguments.arguments"/>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain"></stringProp>
+            <stringProp name="HTTPSampler.port"></stringProp>
+            <stringProp name="HTTPSampler.protocol">http</stringProp>
+            <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+            <stringProp name="HTTPSampler.path">/log4j/index.html</stringProp>
+            <stringProp name="HTTPSampler.method">GET</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <stringProp name="HTTPSampler.FILE_NAME"></stringProp>
+            <stringProp name="HTTPSampler.FILE_FIELD"></stringProp>
+            <stringProp name="HTTPSampler.mimetype"></stringProp>
+            <stringProp name="HTTPSampler.monitor">false</stringProp>
+            <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          </HTTPSampler>
+          <hashTree/>
+          <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="History Page" enabled="true">
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+              <collectionProp name="Arguments.arguments"/>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain"></stringProp>
+            <stringProp name="HTTPSampler.port"></stringProp>
+            <stringProp name="HTTPSampler.protocol">http</stringProp>
+            <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+            <stringProp name="HTTPSampler.path">/log4j/docs/history.html</stringProp>
+            <stringProp name="HTTPSampler.method">GET</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <stringProp name="HTTPSampler.FILE_NAME"></stringProp>
+            <stringProp name="HTTPSampler.FILE_FIELD"></stringProp>
+            <stringProp name="HTTPSampler.mimetype"></stringProp>
+            <stringProp name="HTTPSampler.monitor">false</stringProp>
+            <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          </HTTPSampler>
+          <hashTree/>
+        </hashTree>
+        <ResultCollector guiclass="GraphVisualizer" testclass="ResultCollector" testname="File Reporter" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>true</xml>
+              <fieldNames>false</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+            </value>
+          </objProp>
+          <stringProp name="filename">simple-test.dat</stringProp>
+        </ResultCollector>
+        <hashTree/>
+      </hashTree>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>
