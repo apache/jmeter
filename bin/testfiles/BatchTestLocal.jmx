@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="2.0">
+<jmeterTestPlan version="1.2" properties="2.1">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
@@ -8,7 +8,8 @@
       <stringProp name="TestPlan.user_define_classpath"></stringProp>
       <boolProp name="TestPlan.serialize_threadgroups">true</boolProp>
       <boolProp name="TestPlan.functional_mode">false</boolProp>
-      <stringProp name="TestPlan.comments">Batch Test using only local resources.</stringProp>
+      <stringProp name="TestPlan.comments">Batch Test using only local resources.
+**N.B. If this file is updated, then the expected test data files need to be updated with the new length of this file**</stringProp>
     </TestPlan>
     <hashTree>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group" enabled="true">
@@ -284,6 +285,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
         <ResultCollector guiclass="SimpleDataWriter" testclass="ResultCollector" testname="Write CSV" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
+            <name>saveConfig</name>
             <value class="SampleSaveConfiguration">
               <time>false</time>
               <latency>false</latency>
@@ -312,7 +314,6 @@ This is to ensure the test output is predictable, whilst still allowing testing 
               <threadCounts>true</threadCounts>
               <sampleCount>true</sampleCount>
             </value>
-            <name>saveConfig</name>
           </objProp>
           <stringProp name="filename">${__P(CSVFILE)}</stringProp>
         </ResultCollector>
@@ -320,6 +321,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
         <ResultCollector guiclass="SimpleDataWriter" testclass="ResultCollector" testname="Write XML" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
+            <name>saveConfig</name>
             <value class="SampleSaveConfiguration">
               <time>false</time>
               <latency>false</latency>
@@ -348,7 +350,6 @@ This is to ensure the test output is predictable, whilst still allowing testing 
               <threadCounts>true</threadCounts>
               <sampleCount>true</sampleCount>
             </value>
-            <name>saveConfig</name>
           </objProp>
           <stringProp name="filename">BatchTestLocal.xml</stringProp>
         </ResultCollector>
@@ -356,6 +357,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
         <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
+            <name>saveConfig</name>
             <value class="SampleSaveConfiguration">
               <time>true</time>
               <latency>false</latency>
@@ -379,7 +381,6 @@ This is to ensure the test output is predictable, whilst still allowing testing 
               <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
               <assertionsResultsToSave>0</assertionsResultsToSave>
             </value>
-            <name>saveConfig</name>
           </objProp>
           <stringProp name="filename"></stringProp>
         </ResultCollector>
@@ -387,6 +388,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
         <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results in Table" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
+            <name>saveConfig</name>
             <value class="SampleSaveConfiguration">
               <time>true</time>
               <latency>true</latency>
@@ -411,7 +413,6 @@ This is to ensure the test output is predictable, whilst still allowing testing 
               <assertionsResultsToSave>0</assertionsResultsToSave>
               <bytes>true</bytes>
             </value>
-            <name>saveConfig</name>
           </objProp>
           <stringProp name="filename"></stringProp>
         </ResultCollector>
@@ -752,22 +753,25 @@ This is to ensure the test output is predictable, whilst still allowing testing 
           <stringProp name="HTTPSampler.port"></stringProp>
           <stringProp name="HTTPSampler.protocol">file</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">testfiles/jmeter_home_page.html</stringProp>
+          <stringProp name="HTTPSampler.path">testfiles/BatchTestLocal.jmx</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">true</boolProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
           <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-          <stringProp name="HTTPSampler.mimetype"></stringProp>
           <stringProp name="HTTPSampler.FILE_NAME"></stringProp>
           <stringProp name="HTTPSampler.FILE_FIELD"></stringProp>
+          <stringProp name="HTTPSampler.mimetype"></stringProp>
           <stringProp name="HTTPSampler.monitor">false</stringProp>
           <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="TestPlan.comments">N.B. The file that is loaded must have a fixed size, so HTML won&apos;t do as it will be different on Unix and Windows.
+We use this file, which has eol=LF - but of course any changes need to be reflected in the expected test data.</stringProp>
         </HTTPSampler>
         <hashTree/>
         <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
+            <name>saveConfig</name>
             <value class="SampleSaveConfiguration">
               <time>true</time>
               <latency>true</latency>
@@ -795,7 +799,6 @@ This is to ensure the test output is predictable, whilst still allowing testing 
               <threadCounts>true</threadCounts>
               <sampleCount>true</sampleCount>
             </value>
-            <name>saveConfig</name>
           </objProp>
           <stringProp name="filename"></stringProp>
         </ResultCollector>
@@ -803,6 +806,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
         <ResultCollector guiclass="SimpleDataWriter" testclass="ResultCollector" testname="Write CSV" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
+            <name>saveConfig</name>
             <value class="SampleSaveConfiguration">
               <time>false</time>
               <latency>false</latency>
@@ -831,7 +835,6 @@ This is to ensure the test output is predictable, whilst still allowing testing 
               <threadCounts>true</threadCounts>
               <sampleCount>true</sampleCount>
             </value>
-            <name>saveConfig</name>
           </objProp>
           <stringProp name="filename">${__P(CSVFILE)}</stringProp>
         </ResultCollector>
@@ -839,6 +842,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
         <ResultCollector guiclass="SimpleDataWriter" testclass="ResultCollector" testname="Write XML" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
+            <name>saveConfig</name>
             <value class="SampleSaveConfiguration">
               <time>false</time>
               <latency>false</latency>
@@ -867,7 +871,6 @@ This is to ensure the test output is predictable, whilst still allowing testing 
               <threadCounts>true</threadCounts>
               <sampleCount>true</sampleCount>
             </value>
-            <name>saveConfig</name>
           </objProp>
           <stringProp name="filename">BatchTestLocal.xml</stringProp>
         </ResultCollector>
