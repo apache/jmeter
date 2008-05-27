@@ -1,4 +1,4 @@
-presMaking a TestBean Plugin For JMeter
+Making a TestBean Plugin For JMeter
 
 This component will be a CSV file reading element that will let users easily vary their input 
 data using csv files.
