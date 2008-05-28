@@ -3861,6 +3861,20 @@ you should be able to record what you are interested in and skip what you are no
 N.B. the string that is matched by the regular expression must be the same as the <b>whole</b> host+path string.<br></br>Thus <b>&quot;\.html&quot;</b> will <b>not</b> match <b>j.a.o/index.html</b>
 </p>
 
+<p>
+Versions of JMeter after 2.3.2 are able to capture binary POST data.
+To configure which content-types are treated as binary, update the JMeter property proxy.binary.types.
+The default settings are as follows:
+<pre>
+# These content-types will be handled by saving the request in a file:
+proxy.binary.types=application/x-amf,application/x-java-serialized-object
+# The files will be saved in this directory:
+proxy.binary.directory=user.dir
+# The files will be created with this file filesuffix:
+proxy.binary.filesuffix=.binary
+</pre>
+</p>
+
 <p>It is also possible to have the proxy add timers to the recorded script. To
 do this, create a timer directly within the HTTP Proxy Server component.
 The proxy will place a copy of this timer into each sample it records, or into

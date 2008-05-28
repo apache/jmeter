@@ -30,6 +30,14 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 </note>
 <!--  ===================  -->
 
+<h2>Version 2.3.2A</h2>
+<h3>Improvements</h3>
+<ul>
+<li>Bugs 44808 & 39641 - Proxy support for binary requests</li>
+</ul>
+
+<!--  ===================  -->
+
 <h2>Version 2.3.2</h2>
 
 <h3>Summary of main changes</h3>
