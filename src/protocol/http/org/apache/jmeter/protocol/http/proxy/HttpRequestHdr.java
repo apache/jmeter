@@ -19,6 +19,7 @@
 package org.apache.jmeter.protocol.http.proxy;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -26,10 +27,13 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.CharUtils;
 import org.apache.jmeter.protocol.http.config.MultipartUrlConfig;
 import org.apache.jmeter.protocol.http.control.Header;
@@ -42,6 +46,8 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
+import org.apache.jmeter.protocol.http.util.HTTPFileArg;
+import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -61,6 +67,30 @@ public class HttpRequestHdr {
     private static final String PROXY_CONNECTION = "proxy-connection"; // $NON-NLS-1$
     private static final String CONTENT_TYPE = "content-type"; // $NON-NLS-1$
     private static final String CONTENT_LENGTH = "content-length"; // $NON-NLS-1$
+
+    /** Filetype to be used for the temporary binary files*/
+    private static final String binaryFileSuffix = 
+        JMeterUtils.getPropDefault("proxy.binary.filesuffix",// $NON-NLS-1$ 
+                                   ".binary"); // $NON-NLS-1$
+    
+    /** Which content-types will be treated as binary (exact match) */
+    private static final Set binaryContentTypes = new HashSet();
+    
+    /** Where to store the temporary binary files */
+    private static final String binaryDirectory = 
+        JMeterUtils.getPropDefault("proxy.binary.directory",// $NON-NLS-1$ 
+                JMeterUtils.getProperty("user.dir")); // $NON-NLS-1$ proxy.binary.filetype=binary
+    
+    static {
+        String binaries = JMeterUtils.getPropDefault("proxy.binary.types", // $NON-NLS-1$
+                "application/x-amf,application/x-java-serialized-object"); // $NON-NLS-1$ 
+        if (binaries.length() > 0){
+            StringTokenizer s = new StringTokenizer(binaries,"|, ");// $NON-NLS-1$
+            while (s.hasMoreTokens()){
+               binaryContentTypes.add(s.nextToken());
+            }
+        }
+    }
 
 	/**
 	 * Http Request method. Such as get or post.
@@ -434,8 +464,20 @@ public class HttpRequestHdr {
                 // but maybe we should only parse arguments if the content type is as expected
                 sampler.parseArguments(postData.trim(), contentEncoding); //standard name=value postData
             } else if (postData.length() > 0) {
-                // Just put the whole postbody as the value of a parameter
-                sampler.addNonEncodedArgument("", postData, ""); //used when postData is pure xml (ex. an xml-rpc call)
+                if (isBinaryContent(contentType)) {
+                    try {
+                        File tempDir = new File(binaryDirectory);
+                        File out = File.createTempFile(method, binaryFileSuffix, tempDir);
+                        FileUtils.writeByteArrayToFile(out,rawPostData);
+                        HTTPFileArg [] files = {new HTTPFileArg(out.getPath(),"",contentType)};
+                        sampler.setHTTPFiles(files);
+                    } catch (IOException e) {
+                        log.warn("Could not create binary file: "+e);
+                    }
+                } else {
+                    // Just put the whole postbody as the value of a parameter
+                    sampler.addNonEncodedArgument("", postData, ""); //used when postData is pure xml (ex. an xml-rpc call)
+                }
             }
         }
         if (log.isDebugEnabled()) {
@@ -443,7 +485,12 @@ public class HttpRequestHdr {
         }
 	}
 
-	//
+	private boolean isBinaryContent(String contentType) {
+        if (contentType == null) return false;
+        return binaryContentTypes.contains(contentType);
+    }
+
+    //
 	// Parsing Methods
 	//
 
