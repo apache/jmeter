@@ -543,8 +543,10 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 		nodeCreationPanel.add(addAssertions);
 		nodeCreationPanel.add(regexMatch);
 		
-		mainPanel.add(createTargetPanel());
-		mainPanel.add(createGroupingPanel());
+        HorizontalPanel targetPanel = new HorizontalPanel();
+        targetPanel.add(createTargetPanel());
+        targetPanel.add(createGroupingPanel());
+        mainPanel.add(targetPanel);
 		mainPanel.add(nodeCreationPanel);
 
 		return mainPanel;
@@ -660,7 +662,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 	}
 	
 	private JPanel createContentTypePanel() {
-		contentTypeInclude = new JTextField(30);
+		contentTypeInclude = new JTextField(35);
 		contentTypeInclude.addKeyListener(this);
 		contentTypeInclude.setName(ENABLE_RESTART);
 		JLabel labelInclude = new JLabel(JMeterUtils.getResString("proxy_content_type_include")); // $NON-NLS-1$
@@ -668,7 +670,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 		// Default value
 		contentTypeInclude.setText(JMeterUtils.getProperty("proxy.content_type_include")); // $NON-NLS-1$
 
-		contentTypeExclude = new JTextField(30);
+		contentTypeExclude = new JTextField(35);
 		contentTypeExclude.addKeyListener(this);
 		contentTypeExclude.setName(ENABLE_RESTART);
 		JLabel labelExclude = new JLabel(JMeterUtils.getResString("proxy_content_type_exclude")); // $NON-NLS-1$
