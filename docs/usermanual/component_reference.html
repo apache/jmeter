@@ -194,6 +194,7 @@
 					<li><a href="#CSV_Data_Set_Config">CSV Data Set Config</a></li>
 					<li><a href="#FTP_Request_Defaults">FTP Request Defaults</a></li>
 					<li><a href="#HTTP_Authorization_Manager">HTTP Authorization Manager</a></li>
+					<li><a href="#HTTP_Cache_Manager">HTTP Cache Manager</a></li>
 					<li><a href="#HTTP_Cookie_Manager">HTTP Cookie Manager</a></li>
 					<li><a href="#HTTP_Request_Defaults">HTTP Request Defaults</a></li>
 					<li><a href="#HTTP_Header_Manager">HTTP Header Manager</a></li>
@@ -7170,6 +7171,50 @@ be able to run it.  However, you can use it as a reference in constructing your 
 									
 
 										  		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+	<hr>
+							  									 						<table border="0" cellspacing="0" cellpadding="2">
+		<tr><td>
+		  <font face="arial,helvetica,sanserif">
+			 <h3><a name="HTTP_Cache_Manager">18.4.4 HTTP Cache Manager</h3></a>
+		  </font>
+		</td></tr>
+				<tr><td>
+		  									 				<p><table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+		<tr><td>						This is a new element, and is liable to change
+			</td></tr>
+	</table></p>
+							  															
+
+												<p	>
+								
+The HTTP Cache Manager is used to add caching functionality to HTTP requests within its scope.
+
+						</p>
+									
+
+												<p	>
+								
+If a sample is successful (i.e. has response code 2xx) then the Last-Modified and Etag values are saved for the URL.
+Before executing the next sample, the sampler checks to see if there is an entry in the cache, 
+and if so, the If-Last-Modified and If-None-Match conditional headers are set for the request.
+
+						</p>
+									
+
+												<p	>
+								
+If the requested document has not changed since it was cached, then the response body will be empty.
+This may cause problems for Assertions.
+
+						</p>
+									
+
+
+														<p><b>Control Panel</b></p>
+						<div align="center"><img width='267' height='132' src="../images/screenshots/http-config/http-cache-manager.png"></div>
+											  		</td></tr>
 		<tr><td><br></td></tr>
 	 </table>
 	<hr>

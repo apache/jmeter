@@ -21,6 +21,7 @@ package org.apache.jmeter.protocol.http.sampler;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
+import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
@@ -307,6 +308,12 @@ public class SoapSampler extends HTTPSampler2 {
 
             // Store any cookies received in the cookie manager:
             saveConnectionCookies(httpMethod, res.getURL(), getCookieManager());
+
+            // Save cache information
+            final CacheManager cacheManager = getCacheManager();
+            if (cacheManager != null){
+                cacheManager.saveDetails(httpMethod, res);
+            }
 
             // Follow redirects and download page resources if appropriate:
             res = resultProcessing(areFollowingRedirect, frameDepth, res);
