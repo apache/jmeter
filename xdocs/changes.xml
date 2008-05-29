@@ -42,6 +42,7 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 <h3>Improvements</h3>
 <ul>
 <li>Bugs 44808, 39641 - Proxy support for binary requests</li>
+<li>Bug 28502 - HTTP Resource Cache</li>
 </ul>
 
 <!--  ===================  -->

@@ -67,6 +67,7 @@ import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.jmeter.JMeter;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.Authorization;
+import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
@@ -578,7 +579,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 			httpMethod.setRequestHeader(HEADER_CONNECTION, CONNECTION_CLOSE);
 		}
 
-		setConnectionHeaders(httpMethod, u, getHeaderManager());
+		setConnectionHeaders(httpMethod, u, getHeaderManager(), getCacheManager());
 		String cookies = setConnectionCookie(httpMethod, u, getCookieManager());
 
         setConnectionAuthorization(httpClient, u, getAuthManager());
@@ -655,8 +656,9 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	 * @param headerManager
 	 *            the <code>HeaderManager</code> containing all the cookies
 	 *            for this <code>UrlConfig</code>
+     * @param cacheManager the CacheManager (may be null)
 	 */
-	private void setConnectionHeaders(HttpMethod method, URL u, HeaderManager headerManager) {
+	private void setConnectionHeaders(HttpMethod method, URL u, HeaderManager headerManager, CacheManager cacheManager) {
         // Set all the headers from the HeaderManager
 		if (headerManager != null) {
 			CollectionProperty headers = headerManager.getHeaders();
@@ -676,6 +678,9 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 					}
 				}
 			}
+		}
+		if (cacheManager != null){
+		    cacheManager.setHeaders(u, method);
 		}
 	}
     
@@ -883,6 +888,12 @@ public class HTTPSampler2 extends HTTPSamplerBase {
             
 			// Store any cookies received in the cookie manager:
 			saveConnectionCookies(httpMethod, res.getURL(), getCookieManager());
+			
+			// Save cache information
+            final CacheManager cacheManager = getCacheManager();
+            if (cacheManager != null){
+                cacheManager.saveDetails(httpMethod, res);
+            }
 
 			// Follow redirects and download page resources if appropriate:
 			res = resultProcessing(areFollowingRedirect, frameDepth, res);

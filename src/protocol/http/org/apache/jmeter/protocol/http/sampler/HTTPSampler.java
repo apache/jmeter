@@ -34,6 +34,7 @@ import java.util.zip.GZIPInputStream;
 
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.Authorization;
+import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
@@ -166,7 +167,7 @@ public class HTTPSampler extends HTTPSamplerBase {
 		}
 
 		conn.setRequestMethod(method);
-		setConnectionHeaders(conn, u, getHeaderManager());
+		setConnectionHeaders(conn, u, getHeaderManager(), getCacheManager());
 		String cookies = setConnectionCookie(conn, u, getCookieManager());
 
         setConnectionAuthorization(conn, u, getAuthManager());
@@ -315,8 +316,9 @@ public class HTTPSampler extends HTTPSamplerBase {
 	 * @param headerManager
 	 *            the <code>HeaderManager</code> containing all the cookies
 	 *            for this <code>UrlConfig</code>
+	 * @param cacheManager the CacheManager (may be null)
 	 */
-	private void setConnectionHeaders(HttpURLConnection conn, URL u, HeaderManager headerManager) {
+	private void setConnectionHeaders(HttpURLConnection conn, URL u, HeaderManager headerManager, CacheManager cacheManager) {
         // Add all the headers from the HeaderManager
 		if (headerManager != null) {
 			CollectionProperty headers = headerManager.getHeaders();
@@ -330,6 +332,9 @@ public class HTTPSampler extends HTTPSamplerBase {
 				}
 			}
 		}
+        if (cacheManager != null){
+            cacheManager.setHeaders(conn, u);
+        }
 	}
     
     /**
@@ -513,6 +518,12 @@ public class HTTPSampler extends HTTPSamplerBase {
             
 			// Store any cookies received in the cookie manager:
 			saveConnectionCookies(conn, url, getCookieManager());
+
+            // Save cache information
+            final CacheManager cacheManager = getCacheManager();
+            if (cacheManager != null){
+                cacheManager.saveDetails(conn, res);
+            }
 
 			res = resultProcessing(areFollowingRedirect, frameDepth, res);
 
