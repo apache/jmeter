@@ -186,7 +186,7 @@ public class SampleResult implements Serializable {
 
 	private int sampleCount = 1;
 
-	private int bytes = 0;
+	private int bytes = 0; // Allows override of sample size in case sampler does not want to store all the data
 	
 	private volatile int groupThreads = 0; // Active threads in this thread group
 	
@@ -560,7 +560,12 @@ public class SampleResult implements Serializable {
 
 	/**
 	 * Gets the responseData attribute of the SampleResult object.
+	 * <p>
+	 * Note that some samplers may not store all the data, in which case
+	 * getResponseData().length will be incorrect.
 	 * 
+	 * Instead, always use {@link #getBytes()} to obtain the sample result byte count.
+	 * </p>
 	 * @return the responseData value (cannot be null)
 	 */
 	public byte[] getResponseData() {
