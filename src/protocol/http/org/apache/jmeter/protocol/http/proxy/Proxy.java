@@ -51,6 +51,9 @@ import org.apache.log.Logger;
 public class Proxy extends Thread {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final byte[] CRLF_BYTES = { 0x0d, 0x0a };
+    private static final String CRLF_STRING = "\r\n";
+    
     private static final String NEW_LINE = "\n"; // $NON-NLS-1$
 
     private static final String[] headersToRemove;
@@ -204,6 +207,7 @@ public class Proxy extends Thread {
 					"https://([^:/]+)(:"+HTTPConstants.DEFAULT_HTTPS_PORT_STRING+")?"; // $NON-NLS-1$ $NON-NLS-2$
 				noHttpsResult = noHttpsResult.replaceAll(HTTPS_HOST, "http://$1"); // $NON-NLS-1$
 				result.setResponseData(noHttpsResult.getBytes(enc));
+				// TODO adjust Content-Length header
 			}
 
             // Find the page encoding and possibly encodings for forms in the page
@@ -211,7 +215,7 @@ public class Proxy extends Thread {
             String pageEncoding = addPageEncoding(result);
             addFormEncodings(result, pageEncoding);
 
-			writeToClient(result, new BufferedOutputStream(clientSocket.getOutputStream()));
+			writeToClient(result, new BufferedOutputStream(clientSocket.getOutputStream()), forcedHTTP);
 		} catch (UnknownHostException uhe) {
 			log.warn("Server Not Found.", uhe);
 			writeErrorToClient(HttpReplyHdr.formServerNotFound());
@@ -265,14 +269,15 @@ public class Proxy extends Thread {
 	 *            the bytes to write
 	 * @param out
 	 *            the output stream to write to
+	 * @param forcedHTTP if we changed the protocol to http
 	 * @throws IOException
 	 *             if an IOException occurs while writing
 	 */
-	private void writeToClient(SampleResult res, OutputStream out) throws IOException {
+	private void writeToClient(SampleResult res, OutputStream out, boolean forcedHTTP) throws IOException {
 		try {
-			String responseHeaders = massageResponseHeaders(res);
+			String responseHeaders = massageResponseHeaders(res, forcedHTTP);
             out.write(responseHeaders.getBytes());
-			out.write('\n'); // $NON-NLS-1$
+			out.write(CRLF_BYTES);
 			out.write(res.getResponseData());
 			out.flush();
 			log.debug("Done writing to client");
@@ -295,10 +300,11 @@ public class Proxy extends Thread {
 	 * The Transfer-Encoding header is also removed.
 	 * 
 	 * @param res - response
+	 * @param forcedHTTP  if we changed the protocol to http
 	 * 
 	 * @return updated headers to be sent to client
 	 */
-	private String massageResponseHeaders(SampleResult res) {
+	private String massageResponseHeaders(SampleResult res, boolean forcedHTTP) {
 		String headers = res.getResponseHeaders();
 		String [] headerLines=headers.split(NEW_LINE, 0); // drop empty trailing content
 		int contentLengthIndex=-1;
@@ -323,6 +329,12 @@ public class Proxy extends Thread {
 					contentLengthIndex=i;
 					continue;
 				}
+                final String HTTPS_PREFIX = "https://";
+                if (forcedHTTP && HTTPConstants.HEADER_LOCATION.equalsIgnoreCase(parts[0]) 
+                        && parts[1].substring(0, HTTPS_PREFIX.length()).equalsIgnoreCase(HTTPS_PREFIX)){
+                    headerLines[i]=headerLines[i].replaceFirst(HTTPS_PREFIX, "http://");
+                    continue;
+                }
 			}
 		}
 		if (fixContentLength && contentLengthIndex>=0){// Fix the content length
@@ -332,7 +344,7 @@ public class Proxy extends Thread {
 		for (int i=0;i<headerLines.length;i++){
 			String line=headerLines[i];
 			if (line != null){
-				sb.append(line).append(NEW_LINE);
+				sb.append(line).append(CRLF_STRING);
 			}
 		}
 		return sb.toString();
