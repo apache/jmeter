@@ -40,6 +40,7 @@ import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.protocol.http.control.AuthManager;
+import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.parser.HTMLParseException;
@@ -83,6 +84,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 	public static final String AUTH_MANAGER = "HTTPSampler.auth_manager"; // $NON-NLS-1$
 
 	public static final String COOKIE_MANAGER = "HTTPSampler.cookie_manager"; // $NON-NLS-1$
+
+    public static final String CACHE_MANAGER = "HTTPSampler.cache_manager"; // $NON-NLS-1$
 
 	public static final String HEADER_MANAGER = "HTTPSampler.header_manager"; // $NON-NLS-1$
 
@@ -610,6 +613,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 	public void addTestElement(TestElement el) {
 		if (el instanceof CookieManager) {
 			setCookieManager((CookieManager) el);
+        } else if (el instanceof CacheManager) {
+            setCacheManager((CacheManager) el);
 		} else if (el instanceof HeaderManager) {
 			setHeaderManager((HeaderManager) el);
 		} else if (el instanceof AuthManager) {
@@ -710,7 +715,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 	public void setAuthManager(AuthManager value) {
 		AuthManager mgr = getAuthManager();
 		if (mgr != null) {
-			log.warn("Existing Manager " + mgr.getName() + " superseded by " + value.getName());
+			log.warn("Existing AuthManager " + mgr.getName() + " superseded by " + value.getName());
 		}
 		setProperty(new TestElementProperty(AUTH_MANAGER, value));
 	}
@@ -722,7 +727,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 	public void setHeaderManager(HeaderManager value) {
 		HeaderManager mgr = getHeaderManager();
 		if (mgr != null) {
-			log.warn("Existing Manager " + mgr.getName() + " superseded by " + value.getName());
+			log.warn("Existing HeaderManager " + mgr.getName() + " superseded by " + value.getName());
 		}
 		setProperty(new TestElementProperty(HEADER_MANAGER, value));
 	}
@@ -734,7 +739,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 	public void setCookieManager(CookieManager value) {
 		CookieManager mgr = getCookieManager();
 		if (mgr != null) {
-			log.warn("Existing Manager " + mgr.getName() + " superseded by " + value.getName());
+			log.warn("Existing CookieManager " + mgr.getName() + " superseded by " + value.getName());
 		}
 		setProperty(new TestElementProperty(COOKIE_MANAGER, value));
 	}
@@ -742,6 +747,18 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 	public CookieManager getCookieManager() {
 		return (CookieManager) getProperty(COOKIE_MANAGER).getObjectValue();
 	}
+
+    public void setCacheManager(CacheManager value) {
+        CacheManager mgr = getCacheManager();
+        if (mgr != null) {
+            log.warn("Existing CacheManager " + mgr.getName() + " superseded by " + value.getName());
+        }
+        setProperty(new TestElementProperty(CACHE_MANAGER, value));
+    }
+
+    public CacheManager getCacheManager() {
+        return (CacheManager) getProperty(CACHE_MANAGER).getObjectValue();
+    }
 
 	public boolean isImageParser() {
 		return getPropertyAsBoolean(IMAGE_PARSER);

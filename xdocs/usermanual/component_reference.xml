@@ -2310,6 +2310,27 @@ be able to run it.  However, you can use it as a reference in constructing your 
 
 </component>
 
+<component name="HTTP Cache Manager" index="&sect-num;.4.4"  width="267" height="132" screenshot="http-config/http-cache-manager.png">
+
+<note>This is a new element, and is liable to change</note>
+
+<description>
+<p>
+The HTTP Cache Manager is used to add caching functionality to HTTP requests within its scope.
+</p>
+<p>
+If a sample is successful (i.e. has response code 2xx) then the Last-Modified and Etag values are saved for the URL.
+Before executing the next sample, the sampler checks to see if there is an entry in the cache, 
+and if so, the If-Last-Modified and If-None-Match conditional headers are set for the request.
+</p>
+<p>
+If the requested document has not changed since it was cached, then the response body will be empty.
+This may cause problems for Assertions.
+</p>
+
+</description>
+</component>
+
 <component name="HTTP Cookie Manager" index="&sect-num;.4.4"  width="548" height="319" screenshot="http-config/http-cookie-manager.png">
 
 <note>If there is more than one Cookie Manager in the scope of a Sampler,
