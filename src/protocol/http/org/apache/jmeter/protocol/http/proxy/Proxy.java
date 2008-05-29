@@ -207,7 +207,6 @@ public class Proxy extends Thread {
 					"https://([^:/]+)(:"+HTTPConstants.DEFAULT_HTTPS_PORT_STRING+")?"; // $NON-NLS-1$ $NON-NLS-2$
 				noHttpsResult = noHttpsResult.replaceAll(HTTPS_HOST, "http://$1"); // $NON-NLS-1$
 				result.setResponseData(noHttpsResult.getBytes(enc));
-				// TODO adjust Content-Length header
 			}
 
             // Find the page encoding and possibly encodings for forms in the page
@@ -308,7 +307,7 @@ public class Proxy extends Thread {
 		String headers = res.getResponseHeaders();
 		String [] headerLines=headers.split(NEW_LINE, 0); // drop empty trailing content
 		int contentLengthIndex=-1;
-		boolean fixContentLength = false;
+		boolean fixContentLength = forcedHTTP;
 		for (int i=0;i<headerLines.length;i++){
 			String line=headerLines[i];
 			String[] parts=line.split(":\\s+",2); // $NON-NLS-1$
