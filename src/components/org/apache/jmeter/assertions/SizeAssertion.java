@@ -32,11 +32,10 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * Checks if the results of a Sample matches a particular size.
  * 
- * author <a href="mailto:wolfram.rittmeyer@web.de">Wolfram Rittmeyer</a>
  */
 public class SizeAssertion extends AbstractTestElement implements Serializable, Assertion {
 
-	private String comparatorErrorMessage = "ERROR!";
+	private transient String comparatorErrorMessage;// Only used for communication with compareSize()
 
 	// * Static int to signify the type of logical comparitor to assert
 	public final static int EQUAL = 1;
@@ -56,8 +55,6 @@ public class SizeAssertion extends AbstractTestElement implements Serializable, 
 
 	private static final String OPERATOR_KEY = "SizeAssertion.operator"; // $NON-NLS-1$
 
-	byte[] resultData;
-
 	/**
 	 * Returns the result of the Assertion. 
 	 * Here it checks the Sample responseData length.
@@ -65,8 +62,7 @@ public class SizeAssertion extends AbstractTestElement implements Serializable, 
 	public AssertionResult getResult(SampleResult response) {
 		AssertionResult result = new AssertionResult(getName());
 		result.setFailure(false);
-		resultData = response.getResponseData();
-		long resultSize = resultData.length;
+		long resultSize = response.getBytes();
 		// is the Sample the correct size?
 		if (!(compareSize(resultSize))) {
 			result.setFailure(true);
@@ -158,6 +154,10 @@ public class SizeAssertion extends AbstractTestElement implements Serializable, 
 		case LESSTHANEQUAL:
 			result = (resultSize <= getAllowedSize());
 			comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_lessequal"); //$NON-NLS-1$
+			break;
+		default:
+		    result = false;
+			comparatorErrorMessage = "ERROR - invalid condition";
 			break;
 		}
 		return result;
