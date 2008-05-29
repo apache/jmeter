@@ -265,6 +265,25 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
 		setProperty(new StringProperty(name, value));
 	}
 
+    /**
+     * Create a String property - but only if it is not the default.
+     * This is intended for use when adding new properties to JMeter
+     * so that JMX files are not expanded unnecessarily.
+     * 
+     * N.B. - must agree with the default applied when reading the property.
+     * 
+     * @param name property name
+     * @param value current value
+     * @param dflt default
+     */
+    public void setProperty(String name, String value, String dflt) {
+        if (dflt.equals(value)) {
+            removeProperty(name);
+        } else {
+            setProperty(new StringProperty(name, value));
+        }
+    }
+
 	public void setProperty(String name, boolean value) {
 		setProperty(new StringProperty(name, Boolean.toString(value)));
 	}
@@ -278,7 +297,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
 	 * 
 	 * @param name property name
 	 * @param value current value
-	 * @param dflt default if not present
+	 * @param dflt default
 	 */
 	public void setProperty(String name, boolean value, boolean dflt) {
 		if (value == dflt) {
