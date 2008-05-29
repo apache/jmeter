@@ -55,5 +55,10 @@ public interface HTTPConstantsInterface {
 	public static final String HEADER_LOCATION = "Location"; // $NON-NLS-1$
 	public static final String APPLICATION_X_WWW_FORM_URLENCODED = "application/x-www-form-urlencoded"; // $NON-NLS-1$
 	public static final String MULTIPART_FORM_DATA = "multipart/form-data"; // $NON-NLS-1$
+	// For handling caching
+    public static final String IF_NONE_MATCH = "If-None-Match"; // $NON-NLS-1$
+    public static final String IF_MODIFIED_SINCE = "If-Modified-Since"; // $NON-NLS-1$
+    public static final String ETAG = "Etag"; // $NON-NLS-1$
+    public static final String LAST_MODIFIED = "Last-Modified"; // $NON-NLS-1$
 
 }
