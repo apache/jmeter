@@ -2,7 +2,7 @@ http://opensource.org/licenses/cpl1.0.txt
 =========================================
 
 Common Public License Version 1.0
-Fri, 2007-06-01 17:16 — nelson
+Fri, 2007-06-01 17:16 - nelson
 
 THE ACCOMPANYING PROGRAM IS PROVIDED UNDER THE TERMS OF THIS COMMON PUBLIC
 LICENSE ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THE PROGRAM
