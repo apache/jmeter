@@ -22,10 +22,11 @@
   	and these must be unpacked into the same directory structure.
   	[The required external jars are only included in the binary release]
   	
-    To build JMeter from source and install:
-      ant [all]
-    To rebuild and install:
-      ant install
+    To build JMeter from source:
+      ant [install]
+
+    To rebuild:
+      ant clean install
 
     To update documentation
       ant docs-site
