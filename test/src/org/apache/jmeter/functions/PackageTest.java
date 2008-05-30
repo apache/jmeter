@@ -736,7 +736,7 @@ public class PackageTest extends JMeterTestCase {
 		XPathFileContainer f = new XPathFileContainer("../build.xml", "/project/@default");
 		assertNotNull(f);
 		assertTrue("Not empty", f.size() > 0);
-		assertEquals("all", f.getXPathString(0));
+		assertEquals("install", f.getXPathString(0));
 
 	}
     
