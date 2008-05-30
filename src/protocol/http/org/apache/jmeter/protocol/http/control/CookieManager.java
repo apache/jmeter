@@ -98,7 +98,11 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 
     public void setCookiePolicy(String policy){
         cookieSpec = CookiePolicy.getCookieSpec(policy);
-        setProperty(POLICY, policy, DEFAULT_POLICY);// Don't clutter the JMX file
+        if (DEFAULT_POLICY.equals(policy)){// Don't clutter the JMX file 
+            removeProperty(POLICY);            
+        } else {
+            setProperty(POLICY, policy);           
+        }
     }
     
 	public CollectionProperty getCookies() {
