@@ -1549,6 +1549,7 @@ run JMeter unless all the JMeter jars are added.
     <anakia basedir="${src.docs}" destdir="${dest.printable_docs}/" extension=".html" style="${eclipse.anakia}/xdocs/stylesheets/site_printable.vsl" projectFile="./stylesheets/printable_project.xml"
     	excludes="**/stylesheets/** extending.xml extending/*.xml" 
     	includes="**/*.xml" lastModifiedCheck="true" velocityPropertiesFile="${src.docs}/velocity.properties"/>
+  	<fixcrlf srcdir="${dest.printable_docs}/" includes="**/*.html" fixlast="false"/>
     <!--
     Share images with non-printable version
     Means printable version won't work on web-site
