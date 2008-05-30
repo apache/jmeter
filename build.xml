@@ -400,16 +400,17 @@
   
 
   <target name="init-version">
-  	<!-- Needed for build to succeed. TODO: is the correct place for this? -->
-    <mkdir dir="${lib.opt}"/>
   	<tstamp/>
   	<!--
   	    JMeter version
   	    This is overridden for formal releases.
   	-->
     <property name="jmeter.version" value="2.3.2.${DSTAMP}"/>
-    <property name="implementation.version" value="${jmeter.version} r${svn.revision}"/>
-    <property name="display.version" value="${jmeter.version} r${svn.revision}"/>
+  	<condition property="implementation.version" 
+  		value="${jmeter.version} r${svn.revision}" else="${jmeter.version}">
+  		<isset property="svn.revision"/>
+  	</condition>
+    <property name="display.version" value="${implementation.version}"/>
    	<echo>jmeter.version = ${jmeter.version}</echo>
     <echo>display.version = ${display.version}</echo>
    	<echo>implementation.version = ${implementation.version}</echo>
@@ -1108,17 +1109,11 @@ run JMeter unless all the JMeter jars are added.
             <os family="dos"/>
         </condition>
 		<!-- Define native.dir.x as either the source or updated directory as appropriate -->
-		<condition property="native.dir.lf" value=".">
+		<condition property="native.dir.lf" value="." else="${dist.dir}/lf">
 			<isset property="native.lf"/>
 		</condition>
-        <condition property="native.dir.crlf" value=".">
+        <condition property="native.dir.crlf" value="." else="${dist.dir}/crlf">
             <isset property="native.crlf"/>
-        </condition>
-        <condition property="native.dir.lf" value="${dist.dir}/lf">
-            <not><isset property="native.lf"/></not>
-        </condition>
-        <condition property="native.dir.crlf" value="${dist.dir}/crlf">
-        	<not><isset property="native.crlf"/></not>
         </condition>
 		<echoproperties prefix="native"></echoproperties>
 	</target>
@@ -1794,7 +1789,7 @@ run JMeter unless all the JMeter jars are added.
   <formatter type="xml"/>
       <classpath>
         <fileset dir="${dest.jar}" includes="*.jar"/>
-        <fileset dir="${lib.opt}" includes="optional.jar"/>
+        <fileset dir="${lib.opt}" includes="*.jar"/>
         <path refid="classpath"/>
       </classpath>
   <test name="${test.case}" todir="reports"/>
