@@ -205,11 +205,11 @@
 Third party license pointers
 ============================
 
-HtmlParser - see LICENSE(htmlparser).txt
+HtmlParser & HtmlLexer - see LICENSE(htmlparser).txt
 jCharts - see LICENSE(jCharts).txt
 JDOM - see LICENSE(jdom).txt
 JTidy - see LICENSE(jtidy).html
-JUnit - see CPL V1.0 at http://opensource.org/licenses/cpl1.0.php
-Mozilla Rhino JavaScript - see MPL 1.1 at http://www.mozilla.org/MPL/MPL-1.1.html
+JUnit - see LICENSE(junit).txt or CPL V1.0 at http://opensource.org/licenses/cpl1.0.txt
+Mozilla Rhino JavaScript - see LICENSE(Rhino).txt or MPL 1.1 at http://www.mozilla.org/MPL/MPL-1.1.html
 XPP3 - see LICENSE(XPP3).txt
 XStream - see LICENSE(XStream).txt
