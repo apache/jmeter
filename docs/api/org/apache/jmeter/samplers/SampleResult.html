@@ -400,7 +400,8 @@ This is a nice packaging for the various information returned from taking a
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getResponseData()">getResponseData</A></B>()</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gets the responseData attribute of the SampleResult object.</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gets the responseData attribute of the SampleResult object.
+ </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -1548,6 +1549,12 @@ getResponseData</H3>
 public byte[] <B>getResponseData</B>()</PRE>
 <DL>
 <DD>Gets the responseData attribute of the SampleResult object.
+ <p>
+ Note that some samplers may not store all the data, in which case
+ getResponseData().length will be incorrect.
+ 
+ Instead, always use <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getBytes()"><CODE>getBytes()</CODE></A> to obtain the sample result byte count.
+ </p>
 <P>
 <DD><DL>
 </DL>
