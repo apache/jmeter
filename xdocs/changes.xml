@@ -28,22 +28,6 @@
 <br></br>
 Earlier changes are detailed in the <a href="changes_history.html">History of Previous Changes</a>.
 </note>
-<!--  ===================  -->
-
-<h2>Version 2.3.2A</h2>
-<h3>Bug fixes</h3>
-<ul>
-<li>Bug 45093 - SizeAssertion did not call getBytes()</li>
-<li>Bug 45007 - Rewrite Location headers when using Proxy HTTPS spoofing</li>
-<li>Use CRLF rather than LF in Proxy when returning headers to the client</li>
-<li>Bug 45007 - fix content length header if content may have been changed</li>
-</ul>
-
-<h3>Improvements</h3>
-<ul>
-<li>Bugs 44808, 39641 - Proxy support for binary requests</li>
-<li>Bug 28502 - HTTP Resource Cache</li>
-</ul>
 
 <!--  ===================  -->
 
@@ -73,6 +57,15 @@ This bug has been corrected.
 </p>
 
 <h4>Improvements</h4>
+
+<p>
+The Proxy server can now record binary requests.
+By default the content types
+application/x-amf and application/x-java-serialized-object
+will be treated as binary and saved in a file.
+To change the content types, update the property <b>proxy.binary.types</b>.
+</p>
+
 <p>
 The CSV Dataset configuration element has new file sharing options: per thread group, per thread, per identifier.
 This allows for more flexible file processing, e.g. each thread can process the same data in the same order.
@@ -103,6 +96,10 @@ Webservice(SOAP) Sampler can now load local WSDL files using the "file:" protoco
 </p>
 
 <p>
+A simple HTTP Cache Manager has been added. This needs further development.
+</p>
+
+<p>
 View Results Tree Listener now uses Tidy to display XML.
 This should allow more content to be displayed succesfully.
 It also avoids the need to download remote DTD files, which can slow the rendering considerably.
@@ -130,6 +127,10 @@ In particular, it can cause a NullPointerException if there are two include cont
 <p>Once Only controller behaves OK under a Thread Group or Loop Controller,
 but otherwise its behaviour is not consistent (or clearly specified).</p>
 
+<p>
+The menu item Options / Choose Language does not change all the displayed text to the new language.
+To override the default local language, set the JMeter property "language" before starting JMeter. 
+</p>
 <h3>Incompatible changes</h3>
 <ul>
 <li>
@@ -186,6 +187,10 @@ this has been corrected to "SampleResult"</li>
 <li>BSF Sampler now works properly with Javascript</li>
 <li>Test Action "Stop Test" now works</li>
 <li>Bug 42833 - Argument class uses LinkedHashMap in getArgumentsAsMap() to preserve ordering</li>
+<li>Bug 45093 - SizeAssertion did not call getBytes()</li>
+<li>Bug 45007 - Rewrite Location headers when using Proxy HTTPS spoofing</li>
+<li>Use CRLF rather than LF in Proxy when returning headers to the client</li>
+<li>Bug 45007 - fix content length header if content may have been changed</li>
 </ul>
 
 <h3>Improvements</h3>
@@ -253,6 +258,8 @@ For example, ${__Random(1,63, LOTTERY )} will use the variable 'LOTTERY' rather 
 <li>All BSF elements now have access to System.out via the variable "OUT"</li>
 <li>Summariser updated to handle variable names</li>
 <li>Synchronisation added to Summary and Aggregate Report to try to prevent occasional lost samples</li>
+<li>Bugs 44808, 39641 - Proxy support for binary requests</li>
+<li>Bug 28502 - HTTP Resource Cache</li>
 </ul>
 
 <h3>Non-functional changes</h3>
