@@ -15,7 +15,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="JMeter" default="all" basedir=".">
+<project name="JMeter" default="install" basedir=".">
   <description>
   	
   	N.B. To build JMeter from a release you need both the binary and source archives,
@@ -941,9 +941,6 @@ run JMeter unless all the JMeter jars are added.
   	<fixcrlf srcdir="." eol="lf" includes="bin/*.sh bin/jmeter bin/jmeter-server bin/jmeter-report"/>
   </target>
 
-  <target name="all" depends="clean,install" 
-    description="Default: build from source. Does not create docs."/>
-
   <target name="install-examples" depends="compile-examples" description="Build and installs the example components.">
     <jar jarfile="${dest.jar}/ApacheJMeter_examples.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
       <fileset dir="${build.examples}" includes="**/*.class" />
@@ -1031,6 +1028,8 @@ run JMeter unless all the JMeter jars are added.
     <include name="${lib.dir}/aareadme.txt"/>
     <include name="fb-*.x*"/>
     <include name="KEYS.txt"/>
+    <!-- Make sure that the lib/opt directory is included in the archives -->
+    <include name="${lib.opt}/README.txt"/>
   </patternset>
   
   <!-- Non-native items -->
