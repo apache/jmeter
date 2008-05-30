@@ -12377,7 +12377,7 @@ N.B. the string that is matched by the regular expression must be the same as th
 						</p>
 							  									 				<p	>
 								
-Versions of JMeter after 2.3.2 are able to capture binary POST data.
+Versions of JMeter from 2.3.2 are able to capture binary POST data.
 To configure which content-types are treated as binary, update the JMeter property proxy.binary.types.
 The default settings are as follows:
 
@@ -12419,6 +12419,16 @@ the port # is from the Proxy Control Panel shown above.
 								JMeter places the recorded samples in the Target Controller you choose. If you choose the default option
 "Use Recording Controller", they will be stored in the first Recording Controller found in the test object tree (so be
 sure to add a Recording Controller before you start recording).
+						</p>
+							  									 				<p	>
+								
+If the Proxy does not seem to record any samples, this could be because the browser is not actually using the proxy.
+To check if this is the case, try stopping the proxy.
+If the browser still downloads pages, then it was not sending requests via the proxy.
+Double-check the browser options. 
+In particular check that the browser is not set to "Bypass proxy server for local addresses"
+(this example is from IE7, but there will be similar options for other browsers).
+
 						</p>
 							  									 				<p	>
 								If the HTTP Proxy Server finds enabled 
