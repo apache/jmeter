@@ -1026,6 +1026,7 @@ run JMeter unless all the JMeter jars are added.
     <include name="${dest.jar.jmeter}/testfiles/**"/>
     <exclude name="${dest.jar.jmeter}/testfiles/*.jmx"/>
     <exclude name="${dest.jar.jmeter}/testfiles/*.jtl"/>
+    <exclude name="${dest.jar.jmeter}/testfiles/*.xml"/>
   	<!-- Ignore unit test output -->
     <exclude name="${dest.jar.jmeter}/testfiles/*.out"/>
     <exclude name="${dest.jar.jmeter}/testfiles/Sample_*.png"/>
@@ -1052,6 +1053,7 @@ run JMeter unless all the JMeter jars are added.
     <include name="${src.docs}/**/*.sxw"/>
     <include name="${dest.jar.jmeter}/testfiles/*.jmx"/>
     <include name="${dest.jar.jmeter}/testfiles/*.jtl"/>
+    <include name="${dest.jar.jmeter}/testfiles/*.xml"/>
   </patternset>
 
 	<!-- Convert eol:native source files to appropriate format if required -->
