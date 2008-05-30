@@ -971,6 +971,8 @@ run JMeter unless all the JMeter jars are added.
     <!-- Exclude any files that might be present from testing the release -->
     <exclude name="${dest.jar.jmeter}/*.log"/>
     <include name="${dest.printable_docs}/**"/>
+    <exclude name="${dest.printable_docs}/**/*.pdf"/>
+    <exclude name="${dest.printable_docs}/**/*.jmx"/>
     <include name="${extras.dir}/**"/>
     <exclude name="${extras.dir}/*.jar"/>
     <exclude name="${extras.dir}/*.jpg"/>
@@ -990,6 +992,8 @@ run JMeter unless all the JMeter jars are added.
     <include name="${lib.dir}/jorphan.jar"/>
     <include name="${lib.dir}/junit/test.jar"/>
     <include name="${dest.jar.jmeter}/ApacheJMeter.jar"/>
+    <include name="${dest.printable_docs}/**/*.pdf"/>
+    <include name="${dest.printable_docs}/**/*.jmx"/>
     <include name="${extras.dir}/*.jar"/>
     <include name="${extras.dir}/*.jpg"/>
     <include name="${extras.dir}/*.jmx"/>
