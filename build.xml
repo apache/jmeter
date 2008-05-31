@@ -1816,20 +1816,21 @@ run JMeter unless all the JMeter jars are added.
     </junitreport>
   </target>
 
-  <path id="svnant.classpath">
- 	  	<pathelement location="${lib.opt}/svnant.jar"/>
- 	  	<pathelement location="${lib.opt}/svnClientAdapter.jar"/>
- 	  	<pathelement location="${lib.opt}/svnjavahl.jar"/>
- 	</path>
-
-	<available resource="svntask.properties" classpathref="svnant.classpath" property="svnAnt.present"/>
-
-    <target name="svnCheck" description="Use SVN to get the current revision" if="svnAnt.present">
-      <!-- The task def is nested here so that a missing jar does not cause an error -->
-   	  <taskdef resource="svntask.properties" classpathref="svnant.classpath"/>
-    	<svn>
-          <status path="build.xml" 
-    		revisionProperty="svn.revision"/>
-    	</svn>
-    </target>
+  <target name="svnCheck" description="Use SVN to get the current revision">
+    <exec executable="svn"  resultproperty="svn.exec.result" errorproperty="svn.exec.error" failifexecutionfails="false">
+      <arg line="info"/>
+      <redirector outputproperty="svn.revision">
+        <outputfilterchain>
+          <linecontains>
+            <contains value="Last Changed Rev: "/>
+          </linecontains>
+          <tokenfilter>
+            <!-- Remove all but the revision number -->
+            <replaceregex pattern=".*: " replace=""/>
+          </tokenfilter>
+        </outputfilterchain>
+      </redirector>
+    </exec>
+    <echoproperties prefix="svn"/>
+  </target>
 </project>
