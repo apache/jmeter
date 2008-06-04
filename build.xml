@@ -1035,7 +1035,6 @@ run JMeter unless all the JMeter jars are added.
     <include name="eclipse.readme"/>
     <include name="${lib.dir}/aareadme.txt"/>
     <include name="fb-*.x*"/>
-    <include name="KEYS.txt"/>
     <!-- Make sure that the lib/opt directory is included in the archives -->
     <include name="${lib.opt}/README.txt"/>
   </patternset>
