@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.jmeter.assertions.ResponseAssertion;
 import org.apache.jmeter.assertions.gui.AssertionGui;
@@ -869,7 +870,14 @@ public class ProxyControl extends GenericController {
 		// Build the replacer from all the variables in the collection:
 		ValueReplacer replacer = new ValueReplacer();
 		for (Iterator vars = variables.iterator(); vars.hasNext();) {
-			replacer.addVariables(((Arguments) vars.next()).getArgumentsAsMap());
+            final Map map = ((Arguments) vars.next()).getArgumentsAsMap();
+            for (Iterator vals = map.values().iterator(); vals.hasNext();){
+               final Object next = vals.next();
+               if ("".equals(next)) {// Drop any empty values (Bug 45199)
+                   vals.remove();
+               }
+            }
+            replacer.addVariables(map);
 		}
 
 		try {
