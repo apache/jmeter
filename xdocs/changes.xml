@@ -64,6 +64,7 @@ To override the default local language, set the JMeter property "language" befor
 
 <h3>Bug fixes</h3>
 <ul>
+<li>Bug 45199 - don't try to replace blank variables in Proxy recording</li>
 </ul>
 
 <h3>Improvements</h3>
