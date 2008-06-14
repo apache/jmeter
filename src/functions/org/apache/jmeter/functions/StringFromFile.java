@@ -286,7 +286,9 @@ public class StringFromFile extends AbstractFunction implements Serializable, Te
 
 		if (myName.length() > 0) {
             JMeterVariables vars = getVariables();
-			vars.put(myName, myValue);
+			if (vars != null) {// Can be null if called from Config item testEnded() method
+			    vars.put(myName, myValue);
+			}
 		}
 
 		if (log.isDebugEnabled()) {
