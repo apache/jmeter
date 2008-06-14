@@ -245,7 +245,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 		while (iter.hasNext()) {
 			TestListener tl = (TestListener) iter.next();
 			if (tl instanceof TestBean) {
-			    TestBeanHelper.prepare((TestElement) tl);
+			    TestBeanHelper.prepare((TestElement) tl); // TODO is this necessary? It was called by start.
 			}
 			if (host == null) {
 				tl.testEnded();
