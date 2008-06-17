@@ -129,10 +129,20 @@ public class LdapExtClient {
 		if (dirContext == null) {
 			throw new NamingException(CONTEXT_IS_NULL);
 		}
+        if (log.isDebugEnabled()){
+            log.debug(
+                    "searchBase=" + searchBase +
+                    " scope=" + scope +
+                    " countlim=" + countlim +
+                    " timelim=" + timelim +
+                    " attrs=" + attrs +
+                    " retobj=" + retobj +
+                    " deref=" + deref +
+                    " filter=" + searchFilter
+                      );
+        }
 		SearchControls searchcontrols = null;
 		searchcontrols = new SearchControls(scope, countlim, timelim, attrs, retobj, deref);
-		log.debug("scope, countlim, timelim, attrs, retobj, deref= " + searchFilter + scope + countlim + timelim
-				+ attrs + retobj + deref);
 		return dirContext.search(searchBase, searchFilter, searchcontrols);
 	}
 
