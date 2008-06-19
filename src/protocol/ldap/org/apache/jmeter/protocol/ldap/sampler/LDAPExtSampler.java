@@ -716,6 +716,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 		res.setResponseData("successfull".getBytes());
 		res.setResponseMessage("Success"); // $NON-NLS-1$
 		res.setResponseCode("0"); // $NON-NLS-1$
+		res.setContentType("text/xml");// $NON-NLS-1$
 		boolean isSuccessful = true;
 		res.setSampleLabel(getName());
 		LdapExtClient temp_client = (LdapExtClient) ldapConnections.get(getThreadName());
@@ -757,19 +758,22 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 								+ getPropertyAsString(COMPAREDN));
 				xmlBuffer.tag("comparedn",getPropertyAsString(COMPAREDN)); // $NON-NLS-1$
 				xmlBuffer.tag("comparefilter",getPropertyAsString(COMPAREFILT)); // $NON-NLS-1$
-                NamingEnumeration cmp;
+                NamingEnumeration cmp=null;
 				try {
 					res.sampleStart();
 					cmp = temp_client.compare(dirContext, getPropertyAsString(COMPAREFILT),
 							getPropertyAsString(COMPAREDN));
+	                if (!cmp.hasMore()) {
+	                    res.setResponseCode("5"); // $NON-NLS-1$
+	                    res.setResponseMessage("compareFalse");
+	                    isSuccessful = false;
+	                }
 				} finally {
 					res.sampleEnd();
+                    if (cmp != null) {
+                        cmp.close();
+                    }
 				}				
-				if (!cmp.hasMore()) {
-					res.setResponseCode("5"); // $NON-NLS-1$
-					res.setResponseMessage("compareFalse");
-					isSuccessful = false;
-				}
 			} else if (testType.equals(ADD)) {
 				res.setSamplerData("Add object " + getBaseEntryDN());
 				xmlBuffer.tag("attributes",getArguments().toString()); // $NON-NLS-1$
@@ -805,7 +809,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 				xmlBuffer.tag("countlimit",countLimit); // $NON-NLS-1$
 				xmlBuffer.tag("timelimit",timeLimit); // $NON-NLS-1$
 
-                NamingEnumeration srch;
+                NamingEnumeration srch=null;
 				try {
 					res.sampleStart();
 					srch = temp_client.searchTest(
@@ -815,18 +819,24 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 							getRequestAttributes(getAttrs()),
 							isRetobj(),
 							isDeref());
+	                if (isParseFlag()) {
+	                    try {
+	                        xmlBuffer.openTag("searchresults"); // $NON-NLS-1$
+	                        writeSearchResults(xmlBuffer, srch);
+	                    } finally {
+	                        xmlBuffer.closeTag("searchresults"); // $NON-NLS-1$
+	                    }                   
+	                } else {
+                        xmlBuffer.tag("searchresults", // $NON-NLS-1$
+                                "hasElements="+srch.hasMoreElements()); // $NON-NLS-1$
+	                }
 				} finally {
+				    if (srch != null){
+				        srch.close();
+				    }
 					res.sampleEnd();
 				}				
 
-                if (isParseFlag()) {
-					try {
-						xmlBuffer.openTag("searchresults"); // $NON-NLS-1$
-						writeSearchResults(xmlBuffer, srch);
-					} finally {
-						xmlBuffer.closeTag("searchresults"); // $NON-NLS-1$
-					}					
-                }
 			}
 
 		} catch (NamingException ex) {
