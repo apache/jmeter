@@ -41,11 +41,20 @@ public class XMLBuffer{
 		sb.append(t);
 		sb.append(">");			
 	}
+
 	private void endTag(String t){
 		sb.append("</");
 		sb.append(t);
 		sb.append(">");			
+        sb.append("\n");            
 	}
+
+	private void emptyTag(String t){
+        sb.append("<");
+        sb.append(t);
+        sb.append("/>");         
+        sb.append("\n");            
+    }
 
 	/**
 	 * Open a tag; save on stack.
@@ -84,10 +93,14 @@ public class XMLBuffer{
 	 * @param content
 	 * @return this
 	 */
-	public XMLBuffer tag(String tagname,String content){
-		startTag(tagname);
-		sb.append(content);
-		endTag(tagname);
+	public XMLBuffer tag(String tagname, String content){
+	    if (content.length() == 0) {
+	        emptyTag(tagname);
+	    } else {
+    		startTag(tagname);
+    		sb.append(content);
+    		endTag(tagname);
+	    }
 		return this;
 	}
 
@@ -99,9 +112,13 @@ public class XMLBuffer{
 	 * @return this
 	 */
 	public XMLBuffer tag(String tagname,StringBuffer content){
-		startTag(tagname);
-		sb.append(content);
-		endTag(tagname);
+        if (content.length() == 0) {
+            emptyTag(tagname);
+        } else {
+    		startTag(tagname);
+    		sb.append(content);
+    		endTag(tagname);
+        }
 		return this;
 	}
 
