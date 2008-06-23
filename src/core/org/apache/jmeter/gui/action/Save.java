@@ -109,17 +109,15 @@ public class Save implements Command {
 				updateFile = updateFile + JMX_FILE_EXTENSION;
 			}
 			// Check if the user is trying to save to an existing file
-			if(!e.getActionCommand().equals(ActionNames.SAVE)) {//so it must be a SAVE_AS action
-				File f = new File(updateFile);
-				if(f.exists()) {
-					int response = JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(), 
-							JMeterUtils.getResString("save_overwrite_existing_file"), // $NON-NLS-1$
-							JMeterUtils.getResString("save?"),  // $NON-NLS-1$
-							JOptionPane.YES_NO_OPTION,
-							JOptionPane.QUESTION_MESSAGE);
-					if (response == JOptionPane.CLOSED_OPTION || response == JOptionPane.NO_OPTION) {
-						return ; // Do not save, user does not want to overwrite
-					}
+			File f = new File(updateFile);
+			if(f.exists()) {
+				int response = JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(), 
+						JMeterUtils.getResString("save_overwrite_existing_file"), // $NON-NLS-1$
+						JMeterUtils.getResString("save?"),  // $NON-NLS-1$
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE);
+				if (response == JOptionPane.CLOSED_OPTION || response == JOptionPane.NO_OPTION) {
+					return ; // Do not save, user does not want to overwrite
 				}
 			}
 			
