@@ -939,6 +939,7 @@ Before invoking the script, some variables are set up:
 <li>ctx - JMeterContext</li>
 <li>vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.remove("VAR3"); vars.putObject("OBJ1",new Object());</li>
 <li>props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
+<li>OUT - System.out - e.g. OUT.println("message")</li>
 </ul>
 <p>
 The SampleResult ResponseData is set from the return value of the script.
