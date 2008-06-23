@@ -104,7 +104,7 @@ public abstract class BSFTestElement extends AbstractTestElement
         mgr.declareBean("vars", vars, vars.getClass()); // $NON-NLS-1$
         mgr.declareBean("props", props, props.getClass()); // $NON-NLS-1$
         // For use in debugging:
-        mgr.declareBean("OUT", System.out, PrintStream.class);
+        mgr.declareBean("OUT", System.out, PrintStream.class); // $NON-NLS-1$
     }
 
     protected void processFileOrScript(BSFManager mgr) throws BSFException{
