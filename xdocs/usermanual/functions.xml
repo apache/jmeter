@@ -878,6 +878,15 @@ The following variables are made available to the script:
 <li>sampleResult - previous SampleResult object (if any)</li>
 <li>OUT - System.out - e.g. OUT.println("message")</li>
 </ul>
+    <p>
+    Jexl can also create classes and call methods on them, for example:
+    </p>
+    <p>
+    <code>
+    Systemclass=log.class.forName("java.lang.System");<br></br>
+    now=Systemclass.currentTimeMillis();
+    </code>
+    </p>
 </component>
 
 <component index="&sect-num;.5.19" name="__V">
