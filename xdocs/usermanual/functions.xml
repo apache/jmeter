@@ -876,6 +876,7 @@ The following variables are made available to the script:
 <li>threadName - String</li>
 <li>sampler - current Sampler object (if any)</li>
 <li>sampleResult - previous SampleResult object (if any)</li>
+<li>OUT - System.out - e.g. OUT.println("message")</li>
 </ul>
 </component>
 

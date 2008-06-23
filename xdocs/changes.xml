@@ -40,8 +40,10 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 </p>
 
 <h4>Improvements</h4>
-
 <p>
+<ul>
+<li>Add OUT variable to jexl function</li>
+</ul>
 </p>
 
 <h3>Known bugs</h3>

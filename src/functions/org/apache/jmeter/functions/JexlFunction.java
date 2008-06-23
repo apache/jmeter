@@ -85,7 +85,8 @@ public class JexlFunction extends AbstractFunction implements Serializable
             jexlVars.put("theadName", Thread.currentThread().getName()); //$NON-NLS-1$
             jexlVars.put("sampler", currentSampler); //$NON-NLS-1$ (may be null)
             jexlVars.put("sampleResult", previousResult); //$NON-NLS-1$ (may be null)
-
+            jexlVars.put("OUT", System.out);//$NON-NLS-1$
+            
             // Now evaluate the expression, getting the result
             Object o = e.evaluate(jc);
             if (o != null)
