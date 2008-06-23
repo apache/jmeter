@@ -37,6 +37,9 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 
 <h4>Bug fixes</h4>
 <p>
+<ul>
+<li>Prompt to overwrite existing file when saving a new test plan</li>
+</ul>
 </p>
 
 <h4>Improvements</h4>
