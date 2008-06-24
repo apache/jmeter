@@ -207,6 +207,7 @@ public class MailReaderSampler extends AbstractSampler {
 			 */
 			parent.setResponseData(pdata.toString().getBytes());
 			parent.setDataType(SampleResult.TEXT);
+			parent.setContentType("text/plain"); // $NON-NLS-1$
 
 			parent.setResponseCodeOK();
 			parent.setResponseMessage("OK"); // $NON-NLS-1$
