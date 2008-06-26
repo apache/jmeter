@@ -38,16 +38,16 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 <h4>Bug fixes</h4>
 <p>
 <ul>
-<li>Prompt to overwrite existing file when saving a new test plan</li>
 </ul>
 </p>
 
 <h4>Improvements</h4>
 <p>
 <ul>
-<li>Add OUT variable to jexl function</li>
 </ul>
 </p>
+
+<!--  ========================= End of summary ===================================== -->
 
 <h3>Known bugs</h3>
 
@@ -65,19 +65,29 @@ To override the default local language, set the JMeter property "language" befor
 </p>
 <h3>Incompatible changes</h3>
 <ul>
+The test element "Save Results to a file" is now shown as a Listener.
+It was previously shown as a Post-Processor, even though it was in fact a Listener.
+This change only affects the icon that is displayed and the location in the Gui pop-up menus.
+It does not affect test plans or test behaviour.
 </ul>
 
 <h3>Bug fixes</h3>
 <ul>
 <li>Bug 45199 - don't try to replace blank variables in Proxy recording</li>
+<li>The "prev" and "sampler" objects are now defined for BSF test elements</li>
+<li>Prompt to overwrite an existing file when first saving a new test plan</li>
+<li>The test element "Save Results to a file" is now shown as a Listener</li>
 </ul>
 
 <h3>Improvements</h3>
 <ul>
+<li>LDAP result data now formatted with line breaks</li>
+<li>Add OUT variable to jexl function</li>
 </ul>
 
 <h3>Non-functional changes</h3>
 <ul>
+Introduce AbstractListenerGui class to make it easier to create Listeners with no visual output
 </ul>
 </section> 
 </body> 
