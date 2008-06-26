@@ -25,6 +25,8 @@ import java.util.Properties;
 import org.apache.bsf.BSFEngine;
 import org.apache.bsf.BSFException;
 import org.apache.bsf.BSFManager;
+import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
@@ -105,6 +107,12 @@ public abstract class BSFTestElement extends AbstractTestElement
         mgr.declareBean("props", props, props.getClass()); // $NON-NLS-1$
         // For use in debugging:
         mgr.declareBean("OUT", System.out, PrintStream.class); // $NON-NLS-1$
+        
+        // Most subclasses will need these:
+        SampleResult prev = jmctx.getPreviousResult();
+        mgr.declareBean("prev", prev, SampleResult.class);
+        Sampler sampler = jmctx.getCurrentSampler();
+        mgr.declareBean("sampler", sampler, Sampler.class);
     }
 
     protected void processFileOrScript(BSFManager mgr) throws BSFException{
