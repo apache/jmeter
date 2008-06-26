@@ -54,7 +54,7 @@ import org.apache.jmeter.report.writers.gui.HTMLReportWriterGui;
 import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.reporters.Summariser;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
+import org.apache.jmeter.visualizers.gui.AbstractListenerGui;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.logging.LoggingManager;
@@ -158,7 +158,7 @@ public class JMeterReport implements JMeterPlugin {
      * The default icons for the report GUI.
      */
     private static final String[][] DEFAULT_ICONS = {
-            { AbstractVisualizer.class.getName(), "org/apache/jmeter/images/meter.png" },
+            { AbstractListenerGui.class.getName(), "org/apache/jmeter/images/meter.png" },
             { AbstractConfigGui.class.getName(), "org/apache/jmeter/images/testtubes.png" },
             { HTMLReportWriterGui.class.getName(), "org/apache/jmeter/images/new/pencil.png" },
             { ReportPageGui.class.getName(), "org/apache/jmeter/images/new/scroll.png" },
