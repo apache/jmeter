@@ -2143,7 +2143,7 @@ This allows identical labels from different thread groups to be collated separat
 </div>
 </component>
 
-<component name="Save Responses to a file" index="&sect-num;.3.16"  width="361" height="165" screenshot="savetofile.png">
+<component name="Save Responses to a file" index="&sect-num;.3.16"  width="361" height="178" screenshot="savetofile.png">
     <description>
         <p>
         This test element can be placed anywhere in the test plan.
@@ -2162,6 +2162,12 @@ This allows identical labels from different thread groups to be collated separat
  <properties>
  <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
  <property name="Filename Prefix" required="Yes">Prefix for the generated file names; this can include a directory name.</property>
+ <property name="Variable Name" required="No">
+ Name of a variable in which to save the generated file name (so it can be used later in the test plan).
+ If there are sub-samples then a numeric suffix is added to the variable name.
+ E.g. if the variable name is FILENAME, then the parent sample file name is saved in the variable FILENAME, 
+ and the filenames for the child samplers are saved in FILENAME1, FILENAME2 etc.
+ </property>
  <property name="Save Failed Responses only" required="Yes">If selected, then only failed responses are saved</property>
  <property name="Save Successful Responses only" required="Yes">If selected, then only successful responses are saved</property>
  </properties>

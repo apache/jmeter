@@ -83,6 +83,7 @@ It does not affect test plans or test behaviour.
 <ul>
 <li>LDAP result data now formatted with line breaks</li>
 <li>Add OUT variable to jexl function</li>
+<li>Save Responses to a file can save the generated filename(s) to variables.</li>
 </ul>
 
 <h3>Non-functional changes</h3>
