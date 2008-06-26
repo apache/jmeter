@@ -24,11 +24,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 
+import org.apache.commons.lang.text.StrBuilder;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
@@ -50,7 +52,9 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
 
 	public static final String FILENAME = "FileSaver.filename"; // $NON-NLS-1$
 
-	public static final String ERRORS_ONLY = "FileSaver.errorsonly"; // $NON-NLS-1$
+    public static final String VARIABLE_NAME = "FileSaver.variablename"; // $NON-NLS-1$
+
+    public static final String ERRORS_ONLY = "FileSaver.errorsonly"; // $NON-NLS-1$
 
     public static final String SUCCESS_ONLY = "FileSaver.successonly"; // $NON-NLS-1$
 
@@ -105,27 +109,28 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
 	 * @see org.apache.jmeter.samplers.SampleListener#sampleOccurred(org.apache.jmeter.samplers.SampleEvent)
 	 */
 	public void sampleOccurred(SampleEvent e) {
-      processSample(e.getResult());
+      processSample(e.getResult(), new Counter());
    }
 
    /**
     * Recurse the whole (sub)result hierarchy.
     *
     * @param s Sample result
+    * @param c sample counter
     */
-   private void processSample(SampleResult s) {
-		saveSample(s);
+   private void processSample(SampleResult s, Counter c) {
+		saveSample(s, c.num++);
 		SampleResult[] sr = s.getSubResults();
 		for (int i = 0; i < sr.length; i++) {
-			processSample(sr[i]);
+			processSample(sr[i], c);
 		}
 	}
 
 	/**
-	 * @param s
-	 *            SampleResult to save
+	 * @param s SampleResult to save
+	 * @param num number to append to variable (if >0)
 	 */
-	private void saveSample(SampleResult s) {
+	private void saveSample(SampleResult s, int num) {
 		// Should we save the sample?
 		if (s.isSuccessful()){
 		    if (getErrorsOnly()){
@@ -140,6 +145,15 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
 		String fileName = makeFileName(s.getContentType());
 		log.debug("Saving " + s.getSampleLabel() + " in " + fileName);
         s.setResultFileName(fileName);// Associate sample with file name
+        String variable = getVariableName();
+        if (variable.length()>0){
+            if (num > 0) {
+                StrBuilder sb = new StrBuilder(variable);
+                sb.append(num);
+                variable=sb.toString();
+            }
+            JMeterContextService.getContext().getVariables().put(variable, fileName);
+        }
 		File out = new File(fileName);
 		FileOutputStream pw = null;
 		try {
@@ -197,6 +211,10 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
 		return getPropertyAsString(FILENAME);
 	}
 
+    private String getVariableName() {
+        return getPropertyAsString(VARIABLE_NAME,""); // $NON-NLS-1$
+    }
+
 	private boolean getErrorsOnly() {
 		return getPropertyAsBoolean(ERRORS_ONLY);
 	}
@@ -205,4 +223,8 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
         return getPropertyAsBoolean(SUCCESS_ONLY);
     }
 
+    // Mutable int to keep track of sample count
+    private static class Counter{
+        int num;
+    }
 }

@@ -28,6 +28,7 @@ import javax.swing.JTextField;
 
 import org.apache.jmeter.reporters.ResultSaver;
 import org.apache.jmeter.samplers.Clearable;
+import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractListenerGui;
@@ -41,7 +42,9 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable {
 
 	private JTextField filename;
 
-	private JCheckBox errorsOnly;
+    private JTextField variableName;
+
+    private JCheckBox errorsOnly;
 
     private JCheckBox successOnly;
 
@@ -65,6 +68,7 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable {
 		filename.setText(el.getPropertyAsString(ResultSaver.FILENAME));
 		errorsOnly.setSelected(el.getPropertyAsBoolean(ResultSaver.ERRORS_ONLY));
         successOnly.setSelected(el.getPropertyAsBoolean(ResultSaver.SUCCESS_ONLY));
+        variableName.setText(el.getPropertyAsString(ResultSaver.VARIABLE_NAME,""));
 	}
 
 	/**
@@ -86,6 +90,8 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable {
 		te.setProperty(ResultSaver.FILENAME, filename.getText());
 		te.setProperty(ResultSaver.ERRORS_ONLY, errorsOnly.isSelected());
         te.setProperty(ResultSaver.SUCCESS_ONLY, successOnly.isSelected());
+        AbstractTestElement at = (AbstractTestElement) te;
+        at.setProperty(ResultSaver.VARIABLE_NAME, variableName.getText(),""); //$NON-NLS-1$
 	}
 
     /**
@@ -97,6 +103,7 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable {
         filename.setText(""); //$NON-NLS-1$
         errorsOnly.setSelected(false);
         successOnly.setSelected(false);
+        variableName.setText(""); //$NON-NLS-1$
     }
 
 	private void init() {
@@ -105,6 +112,7 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable {
 		Box box = Box.createVerticalBox();
 		box.add(makeTitlePanel());
 		box.add(createFilenamePrefixPanel());
+        box.add(createVariableNamePanel());
 		errorsOnly = new JCheckBox(JMeterUtils.getResString("resultsaver_errors")); // $NON-NLS-1$
 		box.add(errorsOnly);
         successOnly = new JCheckBox(JMeterUtils.getResString("resultsaver_success")); // $NON-NLS-1$
@@ -125,6 +133,21 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable {
 		filenamePanel.add(filename, BorderLayout.CENTER);
 		return filenamePanel;
 	}
+
+
+    private JPanel createVariableNamePanel()
+    {
+        JLabel label = new JLabel(JMeterUtils.getResString("resultsaver_variable")); // $NON-NLS-1$
+
+        variableName = new JTextField(10);
+        variableName.setName(ResultSaver.VARIABLE_NAME);
+        label.setLabelFor(variableName);
+
+        JPanel filenamePanel = new JPanel(new BorderLayout(5, 0));
+        filenamePanel.add(label, BorderLayout.WEST);
+        filenamePanel.add(variableName, BorderLayout.CENTER);
+        return filenamePanel;
+    }
 
 
 	// Needed to avoid Class cast error in Clear.java
