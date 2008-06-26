@@ -30,19 +30,19 @@ public class TestXMLBuffer extends JMeterTestCase {
 	public void test1() throws Exception{
 		XMLBuffer xb = new XMLBuffer();
 		xb.openTag("start");
-		assertEquals("<start></start>",xb.toString());
+		assertEquals("<start></start>\n",xb.toString());
 	}
 	
 	public void test2() throws Exception{
 		XMLBuffer xb = new XMLBuffer();
 		xb.tag("start","now");
-		assertEquals("<start>now</start>",xb.toString());
+		assertEquals("<start>now</start>\n",xb.toString());
 	}
 	public void test3() throws Exception{
 		XMLBuffer xb = new XMLBuffer();
 		xb.openTag("abc");
 		xb.closeTag("abc");
-		assertEquals("<abc></abc>",xb.toString());
+		assertEquals("<abc></abc>\n",xb.toString());
 	}
 	public void test4() throws Exception{
 		XMLBuffer xb = new XMLBuffer();
