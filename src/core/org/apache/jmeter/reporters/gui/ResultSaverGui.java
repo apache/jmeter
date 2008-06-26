@@ -28,16 +28,16 @@ import javax.swing.JTextField;
 
 import org.apache.jmeter.reporters.ResultSaver;
 import org.apache.jmeter.samplers.Clearable;
-import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.visualizers.gui.AbstractListenerGui;
 
 /**
  * Create a ResultSaver test element, which saves the sample information in set
  * of files
  * 
  */
-public class ResultSaverGui extends AbstractPostProcessorGui implements Clearable {
+public class ResultSaverGui extends AbstractListenerGui implements Clearable {
 
 	private JTextField filename;
 
@@ -104,17 +104,15 @@ public class ResultSaverGui extends AbstractPostProcessorGui implements Clearabl
 		setBorder(makeBorder());
 		Box box = Box.createVerticalBox();
 		box.add(makeTitlePanel());
-		box.add(createFilenamePanel());
+		box.add(createFilenamePrefixPanel());
 		errorsOnly = new JCheckBox(JMeterUtils.getResString("resultsaver_errors")); // $NON-NLS-1$
 		box.add(errorsOnly);
         successOnly = new JCheckBox(JMeterUtils.getResString("resultsaver_success")); // $NON-NLS-1$
         box.add(successOnly);
 		add(box, BorderLayout.NORTH);
-
-		// add(makeTitlePanel(),BorderLayout.NORTH);
 	}
 
-	private JPanel createFilenamePanel()// TODO ought to be a FileChooser ...
+	private JPanel createFilenamePrefixPanel()
 	{
 		JLabel label = new JLabel(JMeterUtils.getResString("resultsaver_prefix")); // $NON-NLS-1$
 
