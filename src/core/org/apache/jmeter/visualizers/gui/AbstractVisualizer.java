@@ -22,22 +22,17 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
-import java.util.Collection;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
-import javax.swing.JPopupMenu;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.SavePropertyDialog;
 import org.apache.jmeter.gui.UnsharedComponent;
 import org.apache.jmeter.gui.util.FilePanel;
-import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.reporters.AbstractListenerElement;
 import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.samplers.Clearable;
@@ -106,7 +101,7 @@ import org.apache.log.Logger;
  * 
  */
 public abstract class AbstractVisualizer 
-    extends AbstractJMeterGuiComponent 
+    extends AbstractListenerGui 
     implements Visualizer, ChangeListener, UnsharedComponent, Clearable 
     {
 	/** Logging. */
@@ -241,21 +236,6 @@ public abstract class AbstractVisualizer
 	}
 
 	/**
-	 * When a user right-clicks on the component in the test tree, or selects
-	 * the edit menu when the component is selected, the component will be asked
-	 * to return a JPopupMenu that provides all the options available to the
-	 * user from this component.
-	 * <p>
-	 * This implementation returns menu items appropriate for most visualizer
-	 * components.
-	 * 
-	 * @return a JPopupMenu appropriate for the component.
-	 */
-	public JPopupMenu createPopupMenu() {
-		return MenuFactory.getDefaultVisualizerMenu();
-	}
-
-	/**
 	 * Invoked when the target of the listener has changed its state. This
 	 * implementation assumes that the target is the FilePanel, and will update
 	 * the result collector for the new filename.
@@ -267,19 +247,6 @@ public abstract class AbstractVisualizer
 		log.debug("getting new collector");
 		collector = (ResultCollector) createTestElement();
         collector.loadExistingFile();
-	}
-
-	/**
-	 * This is the list of menu categories this gui component will be available
-	 * under. This implementation returns
-	 * {@link org.apache.jmeter.gui.util.MenuFactory#LISTENERS}, which is
-	 * appropriate for most visualizer components.
-	 * 
-	 * @return a Collection of Strings, where each element is one of the
-	 *         constants defined in MenuFactory
-	 */
-	public Collection getMenuCategories() {
-		return Arrays.asList(new String[] { MenuFactory.LISTENERS });
 	}
 
 	/* Implements JMeterGUIComponent.createTestElement() */
