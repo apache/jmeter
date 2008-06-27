@@ -49,7 +49,6 @@ import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.processor.gui.AbstractPreProcessorGui;
-import org.apache.jmeter.reporters.AbstractListenerElement;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testbeans.BeanInfoSupport;
@@ -89,11 +88,11 @@ import org.apache.log.Logger;
 public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUIComponent {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private Class testBeanClass;
+	private final Class testBeanClass;
 
 	private transient BeanInfo beanInfo;
 
-	private Class customizerClass;
+	private final Class customizerClass;
 
 	/**
 	 * The single customizer if the customizer class implements
@@ -107,7 +106,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 	 * needs to be limited, though, to avoid memory issues when editing very
 	 * large test plans.
 	 */
-	private Map customizers = new LRUMap(20);
+	private final Map customizers = new LRUMap(20);
 
 	/**
 	 * Index of the customizer in the JPanel's child component list:
@@ -117,7 +116,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 	/**
 	 * The property name to value map that the active customizer edits:
 	 */
-	private Map propertyMap = new HashMap();
+	private final Map propertyMap = new HashMap();
 
 	/**
 	 * Whether the GUI components have been created.
@@ -138,6 +137,8 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 	// Dummy for JUnit test
 	public TestBeanGUI() {
 		log.warn("Constructor only for use in testing");// $NON-NLS-1$
+		testBeanClass = null;
+		customizerClass = null;
 	}
 
 	public TestBeanGUI(Class testBeanClass) {
@@ -268,10 +269,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 	 * @see org.apache.jmeter.gui.JMeterGUIComponent#createPopupMenu()
 	 */
 	public JPopupMenu createPopupMenu() {
-		// TODO: this menu is too wide (allows, e.g. to add controllers, no
-		// matter what the type of the element).
-        // Change to match the actual bean's capabilities.
-		if (Timer.class.isAssignableFrom(testBeanClass))// HACK: Fix one such problem
+		if (Timer.class.isAssignableFrom(testBeanClass))
 		{
 			return MenuFactory.getDefaultTimerMenu();
 		}
@@ -292,7 +290,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
         {
             return MenuFactory.getDefaultExtractorMenu();
         }
-        else if(AbstractListenerElement.class.isAssignableFrom(testBeanClass))
+        else if(Visualizer.class.isAssignableFrom(testBeanClass))
         {
             return MenuFactory.getDefaultVisualizerMenu();
         }
