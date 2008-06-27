@@ -17,6 +17,7 @@
  */
 package org.apache.jmeter.protocol.mail.sampler;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
@@ -54,6 +55,7 @@ public class MailReaderSampler extends AbstractSampler {
 	private final static String DELETE = "delete"; // $NON-NLS-1$
 	private final static String NUM_MESSAGES = "num_messages"; // $NON-NLS-1$
 	private static final String NEW_LINE = "\n"; // $NON-NLS-1$
+	private final static String STORE_MIME_MESSAGE = "storeMimeMessage";
 	
 	// Needed by GUI
 	public final static String TYPE_POP3 = "pop3"; // $NON-NLS-1$
@@ -133,57 +135,10 @@ public class MailReaderSampler extends AbstractSampler {
 				child.setSamplerData(cdata.toString());
 				cdata.setLength(0);
 				
-				cdata.append("Date: "); // $NON-NLS-1$
-				cdata.append(message.getSentDate());
-				cdata.append(NEW_LINE);
-
-				cdata.append("To: "); // $NON-NLS-1$
-				Address[] recips = message.getAllRecipients();
-				for (int j = 0; j < recips.length; j++) {
-					cdata.append(recips[j].toString());
-					if (j < recips.length - 1) {
-						cdata.append("; "); // $NON-NLS-1$
-					}
-				}
-				cdata.append(NEW_LINE);
-
-				cdata.append("From: "); // $NON-NLS-1$
-				Address[] from = message.getFrom();
-				for (int j = 0; j < from.length; j++) {
-					cdata.append(from[j].toString());
-					if (j < from.length - 1) {
-						cdata.append("; "); // $NON-NLS-1$
-					}
-				}
-				cdata.append(NEW_LINE);
-
-				cdata.append("Subject: "); // $NON-NLS-1$
-				cdata.append(message.getSubject());
-				cdata.append(NEW_LINE);
-				
-				cdata.append(NEW_LINE);
-				Object content = message.getContent();
-				if (content instanceof MimeMultipart) {
-					MimeMultipart mmp = (MimeMultipart) content;
-					int count = mmp.getCount();
-					cdata.append("Multipart. Count: ");
-					cdata.append(count);
-					cdata.append(NEW_LINE);
-					for (int j=0; j<count;j++){
-						BodyPart bodyPart = mmp.getBodyPart(j);
-						cdata.append("Type: ");
-						cdata.append(bodyPart.getContentType());
-						cdata.append(NEW_LINE);
-						try {
-							cdata.append(bodyPart.getContent());
-						} catch (UnsupportedEncodingException ex){
-							cdata.append(ex.getLocalizedMessage());
-						}
-						cdata.append(NEW_LINE);
-					}
+				if (isStoreMimeMessage()) {
+                    appendMessageAsMime(cdata, message);
 				} else {
-				    cdata.append(content);
-					cdata.append(NEW_LINE);
+                    appendMessageData(cdata, message);
 				}
 
 				if (deleteMessages) {
@@ -231,6 +186,67 @@ public class MailReaderSampler extends AbstractSampler {
 		}
 		parent.setSuccessful(isOK);
 		return parent;
+	}
+	
+	private void appendMessageData(StringBuffer cdata, Message message)
+			throws MessagingException, IOException {
+		cdata.append("Date: "); // $NON-NLS-1$
+		cdata.append(message.getSentDate());// TODO - use a different format here?
+		cdata.append(NEW_LINE);
+
+		cdata.append("To: "); // $NON-NLS-1$
+		Address[] recips = message.getAllRecipients();
+		for (int j = 0; j < recips.length; j++) {
+			cdata.append(recips[j].toString());
+			if (j < recips.length - 1) {
+				cdata.append("; "); // $NON-NLS-1$
+			}
+		}
+		cdata.append(NEW_LINE);
+
+		cdata.append("From: "); // $NON-NLS-1$
+		Address[] from = message.getFrom();
+		for (int j = 0; j < from.length; j++) {
+			cdata.append(from[j].toString());
+			if (j < from.length - 1) {
+				cdata.append("; "); // $NON-NLS-1$
+			}
+		}
+		cdata.append(NEW_LINE);
+
+		cdata.append("Subject: "); // $NON-NLS-1$
+		cdata.append(message.getSubject());
+		cdata.append(NEW_LINE);
+		
+		cdata.append(NEW_LINE);
+		Object content = message.getContent();
+		if (content instanceof MimeMultipart) {
+			MimeMultipart mmp = (MimeMultipart) content;
+			int count = mmp.getCount();
+			cdata.append("Multipart. Count: ");
+			cdata.append(count);
+			cdata.append(NEW_LINE);
+			for (int j=0; j<count;j++){
+				BodyPart bodyPart = mmp.getBodyPart(j);
+				cdata.append("Type: ");
+				cdata.append(bodyPart.getContentType());
+				cdata.append(NEW_LINE);
+				try {
+					cdata.append(bodyPart.getContent());
+				} catch (UnsupportedEncodingException ex){
+					cdata.append(ex.getLocalizedMessage());
+				}
+			}
+		} else {
+		    cdata.append(content);
+		}
+	}
+	
+	private void appendMessageAsMime(StringBuffer cdata, Message message)
+			throws MessagingException, IOException {
+		ByteArrayOutputStream bout = new ByteArrayOutputStream();
+		message.writeTo(bout);
+		cdata.append(bout);
 	}
 
 	/**
@@ -362,5 +378,22 @@ public class MailReaderSampler extends AbstractSampler {
 	 */
 	public boolean getDeleteMessages() {
 		return getPropertyAsBoolean(DELETE);
+	}
+	
+	/**
+	 * @return Whether or not to store the retrieved message as MIME message in
+	 *         the sample result
+	 */
+	public boolean isStoreMimeMessage() {
+		return getPropertyAsBoolean(STORE_MIME_MESSAGE, false);
+	}
+
+	/**
+	 * @param storeMimeMessage
+	 *            Whether or not to store the retrieved message as MIME message in the
+	 *            sample result
+	 */
+	public void setStoreMimeMessage(boolean storeMimeMessage) {
+		setProperty(STORE_MIME_MESSAGE, storeMimeMessage, false);
 	}
 }

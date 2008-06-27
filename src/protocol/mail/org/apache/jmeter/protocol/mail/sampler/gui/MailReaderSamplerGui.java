@@ -60,6 +60,8 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 	private JTextField someMessagesField;
 
 	private JCheckBox deleteBox;
+	
+	private JCheckBox storeMimeMessageBox;
 
 	// Labels
 	private final static String POP3Label = JMeterUtils.getResString("mail_reader_pop3");// $NON-NLS-1$
@@ -85,6 +87,8 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 	private final static String DeleteLabel = JMeterUtils.getResString("mail_reader_delete");// $NON-NLS-1$
 
 	private final static String FolderLabel = JMeterUtils.getResString("mail_reader_folder");// $NON-NLS-1$
+
+    private final static String STOREMIME = JMeterUtils.getResString("mail_reader_storemime");// $NON-NLS-1$
 
 	private static final String INBOX = "INBOX"; // $NON-NLS-1$
 
@@ -128,6 +132,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 			someMessagesField.setText(mrs.getNumMessagesString());
 		}
 		deleteBox.setSelected(mrs.getDeleteMessages());
+		storeMimeMessageBox.setSelected(mrs.isStoreMimeMessage());
 		super.configure(element);
 	}
 
@@ -175,6 +180,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 			mrs.setNumMessages(someMessagesField.getText());
 		}
 		mrs.setDeleteMessages(deleteBox.isSelected());
+		mrs.setStoreMimeMessage(storeMimeMessageBox.isSelected());
 	}
 
 	// TODO - fix GUI layout problems
@@ -266,6 +272,9 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 
 		deleteBox = new JCheckBox(DeleteLabel);
 		add(deleteBox);
+		
+		storeMimeMessageBox = new JCheckBox(STOREMIME);
+		add(storeMimeMessageBox);
 	}
 
 	public void clearGui() {
@@ -278,9 +287,11 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 		//someMessagesButton.setSelected(false);
 		//someMessagesField.setText("0");
 		deleteBox.setSelected(false);
+		storeMimeMessageBox.setSelected(false);
 		folderBox.setText(INBOX);
-		passwordBox.setText("");
-		serverBox.setText("");
-		usernameBox.setText("");
+		serverTypeBox.setSelectedIndex(0);
+		passwordBox.setText("");// $NON-NLS-1$
+		serverBox.setText("");// $NON-NLS-1$
+		usernameBox.setText("");// $NON-NLS-1$
 	}
 }
