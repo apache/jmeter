@@ -86,6 +86,7 @@ It does not affect test plans or test behaviour.
 <li>Add OUT variable to jexl function</li>
 <li>Save Responses to a file can save the generated filename(s) to variables.</li>
 <li>Add BSF Listener element</li>
+<li>Bug 45200 - MailReaderSampler: store the whole MIME message in the SamplerResult</li>
 </ul>
 
 <h3>Non-functional changes</h3>
