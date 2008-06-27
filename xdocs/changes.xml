@@ -77,6 +77,7 @@ It does not affect test plans or test behaviour.
 <li>The "prev" and "sampler" objects are now defined for BSF test elements</li>
 <li>Prompt to overwrite an existing file when first saving a new test plan</li>
 <li>The test element "Save Results to a file" is now shown as a Listener</li>
+<li>Correct TestBeans to show the correct popup menu for Listeners</li>
 </ul>
 
 <h3>Improvements</h3>
@@ -84,6 +85,7 @@ It does not affect test plans or test behaviour.
 <li>LDAP result data now formatted with line breaks</li>
 <li>Add OUT variable to jexl function</li>
 <li>Save Responses to a file can save the generated filename(s) to variables.</li>
+<li>Add BSF Listener element</li>
 </ul>
 
 <h3>Non-functional changes</h3>
