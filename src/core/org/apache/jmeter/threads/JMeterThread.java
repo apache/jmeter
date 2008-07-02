@@ -329,7 +329,11 @@ public class JMeterThread implements Runnable, Serializable {
 						log.info("Stopping Thread: " + e.toString());
 						stopThread();
 					} catch (Exception e) {
-						log.error("", e);
+					    if (sam != null) {
+	                        log.error("Error while processing sampler '"+sam.getName()+"' :", e);					        
+					    } else {
+					        log.error("", e);
+					    }
 					}
 				}
 				if (controller.isDone()) {
