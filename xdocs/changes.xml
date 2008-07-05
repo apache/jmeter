@@ -63,6 +63,7 @@ but otherwise its behaviour is not consistent (or clearly specified).</p>
 The menu item Options / Choose Language does not change all the displayed text to the new language.
 To override the default local language, set the JMeter property "language" before starting JMeter. 
 </p>
+
 <h3>Incompatible changes</h3>
 <ul>
 The test element "Save Results to a file" is now shown as a Listener.
@@ -77,7 +78,8 @@ It does not affect test plans or test behaviour.
 <li>The "prev" and "sampler" objects are now defined for BSF test elements</li>
 <li>Prompt to overwrite an existing file when first saving a new test plan</li>
 <li>The test element "Save Results to a file" is now shown as a Listener</li>
-<li>Correct TestBeans to show the correct popup menu for Listeners</li>
+<li>Amend TestBeans to show the correct popup menu for Listeners</li>
+<li>Fix NPE when using nested Transaction Controllers with parent samples</li>
 </ul>
 
 <h3>Improvements</h3>
