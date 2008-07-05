@@ -28,16 +28,17 @@ import javax.jms.*;
  * 
  */
 public class Receiver implements Runnable {
-	private boolean active;
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private QueueSession session;
+    private boolean active;
 
-	private QueueReceiver consumer;
+	private final QueueSession session;
 
-	private QueueConnection conn;
+	private final QueueReceiver consumer;
+
+	private final QueueConnection conn;
 
 	// private static Receiver receiver;
-	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private Receiver(QueueConnectionFactory factory, Queue receiveQueue) throws JMSException {
 		conn = factory.createQueueConnection();
@@ -48,6 +49,7 @@ public class Receiver implements Runnable {
 		log.info("Receiver - ctor. Connection to messaging system established");
 	}
 
+	// TODO - does this need to be synchronized now that the variables are final?
 	public static synchronized Receiver createReceiver(QueueConnectionFactory factory, Queue receiveQueue)
 			throws JMSException {
 		// if (receiver == null) {
@@ -84,20 +86,25 @@ public class Receiver implements Runnable {
 			}
 		}
 		// not active anymore
-		if (session != null) {
-			try {
-				session.close();
-				try {
-					if (conn != null) {
-						conn.close();
-					}
-				} catch (JMSException e) {
-					log.error("Error closing connection",e);
-				}
-			} catch (JMSException e) {
-				log.error("Error closing session",e);
-			}
+		if (consumer != null) {
+		    try {
+                consumer.close();
+            } catch (JMSException e) {
+                log.error("Error closing connection",e);
+            }
 		}
+
+		// session and conn cannot be null (or ctor would have caused NPE)
+		try {
+			session.close();
+		} catch (JMSException e) {
+			log.error("Error closing session",e);
+		}
+        try {
+            conn.close();
+        } catch (JMSException e) {
+            log.error("Error closing connection",e);
+        }
 	}
 
 	public synchronized void activate() {
