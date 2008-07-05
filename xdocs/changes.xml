@@ -81,6 +81,7 @@ It does not affect test plans or test behaviour.
 <li>Amend TestBeans to show the correct popup menu for Listeners</li>
 <li>Fix NPE when using nested Transaction Controllers with parent samples</li>
 <li>Bug 45185 - CSV dataset blank delimiter causes OOM</li>
+<li>Bug 43791 - ensure QueueReceiver is closed</li>
 </ul>
 
 <h3>Improvements</h3>
