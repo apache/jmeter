@@ -237,104 +237,7 @@ public class JMeterThread implements Runnable, Serializable {
 			while (running) {
 				Sampler sam;
 				while (running && (sam = controller.next()) != null) {
-					try {
-						threadContext.setCurrentSampler(sam);
-                        
-                        // Check if we are running a transaction
-                        TransactionSampler transactionSampler = null;
-                        if(sam instanceof TransactionSampler) {
-                            transactionSampler = (TransactionSampler) sam;
-                        }
-                        // Find the package for the transaction
-                        SamplePackage transactionPack = null;
-                        if(transactionSampler != null) {
-                            transactionPack = compiler.configureTransactionSampler(transactionSampler);
-                            
-                            // Check if the transaction is done
-                            if(transactionSampler.isTransactionDone()) {
-                                // Get the transaction sample result
-                                SampleResult transactionResult = transactionSampler.getTransactionResult();
-                                transactionResult.setThreadName(threadName);
-                                transactionResult.setGroupThreads(threadGroup.getNumberOfThreads());
-                                transactionResult.setAllThreads(JMeterContextService.getNumberOfThreads());
-
-                                // Check assertions for the transaction sample
-                                checkAssertions(transactionPack.getAssertions(), transactionResult);
-                                // Notify listeners with the transaction sample result
-                                notifyListeners(transactionPack.getSampleListeners(), transactionResult);
-                                compiler.done(transactionPack);
-                                // Transaction is done, we do not have a sampler to sample
-                                sam = null;
-                            }
-                            else {
-                                // It is the sub sampler of the transaction that will be sampled
-                                sam = transactionSampler.getSubSampler();
-                            }
-                        }
-                        
-                        // Check if we have a sampler to sample
-                        if(sam != null) {
-                            // Get the sampler ready to sample
-                            SamplePackage pack = compiler.configureSampler(sam);
-
-						    // Hack: save the package for any transaction controllers
-							threadVars.putObject(PACKAGE_OBJECT, pack);
-
-                            delay(pack.getTimers());
-                            Sampler sampler = pack.getSampler();
-                            sampler.setThreadContext(threadContext);
-                            sampler.setThreadName(threadName);
-                            TestBeanHelper.prepare(sampler);
-                        
-                            // Perform the actual sample
-                            SampleResult result = sampler.sample(null); 
-                            // TODO: remove this useless Entry parameter
-                        
-                            // If we got any results, then perform processing on the result
-                            if (result != null) {
-                            	result.setGroupThreads(threadGroup.getNumberOfThreads());
-                            	result.setAllThreads(JMeterContextService.getNumberOfThreads());
-                                result.setThreadName(threadName);
-                                threadContext.setPreviousResult(result);
-                                runPostProcessors(pack.getPostProcessors());
-                                checkAssertions(pack.getAssertions(), result);
-                                // Do not send subsamples to listeners which receive the transaction sample
-                                List sampleListeners = getSampleListeners(pack, transactionPack, transactionSampler);
-                                notifyListeners(sampleListeners, result);
-                                compiler.done(pack);
-                                // Add the result as subsample of transaction if we are in a transaction
-                                if(transactionSampler != null) {
-                                    transactionSampler.addSubSamplerResult(result);
-                                }
-
-                                // Check if thread or test should be stopped
-                                if (result.isStopThread() || (!result.isSuccessful() && onErrorStopThread)) {
-                                    stopThread();
-                                }
-                                if (result.isStopTest() || (!result.isSuccessful() && onErrorStopTest)) {
-                                    stopTest();
-                                }
-                            } else {
-                                compiler.done(pack); // Finish up
-                            }
-                        }
-						if (scheduler) {
-							// checks the scheduler to stop the iteration
-							stopScheduler();
-						}
-					} catch (JMeterStopTestException e) {
-						log.info("Stopping Test: " + e.toString());
-						stopTest();
-					} catch (JMeterStopThreadException e) {
-						log.info("Stopping Thread: " + e.toString());
-						stopThread();
-					} catch (Exception e) {
-					    if (sam != null) {
-	                        log.error("Error while processing sampler '"+sam.getName()+"' :", e);					        
-					    } else {
-					        log.error("", e);
-					    }
-					}
+					process_sampler(sam, null);
 				}
 				if (controller.isDone()) {
 					running = false;
@@ -360,6 +263,128 @@ public class JMeterThread implements Runnable, Serializable {
 			threadFinished();
 		}
 	}
+
+	/**
+	 * Process the current sampler, handling transaction samplers.
+	 * 
+	 * @param current sampler
+	 * @param parent sampler
+	 * @return SampleResult if a transaction was processed
+	 */
+    private SampleResult process_sampler(Sampler current, Sampler parent) {
+        SampleResult transactionResult = null;
+        try {
+        	threadContext.setCurrentSampler(current);
+            
+            // Check if we are running a transaction
+            TransactionSampler transactionSampler = null;
+            if(current instanceof TransactionSampler) {
+                transactionSampler = (TransactionSampler) current;
+            }
+            // Find the package for the transaction
+            SamplePackage transactionPack = null;
+            if(transactionSampler != null) {
+                transactionPack = compiler.configureTransactionSampler(transactionSampler);
+                
+                // Check if the transaction is done
+                if(transactionSampler.isTransactionDone()) {
+                    // Get the transaction sample result
+                    transactionResult = transactionSampler.getTransactionResult();
+                    transactionResult.setThreadName(threadName);
+                    transactionResult.setGroupThreads(threadGroup.getNumberOfThreads());
+                    transactionResult.setAllThreads(JMeterContextService.getNumberOfThreads());
+
+                    // Check assertions for the transaction sample
+                    checkAssertions(transactionPack.getAssertions(), transactionResult);
+                    // Notify listeners with the transaction sample result
+                    if (!(parent instanceof TransactionSampler)){
+                        notifyListeners(transactionPack.getSampleListeners(), transactionResult);
+                    }
+                    compiler.done(transactionPack);
+                    // Transaction is done, we do not have a sampler to sample
+                    current = null;
+                }
+                else {
+                    Sampler prev = current;
+                    // It is the sub sampler of the transaction that will be sampled
+                    current = transactionSampler.getSubSampler();
+                    if (current instanceof TransactionSampler){
+                        SampleResult res = process_sampler(current, prev);// recursive call
+                        threadContext.setCurrentSampler(prev);
+                        current=null;
+                        if (res!=null){
+                            transactionSampler.addSubSamplerResult(res);
+                        }
+                    }
+                }
+            }
+            
+            // Check if we have a sampler to sample
+            if(current != null) {
+                // Get the sampler ready to sample
+                SamplePackage pack = compiler.configureSampler(current);
+
+        	    // Hack: save the package for any transaction controllers
+        		threadVars.putObject(PACKAGE_OBJECT, pack);
+
+                delay(pack.getTimers());
+                Sampler sampler = pack.getSampler();
+                sampler.setThreadContext(threadContext);
+                sampler.setThreadName(threadName);
+                TestBeanHelper.prepare(sampler);
+            
+                // Perform the actual sample
+                SampleResult 
+                result = sampler.sample(null); 
+                // TODO: remove this useless Entry parameter
+            
+                // If we got any results, then perform processing on the result
+                if (result != null) {
+                	result.setGroupThreads(threadGroup.getNumberOfThreads());
+                	result.setAllThreads(JMeterContextService.getNumberOfThreads());
+                    result.setThreadName(threadName);
+                    threadContext.setPreviousResult(result);
+                    runPostProcessors(pack.getPostProcessors());
+                    checkAssertions(pack.getAssertions(), result);
+                    // Do not send subsamples to listeners which receive the transaction sample
+                    List sampleListeners = getSampleListeners(pack, transactionPack, transactionSampler);
+                    notifyListeners(sampleListeners, result);
+                    compiler.done(pack);
+                    // Add the result as subsample of transaction if we are in a transaction
+                    if(transactionSampler != null) {
+                        transactionSampler.addSubSamplerResult(result);
+                    }
+
+                    // Check if thread or test should be stopped
+                    if (result.isStopThread() || (!result.isSuccessful() && onErrorStopThread)) {
+                        stopThread();
+                    }
+                    if (result.isStopTest() || (!result.isSuccessful() && onErrorStopTest)) {
+                        stopTest();
+                    }
+                } else {
+                    compiler.done(pack); // Finish up
+                }
+            }
+        	if (scheduler) {
+        		// checks the scheduler to stop the iteration
+        		stopScheduler();
+        	}
+        } catch (JMeterStopTestException e) {
+        	log.info("Stopping Test: " + e.toString());
+        	stopTest();
+        } catch (JMeterStopThreadException e) {
+        	log.info("Stopping Thread: " + e.toString());
+        	stopThread();
+        } catch (Exception e) {
+            if (current != null) {
+                log.error("Error while processing sampler '"+current.getName()+"' :", e);					        
+            } else {
+                log.error("", e);
+            }
+        }
+        return transactionResult;
+    }
     
     /**
      * Get the SampleListeners for the sampler. Listeners who receive transaction sample
