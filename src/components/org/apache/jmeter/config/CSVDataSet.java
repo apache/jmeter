@@ -126,6 +126,9 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
 			String delim = getDelimiter();
 			if (delim.equals("\\t")) { // $NON-NLS-1$
 				delim = "\t";// Make it easier to enter a Tab // $NON-NLS-1$
+		    } else if (delim.length()==0){
+		        log.warn("Empty delimiter converted to ','");
+		        delim=",";
 		    }
 			// TODO: fetch this once as per vars above?
             JMeterVariables threadVars = context.getVariables();
