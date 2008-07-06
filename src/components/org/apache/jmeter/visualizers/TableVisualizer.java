@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.visualizers;
@@ -52,237 +52,237 @@ import org.apache.log.Logger;
  * This class implements a statistical analyser that calculates both the average
  * and the standard deviation of the sampling process. The samples are displayed
  * in a JTable, and the statistics are displayed at the bottom of the table.
- * 
+ *
  * created March 10, 2002
- * 
+ *
  */
 public class TableVisualizer extends AbstractVisualizer implements Clearable {
-	private static final Logger log = LoggingManager.getLoggerForClass();
-	
-	private static final ImageIcon imageSuccess = JMeterUtils.getImage(
+    private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private static final ImageIcon imageSuccess = JMeterUtils.getImage(
             JMeterUtils.getPropDefault("viewResultsTree.success",  //$NON-NLS-1$
-            		"icon_success_sml.gif"), //$NON-NLS-1$
+                    "icon_success_sml.gif"), //$NON-NLS-1$
             JMeterUtils.getResString("table_visualizer_success")); //$NON-NLS-1$
 
-	private static final ImageIcon imageFailure = JMeterUtils.getImage(
+    private static final ImageIcon imageFailure = JMeterUtils.getImage(
             JMeterUtils.getPropDefault("viewResultsTree.failure",  //$NON-NLS-1$
-            		"icon_warning_sml.gif"), //$NON-NLS-1$
+                    "icon_warning_sml.gif"), //$NON-NLS-1$
             JMeterUtils.getResString("table_visualizer_warning")); //$NON-NLS-1$
 
-	private final String[] COLUMNS = new String[] {
+    private final String[] COLUMNS = new String[] {
             JMeterUtils.getResString("table_visualizer_sample_num"), // $NON-NLS-1$
             JMeterUtils.getResString("table_visualizer_start_time"), // $NON-NLS-1$
             JMeterUtils.getResString("table_visualizer_thread_name"),// $NON-NLS-1$
-			JMeterUtils.getResString("sampler_label"),  // $NON-NLS-1$
+            JMeterUtils.getResString("sampler_label"),  // $NON-NLS-1$
             JMeterUtils.getResString("table_visualizer_sample_time"), // $NON-NLS-1$
-			JMeterUtils.getResString("table_visualizer_status"),  // $NON-NLS-1$
+            JMeterUtils.getResString("table_visualizer_status"),  // $NON-NLS-1$
             JMeterUtils.getResString("table_visualizer_bytes") }; // $NON-NLS-1$
 
-	private ObjectTableModel model = null;
+    private ObjectTableModel model = null;
 
-	private JTable table = null;
+    private JTable table = null;
 
-	private JTextField dataField = null;
+    private JTextField dataField = null;
 
-	private JTextField averageField = null;
+    private JTextField averageField = null;
 
-	private JTextField deviationField = null;
+    private JTextField deviationField = null;
 
-	private JTextField noSamplesField = null;
+    private JTextField noSamplesField = null;
 
-	private JScrollPane tableScrollPanel = null;
+    private JScrollPane tableScrollPanel = null;
 
-	private transient Calculator calc = new Calculator();
+    private transient Calculator calc = new Calculator();
 
-	private long currentData = 0;
+    private long currentData = 0;
 
     private Format format = new SimpleDateFormat("HH:mm:ss.SSS"); //$NON-NLS-1$
-    
-	// Column renderers
-	private static final TableCellRenderer[] RENDERERS = 
-		new TableCellRenderer[]{
-		    null, // Count
-		    new RightAlignRenderer(), // Start Time
-		    null, // Thread Name
-		    null, // Label
-		    null, // Sample Time
-		    null, // Status
-		    null, // Bytes
-		};
 
-	/**
-	 * Constructor for the TableVisualizer object.
-	 */
-	public TableVisualizer() {
-		super();
-		model = new ObjectTableModel(COLUMNS,
-				Sample.class,         // The object used for each row
-				new Functor[] {
+    // Column renderers
+    private static final TableCellRenderer[] RENDERERS =
+        new TableCellRenderer[]{
+            null, // Count
+            new RightAlignRenderer(), // Start Time
+            null, // Thread Name
+            null, // Label
+            null, // Sample Time
+            null, // Status
+            null, // Bytes
+        };
+
+    /**
+     * Constructor for the TableVisualizer object.
+     */
+    public TableVisualizer() {
+        super();
+        model = new ObjectTableModel(COLUMNS,
+                Sample.class,         // The object used for each row
+                new Functor[] {
                 new Functor("getCount"), // $NON-NLS-1$
                 new Functor("getStartTimeFormatted",  // $NON-NLS-1$
                         new Object[]{format}),
                 new Functor("getThreadName"), // $NON-NLS-1$
                 new Functor("getLabel"), // $NON-NLS-1$
-				new Functor("getData"), // $NON-NLS-1$
+                new Functor("getData"), // $NON-NLS-1$
                 new SampleSuccessFunctor("isSuccess"), // $NON-NLS-1$
                 new Functor("getBytes") }, // $NON-NLS-1$
-                new Functor[] { null, null, null, null, null, null, null }, 
-                new Class[] { 
-				Long.class, String.class, String.class, String.class, Long.class, ImageIcon.class, Integer.class });
-		init();
-	}
+                new Functor[] { null, null, null, null, null, null, null },
+                new Class[] {
+                Long.class, String.class, String.class, String.class, Long.class, ImageIcon.class, Integer.class });
+        init();
+    }
 
-	public static boolean testFunctors(){
-		TableVisualizer instance = new TableVisualizer();
-		return instance.model.checkFunctors(null,instance.getClass());
-	}
-	
+    public static boolean testFunctors(){
+        TableVisualizer instance = new TableVisualizer();
+        return instance.model.checkFunctors(null,instance.getClass());
+    }
 
-	public String getLabelResource() {
-		return "view_results_in_table"; // $NON-NLS-1$
-	}
 
-	protected synchronized void updateTextFields() {
-		noSamplesField.setText(Long.toString(calc.getCount()));
-		dataField.setText(Long.toString(currentData));
-		averageField.setText(Long.toString((long) calc.getMean()));
-		deviationField.setText(Long.toString((long) calc.getStandardDeviation()));
-	}
+    public String getLabelResource() {
+        return "view_results_in_table"; // $NON-NLS-1$
+    }
 
-	public void add(SampleResult res) {
+    protected synchronized void updateTextFields() {
+        noSamplesField.setText(Long.toString(calc.getCount()));
+        dataField.setText(Long.toString(currentData));
+        averageField.setText(Long.toString((long) calc.getMean()));
+        deviationField.setText(Long.toString((long) calc.getStandardDeviation()));
+    }
+
+    public void add(SampleResult res) {
         currentData = res.getTime();
-		synchronized (calc) {
-			calc.addValue(currentData);
-			int count = calc.getCount();
-			Sample newS = new Sample(res.getSampleLabel(), res.getTime(), 0, 0, 0, 0, 0, 0,
+        synchronized (calc) {
+            calc.addValue(currentData);
+            int count = calc.getCount();
+            Sample newS = new Sample(res.getSampleLabel(), res.getTime(), 0, 0, 0, 0, 0, 0,
                     res.isSuccessful(), count, res.getEndTime(),res.getBytes(),
                     res.getThreadName());
-			model.addRow(newS);
-		}
-		updateTextFields();
-	}
+            model.addRow(newS);
+        }
+        updateTextFields();
+    }
 
-	public synchronized void clearData() {
-		model.clearData();
-		currentData = 0;
-		calc.clear();
-		noSamplesField.setText("0"); // $NON-NLS-1$
-		dataField.setText("0"); // $NON-NLS-1$
-		averageField.setText("0"); // $NON-NLS-1$
-		deviationField.setText("0"); // $NON-NLS-1$
-		repaint();
-	}
+    public synchronized void clearData() {
+        model.clearData();
+        currentData = 0;
+        calc.clear();
+        noSamplesField.setText("0"); // $NON-NLS-1$
+        dataField.setText("0"); // $NON-NLS-1$
+        averageField.setText("0"); // $NON-NLS-1$
+        deviationField.setText("0"); // $NON-NLS-1$
+        repaint();
+    }
 
-	public String toString() {
-		return "Show the samples in a table";
-	}
+    public String toString() {
+        return "Show the samples in a table";
+    }
 
-	private void init() {
-		this.setLayout(new BorderLayout());
+    private void init() {
+        this.setLayout(new BorderLayout());
 
-		// MAIN PANEL
-		JPanel mainPanel = new JPanel();
-		Border margin = new EmptyBorder(10, 10, 5, 10);
+        // MAIN PANEL
+        JPanel mainPanel = new JPanel();
+        Border margin = new EmptyBorder(10, 10, 5, 10);
 
-		mainPanel.setBorder(margin);
-		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.BOTH));
+        mainPanel.setBorder(margin);
+        mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.BOTH));
 
-		// NAME
-		mainPanel.add(makeTitlePanel());
+        // NAME
+        mainPanel.add(makeTitlePanel());
 
-		// Set up the table itself
-		table = new JTable(model);
-		// table.getTableHeader().setReorderingAllowed(false);
-		RendererUtils.applyRenderers(table, RENDERERS);
+        // Set up the table itself
+        table = new JTable(model);
+        // table.getTableHeader().setReorderingAllowed(false);
+        RendererUtils.applyRenderers(table, RENDERERS);
 
-		tableScrollPanel = new JScrollPane(table);
-		tableScrollPanel.setViewportBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+        tableScrollPanel = new JScrollPane(table);
+        tableScrollPanel.setViewportBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 
-		// Set up footer of table which displays numerics of the graphs
-		JPanel dataPanel = new JPanel();
-		JLabel dataLabel = new JLabel(JMeterUtils.getResString("graph_results_latest_sample")); // $NON-NLS-1$
-		dataLabel.setForeground(Color.black);
-		dataField = new JTextField(5);
-		dataField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-		dataField.setEditable(false);
-		dataField.setForeground(Color.black);
-		dataField.setBackground(getBackground());
-		dataPanel.add(dataLabel);
-		dataPanel.add(dataField);
+        // Set up footer of table which displays numerics of the graphs
+        JPanel dataPanel = new JPanel();
+        JLabel dataLabel = new JLabel(JMeterUtils.getResString("graph_results_latest_sample")); // $NON-NLS-1$
+        dataLabel.setForeground(Color.black);
+        dataField = new JTextField(5);
+        dataField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        dataField.setEditable(false);
+        dataField.setForeground(Color.black);
+        dataField.setBackground(getBackground());
+        dataPanel.add(dataLabel);
+        dataPanel.add(dataField);
 
-		JPanel averagePanel = new JPanel();
-		JLabel averageLabel = new JLabel(JMeterUtils.getResString("graph_results_average")); // $NON-NLS-1$
-		averageLabel.setForeground(Color.blue);
-		averageField = new JTextField(5);
-		averageField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-		averageField.setEditable(false);
-		averageField.setForeground(Color.blue);
-		averageField.setBackground(getBackground());
-		averagePanel.add(averageLabel);
-		averagePanel.add(averageField);
+        JPanel averagePanel = new JPanel();
+        JLabel averageLabel = new JLabel(JMeterUtils.getResString("graph_results_average")); // $NON-NLS-1$
+        averageLabel.setForeground(Color.blue);
+        averageField = new JTextField(5);
+        averageField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        averageField.setEditable(false);
+        averageField.setForeground(Color.blue);
+        averageField.setBackground(getBackground());
+        averagePanel.add(averageLabel);
+        averagePanel.add(averageField);
 
-		JPanel deviationPanel = new JPanel();
-		JLabel deviationLabel = new JLabel(JMeterUtils.getResString("graph_results_deviation")); // $NON-NLS-1$
-		deviationLabel.setForeground(Color.red);
-		deviationField = new JTextField(5);
-		deviationField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-		deviationField.setEditable(false);
-		deviationField.setForeground(Color.red);
-		deviationField.setBackground(getBackground());
-		deviationPanel.add(deviationLabel);
-		deviationPanel.add(deviationField);
+        JPanel deviationPanel = new JPanel();
+        JLabel deviationLabel = new JLabel(JMeterUtils.getResString("graph_results_deviation")); // $NON-NLS-1$
+        deviationLabel.setForeground(Color.red);
+        deviationField = new JTextField(5);
+        deviationField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        deviationField.setEditable(false);
+        deviationField.setForeground(Color.red);
+        deviationField.setBackground(getBackground());
+        deviationPanel.add(deviationLabel);
+        deviationPanel.add(deviationField);
 
-		JPanel noSamplesPanel = new JPanel();
-		JLabel noSamplesLabel = new JLabel(JMeterUtils.getResString("graph_results_no_samples")); // $NON-NLS-1$
+        JPanel noSamplesPanel = new JPanel();
+        JLabel noSamplesLabel = new JLabel(JMeterUtils.getResString("graph_results_no_samples")); // $NON-NLS-1$
 
-		noSamplesField = new JTextField(10);
-		noSamplesField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-		noSamplesField.setEditable(false);
-		noSamplesField.setForeground(Color.black);
-		noSamplesField.setBackground(getBackground());
-		noSamplesPanel.add(noSamplesLabel);
-		noSamplesPanel.add(noSamplesField);
+        noSamplesField = new JTextField(10);
+        noSamplesField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        noSamplesField.setEditable(false);
+        noSamplesField.setForeground(Color.black);
+        noSamplesField.setBackground(getBackground());
+        noSamplesPanel.add(noSamplesLabel);
+        noSamplesPanel.add(noSamplesField);
 
-		JPanel tableInfoPanel = new JPanel();
-		tableInfoPanel.setLayout(new FlowLayout());
-		tableInfoPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        JPanel tableInfoPanel = new JPanel();
+        tableInfoPanel.setLayout(new FlowLayout());
+        tableInfoPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
-		tableInfoPanel.add(noSamplesPanel);
-		tableInfoPanel.add(dataPanel);
-		tableInfoPanel.add(averagePanel);
-		tableInfoPanel.add(deviationPanel);
+        tableInfoPanel.add(noSamplesPanel);
+        tableInfoPanel.add(dataPanel);
+        tableInfoPanel.add(averagePanel);
+        tableInfoPanel.add(deviationPanel);
 
-		// Set up the table with footer
-		JPanel tablePanel = new JPanel();
+        // Set up the table with footer
+        JPanel tablePanel = new JPanel();
 
-		tablePanel.setLayout(new BorderLayout());
-		tablePanel.add(tableScrollPanel, BorderLayout.CENTER);
-		tablePanel.add(tableInfoPanel, BorderLayout.SOUTH);
+        tablePanel.setLayout(new BorderLayout());
+        tablePanel.add(tableScrollPanel, BorderLayout.CENTER);
+        tablePanel.add(tableInfoPanel, BorderLayout.SOUTH);
 
-		// Add the main panel and the graph
-		this.add(mainPanel, BorderLayout.NORTH);
-		this.add(tablePanel, BorderLayout.CENTER);
-	}
-	
-	public static class SampleSuccessFunctor extends Functor {
-		public SampleSuccessFunctor(String methodName) {
-			super(methodName);
-		}
-		
-		public Object invoke(Object p_invokee) {
-			Boolean success = (Boolean)super.invoke(p_invokee);
-			
-			if(success != null) {
-				if(success.booleanValue()) {
-					return imageSuccess;
-				}
-				else {
-					return imageFailure;
-				}
-			}
-			else {
-				return null;
-			}
-		}
-	}
+        // Add the main panel and the graph
+        this.add(mainPanel, BorderLayout.NORTH);
+        this.add(tablePanel, BorderLayout.CENTER);
+    }
+
+    public static class SampleSuccessFunctor extends Functor {
+        public SampleSuccessFunctor(String methodName) {
+            super(methodName);
+        }
+
+        public Object invoke(Object p_invokee) {
+            Boolean success = (Boolean)super.invoke(p_invokee);
+
+            if(success != null) {
+                if(success.booleanValue()) {
+                    return imageSuccess;
+                }
+                else {
+                    return imageFailure;
+                }
+            }
+            else {
+                return null;
+            }
+        }
+    }
 }

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.visualizers;
@@ -26,48 +26,48 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 /*******************************************************************************
  * This listener can record results to a file but not to the UI. It is meant to
  * provide an efficient means of recording data by eliminating GUI overhead.
- * 
+ *
  ******************************************************************************/
 
 public class SimpleDataWriter extends AbstractVisualizer {
-	/***************************************************************************
-	 * Create the SimpleDataWriter.
-	 **************************************************************************/
+    /***************************************************************************
+     * Create the SimpleDataWriter.
+     **************************************************************************/
 
-	public SimpleDataWriter() {
-		init();
-		setName(getStaticLabel());
-	}
+    public SimpleDataWriter() {
+        init();
+        setName(getStaticLabel());
+    }
 
-	public String getLabelResource() {
-		return "simple_data_writer_title"; // $NON-NLS-1$
-	}
+    public String getLabelResource() {
+        return "simple_data_writer_title"; // $NON-NLS-1$
+    }
 
-	/**
-	 * Initialize the component in the UI
-	 */
+    /**
+     * Initialize the component in the UI
+     */
 
-	private void init() {
-		setLayout(new BorderLayout());
-		setBorder(makeBorder());
+    private void init() {
+        setLayout(new BorderLayout());
+        setBorder(makeBorder());
 
-		add(makeTitlePanel(), BorderLayout.NORTH);
-	}
+        add(makeTitlePanel(), BorderLayout.NORTH);
+    }
 
-	/**
-	 * Does nothing, but required by interface.
-	 */
+    /**
+     * Does nothing, but required by interface.
+     */
 
-	public void clearData() {
-	}
+    public void clearData() {
+    }
 
-	/**
-	 * Does nothing, but required by interface.
-	 * 
-	 * @param sample
-	 *            ignored
-	 */
+    /**
+     * Does nothing, but required by interface.
+     *
+     * @param sample
+     *            ignored
+     */
 
-	public void add(SampleResult sample) {
-	}
+    public void add(SampleResult sample) {
+    }
 }

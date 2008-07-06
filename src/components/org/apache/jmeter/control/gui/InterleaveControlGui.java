@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.control.gui;
@@ -26,60 +26,60 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
 public class InterleaveControlGui extends AbstractControllerGui {
-	private JCheckBox style;
+    private JCheckBox style;
 
-	public InterleaveControlGui() {
-		init();
-	}
+    public InterleaveControlGui() {
+        init();
+    }
 
-	public void configure(TestElement el) {
-		super.configure(el);
-		if (((InterleaveControl) el).getStyle() == InterleaveControl.IGNORE_SUB_CONTROLLERS) {
-			style.setSelected(true);
-		} else {
-			style.setSelected(false);
-		}
-	}
+    public void configure(TestElement el) {
+        super.configure(el);
+        if (((InterleaveControl) el).getStyle() == InterleaveControl.IGNORE_SUB_CONTROLLERS) {
+            style.setSelected(true);
+        } else {
+            style.setSelected(false);
+        }
+    }
 
-	public TestElement createTestElement() {
-		InterleaveControl ic = new InterleaveControl();
-		modifyTestElement(ic);
-		return ic;
-	}
+    public TestElement createTestElement() {
+        InterleaveControl ic = new InterleaveControl();
+        modifyTestElement(ic);
+        return ic;
+    }
 
-	/**
-	 * Modifies a given TestElement to mirror the data in the gui components.
-	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-	 */
-	public void modifyTestElement(TestElement ic) {
-		configureTestElement(ic);
-		if (style.isSelected()) {
-			((InterleaveControl) ic).setStyle(InterleaveControl.IGNORE_SUB_CONTROLLERS);
-		} else {
-			((InterleaveControl) ic).setStyle(InterleaveControl.USE_SUB_CONTROLLERS);
-		}
-	}
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     *
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement ic) {
+        configureTestElement(ic);
+        if (style.isSelected()) {
+            ((InterleaveControl) ic).setStyle(InterleaveControl.IGNORE_SUB_CONTROLLERS);
+        } else {
+            ((InterleaveControl) ic).setStyle(InterleaveControl.USE_SUB_CONTROLLERS);
+        }
+    }
 
     /**
      * Implements JMeterGUIComponent.clearGui
      */
     public void clearGui() {
-        super.clearGui();    
+        super.clearGui();
         style.setSelected(false);
     }
-    
-	public String getLabelResource() {
-		return "interleave_control_title"; // $NON-NLS-1$
-	}
 
-	private void init() {
-		setLayout(new VerticalLayout(5, VerticalLayout.BOTH, VerticalLayout.TOP));
-		setBorder(makeBorder());
+    public String getLabelResource() {
+        return "interleave_control_title"; // $NON-NLS-1$
+    }
 
-		add(makeTitlePanel());
+    private void init() {
+        setLayout(new VerticalLayout(5, VerticalLayout.BOTH, VerticalLayout.TOP));
+        setBorder(makeBorder());
 
-		style = new JCheckBox(JMeterUtils.getResString("ignore_subcontrollers")); // $NON-NLS-1$
-		add(style);
-	}
+        add(makeTitlePanel());
+
+        style = new JCheckBox(JMeterUtils.getResString("ignore_subcontrollers")); // $NON-NLS-1$
+        add(style);
+    }
 }

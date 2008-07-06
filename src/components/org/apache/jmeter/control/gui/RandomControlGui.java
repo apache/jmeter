@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.control.gui;
@@ -27,59 +27,59 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
 public class RandomControlGui extends AbstractControllerGui {
-	private JCheckBox style;
+    private JCheckBox style;
 
-	public RandomControlGui() {
-		init();
-	}
+    public RandomControlGui() {
+        init();
+    }
 
-	public TestElement createTestElement() {
-		RandomController ic = new RandomController();
-		modifyTestElement(ic);
-		return ic;
-	}
+    public TestElement createTestElement() {
+        RandomController ic = new RandomController();
+        modifyTestElement(ic);
+        return ic;
+    }
 
-	/**
-	 * Modifies a given TestElement to mirror the data in the gui components.
-	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-	 */
-	public void modifyTestElement(TestElement ic) {
-		configureTestElement(ic);
-		if (style.isSelected()) {
-			((RandomController) ic).setStyle(InterleaveControl.IGNORE_SUB_CONTROLLERS);
-		} else {
-			((RandomController) ic).setStyle(InterleaveControl.USE_SUB_CONTROLLERS);
-		}
-	}
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     *
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement ic) {
+        configureTestElement(ic);
+        if (style.isSelected()) {
+            ((RandomController) ic).setStyle(InterleaveControl.IGNORE_SUB_CONTROLLERS);
+        } else {
+            ((RandomController) ic).setStyle(InterleaveControl.USE_SUB_CONTROLLERS);
+        }
+    }
 
     /**
      * Implements JMeterGUIComponent.clearGui
      */
     public void clearGui() {
-        super.clearGui(); 
+        super.clearGui();
         style.setSelected(false);
     }
 
-	public void configure(TestElement el) {
-		super.configure(el);
-		if (((RandomController) el).getStyle() == InterleaveControl.IGNORE_SUB_CONTROLLERS) {
-			style.setSelected(true);
-		} else {
-			style.setSelected(false);
-		}
-	}
+    public void configure(TestElement el) {
+        super.configure(el);
+        if (((RandomController) el).getStyle() == InterleaveControl.IGNORE_SUB_CONTROLLERS) {
+            style.setSelected(true);
+        } else {
+            style.setSelected(false);
+        }
+    }
 
-	public String getLabelResource() {
-		return "random_control_title"; // $NON-NLS-1$
-	}
+    public String getLabelResource() {
+        return "random_control_title"; // $NON-NLS-1$
+    }
 
-	private void init() {
-		setLayout(new VerticalLayout(5, VerticalLayout.BOTH, VerticalLayout.TOP));
-		setBorder(makeBorder());
-		add(makeTitlePanel());
+    private void init() {
+        setLayout(new VerticalLayout(5, VerticalLayout.BOTH, VerticalLayout.TOP));
+        setBorder(makeBorder());
+        add(makeTitlePanel());
 
-		style = new JCheckBox(JMeterUtils.getResString("ignore_subcontrollers")); // $NON-NLS-1$
-		add(style);
-	}
+        style = new JCheckBox(JMeterUtils.getResString("ignore_subcontrollers")); // $NON-NLS-1$
+        add(style);
+    }
 }

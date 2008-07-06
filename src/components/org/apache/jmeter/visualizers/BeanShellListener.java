@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.visualizers;
@@ -32,13 +32,13 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterException;
 import org.apache.log.Logger;
 
-public class BeanShellListener extends BeanShellTestElement 
+public class BeanShellListener extends BeanShellTestElement
     implements Cloneable, SampleListener, TestBean, Visualizer, UnsharedComponent  {
-	// N.B. Needs to implement Visualizer so that TestBeanGUI can find the correct GUI class
-	// TODO - remove UnsharedComponent ? Probably does not make sense for a TestBean.
-	
+    // N.B. Needs to implement Visualizer so that TestBeanGUI can find the correct GUI class
+    // TODO - remove UnsharedComponent ? Probably does not make sense for a TestBean.
+
     private static final Logger log = LoggingManager.getLoggerForClass();
-    
+
     private static final long serialVersionUID = 4;
 
     // can be specified in jmeter.properties
@@ -48,13 +48,13 @@ public class BeanShellListener extends BeanShellTestElement
         return INIT_FILE;
     }
 
-	public void sampleOccurred(SampleEvent se) {
+    public void sampleOccurred(SampleEvent se) {
         final BeanShellInterpreter bshInterpreter = getBeanShellInterpreter();
-		if (bshInterpreter == null) {
+        if (bshInterpreter == null) {
             log.error("BeanShell not found");
             return;
         }
-        
+
         JMeterContext jmctx = JMeterContextService.getContext();
         JMeterVariables vars = jmctx.getVariables();
         SampleResult samp=se.getResult();
@@ -67,22 +67,22 @@ public class BeanShellListener extends BeanShellTestElement
             processFileOrScript(bshInterpreter);
         } catch (JMeterException e) {
             log.warn("Problem in BeanShell script "+e);
-        }		
-	}
+        }
+    }
 
-	public void sampleStarted(SampleEvent e) {
-	}
+    public void sampleStarted(SampleEvent e) {
+    }
 
-	public void sampleStopped(SampleEvent e) {
-	}
+    public void sampleStopped(SampleEvent e) {
+    }
 
-	public void add(SampleResult sample) {
-		// TODO Auto-generated method stub
-		
-	}
+    public void add(SampleResult sample) {
+        // TODO Auto-generated method stub
 
-	public boolean isStats() { // Needed by Visualizer interface
-		return false;
-	}
+    }
+
+    public boolean isStats() { // Needed by Visualizer interface
+        return false;
+    }
 
 }
