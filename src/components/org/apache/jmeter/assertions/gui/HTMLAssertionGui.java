@@ -49,100 +49,100 @@ import org.apache.log.Logger;
  */
 public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListener, ActionListener {
 
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	// Names for the fields
-	private static final String WARNING_THRESHOLD_FIELD = "warningThresholdField"; // $NON-NLS-1$
+    // Names for the fields
+    private static final String WARNING_THRESHOLD_FIELD = "warningThresholdField"; // $NON-NLS-1$
 
-	private static final String ERROR_THRESHOLD_FIELD = "errorThresholdField"; // $NON-NLS-1$
+    private static final String ERROR_THRESHOLD_FIELD = "errorThresholdField"; // $NON-NLS-1$
 
-	// instance attributes
-	private JTextField errorThresholdField = null;
+    // instance attributes
+    private JTextField errorThresholdField = null;
 
-	private JTextField warningThresholdField = null;
+    private JTextField warningThresholdField = null;
 
-	private JCheckBox errorsOnly = null;
+    private JCheckBox errorsOnly = null;
 
-	private JComboBox docTypeBox = null;
+    private JComboBox docTypeBox = null;
 
-	private JRadioButton htmlRadioButton = null;
+    private JRadioButton htmlRadioButton = null;
 
-	private JRadioButton xhtmlRadioButton = null;
+    private JRadioButton xhtmlRadioButton = null;
 
-	private JRadioButton xmlRadioButton = null;
+    private JRadioButton xmlRadioButton = null;
 
-	private FilePanel filePanel = null;
+    private FilePanel filePanel = null;
 
-	/**
-	 * The constructor.
-	 */
-	public HTMLAssertionGui() {
-		init();
-	}
+    /**
+     * The constructor.
+     */
+    public HTMLAssertionGui() {
+        init();
+    }
 
-	/**
-	 * Returns the label to be shown within the JTree-Component.
-	 */
-	public String getLabelResource() {
-		return "html_assertion_title"; // $NON-NLS-1$
-	}
+    /**
+     * Returns the label to be shown within the JTree-Component.
+     */
+    public String getLabelResource() {
+        return "html_assertion_title"; // $NON-NLS-1$
+    }
 
-	/**
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
-	 */
-	public TestElement createTestElement() {
-		HTMLAssertion el = new HTMLAssertion();
-		modifyTestElement(el);
-		return el;
-	}
+    /**
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
+     */
+    public TestElement createTestElement() {
+        HTMLAssertion el = new HTMLAssertion();
+        modifyTestElement(el);
+        return el;
+    }
 
-	/**
-	 * Modifies a given TestElement to mirror the data in the gui components.
-	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-	 */
-	public void modifyTestElement(TestElement inElement) {
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * 
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement inElement) {
 
-		log.debug("HTMLAssertionGui.modifyTestElement() called");
+        log.debug("HTMLAssertionGui.modifyTestElement() called");
 
-		configureTestElement(inElement);
+        configureTestElement(inElement);
 
-		String errorThresholdString = errorThresholdField.getText();
-		long errorThreshold = 0;
+        String errorThresholdString = errorThresholdField.getText();
+        long errorThreshold = 0;
 
-		try {
-			errorThreshold = Long.parseLong(errorThresholdString);
-		} catch (NumberFormatException e) {
-			errorThreshold = 0;
-		}
-		((HTMLAssertion) inElement).setErrorThreshold(errorThreshold);
+        try {
+            errorThreshold = Long.parseLong(errorThresholdString);
+        } catch (NumberFormatException e) {
+            errorThreshold = 0;
+        }
+        ((HTMLAssertion) inElement).setErrorThreshold(errorThreshold);
 
-		String warningThresholdString = warningThresholdField.getText();
-		long warningThreshold = 0;
-		try {
-			warningThreshold = Long.parseLong(warningThresholdString);
-		} catch (NumberFormatException e) {
-			warningThreshold = 0;
-		}
-		((HTMLAssertion) inElement).setWarningThreshold(warningThreshold);
+        String warningThresholdString = warningThresholdField.getText();
+        long warningThreshold = 0;
+        try {
+            warningThreshold = Long.parseLong(warningThresholdString);
+        } catch (NumberFormatException e) {
+            warningThreshold = 0;
+        }
+        ((HTMLAssertion) inElement).setWarningThreshold(warningThreshold);
 
-		String docTypeString = docTypeBox.getSelectedItem().toString();
-		((HTMLAssertion) inElement).setDoctype(docTypeString);
+        String docTypeString = docTypeBox.getSelectedItem().toString();
+        ((HTMLAssertion) inElement).setDoctype(docTypeString);
 
-		boolean trackErrorsOnly = errorsOnly.isSelected();
-		((HTMLAssertion) inElement).setErrorsOnly(trackErrorsOnly);
+        boolean trackErrorsOnly = errorsOnly.isSelected();
+        ((HTMLAssertion) inElement).setErrorsOnly(trackErrorsOnly);
 
-		if (htmlRadioButton.isSelected()) {
-			((HTMLAssertion) inElement).setHTML();
-		} else if (xhtmlRadioButton.isSelected()) {
-			((HTMLAssertion) inElement).setXHTML();
-		} else {
-			((HTMLAssertion) inElement).setXML();
-		}
-		((HTMLAssertion) inElement).setFilename(filePanel.getFilename());
-	}
+        if (htmlRadioButton.isSelected()) {
+            ((HTMLAssertion) inElement).setHTML();
+        } else if (xhtmlRadioButton.isSelected()) {
+            ((HTMLAssertion) inElement).setXHTML();
+        } else {
+            ((HTMLAssertion) inElement).setXML();
+        }
+        ((HTMLAssertion) inElement).setFilename(filePanel.getFilename());
+    }
 
     /**
      * Implements JMeterGUIComponent.clearGui
@@ -160,200 +160,200 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListene
         errorsOnly.setSelected(false);
     }    
 
-	/**
-	 * Configures the associated test element.
-	 * 
-	 * @param inElement
-	 */
-	public void configure(TestElement inElement) {
-		super.configure(inElement);
-		HTMLAssertion lAssertion = (HTMLAssertion) inElement;
-		errorThresholdField.setText(String.valueOf(lAssertion.getErrorThreshold()));
-		warningThresholdField.setText(String.valueOf(lAssertion.getWarningThreshold()));
-		errorsOnly.setSelected(lAssertion.isErrorsOnly());
-		docTypeBox.setSelectedItem(lAssertion.getDoctype());
-		if (lAssertion.isHTML()) {
-			htmlRadioButton.setSelected(true);
-		} else if (lAssertion.isXHTML()) {
-			xhtmlRadioButton.setSelected(true);
-		} else {
-			xmlRadioButton.setSelected(true);
-		}
-		if (lAssertion.isErrorsOnly()) {
-			warningThresholdField.setEnabled(false);
-			warningThresholdField.setEditable(false);
-		}
-		else {
-			warningThresholdField.setEnabled(true);
-			warningThresholdField.setEditable(true);
-		}
-		filePanel.setFilename(lAssertion.getFilename());
-	}
+    /**
+     * Configures the associated test element.
+     * 
+     * @param inElement
+     */
+    public void configure(TestElement inElement) {
+        super.configure(inElement);
+        HTMLAssertion lAssertion = (HTMLAssertion) inElement;
+        errorThresholdField.setText(String.valueOf(lAssertion.getErrorThreshold()));
+        warningThresholdField.setText(String.valueOf(lAssertion.getWarningThreshold()));
+        errorsOnly.setSelected(lAssertion.isErrorsOnly());
+        docTypeBox.setSelectedItem(lAssertion.getDoctype());
+        if (lAssertion.isHTML()) {
+            htmlRadioButton.setSelected(true);
+        } else if (lAssertion.isXHTML()) {
+            xhtmlRadioButton.setSelected(true);
+        } else {
+            xmlRadioButton.setSelected(true);
+        }
+        if (lAssertion.isErrorsOnly()) {
+            warningThresholdField.setEnabled(false);
+            warningThresholdField.setEditable(false);
+        }
+        else {
+            warningThresholdField.setEnabled(true);
+            warningThresholdField.setEditable(true);
+        }
+        filePanel.setFilename(lAssertion.getFilename());
+    }
 
-	/**
-	 * Inits the GUI.
-	 */
-	private void init() {
+    /**
+     * Inits the GUI.
+     */
+    private void init() {
 
-		setLayout(new BorderLayout(0, 10));
-		setBorder(makeBorder());
+        setLayout(new BorderLayout(0, 10));
+        setBorder(makeBorder());
 
-		add(makeTitlePanel(), BorderLayout.NORTH);
+        add(makeTitlePanel(), BorderLayout.NORTH);
 
-		JPanel mainPanel = new JPanel(new BorderLayout());
+        JPanel mainPanel = new JPanel(new BorderLayout());
 
-		// USER_INPUT
-		VerticalPanel assertionPanel = new VerticalPanel();
-		assertionPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Tidy Settings"));
+        // USER_INPUT
+        VerticalPanel assertionPanel = new VerticalPanel();
+        assertionPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Tidy Settings"));
 
-		// doctype
-		HorizontalPanel docTypePanel = new HorizontalPanel();
-		docTypeBox = new JComboBox(new Object[] { "omit", "auto", "strict", "loose" });
-		// docTypePanel.add(new
-		// JLabel(JMeterUtils.getResString("duration_assertion_label"))); //$NON-NLS-1$
-		docTypePanel.add(new JLabel("Doctype:"));
-		docTypePanel.add(docTypeBox);
-		assertionPanel.add(docTypePanel);
+        // doctype
+        HorizontalPanel docTypePanel = new HorizontalPanel();
+        docTypeBox = new JComboBox(new Object[] { "omit", "auto", "strict", "loose" });
+        // docTypePanel.add(new
+        // JLabel(JMeterUtils.getResString("duration_assertion_label"))); //$NON-NLS-1$
+        docTypePanel.add(new JLabel("Doctype:"));
+        docTypePanel.add(docTypeBox);
+        assertionPanel.add(docTypePanel);
 
-		// format (HMTL, XHTML, XML)
-		VerticalPanel formatPanel = new VerticalPanel();
-		formatPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Format"));
-		htmlRadioButton = new JRadioButton("HTML", true); //$NON-NLS-1$
-		xhtmlRadioButton = new JRadioButton("XHTML", false); //$NON-NLS-1$
-		xmlRadioButton = new JRadioButton("XML", false); //$NON-NLS-1$
-		ButtonGroup buttonGroup = new ButtonGroup();
-		buttonGroup.add(htmlRadioButton);
-		buttonGroup.add(xhtmlRadioButton);
-		buttonGroup.add(xmlRadioButton);
-		formatPanel.add(htmlRadioButton);
-		formatPanel.add(xhtmlRadioButton);
-		formatPanel.add(xmlRadioButton);
-		assertionPanel.add(formatPanel);
+        // format (HMTL, XHTML, XML)
+        VerticalPanel formatPanel = new VerticalPanel();
+        formatPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Format"));
+        htmlRadioButton = new JRadioButton("HTML", true); //$NON-NLS-1$
+        xhtmlRadioButton = new JRadioButton("XHTML", false); //$NON-NLS-1$
+        xmlRadioButton = new JRadioButton("XML", false); //$NON-NLS-1$
+        ButtonGroup buttonGroup = new ButtonGroup();
+        buttonGroup.add(htmlRadioButton);
+        buttonGroup.add(xhtmlRadioButton);
+        buttonGroup.add(xmlRadioButton);
+        formatPanel.add(htmlRadioButton);
+        formatPanel.add(xhtmlRadioButton);
+        formatPanel.add(xmlRadioButton);
+        assertionPanel.add(formatPanel);
 
-		// errors only
-		errorsOnly = new JCheckBox("Errors only", false);
-		errorsOnly.addActionListener(this);
-		assertionPanel.add(errorsOnly);
+        // errors only
+        errorsOnly = new JCheckBox("Errors only", false);
+        errorsOnly.addActionListener(this);
+        assertionPanel.add(errorsOnly);
 
-		// thresholds
-		HorizontalPanel thresholdPanel = new HorizontalPanel();
-		thresholdPanel.add(new JLabel("Error threshold:"));
-		errorThresholdField = new JTextField("0", 5); // $NON-NLS-1$
-		errorThresholdField.setName(ERROR_THRESHOLD_FIELD);
-		errorThresholdField.addKeyListener(this);
-		thresholdPanel.add(errorThresholdField);
-		thresholdPanel.add(new JLabel("Warning threshold:"));
-		warningThresholdField = new JTextField("0", 5); // $NON-NLS-1$
-		warningThresholdField.setName(WARNING_THRESHOLD_FIELD);
-		warningThresholdField.addKeyListener(this);
-		thresholdPanel.add(warningThresholdField);
-		assertionPanel.add(thresholdPanel);
+        // thresholds
+        HorizontalPanel thresholdPanel = new HorizontalPanel();
+        thresholdPanel.add(new JLabel("Error threshold:"));
+        errorThresholdField = new JTextField("0", 5); // $NON-NLS-1$
+        errorThresholdField.setName(ERROR_THRESHOLD_FIELD);
+        errorThresholdField.addKeyListener(this);
+        thresholdPanel.add(errorThresholdField);
+        thresholdPanel.add(new JLabel("Warning threshold:"));
+        warningThresholdField = new JTextField("0", 5); // $NON-NLS-1$
+        warningThresholdField.setName(WARNING_THRESHOLD_FIELD);
+        warningThresholdField.addKeyListener(this);
+        thresholdPanel.add(warningThresholdField);
+        assertionPanel.add(thresholdPanel);
 
-		// file panel
-		filePanel = new FilePanel(JMeterUtils.getResString("html_assertion_file"), ".txt"); //$NON-NLS-1$ //$NON-NLS-2$
-		assertionPanel.add(filePanel);
+        // file panel
+        filePanel = new FilePanel(JMeterUtils.getResString("html_assertion_file"), ".txt"); //$NON-NLS-1$ //$NON-NLS-2$
+        assertionPanel.add(filePanel);
 
-		mainPanel.add(assertionPanel, BorderLayout.NORTH);
-		add(mainPanel, BorderLayout.CENTER);
-	}
+        mainPanel.add(assertionPanel, BorderLayout.NORTH);
+        add(mainPanel, BorderLayout.CENTER);
+    }
 
-	/**
-	 * This method is called if one of the threshold field looses the focus
-	 * 
-	 * @param inEvent
-	 */
-	public void focusLost(FocusEvent inEvent) {
-		log.debug("HTMLAssertionGui.focusLost() called");
+    /**
+     * This method is called if one of the threshold field looses the focus
+     * 
+     * @param inEvent
+     */
+    public void focusLost(FocusEvent inEvent) {
+        log.debug("HTMLAssertionGui.focusLost() called");
 
-		String errorThresholdString = errorThresholdField.getText();
-		if (errorThresholdString != null) {
-			boolean isInvalid = false;
-			try {
-				long errorThreshold = Long.parseLong(errorThresholdString);
-				if (errorThreshold < 0) {
-					isInvalid = true;
-				}
-			} catch (NumberFormatException ex) {
-				isInvalid = true;
-			}
-			if (isInvalid) {
-				log.warn("HTMLAssertionGui: Error threshold Not a valid number!");
-				JOptionPane.showMessageDialog(null, "Threshold for errors is invalid", "Error",
-						JOptionPane.ERROR_MESSAGE);
-			}
-		}
+        String errorThresholdString = errorThresholdField.getText();
+        if (errorThresholdString != null) {
+            boolean isInvalid = false;
+            try {
+                long errorThreshold = Long.parseLong(errorThresholdString);
+                if (errorThreshold < 0) {
+                    isInvalid = true;
+                }
+            } catch (NumberFormatException ex) {
+                isInvalid = true;
+            }
+            if (isInvalid) {
+                log.warn("HTMLAssertionGui: Error threshold Not a valid number!");
+                JOptionPane.showMessageDialog(null, "Threshold for errors is invalid", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
 
-		String warningThresholdString = warningThresholdField.getText();
-		if (warningThresholdString != null) {
-			boolean isInvalid = false;
-			try {
-				long warningThreshold = Long.parseLong(warningThresholdString);
-				if (warningThreshold < 0) {
-					isInvalid = true;
-				}
-			} catch (NumberFormatException ex) {
-				isInvalid = true;
-			}
-			if (isInvalid) {
-				log.warn("HTMLAssertionGui: Error threshold Not a valid number!");
-				JOptionPane.showMessageDialog(null, "Threshold for warnings is invalid", "Error",
-						JOptionPane.ERROR_MESSAGE);
-			}
-		}
-	}
+        String warningThresholdString = warningThresholdField.getText();
+        if (warningThresholdString != null) {
+            boolean isInvalid = false;
+            try {
+                long warningThreshold = Long.parseLong(warningThresholdString);
+                if (warningThreshold < 0) {
+                    isInvalid = true;
+                }
+            } catch (NumberFormatException ex) {
+                isInvalid = true;
+            }
+            if (isInvalid) {
+                log.warn("HTMLAssertionGui: Error threshold Not a valid number!");
+                JOptionPane.showMessageDialog(null, "Threshold for warnings is invalid", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
 
-	/**
-	 * @see java.awt.event.FocusListener#focusGained(java.awt.event.FocusEvent)
-	 */
-	public void focusGained(FocusEvent e) {
+    /**
+     * @see java.awt.event.FocusListener#focusGained(java.awt.event.FocusEvent)
+     */
+    public void focusGained(FocusEvent e) {
 
-	}
+    }
 
-	/**
-	 * This method is called from erros-only checkbox
-	 * 
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 */
-	public void actionPerformed(ActionEvent e) {
-		if (errorsOnly.isSelected()) {
-			warningThresholdField.setEnabled(false);
-			warningThresholdField.setEditable(false);
-		} else {
-			warningThresholdField.setEnabled(true);
-			warningThresholdField.setEditable(true);
-		}
-	}
+    /**
+     * This method is called from erros-only checkbox
+     * 
+     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+     */
+    public void actionPerformed(ActionEvent e) {
+        if (errorsOnly.isSelected()) {
+            warningThresholdField.setEnabled(false);
+            warningThresholdField.setEditable(false);
+        } else {
+            warningThresholdField.setEnabled(true);
+            warningThresholdField.setEditable(true);
+        }
+    }
 
-	public void keyPressed(KeyEvent e) {
-	}
+    public void keyPressed(KeyEvent e) {
+    }
 
-	public void keyReleased(KeyEvent e) {
-		String fieldName = e.getComponent().getName();
+    public void keyReleased(KeyEvent e) {
+        String fieldName = e.getComponent().getName();
 
-		if (fieldName.equals(WARNING_THRESHOLD_FIELD)) {
-			validateInteger(warningThresholdField);
-		}
-		
-		if (fieldName.equals(ERROR_THRESHOLD_FIELD)) {
-			validateInteger(errorThresholdField);
-		}
-	}
+        if (fieldName.equals(WARNING_THRESHOLD_FIELD)) {
+            validateInteger(warningThresholdField);
+        }
+        
+        if (fieldName.equals(ERROR_THRESHOLD_FIELD)) {
+            validateInteger(errorThresholdField);
+        }
+    }
 
-	private void validateInteger(JTextField field){
-		try {
-			Integer.parseInt(field.getText());
-		} catch (NumberFormatException nfe) {
-			int length = field.getText().length();
-			if (length > 0) {
-				JOptionPane.showMessageDialog(this, "Only digits allowed", "Invalid data",
-						JOptionPane.WARNING_MESSAGE);
-				// Drop the last character:
-				field.setText(field.getText().substring(0, length-1));
-			}
-		}
+    private void validateInteger(JTextField field){
+        try {
+            Integer.parseInt(field.getText());
+        } catch (NumberFormatException nfe) {
+            int length = field.getText().length();
+            if (length > 0) {
+                JOptionPane.showMessageDialog(this, "Only digits allowed", "Invalid data",
+                        JOptionPane.WARNING_MESSAGE);
+                // Drop the last character:
+                field.setText(field.getText().substring(0, length-1));
+            }
+        }
 
-	}
-	public void keyTyped(KeyEvent e) {
-	}
+    }
+    public void keyTyped(KeyEvent e) {
+    }
 
 }
