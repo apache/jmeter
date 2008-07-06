@@ -23,51 +23,51 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
 public class XMLAssertionGui extends AbstractAssertionGui {
-	/**
-	 * The constructor.
-	 */
-	public XMLAssertionGui() {
-		init();
-	}
+    /**
+     * The constructor.
+     */
+    public XMLAssertionGui() {
+        init();
+    }
 
-	/**
-	 * Returns the label to be shown within the JTree-Component.
-	 */
-	public String getLabelResource() {
-		return "xml_assertion_title"; // $NON-NLS-1$
-	}
+    /**
+     * Returns the label to be shown within the JTree-Component.
+     */
+    public String getLabelResource() {
+        return "xml_assertion_title"; // $NON-NLS-1$
+    }
 
-	public TestElement createTestElement() {
-		XMLAssertion el = new XMLAssertion();
-		modifyTestElement(el);
-		return el;
-	}
+    public TestElement createTestElement() {
+        XMLAssertion el = new XMLAssertion();
+        modifyTestElement(el);
+        return el;
+    }
 
-	/**
-	 * Modifies a given TestElement to mirror the data in the gui components.
-	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-	 */
-	public void modifyTestElement(TestElement el) {
-		configureTestElement(el);
-	}
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * 
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement el) {
+        configureTestElement(el);
+    }
 
-	/**
-	 * Configures the associated test element.
-	 * 
-	 * @param el
-	 */
-	public void configure(TestElement el) {
-		super.configure(el);
-	}
+    /**
+     * Configures the associated test element.
+     * 
+     * @param el
+     */
+    public void configure(TestElement el) {
+        super.configure(el);
+    }
 
-	/**
-	 * Inits the GUI.
-	 */
-	private void init() {
-		setLayout(new VerticalLayout(5, VerticalLayout.BOTH, VerticalLayout.TOP));
-		setBorder(makeBorder());
+    /**
+     * Inits the GUI.
+     */
+    private void init() {
+        setLayout(new VerticalLayout(5, VerticalLayout.BOTH, VerticalLayout.TOP));
+        setBorder(makeBorder());
 
-		add(makeTitlePanel());
-	}
+        add(makeTitlePanel());
+    }
 }

@@ -37,61 +37,61 @@ public class BeanShellAssertionGui extends AbstractAssertionGui {
 
     private JCheckBox resetInterpreter;// reset the bsh.Interpreter before each execution
 
-	private JTextField filename;// script file name (if present)
+    private JTextField filename;// script file name (if present)
 
-	private JTextField parameters;// parameters to pass to script file (or script)
+    private JTextField parameters;// parameters to pass to script file (or script)
 
-	private JTextArea scriptField;// script area
+    private JTextArea scriptField;// script area
 
-	public BeanShellAssertionGui() {
-		init();
-	}
+    public BeanShellAssertionGui() {
+        init();
+    }
 
-	public void configure(TestElement element) {
-		scriptField.setText(element.getPropertyAsString(BeanShellAssertion.SCRIPT));
-		filename.setText(element.getPropertyAsString(BeanShellAssertion.FILENAME));
-		parameters.setText(element.getPropertyAsString(BeanShellAssertion.PARAMETERS));
+    public void configure(TestElement element) {
+        scriptField.setText(element.getPropertyAsString(BeanShellAssertion.SCRIPT));
+        filename.setText(element.getPropertyAsString(BeanShellAssertion.FILENAME));
+        parameters.setText(element.getPropertyAsString(BeanShellAssertion.PARAMETERS));
         resetInterpreter.setSelected(element.getPropertyAsBoolean(BeanShellAssertion.RESET_INTERPRETER));
-		super.configure(element);
-	}
+        super.configure(element);
+    }
 
-	public TestElement createTestElement() {
-		BeanShellAssertion sampler = new BeanShellAssertion();
-		modifyTestElement(sampler);
-		return sampler;
-	}
+    public TestElement createTestElement() {
+        BeanShellAssertion sampler = new BeanShellAssertion();
+        modifyTestElement(sampler);
+        return sampler;
+    }
 
-	/**
-	 * Modifies a given TestElement to mirror the data in the gui components.
-	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-	 */
-	public void modifyTestElement(TestElement te) {
-		te.clear();
-		this.configureTestElement(te);
-		te.setProperty(BeanShellAssertion.SCRIPT, scriptField.getText());
-		te.setProperty(BeanShellAssertion.FILENAME, filename.getText());
-		te.setProperty(BeanShellAssertion.PARAMETERS, parameters.getText());
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * 
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement te) {
+        te.clear();
+        this.configureTestElement(te);
+        te.setProperty(BeanShellAssertion.SCRIPT, scriptField.getText());
+        te.setProperty(BeanShellAssertion.FILENAME, filename.getText());
+        te.setProperty(BeanShellAssertion.PARAMETERS, parameters.getText());
         te.setProperty(new BooleanProperty(BeanShellAssertion.RESET_INTERPRETER, resetInterpreter.isSelected()));
-	}
+    }
 
-	public String getLabelResource() {
-		return "bsh_assertion_title"; // $NON-NLS-1$
-	}
+    public String getLabelResource() {
+        return "bsh_assertion_title"; // $NON-NLS-1$
+    }
 
-	private JPanel createFilenamePanel()// TODO ought to be a FileChooser ...
-	{
-		JLabel label = new JLabel(JMeterUtils.getResString("bsh_script_file")); //$NON-NLS-1$
+    private JPanel createFilenamePanel()// TODO ought to be a FileChooser ...
+    {
+        JLabel label = new JLabel(JMeterUtils.getResString("bsh_script_file")); //$NON-NLS-1$
 
-		filename = new JTextField(10);
-		filename.setName(BeanShellAssertion.FILENAME);
-		label.setLabelFor(filename);
+        filename = new JTextField(10);
+        filename.setName(BeanShellAssertion.FILENAME);
+        label.setLabelFor(filename);
 
-		JPanel filenamePanel = new JPanel(new BorderLayout(5, 0));
-		filenamePanel.add(label, BorderLayout.WEST);
-		filenamePanel.add(filename, BorderLayout.CENTER);
-		return filenamePanel;
-	}
+        JPanel filenamePanel = new JPanel(new BorderLayout(5, 0));
+        filenamePanel.add(label, BorderLayout.WEST);
+        filenamePanel.add(filename, BorderLayout.CENTER);
+        return filenamePanel;
+    }
 
     private JPanel createResetPanel() {
         resetInterpreter = new JCheckBox(JMeterUtils.getResString("bsh_script_reset_interpreter")); // $NON-NLS-1$
@@ -100,65 +100,65 @@ public class BeanShellAssertionGui extends AbstractAssertionGui {
         JPanel resetInterpreterPanel = new JPanel(new BorderLayout());
         resetInterpreterPanel.add(resetInterpreter, BorderLayout.WEST);
         return resetInterpreterPanel;
-	}
+    }
 
-	private JPanel createParameterPanel() {
-		JLabel label = new JLabel(JMeterUtils.getResString("bsh_script_parameters")); //$NON-NLS-1$
+    private JPanel createParameterPanel() {
+        JLabel label = new JLabel(JMeterUtils.getResString("bsh_script_parameters")); //$NON-NLS-1$
 
-		parameters = new JTextField(10);
-		parameters.setName(BeanShellAssertion.PARAMETERS);
-		label.setLabelFor(parameters);
+        parameters = new JTextField(10);
+        parameters.setName(BeanShellAssertion.PARAMETERS);
+        label.setLabelFor(parameters);
 
-		JPanel parameterPanel = new JPanel(new BorderLayout(5, 0));
-		parameterPanel.add(label, BorderLayout.WEST);
-		parameterPanel.add(parameters, BorderLayout.CENTER);
-		return parameterPanel;
-	}
+        JPanel parameterPanel = new JPanel(new BorderLayout(5, 0));
+        parameterPanel.add(label, BorderLayout.WEST);
+        parameterPanel.add(parameters, BorderLayout.CENTER);
+        return parameterPanel;
+    }
 
-	private void init() {
-		setLayout(new BorderLayout(0, 5));
-		setBorder(makeBorder());
+    private void init() {
+        setLayout(new BorderLayout(0, 5));
+        setBorder(makeBorder());
 
-		Box box = Box.createVerticalBox();
-		box.add(makeTitlePanel());
-		box.add(createResetPanel());
-		box.add(createParameterPanel());
-		box.add(createFilenamePanel());
-		add(box, BorderLayout.NORTH);
+        Box box = Box.createVerticalBox();
+        box.add(makeTitlePanel());
+        box.add(createResetPanel());
+        box.add(createParameterPanel());
+        box.add(createFilenamePanel());
+        add(box, BorderLayout.NORTH);
 
-		JPanel panel = createScriptPanel();
-		add(panel, BorderLayout.CENTER);
-		// Don't let the input field shrink too much
-		add(Box.createVerticalStrut(panel.getPreferredSize().height), BorderLayout.WEST);
-	}
+        JPanel panel = createScriptPanel();
+        add(panel, BorderLayout.CENTER);
+        // Don't let the input field shrink too much
+        add(Box.createVerticalStrut(panel.getPreferredSize().height), BorderLayout.WEST);
+    }
 
-	private JPanel createScriptPanel() {
-		scriptField = new JTextArea();
-		scriptField.setRows(4);
-		scriptField.setLineWrap(true);
-		scriptField.setWrapStyleWord(true);
+    private JPanel createScriptPanel() {
+        scriptField = new JTextArea();
+        scriptField.setRows(4);
+        scriptField.setLineWrap(true);
+        scriptField.setWrapStyleWord(true);
 
-		JLabel label = new JLabel(JMeterUtils.getResString("bsh_assertion_script")); //$NON-NLS-1$
-		label.setLabelFor(scriptField);
+        JLabel label = new JLabel(JMeterUtils.getResString("bsh_assertion_script")); //$NON-NLS-1$
+        label.setLabelFor(scriptField);
 
-		JPanel panel = new JPanel(new BorderLayout());
-		panel.add(label, BorderLayout.NORTH);
-		panel.add(new JScrollPane(scriptField), BorderLayout.CENTER);
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.add(label, BorderLayout.NORTH);
+        panel.add(new JScrollPane(scriptField), BorderLayout.CENTER);
 
-		JTextArea explain = new JTextArea(JMeterUtils.getResString("bsh_assertion_script_variables")); //$NON-NLS-1$
-		explain.setLineWrap(true);
-		explain.setEditable(false);
-		explain.setBackground(this.getBackground());
-		panel.add(explain, BorderLayout.SOUTH);
+        JTextArea explain = new JTextArea(JMeterUtils.getResString("bsh_assertion_script_variables")); //$NON-NLS-1$
+        explain.setLineWrap(true);
+        explain.setEditable(false);
+        explain.setBackground(this.getBackground());
+        panel.add(explain, BorderLayout.SOUTH);
 
-		return panel;
-	}
+        return panel;
+    }
 
-	public void clearGui() {
-		super.clearGui();
-		filename.setText(""); // $NON-NLS-1$
-		parameters.setText(""); // $NON-NLS-1$
-		scriptField.setText(""); // $NON-NLS-1$
+    public void clearGui() {
+        super.clearGui();
+        filename.setText(""); // $NON-NLS-1$
+        parameters.setText(""); // $NON-NLS-1$
+        scriptField.setText(""); // $NON-NLS-1$
         resetInterpreter.setSelected(false);
-	}
+    }
 }
