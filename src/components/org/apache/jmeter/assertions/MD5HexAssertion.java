@@ -22,7 +22,7 @@
  * The assertion will fail when the expected hex is different from the <br/>
  * one calculated from the response OR when the expected hex is left empty.
  * 
- * @author	<a href="mailto:jh@domek.be">Jorg Heymans</a>
+ * @author  <a href="mailto:jh@domek.be">Jorg Heymans</a>
  */
 package org.apache.jmeter.assertions;
 
@@ -41,70 +41,70 @@ import org.apache.log.Logger;
 
 public class MD5HexAssertion extends AbstractTestElement implements Serializable, Assertion {
 
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	/** Key for storing assertion-informations in the jmx-file. */
-	private static final String MD5HEX_KEY = "MD5HexAssertion.size";
+    /** Key for storing assertion-informations in the jmx-file. */
+    private static final String MD5HEX_KEY = "MD5HexAssertion.size";
 
-	/*
-	 * @param response @return
-	 */
-	public AssertionResult getResult(SampleResult response) {
+    /*
+     * @param response @return
+     */
+    public AssertionResult getResult(SampleResult response) {
 
-		AssertionResult result = new AssertionResult(getName());
-		result.setFailure(false);
-		byte[] resultData = response.getResponseData();
+        AssertionResult result = new AssertionResult(getName());
+        result.setFailure(false);
+        byte[] resultData = response.getResponseData();
 
-		if (resultData.length == 0) {
-			result.setError(false);
-			result.setFailure(true);
-			result.setFailureMessage("Response was null");
-			return result;
-		}
+        if (resultData.length == 0) {
+            result.setError(false);
+            result.setFailure(true);
+            result.setFailureMessage("Response was null");
+            return result;
+        }
 
-		// no point in checking if we don't have anything to compare against
-		if (getAllowedMD5Hex().equals("")) {
-			result.setError(false);
-			result.setFailure(true);
-			result.setFailureMessage("MD5Hex to test against is empty");
-			return result;
-		}
+        // no point in checking if we don't have anything to compare against
+        if (getAllowedMD5Hex().equals("")) {
+            result.setError(false);
+            result.setFailure(true);
+            result.setFailureMessage("MD5Hex to test against is empty");
+            return result;
+        }
 
-		String md5Result = baMD5Hex(resultData);
+        String md5Result = baMD5Hex(resultData);
 
-		// String md5Result = DigestUtils.md5Hex(resultData);
+        // String md5Result = DigestUtils.md5Hex(resultData);
 
-		if (!md5Result.equalsIgnoreCase(getAllowedMD5Hex())) {
-			result.setFailure(true);
+        if (!md5Result.equalsIgnoreCase(getAllowedMD5Hex())) {
+            result.setFailure(true);
 
-			Object[] arguments = { md5Result, getAllowedMD5Hex() };
-			String message = MessageFormat.format(JMeterUtils.getResString("md5hex_assertion_failure"), arguments); // $NON-NLS-1$
-			result.setFailureMessage(message);
+            Object[] arguments = { md5Result, getAllowedMD5Hex() };
+            String message = MessageFormat.format(JMeterUtils.getResString("md5hex_assertion_failure"), arguments); // $NON-NLS-1$
+            result.setFailureMessage(message);
 
-		}
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	public void setAllowedMD5Hex(String hex) {
-		setProperty(new StringProperty(MD5HexAssertion.MD5HEX_KEY, hex));
-	}
+    public void setAllowedMD5Hex(String hex) {
+        setProperty(new StringProperty(MD5HexAssertion.MD5HEX_KEY, hex));
+    }
 
-	public String getAllowedMD5Hex() {
-		return getPropertyAsString(MD5HexAssertion.MD5HEX_KEY);
-	}
+    public String getAllowedMD5Hex() {
+        return getPropertyAsString(MD5HexAssertion.MD5HEX_KEY);
+    }
 
-	// package protected so can be accessed by test class
-	static String baMD5Hex(byte ba[]) {
-		byte[] md5Result = {};
+    // package protected so can be accessed by test class
+    static String baMD5Hex(byte ba[]) {
+        byte[] md5Result = {};
 
-		try {
-			MessageDigest md;
-			md = MessageDigest.getInstance("MD5");
-			md5Result = md.digest(ba);
-		} catch (NoSuchAlgorithmException e) {
-			log.error("", e);
-		}
-		return JOrphanUtils.baToHexString(md5Result);
-	}
+        try {
+            MessageDigest md;
+            md = MessageDigest.getInstance("MD5");
+            md5Result = md.digest(ba);
+        } catch (NoSuchAlgorithmException e) {
+            log.error("", e);
+        }
+        return JOrphanUtils.baToHexString(md5Result);
+    }
 }

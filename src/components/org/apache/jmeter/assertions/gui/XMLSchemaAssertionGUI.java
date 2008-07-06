@@ -40,46 +40,46 @@ import org.apache.log.Logger;
  */
 
 public class XMLSchemaAssertionGUI extends AbstractAssertionGui {
-	// class attributes
-	 private static final Logger log = LoggingManager.getLoggerForClass();
+    // class attributes
+     private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private JTextField xmlSchema;
+    private JTextField xmlSchema;
 
-	/**
-	 * The constructor.
-	 */
-	public XMLSchemaAssertionGUI() {
-		init();
-	}
+    /**
+     * The constructor.
+     */
+    public XMLSchemaAssertionGUI() {
+        init();
+    }
 
-	/**
-	 * Returns the label to be shown within the JTree-Component.
-	 */
-	public String getLabelResource() {
-		return "xmlschema_assertion_title"; //$NON-NLS-1$
-	}
+    /**
+     * Returns the label to be shown within the JTree-Component.
+     */
+    public String getLabelResource() {
+        return "xmlschema_assertion_title"; //$NON-NLS-1$
+    }
 
-	/**
-	 * create Test Element
-	 */
-	public TestElement createTestElement() {
-		log.debug("XMLSchemaAssertionGui.createTestElement() called");
-		XMLSchemaAssertion el = new XMLSchemaAssertion();
-		modifyTestElement(el);
-		return el;
-	}
+    /**
+     * create Test Element
+     */
+    public TestElement createTestElement() {
+        log.debug("XMLSchemaAssertionGui.createTestElement() called");
+        XMLSchemaAssertion el = new XMLSchemaAssertion();
+        modifyTestElement(el);
+        return el;
+    }
 
-	/**
-	 * Modifies a given TestElement to mirror the data in the gui components.
-	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-	 */
-	public void modifyTestElement(TestElement inElement) {
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * 
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement inElement) {
 
-		log.debug("XMLSchemaAssertionGui.modifyTestElement() called");
-		configureTestElement(inElement);
-		((XMLSchemaAssertion) inElement).setXsdFileName(xmlSchema.getText());
-	}
+        log.debug("XMLSchemaAssertionGui.modifyTestElement() called");
+        configureTestElement(inElement);
+        ((XMLSchemaAssertion) inElement).setXsdFileName(xmlSchema.getText());
+    }
 
     /**
      * Implements JMeterGUIComponent.clearGui
@@ -90,49 +90,49 @@ public class XMLSchemaAssertionGUI extends AbstractAssertionGui {
         xmlSchema.setText(""); //$NON-NLS-1$
     }    
 
-	/**
-	 * Configures the GUI from the associated test element.
-	 * 
-	 * @param el -
-	 *            the test element (should be XMLSchemaAssertion)
-	 */
-	public void configure(TestElement el) {
-		super.configure(el);
-		XMLSchemaAssertion assertion = (XMLSchemaAssertion) el;
-		xmlSchema.setText(assertion.getXsdFileName());
-	}
+    /**
+     * Configures the GUI from the associated test element.
+     * 
+     * @param el -
+     *            the test element (should be XMLSchemaAssertion)
+     */
+    public void configure(TestElement el) {
+        super.configure(el);
+        XMLSchemaAssertion assertion = (XMLSchemaAssertion) el;
+        xmlSchema.setText(assertion.getXsdFileName());
+    }
 
-	/**
-	 * Inits the GUI.
-	 */
-	private void init() {
-		setLayout(new BorderLayout(0, 10));
-		setBorder(makeBorder());
+    /**
+     * Inits the GUI.
+     */
+    private void init() {
+        setLayout(new BorderLayout(0, 10));
+        setBorder(makeBorder());
 
-		add(makeTitlePanel(), BorderLayout.NORTH);
+        add(makeTitlePanel(), BorderLayout.NORTH);
 
-		JPanel mainPanel = new JPanel(new BorderLayout());
+        JPanel mainPanel = new JPanel(new BorderLayout());
 
-		// USER_INPUT
-		VerticalPanel assertionPanel = new VerticalPanel();
-		assertionPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "XML Schema"));
+        // USER_INPUT
+        VerticalPanel assertionPanel = new VerticalPanel();
+        assertionPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "XML Schema"));
 
-		// doctype
-		HorizontalPanel xmlSchemaPanel = new HorizontalPanel();
+        // doctype
+        HorizontalPanel xmlSchemaPanel = new HorizontalPanel();
 
-		xmlSchemaPanel.add(new JLabel(JMeterUtils.getResString("xmlschema_assertion_label"))); //$NON-NLS-1$
+        xmlSchemaPanel.add(new JLabel(JMeterUtils.getResString("xmlschema_assertion_label"))); //$NON-NLS-1$
 
-		xmlSchema = new JTextField(26);
-		xmlSchemaPanel.add(xmlSchema);
+        xmlSchema = new JTextField(26);
+        xmlSchemaPanel.add(xmlSchema);
 
-		assertionPanel.add(xmlSchemaPanel);
+        assertionPanel.add(xmlSchemaPanel);
 
-		mainPanel.add(assertionPanel, BorderLayout.NORTH);
-		add(mainPanel, BorderLayout.CENTER);
-	}
+        mainPanel.add(assertionPanel, BorderLayout.NORTH);
+        add(mainPanel, BorderLayout.CENTER);
+    }
 
-	// public void stateChanged(ChangeEvent e) {
-	// log.debug("XMLSchemaAssertionGui.stateChanged() called");
-	// }
+    // public void stateChanged(ChangeEvent e) {
+    // log.debug("XMLSchemaAssertionGui.stateChanged() called");
+    // }
 
 }

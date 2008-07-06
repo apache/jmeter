@@ -43,39 +43,39 @@ import org.apache.oro.text.regex.Perl5Matcher;
  * Test element to handle Response Assertions, @see AssertionGui
  */
 public class ResponseAssertion extends AbstractTestElement implements Serializable, Assertion {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private final static String TEST_FIELD = "Assertion.test_field";  // $NON-NLS-1$
+    private final static String TEST_FIELD = "Assertion.test_field";  // $NON-NLS-1$
 
-	// Values for TEST_FIELD
-	// N.B. we cannot change the text value as it is in test plans
-	private final static String SAMPLE_URL = "Assertion.sample_label"; // $NON-NLS-1$
+    // Values for TEST_FIELD
+    // N.B. we cannot change the text value as it is in test plans
+    private final static String SAMPLE_URL = "Assertion.sample_label"; // $NON-NLS-1$
 
-	private final static String RESPONSE_DATA = "Assertion.response_data"; // $NON-NLS-1$
+    private final static String RESPONSE_DATA = "Assertion.response_data"; // $NON-NLS-1$
 
-	private final static String RESPONSE_CODE = "Assertion.response_code"; // $NON-NLS-1$
+    private final static String RESPONSE_CODE = "Assertion.response_code"; // $NON-NLS-1$
 
-	private final static String RESPONSE_MESSAGE = "Assertion.response_message"; // $NON-NLS-1$
+    private final static String RESPONSE_MESSAGE = "Assertion.response_message"; // $NON-NLS-1$
 
-	private final static String RESPONSE_HEADERS = "Assertion.response_headers"; // $NON-NLS-1$
+    private final static String RESPONSE_HEADERS = "Assertion.response_headers"; // $NON-NLS-1$
 
-	private final static String ASSUME_SUCCESS = "Assertion.assume_success"; // $NON-NLS-1$
+    private final static String ASSUME_SUCCESS = "Assertion.assume_success"; // $NON-NLS-1$
 
-	private final static String TEST_STRINGS = "Asserion.test_strings"; // $NON-NLS-1$
+    private final static String TEST_STRINGS = "Asserion.test_strings"; // $NON-NLS-1$
 
-	private final static String TEST_TYPE = "Assertion.test_type"; // $NON-NLS-1$
+    private final static String TEST_TYPE = "Assertion.test_type"; // $NON-NLS-1$
 
-	/*
-	 * Mask values for TEST_TYPE TODO: remove either MATCH or CONTAINS - they
-	 * are mutually exckusive
-	 */
-	private final static int MATCH = 1 << 0;
+    /*
+     * Mask values for TEST_TYPE TODO: remove either MATCH or CONTAINS - they
+     * are mutually exckusive
+     */
+    private final static int MATCH = 1 << 0;
 
-	final static int CONTAINS = 1 << 1;
+    final static int CONTAINS = 1 << 1;
 
-	private final static int NOT = 1 << 2;
+    private final static int NOT = 1 << 2;
 
-	private final static int EQUALS = 1 << 3;
+    private final static int EQUALS = 1 << 3;
 
     private final static int SUBSTRING = 1 << 4;
 
@@ -95,324 +95,324 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
     private static final String DIFF_DELTA_END
             = JMeterUtils.getPropDefault("assertion.equals_diff_delta_end", "]]]");
 
-	public ResponseAssertion() {
-		setProperty(new CollectionProperty(TEST_STRINGS, new ArrayList()));
-	}
+    public ResponseAssertion() {
+        setProperty(new CollectionProperty(TEST_STRINGS, new ArrayList()));
+    }
 
-	public void clear() {
-		super.clear();
-		setProperty(new CollectionProperty(TEST_STRINGS, new ArrayList()));
-	}
+    public void clear() {
+        super.clear();
+        setProperty(new CollectionProperty(TEST_STRINGS, new ArrayList()));
+    }
 
-	private void setTestField(String testField) {
-		setProperty(TEST_FIELD, testField);
-	}
+    private void setTestField(String testField) {
+        setProperty(TEST_FIELD, testField);
+    }
 
-	public void setTestFieldURL(){
-		setTestField(SAMPLE_URL);
-	}
+    public void setTestFieldURL(){
+        setTestField(SAMPLE_URL);
+    }
 
-	public void setTestFieldResponseCode(){
-		setTestField(RESPONSE_CODE);
-	}
+    public void setTestFieldResponseCode(){
+        setTestField(RESPONSE_CODE);
+    }
 
-	public void setTestFieldResponseData(){
-		setTestField(RESPONSE_DATA);
-	}
+    public void setTestFieldResponseData(){
+        setTestField(RESPONSE_DATA);
+    }
 
-	public void setTestFieldResponseMessage(){
-		setTestField(RESPONSE_MESSAGE);
-	}
+    public void setTestFieldResponseMessage(){
+        setTestField(RESPONSE_MESSAGE);
+    }
 
-	public void setTestFieldResponseHeaders(){
-		setTestField(RESPONSE_HEADERS);
-	}
+    public void setTestFieldResponseHeaders(){
+        setTestField(RESPONSE_HEADERS);
+    }
 
-	public boolean isTestFieldURL(){
-		return SAMPLE_URL.equals(getTestField());
-	}
+    public boolean isTestFieldURL(){
+        return SAMPLE_URL.equals(getTestField());
+    }
 
-	public boolean isTestFieldResponseCode(){
-		return RESPONSE_CODE.equals(getTestField());
-	}
+    public boolean isTestFieldResponseCode(){
+        return RESPONSE_CODE.equals(getTestField());
+    }
 
-	public boolean isTestFieldResponseData(){
-		return RESPONSE_DATA.equals(getTestField());
-	}
+    public boolean isTestFieldResponseData(){
+        return RESPONSE_DATA.equals(getTestField());
+    }
 
-	public boolean isTestFieldResponseMessage(){
-		return RESPONSE_MESSAGE.equals(getTestField());
-	}
+    public boolean isTestFieldResponseMessage(){
+        return RESPONSE_MESSAGE.equals(getTestField());
+    }
 
-	public boolean isTestFieldResponseHeaders(){
-		return RESPONSE_HEADERS.equals(getTestField());
-	}
+    public boolean isTestFieldResponseHeaders(){
+        return RESPONSE_HEADERS.equals(getTestField());
+    }
 
-	private void setTestType(int testType) {
-		setProperty(new IntegerProperty(TEST_TYPE, testType));
-	}
+    private void setTestType(int testType) {
+        setProperty(new IntegerProperty(TEST_TYPE, testType));
+    }
 
     private void setTestTypeMasked(int testType) {
         int value = getTestType() & ~(TYPE_MASK) | testType;
         setProperty(new IntegerProperty(TEST_TYPE, value));
     }
 
-	public void addTestString(String testString) {
-		getTestStrings().addProperty(new StringProperty(String.valueOf(testString.hashCode()), testString));
-	}
+    public void addTestString(String testString) {
+        getTestStrings().addProperty(new StringProperty(String.valueOf(testString.hashCode()), testString));
+    }
 
-	public void clearTestStrings() {
-		getTestStrings().clear();
-	}
+    public void clearTestStrings() {
+        getTestStrings().clear();
+    }
 
-	public AssertionResult getResult(SampleResult response) {
-		AssertionResult result;
+    public AssertionResult getResult(SampleResult response) {
+        AssertionResult result;
 
-		// None of the other Assertions check the response status, so remove
-		// this check
-		// for the time being, at least...
-		// if (!response.isSuccessful())
-		// {
-		// result = new AssertionResult();
-		// result.setError(true);
-		// byte [] ba = response.getResponseData();
-		// result.setFailureMessage(
-		// ba == null ? "Unknown Error (responseData is empty)" : new String(ba)
-		// );
-		// return result;
-		// }
+        // None of the other Assertions check the response status, so remove
+        // this check
+        // for the time being, at least...
+        // if (!response.isSuccessful())
+        // {
+        // result = new AssertionResult();
+        // result.setError(true);
+        // byte [] ba = response.getResponseData();
+        // result.setFailureMessage(
+        // ba == null ? "Unknown Error (responseData is empty)" : new String(ba)
+        // );
+        // return result;
+        // }
 
-		result = evaluateResponse(response);
-		return result;
-	}
+        result = evaluateResponse(response);
+        return result;
+    }
 
-	/***************************************************************************
-	 * !ToDoo (Method description)
-	 * 
-	 * @return !ToDo (Return description)
-	 **************************************************************************/
-	public String getTestField() {
-		return getPropertyAsString(TEST_FIELD);
-	}
+    /***************************************************************************
+     * !ToDoo (Method description)
+     * 
+     * @return !ToDo (Return description)
+     **************************************************************************/
+    public String getTestField() {
+        return getPropertyAsString(TEST_FIELD);
+    }
 
-	/***************************************************************************
-	 * !ToDoo (Method description)
-	 * 
-	 * @return !ToDo (Return description)
-	 **************************************************************************/
-	public int getTestType() {
-		JMeterProperty type = getProperty(TEST_TYPE);
-		if (type instanceof NullProperty) {
-			return CONTAINS;
-		}
-		return type.getIntValue();
-	}
+    /***************************************************************************
+     * !ToDoo (Method description)
+     * 
+     * @return !ToDo (Return description)
+     **************************************************************************/
+    public int getTestType() {
+        JMeterProperty type = getProperty(TEST_TYPE);
+        if (type instanceof NullProperty) {
+            return CONTAINS;
+        }
+        return type.getIntValue();
+    }
 
-	/***************************************************************************
-	 * !ToDoo (Method description)
-	 * 
-	 * @return !ToDo (Return description)
-	 **************************************************************************/
-	public CollectionProperty getTestStrings() {
-		return (CollectionProperty) getProperty(TEST_STRINGS);
-	}
+    /***************************************************************************
+     * !ToDoo (Method description)
+     * 
+     * @return !ToDo (Return description)
+     **************************************************************************/
+    public CollectionProperty getTestStrings() {
+        return (CollectionProperty) getProperty(TEST_STRINGS);
+    }
 
-	public boolean isEqualsType() {
-		return (getTestType() & EQUALS) > 0;
-	}
+    public boolean isEqualsType() {
+        return (getTestType() & EQUALS) > 0;
+    }
 
     public boolean isSubstringType() {
         return (getTestType() & SUBSTRING) > 0;
     }
 
-	public boolean isContainsType() {
-		return (getTestType() & CONTAINS) > 0;
-	}
+    public boolean isContainsType() {
+        return (getTestType() & CONTAINS) > 0;
+    }
 
-	public boolean isMatchType() {
-		return (getTestType() & MATCH) > 0;
-	}
+    public boolean isMatchType() {
+        return (getTestType() & MATCH) > 0;
+    }
 
-	public boolean isNotType() {
-		return (getTestType() & NOT) > 0;
-	}
+    public boolean isNotType() {
+        return (getTestType() & NOT) > 0;
+    }
 
-	public void setToContainsType() {
-		setTestTypeMasked(CONTAINS);
-	}
+    public void setToContainsType() {
+        setTestTypeMasked(CONTAINS);
+    }
 
-	public void setToMatchType() {
-	    setTestTypeMasked(MATCH);
-	}
+    public void setToMatchType() {
+        setTestTypeMasked(MATCH);
+    }
 
-	public void setToEqualsType() {
-	    setTestTypeMasked(EQUALS);
-	}
+    public void setToEqualsType() {
+        setTestTypeMasked(EQUALS);
+    }
 
     public void setToSubstringType() {
         setTestTypeMasked(SUBSTRING);
     }
 
-	public void setToNotType() {
-		setTestType((getTestType() | NOT));
-	}
+    public void setToNotType() {
+        setTestType((getTestType() | NOT));
+    }
 
-	public void unsetNotType() {
-		setTestType(getTestType() & ~NOT);
-	}
+    public void unsetNotType() {
+        setTestType(getTestType() & ~NOT);
+    }
 
-	public boolean getAssumeSuccess() {
-		return getPropertyAsBoolean(ASSUME_SUCCESS, false);
-	}
+    public boolean getAssumeSuccess() {
+        return getPropertyAsBoolean(ASSUME_SUCCESS, false);
+    }
 
-	public void setAssumeSuccess(boolean b) {
-		setProperty(ASSUME_SUCCESS, b);
-	}
+    public void setAssumeSuccess(boolean b) {
+        setProperty(ASSUME_SUCCESS, b);
+    }
 
-	/**
-	 * Make sure the response satisfies the specified assertion requirements.
-	 * 
-	 * @param response
-	 *            an instance of SampleResult
-	 * @return an instance of AssertionResult
-	 */
-	AssertionResult evaluateResponse(SampleResult response) {
-		boolean pass = true;
-		boolean not = (NOT & getTestType()) > 0;
-		AssertionResult result = new AssertionResult(getName());
-		String toCheck = ""; // The string to check (Url or data)
+    /**
+     * Make sure the response satisfies the specified assertion requirements.
+     * 
+     * @param response
+     *            an instance of SampleResult
+     * @return an instance of AssertionResult
+     */
+    AssertionResult evaluateResponse(SampleResult response) {
+        boolean pass = true;
+        boolean not = (NOT & getTestType()) > 0;
+        AssertionResult result = new AssertionResult(getName());
+        String toCheck = ""; // The string to check (Url or data)
 
-		if (getAssumeSuccess()) {
-			response.setSuccessful(true);// Allow testing of failure codes
-		}
+        if (getAssumeSuccess()) {
+            response.setSuccessful(true);// Allow testing of failure codes
+        }
 
-		// What are we testing against?
-		if (isTestFieldResponseData()) {
-			toCheck = response.getResponseDataAsString(); // (bug25052)
-		} else if (isTestFieldResponseCode()) {
-			toCheck = response.getResponseCode();
-		} else if (isTestFieldResponseMessage()) {
-			toCheck = response.getResponseMessage();
-		} else if (isTestFieldResponseHeaders()) {
-			toCheck = response.getResponseHeaders();
-		} else { // Assume it is the URL
-			toCheck = response.getSamplerData(); // TODO - is this where the URL is stored?
-			if (toCheck == null) {
-				toCheck = "";
-			}
-		}
+        // What are we testing against?
+        if (isTestFieldResponseData()) {
+            toCheck = response.getResponseDataAsString(); // (bug25052)
+        } else if (isTestFieldResponseCode()) {
+            toCheck = response.getResponseCode();
+        } else if (isTestFieldResponseMessage()) {
+            toCheck = response.getResponseMessage();
+        } else if (isTestFieldResponseHeaders()) {
+            toCheck = response.getResponseHeaders();
+        } else { // Assume it is the URL
+            toCheck = response.getSamplerData(); // TODO - is this where the URL is stored?
+            if (toCheck == null) {
+                toCheck = "";
+            }
+        }
 
-		if (toCheck.length() == 0) {
-			return result.setResultForNull();
-		}
+        if (toCheck.length() == 0) {
+            return result.setResultForNull();
+        }
 
-		result.setFailure(false);
-		result.setError(false);
+        result.setFailure(false);
+        result.setError(false);
 
-		boolean contains = isContainsType(); // do it once outside loop
-		boolean equals = isEqualsType();
+        boolean contains = isContainsType(); // do it once outside loop
+        boolean equals = isEqualsType();
         boolean substring = isSubstringType();
-		boolean debugEnabled = log.isDebugEnabled();
-		if (debugEnabled){
-			log.debug("Type:" + (contains?"Contains":"Match") + (not? "(not)": ""));
-		}
-		
-		try {
-			// Get the Matcher for this thread
-			Perl5Matcher localMatcher = JMeterUtils.getMatcher();
-			PropertyIterator iter = getTestStrings().iterator();
-			while (iter.hasNext()) {
-				String stringPattern = iter.next().getStringValue();
-				Pattern pattern = JMeterUtils.getPatternCache().getPattern(stringPattern, Perl5Compiler.READ_ONLY_MASK);
-				boolean found;
-				if (contains) {
-					found = localMatcher.contains(toCheck, pattern);
+        boolean debugEnabled = log.isDebugEnabled();
+        if (debugEnabled){
+            log.debug("Type:" + (contains?"Contains":"Match") + (not? "(not)": ""));
+        }
+        
+        try {
+            // Get the Matcher for this thread
+            Perl5Matcher localMatcher = JMeterUtils.getMatcher();
+            PropertyIterator iter = getTestStrings().iterator();
+            while (iter.hasNext()) {
+                String stringPattern = iter.next().getStringValue();
+                Pattern pattern = JMeterUtils.getPatternCache().getPattern(stringPattern, Perl5Compiler.READ_ONLY_MASK);
+                boolean found;
+                if (contains) {
+                    found = localMatcher.contains(toCheck, pattern);
                 } else if (equals) {
                     found = toCheck.equals(stringPattern);
                 } else if (substring) {
                     found = toCheck.indexOf(stringPattern) != -1;
-				} else {
-					found = localMatcher.matches(toCheck, pattern);
-				}
-				pass = not ? !found : found;
-				if (!pass) {
-					if (debugEnabled){log.debug("Failed: "+pattern);}
-					result.setFailure(true);
-					result.setFailureMessage(getFailText(stringPattern,toCheck));
-					break;
-				}
-				if (debugEnabled){log.debug("Passed: "+pattern);}
-			}
-		} catch (MalformedCachePatternException e) {
-			result.setError(true);
-			result.setFailure(false);
-			result.setFailureMessage("Bad test configuration " + e);
-		}
-		return result;
-	}
+                } else {
+                    found = localMatcher.matches(toCheck, pattern);
+                }
+                pass = not ? !found : found;
+                if (!pass) {
+                    if (debugEnabled){log.debug("Failed: "+pattern);}
+                    result.setFailure(true);
+                    result.setFailureMessage(getFailText(stringPattern,toCheck));
+                    break;
+                }
+                if (debugEnabled){log.debug("Passed: "+pattern);}
+            }
+        } catch (MalformedCachePatternException e) {
+            result.setError(true);
+            result.setFailure(false);
+            result.setFailureMessage("Bad test configuration " + e);
+        }
+        return result;
+    }
 
-	/**
-	 * Generate the failure reason from the TestType
-	 * 
-	 * @param stringPattern
-	 * @return the message for the assertion report 
-	 */
-	// TODO strings should be resources
-	private String getFailText(String stringPattern, String toCheck) {
-		
-		StringBuffer sb = new StringBuffer(200);
-		sb.append("Test failed: ");
+    /**
+     * Generate the failure reason from the TestType
+     * 
+     * @param stringPattern
+     * @return the message for the assertion report 
+     */
+    // TODO strings should be resources
+    private String getFailText(String stringPattern, String toCheck) {
+        
+        StringBuffer sb = new StringBuffer(200);
+        sb.append("Test failed: ");
 
-		if (isTestFieldResponseData()) {
-			sb.append("text");
-		} else if (isTestFieldResponseCode()) {
-			sb.append("code");
-		} else if (isTestFieldResponseMessage()) {
-			sb.append("message");
-		} else if (isTestFieldResponseHeaders()) {
-			sb.append("headers");
-		} else // Assume it is the URL
-		{
-			sb.append("URL");
-		}
+        if (isTestFieldResponseData()) {
+            sb.append("text");
+        } else if (isTestFieldResponseCode()) {
+            sb.append("code");
+        } else if (isTestFieldResponseMessage()) {
+            sb.append("message");
+        } else if (isTestFieldResponseHeaders()) {
+            sb.append("headers");
+        } else // Assume it is the URL
+        {
+            sb.append("URL");
+        }
 
-		switch (getTestType()) {
-		case CONTAINS:
+        switch (getTestType()) {
+        case CONTAINS:
         case SUBSTRING:
-			sb.append(" expected to contain ");
-			break;
-		case NOT | CONTAINS:
+            sb.append(" expected to contain ");
+            break;
+        case NOT | CONTAINS:
         case NOT | SUBSTRING:
-			sb.append(" expected not to contain ");
-			break;
-		case MATCH:
-			sb.append(" expected to match ");
-			break;
-		case NOT | MATCH:
-			sb.append(" expected not to match ");
-			break;
-		case EQUALS:
-			sb.append(" expected to equal ");
-			break;
-		case NOT | EQUALS:
-			sb.append(" expected not to equal ");
-			break;
-		default:// should never happen...
-			sb.append(" expected something using ");
-		}
+            sb.append(" expected not to contain ");
+            break;
+        case MATCH:
+            sb.append(" expected to match ");
+            break;
+        case NOT | MATCH:
+            sb.append(" expected not to match ");
+            break;
+        case EQUALS:
+            sb.append(" expected to equal ");
+            break;
+        case NOT | EQUALS:
+            sb.append(" expected not to equal ");
+            break;
+        default:// should never happen...
+            sb.append(" expected something using ");
+        }
 
-		sb.append("/");
-		
-		if (isEqualsType()){
-			sb.append(equalsComparisonText(toCheck, stringPattern));
-		} else {
-			sb.append(stringPattern);
-		}
-		
-		sb.append("/");
-		
-		return sb.toString();
-	}
+        sb.append("/");
+        
+        if (isEqualsType()){
+            sb.append(equalsComparisonText(toCheck, stringPattern));
+        } else {
+            sb.append(stringPattern);
+        }
+        
+        sb.append("/");
+        
+        return sb.toString();
+    }
 
 
     private static String trunc(final boolean right, final String str)
