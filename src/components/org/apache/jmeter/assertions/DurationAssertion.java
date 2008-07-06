@@ -33,40 +33,40 @@ import org.apache.jmeter.util.JMeterUtils;
  * @version $Revision$, $Date$
  */
 public class DurationAssertion extends AbstractTestElement implements Serializable, Assertion {
-	/** Key for storing assertion-informations in the jmx-file. */
-	public static final String DURATION_KEY = "DurationAssertion.duration"; // $NON-NLS-1$
+    /** Key for storing assertion-informations in the jmx-file. */
+    public static final String DURATION_KEY = "DurationAssertion.duration"; // $NON-NLS-1$
 
-	/**
-	 * Returns the result of the Assertion. Here it checks wether the Sample
-	 * took to long to be considered successful. If so an AssertionResult
-	 * containing a FailureMessage will be returned. Otherwise the returned
-	 * AssertionResult will reflect the success of the Sample.
-	 */
-	public AssertionResult getResult(SampleResult response) {
-		AssertionResult result = new AssertionResult(getName());
-		result.setFailure(false);
-		long duration=getAllowedDuration();
-		if (duration > 0) {
-			long responseTime=response.getTime();
-		// has the Sample lasted too long?
-			if ( responseTime > duration) {
-				result.setFailure(true);
-				Object[] arguments = { new Long(responseTime), new Long(duration) };
-				String message = MessageFormat.format(
-						JMeterUtils.getResString("duration_assertion_failure") // $NON-NLS-1$
-						, arguments);
-				result.setFailureMessage(message);
-			}
-		}
-		return result;
-	}
+    /**
+     * Returns the result of the Assertion. Here it checks wether the Sample
+     * took to long to be considered successful. If so an AssertionResult
+     * containing a FailureMessage will be returned. Otherwise the returned
+     * AssertionResult will reflect the success of the Sample.
+     */
+    public AssertionResult getResult(SampleResult response) {
+        AssertionResult result = new AssertionResult(getName());
+        result.setFailure(false);
+        long duration=getAllowedDuration();
+        if (duration > 0) {
+            long responseTime=response.getTime();
+        // has the Sample lasted too long?
+            if ( responseTime > duration) {
+                result.setFailure(true);
+                Object[] arguments = { new Long(responseTime), new Long(duration) };
+                String message = MessageFormat.format(
+                        JMeterUtils.getResString("duration_assertion_failure") // $NON-NLS-1$
+                        , arguments);
+                result.setFailureMessage(message);
+            }
+        }
+        return result;
+    }
 
-	/**
-	 * Returns the duration to be asserted. A duration of 0 indicates this
-	 * assertion is to be ignored.
-	 */
-	private long getAllowedDuration() {
-		return getPropertyAsLong(DURATION_KEY);
-	}
+    /**
+     * Returns the duration to be asserted. A duration of 0 indicates this
+     * assertion is to be ignored.
+     */
+    private long getAllowedDuration() {
+        return getPropertyAsLong(DURATION_KEY);
+    }
 
 }
