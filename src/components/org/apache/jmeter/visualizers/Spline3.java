@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.visualizers;
@@ -67,366 +67,366 @@ import org.apache.log.Logger;
  * good reason not to explore the question any further :)
  * <P>
  * Here is a little piece of code showing how to use this class :
- * 
+ *
  * <PRE> // ... float[] nodes = {3F, 2F, 4F, 1F, 2.5F, 5F, 3F}; Spline3 curve =
  * new Spline3(nodes); // ... public void paint(Graphics g) { int[] plot =
  * curve.getPlots(); for (int i = 1; i < n; i++) { g.drawLine(i - 1, plot[i -
  * 1], i, plot[i]); } } // ...
- * 
+ *
  * </PRE>
- * 
+ *
  * Have fun with it !<BR>
  * Any comments, feedback, bug reports or suggestions will be <a
  * href="mailto:norguet@bigfoot.com?subject=Spline3">appreciated</a>.
- * 
+ *
  * @author <a href="norguet@bigfoot.com">Jean-Pierre Norguet</a>
  * @version $Revison$ updated $Date$
  */
 public class Spline3 {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	protected float[][] _coefficients;
+    protected float[][] _coefficients;
 
-	protected float[][] _A;
+    protected float[][] _A;
 
-	protected float[] _B;
+    protected float[] _B;
 
-	protected float[] _r;
+    protected float[] _r;
 
-	protected float[] _rS;
+    protected float[] _rS;
 
-	protected int _m; // number of nodes
+    protected int _m; // number of nodes
 
-	protected int _n; // number of non extreme nodes (_m-2)
+    protected int _n; // number of non extreme nodes (_m-2)
 
-	final static protected float DEFAULT_PRECISION = (float) 1E-1;
+    final static protected float DEFAULT_PRECISION = (float) 1E-1;
 
-	final static protected int DEFAULT_MAX_ITERATIONS = 100;
+    final static protected int DEFAULT_MAX_ITERATIONS = 100;
 
-	protected float _minPrecision = DEFAULT_PRECISION;
+    protected float _minPrecision = DEFAULT_PRECISION;
 
-	protected int _maxIterations = DEFAULT_MAX_ITERATIONS;
+    protected int _maxIterations = DEFAULT_MAX_ITERATIONS;
 
-	/**
-	 * Creates a new Spline curve by calculating the coefficients of each part
-	 * of the curve, i.e. by resolving the equation system implied by the
-	 * interpolation condition on every interval.
-	 * 
-	 * @param r
-	 *            an array of float containing the vertical coordinates of the
-	 *            nodes to interpolate ; the vertical coordinates start at 0 and
-	 *            are equidistant with a step of 1.
-	 */
-	public Spline3(float[] r) {
-		int n = r.length;
+    /**
+     * Creates a new Spline curve by calculating the coefficients of each part
+     * of the curve, i.e. by resolving the equation system implied by the
+     * interpolation condition on every interval.
+     *
+     * @param r
+     *            an array of float containing the vertical coordinates of the
+     *            nodes to interpolate ; the vertical coordinates start at 0 and
+     *            are equidistant with a step of 1.
+     */
+    public Spline3(float[] r) {
+        int n = r.length;
 
-		// the number of nodes is defined by the length of r
-		this._m = n;
-		// grab the nodes
-		this._r = new float[n];
-		for (int i = 0; i < n; i++) {
-			_r[i] = r[i];
-		}
-		// the number of non extreme nodes is the number of intervals
-		// minus 1, i.e. the length of r minus 2
-		this._n = n - 2;
-		// computes interpolation coefficients
-		try {
-			long startTime = System.currentTimeMillis();
+        // the number of nodes is defined by the length of r
+        this._m = n;
+        // grab the nodes
+        this._r = new float[n];
+        for (int i = 0; i < n; i++) {
+            _r[i] = r[i];
+        }
+        // the number of non extreme nodes is the number of intervals
+        // minus 1, i.e. the length of r minus 2
+        this._n = n - 2;
+        // computes interpolation coefficients
+        try {
+            long startTime = System.currentTimeMillis();
 
-			this.interpolation();
-			if (log.isDebugEnabled()) {
-				long endTime = System.currentTimeMillis();
-				long elapsedTime = endTime - startTime;
+            this.interpolation();
+            if (log.isDebugEnabled()) {
+                long endTime = System.currentTimeMillis();
+                long elapsedTime = endTime - startTime;
 
-				log.debug("New Spline curve interpolated in ");
-				log.debug(elapsedTime + " ms");
-			}
-		} catch (Exception e) {
-			log.error("Error when interpolating : ", e);
-		}
+                log.debug("New Spline curve interpolated in ");
+                log.debug(elapsedTime + " ms");
+            }
+        } catch (Exception e) {
+            log.error("Error when interpolating : ", e);
+        }
 
-	}
+    }
 
-	/**
-	 * Computes the coefficients of the Spline interpolated curve, on each
-	 * interval. The matrix system to resolve is <CODE>AX=B</CODE>
-	 */
-	protected void interpolation() {
-		// creation of the interpolation structure
-		_rS = new float[_m];
-		_B = new float[_n];
-		_A = new float[_n][_n];
-		_coefficients = new float[_n + 1][4];
-		// local variables
-		int i = 0, j = 0;
+    /**
+     * Computes the coefficients of the Spline interpolated curve, on each
+     * interval. The matrix system to resolve is <CODE>AX=B</CODE>
+     */
+    protected void interpolation() {
+        // creation of the interpolation structure
+        _rS = new float[_m];
+        _B = new float[_n];
+        _A = new float[_n][_n];
+        _coefficients = new float[_n + 1][4];
+        // local variables
+        int i = 0, j = 0;
 
-		// initialize system structures (just to be safe)
-		for (i = 0; i < _n; i++) {
-			_B[i] = 0;
-			for (j = 0; j < _n; j++) {
-				_A[i][j] = 0;
-			}
-			for (j = 0; j < 4; j++) {
-				_coefficients[i][j] = 0;
-			}
-		}
-		for (i = 0; i < _n; i++) {
-			_rS[i] = 0;
-		}
-		// initialize the diagonal of the system matrix (A) to 4
-		for (i = 0; i < _n; i++) {
-			_A[i][i] = 4;
-		}
-		// initialize the two minor diagonals of A to 1
-		for (i = 1; i < _n; i++) {
-			_A[i][i - 1] = 1;
-			_A[i - 1][i] = 1;
-		}
-		// initialize B
-		for (i = 0; i < _n; i++) {
-			_B[i] = 6 * (_r[i + 2] - 2 * _r[i + 1] + _r[i]);
-		}
-		// Jacobi system resolving
-		this.jacobi(); // results are stored in _rS
-		// computes the coefficients (di, ci, bi, ai) from the results
-		for (i = 0; i < _n + 1; i++) {
-			// di (degree 0)
-			_coefficients[i][0] = _r[i];
-			// ci (degree 1)
-			_coefficients[i][1] = _r[i + 1] - _r[i] - (_rS[i + 1] + 2 * _rS[i]) / 6;
-			// bi (degree 2)
-			_coefficients[i][2] = _rS[i] / 2;
-			// ai (degree 3)
-			_coefficients[i][3] = (_rS[i + 1] - _rS[i]) / 6;
-		}
-	}
+        // initialize system structures (just to be safe)
+        for (i = 0; i < _n; i++) {
+            _B[i] = 0;
+            for (j = 0; j < _n; j++) {
+                _A[i][j] = 0;
+            }
+            for (j = 0; j < 4; j++) {
+                _coefficients[i][j] = 0;
+            }
+        }
+        for (i = 0; i < _n; i++) {
+            _rS[i] = 0;
+        }
+        // initialize the diagonal of the system matrix (A) to 4
+        for (i = 0; i < _n; i++) {
+            _A[i][i] = 4;
+        }
+        // initialize the two minor diagonals of A to 1
+        for (i = 1; i < _n; i++) {
+            _A[i][i - 1] = 1;
+            _A[i - 1][i] = 1;
+        }
+        // initialize B
+        for (i = 0; i < _n; i++) {
+            _B[i] = 6 * (_r[i + 2] - 2 * _r[i + 1] + _r[i]);
+        }
+        // Jacobi system resolving
+        this.jacobi(); // results are stored in _rS
+        // computes the coefficients (di, ci, bi, ai) from the results
+        for (i = 0; i < _n + 1; i++) {
+            // di (degree 0)
+            _coefficients[i][0] = _r[i];
+            // ci (degree 1)
+            _coefficients[i][1] = _r[i + 1] - _r[i] - (_rS[i + 1] + 2 * _rS[i]) / 6;
+            // bi (degree 2)
+            _coefficients[i][2] = _rS[i] / 2;
+            // ai (degree 3)
+            _coefficients[i][3] = (_rS[i + 1] - _rS[i]) / 6;
+        }
+    }
 
-	/**
-	 * Resolves the equation system by a Jacobi algorithm. The use of the slower
-	 * Jacobi algorithm instead of Gauss-Seidel is choosen here because Jacobi
-	 * is assured of to be convergent for this particular equation system, as
-	 * the system matrix has a strong diagonal.
-	 */
-	protected void jacobi() {
-		// local variables
-		int i = 0, j = 0, iterations = 0;
-		// intermediate arrays
-		float[] newX = new float[_n];
-		float[] oldX = new float[_n];
+    /**
+     * Resolves the equation system by a Jacobi algorithm. The use of the slower
+     * Jacobi algorithm instead of Gauss-Seidel is choosen here because Jacobi
+     * is assured of to be convergent for this particular equation system, as
+     * the system matrix has a strong diagonal.
+     */
+    protected void jacobi() {
+        // local variables
+        int i = 0, j = 0, iterations = 0;
+        // intermediate arrays
+        float[] newX = new float[_n];
+        float[] oldX = new float[_n];
 
-		// Jacobi convergence test
-		if (!converge()) {
-			if (log.isDebugEnabled()) {
-				log.debug("Warning : equation system resolving is unstable");
-			}
-		}
-		// init newX and oldX arrays to 0
-		for (i = 0; i < _n; i++) {
-			newX[i] = 0;
-			oldX[i] = 0;
-		}
-		// main iteration
-		while ((this.precision(oldX, newX) > this._minPrecision) && (iterations < this._maxIterations)) {
-			for (i = 0; i < _n; i++) {
-				oldX[i] = newX[i];
-			}
-			for (i = 0; i < _n; i++) {
-				newX[i] = _B[i];
-				for (j = 0; j < i; j++) {
-					newX[i] = newX[i] - (_A[i][j] * oldX[j]);
-				}
-				for (j = i + 1; j < _n; j++) {
-					newX[i] = newX[i] - (_A[i][j] * oldX[j]);
-				}
-				newX[i] = newX[i] / _A[i][i];
-			}
-			iterations++;
-		}
-		if (this.precision(oldX, newX) < this._minPrecision) {
-			if (log.isDebugEnabled()) {
-				log.debug("Minimal precision (");
-				log.debug(this._minPrecision + ") reached after ");
-				log.debug(iterations + " iterations");
-			}
-		} else if (iterations > this._maxIterations) {
-			if (log.isDebugEnabled()) {
-				log.debug("Maximal number of iterations (");
-				log.debug(this._maxIterations + ") reached");
-				log.debug("Warning : precision is only ");
-				log.debug("" + this.precision(oldX, newX));
-				log.debug(", divergence is possible");
-			}
-		}
-		for (i = 0; i < _n; i++) {
-			_rS[i + 1] = newX[i];
-		}
-	}
+        // Jacobi convergence test
+        if (!converge()) {
+            if (log.isDebugEnabled()) {
+                log.debug("Warning : equation system resolving is unstable");
+            }
+        }
+        // init newX and oldX arrays to 0
+        for (i = 0; i < _n; i++) {
+            newX[i] = 0;
+            oldX[i] = 0;
+        }
+        // main iteration
+        while ((this.precision(oldX, newX) > this._minPrecision) && (iterations < this._maxIterations)) {
+            for (i = 0; i < _n; i++) {
+                oldX[i] = newX[i];
+            }
+            for (i = 0; i < _n; i++) {
+                newX[i] = _B[i];
+                for (j = 0; j < i; j++) {
+                    newX[i] = newX[i] - (_A[i][j] * oldX[j]);
+                }
+                for (j = i + 1; j < _n; j++) {
+                    newX[i] = newX[i] - (_A[i][j] * oldX[j]);
+                }
+                newX[i] = newX[i] / _A[i][i];
+            }
+            iterations++;
+        }
+        if (this.precision(oldX, newX) < this._minPrecision) {
+            if (log.isDebugEnabled()) {
+                log.debug("Minimal precision (");
+                log.debug(this._minPrecision + ") reached after ");
+                log.debug(iterations + " iterations");
+            }
+        } else if (iterations > this._maxIterations) {
+            if (log.isDebugEnabled()) {
+                log.debug("Maximal number of iterations (");
+                log.debug(this._maxIterations + ") reached");
+                log.debug("Warning : precision is only ");
+                log.debug("" + this.precision(oldX, newX));
+                log.debug(", divergence is possible");
+            }
+        }
+        for (i = 0; i < _n; i++) {
+            _rS[i + 1] = newX[i];
+        }
+    }
 
-	/**
-	 * Test if the Jacobi resolution of the equation system converges. It's OK
-	 * if A has a strong diagonal.
-	 */
-	protected boolean converge() {
-		boolean converge = true;
-		int i = 0, j = 0;
-		float lineSum = 0F;
+    /**
+     * Test if the Jacobi resolution of the equation system converges. It's OK
+     * if A has a strong diagonal.
+     */
+    protected boolean converge() {
+        boolean converge = true;
+        int i = 0, j = 0;
+        float lineSum = 0F;
 
-		for (i = 0; i < _n; i++) {
-			if (converge) {
-				lineSum = 0;
-				for (j = 0; j < _n; j++) {
-					lineSum = lineSum + Math.abs(_A[i][j]);
-				}
-				lineSum = lineSum - Math.abs(_A[i][i]);
-				if (lineSum > Math.abs(_A[i][i])) {
-					converge = false;
-				}
-			}
-		}
-		return converge;
-	}
+        for (i = 0; i < _n; i++) {
+            if (converge) {
+                lineSum = 0;
+                for (j = 0; j < _n; j++) {
+                    lineSum = lineSum + Math.abs(_A[i][j]);
+                }
+                lineSum = lineSum - Math.abs(_A[i][i]);
+                if (lineSum > Math.abs(_A[i][i])) {
+                    converge = false;
+                }
+            }
+        }
+        return converge;
+    }
 
-	/**
-	 * Computes the current precision reached.
-	 */
-	protected float precision(float[] oldX, float[] newX) {
-		float N = 0F, D = 0F, erreur = 0F;
-		int i = 0;
+    /**
+     * Computes the current precision reached.
+     */
+    protected float precision(float[] oldX, float[] newX) {
+        float N = 0F, D = 0F, erreur = 0F;
+        int i = 0;
 
-		for (i = 0; i < _n; i++) {
-			N = N + Math.abs(newX[i] - oldX[i]);
-			D = D + Math.abs(newX[i]);
-		}
-		if (D != 0F) {
-			erreur = N / D;
-		} else {
-			erreur = Float.MAX_VALUE;
-		}
-		return erreur;
-	}
+        for (i = 0; i < _n; i++) {
+            N = N + Math.abs(newX[i] - oldX[i]);
+            D = D + Math.abs(newX[i]);
+        }
+        if (D != 0F) {
+            erreur = N / D;
+        } else {
+            erreur = Float.MAX_VALUE;
+        }
+        return erreur;
+    }
 
-	/**
-	 * Computes a (vertical) Y-axis value of the global curve.
-	 * 
-	 * @param t
-	 *            abscissa
-	 * @return computed ordinate
-	 */
-	public float value(float t) {
-		int i = 0, splineNumber = 0;
-		float abscissa = 0F, result = 0F;
+    /**
+     * Computes a (vertical) Y-axis value of the global curve.
+     *
+     * @param t
+     *            abscissa
+     * @return computed ordinate
+     */
+    public float value(float t) {
+        int i = 0, splineNumber = 0;
+        float abscissa = 0F, result = 0F;
 
-		// verify t belongs to the curve (range [0, _m-1])
-		if ((t < 0) || (t > (_m - 1))) {
-			if (log.isDebugEnabled()) {
-				log.debug("Warning : abscissa " + t + " out of bounds [0, " + (_m - 1) + "]");
-			}
-			// silent error, consider the curve is constant outside its range
-			if (t < 0) {
-				t = 0;
-			} else {
-				t = _m - 1;
-			}
-		}
-		// seek the good interval for t and get the piece of curve on it
-		splineNumber = (int) Math.floor(t);
-		if (t == (_m - 1)) {
-			// the upper limit of the curve range belongs by definition
-			// to the last interval
-			splineNumber--;
-		}
-		// computes the value of the curve at the pecified abscissa
-		// and relative to the beginning of the right piece of Spline curve
-		abscissa = t - splineNumber;
-		// the polynomial calculation is done by the (fast) Euler method
-		for (i = 0; i < 4; i++) {
-			result = result * abscissa;
-			result = result + _coefficients[splineNumber][3 - i];
-		}
-		return result;
-	}
+        // verify t belongs to the curve (range [0, _m-1])
+        if ((t < 0) || (t > (_m - 1))) {
+            if (log.isDebugEnabled()) {
+                log.debug("Warning : abscissa " + t + " out of bounds [0, " + (_m - 1) + "]");
+            }
+            // silent error, consider the curve is constant outside its range
+            if (t < 0) {
+                t = 0;
+            } else {
+                t = _m - 1;
+            }
+        }
+        // seek the good interval for t and get the piece of curve on it
+        splineNumber = (int) Math.floor(t);
+        if (t == (_m - 1)) {
+            // the upper limit of the curve range belongs by definition
+            // to the last interval
+            splineNumber--;
+        }
+        // computes the value of the curve at the pecified abscissa
+        // and relative to the beginning of the right piece of Spline curve
+        abscissa = t - splineNumber;
+        // the polynomial calculation is done by the (fast) Euler method
+        for (i = 0; i < 4; i++) {
+            result = result * abscissa;
+            result = result + _coefficients[splineNumber][3 - i];
+        }
+        return result;
+    }
 
-	/**
-	 * Manual check of the curve at the interpolated points.
-	 */
-	public void debugCheck() {
-		int i = 0;
+    /**
+     * Manual check of the curve at the interpolated points.
+     */
+    public void debugCheck() {
+        int i = 0;
 
-		for (i = 0; i < _m; i++) {
-			log.info("Point " + i + " : ");
-			log.info(_r[i] + " =? " + value(i));
-		}
-	}
+        for (i = 0; i < _m; i++) {
+            log.info("Point " + i + " : ");
+            log.info(_r[i] + " =? " + value(i));
+        }
+    }
 
-	/**
-	 * Computes drawable plots from the curve for a given draw space. The values
-	 * returned are drawable vertically and from the <B>bottom</B> of a Panel.
-	 * 
-	 * @param width
-	 *            width within the plots have to be computed
-	 * @param height
-	 *            height within the plots are expected to be drawed
-	 * @return drawable plots within the limits defined, in an array of int (as
-	 *         many int as the value of the <CODE>width</CODE> parameter)
-	 */
-	public int[] getPlots(int width, int height) {
-		int[] plot = new int[width];
-		// computes auto-scaling and absolute plots
-		float[] y = new float[width];
-		float max = java.lang.Integer.MIN_VALUE;
-		float min = java.lang.Integer.MAX_VALUE;
+    /**
+     * Computes drawable plots from the curve for a given draw space. The values
+     * returned are drawable vertically and from the <B>bottom</B> of a Panel.
+     *
+     * @param width
+     *            width within the plots have to be computed
+     * @param height
+     *            height within the plots are expected to be drawed
+     * @return drawable plots within the limits defined, in an array of int (as
+     *         many int as the value of the <CODE>width</CODE> parameter)
+     */
+    public int[] getPlots(int width, int height) {
+        int[] plot = new int[width];
+        // computes auto-scaling and absolute plots
+        float[] y = new float[width];
+        float max = java.lang.Integer.MIN_VALUE;
+        float min = java.lang.Integer.MAX_VALUE;
 
-		for (int i = 0; i < width; i++) {
-			y[i] = value(((float) i) * (_m - 1) / width);
-			if (y[i] < min) {
-				min = y[i];
-			}
+        for (int i = 0; i < width; i++) {
+            y[i] = value(((float) i) * (_m - 1) / width);
+            if (y[i] < min) {
+                min = y[i];
+            }
 
-			if (y[i] > max) {
-				max = y[i];
-			}
-		}
-		if (min < 0) {
-			min = 0; // shouldn't draw negative values
-		}
-		// computes relative auto-scaled plots to fit in the specified area
-		for (int i = 0; i < width; i++) {
-			plot[i] = Math.round(((y[i] - min) * (height - 1)) / (max - min));
-		}
-		return plot;
-	}
+            if (y[i] > max) {
+                max = y[i];
+            }
+        }
+        if (min < 0) {
+            min = 0; // shouldn't draw negative values
+        }
+        // computes relative auto-scaled plots to fit in the specified area
+        for (int i = 0; i < width; i++) {
+            plot[i] = Math.round(((y[i] - min) * (height - 1)) / (max - min));
+        }
+        return plot;
+    }
 
-	public void setPrecision(float precision) {
-		this._minPrecision = precision;
-	}
+    public void setPrecision(float precision) {
+        this._minPrecision = precision;
+    }
 
-	public float getPrecision() {
-		return this._minPrecision;
-	}
+    public float getPrecision() {
+        return this._minPrecision;
+    }
 
-	public void setToDefaultPrecision() {
-		this._minPrecision = DEFAULT_PRECISION;
-	}
+    public void setToDefaultPrecision() {
+        this._minPrecision = DEFAULT_PRECISION;
+    }
 
-	public float getDefaultPrecision() {
-		return DEFAULT_PRECISION;
-	}
+    public float getDefaultPrecision() {
+        return DEFAULT_PRECISION;
+    }
 
-	public void setMaxIterations(int iterations) {
-		this._maxIterations = iterations;
-	}
+    public void setMaxIterations(int iterations) {
+        this._maxIterations = iterations;
+    }
 
-	public int getMaxIterations() {
-		return this._maxIterations;
-	}
+    public int getMaxIterations() {
+        return this._maxIterations;
+    }
 
-	public void setToDefaultMaxIterations() {
-		this._maxIterations = DEFAULT_MAX_ITERATIONS;
-	}
+    public void setToDefaultMaxIterations() {
+        this._maxIterations = DEFAULT_MAX_ITERATIONS;
+    }
 
-	public int getDefaultMaxIterations() {
-		return DEFAULT_MAX_ITERATIONS;
-	}
+    public int getDefaultMaxIterations() {
+        return DEFAULT_MAX_ITERATIONS;
+    }
 
 }

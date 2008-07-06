@@ -5,15 +5,15 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations
  * under the License.
- *  
+ *
  */
 
 package org.apache.jmeter.visualizers;
@@ -61,167 +61,167 @@ import org.apache.log.Logger;
  * Excludes the Median and 90% columns, which are expensive in memory terms
  */
 public class SummaryReport extends AbstractVisualizer implements Clearable, ActionListener {
-	
-	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private final String[] COLUMNS = { 
+    private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private final String[] COLUMNS = {
             JMeterUtils.getResString("sampler_label"),               //$NON-NLS-1$
-			JMeterUtils.getResString("aggregate_report_count"),      //$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_count"),      //$NON-NLS-1$
             JMeterUtils.getResString("average"),                     //$NON-NLS-1$
-			JMeterUtils.getResString("aggregate_report_min"),        //$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_min"),        //$NON-NLS-1$
             JMeterUtils.getResString("aggregate_report_max"),        //$NON-NLS-1$
             JMeterUtils.getResString("aggregate_report_stddev"),     //$NON-NLS-1$
-			JMeterUtils.getResString("aggregate_report_error%"),     //$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_error%"),     //$NON-NLS-1$
             JMeterUtils.getResString("aggregate_report_rate"),       //$NON-NLS-1$
-			JMeterUtils.getResString("aggregate_report_bandwidth"),  //$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_bandwidth"),  //$NON-NLS-1$
             JMeterUtils.getResString("average_bytes"),               //$NON-NLS-1$
             };
 
-	private final String TOTAL_ROW_LABEL 
+    private final String TOTAL_ROW_LABEL
         = JMeterUtils.getResString("aggregate_report_total_label");  //$NON-NLS-1$
 
-	protected JTable myJTable;
+    protected JTable myJTable;
 
-	protected JScrollPane myScrollPane;
+    protected JScrollPane myScrollPane;
 
-    protected JButton saveTable = 
+    protected JButton saveTable =
         new JButton(JMeterUtils.getResString("aggregate_graph_save_table"));            //$NON-NLS-1$
-    
-    private JCheckBox useGroupName = 
+
+    private JCheckBox useGroupName =
         new JCheckBox(JMeterUtils.getResString("aggregate_graph_use_group_name"));            //$NON-NLS-1$
-    
-	private transient ObjectTableModel model;
 
-	Map tableRows = Collections.synchronizedMap(new HashMap());
+    private transient ObjectTableModel model;
 
-	// Column renderers
-	private static final TableCellRenderer[] RENDERERS = 
-		new TableCellRenderer[]{
-		    null, // Label
-		    null, // count
-		    null, // Mean
-		    null, // Min
-		    null, // Max
-		    new NumberRenderer("#0.00"), // Std Dev.
-		    new NumberRenderer("#0.00%"), // Error %age
-		    new RateRenderer("#.0"),      // Throughpur
-		    new NumberRenderer("#0.00"),  // kB/sec
-		    new NumberRenderer("#.0"),    // avg. pageSize
-		};
+    Map tableRows = Collections.synchronizedMap(new HashMap());
+
+    // Column renderers
+    private static final TableCellRenderer[] RENDERERS =
+        new TableCellRenderer[]{
+            null, // Label
+            null, // count
+            null, // Mean
+            null, // Min
+            null, // Max
+            new NumberRenderer("#0.00"), // Std Dev.
+            new NumberRenderer("#0.00%"), // Error %age
+            new RateRenderer("#.0"),      // Throughpur
+            new NumberRenderer("#0.00"),  // kB/sec
+            new NumberRenderer("#.0"),    // avg. pageSize
+        };
 
     public SummaryReport() {
-		super();
-		model = new ObjectTableModel(COLUMNS,
-				Calculator.class,// All rows have this class
-                new Functor[] { 
+        super();
+        model = new ObjectTableModel(COLUMNS,
+                Calculator.class,// All rows have this class
+                new Functor[] {
                     new Functor("getLabel"),              //$NON-NLS-1$
                     new Functor("getCount"),              //$NON-NLS-1$
-    				new Functor("getMeanAsNumber"),       //$NON-NLS-1$
+                    new Functor("getMeanAsNumber"),       //$NON-NLS-1$
                     new Functor("getMin"),                //$NON-NLS-1$
                     new Functor("getMax"),                //$NON-NLS-1$
                     new Functor("getStandardDeviation"),  //$NON-NLS-1$
                     new Functor("getErrorPercentage"),    //$NON-NLS-1$
                     new Functor("getRate"),               //$NON-NLS-1$
-    				new Functor("getKBPerSecond"),        //$NON-NLS-1$
+                    new Functor("getKBPerSecond"),        //$NON-NLS-1$
                     new Functor("getAvgPageBytes"),       //$NON-NLS-1$
                 },
-                new Functor[] { null, null, null, null, null, null, null, null , null, null }, 
-                new Class[] { String.class, Long.class, Long.class, Long.class, Long.class, 
+                new Functor[] { null, null, null, null, null, null, null, null , null, null },
+                new Class[] { String.class, Long.class, Long.class, Long.class, Long.class,
                               String.class, String.class, String.class, String.class, String.class });
-		clearData();
-		init();
-	}
-    
-	public static boolean testFunctors(){
-		SummaryReport instance = new SummaryReport();
-		return instance.model.checkFunctors(null,instance.getClass());
-	}
-	
-	public String getLabelResource() {
-		return "summary_report";  //$NON-NLS-1$
-	}
+        clearData();
+        init();
+    }
 
-	public void add(SampleResult res) {
-		Calculator row = null;
+    public static boolean testFunctors(){
+        SummaryReport instance = new SummaryReport();
+        return instance.model.checkFunctors(null,instance.getClass());
+    }
+
+    public String getLabelResource() {
+        return "summary_report";  //$NON-NLS-1$
+    }
+
+    public void add(SampleResult res) {
+        Calculator row = null;
         final String sampleLabel = res.getSampleLabel(useGroupName.isSelected());
-		synchronized (tableRows) {
-            row = (Calculator) tableRows.get(sampleLabel);
-			if (row == null) {
-				row = new Calculator(sampleLabel);
-				tableRows.put(row.getLabel(), row);
-				model.insertRow(row, model.getRowCount() - 1);
-			}
-		}
-		/*
-		 * Synch is needed because multiple threads can update the counts.
-		 */
-		synchronized(row) {
-		    row.addSample(res);
-		}
-		Calculator tot = ((Calculator) tableRows.get(TOTAL_ROW_LABEL));
-		synchronized(tot) {
-		    tot.addSample(res);
-		}
-		model.fireTableDataChanged();
-	}
-
-	/**
-	 * Clears this visualizer and its model, and forces a repaint of the table.
-	 */
-	public void clearData() {
         synchronized (tableRows) {
-    		model.clearData();
-    		tableRows.clear();
-    		tableRows.put(TOTAL_ROW_LABEL, new Calculator(TOTAL_ROW_LABEL));
-    		model.addRow(tableRows.get(TOTAL_ROW_LABEL));
+            row = (Calculator) tableRows.get(sampleLabel);
+            if (row == null) {
+                row = new Calculator(sampleLabel);
+                tableRows.put(row.getLabel(), row);
+                model.insertRow(row, model.getRowCount() - 1);
+            }
         }
-	}
+        /*
+         * Synch is needed because multiple threads can update the counts.
+         */
+        synchronized(row) {
+            row.addSample(res);
+        }
+        Calculator tot = ((Calculator) tableRows.get(TOTAL_ROW_LABEL));
+        synchronized(tot) {
+            tot.addSample(res);
+        }
+        model.fireTableDataChanged();
+    }
 
-	/**
-	 * Main visualizer setup.
-	 */
-	private void init() {
-		this.setLayout(new BorderLayout());
+    /**
+     * Clears this visualizer and its model, and forces a repaint of the table.
+     */
+    public void clearData() {
+        synchronized (tableRows) {
+            model.clearData();
+            tableRows.clear();
+            tableRows.put(TOTAL_ROW_LABEL, new Calculator(TOTAL_ROW_LABEL));
+            model.addRow(tableRows.get(TOTAL_ROW_LABEL));
+        }
+    }
 
-		// MAIN PANEL
-		JPanel mainPanel = new JPanel();
-		Border margin = new EmptyBorder(10, 10, 5, 10);
+    /**
+     * Main visualizer setup.
+     */
+    private void init() {
+        this.setLayout(new BorderLayout());
 
-		mainPanel.setBorder(margin);
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        // MAIN PANEL
+        JPanel mainPanel = new JPanel();
+        Border margin = new EmptyBorder(10, 10, 5, 10);
 
-		mainPanel.add(makeTitlePanel());
+        mainPanel.setBorder(margin);
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
-		myJTable = new JTable(model);
-		myJTable.setPreferredScrollableViewportSize(new Dimension(500, 70));
-		RendererUtils.applyRenderers(myJTable, RENDERERS);
-		myScrollPane = new JScrollPane(myJTable);
-		this.add(mainPanel, BorderLayout.NORTH);
-		this.add(myScrollPane, BorderLayout.CENTER);
-		saveTable.addActionListener(this);
-		JPanel opts = new JPanel();
+        mainPanel.add(makeTitlePanel());
+
+        myJTable = new JTable(model);
+        myJTable.setPreferredScrollableViewportSize(new Dimension(500, 70));
+        RendererUtils.applyRenderers(myJTable, RENDERERS);
+        myScrollPane = new JScrollPane(myJTable);
+        this.add(mainPanel, BorderLayout.NORTH);
+        this.add(myScrollPane, BorderLayout.CENTER);
+        saveTable.addActionListener(this);
+        JPanel opts = new JPanel();
         opts.add(useGroupName, BorderLayout.WEST);
-		opts.add(saveTable, BorderLayout.CENTER);
-		this.add(opts,BorderLayout.SOUTH);
-	}
+        opts.add(saveTable, BorderLayout.CENTER);
+        this.add(opts,BorderLayout.SOUTH);
+    }
 
-	public void actionPerformed(ActionEvent ev) {
-		if (ev.getSource() == saveTable) {
-	        JFileChooser chooser = FileDialoger.promptToSaveFile("summary.csv");//$NON-NLS-1$
+    public void actionPerformed(ActionEvent ev) {
+        if (ev.getSource() == saveTable) {
+            JFileChooser chooser = FileDialoger.promptToSaveFile("summary.csv");//$NON-NLS-1$
             if (chooser == null) {
                 return;
             }
-			FileWriter writer = null;
-			try {
-			    writer = new FileWriter(chooser.getSelectedFile());
-			    CSVSaveService.saveCSVStats(model,writer);
-			} catch (FileNotFoundException e) {
-			    log.warn(e.getMessage());
-			} catch (IOException e) {
-			    log.warn(e.getMessage());
-			} finally {
-			    JOrphanUtils.closeQuietly(writer);
-			}
-		}
-	}
+            FileWriter writer = null;
+            try {
+                writer = new FileWriter(chooser.getSelectedFile());
+                CSVSaveService.saveCSVStats(model,writer);
+            } catch (FileNotFoundException e) {
+                log.warn(e.getMessage());
+            } catch (IOException e) {
+                log.warn(e.getMessage());
+            } finally {
+                JOrphanUtils.closeQuietly(writer);
+            }
+        }
+    }
 }
