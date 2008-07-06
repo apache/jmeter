@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jorphan.gui;
@@ -27,15 +27,15 @@ import javax.swing.table.TableColumnModel;
  */
 public class RendererUtils {
     private RendererUtils(){
-    	// uninstantiable
+        // uninstantiable
     }
     public static void applyRenderers(final JTable table, final TableCellRenderer [] renderers){
-		final TableColumnModel columnModel = table.getColumnModel();
-		for(int i = 0; i < renderers.length; i++){
-		    final TableCellRenderer rend = renderers[i];
-		    if (rend != null) {
-			    columnModel.getColumn(i).setCellRenderer(rend);
-		    }
-		}
+        final TableColumnModel columnModel = table.getColumnModel();
+        for(int i = 0; i < renderers.length; i++){
+            final TableCellRenderer rend = renderers[i];
+            if (rend != null) {
+                columnModel.getColumn(i).setCellRenderer(rend);
+            }
+        }
 }
 }

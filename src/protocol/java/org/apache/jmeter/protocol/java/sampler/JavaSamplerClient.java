@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.java.sampler;
@@ -58,66 +58,64 @@ import org.apache.jmeter.samplers.SampleResult;
  * <p>
  * See {@link org.apache.jmeter.protocol.java.test.SleepTest} for an example of
  * how to implement this interface.
- * 
- * @author Brad Kiewel
- * @author <a href="mailto:jeremy_a@bigfoot.com">Jeremy Arnold</a>
+ *
  * @version $Revision$
  */
 public interface JavaSamplerClient {
-	/**
-	 * Do any initialization required by this client. It is generally
-	 * recommended to do any initialization such as getting parameter values in
-	 * the setupTest method rather than the runTest method in order to add as
-	 * little overhead as possible to the test.
-	 * 
-	 * @param context
-	 *            the context to run with. This provides access to
-	 *            initialization parameters.
-	 */
-	void setupTest(JavaSamplerContext context);
+    /**
+     * Do any initialization required by this client. It is generally
+     * recommended to do any initialization such as getting parameter values in
+     * the setupTest method rather than the runTest method in order to add as
+     * little overhead as possible to the test.
+     *
+     * @param context
+     *            the context to run with. This provides access to
+     *            initialization parameters.
+     */
+    void setupTest(JavaSamplerContext context);
 
-	/**
-	 * Perform a single sample for each iteration. This method returns a
-	 * <code>SampleResult</code> object. <code>SampleResult</code> has many
-	 * fields which can be used. At a minimum, the test should use
-	 * <code>SampleResult.sampleStart</code> and
-	 * <code>SampleResult.sampleEnd</code>to set the time that the test
-	 * required to execute. It is also a good idea to set the sampleLabel and
-	 * the successful flag.
-	 * 
-	 * @see org.apache.jmeter.samplers.SampleResult#sampleStart()
-	 * @see org.apache.jmeter.samplers.SampleResult#sampleEnd()
-	 * @see org.apache.jmeter.samplers.SampleResult#setSuccessful(boolean)
-	 * @see org.apache.jmeter.samplers.SampleResult#setSampleLabel(String)
-	 * 
-	 * @param context
-	 *            the context to run with. This provides access to
-	 *            initialization parameters.
-	 * 
-	 * @return a SampleResult giving the results of this sample.
-	 */
-	SampleResult runTest(JavaSamplerContext context);
+    /**
+     * Perform a single sample for each iteration. This method returns a
+     * <code>SampleResult</code> object. <code>SampleResult</code> has many
+     * fields which can be used. At a minimum, the test should use
+     * <code>SampleResult.sampleStart</code> and
+     * <code>SampleResult.sampleEnd</code>to set the time that the test
+     * required to execute. It is also a good idea to set the sampleLabel and
+     * the successful flag.
+     *
+     * @see org.apache.jmeter.samplers.SampleResult#sampleStart()
+     * @see org.apache.jmeter.samplers.SampleResult#sampleEnd()
+     * @see org.apache.jmeter.samplers.SampleResult#setSuccessful(boolean)
+     * @see org.apache.jmeter.samplers.SampleResult#setSampleLabel(String)
+     *
+     * @param context
+     *            the context to run with. This provides access to
+     *            initialization parameters.
+     *
+     * @return a SampleResult giving the results of this sample.
+     */
+    SampleResult runTest(JavaSamplerContext context);
 
-	/**
-	 * Do any clean-up required by this test at the end of a test run.
-	 * 
-	 * @param context
-	 *            the context to run with. This provides access to
-	 *            initialization parameters.
-	 */
-	void teardownTest(JavaSamplerContext context);
+    /**
+     * Do any clean-up required by this test at the end of a test run.
+     *
+     * @param context
+     *            the context to run with. This provides access to
+     *            initialization parameters.
+     */
+    void teardownTest(JavaSamplerContext context);
 
-	/**
-	 * Provide a list of parameters which this test supports. Any parameter
-	 * names and associated values returned by this method will appear in the
-	 * GUI by default so the user doesn't have to remember the exact names. The
-	 * user can add other parameters which are not listed here. If this method
-	 * returns null then no parameters will be listed. If the value for some
-	 * parameter is null then that parameter will be listed in the GUI with an
-	 * empty value.
-	 * 
-	 * @return a specification of the parameters used by this test which should
-	 *         be listed in the GUI, or null if no parameters should be listed.
-	 */
-	Arguments getDefaultParameters();
+    /**
+     * Provide a list of parameters which this test supports. Any parameter
+     * names and associated values returned by this method will appear in the
+     * GUI by default so the user doesn't have to remember the exact names. The
+     * user can add other parameters which are not listed here. If this method
+     * returns null then no parameters will be listed. If the value for some
+     * parameter is null then that parameter will be listed in the GUI with an
+     * empty value.
+     *
+     * @return a specification of the parameters used by this test which should
+     *         be listed in the GUI, or null if no parameters should be listed.
+     */
+    Arguments getDefaultParameters();
 }

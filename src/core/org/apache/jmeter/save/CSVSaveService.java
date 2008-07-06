@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.save;
@@ -58,7 +58,7 @@ import org.apache.oro.text.regex.Perl5Matcher;
  * This class provides a means for saving/reading test results as CSV files.
  */
 public final class CSVSaveService {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     // ---------------------------------------------------------------------
     // XML RESULT FILE CONSTANTS AND FIELD NAME CONSTANTS
@@ -90,197 +90,197 @@ public final class CSVSaveService {
     private static final String CSV_HOSTNAME = "Hostname"; // $NON-NLS-1$
 
     // Used to enclose variable name labels, to distinguish from any of the above labels
-	private static final String VARIABLE_NAME_QUOTE_CHAR = "\"";  // $NON-NLS-1$
+    private static final String VARIABLE_NAME_QUOTE_CHAR = "\"";  // $NON-NLS-1$
 
     // Initial config from properties
-	static private final SampleSaveConfiguration _saveConfig = SampleSaveConfiguration.staticConfig();
+    static private final SampleSaveConfiguration _saveConfig = SampleSaveConfiguration.staticConfig();
 
-	// Date format to try if the time format does not parse as milliseconds
-	// (this is the suggested value in jmeter.properties)
-	private static final String DEFAULT_DATE_FORMAT_STRING = "MM/dd/yy HH:mm:ss"; // $NON-NLS-1$
-	private static final DateFormat DEFAULT_DATE_FORMAT = new SimpleDateFormat(DEFAULT_DATE_FORMAT_STRING);
+    // Date format to try if the time format does not parse as milliseconds
+    // (this is the suggested value in jmeter.properties)
+    private static final String DEFAULT_DATE_FORMAT_STRING = "MM/dd/yy HH:mm:ss"; // $NON-NLS-1$
+    private static final DateFormat DEFAULT_DATE_FORMAT = new SimpleDateFormat(DEFAULT_DATE_FORMAT_STRING);
 
-	/**
-	 * Private constructor to prevent instantiation.
-	 */
-	private CSVSaveService() {
-	}
+    /**
+     * Private constructor to prevent instantiation.
+     */
+    private CSVSaveService() {
+    }
 
-	/**
-	 * Read Samples from a file; handles quoted strings.
-	 * 
-	 * @param filename input file
-	 * @param visualizer where to send the results
-	 * @param resultCollector the parent collector
-	 * @throws IOException
-	 */
-	public static void processSamples(String filename, Visualizer visualizer,
-			ResultCollector resultCollector) throws IOException {
-    	BufferedReader dataReader = null;
-		try {
-			dataReader = new BufferedReader(new FileReader(filename));
-			dataReader.mark(400);// Enough to read the header column names
-			// Get the first line, and see if it is the header
-			String line = dataReader.readLine();
-			long lineNumber=1;
-			SampleSaveConfiguration saveConfig = CSVSaveService.getSampleSaveConfiguration(line,filename);
-			if (saveConfig == null) {// not a valid header
-				log.info(filename+" does not appear to have a valid header. Using default configuration.");
-				saveConfig = (SampleSaveConfiguration) resultCollector.getSaveConfig().clone(); // may change the format later
-				dataReader.reset(); // restart from beginning
-				lineNumber = 0;
-			}
-			String [] parts;
-			while ((parts = csvReadFile(dataReader, saveConfig.getDelimiter().charAt(0))).length != 0) {
-				lineNumber++;
-				SampleEvent event = CSVSaveService.makeResultFromDelimitedString(parts,saveConfig,lineNumber);
-				if (event != null){
-					final SampleResult result = event.getResult();
-					if (resultCollector.isSampleWanted(result.isSuccessful())) {
-						visualizer.add(result);
-					}
-				}
-			}
-		} finally {
-			JOrphanUtils.closeQuietly(dataReader);
-		}
-	}
+    /**
+     * Read Samples from a file; handles quoted strings.
+     *
+     * @param filename input file
+     * @param visualizer where to send the results
+     * @param resultCollector the parent collector
+     * @throws IOException
+     */
+    public static void processSamples(String filename, Visualizer visualizer,
+            ResultCollector resultCollector) throws IOException {
+        BufferedReader dataReader = null;
+        try {
+            dataReader = new BufferedReader(new FileReader(filename));
+            dataReader.mark(400);// Enough to read the header column names
+            // Get the first line, and see if it is the header
+            String line = dataReader.readLine();
+            long lineNumber=1;
+            SampleSaveConfiguration saveConfig = CSVSaveService.getSampleSaveConfiguration(line,filename);
+            if (saveConfig == null) {// not a valid header
+                log.info(filename+" does not appear to have a valid header. Using default configuration.");
+                saveConfig = (SampleSaveConfiguration) resultCollector.getSaveConfig().clone(); // may change the format later
+                dataReader.reset(); // restart from beginning
+                lineNumber = 0;
+            }
+            String [] parts;
+            while ((parts = csvReadFile(dataReader, saveConfig.getDelimiter().charAt(0))).length != 0) {
+                lineNumber++;
+                SampleEvent event = CSVSaveService.makeResultFromDelimitedString(parts,saveConfig,lineNumber);
+                if (event != null){
+                    final SampleResult result = event.getResult();
+                    if (resultCollector.isSampleWanted(result.isSuccessful())) {
+                        visualizer.add(result);
+                    }
+                }
+            }
+        } finally {
+            JOrphanUtils.closeQuietly(dataReader);
+        }
+    }
 
-	/**
+    /**
      * Make a SampleResult given a delimited string.
-     * 
+     *
      * @param inputLine - line from CSV file
      * @param saveConfig - configuration
      * @param lineNumber - line number for error reporting
      * @return SampleResult
-     * 
+     *
      * @deprecated Does not handle quoted strings; use {@link #processSamples(String, Visualizer, ResultCollector)} instead
-     * 
+     *
      * @throws JMeterError
      */
     public static SampleEvent makeResultFromDelimitedString(
-    		final String inputLine, 
-    		final SampleSaveConfiguration saveConfig, // may be updated
-    		final long lineNumber) {
-		/*
-		 * Bug 40772: replaced StringTokenizer with String.split(), as the
-		 * former does not return empty tokens.
-		 */
-		// The \Q prefix is needed to ensure that meta-characters (e.g. ".") work.
-		String parts[]=inputLine.split("\\Q"+saveConfig.getDelimiter());// $NON-NLS-1$
-    	return makeResultFromDelimitedString(parts, saveConfig, lineNumber);
+            final String inputLine,
+            final SampleSaveConfiguration saveConfig, // may be updated
+            final long lineNumber) {
+        /*
+         * Bug 40772: replaced StringTokenizer with String.split(), as the
+         * former does not return empty tokens.
+         */
+        // The \Q prefix is needed to ensure that meta-characters (e.g. ".") work.
+        String parts[]=inputLine.split("\\Q"+saveConfig.getDelimiter());// $NON-NLS-1$
+        return makeResultFromDelimitedString(parts, saveConfig, lineNumber);
     }
-    
+
     /**
      * Make a SampleResult given a set of tokens
      * @param parts tokens parsed from the input
      * @param saveConfig the save configuration (may be updated)
      * @param lineNumber
      * @return the sample result
-     * 
+     *
      * @throws JMeterError
      */
     private static SampleEvent makeResultFromDelimitedString(
-    		final String[] parts, 
-    		final SampleSaveConfiguration saveConfig, // may be updated
-    		final long lineNumber) {
-    
-    	SampleResult result = null;
+            final String[] parts,
+            final SampleSaveConfiguration saveConfig, // may be updated
+            final long lineNumber) {
+
+        SampleResult result = null;
         String hostname = "";// $NON-NLS-1$
-		long timeStamp = 0;
-		long elapsed = 0;
-		String text = null;
-		String field = null; // Save the name for error reporting
-		int i=0;
+        long timeStamp = 0;
+        long elapsed = 0;
+        String text = null;
+        String field = null; // Save the name for error reporting
+        int i=0;
 
-		try {
-			if (saveConfig.saveTimestamp()){
-				field = TIME_STAMP;
-				text = parts[i++];
-				if (saveConfig.printMilliseconds()) {
-					try {
-						timeStamp = Long.parseLong(text);
-					} catch (NumberFormatException e) {// see if this works
-						log.warn(e.toString());
-						Date stamp = DEFAULT_DATE_FORMAT.parse(text);
-						timeStamp = stamp.getTime();
-						log.warn("Setting date format to: "+DEFAULT_DATE_FORMAT_STRING);
-						saveConfig.setFormatter(DEFAULT_DATE_FORMAT);
-					}
-				} else if (saveConfig.formatter() != null) {
-					Date stamp = saveConfig.formatter().parse(text);
-					timeStamp = stamp.getTime();
-				} else { // can this happen?
-					final String msg = "Unknown timestamp format";
-					log.warn(msg);
-					throw new JMeterError(msg);
-				}
-			}
+        try {
+            if (saveConfig.saveTimestamp()){
+                field = TIME_STAMP;
+                text = parts[i++];
+                if (saveConfig.printMilliseconds()) {
+                    try {
+                        timeStamp = Long.parseLong(text);
+                    } catch (NumberFormatException e) {// see if this works
+                        log.warn(e.toString());
+                        Date stamp = DEFAULT_DATE_FORMAT.parse(text);
+                        timeStamp = stamp.getTime();
+                        log.warn("Setting date format to: "+DEFAULT_DATE_FORMAT_STRING);
+                        saveConfig.setFormatter(DEFAULT_DATE_FORMAT);
+                    }
+                } else if (saveConfig.formatter() != null) {
+                    Date stamp = saveConfig.formatter().parse(text);
+                    timeStamp = stamp.getTime();
+                } else { // can this happen?
+                    final String msg = "Unknown timestamp format";
+                    log.warn(msg);
+                    throw new JMeterError(msg);
+                }
+            }
 
-			if (saveConfig.saveTime()) {
-				field = CSV_ELAPSED;
-				text = parts[i++];
-				elapsed = Long.parseLong(text);
-			}
+            if (saveConfig.saveTime()) {
+                field = CSV_ELAPSED;
+                text = parts[i++];
+                elapsed = Long.parseLong(text);
+            }
 
-			if (saveConfig.saveSampleCount()) {
-				result = new StatisticalSampleResult(timeStamp, elapsed);
-			} else {
-				result = new SampleResult(timeStamp, elapsed);
-			}
+            if (saveConfig.saveSampleCount()) {
+                result = new StatisticalSampleResult(timeStamp, elapsed);
+            } else {
+                result = new SampleResult(timeStamp, elapsed);
+            }
 
-			if (saveConfig.saveLabel()) {
-				field = LABEL;
-				text = parts[i++];
-				result.setSampleLabel(text);
-			}
-			if (saveConfig.saveCode()) {
-				field = RESPONSE_CODE;
-				text = parts[i++];
-				result.setResponseCode(text);
-			}
+            if (saveConfig.saveLabel()) {
+                field = LABEL;
+                text = parts[i++];
+                result.setSampleLabel(text);
+            }
+            if (saveConfig.saveCode()) {
+                field = RESPONSE_CODE;
+                text = parts[i++];
+                result.setResponseCode(text);
+            }
 
-			if (saveConfig.saveMessage()) {
-				field = RESPONSE_MESSAGE;
-				text = parts[i++];
-				result.setResponseMessage(text);
-			}
+            if (saveConfig.saveMessage()) {
+                field = RESPONSE_MESSAGE;
+                text = parts[i++];
+                result.setResponseMessage(text);
+            }
 
-			if (saveConfig.saveThreadName()) {
-				field = THREAD_NAME;
-				text = parts[i++];
-				result.setThreadName(text);
-			}
+            if (saveConfig.saveThreadName()) {
+                field = THREAD_NAME;
+                text = parts[i++];
+                result.setThreadName(text);
+            }
 
-			if (saveConfig.saveDataType()) {
-				field = DATA_TYPE;
-				text = parts[i++];
-				result.setDataType(text);
-			}
+            if (saveConfig.saveDataType()) {
+                field = DATA_TYPE;
+                text = parts[i++];
+                result.setDataType(text);
+            }
 
-			if (saveConfig.saveSuccess()) {
-				field = SUCCESSFUL;
-				text = parts[i++];
-				result.setSuccessful(Boolean.valueOf(text).booleanValue());
-			}
+            if (saveConfig.saveSuccess()) {
+                field = SUCCESSFUL;
+                text = parts[i++];
+                result.setSuccessful(Boolean.valueOf(text).booleanValue());
+            }
 
-			if (saveConfig.saveAssertionResultsFailureMessage()) {
-				i++;
+            if (saveConfig.saveAssertionResultsFailureMessage()) {
+                i++;
                 // TODO - should this be restored?
-			}
-            
+            }
+
             if (saveConfig.saveBytes()) {
-            	field = CSV_BYTES;
+                field = CSV_BYTES;
                 text = parts[i++];
                 result.setBytes(Integer.parseInt(text));
             }
-        
+
             if (saveConfig.saveThreadCounts()) {
-            	field = CSV_THREAD_COUNT1;
+                field = CSV_THREAD_COUNT1;
                 text = parts[i++];
                 result.setGroupThreads(Integer.parseInt(text));
-                
-            	field = CSV_THREAD_COUNT2;
+
+                field = CSV_THREAD_COUNT2;
                 text = parts[i++];
                 result.setAllThreads(Integer.parseInt(text));
             }
@@ -289,117 +289,117 @@ public final class CSVSaveService {
                 i++;
                 // TODO: should this be restored?
             }
-        
+
             if (saveConfig.saveFileName()) {
-            	field = CSV_FILENAME;
+                field = CSV_FILENAME;
                 text = parts[i++];
                 result.setResultFileName(text);
-            }            
+            }
             if (saveConfig.saveLatency()) {
-            	field = CSV_LATENCY;
+                field = CSV_LATENCY;
                 text = parts[i++];
                 result.setLatency(Long.parseLong(text));
             }
 
             if (saveConfig.saveEncoding()) {
-            	field = CSV_ENCODING;
+                field = CSV_ENCODING;
                 text = parts[i++];
                 result.setEncodingAndType(text);
             }
 
             if (saveConfig.saveSampleCount()) {
-            	field = CSV_SAMPLE_COUNT;
+                field = CSV_SAMPLE_COUNT;
                 text = parts[i++];
                 result.setSampleCount(Integer.parseInt(text));
-            	field = CSV_ERROR_COUNT;
+                field = CSV_ERROR_COUNT;
                 text = parts[i++];
                 result.setErrorCount(Integer.parseInt(text));
             }
 
             if (saveConfig.saveHostname()) {
-            	field = CSV_HOSTNAME;
+                field = CSV_HOSTNAME;
                 hostname = parts[i++];
             }
-            
+
             if (i + saveConfig.getVarCount() < parts.length){
-            	log.warn("Line: "+lineNumber+". Found "+parts.length+" fields, expected "+i+". Extra fields have been ignored.");
+                log.warn("Line: "+lineNumber+". Found "+parts.length+" fields, expected "+i+". Extra fields have been ignored.");
             }
 
-		} catch (NumberFormatException e) {
-			log.warn("Error parsing field '" + field + "' at line " + lineNumber + " " + e);
-			throw new JMeterError(e);
-		} catch (ParseException e) {
-			log.warn("Error parsing field '" + field + "' at line " + lineNumber + " " + e);
-			throw new JMeterError(e);
-		} catch (ArrayIndexOutOfBoundsException e){
-			log.warn("Insufficient columns to parse field '" + field + "' at line " + lineNumber);
-			throw new JMeterError(e);
-		}
-		return new SampleEvent(result,"",hostname);
-	}
+        } catch (NumberFormatException e) {
+            log.warn("Error parsing field '" + field + "' at line " + lineNumber + " " + e);
+            throw new JMeterError(e);
+        } catch (ParseException e) {
+            log.warn("Error parsing field '" + field + "' at line " + lineNumber + " " + e);
+            throw new JMeterError(e);
+        } catch (ArrayIndexOutOfBoundsException e){
+            log.warn("Insufficient columns to parse field '" + field + "' at line " + lineNumber);
+            throw new JMeterError(e);
+        }
+        return new SampleEvent(result,"",hostname);
+    }
 
     /**
      * Generates the field names for the output file
-     * 
+     *
      * @return the field names as a string
      */
     public static String printableFieldNamesToString() {
         return printableFieldNamesToString(_saveConfig);
     }
-    
-	/**
-	 * Generates the field names for the output file
-	 * 
-	 * @return the field names as a string
-	 */
-	public static String printableFieldNamesToString(SampleSaveConfiguration saveConfig) {
-		StringBuffer text = new StringBuffer();
-		String delim = saveConfig.getDelimiter();
 
-		if (saveConfig.saveTimestamp()) {
-			text.append(TIME_STAMP);
-			text.append(delim);
-		}
+    /**
+     * Generates the field names for the output file
+     *
+     * @return the field names as a string
+     */
+    public static String printableFieldNamesToString(SampleSaveConfiguration saveConfig) {
+        StringBuffer text = new StringBuffer();
+        String delim = saveConfig.getDelimiter();
 
-		if (saveConfig.saveTime()) {
-			text.append(CSV_ELAPSED);
-			text.append(delim);
-		}
+        if (saveConfig.saveTimestamp()) {
+            text.append(TIME_STAMP);
+            text.append(delim);
+        }
 
-		if (saveConfig.saveLabel()) {
-			text.append(LABEL);
-			text.append(delim);
-		}
+        if (saveConfig.saveTime()) {
+            text.append(CSV_ELAPSED);
+            text.append(delim);
+        }
 
-		if (saveConfig.saveCode()) {
-			text.append(RESPONSE_CODE);
-			text.append(delim);
-		}
+        if (saveConfig.saveLabel()) {
+            text.append(LABEL);
+            text.append(delim);
+        }
 
-		if (saveConfig.saveMessage()) {
-			text.append(RESPONSE_MESSAGE);
-			text.append(delim);
-		}
+        if (saveConfig.saveCode()) {
+            text.append(RESPONSE_CODE);
+            text.append(delim);
+        }
 
-		if (saveConfig.saveThreadName()) {
-			text.append(THREAD_NAME);
-			text.append(delim);
-		}
+        if (saveConfig.saveMessage()) {
+            text.append(RESPONSE_MESSAGE);
+            text.append(delim);
+        }
 
-		if (saveConfig.saveDataType()) {
-			text.append(DATA_TYPE);
-			text.append(delim);
-		}
+        if (saveConfig.saveThreadName()) {
+            text.append(THREAD_NAME);
+            text.append(delim);
+        }
 
-		if (saveConfig.saveSuccess()) {
-			text.append(SUCCESSFUL);
-			text.append(delim);
-		}
+        if (saveConfig.saveDataType()) {
+            text.append(DATA_TYPE);
+            text.append(delim);
+        }
 
-		if (saveConfig.saveAssertionResultsFailureMessage()) {
-			text.append(FAILURE_MESSAGE);
-			text.append(delim);
-		}
+        if (saveConfig.saveSuccess()) {
+            text.append(SUCCESSFUL);
+            text.append(delim);
+        }
+
+        if (saveConfig.saveAssertionResultsFailureMessage()) {
+            text.append(FAILURE_MESSAGE);
+            text.append(delim);
+        }
 
         if (saveConfig.saveBytes()) {
             text.append(CSV_BYTES);
@@ -433,12 +433,12 @@ public final class CSVSaveService {
             text.append(delim);
         }
 
-		if (saveConfig.saveSampleCount()) {
-			text.append(CSV_SAMPLE_COUNT);
-			text.append(delim);
-			text.append(CSV_ERROR_COUNT);
-			text.append(delim);
-		}
+        if (saveConfig.saveSampleCount()) {
+            text.append(CSV_SAMPLE_COUNT);
+            text.append(delim);
+            text.append(CSV_ERROR_COUNT);
+            text.append(delim);
+        }
 
         if (saveConfig.saveHostname()) {
             text.append(CSV_HOSTNAME);
@@ -446,40 +446,40 @@ public final class CSVSaveService {
         }
 
         for (int i = 0; i < SampleEvent.getVarCount(); i++){
-        	text.append(VARIABLE_NAME_QUOTE_CHAR);
-        	text.append(SampleEvent.getVarName(i));
-        	text.append(VARIABLE_NAME_QUOTE_CHAR);
+            text.append(VARIABLE_NAME_QUOTE_CHAR);
+            text.append(SampleEvent.getVarName(i));
+            text.append(VARIABLE_NAME_QUOTE_CHAR);
             text.append(delim);
         }
 
         String resultString = null;
-		int size = text.length();
-		int delSize = delim.length();
+        int size = text.length();
+        int delSize = delim.length();
 
-		// Strip off the trailing delimiter
-		if (size >= delSize) {
-			resultString = text.substring(0, size - delSize);
-		} else {
-			resultString = text.toString();
-		}
-		return resultString;
-	}
-	
-	// Map header names to set() methods
-	private static final LinkedMap headerLabelMethods = new LinkedMap();
-	
-	// These entries must be in the same order as columns are saved/restored.
-	
-	static {
-		    headerLabelMethods.put(TIME_STAMP, new Functor("setTimestamp"));
-			headerLabelMethods.put(CSV_ELAPSED, new Functor("setTime"));
-			headerLabelMethods.put(LABEL, new Functor("setLabel"));
-			headerLabelMethods.put(RESPONSE_CODE, new Functor("setCode"));
-			headerLabelMethods.put(RESPONSE_MESSAGE, new Functor("setMessage"));
-			headerLabelMethods.put(THREAD_NAME, new Functor("setThreadName"));
-			headerLabelMethods.put(DATA_TYPE, new Functor("setDataType"));
-			headerLabelMethods.put(SUCCESSFUL, new Functor("setSuccess"));
-			headerLabelMethods.put(FAILURE_MESSAGE, new Functor("setAssertionResultsFailureMessage"));
+        // Strip off the trailing delimiter
+        if (size >= delSize) {
+            resultString = text.substring(0, size - delSize);
+        } else {
+            resultString = text.toString();
+        }
+        return resultString;
+    }
+
+    // Map header names to set() methods
+    private static final LinkedMap headerLabelMethods = new LinkedMap();
+
+    // These entries must be in the same order as columns are saved/restored.
+
+    static {
+            headerLabelMethods.put(TIME_STAMP, new Functor("setTimestamp"));
+            headerLabelMethods.put(CSV_ELAPSED, new Functor("setTime"));
+            headerLabelMethods.put(LABEL, new Functor("setLabel"));
+            headerLabelMethods.put(RESPONSE_CODE, new Functor("setCode"));
+            headerLabelMethods.put(RESPONSE_MESSAGE, new Functor("setMessage"));
+            headerLabelMethods.put(THREAD_NAME, new Functor("setThreadName"));
+            headerLabelMethods.put(DATA_TYPE, new Functor("setDataType"));
+            headerLabelMethods.put(SUCCESSFUL, new Functor("setSuccess"));
+            headerLabelMethods.put(FAILURE_MESSAGE, new Functor("setAssertionResultsFailureMessage"));
             headerLabelMethods.put(CSV_BYTES, new Functor("setBytes"));
             // Both these are needed in the list even though they set the same variable
             headerLabelMethods.put(CSV_THREAD_COUNT1,new Functor("setThreadCounts"));
@@ -492,101 +492,101 @@ public final class CSVSaveService {
             headerLabelMethods.put(CSV_SAMPLE_COUNT, new Functor("setSampleCount"));
             headerLabelMethods.put(CSV_ERROR_COUNT, new Functor("setSampleCount"));
             headerLabelMethods.put(CSV_HOSTNAME, new Functor("setHostname"));
-	}
+    }
 
-	/**
-	 * Parse a CSV header line
-	 * @param headerLine from CSV file
-	 * @param filename name of file (for log message only)
-	 * @return config corresponding to the header items found or null if not a header line
-	 */
-	public static SampleSaveConfiguration getSampleSaveConfiguration(String headerLine, String filename){
-		String[] parts = splitHeader(headerLine,_saveConfig.getDelimiter()); // Try default delimiter
+    /**
+     * Parse a CSV header line
+     * @param headerLine from CSV file
+     * @param filename name of file (for log message only)
+     * @return config corresponding to the header items found or null if not a header line
+     */
+    public static SampleSaveConfiguration getSampleSaveConfiguration(String headerLine, String filename){
+        String[] parts = splitHeader(headerLine,_saveConfig.getDelimiter()); // Try default delimiter
 
-		String delim = null;
-		
-		if (parts == null){
-			Perl5Matcher matcher = JMeterUtils.getMatcher();
-			PatternMatcherInput input = new PatternMatcherInput(headerLine);
-			Pattern pattern = JMeterUtils.getPatternCache()
-			// This assumes the header names are all single words with no spaces
-			// word followed by 0 or more repeats of (non-word char + word)
-			// where the non-word char (\2) is the same
-			// e.g.  abc|def|ghi but not abd|def~ghi
-			        .getPattern("\\w+((\\W)\\w+)?(\\2\\w+)*(\\2\"\\w+\")*", // $NON-NLS-1$
-			        		// last entries may be quoted strings
-					Perl5Compiler.READ_ONLY_MASK);
-			if (matcher.matches(input, pattern)) {
-				delim = matcher.getMatch().group(2);
-				parts = splitHeader(headerLine,delim);// now validate the result
-			}
-		}
-		
-		if (parts == null) {
-			return null; // failed to recognise the header
-		}
-		
-		// We know the column names all exist, so create the config 
-		SampleSaveConfiguration saveConfig=new SampleSaveConfiguration(false);
-		
-		int varCount = 0;
-		for(int i=0;i<parts.length;i++){
-			String label = parts[i];
-			if (isVariableName(label)){
-				varCount++;
-			} else {
-				Functor set = (Functor) headerLabelMethods.get(label);
-				set.invoke(saveConfig,new Boolean[]{Boolean.TRUE});
-			}
-		}
+        String delim = null;
 
-		if (delim != null){
-			log.warn("Default delimiter '"+_saveConfig.getDelimiter()+"' did not work; using alternate '"+delim+"' for reading "+filename);
-			saveConfig.setDelimiter(delim);
-		}
-		
-		saveConfig.setVarCount(varCount);
-		
-		return saveConfig;
-	}
+        if (parts == null){
+            Perl5Matcher matcher = JMeterUtils.getMatcher();
+            PatternMatcherInput input = new PatternMatcherInput(headerLine);
+            Pattern pattern = JMeterUtils.getPatternCache()
+            // This assumes the header names are all single words with no spaces
+            // word followed by 0 or more repeats of (non-word char + word)
+            // where the non-word char (\2) is the same
+            // e.g.  abc|def|ghi but not abd|def~ghi
+                    .getPattern("\\w+((\\W)\\w+)?(\\2\\w+)*(\\2\"\\w+\")*", // $NON-NLS-1$
+                            // last entries may be quoted strings
+                    Perl5Compiler.READ_ONLY_MASK);
+            if (matcher.matches(input, pattern)) {
+                delim = matcher.getMatch().group(2);
+                parts = splitHeader(headerLine,delim);// now validate the result
+            }
+        }
 
-	private static String[] splitHeader(String headerLine, String delim) {
-		String parts[]=headerLine.split("\\Q"+delim);// $NON-NLS-1$
-		int previous = -1;
-		// Check if the line is a header
-		for(int i=0;i<parts.length;i++){
-			final String label = parts[i];
-			// Check for Quoted variable names
-			if (isVariableName(label)){
-				previous=Integer.MAX_VALUE; // they are always last
-				continue;
-			}
-			int current = headerLabelMethods.indexOf(label);
-			if (current == -1){
-				return null; // unknown column name
-			}
-			if (current <= previous){
-				log.warn("Column header number "+(i+1)+" name "+ label + " is out of order.");
-				return null; // out of order
-			}
-			previous = current;
-		}
-		return parts;
-	}
+        if (parts == null) {
+            return null; // failed to recognise the header
+        }
 
-	/**
-	 * Check if the label is a variable name, i.e. is it enclosed in double-quotes?
-	 * 
-	 * @param label column name from CSV file
-	 * @return if the label is enclosed in double-quotes
-	 */
-	private static boolean isVariableName(final String label) {
-		return label.length() > 2
-		    && label.startsWith(VARIABLE_NAME_QUOTE_CHAR)
-		    && label.endsWith(VARIABLE_NAME_QUOTE_CHAR);
-	}
+        // We know the column names all exist, so create the config
+        SampleSaveConfiguration saveConfig=new SampleSaveConfiguration(false);
 
-	/**
+        int varCount = 0;
+        for(int i=0;i<parts.length;i++){
+            String label = parts[i];
+            if (isVariableName(label)){
+                varCount++;
+            } else {
+                Functor set = (Functor) headerLabelMethods.get(label);
+                set.invoke(saveConfig,new Boolean[]{Boolean.TRUE});
+            }
+        }
+
+        if (delim != null){
+            log.warn("Default delimiter '"+_saveConfig.getDelimiter()+"' did not work; using alternate '"+delim+"' for reading "+filename);
+            saveConfig.setDelimiter(delim);
+        }
+
+        saveConfig.setVarCount(varCount);
+
+        return saveConfig;
+    }
+
+    private static String[] splitHeader(String headerLine, String delim) {
+        String parts[]=headerLine.split("\\Q"+delim);// $NON-NLS-1$
+        int previous = -1;
+        // Check if the line is a header
+        for(int i=0;i<parts.length;i++){
+            final String label = parts[i];
+            // Check for Quoted variable names
+            if (isVariableName(label)){
+                previous=Integer.MAX_VALUE; // they are always last
+                continue;
+            }
+            int current = headerLabelMethods.indexOf(label);
+            if (current == -1){
+                return null; // unknown column name
+            }
+            if (current <= previous){
+                log.warn("Column header number "+(i+1)+" name "+ label + " is out of order.");
+                return null; // out of order
+            }
+            previous = current;
+        }
+        return parts;
+    }
+
+    /**
+     * Check if the label is a variable name, i.e. is it enclosed in double-quotes?
+     *
+     * @param label column name from CSV file
+     * @return if the label is enclosed in double-quotes
+     */
+    private static boolean isVariableName(final String label) {
+        return label.length() > 2
+            && label.startsWith(VARIABLE_NAME_QUOTE_CHAR)
+            && label.endsWith(VARIABLE_NAME_QUOTE_CHAR);
+    }
+
+    /**
      * Method will save aggregate statistics as CSV. For now I put it here.
      * Not sure if it should go in the newer SaveService instead of here.
      * if we ever decide to get rid of this class, we'll need to move this
@@ -596,10 +596,10 @@ public final class CSVSaveService {
      * @throws IOException
      */
     public static void saveCSVStats(Vector data, FileWriter writer) throws IOException {
-    	saveCSVStats(data, writer, null);
+        saveCSVStats(data, writer, null);
     }
-	
-	/**
+
+    /**
      * Method will save aggregate statistics as CSV. For now I put it here.
      * Not sure if it should go in the newer SaveService instead of here.
      * if we ever decide to get rid of this class, we'll need to move this
@@ -610,18 +610,18 @@ public final class CSVSaveService {
      * @throws IOException
      */
     public static void saveCSVStats(Vector data, FileWriter writer, String headers[]) throws IOException {
-    	final char DELIM = ',';
-		final String LINE_SEP = System.getProperty("line.separator"); // $NON-NLS-1$
-		final char SPECIALS[] = new char[] {DELIM, QUOTING_CHAR};
-		if (headers != null){
-        	for (int i=0; i < headers.length; i++){
-        		if (i>0) {
-        			writer.write(DELIM);
-        		}
-        		writer.write(quoteDelimiters(headers[i],SPECIALS));
-        	}
-        	writer.write(LINE_SEP);
-    	}
+        final char DELIM = ',';
+        final String LINE_SEP = System.getProperty("line.separator"); // $NON-NLS-1$
+        final char SPECIALS[] = new char[] {DELIM, QUOTING_CHAR};
+        if (headers != null){
+            for (int i=0; i < headers.length; i++){
+                if (i>0) {
+                    writer.write(DELIM);
+                }
+                writer.write(quoteDelimiters(headers[i],SPECIALS));
+            }
+            writer.write(LINE_SEP);
+        }
         for (int idx=0; idx < data.size(); idx++) {
             Vector row = (Vector)data.elementAt(idx);
             for (int idy=0; idy < row.size(); idy++) {
@@ -635,28 +635,28 @@ public final class CSVSaveService {
         }
     }
 
-	/**
+    /**
      * Method saves aggregate statistics as CSV from a table model.
      * Same as {@link #saveCSVStats(Vector, FileWriter, String[])} except
      * that there is no need to create a Vector containing the data.
-     * 
+     *
      * @param model table model containing the data
      * @param writer output file
      * @throws IOException
      */
     public static void saveCSVStats(DefaultTableModel model, FileWriter writer) throws IOException {
-    	final char DELIM = ',';
-		final String LINE_SEP = System.getProperty("line.separator"); // $NON-NLS-1$
-		final char SPECIALS[] = new char[] {DELIM, QUOTING_CHAR};
-		final int columns = model.getColumnCount();
-		final int rows = model.getRowCount();
-    	for (int i=0; i < columns; i++){
-    		if (i>0) {
-    			writer.write(DELIM);
-    		}
-    		writer.write(quoteDelimiters(model.getColumnName(i),SPECIALS));
-    	}
-    	writer.write(LINE_SEP);
+        final char DELIM = ',';
+        final String LINE_SEP = System.getProperty("line.separator"); // $NON-NLS-1$
+        final char SPECIALS[] = new char[] {DELIM, QUOTING_CHAR};
+        final int columns = model.getColumnCount();
+        final int rows = model.getRowCount();
+        for (int i=0; i < columns; i++){
+            if (i>0) {
+                writer.write(DELIM);
+            }
+            writer.write(quoteDelimiters(model.getColumnName(i),SPECIALS));
+        }
+        writer.write(LINE_SEP);
         for (int row=0; row < rows; row++) {
             for (int column=0; column < columns; column++) {
                 if (column > 0) {
@@ -672,13 +672,13 @@ public final class CSVSaveService {
     /**
      * Convert a result into a string, where the fields of the result are
      * separated by the default delimiter.
-     * 
+     *
      * @param event
      *            the sample event to be converted
      * @return the separated value representation of the result
      */
     public static String resultToDelimitedString(SampleEvent event) {
-    	return resultToDelimitedString(event, event.getResult().getSaveConfig().getDelimiter());
+        return resultToDelimitedString(event, event.getResult().getSaveConfig().getDelimiter());
     }
 
     /**
@@ -692,124 +692,124 @@ public final class CSVSaveService {
      * @return the separated value representation of the result
      */
     public static String resultToDelimitedString(SampleEvent event, final String delimiter) {
-    	
-    	/*
-    	 * Class to handle generating the delimited string.
-    	 * - adds the delimiter if not the first call
-    	 * - quotes any strings that require it 
-    	 */
-    	final class StringQuoter{
-        	final StringBuffer sb = new StringBuffer();
-    		private final char[] specials;
-    		private boolean addDelim;
-    		public StringQuoter(char delim) {
-    			specials = new char[] {delim, QUOTING_CHAR, CharUtils.CR, CharUtils.LF};
-    			addDelim=false; // Don't add delimiter first time round
-			}
-    		
-    		private void addDelim(){
-    			if (addDelim){
-    				sb.append(specials[0]);
-    			} else {
-    				addDelim = true;
-    			}
-    		}
-    		// These methods handle parameters that could contain delimiters or quotes:
-    		public void append(String s){
-    			addDelim();
-    			//if (s == null) return;
-    			sb.append(quoteDelimiters(s,specials));
-    		}
-    		public void append(Object obj){
-    			append(String.valueOf(obj));
-    		}
-    		
-    		// These methods handle parameters that cannot contain delimiters or quotes
-    		public void append(int i){
-    			addDelim();
-    			sb.append(i);
-    		}
-    		public void append(long l){
-    			addDelim();
-    			sb.append(l);
-    		}
-    		public void append(boolean b){
-    			addDelim();
-    			sb.append(b);
-    		}
 
-    		public String toString(){
-    			return sb.toString();
-    		}
-    	}
-    	
-    	StringQuoter text = new StringQuoter(delimiter.charAt(0));
-    	
-    	SampleResult sample = event.getResult();
-    	SampleSaveConfiguration saveConfig = sample.getSaveConfig();
-    
-    	if (saveConfig.saveTimestamp()) {
-    		if (saveConfig.printMilliseconds()){
-    			text.append(sample.getTimeStamp());
-    		} else if (saveConfig.formatter() != null) {
-    			String stamp = saveConfig.formatter().format(new Date(sample.getTimeStamp()));
-    			text.append(stamp);
-    		}
-    	}
-    
-    	if (saveConfig.saveTime()) {
-    		text.append(sample.getTime());
-    	}
-    
-    	if (saveConfig.saveLabel()) {
-    		text.append(sample.getSampleLabel());
-    	}
-    
-    	if (saveConfig.saveCode()) {
-    		text.append(sample.getResponseCode());
-    	}
-    
-    	if (saveConfig.saveMessage()) {
-    		text.append(sample.getResponseMessage());
-    	}
-    
-    	if (saveConfig.saveThreadName()) {
-    		text.append(sample.getThreadName());
-    	}
-    
-    	if (saveConfig.saveDataType()) {
-    		text.append(sample.getDataType());
-    	}
-    
-    	if (saveConfig.saveSuccess()) {
-    		text.append(sample.isSuccessful());
-    	}
-    
-    	if (saveConfig.saveAssertionResultsFailureMessage()) {
-    		String message = null;
-    		AssertionResult[] results = sample.getAssertionResults();
-    
-    		if (results != null) {
-    			// Find the first non-null message
-    			for (int i = 0; i < results.length; i++){
-        			message = results[i].getFailureMessage();
-    				if (message != null) {
-    				    break;
-    				}
-    			}
-    		}
-    
-    		if (message != null) {
-    			text.append(message);
-    		} else {
-    			text.append(""); // Need to append something so delimiter is added
-    		}
-    	}
-    
+        /*
+         * Class to handle generating the delimited string.
+         * - adds the delimiter if not the first call
+         * - quotes any strings that require it
+         */
+        final class StringQuoter{
+            final StringBuffer sb = new StringBuffer();
+            private final char[] specials;
+            private boolean addDelim;
+            public StringQuoter(char delim) {
+                specials = new char[] {delim, QUOTING_CHAR, CharUtils.CR, CharUtils.LF};
+                addDelim=false; // Don't add delimiter first time round
+            }
+
+            private void addDelim(){
+                if (addDelim){
+                    sb.append(specials[0]);
+                } else {
+                    addDelim = true;
+                }
+            }
+            // These methods handle parameters that could contain delimiters or quotes:
+            public void append(String s){
+                addDelim();
+                //if (s == null) return;
+                sb.append(quoteDelimiters(s,specials));
+            }
+            public void append(Object obj){
+                append(String.valueOf(obj));
+            }
+
+            // These methods handle parameters that cannot contain delimiters or quotes
+            public void append(int i){
+                addDelim();
+                sb.append(i);
+            }
+            public void append(long l){
+                addDelim();
+                sb.append(l);
+            }
+            public void append(boolean b){
+                addDelim();
+                sb.append(b);
+            }
+
+            public String toString(){
+                return sb.toString();
+            }
+        }
+
+        StringQuoter text = new StringQuoter(delimiter.charAt(0));
+
+        SampleResult sample = event.getResult();
+        SampleSaveConfiguration saveConfig = sample.getSaveConfig();
+
+        if (saveConfig.saveTimestamp()) {
+            if (saveConfig.printMilliseconds()){
+                text.append(sample.getTimeStamp());
+            } else if (saveConfig.formatter() != null) {
+                String stamp = saveConfig.formatter().format(new Date(sample.getTimeStamp()));
+                text.append(stamp);
+            }
+        }
+
+        if (saveConfig.saveTime()) {
+            text.append(sample.getTime());
+        }
+
+        if (saveConfig.saveLabel()) {
+            text.append(sample.getSampleLabel());
+        }
+
+        if (saveConfig.saveCode()) {
+            text.append(sample.getResponseCode());
+        }
+
+        if (saveConfig.saveMessage()) {
+            text.append(sample.getResponseMessage());
+        }
+
+        if (saveConfig.saveThreadName()) {
+            text.append(sample.getThreadName());
+        }
+
+        if (saveConfig.saveDataType()) {
+            text.append(sample.getDataType());
+        }
+
+        if (saveConfig.saveSuccess()) {
+            text.append(sample.isSuccessful());
+        }
+
+        if (saveConfig.saveAssertionResultsFailureMessage()) {
+            String message = null;
+            AssertionResult[] results = sample.getAssertionResults();
+
+            if (results != null) {
+                // Find the first non-null message
+                for (int i = 0; i < results.length; i++){
+                    message = results[i].getFailureMessage();
+                    if (message != null) {
+                        break;
+                    }
+                }
+            }
+
+            if (message != null) {
+                text.append(message);
+            } else {
+                text.append(""); // Need to append something so delimiter is added
+            }
+        }
+
         if (saveConfig.saveBytes()) {
             text.append(sample.getBytes());
         }
-    
+
         if (saveConfig.saveThreadCounts()) {
             text.append(sample.getGroupThreads());
             text.append(sample.getAllThreads());
@@ -817,11 +817,11 @@ public final class CSVSaveService {
         if (saveConfig.saveUrl()) {
             text.append(sample.getURL());
         }
-    
+
         if (saveConfig.saveFileName()) {
             text.append(sample.getResultFileName());
         }
-    
+
         if (saveConfig.saveLatency()) {
             text.append(sample.getLatency());
         }
@@ -830,28 +830,28 @@ public final class CSVSaveService {
             text.append(sample.getDataEncodingWithDefault());
         }
 
-    	if (saveConfig.saveSampleCount()) {// Need both sample and error count to be any use
-    		text.append(sample.getSampleCount());
-    		text.append(sample.getErrorCount());
-    	}
-    
+        if (saveConfig.saveSampleCount()) {// Need both sample and error count to be any use
+            text.append(sample.getSampleCount());
+            text.append(sample.getErrorCount());
+        }
+
         if (saveConfig.saveHostname()) {
             text.append(event.getHostname());
         }
 
         for (int i=0; i < SampleEvent.getVarCount(); i++){
-        	text.append(event.getVarValue(i));
+            text.append(event.getVarValue(i));
         }
 
-    	return text.toString();
+        return text.toString();
     }
 
     // =================================== CSV quote/unquote handling ==============================
-    
+
     /*
      * Private versions of what might eventually be part of Commons-CSV or Commons-Lang/Io...
      */
-    
+
     /*
      * <p>
      * Returns a <code>String</code> value for a character-delimited column value
@@ -871,13 +871,13 @@ public final class CSVSaveService {
      * If the value does not contain any special characters,
      * then the String value is returned unchanged.
      * </p>
-     * 
+     *
      * <p>
      * N.B. The list of special characters includes the quote character.
      * </p>
-     * 
+     *
      * @param input the input column String, may be null (without enclosing delimiters)
-     * @param specialChars special characters; second one must be the quote character 
+     * @param specialChars special characters; second one must be the quote character
      * @return the input String, enclosed in quote characters if the value contains a special character,
      * <code>null</code> for null string input
      */
@@ -900,90 +900,90 @@ public final class CSVSaveService {
     }
 
     // State of the parser
-	private static final int INITIAL=0, PLAIN = 1, QUOTED = 2, EMBEDDEDQUOTE = 3;
-	public static final char QUOTING_CHAR = '"';
+    private static final int INITIAL=0, PLAIN = 1, QUOTED = 2, EMBEDDEDQUOTE = 3;
+    public static final char QUOTING_CHAR = '"';
     /**
      * Reads from file and splits input into strings according to the delimiter,
      * taking note of quoted strings.
-     * 
+     *
      * Handles DOS (CRLF), Unix (LF), and Mac (CR) line-endings equally.
-     * 
+     *
      * @param infile input file  - must support mark(1)
      * @param delim delimiter (e.g. comma)
      * @return array of strings
      * @throws IOException also for unexpected quote characters
      */
-	public static String[] csvReadFile(BufferedReader infile, char delim) throws IOException {
-		int ch;
-		int state = INITIAL;
-		List list = new ArrayList();
-		ByteArrayOutputStream baos = new ByteArrayOutputStream(200);
-		while(-1 != (ch=infile.read())){
-			boolean push = false;
-			switch(state){
-			case INITIAL:
-				if (ch == QUOTING_CHAR){
-					state = QUOTED;
-				} else if (isDelimOrEOL(delim, ch)) {
-					push = true;
-				} else {
-					baos.write(ch);	
-					state = PLAIN;
-				}
-				break;
-			case PLAIN:
-				if (ch == QUOTING_CHAR){
-                    baos.write(ch); 
-					throw new IOException("Cannot have quote-char in plain field:["+baos.toString()+"]");
-				} else if (isDelimOrEOL(delim, ch)) {
-					push = true;
-					state = INITIAL;
-				} else {
-					baos.write(ch);
-				}
-				break;
-			case QUOTED:
-				if (ch == QUOTING_CHAR){
-					state=EMBEDDEDQUOTE;
-				} else {
-					baos.write(ch);
-				}
-				break;
-			case EMBEDDEDQUOTE:
-				if (ch == QUOTING_CHAR){
-					baos.write(QUOTING_CHAR); // doubled quote => quote
-					state = QUOTED;
-				} else if (isDelimOrEOL(delim, ch)) {
-					push = true;
-					state = INITIAL;
-				} else {
+    public static String[] csvReadFile(BufferedReader infile, char delim) throws IOException {
+        int ch;
+        int state = INITIAL;
+        List list = new ArrayList();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(200);
+        while(-1 != (ch=infile.read())){
+            boolean push = false;
+            switch(state){
+            case INITIAL:
+                if (ch == QUOTING_CHAR){
+                    state = QUOTED;
+                } else if (isDelimOrEOL(delim, ch)) {
+                    push = true;
+                } else {
+                    baos.write(ch);
+                    state = PLAIN;
+                }
+                break;
+            case PLAIN:
+                if (ch == QUOTING_CHAR){
+                    baos.write(ch);
+                    throw new IOException("Cannot have quote-char in plain field:["+baos.toString()+"]");
+                } else if (isDelimOrEOL(delim, ch)) {
+                    push = true;
+                    state = INITIAL;
+                } else {
+                    baos.write(ch);
+                }
+                break;
+            case QUOTED:
+                if (ch == QUOTING_CHAR){
+                    state=EMBEDDEDQUOTE;
+                } else {
+                    baos.write(ch);
+                }
+                break;
+            case EMBEDDEDQUOTE:
+                if (ch == QUOTING_CHAR){
+                    baos.write(QUOTING_CHAR); // doubled quote => quote
+                    state = QUOTED;
+                } else if (isDelimOrEOL(delim, ch)) {
+                    push = true;
+                    state = INITIAL;
+                } else {
                     baos.write(QUOTING_CHAR);
-					throw new IOException("Cannot have single quote-char in quoted field:["+baos.toString()+"]");
-				}
-				break;
-			}
-			if (push) {
-				if (ch == '\r') {// Remove following \n if present
-					infile.mark(1);
-					if (infile.read() != '\n'){
-						infile.reset(); // did not find \n, put the character back
-					}
-				}
-				String s = baos.toString();
-				list.add(s);
-				baos.reset();
-			}
-			if ((ch == '\n' || ch == '\r') && state != QUOTED) {
-				break;
-			}
-		}
-		if (ch == -1 && baos.size() > 0){
-			list.add(baos.toString());
-		}
-		return (String[]) list.toArray(new String[]{});
-	}
+                    throw new IOException("Cannot have single quote-char in quoted field:["+baos.toString()+"]");
+                }
+                break;
+            }
+            if (push) {
+                if (ch == '\r') {// Remove following \n if present
+                    infile.mark(1);
+                    if (infile.read() != '\n'){
+                        infile.reset(); // did not find \n, put the character back
+                    }
+                }
+                String s = baos.toString();
+                list.add(s);
+                baos.reset();
+            }
+            if ((ch == '\n' || ch == '\r') && state != QUOTED) {
+                break;
+            }
+        }
+        if (ch == -1 && baos.size() > 0){
+            list.add(baos.toString());
+        }
+        return (String[]) list.toArray(new String[]{});
+    }
 
-	private static boolean isDelimOrEOL(char delim, int ch) {
-		return ch == delim || ch == '\n' || ch == '\r';
-	}
+    private static boolean isDelimOrEOL(char delim, int ch) {
+        return ch == delim || ch == '\n' || ch == '\r';
+    }
 }

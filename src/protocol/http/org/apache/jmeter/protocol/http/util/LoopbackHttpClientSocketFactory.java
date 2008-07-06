@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.util;
@@ -53,42 +53,42 @@ public class LoopbackHttpClientSocketFactory implements ProtocolSocketFactory {
     }
 
     public Socket createSocket(String host, int port, InetAddress localAddress, int localPort,
-    		HttpConnectionParams params) 
+            HttpConnectionParams params)
     throws IOException, UnknownHostException, ConnectTimeoutException {
         int timeout = params.getConnectionTimeout();
         if (timeout == 0) {
-        	return new LoopbackHTTPSocket(host,port,localAddress,localPort);
+            return new LoopbackHTTPSocket(host,port,localAddress,localPort);
         } else {
-        	return new LoopbackHTTPSocket(host,port,localAddress,localPort, timeout);        	
+            return new LoopbackHTTPSocket(host,port,localAddress,localPort, timeout);
         }
     }
 
     /**
      * Convenience method to set up the necessary HttpClient protocol and URL handler.
-     * 
+     *
      * Only works for HttpClient, because it's not possible (or at least very difficult)
      * to provide a different socket factory for the HttpURLConnection class.
      */
     public static void setup(){
         final String LOOPBACK = "loopback"; // $NON-NLS-1$
-        
+
         // This ensures tha HttpClient knows about the protocol
-		Protocol.registerProtocol(LOOPBACK, new Protocol(LOOPBACK,new LoopbackHttpClientSocketFactory(),1));
-        
-		// Now allow the URL handling to work.
+        Protocol.registerProtocol(LOOPBACK, new Protocol(LOOPBACK,new LoopbackHttpClientSocketFactory(),1));
+
+        // Now allow the URL handling to work.
         URLStreamHandlerFactory ushf = new URLStreamHandlerFactory(){
-			public URLStreamHandler createURLStreamHandler(String protocol) {
-				if (protocol.equalsIgnoreCase(LOOPBACK)){
-					return new URLStreamHandler(){
-						protected URLConnection openConnection(URL u) throws IOException {
-							return null;// not needed for HttpClient
-						}
-					};
-				}
-				return null;
-			}
+            public URLStreamHandler createURLStreamHandler(String protocol) {
+                if (protocol.equalsIgnoreCase(LOOPBACK)){
+                    return new URLStreamHandler(){
+                        protected URLConnection openConnection(URL u) throws IOException {
+                            return null;// not needed for HttpClient
+                        }
+                    };
+                }
+                return null;
+            }
         };
-        
-        java.net.URL.setURLStreamHandlerFactory(ushf);	
+
+        java.net.URL.setURLStreamHandlerFactory(ushf);
     }
 }

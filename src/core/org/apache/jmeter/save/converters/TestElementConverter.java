@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.save.converters;
@@ -33,98 +33,94 @@ import com.thoughtworks.xstream.converters.collections.AbstractCollectionConvert
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
-/**
- * @author mstover
- * 
- */
 public class TestElementConverter extends AbstractCollectionConverter {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	
+
     private final boolean testFormat22=SaveService.isSaveTestPlanFormat22();
 
-	/**
-	 * Returns the converter version; used to check for possible
-	 * incompatibilities
-	 */
-	public static String getVersion() {
-		return "$Revision$"; //$NON-NLS-1$
-	}
+    /**
+     * Returns the converter version; used to check for possible
+     * incompatibilities
+     */
+    public static String getVersion() {
+        return "$Revision$"; //$NON-NLS-1$
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
-	 */
-	public boolean canConvert(Class arg0) {
-		return TestElement.class.isAssignableFrom(arg0);
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
+     */
+    public boolean canConvert(Class arg0) {
+        return TestElement.class.isAssignableFrom(arg0);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.thoughtworks.xstream.converters.Converter#marshal(java.lang.Object,
-	 *      com.thoughtworks.xstream.io.HierarchicalStreamWriter,
-	 *      com.thoughtworks.xstream.converters.MarshallingContext)
-	 */
-	public void marshal(Object arg0, HierarchicalStreamWriter writer, MarshallingContext context) {
-		TestElement el = (TestElement) arg0;
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.thoughtworks.xstream.converters.Converter#marshal(java.lang.Object,
+     *      com.thoughtworks.xstream.io.HierarchicalStreamWriter,
+     *      com.thoughtworks.xstream.converters.MarshallingContext)
+     */
+    public void marshal(Object arg0, HierarchicalStreamWriter writer, MarshallingContext context) {
+        TestElement el = (TestElement) arg0;
         if (testFormat22){
             ConversionHelp.saveSpecialProperties(el,writer);
         }
         PropertyIterator iter = el.propertyIterator();
-		while (iter.hasNext()) {
+        while (iter.hasNext()) {
             JMeterProperty jmp=iter.next();
             // Skip special properties if required
             if (!testFormat22 || !ConversionHelp.isSpecialProperty(jmp.getName())) {
-            	// Don't save empty comments - except for the TestPlan (to maintain compatibility)
-	       		if (!(
-	       				TestElement.COMMENTS.equals(jmp.getName())
-		       			&& jmp.getStringValue().length()==0
-		       			&& !el.getClass().equals(TestPlan.class)
-	       			))
-	       		{
-		            writeItem(jmp, context, writer);
-	       		}
+                // Don't save empty comments - except for the TestPlan (to maintain compatibility)
+                   if (!(
+                           TestElement.COMMENTS.equals(jmp.getName())
+                           && jmp.getStringValue().length()==0
+                           && !el.getClass().equals(TestPlan.class)
+                       ))
+                   {
+                    writeItem(jmp, context, writer);
+                   }
             }
-		}
-	}
+        }
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.thoughtworks.xstream.converters.Converter#unmarshal(com.thoughtworks.xstream.io.HierarchicalStreamReader,
-	 *      com.thoughtworks.xstream.converters.UnmarshallingContext)
-	 */
-	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
-		String classAttribute = reader.getAttribute(ConversionHelp.ATT_CLASS);
-		Class type;
-		if (classAttribute == null) {
-			type = mapper().realClass(reader.getNodeName());
-		} else {
-			type = mapper().realClass(classAttribute);
-		}
-		try {
-			TestElement el = (TestElement) type.newInstance();
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.thoughtworks.xstream.converters.Converter#unmarshal(com.thoughtworks.xstream.io.HierarchicalStreamReader,
+     *      com.thoughtworks.xstream.converters.UnmarshallingContext)
+     */
+    public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
+        String classAttribute = reader.getAttribute(ConversionHelp.ATT_CLASS);
+        Class type;
+        if (classAttribute == null) {
+            type = mapper().realClass(reader.getNodeName());
+        } else {
+            type = mapper().realClass(classAttribute);
+        }
+        try {
+            TestElement el = (TestElement) type.newInstance();
             // No need to check version, just process the attributes if present
             ConversionHelp.restoreSpecialProperties(el, reader);
-			while (reader.hasMoreChildren()) {
-				reader.moveDown();
-				JMeterProperty prop = (JMeterProperty) readItem(reader, context, el);
-				el.setProperty(prop);
-				reader.moveUp();
-			}
-			return el;
-		} catch (Exception e) {
-			log.error("TestElement not instantiable: " + type, e);
-			return null;
-		}
-	}
+            while (reader.hasMoreChildren()) {
+                reader.moveDown();
+                JMeterProperty prop = (JMeterProperty) readItem(reader, context, el);
+                el.setProperty(prop);
+                reader.moveUp();
+            }
+            return el;
+        } catch (Exception e) {
+            log.error("TestElement not instantiable: " + type, e);
+            return null;
+        }
+    }
 
-	/**
-	 * @param arg0
-	 */
-	public TestElementConverter(Mapper arg0) {
-		super(arg0);
-	}
+    /**
+     * @param arg0
+     */
+    public TestElementConverter(Mapper arg0) {
+        super(arg0);
+    }
 }

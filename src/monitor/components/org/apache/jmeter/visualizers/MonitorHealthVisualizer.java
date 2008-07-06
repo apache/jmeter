@@ -41,122 +41,122 @@ import org.apache.log.Logger;
  * JComponents. In the future, we may want to add email alerts as a third tab.
  */
 public class MonitorHealthVisualizer extends AbstractVisualizer implements ImageVisualizer, ItemListener,
-		GraphListener, Clearable {
-	private MonitorTabPane TABPANE;
+        GraphListener, Clearable {
+    private MonitorTabPane TABPANE;
 
-	private MonitorHealthPanel HEALTHPANE;
+    private MonitorHealthPanel HEALTHPANE;
 
-	private MonitorPerformancePanel PERFPANE;
+    private MonitorPerformancePanel PERFPANE;
 
-	private MonitorAccumModel MODEL;
+    private MonitorAccumModel MODEL;
 
-	private MonitorGraph GRAPH;
+    private MonitorGraph GRAPH;
 
-	public static final String BUFFER = "monitor.buffer.size"; // $NON-NLS-1$
+    public static final String BUFFER = "monitor.buffer.size"; // $NON-NLS-1$
 
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	/**
-	 * Constructor for the GraphVisualizer object.
-	 */
-	public MonitorHealthVisualizer() {
-		this.isStats = true;
-		initModel();
-		init();
-	}
+    /**
+     * Constructor for the GraphVisualizer object.
+     */
+    public MonitorHealthVisualizer() {
+        this.isStats = true;
+        initModel();
+        init();
+    }
 
-	private void initModel() {
-		MODEL = new MonitorAccumModel();
-		GRAPH = new MonitorGraph(MODEL);
-		MODEL.setBufferSize(JMeterUtils.getPropDefault(BUFFER, 800));
-	}
+    private void initModel() {
+        MODEL = new MonitorAccumModel();
+        GRAPH = new MonitorGraph(MODEL);
+        MODEL.setBufferSize(JMeterUtils.getPropDefault(BUFFER, 800));
+    }
 
-	public String getLabelResource() {
-		return "monitor_health_title"; // $NON-NLS-1$
-	}
+    public String getLabelResource() {
+        return "monitor_health_title"; // $NON-NLS-1$
+    }
 
-	/**
-	 * Because of the unique requirements of a monitor We have to handle the
-	 * results differently than normal GUI components. A monitor should be able
-	 * to run for a very long time without eating up all the memory.
-	 */
-	public void add(SampleResult res) {
-		MODEL.addSample(res);
-		try {
-			collector.recordStats(this.MODEL.getLastSample().cloneMonitorStats());
-		} catch (Exception e) {
-			// for now just swallow the exception
-			log.debug("StatsModel was null", e);
-		}
-	}
+    /**
+     * Because of the unique requirements of a monitor We have to handle the
+     * results differently than normal GUI components. A monitor should be able
+     * to run for a very long time without eating up all the memory.
+     */
+    public void add(SampleResult res) {
+        MODEL.addSample(res);
+        try {
+            collector.recordStats(this.MODEL.getLastSample().cloneMonitorStats());
+        } catch (Exception e) {
+            // for now just swallow the exception
+            log.debug("StatsModel was null", e);
+        }
+    }
 
-	public Image getImage() {
-		Image result = GRAPH.createImage(this.getWidth(), this.getHeight());
-		Graphics image = result.getGraphics();
-		GRAPH.paintComponent(image);
-		return result;
-	}
+    public Image getImage() {
+        Image result = GRAPH.createImage(this.getWidth(), this.getHeight());
+        Graphics image = result.getGraphics();
+        GRAPH.paintComponent(image);
+        return result;
+    }
 
-	public void itemStateChanged(ItemEvent e) {
-	}
+    public void itemStateChanged(ItemEvent e) {
+    }
 
-	public synchronized void updateGui() {
-		this.repaint();
-	}
+    public synchronized void updateGui() {
+        this.repaint();
+    }
 
-	public synchronized void updateGui(Sample s) {
-		this.repaint();
-	}
+    public synchronized void updateGui(Sample s) {
+        this.repaint();
+    }
 
-	/**
-	 * Initialize the GUI.
-	 */
-	private void init() {
-		this.setLayout(new BorderLayout());
+    /**
+     * Initialize the GUI.
+     */
+    private void init() {
+        this.setLayout(new BorderLayout());
 
-		// MAIN PANEL
-		Border margin = new EmptyBorder(10, 10, 5, 10);
-		this.setBorder(margin);
+        // MAIN PANEL
+        Border margin = new EmptyBorder(10, 10, 5, 10);
+        this.setBorder(margin);
 
-		// Add the main panel and the graph
-		this.add(this.makeTitlePanel(), BorderLayout.NORTH);
-		this.createTabs();
-	}
+        // Add the main panel and the graph
+        this.add(this.makeTitlePanel(), BorderLayout.NORTH);
+        this.createTabs();
+    }
 
-	private void createTabs() {
-		TABPANE = new MonitorTabPane();
-		createHealthPane(TABPANE);
-		createPerformancePane(TABPANE);
-		this.add(TABPANE, BorderLayout.CENTER);
-	}
+    private void createTabs() {
+        TABPANE = new MonitorTabPane();
+        createHealthPane(TABPANE);
+        createPerformancePane(TABPANE);
+        this.add(TABPANE, BorderLayout.CENTER);
+    }
 
-	/**
-	 * Create the JPanel
-	 * 
-	 * @param pane
-	 */
-	private void createHealthPane(MonitorTabPane pane) {
-		HEALTHPANE = new MonitorHealthPanel(MODEL);
-		pane.addTab(JMeterUtils.getResString("monitor_health_tab_title"), HEALTHPANE); // $NON-NLS-1$
-	}
+    /**
+     * Create the JPanel
+     *
+     * @param pane
+     */
+    private void createHealthPane(MonitorTabPane pane) {
+        HEALTHPANE = new MonitorHealthPanel(MODEL);
+        pane.addTab(JMeterUtils.getResString("monitor_health_tab_title"), HEALTHPANE); // $NON-NLS-1$
+    }
 
-	/**
-	 * Create the JSplitPane for the performance history
-	 * 
-	 * @param pane
-	 */
-	private void createPerformancePane(MonitorTabPane pane) {
-		PERFPANE = new MonitorPerformancePanel(MODEL, GRAPH);
-		pane.addTab(JMeterUtils.getResString("monitor_performance_tab_title"), PERFPANE); // $NON-NLS-1$
-	}
+    /**
+     * Create the JSplitPane for the performance history
+     *
+     * @param pane
+     */
+    private void createPerformancePane(MonitorTabPane pane) {
+        PERFPANE = new MonitorPerformancePanel(MODEL, GRAPH);
+        pane.addTab(JMeterUtils.getResString("monitor_performance_tab_title"), PERFPANE); // $NON-NLS-1$
+    }
 
-	/**
-	 * Clears the MonitorAccumModel.
-	 */
-	public void clearData() {
-		this.MODEL.clearData();
-		this.HEALTHPANE.clearData();
-		this.PERFPANE.clearData();
-	}
+    /**
+     * Clears the MonitorAccumModel.
+     */
+    public void clearData() {
+        this.MODEL.clearData();
+        this.HEALTHPANE.clearData();
+        this.PERFPANE.clearData();
+    }
 
 }

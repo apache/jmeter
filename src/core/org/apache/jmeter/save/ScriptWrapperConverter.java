@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.save;
@@ -31,76 +31,76 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 /**
  * Handles XStream conversion of Test Scripts
- * 
+ *
  */
 public class ScriptWrapperConverter implements Converter {
-    
-	private static final String ATT_PROPERTIES = "properties"; // $NON-NLS-1$
+
+    private static final String ATT_PROPERTIES = "properties"; // $NON-NLS-1$
     private static final String ATT_VERSION = "version"; // $NON-NLS-1$
 
     /**
-	 * Returns the converter version; used to check for possible
-	 * incompatibilities
-	 */
-	public static String getVersion() {
-		return "$Revision$"; // $NON-NLS-1$
-	}
+     * Returns the converter version; used to check for possible
+     * incompatibilities
+     */
+    public static String getVersion() {
+        return "$Revision$"; // $NON-NLS-1$
+    }
 
-	Mapper classMapper;
+    Mapper classMapper;
 
-	public ScriptWrapperConverter(Mapper classMapper) {
-		this.classMapper = classMapper;
-	}
+    public ScriptWrapperConverter(Mapper classMapper) {
+        this.classMapper = classMapper;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
-	 */
-	public boolean canConvert(Class arg0) {
-		return arg0.equals(ScriptWrapper.class);
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
+     */
+    public boolean canConvert(Class arg0) {
+        return arg0.equals(ScriptWrapper.class);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.thoughtworks.xstream.converters.Converter#marshal(java.lang.Object,
-	 *      com.thoughtworks.xstream.io.HierarchicalStreamWriter,
-	 *      com.thoughtworks.xstream.converters.MarshallingContext)
-	 */
-	public void marshal(Object arg0, HierarchicalStreamWriter writer, MarshallingContext context) {
-		ScriptWrapper wrap = (ScriptWrapper) arg0;
-		String version = SaveService.getVERSION();
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.thoughtworks.xstream.converters.Converter#marshal(java.lang.Object,
+     *      com.thoughtworks.xstream.io.HierarchicalStreamWriter,
+     *      com.thoughtworks.xstream.converters.MarshallingContext)
+     */
+    public void marshal(Object arg0, HierarchicalStreamWriter writer, MarshallingContext context) {
+        ScriptWrapper wrap = (ScriptWrapper) arg0;
+        String version = SaveService.getVERSION();
         ConversionHelp.setOutVersion(version);// Ensure output follows version
-		writer.addAttribute(ATT_VERSION, version);
-		writer.addAttribute(ATT_PROPERTIES, SaveService.getPropertiesVersion());
-		writer.startNode(classMapper.serializedClass(wrap.testPlan.getClass()));
-		context.convertAnother(wrap.testPlan);
-		writer.endNode();
-	}
+        writer.addAttribute(ATT_VERSION, version);
+        writer.addAttribute(ATT_PROPERTIES, SaveService.getPropertiesVersion());
+        writer.startNode(classMapper.serializedClass(wrap.testPlan.getClass()));
+        context.convertAnother(wrap.testPlan);
+        writer.endNode();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.thoughtworks.xstream.converters.Converter#unmarshal(com.thoughtworks.xstream.io.HierarchicalStreamReader,
-	 *      com.thoughtworks.xstream.converters.UnmarshallingContext)
-	 */
-	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
-		ScriptWrapper wrap = new ScriptWrapper();
-		wrap.version = reader.getAttribute(ATT_VERSION);
-		ConversionHelp.setInVersion(wrap.version);// Make sure decoding
-													// follows input file
-		reader.moveDown();
-		// Catch errors and rethrow as ConversionException so we get location details
-		try {
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.thoughtworks.xstream.converters.Converter#unmarshal(com.thoughtworks.xstream.io.HierarchicalStreamReader,
+     *      com.thoughtworks.xstream.converters.UnmarshallingContext)
+     */
+    public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
+        ScriptWrapper wrap = new ScriptWrapper();
+        wrap.version = reader.getAttribute(ATT_VERSION);
+        ConversionHelp.setInVersion(wrap.version);// Make sure decoding
+                                                    // follows input file
+        reader.moveDown();
+        // Catch errors and rethrow as ConversionException so we get location details
+        try {
             wrap.testPlan = (HashTree) context.convertAnother(wrap, getNextType(reader));
         } catch (NoClassDefFoundError e) {
             throw createConversionException(e);
         } catch (Exception e) {
             throw createConversionException(e);
         }
-		return wrap;
-	}
+        return wrap;
+    }
 
     private ConversionException createConversionException(Throwable e) {
         final ConversionException conversionException = new ConversionException(e);
@@ -118,14 +118,14 @@ public class ScriptWrapperConverter implements Converter {
         return conversionException;
     }
 
-	protected Class getNextType(HierarchicalStreamReader reader) {
-		String classAttribute = reader.getAttribute(ConversionHelp.ATT_CLASS);
-		Class type;
-		if (classAttribute == null) {
-			type = classMapper.realClass(reader.getNodeName());
-		} else {
-			type = classMapper.realClass(classAttribute);
-		}
-		return type;
-	}
+    protected Class getNextType(HierarchicalStreamReader reader) {
+        String classAttribute = reader.getAttribute(ConversionHelp.ATT_CLASS);
+        Class type;
+        if (classAttribute == null) {
+            type = classMapper.realClass(reader.getNodeName());
+        } else {
+            type = classMapper.realClass(classAttribute);
+        }
+        return type;
+    }
 }

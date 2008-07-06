@@ -18,27 +18,27 @@
 package org.apache.jmeter.monitor.model;
 
 /**
- * @version $Revision$ on $Date$
+ * @version $Revision$
  */
 public interface ThreadInfo {
-	int getMaxSpareThreads();
+    int getMaxSpareThreads();
 
-	void setMaxSpareThreads(int value);
+    void setMaxSpareThreads(int value);
 
-	int getMinSpareThreads();
+    int getMinSpareThreads();
 
-	void setMinSpareThreads(int value);
+    void setMinSpareThreads(int value);
 
-	int getMaxThreads();
+    int getMaxThreads();
 
-	void setMaxThreads(int value);
+    void setMaxThreads(int value);
 
-	int getCurrentThreadsBusy();
+    int getCurrentThreadsBusy();
 
-	void setCurrentThreadsBusy(int value);
+    void setCurrentThreadsBusy(int value);
 
-	int getCurrentThreadCount();
+    int getCurrentThreadCount();
 
-	void setCurrentThreadCount(int value);
+    void setCurrentThreadCount(int value);
 
 }

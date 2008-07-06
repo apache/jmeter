@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.sampler;
@@ -46,27 +46,27 @@ import java.util.zip.GZIPInputStream;
 public class SoapSampler extends HTTPSampler2 {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public static final String XML_DATA = "HTTPSamper.xml_data"; //$NON-NLS-1$
+    public static final String XML_DATA = "HTTPSamper.xml_data"; //$NON-NLS-1$
 
-	public static final String URL_DATA = "SoapSampler.URL_DATA"; //$NON-NLS-1$
+    public static final String URL_DATA = "SoapSampler.URL_DATA"; //$NON-NLS-1$
 
-	public static final String SOAP_ACTION = "SoapSampler.SOAP_ACTION"; //$NON-NLS-1$
+    public static final String SOAP_ACTION = "SoapSampler.SOAP_ACTION"; //$NON-NLS-1$
 
-	public static final String SEND_SOAP_ACTION = "SoapSampler.SEND_SOAP_ACTION"; //$NON-NLS-1$
+    public static final String SEND_SOAP_ACTION = "SoapSampler.SEND_SOAP_ACTION"; //$NON-NLS-1$
 
-	public static final String XML_DATA_FILE = "SoapSampler.xml_data_file"; //$NON-NLS-1$
+    public static final String XML_DATA_FILE = "SoapSampler.xml_data_file"; //$NON-NLS-1$
 
-	private static final String DOUBLE_QUOTE = "\""; //$NON-NLS-1$
+    private static final String DOUBLE_QUOTE = "\""; //$NON-NLS-1$
 
-	private static final String SOAPACTION = "SOAPAction"; //$NON-NLS-1$
+    private static final String SOAPACTION = "SOAPAction"; //$NON-NLS-1$
 
-	public void setXmlData(String data) {
-		setProperty(XML_DATA, data);
-	}
+    public void setXmlData(String data) {
+        setProperty(XML_DATA, data);
+    }
 
-	public String getXmlData() {
-		return getPropertyAsString(XML_DATA);
-	}
+    public String getXmlData() {
+        return getPropertyAsString(XML_DATA);
+    }
 
     /**
      * it's kinda obvious, but we state it anyways. Set the xml file with a
@@ -87,41 +87,41 @@ public class SoapSampler extends HTTPSampler2 {
         return getPropertyAsString(XML_DATA_FILE);
     }
 
-	public String getURLData() {
-		return getPropertyAsString(URL_DATA);
-	}
+    public String getURLData() {
+        return getPropertyAsString(URL_DATA);
+    }
 
-	public void setURLData(String url) {
-		setProperty(URL_DATA, url);
-	}
+    public void setURLData(String url) {
+        setProperty(URL_DATA, url);
+    }
 
-	public String getSOAPAction() {
-		return getPropertyAsString(SOAP_ACTION);
-	}
+    public String getSOAPAction() {
+        return getPropertyAsString(SOAP_ACTION);
+    }
 
-	public String getSOAPActionQuoted() {
-		String action = getSOAPAction();
-		StringBuffer sb = new StringBuffer(action.length()+2);
-		sb.append(DOUBLE_QUOTE);
-		sb.append(action);
-		sb.append(DOUBLE_QUOTE);
-		return sb.toString();
-	}
+    public String getSOAPActionQuoted() {
+        String action = getSOAPAction();
+        StringBuffer sb = new StringBuffer(action.length()+2);
+        sb.append(DOUBLE_QUOTE);
+        sb.append(action);
+        sb.append(DOUBLE_QUOTE);
+        return sb.toString();
+    }
 
-	public void setSOAPAction(String action) {
-		setProperty(SOAP_ACTION, action);
-	}
+    public void setSOAPAction(String action) {
+        setProperty(SOAP_ACTION, action);
+    }
 
-	public boolean getSendSOAPAction() {
-		return getPropertyAsBoolean(SEND_SOAP_ACTION);
-	}
+    public boolean getSendSOAPAction() {
+        return getPropertyAsBoolean(SEND_SOAP_ACTION);
+    }
 
-	public void setSendSOAPAction(boolean action) {
-		setProperty(SEND_SOAP_ACTION, String.valueOf(action));
-	}
+    public void setSendSOAPAction(boolean action) {
+        setProperty(SEND_SOAP_ACTION, String.valueOf(action));
+    }
 
     protected int setPostHeaders(PostMethod post) {
-    	int length=0;// Take length from file
+        int length=0;// Take length from file
         if (getHeaderManager() != null) {
             // headerManager was set, so let's set the connection
             // to use it.
@@ -130,7 +130,7 @@ public class SoapSampler extends HTTPSampler2 {
             for (int idx = 0; idx < headerSize; idx++) {
                 Header hd = mngr.getHeader(idx);
                 if (HEADER_CONTENT_LENGTH.equalsIgnoreCase(hd.getName())) {// Use this to override file length
-                	length = Integer.parseInt(hd.getValue());
+                    length = Integer.parseInt(hd.getValue());
                 }
                 // All the other headers are set up by HTTPSampler2.setupConnection()
             }
@@ -179,14 +179,14 @@ public class SoapSampler extends HTTPSampler2 {
                 }
 
                 public long getContentLength() {
-                	switch(length){
-	                	case -1:
-	                		return -1;
-	                	case 0: // No header provided
-	                		return (new File(xmlFile)).length();
-	                	default:
-	                		return length;
-	                	}
+                    switch(length){
+                        case -1:
+                            return -1;
+                        case 0: // No header provided
+                            return (new File(xmlFile)).length();
+                        default:
+                            return length;
+                        }
                 }
 
                 public String getContentType() {

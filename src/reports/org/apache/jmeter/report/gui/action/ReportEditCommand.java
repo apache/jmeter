@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.report.gui.action;
@@ -27,31 +27,31 @@ import org.apache.jmeter.gui.ReportGuiPackage;
 import org.apache.jmeter.gui.NamePanel;
 
 public class ReportEditCommand implements Command {
-	private static final Set commands = new HashSet();
-	static {
-		commands.add("edit");
-	}
+    private static final Set commands = new HashSet();
+    static {
+        commands.add("edit");
+    }
 
-	public ReportEditCommand() {
-	}
+    public ReportEditCommand() {
+    }
 
-	public void doAction(ActionEvent e) {
-		ReportGuiPackage guiPackage = ReportGuiPackage.getInstance();
-		guiPackage.getMainFrame().setMainPanel((javax.swing.JComponent) guiPackage.getCurrentGui());
-		guiPackage.getMainFrame().setEditMenu(guiPackage.getTreeListener().getCurrentNode().createPopupMenu());
-		// TODO: I believe the following code (to the end of the method) is
-		// obsolete,
-		// since NamePanel no longer seems to be the GUI for any component:
-		if (!(guiPackage.getCurrentGui() instanceof NamePanel)) {
-			guiPackage.getMainFrame().setFileLoadEnabled(true);
-			guiPackage.getMainFrame().setFileSaveEnabled(true);
-		} else {
-			guiPackage.getMainFrame().setFileLoadEnabled(false);
-			guiPackage.getMainFrame().setFileSaveEnabled(false);
-		}
-	}
+    public void doAction(ActionEvent e) {
+        ReportGuiPackage guiPackage = ReportGuiPackage.getInstance();
+        guiPackage.getMainFrame().setMainPanel((javax.swing.JComponent) guiPackage.getCurrentGui());
+        guiPackage.getMainFrame().setEditMenu(guiPackage.getTreeListener().getCurrentNode().createPopupMenu());
+        // TODO: I believe the following code (to the end of the method) is
+        // obsolete,
+        // since NamePanel no longer seems to be the GUI for any component:
+        if (!(guiPackage.getCurrentGui() instanceof NamePanel)) {
+            guiPackage.getMainFrame().setFileLoadEnabled(true);
+            guiPackage.getMainFrame().setFileSaveEnabled(true);
+        } else {
+            guiPackage.getMainFrame().setFileLoadEnabled(false);
+            guiPackage.getMainFrame().setFileSaveEnabled(false);
+        }
+    }
 
-	public Set getActionNames() {
-		return commands;
-	}
+    public Set getActionNames() {
+        return commands;
+    }
 }

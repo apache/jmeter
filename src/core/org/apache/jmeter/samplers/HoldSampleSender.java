@@ -32,59 +32,59 @@ import java.io.Serializable;
  */
 
 public class HoldSampleSender implements SampleSender, Serializable {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private List sampleStore = new ArrayList();
+    private List sampleStore = new ArrayList();
 
-	private RemoteSampleListener listener;
+    private RemoteSampleListener listener;
 
     public HoldSampleSender(){
         log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
     }
-    
-	HoldSampleSender(RemoteSampleListener listener) {
-		log.info("Using Sample store for this test run");
-		this.listener = listener;
-	}
 
-	public void testEnded() {
-		log.info("Test ended()");
-		try {
-			synchronized (sampleStore) {
-				Iterator i = sampleStore.iterator();
-				while (i.hasNext()) {
-					SampleEvent se = (SampleEvent) i.next();
-					listener.sampleOccurred(se);
-				}
-			}
-			listener.testEnded();
-			sampleStore = null;
-		} catch (Throwable ex) {
-			log.warn("testEnded()", ex);
-		}
+    HoldSampleSender(RemoteSampleListener listener) {
+        log.info("Using Sample store for this test run");
+        this.listener = listener;
+    }
 
-	}
+    public void testEnded() {
+        log.info("Test ended()");
+        try {
+            synchronized (sampleStore) {
+                Iterator i = sampleStore.iterator();
+                while (i.hasNext()) {
+                    SampleEvent se = (SampleEvent) i.next();
+                    listener.sampleOccurred(se);
+                }
+            }
+            listener.testEnded();
+            sampleStore = null;
+        } catch (Throwable ex) {
+            log.warn("testEnded()", ex);
+        }
 
-	public void testEnded(String host) {
-		log.info("Test Ended on " + host); // should this be debug?
-		try {
-			Iterator i = sampleStore.iterator();
-			while (i.hasNext()) {
-				SampleEvent se = (SampleEvent) i.next();
-				listener.sampleOccurred(se);
-			}
-			listener.testEnded(host);
-			sampleStore = null;
-		} catch (Throwable ex) {
-			log.error("testEnded(host)", ex);
-		}
+    }
 
-	}
+    public void testEnded(String host) {
+        log.info("Test Ended on " + host); // should this be debug?
+        try {
+            Iterator i = sampleStore.iterator();
+            while (i.hasNext()) {
+                SampleEvent se = (SampleEvent) i.next();
+                listener.sampleOccurred(se);
+            }
+            listener.testEnded(host);
+            sampleStore = null;
+        } catch (Throwable ex) {
+            log.error("testEnded(host)", ex);
+        }
 
-	public void SampleOccurred(SampleEvent e) {
-		log.debug("Sample occurred");
-		synchronized (sampleStore) {
-			sampleStore.add(e);
-		}
-	}
+    }
+
+    public void SampleOccurred(SampleEvent e) {
+        log.debug("Sample occurred");
+        synchronized (sampleStore) {
+            sampleStore.add(e);
+        }
+    }
 }

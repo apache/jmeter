@@ -1,12 +1,12 @@
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.	See the NOTICE file distributed with
+ * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
- * the License.	 You may obtain a copy of the License at
+ * the License.  You may obtain a copy of the License at
  *
- *	 http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -36,62 +36,62 @@ public class HTTPFileArgs extends ConfigTestElement implements Serializable {
     /** The name of the property used to store the files. */
     private static final String HTTP_FILE_ARGS = "HTTPFileArgs.files"; //$NON-NLS-1$
 
-	/**
-	 * Create a new HTTPFileArgs object with no files.
-	 */
-	public HTTPFileArgs() {
-		setProperty(new CollectionProperty(HTTP_FILE_ARGS, new ArrayList()));
-	}
+    /**
+     * Create a new HTTPFileArgs object with no files.
+     */
+    public HTTPFileArgs() {
+        setProperty(new CollectionProperty(HTTP_FILE_ARGS, new ArrayList()));
+    }
 
-	/**
-	 * Get the files.
-	 *
-	 * @return the files
-	 */
-	public CollectionProperty getHTTPFileArgsCollection() {
-		return (CollectionProperty) getProperty(HTTP_FILE_ARGS);
-	}
+    /**
+     * Get the files.
+     *
+     * @return the files
+     */
+    public CollectionProperty getHTTPFileArgsCollection() {
+        return (CollectionProperty) getProperty(HTTP_FILE_ARGS);
+    }
 
-	/**
-	 * Clear the files.
-	 */
-	public void clear() {
-		super.clear();
-		setProperty(new CollectionProperty(HTTP_FILE_ARGS, new ArrayList()));
-	}
+    /**
+     * Clear the files.
+     */
+    public void clear() {
+        super.clear();
+        setProperty(new CollectionProperty(HTTP_FILE_ARGS, new ArrayList()));
+    }
 
-	/**
-	 * Set the list of files. Any existing files will be lost.
-	 *
-	 * @param files the new files
-	 */
-	public void setHTTPFileArgs(List files) {
-		setProperty(new CollectionProperty(HTTP_FILE_ARGS, files));
-	}
+    /**
+     * Set the list of files. Any existing files will be lost.
+     *
+     * @param files the new files
+     */
+    public void setHTTPFileArgs(List files) {
+        setProperty(new CollectionProperty(HTTP_FILE_ARGS, files));
+    }
 
-	/**
-	 * Add a new file with the given path.
-	 *
-	 * @param path
-	 *	the path of the file
-	 */
-	public void addHTTPFileArg(String path) {
-		addHTTPFileArg(new HTTPFileArg(path));
-	}
+    /**
+     * Add a new file with the given path.
+     *
+     * @param path
+     *  the path of the file
+     */
+    public void addHTTPFileArg(String path) {
+        addHTTPFileArg(new HTTPFileArg(path));
+    }
 
-	/**
-	 * Add a new file.
-	 *
-	 * @param file
-	 *	the new file
-	 */
-	public void addHTTPFileArg(HTTPFileArg file) {
-		TestElementProperty newHTTPFileArg = new TestElementProperty(file.getPath(), file);
-		if (isRunningVersion()) {
-			this.setTemporary(newHTTPFileArg);
-		}
-		getHTTPFileArgsCollection().addItem(newHTTPFileArg);
-	}
+    /**
+     * Add a new file.
+     *
+     * @param file
+     *  the new file
+     */
+    public void addHTTPFileArg(HTTPFileArg file) {
+        TestElementProperty newHTTPFileArg = new TestElementProperty(file.getPath(), file);
+        if (isRunningVersion()) {
+            this.setTemporary(newHTTPFileArg);
+        }
+        getHTTPFileArgsCollection().addItem(newHTTPFileArg);
+    }
 
     /**
      * adds a new File to the HTTPFileArgs list to be uploaded with http
@@ -105,128 +105,128 @@ public class HTTPFileArgs extends ConfigTestElement implements Serializable {
         addHTTPFileArg(new HTTPFileArg(path, param, mime));
     }
 
-	/**
-	 * Get a PropertyIterator of the files.
-	 *
-	 * @return an iteration of the files
-	 */
-	public PropertyIterator iterator() {
-		return getHTTPFileArgsCollection().iterator();
-	}
+    /**
+     * Get a PropertyIterator of the files.
+     *
+     * @return an iteration of the files
+     */
+    public PropertyIterator iterator() {
+        return getHTTPFileArgsCollection().iterator();
+    }
 
-	/**
-	 * Get the current arguments as an array.
-	 * 
-	 * @return an array of file arguments
-	 */
-	public HTTPFileArg[] asArray(){
-	    CollectionProperty props = getHTTPFileArgsCollection();
-	    final int size = props.size();
+    /**
+     * Get the current arguments as an array.
+     *
+     * @return an array of file arguments
+     */
+    public HTTPFileArg[] asArray(){
+        CollectionProperty props = getHTTPFileArgsCollection();
+        final int size = props.size();
         HTTPFileArg[] args = new HTTPFileArg[size];
         for(int i=0; i<size; i++){
             args[i]=(HTTPFileArg) props.get(i).getObjectValue();
         }
-	    return args;
-	}
-	/**
-	 * Create a string representation of the files.
-	 *
-	 * @return the string representation of the files
-	 */
-	public String toString() {
-		StringBuffer str = new StringBuffer();
-		PropertyIterator iter = getHTTPFileArgsCollection().iterator();
-		while (iter.hasNext()) {
-			HTTPFileArg file = (HTTPFileArg) iter.next().getObjectValue();
-			str.append(file.getPath());
-			if (iter.hasNext()) {
-				str.append("&"); //$NON-NLS-1$
-			}
-		}
-		return str.toString();
-	}
+        return args;
+    }
+    /**
+     * Create a string representation of the files.
+     *
+     * @return the string representation of the files
+     */
+    public String toString() {
+        StringBuffer str = new StringBuffer();
+        PropertyIterator iter = getHTTPFileArgsCollection().iterator();
+        while (iter.hasNext()) {
+            HTTPFileArg file = (HTTPFileArg) iter.next().getObjectValue();
+            str.append(file.getPath());
+            if (iter.hasNext()) {
+                str.append("&"); //$NON-NLS-1$
+            }
+        }
+        return str.toString();
+    }
 
-	/**
-	 * Remove the specified file from the list.
-	 *
-	 * @param row
-	 *	the index of the file to remove
-	 */
-	public void removeHTTPFileArg(int row) {
-		if (row < getHTTPFileArgCount()) {
-			getHTTPFileArgsCollection().remove(row);
-		}
-	}
+    /**
+     * Remove the specified file from the list.
+     *
+     * @param row
+     *  the index of the file to remove
+     */
+    public void removeHTTPFileArg(int row) {
+        if (row < getHTTPFileArgCount()) {
+            getHTTPFileArgsCollection().remove(row);
+        }
+    }
 
-	/**
-	 * Remove the specified file from the list.
-	 *
-	 * @param file
-	 *	the file to remove
-	 */
-	public void removeHTTPFileArg(HTTPFileArg file) {
-		PropertyIterator iter = getHTTPFileArgsCollection().iterator();
-		while (iter.hasNext()) {
-			HTTPFileArg item = (HTTPFileArg) iter.next().getObjectValue();
-			if (file.equals(item)) {
-				iter.remove();
-			}
-		}
-	}
+    /**
+     * Remove the specified file from the list.
+     *
+     * @param file
+     *  the file to remove
+     */
+    public void removeHTTPFileArg(HTTPFileArg file) {
+        PropertyIterator iter = getHTTPFileArgsCollection().iterator();
+        while (iter.hasNext()) {
+            HTTPFileArg item = (HTTPFileArg) iter.next().getObjectValue();
+            if (file.equals(item)) {
+                iter.remove();
+            }
+        }
+    }
 
-	/**
-	 * Remove the file with the specified path.
-	 *
-	 * @param filePath
-	 *	the path of the file to remove
-	 */
-	public void removeHTTPFileArg(String filePath) {
-		PropertyIterator iter = getHTTPFileArgsCollection().iterator();
-		while (iter.hasNext()) {
-			HTTPFileArg file = (HTTPFileArg) iter.next().getObjectValue();
-			if (file.getPath().equals(filePath)) {
-				iter.remove();
-			}
-		}
-	}
+    /**
+     * Remove the file with the specified path.
+     *
+     * @param filePath
+     *  the path of the file to remove
+     */
+    public void removeHTTPFileArg(String filePath) {
+        PropertyIterator iter = getHTTPFileArgsCollection().iterator();
+        while (iter.hasNext()) {
+            HTTPFileArg file = (HTTPFileArg) iter.next().getObjectValue();
+            if (file.getPath().equals(filePath)) {
+                iter.remove();
+            }
+        }
+    }
 
-	/**
-	 * Remove all files from the list.
-	 */
-	public void removeAllHTTPFileArgs() {
-		getHTTPFileArgsCollection().clear();
-	}
+    /**
+     * Remove all files from the list.
+     */
+    public void removeAllHTTPFileArgs() {
+        getHTTPFileArgsCollection().clear();
+    }
 
-	/**
-	 * Add a new empty file to the list. The new file will have the
-	 * empty string as its path.
-	 */
-	public void addEmptyHTTPFileArg() {
-		addHTTPFileArg(new HTTPFileArg(""));
-	}
+    /**
+     * Add a new empty file to the list. The new file will have the
+     * empty string as its path.
+     */
+    public void addEmptyHTTPFileArg() {
+        addHTTPFileArg(new HTTPFileArg(""));
+    }
 
-	/**
-	 * Get the number of files in the list.
-	 *
-	 * @return the number of files
-	 */
-	public int getHTTPFileArgCount() {
-		return getHTTPFileArgsCollection().size();
-	}
+    /**
+     * Get the number of files in the list.
+     *
+     * @return the number of files
+     */
+    public int getHTTPFileArgCount() {
+        return getHTTPFileArgsCollection().size();
+    }
 
-	/**
-	 * Get a single file.
-	 *
-	 * @param row
-	 *	the index of the file to return.
-	 * @return the file at the specified index, or null if no file
-	 *	exists at that index.
-	 */
-	public HTTPFileArg getHTTPFileArg(int row) {
-		HTTPFileArg file = null;
-		if (row < getHTTPFileArgCount()) {
-			file = (HTTPFileArg) getHTTPFileArgsCollection().get(row).getObjectValue();
-		}
-		return file;
-	}
+    /**
+     * Get a single file.
+     *
+     * @param row
+     *  the index of the file to return.
+     * @return the file at the specified index, or null if no file
+     *  exists at that index.
+     */
+    public HTTPFileArg getHTTPFileArg(int row) {
+        HTTPFileArg file = null;
+        if (row < getHTTPFileArgCount()) {
+            file = (HTTPFileArg) getHTTPFileArgsCollection().get(row).getObjectValue();
+        }
+        return file;
+    }
 }

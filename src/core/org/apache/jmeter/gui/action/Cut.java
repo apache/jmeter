@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.gui.action;
@@ -29,30 +29,30 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
  * Implements the Cut menu item command
  */
 public class Cut extends AbstractAction {
-	private static final Set commands = new HashSet();
+    private static final Set commands = new HashSet();
 
-	static {
-		commands.add(ActionNames.CUT);
-	}
+    static {
+        commands.add(ActionNames.CUT);
+    }
 
-	/**
-	 * @see Command#getActionNames()
-	 */
-	public Set getActionNames() {
-		return commands;
-	}
+    /**
+     * @see Command#getActionNames()
+     */
+    public Set getActionNames() {
+        return commands;
+    }
 
-	/**
-	 * @see Command#doAction(ActionEvent)
-	 */
-	public void doAction(ActionEvent e) {
-		GuiPackage guiPack = GuiPackage.getInstance();
-		JMeterTreeNode[] currentNodes = guiPack.getTreeListener().getSelectedNodes();
+    /**
+     * @see Command#doAction(ActionEvent)
+     */
+    public void doAction(ActionEvent e) {
+        GuiPackage guiPack = GuiPackage.getInstance();
+        JMeterTreeNode[] currentNodes = guiPack.getTreeListener().getSelectedNodes();
 
-		Copy.setCopiedNodes(currentNodes);
-		for (int i = 0; i < currentNodes.length; i++) {
-			guiPack.getTreeModel().removeNodeFromParent(currentNodes[i]);
-		}
-		guiPack.getMainFrame().repaint();
-	}
+        Copy.setCopiedNodes(currentNodes);
+        for (int i = 0; i < currentNodes.length; i++) {
+            guiPack.getTreeModel().removeNodeFromParent(currentNodes[i]);
+        }
+        guiPack.getMainFrame().repaint();
+    }
 }

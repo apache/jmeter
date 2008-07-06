@@ -13,30 +13,30 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.testelement;
 
 /**
  * Allow threads to perform startup and closedown if necessary
- * 
+ *
  */
 public interface ThreadListener {
-	/**
-	 * Called just before the start of the thread 
-     * 
+    /**
+     * Called just before the start of the thread
+     *
      * @see org.apache.jmeter.threads.JMeterThread#threadStarted()
-	 * 
-	 */
-	public void threadStarted();
+     *
+     */
+    public void threadStarted();
 
-	/**
-	 * Called once for each thread at the end of a test
-	 * 
-	 * @see org.apache.jmeter.threads.JMeterThread#threadFinished()
-	 * 
-	 */
-	public void threadFinished();
+    /**
+     * Called once for each thread at the end of a test
+     *
+     * @see org.apache.jmeter.threads.JMeterThread#threadFinished()
+     *
+     */
+    public void threadFinished();
 
 }

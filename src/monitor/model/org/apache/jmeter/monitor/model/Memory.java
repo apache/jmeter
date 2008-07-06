@@ -20,19 +20,19 @@
 package org.apache.jmeter.monitor.model;
 
 /**
- * @version $Revision$ on $Date4
+ * @version $Revision$
  */
 public interface Memory {
-	long getMax();
+    long getMax();
 
-	void setMax(long value);
+    void setMax(long value);
 
-	long getFree();
+    long getFree();
 
-	void setFree(long value);
+    void setFree(long value);
 
-	long getTotal();
+    long getTotal();
 
-	void setTotal(long value);
+    void setTotal(long value);
 
 }

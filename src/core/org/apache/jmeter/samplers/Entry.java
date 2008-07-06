@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.samplers;
@@ -32,62 +32,62 @@ import org.apache.jmeter.config.ConfigElement;
  */
 public class Entry {
 
-	private Map configSet;
+    private Map configSet;
 
-	// Set clonedSet;
-	private Class sampler;
+    // Set clonedSet;
+    private Class sampler;
 
-	private List assertions;
+    private List assertions;
 
-	public Entry() {
-		configSet = new HashMap();
-		// clonedSet = new HashSet();
-		assertions = new LinkedList();
-	}
+    public Entry() {
+        configSet = new HashMap();
+        // clonedSet = new HashSet();
+        assertions = new LinkedList();
+    }
 
-	public void addAssertion(Assertion assertion) {
-		assertions.add(assertion);
-	}
+    public void addAssertion(Assertion assertion) {
+        assertions.add(assertion);
+    }
 
-	public List getAssertions() {
-		return assertions;
-	}
+    public List getAssertions() {
+        return assertions;
+    }
 
-	public void setSamplerClass(Class samplerClass) {
-		this.sampler = samplerClass;
-	}
+    public void setSamplerClass(Class samplerClass) {
+        this.sampler = samplerClass;
+    }
 
-	public Class getSamplerClass() {
-		return this.sampler;
-	}
+    public Class getSamplerClass() {
+        return this.sampler;
+    }
 
-	public ConfigElement getConfigElement(Class configClass) {
-		return (ConfigElement) configSet.get(configClass);
-	}
+    public ConfigElement getConfigElement(Class configClass) {
+        return (ConfigElement) configSet.get(configClass);
+    }
 
-	public void addConfigElement(ConfigElement config) {
-		addConfigElement(config, config.getClass());
-	}
+    public void addConfigElement(ConfigElement config) {
+        addConfigElement(config, config.getClass());
+    }
 
-	/**
-	 * Add a config element as a specific class. Usually this is done to add a
-	 * subclass as one of it's parent classes.
-	 */
-	public void addConfigElement(ConfigElement config, Class asClass) {
-		if (config != null) {
-			ConfigElement current = (ConfigElement) configSet.get(asClass);
-			if (current == null) {
-				configSet.put(asClass, cloneIfNecessary(config));
-			} else {
-				current.addConfigElement(config);
-			}
-		}
-	}
+    /**
+     * Add a config element as a specific class. Usually this is done to add a
+     * subclass as one of it's parent classes.
+     */
+    public void addConfigElement(ConfigElement config, Class asClass) {
+        if (config != null) {
+            ConfigElement current = (ConfigElement) configSet.get(asClass);
+            if (current == null) {
+                configSet.put(asClass, cloneIfNecessary(config));
+            } else {
+                current.addConfigElement(config);
+            }
+        }
+    }
 
-	private ConfigElement cloneIfNecessary(ConfigElement config) {
-		if (config.expectsModification()) {
-			return config;
-		}
-		return (ConfigElement) config.clone();
-	}
+    private ConfigElement cloneIfNecessary(ConfigElement config) {
+        if (config.expectsModification()) {
+            return config;
+        }
+        return (ConfigElement) config.clone();
+    }
 }

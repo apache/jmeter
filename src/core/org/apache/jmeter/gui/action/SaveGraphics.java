@@ -5,15 +5,15 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations
  * under the License.
- *  
+ *
  */
 
 package org.apache.jmeter.gui.action;
@@ -45,51 +45,51 @@ import org.apache.jmeter.visualizers.Printable;
  */
 public class SaveGraphics implements Command {
 
-	private static final Set commands = new HashSet();
+    private static final Set commands = new HashSet();
 
-	static {
-		commands.add(ActionNames.SAVE_GRAPHICS);
+    static {
+        commands.add(ActionNames.SAVE_GRAPHICS);
         commands.add(ActionNames.SAVE_GRAPHICS_ALL);
-	}
+    }
 
-	private static final String[] extensions 
+    private static final String[] extensions
         = { SaveGraphicsService.TIFF_EXTENSION, SaveGraphicsService.PNG_EXTENSION };
 
-	/**
-	 * Constructor for the Save object.
-	 */
-	public SaveGraphics() {
-	}
+    /**
+     * Constructor for the Save object.
+     */
+    public SaveGraphics() {
+    }
 
-	/**
-	 * Gets the ActionNames attribute of the Save object.
-	 * 
-	 * @return the ActionNames value
-	 */
-	public Set getActionNames() {
-		return commands;
-	}
+    /**
+     * Gets the ActionNames attribute of the Save object.
+     *
+     * @return the ActionNames value
+     */
+    public Set getActionNames() {
+        return commands;
+    }
 
-	public void doAction(ActionEvent e) throws IllegalUserActionException {
-		JMeterGUIComponent component = null;
-		JComponent comp = null;
-		if (!commands.contains(e.getActionCommand())) {
-			throw new IllegalUserActionException("Invalid user command:" + e.getActionCommand());
-		}
-		if (e.getActionCommand().equals(ActionNames.SAVE_GRAPHICS)) {
-			component = GuiPackage.getInstance().getCurrentGui();
-			// get the JComponent from the visualizer
-			if (component instanceof Printable) {
-				comp = ((Printable) component).getPrintableComponent();
+    public void doAction(ActionEvent e) throws IllegalUserActionException {
+        JMeterGUIComponent component = null;
+        JComponent comp = null;
+        if (!commands.contains(e.getActionCommand())) {
+            throw new IllegalUserActionException("Invalid user command:" + e.getActionCommand());
+        }
+        if (e.getActionCommand().equals(ActionNames.SAVE_GRAPHICS)) {
+            component = GuiPackage.getInstance().getCurrentGui();
+            // get the JComponent from the visualizer
+            if (component instanceof Printable) {
+                comp = ((Printable) component).getPrintableComponent();
                 saveImage(comp);
-			}
-		}
+            }
+        }
         if (e.getActionCommand().equals(ActionNames.SAVE_GRAPHICS_ALL)) {
             component = GuiPackage.getInstance().getCurrentGui();
             comp=((JComponent) component).getRootPane();
             saveImage(comp);
         }
-	}
+    }
 
     private void saveImage(JComponent comp){
 
@@ -103,17 +103,17 @@ public class SaveGraphics implements Command {
         // the file extension.
         filename = chooser.getSelectedFile().getAbsolutePath();
         if (filename != null) {
-			File f = new File(filename);
-			if(f.exists()) {
-				int response = JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(), 
-						JMeterUtils.getResString("save_overwrite_existing_file"), // $NON-NLS-1$
-						JMeterUtils.getResString("save?"),  // $NON-NLS-1$
-						JOptionPane.YES_NO_OPTION,
-						JOptionPane.QUESTION_MESSAGE);
-				if (response == JOptionPane.CLOSED_OPTION || response == JOptionPane.NO_OPTION) {
-					return ; // Do not save, user does not want to overwrite
-				}
-			}
+            File f = new File(filename);
+            if(f.exists()) {
+                int response = JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(),
+                        JMeterUtils.getResString("save_overwrite_existing_file"), // $NON-NLS-1$
+                        JMeterUtils.getResString("save?"),  // $NON-NLS-1$
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE);
+                if (response == JOptionPane.CLOSED_OPTION || response == JOptionPane.NO_OPTION) {
+                    return ; // Do not save, user does not want to overwrite
+                }
+            }
             SaveGraphicsService save = new SaveGraphicsService();
             String ext = filename.substring(filename.length() - 4);
             String name = filename.substring(0, filename.length() - 4);

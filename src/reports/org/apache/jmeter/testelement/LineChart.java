@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 package org.apache.jmeter.testelement;
 
@@ -36,28 +36,28 @@ import org.jCharts.properties.PointChartProperties;
 public class LineChart extends AbstractChart {
 
     private static final String URL_DELIM = ","; //$NON-NLS-1$
-	private static final String REPORT_CHART_URLS = "ReportChart.chart.urls"; //$NON-NLS-1$
+    private static final String REPORT_CHART_URLS = "ReportChart.chart.urls"; //$NON-NLS-1$
     private static final Shape[] SHAPE_ARRAY = {PointChartProperties.SHAPE_CIRCLE,
             PointChartProperties.SHAPE_DIAMOND,PointChartProperties.SHAPE_SQUARE,
             PointChartProperties.SHAPE_TRIANGLE};
-    
+
     protected int width = 350;
     protected int height = 250;
-    
+
     protected int shape_counter = 0;
 
-	public LineChart() {
-		super();
-	}
+    public LineChart() {
+        super();
+    }
 
     public String getURLs() {
         return getPropertyAsString(REPORT_CHART_URLS);
     }
-    
+
     public void setURLs(String urls) {
         setProperty(REPORT_CHART_URLS,urls);
     }
-    
+
     public double[][] convertToDouble(List data) {
         String[] urls = this.getURLs().split(URL_DELIM);
         double[][] dataset = new double[urls.length][data.size()];
@@ -89,7 +89,7 @@ public class LineChart extends AbstractChart {
         }
         double[][] dbset = convertToDouble(dset);
         return renderGraphics(dbset, (String[])xlabels.toArray(new String[xlabels.size()]));
-	}
+    }
 
     public JComponent renderGraphics(double[][] data, String[] xAxisLabels) {
         LineGraph panel = new LineGraph();
@@ -110,7 +110,7 @@ public class LineChart extends AbstractChart {
         panel.paintComponent(this.getBufferedImage().createGraphics());
         return panel;
     }
-    
+
     /**
      * Since we only have 4 shapes, the method will start with the
      * first shape and keep cycling through the shapes in order.
@@ -124,7 +124,7 @@ public class LineChart extends AbstractChart {
         }
         return shapes;
     }
-    
+
     /**
      * Return the next shape
      * @return the shape
@@ -135,9 +135,9 @@ public class LineChart extends AbstractChart {
         }
         return SHAPE_ARRAY[shape_counter];
     }
-    
+
     /**
-     * 
+     *
      * @param count
      * @return array of strokes
      */
@@ -148,7 +148,7 @@ public class LineChart extends AbstractChart {
         }
         return str;
     }
-    
+
     public Stroke nextStroke() {
         return new BasicStroke(1.5f);
     }

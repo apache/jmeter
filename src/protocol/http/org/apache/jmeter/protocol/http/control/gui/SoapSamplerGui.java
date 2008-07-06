@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.control.gui;
@@ -37,128 +37,128 @@ import org.apache.jorphan.gui.JLabeledTextArea;
 import org.apache.jorphan.gui.JLabeledTextField;
 
 public class SoapSamplerGui extends AbstractSamplerGui {
-	private JLabeledTextField urlField;
-	private JLabeledTextField soapAction;
+    private JLabeledTextField urlField;
+    private JLabeledTextField soapAction;
     private JCheckBox sendSoapAction;
     private JCheckBox useKeepAlive;
-	private JLabeledTextArea soapXml;
+    private JLabeledTextArea soapXml;
 
     private FilePanel soapXmlFile = new FilePanel();
 
-	public SoapSamplerGui() {
-		init();
-	}
+    public SoapSamplerGui() {
+        init();
+    }
 
-	public String getLabelResource() {
-		return "soap_sampler_title"; //$NON-NLS-1$
-	}
+    public String getLabelResource() {
+        return "soap_sampler_title"; //$NON-NLS-1$
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
-	 */
-	public TestElement createTestElement() {
-		SoapSampler sampler = new SoapSampler();
-		modifyTestElement(sampler);
-		return sampler;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
+     */
+    public TestElement createTestElement() {
+        SoapSampler sampler = new SoapSampler();
+        modifyTestElement(sampler);
+        return sampler;
+    }
 
-	/**
-	 * Modifies a given TestElement to mirror the data in the gui components.
-	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-	 */
-	public void modifyTestElement(TestElement s) {
-		this.configureTestElement(s);
-		if (s instanceof SoapSampler) {
-			SoapSampler sampler = (SoapSampler) s;
-			sampler.setURLData(urlField.getText());
-			sampler.setXmlData(soapXml.getText());
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     *
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement s) {
+        this.configureTestElement(s);
+        if (s instanceof SoapSampler) {
+            SoapSampler sampler = (SoapSampler) s;
+            sampler.setURLData(urlField.getText());
+            sampler.setXmlData(soapXml.getText());
             sampler.setXmlFile(soapXmlFile.getFilename());
-			sampler.setSOAPAction(soapAction.getText());
-			sampler.setSendSOAPAction(sendSoapAction.isSelected());
-			sampler.setUseKeepAlive(useKeepAlive.isSelected());
-		}
-	}
+            sampler.setSOAPAction(soapAction.getText());
+            sampler.setSendSOAPAction(sendSoapAction.isSelected());
+            sampler.setUseKeepAlive(useKeepAlive.isSelected());
+        }
+    }
 
     /**
      * Implements JMeterGUIComponent.clearGui
      */
     public void clearGui() {
         super.clearGui();
-        
+
         urlField.setText(""); //$NON-NLS-1$
         soapAction.setText(""); //$NON-NLS-1$
         soapXml.setText(""); //$NON-NLS-1$
         sendSoapAction.setSelected(true);
         soapXmlFile.setFilename(""); //$NON-NLS-1$
         useKeepAlive.setSelected(false);
-    }    
+    }
 
-	private void init() {
-		setLayout(new BorderLayout());
-		setBorder(makeBorder());
+    private void init() {
+        setLayout(new BorderLayout());
+        setBorder(makeBorder());
 
-		add(makeTitlePanel(), BorderLayout.NORTH);
+        add(makeTitlePanel(), BorderLayout.NORTH);
 
-		urlField = new JLabeledTextField(JMeterUtils.getResString("url"), 10); //$NON-NLS-1$
-		soapXml = new JLabeledTextArea(JMeterUtils.getResString("soap_data_title")); //$NON-NLS-1$
-		soapAction = new JLabeledTextField("", 10); //$NON-NLS-1$
-		sendSoapAction = new JCheckBox(JMeterUtils.getResString("soap_send_action"), true); //$NON-NLS-1$
-		useKeepAlive = new JCheckBox(JMeterUtils.getResString("use_keepalive")); // $NON-NLS-1$
+        urlField = new JLabeledTextField(JMeterUtils.getResString("url"), 10); //$NON-NLS-1$
+        soapXml = new JLabeledTextArea(JMeterUtils.getResString("soap_data_title")); //$NON-NLS-1$
+        soapAction = new JLabeledTextField("", 10); //$NON-NLS-1$
+        sendSoapAction = new JCheckBox(JMeterUtils.getResString("soap_send_action"), true); //$NON-NLS-1$
+        useKeepAlive = new JCheckBox(JMeterUtils.getResString("use_keepalive")); // $NON-NLS-1$
 
-		JPanel mainPanel = new JPanel(new BorderLayout());
-	    JPanel soapActionPanel = new JPanel();
-	    soapActionPanel.setLayout(new GridBagLayout());
-	    GridBagConstraints c = new GridBagConstraints();
-	    c.fill = GridBagConstraints.HORIZONTAL;
-	    c.gridwidth = 2;
-	    c.gridx = 0;
-	    c.gridy = 0;
-	    c.weightx = 1;
-	    soapActionPanel.add(urlField, c);
-	    c.fill = GridBagConstraints.NONE;
-	    c.gridwidth = 1;
-	    c.gridy = 1;
-	    c.weightx = 0;
-	    soapActionPanel.add(sendSoapAction, c);
-	    c.gridx = 1;
-	    c.fill = GridBagConstraints.HORIZONTAL;
-	    c.weightx = 1;
-		soapActionPanel.add(soapAction, c);
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        JPanel soapActionPanel = new JPanel();
+        soapActionPanel.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridwidth = 2;
+        c.gridx = 0;
+        c.gridy = 0;
+        c.weightx = 1;
+        soapActionPanel.add(urlField, c);
+        c.fill = GridBagConstraints.NONE;
+        c.gridwidth = 1;
+        c.gridy = 1;
+        c.weightx = 0;
+        soapActionPanel.add(sendSoapAction, c);
+        c.gridx = 1;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 1;
+        soapActionPanel.add(soapAction, c);
 
-		c.fill = GridBagConstraints.HORIZONTAL;
-	    c.gridwidth = 2;
-	    c.gridy = 2;
-	    c.gridx = 0;
-		soapActionPanel.add(useKeepAlive, c);
-		
-		mainPanel.add(soapActionPanel, BorderLayout.NORTH);
-		mainPanel.add(soapXml, BorderLayout.CENTER);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridwidth = 2;
+        c.gridy = 2;
+        c.gridx = 0;
+        soapActionPanel.add(useKeepAlive, c);
+
+        mainPanel.add(soapActionPanel, BorderLayout.NORTH);
+        mainPanel.add(soapXml, BorderLayout.CENTER);
         mainPanel.add(soapXmlFile, BorderLayout.SOUTH);
 
         sendSoapAction.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-		        soapAction.setEnabled(sendSoapAction.isSelected());
-		    }
+            public void actionPerformed(ActionEvent e) {
+                soapAction.setEnabled(sendSoapAction.isSelected());
+            }
             });
 
-		add(mainPanel, BorderLayout.CENTER);
-	}
+        add(mainPanel, BorderLayout.CENTER);
+    }
 
-	public void configure(TestElement el) {
-		super.configure(el);
-		SoapSampler sampler = (SoapSampler) el;
-		urlField.setText(sampler.getURLData());
-		sendSoapAction.setSelected(sampler.getSendSOAPAction());
-		soapAction.setText(sampler.getSOAPAction());
-		soapXml.setText(sampler.getXmlData());
+    public void configure(TestElement el) {
+        super.configure(el);
+        SoapSampler sampler = (SoapSampler) el;
+        urlField.setText(sampler.getURLData());
+        sendSoapAction.setSelected(sampler.getSendSOAPAction());
+        soapAction.setText(sampler.getSOAPAction());
+        soapXml.setText(sampler.getXmlData());
         soapXmlFile.setFilename(sampler.getXmlFile());
         useKeepAlive.setSelected(sampler.getUseKeepAlive());
-	}
+    }
 
-	public Dimension getPreferredSize() {
-		return getMinimumSize();
-	}
+    public Dimension getPreferredSize() {
+        return getMinimumSize();
+    }
 }

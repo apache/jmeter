@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.gui.util;
@@ -45,19 +45,19 @@ import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.reflect.Functor;
 
 /**
- * @author Peter Lin 
+ * @author Peter Lin
  * @version $Revision$ Last updated: $Date$
  */
 public class FileListPanel extends JPanel implements ActionListener {
-	private JTable files = null;
+    private JTable files = null;
 
     private transient ObjectTableModel tableModel = null;
-    
-	private static final String ACTION_BROWSE = "browse"; // $NON-NLS-1$
+
+    private static final String ACTION_BROWSE = "browse"; // $NON-NLS-1$
 
     private JButton browse = new JButton(JMeterUtils.getResString(ACTION_BROWSE));
 
-	private JButton clear = new JButton(JMeterUtils.getResString("clear")); // $NON-NLS-1$
+    private JButton clear = new JButton(JMeterUtils.getResString("clear")); // $NON-NLS-1$
 
     private JButton delete = new JButton(JMeterUtils.getResString("delete")); // $NON-NLS-1$
 
@@ -67,39 +67,39 @@ public class FileListPanel extends JPanel implements ActionListener {
 
     private String filetype;
 
-	/**
-	 * Constructor for the FilePanel object.
-	 */
-	public FileListPanel() {
-		title = ""; // $NON-NLS-1$
-		init();
-	}
+    /**
+     * Constructor for the FilePanel object.
+     */
+    public FileListPanel() {
+        title = ""; // $NON-NLS-1$
+        init();
+    }
 
-	public FileListPanel(String title) {
-		this.title = title;
-		init();
-	}
+    public FileListPanel(String title) {
+        this.title = title;
+        init();
+    }
 
-	public FileListPanel(String title, String filetype) {
-		this.title = title;
-		this.filetype = filetype;
-		init();
-	}
+    public FileListPanel(String title, String filetype) {
+        this.title = title;
+        this.filetype = filetype;
+        init();
+    }
 
-	/**
-	 * Constructor for the FilePanel object.
-	 */
-	public FileListPanel(ChangeListener l, String title) {
-		this.title = title;
-		init();
-		listeners.add(l);
-	}
+    /**
+     * Constructor for the FilePanel object.
+     */
+    public FileListPanel(ChangeListener l, String title) {
+        this.title = title;
+        init();
+        listeners.add(l);
+    }
 
-	public void addChangeListener(ChangeListener l) {
-		listeners.add(l);
-	}
+    public void addChangeListener(ChangeListener l) {
+        listeners.add(l);
+    }
 
-	private void init() {
+    private void init() {
         this.setLayout(new BorderLayout(0, 5));
         setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 5));
         JLabel jtitle = new JLabel(title);
@@ -120,22 +120,22 @@ public class FileListPanel extends JPanel implements ActionListener {
         scrollpane.setPreferredSize(new Dimension(100,80));
         add(scrollpane,BorderLayout.CENTER);
 
-		browse.setActionCommand(ACTION_BROWSE); // $NON-NLS-1$
-		browse.addActionListener(this);
+        browse.setActionCommand(ACTION_BROWSE); // $NON-NLS-1$
+        browse.addActionListener(this);
         clear.addActionListener(this);
         delete.addActionListener(this);
         //this.setPreferredSize(new Dimension(400,150));
-	}
+    }
 
-	/**
-	 * If the gui needs to enable/disable the FilePanel, call the method.
-	 * 
-	 * @param enable
-	 */
-	public void enableFile(boolean enable) {
-		browse.setEnabled(enable);
+    /**
+     * If the gui needs to enable/disable the FilePanel, call the method.
+     *
+     * @param enable
+     */
+    public void enableFile(boolean enable) {
+        browse.setEnabled(enable);
         files.setEnabled(false);
-	}
+    }
 
     /**
      * Add a single file to the table
@@ -144,7 +144,7 @@ public class FileListPanel extends JPanel implements ActionListener {
     public void addFilename(String f) {
         tableModel.addRow(f);
     }
-    
+
     /**
      * clear the files from the table
      */
@@ -158,7 +158,7 @@ public class FileListPanel extends JPanel implements ActionListener {
             addFilename(files[idx]);
         }
     }
-    
+
     public String[] getFiles() {
         String[] _files = new String[tableModel.getRowCount()];
         for (int idx=0; idx < _files.length; idx++) {
@@ -166,7 +166,7 @@ public class FileListPanel extends JPanel implements ActionListener {
         }
         return _files;
     }
-    
+
     protected void deleteFile() {
         // If a table cell is being edited, we must cancel the editing before
         // deleting the row
@@ -174,29 +174,29 @@ public class FileListPanel extends JPanel implements ActionListener {
         int rowSelected = files.getSelectedRow();
         if (rowSelected >= 0) {
             tableModel.removeRow(rowSelected);
-			tableModel.fireTableDataChanged();
+            tableModel.fireTableDataChanged();
 
         }
     }
-    
-	private void fireFileChanged() {
-		Iterator iter = listeners.iterator();
-		while (iter.hasNext()) {
-			((ChangeListener) iter.next()).stateChanged(new ChangeEvent(this));
-		}
-	}
+
+    private void fireFileChanged() {
+        Iterator iter = listeners.iterator();
+        while (iter.hasNext()) {
+            ((ChangeListener) iter.next()).stateChanged(new ChangeEvent(this));
+        }
+    }
 
     protected void initializeTableModel() {
         tableModel = new ObjectTableModel(new String[] { "Library" },
                 new Functor[0] , new Functor[0] , // i.e. bypass the Functors
                 new Class[] { String.class });
     }
-    
-	public void actionPerformed(ActionEvent e) {
+
+    public void actionPerformed(ActionEvent e) {
         if (e.getSource() == clear) {
             this.clearFiles();
         } else if (e.getActionCommand().equals(ACTION_BROWSE)) {
-			JFileChooser chooser = new JFileChooser();
+            JFileChooser chooser = new JFileChooser();
             String start = JMeterUtils.getPropDefault("user.dir", ""); // $NON-NLS-1$ // $NON-NLS-2$
             chooser.setCurrentDirectory(new File(start));
             chooser.setFileFilter(new JMeterFileFilter(new String[] { filetype }));
@@ -204,16 +204,16 @@ public class FileListPanel extends JPanel implements ActionListener {
             chooser.setMultiSelectionEnabled(true);
             chooser.showOpenDialog(GuiPackage.getInstance().getMainFrame());
             File[] cfiles = chooser.getSelectedFiles();
-			if (cfiles != null) {
+            if (cfiles != null) {
                 for (int idx=0; idx < cfiles.length; idx++) {
                     this.addFilename(cfiles[idx].getPath());
                 }
-				fireFileChanged();
-			}
+                fireFileChanged();
+            }
         } else if (e.getSource() == delete) {
             this.deleteFile();
-		} else {
-			fireFileChanged();
-		}
-	}
+        } else {
+            fireFileChanged();
+        }
+    }
 }

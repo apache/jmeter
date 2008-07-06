@@ -38,57 +38,57 @@ import org.apache.log.Logger;
 
 /**
  * Derived from EasySSLProtocolFactory
- * 
+ *
  * Used by JsseSSLManager to set up the HttpClient and Java https socket handling
  */
 
-public class HttpSSLProtocolSocketFactory 
+public class HttpSSLProtocolSocketFactory
     extends SSLSocketFactory // for java sockets
     implements SecureProtocolSocketFactory { // for httpclient sockets
 
-	private static final Logger log = LoggingManager.getLoggerForClass();
-	
-	private JsseSSLManager sslManager;
+    private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private JsseSSLManager sslManager;
 
     private final int CPS; // Characters per second to emulate
 
     private HttpSSLProtocolSocketFactory(){
-    	CPS=0;
+        CPS=0;
     }
-    
+
     public HttpSSLProtocolSocketFactory(JsseSSLManager sslManager) {
         super();
         this.sslManager = sslManager;
         CPS=0;
     }
-    
+
     public HttpSSLProtocolSocketFactory(JsseSSLManager sslManager, int cps) {
         super();
         this.sslManager = sslManager;
         CPS=cps;
     }
-    
-    private static final String protocolList = 
-    	JMeterUtils.getPropDefault("https.socket.protocols", ""); // $NON-NLS-1$ $NON-NLS-2$
-    
+
+    private static final String protocolList =
+        JMeterUtils.getPropDefault("https.socket.protocols", ""); // $NON-NLS-1$ $NON-NLS-2$
+
     static {
-    	if (protocolList.length()>0){
-    		log.info("Using protocol list: "+protocolList);
-    	}
+        if (protocolList.length()>0){
+            log.info("Using protocol list: "+protocolList);
+        }
     }
 
     private static final String[] protocols = protocolList.split(" "); // $NON-NLS-1$
 
     private void setSocket(Socket socket){
-    	if (!(socket instanceof SSLSocket)) {
-    		throw new IllegalArgumentException("Expected SSLSocket");
-    	}
-    	SSLSocket sock = (SSLSocket) socket;
+        if (!(socket instanceof SSLSocket)) {
+            throw new IllegalArgumentException("Expected SSLSocket");
+        }
+        SSLSocket sock = (SSLSocket) socket;
         if (log.isDebugEnabled()) {
-        	/* Warning: the next line seems to cause the error
-        	* javax.net.ssl.SSLException: Received fatal alert: unexpected_message
-        	* with certain sites
-        	*/
+            /* Warning: the next line seems to cause the error
+            * javax.net.ssl.SSLException: Received fatal alert: unexpected_message
+            * with certain sites
+            */
             SSLSession sslSession = sock.getSession();
             byte[] bytes = sslSession.getId();
 
@@ -112,16 +112,16 @@ public class HttpSSLProtocolSocketFactory
     }
 
     private String join(String[] strings) {
-		StringBuffer sb = new StringBuffer();
-    	for (int i=0;i<strings.length;i++){
-    		if (i>0) {
-    		    sb.append(" ");
-    		}
-    		sb.append(strings[i]);
-    	}
-    	return sb.toString();
-	}
-    
+        StringBuffer sb = new StringBuffer();
+        for (int i=0;i<strings.length;i++){
+            if (i>0) {
+                sb.append(" ");
+            }
+            sb.append(strings[i]);
+        }
+        return sb.toString();
+    }
+
     private SSLSocketFactory getSSLSocketFactory() throws IOException {
         try {
             SSLContext sslContext = this.sslManager.getContext();
@@ -135,23 +135,23 @@ public class HttpSSLProtocolSocketFactory
      * Wraps the socket in a slow SSL socket if necessary
      */
     private Socket wrapSocket(Socket sock){
-    	if (CPS>0) {
-    	    return new SlowSSLSocket((SSLSocket) sock, CPS);
-    	}
-    	return sock;
+        if (CPS>0) {
+            return new SlowSSLSocket((SSLSocket) sock, CPS);
+        }
+        return sock;
     }
 
-	/**
+    /**
      * Attempts to get a new socket connection to the given host within the given time limit.
-     *  
+     *
      * @param host the host name/IP
      * @param port the port on the host
      * @param localAddress the local host name/IP to bind the socket to
      * @param localPort the port on the local machine
      * @param params {@link HttpConnectionParams Http connection parameters}
-     * 
+     *
      * @return Socket a new socket
-     * 
+     *
      * @throws IOException if an I/O error occurs while creating the socket
      * @throws UnknownHostException if the IP address of the host cannot be
      * determined
@@ -167,11 +167,11 @@ public class HttpSSLProtocolSocketFactory
             throw new IllegalArgumentException("Parameters may not be null");
         }
         int timeout = params.getConnectionTimeout();
-        
+
         SSLSocketFactory sslfac = getSSLSocketFactory();
         Socket socket;
         if (timeout == 0) {
-        	socket = sslfac.createSocket(host, port, localAddress, localPort);
+            socket = sslfac.createSocket(host, port, localAddress, localPort);
         } else {
             socket = sslfac.createSocket();
             SocketAddress localaddr = new InetSocketAddress(localAddress, localPort);
@@ -189,12 +189,12 @@ public class HttpSSLProtocolSocketFactory
     public Socket createSocket(String host, int port)
         throws IOException, UnknownHostException {
         SSLSocketFactory sslfac = getSSLSocketFactory();
-    	Socket sock = sslfac.createSocket(
+        Socket sock = sslfac.createSocket(
             host,
             port
         );
         setSocket(sock);
-    	return wrapSocket(sock);
+        return wrapSocket(sock);
     }
 
     /**
@@ -207,14 +207,14 @@ public class HttpSSLProtocolSocketFactory
         boolean autoClose)
         throws IOException, UnknownHostException {
         SSLSocketFactory sslfac = getSSLSocketFactory();
-    	Socket sock = sslfac.createSocket(
+        Socket sock = sslfac.createSocket(
             socket,
             host,
             port,
             autoClose
         );
         setSocket(sock);
-    	return wrapSocket(sock);
+        return wrapSocket(sock);
     }
 
     /**
@@ -238,35 +238,35 @@ public class HttpSSLProtocolSocketFactory
         return wrapSocket(sock);
     }
 
-	public Socket createSocket(InetAddress host, int port) throws IOException {
+    public Socket createSocket(InetAddress host, int port) throws IOException {
         SSLSocketFactory sslfac = getSSLSocketFactory();
-		Socket sock=sslfac.createSocket(host,port);
+        Socket sock=sslfac.createSocket(host,port);
         setSocket(sock);
-		return wrapSocket(sock);
-	}
+        return wrapSocket(sock);
+    }
 
-	public Socket createSocket(InetAddress address, int port, InetAddress localAddress, int localPort) throws IOException {
+    public Socket createSocket(InetAddress address, int port, InetAddress localAddress, int localPort) throws IOException {
         SSLSocketFactory sslfac = getSSLSocketFactory();
-		Socket sock=sslfac.createSocket(address, port, localAddress, localPort);
+        Socket sock=sslfac.createSocket(address, port, localAddress, localPort);
         setSocket(sock);
-		return wrapSocket(sock);
-	}
+        return wrapSocket(sock);
+    }
 
-	public String[] getDefaultCipherSuites() {
+    public String[] getDefaultCipherSuites() {
         try {
             SSLSocketFactory sslfac = getSSLSocketFactory();
             return sslfac.getDefaultCipherSuites();
         } catch (IOException ex) {
             return new String[] {};
         }
-	}
+    }
 
-	public String[] getSupportedCipherSuites() {
+    public String[] getSupportedCipherSuites() {
         try {
             SSLSocketFactory sslfac = getSSLSocketFactory();
             return sslfac.getSupportedCipherSuites();
         } catch (IOException ex) {
             return new String[] {};
-		}
-	}
+        }
+    }
 }

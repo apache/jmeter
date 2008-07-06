@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.threads;
@@ -26,73 +26,73 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public final class JMeterContextService {
     private static final ThreadLocal threadContext = new ThreadLocal() {
-		public Object initialValue() {
-			return new JMeterContext();
-		}
-	};
-
-	//@GuardedGy("this")
-	private static long testStart = 0;
+        public Object initialValue() {
+            return new JMeterContext();
+        }
+    };
 
     //@GuardedGy("this")
-	private static int numberOfActiveThreads = 0;
-    
+    private static long testStart = 0;
+
+    //@GuardedGy("this")
+    private static int numberOfActiveThreads = 0;
+
     //@GuardedGy("this")
     private static int totalThreads = 0;
 
-	/**
-	 * Private constructor to prevent instantiation.
-	 */
-	private JMeterContextService() {
-	}
+    /**
+     * Private constructor to prevent instantiation.
+     */
+    private JMeterContextService() {
+    }
 
-	static public JMeterContext getContext() {
-		return (JMeterContext) threadContext.get();
-	}
+    static public JMeterContext getContext() {
+        return (JMeterContext) threadContext.get();
+    }
 
-	static public synchronized void startTest() {
-		if (testStart == 0) {
-			numberOfActiveThreads = 0;
-			testStart = System.currentTimeMillis();
+    static public synchronized void startTest() {
+        if (testStart == 0) {
+            numberOfActiveThreads = 0;
+            testStart = System.currentTimeMillis();
             JMeterUtils.setProperty("TESTSTART.MS",Long.toString(testStart));// $NON-NLS-1$
-		}
-	}
+        }
+    }
 
-	/**
-	 * Increment number of active threads.
-	 */
-	static synchronized void incrNumberOfThreads() {
-		numberOfActiveThreads++;
-	}
+    /**
+     * Increment number of active threads.
+     */
+    static synchronized void incrNumberOfThreads() {
+        numberOfActiveThreads++;
+    }
 
-	/**
-	 * Decrement number of active threads.
-	 */
-	static synchronized void decrNumberOfThreads() {
-		numberOfActiveThreads--;
-	}
+    /**
+     * Decrement number of active threads.
+     */
+    static synchronized void decrNumberOfThreads() {
+        numberOfActiveThreads--;
+    }
 
-	/**
-	 * Get the number of currently active threads
-	 * @return active thread count
-	 */
-	static public synchronized int getNumberOfThreads() {
-		return numberOfActiveThreads;
-	}
+    /**
+     * Get the number of currently active threads
+     * @return active thread count
+     */
+    static public synchronized int getNumberOfThreads() {
+        return numberOfActiveThreads;
+    }
 
-	static public synchronized void endTest() {
-		testStart = 0;
-		numberOfActiveThreads = 0;
-	}
+    static public synchronized void endTest() {
+        testStart = 0;
+        numberOfActiveThreads = 0;
+    }
 
-	static public synchronized long getTestStartTime() {// NOT USED
-		return testStart;
-	}
+    static public synchronized long getTestStartTime() {// NOT USED
+        return testStart;
+    }
 
-	/**
-	 * Get the total number of threads (>= active)
-	 * @return total thread count
-	 */
+    /**
+     * Get the total number of threads (>= active)
+     * @return total thread count
+     */
     public static synchronized int getTotalThreads() {
         return totalThreads;
     }

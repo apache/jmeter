@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.samplers;
@@ -27,44 +27,43 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author unascribed
  * @version $Revision$
  */
 
 public class RemoteSampleListenerWrapper extends AbstractTestElement implements SampleListener, Serializable,
-		NoThreadClone {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+        NoThreadClone {
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private RemoteSampleListener listener;
+    private RemoteSampleListener listener;
 
-	public RemoteSampleListenerWrapper(RemoteSampleListener l) {
-		listener = l;
-	}
+    public RemoteSampleListenerWrapper(RemoteSampleListener l) {
+        listener = l;
+    }
 
-	public RemoteSampleListenerWrapper() {
-	}
+    public RemoteSampleListenerWrapper() {
+    }
 
-	public void sampleOccurred(SampleEvent e) {
-		try {
-			listener.sampleOccurred(e);
-		} catch (RemoteException err) {
-			log.error("", err); // $NON-NLS-1$
-		}
-	}
+    public void sampleOccurred(SampleEvent e) {
+        try {
+            listener.sampleOccurred(e);
+        } catch (RemoteException err) {
+            log.error("", err); // $NON-NLS-1$
+        }
+    }
 
-	public void sampleStarted(SampleEvent e) {
-		try {
-			listener.sampleStarted(e);
-		} catch (RemoteException err) {
-			log.error("", err); // $NON-NLS-1$
-		}
-	}
+    public void sampleStarted(SampleEvent e) {
+        try {
+            listener.sampleStarted(e);
+        } catch (RemoteException err) {
+            log.error("", err); // $NON-NLS-1$
+        }
+    }
 
-	public void sampleStopped(SampleEvent e) {
-		try {
-			listener.sampleStopped(e);
-		} catch (RemoteException err) {
-			log.error("", err); // $NON-NLS-1$
-		}
-	}
+    public void sampleStopped(SampleEvent e) {
+        try {
+            listener.sampleStopped(e);
+        } catch (RemoteException err) {
+            log.error("", err); // $NON-NLS-1$
+        }
+    }
 }

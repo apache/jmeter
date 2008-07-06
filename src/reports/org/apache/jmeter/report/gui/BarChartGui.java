@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 package org.apache.jmeter.report.gui;
 
@@ -39,37 +39,37 @@ import org.apache.jorphan.gui.JLabeledTextField;
 public class BarChartGui extends AbstractReportGui {
 
     private JLabeledChoice xAxisLabel = new JLabeledChoice();
-    
-    private JLabeledTextField yAxisLabel = 
+
+    private JLabeledTextField yAxisLabel =
         new JLabeledTextField(JMeterUtils.getResString("report_chart_y_axis_label"));
-    
-    private JLabeledTextField caption = 
+
+    private JLabeledTextField caption =
         new JLabeledTextField(JMeterUtils.getResString("report_chart_caption"),
                 Color.white);
-    private JLabeledTextField url = 
+    private JLabeledTextField url =
         new JLabeledTextField(JMeterUtils.getResString("report_bar_graph_url"),
                 Color.white);
 
     private JLabeledChoice yItems = new JLabeledChoice();
-	private JLabeledChoice xItems = new JLabeledChoice();
+    private JLabeledChoice xItems = new JLabeledChoice();
 
     public BarChartGui() {
-		super();
-		init();
-	}
-	
-	public String getLabelResource() {
-		return "report_bar_chart";
-	}
-	
-	public JPopupMenu createPopupMenu() {
+        super();
+        init();
+    }
+
+    public String getLabelResource() {
+        return "report_bar_chart";
+    }
+
+    public JPopupMenu createPopupMenu() {
         JPopupMenu pop = new JPopupMenu();
         ReportMenuFactory.addFileMenu(pop);
         ReportMenuFactory.addEditMenu(pop,true);
         return pop;
-	}
+    }
 
-	private void init() {// called from ctor, so must not be overridable
+    private void init() {// called from ctor, so must not be overridable
         setLayout(new BorderLayout(10, 10));
         setBorder(makeBorder());
         setBackground(Color.white);
@@ -78,14 +78,14 @@ public class BarChartGui extends AbstractReportGui {
         pane.setLayout(new BorderLayout(10,10));
         pane.setBackground(Color.white);
         pane.add(this.getNamePanel(),BorderLayout.NORTH);
-        
+
         VerticalPanel options = new VerticalPanel(Color.white);
         xAxisLabel.setBackground(Color.white);
         yAxisLabel.setBackground(Color.white);
 
         JLabel xLabel = new JLabel(JMeterUtils.getResString("report_chart_x_axis"));
-		HorizontalPanel xpanel = new HorizontalPanel(Color.white);
-		xLabel.setBorder(new EmptyBorder(5,2,5,2));
+        HorizontalPanel xpanel = new HorizontalPanel(Color.white);
+        xLabel.setBorder(new EmptyBorder(5,2,5,2));
         xItems.setBackground(Color.white);
         xItems.setValues(AbstractTable.xitems);
         xpanel.add(xLabel);
@@ -100,10 +100,10 @@ public class BarChartGui extends AbstractReportGui {
         xApanel.add(xALabel);
         xApanel.add(xAxisLabel);
         options.add(xApanel);
-        
-		JLabel yLabel = new JLabel(JMeterUtils.getResString("report_chart_y_axis"));
-		HorizontalPanel ypanel = new HorizontalPanel(Color.white);
-		yLabel.setBorder(new EmptyBorder(5,2,5,2));
+
+        JLabel yLabel = new JLabel(JMeterUtils.getResString("report_chart_y_axis"));
+        HorizontalPanel ypanel = new HorizontalPanel(Color.white);
+        yLabel.setBorder(new EmptyBorder(5,2,5,2));
         yItems.setBackground(Color.white);
         yItems.setValues(AbstractTable.items);
         ypanel.add(yLabel);
@@ -112,28 +112,28 @@ public class BarChartGui extends AbstractReportGui {
         options.add(yAxisLabel);
         options.add(caption);
         options.add(url);
-        
+
         add(pane,BorderLayout.NORTH);
         add(options,BorderLayout.CENTER);
-	}
-	
-	public TestElement createTestElement() {
-		BarChart element = new BarChart();
-		modifyTestElement(element);
-		return element;
-	}
+    }
 
-	public void modifyTestElement(TestElement element) {
-		this.configureTestElement(element);
-		BarChart bc = (BarChart)element;
-		bc.setXAxis(xItems.getText());
-		bc.setYAxis(yItems.getText());
-		bc.setXLabel(xAxisLabel.getText());
-		bc.setYLabel(yAxisLabel.getText());
+    public TestElement createTestElement() {
+        BarChart element = new BarChart();
+        modifyTestElement(element);
+        return element;
+    }
+
+    public void modifyTestElement(TestElement element) {
+        this.configureTestElement(element);
+        BarChart bc = (BarChart)element;
+        bc.setXAxis(xItems.getText());
+        bc.setYAxis(yItems.getText());
+        bc.setXLabel(xAxisLabel.getText());
+        bc.setYLabel(yAxisLabel.getText());
         bc.setCaption(caption.getText());
         bc.setURL(url.getText());
-	}
-	
+    }
+
     public void configure(TestElement element) {
         super.configure(element);
         BarChart bc = (BarChart)element;
@@ -144,5 +144,5 @@ public class BarChartGui extends AbstractReportGui {
         caption.setText(bc.getCaption());
         url.setText(bc.getURL());
     }
-    
+
 }

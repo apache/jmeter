@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.control;
@@ -28,51 +28,51 @@ import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  * This class is a Cookie encapsulator.
- * 
+ *
  */
 public class Cookie extends AbstractTestElement implements Serializable {
-	private static final String TAB = "\t";
+    private static final String TAB = "\t";
 
     private static final String VALUE = "Cookie.value"; //$NON-NLS-1$
 
-	private static final String DOMAIN = "Cookie.domain"; //$NON-NLS-1$
+    private static final String DOMAIN = "Cookie.domain"; //$NON-NLS-1$
 
-	private static final String EXPIRES = "Cookie.expires"; //$NON-NLS-1$
+    private static final String EXPIRES = "Cookie.expires"; //$NON-NLS-1$
 
-	private static final String SECURE = "Cookie.secure"; //$NON-NLS-1$
+    private static final String SECURE = "Cookie.secure"; //$NON-NLS-1$
 
-	private static final String PATH = "Cookie.path"; //$NON-NLS-1$
+    private static final String PATH = "Cookie.path"; //$NON-NLS-1$
 
     private static final String PATH_SPECIFIED = "Cookie.path_specified"; //$NON-NLS-1$
 
     private static final String DOMAIN_SPECIFIED = "Cookie.domain_specified"; //$NON-NLS-1$
 
-	/**
-	 * create the coookie
-	 */
-	public Cookie() {
-        this("","","","",false,0,false,false);
-	}
-
     /**
-	 * create the coookie
-     * 
-     * @param expires - this is in seconds
-     * 
-	 */
-	public Cookie(String name, String value, String domain, String path, boolean secure, long expires) {
-        this(name,value,domain,path,secure,expires,true,true);
-	}
+     * create the coookie
+     */
+    public Cookie() {
+        this("","","","",false,0,false,false);
+    }
 
     /**
      * create the coookie
-     * 
+     *
+     * @param expires - this is in seconds
+     *
+     */
+    public Cookie(String name, String value, String domain, String path, boolean secure, long expires) {
+        this(name,value,domain,path,secure,expires,true,true);
+    }
+
+    /**
+     * create the coookie
+     *
      * @param expires - this is in seconds
      * @param hasPath - was the path explicitly specified?
      * @param hasDomain - was the domain explicitly specified?
-     * 
+     *
      */
-    public Cookie(String name, String value, String domain, String path, 
+    public Cookie(String name, String value, String domain, String path,
             boolean secure, long expires, boolean hasPath, boolean hasDomain) {
         this.setName(name);
         this.setValue(value);
@@ -85,90 +85,90 @@ public class Cookie extends AbstractTestElement implements Serializable {
     }
 
     public void addConfigElement(ConfigElement config) {
-	}
+    }
 
-	/**
-	 * get the value for this object.
-	 */
-	public synchronized String getValue() {
-		return getPropertyAsString(VALUE);
-	}
+    /**
+     * get the value for this object.
+     */
+    public synchronized String getValue() {
+        return getPropertyAsString(VALUE);
+    }
 
-	/**
-	 * set the value for this object.
-	 */
-	public synchronized void setValue(String value) {
-		this.setProperty(VALUE, value);
-	}
+    /**
+     * set the value for this object.
+     */
+    public synchronized void setValue(String value) {
+        this.setProperty(VALUE, value);
+    }
 
-	/**
-	 * get the domain for this object.
-	 */
-	public synchronized String getDomain() {
-		return getPropertyAsString(DOMAIN);
-	}
+    /**
+     * get the domain for this object.
+     */
+    public synchronized String getDomain() {
+        return getPropertyAsString(DOMAIN);
+    }
 
-	/**
-	 * set the domain for this object.
-	 */
-	public synchronized void setDomain(String domain) {
-		setProperty(DOMAIN, domain);
-	}
-
-	/**
-	 * get the expiry time for the cookie
-     * 
-     * @return Expiry time in seconds since the Java epoch
-	 */
-	public synchronized long getExpires() {
-		return getPropertyAsLong(EXPIRES);
-	}
+    /**
+     * set the domain for this object.
+     */
+    public synchronized void setDomain(String domain) {
+        setProperty(DOMAIN, domain);
+    }
 
     /**
      * get the expiry time for the cookie
-     * 
-     * @return Expiry time in milli-seconds since the Java epoch, 
+     *
+     * @return Expiry time in seconds since the Java epoch
+     */
+    public synchronized long getExpires() {
+        return getPropertyAsLong(EXPIRES);
+    }
+
+    /**
+     * get the expiry time for the cookie
+     *
+     * @return Expiry time in milli-seconds since the Java epoch,
      * i.e. same as System.currentTimeMillis()
      */
     public synchronized long getExpiresMillis() {
         return getPropertyAsLong(EXPIRES)*1000;
     }
 
-	/**
-	 * set the expiry time for the cookie
+    /**
+     * set the expiry time for the cookie
      * @param expires - expiry time in seconds since the Java epoch
-	 */
-	public synchronized void setExpires(long expires) {
-		setProperty(new LongProperty(EXPIRES, expires));
-	}
+     */
+    public synchronized void setExpires(long expires) {
+        setProperty(new LongProperty(EXPIRES, expires));
+    }
 
-	/**
-	 * get the secure for this object.
-	 */
-	public synchronized boolean getSecure() {
-		return getPropertyAsBoolean(SECURE);
-	}
+    /**
+     * get the secure for this object.
+     */
+    public synchronized boolean getSecure() {
+        return getPropertyAsBoolean(SECURE);
+    }
 
-	/**
-	 * set the secure for this object.
-	 */
-	public synchronized void setSecure(boolean secure) {
-		setProperty(new BooleanProperty(SECURE, secure));
-	}
+    /**
+     * set the secure for this object.
+     */
+    public synchronized void setSecure(boolean secure) {
+        setProperty(new BooleanProperty(SECURE, secure));
+    }
 
-	/**
-	 * get the path for this object.
-	 */
-	public synchronized String getPath() {
-		return getPropertyAsString(PATH);
-	}
+    /**
+     * get the path for this object.
+     */
+    public synchronized String getPath() {
+        return getPropertyAsString(PATH);
+    }
 
-	/**
-	 * set the path for this object.
-	 */
-	public synchronized void setPath(String path) {
-		setProperty(PATH, path);
-	}
+    /**
+     * set the path for this object.
+     */
+    public synchronized void setPath(String path) {
+        setProperty(PATH, path);
+    }
 
     public void setPathSpecified(boolean b) {
         setProperty(PATH_SPECIFIED, b);
@@ -177,7 +177,7 @@ public class Cookie extends AbstractTestElement implements Serializable {
     public boolean isPathSpecified(){
         return getPropertyAsBoolean(PATH_SPECIFIED);
     }
-    
+
     public void setDomainSpecified(boolean b) {
         setProperty(DOMAIN_SPECIFIED, b);
     }
@@ -185,23 +185,23 @@ public class Cookie extends AbstractTestElement implements Serializable {
     public boolean isDomainSpecified(){
         return getPropertyAsBoolean(DOMAIN_SPECIFIED);
     }
-    
-	/**
-	 * creates a string representation of this cookie
-	 */
-	public String toString() {
+
+    /**
+     * creates a string representation of this cookie
+     */
+    public String toString() {
         StringBuffer sb=new StringBuffer(80);
         sb.append(getDomain());
         // flag - if all machines within a given domain can access the variable.
         //(from http://www.cookiecentral.com/faq/ 3.5)
         sb.append(TAB).append("TRUE");
         sb.append(TAB).append(getPath());
-        sb.append(TAB).append(JOrphanUtils.booleanToSTRING(getSecure())); 
+        sb.append(TAB).append(JOrphanUtils.booleanToSTRING(getSecure()));
         sb.append(TAB).append(getExpires());
         sb.append(TAB).append(getName());
         sb.append(TAB).append(getValue());
         return sb.toString();
-	}
+    }
 
 
 }

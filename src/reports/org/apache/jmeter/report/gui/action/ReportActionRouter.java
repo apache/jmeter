@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.report.gui.action;
@@ -39,231 +39,231 @@ import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.log.Logger;
 
 public final class ReportActionRouter implements ActionListener {
-	private Map commands = new HashMap();
+    private Map commands = new HashMap();
 
-	private static ReportActionRouter router;
+    private static ReportActionRouter router;
 
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private Map preActionListeners = new HashMap();
+    private Map preActionListeners = new HashMap();
 
-	private Map postActionListeners = new HashMap();
+    private Map postActionListeners = new HashMap();
 
-	private ReportActionRouter() {
-	}
+    private ReportActionRouter() {
+    }
 
-	public void actionPerformed(final ActionEvent e) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				performAction(e);
-			}
+    public void actionPerformed(final ActionEvent e) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                performAction(e);
+            }
 
-		});
-	}
+        });
+    }
 
-	private void performAction(final ActionEvent e) {
-		try {
-			ReportGuiPackage.getInstance().updateCurrentNode();
-			Set commandObjects = (Set) commands.get(e.getActionCommand());
-			Iterator iter = commandObjects.iterator();
-			while (iter.hasNext()) {
-				try {
-					Command c = (Command) iter.next();
-					preActionPerformed(c.getClass(), e);
-					c.doAction(e);
-					postActionPerformed(c.getClass(), e);
-				} catch (IllegalUserActionException err) {
-					JMeterUtils.reportErrorToUser(err.toString());
-				} catch (Exception err) {
-					log.error("", err);
-				}
-			}
-		} catch (NullPointerException er) {
-			log.error("performAction(" + e.getActionCommand() + ") " + e.toString() + " caused", er);
-			JMeterUtils.reportErrorToUser("Sorry, this feature (" + e.getActionCommand() + ") not yet implemented");
-		}
-	}
+    private void performAction(final ActionEvent e) {
+        try {
+            ReportGuiPackage.getInstance().updateCurrentNode();
+            Set commandObjects = (Set) commands.get(e.getActionCommand());
+            Iterator iter = commandObjects.iterator();
+            while (iter.hasNext()) {
+                try {
+                    Command c = (Command) iter.next();
+                    preActionPerformed(c.getClass(), e);
+                    c.doAction(e);
+                    postActionPerformed(c.getClass(), e);
+                } catch (IllegalUserActionException err) {
+                    JMeterUtils.reportErrorToUser(err.toString());
+                } catch (Exception err) {
+                    log.error("", err);
+                }
+            }
+        } catch (NullPointerException er) {
+            log.error("performAction(" + e.getActionCommand() + ") " + e.toString() + " caused", er);
+            JMeterUtils.reportErrorToUser("Sorry, this feature (" + e.getActionCommand() + ") not yet implemented");
+        }
+    }
 
-	/**
-	 * To execute an action immediately in the current thread.
-	 * 
-	 * @param e
-	 *            the action to execute
-	 */
-	public void doActionNow(ActionEvent e) {
-		performAction(e);
-	}
+    /**
+     * To execute an action immediately in the current thread.
+     *
+     * @param e
+     *            the action to execute
+     */
+    public void doActionNow(ActionEvent e) {
+        performAction(e);
+    }
 
-	public Set getAction(String actionName) {
-		Set set = new HashSet();
-		Set commandObjects = (Set) commands.get(actionName);
-		Iterator iter = commandObjects.iterator();
-		while (iter.hasNext()) {
-			try {
-				set.add(iter.next());
-			} catch (Exception err) {
-				log.error("", err);
-			}
-		}
-		return set;
-	}
+    public Set getAction(String actionName) {
+        Set set = new HashSet();
+        Set commandObjects = (Set) commands.get(actionName);
+        Iterator iter = commandObjects.iterator();
+        while (iter.hasNext()) {
+            try {
+                set.add(iter.next());
+            } catch (Exception err) {
+                log.error("", err);
+            }
+        }
+        return set;
+    }
 
-	public Command getAction(String actionName, Class actionClass) {
-		Set commandObjects = (Set) commands.get(actionName);
-		Iterator iter = commandObjects.iterator();
-		while (iter.hasNext()) {
-			try {
-				Command com = (Command) iter.next();
-				if (com.getClass().equals(actionClass)) {
-					return com;
-				}
-			} catch (Exception err) {
-				log.error("", err);
-			}
-		}
-		return null;
-	}
+    public Command getAction(String actionName, Class actionClass) {
+        Set commandObjects = (Set) commands.get(actionName);
+        Iterator iter = commandObjects.iterator();
+        while (iter.hasNext()) {
+            try {
+                Command com = (Command) iter.next();
+                if (com.getClass().equals(actionClass)) {
+                    return com;
+                }
+            } catch (Exception err) {
+                log.error("", err);
+            }
+        }
+        return null;
+    }
 
-	public Command getAction(String actionName, String className) {
-		Set commandObjects = (Set) commands.get(actionName);
-		Iterator iter = commandObjects.iterator();
-		while (iter.hasNext()) {
-			try {
-				Command com = (Command) iter.next();
-				if (com.getClass().getName().equals(className)) {
-					return com;
-				}
-			} catch (Exception err) {
-				log.error("", err);
-			}
-		}
-		return null;
-	}
+    public Command getAction(String actionName, String className) {
+        Set commandObjects = (Set) commands.get(actionName);
+        Iterator iter = commandObjects.iterator();
+        while (iter.hasNext()) {
+            try {
+                Command com = (Command) iter.next();
+                if (com.getClass().getName().equals(className)) {
+                    return com;
+                }
+            } catch (Exception err) {
+                log.error("", err);
+            }
+        }
+        return null;
+    }
 
-	/**
-	 * Allows an ActionListener to receive notification of a command being
-	 * executed prior to the actual execution of the command.
-	 * 
-	 * @param action
-	 *            the Class of the command for which the listener will
-	 *            notifications for. Class must extend
-	 *            org.apache.jmeter.report.gui.action.Command.
-	 * @param listener
-	 *            the ActionListener to receive the notifications
-	 */
-	public void addPreActionListener(Class action, ActionListener listener) {
-		if (action != null) {
-			HashSet set = (HashSet) preActionListeners.get(action.getName());
-			if (set == null) {
-				set = new HashSet();
-			}
-			set.add(listener);
-			preActionListeners.put(action.getName(), set);
-		}
-	}
+    /**
+     * Allows an ActionListener to receive notification of a command being
+     * executed prior to the actual execution of the command.
+     *
+     * @param action
+     *            the Class of the command for which the listener will
+     *            notifications for. Class must extend
+     *            org.apache.jmeter.report.gui.action.Command.
+     * @param listener
+     *            the ActionListener to receive the notifications
+     */
+    public void addPreActionListener(Class action, ActionListener listener) {
+        if (action != null) {
+            HashSet set = (HashSet) preActionListeners.get(action.getName());
+            if (set == null) {
+                set = new HashSet();
+            }
+            set.add(listener);
+            preActionListeners.put(action.getName(), set);
+        }
+    }
 
-	/**
-	 * Allows an ActionListener to be removed from receiving notifications of a
-	 * command being executed prior to the actual execution of the command.
-	 * 
-	 * @param action
-	 *            the Class of the command for which the listener will
-	 *            notifications for. Class must extend
-	 *            org.apache.jmeter.report.gui.action.Command.
-	 * @param listener
-	 *            the ActionListener to receive the notifications
-	 */
-	public void removePreActionListener(Class action, ActionListener listener) {
-		if (action != null) {
-			HashSet set = (HashSet) preActionListeners.get(action.getName());
-			if (set != null) {
-				set.remove(listener);
-				preActionListeners.put(action.getName(), set);
-			}
-		}
-	}
+    /**
+     * Allows an ActionListener to be removed from receiving notifications of a
+     * command being executed prior to the actual execution of the command.
+     *
+     * @param action
+     *            the Class of the command for which the listener will
+     *            notifications for. Class must extend
+     *            org.apache.jmeter.report.gui.action.Command.
+     * @param listener
+     *            the ActionListener to receive the notifications
+     */
+    public void removePreActionListener(Class action, ActionListener listener) {
+        if (action != null) {
+            HashSet set = (HashSet) preActionListeners.get(action.getName());
+            if (set != null) {
+                set.remove(listener);
+                preActionListeners.put(action.getName(), set);
+            }
+        }
+    }
 
-	/**
-	 * Allows an ActionListener to receive notification of a command being
-	 * executed after the command has executed.
-	 * 
-	 * @param action
-	 *            the Class of the command for which the listener will
-	 *            notifications for. Class must extend
-	 *            org.apache.jmeter.report.gui.action.Command.
-	 * @param listener
-	 */
-	public void addPostActionListener(Class action, ActionListener listener) {
-		if (action != null) {
-			HashSet set = (HashSet) postActionListeners.get(action.getName());
-			if (set == null) {
-				set = new HashSet();
-			}
-			set.add(listener);
-			postActionListeners.put(action.getName(), set);
-		}
-	}
+    /**
+     * Allows an ActionListener to receive notification of a command being
+     * executed after the command has executed.
+     *
+     * @param action
+     *            the Class of the command for which the listener will
+     *            notifications for. Class must extend
+     *            org.apache.jmeter.report.gui.action.Command.
+     * @param listener
+     */
+    public void addPostActionListener(Class action, ActionListener listener) {
+        if (action != null) {
+            HashSet set = (HashSet) postActionListeners.get(action.getName());
+            if (set == null) {
+                set = new HashSet();
+            }
+            set.add(listener);
+            postActionListeners.put(action.getName(), set);
+        }
+    }
 
-	/**
-	 * Allows an ActionListener to be removed from receiving notifications of a
-	 * command being executed after the command has executed.
-	 * 
-	 * @param action
-	 *            the Class of the command for which the listener will
-	 *            notifications for. Class must extend
-	 *            org.apache.jmeter.report.gui.action.Command.
-	 * @param listener
-	 */
-	public void removePostActionListener(Class action, ActionListener listener) {
-		if (action != null) {
-			HashSet set = (HashSet) postActionListeners.get(action.getName());
-			if (set != null) {
-				set.remove(listener);
-				postActionListeners.put(action.getName(), set);
-			}
-		}
-	}
+    /**
+     * Allows an ActionListener to be removed from receiving notifications of a
+     * command being executed after the command has executed.
+     *
+     * @param action
+     *            the Class of the command for which the listener will
+     *            notifications for. Class must extend
+     *            org.apache.jmeter.report.gui.action.Command.
+     * @param listener
+     */
+    public void removePostActionListener(Class action, ActionListener listener) {
+        if (action != null) {
+            HashSet set = (HashSet) postActionListeners.get(action.getName());
+            if (set != null) {
+                set.remove(listener);
+                postActionListeners.put(action.getName(), set);
+            }
+        }
+    }
 
-	protected void preActionPerformed(Class action, ActionEvent e) {
-		if (action != null) {
-			HashSet listenerSet = (HashSet) preActionListeners.get(action.getName());
-			if (listenerSet != null && listenerSet.size() > 0) {
-				Object[] listeners = listenerSet.toArray();
-				for (int i = 0; i < listeners.length; i++) {
-					((ActionListener) listeners[i]).actionPerformed(e);
-				}
-			}
-		}
-	}
+    protected void preActionPerformed(Class action, ActionEvent e) {
+        if (action != null) {
+            HashSet listenerSet = (HashSet) preActionListeners.get(action.getName());
+            if (listenerSet != null && listenerSet.size() > 0) {
+                Object[] listeners = listenerSet.toArray();
+                for (int i = 0; i < listeners.length; i++) {
+                    ((ActionListener) listeners[i]).actionPerformed(e);
+                }
+            }
+        }
+    }
 
-	protected void postActionPerformed(Class action, ActionEvent e) {
-		if (action != null) {
-			HashSet listenerSet = (HashSet) postActionListeners.get(action.getName());
-			if (listenerSet != null && listenerSet.size() > 0) {
-				Object[] listeners = listenerSet.toArray();
-				for (int i = 0; i < listeners.length; i++) {
-					((ActionListener) listeners[i]).actionPerformed(e);
-				}
-			}
-		}
-	}
+    protected void postActionPerformed(Class action, ActionEvent e) {
+        if (action != null) {
+            HashSet listenerSet = (HashSet) postActionListeners.get(action.getName());
+            if (listenerSet != null && listenerSet.size() > 0) {
+                Object[] listeners = listenerSet.toArray();
+                for (int i = 0; i < listeners.length; i++) {
+                    ((ActionListener) listeners[i]).actionPerformed(e);
+                }
+            }
+        }
+    }
 
-	private void populateCommandMap() {
+    private void populateCommandMap() {
         log.info("populateCommandMap called");
-		List listClasses;
-		Command command;
-		Iterator iterClasses;
-		Class commandClass;
-		try {
-			listClasses = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] { Class
-					.forName("org.apache.jmeter.gui.action.Command") });
-			commands = new HashMap(listClasses.size());
-			if (listClasses.size() == 0) {
-				log.warn("!!!!!Uh-oh, didn't find any action handlers!!!!!");
-			}
-			iterClasses = listClasses.iterator();
-			while (iterClasses.hasNext()) {
-				String strClassName = (String) iterClasses.next();
+        List listClasses;
+        Command command;
+        Iterator iterClasses;
+        Class commandClass;
+        try {
+            listClasses = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] { Class
+                    .forName("org.apache.jmeter.gui.action.Command") });
+            commands = new HashMap(listClasses.size());
+            if (listClasses.size() == 0) {
+                log.warn("!!!!!Uh-oh, didn't find any action handlers!!!!!");
+            }
+            iterClasses = listClasses.iterator();
+            while (iterClasses.hasNext()) {
+                String strClassName = (String) iterClasses.next();
                 if (strClassName.startsWith("org.apache.jmeter.report.gui.action")) {
                     // log.info("classname:: " + strClassName);
                     commandClass = Class.forName(strClassName);
@@ -281,27 +281,27 @@ public final class ReportActionRouter implements ActionListener {
                         }
                     }
                 }
-			}
-		} catch (Exception e) {
-			if ("java.awt.HeadlessException".equals(e.getClass().getName())) // JDK1.4:
-			{
-				log.warn(e.toString());
-			} else {
-				log.error("exception finding action handlers", e);
-			}
-		}
-	}
+            }
+        } catch (Exception e) {
+            if ("java.awt.HeadlessException".equals(e.getClass().getName())) // JDK1.4:
+            {
+                log.warn(e.toString());
+            } else {
+                log.error("exception finding action handlers", e);
+            }
+        }
+    }
 
-	/**
-	 * Gets the Instance attribute of the ActionRouter class
-	 * 
-	 * @return The Instance value
-	 */
-	public static ReportActionRouter getInstance() {
-		if (router == null) {
-			router = new ReportActionRouter();
-			router.populateCommandMap();
-		}
-		return router;
-	}
+    /**
+     * Gets the Instance attribute of the ActionRouter class
+     *
+     * @return The Instance value
+     */
+    public static ReportActionRouter getInstance() {
+        if (router == null) {
+            router = new ReportActionRouter();
+            router.populateCommandMap();
+        }
+        return router;
+    }
 }

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.proxy;
@@ -33,143 +33,143 @@ import org.apache.log.Logger;
  * Web daemon thread. Creates main socket on port 8080 and listens on it
  * forever. For each client request, creates a proxy thread to handle the
  * request.
- * 
+ *
  */
 public class Daemon extends Thread {
 
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	/**
-	 * The time (in milliseconds) to wait when accepting a client connection.
-	 * The accept will be retried until the Daemon is told to stop. So this
-	 * interval is the longest time that the Daemon will have to wait after
-	 * being told to stop.
-	 */
-	private static final int ACCEPT_TIMEOUT = 1000;
+    /**
+     * The time (in milliseconds) to wait when accepting a client connection.
+     * The accept will be retried until the Daemon is told to stop. So this
+     * interval is the longest time that the Daemon will have to wait after
+     * being told to stop.
+     */
+    private static final int ACCEPT_TIMEOUT = 1000;
 
-	/** The port to listen on. */
-	private int daemonPort;
+    /** The port to listen on. */
+    private int daemonPort;
 
-	/** True if the Daemon is currently running. */
-	private boolean running;
+    /** True if the Daemon is currently running. */
+    private boolean running;
 
-	/** The target which will receive the generated JMeter test components. */
-	private ProxyControl target;
+    /** The target which will receive the generated JMeter test components. */
+    private ProxyControl target;
 
-	/**
-	 * The proxy class which will be used to handle individual requests. This
-	 * class must be the {@link Proxy} class or a subclass.
-	 */
-	private Class proxyClass = Proxy.class;
+    /**
+     * The proxy class which will be used to handle individual requests. This
+     * class must be the {@link Proxy} class or a subclass.
+     */
+    private Class proxyClass = Proxy.class;
 
     /** A Map of url string to page character encoding of that page */
     private Map pageEncodings;
     /** A Map of url string to character encoding for the form */
     private Map formEncodings;
 
-	/**
-	 * Default constructor.
-	 */
-	public Daemon() {
-		super("HTTP Proxy Daemon");
-	}
+    /**
+     * Default constructor.
+     */
+    public Daemon() {
+        super("HTTP Proxy Daemon");
+    }
 
-	/**
-	 * Create a new Daemon with the specified port and target.
-	 * 
-	 * @param port
-	 *            the port to listen on.
-	 * @param target
-	 *            the target which will receive the generated JMeter test
-	 *            components.
-	 */
-	public Daemon(int port, ProxyControl target) {
-		this();
-		this.target = target;
-		configureProxy(port);
-	}
+    /**
+     * Create a new Daemon with the specified port and target.
+     *
+     * @param port
+     *            the port to listen on.
+     * @param target
+     *            the target which will receive the generated JMeter test
+     *            components.
+     */
+    public Daemon(int port, ProxyControl target) {
+        this();
+        this.target = target;
+        configureProxy(port);
+    }
 
-	/**
-	 * Create a new Daemon with the specified port and target, using the
-	 * specified class to handle individual requests.
-	 * 
-	 * @param port
-	 *            the port to listen on.
-	 * @param target
-	 *            the target which will receive the generated JMeter test
-	 *            components.
-	 * @param proxyClass
-	 *            the proxy class to use to handle individual requests. This
-	 *            class must be the {@link Proxy} class or a subclass.
-	 */
-	public Daemon(int port, ProxyControl target, Class proxyClass) {
-		this(port, target);
-		this.proxyClass = proxyClass;
-	}
+    /**
+     * Create a new Daemon with the specified port and target, using the
+     * specified class to handle individual requests.
+     *
+     * @param port
+     *            the port to listen on.
+     * @param target
+     *            the target which will receive the generated JMeter test
+     *            components.
+     * @param proxyClass
+     *            the proxy class to use to handle individual requests. This
+     *            class must be the {@link Proxy} class or a subclass.
+     */
+    public Daemon(int port, ProxyControl target, Class proxyClass) {
+        this(port, target);
+        this.proxyClass = proxyClass;
+    }
 
-	/**
-	 * Configure the Daemon to listen on the specified port.
-	 * 
-	 * @param _daemonPort
-	 *            the port to listen on
-	 */
-	public void configureProxy(int _daemonPort) {
-		this.daemonPort = _daemonPort;
-		log.info("Proxy: OK");
-	}
+    /**
+     * Configure the Daemon to listen on the specified port.
+     *
+     * @param _daemonPort
+     *            the port to listen on
+     */
+    public void configureProxy(int _daemonPort) {
+        this.daemonPort = _daemonPort;
+        log.info("Proxy: OK");
+    }
 
-	/**
-	 * Listen on the daemon port and handle incoming requests. This method will
-	 * not exit until {@link #stopServer()} is called or an error occurs.
-	 */
-	public void run() {
-		running = true;
-		ServerSocket mainSocket = null;
+    /**
+     * Listen on the daemon port and handle incoming requests. This method will
+     * not exit until {@link #stopServer()} is called or an error occurs.
+     */
+    public void run() {
+        running = true;
+        ServerSocket mainSocket = null;
 
         // Maps to contain page and form encodings
         pageEncodings = Collections.synchronizedMap(new HashMap());
         formEncodings = Collections.synchronizedMap(new HashMap());
-        
-		try {
-			log.info("Creating Daemon Socket... on port " + daemonPort);
-			mainSocket = new ServerSocket(daemonPort);
-			mainSocket.setSoTimeout(ACCEPT_TIMEOUT);
-			log.info("Proxy up and running!");
 
-			while (running) {
-				try {
-					// Listen on main socket
-				    Socket clientSocket = mainSocket.accept();
-					if (running) {
-						// Pass request to new proxy thread
-						Proxy thd = (Proxy) proxyClass.newInstance();
+        try {
+            log.info("Creating Daemon Socket... on port " + daemonPort);
+            mainSocket = new ServerSocket(daemonPort);
+            mainSocket.setSoTimeout(ACCEPT_TIMEOUT);
+            log.info("Proxy up and running!");
+
+            while (running) {
+                try {
+                    // Listen on main socket
+                    Socket clientSocket = mainSocket.accept();
+                    if (running) {
+                        // Pass request to new proxy thread
+                        Proxy thd = (Proxy) proxyClass.newInstance();
                         thd.configure(clientSocket, target, pageEncodings, formEncodings);
-						thd.start();
-					}
-				} catch (InterruptedIOException e) {
-				    continue;
-					// Timeout occurred. Ignore, and keep looping until we're
-					// told to stop running.
-				}
-			}
-			log.info("Proxy Server stopped");
-		} catch (Exception e) {
-			log.warn("Proxy Server stopped", e);
-		} finally {
-		    JOrphanUtils.closeQuietly(mainSocket);
-		}
-        
+                        thd.start();
+                    }
+                } catch (InterruptedIOException e) {
+                    continue;
+                    // Timeout occurred. Ignore, and keep looping until we're
+                    // told to stop running.
+                }
+            }
+            log.info("Proxy Server stopped");
+        } catch (Exception e) {
+            log.warn("Proxy Server stopped", e);
+        } finally {
+            JOrphanUtils.closeQuietly(mainSocket);
+        }
+
         // Clear maps
         pageEncodings = null;
         formEncodings = null;
-	}
+    }
 
-	/**
-	 * Stop the proxy daemon. The daemon may not stop immediately.
-	 * 
-	 * see #ACCEPT_TIMEOUT
-	 */
-	public void stopServer() {
-		running = false;
-	}
+    /**
+     * Stop the proxy daemon. The daemon may not stop immediately.
+     *
+     * see #ACCEPT_TIMEOUT
+     */
+    public void stopServer() {
+        running = false;
+    }
 }

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -42,52 +42,52 @@ import org.apache.oro.text.regex.PatternMatcherInput;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Util;
 /**
- * Implements regular expression parsing of sample results and variables 
+ * Implements regular expression parsing of sample results and variables
  */
 
 // @see TestRegexFunction for unit tests
 
 public class RegexFunction extends AbstractFunction implements Serializable {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final long serialVersionUID = 232L;
-	
-	public static final String ALL = "ALL"; //$NON-NLS-1$
+    private static final long serialVersionUID = 232L;
 
-	public static final String RAND = "RAND"; //$NON-NLS-1$
+    public static final String ALL = "ALL"; //$NON-NLS-1$
 
-	public static final String KEY = "__regexFunction"; //$NON-NLS-1$
+    public static final String RAND = "RAND"; //$NON-NLS-1$
 
-	private Object[] values;// Parameters are stored here
+    public static final String KEY = "__regexFunction"; //$NON-NLS-1$
 
-	private static final Random rand = new Random();
+    private Object[] values;// Parameters are stored here
 
-	private static final List desc = new LinkedList();
+    private static final Random rand = new Random();
 
-	private transient Pattern templatePattern;// initialised to the regex \$(\d+)\$
+    private static final List desc = new LinkedList();
 
-	// Number of parameters expected - used to reject invalid calls
-	private static final int MIN_PARAMETER_COUNT = 2;
+    private transient Pattern templatePattern;// initialised to the regex \$(\d+)\$
 
-	private static final int MAX_PARAMETER_COUNT = 7;
-	static {
-		desc.add(JMeterUtils.getResString("regexfunc_param_1"));// regex //$NON-NLS-1$
-		desc.add(JMeterUtils.getResString("regexfunc_param_2"));// template //$NON-NLS-1$
-		desc.add(JMeterUtils.getResString("regexfunc_param_3"));// which match //$NON-NLS-1$
-		desc.add(JMeterUtils.getResString("regexfunc_param_4"));// between text //$NON-NLS-1$
-		desc.add(JMeterUtils.getResString("regexfunc_param_5"));// default text //$NON-NLS-1$
-		desc.add(JMeterUtils.getResString("function_name_paropt")); // output variable name //$NON-NLS-1$
+    // Number of parameters expected - used to reject invalid calls
+    private static final int MIN_PARAMETER_COUNT = 2;
+
+    private static final int MAX_PARAMETER_COUNT = 7;
+    static {
+        desc.add(JMeterUtils.getResString("regexfunc_param_1"));// regex //$NON-NLS-1$
+        desc.add(JMeterUtils.getResString("regexfunc_param_2"));// template //$NON-NLS-1$
+        desc.add(JMeterUtils.getResString("regexfunc_param_3"));// which match //$NON-NLS-1$
+        desc.add(JMeterUtils.getResString("regexfunc_param_4"));// between text //$NON-NLS-1$
+        desc.add(JMeterUtils.getResString("regexfunc_param_5"));// default text //$NON-NLS-1$
+        desc.add(JMeterUtils.getResString("function_name_paropt")); // output variable name //$NON-NLS-1$
         desc.add(JMeterUtils.getResString("regexfunc_param_7"));// input variable //$NON-NLS-1$
-	}
+    }
 
-	public RegexFunction() {
-		initPattern();
-	}
+    public RegexFunction() {
+        initPattern();
+    }
 
-	private void initPattern() {
-		templatePattern = JMeterUtils.getPatternCache().getPattern("\\$(\\d+)\\$",  //$NON-NLS-1$
-				Perl5Compiler.READ_ONLY_MASK);
-	}
+    private void initPattern() {
+        templatePattern = JMeterUtils.getPatternCache().getPattern("\\$(\\d+)\\$",  //$NON-NLS-1$
+                Perl5Compiler.READ_ONLY_MASK);
+    }
 
     // For serialised objects, do the same work as the constructor:
     private Object readResolve() throws ObjectStreamException {
@@ -96,189 +96,189 @@ public class RegexFunction extends AbstractFunction implements Serializable {
     }
 
 
-	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
-			throws InvalidVariableException {
-		String valueIndex = "", defaultValue = "", between = ""; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		String name = ""; //$NON-NLS-1$
-		String inputVariable = ""; //$NON-NLS-1$
-		Pattern searchPattern;
-		Object[] tmplt;
-		try {
-			searchPattern = JMeterUtils.getPatternCache().getPattern(((CompoundVariable) values[0]).execute(),
-					Perl5Compiler.READ_ONLY_MASK);
-			tmplt = generateTemplate(((CompoundVariable) values[1]).execute());
+    public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
+            throws InvalidVariableException {
+        String valueIndex = "", defaultValue = "", between = ""; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        String name = ""; //$NON-NLS-1$
+        String inputVariable = ""; //$NON-NLS-1$
+        Pattern searchPattern;
+        Object[] tmplt;
+        try {
+            searchPattern = JMeterUtils.getPatternCache().getPattern(((CompoundVariable) values[0]).execute(),
+                    Perl5Compiler.READ_ONLY_MASK);
+            tmplt = generateTemplate(((CompoundVariable) values[1]).execute());
 
-			if (values.length > 2) {
-				valueIndex = ((CompoundVariable) values[2]).execute();
-			}
-			if (valueIndex.length() == 0) {
-				valueIndex = "1"; //$NON-NLS-1$
-			}
+            if (values.length > 2) {
+                valueIndex = ((CompoundVariable) values[2]).execute();
+            }
+            if (valueIndex.length() == 0) {
+                valueIndex = "1"; //$NON-NLS-1$
+            }
 
-			if (values.length > 3) {
-				between = ((CompoundVariable) values[3]).execute();
-			}
+            if (values.length > 3) {
+                between = ((CompoundVariable) values[3]).execute();
+            }
 
-			if (values.length > 4) {
-				String dv = ((CompoundVariable) values[4]).execute();
-				if (dv.length() != 0) {
-					defaultValue = dv;
-				}
-			}
+            if (values.length > 4) {
+                String dv = ((CompoundVariable) values[4]).execute();
+                if (dv.length() != 0) {
+                    defaultValue = dv;
+                }
+            }
 
-			if (values.length > 5) {
-				name = ((CompoundVariable) values[5]).execute();
-			}
+            if (values.length > 5) {
+                name = ((CompoundVariable) values[5]).execute();
+            }
 
-			if (values.length > 6) {
+            if (values.length > 6) {
                 inputVariable = ((CompoundVariable) values[6]).execute();
             }
-		} catch (MalformedCachePatternException e) {
-			throw new InvalidVariableException(e.toString());
-		}
+        } catch (MalformedCachePatternException e) {
+            throw new InvalidVariableException(e.toString());
+        }
 
-		// Relatively expensive operation, so do it once
-		JMeterVariables vars = getVariables();
-		
-		if (name.length() > 0) {
-		    vars.put(name, defaultValue);
-		}
-        
-		String textToMatch=null;
-		
-		if (inputVariable.length() > 0){
-		    textToMatch=vars.get(inputVariable);
-		} else if (previousResult != null){
-		    textToMatch = previousResult.getResponseDataAsString();		    
-		}
+        // Relatively expensive operation, so do it once
+        JMeterVariables vars = getVariables();
+
+        if (name.length() > 0) {
+            vars.put(name, defaultValue);
+        }
+
+        String textToMatch=null;
+
+        if (inputVariable.length() > 0){
+            textToMatch=vars.get(inputVariable);
+        } else if (previousResult != null){
+            textToMatch = previousResult.getResponseDataAsString();
+        }
 
         if (textToMatch == null || textToMatch.length() == 0) {
-			return defaultValue;
-		}
+            return defaultValue;
+        }
 
-		List collectAllMatches = new ArrayList();
-		try {
-			PatternMatcher matcher = JMeterUtils.getMatcher();
-			PatternMatcherInput input = new PatternMatcherInput(textToMatch);
-			while (matcher.contains(input, searchPattern)) {
-				MatchResult match = matcher.getMatch();
-				collectAllMatches.add(match);
-			}
-		} catch (NumberFormatException e) {//TODO: can this occur?
-			log.error("", e); //$NON-NLS-1$
-			return defaultValue;
-		} finally {
-		    if (name.length() > 0){
-		        vars.put(name + "_matchNr", "" + collectAllMatches.size()); //$NON-NLS-1$ //$NON-NLS-2$
-		    }
-		}
+        List collectAllMatches = new ArrayList();
+        try {
+            PatternMatcher matcher = JMeterUtils.getMatcher();
+            PatternMatcherInput input = new PatternMatcherInput(textToMatch);
+            while (matcher.contains(input, searchPattern)) {
+                MatchResult match = matcher.getMatch();
+                collectAllMatches.add(match);
+            }
+        } catch (NumberFormatException e) {//TODO: can this occur?
+            log.error("", e); //$NON-NLS-1$
+            return defaultValue;
+        } finally {
+            if (name.length() > 0){
+                vars.put(name + "_matchNr", "" + collectAllMatches.size()); //$NON-NLS-1$ //$NON-NLS-2$
+            }
+        }
 
-		if (collectAllMatches.size() == 0) {
-			return defaultValue;
-		}
+        if (collectAllMatches.size() == 0) {
+            return defaultValue;
+        }
 
-		if (valueIndex.equals(ALL)) {
-			StringBuffer value = new StringBuffer();
-			Iterator it = collectAllMatches.iterator();
-			boolean first = true;
-			while (it.hasNext()) {
-				if (!first) {
-					value.append(between);
-				} else {
-					first = false;
-				}
-				value.append(generateResult((MatchResult) it.next(), name, tmplt, vars));
-			}
-			return value.toString();
-		} else if (valueIndex.equals(RAND)) {
-			MatchResult result = (MatchResult) collectAllMatches.get(rand.nextInt(collectAllMatches.size()));
-			return generateResult(result, name, tmplt, vars);
-		} else {
-			try {
-				int index = Integer.parseInt(valueIndex) - 1;
-				MatchResult result = (MatchResult) collectAllMatches.get(index);
-				return generateResult(result, name, tmplt, vars);
-			} catch (NumberFormatException e) {
-				float ratio = Float.parseFloat(valueIndex);
-				MatchResult result = (MatchResult) collectAllMatches
-						.get((int) (collectAllMatches.size() * ratio + .5) - 1);
-				return generateResult(result, name, tmplt, vars);
-			} catch (IndexOutOfBoundsException e) {
-				return defaultValue;
-			}
-		}
+        if (valueIndex.equals(ALL)) {
+            StringBuffer value = new StringBuffer();
+            Iterator it = collectAllMatches.iterator();
+            boolean first = true;
+            while (it.hasNext()) {
+                if (!first) {
+                    value.append(between);
+                } else {
+                    first = false;
+                }
+                value.append(generateResult((MatchResult) it.next(), name, tmplt, vars));
+            }
+            return value.toString();
+        } else if (valueIndex.equals(RAND)) {
+            MatchResult result = (MatchResult) collectAllMatches.get(rand.nextInt(collectAllMatches.size()));
+            return generateResult(result, name, tmplt, vars);
+        } else {
+            try {
+                int index = Integer.parseInt(valueIndex) - 1;
+                MatchResult result = (MatchResult) collectAllMatches.get(index);
+                return generateResult(result, name, tmplt, vars);
+            } catch (NumberFormatException e) {
+                float ratio = Float.parseFloat(valueIndex);
+                MatchResult result = (MatchResult) collectAllMatches
+                        .get((int) (collectAllMatches.size() * ratio + .5) - 1);
+                return generateResult(result, name, tmplt, vars);
+            } catch (IndexOutOfBoundsException e) {
+                return defaultValue;
+            }
+        }
 
-	}
+    }
 
-	private void saveGroups(MatchResult result, String namep, JMeterVariables vars) {
-		if (result != null) {
-			for (int x = 0; x < result.groups(); x++) {
-				vars.put(namep + "_g" + x, result.group(x)); //$NON-NLS-1$
-			}
-		}
-	}
+    private void saveGroups(MatchResult result, String namep, JMeterVariables vars) {
+        if (result != null) {
+            for (int x = 0; x < result.groups(); x++) {
+                vars.put(namep + "_g" + x, result.group(x)); //$NON-NLS-1$
+            }
+        }
+    }
 
-	public List getArgumentDesc() {
-		return desc;
-	}
+    public List getArgumentDesc() {
+        return desc;
+    }
 
-	private String generateResult(MatchResult match, String namep, Object[] template, JMeterVariables vars) {
-		saveGroups(match, namep, vars);
-		StringBuffer result = new StringBuffer();
-		for (int a = 0; a < template.length; a++) {
-			if (template[a] instanceof String) {
-				result.append(template[a]);
-			} else {
-				result.append(match.group(((Integer) template[a]).intValue()));
-			}
-		}
-		if (namep.length() > 0){
-		    vars.put(namep, result.toString());
-		}
-		return result.toString();
-	}
+    private String generateResult(MatchResult match, String namep, Object[] template, JMeterVariables vars) {
+        saveGroups(match, namep, vars);
+        StringBuffer result = new StringBuffer();
+        for (int a = 0; a < template.length; a++) {
+            if (template[a] instanceof String) {
+                result.append(template[a]);
+            } else {
+                result.append(match.group(((Integer) template[a]).intValue()));
+            }
+        }
+        if (namep.length() > 0){
+            vars.put(namep, result.toString());
+        }
+        return result.toString();
+    }
 
-	public String getReferenceKey() {
-		return KEY;
-	}
+    public String getReferenceKey() {
+        return KEY;
+    }
 
-	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
-		checkParameterCount(parameters, MIN_PARAMETER_COUNT, MAX_PARAMETER_COUNT);
-		values = parameters.toArray();
-	}
+    public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
+        checkParameterCount(parameters, MIN_PARAMETER_COUNT, MAX_PARAMETER_COUNT);
+        values = parameters.toArray();
+    }
 
-	private Object[] generateTemplate(String rawTemplate) {
-		List pieces = new ArrayList();
-		List combined = new LinkedList();
-		PatternMatcher matcher = JMeterUtils.getMatcher();
-		Util.split(pieces, matcher, templatePattern, rawTemplate);
-		PatternMatcherInput input = new PatternMatcherInput(rawTemplate);
-		Iterator iter = pieces.iterator();
-		boolean startsWith = isFirstElementGroup(rawTemplate);
-		while (iter.hasNext()) {
-			boolean matchExists = matcher.contains(input, templatePattern);
-			if (startsWith) {
-				if (matchExists) {
-					combined.add(new Integer(matcher.getMatch().group(1)));
-				}
-				combined.add(iter.next());
-			} else {
-				combined.add(iter.next());
-				if (matchExists) {
-					combined.add(new Integer(matcher.getMatch().group(1)));
-				}
-			}
-		}
-		if (matcher.contains(input, templatePattern)) {
-			combined.add(new Integer(matcher.getMatch().group(1)));
-		}
-		return combined.toArray();
-	}
+    private Object[] generateTemplate(String rawTemplate) {
+        List pieces = new ArrayList();
+        List combined = new LinkedList();
+        PatternMatcher matcher = JMeterUtils.getMatcher();
+        Util.split(pieces, matcher, templatePattern, rawTemplate);
+        PatternMatcherInput input = new PatternMatcherInput(rawTemplate);
+        Iterator iter = pieces.iterator();
+        boolean startsWith = isFirstElementGroup(rawTemplate);
+        while (iter.hasNext()) {
+            boolean matchExists = matcher.contains(input, templatePattern);
+            if (startsWith) {
+                if (matchExists) {
+                    combined.add(new Integer(matcher.getMatch().group(1)));
+                }
+                combined.add(iter.next());
+            } else {
+                combined.add(iter.next());
+                if (matchExists) {
+                    combined.add(new Integer(matcher.getMatch().group(1)));
+                }
+            }
+        }
+        if (matcher.contains(input, templatePattern)) {
+            combined.add(new Integer(matcher.getMatch().group(1)));
+        }
+        return combined.toArray();
+    }
 
-	private boolean isFirstElementGroup(String rawData) {
-		Pattern pattern = JMeterUtils.getPatternCache().getPattern("^\\$\\d+\\$",  //$NON-NLS-1$
-				Perl5Compiler.READ_ONLY_MASK);
-		return JMeterUtils.getMatcher().contains(rawData, pattern);
-	}
+    private boolean isFirstElementGroup(String rawData) {
+        Pattern pattern = JMeterUtils.getPatternCache().getPattern("^\\$\\d+\\$",  //$NON-NLS-1$
+                Perl5Compiler.READ_ONLY_MASK);
+        return JMeterUtils.getMatcher().contains(rawData, pattern);
+    }
 
 }

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.gui.action;
@@ -30,74 +30,74 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * This command clears the existing test plan, allowing the creation of a New
  * test plan.
- * 
+ *
  */
 public class Close implements Command {
 
-	private static final Set commands = new HashSet();
+    private static final Set commands = new HashSet();
 
-	static {
-		commands.add(ActionNames.CLOSE);
-	}
+    static {
+        commands.add(ActionNames.CLOSE);
+    }
 
-	/**
-	 * Constructor for the Close object.
-	 */
-	public Close() {
-	}
+    /**
+     * Constructor for the Close object.
+     */
+    public Close() {
+    }
 
-	/**
-	 * Gets the ActionNames attribute of the Close object.
-	 * 
-	 * @return the ActionNames value
-	 */
-	public Set getActionNames() {
-		return commands;
-	}
+    /**
+     * Gets the ActionNames attribute of the Close object.
+     *
+     * @return the ActionNames value
+     */
+    public Set getActionNames() {
+        return commands;
+    }
 
-	/**
-	 * This method performs the actual command processing.
-	 * 
-	 * @param e
-	 *            the generic UI action event
-	 */
-	public void doAction(ActionEvent e) {
-		performAction(e);
-	}
-	
-	/**
-	 * Helper routine to allow action to be shared by LOAD.
-	 * 
-	 * @param e event
-	 * @return true if Close was not cancelled
-	 */
-	static boolean performAction(ActionEvent e){
-		ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.CHECK_DIRTY));
-		GuiPackage guiPackage = GuiPackage.getInstance();
-		if (guiPackage.isDirty()) {
-			int response;
-			if ((response=JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(), 
-					JMeterUtils.getResString("cancel_new_to_save"), // $NON-NLS-1$
-					JMeterUtils.getResString("save?"),  // $NON-NLS-1$
-					JOptionPane.YES_NO_CANCEL_OPTION,
-					JOptionPane.QUESTION_MESSAGE)) == JOptionPane.YES_OPTION) {
-				ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.SAVE));
-			}
-			if (response == JOptionPane.CLOSED_OPTION || response == JOptionPane.CANCEL_OPTION) {
-				return false; // Don't clear the plan
-			}
-		}
-		
-		closeProject(e);
-		return true;
-	}
-	
-	static void closeProject(ActionEvent e) {
-		GuiPackage guiPackage = GuiPackage.getInstance();
+    /**
+     * This method performs the actual command processing.
+     *
+     * @param e
+     *            the generic UI action event
+     */
+    public void doAction(ActionEvent e) {
+        performAction(e);
+    }
 
-		guiPackage.clearTestPlan();
-		guiPackage.getTreeListener().getJTree().setSelectionRow(1);
+    /**
+     * Helper routine to allow action to be shared by LOAD.
+     *
+     * @param e event
+     * @return true if Close was not cancelled
+     */
+    static boolean performAction(ActionEvent e){
+        ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.CHECK_DIRTY));
+        GuiPackage guiPackage = GuiPackage.getInstance();
+        if (guiPackage.isDirty()) {
+            int response;
+            if ((response=JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(),
+                    JMeterUtils.getResString("cancel_new_to_save"), // $NON-NLS-1$
+                    JMeterUtils.getResString("save?"),  // $NON-NLS-1$
+                    JOptionPane.YES_NO_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE)) == JOptionPane.YES_OPTION) {
+                ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.SAVE));
+            }
+            if (response == JOptionPane.CLOSED_OPTION || response == JOptionPane.CANCEL_OPTION) {
+                return false; // Don't clear the plan
+            }
+        }
 
-		ActionRouter.getInstance().actionPerformed(new ActionEvent(e.getSource(), e.getID(), ActionNames.ADD_ALL));
-	}
+        closeProject(e);
+        return true;
+    }
+
+    static void closeProject(ActionEvent e) {
+        GuiPackage guiPackage = GuiPackage.getInstance();
+
+        guiPackage.clearTestPlan();
+        guiPackage.getTreeListener().getJTree().setSelectionRow(1);
+
+        ActionRouter.getInstance().actionPerformed(new ActionEvent(e.getSource(), e.getID(), ActionNames.ADD_ALL));
+    }
 }

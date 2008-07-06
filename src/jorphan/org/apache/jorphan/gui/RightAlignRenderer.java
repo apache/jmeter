@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jorphan.gui;
@@ -26,7 +26,7 @@ import javax.swing.table.DefaultTableCellRenderer;
  */
 public class RightAlignRenderer extends DefaultTableCellRenderer {
     public RightAlignRenderer() {
-    	super();
-    	setHorizontalAlignment(JLabel.RIGHT);
+        super();
+        setHorizontalAlignment(JLabel.RIGHT);
     }
 }
