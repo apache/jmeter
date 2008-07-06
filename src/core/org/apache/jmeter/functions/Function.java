@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -28,42 +28,42 @@ import org.apache.jmeter.samplers.Sampler;
  * Methods that a function must implement
  */
 public interface Function {
-	/**
-	 * Given the previous SampleResult and the current Sampler, return a string
-	 * to use as a replacement value for the function call. Assume
-	 * "setParameter" was previously called.
-	 * 
-	 * This method must be threadsafe - multiple threads will be using the same
-	 * object.
-	 */
-	public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException;
+    /**
+     * Given the previous SampleResult and the current Sampler, return a string
+     * to use as a replacement value for the function call. Assume
+     * "setParameter" was previously called.
+     *
+     * This method must be threadsafe - multiple threads will be using the same
+     * object.
+     */
+    public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException;
 
-	/**
-	 * A collection of the parameters used to configure your function. Each
-	 * parameter is a CompoundFunction and can be resolved by calling the
-	 * execute() method of the CompoundFunction (which should be done at
-	 * execution.)
-	 * 
-	 * @param parameters
-	 * @throws InvalidVariableException
-	 */
-	public void setParameters(Collection parameters) throws InvalidVariableException;
+    /**
+     * A collection of the parameters used to configure your function. Each
+     * parameter is a CompoundFunction and can be resolved by calling the
+     * execute() method of the CompoundFunction (which should be done at
+     * execution.)
+     *
+     * @param parameters
+     * @throws InvalidVariableException
+     */
+    public void setParameters(Collection parameters) throws InvalidVariableException;
 
-	/**
-	 * Return the name of your function. Convention is to prepend "__" to the
-	 * name (ie "__regexFunction")
-	 */
-	public String getReferenceKey();
+    /**
+     * Return the name of your function. Convention is to prepend "__" to the
+     * name (ie "__regexFunction")
+     */
+    public String getReferenceKey();
 
-	/**
-	 * Return a list of strings briefly describing each parameter your function
-	 * takes. Please use JMeterUtils.getResString(resource_name) to grab a
-	 * resource string. Otherwise, your help text will be difficult to
-	 * internationalize.
-	 * 
-	 * This list is not optional. If you don't wish to write help, you must at
-	 * least return a List containing the correct number of blank strings, one
-	 * for each argument.
-	 */
-	public List getArgumentDesc();
+    /**
+     * Return a list of strings briefly describing each parameter your function
+     * takes. Please use JMeterUtils.getResString(resource_name) to grab a
+     * resource string. Otherwise, your help text will be difficult to
+     * internationalize.
+     *
+     * This list is not optional. If you don't wish to write help, you must at
+     * least return a List containing the correct number of blank strings, one
+     * for each argument.
+     */
+    public List getArgumentDesc();
 }
