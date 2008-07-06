@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.control;
@@ -24,36 +24,36 @@ import org.apache.jmeter.testelement.TestElement;
 
 /**
  * This interface is used by JMeterThread in the following manner:
- * 
+ *
  * while (running && (sampler = controller.next()) != null)
  */
 public interface Controller extends TestElement {
-	/**
-	 * Delivers the next Sampler or null
-	 * 
-	 * @return org.apache.jmeter.samplers.Sampler or null
-	 */
-	public Sampler next();
+    /**
+     * Delivers the next Sampler or null
+     *
+     * @return org.apache.jmeter.samplers.Sampler or null
+     */
+    public Sampler next();
 
-	/**
-	 * Indicates whether the Controller is done delivering Samplers for the rest
-	 * of the test.
-	 * 
-	 * When the top-level controller returns true to JMeterThread,
-	 * the thread is complete.
-	 * 
-	 * @return boolean
-	 */
-	public boolean isDone();
+    /**
+     * Indicates whether the Controller is done delivering Samplers for the rest
+     * of the test.
+     *
+     * When the top-level controller returns true to JMeterThread,
+     * the thread is complete.
+     *
+     * @return boolean
+     */
+    public boolean isDone();
 
-	/**
-	 * Controllers have to notify listeners of when they begin an iteration
-	 * through their sub-elements.
-	 */
-	public void addIterationListener(LoopIterationListener listener);
+    /**
+     * Controllers have to notify listeners of when they begin an iteration
+     * through their sub-elements.
+     */
+    public void addIterationListener(LoopIterationListener listener);
 
-	/**
-	 * Called to initialize a controller at the beginning of a test iteration.
-	 */
-	public void initialize();
+    /**
+     * Called to initialize a controller at the beginning of a test iteration.
+     */
+    public void initialize();
 }

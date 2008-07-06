@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.control;
@@ -32,84 +32,84 @@ import org.apache.log.Logger;
 // @see TestWhileController for unit tests
 
 public class WhileController extends GenericController implements Serializable {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final long serialVersionUID = 232L;
-	
-	private static final String CONDITION = "WhileController.condition"; // $NON-NLS-1$
+    private static final long serialVersionUID = 232L;
 
-	public WhileController() {
-	}
+    private static final String CONDITION = "WhileController.condition"; // $NON-NLS-1$
 
-	/*
-	 * Evaluate the condition, which can be: 
-	 * blank or LAST = was the last sampler OK? 
-	 * otherwise, evaluate the condition to see if it is not "false"
-	 * If blank, only evaluate at the end of the loop
-	 * 
-	 * Must only be called at start and end of loop
-	 * 
-	 * @param loopEnd - are we at loop end? 
-	 * @return true means OK to continue
-	 */
-	private boolean endOfLoop(boolean loopEnd) {
-		String cnd = getCondition();
-		log.debug("Condition string:" + cnd+".");
-		boolean res;
-		// If blank, only check previous sample when at end of loop
-		if ((loopEnd && cnd.length() == 0) || "LAST".equalsIgnoreCase(cnd)) {// $NON-NLS-1$
-			JMeterVariables threadVars = JMeterContextService.getContext().getVariables();
-			res = "false".equalsIgnoreCase(threadVars.get(JMeterThread.LAST_SAMPLE_OK));// $NON-NLS-1$
-		} else {
-			// cnd may be null if next() called us
-			res = "false".equalsIgnoreCase(cnd);// $NON-NLS-1$
-		}
-		log.debug("Condition value: " + res);
-		return res;
-	}
+    public WhileController() {
+    }
 
-	/*
-	 * (non-Javadoc) Only called at End of Loop
-	 * 
-	 * @see org.apache.jmeter.control.GenericController#nextIsNull()
-	 */
-	protected Sampler nextIsNull() throws NextIsNullException {
-		reInitialize();
-		if (endOfLoop(true)){
-			return null;
-		}
-		return next();
-	}
+    /*
+     * Evaluate the condition, which can be:
+     * blank or LAST = was the last sampler OK?
+     * otherwise, evaluate the condition to see if it is not "false"
+     * If blank, only evaluate at the end of the loop
+     *
+     * Must only be called at start and end of loop
+     *
+     * @param loopEnd - are we at loop end?
+     * @return true means OK to continue
+     */
+    private boolean endOfLoop(boolean loopEnd) {
+        String cnd = getCondition();
+        log.debug("Condition string:" + cnd+".");
+        boolean res;
+        // If blank, only check previous sample when at end of loop
+        if ((loopEnd && cnd.length() == 0) || "LAST".equalsIgnoreCase(cnd)) {// $NON-NLS-1$
+            JMeterVariables threadVars = JMeterContextService.getContext().getVariables();
+            res = "false".equalsIgnoreCase(threadVars.get(JMeterThread.LAST_SAMPLE_OK));// $NON-NLS-1$
+        } else {
+            // cnd may be null if next() called us
+            res = "false".equalsIgnoreCase(cnd);// $NON-NLS-1$
+        }
+        log.debug("Condition value: " + res);
+        return res;
+    }
 
-	/*
-	 * This skips controller entirely if the condition is false on first entry.
-	 */
-	public Sampler next(){
-		if (isFirst()){
-			if (endOfLoop(false)){
-				return null;
-			}
-		}
-		return super.next();
-	}
+    /*
+     * (non-Javadoc) Only called at End of Loop
+     *
+     * @see org.apache.jmeter.control.GenericController#nextIsNull()
+     */
+    protected Sampler nextIsNull() throws NextIsNullException {
+        reInitialize();
+        if (endOfLoop(true)){
+            return null;
+        }
+        return next();
+    }
 
-	/**
-	 * @param string
-	 *            the condition to save
-	 */
-	public void setCondition(String string) {
-		log.debug("setCondition(" + string + ")");
-		setProperty(new StringProperty(CONDITION, string));
-	}
+    /*
+     * This skips controller entirely if the condition is false on first entry.
+     */
+    public Sampler next(){
+        if (isFirst()){
+            if (endOfLoop(false)){
+                return null;
+            }
+        }
+        return super.next();
+    }
 
-	/**
-	 * @return the condition
-	 */
-	public String getCondition() {
-		String cnd;
+    /**
+     * @param string
+     *            the condition to save
+     */
+    public void setCondition(String string) {
+        log.debug("setCondition(" + string + ")");
+        setProperty(new StringProperty(CONDITION, string));
+    }
+
+    /**
+     * @return the condition
+     */
+    public String getCondition() {
+        String cnd;
         JMeterProperty prop=getProperty(CONDITION);
         prop.recoverRunningVersion(this);
-		cnd = prop.getStringValue();
-		return cnd;
-	}
+        cnd = prop.getStringValue();
+        return cnd;
+    }
 }

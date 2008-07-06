@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.engine.util;
@@ -32,39 +32,39 @@ import org.apache.log.Logger;
 public class DisabledComponentRemover implements HashTreeTraverser {
 
     /*
-     * TODO - does this class work? and is it needed? 
+     * TODO - does this class work? and is it needed?
      * It is only called by Start, and then only after
      * having called convertTree - which removes the disabled elements anyway.
      * When tried in IncludeController, it failed to work.
     */
 
     private static final Logger log = LoggingManager.getLoggerForClass();
-    
-	HashTree tree;
 
-	LinkedList stack = new LinkedList();
+    HashTree tree;
 
-	public DisabledComponentRemover(HashTree tree) {
-		this.tree = tree;
-	}
+    LinkedList stack = new LinkedList();
 
-	public void addNode(Object node, HashTree subTree) {
-		stack.addLast(node);
-	}
+    public DisabledComponentRemover(HashTree tree) {
+        this.tree = tree;
+    }
 
-	public void subtractNode() {
-		Object removeLast = stack.removeLast();
+    public void addNode(Object node, HashTree subTree) {
+        stack.addLast(node);
+    }
+
+    public void subtractNode() {
+        Object removeLast = stack.removeLast();
         if (!(removeLast instanceof TestElement)) {
             log.warn("Expected class TestElement, found "+removeLast.getClass().getName());
             return;
         }
         TestElement lastNode = (TestElement) removeLast;
-		if (!lastNode.getPropertyAsBoolean(TestElement.ENABLED)) {
+        if (!lastNode.getPropertyAsBoolean(TestElement.ENABLED)) {
             log.info("*** Removing *** "+lastNode);// TODO not sure this is ever called
-			tree.getTree(stack).remove(lastNode);
-		}
-	}
+            tree.getTree(stack).remove(lastNode);
+        }
+    }
 
-	public void processPath() {
-	}
+    public void processPath() {
+    }
 }

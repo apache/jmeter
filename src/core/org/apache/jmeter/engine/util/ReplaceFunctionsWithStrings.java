@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 /*
@@ -42,57 +42,57 @@ import org.apache.oro.text.regex.Util;
 /**
  * Transforms strings into variable references (in spite of the name, which
  * suggests the opposite!)
- * 
+ *
  */
 public class ReplaceFunctionsWithStrings extends AbstractTransformer {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	// Functions are wrapped in ${ and }
-	private static final String FUNCTION_REF_PREFIX = "${"; //$NON-NLS-1$
+    // Functions are wrapped in ${ and }
+    private static final String FUNCTION_REF_PREFIX = "${"; //$NON-NLS-1$
 
-	private static final String FUNCTION_REF_SUFFIX = "}"; //$NON-NLS-1$
+    private static final String FUNCTION_REF_SUFFIX = "}"; //$NON-NLS-1$
 
-	private boolean regexMatch;// Should we match using regexes?
+    private boolean regexMatch;// Should we match using regexes?
 
-	public ReplaceFunctionsWithStrings(CompoundVariable masterFunction, Map variables) {
-		this(masterFunction, variables, false);
-	}
+    public ReplaceFunctionsWithStrings(CompoundVariable masterFunction, Map variables) {
+        this(masterFunction, variables, false);
+    }
 
-	public ReplaceFunctionsWithStrings(CompoundVariable masterFunction, Map variables, boolean regexMatch) {
-		super();
-		setMasterFunction(masterFunction);
-		setVariables(variables);
-		this.regexMatch = regexMatch;
-	}
+    public ReplaceFunctionsWithStrings(CompoundVariable masterFunction, Map variables, boolean regexMatch) {
+        super();
+        setMasterFunction(masterFunction);
+        setVariables(variables);
+        this.regexMatch = regexMatch;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ValueTransformer#transformValue(JMeterProperty)
-	 */
-	public JMeterProperty transformValue(JMeterProperty prop) throws InvalidVariableException {
-		PatternMatcher pm = JMeterUtils.getMatcher();
-		Pattern pattern = null;
-		PatternCompiler compiler = new Perl5Compiler();
-		Iterator iter = getVariables().keySet().iterator();
-		String input = prop.getStringValue();
-		while (iter.hasNext()) {
-			String key = (String) iter.next();
-			String value = (String) getVariables().get(key);
-			if (regexMatch) {
-				try {
-					pattern = compiler.compile(value);
-					input = Util.substitute(pm, pattern, 
-							new StringSubstitution(FUNCTION_REF_PREFIX + key + FUNCTION_REF_SUFFIX), 
-							input, Util.SUBSTITUTE_ALL);
-				} catch (MalformedPatternException e) {
-					log.warn("Malformed pattern " + value);
-				}
-			} else {
-				input = StringUtilities.substitute(input, value, FUNCTION_REF_PREFIX + key + FUNCTION_REF_SUFFIX);
-			}
-		}
-		StringProperty newProp = new StringProperty(prop.getName(), input);
-		return newProp;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see ValueTransformer#transformValue(JMeterProperty)
+     */
+    public JMeterProperty transformValue(JMeterProperty prop) throws InvalidVariableException {
+        PatternMatcher pm = JMeterUtils.getMatcher();
+        Pattern pattern = null;
+        PatternCompiler compiler = new Perl5Compiler();
+        Iterator iter = getVariables().keySet().iterator();
+        String input = prop.getStringValue();
+        while (iter.hasNext()) {
+            String key = (String) iter.next();
+            String value = (String) getVariables().get(key);
+            if (regexMatch) {
+                try {
+                    pattern = compiler.compile(value);
+                    input = Util.substitute(pm, pattern,
+                            new StringSubstitution(FUNCTION_REF_PREFIX + key + FUNCTION_REF_SUFFIX),
+                            input, Util.SUBSTITUTE_ALL);
+                } catch (MalformedPatternException e) {
+                    log.warn("Malformed pattern " + value);
+                }
+            } else {
+                input = StringUtilities.substitute(input, value, FUNCTION_REF_PREFIX + key + FUNCTION_REF_SUFFIX);
+            }
+        }
+        StringProperty newProp = new StringProperty(prop.getName(), input);
+        return newProp;
+    }
 }
