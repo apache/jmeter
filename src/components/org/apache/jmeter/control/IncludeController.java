@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.control;
@@ -33,32 +33,32 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 public class IncludeController extends GenericController implements ReplaceableController {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final String INCLUDE_PATH = "IncludeController.includepath"; //$NON-NLS-1$
 
     private static  final String prefix =
         JMeterUtils.getPropDefault(
-                "includecontroller.prefix", //$NON-NLS-1$ 
+                "includecontroller.prefix", //$NON-NLS-1$
                 ""); //$NON-NLS-1$
-    
+
     private HashTree SUBTREE = null;
     private TestElement SUB = null;
 
-	/**
-	 * No-arg constructor
-	 * 
-	 * @see java.lang.Object#Object()
-	 */
-	public IncludeController() {
-		super();
-	}
+    /**
+     * No-arg constructor
+     *
+     * @see java.lang.Object#Object()
+     */
+    public IncludeController() {
+        super();
+    }
 
-	public Object clone() {
+    public Object clone() {
         // TODO - fix so that this is only called once per test, instead of at every clone
         // Perhaps save previous filename, and only load if it has changed?
         this.resolveReplacementSubTree(null);
-		IncludeController clone = (IncludeController) super.clone();
+        IncludeController clone = (IncludeController) super.clone();
         clone.setIncludePath(this.getIncludePath());
         if (this.SUBTREE != null) {
             if (this.SUBTREE.keySet().size() == 1) {
@@ -70,8 +70,8 @@ public class IncludeController extends GenericController implements ReplaceableC
             clone.SUBTREE = (HashTree)this.SUBTREE.clone();
             clone.SUB = (TestElement)this.SUB.clone();
         }
-		return clone;
-	}
+        return clone;
+    }
 
     /**
      * In the event an user wants to include an external JMX test plan
@@ -81,7 +81,7 @@ public class IncludeController extends GenericController implements ReplaceableC
     public void setIncludePath(String jmxfile) {
         this.setProperty(INCLUDE_PATH,jmxfile);
     }
-    
+
     /**
      * return the JMX file path.
      * @return the JMX file path
@@ -89,7 +89,7 @@ public class IncludeController extends GenericController implements ReplaceableC
     public String getIncludePath() {
         return this.getPropertyAsString(INCLUDE_PATH);
     }
-    
+
     /**
      * The way ReplaceableController works is clone is called first,
      * followed by replace(HashTree) and finally getReplacement().
@@ -112,7 +112,7 @@ public class IncludeController extends GenericController implements ReplaceableC
         HashTree tree = null;
         if (includePath != null && includePath.length() > 0) {
             try {
-            	String file=prefix+includePath;
+                String file=prefix+includePath;
                 log.info("loadIncludedElements -- try to load included module: "+file);
                 reader = new FileInputStream(file);
                 tree = SaveService.loadTree(reader);
@@ -158,5 +158,5 @@ public class IncludeController extends GenericController implements ReplaceableC
             }
         }
     }
-    
+
 }

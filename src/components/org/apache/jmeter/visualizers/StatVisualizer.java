@@ -5,15 +5,15 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations
  * under the License.
- *  
+ *
  */
 
 package org.apache.jmeter.visualizers;
@@ -65,263 +65,263 @@ import org.apache.log.Logger;
  * who've done the other visualizers ahead of me (Stefano Mazzocchi), who I
  * borrowed code from to start me off (and much code may still exist). Thank
  * you!
- * 
+ *
  */
 public class StatVisualizer extends AbstractVisualizer implements Clearable, ActionListener {
-    
-	private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private final String[] COLUMNS = { 
+    private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private final String[] COLUMNS = {
             JMeterUtils.getResString("sampler_label"),  //$NON-NLS-1$
-			JMeterUtils.getResString("aggregate_report_count"),  //$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_count"),  //$NON-NLS-1$
             JMeterUtils.getResString("average"),  //$NON-NLS-1$
-			JMeterUtils.getResString("aggregate_report_median"),  //$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_median"),  //$NON-NLS-1$
             JMeterUtils.getResString("aggregate_report_90%_line"),  //$NON-NLS-1$
-			JMeterUtils.getResString("aggregate_report_min"),  //$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_min"),  //$NON-NLS-1$
             JMeterUtils.getResString("aggregate_report_max"),  //$NON-NLS-1$
-			JMeterUtils.getResString("aggregate_report_error%"),  //$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_error%"),  //$NON-NLS-1$
             JMeterUtils.getResString("aggregate_report_rate"),  //$NON-NLS-1$
-			JMeterUtils.getResString("aggregate_report_bandwidth") };  //$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_bandwidth") };  //$NON-NLS-1$
 
-	private final String TOTAL_ROW_LABEL 
+    private final String TOTAL_ROW_LABEL
         = JMeterUtils.getResString("aggregate_report_total_label");  //$NON-NLS-1$
 
-	protected JTable myJTable;
+    protected JTable myJTable;
 
-	protected JScrollPane myScrollPane;
+    protected JScrollPane myScrollPane;
 
-    protected JButton saveTable = 
-        new JButton(JMeterUtils.getResString("aggregate_graph_save_table"));			//$NON-NLS-1$
-    
-    private JCheckBox useGroupName = 
+    protected JButton saveTable =
+        new JButton(JMeterUtils.getResString("aggregate_graph_save_table"));            //$NON-NLS-1$
+
+    private JCheckBox useGroupName =
         new JCheckBox(JMeterUtils.getResString("aggregate_graph_use_group_name"));            //$NON-NLS-1$
-    
-	private transient ObjectTableModel model;
 
-	Map tableRows = Collections.synchronizedMap(new HashMap());
+    private transient ObjectTableModel model;
 
-	public StatVisualizer() {
-		super();
-		model = new ObjectTableModel(COLUMNS, 
-				SamplingStatCalculator.class,
-                new Functor[] { 
+    Map tableRows = Collections.synchronizedMap(new HashMap());
+
+    public StatVisualizer() {
+        super();
+        model = new ObjectTableModel(COLUMNS,
+                SamplingStatCalculator.class,
+                new Functor[] {
                     new Functor("getLabel"),   //$NON-NLS-1$
                     new Functor("getCount"),  //$NON-NLS-1$
-    				new Functor("getMeanAsNumber"),   //$NON-NLS-1$
+                    new Functor("getMeanAsNumber"),   //$NON-NLS-1$
                     new Functor("getMedian"),  //$NON-NLS-1$
-    				new Functor("getPercentPoint",  //$NON-NLS-1$
-                            new Object[] { new Float(.900) }), 
+                    new Functor("getPercentPoint",  //$NON-NLS-1$
+                            new Object[] { new Float(.900) }),
                     new Functor("getMin"),  //$NON-NLS-1$
                     new Functor("getMax"),   //$NON-NLS-1$
                     new Functor("getErrorPercentage"),   //$NON-NLS-1$
                     new Functor("getRate"),  //$NON-NLS-1$
-    				new Functor("getKBPerSecond")   //$NON-NLS-1$
+                    new Functor("getKBPerSecond")   //$NON-NLS-1$
                 },
-                new Functor[] { null, null, null, null, null, null, null, null, null, null }, 
-                new Class[] { String.class, Long.class, Long.class, Long.class, Long.class, 
+                new Functor[] { null, null, null, null, null, null, null, null, null, null },
+                new Class[] { String.class, Long.class, Long.class, Long.class, Long.class,
                               Long.class, Long.class, String.class, String.class, String.class });
-		clearData();
-		init();
-	}
+        clearData();
+        init();
+    }
 
-	// Column renderers
-	private static final TableCellRenderer[] RENDERERS = 
-		new TableCellRenderer[]{
-		    null, // Label
-		    null, // count
-		    null, // Mean
-		    null, // median
-		    null, // 90%
-		    null, // Min
-		    null, // Max
-		    new NumberRenderer("#0.00%"), // Error %age //$NON-NLS-1$
-		    new RateRenderer("#.0"),      // Throughput //$NON-NLS-1$
-		    new NumberRenderer("#.0"),    // pageSize   //$NON-NLS-1$
-		};
+    // Column renderers
+    private static final TableCellRenderer[] RENDERERS =
+        new TableCellRenderer[]{
+            null, // Label
+            null, // count
+            null, // Mean
+            null, // median
+            null, // 90%
+            null, // Min
+            null, // Max
+            new NumberRenderer("#0.00%"), // Error %age //$NON-NLS-1$
+            new RateRenderer("#.0"),      // Throughput //$NON-NLS-1$
+            new NumberRenderer("#.0"),    // pageSize   //$NON-NLS-1$
+        };
 
-	public static boolean testFunctors(){
-		StatVisualizer instance = new StatVisualizer();
-		return instance.model.checkFunctors(null,instance.getClass());
-	}
-	
-	public String getLabelResource() {
-		return "aggregate_report";  //$NON-NLS-1$
-	}
+    public static boolean testFunctors(){
+        StatVisualizer instance = new StatVisualizer();
+        return instance.model.checkFunctors(null,instance.getClass());
+    }
 
-	public void add(SampleResult res) {
-		SamplingStatCalculator row = null;
+    public String getLabelResource() {
+        return "aggregate_report";  //$NON-NLS-1$
+    }
+
+    public void add(SampleResult res) {
+        SamplingStatCalculator row = null;
         final String sampleLabel = res.getSampleLabel(useGroupName.isSelected());
-		synchronized (tableRows) {
+        synchronized (tableRows) {
             row = (SamplingStatCalculator) tableRows.get(sampleLabel);
-			if (row == null) {
-				row = new SamplingStatCalculator(sampleLabel);
-				tableRows.put(row.getLabel(), row);
-				model.insertRow(row, model.getRowCount() - 1);
-			}
-		}
+            if (row == null) {
+                row = new SamplingStatCalculator(sampleLabel);
+                tableRows.put(row.getLabel(), row);
+                model.insertRow(row, model.getRowCount() - 1);
+            }
+        }
         /*
          * Synch is needed because multiple threads can update the counts.
          */
-        synchronized(row) { 
+        synchronized(row) {
             row.addSample(res);
         }
-		SamplingStatCalculator tot = (SamplingStatCalculator) tableRows.get(TOTAL_ROW_LABEL);
-		synchronized(tot) {
-		    tot.addSample(res);
-		}
-		model.fireTableDataChanged();
-	}
+        SamplingStatCalculator tot = (SamplingStatCalculator) tableRows.get(TOTAL_ROW_LABEL);
+        synchronized(tot) {
+            tot.addSample(res);
+        }
+        model.fireTableDataChanged();
+    }
 
-	/**
-	 * Clears this visualizer and its model, and forces a repaint of the table.
-	 */
-	public void clearData() {
-	    synchronized (tableRows) {
-    		model.clearData();
-    		tableRows.clear();
-    		tableRows.put(TOTAL_ROW_LABEL, new SamplingStatCalculator(TOTAL_ROW_LABEL));
-    		model.addRow(tableRows.get(TOTAL_ROW_LABEL));
-	    }
-	}
+    /**
+     * Clears this visualizer and its model, and forces a repaint of the table.
+     */
+    public void clearData() {
+        synchronized (tableRows) {
+            model.clearData();
+            tableRows.clear();
+            tableRows.put(TOTAL_ROW_LABEL, new SamplingStatCalculator(TOTAL_ROW_LABEL));
+            model.addRow(tableRows.get(TOTAL_ROW_LABEL));
+        }
+    }
 
-	/**
-	 * Main visualizer setup.
-	 */
-	private void init() {
-		this.setLayout(new BorderLayout());
+    /**
+     * Main visualizer setup.
+     */
+    private void init() {
+        this.setLayout(new BorderLayout());
 
-		// MAIN PANEL
-		JPanel mainPanel = new JPanel();
-		Border margin = new EmptyBorder(10, 10, 5, 10);
+        // MAIN PANEL
+        JPanel mainPanel = new JPanel();
+        Border margin = new EmptyBorder(10, 10, 5, 10);
 
-		mainPanel.setBorder(margin);
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.setBorder(margin);
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
-		mainPanel.add(makeTitlePanel());
+        mainPanel.add(makeTitlePanel());
 
-		// SortFilterModel mySortedModel =
-		// new SortFilterModel(myStatTableModel);
-		myJTable = new JTable(model);
-		myJTable.setPreferredScrollableViewportSize(new Dimension(500, 70));
-		RendererUtils.applyRenderers(myJTable, RENDERERS);
-		myScrollPane = new JScrollPane(myJTable);
-		this.add(mainPanel, BorderLayout.NORTH);
-		this.add(myScrollPane, BorderLayout.CENTER);
-		saveTable.addActionListener(this);
+        // SortFilterModel mySortedModel =
+        // new SortFilterModel(myStatTableModel);
+        myJTable = new JTable(model);
+        myJTable.setPreferredScrollableViewportSize(new Dimension(500, 70));
+        RendererUtils.applyRenderers(myJTable, RENDERERS);
+        myScrollPane = new JScrollPane(myJTable);
+        this.add(mainPanel, BorderLayout.NORTH);
+        this.add(myScrollPane, BorderLayout.CENTER);
+        saveTable.addActionListener(this);
         JPanel opts = new JPanel();
         opts.add(useGroupName, BorderLayout.WEST);
         opts.add(saveTable, BorderLayout.CENTER);
         this.add(opts,BorderLayout.SOUTH);
-	}
+    }
 
-	public void actionPerformed(ActionEvent ev) {
-		if (ev.getSource() == saveTable) {
-	        JFileChooser chooser = FileDialoger.promptToSaveFile("aggregate.csv");//$NON-NLS-1$
-	        if (chooser == null) {
-	            return;
-	        }
-			FileWriter writer = null;
-			try {
-			    writer = new FileWriter(chooser.getSelectedFile());
-			    CSVSaveService.saveCSVStats(model,writer);
-			} catch (FileNotFoundException e) {
-			    log.warn(e.getMessage());
-			} catch (IOException e) {
-			    log.warn(e.getMessage());
-			} finally {
-			    JOrphanUtils.closeQuietly(writer);
-			}
-		}
-	}
+    public void actionPerformed(ActionEvent ev) {
+        if (ev.getSource() == saveTable) {
+            JFileChooser chooser = FileDialoger.promptToSaveFile("aggregate.csv");//$NON-NLS-1$
+            if (chooser == null) {
+                return;
+            }
+            FileWriter writer = null;
+            try {
+                writer = new FileWriter(chooser.getSelectedFile());
+                CSVSaveService.saveCSVStats(model,writer);
+            } catch (FileNotFoundException e) {
+                log.warn(e.getMessage());
+            } catch (IOException e) {
+                log.warn(e.getMessage());
+            } finally {
+                JOrphanUtils.closeQuietly(writer);
+            }
+        }
+    }
 }
 
 /**
  * Pulled this mainly out of a Core Java book to implement a sorted table -
  * haven't implemented this yet, it needs some non-trivial work done to it to
  * support our dynamically-sizing TableModel for this visualizer.
- * 
+ *
  */
 
 //class SortFilterModel extends AbstractTableModel {
-//	private TableModel model;
+//  private TableModel model;
 //
-//	private int sortColumn;
+//  private int sortColumn;
 //
-//	private Row[] rows;
+//  private Row[] rows;
 //
-//	public SortFilterModel(TableModel m) {
-//		model = m;
-//		rows = new Row[model.getRowCount()];
-//		for (int i = 0; i < rows.length; i++) {
-//			rows[i] = new Row();
-//			rows[i].index = i;
-//		}
-//	}
+//  public SortFilterModel(TableModel m) {
+//      model = m;
+//      rows = new Row[model.getRowCount()];
+//      for (int i = 0; i < rows.length; i++) {
+//          rows[i] = new Row();
+//          rows[i].index = i;
+//      }
+//  }
 //
-//	public SortFilterModel() {
-//	}
+//  public SortFilterModel() {
+//  }
 //
-//	public void setValueAt(Object aValue, int r, int c) {
-//		model.setValueAt(aValue, rows[r].index, c);
-//	}
+//  public void setValueAt(Object aValue, int r, int c) {
+//        model.setValueAt(aValue, rows[r].index, c);
+//    }
 //
-//	public Object getValueAt(int r, int c) {
-//		return model.getValueAt(rows[r].index, c);
-//	}
+//    public Object getValueAt(int r, int c) {
+//        return model.getValueAt(rows[r].index, c);
+//    }
 //
-//	public boolean isCellEditable(int r, int c) {
-//		return model.isCellEditable(rows[r].index, c);
-//	}
+//    public boolean isCellEditable(int r, int c) {
+//        return model.isCellEditable(rows[r].index, c);
+//    }
 //
-//	public int getRowCount() {
-//		return model.getRowCount();
-//	}
+//    public int getRowCount() {
+//        return model.getRowCount();
+//    }
 //
-//	public int getColumnCount() {
-//		return model.getColumnCount();
-//	}
+//    public int getColumnCount() {
+//        return model.getColumnCount();
+//    }
 //
-//	public String getColumnName(int c) {
-//		return model.getColumnName(c);
-//	}
+//    public String getColumnName(int c) {
+//        return model.getColumnName(c);
+//    }
 //
-//	public Class getColumnClass(int c) {
-//		return model.getColumnClass(c);
-//	}
+//    public Class getColumnClass(int c) {
+//        return model.getColumnClass(c);
+//    }
 //
-//	public void sort(int c) {
-//		sortColumn = c;
-//		Arrays.sort(rows);
-//		fireTableDataChanged();
-//	}
+//    public void sort(int c) {
+//        sortColumn = c;
+//        Arrays.sort(rows);
+//        fireTableDataChanged();
+//    }
 //
-//	public void addMouseListener(final JTable table) {
-//		table.getTableHeader().addMouseListener(new MouseAdapter() {
-//			public void mouseClicked(MouseEvent event) {
-//				if (event.getClickCount() < 2) {
-//					return;
-//				}
-//				int tableColumn = table.columnAtPoint(event.getPoint());
-//				int modelColumn = table.convertColumnIndexToModel(tableColumn);
+//    public void addMouseListener(final JTable table) {
+//        table.getTableHeader().addMouseListener(new MouseAdapter() {
+//            public void mouseClicked(MouseEvent event) {
+//                if (event.getClickCount() < 2) {
+//                    return;
+//                }
+//                int tableColumn = table.columnAtPoint(event.getPoint());
+//                int modelColumn = table.convertColumnIndexToModel(tableColumn);
 //
-//				sort(modelColumn);
-//			}
-//		});
-//	}
+//                sort(modelColumn);
+//            }
+//        });
+//    }
 //
-//	private class Row implements Comparable {
-//		public int index;
+//    private class Row implements Comparable {
+//        public int index;
 //
-//		public int compareTo(Object other) {
-//			Row otherRow = (Row) other;
-//			Object a = model.getValueAt(index, sortColumn);
-//			Object b = model.getValueAt(otherRow.index, sortColumn);
+//        public int compareTo(Object other) {
+//            Row otherRow = (Row) other;
+//            Object a = model.getValueAt(index, sortColumn);
+//            Object b = model.getValueAt(otherRow.index, sortColumn);
 //
-//			if (a instanceof Comparable) {
-//				return ((Comparable) a).compareTo(b);
-//			} else {
-//				return index - otherRow.index;
-//			}
-//		}
-//	}
+//            if (a instanceof Comparable) {
+//                return ((Comparable) a).compareTo(b);
+//            } else {
+//                return index - otherRow.index;
+//            }
+//        }
+//    }
 //} // class SortFilterModel

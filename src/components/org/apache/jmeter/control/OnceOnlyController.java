@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.control;
@@ -30,22 +30,22 @@ import org.apache.jmeter.samplers.Sampler;
  */
 public class OnceOnlyController extends GenericController implements Serializable, LoopIterationListener {
 
-	/**
-	 * Constructor for the OnceOnlyController object.
-	 */
-	public OnceOnlyController() {
-	}
+    /**
+     * Constructor for the OnceOnlyController object.
+     */
+    public OnceOnlyController() {
+    }
 
-	/**
-	 * @see LoopIterationListener#iterationStart(LoopIterationEvent)
-	 */
-	public void iterationStart(LoopIterationEvent event) {
-		if (event.getIteration() == 1) {
-			reInitialize();
-		}
-	}
+    /**
+     * @see LoopIterationListener#iterationStart(LoopIterationEvent)
+     */
+    public void iterationStart(LoopIterationEvent event) {
+        if (event.getIteration() == 1) {
+            reInitialize();
+        }
+    }
 
-	protected Sampler nextIsNull() throws NextIsNullException {
-		return null;
-	}
+    protected Sampler nextIsNull() throws NextIsNullException {
+        return null;
+    }
 }

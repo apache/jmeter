@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.control;
@@ -25,160 +25,160 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 
 public class InterleaveControl extends GenericController implements Serializable {
-	private static final String STYLE = "InterleaveControl.style";// $NON-NLS-1$
+    private static final String STYLE = "InterleaveControl.style";// $NON-NLS-1$
 
-	public static final int IGNORE_SUB_CONTROLLERS = 0;
+    public static final int IGNORE_SUB_CONTROLLERS = 0;
 
-	public static final int USE_SUB_CONTROLLERS = 1;
+    public static final int USE_SUB_CONTROLLERS = 1;
 
-	private boolean skipNext;
+    private boolean skipNext;
 
-	private transient TestElement searchStart = null;
+    private transient TestElement searchStart = null;
 
-	private boolean currentReturnedAtLeastOne;
+    private boolean currentReturnedAtLeastOne;
 
-	private boolean stillSame = true;
+    private boolean stillSame = true;
 
-	/***************************************************************************
-	 * Constructor for the InterleaveControl object
-	 **************************************************************************/
-	public InterleaveControl() {
-	}
+    /***************************************************************************
+     * Constructor for the InterleaveControl object
+     **************************************************************************/
+    public InterleaveControl() {
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.control.GenericController#reInitialize()
-	 */
-	public void reInitialize() {
-		setFirst(true);
-		currentReturnedAtLeastOne = false;
-		searchStart = null;
-		stillSame = true;
-		skipNext = false;
-		incrementIterCount();
-		recoverRunningVersion();
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.control.GenericController#reInitialize()
+     */
+    public void reInitialize() {
+        setFirst(true);
+        currentReturnedAtLeastOne = false;
+        searchStart = null;
+        stillSame = true;
+        skipNext = false;
+        incrementIterCount();
+        recoverRunningVersion();
+    }
 
-	public void setStyle(int style) {
-		setProperty(new IntegerProperty(STYLE, style));
-	}
+    public void setStyle(int style) {
+        setProperty(new IntegerProperty(STYLE, style));
+    }
 
-	public int getStyle() {
-		return getPropertyAsInt(STYLE);
-	}
+    public int getStyle() {
+        return getPropertyAsInt(STYLE);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.control.Controller#next()
-	 */
-	public Sampler next() {
-		if (isSkipNext()) {
-			reInitialize();
-			return null;
-		}
-		return super.next();
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.control.Controller#next()
+     */
+    public Sampler next() {
+        if (isSkipNext()) {
+            reInitialize();
+            return null;
+        }
+        return super.next();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see GenericController#nextIsAController(Controller)
-	 */
-	protected Sampler nextIsAController(Controller controller) throws NextIsNullException {
-		Sampler sampler = controller.next();
-		if (sampler == null) {
-			currentReturnedNull(controller);
-			return next();
-		}
-		currentReturnedAtLeastOne = true;
-		if (getStyle() == IGNORE_SUB_CONTROLLERS) {
-			incrementCurrent();
-			skipNext = true;
-		} else {
-			searchStart = null;
-		}
-		return sampler;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see GenericController#nextIsAController(Controller)
+     */
+    protected Sampler nextIsAController(Controller controller) throws NextIsNullException {
+        Sampler sampler = controller.next();
+        if (sampler == null) {
+            currentReturnedNull(controller);
+            return next();
+        }
+        currentReturnedAtLeastOne = true;
+        if (getStyle() == IGNORE_SUB_CONTROLLERS) {
+            incrementCurrent();
+            skipNext = true;
+        } else {
+            searchStart = null;
+        }
+        return sampler;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.control.GenericController#nextIsASampler(Sampler)
-	 */
-	protected Sampler nextIsASampler(Sampler element) throws NextIsNullException {
-		skipNext = true;
-		incrementCurrent();
-		return element;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.control.GenericController#nextIsASampler(Sampler)
+     */
+    protected Sampler nextIsASampler(Sampler element) throws NextIsNullException {
+        skipNext = true;
+        incrementCurrent();
+        return element;
+    }
 
-	/**
-	 * If the current is null, reset and continue searching. The searchStart
-	 * attribute will break us off when we start a repeat.
-	 * 
-	 * @see org.apache.jmeter.control.GenericController#nextIsNull()
-	 */
-	protected Sampler nextIsNull() {
-		resetCurrent();
-		return next();
-	}
+    /**
+     * If the current is null, reset and continue searching. The searchStart
+     * attribute will break us off when we start a repeat.
+     *
+     * @see org.apache.jmeter.control.GenericController#nextIsNull()
+     */
+    protected Sampler nextIsNull() {
+        resetCurrent();
+        return next();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see GenericController#setCurrentElement(TestElement)
-	 */
-	protected void setCurrentElement(TestElement currentElement) throws NextIsNullException {
-		// Set the position when next is first called, and don't overwrite
-		// until reInitialize is called.
-		if (searchStart == null) {
-			searchStart = currentElement;
-		} else if (searchStart == currentElement && !stillSame) {
-			// We've gone through the whole list and are now back at the start
-			// point of our search.
-			reInitialize();
-			throw new NextIsNullException();
-		}
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see GenericController#setCurrentElement(TestElement)
+     */
+    protected void setCurrentElement(TestElement currentElement) throws NextIsNullException {
+        // Set the position when next is first called, and don't overwrite
+        // until reInitialize is called.
+        if (searchStart == null) {
+            searchStart = currentElement;
+        } else if (searchStart == currentElement && !stillSame) {
+            // We've gone through the whole list and are now back at the start
+            // point of our search.
+            reInitialize();
+            throw new NextIsNullException();
+        }
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see GenericController#currentReturnedNull(Controller)
-	 */
-	protected void currentReturnedNull(Controller c) {
-		if (c.isDone()) {
-			removeCurrentElement();
-		} else if (getStyle() == USE_SUB_CONTROLLERS) {
-			incrementCurrent();
-		}
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see GenericController#currentReturnedNull(Controller)
+     */
+    protected void currentReturnedNull(Controller c) {
+        if (c.isDone()) {
+            removeCurrentElement();
+        } else if (getStyle() == USE_SUB_CONTROLLERS) {
+            incrementCurrent();
+        }
+    }
 
-	/**
-	 * @return skipNext
-	 */
-	protected boolean isSkipNext() {
-		return skipNext;
-	}
+    /**
+     * @return skipNext
+     */
+    protected boolean isSkipNext() {
+        return skipNext;
+    }
 
-	/**
-	 * @param skipNext
-	 */
-	protected void setSkipNext(boolean skipNext) {
-		this.skipNext = skipNext;
-	}
+    /**
+     * @param skipNext
+     */
+    protected void setSkipNext(boolean skipNext) {
+        this.skipNext = skipNext;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.control.GenericController#incrementCurrent()
-	 */
-	protected void incrementCurrent() {
-		if (currentReturnedAtLeastOne) {
-			skipNext = true;
-		}
-		stillSame = false;
-		super.incrementCurrent();
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.control.GenericController#incrementCurrent()
+     */
+    protected void incrementCurrent() {
+        if (currentReturnedAtLeastOne) {
+            skipNext = true;
+        }
+        stillSame = false;
+        super.incrementCurrent();
+    }
 }

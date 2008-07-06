@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.visualizers;
@@ -56,197 +56,197 @@ import org.apache.jorphan.reflect.Functor;
 public class PropertyControlGui extends AbstractConfigGui
     implements ActionListener, UnsharedComponent {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private static final String COLUMN_NAMES_0 = JMeterUtils.getResString("name"); // $NON-NLS-1$
+    private static final String COLUMN_NAMES_0 = JMeterUtils.getResString("name"); // $NON-NLS-1$
 
-	private static final String COLUMN_NAMES_1 = JMeterUtils.getResString("value"); // $NON-NLS-1$
+    private static final String COLUMN_NAMES_1 = JMeterUtils.getResString("value"); // $NON-NLS-1$
 
-	// TODO: add and delete not currently supported
-	private static final String ADD = "add"; // $NON-NLS-1$
+    // TODO: add and delete not currently supported
+    private static final String ADD = "add"; // $NON-NLS-1$
 
-	private static final String DELETE = "delete"; // $NON-NLS-1$
+    private static final String DELETE = "delete"; // $NON-NLS-1$
 
-	private static final String SYSTEM = "system"; // $NON-NLS-1$
+    private static final String SYSTEM = "system"; // $NON-NLS-1$
 
-	private static final String JMETER = "jmeter"; // $NON-NLS-1$
+    private static final String JMETER = "jmeter"; // $NON-NLS-1$
 
-	private JCheckBox systemButton = new JCheckBox("System");
-	private JCheckBox jmeterButton = new JCheckBox("JMeter");
-	
-	private JLabel tableLabel = new JLabel("Properties");
+    private JCheckBox systemButton = new JCheckBox("System");
+    private JCheckBox jmeterButton = new JCheckBox("JMeter");
 
-	/** The table containing the list of arguments. */
-	private transient JTable table;
+    private JLabel tableLabel = new JLabel("Properties");
 
-	/** The model for the arguments table. */
-	protected transient ObjectTableModel tableModel;
+    /** The table containing the list of arguments. */
+    private transient JTable table;
 
-	/** A button for adding new arguments to the table. */
-	private JButton add;
+    /** The model for the arguments table. */
+    protected transient ObjectTableModel tableModel;
 
-	/** A button for removing arguments from the table. */
-	private JButton delete;
+    /** A button for adding new arguments to the table. */
+    private JButton add;
 
-	public PropertyControlGui() {
-		super();
-		init();
-	}
+    /** A button for removing arguments from the table. */
+    private JButton delete;
 
-	public String getLabelResource() {
-		return "property_visualiser_title"; // $NON-NLS-1$
-	}
+    public PropertyControlGui() {
+        super();
+        init();
+    }
 
-	public Collection getMenuCategories() {
-		return Arrays.asList(new String[] { MenuFactory.NON_TEST_ELEMENTS });
-	}
+    public String getLabelResource() {
+        return "property_visualiser_title"; // $NON-NLS-1$
+    }
 
-	public void actionPerformed(ActionEvent action) {
-		String command = action.getActionCommand();
-		if (ADD.equals(command)){
-			return;
-		}
-		if (DELETE.equals(command)){
-			return;
-		}
-		if (SYSTEM.equals(command)){
-			setUpData();
-			return;
-		}
-		if (JMETER.equals(command)){
-			setUpData();
-			return;
-		}
+    public Collection getMenuCategories() {
+        return Arrays.asList(new String[] { MenuFactory.NON_TEST_ELEMENTS });
+    }
 
-	}
+    public void actionPerformed(ActionEvent action) {
+        String command = action.getActionCommand();
+        if (ADD.equals(command)){
+            return;
+        }
+        if (DELETE.equals(command)){
+            return;
+        }
+        if (SYSTEM.equals(command)){
+            setUpData();
+            return;
+        }
+        if (JMETER.equals(command)){
+            setUpData();
+            return;
+        }
 
-	public void add(SampleResult sample) {
-	}
+    }
 
-	public TestElement createTestElement() {
-		TestElement el = new ConfigTestElement();// TODO replace with simpler version?
-		modifyTestElement(el);
-		return el;
-	}
-	public void configure(TestElement element) {
-	    super.configure(element);
-	    setUpData();
-	}
-	
-	private void setUpData(){
-		tableModel.clearData();
-		Properties p=null;
-		if (systemButton.isSelected()){
-			p = System.getProperties();
-		}
-		if (jmeterButton.isSelected()) {
-			p = JMeterUtils.getJMeterProperties();
-		}
-		if (p == null) {
-		    return;
-		}
-		Set s = p.entrySet();
-		ArrayList al = new ArrayList(s);
-		Collections.sort(al, new Comparator(){
-			public int compare(Object o1, Object o2) {
-				String m1,m2;
-				m1=(String)((Map.Entry)o1).getKey();
-				m2=(String)((Map.Entry)o2).getKey();
-				return m1.compareTo(m2);
-			}
-		});
-		Iterator i = al.iterator();
-		while(i.hasNext()){
-			tableModel.addRow(i.next());
-		}
-	    
-	}
+    public void add(SampleResult sample) {
+    }
 
-	public void modifyTestElement(TestElement element) {
-		configureTestElement(element);
-	}
-	private Component makeMainPanel() {
-		initializeTableModel();
-		table = new JTable(tableModel);
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		return makeScrollPane(table);
-	}
+    public TestElement createTestElement() {
+        TestElement el = new ConfigTestElement();// TODO replace with simpler version?
+        modifyTestElement(el);
+        return el;
+    }
+    public void configure(TestElement element) {
+        super.configure(element);
+        setUpData();
+    }
 
-	/**
-	 * Create a panel containing the title label for the table.
-	 * 
-	 * @return a panel containing the title label
-	 */
-	private Component makeLabelPanel() {
-		JPanel labelPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		ButtonGroup bg = new ButtonGroup();
-		bg.add(systemButton);
-		bg.add(jmeterButton);
-		jmeterButton.setSelected(true);
-		systemButton.setActionCommand(SYSTEM);
-		jmeterButton.setActionCommand(JMETER);
-		systemButton.addActionListener(this);
-		jmeterButton.addActionListener(this);
-		
-		labelPanel.add(systemButton);
-		labelPanel.add(jmeterButton);
-		labelPanel.add(tableLabel);
-		return labelPanel;
-	}
+    private void setUpData(){
+        tableModel.clearData();
+        Properties p=null;
+        if (systemButton.isSelected()){
+            p = System.getProperties();
+        }
+        if (jmeterButton.isSelected()) {
+            p = JMeterUtils.getJMeterProperties();
+        }
+        if (p == null) {
+            return;
+        }
+        Set s = p.entrySet();
+        ArrayList al = new ArrayList(s);
+        Collections.sort(al, new Comparator(){
+            public int compare(Object o1, Object o2) {
+                String m1,m2;
+                m1=(String)((Map.Entry)o1).getKey();
+                m2=(String)((Map.Entry)o2).getKey();
+                return m1.compareTo(m2);
+            }
+        });
+        Iterator i = al.iterator();
+        while(i.hasNext()){
+            tableModel.addRow(i.next());
+        }
 
-	/**
-	 * Create a panel containing the add and delete buttons.
-	 * 
-	 * @return a GUI panel containing the buttons
-	 */
-	private JPanel makeButtonPanel() {// Not currently used
-		add = new JButton(JMeterUtils.getResString("add")); // $NON-NLS-1$
-		add.setActionCommand(ADD);
-		add.setEnabled(true);
+    }
 
-		delete = new JButton(JMeterUtils.getResString("delete")); // $NON-NLS-1$
-		delete.setActionCommand(DELETE);
+    public void modifyTestElement(TestElement element) {
+        configureTestElement(element);
+    }
+    private Component makeMainPanel() {
+        initializeTableModel();
+        table = new JTable(tableModel);
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        return makeScrollPane(table);
+    }
 
-		JPanel buttonPanel = new JPanel();
-		buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
- 		add.addActionListener(this);
-		delete.addActionListener(this);
-		buttonPanel.add(add);
-		buttonPanel.add(delete);
-		return buttonPanel;
-	}
+    /**
+     * Create a panel containing the title label for the table.
+     *
+     * @return a panel containing the title label
+     */
+    private Component makeLabelPanel() {
+        JPanel labelPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        ButtonGroup bg = new ButtonGroup();
+        bg.add(systemButton);
+        bg.add(jmeterButton);
+        jmeterButton.setSelected(true);
+        systemButton.setActionCommand(SYSTEM);
+        jmeterButton.setActionCommand(JMETER);
+        systemButton.addActionListener(this);
+        jmeterButton.addActionListener(this);
 
-	/**
-	 * Initialize the components and layout of this component.
-	 */
-	private void init() {
-		JPanel p = this;
+        labelPanel.add(systemButton);
+        labelPanel.add(jmeterButton);
+        labelPanel.add(tableLabel);
+        return labelPanel;
+    }
 
-			setLayout(new BorderLayout(0, 5));
-			setBorder(makeBorder());
-			add(makeTitlePanel(), BorderLayout.NORTH);
-			p = new JPanel();
+    /**
+     * Create a panel containing the add and delete buttons.
+     *
+     * @return a GUI panel containing the buttons
+     */
+    private JPanel makeButtonPanel() {// Not currently used
+        add = new JButton(JMeterUtils.getResString("add")); // $NON-NLS-1$
+        add.setActionCommand(ADD);
+        add.setEnabled(true);
 
-		p.setLayout(new BorderLayout());
+        delete = new JButton(JMeterUtils.getResString("delete")); // $NON-NLS-1$
+        delete.setActionCommand(DELETE);
 
-		p.add(makeLabelPanel(), BorderLayout.NORTH);
-		p.add(makeMainPanel(), BorderLayout.CENTER);
-		// Force a minimum table height of 70 pixels
-		p.add(Box.createVerticalStrut(70), BorderLayout.WEST);
-		//p.add(makeButtonPanel(), BorderLayout.SOUTH);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+         add.addActionListener(this);
+        delete.addActionListener(this);
+        buttonPanel.add(add);
+        buttonPanel.add(delete);
+        return buttonPanel;
+    }
 
-		add(p, BorderLayout.CENTER);
-		table.revalidate();
-	}
-	private void initializeTableModel() {
-		tableModel = new ObjectTableModel(new String[] { COLUMN_NAMES_0, COLUMN_NAMES_1 },
-				new Functor[] {
-				new Functor(Map.Entry.class, "getKey"), // $NON-NLS-1$
-				new Functor(Map.Entry.class, "getValue") },  // $NON-NLS-1$
-				new Functor[] {
-			    null, //new Functor("setName"), // $NON-NLS-1$
-				new Functor(Map.Entry.class,"setValue", new Class[] { Object.class }) // $NON-NLS-1$
-			}, 
-				new Class[] { String.class, String.class });
-	}
+    /**
+     * Initialize the components and layout of this component.
+     */
+    private void init() {
+        JPanel p = this;
+
+            setLayout(new BorderLayout(0, 5));
+            setBorder(makeBorder());
+            add(makeTitlePanel(), BorderLayout.NORTH);
+            p = new JPanel();
+
+        p.setLayout(new BorderLayout());
+
+        p.add(makeLabelPanel(), BorderLayout.NORTH);
+        p.add(makeMainPanel(), BorderLayout.CENTER);
+        // Force a minimum table height of 70 pixels
+        p.add(Box.createVerticalStrut(70), BorderLayout.WEST);
+        //p.add(makeButtonPanel(), BorderLayout.SOUTH);
+
+        add(p, BorderLayout.CENTER);
+        table.revalidate();
+    }
+    private void initializeTableModel() {
+        tableModel = new ObjectTableModel(new String[] { COLUMN_NAMES_0, COLUMN_NAMES_1 },
+                new Functor[] {
+                new Functor(Map.Entry.class, "getKey"), // $NON-NLS-1$
+                new Functor(Map.Entry.class, "getValue") },  // $NON-NLS-1$
+                new Functor[] {
+                null, //new Functor("setName"), // $NON-NLS-1$
+                new Functor(Map.Entry.class,"setValue", new Class[] { Object.class }) // $NON-NLS-1$
+            },
+                new Class[] { String.class, String.class });
+    }
 }

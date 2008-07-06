@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.visualizers;
@@ -36,77 +36,77 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 
 public class AssertionVisualizer extends AbstractVisualizer implements Clearable {
 
-	private JTextArea textArea;
+    private JTextArea textArea;
 
-	public AssertionVisualizer() {
-		init();
-		setName(getStaticLabel());
-	}
+    public AssertionVisualizer() {
+        init();
+        setName(getStaticLabel());
+    }
 
-	public String getLabelResource() {
-		return "assertion_visualizer_title"; // $NON-NLS-1$
-	}
+    public String getLabelResource() {
+        return "assertion_visualizer_title"; // $NON-NLS-1$
+    }
 
-	public void add(SampleResult sample) {
-		StringBuffer sb = new StringBuffer(100);
-		sb.append(sample.getSampleLabel());
-		sb.append(getAssertionResult(sample));
-		sb.append("\n"); // $NON-NLS-1$
-		synchronized (textArea) {
-			textArea.append(sb.toString());
-		}
-	}
+    public void add(SampleResult sample) {
+        StringBuffer sb = new StringBuffer(100);
+        sb.append(sample.getSampleLabel());
+        sb.append(getAssertionResult(sample));
+        sb.append("\n"); // $NON-NLS-1$
+        synchronized (textArea) {
+            textArea.append(sb.toString());
+        }
+    }
 
-	public void clearData() {
-		textArea.setText(""); // $NON-NLS-1$
-	}
+    public void clearData() {
+        textArea.setText(""); // $NON-NLS-1$
+    }
 
-	private String getAssertionResult(SampleResult res) {
-		if (res != null) {
-			StringBuffer display = new StringBuffer();
-			AssertionResult assertionResults[] = res.getAssertionResults();
-			for (int i = 0; i < assertionResults.length; i++) {
-				AssertionResult item = assertionResults[i];
+    private String getAssertionResult(SampleResult res) {
+        if (res != null) {
+            StringBuffer display = new StringBuffer();
+            AssertionResult assertionResults[] = res.getAssertionResults();
+            for (int i = 0; i < assertionResults.length; i++) {
+                AssertionResult item = assertionResults[i];
 
-				if (item.isFailure() || item.isError()) {
-					display.append("\n\t"); // $NON-NLS-1$
-					display.append(item.getName() != null ? item.getName() + " : " : "");// $NON-NLS-1$
-					display.append(item.getFailureMessage());
-				}
-			}
-			return display.toString();
-		}
-		return "";
-	}
+                if (item.isFailure() || item.isError()) {
+                    display.append("\n\t"); // $NON-NLS-1$
+                    display.append(item.getName() != null ? item.getName() + " : " : "");// $NON-NLS-1$
+                    display.append(item.getFailureMessage());
+                }
+            }
+            return display.toString();
+        }
+        return "";
+    }
 
-	private void init() {
-		this.setLayout(new BorderLayout());
+    private void init() {
+        this.setLayout(new BorderLayout());
 
-		// MAIN PANEL
-		Border margin = new EmptyBorder(10, 10, 5, 10);
+        // MAIN PANEL
+        Border margin = new EmptyBorder(10, 10, 5, 10);
 
-		this.setBorder(margin);
+        this.setBorder(margin);
 
-		// NAME
-		this.add(makeTitlePanel(), BorderLayout.NORTH);
+        // NAME
+        this.add(makeTitlePanel(), BorderLayout.NORTH);
 
-		// TEXTAREA LABEL
-		JLabel textAreaLabel = 
+        // TEXTAREA LABEL
+        JLabel textAreaLabel =
             new JLabel(JMeterUtils.getResString("assertion_textarea_label")); // $NON-NLS-1$
-		Box mainPanel = Box.createVerticalBox();
-		mainPanel.add(textAreaLabel);
+        Box mainPanel = Box.createVerticalBox();
+        mainPanel.add(textAreaLabel);
 
-		// TEXTAREA
-		textArea = new JTextArea();
-		textArea.setEditable(false);
-		textArea.setLineWrap(false);
-		JScrollPane areaScrollPane = new JScrollPane(textArea);
+        // TEXTAREA
+        textArea = new JTextArea();
+        textArea.setEditable(false);
+        textArea.setLineWrap(false);
+        JScrollPane areaScrollPane = new JScrollPane(textArea);
 
-		areaScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		areaScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        areaScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        areaScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
         areaScrollPane.setPreferredSize(new Dimension(mainPanel.getWidth(),mainPanel.getHeight()));
-		mainPanel.add(areaScrollPane);
-		this.add(mainPanel, BorderLayout.CENTER);
-	}
+        mainPanel.add(areaScrollPane);
+        this.add(mainPanel, BorderLayout.CENTER);
+    }
 }
