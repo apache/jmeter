@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.engine;
@@ -25,39 +25,39 @@ import org.apache.jorphan.collections.HashTreeTraverser;
 
 /**
  * @author mstover
- * 
+ *
  * To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Generation - Code and Comments
  */
 public class TurnElementsOn implements HashTreeTraverser {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jorphan.collections.HashTreeTraverser#addNode(java.lang.Object,
-	 *      org.apache.jorphan.collections.HashTree)
-	 */
-	public void addNode(Object node, HashTree subTree) {
-		if (node instanceof TestElement && !(node instanceof TestPlan)) {
-			((TestElement) node).setRunningVersion(true);
-		}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jorphan.collections.HashTreeTraverser#addNode(java.lang.Object,
+     *      org.apache.jorphan.collections.HashTree)
+     */
+    public void addNode(Object node, HashTree subTree) {
+        if (node instanceof TestElement && !(node instanceof TestPlan)) {
+            ((TestElement) node).setRunningVersion(true);
+        }
 
-	}
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jorphan.collections.HashTreeTraverser#subtractNode()
-	 */
-	public void subtractNode() {
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jorphan.collections.HashTreeTraverser#subtractNode()
+     */
+    public void subtractNode() {
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jorphan.collections.HashTreeTraverser#processPath()
-	 */
-	public void processPath() {
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jorphan.collections.HashTreeTraverser#processPath()
+     */
+    public void processPath() {
+    }
 
 }

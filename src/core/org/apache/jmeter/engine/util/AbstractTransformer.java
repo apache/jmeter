@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 /*
@@ -25,23 +25,23 @@ import java.util.Map;
 
 abstract class AbstractTransformer implements ValueTransformer {
 
-	protected CompoundVariable masterFunction;
+    protected CompoundVariable masterFunction;
 
-	protected Map variables;
+    protected Map variables;
 
-	public void setMasterFunction(CompoundVariable variable) {
-		masterFunction = variable;
-	}
+    public void setMasterFunction(CompoundVariable variable) {
+        masterFunction = variable;
+    }
 
-	protected CompoundVariable getMasterFunction() {
-		return masterFunction;
-	}
+    protected CompoundVariable getMasterFunction() {
+        return masterFunction;
+    }
 
-	public Map getVariables() {
-		return variables;
-	}
+    public Map getVariables() {
+        return variables;
+    }
 
-	public void setVariables(Map map) {
-		variables = map;
-	}
+    public void setVariables(Map map) {
+        variables = map;
+    }
 }

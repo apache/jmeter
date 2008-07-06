@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.control;
@@ -45,287 +45,287 @@ import org.apache.log.Logger;
  * </p>
  */
 public class GenericController extends AbstractTestElement implements Controller, Serializable {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private transient LinkedList iterationListeners = new LinkedList();
+    private transient LinkedList iterationListeners = new LinkedList();
 
-	// May be replaced by RandomOrderController
-	protected transient List subControllersAndSamplers = new ArrayList();
+    // May be replaced by RandomOrderController
+    protected transient List subControllersAndSamplers = new ArrayList();
 
-	protected transient int current;
+    protected transient int current;
 
-	private transient int iterCount;
+    private transient int iterCount;
 
-	private transient boolean done, first;
+    private transient boolean done, first;
 
-	/**
-	 * Creates a Generic Controller
-	 */
-	public GenericController() {
-	}
+    /**
+     * Creates a Generic Controller
+     */
+    public GenericController() {
+    }
 
-	public void initialize() {
-		resetCurrent();
-		resetIterCount();
-		done = false; // TODO should this use setDone()?
-		first = true; // TODO should this use setFirst()?
-		TestElement elem;
-		for (int i = 0; i < subControllersAndSamplers.size(); i++) {
-			elem = (TestElement) subControllersAndSamplers.get(i);
-			if (elem instanceof Controller) {
-				((Controller) elem).initialize();
-			}
-		}
-	}
+    public void initialize() {
+        resetCurrent();
+        resetIterCount();
+        done = false; // TODO should this use setDone()?
+        first = true; // TODO should this use setFirst()?
+        TestElement elem;
+        for (int i = 0; i < subControllersAndSamplers.size(); i++) {
+            elem = (TestElement) subControllersAndSamplers.get(i);
+            if (elem instanceof Controller) {
+                ((Controller) elem).initialize();
+            }
+        }
+    }
 
-	/**
-	 * Resets the controller:
-	 * <ul>
-	 * <li>resetCurrent() (i.e. current=0)</li>
-	 * <li>increment iteration count</li>
-	 * <li>sets first=true</li>
-	 * <li>recoverRunningVersion() to set the controller back to the initial state</li>
-	 * </ul>
-	 * 
-	 */
-	protected void reInitialize() {
-		resetCurrent();
-		incrementIterCount();
-		setFirst(true);
-		recoverRunningVersion();
-	}
+    /**
+     * Resets the controller:
+     * <ul>
+     * <li>resetCurrent() (i.e. current=0)</li>
+     * <li>increment iteration count</li>
+     * <li>sets first=true</li>
+     * <li>recoverRunningVersion() to set the controller back to the initial state</li>
+     * </ul>
+     *
+     */
+    protected void reInitialize() {
+        resetCurrent();
+        incrementIterCount();
+        setFirst(true);
+        recoverRunningVersion();
+    }
 
-	/**
-	 * <p>
-	 * Determines the next sampler to be processed.
-	 * </p>
-	 * 
-	 * <p>
-	 * If isDone, returns null.
-	 * </p>
-	 * 
-	 * <p>
-	 * Gets the list element using current pointer.
-	 * If this is null, calls {@link #nextIsNull()}.
-	 * </p>
-	 * 
-	 * <p>
-	 * If the list element is a sampler, calls {@link #nextIsASampler(Sampler)},
-	 * otherwise calls {@link #nextIsAController(Controller)}
-	 * </p>
-	 * 
-	 * <p>
-	 * If any of the called methods throws NextIsNullException, returns null,
-	 * otherwise the value obtained above is returned.
-	 * </p>
-	 * 
-	 * @return the next sampler or null
-	 */
-	public Sampler next() {
-		fireIterEvents();
-		if (log.isDebugEnabled()) {
-			log.debug("Calling next on: " + this.getClass().getName());
-		}
-		if (isDone()) {
-			return null;
-		}
-		Sampler returnValue = null;
-		try {
-			TestElement currentElement = getCurrentElement();
-			setCurrentElement(currentElement);
-			if (currentElement == null) {
-				// incrementCurrent();
-				returnValue = nextIsNull();
-			} else {
-				if (currentElement instanceof Sampler) {
-					returnValue = nextIsASampler((Sampler) currentElement);
-				} else { // must be a controller
-					returnValue = nextIsAController((Controller) currentElement);
-				}
-			}
-		} catch (NextIsNullException e) {
-			returnValue = null;
-		}
-		return returnValue;
-	}
+    /**
+     * <p>
+     * Determines the next sampler to be processed.
+     * </p>
+     *
+     * <p>
+     * If isDone, returns null.
+     * </p>
+     *
+     * <p>
+     * Gets the list element using current pointer.
+     * If this is null, calls {@link #nextIsNull()}.
+     * </p>
+     *
+     * <p>
+     * If the list element is a sampler, calls {@link #nextIsASampler(Sampler)},
+     * otherwise calls {@link #nextIsAController(Controller)}
+     * </p>
+     *
+     * <p>
+     * If any of the called methods throws NextIsNullException, returns null,
+     * otherwise the value obtained above is returned.
+     * </p>
+     *
+     * @return the next sampler or null
+     */
+    public Sampler next() {
+        fireIterEvents();
+        if (log.isDebugEnabled()) {
+            log.debug("Calling next on: " + this.getClass().getName());
+        }
+        if (isDone()) {
+            return null;
+        }
+        Sampler returnValue = null;
+        try {
+            TestElement currentElement = getCurrentElement();
+            setCurrentElement(currentElement);
+            if (currentElement == null) {
+                // incrementCurrent();
+                returnValue = nextIsNull();
+            } else {
+                if (currentElement instanceof Sampler) {
+                    returnValue = nextIsASampler((Sampler) currentElement);
+                } else { // must be a controller
+                    returnValue = nextIsAController((Controller) currentElement);
+                }
+            }
+        } catch (NextIsNullException e) {
+            returnValue = null;
+        }
+        return returnValue;
+    }
 
-	/**
-	 * @see org.apache.jmeter.control.Controller#isDone()
-	 */
-	public boolean isDone() {
-		return done;
-	}
+    /**
+     * @see org.apache.jmeter.control.Controller#isDone()
+     */
+    public boolean isDone() {
+        return done;
+    }
 
-	protected void setDone(boolean done) {
-		this.done = done;
-	}
+    protected void setDone(boolean done) {
+        this.done = done;
+    }
 
-	protected boolean isFirst() {
-		return first;
-	}
+    protected boolean isFirst() {
+        return first;
+    }
 
-	public void setFirst(boolean b) {
-		first = b;
-	}
+    public void setFirst(boolean b) {
+        first = b;
+    }
 
-	/**
-	 * Called by next() if the element is a Controller,
-	 * and returns the next sampler from the controller.
-	 * If this is null, then updates the current pointer and makes recursive call to next().
-	 * @param controller
-	 * @return the next sampler
-	 * @throws NextIsNullException
-	 */
-	protected Sampler nextIsAController(Controller controller) throws NextIsNullException {
-		Sampler sampler = controller.next();
-		if (sampler == null) {
-			currentReturnedNull(controller);
-			sampler = next();
-		}
-		return sampler;
-	}
+    /**
+     * Called by next() if the element is a Controller,
+     * and returns the next sampler from the controller.
+     * If this is null, then updates the current pointer and makes recursive call to next().
+     * @param controller
+     * @return the next sampler
+     * @throws NextIsNullException
+     */
+    protected Sampler nextIsAController(Controller controller) throws NextIsNullException {
+        Sampler sampler = controller.next();
+        if (sampler == null) {
+            currentReturnedNull(controller);
+            sampler = next();
+        }
+        return sampler;
+    }
 
-	/**
-	 * Increment the current pointer and return the element.
-	 * Called by next() if the element is a sampler.
-	 * (May be overriden by sub-classes).
-	 *  
-	 * @param element
-	 * @return input element
-	 * @throws NextIsNullException
-	 */
-	protected Sampler nextIsASampler(Sampler element) throws NextIsNullException {
-		incrementCurrent();
-		return element;
-	}
+    /**
+     * Increment the current pointer and return the element.
+     * Called by next() if the element is a sampler.
+     * (May be overriden by sub-classes).
+     *
+     * @param element
+     * @return input element
+     * @throws NextIsNullException
+     */
+    protected Sampler nextIsASampler(Sampler element) throws NextIsNullException {
+        incrementCurrent();
+        return element;
+    }
 
-	/**
-	 * Called by next() when getCurrentElement() returns null.
-	 * Reinitialises the controller.
-	 * 
-	 * @return null (always, for this class)
-	 * @throws NextIsNullException
-	 */
-	protected Sampler nextIsNull() throws NextIsNullException {
-		reInitialize();
-		return null;
-	}
+    /**
+     * Called by next() when getCurrentElement() returns null.
+     * Reinitialises the controller.
+     *
+     * @return null (always, for this class)
+     * @throws NextIsNullException
+     */
+    protected Sampler nextIsNull() throws NextIsNullException {
+        reInitialize();
+        return null;
+    }
 
-	/**
-	 * If the controller is done, remove it from the list,
-	 * otherwise increment to next entry in list.
-	 * 
-	 * @param c controller
-	 */
-	protected void currentReturnedNull(Controller c) {
-		if (c.isDone()) {
-			removeCurrentElement();
-		} else {
-			incrementCurrent();
-		}
-	}
+    /**
+     * If the controller is done, remove it from the list,
+     * otherwise increment to next entry in list.
+     *
+     * @param c controller
+     */
+    protected void currentReturnedNull(Controller c) {
+        if (c.isDone()) {
+            removeCurrentElement();
+        } else {
+            incrementCurrent();
+        }
+    }
 
-	/**
-	 * Gets the SubControllers attribute of the GenericController object
-	 * 
-	 * @return the SubControllers value
-	 */
-	protected List getSubControllers() {
-		return subControllersAndSamplers;
-	}
+    /**
+     * Gets the SubControllers attribute of the GenericController object
+     *
+     * @return the SubControllers value
+     */
+    protected List getSubControllers() {
+        return subControllersAndSamplers;
+    }
 
-	private void addElement(TestElement child) {
-		subControllersAndSamplers.add(child);
-	}
+    private void addElement(TestElement child) {
+        subControllersAndSamplers.add(child);
+    }
 
-	/**
-	 * Empty implementation - does nothing.
-	 * 
-	 * @param currentElement
-	 * @throws NextIsNullException
-	 */
-	protected void setCurrentElement(TestElement currentElement) throws NextIsNullException {
-	}
+    /**
+     * Empty implementation - does nothing.
+     *
+     * @param currentElement
+     * @throws NextIsNullException
+     */
+    protected void setCurrentElement(TestElement currentElement) throws NextIsNullException {
+    }
 
-	/**
-	 * <p>
-	 * Gets the element indicated by the <code>current</code> index, if one exists,
-	 * from the <code>subControllersAndSamplers</code> list.
-	 * </p>
-	 * <p>
-	 * If the <code>subControllersAndSamplers</code> list is empty, 
-	 * then set done = true, and throw NextIsNullException.
-	 * </p>
-	 * @return the current element - or null if current index too large
-	 * @throws NextIsNullException if list is empty
-	 */
-	protected TestElement getCurrentElement() throws NextIsNullException {
-		if (current < subControllersAndSamplers.size()) {
-			return (TestElement) subControllersAndSamplers.get(current);
-		}
-		if (subControllersAndSamplers.size() == 0) {
-			setDone(true);
-			throw new NextIsNullException();
-		}
-		return null;
-	}
+    /**
+     * <p>
+     * Gets the element indicated by the <code>current</code> index, if one exists,
+     * from the <code>subControllersAndSamplers</code> list.
+     * </p>
+     * <p>
+     * If the <code>subControllersAndSamplers</code> list is empty,
+     * then set done = true, and throw NextIsNullException.
+     * </p>
+     * @return the current element - or null if current index too large
+     * @throws NextIsNullException if list is empty
+     */
+    protected TestElement getCurrentElement() throws NextIsNullException {
+        if (current < subControllersAndSamplers.size()) {
+            return (TestElement) subControllersAndSamplers.get(current);
+        }
+        if (subControllersAndSamplers.size() == 0) {
+            setDone(true);
+            throw new NextIsNullException();
+        }
+        return null;
+    }
 
-	protected void removeCurrentElement() {
-		subControllersAndSamplers.remove(current);
-	}
+    protected void removeCurrentElement() {
+        subControllersAndSamplers.remove(current);
+    }
 
-	/**
-	 * Increments the current pointer; called by currentReturnedNull to move the
-	 * controller on to its next child.
-	 */
-	protected void incrementCurrent() {
-		current++;
-	}
+    /**
+     * Increments the current pointer; called by currentReturnedNull to move the
+     * controller on to its next child.
+     */
+    protected void incrementCurrent() {
+        current++;
+    }
 
-	protected void resetCurrent() {
-		current = 0;
-	}
+    protected void resetCurrent() {
+        current = 0;
+    }
 
-	public void addTestElement(TestElement child) {
-		if (child instanceof Controller || child instanceof Sampler) {
-			addElement(child);
-		}
-	}
+    public void addTestElement(TestElement child) {
+        if (child instanceof Controller || child instanceof Sampler) {
+            addElement(child);
+        }
+    }
 
-	public void addIterationListener(LoopIterationListener lis) {
-		/*
-		 * A little hack - add each listener to the start of the list - this
-		 * ensures that the thread running the show is the first listener and
-		 * can modify certain values before other listeners are called.
-		 */
-		iterationListeners.addFirst(lis);
-	}
+    public void addIterationListener(LoopIterationListener lis) {
+        /*
+         * A little hack - add each listener to the start of the list - this
+         * ensures that the thread running the show is the first listener and
+         * can modify certain values before other listeners are called.
+         */
+        iterationListeners.addFirst(lis);
+    }
 
-	protected void fireIterEvents() {
-		if (isFirst()) {
-			fireIterationStart();
-			first = false; // TODO - should this use setFirst() ?
-		}
-	}
+    protected void fireIterEvents() {
+        if (isFirst()) {
+            fireIterationStart();
+            first = false; // TODO - should this use setFirst() ?
+        }
+    }
 
-	protected void fireIterationStart() {
-		Iterator iter = iterationListeners.iterator();
-		LoopIterationEvent event = new LoopIterationEvent(this, getIterCount());
-		while (iter.hasNext()) {
-			LoopIterationListener item = (LoopIterationListener) iter.next();
-			item.iterationStart(event);
-		}
-	}
+    protected void fireIterationStart() {
+        Iterator iter = iterationListeners.iterator();
+        LoopIterationEvent event = new LoopIterationEvent(this, getIterCount());
+        while (iter.hasNext()) {
+            LoopIterationListener item = (LoopIterationListener) iter.next();
+            item.iterationStart(event);
+        }
+    }
 
-	protected int getIterCount() {
-		return iterCount;
-	}
+    protected int getIterCount() {
+        return iterCount;
+    }
 
-	protected void incrementIterCount() {
-		iterCount++;
-	}
+    protected void incrementIterCount() {
+        iterCount++;
+    }
 
-	protected void resetIterCount() {
-		iterCount = 0;
-	}
+    protected void resetIterCount() {
+        iterCount = 0;
+    }
 }
