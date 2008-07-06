@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions.util;
@@ -24,18 +24,18 @@ import org.apache.oro.text.perl.Perl5Util;
  * Decodes an Argument by replacing '\x' with 'x'
  */
 public final class ArgumentDecoder {
-	private static final Perl5Util util = new Perl5Util();
+    private static final Perl5Util util = new Perl5Util();
 
-	private static final String expression = "s#[\\\\](.)#$1#g"; // $NON-NLS-1$
+    private static final String expression = "s#[\\\\](.)#$1#g"; // $NON-NLS-1$
 
 // TODO does not appear to be used
-	public static String decode(String s) {
-		return util.substitute(expression, s);
-	}
+    public static String decode(String s) {
+        return util.substitute(expression, s);
+    }
 
-	/**
-	 * Prevent instantiation of utility class.
-	 */
-	private ArgumentDecoder() {
-	}
+    /**
+     * Prevent instantiation of utility class.
+     */
+    private ArgumentDecoder() {
+    }
 }
