@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.testelement.property;
@@ -24,142 +24,142 @@ import org.apache.jmeter.testelement.TestElement;
 
 public class MapProperty extends MultiProperty {
 
-	private static final long serialVersionUID = 221L; // Remember to change this when the class changes ...
-	
+    private static final long serialVersionUID = 221L; // Remember to change this when the class changes ...
+
     private Map value;
 
-	private transient Map savedValue = null;
+    private transient Map savedValue = null;
 
-	public MapProperty(String name, Map value) {
-		super(name);
-		log.info("map = " + value);
-		this.value = normalizeMap(value);
-		log.info("normalized map = " + this.value);
-	}
+    public MapProperty(String name, Map value) {
+        super(name);
+        log.info("map = " + value);
+        this.value = normalizeMap(value);
+        log.info("normalized map = " + this.value);
+    }
 
-	public MapProperty() {
-		super();
-	}
+    public MapProperty() {
+        super();
+    }
 
-	public boolean equals(Object o) {
-		if (o instanceof MapProperty) {
-			if (value != null) {
-				return value.equals(((JMeterProperty) o).getObjectValue());
-			}
-		}
-		return false;
-	}
+    public boolean equals(Object o) {
+        if (o instanceof MapProperty) {
+            if (value != null) {
+                return value.equals(((JMeterProperty) o).getObjectValue());
+            }
+        }
+        return false;
+    }
 
-	public void setObjectValue(Object v) {
-		if (v instanceof Map) {
-			setMap((Map) v);
-		}
-	}
+    public void setObjectValue(Object v) {
+        if (v instanceof Map) {
+            setMap((Map) v);
+        }
+    }
 
-	public void addProperty(JMeterProperty prop) {
-		addProperty(prop.getName(), prop);
-	}
+    public void addProperty(JMeterProperty prop) {
+        addProperty(prop.getName(), prop);
+    }
 
-	public JMeterProperty get(String key) {
-		return (JMeterProperty) value.get(key);
-	}
+    public JMeterProperty get(String key) {
+        return (JMeterProperty) value.get(key);
+    }
 
-	/**
-	 * Figures out what kind of properties this collection is holding and
-	 * returns the class type.
-	 * 
-	 * @see AbstractProperty#getPropertyType()
-	 */
-	protected Class getPropertyType() {
-		if (value.size() > 0) {
-			return valueIterator().next().getClass();
-		}
-		return NullProperty.class;
-	}
+    /**
+     * Figures out what kind of properties this collection is holding and
+     * returns the class type.
+     *
+     * @see AbstractProperty#getPropertyType()
+     */
+    protected Class getPropertyType() {
+        if (value.size() > 0) {
+            return valueIterator().next().getClass();
+        }
+        return NullProperty.class;
+    }
 
-	/**
-	 * @see JMeterProperty#getStringValue()
-	 */
-	public String getStringValue() {
-		return value.toString();
-	}
+    /**
+     * @see JMeterProperty#getStringValue()
+     */
+    public String getStringValue() {
+        return value.toString();
+    }
 
-	/**
-	 * @see JMeterProperty#getObjectValue()
-	 */
-	public Object getObjectValue() {
-		return value;
-	}
+    /**
+     * @see JMeterProperty#getObjectValue()
+     */
+    public Object getObjectValue() {
+        return value;
+    }
 
-	public Object clone() {
-		MapProperty prop = (MapProperty) super.clone();
-		prop.value = cloneMap();
-		return prop;
-	}
+    public Object clone() {
+        MapProperty prop = (MapProperty) super.clone();
+        prop.value = cloneMap();
+        return prop;
+    }
 
-	private Map cloneMap() {
-		try {
-			Map newCol = (Map) value.getClass().newInstance();
-			PropertyIterator iter = valueIterator();
-			while (iter.hasNext()) {
-				JMeterProperty item = iter.next();
-				newCol.put(item.getName(), item.clone());
-			}
-			return newCol;
-		} catch (Exception e) {
-			log.error("Couldn't clone map", e);
-			return value;
-		}
-	}
+    private Map cloneMap() {
+        try {
+            Map newCol = (Map) value.getClass().newInstance();
+            PropertyIterator iter = valueIterator();
+            while (iter.hasNext()) {
+                JMeterProperty item = iter.next();
+                newCol.put(item.getName(), item.clone());
+            }
+            return newCol;
+        } catch (Exception e) {
+            log.error("Couldn't clone map", e);
+            return value;
+        }
+    }
 
-	public PropertyIterator valueIterator() {
-		return getIterator(value.values());
-	}
+    public PropertyIterator valueIterator() {
+        return getIterator(value.values());
+    }
 
-	public void addProperty(String name, JMeterProperty prop) {
-		if (!value.containsKey(name)) {
-			value.put(name, prop);
-		}
-	}
+    public void addProperty(String name, JMeterProperty prop) {
+        if (!value.containsKey(name)) {
+            value.put(name, prop);
+        }
+    }
 
-	public void setMap(Map newMap) {
-		value = normalizeMap(newMap);
-	}
+    public void setMap(Map newMap) {
+        value = normalizeMap(newMap);
+    }
 
-	/**
-	 * @see JMeterProperty#recoverRunningVersion(TestElement)
-	 */
-	public void recoverRunningVersion(TestElement owner) {
-		if (savedValue != null) {
-			value = savedValue;
-		}
-		recoverRunningVersionOfSubElements(owner);
-	}
+    /**
+     * @see JMeterProperty#recoverRunningVersion(TestElement)
+     */
+    public void recoverRunningVersion(TestElement owner) {
+        if (savedValue != null) {
+            value = savedValue;
+        }
+        recoverRunningVersionOfSubElements(owner);
+    }
 
-	public void clear() {
-		value.clear();
-	}
+    public void clear() {
+        value.clear();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see MultiProperty#iterator()
-	 */
-	public PropertyIterator iterator() {
-		return valueIterator();
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see MultiProperty#iterator()
+     */
+    public PropertyIterator iterator() {
+        return valueIterator();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see JMeterProperty#setRunningVersion(boolean)
-	 */
-	public void setRunningVersion(boolean running) {
-		super.setRunningVersion(running);
-		if (running) {
-			savedValue = value;
-		} else {
-			savedValue = null;
-		}
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see JMeterProperty#setRunningVersion(boolean)
+     */
+    public void setRunningVersion(boolean running) {
+        super.setRunningVersion(running);
+        if (running) {
+            savedValue = value;
+        } else {
+            savedValue = null;
+        }
+    }
 }

@@ -13,22 +13,18 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.gui.util;
 
-/**
- * @author Michael Stover
- * @version $Revision$
- */
 public class MenuInfo {
-	public String label;
+    public String label;
 
-	public String className;
+    public String className;
 
-	public MenuInfo(String l, String cn) {
-		label = l;
-		className = cn;
-	}
+    public MenuInfo(String l, String cn) {
+        label = l;
+        className = cn;
+    }
 }

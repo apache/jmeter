@@ -17,20 +17,20 @@
 package org.apache.jmeter.monitor.model;
 
 public interface Connector {
-	ThreadInfo getThreadInfo();
+    ThreadInfo getThreadInfo();
 
-	void setThreadInfo(ThreadInfo value);
+    void setThreadInfo(ThreadInfo value);
 
-	RequestInfo getRequestInfo();
+    RequestInfo getRequestInfo();
 
-	void setRequestInfo(RequestInfo value);
+    void setRequestInfo(RequestInfo value);
 
-	Workers getWorkers();
+    Workers getWorkers();
 
-	void setWorkers(Workers value);
+    void setWorkers(Workers value);
 
-	String getName();
+    String getName();
 
-	void setName(String value);
+    void setName(String value);
 
 }

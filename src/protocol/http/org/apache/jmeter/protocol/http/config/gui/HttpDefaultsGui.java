@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.config.gui;
@@ -33,45 +33,45 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class HttpDefaultsGui extends AbstractConfigGui {
 
-	private JCheckBox imageParser;
+    private JCheckBox imageParser;
 
-	private UrlConfigGui urlConfig;
+    private UrlConfigGui urlConfig;
 
-	public HttpDefaultsGui() {
-		super();
-		init();
-	}
+    public HttpDefaultsGui() {
+        super();
+        init();
+    }
 
-	public String getLabelResource() {
-		return "url_config_title"; // $NON-NLS-1$
-	}
+    public String getLabelResource() {
+        return "url_config_title"; // $NON-NLS-1$
+    }
 
-	/**
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
-	 */
-	public TestElement createTestElement() {
-		ConfigTestElement config = new ConfigTestElement();
-		modifyTestElement(config);
-		return config;
-	}
+    /**
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
+     */
+    public TestElement createTestElement() {
+        ConfigTestElement config = new ConfigTestElement();
+        modifyTestElement(config);
+        return config;
+    }
 
-	/**
-	 * Modifies a given TestElement to mirror the data in the gui components.
-	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-	 */
-	public void modifyTestElement(TestElement config) {
-		ConfigTestElement cfg = (ConfigTestElement ) config;
-		ConfigTestElement el = (ConfigTestElement) urlConfig.createTestElement();
-        cfg.clear(); // need to clear because the 
-		cfg.addConfigElement(el);
-		super.configureTestElement(config);
-		if (imageParser.isSelected()) {
-			config.setProperty(new BooleanProperty(HTTPSamplerBase.IMAGE_PARSER, true));
-		} else {
-			config.removeProperty(HTTPSamplerBase.IMAGE_PARSER);
-		}
-	}
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     *
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement config) {
+        ConfigTestElement cfg = (ConfigTestElement ) config;
+        ConfigTestElement el = (ConfigTestElement) urlConfig.createTestElement();
+        cfg.clear(); // need to clear because the
+        cfg.addConfigElement(el);
+        super.configureTestElement(config);
+        if (imageParser.isSelected()) {
+            config.setProperty(new BooleanProperty(HTTPSamplerBase.IMAGE_PARSER, true));
+        } else {
+            config.removeProperty(HTTPSamplerBase.IMAGE_PARSER);
+        }
+    }
 
     /**
      * Implements JMeterGUIComponent.clearGui
@@ -80,28 +80,28 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         super.clearGui();
         urlConfig.clear();
         imageParser.setSelected(false);
-    }    
+    }
 
-	public void configure(TestElement el) {
-		super.configure(el);
-		urlConfig.configure(el);
-		imageParser.setSelected(((AbstractTestElement) el).getPropertyAsBoolean(HTTPSamplerBase.IMAGE_PARSER));
-	}
+    public void configure(TestElement el) {
+        super.configure(el);
+        urlConfig.configure(el);
+        imageParser.setSelected(((AbstractTestElement) el).getPropertyAsBoolean(HTTPSamplerBase.IMAGE_PARSER));
+    }
 
-	private void init() {
-		setLayout(new BorderLayout(0, 5));
-		setBorder(makeBorder());
+    private void init() {
+        setLayout(new BorderLayout(0, 5));
+        setBorder(makeBorder());
 
-		add(makeTitlePanel(), BorderLayout.NORTH);
+        add(makeTitlePanel(), BorderLayout.NORTH);
 
-		urlConfig = new UrlConfigGui(false);
-		add(urlConfig, BorderLayout.CENTER);
+        urlConfig = new UrlConfigGui(false);
+        add(urlConfig, BorderLayout.CENTER);
 
-		imageParser = new JCheckBox(JMeterUtils.getResString("web_testing_retrieve_images")); // $NON-NLS-1$
-		add(imageParser, BorderLayout.SOUTH);
-	}
+        imageParser = new JCheckBox(JMeterUtils.getResString("web_testing_retrieve_images")); // $NON-NLS-1$
+        add(imageParser, BorderLayout.SOUTH);
+    }
 
-	public Dimension getPreferredSize() {
-		return getMinimumSize();
-	}
+    public Dimension getPreferredSize() {
+        return getMinimumSize();
+    }
 }

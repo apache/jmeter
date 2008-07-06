@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 /*
@@ -37,79 +37,79 @@ import org.apache.jmeter.testelement.TestElement;
  * Implements the Copy menu command
  */
 public class Copy extends AbstractAction {
-	private static JMeterTreeNode copiedNode = null;
+    private static JMeterTreeNode copiedNode = null;
 
-	private static JMeterTreeNode copiedNodes[] = null;
+    private static JMeterTreeNode copiedNodes[] = null;
 
-	private static final HashSet commands = new HashSet();
-    
-	static {
-		commands.add(ActionNames.COPY);
-	}
+    private static final HashSet commands = new HashSet();
 
-	/*
-	 * @see org.apache.jmeter.gui.action.Command#getActionNames()
-	 */
-	public Set getActionNames() {
-		return commands;
-	}
+    static {
+        commands.add(ActionNames.COPY);
+    }
 
-	public void doAction(ActionEvent e) {
-		JMeterTreeListener treeListener = GuiPackage.getInstance().getTreeListener();
-		JMeterTreeNode[] nodes = treeListener.getSelectedNodes();
-		setCopiedNodes(nodes);
-	}
+    /*
+     * @see org.apache.jmeter.gui.action.Command#getActionNames()
+     */
+    public Set getActionNames() {
+        return commands;
+    }
 
-	public static JMeterTreeNode[] getCopiedNodes() {
-		for (int i = 0; i < copiedNodes.length; i++) {
-			if (copiedNodes[i] == null) {
-				return null;
-			}
-		}
-		return cloneTreeNodes(copiedNodes);
-	}
+    public void doAction(ActionEvent e) {
+        JMeterTreeListener treeListener = GuiPackage.getInstance().getTreeListener();
+        JMeterTreeNode[] nodes = treeListener.getSelectedNodes();
+        setCopiedNodes(nodes);
+    }
 
-	public static JMeterTreeNode getCopiedNode() {
-		if (copiedNode == null) {
-			return null;
-		}
-		return cloneTreeNode(copiedNode);
-	}
+    public static JMeterTreeNode[] getCopiedNodes() {
+        for (int i = 0; i < copiedNodes.length; i++) {
+            if (copiedNodes[i] == null) {
+                return null;
+            }
+        }
+        return cloneTreeNodes(copiedNodes);
+    }
 
-	public static void setCopiedNode(JMeterTreeNode node) {
-		copiedNode = cloneTreeNode(node);
-	}
+    public static JMeterTreeNode getCopiedNode() {
+        if (copiedNode == null) {
+            return null;
+        }
+        return cloneTreeNode(copiedNode);
+    }
 
-	public static JMeterTreeNode cloneTreeNode(JMeterTreeNode node) {
-		JMeterTreeNode treeNode = (JMeterTreeNode) node.clone();
-		treeNode.setUserObject(((TestElement) node.getUserObject()).clone());
-		cloneChildren(treeNode, node);
-		return treeNode;
-	}
+    public static void setCopiedNode(JMeterTreeNode node) {
+        copiedNode = cloneTreeNode(node);
+    }
 
-	public static void setCopiedNodes(JMeterTreeNode nodes[]) {
-		copiedNodes = new JMeterTreeNode[nodes.length];
-		for (int i = 0; i < nodes.length; i++) {
-			copiedNodes[i] = cloneTreeNode(nodes[i]);
-		}
-	}
+    public static JMeterTreeNode cloneTreeNode(JMeterTreeNode node) {
+        JMeterTreeNode treeNode = (JMeterTreeNode) node.clone();
+        treeNode.setUserObject(((TestElement) node.getUserObject()).clone());
+        cloneChildren(treeNode, node);
+        return treeNode;
+    }
 
-	public static JMeterTreeNode[] cloneTreeNodes(JMeterTreeNode nodes[]) {
-		JMeterTreeNode treeNodes[] = new JMeterTreeNode[nodes.length];
-		for (int i = 0; i < nodes.length; i++) {
-			treeNodes[i] = cloneTreeNode(nodes[i]);
-		}
-		return treeNodes;
-	}
+    public static void setCopiedNodes(JMeterTreeNode nodes[]) {
+        copiedNodes = new JMeterTreeNode[nodes.length];
+        for (int i = 0; i < nodes.length; i++) {
+            copiedNodes[i] = cloneTreeNode(nodes[i]);
+        }
+    }
 
-	private static void cloneChildren(JMeterTreeNode to, JMeterTreeNode from) {
-		Enumeration enumFrom = from.children();
-		while (enumFrom.hasMoreElements()) {
-			JMeterTreeNode child = (JMeterTreeNode) enumFrom.nextElement();
-			JMeterTreeNode childClone = (JMeterTreeNode) child.clone();
-			childClone.setUserObject(((TestElement) child.getUserObject()).clone());
-			to.add(childClone);
-			cloneChildren((JMeterTreeNode) to.getLastChild(), child);
-		}
-	}
+    public static JMeterTreeNode[] cloneTreeNodes(JMeterTreeNode nodes[]) {
+        JMeterTreeNode treeNodes[] = new JMeterTreeNode[nodes.length];
+        for (int i = 0; i < nodes.length; i++) {
+            treeNodes[i] = cloneTreeNode(nodes[i]);
+        }
+        return treeNodes;
+    }
+
+    private static void cloneChildren(JMeterTreeNode to, JMeterTreeNode from) {
+        Enumeration enumFrom = from.children();
+        while (enumFrom.hasMoreElements()) {
+            JMeterTreeNode child = (JMeterTreeNode) enumFrom.nextElement();
+            JMeterTreeNode childClone = (JMeterTreeNode) child.clone();
+            childClone.setUserObject(((TestElement) child.getUserObject()).clone());
+            to.add(childClone);
+            cloneChildren((JMeterTreeNode) to.getLastChild(), child);
+        }
+    }
 }

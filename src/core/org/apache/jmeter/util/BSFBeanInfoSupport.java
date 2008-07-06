@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.util;
@@ -28,38 +28,38 @@ import org.apache.jmeter.testbeans.gui.TextAreaEditor;
  */
 public abstract class BSFBeanInfoSupport extends BeanInfoSupport {
 
-	protected BSFBeanInfoSupport(Class beanClass) {
-		super(beanClass);
-		PropertyDescriptor p;
-		
+    protected BSFBeanInfoSupport(Class beanClass) {
+        super(beanClass);
+        PropertyDescriptor p;
+
         p = property("scriptLanguage"); // $NON-NLS-1$
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, ""); // $NON-NLS-1$
 
         createPropertyGroup("scriptingLanguage", // $NON-NLS-1$
                 new String[] { "scriptLanguage" }); // $NON-NLS-1$
-        
-		p = property("parameters"); // $NON-NLS-1$
-		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-		p.setValue(DEFAULT, ""); // $NON-NLS-1$
+
+        p = property("parameters"); // $NON-NLS-1$
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, ""); // $NON-NLS-1$
 
         createPropertyGroup("parameterGroup", // $NON-NLS-1$
                 new String[] { "parameters" }); // $NON-NLS-1$
 
         p = property("filename"); // $NON-NLS-1$
-		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-		p.setValue(DEFAULT, ""); // $NON-NLS-1$
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, ""); // $NON-NLS-1$
 
         createPropertyGroup("filenameGroup",  // $NON-NLS-1$
                 new String[] { "filename" }); // $NON-NLS-1$
 
-		p = property("script"); // $NON-NLS-1$
-		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-		p.setValue(DEFAULT, ""); // $NON-NLS-1$
+        p = property("script"); // $NON-NLS-1$
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, ""); // $NON-NLS-1$
         p.setPropertyEditorClass(TextAreaEditor.class);
 
         createPropertyGroup("scripting", // $NON-NLS-1$
                 new String[] { "script" }); // $NON-NLS-1$
-	}
+    }
 
 }

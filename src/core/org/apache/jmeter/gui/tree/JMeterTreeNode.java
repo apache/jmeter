@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.gui.tree;
@@ -38,104 +38,104 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeNode {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private JMeterTreeModel treeModel;
+    private JMeterTreeModel treeModel;
 
-	public JMeterTreeNode() {// Allow serializable test to work
-		// TODO: is the serializable test necessary now that JMeterTreeNode is
-		// no longer a GUI component?
-		this(null, null);
-	}
+    public JMeterTreeNode() {// Allow serializable test to work
+        // TODO: is the serializable test necessary now that JMeterTreeNode is
+        // no longer a GUI component?
+        this(null, null);
+    }
 
-	public JMeterTreeNode(TestElement userObj, JMeterTreeModel treeModel) {
-		super(userObj);
-		this.treeModel = treeModel;
-	}
+    public JMeterTreeNode(TestElement userObj, JMeterTreeModel treeModel) {
+        super(userObj);
+        this.treeModel = treeModel;
+    }
 
-	public boolean isEnabled() {
-		return ((AbstractTestElement) getTestElement()).getPropertyAsBoolean(TestElement.ENABLED);
-	}
+    public boolean isEnabled() {
+        return ((AbstractTestElement) getTestElement()).getPropertyAsBoolean(TestElement.ENABLED);
+    }
 
-	public void setEnabled(boolean enabled) {
-		getTestElement().setProperty(new BooleanProperty(TestElement.ENABLED, enabled));
-		treeModel.nodeChanged(this);
-	}
+    public void setEnabled(boolean enabled) {
+        getTestElement().setProperty(new BooleanProperty(TestElement.ENABLED, enabled));
+        treeModel.nodeChanged(this);
+    }
 
-	public ImageIcon getIcon() {
-		return getIcon(true);
-	}
+    public ImageIcon getIcon() {
+        return getIcon(true);
+    }
 
-	public ImageIcon getIcon(boolean enabled) {
-		TestElement testElement = getTestElement();
-		try {
-			if (testElement instanceof TestBean) {
-				Class testClass = testElement.getClass();
-				try {
-					Image img = Introspector.getBeanInfo(testClass).getIcon(BeanInfo.ICON_COLOR_16x16);
-					// If icon has not been defined, then use GUI_CLASS property
-					if (img == null) {
-						Object clazz = Introspector.getBeanInfo(testClass).getBeanDescriptor()
-								.getValue(TestElement.GUI_CLASS);
-						if (clazz == null) {
-							log.warn("getIcon(): Can't obtain GUI class from " + testClass.getName());
-							return null;
-						}
-						return GUIFactory.getIcon(Class.forName((String) clazz), enabled);
-					}
-					return new ImageIcon(img);
-				} catch (IntrospectionException e1) {
-					log.error("Can't obtain icon for class "+testElement, e1);
-					throw new org.apache.jorphan.util.JMeterError(e1);
-				}
-			}
-			return GUIFactory.getIcon(Class.forName(testElement.getPropertyAsString(TestElement.GUI_CLASS)),
-						enabled);
-		} catch (ClassNotFoundException e) {
-			log.warn("Can't get icon for class " + testElement, e);
-			return null;
-		}
-	}
+    public ImageIcon getIcon(boolean enabled) {
+        TestElement testElement = getTestElement();
+        try {
+            if (testElement instanceof TestBean) {
+                Class testClass = testElement.getClass();
+                try {
+                    Image img = Introspector.getBeanInfo(testClass).getIcon(BeanInfo.ICON_COLOR_16x16);
+                    // If icon has not been defined, then use GUI_CLASS property
+                    if (img == null) {
+                        Object clazz = Introspector.getBeanInfo(testClass).getBeanDescriptor()
+                                .getValue(TestElement.GUI_CLASS);
+                        if (clazz == null) {
+                            log.warn("getIcon(): Can't obtain GUI class from " + testClass.getName());
+                            return null;
+                        }
+                        return GUIFactory.getIcon(Class.forName((String) clazz), enabled);
+                    }
+                    return new ImageIcon(img);
+                } catch (IntrospectionException e1) {
+                    log.error("Can't obtain icon for class "+testElement, e1);
+                    throw new org.apache.jorphan.util.JMeterError(e1);
+                }
+            }
+            return GUIFactory.getIcon(Class.forName(testElement.getPropertyAsString(TestElement.GUI_CLASS)),
+                        enabled);
+        } catch (ClassNotFoundException e) {
+            log.warn("Can't get icon for class " + testElement, e);
+            return null;
+        }
+    }
 
-	public Collection getMenuCategories() {
-		try {
-			return GuiPackage.getInstance().getGui(getTestElement()).getMenuCategories();
-		} catch (Exception e) {
-			log.error("Can't get popup menu for gui", e);
-			return null;
-		}
-	}
+    public Collection getMenuCategories() {
+        try {
+            return GuiPackage.getInstance().getGui(getTestElement()).getMenuCategories();
+        } catch (Exception e) {
+            log.error("Can't get popup menu for gui", e);
+            return null;
+        }
+    }
 
-	public JPopupMenu createPopupMenu() {
-		try {
-			return GuiPackage.getInstance().getGui(getTestElement()).createPopupMenu();
-		} catch (Exception e) {
-			log.error("Can't get popup menu for gui", e);
-			return null;
-		}
-	}
+    public JPopupMenu createPopupMenu() {
+        try {
+            return GuiPackage.getInstance().getGui(getTestElement()).createPopupMenu();
+        } catch (Exception e) {
+            log.error("Can't get popup menu for gui", e);
+            return null;
+        }
+    }
 
-	public TestElement getTestElement() {
-		return (TestElement) getUserObject();
-	}
+    public TestElement getTestElement() {
+        return (TestElement) getUserObject();
+    }
 
-	public String getStaticLabel() {
-		return GuiPackage.getInstance().getGui((TestElement) getUserObject()).getStaticLabel();
-	}
+    public String getStaticLabel() {
+        return GuiPackage.getInstance().getGui((TestElement) getUserObject()).getStaticLabel();
+    }
 
-	public String getDocAnchor() {
-		return GuiPackage.getInstance().getGui((TestElement) getUserObject()).getDocAnchor();
-	}
+    public String getDocAnchor() {
+        return GuiPackage.getInstance().getGui((TestElement) getUserObject()).getDocAnchor();
+    }
 
-	public void setName(String name) {
-		((TestElement) getUserObject()).setName(name);
-	}
+    public void setName(String name) {
+        ((TestElement) getUserObject()).setName(name);
+    }
 
-	public String getName() {
-		return ((TestElement) getUserObject()).getName();
-	}
+    public String getName() {
+        return ((TestElement) getUserObject()).getName();
+    }
 
-	public void nameChanged() {
-		treeModel.nodeChanged(this);
-	}
+    public void nameChanged() {
+        treeModel.nodeChanged(this);
+    }
 }

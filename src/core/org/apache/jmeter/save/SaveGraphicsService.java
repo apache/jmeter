@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 package org.apache.jmeter.save;
 
@@ -45,140 +45,140 @@ import org.apache.log.Logger;
  */
 public class SaveGraphicsService {
 
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public static final int PNG = 0;
+    public static final int PNG = 0;
 
-	public static final int TIFF = 1;
+    public static final int TIFF = 1;
 
-	public static final String PNG_EXTENSION = ".png"; //$NON-NLS-1$
+    public static final String PNG_EXTENSION = ".png"; //$NON-NLS-1$
 
-	public static final String TIFF_EXTENSION = ".tif"; //$NON-NLS-1$
+    public static final String TIFF_EXTENSION = ".tif"; //$NON-NLS-1$
 
-	public static final String JPEG_EXTENSION = ".jpg"; //$NON-NLS-1$
+    public static final String JPEG_EXTENSION = ".jpg"; //$NON-NLS-1$
 
-	/**
-	 * 
-	 */
-	public SaveGraphicsService() {
-		super();
-	}
+    /**
+     *
+     */
+    public SaveGraphicsService() {
+        super();
+    }
 
 /*
  * This is not currently used by JMeter code.
  * As it uses Sun-specific code (the only such in JMeter), it has been commented out for now.
  */
-//	/**
-//	 * If someone wants to save a JPEG, use this method. There is a limitation
-//	 * though. It uses gray scale instead of color due to artifacts with color
-//	 * encoding. For some reason, it does not translate pure red and orange
-//	 * correctly. To make the text readable, gray scale is used.
-//	 * 
-//	 * @param filename
-//	 * @param component
-//	 */
-//	public void saveUsingJPEGEncoder(String filename, JComponent component) {
-//		Dimension size = component.getSize();
-//		// We use Gray scale, since color produces poor quality
-//		// this is an unfortunate result of the default codec
-//		// implementation.
-//		BufferedImage image = new BufferedImage(size.width, size.height, BufferedImage.TYPE_USHORT_GRAY);
-//		Graphics2D grp = image.createGraphics();
-//		component.paint(grp);
+//  /**
+//   * If someone wants to save a JPEG, use this method. There is a limitation
+//   * though. It uses gray scale instead of color due to artifacts with color
+//   * encoding. For some reason, it does not translate pure red and orange
+//   * correctly. To make the text readable, gray scale is used.
+//   *
+//   * @param filename
+//   * @param component
+//   */
+//  public void saveUsingJPEGEncoder(String filename, JComponent component) {
+//      Dimension size = component.getSize();
+//      // We use Gray scale, since color produces poor quality
+//      // this is an unfortunate result of the default codec
+//      // implementation.
+//      BufferedImage image = new BufferedImage(size.width, size.height, BufferedImage.TYPE_USHORT_GRAY);
+//      Graphics2D grp = image.createGraphics();
+//      component.paint(grp);
 //
-//		File outfile = new File(filename + JPEG_EXTENSION);
-//		FileOutputStream fos = createFile(outfile);
-//		JPEGEncodeParam param = JPEGCodec.getDefaultJPEGEncodeParam(image);
-//		Float q = new Float(1.0);
-//		param.setQuality(q.floatValue(), true);
-//		JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(fos, param);
+//      File outfile = new File(filename + JPEG_EXTENSION);
+//      FileOutputStream fos = createFile(outfile);
+//      JPEGEncodeParam param = JPEGCodec.getDefaultJPEGEncodeParam(image);
+//      Float q = new Float(1.0);
+//      param.setQuality(q.floatValue(), true);
+//      JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(fos, param);
 //
-//		try {
-//			encoder.encode(image);
-//		} catch (Exception e) {
-//			log.warn(e.toString());
-//		} finally {
+//      try {
+//          encoder.encode(image);
+//      } catch (Exception e) {
+//          log.warn(e.toString());
+//      } finally {
 //            JOrphanUtils.closeQuietly(fos);
-//		}
-//	}
+//      }
+//  }
 
-	/**
-	 * Method will save the JComponent as an image. The formats are PNG, and
-	 * TIFF.
-	 * 
-	 * @param filename
-	 * @param type
-	 * @param component
-	 */
-	public void saveJComponent(String filename, int type, JComponent component) {
-		Dimension size = component.getSize();
-		BufferedImage image = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_RGB);
-		Graphics2D grp = image.createGraphics();
-		component.paint(grp);
+    /**
+     * Method will save the JComponent as an image. The formats are PNG, and
+     * TIFF.
+     *
+     * @param filename
+     * @param type
+     * @param component
+     */
+    public void saveJComponent(String filename, int type, JComponent component) {
+        Dimension size = component.getSize();
+        BufferedImage image = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_RGB);
+        Graphics2D grp = image.createGraphics();
+        component.paint(grp);
 
-		if (type == PNG) {
-			filename += PNG_EXTENSION;
-			this.savePNGWithBatik(filename, image);
-		} else if (type == TIFF) {
-			filename = filename + TIFF_EXTENSION;
-			this.saveTIFFWithBatik(filename, image);
-		}
-	}
+        if (type == PNG) {
+            filename += PNG_EXTENSION;
+            this.savePNGWithBatik(filename, image);
+        } else if (type == TIFF) {
+            filename = filename + TIFF_EXTENSION;
+            this.saveTIFFWithBatik(filename, image);
+        }
+    }
 
-	/**
-	 * Use Batik to save a PNG of the graph
-	 * 
-	 * @param filename
-	 * @param image
-	 */
-	public void savePNGWithBatik(String filename, BufferedImage image) {
-		File outfile = new File(filename);
-		OutputStream fos = createFile(outfile);
-		PNGEncodeParam param = PNGEncodeParam.getDefaultEncodeParam(image);
-		PNGImageEncoder encoder = new PNGImageEncoder(fos, param);
-		try {
-			encoder.encode(image);
-		} catch (Exception e) {
-			// do nothing
-		} finally {
-			JOrphanUtils.closeQuietly(fos);
-		}
-	}
+    /**
+     * Use Batik to save a PNG of the graph
+     *
+     * @param filename
+     * @param image
+     */
+    public void savePNGWithBatik(String filename, BufferedImage image) {
+        File outfile = new File(filename);
+        OutputStream fos = createFile(outfile);
+        PNGEncodeParam param = PNGEncodeParam.getDefaultEncodeParam(image);
+        PNGImageEncoder encoder = new PNGImageEncoder(fos, param);
+        try {
+            encoder.encode(image);
+        } catch (Exception e) {
+            // do nothing
+        } finally {
+            JOrphanUtils.closeQuietly(fos);
+        }
+    }
 
-	/**
-	 * Use Batik to save a TIFF file of the graph
-	 * 
-	 * @param filename
-	 * @param image
-	 */
-	public void saveTIFFWithBatik(String filename, BufferedImage image) {
-		File outfile = new File(filename);
-		OutputStream fos = createFile(outfile);
-		TIFFEncodeParam param = new TIFFEncodeParam();
-		TIFFImageEncoder encoder = new TIFFImageEncoder(fos, param);
-		try {
-			encoder.encode(image);
-		} catch (Exception e) {
-			// do nothing
-		} finally {
-			JOrphanUtils.closeQuietly(fos);
-		}
-	}
+    /**
+     * Use Batik to save a TIFF file of the graph
+     *
+     * @param filename
+     * @param image
+     */
+    public void saveTIFFWithBatik(String filename, BufferedImage image) {
+        File outfile = new File(filename);
+        OutputStream fos = createFile(outfile);
+        TIFFEncodeParam param = new TIFFEncodeParam();
+        TIFFImageEncoder encoder = new TIFFImageEncoder(fos, param);
+        try {
+            encoder.encode(image);
+        } catch (Exception e) {
+            // do nothing
+        } finally {
+            JOrphanUtils.closeQuietly(fos);
+        }
+    }
 
-	/**
-	 * Create a new file for the graphics. Since the method creates a new file,
-	 * we shouldn't get a FNFE.
-	 * 
-	 * @param filename
-	 * @return output stream created from the filename
-	 */
-	public FileOutputStream createFile(File filename) {
-		try {
-			return new FileOutputStream(filename);
-		} catch (FileNotFoundException e) {
-			log.warn(e.toString());
-			return null;
-		}
-	}
+    /**
+     * Create a new file for the graphics. Since the method creates a new file,
+     * we shouldn't get a FNFE.
+     *
+     * @param filename
+     * @return output stream created from the filename
+     */
+    public FileOutputStream createFile(File filename) {
+        try {
+            return new FileOutputStream(filename);
+        } catch (FileNotFoundException e) {
+            log.warn(e.toString());
+            return null;
+        }
+    }
 
 }

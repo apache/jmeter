@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.modifier.gui;
@@ -25,33 +25,33 @@ import org.apache.jmeter.protocol.http.modifier.AnchorModifier;
 import org.apache.jmeter.testelement.TestElement;
 
 public class AnchorModifierGui extends AbstractPreProcessorGui {
-	public AnchorModifierGui() {
-		init();
-	}
+    public AnchorModifierGui() {
+        init();
+    }
 
-	public String getLabelResource() {
-		return "anchor_modifier_title"; //$NON-NLS-1$
-	}
+    public String getLabelResource() {
+        return "anchor_modifier_title"; //$NON-NLS-1$
+    }
 
-	public TestElement createTestElement() {
-		AnchorModifier modifier = new AnchorModifier();
-		modifyTestElement(modifier);
-		return modifier;
-	}
+    public TestElement createTestElement() {
+        AnchorModifier modifier = new AnchorModifier();
+        modifyTestElement(modifier);
+        return modifier;
+    }
 
-	/**
-	 * Modifies a given TestElement to mirror the data in the gui components.
-	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-	 */
-	public void modifyTestElement(TestElement modifier) {
-		configureTestElement(modifier);
-	}
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     *
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement modifier) {
+        configureTestElement(modifier);
+    }
 
-	private void init() {
-		setLayout(new BorderLayout());
-		setBorder(makeBorder());
+    private void init() {
+        setLayout(new BorderLayout());
+        setBorder(makeBorder());
 
-		add(makeTitlePanel(), BorderLayout.NORTH);
-	}
+        add(makeTitlePanel(), BorderLayout.NORTH);
+    }
 }

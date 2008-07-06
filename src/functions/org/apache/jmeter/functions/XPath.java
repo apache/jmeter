@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -37,100 +37,100 @@ import org.apache.log.Logger;
  * Syntax is similar to the CVSRead function. The function allows the test to
  * line-thru the nodes in the XML file - one node per each test. E.g. inserting
  * the following in the test scripts :
- * 
+ *
  * ${_XPath(c:/BOF/abcd.xml,/xpath/)} // match the (first) node
  * ${_XPath(c:/BOF/abcd.xml,/xpath/)} // Go to next match of '/xpath/' expression
- * 
+ *
  * NOTE: A single instance of each different file/expression combination
  * is opened and used for all threads.
- * 
+ *
  */
 public class XPath extends AbstractFunction implements Serializable {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final long serialVersionUID = 232L;
-	
-	// static {
-	// LoggingManager.setPriority("DEBUG","jmeter");
-	// LoggingManager.setTarget(new java.io.PrintWriter(System.out));
-	// }
-	private static final String KEY = "__XPath"; // Function name //$NON-NLS-1$
+    private static final long serialVersionUID = 232L;
 
-	private static final List desc = new LinkedList();
+    // static {
+    // LoggingManager.setPriority("DEBUG","jmeter");
+    // LoggingManager.setTarget(new java.io.PrintWriter(System.out));
+    // }
+    private static final String KEY = "__XPath"; // Function name //$NON-NLS-1$
 
-	private Object[] values; // Parameter list
+    private static final List desc = new LinkedList();
 
-	static {
-		desc.add(JMeterUtils.getResString("xpath_file_file_name")); //$NON-NLS-1$
-		desc.add(JMeterUtils.getResString("xpath_expression")); //$NON-NLS-1$
-	}
+    private Object[] values; // Parameter list
 
-	public XPath() {
-	}
+    static {
+        desc.add(JMeterUtils.getResString("xpath_file_file_name")); //$NON-NLS-1$
+        desc.add(JMeterUtils.getResString("xpath_expression")); //$NON-NLS-1$
+    }
 
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
+    public XPath() {
+    }
 
-	/**
-	 * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
-	 */
-	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
-			throws InvalidVariableException {
-		String myValue = ""; //$NON-NLS-1$
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 
-		String fileName = ((org.apache.jmeter.engine.util.CompoundVariable) values[0]).execute();
-		String xpathString = ((org.apache.jmeter.engine.util.CompoundVariable) values[1]).execute();
+    /**
+     * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
+     */
+    public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
+            throws InvalidVariableException {
+        String myValue = ""; //$NON-NLS-1$
 
-        if (log.isDebugEnabled()){
-    		log.debug("execute (" + fileName + " " + xpathString + ")   ");
-        }
-
-		myValue = XPathWrapper.getXPathString(fileName, xpathString);
+        String fileName = ((org.apache.jmeter.engine.util.CompoundVariable) values[0]).execute();
+        String xpathString = ((org.apache.jmeter.engine.util.CompoundVariable) values[1]).execute();
 
         if (log.isDebugEnabled()){
-    		log.debug("execute value: " + myValue);
+            log.debug("execute (" + fileName + " " + xpathString + ")   ");
         }
 
-		return myValue;
-	}
+        myValue = XPathWrapper.getXPathString(fileName, xpathString);
 
-	/**
-	 * @see org.apache.jmeter.functions.Function#getArgumentDesc()
-	 */
-	public List getArgumentDesc() {
-		return desc;
-	}
+        if (log.isDebugEnabled()){
+            log.debug("execute value: " + myValue);
+        }
 
-	/**
-	 * @see org.apache.jmeter.functions.Function#getReferenceKey()
-	 */
-	public String getReferenceKey() {
-		return KEY;
-	}
+        return myValue;
+    }
 
-	/**
-	 * @see org.apache.jmeter.functions.Function#setParameters(Collection)
-	 */
-	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
-		log.debug("setParameter - Collection.size=" + parameters.size());
+    /**
+     * @see org.apache.jmeter.functions.Function#getArgumentDesc()
+     */
+    public List getArgumentDesc() {
+        return desc;
+    }
 
-		values = parameters.toArray();
+    /**
+     * @see org.apache.jmeter.functions.Function#getReferenceKey()
+     */
+    public String getReferenceKey() {
+        return KEY;
+    }
 
-		if (log.isDebugEnabled()) {
-			for (int i = 0; i < parameters.size(); i++) {
-				log.debug("i:" + ((CompoundVariable) values[i]).execute());
-			}
-		}
+    /**
+     * @see org.apache.jmeter.functions.Function#setParameters(Collection)
+     */
+    public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
+        log.debug("setParameter - Collection.size=" + parameters.size());
 
-		checkParameterCount(parameters, 2);
+        values = parameters.toArray();
 
-		/*
-		 * Need to reset the containers for repeated runs; about the only way
-		 * for functions to detect that a run is starting seems to be the
-		 * setParameters() call.
-		 */
-		XPathWrapper.clearAll();// TODO only clear the relevant entry - if possible...
+        if (log.isDebugEnabled()) {
+            for (int i = 0; i < parameters.size(); i++) {
+                log.debug("i:" + ((CompoundVariable) values[i]).execute());
+            }
+        }
 
-	}
+        checkParameterCount(parameters, 2);
+
+        /*
+         * Need to reset the containers for repeated runs; about the only way
+         * for functions to detect that a run is starting seems to be the
+         * setParameters() call.
+         */
+        XPathWrapper.clearAll();// TODO only clear the relevant entry - if possible...
+
+    }
 }

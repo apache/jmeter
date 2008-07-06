@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.visualizers.gui;
@@ -39,11 +39,11 @@ public abstract class AbstractListenerGui extends AbstractJMeterGuiComponent {
      * <p>
      * This implementation returns menu items appropriate for most visualizer
      * components.
-     * 
+     *
      * @return a JPopupMenu appropriate for the component.
      */
     public JPopupMenu createPopupMenu() {
-    	return MenuFactory.getDefaultVisualizerMenu();
+        return MenuFactory.getDefaultVisualizerMenu();
     }
 
     /**
@@ -51,12 +51,12 @@ public abstract class AbstractListenerGui extends AbstractJMeterGuiComponent {
      * under. This implementation returns
      * {@link org.apache.jmeter.gui.util.MenuFactory#LISTENERS}, which is
      * appropriate for most visualizer components.
-     * 
+     *
      * @return a Collection of Strings, where each element is one of the
      *         constants defined in MenuFactory
      */
     public Collection getMenuCategories() {
-    	return Arrays.asList(new String[] { MenuFactory.LISTENERS });
+        return Arrays.asList(new String[] { MenuFactory.LISTENERS });
     }
 
 }

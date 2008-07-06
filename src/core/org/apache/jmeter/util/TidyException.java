@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.util;
@@ -23,11 +23,11 @@ package org.apache.jmeter.util;
  */
 public class TidyException extends Exception {
 
-	public TidyException() {
-		this(0,0);
-	}
-	
-	public TidyException(int errors, int warnings){
-		super("tidy: " + errors + " errors, " + warnings + " warnings");
-	}
+    public TidyException() {
+        this(0,0);
+    }
+
+    public TidyException(int errors, int warnings){
+        super("tidy: " + errors + " errors, " + warnings + " warnings");
+    }
 }

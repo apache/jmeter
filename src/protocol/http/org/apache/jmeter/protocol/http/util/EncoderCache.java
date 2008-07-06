@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.util;
@@ -25,20 +25,20 @@ import org.apache.oro.util.Cache;
 import org.apache.oro.util.CacheLRU;
 
 public class EncoderCache {
-	
+
     /** The encoding which should be usd for URLs, according to HTTP specification */
     public static final String URL_ARGUMENT_ENCODING = "UTF-8";
 
     private Cache cache;
 
-	public EncoderCache(int cacheSize) {
-		cache = new CacheLRU(cacheSize);
-	}
+    public EncoderCache(int cacheSize) {
+        cache = new CacheLRU(cacheSize);
+    }
 
 
     /**
      * Get the specified value URL encoded using UTF-8 encoding
-     * 
+     *
      * @param k the value to encode
      * @return the value URL encoded using UTF-8
      */
@@ -51,10 +51,10 @@ public class EncoderCache {
             throw new Error("Should not happen: " + e.toString());
         }
     }
-    
+
     /**
      * Get the specified value URL encoded using the specified encoding
-     * 
+     *
      * @param k the value to encode
      * @param contentEncoding the encoding to use when URL encoding
      * @return the value URL encoded using the specified encoding

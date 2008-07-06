@@ -34,99 +34,99 @@ import javax.swing.JTextField;
  * field.
  * <p>
  * The provided GUI is a simple text field.
- * 
+ *
  */
 class FieldStringEditor extends PropertyEditorSupport implements ActionListener, FocusListener {
-//	private static final Logger log = LoggingManager.getLoggerForClass();
+//  private static final Logger log = LoggingManager.getLoggerForClass();
 
-	/**
-	 * This will hold the text editing component, either a plain JTextField (in
-	 * cases where the combo box would not have other options than 'Edit'), or
-	 * the text editing component in the combo box.
-	 */
-	private JTextField textField;
+    /**
+     * This will hold the text editing component, either a plain JTextField (in
+     * cases where the combo box would not have other options than 'Edit'), or
+     * the text editing component in the combo box.
+     */
+    private JTextField textField;
 
-	/**
-	 * Value on which we started the editing. Used to avoid firing
-	 * PropertyChanged events when there's not been such change.
-	 */
-	private String initialValue = "";
+    /**
+     * Value on which we started the editing. Used to avoid firing
+     * PropertyChanged events when there's not been such change.
+     */
+    private String initialValue = "";
 
-	protected FieldStringEditor() {
-		super();
+    protected FieldStringEditor() {
+        super();
 
-		textField = new JTextField();
-		textField.addActionListener(this);
-		textField.addFocusListener(this);
-	}
+        textField = new JTextField();
+        textField.addActionListener(this);
+        textField.addFocusListener(this);
+    }
 
-	public String getAsText() {
-		return textField.getText();
-	}
+    public String getAsText() {
+        return textField.getText();
+    }
 
-	public void setAsText(String value) {
-		initialValue = value;
-		textField.setText(value);
-	}
+    public void setAsText(String value) {
+        initialValue = value;
+        textField.setText(value);
+    }
 
-	public Object getValue() {
-		return getAsText();
-	}
+    public Object getValue() {
+        return getAsText();
+    }
 
-	public void setValue(Object value) {
-		if (value instanceof String) {
-			setAsText((String) value);
-		} else {
-			throw new IllegalArgumentException();
-		}
-	}
+    public void setValue(Object value) {
+        if (value instanceof String) {
+            setAsText((String) value);
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.beans.PropertyEditor#getCustomEditor()
-	 */
-	public Component getCustomEditor() {
-		return textField;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.beans.PropertyEditor#getCustomEditor()
+     */
+    public Component getCustomEditor() {
+        return textField;
+    }
 
-	/*
-	 * (non-Javadoc) Avoid needlessly firing PropertyChanged events.
-	 */
-	public void firePropertyChange() {
-		String newValue = getAsText();
+    /*
+     * (non-Javadoc) Avoid needlessly firing PropertyChanged events.
+     */
+    public void firePropertyChange() {
+        String newValue = getAsText();
 
-		if (initialValue.equals(newValue)) {
-		    return;
-		}
-		initialValue = newValue;
+        if (initialValue.equals(newValue)) {
+            return;
+        }
+        initialValue = newValue;
 
-		super.firePropertyChange();
-	}
+        super.firePropertyChange();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 */
-	public void actionPerformed(ActionEvent e) {
-		firePropertyChange();
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+     */
+    public void actionPerformed(ActionEvent e) {
+        firePropertyChange();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.awt.event.FocusListener#focusGained(java.awt.event.FocusEvent)
-	 */
-	public void focusGained(FocusEvent e) {
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.awt.event.FocusListener#focusGained(java.awt.event.FocusEvent)
+     */
+    public void focusGained(FocusEvent e) {
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.awt.event.FocusListener#focusLost(java.awt.event.FocusEvent)
-	 */
-	public void focusLost(FocusEvent e) {
-		firePropertyChange();
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.awt.event.FocusListener#focusLost(java.awt.event.FocusEvent)
+     */
+    public void focusLost(FocusEvent e) {
+        firePropertyChange();
+    }
 }

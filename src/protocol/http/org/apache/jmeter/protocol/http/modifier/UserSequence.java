@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.modifier;
@@ -30,65 +30,64 @@ import org.apache.log.Logger;
 /**
  * This module controls the Sequence in which user details are returned. This
  * module uses round robin allocation of users.
- * 
- * @author Mark Walsh
+ *
  * @version $Revision$
  */
 public class UserSequence implements Serializable {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	// -------------------------------------------
-	// Constants and Data Members
-	// -------------------------------------------
-	private List allUsers;
+    // -------------------------------------------
+    // Constants and Data Members
+    // -------------------------------------------
+    private List allUsers;
 
-	private transient Iterator indexOfUsers;
+    private transient Iterator indexOfUsers;
 
-	// -------------------------------------------
-	// Constructors
-	// -------------------------------------------
+    // -------------------------------------------
+    // Constructors
+    // -------------------------------------------
 
-	public UserSequence() {
-	}
+    public UserSequence() {
+    }
 
-	/**
-	 * Load all user and parameter data into the sequence module.
-	 * <P>
-	 * ie a Set of Mapped "parameter names and parameter values" for each user
-	 * to be loaded into the sequencer.
-	 */
-	public UserSequence(List allUsers) {
-		this.allUsers = allUsers;
+    /**
+     * Load all user and parameter data into the sequence module.
+     * <P>
+     * ie a Set of Mapped "parameter names and parameter values" for each user
+     * to be loaded into the sequencer.
+     */
+    public UserSequence(List allUsers) {
+        this.allUsers = allUsers;
 
-		// initalise pointer to first user
-		indexOfUsers = allUsers.iterator();
-	}
+        // initalise pointer to first user
+        indexOfUsers = allUsers.iterator();
+    }
 
-	// -------------------------------------------
-	// Methods
-	// -------------------------------------------
+    // -------------------------------------------
+    // Methods
+    // -------------------------------------------
 
-	/**
-	 * Returns the parameter data for the next user in the sequence
-	 * 
-	 * @return a Map object of parameter names and matching parameter values for
-	 *         the next user
-	 */
-	public synchronized Map getNextUserMods() {
-		// Use round robin allocation of user details
-		if (!indexOfUsers.hasNext()) {
-			indexOfUsers = allUsers.iterator();
-		}
+    /**
+     * Returns the parameter data for the next user in the sequence
+     *
+     * @return a Map object of parameter names and matching parameter values for
+     *         the next user
+     */
+    public synchronized Map getNextUserMods() {
+        // Use round robin allocation of user details
+        if (!indexOfUsers.hasNext()) {
+            indexOfUsers = allUsers.iterator();
+        }
 
-		Map user;
-		if (indexOfUsers.hasNext()) {
-			user = (Map) indexOfUsers.next();
-			log.debug("UserSequence.getNextuserMods(): current parameters will be " + "changed to: " + user);
-		} else {
-			// no entries in all users, therefore create an empty Map object
-			user = new HashMap();
-		}
+        Map user;
+        if (indexOfUsers.hasNext()) {
+            user = (Map) indexOfUsers.next();
+            log.debug("UserSequence.getNextuserMods(): current parameters will be " + "changed to: " + user);
+        } else {
+            // no entries in all users, therefore create an empty Map object
+            user = new HashMap();
+        }
 
-		return user;
-	}
+        return user;
+    }
 }

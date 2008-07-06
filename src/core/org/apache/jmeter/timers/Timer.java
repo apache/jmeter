@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.timers;
@@ -23,17 +23,14 @@ import java.io.Serializable;
 /**
  * This interface defines those methods that must be implemented by timer
  * plugins.
- * 
- * @author <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
- * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
- * @version $Id$
+ *
  */
 public interface Timer extends Serializable {
-	/**
-	 * This method is called after a sampling process is done to know how much
-	 * time the sampling thread has to wait until sampling again.
-	 * 
-	 * @return the computed delay value.
-	 */
-	public long delay();
+    /**
+     * This method is called after a sampling process is done to know how much
+     * time the sampling thread has to wait until sampling again.
+     *
+     * @return the computed delay value.
+     */
+    public long delay();
 }

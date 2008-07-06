@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.gui.action;
@@ -33,49 +33,49 @@ import org.apache.jmeter.testelement.TestElement;
  * Implements the Remove menu item.
  */
 public class Remove implements Command {
-	
+
     private static final Set commands = new HashSet();
 
     static {
-		commands.add(ActionNames.REMOVE);
-	}
+        commands.add(ActionNames.REMOVE);
+    }
 
-	/**
-	 * Constructor for the Remove object
-	 */
-	public Remove() {
-	}
+    /**
+     * Constructor for the Remove object
+     */
+    public Remove() {
+    }
 
-	/**
-	 * Gets the ActionNames attribute of the Remove object.
-	 * 
-	 * @return the ActionNames value
-	 */
-	public Set getActionNames() {
-		return commands;
-	}
+    /**
+     * Gets the ActionNames attribute of the Remove object.
+     *
+     * @return the ActionNames value
+     */
+    public Set getActionNames() {
+        return commands;
+    }
 
-	public void doAction(ActionEvent e) {
-		ActionRouter.getInstance().actionPerformed(new ActionEvent(e.getSource(), e.getID(), ActionNames.CHECK_REMOVE));
-		GuiPackage guiPackage = GuiPackage.getInstance();
-		JMeterTreeNode[] nodes = guiPackage.getTreeListener().getSelectedNodes();
-		TreePath newTreePath = // Save parent node for later
-		guiPackage.getTreeListener().removedSelectedNode();
-		for (int i = nodes.length - 1; i >= 0; i--) {
-			removeNode(nodes[i]);
-		}
-		guiPackage.getTreeListener().getJTree().setSelectionPath(newTreePath);
-		guiPackage.updateCurrentGui();
-	}
+    public void doAction(ActionEvent e) {
+        ActionRouter.getInstance().actionPerformed(new ActionEvent(e.getSource(), e.getID(), ActionNames.CHECK_REMOVE));
+        GuiPackage guiPackage = GuiPackage.getInstance();
+        JMeterTreeNode[] nodes = guiPackage.getTreeListener().getSelectedNodes();
+        TreePath newTreePath = // Save parent node for later
+        guiPackage.getTreeListener().removedSelectedNode();
+        for (int i = nodes.length - 1; i >= 0; i--) {
+            removeNode(nodes[i]);
+        }
+        guiPackage.getTreeListener().getJTree().setSelectionPath(newTreePath);
+        guiPackage.updateCurrentGui();
+    }
 
-	public static void removeNode(JMeterTreeNode node) {
-		TestElement testElement = node.getTestElement();
-		if (testElement.canRemove()) {
-			GuiPackage.getInstance().getTreeModel().removeNodeFromParent(node);
-			GuiPackage.getInstance().removeNode(testElement);
-		} else {
-			String message = testElement.getClass().getName() + " is busy";
-			JOptionPane.showMessageDialog(null, message, "Cannot remove item", JOptionPane.ERROR_MESSAGE);
-		}
-	}
+    public static void removeNode(JMeterTreeNode node) {
+        TestElement testElement = node.getTestElement();
+        if (testElement.canRemove()) {
+            GuiPackage.getInstance().getTreeModel().removeNodeFromParent(node);
+            GuiPackage.getInstance().removeNode(testElement);
+        } else {
+            String message = testElement.getClass().getName() + " is busy";
+            JOptionPane.showMessageDialog(null, message, "Cannot remove item", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 }

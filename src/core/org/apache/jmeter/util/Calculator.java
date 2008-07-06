@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.util;
@@ -29,47 +29,47 @@ import org.apache.jmeter.samplers.SampleResult;
  */
 public class Calculator {
 
-	private double sum = 0;
+    private double sum = 0;
 
-	private double sumOfSquares = 0;
+    private double sumOfSquares = 0;
 
-	private double mean = 0;
+    private double mean = 0;
 
-	private double deviation = 0;
+    private double deviation = 0;
 
-	private int count = 0;
+    private int count = 0;
 
-	private long bytes = 0;
-	
-	private long maximum = Long.MIN_VALUE;
-	
-	private long minimum = Long.MAX_VALUE;
-    
+    private long bytes = 0;
+
+    private long maximum = Long.MIN_VALUE;
+
+    private long minimum = Long.MAX_VALUE;
+
     private int errors = 0;
-	
+
     private final String label;
-    
+
     public Calculator() {
         this("");
     }
 
-	public Calculator(String label) {
+    public Calculator(String label) {
         this.label = label;
     }
 
     public void clear() {
-		maximum = Long.MIN_VALUE;
-		minimum = Long.MAX_VALUE;
-		sum = 0;
-		sumOfSquares = 0;
-		mean = 0;
-		deviation = 0;
-		count = 0;
-	}
+        maximum = Long.MIN_VALUE;
+        minimum = Long.MAX_VALUE;
+        sum = 0;
+        sumOfSquares = 0;
+        mean = 0;
+        deviation = 0;
+        count = 0;
+    }
 
-	public void addValue(long newValue) {
+    public void addValue(long newValue) {
         addValue(newValue,1);
-	}
+    }
 
     private void addValue(long newValue, int sampleCount) {
         count += sampleCount;
@@ -84,9 +84,9 @@ public class Calculator {
     }
 
 
-	public void addBytes(long newValue) {
-		bytes += newValue;
-	}
+    public void addBytes(long newValue) {
+        bytes += newValue;
+    }
 
     private long startTime = 0;
     private long elapsedTime = 0;
@@ -104,33 +104,33 @@ public class Calculator {
 
 
     public long getTotalBytes() {
-		return bytes;
-	}
+        return bytes;
+    }
 
 
-	public double getMean() {
-		return mean;
-	}
+    public double getMean() {
+        return mean;
+    }
 
     public Number getMeanAsNumber() {
         return new Long((long) mean);
     }
 
-	public double getStandardDeviation() {
-		return deviation;
-	}
+    public double getStandardDeviation() {
+        return deviation;
+    }
 
-	public long getMin() {
-		return minimum;
-	}
+    public long getMin() {
+        return minimum;
+    }
 
-	public long getMax() {
-		return maximum;
-	}
+    public long getMax() {
+        return maximum;
+    }
 
-	public int getCount() {
-		return count;
-	}
+    public int getCount() {
+        return count;
+    }
 
     public String getLabel() {
         return label;
@@ -139,7 +139,7 @@ public class Calculator {
     /**
      * Returns the raw double value of the percentage of samples with errors
      * that were recorded. (Between 0.0 and 1.0)
-     * 
+     *
      * @return the raw double value of the percentage of samples with errors
      *         that were recorded.
      */
@@ -170,10 +170,10 @@ public class Calculator {
     /**
      * calculates the average page size, which means divide the bytes by number
      * of samples.
-     * 
+     *
      * This is an ambiguous name, so:
      * @deprecated use getAvgPageBytes() instead.
-     * 
+     *
      * @return average page size
      */
     public double getPageSize() {
@@ -186,7 +186,7 @@ public class Calculator {
     /**
      * calculates the average page size, which means divide the bytes by number
      * of samples.
-     * 
+     *
      * @return average page size in bytes
      */
     public double getAvgPageBytes() {
@@ -198,7 +198,7 @@ public class Calculator {
 
     /**
      * Throughput in bytes / second
-     * 
+     *
      * @return throughput in bytes/second
      */
     public double getBytesPerSecond() {
@@ -210,7 +210,7 @@ public class Calculator {
 
     /**
      * Throughput in kilobytes / second
-     * 
+     *
      * @return Throughput in kilobytes / second
      */
     public double getKBPerSecond() {

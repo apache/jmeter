@@ -17,9 +17,9 @@
 package org.apache.jmeter.monitor.model;
 
 public interface Status {
-	Jvm getJvm();
+    Jvm getJvm();
 
-	void setJvm(Jvm vm);
+    void setJvm(Jvm vm);
 
-	java.util.List getConnector();
+    java.util.List getConnector();
 }

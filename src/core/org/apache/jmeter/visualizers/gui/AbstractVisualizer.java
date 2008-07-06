@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.visualizers.gui;
@@ -98,249 +98,249 @@ import org.apache.log.Logger;
  * of this, see the
  * {@link org.apache.jmeter.visualizers.MailerVisualizer MailerVisualizer}.
  * <p>
- * 
+ *
  */
-public abstract class AbstractVisualizer 
-    extends AbstractListenerGui 
-    implements Visualizer, ChangeListener, UnsharedComponent, Clearable 
+public abstract class AbstractVisualizer
+    extends AbstractListenerGui
+    implements Visualizer, ChangeListener, UnsharedComponent, Clearable
     {
-	/** Logging. */
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    /** Logging. */
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	/** A panel allowing results to be saved. */
-	private FilePanel filePanel;
+    /** A panel allowing results to be saved. */
+    private FilePanel filePanel;
 
-	/** A checkbox choosing whether or not only errors should be logged. */
-	private JCheckBox errorLogging;
-	
-	/* A checkbox choosing whether or not only successes should be logged. */
-	private JCheckBox successOnlyLogging;
+    /** A checkbox choosing whether or not only errors should be logged. */
+    private JCheckBox errorLogging;
 
-	private JButton saveConfigButton;
+    /* A checkbox choosing whether or not only successes should be logged. */
+    private JCheckBox successOnlyLogging;
 
-	protected ResultCollector collector = new ResultCollector();
+    private JButton saveConfigButton;
 
-	protected boolean isStats = false;
+    protected ResultCollector collector = new ResultCollector();
 
-	public AbstractVisualizer() {
-		super();
+    protected boolean isStats = false;
 
-		// errorLogging and successOnlyLogging are mutually exclusive
-		errorLogging = new JCheckBox(JMeterUtils.getResString("log_errors_only")); // $NON-NLS-1$
-		errorLogging.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
-				if (errorLogging.isSelected()) {
-				    successOnlyLogging.setSelected(false);
-				}
-			}			
-		});
-		successOnlyLogging = new JCheckBox(JMeterUtils.getResString("log_success_only")); // $NON-NLS-1$
-		successOnlyLogging.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
-				if (successOnlyLogging.isSelected()) {
-				    errorLogging.setSelected(false);
-				}
-			}			
-		});
-		saveConfigButton = new JButton(JMeterUtils.getResString("config_save_settings")); // $NON-NLS-1$
-		saveConfigButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				SavePropertyDialog d = new SavePropertyDialog(
-                        GuiPackage.getInstance().getMainFrame(), 
+    public AbstractVisualizer() {
+        super();
+
+        // errorLogging and successOnlyLogging are mutually exclusive
+        errorLogging = new JCheckBox(JMeterUtils.getResString("log_errors_only")); // $NON-NLS-1$
+        errorLogging.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                if (errorLogging.isSelected()) {
+                    successOnlyLogging.setSelected(false);
+                }
+            }
+        });
+        successOnlyLogging = new JCheckBox(JMeterUtils.getResString("log_success_only")); // $NON-NLS-1$
+        successOnlyLogging.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                if (successOnlyLogging.isSelected()) {
+                    errorLogging.setSelected(false);
+                }
+            }
+        });
+        saveConfigButton = new JButton(JMeterUtils.getResString("config_save_settings")); // $NON-NLS-1$
+        saveConfigButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                SavePropertyDialog d = new SavePropertyDialog(
+                        GuiPackage.getInstance().getMainFrame(),
                         JMeterUtils.getResString("sample_result_save_configuration"), // $NON-NLS-1$
                         true, collector.getSaveConfig());
-				d.pack();
-				ComponentUtil.centerComponentInComponent(GuiPackage.getInstance().getMainFrame(), d);
-				d.setVisible(true);
-			}
-		});
+                d.pack();
+                ComponentUtil.centerComponentInComponent(GuiPackage.getInstance().getMainFrame(), d);
+                d.setVisible(true);
+            }
+        });
 
-		filePanel = new FilePanel(JMeterUtils.getResString("file_visualizer_output_file"), ".jtl"); // $NON-NLS-1$ $NON-NLS-2$
-		filePanel.addChangeListener(this);
-		filePanel.add(new JLabel(JMeterUtils.getResString("log_only"))); // $NON-NLS-1$
-		filePanel.add(errorLogging);
-		filePanel.add(successOnlyLogging);
-		filePanel.add(saveConfigButton);
+        filePanel = new FilePanel(JMeterUtils.getResString("file_visualizer_output_file"), ".jtl"); // $NON-NLS-1$ $NON-NLS-2$
+        filePanel.addChangeListener(this);
+        filePanel.add(new JLabel(JMeterUtils.getResString("log_only"))); // $NON-NLS-1$
+        filePanel.add(errorLogging);
+        filePanel.add(successOnlyLogging);
+        filePanel.add(saveConfigButton);
 
-	}
+    }
 
-	public boolean isStats() {
-		return isStats;
-	}
+    public boolean isStats() {
+        return isStats;
+    }
 
-	/**
-	 * Gets the checkbox which selects whether or not only errors should be
-	 * logged. Subclasses don't normally need to worry about this checkbox,
-	 * because it is automatically added to the GUI in {@link #makeTitlePanel()},
-	 * and the behavior is handled in this base class.
-	 * 
-	 * @return the error logging checkbox
-	 */
-	protected JCheckBox getErrorLoggingCheckbox() {
-		return errorLogging;
-	}
+    /**
+     * Gets the checkbox which selects whether or not only errors should be
+     * logged. Subclasses don't normally need to worry about this checkbox,
+     * because it is automatically added to the GUI in {@link #makeTitlePanel()},
+     * and the behavior is handled in this base class.
+     *
+     * @return the error logging checkbox
+     */
+    protected JCheckBox getErrorLoggingCheckbox() {
+        return errorLogging;
+    }
 
-	/**
-	 * Provides access to the ResultCollector model class for extending
-	 * implementations. Using this method and setModel(ResultCollector) is only
-	 * necessary if your visualizer requires a differently behaving
-	 * ResultCollector. Using these methods will allow maximum reuse of the
-	 * methods provided by AbstractVisualizer in this event.
-	 */
-	protected ResultCollector getModel() {
-		return collector;
-	}
+    /**
+     * Provides access to the ResultCollector model class for extending
+     * implementations. Using this method and setModel(ResultCollector) is only
+     * necessary if your visualizer requires a differently behaving
+     * ResultCollector. Using these methods will allow maximum reuse of the
+     * methods provided by AbstractVisualizer in this event.
+     */
+    protected ResultCollector getModel() {
+        return collector;
+    }
 
-	/**
-	 * Gets the file panel which allows the user to save results to a file.
-	 * Subclasses don't normally need to worry about this panel, because it is
-	 * automatically added to the GUI in {@link #makeTitlePanel()}, and the
-	 * behavior is handled in this base class.
-	 * 
-	 * @return the file panel allowing users to save results
-	 */
-	protected Component getFilePanel() {
-		return filePanel;
-	}
+    /**
+     * Gets the file panel which allows the user to save results to a file.
+     * Subclasses don't normally need to worry about this panel, because it is
+     * automatically added to the GUI in {@link #makeTitlePanel()}, and the
+     * behavior is handled in this base class.
+     *
+     * @return the file panel allowing users to save results
+     */
+    protected Component getFilePanel() {
+        return filePanel;
+    }
 
-	/**
-	 * Sets the filename which results will be saved to. This will set the
-	 * filename in the FilePanel. Subclasses don't normally need to call this
-	 * method, because configuration of the FilePanel is handled in this base
-	 * class.
-	 * 
-	 * @param filename
-	 *            the new filename
-	 * 
-	 * @see #getFilePanel()
-	 */
-	public void setFile(String filename) {
-		// TODO: Does this method need to be public? It isn't currently
-		// called outside of this class.
-		filePanel.setFilename(filename);
-	}
+    /**
+     * Sets the filename which results will be saved to. This will set the
+     * filename in the FilePanel. Subclasses don't normally need to call this
+     * method, because configuration of the FilePanel is handled in this base
+     * class.
+     *
+     * @param filename
+     *            the new filename
+     *
+     * @see #getFilePanel()
+     */
+    public void setFile(String filename) {
+        // TODO: Does this method need to be public? It isn't currently
+        // called outside of this class.
+        filePanel.setFilename(filename);
+    }
 
-	/**
-	 * Gets the filename which has been entered in the FilePanel. Subclasses
-	 * don't normally need to call this method, because configuration of the
-	 * FilePanel is handled in this base class.
-	 * 
-	 * @return the current filename
-	 * 
-	 * @see #getFilePanel()
-	 */
-	public String getFile() {
-		// TODO: Does this method need to be public? It isn't currently
-		// called outside of this class.
-		return filePanel.getFilename();
-	}
+    /**
+     * Gets the filename which has been entered in the FilePanel. Subclasses
+     * don't normally need to call this method, because configuration of the
+     * FilePanel is handled in this base class.
+     *
+     * @return the current filename
+     *
+     * @see #getFilePanel()
+     */
+    public String getFile() {
+        // TODO: Does this method need to be public? It isn't currently
+        // called outside of this class.
+        return filePanel.getFilename();
+    }
 
-	/**
-	 * Invoked when the target of the listener has changed its state. This
-	 * implementation assumes that the target is the FilePanel, and will update
-	 * the result collector for the new filename.
-	 * 
-	 * @param e
-	 *            the event that has occurred
-	 */
-	public void stateChanged(ChangeEvent e) {
-		log.debug("getting new collector");
-		collector = (ResultCollector) createTestElement();
+    /**
+     * Invoked when the target of the listener has changed its state. This
+     * implementation assumes that the target is the FilePanel, and will update
+     * the result collector for the new filename.
+     *
+     * @param e
+     *            the event that has occurred
+     */
+    public void stateChanged(ChangeEvent e) {
+        log.debug("getting new collector");
+        collector = (ResultCollector) createTestElement();
         collector.loadExistingFile();
-	}
+    }
 
-	/* Implements JMeterGUIComponent.createTestElement() */
-	public TestElement createTestElement() {
-		if (collector == null) {
-			collector = new ResultCollector();
-		}
-		modifyTestElement(collector);
-		return (TestElement) collector.clone();
-	}
+    /* Implements JMeterGUIComponent.createTestElement() */
+    public TestElement createTestElement() {
+        if (collector == null) {
+            collector = new ResultCollector();
+        }
+        modifyTestElement(collector);
+        return (TestElement) collector.clone();
+    }
 
-	/* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
-	public void modifyTestElement(TestElement c) {
-		configureTestElement((AbstractListenerElement) c);
-		if (c instanceof ResultCollector) {
-			ResultCollector rc = (ResultCollector) c;
-			rc.setErrorLogging(errorLogging.isSelected());
-			rc.setSuccessOnlyLogging(successOnlyLogging.isSelected());
-			rc.setFilename(getFile());
-			collector = rc;
-		}
-	}
+    /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
+    public void modifyTestElement(TestElement c) {
+        configureTestElement((AbstractListenerElement) c);
+        if (c instanceof ResultCollector) {
+            ResultCollector rc = (ResultCollector) c;
+            rc.setErrorLogging(errorLogging.isSelected());
+            rc.setSuccessOnlyLogging(successOnlyLogging.isSelected());
+            rc.setFilename(getFile());
+            collector = rc;
+        }
+    }
 
-	/* Overrides AbstractJMeterGuiComponent.configure(TestElement) */
-	public void configure(TestElement el) {
-		super.configure(el);
-		setFile(el.getPropertyAsString(ResultCollector.FILENAME));
-		ResultCollector rc = (ResultCollector) el;
-		errorLogging.setSelected(rc.isErrorLogging());
-		successOnlyLogging.setSelected(rc.isSuccessOnlyLogging());
-		if (collector == null) {
-			collector = new ResultCollector();
-		}
-		collector.setSaveConfig((SampleSaveConfiguration) rc.getSaveConfig().clone());
-	}
+    /* Overrides AbstractJMeterGuiComponent.configure(TestElement) */
+    public void configure(TestElement el) {
+        super.configure(el);
+        setFile(el.getPropertyAsString(ResultCollector.FILENAME));
+        ResultCollector rc = (ResultCollector) el;
+        errorLogging.setSelected(rc.isErrorLogging());
+        successOnlyLogging.setSelected(rc.isSuccessOnlyLogging());
+        if (collector == null) {
+            collector = new ResultCollector();
+        }
+        collector.setSaveConfig((SampleSaveConfiguration) rc.getSaveConfig().clone());
+    }
 
-	/**
-	 * This provides a convenience for extenders when they implement the
-	 * {@link org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()}
-	 * method. This method will set the name, gui class, and test class for the
-	 * created Test Element. It should be called by every extending class when
-	 * creating Test Elements, as that will best assure consistent behavior.
-	 * 
-	 * @param mc
-	 *            the TestElement being created.
-	 */
-	protected void configureTestElement(AbstractListenerElement mc) {
-		// TODO: Should the method signature of this method be changed to
-		// match the super-implementation (using a TestElement parameter
-		// instead of AbstractListenerElement)? This would require an
-		// instanceof check before adding the listener (below), but would
-		// also make the behavior a bit more obvious for sub-classes -- the
-		// Java rules dealing with this situation aren't always intuitive,
-		// and a subclass may think it is calling this version of the method
-		// when it is really calling the superclass version instead.
-		super.configureTestElement(mc);
-		mc.setListener(this);
-	}
+    /**
+     * This provides a convenience for extenders when they implement the
+     * {@link org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()}
+     * method. This method will set the name, gui class, and test class for the
+     * created Test Element. It should be called by every extending class when
+     * creating Test Elements, as that will best assure consistent behavior.
+     *
+     * @param mc
+     *            the TestElement being created.
+     */
+    protected void configureTestElement(AbstractListenerElement mc) {
+        // TODO: Should the method signature of this method be changed to
+        // match the super-implementation (using a TestElement parameter
+        // instead of AbstractListenerElement)? This would require an
+        // instanceof check before adding the listener (below), but would
+        // also make the behavior a bit more obvious for sub-classes -- the
+        // Java rules dealing with this situation aren't always intuitive,
+        // and a subclass may think it is calling this version of the method
+        // when it is really calling the superclass version instead.
+        super.configureTestElement(mc);
+        mc.setListener(this);
+    }
 
-	/**
-	 * Create a standard title section for JMeter components. This includes the
-	 * title for the component and the Name Panel allowing the user to change
-	 * the name for the component. The AbstractVisualizer also adds the
-	 * FilePanel allowing the user to save the results, and the error logging
-	 * checkbox, allowing the user to choose whether or not only errors should
-	 * be logged.
-	 * <p>
-	 * This method is typically added to the top of the component at the
-	 * beginning of the component's init method.
-	 * 
-	 * @return a panel containing the component title, name panel, file panel,
-	 *         and error logging checkbox
-	 */
-	protected Container makeTitlePanel() {
-		Container panel = super.makeTitlePanel();
-		// Note: the file panel already includes the error logging checkbox,
-		// so we don't have to add it explicitly.
-		panel.add(getFilePanel());
-		return panel;
-	}
+    /**
+     * Create a standard title section for JMeter components. This includes the
+     * title for the component and the Name Panel allowing the user to change
+     * the name for the component. The AbstractVisualizer also adds the
+     * FilePanel allowing the user to save the results, and the error logging
+     * checkbox, allowing the user to choose whether or not only errors should
+     * be logged.
+     * <p>
+     * This method is typically added to the top of the component at the
+     * beginning of the component's init method.
+     *
+     * @return a panel containing the component title, name panel, file panel,
+     *         and error logging checkbox
+     */
+    protected Container makeTitlePanel() {
+        Container panel = super.makeTitlePanel();
+        // Note: the file panel already includes the error logging checkbox,
+        // so we don't have to add it explicitly.
+        panel.add(getFilePanel());
+        return panel;
+    }
 
-	/**
-	 * Provides extending classes the opportunity to set the ResultCollector
-	 * model for the Visualizer. This is useful to allow maximum reuse of the
-	 * methods from AbstractVisualizer.
-	 * 
-	 * @param collector
-	 */
-	protected void setModel(ResultCollector collector) {
-		this.collector = collector;
-	}
+    /**
+     * Provides extending classes the opportunity to set the ResultCollector
+     * model for the Visualizer. This is useful to allow maximum reuse of the
+     * methods from AbstractVisualizer.
+     *
+     * @param collector
+     */
+    protected void setModel(ResultCollector collector) {
+        this.collector = collector;
+    }
 
-	public void clearGui(){
-		super.clearGui();
-		filePanel.clearGui();
-	}
+    public void clearGui(){
+        super.clearGui();
+        filePanel.clearGui();
+    }
 }

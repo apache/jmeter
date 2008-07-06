@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jorphan.gui;
@@ -47,21 +47,21 @@ public abstract class AbstractTreeTableModel extends DefaultTableModel implement
     public AbstractTreeTableModel(TreeNode root) {
         this.rootNode = root;
     }
-    
+
     public AbstractTreeTableModel(TreeNode root, boolean editable) {
         this.rootNode = root;
     }
 
-    public AbstractTreeTableModel(String[] headers, 
-            Functor[] readFunctors, 
-            Functor[] writeFunctors, 
+    public AbstractTreeTableModel(String[] headers,
+            Functor[] readFunctors,
+            Functor[] writeFunctors,
             Class[] editorClasses) {
         this.headers.addAll(Arrays.asList(headers));
         this.classes.addAll(Arrays.asList(editorClasses));
         this.readFunctors = new ArrayList(Arrays.asList(readFunctors));
         this.writeFunctors = new ArrayList(Arrays.asList(writeFunctors));
     }
-    
+
     /**
      * The root node for the TreeTable
      * @return the root node
@@ -69,26 +69,26 @@ public abstract class AbstractTreeTableModel extends DefaultTableModel implement
     public Object getRootNode() {
         return this.rootNode;
     }
-    
-	/* (non-Javadoc)
-	 * @see org.apache.jorphan.gui.TreeTableModel#getValueAt(java.lang.Object, int)
-	 */
-	public Object getValueAt(Object node, int col) {
-		return null;
-	}
 
-	/* (non-Javadoc)
-	 * @see org.apache.jorphan.gui.TreeTableModel#isCellEditable(java.lang.Object, int)
-	 */
-	public boolean isCellEditable(Object node, int col) {
-		return false;
-	}
+    /* (non-Javadoc)
+     * @see org.apache.jorphan.gui.TreeTableModel#getValueAt(java.lang.Object, int)
+     */
+    public Object getValueAt(Object node, int col) {
+        return null;
+    }
 
-	/* (non-Javadoc)
-	 * @see org.apache.jorphan.gui.TreeTableModel#setValueAt(java.lang.Object, java.lang.Object, int)
-	 */
-	public void setValueAt(Object val, Object node, int column) {
-	}
+    /* (non-Javadoc)
+     * @see org.apache.jorphan.gui.TreeTableModel#isCellEditable(java.lang.Object, int)
+     */
+    public boolean isCellEditable(Object node, int col) {
+        return false;
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.jorphan.gui.TreeTableModel#setValueAt(java.lang.Object, java.lang.Object, int)
+     */
+    public void setValueAt(Object val, Object node, int column) {
+    }
 
     /**
      * The implementation is exactly the same as ObjectTableModel.getColumnCount.
@@ -111,9 +111,9 @@ public abstract class AbstractTreeTableModel extends DefaultTableModel implement
      * By default the abstract class returns true. It is up to subclasses
      * to override the implementation.
      */
-	public boolean isCellEditable(int rowIndex, int columnIndex) {
-		return true;
-	}
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return true;
+    }
 
     public Class getColumnClass(int arg0) {
         return (Class) classes.get(arg0);
@@ -123,32 +123,32 @@ public abstract class AbstractTreeTableModel extends DefaultTableModel implement
      * Subclasses need to implement the logic for the method and
      * return the value at the specific cell.
      */
-	public Object getValueAt(int rowIndex, int columnIndex) {
+    public Object getValueAt(int rowIndex, int columnIndex) {
         return null;
     }
 
     /**
-     * 
+     *
      */
-	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-        
+    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+
     }
 
     /**
-     * 
+     *
      */
-	public String getColumnName(int columnIndex) {
+    public String getColumnName(int columnIndex) {
         return (String) headers.get(columnIndex);
     }
 
     public int getChildCount(Object parent) {
         return 0;
     }
-    
+
     public Object getChild(Object parent, int index) {
         return null;
     }
-    
+
     /**
      * the implementation checks if the Object is a treenode. If it is,
      * it returns isLeaf(), otherwise it returns false.
@@ -162,32 +162,32 @@ public abstract class AbstractTreeTableModel extends DefaultTableModel implement
             return false;
         }
     }
-    
-    /**
-     * 
-     */
-	public void addTableModelListener(TableModelListener l) {
-        this.listener.add(TableModelListener.class,l);
-	}
 
     /**
-     * 
+     *
      */
-	public void removeTableModelListener(TableModelListener l) {
+    public void addTableModelListener(TableModelListener l) {
+        this.listener.add(TableModelListener.class,l);
+    }
+
+    /**
+     *
+     */
+    public void removeTableModelListener(TableModelListener l) {
         this.listener.remove(TableModelListener.class,l);
-	}
+    }
 
     public void nodeStructureChanged(TreeNode node) {
-        
+
     }
-    
-    public void fireTreeNodesChanged(TreeNode source, 
-            Object[] path, 
-            int[] indexes, 
+
+    public void fireTreeNodesChanged(TreeNode source,
+            Object[] path,
+            int[] indexes,
             Object[] children) {
-        
+
     }
-    
+
     public void clearData() {
         int size = getRowCount();
         objects.clear();

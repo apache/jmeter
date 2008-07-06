@@ -17,55 +17,55 @@
 package org.apache.jmeter.monitor.model;
 
 /**
- * 
- * @version $Revision$ $Date$
+ *
+ * @version $Revision$
  */
 public class ConnectorImpl implements Connector {
-	private ThreadInfo threadinfo = null;
+    private ThreadInfo threadinfo = null;
 
-	private RequestInfo requestinfo = null;
+    private RequestInfo requestinfo = null;
 
-	private Workers workers = null;
+    private Workers workers = null;
 
-	private String name = null;
+    private String name = null;
 
-	/**
-	 * 
-	 */
-	public ConnectorImpl() {
-		super();
-	}
+    /**
+     *
+     */
+    public ConnectorImpl() {
+        super();
+    }
 
-	public ThreadInfo getThreadInfo() {
-		return this.threadinfo;
-	}
+    public ThreadInfo getThreadInfo() {
+        return this.threadinfo;
+    }
 
-	public void setThreadInfo(ThreadInfo value) {
-		this.threadinfo = value;
-	}
+    public void setThreadInfo(ThreadInfo value) {
+        this.threadinfo = value;
+    }
 
-	public RequestInfo getRequestInfo() {
-		return this.requestinfo;
-	}
+    public RequestInfo getRequestInfo() {
+        return this.requestinfo;
+    }
 
-	public void setRequestInfo(RequestInfo value) {
-		this.requestinfo = value;
-	}
+    public void setRequestInfo(RequestInfo value) {
+        this.requestinfo = value;
+    }
 
-	public Workers getWorkers() {
-		return this.workers;
-	}
+    public Workers getWorkers() {
+        return this.workers;
+    }
 
-	public void setWorkers(Workers value) {
-		this.workers = value;
-	}
+    public void setWorkers(Workers value) {
+        this.workers = value;
+    }
 
-	public String getName() {
-		return this.name;
-	}
+    public String getName() {
+        return this.name;
+    }
 
-	public void setName(String value) {
-		this.name = value;
-	}
+    public void setName(String value) {
+        this.name = value;
+    }
 
 }

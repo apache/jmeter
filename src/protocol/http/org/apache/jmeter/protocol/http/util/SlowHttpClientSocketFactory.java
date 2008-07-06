@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.util;
@@ -29,7 +29,7 @@ import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 import org.apache.jmeter.util.SlowSocket;
 
 /**
- * HttpClient protocol factory to generate "slow" sockets for emulating dial-up modems 
+ * HttpClient protocol factory to generate "slow" sockets for emulating dial-up modems
  */
 
 public class SlowHttpClientSocketFactory implements ProtocolSocketFactory {
@@ -37,7 +37,7 @@ public class SlowHttpClientSocketFactory implements ProtocolSocketFactory {
     private final int CPS; // Characters per second to emulate
 
     /**
-     * 
+     *
      * @param cps - characters per second
      */
     public SlowHttpClientSocketFactory(final int cps) {
@@ -56,13 +56,13 @@ public class SlowHttpClientSocketFactory implements ProtocolSocketFactory {
     }
 
     public Socket createSocket(String host, int port, InetAddress localAddress, int localPort,
-    		HttpConnectionParams params) 
+            HttpConnectionParams params)
     throws IOException, UnknownHostException, ConnectTimeoutException {
         int timeout = params.getConnectionTimeout();
         if (timeout == 0) {
-        	return new SlowSocket(CPS,host,port,localAddress,localPort);
+            return new SlowSocket(CPS,host,port,localAddress,localPort);
         } else {
-        	return new SlowSocket(CPS,host,port,localAddress,localPort, timeout);        	
+            return new SlowSocket(CPS,host,port,localAddress,localPort, timeout);
         }
     }
 }

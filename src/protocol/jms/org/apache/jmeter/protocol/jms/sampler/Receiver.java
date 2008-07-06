@@ -25,98 +25,98 @@ import javax.jms.*;
 
 /**
  * Receiver of pseudo-synchronous reply messages.
- * 
+ *
  */
 public class Receiver implements Runnable {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private boolean active;
 
-	private final QueueSession session;
+    private final QueueSession session;
 
-	private final QueueReceiver consumer;
+    private final QueueReceiver consumer;
 
-	private final QueueConnection conn;
+    private final QueueConnection conn;
 
-	// private static Receiver receiver;
+    // private static Receiver receiver;
 
-	private Receiver(QueueConnectionFactory factory, Queue receiveQueue) throws JMSException {
-		conn = factory.createQueueConnection();
-		session = conn.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
-		consumer = session.createReceiver(receiveQueue);
-		log.debug("Receiver - ctor. Starting connection now");
-		conn.start();
-		log.info("Receiver - ctor. Connection to messaging system established");
-	}
+    private Receiver(QueueConnectionFactory factory, Queue receiveQueue) throws JMSException {
+        conn = factory.createQueueConnection();
+        session = conn.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
+        consumer = session.createReceiver(receiveQueue);
+        log.debug("Receiver - ctor. Starting connection now");
+        conn.start();
+        log.info("Receiver - ctor. Connection to messaging system established");
+    }
 
-	// TODO - does this need to be synchronized now that the variables are final?
-	public static synchronized Receiver createReceiver(QueueConnectionFactory factory, Queue receiveQueue)
-			throws JMSException {
-		// if (receiver == null) {
-		Receiver receiver = new Receiver(factory, receiveQueue);
-		Thread thread = new Thread(receiver);
-		thread.start();
-		// }
-		return receiver;
-	}
+    // TODO - does this need to be synchronized now that the variables are final?
+    public static synchronized Receiver createReceiver(QueueConnectionFactory factory, Queue receiveQueue)
+            throws JMSException {
+        // if (receiver == null) {
+        Receiver receiver = new Receiver(factory, receiveQueue);
+        Thread thread = new Thread(receiver);
+        thread.start();
+        // }
+        return receiver;
+    }
 
-	public void run() {
-		activate();
-		Message reply;
+    public void run() {
+        activate();
+        Message reply;
 
-		while (isActive()) {
-			reply = null;
-			try {
-				reply = consumer.receive(5000);
-				if (reply != null) {
+        while (isActive()) {
+            reply = null;
+            try {
+                reply = consumer.receive(5000);
+                if (reply != null) {
 
-					if (log.isDebugEnabled()) {
-						log.debug("Received message, correlation id:" + reply.getJMSCorrelationID());
-					}
+                    if (log.isDebugEnabled()) {
+                        log.debug("Received message, correlation id:" + reply.getJMSCorrelationID());
+                    }
 
-					if (reply.getJMSCorrelationID() == null) {
-						log.warn("Received message with correlation id null. Discarding message ...");
-					} else {
-						MessageAdmin.getAdmin().putReply(reply.getJMSCorrelationID(), reply);
-					}
-				}
+                    if (reply.getJMSCorrelationID() == null) {
+                        log.warn("Received message with correlation id null. Discarding message ...");
+                    } else {
+                        MessageAdmin.getAdmin().putReply(reply.getJMSCorrelationID(), reply);
+                    }
+                }
 
-			} catch (JMSException e1) {
-				log.error("Error handling receive",e1);
-			}
-		}
-		// not active anymore
-		if (consumer != null) {
-		    try {
+            } catch (JMSException e1) {
+                log.error("Error handling receive",e1);
+            }
+        }
+        // not active anymore
+        if (consumer != null) {
+            try {
                 consumer.close();
             } catch (JMSException e) {
                 log.error("Error closing connection",e);
             }
-		}
+        }
 
-		// session and conn cannot be null (or ctor would have caused NPE)
-		try {
-			session.close();
-		} catch (JMSException e) {
-			log.error("Error closing session",e);
-		}
+        // session and conn cannot be null (or ctor would have caused NPE)
+        try {
+            session.close();
+        } catch (JMSException e) {
+            log.error("Error closing session",e);
+        }
         try {
             conn.close();
         } catch (JMSException e) {
             log.error("Error closing connection",e);
         }
-	}
+    }
 
-	public synchronized void activate() {
-		active = true;
-	}
+    public synchronized void activate() {
+        active = true;
+    }
 
-	public synchronized void deactivate() {
-		active = false;
-	}
+    public synchronized void deactivate() {
+        active = false;
+    }
 
-	private synchronized boolean isActive() {
-		return active;
-	}
+    private synchronized boolean isActive() {
+        return active;
+    }
 
 }

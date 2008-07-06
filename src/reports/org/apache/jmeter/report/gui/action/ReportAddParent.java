@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.report.gui.action;
@@ -31,52 +31,52 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 public class ReportAddParent implements Command {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final Set commands = new HashSet();
-	static {
-		commands.add("Add Parent");
-	}
+    private static final Set commands = new HashSet();
+    static {
+        commands.add("Add Parent");
+    }
 
-	public ReportAddParent() {
-	}
+    public ReportAddParent() {
+    }
 
-	public void doAction(ActionEvent e) {
-		String name = ((Component) e.getSource()).getName();
-		try {
-			TestElement controller = ReportGuiPackage.getInstance()
-					.createTestElement(name);
-			addParentToTree(controller);
-		} catch (Exception err) {
-			log.error("", err);
-		}
+    public void doAction(ActionEvent e) {
+        String name = ((Component) e.getSource()).getName();
+        try {
+            TestElement controller = ReportGuiPackage.getInstance()
+                    .createTestElement(name);
+            addParentToTree(controller);
+        } catch (Exception err) {
+            log.error("", err);
+        }
 
-	}
+    }
 
-	public Set getActionNames() {
-		return commands;
-	}
+    public Set getActionNames() {
+        return commands;
+    }
 
-	protected void addParentToTree(TestElement newParent) {
-		ReportGuiPackage guiPackage = ReportGuiPackage.getInstance();
-		ReportTreeNode newNode = new ReportTreeNode(newParent, guiPackage
-				.getTreeModel());
-		ReportTreeNode currentNode = guiPackage.getTreeListener()
-				.getCurrentNode();
-		ReportTreeNode parentNode = (ReportTreeNode) currentNode.getParent();
-		int index = parentNode.getIndex(currentNode);
-		guiPackage.getTreeModel().insertNodeInto(newNode, parentNode, index);
-		ReportTreeNode[] nodes = guiPackage.getTreeListener()
-				.getSelectedNodes();
-		for (int i = 0; i < nodes.length; i++) {
-			moveNode(guiPackage, nodes[i], newNode);
-		}
-	}
+    protected void addParentToTree(TestElement newParent) {
+        ReportGuiPackage guiPackage = ReportGuiPackage.getInstance();
+        ReportTreeNode newNode = new ReportTreeNode(newParent, guiPackage
+                .getTreeModel());
+        ReportTreeNode currentNode = guiPackage.getTreeListener()
+                .getCurrentNode();
+        ReportTreeNode parentNode = (ReportTreeNode) currentNode.getParent();
+        int index = parentNode.getIndex(currentNode);
+        guiPackage.getTreeModel().insertNodeInto(newNode, parentNode, index);
+        ReportTreeNode[] nodes = guiPackage.getTreeListener()
+                .getSelectedNodes();
+        for (int i = 0; i < nodes.length; i++) {
+            moveNode(guiPackage, nodes[i], newNode);
+        }
+    }
 
-	private void moveNode(ReportGuiPackage guiPackage, ReportTreeNode node,
-			ReportTreeNode newParentNode) {
-		guiPackage.getTreeModel().removeNodeFromParent(node);
-		guiPackage.getTreeModel().insertNodeInto(node, newParentNode,
-				newParentNode.getChildCount());
-	}
+    private void moveNode(ReportGuiPackage guiPackage, ReportTreeNode node,
+            ReportTreeNode newParentNode) {
+        guiPackage.getTreeModel().removeNodeFromParent(node);
+        guiPackage.getTreeModel().insertNodeInto(node, newParentNode,
+                newParentNode.getChildCount());
+    }
 }

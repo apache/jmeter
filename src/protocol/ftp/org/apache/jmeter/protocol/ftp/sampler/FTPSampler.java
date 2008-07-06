@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.ftp.sampler;
@@ -45,100 +45,100 @@ import org.apache.log.Logger;
 
 /**
  * A sampler which understands FTP file requests.
- * 
+ *
  */
 public class FTPSampler extends AbstractSampler {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     public final static String SERVER = "FTPSampler.server"; // $NON-NLS-1$
 
-	// N.B. Originally there was only one filename, and only get(RETR) was supported
-	// To maintain backwards compatibility, the property name needs to remain the same
-	public final static String REMOTE_FILENAME = "FTPSampler.filename"; // $NON-NLS-1$
-	
-	public final static String LOCAL_FILENAME = "FTPSampler.localfilename"; // $NON-NLS-1$
+    // N.B. Originally there was only one filename, and only get(RETR) was supported
+    // To maintain backwards compatibility, the property name needs to remain the same
+    public final static String REMOTE_FILENAME = "FTPSampler.filename"; // $NON-NLS-1$
+
+    public final static String LOCAL_FILENAME = "FTPSampler.localfilename"; // $NON-NLS-1$
 
     public final static String INPUT_DATA = "FTPSampler.inputdata"; // $NON-NLS-1$
 
-	// Use binary mode file transfer?
-	public final static String BINARY_MODE = "FTPSampler.binarymode"; // $NON-NLS-1$
+    // Use binary mode file transfer?
+    public final static String BINARY_MODE = "FTPSampler.binarymode"; // $NON-NLS-1$
 
-	// Are we uploading?
-	public final static String UPLOAD_FILE = "FTPSampler.upload"; // $NON-NLS-1$
-	
-	// Should the file data be saved in the response?
-	public final static String SAVE_RESPONSE = "FTPSampler.saveresponse"; // $NON-NLS-1$
+    // Are we uploading?
+    public final static String UPLOAD_FILE = "FTPSampler.upload"; // $NON-NLS-1$
 
-	public FTPSampler() {
-	}
+    // Should the file data be saved in the response?
+    public final static String SAVE_RESPONSE = "FTPSampler.saveresponse"; // $NON-NLS-1$
 
-	public String getUsername() {
-		return getPropertyAsString(ConfigTestElement.USERNAME);
-	}
+    public FTPSampler() {
+    }
 
-	public String getPassword() {
-		return getPropertyAsString(ConfigTestElement.PASSWORD);
-	}
+    public String getUsername() {
+        return getPropertyAsString(ConfigTestElement.USERNAME);
+    }
 
-	public void setServer(String newServer) {
-		this.setProperty(SERVER, newServer);
-	}
+    public String getPassword() {
+        return getPropertyAsString(ConfigTestElement.PASSWORD);
+    }
 
-	public String getServer() {
-		return getPropertyAsString(SERVER);
-	}
+    public void setServer(String newServer) {
+        this.setProperty(SERVER, newServer);
+    }
 
-	public String getRemoteFilename() {
-		return getPropertyAsString(REMOTE_FILENAME);
-	}
+    public String getServer() {
+        return getPropertyAsString(SERVER);
+    }
 
-	public String getLocalFilename() {
-		return getPropertyAsString(LOCAL_FILENAME);
-	}
+    public String getRemoteFilename() {
+        return getPropertyAsString(REMOTE_FILENAME);
+    }
+
+    public String getLocalFilename() {
+        return getPropertyAsString(LOCAL_FILENAME);
+    }
 
     private String getLocalFileContents() {
         return getPropertyAsString(INPUT_DATA);
     }
 
-	public boolean isBinaryMode(){
-		return getPropertyAsBoolean(BINARY_MODE,false);
-	}
+    public boolean isBinaryMode(){
+        return getPropertyAsBoolean(BINARY_MODE,false);
+    }
 
-	public boolean isSaveResponse(){
-		return getPropertyAsBoolean(SAVE_RESPONSE,false);
-	}
+    public boolean isSaveResponse(){
+        return getPropertyAsBoolean(SAVE_RESPONSE,false);
+    }
 
-	public boolean isUpload(){
-		return getPropertyAsBoolean(UPLOAD_FILE,false);
-	}
+    public boolean isUpload(){
+        return getPropertyAsBoolean(UPLOAD_FILE,false);
+    }
 
-	
-	/**
-	 * Returns a formatted string label describing this sampler Example output:
-	 * ftp://ftp.nowhere.com/pub/README.txt
-	 * 
-	 * @return a formatted string label describing this sampler
-	 */
-	public String getLabel() {
-	    StrBuilder sb = new StrBuilder();
-	    sb.setNullText("null");// $NON-NLS-1$
-	    sb.append("ftp://");// $NON-NLS-1$
-	    sb.append(getServer());
-	    sb.append("/");// $NON-NLS-1$
-	    sb.append(getRemoteFilename());
-	    sb.append(isBinaryMode() ? " (Binary) " : " (Ascii) ");// $NON-NLS-1$ $NON-NLS-2$
-		sb.append(isUpload() ? " <- " : " -> "); // $NON-NLS-1$ $NON-NLS-2$
-		sb.append(getLocalFilename());
-		return sb.toString();
-	}
 
-	public SampleResult sample(Entry e) {
-		SampleResult res = new SampleResult();
-		res.setSuccessful(false); // Assume failure
-		String remote = getRemoteFilename();
-		String local = getLocalFilename();
-		boolean binaryTransfer = isBinaryMode();
-		res.setSampleLabel(getName());
+    /**
+     * Returns a formatted string label describing this sampler Example output:
+     * ftp://ftp.nowhere.com/pub/README.txt
+     *
+     * @return a formatted string label describing this sampler
+     */
+    public String getLabel() {
+        StrBuilder sb = new StrBuilder();
+        sb.setNullText("null");// $NON-NLS-1$
+        sb.append("ftp://");// $NON-NLS-1$
+        sb.append(getServer());
+        sb.append("/");// $NON-NLS-1$
+        sb.append(getRemoteFilename());
+        sb.append(isBinaryMode() ? " (Binary) " : " (Ascii) ");// $NON-NLS-1$ $NON-NLS-2$
+        sb.append(isUpload() ? " <- " : " -> "); // $NON-NLS-1$ $NON-NLS-2$
+        sb.append(getLocalFilename());
+        return sb.toString();
+    }
+
+    public SampleResult sample(Entry e) {
+        SampleResult res = new SampleResult();
+        res.setSuccessful(false); // Assume failure
+        String remote = getRemoteFilename();
+        String local = getLocalFilename();
+        boolean binaryTransfer = isBinaryMode();
+        res.setSampleLabel(getName());
         final String label = getLabel();
         res.setSamplerData(label);
         try {
@@ -151,87 +151,87 @@ public class FTPSampler extends AbstractSampler {
 
         res.sampleStart();
         FTPClient ftp = new FTPClient();
-		try {
-			ftp.connect(getServer());
-			res.latencyEnd();
-			int reply = ftp.getReplyCode();
+        try {
+            ftp.connect(getServer());
+            res.latencyEnd();
+            int reply = ftp.getReplyCode();
             if (FTPReply.isPositiveCompletion(reply))
             {
-	            if (ftp.login( getUsername(), getPassword())){
-	                if (binaryTransfer) {
-	                    ftp.setFileType(FTP.BINARY_FILE_TYPE);
-	                }
-					ftp.enterLocalPassiveMode();// should probably come from the setup dialog
-					boolean ftpOK=false;
-		            if (isUpload()) {
-		                String contents=getLocalFileContents();
-		                if (contents.length() > 0){
-		                    byte bytes[] = contents.getBytes();// TODO this assumes local encoding
-		                    input = new ByteArrayInputStream(bytes);
-	                        res.setBytes(bytes.length);
-		                } else {
-	                        File infile = new File(local);
-	                        res.setBytes((int)infile.length());
-	                        input = new FileInputStream(infile);		                    
-		                }
-		                ftpOK = ftp.storeFile(remote, input);		                
-		            } else {
-		                final boolean saveResponse = isSaveResponse();
-		            	ByteArrayOutputStream baos=null; // No need to close this
-		            	OutputStream target=null; // No need to close this
-		            	if (saveResponse){
-		            		baos  = new ByteArrayOutputStream();
-		            		target=baos;
-		            	}
-		            	if (local.length()>0){
-		            		output=new FileOutputStream(local);
-		            		if (target==null) {
-		            			target=output;
-		            		} else {
-		            			target = new TeeOutputStream(output,baos);
-		            		}
-		            	}
-		            	if (target == null){
-		            		target=new NullOutputStream();
-		            	}
-		                input = ftp.retrieveFileStream(remote);
-		                if (input == null){// Could not access file or other error
-	                        res.setResponseCode(Integer.toString(ftp.getReplyCode()));
-	                        res.setResponseMessage(ftp.getReplyString());		                    
-		                } else {
-    		                long bytes = IOUtils.copy(input,target);
-    		                ftpOK = bytes > 0;
-    						if (saveResponse){
-    							res.setResponseData(baos.toByteArray());
-    							if (!binaryTransfer) {
-    							    res.setDataType(SampleResult.TEXT);
-    							}
-    		                } else {
-    		                	res.setBytes((int) bytes);
-    		                }
-		                }
-		            }
+                if (ftp.login( getUsername(), getPassword())){
+                    if (binaryTransfer) {
+                        ftp.setFileType(FTP.BINARY_FILE_TYPE);
+                    }
+                    ftp.enterLocalPassiveMode();// should probably come from the setup dialog
+                    boolean ftpOK=false;
+                    if (isUpload()) {
+                        String contents=getLocalFileContents();
+                        if (contents.length() > 0){
+                            byte bytes[] = contents.getBytes();// TODO this assumes local encoding
+                            input = new ByteArrayInputStream(bytes);
+                            res.setBytes(bytes.length);
+                        } else {
+                            File infile = new File(local);
+                            res.setBytes((int)infile.length());
+                            input = new FileInputStream(infile);
+                        }
+                        ftpOK = ftp.storeFile(remote, input);
+                    } else {
+                        final boolean saveResponse = isSaveResponse();
+                        ByteArrayOutputStream baos=null; // No need to close this
+                        OutputStream target=null; // No need to close this
+                        if (saveResponse){
+                            baos  = new ByteArrayOutputStream();
+                            target=baos;
+                        }
+                        if (local.length()>0){
+                            output=new FileOutputStream(local);
+                            if (target==null) {
+                                target=output;
+                            } else {
+                                target = new TeeOutputStream(output,baos);
+                            }
+                        }
+                        if (target == null){
+                            target=new NullOutputStream();
+                        }
+                        input = ftp.retrieveFileStream(remote);
+                        if (input == null){// Could not access file or other error
+                            res.setResponseCode(Integer.toString(ftp.getReplyCode()));
+                            res.setResponseMessage(ftp.getReplyString());
+                        } else {
+                            long bytes = IOUtils.copy(input,target);
+                            ftpOK = bytes > 0;
+                            if (saveResponse){
+                                res.setResponseData(baos.toByteArray());
+                                if (!binaryTransfer) {
+                                    res.setDataType(SampleResult.TEXT);
+                                }
+                            } else {
+                                res.setBytes((int) bytes);
+                            }
+                        }
+                    }
 
-		            if (ftpOK) {
-		            	res.setResponseCodeOK();
-			            res.setResponseMessageOK();
-			    		res.setSuccessful(true);
-		            } else {
-		            	res.setResponseCode(Integer.toString(ftp.getReplyCode()));
-		            	res.setResponseMessage(ftp.getReplyString());
-		            }
-	            } else {
-	            	res.setResponseCode(Integer.toString(ftp.getReplyCode()));
-	            	res.setResponseMessage(ftp.getReplyString());
-	            }
+                    if (ftpOK) {
+                        res.setResponseCodeOK();
+                        res.setResponseMessageOK();
+                        res.setSuccessful(true);
+                    } else {
+                        res.setResponseCode(Integer.toString(ftp.getReplyCode()));
+                        res.setResponseMessage(ftp.getReplyString());
+                    }
+                } else {
+                    res.setResponseCode(Integer.toString(ftp.getReplyCode()));
+                    res.setResponseMessage(ftp.getReplyString());
+                }
             } else {
-            	res.setResponseCode("501"); // TODO
-            	res.setResponseMessage("Could not connect");            	
-            	//res.setResponseCode(Integer.toString(ftp.getReplyCode()));
-            	res.setResponseMessage(ftp.getReplyString());
+                res.setResponseCode("501"); // TODO
+                res.setResponseMessage("Could not connect");
+                //res.setResponseCode(Integer.toString(ftp.getReplyCode()));
+                res.setResponseMessage(ftp.getReplyString());
             }
-		} catch (IOException ex) {
-        	res.setResponseCode("000"); // TODO
+        } catch (IOException ex) {
+            res.setResponseCode("000"); // TODO
             res.setResponseMessage(ex.toString());
         } finally {
             if (ftp.isConnected()) {
@@ -244,7 +244,7 @@ public class FTPSampler extends AbstractSampler {
             IOUtils.closeQuietly(output);
         }
 
-		res.sampleEnd();
-		return res;
-	}
+        res.sampleEnd();
+        return res;
+    }
 }

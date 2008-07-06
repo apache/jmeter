@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.reporters;
@@ -36,21 +36,21 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
- * Save Result responseData to a set of files 
- * 
- * 
+ * Save Result responseData to a set of files
+ *
+ *
  * This is mainly intended for validation tests
- * 
+ *
  */
 // TODO - perhaps save other items such as headers?
 public class ResultSaver extends AbstractTestElement implements Serializable, SampleListener, Clearable {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	// File name sequence number
-	//@GuardedBy("this")
-	private static long sequenceNumber = 0;
+    // File name sequence number
+    //@GuardedBy("this")
+    private static long sequenceNumber = 0;
 
-	public static final String FILENAME = "FileSaver.filename"; // $NON-NLS-1$
+    public static final String FILENAME = "FileSaver.filename"; // $NON-NLS-1$
 
     public static final String VARIABLE_NAME = "FileSaver.variablename"; // $NON-NLS-1$
 
@@ -59,56 +59,56 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
     public static final String SUCCESS_ONLY = "FileSaver.successonly"; // $NON-NLS-1$
 
     private synchronized long nextNumber() {
-		return ++sequenceNumber;
-	}
+        return ++sequenceNumber;
+    }
 
-	/*
-	 * Constructor is initially called once for each occurrence in the test plan
-	 * For GUI, several more instances are created Then clear is called at start
-	 * of test Called several times during test startup The name will not
-	 * necessarily have been set at this point.
-	 */
-	public ResultSaver() {
-		super();
-		// log.debug(Thread.currentThread().getName());
-		// System.out.println(">> "+me+" "+this.getName()+"
-		// "+Thread.currentThread().getName());
-	}
+    /*
+     * Constructor is initially called once for each occurrence in the test plan
+     * For GUI, several more instances are created Then clear is called at start
+     * of test Called several times during test startup The name will not
+     * necessarily have been set at this point.
+     */
+    public ResultSaver() {
+        super();
+        // log.debug(Thread.currentThread().getName());
+        // System.out.println(">> "+me+" "+this.getName()+"
+        // "+Thread.currentThread().getName());
+    }
 
-	/*
-	 * Constructor for use during startup (intended for non-GUI use) @param name
-	 * of summariser
-	 */
-	public ResultSaver(String name) {
-		this();
-		setName(name);
-	}
+    /*
+     * Constructor for use during startup (intended for non-GUI use) @param name
+     * of summariser
+     */
+    public ResultSaver(String name) {
+        this();
+        setName(name);
+    }
 
-	/*
-	 * This is called once for each occurrence in the test plan, before the
-	 * start of the test. The super.clear() method clears the name (and all
-	 * other properties), so it is called last.
-	 */
-	// TODO: is this clearData, clearGui or TestElement.clear() ?
-	public void clear() {
-		// System.out.println("-- "+me+this.getName()+"
-		// "+Thread.currentThread().getName());
-		super.clear();
-		synchronized(this){
-		    sequenceNumber = 0; // TODO is this the right thing to do?
-		}
-	}
+    /*
+     * This is called once for each occurrence in the test plan, before the
+     * start of the test. The super.clear() method clears the name (and all
+     * other properties), so it is called last.
+     */
+    // TODO: is this clearData, clearGui or TestElement.clear() ?
+    public void clear() {
+        // System.out.println("-- "+me+this.getName()+"
+        // "+Thread.currentThread().getName());
+        super.clear();
+        synchronized(this){
+            sequenceNumber = 0; // TODO is this the right thing to do?
+        }
+    }
 
-	// TODO - is this the same as the above?
-	public void clearData() {
-	}
+    // TODO - is this the same as the above?
+    public void clearData() {
+    }
 
-	/**
-	 * Saves the sample result (and any sub results) in files
-	 * 
-	 * @see org.apache.jmeter.samplers.SampleListener#sampleOccurred(org.apache.jmeter.samplers.SampleEvent)
-	 */
-	public void sampleOccurred(SampleEvent e) {
+    /**
+     * Saves the sample result (and any sub results) in files
+     *
+     * @see org.apache.jmeter.samplers.SampleListener#sampleOccurred(org.apache.jmeter.samplers.SampleEvent)
+     */
+    public void sampleOccurred(SampleEvent e) {
       processSample(e.getResult(), new Counter());
    }
 
@@ -119,31 +119,31 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
     * @param c sample counter
     */
    private void processSample(SampleResult s, Counter c) {
-		saveSample(s, c.num++);
-		SampleResult[] sr = s.getSubResults();
-		for (int i = 0; i < sr.length; i++) {
-			processSample(sr[i], c);
-		}
-	}
+        saveSample(s, c.num++);
+        SampleResult[] sr = s.getSubResults();
+        for (int i = 0; i < sr.length; i++) {
+            processSample(sr[i], c);
+        }
+    }
 
-	/**
-	 * @param s SampleResult to save
-	 * @param num number to append to variable (if >0)
-	 */
-	private void saveSample(SampleResult s, int num) {
-		// Should we save the sample?
-		if (s.isSuccessful()){
-		    if (getErrorsOnly()){
-		        return;
-		    }
-		} else {
-		    if (getSuccessOnly()){
-		        return;
-		    }
-		}
+    /**
+     * @param s SampleResult to save
+     * @param num number to append to variable (if >0)
+     */
+    private void saveSample(SampleResult s, int num) {
+        // Should we save the sample?
+        if (s.isSuccessful()){
+            if (getErrorsOnly()){
+                return;
+            }
+        } else {
+            if (getSuccessOnly()){
+                return;
+            }
+        }
 
-		String fileName = makeFileName(s.getContentType());
-		log.debug("Saving " + s.getSampleLabel() + " in " + fileName);
+        String fileName = makeFileName(s.getContentType());
+        log.debug("Saving " + s.getSampleLabel() + " in " + fileName);
         s.setResultFileName(fileName);// Associate sample with file name
         String variable = getVariableName();
         if (variable.length()>0){
@@ -154,70 +154,70 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
             }
             JMeterContextService.getContext().getVariables().put(variable, fileName);
         }
-		File out = new File(fileName);
-		FileOutputStream pw = null;
-		try {
-			pw = new FileOutputStream(out);
-			pw.write(s.getResponseData());
-		} catch (FileNotFoundException e1) {
-			log.error("Error creating sample file for " + s.getSampleLabel(), e1);
-		} catch (IOException e1) {
-			log.error("Error saving sample " + s.getSampleLabel(), e1);
-		} finally {
+        File out = new File(fileName);
+        FileOutputStream pw = null;
+        try {
+            pw = new FileOutputStream(out);
+            pw.write(s.getResponseData());
+        } catch (FileNotFoundException e1) {
+            log.error("Error creating sample file for " + s.getSampleLabel(), e1);
+        } catch (IOException e1) {
+            log.error("Error saving sample " + s.getSampleLabel(), e1);
+        } finally {
             JOrphanUtils.closeQuietly(pw);
-		}
-	}
+        }
+    }
 
-	/**
-	 * @return fileName composed of fixed prefix, a number, and a suffix derived
-	 *         from the contentType e.g. Content-Type:
-	 *         text/html;charset=ISO-8859-1
-	 */
-	private String makeFileName(String contentType) {
-		String suffix = "unknown";
-		if (contentType != null) {
-			int i = contentType.indexOf("/");
-			if (i != -1) {
-				int j = contentType.indexOf(";");
-				if (j != -1) {
-					suffix = contentType.substring(i + 1, j);
-				} else {
-					suffix = contentType.substring(i + 1);
-				}
-			}
-		}
-		return getFilename() + nextNumber() + "." + suffix;
-	}
+    /**
+     * @return fileName composed of fixed prefix, a number, and a suffix derived
+     *         from the contentType e.g. Content-Type:
+     *         text/html;charset=ISO-8859-1
+     */
+    private String makeFileName(String contentType) {
+        String suffix = "unknown";
+        if (contentType != null) {
+            int i = contentType.indexOf("/");
+            if (i != -1) {
+                int j = contentType.indexOf(";");
+                if (j != -1) {
+                    suffix = contentType.substring(i + 1, j);
+                } else {
+                    suffix = contentType.substring(i + 1);
+                }
+            }
+        }
+        return getFilename() + nextNumber() + "." + suffix;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.samplers.SampleListener#sampleStarted(org.apache.jmeter.samplers.SampleEvent)
-	 */
-	public void sampleStarted(SampleEvent e) {
-		// not used
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.samplers.SampleListener#sampleStarted(org.apache.jmeter.samplers.SampleEvent)
+     */
+    public void sampleStarted(SampleEvent e) {
+        // not used
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.samplers.SampleListener#sampleStopped(org.apache.jmeter.samplers.SampleEvent)
-	 */
-	public void sampleStopped(SampleEvent e) {
-		// not used
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.samplers.SampleListener#sampleStopped(org.apache.jmeter.samplers.SampleEvent)
+     */
+    public void sampleStopped(SampleEvent e) {
+        // not used
+    }
 
-	private String getFilename() {
-		return getPropertyAsString(FILENAME);
-	}
+    private String getFilename() {
+        return getPropertyAsString(FILENAME);
+    }
 
     private String getVariableName() {
         return getPropertyAsString(VARIABLE_NAME,""); // $NON-NLS-1$
     }
 
-	private boolean getErrorsOnly() {
-		return getPropertyAsBoolean(ERRORS_ONLY);
-	}
+    private boolean getErrorsOnly() {
+        return getPropertyAsBoolean(ERRORS_ONLY);
+    }
 
     private boolean getSuccessOnly() {
         return getPropertyAsBoolean(SUCCESS_ONLY);

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.util.keystore;
@@ -27,66 +27,65 @@ import java.util.Enumeration;
 
 /**
  * Use this Keystore to wrap the normal KeyStore implementation.
- * 
- * @author <a href="bloritsch@apache.org">Berin Loritsch</a>
+ *
  */
 public class DefaultKeyStore extends JmeterKeyStore {
-	private X509Certificate[] certChain;
+    private X509Certificate[] certChain;
 
-	private PrivateKey key;
+    private PrivateKey key;
 
-	private String alias;
+    private String alias;
 
-	private final KeyStore store;
+    private final KeyStore store;
 
-	public DefaultKeyStore(String type) throws Exception {
-		this.store = KeyStore.getInstance(type);
-	}
+    public DefaultKeyStore(String type) throws Exception {
+        this.store = KeyStore.getInstance(type);
+    }
 
-	public void load(InputStream is, String pword) throws Exception {
-		store.load(is, pword.toCharArray());
-		PrivateKey _key = null;
-		X509Certificate[] _certChain = null;
+    public void load(InputStream is, String pword) throws Exception {
+        store.load(is, pword.toCharArray());
+        PrivateKey _key = null;
+        X509Certificate[] _certChain = null;
 
-		if (null != is){ // No point checking an empty keystore
-			
-			Enumeration aliases = store.aliases();
-			while (aliases.hasMoreElements()) {
-				this.alias = (String) aliases.nextElement();
-				if (store.isKeyEntry(alias)) {
-					_key = (PrivateKey) store.getKey(alias, pword.toCharArray());
-					Certificate[] chain = store.getCertificateChain(alias);
-					_certChain = new X509Certificate[chain.length];
-	
-					for (int i = 0; i < chain.length; i++) {
-						_certChain[i] = (X509Certificate) chain[i];
-					}
-	
-					break;
-				}
-			}
+        if (null != is){ // No point checking an empty keystore
 
-			if (null == _key) {
-				throw new Exception("No key found");
-			}
-			if (null == _certChain) {
-				throw new Exception("No certificate chain found");
-			}
-		}
-		
-		this.key = _key;
-		this.certChain = _certChain;
-	}
+            Enumeration aliases = store.aliases();
+            while (aliases.hasMoreElements()) {
+                this.alias = (String) aliases.nextElement();
+                if (store.isKeyEntry(alias)) {
+                    _key = (PrivateKey) store.getKey(alias, pword.toCharArray());
+                    Certificate[] chain = store.getCertificateChain(alias);
+                    _certChain = new X509Certificate[chain.length];
 
-	public final X509Certificate[] getCertificateChain() {
-		return this.certChain;
-	}
+                    for (int i = 0; i < chain.length; i++) {
+                        _certChain[i] = (X509Certificate) chain[i];
+                    }
 
-	public final PrivateKey getPrivateKey() {
-		return this.key;
-	}
+                    break;
+                }
+            }
 
-	public final String getAlias() {
-		return this.alias;
-	}
+            if (null == _key) {
+                throw new Exception("No key found");
+            }
+            if (null == _certChain) {
+                throw new Exception("No certificate chain found");
+            }
+        }
+
+        this.key = _key;
+        this.certChain = _certChain;
+    }
+
+    public final X509Certificate[] getCertificateChain() {
+        return this.certChain;
+    }
+
+    public final PrivateKey getPrivateKey() {
+        return this.key;
+    }
+
+    public final String getAlias() {
+        return this.alias;
+    }
 }

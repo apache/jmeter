@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jorphan.util;
@@ -21,15 +21,15 @@ package org.apache.jorphan.util;
 /**
  * This Exception is for use by functions etc to signal a Stop Thread condition
  * where there is no access to the normal stop method
- * 
- * @version $Revision$ $Date$
+ *
+ * @version $Revision$
  */
 public class JMeterStopThreadException extends RuntimeException {
-	public JMeterStopThreadException() {
-		super();
-	}
+    public JMeterStopThreadException() {
+        super();
+    }
 
-	public JMeterStopThreadException(String s) {
-		super(s);
-	}
+    public JMeterStopThreadException(String s) {
+        super(s);
+    }
 }

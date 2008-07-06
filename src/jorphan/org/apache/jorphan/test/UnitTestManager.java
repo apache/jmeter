@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jorphan.test;
@@ -29,12 +29,12 @@ package org.apache.jorphan.test;
  * @see org.apache.jorphan.test.AllTests
  */
 public interface UnitTestManager {
-	/**
-	 * Your implementation will be handed the filename that was provided to
-	 * AllTests as a configuration file. It can hold whatever properties you
-	 * need to configure your system prior to the unit tests running.
-	 * 
-	 * @param filename
-	 */
-	public void initializeProperties(String filename);
+    /**
+     * Your implementation will be handed the filename that was provided to
+     * AllTests as a configuration file. It can hold whatever properties you
+     * need to configure your system prior to the unit tests running.
+     *
+     * @param filename
+     */
+    public void initializeProperties(String filename);
 }

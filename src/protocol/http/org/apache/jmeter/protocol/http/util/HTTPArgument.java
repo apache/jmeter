@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.util;
@@ -34,59 +34,59 @@ import org.apache.log.Logger;
 //For unit tests, @see TestHTTPArgument
 
 /*
- * 
+ *
  * Represents an Argument for HTTP requests.
  */
 public class HTTPArgument extends Argument implements Serializable {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final String ALWAYS_ENCODE = "HTTPArgument.always_encode";
+    private static final String ALWAYS_ENCODE = "HTTPArgument.always_encode";
 
-	private static final String USE_EQUALS = "HTTPArgument.use_equals";
+    private static final String USE_EQUALS = "HTTPArgument.use_equals";
 
-	private static final EncoderCache cache = new EncoderCache(1000);
+    private static final EncoderCache cache = new EncoderCache(1000);
 
-	/**
-	 * Constructor for the Argument object.
-	 */
-	public HTTPArgument(String name, String value, String metadata) {
-		this(name, value, false);
-		this.setMetaData(metadata);
-	}
+    /**
+     * Constructor for the Argument object.
+     */
+    public HTTPArgument(String name, String value, String metadata) {
+        this(name, value, false);
+        this.setMetaData(metadata);
+    }
 
-	public void setUseEquals(boolean ue) {
-		if (ue) {
-			setMetaData("=");
-		} else {
-			setMetaData("");
-		}
-		setProperty(new BooleanProperty(USE_EQUALS, ue));
-	}
+    public void setUseEquals(boolean ue) {
+        if (ue) {
+            setMetaData("=");
+        } else {
+            setMetaData("");
+        }
+        setProperty(new BooleanProperty(USE_EQUALS, ue));
+    }
 
-	public boolean isUseEquals() {
-		boolean eq = getPropertyAsBoolean(USE_EQUALS);
-		if (getMetaData().equals("=") || (getValue() != null && getValue().length() > 0)) {
-			setUseEquals(true);
-			return true;
-		}
-		return eq;
+    public boolean isUseEquals() {
+        boolean eq = getPropertyAsBoolean(USE_EQUALS);
+        if (getMetaData().equals("=") || (getValue() != null && getValue().length() > 0)) {
+            setUseEquals(true);
+            return true;
+        }
+        return eq;
 
-	}
+    }
 
-	public void setAlwaysEncoded(boolean ae) {
-		setProperty(new BooleanProperty(ALWAYS_ENCODE, ae));
-	}
+    public void setAlwaysEncoded(boolean ae) {
+        setProperty(new BooleanProperty(ALWAYS_ENCODE, ae));
+    }
 
-	public boolean isAlwaysEncoded() {
-		return getPropertyAsBoolean(ALWAYS_ENCODE);
-	}
+    public boolean isAlwaysEncoded() {
+        return getPropertyAsBoolean(ALWAYS_ENCODE);
+    }
 
-	/**
-	 * Constructor for the Argument object.
-	 */
-	public HTTPArgument(String name, String value) {
-		this(name, value, false);
-	}
+    /**
+     * Constructor for the Argument object.
+     */
+    public HTTPArgument(String name, String value) {
+        this(name, value, false);
+    }
 
     public HTTPArgument(String name, String value, boolean alreadyEncoded) {
         // We assume the argument value is encoded according to the HTTP spec, i.e. UTF-8
@@ -95,7 +95,7 @@ public class HTTPArgument extends Argument implements Serializable {
 
     /**
      * Construct a new HTTPArgument instance
-     * 
+     *
      * @param name the name of the parameter
      * @param value the value of the parameter
      * @param alreadyEncoded true if the name and value is already encoded
@@ -126,7 +126,7 @@ public class HTTPArgument extends Argument implements Serializable {
 
     /**
      * Construct a new HTTPArgument instance
-     * 
+     *
      * @param name the name of the parameter
      * @param value the value of the parameter
      * @param metaData the separator to use between name and value
@@ -148,21 +148,21 @@ public class HTTPArgument extends Argument implements Serializable {
     public HTTPArgument() {
     }
 
-	/**
-	 * Sets the Name attribute of the Argument object.
-	 * 
-	 * @param newName
-	 *            the new Name value
-	 */
-	public void setName(String newName) {
-		if (newName == null || !newName.equals(getName())) {
-			super.setName(newName);
-		}
-	}
+    /**
+     * Sets the Name attribute of the Argument object.
+     *
+     * @param newName
+     *            the new Name value
+     */
+    public void setName(String newName) {
+        if (newName == null || !newName.equals(getName())) {
+            super.setName(newName);
+        }
+    }
 
     /**
      * Get the argument value encoded using UTF-8
-     * 
+     *
      * @return the argument value encoded in UTF-8
      */
     public String getEncodedValue() {
@@ -178,7 +178,7 @@ public class HTTPArgument extends Argument implements Serializable {
 
     /**
      * Get the argument value encoded in the specified encoding
-     * 
+     *
      * @param contentEncoding the encoding to use when encoding the argument value
      * @return the argument value encoded in the specified encoding
      * @throws UnsupportedEncodingException
@@ -191,27 +191,27 @@ public class HTTPArgument extends Argument implements Serializable {
         }
     }
 
-	public String getEncodedName() {
-		if (isAlwaysEncoded()) {
-			return cache.getEncoded(getName());
-		} else {
-			return getName();
-		}
+    public String getEncodedName() {
+        if (isAlwaysEncoded()) {
+            return cache.getEncoded(getName());
+        } else {
+            return getName();
+        }
 
-	}
+    }
 
-	public static void convertArgumentsToHTTP(Arguments args) {
-		List newArguments = new LinkedList();
-		PropertyIterator iter = args.getArguments().iterator();
-		while (iter.hasNext()) {
-			Argument arg = (Argument) iter.next().getObjectValue();
-			if (!(arg instanceof HTTPArgument)) {
-				newArguments.add(new HTTPArgument(arg));
-			} else {
-				newArguments.add(arg);
-			}
-		}
-		args.removeAllArguments();
-		args.setArguments(newArguments);
-	}
+    public static void convertArgumentsToHTTP(Arguments args) {
+        List newArguments = new LinkedList();
+        PropertyIterator iter = args.getArguments().iterator();
+        while (iter.hasNext()) {
+            Argument arg = (Argument) iter.next().getObjectValue();
+            if (!(arg instanceof HTTPArgument)) {
+                newArguments.add(new HTTPArgument(arg));
+            } else {
+                newArguments.add(arg);
+            }
+        }
+        args.removeAllArguments();
+        args.setArguments(newArguments);
+    }
 }
