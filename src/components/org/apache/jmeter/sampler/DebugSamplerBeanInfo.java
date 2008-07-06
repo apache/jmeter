@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.sampler;
@@ -23,20 +23,20 @@ import java.beans.PropertyDescriptor;
 import org.apache.jmeter.testbeans.BeanInfoSupport;
 
 public class DebugSamplerBeanInfo extends BeanInfoSupport {
-	public DebugSamplerBeanInfo() {
-		super(DebugSampler.class);
-		PropertyDescriptor p;
-		
-		p = property("displayJMeterVariables");
-		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-		p.setValue(DEFAULT, Boolean.TRUE);
+    public DebugSamplerBeanInfo() {
+        super(DebugSampler.class);
+        PropertyDescriptor p;
 
-		p = property("displayJMeterProperties");
-		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-		p.setValue(DEFAULT, Boolean.FALSE);
-		
-		p = property("displaySystemProperties");
-		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-		p.setValue(DEFAULT, Boolean.FALSE);
+        p = property("displayJMeterVariables");
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, Boolean.TRUE);
+
+        p = property("displayJMeterProperties");
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, Boolean.FALSE);
+
+        p = property("displaySystemProperties");
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, Boolean.FALSE);
     }
 }

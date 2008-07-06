@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.timers;
@@ -26,16 +26,16 @@ import org.apache.jmeter.util.JMeterUtils;
  * This class implements those methods needed by RandomTimer to be instantiable
  * and implements a random delay with an average value and a gaussian
  * distributed variation.
- * 
+ *
  * @author <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
  * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
  */
 public class GaussianRandomTimer extends RandomTimer implements Serializable {
-	public long delay() {
-		return (long) Math.abs((this.random.nextGaussian() * getRange()) + super.delay());
-	}
+    public long delay() {
+        return (long) Math.abs((this.random.nextGaussian() * getRange()) + super.delay());
+    }
 
-	public String toString() {
-		return JMeterUtils.getResString("gaussian_timer_memo"); //$NON-NLS-1$
-	}
+    public String toString() {
+        return JMeterUtils.getResString("gaussian_timer_memo"); //$NON-NLS-1$
+    }
 }

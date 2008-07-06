@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.assertions;
@@ -24,146 +24,146 @@ import java.io.Serializable;
  * @author Michael Stover
  */
 public class AssertionResult implements Serializable {
-	public static final String RESPONSE_WAS_NULL = "Response was null"; // $NON-NLS-1$
+    public static final String RESPONSE_WAS_NULL = "Response was null"; // $NON-NLS-1$
 
-	/** Name of the assertion. */
-	private String name;
-	
-	/** True if the assertion failed. */
-	private boolean failure;
+    /** Name of the assertion. */
+    private String name;
 
-	/** True if there was an error checking the assertion. */
-	private boolean error;
+    /** True if the assertion failed. */
+    private boolean failure;
 
-	/** A message describing the failure. */
-	private String failureMessage;
+    /** True if there was an error checking the assertion. */
+    private boolean error;
 
-	/**
-	 * Create a new Assertion Result. The result will indicate no failure or
-	 * error.
-	 * @deprecated - use the named constructor
-	 */
-	public AssertionResult() { // Needs to be public for tests
-	}
-	
-	/**
-	 * Create a new Assertion Result. The result will indicate no failure or
-	 * error.
-	 * 
-	 * @param name the name of the assertion
-	 */
-	public AssertionResult(String name) {
-		setName(name);
-	}
-	
-	/**
-	 * Get the name of the assertion
-	 * 
-	 * @return the name of the assertion
-	 */
-	public String getName() {
-		return name;
-	}
+    /** A message describing the failure. */
+    private String failureMessage;
 
-	/**
-	 * Set the name of the assertion
-	 * 
-	 * @param name the name of the assertion
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	/**
-	 * Check if the assertion failed. If it failed, the failure message may give
-	 * more details about the failure.
-	 * 
-	 * @return true if the assertion failed, false if the sample met the
-	 *         assertion criteria
-	 */
-	public boolean isFailure() {
-		return failure;
-	}
+    /**
+     * Create a new Assertion Result. The result will indicate no failure or
+     * error.
+     * @deprecated - use the named constructor
+     */
+    public AssertionResult() { // Needs to be public for tests
+    }
 
-	/**
-	 * Check if an error occurred while checking the assertion. If an error
-	 * occurred, the failure message may give more details about the error.
-	 * 
-	 * @return true if an error occurred while checking the assertion, false
-	 *         otherwise.
-	 */
-	public boolean isError() {
-		return error;
-	}
+    /**
+     * Create a new Assertion Result. The result will indicate no failure or
+     * error.
+     *
+     * @param name the name of the assertion
+     */
+    public AssertionResult(String name) {
+        setName(name);
+    }
 
-	/**
-	 * Get the message associated with any failure or error. This method may
-	 * return null if no message was set.
-	 * 
-	 * @return a failure or error message, or null if no message has been set
-	 */
-	public String getFailureMessage() {
-		return failureMessage;
-	}
+    /**
+     * Get the name of the assertion
+     *
+     * @return the name of the assertion
+     */
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * Set the flag indicating whether or not an error occurred.
-	 * 
-	 * @param e
-	 *            true if an error occurred, false otherwise
-	 */
-	public void setError(boolean e) {
-		error = e;
-	}
+    /**
+     * Set the name of the assertion
+     *
+     * @param name the name of the assertion
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	/**
-	 * Set the flag indicating whether or not a failure occurred.
-	 * 
-	 * @param f
-	 *            true if a failure occurred, false otherwise
-	 */
-	public void setFailure(boolean f) {
-		failure = f;
-	}
+    /**
+     * Check if the assertion failed. If it failed, the failure message may give
+     * more details about the failure.
+     *
+     * @return true if the assertion failed, false if the sample met the
+     *         assertion criteria
+     */
+    public boolean isFailure() {
+        return failure;
+    }
 
-	/**
-	 * Set the failure message giving more details about a failure or error.
-	 * 
-	 * @param message
-	 *            the message to set
-	 */
-	public void setFailureMessage(String message) {
-		failureMessage = message;
-	}
+    /**
+     * Check if an error occurred while checking the assertion. If an error
+     * occurred, the failure message may give more details about the error.
+     *
+     * @return true if an error occurred while checking the assertion, false
+     *         otherwise.
+     */
+    public boolean isError() {
+        return error;
+    }
 
-	/**
-	 * Convenience method for setting up failed results
-	 * 
-	 * @param message
-	 *            the message to set
-	 * @return this
-	 * 
-	 */
-	public AssertionResult setResultForFailure(String message) {
-		error = false;
-		failure = true;
-		failureMessage = message;
-		return this;
-	}
+    /**
+     * Get the message associated with any failure or error. This method may
+     * return null if no message was set.
+     *
+     * @return a failure or error message, or null if no message has been set
+     */
+    public String getFailureMessage() {
+        return failureMessage;
+    }
 
-	/**
-	 * Convenience method for setting up results where the response was null
-	 * 
-	 * @return assertion result with appropriate fields set up
-	 */
-	public AssertionResult setResultForNull() {
-		error = false;
-		failure = true;
-		failureMessage = RESPONSE_WAS_NULL;
-		return this;
-	}
+    /**
+     * Set the flag indicating whether or not an error occurred.
+     *
+     * @param e
+     *            true if an error occurred, false otherwise
+     */
+    public void setError(boolean e) {
+        error = e;
+    }
 
-	public String toString() {
-		return getName() != null ? getName() : super.toString();
-	}
+    /**
+     * Set the flag indicating whether or not a failure occurred.
+     *
+     * @param f
+     *            true if a failure occurred, false otherwise
+     */
+    public void setFailure(boolean f) {
+        failure = f;
+    }
+
+    /**
+     * Set the failure message giving more details about a failure or error.
+     *
+     * @param message
+     *            the message to set
+     */
+    public void setFailureMessage(String message) {
+        failureMessage = message;
+    }
+
+    /**
+     * Convenience method for setting up failed results
+     *
+     * @param message
+     *            the message to set
+     * @return this
+     *
+     */
+    public AssertionResult setResultForFailure(String message) {
+        error = false;
+        failure = true;
+        failureMessage = message;
+        return this;
+    }
+
+    /**
+     * Convenience method for setting up results where the response was null
+     *
+     * @return assertion result with appropriate fields set up
+     */
+    public AssertionResult setResultForNull() {
+        error = false;
+        failure = true;
+        failureMessage = RESPONSE_WAS_NULL;
+        return this;
+    }
+
+    public String toString() {
+        return getName() != null ? getName() : super.toString();
+    }
 }

@@ -5,15 +5,15 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations
  * under the License.
- *  
+ *
  */
 
 package org.apache.jmeter.visualizers;
@@ -71,179 +71,179 @@ import org.apache.log.Logger;
  * who've done the other visualizers ahead of me (Stefano Mazzocchi), who I
  * borrowed code from to start me off (and much code may still exist). Thank
  * you!
- * 
+ *
  */
 public class StatGraphVisualizer extends AbstractVisualizer implements Clearable,
 ActionListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
-    
-	private final String[] COLUMNS = { JMeterUtils.getResString("sampler_label"), //$NON-NLS-1$
-			JMeterUtils.getResString("aggregate_report_count"),			//$NON-NLS-1$
-			JMeterUtils.getResString("average"),						//$NON-NLS-1$
-			JMeterUtils.getResString("aggregate_report_median"),		//$NON-NLS-1$
-			JMeterUtils.getResString("aggregate_report_90%_line"),		//$NON-NLS-1$
-			JMeterUtils.getResString("aggregate_report_min"),			//$NON-NLS-1$
-			JMeterUtils.getResString("aggregate_report_max"),			//$NON-NLS-1$
-			JMeterUtils.getResString("aggregate_report_error%"),		//$NON-NLS-1$
-			JMeterUtils.getResString("aggregate_report_rate"),			//$NON-NLS-1$
-			JMeterUtils.getResString("aggregate_report_bandwidth") };	//$NON-NLS-1$
-    
+
+    private final String[] COLUMNS = { JMeterUtils.getResString("sampler_label"), //$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_count"),         //$NON-NLS-1$
+            JMeterUtils.getResString("average"),                        //$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_median"),        //$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_90%_line"),      //$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_min"),           //$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_max"),           //$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_error%"),        //$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_rate"),          //$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_bandwidth") };   //$NON-NLS-1$
+
     private final String[] GRAPH_COLUMNS = {JMeterUtils.getResString("average"),//$NON-NLS-1$
-            JMeterUtils.getResString("aggregate_report_median"),		//$NON-NLS-1$
-            JMeterUtils.getResString("aggregate_report_90%_line"),		//$NON-NLS-1$
-            JMeterUtils.getResString("aggregate_report_min"),			//$NON-NLS-1$
-            JMeterUtils.getResString("aggregate_report_max")};			//$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_median"),        //$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_90%_line"),      //$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_min"),           //$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_max")};          //$NON-NLS-1$
 
-	private final String TOTAL_ROW_LABEL =
-		JMeterUtils.getResString("aggregate_report_total_label");		//$NON-NLS-1$
+    private final String TOTAL_ROW_LABEL =
+        JMeterUtils.getResString("aggregate_report_total_label");       //$NON-NLS-1$
 
-	protected JTable myJTable;
+    protected JTable myJTable;
 
-	protected JScrollPane myScrollPane;
+    protected JScrollPane myScrollPane;
 
-	private transient ObjectTableModel model;
+    private transient ObjectTableModel model;
 
-	Map tableRows = Collections.synchronizedMap(new HashMap());
-    
+    Map tableRows = Collections.synchronizedMap(new HashMap());
+
     protected AxisGraph graphPanel = null;
-    
+
     protected VerticalPanel graph = null;
-    
+
     protected JScrollPane graphScroll = null;
-    
+
     protected JSplitPane spane = null;
-    
-    protected JLabeledChoice columns = 
+
+    protected JLabeledChoice columns =
         new JLabeledChoice(JMeterUtils.getResString("aggregate_graph_column"),GRAPH_COLUMNS);//$NON-NLS-1$
-    
+
     //NOT USED protected double[][] data = null;
-    
-    protected JButton displayButton = 
-        new JButton(JMeterUtils.getResString("aggregate_graph_display"));				//$NON-NLS-1$
-    
-    protected JButton saveGraph = 
-        new JButton(JMeterUtils.getResString("aggregate_graph_save"));					//$NON-NLS-1$
-    
-    protected JButton saveTable = 
-        new JButton(JMeterUtils.getResString("aggregate_graph_save_table"));			//$NON-NLS-1$
-    
+
+    protected JButton displayButton =
+        new JButton(JMeterUtils.getResString("aggregate_graph_display"));                //$NON-NLS-1$
+
+    protected JButton saveGraph =
+        new JButton(JMeterUtils.getResString("aggregate_graph_save"));                    //$NON-NLS-1$
+
+    protected JButton saveTable =
+        new JButton(JMeterUtils.getResString("aggregate_graph_save_table"));            //$NON-NLS-1$
+
     private JCheckBox saveHeaders = // should header be saved with the data?
-    	new JCheckBox(JMeterUtils.getResString("aggregate_graph_save_table_header"));	//$NON-NLS-1$
- 
-    JLabeledTextField graphTitle = 
-        new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_user_title"));	//$NON-NLS-1$
-    
-    JLabeledTextField maxLengthXAxisLabel = 
+        new JCheckBox(JMeterUtils.getResString("aggregate_graph_save_table_header"));    //$NON-NLS-1$
+
+    JLabeledTextField graphTitle =
+        new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_user_title"));    //$NON-NLS-1$
+
+    JLabeledTextField maxLengthXAxisLabel =
         new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_max_length_xaxis_label"));//$NON-NLS-1$
-    
-    JLabeledTextField graphWidth = 
-        new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_width"));		//$NON-NLS-1$
-    JLabeledTextField graphHeight = 
-        new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_height"));		//$NON-NLS-1$
-    
+
+    JLabeledTextField graphWidth =
+        new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_width"));        //$NON-NLS-1$
+    JLabeledTextField graphHeight =
+        new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_height"));        //$NON-NLS-1$
+
     protected String yAxisLabel = JMeterUtils.getResString("aggregate_graph_response_time");//$NON-NLS-1$
-    
-    protected String yAxisTitle = JMeterUtils.getResString("aggregate_graph_ms");		//$NON-NLS-1$
-    
+
+    protected String yAxisTitle = JMeterUtils.getResString("aggregate_graph_ms");        //$NON-NLS-1$
+
     protected boolean saveGraphToFile = false;
-    
+
     protected int defaultWidth = 400;
-    
+
     protected int defaultHeight = 300;
 
-	public StatGraphVisualizer() {
-		super();
-		model = new ObjectTableModel(COLUMNS,
-				SamplingStatCalculator.class,
-				new Functor[] {
-				new Functor("getLabel"),					//$NON-NLS-1$
-				new Functor("getCount"),					//$NON-NLS-1$
-				new Functor("getMeanAsNumber"),				//$NON-NLS-1$
-				new Functor("getMedian"),					//$NON-NLS-1$
-				new Functor("getPercentPoint",				//$NON-NLS-1$
-				new Object[] { new Float(.900) }),
-				new Functor("getMin"),						//$NON-NLS-1$
-				new Functor("getMax"), 						//$NON-NLS-1$
-				new Functor("getErrorPercentage"),	        //$NON-NLS-1$
-				new Functor("getRate"),				        //$NON-NLS-1$
-				new Functor("getKBPerSecond") },			//$NON-NLS-1$
-				new Functor[] { null, null, null, null, null, null, null, null,	null, null }, 
-				new Class[] { String.class, Long.class, Long.class, Long.class, Long.class, Long.class,
-				Long.class, String.class, String.class, String.class });
-		clearData();
-		init();
-	}
+    public StatGraphVisualizer() {
+        super();
+        model = new ObjectTableModel(COLUMNS,
+                SamplingStatCalculator.class,
+                new Functor[] {
+                new Functor("getLabel"),                    //$NON-NLS-1$
+                new Functor("getCount"),                    //$NON-NLS-1$
+                new Functor("getMeanAsNumber"),                //$NON-NLS-1$
+                new Functor("getMedian"),                    //$NON-NLS-1$
+                new Functor("getPercentPoint",                //$NON-NLS-1$
+                new Object[] { new Float(.900) }),
+                new Functor("getMin"),                        //$NON-NLS-1$
+                new Functor("getMax"),                         //$NON-NLS-1$
+                new Functor("getErrorPercentage"),            //$NON-NLS-1$
+                new Functor("getRate"),                        //$NON-NLS-1$
+                new Functor("getKBPerSecond") },            //$NON-NLS-1$
+                new Functor[] { null, null, null, null, null, null, null, null,    null, null },
+                new Class[] { String.class, Long.class, Long.class, Long.class, Long.class, Long.class,
+                Long.class, String.class, String.class, String.class });
+        clearData();
+        init();
+    }
 
-	// Column renderers
-	private static final TableCellRenderer[] RENDERERS = 
-		new TableCellRenderer[]{
-		    null, // Label
-		    null, // count
-		    null, // Mean
-		    null, // median
-		    null, // 90%
-		    null, // Min
-		    null, // Max
-		    new NumberRenderer("#0.00%"), // Error %age
-		    new RateRenderer("#.0"),      // Throughpur
-		    new NumberRenderer("#.0"),    // pageSize
-		};
+    // Column renderers
+    private static final TableCellRenderer[] RENDERERS =
+        new TableCellRenderer[]{
+            null, // Label
+            null, // count
+            null, // Mean
+            null, // median
+            null, // 90%
+            null, // Min
+            null, // Max
+            new NumberRenderer("#0.00%"), // Error %age
+            new RateRenderer("#.0"),      // Throughpur
+            new NumberRenderer("#.0"),    // pageSize
+        };
 
-	public static boolean testFunctors(){
-		StatGraphVisualizer instance = new StatGraphVisualizer();
-		return instance.model.checkFunctors(null,instance.getClass());
-	}
-	
-	public String getLabelResource() {
-		return "aggregate_graph_title";						//$NON-NLS-1$
-	}
+    public static boolean testFunctors(){
+        StatGraphVisualizer instance = new StatGraphVisualizer();
+        return instance.model.checkFunctors(null,instance.getClass());
+    }
 
-	public void add(SampleResult res) {
-		SamplingStatCalculator row = null;
+    public String getLabelResource() {
+        return "aggregate_graph_title";                        //$NON-NLS-1$
+    }
+
+    public void add(SampleResult res) {
+        SamplingStatCalculator row = null;
         final String sampleLabel = res.getSampleLabel();
-		synchronized (tableRows) {
+        synchronized (tableRows) {
             row = (SamplingStatCalculator) tableRows.get(sampleLabel);
-			if (row == null) {
-				row = new SamplingStatCalculator(sampleLabel);
-				tableRows.put(row.getLabel(), row);
-				model.insertRow(row, model.getRowCount() - 1);
-			}
-		}
-		row.addSample(res);
-		((SamplingStatCalculator) tableRows.get(TOTAL_ROW_LABEL)).addSample(res);
-		model.fireTableDataChanged();
-	}
+            if (row == null) {
+                row = new SamplingStatCalculator(sampleLabel);
+                tableRows.put(row.getLabel(), row);
+                model.insertRow(row, model.getRowCount() - 1);
+            }
+        }
+        row.addSample(res);
+        ((SamplingStatCalculator) tableRows.get(TOTAL_ROW_LABEL)).addSample(res);
+        model.fireTableDataChanged();
+    }
 
-	/**
-	 * Clears this visualizer and its model, and forces a repaint of the table.
-	 */
-	public void clearData() {
-		model.clearData();
-		tableRows.clear();
-		tableRows.put(TOTAL_ROW_LABEL, new SamplingStatCalculator(TOTAL_ROW_LABEL));
-		model.addRow(tableRows.get(TOTAL_ROW_LABEL));
-	}
+    /**
+     * Clears this visualizer and its model, and forces a repaint of the table.
+     */
+    public void clearData() {
+        model.clearData();
+        tableRows.clear();
+        tableRows.put(TOTAL_ROW_LABEL, new SamplingStatCalculator(TOTAL_ROW_LABEL));
+        model.addRow(tableRows.get(TOTAL_ROW_LABEL));
+    }
 
-	/**
-	 * Main visualizer setup.
-	 */
-	private void init() {
-		this.setLayout(new BorderLayout());
+    /**
+     * Main visualizer setup.
+     */
+    private void init() {
+        this.setLayout(new BorderLayout());
 
-		// MAIN PANEL
-		JPanel mainPanel = new JPanel();
-		Border margin = new EmptyBorder(10, 10, 5, 10);
+        // MAIN PANEL
+        JPanel mainPanel = new JPanel();
+        Border margin = new EmptyBorder(10, 10, 5, 10);
         Border margin2 = new EmptyBorder(10, 10, 5, 10);
-        
-		mainPanel.setBorder(margin);
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		mainPanel.add(makeTitlePanel());
 
-		myJTable = new JTable(model);
-		myJTable.setPreferredScrollableViewportSize(new Dimension(500, 80));
-		RendererUtils.applyRenderers(myJTable, RENDERERS);
-		myScrollPane = new JScrollPane(myJTable);
-        
+        mainPanel.setBorder(margin);
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.add(makeTitlePanel());
+
+        myJTable = new JTable(model);
+        myJTable.setPreferredScrollableViewportSize(new Dimension(500, 80));
+        RendererUtils.applyRenderers(myJTable, RENDERERS);
+        myScrollPane = new JScrollPane(myJTable);
+
         graph = new VerticalPanel();
         graph.setBorder(margin2);
 
@@ -259,7 +259,7 @@ ActionListener {
         buttonpanel.add(saveGraph);
         buttonpanel.add(saveTable);
         buttonpanel.add(saveHeaders);
-        
+
         graph.add(graphLabel);
         graph.add(graphTitle);
         graph.add(maxLengthXAxisLabel);
@@ -282,8 +282,8 @@ ActionListener {
 
         this.add(mainPanel, BorderLayout.NORTH);
         this.add(spane,BorderLayout.CENTER);
-	}
-    
+    }
+
     public void makeGraph() {
         String wstr = graphWidth.getText();
         String hstr = graphHeight.getText();
@@ -315,7 +315,7 @@ ActionListener {
         graph.setSize(new Dimension(graph.getWidth(), height + 120));
         spane.repaint();
     }
-    
+
     public double[][] getData() {
         if (model.getRowCount() > 1) {
             int count = model.getRowCount() -1;
@@ -326,9 +326,9 @@ ActionListener {
             }
             return data;
         }
-		return new double[][]{ { 250, 45, 36, 66, 145, 80, 55  } };
+        return new double[][]{ { 250, 45, 36, 66, 145, 80, 55  } };
     }
-    
+
     public String[] getAxisLabels() {
         if (model.getRowCount() > 1) {
             int count = model.getRowCount() -1;
@@ -338,12 +338,12 @@ ActionListener {
             }
             return labels;
         }
-		return new String[]{ "/", "/samples", "/jsp-samples", "/manager", "/manager/status", "/hello", "/world" };
+        return new String[]{ "/", "/samples", "/jsp-samples", "/manager", "/manager/status", "/hello", "/world" };
     }
-    
+
     /**
      * We use this method to get the data, since we are using
-     * ObjectTableModel, so the calling getDataVector doesn't 
+     * ObjectTableModel, so the calling getDataVector doesn't
      * work as expected.
      * @return the data from the model
      */
@@ -362,7 +362,7 @@ ActionListener {
         }
         return data;
     }
-    
+
     public void actionPerformed(ActionEvent event) {
         if (event.getSource() == displayButton) {
             makeGraph();
@@ -373,10 +373,10 @@ ActionListener {
                         ActionNames.SAVE_GRAPHICS,SaveGraphics.class.getName()).doAction(
                                 new ActionEvent(this,1,ActionNames.SAVE_GRAPHICS));
             } catch (Exception e) {
-            	log.error(e.getMessage());
+                log.error(e.getMessage());
             }
         } else if (event.getSource() == saveTable) {
-            JFileChooser chooser = FileDialoger.promptToSaveFile("statistics.csv");	//$NON-NLS-1$
+            JFileChooser chooser = FileDialoger.promptToSaveFile("statistics.csv");    //$NON-NLS-1$
             if (chooser == null) {
                 return;
             }
@@ -394,7 +394,7 @@ ActionListener {
             }
         }
     }
-    
+
     public JComponent getPrintableComponent() {
         if (saveGraphToFile == true) {
             saveGraphToFile = false;
@@ -402,6 +402,6 @@ ActionListener {
                     graphPanel.width,graphPanel.height);
             return graphPanel;
         }
-		return this;
+        return this;
     }
 }

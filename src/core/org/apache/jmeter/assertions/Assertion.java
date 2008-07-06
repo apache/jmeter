@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.assertions;
@@ -25,20 +25,20 @@ import org.apache.jmeter.samplers.SampleResult;
  * successful. The resulting success status can be obtained from a corresponding
  * Assertion Result. For example, if a web response doesn't contain an expected
  * expression, it would be considered a failure.
- * 
+ *
  * @version $Revision$
  */
 public interface Assertion {
-	/**
-	 * Returns the AssertionResult object encapsulating information about the
-	 * success or failure of the assertion.
-	 * 
-	 * @param response
-	 *            the SampleResult containing information about the Sample
-	 *            (duration, success, etc)
-	 * 
-	 * @return the AssertionResult containing the information about whether the
-	 *         assertion passed or failed.
-	 */
-	AssertionResult getResult(SampleResult response);
+    /**
+     * Returns the AssertionResult object encapsulating information about the
+     * success or failure of the assertion.
+     *
+     * @param response
+     *            the SampleResult containing information about the Sample
+     *            (duration, success, etc)
+     *
+     * @return the AssertionResult containing the information about whether the
+     *         assertion passed or failed.
+     */
+    AssertionResult getResult(SampleResult response);
 }

@@ -5,15 +5,15 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations
  * under the License.
- *  
+ *
  */
 package org.apache.jmeter.visualizers;
 
@@ -55,14 +55,14 @@ public class LineGraph extends JPanel {
     protected String title, xAxisTitle, yAxisTitle;
     protected String[] xAxisLabels, yAxisLabel;
     protected int width, height;
-    
+
     private static final Shape[] SHAPE_ARRAY = {PointChartProperties.SHAPE_CIRCLE,
             PointChartProperties.SHAPE_DIAMOND,PointChartProperties.SHAPE_SQUARE,
             PointChartProperties.SHAPE_TRIANGLE};
 
     /**
      * 12 basic colors for line graphs. If we need more colors than this,
-     * we can add more. Though more than 12 lines per graph will look 
+     * we can add more. Though more than 12 lines per graph will look
      * rather busy and be hard to read.
      */
     private static final Paint[] PAINT_ARRAY = {Color.black,
@@ -73,59 +73,59 @@ public class LineGraph extends JPanel {
     protected int paint_counter = -1;
 
     /**
-	 * 
-	 */
-	public LineGraph() {
-		super();
-	}
+     *
+     */
+    public LineGraph() {
+        super();
+    }
 
-	/**
-	 * @param layout
-	 */
-	public LineGraph(LayoutManager layout) {
-		super(layout);
-	}
+    /**
+     * @param layout
+     */
+    public LineGraph(LayoutManager layout) {
+        super(layout);
+    }
 
-	/**
-	 * @param layout
-	 * @param isDoubleBuffered
-	 */
-	public LineGraph(LayoutManager layout, boolean isDoubleBuffered) {
-		super(layout, isDoubleBuffered);
-	}
-    
+    /**
+     * @param layout
+     * @param isDoubleBuffered
+     */
+    public LineGraph(LayoutManager layout, boolean isDoubleBuffered) {
+        super(layout, isDoubleBuffered);
+    }
+
     public void setData(double[][] data) {
         this.data = data;
     }
-    
+
     public void setTitle(String title) {
         this.title = title;
     }
-    
+
     public void setXAxisTitle(String title) {
         this.xAxisTitle = title;
     }
-    
+
     public void setYAxisTitle(String title) {
         this.yAxisTitle = title;
     }
-    
+
     public void setXAxisLabels(String[] labels) {
         this.xAxisLabels = labels;
     }
-    
+
     public void setYAxisLabels(String[] label) {
         this.yAxisLabel = label;
     }
-    
+
     public void setWidth(int w) {
         this.width = w;
     }
-    
+
     public void setHeight(int h) {
         this.height = h;
     }
-    
+
     public void paintComponent(Graphics g) {
         // reset the paint counter
         this.paint_counter = -1;
@@ -136,7 +136,7 @@ public class LineGraph extends JPanel {
                     this.yAxisTitle,this.data,this.width,this.height,g);
         }
     }
-    
+
     private void drawSample(String _title, String[] _xAxisLabels, String _xAxisTitle,
             String _yAxisTitle, double[][] _data, int _width, int _height, Graphics g) {
         try {
@@ -153,10 +153,10 @@ public class LineGraph extends JPanel {
             Shape[] shapes = createShapes(_data.length);
             Stroke[] lstrokes = createStrokes(_data.length);
             LineChartProperties lineChartProperties= new LineChartProperties(lstrokes,shapes);
-            AxisChartDataSet axisChartDataSet= new AxisChartDataSet( _data, 
-                    legendLabels, 
-                    paints, 
-                    ChartType.LINE, 
+            AxisChartDataSet axisChartDataSet= new AxisChartDataSet( _data,
+                    legendLabels,
+                    paints,
+                    ChartType.LINE,
                     lineChartProperties );
             dataSeries.addIAxisPlotDataSet( axisChartDataSet );
 
@@ -169,16 +169,16 @@ public class LineGraph extends JPanel {
             DataAxisProperties daxp = (DataAxisProperties)axisProperties.getYAxisProperties();
             daxp.setRoundToNearest(1);
             LegendProperties legendProperties = new LegendProperties();
-            AxisChart axisChart = new AxisChart( 
-                    dataSeries, chartProperties, axisProperties, 
+            AxisChart axisChart = new AxisChart(
+                    dataSeries, chartProperties, axisProperties,
                     legendProperties, _width, _height );
             axisChart.setGraphics2D((Graphics2D) g);
             axisChart.render();
         } catch (Exception e) {
-        	log.error(e.getMessage());
+            log.error(e.getMessage());
         }
     }
-    
+
     /**
      * Since we only have 4 shapes, the method will start with the
      * first shape and keep cycling through the shapes in order.
@@ -192,7 +192,7 @@ public class LineGraph extends JPanel {
         }
         return shapes;
     }
-    
+
     /**
      * Return the next shape
      * @return the next shape
@@ -204,9 +204,9 @@ public class LineGraph extends JPanel {
         }
         return SHAPE_ARRAY[shape_counter];
     }
-    
+
     /**
-     * 
+     *
      * @param count
      * @return the first count strokes
      */
@@ -217,7 +217,7 @@ public class LineGraph extends JPanel {
         }
         return str;
     }
-    
+
     /**
      * method always return a new BasicStroke with 1.0f weight
      * @return a new BasicStroke with 1.0f weight
@@ -225,7 +225,7 @@ public class LineGraph extends JPanel {
     public Stroke nextStroke() {
         return new BasicStroke(1.0f);
     }
-    
+
     /**
      * return an array of Paint with different colors. The current
      * implementation will cycle through 12 colors if a line graph
@@ -240,7 +240,7 @@ public class LineGraph extends JPanel {
         }
         return pts;
     }
-    
+
     /**
      * The method will return the next paint color in the PAINT_ARRAY.
      * Rather than return a random color, we want it to always go through

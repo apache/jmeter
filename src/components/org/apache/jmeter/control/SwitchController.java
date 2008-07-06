@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.control;
@@ -34,7 +34,7 @@ import org.apache.jmeter.testelement.property.StringProperty;
  * </p>
  * <p>
  * For numeric input, the controller processes the appropriate child,
- * where the numbering starts from 0. 
+ * where the numbering starts from 0.
  * If the number is out of range, then the first (0th) child is selected.
  * If the condition is the empty string, then it is assumed to be 0.
  * </p>
@@ -48,82 +48,82 @@ import org.apache.jmeter.testelement.property.StringProperty;
  * </p>
  */
 public class SwitchController extends GenericController implements Serializable {
-	// Package access for use by Test code
-	final static String SWITCH_VALUE = "SwitchController.value"; //$NON-NLS-1$
+    // Package access for use by Test code
+    final static String SWITCH_VALUE = "SwitchController.value"; //$NON-NLS-1$
 
-	public SwitchController() {
-		super();
-	}
+    public SwitchController() {
+        super();
+    }
 
-	public Sampler next() {
-		if (isFirst()) { // Set the selection once per iteration
-			current = getSelectionAsInt();
-		}
-		return super.next();
-	}
+    public Sampler next() {
+        if (isFirst()) { // Set the selection once per iteration
+            current = getSelectionAsInt();
+        }
+        return super.next();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * incrementCurrent is called when the current child (whether sampler or controller)
-	 * has been processed.
-	 * 
-	 * Setting it to int.max marks the controller as having processed all its
-	 * children. Thus the controller processes one child per iteration.
-	 * 
-	 * @see org.apache.jmeter.control.GenericController#incrementCurrent()
-	 */
-	protected void incrementCurrent() {
-		current=Integer.MAX_VALUE;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * incrementCurrent is called when the current child (whether sampler or controller)
+     * has been processed.
+     *
+     * Setting it to int.max marks the controller as having processed all its
+     * children. Thus the controller processes one child per iteration.
+     *
+     * @see org.apache.jmeter.control.GenericController#incrementCurrent()
+     */
+    protected void incrementCurrent() {
+        current=Integer.MAX_VALUE;
+    }
 
-	public void setSelection(String inputValue) {
-		setProperty(new StringProperty(SWITCH_VALUE, inputValue));
-	}
+    public void setSelection(String inputValue) {
+        setProperty(new StringProperty(SWITCH_VALUE, inputValue));
+    }
 
-	/*
-	 * Returns the selection value as a int,
-	 * with the value set to zero if it is out of range.
-	 */
-	private int getSelectionAsInt() {
-		int ret;
-		getProperty(SWITCH_VALUE).recoverRunningVersion(null);
-		String sel = getSelection();
-		try {
-			ret = Integer.parseInt(sel);
-			if (ret < 0 || ret >= getSubControllers().size()) {
-				ret = 0;
-			}
-		} catch (NumberFormatException e) {
-			if (sel.length()==0) {
-				ret = 0;
-			} else {
-				ret = scanControllerNames(sel);
-			}
-		}
-		return ret;
-	}
+    /*
+     * Returns the selection value as a int,
+     * with the value set to zero if it is out of range.
+     */
+    private int getSelectionAsInt() {
+        int ret;
+        getProperty(SWITCH_VALUE).recoverRunningVersion(null);
+        String sel = getSelection();
+        try {
+            ret = Integer.parseInt(sel);
+            if (ret < 0 || ret >= getSubControllers().size()) {
+                ret = 0;
+            }
+        } catch (NumberFormatException e) {
+            if (sel.length()==0) {
+                ret = 0;
+            } else {
+                ret = scanControllerNames(sel);
+            }
+        }
+        return ret;
+    }
 
-	private int scanControllerNames(String sel){
-		Iterator iter = getSubControllers().iterator();
-		int i = 0;
-		int default_pos = Integer.MAX_VALUE;
-		while(iter.hasNext()) {
-			String name;
-		    TestElement el = (TestElement)iter.next();
-		    name=el.getName();
-			if (name.equals(sel)) { 
-			    return i; 
-			}
-     		if (name.equalsIgnoreCase("default")) {  //$NON-NLS-1$
-     		    default_pos = i; 
-     		}
-			i++;
-		}
-		return default_pos;	
-	}
+    private int scanControllerNames(String sel){
+        Iterator iter = getSubControllers().iterator();
+        int i = 0;
+        int default_pos = Integer.MAX_VALUE;
+        while(iter.hasNext()) {
+            String name;
+            TestElement el = (TestElement)iter.next();
+            name=el.getName();
+            if (name.equals(sel)) {
+                return i;
+            }
+             if (name.equalsIgnoreCase("default")) {  //$NON-NLS-1$
+                 default_pos = i;
+             }
+            i++;
+        }
+        return default_pos;
+    }
 
-	public String getSelection() {
-		return getPropertyAsString(SWITCH_VALUE);
-	}
+    public String getSelection() {
+        return getPropertyAsString(SWITCH_VALUE);
+    }
 }
