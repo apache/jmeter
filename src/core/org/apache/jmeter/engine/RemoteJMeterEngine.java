@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.engine;
@@ -25,17 +25,17 @@ import java.util.Properties;
 import org.apache.jorphan.collections.HashTree;
 
 public interface RemoteJMeterEngine extends Remote {
-	void configure(HashTree testTree) throws RemoteException;
+    void configure(HashTree testTree) throws RemoteException;
 
-	void runTest() throws RemoteException, JMeterEngineException;
+    void runTest() throws RemoteException, JMeterEngineException;
 
-	void stopTest() throws RemoteException;
+    void stopTest() throws RemoteException;
 
-	void reset() throws RemoteException;
+    void reset() throws RemoteException;
 
-	void setHost(String host) throws RemoteException;
+    void setHost(String host) throws RemoteException;
 
-	void setProperties(Properties p) throws RemoteException;
+    void setProperties(Properties p) throws RemoteException;
 
-	void exit() throws RemoteException;
+    void exit() throws RemoteException;
 }

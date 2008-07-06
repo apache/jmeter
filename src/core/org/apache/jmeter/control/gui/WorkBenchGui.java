@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.control.gui;
@@ -34,83 +34,83 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * JMeter GUI component representing a work bench where users can make
  * preparations for the test plan.
- * 
+ *
  */
 public class WorkBenchGui extends AbstractJMeterGuiComponent {
-	/**
-	 * Create a new WorkbenchGui.
-	 */
-	public WorkBenchGui() {
-		super();
-		init();
-	}
+    /**
+     * Create a new WorkbenchGui.
+     */
+    public WorkBenchGui() {
+        super();
+        init();
+    }
 
-	/**
-	 * This is the list of menu categories this gui component will be available
-	 * under. This implementation returns null, since the WorkBench appears at
-	 * the top level of the tree and cannot be added elsewhere.
-	 * 
-	 * @return a Collection of Strings, where each element is one of the
-	 *         constants defined in MenuFactory
-	 */
-	public Collection getMenuCategories() {
-		return null;
-	}
+    /**
+     * This is the list of menu categories this gui component will be available
+     * under. This implementation returns null, since the WorkBench appears at
+     * the top level of the tree and cannot be added elsewhere.
+     *
+     * @return a Collection of Strings, where each element is one of the
+     *         constants defined in MenuFactory
+     */
+    public Collection getMenuCategories() {
+        return null;
+    }
 
-	/* Implements JMeterGUIComponent.createTestElement() */
-	public TestElement createTestElement() {
-		WorkBench wb = new WorkBench();
-		modifyTestElement(wb);
-		return wb;
-	}
+    /* Implements JMeterGUIComponent.createTestElement() */
+    public TestElement createTestElement() {
+        WorkBench wb = new WorkBench();
+        modifyTestElement(wb);
+        return wb;
+    }
 
-	/* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
-	public void modifyTestElement(TestElement wb) {
-		super.configureTestElement(wb);
-	}
+    /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
+    public void modifyTestElement(TestElement wb) {
+        super.configureTestElement(wb);
+    }
 
-	/**
-	 * When a user right-clicks on the component in the test tree, or selects
-	 * the edit menu when the component is selected, the component will be asked
-	 * to return a JPopupMenu that provides all the options available to the
-	 * user from this component.
-	 * <p>
-	 * The WorkBench returns a popup menu allowing you to add anything.
-	 * 
-	 * @return a JPopupMenu appropriate for the component.
-	 */
-	public JPopupMenu createPopupMenu() {
-		JPopupMenu menu = new JPopupMenu();
-		JMenu addMenu = MenuFactory.makeMenus(new String[] { 
-				MenuFactory.NON_TEST_ELEMENTS, 
-				MenuFactory.CONTROLLERS,
-				MenuFactory.CONFIG_ELEMENTS, 
-				MenuFactory.TIMERS,
-				MenuFactory.PRE_PROCESSORS,
-				MenuFactory.SAMPLERS,
-				MenuFactory.ASSERTIONS,
-				MenuFactory.POST_PROCESSORS,
-				MenuFactory.LISTENERS,
-				}, 
-				JMeterUtils.getResString("add"), // $NON-NLS-1$
-				ActionNames.ADD);
-		menu.add(addMenu);
-		MenuFactory.addPasteResetMenu(menu);
-		MenuFactory.addFileMenu(menu);
-		return menu;
-	}
+    /**
+     * When a user right-clicks on the component in the test tree, or selects
+     * the edit menu when the component is selected, the component will be asked
+     * to return a JPopupMenu that provides all the options available to the
+     * user from this component.
+     * <p>
+     * The WorkBench returns a popup menu allowing you to add anything.
+     *
+     * @return a JPopupMenu appropriate for the component.
+     */
+    public JPopupMenu createPopupMenu() {
+        JPopupMenu menu = new JPopupMenu();
+        JMenu addMenu = MenuFactory.makeMenus(new String[] {
+                MenuFactory.NON_TEST_ELEMENTS,
+                MenuFactory.CONTROLLERS,
+                MenuFactory.CONFIG_ELEMENTS,
+                MenuFactory.TIMERS,
+                MenuFactory.PRE_PROCESSORS,
+                MenuFactory.SAMPLERS,
+                MenuFactory.ASSERTIONS,
+                MenuFactory.POST_PROCESSORS,
+                MenuFactory.LISTENERS,
+                },
+                JMeterUtils.getResString("add"), // $NON-NLS-1$
+                ActionNames.ADD);
+        menu.add(addMenu);
+        MenuFactory.addPasteResetMenu(menu);
+        MenuFactory.addFileMenu(menu);
+        return menu;
+    }
 
-	public String getLabelResource() {
-		return "workbench_title"; // $NON-NLS-1$
-	}
+    public String getLabelResource() {
+        return "workbench_title"; // $NON-NLS-1$
+    }
 
-	/**
-	 * Initialize the components and layout of this component.
-	 */
-	private void init() {
-		setLayout(new BorderLayout());
-		setBorder(makeBorder());
+    /**
+     * Initialize the components and layout of this component.
+     */
+    private void init() {
+        setLayout(new BorderLayout());
+        setBorder(makeBorder());
 
-		add(makeTitlePanel(), BorderLayout.NORTH);
-	}
+        add(makeTitlePanel(), BorderLayout.NORTH);
+    }
 }

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.engine;
@@ -28,40 +28,40 @@ import org.apache.jorphan.collections.ListedHashTree;
 
 public class TreeCloner implements HashTreeTraverser {
 
-	private ListedHashTree newTree;
+    private ListedHashTree newTree;
 
-	private LinkedList objects = new LinkedList();
+    private LinkedList objects = new LinkedList();
 
-	private boolean forThread = true;
+    private boolean forThread = true;
 
-	public TreeCloner() {
-		this(true);
-	}
+    public TreeCloner() {
+        this(true);
+    }
 
-	public TreeCloner(boolean forThread) {
-		newTree = new ListedHashTree();
-		this.forThread = forThread;
-	}
+    public TreeCloner(boolean forThread) {
+        newTree = new ListedHashTree();
+        this.forThread = forThread;
+    }
 
-	public void addNode(Object node, HashTree subTree) {
-		if ((!forThread || !(node instanceof NoThreadClone)) && (node instanceof TestElement)) {
-			node = ((TestElement) node).clone();
-			newTree.add(objects, node);
-		} else {
-			newTree.add(objects, node);
-		}
-		objects.addLast(node);
-	}
+    public void addNode(Object node, HashTree subTree) {
+        if ((!forThread || !(node instanceof NoThreadClone)) && (node instanceof TestElement)) {
+            node = ((TestElement) node).clone();
+            newTree.add(objects, node);
+        } else {
+            newTree.add(objects, node);
+        }
+        objects.addLast(node);
+    }
 
-	public void subtractNode() {
-		objects.removeLast();
-	}
+    public void subtractNode() {
+        objects.removeLast();
+    }
 
-	public ListedHashTree getClonedTree() {
-		return newTree;
-	}
+    public ListedHashTree getClonedTree() {
+        return newTree;
+    }
 
-	public void processPath() {
-	}
+    public void processPath() {
+    }
 
 }
