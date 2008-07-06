@@ -13,14 +13,14 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jorphan.gui;
 
 /**
  * Renders a rate in a JTable.
- * 
+ *
  * The output is in units appropriate to its dimension:
  * <p>
  * The number is represented in one of:
@@ -32,31 +32,31 @@ package org.apache.jorphan.gui;
  */
 public class RateRenderer extends NumberRenderer{
 
-	public RateRenderer(String format) {
-		super(format);
-	}
-	
-	public void setValue(Object value) {
-		if (value == null || ! (value instanceof Double)) {
-			setText("#N/A"); // TODO: should this just call super()?
-			return;
-		}
-		double rate = ((Double) value).doubleValue();
-		if (rate == Double.MAX_VALUE){
-			setText("#N/A"); // TODO: should this just call super()?
-			return;
-		}
-		
-	    String unit = "sec";
+    public RateRenderer(String format) {
+        super(format);
+    }
 
-	    if (rate < 1.0) {
-	        rate *= 60.0;
-	        unit = "min";
-	    }
-	    if (rate < 1.0) {
-	        rate *= 60.0;
-	        unit = "hour";
-	    }			
-	    setText(formatter.format(rate) + "/" + unit);
-	}
+    public void setValue(Object value) {
+        if (value == null || ! (value instanceof Double)) {
+            setText("#N/A"); // TODO: should this just call super()?
+            return;
+        }
+        double rate = ((Double) value).doubleValue();
+        if (rate == Double.MAX_VALUE){
+            setText("#N/A"); // TODO: should this just call super()?
+            return;
+        }
+
+        String unit = "sec";
+
+        if (rate < 1.0) {
+            rate *= 60.0;
+            unit = "min";
+        }
+        if (rate < 1.0) {
+            rate *= 60.0;
+            unit = "hour";
+        }
+        setText(formatter.format(rate) + "/" + unit);
+    }
 }

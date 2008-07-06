@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.util.accesslog;
@@ -51,191 +51,189 @@ import org.apache.log.Logger;
  * added and should be left up to the user. One option is to provide parameters,
  * so the user can pass the desired listener to the tool.
  * <p>
- * 
- * author Peter Lin<br>
- * Created on: Jul 1, 2003<br>
+ *
  */
 
 public class StandardGenerator implements Generator, Serializable {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-	protected HTTPSamplerBase SAMPLE = null;
+    protected HTTPSamplerBase SAMPLE = null;
 
-	protected transient FileWriter WRITER = null;
+    protected transient FileWriter WRITER = null;
 
-	protected transient OutputStream OUTPUT = null;
+    protected transient OutputStream OUTPUT = null;
 
-	protected String FILENAME = null;
+    protected String FILENAME = null;
 
-	protected File FILE = null;
+    protected File FILE = null;
 
-	// NOT USED transient protected ThreadGroup THREADGROUP = null;
-	// Anyway, was this supposed to be the class from java.lang, or
-	// jmeter.threads?
+    // NOT USED transient protected ThreadGroup THREADGROUP = null;
+    // Anyway, was this supposed to be the class from java.lang, or
+    // jmeter.threads?
 
-	/**
-	 * The constructor is used by GUI and samplers to generate request objects.
-	 */
-	public StandardGenerator() {
-		super();
-		init();
-	}
+    /**
+     * The constructor is used by GUI and samplers to generate request objects.
+     */
+    public StandardGenerator() {
+        super();
+        init();
+    }
 
-	/**
-	 * 
-	 * @param file
-	 */
-	public StandardGenerator(String file) {
-		FILENAME = file;
-		init();
-	}
+    /**
+     *
+     * @param file
+     */
+    public StandardGenerator(String file) {
+        FILENAME = file;
+        init();
+    }
 
-	/**
-	 * initialize the generator. It should create the following objects.
-	 * <p>
-	 * <ol>
-	 * <li> ListedHashTree</li>
-	 * <li> ThreadGroup</li>
-	 * <li> File object</li>
-	 * <li> Writer</li>
-	 * </ol>
-	 */
-	private void init() {// called from ctor, so must not be overridable
-		generateRequest();
-	}
+    /**
+     * initialize the generator. It should create the following objects.
+     * <p>
+     * <ol>
+     * <li> ListedHashTree</li>
+     * <li> ThreadGroup</li>
+     * <li> File object</li>
+     * <li> Writer</li>
+     * </ol>
+     */
+    private void init() {// called from ctor, so must not be overridable
+        generateRequest();
+    }
 
-	/**
-	 * Create the FileWriter to save the JMX file.
-	 */
-	protected void initStream() {
-		try {
-			this.OUTPUT = new FileOutputStream(FILE);
-		} catch (IOException exception) {
-			log.error(exception.getMessage());
-		}
-	}
+    /**
+     * Create the FileWriter to save the JMX file.
+     */
+    protected void initStream() {
+        try {
+            this.OUTPUT = new FileOutputStream(FILE);
+        } catch (IOException exception) {
+            log.error(exception.getMessage());
+        }
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#close()
-	 */
-	public void close() {
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#close()
+     */
+    public void close() {
         JOrphanUtils.closeQuietly(OUTPUT);
         JOrphanUtils.closeQuietly(WRITER);
-	}
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#setHost(java.lang.String)
-	 */
-	public void setHost(String host) {
-		SAMPLE.setDomain(host);
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#setHost(java.lang.String)
+     */
+    public void setHost(String host) {
+        SAMPLE.setDomain(host);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#setLabel(java.lang.String)
-	 */
-	public void setLabel(String label) {
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#setLabel(java.lang.String)
+     */
+    public void setLabel(String label) {
 
-	}
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#setMethod(java.lang.String)
-	 */
-	public void setMethod(String post_get) {
-		SAMPLE.setMethod(post_get);
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#setMethod(java.lang.String)
+     */
+    public void setMethod(String post_get) {
+        SAMPLE.setMethod(post_get);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#setParams(org.apache.jmeter.protocol.http.util.accesslog.NVPair[])
-	 */
-	public void setParams(NVPair[] params) {
-		for (int idx = 0; idx < params.length; idx++) {
-			SAMPLE.addArgument(params[idx].getName(), params[idx].getValue());
-		}
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#setParams(org.apache.jmeter.protocol.http.util.accesslog.NVPair[])
+     */
+    public void setParams(NVPair[] params) {
+        for (int idx = 0; idx < params.length; idx++) {
+            SAMPLE.addArgument(params[idx].getName(), params[idx].getValue());
+        }
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#setPath(java.lang.String)
-	 */
-	public void setPath(String path) {
-		SAMPLE.setPath(path);
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#setPath(java.lang.String)
+     */
+    public void setPath(String path) {
+        SAMPLE.setPath(path);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#setPort(int)
-	 */
-	public void setPort(int port) {
-		SAMPLE.setPort(port);
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#setPort(int)
+     */
+    public void setPort(int port) {
+        SAMPLE.setPort(port);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#setQueryString(java.lang.String)
-	 */
-	public void setQueryString(String querystring) {
-		SAMPLE.parseArguments(querystring);
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#setQueryString(java.lang.String)
+     */
+    public void setQueryString(String querystring) {
+        SAMPLE.parseArguments(querystring);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#setSourceLogs(java.lang.String)
-	 */
-	public void setSourceLogs(String sourcefile) {
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#setSourceLogs(java.lang.String)
+     */
+    public void setSourceLogs(String sourcefile) {
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#setTarget(java.lang.Object)
-	 */
-	public void setTarget(Object target) {
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#setTarget(java.lang.Object)
+     */
+    public void setTarget(Object target) {
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#generateRequest()
-	 */
-	public Object generateRequest() {
-		SAMPLE = HTTPSamplerFactory.newInstance();
-		return SAMPLE;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#generateRequest()
+     */
+    public Object generateRequest() {
+        SAMPLE = HTTPSamplerFactory.newInstance();
+        return SAMPLE;
+    }
 
-	/**
-	 * save must be called to write the jmx file, otherwise it will not be
-	 * saved.
-	 */
-	public void save() {
-		// no implementation at this time, since
-		// we bypass the idea of having a console
-		// tool to generate test plans. Instead
-		// I decided to have a sampler that uses
-		// the generator and parser directly
-	}
+    /**
+     * save must be called to write the jmx file, otherwise it will not be
+     * saved.
+     */
+    public void save() {
+        // no implementation at this time, since
+        // we bypass the idea of having a console
+        // tool to generate test plans. Instead
+        // I decided to have a sampler that uses
+        // the generator and parser directly
+    }
 
-	/**
-	 * Reset the HTTPSampler to make sure it is a new instance.
-	 */
-	public void reset() {
-		SAMPLE = null;
-		generateRequest();
-	}
+    /**
+     * Reset the HTTPSampler to make sure it is a new instance.
+     */
+    public void reset() {
+        SAMPLE = null;
+        generateRequest();
+    }
 
-	// TODO write some tests
+    // TODO write some tests
 }

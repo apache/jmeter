@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.java.sampler;
@@ -45,39 +45,38 @@ import org.apache.log.Logger;
  * The runTest() method of JavaSamplerClient does not have a default
  * implementation here, so subclasses must define at least this method. It may
  * be useful to override other methods as well.
- * 
+ *
  * @see JavaSamplerClient#runTest(JavaSamplerContext)
- * 
- * @author <a href="mailto:jeremy_a@bigfoot.com">Jeremy Arnold</a>
+ *
  * @version $Revision$
  */
 public abstract class AbstractJavaSamplerClient implements JavaSamplerClient {
 
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	/* Implements JavaSamplerClient.setupTest(JavaSamplerContext) */
-	public void setupTest(JavaSamplerContext context) {
-		log.debug(getClass().getName() + ": setupTest");
-	}
+    /* Implements JavaSamplerClient.setupTest(JavaSamplerContext) */
+    public void setupTest(JavaSamplerContext context) {
+        log.debug(getClass().getName() + ": setupTest");
+    }
 
-	/* Implements JavaSamplerClient.teardownTest(JavaSamplerContext) */
-	public void teardownTest(JavaSamplerContext context) {
-		log.debug(getClass().getName() + ": teardownTest");
-	}
+    /* Implements JavaSamplerClient.teardownTest(JavaSamplerContext) */
+    public void teardownTest(JavaSamplerContext context) {
+        log.debug(getClass().getName() + ": teardownTest");
+    }
 
-	/* Implements JavaSamplerClient.getDefaultParameters() */
-	public Arguments getDefaultParameters() {
-		return null;
-	}
+    /* Implements JavaSamplerClient.getDefaultParameters() */
+    public Arguments getDefaultParameters() {
+        return null;
+    }
 
-	/**
-	 * Get a Logger instance which can be used by subclasses to log information.
-	 * This is the same Logger which is used by the base JavaSampler classes
-	 * (jmeter.protocol.java).
-	 * 
-	 * @return a Logger instance which can be used for logging
-	 */
-	protected Logger getLogger() {
-		return log;
-	}
+    /**
+     * Get a Logger instance which can be used by subclasses to log information.
+     * This is the same Logger which is used by the base JavaSampler classes
+     * (jmeter.protocol.java).
+     *
+     * @return a Logger instance which can be used for logging
+     */
+    protected Logger getLogger() {
+        return log;
+    }
 }

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.gui.action;
@@ -28,50 +28,50 @@ import org.apache.jmeter.gui.GuiPackage;
 
 /**
  * Processes the Collapse All and Expand All options.
- * 
+ *
  */
 public class CollapseExpand implements Command {
 
-	private static final Set commands = new HashSet();
+    private static final Set commands = new HashSet();
 
-	static {
-		commands.add(ActionNames.COLLAPSE_ALL);
-		commands.add(ActionNames.EXPAND_ALL);
-	}
+    static {
+        commands.add(ActionNames.COLLAPSE_ALL);
+        commands.add(ActionNames.EXPAND_ALL);
+    }
 
-	/**
-	 * Constructor for the Close object.
-	 */
-	public CollapseExpand() {
-	}
+    /**
+     * Constructor for the Close object.
+     */
+    public CollapseExpand() {
+    }
 
-	/**
-	 * Gets the ActionNames attribute of the Close object.
-	 * 
-	 * @return the ActionNames value
-	 */
-	public Set getActionNames() {
-		return commands;
-	}
+    /**
+     * Gets the ActionNames attribute of the Close object.
+     *
+     * @return the ActionNames value
+     */
+    public Set getActionNames() {
+        return commands;
+    }
 
-	/**
-	 * This method performs the actual command processing.
-	 * 
-	 * @param e
-	 *            the generic UI action event
-	 */
-	public void doAction(ActionEvent e) {
-		boolean collapse=ActionNames.COLLAPSE_ALL.equals(e.getActionCommand());
-		GuiPackage guiInstance = GuiPackage.getInstance();
-		JTree jTree = guiInstance.getMainFrame().getTree();
-		if (collapse){
-			for (int i = jTree.getRowCount() - 1; i >= 0; i--) {
-		         jTree.collapseRow(i);
-		    }
-			return;
-		}
-	   for(int i = 0; i < jTree.getRowCount(); i++) {
-			   jTree.expandRow(i);
-	   }
-	}
+    /**
+     * This method performs the actual command processing.
+     *
+     * @param e
+     *            the generic UI action event
+     */
+    public void doAction(ActionEvent e) {
+        boolean collapse=ActionNames.COLLAPSE_ALL.equals(e.getActionCommand());
+        GuiPackage guiInstance = GuiPackage.getInstance();
+        JTree jTree = guiInstance.getMainFrame().getTree();
+        if (collapse){
+            for (int i = jTree.getRowCount() - 1; i >= 0; i--) {
+                 jTree.collapseRow(i);
+            }
+            return;
+        }
+       for(int i = 0; i < jTree.getRowCount(); i++) {
+               jTree.expandRow(i);
+       }
+    }
 }

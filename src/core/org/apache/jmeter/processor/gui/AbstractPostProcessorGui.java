@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.processor.gui;
@@ -30,11 +30,11 @@ import org.apache.jmeter.gui.util.MenuFactory;
  * @version $Revision$
  */
 public abstract class AbstractPostProcessorGui extends AbstractJMeterGuiComponent {
-	public JPopupMenu createPopupMenu() {
-		return MenuFactory.getDefaultExtractorMenu();
-	}
+    public JPopupMenu createPopupMenu() {
+        return MenuFactory.getDefaultExtractorMenu();
+    }
 
-	public Collection getMenuCategories() {
-		return Arrays.asList(new String[] { MenuFactory.POST_PROCESSORS });
-	}
+    public Collection getMenuCategories() {
+        return Arrays.asList(new String[] { MenuFactory.POST_PROCESSORS });
+    }
 }

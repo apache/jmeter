@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.report.gui.action;
@@ -33,95 +33,95 @@ import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.WorkBench;
 
 public class ReportDragNDrop extends AbstractAction {
-	public static final String ADD = "drag_n_drop.add";//$NON-NLS-1$
+    public static final String ADD = "drag_n_drop.add";//$NON-NLS-1$
 
-	public static final String INSERT_BEFORE = "drag_n_drop.insert_before";//$NON-NLS-1$
+    public static final String INSERT_BEFORE = "drag_n_drop.insert_before";//$NON-NLS-1$
 
-	public static final String INSERT_AFTER = "drag_n_drop.insert_after";//$NON-NLS-1$
+    public static final String INSERT_AFTER = "drag_n_drop.insert_after";//$NON-NLS-1$
 
-	private static final Set commands = new HashSet();
-	static {
-		commands.add(ADD);
-		commands.add(INSERT_BEFORE);
-		commands.add(INSERT_AFTER);
-	}
+    private static final Set commands = new HashSet();
+    static {
+        commands.add(ADD);
+        commands.add(INSERT_BEFORE);
+        commands.add(INSERT_AFTER);
+    }
 
-	/**
-	 * @see org.apache.jmeter.gui.action.Command#doAction(ActionEvent)
-	 */
-	public void doAction(ActionEvent e) {
-		String action = e.getActionCommand();
-		ReportGuiPackage guiPackage = ReportGuiPackage.getInstance();
-		ReportTreeNode[] draggedNodes = guiPackage.getTreeListener().getDraggedNodes();
-		ReportTreeListener treeListener = guiPackage.getTreeListener();
-		ReportTreeNode currentNode = treeListener.getCurrentNode();
-		ReportTreeNode parentNode = (ReportTreeNode) currentNode.getParent();
-		TestElement te = currentNode.getTestElement();
-		if (te instanceof TestPlan || te instanceof WorkBench) {
-			parentNode = null; // So elements can only be added as children
-		}
-		// System.out.println(action+" "+te.getClass().getName());
+    /**
+     * @see org.apache.jmeter.gui.action.Command#doAction(ActionEvent)
+     */
+    public void doAction(ActionEvent e) {
+        String action = e.getActionCommand();
+        ReportGuiPackage guiPackage = ReportGuiPackage.getInstance();
+        ReportTreeNode[] draggedNodes = guiPackage.getTreeListener().getDraggedNodes();
+        ReportTreeListener treeListener = guiPackage.getTreeListener();
+        ReportTreeNode currentNode = treeListener.getCurrentNode();
+        ReportTreeNode parentNode = (ReportTreeNode) currentNode.getParent();
+        TestElement te = currentNode.getTestElement();
+        if (te instanceof TestPlan || te instanceof WorkBench) {
+            parentNode = null; // So elements can only be added as children
+        }
+        // System.out.println(action+" "+te.getClass().getName());
 
-		if (ADD.equals(action) && canAddTo(currentNode)) {
-			removeNodesFromParents(draggedNodes);
-			for (int i = 0; i < draggedNodes.length; i++) {
-				ReportGuiPackage.getInstance().getTreeModel().insertNodeInto(draggedNodes[i], currentNode,
-						currentNode.getChildCount());
-			}
-		} else if (INSERT_BEFORE.equals(action) && canAddTo(parentNode)) {
-			removeNodesFromParents(draggedNodes);
-			for (int i = 0; i < draggedNodes.length; i++) {
-				int index = parentNode.getIndex(currentNode);
-				ReportGuiPackage.getInstance().getTreeModel().insertNodeInto(draggedNodes[i], parentNode, index);
-			}
-		} else if (INSERT_AFTER.equals(action) && canAddTo(parentNode)) {
-			removeNodesFromParents(draggedNodes);
-			for (int i = 0; i < draggedNodes.length; i++) {
-				int index = parentNode.getIndex(currentNode) + 1;
-				ReportGuiPackage.getInstance().getTreeModel().insertNodeInto(draggedNodes[i], parentNode, index);
-			}
-		}
-		ReportGuiPackage.getInstance().getMainFrame().repaint();
-	}
+        if (ADD.equals(action) && canAddTo(currentNode)) {
+            removeNodesFromParents(draggedNodes);
+            for (int i = 0; i < draggedNodes.length; i++) {
+                ReportGuiPackage.getInstance().getTreeModel().insertNodeInto(draggedNodes[i], currentNode,
+                        currentNode.getChildCount());
+            }
+        } else if (INSERT_BEFORE.equals(action) && canAddTo(parentNode)) {
+            removeNodesFromParents(draggedNodes);
+            for (int i = 0; i < draggedNodes.length; i++) {
+                int index = parentNode.getIndex(currentNode);
+                ReportGuiPackage.getInstance().getTreeModel().insertNodeInto(draggedNodes[i], parentNode, index);
+            }
+        } else if (INSERT_AFTER.equals(action) && canAddTo(parentNode)) {
+            removeNodesFromParents(draggedNodes);
+            for (int i = 0; i < draggedNodes.length; i++) {
+                int index = parentNode.getIndex(currentNode) + 1;
+                ReportGuiPackage.getInstance().getTreeModel().insertNodeInto(draggedNodes[i], parentNode, index);
+            }
+        }
+        ReportGuiPackage.getInstance().getMainFrame().repaint();
+    }
 
-	/**
-	 * Determine whether or not dragged nodes can be added to this parent. Also
-	 * used by Paste TODO tighten rules TODO move to MenuFactory?
-	 * 
-	 * @param parentNode
-	 * @return whether it is OK to add the dragged nodes to this parent
-	 */
-	static boolean canAddTo(ReportTreeNode parentNode) {
-		if (null == parentNode) {
-			return false;
-		}
-		TestElement te = parentNode.getTestElement();
-		// System.out.println("Add to: "+te.getClass().getName());
-		if (te instanceof Controller) {
-			return true;
-		}
-		if (te instanceof Sampler) {
-			return true;
-		}
-		if (te instanceof WorkBench) {
-			return true;
-		}
-		if (te instanceof TestPlan) {
-			return true;
-		}
-		return false;
-	}
+    /**
+     * Determine whether or not dragged nodes can be added to this parent. Also
+     * used by Paste TODO tighten rules TODO move to MenuFactory?
+     *
+     * @param parentNode
+     * @return whether it is OK to add the dragged nodes to this parent
+     */
+    static boolean canAddTo(ReportTreeNode parentNode) {
+        if (null == parentNode) {
+            return false;
+        }
+        TestElement te = parentNode.getTestElement();
+        // System.out.println("Add to: "+te.getClass().getName());
+        if (te instanceof Controller) {
+            return true;
+        }
+        if (te instanceof Sampler) {
+            return true;
+        }
+        if (te instanceof WorkBench) {
+            return true;
+        }
+        if (te instanceof TestPlan) {
+            return true;
+        }
+        return false;
+    }
 
-	protected void removeNodesFromParents(ReportTreeNode[] nodes) {
-		for (int i = 0; i < nodes.length; i++) {
-			ReportGuiPackage.getInstance().getTreeModel().removeNodeFromParent(nodes[i]);
-		}
-	}
+    protected void removeNodesFromParents(ReportTreeNode[] nodes) {
+        for (int i = 0; i < nodes.length; i++) {
+            ReportGuiPackage.getInstance().getTreeModel().removeNodeFromParent(nodes[i]);
+        }
+    }
 
-	/**
-	 * @see org.apache.jmeter.gui.action.Command#getActionNames()
-	 */
-	public Set getActionNames() {
-		return commands;
-	}
+    /**
+     * @see org.apache.jmeter.gui.action.Command#getActionNames()
+     */
+    public Set getActionNames() {
+        return commands;
+    }
 }

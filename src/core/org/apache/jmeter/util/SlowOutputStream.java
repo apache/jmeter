@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.util;
@@ -28,13 +28,13 @@ import java.io.OutputStream;
  */
 public class SlowOutputStream extends FilterOutputStream {
 
-	private final CPSPauser pauser;
-	
-	/**
-	 * Create wrapped Output Stream toe emulate the requested CPS.
-	 * @param out OutputStream
-	 * @param cps characters per second
-	 */
+    private final CPSPauser pauser;
+
+    /**
+     * Create wrapped Output Stream toe emulate the requested CPS.
+     * @param out OutputStream
+     * @param cps characters per second
+     */
     public SlowOutputStream(OutputStream out, int cps) {
         super(out);
         pauser = new CPSPauser(cps);
@@ -42,12 +42,12 @@ public class SlowOutputStream extends FilterOutputStream {
 
     // Also handles write(byte[])
     public void write(byte[] b, int off, int len) throws IOException {
-    	pauser.pause(len);
+        pauser.pause(len);
         out.write(b, off, len);
     }
 
     public void write(int b) throws IOException {
-    	pauser.pause(1);
+        pauser.pause(1);
         out.write(b);
     }
 }

@@ -14,7 +14,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 package org.apache.jmeter.report.writers;
 
@@ -23,17 +23,16 @@ import org.apache.jmeter.testelement.TestElement;
 /**
  * HTMLReportWriter is a basic report writer that produces HTML pages.
  * It contains all the necessary helper method to write out the report.
- * 
- * @author Peter Lin
+ *
  */
 public class HTMLReportWriter extends AbstractReportWriter {
 
-	public HTMLReportWriter() {
-		super();
-	}
+    public HTMLReportWriter() {
+        super();
+    }
 
-	public ReportSummary writeReport(TestElement element) {
-		return null;
-	}
+    public ReportSummary writeReport(TestElement element) {
+        return null;
+    }
 
 }

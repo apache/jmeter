@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -39,103 +39,103 @@ import org.xml.sax.SAXException;
 
 /**
  * File data container for XML files Data is accessible via XPath
- * 
+ *
  */
 public class XPathFileContainer {
 
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private NodeList nodeList;
+    private NodeList nodeList;
 
-	private String fileName; // name of the file
+    private String fileName; // name of the file
 
-	private String xpath;
+    private String xpath;
 
-	/** Keeping track of which row is next to be read. */
-	private int nextRow;
-	int getNextRow(){// give access to Test code
-		return nextRow;
-	}
-	
-	private XPathFileContainer()// Not intended to be called directly
-	{
-	}
+    /** Keeping track of which row is next to be read. */
+    private int nextRow;
+    int getNextRow(){// give access to Test code
+        return nextRow;
+    }
 
-	public XPathFileContainer(String file, String xpath) throws FileNotFoundException, IOException,
-			ParserConfigurationException, SAXException, TransformerException {
-		log.debug("XPath(" + file + ") xpath " + xpath + "");
-		fileName = file;
-		this.xpath = xpath;
-		nextRow = 0;
-		load();
-	}
+    private XPathFileContainer()// Not intended to be called directly
+    {
+    }
 
-	private void load() throws IOException, FileNotFoundException, ParserConfigurationException, SAXException,
-			TransformerException {
-		InputStream fis = null;
-		try {
-			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+    public XPathFileContainer(String file, String xpath) throws FileNotFoundException, IOException,
+            ParserConfigurationException, SAXException, TransformerException {
+        log.debug("XPath(" + file + ") xpath " + xpath + "");
+        fileName = file;
+        this.xpath = xpath;
+        nextRow = 0;
+        load();
+    }
 
-			fis = new FileInputStream(fileName);
-			nodeList = XPathAPI.selectNodeList(builder.parse(fis), xpath);
-			log.debug("found " + nodeList.getLength());
+    private void load() throws IOException, FileNotFoundException, ParserConfigurationException, SAXException,
+            TransformerException {
+        InputStream fis = null;
+        try {
+            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 
-		} catch (FileNotFoundException e) {
-			nodeList = null;
-			log.warn(e.toString());
-			throw e;
-		} catch (IOException e) {
-			nodeList = null;
-			log.warn(e.toString());
-			throw e;
-		} catch (ParserConfigurationException e) {
-			nodeList = null;
-			log.warn(e.toString());
-			throw e;
-		} catch (SAXException e) {
-			nodeList = null;
-			log.warn(e.toString());
-			throw e;
-		} catch (TransformerException e) {
-			nodeList = null;
-			log.warn(e.toString());
-			throw e;
-		} finally {
+            fis = new FileInputStream(fileName);
+            nodeList = XPathAPI.selectNodeList(builder.parse(fis), xpath);
+            log.debug("found " + nodeList.getLength());
+
+        } catch (FileNotFoundException e) {
+            nodeList = null;
+            log.warn(e.toString());
+            throw e;
+        } catch (IOException e) {
+            nodeList = null;
+            log.warn(e.toString());
+            throw e;
+        } catch (ParserConfigurationException e) {
+            nodeList = null;
+            log.warn(e.toString());
+            throw e;
+        } catch (SAXException e) {
+            nodeList = null;
+            log.warn(e.toString());
+            throw e;
+        } catch (TransformerException e) {
+            nodeList = null;
+            log.warn(e.toString());
+            throw e;
+        } finally {
             JOrphanUtils.closeQuietly(fis);
-		}
-	}
+        }
+    }
 
-	public String getXPathString(int num) {
-		return nodeList.item(num).getNodeValue();
-	}
+    public String getXPathString(int num) {
+        return nodeList.item(num).getNodeValue();
+    }
 
-	/**
-	 * Returns the next row to the caller, and updates it, allowing for wrap
-	 * round
-	 * 
-	 * @return the first free (unread) row
-	 * 
-	 */
-	public int nextRow() {
-		int row = nextRow;
-		nextRow++;
-		if (nextRow >= size())// 0-based
-		{
-			nextRow = 0;
-		}
-		log.debug(new StringBuffer("Row: ").append(row).toString());
-		return row;
-	}
+    /**
+     * Returns the next row to the caller, and updates it, allowing for wrap
+     * round
+     *
+     * @return the first free (unread) row
+     *
+     */
+    public int nextRow() {
+        int row = nextRow;
+        nextRow++;
+        if (nextRow >= size())// 0-based
+        {
+            nextRow = 0;
+        }
+        log.debug(new StringBuffer("Row: ").append(row).toString());
+        return row;
+    }
 
-	public int size() {
-		return (nodeList == null) ? -1 : nodeList.getLength();
-	}
+    public int size() {
+        return (nodeList == null) ? -1 : nodeList.getLength();
+    }
 
-	/**
-	 * @return the file name for this class
-	 */
-	public String getFileName() {
-		return fileName;
-	}
+    /**
+     * @return the file name for this class
+     */
+    public String getFileName() {
+        return fileName;
+    }
 
 }

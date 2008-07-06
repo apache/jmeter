@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.testelement.property;
@@ -23,32 +23,32 @@ import java.util.Iterator;
 
 public class PropertyIteratorImpl implements PropertyIterator {
 
-	Iterator iter;
+    Iterator iter;
 
-	public PropertyIteratorImpl(Collection value) {
-		iter = value.iterator();
-	}
+    public PropertyIteratorImpl(Collection value) {
+        iter = value.iterator();
+    }
 
-	public PropertyIteratorImpl() {
-	}
+    public PropertyIteratorImpl() {
+    }
 
-	public void setCollection(Collection value) {
-		iter = value.iterator();
-	}
+    public void setCollection(Collection value) {
+        iter = value.iterator();
+    }
 
-	public boolean hasNext() {
-		return iter.hasNext();
-	}
+    public boolean hasNext() {
+        return iter.hasNext();
+    }
 
-	public JMeterProperty next() {
-		return (JMeterProperty) iter.next();
-	}
+    public JMeterProperty next() {
+        return (JMeterProperty) iter.next();
+    }
 
-	/**
-	 * @see org.apache.jmeter.testelement.property.PropertyIterator#remove()
-	 */
-	public void remove() {
-		iter.remove();
-	}
+    /**
+     * @see org.apache.jmeter.testelement.property.PropertyIterator#remove()
+     */
+    public void remove() {
+        iter.remove();
+    }
 
 }

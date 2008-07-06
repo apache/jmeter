@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 package org.apache.jmeter.report.gui;
 
@@ -39,27 +39,27 @@ public class TableGui extends AbstractReportGui implements ChangeListener {
     private JCheckBox medianCheck = new JCheckBox(JMeterUtils.getResString("graph_results_median"));
     private JCheckBox maxCheck = new JCheckBox(JMeterUtils.getResString("aggregate_report_max"));
     private JCheckBox minCheck = new JCheckBox(JMeterUtils.getResString("aggregate_report_min"));
-    private JCheckBox responseRateCheck = 
-    	new JCheckBox(JMeterUtils.getResString("aggregate_report_rate"));
-    private JCheckBox transferRateCheck = 
-    	new JCheckBox(JMeterUtils.getResString("aggregate_report_bandwidth"));
-    private JCheckBox fiftypercentCheck = 
-    	new JCheckBox(JMeterUtils.getResString("monitor_label_left_middle"));
-    private JCheckBox nintypercentCheck = 
-    	new JCheckBox(JMeterUtils.getResString("aggregate_report_90"));
-    private JCheckBox errorRateCheck = 
-    	new JCheckBox(JMeterUtils.getResString("aggregate_report_error"));
+    private JCheckBox responseRateCheck =
+        new JCheckBox(JMeterUtils.getResString("aggregate_report_rate"));
+    private JCheckBox transferRateCheck =
+        new JCheckBox(JMeterUtils.getResString("aggregate_report_bandwidth"));
+    private JCheckBox fiftypercentCheck =
+        new JCheckBox(JMeterUtils.getResString("monitor_label_left_middle"));
+    private JCheckBox nintypercentCheck =
+        new JCheckBox(JMeterUtils.getResString("aggregate_report_90"));
+    private JCheckBox errorRateCheck =
+        new JCheckBox(JMeterUtils.getResString("aggregate_report_error"));
 
     public TableGui() {
-		super();
-		init();
-	}
-    
-	public String getLabelResource() {
-		return "report_table";
-	}
+        super();
+        init();
+    }
 
-	/**
+    public String getLabelResource() {
+        return "report_table";
+    }
+
+    /**
      * Initialize the components and layout of this component.
      */
     private void init() {// called from ctor, so must not be overridable
@@ -71,7 +71,7 @@ public class TableGui extends AbstractReportGui implements ChangeListener {
         pane.setLayout(new BorderLayout(10,10));
         pane.setBackground(Color.white);
         pane.add(this.getNamePanel(),BorderLayout.NORTH);
-        
+
         meanCheck.addChangeListener(this);
         VerticalPanel options = new VerticalPanel(Color.white);
         meanCheck.setBackground(Color.white);
@@ -92,38 +92,38 @@ public class TableGui extends AbstractReportGui implements ChangeListener {
         options.add(fiftypercentCheck);
         options.add(nintypercentCheck);
         options.add(errorRateCheck);
-        
+
         add(pane,BorderLayout.NORTH);
         add(options,BorderLayout.CENTER);
     }
-    
-	public JPopupMenu createPopupMenu() {
+
+    public JPopupMenu createPopupMenu() {
         JPopupMenu pop = new JPopupMenu();
         ReportMenuFactory.addFileMenu(pop);
         ReportMenuFactory.addEditMenu(pop,true);
         return pop;
-	}
+    }
 
-	public TestElement createTestElement() {
-		Table element = new Table();
+    public TestElement createTestElement() {
+        Table element = new Table();
         modifyTestElement(element);
-		return element;
-	}
+        return element;
+    }
 
-	public void modifyTestElement(TestElement element) {
-		this.configureTestElement(element);
-		Table tb = (Table)element;
-		tb.set50Percent(String.valueOf(fiftypercentCheck.isSelected()));
-		tb.set90Percent(String.valueOf(nintypercentCheck.isSelected()));
-		tb.setErrorRate(String.valueOf(errorRateCheck.isSelected()));
-		tb.setMax(String.valueOf(maxCheck.isSelected()));
-		tb.setMean(String.valueOf(meanCheck.isSelected()));
-		tb.setMedian(String.valueOf(medianCheck.isSelected()));
-		tb.setMin(String.valueOf(minCheck.isSelected()));
-		tb.setResponseRate(String.valueOf(responseRateCheck.isSelected()));
-		tb.setTransferRate(String.valueOf(transferRateCheck.isSelected()));
-	}
-	
+    public void modifyTestElement(TestElement element) {
+        this.configureTestElement(element);
+        Table tb = (Table)element;
+        tb.set50Percent(String.valueOf(fiftypercentCheck.isSelected()));
+        tb.set90Percent(String.valueOf(nintypercentCheck.isSelected()));
+        tb.setErrorRate(String.valueOf(errorRateCheck.isSelected()));
+        tb.setMax(String.valueOf(maxCheck.isSelected()));
+        tb.setMean(String.valueOf(meanCheck.isSelected()));
+        tb.setMedian(String.valueOf(medianCheck.isSelected()));
+        tb.setMin(String.valueOf(minCheck.isSelected()));
+        tb.setResponseRate(String.valueOf(responseRateCheck.isSelected()));
+        tb.setTransferRate(String.valueOf(transferRateCheck.isSelected()));
+    }
+
     public void configure(TestElement element) {
         super.configure(element);
         Table tb = (Table)element;
@@ -137,8 +137,8 @@ public class TableGui extends AbstractReportGui implements ChangeListener {
         responseRateCheck.setSelected(tb.getResponseRate());
         transferRateCheck.setSelected(tb.getTransferRate());
     }
-    
+
     public void stateChanged(ChangeEvent e) {
-    	modifyTestElement(ReportGuiPackage.getInstance().getCurrentElement());
+        modifyTestElement(ReportGuiPackage.getInstance().getCurrentElement());
     }
 }

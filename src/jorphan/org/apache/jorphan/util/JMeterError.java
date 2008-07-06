@@ -13,57 +13,57 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jorphan.util;
 
 /**
  * The rationale for this class is to support chained Errors in JDK 1.3
- * 
- * @version $Revision$ $Date$
+ *
+ * @version $Revision$
  */
 public class JMeterError extends Error {
-	private Throwable savedCause; // Support JDK1.4 getCause() on JDK1.3
+    private Throwable savedCause; // Support JDK1.4 getCause() on JDK1.3
 
-	/**
-	 * 
-	 */
-	public JMeterError() {
-		super();
-	}
+    /**
+     *
+     */
+    public JMeterError() {
+        super();
+    }
 
-	/**
-	 * @param s
-	 */
-	public JMeterError(String s) {
-		super(s);
-	}
+    /**
+     * @param s
+     */
+    public JMeterError(String s) {
+        super(s);
+    }
 
-	/**
-	 * @param cause
-	 */
-	public JMeterError(Throwable cause) {
-		// JDK1.4: super(cause);
-		savedCause = cause;
-	}
+    /**
+     * @param cause
+     */
+    public JMeterError(Throwable cause) {
+        // JDK1.4: super(cause);
+        savedCause = cause;
+    }
 
-	/**
-	 * @param message
-	 * @param cause
-	 */
-	public JMeterError(String message, Throwable cause) {
-		// JDK1.4: super(message, cause);
-		super(message);
-		savedCause = cause;
-	}
+    /**
+     * @param message
+     * @param cause
+     */
+    public JMeterError(String message, Throwable cause) {
+        // JDK1.4: super(message, cause);
+        super(message);
+        savedCause = cause;
+    }
 
-	/**
-	 * Local version of getCause() for JDK1.3 support
-	 * 
-	 */
-	public Throwable getCause() {
-		return savedCause;
-	}
+    /**
+     * Local version of getCause() for JDK1.3 support
+     *
+     */
+    public Throwable getCause() {
+        return savedCause;
+    }
 
 }

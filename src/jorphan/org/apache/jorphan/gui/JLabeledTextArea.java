@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jorphan.gui;
@@ -38,177 +38,177 @@ import javax.swing.text.Document;
  * This component also has an efficient event handling mechanism for handling
  * the text changing in the Text Field. The registered change listeners are only
  * called when the text has changed.
- * 
+ *
  */
 public class JLabeledTextArea extends JPanel implements JLabeledField, FocusListener {
-	private JLabel mLabel;
+    private JLabel mLabel;
 
-	private JTextArea mTextArea;
+    private JTextArea mTextArea;
 
-	// Maybe move to vector if MT problems occur
-	private ArrayList mChangeListeners = new ArrayList(3);
+    // Maybe move to vector if MT problems occur
+    private ArrayList mChangeListeners = new ArrayList(3);
 
-	// A temporary cache for the focus listener
-	private String oldValue = "";
+    // A temporary cache for the focus listener
+    private String oldValue = "";
 
-	/**
-	 * Default constructor, The label and the Text field are left empty.
-	 */
-	public JLabeledTextArea() {
-		this("", null);
-	}
+    /**
+     * Default constructor, The label and the Text field are left empty.
+     */
+    public JLabeledTextArea() {
+        this("", null);
+    }
 
-	/**
-	 * Constructs a new component with the label displaying the passed text.
-	 * 
-	 * @param label
-	 *            The text to display in the label.
-	 */
-	public JLabeledTextArea(String label) {
-		this(label, null);
-	}
+    /**
+     * Constructs a new component with the label displaying the passed text.
+     *
+     * @param label
+     *            The text to display in the label.
+     */
+    public JLabeledTextArea(String label) {
+        this(label, null);
+    }
 
-	/**
-	 * Constructs a new component with the label displaying the passed text.
-	 * 
-	 * @param pLabel
-	 *            The text to display in the label.
-	 * @param docModel the document for the text area
-	 */
-	public JLabeledTextArea(String pLabel, Document docModel) {
-		super();
-		mLabel = new JLabel(pLabel);
-		init();
-		if (docModel != null) {
+    /**
+     * Constructs a new component with the label displaying the passed text.
+     *
+     * @param pLabel
+     *            The text to display in the label.
+     * @param docModel the document for the text area
+     */
+    public JLabeledTextArea(String pLabel, Document docModel) {
+        super();
+        mLabel = new JLabel(pLabel);
+        init();
+        if (docModel != null) {
             mTextArea.setDocument(docModel);
-		}
-	}
+        }
+    }
 
-	public List getComponentList() {
-		List comps = new LinkedList();
-		comps.add(mLabel);
-		comps.add(mTextArea);
-		return comps;
-	}
+    public List getComponentList() {
+        List comps = new LinkedList();
+        comps.add(mLabel);
+        comps.add(mTextArea);
+        return comps;
+    }
 
-	public void setDocumentModel(Document docModel) {
-		mTextArea.setDocument(docModel);
-	}
+    public void setDocumentModel(Document docModel) {
+        mTextArea.setDocument(docModel);
+    }
 
-	/**
-	 * Initialises all of the components on this panel.
-	 */
-	private void init() {
-		setLayout(new BorderLayout());
+    /**
+     * Initialises all of the components on this panel.
+     */
+    private void init() {
+        setLayout(new BorderLayout());
 
-		mTextArea = new JTextArea();
-		mTextArea.setRows(4);
-		mTextArea.setLineWrap(true);
-		mTextArea.setWrapStyleWord(true);
-		// Register the handler for focus listening. This handler will
-		// only notify the registered when the text changes from when
-		// the focus is gained to when it is lost.
-		mTextArea.addFocusListener(this);
+        mTextArea = new JTextArea();
+        mTextArea.setRows(4);
+        mTextArea.setLineWrap(true);
+        mTextArea.setWrapStyleWord(true);
+        // Register the handler for focus listening. This handler will
+        // only notify the registered when the text changes from when
+        // the focus is gained to when it is lost.
+        mTextArea.addFocusListener(this);
 
-		// Add the sub components
-		this.add(mLabel, BorderLayout.NORTH);
-		this.add(new JScrollPane(mTextArea), BorderLayout.CENTER);
-	}
+        // Add the sub components
+        this.add(mLabel, BorderLayout.NORTH);
+        this.add(new JScrollPane(mTextArea), BorderLayout.CENTER);
+    }
 
-	/**
-	 * Callback method when the focus to the Text Field component is lost.
-	 * 
-	 * @param pFocusEvent
-	 *            The focus event that occured.
-	 */
-	public void focusLost(FocusEvent pFocusEvent) {
-		// Compare if the value has changed, since we received focus.
-		if (!oldValue.equals(mTextArea.getText())) {
-			notifyChangeListeners();
-		}
-	}
+    /**
+     * Callback method when the focus to the Text Field component is lost.
+     *
+     * @param pFocusEvent
+     *            The focus event that occured.
+     */
+    public void focusLost(FocusEvent pFocusEvent) {
+        // Compare if the value has changed, since we received focus.
+        if (!oldValue.equals(mTextArea.getText())) {
+            notifyChangeListeners();
+        }
+    }
 
-	/**
-	 * Catch what the value was when focus was gained.
-	 */
-	public void focusGained(FocusEvent pFocusEvent) {
-		oldValue = mTextArea.getText();
-	}
+    /**
+     * Catch what the value was when focus was gained.
+     */
+    public void focusGained(FocusEvent pFocusEvent) {
+        oldValue = mTextArea.getText();
+    }
 
-	/**
-	 * Set the text displayed in the label.
-	 * 
-	 * @param pLabel
-	 *            The new label text.
-	 */
-	public void setLabel(String pLabel) {
-		mLabel.setText(pLabel);
-	}
+    /**
+     * Set the text displayed in the label.
+     *
+     * @param pLabel
+     *            The new label text.
+     */
+    public void setLabel(String pLabel) {
+        mLabel.setText(pLabel);
+    }
 
-	/**
-	 * Set the text displayed in the Text Field.
-	 * 
-	 * @param pText
-	 *            The new text to display in the text field.
-	 */
-	public void setText(String pText) {
-		mTextArea.setText(pText);
-	}
+    /**
+     * Set the text displayed in the Text Field.
+     *
+     * @param pText
+     *            The new text to display in the text field.
+     */
+    public void setText(String pText) {
+        mTextArea.setText(pText);
+    }
 
-	/**
-	 * Returns the text in the Text Field.
-	 * 
-	 * @return The text in the Text Field.
-	 */
-	public String getText() {
-		return mTextArea.getText();
-	}
+    /**
+     * Returns the text in the Text Field.
+     *
+     * @return The text in the Text Field.
+     */
+    public String getText() {
+        return mTextArea.getText();
+    }
 
-	/**
-	 * Returns the text of the label.
-	 * 
-	 * @return The text of the label.
-	 */
-	public String getLabel() {
-		return mLabel.getText();
-	}
+    /**
+     * Returns the text of the label.
+     *
+     * @return The text of the label.
+     */
+    public String getLabel() {
+        return mLabel.getText();
+    }
 
-	public void setEnabled(boolean enable) {
-		super.setEnabled(enable);
-		mTextArea.setEnabled(enable);
-	}
+    public void setEnabled(boolean enable) {
+        super.setEnabled(enable);
+        mTextArea.setEnabled(enable);
+    }
 
-	/**
-	 * Adds a change listener, that will be notified when the text in the text
-	 * field is changed. The ChangeEvent that will be passed to registered
-	 * listeners will contain this object as the source, allowing the new text
-	 * to be extracted using the {@link #getText() getText} method.
-	 * 
-	 * @param pChangeListener
-	 *            The listener to add
-	 */
-	public void addChangeListener(ChangeListener pChangeListener) {
-		mChangeListeners.add(pChangeListener);
-	}
+    /**
+     * Adds a change listener, that will be notified when the text in the text
+     * field is changed. The ChangeEvent that will be passed to registered
+     * listeners will contain this object as the source, allowing the new text
+     * to be extracted using the {@link #getText() getText} method.
+     *
+     * @param pChangeListener
+     *            The listener to add
+     */
+    public void addChangeListener(ChangeListener pChangeListener) {
+        mChangeListeners.add(pChangeListener);
+    }
 
-	/**
-	 * Removes a change listener.
-	 * 
-	 * @param pChangeListener
-	 *            The change listener to remove.
-	 */
-	public void removeChangeListener(ChangeListener pChangeListener) {
-		mChangeListeners.remove(pChangeListener);
-	}
+    /**
+     * Removes a change listener.
+     *
+     * @param pChangeListener
+     *            The change listener to remove.
+     */
+    public void removeChangeListener(ChangeListener pChangeListener) {
+        mChangeListeners.remove(pChangeListener);
+    }
 
-	/**
-	 * Notify all registered change listeners that the text in the text field
-	 * has changed.
-	 */
-	private void notifyChangeListeners() {
-		ChangeEvent ce = new ChangeEvent(this);
-		for (int index = 0; index < mChangeListeners.size(); index++) {
-			((ChangeListener) mChangeListeners.get(index)).stateChanged(ce);
-		}
-	}
+    /**
+     * Notify all registered change listeners that the text in the text field
+     * has changed.
+     */
+    private void notifyChangeListeners() {
+        ChangeEvent ce = new ChangeEvent(this);
+        for (int index = 0; index < mChangeListeners.size(); index++) {
+            ((ChangeListener) mChangeListeners.get(index)).stateChanged(ce);
+        }
+    }
 }

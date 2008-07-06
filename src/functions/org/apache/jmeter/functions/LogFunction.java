@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -35,147 +35,147 @@ import org.apache.log.Priority;
  * <p>
  * Function to log a message.
  * </p>
- * 
+ *
  * <p>
  * Parameters:
  * <ul>
- * <li>string value</li> 
- * <li>log level (optional; defaults to INFO; or DEBUG if unrecognised; or can use OUT or ERR)</li> 
+ * <li>string value</li>
+ * <li>log level (optional; defaults to INFO; or DEBUG if unrecognised; or can use OUT or ERR)</li>
  * <li>throwable message (optional)</li>
  * <li>comment (optional)</li>
  * </ul>
  * </p>
  * Returns: - the input string
- * 
+ *
  */
 public class LogFunction extends AbstractFunction implements Serializable {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final long serialVersionUID = 232L;
-	
-	private static final List desc = new LinkedList();
+    private static final long serialVersionUID = 232L;
 
-	private static final String KEY = "__log"; //$NON-NLS-1$
+    private static final List desc = new LinkedList();
 
-	// Number of parameters expected - used to reject invalid calls
-	private static final int MIN_PARAMETER_COUNT = 1;
+    private static final String KEY = "__log"; //$NON-NLS-1$
 
-	private static final int MAX_PARAMETER_COUNT = 4;
-	static {
-		desc.add(JMeterUtils.getResString("log_function_string_ret"));    //$NON-NLS-1$
-		desc.add(JMeterUtils.getResString("log_function_level"));     //$NON-NLS-1$
-		desc.add(JMeterUtils.getResString("log_function_throwable")); //$NON-NLS-1$
-		desc.add(JMeterUtils.getResString("log_function_comment"));   //$NON-NLS-1$
-	}
+    // Number of parameters expected - used to reject invalid calls
+    private static final int MIN_PARAMETER_COUNT = 1;
 
-	private static final String DEFAULT_PRIORITY = "INFO"; //$NON-NLS-1$
+    private static final int MAX_PARAMETER_COUNT = 4;
+    static {
+        desc.add(JMeterUtils.getResString("log_function_string_ret"));    //$NON-NLS-1$
+        desc.add(JMeterUtils.getResString("log_function_level"));     //$NON-NLS-1$
+        desc.add(JMeterUtils.getResString("log_function_throwable")); //$NON-NLS-1$
+        desc.add(JMeterUtils.getResString("log_function_comment"));   //$NON-NLS-1$
+    }
 
-	private static final String DEFAULT_SEPARATOR = " : "; //$NON-NLS-1$
+    private static final String DEFAULT_PRIORITY = "INFO"; //$NON-NLS-1$
 
-	private Object[] values;
+    private static final String DEFAULT_SEPARATOR = " : "; //$NON-NLS-1$
 
-	public LogFunction() {
-	}
+    private Object[] values;
 
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
+    public LogFunction() {
+    }
 
-	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
-			throws InvalidVariableException {
-		String stringToLog = ((CompoundVariable) values[0]).execute();
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 
-		String priorityString;
-		if (values.length > 1) { // We have a default
-			priorityString = ((CompoundVariable) values[1]).execute();
-			if (priorityString.length() == 0) {
-				priorityString = DEFAULT_PRIORITY;
-			}
-		} else {
-			priorityString = DEFAULT_PRIORITY;
-		}
+    public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
+            throws InvalidVariableException {
+        String stringToLog = ((CompoundVariable) values[0]).execute();
 
-		Throwable t = null;
-		if (values.length > 2) { // Throwable wanted
-			String value = ((CompoundVariable) values[2]).execute();
-			if (value.length() > 0) {
-			    t = new Throwable(value);
-			}
-		}
+        String priorityString;
+        if (values.length > 1) { // We have a default
+            priorityString = ((CompoundVariable) values[1]).execute();
+            if (priorityString.length() == 0) {
+                priorityString = DEFAULT_PRIORITY;
+            }
+        } else {
+            priorityString = DEFAULT_PRIORITY;
+        }
 
-		String comment = "";
-		if (values.length > 3) { // Comment wanted
-			comment = ((CompoundVariable) values[3]).execute();
-		}
-		
-		logDetails(log, stringToLog, priorityString, t, comment);
+        Throwable t = null;
+        if (values.length > 2) { // Throwable wanted
+            String value = ((CompoundVariable) values[2]).execute();
+            if (value.length() > 0) {
+                t = new Throwable(value);
+            }
+        }
 
-		return stringToLog;
+        String comment = "";
+        if (values.length > 3) { // Comment wanted
+            comment = ((CompoundVariable) values[3]).execute();
+        }
 
-	}
+        logDetails(log, stringToLog, priorityString, t, comment);
 
-	// Common output function
-	private static void printDetails(java.io.PrintStream ps, String s, Throwable t, String c) {
-		String tn = Thread.currentThread().getName();
+        return stringToLog;
 
-		StringBuffer sb = new StringBuffer(80);
-		sb.append("Log: ");
-		sb.append(tn);
-		if (c.length()>0){
-			sb.append(" ");
-			sb.append(c);
-		} else {
-			sb.append(DEFAULT_SEPARATOR);
-		}
-		sb.append(s);
-		if (t != null) {
-			sb.append(" ");
-			ps.print(sb.toString());
-			t.printStackTrace(ps);
-		} else {
-			ps.println(sb.toString());
-		}
-	}
+    }
 
-	// Routine to perform the output (also used by __logn() function)
-	static void logDetails(Logger l, String s, String prio, Throwable t, String c) {
-		if (prio.equalsIgnoreCase("OUT")) //$NON-NLS-1
-		{
-			printDetails(System.out, s, t, c);
-		} else if (prio.equalsIgnoreCase("ERR")) //$NON-NLS-1
-		{
-			printDetails(System.err, s, t, c);
-		} else {
-			// N.B. if the string is not recognised, DEBUG is assumed
-			Priority p = Priority.getPriorityForName(prio);
-			if (log.isPriorityEnabled(p)) {// Thread method is potentially expensive
-				String tn = Thread.currentThread().getName();
-				StringBuffer sb = new StringBuffer(40);
-				sb.append(tn);
-				if (c.length()>0){
-					sb.append(" ");
-					sb.append(c);
-				} else {
-					sb.append(DEFAULT_SEPARATOR);
-				}
-				sb.append(s);
-				log.log(p, sb.toString(), t);
-			}
-		}
+    // Common output function
+    private static void printDetails(java.io.PrintStream ps, String s, Throwable t, String c) {
+        String tn = Thread.currentThread().getName();
 
-	}
+        StringBuffer sb = new StringBuffer(80);
+        sb.append("Log: ");
+        sb.append(tn);
+        if (c.length()>0){
+            sb.append(" ");
+            sb.append(c);
+        } else {
+            sb.append(DEFAULT_SEPARATOR);
+        }
+        sb.append(s);
+        if (t != null) {
+            sb.append(" ");
+            ps.print(sb.toString());
+            t.printStackTrace(ps);
+        } else {
+            ps.println(sb.toString());
+        }
+    }
 
-	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
-		checkParameterCount(parameters, MIN_PARAMETER_COUNT, MAX_PARAMETER_COUNT);
-		values = parameters.toArray();
-	}
+    // Routine to perform the output (also used by __logn() function)
+    static void logDetails(Logger l, String s, String prio, Throwable t, String c) {
+        if (prio.equalsIgnoreCase("OUT")) //$NON-NLS-1
+        {
+            printDetails(System.out, s, t, c);
+        } else if (prio.equalsIgnoreCase("ERR")) //$NON-NLS-1
+        {
+            printDetails(System.err, s, t, c);
+        } else {
+            // N.B. if the string is not recognised, DEBUG is assumed
+            Priority p = Priority.getPriorityForName(prio);
+            if (log.isPriorityEnabled(p)) {// Thread method is potentially expensive
+                String tn = Thread.currentThread().getName();
+                StringBuffer sb = new StringBuffer(40);
+                sb.append(tn);
+                if (c.length()>0){
+                    sb.append(" ");
+                    sb.append(c);
+                } else {
+                    sb.append(DEFAULT_SEPARATOR);
+                }
+                sb.append(s);
+                log.log(p, sb.toString(), t);
+            }
+        }
 
-	public String getReferenceKey() {
-		return KEY;
-	}
+    }
 
-	public List getArgumentDesc() {
-		return desc;
-	}
+    public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
+        checkParameterCount(parameters, MIN_PARAMETER_COUNT, MAX_PARAMETER_COUNT);
+        values = parameters.toArray();
+    }
+
+    public String getReferenceKey() {
+        return KEY;
+    }
+
+    public List getArgumentDesc() {
+        return desc;
+    }
 
 }

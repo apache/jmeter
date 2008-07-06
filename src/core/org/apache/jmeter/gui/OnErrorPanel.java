@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.gui;
@@ -29,65 +29,65 @@ import org.apache.jmeter.testelement.OnErrorTestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
 public class OnErrorPanel extends JPanel {
-	// Sampler error action buttons
-	private JRadioButton continueBox;
+    // Sampler error action buttons
+    private JRadioButton continueBox;
 
-	private JRadioButton stopThrdBox;
+    private JRadioButton stopThrdBox;
 
-	private JRadioButton stopTestBox;
+    private JRadioButton stopTestBox;
 
-	private JPanel createOnErrorPanel() {
-		JPanel panel = new JPanel();
-		panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("sampler_on_error_action"))); //$NON-NLS-1$
+    private JPanel createOnErrorPanel() {
+        JPanel panel = new JPanel();
+        panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("sampler_on_error_action"))); //$NON-NLS-1$
 
-		ButtonGroup group = new ButtonGroup();
+        ButtonGroup group = new ButtonGroup();
 
-		continueBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_continue")); //$NON-NLS-1$
-		group.add(continueBox);
-		continueBox.setSelected(true);
-		panel.add(continueBox);
+        continueBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_continue")); //$NON-NLS-1$
+        group.add(continueBox);
+        continueBox.setSelected(true);
+        panel.add(continueBox);
 
-		stopThrdBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_stop_thread")); //$NON-NLS-1$
-		group.add(stopThrdBox);
-		panel.add(stopThrdBox);
+        stopThrdBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_stop_thread")); //$NON-NLS-1$
+        group.add(stopThrdBox);
+        panel.add(stopThrdBox);
 
-		stopTestBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_stop_test")); //$NON-NLS-1$
-		group.add(stopTestBox);
-		panel.add(stopTestBox);
+        stopTestBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_stop_test")); //$NON-NLS-1$
+        group.add(stopTestBox);
+        panel.add(stopTestBox);
 
-		return panel;
-	}
+        return panel;
+    }
 
-	/**
-	 * Create a new NamePanel with the default name.
-	 */
-	public OnErrorPanel() {
-		init();
-	}
+    /**
+     * Create a new NamePanel with the default name.
+     */
+    public OnErrorPanel() {
+        init();
+    }
 
-	/**
-	 * Initialize the GUI components and layout.
-	 */
-	private void init() {
-		setLayout(new BorderLayout(5, 0));
-		add(createOnErrorPanel());
-	}
+    /**
+     * Initialize the GUI components and layout.
+     */
+    private void init() {
+        setLayout(new BorderLayout(5, 0));
+        add(createOnErrorPanel());
+    }
 
-	public void configure(int errorAction) {
-		stopTestBox.setSelected(errorAction == OnErrorTestElement.ON_ERROR_STOPTEST);
-		stopThrdBox.setSelected(errorAction == OnErrorTestElement.ON_ERROR_STOPTHREAD);
-		continueBox.setSelected(errorAction == OnErrorTestElement.ON_ERROR_CONTINUE);
-	}
+    public void configure(int errorAction) {
+        stopTestBox.setSelected(errorAction == OnErrorTestElement.ON_ERROR_STOPTEST);
+        stopThrdBox.setSelected(errorAction == OnErrorTestElement.ON_ERROR_STOPTHREAD);
+        continueBox.setSelected(errorAction == OnErrorTestElement.ON_ERROR_CONTINUE);
+    }
 
-	public int getOnErrorSetting() {
-		if (stopTestBox.isSelected()) {
-		    return OnErrorTestElement.ON_ERROR_STOPTEST;
-		}
-		if (stopThrdBox.isSelected()) {
-		    return OnErrorTestElement.ON_ERROR_STOPTHREAD;
-		}
+    public int getOnErrorSetting() {
+        if (stopTestBox.isSelected()) {
+            return OnErrorTestElement.ON_ERROR_STOPTEST;
+        }
+        if (stopThrdBox.isSelected()) {
+            return OnErrorTestElement.ON_ERROR_STOPTHREAD;
+        }
 
-		// Defaults to continue
-		return OnErrorTestElement.ON_ERROR_CONTINUE;
-	}
+        // Defaults to continue
+        return OnErrorTestElement.ON_ERROR_CONTINUE;
+    }
 }

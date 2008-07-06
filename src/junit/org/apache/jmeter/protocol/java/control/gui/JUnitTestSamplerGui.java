@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
 */
 
 package org.apache.jmeter.protocol.java.control.gui;
@@ -50,9 +50,9 @@ import org.apache.log.Logger;
 /**
  * The <code>JUnitTestSamplerGui</code> class provides the user interface
  * for the {@link JUnitSampler}.
- * 
+ *
  */
-public class JUnitTestSamplerGui extends AbstractSamplerGui 
+public class JUnitTestSamplerGui extends AbstractSamplerGui
 implements ChangeListener, ActionListener
 {
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -61,12 +61,12 @@ implements ChangeListener, ActionListener
     private static final String CLASSNAMECOMBO = "classnamecombo"; //$NON-NLS-1$
     private static final String METHODCOMBO = "methodcombo"; //$NON-NLS-1$
     private static final String PREFIX = "test"; //$NON-NLS-1$
-    
+
     // Names of JUnit methods
     private static final String ONETIMESETUP = "oneTimeSetUp"; //$NON-NLS-1$
     private static final String ONETIMETEARDOWN = "oneTimeTearDown"; //$NON-NLS-1$
     private static final String SUITE = "suite"; //$NON-NLS-1$
-    
+
     private static final String[] SPATHS;
 
     static {
@@ -102,7 +102,7 @@ implements ChangeListener, ActionListener
     private JLabeledTextField failureMsg =
         new JLabeledTextField(
             JMeterUtils.getResString("junit_failure_msg")); //$NON-NLS-1$
-    
+
     private JLabeledTextField errorMsg =
         new JLabeledTextField(
             JMeterUtils.getResString("junit_error_msg")); //$NON-NLS-1$
@@ -126,16 +126,16 @@ implements ChangeListener, ActionListener
     private JCheckBox doSetup = new JCheckBox(JMeterUtils.getResString("junit_do_setup_teardown")); //$NON-NLS-1$
     private JCheckBox appendError = new JCheckBox(JMeterUtils.getResString("junit_append_error")); //$NON-NLS-1$
     private JCheckBox appendExc = new JCheckBox(JMeterUtils.getResString("junit_append_exception")); //$NON-NLS-1$
-    
+
     /** A combo box allowing the user to choose a test class. */
     private JComboBox classnameCombo;
     private JComboBox methodName;
     private transient TestCase TESTCLASS = null;
     private List METHODLIST = null;
-    
+
     private transient ClassFilter FILTER = new ClassFilter();
     private List CLASSLIST = null;
-    
+
     /**
      * Constructor for JUnitTestSamplerGui
      */
@@ -157,13 +157,13 @@ implements ChangeListener, ActionListener
     {
         setLayout(new BorderLayout(0, 5));
         setBorder(makeBorder());
-        
+
         add(makeTitlePanel(), BorderLayout.NORTH);
 
 
         add(createClassPanel(), BorderLayout.CENTER);
     }
-    
+
     private JPanel createClassPanel()
     {
         METHODLIST = new java.util.ArrayList();
@@ -179,7 +179,7 @@ implements ChangeListener, ActionListener
         catch (IOException e)
         {
             log.error("Exception getting interfaces.", e);
-        } 
+        }
 
         JLabel label =
             new JLabel(JMeterUtils.getResString("protocol_java_classname")); //$NON-NLS-1$
@@ -189,7 +189,7 @@ implements ChangeListener, ActionListener
         classnameCombo.setName(CLASSNAMECOMBO);
         classnameCombo.setEditable(false);
         label.setLabelFor(classnameCombo);
-        
+
         if (FILTER != null && FILTER.size() > 0) {
             methodName = new JComboBox(FILTER.filterArray(METHODLIST));
         } else {
@@ -198,7 +198,7 @@ implements ChangeListener, ActionListener
         methodName.addActionListener(this);
         methodName.setName(METHODCOMBO);
         methodLabel.setLabelFor(methodName);
-        
+
         VerticalPanel panel = new VerticalPanel();
         panel.add(filterpkg);
         panel.add(label);
@@ -226,11 +226,11 @@ implements ChangeListener, ActionListener
     }
 
     private void initGui(){ // TODO - unfinished?
-    	appendError.setSelected(false);
-    	appendExc.setSelected(false);
-    	doSetup.setSelected(false);
-    	filterpkg.setText(""); //$NON-NLS-1$
-    	constructorLabel.setText(""); //$NON-NLS-1$
+        appendError.setSelected(false);
+        appendExc.setSelected(false);
+        doSetup.setSelected(false);
+        filterpkg.setText(""); //$NON-NLS-1$
+        constructorLabel.setText(""); //$NON-NLS-1$
         successCode.setText(JMeterUtils.getResString("junit_success_default_code")); //$NON-NLS-1$
         successMsg.setText(JMeterUtils.getResString("junit_success_default_msg")); //$NON-NLS-1$
         failureCode.setText(JMeterUtils.getResString("junit_failure_default_code")); //$NON-NLS-1$
@@ -240,11 +240,11 @@ implements ChangeListener, ActionListener
     }
 
     public void clearGui() {
-		super.clearGui();
-		initGui();
-	}
-    
-    /* Implements JMeterGuiComponent.createTestElement() */ 
+        super.clearGui();
+        initGui();
+    }
+
+    /* Implements JMeterGuiComponent.createTestElement() */
     public TestElement createTestElement()
     {
         JUnitSampler sampler = new JUnitSampler();
@@ -257,7 +257,7 @@ implements ChangeListener, ActionListener
     {
         JUnitSampler sampler = (JUnitSampler)el;
         configureTestElement(sampler);
-        if (classnameCombo.getSelectedItem() != null && 
+        if (classnameCombo.getSelectedItem() != null &&
                 classnameCombo.getSelectedItem() instanceof String) {
             sampler.setClassname((String)classnameCombo.getSelectedItem());
         }
@@ -320,7 +320,7 @@ implements ChangeListener, ActionListener
         appendError.setSelected(sampler.getAppendError());
         appendExc.setSelected(sampler.getAppendException());
     }
-    
+
     public void instantiateClass(){
         String className =
             ((String) classnameCombo.getSelectedItem());
@@ -335,12 +335,12 @@ implements ChangeListener, ActionListener
     }
 
     public void showErrorDialog() {
-        JOptionPane.showConfirmDialog(this, 
+        JOptionPane.showConfirmDialog(this,
                 JMeterUtils.getResString("junit_constructor_error"),  //$NON-NLS-1$
                 "Warning",
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
     }
-    
+
     public void configureMethodCombo(){
         if (TESTCLASS != null) {
             clearMethodCombo();
@@ -352,12 +352,12 @@ implements ChangeListener, ActionListener
             methodName.repaint();
         }
     }
-    
+
     public void clearMethodCombo(){
         methodName.removeAllItems();
         METHODLIST.clear();
     }
-    
+
     public Method[] getMethods(Object obj, List list)
     {
         Method[] meths = obj.getClass().getMethods();
@@ -373,9 +373,9 @@ implements ChangeListener, ActionListener
             Method[] rmeth = new Method[list.size()];
             return (Method[])list.toArray(rmeth);
         }
-		return new Method[0];
+        return new Method[0];
     }
-    
+
     public String[] getMethodNames(Method[] meths)
     {
         String[] names = new String[meths.length];
@@ -384,19 +384,19 @@ implements ChangeListener, ActionListener
         }
         return names;
     }
-    
+
     public Class[] filterClasses(Class[] clz) {
         if (clz != null && clz.length > 0){
             Class[] nclz = null;
             return nclz;
         }
-		return clz;
+        return clz;
     }
-  
+
     /**
      * Handle action events for this component.  This method currently handles
      * events for the classname combo box.
-     * 
+     *
      * @param evt  the ActionEvent to be handled
      */
     public void actionPerformed(ActionEvent evt)
@@ -406,7 +406,7 @@ implements ChangeListener, ActionListener
             instantiateClass();
         }
     }
-    
+
     /**
      * the current implementation checks to see if the source
      * of the event is the filterpkg field.

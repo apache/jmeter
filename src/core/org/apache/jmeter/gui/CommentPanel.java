@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.gui;
@@ -31,42 +31,42 @@ import org.apache.jmeter.util.JMeterUtils;
  *
  */
 public class CommentPanel extends JPanel {
-	/** A text field containing the comment. */
-	private JTextArea commentField;
+    /** A text field containing the comment. */
+    private JTextArea commentField;
 
-	/**
-	 * Create a new NamePanel with the default name.
-	 */
-	public CommentPanel() {
-		init();
-	}
+    /**
+     * Create a new NamePanel with the default name.
+     */
+    public CommentPanel() {
+        init();
+    }
 
-	/**
-	 * Initialize the GUI components and layout.
-	 */
-	private void init() {
-		setLayout(new BorderLayout(5, 0));
+    /**
+     * Initialize the GUI components and layout.
+     */
+    private void init() {
+        setLayout(new BorderLayout(5, 0));
 
-		commentField = new JTextArea();
-		JLabel commentLabel = new JLabel(JMeterUtils.getResString("testplan_comments")); //$NON-NLS-1$
-		commentLabel.setLabelFor(commentField);
+        commentField = new JTextArea();
+        JLabel commentLabel = new JLabel(JMeterUtils.getResString("testplan_comments")); //$NON-NLS-1$
+        commentLabel.setLabelFor(commentField);
 
-		JPanel commentPanel = new JPanel();
-		commentPanel.setLayout(new BorderLayout(0, 5));
-		commentPanel.add(commentLabel,BorderLayout.WEST);
-		commentPanel.add(commentField,BorderLayout.CENTER);
-		add(commentPanel);
-	}
+        JPanel commentPanel = new JPanel();
+        commentPanel.setLayout(new BorderLayout(0, 5));
+        commentPanel.add(commentLabel,BorderLayout.WEST);
+        commentPanel.add(commentField,BorderLayout.CENTER);
+        add(commentPanel);
+    }
 
-	public void setText(String comment) {
-		this.commentField.setText(comment);
-	}
+    public void setText(String comment) {
+        this.commentField.setText(comment);
+    }
 
-	public String getText() {
-		return this.commentField.getText();
-	}
+    public String getText() {
+        return this.commentField.getText();
+    }
 
-	public void clearGui() {
-		commentField.setText(""); // $NON-NLS-1$
-	}
+    public void clearGui() {
+        commentField.setText(""); // $NON-NLS-1$
+    }
 }

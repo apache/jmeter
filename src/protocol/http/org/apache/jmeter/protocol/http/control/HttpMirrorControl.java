@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.control;
@@ -28,79 +28,79 @@ import org.apache.jmeter.util.JMeterUtils;
  * Test element that implements the Workbench HTTP Mirror function
  */
 public class HttpMirrorControl extends AbstractTestElement {
-    
-	private transient HttpMirrorServer server;
 
-	private static final int DEFAULT_PORT = 8080;
+    private transient HttpMirrorServer server;
+
+    private static final int DEFAULT_PORT = 8080;
 
     // and as a string
-	public static final String DEFAULT_PORT_S =
+    public static final String DEFAULT_PORT_S =
         Integer.toString(DEFAULT_PORT);// Used by GUI
 
-	public static final String PORT = "HttpMirrorControlGui.port"; // $NON-NLS-1$
+    public static final String PORT = "HttpMirrorControlGui.port"; // $NON-NLS-1$
 
-	public HttpMirrorControl() {
-		initPort(DEFAULT_PORT);
-	}
+    public HttpMirrorControl() {
+        initPort(DEFAULT_PORT);
+    }
 
-	public HttpMirrorControl(int port) {
-		initPort(port);
-	}
+    public HttpMirrorControl(int port) {
+        initPort(port);
+    }
 
-	private void initPort(int port){
-		setProperty(new IntegerProperty(PORT, port));	
-	}
+    private void initPort(int port){
+        setProperty(new IntegerProperty(PORT, port));
+    }
 
-	public void setPort(int port) {
-		initPort(port);
-	}
+    public void setPort(int port) {
+        initPort(port);
+    }
 
-	public void setPort(String port) {
-		setProperty(PORT, port);
-	}
-	
-	public String getClassLabel() {
-		return JMeterUtils.getResString("httpmirror_title"); //$NON-NLS-1$
-	}
+    public void setPort(String port) {
+        setProperty(PORT, port);
+    }
+
+    public String getClassLabel() {
+        return JMeterUtils.getResString("httpmirror_title"); //$NON-NLS-1$
+    }
 
 
-	public int getPort() {
-		return getPropertyAsInt(PORT);
-	}
+    public int getPort() {
+        return getPropertyAsInt(PORT);
+    }
 
-	public String getPortString() {
-		return getPropertyAsString(PORT);
-	}
+    public String getPortString() {
+        return getPropertyAsString(PORT);
+    }
 
-	public int getDefaultPort() {
-		return DEFAULT_PORT;
-	}
+    public int getDefaultPort() {
+        return DEFAULT_PORT;
+    }
 
-	public Class getGuiClass() {
-		return org.apache.jmeter.protocol.http.control.gui.HttpMirrorControlGui.class;
-	}
+    public Class getGuiClass() {
+        return org.apache.jmeter.protocol.http.control.gui.HttpMirrorControlGui.class;
+    }
 
-	public void startHttpMirror() {
-		server = new HttpMirrorServer(getPort());
-		server.start();
-	}
+    public void startHttpMirror() {
+        server = new HttpMirrorServer(getPort());
+        server.start();
+    }
 
-	public void stopHttpMirror() {
-		if (server != null) {
-			server.stopServer();
-			try {
-				server.join(1000); // wait for server to stop
-			} catch (InterruptedException e) {
-			}
-			server = null;
-		}
-	}
+    public void stopHttpMirror() {
+        if (server != null) {
+            server.stopServer();
+            try {
+                server.join(1000); // wait for server to stop
+            } catch (InterruptedException e) {
+            }
+            server = null;
+        }
+    }
 
-	public boolean canRemove() {
-		return null == server;
-	}
-	
-	public boolean isServerAlive(){
-		return server != null && server.isAlive();
-	}
+    public boolean canRemove() {
+        return null == server;
+    }
+
+    public boolean isServerAlive(){
+        return server != null && server.isAlive();
+    }
 }

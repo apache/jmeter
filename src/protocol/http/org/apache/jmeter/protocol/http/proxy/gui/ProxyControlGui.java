@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.proxy.gui;
@@ -66,776 +66,776 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComponent, ActionListener, ItemListener,
-		KeyListener, UnsharedComponent {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+        KeyListener, UnsharedComponent {
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final long serialVersionUID = 232L;
+    private static final long serialVersionUID = 232L;
 
-	private JTextField portField;
+    private JTextField portField;
 
-	/**
-	 * Used to indicate that HTTP request headers should be captured. The
-	 * default is to capture the HTTP request headers, which are specific to
-	 * particular browser settings.
-	 */
-	private JCheckBox httpHeaders;
+    /**
+     * Used to indicate that HTTP request headers should be captured. The
+     * default is to capture the HTTP request headers, which are specific to
+     * particular browser settings.
+     */
+    private JCheckBox httpHeaders;
 
-	/**
-	 * Whether to group requests together based on inactivity separation periods --
-	 * and how to handle such grouping afterwards.
-	 */
-	private JComboBox groupingMode;
+    /**
+     * Whether to group requests together based on inactivity separation periods --
+     * and how to handle such grouping afterwards.
+     */
+    private JComboBox groupingMode;
 
-	/**
-	 * Add an Assertion to the first sample of each set
-	 */
-	private JCheckBox addAssertions;
+    /**
+     * Add an Assertion to the first sample of each set
+     */
+    private JCheckBox addAssertions;
 
-	/**
-	 * Set/clear the Use Keep-Alive box on the samplers (default is true)
-	 */
-	private JCheckBox useKeepAlive;
+    /**
+     * Set/clear the Use Keep-Alive box on the samplers (default is true)
+     */
+    private JCheckBox useKeepAlive;
 
-	/*
-	 * Use regexes to match the source data
-	 */
-	private JCheckBox regexMatch;
+    /*
+     * Use regexes to match the source data
+     */
+    private JCheckBox regexMatch;
 
-	/**
-	 * The list of sampler type names to choose from
-	 */
-	private JComboBox samplerTypeName;
+    /**
+     * The list of sampler type names to choose from
+     */
+    private JComboBox samplerTypeName;
 
-	/**
-	 * Set/clear the Redirect automatically box on the samplers (default is false)
-	 */
-	private JCheckBox samplerRedirectAutomatically;
+    /**
+     * Set/clear the Redirect automatically box on the samplers (default is false)
+     */
+    private JCheckBox samplerRedirectAutomatically;
 
-	/**
-	 * Set/clear the Follow-redirects box on the samplers (default is true)
-	 */
-	private JCheckBox samplerFollowRedirects;
-
-	/**
-	 * Set/clear the Download images box on the samplers (default is false)
-	 */
-	private JCheckBox samplerDownloadImages;
-
-	/*
-	 * Spoof the client into thinking that it is communicating with http
-	 * even if it is really https.
-	 */
-	private JCheckBox httpsSpoof;
-
-	private JTextField httpsMatch;
-	
-	/**
-	 * Regular expression to include results based on content type
-	 */
-	private JTextField contentTypeInclude;
-
-	/**
-	 * Regular expression to exclude results based on content type
-	 */
-	private JTextField contentTypeExclude;
-	
-	/**
-	 * List of available target controllers
-	 */
-	private JComboBox targetNodes;
-
-	private DefaultComboBoxModel targetNodesModel;
-
-	private ProxyControl model;
-
-	private JTable excludeTable;
-
-	private PowerTableModel excludeModel;
-
-	private JTable includeTable;
-
-	private PowerTableModel includeModel;
-
-	private static final String CHANGE_TARGET = "change_target"; // $NON-NLS-1$
-
-	private JButton stop, start, restart;
-
-	//+ action names
-	private static final String STOP = "stop"; // $NON-NLS-1$
-
-	private static final String START = "start"; // $NON-NLS-1$
-
-	private static final String RESTART = "restart"; // $NON-NLS-1$
-
-	private static final String ENABLE_RESTART = "enable_restart"; // $NON-NLS-1$
-
-	private static final String ADD_INCLUDE = "add_include"; // $NON-NLS-1$
-
-	private static final String ADD_EXCLUDE = "add_exclude"; // $NON-NLS-1$
-
-	private static final String DELETE_INCLUDE = "delete_include"; // $NON-NLS-1$
-
-	private static final String DELETE_EXCLUDE = "delete_exclude"; // $NON-NLS-1$
-	//- action names
-
-	private static final String INCLUDE_COL = JMeterUtils.getResString("patterns_to_include"); // $NON-NLS-1$
-
-	private static final String EXCLUDE_COL = JMeterUtils.getResString("patterns_to_exclude"); // $NON-NLS-1$
-
-	// Used by itemListener
-	private static final String PORTFIELD = "portField"; // $NON-NLS-1$
-
-	public ProxyControlGui() {
-		super();
-		log.debug("Creating ProxyControlGui");
-		init();
-	}
-
-	public TestElement createTestElement() {
-		model = makeProxyControl();
-		log.debug("creating/configuring model = " + model);
-		modifyTestElement(model);
-		return model;
-	}
-
-	protected ProxyControl makeProxyControl() {
-		ProxyControl local = new ProxyControl();
-		return local;
-	}
-
-	/**
-	 * Modifies a given TestElement to mirror the data in the gui components.
-	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-	 */
-	public void modifyTestElement(TestElement el) {
-		if (excludeTable.isEditing()) {// Bug 42948
-			excludeTable.getCellEditor().stopCellEditing();
-		}
-		if (includeTable.isEditing()) {// Bug 42948
-			includeTable.getCellEditor().stopCellEditing();
-		}
-		configureTestElement(el);
-		if (el instanceof ProxyControl) {
-			model = (ProxyControl) el;
-			model.setPort(portField.getText());
-			setIncludeListInProxyControl(model);
-			setExcludeListInProxyControl(model);
-			model.setCaptureHttpHeaders(httpHeaders.isSelected());
-			model.setGroupingMode(groupingMode.getSelectedIndex());
-			model.setAssertions(addAssertions.isSelected());
-			model.setSamplerTypeName(samplerTypeName.getSelectedIndex());
-			model.setSamplerRedirectAutomatically(samplerRedirectAutomatically.isSelected());
-			model.setSamplerFollowRedirects(samplerFollowRedirects.isSelected());
-			model.setUseKeepAlive(useKeepAlive.isSelected());
-			model.setSamplerDownloadImages(samplerDownloadImages.isSelected());
-			model.setRegexMatch(regexMatch.isSelected());
-			model.setHttpsSpoof(httpsSpoof.isSelected());
-			model.setHttpsSpoofMatch(httpsMatch.getText());
-			model.setContentTypeInclude(contentTypeInclude.getText());
-			model.setContentTypeExclude(contentTypeExclude.getText());
-			TreeNodeWrapper nw = (TreeNodeWrapper) targetNodes.getSelectedItem();
-			if (nw == null) {
-				model.setTarget(null);
-			} else {
-				model.setTarget(nw.getTreeNode());
-			}
-		}
-	}
-
-	protected void setIncludeListInProxyControl(ProxyControl element) {
-		List includeList = getDataList(includeModel, INCLUDE_COL);
-		element.setIncludeList(includeList);
-	}
-
-	protected void setExcludeListInProxyControl(ProxyControl element) {
-		List excludeList = getDataList(excludeModel, EXCLUDE_COL);
-		element.setExcludeList(excludeList);
-	}
-
-	private List getDataList(PowerTableModel p_model, String colName) {
-		String[] dataArray = p_model.getData().getColumn(colName);
-		List list = new LinkedList();
-		for (int i = 0; i < dataArray.length; i++) {
-			list.add(dataArray[i]);
-		}
-		return list;
-	}
-
-	public String getLabelResource() {
-		return "proxy_title"; // $NON-NLS-1$
-	}
-
-	public Collection getMenuCategories() {
-		return Arrays.asList(new String[] { MenuFactory.NON_TEST_ELEMENTS });
-	}
-
-	public void configure(TestElement element) {
-		log.debug("Configuring gui with " + element);
-		super.configure(element);
-		model = (ProxyControl) element;
-		portField.setText(model.getPortString());
-		httpHeaders.setSelected(model.getCaptureHttpHeaders());
-		groupingMode.setSelectedIndex(model.getGroupingMode());
-		addAssertions.setSelected(model.getAssertions());
-		samplerTypeName.setSelectedIndex(model.getSamplerTypeName());
-		samplerRedirectAutomatically.setSelected(model.getSamplerRedirectAutomatically());
-		samplerFollowRedirects.setSelected(model.getSamplerFollowRedirects());
-		useKeepAlive.setSelected(model.getUseKeepalive());
-		samplerDownloadImages.setSelected(model.getSamplerDownloadImages());
-		regexMatch.setSelected(model.getRegexMatch());
-		httpsSpoof.setSelected(model.getHttpsSpoof());
-		httpsMatch.setText(model.getHttpsSpoofMatch());
-		contentTypeInclude.setText(model.getContentTypeInclude());
-		contentTypeExclude.setText(model.getContentTypeExclude());
-
-		reinitializeTargetCombo();// Set up list of potential targets and
-									// enable listener
-
-		populateTable(includeModel, model.getIncludePatterns().iterator());
-		populateTable(excludeModel, model.getExcludePatterns().iterator());
-		repaint();
-	}
-
-	private void populateTable(PowerTableModel p_model, PropertyIterator iter) {
-		p_model.clearData();
-		while (iter.hasNext()) {
-			p_model.addRow(new Object[] { iter.next().getStringValue() });
-		}
-		p_model.fireTableDataChanged();
-	}
-
-	/*
-	 * Handles groupingMode. actionPerfomed is not suitable, as that seems to be
-	 * activated whenever the Proxy is selected in the Test Plan
-	 * Also handles samplerTypeName
-	 */
-	public void itemStateChanged(ItemEvent e) {
-		// System.err.println(e.paramString());
-		enableRestart();
-	}
-
-	/***************************************************************************
-	 * !ToDo (Method description)
-	 * 
-	 * @param action
-	 *            !ToDo (Parameter description)
-	 **************************************************************************/
-	public void actionPerformed(ActionEvent action) {
-		String command = action.getActionCommand();
-
-		// System.err.println(action.paramString()+" "+command+ "
-		// "+action.getModifiers());
-
-		if (command.equals(STOP)) {
-			model.stopProxy();
-			stop.setEnabled(false);
-			start.setEnabled(true);
-			restart.setEnabled(false);
-		} else if (command.equals(START)) {
-			startProxy();
-		} else if (command.equals(RESTART)) {
-			model.stopProxy();
-			startProxy();
-		} else if (command.equals(ENABLE_RESTART)){
-			enableRestart();
-		} else if (command.equals(ADD_EXCLUDE)) {
-			excludeModel.addNewRow();
-			excludeModel.fireTableDataChanged();
-			enableRestart();
-		} else if (command.equals(ADD_INCLUDE)) {
-			includeModel.addNewRow();
-			includeModel.fireTableDataChanged();
-			enableRestart();
-		} else if (command.equals(DELETE_EXCLUDE)) {
-			excludeModel.removeRow(excludeTable.getSelectedRow());
-			excludeModel.fireTableDataChanged();
-			enableRestart();
-		} else if (command.equals(DELETE_INCLUDE)) {
-			includeModel.removeRow(includeTable.getSelectedRow());
-			includeModel.fireTableDataChanged();
-			enableRestart();
-		} else if (command.equals(CHANGE_TARGET)) {
-			log.debug("Change target " + targetNodes.getSelectedItem());
-			log.debug("In model " + model);
-			TreeNodeWrapper nw = (TreeNodeWrapper) targetNodes.getSelectedItem();
-			model.setTarget(nw.getTreeNode());
-			enableRestart();
-		}
-	}
-
-	private void startProxy() {
-		ValueReplacer replacer = GuiPackage.getInstance().getReplacer();
-		modifyTestElement(model);
-		try {
-			replacer.replaceValues(model);
-			model.startProxy();
-			start.setEnabled(false);
-			stop.setEnabled(true);
-			restart.setEnabled(false);
-		} catch (InvalidVariableException e) {
-			JOptionPane.showMessageDialog(this, 
-					JMeterUtils.getResString("invalid_variables"), // $NON-NLS-1$
-					"Error",
-					JOptionPane.ERROR_MESSAGE);
-		}
-	}
-
-	private void enableRestart() {
-		if (stop.isEnabled()) {
-			// System.err.println("Enable Restart");
-			restart.setEnabled(true);
-		}
-	}
-
-	/***************************************************************************
-	 * !ToDo (Method description)
-	 * 
-	 * @param e
-	 *            !ToDo (Parameter description)
-	 **************************************************************************/
-	public void keyPressed(KeyEvent e) {
-	}
-
-	/***************************************************************************
-	 * !ToDo (Method description)
-	 * 
-	 * @param e
-	 *            !ToDo (Parameter description)
-	 **************************************************************************/
-	public void keyTyped(KeyEvent e) {
-	}
-
-	/***************************************************************************
-	 * !ToDo (Method description)
-	 * 
-	 * @param e
-	 *            !ToDo (Parameter description)
-	 **************************************************************************/
-	public void keyReleased(KeyEvent e) {
-		String fieldName = e.getComponent().getName();
-
-		if (fieldName.equals(PORTFIELD)) {
-			try {
-				Integer.parseInt(portField.getText());
-			} catch (NumberFormatException nfe) {
-				int length = portField.getText().length();
-				if (length > 0) {
-					JOptionPane.showMessageDialog(this, "Only digits allowed", "Invalid data",
-							JOptionPane.WARNING_MESSAGE);
-					// Drop the last character:
-					portField.setText(portField.getText().substring(0, length-1));
-				}
-			}
-			enableRestart();
-		} else if (fieldName.equals(ENABLE_RESTART)){
-			enableRestart();			
-		}
-	}
-
-	private void init() {
-		setLayout(new BorderLayout(0, 5));
-		setBorder(makeBorder());
-
-		add(makeTitlePanel(), BorderLayout.NORTH);
-
-		JPanel mainPanel = new JPanel(new BorderLayout());
-
-		Box myBox = Box.createVerticalBox();
-		myBox.add(createPortPanel());
-		myBox.add(Box.createVerticalStrut(5));
-		myBox.add(createTestPlanContentPanel());
-		myBox.add(Box.createVerticalStrut(5));
-		myBox.add(createHTTPSamplerPanel());
-		myBox.add(Box.createVerticalStrut(5));
-		myBox.add(createContentTypePanel());
-		myBox.add(Box.createVerticalStrut(5));				
-		mainPanel.add(myBox, BorderLayout.NORTH);
-
-		Box includeExcludePanel = Box.createVerticalBox();
-		includeExcludePanel.add(createIncludePanel());
-		includeExcludePanel.add(createExcludePanel());
-		mainPanel.add(includeExcludePanel, BorderLayout.CENTER);
-
-		mainPanel.add(createControls(), BorderLayout.SOUTH);
-
-		add(mainPanel, BorderLayout.CENTER);
-	}
-
-	private JPanel createControls() {
-		start = new JButton(JMeterUtils.getResString("start")); // $NON-NLS-1$
-		start.addActionListener(this);
-		start.setActionCommand(START);
-		start.setEnabled(true);
-
-		stop = new JButton(JMeterUtils.getResString("stop")); // $NON-NLS-1$
-		stop.addActionListener(this);
-		stop.setActionCommand(STOP);
-		stop.setEnabled(false);
-
-		restart = new JButton(JMeterUtils.getResString("restart")); // $NON-NLS-1$
-		restart.addActionListener(this);
-		restart.setActionCommand(RESTART);
-		restart.setEnabled(false);
-
-		JPanel panel = new JPanel();
-		panel.add(start);
-		panel.add(stop);
-		panel.add(restart);
-		return panel;
-	}
-
-	private JPanel createPortPanel() {
-		portField = new JTextField(ProxyControl.DEFAULT_PORT_S, 5);
-		portField.setName(PORTFIELD);
-		portField.addKeyListener(this);
-
-		JLabel label = new JLabel(JMeterUtils.getResString("port")); // $NON-NLS-1$
-		label.setLabelFor(portField);
-
-		httpsSpoof = new JCheckBox(JMeterUtils.getResString("proxy_httpsspoofing")); // $NON-NLS-1$
-		httpsSpoof.setSelected(false);
-		httpsSpoof.addActionListener(this);
-		httpsSpoof.setActionCommand(ENABLE_RESTART);		
-		
-		httpsMatch = new JTextField(40);
-		httpsMatch.addKeyListener(this);
-		httpsMatch.setName(ENABLE_RESTART);
-
-		JLabel matchlabel = new JLabel(JMeterUtils.getResString("proxy_httpsspoofing_match")); // $NON-NLS-1$
-		matchlabel.setLabelFor(httpsMatch);
-		
-		HorizontalPanel panel = new HorizontalPanel();
-		panel.add(label);
-		panel.add(portField);
-
-		panel.add(Box.createHorizontalStrut(10));
-		panel.add(httpsSpoof);
-
-		panel.add(matchlabel);
-		panel.add(httpsMatch);
-		
-		return panel;
-	}
-
-	private JPanel createTestPlanContentPanel() {
-		httpHeaders = new JCheckBox(JMeterUtils.getResString("proxy_headers")); // $NON-NLS-1$
-		httpHeaders.setSelected(true); // maintain original default
-		httpHeaders.addActionListener(this);
-		httpHeaders.setActionCommand(ENABLE_RESTART);
-
-		addAssertions = new JCheckBox(JMeterUtils.getResString("proxy_assertions")); // $NON-NLS-1$
-		addAssertions.setSelected(false);
-		addAssertions.addActionListener(this);
-		addAssertions.setActionCommand(ENABLE_RESTART);
-
-		regexMatch = new JCheckBox(JMeterUtils.getResString("proxy_regex")); // $NON-NLS-1$
-		regexMatch.setSelected(false);
-		regexMatch.addActionListener(this);
-		regexMatch.setActionCommand(ENABLE_RESTART);
-
-		VerticalPanel mainPanel = new VerticalPanel();
-		mainPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
-				JMeterUtils.getResString("proxy_test_plan_content"))); // $NON-NLS-1$
-
-		HorizontalPanel nodeCreationPanel = new HorizontalPanel();
-		nodeCreationPanel.add(httpHeaders);
-		nodeCreationPanel.add(addAssertions);
-		nodeCreationPanel.add(regexMatch);
-		
+    /**
+     * Set/clear the Follow-redirects box on the samplers (default is true)
+     */
+    private JCheckBox samplerFollowRedirects;
+
+    /**
+     * Set/clear the Download images box on the samplers (default is false)
+     */
+    private JCheckBox samplerDownloadImages;
+
+    /*
+     * Spoof the client into thinking that it is communicating with http
+     * even if it is really https.
+     */
+    private JCheckBox httpsSpoof;
+
+    private JTextField httpsMatch;
+
+    /**
+     * Regular expression to include results based on content type
+     */
+    private JTextField contentTypeInclude;
+
+    /**
+     * Regular expression to exclude results based on content type
+     */
+    private JTextField contentTypeExclude;
+
+    /**
+     * List of available target controllers
+     */
+    private JComboBox targetNodes;
+
+    private DefaultComboBoxModel targetNodesModel;
+
+    private ProxyControl model;
+
+    private JTable excludeTable;
+
+    private PowerTableModel excludeModel;
+
+    private JTable includeTable;
+
+    private PowerTableModel includeModel;
+
+    private static final String CHANGE_TARGET = "change_target"; // $NON-NLS-1$
+
+    private JButton stop, start, restart;
+
+    //+ action names
+    private static final String STOP = "stop"; // $NON-NLS-1$
+
+    private static final String START = "start"; // $NON-NLS-1$
+
+    private static final String RESTART = "restart"; // $NON-NLS-1$
+
+    private static final String ENABLE_RESTART = "enable_restart"; // $NON-NLS-1$
+
+    private static final String ADD_INCLUDE = "add_include"; // $NON-NLS-1$
+
+    private static final String ADD_EXCLUDE = "add_exclude"; // $NON-NLS-1$
+
+    private static final String DELETE_INCLUDE = "delete_include"; // $NON-NLS-1$
+
+    private static final String DELETE_EXCLUDE = "delete_exclude"; // $NON-NLS-1$
+    //- action names
+
+    private static final String INCLUDE_COL = JMeterUtils.getResString("patterns_to_include"); // $NON-NLS-1$
+
+    private static final String EXCLUDE_COL = JMeterUtils.getResString("patterns_to_exclude"); // $NON-NLS-1$
+
+    // Used by itemListener
+    private static final String PORTFIELD = "portField"; // $NON-NLS-1$
+
+    public ProxyControlGui() {
+        super();
+        log.debug("Creating ProxyControlGui");
+        init();
+    }
+
+    public TestElement createTestElement() {
+        model = makeProxyControl();
+        log.debug("creating/configuring model = " + model);
+        modifyTestElement(model);
+        return model;
+    }
+
+    protected ProxyControl makeProxyControl() {
+        ProxyControl local = new ProxyControl();
+        return local;
+    }
+
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     *
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement el) {
+        if (excludeTable.isEditing()) {// Bug 42948
+            excludeTable.getCellEditor().stopCellEditing();
+        }
+        if (includeTable.isEditing()) {// Bug 42948
+            includeTable.getCellEditor().stopCellEditing();
+        }
+        configureTestElement(el);
+        if (el instanceof ProxyControl) {
+            model = (ProxyControl) el;
+            model.setPort(portField.getText());
+            setIncludeListInProxyControl(model);
+            setExcludeListInProxyControl(model);
+            model.setCaptureHttpHeaders(httpHeaders.isSelected());
+            model.setGroupingMode(groupingMode.getSelectedIndex());
+            model.setAssertions(addAssertions.isSelected());
+            model.setSamplerTypeName(samplerTypeName.getSelectedIndex());
+            model.setSamplerRedirectAutomatically(samplerRedirectAutomatically.isSelected());
+            model.setSamplerFollowRedirects(samplerFollowRedirects.isSelected());
+            model.setUseKeepAlive(useKeepAlive.isSelected());
+            model.setSamplerDownloadImages(samplerDownloadImages.isSelected());
+            model.setRegexMatch(regexMatch.isSelected());
+            model.setHttpsSpoof(httpsSpoof.isSelected());
+            model.setHttpsSpoofMatch(httpsMatch.getText());
+            model.setContentTypeInclude(contentTypeInclude.getText());
+            model.setContentTypeExclude(contentTypeExclude.getText());
+            TreeNodeWrapper nw = (TreeNodeWrapper) targetNodes.getSelectedItem();
+            if (nw == null) {
+                model.setTarget(null);
+            } else {
+                model.setTarget(nw.getTreeNode());
+            }
+        }
+    }
+
+    protected void setIncludeListInProxyControl(ProxyControl element) {
+        List includeList = getDataList(includeModel, INCLUDE_COL);
+        element.setIncludeList(includeList);
+    }
+
+    protected void setExcludeListInProxyControl(ProxyControl element) {
+        List excludeList = getDataList(excludeModel, EXCLUDE_COL);
+        element.setExcludeList(excludeList);
+    }
+
+    private List getDataList(PowerTableModel p_model, String colName) {
+        String[] dataArray = p_model.getData().getColumn(colName);
+        List list = new LinkedList();
+        for (int i = 0; i < dataArray.length; i++) {
+            list.add(dataArray[i]);
+        }
+        return list;
+    }
+
+    public String getLabelResource() {
+        return "proxy_title"; // $NON-NLS-1$
+    }
+
+    public Collection getMenuCategories() {
+        return Arrays.asList(new String[] { MenuFactory.NON_TEST_ELEMENTS });
+    }
+
+    public void configure(TestElement element) {
+        log.debug("Configuring gui with " + element);
+        super.configure(element);
+        model = (ProxyControl) element;
+        portField.setText(model.getPortString());
+        httpHeaders.setSelected(model.getCaptureHttpHeaders());
+        groupingMode.setSelectedIndex(model.getGroupingMode());
+        addAssertions.setSelected(model.getAssertions());
+        samplerTypeName.setSelectedIndex(model.getSamplerTypeName());
+        samplerRedirectAutomatically.setSelected(model.getSamplerRedirectAutomatically());
+        samplerFollowRedirects.setSelected(model.getSamplerFollowRedirects());
+        useKeepAlive.setSelected(model.getUseKeepalive());
+        samplerDownloadImages.setSelected(model.getSamplerDownloadImages());
+        regexMatch.setSelected(model.getRegexMatch());
+        httpsSpoof.setSelected(model.getHttpsSpoof());
+        httpsMatch.setText(model.getHttpsSpoofMatch());
+        contentTypeInclude.setText(model.getContentTypeInclude());
+        contentTypeExclude.setText(model.getContentTypeExclude());
+
+        reinitializeTargetCombo();// Set up list of potential targets and
+                                    // enable listener
+
+        populateTable(includeModel, model.getIncludePatterns().iterator());
+        populateTable(excludeModel, model.getExcludePatterns().iterator());
+        repaint();
+    }
+
+    private void populateTable(PowerTableModel p_model, PropertyIterator iter) {
+        p_model.clearData();
+        while (iter.hasNext()) {
+            p_model.addRow(new Object[] { iter.next().getStringValue() });
+        }
+        p_model.fireTableDataChanged();
+    }
+
+    /*
+     * Handles groupingMode. actionPerfomed is not suitable, as that seems to be
+     * activated whenever the Proxy is selected in the Test Plan
+     * Also handles samplerTypeName
+     */
+    public void itemStateChanged(ItemEvent e) {
+        // System.err.println(e.paramString());
+        enableRestart();
+    }
+
+    /***************************************************************************
+     * !ToDo (Method description)
+     *
+     * @param action
+     *            !ToDo (Parameter description)
+     **************************************************************************/
+    public void actionPerformed(ActionEvent action) {
+        String command = action.getActionCommand();
+
+        // System.err.println(action.paramString()+" "+command+ "
+        // "+action.getModifiers());
+
+        if (command.equals(STOP)) {
+            model.stopProxy();
+            stop.setEnabled(false);
+            start.setEnabled(true);
+            restart.setEnabled(false);
+        } else if (command.equals(START)) {
+            startProxy();
+        } else if (command.equals(RESTART)) {
+            model.stopProxy();
+            startProxy();
+        } else if (command.equals(ENABLE_RESTART)){
+            enableRestart();
+        } else if (command.equals(ADD_EXCLUDE)) {
+            excludeModel.addNewRow();
+            excludeModel.fireTableDataChanged();
+            enableRestart();
+        } else if (command.equals(ADD_INCLUDE)) {
+            includeModel.addNewRow();
+            includeModel.fireTableDataChanged();
+            enableRestart();
+        } else if (command.equals(DELETE_EXCLUDE)) {
+            excludeModel.removeRow(excludeTable.getSelectedRow());
+            excludeModel.fireTableDataChanged();
+            enableRestart();
+        } else if (command.equals(DELETE_INCLUDE)) {
+            includeModel.removeRow(includeTable.getSelectedRow());
+            includeModel.fireTableDataChanged();
+            enableRestart();
+        } else if (command.equals(CHANGE_TARGET)) {
+            log.debug("Change target " + targetNodes.getSelectedItem());
+            log.debug("In model " + model);
+            TreeNodeWrapper nw = (TreeNodeWrapper) targetNodes.getSelectedItem();
+            model.setTarget(nw.getTreeNode());
+            enableRestart();
+        }
+    }
+
+    private void startProxy() {
+        ValueReplacer replacer = GuiPackage.getInstance().getReplacer();
+        modifyTestElement(model);
+        try {
+            replacer.replaceValues(model);
+            model.startProxy();
+            start.setEnabled(false);
+            stop.setEnabled(true);
+            restart.setEnabled(false);
+        } catch (InvalidVariableException e) {
+            JOptionPane.showMessageDialog(this,
+                    JMeterUtils.getResString("invalid_variables"), // $NON-NLS-1$
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void enableRestart() {
+        if (stop.isEnabled()) {
+            // System.err.println("Enable Restart");
+            restart.setEnabled(true);
+        }
+    }
+
+    /***************************************************************************
+     * !ToDo (Method description)
+     *
+     * @param e
+     *            !ToDo (Parameter description)
+     **************************************************************************/
+    public void keyPressed(KeyEvent e) {
+    }
+
+    /***************************************************************************
+     * !ToDo (Method description)
+     *
+     * @param e
+     *            !ToDo (Parameter description)
+     **************************************************************************/
+    public void keyTyped(KeyEvent e) {
+    }
+
+    /***************************************************************************
+     * !ToDo (Method description)
+     *
+     * @param e
+     *            !ToDo (Parameter description)
+     **************************************************************************/
+    public void keyReleased(KeyEvent e) {
+        String fieldName = e.getComponent().getName();
+
+        if (fieldName.equals(PORTFIELD)) {
+            try {
+                Integer.parseInt(portField.getText());
+            } catch (NumberFormatException nfe) {
+                int length = portField.getText().length();
+                if (length > 0) {
+                    JOptionPane.showMessageDialog(this, "Only digits allowed", "Invalid data",
+                            JOptionPane.WARNING_MESSAGE);
+                    // Drop the last character:
+                    portField.setText(portField.getText().substring(0, length-1));
+                }
+            }
+            enableRestart();
+        } else if (fieldName.equals(ENABLE_RESTART)){
+            enableRestart();
+        }
+    }
+
+    private void init() {
+        setLayout(new BorderLayout(0, 5));
+        setBorder(makeBorder());
+
+        add(makeTitlePanel(), BorderLayout.NORTH);
+
+        JPanel mainPanel = new JPanel(new BorderLayout());
+
+        Box myBox = Box.createVerticalBox();
+        myBox.add(createPortPanel());
+        myBox.add(Box.createVerticalStrut(5));
+        myBox.add(createTestPlanContentPanel());
+        myBox.add(Box.createVerticalStrut(5));
+        myBox.add(createHTTPSamplerPanel());
+        myBox.add(Box.createVerticalStrut(5));
+        myBox.add(createContentTypePanel());
+        myBox.add(Box.createVerticalStrut(5));
+        mainPanel.add(myBox, BorderLayout.NORTH);
+
+        Box includeExcludePanel = Box.createVerticalBox();
+        includeExcludePanel.add(createIncludePanel());
+        includeExcludePanel.add(createExcludePanel());
+        mainPanel.add(includeExcludePanel, BorderLayout.CENTER);
+
+        mainPanel.add(createControls(), BorderLayout.SOUTH);
+
+        add(mainPanel, BorderLayout.CENTER);
+    }
+
+    private JPanel createControls() {
+        start = new JButton(JMeterUtils.getResString("start")); // $NON-NLS-1$
+        start.addActionListener(this);
+        start.setActionCommand(START);
+        start.setEnabled(true);
+
+        stop = new JButton(JMeterUtils.getResString("stop")); // $NON-NLS-1$
+        stop.addActionListener(this);
+        stop.setActionCommand(STOP);
+        stop.setEnabled(false);
+
+        restart = new JButton(JMeterUtils.getResString("restart")); // $NON-NLS-1$
+        restart.addActionListener(this);
+        restart.setActionCommand(RESTART);
+        restart.setEnabled(false);
+
+        JPanel panel = new JPanel();
+        panel.add(start);
+        panel.add(stop);
+        panel.add(restart);
+        return panel;
+    }
+
+    private JPanel createPortPanel() {
+        portField = new JTextField(ProxyControl.DEFAULT_PORT_S, 5);
+        portField.setName(PORTFIELD);
+        portField.addKeyListener(this);
+
+        JLabel label = new JLabel(JMeterUtils.getResString("port")); // $NON-NLS-1$
+        label.setLabelFor(portField);
+
+        httpsSpoof = new JCheckBox(JMeterUtils.getResString("proxy_httpsspoofing")); // $NON-NLS-1$
+        httpsSpoof.setSelected(false);
+        httpsSpoof.addActionListener(this);
+        httpsSpoof.setActionCommand(ENABLE_RESTART);
+
+        httpsMatch = new JTextField(40);
+        httpsMatch.addKeyListener(this);
+        httpsMatch.setName(ENABLE_RESTART);
+
+        JLabel matchlabel = new JLabel(JMeterUtils.getResString("proxy_httpsspoofing_match")); // $NON-NLS-1$
+        matchlabel.setLabelFor(httpsMatch);
+
+        HorizontalPanel panel = new HorizontalPanel();
+        panel.add(label);
+        panel.add(portField);
+
+        panel.add(Box.createHorizontalStrut(10));
+        panel.add(httpsSpoof);
+
+        panel.add(matchlabel);
+        panel.add(httpsMatch);
+
+        return panel;
+    }
+
+    private JPanel createTestPlanContentPanel() {
+        httpHeaders = new JCheckBox(JMeterUtils.getResString("proxy_headers")); // $NON-NLS-1$
+        httpHeaders.setSelected(true); // maintain original default
+        httpHeaders.addActionListener(this);
+        httpHeaders.setActionCommand(ENABLE_RESTART);
+
+        addAssertions = new JCheckBox(JMeterUtils.getResString("proxy_assertions")); // $NON-NLS-1$
+        addAssertions.setSelected(false);
+        addAssertions.addActionListener(this);
+        addAssertions.setActionCommand(ENABLE_RESTART);
+
+        regexMatch = new JCheckBox(JMeterUtils.getResString("proxy_regex")); // $NON-NLS-1$
+        regexMatch.setSelected(false);
+        regexMatch.addActionListener(this);
+        regexMatch.setActionCommand(ENABLE_RESTART);
+
+        VerticalPanel mainPanel = new VerticalPanel();
+        mainPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+                JMeterUtils.getResString("proxy_test_plan_content"))); // $NON-NLS-1$
+
+        HorizontalPanel nodeCreationPanel = new HorizontalPanel();
+        nodeCreationPanel.add(httpHeaders);
+        nodeCreationPanel.add(addAssertions);
+        nodeCreationPanel.add(regexMatch);
+
         HorizontalPanel targetPanel = new HorizontalPanel();
         targetPanel.add(createTargetPanel());
         targetPanel.add(createGroupingPanel());
         mainPanel.add(targetPanel);
-		mainPanel.add(nodeCreationPanel);
+        mainPanel.add(nodeCreationPanel);
 
-		return mainPanel;
-	}
+        return mainPanel;
+    }
 
-	private JPanel createHTTPSamplerPanel() {
-		DefaultComboBoxModel m = new DefaultComboBoxModel();
-		// Note: position of these elements in the menu *must* match the
-		// corresponding ProxyControl.SAMPLER_TYPE_* values.
-		m.addElement(JMeterUtils.getResString("web_testing_title")); // $NON-NLS-1$
-		m.addElement(JMeterUtils.getResString("web_testing2_title")); // $NON-NLS-1$
-		samplerTypeName = new JComboBox(m);
-		samplerTypeName.setSelectedIndex(0);
-		samplerTypeName.addItemListener(this);
-		JLabel label2 = new JLabel(JMeterUtils.getResString("proxy_sampler_type")); // $NON-NLS-1$
-		label2.setLabelFor(samplerTypeName);
+    private JPanel createHTTPSamplerPanel() {
+        DefaultComboBoxModel m = new DefaultComboBoxModel();
+        // Note: position of these elements in the menu *must* match the
+        // corresponding ProxyControl.SAMPLER_TYPE_* values.
+        m.addElement(JMeterUtils.getResString("web_testing_title")); // $NON-NLS-1$
+        m.addElement(JMeterUtils.getResString("web_testing2_title")); // $NON-NLS-1$
+        samplerTypeName = new JComboBox(m);
+        samplerTypeName.setSelectedIndex(0);
+        samplerTypeName.addItemListener(this);
+        JLabel label2 = new JLabel(JMeterUtils.getResString("proxy_sampler_type")); // $NON-NLS-1$
+        label2.setLabelFor(samplerTypeName);
 
-		samplerRedirectAutomatically = new JCheckBox(JMeterUtils.getResString("follow_redirects_auto")); // $NON-NLS-1$
-		samplerRedirectAutomatically.setSelected(false);
-		samplerRedirectAutomatically.addActionListener(this);
-		samplerRedirectAutomatically.setActionCommand(ENABLE_RESTART);
-		
-		samplerFollowRedirects = new JCheckBox(JMeterUtils.getResString("follow_redirects")); // $NON-NLS-1$
-		samplerFollowRedirects.setSelected(true);
-		samplerFollowRedirects.addActionListener(this);
-		samplerFollowRedirects.setActionCommand(ENABLE_RESTART);
-		
-		useKeepAlive = new JCheckBox(JMeterUtils.getResString("use_keepalive")); // $NON-NLS-1$
-		useKeepAlive.setSelected(true);
-		useKeepAlive.addActionListener(this);
-		useKeepAlive.setActionCommand(ENABLE_RESTART);
+        samplerRedirectAutomatically = new JCheckBox(JMeterUtils.getResString("follow_redirects_auto")); // $NON-NLS-1$
+        samplerRedirectAutomatically.setSelected(false);
+        samplerRedirectAutomatically.addActionListener(this);
+        samplerRedirectAutomatically.setActionCommand(ENABLE_RESTART);
 
-		samplerDownloadImages = new JCheckBox(JMeterUtils.getResString("web_testing_retrieve_images")); // $NON-NLS-1$
-		samplerDownloadImages.setSelected(false);
-		samplerDownloadImages.addActionListener(this);
-		samplerDownloadImages.setActionCommand(ENABLE_RESTART);
-		
-		HorizontalPanel panel = new HorizontalPanel();
-		panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
-				JMeterUtils.getResString("proxy_sampler_settings"))); // $NON-NLS-1$
-		panel.add(label2);
-		panel.add(samplerTypeName);
-		panel.add(samplerRedirectAutomatically);
-		panel.add(samplerFollowRedirects);
-		panel.add(useKeepAlive);
-		panel.add(samplerDownloadImages);
+        samplerFollowRedirects = new JCheckBox(JMeterUtils.getResString("follow_redirects")); // $NON-NLS-1$
+        samplerFollowRedirects.setSelected(true);
+        samplerFollowRedirects.addActionListener(this);
+        samplerFollowRedirects.setActionCommand(ENABLE_RESTART);
 
-		return panel;
-	}
-	
-	private JPanel createTargetPanel() {
-		targetNodesModel = new DefaultComboBoxModel();
-		targetNodes = new JComboBox(targetNodesModel);
-		targetNodes.setActionCommand(CHANGE_TARGET);
-		// Action listener will be added later
+        useKeepAlive = new JCheckBox(JMeterUtils.getResString("use_keepalive")); // $NON-NLS-1$
+        useKeepAlive.setSelected(true);
+        useKeepAlive.addActionListener(this);
+        useKeepAlive.setActionCommand(ENABLE_RESTART);
 
-		JLabel label = new JLabel(JMeterUtils.getResString("proxy_target")); // $NON-NLS-1$
-		label.setLabelFor(targetNodes);
+        samplerDownloadImages = new JCheckBox(JMeterUtils.getResString("web_testing_retrieve_images")); // $NON-NLS-1$
+        samplerDownloadImages.setSelected(false);
+        samplerDownloadImages.addActionListener(this);
+        samplerDownloadImages.setActionCommand(ENABLE_RESTART);
 
-		HorizontalPanel panel = new HorizontalPanel();
-		panel.add(label);
-		panel.add(targetNodes);
+        HorizontalPanel panel = new HorizontalPanel();
+        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+                JMeterUtils.getResString("proxy_sampler_settings"))); // $NON-NLS-1$
+        panel.add(label2);
+        panel.add(samplerTypeName);
+        panel.add(samplerRedirectAutomatically);
+        panel.add(samplerFollowRedirects);
+        panel.add(useKeepAlive);
+        panel.add(samplerDownloadImages);
 
-		/*
-		 * This listener subscription prevents freeing up the GUI when it's no
-		 * longer in use (e.g. on locale change)... plus causes some anoying
-		 * NPEs in the GUI instance created by the menu manager just to find out
-		 * our name and which menus we want to be in... ... plus I don't think
-		 * it's really necessary: configure(TestElement) already takes care of
-		 * reinitializing the target combo when we come back to it. And I can't
-		 * see how the tree can change in a relevant way without we leaving this
-		 * GUI (since it is very unlikely that we will want to record into one
-		 * of the controllers created by the proxy). I'll comment it out for the
-		 * time being: TODO: remove once we're convinced it's really
-		 * unnecessary.
-		 */
-		/*
-		 * try { Class addToTree =
-		 * Class.forName("org.apache.jmeter.gui.action.AddToTree"); Class remove =
-		 * Class.forName("org.apache.jmeter.gui.action.Remove"); ActionListener
-		 * listener = new ActionListener() { public void
-		 * actionPerformed(ActionEvent e) { reinitializeTargetCombo(); } };
-		 * ActionRouter ar = ActionRouter.getInstance();
-		 * ar.addPostActionListener(addToTree, listener);
-		 * ar.addPostActionListener(remove, listener); } catch
-		 * (ClassNotFoundException e) { // This should never happen -- throw an
-		 * Error: throw new Error(e.toString());//JDK1.4: remove .toString() }
-		 */
+        return panel;
+    }
 
-		return panel;
-	}
+    private JPanel createTargetPanel() {
+        targetNodesModel = new DefaultComboBoxModel();
+        targetNodes = new JComboBox(targetNodesModel);
+        targetNodes.setActionCommand(CHANGE_TARGET);
+        // Action listener will be added later
 
-	private JPanel createGroupingPanel() {
-		DefaultComboBoxModel m = new DefaultComboBoxModel();
-		// Note: position of these elements in the menu *must* match the
-		// corresponding ProxyControl.GROUPING_* values.
-		m.addElement(JMeterUtils.getResString("grouping_no_groups")); // $NON-NLS-1$
-		m.addElement(JMeterUtils.getResString("grouping_add_separators")); // $NON-NLS-1$
-		m.addElement(JMeterUtils.getResString("grouping_in_controllers")); // $NON-NLS-1$
-		m.addElement(JMeterUtils.getResString("grouping_store_first_only")); // $NON-NLS-1$
-		groupingMode = new JComboBox(m);
-		groupingMode.setSelectedIndex(0);
-		groupingMode.addItemListener(this);
+        JLabel label = new JLabel(JMeterUtils.getResString("proxy_target")); // $NON-NLS-1$
+        label.setLabelFor(targetNodes);
 
-		JLabel label2 = new JLabel(JMeterUtils.getResString("grouping_mode")); // $NON-NLS-1$
-		label2.setLabelFor(groupingMode);
+        HorizontalPanel panel = new HorizontalPanel();
+        panel.add(label);
+        panel.add(targetNodes);
 
-		HorizontalPanel panel = new HorizontalPanel();
-		panel.add(label2);
-		panel.add(groupingMode);
+        /*
+         * This listener subscription prevents freeing up the GUI when it's no
+         * longer in use (e.g. on locale change)... plus causes some anoying
+         * NPEs in the GUI instance created by the menu manager just to find out
+         * our name and which menus we want to be in... ... plus I don't think
+         * it's really necessary: configure(TestElement) already takes care of
+         * reinitializing the target combo when we come back to it. And I can't
+         * see how the tree can change in a relevant way without we leaving this
+         * GUI (since it is very unlikely that we will want to record into one
+         * of the controllers created by the proxy). I'll comment it out for the
+         * time being: TODO: remove once we're convinced it's really
+         * unnecessary.
+         */
+        /*
+         * try { Class addToTree =
+         * Class.forName("org.apache.jmeter.gui.action.AddToTree"); Class remove =
+         * Class.forName("org.apache.jmeter.gui.action.Remove"); ActionListener
+         * listener = new ActionListener() { public void
+         * actionPerformed(ActionEvent e) { reinitializeTargetCombo(); } };
+         * ActionRouter ar = ActionRouter.getInstance();
+         * ar.addPostActionListener(addToTree, listener);
+         * ar.addPostActionListener(remove, listener); } catch
+         * (ClassNotFoundException e) { // This should never happen -- throw an
+         * Error: throw new Error(e.toString());//JDK1.4: remove .toString() }
+         */
 
-		return panel;
-	}
-	
-	private JPanel createContentTypePanel() {
-		contentTypeInclude = new JTextField(35);
-		contentTypeInclude.addKeyListener(this);
-		contentTypeInclude.setName(ENABLE_RESTART);
-		JLabel labelInclude = new JLabel(JMeterUtils.getResString("proxy_content_type_include")); // $NON-NLS-1$
-		labelInclude.setLabelFor(contentTypeInclude);
-		// Default value
-		contentTypeInclude.setText(JMeterUtils.getProperty("proxy.content_type_include")); // $NON-NLS-1$
+        return panel;
+    }
 
-		contentTypeExclude = new JTextField(35);
-		contentTypeExclude.addKeyListener(this);
-		contentTypeExclude.setName(ENABLE_RESTART);
-		JLabel labelExclude = new JLabel(JMeterUtils.getResString("proxy_content_type_exclude")); // $NON-NLS-1$
-		labelExclude.setLabelFor(contentTypeExclude);
-		// Default value
-		contentTypeExclude.setText(JMeterUtils.getProperty("proxy.content_type_exclude")); // $NON-NLS-1$
-		
-		HorizontalPanel panel = new HorizontalPanel();
-		panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
-				JMeterUtils.getResString("proxy_content_type_filter"))); // $NON-NLS-1$
-		panel.add(labelInclude);
-		panel.add(contentTypeInclude);
-		panel.add(labelExclude);
-		panel.add(contentTypeExclude);
-		
-		return panel;
-	}
+    private JPanel createGroupingPanel() {
+        DefaultComboBoxModel m = new DefaultComboBoxModel();
+        // Note: position of these elements in the menu *must* match the
+        // corresponding ProxyControl.GROUPING_* values.
+        m.addElement(JMeterUtils.getResString("grouping_no_groups")); // $NON-NLS-1$
+        m.addElement(JMeterUtils.getResString("grouping_add_separators")); // $NON-NLS-1$
+        m.addElement(JMeterUtils.getResString("grouping_in_controllers")); // $NON-NLS-1$
+        m.addElement(JMeterUtils.getResString("grouping_store_first_only")); // $NON-NLS-1$
+        groupingMode = new JComboBox(m);
+        groupingMode.setSelectedIndex(0);
+        groupingMode.addItemListener(this);
 
-	private JPanel createIncludePanel() {
-		includeModel = new PowerTableModel(new String[] { INCLUDE_COL }, new Class[] { String.class });
-		includeTable = new JTable(includeModel);
-		includeTable.setPreferredScrollableViewportSize(new Dimension(100, 30));
+        JLabel label2 = new JLabel(JMeterUtils.getResString("grouping_mode")); // $NON-NLS-1$
+        label2.setLabelFor(groupingMode);
 
-		JPanel panel = new JPanel(new BorderLayout());
-		panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
-				.getResString("patterns_to_include"))); // $NON-NLS-1$
+        HorizontalPanel panel = new HorizontalPanel();
+        panel.add(label2);
+        panel.add(groupingMode);
 
-		panel.add(new JScrollPane(includeTable), BorderLayout.CENTER);
-		panel.add(createTableButtonPanel(ADD_INCLUDE, DELETE_INCLUDE), BorderLayout.SOUTH);
+        return panel;
+    }
 
-		return panel;
-	}
+    private JPanel createContentTypePanel() {
+        contentTypeInclude = new JTextField(35);
+        contentTypeInclude.addKeyListener(this);
+        contentTypeInclude.setName(ENABLE_RESTART);
+        JLabel labelInclude = new JLabel(JMeterUtils.getResString("proxy_content_type_include")); // $NON-NLS-1$
+        labelInclude.setLabelFor(contentTypeInclude);
+        // Default value
+        contentTypeInclude.setText(JMeterUtils.getProperty("proxy.content_type_include")); // $NON-NLS-1$
 
-	private JPanel createExcludePanel() {
-		excludeModel = new PowerTableModel(new String[] { EXCLUDE_COL }, new Class[] { String.class });
-		excludeTable = new JTable(excludeModel);
-		excludeTable.setPreferredScrollableViewportSize(new Dimension(100, 30));
+        contentTypeExclude = new JTextField(35);
+        contentTypeExclude.addKeyListener(this);
+        contentTypeExclude.setName(ENABLE_RESTART);
+        JLabel labelExclude = new JLabel(JMeterUtils.getResString("proxy_content_type_exclude")); // $NON-NLS-1$
+        labelExclude.setLabelFor(contentTypeExclude);
+        // Default value
+        contentTypeExclude.setText(JMeterUtils.getProperty("proxy.content_type_exclude")); // $NON-NLS-1$
 
-		JPanel panel = new JPanel(new BorderLayout());
-		panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
-				.getResString("patterns_to_exclude"))); // $NON-NLS-1$
+        HorizontalPanel panel = new HorizontalPanel();
+        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+                JMeterUtils.getResString("proxy_content_type_filter"))); // $NON-NLS-1$
+        panel.add(labelInclude);
+        panel.add(contentTypeInclude);
+        panel.add(labelExclude);
+        panel.add(contentTypeExclude);
 
-		panel.add(new JScrollPane(excludeTable), BorderLayout.CENTER);
-		panel.add(createTableButtonPanel(ADD_EXCLUDE, DELETE_EXCLUDE), BorderLayout.SOUTH);
+        return panel;
+    }
 
-		return panel;
-	}
+    private JPanel createIncludePanel() {
+        includeModel = new PowerTableModel(new String[] { INCLUDE_COL }, new Class[] { String.class });
+        includeTable = new JTable(includeModel);
+        includeTable.setPreferredScrollableViewportSize(new Dimension(100, 30));
 
-	private JPanel createTableButtonPanel(String addCommand, String deleteCommand) {
-		JPanel buttonPanel = new JPanel();
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
+                .getResString("patterns_to_include"))); // $NON-NLS-1$
 
-		JButton addButton = new JButton(JMeterUtils.getResString("add")); // $NON-NLS-1$
-		addButton.setActionCommand(addCommand);
-		addButton.addActionListener(this);
-		buttonPanel.add(addButton);
+        panel.add(new JScrollPane(includeTable), BorderLayout.CENTER);
+        panel.add(createTableButtonPanel(ADD_INCLUDE, DELETE_INCLUDE), BorderLayout.SOUTH);
 
-		JButton deleteButton = new JButton(JMeterUtils.getResString("delete")); // $NON-NLS-1$
-		deleteButton.setActionCommand(deleteCommand);
-		deleteButton.addActionListener(this);
-		buttonPanel.add(deleteButton);
+        return panel;
+    }
 
-		return buttonPanel;
-	}
+    private JPanel createExcludePanel() {
+        excludeModel = new PowerTableModel(new String[] { EXCLUDE_COL }, new Class[] { String.class });
+        excludeTable = new JTable(excludeModel);
+        excludeTable.setPreferredScrollableViewportSize(new Dimension(100, 30));
 
-	private void reinitializeTargetCombo() {
-		log.debug("Reinitializing target combo");
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
+                .getResString("patterns_to_exclude"))); // $NON-NLS-1$
 
-		// Stop action notifications while we shuffle this around:
-		targetNodes.removeActionListener(this);
+        panel.add(new JScrollPane(excludeTable), BorderLayout.CENTER);
+        panel.add(createTableButtonPanel(ADD_EXCLUDE, DELETE_EXCLUDE), BorderLayout.SOUTH);
 
-		targetNodesModel.removeAllElements();
-		GuiPackage gp = GuiPackage.getInstance();
-		JMeterTreeNode root;
-		if (gp != null) {
-			root = (JMeterTreeNode) GuiPackage.getInstance().getTreeModel().getRoot();
-			targetNodesModel
-					.addElement(new TreeNodeWrapper(null, JMeterUtils.getResString("use_recording_controller"))); // $NON-NLS-1$
-			buildNodesModel(root, "", 0);
-		}
-		TreeNodeWrapper choice = null;
-		for (int i = 0; i < targetNodesModel.getSize(); i++) {
-			choice = (TreeNodeWrapper) targetNodesModel.getElementAt(i);
-			log.debug("Selecting item " + choice + " for model " + model + " in " + this);
-			if (choice.getTreeNode() == model.getTarget()) // .equals caused
-															// NPE
-			{
-				break;
-			}
-		}
-		// Reinstate action notifications:
-		targetNodes.addActionListener(this);
-		// Set the current value:
-		targetNodesModel.setSelectedItem(choice);
+        return panel;
+    }
 
-		log.debug("Reinitialization complete");
-	}
+    private JPanel createTableButtonPanel(String addCommand, String deleteCommand) {
+        JPanel buttonPanel = new JPanel();
 
-	private void buildNodesModel(JMeterTreeNode node, String parent_name, int level) {
-		String seperator = " > ";
-		if (node != null) {
-			for (int i = 0; i < node.getChildCount(); i++) {
-				StringBuffer name = new StringBuffer();
-				JMeterTreeNode cur = (JMeterTreeNode) node.getChildAt(i);
-				TestElement te = cur.getTestElement();
-				/*
-				 * Will never be true. Probably intended to use
-				 * org.apache.jmeter.threads.ThreadGroup rather than
-				 * java.lang.ThreadGroup However, that does not work correctly;
-				 * whereas treating it as a Controller does. if (te instanceof
-				 * ThreadGroup) { name.append(parent_name);
-				 * name.append(cur.getName()); name.append(seperator);
-				 * buildNodesModel(cur, name.toString(), level); } else
-				 */
-				if (te instanceof Controller) {
-					name.append(spaces(level));
-					name.append(parent_name);
-					name.append(cur.getName());
-					TreeNodeWrapper tnw = new TreeNodeWrapper(cur, name.toString());
-					targetNodesModel.addElement(tnw);
-					name = new StringBuffer();
-					name.append(cur.getName());
-					name.append(seperator);
-					buildNodesModel(cur, name.toString(), level + 1);
-				} else if (te instanceof TestPlan || te instanceof WorkBench) {
-					name.append(cur.getName());
-					name.append(seperator);
-					buildNodesModel(cur, name.toString(), 0);
-				}
-				// Ignore everything else
-			}
-		}
-	}
+        JButton addButton = new JButton(JMeterUtils.getResString("add")); // $NON-NLS-1$
+        addButton.setActionCommand(addCommand);
+        addButton.addActionListener(this);
+        buttonPanel.add(addButton);
 
-	private String spaces(int level) {
-		int multi = 4;
-		StringBuffer spaces = new StringBuffer(level * multi);
-		for (int i = 0; i < level * multi; i++) {
-			spaces.append(" "); // $NON-NLS-1$
-		}
-		return spaces.toString();
-	}
+        JButton deleteButton = new JButton(JMeterUtils.getResString("delete")); // $NON-NLS-1$
+        deleteButton.setActionCommand(deleteCommand);
+        deleteButton.addActionListener(this);
+        buttonPanel.add(deleteButton);
 
-	public void setNode(JMeterTreeNode node) {
-		getNamePanel().setNode(node);
-	}
+        return buttonPanel;
+    }
+
+    private void reinitializeTargetCombo() {
+        log.debug("Reinitializing target combo");
+
+        // Stop action notifications while we shuffle this around:
+        targetNodes.removeActionListener(this);
+
+        targetNodesModel.removeAllElements();
+        GuiPackage gp = GuiPackage.getInstance();
+        JMeterTreeNode root;
+        if (gp != null) {
+            root = (JMeterTreeNode) GuiPackage.getInstance().getTreeModel().getRoot();
+            targetNodesModel
+                    .addElement(new TreeNodeWrapper(null, JMeterUtils.getResString("use_recording_controller"))); // $NON-NLS-1$
+            buildNodesModel(root, "", 0);
+        }
+        TreeNodeWrapper choice = null;
+        for (int i = 0; i < targetNodesModel.getSize(); i++) {
+            choice = (TreeNodeWrapper) targetNodesModel.getElementAt(i);
+            log.debug("Selecting item " + choice + " for model " + model + " in " + this);
+            if (choice.getTreeNode() == model.getTarget()) // .equals caused
+                                                            // NPE
+            {
+                break;
+            }
+        }
+        // Reinstate action notifications:
+        targetNodes.addActionListener(this);
+        // Set the current value:
+        targetNodesModel.setSelectedItem(choice);
+
+        log.debug("Reinitialization complete");
+    }
+
+    private void buildNodesModel(JMeterTreeNode node, String parent_name, int level) {
+        String seperator = " > ";
+        if (node != null) {
+            for (int i = 0; i < node.getChildCount(); i++) {
+                StringBuffer name = new StringBuffer();
+                JMeterTreeNode cur = (JMeterTreeNode) node.getChildAt(i);
+                TestElement te = cur.getTestElement();
+                /*
+                 * Will never be true. Probably intended to use
+                 * org.apache.jmeter.threads.ThreadGroup rather than
+                 * java.lang.ThreadGroup However, that does not work correctly;
+                 * whereas treating it as a Controller does. if (te instanceof
+                 * ThreadGroup) { name.append(parent_name);
+                 * name.append(cur.getName()); name.append(seperator);
+                 * buildNodesModel(cur, name.toString(), level); } else
+                 */
+                if (te instanceof Controller) {
+                    name.append(spaces(level));
+                    name.append(parent_name);
+                    name.append(cur.getName());
+                    TreeNodeWrapper tnw = new TreeNodeWrapper(cur, name.toString());
+                    targetNodesModel.addElement(tnw);
+                    name = new StringBuffer();
+                    name.append(cur.getName());
+                    name.append(seperator);
+                    buildNodesModel(cur, name.toString(), level + 1);
+                } else if (te instanceof TestPlan || te instanceof WorkBench) {
+                    name.append(cur.getName());
+                    name.append(seperator);
+                    buildNodesModel(cur, name.toString(), 0);
+                }
+                // Ignore everything else
+            }
+        }
+    }
+
+    private String spaces(int level) {
+        int multi = 4;
+        StringBuffer spaces = new StringBuffer(level * multi);
+        for (int i = 0; i < level * multi; i++) {
+            spaces.append(" "); // $NON-NLS-1$
+        }
+        return spaces.toString();
+    }
+
+    public void setNode(JMeterTreeNode node) {
+        getNamePanel().setNode(node);
+    }
 }
 
 class TreeNodeWrapper {
-	private JMeterTreeNode tn;
+    private JMeterTreeNode tn;
 
-	private String label;
+    private String label;
 
-	private TreeNodeWrapper() {
-	}
+    private TreeNodeWrapper() {
+    }
 
-	public TreeNodeWrapper(JMeterTreeNode tn, String label) {
-		this.tn = tn;
-		this.label = label;
-	}
+    public TreeNodeWrapper(JMeterTreeNode tn, String label) {
+        this.tn = tn;
+        this.label = label;
+    }
 
-	public JMeterTreeNode getTreeNode() {
-		return tn;
-	}
+    public JMeterTreeNode getTreeNode() {
+        return tn;
+    }
 
-	public String toString() {
-		return label;
-	}
+    public String toString() {
+        return label;
+    }
 }

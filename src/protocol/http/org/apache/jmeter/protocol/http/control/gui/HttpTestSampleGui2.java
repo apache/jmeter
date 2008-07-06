@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.control.gui;
@@ -28,19 +28,19 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class HttpTestSampleGui2 extends HttpTestSampleGui {
 
-	public HttpTestSampleGui2() {
-		super();
-	}
+    public HttpTestSampleGui2() {
+        super();
+    }
 
-	public TestElement createTestElement() {
-		HTTPSamplerBase sampler = HTTPSamplerFactory.newInstance(HTTPSamplerFactory.HTTP_SAMPLER_APACHE);
-		modifyTestElement(sampler);
-		return sampler;
-	}
+    public TestElement createTestElement() {
+        HTTPSamplerBase sampler = HTTPSamplerFactory.newInstance(HTTPSamplerFactory.HTTP_SAMPLER_APACHE);
+        modifyTestElement(sampler);
+        return sampler;
+    }
 
-	public String getStaticLabel() {
-		return JMeterUtils.getResString("web_testing2_title"); //$NON-NLS-1$
-	}
+    public String getStaticLabel() {
+        return JMeterUtils.getResString("web_testing2_title"); //$NON-NLS-1$
+    }
 
     // Documentation is shared with our parent
     public String getDocAnchor() {

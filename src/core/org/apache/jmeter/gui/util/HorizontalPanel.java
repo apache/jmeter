@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 /*
@@ -31,44 +31,44 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 public class HorizontalPanel extends JPanel {
-	private Box subPanel = Box.createHorizontalBox();
+    private Box subPanel = Box.createHorizontalBox();
 
-	private float verticalAlign;
+    private float verticalAlign;
 
-	private int hgap;
+    private int hgap;
 
-	public HorizontalPanel() {
-		this(5, CENTER_ALIGNMENT);
-	}
+    public HorizontalPanel() {
+        this(5, CENTER_ALIGNMENT);
+    }
 
-	public HorizontalPanel(Color bk) {
-		this();
-		subPanel.setBackground(bk);
-		this.setBackground(bk);
-	}
-	
-	public HorizontalPanel(int hgap, float verticalAlign) {
-		super(new BorderLayout());
-		add(subPanel, BorderLayout.WEST);
-		this.hgap = hgap;
-		this.verticalAlign = verticalAlign;
-	}
+    public HorizontalPanel(Color bk) {
+        this();
+        subPanel.setBackground(bk);
+        this.setBackground(bk);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.awt.Container#add(java.awt.Component)
-	 */
-	public Component add(Component c) {
-		// This won't work right if we remove components. But we don't, so I'm
-		// not going to worry about it right now.
-		if (hgap > 0 && subPanel.getComponentCount() > 0) {
-			subPanel.add(Box.createHorizontalStrut(hgap));
-		}
+    public HorizontalPanel(int hgap, float verticalAlign) {
+        super(new BorderLayout());
+        add(subPanel, BorderLayout.WEST);
+        this.hgap = hgap;
+        this.verticalAlign = verticalAlign;
+    }
 
-		if (c instanceof JComponent) {
-			((JComponent) c).setAlignmentY(verticalAlign);
-		}
-		return subPanel.add(c);
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.awt.Container#add(java.awt.Component)
+     */
+    public Component add(Component c) {
+        // This won't work right if we remove components. But we don't, so I'm
+        // not going to worry about it right now.
+        if (hgap > 0 && subPanel.getComponentCount() > 0) {
+            subPanel.add(Box.createHorizontalStrut(hgap));
+        }
+
+        if (c instanceof JComponent) {
+            ((JComponent) c).setAlignmentY(verticalAlign);
+        }
+        return subPanel.add(c);
+    }
 }

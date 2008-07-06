@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.gui.util;
@@ -30,28 +30,28 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class NumberFieldErrorListener extends FocusAdapter {
 
-	private static final NumberFieldErrorListener listener = new NumberFieldErrorListener();
+    private static final NumberFieldErrorListener listener = new NumberFieldErrorListener();
 
-	public static NumberFieldErrorListener getNumberFieldErrorListener() {
-		return listener;
-	}
+    public static NumberFieldErrorListener getNumberFieldErrorListener() {
+        return listener;
+    }
 
-	public void focusLost(FocusEvent e) {
-		Component source = (Component) e.getSource();
-		String text = "";
-		if (source instanceof JTextComponent) {
-			text = ((JTextComponent) source).getText();
-		} else if (source instanceof TextComponent) {
-			text = ((TextComponent) source).getText();
-		}
-		try {
-			Integer.parseInt(text);
-		} catch (NumberFormatException nfe) {
-			JOptionPane.showMessageDialog(source, 
-					JMeterUtils.getResString("you_must_enter_a_valid_number"), //$NON-NLS-1$
-					JMeterUtils.getResString("invalid_data"),  //$NON-NLS-1$
-					JOptionPane.WARNING_MESSAGE);
-			new FocusRequester(source);
-		}
-	}
+    public void focusLost(FocusEvent e) {
+        Component source = (Component) e.getSource();
+        String text = "";
+        if (source instanceof JTextComponent) {
+            text = ((JTextComponent) source).getText();
+        } else if (source instanceof TextComponent) {
+            text = ((TextComponent) source).getText();
+        }
+        try {
+            Integer.parseInt(text);
+        } catch (NumberFormatException nfe) {
+            JOptionPane.showMessageDialog(source,
+                    JMeterUtils.getResString("you_must_enter_a_valid_number"), //$NON-NLS-1$
+                    JMeterUtils.getResString("invalid_data"),  //$NON-NLS-1$
+                    JOptionPane.WARNING_MESSAGE);
+            new FocusRequester(source);
+        }
+    }
 }

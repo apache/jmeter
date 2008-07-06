@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.samplers;
@@ -39,119 +39,119 @@ public class SampleEvent implements Serializable {
     public static final String HOSTNAME;
 
     // List of variable names to be saved in JTL files
-	private static final String[] variableNames;
-	// Number of variable names
-	private static final int varCount;
+    private static final String[] variableNames;
+    // Number of variable names
+    private static final int varCount;
 
-	// The values. Entries be null, but there will be the correct number.
+    // The values. Entries be null, but there will be the correct number.
     private final String[] values;
-    
-	static {
+
+    static {
         String hn="";
-		try {
-			hn = InetAddress.getLocalHost().getHostName();
-		} catch (UnknownHostException e) {
+        try {
+            hn = InetAddress.getLocalHost().getHostName();
+        } catch (UnknownHostException e) {
             log.error("Cannot obtain local host name "+e);
-		}
-        HOSTNAME=hn;
-        
-        String vars = JMeterUtils.getProperty("sample_variables"); // $NON-NLS-1$
-       	variableNames=vars != null ? vars.split(",") : new String[0];
-       	varCount=variableNames.length;
-        if (varCount>0){
-        	log.info(varCount + " sample_variables have been declared: "+vars);
         }
-	}
+        HOSTNAME=hn;
+
+        String vars = JMeterUtils.getProperty("sample_variables"); // $NON-NLS-1$
+           variableNames=vars != null ? vars.split(",") : new String[0];
+           varCount=variableNames.length;
+        if (varCount>0){
+            log.info(varCount + " sample_variables have been declared: "+vars);
+        }
+    }
 
 
-	private final SampleResult result;
+    private final SampleResult result;
 
-	private final String threadGroup; // TODO appears to duplicate the threadName field in SampleResult
+    private final String threadGroup; // TODO appears to duplicate the threadName field in SampleResult
 
-	private final String hostname;
+    private final String hostname;
 
 
-	/*
-	 * Only for Unit tests
-	 */
-	public SampleEvent() {
-		this(null, null);
-	}
+    /*
+     * Only for Unit tests
+     */
+    public SampleEvent() {
+        this(null, null);
+    }
 
-	/**
-	 * Creates SampleEvent without saving any variables.
-	 * 
-	 * Use by Proxy and StatisticalSampleSender.
-	 * 
-	 * @param result SampleResult
-	 * @param threadGroup name
-	 */
-	public SampleEvent(SampleResult result, String threadGroup) {
-		this.result = result;
-		this.threadGroup = threadGroup;
-		this.hostname = HOSTNAME;
-		values = new String[variableNames.length];
-	}
+    /**
+     * Creates SampleEvent without saving any variables.
+     *
+     * Use by Proxy and StatisticalSampleSender.
+     *
+     * @param result SampleResult
+     * @param threadGroup name
+     */
+    public SampleEvent(SampleResult result, String threadGroup) {
+        this.result = result;
+        this.threadGroup = threadGroup;
+        this.hostname = HOSTNAME;
+        values = new String[variableNames.length];
+    }
 
-	/**
-	 * Contructor used for normal samples, saves variable values if any are defined.
-	 * 
-	 * @param result
-	 * @param threadGroup name
-	 * @param jmvars Jmeter variables
-	 */
-	public SampleEvent(SampleResult result, String threadGroup, JMeterVariables jmvars) {
-		this.result = result;
-		this.threadGroup = threadGroup;
-		this.hostname = HOSTNAME;
-		values = new String[variableNames.length];
-		saveVars(jmvars);
-	}
+    /**
+     * Contructor used for normal samples, saves variable values if any are defined.
+     *
+     * @param result
+     * @param threadGroup name
+     * @param jmvars Jmeter variables
+     */
+    public SampleEvent(SampleResult result, String threadGroup, JMeterVariables jmvars) {
+        this.result = result;
+        this.threadGroup = threadGroup;
+        this.hostname = HOSTNAME;
+        values = new String[variableNames.length];
+        saveVars(jmvars);
+    }
 
-	/**
-	 * Only intended for use when loading results from a file.
-	 * 
-	 * @param result
-	 * @param threadGroup
-	 * @param hostname
-	 */
-	public SampleEvent(SampleResult result, String threadGroup, String hostname) {
-		this.result = result;
-		this.threadGroup = threadGroup;
-		this.hostname = hostname;
-		values = new String[variableNames.length];
-	}
+    /**
+     * Only intended for use when loading results from a file.
+     *
+     * @param result
+     * @param threadGroup
+     * @param hostname
+     */
+    public SampleEvent(SampleResult result, String threadGroup, String hostname) {
+        this.result = result;
+        this.threadGroup = threadGroup;
+        this.hostname = hostname;
+        values = new String[variableNames.length];
+    }
 
-	private void saveVars(JMeterVariables vars){
-		for(int i = 0; i < variableNames.length; i++){
-			values[i] = vars.get(variableNames[i]);
-		}
-	}
+    private void saveVars(JMeterVariables vars){
+        for(int i = 0; i < variableNames.length; i++){
+            values[i] = vars.get(variableNames[i]);
+        }
+    }
 
-	/** Return the number of variables defined */
-	public static int getVarCount(){
-		return varCount;
-	}
+    /** Return the number of variables defined */
+    public static int getVarCount(){
+        return varCount;
+    }
 
-	/** Get the nth variable name (zero-based) */
-	public static String getVarName(int i){
-		return variableNames[i];
-	}
+    /** Get the nth variable name (zero-based) */
+    public static String getVarName(int i){
+        return variableNames[i];
+    }
 
-	/** Get the nth variable value (zero-based) */
-	public String getVarValue(int i){
-		return values[i];
-	}
-		
-	public SampleResult getResult() {
-		return result;
-	}
+    /** Get the nth variable value (zero-based) */
+    public String getVarValue(int i){
+        return values[i];
+    }
 
-	public String getThreadGroup() {
-		return threadGroup;
-	}
+    public SampleResult getResult() {
+        return result;
+    }
 
-	public String getHostname() {
-		return hostname;
-	}
+    public String getThreadGroup() {
+        return threadGroup;
+    }
+
+    public String getHostname() {
+        return hostname;
+    }
 }

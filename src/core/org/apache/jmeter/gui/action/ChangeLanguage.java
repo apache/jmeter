@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.gui.action;
@@ -32,35 +32,35 @@ import org.apache.log.Logger;
  * @version $Revision$
  */
 public class ChangeLanguage implements Command {
-	private static final Set commands = new HashSet();
+    private static final Set commands = new HashSet();
 
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	static {
-		commands.add(ActionNames.CHANGE_LANGUAGE);
-	}
+    static {
+        commands.add(ActionNames.CHANGE_LANGUAGE);
+    }
 
-	/**
-	 * @see org.apache.jmeter.gui.action.Command#doAction(ActionEvent)
-	 */
-	public void doAction(ActionEvent e) {
-		String locale = ((Component) e.getSource()).getName();
-		Locale loc;
+    /**
+     * @see org.apache.jmeter.gui.action.Command#doAction(ActionEvent)
+     */
+    public void doAction(ActionEvent e) {
+        String locale = ((Component) e.getSource()).getName();
+        Locale loc;
 
-		int sep = locale.indexOf('_');
-		if (sep > 0) {
-			loc = new Locale(locale.substring(0, sep), locale.substring(sep + 1));
-		} else {
-			loc = new Locale(locale, "");
-		}
-		log.debug("Changing locale to " + loc.toString());
-		JMeterUtils.setLocale(loc);
-	}
+        int sep = locale.indexOf('_');
+        if (sep > 0) {
+            loc = new Locale(locale.substring(0, sep), locale.substring(sep + 1));
+        } else {
+            loc = new Locale(locale, "");
+        }
+        log.debug("Changing locale to " + loc.toString());
+        JMeterUtils.setLocale(loc);
+    }
 
-	/**
-	 * @see org.apache.jmeter.gui.action.Command#getActionNames()
-	 */
-	public Set getActionNames() {
-		return commands;
-	}
+    /**
+     * @see org.apache.jmeter.gui.action.Command#getActionNames()
+     */
+    public Set getActionNames() {
+        return commands;
+    }
 }

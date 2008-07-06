@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 package org.apache.jmeter.report;
 
@@ -25,8 +25,8 @@ public interface ReportChart {
     /**
      * The method takes a list of the DataSet items. It is up to the chart
      * class to extract the data and use it to render a graphic.
-     * @param data list of DataSet 
+     * @param data list of DataSet
      * @return the component
      */
-	JComponent renderChart(List data);
+    JComponent renderChart(List data);
 }

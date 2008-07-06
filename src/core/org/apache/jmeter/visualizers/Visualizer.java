@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.visualizers;
@@ -27,19 +27,19 @@ import org.apache.jmeter.samplers.SampleResult;
  * the implementing visualizer for display/logging. The easiest way to create
  * the visualizer is to extend the
  * {@link org.apache.jmeter.visualizers.gui.AbstractVisualizer} class.
- * 
+ *
  */
 public interface Visualizer {
-	/**
-	 * This method is called by sampling thread to inform the visualizer about
-	 * the arrival of a new sample.
-	 */
-	public void add(SampleResult sample);
+    /**
+     * This method is called by sampling thread to inform the visualizer about
+     * the arrival of a new sample.
+     */
+    public void add(SampleResult sample);
 
-	/**
-	 * This method is used to indicate a visualizer generates statistics.
-	 * 
-	 * @return true if visualiser generates statistics
-	 */
-	public boolean isStats();
+    /**
+     * This method is used to indicate a visualizer generates statistics.
+     *
+     * @return true if visualiser generates statistics
+     */
+    public boolean isStats();
 }

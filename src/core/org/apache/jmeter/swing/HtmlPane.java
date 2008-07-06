@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.swing;
@@ -29,23 +29,23 @@ import org.apache.log.Logger;
  * Implements an HTML Pane with local hyperlinking enabled.
  */
 public class HtmlPane extends JTextPane {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public HtmlPane() {
-		this.addHyperlinkListener(new HyperlinkListener() {
-			public void hyperlinkUpdate(HyperlinkEvent e) {
-				if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-					String ref = e.getURL().getRef();
-					if (ref != null && ref.length() > 0) {
-						log.debug("reference to scroll to = " + ref);
-						scrollToReference(ref);
-					}
-				}
-			}
-		});
-	}
+    public HtmlPane() {
+        this.addHyperlinkListener(new HyperlinkListener() {
+            public void hyperlinkUpdate(HyperlinkEvent e) {
+                if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+                    String ref = e.getURL().getRef();
+                    if (ref != null && ref.length() > 0) {
+                        log.debug("reference to scroll to = " + ref);
+                        scrollToReference(ref);
+                    }
+                }
+            }
+        });
+    }
 
-	public void scrollToReference(String reference) {
-		super.scrollToReference(reference);
-	}
+    public void scrollToReference(String reference) {
+        super.scrollToReference(reference);
+    }
 }

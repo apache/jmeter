@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 package org.apache.jmeter.testelement;
 
@@ -30,7 +30,7 @@ import org.apache.jmeter.visualizers.AxisGraph;
 import org.apache.jmeter.visualizers.SamplingStatCalculator;
 
 /**
- * The class is reponsible for returning 
+ * The class is reponsible for returning
  *
  */
 public class BarChart extends AbstractChart {
@@ -38,17 +38,17 @@ public class BarChart extends AbstractChart {
     public static final String REPORT_BAR_CHART_URL = "ReportChart.bar.chart.url";
 
     public BarChart() {
-		super();
-	}
+        super();
+    }
 
     public String getURL() {
         return getPropertyAsString(REPORT_BAR_CHART_URL);
     }
-    
+
     public void setURL(String url) {
         setProperty(REPORT_BAR_CHART_URL,url);
     }
-    
+
     /**
      * Convert the data from SamplingStatCalculator to double array of array
      * @param data
@@ -63,8 +63,8 @@ public class BarChart extends AbstractChart {
         }
         return dataset;
     }
-    
-	public JComponent renderChart(List data) {
+
+    public JComponent renderChart(List data) {
         ArrayList dset = new ArrayList();
         ArrayList xlabels = new ArrayList();
         Iterator itr = data.iterator();
@@ -82,9 +82,9 @@ public class BarChart extends AbstractChart {
             }
         }
         double[][] dbset = convertToDouble(dset);
-		return renderGraphics(dbset, (String[])xlabels.toArray(new String[xlabels.size()]));
-	}
-    
+        return renderGraphics(dbset, (String[])xlabels.toArray(new String[xlabels.size()]));
+    }
+
     public JComponent renderGraphics(double[][] data, String[] xAxisLabels) {
         AxisGraph panel = new AxisGraph();
         panel.setTitle(this.getTitle());
@@ -104,5 +104,5 @@ public class BarChart extends AbstractChart {
         panel.paintComponent(this.getBufferedImage().createGraphics());
         return panel;
     }
-    
+
 }

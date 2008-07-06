@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.util;
@@ -28,26 +28,26 @@ import java.io.InputStream;
  */
 public class SlowInputStream extends FilterInputStream {
 
-	private final CPSPauser pauser;
-	
-	/**
-	 * Wraps the input stream to emulate a slow device
-	 * @param in input stream
-	 * @param cps characters per second to emulate
-	 */
+    private final CPSPauser pauser;
+
+    /**
+     * Wraps the input stream to emulate a slow device
+     * @param in input stream
+     * @param cps characters per second to emulate
+     */
     public SlowInputStream(InputStream in, int cps) {
         super(in);
         pauser = new CPSPauser(cps);
     }
 
     public int read() throws IOException {
-    	pauser.pause(1);
+        pauser.pause(1);
         return in.read();
     }
 
     // Also handles read(byte[])
     public int read(byte[] b, int off, int len) throws IOException {
-    	pauser.pause(len);
+        pauser.pause(len);
         return in.read(b, off, len);
     }
 

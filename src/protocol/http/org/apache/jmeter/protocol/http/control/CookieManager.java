@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 // For unit tests @see TestCookieManager
@@ -50,129 +50,129 @@ import org.apache.log.Logger;
 /**
  * This class provides an interface to the netscape cookies file to pass cookies
  * along with a request.
- * 
+ *
  * Now uses Commons HttpClient parsing and matching code (since 2.1.2)
- * 
+ *
  */
 public class CookieManager extends ConfigTestElement implements TestListener, Serializable {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public static final String CLEAR = "CookieManager.clearEachIteration";// $NON-NLS-1$
+    public static final String CLEAR = "CookieManager.clearEachIteration";// $NON-NLS-1$
 
-	public static final String COOKIES = "CookieManager.cookies";// $NON-NLS-1$
+    public static final String COOKIES = "CookieManager.cookies";// $NON-NLS-1$
 
     public static final String POLICY = "CookieManager.policy"; //$NON-NLS-1$
 
-	private static final String TAB = "\t"; //$NON-NLS-1$
+    private static final String TAB = "\t"; //$NON-NLS-1$
 
-	// See bug 33796
-	private static final boolean DELETE_NULL_COOKIES 
+    // See bug 33796
+    private static final boolean DELETE_NULL_COOKIES
         = JMeterUtils.getPropDefault("CookieManager.delete_null_cookies", true);// $NON-NLS-1$
 
-	// See bug 28715
-	private static final boolean ALLOW_VARIABLE_COOKIES 
+    // See bug 28715
+    private static final boolean ALLOW_VARIABLE_COOKIES
         = JMeterUtils.getPropDefault("CookieManager.allow_variable_cookies", true);// $NON-NLS-1$
 
     private transient CookieSpec cookieSpec;
 
     private transient CollectionProperty initialCookies;
-    
+
     public static final String DEFAULT_POLICY = CookiePolicy.BROWSER_COMPATIBILITY;
 
-	public CookieManager() {
+    public CookieManager() {
         setProperty(new CollectionProperty(COOKIES, new ArrayList()));
         setProperty(new BooleanProperty(CLEAR, false));
         setCookiePolicy(DEFAULT_POLICY);
-	}
+    }
 
-	// ensure that the initial cookies are copied to the per-thread instances
-	public Object clone(){
-		CookieManager clone = (CookieManager) super.clone();
-		clone.initialCookies = initialCookies;
-		return clone;
-	}
+    // ensure that the initial cookies are copied to the per-thread instances
+    public Object clone(){
+        CookieManager clone = (CookieManager) super.clone();
+        clone.initialCookies = initialCookies;
+        return clone;
+    }
 
-	public String getPolicy() {
+    public String getPolicy() {
         return getPropertyAsString(POLICY,DEFAULT_POLICY);
     }
 
     public void setCookiePolicy(String policy){
         cookieSpec = CookiePolicy.getCookieSpec(policy);
-        if (DEFAULT_POLICY.equals(policy)){// Don't clutter the JMX file 
-            removeProperty(POLICY);            
+        if (DEFAULT_POLICY.equals(policy)){// Don't clutter the JMX file
+            removeProperty(POLICY);
         } else {
-            setProperty(POLICY, policy);           
+            setProperty(POLICY, policy);
         }
     }
-    
-	public CollectionProperty getCookies() {
-		return (CollectionProperty) getProperty(COOKIES);
-	}
 
-	public int getCookieCount() {// Used by GUI
-		return getCookies().size();
-	}
+    public CollectionProperty getCookies() {
+        return (CollectionProperty) getProperty(COOKIES);
+    }
 
-	public boolean getClearEachIteration() {
-		return getPropertyAsBoolean(CLEAR);
-	}
+    public int getCookieCount() {// Used by GUI
+        return getCookies().size();
+    }
 
-	public void setClearEachIteration(boolean clear) {
-		setProperty(new BooleanProperty(CLEAR, clear));
-	}
+    public boolean getClearEachIteration() {
+        return getPropertyAsBoolean(CLEAR);
+    }
 
-	/**
-	 * Save the static cookie data to a file.
-     * Cookies are only taken from the GUI - runtime cookies are not included. 
-	 */
-	public void save(String authFile) throws IOException {
-		File file = new File(authFile);
-		if (!file.isAbsolute()) {
-			file = new File(System.getProperty("user.dir") // $NON-NLS-1$
+    public void setClearEachIteration(boolean clear) {
+        setProperty(new BooleanProperty(CLEAR, clear));
+    }
+
+    /**
+     * Save the static cookie data to a file.
+     * Cookies are only taken from the GUI - runtime cookies are not included.
+     */
+    public void save(String authFile) throws IOException {
+        File file = new File(authFile);
+        if (!file.isAbsolute()) {
+            file = new File(System.getProperty("user.dir") // $NON-NLS-1$
                     + File.separator + authFile);
-		}
-		PrintWriter writer = new PrintWriter(new FileWriter(file));
-		writer.println("# JMeter generated Cookie file");// $NON-NLS-1$
-		PropertyIterator cookies = getCookies().iterator();
-		long now = System.currentTimeMillis();
-		while (cookies.hasNext()) {
-			Cookie cook = (Cookie) cookies.next().getObjectValue();
-			final long expiresMillis = cook.getExpiresMillis();
-			if (expiresMillis == 0 || expiresMillis > now) { // only save unexpired cookies
-				writer.println(cookieToString(cook));
-			}
-		}
-		writer.flush();
-		writer.close();
-	}
+        }
+        PrintWriter writer = new PrintWriter(new FileWriter(file));
+        writer.println("# JMeter generated Cookie file");// $NON-NLS-1$
+        PropertyIterator cookies = getCookies().iterator();
+        long now = System.currentTimeMillis();
+        while (cookies.hasNext()) {
+            Cookie cook = (Cookie) cookies.next().getObjectValue();
+            final long expiresMillis = cook.getExpiresMillis();
+            if (expiresMillis == 0 || expiresMillis > now) { // only save unexpired cookies
+                writer.println(cookieToString(cook));
+            }
+        }
+        writer.flush();
+        writer.close();
+    }
 
-	/**
-	 * Add cookie data from a file.
-	 */
-	public void addFile(String cookieFile) throws IOException {
-		File file = new File(cookieFile);
-		if (!file.isAbsolute()) {
-			file = new File(System.getProperty("user.dir") // $NON-NLS-1$
+    /**
+     * Add cookie data from a file.
+     */
+    public void addFile(String cookieFile) throws IOException {
+        File file = new File(cookieFile);
+        if (!file.isAbsolute()) {
+            file = new File(System.getProperty("user.dir") // $NON-NLS-1$
                     + File.separator + cookieFile);
-		}
-		BufferedReader reader = null;
-		if (file.canRead()) {
-			reader = new BufferedReader(new FileReader(file));
-		} else {
-			throw new IOException("The file you specified cannot be read.");
-		}
+        }
+        BufferedReader reader = null;
+        if (file.canRead()) {
+            reader = new BufferedReader(new FileReader(file));
+        } else {
+            throw new IOException("The file you specified cannot be read.");
+        }
 
         // N.B. this must agree with the save() and cookieToString() methods
-		String line;
+        String line;
         try {
             final CollectionProperty cookies = getCookies();
-    		while ((line = reader.readLine()) != null) {
-    			try {
-    				if (line.startsWith("#") || line.trim().length() == 0) {//$NON-NLS-1$
-    					continue;
-    				}
+            while ((line = reader.readLine()) != null) {
+                try {
+                    if (line.startsWith("#") || line.trim().length() == 0) {//$NON-NLS-1$
+                        continue;
+                    }
                     String[] st = JOrphanUtils.split(line, TAB, false);
-    				
+
                     final int _domain = 0;
                     //final int _ignored = 1;
                     final int _path = 2;
@@ -184,9 +184,9 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
                     if (st.length!=_fields) {
                         throw new IOException("Expected "+_fields+" fields, found "+st.length+" in "+line);
                     }
-    
+
                     if (st[_path].length()==0) {
-    					st[_path] = "/"; //$NON-NLS-1$
+                        st[_path] = "/"; //$NON-NLS-1$
                     }
                     boolean secure = Boolean.valueOf(st[_secure]).booleanValue();
                     long expires = new Long(st[_expires]).longValue();
@@ -194,92 +194,92 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
                         expires=0;
                     }
                     //long max was used to represent a non-expiring cookie, but that caused problems
-    				Cookie cookie = new Cookie(st[_name], st[_value], st[_domain], st[_path], secure, expires);
+                    Cookie cookie = new Cookie(st[_name], st[_value], st[_domain], st[_path], secure, expires);
                     cookies.addItem(cookie);
-    			} catch (NumberFormatException e) {
-    				throw new IOException("Error parsing cookie line\n\t'" + line + "'\n\t" + e);
+                } catch (NumberFormatException e) {
+                    throw new IOException("Error parsing cookie line\n\t'" + line + "'\n\t" + e);
                 }
             }
-        } finally { 
+        } finally {
             reader.close();
          }
-	}
+    }
 
     private String cookieToString(Cookie c){
         StringBuffer sb=new StringBuffer(80);
         sb.append(c.getDomain());
         //flag - if all machines within a given domain can access the variable.
         //(from http://www.cookiecentral.com/faq/ 3.5)
-        sb.append(TAB).append("TRUE");  
+        sb.append(TAB).append("TRUE");
         sb.append(TAB).append(c.getPath());
-        sb.append(TAB).append(JOrphanUtils.booleanToSTRING(c.getSecure())); 
+        sb.append(TAB).append(JOrphanUtils.booleanToSTRING(c.getSecure()));
         sb.append(TAB).append(c.getExpires());
         sb.append(TAB).append(c.getName());
         sb.append(TAB).append(c.getValue());
         return sb.toString();
     }
-    
-	public void recoverRunningVersion() {
-		// do nothing, the cookie manager has to accept changes.
-	}
 
-	public void setRunningVersion(boolean running) {
-		// do nothing, the cookie manager has to accept changes.
-	}
+    public void recoverRunningVersion() {
+        // do nothing, the cookie manager has to accept changes.
+    }
 
-	/**
-	 * Add a cookie.
-	 */
-	public void add(Cookie c) {
-		String cv = c.getValue();
+    public void setRunningVersion(boolean running) {
+        // do nothing, the cookie manager has to accept changes.
+    }
+
+    /**
+     * Add a cookie.
+     */
+    public void add(Cookie c) {
+        String cv = c.getValue();
         String cn = c.getName();
         removeMatchingCookies(c); // Can't have two matching cookies
-        
-		if (DELETE_NULL_COOKIES && (null == cv || cv.length()==0)) {
+
+        if (DELETE_NULL_COOKIES && (null == cv || cv.length()==0)) {
             if (log.isDebugEnabled()) {
                 log.debug("Dropping cookie with null value " + c.toString());
             }
-		} else {
+        } else {
             if (log.isDebugEnabled()) {
                 log.debug("Add cookie to store " + c.toString());
             }
-			getCookies().addItem(c);
-            // Store cookie as a thread variable. 
+            getCookies().addItem(c);
+            // Store cookie as a thread variable.
             // TODO - should we add a prefix to these variables?
             // TODO - should storing cookie values be optional?
             JMeterContext context = getThreadContext();
-			if (context.isSamplingStarted()) {
-				context.getVariables().put(cn, cv);
-			}
-		}
-	}
+            if (context.isSamplingStarted()) {
+                context.getVariables().put(cn, cv);
+            }
+        }
+    }
 
-	public void clear(){
-		super.clear();
-		clearCookies(); // ensure data is set up OK initially
-	}
+    public void clear(){
+        super.clear();
+        clearCookies(); // ensure data is set up OK initially
+    }
 
-	/*
-	 * Remove all the cookies.
-	 */
-	private void clearCookies() {
-		log.debug("Clear all cookies from store");
-		setProperty(new CollectionProperty(COOKIES, new ArrayList()));
-	}
+    /*
+     * Remove all the cookies.
+     */
+    private void clearCookies() {
+        log.debug("Clear all cookies from store");
+        setProperty(new CollectionProperty(COOKIES, new ArrayList()));
+    }
 
-	/**
-	 * Remove a cookie.
-	 */
-	public void remove(int index) {// TODO not used by GUI
-		getCookies().remove(index);
-	}
+    /**
+     * Remove a cookie.
+     */
+    public void remove(int index) {// TODO not used by GUI
+        getCookies().remove(index);
+    }
 
-	/**
-	 * Return the cookie at index i.
-	 */
-	public Cookie get(int i) {// Only used by GUI
-		return (Cookie) getCookies().get(i).getObjectValue();
-	}
+    /**
+     * Return the cookie at index i.
+     */
+    public Cookie get(int i) {// Only used by GUI
+        return (Cookie) getCookies().get(i).getObjectValue();
+    }
 
     /*
      * Create an HttpClient cookie from a JMeter cookie
@@ -299,13 +299,13 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
         ret.setDomainAttributeSpecified(jmc.isDomainSpecified());
         return ret;
     }
-    
+
     /**
      * Get array of valid HttpClient cookies for the URL
-     * 
+     *
      * @param url the target URL
      * @return array of HttpClient cookies
-     * 
+     *
      */
     public org.apache.commons.httpclient.Cookie[] getCookiesForUrl(URL url){
         CollectionProperty jar=getCookies();
@@ -330,11 +330,11 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
         boolean secure = HTTPSamplerBase.isSecure(protocol);
         return cookieSpec.match(host, port, path, secure, cookies);
     }
-    
+
     /**
      * Find cookies applicable to the given URL and build the Cookie header from
      * them.
-     * 
+     *
      * @param url
      *            URL of the request to which the returned header will be added.
      * @return the value string for the cookie header (goes after "Cookie: ").
@@ -355,10 +355,10 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
         }
         return hdr;
     }
-    
+
 
     public void addCookieFromHeader(String cookieHeader, URL url){
-        boolean debugEnabled = log.isDebugEnabled(); 
+        boolean debugEnabled = log.isDebugEnabled();
         if (debugEnabled) {
             log.debug("Received Cookie: " + cookieHeader + " From: " + url.toExternalForm());
         }
@@ -389,7 +389,7 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
                     cookies[i].getValue(),
                     cookies[i].getDomain(),
                     cookies[i].getPath(),
-                    cookies[i].getSecure(), 
+                    cookies[i].getSecure(),
                     exp / 1000,
                     cookies[i].isPathAttributeSpecified(),
                     cookies[i].isDomainAttributeSpecified()
@@ -402,20 +402,20 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
                 removeMatchingCookies(newCookie);
                 if (debugEnabled){
                     log.debug("Dropping expired Cookie: "+newCookie.toString());
-                }      
+                }
             }
         }
 
     }
     private boolean match(Cookie a, Cookie b){
-        return 
+        return
         a.getName().equals(b.getName())
         &&
         a.getPath().equals(b.getPath())
         &&
         a.getDomain().equals(b.getDomain());
     }
-    
+
     private void removeMatchingCookies(Cookie newCookie){
         // Scan for any matching cookies
         PropertyIterator iter = getCookies().iterator();
@@ -424,39 +424,39 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
             if (cookie == null) {
                 continue;
             }
-            if (match(cookie,newCookie)) { 
+            if (match(cookie,newCookie)) {
                 if (log.isDebugEnabled()) {
                     log.debug("New Cookie = " + newCookie.toString()
                               + " removing matching Cookie " + cookie.toString());
                 }
                 iter.remove();
             }
-        }       
+        }
     }
-    
-	public String getClassLabel() {
-		return JMeterUtils.getResString("cookie_manager_title");// $NON-NLS-1$
-	}
 
-	public void testStarted() {
-		initialCookies = getCookies();
-	}
+    public String getClassLabel() {
+        return JMeterUtils.getResString("cookie_manager_title");// $NON-NLS-1$
+    }
 
-	public void testEnded() {
-	}
+    public void testStarted() {
+        initialCookies = getCookies();
+    }
 
-	public void testStarted(String host) {
-		testStarted();
-	}
+    public void testEnded() {
+    }
 
-	public void testEnded(String host) {
-	}
+    public void testStarted(String host) {
+        testStarted();
+    }
 
-	public void testIterationStart(LoopIterationEvent event) {
-		if (getClearEachIteration()) {
-			log.debug("Initialise cookies from pre-defined list");
-			// No need to call clear
-			setProperty((CollectionProperty)initialCookies.clone());
-		}
-	}
+    public void testEnded(String host) {
+    }
+
+    public void testIterationStart(LoopIterationEvent event) {
+        if (getClearEachIteration()) {
+            log.debug("Initialise cookies from pre-defined list");
+            // No need to call clear
+            setProperty((CollectionProperty)initialCookies.clone());
+        }
+    }
 }

@@ -19,26 +19,26 @@
 package org.apache.jmeter.samplers;
 
 public interface SampleSender {
-	/**
-	 * The test ended
-	 */
-	public void testEnded();
+    /**
+     * The test ended
+     */
+    public void testEnded();
 
-	/**
-	 * The test ended
-	 * 
-	 * @param host
-	 *            the host that the test ended on.
-	 */
-	public void testEnded(String host);
+    /**
+     * The test ended
+     *
+     * @param host
+     *            the host that the test ended on.
+     */
+    public void testEnded(String host);
 
-	/**
-	 * A sample occurred
-	 * 
-	 * @param e
-	 *            a Sample Event
-	 */
-	public void SampleOccurred(SampleEvent e);
+    /**
+     * A sample occurred
+     *
+     * @param e
+     *            a Sample Event
+     */
+    public void SampleOccurred(SampleEvent e);
     // TODO consider renaming this method
     // - should begin with lower-case letter
     // - should be less like the SampleListener method (sampleOccurred)

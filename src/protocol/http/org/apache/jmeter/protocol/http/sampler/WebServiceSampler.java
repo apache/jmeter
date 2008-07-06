@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.sampler;
@@ -61,544 +61,544 @@ import org.w3c.dom.Document;
  * functions.
  * <p>
  * Created on: Jun 26, 2003
- * 
+ *
  */
 public class WebServiceSampler extends HTTPSamplerBase {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	//+ JMX file attribut names - do not change!
-	private static final String XML_DATA = "HTTPSamper.xml_data"; //$NON-NLS-1$
+    //+ JMX file attribut names - do not change!
+    private static final String XML_DATA = "HTTPSamper.xml_data"; //$NON-NLS-1$
 
-	private static final String SOAP_ACTION = "Soap.Action"; //$NON-NLS-1$
+    private static final String SOAP_ACTION = "Soap.Action"; //$NON-NLS-1$
 
-	private static final String XML_DATA_FILE = "WebServiceSampler.xml_data_file"; //$NON-NLS-1$
+    private static final String XML_DATA_FILE = "WebServiceSampler.xml_data_file"; //$NON-NLS-1$
 
-	private static final String XML_PATH_LOC = "WebServiceSampler.xml_path_loc"; //$NON-NLS-1$
+    private static final String XML_PATH_LOC = "WebServiceSampler.xml_path_loc"; //$NON-NLS-1$
 
-	private static final String MEMORY_CACHE = "WebServiceSampler.memory_cache"; //$NON-NLS-1$
+    private static final String MEMORY_CACHE = "WebServiceSampler.memory_cache"; //$NON-NLS-1$
 
-	private static final String READ_RESPONSE = "WebServiceSampler.read_response"; //$NON-NLS-1$
+    private static final String READ_RESPONSE = "WebServiceSampler.read_response"; //$NON-NLS-1$
 
-	private static final String USE_PROXY = "WebServiceSampler.use_proxy"; //$NON-NLS-1$
+    private static final String USE_PROXY = "WebServiceSampler.use_proxy"; //$NON-NLS-1$
 
-	private static final String PROXY_HOST = "WebServiceSampler.proxy_host"; //$NON-NLS-1$
+    private static final String PROXY_HOST = "WebServiceSampler.proxy_host"; //$NON-NLS-1$
 
-	private static final String PROXY_PORT = "WebServiceSampler.proxy_port"; //$NON-NLS-1$
+    private static final String PROXY_PORT = "WebServiceSampler.proxy_port"; //$NON-NLS-1$
 
-	private static final String WSDL_URL = "WebserviceSampler.wsdl_url"; //$NON-NLS-1$
+    private static final String WSDL_URL = "WebserviceSampler.wsdl_url"; //$NON-NLS-1$
 
-	private static final String TIMEOUT = "WebserviceSampler.timeout"; //$NON-NLS-1$
+    private static final String TIMEOUT = "WebserviceSampler.timeout"; //$NON-NLS-1$
     //- JMX file attribut names - do not change!
-    
-    private static final String PROXY_USER = 
+
+    private static final String PROXY_USER =
         JMeterUtils.getPropDefault(JMeter.HTTP_PROXY_USER,""); // $NON-NLS-1$
-    
-    private static final String PROXY_PASS = 
+
+    private static final String PROXY_PASS =
         JMeterUtils.getPropDefault(JMeter.HTTP_PROXY_PASS,""); // $NON-NLS-1$
-    
 
-	/*
-	 * Random class for generating random numbers.
-	 */
-	private final Random RANDOM = new Random();
 
-	private String fileContents = null;
+    /*
+     * Random class for generating random numbers.
+     */
+    private final Random RANDOM = new Random();
 
-	/**
-	 * Set the path where XML messages are stored for random selection.
-	 */
-	public void setXmlPathLoc(String path) {
-		setProperty(XML_PATH_LOC, path);
-	}
+    private String fileContents = null;
 
-	/**
-	 * Get the path where XML messages are stored. this is the directory where
-	 * JMeter will randomly select a file.
-	 */
-	public String getXmlPathLoc() {
-		return getPropertyAsString(XML_PATH_LOC);
-	}
+    /**
+     * Set the path where XML messages are stored for random selection.
+     */
+    public void setXmlPathLoc(String path) {
+        setProperty(XML_PATH_LOC, path);
+    }
 
-	/**
-	 * it's kinda obvious, but we state it anyways. Set the xml file with a
-	 * string path.
-	 * 
-	 * @param filename
-	 */
-	public void setXmlFile(String filename) {
-		setProperty(XML_DATA_FILE, filename);
-	}
+    /**
+     * Get the path where XML messages are stored. this is the directory where
+     * JMeter will randomly select a file.
+     */
+    public String getXmlPathLoc() {
+        return getPropertyAsString(XML_PATH_LOC);
+    }
 
-	/**
-	 * Get the file location of the xml file.
-	 * 
-	 * @return String file path.
-	 */
-	public String getXmlFile() {
-		return getPropertyAsString(XML_DATA_FILE);
-	}
+    /**
+     * it's kinda obvious, but we state it anyways. Set the xml file with a
+     * string path.
+     *
+     * @param filename
+     */
+    public void setXmlFile(String filename) {
+        setProperty(XML_DATA_FILE, filename);
+    }
 
-	/**
-	 * Method is used internally to check if a random file should be used for
-	 * the message. Messages must be valid. This is one way to load test with
-	 * different messages. The limitation of this approach is parsing XML takes
-	 * CPU resources, so it could affect JMeter GUI responsiveness.
-	 * 
-	 * @return String filename
-	 */
-	protected String getRandomFileName() {
-		if (this.getXmlPathLoc() != null) {
-			File src = new File(this.getXmlPathLoc());
-			if (src.isDirectory() && src.list() != null) {
-				File [] fileList = src.listFiles(new JMeterFileFilter(new String[] { ".xml" }, false));
-				File one = fileList[RANDOM.nextInt(fileList.length)];
-				// return the absolutePath of the file
-				return one.getAbsolutePath();
-			}
-			return getXmlFile();
-		}
-		return getXmlFile();
-	}
+    /**
+     * Get the file location of the xml file.
+     *
+     * @return String file path.
+     */
+    public String getXmlFile() {
+        return getPropertyAsString(XML_DATA_FILE);
+    }
 
-	/**
-	 * Set the XML data.
-	 * 
-	 * @param data
-	 */
-	public void setXmlData(String data) {
-		setProperty(XML_DATA, data);
-	}
+    /**
+     * Method is used internally to check if a random file should be used for
+     * the message. Messages must be valid. This is one way to load test with
+     * different messages. The limitation of this approach is parsing XML takes
+     * CPU resources, so it could affect JMeter GUI responsiveness.
+     *
+     * @return String filename
+     */
+    protected String getRandomFileName() {
+        if (this.getXmlPathLoc() != null) {
+            File src = new File(this.getXmlPathLoc());
+            if (src.isDirectory() && src.list() != null) {
+                File [] fileList = src.listFiles(new JMeterFileFilter(new String[] { ".xml" }, false));
+                File one = fileList[RANDOM.nextInt(fileList.length)];
+                // return the absolutePath of the file
+                return one.getAbsolutePath();
+            }
+            return getXmlFile();
+        }
+        return getXmlFile();
+    }
 
-	/**
-	 * Get the XML data as a string.
-	 * 
-	 * @return String data
-	 */
-	public String getXmlData() {
-		return getPropertyAsString(XML_DATA);
-	}
+    /**
+     * Set the XML data.
+     *
+     * @param data
+     */
+    public void setXmlData(String data) {
+        setProperty(XML_DATA, data);
+    }
 
-	/**
-	 * Set the soap action which should be in the form of an URN.
-	 * 
-	 * @param data
-	 */
-	public void setSoapAction(String data) {
-		setProperty(SOAP_ACTION, data);
-	}
+    /**
+     * Get the XML data as a string.
+     *
+     * @return String data
+     */
+    public String getXmlData() {
+        return getPropertyAsString(XML_DATA);
+    }
 
-	/**
-	 * Return the soap action string.
-	 * 
-	 * @return String soap action
-	 */
-	public String getSoapAction() {
-		return getPropertyAsString(SOAP_ACTION);
-	}
+    /**
+     * Set the soap action which should be in the form of an URN.
+     *
+     * @param data
+     */
+    public void setSoapAction(String data) {
+        setProperty(SOAP_ACTION, data);
+    }
 
-	/**
-	 * Set the memory cache.
-	 * 
-	 * @param cache
-	 */
-	public void setMemoryCache(boolean cache) {
-		setProperty(MEMORY_CACHE, String.valueOf(cache));
-	}
+    /**
+     * Return the soap action string.
+     *
+     * @return String soap action
+     */
+    public String getSoapAction() {
+        return getPropertyAsString(SOAP_ACTION);
+    }
 
-	/**
-	 * Get the memory cache.
-	 * 
-	 * @return boolean cache
-	 */
-	public boolean getMemoryCache() {
-		return getPropertyAsBoolean(MEMORY_CACHE);
-	}
+    /**
+     * Set the memory cache.
+     *
+     * @param cache
+     */
+    public void setMemoryCache(boolean cache) {
+        setProperty(MEMORY_CACHE, String.valueOf(cache));
+    }
 
-	/**
-	 * Set whether the sampler should read the response or not.
-	 * 
-	 * @param read
-	 */
-	public void setReadResponse(boolean read) {
-		setProperty(READ_RESPONSE, String.valueOf(read));
-	}
+    /**
+     * Get the memory cache.
+     *
+     * @return boolean cache
+     */
+    public boolean getMemoryCache() {
+        return getPropertyAsBoolean(MEMORY_CACHE);
+    }
 
-	/**
-	 * Return whether or not to read the response.
-	 * 
-	 * @return boolean
-	 */
-	public boolean getReadResponse() {
-		return this.getPropertyAsBoolean(READ_RESPONSE);
-	}
+    /**
+     * Set whether the sampler should read the response or not.
+     *
+     * @param read
+     */
+    public void setReadResponse(boolean read) {
+        setProperty(READ_RESPONSE, String.valueOf(read));
+    }
 
-	/**
-	 * Set whether or not to use a proxy
-	 * 
-	 * @param proxy
-	 */
-	public void setUseProxy(boolean proxy) {
-		setProperty(USE_PROXY, String.valueOf(proxy));
-	}
+    /**
+     * Return whether or not to read the response.
+     *
+     * @return boolean
+     */
+    public boolean getReadResponse() {
+        return this.getPropertyAsBoolean(READ_RESPONSE);
+    }
 
-	/**
-	 * Return whether or not to use proxy
-	 * 
-	 * @return true if should use proxy
-	 */
-	public boolean getUseProxy() {
-		return this.getPropertyAsBoolean(USE_PROXY);
-	}
+    /**
+     * Set whether or not to use a proxy
+     *
+     * @param proxy
+     */
+    public void setUseProxy(boolean proxy) {
+        setProperty(USE_PROXY, String.valueOf(proxy));
+    }
 
-	/**
-	 * Set the proxy hostname
-	 * 
-	 * @param host
-	 */
-	public void setProxyHost(String host) {
-		setProperty(PROXY_HOST, host);
-	}
+    /**
+     * Return whether or not to use proxy
+     *
+     * @return true if should use proxy
+     */
+    public boolean getUseProxy() {
+        return this.getPropertyAsBoolean(USE_PROXY);
+    }
 
-	/**
-	 * Return the proxy hostname
-	 * 
-	 * @return the proxy hostname
-	 */
-	public String getProxyHost() {
-		this.checkProxy();
-		return this.getPropertyAsString(PROXY_HOST);
-	}
+    /**
+     * Set the proxy hostname
+     *
+     * @param host
+     */
+    public void setProxyHost(String host) {
+        setProperty(PROXY_HOST, host);
+    }
 
-	/**
-	 * Set the proxy port
-	 * 
-	 * @param port
-	 */
-	public void setProxyPort(String port) {
-		setProperty(PROXY_PORT, port);
-	}
+    /**
+     * Return the proxy hostname
+     *
+     * @return the proxy hostname
+     */
+    public String getProxyHost() {
+        this.checkProxy();
+        return this.getPropertyAsString(PROXY_HOST);
+    }
 
-	/**
-	 * Return the proxy port
-	 * 
-	 * @return the proxy port
-	 */
-	public int getProxyPort() {
-		this.checkProxy();
-		return this.getPropertyAsInt(PROXY_PORT);
-	}
+    /**
+     * Set the proxy port
+     *
+     * @param port
+     */
+    public void setProxyPort(String port) {
+        setProperty(PROXY_PORT, port);
+    }
 
-	/**
-	 * 
-	 * @param url
-	 */
-	public void setWsdlURL(String url) {
-		this.setProperty(WSDL_URL, url);
-	}
+    /**
+     * Return the proxy port
+     *
+     * @return the proxy port
+     */
+    public int getProxyPort() {
+        this.checkProxy();
+        return this.getPropertyAsInt(PROXY_PORT);
+    }
 
-	/**
-	 * method returns the WSDL URL
-	 * 
-	 * @return the WSDL URL
-	 */
-	public String getWsdlURL() {
-		return getPropertyAsString(WSDL_URL);
-	}
+    /**
+     *
+     * @param url
+     */
+    public void setWsdlURL(String url) {
+        this.setProperty(WSDL_URL, url);
+    }
 
-	/*
-	 * The method will check to see if JMeter was started in NonGui mode. If it
-	 * was, it will try to pick up the proxy host and port values if they were
-	 * passed to JMeter.java.
-	 */
-	private void checkProxy() {
-		if (System.getProperty("JMeter.NonGui") != null && System.getProperty("JMeter.NonGui").equals("true")) {
-			this.setUseProxy(true);
-			// we check to see if the proxy host and port are set
-			String port = this.getPropertyAsString(PROXY_PORT);
-			String host = this.getPropertyAsString(PROXY_HOST);
-			if (host == null || host.length() == 0) {
-				// it's not set, lets check if the user passed
-				// proxy host and port from command line
+    /**
+     * method returns the WSDL URL
+     *
+     * @return the WSDL URL
+     */
+    public String getWsdlURL() {
+        return getPropertyAsString(WSDL_URL);
+    }
+
+    /*
+     * The method will check to see if JMeter was started in NonGui mode. If it
+     * was, it will try to pick up the proxy host and port values if they were
+     * passed to JMeter.java.
+     */
+    private void checkProxy() {
+        if (System.getProperty("JMeter.NonGui") != null && System.getProperty("JMeter.NonGui").equals("true")) {
+            this.setUseProxy(true);
+            // we check to see if the proxy host and port are set
+            String port = this.getPropertyAsString(PROXY_PORT);
+            String host = this.getPropertyAsString(PROXY_HOST);
+            if (host == null || host.length() == 0) {
+                // it's not set, lets check if the user passed
+                // proxy host and port from command line
                 host = System.getProperty("http.proxyHost");
-				if (host != null) {
-					this.setProxyHost(host);
-				}
-			}
-			if (port == null || port.length() == 0) {
-				// it's not set, lets check if the user passed
-				// proxy host and port from command line
+                if (host != null) {
+                    this.setProxyHost(host);
+                }
+            }
+            if (port == null || port.length() == 0) {
+                // it's not set, lets check if the user passed
+                // proxy host and port from command line
                 port = System.getProperty("http.proxyPort");
-				if (port != null) {
-					this.setProxyPort(port);
-				}
-			}
-		}
-	}
+                if (port != null) {
+                    this.setProxyPort(port);
+                }
+            }
+        }
+    }
 
-	/*
-	 * This method uses Apache soap util to create the proper DOM elements.
-	 * 
-	 * @return Element
-	 */
-	private org.w3c.dom.Element createDocument() throws SAXException, IOException {
+    /*
+     * This method uses Apache soap util to create the proper DOM elements.
+     *
+     * @return Element
+     */
+    private org.w3c.dom.Element createDocument() throws SAXException, IOException {
         Document doc = null;
         String next = this.getRandomFileName();//get filename or ""
-        
+
         /* Note that the filename is also used as a key to the pool (if used)
         ** Documents provided in the testplan are not currently pooled, as they may change
         *  between samples.
         */
-        
+
         if (next.length() > 0 && getMemoryCache()) {
-			doc = DOMPool.getDocument(next);
+            doc = DOMPool.getDocument(next);
             if (doc == null){
                 doc = openDocument(next);
                 if (doc != null) {// we created the document
                     DOMPool.putDocument(next, doc);
                 }
             }
-		} else { // Must be local content - or not using pool
+        } else { // Must be local content - or not using pool
             doc = openDocument(next);
         }
 
         if (doc == null) {
-			return null;
+            return null;
         }
-		return doc.getDocumentElement();
-	}
+        return doc.getDocumentElement();
+    }
 
-	/**
-	 * Open the file and create a Document.
-	 * 
+    /**
+     * Open the file and create a Document.
+     *
      * @param file - input filename or empty if using data from tesplan
-	 * @return Document
-	 * @throws IOException 
-	 * @throws SAXException 
-	 */
-	private Document openDocument(String file) throws SAXException, IOException {
-		/*
-		 * Consider using Apache commons pool to create a pool of document
-		 * builders or make sure XMLParserUtils creates builders efficiently.
-		 */
-		DocumentBuilder XDB = XMLParserUtils.getXMLDocBuilder();
-		XDB.setErrorHandler(null);//Suppress messages to stdout
+     * @return Document
+     * @throws IOException
+     * @throws SAXException
+     */
+    private Document openDocument(String file) throws SAXException, IOException {
+        /*
+         * Consider using Apache commons pool to create a pool of document
+         * builders or make sure XMLParserUtils creates builders efficiently.
+         */
+        DocumentBuilder XDB = XMLParserUtils.getXMLDocBuilder();
+        XDB.setErrorHandler(null);//Suppress messages to stdout
 
-		Document doc = null;
-		// if either a file or path location is given,
-		// get the file object.
-		if (file.length() > 0) {// we have a file
+        Document doc = null;
+        // if either a file or path location is given,
+        // get the file object.
+        if (file.length() > 0) {// we have a file
             if (this.getReadResponse()) {
                 TextFile tfile = new TextFile(file);
                 fileContents = tfile.getText();
             }
-			doc = XDB.parse(new FileInputStream(file));
-		} else {// must be a "here" document
-			fileContents = getXmlData();
-			if (fileContents != null && fileContents.length() > 0) {
-				doc = XDB.parse(new InputSource(new StringReader(fileContents)));
-			} else {
-			    log.warn("No post data provided!");
+            doc = XDB.parse(new FileInputStream(file));
+        } else {// must be a "here" document
+            fileContents = getXmlData();
+            if (fileContents != null && fileContents.length() > 0) {
+                doc = XDB.parse(new InputSource(new StringReader(fileContents)));
+            } else {
+                log.warn("No post data provided!");
             }
-		}
-		return doc;
-	}
+        }
+        return doc;
+    }
 
-	/*
-	 * Required to satisfy HTTPSamplerBase Should not be called, as we override
-	 * sample()
-	 */
+    /*
+     * Required to satisfy HTTPSamplerBase Should not be called, as we override
+     * sample()
+     */
 
-	protected HTTPSampleResult sample(URL u, String s, boolean b, int i) {
-		throw new RuntimeException("Not implemented - should not be called");
-	}
+    protected HTTPSampleResult sample(URL u, String s, boolean b, int i) {
+        throw new RuntimeException("Not implemented - should not be called");
+    }
 
-	/**
-	 * Sample the URL using Apache SOAP driver. Implementation note for myself
-	 * and those that are curious. Current logic marks the end after the
-	 * response has been read. If read response is set to false, the buffered
-	 * reader will read, but do nothing with it. Essentially, the stream from
-	 * the server goes into the ether.
-	 */
-	public SampleResult sample() {
-		SampleResult result = new SampleResult();
-		result.setSuccessful(false); // Assume it will fail
-		result.setResponseCode("000"); // ditto $NON-NLS-1$
-		result.setSampleLabel(getName());
-		try {
-			result.setURL(this.getUrl());
-			org.w3c.dom.Element rdoc = createDocument();
-			if (rdoc == null) {
-				throw new SOAPException("Could not create document", null);
-			}
-			Envelope msgEnv = Envelope.unmarshall(rdoc);
-			// create a new message
-			Message msg = new Message();
-			result.sampleStart();
-			SOAPHTTPConnection spconn = null;
-			// if a blank HeaderManager exists, try to
-			// get the SOAPHTTPConnection. After the first
-			// request, there should be a connection object
-			// stored with the cookie header info.
-			if (this.getHeaderManager() != null && this.getHeaderManager().getSOAPHeader() != null) {
-				spconn = (SOAPHTTPConnection) this.getHeaderManager().getSOAPHeader();
-			} else {
-				spconn = new SOAPHTTPConnection();
-			}
-            
+    /**
+     * Sample the URL using Apache SOAP driver. Implementation note for myself
+     * and those that are curious. Current logic marks the end after the
+     * response has been read. If read response is set to false, the buffered
+     * reader will read, but do nothing with it. Essentially, the stream from
+     * the server goes into the ether.
+     */
+    public SampleResult sample() {
+        SampleResult result = new SampleResult();
+        result.setSuccessful(false); // Assume it will fail
+        result.setResponseCode("000"); // ditto $NON-NLS-1$
+        result.setSampleLabel(getName());
+        try {
+            result.setURL(this.getUrl());
+            org.w3c.dom.Element rdoc = createDocument();
+            if (rdoc == null) {
+                throw new SOAPException("Could not create document", null);
+            }
+            Envelope msgEnv = Envelope.unmarshall(rdoc);
+            // create a new message
+            Message msg = new Message();
+            result.sampleStart();
+            SOAPHTTPConnection spconn = null;
+            // if a blank HeaderManager exists, try to
+            // get the SOAPHTTPConnection. After the first
+            // request, there should be a connection object
+            // stored with the cookie header info.
+            if (this.getHeaderManager() != null && this.getHeaderManager().getSOAPHeader() != null) {
+                spconn = (SOAPHTTPConnection) this.getHeaderManager().getSOAPHeader();
+            } else {
+                spconn = new SOAPHTTPConnection();
+            }
+
             spconn.setTimeout(getTimeoutAsInt());
-            
-			// set the auth. thanks to KiYun Roe for contributing the patch
-			// I cleaned up the patch slightly. 5-26-05
-			if (getAuthManager() != null) {
-				if (getAuthManager().getAuthForURL(getUrl()) != null) {
-					AuthManager authmanager = getAuthManager();
-					Authorization auth = authmanager.getAuthForURL(getUrl());
-					spconn.setUserName(auth.getUser());
-					spconn.setPassword(auth.getPass());
-				} else {
-					log.warn("the URL for the auth was null." + " Username and password not set");
-				}
-			}
-			// check the proxy
-			String phost = "";
-			int pport = 0;
-			// if use proxy is set, we try to pick up the
-			// proxy host and port from either the text
-			// fields or from JMeterUtil if they were passed
-			// from command line
-			if (this.getUseProxy()) {
-				if (this.getProxyHost().length() > 0 && this.getProxyPort() > 0) {
-					phost = this.getProxyHost();
-					pport = this.getProxyPort();
-				} else {
-					if (System.getProperty("http.proxyHost") != null || System.getProperty("http.proxyPort") != null) {
-						phost = System.getProperty("http.proxyHost");
-						pport = Integer.parseInt(System.getProperty("http.proxyPort"));
-					}
-				}
-				// if for some reason the host is blank and the port is
-				// zero, the sampler will fail silently
-				if (phost.length() > 0 && pport > 0) {
-					spconn.setProxyHost(phost);
-					spconn.setProxyPort(pport);
-					if (PROXY_USER.length()>0 && PROXY_PASS.length()>0){
-						spconn.setProxyUserName(PROXY_USER);
-						spconn.setProxyPassword(PROXY_PASS);
-					}
-				}
-			}
-			// by default we maintain the session.
-			spconn.setMaintainSession(true);
-			msg.setSOAPTransport(spconn);
-			msg.send(this.getUrl(), this.getSoapAction(), msgEnv);
 
-			if (this.getHeaderManager() != null) {
-				this.getHeaderManager().setSOAPHeader(spconn);
-			}
+            // set the auth. thanks to KiYun Roe for contributing the patch
+            // I cleaned up the patch slightly. 5-26-05
+            if (getAuthManager() != null) {
+                if (getAuthManager().getAuthForURL(getUrl()) != null) {
+                    AuthManager authmanager = getAuthManager();
+                    Authorization auth = authmanager.getAuthForURL(getUrl());
+                    spconn.setUserName(auth.getUser());
+                    spconn.setPassword(auth.getPass());
+                } else {
+                    log.warn("the URL for the auth was null." + " Username and password not set");
+                }
+            }
+            // check the proxy
+            String phost = "";
+            int pport = 0;
+            // if use proxy is set, we try to pick up the
+            // proxy host and port from either the text
+            // fields or from JMeterUtil if they were passed
+            // from command line
+            if (this.getUseProxy()) {
+                if (this.getProxyHost().length() > 0 && this.getProxyPort() > 0) {
+                    phost = this.getProxyHost();
+                    pport = this.getProxyPort();
+                } else {
+                    if (System.getProperty("http.proxyHost") != null || System.getProperty("http.proxyPort") != null) {
+                        phost = System.getProperty("http.proxyHost");
+                        pport = Integer.parseInt(System.getProperty("http.proxyPort"));
+                    }
+                }
+                // if for some reason the host is blank and the port is
+                // zero, the sampler will fail silently
+                if (phost.length() > 0 && pport > 0) {
+                    spconn.setProxyHost(phost);
+                    spconn.setProxyPort(pport);
+                    if (PROXY_USER.length()>0 && PROXY_PASS.length()>0){
+                        spconn.setProxyUserName(PROXY_USER);
+                        spconn.setProxyPassword(PROXY_PASS);
+                    }
+                }
+            }
+            // by default we maintain the session.
+            spconn.setMaintainSession(true);
+            msg.setSOAPTransport(spconn);
+            msg.send(this.getUrl(), this.getSoapAction(), msgEnv);
 
-			SOAPTransport st = msg.getSOAPTransport();
-			result.setDataType(SampleResult.TEXT);
-			BufferedReader br = null;
-			// check to see if SOAPTransport is not nul and receive is
-			// also not null. hopefully this will improve the error
-			// reporting. 5/13/05 peter lin
-			if (st != null && st.receive() != null) {
-				br = st.receive();
-				if (getReadResponse()) {
-					StringWriter sw = new StringWriter();
-					IOUtils.copy(br, sw);
-					result.sampleEnd();
-					// set the response
-					result.setResponseData(sw.toString().getBytes());
-				} else {
-					// by not reading the response
-					// for real, it improves the
-					// performance on slow clients
-					br.read();
-					result.sampleEnd();
-					result.setResponseData(JMeterUtils.getResString("read_response_message").getBytes()); //$NON-NLS-1$
-				}
-				result.setSuccessful(true);
-				result.setResponseCodeOK();
-				result.setResponseHeaders(this.convertSoapHeaders(st.getHeaders()));
-			} else {
-				result.sampleEnd();
-				result.setSuccessful(false);
-				if (st != null){
-				    result.setResponseData(st.getResponseSOAPContext().getContentType().getBytes());
-				}
-				result.setResponseHeaders("error");
-			}
-			// 1-22-04 updated the sampler so that when read
-			// response is set, it also sets SamplerData with
-			// the XML message, so users can see what was
-			// sent. if read response is not checked, it will
-			// not set sampler data with the request message.
-			// peter lin.
+            if (this.getHeaderManager() != null) {
+                this.getHeaderManager().setSOAPHeader(spconn);
+            }
+
+            SOAPTransport st = msg.getSOAPTransport();
+            result.setDataType(SampleResult.TEXT);
+            BufferedReader br = null;
+            // check to see if SOAPTransport is not nul and receive is
+            // also not null. hopefully this will improve the error
+            // reporting. 5/13/05 peter lin
+            if (st != null && st.receive() != null) {
+                br = st.receive();
+                if (getReadResponse()) {
+                    StringWriter sw = new StringWriter();
+                    IOUtils.copy(br, sw);
+                    result.sampleEnd();
+                    // set the response
+                    result.setResponseData(sw.toString().getBytes());
+                } else {
+                    // by not reading the response
+                    // for real, it improves the
+                    // performance on slow clients
+                    br.read();
+                    result.sampleEnd();
+                    result.setResponseData(JMeterUtils.getResString("read_response_message").getBytes()); //$NON-NLS-1$
+                }
+                result.setSuccessful(true);
+                result.setResponseCodeOK();
+                result.setResponseHeaders(this.convertSoapHeaders(st.getHeaders()));
+            } else {
+                result.sampleEnd();
+                result.setSuccessful(false);
+                if (st != null){
+                    result.setResponseData(st.getResponseSOAPContext().getContentType().getBytes());
+                }
+                result.setResponseHeaders("error");
+            }
+            // 1-22-04 updated the sampler so that when read
+            // response is set, it also sets SamplerData with
+            // the XML message, so users can see what was
+            // sent. if read response is not checked, it will
+            // not set sampler data with the request message.
+            // peter lin.
             // Removed URL, as that is already stored elsewere
-			result.setSamplerData(fileContents);// WARNING - could be large
-			if (st!= null){
-			    result.setEncodingAndType(st.getResponseSOAPContext().getContentType());
-			}
-			// setting this is just a formality, since
-			// soap will return a descriptive error
-			// message, soap errors within the response
-			// are preferred.
-			if (br != null) {
-				br.close();
-			}
-			// reponse code doesn't really apply, since
-			// the soap driver doesn't provide a
-			// response code
-		} catch (IllegalArgumentException exception){
-			String message = exception.getMessage();
-			log.warn(message);
-			result.setResponseMessage(message);
-		} catch (SAXException exception) {
-			log.warn(exception.toString());
-			result.setResponseMessage(exception.getMessage());
-		} catch (SOAPException exception) {
-			log.warn(exception.toString());
-			result.setResponseMessage(exception.getMessage());
-		} catch (MalformedURLException exception) {
-			String message = exception.getMessage();
-			log.warn(message);
-			result.setResponseMessage(message);
-		} catch (IOException exception) {
-			String message = exception.getMessage();
-			log.warn(message);
-			result.setResponseMessage(message);
-		} catch (NoClassDefFoundError error){
-			log.error("Missing class: ",error);
-			result.setResponseMessage(error.toString());			
-		} catch (Exception exception) {
-			if ("javax.mail.MessagingException".equals(exception.getClass().getName())){
-				log.warn(exception.toString());
-				result.setResponseMessage(exception.getMessage());
-			} else {
-				throw new RuntimeException(exception);
-			}
-		}
-		return result;
-	}
+            result.setSamplerData(fileContents);// WARNING - could be large
+            if (st!= null){
+                result.setEncodingAndType(st.getResponseSOAPContext().getContentType());
+            }
+            // setting this is just a formality, since
+            // soap will return a descriptive error
+            // message, soap errors within the response
+            // are preferred.
+            if (br != null) {
+                br.close();
+            }
+            // reponse code doesn't really apply, since
+            // the soap driver doesn't provide a
+            // response code
+        } catch (IllegalArgumentException exception){
+            String message = exception.getMessage();
+            log.warn(message);
+            result.setResponseMessage(message);
+        } catch (SAXException exception) {
+            log.warn(exception.toString());
+            result.setResponseMessage(exception.getMessage());
+        } catch (SOAPException exception) {
+            log.warn(exception.toString());
+            result.setResponseMessage(exception.getMessage());
+        } catch (MalformedURLException exception) {
+            String message = exception.getMessage();
+            log.warn(message);
+            result.setResponseMessage(message);
+        } catch (IOException exception) {
+            String message = exception.getMessage();
+            log.warn(message);
+            result.setResponseMessage(message);
+        } catch (NoClassDefFoundError error){
+            log.error("Missing class: ",error);
+            result.setResponseMessage(error.toString());
+        } catch (Exception exception) {
+            if ("javax.mail.MessagingException".equals(exception.getClass().getName())){
+                log.warn(exception.toString());
+                result.setResponseMessage(exception.getMessage());
+            } else {
+                throw new RuntimeException(exception);
+            }
+        }
+        return result;
+    }
 
-	/**
-	 * We override this to prevent the wrong encoding and provide no
-	 * implementation. We want to reuse the other parts of HTTPSampler, but not
-	 * the connection. The connection is handled by the Apache SOAP driver.
-	 */
-	public void addEncodedArgument(String name, String value, String metaData) {
-	}
+    /**
+     * We override this to prevent the wrong encoding and provide no
+     * implementation. We want to reuse the other parts of HTTPSampler, but not
+     * the connection. The connection is handled by the Apache SOAP driver.
+     */
+    public void addEncodedArgument(String name, String value, String metaData) {
+    }
 
-	public String convertSoapHeaders(Hashtable ht) {
-		Enumeration en = ht.keys();
-		StringBuffer buf = new StringBuffer();
-		while (en.hasMoreElements()) {
-			Object key = en.nextElement();
-			buf.append((String) key).append("=").append((String) ht.get(key)).append("\n"); //$NON-NLS-1$ //$NON-NLS-2$
-		}
-		return buf.toString();
-	}
+    public String convertSoapHeaders(Hashtable ht) {
+        Enumeration en = ht.keys();
+        StringBuffer buf = new StringBuffer();
+        while (en.hasMoreElements()) {
+            Object key = en.nextElement();
+            buf.append((String) key).append("=").append((String) ht.get(key)).append("\n"); //$NON-NLS-1$ //$NON-NLS-2$
+        }
+        return buf.toString();
+    }
 
     public String getTimeout() {
         return getPropertyAsString(TIMEOUT);

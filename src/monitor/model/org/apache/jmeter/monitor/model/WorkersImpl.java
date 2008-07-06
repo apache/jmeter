@@ -20,25 +20,25 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * 
- * @version $Revision$ on $Date$
+ *
+ * @version $Revision$
  */
 public class WorkersImpl implements Workers {
-	private List worker = null;
+    private List worker = null;
 
-	/**
-	 * 
-	 */
-	public WorkersImpl() {
-		super();
-		worker = new LinkedList();
-	}
+    /**
+     *
+     */
+    public WorkersImpl() {
+        super();
+        worker = new LinkedList();
+    }
 
-	public List getWorker() {
-		return worker;
-	}
+    public List getWorker() {
+        return worker;
+    }
 
-	public void addWorker(Worker value) {
-		this.worker.add(value);
-	}
+    public void addWorker(Worker value) {
+        this.worker.add(value);
+    }
 }

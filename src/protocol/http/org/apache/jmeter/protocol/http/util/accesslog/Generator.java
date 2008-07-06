@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.util.accesslog;
@@ -36,103 +36,101 @@ package org.apache.jmeter.protocol.http.util.accesslog;
  * dramatically. E-commerce sites typically have limited inventory, therefore it
  * is better to design test plans that use data from the database.
  * <p>
- * 
- * @author Peter Lin
- * @version $Revision$ last updated on $Date$
- *          Created on: Jun 23, 2003<br>
+ *
+ * @version $Revision$
  */
 
 public interface Generator {
 
-	/**
-	 * close the generator
-	 */
-	public void close();
+    /**
+     * close the generator
+     */
+    public void close();
 
-	/**
-	 * The host is the name of the server.
-	 * 
-	 * @param host
-	 */
-	public void setHost(String host);
+    /**
+     * The host is the name of the server.
+     *
+     * @param host
+     */
+    public void setHost(String host);
 
-	/**
-	 * This is the label for the request, which is used in the logs and results.
-	 * 
-	 * @param label
-	 */
-	public void setLabel(String label);
+    /**
+     * This is the label for the request, which is used in the logs and results.
+     *
+     * @param label
+     */
+    public void setLabel(String label);
 
-	/**
-	 * The method is the HTTP request method. It's normally POST or GET.
-	 * 
-	 * @param post_get
-	 */
-	public void setMethod(String post_get);
+    /**
+     * The method is the HTTP request method. It's normally POST or GET.
+     *
+     * @param post_get
+     */
+    public void setMethod(String post_get);
 
-	/**
-	 * Set the request parameters
-	 * 
-	 * @param params
-	 */
-	public void setParams(NVPair[] params);
+    /**
+     * Set the request parameters
+     *
+     * @param params
+     */
+    public void setParams(NVPair[] params);
 
-	/**
-	 * The path is the web page you want to test.
-	 * 
-	 * @param path
-	 */
-	public void setPath(String path);
+    /**
+     * The path is the web page you want to test.
+     *
+     * @param path
+     */
+    public void setPath(String path);
 
-	/**
-	 * The default port for HTTP is 80, but not all servers run on that port.
-	 * 
-	 * @param port -
-	 *            port number
-	 */
-	public void setPort(int port);
+    /**
+     * The default port for HTTP is 80, but not all servers run on that port.
+     *
+     * @param port -
+     *            port number
+     */
+    public void setPort(int port);
 
-	/**
-	 * Set the querystring for the request if the method is GET.
-	 * 
-	 * @param querystring
-	 */
-	public void setQueryString(String querystring);
+    /**
+     * Set the querystring for the request if the method is GET.
+     *
+     * @param querystring
+     */
+    public void setQueryString(String querystring);
 
-	/**
-	 * The source logs is the location where the access log resides.
-	 * 
-	 * @param sourcefile
-	 */
-	public void setSourceLogs(String sourcefile);
+    /**
+     * The source logs is the location where the access log resides.
+     *
+     * @param sourcefile
+     */
+    public void setSourceLogs(String sourcefile);
 
-	/**
-	 * The target can be either a java.io.File or a Sampler. We make it generic,
-	 * so that later on we can use these classes directly from a HTTPSampler.
-	 * 
-	 * @param target
-	 */
-	public void setTarget(Object target);
+    /**
+     * The target can be either a java.io.File or a Sampler. We make it generic,
+     * so that later on we can use these classes directly from a HTTPSampler.
+     *
+     * @param target
+     */
+    public void setTarget(Object target);
 
-	/**
-	 * The method is responsible for calling the necessary methods to generate a
-	 * valid request. If the generator is used to pre-process access logs, the
-	 * method wouldn't return anything. If the generator is used by a control
-	 * element, it should return the correct Sampler class with the required
-	 * fields set.
-	 */
-	public Object generateRequest();
+    /**
+     * The method is responsible for calling the necessary methods to generate a
+     * valid request. If the generator is used to pre-process access logs, the
+     * method wouldn't return anything. If the generator is used by a control
+     * element, it should return the correct Sampler class with the required
+     * fields set.
+     */
+    public Object generateRequest();
 
-	/**
-	 * If the generator is converting the logs to a .jmx file, save should be
-	 * called.
-	 */
-	public void save();
+    /**
+     * If the generator is converting the logs to a .jmx file, save should be
+     * called.
+     */
+    public void save();
 
-	/**
-	 * The purpose of the reset is so Samplers can explicitly call reset to
-	 * create a new instance of HTTPSampler.
-	 * 
-	 */
-	public void reset();
+    /**
+     * The purpose of the reset is so Samplers can explicitly call reset to
+     * create a new instance of HTTPSampler.
+     *
+     */
+    public void reset();
 }

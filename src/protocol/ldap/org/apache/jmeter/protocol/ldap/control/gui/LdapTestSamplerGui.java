@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.ldap.control.gui;
@@ -31,47 +31,47 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
 public class LdapTestSamplerGui extends AbstractSamplerGui {
-	private LoginConfigGui loginPanel;
+    private LoginConfigGui loginPanel;
 
-	private LdapConfigGui ldapDefaultPanel;
+    private LdapConfigGui ldapDefaultPanel;
 
-	public LdapTestSamplerGui() {
-		init();
-	}
+    public LdapTestSamplerGui() {
+        init();
+    }
 
-	/**
-	 * A newly created component can be initialized with the contents of a Test
-	 * Element object by calling this method. The component is responsible for
-	 * querying the Test Element object for the relevant information to display
-	 * in its GUI.
-	 * 
-	 * @param element
-	 *            the TestElement to configure
-	 */
-	public void configure(TestElement element) {
-		super.configure(element);
-		loginPanel.configure(element);
-		ldapDefaultPanel.configure(element);
-	}
+    /**
+     * A newly created component can be initialized with the contents of a Test
+     * Element object by calling this method. The component is responsible for
+     * querying the Test Element object for the relevant information to display
+     * in its GUI.
+     *
+     * @param element
+     *            the TestElement to configure
+     */
+    public void configure(TestElement element) {
+        super.configure(element);
+        loginPanel.configure(element);
+        ldapDefaultPanel.configure(element);
+    }
 
-	public TestElement createTestElement() {
-		LDAPSampler sampler = new LDAPSampler();
-		modifyTestElement(sampler);
-		return sampler;
-	}
+    public TestElement createTestElement() {
+        LDAPSampler sampler = new LDAPSampler();
+        modifyTestElement(sampler);
+        return sampler;
+    }
 
-	/**
-	 * Modifies a given TestElement to mirror the data in the gui components.
-	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-	 */
-	public void modifyTestElement(TestElement sampler) {
-		sampler.clear();
-		((LDAPSampler) sampler).addTestElement(ldapDefaultPanel.createTestElement());
-		((LDAPSampler) sampler).addTestElement(loginPanel.createTestElement());
-		this.configureTestElement(sampler);
-	}
-    
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     *
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement sampler) {
+        sampler.clear();
+        ((LDAPSampler) sampler).addTestElement(ldapDefaultPanel.createTestElement());
+        ((LDAPSampler) sampler).addTestElement(loginPanel.createTestElement());
+        this.configureTestElement(sampler);
+    }
+
     /**
      * Implements JMeterGUIComponent.clearGui
      */
@@ -80,23 +80,23 @@ public class LdapTestSamplerGui extends AbstractSamplerGui {
 
         ldapDefaultPanel.clearGui();
         loginPanel.clearGui();
-    }    
+    }
 
-	public String getLabelResource() {
-		return "ldap_testing_title"; // $NON-NLS-1$
-	}
+    public String getLabelResource() {
+        return "ldap_testing_title"; // $NON-NLS-1$
+    }
 
-	private void init() {
-		setLayout(new BorderLayout(0, 5));
-		setBorder(makeBorder());
-		// MAIN PANEL
-		VerticalPanel mainPanel = new VerticalPanel();
-		loginPanel = new LoginConfigGui(false);
-		ldapDefaultPanel = new LdapConfigGui(false);
-		loginPanel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("login_config"))); // $NON-NLS-1$
-		add(makeTitlePanel(), BorderLayout.NORTH);
-		mainPanel.add(loginPanel);
-		mainPanel.add(ldapDefaultPanel);
-		add(mainPanel, BorderLayout.CENTER);
-	}
+    private void init() {
+        setLayout(new BorderLayout(0, 5));
+        setBorder(makeBorder());
+        // MAIN PANEL
+        VerticalPanel mainPanel = new VerticalPanel();
+        loginPanel = new LoginConfigGui(false);
+        ldapDefaultPanel = new LdapConfigGui(false);
+        loginPanel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("login_config"))); // $NON-NLS-1$
+        add(makeTitlePanel(), BorderLayout.NORTH);
+        mainPanel.add(loginPanel);
+        mainPanel.add(ldapDefaultPanel);
+        add(mainPanel, BorderLayout.CENTER);
+    }
 }

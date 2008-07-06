@@ -5,15 +5,15 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations
  * under the License.
- *  
+ *
  */
 
 package org.apache.jmeter.util;
@@ -43,34 +43,34 @@ public abstract class BSFTestElement extends AbstractTestElement
     static {
         BSFManager.registerScriptingEngine("jexl", //$NON-NLS-1$
                 "org.apache.commons.jexl.bsf.JexlEngine", //$NON-NLS-1$
-                new String[]{"jexl"}); //$NON-NLS-1$        
+                new String[]{"jexl"}); //$NON-NLS-1$
     }
-    
-    //++ For TestBean implementations only
-	private String parameters; // passed to file or script
-	
-	private String filename; // file to source (overrides script)
 
-	private String script; // script (if file not provided)
-	
-	private String scriptLanguage; // BSF language to use
+    //++ For TestBean implementations only
+    private String parameters; // passed to file or script
+
+    private String filename; // file to source (overrides script)
+
+    private String script; // script (if file not provided)
+
+    private String scriptLanguage; // BSF language to use
     //-- For TestBean implementations only
-	
+
     public BSFTestElement() {
         super();
         init();
     }
 
-	private void init() {
-		parameters=""; // ensure variables are not null
-		filename="";
-		script="";
-		scriptLanguage="";
-	}
+    private void init() {
+        parameters=""; // ensure variables are not null
+        filename="";
+        script="";
+        scriptLanguage="";
+    }
 
     private Object readResolve() {
-    	init();
-    	return this;
+        init();
+        return this;
     }
 
     public Object clone() {
@@ -107,7 +107,7 @@ public abstract class BSFTestElement extends AbstractTestElement
         mgr.declareBean("props", props, props.getClass()); // $NON-NLS-1$
         // For use in debugging:
         mgr.declareBean("OUT", System.out, PrintStream.class); // $NON-NLS-1$
-        
+
         // Most subclasses will need these:
         SampleResult prev = jmctx.getPreviousResult();
         mgr.declareBean("prev", prev, SampleResult.class);
@@ -117,18 +117,18 @@ public abstract class BSFTestElement extends AbstractTestElement
 
     protected void processFileOrScript(BSFManager mgr) throws BSFException{
         BSFEngine bsfEngine = mgr.loadScriptingEngine(getScriptLanguage());
-		final String scriptFile = getFilename();
+        final String scriptFile = getFilename();
         if (scriptFile.length() == 0) {
-			bsfEngine.exec("[script]",0,0,getScript());
-		} 
-		bsfEngine.exec(scriptFile,0,0,scriptFile);
+            bsfEngine.exec("[script]",0,0,getScript());
+        }
+        bsfEngine.exec(scriptFile,0,0,scriptFile);
     }
 
     /**
      * Return the script (TestBean version).
      * Must be overridden for subclasses that don't implement TestBean
      * otherwise the clone() method won't work.
-     * 
+     *
      * @return the script to execute
      */
     public String getScript(){
@@ -139,29 +139,29 @@ public abstract class BSFTestElement extends AbstractTestElement
      * Set the script (TestBean version).
      * Must be overridden for subclasses that don't implement TestBean
      * otherwise the clone() method won't work.
-     * 
+     *
      * @param s the script to execute (may be blank)
      */
     public void setScript(String s){
         script=s;
     }
 
-	public String getParameters() {
-		return parameters;
-	}
+    public String getParameters() {
+        return parameters;
+    }
 
-	public void setParameters(String s) {
-		parameters = s;
-	}
+    public void setParameters(String s) {
+        parameters = s;
+    }
 
-	public String getFilename() {
-		return filename;
-	}
+    public String getFilename() {
+        return filename;
+    }
 
-	public void setFilename(String s) {
-		filename = s;
-	}
-	
+    public void setFilename(String s) {
+        filename = s;
+    }
+
     public String getScriptLanguage() {
         return scriptLanguage;
     }
@@ -169,5 +169,5 @@ public abstract class BSFTestElement extends AbstractTestElement
     public void setScriptLanguage(String s) {
         scriptLanguage = s;
     }
-    
+
 }

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.sampler;
@@ -25,87 +25,87 @@ import org.apache.jmeter.samplers.SampleResult;
 
 /**
  * This is a specialisation of the SampleResult class for the HTTP protocol.
- * 
+ *
  */
 public class HTTPSampleResult extends SampleResult {
 
-	private String cookies = ""; // never null
+    private String cookies = ""; // never null
 
-	private String method;
+    private String method;
 
-	private String redirectLocation;
+    private String redirectLocation;
 
-	private String queryString = ""; // never null
+    private String queryString = ""; // never null
 
-	public HTTPSampleResult() {
-		super();
-		setDataEncoding(DEFAULT_HTTP_ENCODING); // default if encoding not provided be the page
-	}
+    public HTTPSampleResult() {
+        super();
+        setDataEncoding(DEFAULT_HTTP_ENCODING); // default if encoding not provided be the page
+    }
 
-	public HTTPSampleResult(long elapsed) {
-		super(elapsed, true);
-	}
+    public HTTPSampleResult(long elapsed) {
+        super(elapsed, true);
+    }
 
-	/**
-	 * Construct a 'parent' result for an already-existing result, essentially
-	 * cloning it
-	 * 
-	 * @param res
-	 *            existing sample result
-	 */
-	public HTTPSampleResult(HTTPSampleResult res) {
-		super(res);
-		method=res.method;
-		cookies=res.cookies;
+    /**
+     * Construct a 'parent' result for an already-existing result, essentially
+     * cloning it
+     *
+     * @param res
+     *            existing sample result
+     */
+    public HTTPSampleResult(HTTPSampleResult res) {
+        super(res);
+        method=res.method;
+        cookies=res.cookies;
         queryString=res.queryString;
         redirectLocation=res.redirectLocation;
-	}
+    }
 
-	public void setHTTPMethod(String method) {
-		this.method = method;
-	}
+    public void setHTTPMethod(String method) {
+        this.method = method;
+    }
 
-	public String getHTTPMethod() {
-		return method;
-	}
+    public String getHTTPMethod() {
+        return method;
+    }
 
-	public void setRedirectLocation(String redirectLocation) {
-		this.redirectLocation = redirectLocation;
-	}
+    public void setRedirectLocation(String redirectLocation) {
+        this.redirectLocation = redirectLocation;
+    }
 
-	public String getRedirectLocation() {
-		return redirectLocation;
-	}
+    public String getRedirectLocation() {
+        return redirectLocation;
+    }
 
-	/**
-	 * Determine whether this result is a redirect.
-	 * 
-	 * @return true iif res is an HTTP redirect response
-	 */
-	public boolean isRedirect() {
-		final String[] REDIRECT_CODES = { "301", "302", "303" }; // NOT 304!
-		String code = getResponseCode();
-		for (int i = 0; i < REDIRECT_CODES.length; i++) {
-			if (REDIRECT_CODES[i].equals(code)) {
-				return true;
-			}
-		}
-		return false;
-	}
+    /**
+     * Determine whether this result is a redirect.
+     *
+     * @return true iif res is an HTTP redirect response
+     */
+    public boolean isRedirect() {
+        final String[] REDIRECT_CODES = { "301", "302", "303" }; // NOT 304!
+        String code = getResponseCode();
+        for (int i = 0; i < REDIRECT_CODES.length; i++) {
+            if (REDIRECT_CODES[i].equals(code)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	/*
-	 * (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * Overrides version in Sampler data to provide more details
-	 * 
-	 * @see org.apache.jmeter.samplers.SampleResult#getSamplerData()
-	 */
-	public String getSamplerData() {
-		StringBuffer sb = new StringBuffer();
-		sb.append(method);
-		URL u = super.getURL();
-		if (u != null) {
-			sb.append(' ');
-			sb.append(u.toString());
+     *
+     * @see org.apache.jmeter.samplers.SampleResult#getSamplerData()
+     */
+    public String getSamplerData() {
+        StringBuffer sb = new StringBuffer();
+        sb.append(method);
+        URL u = super.getURL();
+        if (u != null) {
+            sb.append(' ');
+            sb.append(u.toString());
             sb.append("\n");
             // Include request body if it is a post or put
             if (HTTPConstants.POST.equals(method) || HTTPConstants.PUT.equals(method)) {
@@ -115,85 +115,85 @@ public class HTTPSampleResult extends SampleResult {
             }
             if (cookies.length()>0){
                 sb.append("\nCookie Data:\n");
-    			sb.append(cookies);
+                sb.append(cookies);
             } else {
                 sb.append("\n[no cookies]");
             }
             sb.append("\n");
-		}
-		final String sampData = super.getSamplerData();
+        }
+        final String sampData = super.getSamplerData();
         if (sampData != null){
             sb.append(sampData);
         }
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 
-	/**
-	 * @return cookies as a string
-	 */
-	public String getCookies() {
-		return cookies;
-	}
+    /**
+     * @return cookies as a string
+     */
+    public String getCookies() {
+        return cookies;
+    }
 
-	/**
-	 * @param string
-	 *            representing the cookies
-	 */
-	public void setCookies(String string) {
+    /**
+     * @param string
+     *            representing the cookies
+     */
+    public void setCookies(String string) {
         if (string == null) {
             cookies="";// $NON-NLS-1$
         } else {
-    		cookies = string;
+            cookies = string;
         }
-	}
+    }
 
-	/**
-	 * Fetch the query string
-	 * 
-	 * @return the query string
-	 */
-	public String getQueryString() {
-		return queryString;
-	}
+    /**
+     * Fetch the query string
+     *
+     * @return the query string
+     */
+    public String getQueryString() {
+        return queryString;
+    }
 
-	/**
-	 * Save the query string
-	 * 
-	 * @param string
-	 *            the query string
-	 */
-	public void setQueryString(String string) {
+    /**
+     * Save the query string
+     *
+     * @param string
+     *            the query string
+     */
+    public void setQueryString(String string) {
         if (string == null ) {
             queryString="";// $NON-NLS-1$
         } else {
-    		queryString = string;
+            queryString = string;
         }
-	}
+    }
     /**
      * Overrides the method from SampleResult - so the encoding can be extracted from
      * the Meta content-type if necessary.
-     * 
+     *
      * Updates the dataEncoding field if the content-type is found.
-     * 
+     *
      * @return the dataEncoding value as a String
      */
     public String getDataEncodingWithDefault() {
-    	if (getDataEncodingNoDefault() == null && getContentType().startsWith("text/html")){ // $NON-NLS-1$
-    		byte[] bytes=getResponseData();    		
-    		// get the start of the file
-    		String prefix = new String(bytes,0,Math.min(bytes.length, 1000)).toLowerCase(java.util.Locale.ENGLISH);
-    		// Extract the content-type if present
-    		final String METATAG = "<meta http-equiv=\"content-type\" content=\""; // $NON-NLS-1$
-			int tagstart=prefix.indexOf(METATAG);
-    		if (tagstart!=-1){
-    			tagstart += METATAG.length();
-    			int tagend = prefix.indexOf("\"", tagstart); // $NON-NLS-1$
-    			if (tagend!=-1){
-    				final String ct = new String(bytes,tagstart,tagend-tagstart);
-					setEncodingAndType(ct);// Update the dataEncoding
-    			}
-    		}
-    	}
-		return super.getDataEncodingWithDefault();
-    }	    
+        if (getDataEncodingNoDefault() == null && getContentType().startsWith("text/html")){ // $NON-NLS-1$
+            byte[] bytes=getResponseData();
+            // get the start of the file
+            String prefix = new String(bytes,0,Math.min(bytes.length, 1000)).toLowerCase(java.util.Locale.ENGLISH);
+            // Extract the content-type if present
+            final String METATAG = "<meta http-equiv=\"content-type\" content=\""; // $NON-NLS-1$
+            int tagstart=prefix.indexOf(METATAG);
+            if (tagstart!=-1){
+                tagstart += METATAG.length();
+                int tagend = prefix.indexOf("\"", tagstart); // $NON-NLS-1$
+                if (tagend!=-1){
+                    final String ct = new String(bytes,tagstart,tagend-tagstart);
+                    setEncodingAndType(ct);// Update the dataEncoding
+                }
+            }
+        }
+        return super.getDataEncodingWithDefault();
+    }
 }

@@ -17,65 +17,65 @@
 package org.apache.jmeter.monitor.model;
 
 /**
- * 
- * @version $Revision$ on $Date$
+ *
+ * @version $Revision$
  */
 public class ThreadInfoImpl implements ThreadInfo {
-	private int maxSpareThreads = 0;
+    private int maxSpareThreads = 0;
 
-	private int minSpareThreads = 0;
+    private int minSpareThreads = 0;
 
-	private int maxThreads = 0;
+    private int maxThreads = 0;
 
-	private int currentThreadCount = 0;
+    private int currentThreadCount = 0;
 
-	private int currentThreadsBusy = 0;
+    private int currentThreadsBusy = 0;
 
-	/**
-	 * 
-	 */
-	public ThreadInfoImpl() {
-		super();
-	}
+    /**
+     *
+     */
+    public ThreadInfoImpl() {
+        super();
+    }
 
-	public int getMaxSpareThreads() {
-		return this.maxSpareThreads;
-	}
+    public int getMaxSpareThreads() {
+        return this.maxSpareThreads;
+    }
 
-	public void setMaxSpareThreads(int value) {
-		this.maxSpareThreads = value;
-	}
+    public void setMaxSpareThreads(int value) {
+        this.maxSpareThreads = value;
+    }
 
-	public int getMinSpareThreads() {
-		return this.minSpareThreads;
-	}
+    public int getMinSpareThreads() {
+        return this.minSpareThreads;
+    }
 
-	public void setMinSpareThreads(int value) {
-		this.minSpareThreads = value;
-	}
+    public void setMinSpareThreads(int value) {
+        this.minSpareThreads = value;
+    }
 
-	public int getMaxThreads() {
-		return this.maxThreads;
-	}
+    public int getMaxThreads() {
+        return this.maxThreads;
+    }
 
-	public void setMaxThreads(int value) {
-		this.maxThreads = value;
-	}
+    public void setMaxThreads(int value) {
+        this.maxThreads = value;
+    }
 
-	public int getCurrentThreadsBusy() {
-		return this.currentThreadsBusy;
-	}
+    public int getCurrentThreadsBusy() {
+        return this.currentThreadsBusy;
+    }
 
-	public void setCurrentThreadsBusy(int value) {
-		this.currentThreadsBusy = value;
-	}
+    public void setCurrentThreadsBusy(int value) {
+        this.currentThreadsBusy = value;
+    }
 
-	public int getCurrentThreadCount() {
-		return this.currentThreadCount;
-	}
+    public int getCurrentThreadCount() {
+        return this.currentThreadCount;
+    }
 
-	public void setCurrentThreadCount(int value) {
-		this.currentThreadCount = value;
-	}
+    public void setCurrentThreadCount(int value) {
+        this.currentThreadCount = value;
+    }
 
 }

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.reporters;
@@ -29,58 +29,58 @@ import org.apache.log.Logger;
 
 /**
  * ResultAction - take action based on the status of the last Result
- * 
+ *
  */
 public class ResultAction extends OnErrorTestElement implements Serializable, SampleListener {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	/*
-	 * Constructor is initially called once for each occurrence in the test plan
-	 * For GUI, several more instances are created Then clear is called at start
-	 * of test Called several times during test startup The name will not
-	 * necessarily have been set at this point.
-	 */
-	public ResultAction() {
-		super();
-		// log.debug(Thread.currentThread().getName());
-		// System.out.println(">> "+me+" "+this.getName()+"
-		// "+Thread.currentThread().getName());
-	}
+    /*
+     * Constructor is initially called once for each occurrence in the test plan
+     * For GUI, several more instances are created Then clear is called at start
+     * of test Called several times during test startup The name will not
+     * necessarily have been set at this point.
+     */
+    public ResultAction() {
+        super();
+        // log.debug(Thread.currentThread().getName());
+        // System.out.println(">> "+me+" "+this.getName()+"
+        // "+Thread.currentThread().getName());
+    }
 
-	/**
-	 * Examine the sample(s) and take appropriate action
-	 * 
-	 * @see org.apache.jmeter.samplers.SampleListener#sampleOccurred(org.apache.jmeter.samplers.SampleEvent)
-	 */
-	public void sampleOccurred(SampleEvent e) {
-		SampleResult s = e.getResult();
-		log.debug(s.getSampleLabel() + " OK? " + s.isSuccessful());
-		if (!s.isSuccessful()) {
-			if (isStopTest()) {
-				s.setStopTest(true);
-			}
-			if (isStopThread()) {
-				s.setStopThread(true);
-			}
-		}
-	}
+    /**
+     * Examine the sample(s) and take appropriate action
+     *
+     * @see org.apache.jmeter.samplers.SampleListener#sampleOccurred(org.apache.jmeter.samplers.SampleEvent)
+     */
+    public void sampleOccurred(SampleEvent e) {
+        SampleResult s = e.getResult();
+        log.debug(s.getSampleLabel() + " OK? " + s.isSuccessful());
+        if (!s.isSuccessful()) {
+            if (isStopTest()) {
+                s.setStopTest(true);
+            }
+            if (isStopThread()) {
+                s.setStopThread(true);
+            }
+        }
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.samplers.SampleListener#sampleStarted(org.apache.jmeter.samplers.SampleEvent)
-	 */
-	public void sampleStarted(SampleEvent e) {
-		// not used
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.samplers.SampleListener#sampleStarted(org.apache.jmeter.samplers.SampleEvent)
+     */
+    public void sampleStarted(SampleEvent e) {
+        // not used
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.samplers.SampleListener#sampleStopped(org.apache.jmeter.samplers.SampleEvent)
-	 */
-	public void sampleStopped(SampleEvent e) {
-		// not used
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.samplers.SampleListener#sampleStopped(org.apache.jmeter.samplers.SampleEvent)
+     */
+    public void sampleStopped(SampleEvent e) {
+        // not used
+    }
 
 }
