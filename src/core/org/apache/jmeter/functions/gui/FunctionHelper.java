@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions.gui;
@@ -49,115 +49,115 @@ import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.reflect.ClassFinder;
 
 public class FunctionHelper extends JDialog implements ActionListener, ChangeListener {
-	JLabeledChoice functionList;
+    JLabeledChoice functionList;
 
-	ArgumentsPanel parameterPanel;
+    ArgumentsPanel parameterPanel;
 
-	JLabeledTextField cutPasteFunction;
+    JLabeledTextField cutPasteFunction;
 
-	private Map functionMap = new HashMap();
+    private Map functionMap = new HashMap();
 
-	JButton generateButton;
+    JButton generateButton;
 
-	public FunctionHelper() {
-		super((JFrame) null, JMeterUtils.getResString("function_helper_title"), false); //$NON-NLS-1$
-		init();
-	}
+    public FunctionHelper() {
+        super((JFrame) null, JMeterUtils.getResString("function_helper_title"), false); //$NON-NLS-1$
+        init();
+    }
 
-	private void init() {
-		parameterPanel = new ArgumentsPanel(JMeterUtils.getResString("function_params")); //$NON-NLS-1$
-		initializeFunctionList();
-		this.getContentPane().setLayout(new BorderLayout(10, 10));
-		JPanel comboPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		comboPanel.add(functionList);
-		JButton helpButton = new JButton(JMeterUtils.getResString("help")); //$NON-NLS-1$
-		helpButton.addActionListener(new HelpListener());
-		comboPanel.add(helpButton);
-		this.getContentPane().add(comboPanel, BorderLayout.NORTH);
-		this.getContentPane().add(parameterPanel, BorderLayout.CENTER);
-		JPanel resultsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		cutPasteFunction = new JLabeledTextField(JMeterUtils.getResString("cut_paste_function"), 35); //$NON-NLS-1$
-		resultsPanel.add(cutPasteFunction);
-		generateButton = new JButton(JMeterUtils.getResString("generate")); //$NON-NLS-1$
-		generateButton.addActionListener(this);
-		resultsPanel.add(generateButton);
-		this.getContentPane().add(resultsPanel, BorderLayout.SOUTH);
-		this.pack();
-		ComponentUtil.centerComponentInWindow(this);
-	}
+    private void init() {
+        parameterPanel = new ArgumentsPanel(JMeterUtils.getResString("function_params")); //$NON-NLS-1$
+        initializeFunctionList();
+        this.getContentPane().setLayout(new BorderLayout(10, 10));
+        JPanel comboPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        comboPanel.add(functionList);
+        JButton helpButton = new JButton(JMeterUtils.getResString("help")); //$NON-NLS-1$
+        helpButton.addActionListener(new HelpListener());
+        comboPanel.add(helpButton);
+        this.getContentPane().add(comboPanel, BorderLayout.NORTH);
+        this.getContentPane().add(parameterPanel, BorderLayout.CENTER);
+        JPanel resultsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        cutPasteFunction = new JLabeledTextField(JMeterUtils.getResString("cut_paste_function"), 35); //$NON-NLS-1$
+        resultsPanel.add(cutPasteFunction);
+        generateButton = new JButton(JMeterUtils.getResString("generate")); //$NON-NLS-1$
+        generateButton.addActionListener(this);
+        resultsPanel.add(generateButton);
+        this.getContentPane().add(resultsPanel, BorderLayout.SOUTH);
+        this.pack();
+        ComponentUtil.centerComponentInWindow(this);
+    }
 
-	private void initializeFunctionList() {
-		try {
-			List functionClasses = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(),
-					new Class[] { Function.class }, true);
-			Iterator iter = functionClasses.iterator();
-			String[] functionNames = new String[functionClasses.size()];
-			int count = 0;
-			while (iter.hasNext()) {
-				Class cl = Class.forName((String) iter.next());
-				functionNames[count] = ((Function) cl.newInstance()).getReferenceKey();
-				functionMap.put(functionNames[count], cl);
-				count++;
-			}
-			functionList = new JLabeledChoice(JMeterUtils.getResString("choose_function"), functionNames); //$NON-NLS-1$
-			functionList.addChangeListener(this);
-		} catch (IOException e) {
-		} catch (ClassNotFoundException e) {
-		} catch (InstantiationException e) {
-		} catch (IllegalAccessException e) {
-		}
-	}
+    private void initializeFunctionList() {
+        try {
+            List functionClasses = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(),
+                    new Class[] { Function.class }, true);
+            Iterator iter = functionClasses.iterator();
+            String[] functionNames = new String[functionClasses.size()];
+            int count = 0;
+            while (iter.hasNext()) {
+                Class cl = Class.forName((String) iter.next());
+                functionNames[count] = ((Function) cl.newInstance()).getReferenceKey();
+                functionMap.put(functionNames[count], cl);
+                count++;
+            }
+            functionList = new JLabeledChoice(JMeterUtils.getResString("choose_function"), functionNames); //$NON-NLS-1$
+            functionList.addChangeListener(this);
+        } catch (IOException e) {
+        } catch (ClassNotFoundException e) {
+        } catch (InstantiationException e) {
+        } catch (IllegalAccessException e) {
+        }
+    }
 
-	public void stateChanged(ChangeEvent event) {
-		try {
-			Arguments args = new Arguments();
-			Function function = (Function) ((Class) functionMap.get(functionList.getText())).newInstance();
-			List argumentDesc = function.getArgumentDesc();
-			Iterator iter = argumentDesc.iterator();
-			while (iter.hasNext()) {
-				String help = (String) iter.next();
-				args.addArgument(help, ""); //$NON-NLS-1$
-			}
-			parameterPanel.configure(args);
-			parameterPanel.revalidate();
-			getContentPane().remove(parameterPanel);
-			this.pack();
-			getContentPane().add(parameterPanel, BorderLayout.CENTER);
-			this.pack();
-			this.validate();
-			this.repaint();
-		} catch (InstantiationException e) {
-		} catch (IllegalAccessException e) {
-		}
-	}
+    public void stateChanged(ChangeEvent event) {
+        try {
+            Arguments args = new Arguments();
+            Function function = (Function) ((Class) functionMap.get(functionList.getText())).newInstance();
+            List argumentDesc = function.getArgumentDesc();
+            Iterator iter = argumentDesc.iterator();
+            while (iter.hasNext()) {
+                String help = (String) iter.next();
+                args.addArgument(help, ""); //$NON-NLS-1$
+            }
+            parameterPanel.configure(args);
+            parameterPanel.revalidate();
+            getContentPane().remove(parameterPanel);
+            this.pack();
+            getContentPane().add(parameterPanel, BorderLayout.CENTER);
+            this.pack();
+            this.validate();
+            this.repaint();
+        } catch (InstantiationException e) {
+        } catch (IllegalAccessException e) {
+        }
+    }
 
-	public void actionPerformed(ActionEvent e) {
-		StringBuffer functionCall = new StringBuffer("${");
-		functionCall.append(functionList.getText());
-		Arguments args = (Arguments) parameterPanel.createTestElement();
-		if (args.getArguments().size() > 0) {
-			functionCall.append("(");
-			PropertyIterator iter = args.iterator();
-			boolean first = true;
-			while (iter.hasNext()) {
-				Argument arg = (Argument) iter.next().getObjectValue();
-				if (!first) {
-					functionCall.append(",");
-				}
-				functionCall.append(arg.getValue());
-				first = false;
-			}
-			functionCall.append(")");
-		}
-		functionCall.append("}");
-		cutPasteFunction.setText(functionCall.toString());
-	}
+    public void actionPerformed(ActionEvent e) {
+        StringBuffer functionCall = new StringBuffer("${");
+        functionCall.append(functionList.getText());
+        Arguments args = (Arguments) parameterPanel.createTestElement();
+        if (args.getArguments().size() > 0) {
+            functionCall.append("(");
+            PropertyIterator iter = args.iterator();
+            boolean first = true;
+            while (iter.hasNext()) {
+                Argument arg = (Argument) iter.next().getObjectValue();
+                if (!first) {
+                    functionCall.append(",");
+                }
+                functionCall.append(arg.getValue());
+                first = false;
+            }
+            functionCall.append(")");
+        }
+        functionCall.append("}");
+        cutPasteFunction.setText(functionCall.toString());
+    }
 
-	private class HelpListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			String[] source = new String[] { Help.HELP_FUNCTIONS, functionList.getText() };
-			ActionEvent helpEvent = new ActionEvent(source, e.getID(), "help"); //$NON-NLS-1$
-			ActionRouter.getInstance().actionPerformed(helpEvent);
-		}
-	}
+    private class HelpListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            String[] source = new String[] { Help.HELP_FUNCTIONS, functionList.getText() };
+            ActionEvent helpEvent = new ActionEvent(source, e.getID(), "help"); //$NON-NLS-1$
+            ActionRouter.getInstance().actionPerformed(helpEvent);
+        }
+    }
 }

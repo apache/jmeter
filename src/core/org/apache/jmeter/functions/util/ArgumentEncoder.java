@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions.util;
@@ -24,18 +24,18 @@ import org.apache.oro.text.perl.Perl5Util;
  * Encode an Argument
  */
 public final class ArgumentEncoder {
-	private static final Perl5Util util = new Perl5Util();
+    private static final Perl5Util util = new Perl5Util();
 
-	private static final String expression = "s#([${}(),\\\\])#\\$1#g";
+    private static final String expression = "s#([${}(),\\\\])#\\$1#g";
 
-	// TODO does not appear to be used
-	public static String encode(String s) {
-		return util.substitute(expression, s);
-	}
+    // TODO does not appear to be used
+    public static String encode(String s) {
+        return util.substitute(expression, s);
+    }
 
-	/**
-	 * Prevent instantiation of utility class.
-	 */
-	private ArgumentEncoder() {
-	}
+    /**
+     * Prevent instantiation of utility class.
+     */
+    private ArgumentEncoder() {
+    }
 }
