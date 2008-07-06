@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 package org.apache.jmeter.report.gui;
 
@@ -34,29 +34,29 @@ import org.apache.jorphan.gui.JLabeledTextArea;
 import org.apache.jorphan.gui.JLabeledTextField;
 
 public class ReportPageGui extends AbstractReportGui {
-    
+
     private JLabeledTextField pageTitle = new JLabeledTextField(JMeterUtils.getResString("report_page_title"));
 
     private JCheckBox makeIndex = new JCheckBox(JMeterUtils.getResString("report_page_index"));
-    
-    private JLabeledTextField cssURL = 
+
+    private JLabeledTextField cssURL =
         new JLabeledTextField(JMeterUtils.getResString("report_page_style_url"));
-    
-    private JLabeledTextField headerURL = 
+
+    private JLabeledTextField headerURL =
         new JLabeledTextField(JMeterUtils.getResString("report_page_header"));
-        
-    private JLabeledTextField footerURL = 
+
+    private JLabeledTextField footerURL =
         new JLabeledTextField(JMeterUtils.getResString("report_page_footer"));
 
-    private JLabeledTextArea introduction = 
+    private JLabeledTextArea introduction =
         new JLabeledTextArea(JMeterUtils.getResString("report_page_intro"));
-    
+
     /**
-	 * 
-	 */
-	public ReportPageGui() {
-		init();
-	}
+     *
+     */
+    public ReportPageGui() {
+        init();
+    }
 
     /**
      * Initialize the components and layout of this component.
@@ -70,7 +70,7 @@ public class ReportPageGui extends AbstractReportGui {
         pane.setLayout(new BorderLayout(10,10));
         pane.setBackground(Color.white);
         pane.add(this.getNamePanel(),BorderLayout.NORTH);
-        
+
         VerticalPanel options = new VerticalPanel(Color.white);
         pageTitle.setBackground(Color.white);
         makeIndex.setBackground(Color.white);
@@ -87,13 +87,13 @@ public class ReportPageGui extends AbstractReportGui {
         add(pane,BorderLayout.NORTH);
         add(options,BorderLayout.CENTER);
     }
-    
-	public JPopupMenu createPopupMenu() {
+
+    public JPopupMenu createPopupMenu() {
         JPopupMenu pop = new JPopupMenu();
         JMenu addMenu = new JMenu(JMeterUtils.getResString("Add"));
-		addMenu.add(ReportMenuFactory.makeMenuItem(new TableGui().getStaticLabel(),
-				TableGui.class.getName(),
-				"Add"));
+        addMenu.add(ReportMenuFactory.makeMenuItem(new TableGui().getStaticLabel(),
+                TableGui.class.getName(),
+                "Add"));
         addMenu.add(ReportMenuFactory.makeMenuItem(new BarChartGui().getStaticLabel(),
                 BarChartGui.class.getName(),
                 "Add"));
@@ -104,7 +104,7 @@ public class ReportPageGui extends AbstractReportGui {
         ReportMenuFactory.addFileMenu(pop);
         ReportMenuFactory.addEditMenu(pop,true);
         return pop;
-	}
+    }
 
     /* (non-Javadoc)
      * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
@@ -115,10 +115,10 @@ public class ReportPageGui extends AbstractReportGui {
         return element;
     }
 
-	/* (non-Javadoc)
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(org.apache.jmeter.testelement.TestElement)
-	 */
-	public void modifyTestElement(TestElement element) {
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(org.apache.jmeter.testelement.TestElement)
+     */
+    public void modifyTestElement(TestElement element) {
         super.configureTestElement(element);
         ReportPage page = (ReportPage)element;
         page.setCSS(cssURL.getText());
@@ -127,7 +127,7 @@ public class ReportPageGui extends AbstractReportGui {
         page.setIndex(String.valueOf(makeIndex.isSelected()));
         page.setIntroduction(introduction.getText());
         page.setTitle(pageTitle.getText());
-	}
+    }
 
     public void configure(TestElement element) {
         super.configure(element);

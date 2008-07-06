@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.gui.action;
@@ -37,72 +37,72 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 public class Start extends AbstractAction {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final Set commands = new HashSet();
+    private static final Set commands = new HashSet();
 
-	static {
-		commands.add(ActionNames.ACTION_START);
-		commands.add(ActionNames.ACTION_STOP);
-		commands.add(ActionNames.ACTION_SHUTDOWN);
-	}
+    static {
+        commands.add(ActionNames.ACTION_START);
+        commands.add(ActionNames.ACTION_STOP);
+        commands.add(ActionNames.ACTION_SHUTDOWN);
+    }
 
-	private StandardJMeterEngine engine;
+    private StandardJMeterEngine engine;
 
-	/**
-	 * Constructor for the Start object.
-	 */
-	public Start() {
-	}
+    /**
+     * Constructor for the Start object.
+     */
+    public Start() {
+    }
 
-	/**
-	 * Gets the ActionNames attribute of the Start object.
-	 * 
-	 * @return the ActionNames value
-	 */
-	public Set getActionNames() {
-		return commands;
-	}
+    /**
+     * Gets the ActionNames attribute of the Start object.
+     *
+     * @return the ActionNames value
+     */
+    public Set getActionNames() {
+        return commands;
+    }
 
-	public void doAction(ActionEvent e) {
-		if (e.getActionCommand().equals(ActionNames.ACTION_START)) {
-			popupShouldSave(e);
-			startEngine();
-		} else if (e.getActionCommand().equals(ActionNames.ACTION_STOP)) {
-			if (engine != null) {
-				GuiPackage.getInstance().getMainFrame().showStoppingMessage("");
-				engine.stopTest();
-				engine = null;
-			}
-		} else if (e.getActionCommand().equals(ActionNames.ACTION_SHUTDOWN)) {
-			if (engine != null) {
-				GuiPackage.getInstance().getMainFrame().showStoppingMessage("");
-				engine.askThreadsToStop();
-				engine = null;
-			}
-		}
-	}
+    public void doAction(ActionEvent e) {
+        if (e.getActionCommand().equals(ActionNames.ACTION_START)) {
+            popupShouldSave(e);
+            startEngine();
+        } else if (e.getActionCommand().equals(ActionNames.ACTION_STOP)) {
+            if (engine != null) {
+                GuiPackage.getInstance().getMainFrame().showStoppingMessage("");
+                engine.stopTest();
+                engine = null;
+            }
+        } else if (e.getActionCommand().equals(ActionNames.ACTION_SHUTDOWN)) {
+            if (engine != null) {
+                GuiPackage.getInstance().getMainFrame().showStoppingMessage("");
+                engine.askThreadsToStop();
+                engine = null;
+            }
+        }
+    }
 
-	protected void startEngine() {
-		GuiPackage gui = GuiPackage.getInstance();
-		engine = new StandardJMeterEngine();
-		HashTree testTree = gui.getTreeModel().getTestPlan();
-		JMeter.convertSubTree(testTree);
-		DisabledComponentRemover remover = new DisabledComponentRemover(testTree);
-		testTree.traverse(remover);
-		testTree.add(testTree.getArray()[0], gui.getMainFrame());
-		log.debug("test plan before cloning is running version: "
-				+ ((TestPlan) testTree.getArray()[0]).isRunningVersion());
-		TreeCloner cloner = new TreeCloner(false);
-		testTree.traverse(cloner);
-		engine.configure(cloner.getClonedTree());
-		try {
-			engine.runTest();
-		} catch (JMeterEngineException e) {
-			JOptionPane.showMessageDialog(gui.getMainFrame(), e.getMessage(), JMeterUtils
-					.getResString("Error Occurred"), JOptionPane.ERROR_MESSAGE);
-		}
-		log.debug("test plan after cloning and running test is running version: "
-				+ ((TestPlan) testTree.getArray()[0]).isRunningVersion());
-	}
+    protected void startEngine() {
+        GuiPackage gui = GuiPackage.getInstance();
+        engine = new StandardJMeterEngine();
+        HashTree testTree = gui.getTreeModel().getTestPlan();
+        JMeter.convertSubTree(testTree);
+        DisabledComponentRemover remover = new DisabledComponentRemover(testTree);
+        testTree.traverse(remover);
+        testTree.add(testTree.getArray()[0], gui.getMainFrame());
+        log.debug("test plan before cloning is running version: "
+                + ((TestPlan) testTree.getArray()[0]).isRunningVersion());
+        TreeCloner cloner = new TreeCloner(false);
+        testTree.traverse(cloner);
+        engine.configure(cloner.getClonedTree());
+        try {
+            engine.runTest();
+        } catch (JMeterEngineException e) {
+            JOptionPane.showMessageDialog(gui.getMainFrame(), e.getMessage(), JMeterUtils
+                    .getResString("Error Occurred"), JOptionPane.ERROR_MESSAGE);
+        }
+        log.debug("test plan after cloning and running test is running version: "
+                + ((TestPlan) testTree.getArray()[0]).isRunningVersion());
+    }
 }

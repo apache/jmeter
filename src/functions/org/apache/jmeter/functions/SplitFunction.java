@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -53,76 +53,76 @@ import org.apache.log.Logger;
  * <li>VARNAME_n - number of fields found</li>
  * <li>VARNAME_1..n - fields</li>
  * </ul>
- * 
+ *
  */
 public class SplitFunction extends AbstractFunction implements Serializable {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final long serialVersionUID = 232L;
-	
-	private static final List desc = new LinkedList();
+    private static final long serialVersionUID = 232L;
 
-	private static final String KEY = "__split";// $NON-NLS-1$
+    private static final List desc = new LinkedList();
 
-	// Number of parameters expected - used to reject invalid calls
-	private static final int MIN_PARAMETER_COUNT = 2;
+    private static final String KEY = "__split";// $NON-NLS-1$
 
-	private static final int MAX_PARAMETER_COUNT = 3;
-	static {
+    // Number of parameters expected - used to reject invalid calls
+    private static final int MIN_PARAMETER_COUNT = 2;
+
+    private static final int MAX_PARAMETER_COUNT = 3;
+    static {
         desc.add(JMeterUtils.getResString("split_function_string"));   //$NON-NLS-1$
         desc.add(JMeterUtils.getResString("function_name_param"));     //$NON-NLS-1$
         desc.add(JMeterUtils.getResString("split_function_separator"));//$NON-NLS-1$
-	}
+    }
 
-	private Object[] values;
+    private Object[] values;
 
-	public SplitFunction() {
-	}
+    public SplitFunction() {
+    }
 
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 
-	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
-			throws InvalidVariableException {
-		JMeterVariables vars = getVariables();
+    public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
+            throws InvalidVariableException {
+        JMeterVariables vars = getVariables();
 
-		String stringToSplit = ((CompoundVariable) values[0]).execute();
-		String varNamePrefix = ((CompoundVariable) values[1]).execute().trim();
-		String splitString = ",";
+        String stringToSplit = ((CompoundVariable) values[0]).execute();
+        String varNamePrefix = ((CompoundVariable) values[1]).execute().trim();
+        String splitString = ",";
 
-		if (values.length > 2) { // Split string provided
-			splitString = ((CompoundVariable) values[2]).execute();
-		}
+        if (values.length > 2) { // Split string provided
+            splitString = ((CompoundVariable) values[2]).execute();
+        }
         if (log.isDebugEnabled()){
             log.debug("Split "+stringToSplit+ " using "+ splitString+ " into "+varNamePrefix);
         }
-		String parts[] = JOrphanUtils.split(stringToSplit, splitString, "?");// $NON-NLS-1$
+        String parts[] = JOrphanUtils.split(stringToSplit, splitString, "?");// $NON-NLS-1$
 
-		vars.put(varNamePrefix, stringToSplit);
-		vars.put(varNamePrefix + "_n", "" + parts.length);// $NON-NLS-1$ // $NON-NLS-2$
-		for (int i = 1; i <= parts.length; i++) {
+        vars.put(varNamePrefix, stringToSplit);
+        vars.put(varNamePrefix + "_n", "" + parts.length);// $NON-NLS-1$ // $NON-NLS-2$
+        for (int i = 1; i <= parts.length; i++) {
             if (log.isDebugEnabled()){
                 log.debug(parts[i-1]);
             }
-			vars.put(varNamePrefix + "_" + i, parts[i - 1]);// $NON-NLS-1$
-		} 
-		vars.remove(varNamePrefix + "_" + (parts.length+1));
-		return stringToSplit;
+            vars.put(varNamePrefix + "_" + i, parts[i - 1]);// $NON-NLS-1$
+        }
+        vars.remove(varNamePrefix + "_" + (parts.length+1));
+        return stringToSplit;
 
-	}
+    }
 
-	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
-		checkParameterCount(parameters, MIN_PARAMETER_COUNT, MAX_PARAMETER_COUNT);
-		values = parameters.toArray();
-	}
+    public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
+        checkParameterCount(parameters, MIN_PARAMETER_COUNT, MAX_PARAMETER_COUNT);
+        values = parameters.toArray();
+    }
 
-	public String getReferenceKey() {
-		return KEY;
-	}
+    public String getReferenceKey() {
+        return KEY;
+    }
 
-	public List getArgumentDesc() {
-		return desc;
-	}
+    public List getArgumentDesc() {
+        return desc;
+    }
 
 }

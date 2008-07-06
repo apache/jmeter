@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.reporters.gui;
@@ -26,48 +26,48 @@ import org.apache.jmeter.testelement.TestElement;
 
 /**
  * Create a summariser test element.
- * 
+ *
  * Note: This is not really a PostProcessor, but that seems to be the closest of
  * the existing types.
- * 
+ *
  */
 public class SummariserGui extends AbstractPostProcessorGui {
 
-	public SummariserGui() {
-		super();
-		init();
-	}
+    public SummariserGui() {
+        super();
+        init();
+    }
 
-	public String getLabelResource() {
-		return "summariser_title"; //$NON-NLS-1$
-	}
+    public String getLabelResource() {
+        return "summariser_title"; //$NON-NLS-1$
+    }
 
-	public void configure(TestElement el) {
-		super.configure(el);
-	}
+    public void configure(TestElement el) {
+        super.configure(el);
+    }
 
-	/**
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
-	 */
-	public TestElement createTestElement() {
-		Summariser summariser = new Summariser();
-		modifyTestElement(summariser);
-		return summariser;
-	}
+    /**
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
+     */
+    public TestElement createTestElement() {
+        Summariser summariser = new Summariser();
+        modifyTestElement(summariser);
+        return summariser;
+    }
 
-	/**
-	 * Modifies a given TestElement to mirror the data in the gui components.
-	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-	 */
-	public void modifyTestElement(TestElement summariser) {
-		super.configureTestElement(summariser);
-	}
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     *
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement summariser) {
+        super.configureTestElement(summariser);
+    }
 
-	private void init() {
-		setLayout(new BorderLayout());
-		setBorder(makeBorder());
+    private void init() {
+        setLayout(new BorderLayout());
+        setBorder(makeBorder());
 
-		add(makeTitlePanel(), BorderLayout.NORTH);
-	}
+        add(makeTitlePanel(), BorderLayout.NORTH);
+    }
 }

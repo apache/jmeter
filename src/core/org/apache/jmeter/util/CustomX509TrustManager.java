@@ -27,9 +27,9 @@ import org.apache.log.Logger;
 
 /**
  * Custom TrustManager ignores all certificate errors
- * 
+ *
  * TODO: implement conditional checking and logging
- *  
+ *
  * (Derived from AuthSSLX509TrustManager in HttpClient contrib directory)
  */
 
@@ -37,7 +37,7 @@ public class CustomX509TrustManager implements X509TrustManager
 {
     private X509TrustManager defaultTrustManager = null;
 
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     public CustomX509TrustManager(final X509TrustManager defaultTrustManager) {
         super();
@@ -65,7 +65,7 @@ public class CustomX509TrustManager implements X509TrustManager
 //        try {
 //            defaultTrustManager.checkClientTrusted(certificates,authType);
 //        } catch (CertificateException e){
-//        	log.warn("Ignoring failed Client trust check: "+e.getMessage());
+//            log.warn("Ignoring failed Client trust check: "+e.getMessage());
 //        }
     }
 
@@ -87,7 +87,7 @@ public class CustomX509TrustManager implements X509TrustManager
 //        try{
 //            defaultTrustManager.checkServerTrusted(certificates,authType);
 //        } catch (CertificateException e){
-//        	log.warn("Ignoring failed Server trust check: "+e.getMessage());        	
+//            log.warn("Ignoring failed Server trust check: "+e.getMessage());
 //        }
     }
 

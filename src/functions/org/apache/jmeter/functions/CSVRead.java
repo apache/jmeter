@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -35,135 +35,135 @@ import org.apache.log.Logger;
  * Syntax is similar to StringFromFile function. The function allows the test to
  * line-thru the data in the CSV file - one line per each test. E.g. inserting
  * the following in the test scripts :
- * 
+ *
  * ${_CSVRead(c:/BOF/abcd.csv,0)} // read (first) line of 'c:/BOF/abcd.csv' ,
  * return the 1st column ( represented by the '0'),
  * ${_CSVRead(c:/BOF/abcd.csv,1)} // read (first) line of 'c:/BOF/abcd.csv' ,
  * return the 2nd column ( represented by the '1'),
  * ${_CSVRead(c:/BOF/abcd.csv,next())} // Go to next line of 'c:/BOF/abcd.csv'
- * 
+ *
  * NOTE: A single instance of each different file is opened and used for all
  * threads.
- * 
+ *
  * To open the same file twice, use the alias function: __CSVRead(abc.csv,*ONE);
  * __CSVRead(abc.csv,*TWO);
- * 
+ *
  * __CSVRead(*ONE,1); etc
- * 
+ *
  */
 public class CSVRead extends AbstractFunction implements Serializable {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final long serialVersionUID = 232L;
-	
-	private static final String KEY = "__CSVRead"; // Function name //$NON-NLS-1$
+    private static final long serialVersionUID = 232L;
 
-	private static final List desc = new LinkedList();
+    private static final String KEY = "__CSVRead"; // Function name //$NON-NLS-1$
 
-	private Object[] values; // Parameter list
+    private static final List desc = new LinkedList();
 
-	static {
-		desc.add(JMeterUtils.getResString("csvread_file_file_name")); //$NON-NLS-1$
-		desc.add(JMeterUtils.getResString("column_number")); //$NON-NLS-1$
-	}
+    private Object[] values; // Parameter list
 
-	public CSVRead() {
-	}
+    static {
+        desc.add(JMeterUtils.getResString("csvread_file_file_name")); //$NON-NLS-1$
+        desc.add(JMeterUtils.getResString("column_number")); //$NON-NLS-1$
+    }
 
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
+    public CSVRead() {
+    }
 
-	/**
-	 * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
-	 */
-	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
-			throws InvalidVariableException {
-		String myValue = ""; //$NON-NLS-1$
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 
-		String fileName = ((org.apache.jmeter.engine.util.CompoundVariable) values[0]).execute();
-		String columnOrNext = ((org.apache.jmeter.engine.util.CompoundVariable) values[1]).execute();
+    /**
+     * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
+     */
+    public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
+            throws InvalidVariableException {
+        String myValue = ""; //$NON-NLS-1$
 
-		log.debug("execute (" + fileName + " , " + columnOrNext + ")   ");
+        String fileName = ((org.apache.jmeter.engine.util.CompoundVariable) values[0]).execute();
+        String columnOrNext = ((org.apache.jmeter.engine.util.CompoundVariable) values[1]).execute();
 
-		// Process __CSVRead(filename,*ALIAS)
-		if (columnOrNext.startsWith("*")) { //$NON-NLS-1$
-			FileWrapper.open(fileName, columnOrNext);
-			/*
-			 * All done, so return
-			 */
-			return ""; //$NON-NLS-1$
-		}
+        log.debug("execute (" + fileName + " , " + columnOrNext + ")   ");
 
-		// if argument is 'next' - go to the next line
-		if (columnOrNext.equals("next()") || columnOrNext.equals("next")) { //$NON-NLS-1$ //$NON-NLS-2$
-			FileWrapper.endRow(fileName);
+        // Process __CSVRead(filename,*ALIAS)
+        if (columnOrNext.startsWith("*")) { //$NON-NLS-1$
+            FileWrapper.open(fileName, columnOrNext);
+            /*
+             * All done, so return
+             */
+            return ""; //$NON-NLS-1$
+        }
 
-			/*
-			 * All done now ,so return the empty string - this allows the caller
-			 * to append __CSVRead(file,next) to the last instance of
-			 * __CSVRead(file,col)
-			 * 
-			 * N.B. It is important not to read any further lines at this point,
-			 * otherwise the wrong line can be retrieved when using multiple
-			 * threads.
-			 */
-			return ""; //$NON-NLS-1$
-		}
+        // if argument is 'next' - go to the next line
+        if (columnOrNext.equals("next()") || columnOrNext.equals("next")) { //$NON-NLS-1$ //$NON-NLS-2$
+            FileWrapper.endRow(fileName);
 
-		try {
-			int columnIndex = Integer.parseInt(columnOrNext); // what column
-																// is wanted?
-			myValue = FileWrapper.getColumn(fileName, columnIndex);
-		} catch (NumberFormatException e) {
-			log.warn(Thread.currentThread().getName() + " - can't parse column number: " + columnOrNext + " "
-					+ e.toString());
-		} catch (IndexOutOfBoundsException e) {
-			log.warn(Thread.currentThread().getName() + " - invalid column number: " + columnOrNext + " at row "
-					+ FileWrapper.getCurrentRow(fileName) + " " + e.toString());
-		}
+            /*
+             * All done now ,so return the empty string - this allows the caller
+             * to append __CSVRead(file,next) to the last instance of
+             * __CSVRead(file,col)
+             *
+             * N.B. It is important not to read any further lines at this point,
+             * otherwise the wrong line can be retrieved when using multiple
+             * threads.
+             */
+            return ""; //$NON-NLS-1$
+        }
 
-		log.debug("execute value: " + myValue);
+        try {
+            int columnIndex = Integer.parseInt(columnOrNext); // what column
+                                                                // is wanted?
+            myValue = FileWrapper.getColumn(fileName, columnIndex);
+        } catch (NumberFormatException e) {
+            log.warn(Thread.currentThread().getName() + " - can't parse column number: " + columnOrNext + " "
+                    + e.toString());
+        } catch (IndexOutOfBoundsException e) {
+            log.warn(Thread.currentThread().getName() + " - invalid column number: " + columnOrNext + " at row "
+                    + FileWrapper.getCurrentRow(fileName) + " " + e.toString());
+        }
 
-		return myValue;
-	}
+        log.debug("execute value: " + myValue);
 
-	/**
-	 * @see org.apache.jmeter.functions.Function#getArgumentDesc()
-	 */
-	public List getArgumentDesc() {
-		return desc;
-	}
+        return myValue;
+    }
 
-	/**
-	 * @see org.apache.jmeter.functions.Function#getReferenceKey()
-	 */
-	public String getReferenceKey() {
-		return KEY;
-	}
+    /**
+     * @see org.apache.jmeter.functions.Function#getArgumentDesc()
+     */
+    public List getArgumentDesc() {
+        return desc;
+    }
 
-	/**
-	 * @see org.apache.jmeter.functions.Function#setParameters(Collection)
-	 */
-	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
-		log.debug("setParameter - Collection.size=" + parameters.size());
+    /**
+     * @see org.apache.jmeter.functions.Function#getReferenceKey()
+     */
+    public String getReferenceKey() {
+        return KEY;
+    }
 
-		values = parameters.toArray();
+    /**
+     * @see org.apache.jmeter.functions.Function#setParameters(Collection)
+     */
+    public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
+        log.debug("setParameter - Collection.size=" + parameters.size());
 
-		if (log.isDebugEnabled()) {
-			for (int i = 0; i < parameters.size(); i++) {
-				log.debug("i:" + ((CompoundVariable) values[i]).execute());
-			}
-		}
+        values = parameters.toArray();
 
-		checkParameterCount(parameters, 2);
+        if (log.isDebugEnabled()) {
+            for (int i = 0; i < parameters.size(); i++) {
+                log.debug("i:" + ((CompoundVariable) values[i]).execute());
+            }
+        }
 
-		/*
-		 * Need to reset the containers for repeated runs; about the only way
-		 * for functions to detect that a run is starting seems to be the
-		 * setParameters() call.
-		 */
-		FileWrapper.clearAll();// TODO only clear the relevant entry - if possible...
+        checkParameterCount(parameters, 2);
 
-	}
+        /*
+         * Need to reset the containers for repeated runs; about the only way
+         * for functions to detect that a run is starting seems to be the
+         * setParameters() call.
+         */
+        FileWrapper.clearAll();// TODO only clear the relevant entry - if possible...
+
+    }
 }

@@ -17,30 +17,30 @@
 package org.apache.jmeter.monitor.model;
 
 /**
- * 
- * @version $Revision$ on $Date$
+ *
+ * @version $Revision$
  */
 public class JvmImpl implements Jvm {
-	private Memory memory = null;
+    private Memory memory = null;
 
-	/**
-	 * 
-	 */
-	public JvmImpl() {
-		super();
-	}
+    /**
+     *
+     */
+    public JvmImpl() {
+        super();
+    }
 
-	public Memory getMemory() {
-		return this.memory;
-	}
+    public Memory getMemory() {
+        return this.memory;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.monitor.model.Jvm#setMemory(org.apache.jmeter.monitor.model.Memory)
-	 */
-	public void setMemory(Memory mem) {
-		this.memory = mem;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.monitor.model.Jvm#setMemory(org.apache.jmeter.monitor.model.Memory)
+     */
+    public void setMemory(Memory mem) {
+        this.memory = mem;
+    }
 
 }

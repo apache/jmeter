@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.testelement;
@@ -23,163 +23,163 @@ import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.threads.JMeterContext;
 
 public interface TestElement extends Cloneable {
-	public final static String NAME = "TestElement.name"; //$NON-NLS-1$
+    public final static String NAME = "TestElement.name"; //$NON-NLS-1$
 
-	public final static String GUI_CLASS = "TestElement.gui_class"; //$NON-NLS-1$
+    public final static String GUI_CLASS = "TestElement.gui_class"; //$NON-NLS-1$
 
-	public final static String ENABLED = "TestElement.enabled"; //$NON-NLS-1$
+    public final static String ENABLED = "TestElement.enabled"; //$NON-NLS-1$
 
-	public final static String TEST_CLASS = "TestElement.test_class"; //$NON-NLS-1$
+    public final static String TEST_CLASS = "TestElement.test_class"; //$NON-NLS-1$
 
     // Needed by AbstractTestElement.
     // Also TestElementConverter and TestElementPropertyConverter for handling empty comments
     public final static String COMMENTS = "TestPlan.comments"; //$NON-NLS-1$
     // N.B. Comments originally only applied to Test Plans, hence the name - which can now not be easily changed
 
-	public void addTestElement(TestElement child);
+    public void addTestElement(TestElement child);
 
-	public void setProperty(String key, String value);
+    public void setProperty(String key, String value);
 
-	public void setProperty(String key, boolean value);
+    public void setProperty(String key, boolean value);
 
-	/**
-	 * Check if ENABLED property is present and true ; defaults to true
-	 * 
-	 * @return true if element is enabled
-	 */
-	public boolean isEnabled();
+    /**
+     * Check if ENABLED property is present and true ; defaults to true
+     *
+     * @return true if element is enabled
+     */
+    public boolean isEnabled();
 
-	/**
-	 * Returns true or false whether the element is the running version.
-	 */
-	public boolean isRunningVersion();
+    /**
+     * Returns true or false whether the element is the running version.
+     */
+    public boolean isRunningVersion();
 
-	/**
-	 * Test whether a given property is only a temporary resident of the
-	 * TestElement
-	 * 
-	 * @param property
-	 * @return boolean
-	 */
-	public boolean isTemporary(JMeterProperty property);
+    /**
+     * Test whether a given property is only a temporary resident of the
+     * TestElement
+     *
+     * @param property
+     * @return boolean
+     */
+    public boolean isTemporary(JMeterProperty property);
 
-	/**
-	 * Indicate that the given property should be only a temporary property in
-	 * the TestElement
-	 * 
-	 * @param property
-	 *            void
-	 */
-	public void setTemporary(JMeterProperty property);
+    /**
+     * Indicate that the given property should be only a temporary property in
+     * the TestElement
+     *
+     * @param property
+     *            void
+     */
+    public void setTemporary(JMeterProperty property);
 
-	/**
-	 * Return a property as a boolean value.
-	 */
-	public boolean getPropertyAsBoolean(String key);
+    /**
+     * Return a property as a boolean value.
+     */
+    public boolean getPropertyAsBoolean(String key);
 
-	public boolean getPropertyAsBoolean(String key, boolean defaultValue);
+    public boolean getPropertyAsBoolean(String key, boolean defaultValue);
 
-	public long getPropertyAsLong(String key);
+    public long getPropertyAsLong(String key);
 
-	public int getPropertyAsInt(String key);
+    public int getPropertyAsInt(String key);
 
-	public float getPropertyAsFloat(String key);
-	
-	public double getPropertyAsDouble(String key);
+    public float getPropertyAsFloat(String key);
 
-	/**
-	 * Make the test element the running version, or make it no longer the
-	 * running version. This tells the test element that it's current state must
-	 * be retrievable by a call to recoverRunningVersion(). It is kind of like
-	 * making the TestElement Read- Only, but not as strict. Changes can be made
-	 * and the element can be modified, but the state of the element at the time
-	 * of the call to setRunningVersion() must be recoverable.
-	 */
-	public void setRunningVersion(boolean run);
+    public double getPropertyAsDouble(String key);
 
-	/**
-	 * Tells the test element to return to the state it was in when
-	 * makeRunningVersion() was called.
-	 */
-	public void recoverRunningVersion();
+    /**
+     * Make the test element the running version, or make it no longer the
+     * running version. This tells the test element that it's current state must
+     * be retrievable by a call to recoverRunningVersion(). It is kind of like
+     * making the TestElement Read- Only, but not as strict. Changes can be made
+     * and the element can be modified, but the state of the element at the time
+     * of the call to setRunningVersion() must be recoverable.
+     */
+    public void setRunningVersion(boolean run);
 
-	/**
-	 * Clear the TestElement of all data.
-	 */
-	public void clear();
-	// TODO - yet another ambiguous name - does it need changing?
-	// See also: Clearable, JMeterGUIComponent
+    /**
+     * Tells the test element to return to the state it was in when
+     * makeRunningVersion() was called.
+     */
+    public void recoverRunningVersion();
 
-	public String getPropertyAsString(String key);
+    /**
+     * Clear the TestElement of all data.
+     */
+    public void clear();
+    // TODO - yet another ambiguous name - does it need changing?
+    // See also: Clearable, JMeterGUIComponent
 
-	public String getPropertyAsString(String key, String defaultValue);
+    public String getPropertyAsString(String key);
 
-	/**
-	 * Sets and overwrites a property in the TestElement. This call will be
-	 * ignored if the TestElement is currently a "running version".
-	 */
-	public void setProperty(JMeterProperty property);
+    public String getPropertyAsString(String key, String defaultValue);
 
-	/**
-	 * Given the name of the property, returns the appropriate property from
-	 * JMeter. If it is null, a NullProperty object will be returned.
-	 */
-	public JMeterProperty getProperty(String propName);
+    /**
+     * Sets and overwrites a property in the TestElement. This call will be
+     * ignored if the TestElement is currently a "running version".
+     */
+    public void setProperty(JMeterProperty property);
 
-	/**
-	 * Get a Property Iterator for the TestElements properties.
-	 * 
-	 * @return PropertyIterator
-	 */
-	public PropertyIterator propertyIterator();
+    /**
+     * Given the name of the property, returns the appropriate property from
+     * JMeter. If it is null, a NullProperty object will be returned.
+     */
+    public JMeterProperty getProperty(String propName);
 
-	public void removeProperty(String key);
+    /**
+     * Get a Property Iterator for the TestElements properties.
+     *
+     * @return PropertyIterator
+     */
+    public PropertyIterator propertyIterator();
 
-	// lifecycle methods
+    public void removeProperty(String key);
 
-	public Object clone();
+    // lifecycle methods
 
-	/**
-	 * Convenient way to traverse a test element.
-	 */
-	public void traverse(TestElementTraverser traverser);
+    public Object clone();
 
-	/**
-	 * @return Returns the threadContext.
-	 */
-	public JMeterContext getThreadContext();
+    /**
+     * Convenient way to traverse a test element.
+     */
+    public void traverse(TestElementTraverser traverser);
 
-	/**
-	 * @param threadContext
-	 *            The threadContext to set.
-	 */
-	public void setThreadContext(JMeterContext threadContext);
+    /**
+     * @return Returns the threadContext.
+     */
+    public JMeterContext getThreadContext();
 
-	/**
-	 * @return Returns the threadName.
-	 */
-	public String getThreadName();
+    /**
+     * @param threadContext
+     *            The threadContext to set.
+     */
+    public void setThreadContext(JMeterContext threadContext);
 
-	/**
-	 * @param threadName
-	 *            The threadName to set.
-	 */
-	public void setThreadName(String threadName);
+    /**
+     * @return Returns the threadName.
+     */
+    public String getThreadName();
 
-	/**
-	 * Called by Remove to determine if it is safe to remove the element. The
-	 * element can either clean itself up, and return true, or the element can
-	 * return false.
-	 * 
-	 * @return true if safe to remove the element
-	 */
-	public boolean canRemove();
-	
-	public String getName();
-	
-	public void setName(String name);
-	
-	public String getComment();
-	
-	public void setComment(String comment);
+    /**
+     * @param threadName
+     *            The threadName to set.
+     */
+    public void setThreadName(String threadName);
+
+    /**
+     * Called by Remove to determine if it is safe to remove the element. The
+     * element can either clean itself up, and return true, or the element can
+     * return false.
+     *
+     * @return true if safe to remove the element
+     */
+    public boolean canRemove();
+
+    public String getName();
+
+    public void setName(String name);
+
+    public String getComment();
+
+    public void setComment(String comment);
 }

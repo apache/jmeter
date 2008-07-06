@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.gui.util;
@@ -26,38 +26,38 @@ import org.apache.jmeter.gui.ReportGuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
 
 public final class DirectoryDialoger {
-	/**
-	 * The last directory visited by the user while choosing Files.
-	 */
-	private static String lastJFCDirectory = null;
+    /**
+     * The last directory visited by the user while choosing Files.
+     */
+    private static String lastJFCDirectory = null;
 
-	private static final JFileChooser jfc = new JFileChooser();
+    private static final JFileChooser jfc = new JFileChooser();
 
-	/**
-	 * Prevent instantiation of utility class.
-	 */
-	private DirectoryDialoger() {
-	}
+    /**
+     * Prevent instantiation of utility class.
+     */
+    private DirectoryDialoger() {
+    }
 
-	public static JFileChooser promptToOpenFile() {
+    public static JFileChooser promptToOpenFile() {
 
-		if (lastJFCDirectory == null) {
-			String start = JMeterUtils.getPropDefault("user.dir", "");
+        if (lastJFCDirectory == null) {
+            String start = JMeterUtils.getPropDefault("user.dir", "");
 
-			if (!start.equals("")) {
-				jfc.setCurrentDirectory(new File(start));
-			}
-		}
+            if (!start.equals("")) {
+                jfc.setCurrentDirectory(new File(start));
+            }
+        }
         jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int retVal = jfc.showDialog(ReportGuiPackage.getInstance().getMainFrame(),
                 JMeterUtils.getResString("report_select"));
-		lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();
+        lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();
 
-		if (retVal == JFileChooser.APPROVE_OPTION) {
-			return jfc;
-		} else {
-			return null;
-		}
-	}
+        if (retVal == JFileChooser.APPROVE_OPTION) {
+            return jfc;
+        } else {
+            return null;
+        }
+    }
 
 }

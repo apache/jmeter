@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.modifier;
@@ -40,125 +40,125 @@ import org.apache.log.Logger;
  * <P>
  * For example if userid and password are defined in the XML parameter file for
  * each user (ie thread), then simulated multiple user activity can occur.
- * 
+ *
  * This test element is deprecated. Test plans should use User Parameters instead.
  * @deprecated
  */
 public class UserParameterModifier extends ConfigTestElement implements PreProcessor, Serializable, TestListener {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final String XMLURI = "UserParameterModifier.xmluri"; // $NON-NLS-1$
+    private static final String XMLURI = "UserParameterModifier.xmluri"; // $NON-NLS-1$
 
-	private UserSequence allAvailableUsers;
+    private UserSequence allAvailableUsers;
 
-	/**
-	 * Default constructor.
-	 */
-	public UserParameterModifier() {
-	} // end constructor
+    /**
+     * Default constructor.
+     */
+    public UserParameterModifier() {
+    } // end constructor
 
-	/**
-	 * Runs before the start of every test. Reload the Sequencer with the latest
-	 * parameter data for each user
-	 */
-	public void testStarted() {
-		// try to populate allUsers, if fail, leave as any empty set
-		List allUsers = new LinkedList();
-		try {
-			UserParameterXMLParser readXMLParameters = new UserParameterXMLParser();
-			allUsers = readXMLParameters.getXMLParameters(getXmlUri());
-		} catch (Exception e) {
-			// do nothing, now object allUsers contains an empty set
-			log.error("Unable to read parameters from xml file " + getXmlUri());
-			log.error("No unique values for http requests will be substituted for " + "each thread", e);
-		}
-		allAvailableUsers = new UserSequence(allUsers);
-	}
+    /**
+     * Runs before the start of every test. Reload the Sequencer with the latest
+     * parameter data for each user
+     */
+    public void testStarted() {
+        // try to populate allUsers, if fail, leave as any empty set
+        List allUsers = new LinkedList();
+        try {
+            UserParameterXMLParser readXMLParameters = new UserParameterXMLParser();
+            allUsers = readXMLParameters.getXMLParameters(getXmlUri());
+        } catch (Exception e) {
+            // do nothing, now object allUsers contains an empty set
+            log.error("Unable to read parameters from xml file " + getXmlUri());
+            log.error("No unique values for http requests will be substituted for " + "each thread", e);
+        }
+        allAvailableUsers = new UserSequence(allUsers);
+    }
 
-	public void testEnded() {
-	}
+    public void testEnded() {
+    }
 
-	public void testStarted(String host) {
-		testStarted();
-	}
+    public void testStarted(String host) {
+        testStarted();
+    }
 
-	public void testEnded(String host) {
-	}
+    public void testEnded(String host) {
+    }
 
-	/*
-	 * ------------------------------------------------------------------------
-	 * Methods implemented from interface org.apache.jmeter.config.Modifier
-	 * ------------------------------------------------------------------------
-	 */
+    /*
+     * ------------------------------------------------------------------------
+     * Methods implemented from interface org.apache.jmeter.config.Modifier
+     * ------------------------------------------------------------------------
+     */
 
-	/**
-	 * Modifies an entry object to replace the value of any url parameter that
-	 * matches a parameter name in the XML file.
-	 * 
-	 */
-	public void process() {
-		Sampler entry = getThreadContext().getCurrentSampler();
-		if (!(entry instanceof HTTPSamplerBase)) {
-			return;
-		}
-		HTTPSamplerBase config = (HTTPSamplerBase) entry;
-		Map currentUser = allAvailableUsers.getNextUserMods();
-		PropertyIterator iter = config.getArguments().iterator();
-		while (iter.hasNext()) {
-			Argument arg = (Argument) iter.next().getObjectValue();
-			// if parameter name exists in http request
-			// then change its value
-			// (Note: each jmeter thread (ie user) gets to have unique values)
-			if (currentUser.containsKey(arg.getName())) {
-				arg.setValue((String) currentUser.get(arg.getName()));
-			}
-		}
-	}
+    /**
+     * Modifies an entry object to replace the value of any url parameter that
+     * matches a parameter name in the XML file.
+     *
+     */
+    public void process() {
+        Sampler entry = getThreadContext().getCurrentSampler();
+        if (!(entry instanceof HTTPSamplerBase)) {
+            return;
+        }
+        HTTPSamplerBase config = (HTTPSamplerBase) entry;
+        Map currentUser = allAvailableUsers.getNextUserMods();
+        PropertyIterator iter = config.getArguments().iterator();
+        while (iter.hasNext()) {
+            Argument arg = (Argument) iter.next().getObjectValue();
+            // if parameter name exists in http request
+            // then change its value
+            // (Note: each jmeter thread (ie user) gets to have unique values)
+            if (currentUser.containsKey(arg.getName())) {
+                arg.setValue((String) currentUser.get(arg.getName()));
+            }
+        }
+    }
 
-	/*
-	 * ------------------------------------------------------------------------
-	 * Methods (used by UserParameterModifierGui to get/set the name of XML
-	 * parameter file)
-	 * ------------------------------------------------------------------------
-	 */
+    /*
+     * ------------------------------------------------------------------------
+     * Methods (used by UserParameterModifierGui to get/set the name of XML
+     * parameter file)
+     * ------------------------------------------------------------------------
+     */
 
-	/**
-	 * Return the current XML file name to be read to obtain the parameter data
-	 * for all users
-	 * 
-	 * @return the name of the XML file containing parameter data for each user
-	 */
-	public String getXmlUri() {
-		return this.getPropertyAsString(XMLURI);
-	}
+    /**
+     * Return the current XML file name to be read to obtain the parameter data
+     * for all users
+     *
+     * @return the name of the XML file containing parameter data for each user
+     */
+    public String getXmlUri() {
+        return this.getPropertyAsString(XMLURI);
+    }
 
-	/**
-	 * From the GUI screen, set file name of XML to read
-	 * 
-	 * @param xmlURI
-	 *            the name of the XML file containing the HTTP name value pair
-	 *            parameters per user
-	 */
-	public void setXmlUri(String xmlURI) {
-		setProperty(XMLURI, xmlURI);
-	}
+    /**
+     * From the GUI screen, set file name of XML to read
+     *
+     * @param xmlURI
+     *            the name of the XML file containing the HTTP name value pair
+     *            parameters per user
+     */
+    public void setXmlUri(String xmlURI) {
+        setProperty(XMLURI, xmlURI);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see TestListener#testIterationStart(LoopIterationEvent)
-	 */
-	public void testIterationStart(LoopIterationEvent event) {
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see TestListener#testIterationStart(LoopIterationEvent)
+     */
+    public void testIterationStart(LoopIterationEvent event) {
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#clone()
-	 */
-	public Object clone() {
-		UserParameterModifier clone = (UserParameterModifier) super.clone();
-		clone.allAvailableUsers = allAvailableUsers;
-		return clone;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.lang.Object#clone()
+     */
+    public Object clone() {
+        UserParameterModifier clone = (UserParameterModifier) super.clone();
+        clone.allAvailableUsers = allAvailableUsers;
+        return clone;
+    }
 }

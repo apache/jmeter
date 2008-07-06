@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.gui.action;
@@ -35,10 +35,10 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 public class AddToTree implements Command {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static Set commandSet;
-    
+
     static {
         HashSet commands = new HashSet();
         commands.add(ActionNames.ADD);
@@ -46,45 +46,45 @@ public class AddToTree implements Command {
     }
 
 
-	public AddToTree() {
-	}
+    public AddToTree() {
+    }
 
-	/**
-	 * Gets the Set of actions this Command class responds to.
-	 * 
-	 * @return the ActionNames value
-	 */
-	public Set getActionNames() {
-		return commandSet;
-	}
+    /**
+     * Gets the Set of actions this Command class responds to.
+     *
+     * @return the ActionNames value
+     */
+    public Set getActionNames() {
+        return commandSet;
+    }
 
-	/**
-	 * Adds the specified class to the current node of the tree.
-	 */
-	public void doAction(ActionEvent e) {
+    /**
+     * Adds the specified class to the current node of the tree.
+     */
+    public void doAction(ActionEvent e) {
         GuiPackage guiPackage = GuiPackage.getInstance();
-		try {
-			guiPackage.updateCurrentNode();
-			TestElement testElement = guiPackage.createTestElement(((JComponent) e.getSource()).getName());
+        try {
+            guiPackage.updateCurrentNode();
+            TestElement testElement = guiPackage.createTestElement(((JComponent) e.getSource()).getName());
             JMeterTreeNode parentNode = guiPackage.getCurrentNode();
             JMeterTreeNode node = guiPackage.getTreeModel().addComponent(testElement, parentNode);
             guiPackage.getMainFrame().getTree().setSelectionPath(new TreePath(node.getPath()));
         }
-		catch (IllegalUserActionException err) {
+        catch (IllegalUserActionException err) {
             log.error("", err); // $NON-NLS-1$
-			String msg = err.getMessage();
-			if (msg == null) {
-				msg=err.toString();
-			}
-		    JMeterUtils.reportErrorToUser(msg);
-		}
+            String msg = err.getMessage();
+            if (msg == null) {
+                msg=err.toString();
+            }
+            JMeterUtils.reportErrorToUser(msg);
+        }
         catch (Exception err) {
-			log.error("", err); // $NON-NLS-1$
-			String msg = err.getMessage();
-			if (msg == null) {
-				msg=err.toString();
-			}
-		    JMeterUtils.reportErrorToUser(msg);
-		}
-	}
+            log.error("", err); // $NON-NLS-1$
+            String msg = err.getMessage();
+            if (msg == null) {
+                msg=err.toString();
+            }
+            JMeterUtils.reportErrorToUser(msg);
+        }
+    }
 }

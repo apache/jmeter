@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.gui.action;
@@ -30,28 +30,28 @@ import org.apache.jmeter.reporters.FileReporter;
 import org.apache.jmeter.util.JMeterUtils;
 
 public class Analyze implements Command {
-	private static final Set commands = new HashSet();
+    private static final Set commands = new HashSet();
 
-	static {
-		commands.add(ActionNames.ANALYZE_FILE);
-	}
+    static {
+        commands.add(ActionNames.ANALYZE_FILE);
+    }
 
-	public Analyze() {
-	}
+    public Analyze() {
+    }
 
-	public Set getActionNames() {
-		return commands;
-	}
+    public Set getActionNames() {
+        return commands;
+    }
 
-	public void doAction(ActionEvent e) {
-		FileReporter analyzer = new FileReporter();
-		final JFileChooser chooser = FileDialoger.promptToOpenFile(new String[] { ".jtl" }); //$NON-NLS-1$
-		if (chooser != null) {
-			try {
-				analyzer.init(chooser.getSelectedFile().getPath());
-			} catch (IOException err) {
-				JMeterUtils.reportErrorToUser("The file you selected could not be analyzed");
-			}
-		}
-	}
+    public void doAction(ActionEvent e) {
+        FileReporter analyzer = new FileReporter();
+        final JFileChooser chooser = FileDialoger.promptToOpenFile(new String[] { ".jtl" }); //$NON-NLS-1$
+        if (chooser != null) {
+            try {
+                analyzer.init(chooser.getSelectedFile().getPath());
+            } catch (IOException err) {
+                JMeterUtils.reportErrorToUser("The file you selected could not be analyzed");
+            }
+        }
+    }
 }

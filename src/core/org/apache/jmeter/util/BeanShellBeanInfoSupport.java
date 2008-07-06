@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.util;
@@ -28,36 +28,36 @@ import org.apache.jmeter.testbeans.gui.TextAreaEditor;
  */
 public abstract class BeanShellBeanInfoSupport extends BeanInfoSupport {
 
-	protected BeanShellBeanInfoSupport(Class beanClass) {
-		super(beanClass);
-		PropertyDescriptor p;
-		
+    protected BeanShellBeanInfoSupport(Class beanClass) {
+        super(beanClass);
+        PropertyDescriptor p;
+
         p = property("resetInterpreter");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, Boolean.FALSE);
         p.setValue(NOT_EXPRESSION, Boolean.TRUE);
         p.setValue(NOT_OTHER, Boolean.TRUE);
-        
+
         createPropertyGroup("resetGroup", new String[] { "resetInterpreter" });
-		
-		p = property("parameters");
-		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-		p.setValue(DEFAULT, "");
+
+        p = property("parameters");
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, "");
 
         createPropertyGroup("parameterGroup", new String[] { "parameters" });
 
         p = property("filename");
-		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-		p.setValue(DEFAULT, "");
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, "");
 
         createPropertyGroup("filenameGroup", new String[] { "filename" });
 
-		p = property("script");
-		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-		p.setValue(DEFAULT, "");
+        p = property("script");
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, "");
         p.setPropertyEditorClass(TextAreaEditor.class);
 
         createPropertyGroup("scripting", new String[] { "script" });
-	}
+    }
 
 }

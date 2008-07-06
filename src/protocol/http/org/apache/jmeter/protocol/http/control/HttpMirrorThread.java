@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.control;
@@ -56,8 +56,8 @@ public class HttpMirrorThread extends Thread {
         log.info("Starting thread");
         BufferedInputStream in = null;
         BufferedOutputStream out = null;
-        
-        try {           
+
+        try {
             in = new BufferedInputStream(clientSocket.getInputStream());
             out = new BufferedOutputStream(clientSocket.getOutputStream());
             // The headers are written using ISO_8859_1 encoding
@@ -67,7 +67,7 @@ public class HttpMirrorThread extends Thread {
             out.write(CRLF);
             out.write(CRLF);
             out.flush();
-            
+
             // Read the header part, we will be looking for a content-length
             // header, so we know how much we should read.
             // We assume headers are in ISO_8859_1
@@ -80,12 +80,12 @@ public class HttpMirrorThread extends Thread {
             int length = 0;
             int positionOfBody = 0;
             while(positionOfBody <= 0 && ((length = in.read(buffer)) != -1)) {
-            	out.write(buffer, 0, length); // echo back
+                out.write(buffer, 0, length); // echo back
                 headers.append(new String(buffer, 0, length, ISO_8859_1));
                 // Check if we have read all the headers
                 positionOfBody = getPositionOfBody(headers.toString());
             }
-          
+
             // Check if we have found a content-length header
             String contentLengthHeaderValue = getRequestHeaderValue(headers.toString(), "Content-Length"); //$NON-NLS-1$
             if(contentLengthHeaderValue != null) {
@@ -99,7 +99,7 @@ public class HttpMirrorThread extends Thread {
                     log.error("Transfer-Encoding header set, the value is not supported : " + transferEncodingHeaderValue);
                 }
             }
-            
+
             // If we know the content lenght, we can allow the reading of
             // the request to block until more data arrives.
             // If it is chunked transfer, we cannot allow the reading to
@@ -111,11 +111,11 @@ public class HttpMirrorThread extends Thread {
                 // the headers
                 // We subtract two bytes for the crlf divider between header and body
                 int totalReadBytes = headers.toString().length() - positionOfBody - 2;
-                
+
                 // We know when to stop reading, so we can allow the read method to block
                 while((totalReadBytes < contentLength) && ((length = in.read(buffer)) != -1)) {
                     out.write(buffer, 0, length);
-                    
+
                     totalReadBytes += length;
                 }
             }
@@ -147,13 +147,13 @@ public class HttpMirrorThread extends Thread {
         }
         log.info("End of Thread");
     }
-    
+
     private static String getRequestHeaderValue(String requestHeaders, String headerName) {
         Perl5Matcher localMatcher = JMeterUtils.getMatcher();
         // We use multi-line mask so can prefix the line with ^
         // also match \w+ to catch Transfer-Encoding: chunked
         // TODO: may need to be extended to allow for other header values with non-word contents
-        String expression = "^" + headerName + ":\\s+(\\w+)"; // $NON-NLS-1$ $NON-NLS-2$        
+        String expression = "^" + headerName + ":\\s+(\\w+)"; // $NON-NLS-1$ $NON-NLS-2$
         Pattern pattern = JMeterUtils.getPattern(expression, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.CASE_INSENSITIVE_MASK | Perl5Compiler.MULTILINE_MASK);
         if(localMatcher.contains(requestHeaders, pattern)) {
             // The value is in the first group, group 0 is the whole match
@@ -169,7 +169,7 @@ public class HttpMirrorThread extends Thread {
         // The headers and body are divided by a blank line (the \r is to allow for the CR before LF)
         String regularExpression = "^\\r$"; // $NON-NLS-1$
         Pattern pattern = JMeterUtils.getPattern(regularExpression, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.CASE_INSENSITIVE_MASK | Perl5Compiler.MULTILINE_MASK);
-        
+
         PatternMatcherInput input = new PatternMatcherInput(stringToCheck);
         if(localMatcher.contains(input, pattern)) {
             MatchResult match = localMatcher.getMatch();

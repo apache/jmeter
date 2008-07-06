@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.sampler;
@@ -40,9 +40,9 @@ public class PutWriter extends PostWriter {
         // Put request does not use multipart, so no need for boundary
         super(null);
     }
-    
+
     public void setHeaders(URLConnection connection, HTTPSampler sampler) throws IOException {
-    	// Get the encoding to use for the request
+        // Get the encoding to use for the request
         String contentEncoding = sampler.getContentEncoding();
         if(contentEncoding == null || contentEncoding.length() == 0) {
             contentEncoding = ENCODING;
@@ -53,10 +53,10 @@ public class PutWriter extends PostWriter {
         // Check if the header manager had a content type header
         // This allows the user to specify his own content-type for a PUT request
         String contentTypeHeader = connection.getRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE);
-        boolean hasContentTypeHeader = contentTypeHeader != null && contentTypeHeader.length() > 0; 
-        
+        boolean hasContentTypeHeader = contentTypeHeader != null && contentTypeHeader.length() > 0;
+
         HTTPFileArg files[] = sampler.getHTTPFiles();
-        
+
         // If there are no arguments, we can send a file as the body of the request
         // TODO: needs a multiple file upload scenerio
         if(sampler.getArguments() != null && sampler.getArguments().getArgumentCount() == 0 && sampler.getSendFileAsPostBody()) {

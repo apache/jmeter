@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.util.accesslog;
@@ -69,57 +69,57 @@ import org.apache.log.Logger;
  * work with this parser. Servers that are known to use non standard formats are
  * IIS and Netscape.
  * <p>
- * 
+ *
  */
 
 public class TCLogParser implements LogParser {
-	protected static final Logger log = LoggingManager.getLoggerForClass();
+    protected static final Logger log = LoggingManager.getLoggerForClass();
 
-	public static final String GET = "GET";
+    public static final String GET = "GET";
 
-	public static final String POST = "POST";
+    public static final String POST = "POST";
 
-	/** protected members * */
-	protected String RMETHOD = null;
+    /** protected members * */
+    protected String RMETHOD = null;
 
-	/**
-	 * The path to the access log file
-	 */
-	protected String URL_PATH = null;
+    /**
+     * The path to the access log file
+     */
+    protected String URL_PATH = null;
 
-	protected boolean useFILE = true;
+    protected boolean useFILE = true;
 
-	protected File SOURCE = null;
+    protected File SOURCE = null;
 
-	protected String FILENAME = null;
+    protected String FILENAME = null;
 
-	protected BufferedReader READER = null;
+    protected BufferedReader READER = null;
 
-	/**
-	 * Handles to supporting classes
-	 */
-	protected Filter FILTER = null;
+    /**
+     * Handles to supporting classes
+     */
+    protected Filter FILTER = null;
 
     /**
      * by default, we probably should decode the parameter values
      */
     protected boolean decode = true;
-    
-	// TODO downcase UPPER case non-final variables
 
-	/**
-	 * 
-	 */
-	public TCLogParser() {
-		super();
-	}
+    // TODO downcase UPPER case non-final variables
 
-	/**
-	 * @param source
-	 */
-	public TCLogParser(String source) {
-		setSourceFile(source);
-	}
+    /**
+     *
+     */
+    public TCLogParser() {
+        super();
+    }
+
+    /**
+     * @param source
+     */
+    public TCLogParser(String source) {
+        setSourceFile(source);
+    }
 
     /**
      * by default decode is set to true. if the parameters shouldn't be
@@ -129,7 +129,7 @@ public class TCLogParser implements LogParser {
     public void setDecodeParameterValues(boolean decodeparams) {
         this.decode = decodeparams;
     }
-    
+
     /**
      * decode the parameter values is to true by default
      * @return  if paramter values should be decoded
@@ -137,353 +137,353 @@ public class TCLogParser implements LogParser {
     public boolean decodeParameterValue() {
         return this.decode;
     }
-    
-	/**
-	 * Calls this method to set whether or not to use the path in the log. We
-	 * may want to provide the ability to filter the log file later on. By
-	 * default, the parser uses the file in the log.
-	 * 
-	 * @param file
-	 */
-	public void setUseParsedFile(boolean file) {
-		this.useFILE = file;
-	}
 
-	/**
-	 * Use the filter to include/exclude files in the access logs. This is
-	 * provided as a convienance and reduce the need to spend hours cleaning up
-	 * log files.
-	 * 
-	 * @param filter
-	 */
-	public void setFilter(Filter filter) {
-		FILTER = filter;
-	}
+    /**
+     * Calls this method to set whether or not to use the path in the log. We
+     * may want to provide the ability to filter the log file later on. By
+     * default, the parser uses the file in the log.
+     *
+     * @param file
+     */
+    public void setUseParsedFile(boolean file) {
+        this.useFILE = file;
+    }
 
-	/**
-	 * Sets the source file.
-	 * 
-	 * @param source
-	 */
-	public void setSourceFile(String source) {
-		this.FILENAME = source;
-	}
+    /**
+     * Use the filter to include/exclude files in the access logs. This is
+     * provided as a convienance and reduce the need to spend hours cleaning up
+     * log files.
+     *
+     * @param filter
+     */
+    public void setFilter(Filter filter) {
+        FILTER = filter;
+    }
 
-	/**
-	 * Creates a new File object.
-	 * 
-	 * @param filename
-	 */
-	public File openFile(String filename) {
-		return new File(filename);
-	}
+    /**
+     * Sets the source file.
+     *
+     * @param source
+     */
+    public void setSourceFile(String source) {
+        this.FILENAME = source;
+    }
 
-	/**
-	 * parse the entire file.
-	 * 
-	 * @return boolean success/failure
-	 */
-	public int parse(TestElement el, int parseCount) {
-		if (this.SOURCE == null) {
-			this.SOURCE = this.openFile(this.FILENAME);
-		}
-		try {
-			if (this.READER == null) {
-				this.READER = new BufferedReader(new FileReader(this.SOURCE));
-			}
-			return parse(this.READER, el, parseCount);
-		} catch (Exception exception) {
-			log.error("Problem creating samples", exception);
-		}
-		return -1;// indicate that an error occured
-	}
+    /**
+     * Creates a new File object.
+     *
+     * @param filename
+     */
+    public File openFile(String filename) {
+        return new File(filename);
+    }
 
-	/**
-	 * parse a set number of lines from the access log. Keep in mind the number
-	 * of lines parsed will depend the filter and number of lines in the log.
-	 * The method returns the actual lines parsed.
-	 * 
-	 * @param count
-	 * @return lines parsed
-	 */
-	public int parseAndConfigure(int count, TestElement el) {
-		return this.parse(el, count);
-	}
+    /**
+     * parse the entire file.
+     *
+     * @return boolean success/failure
+     */
+    public int parse(TestElement el, int parseCount) {
+        if (this.SOURCE == null) {
+            this.SOURCE = this.openFile(this.FILENAME);
+        }
+        try {
+            if (this.READER == null) {
+                this.READER = new BufferedReader(new FileReader(this.SOURCE));
+            }
+            return parse(this.READER, el, parseCount);
+        } catch (Exception exception) {
+            log.error("Problem creating samples", exception);
+        }
+        return -1;// indicate that an error occured
+    }
 
-	/**
-	 * The method is responsible for reading each line, and breaking out of the
-	 * while loop if a set number of lines is given.
-	 * 
-	 * @param breader
-	 */
-	protected int parse(BufferedReader breader, TestElement el, int parseCount) {
-		int actualCount = 0;
-		String line = null;
-		try {
-			// read one line at a time using
-			// BufferedReader
-			line = breader.readLine();
-			while (line != null) {
-				if (line.length() > 0) {
-					actualCount += this.parseLine(line, el);
-				}
-				// we check the count to see if we have exceeded
-				// the number of lines to parse. There's no way
-				// to know where to stop in the file. Therefore
-				// we use break to escape the while loop when
-				// we've reached the count.
-				if (parseCount != -1 && actualCount >= parseCount) {
-					break;
-				}
-				line = breader.readLine();
-			}
-			if (line == null) {
-				breader.close();
-				breader = null;
-				this.READER = null;
-				// this.READER = new BufferedReader(new
-				// FileReader(this.SOURCE));
-				// parse(this.READER,el);
-			}
-		} catch (IOException ioe) {
-			log.error("Error reading log file", ioe);
-		}
-		return actualCount;
-	}
+    /**
+     * parse a set number of lines from the access log. Keep in mind the number
+     * of lines parsed will depend the filter and number of lines in the log.
+     * The method returns the actual lines parsed.
+     *
+     * @param count
+     * @return lines parsed
+     */
+    public int parseAndConfigure(int count, TestElement el) {
+        return this.parse(el, count);
+    }
 
-	/**
-	 * parseLine calls the other parse methods to parse the given text.
-	 * 
-	 * @param line
-	 */
-	protected int parseLine(String line, TestElement el) {
-		int count = 0;
-		// we clean the line to get
-		// rid of extra stuff
-		String cleanedLine = this.cleanURL(line);
-		log.debug("parsing line: " + line);
-		// now we set request method
-		el.setProperty(HTTPSamplerBase.METHOD, RMETHOD);
-		if (FILTER != null) {
-			log.debug("filter is not null");
-			if (!FILTER.isFiltered(line,el)) {
-				log.debug("line was not filtered");
-				// increment the current count
-				count++;
-				// we filter the line first, before we try
-				// to separate the URL into file and
-				// parameters.
-				line = FILTER.filter(cleanedLine);
-				if (line != null) {
-					createUrl(line, el);
-				}
-			} else {
-				log.debug("Line was filtered");
-			}
-		} else {
-			log.debug("filter was null");
-			// increment the current count
-			count++;
-			// in the case when the filter is not set, we
-			// parse all the lines
-			createUrl(cleanedLine, el);
-		}
-		return count;
-	}
+    /**
+     * The method is responsible for reading each line, and breaking out of the
+     * while loop if a set number of lines is given.
+     *
+     * @param breader
+     */
+    protected int parse(BufferedReader breader, TestElement el, int parseCount) {
+        int actualCount = 0;
+        String line = null;
+        try {
+            // read one line at a time using
+            // BufferedReader
+            line = breader.readLine();
+            while (line != null) {
+                if (line.length() > 0) {
+                    actualCount += this.parseLine(line, el);
+                }
+                // we check the count to see if we have exceeded
+                // the number of lines to parse. There's no way
+                // to know where to stop in the file. Therefore
+                // we use break to escape the while loop when
+                // we've reached the count.
+                if (parseCount != -1 && actualCount >= parseCount) {
+                    break;
+                }
+                line = breader.readLine();
+            }
+            if (line == null) {
+                breader.close();
+                breader = null;
+                this.READER = null;
+                // this.READER = new BufferedReader(new
+                // FileReader(this.SOURCE));
+                // parse(this.READER,el);
+            }
+        } catch (IOException ioe) {
+            log.error("Error reading log file", ioe);
+        }
+        return actualCount;
+    }
 
-	/**
-	 * @param line
-	 */
-	private void createUrl(String line, TestElement el) {
-		String paramString = null;
-		// check the URL for "?" symbol
-		paramString = this.stripFile(line, el);
-		if (paramString != null) {
-			this.checkParamFormat(line);
-			// now that we have stripped the file, we can parse the parameters
-			this.convertStringToJMRequest(paramString, el);
-		}
-	}
+    /**
+     * parseLine calls the other parse methods to parse the given text.
+     *
+     * @param line
+     */
+    protected int parseLine(String line, TestElement el) {
+        int count = 0;
+        // we clean the line to get
+        // rid of extra stuff
+        String cleanedLine = this.cleanURL(line);
+        log.debug("parsing line: " + line);
+        // now we set request method
+        el.setProperty(HTTPSamplerBase.METHOD, RMETHOD);
+        if (FILTER != null) {
+            log.debug("filter is not null");
+            if (!FILTER.isFiltered(line,el)) {
+                log.debug("line was not filtered");
+                // increment the current count
+                count++;
+                // we filter the line first, before we try
+                // to separate the URL into file and
+                // parameters.
+                line = FILTER.filter(cleanedLine);
+                if (line != null) {
+                    createUrl(line, el);
+                }
+            } else {
+                log.debug("Line was filtered");
+            }
+        } else {
+            log.debug("filter was null");
+            // increment the current count
+            count++;
+            // in the case when the filter is not set, we
+            // parse all the lines
+            createUrl(cleanedLine, el);
+        }
+        return count;
+    }
 
-	/**
-	 * The method cleans the URL using the following algorithm.
-	 * <ol>
-	 * <li> check for double quotes
-	 * <li> check the request method
-	 * <li> tokenize using double quotes
-	 * <li> find first token containing request method
-	 * <li> tokenize string using space
-	 * <li> find first token that begins with "/"
-	 * </ol>
-	 * Example Tomcat log entry:
-	 * <p>
-	 * 127.0.0.1 - - [08/Jan/2003:07:03:54 -0500] "GET /addrbook/ HTTP/1.1" 200
-	 * 1981
-	 * <p>
-	 * 
-	 * @param entry
-	 * @return cleaned url
-	 */
-	public String cleanURL(String entry) {
-		String url = entry;
-		// if the string contains atleast one double
-		// quote and checkMethod is true, go ahead
-		// and tokenize the string.
-		if (entry.indexOf("\"") > -1 && checkMethod(entry)) {
-			StringTokenizer tokens = null;
-			// we tokenize using double quotes. this means
-			// for tomcat we should have 3 tokens if there
-			// isn't any additional information in the logs
-			tokens = this.tokenize(entry, "\"");
-			while (tokens.hasMoreTokens()) {
-				String toke = tokens.nextToken();
-				// if checkMethod on the token is true
-				// we tokenzie it using space and escape
-				// the while loop. Only the first matching
-				// token will be used
-				if (checkMethod(toke)) {
-					StringTokenizer token2 = this.tokenize(toke, " ");
-					while (token2.hasMoreTokens()) {
-						String t = (String) token2.nextElement();
-						if (t.equalsIgnoreCase(GET)) {
-							RMETHOD = GET;
-						} else if (t.equalsIgnoreCase(POST)) {
-							RMETHOD = POST;
-						}
-						// there should only be one token
-						// that starts with slash character
-						if (t.startsWith("/")) {
-							url = t;
-							break;
-						}
-					}
-					break;
-				}
-			}
-			return url;
-		}
-		// we return the original string
-		return url;
-	}
+    /**
+     * @param line
+     */
+    private void createUrl(String line, TestElement el) {
+        String paramString = null;
+        // check the URL for "?" symbol
+        paramString = this.stripFile(line, el);
+        if (paramString != null) {
+            this.checkParamFormat(line);
+            // now that we have stripped the file, we can parse the parameters
+            this.convertStringToJMRequest(paramString, el);
+        }
+    }
 
-	/**
-	 * The method checks for POST and GET methods currently. The other methods
-	 * aren't supported yet.
-	 * 
-	 * @param text
-	 * @return if method is supported
-	 */
-	public boolean checkMethod(String text) {
-		if (text.indexOf("GET") > -1) {
-			this.RMETHOD = GET;
-			return true;
-		} else if (text.indexOf("POST") > -1) {
-			this.RMETHOD = POST;
-			return true;
-		} else {
-			return false;
-		}
-	}
+    /**
+     * The method cleans the URL using the following algorithm.
+     * <ol>
+     * <li> check for double quotes
+     * <li> check the request method
+     * <li> tokenize using double quotes
+     * <li> find first token containing request method
+     * <li> tokenize string using space
+     * <li> find first token that begins with "/"
+     * </ol>
+     * Example Tomcat log entry:
+     * <p>
+     * 127.0.0.1 - - [08/Jan/2003:07:03:54 -0500] "GET /addrbook/ HTTP/1.1" 200
+     * 1981
+     * <p>
+     *
+     * @param entry
+     * @return cleaned url
+     */
+    public String cleanURL(String entry) {
+        String url = entry;
+        // if the string contains atleast one double
+        // quote and checkMethod is true, go ahead
+        // and tokenize the string.
+        if (entry.indexOf("\"") > -1 && checkMethod(entry)) {
+            StringTokenizer tokens = null;
+            // we tokenize using double quotes. this means
+            // for tomcat we should have 3 tokens if there
+            // isn't any additional information in the logs
+            tokens = this.tokenize(entry, "\"");
+            while (tokens.hasMoreTokens()) {
+                String toke = tokens.nextToken();
+                // if checkMethod on the token is true
+                // we tokenzie it using space and escape
+                // the while loop. Only the first matching
+                // token will be used
+                if (checkMethod(toke)) {
+                    StringTokenizer token2 = this.tokenize(toke, " ");
+                    while (token2.hasMoreTokens()) {
+                        String t = (String) token2.nextElement();
+                        if (t.equalsIgnoreCase(GET)) {
+                            RMETHOD = GET;
+                        } else if (t.equalsIgnoreCase(POST)) {
+                            RMETHOD = POST;
+                        }
+                        // there should only be one token
+                        // that starts with slash character
+                        if (t.startsWith("/")) {
+                            url = t;
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+            return url;
+        }
+        // we return the original string
+        return url;
+    }
 
-	/**
-	 * Tokenize the URL into two tokens. If the URL has more than one "?", the
-	 * parse may fail. Only the first two tokens are used. The first token is
-	 * automatically parsed and set at URL_PATH.
-	 * 
-	 * @param url
-	 * @return String parameters
-	 */
-	public String stripFile(String url, TestElement el) {
-		if (url.indexOf("?") > -1) {
-			StringTokenizer tokens = this.tokenize(url, "?");
-			this.URL_PATH = tokens.nextToken();
-			el.setProperty(HTTPSamplerBase.PATH, URL_PATH);
-			return tokens.hasMoreTokens() ? tokens.nextToken() : null;
-		}
-		el.setProperty(HTTPSamplerBase.PATH, url);
-		return null;
-	}
+    /**
+     * The method checks for POST and GET methods currently. The other methods
+     * aren't supported yet.
+     *
+     * @param text
+     * @return if method is supported
+     */
+    public boolean checkMethod(String text) {
+        if (text.indexOf("GET") > -1) {
+            this.RMETHOD = GET;
+            return true;
+        } else if (text.indexOf("POST") > -1) {
+            this.RMETHOD = POST;
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-	/**
-	 * Checks the string to make sure it has /path/file?name=value format. If
-	 * the string doesn't have "?", it will return false.
-	 * 
-	 * @param url
-	 * @return boolean
-	 */
-	public boolean checkURL(String url) {
-		if (url.indexOf("?") > -1) {
-			return true;
-		}
-		return false;
-	}
+    /**
+     * Tokenize the URL into two tokens. If the URL has more than one "?", the
+     * parse may fail. Only the first two tokens are used. The first token is
+     * automatically parsed and set at URL_PATH.
+     *
+     * @param url
+     * @return String parameters
+     */
+    public String stripFile(String url, TestElement el) {
+        if (url.indexOf("?") > -1) {
+            StringTokenizer tokens = this.tokenize(url, "?");
+            this.URL_PATH = tokens.nextToken();
+            el.setProperty(HTTPSamplerBase.PATH, URL_PATH);
+            return tokens.hasMoreTokens() ? tokens.nextToken() : null;
+        }
+        el.setProperty(HTTPSamplerBase.PATH, url);
+        return null;
+    }
 
-	/**
-	 * Checks the string to see if it contains "&" and "=". If it does, return
-	 * true, so that it can be parsed.
-	 * 
-	 * @param text
-	 * @return boolean
-	 */
-	public boolean checkParamFormat(String text) {
-		if (text.indexOf("&") > -1 && text.indexOf("=") > -1) {
-			return true;
-		}
-		return false;
-	}
+    /**
+     * Checks the string to make sure it has /path/file?name=value format. If
+     * the string doesn't have "?", it will return false.
+     *
+     * @param url
+     * @return boolean
+     */
+    public boolean checkURL(String url) {
+        if (url.indexOf("?") > -1) {
+            return true;
+        }
+        return false;
+    }
 
-	/**
-	 * Convert a single line into XML
-	 * 
-	 * @param text
-	 */
-	public void convertStringToJMRequest(String text, TestElement el) {
-		((HTTPSamplerBase) el).parseArguments(text);
-	}
+    /**
+     * Checks the string to see if it contains "&" and "=". If it does, return
+     * true, so that it can be parsed.
+     *
+     * @param text
+     * @return boolean
+     */
+    public boolean checkParamFormat(String text) {
+        if (text.indexOf("&") > -1 && text.indexOf("=") > -1) {
+            return true;
+        }
+        return false;
+    }
 
-	/**
-	 * Parse the string parameters into NVPair[] array. Once they are parsed, it
-	 * is returned. The method uses parseOneParameter(string) to convert each
-	 * pair.
-	 * 
-	 * @param stringparams
-	 */
-	public NVPair[] convertStringtoNVPair(String stringparams) {
-		Vector vparams = this.parseParameters(stringparams);
-		NVPair[] nvparams = new NVPair[vparams.size()];
-		// convert the Parameters
-		for (int idx = 0; idx < nvparams.length; idx++) {
-			nvparams[idx] = this.parseOneParameter((String) vparams.get(idx));
-		}
-		return nvparams;
-	}
+    /**
+     * Convert a single line into XML
+     *
+     * @param text
+     */
+    public void convertStringToJMRequest(String text, TestElement el) {
+        ((HTTPSamplerBase) el).parseArguments(text);
+    }
 
-	/**
-	 * Method expects name and value to be separated by an equal sign "=". The
-	 * method uses StringTokenizer to make a NVPair object. If there happens to
-	 * be more than one "=" sign, the others are ignored. The chance of a string
-	 * containing more than one is unlikely and would not conform to HTTP spec.
-	 * I should double check the protocol spec to make sure this is accurate.
-	 * 
-	 * @param parameter
-	 *            to be parsed
-	 * @return NVPair
-	 */
-	protected NVPair parseOneParameter(String parameter) {
-		String name = ""; // avoid possible NPE when trimming the name
-		String value = null;
-		try {
-			StringTokenizer param = this.tokenize(parameter, "=");
-			name = param.nextToken();
-			value = param.nextToken();
-		} catch (Exception e) {
-			// do nothing. it's naive, but since
-			// the utility is meant to parse access
-			// logs the formatting should be correct
-		}
-		if (value == null) {
-			value = "";
-		} else {
+    /**
+     * Parse the string parameters into NVPair[] array. Once they are parsed, it
+     * is returned. The method uses parseOneParameter(string) to convert each
+     * pair.
+     *
+     * @param stringparams
+     */
+    public NVPair[] convertStringtoNVPair(String stringparams) {
+        Vector vparams = this.parseParameters(stringparams);
+        NVPair[] nvparams = new NVPair[vparams.size()];
+        // convert the Parameters
+        for (int idx = 0; idx < nvparams.length; idx++) {
+            nvparams[idx] = this.parseOneParameter((String) vparams.get(idx));
+        }
+        return nvparams;
+    }
+
+    /**
+     * Method expects name and value to be separated by an equal sign "=". The
+     * method uses StringTokenizer to make a NVPair object. If there happens to
+     * be more than one "=" sign, the others are ignored. The chance of a string
+     * containing more than one is unlikely and would not conform to HTTP spec.
+     * I should double check the protocol spec to make sure this is accurate.
+     *
+     * @param parameter
+     *            to be parsed
+     * @return NVPair
+     */
+    protected NVPair parseOneParameter(String parameter) {
+        String name = ""; // avoid possible NPE when trimming the name
+        String value = null;
+        try {
+            StringTokenizer param = this.tokenize(parameter, "=");
+            name = param.nextToken();
+            value = param.nextToken();
+        } catch (Exception e) {
+            // do nothing. it's naive, but since
+            // the utility is meant to parse access
+            // logs the formatting should be correct
+        }
+        if (value == null) {
+            value = "";
+        } else {
             if (decode) {
                 try {
                     value = URLDecoder.decode(value,"UTF-8");
@@ -492,48 +492,48 @@ public class TCLogParser implements LogParser {
                 }
             }
         }
-		return new NVPair(name.trim(), value.trim());
-	}
+        return new NVPair(name.trim(), value.trim());
+    }
 
-	/**
-	 * Method uses StringTokenizer to convert the string into single pairs. The
-	 * string should conform to HTTP protocol spec, which means the name/value
-	 * pairs are separated by the ampersand symbol "&". Some one could write the
-	 * querystrings by hand, but that would be round about and go against the
-	 * purpose of this utility.
-	 * 
-	 * @param parameters
-	 * @return Vector
-	 */
-	protected Vector parseParameters(String parameters) {
-		Vector parsedParams = new Vector();
-		StringTokenizer paramtokens = this.tokenize(parameters, "&");
-		while (paramtokens.hasMoreElements()) {
-			parsedParams.add(paramtokens.nextElement());
-		}
-		return parsedParams;
-	}
+    /**
+     * Method uses StringTokenizer to convert the string into single pairs. The
+     * string should conform to HTTP protocol spec, which means the name/value
+     * pairs are separated by the ampersand symbol "&". Some one could write the
+     * querystrings by hand, but that would be round about and go against the
+     * purpose of this utility.
+     *
+     * @param parameters
+     * @return Vector
+     */
+    protected Vector parseParameters(String parameters) {
+        Vector parsedParams = new Vector();
+        StringTokenizer paramtokens = this.tokenize(parameters, "&");
+        while (paramtokens.hasMoreElements()) {
+            parsedParams.add(paramtokens.nextElement());
+        }
+        return parsedParams;
+    }
 
-	/**
-	 * Parses the line using java.util.StringTokenizer.
-	 * 
-	 * @param line
-	 *            line to be parsed
-	 * @param delim
-	 *            delimiter
-	 * @return StringTokenizer
-	 */
-	public StringTokenizer tokenize(String line, String delim) {
-		return new StringTokenizer(line, delim);
-	}
+    /**
+     * Parses the line using java.util.StringTokenizer.
+     *
+     * @param line
+     *            line to be parsed
+     * @param delim
+     *            delimiter
+     * @return StringTokenizer
+     */
+    public StringTokenizer tokenize(String line, String delim) {
+        return new StringTokenizer(line, delim);
+    }
 
-	public void close() {
-		try {
-			this.READER.close();
-			this.READER = null;
-			this.SOURCE = null;
-		} catch (IOException e) {
-			// do nothing
-		}
-	}
+    public void close() {
+        try {
+            this.READER.close();
+            this.READER = null;
+            this.SOURCE = null;
+        } catch (IOException e) {
+            // do nothing
+        }
+    }
 }

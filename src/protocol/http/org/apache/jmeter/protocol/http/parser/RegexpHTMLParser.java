@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.parser;
@@ -58,133 +58,133 @@ import org.apache.oro.text.regex.Perl5Matcher;
  * <li>&lt;bgsound src=<b>url</b> ... &gt;
  * <li>&lt;frame src=<b>url</b> ... &gt;
  * </ul>
- * 
+ *
  * <p>
  * This class will take into account the following construct:
  * <ul>
  * <li>&lt;base href=<b>url</b>&gt;
  * </ul>
- * 
+ *
  * <p>
  * But not the following:
  * <ul>
  * <li>&lt; ... codebase=<b>url</b> ... &gt;
  * </ul>
- * 
+ *
  */
 class RegexpHTMLParser extends HTMLParser {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-	/**
-	 * Regexp fragment matching a tag attribute's value (including the equals
-	 * sign and any spaces before it). Note it matches unquoted values, which to
-	 * my understanding, are not conformant to any of the HTML specifications,
-	 * but are still quite common in the web and all browsers seem to understand
-	 * them.
-	 */
-	private static final String VALUE = "\\s*=\\s*(?:\"([^\"]*)\"|'([^']*)'|([^\"'\\s>\\\\][^\\s>]*)(?=[\\s>]))";
+    /**
+     * Regexp fragment matching a tag attribute's value (including the equals
+     * sign and any spaces before it). Note it matches unquoted values, which to
+     * my understanding, are not conformant to any of the HTML specifications,
+     * but are still quite common in the web and all browsers seem to understand
+     * them.
+     */
+    private static final String VALUE = "\\s*=\\s*(?:\"([^\"]*)\"|'([^']*)'|([^\"'\\s>\\\\][^\\s>]*)(?=[\\s>]))";
 
-	// Note there's 3 capturing groups per value
+    // Note there's 3 capturing groups per value
 
-	/**
-	 * Regexp fragment matching the separation between two tag attributes.
-	 */
-	private static final String SEP = "\\s(?:[^>]*\\s)?";
+    /**
+     * Regexp fragment matching the separation between two tag attributes.
+     */
+    private static final String SEP = "\\s(?:[^>]*\\s)?";
 
-	/**
-	 * Regular expression used against the HTML code to find the URIs of images,
-	 * etc.:
-	 */
-	private static final String REGEXP = 
-		      "<(?:" + "!--.*?-->"
-		    + "|BASE" + SEP + "HREF" + VALUE
-			+ "|(?:IMG|SCRIPT|FRAME|IFRAME|BGSOUND|FRAME)" + SEP + "SRC" + VALUE
-			+ "|APPLET" + SEP + "CODE(?:BASE)?"	+ VALUE
-			+ "|(?:EMBED|OBJECT)" + SEP + "(?:SRC|CODEBASE)" + VALUE
-			+ "|(?:BODY|TABLE|TR|TD)" + SEP + "BACKGROUND" + VALUE
-			+ "|[^<]+?STYLE\\s*=['\"].*?URL\\(\\s*['\"](.+?)['\"]\\s*\\)"
-			+ "|INPUT(?:" + SEP + "(?:SRC" + VALUE
-			+ "|TYPE\\s*=\\s*(?:\"image\"|'image'|image(?=[\\s>])))){2,}"
-			+ "|LINK(?:" + SEP + "(?:HREF" + VALUE
-			+ "|REL\\s*=\\s*(?:\"stylesheet\"|'stylesheet'|stylesheet(?=[\\s>])))){2,}" + ")";
+    /**
+     * Regular expression used against the HTML code to find the URIs of images,
+     * etc.:
+     */
+    private static final String REGEXP =
+              "<(?:" + "!--.*?-->"
+            + "|BASE" + SEP + "HREF" + VALUE
+            + "|(?:IMG|SCRIPT|FRAME|IFRAME|BGSOUND|FRAME)" + SEP + "SRC" + VALUE
+            + "|APPLET" + SEP + "CODE(?:BASE)?" + VALUE
+            + "|(?:EMBED|OBJECT)" + SEP + "(?:SRC|CODEBASE)" + VALUE
+            + "|(?:BODY|TABLE|TR|TD)" + SEP + "BACKGROUND" + VALUE
+            + "|[^<]+?STYLE\\s*=['\"].*?URL\\(\\s*['\"](.+?)['\"]\\s*\\)"
+            + "|INPUT(?:" + SEP + "(?:SRC" + VALUE
+            + "|TYPE\\s*=\\s*(?:\"image\"|'image'|image(?=[\\s>])))){2,}"
+            + "|LINK(?:" + SEP + "(?:HREF" + VALUE
+            + "|REL\\s*=\\s*(?:\"stylesheet\"|'stylesheet'|stylesheet(?=[\\s>])))){2,}" + ")";
 
-	// Number of capturing groups possibly containing Base HREFs:
-	private static final int NUM_BASE_GROUPS = 3;
+    // Number of capturing groups possibly containing Base HREFs:
+    private static final int NUM_BASE_GROUPS = 3;
 
-	/**
-	 * Thread-local input:
-	 */
-	private static final ThreadLocal localInput = new ThreadLocal() {
-		protected Object initialValue() {
-			return new PatternMatcherInput(new char[0]);
-		}
-	};
+    /**
+     * Thread-local input:
+     */
+    private static final ThreadLocal localInput = new ThreadLocal() {
+        protected Object initialValue() {
+            return new PatternMatcherInput(new char[0]);
+        }
+    };
 
-	protected boolean isReusable() {
-		return true;
-	}
+    protected boolean isReusable() {
+        return true;
+    }
 
-	/**
-	 * Make sure to compile the regular expression upon instantiation:
-	 */
-	protected RegexpHTMLParser() {
-		super();
-	}
+    /**
+     * Make sure to compile the regular expression upon instantiation:
+     */
+    protected RegexpHTMLParser() {
+        super();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.protocol.http.parser.HtmlParser#getEmbeddedResourceURLs(byte[],
-	 *      java.net.URL)
-	 */
-	public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection urls) {
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.protocol.http.parser.HtmlParser#getEmbeddedResourceURLs(byte[],
+     *      java.net.URL)
+     */
+    public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection urls) {
 
-		Perl5Matcher matcher = JMeterUtils.getMatcher();
-		PatternMatcherInput input = (PatternMatcherInput) localInput.get();
-		// TODO: find a way to avoid the cost of creating a String here --
-		// probably a new PatternMatcherInput working on a byte[] would do
-		// better.
-		input.setInput(new String(html));
-		Pattern pattern=JMeterUtils.getPatternCache().getPattern(
-				REGEXP, 
-				Perl5Compiler.CASE_INSENSITIVE_MASK 
-				| Perl5Compiler.SINGLELINE_MASK
-				| Perl5Compiler.READ_ONLY_MASK);
-		
-		while (matcher.contains(input, pattern)) {
-			MatchResult match = matcher.getMatch();
-			String s;
-			if (log.isDebugEnabled()) {
-				log.debug("match groups " + match.groups() + " " + match.toString());
-			}
-			// Check for a BASE HREF:
-			for (int g = 1; g <= NUM_BASE_GROUPS && g <= match.groups(); g++) {
-				s = match.group(g);
-				if (s != null) {
-					if (log.isDebugEnabled()) {
-						log.debug("new baseUrl: " + s + " - " + baseUrl.toString());
-					}
-					try {
-						baseUrl = new URL(baseUrl, s);
-					} catch (MalformedURLException e) {
-						// Doesn't even look like a URL?
-						// Maybe it isn't: Ignore the exception.
-						if (log.isDebugEnabled()) {
-							log.debug("Can't build base URL from RL " + s + " in page " + baseUrl, e);
-						}
-					}
-				}
-			}
-			for (int g = NUM_BASE_GROUPS + 1; g <= match.groups(); g++) {
-				s = match.group(g);
-				if (s != null) {
-					if (log.isDebugEnabled()) {
-						log.debug("group " + g + " - " + match.group(g));
-					}
-					urls.addURL(s, baseUrl);
-				}
-			}
-		}
-		return urls.iterator();
-	}
+        Perl5Matcher matcher = JMeterUtils.getMatcher();
+        PatternMatcherInput input = (PatternMatcherInput) localInput.get();
+        // TODO: find a way to avoid the cost of creating a String here --
+        // probably a new PatternMatcherInput working on a byte[] would do
+        // better.
+        input.setInput(new String(html));
+        Pattern pattern=JMeterUtils.getPatternCache().getPattern(
+                REGEXP,
+                Perl5Compiler.CASE_INSENSITIVE_MASK
+                | Perl5Compiler.SINGLELINE_MASK
+                | Perl5Compiler.READ_ONLY_MASK);
+
+        while (matcher.contains(input, pattern)) {
+            MatchResult match = matcher.getMatch();
+            String s;
+            if (log.isDebugEnabled()) {
+                log.debug("match groups " + match.groups() + " " + match.toString());
+            }
+            // Check for a BASE HREF:
+            for (int g = 1; g <= NUM_BASE_GROUPS && g <= match.groups(); g++) {
+                s = match.group(g);
+                if (s != null) {
+                    if (log.isDebugEnabled()) {
+                        log.debug("new baseUrl: " + s + " - " + baseUrl.toString());
+                    }
+                    try {
+                        baseUrl = new URL(baseUrl, s);
+                    } catch (MalformedURLException e) {
+                        // Doesn't even look like a URL?
+                        // Maybe it isn't: Ignore the exception.
+                        if (log.isDebugEnabled()) {
+                            log.debug("Can't build base URL from RL " + s + " in page " + baseUrl, e);
+                        }
+                    }
+                }
+            }
+            for (int g = NUM_BASE_GROUPS + 1; g <= match.groups(); g++) {
+                s = match.group(g);
+                if (s != null) {
+                    if (log.isDebugEnabled()) {
+                        log.debug("group " + g + " - " + match.group(g));
+                    }
+                    urls.addURL(s, baseUrl);
+                }
+            }
+        }
+        return urls.iterator();
+    }
 }

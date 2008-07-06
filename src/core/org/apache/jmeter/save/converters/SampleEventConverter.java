@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.save.converters;
@@ -30,35 +30,35 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
  * XStream Converter for the SampleResult class
  */
 public class SampleEventConverter implements Converter {
-	/**
-	 * Returns the converter version; used to check for possible
-	 * incompatibilities
-	 */
-	public static String getVersion() {
-		return "$Revision$"; //$NON-NLS-1$
-	}
+    /**
+     * Returns the converter version; used to check for possible
+     * incompatibilities
+     */
+    public static String getVersion() {
+        return "$Revision$"; //$NON-NLS-1$
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
-	 */
-	public boolean canConvert(Class arg0) {
-		return SampleEvent.class.equals(arg0);
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
+     */
+    public boolean canConvert(Class arg0) {
+        return SampleEvent.class.equals(arg0);
+    }
 
     // TODO save hostname; save sample type (plain or http)
-	public void marshal(Object source, HierarchicalStreamWriter writer,
-			MarshallingContext context) {
-		SampleEvent evt = (SampleEvent) source;
-		Object res = evt.getResult();
-		context.convertAnother(res);
-	}
+    public void marshal(Object source, HierarchicalStreamWriter writer,
+            MarshallingContext context) {
+        SampleEvent evt = (SampleEvent) source;
+        Object res = evt.getResult();
+        context.convertAnother(res);
+    }
 
     // TODO does not work yet; need to determine the sample type
-	public Object unmarshal(HierarchicalStreamReader reader,
-			UnmarshallingContext context) {
-		SampleEvent evt = new SampleEvent();
-		return evt;
-	}
+    public Object unmarshal(HierarchicalStreamReader reader,
+            UnmarshallingContext context) {
+        SampleEvent evt = new SampleEvent();
+        return evt;
+    }
 }

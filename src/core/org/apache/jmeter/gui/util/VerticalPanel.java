@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 /*
@@ -33,45 +33,45 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 public class VerticalPanel extends JPanel {
-	private Box subPanel = Box.createVerticalBox();
+    private Box subPanel = Box.createVerticalBox();
 
-	private float horizontalAlign;
+    private float horizontalAlign;
 
-	private int vgap;
+    private int vgap;
 
-	public VerticalPanel() {
-		this(5, LEFT_ALIGNMENT);
-	}
+    public VerticalPanel() {
+        this(5, LEFT_ALIGNMENT);
+    }
 
     public VerticalPanel(Color bkg) {
         this();
         subPanel.setBackground(bkg);
         this.setBackground(bkg);
     }
-    
-	public VerticalPanel(int vgap, float horizontalAlign) {
-		super(new BorderLayout());
-		add(subPanel, BorderLayout.NORTH);
-		this.vgap = vgap;
-		this.horizontalAlign = horizontalAlign;
-	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.awt.Container#add(java.awt.Component)
-	 */
-	public Component add(Component c) {
-		// This won't work right if we remove components. But we don't, so I'm
-		// not going to worry about it right now.
-		if (vgap > 0 && subPanel.getComponentCount() > 0) {
-			subPanel.add(Box.createVerticalStrut(vgap));
-		}
+    public VerticalPanel(int vgap, float horizontalAlign) {
+        super(new BorderLayout());
+        add(subPanel, BorderLayout.NORTH);
+        this.vgap = vgap;
+        this.horizontalAlign = horizontalAlign;
+    }
 
-		if (c instanceof JComponent) {
-			((JComponent) c).setAlignmentX(horizontalAlign);
-		}
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.awt.Container#add(java.awt.Component)
+     */
+    public Component add(Component c) {
+        // This won't work right if we remove components. But we don't, so I'm
+        // not going to worry about it right now.
+        if (vgap > 0 && subPanel.getComponentCount() > 0) {
+            subPanel.add(Box.createVerticalStrut(vgap));
+        }
 
-		return subPanel.add(c);
-	}
+        if (c instanceof JComponent) {
+            ((JComponent) c).setAlignmentX(horizontalAlign);
+        }
+
+        return subPanel.add(c);
+    }
 }

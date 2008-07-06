@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.gui.action;
@@ -23,13 +23,8 @@ import java.util.Set;
 
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 
-/**
- * @author Michael Stover
- * @version $Revision$
- */
-
 public interface Command {
-	public void doAction(ActionEvent e) throws IllegalUserActionException;
+    public void doAction(ActionEvent e) throws IllegalUserActionException;
 
-	public Set getActionNames();
+    public Set getActionNames();
 }

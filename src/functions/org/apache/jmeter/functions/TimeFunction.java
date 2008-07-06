@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -40,14 +40,14 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class TimeFunction extends AbstractFunction implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	
+    private static final long serialVersionUID = 1L;
+
     private static final String KEY = "__time"; // $NON-NLS-1$
 
     private static final List desc = new LinkedList();
 
     private static final Map aliases = new HashMap();
-    
+
     static {
         desc.add(JMeterUtils.getResString("time_format")); //$NON-NLS-1$
         desc.add(JMeterUtils.getResString("function_name_paropt")); //$NON-NLS-1$
@@ -69,24 +69,24 @@ public class TimeFunction extends AbstractFunction implements Serializable {
     // Ensure that these are set, even if no paramters are provided
     private transient String format   = ""; //$NON-NLS-1$
     private transient String variable = ""; //$NON-NLS-1$
-    
+
     private Object readResolve(){
         format="";
         variable="";
         return this;
     }
-    
+
     public TimeFunction(){
         super();
     }
-    
+
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
-    
+
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
      */
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException {
@@ -100,13 +100,13 @@ public class TimeFunction extends AbstractFunction implements Serializable {
                 fmt = format;// Not found
             }
             SimpleDateFormat df = new SimpleDateFormat(fmt);// Not synchronised, so can't be shared
-            datetime = df.format(new Date());            
+            datetime = df.format(new Date());
         }
-        
+
         if (variable.length() > 0) {
             JMeterVariables vars = getVariables();
             if (vars != null){// vars will be null on TestPlan
-            	vars.put(variable, datetime);
+                vars.put(variable, datetime);
             }
         }
         return datetime;
@@ -114,31 +114,31 @@ public class TimeFunction extends AbstractFunction implements Serializable {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * It appears that this is not called if no parameters are provided.
-     * 
+     *
      * @see org.apache.jmeter.functions.Function#setParameters(Collection)
      */
     public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
 
         checkParameterCount(parameters, 0, 2);
-        
+
         Object []values = parameters.toArray();
         int count = values.length;
-        
+
         if (count > 0) {
             format = ((CompoundVariable) values[0]).execute();
         }
-        
+
         if (count > 1) {
             variable = ((CompoundVariable)values[1]).execute().trim();
         }
-        
+
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.functions.Function#getReferenceKey()
      */
     public String getReferenceKey() {
@@ -147,7 +147,7 @@ public class TimeFunction extends AbstractFunction implements Serializable {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.functions.Function#getArgumentDesc()
      */
     public List getArgumentDesc() {

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.gui.action;
@@ -32,44 +32,44 @@ import org.apache.jmeter.util.JMeterUtils;
  *
  */
 public class RevertProject implements Command {
-	private static final Set commands = new HashSet();
+    private static final Set commands = new HashSet();
 
-	static {
-		commands.add(ActionNames.REVERT_PROJECT);
-	}
+    static {
+        commands.add(ActionNames.REVERT_PROJECT);
+    }
 
-	public RevertProject() {
-		super();
-	}
+    public RevertProject() {
+        super();
+    }
 
-	public Set getActionNames() {
-		return commands;
-	}
+    public Set getActionNames() {
+        return commands;
+    }
 
-	public void doAction(ActionEvent e) {
-		// Get the file name of the current project
-		String projectFile = GuiPackage.getInstance().getTestPlanFile();
-		// Check if the user has loaded any file
-		if(projectFile == null) {
-			return;
-		}
-		
+    public void doAction(ActionEvent e) {
+        // Get the file name of the current project
+        String projectFile = GuiPackage.getInstance().getTestPlanFile();
+        // Check if the user has loaded any file
+        if(projectFile == null) {
+            return;
+        }
+
         // Check if the user wants to drop any changes
-		ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.CHECK_DIRTY));
-		GuiPackage guiPackage = GuiPackage.getInstance();
-		if (guiPackage.isDirty()) {
-			// Check if the user wants to revert
-			int response = JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(), 
-					JMeterUtils.getResString("cancel_revert_project"), // $NON-NLS-1$
-					JMeterUtils.getResString("revert_project?"),  // $NON-NLS-1$
-					JOptionPane.YES_NO_OPTION,
-					JOptionPane.QUESTION_MESSAGE);
-			if(response == JOptionPane.YES_OPTION) {
-				// Close the current project
-				Close.closeProject(e);
-				// Reload the project
-				Load.loadProjectFile(e, new File(projectFile), false);
-			}
-		}
-	}
+        ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.CHECK_DIRTY));
+        GuiPackage guiPackage = GuiPackage.getInstance();
+        if (guiPackage.isDirty()) {
+            // Check if the user wants to revert
+            int response = JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(),
+                    JMeterUtils.getResString("cancel_revert_project"), // $NON-NLS-1$
+                    JMeterUtils.getResString("revert_project?"),  // $NON-NLS-1$
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
+            if(response == JOptionPane.YES_OPTION) {
+                // Close the current project
+                Close.closeProject(e);
+                // Reload the project
+                Load.loadProjectFile(e, new File(projectFile), false);
+            }
+        }
+    }
 }

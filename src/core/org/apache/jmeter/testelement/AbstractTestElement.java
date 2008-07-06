@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.testelement;
@@ -44,234 +44,234 @@ import org.apache.log.Logger;
 /**
  */
 public abstract class AbstractTestElement implements TestElement, Serializable {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private Map propMap = Collections.synchronizedMap(new LinkedHashMap());
+    private Map propMap = Collections.synchronizedMap(new LinkedHashMap());
 
-	private transient Set temporaryProperties;
+    private transient Set temporaryProperties;
 
-	private transient boolean runningVersion = false;
+    private transient boolean runningVersion = false;
 
-	// Thread-specific variables saved here to save recalculation
-	private transient JMeterContext threadContext = null;
+    // Thread-specific variables saved here to save recalculation
+    private transient JMeterContext threadContext = null;
 
-	private transient String threadName = null;
+    private transient String threadName = null;
 
-	public Object clone() {
-		try {
-			TestElement clonedElement = (TestElement) this.getClass().newInstance();
+    public Object clone() {
+        try {
+            TestElement clonedElement = (TestElement) this.getClass().newInstance();
 
-			PropertyIterator iter = propertyIterator();
-			while (iter.hasNext()) {
-				clonedElement.setProperty((JMeterProperty) iter.next().clone());
-			}
-			clonedElement.setRunningVersion(runningVersion);
-			return clonedElement;
-		} catch (InstantiationException e) {
-			throw new AssertionError(e); // clone should never return null
+            PropertyIterator iter = propertyIterator();
+            while (iter.hasNext()) {
+                clonedElement.setProperty((JMeterProperty) iter.next().clone());
+            }
+            clonedElement.setRunningVersion(runningVersion);
+            return clonedElement;
+        } catch (InstantiationException e) {
+            throw new AssertionError(e); // clone should never return null
         } catch (IllegalAccessException e) {
-        	throw new AssertionError(e); // clone should never return null
+            throw new AssertionError(e); // clone should never return null
         }
-	}
+    }
 
-	public void clear() {
-		propMap.clear();
-	}
+    public void clear() {
+        propMap.clear();
+    }
 
-	public void removeProperty(String key) {
-		propMap.remove(key);
-	}
+    public void removeProperty(String key) {
+        propMap.remove(key);
+    }
 
-	public boolean equals(Object o) {
-		if (o instanceof AbstractTestElement) {
-			return ((AbstractTestElement) o).propMap.equals(propMap);
-		} else {
-			return false;
-		}
-	}
+    public boolean equals(Object o) {
+        if (o instanceof AbstractTestElement) {
+            return ((AbstractTestElement) o).propMap.equals(propMap);
+        } else {
+            return false;
+        }
+    }
 
-	// TODO temporary hack to avoid unnecessary bug reports for subclasses
-	
-	public int hashCode(){
-		return System.identityHashCode(this);
-	}
-	/*
-	 * URGENT: TODO - sort out equals and hashCode() - at present equal
-	 * instances can/will have different hashcodes - problem is, when a proper
-	 * hashcode is used, tests stop working, e.g. listener data disappears when
-	 * switching views... This presumably means that instances currently
-	 * regarded as equal, aren't really equal...
-	 * 
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
-	// This would be sensible, but does not work:
-	// public int hashCode()
-	// {
-	// return propMap.hashCode();
-	// }
-	public void addTestElement(TestElement el) {
-		mergeIn(el);
-	}
+    // TODO temporary hack to avoid unnecessary bug reports for subclasses
 
-	public void setName(String name) {
-		setProperty(TestElement.NAME, name);
-	}
+    public int hashCode(){
+        return System.identityHashCode(this);
+    }
+    /*
+     * URGENT: TODO - sort out equals and hashCode() - at present equal
+     * instances can/will have different hashcodes - problem is, when a proper
+     * hashcode is used, tests stop working, e.g. listener data disappears when
+     * switching views... This presumably means that instances currently
+     * regarded as equal, aren't really equal...
+     *
+     * (non-Javadoc)
+     *
+     * @see java.lang.Object#hashCode()
+     */
+    // This would be sensible, but does not work:
+    // public int hashCode()
+    // {
+    // return propMap.hashCode();
+    // }
+    public void addTestElement(TestElement el) {
+        mergeIn(el);
+    }
 
-	public String getName() {
-		return getPropertyAsString(TestElement.NAME);
-	}
+    public void setName(String name) {
+        setProperty(TestElement.NAME, name);
+    }
 
-	public void setComment(String comment){
-		setProperty(new StringProperty(TestElement.COMMENTS, comment));
-	}
-	
-	public String getComment(){
-		return getProperty(TestElement.COMMENTS).getStringValue();
-	}
+    public String getName() {
+        return getPropertyAsString(TestElement.NAME);
+    }
 
-	/**
-	 * Get the named property. If it doesn't exist, a new NullProperty object is
-	 * created with the same name and returned.
-	 */
-	public JMeterProperty getProperty(String key) {
-		JMeterProperty prop = (JMeterProperty) propMap.get(key);
-		if (prop == null) {
-			prop = new NullProperty(key);
-		}
-		return prop;
-	}
+    public void setComment(String comment){
+        setProperty(new StringProperty(TestElement.COMMENTS, comment));
+    }
 
-	public void traverse(TestElementTraverser traverser) {
-		PropertyIterator iter = propertyIterator();
-		traverser.startTestElement(this);
-		while (iter.hasNext()) {
-			traverseProperty(traverser, iter.next());
-		}
-		traverser.endTestElement(this);
-	}
+    public String getComment(){
+        return getProperty(TestElement.COMMENTS).getStringValue();
+    }
 
-	protected void traverseProperty(TestElementTraverser traverser, JMeterProperty value) {
-		traverser.startProperty(value);
-		if (value instanceof TestElementProperty) {
-			((TestElement) value.getObjectValue()).traverse(traverser);
-		} else if (value instanceof CollectionProperty) {
-			traverseCollection((CollectionProperty) value, traverser);
-		} else if (value instanceof MapProperty) {
-			traverseMap((MapProperty) value, traverser);
-		}
-		traverser.endProperty(value);
-	}
+    /**
+     * Get the named property. If it doesn't exist, a new NullProperty object is
+     * created with the same name and returned.
+     */
+    public JMeterProperty getProperty(String key) {
+        JMeterProperty prop = (JMeterProperty) propMap.get(key);
+        if (prop == null) {
+            prop = new NullProperty(key);
+        }
+        return prop;
+    }
 
-	protected void traverseMap(MapProperty map, TestElementTraverser traverser) {
-		PropertyIterator iter = map.valueIterator();
-		while (iter.hasNext()) {
-			traverseProperty(traverser, iter.next());
-		}
-	}
+    public void traverse(TestElementTraverser traverser) {
+        PropertyIterator iter = propertyIterator();
+        traverser.startTestElement(this);
+        while (iter.hasNext()) {
+            traverseProperty(traverser, iter.next());
+        }
+        traverser.endTestElement(this);
+    }
 
-	protected void traverseCollection(CollectionProperty col, TestElementTraverser traverser) {
-		PropertyIterator iter = col.iterator();
-		while (iter.hasNext()) {
-			traverseProperty(traverser, iter.next());
-		}
-	}
+    protected void traverseProperty(TestElementTraverser traverser, JMeterProperty value) {
+        traverser.startProperty(value);
+        if (value instanceof TestElementProperty) {
+            ((TestElement) value.getObjectValue()).traverse(traverser);
+        } else if (value instanceof CollectionProperty) {
+            traverseCollection((CollectionProperty) value, traverser);
+        } else if (value instanceof MapProperty) {
+            traverseMap((MapProperty) value, traverser);
+        }
+        traverser.endProperty(value);
+    }
 
-	public int getPropertyAsInt(String key) {
-		return getProperty(key).getIntValue();
-	}
+    protected void traverseMap(MapProperty map, TestElementTraverser traverser) {
+        PropertyIterator iter = map.valueIterator();
+        while (iter.hasNext()) {
+            traverseProperty(traverser, iter.next());
+        }
+    }
 
-	public boolean getPropertyAsBoolean(String key) {
-		return getProperty(key).getBooleanValue();
-	}
+    protected void traverseCollection(CollectionProperty col, TestElementTraverser traverser) {
+        PropertyIterator iter = col.iterator();
+        while (iter.hasNext()) {
+            traverseProperty(traverser, iter.next());
+        }
+    }
 
-	public boolean getPropertyAsBoolean(String key, boolean defaultVal) {
-		JMeterProperty jmp = getProperty(key);
-		return jmp instanceof NullProperty ? defaultVal : jmp.getBooleanValue();
-	}
+    public int getPropertyAsInt(String key) {
+        return getProperty(key).getIntValue();
+    }
 
-	public float getPropertyAsFloat(String key) {
-		return getProperty(key).getFloatValue();
-	}
+    public boolean getPropertyAsBoolean(String key) {
+        return getProperty(key).getBooleanValue();
+    }
 
-	public long getPropertyAsLong(String key) {
-		return getProperty(key).getLongValue();
-	}
+    public boolean getPropertyAsBoolean(String key, boolean defaultVal) {
+        JMeterProperty jmp = getProperty(key);
+        return jmp instanceof NullProperty ? defaultVal : jmp.getBooleanValue();
+    }
 
-	public double getPropertyAsDouble(String key) {
-		return getProperty(key).getDoubleValue();
-	}
+    public float getPropertyAsFloat(String key) {
+        return getProperty(key).getFloatValue();
+    }
 
-	public String getPropertyAsString(String key) {
-		return getProperty(key).getStringValue();
-	}
+    public long getPropertyAsLong(String key) {
+        return getProperty(key).getLongValue();
+    }
+
+    public double getPropertyAsDouble(String key) {
+        return getProperty(key).getDoubleValue();
+    }
+
+    public String getPropertyAsString(String key) {
+        return getProperty(key).getStringValue();
+    }
 
     public String getPropertyAsString(String key, String defaultValue) {
         JMeterProperty jmp = getProperty(key);
         return jmp instanceof NullProperty ? defaultValue : jmp.getStringValue();
     }
 
-	protected void addProperty(JMeterProperty property) {
-		if (isRunningVersion()) {
-			setTemporary(property);
-		} else {
-			clearTemporary(property);
-		}
-		JMeterProperty prop = getProperty(property.getName());
+    protected void addProperty(JMeterProperty property) {
+        if (isRunningVersion()) {
+            setTemporary(property);
+        } else {
+            clearTemporary(property);
+        }
+        JMeterProperty prop = getProperty(property.getName());
 
-		if (prop instanceof NullProperty || (prop instanceof StringProperty && prop.getStringValue().equals(""))) {
-			propMap.put(property.getName(), property);
-		} else {
-			prop.mergeIn(property);
-		}
-	}
+        if (prop instanceof NullProperty || (prop instanceof StringProperty && prop.getStringValue().equals(""))) {
+            propMap.put(property.getName(), property);
+        } else {
+            prop.mergeIn(property);
+        }
+    }
 
-	protected void clearTemporary(JMeterProperty property) {
-		if (temporaryProperties != null) {
-			temporaryProperties.remove(property);
-		}
-	}
+    protected void clearTemporary(JMeterProperty property) {
+        if (temporaryProperties != null) {
+            temporaryProperties.remove(property);
+        }
+    }
 
-	/**
-	 * Log the properties of the test element
-	 * 
-	 * @see TestElement#setProperty(JMeterProperty)
-	 */
-	protected void logProperties() {
-		if (log.isDebugEnabled()) {
-			PropertyIterator iter = propertyIterator();
-			while (iter.hasNext()) {
-				JMeterProperty prop = iter.next();
-				log.debug("Property " + prop.getName() + " is temp? " + isTemporary(prop) + " and is a "
-						+ prop.getObjectValue());
-			}
-		}
-	}
+    /**
+     * Log the properties of the test element
+     *
+     * @see TestElement#setProperty(JMeterProperty)
+     */
+    protected void logProperties() {
+        if (log.isDebugEnabled()) {
+            PropertyIterator iter = propertyIterator();
+            while (iter.hasNext()) {
+                JMeterProperty prop = iter.next();
+                log.debug("Property " + prop.getName() + " is temp? " + isTemporary(prop) + " and is a "
+                        + prop.getObjectValue());
+            }
+        }
+    }
 
-	public void setProperty(JMeterProperty property) {
-		if (isRunningVersion()) {
-			if (getProperty(property.getName()) instanceof NullProperty) {
-				addProperty(property);
-			} else {
-				getProperty(property.getName()).setObjectValue(property.getObjectValue());
-			}
-		} else {
-			propMap.put(property.getName(), property);
-		}
-	}
+    public void setProperty(JMeterProperty property) {
+        if (isRunningVersion()) {
+            if (getProperty(property.getName()) instanceof NullProperty) {
+                addProperty(property);
+            } else {
+                getProperty(property.getName()).setObjectValue(property.getObjectValue());
+            }
+        } else {
+            propMap.put(property.getName(), property);
+        }
+    }
 
-	public void setProperty(String name, String value) {
-		setProperty(new StringProperty(name, value));
-	}
+    public void setProperty(String name, String value) {
+        setProperty(new StringProperty(name, value));
+    }
 
     /**
      * Create a String property - but only if it is not the default.
      * This is intended for use when adding new properties to JMeter
      * so that JMX files are not expanded unnecessarily.
-     * 
+     *
      * N.B. - must agree with the default applied when reading the property.
-     * 
+     *
      * @param name property name
      * @param value current value
      * @param dflt default
@@ -284,175 +284,175 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
         }
     }
 
-	public void setProperty(String name, boolean value) {
-		setProperty(new StringProperty(name, Boolean.toString(value)));
-	}
+    public void setProperty(String name, boolean value) {
+        setProperty(new StringProperty(name, Boolean.toString(value)));
+    }
 
-	/**
-	 * Create a boolean property - but only if it is not the default.
-	 * This is intended for use when adding new properties to JMeter
-	 * so that JMX files are not expanded unnecessarily.
-	 * 
-	 * N.B. - must agree with the default applied when reading the property.
-	 * 
-	 * @param name property name
-	 * @param value current value
-	 * @param dflt default
-	 */
-	public void setProperty(String name, boolean value, boolean dflt) {
-		if (value == dflt) {
-			removeProperty(name);
-		} else {
-			setProperty(new BooleanProperty(name, value));
-		}
-	}
-	
-	public PropertyIterator propertyIterator() {
-		return new PropertyIteratorImpl(propMap.values());
-	}
+    /**
+     * Create a boolean property - but only if it is not the default.
+     * This is intended for use when adding new properties to JMeter
+     * so that JMX files are not expanded unnecessarily.
+     *
+     * N.B. - must agree with the default applied when reading the property.
+     *
+     * @param name property name
+     * @param value current value
+     * @param dflt default
+     */
+    public void setProperty(String name, boolean value, boolean dflt) {
+        if (value == dflt) {
+            removeProperty(name);
+        } else {
+            setProperty(new BooleanProperty(name, value));
+        }
+    }
 
-	protected void mergeIn(TestElement element) {
-		PropertyIterator iter = element.propertyIterator();
-		while (iter.hasNext()) {
-			JMeterProperty prop = iter.next();
-			addProperty(prop);
-		}
-	}
+    public PropertyIterator propertyIterator() {
+        return new PropertyIteratorImpl(propMap.values());
+    }
 
-	/**
-	 * Returns the runningVersion.
-	 */
-	public boolean isRunningVersion() {
-		return runningVersion;
-	}
+    protected void mergeIn(TestElement element) {
+        PropertyIterator iter = element.propertyIterator();
+        while (iter.hasNext()) {
+            JMeterProperty prop = iter.next();
+            addProperty(prop);
+        }
+    }
 
-	/**
-	 * Sets the runningVersion.
-	 * 
-	 * @param runningVersion
-	 *            the runningVersion to set
-	 */
-	public void setRunningVersion(boolean runningVersion) {
-		this.runningVersion = runningVersion;
-		PropertyIterator iter = propertyIterator();
-		while (iter.hasNext()) {
-			iter.next().setRunningVersion(runningVersion);
-		}
-	}
+    /**
+     * Returns the runningVersion.
+     */
+    public boolean isRunningVersion() {
+        return runningVersion;
+    }
 
-	public void recoverRunningVersion() {
-		Iterator iter = propMap.entrySet().iterator();
-		while (iter.hasNext()) {
-			Map.Entry entry = (Map.Entry) iter.next();
-			JMeterProperty prop = (JMeterProperty) entry.getValue();
-			if (isTemporary(prop)) {
-				iter.remove();
-				clearTemporary(prop);
-			} else {
-				prop.recoverRunningVersion(this);
-			}
-		}
-		emptyTemporary();
-	}
+    /**
+     * Sets the runningVersion.
+     *
+     * @param runningVersion
+     *            the runningVersion to set
+     */
+    public void setRunningVersion(boolean runningVersion) {
+        this.runningVersion = runningVersion;
+        PropertyIterator iter = propertyIterator();
+        while (iter.hasNext()) {
+            iter.next().setRunningVersion(runningVersion);
+        }
+    }
 
-	protected void emptyTemporary() {
-		if (temporaryProperties != null) {
-			temporaryProperties.clear();
-		}
-	}
+    public void recoverRunningVersion() {
+        Iterator iter = propMap.entrySet().iterator();
+        while (iter.hasNext()) {
+            Map.Entry entry = (Map.Entry) iter.next();
+            JMeterProperty prop = (JMeterProperty) entry.getValue();
+            if (isTemporary(prop)) {
+                iter.remove();
+                clearTemporary(prop);
+            } else {
+                prop.recoverRunningVersion(this);
+            }
+        }
+        emptyTemporary();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.testelement.TestElement#isTemporary(org.apache.jmeter.testelement.property.JMeterProperty)
-	 */
-	public boolean isTemporary(JMeterProperty property) {
-		if (temporaryProperties == null) {
-			return false;
-		} else {
-			return temporaryProperties.contains(property);
-		}
-	}
+    protected void emptyTemporary() {
+        if (temporaryProperties != null) {
+            temporaryProperties.clear();
+        }
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.testelement.TestElement#setTemporary(org.apache.jmeter.testelement.property.JMeterProperty)
-	 */
-	public void setTemporary(JMeterProperty property) {
-		if (temporaryProperties == null) {
-			temporaryProperties = new LinkedHashSet();
-		}
-		temporaryProperties.add(property);
-		if (property instanceof MultiProperty) {
-			PropertyIterator iter = ((MultiProperty) property).iterator();
-			while (iter.hasNext()) {
-				setTemporary(iter.next());
-			}
-		}
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.testelement.TestElement#isTemporary(org.apache.jmeter.testelement.property.JMeterProperty)
+     */
+    public boolean isTemporary(JMeterProperty property) {
+        if (temporaryProperties == null) {
+            return false;
+        } else {
+            return temporaryProperties.contains(property);
+        }
+    }
 
-	/**
-	 * @return Returns the threadContext.
-	 */
-	public JMeterContext getThreadContext() {
-		if (threadContext == null) {
-			/*
-			 * Only samplers have the thread context set up by JMeterThread at
-			 * present, so suppress the warning for now
-			 */
-			// log.warn("ThreadContext was not set up - should only happen in
-			// JUnit testing..."
-			// ,new Throwable("Debug"));
-			threadContext = JMeterContextService.getContext();
-		}
-		return threadContext;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.testelement.TestElement#setTemporary(org.apache.jmeter.testelement.property.JMeterProperty)
+     */
+    public void setTemporary(JMeterProperty property) {
+        if (temporaryProperties == null) {
+            temporaryProperties = new LinkedHashSet();
+        }
+        temporaryProperties.add(property);
+        if (property instanceof MultiProperty) {
+            PropertyIterator iter = ((MultiProperty) property).iterator();
+            while (iter.hasNext()) {
+                setTemporary(iter.next());
+            }
+        }
+    }
 
-	/**
-	 * @param inthreadContext
-	 *            The threadContext to set.
-	 */
-	public void setThreadContext(JMeterContext inthreadContext) {
-		if (threadContext != null) {
-			if (inthreadContext != threadContext) {
-				throw new RuntimeException("Attempting to reset the thread context");
-			}
-		}
-		this.threadContext = inthreadContext;
-	}
+    /**
+     * @return Returns the threadContext.
+     */
+    public JMeterContext getThreadContext() {
+        if (threadContext == null) {
+            /*
+             * Only samplers have the thread context set up by JMeterThread at
+             * present, so suppress the warning for now
+             */
+            // log.warn("ThreadContext was not set up - should only happen in
+            // JUnit testing..."
+            // ,new Throwable("Debug"));
+            threadContext = JMeterContextService.getContext();
+        }
+        return threadContext;
+    }
 
-	/**
-	 * @return Returns the threadName.
-	 */
-	public String getThreadName() {
-		return threadName;
-	}
+    /**
+     * @param inthreadContext
+     *            The threadContext to set.
+     */
+    public void setThreadContext(JMeterContext inthreadContext) {
+        if (threadContext != null) {
+            if (inthreadContext != threadContext) {
+                throw new RuntimeException("Attempting to reset the thread context");
+            }
+        }
+        this.threadContext = inthreadContext;
+    }
 
-	/**
-	 * @param inthreadName
-	 *            The threadName to set.
-	 */
-	public void setThreadName(String inthreadName) {
-		if (threadName != null) {
-			if (!threadName.equals(inthreadName)) {
-				throw new RuntimeException("Attempting to reset the thread name");
-			}
-		}
-		this.threadName = inthreadName;
-	}
+    /**
+     * @return Returns the threadName.
+     */
+    public String getThreadName() {
+        return threadName;
+    }
 
-	public AbstractTestElement() {
-		super();
-	}
+    /**
+     * @param inthreadName
+     *            The threadName to set.
+     */
+    public void setThreadName(String inthreadName) {
+        if (threadName != null) {
+            if (!threadName.equals(inthreadName)) {
+                throw new RuntimeException("Attempting to reset the thread name");
+            }
+        }
+        this.threadName = inthreadName;
+    }
 
-	// Default implementation
-	public boolean canRemove() {
-		return true;
-	}
+    public AbstractTestElement() {
+        super();
+    }
 
-	// Moved from JMeter class
-	public boolean isEnabled() {
-		return getProperty(TestElement.ENABLED) instanceof NullProperty || getPropertyAsBoolean(TestElement.ENABLED);
-	}
+    // Default implementation
+    public boolean canRemove() {
+        return true;
+    }
+
+    // Moved from JMeter class
+    public boolean isEnabled() {
+        return getProperty(TestElement.ENABLED) instanceof NullProperty || getPropertyAsBoolean(TestElement.ENABLED);
+    }
 }

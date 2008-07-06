@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 package org.apache.jmeter;
 
@@ -64,7 +64,7 @@ import org.apache.log.Logger;
 /**
  *
  * JMeterReport is the main class for the reporting component. For now,
- * the plan is to make the reporting component a separate GUI, which 
+ * the plan is to make the reporting component a separate GUI, which
  * can run in GUI or console mode. The purpose of the GUI is to design
  * reports, which can then be run. One of the primary goals of the
  * reporting component is to make it so the reports can be run in an
@@ -144,15 +144,15 @@ public class JMeterReport implements JMeterPlugin {
                     "Start remote servers from non-gui mode"),
             new CLOptionDescriptor("homedir", CLOptionDescriptor.ARGUMENT_REQUIRED, JMETER_HOME_OPT,
                     "the jmeter home directory to use"), };
-    
+
     transient boolean testEnded = false;
 
     /**
-	 * 
-	 */
-	public JMeterReport() {
-		super();
-	}
+     *
+     */
+    public JMeterReport() {
+        super();
+    }
 
     /**
      * The default icons for the report GUI.
@@ -164,11 +164,11 @@ public class JMeterReport implements JMeterPlugin {
             { ReportPageGui.class.getName(), "org/apache/jmeter/images/new/scroll.png" },
             { ReportGui.class.getName(), "org/apache/jmeter/images/new/book.png" }
     };
-    
-	/* (non-Javadoc)
-	 * @see org.apache.jmeter.plugin.JMeterPlugin#getIconMappings()
-	 */
-	public String[][] getIconMappings() {
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.plugin.JMeterPlugin#getIconMappings()
+     */
+    public String[][] getIconMappings() {
         String iconProp = JMeterUtils.getPropDefault("jmeter.icons", "org/apache/jmeter/images/icon.properties");
         Properties p = JMeterUtils.loadProperties(iconProp);
         if (p == null) {
@@ -190,14 +190,14 @@ public class JMeterReport implements JMeterPlugin {
             i++;
         }
         return iconlist;
-	}
+    }
 
-	/* (non-Javadoc)
-	 * @see org.apache.jmeter.plugin.JMeterPlugin#getResourceBundles()
-	 */
-	public String[][] getResourceBundles() {
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.plugin.JMeterPlugin#getResourceBundles()
+     */
+    public String[][] getResourceBundles() {
         return new String[0][];
-	}
+    }
 
     public void startNonGui(CLOption testFile, CLOption logFile){
         System.setProperty("JMeter.NonGui", "true");
@@ -205,14 +205,14 @@ public class JMeterReport implements JMeterPlugin {
         driver.parent = this;
         PluginManager.install(this, false);
     }
-    
+
     public void startGui(CLOption testFile) {
         PluginManager.install(this, true);
         ReportTreeModel treeModel = new ReportTreeModel();
         ReportTreeListener treeLis = new ReportTreeListener(treeModel);
         treeLis.setActionHandler(ReportActionRouter.getInstance());
         ReportGuiPackage.getInstance(treeLis, treeModel);
-        org.apache.jmeter.gui.ReportMainFrame main = 
+        org.apache.jmeter.gui.ReportMainFrame main =
             new org.apache.jmeter.gui.ReportMainFrame(ReportActionRouter.getInstance(),
                 treeModel, treeLis);
         ComponentUtil.centerComponentInWindow(main, 80);
@@ -240,79 +240,79 @@ public class JMeterReport implements JMeterPlugin {
         }
     }
 
-	private void run(String testFile, String logFile, boolean remoteStart) {
-		FileInputStream reader = null;
-		try {
-			File f = new File(testFile);
-			if (!f.exists() || !f.isFile()) {
-				System.out.println("Could not open " + testFile);
-				return;
-			}
-			FileServer.getFileServer().setBasedir(f.getAbsolutePath());
+    private void run(String testFile, String logFile, boolean remoteStart) {
+        FileInputStream reader = null;
+        try {
+            File f = new File(testFile);
+            if (!f.exists() || !f.isFile()) {
+                System.out.println("Could not open " + testFile);
+                return;
+            }
+            FileServer.getFileServer().setBasedir(f.getAbsolutePath());
 
-			reader = new FileInputStream(f);
-			log.info("Loading file: " + f);
+            reader = new FileInputStream(f);
+            log.info("Loading file: " + f);
 
-			HashTree tree = SaveService.loadTree(reader);
+            HashTree tree = SaveService.loadTree(reader);
 
-			// Remove the disabled items
-			// For GUI runs this is done in Start.java
-			convertSubTree(tree);
+            // Remove the disabled items
+            // For GUI runs this is done in Start.java
+            convertSubTree(tree);
 
-			if (logFile != null) {
-				ResultCollector logger = new ResultCollector();
-				logger.setFilename(logFile);
-				tree.add(tree.getArray()[0], logger);
-			}
-			String summariserName = JMeterUtils.getPropDefault(
-					"summariser.name", "");//$NON-NLS-1$
-			if (summariserName.length() > 0) {
-				log.info("Creating summariser <" + summariserName + ">");
-				System.out.println("Creating summariser <" + summariserName + ">");
-				Summariser summer = new Summariser(summariserName);
-				tree.add(tree.getArray()[0], summer);
-			}
-			tree.add(tree.getArray()[0], new ListenToTest(parent));
-			System.out.println("Created the tree successfully");
+            if (logFile != null) {
+                ResultCollector logger = new ResultCollector();
+                logger.setFilename(logFile);
+                tree.add(tree.getArray()[0], logger);
+            }
+            String summariserName = JMeterUtils.getPropDefault(
+                    "summariser.name", "");//$NON-NLS-1$
+            if (summariserName.length() > 0) {
+                log.info("Creating summariser <" + summariserName + ">");
+                System.out.println("Creating summariser <" + summariserName + ">");
+                Summariser summer = new Summariser(summariserName);
+                tree.add(tree.getArray()[0], summer);
+            }
+            tree.add(tree.getArray()[0], new ListenToTest(parent));
+            System.out.println("Created the tree successfully");
             /**
-			JMeterEngine engine = null;
-			if (!remoteStart) {
-				engine = new StandardJMeterEngine();
-				engine.configure(tree);
-				System.out.println("Starting the test");
-				engine.runTest();
-			} else {
-				String remote_hosts_string = JMeterUtils.getPropDefault(
-						"remote_hosts", "127.0.0.1");
-				java.util.StringTokenizer st = new java.util.StringTokenizer(
-						remote_hosts_string, ",");
-				List engines = new LinkedList();
-				while (st.hasMoreElements()) {
-					String el = (String) st.nextElement();
-					System.out.println("Configuring remote engine for " + el);
-					// engines.add(doRemoteInit(el.trim(), tree));
-				}
-				System.out.println("Starting remote engines");
-				Iterator iter = engines.iterator();
-				while (iter.hasNext()) {
-					engine = (JMeterEngine) iter.next();
-					engine.runTest();
-				}
-				System.out.println("Remote engines have been started");
-			}
+            JMeterEngine engine = null;
+            if (!remoteStart) {
+                engine = new StandardJMeterEngine();
+                engine.configure(tree);
+                System.out.println("Starting the test");
+                engine.runTest();
+            } else {
+                String remote_hosts_string = JMeterUtils.getPropDefault(
+                        "remote_hosts", "127.0.0.1");
+                java.util.StringTokenizer st = new java.util.StringTokenizer(
+                        remote_hosts_string, ",");
+                List engines = new LinkedList();
+                while (st.hasMoreElements()) {
+                    String el = (String) st.nextElement();
+                    System.out.println("Configuring remote engine for " + el);
+                    // engines.add(doRemoteInit(el.trim(), tree));
+                }
+                System.out.println("Starting remote engines");
+                Iterator iter = engines.iterator();
+                while (iter.hasNext()) {
+                    engine = (JMeterEngine) iter.next();
+                    engine.runTest();
+                }
+                System.out.println("Remote engines have been started");
+            }
             **/
-		} catch (Exception e) {
-			System.out.println("Error in NonGUIDriver " + e.toString());
-			log.error("", e);
-		}
+        } catch (Exception e) {
+            System.out.println("Error in NonGUIDriver " + e.toString());
+            log.error("", e);
+        }
         finally{
             JOrphanUtils.closeQuietly(reader);
         }
-	}
+    }
 
-    
+
     /**
-     * 
+     *
      * @param args
      */
     public void start(String[] args) {
@@ -344,7 +344,7 @@ public class JMeterReport implements JMeterPlugin {
             System.exit(-1);
         }
     }
-    
+
     private void initializeProperties(CLArgsParser parser) {
         if (parser.getArgumentById(PROPFILE_OPT) != null) {
             JMeterUtils.getProperties(parser.getArgumentById(PROPFILE_OPT).getArgument());
@@ -413,10 +413,10 @@ public class JMeterReport implements JMeterPlugin {
         }
 
     }
-    
+
     /**
      * Code copied from AbstractAction.java and modified to suit TestElements
-     * 
+     *
      * @param tree
      */
     private void convertSubTree(HashTree tree) {// TODO check build dependencies
@@ -457,7 +457,7 @@ public class JMeterReport implements JMeterPlugin {
             }
         }
     }
-    
+
     /**
      * Listen to test and exit program after test completes, after a 5 second
      * delay to give listeners a chance to close out their files.

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.util.keystore;
@@ -24,30 +24,29 @@ import java.security.cert.X509Certificate;
 
 /**
  * Use this Keystore for JMeter specific KeyStores.
- * 
- * @author <a href="bloritsch@apache.org">Berin Loritsch</a>
+ *
  */
 public abstract class JmeterKeyStore {
 
-	/**
-	 * Process the input stream
-	 */
-	public abstract void load(InputStream is, String password) throws Exception;
+    /**
+     * Process the input stream
+     */
+    public abstract void load(InputStream is, String password) throws Exception;
 
-	/**
-	 * Get the ordered certificate chain.
-	 */
-	public abstract X509Certificate[] getCertificateChain();
+    /**
+     * Get the ordered certificate chain.
+     */
+    public abstract X509Certificate[] getCertificateChain();
 
-	public abstract String getAlias();
+    public abstract String getAlias();
 
-	/**
-	 * Return the private Key
-	 */
-	public abstract PrivateKey getPrivateKey();
+    /**
+     * Return the private Key
+     */
+    public abstract PrivateKey getPrivateKey();
 
-	public static final JmeterKeyStore getInstance(String type) throws Exception {
+    public static final JmeterKeyStore getInstance(String type) throws Exception {
         // JAVA 1.4 now handles all keystore types, so just use default
         return new DefaultKeyStore(type);
-	}
+    }
 }

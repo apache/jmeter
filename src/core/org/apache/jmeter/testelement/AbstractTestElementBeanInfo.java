@@ -36,76 +36,75 @@ import java.beans.PropertyDescriptor;
  * <li>java.beans.Introspector is buggy and, opposite to what's stated in the
  * Javadocs, only results of getBeanInfo(Class) are actually cached.
  * </ol>
- * 
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
- * @version $Revision$ updated on $Date$
+ *
+ * @version $Revision$
  */
 public class AbstractTestElementBeanInfo implements BeanInfo {
 
-	public BeanInfo[] getAdditionalBeanInfo() {
-		return new BeanInfo[0];
-	}
+    public BeanInfo[] getAdditionalBeanInfo() {
+        return new BeanInfo[0];
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.beans.BeanInfo#getBeanDescriptor()
-	 */
-	public BeanDescriptor getBeanDescriptor() {
-		return null;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.beans.BeanInfo#getBeanDescriptor()
+     */
+    public BeanDescriptor getBeanDescriptor() {
+        return null;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.beans.BeanInfo#getDefaultEventIndex()
-	 */
-	public int getDefaultEventIndex() {
-		return 0;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.beans.BeanInfo#getDefaultEventIndex()
+     */
+    public int getDefaultEventIndex() {
+        return 0;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.beans.BeanInfo#getDefaultPropertyIndex()
-	 */
-	public int getDefaultPropertyIndex() {
-		return 0;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.beans.BeanInfo#getDefaultPropertyIndex()
+     */
+    public int getDefaultPropertyIndex() {
+        return 0;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.beans.BeanInfo#getEventSetDescriptors()
-	 */
-	public EventSetDescriptor[] getEventSetDescriptors() {
-		return new EventSetDescriptor[0];
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.beans.BeanInfo#getEventSetDescriptors()
+     */
+    public EventSetDescriptor[] getEventSetDescriptors() {
+        return new EventSetDescriptor[0];
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.beans.BeanInfo#getIcon(int)
-	 */
-	public Image getIcon(int iconKind) {
-		return null;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.beans.BeanInfo#getIcon(int)
+     */
+    public Image getIcon(int iconKind) {
+        return null;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.beans.BeanInfo#getMethodDescriptors()
-	 */
-	public MethodDescriptor[] getMethodDescriptors() {
-		return new MethodDescriptor[0];
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.beans.BeanInfo#getMethodDescriptors()
+     */
+    public MethodDescriptor[] getMethodDescriptors() {
+        return new MethodDescriptor[0];
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.beans.BeanInfo#getPropertyDescriptors()
-	 */
-	public PropertyDescriptor[] getPropertyDescriptors() {
-		return new PropertyDescriptor[0];
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.beans.BeanInfo#getPropertyDescriptors()
+     */
+    public PropertyDescriptor[] getPropertyDescriptors() {
+        return new PropertyDescriptor[0];
+    }
 }

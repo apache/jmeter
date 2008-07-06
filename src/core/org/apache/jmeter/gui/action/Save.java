@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.gui.action;
@@ -50,115 +50,115 @@ import org.apache.log.Logger;
  * Save (Selection) As
  */
 public class Save implements Command {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public static final String JMX_FILE_EXTENSION = ".jmx"; // $NON-NLS-1$
+    public static final String JMX_FILE_EXTENSION = ".jmx"; // $NON-NLS-1$
 
-	private static final Set commands = new HashSet();
+    private static final Set commands = new HashSet();
 
-	static {
-		commands.add(ActionNames.SAVE_AS); // Save (Selection) As
-		commands.add(ActionNames.SAVE_ALL_AS); // Save TestPlan As
-		commands.add(ActionNames.SAVE); // Save
-	}
+    static {
+        commands.add(ActionNames.SAVE_AS); // Save (Selection) As
+        commands.add(ActionNames.SAVE_ALL_AS); // Save TestPlan As
+        commands.add(ActionNames.SAVE); // Save
+    }
 
-	/**
-	 * Constructor for the Save object.
-	 */
-	public Save() {
-	}
+    /**
+     * Constructor for the Save object.
+     */
+    public Save() {
+    }
 
-	/**
-	 * Gets the ActionNames attribute of the Save object.
-	 * 
-	 * @return the ActionNames value
-	 */
-	public Set getActionNames() {
-		return commands;
-	}
+    /**
+     * Gets the ActionNames attribute of the Save object.
+     *
+     * @return the ActionNames value
+     */
+    public Set getActionNames() {
+        return commands;
+    }
 
-	public void doAction(ActionEvent e) throws IllegalUserActionException {
-		HashTree subTree = null;
-		if (!commands.contains(e.getActionCommand())) {
-			throw new IllegalUserActionException("Invalid user command:" + e.getActionCommand());
-		}
-		if (e.getActionCommand().equals(ActionNames.SAVE_AS)) {
-			JMeterTreeNode[] nodes = GuiPackage.getInstance().getTreeListener().getSelectedNodes();
-			if (nodes.length > 1){
-				JMeterUtils.reportErrorToUser(
-						JMeterUtils.getResString("save_as_error"), // $NON-NLS-1$
-						JMeterUtils.getResString("save_as")); // $NON-NLS-1$
-				return;
-			}
-			subTree = GuiPackage.getInstance().getCurrentSubTree();
-		} else {
-			subTree = GuiPackage.getInstance().getTreeModel().getTestPlan();
-		}
+    public void doAction(ActionEvent e) throws IllegalUserActionException {
+        HashTree subTree = null;
+        if (!commands.contains(e.getActionCommand())) {
+            throw new IllegalUserActionException("Invalid user command:" + e.getActionCommand());
+        }
+        if (e.getActionCommand().equals(ActionNames.SAVE_AS)) {
+            JMeterTreeNode[] nodes = GuiPackage.getInstance().getTreeListener().getSelectedNodes();
+            if (nodes.length > 1){
+                JMeterUtils.reportErrorToUser(
+                        JMeterUtils.getResString("save_as_error"), // $NON-NLS-1$
+                        JMeterUtils.getResString("save_as")); // $NON-NLS-1$
+                return;
+            }
+            subTree = GuiPackage.getInstance().getCurrentSubTree();
+        } else {
+            subTree = GuiPackage.getInstance().getTreeModel().getTestPlan();
+        }
 
-		String updateFile = GuiPackage.getInstance().getTestPlanFile();
-		if (!ActionNames.SAVE.equals(e.getActionCommand()) || updateFile == null) {
-			JFileChooser chooser = FileDialoger.promptToSaveFile(GuiPackage.getInstance().getTreeListener()
-					.getCurrentNode().getName()
-					+ JMX_FILE_EXTENSION);
-			if (chooser == null) {
-				return;
-			}
-			updateFile = chooser.getSelectedFile().getAbsolutePath();
-			// Make sure the file ends with proper extension
-			if(FilenameUtils.getExtension(updateFile).equals("")) {
-				updateFile = updateFile + JMX_FILE_EXTENSION;
-			}
-			// Check if the user is trying to save to an existing file
-			File f = new File(updateFile);
-			if(f.exists()) {
-				int response = JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(), 
-						JMeterUtils.getResString("save_overwrite_existing_file"), // $NON-NLS-1$
-						JMeterUtils.getResString("save?"),  // $NON-NLS-1$
-						JOptionPane.YES_NO_OPTION,
-						JOptionPane.QUESTION_MESSAGE);
-				if (response == JOptionPane.CLOSED_OPTION || response == JOptionPane.NO_OPTION) {
-					return ; // Do not save, user does not want to overwrite
-				}
-			}
-			
-			if (!e.getActionCommand().equals(ActionNames.SAVE_AS)) {
-				GuiPackage.getInstance().setTestPlanFile(updateFile);
-			}
-		}
-		// TODO: doesn't putting this here mark the tree as
-		// saved even though a failure may occur later?
+        String updateFile = GuiPackage.getInstance().getTestPlanFile();
+        if (!ActionNames.SAVE.equals(e.getActionCommand()) || updateFile == null) {
+            JFileChooser chooser = FileDialoger.promptToSaveFile(GuiPackage.getInstance().getTreeListener()
+                    .getCurrentNode().getName()
+                    + JMX_FILE_EXTENSION);
+            if (chooser == null) {
+                return;
+            }
+            updateFile = chooser.getSelectedFile().getAbsolutePath();
+            // Make sure the file ends with proper extension
+            if(FilenameUtils.getExtension(updateFile).equals("")) {
+                updateFile = updateFile + JMX_FILE_EXTENSION;
+            }
+            // Check if the user is trying to save to an existing file
+            File f = new File(updateFile);
+            if(f.exists()) {
+                int response = JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(),
+                        JMeterUtils.getResString("save_overwrite_existing_file"), // $NON-NLS-1$
+                        JMeterUtils.getResString("save?"),  // $NON-NLS-1$
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE);
+                if (response == JOptionPane.CLOSED_OPTION || response == JOptionPane.NO_OPTION) {
+                    return ; // Do not save, user does not want to overwrite
+                }
+            }
 
-		ActionRouter.getInstance().doActionNow(new ActionEvent(subTree, e.getID(), ActionNames.SUB_TREE_SAVED));
-		try {
-			convertSubTree(subTree);
-		} catch (Exception err) {
-		}
-		FileOutputStream ostream = null;
-		try {
-			ostream = new FileOutputStream(updateFile);
-			if (SaveService.isSaveTestPlanFormat20()) {
-				OldSaveService.saveSubTree(subTree, ostream);
-			} else {
-				SaveService.saveTree(subTree, ostream);
-			}
-		} catch (Throwable ex) {
-			GuiPackage.getInstance().setTestPlanFile(null);
-			log.error("", ex);
-			throw new IllegalUserActionException("Couldn't save test plan to file: " + updateFile);
-		} finally {
+            if (!e.getActionCommand().equals(ActionNames.SAVE_AS)) {
+                GuiPackage.getInstance().setTestPlanFile(updateFile);
+            }
+        }
+        // TODO: doesn't putting this here mark the tree as
+        // saved even though a failure may occur later?
+
+        ActionRouter.getInstance().doActionNow(new ActionEvent(subTree, e.getID(), ActionNames.SUB_TREE_SAVED));
+        try {
+            convertSubTree(subTree);
+        } catch (Exception err) {
+        }
+        FileOutputStream ostream = null;
+        try {
+            ostream = new FileOutputStream(updateFile);
+            if (SaveService.isSaveTestPlanFormat20()) {
+                OldSaveService.saveSubTree(subTree, ostream);
+            } else {
+                SaveService.saveTree(subTree, ostream);
+            }
+        } catch (Throwable ex) {
+            GuiPackage.getInstance().setTestPlanFile(null);
+            log.error("", ex);
+            throw new IllegalUserActionException("Couldn't save test plan to file: " + updateFile);
+        } finally {
             JOrphanUtils.closeQuietly(ostream);
-		}
+        }
         GuiPackage.getInstance().updateCurrentGui();
-	}
+    }
 
-	// package protected to all for separate test code
-	void convertSubTree(HashTree tree) {
-		Iterator iter = new LinkedList(tree.list()).iterator();
-		while (iter.hasNext()) {
-			JMeterTreeNode item = (JMeterTreeNode) iter.next();
-			convertSubTree(tree.getTree(item));
-			TestElement testElement = item.getTestElement();
-			tree.replace(item, testElement);
-		}
-	}
+    // package protected to all for separate test code
+    void convertSubTree(HashTree tree) {
+        Iterator iter = new LinkedList(tree.list()).iterator();
+        while (iter.hasNext()) {
+            JMeterTreeNode item = (JMeterTreeNode) iter.next();
+            convertSubTree(tree.getTree(item));
+            TestElement testElement = item.getTestElement();
+            tree.replace(item, testElement);
+        }
+    }
 }

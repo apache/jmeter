@@ -56,170 +56,169 @@ import org.apache.log.Logger;
  * The resource bundle will be stored as the bean descriptor's "resourceBundle"
  * attribute, so that it can be used for further localization. TestBeanGUI, for
  * example, uses it to obtain the group's display names from properties <b><i>groupName</i>.displayName</b>.
- * 
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
- * @version $Revision$ updated on $Date$
+ *
+ * @version $Revision$
  */
 public abstract class BeanInfoSupport extends SimpleBeanInfo {
 
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	// Some known attribute names, just for convenience:
-	public static final String TAGS = GenericTestBeanCustomizer.TAGS;
+    // Some known attribute names, just for convenience:
+    public static final String TAGS = GenericTestBeanCustomizer.TAGS;
 
-	public static final String NOT_UNDEFINED = GenericTestBeanCustomizer.NOT_UNDEFINED;
+    public static final String NOT_UNDEFINED = GenericTestBeanCustomizer.NOT_UNDEFINED;
 
-	public static final String NOT_EXPRESSION = GenericTestBeanCustomizer.NOT_EXPRESSION;
+    public static final String NOT_EXPRESSION = GenericTestBeanCustomizer.NOT_EXPRESSION;
 
-	public static final String NOT_OTHER = GenericTestBeanCustomizer.NOT_OTHER;
+    public static final String NOT_OTHER = GenericTestBeanCustomizer.NOT_OTHER;
 
-	public static final String DEFAULT = GenericTestBeanCustomizer.DEFAULT;
+    public static final String DEFAULT = GenericTestBeanCustomizer.DEFAULT;
 
-	public static final String RESOURCE_BUNDLE = GenericTestBeanCustomizer.RESOURCE_BUNDLE;
+    public static final String RESOURCE_BUNDLE = GenericTestBeanCustomizer.RESOURCE_BUNDLE;
 
-	/** The class for which we're providing the bean info. */
-	// NOTREAD private Class beanClass;
-	/** The BeanInfo for our class as obtained by the introspector. */
-	private BeanInfo rootBeanInfo;
+    /** The class for which we're providing the bean info. */
+    // NOTREAD private Class beanClass;
+    /** The BeanInfo for our class as obtained by the introspector. */
+    private BeanInfo rootBeanInfo;
 
-	/** The icons for this bean. */
-	private Image[] icons = new Image[5];
+    /** The icons for this bean. */
+    private Image[] icons = new Image[5];
 
-	/**
-	 * Construct a BeanInfo for the given class.
-	 */
-	protected BeanInfoSupport(Class beanClass) {
-		// NOTREAD this.beanClass= beanClass;
+    /**
+     * Construct a BeanInfo for the given class.
+     */
+    protected BeanInfoSupport(Class beanClass) {
+        // NOTREAD this.beanClass= beanClass;
 
-		try {
-			rootBeanInfo = Introspector.getBeanInfo(beanClass, Introspector.IGNORE_IMMEDIATE_BEANINFO);
-		} catch (IntrospectionException e) {
-			log.error("Can't introspect.", e);
-			throw new Error(e.toString()); // Programming error: bail out.
-		}
+        try {
+            rootBeanInfo = Introspector.getBeanInfo(beanClass, Introspector.IGNORE_IMMEDIATE_BEANINFO);
+        } catch (IntrospectionException e) {
+            log.error("Can't introspect.", e);
+            throw new Error(e.toString()); // Programming error: bail out.
+        }
 
-		try {
-			ResourceBundle resourceBundle = ResourceBundle.getBundle(
-					beanClass.getName() + "Resources",  // $NON-NLS-1$ 
-					JMeterUtils.getLocale());
+        try {
+            ResourceBundle resourceBundle = ResourceBundle.getBundle(
+                    beanClass.getName() + "Resources",  // $NON-NLS-1$
+                    JMeterUtils.getLocale());
 
-			// Store the resource bundle as an attribute of the BeanDescriptor:
-			getBeanDescriptor().setValue(RESOURCE_BUNDLE, resourceBundle);
-			// Localize the bean name
-			try {
-				getBeanDescriptor().setDisplayName(resourceBundle.getString("displayName")); // $NON-NLS-1$ 
-			} catch (MissingResourceException e) {
-				log.debug("Localized display name not available for bean " + beanClass.getName());
-			}
-			// Localize the property names and descriptions:
-			PropertyDescriptor[] properties = getPropertyDescriptors();
-			for (int i = 0; i < properties.length; i++) {
-				String name = properties[i].getName();
-				try {
-					properties[i].setDisplayName(resourceBundle.getString(name + ".displayName")); // $NON-NLS-1$ 
-				} catch (MissingResourceException e) {
-					log.debug("Localized display name not available for property " + name);
-				}
+            // Store the resource bundle as an attribute of the BeanDescriptor:
+            getBeanDescriptor().setValue(RESOURCE_BUNDLE, resourceBundle);
+            // Localize the bean name
+            try {
+                getBeanDescriptor().setDisplayName(resourceBundle.getString("displayName")); // $NON-NLS-1$
+            } catch (MissingResourceException e) {
+                log.debug("Localized display name not available for bean " + beanClass.getName());
+            }
+            // Localize the property names and descriptions:
+            PropertyDescriptor[] properties = getPropertyDescriptors();
+            for (int i = 0; i < properties.length; i++) {
+                String name = properties[i].getName();
+                try {
+                    properties[i].setDisplayName(resourceBundle.getString(name + ".displayName")); // $NON-NLS-1$
+                } catch (MissingResourceException e) {
+                    log.debug("Localized display name not available for property " + name);
+                }
 
-				try {
-					properties[i].setShortDescription(resourceBundle.getString(name + ".shortDescription"));
-				} catch (MissingResourceException e) {
-					log.debug("Localized short description not available for property " + name);
-				}
-			}
-		} catch (MissingResourceException e) {
-			log.warn("Localized strings not available for bean " + beanClass, e);
-		} catch (Exception e) {
-			log.warn("Something bad happened when loading bean info", e);
-		}
-	}
+                try {
+                    properties[i].setShortDescription(resourceBundle.getString(name + ".shortDescription"));
+                } catch (MissingResourceException e) {
+                    log.debug("Localized short description not available for property " + name);
+                }
+            }
+        } catch (MissingResourceException e) {
+            log.warn("Localized strings not available for bean " + beanClass, e);
+        } catch (Exception e) {
+            log.warn("Something bad happened when loading bean info", e);
+        }
+    }
 
-	/**
-	 * Get the property descriptor for the property of the given name.
-	 * 
-	 * @param name
-	 *            property name
-	 * @return descriptor for a property of that name, or null if there's none
-	 */
-	protected PropertyDescriptor property(String name) {
-		PropertyDescriptor[] properties = getPropertyDescriptors();
-		for (int i = 0; i < properties.length; i++) {
-			if (properties[i].getName().equals(name)) {
-				return properties[i];
-			}
-		}
-		log.warn("Cannot find property: "+name);
-		return null;
-	}
+    /**
+     * Get the property descriptor for the property of the given name.
+     *
+     * @param name
+     *            property name
+     * @return descriptor for a property of that name, or null if there's none
+     */
+    protected PropertyDescriptor property(String name) {
+        PropertyDescriptor[] properties = getPropertyDescriptors();
+        for (int i = 0; i < properties.length; i++) {
+            if (properties[i].getName().equals(name)) {
+                return properties[i];
+            }
+        }
+        log.warn("Cannot find property: "+name);
+        return null;
+    }
 
-	/**
-	 * Set the bean's 16x16 colour icon.
-	 * 
-	 * @param resourceName
-	 *            A pathname relative to the directory holding the class file of
-	 *            the current class.
-	 */
-	protected void setIcon(String resourceName) {
-		icons[ICON_COLOR_16x16] = loadImage(resourceName);
-	}
+    /**
+     * Set the bean's 16x16 colour icon.
+     *
+     * @param resourceName
+     *            A pathname relative to the directory holding the class file of
+     *            the current class.
+     */
+    protected void setIcon(String resourceName) {
+        icons[ICON_COLOR_16x16] = loadImage(resourceName);
+    }
 
-	/** Number of groups created so far by createPropertyGroup. */
-	private int numCreatedGroups = 0;
+    /** Number of groups created so far by createPropertyGroup. */
+    private int numCreatedGroups = 0;
 
-	/**
-	 * Utility method to group and order properties.
-	 * <p>
-	 * It will assing the given group name to each of the named properties, and
-	 * set their order attribute so that they are shown in the given order.
-	 * <p>
-	 * The created groups will get order 1, 2, 3,... in the order in which they
-	 * are created.
-	 * 
-	 * @param group
-	 *            name of the group
-	 * @param names
-	 *            property names in the desired order
-	 */
-	protected void createPropertyGroup(String group, String[] names) {
-		for (int i = 0; i < names.length; i++) {
-			log.debug("Getting property for: " + names[i]);
-			PropertyDescriptor p = property(names[i]);
-			p.setValue(GenericTestBeanCustomizer.GROUP, group);
-			p.setValue(GenericTestBeanCustomizer.ORDER, new Integer(i));
-		}
-		numCreatedGroups++;
-		getBeanDescriptor().setValue(GenericTestBeanCustomizer.ORDER(group), new Integer(numCreatedGroups));
-	}
+    /**
+     * Utility method to group and order properties.
+     * <p>
+     * It will assing the given group name to each of the named properties, and
+     * set their order attribute so that they are shown in the given order.
+     * <p>
+     * The created groups will get order 1, 2, 3,... in the order in which they
+     * are created.
+     *
+     * @param group
+     *            name of the group
+     * @param names
+     *            property names in the desired order
+     */
+    protected void createPropertyGroup(String group, String[] names) {
+        for (int i = 0; i < names.length; i++) {
+            log.debug("Getting property for: " + names[i]);
+            PropertyDescriptor p = property(names[i]);
+            p.setValue(GenericTestBeanCustomizer.GROUP, group);
+            p.setValue(GenericTestBeanCustomizer.ORDER, new Integer(i));
+        }
+        numCreatedGroups++;
+        getBeanDescriptor().setValue(GenericTestBeanCustomizer.ORDER(group), new Integer(numCreatedGroups));
+    }
 
-	public BeanInfo[] getAdditionalBeanInfo() {
-		return rootBeanInfo.getAdditionalBeanInfo();
-	}
+    public BeanInfo[] getAdditionalBeanInfo() {
+        return rootBeanInfo.getAdditionalBeanInfo();
+    }
 
-	public BeanDescriptor getBeanDescriptor() {
-		return rootBeanInfo.getBeanDescriptor();
-	}
+    public BeanDescriptor getBeanDescriptor() {
+        return rootBeanInfo.getBeanDescriptor();
+    }
 
-	public int getDefaultEventIndex() {
-		return rootBeanInfo.getDefaultEventIndex();
-	}
+    public int getDefaultEventIndex() {
+        return rootBeanInfo.getDefaultEventIndex();
+    }
 
-	public int getDefaultPropertyIndex() {
-		return rootBeanInfo.getDefaultPropertyIndex();
-	}
+    public int getDefaultPropertyIndex() {
+        return rootBeanInfo.getDefaultPropertyIndex();
+    }
 
-	public EventSetDescriptor[] getEventSetDescriptors() {
-		return rootBeanInfo.getEventSetDescriptors();
-	}
+    public EventSetDescriptor[] getEventSetDescriptors() {
+        return rootBeanInfo.getEventSetDescriptors();
+    }
 
-	public Image getIcon(int iconKind) {
-		return icons[iconKind];
-	}
+    public Image getIcon(int iconKind) {
+        return icons[iconKind];
+    }
 
-	public MethodDescriptor[] getMethodDescriptors() {
-		return rootBeanInfo.getMethodDescriptors();
-	}
+    public MethodDescriptor[] getMethodDescriptors() {
+        return rootBeanInfo.getMethodDescriptors();
+    }
 
-	public PropertyDescriptor[] getPropertyDescriptors() {
-		return rootBeanInfo.getPropertyDescriptors();
-	}
+    public PropertyDescriptor[] getPropertyDescriptors() {
+        return rootBeanInfo.getPropertyDescriptors();
+    }
 }

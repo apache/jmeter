@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 package org.apache.jmeter.testelement;
 
@@ -45,13 +45,13 @@ public class JTLData implements Serializable, DataSet {
     protected long startTimestamp = 0;
     protected long endTimestamp = 0;
     protected File inputFile = null;
-    
-	/**
-	 * 
-	 */
-	public JTLData() {
-		super();
-	}
+
+    /**
+     *
+     */
+    public JTLData() {
+        super();
+    }
 
     /**
      * Return a Set of the URLs
@@ -60,7 +60,7 @@ public class JTLData implements Serializable, DataSet {
     public Set getURLs() {
         return this.data.keySet();
     }
-    
+
     /**
      * Return a Set of the values
      * @return values
@@ -68,7 +68,7 @@ public class JTLData implements Serializable, DataSet {
     public Set getStats() {
         return this.data.entrySet();
     }
-    
+
     /**
      * The purpose of the method is to make it convienant to pass a list
      * of the URLs and return a list of the SamplingStatCalculators. If
@@ -89,38 +89,38 @@ public class JTLData implements Serializable, DataSet {
         }
         return items;
     }
-    
+
     public void setDataSource(String absolutePath) {
         this.jtl_file = absolutePath;
     }
-    
+
     public String getDataSource() {
         return this.jtl_file;
     }
-    
+
     public String getDataSourceName() {
         if (inputFile == null) {
             inputFile = new File(getDataSource());
         }
         return inputFile.getName().substring(0,inputFile.getName().length() - 4);
     }
-    
+
     public void setStartTimestamp(long stamp) {
         this.startTimestamp = stamp;
     }
-    
+
     public long getStartTimestamp() {
         return this.startTimestamp;
     }
-    
+
     public void setEndTimestamp(long stamp) {
         this.endTimestamp = stamp;
     }
-    
+
     public long getEndTimestamp() {
         return this.endTimestamp;
     }
-    
+
     /**
      * The date we use for the result is the start timestamp. The
      * reasoning is that a test may run for a long time, but it
@@ -131,18 +131,18 @@ public class JTLData implements Serializable, DataSet {
     public Date getDate() {
         return new Date(this.startTimestamp);
     }
-    
+
     public String getMonthDayDate() {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(this.startTimestamp);
-        return String.valueOf(cal.get(Calendar.MONTH)) + " - " + 
+        return String.valueOf(cal.get(Calendar.MONTH)) + " - " +
         String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
     }
-    
+
     public String getMonthDayYearDate() {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(this.startTimestamp);
-        return String.valueOf(cal.get(Calendar.MONTH)) + " - " + 
+        return String.valueOf(cal.get(Calendar.MONTH)) + " - " +
             String.valueOf(cal.get(Calendar.DAY_OF_MONTH)) + " - " +
             String.valueOf(cal.get(Calendar.YEAR));
     }
@@ -178,7 +178,7 @@ public class JTLData implements Serializable, DataSet {
             rc = null;
         }
     }
-    
+
     /**
      * the implementation will set the start timestamp if the HashMap
      * is empty. otherwise it will set the end timestamp using the
@@ -204,7 +204,7 @@ public class JTLData implements Serializable, DataSet {
         }
         row.addSample(sample);
     }
-    
+
     /**
      * By default, the method always returns true. Subclasses can over
      * ride the implementation.

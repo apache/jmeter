@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.util;
@@ -32,58 +32,58 @@ import java.net.UnknownHostException;
  */
 public class LoopbackHTTPSocket extends Socket {
 
-	// get access to buffer
-	static class LoopbackOutputStream extends ByteArrayOutputStream{
-		byte [] getBuffer() {
-			return buf;
-		}
-	}
+    // get access to buffer
+    static class LoopbackOutputStream extends ByteArrayOutputStream{
+        byte [] getBuffer() {
+            return buf;
+        }
+    }
 
-	// wrap read() methods to track output buffer
-	static class LoopBackInputStream extends ByteArrayInputStream{
-		LoopbackOutputStream os;
-		public synchronized int read() {
-			buf=os.getBuffer();   // make sure buffer details
-			count=buf.length; // track the output
-			return super.read();
-		}
-		public synchronized int read(byte[] b, int off, int len) {
-			buf=os.getBuffer();
-			count=buf.length;
-			return super.read(b, off, len);
-		}
-		
-		public LoopBackInputStream(LoopbackOutputStream _os) {
-			super(_os.getBuffer());
-			os=_os;
-		}		
-	}
-	
-	private final LoopbackOutputStream os;
-	
-	private LoopbackHTTPSocket() throws IOException{
-		os=new LoopbackOutputStream();
-		// Preload the output so that can be read back as HTTP
-		os.write("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n".getBytes());
-	}
-	
+    // wrap read() methods to track output buffer
+    static class LoopBackInputStream extends ByteArrayInputStream{
+        LoopbackOutputStream os;
+        public synchronized int read() {
+            buf=os.getBuffer();   // make sure buffer details
+            count=buf.length; // track the output
+            return super.read();
+        }
+        public synchronized int read(byte[] b, int off, int len) {
+            buf=os.getBuffer();
+            count=buf.length;
+            return super.read(b, off, len);
+        }
+
+        public LoopBackInputStream(LoopbackOutputStream _os) {
+            super(_os.getBuffer());
+            os=_os;
+        }
+    }
+
+    private final LoopbackOutputStream os;
+
+    private LoopbackHTTPSocket() throws IOException{
+        os=new LoopbackOutputStream();
+        // Preload the output so that can be read back as HTTP
+        os.write("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n".getBytes());
+    }
+
     public LoopbackHTTPSocket(String host, int port, InetAddress localAddress, int localPort, int timeout) throws IOException {
-    	this();
-	}
+        this();
+    }
 
     public LoopbackHTTPSocket(String host, int port, InetAddress localAddr, int localPort) throws IOException {
-    	this();
+        this();
     }
 
     public LoopbackHTTPSocket(String host, int port) throws UnknownHostException, IOException {
-    	this();
+        this();
     }
 
-	// Override so we can intercept the stream
+    // Override so we can intercept the stream
     public OutputStream getOutputStream() throws IOException {
         return os;
     }
-    
+
     // Override so we can intercept the stream
     public InputStream getInputStream() throws IOException {
         return new LoopBackInputStream(os);

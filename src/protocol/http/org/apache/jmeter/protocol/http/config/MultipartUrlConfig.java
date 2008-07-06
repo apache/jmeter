@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.config;
@@ -34,70 +34,70 @@ import org.apache.oro.text.regex.Perl5Matcher;
  */
 public class MultipartUrlConfig implements Serializable {
 
-	private final String boundary;
+    private final String boundary;
 
-	private final Arguments args;
+    private final Arguments args;
 
-	/**
-	 * HTTPFileArgs list to be uploaded with http request.
-	 */
-	private final HTTPFileArgs files;
+    /**
+     * HTTPFileArgs list to be uploaded with http request.
+     */
+    private final HTTPFileArgs files;
 
-	/**
-	 * @deprecated only for use by unit tests
-	 */
-	public MultipartUrlConfig(){
-	    this(null);
-	}
+    /**
+     * @deprecated only for use by unit tests
+     */
+    public MultipartUrlConfig(){
+        this(null);
+    }
 
-	// called by HttpRequestHdr
-	public MultipartUrlConfig(String boundary) {
+    // called by HttpRequestHdr
+    public MultipartUrlConfig(String boundary) {
         args = new Arguments();
         files = new HTTPFileArgs();
-		this.boundary = boundary;
-	}
+        this.boundary = boundary;
+    }
 
-	public String getBoundary() {
-		return boundary;
-	}
+    public String getBoundary() {
+        return boundary;
+    }
 
-	public Arguments getArguments() {
-		return args;
-	}
+    public Arguments getArguments() {
+        return args;
+    }
 
-	public void addArgument(String name, String value) {
-		Arguments myArgs = this.getArguments();
-		myArgs.addArgument(new HTTPArgument(name, value));
-	}
+    public void addArgument(String name, String value) {
+        Arguments myArgs = this.getArguments();
+        myArgs.addArgument(new HTTPArgument(name, value));
+    }
 
-	public void addArgument(String name, String value, String metadata) {
-		Arguments myArgs = this.getArguments();
-		myArgs.addArgument(new HTTPArgument(name, value, metadata));
-	}
+    public void addArgument(String name, String value, String metadata) {
+        Arguments myArgs = this.getArguments();
+        myArgs.addArgument(new HTTPArgument(name, value, metadata));
+    }
 
     public HTTPFileArgs getHTTPFileArgs() {
         return files;
     }
 
-// NOT USED	
+// NOT USED
 //    /**
 //     * @deprecated values in a multipart/form-data are not urlencoded,
 //     * so it does not make sense to add a value as a encoded value
 //     */
-//	public void addEncodedArgument(String name, String value) {
-//		Arguments myArgs = getArguments();
-//		HTTPArgument arg = new HTTPArgument(name, value, true);
-//		if (arg.getName().equals(arg.getEncodedName()) && arg.getValue().equals(arg.getEncodedValue())) {
-//			arg.setAlwaysEncoded(false);
-//		}
-//		myArgs.addArgument(arg);
-//	}
-    
+//  public void addEncodedArgument(String name, String value) {
+//      Arguments myArgs = getArguments();
+//      HTTPArgument arg = new HTTPArgument(name, value, true);
+//      if (arg.getName().equals(arg.getEncodedName()) && arg.getValue().equals(arg.getEncodedValue())) {
+//          arg.setAlwaysEncoded(false);
+//      }
+//      myArgs.addArgument(arg);
+//  }
+
     /**
      * Add a value that is not URL encoded, and make sure it
      * appears in the GUI that it will not be encoded when
      * the request is sent.
-     * 
+     *
      * @param name
      * @param value
      */
@@ -110,14 +110,14 @@ public class MultipartUrlConfig implements Serializable {
         myArgs.addArgument(arg);
     }
 
-	/**
-	 * This method allows a proxy server to send over the raw text from a
-	 * browser's output stream to be parsed and stored correctly into the
-	 * UrlConfig object.
-	 */
-	public void parseArguments(String queryString) {
-		String[] parts = JOrphanUtils.split(queryString, "--" + getBoundary()); //$NON-NLS-1$
-		for (int i = 0; i < parts.length; i++) {
+    /**
+     * This method allows a proxy server to send over the raw text from a
+     * browser's output stream to be parsed and stored correctly into the
+     * UrlConfig object.
+     */
+    public void parseArguments(String queryString) {
+        String[] parts = JOrphanUtils.split(queryString, "--" + getBoundary()); //$NON-NLS-1$
+        for (int i = 0; i < parts.length; i++) {
             String contentDisposition = getHeaderValue("Content-disposition", parts[i]); //$NON-NLS-1$
             String contentType = getHeaderValue("Content-type", parts[i]); //$NON-NLS-1$
             // Check if it is form data
@@ -152,9 +152,9 @@ public class MultipartUrlConfig implements Serializable {
                     this.addNonEncodedArgument(name, value);
                 }
             }
-		}
-	}
-    
+        }
+    }
+
     private String getHeaderValue(String headerName, String multiPart) {
         String regularExpression = headerName + "\\s*:\\s*(.*)$"; //$NON-NLS-1$
         Perl5Matcher localMatcher = JMeterUtils.getMatcher();

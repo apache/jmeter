@@ -28,72 +28,72 @@ import org.apache.jmeter.samplers.SampleResult;
  */
 public class ObjectFactory {
 
-	private static ObjectFactory FACTORY = null;
+    private static ObjectFactory FACTORY = null;
 
-	private final Parser PARSER;
+    private final Parser PARSER;
 
-	/**
-	 * 
-	 */
-	protected ObjectFactory() {
-		super();
-		PARSER = new MonitorParser(this);
-	}
+    /**
+     *
+     */
+    protected ObjectFactory() {
+        super();
+        PARSER = new MonitorParser(this);
+    }
 
-	public static synchronized ObjectFactory getInstance() {
-		if (FACTORY == null) {
-			FACTORY = new ObjectFactory();
-		}
-		return FACTORY;
-	}
+    public static synchronized ObjectFactory getInstance() {
+        if (FACTORY == null) {
+            FACTORY = new ObjectFactory();
+        }
+        return FACTORY;
+    }
 
-	public synchronized Status parseBytes(byte[] bytes) {
-		return PARSER.parseBytes(bytes);
-	}
+    public synchronized Status parseBytes(byte[] bytes) {
+        return PARSER.parseBytes(bytes);
+    }
 
-	public Status parseString(String content) {
-		return PARSER.parseString(content);
-	}
+    public Status parseString(String content) {
+        return PARSER.parseString(content);
+    }
 
-	public Status parseSampleResult(SampleResult result) {
-		return PARSER.parseSampleResult(result);
-	}
+    public Status parseSampleResult(SampleResult result) {
+        return PARSER.parseSampleResult(result);
+    }
 
-	public Status createStatus() {
-		return new StatusImpl();
-	}
+    public Status createStatus() {
+        return new StatusImpl();
+    }
 
-	public Connector createConnector() {
-		return new ConnectorImpl();
-	}
+    public Connector createConnector() {
+        return new ConnectorImpl();
+    }
 
-	public Jvm createJvm() {
-		return new JvmImpl();
-	}
+    public Jvm createJvm() {
+        return new JvmImpl();
+    }
 
-	public Memory createMemory() {
-		return new MemoryImpl();
-	}
+    public Memory createMemory() {
+        return new MemoryImpl();
+    }
 
-	public RequestInfo createRequestInfo() {
-		return new RequestInfoImpl();
-	}
+    public RequestInfo createRequestInfo() {
+        return new RequestInfoImpl();
+    }
 
-	public ThreadInfo createThreadInfo() {
-		return new ThreadInfoImpl();
-	}
+    public ThreadInfo createThreadInfo() {
+        return new ThreadInfoImpl();
+    }
 
-	public Worker createWorker() {
-		return new WorkerImpl();
-	}
+    public Worker createWorker() {
+        return new WorkerImpl();
+    }
 
-	public Workers createWorkers() {
-		return new WorkersImpl();
-	}
+    public Workers createWorkers() {
+        return new WorkersImpl();
+    }
 
-	protected static class MonitorParser extends ParserImpl {
-		public MonitorParser(ObjectFactory factory) {
-			super(factory);
-		}
-	}
+    protected static class MonitorParser extends ParserImpl {
+        public MonitorParser(ObjectFactory factory) {
+            super(factory);
+        }
+    }
 }

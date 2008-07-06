@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -30,74 +30,74 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Function to get a JMeter property, and optionally store it
- * 
+ *
  * Parameters:
- *  - property name 
+ *  - property name
  *  - variable name (optional)
  *  - default value (optional)
- * 
+ *
  * Returns:
  * - the property value, but if not found:
  * - the default value, but if not defined:
  * - the property name itself
- * 
+ *
  */
 public class Property extends AbstractFunction implements Serializable {
 
-	private static final long serialVersionUID = 232L;
-	
-	private static final List desc = new LinkedList();
+    private static final long serialVersionUID = 232L;
 
-	private static final String KEY = "__property"; //$NON-NLS-1$
+    private static final List desc = new LinkedList();
 
-	// Number of parameters expected - used to reject invalid calls
-	private static final int MIN_PARAMETER_COUNT = 1;
-	private static final int MAX_PARAMETER_COUNT = 3;
+    private static final String KEY = "__property"; //$NON-NLS-1$
 
-	static {
-		desc.add(JMeterUtils.getResString("property_name_param")); //$NON-NLS-1$
-		desc.add(JMeterUtils.getResString("function_name_paropt")); //$NON-NLS-1$
-		desc.add(JMeterUtils.getResString("property_default_param")); //$NON-NLS-1$
-	}
+    // Number of parameters expected - used to reject invalid calls
+    private static final int MIN_PARAMETER_COUNT = 1;
+    private static final int MAX_PARAMETER_COUNT = 3;
 
-	private Object[] values;
+    static {
+        desc.add(JMeterUtils.getResString("property_name_param")); //$NON-NLS-1$
+        desc.add(JMeterUtils.getResString("function_name_paropt")); //$NON-NLS-1$
+        desc.add(JMeterUtils.getResString("property_default_param")); //$NON-NLS-1$
+    }
 
-	public Property() {
-	}
+    private Object[] values;
 
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
+    public Property() {
+    }
 
-	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
-			throws InvalidVariableException {
-		String propertyName = ((CompoundVariable) values[0]).execute();
-		String propertyDefault = propertyName;
-		if (values.length > 2) { // We have a 3rd parameter
-			propertyDefault = ((CompoundVariable) values[2]).execute();
-		}
-		String propertyValue = JMeterUtils.getPropDefault(propertyName, propertyDefault);
-		if (values.length > 1) {
-			String variableName = ((CompoundVariable) values[1]).execute();
-			if (variableName.length() > 0) {// Allow for empty name
-				getVariables().put(variableName, propertyValue);
-			}
-		}
-		return propertyValue;
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 
-	}
+    public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
+            throws InvalidVariableException {
+        String propertyName = ((CompoundVariable) values[0]).execute();
+        String propertyDefault = propertyName;
+        if (values.length > 2) { // We have a 3rd parameter
+            propertyDefault = ((CompoundVariable) values[2]).execute();
+        }
+        String propertyValue = JMeterUtils.getPropDefault(propertyName, propertyDefault);
+        if (values.length > 1) {
+            String variableName = ((CompoundVariable) values[1]).execute();
+            if (variableName.length() > 0) {// Allow for empty name
+                getVariables().put(variableName, propertyValue);
+            }
+        }
+        return propertyValue;
 
-	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
-		checkParameterCount(parameters, MIN_PARAMETER_COUNT, MAX_PARAMETER_COUNT);
-		values = parameters.toArray();
-	}
+    }
 
-	public String getReferenceKey() {
-		return KEY;
-	}
+    public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
+        checkParameterCount(parameters, MIN_PARAMETER_COUNT, MAX_PARAMETER_COUNT);
+        values = parameters.toArray();
+    }
 
-	public List getArgumentDesc() {
-		return desc;
-	}
+    public String getReferenceKey() {
+        return KEY;
+    }
+
+    public List getArgumentDesc() {
+        return desc;
+    }
 
 }

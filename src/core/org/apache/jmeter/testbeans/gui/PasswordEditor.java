@@ -31,97 +31,97 @@ import javax.swing.JPasswordField;
  * field.
  * <p>
  * The provided GUI is a simple password field.
- * 
+ *
  */
 public class PasswordEditor extends PropertyEditorSupport implements ActionListener, FocusListener {
 
-	private JPasswordField textField;
+    private JPasswordField textField;
 
-	/**
-	 * Value on which we started the editing. Used to avoid firing
-	 * PropertyChanged events when there's not been such change.
-	 */
-	private String initialValue = "";
+    /**
+     * Value on which we started the editing. Used to avoid firing
+     * PropertyChanged events when there's not been such change.
+     */
+    private String initialValue = "";
 
-	protected PasswordEditor() {
-		super();
+    protected PasswordEditor() {
+        super();
 
-		textField = new JPasswordField();
-		textField.addActionListener(this);
-		textField.addFocusListener(this);
-	}
+        textField = new JPasswordField();
+        textField.addActionListener(this);
+        textField.addFocusListener(this);
+    }
 
-	public String getAsText() {
-		return new String(textField.getPassword());
-	}
+    public String getAsText() {
+        return new String(textField.getPassword());
+    }
 
-	public void setAsText(String value) {
-		initialValue = value;
-		textField.setText(value);
-	}
+    public void setAsText(String value) {
+        initialValue = value;
+        textField.setText(value);
+    }
 
-	public Object getValue() {
-		return getAsText();
-	}
+    public Object getValue() {
+        return getAsText();
+    }
 
-	public void setValue(Object value) {
-		if (value instanceof String) {
-			setAsText((String) value);
-		} else {
-			throw new IllegalArgumentException();
-		}
-	}
+    public void setValue(Object value) {
+        if (value instanceof String) {
+            setAsText((String) value);
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.beans.PropertyEditor#getCustomEditor()
-	 */
-	public Component getCustomEditor() {
-		return textField;
-	}
-    
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.beans.PropertyEditor#getCustomEditor()
+     */
+    public Component getCustomEditor() {
+        return textField;
+    }
+
     public boolean supportsCustomEditor() {
         return true;
     }
 
-	/*
-	 * (non-Javadoc) Avoid needlessly firing PropertyChanged events.
-	 */
-	public void firePropertyChange() {
-		String newValue = getAsText();
+    /*
+     * (non-Javadoc) Avoid needlessly firing PropertyChanged events.
+     */
+    public void firePropertyChange() {
+        String newValue = getAsText();
 
-		if (initialValue.equals(newValue)) {
-		    return;
-		}
-		initialValue = newValue;
+        if (initialValue.equals(newValue)) {
+            return;
+        }
+        initialValue = newValue;
 
-		super.firePropertyChange();
-	}
+        super.firePropertyChange();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 */
-	public void actionPerformed(ActionEvent e) {
-		firePropertyChange();
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+     */
+    public void actionPerformed(ActionEvent e) {
+        firePropertyChange();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.awt.event.FocusListener#focusGained(java.awt.event.FocusEvent)
-	 */
-	public void focusGained(FocusEvent e) {
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.awt.event.FocusListener#focusGained(java.awt.event.FocusEvent)
+     */
+    public void focusGained(FocusEvent e) {
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.awt.event.FocusListener#focusLost(java.awt.event.FocusEvent)
-	 */
-	public void focusLost(FocusEvent e) {
-		firePropertyChange();
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.awt.event.FocusListener#focusLost(java.awt.event.FocusEvent)
+     */
+    public void focusLost(FocusEvent e) {
+        firePropertyChange();
+    }
 }

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 // For unit tests @see TestCookieManager
@@ -43,29 +43,29 @@ import org.apache.log.Logger;
  * Handles HTTP Caching
  */
 public class CacheManager extends ConfigTestElement implements TestListener, Serializable {
-    
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public static final String CLEAR = "clearEachIteration"; // $NON-NLS-1$
+    public static final String CLEAR = "clearEachIteration"; // $NON-NLS-1$
 
-	private transient ThreadLocal threadCache;
-	
-	public CacheManager() {
+    private transient ThreadLocal threadCache;
+
+    public CacheManager() {
         setProperty(new BooleanProperty(CLEAR, false));
         clearCache();
-	}
+    }
 
-	/*
-	 * Holder for storing cache details.
-	 * Perhaps add original response later?
-	 */
-	private static class CacheEntry{
-	    private final String lastModified;
-	    private final String etag;
-	    public CacheEntry(String lastModified, String etag){
-	       this.lastModified = lastModified;
-	       this.etag = etag;
-	   }
+    /*
+     * Holder for storing cache details.
+     * Perhaps add original response later?
+     */
+    private static class CacheEntry{
+        private final String lastModified;
+        private final String etag;
+        public CacheEntry(String lastModified, String etag){
+           this.lastModified = lastModified;
+           this.etag = etag;
+       }
         public String getLastModified() {
             return lastModified;
         }
@@ -75,26 +75,26 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
         public String toString(){
             return lastModified+" "+etag;
         }
-	}
-
-	/**
-	 * Save the Last-Modified and Etag headers if the result is cacheable.
-	 * 
-	 * @param conn connection
-	 * @param res result
-	 */
-	public void saveDetails(URLConnection conn, SampleResult res){
-	    if (isCacheable(res)){
-	        String lastModified = conn.getHeaderField(HTTPConstantsInterface.LAST_MODIFIED);
-	        String etag = conn.getHeaderField(HTTPConstantsInterface.ETAG);
-	        String url = conn.getURL().toString();
-	        setCache(lastModified, etag, url);	        
-	    }
-	}
+    }
 
     /**
      * Save the Last-Modified and Etag headers if the result is cacheable.
-     * 
+     *
+     * @param conn connection
+     * @param res result
+     */
+    public void saveDetails(URLConnection conn, SampleResult res){
+        if (isCacheable(res)){
+            String lastModified = conn.getHeaderField(HTTPConstantsInterface.LAST_MODIFIED);
+            String etag = conn.getHeaderField(HTTPConstantsInterface.ETAG);
+            String url = conn.getURL().toString();
+            setCache(lastModified, etag, url);
+        }
+    }
+
+    /**
+     * Save the Last-Modified and Etag headers if the result is cacheable.
+     *
      * @param method
      * @param res result
      */
@@ -184,42 +184,42 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
     }
 
     public boolean getClearEachIteration() {
-		return getPropertyAsBoolean(CLEAR);
-	}
+        return getPropertyAsBoolean(CLEAR);
+    }
 
-	public void setClearEachIteration(boolean clear) {
-		setProperty(new BooleanProperty(CLEAR, clear));
-	}
+    public void setClearEachIteration(boolean clear) {
+        setProperty(new BooleanProperty(CLEAR, clear));
+    }
 
-	public void clear(){
-		super.clear();
-		clearCache();
-	}
+    public void clear(){
+        super.clear();
+        clearCache();
+    }
 
-	private void clearCache() {
-		log.debug("Clear cache");
-		threadCache = new ThreadLocal(){
-		    protected Object initialValue(){
-		        return new HashMap();
-		    }
-		};
-	}
+    private void clearCache() {
+        log.debug("Clear cache");
+        threadCache = new ThreadLocal(){
+            protected Object initialValue(){
+                return new HashMap();
+            }
+        };
+    }
 
-	public void testStarted() {
-	}
+    public void testStarted() {
+    }
 
-	public void testEnded() {
-	}
+    public void testEnded() {
+    }
 
-	public void testStarted(String host) {
-	}
+    public void testStarted(String host) {
+    }
 
-	public void testEnded(String host) {
-	}
+    public void testEnded(String host) {
+    }
 
-	public void testIterationStart(LoopIterationEvent event) {
-		if (getClearEachIteration()) {
-		    clearCache();
-		}
-	}
+    public void testIterationStart(LoopIterationEvent event) {
+        if (getClearEachIteration()) {
+            clearCache();
+        }
+    }
 }

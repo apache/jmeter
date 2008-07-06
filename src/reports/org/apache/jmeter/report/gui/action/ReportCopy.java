@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.report.gui.action;
@@ -30,82 +30,82 @@ import org.apache.jmeter.report.gui.tree.ReportTreeNode;
 import org.apache.jmeter.testelement.TestElement;
 
 public class ReportCopy extends AbstractAction {
-	private static ReportTreeNode copiedNode = null;
+    private static ReportTreeNode copiedNode = null;
 
-	private static ReportTreeNode copiedNodes[] = null;
+    private static ReportTreeNode copiedNodes[] = null;
 
-	private static final String COPY = "Copy";
+    private static final String COPY = "Copy";
 
-	private static final HashSet commands = new HashSet();
-	static {
-		commands.add(COPY);
-	}
+    private static final HashSet commands = new HashSet();
+    static {
+        commands.add(COPY);
+    }
 
-	/*
-	 * @see org.apache.jmeter.report.gui.action.Command#getActionNames()
-	 */
-	public Set getActionNames() {
-		return commands;
-	}
+    /*
+     * @see org.apache.jmeter.report.gui.action.Command#getActionNames()
+     */
+    public Set getActionNames() {
+        return commands;
+    }
 
-	public void doAction(ActionEvent e) {
-		ReportTreeListener treeListener = ReportGuiPackage.getInstance()
-				.getTreeListener();
-		ReportTreeNode[] nodes = treeListener.getSelectedNodes();
-		setCopiedNodes(nodes);
-	}
+    public void doAction(ActionEvent e) {
+        ReportTreeListener treeListener = ReportGuiPackage.getInstance()
+                .getTreeListener();
+        ReportTreeNode[] nodes = treeListener.getSelectedNodes();
+        setCopiedNodes(nodes);
+    }
 
-	public static ReportTreeNode[] getCopiedNodes() {
-		for (int i = 0; i < copiedNodes.length; i++) {
-			if (copiedNodes[i] == null) {
-				return null;
-			}
-		}
-		return cloneTreeNodes(copiedNodes);
-	}
+    public static ReportTreeNode[] getCopiedNodes() {
+        for (int i = 0; i < copiedNodes.length; i++) {
+            if (copiedNodes[i] == null) {
+                return null;
+            }
+        }
+        return cloneTreeNodes(copiedNodes);
+    }
 
-	public static ReportTreeNode getCopiedNode() {
-		if (copiedNode == null) {
-			return null;
-		}
-		return cloneTreeNode(copiedNode);
-	}
+    public static ReportTreeNode getCopiedNode() {
+        if (copiedNode == null) {
+            return null;
+        }
+        return cloneTreeNode(copiedNode);
+    }
 
-	public static void setCopiedNode(ReportTreeNode node) {
-		copiedNode = cloneTreeNode(node);
-	}
+    public static void setCopiedNode(ReportTreeNode node) {
+        copiedNode = cloneTreeNode(node);
+    }
 
-	public static ReportTreeNode cloneTreeNode(ReportTreeNode node) {
-		ReportTreeNode treeNode = (ReportTreeNode) node.clone();
-		treeNode.setUserObject(((TestElement) node.getUserObject()).clone());
-		cloneChildren(treeNode, node);
-		return treeNode;
-	}
+    public static ReportTreeNode cloneTreeNode(ReportTreeNode node) {
+        ReportTreeNode treeNode = (ReportTreeNode) node.clone();
+        treeNode.setUserObject(((TestElement) node.getUserObject()).clone());
+        cloneChildren(treeNode, node);
+        return treeNode;
+    }
 
-	public static void setCopiedNodes(ReportTreeNode nodes[]) {
-		copiedNodes = new ReportTreeNode[nodes.length];
-		for (int i = 0; i < nodes.length; i++) {
-			copiedNodes[i] = cloneTreeNode(nodes[i]);
-		}
-	}
+    public static void setCopiedNodes(ReportTreeNode nodes[]) {
+        copiedNodes = new ReportTreeNode[nodes.length];
+        for (int i = 0; i < nodes.length; i++) {
+            copiedNodes[i] = cloneTreeNode(nodes[i]);
+        }
+    }
 
-	public static ReportTreeNode[] cloneTreeNodes(ReportTreeNode nodes[]) {
-		ReportTreeNode treeNodes[] = new ReportTreeNode[nodes.length];
-		for (int i = 0; i < nodes.length; i++) {
-			treeNodes[i] = cloneTreeNode(nodes[i]);
-		}
-		return treeNodes;
-	}
+    public static ReportTreeNode[] cloneTreeNodes(ReportTreeNode nodes[]) {
+        ReportTreeNode treeNodes[] = new ReportTreeNode[nodes.length];
+        for (int i = 0; i < nodes.length; i++) {
+            treeNodes[i] = cloneTreeNode(nodes[i]);
+        }
+        return treeNodes;
+    }
 
-	private static void cloneChildren(ReportTreeNode to, ReportTreeNode from) {
-		Enumeration enumFrom = from.children();
-		while (enumFrom.hasMoreElements()) {
-			ReportTreeNode child = (ReportTreeNode) enumFrom.nextElement();
-			ReportTreeNode childClone = (ReportTreeNode) child.clone();
-			childClone.setUserObject(((TestElement) child.getUserObject())
-					.clone());
-			to.add(childClone);
-			cloneChildren((ReportTreeNode) to.getLastChild(), child);
-		}
-	}
+    private static void cloneChildren(ReportTreeNode to, ReportTreeNode from) {
+        Enumeration enumFrom = from.children();
+        while (enumFrom.hasMoreElements()) {
+            ReportTreeNode child = (ReportTreeNode) enumFrom.nextElement();
+            ReportTreeNode childClone = (ReportTreeNode) child.clone();
+            childClone.setUserObject(((TestElement) child.getUserObject())
+                    .clone());
+            to.add(childClone);
+            cloneChildren((ReportTreeNode) to.getLastChild(), child);
+        }
+    }
 }

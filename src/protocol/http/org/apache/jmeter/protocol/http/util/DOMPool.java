@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.util;
@@ -35,39 +35,39 @@ import org.w3c.dom.Document;
  * hundred, it will take a long time for the lookup.
  * <p>
  * Created on: Jun 17, 2003<br>
- * 
+ *
  */
 public final class DOMPool {
-	/**
-	 * The cache is created with an initial size of 50. Running a webservice
-	 * test on an old system will likely run into memory or CPU problems long
-	 * before the HashMap is an issue.
-	 */
-	private static final HashMap MEMCACHE = new HashMap(50);
+    /**
+     * The cache is created with an initial size of 50. Running a webservice
+     * test on an old system will likely run into memory or CPU problems long
+     * before the HashMap is an issue.
+     */
+    private static final HashMap MEMCACHE = new HashMap(50);
 
-	/**
-	 * Return a document.
-	 * 
-	 * @param key
-	 * @return Document
-	 */
-	public static synchronized Document getDocument(Object key) {
-		return (Document) MEMCACHE.get(key);
-	}
+    /**
+     * Return a document.
+     *
+     * @param key
+     * @return Document
+     */
+    public static synchronized Document getDocument(Object key) {
+        return (Document) MEMCACHE.get(key);
+    }
 
-	/**
-	 * Add an object to the cache.
-	 * 
-	 * @param key
-	 * @param data
-	 */
-	public static synchronized void putDocument(Object key, Object data) {
-		MEMCACHE.put(key, data);
-	}
+    /**
+     * Add an object to the cache.
+     *
+     * @param key
+     * @param data
+     */
+    public static synchronized void putDocument(Object key, Object data) {
+        MEMCACHE.put(key, data);
+    }
 
-	/**
-	 * Private constructor to prevent instantiation.
-	 */
-	private DOMPool() {
-	}
+    /**
+     * Private constructor to prevent instantiation.
+     */
+    private DOMPool() {
+    }
 }

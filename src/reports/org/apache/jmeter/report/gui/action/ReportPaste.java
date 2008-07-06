@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.report.gui.action;
@@ -29,39 +29,39 @@ import org.apache.jmeter.report.gui.tree.ReportTreeNode;
 
 /**
  * Places a copied JMeterTreeNode under the selected node.
- * 
+ *
  */
 public class ReportPaste extends AbstractAction {
 
-	public static final String PASTE = "Paste"; //$NON-NLS-1$
+    public static final String PASTE = "Paste"; //$NON-NLS-1$
 
-	private static final Set commands = new HashSet();
-	static {
-		commands.add(PASTE);
-	}
+    private static final Set commands = new HashSet();
+    static {
+        commands.add(PASTE);
+    }
 
-	/**
-	 * @see org.apache.jmeter.gui.action.Command#getActionNames()
-	 */
-	public Set getActionNames() {
-		return commands;
-	}
+    /**
+     * @see org.apache.jmeter.gui.action.Command#getActionNames()
+     */
+    public Set getActionNames() {
+        return commands;
+    }
 
-	/**
-	 * @see org.apache.jmeter.gui.action.Command#doAction(ActionEvent)
-	 */
-	public void doAction(ActionEvent e) {
-		ReportTreeNode draggedNodes[] = ReportCopy.getCopiedNodes();
-		ReportTreeListener treeListener = ReportGuiPackage.getInstance().getTreeListener();
-		ReportTreeNode currentNode = treeListener.getCurrentNode();
-		if (ReportDragNDrop.canAddTo(currentNode)) {
-			for (int i = 0; i < draggedNodes.length; i++) {
-				if (draggedNodes[i] != null) {
-					ReportGuiPackage.getInstance().getTreeModel().insertNodeInto(draggedNodes[i], currentNode,
-							currentNode.getChildCount());
-				}
-			}
-		}
-		ReportGuiPackage.getInstance().getMainFrame().repaint();
-	}
+    /**
+     * @see org.apache.jmeter.gui.action.Command#doAction(ActionEvent)
+     */
+    public void doAction(ActionEvent e) {
+        ReportTreeNode draggedNodes[] = ReportCopy.getCopiedNodes();
+        ReportTreeListener treeListener = ReportGuiPackage.getInstance().getTreeListener();
+        ReportTreeNode currentNode = treeListener.getCurrentNode();
+        if (ReportDragNDrop.canAddTo(currentNode)) {
+            for (int i = 0; i < draggedNodes.length; i++) {
+                if (draggedNodes[i] != null) {
+                    ReportGuiPackage.getInstance().getTreeModel().insertNodeInto(draggedNodes[i], currentNode,
+                            currentNode.getChildCount());
+                }
+            }
+        }
+        ReportGuiPackage.getInstance().getMainFrame().repaint();
+    }
 }

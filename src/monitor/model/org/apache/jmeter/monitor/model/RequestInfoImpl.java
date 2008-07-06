@@ -17,75 +17,75 @@
 package org.apache.jmeter.monitor.model;
 
 /**
- * 
- * @version $Revision$ on $Date$
+ *
+ * @version $Revision$
  */
 public class RequestInfoImpl implements RequestInfo {
-	private long bytesReceived = 0;
+    private long bytesReceived = 0;
 
-	private long bytesSent = 0;
+    private long bytesSent = 0;
 
-	private long requestCount = 0;
+    private long requestCount = 0;
 
-	private long errorCount = 0;
+    private long errorCount = 0;
 
-	private int maxTime = 0;
+    private int maxTime = 0;
 
-	private int processingTime = 0;
+    private int processingTime = 0;
 
-	/**
-	 * 
-	 */
-	public RequestInfoImpl() {
-		super();
-	}
+    /**
+     *
+     */
+    public RequestInfoImpl() {
+        super();
+    }
 
-	public long getBytesReceived() {
-		return this.bytesReceived;
-	}
+    public long getBytesReceived() {
+        return this.bytesReceived;
+    }
 
-	public void setBytesReceived(long value) {
-		this.bytesReceived = value;
-	}
+    public void setBytesReceived(long value) {
+        this.bytesReceived = value;
+    }
 
-	public long getBytesSent() {
-		return this.bytesSent;
-	}
+    public long getBytesSent() {
+        return this.bytesSent;
+    }
 
-	public void setBytesSent(long value) {
-		this.bytesSent = value;
-	}
+    public void setBytesSent(long value) {
+        this.bytesSent = value;
+    }
 
-	public long getRequestCount() {
-		return requestCount;
-	}
+    public long getRequestCount() {
+        return requestCount;
+    }
 
-	public void setRequestCount(long value) {
-		this.requestCount = value;
-	}
+    public void setRequestCount(long value) {
+        this.requestCount = value;
+    }
 
-	public long getErrorCount() {
-		return this.errorCount;
-	}
+    public long getErrorCount() {
+        return this.errorCount;
+    }
 
-	public void setErrorCount(long value) {
-		this.errorCount = value;
-	}
+    public void setErrorCount(long value) {
+        this.errorCount = value;
+    }
 
-	public int getMaxTime() {
-		return this.maxTime;
-	}
+    public int getMaxTime() {
+        return this.maxTime;
+    }
 
-	public void setMaxTime(int value) {
-		this.maxTime = value;
-	}
+    public void setMaxTime(int value) {
+        this.maxTime = value;
+    }
 
-	public int getProcessingTime() {
-		return this.processingTime;
-	}
+    public int getProcessingTime() {
+        return this.processingTime;
+    }
 
-	public void setProcessingTime(int value) {
-		this.processingTime = value;
-	}
+    public void setProcessingTime(int value) {
+        this.processingTime = value;
+    }
 
 }

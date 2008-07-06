@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.gui.action;
@@ -34,44 +34,44 @@ import org.apache.log.Logger;
 
 /**
  * Places a copied JMeterTreeNode under the selected node.
- * 
+ *
  */
 public class Paste extends AbstractAction {
-	
-	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final Set commands = new HashSet();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	static {
-		commands.add(ActionNames.PASTE);
-	}
+    private static final Set commands = new HashSet();
 
-	/**
-	 * @see Command#getActionNames()
-	 */
-	public Set getActionNames() {
-		return commands;
-	}
+    static {
+        commands.add(ActionNames.PASTE);
+    }
 
-	/**
-	 * @see Command#doAction(ActionEvent)
-	 */
-	public void doAction(ActionEvent e) {
-		JMeterTreeNode draggedNodes[] = Copy.getCopiedNodes();
-		JMeterTreeListener treeListener = GuiPackage.getInstance().getTreeListener();
-		JMeterTreeNode currentNode = treeListener.getCurrentNode();
-		if (MenuFactory.canAddTo(currentNode, draggedNodes)) {
-			for (int i = 0; i < draggedNodes.length; i++) {
-				if (draggedNodes[i] != null) {
+    /**
+     * @see Command#getActionNames()
+     */
+    public Set getActionNames() {
+        return commands;
+    }
+
+    /**
+     * @see Command#doAction(ActionEvent)
+     */
+    public void doAction(ActionEvent e) {
+        JMeterTreeNode draggedNodes[] = Copy.getCopiedNodes();
+        JMeterTreeListener treeListener = GuiPackage.getInstance().getTreeListener();
+        JMeterTreeNode currentNode = treeListener.getCurrentNode();
+        if (MenuFactory.canAddTo(currentNode, draggedNodes)) {
+            for (int i = 0; i < draggedNodes.length; i++) {
+                if (draggedNodes[i] != null) {
                     addNode(currentNode, draggedNodes[i]);
-				}
-			}
-		} else {
-			Toolkit.getDefaultToolkit().beep();
-		}
-		GuiPackage.getInstance().getMainFrame().repaint();
-	}
-    
+                }
+            }
+        } else {
+            Toolkit.getDefaultToolkit().beep();
+        }
+        GuiPackage.getInstance().getMainFrame().repaint();
+    }
+
     private void addNode(JMeterTreeNode parent, JMeterTreeNode node) {
         try {
             // Add this node

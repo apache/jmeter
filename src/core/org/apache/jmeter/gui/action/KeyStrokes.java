@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.gui.action;
@@ -55,20 +55,20 @@ public final class KeyStrokes {
     public static final KeyStroke OPEN = KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK);
     public static final KeyStroke CLOSE = KeyStroke.getKeyStroke(KeyEvent.VK_L, KeyEvent.CTRL_DOWN_MASK);
     public static final KeyStroke EXIT = KeyStroke.getKeyStroke(KeyEvent.VK_Q, KeyEvent.CTRL_DOWN_MASK);
-	public static final KeyStroke COLLAPSE_ALL = KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, KeyEvent.CTRL_DOWN_MASK);
-	// VK_PLUS + CTRL_DOWN_MASK did not work...
-	public static final KeyStroke EXPAND_ALL = KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK);
-    
+    public static final KeyStroke COLLAPSE_ALL = KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, KeyEvent.CTRL_DOWN_MASK);
+    // VK_PLUS + CTRL_DOWN_MASK did not work...
+    public static final KeyStroke EXPAND_ALL = KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK);
+
 
     /**
      * Check if an event matches the KeyStroke definition.
-     * 
+     *
      * @param e event
      * @param k keystroke
      * @return true if event matches the keystroke definition
      */
     public static boolean matches(KeyEvent e, KeyStroke k){
-    	final int modifiersEx = e.getModifiersEx()  | e.getModifiers();// Hack to get full modifier value
-		return e.getKeyCode() == k.getKeyCode() && modifiersEx == k.getModifiers();
+        final int modifiersEx = e.getModifiersEx()  | e.getModifiers();// Hack to get full modifier value
+        return e.getKeyCode() == k.getKeyCode() && modifiersEx == k.getModifiers();
     }
 }

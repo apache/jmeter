@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jorphan.gui;
@@ -22,48 +22,44 @@ import java.util.Vector;
 
 import javax.swing.JTable;
 
-/**
- * @author Peter Lin
- *
- */
 public class JTreeTable extends JTable {
 
-	/**
-	 * The default implementation will use DefaultTreeTableModel
-	 */
-	public JTreeTable() {
+    /**
+     * The default implementation will use DefaultTreeTableModel
+     */
+    public JTreeTable() {
         super(new DefaultTreeTableModel());
-	}
+    }
 
-	/**
-	 * @param numRows
-	 * @param numColumns
-	 */
-	public JTreeTable(int numRows, int numColumns) {
-		super(numRows, numColumns);
-	}
+    /**
+     * @param numRows
+     * @param numColumns
+     */
+    public JTreeTable(int numRows, int numColumns) {
+        super(numRows, numColumns);
+    }
 
-	/**
-	 * @param dm
-	 */
-	public JTreeTable(TreeTableModel dm) {
-		super(dm);
-	}
+    /**
+     * @param dm
+     */
+    public JTreeTable(TreeTableModel dm) {
+        super(dm);
+    }
 
-	/**
-	 * @param rowData
-	 * @param columnNames
-	 */
-	public JTreeTable(Object[][] rowData, Object[] columnNames) {
-		super(rowData, columnNames);
-	}
+    /**
+     * @param rowData
+     * @param columnNames
+     */
+    public JTreeTable(Object[][] rowData, Object[] columnNames) {
+        super(rowData, columnNames);
+    }
 
-	/**
-	 * @param rowData
-	 * @param columnNames
-	 */
-	public JTreeTable(Vector rowData, Vector columnNames) {
-		super(rowData, columnNames);
-	}
+    /**
+     * @param rowData
+     * @param columnNames
+     */
+    public JTreeTable(Vector rowData, Vector columnNames) {
+        super(rowData, columnNames);
+    }
 
 }

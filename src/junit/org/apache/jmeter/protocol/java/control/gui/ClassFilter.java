@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 package org.apache.jmeter.protocol.java.control.gui;
 
@@ -21,33 +21,27 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- * @author pete
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
 public class ClassFilter {
 
     protected String[] pkgs = new String[0];
-	/**
-	 * 
-	 */
-	public ClassFilter() {
-		super();
-	}
-    
+    /**
+     *
+     */
+    public ClassFilter() {
+        super();
+    }
+
     public void setPackges(String[] pk) {
         this.pkgs = pk;
     }
-    
+
     public void addPackage(String pkg) {
         String[] newpkg = new String[pkgs.length + 1];
         System.arraycopy(pkgs,0,newpkg,0,pkgs.length);
         newpkg[pkgs.length] = pkg;
         pkgs = newpkg;
     }
-    
+
     public boolean include(String text) {
         boolean inc = false;
         for (int idx=0; idx < pkgs.length; idx++) {
@@ -58,7 +52,7 @@ public class ClassFilter {
         }
         return inc;
     }
-    
+
     public Object[] filterArray(List items) {
         Iterator itr = items.iterator();
         ArrayList newlist = new ArrayList();

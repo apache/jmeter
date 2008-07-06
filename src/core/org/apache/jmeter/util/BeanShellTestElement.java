@@ -5,15 +5,15 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations
  * under the License.
- *  
+ *
  */
 
 package org.apache.jmeter.util;
@@ -35,20 +35,20 @@ public abstract class BeanShellTestElement extends AbstractTestElement
     implements Serializable, Cloneable, ThreadListener, TestListener
 {
     private static final Logger log = LoggingManager.getLoggerForClass();
-    
+
     private static final long serialVersionUID = 4;
 
     //++ For TestBean implementations only
-	private String parameters; // passed to file or script
-	
-	private String filename; // file to source (overrides script)
+    private String parameters; // passed to file or script
 
-	private String script; // script (if file not provided)
-	
-	private boolean resetInterpreter = false;
-	//-- For TestBean implementations only
+    private String filename; // file to source (overrides script)
 
-    
+    private String script; // script (if file not provided)
+
+    private boolean resetInterpreter = false;
+    //-- For TestBean implementations only
+
+
     private transient BeanShellInterpreter bshInterpreter = null;
 
     private transient boolean hasInitFile = false;
@@ -77,22 +77,22 @@ public abstract class BeanShellTestElement extends AbstractTestElement
         return bshInterpreter;
     }
 
-	private void init() {
-		parameters=""; // ensure variables are not null
-		filename="";
-		script="";
-		try {
+    private void init() {
+        parameters=""; // ensure variables are not null
+        filename="";
+        script="";
+        try {
             String initFileName = JMeterUtils.getProperty(getInitFileProperty());
             hasInitFile = initFileName != null;
             bshInterpreter = new BeanShellInterpreter(initFileName, log);
-		} catch (ClassNotFoundException e) {
-			log.error("Cannot find BeanShell: "+e.toString());
-		}
-	}
+        } catch (ClassNotFoundException e) {
+            log.error("Cannot find BeanShell: "+e.toString());
+        }
+    }
 
     private Object readResolve() {
-    	init();
-    	return this;
+        init();
+        return this;
     }
 
     public Object clone() {
@@ -102,26 +102,26 @@ public abstract class BeanShellTestElement extends AbstractTestElement
     }
 
     protected Object processFileOrScript(BeanShellInterpreter bsh) throws JMeterException{
-		String fileName = getFilename();
+        String fileName = getFilename();
 
-		bsh.set("FileName", getFilename());//$NON-NLS-1$
-		// Set params as a single line
-		bsh.set("Parameters", getParameters()); // $NON-NLS-1$
-		// and set as an array
-		bsh.set("bsh.args",//$NON-NLS-1$
-				JOrphanUtils.split(getParameters(), " "));//$NON-NLS-1$
+        bsh.set("FileName", getFilename());//$NON-NLS-1$
+        // Set params as a single line
+        bsh.set("Parameters", getParameters()); // $NON-NLS-1$
+        // and set as an array
+        bsh.set("bsh.args",//$NON-NLS-1$
+                JOrphanUtils.split(getParameters(), " "));//$NON-NLS-1$
 
-		if (fileName.length() == 0) {
-			return bsh.eval(getScript());
-		} 
-		return bsh.source(fileName);
+        if (fileName.length() == 0) {
+            return bsh.eval(getScript());
+        }
+        return bsh.source(fileName);
     }
 
     /**
      * Return the script (TestBean version).
      * Must be overridden for subclasses that don't implement TestBean
      * otherwise the clone() method won't work.
-     * 
+     *
      * @return the script to execute
      */
     public String getScript(){
@@ -132,110 +132,110 @@ public abstract class BeanShellTestElement extends AbstractTestElement
      * Set the script (TestBean version).
      * Must be overridden for subclasses that don't implement TestBean
      * otherwise the clone() method won't work.
-     * 
+     *
      * @param s the script to execute (may be blank)
      */
     public void setScript(String s){
         script=s;
     }
 
-	public void threadStarted() {
+    public void threadStarted() {
         if (bshInterpreter == null || !hasInitFile) {
             return;
         }
-		try {
-			bshInterpreter.evalNoLog("threadStarted()"); // $NON-NLS-1$
-		} catch (JMeterException ignored) {
+        try {
+            bshInterpreter.evalNoLog("threadStarted()"); // $NON-NLS-1$
+        } catch (JMeterException ignored) {
             log.debug(getClass().getName() + " : " + ignored.getLocalizedMessage()); // $NON-NLS-1$
-		}
-	}
+        }
+    }
 
-	public void threadFinished() {
+    public void threadFinished() {
         if (bshInterpreter == null || !hasInitFile) {
             return;
         }
-		try {
-			bshInterpreter.evalNoLog("threadFinished()"); // $NON-NLS-1$
-		} catch (JMeterException ignored) {
+        try {
+            bshInterpreter.evalNoLog("threadFinished()"); // $NON-NLS-1$
+        } catch (JMeterException ignored) {
             log.debug(getClass().getName() + " : " + ignored.getLocalizedMessage()); // $NON-NLS-1$
-		}		
-	}
+        }
+    }
 
-	public void testEnded() {
+    public void testEnded() {
         if (bshInterpreter == null || !hasInitFile) {
             return;
         }
-		try {
-			bshInterpreter.evalNoLog("testEnded()"); // $NON-NLS-1$
-		} catch (JMeterException ignored) {
+        try {
+            bshInterpreter.evalNoLog("testEnded()"); // $NON-NLS-1$
+        } catch (JMeterException ignored) {
             log.debug(getClass().getName() + " : " + ignored.getLocalizedMessage()); // $NON-NLS-1$
-		}		
-	}
+        }
+    }
 
-	public void testEnded(String host) {
+    public void testEnded(String host) {
         if (bshInterpreter == null || !hasInitFile) {
             return;
         }
-		try {
-			bshInterpreter.eval((new StringBuffer("testEnded(")) // $NON-NLS-1$
-					.append(host)
-					.append(")") // $NON-NLS-1$
-					.toString()); // $NON-NLS-1$
-		} catch (JMeterException ignored) {
+        try {
+            bshInterpreter.eval((new StringBuffer("testEnded(")) // $NON-NLS-1$
+                    .append(host)
+                    .append(")") // $NON-NLS-1$
+                    .toString()); // $NON-NLS-1$
+        } catch (JMeterException ignored) {
             log.debug(getClass().getName() + " : " + ignored.getLocalizedMessage()); // $NON-NLS-1$
-		}		
-	}
+        }
+    }
 
-	public void testIterationStart(LoopIterationEvent event) {
-		// Not implemented
-	}
+    public void testIterationStart(LoopIterationEvent event) {
+        // Not implemented
+    }
 
-	public void testStarted() {
+    public void testStarted() {
         if (bshInterpreter == null || !hasInitFile) {
             return;
         }
-		try {
-			bshInterpreter.evalNoLog("testStarted()"); // $NON-NLS-1$
-		} catch (JMeterException ignored) {
-			log.debug(getClass().getName() + " : " + ignored.getLocalizedMessage()); // $NON-NLS-1$
-		}		
-	}
-
-	public void testStarted(String host) {
-        if (bshInterpreter == null || !hasInitFile) {
-            return;
-        }
-		try {
-			bshInterpreter.eval((new StringBuffer("testStarted(")) // $NON-NLS-1$
-					.append(host)
-					.append(")") // $NON-NLS-1$
-					.toString()); // $NON-NLS-1$
-		} catch (JMeterException ignored) {
+        try {
+            bshInterpreter.evalNoLog("testStarted()"); // $NON-NLS-1$
+        } catch (JMeterException ignored) {
             log.debug(getClass().getName() + " : " + ignored.getLocalizedMessage()); // $NON-NLS-1$
-		}		
-	}
+        }
+    }
 
-	public String getParameters() {
-		return parameters;
-	}
+    public void testStarted(String host) {
+        if (bshInterpreter == null || !hasInitFile) {
+            return;
+        }
+        try {
+            bshInterpreter.eval((new StringBuffer("testStarted(")) // $NON-NLS-1$
+                    .append(host)
+                    .append(")") // $NON-NLS-1$
+                    .toString()); // $NON-NLS-1$
+        } catch (JMeterException ignored) {
+            log.debug(getClass().getName() + " : " + ignored.getLocalizedMessage()); // $NON-NLS-1$
+        }
+    }
 
-	public void setParameters(String s) {
-		parameters = s;
-	}
+    public String getParameters() {
+        return parameters;
+    }
 
-	public String getFilename() {
-		return filename;
-	}
+    public void setParameters(String s) {
+        parameters = s;
+    }
 
-	public void setFilename(String s) {
-		filename = s;
-	}
-	
-	public boolean isResetInterpreter() {
-	    return resetInterpreter;
-	}
-	
-	public void setResetInterpreter(boolean b) {
-	    resetInterpreter = b;
-	}
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String s) {
+        filename = s;
+    }
+
+    public boolean isResetInterpreter() {
+        return resetInterpreter;
+    }
+
+    public void setResetInterpreter(boolean b) {
+        resetInterpreter = b;
+    }
 }

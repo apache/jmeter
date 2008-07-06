@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.util.accesslog;
@@ -33,76 +33,74 @@ import org.apache.jmeter.testelement.TestElement;
  * it is better to use the standard functional testing tools in JMeter. Using
  * access logs can also reduce the amount of memory needed to run large test
  * plans. <br>
- * 
- * @author Peter Lin<br>
- * @version $Revision$ last updated $Date$ Created
- *          on: Jun 26, 2003<br>
+ *
+ * @version $Revision$
  */
 
 public interface Filter {
 
-	/**
-	 * @param oldextension
-	 * @param newextension
-	 */
-	public void setReplaceExtension(String oldextension, String newextension);
+    /**
+     * @param oldextension
+     * @param newextension
+     */
+    public void setReplaceExtension(String oldextension, String newextension);
 
-	/**
-	 * Include all files in the array.
-	 * 
-	 * @param filenames
-	 */
-	public void includeFiles(String[] filenames);
+    /**
+     * Include all files in the array.
+     *
+     * @param filenames
+     */
+    public void includeFiles(String[] filenames);
 
-	/**
-	 * Exclude all files in the array
-	 * 
-	 * @param filenames
-	 */
-	public void excludeFiles(String[] filenames);
+    /**
+     * Exclude all files in the array
+     *
+     * @param filenames
+     */
+    public void excludeFiles(String[] filenames);
 
-	/**
-	 * Include any log entry that contains the following regular expression
-	 * pattern.
-	 * 
-	 * @param regexp
-	 */
-	public void includePattern(String[] regexp);
+    /**
+     * Include any log entry that contains the following regular expression
+     * pattern.
+     *
+     * @param regexp
+     */
+    public void includePattern(String[] regexp);
 
-	/**
-	 * Exclude any log entry that contains the following regular expression
-	 * pattern.
-	 * 
-	 * @param regexp
-	 */
-	public void excludePattern(String[] regexp);
+    /**
+     * Exclude any log entry that contains the following regular expression
+     * pattern.
+     *
+     * @param regexp
+     */
+    public void excludePattern(String[] regexp);
 
-	/**
-	 * Log parser will call this method to see if a particular entry should be
-	 * filtered or not.
-	 * 
-	 * @param path
-	 * @return boolean
-	 */
-	public boolean isFiltered(String path,TestElement sampler);
+    /**
+     * Log parser will call this method to see if a particular entry should be
+     * filtered or not.
+     *
+     * @param path
+     * @return boolean
+     */
+    public boolean isFiltered(String path,TestElement sampler);
 
-	/**
-	 * In case the user wants to replace the file extension, log parsers should
-	 * call this method. This is useful for regression test plans. If a website
-	 * is migrating from one platform to another and the file extension changes,
-	 * the filter provides an easy way to do it without spending a lot of time.
-	 * 
-	 * @param text
-	 * @return String
-	 */
-	public String filter(String text);
+    /**
+     * In case the user wants to replace the file extension, log parsers should
+     * call this method. This is useful for regression test plans. If a website
+     * is migrating from one platform to another and the file extension changes,
+     * the filter provides an easy way to do it without spending a lot of time.
+     *
+     * @param text
+     * @return String
+     */
+    public String filter(String text);
 
-	/**
-	 * Tell the filter when the parsing has reached the end of the log file and
-	 * is about to begin again. Gives the filter a chance to adjust it's values,
-	 * if needed.
-	 * 
-	 */
-	public void reset();
+    /**
+     * Tell the filter when the parsing has reached the end of the log file and
+     * is about to begin again. Gives the filter a chance to adjust it's values,
+     * if needed.
+     *
+     */
+    public void reset();
 
 }

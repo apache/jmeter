@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.gui;
@@ -46,293 +46,293 @@ import org.apache.log.Logger;
 /**
  * Allows the user to specify if she needs HTTP header services, and give
  * parameters for this service.
- * 
+ *
  */
 public class HeaderPanel extends AbstractConfigGui implements ActionListener
 {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final String ADD_COMMAND = "Add"; // $NON-NLS-1$
+    private static final String ADD_COMMAND = "Add"; // $NON-NLS-1$
 
-	private static final String DELETE_COMMAND = "Delete"; // $NON-NLS-1$
+    private static final String DELETE_COMMAND = "Delete"; // $NON-NLS-1$
 
-	private static final String LOAD_COMMAND = "Load"; // $NON-NLS-1$
+    private static final String LOAD_COMMAND = "Load"; // $NON-NLS-1$
 
-	private static final String SAVE_COMMAND = "Save"; // $NON-NLS-1$
+    private static final String SAVE_COMMAND = "Save"; // $NON-NLS-1$
 
-	private InnerTableModel tableModel;
+    private InnerTableModel tableModel;
 
-	private HeaderManager headerManager;
-	
-	private JTable headerTable;
+    private HeaderManager headerManager;
 
-	private JButton addButton;
+    private JTable headerTable;
 
-	private JButton deleteButton;
+    private JButton addButton;
 
-	private JButton loadButton;
+    private JButton deleteButton;
 
-	private JButton saveButton;
+    private JButton loadButton;
 
-	public HeaderPanel() {
-		headerManager = new HeaderManager();
-		tableModel = new InnerTableModel(headerManager);
-		init();
-	}
+    private JButton saveButton;
 
-	public TestElement createTestElement() {
-		configureTestElement(headerManager);
-		return (TestElement) headerManager.clone();
-	}
+    public HeaderPanel() {
+        headerManager = new HeaderManager();
+        tableModel = new InnerTableModel(headerManager);
+        init();
+    }
 
-	/**
-	 * Modifies a given TestElement to mirror the data in the gui components.
-	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-	 */
-	public void modifyTestElement(TestElement el) {
-		if (headerTable.isEditing()) {// Bug 41905
-			headerTable.getCellEditor().stopCellEditing();
-		}
-		el.clear();
-		el.addTestElement(headerManager);
-		configureTestElement(el);
-	}
+    public TestElement createTestElement() {
+        configureTestElement(headerManager);
+        return (TestElement) headerManager.clone();
+    }
+
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     *
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement el) {
+        if (headerTable.isEditing()) {// Bug 41905
+            headerTable.getCellEditor().stopCellEditing();
+        }
+        el.clear();
+        el.addTestElement(headerManager);
+        configureTestElement(el);
+    }
 
     /**
      * Implements JMeterGUIComponent.clearGui
      */
     public void clearGui() {
         super.clearGui();
-        
+
         tableModel.clearData();
         deleteButton.setEnabled(false);
         saveButton.setEnabled(false);
-    }    
+    }
 
-	public void configure(TestElement el) {
-		headerManager.clear();
-		super.configure(el);
-		headerManager.addTestElement(el);
-		boolean hasRows = tableModel.getRowCount() > 0;
-		deleteButton.setEnabled(hasRows);
-		saveButton.setEnabled(hasRows);
+    public void configure(TestElement el) {
+        headerManager.clear();
+        super.configure(el);
+        headerManager.addTestElement(el);
+        boolean hasRows = tableModel.getRowCount() > 0;
+        deleteButton.setEnabled(hasRows);
+        saveButton.setEnabled(hasRows);
 
-	}
+    }
 
-	public String getLabelResource() {
-		return "header_manager_title"; // $NON-NLS-1$
-	}
+    public String getLabelResource() {
+        return "header_manager_title"; // $NON-NLS-1$
+    }
 
-	private void init() {// called from ctor, so must not be overridable
-		setLayout(new BorderLayout());
-		setBorder(makeBorder());
+    private void init() {// called from ctor, so must not be overridable
+        setLayout(new BorderLayout());
+        setBorder(makeBorder());
 
-		add(makeTitlePanel(), BorderLayout.NORTH);
-		add(createHeaderTablePanel(), BorderLayout.CENTER);
-	}
+        add(makeTitlePanel(), BorderLayout.NORTH);
+        add(createHeaderTablePanel(), BorderLayout.CENTER);
+    }
 
-	public void actionPerformed(ActionEvent e) {
-		String action = e.getActionCommand();
+    public void actionPerformed(ActionEvent e) {
+        String action = e.getActionCommand();
 
-		if (action.equals(DELETE_COMMAND)) {
-			if (tableModel.getRowCount() > 0) {
-				// If a table cell is being edited, we must cancel the editing
-				// before deleting the row.
-				if (headerTable.isEditing()) {
-					TableCellEditor cellEditor = headerTable.getCellEditor(headerTable.getEditingRow(),
-							headerTable.getEditingColumn());
-					cellEditor.cancelCellEditing();
-				}
+        if (action.equals(DELETE_COMMAND)) {
+            if (tableModel.getRowCount() > 0) {
+                // If a table cell is being edited, we must cancel the editing
+                // before deleting the row.
+                if (headerTable.isEditing()) {
+                    TableCellEditor cellEditor = headerTable.getCellEditor(headerTable.getEditingRow(),
+                            headerTable.getEditingColumn());
+                    cellEditor.cancelCellEditing();
+                }
 
-				int rowSelected = headerTable.getSelectedRow();
+                int rowSelected = headerTable.getSelectedRow();
 
-				if (rowSelected != -1) {
-					tableModel.removeRow(rowSelected);
-					tableModel.fireTableDataChanged();
+                if (rowSelected != -1) {
+                    tableModel.removeRow(rowSelected);
+                    tableModel.fireTableDataChanged();
 
-					// Disable the DELETE and SAVE buttons if no rows remaining
-					// after delete
-					if (tableModel.getRowCount() == 0) {
-						deleteButton.setEnabled(false);
-						saveButton.setEnabled(false);
-					}
+                    // Disable the DELETE and SAVE buttons if no rows remaining
+                    // after delete
+                    if (tableModel.getRowCount() == 0) {
+                        deleteButton.setEnabled(false);
+                        saveButton.setEnabled(false);
+                    }
 
-					// Table still contains one or more rows, so highlight
-					// (select) the appropriate one.
-					else {
-						int rowToSelect = rowSelected;
+                    // Table still contains one or more rows, so highlight
+                    // (select) the appropriate one.
+                    else {
+                        int rowToSelect = rowSelected;
 
-						if (rowSelected >= tableModel.getRowCount()) {
-							rowToSelect = rowSelected - 1;
-						}
+                        if (rowSelected >= tableModel.getRowCount()) {
+                            rowToSelect = rowSelected - 1;
+                        }
 
-						headerTable.setRowSelectionInterval(rowToSelect, rowToSelect);
-					}
-				}
-			}
-		} else if (action.equals(ADD_COMMAND)) {
-			// If a table cell is being edited, we should accept the current
-			// value and stop the editing before adding a new row.
-			if (headerTable.isEditing()) {
-				TableCellEditor cellEditor = headerTable.getCellEditor(headerTable.getEditingRow(),
-						headerTable.getEditingColumn());
-				cellEditor.stopCellEditing();
-			}
+                        headerTable.setRowSelectionInterval(rowToSelect, rowToSelect);
+                    }
+                }
+            }
+        } else if (action.equals(ADD_COMMAND)) {
+            // If a table cell is being edited, we should accept the current
+            // value and stop the editing before adding a new row.
+            if (headerTable.isEditing()) {
+                TableCellEditor cellEditor = headerTable.getCellEditor(headerTable.getEditingRow(),
+                        headerTable.getEditingColumn());
+                cellEditor.stopCellEditing();
+            }
 
-			tableModel.addNewRow();
-			tableModel.fireTableDataChanged();
+            tableModel.addNewRow();
+            tableModel.fireTableDataChanged();
 
-			// Enable the DELETE and SAVE buttons if they are currently
-			// disabled.
-			if (!deleteButton.isEnabled()) {
-				deleteButton.setEnabled(true);
-			}
-			if (!saveButton.isEnabled()) {
-				saveButton.setEnabled(true);
-			}
+            // Enable the DELETE and SAVE buttons if they are currently
+            // disabled.
+            if (!deleteButton.isEnabled()) {
+                deleteButton.setEnabled(true);
+            }
+            if (!saveButton.isEnabled()) {
+                saveButton.setEnabled(true);
+            }
 
-			// Highlight (select) the appropriate row.
-			int rowToSelect = tableModel.getRowCount() - 1;
-			headerTable.setRowSelectionInterval(rowToSelect, rowToSelect);
-		} else if (action.equals(LOAD_COMMAND)) {
-			try {
-				final JFileChooser chooser = FileDialoger.promptToOpenFile();
-				if (chooser != null) {
-					headerManager.addFile(chooser.getSelectedFile().getAbsolutePath());
-					tableModel.fireTableDataChanged();
+            // Highlight (select) the appropriate row.
+            int rowToSelect = tableModel.getRowCount() - 1;
+            headerTable.setRowSelectionInterval(rowToSelect, rowToSelect);
+        } else if (action.equals(LOAD_COMMAND)) {
+            try {
+                final JFileChooser chooser = FileDialoger.promptToOpenFile();
+                if (chooser != null) {
+                    headerManager.addFile(chooser.getSelectedFile().getAbsolutePath());
+                    tableModel.fireTableDataChanged();
 
-					if (tableModel.getRowCount() > 0) {
-						deleteButton.setEnabled(true);
-						saveButton.setEnabled(true);
-					}
-				}
-			} catch (IOException ex) {
-				log.error("Could not load headers", ex);
-			}
-		} else if (action.equals(SAVE_COMMAND)) {
-			try {
-				final JFileChooser chooser = FileDialoger.promptToSaveFile(null);
-				if (chooser != null) {
-					headerManager.save(chooser.getSelectedFile().getAbsolutePath());
-				}
-			} catch (IOException ex) {
-				log.error("Could not save headers", ex);
-			}
-		}
-	}
+                    if (tableModel.getRowCount() > 0) {
+                        deleteButton.setEnabled(true);
+                        saveButton.setEnabled(true);
+                    }
+                }
+            } catch (IOException ex) {
+                log.error("Could not load headers", ex);
+            }
+        } else if (action.equals(SAVE_COMMAND)) {
+            try {
+                final JFileChooser chooser = FileDialoger.promptToSaveFile(null);
+                if (chooser != null) {
+                    headerManager.save(chooser.getSelectedFile().getAbsolutePath());
+                }
+            } catch (IOException ex) {
+                log.error("Could not save headers", ex);
+            }
+        }
+    }
 
-	public JPanel createHeaderTablePanel() {
-		// create the JTable that holds header per row
-		headerTable = new JTable(tableModel);
-		headerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		headerTable.setPreferredScrollableViewportSize(new Dimension(100, 70));
+    public JPanel createHeaderTablePanel() {
+        // create the JTable that holds header per row
+        headerTable = new JTable(tableModel);
+        headerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        headerTable.setPreferredScrollableViewportSize(new Dimension(100, 70));
 
-		JPanel panel = new JPanel(new BorderLayout(0, 5));
-		panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
-				JMeterUtils.getResString("headers_stored"))); // $NON-NLS-1$
-		panel.add(new JScrollPane(headerTable), BorderLayout.CENTER);
-		panel.add(createButtonPanel(), BorderLayout.SOUTH);
-		return panel;
-	}
+        JPanel panel = new JPanel(new BorderLayout(0, 5));
+        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+                JMeterUtils.getResString("headers_stored"))); // $NON-NLS-1$
+        panel.add(new JScrollPane(headerTable), BorderLayout.CENTER);
+        panel.add(createButtonPanel(), BorderLayout.SOUTH);
+        return panel;
+    }
 
-	private JButton createButton(String resName, char mnemonic, String command, boolean enabled) {
-		JButton button = new JButton(JMeterUtils.getResString(resName));
-		button.setMnemonic(mnemonic);
-		button.setActionCommand(command);
-		button.setEnabled(enabled);
-		button.addActionListener(this);
-		return button;
-	}
+    private JButton createButton(String resName, char mnemonic, String command, boolean enabled) {
+        JButton button = new JButton(JMeterUtils.getResString(resName));
+        button.setMnemonic(mnemonic);
+        button.setActionCommand(command);
+        button.setEnabled(enabled);
+        button.addActionListener(this);
+        return button;
+    }
 
-	private JPanel createButtonPanel() {
-		boolean tableEmpty = (tableModel.getRowCount() == 0);
+    private JPanel createButtonPanel() {
+        boolean tableEmpty = (tableModel.getRowCount() == 0);
 
-		addButton = createButton("add", 'A', ADD_COMMAND, true); // $NON-NLS-1$
-		deleteButton = createButton("delete", 'D', DELETE_COMMAND, !tableEmpty); // $NON-NLS-1$
-		loadButton = createButton("load", 'L', LOAD_COMMAND, true); // $NON-NLS-1$
-		saveButton = createButton("save", 'S', SAVE_COMMAND, !tableEmpty); // $NON-NLS-1$
+        addButton = createButton("add", 'A', ADD_COMMAND, true); // $NON-NLS-1$
+        deleteButton = createButton("delete", 'D', DELETE_COMMAND, !tableEmpty); // $NON-NLS-1$
+        loadButton = createButton("load", 'L', LOAD_COMMAND, true); // $NON-NLS-1$
+        saveButton = createButton("save", 'S', SAVE_COMMAND, !tableEmpty); // $NON-NLS-1$
 
-		JPanel buttonPanel = new JPanel();
-		buttonPanel.add(addButton);
-		buttonPanel.add(deleteButton);
-		buttonPanel.add(loadButton);
-		buttonPanel.add(saveButton);
-		return buttonPanel;
-	}
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(addButton);
+        buttonPanel.add(deleteButton);
+        buttonPanel.add(loadButton);
+        buttonPanel.add(saveButton);
+        return buttonPanel;
+    }
 
-	private static class InnerTableModel extends AbstractTableModel {
-		private HeaderManager manager;
+    private static class InnerTableModel extends AbstractTableModel {
+        private HeaderManager manager;
 
-		public InnerTableModel(HeaderManager man) {
-			manager = man;
-		}
+        public InnerTableModel(HeaderManager man) {
+            manager = man;
+        }
 
         public void clearData() {
             manager.clear();
             fireTableDataChanged();
         }
 
-		public void removeRow(int row) {
-			manager.remove(row);
-		}
+        public void removeRow(int row) {
+            manager.remove(row);
+        }
 
-		public void addNewRow() {
-			manager.add();
-		}
+        public void addNewRow() {
+            manager.add();
+        }
 
-		public boolean isCellEditable(int row, int column) {
-			// all table cells are editable
-			return true;
-		}
+        public boolean isCellEditable(int row, int column) {
+            // all table cells are editable
+            return true;
+        }
 
-		public Class getColumnClass(int column) {
-			return getValueAt(0, column).getClass();
-		}
+        public Class getColumnClass(int column) {
+            return getValueAt(0, column).getClass();
+        }
 
-		public int getRowCount() {
-			return manager.getHeaders().size();
-		}
+        public int getRowCount() {
+            return manager.getHeaders().size();
+        }
 
-		/**
-		 * Required by table model interface.
-		 */
-		public int getColumnCount() {
-			return manager.getColumnCount();
-		}
+        /**
+         * Required by table model interface.
+         */
+        public int getColumnCount() {
+            return manager.getColumnCount();
+        }
 
-		/**
-		 * Required by table model interface.
-		 */
-		public String getColumnName(int column) {
-			return manager.getColumnName(column);
-		}
+        /**
+         * Required by table model interface.
+         */
+        public String getColumnName(int column) {
+            return manager.getColumnName(column);
+        }
 
-		/**
-		 * Required by table model interface.
-		 */
-		public Object getValueAt(int row, int column) {
-			Header head = manager.getHeader(row);
-			if (column == 0) {
-				return head.getName();
-			} else if (column == 1) {
-				return head.getValue();
-			}
-			return null;
-		}
+        /**
+         * Required by table model interface.
+         */
+        public Object getValueAt(int row, int column) {
+            Header head = manager.getHeader(row);
+            if (column == 0) {
+                return head.getName();
+            } else if (column == 1) {
+                return head.getValue();
+            }
+            return null;
+        }
 
-		/**
-		 * Required by table model interface.
-		 */
-		public void setValueAt(Object value, int row, int column) {
-			Header header = manager.getHeader(row);
+        /**
+         * Required by table model interface.
+         */
+        public void setValueAt(Object value, int row, int column) {
+            Header header = manager.getHeader(row);
 
-			if (column == 0) {
-				header.setName((String) value);
-			} else if (column == 1) {
-				header.setValue((String) value);
-			}
-		}
+            if (column == 0) {
+                header.setName((String) value);
+            } else if (column == 1) {
+                header.setValue((String) value);
+            }
+        }
 
-	}
+    }
 }

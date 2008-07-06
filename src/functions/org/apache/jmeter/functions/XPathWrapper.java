@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -32,13 +32,13 @@ import org.xml.sax.SAXException;
 
 /**
  * This class wraps the XPathFileContainer for use across multiple threads.
- * 
+ *
  * It maintains a list of nodelist containers, one for each file/xpath combination
- * 
+ *
  */
 public class XPathWrapper {
 
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     /*
      * This Map serves two purposes:
@@ -46,78 +46,78 @@ public class XPathWrapper {
      * - ensures only one container per file across all threads
      */
     private static final Map fileContainers = new HashMap();
-    
-	/* The cache of file packs - for faster local access */
-	private static final ThreadLocal filePacks = new ThreadLocal() {
-		protected Object initialValue() {
-			return new HashMap();
-		}
-	};
+
+    /* The cache of file packs - for faster local access */
+    private static final ThreadLocal filePacks = new ThreadLocal() {
+        protected Object initialValue() {
+            return new HashMap();
+        }
+    };
 
     private XPathWrapper() {// Prevent separate instantiation
         super();
     }
 
-	private static XPathFileContainer open(String file, String xpathString) {
+    private static XPathFileContainer open(String file, String xpathString) {
         String tname = Thread.currentThread().getName();
-		log.info(tname+": Opening " + file);
-		XPathFileContainer frcc=null;
-		try {
+        log.info(tname+": Opening " + file);
+        XPathFileContainer frcc=null;
+        try {
             frcc = new XPathFileContainer(file, xpathString);
-		} catch (FileNotFoundException e) {
-			log.warn(e.getLocalizedMessage());
-		} catch (IOException e) {
-			log.warn(e.getLocalizedMessage());
-		} catch (ParserConfigurationException e) {
-			log.warn(e.getLocalizedMessage());
-		} catch (SAXException e) {
-			log.warn(e.getLocalizedMessage());
-		} catch (TransformerException e) {
-			log.warn(e.getLocalizedMessage());
-		}
+        } catch (FileNotFoundException e) {
+            log.warn(e.getLocalizedMessage());
+        } catch (IOException e) {
+            log.warn(e.getLocalizedMessage());
+        } catch (ParserConfigurationException e) {
+            log.warn(e.getLocalizedMessage());
+        } catch (SAXException e) {
+            log.warn(e.getLocalizedMessage());
+        } catch (TransformerException e) {
+            log.warn(e.getLocalizedMessage());
+        }
         return frcc;
-	}
+    }
 
     /**
      * Not thread-safe - must be called from a synchronized method.
-     * 
+     *
      * @param file
      * @param xpathString
      * @return the next row from the file container
      */
     public static String getXPathString(String file, String xpathString) {
-		Map my = (Map) filePacks.get();
+        Map my = (Map) filePacks.get();
         String key = file+xpathString;
         XPathFileContainer xpfc = (XPathFileContainer) my.get(key);
-		if (xpfc == null) // We don't have a local copy
-		{
+        if (xpfc == null) // We don't have a local copy
+        {
             synchronized(fileContainers){
                 xpfc = (XPathFileContainer) fileContainers.get(key);
                 if (xpfc == null) { // There's no global copy either
-                    xpfc=open(file, xpathString);                    
+                    xpfc=open(file, xpathString);
                 }
                 if (xpfc != null) {
                     fileContainers.put(key, xpfc);// save the global copy
                 }
             }
-			// TODO improve the error handling
-			if (xpfc == null) {
-				log.error("XPathWrapper is null!");
-				return ""; //$NON-NLS-1$
-			}
+            // TODO improve the error handling
+            if (xpfc == null) {
+                log.error("XPathWrapper is null!");
+                return ""; //$NON-NLS-1$
+            }
             my.put(key,xpfc); // save our local copy
-		}
+        }
         int currentRow = xpfc.nextRow();
         log.debug("getting match number " + currentRow);
         return xpfc.getXPathString(currentRow);
-	}
+    }
 
-	public static void clearAll() {
-		log.debug("clearAll()");
-		Map my = (Map) filePacks.get();
+    public static void clearAll() {
+        log.debug("clearAll()");
+        Map my = (Map) filePacks.get();
         my.clear();
         String tname = Thread.currentThread().getName();
         log.info(tname+": clearing container");
         fileContainers.clear();
-	}
+    }
 }

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.samplers;
@@ -28,60 +28,59 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author unascribed
  * @version $Revision$
  */
 public class RemoteTestListenerWrapper extends AbstractTestElement implements TestListener, Serializable, NoThreadClone {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private RemoteSampleListener listener;
+    private RemoteSampleListener listener;
 
-	public RemoteTestListenerWrapper() {
-	}
+    public RemoteTestListenerWrapper() {
+    }
 
-	public RemoteTestListenerWrapper(RemoteSampleListener l) {
-		listener = l;
-	}
+    public RemoteTestListenerWrapper(RemoteSampleListener l) {
+        listener = l;
+    }
 
-	public void testStarted() {
-		try {
-			listener.testStarted();
-		} catch (Exception ex) {
-			log.error("", ex); // $NON-NLS-1$
-		}
+    public void testStarted() {
+        try {
+            listener.testStarted();
+        } catch (Exception ex) {
+            log.error("", ex); // $NON-NLS-1$
+        }
 
-	}
+    }
 
-	public void testEnded() {
-		try {
-			listener.testEnded();
-		} catch (Exception ex) {
-			log.error("", ex); // $NON-NLS-1$
-		}
-	}
+    public void testEnded() {
+        try {
+            listener.testEnded();
+        } catch (Exception ex) {
+            log.error("", ex); // $NON-NLS-1$
+        }
+    }
 
-	public void testStarted(String host) {
-		try {
-			listener.testStarted(host);
-		} catch (Exception ex) {
-			log.error("", ex); // $NON-NLS-1$
-		}
-	}
+    public void testStarted(String host) {
+        try {
+            listener.testStarted(host);
+        } catch (Exception ex) {
+            log.error("", ex); // $NON-NLS-1$
+        }
+    }
 
-	public void testEnded(String host) {
-		try {
-			listener.testEnded(host);
-		} catch (Exception ex) {
-			log.error("", ex); // $NON-NLS-1$
-		}
-	}
+    public void testEnded(String host) {
+        try {
+            listener.testEnded(host);
+        } catch (Exception ex) {
+            log.error("", ex); // $NON-NLS-1$
+        }
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see TestListener#testIterationStart(LoopIterationEvent)
-	 */
-	public void testIterationStart(LoopIterationEvent event) {
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see TestListener#testIterationStart(LoopIterationEvent)
+     */
+    public void testIterationStart(LoopIterationEvent event) {
+    }
 
 }

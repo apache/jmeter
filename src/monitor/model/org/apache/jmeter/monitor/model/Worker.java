@@ -18,47 +18,47 @@
 package org.apache.jmeter.monitor.model;
 
 /**
- * @version $Revision$ on $Date$
+ * @version $Revision$
  */
 public interface Worker {
-	int getRequestProcessingTime();
+    int getRequestProcessingTime();
 
-	void setRequestProcessingTime(int value);
+    void setRequestProcessingTime(int value);
 
-	long getRequestBytesSent();
+    long getRequestBytesSent();
 
-	void setRequestBytesSent(long value);
+    void setRequestBytesSent(long value);
 
-	java.lang.String getCurrentQueryString();
+    java.lang.String getCurrentQueryString();
 
-	void setCurrentQueryString(java.lang.String value);
+    void setCurrentQueryString(java.lang.String value);
 
-	java.lang.String getRemoteAddr();
+    java.lang.String getRemoteAddr();
 
-	void setRemoteAddr(java.lang.String value);
+    void setRemoteAddr(java.lang.String value);
 
-	java.lang.String getCurrentUri();
+    java.lang.String getCurrentUri();
 
-	void setCurrentUri(java.lang.String value);
+    void setCurrentUri(java.lang.String value);
 
-	java.lang.String getStage();
+    java.lang.String getStage();
 
-	void setStage(java.lang.String value);
+    void setStage(java.lang.String value);
 
-	java.lang.String getVirtualHost();
+    java.lang.String getVirtualHost();
 
-	void setVirtualHost(java.lang.String value);
+    void setVirtualHost(java.lang.String value);
 
-	java.lang.String getProtocol();
+    java.lang.String getProtocol();
 
-	void setProtocol(java.lang.String value);
+    void setProtocol(java.lang.String value);
 
-	long getRequestBytesReceived();
+    long getRequestBytesReceived();
 
-	void setRequestBytesReceived(long value);
+    void setRequestBytesReceived(long value);
 
-	java.lang.String getMethod();
+    java.lang.String getMethod();
 
-	void setMethod(java.lang.String value);
+    void setMethod(java.lang.String value);
 
 }

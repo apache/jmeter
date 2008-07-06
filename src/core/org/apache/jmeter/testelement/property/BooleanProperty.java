@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.testelement.property;
@@ -24,71 +24,71 @@ import org.apache.jmeter.testelement.TestElement;
  * @version $Revision$
  */
 public class BooleanProperty extends AbstractProperty {
-	private boolean value;
+    private boolean value;
 
-	private transient boolean savedValue;
+    private transient boolean savedValue;
 
-	public BooleanProperty(String name, boolean v) {
-		super(name);
-		value = v;
-	}
+    public BooleanProperty(String name, boolean v) {
+        super(name);
+        value = v;
+    }
 
-	public BooleanProperty() {
-		super();
-	}
+    public BooleanProperty() {
+        super();
+    }
 
-	public void setObjectValue(Object v) {
-		if (v instanceof Boolean) {
-			value = ((Boolean) v).booleanValue();
-		} else {
-			value = Boolean.valueOf(v.toString()).booleanValue();
-		}
-	}
+    public void setObjectValue(Object v) {
+        if (v instanceof Boolean) {
+            value = ((Boolean) v).booleanValue();
+        } else {
+            value = Boolean.valueOf(v.toString()).booleanValue();
+        }
+    }
 
-	/**
-	 * @see JMeterProperty#getStringValue()
-	 */
-	public String getStringValue() {
-		return Boolean.toString(value);
-	}
+    /**
+     * @see JMeterProperty#getStringValue()
+     */
+    public String getStringValue() {
+        return Boolean.toString(value);
+    }
 
-	/**
-	 * @see JMeterProperty#getObjectValue()
-	 */
-	public Object getObjectValue() {
-		return Boolean.valueOf(value);
-	}
+    /**
+     * @see JMeterProperty#getObjectValue()
+     */
+    public Object getObjectValue() {
+        return Boolean.valueOf(value);
+    }
 
-	public Object clone() {
-		BooleanProperty prop = (BooleanProperty) super.clone();
-		prop.value = value;
-		return prop;
-	}
+    public Object clone() {
+        BooleanProperty prop = (BooleanProperty) super.clone();
+        prop.value = value;
+        return prop;
+    }
 
-	/**
-	 * @see JMeterProperty#getBooleanValue()
-	 */
-	public boolean getBooleanValue() {
-		return value;
-	}
+    /**
+     * @see JMeterProperty#getBooleanValue()
+     */
+    public boolean getBooleanValue() {
+        return value;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.testelement.property.JMeterProperty#setRunningVersion(boolean)
-	 */
-	public void setRunningVersion(boolean runningVersion) {
-		savedValue = value;
-		super.setRunningVersion(runningVersion);
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.testelement.property.JMeterProperty#setRunningVersion(boolean)
+     */
+    public void setRunningVersion(boolean runningVersion) {
+        savedValue = value;
+        super.setRunningVersion(runningVersion);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.testelement.property.JMeterProperty#recoverRunningVersion(org.apache.jmeter.testelement.TestElement)
-	 */
-	public void recoverRunningVersion(TestElement owner) {
-		value = savedValue;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.testelement.property.JMeterProperty#recoverRunningVersion(org.apache.jmeter.testelement.TestElement)
+     */
+    public void recoverRunningVersion(TestElement owner) {
+        value = savedValue;
+    }
 
 }
