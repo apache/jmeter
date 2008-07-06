@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.visualizers;
@@ -24,7 +24,7 @@ package org.apache.jmeter.visualizers;
  */
 
 public interface GraphListener {
-	public void updateGui(Sample s);
+    public void updateGui(Sample s);
 
-	public void updateGui();
+    public void updateGui();
 }

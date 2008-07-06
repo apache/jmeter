@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.control.gui;
@@ -33,53 +33,53 @@ public class IncludeControllerGui extends AbstractControllerGui
        // implements UnsharedComponent
 {
 
-    private FilePanel includePanel = 
+    private FilePanel includePanel =
         new FilePanel(JMeterUtils.getResString("include_path"), ".jmx"); //$NON-NLS-1$ //$NON-NLS-2$
 
-	/**
-	 * Initializes the gui panel for the ModuleController instance.
-	 */
-	public IncludeControllerGui() {
-		init();
-	}
+    /**
+     * Initializes the gui panel for the ModuleController instance.
+     */
+    public IncludeControllerGui() {
+        init();
+    }
 
-	public String getLabelResource() {
-		return "include_controller";//$NON-NLS-1$
-	}
+    public String getLabelResource() {
+        return "include_controller";//$NON-NLS-1$
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(TestElement)
-	 */
-	public void configure(TestElement el) {
-		super.configure(el);
-		IncludeController controller = (IncludeController) el;
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(TestElement)
+     */
+    public void configure(TestElement el) {
+        super.configure(el);
+        IncludeController controller = (IncludeController) el;
         this.includePanel.setFilename(controller.getIncludePath());
-	}
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
-	 */
-	public TestElement createTestElement() {
-		IncludeController mc = new IncludeController();
-		configureTestElement(mc);
-		return mc;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
+     */
+    public TestElement createTestElement() {
+        IncludeController mc = new IncludeController();
+        configureTestElement(mc);
+        return mc;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-	 */
-	public void modifyTestElement(TestElement element) {
-		configureTestElement(element);
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement element) {
+        configureTestElement(element);
         IncludeController controller = (IncludeController)element;
         controller.setIncludePath(this.includePanel.getFilename());
-	}
-    
+    }
+
     /**
      * Implements JMeterGUIComponent.clearGui
      */
@@ -88,26 +88,26 @@ public class IncludeControllerGui extends AbstractControllerGui
         includePanel.clearGui();
     }
 
-	public JPopupMenu createPopupMenu() {
-		JPopupMenu menu = new JPopupMenu();
-		JMenu addMenu = MenuFactory.makeMenus(new String[] {
-				MenuFactory.CONFIG_ELEMENTS, 
-				MenuFactory.ASSERTIONS,
-				MenuFactory.TIMERS, 
-				MenuFactory.LISTENERS, 
-				}, JMeterUtils.getResString("add"), // $NON-NLS-1$
-				ActionNames.ADD);
-		menu.add(addMenu);
-		MenuFactory.addEditMenu(menu, true);
-		MenuFactory.addFileMenu(menu);
-		return menu;
-	}
+    public JPopupMenu createPopupMenu() {
+        JPopupMenu menu = new JPopupMenu();
+        JMenu addMenu = MenuFactory.makeMenus(new String[] {
+                MenuFactory.CONFIG_ELEMENTS,
+                MenuFactory.ASSERTIONS,
+                MenuFactory.TIMERS,
+                MenuFactory.LISTENERS,
+                }, JMeterUtils.getResString("add"), // $NON-NLS-1$
+                ActionNames.ADD);
+        menu.add(addMenu);
+        MenuFactory.addEditMenu(menu, true);
+        MenuFactory.addFileMenu(menu);
+        return menu;
+    }
 
-	private void init() {
-		setLayout(new VerticalLayout(5, VerticalLayout.BOTH, VerticalLayout.TOP));
-		setBorder(makeBorder());
-		add(makeTitlePanel());
+    private void init() {
+        setLayout(new VerticalLayout(5, VerticalLayout.BOTH, VerticalLayout.TOP));
+        setBorder(makeBorder());
+        add(makeTitlePanel());
 
         add(includePanel);
-	}    
+    }
 }

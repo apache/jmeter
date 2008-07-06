@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 package org.apache.jmeter.extractor;
 
@@ -51,7 +51,7 @@ import org.xml.sax.SAXException;
 /**
  * Extracts text from (X)HTML response using XPath query language
  * Example XPath queries:
- * <dl> 
+ * <dl>
  * <dt>/html/head/title</dt>
  *     <dd>extracts Title from HTML response</dd>
  * <dt>//form[@name='countryForm']//select[@name='country']/option[text()='Czech Republic'])/@value
@@ -69,139 +69,139 @@ import org.xml.sax.SAXException;
 public class XPathExtractor extends AbstractTestElement implements
         PostProcessor, Serializable {
     private static final Logger log = LoggingManager.getLoggerForClass();
-	private static final String MATCH_NR = "matchNr"; // $NON-NLS-1$
-	
-	//+ JMX file attributes
-	private static final String XPATH_QUERY     = "XPathExtractor.xpathQuery"; // $NON-NLS-1$
-	private static final String REFNAME         = "XPathExtractor.refname"; // $NON-NLS-1$
-	private static final String DEFAULT         = "XPathExtractor.default"; // $NON-NLS-1$
-	private static final String TOLERANT        = "XPathExtractor.tolerant"; // $NON-NLS-1$
-	private static final String NAMESPACE       = "XPathExtractor.namespace"; // $NON-NLS-1$
-	private static final String QUIET           = "XPathExtractor.quiet"; // $NON-NLS-1$
-	private static final String REPORT_ERRORS   = "XPathExtractor.report_errors"; // $NON-NLS-1$
-	private static final String SHOW_WARNINGS   = "XPathExtractor.show_warnings"; // $NON-NLS-1$
-	//- JMX file attributes
+    private static final String MATCH_NR = "matchNr"; // $NON-NLS-1$
+
+    //+ JMX file attributes
+    private static final String XPATH_QUERY     = "XPathExtractor.xpathQuery"; // $NON-NLS-1$
+    private static final String REFNAME         = "XPathExtractor.refname"; // $NON-NLS-1$
+    private static final String DEFAULT         = "XPathExtractor.default"; // $NON-NLS-1$
+    private static final String TOLERANT        = "XPathExtractor.tolerant"; // $NON-NLS-1$
+    private static final String NAMESPACE       = "XPathExtractor.namespace"; // $NON-NLS-1$
+    private static final String QUIET           = "XPathExtractor.quiet"; // $NON-NLS-1$
+    private static final String REPORT_ERRORS   = "XPathExtractor.report_errors"; // $NON-NLS-1$
+    private static final String SHOW_WARNINGS   = "XPathExtractor.show_warnings"; // $NON-NLS-1$
+    //- JMX file attributes
 
 
     private String concat(String s1,String s2){
         return new StringBuffer(s1).append("_").append(s2).toString(); // $NON-NLS-1$
     }
-    
-	/**
-	 * Do the job - extract value from (X)HTML response using XPath Query.
-	 * Return value as variable defined by REFNAME. Returns DEFAULT value
-	 * if not found.
-	 */
+
+    /**
+     * Do the job - extract value from (X)HTML response using XPath Query.
+     * Return value as variable defined by REFNAME. Returns DEFAULT value
+     * if not found.
+     */
     public void process() {
-        JMeterContext context = getThreadContext();        
-		JMeterVariables vars = context.getVariables();
-		String refName = getRefName();
-		vars.put(refName, getDefaultValue());
+        JMeterContext context = getThreadContext();
+        JMeterVariables vars = context.getVariables();
+        String refName = getRefName();
+        vars.put(refName, getDefaultValue());
         vars.put(concat(refName,MATCH_NR), "0"); // In case parse fails // $NON-NLS-1$
         vars.remove(concat(refName,"1")); // In case parse fails // $NON-NLS-1$
-		final SampleResult previousResult = context.getPreviousResult();
+        final SampleResult previousResult = context.getPreviousResult();
 
-		try{			
-			Document d = parseResponse(previousResult);		
-			getValuesForXPath(d,getXPathQuery(),vars, refName);
-		}catch(IOException e){// Should not happen
-			final String errorMessage = "error on ("+getXPathQuery()+")";
-			log.error(errorMessage,e);
-			throw new JMeterError(errorMessage,e);
-		} catch (ParserConfigurationException e) {// Should not happen
-			final String errrorMessage = "error on ("+getXPathQuery()+")";
-			log.error(errrorMessage,e);
-			throw new JMeterError(errrorMessage,e);
-		} catch (SAXException e) {// Can happen for bad input document
-			log.warn("error on ("+getXPathQuery()+")"+e.getLocalizedMessage());
-		} catch (TransformerException e) {// Can happen for incorrect XPath expression
-			log.warn("error on ("+getXPathQuery()+")"+e.getLocalizedMessage());
-		} catch (TidyException e) {
-			AssertionResult ass = new AssertionResult("TidyException"); // $NON-NLS-1$
-			ass.setFailure(true);
-			ass.setFailureMessage(e.getMessage());
-			previousResult.addAssertionResult(ass);
-			previousResult.setSuccessful(false);
-		}
-    }    
-            
+        try{
+            Document d = parseResponse(previousResult);
+            getValuesForXPath(d,getXPathQuery(),vars, refName);
+        }catch(IOException e){// Should not happen
+            final String errorMessage = "error on ("+getXPathQuery()+")";
+            log.error(errorMessage,e);
+            throw new JMeterError(errorMessage,e);
+        } catch (ParserConfigurationException e) {// Should not happen
+            final String errrorMessage = "error on ("+getXPathQuery()+")";
+            log.error(errrorMessage,e);
+            throw new JMeterError(errrorMessage,e);
+        } catch (SAXException e) {// Can happen for bad input document
+            log.warn("error on ("+getXPathQuery()+")"+e.getLocalizedMessage());
+        } catch (TransformerException e) {// Can happen for incorrect XPath expression
+            log.warn("error on ("+getXPathQuery()+")"+e.getLocalizedMessage());
+        } catch (TidyException e) {
+            AssertionResult ass = new AssertionResult("TidyException"); // $NON-NLS-1$
+            ass.setFailure(true);
+            ass.setFailureMessage(e.getMessage());
+            previousResult.addAssertionResult(ass);
+            previousResult.setSuccessful(false);
+        }
+    }
+
    public Object clone() {
-		XPathExtractor cloned = (XPathExtractor) super.clone();
-		return cloned;
-	}    
-        
+        XPathExtractor cloned = (XPathExtractor) super.clone();
+        return cloned;
+    }
+
     /*============= object properties ================*/
     public void setXPathQuery(String val){
-        setProperty(XPATH_QUERY,val);   
+        setProperty(XPATH_QUERY,val);
     }
-    
+
     public String getXPathQuery(){
         return getPropertyAsString(XPATH_QUERY);
     }
-  
-	public void setRefName(String refName) {
-		setProperty(REFNAME, refName);
-	}
 
-	public String getRefName() {
-		return getPropertyAsString(REFNAME);
-	}
-    
+    public void setRefName(String refName) {
+        setProperty(REFNAME, refName);
+    }
+
+    public String getRefName() {
+        return getPropertyAsString(REFNAME);
+    }
+
     public void setDefaultValue(String val) {
-		setProperty(DEFAULT, val);
-	}
+        setProperty(DEFAULT, val);
+    }
 
-	public String getDefaultValue() {
-		return getPropertyAsString(DEFAULT);
-	}
-	
+    public String getDefaultValue() {
+        return getPropertyAsString(DEFAULT);
+    }
+
     public void setTolerant(boolean val) {
-		setProperty(new BooleanProperty(TOLERANT, val));
-	}
+        setProperty(new BooleanProperty(TOLERANT, val));
+    }
 
-	public boolean isTolerant() {
-		return getPropertyAsBoolean(TOLERANT);
-	}
+    public boolean isTolerant() {
+        return getPropertyAsBoolean(TOLERANT);
+    }
 
-	public void setNameSpace(boolean val) {
-		setProperty(new BooleanProperty(NAMESPACE, val));
-	}
+    public void setNameSpace(boolean val) {
+        setProperty(new BooleanProperty(NAMESPACE, val));
+    }
 
-	public boolean useNameSpace() {
-		return getPropertyAsBoolean(NAMESPACE);
-	}
+    public boolean useNameSpace() {
+        return getPropertyAsBoolean(NAMESPACE);
+    }
 
-	public void setReportErrors(boolean val) {
-		    setProperty(REPORT_ERRORS, val, false);
-	}
+    public void setReportErrors(boolean val) {
+            setProperty(REPORT_ERRORS, val, false);
+    }
 
-	public boolean reportErrors() {
-		return getPropertyAsBoolean(REPORT_ERRORS, false);
-	}
+    public boolean reportErrors() {
+        return getPropertyAsBoolean(REPORT_ERRORS, false);
+    }
 
-	public void setShowWarnings(boolean val) {
-	    setProperty(SHOW_WARNINGS, val, false);
-	}
+    public void setShowWarnings(boolean val) {
+        setProperty(SHOW_WARNINGS, val, false);
+    }
 
-	public boolean showWarnings() {
-		return getPropertyAsBoolean(SHOW_WARNINGS, false);
-	}
+    public boolean showWarnings() {
+        return getPropertyAsBoolean(SHOW_WARNINGS, false);
+    }
 
-	public void setQuiet(boolean val) {
-	    setProperty(QUIET, val, true);
-	}
+    public void setQuiet(boolean val) {
+        setProperty(QUIET, val, true);
+    }
 
-	public boolean isQuiet() {
-		return getPropertyAsBoolean(QUIET, true);
-	}
+    public boolean isQuiet() {
+        return getPropertyAsBoolean(QUIET, true);
+    }
 
-	/*================= internal business =================*/
+    /*================= internal business =================*/
     /**
      * Converts (X)HTML response to DOM object Tree.
      * This version cares of charset of response.
      * @param result
      * @return
-     * 
+     *
      */
     private Document parseResponse(SampleResult result)
       throws UnsupportedEncodingException, IOException, ParserConfigurationException,SAXException,TidyException
@@ -231,43 +231,43 @@ public class XPathExtractor extends AbstractTestElement implements
      throws TransformerException
     {
         String val = null;
-     	XObject xObject = XPathAPI.eval(d, query);
+         XObject xObject = XPathAPI.eval(d, query);
         final int objectType = xObject.getType();
         if (objectType == XObject.CLASS_NODESET) {
-	        NodeList matches = xObject.nodelist();
-			int length = matches.getLength();
-	        vars.put(concat(refName,MATCH_NR), String.valueOf(length));
-	        for (int i = 0 ; i < length; i++) {
-	            Node match = matches.item(i);
-				if ( match instanceof Element){
-				// elements have empty nodeValue, but we are usually interested in their content
-				   final Node firstChild = match.getFirstChild();
-				   if (firstChild != null) {
-					   val = firstChild.getNodeValue();
-				   } else {
-					   val = match.getNodeValue(); // TODO is this correct?
-				   }
-				} else {				
-				   val = match.getNodeValue();
-				}
-	            if ( val!=null){
-	                if (i==0) {// Treat 1st match specially
-	                    vars.put(refName,val);                    
-	                }
-	                vars.put(concat(refName,String.valueOf(i+1)),val);
-	            }
-			}
-	        vars.remove(concat(refName,String.valueOf(length+1)));
+            NodeList matches = xObject.nodelist();
+            int length = matches.getLength();
+            vars.put(concat(refName,MATCH_NR), String.valueOf(length));
+            for (int i = 0 ; i < length; i++) {
+                Node match = matches.item(i);
+                if ( match instanceof Element){
+                // elements have empty nodeValue, but we are usually interested in their content
+                   final Node firstChild = match.getFirstChild();
+                   if (firstChild != null) {
+                       val = firstChild.getNodeValue();
+                   } else {
+                       val = match.getNodeValue(); // TODO is this correct?
+                   }
+                } else {
+                   val = match.getNodeValue();
+                }
+                if ( val!=null){
+                    if (i==0) {// Treat 1st match specially
+                        vars.put(refName,val);
+                    }
+                    vars.put(concat(refName,String.valueOf(i+1)),val);
+                }
+            }
+            vars.remove(concat(refName,String.valueOf(length+1)));
         } else if (objectType == XObject.CLASS_NULL
                 || objectType == XObject.CLASS_UNKNOWN
                 || objectType == XObject.CLASS_UNRESOLVEDVARIABLE) {
             log.warn("Unexpected object type: "+xObject.getTypeString()+" returned for: "+getXPathQuery());
-     	} else {
-	        val = xObject.toString();
-	        vars.put(concat(refName, MATCH_NR), "1");
-	        vars.put(refName, val);
-	        vars.put(concat(refName, "1"), val);
-	        vars.remove(concat(refName, "2"));
-	    }
+         } else {
+            val = xObject.toString();
+            vars.put(concat(refName, MATCH_NR), "1");
+            vars.put(refName, val);
+            vars.put(concat(refName, "1"), val);
+            vars.remove(concat(refName, "2"));
+        }
     }
 }

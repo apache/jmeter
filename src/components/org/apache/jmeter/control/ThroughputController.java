@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.control;
@@ -35,208 +35,208 @@ import org.apache.jmeter.testelement.property.StringProperty;
  * it is executed, either by the total number of times the user wants the
  * controller executed (BYNUMBER) or by the percentage of time it is called
  * (BYPERCENT)
- * 
+ *
  * The current implementation executes the first N samples (BYNUMBER)
  * or the last N% of samples (BYPERCENT).
  */
 public class ThroughputController extends GenericController implements Serializable, LoopIterationListener,
-		TestListener {
+        TestListener {
 
-	public static final int BYNUMBER = 0;
+    public static final int BYNUMBER = 0;
 
-	public static final int BYPERCENT = 1;
+    public static final int BYPERCENT = 1;
 
-	private static final String STYLE = "ThroughputController.style";// $NON-NLS-1$
+    private static final String STYLE = "ThroughputController.style";// $NON-NLS-1$
 
-	private static final String PERTHREAD = "ThroughputController.perThread";// $NON-NLS-1$
+    private static final String PERTHREAD = "ThroughputController.perThread";// $NON-NLS-1$
 
-	private static final String MAXTHROUGHPUT = "ThroughputController.maxThroughput";// $NON-NLS-1$
+    private static final String MAXTHROUGHPUT = "ThroughputController.maxThroughput";// $NON-NLS-1$
 
-	private static final String PERCENTTHROUGHPUT = "ThroughputController.percentThroughput";// $NON-NLS-1$
+    private static final String PERCENTTHROUGHPUT = "ThroughputController.percentThroughput";// $NON-NLS-1$
 
-	private static int globalNumExecutions;
+    private static int globalNumExecutions;
 
-	private static int globalIteration;
+    private static int globalIteration;
 
-	private static final Object counterLock = new Object(); // ensure counts are updated correctly
+    private static final Object counterLock = new Object(); // ensure counts are updated correctly
 
-	/**
-	 * Number of iterations on which we've chosen to deliver samplers.
-	 */
-	private int numExecutions = 0;
+    /**
+     * Number of iterations on which we've chosen to deliver samplers.
+     */
+    private int numExecutions = 0;
 
-	/**
-	 * Index of the current iteration. 0-based.
-	 */
-	private int iteration = -1;
+    /**
+     * Index of the current iteration. 0-based.
+     */
+    private int iteration = -1;
 
-	/**
-	 * Whether to deliver samplers on this iteration.
-	 */
-	private boolean runThisTime;
+    /**
+     * Whether to deliver samplers on this iteration.
+     */
+    private boolean runThisTime;
 
-	public ThroughputController() {
-		setStyle(BYNUMBER);
-		setPerThread(true);
-		setMaxThroughput(1);
-		setPercentThroughput(100);
-		runThisTime = false;
-	}
+    public ThroughputController() {
+        setStyle(BYNUMBER);
+        setPerThread(true);
+        setMaxThroughput(1);
+        setPercentThroughput(100);
+        runThisTime = false;
+    }
 
-	public void setStyle(int style) {
-		setProperty(new IntegerProperty(STYLE, style));
-	}
+    public void setStyle(int style) {
+        setProperty(new IntegerProperty(STYLE, style));
+    }
 
-	public int getStyle() {
-		return getPropertyAsInt(STYLE);
-	}
+    public int getStyle() {
+        return getPropertyAsInt(STYLE);
+    }
 
-	public void setPerThread(boolean perThread) {
-		setProperty(new BooleanProperty(PERTHREAD, perThread));
-	}
+    public void setPerThread(boolean perThread) {
+        setProperty(new BooleanProperty(PERTHREAD, perThread));
+    }
 
-	public boolean isPerThread() {
-		return getPropertyAsBoolean(PERTHREAD);
-	}
+    public boolean isPerThread() {
+        return getPropertyAsBoolean(PERTHREAD);
+    }
 
-	public void setMaxThroughput(int maxThroughput) {
-		setProperty(new IntegerProperty(MAXTHROUGHPUT, maxThroughput));
-	}
+    public void setMaxThroughput(int maxThroughput) {
+        setProperty(new IntegerProperty(MAXTHROUGHPUT, maxThroughput));
+    }
 
-	public void setMaxThroughput(String maxThroughput) {
-		setProperty(new StringProperty(MAXTHROUGHPUT, maxThroughput));
-	}
+    public void setMaxThroughput(String maxThroughput) {
+        setProperty(new StringProperty(MAXTHROUGHPUT, maxThroughput));
+    }
 
-	public String getMaxThroughput() {
-		return getPropertyAsString(MAXTHROUGHPUT);
-	}
+    public String getMaxThroughput() {
+        return getPropertyAsString(MAXTHROUGHPUT);
+    }
 
-	protected int getMaxThroughputAsInt() {
-		JMeterProperty prop = getProperty(MAXTHROUGHPUT);
-		int retVal = 1;
-		if (prop instanceof IntegerProperty) {
-			retVal = (((IntegerProperty) prop).getIntValue());
-		} else {
-			try {
-				retVal = Integer.parseInt(prop.getStringValue());
-			} catch (NumberFormatException e) {
-			}
-		}
-		return retVal;
-	}
+    protected int getMaxThroughputAsInt() {
+        JMeterProperty prop = getProperty(MAXTHROUGHPUT);
+        int retVal = 1;
+        if (prop instanceof IntegerProperty) {
+            retVal = (((IntegerProperty) prop).getIntValue());
+        } else {
+            try {
+                retVal = Integer.parseInt(prop.getStringValue());
+            } catch (NumberFormatException e) {
+            }
+        }
+        return retVal;
+    }
 
-	public void setPercentThroughput(float percentThroughput) {
-		setProperty(new FloatProperty(PERCENTTHROUGHPUT, percentThroughput));
-	}
+    public void setPercentThroughput(float percentThroughput) {
+        setProperty(new FloatProperty(PERCENTTHROUGHPUT, percentThroughput));
+    }
 
-	public void setPercentThroughput(String percentThroughput) {
-		setProperty(new StringProperty(PERCENTTHROUGHPUT, percentThroughput));
-	}
+    public void setPercentThroughput(String percentThroughput) {
+        setProperty(new StringProperty(PERCENTTHROUGHPUT, percentThroughput));
+    }
 
-	public String getPercentThroughput() {
-		return getPropertyAsString(PERCENTTHROUGHPUT);
-	}
+    public String getPercentThroughput() {
+        return getPropertyAsString(PERCENTTHROUGHPUT);
+    }
 
-	protected float getPercentThroughputAsFloat() {
-		JMeterProperty prop = getProperty(PERCENTTHROUGHPUT);
-		float retVal = 100;
-		if (prop instanceof FloatProperty) {
-			retVal = (((FloatProperty) prop).getFloatValue());
-		} else {
-			try {
-				retVal = Float.parseFloat(prop.getStringValue());
-			} catch (NumberFormatException e) {
-			}
-		}
-		return retVal;
-	}
+    protected float getPercentThroughputAsFloat() {
+        JMeterProperty prop = getProperty(PERCENTTHROUGHPUT);
+        float retVal = 100;
+        if (prop instanceof FloatProperty) {
+            retVal = (((FloatProperty) prop).getFloatValue());
+        } else {
+            try {
+                retVal = Float.parseFloat(prop.getStringValue());
+            } catch (NumberFormatException e) {
+            }
+        }
+        return retVal;
+    }
 
-	private int getExecutions() {
-		if (!isPerThread()) {
-			synchronized (counterLock) {
-				return globalNumExecutions;
-			}
-		}
-		return numExecutions;
-	}
+    private int getExecutions() {
+        if (!isPerThread()) {
+            synchronized (counterLock) {
+                return globalNumExecutions;
+            }
+        }
+        return numExecutions;
+    }
 
-	/**
-	 * @see org.apache.jmeter.control.Controller#next()
-	 */
-	public Sampler next() {
-		if (runThisTime) {
-			return super.next();
-		}
-		return null;
-	}
+    /**
+     * @see org.apache.jmeter.control.Controller#next()
+     */
+    public Sampler next() {
+        if (runThisTime) {
+            return super.next();
+        }
+        return null;
+    }
 
-	/**
-	 * Decide whether to return any samplers on this iteration.
-	 */
-	private boolean decide(int executions, int iterations) {
-		if (getStyle() == BYNUMBER) {
-			return executions < getMaxThroughputAsInt();
-		}
-		return (100.0 * executions + 50.0) / (iterations + 1) < getPercentThroughputAsFloat();
-	}
+    /**
+     * Decide whether to return any samplers on this iteration.
+     */
+    private boolean decide(int executions, int iterations) {
+        if (getStyle() == BYNUMBER) {
+            return executions < getMaxThroughputAsInt();
+        }
+        return (100.0 * executions + 50.0) / (iterations + 1) < getPercentThroughputAsFloat();
+    }
 
-	/**
-	 * @see org.apache.jmeter.control.Controller#isDone()
-	 */
-	public boolean isDone() {
-		if (subControllersAndSamplers.size() == 0) {
-			return true;
-		} else if (getStyle() == BYNUMBER && getExecutions() >= getMaxThroughputAsInt()
-				&& current >= getSubControllers().size()) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+    /**
+     * @see org.apache.jmeter.control.Controller#isDone()
+     */
+    public boolean isDone() {
+        if (subControllersAndSamplers.size() == 0) {
+            return true;
+        } else if (getStyle() == BYNUMBER && getExecutions() >= getMaxThroughputAsInt()
+                && current >= getSubControllers().size()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-	public Object clone() {
-		ThroughputController clone = (ThroughputController) super.clone();
-		clone.numExecutions = numExecutions;
-		clone.iteration = iteration;
-		clone.runThisTime = false;
-		return clone;
-	}
+    public Object clone() {
+        ThroughputController clone = (ThroughputController) super.clone();
+        clone.numExecutions = numExecutions;
+        clone.iteration = iteration;
+        clone.runThisTime = false;
+        return clone;
+    }
 
-	public void iterationStart(LoopIterationEvent iterEvent) {
-		if (!isPerThread()) {
-			synchronized (counterLock) {
-				globalIteration++;
-				runThisTime = decide(globalNumExecutions, globalIteration);
-				if (runThisTime) {
-					globalNumExecutions++;
-				}
-			}
-		} else {
-			iteration++;
-			runThisTime = decide(numExecutions, iteration);
-			if (runThisTime) {
-				numExecutions++;
-			}
-		}
-	}
+    public void iterationStart(LoopIterationEvent iterEvent) {
+        if (!isPerThread()) {
+            synchronized (counterLock) {
+                globalIteration++;
+                runThisTime = decide(globalNumExecutions, globalIteration);
+                if (runThisTime) {
+                    globalNumExecutions++;
+                }
+            }
+        } else {
+            iteration++;
+            runThisTime = decide(numExecutions, iteration);
+            if (runThisTime) {
+                numExecutions++;
+            }
+        }
+    }
 
-	public void testStarted() {
-		synchronized (counterLock) {
-			globalNumExecutions = 0;
-			globalIteration = -1;			
-		}
-	}
+    public void testStarted() {
+        synchronized (counterLock) {
+            globalNumExecutions = 0;
+            globalIteration = -1;
+        }
+    }
 
-	public void testStarted(String host) {
-		testStarted();
-	}
+    public void testStarted(String host) {
+        testStarted();
+    }
 
-	public void testEnded() {
-	}
+    public void testEnded() {
+    }
 
-	public void testEnded(String host) {
-	}
+    public void testEnded(String host) {
+    }
 
-	public void testIterationStart(LoopIterationEvent event) {
-	}
+    public void testIterationStart(LoopIterationEvent event) {
+    }
 }

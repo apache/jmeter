@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.config;
@@ -38,12 +38,12 @@ import org.apache.log.Logger;
 
 /**
  * Read lines from a file and split int variables.
- * 
+ *
  * The iterationStart() method is used to set up each set of values.
- * 
- * By default, the same file is shared between all threads 
+ *
+ * By default, the same file is shared between all threads
  * (and other thread groups, if they use the same file name).
- * 
+ *
  * The shareMode can be set to:
  * <ul>
  * <li>All threads - default, as described above</li>
@@ -51,7 +51,7 @@ import org.apache.log.Logger;
  * <li>Current thread</li>
  * <li>Identifier - all threads sharing the same identifier</li>
  * </ul>
- * 
+ *
  * The class uses the FileServer alias mechanism to provide the different share modes.
  * For all threads, the file alias is set to the file name.
  * Otherwise, a suffix is appended to the filename to make it unique within the required context.
@@ -59,14 +59,14 @@ import org.apache.log.Logger;
  * for individual threads, the thread hashcode is used as the suffix.
  * Or the user can provide their own suffix, in which case the file is shared between all
  * threads with the same suffix.
- *  
+ *
  */
 public class CSVDataSet extends ConfigTestElement implements TestBean, LoopIterationListener {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final long serialVersionUID = 232L;
+    private static final long serialVersionUID = 232L;
 
-    private static final String EOFVALUE = // value to return at EOF 
+    private static final String EOFVALUE = // value to return at EOF
         JMeterUtils.getPropDefault("csvdataset.eofstring", "<EOF>"); //$NON-NLS-1$ //$NON-NLS-2$
 
     private transient String filename;
@@ -78,13 +78,13 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
     private transient String delimiter;
 
     private transient boolean quoted;
-    
+
     private transient boolean recycle = true;
-    
+
     private transient boolean stopThread;
-    
+
     private transient String[] vars;
-    
+
     private transient String alias;
 
     private transient String shareMode;
@@ -93,22 +93,22 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
         recycle = true;
         return this;
     }
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.engine.event.LoopIterationListener#iterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)
-	 */
-	public void iterationStart(LoopIterationEvent iterEvent) {
-		FileServer server = FileServer.getFileServer();
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.engine.event.LoopIterationListener#iterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)
+     */
+    public void iterationStart(LoopIterationEvent iterEvent) {
+        FileServer server = FileServer.getFileServer();
         final JMeterContext context = getThreadContext();
-		if (vars == null) {
-	        String _fileName = getFilename();
-	        String mode = getShareMode();
-	        int modeInt = CSVDataSetBeanInfo.getShareModeAsInt(mode);
-	        switch(modeInt){
-    	        case CSVDataSetBeanInfo.SHARE_ALL:
-    	            alias = _fileName;
-    	            break;
+        if (vars == null) {
+            String _fileName = getFilename();
+            String mode = getShareMode();
+            int modeInt = CSVDataSetBeanInfo.getShareModeAsInt(mode);
+            switch(modeInt){
+                case CSVDataSetBeanInfo.SHARE_ALL:
+                    alias = _fileName;
+                    break;
                 case CSVDataSetBeanInfo.SHARE_GROUP:
                     alias = _fileName+"@"+System.identityHashCode(context.getThreadGroup());
                     break;
@@ -118,95 +118,95 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
                 default:
                     alias = _fileName+"@"+mode; // user-specified key
                     break;
-	        }
-			server.reserveFile(_fileName, getFileEncoding(), alias);
-			vars = JOrphanUtils.split(getVariableNames(), ","); // $NON-NLS-1$
-		}
-		try {
-			String delim = getDelimiter();
-			if (delim.equals("\\t")) { // $NON-NLS-1$
-				delim = "\t";// Make it easier to enter a Tab // $NON-NLS-1$
-		    } else if (delim.length()==0){
-		        log.warn("Empty delimiter converted to ','");
-		        delim=",";
-		    }
-			// TODO: fetch this once as per vars above?
+            }
+            server.reserveFile(_fileName, getFileEncoding(), alias);
+            vars = JOrphanUtils.split(getVariableNames(), ","); // $NON-NLS-1$
+        }
+        try {
+            String delim = getDelimiter();
+            if (delim.equals("\\t")) { // $NON-NLS-1$
+                delim = "\t";// Make it easier to enter a Tab // $NON-NLS-1$
+            } else if (delim.length()==0){
+                log.warn("Empty delimiter converted to ','");
+                delim=",";
+            }
+            // TODO: fetch this once as per vars above?
             JMeterVariables threadVars = context.getVariables();
-			String line = server.readLine(alias,getRecycle());
+            String line = server.readLine(alias,getRecycle());
             if (line!=null) {// i.e. not EOF
-                String[] lineValues = getQuotedData() ? 
+                String[] lineValues = getQuotedData() ?
                         CSVSaveService.csvReadFile(new BufferedReader(new StringReader(line)), delim.charAt(0))
                         : JOrphanUtils.split(line, delim, false);
-    			for (int a = 0; a < vars.length && a < lineValues.length; a++) {
-    				threadVars.put(vars[a], lineValues[a]);
-    			}
-    			// TODO - report unused columns?
-    			// TODO - provide option to set unused variables ?
+                for (int a = 0; a < vars.length && a < lineValues.length; a++) {
+                    threadVars.put(vars[a], lineValues[a]);
+                }
+                // TODO - report unused columns?
+                // TODO - provide option to set unused variables ?
             } else {
-            	if (getStopThread()) {
-            		throw new JMeterStopThreadException("End of file detected");
-            	}
+                if (getStopThread()) {
+                    throw new JMeterStopThreadException("End of file detected");
+                }
                 for (int a = 0; a < vars.length ; a++) {
                     threadVars.put(vars[a], EOFVALUE);
                 }
             }
-		} catch (IOException e) {// TODO - should the error be indicated in the variables?
-			log.error(e.toString());
-		}
-	}
+        } catch (IOException e) {// TODO - should the error be indicated in the variables?
+            log.error(e.toString());
+        }
+    }
 
-	/**
-	 * @return Returns the filename.
-	 */
-	public String getFilename() {
-		return filename;
-	}
+    /**
+     * @return Returns the filename.
+     */
+    public String getFilename() {
+        return filename;
+    }
 
-	/**
-	 * @param filename
-	 *            The filename to set.
-	 */
-	public void setFilename(String filename) {
-		this.filename = filename;
-	}
+    /**
+     * @param filename
+     *            The filename to set.
+     */
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
 
-	/**
-	 * @return Returns the file encoding.
-	 */
-	public String getFileEncoding() {
-		return fileEncoding;
-	}
+    /**
+     * @return Returns the file encoding.
+     */
+    public String getFileEncoding() {
+        return fileEncoding;
+    }
 
-	/**
-	 * @param fileEncoding
-	 *            The fileEncoding to set.
-	 */
-	public void setFileEncoding(String fileEncoding) {
-		this.fileEncoding = fileEncoding;
-	}
+    /**
+     * @param fileEncoding
+     *            The fileEncoding to set.
+     */
+    public void setFileEncoding(String fileEncoding) {
+        this.fileEncoding = fileEncoding;
+    }
 
-	/**
-	 * @return Returns the variableNames.
-	 */
-	public String getVariableNames() {
-		return variableNames;
-	}
+    /**
+     * @return Returns the variableNames.
+     */
+    public String getVariableNames() {
+        return variableNames;
+    }
 
-	/**
-	 * @param variableNames
-	 *            The variableNames to set.
-	 */
-	public void setVariableNames(String variableNames) {
-		this.variableNames = variableNames;
-	}
+    /**
+     * @param variableNames
+     *            The variableNames to set.
+     */
+    public void setVariableNames(String variableNames) {
+        this.variableNames = variableNames;
+    }
 
-	public String getDelimiter() {
-		return delimiter;
-	}
+    public String getDelimiter() {
+        return delimiter;
+    }
 
-	public void setDelimiter(String delimiter) {
-		this.delimiter = delimiter;
-	}
+    public void setDelimiter(String delimiter) {
+        this.delimiter = delimiter;
+    }
 
     public boolean getQuotedData() {
         return quoted;
@@ -231,7 +231,7 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
     public void setStopThread(boolean value) {
         this.stopThread = value;
     }
-    
+
     public String getShareMode() {
         return shareMode;
     }

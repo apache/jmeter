@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.control;
@@ -22,28 +22,28 @@ import java.io.Serializable;
 import java.util.Random;
 
 public class RandomController extends InterleaveControl implements Serializable {
-	static final Random rand = new Random();
+    static final Random rand = new Random();
 
-	public RandomController() {
-	}
+    public RandomController() {
+    }
 
-	/**
-	 * @see org.apache.jmeter.control.GenericController#resetCurrent()
-	 */
-	protected void resetCurrent() {
-		if (getSubControllers().size() > 0) {
-			current = rand.nextInt(this.getSubControllers().size());
-		} else {
-			current = 0;
-		}
-	}
+    /**
+     * @see org.apache.jmeter.control.GenericController#resetCurrent()
+     */
+    protected void resetCurrent() {
+        if (getSubControllers().size() > 0) {
+            current = rand.nextInt(this.getSubControllers().size());
+        } else {
+            current = 0;
+        }
+    }
 
-	/**
-	 * @see org.apache.jmeter.control.GenericController#incrementCurrent()
-	 */
-	protected void incrementCurrent() {
-		super.incrementCurrent();
-		current = rand.nextInt(this.getSubControllers().size());
-	}
+    /**
+     * @see org.apache.jmeter.control.GenericController#incrementCurrent()
+     */
+    protected void incrementCurrent() {
+        super.incrementCurrent();
+        current = rand.nextInt(this.getSubControllers().size());
+    }
 
 }

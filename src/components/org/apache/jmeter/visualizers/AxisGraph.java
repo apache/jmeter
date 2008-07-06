@@ -5,15 +5,15 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations
  * under the License.
- *  
+ *
  */
 package org.apache.jmeter.visualizers;
 
@@ -51,75 +51,75 @@ import org.jCharts.types.ChartType;
  */
 public class AxisGraph extends JPanel {
 
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final String ELLIPSIS = "..."; //$NON-NLS-1$
-	private static final int ELLIPSIS_LEN = ELLIPSIS.length();
-    
+    private static final int ELLIPSIS_LEN = ELLIPSIS.length();
+
     protected double[][] data = null;
     protected String title, xAxisTitle, yAxisTitle, yAxisLabel;
     protected int maxLength;
     protected String[] xAxisLabels;
     protected int width, height;
-    
-	/**
-	 * 
-	 */
-	public AxisGraph() {
-		super();
-	}
 
-	/**
-	 * @param layout
-	 */
-	public AxisGraph(LayoutManager layout) {
-		super(layout);
-	}
+    /**
+     *
+     */
+    public AxisGraph() {
+        super();
+    }
 
-	/**
-	 * @param layout
-	 * @param isDoubleBuffered
-	 */
-	public AxisGraph(LayoutManager layout, boolean isDoubleBuffered) {
-		super(layout, isDoubleBuffered);
-	}
-    
+    /**
+     * @param layout
+     */
+    public AxisGraph(LayoutManager layout) {
+        super(layout);
+    }
+
+    /**
+     * @param layout
+     * @param isDoubleBuffered
+     */
+    public AxisGraph(LayoutManager layout, boolean isDoubleBuffered) {
+        super(layout, isDoubleBuffered);
+    }
+
     public void setData(double[][] data) {
         this.data = data;
     }
-    
+
     public void setTitle(String title) {
         this.title = title;
     }
 
     public void setMaxLength(int maxLength) {
         this.maxLength = maxLength;
-    }    
-    
+    }
+
     public void setXAxisTitle(String title) {
         this.xAxisTitle = title;
     }
-    
+
     public void setYAxisTitle(String title) {
         this.yAxisTitle = title;
     }
-    
+
     public void setXAxisLabels(String[] labels) {
         this.xAxisLabels = labels;
     }
-    
+
     public void setYAxisLabels(String label) {
         this.yAxisLabel = label;
     }
-    
+
     public void setWidth(int w) {
         this.width = w;
     }
-    
+
     public void setHeight(int h) {
         this.height = h;
     }
-    
+
     public void paintComponent(Graphics g) {
         if (data != null && this.title != null && this.xAxisLabels != null &&
                 this.xAxisTitle != null && this.yAxisLabel != null &&
@@ -141,7 +141,7 @@ public class AxisGraph extends JPanel {
         }
         return max;
     }
-    
+
     private String squeeze (String input, int _maxLength){
         if (input.length()>_maxLength){
             String output=input.substring(0,_maxLength-ELLIPSIS_LEN)+ELLIPSIS;
@@ -149,7 +149,7 @@ public class AxisGraph extends JPanel {
         }
         return input;
     }
-    
+
     private void drawSample(String _title, int _maxLength, String[] _xAxisLabels, String _xAxisTitle,
             String _yAxisTitle, double[][] _data, int _width, int _height, Graphics g) {
         double max = findMax(_data);
@@ -161,7 +161,7 @@ public class AxisGraph extends JPanel {
             if (_height == 0) {
                 _height = 250;
             }
-			**/
+            **/
             if (_maxLength < 3) {
                 _maxLength = 3;
             }
@@ -176,7 +176,7 @@ public class AxisGraph extends JPanel {
             }
             this.setPreferredSize(new Dimension(_width,_height));
             DataSeries dataSeries = new DataSeries( _xAxisLabels, _xAxisTitle, _yAxisTitle, _title );
-            
+
             String[] legendLabels= { yAxisLabel };
             Paint[] paints= new Paint[] { Color.yellow };
             BarChartProperties barChartProperties= new BarChartProperties();
@@ -203,12 +203,12 @@ public class AxisGraph extends JPanel {
             } catch (PropertyException e) {
                 log.warn("",e);
             }
-            
+
             AxisProperties axisProperties= new AxisProperties(xaxis, yaxis);
             axisProperties.setXAxisLabelsAreVertical(true);
             LegendProperties legendProperties= new LegendProperties();
-            AxisChart axisChart = new AxisChart( 
-                    dataSeries, chartProperties, axisProperties, 
+            AxisChart axisChart = new AxisChart(
+                    dataSeries, chartProperties, axisProperties,
                     legendProperties, _width, _height );
             axisChart.setGraphics2D((Graphics2D) g);
             axisChart.render();
@@ -218,5 +218,5 @@ public class AxisGraph extends JPanel {
             log.warn("",e);
         }
     }
-    
+
 }

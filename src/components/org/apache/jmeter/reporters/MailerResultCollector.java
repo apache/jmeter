@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.reporters;
@@ -29,30 +29,30 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
  * @version $Revision$
  */
 public class MailerResultCollector extends ResultCollector implements Serializable {
-	public static final String MAILER_MODEL = "MailerResultCollector.mailer_model"; //$NON-NLS-1$
+    public static final String MAILER_MODEL = "MailerResultCollector.mailer_model"; //$NON-NLS-1$
 
-	public MailerResultCollector() {
-		super();
-		setProperty(new TestElementProperty(MAILER_MODEL, new MailerModel()));
-	}
+    public MailerResultCollector() {
+        super();
+        setProperty(new TestElementProperty(MAILER_MODEL, new MailerModel()));
+    }
 
-	public void clear() {
-		super.clear();
-		setProperty(new TestElementProperty(MAILER_MODEL, new MailerModel()));
-	}
+    public void clear() {
+        super.clear();
+        setProperty(new TestElementProperty(MAILER_MODEL, new MailerModel()));
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see SampleListener#sampleOccurred(SampleEvent)
-	 */
-	public void sampleOccurred(SampleEvent e) {
-		// TODO Auto-generated method stub
-		super.sampleOccurred(e);
-		getMailerModel().add(e.getResult());
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see SampleListener#sampleOccurred(SampleEvent)
+     */
+    public void sampleOccurred(SampleEvent e) {
+        // TODO Auto-generated method stub
+        super.sampleOccurred(e);
+        getMailerModel().add(e.getResult());
+    }
 
-	public MailerModel getMailerModel() {
-		return (MailerModel) getProperty(MAILER_MODEL).getObjectValue();
-	}
+    public MailerModel getMailerModel() {
+        return (MailerModel) getProperty(MAILER_MODEL).getObjectValue();
+    }
 }

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.timers;
@@ -28,80 +28,80 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * This class implements a constant timer with its own panel and fields for
  * value update and user interaction.
- * 
+ *
  * @author <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
  * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
  */
 public class ConstantTimer extends AbstractTestElement implements Timer, Serializable, LoopIterationListener {
 
-	public final static String DELAY = "ConstantTimer.delay"; //$NON-NLS-1$
+    public final static String DELAY = "ConstantTimer.delay"; //$NON-NLS-1$
 
-	private long delay = 0;
+    private long delay = 0;
 
-	/**
-	 * No-arg constructor.
-	 */
-	public ConstantTimer() {
-	}
+    /**
+     * No-arg constructor.
+     */
+    public ConstantTimer() {
+    }
 
-	/**
-	 * Set the delay for this timer.
-	 * 
-	 */
-	public void setDelay(String delay) {
-		setProperty(DELAY, delay);
-	}
+    /**
+     * Set the delay for this timer.
+     *
+     */
+    public void setDelay(String delay) {
+        setProperty(DELAY, delay);
+    }
 
-	/**
-	 * Set the range (not used for this timer).
-	 * 
-	 */
-	public void setRange(double range) {
-	}
+    /**
+     * Set the range (not used for this timer).
+     *
+     */
+    public void setRange(double range) {
+    }
 
-	/**
-	 * Get the delay value for display.
-	 * 
-	 * @return the delay value for display.
-	 */
-	public String getDelay() {
-		return getPropertyAsString(DELAY);
-	}
+    /**
+     * Get the delay value for display.
+     *
+     * @return the delay value for display.
+     */
+    public String getDelay() {
+        return getPropertyAsString(DELAY);
+    }
 
-	/**
-	 * Retrieve the range (not used for this timer).
-	 * 
-	 * @return the range (always zero for this timer).
-	 */
-	public double getRange() {
-		return 0;
-	}
+    /**
+     * Retrieve the range (not used for this timer).
+     *
+     * @return the range (always zero for this timer).
+     */
+    public double getRange() {
+        return 0;
+    }
 
-	/**
-	 * Retrieve the delay to use during test execution.
-	 * 
-	 * @return the delay.
-	 */
-	public long delay() {
-		return delay;
-	}
+    /**
+     * Retrieve the delay to use during test execution.
+     *
+     * @return the delay.
+     */
+    public long delay() {
+        return delay;
+    }
 
-	/**
-	 * Provide a description of this timer class.
-	 * 
-	 * @return the description of this timer class.
-	 */
-	public String toString() {
-		return JMeterUtils.getResString("constant_timer_memo"); //$NON-NLS-1$
-	}
+    /**
+     * Provide a description of this timer class.
+     *
+     * @return the description of this timer class.
+     */
+    public String toString() {
+        return JMeterUtils.getResString("constant_timer_memo"); //$NON-NLS-1$
+    }
 
-	/**
-	 * Gain access to any variables that have been defined.
-	 * 
-	 * @see LoopIterationListener#iterationStart(LoopIterationEvent)
-	 */
-	public void iterationStart(LoopIterationEvent event) {
-		delay = getPropertyAsLong(DELAY);
+    /**
+     * Gain access to any variables that have been defined.
+     *
+     * @see LoopIterationListener#iterationStart(LoopIterationEvent)
+     */
+    public void iterationStart(LoopIterationEvent event) {
+        delay = getPropertyAsLong(DELAY);
 
-	}
+    }
 }

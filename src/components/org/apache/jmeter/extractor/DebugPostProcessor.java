@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.extractor;
@@ -30,25 +30,25 @@ import org.apache.jmeter.threads.JMeterContext;
  * Debugging Post-Processor: creates a subSample containing the variables defined in the previous sampler.
  */
 public class DebugPostProcessor extends AbstractTestElement implements PostProcessor, TestBean {
-    
-	public void process(){
-	    StringBuffer sb = new StringBuffer(100);
-		JMeterContext threadContext = getThreadContext();
-		PropertyIterator i = threadContext.getCurrentSampler().propertyIterator();
-		while(i.hasNext())
-		{
-		    JMeterProperty prop = i.next();
-		    sb.append(prop.getName());
-		    sb.append("=");
-		    sb.append(prop.getStringValue());
-		    sb.append("\n");
-		 }
-		 SampleResult sr = new SampleResult();
-		 sr.setResponseData(sb.toString().getBytes());
-		 sr.setDataType("text");
-		 sr.setSampleLabel(getName());
-		 sr.setSuccessful(true);
-		 sr.setSamplerData("SamplerPropertyValues");
-		 threadContext.getPreviousResult().addSubResult(sr);
-	}
+
+    public void process(){
+        StringBuffer sb = new StringBuffer(100);
+        JMeterContext threadContext = getThreadContext();
+        PropertyIterator i = threadContext.getCurrentSampler().propertyIterator();
+        while(i.hasNext())
+        {
+            JMeterProperty prop = i.next();
+            sb.append(prop.getName());
+            sb.append("=");
+            sb.append(prop.getStringValue());
+            sb.append("\n");
+         }
+         SampleResult sr = new SampleResult();
+         sr.setResponseData(sb.toString().getBytes());
+         sr.setDataType("text");
+         sr.setSampleLabel(getName());
+         sr.setSuccessful(true);
+         sr.setSamplerData("SamplerPropertyValues");
+         threadContext.getPreviousResult().addSubResult(sr);
+    }
 }
