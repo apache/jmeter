@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 /*
@@ -27,62 +27,58 @@ import java.beans.PropertyDescriptor;
 import org.apache.jmeter.testbeans.BeanInfoSupport;
 import org.apache.jmeter.testbeans.gui.TextAreaEditor;
 
-/**
- * @author mstover
- * 
- */
 public class JDBCSamplerBeanInfo extends BeanInfoSupport {
 
-	/**
-	 * 
-	 */
-	public JDBCSamplerBeanInfo() {
-		super(JDBCSampler.class);
+    /**
+     *
+     */
+    public JDBCSamplerBeanInfo() {
+        super(JDBCSampler.class);
 
-		createPropertyGroup("varName", // $NON-NLS-1$
-				new String[]{"dataSource" }); // $NON-NLS-1$
+        createPropertyGroup("varName", // $NON-NLS-1$
+                new String[]{"dataSource" }); // $NON-NLS-1$
 
-		createPropertyGroup("sql", // $NON-NLS-1$
-				new String[] { 
-				"queryType", // $NON-NLS-1$
-				"query", // $NON-NLS-1$
-				"queryArguments", // $NON-NLS-1$
-				"queryArgumentsTypes" // $NON-NLS-1$
-				});
+        createPropertyGroup("sql", // $NON-NLS-1$
+                new String[] {
+                "queryType", // $NON-NLS-1$
+                "query", // $NON-NLS-1$
+                "queryArguments", // $NON-NLS-1$
+                "queryArgumentsTypes" // $NON-NLS-1$
+                });
 
-		PropertyDescriptor p = property("dataSource"); // $NON-NLS-1$
-		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-		p.setValue(DEFAULT, "");
+        PropertyDescriptor p = property("dataSource"); // $NON-NLS-1$
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, "");
 
-		p = property("queryArguments"); // $NON-NLS-1$
-		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-		p.setValue(DEFAULT, "");
-		
-		p = property("queryArgumentsTypes"); // $NON-NLS-1$
-		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-		p.setValue(DEFAULT, "");
-		
+        p = property("queryArguments"); // $NON-NLS-1$
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, "");
 
-		p = property("queryType"); // $NON-NLS-1$
-		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-		p.setValue(DEFAULT, JDBCSampler.SELECT);
-		p.setValue(NOT_OTHER,Boolean.TRUE);
-		p.setValue(TAGS,new String[]{
-				JDBCSampler.SELECT,
-				JDBCSampler.UPDATE,
-				JDBCSampler.CALLABLE, 
-				JDBCSampler.PREPARED_SELECT, 
-				JDBCSampler.PREPARED_UPDATE,
-				JDBCSampler.COMMIT,
-				JDBCSampler.ROLLBACK,
-				JDBCSampler.AUTOCOMMIT_FALSE,
-				JDBCSampler.AUTOCOMMIT_TRUE,
-				});
+        p = property("queryArgumentsTypes"); // $NON-NLS-1$
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, "");
 
-		p = property("query"); // $NON-NLS-1$
-		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-		p.setValue(DEFAULT, "");
-		p.setPropertyEditorClass(TextAreaEditor.class);
 
-	}
+        p = property("queryType"); // $NON-NLS-1$
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, JDBCSampler.SELECT);
+        p.setValue(NOT_OTHER,Boolean.TRUE);
+        p.setValue(TAGS,new String[]{
+                JDBCSampler.SELECT,
+                JDBCSampler.UPDATE,
+                JDBCSampler.CALLABLE,
+                JDBCSampler.PREPARED_SELECT,
+                JDBCSampler.PREPARED_UPDATE,
+                JDBCSampler.COMMIT,
+                JDBCSampler.ROLLBACK,
+                JDBCSampler.AUTOCOMMIT_FALSE,
+                JDBCSampler.AUTOCOMMIT_TRUE,
+                });
+
+        p = property("query"); // $NON-NLS-1$
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, "");
+        p.setPropertyEditorClass(TextAreaEditor.class);
+
+    }
 }

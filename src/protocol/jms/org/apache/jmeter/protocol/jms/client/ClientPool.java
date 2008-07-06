@@ -22,86 +22,86 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 /**
- * 
+ *
  * ClientPool holds the client instances in an ArrayList. The main purpose of
  * this is to make it easier to clean up all the instances at the end of a test.
  * If we didn't do this, threads might become zombie.
  */
 public class ClientPool {
 
-	private static final ArrayList clients = new ArrayList();
+    private static final ArrayList clients = new ArrayList();
 
-	private static final HashMap client_map = new HashMap();
+    private static final HashMap client_map = new HashMap();
 
-	/**
-	 * Add a ReceiveClient to the ClientPool. This is so that we can make sure
-	 * to close all clients and make sure all threads are destroyed.
-	 * 
-	 * @param client
-	 */
-	public static void addClient(ReceiveSubscriber client) {
-		clients.add(client);
-	}
+    /**
+     * Add a ReceiveClient to the ClientPool. This is so that we can make sure
+     * to close all clients and make sure all threads are destroyed.
+     *
+     * @param client
+     */
+    public static void addClient(ReceiveSubscriber client) {
+        clients.add(client);
+    }
 
-	/**
-	 * Add a OnMessageClient to the ClientPool. This is so that we can make sure
-	 * to close all clients and make sure all threads are destroyed.
-	 * 
-	 * @param client
-	 */
-	public static void addClient(OnMessageSubscriber client) {
-		clients.add(client);
-	}
+    /**
+     * Add a OnMessageClient to the ClientPool. This is so that we can make sure
+     * to close all clients and make sure all threads are destroyed.
+     *
+     * @param client
+     */
+    public static void addClient(OnMessageSubscriber client) {
+        clients.add(client);
+    }
 
-	/**
-	 * Add a Publisher to the ClientPool. This is so that we can make sure to
-	 * close all clients and make sure all threads are destroyed.
-	 * 
-	 * @param client
-	 */
-	public static void addClient(Publisher client) {
-		clients.add(client);
-	}
+    /**
+     * Add a Publisher to the ClientPool. This is so that we can make sure to
+     * close all clients and make sure all threads are destroyed.
+     *
+     * @param client
+     */
+    public static void addClient(Publisher client) {
+        clients.add(client);
+    }
 
-	/**
-	 * Clear all the clients created by either Publish or Subscribe sampler. We
-	 * need to do this to make sure all the threads creatd during the test are
-	 * destroyed and cleaned up. In some cases, the client provided by the
-	 * manufacturer of the JMS server may have bugs and some threads may become
-	 * zombie. In those cases, it is not the responsibility of JMeter for those
-	 * bugs.
-	 */
-	public static void clearClient() {
-		Iterator itr = clients.iterator();
-		while (itr.hasNext()) {
-			Object client = itr.next();
-			if (client instanceof ReceiveSubscriber) {
-				ReceiveSubscriber sub = (ReceiveSubscriber) client;
-				sub.close();
-				sub = null;
-			} else if (client instanceof Publisher) {
-				Publisher pub = (Publisher) client;
-				pub.close();
-				pub = null;
-			} else if (client instanceof OnMessageSubscriber) {
-				OnMessageSubscriber sub = (OnMessageSubscriber) client;
-				sub.close();
-				sub = null;
-			}
-		}
-		clients.clear();
-		client_map.clear();
-	}
+    /**
+     * Clear all the clients created by either Publish or Subscribe sampler. We
+     * need to do this to make sure all the threads creatd during the test are
+     * destroyed and cleaned up. In some cases, the client provided by the
+     * manufacturer of the JMS server may have bugs and some threads may become
+     * zombie. In those cases, it is not the responsibility of JMeter for those
+     * bugs.
+     */
+    public static void clearClient() {
+        Iterator itr = clients.iterator();
+        while (itr.hasNext()) {
+            Object client = itr.next();
+            if (client instanceof ReceiveSubscriber) {
+                ReceiveSubscriber sub = (ReceiveSubscriber) client;
+                sub.close();
+                sub = null;
+            } else if (client instanceof Publisher) {
+                Publisher pub = (Publisher) client;
+                pub.close();
+                pub = null;
+            } else if (client instanceof OnMessageSubscriber) {
+                OnMessageSubscriber sub = (OnMessageSubscriber) client;
+                sub.close();
+                sub = null;
+            }
+        }
+        clients.clear();
+        client_map.clear();
+    }
 
-	public static void put(Object key, OnMessageSubscriber client) {
-		client_map.put(key, client);
-	}
+    public static void put(Object key, OnMessageSubscriber client) {
+        client_map.put(key, client);
+    }
 
-	public static void put(Object key, Publisher client) {
-		client_map.put(key, client);
-	}
+    public static void put(Object key, Publisher client) {
+        client_map.put(key, client);
+    }
 
-	public static Object get(Object key) {
-		return client_map.get(key);
-	}
+    public static Object get(Object key) {
+        return client_map.get(key);
+    }
 }

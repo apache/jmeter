@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jorphan.gui;
@@ -26,13 +26,13 @@ import javax.swing.event.ChangeListener;
  * @version $Revision$
  */
 public interface JLabeledField {
-	public String getText();
+    public String getText();
 
-	public void setText(String text);
+    public void setText(String text);
 
-	public void setLabel(String pLabel);
+    public void setLabel(String pLabel);
 
-	public void addChangeListener(ChangeListener pChangeListener);
+    public void addChangeListener(ChangeListener pChangeListener);
 
-	public List getComponentList();
+    public List getComponentList();
 }

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.report.gui.action;
@@ -29,45 +29,45 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 public class ReportEnableComponent implements Command {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public static final String ENABLE = "enable";
+    public static final String ENABLE = "enable";
 
-	public static final String DISABLE = "disable";
+    public static final String DISABLE = "disable";
 
-	private static final Set commands = new HashSet();
-	static {
-		commands.add(ENABLE);
-		commands.add(DISABLE);
-	}
+    private static final Set commands = new HashSet();
+    static {
+        commands.add(ENABLE);
+        commands.add(DISABLE);
+    }
 
-	/**
-	 * @see org.apache.jmeter.gui.action.Command#doAction(ActionEvent)
-	 */
-	public void doAction(ActionEvent e) {
-		ReportTreeNode[] nodes = ReportGuiPackage.getInstance().getTreeListener().getSelectedNodes();
+    /**
+     * @see org.apache.jmeter.gui.action.Command#doAction(ActionEvent)
+     */
+    public void doAction(ActionEvent e) {
+        ReportTreeNode[] nodes = ReportGuiPackage.getInstance().getTreeListener().getSelectedNodes();
 
-		if (e.getActionCommand().equals(ENABLE)) {
-			log.debug("enabling currently selected gui objects");
-			enableComponents(nodes, true);
-		} else if (e.getActionCommand().equals(DISABLE)) {
-			log.debug("disabling currently selected gui objects");
-			enableComponents(nodes, false);
-		}
-	}
+        if (e.getActionCommand().equals(ENABLE)) {
+            log.debug("enabling currently selected gui objects");
+            enableComponents(nodes, true);
+        } else if (e.getActionCommand().equals(DISABLE)) {
+            log.debug("disabling currently selected gui objects");
+            enableComponents(nodes, false);
+        }
+    }
 
-	private void enableComponents(ReportTreeNode[] nodes, boolean enable) {
-		ReportGuiPackage pack = ReportGuiPackage.getInstance();
-		for (int i = 0; i < nodes.length; i++) {
-			nodes[i].setEnabled(enable);
-			pack.getGui(nodes[i].getTestElement()).setEnabled(enable);
-		}
-	}
+    private void enableComponents(ReportTreeNode[] nodes, boolean enable) {
+        ReportGuiPackage pack = ReportGuiPackage.getInstance();
+        for (int i = 0; i < nodes.length; i++) {
+            nodes[i].setEnabled(enable);
+            pack.getGui(nodes[i].getTestElement()).setEnabled(enable);
+        }
+    }
 
-	/**
-	 * @see org.apache.jmeter.gui.action.Command#getActionNames()
-	 */
-	public Set getActionNames() {
-		return commands;
-	}
+    /**
+     * @see org.apache.jmeter.gui.action.Command#getActionNames()
+     */
+    public Set getActionNames() {
+        return commands;
+    }
 }

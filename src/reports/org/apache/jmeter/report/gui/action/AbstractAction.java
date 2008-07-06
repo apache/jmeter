@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.report.gui.action;
@@ -36,64 +36,64 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * Parent class for implementing Menu item commands 
+ * Parent class for implementing Menu item commands
  */
 public abstract class AbstractAction implements Command {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	/**
-	 * @see Command#doAction(ActionEvent)
-	 */
-	public void doAction(ActionEvent e) {
-	}
+    /**
+     * @see Command#doAction(ActionEvent)
+     */
+    public void doAction(ActionEvent e) {
+    }
 
-	/**
-	 * @see Command#getActionNames()
-	 */
-	abstract public Set getActionNames();
+    /**
+     * @see Command#getActionNames()
+     */
+    abstract public Set getActionNames();
 
-	protected void convertSubTree(HashTree tree) {
-		Iterator iter = new LinkedList(tree.list()).iterator();
-		while (iter.hasNext()) {
-			Object o = iter.next();
-			if(o instanceof TestElement) {
-				continue; //hey, no need to convert
-			}
-			ReportTreeNode item = (ReportTreeNode) o;
-			if (item.isEnabled()) {
-				if (item.getUserObject() instanceof ReplaceableController) {
-					ReplaceableController rc = (ReplaceableController) item.getTestElement();
-					HashTree subTree = tree.getTree(item);
+    protected void convertSubTree(HashTree tree) {
+        Iterator iter = new LinkedList(tree.list()).iterator();
+        while (iter.hasNext()) {
+            Object o = iter.next();
+            if(o instanceof TestElement) {
+                continue; //hey, no need to convert
+            }
+            ReportTreeNode item = (ReportTreeNode) o;
+            if (item.isEnabled()) {
+                if (item.getUserObject() instanceof ReplaceableController) {
+                    ReplaceableController rc = (ReplaceableController) item.getTestElement();
+                    HashTree subTree = tree.getTree(item);
 
-					if (subTree != null) {
-						HashTree replacementTree = rc.getReplacementSubTree();
-						convertSubTree(replacementTree);
-						tree.replace(item,rc);
-						tree.set(rc,replacementTree);
-					}
-				} else {
-					convertSubTree(tree.getTree(item));
-					TestElement testElement = item.getTestElement();
-					tree.replace(item, testElement);
-				}
-			} else {
-				tree.remove(item);
-			}
+                    if (subTree != null) {
+                        HashTree replacementTree = rc.getReplacementSubTree();
+                        convertSubTree(replacementTree);
+                        tree.replace(item,rc);
+                        tree.set(rc,replacementTree);
+                    }
+                } else {
+                    convertSubTree(tree.getTree(item));
+                    TestElement testElement = item.getTestElement();
+                    tree.replace(item, testElement);
+                }
+            } else {
+                tree.remove(item);
+            }
 
-		}
-	}
+        }
+    }
 
-	/**
-	 * @param e
-	 */
-	protected void popupShouldSave(ActionEvent e) {
-		log.debug("popupShouldSave");
-		if (ReportGuiPackage.getInstance().getReportPlanFile() == null) {
-			if (JOptionPane.showConfirmDialog(ReportGuiPackage.getInstance().getMainFrame(), JMeterUtils
-					.getResString("should_save"), JMeterUtils.getResString("warning"), JOptionPane.YES_NO_OPTION,
-					JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-				ReportActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ReportSave.SAVE));
-			}
-		}
-	}
+    /**
+     * @param e
+     */
+    protected void popupShouldSave(ActionEvent e) {
+        log.debug("popupShouldSave");
+        if (ReportGuiPackage.getInstance().getReportPlanFile() == null) {
+            if (JOptionPane.showConfirmDialog(ReportGuiPackage.getInstance().getMainFrame(), JMeterUtils
+                    .getResString("should_save"), JMeterUtils.getResString("warning"), JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+                ReportActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ReportSave.SAVE));
+            }
+        }
+    }
 }

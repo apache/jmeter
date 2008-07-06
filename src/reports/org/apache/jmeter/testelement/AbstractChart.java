@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 package org.apache.jmeter.testelement;
 
@@ -42,23 +42,23 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
     public static final String REPORT_CHART_CAPTION = "ReportChart.chart.caption";
     public static final String REPORT_CHART_WIDTH = "ReportChart.chart.width";
     public static final String REPORT_CHART_HEIGHT = "ReportChart.chart.height";
-    
+
     public static final int DEFAULT_WIDTH = 350;
     public static final int DEFAULT_HEIGHT = 350;
-    
+
     public static final String X_DATA_FILENAME_LABEL = "Filename";
     public static final String X_DATA_DATE_LABEL = "Date";
     public static final String[] X_LABELS = { X_DATA_FILENAME_LABEL, X_DATA_DATE_LABEL };
     protected BufferedImage image = null;
 
     public AbstractChart() {
-		super();
-	}
-    
-    public String getXAxis() {
-    	return getPropertyAsString(REPORT_CHART_X_AXIS);
+        super();
     }
-    
+
+    public String getXAxis() {
+        return getPropertyAsString(REPORT_CHART_X_AXIS);
+    }
+
     public String getFormattedXAxis() {
         String text = getXAxis();
         if (text.indexOf('.') > -1) {
@@ -68,38 +68,38 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
         return text;
     }
     public void setXAxis(String field) {
-    	setProperty(REPORT_CHART_X_AXIS,field);
+        setProperty(REPORT_CHART_X_AXIS,field);
     }
-    
+
     public String getYAxis() {
-    	return getPropertyAsString(REPORT_CHART_Y_AXIS);
+        return getPropertyAsString(REPORT_CHART_Y_AXIS);
     }
-    
+
     public void setYAxis(String scale) {
-    	setProperty(REPORT_CHART_Y_AXIS,scale);
+        setProperty(REPORT_CHART_Y_AXIS,scale);
     }
 
     public String getXLabel() {
-    	return getPropertyAsString(REPORT_CHART_X_LABEL);
+        return getPropertyAsString(REPORT_CHART_X_LABEL);
     }
-    
+
     /**
      * The X data labels should be either the filename, date or some
      * other series of values
      * @param label
      */
     public void setXLabel(String label) {
-    	setProperty(REPORT_CHART_X_LABEL,label);
+        setProperty(REPORT_CHART_X_LABEL,label);
     }
-    
+
     public String getYLabel() {
-    	return getPropertyAsString(REPORT_CHART_Y_LABEL);
+        return getPropertyAsString(REPORT_CHART_Y_LABEL);
     }
-    
+
     public void setYLabel(String label) {
-    	setProperty(REPORT_CHART_Y_LABEL,label);
+        setProperty(REPORT_CHART_Y_LABEL,label);
     }
-    
+
     /**
      * The title is a the name for the chart. A page link will
      * be generated using the title. The title will also be
@@ -107,9 +107,9 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
      * @return chart title
      */
     public String getTitle() {
-    	return getPropertyAsString(REPORT_CHART_TITLE);
+        return getPropertyAsString(REPORT_CHART_TITLE);
     }
-    
+
     /**
      * The title is a the name for the chart. A page link will
      * be generated using the title. The title will also be
@@ -117,7 +117,7 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
      * @param title
      */
     public void setTitle(String title) {
-    	setProperty(REPORT_CHART_TITLE,title);
+        setProperty(REPORT_CHART_TITLE,title);
     }
 
     /**
@@ -128,7 +128,7 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
     public String getCaption() {
         return getPropertyAsString(REPORT_CHART_CAPTION);
     }
-    
+
     /**
      * The caption is a description for the chart explaining
      * what the chart means.
@@ -137,7 +137,7 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
     public void setCaption(String caption) {
         setProperty(REPORT_CHART_CAPTION,caption);
     }
-    
+
     /**
      * if no width is set, the default is returned
      * @return width
@@ -150,7 +150,7 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
             return w;
         }
     }
-    
+
     /**
      * set the width of the graph
      * @param width
@@ -158,13 +158,13 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
     public void setWidth(String width) {
         setProperty(REPORT_CHART_WIDTH,String.valueOf(width));
     }
-    
+
     /**
      * if the height is not set, the default is returned
      * @return height
      */
     public int getHeight() {
-        int h = getPropertyAsInt(REPORT_CHART_HEIGHT); 
+        int h = getPropertyAsInt(REPORT_CHART_HEIGHT);
         if (h <= 0) {
             return DEFAULT_HEIGHT;
         } else {
@@ -179,7 +179,7 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
     public void setHeight(String height) {
         setProperty(REPORT_CHART_HEIGHT,String.valueOf(height));
     }
-    
+
     /**
      * Subclasses will need to implement the method by doing the following:
      * 1. get the x and y axis
@@ -187,8 +187,8 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
      * 3. pass the data to the chart library
      * 4. return the generated chart
      */
-	public abstract JComponent renderChart(List data);
-    
+    public abstract JComponent renderChart(List data);
+
     /**
      * this makes it easy to get the bufferedImage
      * @return image
@@ -196,7 +196,7 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
     public BufferedImage getBufferedImage() {
         return this.image;
     }
-    
+
     /**
      * in case an user wants set the bufferdImage
      * @param img
@@ -204,7 +204,7 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
     public void setBufferedImage(BufferedImage img) {
         this.image = img;
     }
-    
+
     /**
      * convienance method for getting the selected value. Rather than use
      * Method.invoke(Object,Object[]), it's simpler to just check which

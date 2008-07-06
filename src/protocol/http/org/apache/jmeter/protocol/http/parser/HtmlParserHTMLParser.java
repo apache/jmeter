@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.parser;
@@ -41,67 +41,67 @@ import org.htmlparser.util.ParserException;
 
 /**
  * HtmlParser implementation using SourceForge's HtmlParser.
- * 
+ *
  */
 class HtmlParserHTMLParser extends HTMLParser {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     static{
-    	org.htmlparser.scanners.ScriptScanner.STRICT = false; // Try to ensure that more javascript code is processed OK ...
+        org.htmlparser.scanners.ScriptScanner.STRICT = false; // Try to ensure that more javascript code is processed OK ...
     }
-	
+
     protected HtmlParserHTMLParser() {
-		super();
+        super();
         log.info("Using htmlparser version: "+Parser.getVersion());
-	}
+    }
 
-	protected boolean isReusable() {
-		return true;
-	}
+    protected boolean isReusable() {
+        return true;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.protocol.http.parser.HtmlParser#getEmbeddedResourceURLs(byte[],
-	 *      java.net.URL)
-	 */
-	public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection urls) throws HTMLParseException {
-        
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.protocol.http.parser.HtmlParser#getEmbeddedResourceURLs(byte[],
+     *      java.net.URL)
+     */
+    public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection urls) throws HTMLParseException {
+
         if (log.isDebugEnabled()) {
             log.debug("Parsing html of: " + baseUrl);
         }
-        
+
         Parser htmlParser = null;
-		try {
-			String contents = new String(html);
-			htmlParser = new Parser();
+        try {
+            String contents = new String(html);
+            htmlParser = new Parser();
             htmlParser.setInputHTML(contents);
-		} catch (Exception e) {
-			throw new HTMLParseException(e);
-		}
+        } catch (Exception e) {
+            throw new HTMLParseException(e);
+        }
 
-		// Now parse the DOM tree
-		try {
-			// we start to iterate through the elements
-			parseNodes(htmlParser.elements(), new URLPointer(baseUrl), urls);
-			log.debug("End   : parseNodes");
-		} catch (ParserException e) {
-			throw new HTMLParseException(e);
-		}
+        // Now parse the DOM tree
+        try {
+            // we start to iterate through the elements
+            parseNodes(htmlParser.elements(), new URLPointer(baseUrl), urls);
+            log.debug("End   : parseNodes");
+        } catch (ParserException e) {
+            throw new HTMLParseException(e);
+        }
 
-		return urls.iterator();
-	}
-	
-    /*
-	 * A dummy class to pass the pointer of URL.
-	 */
-    private static class URLPointer {
-    	private URLPointer(URL newUrl) {
-    		url = newUrl;
-    	}
-    	private URL url;
+        return urls.iterator();
     }
-    
+
+    /*
+     * A dummy class to pass the pointer of URL.
+     */
+    private static class URLPointer {
+        private URLPointer(URL newUrl) {
+            url = newUrl;
+        }
+        private URL url;
+    }
+
     /**
      * Recursively parse all nodes to pick up all URL s.
      * @see e the nodes to be parsed
@@ -109,7 +109,7 @@ class HtmlParserHTMLParser extends HTMLParser {
      * @see urls URLCollection
      */
     private void parseNodes(final NodeIterator e,
-    		final URLPointer baseUrl, final URLCollection urls) 
+            final URLPointer baseUrl, final URLCollection urls)
         throws HTMLParseException, ParserException {
         while(e.hasMoreNodes()) {
             Node node = e.nextNode();
@@ -140,11 +140,11 @@ class HtmlParserHTMLParser extends HTMLParser {
                 ImageTag image = (ImageTag) tag;
                 binUrlStr = image.getImageURL();
             } else if (tag instanceof AppletTag) {
-        		// look for applets
+                // look for applets
 
-        		// This will only work with an Applet .class file.
-        		// Ideally, this should be upgraded to work with Objects (IE)
-        		// and archives (.jar and .zip) files as well.
+                // This will only work with an Applet .class file.
+                // Ideally, this should be upgraded to work with Objects (IE)
+                // and archives (.jar and .zip) files as well.
                 AppletTag applet = (AppletTag) tag;
                 binUrlStr = applet.getAppletClass();
             } else if (tag instanceof InputTag) {
@@ -165,7 +165,7 @@ class HtmlParserHTMLParser extends HTMLParser {
                 binUrlStr = tag.getAttribute(ATT_SRC);
             } else if (tagname.equalsIgnoreCase(TAG_EMBED)
                 || tagname.equalsIgnoreCase(TAG_BGSOUND)){
-                binUrlStr = tag.getAttribute(ATT_SRC);  
+                binUrlStr = tag.getAttribute(ATT_SRC);
             } else if (tagname.equalsIgnoreCase(TAG_LINK)) {
                 // Putting the string first means it works even if the attribute is null
                 if (STYLESHEET.equalsIgnoreCase(tag.getAttribute(ATT_REL))) {
@@ -182,7 +182,7 @@ class HtmlParserHTMLParser extends HTMLParser {
             // Now look for URLs in the STYLE attribute
             String styleTagStr = tag.getAttribute(ATT_STYLE);
             if(styleTagStr != null) {
-            	HtmlParsingUtils.extractStyleURLs(baseUrl.url, urls, styleTagStr);
+                HtmlParsingUtils.extractStyleURLs(baseUrl.url, urls, styleTagStr);
             }
 
             // second, if the tag was a composite tag,

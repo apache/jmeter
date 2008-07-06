@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jorphan.gui;
@@ -25,24 +25,24 @@ import javax.swing.JLabel;
 import javax.swing.table.DefaultTableCellRenderer;
 
 /**
- * Renders numbers in a JTable with a specified format 
+ * Renders numbers in a JTable with a specified format
  */
 public class NumberRenderer extends DefaultTableCellRenderer {
-	protected final NumberFormat formatter;
+    protected final NumberFormat formatter;
 
     public NumberRenderer() {
-    	super();
-    	formatter = NumberFormat.getInstance();
-    	setHorizontalAlignment(JLabel.RIGHT);
+        super();
+        formatter = NumberFormat.getInstance();
+        setHorizontalAlignment(JLabel.RIGHT);
     }
-    
+
     public NumberRenderer(String format) {
-    	super();
-    	formatter = new DecimalFormat(format);
-    	setHorizontalAlignment(JLabel.RIGHT);
+        super();
+        formatter = new DecimalFormat(format);
+        setHorizontalAlignment(JLabel.RIGHT);
     }
-    
-	public void setValue(Object value) {
-	    setText((value == null) ? "" : formatter.format(value));
-	}
+
+    public void setValue(Object value) {
+        setText((value == null) ? "" : formatter.format(value));
+    }
 }

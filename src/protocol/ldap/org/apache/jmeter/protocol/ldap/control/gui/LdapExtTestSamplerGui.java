@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.ldap.control.gui;
@@ -28,55 +28,55 @@ import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 
 /*******************************************************************************
- * 
+ *
  * author Dolf Smits(Dolf.Smits@Siemens.com) created Aug 09 2003 11:00 AM
  * company Siemens Netherlands N.V..
- * 
+ *
  * Based on the work of: author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
  * created Apr 29 2003 11:00 AM company Sip Technologies and Exports Ltd.
- * 
+ *
  ******************************************************************************/
 
 public class LdapExtTestSamplerGui extends AbstractSamplerGui {
-	private LdapExtConfigGui ldapDefaultPanel;
+    private LdapExtConfigGui ldapDefaultPanel;
 
-	/***************************************************************************
-	 * !ToDo (Constructor description)
-	 **************************************************************************/
-	public LdapExtTestSamplerGui() {
-		init();
-	}
+    /***************************************************************************
+     * !ToDo (Constructor description)
+     **************************************************************************/
+    public LdapExtTestSamplerGui() {
+        init();
+    }
 
-	/**
-	 * A newly created component can be initialized with the contents of a Test
-	 * Element object by calling this method. The component is responsible for
-	 * querying the Test Element object for the relevant information to display
-	 * in its GUI.
-	 * 
-	 * @param element
-	 *            the TestElement to configure
-	 */
-	public void configure(TestElement element) {
-		super.configure(element);
-		ldapDefaultPanel.configure(element);
-	}
+    /**
+     * A newly created component can be initialized with the contents of a Test
+     * Element object by calling this method. The component is responsible for
+     * querying the Test Element object for the relevant information to display
+     * in its GUI.
+     *
+     * @param element
+     *            the TestElement to configure
+     */
+    public void configure(TestElement element) {
+        super.configure(element);
+        ldapDefaultPanel.configure(element);
+    }
 
-	public TestElement createTestElement() {
-		LDAPExtSampler sampler = new LDAPExtSampler();
-		modifyTestElement(sampler);
-		return sampler;
-	}
+    public TestElement createTestElement() {
+        LDAPExtSampler sampler = new LDAPExtSampler();
+        modifyTestElement(sampler);
+        return sampler;
+    }
 
-	/**
-	 * Modifies a given TestElement to mirror the data in the gui components.
-	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-	 */
-	public void modifyTestElement(TestElement sampler) {
-		sampler.clear();
-		((LDAPExtSampler) sampler).addTestElement(ldapDefaultPanel.createTestElement());
-		this.configureTestElement(sampler);
-	}
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     *
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement sampler) {
+        sampler.clear();
+        ((LDAPExtSampler) sampler).addTestElement(ldapDefaultPanel.createTestElement());
+        this.configureTestElement(sampler);
+    }
 
     /**
      * Implements JMeterGUIComponent.clearGui
@@ -85,20 +85,20 @@ public class LdapExtTestSamplerGui extends AbstractSamplerGui {
         super.clearGui();
 
         ldapDefaultPanel.clearGui();
-    }    
+    }
 
-	public String getLabelResource() {
-		return "ldapext_testing_title"; // $NON-NLS-1$
-	}
+    public String getLabelResource() {
+        return "ldapext_testing_title"; // $NON-NLS-1$
+    }
 
-	private void init() {
-		setLayout(new BorderLayout(0, 5));
-		setBorder(makeBorder());
-		add(makeTitlePanel(), BorderLayout.NORTH);
-		// MAIN PANEL
-		JPanel mainPanel = new JPanel(new BorderLayout(0, 5));
-		ldapDefaultPanel = new LdapExtConfigGui(false);
-		mainPanel.add(ldapDefaultPanel);
-		add(mainPanel, BorderLayout.CENTER);
-	}
+    private void init() {
+        setLayout(new BorderLayout(0, 5));
+        setBorder(makeBorder());
+        add(makeTitlePanel(), BorderLayout.NORTH);
+        // MAIN PANEL
+        JPanel mainPanel = new JPanel(new BorderLayout(0, 5));
+        ldapDefaultPanel = new LdapExtConfigGui(false);
+        mainPanel.add(ldapDefaultPanel);
+        add(mainPanel, BorderLayout.CENTER);
+    }
 }

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.util;
@@ -33,9 +33,9 @@ import java.net.UnknownHostException;
 public class SlowSocket extends Socket {
 
     private final int CPS; // Characters per second to emulate
-    
+
     public SlowSocket(final int cps, String host, int port, InetAddress localAddress, int localPort, int timeout) throws IOException {
-    	super();
+        super();
         if (cps <=0) {
             throw new IllegalArgumentException("Speed (cps) <= 0");
         }
@@ -46,16 +46,16 @@ public class SlowSocket extends Socket {
         SocketAddress remoteaddr = new InetSocketAddress(host, port);
         bind(localaddr);
         connect(remoteaddr, timeout);
-	}
+    }
 
     /**
-     * 
+     *
      * @param cps characters per second
      * @param host hostname
      * @param port port
      * @param localAddr local address
      * @param localPort local port
-     * 
+     *
      * @throws IOException
      * @throws IllegalArgumentException if cps <=0
      */
@@ -68,11 +68,11 @@ public class SlowSocket extends Socket {
     }
 
     /**
-     * 
+     *
      * @param cps characters per second
      * @param host hostname
      * @param port port
-     * 
+     *
      * @throws UnknownHostException
      * @throws IOException
      * @throws IllegalArgumentException if cps <=0
@@ -85,11 +85,11 @@ public class SlowSocket extends Socket {
         CPS=cps;
     }
 
-	// Override so we can intercept the stream
+    // Override so we can intercept the stream
     public OutputStream getOutputStream() throws IOException {
         return new SlowOutputStream(super.getOutputStream(), CPS);
     }
-    
+
     // Override so we can intercept the stream
     public InputStream getInputStream() throws IOException {
         return new SlowInputStream(super.getInputStream(), CPS);

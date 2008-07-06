@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.sampler;
@@ -38,28 +38,28 @@ import org.apache.jmeter.testelement.property.PropertyIterator;
  * body of the POST.
  */
 public class PostWriter {
-    
-	private static final String DASH_DASH = "--";  // $NON-NLS-1$
-	private static final byte[] DASH_DASH_BYTES = DASH_DASH.getBytes();
+
+    private static final String DASH_DASH = "--";  // $NON-NLS-1$
+    private static final byte[] DASH_DASH_BYTES = DASH_DASH.getBytes();
 
     /** The bounday string between multiparts */
     protected final static String BOUNDARY = "---------------------------7d159c1302d0y0"; // $NON-NLS-1$
 
-	private final static byte[] CRLF = { 0x0d, 0x0A };
+    private final static byte[] CRLF = { 0x0d, 0x0A };
 
-	public static final String ENCODING = "ISO-8859-1"; // $NON-NLS-1$
+    public static final String ENCODING = "ISO-8859-1"; // $NON-NLS-1$
 
     /** The form data that is going to be sent as url encoded */
-    protected byte[] formDataUrlEncoded;    
+    protected byte[] formDataUrlEncoded;
     /** The form data that is going to be sent in post body */
     protected byte[] formDataPostBody;
     /** The boundary string for multipart */
     private final String boundary;
-    
+
     /**
      * Constructor for PostWriter.
      * Uses the PostWriter.BOUNDARY as the boundary string
-     * 
+     *
      */
     public PostWriter() {
         this(BOUNDARY);
@@ -67,20 +67,20 @@ public class PostWriter {
 
     /**
      * Constructor for PostWriter
-     * 
+     *
      * @param boundary the boundary string to use as marker between multipart parts
      */
     public PostWriter(String boundary) {
         this.boundary = boundary;
     }
 
-	/**
-	 * Send POST data from Entry to the open connection.
-     * 
+    /**
+     * Send POST data from Entry to the open connection.
+     *
      * @return the post body sent. Actual file content is not returned, it
      * is just shown as a placeholder text "actual file content"
-	 */
-	public String sendPostData(URLConnection connection, HTTPSampler sampler) throws IOException {
+     */
+    public String sendPostData(URLConnection connection, HTTPSampler sampler) throws IOException {
         // Buffer to hold the post body, except file content
         StringBuffer postedBody = new StringBuffer(1000);
 
@@ -90,14 +90,14 @@ public class PostWriter {
         // application/x-www-form-urlencoded post request
         if(sampler.getUseMultipartForPost()) {
             OutputStream out = connection.getOutputStream();
-            
+
             // Write the form data post body, which we have constructed
             // in the setHeaders. This contains the multipart start divider
             // and any form data, i.e. arguments
             out.write(formDataPostBody);
             // We get the posted bytes as UTF-8, since java is using UTF-8
             postedBody.append(new String(formDataPostBody, "UTF-8")); // $NON-NLS-1$
-            
+
             // Add any files
             for (int i=0; i < files.length; i++) {
                 HTTPFileArg file = files[i];
@@ -121,7 +121,7 @@ public class PostWriter {
                 }
             }
             // Write end of multipart
-            byte[] multipartEndDivider = getMultipartEndDivider(); 
+            byte[] multipartEndDivider = getMultipartEndDivider();
             out.write(multipartEndDivider);
             // We get the posted bytes as UTF-8, since java is using UTF-8
             postedBody.append(new String(multipartEndDivider, "UTF-8")); // $NON-NLS-1$
@@ -143,7 +143,7 @@ public class PostWriter {
                 // We just add placeholder text for file content
                 postedBody.append("<actual file content, not shown here>"); // $NON-NLS-1$
             }
-            else if (formDataUrlEncoded != null){ // may be null for PUT           
+            else if (formDataUrlEncoded != null){ // may be null for PUT
                 // In an application/x-www-form-urlencoded request, we only support
                 // parameters, no file upload is allowed
                 OutputStream out = connection.getOutputStream();
@@ -153,13 +153,13 @@ public class PostWriter {
 
                 // We get the posted bytes as UTF-8, since java is using UTF-8
                 postedBody.append(new String(formDataUrlEncoded, "UTF-8")); // $NON-NLS-1$
-            }            
+            }
         }
         return postedBody.toString();
-	}
-    
+    }
+
     public void setHeaders(URLConnection connection, HTTPSampler sampler) throws IOException {
-    	// Get the encoding to use for the request
+        // Get the encoding to use for the request
         String contentEncoding = sampler.getContentEncoding();
         if(contentEncoding == null || contentEncoding.length() == 0) {
             contentEncoding = ENCODING;
@@ -172,9 +172,9 @@ public class PostWriter {
         if(sampler.getUseMultipartForPost()) {
             // Set the content type
             connection.setRequestProperty(
-            		HTTPConstants.HEADER_CONTENT_TYPE,
-            		HTTPConstants.MULTIPART_FORM_DATA + "; boundary=" + getBoundary()); // $NON-NLS-1$
-            
+                    HTTPConstants.HEADER_CONTENT_TYPE,
+                    HTTPConstants.MULTIPART_FORM_DATA + "; boundary=" + getBoundary()); // $NON-NLS-1$
+
             // Write the form section
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
@@ -243,8 +243,8 @@ public class PostWriter {
             // Check if the header manager had a content type header
             // This allows the user to specify his own content-type for a POST request
             String contentTypeHeader = connection.getRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE);
-            boolean hasContentTypeHeader = contentTypeHeader != null && contentTypeHeader.length() > 0; 
-            
+            boolean hasContentTypeHeader = contentTypeHeader != null && contentTypeHeader.length() > 0;
+
             // If there are no arguments, we can send a file as the body of the request
             if(sampler.getArguments() != null && sampler.getArguments().getArgumentCount() == 0 && sampler.getSendFileAsPostBody()) {
                 // we're sure that there is one file because of
@@ -266,7 +266,7 @@ public class PostWriter {
             else {
                 // We create the post body content now, so we know the size
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                
+
                 // If none of the arguments have a name specified, we
                 // just send all the values as the post body
                 String postBody = null;
@@ -294,7 +294,7 @@ public class PostWriter {
                             connection.setRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE, HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED);
                         }
                     }
-                    
+
                     // Just append all the parameter values, and use that as the post body
                     StringBuffer postBodyBuffer = new StringBuffer();
                     PropertyIterator args = sampler.getArguments().iterator();
@@ -314,7 +314,7 @@ public class PostWriter {
                 formDataUrlEncoded = bos.toByteArray();
                 contentLength = bos.toByteArray().length;
             }
-            
+
             // Set the content length
             connection.setRequestProperty(HTTPConstants.HEADER_CONTENT_LENGTH, Long.toString(contentLength));
 
@@ -322,10 +322,10 @@ public class PostWriter {
             connection.setDoOutput(true);
         }
     }
-    
+
     /**
      * Get the boundary string, used to separate multiparts
-     * 
+     *
      * @return the boundary string
      */
     protected String getBoundary() {
@@ -334,7 +334,7 @@ public class PostWriter {
 
     /**
      * Get the bytes used to separate multiparts
-     * 
+     *
      * @return the bytes used to separate multiparts
      * @throws IOException
      */
@@ -344,7 +344,7 @@ public class PostWriter {
 
     /**
      * Get the bytes used to end a file multipat
-     * 
+     *
      * @return the bytes used to end a file multipart
      * @throws IOException
      */
@@ -358,7 +358,7 @@ public class PostWriter {
 
     /**
      * Get the bytes used to end the multipart request
-     * 
+     *
      * @return the bytes used to end the multipart request
      */
     private byte[] getMultipartEndDivider(){
@@ -373,7 +373,7 @@ public class PostWriter {
      * Write the start of a file multipart, up to the point where the
      * actual file content should be written
      */
-	private void writeStartFileMultipart(OutputStream out, String filename,
+    private void writeStartFileMultipart(OutputStream out, String filename,
             String nameField, String mimetype)
             throws IOException {
         write(out, "Content-Disposition: form-data; name=\""); // $NON-NLS-1$
@@ -388,7 +388,7 @@ public class PostWriter {
 
     /**
      * Write the content of a file to the output stream
-     * 
+     *
      * @param filename the filename of the file to write to the stream
      * @param out the stream to write to
      * @throws IOException
@@ -411,33 +411,33 @@ public class PostWriter {
         }
     }
 
-	/**
-	 * Writes form data in multipart format.
-	 */
-	private void writeFormMultipart(OutputStream out, String name, String value, String charSet)
-		throws IOException {
-		writeln(out, "Content-Disposition: form-data; name=\"" + name + "\""); // $NON-NLS-1$ // $NON-NLS-2$
+    /**
+     * Writes form data in multipart format.
+     */
+    private void writeFormMultipart(OutputStream out, String name, String value, String charSet)
+        throws IOException {
+        writeln(out, "Content-Disposition: form-data; name=\"" + name + "\""); // $NON-NLS-1$ // $NON-NLS-2$
         writeln(out, "Content-Type: text/plain; charset=" + charSet); // $NON-NLS-1$
         writeln(out, "Content-Transfer-Encoding: 8bit"); // $NON-NLS-1$
-        
-		out.write(CRLF);
-		out.write(value.getBytes(charSet));
-		out.write(CRLF);
+
+        out.write(CRLF);
+        out.write(value.getBytes(charSet));
+        out.write(CRLF);
         // Write boundary end marker
         out.write(getMultipartDivider());
-	}
-
-    private void write(OutputStream out, String value) 
-    throws UnsupportedEncodingException, IOException 
-    {
-    	out.write(value.getBytes(ENCODING)); 
     }
-	
 
-	private void writeln(OutputStream out, String value)
-	throws UnsupportedEncodingException, IOException
-	{
-		out.write(value.getBytes(ENCODING));
-		out.write(CRLF);
-	}
+    private void write(OutputStream out, String value)
+    throws UnsupportedEncodingException, IOException
+    {
+        out.write(value.getBytes(ENCODING));
+    }
+
+
+    private void writeln(OutputStream out, String value)
+    throws UnsupportedEncodingException, IOException
+    {
+        out.write(value.getBytes(ENCODING));
+        out.write(CRLF);
+    }
 }

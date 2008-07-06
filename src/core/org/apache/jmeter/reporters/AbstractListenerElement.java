@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.reporters;
@@ -28,27 +28,27 @@ import org.apache.jmeter.visualizers.Visualizer;
  */
 
 public abstract class AbstractListenerElement extends AbstractTestElement {
-	// TODO should class implement SampleListener?
+    // TODO should class implement SampleListener?
     private transient WeakReference listener;
 
-	public AbstractListenerElement() {
-	}
+    public AbstractListenerElement() {
+    }
 
-	protected final Visualizer getVisualizer() {
-		if (listener == null){ // e.g. in non-GUI mode
-			return null;
-		}
-		return (Visualizer)listener.get();
-	}
+    protected final Visualizer getVisualizer() {
+        if (listener == null){ // e.g. in non-GUI mode
+            return null;
+        }
+        return (Visualizer)listener.get();
+    }
 
-	public void setListener(Visualizer vis) {
-		listener = new WeakReference(vis);
-	}
+    public void setListener(Visualizer vis) {
+        listener = new WeakReference(vis);
+    }
 
-	public Object clone() {
-		AbstractListenerElement clone = (AbstractListenerElement) super.clone();
+    public Object clone() {
+        AbstractListenerElement clone = (AbstractListenerElement) super.clone();
 
-		clone.listener=this.listener;
-		return clone;
-	}
+        clone.listener=this.listener;
+        return clone;
+    }
 }

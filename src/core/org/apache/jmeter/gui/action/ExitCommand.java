@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.gui.action;
@@ -29,50 +29,50 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class ExitCommand implements Command {
 
-	private static final Set commands = new HashSet();
+    private static final Set commands = new HashSet();
 
-	static {
-		commands.add(ActionNames.EXIT);
-	}
+    static {
+        commands.add(ActionNames.EXIT);
+    }
 
-	/**
-	 * Constructor for the ExitCommand object
-	 */
-	public ExitCommand() {
-	}
+    /**
+     * Constructor for the ExitCommand object
+     */
+    public ExitCommand() {
+    }
 
-	/**
-	 * Gets the ActionNames attribute of the ExitCommand object
-	 * 
-	 * @return The ActionNames value
-	 */
-	public Set getActionNames() {
-		return commands;
-	}
+    /**
+     * Gets the ActionNames attribute of the ExitCommand object
+     *
+     * @return The ActionNames value
+     */
+    public Set getActionNames() {
+        return commands;
+    }
 
-	/**
-	 * Description of the Method
-	 * 
-	 * @param e
-	 *            Description of Parameter
-	 */
-	public void doAction(ActionEvent e) {
-		ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.CHECK_DIRTY));
-		if (GuiPackage.getInstance().isDirty()) {
-			int chosenOption = JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(), JMeterUtils
-					.getResString("cancel_exit_to_save"), // $NON-NLS-1$
-					JMeterUtils.getResString("save?"), // $NON-NLS-1$
-					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-			if (chosenOption == JOptionPane.NO_OPTION) {
-				System.exit(0);
-			} else if (chosenOption == JOptionPane.YES_OPTION) {
-				ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.SAVE_ALL_AS));
-				if (!GuiPackage.getInstance().isDirty()) {
-					System.exit(0);
-				}
-			}
-		} else {
-			System.exit(0);
-		}
-	}
+    /**
+     * Description of the Method
+     *
+     * @param e
+     *            Description of Parameter
+     */
+    public void doAction(ActionEvent e) {
+        ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.CHECK_DIRTY));
+        if (GuiPackage.getInstance().isDirty()) {
+            int chosenOption = JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(), JMeterUtils
+                    .getResString("cancel_exit_to_save"), // $NON-NLS-1$
+                    JMeterUtils.getResString("save?"), // $NON-NLS-1$
+                    JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (chosenOption == JOptionPane.NO_OPTION) {
+                System.exit(0);
+            } else if (chosenOption == JOptionPane.YES_OPTION) {
+                ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.SAVE_ALL_AS));
+                if (!GuiPackage.getInstance().isDirty()) {
+                    System.exit(0);
+                }
+            }
+        } else {
+            System.exit(0);
+        }
+    }
 }

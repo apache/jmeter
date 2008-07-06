@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.examples.testbeans.example2;
@@ -30,8 +30,8 @@ import org.apache.jmeter.testbeans.TestBean;
  * do nothing -- nothing useful, in any case.
  */
 public class Example2 extends AbstractSampler implements TestBean {
-    
-	public SampleResult sample(Entry e) {
+
+    public SampleResult sample(Entry e) {
         SampleResult res = new SampleResult();
         res.setSampleLabel(getName());
         res.setSamplerData(myStringProperty);
@@ -42,18 +42,18 @@ public class Example2 extends AbstractSampler implements TestBean {
         res.sampleEnd();
         res.setSuccessful(true);
         return res;
-	}
+    }
 
     private String myStringProperty;
-    
-	// A TestBean is a Java Bean. Just define some properties and they will
-	// automagically show up in the GUI.
-	// A String property:
-	public void setMyStringProperty(String s) {
-        myStringProperty=s;
-	}
 
-	public String getMyStringProperty() {
-		return myStringProperty;
-	}
+    // A TestBean is a Java Bean. Just define some properties and they will
+    // automagically show up in the GUI.
+    // A String property:
+    public void setMyStringProperty(String s) {
+        myStringProperty=s;
+    }
+
+    public String getMyStringProperty() {
+        return myStringProperty;
+    }
 }

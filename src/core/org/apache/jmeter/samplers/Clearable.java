@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.samplers;
@@ -21,14 +21,14 @@ package org.apache.jmeter.samplers;
 /**
  * Identifies an object which supports the clearing of run-time data
  * using the clearData() method.
- * 
+ *
  * Intended for implementation by Listeners.
  */
 public interface Clearable {
-	/**
-	 * Clears the current data of the object.
-	 */
-	public void clearData();
-	// N.B. originally called clear()
-	// @see also JMeterGUIComponent
+    /**
+     * Clears the current data of the object.
+     */
+    public void clearData();
+    // N.B. originally called clear()
+    // @see also JMeterGUIComponent
 }

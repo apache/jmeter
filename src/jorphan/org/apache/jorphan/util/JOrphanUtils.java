@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jorphan.util;
@@ -34,56 +34,56 @@ import org.apache.commons.lang.text.StrBuilder;
 
 /**
  * This class contains frequently-used static utility methods.
- * 
+ *
  */
 
 // @see TestJorphanUtils for unit tests
 
 public final class JOrphanUtils {
 
-	/**
-	 * Private constructor to prevent instantiation.
-	 */
-	private JOrphanUtils() {
-	}
+    /**
+     * Private constructor to prevent instantiation.
+     */
+    private JOrphanUtils() {
+    }
 
-	/**
-	 * This is _almost_ equivalent to the String.split method in JDK 1.4. It is
-	 * here to enable us to support earlier JDKs.
-	 * 
-	 * Note that unlike JDK1.4 split(), it optionally ignores leading split Characters,
+    /**
+     * This is _almost_ equivalent to the String.split method in JDK 1.4. It is
+     * here to enable us to support earlier JDKs.
+     *
+     * Note that unlike JDK1.4 split(), it optionally ignores leading split Characters,
      * and the splitChar parameter is not a Regular expression
-	 * 
-	 * <P>
-	 * This piece of code used to be part of JMeterUtils, but was moved here
-	 * because some JOrphan classes use it too.
-	 * 
-	 * @param splittee
-	 *            String to be split
-	 * @param splitChar
-	 *            Character(s) to split the string on, these are treated as a single unit
+     *
+     * <P>
+     * This piece of code used to be part of JMeterUtils, but was moved here
+     * because some JOrphan classes use it too.
+     *
+     * @param splittee
+     *            String to be split
+     * @param splitChar
+     *            Character(s) to split the string on, these are treated as a single unit
      * @param truncate
      *            Should adjacent and leading/trailing splitChars be removed?
-     *            
-	 * @return Array of all the tokens.
-     * 
+     *
+     * @return Array of all the tokens.
+     *
      * @see #split(String, String, String)
-     * 
-	 */
-	public static String[] split(String splittee, String splitChar,boolean truncate) {
-		if (splittee == null || splitChar == null) {
-			return new String[0];
-		}
+     *
+     */
+    public static String[] split(String splittee, String splitChar,boolean truncate) {
+        if (splittee == null || splitChar == null) {
+            return new String[0];
+        }
         final String EMPTY_ELEMENT = "";
-		int spot;
+        int spot;
         final int splitLength = splitChar.length();
         final String adjacentSplit = splitChar + splitChar;
         final int adjacentSplitLength = adjacentSplit.length();
         if(truncate) {
             while ((spot = splittee.indexOf(adjacentSplit)) != -1) {
-    			splittee = splittee.substring(0, spot + splitLength)
-    					+ splittee.substring(spot + adjacentSplitLength, splittee.length());
-    		}
+                splittee = splittee.substring(0, spot + splitLength)
+                        + splittee.substring(spot + adjacentSplitLength, splittee.length());
+            }
             if(splittee.startsWith(splitChar)) {
                 splittee = splittee.substring(splitLength);
             }
@@ -91,30 +91,30 @@ public final class JOrphanUtils {
                 splittee = splittee.substring(0,splittee.length()-splitLength);
             }
         }
-		Vector returns = new Vector();
+        Vector returns = new Vector();
         final int length = splittee.length(); // This is the new length
-		int start = 0;
-		spot = 0;
+        int start = 0;
+        spot = 0;
         while (start < length && (spot = splittee.indexOf(splitChar, start)) > -1) {
-			if (spot > 0) {
-				returns.addElement(splittee.substring(start, spot));
-			}
+            if (spot > 0) {
+                returns.addElement(splittee.substring(start, spot));
+            }
             else
             {
                 returns.addElement(EMPTY_ELEMENT);
             }
-			start = spot + splitLength;
-		}
-		if (start < length) {
-			returns.add(splittee.substring(start));
-		} else if (spot == length - splitLength){// Found splitChar at end of line
+            start = spot + splitLength;
+        }
+        if (start < length) {
+            returns.add(splittee.substring(start));
+        } else if (spot == length - splitLength){// Found splitChar at end of line
             returns.addElement(EMPTY_ELEMENT);
         }
-		String[] values = new String[returns.size()];
-		returns.copyInto(values);
-		return values;
-	}
-    
+        String[] values = new String[returns.size()];
+        returns.copyInto(values);
+        return values;
+    }
+
     public static String[] split(String splittee,String splitChar)
     {
         return split(splittee,splitChar,true);
@@ -123,9 +123,9 @@ public final class JOrphanUtils {
     /**
      * Takes a String and a tokenizer character string, and returns a new array of
      * strings of the string split by the tokenizer character(s).
-     * 
+     *
      * Trailing delimiters are significant (unless the default = null)
-     *  
+     *
      * @param splittee
      *            String to be split.
      * @param delims
@@ -135,12 +135,12 @@ public final class JOrphanUtils {
      *            nothing between them. If null, then ignore omitted elements.
      *
      * @return Array of all the tokens.
-     * 
+     *
      * @throws NullPointerException if splittee or delims are null
-     * 
+     *
      * @see #split(String, String, boolean)
      * @see #split(String, String)
-     * 
+     *
      * This is a rewritten version of JMeterUtils.split()
      */
     public static String[] split(String splittee, String delims, String def) {
@@ -149,7 +149,7 @@ public final class JOrphanUtils {
         List strList=new ArrayList();
         while (tokens.hasMoreTokens()) {
             String tok=tokens.nextToken();
-            if (   tok.length()==1 // we have a single character; could be a token 
+            if (   tok.length()==1 // we have a single character; could be a token
                 && delims.indexOf(tok)!=-1) // it is a token
             {
                 if (lastWasDelim) {// we saw a delimiter last time
@@ -166,122 +166,122 @@ public final class JOrphanUtils {
         }
         return (String[])strList.toArray(new String[0]);
     }
-    
-    
+
+
     private static final String SPACES = "                                 ";
 
-	private static final int SPACES_LEN = SPACES.length();
+    private static final int SPACES_LEN = SPACES.length();
 
-	/**
-	 * Right aligns some text in a StringBuffer N.B. modifies the input buffer
-	 * 
-	 * @param in
-	 *            StringBuffer containing some text
-	 * @param len
-	 *            output length desired
-	 * @return input StringBuffer, with leading spaces
-	 */
-	public static StringBuffer rightAlign(StringBuffer in, int len) {
-		int pfx = len - in.length();
-		if (pfx <= 0) {
-			return in;
-		}
-		if (pfx > SPACES_LEN) {
-			pfx = SPACES_LEN;
-		}
-		in.insert(0, SPACES.substring(0, pfx));
-		return in;
-	}
+    /**
+     * Right aligns some text in a StringBuffer N.B. modifies the input buffer
+     *
+     * @param in
+     *            StringBuffer containing some text
+     * @param len
+     *            output length desired
+     * @return input StringBuffer, with leading spaces
+     */
+    public static StringBuffer rightAlign(StringBuffer in, int len) {
+        int pfx = len - in.length();
+        if (pfx <= 0) {
+            return in;
+        }
+        if (pfx > SPACES_LEN) {
+            pfx = SPACES_LEN;
+        }
+        in.insert(0, SPACES.substring(0, pfx));
+        return in;
+    }
 
-	/**
-	 * Left aligns some text in a StringBuffer N.B. modifies the input buffer
-	 * 
-	 * @param in
-	 *            StringBuffer containing some text
-	 * @param len
-	 *            output length desired
-	 * @return input StringBuffer, with trailing spaces
-	 */
-	public static StringBuffer leftAlign(StringBuffer in, int len) {
-		int sfx = len - in.length();
-		if (sfx <= 0) {
-			return in;
-		}
-		if (sfx > SPACES_LEN) {
-			sfx = SPACES_LEN;
-		}
-		in.append(SPACES.substring(0, sfx));
-		return in;
-	}
+    /**
+     * Left aligns some text in a StringBuffer N.B. modifies the input buffer
+     *
+     * @param in
+     *            StringBuffer containing some text
+     * @param len
+     *            output length desired
+     * @return input StringBuffer, with trailing spaces
+     */
+    public static StringBuffer leftAlign(StringBuffer in, int len) {
+        int sfx = len - in.length();
+        if (sfx <= 0) {
+            return in;
+        }
+        if (sfx > SPACES_LEN) {
+            sfx = SPACES_LEN;
+        }
+        in.append(SPACES.substring(0, sfx));
+        return in;
+    }
 
-	/**
-	 * Convert a boolean to its string representation Equivalent to
-	 * Boolean.toString(boolean) but valid also for JDK 1.3, which
-	 * does not have toString(boolean)
-	 * 
-	 * @param value
-	 *            boolean to convert
-	 * @return "true" or "false"
-	 * @deprecated Use Boolean.toString(boolean) instead.
-	 */
-	public static String booleanToString(boolean value) {
-		return value ? "true" : "false";
-	}
+    /**
+     * Convert a boolean to its string representation Equivalent to
+     * Boolean.toString(boolean) but valid also for JDK 1.3, which
+     * does not have toString(boolean)
+     *
+     * @param value
+     *            boolean to convert
+     * @return "true" or "false"
+     * @deprecated Use Boolean.toString(boolean) instead.
+     */
+    public static String booleanToString(boolean value) {
+        return value ? "true" : "false";
+    }
 
-	/**
-	 * Convert a boolean to its string representation Equivalent to
-	 * Boolean.valueOf(boolean).toString().toUpperCase() but valid also for JDK
-	 * 1.3, which does not have valueOf(boolean)
-	 * 
-	 * @param value
-	 *            boolean to convert
-	 * @return "TRUE" or "FALSE"
-	 */
-	public static String booleanToSTRING(boolean value) {
-		return value ? "TRUE" : "FALSE";
-	}
+    /**
+     * Convert a boolean to its string representation Equivalent to
+     * Boolean.valueOf(boolean).toString().toUpperCase() but valid also for JDK
+     * 1.3, which does not have valueOf(boolean)
+     *
+     * @param value
+     *            boolean to convert
+     * @return "TRUE" or "FALSE"
+     */
+    public static String booleanToSTRING(boolean value) {
+        return value ? "TRUE" : "FALSE";
+    }
 
-	/**
-	 * Version of Boolean.valueOf(boolean) for JDK 1.3
-	 * 
-	 * @param value
-	 *            boolean to convert
-	 * @return Boolean.TRUE or Boolean.FALSE
-	 * 
-	 * @deprecated use Boolean.valueOf(boolean)
-	 * 
-	 */
-	public static Boolean valueOf(boolean value) {
-		return value ? Boolean.TRUE : Boolean.FALSE;
-	}
+    /**
+     * Version of Boolean.valueOf(boolean) for JDK 1.3
+     *
+     * @param value
+     *            boolean to convert
+     * @return Boolean.TRUE or Boolean.FALSE
+     *
+     * @deprecated use Boolean.valueOf(boolean)
+     *
+     */
+    public static Boolean valueOf(boolean value) {
+        return value ? Boolean.TRUE : Boolean.FALSE;
+    }
 
-	/**
-	 * Simple-minded String.replace() for JDK1.3 Should probably be recoded...
-	 * 
-	 * @param source
-	 *            input string
-	 * @param search
-	 *            string to look for (no regular expressions)
-	 * @param replace
-	 *            string to replace the search string
-	 * @return the output string
-	 */
-	public static String replaceFirst(String source, String search, String replace) {
-		int start = source.indexOf(search);
-		int len = search.length();
-		if (start == -1) {
-			return source;
-		}
-		if (start == 0) {
-			return replace + source.substring(len);
-		}
-		return source.substring(0, start) + replace + source.substring(start + len);
-	}
+    /**
+     * Simple-minded String.replace() for JDK1.3 Should probably be recoded...
+     *
+     * @param source
+     *            input string
+     * @param search
+     *            string to look for (no regular expressions)
+     * @param replace
+     *            string to replace the search string
+     * @return the output string
+     */
+    public static String replaceFirst(String source, String search, String replace) {
+        int start = source.indexOf(search);
+        int len = search.length();
+        if (start == -1) {
+            return source;
+        }
+        if (start == 0) {
+            return replace + source.substring(len);
+        }
+        return source.substring(0, start) + replace + source.substring(start + len);
+    }
 
     /**
      * Version of String.replaceAll() for JDK1.3
      * See below for another version which replaces strings rather than chars
-     * 
+     *
      * @param source
      *            input string
      * @param search
@@ -306,9 +306,9 @@ public final class JOrphanUtils {
 
     /**
      * Replace all patterns in a String
-     * 
+     *
      * @see String#replaceAll(String regex,String replacement) - JDK1.4 only
-     * 
+     *
      * @param input - string to be transformed
      * @param pattern - pattern to replace
      * @param sub - replacement
@@ -330,7 +330,7 @@ public final class JOrphanUtils {
 
     /**
      * Trim a string by the tokens provided.
-     *  
+     *
      * @param input string to trim
      * @param delims list of delimiters
      * @return input trimmed at the first delimiter
@@ -339,33 +339,33 @@ public final class JOrphanUtils {
         StringTokenizer tokens = new StringTokenizer(input,delims);
         return tokens.hasMoreTokens() ? tokens.nextToken() : "";
     }
-    
+
     /**
-	 * Returns a slice of a byte array.
-	 * 
-	 * TODO - add bounds checking?
-	 * 
-	 * @param array -
-	 *            input array
-	 * @param begin -
-	 *            start of slice
-	 * @param end -
-	 *            end of slice
-	 * @return slice from the input array
-	 */
-	public static byte[] getByteArraySlice(byte[] array, int begin, int end) {
-		byte[] slice = new byte[(end - begin + 1)];
-		int count = 0;
-		for (int i = begin; i <= end; i++) {
-			slice[count] = array[i];
-			count++;
-		}
+     * Returns a slice of a byte array.
+     *
+     * TODO - add bounds checking?
+     *
+     * @param array -
+     *            input array
+     * @param begin -
+     *            start of slice
+     * @param end -
+     *            end of slice
+     * @return slice from the input array
+     */
+    public static byte[] getByteArraySlice(byte[] array, int begin, int end) {
+        byte[] slice = new byte[(end - begin + 1)];
+        int count = 0;
+        for (int i = begin; i <= end; i++) {
+            slice[count] = array[i];
+            count++;
+        }
 
-		return slice;
-	}
+        return slice;
+    }
 
-	// N.B. Commons IO IOUtils has equivalent methods; these were added before IO was included
-	// TODO - perhaps deprecate these in favour of Commons IO?
+    // N.B. Commons IO IOUtils has equivalent methods; these were added before IO was included
+    // TODO - perhaps deprecate these in favour of Commons IO?
     /**
      * close a stream with no error thrown
      * @param is - InputStream (may be null)
@@ -446,9 +446,9 @@ public final class JOrphanUtils {
 
     /**
      * Check if a byte array starts with the given byte array.
-     * 
+     *
      * @see String#startsWith(String, int)
-     * 
+     *
      * @param target array to scan
      * @param search array to search for
      * @param offset starting offset (>=0)
@@ -467,12 +467,12 @@ public final class JOrphanUtils {
         }
         return true;
     }
-    
+
     private static final byte[] XML_PFX = "<?xml ".getBytes(); // $NON-NLS-1$
-    
+
     /**
      * Detects if some content starts with the standard XML prefix.
-     * 
+     *
      * @param target the content to check
      * @return true if the document starts with the standard XML prefix.
      */
@@ -482,7 +482,7 @@ public final class JOrphanUtils {
 
     /**
      * Convert binary byte array to hex string.
-     * 
+     *
      * @param ba input binary byte array
      * @return hex representation of binary input
      */

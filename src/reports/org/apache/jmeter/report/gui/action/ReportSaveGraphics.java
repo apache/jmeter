@@ -5,15 +5,15 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations
  * under the License.
- *  
+ *
  */
 
 package org.apache.jmeter.report.gui.action;
@@ -44,66 +44,66 @@ import org.apache.jmeter.visualizers.Printable;
  * it will call SaveGraphicsService to save in the format.
  */
 public class ReportSaveGraphics implements Command {
-	//transient private static final Logger log = LoggingManager.getLoggerForClass();
+    //transient private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public static final String SAVE_GRAPHICS = "save_graphics"; // $NON-NLS-1$
+    public static final String SAVE_GRAPHICS = "save_graphics"; // $NON-NLS-1$
 
-	private static final Set commands = new HashSet();
-	static {
-		commands.add(SAVE_GRAPHICS);
-	}
+    private static final Set commands = new HashSet();
+    static {
+        commands.add(SAVE_GRAPHICS);
+    }
 
-	private static final String[] extensions = { SaveGraphicsService.TIFF_EXTENSION, SaveGraphicsService.PNG_EXTENSION };
+    private static final String[] extensions = { SaveGraphicsService.TIFF_EXTENSION, SaveGraphicsService.PNG_EXTENSION };
 
-	/**
-	 * Constructor for the Save object.
-	 */
-	public ReportSaveGraphics() {
-	}
+    /**
+     * Constructor for the Save object.
+     */
+    public ReportSaveGraphics() {
+    }
 
-	/**
-	 * Gets the ActionNames attribute of the Save object.
-	 * 
-	 * @return the ActionNames value
-	 */
-	public Set getActionNames() {
-		return commands;
-	}
+    /**
+     * Gets the ActionNames attribute of the Save object.
+     *
+     * @return the ActionNames value
+     */
+    public Set getActionNames() {
+        return commands;
+    }
 
-	public void doAction(ActionEvent e) throws IllegalUserActionException {
-		JMeterGUIComponent component = null;
-		JComponent comp = null;
-		if (!commands.contains(e.getActionCommand())) {
-			throw new IllegalUserActionException("Invalid user command:" + e.getActionCommand());
-		}
-		if (e.getActionCommand().equals(SAVE_GRAPHICS)) {
-			component = ReportGuiPackage.getInstance().getCurrentGui();
-			// get the JComponent from the visualizer
-			if (component instanceof Printable) {
-				comp = ((Printable) component).getPrintableComponent();
+    public void doAction(ActionEvent e) throws IllegalUserActionException {
+        JMeterGUIComponent component = null;
+        JComponent comp = null;
+        if (!commands.contains(e.getActionCommand())) {
+            throw new IllegalUserActionException("Invalid user command:" + e.getActionCommand());
+        }
+        if (e.getActionCommand().equals(SAVE_GRAPHICS)) {
+            component = ReportGuiPackage.getInstance().getCurrentGui();
+            // get the JComponent from the visualizer
+            if (component instanceof Printable) {
+                comp = ((Printable) component).getPrintableComponent();
 
-				String filename;
-				JFileChooser chooser = ReportFileDialoger.promptToSaveFile(ReportGuiPackage.getInstance().getTreeListener()
-						.getCurrentNode().getName(), extensions);
-				if (chooser == null) {
-					return;
-				}
-				// Get the string given from the choose and check
-				// the file extension.
-				filename = chooser.getSelectedFile().getAbsolutePath();
-				if (filename != null) {
-					SaveGraphicsService save = new SaveGraphicsService();
-					String ext = filename.substring(filename.length() - 4);
-					String name = filename.substring(0, filename.length() - 4);
-					if (ext.equals(SaveGraphicsService.PNG_EXTENSION)) {
-						save.saveJComponent(name, SaveGraphicsService.PNG, comp);
-					} else if (ext.equals(SaveGraphicsService.TIFF_EXTENSION)) {
-						save.saveJComponent(name, SaveGraphicsService.TIFF, comp);
-					} else {
-						save.saveJComponent(filename, SaveGraphicsService.PNG, comp);
-					}
-				}
-			}
-		}
-	}
+                String filename;
+                JFileChooser chooser = ReportFileDialoger.promptToSaveFile(ReportGuiPackage.getInstance().getTreeListener()
+                        .getCurrentNode().getName(), extensions);
+                if (chooser == null) {
+                    return;
+                }
+                // Get the string given from the choose and check
+                // the file extension.
+                filename = chooser.getSelectedFile().getAbsolutePath();
+                if (filename != null) {
+                    SaveGraphicsService save = new SaveGraphicsService();
+                    String ext = filename.substring(filename.length() - 4);
+                    String name = filename.substring(0, filename.length() - 4);
+                    if (ext.equals(SaveGraphicsService.PNG_EXTENSION)) {
+                        save.saveJComponent(name, SaveGraphicsService.PNG, comp);
+                    } else if (ext.equals(SaveGraphicsService.TIFF_EXTENSION)) {
+                        save.saveJComponent(name, SaveGraphicsService.TIFF, comp);
+                    } else {
+                        save.saveJComponent(filename, SaveGraphicsService.PNG, comp);
+                    }
+                }
+            }
+        }
+    }
 }

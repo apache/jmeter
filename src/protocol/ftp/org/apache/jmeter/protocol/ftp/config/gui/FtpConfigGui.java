@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.ftp.config.gui;
@@ -38,83 +38,83 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class FtpConfigGui extends AbstractConfigGui {
 
-	private JTextField server;
+    private JTextField server;
 
-	private JTextField remoteFile;
+    private JTextField remoteFile;
 
-	private JTextField localFile;
-	
-	private JTextArea inputData;
+    private JTextField localFile;
 
-	private JCheckBox binaryMode;
-	
-	private JCheckBox saveResponseData;
-	
-	private boolean displayName = true;
+    private JTextArea inputData;
 
-	private JRadioButton getBox;
+    private JCheckBox binaryMode;
 
-	private JRadioButton putBox;
+    private JCheckBox saveResponseData;
 
-	public FtpConfigGui() {
-		this(true);
-	}
+    private boolean displayName = true;
 
-	public FtpConfigGui(boolean displayName) {
-		this.displayName = displayName;
-		init();
-	}
+    private JRadioButton getBox;
 
-	public String getLabelResource() {
-		return "ftp_sample_title"; // $NON-NLS-1$
-	}
+    private JRadioButton putBox;
 
-	public void configure(TestElement element) {
-		super.configure(element); // TODO - should this be done for embedded usage?
-		// Note: the element is a ConfigTestElement when used standalone, so we cannot use FTPSampler access methods
-		server.setText(element.getPropertyAsString(FTPSampler.SERVER));
-		remoteFile.setText(element.getPropertyAsString(FTPSampler.REMOTE_FILENAME));
-		localFile.setText(element.getPropertyAsString(FTPSampler.LOCAL_FILENAME));
+    public FtpConfigGui() {
+        this(true);
+    }
+
+    public FtpConfigGui(boolean displayName) {
+        this.displayName = displayName;
+        init();
+    }
+
+    public String getLabelResource() {
+        return "ftp_sample_title"; // $NON-NLS-1$
+    }
+
+    public void configure(TestElement element) {
+        super.configure(element); // TODO - should this be done for embedded usage?
+        // Note: the element is a ConfigTestElement when used standalone, so we cannot use FTPSampler access methods
+        server.setText(element.getPropertyAsString(FTPSampler.SERVER));
+        remoteFile.setText(element.getPropertyAsString(FTPSampler.REMOTE_FILENAME));
+        localFile.setText(element.getPropertyAsString(FTPSampler.LOCAL_FILENAME));
         inputData.setText(element.getPropertyAsString(FTPSampler.INPUT_DATA));
-		binaryMode.setSelected(element.getPropertyAsBoolean(FTPSampler.BINARY_MODE, false));
-		saveResponseData.setSelected(element.getPropertyAsBoolean(FTPSampler.SAVE_RESPONSE, false));
+        binaryMode.setSelected(element.getPropertyAsBoolean(FTPSampler.BINARY_MODE, false));
+        saveResponseData.setSelected(element.getPropertyAsBoolean(FTPSampler.SAVE_RESPONSE, false));
         final boolean uploading = element.getPropertyAsBoolean(FTPSampler.UPLOAD_FILE,false);
         if (uploading){
             putBox.setSelected(true);
         } else {
-            getBox.setSelected(true);            
+            getBox.setSelected(true);
         }
-	}
+    }
 
-	public TestElement createTestElement() {
-		ConfigTestElement element = new ConfigTestElement();
-		modifyTestElement(element);
-		return element;
-	}
+    public TestElement createTestElement() {
+        ConfigTestElement element = new ConfigTestElement();
+        modifyTestElement(element);
+        return element;
+    }
 
-	/**
-	 * Modifies a given TestElement to mirror the data in the gui components.
-	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-	 */
-	public void modifyTestElement(TestElement element) {
-		configureTestElement(element);
-		// Note: the element is a ConfigTestElement, so cannot use FTPSampler access methods
-		element.setProperty(FTPSampler.SERVER,server.getText());
-		element.setProperty(FTPSampler.REMOTE_FILENAME,remoteFile.getText());
-		element.setProperty(FTPSampler.LOCAL_FILENAME,localFile.getText());
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     *
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement element) {
+        configureTestElement(element);
+        // Note: the element is a ConfigTestElement, so cannot use FTPSampler access methods
+        element.setProperty(FTPSampler.SERVER,server.getText());
+        element.setProperty(FTPSampler.REMOTE_FILENAME,remoteFile.getText());
+        element.setProperty(FTPSampler.LOCAL_FILENAME,localFile.getText());
         element.setProperty(FTPSampler.INPUT_DATA,inputData.getText());
-		element.setProperty(FTPSampler.BINARY_MODE,binaryMode.isSelected());
-		element.setProperty(FTPSampler.SAVE_RESPONSE, saveResponseData.isSelected());
-		element.setProperty(FTPSampler.UPLOAD_FILE,putBox.isSelected());
-	}
+        element.setProperty(FTPSampler.BINARY_MODE,binaryMode.isSelected());
+        element.setProperty(FTPSampler.SAVE_RESPONSE, saveResponseData.isSelected());
+        element.setProperty(FTPSampler.UPLOAD_FILE,putBox.isSelected());
+    }
 
     /**
      * Implements JMeterGUIComponent.clearGui
      */
     public void clearGui() {
         super.clearGui();
-        
+
         server.setText(""); //$NON-NLS-1$
         remoteFile.setText(""); //$NON-NLS-1$
         localFile.setText(""); //$NON-NLS-1$
@@ -123,31 +123,31 @@ public class FtpConfigGui extends AbstractConfigGui {
         saveResponseData.setSelected(false);
         getBox.setSelected(true);
         putBox.setSelected(false);
-    }    
+    }
 
-	private JPanel createServerPanel() {
-		JLabel label = new JLabel(JMeterUtils.getResString("server")); //$NON-NLS-1$
+    private JPanel createServerPanel() {
+        JLabel label = new JLabel(JMeterUtils.getResString("server")); //$NON-NLS-1$
 
-		server = new JTextField(10);
-		label.setLabelFor(server);
+        server = new JTextField(10);
+        label.setLabelFor(server);
 
-		JPanel serverPanel = new JPanel(new BorderLayout(5, 0));
-		serverPanel.add(label, BorderLayout.WEST);
-		serverPanel.add(server, BorderLayout.CENTER);
-		return serverPanel;
-	}
+        JPanel serverPanel = new JPanel(new BorderLayout(5, 0));
+        serverPanel.add(label, BorderLayout.WEST);
+        serverPanel.add(server, BorderLayout.CENTER);
+        return serverPanel;
+    }
 
-	private JPanel createLocalFilenamePanel() {
-		JLabel label = new JLabel(JMeterUtils.getResString("ftp_local_file")); //$NON-NLS-1$
+    private JPanel createLocalFilenamePanel() {
+        JLabel label = new JLabel(JMeterUtils.getResString("ftp_local_file")); //$NON-NLS-1$
 
-		localFile = new JTextField(10);
-		label.setLabelFor(localFile);
+        localFile = new JTextField(10);
+        label.setLabelFor(localFile);
 
-		JPanel filenamePanel = new JPanel(new BorderLayout(5, 0));
-		filenamePanel.add(label, BorderLayout.WEST);
-		filenamePanel.add(localFile, BorderLayout.CENTER);
-		return filenamePanel;
-	}
+        JPanel filenamePanel = new JPanel(new BorderLayout(5, 0));
+        filenamePanel.add(label, BorderLayout.WEST);
+        filenamePanel.add(localFile, BorderLayout.CENTER);
+        return filenamePanel;
+    }
 
     private JPanel createLocalFileContentsPanel() {
         JLabel label = new JLabel(JMeterUtils.getResString("ftp_local_file_contents")); //$NON-NLS-1$
@@ -161,56 +161,56 @@ public class FtpConfigGui extends AbstractConfigGui {
         return contentsPanel;
     }
 
-	private JPanel createRemoteFilenamePanel() {
-		JLabel label = new JLabel(JMeterUtils.getResString("ftp_remote_file")); //$NON-NLS-1$
+    private JPanel createRemoteFilenamePanel() {
+        JLabel label = new JLabel(JMeterUtils.getResString("ftp_remote_file")); //$NON-NLS-1$
 
-		remoteFile = new JTextField(10);
-		label.setLabelFor(remoteFile);
+        remoteFile = new JTextField(10);
+        label.setLabelFor(remoteFile);
 
-		JPanel filenamePanel = new JPanel(new BorderLayout(5, 0));
-		filenamePanel.add(label, BorderLayout.WEST);
-		filenamePanel.add(remoteFile, BorderLayout.CENTER);
-		return filenamePanel;
-	}
+        JPanel filenamePanel = new JPanel(new BorderLayout(5, 0));
+        filenamePanel.add(label, BorderLayout.WEST);
+        filenamePanel.add(remoteFile, BorderLayout.CENTER);
+        return filenamePanel;
+    }
 
-	private JPanel createOptionsPanel(){
+    private JPanel createOptionsPanel(){
 
-		ButtonGroup group = new ButtonGroup();
+        ButtonGroup group = new ButtonGroup();
 
-		getBox = new JRadioButton(JMeterUtils.getResString("ftp_get")); //$NON-NLS-1$
-		group.add(getBox);
-		getBox.setSelected(true);
+        getBox = new JRadioButton(JMeterUtils.getResString("ftp_get")); //$NON-NLS-1$
+        group.add(getBox);
+        getBox.setSelected(true);
 
-		putBox = new JRadioButton(JMeterUtils.getResString("ftp_put")); //$NON-NLS-1$
-		group.add(putBox);
+        putBox = new JRadioButton(JMeterUtils.getResString("ftp_put")); //$NON-NLS-1$
+        group.add(putBox);
 
-		binaryMode = new JCheckBox(JMeterUtils.getResString("ftp_binary_mode")); //$NON-NLS-1$
-		saveResponseData = new JCheckBox(JMeterUtils.getResString("ftp_save_response_data")); //$NON-NLS-1$
-		
-		
-		JPanel optionsPanel = new HorizontalPanel();
-		optionsPanel.add(getBox);
-		optionsPanel.add(putBox);
-		optionsPanel.add(binaryMode);
-		optionsPanel.add(saveResponseData);
-		return optionsPanel;		
-	}
-	private void init() {
-		setLayout(new BorderLayout(0, 5));
+        binaryMode = new JCheckBox(JMeterUtils.getResString("ftp_binary_mode")); //$NON-NLS-1$
+        saveResponseData = new JCheckBox(JMeterUtils.getResString("ftp_save_response_data")); //$NON-NLS-1$
 
-		if (displayName) {
-			setBorder(makeBorder());
-			add(makeTitlePanel(), BorderLayout.NORTH);
-		}
 
-		// MAIN PANEL
-		VerticalPanel mainPanel = new VerticalPanel();
-		mainPanel.add(createServerPanel());
-		mainPanel.add(createRemoteFilenamePanel());
-		mainPanel.add(createLocalFilenamePanel());
-		mainPanel.add(createLocalFileContentsPanel());
+        JPanel optionsPanel = new HorizontalPanel();
+        optionsPanel.add(getBox);
+        optionsPanel.add(putBox);
+        optionsPanel.add(binaryMode);
+        optionsPanel.add(saveResponseData);
+        return optionsPanel;
+    }
+    private void init() {
+        setLayout(new BorderLayout(0, 5));
+
+        if (displayName) {
+            setBorder(makeBorder());
+            add(makeTitlePanel(), BorderLayout.NORTH);
+        }
+
+        // MAIN PANEL
+        VerticalPanel mainPanel = new VerticalPanel();
+        mainPanel.add(createServerPanel());
+        mainPanel.add(createRemoteFilenamePanel());
+        mainPanel.add(createLocalFilenamePanel());
+        mainPanel.add(createLocalFileContentsPanel());
         mainPanel.add(createOptionsPanel());
 
-		add(mainPanel, BorderLayout.CENTER);
-	}
+        add(mainPanel, BorderLayout.CENTER);
+    }
 }

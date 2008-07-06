@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.gui.action;
@@ -32,7 +32,7 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.SSLManager;
 
-// 
+//
 /**
  * SSL Manager Command. The SSL Manager provides a mechanism to change your
  * client authentication if required by the server. If you have JSSE 1.0.2
@@ -46,90 +46,90 @@ import org.apache.jmeter.util.SSLManager;
  * can have a whopping one key keystore. The advantage is that you can test a
  * connection using the assigned Certificate from a Certificate Authority.
  * </p>
- * TODO ? 
+ * TODO ?
  * N.B. The present implementation does not seem to allow selection of keys,
  * it only allows a change of keystore at run-time, or to provide one if not
  * already defined via the property.
- * 
+ *
  * @author <a href="bloritsch@apache.org">Berin Loritsch</a>
  */
 public class SSLManagerCommand implements Command {
-	private static Set commandSet;
-	static {
-		HashSet commands = new HashSet();
-		commands.add(ActionNames.SSL_MANAGER);
-		SSLManagerCommand.commandSet = Collections.unmodifiableSet(commands);
-	}
+    private static Set commandSet;
+    static {
+        HashSet commands = new HashSet();
+        commands.add(ActionNames.SSL_MANAGER);
+        SSLManagerCommand.commandSet = Collections.unmodifiableSet(commands);
+    }
 
-	private JFileChooser keyStoreChooser;
+    private JFileChooser keyStoreChooser;
 
-	/**
-	 * Handle the "sslmanager" action by displaying the "SSL CLient Manager"
-	 * dialog box. The Dialog Box is NOT modal, because those should be avoided
-	 * if at all possible.
-	 */
-	public void doAction(ActionEvent e) {
-		if (e.getActionCommand().equals(ActionNames.SSL_MANAGER)) {
-			this.sslManager();
-		}
-	}
+    /**
+     * Handle the "sslmanager" action by displaying the "SSL CLient Manager"
+     * dialog box. The Dialog Box is NOT modal, because those should be avoided
+     * if at all possible.
+     */
+    public void doAction(ActionEvent e) {
+        if (e.getActionCommand().equals(ActionNames.SSL_MANAGER)) {
+            this.sslManager();
+        }
+    }
 
-	/**
-	 * Provide the list of Action names that are available in this command.
-	 */
-	public Set getActionNames() {
-		return SSLManagerCommand.commandSet;
-	}
+    /**
+     * Provide the list of Action names that are available in this command.
+     */
+    public Set getActionNames() {
+        return SSLManagerCommand.commandSet;
+    }
 
-	/**
-	 * Called by sslManager button. Raises sslManager dialog.
-	 * I.e. a FileChooser for PCSI12 (.p12|.P12) files.
-	 */
-	private void sslManager() {
-		SSLManager.reset();
+    /**
+     * Called by sslManager button. Raises sslManager dialog.
+     * I.e. a FileChooser for PCSI12 (.p12|.P12) files.
+     */
+    private void sslManager() {
+        SSLManager.reset();
 
-		keyStoreChooser = new JFileChooser(JMeterUtils.getJMeterProperties().getProperty("user.dir")); //$NON-NLS-1$
-		keyStoreChooser.addChoosableFileFilter(new AcceptPKCS12FileFilter());
-		keyStoreChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		int retVal = keyStoreChooser.showOpenDialog(GuiPackage.getInstance().getMainFrame());
+        keyStoreChooser = new JFileChooser(JMeterUtils.getJMeterProperties().getProperty("user.dir")); //$NON-NLS-1$
+        keyStoreChooser.addChoosableFileFilter(new AcceptPKCS12FileFilter());
+        keyStoreChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        int retVal = keyStoreChooser.showOpenDialog(GuiPackage.getInstance().getMainFrame());
 
-		if (JFileChooser.APPROVE_OPTION == retVal) {
-			File selectedFile = keyStoreChooser.getSelectedFile();
-			try {
-				System.setProperty(SSLManager.JAVAX_NET_SSL_KEY_STORE, selectedFile.getCanonicalPath());
-			} catch (IOException e) {
-				//Ignored
-			}
-		}
+        if (JFileChooser.APPROVE_OPTION == retVal) {
+            File selectedFile = keyStoreChooser.getSelectedFile();
+            try {
+                System.setProperty(SSLManager.JAVAX_NET_SSL_KEY_STORE, selectedFile.getCanonicalPath());
+            } catch (IOException e) {
+                //Ignored
+            }
+        }
 
-		keyStoreChooser = null;
-		SSLManager.getInstance();
-	}
+        keyStoreChooser = null;
+        SSLManager.getInstance();
+    }
 
-	/**
-	 * Internal class to add a PKCS12 file format filter for JFileChooser.
-	 */
-	static private class AcceptPKCS12FileFilter extends FileFilter {
-		/**
-		 * Get the description that shows up in JFileChooser filter menu.
-		 * 
-		 * @return description
-		 */
-		public String getDescription() {
-			return JMeterUtils.getResString("pkcs12_desc"); //$NON-NLS-1$
-		}
+    /**
+     * Internal class to add a PKCS12 file format filter for JFileChooser.
+     */
+    static private class AcceptPKCS12FileFilter extends FileFilter {
+        /**
+         * Get the description that shows up in JFileChooser filter menu.
+         *
+         * @return description
+         */
+        public String getDescription() {
+            return JMeterUtils.getResString("pkcs12_desc"); //$NON-NLS-1$
+        }
 
-		/**
-		 * Tests to see if the file ends with "*.p12" or "*.P12".
-		 * 
-		 * @param testFile
-		 *            file to test
-		 * @return true if file is accepted, false otherwise
-		 */
-		public boolean accept(File testFile) {
-			return testFile.isDirectory() 
-			|| testFile.getName().endsWith(".p12")  //$NON-NLS-1$
-			|| testFile.getName().endsWith(".P12"); //$NON-NLS-1$
-		}
-	}
+        /**
+         * Tests to see if the file ends with "*.p12" or "*.P12".
+         *
+         * @param testFile
+         *            file to test
+         * @return true if file is accepted, false otherwise
+         */
+        public boolean accept(File testFile) {
+            return testFile.isDirectory()
+            || testFile.getName().endsWith(".p12")  //$NON-NLS-1$
+            || testFile.getName().endsWith(".P12"); //$NON-NLS-1$
+        }
+    }
 }

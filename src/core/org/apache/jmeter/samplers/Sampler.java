@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.samplers;
@@ -23,14 +23,13 @@ import org.apache.jmeter.testelement.TestElement;
 /**
  * Classes which are able to generate information about an entry should
  * implement this interface.
- * 
- * @author unattributed
- * @version $Revision$ Last updated: $Date$
+ *
+ * @version $Revision$
  */
 public interface Sampler extends java.io.Serializable, TestElement {
-	/**
-	 * Obtains statistics about the given Entry, and packages the information
-	 * into a SampleResult.
-	 */
-	public SampleResult sample(Entry e);
+    /**
+     * Obtains statistics about the given Entry, and packages the information
+     * into a SampleResult.
+     */
+    public SampleResult sample(Entry e);
 }

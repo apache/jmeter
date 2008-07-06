@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.reporters;
@@ -63,151 +63,151 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 public class ResultCollector extends AbstractListenerElement implements SampleListener, Clearable, Serializable,
-		TestListener, Remoteable, NoThreadClone {
+        TestListener, Remoteable, NoThreadClone {
 
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final long serialVersionUID = 231L;
+    private static final long serialVersionUID = 231L;
 
-	// This string is used to identify local test runs, so must not be a valid host name
-	private static final String TEST_IS_LOCAL = "*local*"; // $NON-NLS-1$
+    // This string is used to identify local test runs, so must not be a valid host name
+    private static final String TEST_IS_LOCAL = "*local*"; // $NON-NLS-1$
 
-	private static final String TESTRESULTS_START = "<testResults>"; // $NON-NLS-1$
+    private static final String TESTRESULTS_START = "<testResults>"; // $NON-NLS-1$
 
-	private static final String TESTRESULTS_START_V1_1_PREVER = "<testResults version=\"";  // $NON-NLS-1$
+    private static final String TESTRESULTS_START_V1_1_PREVER = "<testResults version=\"";  // $NON-NLS-1$
         private static final String TESTRESULTS_START_V1_1_POSTVER="\">"; // $NON-NLS-1$
 
-	private static final String TESTRESULTS_END = "</testResults>"; // $NON-NLS-1$
+    private static final String TESTRESULTS_END = "</testResults>"; // $NON-NLS-1$
 
-	private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"; // $NON-NLS-1$
+    private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"; // $NON-NLS-1$
 
-	private static final int MIN_XML_FILE_LEN = XML_HEADER.length() + TESTRESULTS_START.length()
-			+ TESTRESULTS_END.length();
+    private static final int MIN_XML_FILE_LEN = XML_HEADER.length() + TESTRESULTS_START.length()
+            + TESTRESULTS_END.length();
 
-	public final static String FILENAME = "filename"; // $NON-NLS-1$
+    public final static String FILENAME = "filename"; // $NON-NLS-1$
 
-	private final static String SAVE_CONFIG = "saveConfig"; // $NON-NLS-1$
+    private final static String SAVE_CONFIG = "saveConfig"; // $NON-NLS-1$
 
-	private static final String ERROR_LOGGING = "ResultCollector.error_logging"; // $NON-NLS-1$
+    private static final String ERROR_LOGGING = "ResultCollector.error_logging"; // $NON-NLS-1$
 
-	private static final String SUCCESS_ONLY_LOGGING = "ResultCollector.success_only_logging"; // $NON-NLS-1$
+    private static final String SUCCESS_ONLY_LOGGING = "ResultCollector.success_only_logging"; // $NON-NLS-1$
 
-	private transient DefaultConfigurationSerializer serializer;
+    private transient DefaultConfigurationSerializer serializer;
 
-	private transient volatile PrintWriter out;
+    private transient volatile PrintWriter out;
 
-	private boolean inTest = false;
+    private boolean inTest = false;
 
-	private static final Map files = new HashMap();
+    private static final Map files = new HashMap();
 
-	private final Set hosts = new HashSet();
+    private final Set hosts = new HashSet();
 
-	protected boolean isStats = false;
+    protected boolean isStats = false;
 
-	/**
-	 * No-arg constructor.
-	 */
-	public ResultCollector() {
-		// current = -1;
-		// serializer = new DefaultConfigurationSerializer();
-		setErrorLogging(false);
-		setSuccessOnlyLogging(false);
-		setProperty(new ObjectProperty(SAVE_CONFIG, new SampleSaveConfiguration()));
-	}
+    /**
+     * No-arg constructor.
+     */
+    public ResultCollector() {
+        // current = -1;
+        // serializer = new DefaultConfigurationSerializer();
+        setErrorLogging(false);
+        setSuccessOnlyLogging(false);
+        setProperty(new ObjectProperty(SAVE_CONFIG, new SampleSaveConfiguration()));
+    }
 
-	// Ensure that the sample save config is not shared between copied nodes
-	public Object clone(){
-		ResultCollector clone = (ResultCollector) super.clone();
-		clone.setSaveConfig((SampleSaveConfiguration)clone.getSaveConfig().clone());
-		return clone;
-	}
+    // Ensure that the sample save config is not shared between copied nodes
+    public Object clone(){
+        ResultCollector clone = (ResultCollector) super.clone();
+        clone.setSaveConfig((SampleSaveConfiguration)clone.getSaveConfig().clone());
+        return clone;
+    }
 
-	private void setFilenameProperty(String f) {
-		setProperty(FILENAME, f);
-	}
+    private void setFilenameProperty(String f) {
+        setProperty(FILENAME, f);
+    }
 
-	public String getFilename() {
-		return getPropertyAsString(FILENAME);
-	}
+    public String getFilename() {
+        return getPropertyAsString(FILENAME);
+    }
 
-	public boolean isErrorLogging() {
-		return getPropertyAsBoolean(ERROR_LOGGING);
-	}
+    public boolean isErrorLogging() {
+        return getPropertyAsBoolean(ERROR_LOGGING);
+    }
 
-	public void setErrorLogging(boolean errorLogging) {
-		setProperty(new BooleanProperty(ERROR_LOGGING, errorLogging));
-	}
+    public void setErrorLogging(boolean errorLogging) {
+        setProperty(new BooleanProperty(ERROR_LOGGING, errorLogging));
+    }
 
-	public void setSuccessOnlyLogging(boolean value) {
-		if (value) {
-		    setProperty(new BooleanProperty(SUCCESS_ONLY_LOGGING, true));
-		} else {
-			removeProperty(SUCCESS_ONLY_LOGGING);
-		}
-	}
+    public void setSuccessOnlyLogging(boolean value) {
+        if (value) {
+            setProperty(new BooleanProperty(SUCCESS_ONLY_LOGGING, true));
+        } else {
+            removeProperty(SUCCESS_ONLY_LOGGING);
+        }
+    }
 
-	public boolean isSuccessOnlyLogging() {
-		return getPropertyAsBoolean(SUCCESS_ONLY_LOGGING,false);
-	}
+    public boolean isSuccessOnlyLogging() {
+        return getPropertyAsBoolean(SUCCESS_ONLY_LOGGING,false);
+    }
 
-	/**
-	 * Decides whether or not to a sample is wanted based on:
-	 * - errorOnly
-	 * - successOnly
-	 * - sample success
-	 * 
-	 * @param success is sample successful
-	 * @return whether to log/display the sample
-	 */
-	public boolean isSampleWanted(boolean success){
-		boolean errorOnly = isErrorLogging();
-		boolean successOnly = isSuccessOnlyLogging();
-		return (!errorOnly && !successOnly) || 
-		       (success && successOnly) ||
-			   (!success && errorOnly);
-		// successOnly and errorOnly cannot both be set
-	}
-	/**
-	 * Sets the filename attribute of the ResultCollector object.
-	 * 
-	 * @param f
-	 *            the new filename value
-	 */
-	public void setFilename(String f) {
-		if (inTest) {
-			return;
-		}
-		setFilenameProperty(f);
-	}
+    /**
+     * Decides whether or not to a sample is wanted based on:
+     * - errorOnly
+     * - successOnly
+     * - sample success
+     *
+     * @param success is sample successful
+     * @return whether to log/display the sample
+     */
+    public boolean isSampleWanted(boolean success){
+        boolean errorOnly = isErrorLogging();
+        boolean successOnly = isSuccessOnlyLogging();
+        return (!errorOnly && !successOnly) ||
+               (success && successOnly) ||
+               (!success && errorOnly);
+        // successOnly and errorOnly cannot both be set
+    }
+    /**
+     * Sets the filename attribute of the ResultCollector object.
+     *
+     * @param f
+     *            the new filename value
+     */
+    public void setFilename(String f) {
+        if (inTest) {
+            return;
+        }
+        setFilenameProperty(f);
+    }
 
-	public synchronized void testEnded(String host) {
-		hosts.remove(host);
-		if (hosts.size() == 0) {
-			finalizeFileOutput();
-			inTest = false;
-		}
-	}
+    public synchronized void testEnded(String host) {
+        hosts.remove(host);
+        if (hosts.size() == 0) {
+            finalizeFileOutput();
+            inTest = false;
+        }
+    }
 
-	public synchronized void testStarted(String host) {
-		hosts.add(host);
-		try {
-			initializeFileOutput();
-			if (getVisualizer() != null) {
-				this.isStats = getVisualizer().isStats();
-			}
-		} catch (Exception e) {
-			log.error("", e);
-		}
-		inTest = true;
-	}
+    public synchronized void testStarted(String host) {
+        hosts.add(host);
+        try {
+            initializeFileOutput();
+            if (getVisualizer() != null) {
+                this.isStats = getVisualizer().isStats();
+            }
+        } catch (Exception e) {
+            log.error("", e);
+        }
+        inTest = true;
+    }
 
-	public void testEnded() {
-		testEnded(TEST_IS_LOCAL);
-	}
+    public void testEnded() {
+        testEnded(TEST_IS_LOCAL);
+    }
 
-	public void testStarted() {
-		testStarted(TEST_IS_LOCAL);
-	}
+    public void testStarted() {
+        testStarted(TEST_IS_LOCAL);
+    }
 
     /**
      * Loads an existing sample data (JTL) file.
@@ -215,19 +215,19 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
      * - XStream format
      * - Avalon format
      * - CSV format
-     * 
+     *
      */
-	public void loadExistingFile() {
-		final Visualizer visualizer = getVisualizer();
-		if (visualizer == null) {
-			return; // No point reading the file if there's no visualiser
-		}
-		boolean parsedOK = false;
-		String filename = getFilename();
+    public void loadExistingFile() {
+        final Visualizer visualizer = getVisualizer();
+        if (visualizer == null) {
+            return; // No point reading the file if there's no visualiser
+        }
+        boolean parsedOK = false;
+        String filename = getFilename();
         File file = new File(filename);
         if (file.exists()) {
-			clearVisualizer();
-			BufferedReader dataReader = null;
+            clearVisualizer();
+            BufferedReader dataReader = null;
             BufferedInputStream bufferedInputStream = null;
             try {
                 dataReader = new BufferedReader(new FileReader(file));
@@ -239,8 +239,8 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                     log.warn(filename+" is empty");
                 } else {
                     if (!line.startsWith("<?xml ")){// No, must be CSV //$NON-NLS-1$
-                    	CSVSaveService.processSamples(filename, visualizer, this);
-                        parsedOK = true;                                
+                        CSVSaveService.processSamples(filename, visualizer, this);
+                        parsedOK = true;
                     } else { // We are processing XML
                         try { // Assume XStream
                             bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
@@ -258,289 +258,289 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                         }
                     }
                 }
-			} catch (IOException e) {
+            } catch (IOException e) {
                 log.warn("Problem reading JTL file: "+file);
-			} catch (JMeterError e){
+            } catch (JMeterError e){
                 log.warn("Problem reading JTL file: "+file);
-			} catch (RuntimeException e){ // e.g. NullPointerException
+            } catch (RuntimeException e){ // e.g. NullPointerException
                 log.warn("Problem reading JTL file: "+file,e);
             } finally {
                 JOrphanUtils.closeQuietly(dataReader);
                 JOrphanUtils.closeQuietly(bufferedInputStream);
-				if (!parsedOK) {
+                if (!parsedOK) {
                     GuiPackage.showErrorMessage(
                                 "Error loading results file - see log file",
                                 "Result file loader");
-				}
-			}
-		} else {
+                }
+            }
+        } else {
             GuiPackage.showErrorMessage(
                     "Error loading results file - could not open file",
-                    "Result file loader");			
-		}
-	}
+                    "Result file loader");
+        }
+    }
 
-	private static void writeFileStart(PrintWriter writer, SampleSaveConfiguration saveConfig) {
-		if (saveConfig.saveAsXml()) {
-			writer.print(XML_HEADER);
-			// Write the EOL separately so we generate LF line ends on Unix and Windows
-			writer.print("\n"); // $NON-NLS-1$
+    private static void writeFileStart(PrintWriter writer, SampleSaveConfiguration saveConfig) {
+        if (saveConfig.saveAsXml()) {
+            writer.print(XML_HEADER);
+            // Write the EOL separately so we generate LF line ends on Unix and Windows
+            writer.print("\n"); // $NON-NLS-1$
             String pi=saveConfig.getXmlPi();
             if (pi.length() > 0) {
                 writer.println(pi);
             }
-            // Can't do it as a static initialisation, because SaveService 
+            // Can't do it as a static initialisation, because SaveService
             // is being constructed when this is called
-			writer.print(TESTRESULTS_START_V1_1_PREVER);
+            writer.print(TESTRESULTS_START_V1_1_PREVER);
             writer.print(SaveService.getVERSION());
             writer.print(TESTRESULTS_START_V1_1_POSTVER);
-			// Write the EOL separately so we generate LF line ends on Unix and Windows
+            // Write the EOL separately so we generate LF line ends on Unix and Windows
             writer.print("\n"); // $NON-NLS-1$
-		} else if (saveConfig.saveFieldNames()) {
-			writer.println(CSVSaveService.printableFieldNamesToString(saveConfig));
-		}
-	}
+        } else if (saveConfig.saveFieldNames()) {
+            writer.println(CSVSaveService.printableFieldNamesToString(saveConfig));
+        }
+    }
 
-	private static void writeFileEnd(PrintWriter pw, SampleSaveConfiguration saveConfig) {
-		if (saveConfig.saveAsXml()) {
-			pw.print("\n"); // $NON-NLS-1$
-			pw.print(TESTRESULTS_END);
-			pw.print("\n");// Added in version 1.1 // $NON-NLS-1$
-		}
-	}
+    private static void writeFileEnd(PrintWriter pw, SampleSaveConfiguration saveConfig) {
+        if (saveConfig.saveAsXml()) {
+            pw.print("\n"); // $NON-NLS-1$
+            pw.print(TESTRESULTS_END);
+            pw.print("\n");// Added in version 1.1 // $NON-NLS-1$
+        }
+    }
 
-	private static synchronized PrintWriter getFileWriter(String filename, SampleSaveConfiguration saveConfig)
-			throws IOException {
-		if (filename == null || filename.length() == 0) {
-			return null;
-		}
-		PrintWriter writer = (PrintWriter) files.get(filename);
-		boolean trimmed = true;
+    private static synchronized PrintWriter getFileWriter(String filename, SampleSaveConfiguration saveConfig)
+            throws IOException {
+        if (filename == null || filename.length() == 0) {
+            return null;
+        }
+        PrintWriter writer = (PrintWriter) files.get(filename);
+        boolean trimmed = true;
 
-		if (writer == null) {
-			if (saveConfig.saveAsXml()) {
-				trimmed = trimLastLine(filename);
-			} else {
-				trimmed = new File(filename).exists();
-			}
-			// Find the name of the directory containing the file
-			// and create it - if there is one
-			File pdir = new File(filename).getParentFile();
-			if (pdir != null) {
-				pdir.mkdirs();
-			}
-			writer = new PrintWriter(new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(filename,
-					trimmed)), SaveService.getFileEncoding("UTF-8")), true); // $NON-NLS-1$
-			files.put(filename, writer);
-		}
-		if (!trimmed) {
-			writeFileStart(writer, saveConfig);
-		}
-		return writer;
-	}
+        if (writer == null) {
+            if (saveConfig.saveAsXml()) {
+                trimmed = trimLastLine(filename);
+            } else {
+                trimmed = new File(filename).exists();
+            }
+            // Find the name of the directory containing the file
+            // and create it - if there is one
+            File pdir = new File(filename).getParentFile();
+            if (pdir != null) {
+                pdir.mkdirs();
+            }
+            writer = new PrintWriter(new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(filename,
+                    trimmed)), SaveService.getFileEncoding("UTF-8")), true); // $NON-NLS-1$
+            files.put(filename, writer);
+        }
+        if (!trimmed) {
+            writeFileStart(writer, saveConfig);
+        }
+        return writer;
+    }
 
-	// returns false if the file did not contain the terminator
-	private static boolean trimLastLine(String filename) {
-		RandomAccessFile raf = null;
-		try {
-			raf = new RandomAccessFile(filename, "rw"); // $NON-NLS-1$
-			long len = raf.length();
-			if (len < MIN_XML_FILE_LEN) {
-				return false;
-			}
-			raf.seek(len - TESTRESULTS_END.length() - 10);// TODO: may not work on all OSes?
-			String line;
-			long pos = raf.getFilePointer();
-			int end = 0;
-			while ((line = raf.readLine()) != null)// reads to end of line OR end of file
-			{
-				end = line.indexOf(TESTRESULTS_END);
-				if (end >= 0) // found the string
-				{
-					break;
-				}
-				pos = raf.getFilePointer();
-			}
-			if (line == null) {
-				log.warn("Unexpected EOF trying to find XML end marker in " + filename);
-				raf.close();
-				return false;
-			}
-			raf.setLength(pos + end);// Truncate the file
-			raf.close();
-			raf = null;
-		} catch (FileNotFoundException e) {
-			return false;
-		} catch (IOException e) {
-			log.warn("Error trying to find XML terminator " + e.toString());
-			return false;
-		} finally {
-			try {
-				if (raf != null) {
-					raf.close();
-				}
-			} catch (IOException e1) {
-				log.info("Could not close " + filename + " " + e1.getLocalizedMessage());
-			}
-		}
-		return true;
-	}
+    // returns false if the file did not contain the terminator
+    private static boolean trimLastLine(String filename) {
+        RandomAccessFile raf = null;
+        try {
+            raf = new RandomAccessFile(filename, "rw"); // $NON-NLS-1$
+            long len = raf.length();
+            if (len < MIN_XML_FILE_LEN) {
+                return false;
+            }
+            raf.seek(len - TESTRESULTS_END.length() - 10);// TODO: may not work on all OSes?
+            String line;
+            long pos = raf.getFilePointer();
+            int end = 0;
+            while ((line = raf.readLine()) != null)// reads to end of line OR end of file
+            {
+                end = line.indexOf(TESTRESULTS_END);
+                if (end >= 0) // found the string
+                {
+                    break;
+                }
+                pos = raf.getFilePointer();
+            }
+            if (line == null) {
+                log.warn("Unexpected EOF trying to find XML end marker in " + filename);
+                raf.close();
+                return false;
+            }
+            raf.setLength(pos + end);// Truncate the file
+            raf.close();
+            raf = null;
+        } catch (FileNotFoundException e) {
+            return false;
+        } catch (IOException e) {
+            log.warn("Error trying to find XML terminator " + e.toString());
+            return false;
+        } finally {
+            try {
+                if (raf != null) {
+                    raf.close();
+                }
+            } catch (IOException e1) {
+                log.info("Could not close " + filename + " " + e1.getLocalizedMessage());
+            }
+        }
+        return true;
+    }
 
     // Only called if visualizer is non-null
-	private void readSamples(TestResultWrapper testResults, Visualizer visualizer) throws Exception {
-		Collection samples = testResults.getSampleResults();
-		Iterator iter = samples.iterator();
-		while (iter.hasNext()) {
-			SampleResult result = (SampleResult) iter.next();
-			if (isSampleWanted(result.isSuccessful())) {
-				visualizer.add(result);
-			}
-		}
-	}
+    private void readSamples(TestResultWrapper testResults, Visualizer visualizer) throws Exception {
+        Collection samples = testResults.getSampleResults();
+        Iterator iter = samples.iterator();
+        while (iter.hasNext()) {
+            SampleResult result = (SampleResult) iter.next();
+            if (isSampleWanted(result.isSuccessful())) {
+                visualizer.add(result);
+            }
+        }
+    }
 
-	public void clearVisualizer() {
-		// current = -1;
-		if (getVisualizer() != null && getVisualizer() instanceof Clearable) {
-			((Clearable) getVisualizer()).clearData();
-		}
-		finalizeFileOutput();
-	}
+    public void clearVisualizer() {
+        // current = -1;
+        if (getVisualizer() != null && getVisualizer() instanceof Clearable) {
+            ((Clearable) getVisualizer()).clearData();
+        }
+        finalizeFileOutput();
+    }
 
-	public void sampleStarted(SampleEvent e) {
-	}
+    public void sampleStarted(SampleEvent e) {
+    }
 
-	public void sampleStopped(SampleEvent e) {
-	}
+    public void sampleStopped(SampleEvent e) {
+    }
 
-	/**
-	 * When a test result is received, display it and save it.
-	 * 
-	 * @param event
-	 *            the sample event that was received
-	 */
-	public void sampleOccurred(SampleEvent event) {
-		SampleResult result = event.getResult();
+    /**
+     * When a test result is received, display it and save it.
+     *
+     * @param event
+     *            the sample event that was received
+     */
+    public void sampleOccurred(SampleEvent event) {
+        SampleResult result = event.getResult();
 
-		if (isSampleWanted(result.isSuccessful())) {
-			sendToVisualizer(result);
-			if ( out != null) {// no point otherwise
-				SampleSaveConfiguration config = getSaveConfig();
-				result.setSaveConfig(config);
-				try {
-					if (config.saveAsXml()) {
-						recordResult(event);
-					} else {
-						String savee = CSVSaveService.resultToDelimitedString(event);
-						out.println(savee);
-					}
-				} catch (Exception err) {
-					log.error("Error trying to record a sample", err); // should throw exception back to caller
-				}
-			}
-		}
-	}
+        if (isSampleWanted(result.isSuccessful())) {
+            sendToVisualizer(result);
+            if ( out != null) {// no point otherwise
+                SampleSaveConfiguration config = getSaveConfig();
+                result.setSaveConfig(config);
+                try {
+                    if (config.saveAsXml()) {
+                        recordResult(event);
+                    } else {
+                        String savee = CSVSaveService.resultToDelimitedString(event);
+                        out.println(savee);
+                    }
+                } catch (Exception err) {
+                    log.error("Error trying to record a sample", err); // should throw exception back to caller
+                }
+            }
+        }
+    }
 
-	protected final void sendToVisualizer(SampleResult r) {
-		if (getVisualizer() != null) {
-			getVisualizer().add(r);
-		}
-	}
+    protected final void sendToVisualizer(SampleResult r) {
+        if (getVisualizer() != null) {
+            getVisualizer().add(r);
+        }
+    }
 
-	// Only called if out != null
-	private void recordResult(SampleEvent event) throws Exception {
-		SampleResult result = event.getResult();
-		if (!isResultMarked(result) && !this.isStats) {
-			if (SaveService.isSaveTestLogFormat20()) {
-				if (serializer == null) {
-					serializer = new DefaultConfigurationSerializer();
-				}
-				out.write(OldSaveService.getSerializedSampleResult(result, serializer, getSaveConfig()));
-			} else {
-				SaveService.saveSampleResult(event, out);
-			}
-		}
-	}
+    // Only called if out != null
+    private void recordResult(SampleEvent event) throws Exception {
+        SampleResult result = event.getResult();
+        if (!isResultMarked(result) && !this.isStats) {
+            if (SaveService.isSaveTestLogFormat20()) {
+                if (serializer == null) {
+                    serializer = new DefaultConfigurationSerializer();
+                }
+                out.write(OldSaveService.getSerializedSampleResult(result, serializer, getSaveConfig()));
+            } else {
+                SaveService.saveSampleResult(event, out);
+            }
+        }
+    }
 
-	/**
-	 * recordStats is used to save statistics generated by visualizers
-	 * 
-	 * @param e
-	 * @throws Exception
-	 */
-	public void recordStats(TestElement e) throws Exception {
-		if (out == null) {
-			initializeFileOutput();
-		}
-		if (out != null) {
-			SaveService.saveTestElement(e, out);
-		}
-	}
+    /**
+     * recordStats is used to save statistics generated by visualizers
+     *
+     * @param e
+     * @throws Exception
+     */
+    public void recordStats(TestElement e) throws Exception {
+        if (out == null) {
+            initializeFileOutput();
+        }
+        if (out != null) {
+            SaveService.saveTestElement(e, out);
+        }
+    }
 
-	private synchronized boolean isResultMarked(SampleResult res) {
-		String filename = getFilename();
-		boolean marked = res.isMarked(filename);
+    private synchronized boolean isResultMarked(SampleResult res) {
+        String filename = getFilename();
+        boolean marked = res.isMarked(filename);
 
-		if (!marked) {
-			res.setMarked(filename);
-		}
-		return marked;
-	}
+        if (!marked) {
+            res.setMarked(filename);
+        }
+        return marked;
+    }
 
-	private void initializeFileOutput() throws IOException {
+    private void initializeFileOutput() throws IOException {
 
-		String filename = getFilename();
-		if (out == null && filename != null) {
-			if (out == null) {
-				try {
-					out = getFileWriter(filename, getSaveConfig());
-				} catch (FileNotFoundException e) {
-					out = null;
-				}
-			}
-		}
-	}
+        String filename = getFilename();
+        if (out == null && filename != null) {
+            if (out == null) {
+                try {
+                    out = getFileWriter(filename, getSaveConfig());
+                } catch (FileNotFoundException e) {
+                    out = null;
+                }
+            }
+        }
+    }
 
-	private synchronized void finalizeFileOutput() {
-		if (out != null) {
-			writeFileEnd(out, getSaveConfig());
-			out.close();
-			files.remove(getFilename());
-			out = null;
-		}
-	}
+    private synchronized void finalizeFileOutput() {
+        if (out != null) {
+            writeFileEnd(out, getSaveConfig());
+            out.close();
+            files.remove(getFilename());
+            out = null;
+        }
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see TestListener#testIterationStart(LoopIterationEvent)
-	 */
-	public void testIterationStart(LoopIterationEvent event) {
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see TestListener#testIterationStart(LoopIterationEvent)
+     */
+    public void testIterationStart(LoopIterationEvent event) {
+    }
 
-	/**
-	 * @return Returns the saveConfig.
-	 */
-	public SampleSaveConfiguration getSaveConfig() {
-		try {
-			return (SampleSaveConfiguration) getProperty(SAVE_CONFIG).getObjectValue();
-		} catch (ClassCastException e) {
-			setSaveConfig(new SampleSaveConfiguration());
-			return getSaveConfig();
-		}
-	}
+    /**
+     * @return Returns the saveConfig.
+     */
+    public SampleSaveConfiguration getSaveConfig() {
+        try {
+            return (SampleSaveConfiguration) getProperty(SAVE_CONFIG).getObjectValue();
+        } catch (ClassCastException e) {
+            setSaveConfig(new SampleSaveConfiguration());
+            return getSaveConfig();
+        }
+    }
 
-	/**
-	 * @param saveConfig
-	 *            The saveConfig to set.
-	 */
-	public void setSaveConfig(SampleSaveConfiguration saveConfig) {
-		getProperty(SAVE_CONFIG).setObjectValue(saveConfig);
-	}
+    /**
+     * @param saveConfig
+     *            The saveConfig to set.
+     */
+    public void setSaveConfig(SampleSaveConfiguration saveConfig) {
+        getProperty(SAVE_CONFIG).setObjectValue(saveConfig);
+    }
 
-	// This is required so that
-	// @see org.apache.jmeter.gui.tree.JMeterTreeModel.getNodesOfType()
-	// can find the Clearable nodes - the userObject has to implement the interface.
-	public void clearData() {
-	}
+    // This is required so that
+    // @see org.apache.jmeter.gui.tree.JMeterTreeModel.getNodesOfType()
+    // can find the Clearable nodes - the userObject has to implement the interface.
+    public void clearData() {
+    }
 
 }

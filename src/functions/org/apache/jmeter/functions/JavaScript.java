@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -40,107 +40,107 @@ import org.mozilla.javascript.WrappedException;
 
 public class JavaScript extends AbstractFunction implements Serializable {
 
-	private static final long serialVersionUID = 232L;
-	
-	private static final List desc = new LinkedList();
+    private static final long serialVersionUID = 232L;
 
-	private static final String KEY = "__javaScript"; //$NON-NLS-1$
+    private static final List desc = new LinkedList();
 
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final String KEY = "__javaScript"; //$NON-NLS-1$
 
-	static {
-		desc.add(JMeterUtils.getResString("javascript_expression"));//$NON-NLS-1$
-		desc.add(JMeterUtils.getResString("function_name_paropt")); //$NON-NLS-1$
-	}
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private Object[] values;
+    static {
+        desc.add(JMeterUtils.getResString("javascript_expression"));//$NON-NLS-1$
+        desc.add(JMeterUtils.getResString("function_name_paropt")); //$NON-NLS-1$
+    }
 
-	public JavaScript() {
-	}
+    private Object[] values;
 
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
+    public JavaScript() {
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
-	 */
-	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
-			throws InvalidVariableException {
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 
-		JMeterContext jmctx = JMeterContextService.getContext();
-		JMeterVariables vars = jmctx.getVariables();
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
+     */
+    public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
+            throws InvalidVariableException {
 
-		String script = ((CompoundVariable) values[0]).execute();
-		// Allow variable to be omitted
-		String varName = values.length < 2 ? null : ((CompoundVariable) values[1]).execute().trim();
-		String resultStr = "";
+        JMeterContext jmctx = JMeterContextService.getContext();
+        JMeterVariables vars = jmctx.getVariables();
 
-		Context cx = Context.enter();
-		try {
+        String script = ((CompoundVariable) values[0]).execute();
+        // Allow variable to be omitted
+        String varName = values.length < 2 ? null : ((CompoundVariable) values[1]).execute().trim();
+        String resultStr = "";
 
-			Scriptable scope = cx.initStandardObjects(null);
-			
-			// Set up some objects for the script to play with
-			scope.put("ctx", scope, jmctx); //$NON-NLS-1$
-			scope.put("vars", scope, vars); //$NON-NLS-1$
-			scope.put("props", scope, JMeterUtils.getJMeterProperties()); //$NON-NLS-1$
-			scope.put("theadName", scope, Thread.currentThread().getName()); //$NON-NLS-1$
-			scope.put("sampler", scope, currentSampler); //$NON-NLS-1$
-			scope.put("sampleResult", scope, previousResult); //$NON-NLS-1$
+        Context cx = Context.enter();
+        try {
+
+            Scriptable scope = cx.initStandardObjects(null);
+
+            // Set up some objects for the script to play with
+            scope.put("ctx", scope, jmctx); //$NON-NLS-1$
+            scope.put("vars", scope, vars); //$NON-NLS-1$
+            scope.put("props", scope, JMeterUtils.getJMeterProperties()); //$NON-NLS-1$
+            scope.put("theadName", scope, Thread.currentThread().getName()); //$NON-NLS-1$
+            scope.put("sampler", scope, currentSampler); //$NON-NLS-1$
+            scope.put("sampleResult", scope, previousResult); //$NON-NLS-1$
 
             Object result = cx.evaluateString(scope, script, "<cmd>", 1, null); //$NON-NLS-1$
 
-			resultStr = Context.toString(result);
-			if (varName != null && vars != null) {// vars can be null if run from TestPlan
-				vars.put(varName, resultStr);
+            resultStr = Context.toString(result);
+            if (varName != null && vars != null) {// vars can be null if run from TestPlan
+                vars.put(varName, resultStr);
             }
 
-		} catch (WrappedException e) {
-			log.error("Error processing Javascript", e);
-			throw new InvalidVariableException();
-		} catch (EcmaError e) {
-			log.error("Error processing Javascript", e);
-			throw new InvalidVariableException();
-		} catch (JavaScriptException e) {
-			log.error("Error processing Javascript", e);
-			throw new InvalidVariableException();
-		} finally {
-			Context.exit();
-		}
+        } catch (WrappedException e) {
+            log.error("Error processing Javascript", e);
+            throw new InvalidVariableException();
+        } catch (EcmaError e) {
+            log.error("Error processing Javascript", e);
+            throw new InvalidVariableException();
+        } catch (JavaScriptException e) {
+            log.error("Error processing Javascript", e);
+            throw new InvalidVariableException();
+        } finally {
+            Context.exit();
+        }
 
-		return resultStr;
+        return resultStr;
 
-	}
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.functions.Function#setParameters(Collection)
-	 */
-	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
-		checkParameterCount(parameters, 1, 2);
-		values = parameters.toArray();
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.functions.Function#setParameters(Collection)
+     */
+    public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
+        checkParameterCount(parameters, 1, 2);
+        values = parameters.toArray();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.functions.Function#getReferenceKey()
-	 */
-	public String getReferenceKey() {
-		return KEY;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.functions.Function#getReferenceKey()
+     */
+    public String getReferenceKey() {
+        return KEY;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.functions.Function#getArgumentDesc()
-	 */
-	public List getArgumentDesc() {
-		return desc;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.functions.Function#getArgumentDesc()
+     */
+    public List getArgumentDesc() {
+        return desc;
+    }
 
 }

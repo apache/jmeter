@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.gui.action;
@@ -34,45 +34,45 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class LookAndFeelCommand implements Command {
 
-	private static final Set commands = new HashSet();
+    private static final Set commands = new HashSet();
 
-	static {
-		UIManager.LookAndFeelInfo[] lfs = UIManager.getInstalledLookAndFeels();
-		for (int i = 0; i < lfs.length; i++) {
-			commands.add(ActionNames.LAF_PREFIX + lfs[i].getClassName());
-		}
+    static {
+        UIManager.LookAndFeelInfo[] lfs = UIManager.getInstalledLookAndFeels();
+        for (int i = 0; i < lfs.length; i++) {
+            commands.add(ActionNames.LAF_PREFIX + lfs[i].getClassName());
+        }
 
-		try {
-			String defaultUI = JMeterUtils.getPropDefault("jmeter.laf", UIManager
-					.getCrossPlatformLookAndFeelClassName());
-			UIManager.setLookAndFeel(defaultUI);
-		} catch (IllegalAccessException e) {
-		} catch (ClassNotFoundException e) {
+        try {
+            String defaultUI = JMeterUtils.getPropDefault("jmeter.laf", UIManager
+                    .getCrossPlatformLookAndFeelClassName());
+            UIManager.setLookAndFeel(defaultUI);
+        } catch (IllegalAccessException e) {
+        } catch (ClassNotFoundException e) {
         } catch (InstantiationException e) {
         } catch (UnsupportedLookAndFeelException e) {
         }
-	}
+    }
 
-	public LookAndFeelCommand() {
-	}
+    public LookAndFeelCommand() {
+    }
 
-	public void doAction(ActionEvent ev) {
-		try {
-			String className = ev.getActionCommand().substring(4).replace('/', '.');
-			UIManager.setLookAndFeel(className);
-			SwingUtilities.updateComponentTreeUI(GuiPackage.getInstance().getMainFrame());
-		} catch (javax.swing.UnsupportedLookAndFeelException e) {
-			JMeterUtils.reportErrorToUser("Look and Feel unavailable:" + e.toString());
-		} catch (InstantiationException e) {
-			JMeterUtils.reportErrorToUser("Look and Feel unavailable:" + e.toString());
-		} catch (ClassNotFoundException e) {
-			JMeterUtils.reportErrorToUser("Look and Feel unavailable:" + e.toString());
-		} catch (IllegalAccessException e) {
-			JMeterUtils.reportErrorToUser("Look and Feel unavailable:" + e.toString());
-		}
-	}
+    public void doAction(ActionEvent ev) {
+        try {
+            String className = ev.getActionCommand().substring(4).replace('/', '.');
+            UIManager.setLookAndFeel(className);
+            SwingUtilities.updateComponentTreeUI(GuiPackage.getInstance().getMainFrame());
+        } catch (javax.swing.UnsupportedLookAndFeelException e) {
+            JMeterUtils.reportErrorToUser("Look and Feel unavailable:" + e.toString());
+        } catch (InstantiationException e) {
+            JMeterUtils.reportErrorToUser("Look and Feel unavailable:" + e.toString());
+        } catch (ClassNotFoundException e) {
+            JMeterUtils.reportErrorToUser("Look and Feel unavailable:" + e.toString());
+        } catch (IllegalAccessException e) {
+            JMeterUtils.reportErrorToUser("Look and Feel unavailable:" + e.toString());
+        }
+    }
 
-	public Set getActionNames() {
-		return commands;
-	}
+    public Set getActionNames() {
+        return commands;
+    }
 }

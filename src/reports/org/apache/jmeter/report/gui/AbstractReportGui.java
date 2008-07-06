@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 package org.apache.jmeter.report.gui;
 
@@ -41,30 +41,30 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public abstract class AbstractReportGui extends AbstractJMeterGuiComponent
 {
-	/**
-	 * 
-	 */
-	public AbstractReportGui() {
+    /**
+     *
+     */
+    public AbstractReportGui() {
         this.namePanel = new NamePanel();
         this.namePanel.setBackground(Color.white);
         setName(getStaticLabel());
-	}
+    }
 
-	/* (non-Javadoc)
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#getLabelResource()
-	 */
-	public String getLabelResource() {
-		return "report_page";
-	}
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#getLabelResource()
+     */
+    public String getLabelResource() {
+        return "report_page";
+    }
 
     public void configureTestElement(TestElement element) {
         super.configureTestElement(element);
     }
-    
+
     /* (non-Javadoc)
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#createPopupMenu()
-	 */
-	public JPopupMenu createPopupMenu() {
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#createPopupMenu()
+     */
+    public JPopupMenu createPopupMenu() {
         JPopupMenu pop = new JPopupMenu();
         JMenu addMenu = new JMenu(JMeterUtils.getResString("Add"));
         addMenu.add(ReportMenuFactory.makeMenu(ReportMenuFactory.CONFIG_ELEMENTS, "Add"));
@@ -73,14 +73,14 @@ public abstract class AbstractReportGui extends AbstractJMeterGuiComponent
         pop.add(addMenu);
         ReportMenuFactory.addFileMenu(pop);
         return pop;
-	}
+    }
 
-	/* (non-Javadoc)
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#getMenuCategories()
-	 */
-	public Collection getMenuCategories() {
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#getMenuCategories()
+     */
+    public Collection getMenuCategories() {
         return Arrays.asList(new String[] { ReportMenuFactory.TABLES });
-	}
+    }
 
     /**
      * This implementaion differs a bit from the normal jmeter gui. it uses

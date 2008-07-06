@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -31,32 +31,32 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class IterationCounter extends AbstractFunction implements Serializable {
 
-	private static final long serialVersionUID = 232L;
-	
-	private static final List desc = new LinkedList();
+    private static final long serialVersionUID = 232L;
 
-	private static final String KEY = "__counter"; //$NON-NLS-1$
+    private static final List desc = new LinkedList();
+
+    private static final String KEY = "__counter"; //$NON-NLS-1$
 
     private transient ThreadLocal perThreadInt;
-    
-	private void init(){
+
+    private void init(){
         perThreadInt = new ThreadLocal(){
             protected synchronized Object initialValue() {
                 return new Integer(0);
             }
         };
     }
-        
+
     static {
-		desc.add(JMeterUtils.getResString("iteration_counter_arg_1")); //$NON-NLS-1$
-		desc.add(JMeterUtils.getResString("function_name_paropt")); //$NON-NLS-1$
-	}
+        desc.add(JMeterUtils.getResString("iteration_counter_arg_1")); //$NON-NLS-1$
+        desc.add(JMeterUtils.getResString("function_name_paropt")); //$NON-NLS-1$
+    }
 
-	private transient Object[] variables;
+    private transient Object[] variables;
 
-	private transient int globalCounter;//MAXINT = 2,147,483,647
+    private transient int globalCounter;//MAXINT = 2,147,483,647
 
-	public IterationCounter() {
+    public IterationCounter() {
         init();
         globalCounter=0;
     }
@@ -66,73 +66,73 @@ public class IterationCounter extends AbstractFunction implements Serializable {
         globalCounter=0;
         return this;
     }
-    
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
-	 */
-	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
-			throws InvalidVariableException {
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
+     */
+    public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
+            throws InvalidVariableException {
 
         new Integer(1);
         globalCounter++;
 
-		JMeterVariables vars = getVariables();
+        JMeterVariables vars = getVariables();
 
-		boolean perThread = Boolean.valueOf(((CompoundVariable) variables[0]).execute()).booleanValue();
+        boolean perThread = Boolean.valueOf(((CompoundVariable) variables[0]).execute()).booleanValue();
 
-		String varName = ""; //$NON-NLS-1$
+        String varName = ""; //$NON-NLS-1$
         if (variables.length >=2) {// Ensure variable has been provided
             varName = ((CompoundVariable) variables[1]).execute().trim();
         }
-		
+
         String counterString = ""; //$NON-NLS-1$
 
-		if (perThread) {
-			int threadCounter;
-            threadCounter = ((Integer) perThreadInt.get()).intValue() + 1;                
+        if (perThread) {
+            int threadCounter;
+            threadCounter = ((Integer) perThreadInt.get()).intValue() + 1;
             perThreadInt.set(new Integer(threadCounter));
-			counterString = String.valueOf(threadCounter);
-		} else {
-			counterString = String.valueOf(globalCounter);
-		}
+            counterString = String.valueOf(threadCounter);
+        } else {
+            counterString = String.valueOf(globalCounter);
+        }
 
-		if (varName.length() > 0) {
-			vars.put(varName, counterString);
-		}
-		return counterString;
-	}
+        if (varName.length() > 0) {
+            vars.put(varName, counterString);
+        }
+        return counterString;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.functions.Function#setParameters(Collection)
-	 */
-	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
-		checkParameterCount(parameters, 1, 2);
-		variables = parameters.toArray();
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.functions.Function#setParameters(Collection)
+     */
+    public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
+        checkParameterCount(parameters, 1, 2);
+        variables = parameters.toArray();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.functions.Function#getReferenceKey()
-	 */
-	public String getReferenceKey() {
-		return KEY;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.functions.Function#getReferenceKey()
+     */
+    public String getReferenceKey() {
+        return KEY;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.functions.Function#getArgumentDesc()
-	 */
-	public List getArgumentDesc() {
-		return desc;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.functions.Function#getArgumentDesc()
+     */
+    public List getArgumentDesc() {
+        return desc;
+    }
 }

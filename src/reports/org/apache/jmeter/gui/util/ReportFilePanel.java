@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.gui.util;
@@ -35,112 +35,108 @@ import javax.swing.event.ChangeListener;
 
 import org.apache.jmeter.util.JMeterUtils;
 
-/**
- * @author Peter Lin
- * @version $Revision$ Last updated: $Date$
- */
 public class ReportFilePanel extends HorizontalPanel implements ActionListener {
-	JTextField filename = new JTextField(20);
+    JTextField filename = new JTextField(20);
 
-	JLabel label = new JLabel(JMeterUtils.getResString("file_visualizer_filename"));
+    JLabel label = new JLabel(JMeterUtils.getResString("file_visualizer_filename"));
 
-	JButton browse = new JButton(JMeterUtils.getResString("browse"));
+    JButton browse = new JButton(JMeterUtils.getResString("browse"));
 
-	List listeners = new LinkedList();
+    List listeners = new LinkedList();
 
-	String title;
+    String title;
 
-	String filetype;
+    String filetype;
 
-	/**
-	 * Constructor for the FilePanel object.
-	 */
-	public ReportFilePanel() {
-		title = "";
-		init();
-	}
+    /**
+     * Constructor for the FilePanel object.
+     */
+    public ReportFilePanel() {
+        title = "";
+        init();
+    }
 
-	public ReportFilePanel(String title) {
-		this.title = title;
-		init();
-	}
+    public ReportFilePanel(String title) {
+        this.title = title;
+        init();
+    }
 
-	public ReportFilePanel(String title, String filetype) {
-		this(title);
-		this.filetype = filetype;
-	}
+    public ReportFilePanel(String title, String filetype) {
+        this(title);
+        this.filetype = filetype;
+    }
 
-	/**
-	 * Constructor for the FilePanel object.
-	 */
-	public ReportFilePanel(ChangeListener l, String title) {
-		this.title = title;
-		init();
-		listeners.add(l);
-	}
+    /**
+     * Constructor for the FilePanel object.
+     */
+    public ReportFilePanel(ChangeListener l, String title) {
+        this.title = title;
+        init();
+        listeners.add(l);
+    }
 
-	public void addChangeListener(ChangeListener l) {
-		listeners.add(l);
-	}
+    public void addChangeListener(ChangeListener l) {
+        listeners.add(l);
+    }
 
-	private void init() {
-		setBorder(BorderFactory.createTitledBorder(title));
-		add(label);
-		add(Box.createHorizontalStrut(5));
-		add(filename);
-		add(Box.createHorizontalStrut(5));
-		filename.addActionListener(this);
-		add(browse);
-		browse.setActionCommand("browse");
-		browse.addActionListener(this);
+    private void init() {
+        setBorder(BorderFactory.createTitledBorder(title));
+        add(label);
+        add(Box.createHorizontalStrut(5));
+        add(filename);
+        add(Box.createHorizontalStrut(5));
+        filename.addActionListener(this);
+        add(browse);
+        browse.setActionCommand("browse");
+        browse.addActionListener(this);
 
-	}
+    }
 
-	/**
-	 * If the gui needs to enable/disable the FilePanel, call the method.
-	 * 
-	 * @param enable
-	 */
-	public void enableFile(boolean enable) {
-		browse.setEnabled(enable);
-		filename.setEnabled(enable);
-	}
+    /**
+     * If the gui needs to enable/disable the FilePanel, call the method.
+     *
+     * @param enable
+     */
+    public void enableFile(boolean enable) {
+        browse.setEnabled(enable);
+        filename.setEnabled(enable);
+    }
 
-	/**
-	 * Gets the filename attribute of the FilePanel object.
-	 * 
-	 * @return the filename value
-	 */
-	public String getFilename() {
-		return filename.getText();
-	}
+    /**
+     * Gets the filename attribute of the FilePanel object.
+     *
+     * @return the filename value
+     */
+    public String getFilename() {
+        return filename.getText();
+    }
 
-	/**
-	 * Sets the filename attribute of the FilePanel object.
-	 * 
-	 * @param f
-	 *            the new filename value
-	 */
-	public void setFilename(String f) {
-		filename.setText(f);
-	}
+    /**
+     * Sets the filename attribute of the FilePanel object.
+     *
+     * @param f
+     *            the new filename value
+     */
+    public void setFilename(String f) {
+        filename.setText(f);
+    }
 
-	private void fireFileChanged() {
-		Iterator iter = listeners.iterator();
-		while (iter.hasNext()) {
-			((ChangeListener) iter.next()).stateChanged(new ChangeEvent(this));
-		}
-	}
+    private void fireFileChanged() {
+        Iterator iter = listeners.iterator();
+        while (iter.hasNext()) {
+            ((ChangeListener) iter.next()).stateChanged(new ChangeEvent(this));
+        }
+    }
 
-	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals("browse")) {
-			JFileChooser chooser = ReportFileDialoger.promptToOpenFile(new String[] { filetype });
-			if (chooser != null && chooser.getSelectedFile() != null) {
-				filename.setText(chooser.getSelectedFile().getPath());
-				fireFileChanged();
-			}
-		} else {
-			fireFileChanged();
-		}
-	}
+    public void actionPerformed(ActionEvent e) {
+        if (e.getActionCommand().equals("browse")) {
+            JFileChooser chooser = ReportFileDialoger.promptToOpenFile(new String[] { filetype });
+            if (chooser != null && chooser.getSelectedFile() != null) {
+                filename.setText(chooser.getSelectedFile().getPath());
+                fireFileChanged();
+            }
+        } else {
+            fireFileChanged();
+        }
+    }
 }

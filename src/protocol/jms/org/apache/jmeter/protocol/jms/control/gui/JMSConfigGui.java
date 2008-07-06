@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.jms.control.gui;
@@ -40,246 +40,246 @@ import org.apache.jorphan.gui.JLabeledTextField;
 /**
  * Configuration screen for Java Messaging Point-to-Point requests. <br>
  * Created on: October 28, 2004
- * 
+ *
  */
 public class JMSConfigGui extends AbstractSamplerGui {
 
-	private JLabeledTextField queueuConnectionFactory = new JLabeledTextField(
-			JMeterUtils.getResString("jms_queue_connection_factory")); //$NON-NLS-1$
+    private JLabeledTextField queueuConnectionFactory = new JLabeledTextField(
+            JMeterUtils.getResString("jms_queue_connection_factory")); //$NON-NLS-1$
 
-	private JLabeledTextField sendQueue = new JLabeledTextField(JMeterUtils.getResString("jms_send_queue")); //$NON-NLS-1$
+    private JLabeledTextField sendQueue = new JLabeledTextField(JMeterUtils.getResString("jms_send_queue")); //$NON-NLS-1$
 
-	private JLabeledTextField receiveQueue = new JLabeledTextField(JMeterUtils.getResString("jms_receive_queue")); //$NON-NLS-1$
+    private JLabeledTextField receiveQueue = new JLabeledTextField(JMeterUtils.getResString("jms_receive_queue")); //$NON-NLS-1$
 
-	private JLabeledTextField timeout = new JLabeledTextField(JMeterUtils.getResString("jms_timeout")); //$NON-NLS-1$
+    private JLabeledTextField timeout = new JLabeledTextField(JMeterUtils.getResString("jms_timeout")); //$NON-NLS-1$
 
-	private JLabeledTextArea soapXml = new JLabeledTextArea(JMeterUtils.getResString("jms_msg_content")); //$NON-NLS-1$
+    private JLabeledTextArea soapXml = new JLabeledTextArea(JMeterUtils.getResString("jms_msg_content")); //$NON-NLS-1$
 
-	private JLabeledTextField initialContextFactory = new JLabeledTextField(
-			JMeterUtils.getResString("jms_initial_context_factory")); //$NON-NLS-1$
+    private JLabeledTextField initialContextFactory = new JLabeledTextField(
+            JMeterUtils.getResString("jms_initial_context_factory")); //$NON-NLS-1$
 
-	private JLabeledTextField providerUrl = new JLabeledTextField(JMeterUtils.getResString("jms_provider_url")); //$NON-NLS-1$
+    private JLabeledTextField providerUrl = new JLabeledTextField(JMeterUtils.getResString("jms_provider_url")); //$NON-NLS-1$
 
-	private String[] labels = new String[] { JMeterUtils.getResString("jms_request"), //$NON-NLS-1$
-			JMeterUtils.getResString("jms_requestreply") }; //$NON-NLS-1$
+    private String[] labels = new String[] { JMeterUtils.getResString("jms_request"), //$NON-NLS-1$
+            JMeterUtils.getResString("jms_requestreply") }; //$NON-NLS-1$
 
-	private JLabeledChoice oneWay = new JLabeledChoice(JMeterUtils.getResString("jms_communication_style"), labels); //$NON-NLS-1$
+    private JLabeledChoice oneWay = new JLabeledChoice(JMeterUtils.getResString("jms_communication_style"), labels); //$NON-NLS-1$
 
-	private ArgumentsPanel jmsPropertiesPanel;
+    private ArgumentsPanel jmsPropertiesPanel;
 
-	private ArgumentsPanel jndiPropertiesPanel;
-	
-	private JCheckBox useNonPersistentDelivery;
+    private ArgumentsPanel jndiPropertiesPanel;
 
-	public JMSConfigGui() {
-		init();
-	}
+    private JCheckBox useNonPersistentDelivery;
 
-	/**
-	 * Clears all fields.
-	 */
-	public void clearGui() {// renamed from clear
-		super.clearGui();
-		queueuConnectionFactory.setText("");
-		sendQueue.setText("");
-		receiveQueue.setText("");
-		((JComboBox) oneWay.getComponentList().get(1)).setSelectedItem(JMeterUtils.getResString("jms_request")); //$NON-NLS-1$
-		timeout.setText("");
-		soapXml.setText("");
-		initialContextFactory.setText("");
-		providerUrl.setText("");
-		jmsPropertiesPanel.clear();
-		jndiPropertiesPanel.clear();
-	}
+    public JMSConfigGui() {
+        init();
+    }
 
-	public TestElement createTestElement() {
-		// org.activemq.jndi.ActiveMQInitialContextFactory
-		// ConfigTestElement element = new ConfigTestElement();
-		JMSSampler sampler = new JMSSampler();
-		this.configureTestElement(sampler);
-		transfer(sampler);
-		return sampler;
-	}
+    /**
+     * Clears all fields.
+     */
+    public void clearGui() {// renamed from clear
+        super.clearGui();
+        queueuConnectionFactory.setText("");
+        sendQueue.setText("");
+        receiveQueue.setText("");
+        ((JComboBox) oneWay.getComponentList().get(1)).setSelectedItem(JMeterUtils.getResString("jms_request")); //$NON-NLS-1$
+        timeout.setText("");
+        soapXml.setText("");
+        initialContextFactory.setText("");
+        providerUrl.setText("");
+        jmsPropertiesPanel.clear();
+        jndiPropertiesPanel.clear();
+    }
 
-	private void transfer(JMSSampler element) {
-		element.setQueueConnectionFactory(queueuConnectionFactory.getText());
-		element.setSendQueue(sendQueue.getText());
-		element.setReceiveQueue(receiveQueue.getText());
+    public TestElement createTestElement() {
+        // org.activemq.jndi.ActiveMQInitialContextFactory
+        // ConfigTestElement element = new ConfigTestElement();
+        JMSSampler sampler = new JMSSampler();
+        this.configureTestElement(sampler);
+        transfer(sampler);
+        return sampler;
+    }
 
-		boolean isOneway = oneWay.getText().equals(JMeterUtils.getResString("jms_request")); //$NON-NLS-1$
-		element.setIsOneway(isOneway);
+    private void transfer(JMSSampler element) {
+        element.setQueueConnectionFactory(queueuConnectionFactory.getText());
+        element.setSendQueue(sendQueue.getText());
+        element.setReceiveQueue(receiveQueue.getText());
 
-		element.setNonPersistent(useNonPersistentDelivery.isSelected());
-		element.setTimeout(timeout.getText());
-		element.setContent(soapXml.getText());
+        boolean isOneway = oneWay.getText().equals(JMeterUtils.getResString("jms_request")); //$NON-NLS-1$
+        element.setIsOneway(isOneway);
 
-		element.setInitialContextFactory(initialContextFactory.getText());
-		element.setContextProvider(providerUrl.getText());
-		Arguments jndiArgs = (Arguments) jndiPropertiesPanel.createTestElement();
-		element.setJNDIProperties(jndiArgs);
+        element.setNonPersistent(useNonPersistentDelivery.isSelected());
+        element.setTimeout(timeout.getText());
+        element.setContent(soapXml.getText());
 
-		Arguments args = (Arguments) jmsPropertiesPanel.createTestElement();
-		element.setJMSProperties(args);
+        element.setInitialContextFactory(initialContextFactory.getText());
+        element.setContextProvider(providerUrl.getText());
+        Arguments jndiArgs = (Arguments) jndiPropertiesPanel.createTestElement();
+        element.setJNDIProperties(jndiArgs);
 
-	}
+        Arguments args = (Arguments) jmsPropertiesPanel.createTestElement();
+        element.setJMSProperties(args);
 
-	/**
-	 * 
-	 * @param element
-	 */
-	public void modifyTestElement(TestElement element) {
-		JMSSampler sampler = (JMSSampler) element;
-		this.configureTestElement(sampler);
-		transfer(sampler);
+    }
 
-		/*
-		 * element.setProperty( JMSSampler.QUEUE_CONNECTION_FACTORY_JNDI,
-		 * queueuConnectionFactory.getText());
-		 * element.setProperty(JMSSampler.SEND_QUEUE, sendQueue.getText());
-		 * element.setProperty(JMSSampler.RECEIVE_QUEUE,
-		 * receiveQueue.getText());
-		 * 
-		 * boolean isOneway =
-		 * oneWay.getText().equals(JMeterUtils.getResString("jms_request"));
-		 * element.setProperty(new BooleanProperty(JMSSampler.IS_ONE_WAY,
-		 * isOneway));
-		 * 
-		 * element.setProperty(JMSSampler.TIMEOUT, timeout.getText());
-		 * element.setProperty(JMSSampler.XML_DATA, soapXml.getText());
-		 * 
-		 * element.setProperty( JMSSampler.JNDI_INITIAL_CONTEXT_FACTORY,
-		 * initialContextFactory.getText());
-		 * element.setProperty(JMSSampler.JNDI_CONTEXT_PROVIDER_URL,
-		 * providerUrl.getText()); Arguments jndiArgs = (Arguments)
-		 * jndiPropertiesPanel.createTestElement(); element.setProperty(new
-		 * TestElementProperty(JMSSampler.JNDI_PROPERTIES, jndiArgs));
-		 * 
-		 * Arguments args = (Arguments) jmsPropertiesPanel.createTestElement();
-		 * element.setProperty(new
-		 * TestElementProperty(JMSSampler.JMS_PROPERTIES, args));
-		 */}
+    /**
+     *
+     * @param element
+     */
+    public void modifyTestElement(TestElement element) {
+        JMSSampler sampler = (JMSSampler) element;
+        this.configureTestElement(sampler);
+        transfer(sampler);
 
-	/**
-	 * @param el
-	 */
-	public void configure(TestElement el) {
-		super.configure(el);
-		JMSSampler sampler = (JMSSampler) el;
-		queueuConnectionFactory.setText(sampler.getQueueConnectionFactory());
-		sendQueue.setText(sampler.getSendQueue());
-		receiveQueue.setText(sampler.getReceiveQueue());
+        /*
+         * element.setProperty( JMSSampler.QUEUE_CONNECTION_FACTORY_JNDI,
+         * queueuConnectionFactory.getText());
+         * element.setProperty(JMSSampler.SEND_QUEUE, sendQueue.getText());
+         * element.setProperty(JMSSampler.RECEIVE_QUEUE,
+         * receiveQueue.getText());
+         *
+         * boolean isOneway =
+         * oneWay.getText().equals(JMeterUtils.getResString("jms_request"));
+         * element.setProperty(new BooleanProperty(JMSSampler.IS_ONE_WAY,
+         * isOneway));
+         *
+         * element.setProperty(JMSSampler.TIMEOUT, timeout.getText());
+         * element.setProperty(JMSSampler.XML_DATA, soapXml.getText());
+         *
+         * element.setProperty( JMSSampler.JNDI_INITIAL_CONTEXT_FACTORY,
+         * initialContextFactory.getText());
+         * element.setProperty(JMSSampler.JNDI_CONTEXT_PROVIDER_URL,
+         * providerUrl.getText()); Arguments jndiArgs = (Arguments)
+         * jndiPropertiesPanel.createTestElement(); element.setProperty(new
+         * TestElementProperty(JMSSampler.JNDI_PROPERTIES, jndiArgs));
+         *
+         * Arguments args = (Arguments) jmsPropertiesPanel.createTestElement();
+         * element.setProperty(new
+         * TestElementProperty(JMSSampler.JMS_PROPERTIES, args));
+         */}
 
-		JComboBox box = (JComboBox) oneWay.getComponentList().get(1);
-		String selected = null;
-		if (sampler.isOneway()) {
-			selected = JMeterUtils.getResString("jms_request"); //$NON-NLS-1$
-		} else {
-			selected = JMeterUtils.getResString("jms_requestreply"); //$NON-NLS-1$
-		}
-		box.setSelectedItem(selected);
+    /**
+     * @param el
+     */
+    public void configure(TestElement el) {
+        super.configure(el);
+        JMSSampler sampler = (JMSSampler) el;
+        queueuConnectionFactory.setText(sampler.getQueueConnectionFactory());
+        sendQueue.setText(sampler.getSendQueue());
+        receiveQueue.setText(sampler.getReceiveQueue());
 
-		useNonPersistentDelivery.setSelected(sampler.isNonPersistent());
-		
-		timeout.setText(String.valueOf(sampler.getTimeout()));
-		soapXml.setText(sampler.getContent());
-		initialContextFactory.setText(sampler.getInitialContextFactory());
-		providerUrl.setText(sampler.getContextProvider());
+        JComboBox box = (JComboBox) oneWay.getComponentList().get(1);
+        String selected = null;
+        if (sampler.isOneway()) {
+            selected = JMeterUtils.getResString("jms_request"); //$NON-NLS-1$
+        } else {
+            selected = JMeterUtils.getResString("jms_requestreply"); //$NON-NLS-1$
+        }
+        box.setSelectedItem(selected);
 
-		jmsPropertiesPanel.configure(sampler.getJMSProperties());
-		// (TestElement)
-		// el.getProperty(JMSSampler.JMS_PROPERTIES).getObjectValue());
+        useNonPersistentDelivery.setSelected(sampler.isNonPersistent());
 
-		jndiPropertiesPanel.configure(sampler.getJNDIProperties());
-		// (TestElement)
-		// el.getProperty(JMSSampler.JNDI_PROPERTIES).getObjectValue());
-	}
+        timeout.setText(String.valueOf(sampler.getTimeout()));
+        soapXml.setText(sampler.getContent());
+        initialContextFactory.setText(sampler.getInitialContextFactory());
+        providerUrl.setText(sampler.getContextProvider());
 
-	/**
-	 * Initializes the configuration screen.
-	 * 
-	 */
-	private void init() {
-		setLayout(new BorderLayout());
-		setBorder(makeBorder());
-		add(makeTitlePanel(), BorderLayout.NORTH);
+        jmsPropertiesPanel.configure(sampler.getJMSProperties());
+        // (TestElement)
+        // el.getProperty(JMSSampler.JMS_PROPERTIES).getObjectValue());
 
-		Box mainPanel = Box.createVerticalBox();
+        jndiPropertiesPanel.configure(sampler.getJNDIProperties());
+        // (TestElement)
+        // el.getProperty(JMSSampler.JNDI_PROPERTIES).getObjectValue());
+    }
 
-		JPanel jmsQueueingPanel = new JPanel(new BorderLayout());
-		jmsQueueingPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), 
-				JMeterUtils.getResString("jms_queueing"))); //$NON-NLS-1$
+    /**
+     * Initializes the configuration screen.
+     *
+     */
+    private void init() {
+        setLayout(new BorderLayout());
+        setBorder(makeBorder());
+        add(makeTitlePanel(), BorderLayout.NORTH);
 
-		JPanel qcfPanel = new JPanel(new BorderLayout(5, 0));
-		qcfPanel.add(queueuConnectionFactory, BorderLayout.CENTER);
-		jmsQueueingPanel.add(qcfPanel, BorderLayout.NORTH);
+        Box mainPanel = Box.createVerticalBox();
 
-		JPanel sendQueuePanel = new JPanel(new BorderLayout(5, 0));
-		sendQueuePanel.add(sendQueue);
-		jmsQueueingPanel.add(sendQueuePanel, BorderLayout.CENTER);
+        JPanel jmsQueueingPanel = new JPanel(new BorderLayout());
+        jmsQueueingPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+                JMeterUtils.getResString("jms_queueing"))); //$NON-NLS-1$
 
-		JPanel receiveQueuePanel = new JPanel(new BorderLayout(5, 0));
-		receiveQueuePanel.add(receiveQueue);
-		jmsQueueingPanel.add(receiveQueuePanel, BorderLayout.SOUTH);
+        JPanel qcfPanel = new JPanel(new BorderLayout(5, 0));
+        qcfPanel.add(queueuConnectionFactory, BorderLayout.CENTER);
+        jmsQueueingPanel.add(qcfPanel, BorderLayout.NORTH);
 
-		JPanel jndiPanel = createJNDIPanel();
+        JPanel sendQueuePanel = new JPanel(new BorderLayout(5, 0));
+        sendQueuePanel.add(sendQueue);
+        jmsQueueingPanel.add(sendQueuePanel, BorderLayout.CENTER);
 
-		JPanel messagePanel = new JPanel(new BorderLayout());
-		messagePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), 
-				JMeterUtils.getResString("jms_message_title"))); //$NON-NLS-1$
+        JPanel receiveQueuePanel = new JPanel(new BorderLayout(5, 0));
+        receiveQueuePanel.add(receiveQueue);
+        jmsQueueingPanel.add(receiveQueuePanel, BorderLayout.SOUTH);
 
-		JPanel messageNorthPanel = new JPanel(new BorderLayout());
-		JPanel onewayPanel = new JPanel(new BorderLayout());
-		onewayPanel.add(oneWay);
-		messageNorthPanel.add(onewayPanel, BorderLayout.NORTH);
+        JPanel jndiPanel = createJNDIPanel();
 
-		useNonPersistentDelivery = new JCheckBox(JMeterUtils.getResString("jms_use_non_persistent_delivery"),false); //$NON-NLS-1$
-		
-		JPanel timeoutPanel = new HorizontalPanel();
-		timeoutPanel.add(timeout);
-		timeoutPanel.add(useNonPersistentDelivery);
-		messageNorthPanel.add(timeoutPanel, BorderLayout.SOUTH);
+        JPanel messagePanel = new JPanel(new BorderLayout());
+        messagePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+                JMeterUtils.getResString("jms_message_title"))); //$NON-NLS-1$
 
-		messagePanel.add(messageNorthPanel, BorderLayout.NORTH);
+        JPanel messageNorthPanel = new JPanel(new BorderLayout());
+        JPanel onewayPanel = new JPanel(new BorderLayout());
+        onewayPanel.add(oneWay);
+        messageNorthPanel.add(onewayPanel, BorderLayout.NORTH);
 
-		JPanel soapXmlPanel = new JPanel(new BorderLayout());
-		soapXmlPanel.add(soapXml);
-		messagePanel.add(soapXmlPanel, BorderLayout.CENTER);
+        useNonPersistentDelivery = new JCheckBox(JMeterUtils.getResString("jms_use_non_persistent_delivery"),false); //$NON-NLS-1$
 
-		jmsPropertiesPanel = new ArgumentsPanel(JMeterUtils.getResString("jms_props")); //$NON-NLS-1$
-		messagePanel.add(jmsPropertiesPanel, BorderLayout.SOUTH);
+        JPanel timeoutPanel = new HorizontalPanel();
+        timeoutPanel.add(timeout);
+        timeoutPanel.add(useNonPersistentDelivery);
+        messageNorthPanel.add(timeoutPanel, BorderLayout.SOUTH);
 
-		mainPanel.add(jmsQueueingPanel, BorderLayout.NORTH);
-		mainPanel.add(messagePanel, BorderLayout.CENTER);
-		mainPanel.add(jndiPanel, BorderLayout.SOUTH);
+        messagePanel.add(messageNorthPanel, BorderLayout.NORTH);
 
-		add(mainPanel, BorderLayout.CENTER);
-	}
+        JPanel soapXmlPanel = new JPanel(new BorderLayout());
+        soapXmlPanel.add(soapXml);
+        messagePanel.add(soapXmlPanel, BorderLayout.CENTER);
 
-	/**
-	 * Creates the panel for the JNDI configuration.
-	 * 
-	 * @return the JNDI Panel
-	 */
-	private JPanel createJNDIPanel() {
-		JPanel jndiPanel = new JPanel(new BorderLayout());
-		jndiPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), 
-				JMeterUtils.getResString("jms_jndi_props"))); //$NON-NLS-1$
+        jmsPropertiesPanel = new ArgumentsPanel(JMeterUtils.getResString("jms_props")); //$NON-NLS-1$
+        messagePanel.add(jmsPropertiesPanel, BorderLayout.SOUTH);
 
-		JPanel contextPanel = new JPanel(new BorderLayout(10, 0));
-		contextPanel.add(initialContextFactory);
-		jndiPanel.add(contextPanel, BorderLayout.NORTH);
+        mainPanel.add(jmsQueueingPanel, BorderLayout.NORTH);
+        mainPanel.add(messagePanel, BorderLayout.CENTER);
+        mainPanel.add(jndiPanel, BorderLayout.SOUTH);
 
-		JPanel providerPanel = new JPanel(new BorderLayout(10, 0));
-		providerPanel.add(providerUrl);
-		jndiPanel.add(providerPanel, BorderLayout.SOUTH);
+        add(mainPanel, BorderLayout.CENTER);
+    }
 
-		jndiPropertiesPanel = new ArgumentsPanel(JMeterUtils.getResString("jms_jndi_props")); //$NON-NLS-1$
-		jndiPanel.add(jndiPropertiesPanel);
-		return jndiPanel;
-	}
+    /**
+     * Creates the panel for the JNDI configuration.
+     *
+     * @return the JNDI Panel
+     */
+    private JPanel createJNDIPanel() {
+        JPanel jndiPanel = new JPanel(new BorderLayout());
+        jndiPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+                JMeterUtils.getResString("jms_jndi_props"))); //$NON-NLS-1$
 
-	public String getLabelResource() {
-		return "jms_point_to_point"; //$NON-NLS-1$ // TODO - probably wrong
-	}
+        JPanel contextPanel = new JPanel(new BorderLayout(10, 0));
+        contextPanel.add(initialContextFactory);
+        jndiPanel.add(contextPanel, BorderLayout.NORTH);
+
+        JPanel providerPanel = new JPanel(new BorderLayout(10, 0));
+        providerPanel.add(providerUrl);
+        jndiPanel.add(providerPanel, BorderLayout.SOUTH);
+
+        jndiPropertiesPanel = new ArgumentsPanel(JMeterUtils.getResString("jms_jndi_props")); //$NON-NLS-1$
+        jndiPanel.add(jndiPropertiesPanel);
+        return jndiPanel;
+    }
+
+    public String getLabelResource() {
+        return "jms_point_to_point"; //$NON-NLS-1$ // TODO - probably wrong
+    }
 
 }

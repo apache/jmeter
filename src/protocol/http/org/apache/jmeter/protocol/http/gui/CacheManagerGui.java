@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.gui;
@@ -31,62 +31,62 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /**
  * The GUI for the HTTP Cache Manager
- * 
+ *
  */
 public class CacheManagerGui extends AbstractConfigGui {
 
     private JCheckBox clearEachIteration;
 
-	/**
-	 * Create a new LoginConfigGui as a standalone component.
-	 */
-	public CacheManagerGui() {
+    /**
+     * Create a new LoginConfigGui as a standalone component.
+     */
+    public CacheManagerGui() {
         init();
-	}
+    }
 
-	public String getLabelResource() {
-		return "cache_manager_title"; // $NON-NLS-1$
-	}
+    public String getLabelResource() {
+        return "cache_manager_title"; // $NON-NLS-1$
+    }
 
-	/**
-	 * A newly created component can be initialized with the contents of a Test
-	 * Element object by calling this method. The component is responsible for
-	 * querying the Test Element object for the relevant information to display
-	 * in its GUI.
-	 * 
-	 * @param element
-	 *            the TestElement to configure
-	 */
-	public void configure(TestElement element) {
-		super.configure(element);
-		clearEachIteration.setSelected(((CacheManager)element).getClearEachIteration());
-	}
+    /**
+     * A newly created component can be initialized with the contents of a Test
+     * Element object by calling this method. The component is responsible for
+     * querying the Test Element object for the relevant information to display
+     * in its GUI.
+     *
+     * @param element
+     *            the TestElement to configure
+     */
+    public void configure(TestElement element) {
+        super.configure(element);
+        clearEachIteration.setSelected(((CacheManager)element).getClearEachIteration());
+    }
 
-	/* Implements JMeterGUIComponent.createTestElement() */
-	public TestElement createTestElement() {
-		CacheManager element = new CacheManager();
-		modifyTestElement(element);
-		return element;
-	}
+    /* Implements JMeterGUIComponent.createTestElement() */
+    public TestElement createTestElement() {
+        CacheManager element = new CacheManager();
+        modifyTestElement(element);
+        return element;
+    }
 
-	/* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
-	public void modifyTestElement(TestElement element) {
-		configureTestElement(element);
-		((CacheManager)element).setClearEachIteration(clearEachIteration.isSelected());
-	}
+    /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
+    public void modifyTestElement(TestElement element) {
+        configureTestElement(element);
+        ((CacheManager)element).setClearEachIteration(clearEachIteration.isSelected());
+    }
     /**
      * Implements JMeterGUIComponent.clearGui
      */
     public void clearGui() {
         super.clearGui();
         clearEachIteration.setSelected(false);
-    }    
+    }
 
-	/**
-	 * Initialize the components and layout of this component.
-	 */
-	private void init() {
-		setLayout(new BorderLayout(0, 5));
+    /**
+     * Initialize the components and layout of this component.
+     */
+    private void init() {
+        setLayout(new BorderLayout(0, 5));
         setBorder(makeBorder());
 
         clearEachIteration = new JCheckBox(JMeterUtils.getResString("clear_cache_per_iter"), false);
@@ -96,6 +96,6 @@ public class CacheManagerGui extends AbstractConfigGui {
         northPanel.add(makeTitlePanel());
         northPanel.add(clearEachIteration);
         add(northPanel, BorderLayout.NORTH);
-	}
+    }
 
 }

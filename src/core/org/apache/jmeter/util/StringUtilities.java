@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.util;
@@ -28,26 +28,26 @@ public final class StringUtilities {
 
     /**
      * Replace all patterns in a String
-     * 
+     *
      * @see String#replaceAll(String,String)
      *  - JDK1.4 only
-     * 
+     *
      * @param input - string to be transformed
      * @param pattern - pattern to replace
      * @param sub - replacement
      * @return the updated string
      */
-	public static String substitute(final String input, final String pattern, final String sub) {
-		StringBuffer ret = new StringBuffer(input.length());
-		int start = 0;
-		int index = -1;
+    public static String substitute(final String input, final String pattern, final String sub) {
+        StringBuffer ret = new StringBuffer(input.length());
+        int start = 0;
+        int index = -1;
         final int length = pattern.length();
-		while ((index = input.indexOf(pattern, start)) >= start) {
-			ret.append(input.substring(start, index));
-			ret.append(sub);
+        while ((index = input.indexOf(pattern, start)) >= start) {
+            ret.append(input.substring(start, index));
+            ret.append(sub);
             start = index + length;
-		}
-		ret.append(input.substring(start));
-		return ret.toString();
-	}
+        }
+        ret.append(input.substring(start));
+        return ret.toString();
+    }
 }

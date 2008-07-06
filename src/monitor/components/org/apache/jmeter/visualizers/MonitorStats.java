@@ -22,136 +22,136 @@ import org.apache.jmeter.testelement.AbstractTestElement;
 
 public class MonitorStats extends AbstractTestElement implements Serializable {
 
-	private static final String HEALTH = "stats.health";
+    private static final String HEALTH = "stats.health";
 
-	private static final String LOAD = "stats.load";
+    private static final String LOAD = "stats.load";
 
-	private static final String CPULOAD = "stats.cpuload";
+    private static final String CPULOAD = "stats.cpuload";
 
-	private static final String MEMLOAD = "stats.memload";
+    private static final String MEMLOAD = "stats.memload";
 
-	private static final String THREADLOAD = "stats.threadload";
+    private static final String THREADLOAD = "stats.threadload";
 
-	private static final String HOST = "stats.host";
+    private static final String HOST = "stats.host";
 
-	private static final String PORT = "stats.port";
+    private static final String PORT = "stats.port";
 
-	private static final String PROTOCOL = "stats.protocol";
+    private static final String PROTOCOL = "stats.protocol";
 
-	private static final String TIMESTAMP = "stats.timestamp";
+    private static final String TIMESTAMP = "stats.timestamp";
 
-	/**
-	 * 
-	 */
-	public MonitorStats() {
-		super();
-	}
+    /**
+     *
+     */
+    public MonitorStats() {
+        super();
+    }
 
-	/**
-	 * Default constructor
-	 * 
-	 * @param health
-	 * @param load
-	 * @param cpuload
-	 * @param memload
-	 * @param threadload
-	 * @param host
-	 * @param port
-	 * @param protocol
-	 * @param time
-	 */
-	public MonitorStats(int health, int load, int cpuload, int memload, int threadload, String host, String port,
-			String protocol, long time) {
-		this.setHealth(health);
-		this.setLoad(load);
-		this.setCpuLoad(cpuload);
-		this.setMemLoad(memload);
-		this.setThreadLoad(threadload);
-		this.setHost(host);
-		this.setPort(port);
-		this.setProtocol(protocol);
-		this.setTimeStamp(time);
-	}
+    /**
+     * Default constructor
+     *
+     * @param health
+     * @param load
+     * @param cpuload
+     * @param memload
+     * @param threadload
+     * @param host
+     * @param port
+     * @param protocol
+     * @param time
+     */
+    public MonitorStats(int health, int load, int cpuload, int memload, int threadload, String host, String port,
+            String protocol, long time) {
+        this.setHealth(health);
+        this.setLoad(load);
+        this.setCpuLoad(cpuload);
+        this.setMemLoad(memload);
+        this.setThreadLoad(threadload);
+        this.setHost(host);
+        this.setPort(port);
+        this.setProtocol(protocol);
+        this.setTimeStamp(time);
+    }
 
-	/**
-	 * For convienance, this method returns the protocol, host and port as a
-	 * URL.
-	 * 
-	 * @return protocol://host:port
-	 */
-	public String getURL() {
-		return this.getProtocol() + "://" + this.getHost() + ":" + this.getPort();
-	}
+    /**
+     * For convienance, this method returns the protocol, host and port as a
+     * URL.
+     *
+     * @return protocol://host:port
+     */
+    public String getURL() {
+        return this.getProtocol() + "://" + this.getHost() + ":" + this.getPort();
+    }
 
-	public void setHealth(int health) {
-		this.setProperty(HEALTH, String.valueOf(health));
-	}
+    public void setHealth(int health) {
+        this.setProperty(HEALTH, String.valueOf(health));
+    }
 
-	public void setLoad(int load) {
-		this.setProperty(LOAD, String.valueOf(load));
-	}
+    public void setLoad(int load) {
+        this.setProperty(LOAD, String.valueOf(load));
+    }
 
-	public void setCpuLoad(int load) {
-		this.setProperty(CPULOAD, String.valueOf(load));
-	}
+    public void setCpuLoad(int load) {
+        this.setProperty(CPULOAD, String.valueOf(load));
+    }
 
-	public void setMemLoad(int load) {
-		this.setProperty(MEMLOAD, String.valueOf(load));
-	}
+    public void setMemLoad(int load) {
+        this.setProperty(MEMLOAD, String.valueOf(load));
+    }
 
-	public void setThreadLoad(int load) {
-		this.setProperty(THREADLOAD, String.valueOf(load));
-	}
+    public void setThreadLoad(int load) {
+        this.setProperty(THREADLOAD, String.valueOf(load));
+    }
 
-	public void setHost(String host) {
-		this.setProperty(HOST, host);
-	}
+    public void setHost(String host) {
+        this.setProperty(HOST, host);
+    }
 
-	public void setPort(String port) {
-		this.setProperty(PORT, port);
-	}
+    public void setPort(String port) {
+        this.setProperty(PORT, port);
+    }
 
-	public void setProtocol(String protocol) {
-		this.setProperty(PROTOCOL, protocol);
-	}
+    public void setProtocol(String protocol) {
+        this.setProperty(PROTOCOL, protocol);
+    }
 
-	public void setTimeStamp(long time) {
-		this.setProperty(TIMESTAMP, String.valueOf(time));
-	}
+    public void setTimeStamp(long time) {
+        this.setProperty(TIMESTAMP, String.valueOf(time));
+    }
 
-	public int getHealth() {
-		return this.getPropertyAsInt(HEALTH);
-	}
+    public int getHealth() {
+        return this.getPropertyAsInt(HEALTH);
+    }
 
-	public int getLoad() {
-		return this.getPropertyAsInt(LOAD);
-	}
+    public int getLoad() {
+        return this.getPropertyAsInt(LOAD);
+    }
 
-	public int getCpuLoad() {
-		return this.getPropertyAsInt(CPULOAD);
-	}
+    public int getCpuLoad() {
+        return this.getPropertyAsInt(CPULOAD);
+    }
 
-	public int getMemLoad() {
-		return this.getPropertyAsInt(MEMLOAD);
-	}
+    public int getMemLoad() {
+        return this.getPropertyAsInt(MEMLOAD);
+    }
 
-	public int getThreadLoad() {
-		return this.getPropertyAsInt(THREADLOAD);
-	}
+    public int getThreadLoad() {
+        return this.getPropertyAsInt(THREADLOAD);
+    }
 
-	public String getHost() {
-		return this.getPropertyAsString(HOST);
-	}
+    public String getHost() {
+        return this.getPropertyAsString(HOST);
+    }
 
-	public String getPort() {
-		return this.getPropertyAsString(PORT);
-	}
+    public String getPort() {
+        return this.getPropertyAsString(PORT);
+    }
 
-	public String getProtocol() {
-		return this.getPropertyAsString(PROTOCOL);
-	}
+    public String getProtocol() {
+        return this.getPropertyAsString(PROTOCOL);
+    }
 
-	public long getTimeStamp() {
-		return this.getPropertyAsLong(TIMESTAMP);
-	}
+    public long getTimeStamp() {
+        return this.getPropertyAsLong(TIMESTAMP);
+    }
 }

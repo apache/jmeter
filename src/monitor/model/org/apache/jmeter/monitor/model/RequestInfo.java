@@ -18,31 +18,31 @@
 package org.apache.jmeter.monitor.model;
 
 /**
- * @version $Revision$ on $Date$
+ * @version $Revision$
  */
 public interface RequestInfo {
-	long getBytesReceived();
+    long getBytesReceived();
 
-	void setBytesReceived(long value);
+    void setBytesReceived(long value);
 
-	long getBytesSent();
+    long getBytesSent();
 
-	void setBytesSent(long value);
+    void setBytesSent(long value);
 
-	long getRequestCount();
+    long getRequestCount();
 
-	void setRequestCount(long value);
+    void setRequestCount(long value);
 
-	long getErrorCount();
+    long getErrorCount();
 
-	void setErrorCount(long value);
+    void setErrorCount(long value);
 
-	int getMaxTime();
+    int getMaxTime();
 
-	void setMaxTime(int value);
+    void setMaxTime(int value);
 
-	int getProcessingTime();
+    int getProcessingTime();
 
-	void setProcessingTime(int value);
+    void setProcessingTime(int value);
 
 }

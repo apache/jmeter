@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -32,55 +32,55 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Function to evaluate a string which may contain variable or function references.
- * 
+ *
  * Parameter: string to be evaluated
- * 
- * Returns: the evaluated value 
- * 
+ *
+ * Returns: the evaluated value
+ *
  */
 public class EvalFunction extends AbstractFunction implements Serializable {
 
-	private static final long serialVersionUID = 232L;
+    private static final long serialVersionUID = 232L;
 
-	private static final List desc = new LinkedList();
+    private static final List desc = new LinkedList();
 
-	private static final String KEY = "__eval"; //$NON-NLS-1$
+    private static final String KEY = "__eval"; //$NON-NLS-1$
 
-	// Number of parameters expected - used to reject invalid calls
-	private static final int MIN_PARAMETER_COUNT = 1;
-	private static final int MAX_PARAMETER_COUNT = 1;
-	
-	static {
-		desc.add(JMeterUtils.getResString("eval_name_param")); //$NON-NLS-1$
-	}
+    // Number of parameters expected - used to reject invalid calls
+    private static final int MIN_PARAMETER_COUNT = 1;
+    private static final int MAX_PARAMETER_COUNT = 1;
 
-	private Object[] values;
+    static {
+        desc.add(JMeterUtils.getResString("eval_name_param")); //$NON-NLS-1$
+    }
 
-	public EvalFunction() {
-	}
+    private Object[] values;
 
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
+    public EvalFunction() {
+    }
 
-	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
-			throws InvalidVariableException {
-		String parameter = ((CompoundVariable) values[0]).execute();
-		CompoundVariable cv = new CompoundVariable(parameter);
-		return cv.execute();
-	}
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 
-	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
-		checkParameterCount(parameters, MIN_PARAMETER_COUNT, MAX_PARAMETER_COUNT);
-		values = parameters.toArray();
-	}
+    public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
+            throws InvalidVariableException {
+        String parameter = ((CompoundVariable) values[0]).execute();
+        CompoundVariable cv = new CompoundVariable(parameter);
+        return cv.execute();
+    }
 
-	public String getReferenceKey() {
-		return KEY;
-	}
+    public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
+        checkParameterCount(parameters, MIN_PARAMETER_COUNT, MAX_PARAMETER_COUNT);
+        values = parameters.toArray();
+    }
 
-	public List getArgumentDesc() {
-		return desc;
-	}
+    public String getReferenceKey() {
+        return KEY;
+    }
+
+    public List getArgumentDesc() {
+        return desc;
+    }
 
 }

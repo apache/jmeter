@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.threads;
@@ -55,227 +55,227 @@ import org.apache.log.Logger;
 /**
  * The JMeter interface to the sampling process, allowing JMeter to see the
  * timing, add listeners for sampling events and to stop the sampling process.
- * 
+ *
  */
 public class JMeterThread implements Runnable, Serializable {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final long serialVersionUID = 23L; // Remember to change this when the class changes ...
-	
-	// NOT USED private static Map samplers = new HashMap();
-	private int initialDelay = 0;
+    private static final long serialVersionUID = 23L; // Remember to change this when the class changes ...
 
-	private Controller controller;
+    // NOT USED private static Map samplers = new HashMap();
+    private int initialDelay = 0;
 
-	private boolean running;
+    private Controller controller;
 
-	private HashTree testTree;
+    private boolean running;
 
-	private transient TestCompiler compiler;
+    private HashTree testTree;
 
-	private JMeterThreadMonitor monitor;
+    private transient TestCompiler compiler;
 
-	private String threadName;
+    private JMeterThreadMonitor monitor;
 
-	private transient JMeterContext threadContext;
+    private String threadName;
 
-	private transient JMeterVariables threadVars;
+    private transient JMeterContext threadContext;
 
-	private Collection testListeners;
+    private transient JMeterVariables threadVars;
 
-	private transient ListenerNotifier notifier;
+    private Collection testListeners;
 
-	private int threadNum = 0;
+    private transient ListenerNotifier notifier;
 
-	private long startTime = 0;
+    private int threadNum = 0;
 
-	private long endTime = 0;
+    private long startTime = 0;
 
-	private boolean scheduler = false;
+    private long endTime = 0;
 
-	// based on this scheduler is enabled or disabled
+    private boolean scheduler = false;
 
-	private ThreadGroup threadGroup; // Gives access to parent thread
-										// threadGroup
+    // based on this scheduler is enabled or disabled
 
-	private StandardJMeterEngine engine = null; // For access to stop methods.
+    private ThreadGroup threadGroup; // Gives access to parent thread
+                                        // threadGroup
 
-	private boolean onErrorStopTest;
+    private StandardJMeterEngine engine = null; // For access to stop methods.
 
-	private boolean onErrorStopThread;
+    private boolean onErrorStopTest;
 
-	public static final String PACKAGE_OBJECT = "JMeterThread.pack"; // $NON-NLS-1$
+    private boolean onErrorStopThread;
 
-	public static final String LAST_SAMPLE_OK = "JMeterThread.last_sample_ok"; // $NON-NLS-1$
+    public static final String PACKAGE_OBJECT = "JMeterThread.pack"; // $NON-NLS-1$
 
-	public JMeterThread() {
-	}
+    public static final String LAST_SAMPLE_OK = "JMeterThread.last_sample_ok"; // $NON-NLS-1$
 
-	public JMeterThread(HashTree test, JMeterThreadMonitor monitor, ListenerNotifier note) {
-		this.monitor = monitor;
-		threadVars = new JMeterVariables();
-		testTree = test;
-		compiler = new TestCompiler(testTree, threadVars);
-		controller = (Controller) testTree.getArray()[0];
-		SearchByClass threadListenerSearcher = new SearchByClass(TestListener.class);
-		test.traverse(threadListenerSearcher);
-		testListeners = threadListenerSearcher.getSearchResults();
-		notifier = note;
-		running = true;
-	}
+    public JMeterThread() {
+    }
 
-	public void setInitialContext(JMeterContext context) {
-		threadVars.putAll(context.getVariables());
-	}
+    public JMeterThread(HashTree test, JMeterThreadMonitor monitor, ListenerNotifier note) {
+        this.monitor = monitor;
+        threadVars = new JMeterVariables();
+        testTree = test;
+        compiler = new TestCompiler(testTree, threadVars);
+        controller = (Controller) testTree.getArray()[0];
+        SearchByClass threadListenerSearcher = new SearchByClass(TestListener.class);
+        test.traverse(threadListenerSearcher);
+        testListeners = threadListenerSearcher.getSearchResults();
+        notifier = note;
+        running = true;
+    }
 
-	/**
-	 * Checks whether the JMeterThread is Scheduled.
-	 */
-	public boolean isScheduled() {
-		return this.scheduler;
-	}
+    public void setInitialContext(JMeterContext context) {
+        threadVars.putAll(context.getVariables());
+    }
 
-	/**
-	 * Enable the scheduler for this JMeterThread.
-	 */
-	public void setScheduled(boolean sche) {
-		this.scheduler = sche;
-	}
+    /**
+     * Checks whether the JMeterThread is Scheduled.
+     */
+    public boolean isScheduled() {
+        return this.scheduler;
+    }
 
-	/**
-	 * Set the StartTime for this Thread.
-	 * 
-	 * @param stime the StartTime value.
-	 */
-	public void setStartTime(long stime) {
-		startTime = stime;
-	}
+    /**
+     * Enable the scheduler for this JMeterThread.
+     */
+    public void setScheduled(boolean sche) {
+        this.scheduler = sche;
+    }
 
-	/**
-	 * Get the start time value.
-	 * 
-	 * @return the start time value.
-	 */
-	public long getStartTime() {
-		return startTime;
-	}
+    /**
+     * Set the StartTime for this Thread.
+     *
+     * @param stime the StartTime value.
+     */
+    public void setStartTime(long stime) {
+        startTime = stime;
+    }
 
-	/**
-	 * Set the EndTime for this Thread.
-	 * 
-	 * @param etime
-	 *            the EndTime value.
-	 */
-	public void setEndTime(long etime) {
-		endTime = etime;
-	}
+    /**
+     * Get the start time value.
+     *
+     * @return the start time value.
+     */
+    public long getStartTime() {
+        return startTime;
+    }
 
-	/**
-	 * Get the end time value.
-	 * 
-	 * @return the end time value.
-	 */
-	public long getEndTime() {
-		return endTime;
-	}
+    /**
+     * Set the EndTime for this Thread.
+     *
+     * @param etime
+     *            the EndTime value.
+     */
+    public void setEndTime(long etime) {
+        endTime = etime;
+    }
 
-	/**
-	 * Check the scheduled time is completed.
-	 * 
-	 */
-	private void stopScheduler() {
-		long delay = System.currentTimeMillis() - endTime;
-		if ((delay >= 0)) {
-			running = false;
-		}
-	}
+    /**
+     * Get the end time value.
+     *
+     * @return the end time value.
+     */
+    public long getEndTime() {
+        return endTime;
+    }
 
-	/**
-	 * Wait until the scheduled start time if necessary
-	 * 
-	 */
-	private void startScheduler() {
-		long delay = (startTime - System.currentTimeMillis());
-		if (delay > 0) {
-			try {
-				Thread.sleep(delay);
-			} catch (Exception e) {
-			}
-		}
-	}
+    /**
+     * Check the scheduled time is completed.
+     *
+     */
+    private void stopScheduler() {
+        long delay = System.currentTimeMillis() - endTime;
+        if ((delay >= 0)) {
+            running = false;
+        }
+    }
 
-	public void setThreadName(String threadName) {
-		this.threadName = threadName;
-	}
+    /**
+     * Wait until the scheduled start time if necessary
+     *
+     */
+    private void startScheduler() {
+        long delay = (startTime - System.currentTimeMillis());
+        if (delay > 0) {
+            try {
+                Thread.sleep(delay);
+            } catch (Exception e) {
+            }
+        }
+    }
 
-	/*
-	 * See below for reason for this change. Just in case this causes problems,
-	 * allow the change to be backed out
-	 */
-	private static final boolean startEarlier = 
+    public void setThreadName(String threadName) {
+        this.threadName = threadName;
+    }
+
+    /*
+     * See below for reason for this change. Just in case this causes problems,
+     * allow the change to be backed out
+     */
+    private static final boolean startEarlier =
         JMeterUtils.getPropDefault("jmeterthread.startearlier", true); // $NON-NLS-1$
 
-    private static final boolean reversePostProcessors = 
+    private static final boolean reversePostProcessors =
         JMeterUtils.getPropDefault("jmeterthread.reversePostProcessors",false); // $NON-NLS-1$
 
-	static {
-		if (startEarlier) {
-			log.info("jmeterthread.startearlier=true (see jmeter.properties)");
-		} else {
-			log.info("jmeterthread.startearlier=false (see jmeter.properties)");
-		}
+    static {
+        if (startEarlier) {
+            log.info("jmeterthread.startearlier=true (see jmeter.properties)");
+        } else {
+            log.info("jmeterthread.startearlier=false (see jmeter.properties)");
+        }
         if (reversePostProcessors) {
             log.info("Running PostProcessors in reverse order");
         } else {
-            log.info("Running PostProcessors in forward order");            
+            log.info("Running PostProcessors in forward order");
         }
-	}
+    }
 
-	public void run() {
-		try {
-			initRun();
-			while (running) {
-				Sampler sam;
-				while (running && (sam = controller.next()) != null) {
-					process_sampler(sam, null);
-				}
-				if (controller.isDone()) {
-					running = false;
-				}
-			}
-		}
-		// Might be found by contoller.next()
-		catch (JMeterStopTestException e) {
-			log.info("Stopping Test: " + e.toString());
-			stopTest();
-		} catch (JMeterStopThreadException e) {
-			log.info("Stop Thread seen: " + e.toString());
-		} catch (Exception e) {
-			log.error("Test failed!", e);
-		} catch (ThreadDeath e) {
-			throw e; // Must not ignore this one
-		} catch (Error e) {// Make sure errors are output to the log file
-			log.error("Test failed!", e);
-		} finally {
-			threadContext.clear();
-			log.info("Thread " + threadName + " is done");
-			monitor.threadFinished(this);
-			threadFinished();
-		}
-	}
+    public void run() {
+        try {
+            initRun();
+            while (running) {
+                Sampler sam;
+                while (running && (sam = controller.next()) != null) {
+                    process_sampler(sam, null);
+                }
+                if (controller.isDone()) {
+                    running = false;
+                }
+            }
+        }
+        // Might be found by contoller.next()
+        catch (JMeterStopTestException e) {
+            log.info("Stopping Test: " + e.toString());
+            stopTest();
+        } catch (JMeterStopThreadException e) {
+            log.info("Stop Thread seen: " + e.toString());
+        } catch (Exception e) {
+            log.error("Test failed!", e);
+        } catch (ThreadDeath e) {
+            throw e; // Must not ignore this one
+        } catch (Error e) {// Make sure errors are output to the log file
+            log.error("Test failed!", e);
+        } finally {
+            threadContext.clear();
+            log.info("Thread " + threadName + " is done");
+            monitor.threadFinished(this);
+            threadFinished();
+        }
+    }
 
-	/**
-	 * Process the current sampler, handling transaction samplers.
-	 * 
-	 * @param current sampler
-	 * @param parent sampler
-	 * @return SampleResult if a transaction was processed
-	 */
+    /**
+     * Process the current sampler, handling transaction samplers.
+     *
+     * @param current sampler
+     * @param parent sampler
+     * @return SampleResult if a transaction was processed
+     */
     private SampleResult process_sampler(Sampler current, Sampler parent) {
         SampleResult transactionResult = null;
         try {
-        	threadContext.setCurrentSampler(current);
-            
+            threadContext.setCurrentSampler(current);
+
             // Check if we are running a transaction
             TransactionSampler transactionSampler = null;
             if(current instanceof TransactionSampler) {
@@ -285,7 +285,7 @@ public class JMeterThread implements Runnable, Serializable {
             SamplePackage transactionPack = null;
             if(transactionSampler != null) {
                 transactionPack = compiler.configureTransactionSampler(transactionSampler);
-                
+
                 // Check if the transaction is done
                 if(transactionSampler.isTransactionDone()) {
                     // Get the transaction sample result
@@ -318,30 +318,30 @@ public class JMeterThread implements Runnable, Serializable {
                     }
                 }
             }
-            
+
             // Check if we have a sampler to sample
             if(current != null) {
                 // Get the sampler ready to sample
                 SamplePackage pack = compiler.configureSampler(current);
 
-        	    // Hack: save the package for any transaction controllers
-        		threadVars.putObject(PACKAGE_OBJECT, pack);
+                // Hack: save the package for any transaction controllers
+                threadVars.putObject(PACKAGE_OBJECT, pack);
 
                 delay(pack.getTimers());
                 Sampler sampler = pack.getSampler();
                 sampler.setThreadContext(threadContext);
                 sampler.setThreadName(threadName);
                 TestBeanHelper.prepare(sampler);
-            
+
                 // Perform the actual sample
-                SampleResult 
-                result = sampler.sample(null); 
+                SampleResult
+                result = sampler.sample(null);
                 // TODO: remove this useless Entry parameter
-            
+
                 // If we got any results, then perform processing on the result
                 if (result != null) {
-                	result.setGroupThreads(threadGroup.getNumberOfThreads());
-                	result.setAllThreads(JMeterContextService.getNumberOfThreads());
+                    result.setGroupThreads(threadGroup.getNumberOfThreads());
+                    result.setAllThreads(JMeterContextService.getNumberOfThreads());
                     result.setThreadName(threadName);
                     threadContext.setPreviousResult(result);
                     runPostProcessors(pack.getPostProcessors());
@@ -366,30 +366,30 @@ public class JMeterThread implements Runnable, Serializable {
                     compiler.done(pack); // Finish up
                 }
             }
-        	if (scheduler) {
-        		// checks the scheduler to stop the iteration
-        		stopScheduler();
-        	}
+            if (scheduler) {
+                // checks the scheduler to stop the iteration
+                stopScheduler();
+            }
         } catch (JMeterStopTestException e) {
-        	log.info("Stopping Test: " + e.toString());
-        	stopTest();
+            log.info("Stopping Test: " + e.toString());
+            stopTest();
         } catch (JMeterStopThreadException e) {
-        	log.info("Stopping Thread: " + e.toString());
-        	stopThread();
+            log.info("Stopping Thread: " + e.toString());
+            stopThread();
         } catch (Exception e) {
             if (current != null) {
-                log.error("Error while processing sampler '"+current.getName()+"' :", e);					        
+                log.error("Error while processing sampler '"+current.getName()+"' :", e);
             } else {
                 log.error("", e);
             }
         }
         return transactionResult;
     }
-    
+
     /**
      * Get the SampleListeners for the sampler. Listeners who receive transaction sample
      * will not be in this list.
-     * 
+     *
      * @param samplePack
      * @param transactionPack
      * @param transactionSampler
@@ -421,264 +421,264 @@ public class JMeterThread implements Runnable, Serializable {
         return sampleListeners;
     }
 
-	/**
-	 * 
-	 */
-	protected void initRun() {
-		threadContext = JMeterContextService.getContext();
-		threadContext.setVariables(threadVars);
-		threadContext.setThreadNum(getThreadNum());
-		threadContext.getVariables().put(LAST_SAMPLE_OK, "true");
-		threadContext.setThread(this);
+    /**
+     *
+     */
+    protected void initRun() {
+        threadContext = JMeterContextService.getContext();
+        threadContext.setVariables(threadVars);
+        threadContext.setThreadNum(getThreadNum());
+        threadContext.getVariables().put(LAST_SAMPLE_OK, "true");
+        threadContext.setThread(this);
         threadContext.setThreadGroup(threadGroup);
         threadContext.setEngine(engine);
-		testTree.traverse(compiler);
-		// listeners = controller.getListeners();
-		if (scheduler) {
-			// set the scheduler to start
-			startScheduler();
-		}
-		rampUpDelay();
-		log.info("Thread " + Thread.currentThread().getName() + " started");
+        testTree.traverse(compiler);
+        // listeners = controller.getListeners();
+        if (scheduler) {
+            // set the scheduler to start
+            startScheduler();
+        }
+        rampUpDelay();
+        log.info("Thread " + Thread.currentThread().getName() + " started");
         JMeterContextService.incrNumberOfThreads();
         threadGroup.incrNumberOfThreads();
         GuiPackage gp =GuiPackage.getInstance();
         if (gp != null) {// check there is a GUI
             gp.getMainFrame().updateCounts();
         }
-		/*
-		 * Setting SamplingStarted before the contollers are initialised allows
-		 * them to access the running values of functions and variables (however
-		 * it does not seem to help with the listeners)
-		 */
-		if (startEarlier) {
-			threadContext.setSamplingStarted(true);
-		}
-		controller.initialize();
-		controller.addIterationListener(new IterationListener());
-		if (!startEarlier) {
-			threadContext.setSamplingStarted(true);
-		}
-		threadStarted();
-	}
+        /*
+         * Setting SamplingStarted before the contollers are initialised allows
+         * them to access the running values of functions and variables (however
+         * it does not seem to help with the listeners)
+         */
+        if (startEarlier) {
+            threadContext.setSamplingStarted(true);
+        }
+        controller.initialize();
+        controller.addIterationListener(new IterationListener());
+        if (!startEarlier) {
+            threadContext.setSamplingStarted(true);
+        }
+        threadStarted();
+    }
 
-	/**
-	 * 
-	 */
-	private void threadStarted() {
-		ThreadListenerTraverser startup = new ThreadListenerTraverser(true);
-		testTree.traverse(startup);
-	}
+    /**
+     *
+     */
+    private void threadStarted() {
+        ThreadListenerTraverser startup = new ThreadListenerTraverser(true);
+        testTree.traverse(startup);
+    }
 
-	/**
-	 * 
-	 */
-	private void threadFinished() {
-		ThreadListenerTraverser shut = new ThreadListenerTraverser(false);
-		testTree.traverse(shut);
-		JMeterContextService.decrNumberOfThreads();
+    /**
+     *
+     */
+    private void threadFinished() {
+        ThreadListenerTraverser shut = new ThreadListenerTraverser(false);
+        testTree.traverse(shut);
+        JMeterContextService.decrNumberOfThreads();
         threadGroup.decrNumberOfThreads();
         GuiPackage gp = GuiPackage.getInstance();
         if (gp != null){
             gp.getMainFrame().updateCounts();
         }
-	}
+    }
 
-	private static class ThreadListenerTraverser implements HashTreeTraverser {
-		private boolean isStart = false;
+    private static class ThreadListenerTraverser implements HashTreeTraverser {
+        private boolean isStart = false;
 
-		private ThreadListenerTraverser(boolean start) {
-			isStart = start;
-		}
+        private ThreadListenerTraverser(boolean start) {
+            isStart = start;
+        }
 
-		public void addNode(Object node, HashTree subTree) {
-			if (node instanceof ThreadListener) {
-				ThreadListener tl = (ThreadListener) node;
-				if (isStart) {
-					tl.threadStarted();
-				} else {
-					tl.threadFinished();
-				}
-			}
-		}
+        public void addNode(Object node, HashTree subTree) {
+            if (node instanceof ThreadListener) {
+                ThreadListener tl = (ThreadListener) node;
+                if (isStart) {
+                    tl.threadStarted();
+                } else {
+                    tl.threadFinished();
+                }
+            }
+        }
 
-		public void subtractNode() {
-		}
+        public void subtractNode() {
+        }
 
-		public void processPath() {
-		}
-	}
+        public void processPath() {
+        }
+    }
 
-	public String getThreadName() {
-		return threadName;
-	}
+    public String getThreadName() {
+        return threadName;
+    }
 
-	public void stop() {
-		running = false;
-		log.info("Stopping " + threadName);
-	}
+    public void stop() {
+        running = false;
+        log.info("Stopping " + threadName);
+    }
 
-	private void stopTest() {
-		running = false;
-		log.info("Stop Test detected by thread " + threadName);
-		// engine.stopTest();
-		if (engine != null) {
-			engine.askThreadsToStop();
-		}
-	}
+    private void stopTest() {
+        running = false;
+        log.info("Stop Test detected by thread " + threadName);
+        // engine.stopTest();
+        if (engine != null) {
+            engine.askThreadsToStop();
+        }
+    }
 
-	private void stopThread() {
-		running = false;
-		log.info("Stop Thread detected by thread " + threadName);
-	}
+    private void stopThread() {
+        running = false;
+        log.info("Stop Thread detected by thread " + threadName);
+    }
 
-	private void checkAssertions(List assertions, SampleResult result) {
-		Iterator iter = assertions.iterator();
-		while (iter.hasNext()) {
-			Assertion assertion = (Assertion) iter.next();
-			TestBeanHelper.prepare((TestElement) assertion);
-			AssertionResult assertionResult = assertion.getResult(result);
-			result.setSuccessful(result.isSuccessful() && !(assertionResult.isError() || assertionResult.isFailure()));
-			result.addAssertionResult(assertionResult);
-		}
-		threadContext.getVariables().put(LAST_SAMPLE_OK, Boolean.toString(result.isSuccessful()));
-	}
+    private void checkAssertions(List assertions, SampleResult result) {
+        Iterator iter = assertions.iterator();
+        while (iter.hasNext()) {
+            Assertion assertion = (Assertion) iter.next();
+            TestBeanHelper.prepare((TestElement) assertion);
+            AssertionResult assertionResult = assertion.getResult(result);
+            result.setSuccessful(result.isSuccessful() && !(assertionResult.isError() || assertionResult.isFailure()));
+            result.addAssertionResult(assertionResult);
+        }
+        threadContext.getVariables().put(LAST_SAMPLE_OK, Boolean.toString(result.isSuccessful()));
+    }
 
-	private void runPostProcessors(List extractors) {
-		ListIterator iter;
+    private void runPostProcessors(List extractors) {
+        ListIterator iter;
         if (reversePostProcessors) {// Original (rather odd) behaviour
-        	iter = extractors.listIterator(extractors.size());// start at the end
-    		while (iter.hasPrevious()) {
-    			PostProcessor ex = (PostProcessor) iter.previous();
-    			TestBeanHelper.prepare((TestElement) ex);
-    			ex.process();
-    		}
+            iter = extractors.listIterator(extractors.size());// start at the end
+            while (iter.hasPrevious()) {
+                PostProcessor ex = (PostProcessor) iter.previous();
+                TestBeanHelper.prepare((TestElement) ex);
+                ex.process();
+            }
         } else {
-        	iter = extractors.listIterator(); // start at the beginning
+            iter = extractors.listIterator(); // start at the beginning
             while (iter.hasNext()) {
                 PostProcessor ex = (PostProcessor) iter.next();
                 TestBeanHelper.prepare((TestElement) ex);
                 ex.process();
-            }            
+            }
         }
-	}
+    }
 
-	private void delay(List timers) {
-		long sum = 0;
-		Iterator iter = timers.iterator();
-		while (iter.hasNext()) {
-			Timer timer = (Timer) iter.next();
-			TestBeanHelper.prepare((TestElement) timer);
-			sum += timer.delay();
-		}
-		if (sum > 0) {
-			try {
-				Thread.sleep(sum);
-			} catch (InterruptedException e) {
-				log.error("", e);
-			}
-		}
-	}
+    private void delay(List timers) {
+        long sum = 0;
+        Iterator iter = timers.iterator();
+        while (iter.hasNext()) {
+            Timer timer = (Timer) iter.next();
+            TestBeanHelper.prepare((TestElement) timer);
+            sum += timer.delay();
+        }
+        if (sum > 0) {
+            try {
+                Thread.sleep(sum);
+            } catch (InterruptedException e) {
+                log.error("", e);
+            }
+        }
+    }
 
-	private void notifyTestListeners() {
-		threadVars.incIteration();
-		Iterator iter = testListeners.iterator();
-		while (iter.hasNext()) {
-			TestListener listener = (TestListener) iter.next();
-			if (listener instanceof TestElement) {
-				listener.testIterationStart(new LoopIterationEvent(controller, threadVars.getIteration()));
-				((TestElement) listener).recoverRunningVersion();
-			} else {
-				listener.testIterationStart(new LoopIterationEvent(controller, threadVars.getIteration()));
-			}
-		}
-	}
+    private void notifyTestListeners() {
+        threadVars.incIteration();
+        Iterator iter = testListeners.iterator();
+        while (iter.hasNext()) {
+            TestListener listener = (TestListener) iter.next();
+            if (listener instanceof TestElement) {
+                listener.testIterationStart(new LoopIterationEvent(controller, threadVars.getIteration()));
+                ((TestElement) listener).recoverRunningVersion();
+            } else {
+                listener.testIterationStart(new LoopIterationEvent(controller, threadVars.getIteration()));
+            }
+        }
+    }
 
-	private void notifyListeners(List listeners, SampleResult result) {
-		SampleEvent event = new SampleEvent(result, threadGroup.getName(), threadVars);
-		notifier.notifyListeners(event, listeners);
+    private void notifyListeners(List listeners, SampleResult result) {
+        SampleEvent event = new SampleEvent(result, threadGroup.getName(), threadVars);
+        notifier.notifyListeners(event, listeners);
 
-	}
+    }
 
-	public void setInitialDelay(int delay) {
-		initialDelay = delay;
-	}
+    public void setInitialDelay(int delay) {
+        initialDelay = delay;
+    }
 
-	/**
-	 * Initial delay if ramp-up period is active for this threadGroup.
-	 */
-	private void rampUpDelay() {
-		if (initialDelay > 0) {
-			try {
-				Thread.sleep(initialDelay);
-			} catch (InterruptedException e) {
-			}
-		}
-	}
+    /**
+     * Initial delay if ramp-up period is active for this threadGroup.
+     */
+    private void rampUpDelay() {
+        if (initialDelay > 0) {
+            try {
+                Thread.sleep(initialDelay);
+            } catch (InterruptedException e) {
+            }
+        }
+    }
 
-	/**
-	 * Returns the threadNum.
-	 */
-	public int getThreadNum() {
-		return threadNum;
-	}
+    /**
+     * Returns the threadNum.
+     */
+    public int getThreadNum() {
+        return threadNum;
+    }
 
-	/**
-	 * Sets the threadNum.
-	 * 
-	 * @param threadNum
-	 *            the threadNum to set
-	 */
-	public void setThreadNum(int threadNum) {
-		this.threadNum = threadNum;
-	}
+    /**
+     * Sets the threadNum.
+     *
+     * @param threadNum
+     *            the threadNum to set
+     */
+    public void setThreadNum(int threadNum) {
+        this.threadNum = threadNum;
+    }
 
-	private class IterationListener implements LoopIterationListener {
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see LoopIterationListener#iterationStart(LoopIterationEvent)
-		 */
-		public void iterationStart(LoopIterationEvent iterEvent) {
-			notifyTestListeners();
-		}
-	}
+    private class IterationListener implements LoopIterationListener {
+        /*
+         * (non-Javadoc)
+         *
+         * @see LoopIterationListener#iterationStart(LoopIterationEvent)
+         */
+        public void iterationStart(LoopIterationEvent iterEvent) {
+            notifyTestListeners();
+        }
+    }
 
-	/**
-	 * Save the engine instance for access to the stop methods
-	 * 
-	 * @param engine
-	 */
-	public void setEngine(StandardJMeterEngine engine) {
-		this.engine = engine;
-	}
+    /**
+     * Save the engine instance for access to the stop methods
+     *
+     * @param engine
+     */
+    public void setEngine(StandardJMeterEngine engine) {
+        this.engine = engine;
+    }
 
-	/**
-	 * Should Test stop on sampler error?
-	 * 
-	 * @param b -
-	 *            true or false
-	 */
-	public void setOnErrorStopTest(boolean b) {
-		onErrorStopTest = b;
-	}
+    /**
+     * Should Test stop on sampler error?
+     *
+     * @param b -
+     *            true or false
+     */
+    public void setOnErrorStopTest(boolean b) {
+        onErrorStopTest = b;
+    }
 
-	/**
-	 * Should Thread stop on Sampler error?
-	 * 
-	 * @param b -
-	 *            true or false
-	 */
-	public void setOnErrorStopThread(boolean b) {
-		onErrorStopThread = b;
-	}
+    /**
+     * Should Thread stop on Sampler error?
+     *
+     * @param b -
+     *            true or false
+     */
+    public void setOnErrorStopThread(boolean b) {
+        onErrorStopThread = b;
+    }
 
-	public ThreadGroup getThreadGroup() {
-		return threadGroup;
-	}
+    public ThreadGroup getThreadGroup() {
+        return threadGroup;
+    }
 
-	public void setThreadGroup(ThreadGroup group) {
-		this.threadGroup = group;
-	}
+    public void setThreadGroup(ThreadGroup group) {
+        this.threadGroup = group;
+    }
 
 }

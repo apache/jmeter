@@ -79,14 +79,14 @@ public class JexlFunction extends AbstractFunction implements Serializable
             Expression e = ExpressionFactory.createExpression(exp);
             JexlContext jc = JexlHelper.createContext();
             final Map jexlVars = jc.getVars();
-            jexlVars.put("ctx", jmctx); //$NON-NLS-1$                
+            jexlVars.put("ctx", jmctx); //$NON-NLS-1$
             jexlVars.put("vars", vars); //$NON-NLS-1$
             jexlVars.put("props", JMeterUtils.getJMeterProperties()); //$NON-NLS-1$
             jexlVars.put("theadName", Thread.currentThread().getName()); //$NON-NLS-1$
             jexlVars.put("sampler", currentSampler); //$NON-NLS-1$ (may be null)
             jexlVars.put("sampleResult", previousResult); //$NON-NLS-1$ (may be null)
             jexlVars.put("OUT", System.out);//$NON-NLS-1$
-            
+
             // Now evaluate the expression, getting the result
             Object o = e.evaluate(jc);
             if (o != null)
@@ -117,7 +117,7 @@ public class JexlFunction extends AbstractFunction implements Serializable
     public synchronized void setParameters(Collection parameters)
             throws InvalidVariableException
     {
-		checkParameterCount(parameters, 1, 2);
+        checkParameterCount(parameters, 1, 2);
         values = parameters.toArray();
     }
 

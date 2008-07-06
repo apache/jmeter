@@ -14,7 +14,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 package org.apache.jmeter.report.writers;
 
@@ -22,8 +22,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * @author Peter Lin
- *
  * The default implementation of ReportSummary just contains the stats
  * and basic information. It doesn't contain the actual report. In the
  * future we may want to implement a version with all the details to
@@ -32,47 +30,47 @@ import java.util.Iterator;
 public class DefaultReportSummary implements ReportSummary {
 
     protected ArrayList pages = new ArrayList();
-    
-	/**
-	 * 
-	 */
-	public DefaultReportSummary() {
-		super();
-	}
 
-	/**
+    /**
+     *
+     */
+    public DefaultReportSummary() {
+        super();
+    }
+
+    /**
      * Add a PageSummary to the report
-	 */
-	public void addPageSummary(PageSummary summary) {
+     */
+    public void addPageSummary(PageSummary summary) {
         this.pages.add(summary);
-	}
+    }
 
-	/**
+    /**
      * current implementation simply iterates over the Page summaries
      * and adds the times.
-	 */
-	public long getElapsedTime() {
+     */
+    public long getElapsedTime() {
         long elpasedTime = 0;
         Iterator itr = this.pages.iterator();
         while (itr.hasNext()) {
             elpasedTime += ((PageSummary)itr.next()).getElapsedTime();
         }
-		return elpasedTime;
-	}
+        return elpasedTime;
+    }
 
-	/**
+    /**
      * The current implementation calls ArrayList.toArray(Object[])
-	 */
-	public PageSummary[] getPagesSummaries() {
+     */
+    public PageSummary[] getPagesSummaries() {
         PageSummary[] ps = new PageSummary[this.pages.size()];
-		return (PageSummary[])this.pages.toArray(ps);
-	}
+        return (PageSummary[])this.pages.toArray(ps);
+    }
 
-	/**
+    /**
      * remove a PageSummary
-	 */
-	public void removePageSummary(PageSummary summary) {
+     */
+    public void removePageSummary(PageSummary summary) {
         this.pages.remove(summary);
-	}
+    }
 
 }

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.reporters.gui;
@@ -36,11 +36,11 @@ import org.apache.jmeter.visualizers.gui.AbstractListenerGui;
 /**
  * Create a ResultSaver test element, which saves the sample information in set
  * of files
- * 
+ *
  */
 public class ResultSaverGui extends AbstractListenerGui implements Clearable {
 
-	private JTextField filename;
+    private JTextField filename;
 
     private JTextField variableName;
 
@@ -48,91 +48,91 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable {
 
     private JCheckBox successOnly;
 
-	public ResultSaverGui() {
-		super();
-		init();
-	}
+    public ResultSaverGui() {
+        super();
+        init();
+    }
 
-	/**
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
-	 */
-	public String getLabelResource() {
-		return "resultsaver_title"; // $NON-NLS-1$
-	}
+    /**
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
+     */
+    public String getLabelResource() {
+        return "resultsaver_title"; // $NON-NLS-1$
+    }
 
-	/**
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(TestElement)
-	 */
-	public void configure(TestElement el) {
-		super.configure(el);
-		filename.setText(el.getPropertyAsString(ResultSaver.FILENAME));
-		errorsOnly.setSelected(el.getPropertyAsBoolean(ResultSaver.ERRORS_ONLY));
+    /**
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(TestElement)
+     */
+    public void configure(TestElement el) {
+        super.configure(el);
+        filename.setText(el.getPropertyAsString(ResultSaver.FILENAME));
+        errorsOnly.setSelected(el.getPropertyAsBoolean(ResultSaver.ERRORS_ONLY));
         successOnly.setSelected(el.getPropertyAsBoolean(ResultSaver.SUCCESS_ONLY));
         variableName.setText(el.getPropertyAsString(ResultSaver.VARIABLE_NAME,""));
-	}
+    }
 
-	/**
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
-	 */
-	public TestElement createTestElement() {
-		ResultSaver resultSaver = new ResultSaver();
-		modifyTestElement(resultSaver);
-		return resultSaver;
-	}
+    /**
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
+     */
+    public TestElement createTestElement() {
+        ResultSaver resultSaver = new ResultSaver();
+        modifyTestElement(resultSaver);
+        return resultSaver;
+    }
 
-	/**
-	 * Modifies a given TestElement to mirror the data in the gui components.
-	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-	 */
-	public void modifyTestElement(TestElement te) {
-		super.configureTestElement(te);
-		te.setProperty(ResultSaver.FILENAME, filename.getText());
-		te.setProperty(ResultSaver.ERRORS_ONLY, errorsOnly.isSelected());
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     *
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement te) {
+        super.configureTestElement(te);
+        te.setProperty(ResultSaver.FILENAME, filename.getText());
+        te.setProperty(ResultSaver.ERRORS_ONLY, errorsOnly.isSelected());
         te.setProperty(ResultSaver.SUCCESS_ONLY, successOnly.isSelected());
         AbstractTestElement at = (AbstractTestElement) te;
         at.setProperty(ResultSaver.VARIABLE_NAME, variableName.getText(),""); //$NON-NLS-1$
-	}
+    }
 
     /**
      * Implements JMeterGUIComponent.clearGui
      */
     public void clearGui() {
         super.clearGui();
-        
+
         filename.setText(""); //$NON-NLS-1$
         errorsOnly.setSelected(false);
         successOnly.setSelected(false);
         variableName.setText(""); //$NON-NLS-1$
     }
 
-	private void init() {
-		setLayout(new BorderLayout());
-		setBorder(makeBorder());
-		Box box = Box.createVerticalBox();
-		box.add(makeTitlePanel());
-		box.add(createFilenamePrefixPanel());
+    private void init() {
+        setLayout(new BorderLayout());
+        setBorder(makeBorder());
+        Box box = Box.createVerticalBox();
+        box.add(makeTitlePanel());
+        box.add(createFilenamePrefixPanel());
         box.add(createVariableNamePanel());
-		errorsOnly = new JCheckBox(JMeterUtils.getResString("resultsaver_errors")); // $NON-NLS-1$
-		box.add(errorsOnly);
+        errorsOnly = new JCheckBox(JMeterUtils.getResString("resultsaver_errors")); // $NON-NLS-1$
+        box.add(errorsOnly);
         successOnly = new JCheckBox(JMeterUtils.getResString("resultsaver_success")); // $NON-NLS-1$
         box.add(successOnly);
-		add(box, BorderLayout.NORTH);
-	}
+        add(box, BorderLayout.NORTH);
+    }
 
-	private JPanel createFilenamePrefixPanel()
-	{
-		JLabel label = new JLabel(JMeterUtils.getResString("resultsaver_prefix")); // $NON-NLS-1$
+    private JPanel createFilenamePrefixPanel()
+    {
+        JLabel label = new JLabel(JMeterUtils.getResString("resultsaver_prefix")); // $NON-NLS-1$
 
-		filename = new JTextField(10);
-		filename.setName(ResultSaver.FILENAME);
-		label.setLabelFor(filename);
+        filename = new JTextField(10);
+        filename.setName(ResultSaver.FILENAME);
+        label.setLabelFor(filename);
 
-		JPanel filenamePanel = new JPanel(new BorderLayout(5, 0));
-		filenamePanel.add(label, BorderLayout.WEST);
-		filenamePanel.add(filename, BorderLayout.CENTER);
-		return filenamePanel;
-	}
+        JPanel filenamePanel = new JPanel(new BorderLayout(5, 0));
+        filenamePanel.add(label, BorderLayout.WEST);
+        filenamePanel.add(filename, BorderLayout.CENTER);
+        return filenamePanel;
+    }
 
 
     private JPanel createVariableNamePanel()
@@ -150,8 +150,8 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable {
     }
 
 
-	// Needed to avoid Class cast error in Clear.java
-	public void clearData() {
-	}
+    // Needed to avoid Class cast error in Clear.java
+    public void clearData() {
+    }
 
 }

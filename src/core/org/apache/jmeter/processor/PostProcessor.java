@@ -13,20 +13,20 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.processor;
 
 /**
  * The PostProcessor is activated after a sample result has been generated.
- * 
+ *
  * @version $Revision$
  */
 public interface PostProcessor {
-	/**
-	 * Provides the PostProcessor with a SampleResult object from which to
-	 * extract values for use in future Queries.
-	 */
-	public void process();
+    /**
+     * Provides the PostProcessor with a SampleResult object from which to
+     * extract values for use in future Queries.
+     */
+    public void process();
 }

@@ -18,7 +18,7 @@
 package org.apache.jmeter.monitor.model;
 
 public interface Jvm {
-	Memory getMemory();
+    Memory getMemory();
 
-	void setMemory(Memory mem);
+    void setMemory(Memory mem);
 }

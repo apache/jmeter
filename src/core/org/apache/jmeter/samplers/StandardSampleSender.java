@@ -30,47 +30,47 @@ import java.io.Serializable;
  */
 
 public class StandardSampleSender implements SampleSender, Serializable {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private RemoteSampleListener listener;
+    private RemoteSampleListener listener;
 
-	public StandardSampleSender(){
+    public StandardSampleSender(){
         log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
     }
-    
+
     StandardSampleSender(RemoteSampleListener listener) {
-		log.info("Using Standard Remote Sampler for this test run");
-		this.listener = listener;
-	}
+        log.info("Using Standard Remote Sampler for this test run");
+        this.listener = listener;
+    }
 
-	public void testEnded() {
-		log.info("Test ended()");
-		try {
-			listener.testEnded();
-		} catch (RemoteException ex) {
-			log.warn("testEnded()"+ex);
-		}
+    public void testEnded() {
+        log.info("Test ended()");
+        try {
+            listener.testEnded();
+        } catch (RemoteException ex) {
+            log.warn("testEnded()"+ex);
+        }
 
-	}
+    }
 
-	public void testEnded(String host) {
-		log.info("Test Ended on " + host); // should this be debug?
-		try {
-			listener.testEnded(host);
-		} catch (RemoteException ex) {
-			log.warn("testEnded(host)"+ex);
-		}
-	}
+    public void testEnded(String host) {
+        log.info("Test Ended on " + host); // should this be debug?
+        try {
+            listener.testEnded(host);
+        } catch (RemoteException ex) {
+            log.warn("testEnded(host)"+ex);
+        }
+    }
 
-	public void SampleOccurred(SampleEvent e) {
-		log.debug("Sample occurred");
-		try {
-			listener.sampleOccurred(e);
-		} catch (RemoteException err) {
-			if (err.getCause() instanceof java.net.ConnectException){
-				throw new JMeterError("Could not return sample",err);				
-			}
-			log.error("sampleOccurred", err);
-		}
-	}
+    public void SampleOccurred(SampleEvent e) {
+        log.debug("Sample occurred");
+        try {
+            listener.sampleOccurred(e);
+        } catch (RemoteException err) {
+            if (err.getCause() instanceof java.net.ConnectException){
+                throw new JMeterError("Could not return sample",err);
+            }
+            log.error("sampleOccurred", err);
+        }
+    }
 }

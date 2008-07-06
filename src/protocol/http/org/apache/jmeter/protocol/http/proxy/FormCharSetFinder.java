@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.proxy;
@@ -43,44 +43,44 @@ class FormCharSetFinder {
     }
 
     protected FormCharSetFinder() {
-		super();
-	}
+        super();
+    }
 
     /**
      * Add form action urls and their corresponding encodings for all forms on the page
-     * 
+     *
      * @param html the html to parse for form encodings
      * @param formEncodings the Map where form encodings should be added
      * @param pageEncoding the encoding used for the whole page
      * @throws HTMLParseException
      */
-	public void addFormActionsAndCharSet(String html, Map formEncodings, String pageEncoding)
+    public void addFormActionsAndCharSet(String html, Map formEncodings, String pageEncoding)
             throws HTMLParseException {
         if (log.isDebugEnabled()) {
             log.debug("Parsing html of: " + html);
         }
-        
-        Parser htmlParser = null;
-		try {
-			htmlParser = new Parser();
-            htmlParser.setInputHTML(html);
-		} catch (Exception e) {
-			throw new HTMLParseException(e);
-		}
 
-		// Now parse the DOM tree
-		try {
-			// we start to iterate through the elements
-			parseNodes(htmlParser.elements(), formEncodings, pageEncoding);
-			log.debug("End   : parseNodes");
-		} catch (ParserException e) {
-			throw new HTMLParseException(e);
-		}
-	}
-    
+        Parser htmlParser = null;
+        try {
+            htmlParser = new Parser();
+            htmlParser.setInputHTML(html);
+        } catch (Exception e) {
+            throw new HTMLParseException(e);
+        }
+
+        // Now parse the DOM tree
+        try {
+            // we start to iterate through the elements
+            parseNodes(htmlParser.elements(), formEncodings, pageEncoding);
+            log.debug("End   : parseNodes");
+        } catch (ParserException e) {
+            throw new HTMLParseException(e);
+        }
+    }
+
     /**
      * Recursively parse all nodes to pick up all form encodings
-     * 
+     *
      * @param e the nodes to be parsed
      * @param formEncodings the Map where we should add form encodings found
      * @param pageEncoding the encoding used for the page where the nodes are present

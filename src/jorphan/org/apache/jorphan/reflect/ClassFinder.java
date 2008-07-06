@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jorphan.reflect;
@@ -38,7 +38,7 @@ import org.apache.log.Logger;
 
 /**
  * This class finds classes that extend one of a set of parent classes
- * 
+ *
  */
 public final class ClassFinder {
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -48,27 +48,27 @@ public final class ClassFinder {
     private static final int DOT_CLASS_LEN = DOT_CLASS.length();
 
     // static only
-	private ClassFinder() {
-	}
-    
+    private ClassFinder() {
+    }
+
     /**
      * Filter updates to TreeSet by only storing classes
      * that extend one of the parent classes
-     * 
+     *
      *
      */
     private static class FilterTreeSet extends TreeSet{
         private final Class[] parents; // parent classes to check
         private final boolean inner; // are inner classes OK?
-        
+
         // hack to reduce the need to load every class in non-GUI mode, which only needs functions
         // TODO perhaps use BCEL to scan class files instead?
         private final String contains; // class name should contain this string
         private final String notContains; // class name should not contain this string
 
-        private final transient ClassLoader contextClassLoader 
+        private final transient ClassLoader contextClassLoader
             = Thread.currentThread().getContextClassLoader(); // Potentially expensive; do it once
-        
+
         FilterTreeSet(Class []parents, boolean inner, String contains, String notContains){
             super();
             this.parents=parents;
@@ -76,14 +76,14 @@ public final class ClassFinder {
             this.contains=contains;
             this.notContains=notContains;
         }
-        
+
         /**
          * Override the superclass so we only add classnames that
          * meet the criteria.
-         * 
+         *
          * @param o - classname (must be a String)
          * @return true if it is a new entry
-         * 
+         *
          * @see java.util.TreeSet#add(java.lang.Object)
          */
         public boolean add(Object o){
@@ -92,10 +92,10 @@ public final class ClassFinder {
             }
             String s = (String) o;// we only expect Strings
             if (contains!=null && s.indexOf(contains) == -1){
-            	return false; // It does not contain a required string
+                return false; // It does not contain a required string
             }
             if (notContains!=null && s.indexOf(notContains) != -1){
-            	return false; // It contains a banned string
+                return false; // It contains a banned string
             }
             if ((s.indexOf("$") == -1) || inner) { // $NON-NLS-1$
                 if (isChildOf(parents,s, contextClassLoader)) {
@@ -106,17 +106,17 @@ public final class ClassFinder {
         }
     }
 
-	/**
-	 * Convenience method for 
+    /**
+     * Convenience method for
      * <code>findClassesThatExtend(Class[], boolean)</code>
-	 * with the option to include inner classes in the search set to false.
-	 * 
-	 * @return List containing discovered classes.
-	 */
-	public static List findClassesThatExtend(String[] paths, Class[] superClasses) 
+     * with the option to include inner classes in the search set to false.
+     *
+     * @return List containing discovered classes.
+     */
+    public static List findClassesThatExtend(String[] paths, Class[] superClasses)
         throws IOException {
-		return findClassesThatExtend(paths, superClasses, false);
-	}
+        return findClassesThatExtend(paths, superClasses, false);
+    }
 
     // For each directory in the search path, add all the jars found there
     private static String[] addJarsInPath(String[] paths) {
@@ -147,14 +147,14 @@ public final class ClassFinder {
      * @param strPathsOrJars - pathnames or jarfiles to search for classes
      * @param superClasses - required parent class(es)
      * @param innerClasses - should we include inner classes?
-     * 
+     *
      * @return List containing discovered classes
      */
-	public static List findClassesThatExtend(String[] strPathsOrJars, 
+    public static List findClassesThatExtend(String[] strPathsOrJars,
             final Class[] superClasses, final boolean innerClasses)
-			throws IOException  {
-		return findClassesThatExtend(strPathsOrJars,superClasses,innerClasses,null,null);
-	}
+            throws IOException  {
+        return findClassesThatExtend(strPathsOrJars,superClasses,innerClasses,null,null);
+    }
 
     /**
      * Find classes in the provided path(s)/jar(s) that extend the class(es).
@@ -163,51 +163,51 @@ public final class ClassFinder {
      * @param innerClasses - should we include inner classes?
      * @param contains - classname should contain this string
      * @param notContains - classname should not contain this string
-     * 
+     *
      * @return List containing discovered classes
      */
-	public static List findClassesThatExtend(String[] strPathsOrJars, 
+    public static List findClassesThatExtend(String[] strPathsOrJars,
             final Class[] superClasses, final boolean innerClasses,
             String contains, String notContains)
-			throws IOException  {
-        
-		if (log.isDebugEnabled()) {
-			for (int i = 0; i < superClasses.length ; i++){
-				log.debug("superclass: "+superClasses[i].getName());  
-			}
-		}
+            throws IOException  {
+
+        if (log.isDebugEnabled()) {
+            for (int i = 0; i < superClasses.length ; i++){
+                log.debug("superclass: "+superClasses[i].getName());
+            }
+        }
 
         // Find all jars in the search path
-		strPathsOrJars = addJarsInPath(strPathsOrJars);
+        strPathsOrJars = addJarsInPath(strPathsOrJars);
         for (int k = 0; k < strPathsOrJars.length; k++) {
             strPathsOrJars[k] = fixPathEntry(strPathsOrJars[k]);
-    		if (log.isDebugEnabled()) {
-				log.debug("strPathsOrJars : " + strPathsOrJars[k]);
-			}
-		}
-        
+            if (log.isDebugEnabled()) {
+                log.debug("strPathsOrJars : " + strPathsOrJars[k]);
+            }
+        }
+
         // Now eliminate any classpath entries that do not "match" the search
-		List listPaths = getClasspathMatches(strPathsOrJars);
-		if (log.isDebugEnabled()) {
-			Iterator tIter = listPaths.iterator();
-			while (tIter.hasNext()) {
-				log.debug("listPaths : " + tIter.next());
-			}
-		}
-        
-		Set listClasses = new FilterTreeSet(superClasses, innerClasses, contains, notContains);
-		// first get all the classes
-		findClassesInPaths(listPaths, listClasses);
-		if (log.isDebugEnabled()) {
+        List listPaths = getClasspathMatches(strPathsOrJars);
+        if (log.isDebugEnabled()) {
+            Iterator tIter = listPaths.iterator();
+            while (tIter.hasNext()) {
+                log.debug("listPaths : " + tIter.next());
+            }
+        }
+
+        Set listClasses = new FilterTreeSet(superClasses, innerClasses, contains, notContains);
+        // first get all the classes
+        findClassesInPaths(listPaths, listClasses);
+        if (log.isDebugEnabled()) {
             log.debug("listClasses.size()="+listClasses.size());
-			Iterator tIter = listClasses.iterator();
-			while (tIter.hasNext()) {
-				log.debug("listClasses : " + tIter.next());
-			}
-		}
-        
+            Iterator tIter = listClasses.iterator();
+            while (tIter.hasNext()) {
+                log.debug("listClasses : " + tIter.next());
+            }
+        }
+
 //        // Now keep only the required classes
-//		Set subClassList = findAllSubclasses(superClasses, listClasses, innerClasses);
+//        Set subClassList = findAllSubclasses(superClasses, listClasses, innerClasses);
 //        if (log.isDebugEnabled()) {
 //            log.debug("subClassList.size()="+subClassList.size());
 //            Iterator tIter = subClassList.iterator();
@@ -215,49 +215,49 @@ public final class ClassFinder {
 //                log.debug("subClassList : " + tIter.next());
 //            }
 //        }
-        
-		return new ArrayList(listClasses);//subClassList);
-	}
+
+        return new ArrayList(listClasses);//subClassList);
+    }
 
     /*
      * Returns the classpath entries that match the search list of jars and paths
      */
-	private static List getClasspathMatches(String[] strPathsOrJars) {
-		log.debug("Classpath = " + System.getProperty("java.class.path")); // $NON-NLS-1$
-        StringTokenizer stPaths = 
-            new StringTokenizer(System.getProperty("java.class.path"), // $NON-NLS-1$ 
+    private static List getClasspathMatches(String[] strPathsOrJars) {
+        log.debug("Classpath = " + System.getProperty("java.class.path")); // $NON-NLS-1$
+        StringTokenizer stPaths =
+            new StringTokenizer(System.getProperty("java.class.path"), // $NON-NLS-1$
                 System.getProperty("path.separator")); // $NON-NLS-1$
-		if (log.isDebugEnabled()) {
-			for (int i = 0; i < strPathsOrJars.length; i++) {
-				log.debug("strPathsOrJars[" + i + "] : " + strPathsOrJars[i]);
-			}
-		}
+        if (log.isDebugEnabled()) {
+            for (int i = 0; i < strPathsOrJars.length; i++) {
+                log.debug("strPathsOrJars[" + i + "] : " + strPathsOrJars[i]);
+            }
+        }
 
-		// find all jar files or paths that end with strPathOrJar
+        // find all jar files or paths that end with strPathOrJar
         ArrayList listPaths = new ArrayList();
         String strPath = null;
-		while (stPaths.hasMoreTokens()) {
-			strPath = fixPathEntry(stPaths.nextToken());
-			if (strPathsOrJars == null) {
-				log.debug("Adding: " + strPath);
-				listPaths.add(strPath);
-			} else {
-				boolean found = false;
-				for (int i = 0; i < strPathsOrJars.length; i++) {
-					if (strPath.endsWith(strPathsOrJars[i])) {
-						found = true;
-						log.debug("Adding " + strPath + " found at " + i);
-						listPaths.add(strPath);
-						break;// no need to look further
-					}
-				}
-				if (!found) {
-					log.debug("Did not find: " + strPath);
-				}
-			}
-		}
-		return listPaths;
-	}
+        while (stPaths.hasMoreTokens()) {
+            strPath = fixPathEntry(stPaths.nextToken());
+            if (strPathsOrJars == null) {
+                log.debug("Adding: " + strPath);
+                listPaths.add(strPath);
+            } else {
+                boolean found = false;
+                for (int i = 0; i < strPathsOrJars.length; i++) {
+                    if (strPath.endsWith(strPathsOrJars[i])) {
+                        found = true;
+                        log.debug("Adding " + strPath + " found at " + i);
+                        listPaths.add(strPath);
+                        break;// no need to look further
+                    }
+                }
+                if (!found) {
+                    log.debug("Did not find: " + strPath);
+                }
+            }
+        }
+        return listPaths;
+    }
 
     /**
      * Fix a path:
@@ -282,85 +282,85 @@ public final class ClassFinder {
         }
         return path;
     }
-    
-	/*
-	 * NOTUSED * Determine if the class implements the interface.
-	 * 
-	 * @param theClass
-	 *            the class to check
-	 * @param theInterface
-	 *            the interface to look for
-	 * @return boolean true if it implements
-	 * 
-	 * private static boolean classImplementsInterface( Class theClass, Class
-	 * theInterface) { HashMap mapInterfaces = new HashMap(); String strKey =
-	 * null; // pass in the map by reference since the method is recursive
-	 * getAllInterfaces(theClass, mapInterfaces); Iterator iterInterfaces =
-	 * mapInterfaces.keySet().iterator(); while (iterInterfaces.hasNext()) {
-	 * strKey = (String) iterInterfaces.next(); if (mapInterfaces.get(strKey) ==
-	 * theInterface) { return true; } } return false; }
-	 */
 
-	/*
-	 * Finds all classes that extend the classes in the listSuperClasses
-	 * ArrayList, searching in the listAllClasses ArrayList.
-	 * 
-	 * @param superClasses
-	 *            the base classes to find subclasses for
-	 * @param listAllClasses
-	 *            the collection of classes to search in
-	 * @param innerClasses
-	 *            indicate whether to include inner classes in the search
-	 * @return ArrayList of the subclasses
-	 */
-//	private static Set findAllSubclasses(Class []superClasses, Set listAllClasses, boolean innerClasses) {
-//		Set listSubClasses = new TreeSet();
-//		for (int i=0; i< superClasses.length; i++) {
-//			findAllSubclassesOneClass(superClasses[i], listAllClasses, listSubClasses, innerClasses);
-//		}
-//		return listSubClasses;
-//	}
+    /*
+     * NOTUSED * Determine if the class implements the interface.
+     *
+     * @param theClass
+     *            the class to check
+     * @param theInterface
+     *            the interface to look for
+     * @return boolean true if it implements
+     *
+     * private static boolean classImplementsInterface( Class theClass, Class
+     * theInterface) { HashMap mapInterfaces = new HashMap(); String strKey =
+     * null; // pass in the map by reference since the method is recursive
+     * getAllInterfaces(theClass, mapInterfaces); Iterator iterInterfaces =
+     * mapInterfaces.keySet().iterator(); while (iterInterfaces.hasNext()) {
+     * strKey = (String) iterInterfaces.next(); if (mapInterfaces.get(strKey) ==
+     * theInterface) { return true; } } return false; }
+     */
 
-	/*
-	 * Finds all classes that extend the class, searching in the listAllClasses
-	 * ArrayList.
-	 * 
-	 * @param theClass
-	 *            the parent class
-	 * @param listAllClasses
-	 *            the collection of classes to search in
-	 * @param listSubClasses
-	 *            the collection of discovered subclasses
-	 * @param innerClasses
-	 *            indicates whether inners classes should be included in the
-	 *            search
-	 */
-//	private static void findAllSubclassesOneClass(Class theClass, Set listAllClasses, Set listSubClasses,
-//			boolean innerClasses) {
+    /*
+     * Finds all classes that extend the classes in the listSuperClasses
+     * ArrayList, searching in the listAllClasses ArrayList.
+     *
+     * @param superClasses
+     *            the base classes to find subclasses for
+     * @param listAllClasses
+     *            the collection of classes to search in
+     * @param innerClasses
+     *            indicate whether to include inner classes in the search
+     * @return ArrayList of the subclasses
+     */
+//  private static Set findAllSubclasses(Class []superClasses, Set listAllClasses, boolean innerClasses) {
+//      Set listSubClasses = new TreeSet();
+//      for (int i=0; i< superClasses.length; i++) {
+//          findAllSubclassesOneClass(superClasses[i], listAllClasses, listSubClasses, innerClasses);
+//      }
+//      return listSubClasses;
+//  }
+
+    /*
+     * Finds all classes that extend the class, searching in the listAllClasses
+     * ArrayList.
+     *
+     * @param theClass
+     *            the parent class
+     * @param listAllClasses
+     *            the collection of classes to search in
+     * @param listSubClasses
+     *            the collection of discovered subclasses
+     * @param innerClasses
+     *            indicates whether inners classes should be included in the
+     *            search
+     */
+//  private static void findAllSubclassesOneClass(Class theClass, Set listAllClasses, Set listSubClasses,
+//          boolean innerClasses) {
 //        Iterator iterClasses = listAllClasses.iterator();
-//		while (iterClasses.hasNext()) {
+//      while (iterClasses.hasNext()) {
 //            String strClassName = (String) iterClasses.next();
-//			// only check classes if they are not inner classes
-//			// or we intend to check for inner classes
-//			if ((strClassName.indexOf("$") == -1) || innerClasses) { // $NON-NLS-1$
-//				// might throw an exception, assume this is ignorable
-//				try {
-//					Class c = Class.forName(strClassName, false, Thread.currentThread().getContextClassLoader());
+//          // only check classes if they are not inner classes
+//          // or we intend to check for inner classes
+//          if ((strClassName.indexOf("$") == -1) || innerClasses) { // $NON-NLS-1$
+//              // might throw an exception, assume this is ignorable
+//              try {
+//                  Class c = Class.forName(strClassName, false, Thread.currentThread().getContextClassLoader());
 //
-//					if (!c.isInterface() && !Modifier.isAbstract(c.getModifiers())) {
+//                  if (!c.isInterface() && !Modifier.isAbstract(c.getModifiers())) {
 //                        if(theClass.isAssignableFrom(c)){
 //                            listSubClasses.add(strClassName);
 //                        }
 //                    }
-//				} catch (Throwable ignored) {
+//              } catch (Throwable ignored) {
 //                    log.debug(ignored.getLocalizedMessage());
-//				}
-//			}
-//		}
-//	}
+//              }
+//          }
+//      }
+//  }
 
     /**
-     * 
+     *
      * @param parentClasses list of classes to check for
      * @param strClassName name of class to be checked
      * @param innerClasses should we allow inner classes?
@@ -385,60 +385,60 @@ public final class ClassFinder {
             }
         return false;
     }
-    
-    
-	/*
-	 * Converts a class file from the text stored in a Jar file to a version
-	 * that can be used in Class.forName().
-	 * 
-	 * @param strClassName
-	 *            the class name from a Jar file
-	 * @return String the Java-style dotted version of the name
-	 */
-	private static String fixClassName(String strClassName) {
-		strClassName = strClassName.replace('\\', '.'); // $NON-NLS-1$ // $NON-NLS-2$
-		strClassName = strClassName.replace('/', '.'); // $NON-NLS-1$ // $NON-NLS-2$
-        // remove ".class"
-		strClassName = strClassName.substring(0, strClassName.length() - DOT_CLASS_LEN);
-		return strClassName;
-	}
 
-	private static void findClassesInOnePath(String strPath, Set listClasses) throws IOException {
+
+    /*
+     * Converts a class file from the text stored in a Jar file to a version
+     * that can be used in Class.forName().
+     *
+     * @param strClassName
+     *            the class name from a Jar file
+     * @return String the Java-style dotted version of the name
+     */
+    private static String fixClassName(String strClassName) {
+        strClassName = strClassName.replace('\\', '.'); // $NON-NLS-1$ // $NON-NLS-2$
+        strClassName = strClassName.replace('/', '.'); // $NON-NLS-1$ // $NON-NLS-2$
+        // remove ".class"
+        strClassName = strClassName.substring(0, strClassName.length() - DOT_CLASS_LEN);
+        return strClassName;
+    }
+
+    private static void findClassesInOnePath(String strPath, Set listClasses) throws IOException {
         File file = new File(strPath);
-		if (file.isDirectory()) {
-			findClassesInPathsDir(strPath, file, listClasses);
-		} else if (file.exists()) {
+        if (file.isDirectory()) {
+            findClassesInPathsDir(strPath, file, listClasses);
+        } else if (file.exists()) {
             ZipFile zipFile = new ZipFile(file);
             Enumeration entries = zipFile.entries();
-			while (entries.hasMoreElements()) {
-				String strEntry = entries.nextElement().toString();
-				if (strEntry.endsWith(DOT_CLASS)) {
-					listClasses.add(fixClassName(strEntry));
-				}
-			}
-		}
-	}
+            while (entries.hasMoreElements()) {
+                String strEntry = entries.nextElement().toString();
+                if (strEntry.endsWith(DOT_CLASS)) {
+                    listClasses.add(fixClassName(strEntry));
+                }
+            }
+        }
+    }
 
-	private static void findClassesInPaths(List listPaths, Set listClasses) throws IOException {
-		Iterator iterPaths = listPaths.iterator();
-		while (iterPaths.hasNext()) {
-			findClassesInOnePath((String) iterPaths.next(), listClasses);
-		}
-	}
+    private static void findClassesInPaths(List listPaths, Set listClasses) throws IOException {
+        Iterator iterPaths = listPaths.iterator();
+        while (iterPaths.hasNext()) {
+            findClassesInOnePath((String) iterPaths.next(), listClasses);
+        }
+    }
 
-	private static void findClassesInPathsDir(String strPathElement, File dir, Set listClasses) throws IOException {
-		String[] list = dir.list();
-		for (int i = 0; i < list.length; i++) {
+    private static void findClassesInPathsDir(String strPathElement, File dir, Set listClasses) throws IOException {
+        String[] list = dir.list();
+        for (int i = 0; i < list.length; i++) {
             File file = new File(dir, list[i]);
-			if (file.isDirectory()) {
+            if (file.isDirectory()) {
                 // Recursive call
-				findClassesInPathsDir(strPathElement, file, listClasses);
-			} else if (list[i].endsWith(DOT_CLASS) && file.exists() && (file.length() != 0)) {
-				final String path = file.getPath();
-                listClasses.add(path.substring(strPathElement.length() + 1, 
+                findClassesInPathsDir(strPathElement, file, listClasses);
+            } else if (list[i].endsWith(DOT_CLASS) && file.exists() && (file.length() != 0)) {
+                final String path = file.getPath();
+                listClasses.add(path.substring(strPathElement.length() + 1,
                         path.lastIndexOf(".")) // $NON-NLS-1$
-						.replace(File.separator.charAt(0), '.')); // $NON-NLS-1$
-			}
-		}
-	}
+                        .replace(File.separator.charAt(0), '.')); // $NON-NLS-1$
+            }
+        }
+    }
 }

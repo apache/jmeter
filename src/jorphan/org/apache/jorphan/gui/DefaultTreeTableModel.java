@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jorphan.gui;
@@ -23,40 +23,36 @@ import javax.swing.tree.TreeNode;
 
 import org.apache.jorphan.reflect.Functor;
 
-/**
- * @author pete
- *
- */
 public class DefaultTreeTableModel extends AbstractTreeTableModel {
 
     public DefaultTreeTableModel() {
         this(new DefaultMutableTreeNode());
     }
-    
-	/**
-	 * @param root
-	 */
-	public DefaultTreeTableModel(TreeNode root) {
-		super(root);
-	}
 
-	/**
-	 * @param root
-	 * @param editable
-	 */
-	public DefaultTreeTableModel(TreeNode root, boolean editable) {
-		super(root, editable);
-	}
+    /**
+     * @param root
+     */
+    public DefaultTreeTableModel(TreeNode root) {
+        super(root);
+    }
 
-	/**
-	 * @param headers
-	 * @param readFunctors
-	 * @param writeFunctors
-	 * @param editorClasses
-	 */
-	public DefaultTreeTableModel(String[] headers, Functor[] readFunctors,
-			Functor[] writeFunctors, Class[] editorClasses) {
-		super(headers, readFunctors, writeFunctors, editorClasses);
-	}
+    /**
+     * @param root
+     * @param editable
+     */
+    public DefaultTreeTableModel(TreeNode root, boolean editable) {
+        super(root, editable);
+    }
+
+    /**
+     * @param headers
+     * @param readFunctors
+     * @param writeFunctors
+     * @param editorClasses
+     */
+    public DefaultTreeTableModel(String[] headers, Functor[] readFunctors,
+            Functor[] writeFunctors, Class[] editorClasses) {
+        super(headers, readFunctors, writeFunctors, editorClasses);
+    }
 
 }

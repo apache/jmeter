@@ -5,15 +5,15 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations
  * under the License.
- *  
+ *
  */
 
 package org.apache.jmeter.testelement.property;
@@ -27,88 +27,88 @@ import org.apache.jmeter.threads.JMeterContextService;
  * Class that implements the Function property
  */
 public class FunctionProperty extends AbstractProperty {
-	transient CompoundVariable function;
+    transient CompoundVariable function;
 
-	int testIteration = -1;
+    int testIteration = -1;
 
-	String cacheValue;
+    String cacheValue;
 
-	public FunctionProperty(String name, CompoundVariable func) {
-		super(name);
-		function = func;
-	}
+    public FunctionProperty(String name, CompoundVariable func) {
+        super(name);
+        function = func;
+    }
 
-	public FunctionProperty() {
-		super();
-	}
+    public FunctionProperty() {
+        super();
+    }
 
-	public void setObjectValue(Object v) {
-		if (v instanceof CompoundVariable && !isRunningVersion()) {
-			function = (CompoundVariable) v;
-		} else {
-			cacheValue = v.toString();
-		}
-	}
+    public void setObjectValue(Object v) {
+        if (v instanceof CompoundVariable && !isRunningVersion()) {
+            function = (CompoundVariable) v;
+        } else {
+            cacheValue = v.toString();
+        }
+    }
 
-	public boolean equals(Object o) {
-		if (o instanceof FunctionProperty) {
-			if (function != null) {
-				return function.equals(((JMeterProperty) o).getObjectValue());
-			}
-		}
-		return false;
-	}
+    public boolean equals(Object o) {
+        if (o instanceof FunctionProperty) {
+            if (function != null) {
+                return function.equals(((JMeterProperty) o).getObjectValue());
+            }
+        }
+        return false;
+    }
 
-	/**
-	 * Executes the function (and caches the value for the duration of the test
-	 * iteration) if the property is a running version. Otherwise, the raw
-	 * string representation of the function is provided.
-	 * 
-	 * @see JMeterProperty#getStringValue()
-	 */
-	public String getStringValue() {
-		JMeterContext ctx = JMeterContextService.getContext();// Expensive, so
-																// do
-		// once
-		if (!isRunningVersion() /*|| !ctx.isSamplingStarted()*/) {
-			log.debug("Not running version, return raw function string");
-			return function.getRawParameters();
-		}
+    /**
+     * Executes the function (and caches the value for the duration of the test
+     * iteration) if the property is a running version. Otherwise, the raw
+     * string representation of the function is provided.
+     *
+     * @see JMeterProperty#getStringValue()
+     */
+    public String getStringValue() {
+        JMeterContext ctx = JMeterContextService.getContext();// Expensive, so
+                                                                // do
+        // once
+        if (!isRunningVersion() /*|| !ctx.isSamplingStarted()*/) {
+            log.debug("Not running version, return raw function string");
+            return function.getRawParameters();
+        }
         if(!ctx.isSamplingStarted()) {
             return function.execute();
         }
-		log.debug("Running version, executing function");
-		int iter = ctx.getVariables() != null ? ctx.getVariables().getIteration() : -1;
-		if (iter < testIteration) {
-			testIteration = -1;
-		}
-		if (iter > testIteration || cacheValue == null) {
-			testIteration = iter;
-			cacheValue = function.execute();
-		}
-		return cacheValue;
+        log.debug("Running version, executing function");
+        int iter = ctx.getVariables() != null ? ctx.getVariables().getIteration() : -1;
+        if (iter < testIteration) {
+            testIteration = -1;
+        }
+        if (iter > testIteration || cacheValue == null) {
+            testIteration = iter;
+            cacheValue = function.execute();
+        }
+        return cacheValue;
 
-	}
+    }
 
-	/**
-	 * @see JMeterProperty#getObjectValue()
-	 */
-	public Object getObjectValue() {
-		return function;
-	}
+    /**
+     * @see JMeterProperty#getObjectValue()
+     */
+    public Object getObjectValue() {
+        return function;
+    }
 
-	public Object clone() {
-		FunctionProperty prop = (FunctionProperty) super.clone();
-		prop.cacheValue = cacheValue;
-		prop.testIteration = testIteration;
-		prop.function = function;
-		return prop;
-	}
+    public Object clone() {
+        FunctionProperty prop = (FunctionProperty) super.clone();
+        prop.cacheValue = cacheValue;
+        prop.testIteration = testIteration;
+        prop.function = function;
+        return prop;
+    }
 
-	/**
-	 * @see JMeterProperty#recoverRunningVersion(TestElement)
-	 */
-	public void recoverRunningVersion(TestElement owner) {
-		cacheValue = null;
-	}
+    /**
+     * @see JMeterProperty#recoverRunningVersion(TestElement)
+     */
+    public void recoverRunningVersion(TestElement owner) {
+        cacheValue = null;
+    }
 }

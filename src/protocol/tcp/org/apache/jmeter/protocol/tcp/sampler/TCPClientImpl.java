@@ -13,16 +13,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 /*
  * Basic TCP Sampler Client class
- * 
+ *
  * Can be used to test the TCP Sampler against an HTTP server
- * 
+ *
  * The protocol handler class name is defined by the property tcp.handler
- * 
+ *
  */
 package org.apache.jmeter.protocol.tcp.sampler;
 
@@ -38,63 +38,63 @@ import org.apache.log.Logger;
 
 /**
  * Sample TCPClient implementation
- * 
+ *
  */
 public class TCPClientImpl implements TCPClient {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private int eolInt = JMeterUtils.getPropDefault("tcp.eolByte", 1000);
-	
-	private byte eolByte = (byte) eolInt; // -128 to +127
-	
-	private boolean eolIgnore = eolInt < -128 || eolInt > 127;
+    private int eolInt = JMeterUtils.getPropDefault("tcp.eolByte", 1000);
 
-	public TCPClientImpl() {
-		super();
-		if (!eolIgnore) {
-		    log.info("Using eolByte=" + eolByte);
-		}
-	}
+    private byte eolByte = (byte) eolInt; // -128 to +127
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#setupTest()
-	 */
-	public void setupTest() {
-		log.info("setuptest");
-	}
+    private boolean eolIgnore = eolInt < -128 || eolInt > 127;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#teardownTest()
-	 */
-	public void teardownTest() {
-		log.info("teardowntest");
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#write(java.io.OutputStream,
-	 *      java.lang.String)
-	 */
-	public void write(OutputStream os, String s) {
-		try {
-			os.write(s.getBytes());
-			os.flush();
-		} catch (IOException e) {
-			log.warn("Write error", e);
-		}
-		log.debug("Wrote: " + s);
-		return;
-	}
+    public TCPClientImpl() {
+        super();
+        if (!eolIgnore) {
+            log.info("Using eolByte=" + eolByte);
+        }
+    }
 
     /*
      * (non-Javadoc)
-     * 
+     *
+     * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#setupTest()
+     */
+    public void setupTest() {
+        log.info("setuptest");
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#teardownTest()
+     */
+    public void teardownTest() {
+        log.info("teardowntest");
+
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#write(java.io.OutputStream,
+     *      java.lang.String)
+     */
+    public void write(OutputStream os, String s) {
+        try {
+            os.write(s.getBytes());
+            os.flush();
+        } catch (IOException e) {
+            log.warn("Write error", e);
+        }
+        log.debug("Wrote: " + s);
+        return;
+    }
+
+    /*
+     * (non-Javadoc)
+     *
      * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#write(java.io.OutputStream,
      *      java.io.InputStream)
      */
@@ -110,62 +110,62 @@ public class TCPClientImpl implements TCPClient {
         }
     }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#read(java.io.InputStream)
-	 */
-	public String read(InputStream is) {
-		byte[] buffer = new byte[4096];
-		ByteArrayOutputStream w = new ByteArrayOutputStream();
-		int x = 0;
-		try {
-			while ((x = is.read(buffer)) > -1) {
-				w.write(buffer, 0, x);
-				if (!eolIgnore && (buffer[x - 1] == eolByte)) {
-					break;
-				}
-			}
-			/*
-			 * Timeout is reported as follows: JDK1.3: InterruptedIOException
-			 * JDK1.4: SocketTimeoutException, which extends
-			 * InterruptedIOException
-			 * 
-			 * So to make the code work on both, just check for
-			 * InterruptedIOException
-			 * 
-			 * If 1.3 support is dropped, can change to using
-			 * SocketTimeoutException
-			 * 
-			 * For more accurate detection of timeouts under 1.3, one could
-			 * perhaps examine the Exception message text...
-			 * 
-			 */
-		} catch (InterruptedIOException e) {
-			// drop out to handle buffer
-		} catch (IOException e) {
-			log.warn("Read error:" + e);
-			return "";
-		}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#read(java.io.InputStream)
+     */
+    public String read(InputStream is) {
+        byte[] buffer = new byte[4096];
+        ByteArrayOutputStream w = new ByteArrayOutputStream();
+        int x = 0;
+        try {
+            while ((x = is.read(buffer)) > -1) {
+                w.write(buffer, 0, x);
+                if (!eolIgnore && (buffer[x - 1] == eolByte)) {
+                    break;
+                }
+            }
+            /*
+             * Timeout is reported as follows: JDK1.3: InterruptedIOException
+             * JDK1.4: SocketTimeoutException, which extends
+             * InterruptedIOException
+             *
+             * So to make the code work on both, just check for
+             * InterruptedIOException
+             *
+             * If 1.3 support is dropped, can change to using
+             * SocketTimeoutException
+             *
+             * For more accurate detection of timeouts under 1.3, one could
+             * perhaps examine the Exception message text...
+             *
+             */
+        } catch (InterruptedIOException e) {
+            // drop out to handle buffer
+        } catch (IOException e) {
+            log.warn("Read error:" + e);
+            return "";
+        }
 
-		// do we need to close byte array (or flush it?)
-		log.debug("Read: " + w.size() + "\n" + w.toString());
-		return w.toString();
-	}
+        // do we need to close byte array (or flush it?)
+        log.debug("Read: " + w.size() + "\n" + w.toString());
+        return w.toString();
+    }
 
-	/**
-	 * @return Returns the eolByte.
-	 */
-	public byte getEolByte() {
-		return eolByte;
-	}
+    /**
+     * @return Returns the eolByte.
+     */
+    public byte getEolByte() {
+        return eolByte;
+    }
 
-	/**
-	 * @param eolByte
-	 *            The eolByte to set.
-	 */
-	public void setEolByte(byte eolByte) {
-		this.eolByte = eolByte;
-		eolIgnore = false;
-	}
+    /**
+     * @param eolByte
+     *            The eolByte to set.
+     */
+    public void setEolByte(byte eolByte) {
+        this.eolByte = eolByte;
+        eolIgnore = false;
+    }
 }

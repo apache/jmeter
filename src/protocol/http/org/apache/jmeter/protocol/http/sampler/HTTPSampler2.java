@@ -86,45 +86,45 @@ import org.apache.log.Logger;
 /**
  * A sampler which understands all the parts necessary to read statistics about
  * HTTP requests, including cookies and authentication.
- * 
+ *
  */
 public class HTTPSampler2 extends HTTPSamplerBase {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final String HTTP_AUTHENTICATION_PREEMPTIVE = "http.authentication.preemptive"; // $NON-NLS-1$ 
+    private static final String HTTP_AUTHENTICATION_PREEMPTIVE = "http.authentication.preemptive"; // $NON-NLS-1$
 
-	private static final boolean canSetPreEmptive; // OK to set pre-emptive auth?
-	
-    static final String PROXY_HOST = 
-        System.getProperty("http.proxyHost",""); // $NON-NLS-1$ 
+    private static final boolean canSetPreEmptive; // OK to set pre-emptive auth?
 
-    private static final String NONPROXY_HOSTS = 
-        System.getProperty("http.nonProxyHosts",""); // $NON-NLS-1$ 
+    static final String PROXY_HOST =
+        System.getProperty("http.proxyHost",""); // $NON-NLS-1$
 
-    static final int PROXY_PORT = 
-        Integer.parseInt(System.getProperty("http.proxyPort","0")); // $NON-NLS-1$ 
+    private static final String NONPROXY_HOSTS =
+        System.getProperty("http.nonProxyHosts",""); // $NON-NLS-1$
+
+    static final int PROXY_PORT =
+        Integer.parseInt(System.getProperty("http.proxyPort","0")); // $NON-NLS-1$
 
     // Have proxy details been provided?
     private static final boolean PROXY_DEFINED = PROXY_HOST.length() > 0 && PROXY_PORT > 0;
-    
-    static final String PROXY_USER = 
+
+    static final String PROXY_USER =
         JMeterUtils.getPropDefault(JMeter.HTTP_PROXY_USER,""); // $NON-NLS-1$
-    
-    static final String PROXY_PASS = 
+
+    static final String PROXY_PASS =
         JMeterUtils.getPropDefault(JMeter.HTTP_PROXY_PASS,""); // $NON-NLS-1$
-    
-    private static final String PROXY_DOMAIN = 
+
+    private static final String PROXY_DOMAIN =
         JMeterUtils.getPropDefault("http.proxyDomain",""); // $NON-NLS-1$ $NON-NLS-2$
-    
+
     static final InetAddress localAddress;
-    
+
     private static final String localHost;
-    
+
     /*
      * Connection is re-used within the thread if possible
      */
-	static final ThreadLocal httpClients = new ThreadLocal();
+    static final ThreadLocal httpClients = new ThreadLocal();
 
     private static final Set nonProxyHostFull   = new HashSet();// www.apache.org
     private static final List nonProxyHostSuffix = new ArrayList();// .apache.org
@@ -135,7 +135,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
         return nonProxyHostFull.contains(host) || isPartialMatch(host);
     }
 
-    private static boolean isPartialMatch(String host) {    
+    private static boolean isPartialMatch(String host) {
         for (int i=0;i<nonProxyHostSuffixSize;i++){
             if (host.endsWith((String)nonProxyHostSuffix.get(i))) {
                 return true;
@@ -144,7 +144,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
         return false;
     }
 
-	static {
+    static {
         if (NONPROXY_HOSTS.length() > 0){
             StringTokenizer s = new StringTokenizer(NONPROXY_HOSTS,"|");// $NON-NLS-1$
             while (s.hasMoreTokens()){
@@ -159,26 +159,26 @@ public class HTTPSampler2 extends HTTPSamplerBase {
         nonProxyHostSuffixSize=nonProxyHostSuffix.size();
 
         int cps =
-            JMeterUtils.getPropDefault("httpclient.socket.http.cps", 0); // $NON-NLS-1$        
+            JMeterUtils.getPropDefault("httpclient.socket.http.cps", 0); // $NON-NLS-1$
 
         if (cps > 0) {
             log.info("Setting up HTTP SlowProtocol, cps="+cps);
-            Protocol.registerProtocol(PROTOCOL_HTTP, 
+            Protocol.registerProtocol(PROTOCOL_HTTP,
                     new Protocol(PROTOCOL_HTTP,new SlowHttpClientSocketFactory(cps),DEFAULT_HTTP_PORT));
         }
-  
+
         // Now done in JsseSSLManager (which needs to register the protocol)
 //        cps =
-//            JMeterUtils.getPropDefault("httpclient.socket.https.cps", 0); // $NON-NLS-1$        
+//            JMeterUtils.getPropDefault("httpclient.socket.https.cps", 0); // $NON-NLS-1$
 //
 //        if (cps > 0) {
 //            log.info("Setting up HTTPS SlowProtocol, cps="+cps);
-//            Protocol.registerProtocol(PROTOCOL_HTTPS, 
+//            Protocol.registerProtocol(PROTOCOL_HTTPS,
 //                    new Protocol(PROTOCOL_HTTPS,new SlowHttpClientSocketFactory(cps),DEFAULT_HTTPS_PORT));
 //        }
 
         InetAddress inet=null;
-        String localHostOrIP = 
+        String localHostOrIP =
             JMeterUtils.getPropDefault("httpclient.localaddress",""); // $NON-NLS-1$
         if (localHostOrIP.length() > 0){
             try {
@@ -199,16 +199,16 @@ public class HTTPSampler2 extends HTTPSamplerBase {
         localAddress = inet;
         localHost = localHostOrIP;
         log.info("Local host = "+localHost);
-        
+
         // Set default parameters as needed
        HttpParams params = DefaultHttpParams.getDefaultParams();
-        
+
         // Process httpclient parameters file
         String file=JMeterUtils.getProperty("httpclient.parameters.file"); // $NON-NLS-1$
         if (file != null) {
             HttpClientDefaultParameters.load(file,params);
         }
-        
+
         // If the pre-emptive parameter is undefined, then we cans set it as needed
         // otherwise we should do what the user requested.
         canSetPreEmptive =  params.getParameter(HTTP_AUTHENTICATION_PREEMPTIVE) == null;
@@ -229,31 +229,31 @@ public class HTTPSampler2 extends HTTPSamplerBase {
         // This must be done last, as must not be overridden
         params.setParameter(HttpMethodParams.COOKIE_POLICY,CookiePolicy.IGNORE_COOKIES);
         // We do our own cookie handling
-       
+
         if (JMeterUtils.getPropDefault("httpclient.loopback",false)){// $NON-NLS-1$
-        	LoopbackHttpClientSocketFactory.setup();
+            LoopbackHttpClientSocketFactory.setup();
         }
-	}
+    }
 
-    
+
     /**
-	 * Constructor for the HTTPSampler2 object.
-     * 
+     * Constructor for the HTTPSampler2 object.
+     *
      * Consider using HTTPSamplerFactory.newInstance() instead
-	 */
-	public HTTPSampler2() {
-	}
+     */
+    public HTTPSampler2() {
+    }
 
-	/*
-	 * Send POST data from <code>Entry</code> to the open connection.
-	 * 
-	 * @param connection
-	 *            <code>URLConnection</code> where POST data should be sent
+    /*
+     * Send POST data from <code>Entry</code> to the open connection.
+     *
+     * @param connection
+     *            <code>URLConnection</code> where POST data should be sent
      * @return a String show what was posted. Will not contain actual file upload content
-	 * @exception IOException
-	 *                if an I/O exception occurs
-	 */
-	private String sendPostData(PostMethod post) throws IOException {
+     * @exception IOException
+     *                if an I/O exception occurs
+     */
+    private String sendPostData(PostMethod post) throws IOException {
         // Buffer to hold the post body, except file content
         StringBuffer postedBody = new StringBuffer(1000);
         HTTPFileArg files[] = getHTTPFiles();
@@ -266,7 +266,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
             if(contentEncoding != null && contentEncoding.length() == 0) {
                 contentEncoding = null;
             }
-            
+
             // Check how many parts we need, one for each parameter and file
             int noParts = getArguments().getArgumentCount();
             noParts += files.length;
@@ -284,7 +284,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                }
                parts[partNo++] = new StringPart(arg.getName(), arg.getValue(), contentEncoding);
             }
-            
+
             // Add any files
             for (int i=0; i < files.length; i++) {
                 HTTPFileArg file = files[i];
@@ -294,7 +294,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                 filePart.setCharSet(null); // We do not know what the char set of the file is
                 parts[partNo++] = filePart;
             }
-            
+
             // Set the multipart for the post
             MultipartRequestEntity multiPart = new MultipartRequestEntity(parts, post.getParams());
             post.setRequestEntity(multiPart);
@@ -306,11 +306,11 @@ public class HTTPSampler2 extends HTTPSamplerBase {
             // If the Multipart is repeatable, we can send it first to
             // our own stream, without the actual file content, so we can return it
             if(multiPart.isRepeatable()) {
-            	// For all the file multiparts, we must tell it to not include
-            	// the actual file content
+                // For all the file multiparts, we must tell it to not include
+                // the actual file content
                 for(int i = 0; i < partNo; i++) {
-                	if(parts[i] instanceof ViewableFilePart) {
-                		((ViewableFilePart) parts[i]).setHideFileData(true); // .sendMultipartWithoutFileContent(bos);
+                    if(parts[i] instanceof ViewableFilePart) {
+                        ((ViewableFilePart) parts[i]).setHideFileData(true); // .sendMultipartWithoutFileContent(bos);
                     }
                 }
                 // Write the request to our own stream
@@ -321,11 +321,11 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                 postedBody.append(new String(bos.toByteArray() , "UTF-8")); // $NON-NLS-1$
                 bos.close();
 
-            	// For all the file multiparts, we must revert the hiding of
-            	// the actual file content
+                // For all the file multiparts, we must revert the hiding of
+                // the actual file content
                 for(int i = 0; i < partNo; i++) {
-                	if(parts[i] instanceof ViewableFilePart) {
-                		((ViewableFilePart) parts[i]).setHideFileData(false);
+                    if(parts[i] instanceof ViewableFilePart) {
+                        ((ViewableFilePart) parts[i]).setHideFileData(false);
                     }
                 }
             }
@@ -337,7 +337,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
             // Check if the header manager had a content type header
             // This allows the user to specify his own content-type for a POST request
             Header contentTypeHeader = post.getRequestHeader(HEADER_CONTENT_TYPE);
-            boolean hasContentTypeHeader = contentTypeHeader != null && contentTypeHeader.getValue() != null && contentTypeHeader.getValue().length() > 0; 
+            boolean hasContentTypeHeader = contentTypeHeader != null && contentTypeHeader.getValue() != null && contentTypeHeader.getValue().length() > 0;
             // If there are no arguments, we can send a file as the body of the request
             // TODO: needs a multiple file upload scenerio
             if(!hasArguments() && getSendFileAsPostBody()) {
@@ -355,7 +355,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 
                 FileRequestEntity fileRequestEntity = new FileRequestEntity(new File(file.getPath()),null);
                 post.setRequestEntity(fileRequestEntity);
-                
+
                 // We just add placeholder text for file content
                 postedBody.append("<actual file content, not shown here>");
             }
@@ -371,7 +371,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                     post.getParams().setContentCharset(contentEncoding);
                     haveContentEncoding = true;
                 }
-                
+
                 // If none of the arguments have a name specified, we
                 // just send all the values as the post body
                 if(getSendParameterValuesAsPostBody()) {
@@ -385,11 +385,11 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                             post.setRequestHeader(HEADER_CONTENT_TYPE, file.getMimeType());
                         }
                         else {
-                        	 // TODO - is this the correct default?
+                             // TODO - is this the correct default?
                             post.setRequestHeader(HEADER_CONTENT_TYPE, APPLICATION_X_WWW_FORM_URLENCODED);
                         }
                     }
-                    
+
                     // Just append all the non-empty parameter values, and use that as the post body
                     StringBuffer postBody = new StringBuffer();
                     PropertyIterator args = getArguments().iterator();
@@ -397,18 +397,18 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                         HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
                         String value;
                         if (haveContentEncoding){
-                        	value = arg.getEncodedValue(contentEncoding);
+                            value = arg.getEncodedValue(contentEncoding);
                         } else {
-                        	value = arg.getEncodedValue();
+                            value = arg.getEncodedValue();
                         }
-						postBody.append(value);
+                        postBody.append(value);
                     }
                     StringRequestEntity requestEntity = new StringRequestEntity(postBody.toString(), post.getRequestHeader(HEADER_CONTENT_TYPE).getValue(), post.getRequestCharSet());
                     post.setRequestEntity(requestEntity);
                 }
                 else {
                     // It is a normal post request, with parameter names and values
-                    
+
                     // Set the content type
                     if(!hasContentTypeHeader) {
                         post.setRequestHeader(HEADER_CONTENT_TYPE, APPLICATION_X_WWW_FORM_URLENCODED);
@@ -432,7 +432,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                             // as the user had entered.
                             String urlContentEncoding = contentEncoding;
                             if(urlContentEncoding == null || urlContentEncoding.length() == 0) {
-                                // Use the default encoding for urls 
+                                // Use the default encoding for urls
                                 urlContentEncoding = EncoderCache.URL_ARGUMENT_ENCODING;
                             }
                             parameterName = URLDecoder.decode(parameterName, urlContentEncoding);
@@ -441,11 +441,11 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                         // Add the parameter, httpclient will urlencode it
                         post.addParameter(parameterName, parameterValue);
                     }
-                    
+
 /*
 //                    // Alternative implementation, to make sure that HTTPSampler and HTTPSampler2
 //                    // sends the same post body.
-//                     
+//
 //                    // Only include the content char set in the content-type header if it is not
 //                    // an APPLICATION_X_WWW_FORM_URLENCODED content type
 //                    String contentCharSet = null;
@@ -454,9 +454,9 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 //                    }
 //                    StringRequestEntity requestEntity = new StringRequestEntity(getQueryString(contentEncoding), post.getRequestHeader(HEADER_CONTENT_TYPE).getValue(), contentCharSet);
 //                    post.setRequestEntity(requestEntity);
-*/                    
+*/
                 }
-                
+
                 // If the request entity is repeatable, we can send it first to
                 // our own stream, so we can return it
                 if(post.getRequestEntity().isRepeatable()) {
@@ -474,63 +474,63 @@ public class HTTPSampler2 extends HTTPSamplerBase {
         }
         // Set the content length
         post.setRequestHeader(HEADER_CONTENT_LENGTH, Long.toString(post.getRequestEntity().getContentLength()));
-        
+
         return postedBody.toString();
-	}
-     
+    }
+
     /**
-	 * Returns an <code>HttpConnection</code> fully ready to attempt
-	 * connection. This means it sets the request method (GET or POST), headers,
-	 * cookies, and authorization for the URL request.
-	 * <p>
-	 * The request infos are saved into the sample result if one is provided.
-	 * 
-	 * @param u
-	 *            <code>URL</code> of the URL request
-	 * @param httpMethod 
-	 *            GET/PUT/HEAD etc
-	 * @param res
-	 *            sample result to save request infos to
-	 * @return <code>HttpConnection</code> ready for .connect
-	 * @exception IOException
-	 *                if an I/O Exception occurs
-	 */
-	protected HttpClient setupConnection(URL u, HttpMethodBase httpMethod, HTTPSampleResult res) throws IOException {
+     * Returns an <code>HttpConnection</code> fully ready to attempt
+     * connection. This means it sets the request method (GET or POST), headers,
+     * cookies, and authorization for the URL request.
+     * <p>
+     * The request infos are saved into the sample result if one is provided.
+     *
+     * @param u
+     *            <code>URL</code> of the URL request
+     * @param httpMethod
+     *            GET/PUT/HEAD etc
+     * @param res
+     *            sample result to save request infos to
+     * @return <code>HttpConnection</code> ready for .connect
+     * @exception IOException
+     *                if an I/O Exception occurs
+     */
+    protected HttpClient setupConnection(URL u, HttpMethodBase httpMethod, HTTPSampleResult res) throws IOException {
 
-		String urlStr = u.toString();
+        String urlStr = u.toString();
 
-		org.apache.commons.httpclient.URI uri = new org.apache.commons.httpclient.URI(urlStr,false);
+        org.apache.commons.httpclient.URI uri = new org.apache.commons.httpclient.URI(urlStr,false);
 
-		String schema = uri.getScheme();
-		if ((schema == null) || (schema.length()==0)) {
-			schema = PROTOCOL_HTTP;
-		}
-		
-		if (PROTOCOL_HTTPS.equalsIgnoreCase(schema)){
-			SSLManager.getInstance(); // ensure the manager is initialised
-			// we don't currently need to do anything further, as this sets the default https protocol
-		}
-		
-		Protocol protocol = Protocol.getProtocol(schema);
+        String schema = uri.getScheme();
+        if ((schema == null) || (schema.length()==0)) {
+            schema = PROTOCOL_HTTP;
+        }
 
-		String host = uri.getHost();
-		int port = uri.getPort();
+        if (PROTOCOL_HTTPS.equalsIgnoreCase(schema)){
+            SSLManager.getInstance(); // ensure the manager is initialised
+            // we don't currently need to do anything further, as this sets the default https protocol
+        }
+
+        Protocol protocol = Protocol.getProtocol(schema);
+
+        String host = uri.getHost();
+        int port = uri.getPort();
 
         /*
          *  We use the HostConfiguration as the key to retrieve the HttpClient,
          *  so need to ensure that any items used in its equals/hashcode methods are
          *  not changed after use, i.e.:
          *  host, port, protocol, localAddress, proxy
-         *  
+         *
         */
-		HostConfiguration hc = new HostConfiguration();
-		hc.setHost(host, port, protocol); // All needed to ensure re-usablility
+        HostConfiguration hc = new HostConfiguration();
+        hc.setHost(host, port, protocol); // All needed to ensure re-usablility
 
         // Set up the local address if one exists
         if (localAddress != null){
             hc.setLocalAddress(localAddress);
         }
-        
+
         boolean useProxy = PROXY_DEFINED && !isNonProxy(host);
         if (useProxy) {
             if (log.isDebugEnabled()){
@@ -538,18 +538,18 @@ public class HTTPSampler2 extends HTTPSamplerBase {
             }
             hc.setProxy(PROXY_HOST, PROXY_PORT);
         }
-        
+
         Map map = (Map) httpClients.get();
-		HttpClient httpClient = (HttpClient) map.get(hc);
-		
-		if ( httpClient == null )
-		{
-			httpClient = new HttpClient(new SimpleHttpConnectionManager());
+        HttpClient httpClient = (HttpClient) map.get(hc);
+
+        if ( httpClient == null )
+        {
+            httpClient = new HttpClient(new SimpleHttpConnectionManager());
             if (log.isDebugEnabled()) {
                 log.debug("Created new HttpClient: @"+System.identityHashCode(httpClient));
             }
-			httpClient.setHostConfiguration(hc);
-			map.put(hc, httpClient);
+            httpClient.setHostConfiguration(hc);
+            map.put(hc, httpClient);
             // These items don't change, so only need to be done once
             if (useProxy) {
                 if (PROXY_USER.length() > 0){
@@ -560,81 +560,81 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                 }
             }
 
-		} else {
+        } else {
             if (log.isDebugEnabled()) {
                 log.debug("Reusing the HttpClient: @"+System.identityHashCode(httpClient));
             }
-		}
+        }
 
-		// Allow HttpClient to handle the redirects:
-		httpMethod.setFollowRedirects(getAutoRedirects());
+        // Allow HttpClient to handle the redirects:
+        httpMethod.setFollowRedirects(getAutoRedirects());
 
-		// a well-behaved browser is supposed to send 'Connection: close'
-		// with the last request to an HTTP server. Instead, most browsers
-		// leave it to the server to close the connection after their
-		// timeout period. Leave it to the JMeter user to decide.
-		if (getUseKeepAlive()) {
-			httpMethod.setRequestHeader(HEADER_CONNECTION, KEEP_ALIVE);
-		} else {
-			httpMethod.setRequestHeader(HEADER_CONNECTION, CONNECTION_CLOSE);
-		}
+        // a well-behaved browser is supposed to send 'Connection: close'
+        // with the last request to an HTTP server. Instead, most browsers
+        // leave it to the server to close the connection after their
+        // timeout period. Leave it to the JMeter user to decide.
+        if (getUseKeepAlive()) {
+            httpMethod.setRequestHeader(HEADER_CONNECTION, KEEP_ALIVE);
+        } else {
+            httpMethod.setRequestHeader(HEADER_CONNECTION, CONNECTION_CLOSE);
+        }
 
-		setConnectionHeaders(httpMethod, u, getHeaderManager(), getCacheManager());
-		String cookies = setConnectionCookie(httpMethod, u, getCookieManager());
+        setConnectionHeaders(httpMethod, u, getHeaderManager(), getCacheManager());
+        String cookies = setConnectionCookie(httpMethod, u, getCookieManager());
 
         setConnectionAuthorization(httpClient, u, getAuthManager());
 
         if (res != null) {
             res.setURL(u);
             res.setCookies(cookies);
-		}
+        }
 
-		return httpClient;
-	}
+        return httpClient;
+    }
 
     /**
      * Set any default request headers to include
-     * 
+     *
      * @param httpMethod the HttpMethod used for the request
      */
-	protected void setDefaultRequestHeaders(HttpMethod httpMethod) {
+    protected void setDefaultRequestHeaders(HttpMethod httpMethod) {
         // Method left empty here, but allows subclasses to override
-	}
+    }
 
-	/**
-	 * Gets the ResponseHeaders
-	 * 
-	 * @param method
-	 *            connection from which the headers are read
-	 * @return string containing the headers, one per line
-	 */
-	protected String getResponseHeaders(HttpMethod method) {
-		StringBuffer headerBuf = new StringBuffer();
-		org.apache.commons.httpclient.Header rh[] = method.getResponseHeaders();
-		headerBuf.append(method.getStatusLine());// header[0] is not the status line...
-		headerBuf.append("\n"); // $NON-NLS-1$
+    /**
+     * Gets the ResponseHeaders
+     *
+     * @param method
+     *            connection from which the headers are read
+     * @return string containing the headers, one per line
+     */
+    protected String getResponseHeaders(HttpMethod method) {
+        StringBuffer headerBuf = new StringBuffer();
+        org.apache.commons.httpclient.Header rh[] = method.getResponseHeaders();
+        headerBuf.append(method.getStatusLine());// header[0] is not the status line...
+        headerBuf.append("\n"); // $NON-NLS-1$
 
-		for (int i = 0; i < rh.length; i++) {
-			String key = rh[i].getName();
-			headerBuf.append(key);
-			headerBuf.append(": "); // $NON-NLS-1$
-			headerBuf.append(rh[i].getValue());
-			headerBuf.append("\n"); // $NON-NLS-1$
-		}
-		return headerBuf.toString();
-	}
+        for (int i = 0; i < rh.length; i++) {
+            String key = rh[i].getName();
+            headerBuf.append(key);
+            headerBuf.append(": "); // $NON-NLS-1$
+            headerBuf.append(rh[i].getValue());
+            headerBuf.append("\n"); // $NON-NLS-1$
+        }
+        return headerBuf.toString();
+    }
 
-	/**
-	 * Extracts all the required cookies for that particular URL request and
-	 * sets them in the <code>HttpMethod</code> passed in.
-	 * 
-	 * @param method <code>HttpMethod</code> for the request
-	 * @param u <code>URL</code> of the request
-	 * @param cookieManager the <code>CookieManager</code> containing all the cookies
+    /**
+     * Extracts all the required cookies for that particular URL request and
+     * sets them in the <code>HttpMethod</code> passed in.
+     *
+     * @param method <code>HttpMethod</code> for the request
+     * @param u <code>URL</code> of the request
+     * @param cookieManager the <code>CookieManager</code> containing all the cookies
      * @return a String containing the cookie details (for the response)
      * May be null
-	 */
-	private String setConnectionCookie(HttpMethod method, URL u, CookieManager cookieManager) {        
+     */
+    private String setConnectionCookie(HttpMethod method, URL u, CookieManager cookieManager) {
         String cookieHeader = null;
         if (cookieManager != null) {
             cookieHeader = cookieManager.getCookieHeaderForURL(u);
@@ -642,58 +642,58 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                 method.setRequestHeader(HEADER_COOKIE, cookieHeader);
             }
         }
-		return cookieHeader;
-	}
+        return cookieHeader;
+    }
 
-	/**
-	 * Extracts all the required non-cookie headers for that particular URL request and
-	 * sets them in the <code>HttpMethod</code> passed in
-	 * 
-	 * @param method
-	 *            <code>HttpMethod</code> which represents the request
-	 * @param u
-	 *            <code>URL</code> of the URL request
-	 * @param headerManager
-	 *            the <code>HeaderManager</code> containing all the cookies
-	 *            for this <code>UrlConfig</code>
+    /**
+     * Extracts all the required non-cookie headers for that particular URL request and
+     * sets them in the <code>HttpMethod</code> passed in
+     *
+     * @param method
+     *            <code>HttpMethod</code> which represents the request
+     * @param u
+     *            <code>URL</code> of the URL request
+     * @param headerManager
+     *            the <code>HeaderManager</code> containing all the cookies
+     *            for this <code>UrlConfig</code>
      * @param cacheManager the CacheManager (may be null)
-	 */
-	private void setConnectionHeaders(HttpMethod method, URL u, HeaderManager headerManager, CacheManager cacheManager) {
+     */
+    private void setConnectionHeaders(HttpMethod method, URL u, HeaderManager headerManager, CacheManager cacheManager) {
         // Set all the headers from the HeaderManager
-		if (headerManager != null) {
-			CollectionProperty headers = headerManager.getHeaders();
-			if (headers != null) {
-				PropertyIterator i = headers.iterator();
-				while (i.hasNext()) {
-					org.apache.jmeter.protocol.http.control.Header header 
-                    = (org.apache.jmeter.protocol.http.control.Header) 
+        if (headerManager != null) {
+            CollectionProperty headers = headerManager.getHeaders();
+            if (headers != null) {
+                PropertyIterator i = headers.iterator();
+                while (i.hasNext()) {
+                    org.apache.jmeter.protocol.http.control.Header header
+                    = (org.apache.jmeter.protocol.http.control.Header)
                        i.next().getObjectValue();
-					String n = header.getName();
-					// Don't allow override of Content-Length
-					// This helps with SoapSampler hack too
-					// TODO - what other headers are not allowed?
-					if (! HEADER_CONTENT_LENGTH.equalsIgnoreCase(n)){
-						String v = header.getValue();
-						method.addRequestHeader(n, v);
-					}
-				}
-			}
-		}
-		if (cacheManager != null){
-		    cacheManager.setHeaders(u, method);
-		}
-	}
-    
+                    String n = header.getName();
+                    // Don't allow override of Content-Length
+                    // This helps with SoapSampler hack too
+                    // TODO - what other headers are not allowed?
+                    if (! HEADER_CONTENT_LENGTH.equalsIgnoreCase(n)){
+                        String v = header.getValue();
+                        method.addRequestHeader(n, v);
+                    }
+                }
+            }
+        }
+        if (cacheManager != null){
+            cacheManager.setHeaders(u, method);
+        }
+    }
+
     /**
      * Get all the request headers for the <code>HttpMethod</code>
-     * 
+     *
      * @param method
      *            <code>HttpMethod</code> which represents the request
      * @return the headers as a string
      */
     protected String getConnectionHeaders(HttpMethod method) {
         // Get all the request headers
-        StringBuffer hdrs = new StringBuffer(100);        
+        StringBuffer hdrs = new StringBuffer(100);
         Header[] requestHeaders = method.getRequestHeaders();
         for(int i = 0; i < requestHeaders.length; i++) {
             // Exclude the COOKIE header, since cookie is reported separately in the sample
@@ -704,26 +704,26 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                 hdrs.append("\n"); // $NON-NLS-1$
             }
         }
-        
+
         return hdrs.toString();
     }
-    
 
-	/**
-	 * Extracts all the required authorization for that particular URL request
-	 * and sets it in the <code>HttpMethod</code> passed in.
-	 * 
-	 * @param client the HttpClient object
-	 * 
-	 * @param u
-	 *            <code>URL</code> of the URL request
-	 * @param authManager
-	 *            the <code>AuthManager</code> containing all the authorisations for
-	 *            this <code>UrlConfig</code>
-	 */
+
+    /**
+     * Extracts all the required authorization for that particular URL request
+     * and sets it in the <code>HttpMethod</code> passed in.
+     *
+     * @param client the HttpClient object
+     *
+     * @param u
+     *            <code>URL</code> of the URL request
+     * @param authManager
+     *            the <code>AuthManager</code> containing all the authorisations for
+     *            this <code>UrlConfig</code>
+     */
     private void setConnectionAuthorization(HttpClient client, URL u, AuthManager authManager) {
-		HttpParams params = client.getParams();
-		if (authManager != null) {
+        HttpParams params = client.getParams();
+        if (authManager != null) {
             Authorization auth = authManager.getAuthForURL(u);
             if (auth != null) {
                     String username = auth.getUser();
@@ -732,193 +732,193 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                     if (log.isDebugEnabled()){
                         log.debug(username + " >  D="+ username + " D="+domain+" R="+realm);
                     }
-					client.getState().setCredentials(
+                    client.getState().setCredentials(
                             new AuthScope(u.getHost(),u.getPort(),
-                            		realm.length()==0 ? null : realm //"" is not the same as no realm
-                            		,AuthScope.ANY_SCHEME),
+                                    realm.length()==0 ? null : realm //"" is not the same as no realm
+                                    ,AuthScope.ANY_SCHEME),
                             // NT Includes other types of Credentials
                             new NTCredentials(
-									username, 
-                                    auth.getPass(), 
+                                    username,
+                                    auth.getPass(),
                                     localHost,
-									domain
-							));
-					// We have credentials - should we set pre-emptive authentication?
-					if (canSetPreEmptive){
-						log.debug("Setting Pre-emptive authentication");
-						params.setBooleanParameter(HTTP_AUTHENTICATION_PREEMPTIVE, true);
-					}
-			}
+                                    domain
+                            ));
+                    // We have credentials - should we set pre-emptive authentication?
+                    if (canSetPreEmptive){
+                        log.debug("Setting Pre-emptive authentication");
+                        params.setBooleanParameter(HTTP_AUTHENTICATION_PREEMPTIVE, true);
+                    }
+            }
             else
             {
                 client.getState().clearCredentials();
                 if (canSetPreEmptive){
-                	params.setBooleanParameter(HTTP_AUTHENTICATION_PREEMPTIVE, false);
+                    params.setBooleanParameter(HTTP_AUTHENTICATION_PREEMPTIVE, false);
                 }
             }
-		}
+        }
         else
         {
             client.getState().clearCredentials();
         }
-	}
+    }
 
-	/**
-	 * Samples the URL passed in and stores the result in
-	 * <code>HTTPSampleResult</code>, following redirects and downloading
-	 * page resources as appropriate.
-	 * <p>
-	 * When getting a redirect target, redirects are not followed and resources
-	 * are not downloaded. The caller will take care of this.
-	 * 
-	 * @param url
-	 *            URL to sample
-	 * @param method
-	 *            HTTP method: GET, POST,...
-	 * @param areFollowingRedirect
-	 *            whether we're getting a redirect target
-	 * @param frameDepth
-	 *            Depth of this target in the frame structure. Used only to
-	 *            prevent infinite recursion.
-	 * @return results of the sampling
-	 */
-	protected HTTPSampleResult sample(URL url, String method, boolean areFollowingRedirect, int frameDepth) {
+    /**
+     * Samples the URL passed in and stores the result in
+     * <code>HTTPSampleResult</code>, following redirects and downloading
+     * page resources as appropriate.
+     * <p>
+     * When getting a redirect target, redirects are not followed and resources
+     * are not downloaded. The caller will take care of this.
+     *
+     * @param url
+     *            URL to sample
+     * @param method
+     *            HTTP method: GET, POST,...
+     * @param areFollowingRedirect
+     *            whether we're getting a redirect target
+     * @param frameDepth
+     *            Depth of this target in the frame structure. Used only to
+     *            prevent infinite recursion.
+     * @return results of the sampling
+     */
+    protected HTTPSampleResult sample(URL url, String method, boolean areFollowingRedirect, int frameDepth) {
 
-		String urlStr = url.toString();
+        String urlStr = url.toString();
 
-		log.debug("Start : sample " + urlStr);
-		log.debug("method " + method);
+        log.debug("Start : sample " + urlStr);
+        log.debug("method " + method);
 
         HttpMethodBase httpMethod = null;
 
-		HTTPSampleResult res = new HTTPSampleResult();
-		res.setMonitor(isMonitor());
-        
-		res.setSampleLabel(urlStr); // May be replaced later
+        HTTPSampleResult res = new HTTPSampleResult();
+        res.setMonitor(isMonitor());
+
+        res.setSampleLabel(urlStr); // May be replaced later
         res.setHTTPMethod(method);
-		res.sampleStart(); // Count the retries as well in the time
+        res.sampleStart(); // Count the retries as well in the time
         HttpClient client = null;
         InputStream instream = null;
-		try {
-			// May generate IllegalArgumentException
-			if (method.equals(POST)) {
-			    httpMethod = new PostMethod(urlStr);
-			} else if (method.equals(PUT)){
-			    httpMethod = new PutMethod(urlStr);
-			} else if (method.equals(HEAD)){
-			    httpMethod = new HeadMethod(urlStr);
-			} else if (method.equals(TRACE)){
-			    httpMethod = new TraceMethod(urlStr);
-			} else if (method.equals(OPTIONS)){
-			    httpMethod = new OptionsMethod(urlStr);
-			} else if (method.equals(DELETE)){
-			    httpMethod = new DeleteMethod(urlStr);
-			} else if (method.equals(GET)){
-			    httpMethod = new GetMethod(urlStr);
-			} else {
-				log.error("Unexpected method (converted to GET): "+method);
-			    httpMethod = new GetMethod(urlStr);
-			}
+        try {
+            // May generate IllegalArgumentException
+            if (method.equals(POST)) {
+                httpMethod = new PostMethod(urlStr);
+            } else if (method.equals(PUT)){
+                httpMethod = new PutMethod(urlStr);
+            } else if (method.equals(HEAD)){
+                httpMethod = new HeadMethod(urlStr);
+            } else if (method.equals(TRACE)){
+                httpMethod = new TraceMethod(urlStr);
+            } else if (method.equals(OPTIONS)){
+                httpMethod = new OptionsMethod(urlStr);
+            } else if (method.equals(DELETE)){
+                httpMethod = new DeleteMethod(urlStr);
+            } else if (method.equals(GET)){
+                httpMethod = new GetMethod(urlStr);
+            } else {
+                log.error("Unexpected method (converted to GET): "+method);
+                httpMethod = new GetMethod(urlStr);
+            }
 
-			// Set any default request headers
-			setDefaultRequestHeaders(httpMethod);
+            // Set any default request headers
+            setDefaultRequestHeaders(httpMethod);
             // Setup connection
-			client = setupConnection(url, httpMethod, res);
-			// Handle the various methods
-			if (method.equals(POST)) {
-				String postBody = sendPostData((PostMethod)httpMethod);
-				res.setQueryString(postBody);
-			} else if (method.equals(PUT)) {
+            client = setupConnection(url, httpMethod, res);
+            // Handle the various methods
+            if (method.equals(POST)) {
+                String postBody = sendPostData((PostMethod)httpMethod);
+                res.setQueryString(postBody);
+            } else if (method.equals(PUT)) {
                 String putBody = sendPutData((PutMethod)httpMethod);
                 res.setQueryString(putBody);
             }
 
             res.setRequestHeaders(getConnectionHeaders(httpMethod));
 
-			int statusCode = client.executeMethod(httpMethod);
+            int statusCode = client.executeMethod(httpMethod);
 
-			// Request sent. Now get the response:
+            // Request sent. Now get the response:
             instream = httpMethod.getResponseBodyAsStream();
-            
+
             if (instream != null) {// will be null for HEAD
-            
+
                 Header responseHeader = httpMethod.getResponseHeader(HEADER_CONTENT_ENCODING);
                 if (responseHeader!= null && ENCODING_GZIP.equals(responseHeader.getValue())) {
                     instream = new GZIPInputStream(instream);
                 }
                 res.setResponseData(readResponse(res, instream, (int) httpMethod.getResponseContentLength()));
             }
-            
-			res.sampleEnd();
-			// Done with the sampling proper.
 
-			// Now collect the results into the HTTPSampleResult:
+            res.sampleEnd();
+            // Done with the sampling proper.
 
-			res.setSampleLabel(httpMethod.getURI().toString());
+            // Now collect the results into the HTTPSampleResult:
+
+            res.setSampleLabel(httpMethod.getURI().toString());
             // Pick up Actual path (after redirects)
-            
-			res.setResponseCode(Integer.toString(statusCode));
-			res.setSuccessful(isSuccessCode(statusCode));
 
-			res.setResponseMessage(httpMethod.getStatusText());
+            res.setResponseCode(Integer.toString(statusCode));
+            res.setSuccessful(isSuccessCode(statusCode));
 
-			String ct = null;
-			org.apache.commons.httpclient.Header h 
+            res.setResponseMessage(httpMethod.getStatusText());
+
+            String ct = null;
+            org.apache.commons.httpclient.Header h
                 = httpMethod.getResponseHeader(HEADER_CONTENT_TYPE);
-			if (h != null)// Can be missing, e.g. on redirect
-			{
-				ct = h.getValue();
-				res.setContentType(ct);// e.g. text/html; charset=ISO-8859-1
+            if (h != null)// Can be missing, e.g. on redirect
+            {
+                ct = h.getValue();
+                res.setContentType(ct);// e.g. text/html; charset=ISO-8859-1
                 res.setEncodingAndType(ct);
-			}
+            }
 
-			res.setResponseHeaders(getResponseHeaders(httpMethod));
-			if (res.isRedirect()) {
-				final Header headerLocation = httpMethod.getResponseHeader(HEADER_LOCATION);
-				if (headerLocation == null) { // HTTP protocol violation, but avoids NPE
-					throw new IllegalArgumentException("Missing location header");
-				}
-				res.setRedirectLocation(headerLocation.getValue());
-			}
+            res.setResponseHeaders(getResponseHeaders(httpMethod));
+            if (res.isRedirect()) {
+                final Header headerLocation = httpMethod.getResponseHeader(HEADER_LOCATION);
+                if (headerLocation == null) { // HTTP protocol violation, but avoids NPE
+                    throw new IllegalArgumentException("Missing location header");
+                }
+                res.setRedirectLocation(headerLocation.getValue());
+            }
 
             // If we redirected automatically, the URL may have changed
             if (getAutoRedirects()){
                 res.setURL(new URL(httpMethod.getURI().toString()));
             }
-            
-			// Store any cookies received in the cookie manager:
-			saveConnectionCookies(httpMethod, res.getURL(), getCookieManager());
-			
-			// Save cache information
+
+            // Store any cookies received in the cookie manager:
+            saveConnectionCookies(httpMethod, res.getURL(), getCookieManager());
+
+            // Save cache information
             final CacheManager cacheManager = getCacheManager();
             if (cacheManager != null){
                 cacheManager.saveDetails(httpMethod, res);
             }
 
-			// Follow redirects and download page resources if appropriate:
-			res = resultProcessing(areFollowingRedirect, frameDepth, res);
+            // Follow redirects and download page resources if appropriate:
+            res = resultProcessing(areFollowingRedirect, frameDepth, res);
 
-			log.debug("End : sample");
-			httpMethod.releaseConnection();
-			return res;
-		} catch (IllegalArgumentException e)// e.g. some kinds of invalid URL
-		{
-			res.sampleEnd();
-			HTTPSampleResult err = errorResult(e, res);
-			err.setSampleLabel("Error: " + url.toString());
-			return err;
-		} catch (IOException e) {
-			res.sampleEnd();
-			HTTPSampleResult err = errorResult(e, res);
-			err.setSampleLabel("Error: " + url.toString());
-			return err;
-		} finally {
+            log.debug("End : sample");
+            httpMethod.releaseConnection();
+            return res;
+        } catch (IllegalArgumentException e)// e.g. some kinds of invalid URL
+        {
+            res.sampleEnd();
+            HTTPSampleResult err = errorResult(e, res);
+            err.setSampleLabel("Error: " + url.toString());
+            return err;
+        } catch (IOException e) {
+            res.sampleEnd();
+            HTTPSampleResult err = errorResult(e, res);
+            err.setSampleLabel("Error: " + url.toString());
+            return err;
+        } finally {
             JOrphanUtils.closeQuietly(instream);
-			if (httpMethod != null) {
-				httpMethod.releaseConnection();
-			}
-		}
-	}
+            if (httpMethod != null) {
+                httpMethod.releaseConnection();
+            }
+        }
+    }
 
     /**
      * Set up the PUT data
@@ -927,23 +927,23 @@ public class HTTPSampler2 extends HTTPSamplerBase {
         // Buffer to hold the put body, except file content
         StringBuffer putBody = new StringBuffer(1000);
         boolean hasPutBody = false;
-        
+
         // Check if the header manager had a content type header
         // This allows the user to specify his own content-type for a POST request
         Header contentTypeHeader = put.getRequestHeader(HEADER_CONTENT_TYPE);
-        boolean hasContentTypeHeader = contentTypeHeader != null && contentTypeHeader.getValue() != null && contentTypeHeader.getValue().length() > 0; 
+        boolean hasContentTypeHeader = contentTypeHeader != null && contentTypeHeader.getValue() != null && contentTypeHeader.getValue().length() > 0;
         HTTPFileArg files[] = getHTTPFiles();
 
         // If there are no arguments, we can send a file as the body of the request
-        
+
         // TODO: needs a multiple file upload scenerio
         if(!hasArguments() && getSendFileAsPostBody()) {
             hasPutBody = true;
-                
+
             // If getSendFileAsPostBody returned true, it's sure that file is not null
             FileRequestEntity fileRequestEntity = new FileRequestEntity(new File(files[0].getPath()),null);
             put.setRequestEntity(fileRequestEntity);
-                
+
             // We just add placeholder text for file content
             putBody.append("<actual file content, not shown here>");
         }
@@ -960,7 +960,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                 put.getParams().setContentCharset(contentEncoding);
                 haveContentEncoding = true;
             }
-                
+
             // Just append all the parameter values, and use that as the post body
             StringBuffer putBodyContent = new StringBuffer();
             PropertyIterator args = getArguments().iterator();
@@ -982,7 +982,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
             put.setRequestEntity(requestEntity);
         }
         // Check if we have any content to send for body
-        if(hasPutBody) {                
+        if(hasPutBody) {
             // If the request entity is repeatable, we can send it first to
             // our own stream, so we can return it
             if(put.getRequestEntity().isRepeatable()) {
@@ -1010,82 +1010,82 @@ public class HTTPSampler2 extends HTTPSamplerBase {
             put.setRequestHeader(HEADER_CONTENT_LENGTH, Long.toString(put.getRequestEntity().getContentLength()));
             return putBody.toString();
         }
-        return null;        
+        return null;
     }
-    
+
     /**
      * Class extending FilePart, so that we can send placeholder text
      * instead of the actual file content
      */
     private static class ViewableFilePart extends FilePart {
-    	private boolean hideFileData;
-    	
+        private boolean hideFileData;
+
         public ViewableFilePart(String name, File file, String contentType, String charset) throws FileNotFoundException {
             super(name, file, contentType, charset);
             this.hideFileData = false;
         }
-        
+
         public void setHideFileData(boolean hideFileData) {
-        	this.hideFileData = hideFileData;
+            this.hideFileData = hideFileData;
         }
-        
+
         protected void sendData(OutputStream out) throws IOException {
-        	// Check if we should send only placeholder text for the
-        	// file content, or the real file content
-        	if(hideFileData) {
-        		out.write("<actual file content, not shown here>".getBytes("UTF-8"));
-        	}
-        	else {
-        		super.sendData(out);
-        	}
+            // Check if we should send only placeholder text for the
+            // file content, or the real file content
+            if(hideFileData) {
+                out.write("<actual file content, not shown here>".getBytes("UTF-8"));
+            }
+            else {
+                super.sendData(out);
+            }
         }
-    }    
-
-    /**
-	 * From the <code>HttpMethod</code>, store all the "set-cookie" key-pair
-	 * values in the cookieManager of the <code>UrlConfig</code>.
-	 * 
-	 * @param method
-	 *            <code>HttpMethod</code> which represents the request
-	 * @param u
-	 *            <code>URL</code> of the URL request
-	 * @param cookieManager
-	 *            the <code>CookieManager</code> containing all the cookies
-	 */
-    protected void saveConnectionCookies(HttpMethod method, URL u, CookieManager cookieManager) {
-		if (cookieManager != null) {
-            Header hdr[] = method.getResponseHeaders(HEADER_SET_COOKIE);            
-			for (int i = 0; i < hdr.length; i++) {
-                cookieManager.addCookieFromHeader(hdr[i].getValue(),u);
-			}
-		}
-	}
-	
-
-	public void threadStarted() {
-		log.debug("Thread Started");
-        
-		// Does not need to be synchronised, as all access is from same thread
-        httpClients.set ( new HashMap() );	
     }
 
-	public void threadFinished() {
-		log.debug("Thread Finished");
+    /**
+     * From the <code>HttpMethod</code>, store all the "set-cookie" key-pair
+     * values in the cookieManager of the <code>UrlConfig</code>.
+     *
+     * @param method
+     *            <code>HttpMethod</code> which represents the request
+     * @param u
+     *            <code>URL</code> of the URL request
+     * @param cookieManager
+     *            the <code>CookieManager</code> containing all the cookies
+     */
+    protected void saveConnectionCookies(HttpMethod method, URL u, CookieManager cookieManager) {
+        if (cookieManager != null) {
+            Header hdr[] = method.getResponseHeaders(HEADER_SET_COOKIE);
+            for (int i = 0; i < hdr.length; i++) {
+                cookieManager.addCookieFromHeader(hdr[i].getValue(),u);
+            }
+        }
+    }
+
+
+    public void threadStarted() {
+        log.debug("Thread Started");
 
         // Does not need to be synchronised, as all access is from same thread
-		Map map = (Map)httpClients.get();
+        httpClients.set ( new HashMap() );
+    }
 
-		if ( map != null ) {
-			for ( Iterator it = map.entrySet().iterator(); it.hasNext(); )
-			{
-				Map.Entry entry = (Map.Entry) it.next();
-				HttpClient cl = (HttpClient) entry.getValue();
-				// Can cause NPE in HttpClient 3.1
+    public void threadFinished() {
+        log.debug("Thread Finished");
+
+        // Does not need to be synchronised, as all access is from same thread
+        Map map = (Map)httpClients.get();
+
+        if ( map != null ) {
+            for ( Iterator it = map.entrySet().iterator(); it.hasNext(); )
+            {
+                Map.Entry entry = (Map.Entry) it.next();
+                HttpClient cl = (HttpClient) entry.getValue();
+                // Can cause NPE in HttpClient 3.1
                 //((SimpleHttpConnectionManager)cl.getHttpConnectionManager()).shutdown();// Closes the connection
-				// Revert to original method:
+                // Revert to original method:
                 cl.getHttpConnectionManager().closeIdleConnections(-1000);// Closes the connection
-			}
-			map.clear();
-		}
-	}
+            }
+            map.clear();
+        }
+    }
 }

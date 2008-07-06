@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.report.gui.action;
@@ -34,49 +34,49 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 public class ReportAddToTree implements Command {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private Map allJMeterComponentCommands;
+    private Map allJMeterComponentCommands;
 
-	public ReportAddToTree() {
-		allJMeterComponentCommands = new HashMap();
-		allJMeterComponentCommands.put("Add", "Add");
-	}
+    public ReportAddToTree() {
+        allJMeterComponentCommands = new HashMap();
+        allJMeterComponentCommands.put("Add", "Add");
+    }
 
-	/**
-	 * Gets the Set of actions this Command class responds to.
-	 * 
-	 * @return the ActionNames value
-	 */
-	public Set getActionNames() {
-		return allJMeterComponentCommands.keySet();
-	}
+    /**
+     * Gets the Set of actions this Command class responds to.
+     *
+     * @return the ActionNames value
+     */
+    public Set getActionNames() {
+        return allJMeterComponentCommands.keySet();
+    }
 
-	/**
-	 * Adds the specified class to the current node of the tree.
-	 */
-	public void doAction(ActionEvent e) {
-		try {
-			TestElement node = ReportGuiPackage.getInstance()
-					.createTestElement(((JComponent) e.getSource()).getName());
-			addObjectToTree(node);
-		} catch (Exception err) {
-			log.error("", err);
-		}
-	}
+    /**
+     * Adds the specified class to the current node of the tree.
+     */
+    public void doAction(ActionEvent e) {
+        try {
+            TestElement node = ReportGuiPackage.getInstance()
+                    .createTestElement(((JComponent) e.getSource()).getName());
+            addObjectToTree(node);
+        } catch (Exception err) {
+            log.error("", err);
+        }
+    }
 
-	protected void addObjectToTree(TestElement el) {
-		ReportGuiPackage guiPackage = ReportGuiPackage.getInstance();
-		ReportTreeNode node = new ReportTreeNode(el, guiPackage.getTreeModel());
-		guiPackage.getTreeModel().insertNodeInto(node,
-				guiPackage.getTreeListener().getCurrentNode(),
-				guiPackage.getTreeListener().getCurrentNode().getChildCount());
-        TestElement curNode = 
+    protected void addObjectToTree(TestElement el) {
+        ReportGuiPackage guiPackage = ReportGuiPackage.getInstance();
+        ReportTreeNode node = new ReportTreeNode(el, guiPackage.getTreeModel());
+        guiPackage.getTreeModel().insertNodeInto(node,
+                guiPackage.getTreeListener().getCurrentNode(),
+                guiPackage.getTreeListener().getCurrentNode().getChildCount());
+        TestElement curNode =
             (TestElement)guiPackage.getTreeListener().getCurrentNode().getUserObject();
         if (curNode != null) {
             curNode.addTestElement(el);
             guiPackage.getMainFrame().getTree().setSelectionPath(
                     new TreePath(node.getPath()));
         }
-	}
+    }
 }

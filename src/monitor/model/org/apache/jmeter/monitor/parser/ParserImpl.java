@@ -33,72 +33,72 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 public abstract class ParserImpl implements Parser {
-    
-	private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     private SAXParserFactory PARSERFACTORY = null;
 
-	private SAXParser PARSER = null;
+    private SAXParser PARSER = null;
 
-	private MonitorHandler DOCHANDLER = null;
+    private MonitorHandler DOCHANDLER = null;
 
-	private ObjectFactory FACTORY = null;
+    private ObjectFactory FACTORY = null;
 
-	/**
-	 * 
-	 */
-	public ParserImpl(ObjectFactory factory) {
-		super();
-		this.FACTORY = factory;
-		try {
-			PARSERFACTORY = SAXParserFactory.newInstance();
-			PARSER = PARSERFACTORY.newSAXParser();
-			DOCHANDLER = new MonitorHandler();
-			DOCHANDLER.setObjectFactory(this.FACTORY);
-		} catch (SAXException e) {
-			log.error("Failed to create the parser",e);
-		} catch (ParserConfigurationException e) {
-			log.error("Failed to create the parser",e);
-		}
-	}
+    /**
+     *
+     */
+    public ParserImpl(ObjectFactory factory) {
+        super();
+        this.FACTORY = factory;
+        try {
+            PARSERFACTORY = SAXParserFactory.newInstance();
+            PARSER = PARSERFACTORY.newSAXParser();
+            DOCHANDLER = new MonitorHandler();
+            DOCHANDLER.setObjectFactory(this.FACTORY);
+        } catch (SAXException e) {
+            log.error("Failed to create the parser",e);
+        } catch (ParserConfigurationException e) {
+            log.error("Failed to create the parser",e);
+        }
+    }
 
-	/**
-	 * parse byte array and return Status object
-	 * 
-	 * @param bytes
-	 * @return Status
-	 */
-	public Status parseBytes(byte[] bytes) {
-		try {
-			InputSource is = new InputSource();
-			is.setByteStream(new ByteArrayInputStream(bytes));
-			PARSER.parse(is, DOCHANDLER);
-			return DOCHANDLER.getContents();
-		} catch (SAXException e) {
-			log.error("Failed to parse the bytes",e);
-			// let bad input fail silently
-			return DOCHANDLER.getContents();
-		} catch (IOException e) { // Should never happen
-			log.error("Failed to read the bytes",e);
-			// let bad input fail silently
-			return DOCHANDLER.getContents();
-		}
-	}
+    /**
+     * parse byte array and return Status object
+     *
+     * @param bytes
+     * @return Status
+     */
+    public Status parseBytes(byte[] bytes) {
+        try {
+            InputSource is = new InputSource();
+            is.setByteStream(new ByteArrayInputStream(bytes));
+            PARSER.parse(is, DOCHANDLER);
+            return DOCHANDLER.getContents();
+        } catch (SAXException e) {
+            log.error("Failed to parse the bytes",e);
+            // let bad input fail silently
+            return DOCHANDLER.getContents();
+        } catch (IOException e) { // Should never happen
+            log.error("Failed to read the bytes",e);
+            // let bad input fail silently
+            return DOCHANDLER.getContents();
+        }
+    }
 
-	/**
-	 * @param content
-	 * @return Status
-	 */
-	public Status parseString(String content) {
-		return parseBytes(content.getBytes());
-	}
+    /**
+     * @param content
+     * @return Status
+     */
+    public Status parseString(String content) {
+        return parseBytes(content.getBytes());
+    }
 
-	/**
-	 * @param result
-	 * @return Status
-	 */
-	public Status parseSampleResult(SampleResult result) {
-		return parseBytes(result.getResponseData());
-	}
+    /**
+     * @param result
+     * @return Status
+     */
+    public Status parseSampleResult(SampleResult result) {
+        return parseBytes(result.getResponseData());
+    }
 
 }

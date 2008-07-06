@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.modifier.gui;
@@ -30,98 +30,98 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 
 public class URLRewritingModifierGui extends AbstractPreProcessorGui {
-	private JLabeledTextField argumentName;
+    private JLabeledTextField argumentName;
 
     private JCheckBox pathExt;
 
     private JCheckBox pathExtNoEquals;
 
     private JCheckBox pathExtNoQuestionmark;
-    
+
     private JCheckBox shouldCache;
 
-	public String getLabelResource() {
-		return "http_url_rewriting_modifier_title"; // $NON-NLS-1$
-	}
+    public String getLabelResource() {
+        return "http_url_rewriting_modifier_title"; // $NON-NLS-1$
+    }
 
-	public URLRewritingModifierGui() {
-		init();
-	}
+    public URLRewritingModifierGui() {
+        init();
+    }
 
-	private void init() {
-		setLayout(new BorderLayout(0, 5));
-		setBorder(makeBorder());
+    private void init() {
+        setLayout(new BorderLayout(0, 5));
+        setBorder(makeBorder());
 
-		add(makeTitlePanel(), BorderLayout.NORTH);
+        add(makeTitlePanel(), BorderLayout.NORTH);
 
-		VerticalPanel mainPanel = new VerticalPanel();
+        VerticalPanel mainPanel = new VerticalPanel();
 
-		argumentName = new JLabeledTextField(JMeterUtils.getResString("session_argument_name"), 10); // $NON-NLS-1$
-		mainPanel.add(argumentName);
+        argumentName = new JLabeledTextField(JMeterUtils.getResString("session_argument_name"), 10); // $NON-NLS-1$
+        mainPanel.add(argumentName);
 
-		pathExt = new JCheckBox(JMeterUtils.getResString("path_extension_choice")); // $NON-NLS-1$
-		mainPanel.add(pathExt);
+        pathExt = new JCheckBox(JMeterUtils.getResString("path_extension_choice")); // $NON-NLS-1$
+        mainPanel.add(pathExt);
 
-		pathExtNoEquals = new JCheckBox(JMeterUtils.getResString("path_extension_dont_use_equals")); // $NON-NLS-1$
-		mainPanel.add(pathExtNoEquals);
+        pathExtNoEquals = new JCheckBox(JMeterUtils.getResString("path_extension_dont_use_equals")); // $NON-NLS-1$
+        mainPanel.add(pathExtNoEquals);
 
-		pathExtNoQuestionmark = new JCheckBox(JMeterUtils.getResString("path_extension_dont_use_questionmark")); // $NON-NLS-1$
-		mainPanel.add(pathExtNoQuestionmark);
+        pathExtNoQuestionmark = new JCheckBox(JMeterUtils.getResString("path_extension_dont_use_questionmark")); // $NON-NLS-1$
+        mainPanel.add(pathExtNoQuestionmark);
 
         shouldCache = new JCheckBox(JMeterUtils.getResString("cache_session_id")); // $NON-NLS-1$
         shouldCache.setSelected(true);
         mainPanel.add(shouldCache);
 
-		add(mainPanel, BorderLayout.CENTER);
-	}
+        add(mainPanel, BorderLayout.CENTER);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
-	 */
-	public TestElement createTestElement() {
-		URLRewritingModifier modifier = new URLRewritingModifier();
-		modifyTestElement(modifier);
-		return modifier;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
+     */
+    public TestElement createTestElement() {
+        URLRewritingModifier modifier = new URLRewritingModifier();
+        modifyTestElement(modifier);
+        return modifier;
+    }
 
-	/**
-	 * Modifies a given TestElement to mirror the data in the gui components.
-	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-	 */
-	public void modifyTestElement(TestElement modifier) {
-		this.configureTestElement(modifier);
-		URLRewritingModifier rewritingModifier = ((URLRewritingModifier) modifier);
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     *
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement modifier) {
+        this.configureTestElement(modifier);
+        URLRewritingModifier rewritingModifier = ((URLRewritingModifier) modifier);
         rewritingModifier.setArgumentName(argumentName.getText());
-		rewritingModifier.setPathExtension(pathExt.isSelected());
-		rewritingModifier.setPathExtensionNoEquals(pathExtNoEquals.isSelected());
-		rewritingModifier.setPathExtensionNoQuestionmark(pathExtNoQuestionmark.isSelected());
+        rewritingModifier.setPathExtension(pathExt.isSelected());
+        rewritingModifier.setPathExtensionNoEquals(pathExtNoEquals.isSelected());
+        rewritingModifier.setPathExtensionNoQuestionmark(pathExtNoQuestionmark.isSelected());
         rewritingModifier.setShouldCache((shouldCache.isSelected()));
-	}
+    }
 
     /**
      * Implements JMeterGUIComponent.clearGui
      */
     public void clearGui() {
         super.clearGui();
-        
+
         argumentName.setText(""); //$NON-NLS-1$
         pathExt.setSelected(false);
         pathExtNoEquals.setSelected(false);
         pathExtNoQuestionmark.setSelected(false);
         shouldCache.setSelected(false);
-    }    
+    }
 
-	public void configure(TestElement el) {
-		URLRewritingModifier rewritingModifier = ((URLRewritingModifier) el);
+    public void configure(TestElement el) {
+        URLRewritingModifier rewritingModifier = ((URLRewritingModifier) el);
         argumentName.setText(rewritingModifier.getArgumentName());
-		pathExt.setSelected(rewritingModifier.isPathExtension());
-		pathExtNoEquals.setSelected(rewritingModifier.isPathExtensionNoEquals());
-		pathExtNoQuestionmark.setSelected(rewritingModifier.isPathExtensionNoQuestionmark());
+        pathExt.setSelected(rewritingModifier.isPathExtension());
+        pathExtNoEquals.setSelected(rewritingModifier.isPathExtensionNoEquals());
+        pathExtNoQuestionmark.setSelected(rewritingModifier.isPathExtensionNoQuestionmark());
         shouldCache.setSelected(rewritingModifier.shouldCache());
 
-		super.configure(el);
-	}
+        super.configure(el);
+    }
 }

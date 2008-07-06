@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.gui.action;
@@ -24,30 +24,27 @@ import java.util.Set;
 
 import org.apache.jmeter.functions.gui.FunctionHelper;
 
-/**
- * @version $Revision$
- */
 public class CreateFunctionDialog extends AbstractAction {
-	private FunctionHelper helper = null;
+    private FunctionHelper helper = null;
 
-	private static Set commands;
-	static {
-		commands = new HashSet();
-		commands.add(ActionNames.FUNCTIONS);
-	}
+    private static Set commands;
+    static {
+        commands = new HashSet();
+        commands.add(ActionNames.FUNCTIONS);
+    }
 
-	public CreateFunctionDialog() {
-		helper = new FunctionHelper();
-	}
+    public CreateFunctionDialog() {
+        helper = new FunctionHelper();
+    }
 
-	/**
-	 * Provide the list of Action names that are available in this command.
-	 */
-	public Set getActionNames() {
-		return commands;
-	}
+    /**
+     * Provide the list of Action names that are available in this command.
+     */
+    public Set getActionNames() {
+        return commands;
+    }
 
-	public void doAction(ActionEvent arg0) {
-		helper.show();
-	}
+    public void doAction(ActionEvent arg0) {
+        helper.show();
+    }
 }

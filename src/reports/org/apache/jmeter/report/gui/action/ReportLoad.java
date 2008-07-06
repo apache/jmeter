@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.report.gui.action;
@@ -45,100 +45,100 @@ import org.apache.log.Logger;
 import com.thoughtworks.xstream.XStream;
 
 public class ReportLoad implements Command {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	XStream loadService = new XStream();
+    XStream loadService = new XStream();
 
-	private static final Set commands = new HashSet();
-	static {
-		commands.add("open");
-		commands.add("merge");
-	}
+    private static final Set commands = new HashSet();
+    static {
+        commands.add("open");
+        commands.add("merge");
+    }
 
-	public ReportLoad() {
-		super();
-	}
+    public ReportLoad() {
+        super();
+    }
 
-	public Set getActionNames() {
-		return commands;
-	}
+    public Set getActionNames() {
+        return commands;
+    }
 
-	public void doAction(ActionEvent e) {
-		boolean merging = e.getActionCommand().equals("merge");
+    public void doAction(ActionEvent e) {
+        boolean merging = e.getActionCommand().equals("merge");
 
-		if (!merging) {
-			ReportActionRouter.getInstance().doActionNow(
-					new ActionEvent(e.getSource(), e.getID(), "close"));
-		}
+        if (!merging) {
+            ReportActionRouter.getInstance().doActionNow(
+                    new ActionEvent(e.getSource(), e.getID(), "close"));
+        }
 
-		JFileChooser chooser = ReportFileDialoger
-				.promptToOpenFile(new String[] { ".jmr" });
-		if (chooser == null) {
-			return;
-		}
-		boolean isTestPlan = false;
-		InputStream reader = null;
-		File f = null;
-		try {
-			f = chooser.getSelectedFile();
-			if (f != null) {
-				if (merging) {
-					log.info("Merging file: " + f);
-				} else {
-					log.info("Loading file: " + f);
-					FileServer.getFileServer().setBasedir(f.getAbsolutePath());
-				}
-				reader = new FileInputStream(f);
-				HashTree tree = SaveService.loadTree(reader);
-				isTestPlan = insertLoadedTree(e.getID(), tree);
-			}
-		} catch (NoClassDefFoundError ex) // Allow for missing optional jars
-		{
-			String msg = ex.getMessage();
-			if (msg == null) {
-				msg = "Missing jar file - see log for details";
-				log.warn("Missing jar file", ex);
-			}
-			JMeterUtils.reportErrorToUser(msg);
-		} catch (Exception ex) {
-			String msg = ex.getMessage();
-			if (msg == null) {
-				msg = "Unexpected error - see log for details";
-				log.warn("Unexpected error", ex);
-			}
-			JMeterUtils.reportErrorToUser(msg);
-		} finally {
-		    JOrphanUtils.closeQuietly(reader);
-			ReportGuiPackage.getInstance().updateCurrentGui();
-			ReportGuiPackage.getInstance().getMainFrame().repaint();
-		}
-		// don't change name if merging
-		if (!merging && isTestPlan && f != null) {
-			ReportGuiPackage.getInstance().setReportPlanFile(f.getAbsolutePath());
-		}
-	}
+        JFileChooser chooser = ReportFileDialoger
+                .promptToOpenFile(new String[] { ".jmr" });
+        if (chooser == null) {
+            return;
+        }
+        boolean isTestPlan = false;
+        InputStream reader = null;
+        File f = null;
+        try {
+            f = chooser.getSelectedFile();
+            if (f != null) {
+                if (merging) {
+                    log.info("Merging file: " + f);
+                } else {
+                    log.info("Loading file: " + f);
+                    FileServer.getFileServer().setBasedir(f.getAbsolutePath());
+                }
+                reader = new FileInputStream(f);
+                HashTree tree = SaveService.loadTree(reader);
+                isTestPlan = insertLoadedTree(e.getID(), tree);
+            }
+        } catch (NoClassDefFoundError ex) // Allow for missing optional jars
+        {
+            String msg = ex.getMessage();
+            if (msg == null) {
+                msg = "Missing jar file - see log for details";
+                log.warn("Missing jar file", ex);
+            }
+            JMeterUtils.reportErrorToUser(msg);
+        } catch (Exception ex) {
+            String msg = ex.getMessage();
+            if (msg == null) {
+                msg = "Unexpected error - see log for details";
+                log.warn("Unexpected error", ex);
+            }
+            JMeterUtils.reportErrorToUser(msg);
+        } finally {
+            JOrphanUtils.closeQuietly(reader);
+            ReportGuiPackage.getInstance().updateCurrentGui();
+            ReportGuiPackage.getInstance().getMainFrame().repaint();
+        }
+        // don't change name if merging
+        if (!merging && isTestPlan && f != null) {
+            ReportGuiPackage.getInstance().setReportPlanFile(f.getAbsolutePath());
+        }
+    }
 
-	/**
-	 * Returns a boolean indicating whether the loaded tree was a full test plan
-	 */
-	public boolean insertLoadedTree(int id, HashTree tree) throws Exception,
-			IllegalUserActionException {
-		// convertTree(tree);
-		if (tree == null) {
-			throw new Exception("Error in TestPlan - see log file");
-		}
-		boolean isTestPlan = tree.getArray()[0] instanceof ReportPlan;
-		HashTree newTree = ReportGuiPackage.getInstance().addSubTree(tree);
-		ReportGuiPackage.getInstance().updateCurrentGui();
-		ReportGuiPackage.getInstance().getMainFrame().getTree()
-				.setSelectionPath(
-						new TreePath(((ReportTreeNode) newTree.getArray()[0])
-								.getPath()));
-		tree = ReportGuiPackage.getInstance().getCurrentSubTree();
-		ReportActionRouter.getInstance().actionPerformed(
-				new ActionEvent(tree.get(tree.getArray()[tree.size() - 1]), id,
-						ReportCheckDirty.SUB_TREE_LOADED));
+    /**
+     * Returns a boolean indicating whether the loaded tree was a full test plan
+     */
+    public boolean insertLoadedTree(int id, HashTree tree) throws Exception,
+            IllegalUserActionException {
+        // convertTree(tree);
+        if (tree == null) {
+            throw new Exception("Error in TestPlan - see log file");
+        }
+        boolean isTestPlan = tree.getArray()[0] instanceof ReportPlan;
+        HashTree newTree = ReportGuiPackage.getInstance().addSubTree(tree);
+        ReportGuiPackage.getInstance().updateCurrentGui();
+        ReportGuiPackage.getInstance().getMainFrame().getTree()
+                .setSelectionPath(
+                        new TreePath(((ReportTreeNode) newTree.getArray()[0])
+                                .getPath()));
+        tree = ReportGuiPackage.getInstance().getCurrentSubTree();
+        ReportActionRouter.getInstance().actionPerformed(
+                new ActionEvent(tree.get(tree.getArray()[tree.size() - 1]), id,
+                        ReportCheckDirty.SUB_TREE_LOADED));
 
-		return isTestPlan;
-	}
+        return isTestPlan;
+    }
 }

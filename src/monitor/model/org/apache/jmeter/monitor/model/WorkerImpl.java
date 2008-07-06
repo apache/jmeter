@@ -17,114 +17,114 @@
 package org.apache.jmeter.monitor.model;
 
 /**
- * 
+ *
  */
 public class WorkerImpl implements Worker {
-	private int requestProcessingTime = 0;
+    private int requestProcessingTime = 0;
 
-	private long requestBytesSent = 0;
+    private long requestBytesSent = 0;
 
-	private long requestBytesReceived = 0;
+    private long requestBytesReceived = 0;
 
-	private String currentQueryString = null;
+    private String currentQueryString = null;
 
-	private String remoteAddr = null;
+    private String remoteAddr = null;
 
-	private String currentUri = null;
+    private String currentUri = null;
 
-	private String method = null;
+    private String method = null;
 
-	private String protocol = null;
+    private String protocol = null;
 
-	private String stage = null;
+    private String stage = null;
 
-	private String virtualHost = null;
+    private String virtualHost = null;
 
-	/**
-	 * 
-	 */
-	public WorkerImpl() {
-		super();
-	}
+    /**
+     *
+     */
+    public WorkerImpl() {
+        super();
+    }
 
-	public int getRequestProcessingTime() {
-		return this.requestProcessingTime;
-	}
+    public int getRequestProcessingTime() {
+        return this.requestProcessingTime;
+    }
 
-	public void setRequestProcessingTime(int value) {
-		this.requestProcessingTime = value;
-	}
+    public void setRequestProcessingTime(int value) {
+        this.requestProcessingTime = value;
+    }
 
-	public long getRequestBytesSent() {
-		return this.requestBytesSent;
-	}
+    public long getRequestBytesSent() {
+        return this.requestBytesSent;
+    }
 
-	public void setRequestBytesSent(long value) {
-		this.requestBytesSent = value;
-	}
+    public void setRequestBytesSent(long value) {
+        this.requestBytesSent = value;
+    }
 
-	public String getCurrentQueryString() {
-		return this.currentQueryString;
-	}
+    public String getCurrentQueryString() {
+        return this.currentQueryString;
+    }
 
-	public void setCurrentQueryString(String value) {
-		this.currentQueryString = value;
-	}
+    public void setCurrentQueryString(String value) {
+        this.currentQueryString = value;
+    }
 
-	public String getRemoteAddr() {
-		return this.remoteAddr;
-	}
+    public String getRemoteAddr() {
+        return this.remoteAddr;
+    }
 
-	public void setRemoteAddr(String value) {
-		this.remoteAddr = value;
-	}
+    public void setRemoteAddr(String value) {
+        this.remoteAddr = value;
+    }
 
-	public String getCurrentUri() {
-		return this.currentUri;
-	}
+    public String getCurrentUri() {
+        return this.currentUri;
+    }
 
-	public void setCurrentUri(String value) {
-		this.currentUri = value;
-	}
+    public void setCurrentUri(String value) {
+        this.currentUri = value;
+    }
 
-	public String getStage() {
-		return this.stage;
-	}
+    public String getStage() {
+        return this.stage;
+    }
 
-	public void setStage(String value) {
-		this.stage = value;
-	}
+    public void setStage(String value) {
+        this.stage = value;
+    }
 
-	public String getVirtualHost() {
-		return this.virtualHost;
-	}
+    public String getVirtualHost() {
+        return this.virtualHost;
+    }
 
-	public void setVirtualHost(String value) {
-		this.virtualHost = value;
-	}
+    public void setVirtualHost(String value) {
+        this.virtualHost = value;
+    }
 
-	public String getProtocol() {
-		return this.protocol;
-	}
+    public String getProtocol() {
+        return this.protocol;
+    }
 
-	public void setProtocol(String value) {
-		this.protocol = value;
-	}
+    public void setProtocol(String value) {
+        this.protocol = value;
+    }
 
-	public long getRequestBytesReceived() {
-		return this.requestBytesReceived;
-	}
+    public long getRequestBytesReceived() {
+        return this.requestBytesReceived;
+    }
 
-	public void setRequestBytesReceived(long value) {
-		this.requestBytesReceived = value;
-	}
+    public void setRequestBytesReceived(long value) {
+        this.requestBytesReceived = value;
+    }
 
-	public String getMethod() {
-		return this.method;
-	}
+    public String getMethod() {
+        return this.method;
+    }
 
-	public void setMethod(String value) {
-		this.method = value;
-	}
+    public void setMethod(String value) {
+        this.method = value;
+    }
 
 }

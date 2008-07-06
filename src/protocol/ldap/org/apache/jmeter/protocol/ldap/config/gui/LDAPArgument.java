@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.ldap.config.gui;
@@ -23,148 +23,145 @@ import java.io.Serializable;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.StringProperty;
 
-// Mark Walsh, 2002-08-03, add metadata attribute
-// add constructor Argument(String name, Object value, Object metadata)
-// add MetaData get and set methods
 /*******************************************************************************
- * 
+ *
  * Class representing an argument. Each argument consists of a name/value and
  * opcode combination, as well as (optional) metadata.
- * 
+ *
  * author Dolf Smits(Dolf.Smits@Siemens.com) created Aug 09 2003 11:00 AM
  * company Siemens Netherlands N.V..
- * 
+ *
  * Based on the work of:
- * 
+ *
  * author Michael Stover author Mark Walsh
  */
 
 public class LDAPArgument extends AbstractTestElement implements Serializable {
 
-	// ** These constants are used in the JMX files, and so must not be changed **
-	
-	/** Name used to store the argument's name. */
-	private static final String ARG_NAME = "Argument.name"; //$NON-NLS$
+    // ** These constants are used in the JMX files, and so must not be changed **
 
-	/** Name used to store the argument's value. */
-	private static final String VALUE = "Argument.value"; //$NON-NLS$
+    /** Name used to store the argument's name. */
+    private static final String ARG_NAME = "Argument.name"; //$NON-NLS$
 
-	/** Name used to store the argument's value. */
-	private static final String OPCODE = "Argument.opcode"; //$NON-NLS$
+    /** Name used to store the argument's value. */
+    private static final String VALUE = "Argument.value"; //$NON-NLS$
 
-	/** Name used to store the argument's metadata. */
-	private static final String METADATA = "Argument.metadata"; //$NON-NLS$
+    /** Name used to store the argument's value. */
+    private static final String OPCODE = "Argument.opcode"; //$NON-NLS$
 
-	/**
-	 * Create a new Argument without a name, value, or metadata.
-	 */
-	public LDAPArgument() {
-	}
+    /** Name used to store the argument's metadata. */
+    private static final String METADATA = "Argument.metadata"; //$NON-NLS$
 
-	/**
-	 * Create a new Argument with the specified name and value, and no metadata.
-	 * 
-	 * @param name
-	 *            the argument name
-	 * @param value
-	 *            the argument value
-	 */
-	public LDAPArgument(String name, String value, String opcode) {
-		setProperty(new StringProperty(ARG_NAME, name));
-		setProperty(new StringProperty(VALUE, value));
-		setProperty(new StringProperty(OPCODE, opcode));
-	}
+    /**
+     * Create a new Argument without a name, value, or metadata.
+     */
+    public LDAPArgument() {
+    }
 
-	/**
-	 * Create a new Argument with the specified name, value, and metadata.
-	 * 
-	 * @param name
-	 *            the argument name
-	 * @param value
-	 *            the argument value
-	 * @param metadata
-	 *            the argument metadata
-	 */
-	public LDAPArgument(String name, String value, String opcode, String metadata) {
-		setProperty(new StringProperty(ARG_NAME, name));
-		setProperty(new StringProperty(VALUE, value));
-		setProperty(new StringProperty(OPCODE, opcode));
-		setProperty(new StringProperty(METADATA, metadata));
-	}
+    /**
+     * Create a new Argument with the specified name and value, and no metadata.
+     *
+     * @param name
+     *            the argument name
+     * @param value
+     *            the argument value
+     */
+    public LDAPArgument(String name, String value, String opcode) {
+        setProperty(new StringProperty(ARG_NAME, name));
+        setProperty(new StringProperty(VALUE, value));
+        setProperty(new StringProperty(OPCODE, opcode));
+    }
 
-	/**
-	 * Set the name of the Argument.
-	 * 
-	 * @param newName
-	 *            the new name
-	 */
-	public void setName(String newName) {
-		setProperty(new StringProperty(ARG_NAME, newName));
-	}
+    /**
+     * Create a new Argument with the specified name, value, and metadata.
+     *
+     * @param name
+     *            the argument name
+     * @param value
+     *            the argument value
+     * @param metadata
+     *            the argument metadata
+     */
+    public LDAPArgument(String name, String value, String opcode, String metadata) {
+        setProperty(new StringProperty(ARG_NAME, name));
+        setProperty(new StringProperty(VALUE, value));
+        setProperty(new StringProperty(OPCODE, opcode));
+        setProperty(new StringProperty(METADATA, metadata));
+    }
 
-	/**
-	 * Get the name of the Argument.
-	 * 
-	 * @return the attribute's name
-	 */
-	public String getName() {
-		return getPropertyAsString(ARG_NAME);
-	}
+    /**
+     * Set the name of the Argument.
+     *
+     * @param newName
+     *            the new name
+     */
+    public void setName(String newName) {
+        setProperty(new StringProperty(ARG_NAME, newName));
+    }
 
-	/**
-	 * Sets the value of the Argument.
-	 * 
-	 * @param newValue
-	 *            the new value
-	 */
-	public void setValue(String newValue) {
-		setProperty(new StringProperty(VALUE, newValue));
-	}
+    /**
+     * Get the name of the Argument.
+     *
+     * @return the attribute's name
+     */
+    public String getName() {
+        return getPropertyAsString(ARG_NAME);
+    }
 
-	/**
-	 * Gets the value of the Argument object.
-	 * 
-	 * @return the attribute's value
-	 */
-	public String getValue() {
-		return getPropertyAsString(VALUE);
-	}
+    /**
+     * Sets the value of the Argument.
+     *
+     * @param newValue
+     *            the new value
+     */
+    public void setValue(String newValue) {
+        setProperty(new StringProperty(VALUE, newValue));
+    }
 
-	/**
-	 * Sets the opcode of the Argument.
-	 * 
-	 * @param newOpcode
-	 *            the new value
-	 */
-	public void setOpcode(String newOpcode) {
-		setProperty(new StringProperty(OPCODE, newOpcode));
-	}
+    /**
+     * Gets the value of the Argument object.
+     *
+     * @return the attribute's value
+     */
+    public String getValue() {
+        return getPropertyAsString(VALUE);
+    }
 
-	/**
-	 * Gets the opcode of the Argument object.
-	 * 
-	 * @return the attribute's value
-	 */
-	public String getOpcode() {
-		return getPropertyAsString(OPCODE);
-	}
+    /**
+     * Sets the opcode of the Argument.
+     *
+     * @param newOpcode
+     *            the new value
+     */
+    public void setOpcode(String newOpcode) {
+        setProperty(new StringProperty(OPCODE, newOpcode));
+    }
 
-	/**
-	 * Sets the Meta Data attribute of the Argument.
-	 * 
-	 * @param newMetaData
-	 *            the new metadata
-	 */
-	public void setMetaData(String newMetaData) {
-		setProperty(new StringProperty(METADATA, newMetaData));
-	}
+    /**
+     * Gets the opcode of the Argument object.
+     *
+     * @return the attribute's value
+     */
+    public String getOpcode() {
+        return getPropertyAsString(OPCODE);
+    }
 
-	/**
-	 * Gets the Meta Data attribute of the Argument.
-	 * 
-	 * @return the MetaData value
-	 */
-	public String getMetaData() {
-		return getPropertyAsString(METADATA);
-	}
+    /**
+     * Sets the Meta Data attribute of the Argument.
+     *
+     * @param newMetaData
+     *            the new metadata
+     */
+    public void setMetaData(String newMetaData) {
+        setProperty(new StringProperty(METADATA, newMetaData));
+    }
+
+    /**
+     * Gets the Meta Data attribute of the Argument.
+     *
+     * @return the MetaData value
+     */
+    public String getMetaData() {
+        return getPropertyAsString(METADATA);
+    }
 }

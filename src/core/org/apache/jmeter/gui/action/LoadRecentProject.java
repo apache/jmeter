@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.gui.action;
@@ -46,24 +46,24 @@ public class LoadRecentProject extends Load {
     }
 
     private static final Preferences prefs = Preferences.userNodeForPackage(LoadRecentProject.class);
-    
-	public LoadRecentProject() {
-		super();
-	}
+
+    public LoadRecentProject() {
+        super();
+    }
 
     public Set getActionNames() {
         return commands;
     }
 
-	public void doAction(ActionEvent e) {
+    public void doAction(ActionEvent e) {
         // We must ask the user if it is ok to close current project
-	    if (!Close.performAction(e)) {
-	        return;
-	    }
+        if (!Close.performAction(e)) {
+            return;
+        }
         // Load the file for this recent file command
-	    loadProjectFile(e, getRecentFile(e), false);
-	}
-    
+        loadProjectFile(e, getRecentFile(e), false);
+    }
+
     /**
      * Get the recent file for the menu item
      */
@@ -75,7 +75,7 @@ public class LoadRecentProject extends Load {
 
     /**
      * Get the menu items to add to the menu bar, to get recent file functionality
-     * 
+     *
      * @return a List of JMenuItem and a JSeparator, representing recent files
      */
     public static List getRecentFileMenuItems() {
@@ -92,7 +92,7 @@ public class LoadRecentProject extends Load {
             int shortKey = getShortcutKey(i);
             if(shortKey >= 0) {
                 recentFile.setMnemonic(shortKey);
-            }            
+            }
             // Add the menu item
             menuItems.add(recentFile);
         }
@@ -100,23 +100,23 @@ public class LoadRecentProject extends Load {
         JSeparator separator = new JSeparator();
         separator.setVisible(false);
         menuItems.add(separator);
-        
+
         // Update menu items to reflect recent files
         updateMenuItems(menuItems);
-        
+
         return menuItems;
     }
-    
+
     /**
      * Update the content and visibility of the menu items for recent files
-     * 
+     *
      * @param menuItems the JMenuItem and JSeparator to update
      * @param loadedFileName the file name of the project file that has just
-     * been loaded 
+     * been loaded
      */
     public static void updateRecentFileMenuItems(List menuItems, String loadedFileName) {
         // Get the preference for the recent files
-        
+
         LinkedList newRecentFiles = new LinkedList();
         // Check if the new file is already in the recent list
         boolean alreadyExists = false;
@@ -157,7 +157,7 @@ public class LoadRecentProject extends Load {
         for(int i = 0; i < NUMBER_OF_MENU_ITEMS; i++) {
             // Get the menu item
             JMenuItem recentFile = (JMenuItem)menuItems.get(i);
-            
+
             // Find and set the file for this recent file command
             String recentFilePath = getRecentFile(i);
             if(recentFilePath != null) {
@@ -196,7 +196,7 @@ public class LoadRecentProject extends Load {
         if(menuText.length() > maxLength) {
             menuText = "..." + menuText.substring(menuText.length() - maxLength, menuText.length()); //$NON-NLS-1$
         }
-        return menuText;        
+        return menuText;
     }
 
     /**
@@ -242,7 +242,7 @@ public class LoadRecentProject extends Load {
      * Get the full path to the recent file where index 0 is the most recent
      */
     public static String getRecentFile(int index) {
-        return prefs.get(USER_PREFS_KEY + index, null);        
+        return prefs.get(USER_PREFS_KEY + index, null);
     }
 
     /**

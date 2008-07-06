@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 package org.apache.jmeter.protocol.java.sampler;
 
@@ -45,8 +45,8 @@ import org.apache.log.Logger;
  */
 public class JUnitSampler extends AbstractSampler {
 
-	private static final long serialVersionUID = 232L; // Remember to change this when the class changes ...
-	
+    private static final long serialVersionUID = 232L; // Remember to change this when the class changes ...
+
     /**
      * Property key representing the classname of the JavaSamplerClient to
      * user.
@@ -64,7 +64,7 @@ public class JUnitSampler extends AbstractSampler {
     public static final String DOSETUP = "junitsampler.exec.setup";
     public static final String APPEND_ERROR = "junitsampler.append.error";
     public static final String APPEND_EXCEPTION = "junitsampler.append.exception";
-    
+
     public static final String SETUP = "setUp";
     public static final String TEARDOWN = "tearDown";
     public static final String RUNTEST = "run";
@@ -72,9 +72,9 @@ public class JUnitSampler extends AbstractSampler {
     protected transient Method SETUP_METHOD = null;
     protected transient Method TDOWN_METHOD = null;
     protected boolean checkStartUpTearDown = false;
-    
+
     protected transient TestCase TEST_INSTANCE = null;
-    
+
     /**
      * Logging
      */
@@ -82,29 +82,29 @@ public class JUnitSampler extends AbstractSampler {
 
     public JUnitSampler(){
     }
-    
+
     /**
      * Method tries to get the setUp and tearDown method for the class
      * @param tc
      */
     public void initMethodObjects(TestCase tc){
         if (!this.checkStartUpTearDown && !getDoNotSetUpTearDown()) {
-			if (SETUP_METHOD == null) {
-				SETUP_METHOD = getMethod(tc, SETUP);
-			}
-			if (TDOWN_METHOD == null) {
-				TDOWN_METHOD = getMethod(tc, TEARDOWN);
-			}
-			this.checkStartUpTearDown = true;
-		}
+            if (SETUP_METHOD == null) {
+                SETUP_METHOD = getMethod(tc, SETUP);
+            }
+            if (TDOWN_METHOD == null) {
+                TDOWN_METHOD = getMethod(tc, TEARDOWN);
+            }
+            this.checkStartUpTearDown = true;
+        }
     }
-    
+
     /**
-	 * Sets the Classname attribute of the JavaConfig object
-	 * 
-	 * @param classname
-	 *            the new Classname value
-	 */
+     * Sets the Classname attribute of the JavaConfig object
+     *
+     * @param classname
+     *            the new Classname value
+     */
     public void setClassname(String classname)
     {
         setProperty(CLASSNAME, classname);
@@ -119,7 +119,7 @@ public class JUnitSampler extends AbstractSampler {
     {
         return getPropertyAsString(CLASSNAME);
     }
-    
+
     /**
      * Set the string label used to create an instance of the
      * test with the string constructor.
@@ -129,7 +129,7 @@ public class JUnitSampler extends AbstractSampler {
     {
         setProperty(CONSTRUCTORSTRING,constr);
     }
-    
+
     /**
      * get the string passed to the string constructor
      */
@@ -137,7 +137,7 @@ public class JUnitSampler extends AbstractSampler {
     {
         return getPropertyAsString(CONSTRUCTORSTRING);
     }
-    
+
     /**
      * Return the name of the method to test
      */
@@ -153,14 +153,14 @@ public class JUnitSampler extends AbstractSampler {
     public void setMethod(String methodName){
         setProperty(METHOD,methodName);
     }
-    
+
     /**
      * get the success message
      */
     public String getSuccess(){
         return getPropertyAsString(SUCCESS);
     }
-    
+
     /**
      * set the success message
      * @param success
@@ -168,7 +168,7 @@ public class JUnitSampler extends AbstractSampler {
     public void setSuccess(String success){
         setProperty(SUCCESS,success);
     }
-    
+
     /**
      * get the success code defined by the user
      */
@@ -184,7 +184,7 @@ public class JUnitSampler extends AbstractSampler {
     public void setSuccessCode(String code){
         setProperty(SUCCESSCODE,code);
     }
-    
+
     /**
      * get the failure message
      */
@@ -199,14 +199,14 @@ public class JUnitSampler extends AbstractSampler {
     public void setFailure(String fail){
         setProperty(FAILURE,fail);
     }
-    
+
     /**
      * The failure code is used by other components
      */
     public String getFailureCode(){
         return getPropertyAsString(FAILURECODE);
     }
-    
+
     /**
      * Provide some unique code to denote a type of failure
      * @param code
@@ -221,7 +221,7 @@ public class JUnitSampler extends AbstractSampler {
     public String getError(){
         return getPropertyAsString(ERROR);
     }
-    
+
     /**
      * provide a descriptive error for the test method. For
      * a description of the difference between failure and
@@ -232,7 +232,7 @@ public class JUnitSampler extends AbstractSampler {
     public void setError(String error){
         setProperty(ERROR,error);
     }
-    
+
     /**
      * return the error code for the test method. it should
      * be an unique error code.
@@ -240,7 +240,7 @@ public class JUnitSampler extends AbstractSampler {
     public String getErrorCode(){
         return getPropertyAsString(ERRORCODE);
     }
-    
+
     /**
      * provide an unique error code for when the test
      * does not pass the assert test.
@@ -249,14 +249,14 @@ public class JUnitSampler extends AbstractSampler {
     public void setErrorCode(String code){
         setProperty(ERRORCODE,code);
     }
-    
+
     /**
      * return the comma separated string for the filter
      */
     public String getFilterString(){
         return getPropertyAsString(FILTER);
     }
-    
+
     /**
      * set the filter string in comman separated format
      * @param text
@@ -264,7 +264,7 @@ public class JUnitSampler extends AbstractSampler {
     public void setFilterString(String text){
         setProperty(FILTER,text);
     }
-    
+
     /**
      * if the sample shouldn't call setup/teardown, the
      * method returns true. It's meant for onetimesetup
@@ -291,7 +291,7 @@ public class JUnitSampler extends AbstractSampler {
     public boolean getAppendError() {
         return getPropertyAsBoolean(APPEND_ERROR,false);
     }
-    
+
     public void setAppendError(boolean error) {
         setProperty(APPEND_ERROR,String.valueOf(error));
     }
@@ -304,16 +304,16 @@ public class JUnitSampler extends AbstractSampler {
     public boolean getAppendException() {
         return getPropertyAsBoolean(APPEND_EXCEPTION,false);
     }
-    
+
     public void setAppendException(boolean exc) {
         setProperty(APPEND_EXCEPTION,String.valueOf(exc));
     }
-    
+
     /* (non-Javadoc)
-	 * @see org.apache.jmeter.samplers.Sampler#sample(org.apache.jmeter.samplers.Entry)
-	 */
-	public SampleResult sample(Entry entry) {
-		SampleResult sresult = new SampleResult();
+     * @see org.apache.jmeter.samplers.Sampler#sample(org.apache.jmeter.samplers.Entry)
+     */
+    public SampleResult sample(Entry entry) {
+        SampleResult sresult = new SampleResult();
         String rlabel = null;
         if (getConstructorString().length() > 0) {
             rlabel = getConstructorString();
@@ -321,7 +321,7 @@ public class JUnitSampler extends AbstractSampler {
             rlabel = JUnitSampler.class.getName();
         }
         sresult.setSampleLabel(getName());// Bug 41522 - don't use rlabel here
-        sresult.setSamplerData(getClassname() + "." + getMethod());   
+        sresult.setSamplerData(getClassname() + "." + getMethod());
         // check to see if the test class is null. if it is, we create
         // a new instance. this should only happen at the start of a
         // test run
@@ -334,18 +334,18 @@ public class JUnitSampler extends AbstractSampler {
             TestResult tr = new TestResult();
             this.TEST_INSTANCE.setName(getMethod());
             try {
-                
+
                 if (!getDoNotSetUpTearDown() && SETUP_METHOD != null){
                     try {
                         SETUP_METHOD.invoke(this.TEST_INSTANCE,new Class[0]);
                     } catch (InvocationTargetException e) {
-                        tr.addFailure(this.TEST_INSTANCE, 
+                        tr.addFailure(this.TEST_INSTANCE,
                                 new AssertionFailedError(e.getMessage()));
                     } catch (IllegalAccessException e) {
-                        tr.addFailure(this.TEST_INSTANCE, 
+                        tr.addFailure(this.TEST_INSTANCE,
                                 new AssertionFailedError(e.getMessage()));
                     } catch (IllegalArgumentException e) {
-                        tr.addFailure(this.TEST_INSTANCE, 
+                        tr.addFailure(this.TEST_INSTANCE,
                                 new AssertionFailedError(e.getMessage()));
                     }
                 }
@@ -365,7 +365,7 @@ public class JUnitSampler extends AbstractSampler {
                 tr.runProtected(theClazz, p);
                 tr.endTest(this.TEST_INSTANCE);
                 sresult.sampleEnd();
-                
+
                 if (!getDoNotSetUpTearDown() && TDOWN_METHOD != null){
                     TDOWN_METHOD.invoke(TEST_INSTANCE,new Class[0]);
                 }
@@ -438,8 +438,8 @@ public class JUnitSampler extends AbstractSampler {
         sresult.setContentType("text");
         sresult.setDataType("Not Applicable");
         sresult.setRequestHeaders("Not Applicable");
-		return sresult;
-	}
+        return sresult;
+    }
 
     /**
      * If the method is not able to create a new instance of the
@@ -456,7 +456,7 @@ public class JUnitSampler extends AbstractSampler {
             Object[] params = null;
             try
             {
-                theclazz = 
+                theclazz =
                     Thread.currentThread().getContextClassLoader().loadClass(className.trim());
             } catch (ClassNotFoundException e) {
                 log.warn("ClassNotFoundException:: " + e.getMessage());
@@ -510,9 +510,9 @@ public class JUnitSampler extends AbstractSampler {
         }
         return testclass;
     }
-    
+
     /**
-     * 
+     *
      * @param clazz
      * @param method
      * @return the method or null if an error occurred
@@ -529,7 +529,7 @@ public class JUnitSampler extends AbstractSampler {
         }
         return null;
     }
-    
+
     public Method getRunTestMethod(Object clazz){
         if (clazz != null){
             // log.info("class " + clazz.getClass().getName() +

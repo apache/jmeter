@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -33,73 +33,73 @@ import org.apache.jmeter.util.JMeterUtils;
  * store the value, as it is just as easy to refetch it. This is a
  * specialisation of the __property() function to make it simpler to use for
  * ThreadGroup GUI etc. The name is also shorter.
- * 
+ *
  * Parameters: - property name - default value (optional; defaults to "1")
- * 
+ *
  * Usage:
- * 
+ *
  * Define the property in jmeter.properties, or on the command-line: java ...
  * -Jpropname=value
- * 
+ *
  * Retrieve the value in the appropriate GUI by using the string:
  * ${__P(propname)} $(__P(propname,default)}
- * 
+ *
  * Returns: - the property value, but if not found - the default value, but if
  * not present - "1" (suitable for use in ThreadGroup GUI)
- * 
+ *
  */
 public class Property2 extends AbstractFunction implements Serializable {
 
-	private static final long serialVersionUID = 232L;
-	
-	private static final List desc = new LinkedList();
+    private static final long serialVersionUID = 232L;
 
-	private static final String KEY = "__P"; //$NON-NLS-1$
+    private static final List desc = new LinkedList();
 
-	// Number of parameters expected - used to reject invalid calls
-	private static final int MIN_PARAMETER_COUNT = 1;
+    private static final String KEY = "__P"; //$NON-NLS-1$
 
-	private static final int MAX_PARAMETER_COUNT = 2;
-	static {
-		desc.add(JMeterUtils.getResString("property_name_param")); //$NON-NLS-1$
-		desc.add(JMeterUtils.getResString("property_default_param")); //$NON-NLS-1$
-	}
+    // Number of parameters expected - used to reject invalid calls
+    private static final int MIN_PARAMETER_COUNT = 1;
 
-	private Object[] values;
+    private static final int MAX_PARAMETER_COUNT = 2;
+    static {
+        desc.add(JMeterUtils.getResString("property_name_param")); //$NON-NLS-1$
+        desc.add(JMeterUtils.getResString("property_default_param")); //$NON-NLS-1$
+    }
 
-	public Property2() {
-	}
+    private Object[] values;
 
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
+    public Property2() {
+    }
 
-	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
-			throws InvalidVariableException {
-		String propertyName = ((CompoundVariable) values[0]).execute();
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 
-		String propertyDefault = "1"; //$NON-NLS-1$
-		if (values.length > 1) { // We have a default
-			propertyDefault = ((CompoundVariable) values[1]).execute();
-		}
+    public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
+            throws InvalidVariableException {
+        String propertyName = ((CompoundVariable) values[0]).execute();
 
-		String propertyValue = JMeterUtils.getPropDefault(propertyName, propertyDefault);
+        String propertyDefault = "1"; //$NON-NLS-1$
+        if (values.length > 1) { // We have a default
+            propertyDefault = ((CompoundVariable) values[1]).execute();
+        }
 
-		return propertyValue;
+        String propertyValue = JMeterUtils.getPropDefault(propertyName, propertyDefault);
 
-	}
+        return propertyValue;
 
-	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
-		checkParameterCount(parameters, MIN_PARAMETER_COUNT, MAX_PARAMETER_COUNT);
-		values = parameters.toArray();
-	}
+    }
 
-	public String getReferenceKey() {
-		return KEY;
-	}
+    public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
+        checkParameterCount(parameters, MIN_PARAMETER_COUNT, MAX_PARAMETER_COUNT);
+        values = parameters.toArray();
+    }
 
-	public List getArgumentDesc() {
-		return desc;
-	}
+    public String getReferenceKey() {
+        return KEY;
+    }
+
+    public List getArgumentDesc() {
+        return desc;
+    }
 
 }

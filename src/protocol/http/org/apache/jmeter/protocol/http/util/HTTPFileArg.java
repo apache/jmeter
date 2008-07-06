@@ -1,12 +1,12 @@
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.	See the NOTICE file distributed with
+ * contributor license agreements. See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
- * the License.	 You may obtain a copy of the License at
+ * the License. You may obtain a copy of the License at
  *
- *	 http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,112 +26,112 @@ import org.apache.jmeter.testelement.property.StringProperty;
 /**
  * Class representing a file parameter for http upload.
  * Consists of a http parameter name/file path pair with (optional) mimetype.
- * 
+ *
  * Also provides temporary storage for the headers which are sent with files.
  *
  */
 public class HTTPFileArg extends AbstractTestElement implements Serializable {
 
-	/** Name used to store the file's path. */
+    /** Name used to store the file's path. */
     private static final String FILEPATH = "File.path";
 
-	/** Name used to store the file's paramname. */
-	private static final String PARAMNAME = "File.paramname";
+    /** Name used to store the file's paramname. */
+    private static final String PARAMNAME = "File.paramname";
 
-	/** Name used to store the file's mimetype. */
-	private static final String MIMETYPE = "File.mimetype";
+    /** Name used to store the file's mimetype. */
+    private static final String MIMETYPE = "File.mimetype";
 
-	/** temporary storage for header. */
-	private String header;   
+    /** temporary storage for header. */
+    private String header;
 
     /**
-	 * Constructor for an empty HTTPFileArg object
-	 */
-	public HTTPFileArg() {
-	}
+     * Constructor for an empty HTTPFileArg object
+     */
+    public HTTPFileArg() {
+    }
 
-	/**
-	 * Constructor for the HTTPFileArg object with given path.
-	 */
-	public HTTPFileArg(String path) {
-		this(path, "", "");
-	}
+    /**
+     * Constructor for the HTTPFileArg object with given path.
+     */
+    public HTTPFileArg(String path) {
+        this(path, "", "");
+    }
 
-	/**
-	 * Constructor for the HTTPFileArg object with full information.
-	 */
-	public HTTPFileArg(String path, String paramname, String mimetype) {
-	    if (path == null || paramname == null || mimetype == null){
-	        throw new IllegalArgumentException("Parameters must not be null");
-	    }
-		setPath(path);
-		setParamName(paramname);
-		setMimeType(mimetype);
-	}
+    /**
+     * Constructor for the HTTPFileArg object with full information.
+     */
+    public HTTPFileArg(String path, String paramname, String mimetype) {
+        if (path == null || paramname == null || mimetype == null){
+            throw new IllegalArgumentException("Parameters must not be null");
+        }
+        setPath(path);
+        setParamName(paramname);
+        setMimeType(mimetype);
+    }
 
-	/**
-	 * Copy Constructor.
-	 */
-	public HTTPFileArg(HTTPFileArg file) {
-		this(file.getPath(), file.getParamName(), file.getMimeType());
-	}
+    /**
+     * Copy Constructor.
+     */
+    public HTTPFileArg(HTTPFileArg file) {
+        this(file.getPath(), file.getParamName(), file.getMimeType());
+    }
 
-	/**
-	 * Set the http parameter name of the File.
-	 *
-	 * @param newParamName
-	 *	the new http parameter name
-	 */
-	public void setParamName(String newParamName) {
-		setProperty(new StringProperty(PARAMNAME, newParamName));
-	}
+    /**
+     * Set the http parameter name of the File.
+     *
+     * @param newParamName
+     * the new http parameter name
+     */
+    public void setParamName(String newParamName) {
+        setProperty(new StringProperty(PARAMNAME, newParamName));
+    }
 
-	/**
-	 * Get the http parameter name of the File.
-	 *
-	 * @return the http parameter name
-	 */
-	public String getParamName() {
-		return getPropertyAsString(PARAMNAME);
-	}
+    /**
+     * Get the http parameter name of the File.
+     *
+     * @return the http parameter name
+     */
+    public String getParamName() {
+        return getPropertyAsString(PARAMNAME);
+    }
 
-	/**
-	 * Set the mimetype of the File.
-	 *
-	 * @param newMimeType
-	 *	the new mimetype
-	 */
-	public void setMimeType(String newMimeType) {
-		setProperty(new StringProperty(MIMETYPE, newMimeType));
-	}
+    /**
+     * Set the mimetype of the File.
+     *
+     * @param newMimeType
+     * the new mimetype
+     */
+    public void setMimeType(String newMimeType) {
+        setProperty(new StringProperty(MIMETYPE, newMimeType));
+    }
 
-	/**
-	 * Get the mimetype of the File.
-	 *
-	 * @return the http parameter mimetype
-	 */
-	public String getMimeType() {
-		return getPropertyAsString(MIMETYPE);
-	}
+    /**
+     * Get the mimetype of the File.
+     *
+     * @return the http parameter mimetype
+     */
+    public String getMimeType() {
+        return getPropertyAsString(MIMETYPE);
+    }
 
-	/**
-	 * Set the path of the File.
-	 *
-	 * @param newPath
-	 *	the new path
-	 */
-	public void setPath(String newPath) {
-		setProperty(new StringProperty(FILEPATH, newPath));
-	}
+    /**
+     * Set the path of the File.
+     *
+     * @param newPath
+     *  the new path
+     */
+    public void setPath(String newPath) {
+        setProperty(new StringProperty(FILEPATH, newPath));
+    }
 
-	/**
-	 * Get the path of the File.
-	 *
-	 * @return the file's path
-	 */
-	public String getPath() {
-		return getPropertyAsString(FILEPATH);
-	}
+    /**
+     * Get the path of the File.
+     *
+     * @return the file's path
+     */
+    public String getPath() {
+        return getPropertyAsString(FILEPATH);
+    }
 
    /**
     * Sets the http headers for the HTTPFileArg object. Header
@@ -151,23 +151,23 @@ public class HTTPFileArg extends AbstractTestElement implements Serializable {
        return header;
    }
 
-	/**
-	 * returns path, param name, mime type information of
-	 * HTTPFileArg object.
-	 *
-	 * @return the string demonstration of HTTPFileArg object in this
-	 * format:
-	 *    "path:'<PATH>'|param:'<PARAM NAME>'|mimetype:'<MIME TYPE>'"
-	 */
-	public String toString() {
-		return "path:'" + getPath()
-			+ "'|param:'" + getParamName()
-			+ "'|mimetype:'" + getMimeType() + "'";
-	}
+    /**
+     * returns path, param name, mime type information of
+     * HTTPFileArg object.
+     *
+     * @return the string demonstration of HTTPFileArg object in this
+     * format:
+     *    "path:'<PATH>'|param:'<PARAM NAME>'|mimetype:'<MIME TYPE>'"
+     */
+    public String toString() {
+        return "path:'" + getPath()
+            + "'|param:'" + getParamName()
+            + "'|mimetype:'" + getMimeType() + "'";
+    }
 
     public boolean isNotEmpty() {
-        return getPath().length() > 0 
-            || getParamName().length() > 0 
+        return getPath().length() > 0
+            || getParamName().length() > 0
             || getMimeType().length() > 0; // TODO should we allow mimetype only?
     }
 

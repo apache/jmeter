@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.parser;
@@ -24,61 +24,61 @@ import java.net.URL;
  * Helper class to allow URLs to be stored in Collections without incurring the
  * cost of the hostname lookup performed by the URL methods equals() and
  * hashCode() URL is a final class, so cannot be extended ...
- * 
- * @version $Revision$ $Date$
+ *
+ * @version $Revision$
  */
 public class URLString implements Comparable // To allow use in Sorted
-												// Collections
+                                                // Collections
 {
 
-	private URL url;
+    private URL url;
 
-	private String urlAsString;
+    private String urlAsString;
 
-	private int hashCode;
+    private int hashCode;
 
-	private URLString()// not instantiable
-	{
-	}
+    private URLString()// not instantiable
+    {
+    }
 
-	public URLString(URL u) {
-		url = u;
-		urlAsString = u.toExternalForm();
-		/*
-		 * TODO improve string version to better match browser behaviour? e.g.
-		 * do browsers regard http://host/ and http://Host:80/ as the same? If
-		 * so, it would be better to reflect this in the string
-		 */
+    public URLString(URL u) {
+        url = u;
+        urlAsString = u.toExternalForm();
+        /*
+         * TODO improve string version to better match browser behaviour? e.g.
+         * do browsers regard http://host/ and http://Host:80/ as the same? If
+         * so, it would be better to reflect this in the string
+         */
 
-		hashCode = urlAsString.hashCode();
-	}
+        hashCode = urlAsString.hashCode();
+    }
 
-	/*
-	 * Parsers can return the URL as a string if it does not parse properly
-	 */
-	public URLString(String s) {
-		url = null;
-		urlAsString = s;
-		hashCode = urlAsString.hashCode();
-	}
+    /*
+     * Parsers can return the URL as a string if it does not parse properly
+     */
+    public URLString(String s) {
+        url = null;
+        urlAsString = s;
+        hashCode = urlAsString.hashCode();
+    }
 
-	public String toString() {
-		return urlAsString;
-	}
+    public String toString() {
+        return urlAsString;
+    }
 
-	public URL getURL() {
-		return url;
-	}
+    public URL getURL() {
+        return url;
+    }
 
-	public int compareTo(Object o) {
-		return urlAsString.compareTo(o.toString());
-	}
+    public int compareTo(Object o) {
+        return urlAsString.compareTo(o.toString());
+    }
 
-	public boolean equals(Object o) {
-		return (o instanceof URLString && urlAsString.equals(o.toString()));
-	}
+    public boolean equals(Object o) {
+        return (o instanceof URLString && urlAsString.equals(o.toString()));
+    }
 
-	public int hashCode() {
-		return hashCode;
-	}
+    public int hashCode() {
+        return hashCode;
+    }
 }
