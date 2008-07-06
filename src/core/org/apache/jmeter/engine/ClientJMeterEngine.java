@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.engine;
@@ -35,125 +35,125 @@ import org.apache.log.Logger;
  * Class to run remote tests from the client JMeter and collect remote samples
  */
 public class ClientJMeterEngine implements JMeterEngine, Runnable {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	RemoteJMeterEngine remote;
+    RemoteJMeterEngine remote;
 
-	HashTree test;
+    HashTree test;
 
-	SearchByClass testListeners;
+    SearchByClass testListeners;
 
-	ConvertListeners sampleListeners;
+    ConvertListeners sampleListeners;
 
-	private String host;
+    private String host;
 
-	private static RemoteJMeterEngine getEngine(String h) throws MalformedURLException, RemoteException,
-			NotBoundException {
-		return (RemoteJMeterEngine) Naming.lookup("//" + h + "/JMeterEngine"); // $NON-NLS-1$ $NON-NLS-2$
-	}
+    private static RemoteJMeterEngine getEngine(String h) throws MalformedURLException, RemoteException,
+            NotBoundException {
+        return (RemoteJMeterEngine) Naming.lookup("//" + h + "/JMeterEngine"); // $NON-NLS-1$ $NON-NLS-2$
+    }
 
-	public ClientJMeterEngine(String host) throws MalformedURLException, NotBoundException, RemoteException {
-		this(getEngine(host));
-		this.host = host;
-	}
+    public ClientJMeterEngine(String host) throws MalformedURLException, NotBoundException, RemoteException {
+        this(getEngine(host));
+        this.host = host;
+    }
 
-	public ClientJMeterEngine(RemoteJMeterEngine remote) {
-		this.remote = remote;
-	}
+    public ClientJMeterEngine(RemoteJMeterEngine remote) {
+        this.remote = remote;
+    }
 
-	protected HashTree getTestTree() {
-		return test;
-	}
+    protected HashTree getTestTree() {
+        return test;
+    }
 
-	public void configure(HashTree testTree) {
+    public void configure(HashTree testTree) {
         TreeCloner cloner = new TreeCloner(false);
         testTree.traverse(cloner);
-		test = cloner.getClonedTree();
-	}
+        test = cloner.getClonedTree();
+    }
 
-	public void setHost(String host) {
-		this.host = host;
-	}
+    public void setHost(String host) {
+        this.host = host;
+    }
 
-	public void runTest() {
-		log.info("about to run remote test");
-		new Thread(this).start();
-		log.info("done initiating run command");
-	}
+    public void runTest() {
+        log.info("about to run remote test");
+        new Thread(this).start();
+        log.info("done initiating run command");
+    }
 
-	public void stopTest() {
-		log.info("about to stop remote test on "+host);
-		try {
-			remote.stopTest();
-		} catch (Exception ex) {
-			log.error("", ex); // $NON-NLS-1$
-		}
-	}
+    public void stopTest() {
+        log.info("about to stop remote test on "+host);
+        try {
+            remote.stopTest();
+        } catch (Exception ex) {
+            log.error("", ex); // $NON-NLS-1$
+        }
+    }
 
-	public void reset() {
-		try {
-			try {
-				remote.reset();
-			} catch (java.rmi.ConnectException e) {
-				remote = getEngine(host);
-				remote.reset();
-			}
-		} catch (Exception ex) {
-			log.error("", ex); // $NON-NLS-1$
-		}
-	}
+    public void reset() {
+        try {
+            try {
+                remote.reset();
+            } catch (java.rmi.ConnectException e) {
+                remote = getEngine(host);
+                remote.reset();
+            }
+        } catch (Exception ex) {
+            log.error("", ex); // $NON-NLS-1$
+        }
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Runnable#run()
-	 */
-	public void run() {
-		log.info("running clientengine run method");
-		testListeners = new SearchByClass(TestListener.class);
-		sampleListeners = new ConvertListeners();
-		HashTree testTree = getTestTree();
-		PreCompiler compiler = new PreCompiler(true); // limit the changes to client only test elements
-		synchronized(testTree) {
-			testTree.traverse(compiler);
-			testTree.traverse(new TurnElementsOn());
-			testTree.traverse(testListeners);
-			testTree.traverse(sampleListeners);
-		}
-		
-		try {
-			JMeterContextService.startTest();
-			remote.setHost(host);
-			log.info("sent host =" + host);
-			remote.configure(test);
-			log.info("sent test");
-			remote.runTest();
-			log.info("sent run command");
-		} catch (Exception ex) {
-			log.error("", ex); // $NON-NLS-1$
-		}
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.lang.Runnable#run()
+     */
+    public void run() {
+        log.info("running clientengine run method");
+        testListeners = new SearchByClass(TestListener.class);
+        sampleListeners = new ConvertListeners();
+        HashTree testTree = getTestTree();
+        PreCompiler compiler = new PreCompiler(true); // limit the changes to client only test elements
+        synchronized(testTree) {
+            testTree.traverse(compiler);
+            testTree.traverse(new TurnElementsOn());
+            testTree.traverse(testListeners);
+            testTree.traverse(sampleListeners);
+        }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.engine.JMeterEngine#exit()
-	 */
-	public void exit() {
-		log.info("about to exit remote server on "+host);
-		try {
-			remote.exit();
-		} catch (RemoteException e) {
-			log.warn("Could not perform remote exit: " + e.toString());
-		}
-	}
+        try {
+            JMeterContextService.startTest();
+            remote.setHost(host);
+            log.info("sent host =" + host);
+            remote.configure(test);
+            log.info("sent test");
+            remote.runTest();
+            log.info("sent run command");
+        } catch (Exception ex) {
+            log.error("", ex); // $NON-NLS-1$
+        }
+    }
 
-	public void setProperties(Properties p) {
-		log.info("Sending properties "+p);
-		try {
-			remote.setProperties(p);
-		} catch (RemoteException e) {
-			log.warn("Could not set properties: " + e.toString());
-		}
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.engine.JMeterEngine#exit()
+     */
+    public void exit() {
+        log.info("about to exit remote server on "+host);
+        try {
+            remote.exit();
+        } catch (RemoteException e) {
+            log.warn("Could not perform remote exit: " + e.toString());
+        }
+    }
+
+    public void setProperties(Properties p) {
+        log.info("Sending properties "+p);
+        try {
+            remote.setProperties(p);
+        } catch (RemoteException e) {
+            log.warn("Could not set properties: " + e.toString());
+        }
+    }
 }

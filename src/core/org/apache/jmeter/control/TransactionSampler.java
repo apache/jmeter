@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 /*
@@ -30,52 +30,52 @@ import org.apache.jmeter.samplers.Sampler;
 
 /**
  * Transaction Controller to measure transaction times
- * 
+ *
  */
 public class TransactionSampler extends AbstractSampler {
   private boolean transactionDone = false;
 
-    private TransactionController transactionController; 
-    
-	private Sampler subSampler;
+    private TransactionController transactionController;
 
-	private SampleResult transactionSampleResult;
+    private Sampler subSampler;
 
-	private int calls = 0;
+    private SampleResult transactionSampleResult;
 
-	private int noFailingSamples = 0;
+    private int calls = 0;
 
-	public TransactionSampler(){
-		//log.warn("Constructor only intended for use in testing");
-	}
+    private int noFailingSamples = 0;
 
-	public TransactionSampler(TransactionController controller, String name) {
+    public TransactionSampler(){
+        //log.warn("Constructor only intended for use in testing");
+    }
+
+    public TransactionSampler(TransactionController controller, String name) {
         transactionController = controller;
-		setName(name); // ensure name is available for debugging
-		transactionSampleResult = new SampleResult();
-		transactionSampleResult.setSampleLabel(name);
-		// Assume success
-		transactionSampleResult.setSuccessful(true);
-		transactionSampleResult.sampleStart();
-	}
+        setName(name); // ensure name is available for debugging
+        transactionSampleResult = new SampleResult();
+        transactionSampleResult.setSampleLabel(name);
+        // Assume success
+        transactionSampleResult.setSuccessful(true);
+        transactionSampleResult.sampleStart();
+    }
 
     /**
      * One cannot sample the TransactionSample directly.
      */
-	public SampleResult sample(Entry e) {
+    public SampleResult sample(Entry e) {
         // It is the JMeterThread which knows how to sample a
         // real sampler
         return null;
-	}
-    
+    }
+
     public Sampler getSubSampler() {
         return subSampler;
     }
-    
+
     public SampleResult getTransactionResult() {
         return transactionSampleResult;
     }
-    
+
     public TransactionController getTransactionController() {
         return transactionController;
     }
@@ -83,7 +83,7 @@ public class TransactionSampler extends AbstractSampler {
     public boolean isTransactionDone() {
         return transactionDone;
     }
-    
+
     public void addSubSamplerResult(SampleResult res) {
         // Another subsample for the transaction
         calls++;
@@ -96,19 +96,19 @@ public class TransactionSampler extends AbstractSampler {
         transactionSampleResult.addSubResult(res);
     }
 
-	protected void setTransactionDone() {
-		this.transactionDone = true;
-		// Set the overall status for the transaction sample
-		// TODO: improve, e.g. by adding counts to the SampleResult class
-		transactionSampleResult.setResponseMessage("Number of samples in transaction : "
-						+ calls + ", number of failing samples : "
-						+ noFailingSamples);
-		if (transactionSampleResult.isSuccessful()) {
-			transactionSampleResult.setResponseCodeOK();
-		}
-	}
+    protected void setTransactionDone() {
+        this.transactionDone = true;
+        // Set the overall status for the transaction sample
+        // TODO: improve, e.g. by adding counts to the SampleResult class
+        transactionSampleResult.setResponseMessage("Number of samples in transaction : "
+                        + calls + ", number of failing samples : "
+                        + noFailingSamples);
+        if (transactionSampleResult.isSuccessful()) {
+            transactionSampleResult.setResponseCodeOK();
+        }
+    }
 
-	protected void setSubSampler(Sampler subSampler) {
-		this.subSampler = subSampler;
-	}
+    protected void setSubSampler(Sampler subSampler) {
+        this.subSampler = subSampler;
+    }
 }

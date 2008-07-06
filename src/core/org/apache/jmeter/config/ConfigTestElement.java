@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.config;
@@ -28,34 +28,34 @@ import org.apache.jmeter.testelement.TestElement;
  * @version $Revision$
  */
 public class ConfigTestElement extends AbstractTestElement implements Serializable, ConfigElement {
-	public final static String USERNAME = "ConfigTestElement.username";
+    public final static String USERNAME = "ConfigTestElement.username";
 
-	public final static String PASSWORD = "ConfigTestElement.password";
+    public final static String PASSWORD = "ConfigTestElement.password";
 
-	public ConfigTestElement() {
-	}
+    public ConfigTestElement() {
+    }
 
-	public void addTestElement(TestElement parm1) {
-		if (parm1 instanceof ConfigTestElement) {
-			mergeIn(parm1);
-		}
-	}
+    public void addTestElement(TestElement parm1) {
+        if (parm1 instanceof ConfigTestElement) {
+            mergeIn(parm1);
+        }
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.config.ConfigElement#addConfigElement(org.apache.jmeter.config.ConfigElement)
-	 */
-	public void addConfigElement(ConfigElement config) {
-		mergeIn((TestElement) config);
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.config.ConfigElement#addConfigElement(org.apache.jmeter.config.ConfigElement)
+     */
+    public void addConfigElement(ConfigElement config) {
+        mergeIn((TestElement) config);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.config.ConfigElement#expectsModification()
-	 */
-	public boolean expectsModification() {
-		return false;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.config.ConfigElement#expectsModification()
+     */
+    public boolean expectsModification() {
+        return false;
+    }
 }
