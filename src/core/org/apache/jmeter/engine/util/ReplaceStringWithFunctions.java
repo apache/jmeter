@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 /*
@@ -28,25 +28,25 @@ import org.apache.jmeter.testelement.property.FunctionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 
 public class ReplaceStringWithFunctions extends AbstractTransformer {
-	public ReplaceStringWithFunctions(CompoundVariable masterFunction, Map variables) {
-		super();
-		setMasterFunction(masterFunction);
-		setVariables(variables);
-	}
+    public ReplaceStringWithFunctions(CompoundVariable masterFunction, Map variables) {
+        super();
+        setMasterFunction(masterFunction);
+        setVariables(variables);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ValueTransformer#transformValue(JMeterProperty)
-	 */
-	public JMeterProperty transformValue(JMeterProperty prop) throws InvalidVariableException {
-		JMeterProperty newValue = prop;
-		getMasterFunction().clear();
-		getMasterFunction().setParameters(prop.getStringValue());
-		if (getMasterFunction().hasFunction()) {
-			newValue = new FunctionProperty(prop.getName(), getMasterFunction().getFunction());
-		}
-		return newValue;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see ValueTransformer#transformValue(JMeterProperty)
+     */
+    public JMeterProperty transformValue(JMeterProperty prop) throws InvalidVariableException {
+        JMeterProperty newValue = prop;
+        getMasterFunction().clear();
+        getMasterFunction().setParameters(prop.getStringValue());
+        if (getMasterFunction().hasFunction()) {
+            newValue = new FunctionProperty(prop.getName(), getMasterFunction().getFunction());
+        }
+        return newValue;
+    }
 
 }

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 package org.apache.jmeter;
 
@@ -22,30 +22,28 @@ import java.net.URLClassLoader;
 import java.net.URLStreamHandlerFactory;
 
 /**
- * @author pete
- *
  * This is a basic URL classloader for loading new resources
  * dynamically.
- * 
+ *
  * It allows public access to the addURL() method.
- * 
+ *
  * It also adds a convenience method to update the current thread classloader
  *
  */
 public class DynamicClassLoader extends URLClassLoader {
 
-	public DynamicClassLoader(URL[] urls) {
-		super(urls);
-	}
+    public DynamicClassLoader(URL[] urls) {
+        super(urls);
+    }
 
-	public DynamicClassLoader(URL[] urls, ClassLoader parent) {
-		super(urls, parent);
-	}
+    public DynamicClassLoader(URL[] urls, ClassLoader parent) {
+        super(urls, parent);
+    }
 
-	public DynamicClassLoader(URL[] urls, ClassLoader parent,
-			URLStreamHandlerFactory factory) {
-		super(urls, parent, factory);
-	}
+    public DynamicClassLoader(URL[] urls, ClassLoader parent,
+            URLStreamHandlerFactory factory) {
+        super(urls, parent, factory);
+    }
 
     // Make the addURL method visible
     public void addURL(URL url) {
@@ -53,11 +51,11 @@ public class DynamicClassLoader extends URLClassLoader {
     }
 
     /**
-     * 
+     *
      * @param urls - list of URLs to add to the thread's classloader
      */
     public static void updateLoader(URL [] urls) {
-        DynamicClassLoader loader 
+        DynamicClassLoader loader
             = (DynamicClassLoader) Thread.currentThread().getContextClassLoader();
         for(int i=0;i<urls.length;i++) {
             loader.addURL(urls[i]);

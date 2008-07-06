@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.control;
@@ -31,72 +31,72 @@ import org.apache.jmeter.testelement.property.StringProperty;
  */
 public class LoopController extends GenericController implements Serializable {
 
-	private final static String LOOPS = "LoopController.loops"; // $NON-NLS-1$
-	
-	private static final long serialVersionUID = 232L;
+    private final static String LOOPS = "LoopController.loops"; // $NON-NLS-1$
 
-	/*
-	 * In spite of the name, this is actually used to determine if the loop controller is repeatable.
-	 * 
-	 * The value is only used in nextIsNull() when the loop end condition has been detected:
-	 * If forever==true, then it calls resetLoopCount(), otherwise it calls setDone(true).
-	 * 
-	 * Loop Controllers always set forever=true, so that they will be executed next time
-	 * the parent invokes them.
-	 * 
-	 * Thread Group sets the value false, so nextIsNull() sets done, and the Thread Group will not be repeated.
-	 * However, it's not clear that a Thread Group could ever be repeated.  
-	 */
-	private final static String CONTINUE_FOREVER = "LoopController.continue_forever"; // $NON-NLS-1$
+    private static final long serialVersionUID = 232L;
 
-	private transient int loopCount = 0;
+    /*
+     * In spite of the name, this is actually used to determine if the loop controller is repeatable.
+     *
+     * The value is only used in nextIsNull() when the loop end condition has been detected:
+     * If forever==true, then it calls resetLoopCount(), otherwise it calls setDone(true).
+     *
+     * Loop Controllers always set forever=true, so that they will be executed next time
+     * the parent invokes them.
+     *
+     * Thread Group sets the value false, so nextIsNull() sets done, and the Thread Group will not be repeated.
+     * However, it's not clear that a Thread Group could ever be repeated.
+     */
+    private final static String CONTINUE_FOREVER = "LoopController.continue_forever"; // $NON-NLS-1$
 
-	public LoopController() {
-		setContinueForever_private(true);
-	}
+    private transient int loopCount = 0;
 
-	public void setLoops(int loops) {
-		setProperty(new IntegerProperty(LOOPS, loops));
-	}
+    public LoopController() {
+        setContinueForever_private(true);
+    }
 
-	public void setLoops(String loopValue) {
-		setProperty(new StringProperty(LOOPS, loopValue));
-	}
+    public void setLoops(int loops) {
+        setProperty(new IntegerProperty(LOOPS, loops));
+    }
 
-	public int getLoops() {
-		try {
-			JMeterProperty prop = getProperty(LOOPS);
-			return Integer.parseInt(prop.getStringValue());
-		} catch (NumberFormatException e) {
-			return 0;
-		}
-	}
+    public void setLoops(String loopValue) {
+        setProperty(new StringProperty(LOOPS, loopValue));
+    }
 
-	public String getLoopString() {
-		return getPropertyAsString(LOOPS);
-	}
+    public int getLoops() {
+        try {
+            JMeterProperty prop = getProperty(LOOPS);
+            return Integer.parseInt(prop.getStringValue());
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
 
-	/**
-	 * Determines whether the loop will return any samples if it is rerun.
-	 * 
-	 * @param forever
-	 *            true if the loop must be reset after ending a run
-	 */
-	public void setContinueForever(boolean forever) {
-		setContinueForever_private(forever);
-	}
+    public String getLoopString() {
+        return getPropertyAsString(LOOPS);
+    }
 
-	private void setContinueForever_private(boolean forever) {
-		setProperty(new BooleanProperty(CONTINUE_FOREVER, forever));
-	}
+    /**
+     * Determines whether the loop will return any samples if it is rerun.
+     *
+     * @param forever
+     *            true if the loop must be reset after ending a run
+     */
+    public void setContinueForever(boolean forever) {
+        setContinueForever_private(forever);
+    }
 
-	private boolean getContinueForever() {
-		return getPropertyAsBoolean(CONTINUE_FOREVER);
-	}
+    private void setContinueForever_private(boolean forever) {
+        setProperty(new BooleanProperty(CONTINUE_FOREVER, forever));
+    }
+
+    private boolean getContinueForever() {
+        return getPropertyAsBoolean(CONTINUE_FOREVER);
+    }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.jmeter.control.Controller#next()
      */
     public Sampler next() {
@@ -106,55 +106,55 @@ public class LoopController extends GenericController implements Serializable {
         return super.next();
     }
 
-	private boolean endOfLoop() {
-		final int loops = getLoops();
-		return (loops > -1) && (loopCount >= loops);
-	}
+    private boolean endOfLoop() {
+        final int loops = getLoops();
+        return (loops > -1) && (loopCount >= loops);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.control.GenericController#nextIsNull()
-	 */
-	protected Sampler nextIsNull() throws NextIsNullException {
-		reInitialize();
-		if (endOfLoop()) {
-			if (!getContinueForever()) {
-				setDone(true);
-			} else {
-				resetLoopCount();
-			}
-			return null;
-		}
-		return next();
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.control.GenericController#nextIsNull()
+     */
+    protected Sampler nextIsNull() throws NextIsNullException {
+        reInitialize();
+        if (endOfLoop()) {
+            if (!getContinueForever()) {
+                setDone(true);
+            } else {
+                resetLoopCount();
+            }
+            return null;
+        }
+        return next();
+    }
 
-	protected void incrementLoopCount() {
-		loopCount++;
-	}
+    protected void incrementLoopCount() {
+        loopCount++;
+    }
 
-	protected void resetLoopCount() {
-		loopCount = 0;
-	}
+    protected void resetLoopCount() {
+        loopCount = 0;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.control.GenericController#getIterCount()
-	 */
-	protected int getIterCount() {
-		return loopCount + 1;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.control.GenericController#getIterCount()
+     */
+    protected int getIterCount() {
+        return loopCount + 1;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.control.GenericController#reInitialize()
-	 */
-	protected void reInitialize() {
-		setFirst(true);
-		resetCurrent();
-		incrementLoopCount();
-		recoverRunningVersion();
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.apache.jmeter.control.GenericController#reInitialize()
+     */
+    protected void reInitialize() {
+        setFirst(true);
+        resetCurrent();
+        incrementLoopCount();
+        recoverRunningVersion();
+    }
 }

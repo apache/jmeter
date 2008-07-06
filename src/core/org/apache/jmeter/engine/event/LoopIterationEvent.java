@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.engine.event;
@@ -25,31 +25,31 @@ import org.apache.jmeter.testelement.TestElement;
  * source of the event.
  */
 public class LoopIterationEvent {
-	private final int iteration;
+    private final int iteration;
 
-	private final TestElement source;
+    private final TestElement source;
 
-	public LoopIterationEvent(TestElement source, int iter) {
-		iteration = iter;
-		this.source = source;
-	}
+    public LoopIterationEvent(TestElement source, int iter) {
+        iteration = iter;
+        this.source = source;
+    }
 
-	/**
-	 * Returns the iteration.
-	 * 
-	 * @return int
-	 */
-	public int getIteration() {
-		return iteration;
-	}
+    /**
+     * Returns the iteration.
+     *
+     * @return int
+     */
+    public int getIteration() {
+        return iteration;
+    }
 
-	/**
-	 * Returns the source.
-	 * 
-	 * @return TestElement
-	 */
-	public TestElement getSource() {
-		return source;
-	}
+    /**
+     * Returns the source.
+     *
+     * @return TestElement
+     */
+    public TestElement getSource() {
+        return source;
+    }
 
 }

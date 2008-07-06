@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.exceptions;
@@ -21,14 +21,14 @@ package org.apache.jmeter.exceptions;
 /**
  */
 public class IllegalUserActionException extends Exception {
-	/**
-	 * @deprecated - use IllegalUserActionException(String)
-	 */
-	public IllegalUserActionException() {
-		super();
-	}
+    /**
+     * @deprecated - use IllegalUserActionException(String)
+     */
+    public IllegalUserActionException() {
+        super();
+    }
 
-	public IllegalUserActionException(String name) {
-		super(name);
-	}
+    public IllegalUserActionException(String name) {
+        super(name);
+    }
 }

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.engine;
@@ -23,17 +23,17 @@ import java.util.Properties;
 import org.apache.jorphan.collections.HashTree;
 
 public interface JMeterEngine {
-	void configure(HashTree testPlan);
+    void configure(HashTree testPlan);
 
-	void runTest() throws JMeterEngineException;
+    void runTest() throws JMeterEngineException;
 
-	void stopTest();
+    void stopTest();
 
-	void reset();
+    void reset();
 
-	void setHost(String host);
-	
-	void setProperties(Properties p);
+    void setHost(String host);
 
-	void exit();
+    void setProperties(Properties p);
+
+    void exit();
 }

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.control;
@@ -23,22 +23,22 @@ import org.apache.jorphan.collections.HashTree;
 /**
  * This interface represents a controller that gets replaced during the
  * compilation phase of test execution in an arbitrary way.
- * 
+ *
  */
 public interface ReplaceableController {
 
-	/**
-	 * Used to replace the test execution tree (usually by adding the
-	 * subelements of the TestElement that is replacing the
-	 * ReplaceableController.
-	 * 
-	 * @see org.apache.jorphan.collections.HashTree
-	 */
-	public HashTree getReplacementSubTree();
+    /**
+     * Used to replace the test execution tree (usually by adding the
+     * subelements of the TestElement that is replacing the
+     * ReplaceableController.
+     *
+     * @see org.apache.jorphan.collections.HashTree
+     */
+    public HashTree getReplacementSubTree();
 
-	/**
+    /**
      * Compute the replacement tree.
-     * 
+     *
      * @param context
      */
     public void resolveReplacementSubTree(Object context);

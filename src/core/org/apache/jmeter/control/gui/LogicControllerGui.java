@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.control.gui;
@@ -25,38 +25,38 @@ import org.apache.jmeter.testelement.TestElement;
 
 /**
  * A generic controller component.
- * 
+ *
  */
 public class LogicControllerGui extends AbstractControllerGui {
-	/**
-	 * Create a new LogicControllerGui instance.
-	 */
-	public LogicControllerGui() {
-		init();
-	}
+    /**
+     * Create a new LogicControllerGui instance.
+     */
+    public LogicControllerGui() {
+        init();
+    }
 
-	/* Implements JMeterGUIComponent.createTestElement() */
-	public TestElement createTestElement() {
-		GenericController lc = new GenericController();
-		configureTestElement(lc);
-		return lc;
-	}
+    /* Implements JMeterGUIComponent.createTestElement() */
+    public TestElement createTestElement() {
+        GenericController lc = new GenericController();
+        configureTestElement(lc);
+        return lc;
+    }
 
-	/* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
-	public void modifyTestElement(TestElement el) {
-		configureTestElement(el);
-	}
+    /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
+    public void modifyTestElement(TestElement el) {
+        configureTestElement(el);
+    }
 
-	public String getLabelResource() {
-		return "logic_controller_title"; // $NON-NLS-1$
-	}
+    public String getLabelResource() {
+        return "logic_controller_title"; // $NON-NLS-1$
+    }
 
-	/**
-	 * Initialize the GUI components and layout for this component.
-	 */
-	private void init() {
-		setLayout(new BorderLayout());
-		setBorder(makeBorder());
-		add(makeTitlePanel(), BorderLayout.NORTH);
-	}
+    /**
+     * Initialize the GUI components and layout for this component.
+     */
+    private void init() {
+        setLayout(new BorderLayout());
+        setBorder(makeBorder());
+        add(makeTitlePanel(), BorderLayout.NORTH);
+    }
 }

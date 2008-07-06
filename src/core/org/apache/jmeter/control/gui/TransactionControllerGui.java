@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.control.gui;
@@ -27,49 +27,49 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /**
  * A Transaction controller component.
- * 
+ *
  */
 public class TransactionControllerGui extends AbstractControllerGui {
 
-	private JCheckBox parent; // If selected, then generate parent sample, otherwise as per original controller
+    private JCheckBox parent; // If selected, then generate parent sample, otherwise as per original controller
 
-	/**
-	 * Create a new TransactionControllerGui instance.
-	 */
-	public TransactionControllerGui() {
-		init();
-	}
+    /**
+     * Create a new TransactionControllerGui instance.
+     */
+    public TransactionControllerGui() {
+        init();
+    }
 
-	/* Implements JMeterGUIComponent.createTestElement() */
-	public TestElement createTestElement() {
-		TransactionController lc = new TransactionController();
-		configureTestElement(lc);
-		return lc;
-	}
+    /* Implements JMeterGUIComponent.createTestElement() */
+    public TestElement createTestElement() {
+        TransactionController lc = new TransactionController();
+        configureTestElement(lc);
+        return lc;
+    }
 
-	public void configure(TestElement el) {
-		super.configure(el);
-		parent.setSelected(((TransactionController) el).isParent());
-	}
+    public void configure(TestElement el) {
+        super.configure(el);
+        parent.setSelected(((TransactionController) el).isParent());
+    }
 
-	/* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
-	public void modifyTestElement(TestElement el) {
-		configureTestElement(el);
-		((TransactionController) el).setParent(parent.isSelected());
-	}
+    /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
+    public void modifyTestElement(TestElement el) {
+        configureTestElement(el);
+        ((TransactionController) el).setParent(parent.isSelected());
+    }
 
-	public String getLabelResource() {
-		return "transaction_controller_title"; // $NON-NLS-1$
-	}
+    public String getLabelResource() {
+        return "transaction_controller_title"; // $NON-NLS-1$
+    }
 
-	/**
-	 * Initialize the GUI components and layout for this component.
-	 */
-	private void init() {
-		setLayout(new VerticalLayout(5, VerticalLayout.BOTH, VerticalLayout.TOP));
-		setBorder(makeBorder());
-		add(makeTitlePanel());
-		parent = new JCheckBox(JMeterUtils.getResString("transaction_controller_parent")); // $NON-NLS-1$
-		add(parent);
-	}
+    /**
+     * Initialize the GUI components and layout for this component.
+     */
+    private void init() {
+        setLayout(new VerticalLayout(5, VerticalLayout.BOTH, VerticalLayout.TOP));
+        setBorder(makeBorder());
+        add(makeTitlePanel());
+        parent = new JCheckBox(JMeterUtils.getResString("transaction_controller_parent")); // $NON-NLS-1$
+        add(parent);
+    }
 }
