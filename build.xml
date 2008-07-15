@@ -1254,6 +1254,7 @@ run JMeter unless all the JMeter jars are added.
       <filelist dir="bin" files="jmeter-test.log" />
     </concat>
      -->
+  	<fail message="FAILURES!!! Test gump nagging"/>
   	<!--antcall target="gump-check"/-->
   </target>
 
