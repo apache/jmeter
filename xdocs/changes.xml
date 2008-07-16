@@ -44,6 +44,7 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 <h4>Improvements</h4>
 <p>
 <ul>
+Added __char() function: allows arbitrary Unicode characters to be entered in fields.
 </ul>
 </p>
 
