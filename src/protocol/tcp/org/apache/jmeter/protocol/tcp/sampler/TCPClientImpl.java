@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InterruptedIOException;
 import java.io.OutputStream;
+import java.net.SocketTimeoutException;
 
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -43,7 +44,7 @@ import org.apache.log.Logger;
 public class TCPClientImpl implements TCPClient {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private int eolInt = JMeterUtils.getPropDefault("tcp.eolByte", 1000);
+    private int eolInt = JMeterUtils.getPropDefault("tcp.eolByte", 1000); // default is not in range
 
     private byte eolByte = (byte) eolInt; // -128 to +127
 
@@ -141,6 +142,8 @@ public class TCPClientImpl implements TCPClient {
              * perhaps examine the Exception message text...
              *
              */
+        } catch (SocketTimeoutException e) {
+            // drop out to handle buffer
         } catch (InterruptedIOException e) {
             // drop out to handle buffer
         } catch (IOException e) {
