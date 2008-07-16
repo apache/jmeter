@@ -964,20 +964,18 @@ Currently the only way to changes these is via the SampleResult methods:
 </p>
 </component>
 
-<component name="TCP Sampler" index="&sect-num;.1.12"  width="631" height="305" screenshot="tcpsampler.png">
+<component name="TCP Sampler" index="&sect-num;.1.12"  width="596" height="347" screenshot="tcpsampler.png">
 <note>ALPHA CODE</note>
 	<description>
 		<p>
 		The TCP Sampler opens a TCP/IP connection to the specified server.
 		It then sends the text, and waits for a response.
 		<br></br>
-		Connections are shared between Samplers in the same thread, provided that the exact
-		same host name string and port are used.
-		To force a different socket to be used, change the hostname by changing the case
-		of one of the letters, e.g. www.apache.org and wWw.apache.org will use different
-		sockets.
+		If "Re-use connection" is selected, connections are shared between Samplers in the same thread,
+		provided that the exact same host name string and port are used. 
+		Different hosts/port combinations will use different connections, as will different threads. 
 		<br></br>
-		If an error is detected, the socket is closed. 
+		If an error is detected - or "Re-use connection" is not selected - the socket is closed. 
 		Another socket will be reopened on the next sample.
 		<br></br>
 		The following properties can be used to control its operation:
@@ -997,6 +995,8 @@ Currently the only way to changes these is via the SampleResult methods:
 		<p>
 		Users can provide their own implementation to replace the supplied class TCPClientImpl.
 		The class must extend org.apache.jmeter.protocol.tcp.sampler.TCPClient.
+		Note that the provided implementation is fairly basic.
+		In particular, it does not report timeouts - though these can be handled by the use of Response Assertions.
 		</p>
 		If tcp.status.prefix is defined, then the response message is searched for the text following
 		that up to the suffix. If any such text is found, it is used to set the response code.
@@ -1017,14 +1017,14 @@ Currently the only way to changes these is via the SampleResult methods:
 </description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-  <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
   <property name="ServerName or IP" required="Yes">Name or IP of TCP server</property>
+  <property name="Re-use connection" required="Yes">If selected, the connection is kept open. Otherwise it is closed when the data has been read.</property>
   <property name="Port Number" required="Yes">Port to be used</property>
   <property name="Timeout (milliseconds)" required="No">Timeout for replies</property>
   <property name="Set Nodelay" required="No">Should the nodelay property be set?</property>
   <property name="Text to Send" required="Yes">Text to be sent</property>
-  <property name="Login User" required="No">User Name</property>
-  <property name="Password" required="No">Password</property>
+  <property name="Login User" required="No">User Name - not used by default implementation</property>
+  <property name="Password" required="No">Password - not used by default implementation</property>
 </properties>
 </component>
 
