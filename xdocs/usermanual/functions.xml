@@ -110,7 +110,8 @@ and need to be referenced using the __P or __property function.
         <tr><td>Variables</td><td> <a href="#__V">V</a></td><td>evaluate a variable name</td></tr>
         <tr><td>Variables</td><td> <a href="#__eval">eval</a></td><td>evaluate a variable expression</td></tr>
         <tr><td>Variables</td><td> <a href="#__evalVar">evalVar</a></td><td>evaluate an expression stored in a variable</td></tr>
-        <tr><td>Other</td><td> <a href="#__char">char</a></td><td>generate Unicode char values from a list of numbers</td></tr>
+        <tr><td>String</td><td> <a href="#__char">char</a></td><td>generate Unicode char values from a list of numbers</td></tr>
+        <tr><td>String</td><td> <a href="#__unescape">unescape</a></td><td>Process strings containing Java escapes (e.g. \n & \t)</td></tr>
 </table>
 <p></p>
 <subsection name="&sect-num;.1 What can functions do" anchor="what_can_do">
@@ -958,10 +959,12 @@ The following variables are made available to the script:
 
 <component index="&sect-num;.5.22" name="__char">
 <description>
-    <p>The char function returns the result of evaluating a list of numbers as Unicode characters.
+    <p>
+    The char function returns the result of evaluating a list of numbers as Unicode characters.
+    See also __unescape(), below.
     </p>
     <p>
-    This allows one to add any character values into fields.
+    This allows one to add arbitrary character values into fields.
     </p>
     </description>
 
@@ -972,9 +975,32 @@ The following variables are made available to the script:
 </properties>
 <p>Examples:
 <br/>
-${__char(0xC,0xA)} = CRLF;
+${__char(0xC,0xA)} = CRLF
 <br/>
 ${__char(165)} = &#165; (yen)
+ </p>
+</component>
+
+<component index="&sect-num;.5.23" name="__unescape">
+<description>
+    <p>
+    The unescape function returns the result of evaluating a Java-escaped string. See also __char() above.
+    </p>
+    <p>
+    This allows one to add characters to fields which are otherwise tricky (or impossible) to define via the GUI.
+    </p>
+    </description>
+
+<properties>
+        <property name="String to unescape" required="Yes">
+        The string to be unescaped.
+        </property>
+</properties>
+<p>Examples:
+<br/>
+${__unescape(\r\n)} = CRLF
+<br/>
+${__unescape(1\t2)} = 1[tab]2
  </p>
 </component>
 
