@@ -2744,9 +2744,13 @@ pattern. You can attach multiple assertions to any controller for additional fle
 <properties>
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
         <property name="Response Field to Test" required="Yes">Instructs JMeter which field of the Response to test.
-                This may be the Response Text from the server, the URL string that was sampled,
-                the Response Headers (JMeter version 2.3RC3 and earlier included the headers with the Text),
-                the Response Code (e.g. 404) or the Response Message (e.g. Not Found).
+        <ul>
+        <li>Text Response - the response text from the server, i.e. the body, excluing any HTTP headers.</li>
+        <li>URL sampled</li>
+        <li>Response Code - e.g. 200</li>
+        <li>Response Message - e.g. OK</li>
+        <li>Response Headers (JMeter version 2.3RC3 and earlier included the headers with the Text)</li>
+        </ul>
                 <p>
                 The overall success of the sample is determined by combining the result of the
                 assertion with the existing Response status.
@@ -3472,14 +3476,26 @@ The script (or file) is processed using the BSFEngine.exec() method, which does 
 	The array will be empty if there are none.
 	</p>
 	</description>
-<component name="Regular Expression Extractor" index="&sect-num;.8.1"  width="494" height="257" screenshot="regex_extractor.png">
+<component name="Regular Expression Extractor" index="&sect-num;.8.1"  width="618" height="256" screenshot="regex_extractor.png">
 <description><p>Allows the user to extract values from a server response using a Perl-type regular expression.  As a post-processor,
 this element will execute after each Sample request in its scope, applying the regular expression, extracting the requested values,
 generate the template string, and store the result into the given variable name.</p></description>
 <properties>
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-        <property name="Response Field to check" required="yes">Body, Headers, URL, Response Code, Response Message.
-        These refer to the Sampler Response. Headers can be useful for HTTP samples; it may not be present for other sample types.</property>
+        <property name="Response Field to check" required="yes">
+        The following response fields can be checked:
+        <ul>
+        <li>Body - the body of the response, e.g. the content of a web-page (excluding headers)</li>
+        <li>Body (unescaped) - the body of the response, with all Html escape codes replaced.
+        Note that Html escapes are processed without regard to context, so some incorrect substitutions
+        may be made.
+        </li>
+        <li>Headers - may not be present for non-HTTP samples</li>
+        <li>URL</li>
+        <li>Response Code - e.g. 200</li>
+        <li>Response Message - e.g. OK</li>
+        </ul>
+        Headers can be useful for HTTP samples; it may not be present for other sample types.</property>
         <property name="Reference Name" required="Yes">The name of the JMeter variable in which to store the result.  Also note that each group is stored as [refname]_g#, where [refname] is the string you entered as the reference name, and # is the group number, where group 0 is the entire match, group 1 is the match from the first set of parentheses, etc.</property>
         <property name="Regular Expression" required="Yes">The regular expression used to parse the response data. 
         This must contain at least one set of parentheses "()" to capture a portion of the string, unless using the group $0$.
