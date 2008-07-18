@@ -49,6 +49,9 @@ Added __char() function: allows arbitrary Unicode characters to be entered in fi
 <ul>
 Added __unescape() function: allows Java-escaped strings to be used.
 </ul>
+<ul>
+Add Body (unescaped) source option to Regular Expression Extractor.
+</ul>
 </p>
 
 <!--  ========================= End of summary ===================================== -->

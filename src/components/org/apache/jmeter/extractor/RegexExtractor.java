@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -62,6 +63,7 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
     */
     public static final String USE_HDRS = "true"; // $NON-NLS-1$
     public static final String USE_BODY = "false"; // $NON-NLS-1$
+    public static final String USE_BODY_UNESCAPED = "unescaped"; // $NON-NLS-1$
     public static final String USE_URL = "URL"; // $NON-NLS-1$
     public static final String USE_CODE = "code"; // $NON-NLS-1$
     public static final String USE_MESSAGE = "message"; // $NON-NLS-1$
@@ -80,7 +82,6 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
     private static final String REF_MATCH_NR = "_matchNr"; // $NON-NLS-1$
 
     private static final String UNDERSCORE = "_";  // $NON-NLS-1$
-
 
     private Object[] template = null;
 
@@ -115,6 +116,7 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
             : useHeaders() ? previousResult.getResponseHeaders()
             : useCode() ? previousResult.getResponseCode() //Bug 43451
             : useMessage() ? previousResult.getResponseMessage() //Bug 43451
+            : useUnescapedBody() ? StringEscapeUtils.unescapeHtml(previousResult.getResponseDataAsString())
             : previousResult.getResponseDataAsString() // Bug 36898
             ;
            if (log.isDebugEnabled()) {
@@ -414,6 +416,11 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
     public boolean useBody() {
         String prop = getPropertyAsString(MATCH_AGAINST);
         return prop.length()==0 || USE_BODY.equalsIgnoreCase(prop);// $NON-NLS-1$
+    }
+
+    public boolean useUnescapedBody() {
+        String prop = getPropertyAsString(MATCH_AGAINST);
+        return USE_BODY_UNESCAPED.equalsIgnoreCase(prop);// $NON-NLS-1$
     }
 
     public boolean useUrl() {
