@@ -46,6 +46,9 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 <ul>
 Added __char() function: allows arbitrary Unicode characters to be entered in fields.
 </ul>
+<ul>
+Added __unescape() function: allows Java-escaped strings to be used.
+</ul>
 </p>
 
 <!--  ========================= End of summary ===================================== -->
