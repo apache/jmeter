@@ -99,7 +99,6 @@ and need to be referenced using the __P or __property function.
         <tr><td>Calculation</td><td> <a href="#__intSum">intSum</a></td><td>add int numbers</td></tr>
         <tr><td>Calculation</td><td> <a href="#__longSum">longSum</a></td><td>add long numbers</td></tr>
         <tr><td>Calculation</td><td> <a href="#__Random">Random</a></td><td>generate a random number</td></tr>
-        <tr><td>Calculation</td><td> <a href="#__regexFunction">regexFunction</a></td><td>parse previous response using a regular expression</td></tr>
         <tr><td>Scripting</td><td> <a href="#__BeanShell">BeanShell</a></td><td>run a BeanShell script</td></tr>
         <tr><td>Scripting</td><td> <a href="#__javaScript">javaScript</a></td><td>process JavaScript (Mozilla Rhino)</td></tr>
         <tr><td>Scripting</td><td> <a href="#__jexl">jexl</a></td><td>evaluate a Commons Jexl expression</td></tr>
@@ -110,8 +109,11 @@ and need to be referenced using the __P or __property function.
         <tr><td>Variables</td><td> <a href="#__V">V</a></td><td>evaluate a variable name</td></tr>
         <tr><td>Variables</td><td> <a href="#__eval">eval</a></td><td>evaluate a variable expression</td></tr>
         <tr><td>Variables</td><td> <a href="#__evalVar">evalVar</a></td><td>evaluate an expression stored in a variable</td></tr>
+        <tr><td>String</td><td> <a href="#__regexFunction">regexFunction</a></td><td>parse previous response using a regular expression</td></tr>
         <tr><td>String</td><td> <a href="#__char">char</a></td><td>generate Unicode char values from a list of numbers</td></tr>
-        <tr><td>String</td><td> <a href="#__unescape">unescape</a></td><td>Process strings containing Java escapes (e.g. \n & \t)</td></tr>
+        <tr><td>String</td><td> <a href="#__unescape">unescape</a></td><td>Process strings containing Java escapes (e.g. \n &amp; \t)</td></tr>
+        <tr><td>String</td><td> <a href="#__unescapeHtml">unescapeHtml</a></td><td>Decode HTML-encoded strings</td></tr>
+        <tr><td>String</td><td> <a href="#__escapeHtml">escapeHtml</a></td><td>Encode strings using HTML encoding</td></tr>
 </table>
 <p></p>
 <subsection name="&sect-num;.1 What can functions do" anchor="what_can_do">
@@ -1002,6 +1004,56 @@ ${__unescape(\r\n)} = CRLF
 <br/>
 ${__unescape(1\t2)} = 1[tab]2
  </p>
+</component>
+
+<component index="&sect-num;.5.24" name="__unescapeHtml">
+<description>
+    <p>
+Function to unescape a string containing HTML entity escapes
+to a string containing the actual Unicode characters corresponding to the escapes. 
+Supports HTML 4.0 entities.
+</p>
+<p>
+For example, the string <code>"&amp;#38;lt;Fran&amp;#38;ccedil;ais&amp;#38;gt;"</code>
+will become <code>"&amp;lt;Fran&amp;ccedil;ais&amp;gt;"</code>.
+</p>
+<p>
+If an entity is unrecognized, it is left alone, and inserted verbatim into the result string.
+e.g. <code>"&amp;gt;&amp;zzzz;x"</code> will become <code>">&amp;zzzz;x"</code>.
+</p>
+    <p>
+    Uses StringEscapeUtils#unescapeHtml(String) from Commons Lang.
+    </p>
+    </description>
+
+<properties>
+        <property name="String to unescape" required="Yes">
+        The string to be unescaped.
+        </property>
+</properties>
+</component>
+
+<component index="&sect-num;.5.25" name="__escapeHtml">
+<description>
+    <p>
+Function which escapes the characters in a String using HTML entities.
+Supports HTML 4.0 entities.
+</p>
+<p>
+For example,<code>&amp;quot;bread&amp;quot; &amp;amp; &amp;quot;butter&amp;quot;</code>
+becomes:
+<code>&amp;#38;quot;bread&amp;#38;quot; &amp;#38;amp; &amp;#38;quot;butter&amp;#38;quot;</code>.
+</p>
+    <p>
+    Uses StringEscapeUtils#escapeHtml(String) from Commons Lang.
+    </p>
+    </description>
+
+<properties>
+        <property name="String to escape" required="Yes">
+        The string to be escaped.
+        </property>
+</properties>
 </component>
 
 </subsection>
