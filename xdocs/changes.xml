@@ -42,16 +42,16 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 </p>
 
 <h4>Improvements</h4>
+
 <p>
 <ul>
-Added __char() function: allows arbitrary Unicode characters to be entered in fields.
+<li>Added __char() function: allows arbitrary Unicode characters to be entered in fields.</li>
+<li>Added __unescape() function: allows Java-escaped strings to be used.</li>
+<li>Add Body (unescaped) source option to Regular Expression Extractor.</li>
+<li>Added __unescapeHtml() function: decodes Html-encoded text.</li>
+<li>Added __escapeHtml() function: encodes text using Html-encoding.</li>
 </ul>
-<ul>
-Added __unescape() function: allows Java-escaped strings to be used.
-</ul>
-<ul>
-Add Body (unescaped) source option to Regular Expression Extractor.
-</ul>
+
 </p>
 
 <!--  ========================= End of summary ===================================== -->
