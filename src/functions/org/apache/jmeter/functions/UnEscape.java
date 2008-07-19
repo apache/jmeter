@@ -30,7 +30,11 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * Function to generate chars from a list of decimal or hex values
+ * Function to unescape any Java literals found in the String.
+ * For example, it will turn a sequence of '\' and 'n' into a newline character,
+ * unless the '\' is preceded by another '\'.
+ * 
+ * @see StringEscapeUtils#unescapeJava(String)
  */
 public class UnEscape extends AbstractFunction implements Serializable {
 
