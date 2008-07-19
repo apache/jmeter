@@ -45,11 +45,6 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 
 <p>
 <ul>
-<li>Added __char() function: allows arbitrary Unicode characters to be entered in fields.</li>
-<li>Added __unescape() function: allows Java-escaped strings to be used.</li>
-<li>Add Body (unescaped) source option to Regular Expression Extractor.</li>
-<li>Added __unescapeHtml() function: decodes Html-encoded text.</li>
-<li>Added __escapeHtml() function: encodes text using Html-encoding.</li>
 </ul>
 
 </p>
@@ -98,6 +93,11 @@ It does not affect test plans or test behaviour.
 <li>Save Responses to a file can save the generated filename(s) to variables.</li>
 <li>Add BSF Listener element</li>
 <li>Bug 45200 - MailReaderSampler: store the whole MIME message in the SamplerResult</li>
+<li>Added __char() function: allows arbitrary Unicode characters to be entered in fields.</li>
+<li>Added __unescape() function: allows Java-escaped strings to be used.</li>
+<li>Add Body (unescaped) source option to Regular Expression Extractor.</li>
+<li>Added __unescapeHtml() function: decodes Html-encoded text.</li>
+<li>Added __escapeHtml() function: encodes text using Html-encoding.</li>
 </ul>
 
 <h3>Non-functional changes</h3>
