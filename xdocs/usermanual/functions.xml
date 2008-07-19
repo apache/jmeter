@@ -513,7 +513,7 @@ the comma after 7 is escaped.</note>
 </component>
 
 <component index="&sect-num;.5.8" name="__CSVRead">
-<description><p>The CSVFile function returns a string from a CSV file (c.f. <a href="#_StringFromFile">StringFromFile</a>)</p>
+<description><p>The CSVRead function returns a string from a CSV file (c.f. <a href="#_StringFromFile">StringFromFile</a>)</p>
 	<p>NOTE: versions up to 1.9.1 only supported a single file. 
 		JMeter versions since 1.9.1 support multiple file names.
 	</p>
