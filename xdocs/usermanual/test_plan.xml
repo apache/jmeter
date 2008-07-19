@@ -382,7 +382,34 @@ Assertion 1
 </p>
 </subsection>
 
-<subsection name="&sect-num;.10 Properties and Variables" anchor="properties">
+<subsection name="&sect-num;.10 Scoping Rules" anchor="scoping_rules">
+<p>
+The JMeter test tree contains elements that are both hierarchical and ordered.  Some elements in the test trees are strictly hierarchical (Listeners, Config Elements, Post-Procesors, Pre-Processors, Assertions, Timers), and some are primarily ordered (controllers, samplers).  When you create your test plan, you will create an ordered list of sample request (via Samplers) that represent a set of steps to be executed.  These requests are often organized within controllers that are also ordered.  Given the following test tree:</p>
+<figure image="scoping1.png">Example test tree</figure>
+<p>The order of requests will be, One, Two, Three, Four.</p>
+<p>Some controllers affect the order of their subelements, and you can read about these specific controllers in <a href="component_reference.html">the component reference</a>.</p>
+<p>Other elements are hierarchical.  An Assertion, for instance, is hierarchical in the test tree.  
+If its parent is a request, then it is applied to that request. If its
+parent is a Controller, then it affects all requests that are descendants of
+that Controller.  In the following test tree:</p>
+<figure image="scoping2.png">Hierarchy example</figure>
+<p>Assertion #1 is applied only to Request One, while Assertion #2 is applied to Requests Two and Three.</p>
+<p>Another example, this time using Timers:</p>
+<figure image="scoping3.png">complex example</figure>
+<p>In this example, the requests are named to reflect the order in which they will be executed.  Timer #1 will apply to Requests Two, Three, and Four (notice how order is irrelevant for hierarchical elements).  Assertion #1 will apply only to Request Three.  Timer #2 will affect all the requests.</p>
+<p>Hopefully these examples make it clear how configuration (hierarchical) elements are applied.  If you imagine each Request being passed up the tree branches, to its parent, then to its parent's parent, etc, and each time collecting all the configuration elements of that parent, then you will see how it works.  </p>
+<b>
+The Configuration elements Header Manager, Cookie Manager and Authorization manager are
+treated differently from the Configuration Default elements.
+The settings from the Configuration Default elements are merged into a set of values that the Sampler has access to.
+However, the settings from the Managers are not merged.
+If more than one Manager is in the scope of a Sampler, 
+only one Manager is used, but there is currently no way to specify <b>which</b> is used.
+</b>
+</subsection>
+
+
+<subsection name="&sect-num;.11 Properties and Variables" anchor="properties">
 
 <p>
 JMeter <b>properties</b> are defined in jmeter.properties (see <a href="get-started.html#configuring_jmeter">Gettting Started - Configuring JMeter</a> for more details).
