@@ -67,12 +67,16 @@ To override the default local language, set the JMeter property "language" befor
 </p>
 
 <h3>Incompatible changes</h3>
-<ul>
+<p>
 The test element "Save Results to a file" is now shown as a Listener.
 It was previously shown as a Post-Processor, even though it was in fact a Listener.
 This change only affects the icon that is displayed and the location in the Gui pop-up menus.
 It does not affect test plans or test behaviour.
-</ul>
+</p>
+
+<p>
+Moved the Scoping Rules sub-section from Section 3. "Building a Test Plan"  to Section 4. "Elements of a test plan"
+</p>
 
 <h3>Bug fixes</h3>
 <ul>
