@@ -26,13 +26,16 @@ import javax.jms.QueueSession;
 
 /**
  * Request/reply executor with a temporary reply queue. <br>
+ * 
+ * Used by JMS Sampler (Point to Point)
+ * 
  * Created on: October 28, 2004
  *
  * @version $Revision$
  */
 public class TemporaryQueueExecutor implements QueueExecutor {
     /** The sender and receiver. */
-    private QueueRequestor requestor;
+    private final QueueRequestor requestor;
 
     /**
      * Constructor.

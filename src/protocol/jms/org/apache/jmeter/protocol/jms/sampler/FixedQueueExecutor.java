@@ -27,17 +27,21 @@ import org.apache.log.Logger;
 
 /**
  * Request/reply executor with a fixed reply queue. <br>
+ * 
+ * Used by JMS Sampler (Point to Point)
+ * 
  * Created on: October 28, 2004
  *
  */
 public class FixedQueueExecutor implements QueueExecutor {
-    /** Sender. */
-    private QueueSender producer;
-
-    /** Timeout used for waiting on message. */
-    private int timeout;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
+
+    /** Sender. */
+    private final QueueSender producer;
+
+    /** Timeout used for waiting on message. */
+    private final int timeout;
 
     /**
      * Constructor.
