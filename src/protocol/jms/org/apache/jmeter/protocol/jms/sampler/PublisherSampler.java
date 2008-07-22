@@ -31,6 +31,9 @@ import org.apache.jmeter.protocol.jms.client.Publisher;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
+/**
+ * This class implements the JMS Publisher sampler.
+ */
 public class PublisherSampler extends BaseJMSSampler implements TestListener {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
