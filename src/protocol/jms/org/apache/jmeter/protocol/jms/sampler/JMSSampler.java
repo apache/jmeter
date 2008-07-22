@@ -50,8 +50,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * Sampler for JMS Communication. <br>
- * Created on: October 28, 2004
+ * This class implements the JMS Point-to-Point sampler
  *
  */
 public class JMSSampler extends AbstractSampler implements ThreadListener {
