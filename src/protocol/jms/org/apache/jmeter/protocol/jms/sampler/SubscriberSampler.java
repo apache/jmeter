@@ -35,6 +35,9 @@ import org.apache.jmeter.protocol.jms.client.ReceiveSubscriber;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
+/**
+ * This class implements the JMS Subcriber sampler
+ */
 public class SubscriberSampler extends BaseJMSSampler implements TestListener, MessageListener {
 
     // private Subscriber SUBSCRIBER = null;
