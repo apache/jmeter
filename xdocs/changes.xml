@@ -88,6 +88,7 @@ Moved the Scoping Rules sub-section from Section 3. "Building a Test Plan"  to S
 <li>Fix NPE when using nested Transaction Controllers with parent samples</li>
 <li>Bug 45185 - CSV dataset blank delimiter causes OOM</li>
 <li>Bug 43791 - ensure QueueReceiver is closed</li>
+<li>Fix NPE (in DataSourceElement) when using JDBC in client-server mode</li>
 </ul>
 
 <h3>Improvements</h3>
