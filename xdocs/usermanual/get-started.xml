@@ -164,10 +164,6 @@ See the <a href="#classpath">JMeter Classpath</a> section for more details on in
 
 <section name="&sect-num;.3 Installation" anchor="install">
 
-<note>
-Note: avoid installing JMeter in a path with spaces in the name.  
-This causes problems for remote testing.
-</note>
 <p>We recommend that most users run the <a href="http://jakarta.apache.org/site/downloads/index.html">latest release</a>.</p>
 <p>To install a release build, simply unzip the zip/tar file into the directory
 where you want JMeter to be installed.  Provided that you have a JRE/JDK correctly installed
@@ -185,7 +181,6 @@ jakarta-jmeter-2.3.1/lib/junit
 jakarta-jmeter-2.3.1/printable_docs
 </pre>
 You can rename the parent directory (e.g. jakarta-jmeter-2.3.1) if you want, but do not change any of the sub-directory names.
-The path to the parent directory should not contain any spaces; if it does, then you may have problems running client-server mode.
 </p>
 </section>
 

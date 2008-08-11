@@ -3796,7 +3796,7 @@ If more data is required for a particular sampler only, then add a Listener to i
 </p>
 <p>Also, an option exists here to instruct JMeter to run the <complink name="Thread Group"/> serially rather than in parallel.</p>
 <p>Test plan now provides an easy way to add classpath setting to a specific test plan. The feature is additive, meaning that you can add jar files or directories, but removing an entry requires restarting JMeter. In the past, users had to copy all the jar files to jmeter/lib/ directory. Now that is not necessary. JMeter properties also provides an entry for loading additional classpaths.</p>
-<p>In jmeter.properties, edit "user.classpath" to include additional libraries. Note that paths with spaces may cause problems for Java.</p></description>
+<p>In jmeter.properties, edit "user.classpath" to include additional libraries.</p></description>
 </component>
 
 <component name="Thread Group" index="&sect-num;.9.2"  width="305" height="390" screenshot="threadgroup.png">
