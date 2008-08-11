@@ -109,7 +109,7 @@ public final class NewDriver {
                         }
                     } // usesUNC
 
-                    jars.add(new URL("file", "", s));// $NON-NLS-1$ $NON-NLS-2$
+                    jars.add(new File(s).toURI().toURL());// See Java bug 4496398
                     classpath.append(CLASSPATH_SEPARATOR);
                     classpath.append(s);
                 } catch (MalformedURLException e) {
@@ -137,7 +137,7 @@ public final class NewDriver {
     public static void addURL(String path) {
         File furl = new File(path);
         try {
-            loader.addURL(furl.toURL());
+            loader.addURL(furl.toURI().toURL()); // See Java bug 4496398
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -160,14 +160,11 @@ public final class NewDriver {
      */
     public static void addPath(String path) throws MalformedURLException {
         File file = new File(path);
-        URL url;
         // Ensure that directory URLs end in "/"
         if (file.isDirectory() && !path.endsWith("/")) {// $NON-NLS-1$
-            url = new URL("file","",path+ "/");// $NON-NLS-1$
-        } else {
-            url = new URL("file","",path);
+            file = new File(path + "/");// $NON-NLS-1$
         }
-        loader.addURL(url);
+        loader.addURL(file.toURI().toURL()); // See Java bug 4496398
         StringBuffer sb = new StringBuffer(System.getProperty(JAVA_CLASS_PATH));
         sb.append(CLASSPATH_SEPARATOR);
         sb.append(path);

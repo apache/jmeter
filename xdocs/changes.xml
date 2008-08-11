@@ -103,6 +103,7 @@ Moved the Scoping Rules sub-section from Section 3. "Building a Test Plan"  to S
 <li>Add Body (unescaped) source option to Regular Expression Extractor.</li>
 <li>Added __unescapeHtml() function: decodes Html-encoded text.</li>
 <li>Added __escapeHtml() function: encodes text using Html-encoding.</li>
+<li>Allow spaces in JMeter path names (apply work-round for Java bug 4496398)</li>
 </ul>
 
 <h3>Non-functional changes</h3>

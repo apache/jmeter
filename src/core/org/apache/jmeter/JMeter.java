@@ -325,16 +325,6 @@ public class JMeter implements JMeterPlugin {
             } else if (parser.getArgumentById(HELP_OPT) != null) {
                 System.out.println(JMeterUtils.getResourceFileAsText("org/apache/jmeter/help.txt"));// $NON-NLS-1$
             } else if (parser.getArgumentById(SERVER_OPT) != null) {
-                // We need to check if the JMeter home contains spaces in the path,
-                // because then we will not be able to bind to RMI registry, see
-                // Java bug id 4496398
-                final String jmHome = JMeterUtils.getJMeterHome();
-                if(jmHome.indexOf(" ") > -1) {// $NON-NLS-1$
-                    // Just warn user, and exit, no reason to continue, since we will
-                    // not be able to bind to RMI registry, until Java bug 4496398 is fixed
-                    log.error("JMeter path cannot contain spaces when run in server mode : " + jmHome);
-                    throw new RuntimeException("JMeter path cannot contain spaces when run in server mode: "+jmHome);
-                }
                 // Start the server
                 startServer(JMeterUtils.getPropDefault("server_port", 0));// $NON-NLS-1$
                 startOptionalServers();
