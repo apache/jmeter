@@ -88,8 +88,8 @@ public class WorkBenchGui extends AbstractJMeterGuiComponent {
                 MenuFactory.TIMERS,
                 MenuFactory.PRE_PROCESSORS,
                 MenuFactory.SAMPLERS,
-                MenuFactory.ASSERTIONS,
                 MenuFactory.POST_PROCESSORS,
+                MenuFactory.ASSERTIONS,
                 MenuFactory.LISTENERS,
                 },
                 JMeterUtils.getResString("add"), // $NON-NLS-1$
