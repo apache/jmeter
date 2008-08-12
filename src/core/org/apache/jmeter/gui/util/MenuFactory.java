@@ -93,8 +93,8 @@ public final class MenuFactory {
         MenuFactory.TIMERS,
         MenuFactory.PRE_PROCESSORS,
         MenuFactory.SAMPLERS,
-        MenuFactory.ASSERTIONS,
         MenuFactory.POST_PROCESSORS,
+        MenuFactory.ASSERTIONS,
         MenuFactory.LISTENERS,
         };
 
@@ -105,8 +105,8 @@ public final class MenuFactory {
         MenuFactory.CONFIG_ELEMENTS,
         MenuFactory.TIMERS,
         MenuFactory.PRE_PROCESSORS,
-        MenuFactory.ASSERTIONS,
         MenuFactory.POST_PROCESSORS,
+        MenuFactory.ASSERTIONS,
         MenuFactory.LISTENERS,
         };
 
