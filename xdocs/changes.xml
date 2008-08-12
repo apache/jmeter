@@ -108,7 +108,8 @@ Moved the Scoping Rules sub-section from Section 3. "Building a Test Plan"  to S
 
 <h3>Non-functional changes</h3>
 <ul>
-Introduce AbstractListenerGui class to make it easier to create Listeners with no visual output
+<li>Introduce AbstractListenerGui class to make it easier to create Listeners with no visual output</li>
+<li>Assertions run after PostProcessors; change order of pop-up menus accordingly</li>
 </ul>
 </section> 
 </body> 
