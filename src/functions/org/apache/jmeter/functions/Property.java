@@ -26,6 +26,7 @@ import java.util.List;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -80,7 +81,10 @@ public class Property extends AbstractFunction implements Serializable {
         if (values.length > 1) {
             String variableName = ((CompoundVariable) values[1]).execute();
             if (variableName.length() > 0) {// Allow for empty name
-                getVariables().put(variableName, propertyValue);
+                final JMeterVariables variables = getVariables();
+                if (variables != null) {
+                    variables.put(variableName, propertyValue);
+                }
             }
         }
         return propertyValue;
