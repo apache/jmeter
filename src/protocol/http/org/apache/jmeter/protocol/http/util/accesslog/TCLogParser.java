@@ -20,12 +20,15 @@ package org.apache.jmeter.protocol.http.util.accesslog;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import java.util.zip.GZIPInputStream;
 
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.testelement.TestElement;
@@ -170,32 +173,41 @@ public class TCLogParser implements LogParser {
     }
 
     /**
-     * Creates a new File object.
-     *
-     * @param filename
-     */
-    public File openFile(String filename) {
-        return new File(filename);
-    }
-
-    /**
      * parse the entire file.
      *
      * @return boolean success/failure
      */
     public int parse(TestElement el, int parseCount) {
         if (this.SOURCE == null) {
-            this.SOURCE = this.openFile(this.FILENAME);
+            this.SOURCE = new File(this.FILENAME);
         }
         try {
             if (this.READER == null) {
-                this.READER = new BufferedReader(new FileReader(this.SOURCE));
+                this.READER = getReader(this.SOURCE);
             }
             return parse(this.READER, el, parseCount);
         } catch (Exception exception) {
             log.error("Problem creating samples", exception);
         }
         return -1;// indicate that an error occured
+    }
+
+    private static BufferedReader getReader(File file) throws IOException {
+        if (! isGZIP(file)) {
+            return new BufferedReader(new FileReader(file));
+        }
+        GZIPInputStream in = new GZIPInputStream(new FileInputStream(file));
+        return new BufferedReader(new InputStreamReader(in));
+    }
+
+    private static boolean isGZIP(File file) throws IOException {
+        FileInputStream in = new FileInputStream(file);
+        try {
+            return in.read() == (GZIPInputStream.GZIP_MAGIC & 0xFF)
+                && in.read() == (GZIPInputStream.GZIP_MAGIC >> 8);
+        } finally {
+            in.close();
+        }
     }
 
     /**
