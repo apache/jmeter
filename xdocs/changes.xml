@@ -89,6 +89,7 @@ Moved the Scoping Rules sub-section from Section 3. "Building a Test Plan"  to S
 <li>Bug 45185 - CSV dataset blank delimiter causes OOM</li>
 <li>Bug 43791 - ensure QueueReceiver is closed</li>
 <li>Fix NPE (in DataSourceElement) when using JDBC in client-server mode</li>
+<li>Bug 45749 - Response Assertion does not work with a substring that is not a valid RE</li>
 </ul>
 
 <h3>Improvements</h3>
