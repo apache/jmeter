@@ -351,23 +351,64 @@ public class PackageTest extends TestCase {
 			assertPassed();
 
         }
+		
+        public void testResponseAssertionSubstring() throws Exception{
+            assertion.unsetNotType();
+            assertion.setToSubstringType();
+            assertion.setTestFieldURL();
+            assertion.addTestString("Sampler");
+            assertion.addTestString("Label");
+            assertion.addTestString("+(");
+            
+            result = assertion.getResult(sample);
+            assertFailed();
+            
+            assertion.setToNotType();
+            
+            result = assertion.getResult(sample);
+            assertFailed();
+
+            assertion.clearTestStrings();
+            assertion.addTestString("r l");
+            result = assertion.getResult(sample);
+            assertPassed();
+
+            assertion.unsetNotType();
+            assertion.setTestFieldResponseData();
+            
+            assertion.clearTestStrings();
+            assertion.addTestString("line 2");
+            result = assertion.getResult(sample);
+            assertPassed();
+
+            assertion.clearTestStrings();
+            assertion.addTestString("line 2\n\nEOF");
+            result = assertion.getResult(sample);
+            assertPassed();
+
+            assertion.setTestFieldResponseCode();
+            
+            assertion.clearTestStrings();
+            assertion.addTestString("401");
+            result = assertion.getResult(sample);
+            assertPassed();
+
+        }
+
 // TODO - need a lot more tests
 		
 		private void assertPassed() throws Exception{
-			if (null != result.getFailureMessage()){
-				//System.out.println(result.getFailureMessage());// debug
-			}
 			assertNull(result.getFailureMessage(),result.getFailureMessage());
-			assertFalse(result.isError());
-			assertFalse(result.isFailure());		
+            assertFalse("Not expecting error: "+result.getFailureMessage(),result.isError());
+			assertFalse("Not expecting error",result.isError());
+			assertFalse("Not expecting failure",result.isFailure());		
 		}
 		
 		private void assertFailed() throws Exception{
 			assertNotNull(result.getFailureMessage());
-			//System.out.println(result.getFailureMessage());
 			assertFalse("Should not be: Response was null","Response was null".equals(result.getFailureMessage()));
-			assertFalse(result.isError());
-			assertTrue(result.isFailure());		
+			assertFalse("Not expecting error: "+result.getFailureMessage(),result.isError());
+			assertTrue("Expecting failure",result.isFailure());		
 			
 		}
 }
