@@ -312,6 +312,7 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
         boolean contains = isContainsType(); // do it once outside loop
         boolean equals = isEqualsType();
         boolean substring = isSubstringType();
+        boolean matches = isMatchType();
         boolean debugEnabled = log.isDebugEnabled();
         if (debugEnabled){
             log.debug("Type:" + (contains?"Contains":"Match") + (not? "(not)": ""));
@@ -323,7 +324,10 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
             PropertyIterator iter = getTestStrings().iterator();
             while (iter.hasNext()) {
                 String stringPattern = iter.next().getStringValue();
-                Pattern pattern = JMeterUtils.getPatternCache().getPattern(stringPattern, Perl5Compiler.READ_ONLY_MASK);
+                Pattern pattern = null;
+                if (contains || matches) {
+                	pattern = JMeterUtils.getPatternCache().getPattern(stringPattern, Perl5Compiler.READ_ONLY_MASK);
+                }
                 boolean found;
                 if (contains) {
                     found = localMatcher.contains(toCheck, pattern);
@@ -336,12 +340,12 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
                 }
                 pass = not ? !found : found;
                 if (!pass) {
-                    if (debugEnabled){log.debug("Failed: "+pattern);}
+                    if (debugEnabled){log.debug("Failed: "+stringPattern);}
                     result.setFailure(true);
                     result.setFailureMessage(getFailText(stringPattern,toCheck));
                     break;
                 }
-                if (debugEnabled){log.debug("Passed: "+pattern);}
+                if (debugEnabled){log.debug("Passed: "+stringPattern);}
             }
         } catch (MalformedCachePatternException e) {
             result.setError(true);
