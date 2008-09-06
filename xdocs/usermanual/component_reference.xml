@@ -1828,8 +1828,11 @@ by using the -l command-line flag.
 <p>
 Listeners can be configured to save different items to the result log files (JTL) by using the Config popup as shown below.
 The defaults are defined as described in  the <a href="listeners.html#defaults">Listener Default Configuration</a> documentation.
-Items with (CSV) only apply to the CSV format; items wint (XML) only apply to XML format.
-CSV format cannot be used to save any items that include line-breaks.
+Items with (CSV) after the name only apply to the CSV format; items with (XML) only apply to XML format.
+CSV format cannot currently be used to save any items that include line-breaks.
+</p>
+<p>
+Note that cookies, method and the query string are saved as part of the "Sampler Data" option.
 </p>
 </description>
 </component>
