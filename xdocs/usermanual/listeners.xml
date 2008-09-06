@@ -190,6 +190,19 @@ each sample in the JTL files. The values are written to CSV files as additional 
 and as additional attributes in XML files. See above for an example.
 </p>
 </subsection>
+
+<subsection name="&sect-num;.1.2 Sample Result Save Configuration" anchor="sample_configuration">
+<p>
+Listeners can be configured to save different items to the result log files (JTL) by using the Config popup as shown below.
+The defaults are defined as described in  the <a href="#defaults">Listener Default Configuration</a> section above.
+Items with (CSV) after the name only apply to the CSV format; items with (XML) only apply to XML format.
+CSV format cannot currently be used to save any items that include line-breaks.
+</p>
+<figure image="sample_result_config.png"><br/><b>Configuration dialogue</b></figure>
+</subsection>
+<p>
+Note that cookies, method and the query string are saved as part of the "Sampler Data" option.
+</p>
 </section>
 
 <section name="&sect-num;.2 non-GUI (batch) test runs" anchor="batch">
@@ -422,6 +435,7 @@ This has been corrected so that it is always saved as "rc"; either "rc" or "rs" 
 Versions of JMeter after 2.3.1 allow additional variables to be saved with the test plan.
 Currently, the variables are saved as additional attributes. 
 The testplan variable name is used as the attribute name.
+See <a href="#sample_variables">Sample variables</a> (above) for more information.
 </note>
 </section>
 
