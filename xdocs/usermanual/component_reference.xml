@@ -2071,10 +2071,10 @@ If these are not present in the lib directory, the element will not appear in th
         server.</property>
         <property name="Failure Subject" required="No">Email subject line for fail messages.</property>
         <property name="Success Subject" required="No">Email subject line for success messages.</property>
-        <property name="Failure Limit" required="Yes">Once this number of failed responses are received, a failure
-        email is sent.</property>
-        <property name="Success Limit" required="Yes">Once this number of successful responses are
-        received <strong>after previously reaching the failure limit</strong>, a success email
+        <property name="Failure Limit" required="Yes">Once this number of failed responses is exceeded, a failure
+        email is sent - i.e. set the count to 0 to send an e-mail on the first failure.</property>
+        <property name="Success Limit" required="Yes">Once this number of successful responses is exceeded
+        <strong>after previously reaching the failure limit</strong>, a success email
         is sent.  The mailer will thus only send out messages in a sequence of failed-succeeded-failed-succeeded, etc.</property>
         <property name="Test Mail" required="No">Press this button to send a test mail</property>
         <property name="Failures" required="No">A field that keeps a running total of number
