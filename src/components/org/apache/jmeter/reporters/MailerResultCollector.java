@@ -24,10 +24,6 @@ import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 
 
-/**
- * @author Michael Stover
- * @version $Revision$
- */
 public class MailerResultCollector extends ResultCollector implements Serializable {
     public static final String MAILER_MODEL = "MailerResultCollector.mailer_model"; //$NON-NLS-1$
 
@@ -47,7 +43,6 @@ public class MailerResultCollector extends ResultCollector implements Serializab
      * @see SampleListener#sampleOccurred(SampleEvent)
      */
     public void sampleOccurred(SampleEvent e) {
-        // TODO Auto-generated method stub
         super.sampleOccurred(e);
         getMailerModel().add(e.getResult());
     }
