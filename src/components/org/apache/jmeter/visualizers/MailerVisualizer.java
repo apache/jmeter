@@ -102,11 +102,18 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
      */
     public synchronized void clearData() {
         if (getModel() != null) {
-            ((MailerResultCollector) getModel()).getMailerModel().clear();
+            MailerModel model = ((MailerResultCollector) getModel()).getMailerModel();
+            model.clear();
+            updateVisualizer(model);
         }
     }
 
-    public void add(SampleResult res) {
+    public synchronized void add(SampleResult res) {
+        if (getModel() != null) {
+            MailerModel model = ((MailerResultCollector) getModel()).getMailerModel();
+            model.add(res);//this is a different model from the one used by the result collector
+            updateVisualizer(model);
+        }
     }
 
     public String toString() {
@@ -324,7 +331,7 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
      * Notifies this Visualizer about model-changes. Causes the Visualizer to
      * query the model about its new state.
      */
-    public void updateVisualizer(MailerModel model) {
+    private void updateVisualizer(MailerModel model) {
         addressField.setText(model.getToAddress());
         fromField.setText(model.getFromAddress());
         smtpHostField.setText(model.getSmtpHost());
