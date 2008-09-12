@@ -91,6 +91,7 @@ Moved the Scoping Rules sub-section from Section 3. "Building a Test Plan"  to S
 <li>Fix NPE (in DataSourceElement) when using JDBC in client-server mode</li>
 <li>Bug 45749 - Response Assertion does not work with a substring that is not a valid RE</li>
 <li>Mailer Visualizer documentation now agrees with code i.e. failure/success counts need to be exceeded.</li>
+<li>Mailer Visualizer now shows the failure count</li>
 </ul>
 
 <h3>Improvements</h3>
