@@ -98,16 +98,6 @@ public class MailerModel extends AbstractTestElement implements Serializable {
         return m;
     }
 
-    /**
-     * Returns wether there had been more failures than acceptable.
-     *
-     * @return a boolean value indicating whether the limit of acceptable
-     *         failures has been reached.
-     */
-    public synchronized boolean isFailing() {
-        return (failureCount > getFailureLimit());
-    }
-
     public void notifyChangeListeners() {
         if (changeListener != null) {
             changeListener.stateChanged(new ChangeEvent(this));
@@ -167,7 +157,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
             successCount++;
         }
 
-        if (this.isFailing() && !siteDown && !failureMsgSent) {
+        if ((failureCount > getFailureLimit()) && !siteDown && !failureMsgSent) {
             // Send the mail ...
             Vector addressVector = getAddressVector();
 
