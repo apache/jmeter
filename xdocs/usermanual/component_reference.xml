@@ -1920,7 +1920,9 @@ Additional types can be added by defining the JMeter property
 as a comma-separated list of the content-type prefixes to be matched.
 </p>
 <p>If the response data is larger than 200K, then it won't be displayed.
-To change this limit, set the JMeter property <b>view.results.tree.max_size</b>
+To change this limit, set the JMeter property <b>view.results.tree.max_size</b>.
+You can also use save the entire response to a file using
+<complink name="Save Responses to a file"/>.
 </p>
 <p>The HTML view attempts to render the response as
 HTML.  The rendered HTML is likely to compare poorly to the view one
@@ -2170,7 +2172,9 @@ This allows identical labels from different thread groups to be collated separat
         <p>
         This test element can be placed anywhere in the test plan.
         For each sample in its scope, it will create a file of the response Data.
-        The primary use for this is in creating functional tests.
+        The primary use for this is in creating functional tests, but it can also
+        be useful where the response is too large to be displayed in the 
+        <complink name="View Results Tree"/> Listener.
         The file name is created from the specified prefix, plus a number.
         The file extension is created from the document type, if known.
         If not known, the file extension is set to 'unknown'.
