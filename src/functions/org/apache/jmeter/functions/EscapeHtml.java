@@ -62,10 +62,6 @@ public class EscapeHtml extends AbstractFunction implements Serializable {
     public EscapeHtml() {
     }
 
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
-
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
 

@@ -68,10 +68,6 @@ public class XPath extends AbstractFunction implements Serializable {
     public XPath() {
     }
 
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
-
     /**
      * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
      */
