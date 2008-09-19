@@ -31,7 +31,7 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class IterationCounter extends AbstractFunction implements Serializable {
 
-    private static final long serialVersionUID = 232L;
+    private static final long serialVersionUID = 233L;
 
     private static final List desc = new LinkedList();
 
@@ -39,8 +39,15 @@ public class IterationCounter extends AbstractFunction implements Serializable {
 
     private transient ThreadLocal perThreadInt;
 
+    private transient Object[] variables;
+
+    private transient int globalCounter;//MAXINT = 2,147,483,647
+
     private void init(){
-        perThreadInt = new ThreadLocal(){
+       synchronized(this){
+           globalCounter=0;
+       }
+       perThreadInt = new ThreadLocal(){
             protected synchronized Object initialValue() {
                 return new Integer(0);
             }
@@ -52,23 +59,13 @@ public class IterationCounter extends AbstractFunction implements Serializable {
         desc.add(JMeterUtils.getResString("function_name_paropt")); //$NON-NLS-1$
     }
 
-    private transient Object[] variables;
-
-    private transient int globalCounter;//MAXINT = 2,147,483,647
-
     public IterationCounter() {
         init();
-        globalCounter=0;
     }
 
     private Object readResolve(){
         init();
-        globalCounter=0;
         return this;
-    }
-
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
     }
 
     /*
