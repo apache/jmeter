@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.modifiers;
 
-import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 
@@ -32,10 +31,12 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 
 /**
- * Provides a counter per-thread/user or globally
- * The long value can be
+ * Provides a counter per-thread(user) or per-thread group.
  */
-public class CounterConfig extends AbstractTestElement implements Serializable, LoopIterationListener, NoThreadClone {
+public class CounterConfig extends AbstractTestElement 
+    implements Serializable, LoopIterationListener, NoThreadClone {
+
+    private static final long serialVersionUID = 233L;
 
     private final static String START = "CounterConfig.start"; // $NON-NLS-1$
 
@@ -69,7 +70,7 @@ public class CounterConfig extends AbstractTestElement implements Serializable, 
         init();
     }
 
-    private Object readResolve() throws ObjectStreamException{
+    private Object readResolve(){
         init();
         return this;
     }
