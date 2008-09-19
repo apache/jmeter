@@ -45,20 +45,23 @@ public class XPathFileContainer {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private NodeList nodeList;
+    private final NodeList nodeList;
 
-    private String fileName; // name of the file
+    private final String fileName; // name of the file
 
-    private String xpath;
+    private final String xpath;
 
     /** Keeping track of which row is next to be read. */
-    private int nextRow;
+    private int nextRow;// probably does not need to be synch (always accessed through ThreadLocal?)
     int getNextRow(){// give access to Test code
         return nextRow;
     }
 
     private XPathFileContainer()// Not intended to be called directly
     {
+        fileName=null;
+        xpath=null;
+        nodeList=null;
     }
 
     public XPathFileContainer(String file, String xpath) throws FileNotFoundException, IOException,
@@ -67,42 +70,39 @@ public class XPathFileContainer {
         fileName = file;
         this.xpath = xpath;
         nextRow = 0;
-        load();
+        nodeList=load();
     }
 
-    private void load() throws IOException, FileNotFoundException, ParserConfigurationException, SAXException,
+    private NodeList load() throws IOException, FileNotFoundException, ParserConfigurationException, SAXException,
             TransformerException {
         InputStream fis = null;
+        NodeList nl = null;
         try {
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 
             fis = new FileInputStream(fileName);
-            nodeList = XPathAPI.selectNodeList(builder.parse(fis), xpath);
-            log.debug("found " + nodeList.getLength());
+            nl = XPathAPI.selectNodeList(builder.parse(fis), xpath);
+            log.debug("found " + nl.getLength());
 
         } catch (FileNotFoundException e) {
-            nodeList = null;
             log.warn(e.toString());
             throw e;
         } catch (IOException e) {
-            nodeList = null;
             log.warn(e.toString());
             throw e;
         } catch (ParserConfigurationException e) {
-            nodeList = null;
             log.warn(e.toString());
             throw e;
         } catch (SAXException e) {
-            nodeList = null;
             log.warn(e.toString());
             throw e;
         } catch (TransformerException e) {
-            nodeList = null;
             log.warn(e.toString());
             throw e;
         } finally {
             JOrphanUtils.closeQuietly(fis);
         }
+        return nl;
     }
 
     public String getXPathString(int num) {
