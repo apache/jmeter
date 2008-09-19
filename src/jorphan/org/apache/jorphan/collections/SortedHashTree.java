@@ -21,9 +21,7 @@ package org.apache.jorphan.collections;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.TreeMap;
 
 // NOTUSED import org.apache.jorphan.logging.LoggingManager;
@@ -42,6 +40,9 @@ import java.util.TreeMap;
  */
 public class SortedHashTree extends HashTree implements Serializable {
     // NOTUSED private static Logger log = LoggingManager.getLoggerForClass();
+
+    private static final long serialVersionUID = 233L;
+
     protected transient Comparator comparator;
 
     public SortedHashTree() {
@@ -120,16 +121,17 @@ public class SortedHashTree extends HashTree implements Serializable {
         }
     }
 
-    public Object clone() {
-        HashTree newTree = null;
-        if (comparator == null) {
-            newTree = new SortedHashTree();
-        } else {
-            newTree = new SortedHashTree(comparator);
-        }
-        newTree.data = (Map) ((HashMap) data).clone();
-        return newTree;
-    }
+// Does not seem to be used (and class does not implement Cloneable)
+//    public Object clone() {
+//        HashTree newTree = null;
+//        if (comparator == null) {
+//            newTree = new SortedHashTree();
+//        } else {
+//            newTree = new SortedHashTree(comparator);
+//        }
+//        newTree.data = (Map) ((HashMap) data).clone();
+//        return newTree;
+//    }
 
     /**
      * @param comparator

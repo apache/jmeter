@@ -598,7 +598,7 @@ public class HashTree implements Serializable, Map {
      * contents of the tree are not cloned).
      *
      */
-    public Object clone() {
+    private HashTree localclone() {
         HashTree newTree = new HashTree();
         cloneTree(newTree);
         return newTree;
@@ -608,7 +608,7 @@ public class HashTree implements Serializable, Map {
         Iterator iter = list().iterator();
         while (iter.hasNext()) {
             Object key = iter.next();
-            newTree.set(key, (HashTree) getTree(key).clone());
+            newTree.set(key, getTree(key).localclone());
         }
     }
 
