@@ -68,7 +68,7 @@ public abstract class BSFTestElement extends AbstractTestElement
         scriptLanguage="";
     }
 
-    private Object readResolve() {
+    protected Object readResolve() {
         init();
         return this;
     }
