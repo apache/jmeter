@@ -26,11 +26,7 @@ import javax.swing.JPanel;
 
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.http.gui.HTTPFileArgsPanel;
-import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
-import org.apache.jmeter.protocol.http.util.HTTPFileArg;
-import org.apache.jmeter.protocol.http.util.HTTPFileArgs;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 
 public class MultipartUrlConfigGui extends UrlConfigGui {
