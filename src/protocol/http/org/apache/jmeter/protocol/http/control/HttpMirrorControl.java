@@ -29,6 +29,8 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class HttpMirrorControl extends AbstractTestElement {
 
+    private static final long serialVersionUID = 233L;
+
     private transient HttpMirrorServer server;
 
     private static final int DEFAULT_PORT = 8080;
