@@ -56,16 +56,6 @@ public class LongSum extends AbstractFunction implements Serializable {
     }
 
     /**
-     * Clone this Add object.
-     *
-     * @return A new Add object.
-     * @throws CloneNotSupportedException
-     */
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
-
-    /**
      * Execute the function.
      *
      * @see Function#execute(SampleResult, Sampler)

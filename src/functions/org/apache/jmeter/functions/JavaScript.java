@@ -58,10 +58,6 @@ public class JavaScript extends AbstractFunction implements Serializable {
     public JavaScript() {
     }
 
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
-
     /*
      * (non-Javadoc)
      *
