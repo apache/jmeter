@@ -62,10 +62,6 @@ public class BeanShell extends AbstractFunction implements Serializable {
     public BeanShell() {
     }
 
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
-
     /*
      * (non-Javadoc)
      *
