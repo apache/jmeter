@@ -90,7 +90,7 @@ public abstract class BeanShellTestElement extends AbstractTestElement
         }
     }
 
-    private Object readResolve() {
+    protected Object readResolve() {
         init();
         return this;
     }
