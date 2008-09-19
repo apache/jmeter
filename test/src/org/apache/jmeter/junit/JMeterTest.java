@@ -522,7 +522,7 @@ public class JMeterTest extends JMeterTestCase {
 
     public void readAliases() throws Exception {
         nameMap = SaveService.loadProperties();        
-        assertNotNull("SaveService nameMap should not be null",nameMap);
+        assertNotNull("SaveService nameMap (saveservice.properties) should not be null",nameMap);
     }
     
 	private void checkElementAlias(Object item) {
@@ -530,7 +530,7 @@ public class JMeterTest extends JMeterTestCase {
         boolean contains = nameMap.values().contains(name);
         if (!contains){
             //System.out.println(name.substring(name.lastIndexOf('.')+1)+"="+name);
-            fail("SaveService nameMap should contain "+name);
+            fail("SaveService nameMap (saveservice.properties) should contain "+name);
         }
     }
 
