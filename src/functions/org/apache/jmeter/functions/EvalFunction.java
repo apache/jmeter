@@ -59,10 +59,6 @@ public class EvalFunction extends AbstractFunction implements Serializable {
     public EvalFunction() {
     }
 
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
-
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
         String parameter = ((CompoundVariable) values[0]).execute();

@@ -56,10 +56,6 @@ public class Random extends AbstractFunction implements Serializable {
     public Random() {
     }
 
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
-
     /**
      * Execute the function.
      *

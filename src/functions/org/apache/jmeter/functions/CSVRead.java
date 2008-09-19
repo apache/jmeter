@@ -70,10 +70,6 @@ public class CSVRead extends AbstractFunction implements Serializable {
     public CSVRead() {
     }
 
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
-
     /**
      * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
      */

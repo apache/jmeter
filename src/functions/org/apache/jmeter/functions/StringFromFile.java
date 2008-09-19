@@ -122,15 +122,6 @@ public class StringFromFile extends AbstractFunction implements Serializable, Te
         return this;
     }
 
-    public Object clone() throws CloneNotSupportedException {
-        StringFromFile newReader = (StringFromFile) super.clone();
-        if (log.isDebugEnabled()) { // Skip expensive parameter creation ..
-            log.debug(this + "::StringFromFile.clone()", new Throwable("debug"));//$NON-NLS-1$
-        }
-
-        return newReader;
-    }
-
     /*
      * Warning: the file will generally be left open at the end of a test run.
      * This is because functions don't (yet) have any way to find out when a

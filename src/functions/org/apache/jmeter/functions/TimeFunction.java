@@ -80,10 +80,6 @@ public class TimeFunction extends AbstractFunction implements Serializable {
         super();
     }
 
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
-
     /*
      * (non-Javadoc)
      *
