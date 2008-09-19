@@ -74,6 +74,8 @@ public class ProxyControl extends GenericController {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final long serialVersionUID = 233L;
+
     private static final String ASSERTION_GUI = AssertionGui.class.getName();
 
     private static final String LOGIC_CONTROLLER_GUI = LogicControllerGui.class.getName();
