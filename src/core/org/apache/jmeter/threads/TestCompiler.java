@@ -38,7 +38,6 @@ import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testbeans.TestBeanHelper;
-import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.timers.Timer;
 import org.apache.jorphan.collections.HashTree;
@@ -49,17 +48,17 @@ import org.apache.log.Logger;
 public class TestCompiler implements HashTreeTraverser {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private LinkedList stack = new LinkedList();
+    private final LinkedList stack = new LinkedList();
 
-    private Map samplerConfigMap = new HashMap();
+    private final Map samplerConfigMap = new HashMap();
 
-    private Map transactionControllerConfigMap = new HashMap();
+    private final Map transactionControllerConfigMap = new HashMap();
 
-    private HashTree testTree;
+    private final HashTree testTree;
 
     /*
-     * This set keeps track of which ObjectPairs have been seen Its purpose is
-     * not entirely clear (please document if you know!) but it is needed,..
+     * This set keeps track of which ObjectPairs have been seen.
+     * Its purpose is not entirely clear (please document if you know!) but it is needed,..
      */
     private static final Set pairing = new HashSet();
 
@@ -84,7 +83,6 @@ public class TestCompiler implements HashTreeTraverser {
         SamplePackage pack = (SamplePackage) samplerConfigMap.get(sampler);
         pack.setSampler(sampler);
         configureWithConfigElements(sampler, pack.getConfigs());
-        runPreProcessors(pack.getPreProcessors());
         return pack;
     }
 
@@ -93,18 +91,6 @@ public class TestCompiler implements HashTreeTraverser {
         SamplePackage pack = (SamplePackage) transactionControllerConfigMap.get(controller);
         pack.setSampler(transactionSampler);
         return pack;
-    }
-
-    private void runPreProcessors(List preProcessors) {
-        Iterator iter = preProcessors.iterator();
-        while (iter.hasNext()) {
-            PreProcessor ex = (PreProcessor) iter.next();
-            if (log.isDebugEnabled()) {
-                log.debug("Running preprocessor: " + ((AbstractTestElement) ex).getName());
-            }
-            TestBeanHelper.prepare((TestElement) ex);
-            ex.process();
-        }
     }
 
     public void done(SamplePackage pack) {
