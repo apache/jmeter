@@ -68,7 +68,7 @@ To override the default local language, set the JMeter property "language" befor
 
 <h3>Incompatible changes</h3>
 <p>
-The test elements "Save Results to a file" and "" are now shown as Listeners.
+The test elements "Save Results to a file" and "Generate Summary Results" are now shown as Listeners.
 They were previously shown as Post-Processors, even though they are implemented as Listeners.
 </p>
 <p>
@@ -102,6 +102,10 @@ Moved the Scoping Rules sub-section from Section 3. "Building a Test Plan"  to S
 <li>Bug 45749 - Response Assertion does not work with a substring that is not a valid RE</li>
 <li>Mailer Visualizer documentation now agrees with code i.e. failure/success counts need to be exceeded.</li>
 <li>Mailer Visualizer now shows the failure count</li>
+<li>Fix incorrect GUI classifications: 
+"Save Results to a file" and "Generate Summary Results" are now shown as Listeners.
+"Counter" is now shown as a Configuration element.
+</li>
 </ul>
 
 <h3>Improvements</h3>
@@ -118,6 +122,7 @@ Moved the Scoping Rules sub-section from Section 3. "Building a Test Plan"  to S
 <li>Added __escapeHtml() function: encodes text using Html-encoding.</li>
 <li>Allow spaces in JMeter path names (apply work-round for Java bug 4496398)</li>
 <li>Bug 45694 - Support GZIP compressed logs</li>
+<li>Random Variable - new configuration element to create random numeric variables</li>
 </ul>
 
 <h3>Non-functional changes</h3>
