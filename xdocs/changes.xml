@@ -131,6 +131,7 @@ Moved the Scoping Rules sub-section from Section 3. "Building a Test Plan"  to S
 <li>Assertions run after PostProcessors; change order of pop-up menus accordingly</li>
 <li>Remove unnecessary clone() methods from function classes</li>
 <li>Moved PreProcessor invocation to JMeterThread class</li>
+<li>Made HashTree Map field final</li>
 </ul>
 </section> 
 </body> 
