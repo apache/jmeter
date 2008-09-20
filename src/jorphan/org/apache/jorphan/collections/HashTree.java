@@ -24,6 +24,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -66,6 +67,13 @@ public class HashTree implements Serializable, Map, Cloneable {
      */
     public HashTree() {
         data = new HashMap();
+    }
+
+    /**
+     * Allow subclasses to provide their own Map.
+     */
+    protected HashTree(Map _map) {
+        data = _map;
     }
 
     /**
