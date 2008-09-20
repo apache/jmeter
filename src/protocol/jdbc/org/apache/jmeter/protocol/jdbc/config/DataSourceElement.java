@@ -47,6 +47,8 @@ public class DataSourceElement extends AbstractTestElement
     {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final long serialVersionUID = 233L;
+
     transient String dataSource, driver, dbUrl, username, password, checkQuery, poolMax, connectionAge, timeout,
             trimInterval;
 
