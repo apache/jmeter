@@ -34,11 +34,13 @@ import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.processor.PostProcessor;
+import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testbeans.TestBeanHelper;
+import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.ThreadListener;
@@ -323,6 +325,7 @@ public class JMeterThread implements Runnable, Serializable {
             if(current != null) {
                 // Get the sampler ready to sample
                 SamplePackage pack = compiler.configureSampler(current);
+                runPreProcessors(pack.getPreProcessors());
 
                 // Hack: save the package for any transaction controllers
                 threadVars.putObject(PACKAGE_OBJECT, pack);
@@ -560,6 +563,18 @@ public class JMeterThread implements Runnable, Serializable {
                 TestBeanHelper.prepare((TestElement) ex);
                 ex.process();
             }
+        }
+    }
+
+    private void runPreProcessors(List preProcessors) {
+        Iterator iter = preProcessors.iterator();
+        while (iter.hasNext()) {
+            PreProcessor ex = (PreProcessor) iter.next();
+            if (log.isDebugEnabled()) {
+                log.debug("Running preprocessor: " + ((AbstractTestElement) ex).getName());
+            }
+            TestBeanHelper.prepare((TestElement) ex);
+            ex.process();
         }
     }
 
