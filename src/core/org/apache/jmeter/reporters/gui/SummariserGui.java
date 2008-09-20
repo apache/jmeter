@@ -21,17 +21,14 @@ package org.apache.jmeter.reporters.gui;
 import java.awt.BorderLayout;
 
 import org.apache.jmeter.reporters.Summariser;
-import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.visualizers.gui.AbstractListenerGui;
 
 /**
- * Create a summariser test element.
- *
- * Note: This is not really a PostProcessor, but that seems to be the closest of
- * the existing types.
+ * Create a summariser test element GUI.
  *
  */
-public class SummariserGui extends AbstractPostProcessorGui {
+public class SummariserGui extends AbstractListenerGui {
 
     public SummariserGui() {
         super();
