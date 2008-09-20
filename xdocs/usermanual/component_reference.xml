@@ -2238,6 +2238,53 @@ The script (or file) is processed using the BSFEngine.exec() method, which does 
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
 </component>
 
+<component name="Generate Summary Results" index="&sect-num;.3.18"  width="358" height="131" screenshot="summary.png">
+    <description>This test element can be placed anywhere in the test plan.
+Generates a summary of the test run so far to the log file and/or 
+standard output. Both running and differential totals are shown.
+Output is generated every n seconds (default 3 minutes) on the appropriate
+time boundary, so that multiple test runs on the same time will be synchronised.
+The interval is defined by the property "summariser.interval" - see jmeter.properties.
+This element is mainly intended for batch (non-GUI) runs.
+The output looks like the following:
+<pre>
+label +   171 in  20.3s =    8.4/s Avg:  1129 Min:  1000 Max:  1250 Err:     0 (0.00%)
+label +   263 in  31.3s =    8.4/s Avg:  1138 Min:  1000 Max:  1250 Err:     0 (0.00%)
+label =   434 in  50.4s =    8.6/s Avg:  1135 Min:  1000 Max:  1250 Err:     0 (0.00%)
+label +   263 in  31.0s =    8.5/s Avg:  1138 Min:  1000 Max:  1250 Err:     0 (0.00%)
+label =   697 in  80.3s =    8.7/s Avg:  1136 Min:  1000 Max:  1250 Err:     0 (0.00%)
+label +   109 in  12.4s =    8.8/s Avg:  1092 Min:    47 Max:  1250 Err:     0 (0.00%)
+label =   806 in  91.6s =    8.8/s Avg:  1130 Min:    47 Max:  1250 Err:     0 (0.00%)
+</pre>
+The "label" is the the name of the element.
+The "+" means that the line is a delta line, i.e. shows the changes since the last output.
+The "=" means that the line is a totals line, i.e. it shows the running total.
+Entries in the jmeter log file also include time-stamps.
+The example "806 in  91.6s =    8.8/s" means that there were 806 samples recorded in 91.6 seconds,
+and that works out at 8.8 samples per second.
+The Avg (Average), Min(imum) and Max(imum) times are in milliseonds.
+"Err" means number of errors (also shown as percentage).
+The last two lines will appear at the end of a test.
+They will not be synchronised to the appropriate time boundary.
+Note that the initial and final deltas may be for less than the interval (in the example above this is 30 seconds).
+The first delta will generally be lower, as JMeter synchronises to the interval boundary.
+The last delta will be lower, as the test will generally not finish on an exact interval boundary.
+<p>
+The label is used to group sample results together. 
+So if you have multiple Thread Groups and want to summarize across them all, then use the same label
+ - or add the summariser to the Test Plan (so all thread groups are in scope).
+Different summary groupings can be implemented
+by using suitable labels and adding the summarisers to appropriate parts of the test plan.
+</p>
+
+    </description>
+ <properties>
+ <property name="Name" required="Yes">Descriptive name for this element that is shown in the tree.
+ It appears as the "label" in the output. Details for all elements with the same label will be added together.
+ </property>
+ </properties>
+</component>
+
 <a href="#">^</a>
 
 </section>
@@ -2672,14 +2719,75 @@ You can reference variables defined in earlier UDVs or on the Test Plan.
 </properties>
 </component>
 
-<component name="Simple Config Element" index="&sect-num;.4.14"  width="393" height="245" screenshot="simple_config_element.png">
+<component name="Random Variable" index="&sect-num;.4.14"  width="411" height="306" screenshot="random_variable.png">
+<description>
+<p>
+The Random Variable Config Element is used to generate random numeric strings and store them in variable for use later.
+It's simpler than using <complink name="User Defined Variables"/> together with the __Random() function.
+</p>
+<p>
+The output variable is constructed by using the random number generator,
+and then the resulting number is formatted using the format string.
+The number is calculated using the formula <code>minimum+Random.nextInt(maximum-minimum+1)</code>.
+Random.nextInt() requires a positive integer.
+This means that maximum-minimum - i.e. the range - must be less than 2147483647,
+however the minimum and maximum values can be any long values so long as the range is OK.
+</p>
+</description>
+
+<properties>
+  <property name="Name" required="Yes">Descriptive name for this element that is shown in the tree.</property>
+  <property name="Variable Name" required="Yes">The name of the variable in which to store the random string.</property>
+  <property name="Format String" required="No">The java.text.DecimalFormat format string to be used. 
+  For example "000" which will generate numbers with at least 3 digits, 
+  or "USER_000" which will generate output of the form USER_nnn. 
+  If not specified, the default is to generate the number using Long.toString()</property>
+  <property name="Minimum Value" required="Yes">The minimum value (long) of the generated random number.</property>
+  <property name="Maximum Value" required="Yes">The maximum value (long) of the generated random number.</property>
+  <property name="Random Seed" required="No">The seed for the random number generator. Default is the current time in milliseconds.</property>
+  <property name="Per Thread(User)?" required="Yes">If False, the generator is shared between all threads in the thread group.
+  If True, then each thread has its own random generator.</property>
+</properties>
+
+</component>
+
+<component name="Counter" index="&sect-num;.4.15"  width="399" height="244" screenshot="counter.png">
+<description><p>Allows the user to create a counter that can be referenced anywhere
+in the Thread Group.  The counter config lets the user configure a starting point, a maximum,
+and the increment.  The counter will loop from the start to the max, and then start over
+with the start, continuing on like that until the test is ended.  </p>
+<p>From version 2.1.2, the counter now uses a long to store the value, so the range is from -2^63 to 2^63-1.</p>
+</description>
+<properties>
+        <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+        <property name="Start" required="Yes">The starting number for the counter.  The counter will equal this
+        number during the first iteration.</property>
+        <property name="Increment" required="Yes">How much to increment the counter by after each
+        iteration.</property>
+        <property name="Maximum" required="No">If the counter exceeds the maximum, then it is reset to the Start value.
+        For versions after 2.2 the default is Long.MAX_VALUE (previously it was 0).
+        </property>
+        <property name="Format" required="No">Optional format, e.g. 000 will format as 001, 002 etc. 
+        This is passed to DecimalFormat, so any valid formats can be used.
+        If there is a problem interpreting the format, then it is ignored.
+    [The default format is generated using Long.toString()]
+        </property>
+        <property name="Reference Name" required="Yes">This controls how you refer to this value in other elements.  Syntax is
+        as in <a href="functions.html">user-defined values</a>: <code>$(reference_name}</code>.</property>
+        <property name="Track Counter Independently for each User" required="No">In other words, is this a global counter, or does each user get their
+        own counter?  If unchecked, the counter is global (ie, user #1 will get value "1", and user #2 will get value "2" on
+        the first iteration).  If checked, each user has an independent counter.</property>
+</properties>
+</component>
+
+<component name="Simple Config Element" index="&sect-num;.4.16"  width="393" height="245" screenshot="simple_config_element.png">
 <description><p>The Simple Config Element lets you add or override arbitrary values in samplers.  You can choose the name of the value
 and the value itself.  Although some adventurous users might find a use for this element, it's here primarily for developers as a basic
 GUI that they can use while developing new JMeter components.</p>
 </description>
 
 <properties>
-        <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
+        <property name="Name" required="Yes">Descriptive name for this element that is shown in the tree. </property>
   <property name="Parameter Name" required="Yes">The name of each parameter.  These values are internal to JMeter's workings and
   are not generally documented.  Only those familiar with the code will know these values.</property>
   <property name="Parameter Value" required="Yes">The value to apply to that parameter.</property>
@@ -3352,35 +3460,6 @@ To add a new value to the series, click the 'Add User' button and fill in the de
 </properties>
 </component>
 
-<component name="Counter" index="&sect-num;.7.6"  width="399" height="244" screenshot="counter.png">
-<description><p>Allows the user to create a counter that can be referenced anywhere
-in the Thread Group.  The counter config lets the user configure a starting point, a maximum,
-and the increment.  The counter will loop from the start to the max, and then start over
-with the start, continuing on like that until the test is ended.  </p>
-<p>From version 2.1.2, the counter now uses a long to store the value, so the range is from -2^63 to 2^63-1.</p>
-</description>
-<properties>
-        <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-        <property name="Start" required="Yes">The starting number for the counter.  The counter will equal this
-        number during the first iteration.</property>
-        <property name="Increment" required="Yes">How much to increment the counter by after each
-        iteration.</property>
-        <property name="Maximum" required="No">If the counter exceeds the maximum, then it is reset to the Start value.
-        For versions after 2.2 the default is Long.MAX_VALUE (previously it was 0).
-        </property>
-        <property name="Format" required="No">Optional format, e.g. 000 will format as 001, 002 etc. 
-        This is passed to DecimalFormat, so any valid formats can be used.
-        If there is a problem interpreting the format, then it is ignored.
-	[The default format is generated using Long.toString()]
-        </property>
-        <property name="Reference Name" required="Yes">This controls how you refer to this value in other elements.  Syntax is
-        as in <a href="functions.html">user-defined values</a>: <code>$(reference_name}</code>.</property>
-        <property name="Track Counter Independently for each User" required="No">In other words, is this a global counter, or does each user get their
-        own counter?  If unchecked, the counter is global (ie, user #1 will get value "1", and user #2 will get value "2" on
-        the first iteration).  If checked, each user has an independent counter.</property>
-</properties>
-</component>
-
 <component name="BeanShell PreProcessor" index="&sect-num;.7.7"  width="597" height="303" screenshot="beanshell_preprocessor.png">
 <description>
 <p>
@@ -3633,54 +3712,7 @@ generate the template string, and store the result into the given variable name.
    </properties>
 </component>
 
-<component name="Generate Summary Results" index="&sect-num;.8.4"  width="358" height="131" screenshot="summary.png">
-	<description>This test element can be placed anywhere in the test plan.
-Generates a summary of the test run so far to the log file and/or 
-standard output. Both running and differential totals are shown.
-Output is generated every n seconds (default 3 minutes) on the appropriate
-time boundary, so that multiple test runs on the same time will be synchronised.
-The interval is defined by the property "summariser.interval" - see jmeter.properties.
-This element is mainly intended for batch (non-GUI) runs.
-The output looks like the following:
-<pre>
-label +   171 in  20.3s =    8.4/s Avg:  1129 Min:  1000 Max:  1250 Err:     0 (0.00%)
-label +   263 in  31.3s =    8.4/s Avg:  1138 Min:  1000 Max:  1250 Err:     0 (0.00%)
-label =   434 in  50.4s =    8.6/s Avg:  1135 Min:  1000 Max:  1250 Err:     0 (0.00%)
-label +   263 in  31.0s =    8.5/s Avg:  1138 Min:  1000 Max:  1250 Err:     0 (0.00%)
-label =   697 in  80.3s =    8.7/s Avg:  1136 Min:  1000 Max:  1250 Err:     0 (0.00%)
-label +   109 in  12.4s =    8.8/s Avg:  1092 Min:    47 Max:  1250 Err:     0 (0.00%)
-label =   806 in  91.6s =    8.8/s Avg:  1130 Min:    47 Max:  1250 Err:     0 (0.00%)
-</pre>
-The "label" is the the name of the element.
-The "+" means that the line is a delta line, i.e. shows the changes since the last output.
-The "=" means that the line is a totals line, i.e. it shows the running total.
-Entries in the jmeter log file also include time-stamps.
-The example "806 in  91.6s =    8.8/s" means that there were 806 samples recorded in 91.6 seconds,
-and that works out at 8.8 samples per second.
-The Avg (Average), Min(imum) and Max(imum) times are in milliseonds.
-"Err" means number of errors (also shown as percentage).
-The last two lines will appear at the end of a test.
-They will not be synchronised to the appropriate time boundary.
-Note that the initial and final deltas may be for less than the interval (in the example above this is 30 seconds).
-The first delta will generally be lower, as JMeter synchronises to the interval boundary.
-The last delta will be lower, as the test will generally not finish on an exact interval boundary.
-<p>
-The label is used to group sample results together. 
-So if you have multiple Thread Groups and want to summarize across them all, then use the same label
- - or add the summariser to the Test Plan (so all thread groups are in scope).
-Different summary groupings can be implemented
-by using suitable labels and adding the summarisers to appropriate parts of the test plan.
-</p>
-
-	</description>
- <properties>
- <property name="Name" required="Yes">Descriptive name for this element that is shown in the tree.
- It appears as the "label" in the output. Details for all elements with the same label will be added together.
- </property>
- </properties>
-</component>
-
-<component name="BeanShell PostProcessor"  index="&sect-num;.8.5"  width="597" height="303" screenshot="beanshell_postprocessor.png">
+<component name="BeanShell PostProcessor"  index="&sect-num;.8.4"  width="597" height="303" screenshot="beanshell_postprocessor.png">
 <description>
 <p>
 The BeanShell PreProcessor allows arbitrary code to be applied after taking a sample.
@@ -3726,7 +3758,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 <p>If the property <b>beanshell.postprocessor.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
 </component>
 
-<component name="BSF PostProcessor" index="&sect-num;.8.6"  width="529" height="382" screenshot="bsf_postprocessor.png">
+<component name="BSF PostProcessor" index="&sect-num;.8.5"  width="529" height="382" screenshot="bsf_postprocessor.png">
 <description>
 <p>
 The BSF PostProcessor allows BSF script code to be applied after taking a sample.
