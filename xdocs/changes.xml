@@ -68,12 +68,17 @@ To override the default local language, set the JMeter property "language" befor
 
 <h3>Incompatible changes</h3>
 <p>
-The test element "Save Results to a file" is now shown as a Listener.
-It was previously shown as a Post-Processor, even though it was in fact a Listener.
-This change only affects the icon that is displayed and the location in the Gui pop-up menus.
-It does not affect test plans or test behaviour.
+The test elements "Save Results to a file" and "" are now shown as Listeners.
+They were previously shown as Post-Processors, even though they are implemented as Listeners.
 </p>
-
+<p>
+The Counter element is now shown as a Configuration element.
+It was previously shown as a Pre-Processor, even though it is implemented as a Config item.
+</p>
+<p>
+The above changes only affect the icons that are displayed and the locations in the GUI pop-up menus.
+They do not affect test plans or test behaviour.
+</p>
 <p>
 Moved the Scoping Rules sub-section from Section 3. "Building a Test Plan"  to Section 4. "Elements of a test plan"
 </p>
@@ -114,6 +119,7 @@ Moved the Scoping Rules sub-section from Section 3. "Building a Test Plan"  to S
 <ul>
 <li>Introduce AbstractListenerGui class to make it easier to create Listeners with no visual output</li>
 <li>Assertions run after PostProcessors; change order of pop-up menus accordingly</li>
+<li>Remove unnecessary clone() methods from function classes</li>
 </ul>
 </section> 
 </body> 
