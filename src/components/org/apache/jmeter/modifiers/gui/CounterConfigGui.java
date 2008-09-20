@@ -20,14 +20,14 @@ package org.apache.jmeter.modifiers.gui;
 
 import javax.swing.JCheckBox;
 
+import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.modifiers.CounterConfig;
-import org.apache.jmeter.processor.gui.AbstractPreProcessorGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
-public class CounterConfigGui extends AbstractPreProcessorGui {
+public class CounterConfigGui extends AbstractConfigGui {
     private JLabeledTextField startField, incrField, endField, varNameField, formatField;
 
     private JCheckBox perUserField;
