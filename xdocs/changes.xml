@@ -80,6 +80,11 @@ The above changes only affect the icons that are displayed and the locations in 
 They do not affect test plans or test behaviour.
 </p>
 <p>
+The PreProcessors are now invoked directly by the JMeterThread class,
+rather than by the TestCompiler#configureSampler() method. (JMeterThread handles the PostProcessors).
+This does not affect test plans or behaviour, but could perhaps affect 3rd party add-ons (very unlikely).
+</p>
+<p>
 Moved the Scoping Rules sub-section from Section 3. "Building a Test Plan"  to Section 4. "Elements of a test plan"
 </p>
 
@@ -120,6 +125,7 @@ Moved the Scoping Rules sub-section from Section 3. "Building a Test Plan"  to S
 <li>Introduce AbstractListenerGui class to make it easier to create Listeners with no visual output</li>
 <li>Assertions run after PostProcessors; change order of pop-up menus accordingly</li>
 <li>Remove unnecessary clone() methods from function classes</li>
+<li>Moved PreProcessor invocation to JMeterThread class</li>
 </ul>
 </section> 
 </body> 
