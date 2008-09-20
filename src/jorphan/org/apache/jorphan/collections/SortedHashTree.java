@@ -46,27 +46,27 @@ public class SortedHashTree extends HashTree implements Serializable {
     protected transient Comparator comparator;
 
     public SortedHashTree() {
-        data = new TreeMap();
+        super(new TreeMap());
     }
 
     public SortedHashTree(Comparator comper) {
+        super(new TreeMap(comper));
         comparator = comper;
-        data = new TreeMap(comparator);
     }
 
     public SortedHashTree(Object key) {
-        data = new TreeMap();
+        super(new TreeMap());
         data.put(key, new SortedHashTree());
     }
 
     public SortedHashTree(Object key, Comparator comper) {
+        super(new TreeMap(comper));
         comparator = comper;
-        data = new TreeMap(comparator);
         data.put(key, new SortedHashTree(comparator));
     }
 
     public SortedHashTree(Collection keys) {
-        data = new TreeMap();
+        super(new TreeMap());
         Iterator it = keys.iterator();
         while (it.hasNext()) {
             data.put(it.next(), new SortedHashTree());
@@ -74,8 +74,8 @@ public class SortedHashTree extends HashTree implements Serializable {
     }
 
     public SortedHashTree(Collection keys, Comparator comper) {
+        super(new TreeMap(comper));
         comparator = comper;
-        data = new TreeMap(comparator);
         Iterator it = keys.iterator();
         while (it.hasNext()) {
             data.put(it.next(), new SortedHashTree(comparator));
@@ -83,15 +83,15 @@ public class SortedHashTree extends HashTree implements Serializable {
     }
 
     public SortedHashTree(Object[] keys) {
-        data = new TreeMap();
+        super(new TreeMap());
         for (int x = 0; x < keys.length; x++) {
             data.put(keys[x], new SortedHashTree());
         }
     }
 
     public SortedHashTree(Object[] keys, Comparator comper) {
+        super(new TreeMap(comper));
         comparator = comper;
-        data = new TreeMap(comparator);
         for (int x = 0; x < keys.length; x++) {
             data.put(keys[x], new SortedHashTree(comparator));
         }
