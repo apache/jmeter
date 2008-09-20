@@ -48,7 +48,7 @@ import java.util.Set;
  * @see HashTreeTraverser
  * @see SearchByClass
  */
-public class HashTree implements Serializable, Map {
+public class HashTree implements Serializable, Map, Cloneable {
     // GetLoggerForClass() uses ClassContext, which
     // causes a Security violation in RemoteJMeterImpl
     // Currently log is only used by test code, so moved there.
@@ -58,6 +58,8 @@ public class HashTree implements Serializable, Map {
 
     // Used for the RuntimeException to short-circuit the traversal
     private static final String FOUND = "found"; // $NON-NLS-1$
+
+    protected final Map data;
 
     /**
      * Creates an empty new HashTree.
@@ -252,7 +254,7 @@ public class HashTree implements Serializable, Map {
     }
 
     /**
-     * Sets a key and it's values in the HashTree. It sets up a key in the
+     * Sets a key and its values in the HashTree. It sets up a key in the
      * current node, and then creates a node for that key, and sets all the
      * values in the array as keys in the new node. Any keys previously held
      * under the given key are lost.
@@ -598,7 +600,7 @@ public class HashTree implements Serializable, Map {
      * contents of the tree are not cloned).
      *
      */
-    private HashTree localclone() {
+    public Object clone() {
         HashTree newTree = new HashTree();
         cloneTree(newTree);
         return newTree;
@@ -608,7 +610,7 @@ public class HashTree implements Serializable, Map {
         Iterator iter = list().iterator();
         while (iter.hasNext()) {
             Object key = iter.next();
-            newTree.set(key, getTree(key).localclone());
+            newTree.set(key, (HashTree) getTree(key).clone());
         }
     }
 
@@ -984,8 +986,6 @@ public class HashTree implements Serializable, Map {
         traverse(converter);
         return converter.toString();
     }
-
-    protected Map data;
 
     private static class TreeSearcher implements HashTreeTraverser {
 
