@@ -23,7 +23,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -43,7 +42,7 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
     private List order;
 
     public ListedHashTree() {
-        data = new HashMap();
+        super();
         order = new LinkedList();
     }
 
@@ -54,14 +53,14 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
     }
 
     public ListedHashTree(Object key) {
-        data = new HashMap();
+        super();
         order = new LinkedList();
         data.put(key, new ListedHashTree());
         order.add(key);
     }
 
     public ListedHashTree(Collection keys) {
-        data = new HashMap();
+        super();
         order = new LinkedList();
         Iterator it = keys.iterator();
         while (it.hasNext()) {
@@ -72,7 +71,7 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
     }
 
     public ListedHashTree(Object[] keys) {
-        data = new HashMap();
+        super();
         order = new LinkedList();
         for (int x = 0; x < keys.length; x++) {
             data.put(keys[x], new ListedHashTree());
