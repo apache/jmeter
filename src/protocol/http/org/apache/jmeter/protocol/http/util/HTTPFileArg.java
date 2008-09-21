@@ -21,6 +21,7 @@ package org.apache.jmeter.protocol.http.util;
 import java.io.Serializable;
 
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 
 /**
@@ -67,6 +68,25 @@ public class HTTPFileArg extends AbstractTestElement implements Serializable {
         setPath(path);
         setParamName(paramname);
         setMimeType(mimetype);
+    }
+
+    /**
+     * Constructor for the HTTPFileArg object with full information,
+     * using existing properties
+     */
+    public HTTPFileArg(JMeterProperty path, JMeterProperty paramname, JMeterProperty mimetype) {
+        if (path == null || paramname == null || mimetype == null){
+            throw new IllegalArgumentException("Parameters must not be null");
+        }
+        setProperty(FILEPATH, path);
+        setProperty(MIMETYPE, mimetype);
+        setProperty(PARAMNAME, paramname);
+    }
+
+    private void setProperty(String name, JMeterProperty prop) {
+        JMeterProperty jmp = (JMeterProperty) prop.clone();
+        jmp.setName(name);
+        setProperty(jmp);
     }
 
     /**
