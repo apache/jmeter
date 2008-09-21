@@ -106,6 +106,7 @@ Moved the Scoping Rules sub-section from Section 3. "Building a Test Plan"  to S
 "Save Results to a file" and "Generate Summary Results" are now shown as Listeners.
 "Counter" is now shown as a Configuration element.
 </li>
+<li>HTTPSamplers can now use variables in POSTed file names</li>
 </ul>
 
 <h3>Improvements</h3>

@@ -271,10 +271,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      */
     public String getFileField() {
         checkCount("getFileField");
-        return getFileFieldProperty();
-    }
-
-    private String getFileFieldProperty() {
         return getPropertyAsString(FILE_FIELD);
     }
 
@@ -300,10 +296,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      */
     public String getFilename() {
         checkCount("getFilename");
-        return getFilenameProperty();
-    }
-
-    private String getFilenameProperty() {
         return getPropertyAsString(FILE_NAME);
     }
 
@@ -329,10 +321,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      */
     public String getMimetype() {
         checkCount("getMimetype");
-        return getMimetypeProperty();
-    }
-
-    private String getMimetypeProperty() {
         return getPropertyAsString(MIMETYPE);
     }
 
@@ -1460,9 +1448,10 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         }
         HTTPFileArg[] outFiles;
         // Check for original data names
-        String fileName = getFilenameProperty();
-        String paramName = getFileFieldProperty();
-        String mimeType = getMimetypeProperty();
+        // Use properties so variables and functions are not resolved too early
+        JMeterProperty fileName = getProperty(FILE_NAME);
+        JMeterProperty paramName = getProperty(FILE_FIELD);
+        JMeterProperty mimeType = getProperty(MIMETYPE);
         HTTPFileArg file = new HTTPFileArg(fileName, paramName, mimeType);
         if(file.isNotEmpty()) {
             // Now deal with any additional file arguments
