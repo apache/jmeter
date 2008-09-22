@@ -578,6 +578,19 @@ public class WebServiceSampler extends HTTPSamplerBase {
             } else {
                 throw new RuntimeException(exception);
             }
+        } finally {
+            // Make sure the sample start time and sample end time are recorded 
+            // in order not to confuse the statistics calculation methods: if 
+            //  an error occurs and an exception is thrown it is possible that
+            // the result.sampleStart() or result.sampleEnd() won't be called  
+            if (result.getStartTime() == 0)
+            {
+                result.sampleStart();
+            }
+            if (result.getEndTime() == 0)
+            {
+                result.sampleEnd();
+            }
         }
         return result;
     }
