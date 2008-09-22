@@ -107,6 +107,7 @@ Moved the Scoping Rules sub-section from Section 3. "Building a Test Plan"  to S
 "Counter" is now shown as a Configuration element.
 </li>
 <li>HTTPSamplers can now use variables in POSTed file names</li>
+<li>Bug 45831 - WS Sampler reports incorrect throughput if SOAP packet creation fails</li>
 </ul>
 
 <h3>Improvements</h3>
