@@ -552,7 +552,7 @@ public class HTTPSampler extends HTTPSamplerBase {
             if ((connection == null && (protocol == null || !protocol.startsWith(HTTP_1_1)))
                     || (connection != null && connection.equalsIgnoreCase(CONNECTION_CLOSE))) {
                 conn.disconnect();
-            }
+            } // TODO ? perhaps note connection so it can be disconnected at end of test?
         }
     }
 
