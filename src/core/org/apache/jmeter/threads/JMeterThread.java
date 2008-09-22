@@ -590,7 +590,7 @@ public class JMeterThread implements Runnable, Serializable {
             try {
                 Thread.sleep(sum);
             } catch (InterruptedException e) {
-                log.error("", e);
+                log.warn("The delay timer was interrupted - probably did not wait as long as intended.");
             }
         }
     }
