@@ -156,7 +156,7 @@ public class BeanShellSampler extends BeanShellTestElement implements Sampler
             log.error("BeanShell Jar missing? " + ex.toString());
             res.setResponseCode("501");//$NON-NLS-1$
             res.setResponseMessage(ex.toString());
-            res.setStopThread(true); // No point continuing
+            JMeterContextService.getContext().getThread().setOnErrorStopThread(true); // No point continuing
         } catch (Exception ex) // Mainly for bsh.EvalError
         {
             log.warn(ex.toString());
