@@ -142,7 +142,7 @@ public class BeanShellAssertion extends BeanShellTestElement implements Assertio
             log.error("BeanShell Jar missing? " + ex.toString());
             result.setError(true);
             result.setFailureMessage("BeanShell Jar missing? " + ex.toString());
-            response.setStopThread(true); // No point continuing
+            JMeterContextService.getContext().getThread().setOnErrorStopThread(true); // No point continuing
         } catch (Exception ex) // Mainly for bsh.EvalError
         {
             result.setError(true);
