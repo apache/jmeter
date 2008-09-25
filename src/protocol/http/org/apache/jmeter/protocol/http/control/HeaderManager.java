@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.util.JMeterUtils;
@@ -114,29 +115,31 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
             file = new File(System.getProperty("user.dir")// $NON-NLS-1$
                     + File.separator + headerFile);
         }
-        BufferedReader reader = null;
-        if (file.canRead()) {
-            reader = new BufferedReader(new FileReader(file));
-        } else {
+        if (!file.canRead()) {
             throw new IOException("The file you specified cannot be read.");
         }
 
-        String line;
-        while ((line = reader.readLine()) != null) {
-            try {
-                if (line.startsWith("#") || line.trim().length() == 0) {// $NON-NLS-1$
-                    continue;
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader(file));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                try {
+                    if (line.startsWith("#") || line.trim().length() == 0) {// $NON-NLS-1$
+                        continue;
+                    }
+                    String[] st = JOrphanUtils.split(line, "\t", " ");// $NON-NLS-1$ $NON-NLS-2$
+                    int name = 0;
+                    int value = 1;
+                    Header header = new Header(st[name], st[value]);
+                    getHeaders().addItem(header);
+                } catch (Exception e) {
+                    throw new IOException("Error parsing header line\n\t'" + line + "'\n\t" + e);
                 }
-                String[] st = JOrphanUtils.split(line, "\t", " ");// $NON-NLS-1$ $NON-NLS-2$
-                int name = 0;
-                int value = 1;
-                Header header = new Header(st[name], st[value]);
-                getHeaders().addItem(header);
-            } catch (Exception e) {
-                throw new IOException("Error parsing header line\n\t'" + line + "'\n\t" + e);
             }
+        } finally {
+            IOUtils.closeQuietly(reader);
         }
-        reader.close();
     }
 
     /**

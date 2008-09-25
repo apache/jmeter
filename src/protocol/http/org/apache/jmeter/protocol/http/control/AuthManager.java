@@ -32,6 +32,7 @@ import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
@@ -240,38 +241,40 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
         if (!file.isAbsolute()) {
             file = new File(System.getProperty("user.dir") + File.separator + authFile);
         }
-        BufferedReader reader = null;
-        if (file.canRead()) {
-            reader = new BufferedReader(new FileReader(file));
-        } else {
+        if (!file.canRead()) {
             throw new IOException("The file you specified cannot be read.");
         }
 
-        String line;
+        BufferedReader reader = null;
         boolean ok = true;
-        while ((line = reader.readLine()) != null) {
-            try {
-                if (line.startsWith("#") || line.trim().length() == 0) { //$NON-NLS-1$
-                    continue;
+        try {
+            reader = new BufferedReader(new FileReader(file));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                try {
+                    if (line.startsWith("#") || line.trim().length() == 0) { //$NON-NLS-1$
+                        continue;
+                    }
+                    StringTokenizer st = new StringTokenizer(line, "\t"); //$NON-NLS-1$
+                    String url = st.nextToken();
+                    String user = st.nextToken();
+                    String pass = st.nextToken();
+                    String domain = "";
+                    String realm = "";
+                    if (st.hasMoreTokens()){// Allow for old format file without the extra columnns
+                        domain = st.nextToken();
+                        realm = st.nextToken();
+                    }
+                    Authorization auth = new Authorization(url, user, pass,domain,realm);
+                    getAuthObjects().addItem(auth);
+                } catch (NoSuchElementException e) {
+                    log.error("Error parsing auth line: '" + line + "'");
+                    ok = false;
                 }
-                StringTokenizer st = new StringTokenizer(line, "\t"); //$NON-NLS-1$
-                String url = st.nextToken();
-                String user = st.nextToken();
-                String pass = st.nextToken();
-                String domain = "";
-                String realm = "";
-                if (st.hasMoreTokens()){// Allow for old format file without the extra columnns
-                    domain = st.nextToken();
-                    realm = st.nextToken();
-                }
-                Authorization auth = new Authorization(url, user, pass,domain,realm);
-                getAuthObjects().addItem(auth);
-            } catch (NoSuchElementException e) {
-                log.error("Error parsing auth line: '" + line + "'");
-                ok = false;
             }
+        } finally {
+            IOUtils.closeQuietly(reader);
         }
-        reader.close();
         if (!ok){
             JMeterUtils.reportErrorToUser("One or more errors found when reading the Auth file - see the log file");
         }
