@@ -1079,6 +1079,12 @@ public class JMeterUtils implements UnitTestManager {
         return f;
     }
 
+    /**
+     * Returns the cached result from calling 
+     * InetAddress.getLocalHost().getHostAddress()
+     * 
+     * @return String representation of local IP address
+     */
     public static synchronized String getLocalHostIP(){
         if (localHostIP == null) {
             getLocalHostDetails();
@@ -1086,6 +1092,12 @@ public class JMeterUtils implements UnitTestManager {
         return localHostIP;
     }
 
+    /**
+     * Returns the cached result from calling 
+     * InetAddress.getLocalHost().getHostName()
+     * 
+     * @return local host name
+     */
     public static synchronized String getLocalHostName(){
         if (localHostName == null) {
             getLocalHostDetails();
@@ -1093,6 +1105,12 @@ public class JMeterUtils implements UnitTestManager {
         return localHostName;
     }
 
+    /**
+     * Returns the cached result from calling 
+     * InetAddress.getLocalHost().getCanonicalHostName()
+     * 
+     * @return local host name in canonical form
+     */
     public static synchronized String getLocalHostFullName(){
         if (localHostFullName == null) {
             getLocalHostDetails();
