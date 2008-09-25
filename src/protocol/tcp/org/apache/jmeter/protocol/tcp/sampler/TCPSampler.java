@@ -208,7 +208,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
     }
 
     public void setTimeout(String newTimeout) {
-        this.setProperty(FILENAME, newTimeout);
+        this.setProperty(TIMEOUT, newTimeout);
     }
 
     public int getTimeout() {
