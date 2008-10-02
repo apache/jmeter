@@ -1080,7 +1080,7 @@ Currently the only way to changes these is via the SampleResult methods:
 </properties>
 </component>
 
-<component name="JMS Point-to-Point" index="&sect-num;.1.15"  width="568" height="730" screenshot="jms/JMS_Point-to-Point.png">
+<component name="JMS Point-to-Point" index="&sect-num;.1.15"  width="635" height="733" screenshot="jms/JMS_Point-to-Point.png">
 <note>ALPHA CODE</note>
 	<description>
 		<p>
@@ -1110,6 +1110,10 @@ Currently the only way to changes these is via the SampleResult methods:
     the message id of the request with the correlation id of the reply. If the JNDI Name Reply Queue is empty, then
     temporary queues will be used for the communication between the requestor and the server. This is very different from
     the fixed reply queue. With temporary queues the diffent threads will block until the reply message has been received.
+  </property>
+  <property name="Use Request Message Id As Correlation Id" required="Yes">
+    If this is selected, then the request message id is used as the correlation id.
+    Otherwise, the correlation id needs to be specified in the request.
   </property>
   <property name="Timeout" required="Yes">
       The timeout in milliseconds for the reply-messages. If a reply has not been received within the specified

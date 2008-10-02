@@ -70,6 +70,8 @@ public class JMSConfigGui extends AbstractSamplerGui {
     private ArgumentsPanel jndiPropertiesPanel;
 
     private JCheckBox useNonPersistentDelivery;
+    
+    private JCheckBox useReqMsgIdAsCorrelId;
 
     public JMSConfigGui() {
         init();
@@ -80,14 +82,14 @@ public class JMSConfigGui extends AbstractSamplerGui {
      */
     public void clearGui() {// renamed from clear
         super.clearGui();
-        queueuConnectionFactory.setText("");
-        sendQueue.setText("");
-        receiveQueue.setText("");
+        queueuConnectionFactory.setText(""); // $NON-NLS-1$
+        sendQueue.setText(""); // $NON-NLS-1$
+        receiveQueue.setText(""); // $NON-NLS-1$
         ((JComboBox) oneWay.getComponentList().get(1)).setSelectedItem(JMeterUtils.getResString("jms_request")); //$NON-NLS-1$
-        timeout.setText("");
-        soapXml.setText("");
-        initialContextFactory.setText("");
-        providerUrl.setText("");
+        timeout.setText("");  // $NON-NLS-1$
+        soapXml.setText(""); // $NON-NLS-1$
+        initialContextFactory.setText(""); // $NON-NLS-1$
+        providerUrl.setText(""); // $NON-NLS-1$
         jmsPropertiesPanel.clear();
         jndiPropertiesPanel.clear();
     }
@@ -110,6 +112,7 @@ public class JMSConfigGui extends AbstractSamplerGui {
         element.setIsOneway(isOneway);
 
         element.setNonPersistent(useNonPersistentDelivery.isSelected());
+        element.setUseReqMsgIdAsCorrelId(useReqMsgIdAsCorrelId.isSelected());
         element.setTimeout(timeout.getText());
         element.setContent(soapXml.getText());
 
@@ -179,7 +182,8 @@ public class JMSConfigGui extends AbstractSamplerGui {
         box.setSelectedItem(selected);
 
         useNonPersistentDelivery.setSelected(sampler.isNonPersistent());
-
+        useReqMsgIdAsCorrelId.setSelected(sampler.isUseReqMsgIdAsCorrelId());
+        
         timeout.setText(String.valueOf(sampler.getTimeout()));
         soapXml.setText(sampler.getContent());
         initialContextFactory.setText(sampler.getInitialContextFactory());
@@ -227,9 +231,12 @@ public class JMSConfigGui extends AbstractSamplerGui {
         messagePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("jms_message_title"))); //$NON-NLS-1$
 
+        useReqMsgIdAsCorrelId = new JCheckBox(JMeterUtils.getResString("jms_use_req_msgid_as_correlid"),false); //$NON-NLS-1$
+        
         JPanel messageNorthPanel = new JPanel(new BorderLayout());
-        JPanel onewayPanel = new JPanel(new BorderLayout());
+        JPanel onewayPanel = new HorizontalPanel();
         onewayPanel.add(oneWay);
+        onewayPanel.add(useReqMsgIdAsCorrelId);
         messageNorthPanel.add(onewayPanel, BorderLayout.NORTH);
 
         useNonPersistentDelivery = new JCheckBox(JMeterUtils.getResString("jms_use_non_persistent_delivery"),false); //$NON-NLS-1$

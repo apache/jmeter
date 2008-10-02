@@ -128,6 +128,7 @@ Moved the Scoping Rules sub-section from Section 3. "Building a Test Plan"  to S
 <li>Bug 45694 - Support GZIP compressed logs</li>
 <li>Random Variable - new configuration element to create random numeric variables</li>
 <li>Bug 45929 - improved French translations</li>
+<li>Bug 45571 - JMS Sampler correlation enhancement</li>
 </ul>
 
 <h3>Non-functional changes</h3>
