@@ -127,6 +127,7 @@ Moved the Scoping Rules sub-section from Section 3. "Building a Test Plan"  to S
 <li>Allow spaces in JMeter path names (apply work-round for Java bug 4496398)</li>
 <li>Bug 45694 - Support GZIP compressed logs</li>
 <li>Random Variable - new configuration element to create random numeric variables</li>
+<li>Bug 45929 - improved French translations</li>
 </ul>
 
 <h3>Non-functional changes</h3>
