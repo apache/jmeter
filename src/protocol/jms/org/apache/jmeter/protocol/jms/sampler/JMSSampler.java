@@ -57,6 +57,8 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
     private static final Logger LOGGER = LoggingManager.getLoggerForClass();
 
+    private static final long serialVersionUID = 233L;
+
     private static final int DEFAULT_TIMEOUT = 2000;
 
     //++ These are JMX names, and must not be changed
@@ -81,6 +83,8 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     private final static String QUEUE_CONNECTION_FACTORY_JNDI = "JMSSampler.queueconnectionfactory"; // $NON-NLS-1$
 
     private static final String IS_NON_PERSISTENT = "JMSSampler.isNonPersistent"; // $NON-NLS-1$
+
+    private static final String USE_REQ_MSGID_AS_CORRELID = "JMSSampler.useReqMsgIdAsCorrelId"; // $NON-NLS-1$
 
     //--
 
@@ -179,7 +183,13 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Adding property [" + name + "=" + value + "]");
             }
-            msg.setStringProperty(name, value);
+            
+            // WebsphereMQ does not allow corr. id. to be set using setStringProperty()
+            if("JMSCorrelationID".equalsIgnoreCase(name)) { // $NON-NLS-1$
+            	msg.setJMSCorrelationID(value);
+            } else {
+            	msg.setStringProperty(name, value);
+            }
         }
     }
 
@@ -239,6 +249,10 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         return getPropertyAsBoolean(IS_NON_PERSISTENT);
     }
 
+    public boolean isUseReqMsgIdAsCorrelId() {
+        return getPropertyAsBoolean(USE_REQ_MSGID_AS_CORRELID);
+    }
+
     public String getInitialContextFactory() {
         return getPropertyAsString(JMSSampler.JNDI_INITIAL_CONTEXT_FACTORY);
     }
@@ -253,6 +267,10 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
     public void setNonPersistent(boolean value) {
         setProperty(new BooleanProperty(IS_NON_PERSISTENT, value));
+    }
+
+    public void setUseReqMsgIdAsCorrelId(boolean value) {
+        setProperty(new BooleanProperty(USE_REQ_MSGID_AS_CORRELID, value));
     }
 
     public String toString() {
@@ -315,7 +333,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
                     if (isNonPersistent()) {
                         producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
                     }
-                    executor = new FixedQueueExecutor(producer, getTimeout());
+                    executor = new FixedQueueExecutor(producer, getTimeout(), isUseReqMsgIdAsCorrelId());
                 }
             }
             if (LOGGER.isDebugEnabled()) {
