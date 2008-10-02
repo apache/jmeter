@@ -42,6 +42,8 @@ public class FixedQueueExecutor implements QueueExecutor {
 
     /** Timeout used for waiting on message. */
     private final int timeout;
+    
+    private final boolean useReqMsgIdAsCorrelId;
 
     /**
      * Constructor.
@@ -54,6 +56,23 @@ public class FixedQueueExecutor implements QueueExecutor {
     public FixedQueueExecutor(QueueSender producer, int timeout) {
         this.producer = producer;
         this.timeout = timeout;
+        this.useReqMsgIdAsCorrelId = false;
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param producer
+     *            the queue to send the message on
+     * @param timeout
+     *            timeout to use for the return message
+     * @param useReqMsgIdAsCorrelId
+     *            whether to use the request message id as the correlation id
+     */
+    public FixedQueueExecutor(QueueSender producer, int timeout, boolean useReqMsgIdAsCorrelId) {
+        this.producer = producer;
+        this.timeout = timeout;
+        this.useReqMsgIdAsCorrelId = useReqMsgIdAsCorrelId;
     }
 
     /*
@@ -63,11 +82,16 @@ public class FixedQueueExecutor implements QueueExecutor {
      */
     public Message sendAndReceive(Message request) throws JMSException {
         String id = request.getJMSCorrelationID();
-        if(id == null){
+        if(id == null && !useReqMsgIdAsCorrelId){
             log.error("Correlation id is null. Set the JMSCorrelationID header");
             return null;
         }
         producer.send(request);
+        
+        if(useReqMsgIdAsCorrelId) {
+        	id = request.getJMSMessageID();
+        }
+
         MessageAdmin.getAdmin().putRequest(id, request);
         try {
             if (log.isDebugEnabled()) {
