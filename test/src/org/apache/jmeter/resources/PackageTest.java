@@ -94,7 +94,7 @@ public class PackageTest extends TestCase {
 					String m = java.text.MessageFormat.format(val, DUMMY_PARAMS);
 					if (m.indexOf("{") > 0) {
 						fails++;
-						System.out.println("Incorrect message format ? (input/output): ");
+						System.out.println("Incorrect message format ? (input/output) for: "+key);
 						System.out.println(val);
 						System.out.println(m);
 					}
@@ -151,7 +151,7 @@ public class PackageTest extends TestCase {
 				try {
 					key = (String) enumr.nextElement();
 					String val =defaultPRB.getString(key);
-                    if (!resname.equalsIgnoreCase("de") && val.equals(prb.getString(key))){
+                    if (!resname.equalsIgnoreCase("de") && !resname.equalsIgnoreCase("fr") && val.equals(prb.getString(key))){
                         System.out.println("Possible duplicate value for "+key+" in "+res);
                         subTestFailures++;
                     }
