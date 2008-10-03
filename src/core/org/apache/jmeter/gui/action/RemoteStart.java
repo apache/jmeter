@@ -56,7 +56,7 @@ public class RemoteStart extends AbstractAction {
         commands.add(ActionNames.REMOTE_EXIT_ALL);
     }
 
-    private Map remoteEngines = new HashMap();
+    private final Map remoteEngines = new HashMap();
 
     public RemoteStart() {
     }
@@ -159,11 +159,13 @@ public class RemoteStart extends AbstractAction {
         JMeterEngine engine = (JMeterEngine) remoteEngines.get(name);
         if (engine == null) {
             try {
+                log.info("Initialising remote engine: "+name);
                 engine = new ClientJMeterEngine(name);
                 remoteEngines.put(name, engine);
             } catch (Exception ex) {
                 log.error("Failed to initialise remote engine", ex);
-                JMeterUtils.reportErrorToUser(ex.getMessage(),JMeterUtils.getResString("remote_error_init")); // $NON-NLS-1$
+                JMeterUtils.reportErrorToUser(ex.getMessage(),
+                        JMeterUtils.getResString("remote_error_init") + ": " + name); // $NON-NLS-1$ $NON-NLS-2$
                 return;
             }
         } else {
