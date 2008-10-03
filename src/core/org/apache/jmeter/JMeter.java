@@ -757,6 +757,7 @@ public class JMeter implements JMeterPlugin {
                 while (st.hasMoreElements()) {
                     String el = (String) st.nextElement();
                     println("Configuring remote engine for " + el);
+                    log.info("Configuring remote engine for " + el);
                     engines.add(doRemoteInit(el.trim(), tree));
                 }
                 println("Starting remote engines");
@@ -765,7 +766,9 @@ public class JMeter implements JMeterPlugin {
                 Iterator iter = engines.iterator();
                 while (iter.hasNext()) {
                     engine = (JMeterEngine) iter.next();
-                    engine.runTest();
+                    if (engine != null){
+                        engine.runTest();
+                    }
                 }
                 println("Remote engines have been started");
             }
@@ -849,7 +852,7 @@ public class JMeter implements JMeterPlugin {
         } catch (Exception e) {
             log.fatalError("Failure connecting to remote host", e);
             System.err.println("Failure connecting to remote host"+e);
-            System.exit(1);
+            return null;
         }
         engine.configure(testTree);
         if (!remoteProps.isEmpty()) {
