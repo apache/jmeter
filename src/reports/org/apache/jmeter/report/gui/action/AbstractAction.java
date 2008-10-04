@@ -19,19 +19,13 @@
 package org.apache.jmeter.report.gui.action;
 
 import java.awt.event.ActionEvent;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Set;
 
 import javax.swing.JOptionPane;
 
-import org.apache.jmeter.control.ReplaceableController;
-import org.apache.jmeter.gui.action.Command;
 import org.apache.jmeter.gui.ReportGuiPackage;
-import org.apache.jmeter.report.gui.tree.ReportTreeNode;
-import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.gui.action.Command;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -51,37 +45,6 @@ public abstract class AbstractAction implements Command {
      * @see Command#getActionNames()
      */
     abstract public Set getActionNames();
-
-    protected void convertSubTree(HashTree tree) {
-        Iterator iter = new LinkedList(tree.list()).iterator();
-        while (iter.hasNext()) {
-            Object o = iter.next();
-            if(o instanceof TestElement) {
-                continue; //hey, no need to convert
-            }
-            ReportTreeNode item = (ReportTreeNode) o;
-            if (item.isEnabled()) {
-                if (item.getUserObject() instanceof ReplaceableController) {
-                    ReplaceableController rc = (ReplaceableController) item.getTestElement();
-                    HashTree subTree = tree.getTree(item);
-
-                    if (subTree != null) {
-                        HashTree replacementTree = rc.getReplacementSubTree();
-                        convertSubTree(replacementTree);
-                        tree.replace(item,rc);
-                        tree.set(rc,replacementTree);
-                    }
-                } else {
-                    convertSubTree(tree.getTree(item));
-                    TestElement testElement = item.getTestElement();
-                    tree.replace(item, testElement);
-                }
-            } else {
-                tree.remove(item);
-            }
-
-        }
-    }
 
     /**
      * @param e
