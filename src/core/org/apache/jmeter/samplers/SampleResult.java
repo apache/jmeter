@@ -45,6 +45,8 @@ import org.apache.log.Logger;
  */
 public class SampleResult implements Serializable {
 
+    private static final long serialVersionUID = 233L;
+    
     public static final String DEFAULT_HTTP_ENCODING = "ISO-8859-1";  // $NON-NLS-1$
 
     // Needs to be accessible from Test code
@@ -106,7 +108,7 @@ public class SampleResult implements Serializable {
 
     private String resultFileName = ""; // Filename used by ResultSaver
 
-    private String samplerData;
+    private String samplerData; // The data used by the sampler
 
     private String threadName = ""; // Never return null
 
