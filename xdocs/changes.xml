@@ -110,6 +110,7 @@ Moved the Scoping Rules sub-section from Section 3. "Building a Test Plan"  to S
 <li>Bug 45831 - WS Sampler reports incorrect throughput if SOAP packet creation fails</li>
 <li>Bug 45887 - TCPSampler: timeout property incorrectly set</li>
 <li>Bug 45928 - AJP/1.3 Sampler doesn't retrieve his label from messages.properties</li>
+<li>Bug 45904 - Allow 'Not' Response Assertion to succeed with null sample</li>
 </ul>
 
 <h3>Improvements</h3>
