@@ -19,6 +19,7 @@
 package org.apache.jmeter.assertions;
 
 import java.io.Serializable;
+import java.net.URL;
 import java.util.ArrayList;
 
 import org.apache.jmeter.samplers.SampleResult;
@@ -276,9 +277,9 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
      *            an instance of SampleResult
      * @return an instance of AssertionResult
      */
-    AssertionResult evaluateResponse(SampleResult response) {
+    private AssertionResult evaluateResponse(SampleResult response) {
         boolean pass = true;
-        boolean not = (NOT & getTestType()) > 0;
+        boolean notTest = (NOT & getTestType()) > 0;
         AssertionResult result = new AssertionResult(getName());
         String toCheck = ""; // The string to check (Url or data)
 
@@ -296,18 +297,22 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
         } else if (isTestFieldResponseHeaders()) {
             toCheck = response.getResponseHeaders();
         } else { // Assume it is the URL
-            toCheck = response.getSamplerData(); // TODO - is this where the URL is stored?
-            if (toCheck == null) {
-                toCheck = "";
+            toCheck = "";                
+            final URL url = response.getURL();
+            if (url != null){
+                toCheck = url.toString();                
             }
-        }
-
-        if (toCheck.length() == 0) {
-            return result.setResultForNull();
         }
 
         result.setFailure(false);
         result.setError(false);
+
+        if (toCheck.length() == 0) {
+            if (notTest) {
+                return result;
+            }
+            return result.setResultForNull();
+        }
 
         boolean contains = isContainsType(); // do it once outside loop
         boolean equals = isEqualsType();
@@ -315,7 +320,7 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
         boolean matches = isMatchType();
         boolean debugEnabled = log.isDebugEnabled();
         if (debugEnabled){
-            log.debug("Type:" + (contains?"Contains":"Match") + (not? "(not)": ""));
+            log.debug("Type:" + (contains?"Contains":"Match") + (notTest? "(not)": ""));
         }
         
         try {
@@ -338,7 +343,7 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
                 } else {
                     found = localMatcher.matches(toCheck, pattern);
                 }
-                pass = not ? !found : found;
+                pass = notTest ? !found : found;
                 if (!pass) {
                     if (debugEnabled){log.debug("Failed: "+stringPattern);}
                     result.setFailure(true);
