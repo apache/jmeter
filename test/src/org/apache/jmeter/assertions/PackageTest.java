@@ -18,6 +18,9 @@
 
 package org.apache.jmeter.assertions;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import junit.framework.TestCase;
 
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -41,9 +44,9 @@ public class PackageTest extends TestCase {
 		assertEquals("D41D8CD98F00B204E9800998ECF8427E", MD5HexAssertion.baMD5Hex(new byte[] {}).toUpperCase(java.util.Locale.ENGLISH));
 	}
 
-	int threadsRunning;
+	volatile int threadsRunning;
 
-	int failed;
+	volatile int failed;
 
 	public void testThreadSafety() throws Exception {
 		Thread[] threads = new Thread[100];
@@ -259,7 +262,7 @@ public class PackageTest extends TestCase {
 		private JMeterVariables vars;
 		private AssertionResult result;
 		
-		public void setUp() {
+		public void setUp() throws MalformedURLException {
 			jmctx = JMeterContextService.getContext();
 			assertion = new ResponseAssertion();
 			assertion.setThreadContext(jmctx);
@@ -272,7 +275,7 @@ public class PackageTest extends TestCase {
 					"response Data\n" +
 					"line 2\n\nEOF"
 					).getBytes());
-			sample.setSamplerData("Sampler Label");// This is where RA checks the URL!
+			sample.setURL(new URL("http://localhost/Sampler/Data/"));
 			sample.setResponseCode("401");
 			sample.setResponseHeaders("X-Header: abcd");
 		}
