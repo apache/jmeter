@@ -58,7 +58,7 @@ public class TestHTTPFileArgs extends TestCase {
 		List newHTTPFileArgs = new LinkedList();
 		newHTTPFileArgs.add(new HTTPFileArg("hede"));
 		HTTPFileArgs files = new HTTPFileArgs();
-		files.setHTTPFileArgs((List) newHTTPFileArgs);
+		files.setHTTPFileArgs(newHTTPFileArgs);
 		assertEquals(1, files.getHTTPFileArgCount());
 		assertEquals("hede", ((HTTPFileArg) files.iterator().next().getObjectValue()).getPath());
 	}
