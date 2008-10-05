@@ -260,7 +260,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
         // Check if we should do a multipart/form-data or an
         // application/x-www-form-urlencoded post request
         if(getUseMultipartForPost()) {
-            // If a content encoding is specified, we use that es the
+            // If a content encoding is specified, we use that as the
             // encoding of any parameter values
             String contentEncoding = getContentEncoding();
             if(contentEncoding != null && contentEncoding.length() == 0) {
@@ -317,8 +317,8 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 multiPart.writeRequest(bos);
                 bos.flush();
-                // We get the posted bytes as UTF-8, since java is using UTF-8
-                postedBody.append(new String(bos.toByteArray() , "UTF-8")); // $NON-NLS-1$
+                // We get the posted bytes using the encoding used to create it
+                postedBody.append(new String(bos.toByteArray(),post.getRequestCharSet()));
                 bos.close();
 
                 // For all the file multiparts, we must revert the hiding of
@@ -463,8 +463,8 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                     ByteArrayOutputStream bos = new ByteArrayOutputStream();
                     post.getRequestEntity().writeRequest(bos);
                     bos.flush();
-                    // We get the posted bytes as UTF-8, since java is using UTF-8
-                    postedBody.append(new String(bos.toByteArray() , "UTF-8")); // $NON-NLS-1$
+                    // We get the posted bytes using the encoding used to create it
+                    postedBody.append(new String(bos.toByteArray(),post.getRequestCharSet()));
                     bos.close();
                 }
                 else {
@@ -989,8 +989,8 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 put.getRequestEntity().writeRequest(bos);
                 bos.flush();
-                // We get the posted bytes as UTF-8, since java is using UTF-8
-                putBody.append(new String(bos.toByteArray() , "UTF-8")); // $NON-NLS-1$
+                // We get the posted bytes using the charset that was used to create them
+                putBody.append(new String(bos.toByteArray(),put.getRequestCharSet()));
                 bos.close();
             }
             else {
@@ -1033,7 +1033,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
             // Check if we should send only placeholder text for the
             // file content, or the real file content
             if(hideFileData) {
-                out.write("<actual file content, not shown here>".getBytes("UTF-8"));
+                out.write("<actual file content, not shown here>".getBytes());// encoding does not really matter here
             }
             else {
                 super.sendData(out);
