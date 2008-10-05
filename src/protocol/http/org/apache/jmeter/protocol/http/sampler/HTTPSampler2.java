@@ -936,7 +936,6 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 
         // If there are no arguments, we can send a file as the body of the request
 
-        // TODO: needs a multiple file upload scenerio
         if(!hasArguments() && getSendFileAsPostBody()) {
             hasPutBody = true;
 
