@@ -38,6 +38,8 @@ import org.apache.oro.text.regex.Perl5Matcher;
 
 public class URLRewritingModifier extends AbstractTestElement implements Serializable, PreProcessor {
 
+    private static final long serialVersionUID = 233L;
+
     private static final String SEMI_COLON = ";"; // $NON-NLS-1$
 
     private transient Pattern pathExtensionEqualsQuestionmarkRegexp;

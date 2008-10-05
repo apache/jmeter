@@ -34,6 +34,8 @@ import org.apache.log.Logger;
  * @version $Revision$
  */
 public class UserSequence implements Serializable {
+    private static final long serialVersionUID = 233L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     // -------------------------------------------

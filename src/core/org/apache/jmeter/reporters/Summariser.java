@@ -54,6 +54,8 @@ import org.apache.log.Logger;
  *
  */
 public class Summariser extends AbstractTestElement implements Serializable, SampleListener, TestListener, ThreadListener {
+    private static final long serialVersionUID = 233L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     /** interval between summaries (in seconds) default 3 minutes */

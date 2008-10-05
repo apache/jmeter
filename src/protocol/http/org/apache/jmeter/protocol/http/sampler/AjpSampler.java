@@ -46,6 +46,8 @@ import org.apache.log.Logger;
  */
 public class AjpSampler extends HTTPSamplerBase {
 
+    private static final long serialVersionUID = 233L;
+
     private static final Logger log= LoggingManager.getLoggerForClass(); 
 
     private static final char NEWLINE = '\n';

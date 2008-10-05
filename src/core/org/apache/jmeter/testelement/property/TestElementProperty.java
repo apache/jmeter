@@ -21,6 +21,8 @@ package org.apache.jmeter.testelement.property;
 import org.apache.jmeter.testelement.TestElement;
 
 public class TestElementProperty extends MultiProperty {
+    private static final long serialVersionUID = 233L;
+
     private TestElement value;
 
     private transient TestElement savedValue = null;

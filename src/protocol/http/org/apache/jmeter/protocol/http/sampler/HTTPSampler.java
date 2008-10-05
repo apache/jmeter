@@ -56,6 +56,8 @@ import org.apache.log.Logger;
  *
  */
 public class HTTPSampler extends HTTPSamplerBase {
+    private static final long serialVersionUID = 233L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final int MAX_CONN_RETRIES =
