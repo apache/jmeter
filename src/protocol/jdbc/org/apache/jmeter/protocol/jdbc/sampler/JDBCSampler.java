@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.protocol.jdbc.sampler;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -139,7 +140,9 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
         res.setSamplerData(toString());
         res.setDataType(SampleResult.TEXT);
         // Bug 31184 - make sure encoding is specified
-        res.setDataEncoding(System.getProperty("file.encoding")); // $NON-NLS-1$
+        // TODO - should the encoding be configurable?
+        final String encoding = System.getProperty("file.encoding"); // $NON-NLS-1$
+        res.setDataEncoding(encoding);
 
         // Assume we will be successful
         res.setSuccessful(true);
@@ -150,6 +153,8 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
         res.sampleStart();
         Connection conn = null;
         Statement stmt = null;
+        CallableStatement cstmt = null;
+        PreparedStatement pstmt = null;
 
         try {
 
@@ -168,48 +173,48 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
                 try {
                     rs = stmt.executeQuery(getQuery());
                     Data data = getDataFromResultSet(rs);
-                    res.setResponseData(data.toString().getBytes());
+                    res.setResponseData(data.toString().getBytes(encoding));
                 } finally {
                     close(rs);
                 }
             } else if (CALLABLE.equals(_queryType)) {
-                CallableStatement cstmt = getCallableStatement(conn);
+                cstmt = getCallableStatement(conn);
                 int out[]=setArguments(cstmt);
                 // A CallableStatement can return more than 1 ResultSets
                 // plus a number of update counts.
                 boolean hasResultSet = cstmt.execute();
                 String sb = resultSetsToString(cstmt,hasResultSet, out);
-                res.setResponseData(sb.getBytes());
+                res.setResponseData(sb.getBytes(encoding));
             } else if (UPDATE.equals(_queryType)) {
                 stmt = conn.createStatement();
                 stmt.executeUpdate(getQuery());
                 int updateCount = stmt.getUpdateCount();
                 String results = updateCount + " updates";
-                res.setResponseData(results.getBytes());
+                res.setResponseData(results.getBytes(encoding));
             } else if (PREPARED_SELECT.equals(_queryType)) {
-                PreparedStatement pstmt = getPreparedStatement(conn);
+                pstmt = getPreparedStatement(conn);
                 setArguments(pstmt);
                 pstmt.executeQuery();
                 String sb = resultSetsToString(pstmt,true,null);
-                res.setResponseData(sb.getBytes());
+                res.setResponseData(sb.getBytes(encoding));
             } else if (PREPARED_UPDATE.equals(_queryType)) {
-                PreparedStatement pstmt = getPreparedStatement(conn);
+                pstmt = getPreparedStatement(conn);
                 setArguments(pstmt);
                 pstmt.executeUpdate();
                 String sb = resultSetsToString(pstmt,false,null);
-                res.setResponseData(sb.getBytes());
+                res.setResponseData(sb.getBytes(encoding));
             } else if (ROLLBACK.equals(_queryType)){
                 conn.rollback();
-                res.setResponseData(ROLLBACK.getBytes());
+                res.setResponseData(ROLLBACK.getBytes(encoding));
             } else if (COMMIT.equals(_queryType)){
                 conn.commit();
-                res.setResponseData(COMMIT.getBytes());
+                res.setResponseData(COMMIT.getBytes(encoding));
             } else if (AUTOCOMMIT_FALSE.equals(_queryType)){
                 conn.setAutoCommit(false);
-                res.setResponseData(AUTOCOMMIT_FALSE.getBytes());
+                res.setResponseData(AUTOCOMMIT_FALSE.getBytes(encoding));
             } else if (AUTOCOMMIT_TRUE.equals(_queryType)){
                 conn.setAutoCommit(true);
-                res.setResponseData(AUTOCOMMIT_TRUE.getBytes());
+                res.setResponseData(AUTOCOMMIT_TRUE.getBytes(encoding));
             } else { // User provided incorrect query type
                 String results="Unexpected query type: "+_queryType;
                 res.setResponseMessage(results);
@@ -221,9 +226,15 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
             res.setResponseMessage(ex.toString());
             res.setResponseCode(ex.getSQLState()+ " " +errCode);
             res.setSuccessful(false);
+        } catch (UnsupportedEncodingException ex) {
+            res.setResponseMessage(ex.toString());
+            res.setResponseCode("000"); // TODO - is this correct?
+            res.setSuccessful(false);
         } finally {
             close(stmt);
             close(conn);
+            close(pstmt);
+            close(cstmt);
         }
 
         // TODO: process warnings? Set Code and Message to success?
