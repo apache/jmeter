@@ -38,6 +38,8 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 public class ReportPlan extends AbstractTestElement implements Serializable, TestListener {
+    private static final long serialVersionUID = 233L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     public static final String REPORT_PAGE = "ReportPlan.report_page";

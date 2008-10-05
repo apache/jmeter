@@ -44,6 +44,8 @@ import org.apache.log.Logger;
  */
 public class CacheManager extends ConfigTestElement implements TestListener, Serializable {
 
+    private static final long serialVersionUID = 233L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     public static final String CLEAR = "clearEachIteration"; // $NON-NLS-1$

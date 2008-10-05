@@ -58,6 +58,8 @@ public final class ClassFinder {
      *
      */
     private static class FilterTreeSet extends TreeSet{
+        private static final long serialVersionUID = 233L;
+
         private final Class[] parents; // parent classes to check
         private final boolean inner; // are inner classes OK?
 

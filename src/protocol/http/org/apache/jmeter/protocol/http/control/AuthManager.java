@@ -52,6 +52,8 @@ import org.apache.log.Logger;
  *
  */
 public class AuthManager extends ConfigTestElement implements ConfigElement, Serializable {
+    private static final long serialVersionUID = 233L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private final static String AUTH_LIST = "AuthManager.auth_list"; //$NON-NLS-1$

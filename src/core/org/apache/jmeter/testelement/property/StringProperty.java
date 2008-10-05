@@ -24,6 +24,8 @@ import org.apache.jmeter.testelement.TestElement;
  * @version $Revision$
  */
 public class StringProperty extends AbstractProperty {
+    private static final long serialVersionUID = 233L;
+
     private String value;
 
     private transient String savedValue;

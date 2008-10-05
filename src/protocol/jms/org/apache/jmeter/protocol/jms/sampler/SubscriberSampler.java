@@ -40,6 +40,8 @@ import org.apache.log.Logger;
  */
 public class SubscriberSampler extends BaseJMSSampler implements TestListener, MessageListener {
 
+    private static final long serialVersionUID = 233L;
+
     // private Subscriber SUBSCRIBER = null;
     private static final Logger log = LoggingManager.getLoggerForClass();
 
