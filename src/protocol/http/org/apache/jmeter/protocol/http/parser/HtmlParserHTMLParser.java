@@ -127,7 +127,7 @@ class HtmlParserHTMLParser extends HTMLParser {
                 binUrlStr = tag.getAttribute(ATT_BACKGROUND);
             } else if (tag instanceof BaseHrefTag) {
                 BaseHrefTag baseHref = (BaseHrefTag) tag;
-                String baseref = baseHref.getBaseUrl().toString();
+                String baseref = baseHref.getBaseUrl();
                 try {
                     if (!baseref.equals(""))// Bugzilla 30713
                     {
