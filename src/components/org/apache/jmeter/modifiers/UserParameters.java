@@ -51,7 +51,7 @@ public class UserParameters extends AbstractTestElement implements Serializable,
      * The lock ensures that all the variables are processed together, which is
      * important for functions such as __CSVRead and _StringFromFile.
      */
-    private Integer lock = new Integer(0);
+    private Object lock = new Object();
 
     public CollectionProperty getNames() {
         return (CollectionProperty) getProperty(NAMES);
