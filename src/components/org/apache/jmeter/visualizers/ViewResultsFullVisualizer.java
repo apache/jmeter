@@ -270,7 +270,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
     /**
      * Clears the visualizer.
      */
-    public void clearData() {
+    public synchronized void clearData() {
         log.debug("Start : clear1");
 
         if (log.isDebugEnabled()) {
@@ -392,8 +392,14 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
                     log.debug("valueChanged1 : response message - " + responseMsgStr);
                     statsBuff.append("Response message: ").append(responseMsgStr).append(NL);
 
-                    statsBuff.append(NL).append("Response headers:").append(NL);
+                    statsBuff.append(NL);
+                    statsBuff.append("Response headers:").append(NL);
                     statsBuff.append(res.getResponseHeaders()).append(NL);
+                    statsBuff.append(NL);
+                    final String samplerClass = res.getClass().getName();
+                    statsBuff.append(samplerClass.substring(1+samplerClass.lastIndexOf('.'))).append(" fields:").append(NL);
+                    statsBuff.append("ContentType: ").append(res.getContentType()).append(NL);
+                    statsBuff.append("DataEncoding: ").append(res.getDataEncodingNoDefault()).append(NL);
                     statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), null);
                     statsBuff = null; // Done
 
