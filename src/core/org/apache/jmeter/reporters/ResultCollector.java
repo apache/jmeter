@@ -327,7 +327,9 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             // and create it - if there is one
             File pdir = new File(filename).getParentFile();
             if (pdir != null) {
-                pdir.mkdirs();
+                if (!pdir.mkdirs()){
+                    log.warn("Error creating directories for "+pdir.toString());
+                }
             }
             writer = new PrintWriter(new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(filename,
                     trimmed)), SaveService.getFileEncoding("UTF-8")), true); // $NON-NLS-1$
