@@ -45,6 +45,9 @@ import org.apache.log.Logger;
  * </p>
  */
 public class GenericController extends AbstractTestElement implements Controller, Serializable {
+
+    private static final long serialVersionUID = 233L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private transient LinkedList iterationListeners = new LinkedList();

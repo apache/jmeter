@@ -45,6 +45,8 @@ import org.apache.log.Logger;
  *
  */
 public class TCPSampler extends AbstractSampler implements ThreadListener {
+    private static final long serialVersionUID = 233L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     public static final String SERVER = "TCPSampler.server"; //$NON-NLS-1$

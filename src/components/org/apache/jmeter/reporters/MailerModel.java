@@ -45,6 +45,8 @@ import org.apache.log.Logger;
  */
 public class MailerModel extends AbstractTestElement implements Serializable {
 
+    private static final long serialVersionUID = 233L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final String MAIL_SMTP_HOST = "mail.smtp.host"; //$NON-NLS-1$

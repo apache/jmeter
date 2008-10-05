@@ -55,6 +55,8 @@ import org.apache.log.Logger;
  *
  */
 public class CookieManager extends ConfigTestElement implements TestListener, Serializable {
+    private static final long serialVersionUID = 233L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     public static final String CLEAR = "CookieManager.clearEachIteration";// $NON-NLS-1$

@@ -44,6 +44,9 @@ import org.xml.sax.SAXParseException;
  * 
  */
 public class XMLSchemaAssertion extends AbstractTestElement implements Serializable, Assertion {
+
+    private static final long serialVersionUID = 233L;
+
     public static final String FILE_NAME_IS_REQUIRED = "FileName is required";
 
     public static final String JAXP_SCHEMA_LANGUAGE = "http://java.sun.com/xml/jaxp/properties/schemaLanguage";

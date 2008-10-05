@@ -35,6 +35,8 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class SizeAssertion extends AbstractTestElement implements Serializable, Assertion {
 
+    private static final long serialVersionUID = 233L;
+
     private transient String comparatorErrorMessage;// Only used for communication with compareSize()
 
     // * Static int to signify the type of logical comparitor to assert
