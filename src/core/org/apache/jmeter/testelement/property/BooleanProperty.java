@@ -24,6 +24,8 @@ import org.apache.jmeter.testelement.TestElement;
  * @version $Revision$
  */
 public class BooleanProperty extends AbstractProperty {
+    private static final long serialVersionUID = 233L;
+
     private boolean value;
 
     private transient boolean savedValue;

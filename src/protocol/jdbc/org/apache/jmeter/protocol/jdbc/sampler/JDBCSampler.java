@@ -48,6 +48,8 @@ import org.apache.log.Logger;
  *
  */
 public class JDBCSampler extends AbstractSampler implements TestBean {
+    private static final long serialVersionUID = 233L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     // This value is used for both the connection (perConnCache) and statement (preparedStatementMap) caches.

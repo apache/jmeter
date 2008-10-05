@@ -56,6 +56,8 @@ import org.apache.log.Logger;
 
 public class StandardGenerator implements Generator, Serializable {
 
+    private static final long serialVersionUID = 233L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     protected HTTPSamplerBase SAMPLE = null;

@@ -36,6 +36,8 @@ import org.apache.log.Logger;
  */
 public class PublisherSampler extends BaseJMSSampler implements TestListener {
 
+    private static final long serialVersionUID = 233L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     //++ These are JMX file names and must not be changed
