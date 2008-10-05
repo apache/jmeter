@@ -25,6 +25,8 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 
 public class InterleaveControl extends GenericController implements Serializable {
+    private static final long serialVersionUID = 233L;
+
     private static final String STYLE = "InterleaveControl.style";// $NON-NLS-1$
 
     public static final int IGNORE_SUB_CONTROLLERS = 0;

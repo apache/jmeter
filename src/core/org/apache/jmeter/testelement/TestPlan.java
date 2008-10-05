@@ -37,6 +37,8 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 public class TestPlan extends AbstractTestElement implements Serializable, TestListener {
+    private static final long serialVersionUID = 233L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     // does not appear to be needed
