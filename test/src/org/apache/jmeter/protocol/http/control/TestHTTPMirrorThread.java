@@ -55,7 +55,7 @@ public class TestHTTPMirrorThread extends TestCase {
     private final static String UTF_8 = "UTF-8"; // $NON-NLS-1$
 
     private static final byte[] CRLF = { 0x0d, 0x0a };
-    private final static int HTTP_SERVER_PORT = 8080;
+    private final static int HTTP_SERVER_PORT = 8181;
 
     public TestHTTPMirrorThread(String arg0) {
         super(arg0);
