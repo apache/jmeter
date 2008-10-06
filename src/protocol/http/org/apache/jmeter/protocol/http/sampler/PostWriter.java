@@ -86,6 +86,11 @@ public class PostWriter {
 
         HTTPFileArg files[] = sampler.getHTTPFiles();
 
+        String contentEncoding = sampler.getContentEncoding();
+        if(contentEncoding == null || contentEncoding.length() == 0) {
+            contentEncoding = ENCODING;
+        }
+
         // Check if we should do a multipart/form-data or an
         // application/x-www-form-urlencoded post request
         if(sampler.getUseMultipartForPost()) {
@@ -95,17 +100,17 @@ public class PostWriter {
             // in the setHeaders. This contains the multipart start divider
             // and any form data, i.e. arguments
             out.write(formDataPostBody);
-            // We get the posted bytes as UTF-8, since java is using UTF-8
-            postedBody.append(new String(formDataPostBody, "UTF-8")); // $NON-NLS-1$
+            // Retrieve the formatted data using the same encoding used to create it
+            postedBody.append(new String(formDataPostBody, contentEncoding));
 
             // Add any files
             for (int i=0; i < files.length; i++) {
                 HTTPFileArg file = files[i];
                 // First write the start multipart file
-                byte[] header = file.getHeader().getBytes();
+                byte[] header = file.getHeader().getBytes(); // TODO what encoding should be used here?
                 out.write(header);
-                // We get the posted bytes as UTF-8, since java is using UTF-8
-                postedBody.append(new String(header, "UTF-8")); // $NON-NLS-1$
+                // Retrieve the formatted data using the same encoding used to create it
+                postedBody.append(new String(header));
                 // Write the actual file content
                 writeFileToStream(file.getPath(), out);
                 // We just add placeholder text for file content
@@ -113,18 +118,17 @@ public class PostWriter {
                 // Write the end of multipart file
                 byte[] fileMultipartEndDivider = getFileMultipartEndDivider();
                 out.write(fileMultipartEndDivider);
-                // We get the posted bytes as UTF-8, since java is using UTF-8
-                postedBody.append(new String(fileMultipartEndDivider, "UTF-8")); // $NON-NLS-1$
+                // Retrieve the formatted data using the same encoding used to create it
+                postedBody.append(new String(fileMultipartEndDivider, ENCODING));
                 if(i + 1 < files.length) {
                     out.write(CRLF);
-                    postedBody.append(new String(CRLF, "UTF-8")); // $NON-NLS-1$
+                    postedBody.append(new String(CRLF));
                 }
             }
             // Write end of multipart
             byte[] multipartEndDivider = getMultipartEndDivider();
             out.write(multipartEndDivider);
-            // We get the posted bytes as UTF-8, since java is using UTF-8
-            postedBody.append(new String(multipartEndDivider, "UTF-8")); // $NON-NLS-1$
+            postedBody.append(new String(multipartEndDivider, ENCODING));
 
             out.flush();
             out.close();
@@ -151,8 +155,7 @@ public class PostWriter {
                 out.flush();
                 out.close();
 
-                // We get the posted bytes as UTF-8, since java is using UTF-8
-                postedBody.append(new String(formDataUrlEncoded, "UTF-8")); // $NON-NLS-1$
+                postedBody.append(new String(formDataUrlEncoded, contentEncoding));
             }
         }
         return postedBody.toString();
@@ -213,7 +216,7 @@ public class PostWriter {
                 bos = new ByteArrayOutputStream();
                 writeStartFileMultipart(bos, file.getPath(), file.getParamName(), file.getMimeType());
                 bos.flush();
-                String header = bos.toString();
+                String header = bos.toString(contentEncoding);// TODO is this correct?
                 // If this is not the first file we can't write its header now
                 // for simplicity we always save it, even if there is only one file
                 file.setHeader(header);
@@ -305,8 +308,7 @@ public class PostWriter {
                     postBody = postBodyBuffer.toString();
                 }
 
-                // Query string should be encoded in UTF-8
-                bos.write(postBody.getBytes("UTF-8")); // $NON-NLS-1$
+                bos.write(postBody.getBytes(contentEncoding));
                 bos.flush();
                 bos.close();
 
@@ -334,6 +336,7 @@ public class PostWriter {
 
     /**
      * Get the bytes used to separate multiparts
+     * Encoded using ENCODING
      *
      * @return the bytes used to separate multiparts
      * @throws IOException
@@ -343,7 +346,8 @@ public class PostWriter {
     }
 
     /**
-     * Get the bytes used to end a file multipat
+     * Get the bytes used to end a file multipart
+     * Encoded using ENCODING
      *
      * @return the bytes used to end a file multipart
      * @throws IOException
