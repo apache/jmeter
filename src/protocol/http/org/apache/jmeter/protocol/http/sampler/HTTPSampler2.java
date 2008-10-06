@@ -833,9 +833,11 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                 res.setQueryString(putBody);
             }
 
-            res.setRequestHeaders(getConnectionHeaders(httpMethod));
 
             int statusCode = client.executeMethod(httpMethod);
+
+            // Needs to be done after execute to pick up all the headers
+            res.setRequestHeaders(getConnectionHeaders(httpMethod));
 
             // Request sent. Now get the response:
             instream = httpMethod.getResponseBodyAsStream();
