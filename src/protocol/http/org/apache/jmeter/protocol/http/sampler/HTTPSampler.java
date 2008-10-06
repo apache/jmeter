@@ -70,8 +70,8 @@ public class HTTPSampler extends HTTPSamplerBase {
 
     private static final byte[] NULL_BA = new byte[0];// can share these
 
-    /** Handles writing of a post request */
-    private transient PostWriter postWriter;
+    /** Handles writing of a post or put request */
+    private transient PostWriter postOrPutWriter;
 
     /**
      * Constructor for the HTTPSampler object.
@@ -90,13 +90,13 @@ public class HTTPSampler extends HTTPSamplerBase {
      *                if an I/O exception occurs
      */
     protected void setPostHeaders(URLConnection conn) throws IOException {
-        postWriter = new PostWriter();
-        postWriter.setHeaders(conn, this);
+        postOrPutWriter = new PostWriter();
+        postOrPutWriter.setHeaders(conn, this);
     }
 
     private void setPutHeaders(URLConnection conn) throws IOException {
-        postWriter = new PutWriter();
-        postWriter.setHeaders(conn, this);
+        postOrPutWriter = new PutWriter();
+        postOrPutWriter.setHeaders(conn, this);
     }
 
     /**
@@ -110,11 +110,11 @@ public class HTTPSampler extends HTTPSamplerBase {
      *                if an I/O exception occurs
      */
     protected String sendPostData(URLConnection connection) throws IOException {
-        return postWriter.sendPostData(connection, this);
+        return postOrPutWriter.sendPostData(connection, this);
     }
 
     private String sendPutData(URLConnection connection) throws IOException {
-        return postWriter.sendPostData(connection, this);
+        return postOrPutWriter.sendPostData(connection, this);
     }
 
     /**
