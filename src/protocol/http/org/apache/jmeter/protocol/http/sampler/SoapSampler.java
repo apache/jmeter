@@ -21,6 +21,7 @@ package org.apache.jmeter.protocol.http.sampler;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
+import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
@@ -164,18 +165,14 @@ public class SoapSampler extends HTTPSampler2 {
                 }
 
                 public void writeRequest(OutputStream out) throws IOException {
-                    byte[] buf = new byte[1024];
-                    // 1k - the previous 100k made no sense (there's tons of buffers
-                    // elsewhere in the chain) and it caused OOM when many concurrent
-                    // uploads were being done. Could be fixed by increasing the evacuation
-                    // ratio in bin/jmeter[.bat], but this is better.
-                    int read;
-                    InputStream in = new FileInputStream(xmlFile);
-                    while ((read = in.read(buf)) > 0) {
-                        out.write(buf, 0, read);
+                    InputStream in = null;
+                    try{
+                        in = new FileInputStream(xmlFile);
+                        IOUtils.copy(in, out);
+                        out.flush();
+                    } finally {
+                        IOUtils.closeQuietly(in);
                     }
-                    in.close();
-                    out.flush();
                 }
 
                 public long getContentLength() {
@@ -190,7 +187,8 @@ public class SoapSampler extends HTTPSampler2 {
                 }
 
                 public String getContentType() {
-                    return "text/xml";
+                    // TODO do we need to add a charset for the file contents?
+                    return "text/xml"; // $NON-NLS-1$
                 }
             });
         } else {
@@ -201,9 +199,9 @@ public class SoapSampler extends HTTPSampler2 {
                 }
 
                 public void writeRequest(OutputStream out) throws IOException {
-                    PrintWriter printer = new PrintWriter(out);
-                    printer.print(getXmlData());
-                    printer.flush();
+                    // charset must agree with content-type below
+                    IOUtils.write(getXmlData(), out, "utf-8"); // $NON-NLS-1$
+                    out.flush();
                 }
 
                 public long getContentLength() {
@@ -211,7 +209,7 @@ public class SoapSampler extends HTTPSampler2 {
                 }
 
                 public String getContentType() {
-                    return "text/xml";
+                    return "text/xml; charset=utf-8"; // $NON-NLS-1$
                 }
             });
         }
@@ -240,8 +238,9 @@ public class SoapSampler extends HTTPSampler2 {
             client = setupConnection(url, httpMethod, res);
 
             res.setQueryString(sendPostData(httpMethod,content_len));
-            res.setRequestHeaders(getConnectionHeaders(httpMethod));
             int statusCode = client.executeMethod(httpMethod);
+            // Some headers are set by executeMethod()
+            res.setRequestHeaders(getConnectionHeaders(httpMethod));
 
             // Request sent. Now get the response:
             instream = httpMethod.getResponseBodyAsStream();
