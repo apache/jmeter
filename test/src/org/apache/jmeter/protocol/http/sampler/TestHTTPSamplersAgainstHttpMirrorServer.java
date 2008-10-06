@@ -990,7 +990,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
                 contentLength = new Integer(contentLengthValue).intValue();
             }
             else {
-                fail("Did not receive any content-lenght header");
+                fail("Did not receive any content-length header");
             }
             bodySent = new byte[contentLength];
             System.arraycopy(responseData, responseData.length - contentLength, bodySent, 0, contentLength);
