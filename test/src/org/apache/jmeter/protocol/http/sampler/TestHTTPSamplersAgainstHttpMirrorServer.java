@@ -29,6 +29,7 @@ import java.net.URL;
 import java.util.Locale;
 
 import org.apache.jmeter.engine.util.ValueReplacer;
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.control.HttpMirrorServer;
 import org.apache.jmeter.protocol.http.control.TestHTTPMirrorThread;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
@@ -44,7 +45,6 @@ import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
 
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import junit.extensions.TestSetup;
 
@@ -53,7 +53,7 @@ import junit.extensions.TestSetup;
  * The samples are executed against the HttpMirrorServer, which is 
  * started when the unit tests are executed.
  */
-public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
+public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
 	private final static int HTTP_SAMPLER = 0;
     private final static int HTTP_SAMPLER2 = 1;
     
