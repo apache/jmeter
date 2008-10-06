@@ -58,8 +58,7 @@ public class PutWriter extends PostWriter {
         HTTPFileArg files[] = sampler.getHTTPFiles();
 
         // If there are no arguments, we can send a file as the body of the request
-        // TODO: needs a multiple file upload scenerio
-        if(sampler.getArguments() != null && sampler.getArguments().getArgumentCount() == 0 && sampler.getSendFileAsPostBody()) {
+         if(sampler.getArguments() != null && sampler.getArguments().getArgumentCount() == 0 && sampler.getSendFileAsPostBody()) {
             // If getSendFileAsPostBody returned true, it's sure that file is not null
             HTTPFileArg file = files[0];
             hasPutBody = true;
@@ -79,7 +78,6 @@ public class PutWriter extends PostWriter {
             // Allow the mimetype of the file to control the content type
             // This is not obvious in GUI if you are not uploading any files,
             // but just sending the content of nameless parameters
-            // TODO: needs a multiple file upload scenerio
             if(!hasContentTypeHeader && files.length == 1 && files[0].getMimeType().length() > 0) {
                 connection.setRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE, files[0].getMimeType());
             }
@@ -88,16 +86,14 @@ public class PutWriter extends PostWriter {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
             // Just append all the parameter values, and use that as the put body
-            StringBuffer postBodyBuffer = new StringBuffer();
+            StringBuffer putBodyBuffer = new StringBuffer();
             PropertyIterator args = sampler.getArguments().iterator();
             while (args.hasNext()) {
                 HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
-                postBodyBuffer.append(arg.getEncodedValue(contentEncoding));
+                putBodyBuffer.append(arg.getEncodedValue(contentEncoding));
             }
-            String postBody = postBodyBuffer.toString();
 
-            // Query string should be encoded in UTF-8
-            bos.write(postBody.getBytes("UTF-8")); // $NON-NLS-1$
+            bos.write(putBodyBuffer.toString().getBytes(contentEncoding));
             bos.flush();
             bos.close();
 
