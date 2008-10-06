@@ -367,11 +367,13 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 
                 // If a content encoding is specified, we set it as http parameter, so that
                 // the post body will be encoded in the specified content encoding
-                final String contentEncoding = getContentEncoding();
+                String contentEncoding = getContentEncoding();
                 boolean haveContentEncoding = false;
                 if(contentEncoding != null && contentEncoding.trim().length() > 0) {
                     post.getParams().setContentCharset(contentEncoding);
                     haveContentEncoding = true;
+                } else if (contentEncoding != null && contentEncoding.trim().length() == 0){
+                    contentEncoding=null;
                 }
 
                 // If none of the arguments have a name specified, we
