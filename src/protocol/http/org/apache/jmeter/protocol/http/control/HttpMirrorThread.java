@@ -87,11 +87,12 @@ public class HttpMirrorThread extends Thread {
             }
 
             // Check if we have found a content-length header
-            String contentLengthHeaderValue = getRequestHeaderValue(headers.toString(), "Content-Length"); //$NON-NLS-1$
+            final String headerString = headers.toString();
+            String contentLengthHeaderValue = getRequestHeaderValue(headerString, "Content-Length"); //$NON-NLS-1$
             if(contentLengthHeaderValue != null) {
                 contentLength = new Integer(contentLengthHeaderValue).intValue();
             }
-            String transferEncodingHeaderValue = getRequestHeaderValue(headers.toString(), "Transfer-Encoding"); //$NON-NLS-1$
+            String transferEncodingHeaderValue = getRequestHeaderValue(headerString, "Transfer-Encoding"); //$NON-NLS-1$
             if(transferEncodingHeaderValue != null) {
                 isChunked = transferEncodingHeaderValue.equalsIgnoreCase("chunked"); //$NON-NLS-1$
                 // We only support chunked transfer encoding
@@ -100,7 +101,7 @@ public class HttpMirrorThread extends Thread {
                 }
             }
 
-            // If we know the content lenght, we can allow the reading of
+            // If we know the content length, we can allow the reading of
             // the request to block until more data arrives.
             // If it is chunked transfer, we cannot allow the reading to
             // block, because we do not know when to stop reading, because
@@ -110,7 +111,7 @@ public class HttpMirrorThread extends Thread {
                 // Check how much of the body we have already read as part of reading
                 // the headers
                 // We subtract two bytes for the crlf divider between header and body
-                int totalReadBytes = headers.toString().length() - positionOfBody - 2;
+                int totalReadBytes = headerString.length() - positionOfBody - 2;
 
                 // We know when to stop reading, so we can allow the read method to block
                 while((totalReadBytes < contentLength) && ((length = in.read(buffer)) != -1)) {
