@@ -318,7 +318,9 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                 multiPart.writeRequest(bos);
                 bos.flush();
                 // We get the posted bytes using the encoding used to create it
-                postedBody.append(new String(bos.toByteArray(),post.getRequestCharSet()));
+                postedBody.append(new String(bos.toByteArray(),
+                        contentEncoding == null ? "US-ASCII" // $NON-NLS-1$ this is the default used by HttpClient
+                        : contentEncoding));
                 bos.close();
 
                 // For all the file multiparts, we must revert the hiding of
@@ -403,7 +405,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                         }
                         postBody.append(value);
                     }
-                    StringRequestEntity requestEntity = new StringRequestEntity(postBody.toString(), post.getRequestHeader(HEADER_CONTENT_TYPE).getValue(), post.getRequestCharSet());
+                    StringRequestEntity requestEntity = new StringRequestEntity(postBody.toString(), post.getRequestHeader(HEADER_CONTENT_TYPE).getValue(), contentEncoding);
                     post.setRequestEntity(requestEntity);
                 }
                 else {
