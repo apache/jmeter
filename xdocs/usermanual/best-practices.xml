@@ -255,5 +255,50 @@ defined by the JMeter property "beanshell.init.file". This is only processed onc
 </p>
 </subsection>
 </section>
+
+<section name="&sect-num;.9 Developing script functions in BeanShell, Javascript or Jexl etc." anchor="developing_scripts">
+<p>
+It's quite hard to write and test scripts as functions.
+However, JMeter has the BSF (and BeanShell) samplers which can be used instead.  
+</p>
+<p>
+Create a simple Test Plan containing the BSF Sampler and Tree View Listener.
+Code the script in the sampler script pane, and test it by running the test.
+If there are any errors, these will show up in the Tree View.
+Also the result of running the script will show up as the response.
+</p>
+<p>
+Once the script is working properly, it can be stored as a variable on the Test Plan.
+The script variable can then be used to create the function call.
+For example, suppose a BeanShell script is stored in the variable RANDOM_NAME.
+The function call can then be coded as <code>${__BeanShell(${RANDOM_NAME})}</code>.
+There is no need to escape any commas in the script, 
+because the function call is parsed before the variable's value is interpolated.
+</p>
+</section>
+
+<section name="&sect-num;.10 Parameterising tests" anchor="parameterising_tests">
+<p>
+Often it is useful to be able to re-run the same test with different settings.
+For example, changing the number of threads or loops, or changing a hostname.
+</p>
+<p>
+One way to do this is to define a set of variables on the Test Plan, and then use those variables in the test elements.
+For example, one could define the variable LOOPS=10, and refer to that in the Thread Group as ${LOOPS}. 
+To run the test with 20 loops, just change the value of the LOOPS variable on the Test Plan.
+</p>
+<p>
+This quickly becomes tedious if you want to run lots of tests in non-GUI mode.
+One solution to this is to define the Test Plan variable in terms of a property,
+for example <code>LOOPS=${__P(loops,10))}</code>.
+This uses the value of the property "loops", defaulting to 10 if the property is not found.
+The "loops" property can then be defined on the JMeter command-line:
+<code>jmeter ... -Jloops=12 ...</code>.
+If there are a lot of properties that need to be changed together, 
+then one way to achieve this is to use a set of property files.
+The appropriate property file can be passed in to JMeter using the -q command-line option.
+</p>
+</section>
+
 </body>
 </document>
