@@ -151,7 +151,7 @@ Make sure the file is a jar file, not a zip.
  you need to download the beanshell jar from <a href="http://www.beanshell.org/">http://www.beanshell.org/</a> and copy the jar file to the <b>jmeter/lib directory</b>, where JMeter will automatically pick it up.</p>
 </subsection>
 
-<subsection name="&sect-num;.2.7 Libraries for ActiveMQ 3.0" anchor="libraries_activemq">
+<subsection name="&sect-num;.2.8 Libraries for ActiveMQ 3.0" anchor="libraries_activemq">
 <p>See <a href="http://activemq.apache.org/initial-configuration.html">http://activemq.apache.org/initial-configuration.html</a>
 for details.
 </p>
