@@ -189,14 +189,22 @@ functions begin with "__" to avoid conflict with user value names<sup>*</sup>.  
 configure them, and these go in parentheses, comma-delimited.  If the function takes no arguments, the parentheses can
 be omitted.</p>
 
-<p>Argument values that themselves contain commas should be escaped as necessary.
-If you need to include a comma in your parameter value, escape it like so: '\,'.
+<p><b>Argument values that themselves contain commas should be escaped as necessary.
+If you need to include a comma in your parameter value, escape it like so: '\,'.</b>
 This applies for example to the scripting functions - Javascript, Beanshell, Jexl - where it is necessary to escape any commas
 that may be needed in script method calls - e.g.
 </p>
 <pre>
     ${__BeanShell(vars.put("name"\,"value"))}
 </pre>
+<p>
+Alternatively, you can define your script as a variable, e.g. on the Test Plan:
+<pre>SCRIPT          vars.put("name","value")</pre>
+The script can then be referenced as follows:
+<pre>${__BeanShell(${SCRIPT})}</pre>
+There is no need to escape commas in the SCRIPT variable because the function call is parsed before the variable is replaced with its value.
+This works well in conjunction with the BSF or BeanShell Samplers, as these can be used to test Javascript, Jexl and BeanShell scripts.
+</p>
 <p>
 Functions can reference variables and other functions, for example 
 <code>${__XPath(${__P(xpath.file),${XPATH})}</code> 
