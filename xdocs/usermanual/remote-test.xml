@@ -125,6 +125,14 @@ Use the "-s" option with the jmeter startup script ("jmeter -s").</p>
 <p>Steps 2 and 3 remain the same.</p>
 </subsection>
 <subsection name="&sect-num;.2 Tips" anchor="tips">
+<p>
+JMeter/RMI requires a connection from the client to the server. This will use the port you chose, default 1099.
+JMeter/RMI also requires a reverse connection in order to return sample results from the server to the client.
+This will use a high-numbered port.
+If there are any firewalls or other network filters between JMeter client and server,
+you will need to make sure that they are set up to allow the connections through.
+If necessary, use monitoring software to show what traffic is being generated.
+</p>
 <p>If you're running Suse Linux, these tips may help. The default installation may enable the firewall. In that case, remote testing will not work properly. The following tips were contributed by Sergey Ten.</p>
 <p>If you see connections refused, turn on debugging by passing the following options.</p>
      rmiregistry -J-Dsun.rmi.log.debug=true
