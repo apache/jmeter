@@ -21,10 +21,9 @@
  */
 package org.apache.jorphan.math;
 
-import java.io.Serializable;
 import java.util.Comparator;
 
-public class NumberComparator implements Comparator, Serializable {
+public class NumberComparator implements Comparator {
 
     /**
      *

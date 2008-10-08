@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.visualizers;
 
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +34,7 @@ import org.apache.log.Logger;
  * the stats out with whatever methods you prefer.
  *
  */
-public class SamplingStatCalculator implements Serializable {
+public class SamplingStatCalculator {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private final StatCalculator calculator = new StatCalculator();
