@@ -54,7 +54,6 @@ public class DragNDrop extends AbstractAction {
         if (te instanceof TestPlan || te instanceof WorkBench) {
             parentNode = null; // So elements can only be added as children
         }
-        // System.out.println(action+" "+te.getClass().getName());
 
         if (ActionNames.DRAG_ADD.equals(action) && canAddTo(currentNode,draggedNodes)) {
             removeNodesFromParents(draggedNodes);
@@ -62,17 +61,19 @@ public class DragNDrop extends AbstractAction {
                 GuiPackage.getInstance().getTreeModel().insertNodeInto(draggedNodes[i], currentNode,
                         currentNode.getChildCount());
             }
-        } else if (ActionNames.INSERT_BEFORE.equals(action) && canAddTo(parentNode,draggedNodes)) {
-            removeNodesFromParents(draggedNodes);
-            for (int i = 0; i < draggedNodes.length; i++) {
-                int index = parentNode.getIndex(currentNode);
-                GuiPackage.getInstance().getTreeModel().insertNodeInto(draggedNodes[i], parentNode, index);
-            }
-        } else if (ActionNames.INSERT_AFTER.equals(action) && canAddTo(parentNode,draggedNodes)) {
-            removeNodesFromParents(draggedNodes);
-            for (int i = 0; i < draggedNodes.length; i++) {
-                int index = parentNode.getIndex(currentNode) + 1;
-                GuiPackage.getInstance().getTreeModel().insertNodeInto(draggedNodes[i], parentNode, index);
+        } else if (parentNode != null) {
+            if (ActionNames.INSERT_BEFORE.equals(action) && canAddTo(parentNode,draggedNodes)) {
+                removeNodesFromParents(draggedNodes);
+                for (int i = 0; i < draggedNodes.length; i++) {
+                    int index = parentNode.getIndex(currentNode);
+                    GuiPackage.getInstance().getTreeModel().insertNodeInto(draggedNodes[i], parentNode, index);
+                }
+            } else if (ActionNames.INSERT_AFTER.equals(action) && canAddTo(parentNode,draggedNodes)) {
+                removeNodesFromParents(draggedNodes);
+                for (int i = 0; i < draggedNodes.length; i++) {
+                    int index = parentNode.getIndex(currentNode) + 1;
+                    GuiPackage.getInstance().getTreeModel().insertNodeInto(draggedNodes[i], parentNode, index);
+                }            
             }
         }
         GuiPackage.getInstance().getMainFrame().repaint();
