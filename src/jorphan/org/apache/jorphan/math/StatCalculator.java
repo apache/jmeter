@@ -18,7 +18,6 @@
 
 package org.apache.jorphan.math;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -29,7 +28,7 @@ import java.util.List;
  * This class serves as a way to calculate the median of a list of values. It is
  * not threadsafe.
  */
-public class StatCalculator implements Serializable {
+public class StatCalculator {
     List values = new ArrayList();
 
     double sum = 0;
