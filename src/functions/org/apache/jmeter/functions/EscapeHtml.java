@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.functions;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -47,7 +46,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * 
  * @see StringEscapeUtils#escapeHtml(String) (Commons Lang)
  */
-public class EscapeHtml extends AbstractFunction implements Serializable {
+public class EscapeHtml extends AbstractFunction {
 
     private static final List desc = new LinkedList();
 

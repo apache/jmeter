@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.functions;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -38,9 +37,7 @@ import org.mozilla.javascript.JavaScriptException;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.WrappedException;
 
-public class JavaScript extends AbstractFunction implements Serializable {
-
-    private static final long serialVersionUID = 232L;
+public class JavaScript extends AbstractFunction {
 
     private static final List desc = new LinkedList();
 

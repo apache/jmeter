@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.functions;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -34,9 +33,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * (first argument) and a max (second argument).
  *
  */
-public class Random extends AbstractFunction implements Serializable {
-
-    private static final long serialVersionUID = 232L;
+public class Random extends AbstractFunction {
 
     private static final List desc = new LinkedList();
 
@@ -48,7 +45,7 @@ public class Random extends AbstractFunction implements Serializable {
         desc.add(JMeterUtils.getResString("function_name_paropt")); //$NON-NLS-1$
     }
 
-    private transient CompoundVariable varName, minimum, maximum;
+    private CompoundVariable varName, minimum, maximum;
 
     /**
      * No-arg constructor.

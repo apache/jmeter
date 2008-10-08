@@ -18,7 +18,7 @@
 
 package org.apache.jmeter.functions;
 
-import java.io.Serializable;
+
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -41,9 +41,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * Returns: nothing or original value if the 3rd parameter is true
  *
  */
-public class SetProperty extends AbstractFunction implements Serializable {
-
-    private static final long serialVersionUID = 232L;
+public class SetProperty extends AbstractFunction {
 
     private static final List desc = new LinkedList();
 

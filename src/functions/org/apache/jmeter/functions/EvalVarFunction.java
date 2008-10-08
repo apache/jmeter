@@ -20,7 +20,6 @@ package org.apache.jmeter.functions;
 
 // @see PackageTest for unit tests
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -41,9 +40,7 @@ import org.apache.log.Logger;
  * Returns: the evaluated value
  *
  */
-public class EvalVarFunction extends AbstractFunction implements Serializable {
-
-    private static final long serialVersionUID = 232L;
+public class EvalVarFunction extends AbstractFunction {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 

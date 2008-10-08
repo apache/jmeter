@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.functions;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -34,7 +33,7 @@ import org.apache.log.Logger;
 /**
  * Function to generate chars from a list of decimal or hex values
  */
-public class CharFunction extends AbstractFunction implements Serializable {
+public class CharFunction extends AbstractFunction {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
     
