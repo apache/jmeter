@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.functions;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -38,11 +37,9 @@ import org.apache.log.Logger;
  * A function which understands BeanShell
  *
  */
-public class BeanShell extends AbstractFunction implements Serializable {
+public class BeanShell extends AbstractFunction {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
-
-    private static final long serialVersionUID = 232L;
 
     private static final List desc = new LinkedList();
 
@@ -55,9 +52,9 @@ public class BeanShell extends AbstractFunction implements Serializable {
         desc.add(JMeterUtils.getResString("function_name_paropt"));// $NON-NLS1$
     }
 
-    private transient Object[] values;
+    private Object[] values;
 
-    private transient BeanShellInterpreter bshInterpreter = null;
+    private BeanShellInterpreter bshInterpreter = null;
 
     public BeanShell() {
     }

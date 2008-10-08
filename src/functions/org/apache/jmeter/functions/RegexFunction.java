@@ -18,8 +18,6 @@
 
 package org.apache.jmeter.functions;
 
-import java.io.ObjectStreamException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -47,10 +45,8 @@ import org.apache.oro.text.regex.Util;
 
 // @see TestRegexFunction for unit tests
 
-public class RegexFunction extends AbstractFunction implements Serializable {
+public class RegexFunction extends AbstractFunction {
     private static final Logger log = LoggingManager.getLoggerForClass();
-
-    private static final long serialVersionUID = 232L;
 
     public static final String ALL = "ALL"; //$NON-NLS-1$
 
@@ -64,7 +60,7 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 
     private static final List desc = new LinkedList();
 
-    private transient Pattern templatePattern;// initialised to the regex \$(\d+)\$
+    private Pattern templatePattern;// initialised to the regex \$(\d+)\$
 
     // Number of parameters expected - used to reject invalid calls
     private static final int MIN_PARAMETER_COUNT = 2;
@@ -88,13 +84,6 @@ public class RegexFunction extends AbstractFunction implements Serializable {
         templatePattern = JMeterUtils.getPatternCache().getPattern("\\$(\\d+)\\$",  //$NON-NLS-1$
                 Perl5Compiler.READ_ONLY_MASK);
     }
-
-    // For serialised objects, do the same work as the constructor:
-    private Object readResolve() throws ObjectStreamException {
-        initPattern();
-        return this;
-    }
-
 
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {

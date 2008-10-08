@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.functions;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -46,10 +45,8 @@ import org.apache.log.Logger;
  * Returns: - Empty String (so can be used where return value would be a nuisance)
  *
  */
-public class LogFunction2 extends AbstractFunction implements Serializable {
+public class LogFunction2 extends AbstractFunction {
     private static final Logger log = LoggingManager.getLoggerForClass();
-
-    private static final long serialVersionUID = 232L;
 
     private static final List desc = new LinkedList();
 
