@@ -18,9 +18,7 @@
 
 package org.apache.jmeter.testelement;
 
-import java.io.Serializable;
-
-public class WorkBench extends AbstractTestElement implements Serializable {
+public class WorkBench extends AbstractTestElement {
 
     /**
      * Constructor for the WorkBench object.
