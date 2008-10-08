@@ -51,7 +51,7 @@ import org.apache.log.Logger;
 
 /**
  */
-public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, Runnable, Serializable {
+public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, Runnable {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final long serialVersionUID = 231L; // Remember to change this when the class changes ...
@@ -60,7 +60,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
     private static final long WAIT_TO_DIE = 5 * 1000; // 5 seconds
 
-    private transient Map allThreads;
+    private Map allThreads;
 
     private volatile boolean startingGroups; // flag to show that groups are still being created
 
@@ -72,11 +72,11 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
     private HashTree test;
 
-    private transient SearchByClass testListeners;
+    private SearchByClass testListeners;
 
     private String host = null;
 
-    private transient ListenerNotifier notifier;
+    private ListenerNotifier notifier;
 
     // Should we exit at end of the test? (only applies to server, because host is non-null)
     private static final boolean exitAfterTest =
@@ -95,7 +95,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
     // e.g. from beanshell server
     // Assumes that there is only one instance of the engine
     // at any one time so it is not guaranteed to work ...
-    private static transient Map allThreadNames;
+    private static Map allThreadNames;
 
     private static StandardJMeterEngine engine;
 
