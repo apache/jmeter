@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.functions;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -51,10 +50,8 @@ import org.apache.log.Logger;
  * __CSVRead(*ONE,1); etc
  *
  */
-public class CSVRead extends AbstractFunction implements Serializable {
+public class CSVRead extends AbstractFunction {
     private static final Logger log = LoggingManager.getLoggerForClass();
-
-    private static final long serialVersionUID = 232L;
 
     private static final String KEY = "__CSVRead"; // Function name //$NON-NLS-1$
 

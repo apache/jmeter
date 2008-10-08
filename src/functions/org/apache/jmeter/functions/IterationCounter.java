@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.functions;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,19 +28,17 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 
-public class IterationCounter extends AbstractFunction implements Serializable {
-
-    private static final long serialVersionUID = 233L;
+public class IterationCounter extends AbstractFunction {
 
     private static final List desc = new LinkedList();
 
     private static final String KEY = "__counter"; //$NON-NLS-1$
 
-    private transient ThreadLocal perThreadInt;
+    private ThreadLocal perThreadInt;
 
-    private transient Object[] variables;
+    private Object[] variables;
 
-    private transient int globalCounter;//MAXINT = 2,147,483,647
+    private int globalCounter;//MAXINT = 2,147,483,647
 
     private void init(){
        synchronized(this){
@@ -61,11 +58,6 @@ public class IterationCounter extends AbstractFunction implements Serializable {
 
     public IterationCounter() {
         init();
-    }
-
-    private Object readResolve(){
-        init();
-        return this;
     }
 
     /*

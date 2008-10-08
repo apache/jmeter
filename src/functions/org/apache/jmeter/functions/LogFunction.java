@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.functions;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -48,10 +47,8 @@ import org.apache.log.Priority;
  * Returns: - the input string
  *
  */
-public class LogFunction extends AbstractFunction implements Serializable {
+public class LogFunction extends AbstractFunction {
     private static final Logger log = LoggingManager.getLoggerForClass();
-
-    private static final long serialVersionUID = 232L;
 
     private static final List desc = new LinkedList();
 
