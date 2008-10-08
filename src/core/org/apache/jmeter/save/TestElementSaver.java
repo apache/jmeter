@@ -103,7 +103,7 @@ public class TestElementSaver implements TestElementTraverser {
                 ((DefaultConfiguration) parent).addChild((Configuration) value);
             } else if (parent instanceof DefaultConfiguration && !(value instanceof Configuration)) {
                 DefaultConfiguration config = new DefaultConfiguration("string", "string");
-                config.setValue(value.toString());
+                config.setValue(value != null ? value.toString() : "");
                 config.setAttribute(OldSaveService.XML_SPACE, OldSaveService.PRESERVE);
                 ((DefaultConfiguration) parent).addChild(config);
             }
