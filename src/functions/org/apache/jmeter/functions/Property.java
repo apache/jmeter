@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.functions;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -43,9 +42,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * - the property name itself
  *
  */
-public class Property extends AbstractFunction implements Serializable {
-
-    private static final long serialVersionUID = 232L;
+public class Property extends AbstractFunction {
 
     private static final List desc = new LinkedList();
 

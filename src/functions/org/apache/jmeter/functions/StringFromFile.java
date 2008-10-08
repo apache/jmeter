@@ -21,7 +21,7 @@ package org.apache.jmeter.functions;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.Serializable;
+
 import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -60,10 +60,8 @@ import org.apache.log.Logger;
  * - the output variable name is resolved every time the function is invoked
  *
  */
-public class StringFromFile extends AbstractFunction implements Serializable, TestListener {
+public class StringFromFile extends AbstractFunction implements TestListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
-
-    private static final long serialVersionUID = 232L;
 
     private static final List desc = new LinkedList();
 
@@ -90,20 +88,20 @@ public class StringFromFile extends AbstractFunction implements Serializable, Te
 
     private static final int MAX_PARAM_COUNT = 4;
 
-    private transient String myValue;
+    private String myValue;
 
-    private transient String myName;
+    private String myName;
 
-    private transient Object[] values;
+    private Object[] values;
 
-    private transient BufferedReader myBread = null; // Buffered reader
+    private BufferedReader myBread = null; // Buffered reader
 
-    private transient FileReader fis; // keep this round to close it
+    private FileReader fis; // keep this round to close it
 
-    private transient boolean firstTime = false; // should we try to open the
+    private boolean firstTime = false; // should we try to open the
                                                     // file?
 
-    private transient String fileName; // needed for error messages
+    private String fileName; // needed for error messages
 
     public StringFromFile() {
         init();
@@ -115,11 +113,6 @@ public class StringFromFile extends AbstractFunction implements Serializable, Te
     private void init(){
         myValue = ERR_IND;
         myName = "StringFromFile_";//$NON-NLS-1$
-    }
-
-    private Object readResolve(){
-        init();
-        return this;
     }
 
     /*

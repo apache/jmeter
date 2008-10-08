@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.functions;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,7 +28,7 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 
-public class MachineName extends AbstractFunction implements Serializable {
+public class MachineName extends AbstractFunction {
 
     private static final List desc = new LinkedList();
 

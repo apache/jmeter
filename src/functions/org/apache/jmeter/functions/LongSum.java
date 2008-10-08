@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.functions;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,9 +32,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * Provides a longSum function that adds two or more long values.
  * @see IntSum
  */
-public class LongSum extends AbstractFunction implements Serializable {
-
-    private static final long serialVersionUID = 232L;
+public class LongSum extends AbstractFunction {
 
     private static final List desc = new LinkedList();
 
