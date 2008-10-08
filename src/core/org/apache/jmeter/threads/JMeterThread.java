@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.threads;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -59,12 +58,9 @@ import org.apache.log.Logger;
  * timing, add listeners for sampling events and to stop the sampling process.
  *
  */
-public class JMeterThread implements Runnable, Serializable {
+public class JMeterThread implements Runnable {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final long serialVersionUID = 23L; // Remember to change this when the class changes ...
-
-    // NOT USED private static Map samplers = new HashMap();
     private int initialDelay = 0;
 
     private Controller controller;
@@ -73,19 +69,19 @@ public class JMeterThread implements Runnable, Serializable {
 
     private HashTree testTree;
 
-    private transient TestCompiler compiler;
+    private TestCompiler compiler;
 
     private JMeterThreadMonitor monitor;
 
     private String threadName;
 
-    private transient JMeterContext threadContext;
+    private JMeterContext threadContext;
 
-    private transient JMeterVariables threadVars;
+    private JMeterVariables threadVars;
 
     private Collection testListeners;
 
-    private transient ListenerNotifier notifier;
+    private ListenerNotifier notifier;
 
     private int threadNum = 0;
 
