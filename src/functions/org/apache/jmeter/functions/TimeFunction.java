@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.functions;
 
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
@@ -38,9 +37,7 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * __time() function - returns the current time in milliseconds
  */
-public class TimeFunction extends AbstractFunction implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class TimeFunction extends AbstractFunction {
 
     private static final String KEY = "__time"; // $NON-NLS-1$
 
@@ -67,14 +64,8 @@ public class TimeFunction extends AbstractFunction implements Serializable {
     }
 
     // Ensure that these are set, even if no paramters are provided
-    private transient String format   = ""; //$NON-NLS-1$
-    private transient String variable = ""; //$NON-NLS-1$
-
-    private Object readResolve(){
-        format="";
-        variable="";
-        return this;
-    }
+    private String format   = ""; //$NON-NLS-1$
+    private String variable = ""; //$NON-NLS-1$
 
     public TimeFunction(){
         super();

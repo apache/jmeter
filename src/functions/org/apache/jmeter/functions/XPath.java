@@ -18,7 +18,7 @@
 
 package org.apache.jmeter.functions;
 
-import java.io.Serializable;
+
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -45,10 +45,8 @@ import org.apache.log.Logger;
  * is opened and used for all threads.
  *
  */
-public class XPath extends AbstractFunction implements Serializable {
+public class XPath extends AbstractFunction {
     private static final Logger log = LoggingManager.getLoggerForClass();
-
-    private static final long serialVersionUID = 232L;
 
     // static {
     // LoggingManager.setPriority("DEBUG","jmeter");
