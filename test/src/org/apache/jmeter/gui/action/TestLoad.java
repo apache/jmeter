@@ -105,7 +105,13 @@ public class TestLoad extends JMeterTestCase {
 	}
 
 	private HashTree getTree(File f) throws Exception {
-		HashTree tree = SaveService.loadTree(new FileInputStream(f));
+		FileInputStream fis = new FileInputStream(f);
+		HashTree tree = null;
+		try {
+            tree = SaveService.loadTree(fis);
+		} finally {
+		    fis.close();
+		}
 		return tree;
 	}
 }
