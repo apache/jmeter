@@ -48,7 +48,7 @@ import org.apache.log.Logger;
 public class ThreadGroup extends AbstractTestElement implements SampleListener, Serializable, Controller {
     private final static Logger log = LoggingManager.getLoggerForClass();
 
-    private static final long serialVersionUID = 232L;
+    private static final long serialVersionUID = 233L;
 
     public final static String NUM_THREADS = "ThreadGroup.num_threads";
 
@@ -296,6 +296,8 @@ public class ThreadGroup extends AbstractTestElement implements SampleListener, 
         getSamplerController().addTestElement(child);
     }
 
+    // TODO - does the ThreadGroup ever get any samples? Does it need to implement SampleListener?
+    
     /**
      * A sample has occurred.
      *
@@ -334,11 +336,8 @@ public class ThreadGroup extends AbstractTestElement implements SampleListener, 
      * Separate thread to deliver all SampleEvents. This ensures that sample
      * listeners will get sample events one at a time and can thus ignore thread
      * issues.
-     *
-     * @author Mike Stover
-     * @version $Id$
      */
-    private class SampleQueue implements Runnable, Serializable {
+    private class SampleQueue implements Runnable {
         List occurredQ = Collections.synchronizedList(new LinkedList());
 
         /**
@@ -369,8 +368,8 @@ public class ThreadGroup extends AbstractTestElement implements SampleListener, 
                 try {
                     event = (SampleEvent) occurredQ.remove(0);
                 } catch (Exception ex) {
-                    waitForSamples();
-                    continue;
+                    log.warn("Problem removing an item from the queue", ex);
+                    // Drop thru to wait
                 }
                 try {
                     if (event != null) {
@@ -383,24 +382,20 @@ public class ThreadGroup extends AbstractTestElement implements SampleListener, 
                             try {
                                 ((RemoteSampleListener) iter.next()).sampleOccurred(event);
                             } catch (Exception ex) {
-                                log.error("", ex);
+                                log.error("Could not invoke sampleOccured on remote listener", ex);
                             }
                         }
                     } else {
-                        waitForSamples();
+                        try {
+                            this.wait();
+                        } catch (Exception ex) {
+                            log.warn("Error occured during wait", ex);
+                        }
                     }
                 } catch (Throwable ex) {
                     log.error("", ex);
                 }
 
-            }
-        }
-
-        private synchronized void waitForSamples() {
-            try {
-                this.wait();
-            } catch (Exception ex) {
-                log.error("", ex);
             }
         }
     }
