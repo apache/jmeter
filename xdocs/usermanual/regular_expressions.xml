@@ -193,5 +193,17 @@ Match ExAct case or (?i)ArBiTrARY(?-i) case
 </subsection>
 </section>
 
+<section name="&sect-num;.6 Testing Regular Expressions" anchor="testing_expressions">
+<p>
+There is a <a href="http://jakarta.apache.org/oro/demo.html">demo</a> applet for Apache JMeter ORO.
+</p>
+<p>
+Another approach is to use a simple test plan to test the regular expressions.
+The Java Request sampler can be used to generate a sample, or the HTTP Sampler can be used to load a file.
+Add a Debug Sampler and a Tree View Listener and changes to the regular expression can be tested quickly,
+without needing to access any external servers. 
+</p>
+</section>
+
 </body>
 </document>
