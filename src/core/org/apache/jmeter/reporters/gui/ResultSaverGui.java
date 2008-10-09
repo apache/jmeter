@@ -48,6 +48,8 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable {
 
     private JCheckBox successOnly;
 
+    private JCheckBox skipAutoNumber;
+
     public ResultSaverGui() {
         super();
         init();
@@ -68,6 +70,7 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable {
         filename.setText(el.getPropertyAsString(ResultSaver.FILENAME));
         errorsOnly.setSelected(el.getPropertyAsBoolean(ResultSaver.ERRORS_ONLY));
         successOnly.setSelected(el.getPropertyAsBoolean(ResultSaver.SUCCESS_ONLY));
+        skipAutoNumber.setSelected(el.getPropertyAsBoolean(ResultSaver.SKIP_AUTO_NUMBER));
         variableName.setText(el.getPropertyAsString(ResultSaver.VARIABLE_NAME,""));
     }
 
@@ -89,6 +92,7 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable {
         super.configureTestElement(te);
         te.setProperty(ResultSaver.FILENAME, filename.getText());
         te.setProperty(ResultSaver.ERRORS_ONLY, errorsOnly.isSelected());
+        te.setProperty(ResultSaver.SKIP_AUTO_NUMBER, skipAutoNumber.isSelected());
         te.setProperty(ResultSaver.SUCCESS_ONLY, successOnly.isSelected());
         AbstractTestElement at = (AbstractTestElement) te;
         at.setProperty(ResultSaver.VARIABLE_NAME, variableName.getText(),""); //$NON-NLS-1$
@@ -100,6 +104,7 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable {
     public void clearGui() {
         super.clearGui();
 
+        skipAutoNumber.setSelected(false);
         filename.setText(""); //$NON-NLS-1$
         errorsOnly.setSelected(false);
         successOnly.setSelected(false);
@@ -117,6 +122,8 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable {
         box.add(errorsOnly);
         successOnly = new JCheckBox(JMeterUtils.getResString("resultsaver_success")); // $NON-NLS-1$
         box.add(successOnly);
+        skipAutoNumber = new JCheckBox(JMeterUtils.getResString("resultsaver_skipautonumber")); // $NON-NLS-1$
+        box.add(skipAutoNumber);
         add(box, BorderLayout.NORTH);
     }
 
