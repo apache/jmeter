@@ -29,7 +29,6 @@ import org.mozilla.javascript.Scriptable;
 
 /*******************************************************************************
  *
- * @author Cyrus Montakab created 2003/06/30
  *
  * This is a Conditional Controller; it will execute the set of statements
  * (samplers/controllers, etc) while the 'condition' is true.
@@ -47,6 +46,8 @@ import org.mozilla.javascript.Scriptable;
  *
  ******************************************************************************/
 
+// for unit test code @see TestIfController
+
 public class IfController extends GenericController implements Serializable {
 
     private static final Logger logger = LoggingManager.getLoggerForClass();
@@ -54,6 +55,8 @@ public class IfController extends GenericController implements Serializable {
     private final static String CONDITION = "IfController.condition"; //$NON-NLS-1$
 
     private final static String EVALUATE_ALL = "IfController.evaluateAll"; //$NON-NLS-1$
+
+    private static final String USE_EXPRESSION = "IfController.useExpression"; //$NON-NLS-1$
 
     /**
      * constructor
@@ -87,7 +90,7 @@ public class IfController extends GenericController implements Serializable {
     /**
      * evaluate the condition clause log error if bad condition
      */
-    static boolean evaluateCondition(String cond) {
+    private static boolean evaluateCondition(String cond) {
         logger.debug("    getCondition() : [" + cond + "]");
 
         String resultStr = "";
@@ -120,6 +123,10 @@ public class IfController extends GenericController implements Serializable {
         return result;
     }
 
+    private static boolean evaluateExpression(String cond) {
+        return cond.equalsIgnoreCase("true"); // $NON-NLS-1$
+    }
+
     /**
      * This is overriding the parent method. IsDone indicates whether the
      * termination condition is reached. I.e. if the condition evaluates to
@@ -148,7 +155,10 @@ public class IfController extends GenericController implements Serializable {
         // so then we just pass the control to the next item inside the if control
         boolean result = true;
         if(isEvaluateAll() || isFirst()) {
-            result = evaluateCondition(getCondition());
+            result = isUseExpression() ? 
+                    evaluateExpression(getCondition())
+                    :
+                    evaluateCondition(getCondition());
         }
 
         if (result) {
@@ -167,5 +177,13 @@ public class IfController extends GenericController implements Serializable {
 
     public void setEvaluateAll(boolean b) {
         setProperty(EVALUATE_ALL,b);
+    }
+
+    public boolean isUseExpression() {
+        return getPropertyAsBoolean(USE_EXPRESSION, false);
+    }
+
+    public void setUseExpression(boolean selected) {
+        setProperty(USE_EXPRESSION, selected, false);
     }
 }
