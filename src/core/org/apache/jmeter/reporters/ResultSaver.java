@@ -58,6 +58,8 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
 
     public static final String SUCCESS_ONLY = "FileSaver.successonly"; // $NON-NLS-1$
 
+    public static final String SKIP_AUTO_NUMBER = "FileSaver.skipautonumber"; // $NON-NLS-1$
+
     private synchronized long nextNumber() {
         return ++sequenceNumber;
     }
@@ -142,7 +144,7 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
             }
         }
 
-        String fileName = makeFileName(s.getContentType());
+        String fileName = makeFileName(s.getContentType(), getSkipAutoNumber());
         log.debug("Saving " + s.getSampleLabel() + " in " + fileName);
         s.setResultFileName(fileName);// Associate sample with file name
         String variable = getVariableName();
@@ -173,12 +175,12 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
      *         from the contentType e.g. Content-Type:
      *         text/html;charset=ISO-8859-1
      */
-    private String makeFileName(String contentType) {
+    private String makeFileName(String contentType, boolean skipAutoNumber) {
         String suffix = "unknown";
         if (contentType != null) {
-            int i = contentType.indexOf("/");
+            int i = contentType.indexOf("/"); // $NON-NLS-1$
             if (i != -1) {
-                int j = contentType.indexOf(";");
+                int j = contentType.indexOf(";"); // $NON-NLS-1$
                 if (j != -1) {
                     suffix = contentType.substring(i + 1, j);
                 } else {
@@ -186,7 +188,12 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
                 }
             }
         }
-        return getFilename() + nextNumber() + "." + suffix;
+        if (skipAutoNumber) {
+            return getFilename() + "." + suffix; // $NON-NLS-1$
+        }
+        else {
+            return getFilename() + nextNumber() + "." + suffix; // $NON-NLS-1$
+        }
     }
 
     /*
@@ -217,6 +224,10 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
 
     private boolean getErrorsOnly() {
         return getPropertyAsBoolean(ERRORS_ONLY);
+    }
+
+    private boolean getSkipAutoNumber() {
+        return getPropertyAsBoolean(SKIP_AUTO_NUMBER);
     }
 
     private boolean getSuccessOnly() {
