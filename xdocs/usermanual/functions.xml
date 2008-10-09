@@ -482,6 +482,12 @@ The following variables are made available to the script:
 <li>sampleResult - previous SampleResult object (if any)</li>
 <li>props - JMeter Properties object</li>
 </ul>
+<p>
+Rhinoscript allows access to static methods via its Packages object.
+See the <a href="http://www.mozilla.org/rhino/ScriptingJava.html">Scripting Java</a> documentation.
+For example one can access the JMeterContextService static methods thus:
+<code>Packages.org.apache.jmeter.threads.JMeterContextService.getTotalThreads()</code>
+</p>
 <note>
 JMeter is not a browser, and does not interpret the JavaScript in downloaded pages.
 </note>
