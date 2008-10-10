@@ -134,6 +134,8 @@ public class AssertionGui extends AbstractAssertionGui {
         if (el instanceof ResponseAssertion) {
             ResponseAssertion ra = (ResponseAssertion) el;
 
+            saveScopeSettings(ra);
+            
             ra.clearTestStrings();
             String[] testStrings = tableModel.getData().getColumn(COL_NAME);
             for (int i = 0; i < testStrings.length; i++) {
@@ -204,6 +206,8 @@ public class AssertionGui extends AbstractAssertionGui {
         super.configure(el);
         ResponseAssertion model = (ResponseAssertion) el;
 
+        showScopeSettings(model);
+        
         if (model.isContainsType()) {
             containsBox.setSelected(true);
         } else if (model.isEqualsType()) {
@@ -255,6 +259,7 @@ public class AssertionGui extends AbstractAssertionGui {
         setBorder(makeBorder());
 
         box.add(makeTitlePanel());
+        box.add(createScopePanel());
         box.add(createFieldPanel());
         box.add(createTypePanel());
         add(box, BorderLayout.NORTH);

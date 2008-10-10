@@ -30,6 +30,9 @@ import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
+/**
+ * GUI for {@link DurationAssertion}
+ */
 public class DurationAssertionGui extends AbstractAssertionGui {
 
     private JTextField duration;
@@ -59,7 +62,11 @@ public class DurationAssertionGui extends AbstractAssertionGui {
      */
     public void modifyTestElement(TestElement el) {
         configureTestElement(el);
-        el.setProperty(DurationAssertion.DURATION_KEY,duration.getText());
+        if (el instanceof DurationAssertion) {
+            DurationAssertion assertion = (DurationAssertion) el;
+            assertion.setProperty(DurationAssertion.DURATION_KEY,duration.getText());
+            saveScopeSettings(assertion);
+        }
     }
 
     /**
@@ -73,7 +80,11 @@ public class DurationAssertionGui extends AbstractAssertionGui {
 
     public void configure(TestElement el) {
         super.configure(el);
-        duration.setText(el.getPropertyAsString(DurationAssertion.DURATION_KEY));
+        if (el instanceof DurationAssertion){
+            DurationAssertion da = (DurationAssertion) el;
+            duration.setText(da.getPropertyAsString(DurationAssertion.DURATION_KEY));
+            showScopeSettings(da);
+        }
     }
 
     private void init() {
@@ -82,7 +93,8 @@ public class DurationAssertionGui extends AbstractAssertionGui {
 
         add(makeTitlePanel(), BorderLayout.NORTH);
 
-        JPanel mainPanel = new JPanel(new BorderLayout());
+        JPanel mainPanel = new VerticalPanel();
+        mainPanel.add(createScopePanel());
 
         // USER_INPUT
         VerticalPanel durationPanel = new VerticalPanel();
@@ -99,7 +111,7 @@ public class DurationAssertionGui extends AbstractAssertionGui {
         durationLabel.setLabelFor(duration);
         durationPanel.add(labelPanel);
         
-        mainPanel.add(durationPanel, BorderLayout.NORTH);
+        mainPanel.add(durationPanel);
         add(mainPanel, BorderLayout.CENTER);
     }
 }
