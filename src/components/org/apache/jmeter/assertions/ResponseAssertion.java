@@ -23,7 +23,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.testelement.AbstractScopedAssertion;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
@@ -43,7 +43,7 @@ import org.apache.oro.text.regex.Perl5Matcher;
 /**
  * Test element to handle Response Assertions, @see AssertionGui
  */
-public class ResponseAssertion extends AbstractTestElement implements Serializable, Assertion {
+public class ResponseAssertion extends AbstractScopedAssertion implements Serializable, Assertion {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private final static String TEST_FIELD = "Assertion.test_field";  // $NON-NLS-1$

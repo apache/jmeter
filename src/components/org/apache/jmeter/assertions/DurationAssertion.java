@@ -22,17 +22,15 @@ import java.io.Serializable;
 import java.text.MessageFormat;
 
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.testelement.AbstractScopedAssertion;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Checks if an Sample is sampled within a specified time-frame. If the duration
  * is larger than the timeframe the Assertion is considered a failure.
  * 
- * author <a href="mailto:wolfram.rittmeyer@web.de">Wolfram Rittmeyer</a>
- * @version $Revision$, $Date$
  */
-public class DurationAssertion extends AbstractTestElement implements Serializable, Assertion {
+public class DurationAssertion extends AbstractScopedAssertion implements Serializable, Assertion {
     /** Key for storing assertion-informations in the jmx-file. */
     public static final String DURATION_KEY = "DurationAssertion.duration"; // $NON-NLS-1$
 
