@@ -21,18 +21,26 @@ package org.apache.jmeter.assertions.gui;
 import java.util.Arrays;
 import java.util.Collection;
 
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
 import org.apache.jmeter.gui.util.MenuFactory;
+import org.apache.jmeter.testelement.AbstractScopedAssertion;
 
 /**
  * This is the base class for JMeter GUI components which manage assertions.
+ * 
+ * Assertions which can be applied to different scopes (parent, children or both)
+ * need to use the createScopePanel() to add the panel to the GUI, and they also
+ * need to use saveScopeSettings() and showScopeSettings() to keep the test element
+ * and GUI in synch.
  *
- * @author Michael Stover
- * @version $Revision$
  */
 public abstract class AbstractAssertionGui extends AbstractJMeterGuiComponent {
+
+    private AssertionScopePanel assertionScopePanel;
+    
     /**
      * When a user right-clicks on the component in the test tree, or selects
      * the edit menu when the component is selected, the component will be asked
@@ -59,5 +67,55 @@ public abstract class AbstractAssertionGui extends AbstractJMeterGuiComponent {
      */
     public Collection getMenuCategories() {
         return Arrays.asList(new String[] { MenuFactory.ASSERTIONS });
+    }
+    
+    /**
+     * Create the scope settings panel.
+     * 
+     * @return the scope settings panel
+     */
+    protected JPanel createScopePanel(){
+        assertionScopePanel = new AssertionScopePanel();
+        return assertionScopePanel;
+    }
+
+    public void clearGui(){
+        super.clearGui();
+        if (assertionScopePanel != null) {
+            assertionScopePanel.clearGui();
+        }
+    }
+
+    /**
+     * Save the scope settings in the test element.
+     * 
+     * @param assertion
+     */
+    protected void saveScopeSettings(AbstractScopedAssertion assertion) {
+        if (assertionScopePanel.isScopeParent()){
+            assertion.setScopeParent();
+        } else
+        if (assertionScopePanel.isScopeChildren()){
+            assertion.setScopeChildren();
+        } else {
+            assertion.setScopeAll();
+        }
+        
+    }
+
+    /**
+     * Show the scope settings from the test element.
+     * 
+     * @param assertion
+     */
+    protected void showScopeSettings(AbstractScopedAssertion assertion) {
+        String scope = assertion.fetchScope();
+        if (assertion.isScopeParent(scope)) {
+                assertionScopePanel.setScopeParent();                
+        } else if (assertion.isScopeChildren(scope)){
+            assertionScopePanel.setScopeChildren();
+        } else {
+            assertionScopePanel.setScopeAll();
+        }
     }
 }
