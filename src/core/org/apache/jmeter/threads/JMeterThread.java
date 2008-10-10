@@ -39,6 +39,7 @@ import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testbeans.TestBeanHelper;
+import org.apache.jmeter.testelement.AbstractScopedAssertion;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
@@ -531,16 +532,45 @@ public class JMeterThread implements Runnable {
         log.info("Stop Thread detected by thread " + threadName);
     }
 
-    private void checkAssertions(List assertions, SampleResult result) {
+    private void checkAssertions(List assertions, SampleResult parent) {
         Iterator iter = assertions.iterator();
         while (iter.hasNext()) {
             Assertion assertion = (Assertion) iter.next();
             TestBeanHelper.prepare((TestElement) assertion);
-            AssertionResult assertionResult = assertion.getResult(result);
-            result.setSuccessful(result.isSuccessful() && !(assertionResult.isError() || assertionResult.isFailure()));
-            result.addAssertionResult(assertionResult);
+            if (assertion instanceof AbstractScopedAssertion){
+                AbstractScopedAssertion scopedAssertion = (AbstractScopedAssertion) assertion;
+                String scope = scopedAssertion.fetchScope();
+                if (scopedAssertion.isScopeParent(scope) || scopedAssertion.isScopeAll(scope)){
+                    processAssertion(parent, assertion);
+                }
+                if (scopedAssertion.isScopeChildren(scope) || scopedAssertion.isScopeAll(scope)){
+                    SampleResult children[] = parent.getSubResults();
+                    boolean childError = false;
+                    for (int i=0;i <children.length; i++){
+                        processAssertion(children[i], assertion);
+                        if (!children[i].isSuccessful()){
+                            childError = true;
+                        }
+                    }
+                    // If parent is OK, but child failed, add a message and flag the parent as failed
+                    if (childError && parent.isSuccessful()) {
+                        AssertionResult assertionResult = new AssertionResult(((AbstractTestElement)assertion).getName());
+                        assertionResult.setResultForFailure("One or more sub-samples failed");
+                        parent.addAssertionResult(assertionResult);
+                        parent.setSuccessful(false);
+                    }
+                }
+            } else {
+                processAssertion(parent, assertion);
+            }
         }
-        threadContext.getVariables().put(LAST_SAMPLE_OK, Boolean.toString(result.isSuccessful()));
+        threadContext.getVariables().put(LAST_SAMPLE_OK, Boolean.toString(parent.isSuccessful()));
+    }
+
+    private void processAssertion(SampleResult result, Assertion assertion) {
+        AssertionResult assertionResult = assertion.getResult(result);
+        result.setSuccessful(result.isSuccessful() && !(assertionResult.isError() || assertionResult.isFailure()));
+        result.addAssertionResult(assertionResult);
     }
 
     private void runPostProcessors(List extractors) {
