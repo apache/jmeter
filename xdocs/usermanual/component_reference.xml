@@ -2845,12 +2845,21 @@ GUI that they can use while developing new JMeter components.</p>
     <code>prev.getSubResults()</code> which returns an array of SampleResults.
     The array will be empty if there are none.
     </p>
+    <p>
+    Versions of JMeter after 2.3.2 include the option to apply certain assertions
+    to either the main sample, the sub-samples or both. 
+    The default is to apply the assertion to the main sample only.
+    If the Assertion supports this option, then there will be an entry on the GUI which looks like the following:
+    <figure width="533" height="55" image="assertion/assertionscope.png">Assertion Scope</figure>
+    If a sub-sampler fails and the main sample is successful,
+    then the main sample will be set to failed status and an Assertion Result will be added.
+    </p>
 	<note>
 	The variable <b>JMeterThread.last_sample_ok</b> is set to
 	"true" or "false" after all assertions for a sampler have been run.
 	 </note>
 </description>
-<component name="Response Assertion" index="&sect-num;.5.1" anchor="basic_assertion"  width="762" height="374" screenshot="assertion/assertion.png">
+<component name="Response Assertion" index="&sect-num;.5.1" anchor="basic_assertion"  width="761" height="422" screenshot="assertion/assertion.png">
 
 <description><p>The response assertion control panel lets you add pattern strings to be compared against various
 	fields of the response.
@@ -2944,7 +2953,7 @@ pattern. You can attach multiple assertions to any controller for additional fle
 
 </component>
 
-<component name="Duration Assertion" index="&sect-num;.5.2"  width="391" height="147" screenshot="duration_assertion.png">
+<component name="Duration Assertion" index="&sect-num;.5.2"  width="535" height="200" screenshot="duration_assertion.png">
 <description><p>The Duration Assertion tests that each response was received within a given amount
 of time.  Any response that takes longer than the given number of milliseconds (specified by the
 user) is marked as a failed response.</p></description>
