@@ -33,10 +33,8 @@ import java.io.RandomAccessFile;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.avalon.framework.configuration.DefaultConfigurationSerializer;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
@@ -62,12 +60,16 @@ import org.apache.jorphan.util.JMeterError;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
+/**
+ * This class handles all saving of samples.
+ * The class must be thread-safe because it is shared between threads (NoThreadClone).
+ */
 public class ResultCollector extends AbstractListenerElement implements SampleListener, Clearable, Serializable,
         TestListener, Remoteable, NoThreadClone {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final long serialVersionUID = 231L;
+    private static final long serialVersionUID = 233L;
 
     // This string is used to identify local test runs, so must not be a valid host name
     private static final String TEST_IS_LOCAL = "*local*"; // $NON-NLS-1$
@@ -75,7 +77,8 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     private static final String TESTRESULTS_START = "<testResults>"; // $NON-NLS-1$
 
     private static final String TESTRESULTS_START_V1_1_PREVER = "<testResults version=\"";  // $NON-NLS-1$
-        private static final String TESTRESULTS_START_V1_1_POSTVER="\">"; // $NON-NLS-1$
+
+    private static final String TESTRESULTS_START_V1_1_POSTVER="\">"; // $NON-NLS-1$
 
     private static final String TESTRESULTS_END = "</testResults>"; // $NON-NLS-1$
 
@@ -84,38 +87,51 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     private static final int MIN_XML_FILE_LEN = XML_HEADER.length() + TESTRESULTS_START.length()
             + TESTRESULTS_END.length();
 
-    public final static String FILENAME = "filename"; // $NON-NLS-1$
+    public static final String FILENAME = "filename"; // $NON-NLS-1$
 
-    private final static String SAVE_CONFIG = "saveConfig"; // $NON-NLS-1$
+    private static final String SAVE_CONFIG = "saveConfig"; // $NON-NLS-1$
 
     private static final String ERROR_LOGGING = "ResultCollector.error_logging"; // $NON-NLS-1$
 
     private static final String SUCCESS_ONLY_LOGGING = "ResultCollector.success_only_logging"; // $NON-NLS-1$
+    
+    // Static variables
 
+    private static final Map files = new HashMap();
+
+    private static int instanceCount; // Keep track of how many instances are active
+
+    // Instance variables
+    
     private transient DefaultConfigurationSerializer serializer;
 
     private transient volatile PrintWriter out;
 
-    private boolean inTest = false;
+    private volatile boolean inTest = false;
 
-    private static final Map files = new HashMap();
-
-    private final Set hosts = new HashSet();
-
-    protected boolean isStats = false;
+    private volatile boolean isStats = false;
 
     /**
      * No-arg constructor.
      */
     public ResultCollector() {
-        // current = -1;
-        // serializer = new DefaultConfigurationSerializer();
         setErrorLogging(false);
         setSuccessOnlyLogging(false);
         setProperty(new ObjectProperty(SAVE_CONFIG, new SampleSaveConfiguration()));
+        /*
+         * All instances are created before the test starts.
+         * This is guaranteed so long as all remote test plans are initialised
+         * before they are started.
+         * So we use this to ensure that the static variables are reset.
+         */
+        synchronized(this){
+            files.clear();
+            instanceCount=0;
+        }
     }
 
     // Ensure that the sample save config is not shared between copied nodes
+    // N.B. clone only seems to be used for client-server tests
     public Object clone(){
         ResultCollector clone = (ResultCollector) super.clone();
         clone.setSaveConfig((SampleSaveConfiguration)clone.getSaveConfig().clone());
@@ -181,15 +197,15 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     }
 
     public synchronized void testEnded(String host) {
-        hosts.remove(host);
-        if (hosts.size() == 0) {
+        instanceCount--;
+        if (instanceCount <= 0) {
             finalizeFileOutput();
             inTest = false;
         }
     }
 
     public synchronized void testStarted(String host) {
-        hosts.add(host);
+        instanceCount++;
         try {
             initializeFileOutput();
             if (getVisualizer() != null) {
