@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.text.MessageFormat;
 
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.testelement.AbstractScopedAssertion;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jmeter.util.JMeterUtils;
@@ -33,7 +33,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * Checks if the results of a Sample matches a particular size.
  * 
  */
-public class SizeAssertion extends AbstractTestElement implements Serializable, Assertion {
+public class SizeAssertion extends AbstractScopedAssertion implements Serializable, Assertion {
 
     private static final long serialVersionUID = 233L;
 

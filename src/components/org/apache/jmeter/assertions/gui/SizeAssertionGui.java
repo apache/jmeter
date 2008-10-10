@@ -37,6 +37,9 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
+/**
+ * GUI for {@link SizeAssertion}
+ */
 public class SizeAssertionGui extends AbstractAssertionGui implements FocusListener, ActionListener {
 
     private JTextField size;
@@ -52,10 +55,6 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
 
     public String getLabelResource() {
         return "size_assertion_title"; //$NON-NLS-1$
-    }
-
-    public String getSizeAttributesTitle() {
-        return JMeterUtils.getResString("size_assertion_size_test"); //$NON-NLS-1$
     }
 
     public TestElement createTestElement() {
@@ -78,8 +77,10 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
         } catch (NumberFormatException e) {
             assertionSize = Long.MAX_VALUE;
         }
-        ((SizeAssertion) el).setAllowedSize(assertionSize);
-        ((SizeAssertion) el).setCompOper(getState());
+        SizeAssertion assertion = (SizeAssertion) el;
+        assertion.setAllowedSize(assertionSize);
+        assertion.setCompOper(getState());
+        saveScopeSettings(assertion);
     }
     
     /**
@@ -103,6 +104,7 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
         SizeAssertion assertion = (SizeAssertion) el;
         size.setText(String.valueOf(assertion.getAllowedSize()));
         setState(assertion.getCompOper());
+        showScopeSettings(assertion);
     }
 
     /**
@@ -143,10 +145,12 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
 
         add(makeTitlePanel());
 
+        add(createScopePanel());
+        
         // USER_INPUT
         JPanel sizePanel = new JPanel();
         sizePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
-                getSizeAttributesTitle()));
+                JMeterUtils.getResString("size_assertion_size_test"))); //$NON-NLS-1$
 
         sizePanel.add(new JLabel(JMeterUtils.getResString("size_assertion_label"))); //$NON-NLS-1$
         size = new JTextField(5);
