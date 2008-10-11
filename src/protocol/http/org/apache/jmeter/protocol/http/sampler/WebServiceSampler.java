@@ -542,7 +542,7 @@ public class WebServiceSampler extends HTTPSamplerBase {
                     final String contentType = st.getResponseSOAPContext().getContentType();
                     result.setContentType(contentType);
                     result.setEncodingAndType(contentType);
-                    result.setResponseData(st.getResponseSOAPContext().toString().getBytes());
+                    result.setResponseData(st.getResponseSOAPContext().toString().getBytes(result.getDataEncodingWithDefault()));
                 }
             }
             if (st != null) {
