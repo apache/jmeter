@@ -113,6 +113,7 @@ Moved the Scoping Rules sub-section from Section 3. "Building a Test Plan"  to S
 <li>Bug 45904 - Allow 'Not' Response Assertion to succeed with null sample</li>
 <li>HTTP and SOAP sampler character encodings updated to be more consistent</li>
 <li>Bug 45976 - incomplete result file when using remote testing with more than 1 server</li>
+<li>Bug 45425 - JDBC Request does not support Unicode (changed sampler to use UTF-8)</li>
 </ul>
 
 <h3>Improvements</h3>
