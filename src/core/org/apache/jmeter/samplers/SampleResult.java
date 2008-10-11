@@ -47,16 +47,25 @@ public class SampleResult implements Serializable {
 
     private static final long serialVersionUID = 233L;
     
-    public static final String DEFAULT_HTTP_ENCODING = "ISO-8859-1";  // $NON-NLS-1$
-
     // Needs to be accessible from Test code
     static final Logger log = LoggingManager.getLoggerForClass();
+
+    /**
+     * The default encoding to be used if not overridden.
+     * The value is ISO-8859-1.
+     */
+    public static final String DEFAULT_HTTP_ENCODING = "ISO-8859-1";  // $NON-NLS-1$
 
     // Bug 33196 - encoding ISO-8859-1 is only suitable for Western countries
     // However the suggested System.getProperty("file.encoding") is Cp1252 on
     // Windows
     // So use a new property with the original value as default
     // needs to be accessible from test code
+    /**
+     * The default encoding to be used to decode the responseData byte array.
+     * The value is defined by the property "sampleresult.default.encoding"
+     * with a default of DEFAULT_HTTP_ENCODING if that is not defined.
+     */
     static final String DEFAULT_ENCODING
             = JMeterUtils.getPropDefault("sampleresult.default.encoding", // $NON-NLS-1$
             DEFAULT_HTTP_ENCODING);
@@ -550,6 +559,7 @@ public class SampleResult implements Serializable {
 
     /**
      * Sets the responseData attribute of the SampleResult object.
+     * Should only be called after setting the dataEncoding (if necessary)
      *
      * @param response
      *            the new responseData value (String)
@@ -557,7 +567,12 @@ public class SampleResult implements Serializable {
      * @deprecated - only intended for use from BeanShell code
      */
     public void setResponseData(String response) {
-        responseData = response.getBytes();
+        try {
+            responseData = response.getBytes(getDataEncodingWithDefault());
+        } catch (UnsupportedEncodingException e) {
+            log.warn("Could not convert string, using default encoding. "+e.getLocalizedMessage());
+            responseData = response.getBytes();
+        }
     }
 
     /**
@@ -618,7 +633,10 @@ public class SampleResult implements Serializable {
         return dataType;
     }
     /**
-     * Set Encoding and DataType from ContentType
+     * Extract and save the DataEncoding and DataType from the parameter provided.
+     * Does not save the full content Type.
+     * @see #setContentType(String) which should be used to save the full content-type string
+     * 
      * @param ct - content type (may be null)
      */
     public void setEncodingAndType(String ct){
@@ -702,6 +720,7 @@ public class SampleResult implements Serializable {
 
     /**
      * Returns the dataEncoding or the default if no dataEncoding was provided
+     * @return the value of the dataEncoding or DEFAULT_ENCODING if no 
      */
     public String getDataEncodingWithDefault() {
         if (dataEncoding != null && dataEncoding.length() > 0) {
@@ -711,7 +730,8 @@ public class SampleResult implements Serializable {
     }
 
     /**
-     * Returns the dataEncoding or the default if no dataEncoding was provided
+     * Returns the dataEncoding. May be null or the empty String.
+     * @return the value of the dataEncoding
      */
     public String getDataEncodingNoDefault() {
         return dataEncoding;
@@ -801,6 +821,9 @@ public class SampleResult implements Serializable {
     }
 
     /**
+     * Stores the content-type string, e.g. "text/xml; charset=utf-8"
+     * @see #setEncodingAndType(String) which can be used to extract the charset.
+     * 
      * @param string
      */
     public void setContentType(String string) {
