@@ -2336,9 +2336,16 @@ by using suitable labels and adding the summarisers to appropriate parts of the 
 	</p>
 	<p>
 	By default, the file is only opened once, and each thread will use a different line from the file.
-	See the description of the Share mode below for additional options (JMeter 2.3.2+).
+	However the order in which lines are passed to threads depends on the order in which they execute,
+	which may vary between iterations.
 	Lines are read at the start of each test iteration.
     The file name and mode are resolved in the first iteration.
+	</p>
+	<p>
+	See the description of the Share mode below for additional options (JMeter 2.3.2+).
+	If you want each thread to have its own set of values, then you will need to create a set of files,
+	one for each thread. For example test1.csv, test2.csv,... testn.csv. Use the filename 
+	<code>test${__threadNum}.csv</code> and set the "Sharing mode" to "Current thread".
 	</p>
 	<note>CSV Dataset variables are defined at the start of each test iteration.
 	As this is after configuration processing is completed,
