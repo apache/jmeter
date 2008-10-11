@@ -49,6 +49,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Logger;
 import org.apache.soap.Envelope;
 import org.apache.soap.messaging.Message;
+import org.apache.soap.rpc.SOAPContext;
 import org.apache.soap.transport.SOAPTransport;
 import org.apache.soap.transport.http.SOAPHTTPConnection;
 import org.apache.soap.util.xml.XMLParserUtils;
@@ -96,6 +97,7 @@ public class WebServiceSampler extends HTTPSamplerBase {
     private static final String PROXY_PASS =
         JMeterUtils.getPropDefault(JMeter.HTTP_PROXY_PASS,""); // $NON-NLS-1$
 
+    private static final String ENCODING = "UTF-8"; // $NON-NLS-1$ TODO should this be a variable?
 
     /*
      * Random class for generating random numbers.
@@ -391,7 +393,13 @@ public class WebServiceSampler extends HTTPSamplerBase {
                 TextFile tfile = new TextFile(file);
                 fileContents = tfile.getText();
             }
-            doc = XDB.parse(new FileInputStream(file));
+            FileInputStream fileInputStream = null;
+            try {
+                fileInputStream = new FileInputStream(file);
+                doc = XDB.parse(fileInputStream);
+            } finally {
+                IOUtils.closeQuietly(fileInputStream);
+            }
         } else {// must be a "here" document
             fileContents = getXmlData();
             if (fileContents != null && fileContents.length() > 0) {
@@ -430,6 +438,12 @@ public class WebServiceSampler extends HTTPSamplerBase {
             if (rdoc == null) {
                 throw new SOAPException("Could not create document", null);
             }
+            // set the response defaults
+            result.setDataEncoding(ENCODING);
+            result.setContentType("text/xml"); // $NON-NLS-1$
+            result.setDataType(SampleResult.TEXT);
+            result.setSamplerData(fileContents);// WARNING - could be large
+
             Envelope msgEnv = Envelope.unmarshall(rdoc);
             // create a new message
             Message msg = new Message();
@@ -497,19 +511,20 @@ public class WebServiceSampler extends HTTPSamplerBase {
             }
 
             SOAPTransport st = msg.getSOAPTransport();
-            result.setDataType(SampleResult.TEXT);
             BufferedReader br = null;
-            // check to see if SOAPTransport is not nul and receive is
-            // also not null. hopefully this will improve the error
-            // reporting. 5/13/05 peter lin
             if (st != null && st.receive() != null) {
                 br = st.receive();
+                SOAPContext sc = st.getResponseSOAPContext();
+                // Set details from the actual response
+                // Needs to be done before response can be stored
+                final String contentType = sc.getContentType();
+                result.setContentType(contentType);
+                result.setEncodingAndType(contentType);
                 if (getReadResponse()) {
                     StringWriter sw = new StringWriter();
                     IOUtils.copy(br, sw);
                     result.sampleEnd();
-                    // set the response
-                    result.setResponseData(sw.toString().getBytes());
+                    result.setResponseData(sw.toString().getBytes(result.getDataEncodingWithDefault()));
                 } else {
                     // by not reading the response
                     // for real, it improves the
@@ -520,30 +535,22 @@ public class WebServiceSampler extends HTTPSamplerBase {
                 }
                 result.setSuccessful(true);
                 result.setResponseCodeOK();
-                result.setResponseHeaders(this.convertSoapHeaders(st.getHeaders()));
             } else {
                 result.sampleEnd();
                 result.setSuccessful(false);
                 if (st != null){
-                    result.setResponseData(st.getResponseSOAPContext().getContentType().getBytes());
+                    final String contentType = st.getResponseSOAPContext().getContentType();
+                    result.setContentType(contentType);
+                    result.setEncodingAndType(contentType);
+                    result.setResponseData(st.getResponseSOAPContext().toString().getBytes());
                 }
-                result.setResponseHeaders("error");
             }
-            // 1-22-04 updated the sampler so that when read
-            // response is set, it also sets SamplerData with
-            // the XML message, so users can see what was
-            // sent. if read response is not checked, it will
-            // not set sampler data with the request message.
-            // peter lin.
-            // Removed URL, as that is already stored elsewere
-            result.setSamplerData(fileContents);// WARNING - could be large
-            if (st!= null){
-                result.setEncodingAndType(st.getResponseSOAPContext().getContentType());
+            if (st != null) {
+                SOAPContext sc = st.getResponseSOAPContext();
+                result.setResponseHeaders(convertSoapHeaders(sc.getRootPart().getAllHeaderLines()));
+            } else {
+                result.setResponseHeaders("error");                
             }
-            // setting this is just a formality, since
-            // soap will return a descriptive error
-            // message, soap errors within the response
-            // are preferred.
             if (br != null) {
                 br.close();
             }
@@ -609,6 +616,19 @@ public class WebServiceSampler extends HTTPSamplerBase {
         while (en.hasMoreElements()) {
             Object key = en.nextElement();
             buf.append((String) key).append("=").append((String) ht.get(key)).append("\n"); //$NON-NLS-1$ //$NON-NLS-2$
+        }
+        return buf.toString();
+    }
+
+    /**
+     * Process headerLines
+     * @param en enumeration of Strings
+     * @return String containing the lines
+     */
+    private String convertSoapHeaders(Enumeration en) {
+        StringBuffer buf = new StringBuffer(100);
+        while (en.hasMoreElements()) {
+            buf.append(en.nextElement()).append("\n"); //$NON-NLS-1$
         }
         return buf.toString();
     }
