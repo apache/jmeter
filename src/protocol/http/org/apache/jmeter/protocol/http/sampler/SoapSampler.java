@@ -36,7 +36,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.zip.GZIPInputStream;
@@ -60,6 +60,10 @@ public class SoapSampler extends HTTPSampler2 {
     private static final String DOUBLE_QUOTE = "\""; //$NON-NLS-1$
 
     private static final String SOAPACTION = "SOAPAction"; //$NON-NLS-1$
+
+    private static final String ENCODING = "utf-8"; //$NON-NLS-1$ TODO should this be variable?
+
+    private static final String DEFAULT_CONTENT_TYPE = "text/xml"; //$NON-NLS-1$
 
     public void setXmlData(String data) {
         setProperty(XML_DATA, data);
@@ -137,7 +141,7 @@ public class SoapSampler extends HTTPSampler2 {
             }
         } else {
             // otherwise we use "text/xml" as the default
-            post.addParameter(HEADER_CONTENT_TYPE, "text/xml"); //$NON-NLS-1$
+            post.addParameter(HEADER_CONTENT_TYPE, DEFAULT_CONTENT_TYPE); //$NON-NLS-1$
         }
         if (getSendSOAPAction()) {
             post.setRequestHeader(SOAPACTION, getSOAPActionQuoted());
@@ -188,7 +192,7 @@ public class SoapSampler extends HTTPSampler2 {
 
                 public String getContentType() {
                     // TODO do we need to add a charset for the file contents?
-                    return "text/xml"; // $NON-NLS-1$
+                    return DEFAULT_CONTENT_TYPE; // $NON-NLS-1$
                 }
             });
         } else {
@@ -200,16 +204,21 @@ public class SoapSampler extends HTTPSampler2 {
 
                 public void writeRequest(OutputStream out) throws IOException {
                     // charset must agree with content-type below
-                    IOUtils.write(getXmlData(), out, "utf-8"); // $NON-NLS-1$
+                    IOUtils.write(getXmlData(), out, ENCODING); // $NON-NLS-1$
                     out.flush();
                 }
 
                 public long getContentLength() {
-                    return getXmlData().getBytes().length;// so we don't generate chunked encoding
+                    try {
+                        return getXmlData().getBytes(ENCODING).length; // so we don't generate chunked encoding
+                    } catch (UnsupportedEncodingException e) {
+                        log.warn(e.getLocalizedMessage());
+                        return -1; // will use chunked encoding
+                    }
                 }
 
                 public String getContentType() {
-                    return "text/xml; charset=utf-8"; // $NON-NLS-1$
+                    return DEFAULT_CONTENT_TYPE+"; charset="+ENCODING; // $NON-NLS-1$
                 }
             });
         }
@@ -285,6 +294,9 @@ public class SoapSampler extends HTTPSampler2 {
 
             res.setResponseMessage(httpMethod.getStatusText());
 
+            // Set up the defaults (may be overridden below)
+            res.setDataEncoding(ENCODING);
+            res.setContentType(DEFAULT_CONTENT_TYPE);
             String ct = null;
             org.apache.commons.httpclient.Header h
                     = httpMethod.getResponseHeader(HEADER_CONTENT_TYPE);
