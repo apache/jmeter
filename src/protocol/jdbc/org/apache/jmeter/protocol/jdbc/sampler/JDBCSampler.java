@@ -66,6 +66,9 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 
     private static final String OUT = "OUT"; // $NON-NLS-1$
 
+    // TODO - should the encoding be configurable?
+    private static final String ENCODING = "UTF-8"; // $NON-NLS-1$
+
     private static final Map mapJdbcNameToInt;
 
     static {
@@ -139,10 +142,8 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
         res.setSampleLabel(getName());
         res.setSamplerData(toString());
         res.setDataType(SampleResult.TEXT);
-        // Bug 31184 - make sure encoding is specified
-        // TODO - should the encoding be configurable?
-        final String encoding = System.getProperty("file.encoding"); // $NON-NLS-1$
-        res.setDataEncoding(encoding);
+        res.setContentType("text/plain"); // $NON-NLS-1$
+        res.setDataEncoding(ENCODING);
 
         // Assume we will be successful
         res.setSuccessful(true);
@@ -173,7 +174,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
                 try {
                     rs = stmt.executeQuery(getQuery());
                     Data data = getDataFromResultSet(rs);
-                    res.setResponseData(data.toString().getBytes(encoding));
+                    res.setResponseData(data.toString().getBytes(ENCODING));
                 } finally {
                     close(rs);
                 }
@@ -184,37 +185,37 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
                 // plus a number of update counts.
                 boolean hasResultSet = cstmt.execute();
                 String sb = resultSetsToString(cstmt,hasResultSet, out);
-                res.setResponseData(sb.getBytes(encoding));
+                res.setResponseData(sb.getBytes(ENCODING));
             } else if (UPDATE.equals(_queryType)) {
                 stmt = conn.createStatement();
                 stmt.executeUpdate(getQuery());
                 int updateCount = stmt.getUpdateCount();
                 String results = updateCount + " updates";
-                res.setResponseData(results.getBytes(encoding));
+                res.setResponseData(results.getBytes(ENCODING));
             } else if (PREPARED_SELECT.equals(_queryType)) {
                 pstmt = getPreparedStatement(conn);
                 setArguments(pstmt);
                 pstmt.executeQuery();
                 String sb = resultSetsToString(pstmt,true,null);
-                res.setResponseData(sb.getBytes(encoding));
+                res.setResponseData(sb.getBytes(ENCODING));
             } else if (PREPARED_UPDATE.equals(_queryType)) {
                 pstmt = getPreparedStatement(conn);
                 setArguments(pstmt);
                 pstmt.executeUpdate();
                 String sb = resultSetsToString(pstmt,false,null);
-                res.setResponseData(sb.getBytes(encoding));
+                res.setResponseData(sb.getBytes(ENCODING));
             } else if (ROLLBACK.equals(_queryType)){
                 conn.rollback();
-                res.setResponseData(ROLLBACK.getBytes(encoding));
+                res.setResponseData(ROLLBACK.getBytes(ENCODING));
             } else if (COMMIT.equals(_queryType)){
                 conn.commit();
-                res.setResponseData(COMMIT.getBytes(encoding));
+                res.setResponseData(COMMIT.getBytes(ENCODING));
             } else if (AUTOCOMMIT_FALSE.equals(_queryType)){
                 conn.setAutoCommit(false);
-                res.setResponseData(AUTOCOMMIT_FALSE.getBytes(encoding));
+                res.setResponseData(AUTOCOMMIT_FALSE.getBytes(ENCODING));
             } else if (AUTOCOMMIT_TRUE.equals(_queryType)){
                 conn.setAutoCommit(true);
-                res.setResponseData(AUTOCOMMIT_TRUE.getBytes(encoding));
+                res.setResponseData(AUTOCOMMIT_TRUE.getBytes(ENCODING));
             } else { // User provided incorrect query type
                 String results="Unexpected query type: "+_queryType;
                 res.setResponseMessage(results);
@@ -457,6 +458,10 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
         sb.append(getQueryType());
         sb.append("] "); // $NON-NLS-1$
         sb.append(getQuery());
+        sb.append("\n");
+        sb.append(getQueryArguments());
+        sb.append("\n");
+        sb.append(getQueryArgumentsTypes());
         return sb.toString();
     }
 
