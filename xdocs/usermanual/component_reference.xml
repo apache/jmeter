@@ -844,7 +844,7 @@ If a script file is supplied, that will be used, otherwise the script will be us
 				<p>The contents of the Parameters field is put into the variable "Parameters".
 			The string is also split into separate tokens using a single space as the separator, and the resulting list
 			is stored in the String array bsh.args.</p>
-			<p>The full list of variables that is set up is as follows:</p>
+			<p>The full list of BeanShell variables that is set up is as follows:</p>
 		<ul>
 		<li>log - the Logger</li>
 		<li>Label - the Sampler label</li>
@@ -927,7 +927,8 @@ Beware however that misuse of any methods can cause subtle faults that may be di
 <p>
 If a script file is supplied, that will be used, otherwise the script will be used.</p>
 <p>
-Before invoking the script, some variables are set up:
+Before invoking the script, some variables are set up.
+Note that these are BSF variables - i.e. they can be used directly in the script.
 </p>
 <ul>
 <li>log - the Logger</li>
@@ -2141,7 +2142,7 @@ See the file BeanShellListeners.bshrc for example definitions.
     <property name="Script file" required="No">A file containing the BeanShell script to run</property>
     <property name="Script" required="Yes (unless script file is provided)">The BeanShell script to run. The return value is ignored.</property>
 </properties>
-<p>The following variables are set up for use by the script:</p>
+<p>Before invoking the script, some variables are set up in the BeanShell interpreter:</p>
 <ul>
 <li>log - (Logger) - can be used to write to the log file</li>
 <li>ctx - (JMeterContext) - gives access to the context</li>
@@ -2248,7 +2249,10 @@ The BSF Listener allows BSF script code to be applied to sample results.
 <p>
 The script (or file) is processed using the BSFEngine.exec() method, which does not return a value.
 </p>
-<p>The following variables are set up for use by the script:</p>
+<p>
+Before invoking the script, some variables are set up.
+Note that these are BSF variables - i.e. they can be used directly in the script.
+</p>
 <ul>
 <li>log - (Logger) - can be used to write to the log file</li>
 <li>Label - the String Label</li>
@@ -3043,7 +3047,8 @@ See the file BeanShellListeners.bshrc for example definitions.
     <property name="Script" required="Yes (unless script file is provided)">The BeanShell script to run. The return value is ignored.</property>
 </properties>
 <p>There's a <a href="../demos/BeanShellAssertion.bsh">sample script</a> you can try.</p>
-<p>The following variables are defined to the script. 
+<p>
+Before invoking the script, some variables are set up in the BeanShell interpreter.
 These are strings unless otherwise noted:
 <ul>
 <li>log - the Logger Object. (e.g.) log.warn("Message"[,Throwable])</li>
@@ -3334,7 +3339,7 @@ See the file BeanShellListeners.bshrc for example definitions.
         The BeanShell script. The return value is used as the number of milliseconds to wait.
     </property>
 </properties>
-<p>The following variables are set up for use by the script:</p>
+<p>Before invoking the script, some variables are set up in the BeanShell interpreter:</p>
 <ul>
 <li>log - (Logger) - can be used to write to the log file</li>
 <li>ctx - (JMeterContext) - gives access to the context</li>
@@ -3539,7 +3544,7 @@ See the file BeanShellListeners.bshrc for example definitions.
     <property name="Script file" required="No">A file containing the BeanShell script to run.</property>
     <property name="Script" required="Yes (unless script file is provided)">The BeanShell script. The return value is ignored.</property>
 </properties>
-<p>The following variables are set up for use by the script:</p>
+<p>Before invoking the script, some variables are set up in the BeanShell interpreter:</p>
 <ul>
 <li>log - (Logger) - can be used to write to the log file</li>
 <li>ctx - (JMeterContext) - gives access to the context</li>
@@ -3573,7 +3578,7 @@ The BSF PreProcessor allows BSF script code to be applied before taking a sample
 <p>
 The script (or file) is processed using the BSFEngine.exec() method, which does not return a value.
 </p>
-<p>The following variables are set up for use by the script:</p>
+<p>The following BSF variables are set up for use by the script:</p>
 <ul>
 <li>log - (Logger) - can be used to write to the log file</li>
 <li>Label - the String Label</li>
@@ -3792,7 +3797,7 @@ See the file BeanShellListeners.bshrc for example definitions.
     <property name="Script file" required="No">A file containing the BeanShell script to run.</property>
     <property name="Script" required="Yes (unless script file is provided)">The BeanShell script. The return value is ignored.</property>
 </properties>
-<p>The following variables are set up for use by the script:</p>
+<p>The following BeanShell variables are set up for use by the script:</p>
 <ul>
 <li>log - (Logger) - can be used to write to the log file</li>
 <li>ctx - (JMeterContext) - gives access to the context</li>
@@ -3826,7 +3831,10 @@ The BSF PostProcessor allows BSF script code to be applied after taking a sample
 <p>
 The script (or file) is processed using the BSFEngine.exec() method, which does not return a value.
 </p>
-<p>The following variables are set up for use by the script:</p>
+<p>
+Before invoking the script, some variables are set up.
+Note that these are BSF variables - i.e. they can be used directly in the script.
+</p>
 <ul>
 <li>log - (Logger) - can be used to write to the log file</li>
 <li>Label - the String Label</li>
