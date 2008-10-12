@@ -39,19 +39,20 @@ public class RemoteListenerWrapper extends AbstractTestElement implements Sample
         NoThreadClone {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private RemoteSampleListener listener = null;
+    private final RemoteSampleListener listener;
 
-    private SampleSender mode;
+    private final SampleSender sender;
 
     public RemoteListenerWrapper(RemoteSampleListener l) {
         listener = l;
-        // Get appropriate class governed by the behaviour set in the Jmeter
-        // property mode.
-        this.mode = SampleSenderFactory.getInstance(listener);
+        // Get appropriate sender class governed by the behaviour set in the JMeter property
+        sender = SampleSenderFactory.getInstance(listener);
     }
 
     public RemoteListenerWrapper() // TODO: not used - make private?
     {
+        listener = null;
+        sender = null;
     }
 
     public void testStarted() {
@@ -65,7 +66,7 @@ public class RemoteListenerWrapper extends AbstractTestElement implements Sample
     }
 
     public void testEnded() {
-        mode.testEnded();
+        sender.testEnded();
     }
 
     public void testStarted(String host) {
@@ -78,11 +79,11 @@ public class RemoteListenerWrapper extends AbstractTestElement implements Sample
     }
 
     public void testEnded(String host) {
-        mode.testEnded(host);
+        sender.testEnded(host);
     }
 
     public void sampleOccurred(SampleEvent e) {
-        mode.SampleOccurred(e);
+        sender.sampleOccurred(e);
     }
 
     // Note that sampleStarted() and sampleStopped() is not made to appear

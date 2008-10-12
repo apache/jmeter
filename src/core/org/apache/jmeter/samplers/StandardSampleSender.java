@@ -62,7 +62,7 @@ public class StandardSampleSender implements SampleSender, Serializable {
         }
     }
 
-    public void SampleOccurred(SampleEvent e) {
+    public void sampleOccurred(SampleEvent e) {
         log.debug("Sample occurred");
         try {
             listener.sampleOccurred(e);
