@@ -123,7 +123,7 @@ public class StatisticalSampleSender implements SampleSender, Serializable {
      *
      * @param e a Sample Event
      */
-    public void SampleOccurred(SampleEvent e) {
+    public void sampleOccurred(SampleEvent e) {
         synchronized (sampleStore) {
             // Locate the statistical sample colector
             String key = StatisticalSampleResult.getKey(e);
