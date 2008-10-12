@@ -720,7 +720,7 @@ public class SampleResult implements Serializable {
 
     /**
      * Returns the dataEncoding or the default if no dataEncoding was provided
-     * @return the value of the dataEncoding or DEFAULT_ENCODING if no 
+     * @return the value of the dataEncoding or DEFAULT_ENCODING 
      */
     public String getDataEncodingWithDefault() {
         if (dataEncoding != null && dataEncoding.length() > 0) {
