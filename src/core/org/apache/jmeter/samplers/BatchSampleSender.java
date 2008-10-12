@@ -120,7 +120,7 @@ public class BatchSampleSender implements SampleSender, Serializable {
      * @param e
      *            a Sample Event
      */
-    public void SampleOccurred(SampleEvent e) {
+    public void sampleOccurred(SampleEvent e) {
         synchronized (sampleStore) {
             sampleStore.add(e);
 

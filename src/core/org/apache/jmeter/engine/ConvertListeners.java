@@ -29,6 +29,7 @@ import org.apache.jmeter.samplers.RemoteTestListenerWrapper;
 import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.HashTreeTraverser;
@@ -36,7 +37,11 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author mstover
+ * Converts the Remoteable Test and Sample Listeners in the test tree by wrapping
+ * them with RemoteSampleListeners so that the samples are returned to the client.
+ * 
+ * N.B. Does not handle ThreadListeners.
+ * 
  */
 public class ConvertListeners implements HashTreeTraverser {
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -53,8 +58,11 @@ public class ConvertListeners implements HashTreeTraverser {
             if (item instanceof ThreadGroup) {
                 log.info("num threads = " + ((ThreadGroup) item).getNumThreads());
             }
-            if (item instanceof Remoteable
-                    && (item instanceof TestListener || item instanceof SampleListener)) {
+            if (item instanceof Remoteable) {
+                if (item instanceof ThreadListener){
+                    log.error("Cannot handle ThreadListener Remotable item "+item.getClass().getName());
+                    continue;
+                }
                 try {
                     RemoteSampleListener rtl = new RemoteSampleListenerImpl(item);
                     if (item instanceof TestListener && item instanceof SampleListener) {
@@ -63,9 +71,11 @@ public class ConvertListeners implements HashTreeTraverser {
                     } else if (item instanceof TestListener) {
                         RemoteTestListenerWrapper wrap = new RemoteTestListenerWrapper(rtl);
                         subTree.replace(item, wrap);
-                    } else {
+                    } else if (item instanceof SampleListener) {
                         RemoteSampleListenerWrapper wrap = new RemoteSampleListenerWrapper(rtl);
                         subTree.replace(item, wrap);
+                    } else {
+                        log.warn("Could not replace Remotable item "+item.getClass().getName());
                     }
                 } catch (RemoteException e) {
                     log.error("", e); // $NON-NLS-1$
