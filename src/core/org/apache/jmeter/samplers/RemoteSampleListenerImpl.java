@@ -26,30 +26,27 @@ import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.testelement.TestListener;
 
 /**
- * @version $Revision$
+ * Implementation of remote sampler listener, also supports TestListener
  */
-public class RemoteSampleListenerImpl extends java.rmi.server.UnicastRemoteObject implements RemoteSampleListener,
-        SampleListener, TestListener {
-    TestListener testListener;
+public class RemoteSampleListenerImpl extends java.rmi.server.UnicastRemoteObject 
+    implements RemoteSampleListener, SampleListener, TestListener {
 
-    SampleListener sampleListener;
+    private final TestListener testListener;
 
-    public RemoteSampleListenerImpl() throws RemoteException {
-        super();
-    }
-
-    public void setListener(Object listener) {
-        if (listener instanceof TestListener) {
-            testListener = (TestListener) listener;
-        }
-        if (listener instanceof SampleListener) {
-            sampleListener = (SampleListener) listener;
-        }
-    }
+    private final SampleListener sampleListener;
 
     public RemoteSampleListenerImpl(Object listener) throws RemoteException {
         super();
-        setListener(listener);
+        if (listener instanceof TestListener) {
+            testListener = (TestListener) listener;
+        } else {
+            testListener = null;
+        }
+        if (listener instanceof SampleListener) {
+            sampleListener = (SampleListener) listener;
+        } else {
+            sampleListener = null;
+        }
     }
 
     public void testStarted() {
@@ -76,9 +73,15 @@ public class RemoteSampleListenerImpl extends java.rmi.server.UnicastRemoteObjec
         }
     }
 
+    public void testIterationStart(LoopIterationEvent event) {
+        if (testListener != null) {
+            testListener.testIterationStart(event);
+        }
+    }
+
     /**
      * This method is called remotely and fires a list of samples events
-     * recieved locally. The function is to reduce network load when using
+     * received locally. The function is to reduce network load when using
      * remote testing.
      *
      * @param samples
@@ -116,13 +119,5 @@ public class RemoteSampleListenerImpl extends java.rmi.server.UnicastRemoteObjec
         if (sampleListener != null) {
             sampleListener.sampleStopped(e);
         }
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see TestListener#testIterationStart(LoopIterationEvent)
-     */
-    public void testIterationStart(LoopIterationEvent event) {
     }
 }

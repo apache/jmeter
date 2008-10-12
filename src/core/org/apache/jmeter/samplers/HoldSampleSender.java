@@ -81,7 +81,7 @@ public class HoldSampleSender implements SampleSender, Serializable {
 
     }
 
-    public void SampleOccurred(SampleEvent e) {
+    public void sampleOccurred(SampleEvent e) {
         log.debug("Sample occurred");
         synchronized (sampleStore) {
             sampleStore.add(e);

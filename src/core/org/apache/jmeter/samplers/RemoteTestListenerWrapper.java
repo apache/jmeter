@@ -33,9 +33,11 @@ import org.apache.log.Logger;
 public class RemoteTestListenerWrapper extends AbstractTestElement implements TestListener, Serializable, NoThreadClone {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private RemoteSampleListener listener;
+    private final RemoteSampleListener listener;
 
     public RemoteTestListenerWrapper() {
+        log.warn("Only intended for use in testing");
+        listener = null;
     }
 
     public RemoteTestListenerWrapper(RemoteSampleListener l) {
@@ -81,6 +83,7 @@ public class RemoteTestListenerWrapper extends AbstractTestElement implements Te
      * @see TestListener#testIterationStart(LoopIterationEvent)
      */
     public void testIterationStart(LoopIterationEvent event) {
+        //listener.testIterationStart(event);
     }
 
 }
