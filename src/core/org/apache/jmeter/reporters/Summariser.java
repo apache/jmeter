@@ -24,12 +24,13 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
+import org.apache.jmeter.engine.util.NoThreadClone;
+import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestListener;
-import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.RunningSample;
 import org.apache.jorphan.logging.LoggingManager;
@@ -51,9 +52,19 @@ import org.apache.log.Logger;
  * this means that the delta interval is likely to be longer than the reporting interval.
  *
  * Also, the sum of the delta intervals will be larger than the overall elapsed time.
+ * 
+ * Data is accumulated according to the test element name.
  *
  */
-public class Summariser extends AbstractTestElement implements Serializable, SampleListener, TestListener, ThreadListener {
+public class Summariser extends AbstractTestElement 
+    implements Serializable, SampleListener, TestListener, NoThreadClone, Remoteable {
+
+    /*
+     * N.B. NoThreadClone is used to ensure that the testStarted() methods will share the same
+     * instance as the sampleOccured() methods, so the testStarted() method can fetch the
+     * Totals accumulator object for the samples to be stored in. 
+     */
+
     private static final long serialVersionUID = 233L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -73,14 +84,14 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
      */
     private static final int INTERVAL_WINDOW = 5; // in seconds
 
-    /**
-     * Summariser elements are cloned for each thread in each group; this Map is
-     * used to allow them to share the same statistics. The key is the
-     * Summariser name, so all Summarisers with the same name will use the same
-     * accumulators.
+    /*
+     * This map allows summarisers with the same name to contribute to the same totals.
      */
     //@GuardedBy("accumulators")
     private static final Hashtable accumulators = new Hashtable();
+    
+    //@GuardedBy("accumulators")
+    private static int instanceCount; // number of active tests
 
     /*
      * Cached copy of Totals for this instance.
@@ -91,6 +102,7 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
     //@GuardedBy("myTotals")
     private transient Totals myTotals = null;
 
+    // Name of the accumulator. Set up by testStarted().
     private transient String myName;
 
     /*
@@ -102,6 +114,10 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
      */
     public Summariser() {
         super();
+        synchronized (accumulators) {
+            accumulators.clear();
+            instanceCount=0;
+        }
     }
 
     /**
@@ -266,6 +282,17 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
     }
 
     /*
+     * The testStarted/testEnded methods are called at the start and end of a test.
+     * 
+     * However, when a test is run on multiple nodes, there is no guarantee that all the
+     * testStarted() methods will be called before all the threadStart() or sampleOccurred()
+     * methods for other threads - nor that testEnded() will only be called after all
+     * sampleOccurred() calls. The ordering is only guaranteed within a single test.
+     * 
+     */
+    
+    
+    /*
      * (non-Javadoc)
      *
      * @see org.apache.jmeter.testelement.TestListener#testStarted()
@@ -288,16 +315,23 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
      *
      * Called once for each Summariser in the test plan.
      * There may be more than one summariser with the same name,
-     * however they will all be called before the test proper starts,
-     * so it does not matter if the totals are reset again.
+     * however they will all be called before the test proper starts.
+     * 
+     * However, note that this applies to a single test only.
+     * When running in client-server mode, testStarted() may be 
+     * invoked after sampleOccurred().
      *
      * @see org.apache.jmeter.testelement.TestListener#testStarted(java.lang.String)
      */
     public void testStarted(String host) {
-        // testStarted and testFinished are called from different threads,
-        // so need to synch for visibility.
         synchronized (accumulators) {
-            accumulators.clear(); // Should not be needed, but just in case previous run does not clear up.
+            myName = getName();
+            myTotals = (Totals) accumulators.get(myName);
+            if (myTotals == null){
+                myTotals = new Totals();
+                accumulators.put(myName, myTotals);
+            }
+            instanceCount++;
         }
     }
 
@@ -308,17 +342,24 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
      * @see org.apache.jmeter.testelement.TestListener#testEnded(java.lang.String)
      */
     public void testEnded(String host) {
-        Object[] totals;
+        Object[] totals = null;
         synchronized (accumulators) {
-            totals = accumulators.entrySet().toArray();
-            accumulators.clear(); // Instance is not needed anymore
+            instanceCount--;
+            if (instanceCount <= 0){
+                totals = accumulators.entrySet().toArray();                
+            }
+        }
+        if (totals == null) {// We're not done yet
+            return;
         }
         for (int i=0; i<totals.length; i++) {
             Map.Entry me = (Map.Entry)totals[i];
             String str;
             String name = (String) me.getKey();
             Totals total = (Totals) me.getValue();
-            if (total.total.getNumSamples() != 0) {// Only print delta if different from total
+            // Only print final delta if there were some samples in the delta
+            // and there has been at least one sample reported previously
+            if (total.delta.getNumSamples() > 0 && total.total.getNumSamples() >  0) {
                 str = format(name, total.delta, "+");
                 if (TOLOG) {
                     log.info(str);
@@ -346,20 +387,4 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
     public void testIterationStart(LoopIterationEvent event) {
         // not used
     }
-
-    public void threadFinished() {
-        // not used
-    }
-
-    public void threadStarted() {
-        myName = getName();
-        synchronized (accumulators) {
-            myTotals = (Totals) accumulators.get(myName);
-            if (myTotals == null){
-                myTotals = new Totals();
-                accumulators.put(myName, myTotals);
-            }
-        }
-    }
-
 }
