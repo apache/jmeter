@@ -53,7 +53,7 @@ public class WhileController extends GenericController implements Serializable {
      * @return true means OK to continue
      */
     private boolean endOfLoop(boolean loopEnd) {
-        String cnd = getCondition();
+        String cnd = getCondition().trim();
         log.debug("Condition string:" + cnd+".");
         boolean res;
         // If blank, only check previous sample when at end of loop
