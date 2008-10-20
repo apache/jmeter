@@ -583,7 +583,8 @@ public class WebServiceSampler extends HTTPSamplerBase {
                 log.warn(exception.toString());
                 result.setResponseMessage(exception.getMessage());
             } else {
-                throw new RuntimeException(exception);
+                log.error("Problem processing the SOAP request", exception);
+                result.setResponseMessage(exception.toString());
             }
         } finally {
             // Make sure the sample start time and sample end time are recorded 
