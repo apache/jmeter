@@ -1552,8 +1552,8 @@ This allows the use of JavaScript, BeanShell, properties or variables as needed.
 For example:
 <ul>
 	<li>${VAR} - where VAR is set to false by some other test element</li>
-	<li>${__javaScript(${C}==10,dummy)}</li>
-	<li>${__javaScript("${VAR2}"=="abcd",dummy)}</li>
+	<li>${__javaScript(${C}==10)}</li>
+	<li>${__javaScript("${VAR2}"=="abcd")}</li>
 	<li>${_P(property)} - where property is set to "false" somewhere else</li>
 </ul>
 	</description>
@@ -4117,7 +4117,7 @@ recorded (in milliseconds).</p>
 appropriate server and port, where the server is the machine JMeter is running on, and
 the port # is from the Proxy Control Panel shown above.</note>
 
-<b>Where Do Samples Get Recorded?</b>
+<p><b>Where Do Samples Get Recorded?</b></p>
 <p>JMeter places the recorded samples in the Target Controller you choose. If you choose the default option
 "Use Recording Controller", they will be stored in the first Recording Controller found in the test object tree (so be
 sure to add a Recording Controller before you start recording).</p>
@@ -4131,6 +4131,7 @@ In particular check that the browser is not set to "Bypass proxy server for loca
 (this example is from IE7, but there will be similar options for other browsers).
 </p>
 
+<p><b>Handling of HTTP Request Defaults</b></p>
 <p>If the HTTP Proxy Server finds enabled <complink name="HTTP Request Defaults"/> directly within the
 controller where samples are being stored, or directly within any of its parent controllers, the recorded samples
 will have empty fields for the default values you specified. You may further control this behaviour by placing an
@@ -4138,6 +4139,7 @@ HTTP Request Defaults element directly within the HTTP Proxy Server, whose non-b
 those in the other HTTP Request Defaults. See <a href="best-practices.html#proxy_server"> Best
 Practices with the Proxy Server</a> for more info.</p>
 
+<p><b>User Defined Variable replacement</b></p>
 <p>Similarly, if the HTTP Proxy Server finds <complink name="User Defined Variables"/> (UDV) directly within the
 controller where samples are being stored, or directly within any of its parent controllers, the recorded samples
 will have any occurences of the values of those variables replaced by the corresponding variable. Again, you can
@@ -4166,11 +4168,18 @@ so be sure to check this if UDVs are not working as expected.
 your browser's proxy settings.  Now, you may want to sort and re-order the test script, add timers, listeners, a
 cookie manager, etc.</p>
 
-<b>How can I record the server's responses too?</b>
+<p><b>How can I record the server's responses too?</b></p>
 <p>Just place a <complink name="View Results Tree"/> listener as a child of the Proxy Server and the responses will be displayed. 
 You can also add a <complink name="Save Responses to a file"/> Post-Processor which will save the responses to files.
 </p>
 
+<p><b>Cookie Manager</b></p>
+<p>
+If the server you are testing against uses cookies, remember to add an <complink name="HTTP Cookie Manager"/> to the test plan
+when you have finished recording it.
+During recording, the browser handles any cookies, but JMeter needs a Cookie Manager
+to do the cookie handling during a test run.
+</p>
 </component>
 
 <component name="HTTP Mirror Server" index="&sect-num;.9.6"  width="303" height="139" screenshot="mirrorserver.png">
