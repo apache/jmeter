@@ -298,7 +298,8 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
             context = getInitialContext();
             Object obj = context.lookup(getQueueConnectionFactory());
             if (!(obj instanceof QueueConnectionFactory)) {
-                String msg = "QueueConnectionFactory expected, but got " + obj.getClass().getName();
+                String msg = "QueueConnectionFactory expected, but got " 
+                    + obj == null ? "null" :  obj.getClass().getName();
                 LOGGER.fatalError(msg);
                 throw new IllegalStateException(msg);
             }
@@ -383,10 +384,10 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
                 LOGGER.debug("Number of JNDI properties: " + map.size());
             }
         }
-        Iterator it = map.keySet().iterator();
+        Iterator it = map.entrySet().iterator();
         while (it.hasNext()) {
-            String key = (String) it.next();
-            table.put(key, map.get(key));
+            Map.Entry me = (Map.Entry) it.next();
+            table.put(me.getKey(), me.getValue());
         }
 
         Context context = new InitialContext(table);
