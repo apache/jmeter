@@ -88,6 +88,11 @@ This does not affect test plans or behaviour, but could perhaps affect 3rd party
 Moved the Scoping Rules sub-section from Section 3. "Building a Test Plan"  to Section 4. "Elements of a test plan"
 </p>
 
+<p>
+The While controller now trims leading and trailing spaces from the condition value before it is compared
+with LAST, blank or false.
+</p>
+
 <h3>Bug fixes</h3>
 <ul>
 <li>Bug 45199 - don't try to replace blank variables in Proxy recording</li>
@@ -138,6 +143,7 @@ Moved the Scoping Rules sub-section from Section 3. "Building a Test Plan"  to S
 <li>Bug 43119 - Save Responses to file: optionally omit the file number</li>
 <li>Allow If Controller to use variable expressions (not just Javascript)</li>
 <li>Bug 45903 - allow Assertions to apply to sub-samples</li>
+<li>Trim spaces from While Controller condition before comparing against LAST, blank or false</li>
 </ul>
 
 <h3>Non-functional changes</h3>
