@@ -461,6 +461,18 @@ that was run in interactive mode.
   These are added before the -S and -D options are processed.
   </property>
   </properties>
+  <p>
+  The command line options and properties files are processed in the following order:
+  <ul>
+  <li>-p propfile</li>
+  <li>jmeter.properties (or the file from the -p option) is then loaded</li>
+  <li>-j logfile</li>
+  <li>Logging is initialised</li>
+  <li>user.properties is loaded</li>
+  <li>system.properties is loaded</li>
+  <li>all other command-line options are processed</li>
+  </ul>
+  </p>
 <p><b>
 See also the comments in the jmeter.properties, user.properties and system.properties files for further information on other settings you can change.
 </b></p>
