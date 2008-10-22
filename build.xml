@@ -1648,6 +1648,7 @@ run JMeter unless all the JMeter jars are added.
    	             <include name="${batchtest.name}.csv"/>
    	             <include name="${batchtest.name}.xml"/>
   	             <include name="${batchtest.name}.log"/>
+                 <include name="${batchtest.name}.jtl"/>
    	 	    </fileset>
    	     </delete>
    	   	</sequential>
@@ -1681,6 +1682,8 @@ run JMeter unless all the JMeter jars are added.
         <arg value="-ttestfiles/${batchtest.name}.jmx"/>
         <arg value="-j"/>
         <arg value="${batchtest.name}.log"/>
+        <arg value="-l"/>
+        <arg value="${batchtest.name}.jtl"/>
         <arg value="${remote}"/>
     	<!-- Check properties can be passed to local/remote tests -->
         <arg value="-Jmodule=Module"/>
@@ -1691,6 +1694,7 @@ run JMeter unless all the JMeter jars are added.
 
   	<checkfile type="output" file="${batchtest.out}/${batchtest.name}.csv"/>
     <checkfile type="output" file="${batchtest.out}/${batchtest.name}.xml"/>
+    <checkfile type="output" file="${batchtest.out}/${batchtest.name}.jtl"/>
   	
   	 <condition property="BatchTestLocal.OK">
   	 	<and>
