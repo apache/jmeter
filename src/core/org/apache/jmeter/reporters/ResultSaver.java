@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import org.apache.commons.lang.text.StrBuilder;
-import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
@@ -43,7 +42,7 @@ import org.apache.log.Logger;
  *
  */
 // TODO - perhaps save other items such as headers?
-public class ResultSaver extends AbstractTestElement implements Serializable, SampleListener, Clearable {
+public class ResultSaver extends AbstractTestElement implements Serializable, SampleListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     // File name sequence number
@@ -91,18 +90,11 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
      * start of the test. The super.clear() method clears the name (and all
      * other properties), so it is called last.
      */
-    // TODO: is this clearData, clearGui or TestElement.clear() ?
     public void clear() {
-        // System.out.println("-- "+me+this.getName()+"
-        // "+Thread.currentThread().getName());
         super.clear();
         synchronized(this){
             sequenceNumber = 0; // TODO is this the right thing to do?
         }
-    }
-
-    // TODO - is this the same as the above?
-    public void clearData() {
     }
 
     /**
