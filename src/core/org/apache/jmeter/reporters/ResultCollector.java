@@ -35,6 +35,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.avalon.framework.configuration.DefaultConfigurationSerializer;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
@@ -97,7 +98,21 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     
     // Static variables
 
-    private static final Map files = new HashMap();
+    private static final Map files = new HashMap(); // key=filename, entry=FileEntry
+
+    /*
+     * Keep track of the file writer and the configuration,
+     * as the instance used to close them is not the same as the instance that creates
+     * them. This means one cannot use the saved PrintWriter or use getSaveConfig()
+     */
+    private static class FileEntry{
+        final PrintWriter pw;
+        final SampleSaveConfiguration config;
+        FileEntry(PrintWriter _pw, SampleSaveConfiguration _config){
+            pw =_pw;
+            config = _config;
+        }
+    }
 
     private static int instanceCount; // Keep track of how many instances are active
 
@@ -330,10 +345,11 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
         if (filename == null || filename.length() == 0) {
             return null;
         }
-        PrintWriter writer = (PrintWriter) files.get(filename);
+        FileEntry fe = (FileEntry) files.get(filename);
+        PrintWriter writer = null;
         boolean trimmed = true;
 
-        if (writer == null) {
+        if (fe == null) {
             if (saveConfig.saveAsXml()) {
                 trimmed = trimLastLine(filename);
             } else {
@@ -349,7 +365,10 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             }
             writer = new PrintWriter(new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(filename,
                     trimmed)), SaveService.getFileEncoding("UTF-8")), true); // $NON-NLS-1$
-            files.put(filename, writer);
+            log.debug("Opened file: "+filename);
+            files.put(filename, new FileEntry(writer, saveConfig));
+        } else {
+            writer = fe.pw;
         }
         if (!trimmed) {
             writeFileStart(writer, saveConfig);
@@ -519,12 +538,15 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     }
 
     private synchronized void finalizeFileOutput() {
-        if (out != null) {
-            writeFileEnd(out, getSaveConfig());
-            out.close();
-            files.remove(getFilename());
-            out = null;
+        Iterator it = files.entrySet().iterator();
+        while(it.hasNext()){
+            Map.Entry me = (Map.Entry) it.next();
+            log.debug("Closing: "+me.getKey());
+            FileEntry fe = (FileEntry) me.getValue();
+            writeFileEnd(fe.pw, fe.config);
+            fe.pw.close();
         }
+        files.clear();
     }
 
     /*
