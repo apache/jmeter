@@ -93,6 +93,14 @@ The While controller now trims leading and trailing spaces from the condition va
 with LAST, blank or false.
 </p>
 
+<p>
+The TestElement interface has two new methods:
+<ul>
+<li>void setProperty(String key, String value, String dflt)</li>
+<li>void setProperty(String key, boolean value, boolean dflt);</li>
+</ul>
+These are implemented in the AbstractTestElement class which all elements should extend so this is unlikely to cause a problem.
+</p>
 <h3>Bug fixes</h3>
 <ul>
 <li>Bug 45199 - don't try to replace blank variables in Proxy recording</li>
