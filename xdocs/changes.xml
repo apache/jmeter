@@ -153,6 +153,7 @@ These are implemented in the AbstractTestElement class which all elements should
 <li>Allow If Controller to use variable expressions (not just Javascript)</li>
 <li>Bug 45903 - allow Assertions to apply to sub-samples</li>
 <li>Trim spaces from While Controller condition before comparing against LAST, blank or false</li>
+<li>Add classname field to TCP Sampler GUIs</li>
 </ul>
 
 <h3>Non-functional changes</h3>

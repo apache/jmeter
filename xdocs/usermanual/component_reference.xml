@@ -965,8 +965,7 @@ Currently the only way to changes these is via the SampleResult methods:
 </p>
 </component>
 
-<component name="TCP Sampler" index="&sect-num;.1.12"  width="596" height="347" screenshot="tcpsampler.png">
-<note>ALPHA CODE</note>
+<component name="TCP Sampler" index="&sect-num;.1.12"  width="477" height="343" screenshot="tcpsampler.png">
 	<description>
 		<p>
 		The TCP Sampler opens a TCP/IP connection to the specified server.
@@ -1018,9 +1017,10 @@ Currently the only way to changes these is via the SampleResult methods:
 </description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+  <property name="TCPClient classname" required="No">Name of the TCPClient class. Defaults to the property tcp.handler, failing that TCPClientImpl.</property>
   <property name="ServerName or IP" required="Yes">Name or IP of TCP server</property>
-  <property name="Re-use connection" required="Yes">If selected, the connection is kept open. Otherwise it is closed when the data has been read.</property>
   <property name="Port Number" required="Yes">Port to be used</property>
+  <property name="Re-use connection" required="Yes">If selected, the connection is kept open. Otherwise it is closed when the data has been read.</property>
   <property name="Timeout (milliseconds)" required="No">Timeout for replies</property>
   <property name="Set Nodelay" required="No">Should the nodelay property be set?</property>
   <property name="Text to Send" required="Yes">Text to be sent</property>
@@ -2714,8 +2714,7 @@ The Database URL and JDBC Driver class are defined by the provider of the JDBC i
 
 </component>
 
-<component name="TCP Sampler Config" index="&sect-num;.4.12"  width="645" height="256" screenshot="tcpsamplerconfig.png">
-	<note>ALPHA CODE</note>
+<component name="TCP Sampler Config" index="&sect-num;.4.12"  width="476" height="272" screenshot="tcpsamplerconfig.png">
 <description>
         <p>
 	The TCP Sampler Config provides default data for the TCP Sampler
@@ -2723,8 +2722,10 @@ The Database URL and JDBC Driver class are defined by the provider of the JDBC i
 </description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+  <property name="TCPClient classname" required="No">Name of the TCPClient class. Defaults to the property tcp.handler, failing that TCPClientImpl.</property>
   <property name="ServerName or IP" required="">Name or IP of TCP server</property>
   <property name="Port Number" required="">Port to be used</property>
+  <property name="Re-use connection" required="Yes">If selected, the connection is kept open. Otherwise it is closed when the data has been read.</property>
   <property name="Timeout (milliseconds)" required="">Timeout for replies</property>
   <property name="Set Nodelay" required="">Should the nodelay property be set?</property>
   <property name="Text to Send" required="">Text to be sent</property>
