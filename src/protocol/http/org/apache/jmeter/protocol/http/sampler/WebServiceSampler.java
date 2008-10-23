@@ -505,16 +505,16 @@ public class WebServiceSampler extends HTTPSamplerBase {
             spconn.setMaintainSession(true);
             msg.setSOAPTransport(spconn);
             msg.send(this.getUrl(), this.getSoapAction(), msgEnv);
+            result.setResponseHeaders(convertSoapHeaders(spconn.getHeaders()));
 
             if (this.getHeaderManager() != null) {
                 this.getHeaderManager().setSOAPHeader(spconn);
             }
 
-            SOAPTransport st = msg.getSOAPTransport();
             BufferedReader br = null;
-            if (st != null && st.receive() != null) {
-                br = st.receive();
-                SOAPContext sc = st.getResponseSOAPContext();
+            if (spconn.receive() != null) {
+                br = spconn.receive();
+                SOAPContext sc = spconn.getResponseSOAPContext();
                 // Set details from the actual response
                 // Needs to be done before response can be stored
                 final String contentType = sc.getContentType();
@@ -535,21 +535,14 @@ public class WebServiceSampler extends HTTPSamplerBase {
                 }
                 result.setSuccessful(true);
                 result.setResponseCodeOK();
+                result.setResponseMessageOK();
             } else {
                 result.sampleEnd();
                 result.setSuccessful(false);
-                if (st != null){
-                    final String contentType = st.getResponseSOAPContext().getContentType();
-                    result.setContentType(contentType);
-                    result.setEncodingAndType(contentType);
-                    result.setResponseData(st.getResponseSOAPContext().toString().getBytes(result.getDataEncodingWithDefault()));
-                }
-            }
-            if (st != null) {
-                SOAPContext sc = st.getResponseSOAPContext();
-                result.setResponseHeaders(convertSoapHeaders(sc.getRootPart().getAllHeaderLines()));
-            } else {
-                result.setResponseHeaders("error");                
+                final String contentType = spconn.getResponseSOAPContext().getContentType();
+                result.setContentType(contentType);
+                result.setEncodingAndType(contentType);
+                result.setResponseData(spconn.getResponseSOAPContext().toString().getBytes(result.getDataEncodingWithDefault()));
             }
             if (br != null) {
                 br.close();
