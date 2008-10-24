@@ -154,6 +154,7 @@ These are implemented in the AbstractTestElement class which all elements should
 <li>Bug 45903 - allow Assertions to apply to sub-samples</li>
 <li>Trim spaces from While Controller condition before comparing against LAST, blank or false</li>
 <li>Add classname field to TCP Sampler GUIs</li>
+<li>Apache SOAP 2.3.1 does not give access to HTTP response code/message, so WebService sampler now treats an empty response as an error</li>
 </ul>
 
 <h3>Non-functional changes</h3>
