@@ -274,7 +274,14 @@ then the parameter is ignored. This allows the use of optional parameters define
 <p>
 <b>Method Handling:</b><br></br>
 The POST and PUT request methods work similarly, except that the PUT method does not support multipart requests.
-The GET and DELETE request methods work similarly.
+The PUT method body must be provided as one of the following:
+<ul>
+<li>define the body as a file</li>
+<li>define the body as parameter value(s) with no name</li>
+</ul>
+If you define any parameters with a name in either the sampler or Http
+defaults then nothing is sent.
+The GET and DELETE request methods work similarly to each other.
 </p>
 <p>Upto and including JMeter 2.1.1, only responses with the content-type "text/html" were scanned for
 embedded resources. Other content-types were assumed to be something other than HTML.
@@ -411,12 +418,12 @@ totalSleepTime = SleepTime + (System.currentTimeMillis() % SleepMask)
 <description><p>This sampler lets you send a SOAP request to a webservice.  It can also be
 used to send XML-RPC over HTTP.  It creates an HTTP POST request, with the specified XML as the
 POST content. 
-To change the "Content-type" from the default of "text/html", use a HeaderManager. 
+To change the "Content-type" from the default of "text/xml", use a HeaderManager. 
 Note that the sampler will use all the headers from the HeaderManager.
 If a SOAP action is specified, that will override any SOAPaction in the HeaderManager.
 The primary difference between the soap sampler and
 webservice sampler, is the soap sampler uses raw post and does not require conformance to
-XML.</p>
+SOAP 1.1.</p>
 <note>For versions of JMeter later than 2.2, the sampler no longer uses chunked encoding by default.<br/>
 For screen input, it now always uses the size of the data.<br/>
 File input uses the file length as determined by Java.<br/>
@@ -455,16 +462,16 @@ Or set Content-Length to -1 to force chunked encoding.
  will read it as java.io.FileInputStream.</p>
  <p>The sampler requires mail.jar and activation.jar. This is because Apache SOAP
  requires the libs. Because mail.jar and activation.jar are distributed by Sun,
- you have to download it separately.</p>
+ you have to download them separately.</p>
  <p>An important note on the sampler is it will automatically use the proxy host
- and port passed to JMeter from command line, if thoe fields in the sampler are
+ and port passed to JMeter from command line, if those fields in the sampler are
  left blank. If a sampler has values in the proxy host and port text field, it
  will use the ones provided by the user. This behavior may not be what users
  expect.</p>
  <p>By default, the webservice sampler sets SOAPHTTPConnection.setMaintainSession
  (true). If you need to maintain the session, add a blank Header Manager. The
  sampler uses the Header Manager to store the SOAPHTTPConnection object, since
- there apache soap does provide a easy way to get and set the cookies.</p>
+ the version of apache soap does not provide a easy way to get and set the cookies.</p>
  <p><b>Note:</b> If you are using CSVDataSet, do not check "Memory Cache". If memory
  cache is checked, it will not iterate to the next value. That means all the requests
  will use the first value.</p>
@@ -480,6 +487,11 @@ xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
 &amp;lt;/soap:Body>
 &amp;lt;/soap:Envelope>
 </pre>
+<note>The SOAP library that is used does not support SOAP 1.2, only SOAP 1.1. 
+Also the library does not provide access to the HTTP response code (e.g. 200) or message (e.g. OK). 
+To get round this, versions of JMeter after 2.3.2 check the returned message length.
+If this is zero, then the request is marked as failed.
+</note>
 </description>
 
 <properties>
@@ -3995,6 +4007,12 @@ Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).</p>
 You also need to set up your browser to use the JMeter proxy port as the proxy for HTTP requests.
 Do not use JMeter as the proxy for any other request types - HTTPS, FTP, etc. - as the JMeter proxy cannot handle them.
 </p>
+<p>
+If your browser currently uses a proxy (e.g. a company intranet may route all external requests via a proxy),
+then you need to <a href="get-started.html#proxy_server">tell JMeter to use that proxy</a> before starting JMeter, 
+using the <a href="get-started.html#options">command-line options -H and -P</a>.
+This setting will also be needed when running the generated test plan.
+</p>
 </description>
 
 <properties>
@@ -4180,6 +4198,13 @@ If the server you are testing against uses cookies, remember to add an <complink
 when you have finished recording it.
 During recording, the browser handles any cookies, but JMeter needs a Cookie Manager
 to do the cookie handling during a test run.
+The JMeter Proxy server passes on all cookies sent by the browser during recording, but does not save them to the test
+plan because they are likely to change between runs.
+</p>
+<p><b>Authorization Manager</b></p>
+<p>
+The Proxy server passes on any Authorization headers sent by the browser, but does not save them in the test plan.
+If the site requires Authorization, you will need to add an Authorization Manager and fill it in with the necessary entries.
 </p>
 </component>
 
