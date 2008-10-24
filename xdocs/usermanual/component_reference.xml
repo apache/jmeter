@@ -4206,6 +4206,13 @@ plan because they are likely to change between runs.
 The Proxy server passes on any Authorization headers sent by the browser, but does not save them in the test plan.
 If the site requires Authorization, you will need to add an Authorization Manager and fill it in with the necessary entries.
 </p>
+<p><b>Uploading files</b></p>
+<p>
+Some browsers (e.g. Firefox and Opera) don't include the full name of a file when uploading files.
+This can cause the JMeter proxy server to fail.
+One solution is to ensure that any files to be uploaded are in the JMeter working directory,
+either by copying the files there or by starting JMeter in the directory containing the files.
+</p>
 </component>
 
 <component name="HTTP Mirror Server" index="&sect-num;.9.6"  width="303" height="139" screenshot="mirrorserver.png">
