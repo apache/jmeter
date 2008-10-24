@@ -74,8 +74,10 @@ public class Clear implements Command {
                     Object next = iter.next();
                     node = (JMeterTreeNode) next;
                     guiComp = guiPackage.getGui(node.getTestElement());
-                    Clearable item = (Clearable) guiComp;
-                    item.clearData();
+                    if (guiComp instanceof Clearable){
+                        Clearable item = (Clearable) guiComp;
+                        item.clearData();                        
+                    }
                 } catch (Exception ex) {
                     log.error("Can't clear: "+node+" "+guiComp, ex);
                 }
