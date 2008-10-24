@@ -520,22 +520,30 @@ public class WebServiceSampler extends HTTPSamplerBase {
                 final String contentType = sc.getContentType();
                 result.setContentType(contentType);
                 result.setEncodingAndType(contentType);
+                int length=0;
                 if (getReadResponse()) {
                     StringWriter sw = new StringWriter();
-                    IOUtils.copy(br, sw);
+                    length=IOUtils.copy(br, sw);
                     result.sampleEnd();
                     result.setResponseData(sw.toString().getBytes(result.getDataEncodingWithDefault()));
                 } else {
                     // by not reading the response
                     // for real, it improves the
                     // performance on slow clients
-                    br.read();
+                    length=br.read();
                     result.sampleEnd();
                     result.setResponseData(JMeterUtils.getResString("read_response_message").getBytes()); //$NON-NLS-1$
                 }
-                result.setSuccessful(true);
-                result.setResponseCodeOK();
-                result.setResponseMessageOK();
+                // It is not possible to access the actual HTTP response code, so we assume no data means failure
+                if (length > 0){
+                    result.setSuccessful(true);
+                    result.setResponseCodeOK();
+                    result.setResponseMessageOK();
+                } else {
+                    result.setSuccessful(false);
+                    result.setResponseCode("999");
+                    result.setResponseMessage("Empty response");                    
+                }
             } else {
                 result.sampleEnd();
                 result.setSuccessful(false);
