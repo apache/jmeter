@@ -235,8 +235,8 @@ public class Proxy extends Thread {
              * We don't want to store any cookies in the generated test plan
              */
             if (headers != null) {
-                headers.removeHeaderNamed("cookie");// Always remove cookies // $NON-NLS-1$
-                headers.removeHeaderNamed("Authorization");// Always remove authorization // $NON-NLS-1$
+                headers.removeHeaderNamed(HTTPConstants.HEADER_COOKIE);// Always remove cookies
+                headers.removeHeaderNamed(HTTPConstants.HEADER_AUTHORIZATION);// Always remove authorization
                 // Remove additional headers
                 for(int i=0; i < headersToRemove.length; i++){
                     headers.removeHeaderNamed(headersToRemove[i]);
