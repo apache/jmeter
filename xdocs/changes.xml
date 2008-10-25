@@ -129,6 +129,7 @@ These are implemented in the AbstractTestElement class which all elements should
 <li>Fix Summariser so it works in client server mode</li>
 <li>Bug 45425 - JDBC Request does not support Unicode (changed sampler to use UTF-8)</li>
 <li>Bug 46016 - avoid possible NPE in JMSSampler</li>
+<li>Cookie Manager was not passing cookie policy to runtime threads so they always used compatibility mode</li>
 </ul>
 
 <h3>Improvements</h3>
