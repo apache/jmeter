@@ -94,10 +94,13 @@ with LAST, blank or false.
 </p>
 
 <p>
-The TestElement interface has two new methods:
+The TestElement interface has some new methods:
 <ul>
 <li>void setProperty(String key, String value, String dflt)</li>
-<li>void setProperty(String key, boolean value, boolean dflt);</li>
+<li>void setProperty(String key, boolean value, boolean dflt)</li>
+<li>void setProperty(String key, int value)</li>
+<li>void setProperty(String key, int value, int dflt)</li>
+<li>int getPropertyAsInt(String key, int defaultValue)</li>
 </ul>
 These are implemented in the AbstractTestElement class which all elements should extend so this is unlikely to cause a problem.
 </p>

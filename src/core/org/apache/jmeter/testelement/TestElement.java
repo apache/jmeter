@@ -46,6 +46,10 @@ public interface TestElement extends Cloneable {
 
     public void setProperty(String key, boolean value, boolean dflt);
 
+    public void setProperty(String key, int value);
+
+    public void setProperty(String key, int value, int dflt);
+
     /**
      * Check if ENABLED property is present and true ; defaults to true
      *
@@ -86,6 +90,8 @@ public interface TestElement extends Cloneable {
     public long getPropertyAsLong(String key);
 
     public int getPropertyAsInt(String key);
+
+    public int getPropertyAsInt(String key, int defaultValue);
 
     public float getPropertyAsFloat(String key);
 
