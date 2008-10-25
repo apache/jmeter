@@ -59,11 +59,13 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    public static final String CLEAR = "CookieManager.clearEachIteration";// $NON-NLS-1$
+    //++ JMX tag values
+    private static final String CLEAR = "CookieManager.clearEachIteration";// $NON-NLS-1$
 
-    public static final String COOKIES = "CookieManager.cookies";// $NON-NLS-1$
+    private static final String COOKIES = "CookieManager.cookies";// $NON-NLS-1$
 
-    public static final String POLICY = "CookieManager.policy"; //$NON-NLS-1$
+    private static final String POLICY = "CookieManager.policy"; //$NON-NLS-1$
+    //-- JMX tag values
 
     private static final String TAB = "\t"; //$NON-NLS-1$
 
@@ -82,29 +84,22 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
     public static final String DEFAULT_POLICY = CookiePolicy.BROWSER_COMPATIBILITY;
 
     public CookieManager() {
-        setProperty(new CollectionProperty(COOKIES, new ArrayList()));
-        setProperty(new BooleanProperty(CLEAR, false));
-        setCookiePolicy(DEFAULT_POLICY);
     }
 
     // ensure that the initial cookies are copied to the per-thread instances
     public Object clone(){
         CookieManager clone = (CookieManager) super.clone();
         clone.initialCookies = initialCookies;
+        clone.cookieSpec = cookieSpec;
         return clone;
     }
 
     public String getPolicy() {
-        return getPropertyAsString(POLICY,DEFAULT_POLICY);
+        return getPropertyAsString(POLICY, DEFAULT_POLICY);
     }
 
     public void setCookiePolicy(String policy){
-        cookieSpec = CookiePolicy.getCookieSpec(policy);
-        if (DEFAULT_POLICY.equals(policy)){// Don't clutter the JMX file
-            removeProperty(POLICY);
-        } else {
-            setProperty(POLICY, policy);
-        }
+        setProperty(POLICY, policy, DEFAULT_POLICY);
     }
 
     public CollectionProperty getCookies() {
@@ -442,6 +437,11 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 
     public void testStarted() {
         initialCookies = getCookies();
+        clearCookies();
+        cookieSpec = CookiePolicy.getCookieSpec(getPolicy());
+        if (log.isDebugEnabled()){
+            log.debug("Policy: "+getPolicy()+" Clear: "+getClearEachIteration());
+        }
     }
 
     public void testEnded() {
