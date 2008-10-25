@@ -28,6 +28,7 @@ import java.util.Set;
 
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
+import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.MapProperty;
 import org.apache.jmeter.testelement.property.MultiProperty;
@@ -182,6 +183,11 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
         return getProperty(key).getIntValue();
     }
 
+    public int getPropertyAsInt(String key, int defaultValue) {
+        JMeterProperty jmp = getProperty(key);
+        return jmp instanceof NullProperty ? defaultValue : jmp.getIntValue();
+    }
+
     public boolean getPropertyAsBoolean(String key) {
         return getProperty(key).getBooleanValue();
     }
@@ -285,7 +291,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
     }
 
     public void setProperty(String name, boolean value) {
-        setProperty(new StringProperty(name, Boolean.toString(value)));
+        setProperty(new BooleanProperty(name, value));
     }
 
     /**
@@ -304,6 +310,29 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
             removeProperty(name);
         } else {
             setProperty(new BooleanProperty(name, value));
+        }
+    }
+
+    public void setProperty(String name, int value) {
+        setProperty(new IntegerProperty(name, value));
+    }
+
+    /**
+     * Create a boolean property - but only if it is not the default.
+     * This is intended for use when adding new properties to JMeter
+     * so that JMX files are not expanded unnecessarily.
+     *
+     * N.B. - must agree with the default applied when reading the property.
+     *
+     * @param name property name
+     * @param value current value
+     * @param dflt default
+     */
+    public void setProperty(String name, int value, int dflt) {
+        if (value == dflt) {
+            removeProperty(name);
+        } else {
+            setProperty(new IntegerProperty(name, value));
         }
     }
 
