@@ -84,6 +84,7 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
     public static final String DEFAULT_POLICY = CookiePolicy.BROWSER_COMPATIBILITY;
 
     public CookieManager() {
+        clearCookies(); // Ensure that there is always a collection available
     }
 
     // ensure that the initial cookies are copied to the per-thread instances
@@ -294,6 +295,7 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
                );
         ret.setPathAttributeSpecified(jmc.isPathSpecified());
         ret.setDomainAttributeSpecified(jmc.isDomainSpecified());
+        ret.setVersion(jmc.getVersion());
         return ret;
     }
 
@@ -394,6 +396,7 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 
             // Store session cookies as well as unexpired ones
             if (exp == 0 || exp >= System.currentTimeMillis()) {
+                newCookie.setVersion(cookies[i].getVersion());
                 add(newCookie); // Has its own debug log; removes matching cookies
             } else {
                 removeMatchingCookies(newCookie);
