@@ -42,6 +42,7 @@ public class TestCookieManager extends JMeterTestCase {
             jmctx = JMeterContextService.getContext();
             man = new CookieManager();
             man.setThreadContext(jmctx);
+            man.testStarted();// This is needed in order to set up the cookie policy
         }
 
         public void testRemoveCookie() throws Exception {
@@ -284,6 +285,7 @@ public class TestCookieManager extends JMeterTestCase {
         
         public void testCookiePolicy2109() throws Exception {
             man.setCookiePolicy(CookiePolicy.RFC_2109);
+            man.testStarted(); // ensure policy is picked up
             URL url = new URL("http://order.now/sub1/moo.html");
             man.addCookieFromHeader("test1=moo1;", url);
             man.addCookieFromHeader("test2=moo2;path=/sub1", url);
@@ -306,6 +308,7 @@ public class TestCookieManager extends JMeterTestCase {
 
         public void testCookiePolicyNetscape() throws Exception {
             man.setCookiePolicy(CookiePolicy.NETSCAPE);
+            man.testStarted(); // ensure policy is picked up
             URL url = new URL("http://order.now/sub1/moo.html");
             man.addCookieFromHeader("test1=moo1;", url);
             man.addCookieFromHeader("test2=moo2;path=/sub1", url);
@@ -328,6 +331,7 @@ public class TestCookieManager extends JMeterTestCase {
 
         public void testCookiePolicyIgnore() throws Exception {
             man.setCookiePolicy(CookiePolicy.IGNORE_COOKIES);
+            man.testStarted(); // ensure policy is picked up
             URL url = new URL("http://order.now/sub1/moo.html");
             man.addCookieFromHeader("test1=moo1;", url);
             man.addCookieFromHeader("test2=moo2;path=/sub1", url);
