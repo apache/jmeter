@@ -47,6 +47,10 @@ public class Cookie extends AbstractTestElement implements Serializable {
 
     private static final String DOMAIN_SPECIFIED = "Cookie.domain_specified"; //$NON-NLS-1$
 
+    private static final String VERSION = "Cookie.version"; //$NON-NLS-1$
+
+    private static final int DEFAULT_VERSION = 1;
+
     /**
      * create the coookie
      */
@@ -74,6 +78,24 @@ public class Cookie extends AbstractTestElement implements Serializable {
      */
     public Cookie(String name, String value, String domain, String path,
             boolean secure, long expires, boolean hasPath, boolean hasDomain) {
+        this(name, value, domain, path, secure, expires, hasPath, hasDomain, DEFAULT_VERSION);
+    }
+
+    /**
+     * Create a JMeter Cookie.
+     * 
+     * @param name
+     * @param value
+     * @param domain
+     * @param path
+     * @param secure
+     * @param expires - this is in seconds
+     * @param hasPath - was the path explicitly specified?
+     * @param hasDomain - was the domain explicitly specified?
+     * @param version - cookie spec. version
+     */
+    public Cookie(String name, String value, String domain, String path,
+            boolean secure, long expires, boolean hasPath, boolean hasDomain, int version) {
         this.setName(name);
         this.setValue(value);
         this.setDomain(domain);
@@ -82,6 +104,7 @@ public class Cookie extends AbstractTestElement implements Serializable {
         this.setExpires(expires);
         this.setPathSpecified(hasPath);
         this.setDomainSpecified(hasDomain);
+        this.setVersion(version);
     }
 
     public void addConfigElement(ConfigElement config) {
@@ -201,6 +224,20 @@ public class Cookie extends AbstractTestElement implements Serializable {
         sb.append(TAB).append(getName());
         sb.append(TAB).append(getValue());
         return sb.toString();
+    }
+
+    /**
+     * @return the version
+     */
+    public synchronized int getVersion() {
+        return getPropertyAsInt(VERSION, DEFAULT_VERSION);
+    }
+
+    /**
+     * @param version the version to set
+     */
+    public synchronized void setVersion(int version) {
+        setProperty(VERSION, version, DEFAULT_VERSION);
     }
 
 
