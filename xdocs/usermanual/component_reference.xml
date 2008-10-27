@@ -1730,8 +1730,12 @@ the contents are used to prefix the pathname.
 <component name="Transaction Controller" index="&sect-num;.2.15"  width="258" height="125" screenshot="transactioncontroller.png">
 	<description>
 	    <p>
-	    The Transaction Comntroller is used to group samplers by generating an additional
-	    sample which totals the nested samples.
+	    The Transaction Controller generates an additional
+	    sample which measures the overall time taken to perform the nested test elements.
+	    Note that this time includes all processing within the controller scope, not just
+	    the samples.
+	    </p>
+	    <p>
 	    For JMeter versions after 2.3, there are two modes of operation
 	    <ul>
 	    <li>additional sample is added after the nested samples</li>
@@ -1739,7 +1743,7 @@ the contents are used to prefix the pathname.
 	    </ul>
 	    </p>
 		<p>
-		The generated sample time includes all the times for the nested samplers, and any timers etc.
+		The generated sample time includes all the times for the nested samplers, <b>and any timers etc.</b>
 		Depending on the clock resolution, it may be slightly longer than the sum of the individual samplers plus timers.
 		The clock might tick after the controller recorded the start time but before the first sample starts.
 		Similarly at the end.
