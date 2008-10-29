@@ -135,6 +135,7 @@ These are implemented in the AbstractTestElement class which all elements should
 <li>Cookie Manager was not passing cookie policy to runtime threads so they always used compatibility mode</li>
 <li>Add version attribute to JMeter Cookie class (needed for proper cookie support)</li>
 <li>Cookie Manager now saves/restores cookie versions</li>
+<li>Bug 41608 - misleading warning log message removed</li>
 </ul>
 
 <h3>Improvements</h3>

@@ -310,7 +310,8 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
     }
 
     private void displayPopUp(MouseEvent e, JPopupMenu popup) {
-        log.warn("Shouldn't be here");
+        // See Bug 46108 - this log message is unnecessary and misleading
+        // log.warn("Shouldn't be here");
         if (popup != null) {
             popup.pack();
             popup.show(tree, e.getX(), e.getY());
