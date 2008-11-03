@@ -70,12 +70,18 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
     private static final String TAB = "\t"; //$NON-NLS-1$
 
     // See bug 33796
-    private static final boolean DELETE_NULL_COOKIES
-        = JMeterUtils.getPropDefault("CookieManager.delete_null_cookies", true);// $NON-NLS-1$
+    private static final boolean DELETE_NULL_COOKIES =
+        JMeterUtils.getPropDefault("CookieManager.delete_null_cookies", true);// $NON-NLS-1$
 
     // See bug 28715
     private static final boolean ALLOW_VARIABLE_COOKIES
         = JMeterUtils.getPropDefault("CookieManager.allow_variable_cookies", true);// $NON-NLS-1$
+
+    private static final String COOKIE_NAME_PREFIX =
+        JMeterUtils.getPropDefault("CookieManager.name.prefix", "COOKIE_").trim();// $NON-NLS-1$ $NON-NLS-2$
+    
+    private static final boolean SAVE_COOKIES =
+        JMeterUtils.getPropDefault("CookieManager.save.cookies", false);// $NON-NLS-1$
 
     private transient CookieSpec cookieSpec;
 
@@ -242,12 +248,11 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
                 log.debug("Add cookie to store " + c.toString());
             }
             getCookies().addItem(c);
-            // Store cookie as a thread variable.
-            // TODO - should we add a prefix to these variables?
-            // TODO - should storing cookie values be optional?
-            JMeterContext context = getThreadContext();
-            if (context.isSamplingStarted()) {
-                context.getVariables().put(cn, cv);
+            if (SAVE_COOKIES)  {
+                JMeterContext context = getThreadContext();
+                if (context.isSamplingStarted()) {
+                    context.getVariables().put(COOKIE_NAME_PREFIX+cn, cv);
+                }
             }
         }
     }

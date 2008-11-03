@@ -2542,8 +2542,14 @@ the response contains a cookie, the Cookie Manager automatically stores that coo
 use it for all future requests to that particular web site.  Each JMeter thread has its own
 "cookie storage area".  So, if you are testing a web site that uses a cookie for storing
 session information, each JMeter thread will have its own session.</p>
-<p>Received Cookies are stored as JMeter thread variables. 
-Thus the value of a cookie with the name TEST can be referred to as ${TEST}</p>
+<p>
+Received Cookies can be stored as JMeter thread variables
+(versions of JMeter after 2.3.2 no longer do this by default).
+To save cookies as variables, define the property "CookieManager.save.cookies=true".
+Also, cookies names are prefixed with "COOKIE_" before they are stored (this avoids accidental corruption of local variables)
+To revert to the original behaviour, define the property "CookieManager.name.prefix= " (one or more spaces).
+If enabled, the value of a cookie with the name TEST can be referred to as ${COOKIE_TEST}.
+</p>
 <p>Second, you can manually add a cookie to the Cookie Manager.  However, if you do this,
 the cookie will be shared by all JMeter threads.</p>
 <p>Note that such Cookies are created with an Expiration time far in the future</p>

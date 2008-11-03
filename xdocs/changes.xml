@@ -72,6 +72,12 @@ The test elements "Save Results to a file" and "Generate Summary Results" are no
 They were previously shown as Post-Processors, even though they are implemented as Listeners.
 </p>
 <p>
+The Cookie Manager no longer saves incoming cookies as variables by default.
+To save cookies as variables, define the property "CookieManager.save.cookies=true".
+Also, cookies names are prefixed with "COOKIE_" before they are stored (this avoids accidental corruption of local variables)
+To revert to the original behaviour, define the property "CookieManager.name.prefix= " (one or more spaces).
+</p>
+<p>
 The Counter element is now shown as a Configuration element.
 It was previously shown as a Pre-Processor, even though it is implemented as a Config item.
 </p>
