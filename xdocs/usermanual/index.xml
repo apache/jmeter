@@ -121,6 +121,7 @@
 	 <li><a href="test_plan.html#executionorder">4.9 Execution order</a></li>
 	 <li><a href="test_plan.html#scoping_rules">4.10 Scoping Rules</a></li>
 	 <li><a href="test_plan.html#properties">4.11 Properties and Variables</a></li>
+     <li><a href="test_plan.html#using_variables">4.12 Using Variables to parameterise tests</a></li>
 	</ul>
  <li><a name="build-web-test-plan"/><a href="build-web-test-plan.html">5. Building a Web Test Plan</a></li>
 	 <ul>

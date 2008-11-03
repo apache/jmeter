@@ -432,16 +432,56 @@ For details of how to reference variables and functions, see <a href="functions.
 <p>
 Note that the values defined by the <complink name="Test Plan"/>  and the <complink name="User Defined Variables"/> configuration element
 are made available to the whole test plan at startup. 
-If the same variable is defined by multiple elements, then the last one takes effect.
-
+If the same variable is defined by multiple UDV elements, then the last one takes effect.
+Once a thread has started, the initial set of variables is copied to each thread.
 Other elements such as the 
 <complink name="User Parameters"/> Pre-Processor or <complink name="Regular Expression Extractor"/> Post-Processor
-may be used to redefine the same variables. These redefinitions only apply to the current thread.
+may be used to redefine the same variables (or create new ones). These redefinitions only apply to the current thread.
 </p>
 <p>
-Note that global variables cannot be updated during a test.
 The <a href="functions.html#__setProperty">setProperty</a> function can be used to define a JMeter property.
-These are global to the test plan, so can be used to pass information between threads.
+These are global to the test plan, so can be used to pass information between threads - should that be needed.
+</p>
+<note>Both variables and properties are case-sensitive.</note>
+</subsection>
+
+<subsection name="&sect-num;.12 Using Variables to parameterise tests" anchor="using_variables">
+<p>
+Variables don't have to vary - they can be defined once, and if left alone, will not change value.
+So you can use them as short-hand for expressions that appear frequently in a test plan.
+Or for items which are constant during a run, but which may vary between runs.
+For example, the name of a host, or the number of threads in a thread group.
+</p>
+<p>
+When deciding how to structure a Test Plan, 
+make a note of which items are constant for the run, but which may change between runs.
+Decide on some variable names for these - 
+perhaps use a naming convention such as prefixing them with C_ or K_ or using uppercase only
+to distinguish them from variables that need to change during the test.
+Also consider which items need to be local to a thread - 
+for example counters or values extracted with the Regular Expression Post-Processor.
+You may wish to use a different naming convention for these.
+</p>
+<p>
+For example, you might define the following on the Test Plan:
+<pre>
+HOST             www.example.com
+THREADS          10
+LOOPS            20
+</pre>
+You can refer to these in the test plan as ${HOST} ${THREADS} etc.
+If you later want to change the host, just change the value of the HOST variable.
+This works fine for small numbers of tests, but becomes tedious when testing lots of different combinations.
+One solution is to use a property to define the value of the variables, for example:
+<pre>
+HOST             ${__P(host,www.example.com)}
+THREADS          ${__P(threads,10)}
+LOOPS            ${__P(loops,20)}
+</pre>
+You can then change some or all of the values on the command-line as follows:
+<pre>
+jmeter ... -Jhost=www3.example.org -Jloops=13
+</pre>
 </p>
 </subsection>
 
