@@ -904,7 +904,17 @@ The following variables are made available to the script:
     Systemclass=log.class.forName("java.lang.System");<br></br>
     now=Systemclass.currentTimeMillis();
     </code>
+    Note that the Jexl documentation on the web-site wrongly suggests that "div" does integer division.
+    In fact "div" and "/" both perform normal division. One can get the same effect
+    as follows:
+    <code>
+    i= 5 / 2;
+    i.intValue(); // or use i.longValue()
+    </code>
     </p>
+    <note>Versions of JMeter after 2.3.2 allow the expression to contain multiple statements.
+    JMeter 2.3.2 and earlier only processed the first statement (if there were multiple statements a warning was logged).
+    </note>
 </component>
 
 <component index="&sect-num;.5.19" name="__V">
