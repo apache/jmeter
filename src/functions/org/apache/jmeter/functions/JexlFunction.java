@@ -21,10 +21,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.jexl.Expression;
-import org.apache.commons.jexl.ExpressionFactory;
 import org.apache.commons.jexl.JexlContext;
 import org.apache.commons.jexl.JexlHelper;
+import org.apache.commons.jexl.Script;
+import org.apache.commons.jexl.ScriptFactory;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -73,7 +73,7 @@ public class JexlFunction extends AbstractFunction {
 
         try
         {
-            Expression e = ExpressionFactory.createExpression(exp);
+            Script script = ScriptFactory.createScript(exp);
             JexlContext jc = JexlHelper.createContext();
             final Map jexlVars = jc.getVars();
             jexlVars.put("ctx", jmctx); //$NON-NLS-1$
@@ -84,8 +84,8 @@ public class JexlFunction extends AbstractFunction {
             jexlVars.put("sampleResult", previousResult); //$NON-NLS-1$ (may be null)
             jexlVars.put("OUT", System.out);//$NON-NLS-1$
 
-            // Now evaluate the expression, getting the result
-            Object o = e.evaluate(jc);
+            // Now evaluate the script, getting the result
+            Object o = script.execute(jc);
             if (o != null)
             {
                 str = o.toString();
