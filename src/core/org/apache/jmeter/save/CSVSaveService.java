@@ -965,7 +965,7 @@ public final class CSVSaveService {
                     throw new IOException("Cannot have single quote-char in quoted field:["+baos.toString()+"]");
                 }
                 break;
-            }
+            } // switch(state)
             if (push) {
                 if (ch == '\r') {// Remove following \n if present
                     infile.mark(1);
@@ -980,9 +980,14 @@ public final class CSVSaveService {
             if ((ch == '\n' || ch == '\r') && state != QUOTED) {
                 break;
             }
-        }
-        if (ch == -1 && baos.size() > 0){
-            list.add(baos.toString());
+        } // while not EOF
+        if (ch == -1){
+            if (state == QUOTED){
+                throw new IOException(state+" Missing trailing quote-char in quoted field:[\""+baos.toString()+"]");
+            }
+            if (baos.size() > 0) {
+                list.add(baos.toString());
+            }
         }
         return (String[]) list.toArray(new String[]{});
     }
