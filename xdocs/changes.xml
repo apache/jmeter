@@ -169,6 +169,7 @@ These are implemented in the AbstractTestElement class which all elements should
 <li>Add classname field to TCP Sampler GUIs</li>
 <li>Apache SOAP 2.3.1 does not give access to HTTP response code/message, so WebService sampler now treats an empty response as an error</li>
 <li>Use Script to evaluate __jexl() function so can have multiple statements.</li>
+<li>JDBC Request can optionally save the results of Select statements to variables.</li>
 </ul>
 
 <h3>Non-functional changes</h3>
