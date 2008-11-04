@@ -142,6 +142,7 @@ These are implemented in the AbstractTestElement class which all elements should
 <li>Add version attribute to JMeter Cookie class (needed for proper cookie support)</li>
 <li>Cookie Manager now saves/restores cookie versions</li>
 <li>Bug 41608 - misleading warning log message removed</li>
+<li>CSVSaveService - check for EOF while reading quoted string</li>
 </ul>
 
 <h3>Improvements</h3>
@@ -170,6 +171,7 @@ These are implemented in the AbstractTestElement class which all elements should
 <li>Apache SOAP 2.3.1 does not give access to HTTP response code/message, so WebService sampler now treats an empty response as an error</li>
 <li>Use Script to evaluate __jexl() function so can have multiple statements.</li>
 <li>JDBC Request can optionally save the results of Select statements to variables.</li>
+<li>JDBC Request now handles quoted strings.</li>
 </ul>
 
 <h3>Non-functional changes</h3>
