@@ -1601,7 +1601,7 @@ If there is no default, then no element is selected, and the controller will not
 </properties>
 </component>
 
-<component name="ForEach Controller" index="&sect-num;.2.12" anchor="loop"  width="410" height="153" screenshot="logic-controller/foreach-controller.png">
+<component name="ForEach Controller" index="&sect-num;.2.12" anchor="loop"  width="399" height="176" screenshot="logic-controller/foreach-controller.png">
 <description><p>A ForEach controller loops through the values of a set of related variables. 
 When you add samplers (or controllers) to a ForEach controller, every sample sample (or controller)
 is executed one or more times, where during every loop the variable has a new value.
