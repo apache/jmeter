@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.protocol.jdbc.sampler;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.sql.CallableStatement;
@@ -38,6 +39,7 @@ import org.apache.jmeter.protocol.jdbc.config.DataSourceElement;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
@@ -55,6 +57,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final String COMMA = ","; // $NON-NLS-1$
+    private static final char COMMA_CHAR = ',';
 
     private static final String UNDERSCORE = "_"; // $NON-NLS-1$
 
@@ -238,6 +241,10 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
             res.setResponseMessage(ex.toString());
             res.setResponseCode("000"); // TODO - is this correct?
             res.setSuccessful(false);
+        } catch (IOException ex) {
+            res.setResponseMessage(ex.toString());
+            res.setResponseCode("000"); // TODO - is this correct?
+            res.setSuccessful(false);
         } finally {
             close(stmt);
             close(conn);
@@ -250,7 +257,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
         return res;
     }
 
-    private String resultSetsToString(PreparedStatement pstmt, boolean result, int[] out) throws SQLException {
+    private String resultSetsToString(PreparedStatement pstmt, boolean result, int[] out) throws SQLException, UnsupportedEncodingException {
         StrBuilder sb = new StrBuilder();
         sb.append("\n"); // $NON-NLS-1$
         int updateCount = 0;
@@ -293,11 +300,11 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
     }
 
 
-    private int[] setArguments(PreparedStatement pstmt) throws SQLException {
+    private int[] setArguments(PreparedStatement pstmt) throws SQLException, IOException {
         if (getQueryArguments().trim().length()==0) {
             return new int[]{};
         }
-        String[] arguments = getQueryArguments().split(COMMA);
+        String[] arguments = CSVSaveService.csvSplitString(getQueryArguments(), COMMA_CHAR);
         String[] argumentsTypes = getQueryArgumentsTypes().split(COMMA);
         if (arguments.length != argumentsTypes.length) {
             throw new SQLException("number of arguments ("+arguments.length+") and number of types ("+argumentsTypes.length+") are not equal");
@@ -401,8 +408,9 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
      *            ResultSet passed in from a database query
      * @return a Data object
      * @throws java.sql.SQLException
+     * @throws UnsupportedEncodingException 
      */
-    private Data getDataFromResultSet(ResultSet rs) throws SQLException {
+    private Data getDataFromResultSet(ResultSet rs) throws SQLException, UnsupportedEncodingException {
         ResultSetMetaData meta = rs.getMetaData();
         Data data = new Data();
 
@@ -425,7 +433,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
             for (int i = 0; i < numColumns; i++) {
                 Object o = rs.getObject(i + 1);
                 if (o instanceof byte[]) {
-                    o = new String((byte[]) o); // TODO what charset applies here?
+                    o = new String((byte[]) o, ENCODING);
                 }
                 data.addColumnValue(dbCols[i], o);
                 if (jmvars != null && i < varnames.length) {

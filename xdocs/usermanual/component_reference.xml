@@ -378,6 +378,9 @@ the additional variables for rows 4, 5 and 6 will be removed.
         Comma-separated list of parameter values. Use ]NULL[ to indicate a NULL parameter.
         (If required, the null string can be changed by defining the property "jdbcsampler.nullmarker".)
         <br></br>
+        The list must be enclosed in double-quotes if any of the values contain a comma or double-quote,
+        and any embedded double-quotes must be doubled-up, for example:
+        <pre>"Dbl-Quote: "" and Comma: ,"</pre>
         There must be as many values as there are placeholders in the statement.
         </property>
         <property name="Parameter types" required="Yes, if a prepared or callable statement has parameters">
@@ -386,7 +389,7 @@ the additional variables for rows 4, 5 and 6 will be removed.
         appropriate parameter types, e.g. instead of "INTEGER", use "INOUT INTEGER".
         If not specified, "IN" is assumed, i.e. "DATE" is the same as "IN DATE".
         <br></br>
-        There must be as many values as there are placeholders in the statement.
+        There must be as many types as there are placeholders in the statement.
         </property>
         <property name="Variable Names" required="No">Comma-separated list of variable names to hold values returned by Select statements</property>
 </properties>
@@ -395,7 +398,7 @@ the additional variables for rows 4, 5 and 6 will be removed.
         <link href="build-db-test-plan.html">Building a Database Test Plan</link>
         <complink name="JDBC Connection Configuration"/>
 </links>
-
+<note>Versions of JMeter after 2.3.2 use UTF-8 as the character encoding. Previously the default was used.</note>
 </component>
 
 <component name="Java Request" index="&sect-num;.1.4"  width="406" height="307" screenshot="java_request.png">
