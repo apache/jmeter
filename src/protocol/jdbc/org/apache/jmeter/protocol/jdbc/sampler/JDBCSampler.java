@@ -39,6 +39,7 @@ import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
+import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.Data;
 import org.apache.jorphan.logging.LoggingManager;
@@ -52,6 +53,10 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
     private static final long serialVersionUID = 233L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private static final String COMMA = ","; // $NON-NLS-1$
+
+    private static final String UNDERSCORE = "_"; // $NON-NLS-1$
 
     // This value is used for both the connection (perConnCache) and statement (preparedStatementMap) caches.
     // TODO - do they have to be the same size?
@@ -69,6 +74,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
     // TODO - should the encoding be configurable?
     private static final String ENCODING = "UTF-8"; // $NON-NLS-1$
 
+    // key: name (lowercase) from java.sql.Types; entry: corresponding int value
     private static final Map mapJdbcNameToInt;
 
     static {
@@ -108,6 +114,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
     private String queryType = SELECT;
     private String queryArguments = ""; // $NON-NLS-1$
     private String queryArgumentsTypes = ""; // $NON-NLS-1$
+    private String variableNames = ""; // $NON-NLS-1$
 
     /**
      *  Cache of PreparedStatements stored in a per-connection basis. Each entry of this
@@ -195,7 +202,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
             } else if (PREPARED_SELECT.equals(_queryType)) {
                 pstmt = getPreparedStatement(conn);
                 setArguments(pstmt);
-                pstmt.executeQuery();
+                pstmt.executeQuery(); // FindBugs: the statement is closed in resultSetsToString()
                 String sb = resultSetsToString(pstmt,true,null);
                 res.setResponseData(sb.getBytes(ENCODING));
             } else if (PREPARED_UPDATE.equals(_queryType)) {
@@ -257,6 +264,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
                     rs = pstmt.getResultSet();
                     Data data = getDataFromResultSet(rs);
                     sb.append(data.toString()).append("\n"); // $NON-NLS-1$
+                    data.getDataAsText();
                 } finally {
                     close(rs);
                 }
@@ -289,8 +297,8 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
         if (getQueryArguments().trim().length()==0) {
             return new int[]{};
         }
-        String[] arguments = getQueryArguments().split(","); // $NON-NLS-1$
-        String[] argumentsTypes = getQueryArgumentsTypes().split(","); // $NON-NLS-1$
+        String[] arguments = getQueryArguments().split(COMMA);
+        String[] argumentsTypes = getQueryArgumentsTypes().split(COMMA);
         if (arguments.length != argumentsTypes.length) {
             throw new SQLException("number of arguments ("+arguments.length+") and number of types ("+argumentsTypes.length+") are not equal");
         }
@@ -405,16 +413,46 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
             data.addHeader(dbCols[i]);
         }
 
+        JMeterVariables jmvars = null;
+        String varnames[] = getVariableNames().split(COMMA);
+        if (varnames.length > 0){
+            jmvars = getThreadContext().getVariables();
+        }
+        int j = 0;
         while (rs.next()) {
+            j++;
             data.next();
             for (int i = 0; i < numColumns; i++) {
                 Object o = rs.getObject(i + 1);
                 if (o instanceof byte[]) {
-                    o = new String((byte[]) o);
+                    o = new String((byte[]) o); // TODO what charset applies here?
                 }
                 data.addColumnValue(dbCols[i], o);
+                if (jmvars != null && i < varnames.length) {
+                    String name = varnames[i].trim();
+                    if (name.length()>0){ // Save the value in the variable if present
+                        jmvars.put(name+UNDERSCORE+j, o == null ? null : o.toString());
+                    }
+                }
             }
         }
+        // Remove any additional values from previous sample
+        for(int i=0; i < varnames.length; i++){
+            String name = varnames[i].trim();
+            if (name.length()>0 && jmvars != null){
+                final String varCount = name+"_#"; // $NON-NLS-1$
+                // Get the previous count
+                String prevCount = jmvars.get(varCount);
+                if (prevCount != null){
+                    int prev = Integer.parseInt(prevCount);
+                    for (int n=j+1; n <= prev; n++ ){
+                        jmvars.remove(name+UNDERSCORE+n);
+                    }
+                }
+                jmvars.put(varCount, Integer.toString(j)); // save the current count
+            }
+        }
+        
         return data;
     }
 
@@ -516,5 +554,19 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 
     public void setQueryArgumentsTypes(String queryArgumentsType) {
         this.queryArgumentsTypes = queryArgumentsType;
+    }
+
+    /**
+     * @return the variableNames
+     */
+    public String getVariableNames() {
+        return variableNames;
+    }
+
+    /**
+     * @param variableNames the variableNames to set
+     */
+    public void setVariableNames(String variableNames) {
+        this.variableNames = variableNames;
     }
 }
