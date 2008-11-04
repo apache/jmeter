@@ -77,7 +77,7 @@ public class Receiver implements Runnable {
                     if (reply.getJMSCorrelationID() == null) {
                         log.warn("Received message with correlation id null. Discarding message ...");
                     } else {
-                        MessageAdmin.getAdmin().putReply(reply.getJMSCorrelationID(), reply);
+                        MessageAdmin.getAdmin().putReply(reply.getJMSMessageID(), reply);
                     }
                 }
 
