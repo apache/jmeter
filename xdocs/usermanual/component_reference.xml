@@ -309,12 +309,32 @@ JMeter 2.1.2 introduces the a new property <b>HTTPResponse.parsers</b>, which is
 
 </component>
 
-<component name="JDBC Request" index="&sect-num;.1.3"  width="449" height="335" screenshot="jdbctest/jdbc-request.png">
+<component name="JDBC Request" index="&sect-num;.1.3"  width="427" height="334" screenshot="jdbctest/jdbc-request.png">
 
 <description><p>This sampler lets you send an JDBC Request (an SQL query) to a database.</p>
 <p>Before using this you need to set up a
 <complink name="JDBC Connection Configuration"/> Configuration element
-</p></description>
+</p>
+<p>
+If the Variable Names list is provided, then for each row returned by a Select statement, the variables are set up
+with the value of the corresponding column (if a variable name is provided), and the count of rows is also set up.
+For example, if the Select statement returns 2 rows of 3 columns, and the variable list is <code>A,,C</code>,
+then the following variables will be set up:
+<pre>
+A_#=2 (number of rows)
+A_1=column 1, row 1
+A_2=column 1, row 2
+C_#=2 (number of rows)
+C_1=column 3, row 1
+C_2=column 3, row 2
+</pre>
+If the Select statement returns zero rows, then the A_# and C_# variables would be set to 0, and no other variables would be set.
+</p>
+<p>
+Old variables are cleared if necessary - e.g. if the first select retrieves 6 rows and a second select returns only 3 rows,
+the additional variables for rows 4, 5 and 6 will be removed.
+</p>
+</description>
 
 <properties>
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
@@ -368,6 +388,7 @@ JMeter 2.1.2 introduces the a new property <b>HTTPResponse.parsers</b>, which is
         <br></br>
         There must be as many values as there are placeholders in the statement.
         </property>
+        <property name="Variable Names" required="No">Comma-separated list of variable names to hold values returned by Select statements</property>
 </properties>
 
 <links>
