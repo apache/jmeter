@@ -23,6 +23,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringReader;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -122,6 +123,9 @@ public final class CSVSaveService {
             dataReader.mark(400);// Enough to read the header column names
             // Get the first line, and see if it is the header
             String line = dataReader.readLine();
+            if (line == null){
+                throw new IOException(filename+": unable to read header line");
+            }
             long lineNumber=1;
             SampleSaveConfiguration saveConfig = CSVSaveService.getSampleSaveConfiguration(line,filename);
             if (saveConfig == null) {// not a valid header
@@ -985,5 +989,20 @@ public final class CSVSaveService {
 
     private static boolean isDelimOrEOL(char delim, int ch) {
         return ch == delim || ch == '\n' || ch == '\r';
+    }
+
+    /**
+     * Reads from String and splits into strings according to the delimiter,
+     * taking note of quoted strings.
+     *
+     * Handles DOS (CRLF), Unix (LF), and Mac (CR) line-endings equally.
+     *
+     * @param line input line
+     * @param delim delimiter (e.g. comma)
+     * @return array of strings
+     * @throws IOException also for unexpected quote characters
+     */
+    public static String[] csvSplitString(String line, char delim) throws IOException {
+        return csvReadFile(new BufferedReader(new StringReader(line)), delim);
     }
 }
