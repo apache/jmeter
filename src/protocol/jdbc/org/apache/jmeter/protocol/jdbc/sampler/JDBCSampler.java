@@ -346,7 +346,11 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
     private static int getJdbcType(String jdbcType) throws SQLException {
         Integer entry = (Integer)mapJdbcNameToInt.get(jdbcType.toLowerCase(java.util.Locale.ENGLISH));
         if (entry == null) {
-            throw new SQLException("Invalid data type: "+jdbcType);
+            try {
+                entry = Integer.decode(jdbcType);
+            } catch (NumberFormatException e) {
+                throw new SQLException("Invalid data type: "+jdbcType);
+            }
         }
         return (entry).intValue();
     }
