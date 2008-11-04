@@ -389,6 +389,9 @@ the additional variables for rows 4, 5 and 6 will be removed.
         appropriate parameter types, e.g. instead of "INTEGER", use "INOUT INTEGER".
         If not specified, "IN" is assumed, i.e. "DATE" is the same as "IN DATE".
         <br></br>
+        If the type is not one of the standard Java SQL types, versions of JMeter after 2.3.2 also
+        accept the corresponding integer number, e.g. INTEGER == 4.
+        <br></br>
         There must be as many types as there are placeholders in the statement.
         </property>
         <property name="Variable Names" required="No">Comma-separated list of variable names to hold values returned by Select statements</property>
