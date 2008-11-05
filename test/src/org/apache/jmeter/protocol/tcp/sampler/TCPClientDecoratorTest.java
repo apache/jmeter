@@ -55,24 +55,24 @@ public class TCPClientDecoratorTest extends TestCase {
         assertEquals(-1, ba[0]);
         assertEquals(-1, ba[1]);
 
-        ba = TCPClientDecorator.intToByteArray(TCPClientDecorator.SHORT_MAX_VALUE, len);
+        ba = TCPClientDecorator.intToByteArray(Short.MAX_VALUE, len);
         assertEquals(len, ba.length);
         assertEquals(127, ba[0]);
         assertEquals(-1, ba[1]);
         
-        ba = TCPClientDecorator.intToByteArray(TCPClientDecorator.SHORT_MIN_VALUE, len);
+        ba = TCPClientDecorator.intToByteArray(Short.MIN_VALUE, len);
         assertEquals(len, ba.length);
         assertEquals(-128, ba[0]);
         assertEquals(0, ba[1]);
         
         try {
-            ba = TCPClientDecorator.intToByteArray(TCPClientDecorator.SHORT_MIN_VALUE-1, len);
+            ba = TCPClientDecorator.intToByteArray(Short.MIN_VALUE-1, len);
             fail();
         } catch (IllegalArgumentException iae) {
         }
         
         try {
-            ba = TCPClientDecorator.intToByteArray(TCPClientDecorator.SHORT_MAX_VALUE+1, len);
+            ba = TCPClientDecorator.intToByteArray(Short.MAX_VALUE+1, len);
             fail();
         } catch (IllegalArgumentException iae) {
         }
@@ -179,8 +179,8 @@ public class TCPClientDecoratorTest extends TestCase {
 
     
     public void testLoopBack() throws Exception {
-        assertEquals(TCPClientDecorator.SHORT_MIN_VALUE, TCPClientDecorator.byteArrayToInt(TCPClientDecorator.intToByteArray(TCPClientDecorator.SHORT_MIN_VALUE, 2)));      
-        assertEquals(TCPClientDecorator.SHORT_MAX_VALUE, TCPClientDecorator.byteArrayToInt(TCPClientDecorator.intToByteArray(TCPClientDecorator.SHORT_MAX_VALUE, 2)));      
+        assertEquals(Short.MIN_VALUE, TCPClientDecorator.byteArrayToInt(TCPClientDecorator.intToByteArray(Short.MIN_VALUE, 2)));      
+        assertEquals(Short.MAX_VALUE, TCPClientDecorator.byteArrayToInt(TCPClientDecorator.intToByteArray(Short.MAX_VALUE, 2)));      
         assertEquals(Integer.MIN_VALUE, TCPClientDecorator.byteArrayToInt(TCPClientDecorator.intToByteArray(Integer.MIN_VALUE, 4)));      
         assertEquals(Integer.MAX_VALUE, TCPClientDecorator.byteArrayToInt(TCPClientDecorator.intToByteArray(Integer.MAX_VALUE, 4)));      
     }
