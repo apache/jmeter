@@ -175,6 +175,7 @@ These are implemented in the AbstractTestElement class which all elements should
 <li>JDBC Request can optionally save the results of Select statements to variables.</li>
 <li>JDBC Request now handles quoted strings.</li>
 <li>JDBC Request now handles arbitray variable types.</li>
+<li>Bug 46030 - Extend TCP Sampler to Support Length-Prefixed Binary Data</li>
 </ul>
 
 <h3>Non-functional changes</h3>
