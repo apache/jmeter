@@ -22,9 +22,13 @@
  */
 package org.apache.jmeter.protocol.tcp.sampler;
 
-import org.apache.jorphan.util.JOrphanUtils;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 
 import junit.framework.TestCase;
+
+import org.apache.jorphan.util.JOrphanUtils;
 
 public class BinaryTCPClientImplTest extends TestCase {
 
@@ -37,7 +41,7 @@ public class BinaryTCPClientImplTest extends TestCase {
         assertEquals(1, ba.length);
         assertEquals(0, ba[0]);
  
-        ba = BinaryTCPClientImpl.hexStringToByteArray("0f107f8081ff");
+        ba = BinaryTCPClientImpl.hexStringToByteArray("0f107F8081ff");
         assertEquals(6, ba.length);
         assertEquals(15,   ba[0]);
         assertEquals(16,   ba[1]);
@@ -45,11 +49,38 @@ public class BinaryTCPClientImplTest extends TestCase {
         assertEquals(-128, ba[3]);
         assertEquals(-127, ba[4]);
         assertEquals(-1,   ba[5]);
-        
+        try {
+            ba = BinaryTCPClientImpl.hexStringToByteArray("0f107f8081ff1");// odd chars
+            fail("Expected IllegalArgumentException");
+        } catch (IllegalArgumentException expected){
+            // ignored
+        }
+        try {
+            ba = BinaryTCPClientImpl.hexStringToByteArray("0f107xxf8081ff"); // invalid
+            fail("Expected IllegalArgumentException");
+        } catch (IllegalArgumentException expected){
+            // ignored
+        }
     }
 
     public void testLoopBack() throws Exception {
         assertEquals("0f107f8081ff", JOrphanUtils.baToHexString(BinaryTCPClientImpl.hexStringToByteArray("0f107f8081ff")));      
     }
 
+    public void testRoundTrip() throws Exception {
+        BinaryTCPClientImpl bi = new BinaryTCPClientImpl();
+        InputStream is = null;
+        try {
+            bi.write(null, is);
+            fail("Expected UnsupportedOperationException");
+        } catch (UnsupportedOperationException expected) {
+            // ignored
+        }
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        bi.write(os, "3132333435"); // '12345'
+        os.close();
+        assertEquals("12345",os.toString());
+        ByteArrayInputStream bis = new ByteArrayInputStream(os.toByteArray());
+        assertEquals("3132333435",bi.read(bis));
+    }
 }
