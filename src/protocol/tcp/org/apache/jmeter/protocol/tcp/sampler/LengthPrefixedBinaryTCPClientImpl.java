@@ -90,7 +90,7 @@ public class LengthPrefixedBinaryTCPClientImpl extends TCPClientDecorator {
      * )
      */
     public String read(InputStream is) {
-        byte[] msg = null;
+        byte[] msg = new byte[0];
         int msgLen = 0;
         try {
             byte[] lengthBuffer = new byte[lengthPrefixLen];
