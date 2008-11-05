@@ -144,6 +144,7 @@ These are implemented in the AbstractTestElement class which all elements should
 <li>Bug 41608 - misleading warning log message removed</li>
 <li>CSVSaveService - check for EOF while reading quoted string</li>
 <li>Bug 46142 - JMS Receiver now uses MessageID</li>
+<li>Bug 46148 - HTTP sampler fails on SSL requests when logging for jmeter.util is set to DEBUG</li>
 </ul>
 
 <h3>Improvements</h3>

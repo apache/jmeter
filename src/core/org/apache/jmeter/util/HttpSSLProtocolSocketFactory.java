@@ -84,23 +84,6 @@ public class HttpSSLProtocolSocketFactory
             throw new IllegalArgumentException("Expected SSLSocket");
         }
         SSLSocket sock = (SSLSocket) socket;
-        if (log.isDebugEnabled()) {
-            /* Warning: the next line seems to cause the error
-            * javax.net.ssl.SSLException: Received fatal alert: unexpected_message
-            * with certain sites
-            */
-            SSLSession sslSession = sock.getSession();
-            byte[] bytes = sslSession.getId();
-
-            StringBuffer buffer = new StringBuffer("SSL session id: ");
-            for (int i = 0; i < bytes.length; i++) {
-                int b = bytes[i] & 0xff;
-                buffer.append(Character.toUpperCase(Character.forDigit((b >> 4) & 0xF, 16)));
-                buffer.append(Character.toUpperCase(Character.forDigit(b & 0xF, 16)));
-            }
-            buffer.append(" for ").append(Thread.currentThread().getName());
-            log.debug(buffer.toString());
-        }
         if (protocolList.length() > 0) {
             try {
                 sock.setEnabledProtocols(protocols);
