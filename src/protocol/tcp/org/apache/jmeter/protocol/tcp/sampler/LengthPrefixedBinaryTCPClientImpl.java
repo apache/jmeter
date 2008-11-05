@@ -63,11 +63,11 @@ public class LengthPrefixedBinaryTCPClientImpl extends TCPClientDecorator {
     public void write(OutputStream os, String s) {
         try {
             os.write(intToByteArray(s.length()/2,lengthPrefixLen));
+            log.debug("Wrote: " + s.length()/2 + " bytes");
             this.tcpClient.write(os, s);
         } catch (IOException e) {
             log.warn("Write error", e);
         }
-        log.debug("Wrote: " + s);
         return;
     }
 
@@ -122,9 +122,9 @@ public class LengthPrefixedBinaryTCPClientImpl extends TCPClientDecorator {
             return JOrphanUtils.baToHexString(msg);
         }
 
-        // do we need to close byte array (or flush it?)
-        log.debug("Read: " + msgLen + "\n" + msg.toString());
-        return JOrphanUtils.baToHexString(msg);
+        String buffer = JOrphanUtils.baToHexString(msg);
+        log.debug("Read: " + msgLen + "\n" + buffer);
+        return buffer;
     }
 
     /**
