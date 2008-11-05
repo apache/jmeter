@@ -37,10 +37,15 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
- * Sample TCPClient implementation
+ * TCPClient implementation.
+ * Reads data until the defined EOM byte is reached.
+ * If there is no EOM byte defined, then reads until
+ * the end of the stream is reached.
+ * The EOM byte is defined by the property "tcp.BinaryTCPClient.eomByte".
  * 
+ * Input data is assumed to be in hex, and is converted to binary
  */
-public class BinaryTCPClientImpl implements TCPClient {
+public class BinaryTCPClientImpl extends AbstractTCPClient {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private int eomInt = JMeterUtils.getPropDefault("tcp.BinaryTCPClient.eomByte", 1000); // $NON_NLS-1$
@@ -81,40 +86,19 @@ public class BinaryTCPClientImpl implements TCPClient {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#setupTest()
+    /**
+     * Input (hex) string is converted to binary and written to the output stream.
+     * @param os output stream
+     * @param hexEncodedBinary hex-encoded binary
      */
-    public void setupTest() {
-        log.info("setuptest");
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#teardownTest()
-     */
-    public void teardownTest() {
-        log.info("teardowntest");
-
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.apache.jmeter.protocol.tcp.sampler.TCPClient#write(java.io.OutputStream
-     * , java.lang.String)
-     */
-    public void write(OutputStream os, String s) {
+    public void write(OutputStream os, String hexEncodedBinary) {
         try {
-            os.write(hexStringToByteArray(s));
+            os.write(hexStringToByteArray(hexEncodedBinary));
             os.flush();
         } catch (IOException e) {
             log.warn("Write error", e);
         }
-        log.debug("Wrote: " + s);
+        log.debug("Wrote: " + hexEncodedBinary);
         return;
     }
 
@@ -130,12 +114,12 @@ public class BinaryTCPClientImpl implements TCPClient {
                 "Method not supported for Length-Prefixed data.");
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.apache.jmeter.protocol.tcp.sampler.TCPClient#read(java.io.InputStream
-     * )
+    /**
+     * Reads data until the defined EOM byte is reached.
+     * If there is no EOM byte defined, then reads until
+     * the end of the stream is reached.
+     * Response data is converted to hex-encoded binary
+     * @return hex-encoded binary string
      */
     public String read(InputStream is) {
         byte[] buffer = new byte[4096];
