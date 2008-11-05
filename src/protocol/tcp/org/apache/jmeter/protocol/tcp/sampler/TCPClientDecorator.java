@@ -23,7 +23,7 @@
  */
 package org.apache.jmeter.protocol.tcp.sampler;
 
-public abstract class TCPClientDecorator implements TCPClient {
+public abstract class TCPClientDecorator extends AbstractTCPClient {
     
     protected final TCPClient tcpClient; // the data implementation
 
