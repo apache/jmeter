@@ -40,30 +40,16 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
- * Sample TCPClient implementation
- * 
+ * Implements binary length-prefixed binary data.
+ * This is used in ISO8583 for example.
  */
 public class LengthPrefixedBinaryTCPClientImpl extends TCPClientDecorator {
     private static final Logger log = LoggingManager.getLoggerForClass();
-
-    private int eolInt = JMeterUtils.getPropDefault("tcp.eolByte", 1000); // default
-
-    // is
-    // not
-    // in
-    // range
-
-    private byte eolByte = (byte) eolInt; // -128 to +127
-
-    private boolean eolIgnore = eolInt < -128 || eolInt > 127;
     
-    private int lengthPrefixLen = JMeterUtils.getPropDefault("tcp.length.prefix.length", 2);
+    private final int lengthPrefixLen = JMeterUtils.getPropDefault("tcp.binarylength.prefix.length", 2); // $NON-NLS-1$
 
     public LengthPrefixedBinaryTCPClientImpl() {
         super(new BinaryTCPClientImpl());
-        if (!eolIgnore) {
-            log.info("Using eolByte=" + eolByte);
-        }
     }
 
     /*
@@ -163,7 +149,7 @@ public class LengthPrefixedBinaryTCPClientImpl extends TCPClientDecorator {
      * @return Returns the eolByte.
      */
     public byte getEolByte() {
-        return eolByte;
+        return tcpClient.getEolByte();
     }
 
     /**
@@ -171,7 +157,6 @@ public class LengthPrefixedBinaryTCPClientImpl extends TCPClientDecorator {
      *            The eolByte to set.
      */
     public void setEolByte(byte eolByte) {
-        this.eolByte = eolByte;
-        eolIgnore = false;
+        tcpClient.setEolByte(eolByte);
     }
 }
