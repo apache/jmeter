@@ -52,24 +52,6 @@ public class LengthPrefixedBinaryTCPClientImpl extends TCPClientDecorator {
         super(new BinaryTCPClientImpl());
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#setupTest()
-     */
-    public void setupTest() {
-        log.info("setuptest");
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#teardownTest()
-     */
-    public void teardownTest() {
-        log.info("teardowntest");
-
-    }
 
     /*
      * (non-Javadoc)
