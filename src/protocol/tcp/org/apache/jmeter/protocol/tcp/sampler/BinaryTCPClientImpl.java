@@ -65,17 +65,22 @@ public class BinaryTCPClientImpl extends AbstractTCPClient {
     /**
      * Convert hex string to binary byte array.
      * 
-     * @param s - hex-encoded binary string
-     * @return Byte array containing binary representation of input hex-encoded string 
+     * @param hexEncodedBinary - hex-encoded binary string
+     * @return Byte array containing binary representation of input hex-encoded string
+     * @throws IllegalArgumentException if string is not an even number of hex digits
      */
-    public static final byte[] hexStringToByteArray(String s) {
-        if (s.length() % 2 == 0) {
-            char[] sc = s.toCharArray();
+    public static final byte[] hexStringToByteArray(String hexEncodedBinary) {
+        if (hexEncodedBinary.length() % 2 == 0) {
+            char[] sc = hexEncodedBinary.toCharArray();
             byte[] ba = new byte[sc.length / 2];
 
             for (int i = 0; i < ba.length; i++) {
                 int nibble0 = Character.digit(sc[i * 2], 16);
                 int nibble1 = Character.digit(sc[i * 2 + 1], 16);
+                if (nibble0 == -1 || nibble1 == -1){
+                    throw new IllegalArgumentException(
+                    "Hex-encoded binary string contains an invalid hex digit in '"+sc[i * 2]+sc[i * 2 + 1]+"'");                    
+                }
                 ba[i] = (byte) ((nibble0 << 4) | (nibble1));
             }
 
