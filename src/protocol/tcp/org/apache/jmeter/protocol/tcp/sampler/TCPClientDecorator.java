@@ -39,6 +39,7 @@ public abstract class TCPClientDecorator extends AbstractTCPClient {
      * @param len
      *            - length of required byte array
      * @return Byte array representation of input value
+     * @throws IllegalArgumentException if not length 2 or 4 or outside range of a short int.
      */
     public static byte[] intToByteArray(int value, int len) {
         if (len == 2 || len == 4) {
@@ -64,6 +65,7 @@ public abstract class TCPClientDecorator extends AbstractTCPClient {
      * @param b
      *            - Byte array to be converted
      * @return Integer value of input byte array
+     * @throws IllegalArgumentException if ba is null or not length 2 or 4
      */
     public static int byteArrayToInt(byte[] b) {
         if (b != null && (b.length == 2 || b.length == 4)) {
