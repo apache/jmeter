@@ -141,6 +141,29 @@ public class TCPClientDecoratorTest extends TestCase {
         assertEquals(-1, ba[2]);
         assertEquals(-1, ba[3]);
 
+        // Check illegal array lengths
+        try {
+            ba = TCPClientDecorator.intToByteArray(0, 0);
+            fail();
+        } catch (IllegalArgumentException iae) {
+        }
+
+        try {
+            ba = TCPClientDecorator.intToByteArray(0, 1);
+            fail();
+        } catch (IllegalArgumentException iae) {
+        }
+
+        try {
+            ba = TCPClientDecorator.intToByteArray(0, 3);
+            fail();
+        } catch (IllegalArgumentException iae) {
+        }
+        try {
+            ba = TCPClientDecorator.intToByteArray(0, 5);
+            fail();
+        } catch (IllegalArgumentException iae) {
+        }
     }
 
     public void testByteArrayToInt() throws Exception {
@@ -175,6 +198,43 @@ public class TCPClientDecoratorTest extends TestCase {
 
         ba = new byte[] { 127, -1, -1, -1 };
         assertEquals(Integer.MAX_VALUE, TCPClientDecorator.byteArrayToInt(ba));
+
+        // test invalid byte arrays
+        try {
+            TCPClientDecorator.byteArrayToInt(null);
+            fail("Expected IllegalArgumentException");
+        } catch (IllegalArgumentException expected){
+            // ignored
+        }
+
+        try {
+            TCPClientDecorator.byteArrayToInt(new byte[]{});
+            fail("Expected IllegalArgumentException");
+        } catch (IllegalArgumentException expected){
+            // ignored
+        }
+
+        try {
+            TCPClientDecorator.byteArrayToInt(new byte[]{0});
+            fail("Expected IllegalArgumentException");
+        } catch (IllegalArgumentException expected){
+            // ignored
+        }
+
+        try {
+            TCPClientDecorator.byteArrayToInt(new byte[]{0,0,0});
+            fail("Expected IllegalArgumentException");
+        } catch (IllegalArgumentException expected){
+            // ignored
+        }
+
+        try {
+            TCPClientDecorator.byteArrayToInt(new byte[]{0,0,0});
+            fail("Expected IllegalArgumentException");
+        } catch (IllegalArgumentException expected){
+            // ignored
+        }
+
     }
 
     
@@ -184,5 +244,4 @@ public class TCPClientDecoratorTest extends TestCase {
         assertEquals(Integer.MIN_VALUE, TCPClientDecorator.byteArrayToInt(TCPClientDecorator.intToByteArray(Integer.MIN_VALUE, 4)));      
         assertEquals(Integer.MAX_VALUE, TCPClientDecorator.byteArrayToInt(TCPClientDecorator.intToByteArray(Integer.MAX_VALUE, 4)));      
     }
-
 }
