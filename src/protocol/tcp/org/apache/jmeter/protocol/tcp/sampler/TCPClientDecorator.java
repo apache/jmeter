@@ -17,17 +17,15 @@
  */
 
 /*
- * TCP Sampler Client decorator to permit wrapping base client implementations with length prefixes.  
+ * TCP Sampler Client decorator to permit wrapping base client implementations with length prefixes.
+ * For example, character data or binary data with character length or binary length 
  *
  */
 package org.apache.jmeter.protocol.tcp.sampler;
 
 public abstract class TCPClientDecorator implements TCPClient {
-    public static final int SHORT_MAX_VALUE = 32767;
-
-    public static final int SHORT_MIN_VALUE = -32768;
-
-    protected TCPClient tcpClient;
+    
+    protected final TCPClient tcpClient; // the data implementation
 
     public TCPClientDecorator(TCPClient tcpClient) {
         this.tcpClient = tcpClient;
@@ -44,7 +42,7 @@ public abstract class TCPClientDecorator implements TCPClient {
      */
     public static byte[] intToByteArray(int value, int len) {
         if (len == 2 || len == 4) {
-            if (len == 2 && (value < SHORT_MIN_VALUE || value > SHORT_MAX_VALUE)) {
+            if (len == 2 && (value < Short.MIN_VALUE || value > Short.MAX_VALUE)) {
                 throw new IllegalArgumentException("Value outside range for signed short int.");
             } else {
                 byte[] b = new byte[len];
