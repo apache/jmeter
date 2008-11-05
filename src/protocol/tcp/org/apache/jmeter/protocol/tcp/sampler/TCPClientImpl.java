@@ -38,13 +38,17 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * Sample TCPClient implementation
- *
+ * Sample TCPClient implementation.
+ * Reads data until the defined EOL byte is reached.
+ * If there is no EOL byte defined, then reads until
+ * the end of the stream is reached.
+ * The EOL byte is defined by the property "tcp.eolByte".
  */
-public class TCPClientImpl implements TCPClient {
+public class TCPClientImpl extends AbstractTCPClient {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private int eolInt = JMeterUtils.getPropDefault("tcp.eolByte", 1000); // default is not in range
+    private int eolInt = JMeterUtils.getPropDefault("tcp.eolByte", 1000); // $NON-NLS-1$
+    // default is not in range of a byte
 
     private byte eolByte = (byte) eolInt; // -128 to +127
 
@@ -55,25 +59,6 @@ public class TCPClientImpl implements TCPClient {
         if (!eolIgnore) {
             log.info("Using eolByte=" + eolByte);
         }
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#setupTest()
-     */
-    public void setupTest() {
-        log.info("setuptest");
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#teardownTest()
-     */
-    public void teardownTest() {
-        log.info("teardowntest");
-
     }
 
     /*
@@ -111,10 +96,10 @@ public class TCPClientImpl implements TCPClient {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#read(java.io.InputStream)
+    /**
+     * Reads data until the defined EOL byte is reached.
+     * If there is no EOL byte defined, then reads until
+     * the end of the stream is reached.
      */
     public String read(InputStream is) {
         byte[] buffer = new byte[4096];
