@@ -31,6 +31,7 @@ import java.io.InterruptedIOException;
 import java.io.OutputStream;
 import java.net.SocketTimeoutException;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
@@ -161,9 +162,10 @@ public class BinaryTCPClientImpl extends AbstractTCPClient {
             return "";
         }
 
-        // do we need to close byte array (or flush it?)
-        log.debug("Read: " + w.size() + "\n" + w.toString());
-        return JOrphanUtils.baToHexString(w.toByteArray());
+        IOUtils.closeQuietly(w); // For completeness
+        final String hexString = JOrphanUtils.baToHexString(w.toByteArray());
+        log.debug("Read: " + w.size() + "\n" + hexString);
+        return hexString;
     }
 
     /**
