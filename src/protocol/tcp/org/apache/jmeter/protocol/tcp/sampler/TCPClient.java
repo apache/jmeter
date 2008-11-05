@@ -31,8 +31,15 @@ import java.io.OutputStream;
  * Interface required by TCPSampler for TCPClient implementations.
  */
 public interface TCPClient {
+    
+    /**
+     * Versions of JMeter after 2.3.2 invoke this method when the thread starts.
+     */
     void setupTest();
 
+    /**
+     * Versions of JMeter after 2.3.2 invoke this method when the thread ends.
+     */
     void teardownTest();
 
     /**

@@ -368,6 +368,9 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
         protocolHandler = getProtocol();
         log.debug("Using Protocol Handler: " +  //$NON-NLS-1$
                 (protocolHandler == null ? "NONE" : protocolHandler.getClass().getName())); //$NON-NLS-1$
+        if (protocolHandler != null){
+            protocolHandler.setupTest();
+        }
 }
 
     private void closeSocket() {
@@ -386,5 +389,8 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
     public void threadFinished() {
         log.debug("Thread Finished"); //$NON-NLS-1$
         closeSocket();
+        if (protocolHandler != null){
+            protocolHandler.teardownTest();
+        }
     }
 }
