@@ -49,17 +49,13 @@ import org.apache.log.Logger;
 public class BinaryTCPClientImpl extends AbstractTCPClient {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private int eomInt = JMeterUtils.getPropDefault("tcp.BinaryTCPClient.eomByte", 1000); // $NON_NLS-1$
+    private static final int eomInt = JMeterUtils.getPropDefault("tcp.BinaryTCPClient.eomByte", 1000); // $NON_NLS-1$
 
-    // End of message byte (defaults to none)
-    private byte eomByte = (byte) eomInt; // -128 to +127
-
-    private boolean eomIgnore = eomInt < -128 || eomInt > 127;
-    
     public BinaryTCPClientImpl() {
         super();
-        if (!eomIgnore) {
-            log.info("Using eomByte=" + eomByte);
+        setEolByte(eomInt);
+        if (useEolByte) {
+            log.info("Using eomByte=" + eolByte);
         }
     }
 
@@ -134,7 +130,7 @@ public class BinaryTCPClientImpl extends AbstractTCPClient {
         try {
             while ((x = is.read(buffer)) > -1) {
                 w.write(buffer, 0, x);
-                if (!eomIgnore && (buffer[x - 1] == eomByte)) {
+                if (useEolByte && (buffer[x - 1] == eolByte)) {
                     break;
                 }
             }
@@ -168,19 +164,4 @@ public class BinaryTCPClientImpl extends AbstractTCPClient {
         return hexString;
     }
 
-    /**
-     * @return Returns the eomByte.
-     */
-    public byte getEolByte() {
-        return eomByte;
-    }
-
-    /**
-     * @param eomByte
-     *            The eomByte to set.
-     */
-    public void setEolByte(byte eomByte) {
-        this.eomByte = eomByte;
-        eomIgnore = false;
-    }
 }
