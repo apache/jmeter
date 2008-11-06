@@ -401,7 +401,7 @@ the additional variables for rows 4, 5 and 6 will be removed.
         <link href="build-db-test-plan.html">Building a Database Test Plan</link>
         <complink name="JDBC Connection Configuration"/>
 </links>
-<note>Versions of JMeter after 2.3.2 use UTF-8 as the character encoding. Previously the default was used.</note>
+<note>Versions of JMeter after 2.3.2 use UTF-8 as the character encoding. Previously the platform default was used.</note>
 </component>
 
 <component name="Java Request" index="&sect-num;.1.4"  width="406" height="307" screenshot="java_request.png">
@@ -940,7 +940,7 @@ Beware however that misuse of any methods can cause subtle faults that may be di
 </component>
 
 
-<component name="BSF Sampler" index="&sect-num;.1.11"  width="396" height="217" screenshot="bsfsampler.png">
+<component name="BSF Sampler" index="&sect-num;.1.11"  width="598" height="259" screenshot="bsfsampler.png">
 	<description><p>This sampler allows you to write a sampler using a BSF scripting language.<br></br>
 		See the <a href="http://jakarta.apache.org/bsf/index.html">Apache Bean Scripting Framework</a>
 		website for details of the languages supported.
@@ -950,13 +950,14 @@ Beware however that misuse of any methods can cause subtle faults that may be di
 		<ul>
 		<li>javascript</li>
         <li>jexl (JMeter version 2.3.2 and later)</li>
+        <li>xslt</li>
 		</ul>
 	</description>
 <properties>
 	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
 	<property name="Scripting Language" required="Yes">Name of the BSF scripting language to be used.
 	N.B. Not all the languages in the drop-down list are supported by default.
-	The following are supported: beanshell, jacl, javascript, xslt.
+	The following are supported: jexl, javascript, xslt.
 	Others may be available if the appropriate jar is installed in the JMeter lib directory.
 	</property>
 	<property name="Script File" required="No">Name of a file to be used as a BSF script</property>
@@ -1023,20 +1024,42 @@ Currently the only way to changes these is via the SampleResult methods:
 			<li>tcp.status.prefix - text that precedes a status number</li>
 			<li>tcp.status.suffix - text that follows a status number</li>
 			<li>tcp.status.properties - name of property file to convert status codes to messages</li>
-			<li>tcp.handler - Name of TCP Handler class (default TCPClientImpl)</li>
-			<li>tcp.eolByte - decimal value. Defines the end of line byte value; used to determine when a response has been received.
-			JMeter 2.3.1 and earlier used the value zero (0) to mean don't check for EOL bytes; later versions
-			skip the EOL check if the value is outside the range -128 to +127 (inclusive). Thus zero can now be used as an EOL byte.
-			</li>
+			<li>tcp.handler - Name of TCP Handler class (default TCPClientImpl) - only used if not specified on the GUI</li>
 		</ul>
-		The class that handles the connection is defined by the property tcp.handler. 
+		The class that handles the connection is defined by the GUI, failing that the property tcp.handler. 
 		If not found, the class is then searched for in the package org.apache.jmeter.protocol.tcp.sampler.
 		<p>
-		Users can provide their own implementation to replace the supplied class TCPClientImpl.
+		Users can provide their own implementation.
 		The class must extend org.apache.jmeter.protocol.tcp.sampler.TCPClient.
-		Note that the provided implementation is fairly basic.
-		In particular, it does not report timeouts - though these can be handled by the use of Response Assertions.
 		</p>
+		<p>
+		The following implementations are currently provided.
+		<ul>
+		<li>TCPClientImpl</li>
+        <li>BinaryTCPClientImpl</li>
+        <li>LengthPrefixedBinaryTCPClientImpl</li>
+		</ul>
+		The implementations behave as follows:
+		</p>
+		<p><b>TCPClientImpl</b><br></br>
+		This implementation is fairly basic.
+		In particular, it does not report timeouts - though these can be handled by the use of Response Assertions.
+		The implementation reads input up to the end of the stream, 
+		or the eolByte if that is defined using the property <b>tcp.eolByte</b>
+        </p>
+        <p><b>BinaryTCPClientImpl</b><br></br>
+        This implementation converts the GUI input, which must be a hex-encoded string, into binary,
+        and performs the reverse when reading the response.
+        When reading the response, it reads until the end of message byte, if this is defined
+        by setting the property <b>tcp.BinaryTCPClient.eomByte</b>, otherwise until the end of the input stream.
+        </p>
+        <p><b>LengthPrefixedBinaryTCPClientImpl</b><br></br>
+        This implementation extends BinaryTCPClientImpl by prefixing the binary message data with a binary length byte.
+        The length prefix defaults to 2 bytes.
+        This can be changed by setting the property <b>tcp.binarylength.prefix.length</b>.
+		</p>
+		<p><b>Response handling</b>
+		<br></br>
 		If tcp.status.prefix is defined, then the response message is searched for the text following
 		that up to the suffix. If any such text is found, it is used to set the response code.
 		The response message is then fetched from the properties file (if provided).
@@ -1049,7 +1072,7 @@ Currently the only way to changes these is via the SampleResult methods:
 		<br></br>
 		Response codes in the range "400"-"499" and "500"-"599" are currently regarded as failures;
 		all others are successful. [This needs to be made configurable!]
-		<br></br>
+		</p>
 <note>The login name/password are not used by the supplied TCP implementation.</note>
 		<br></br>
 		Sockets are disconnected at the end of a test run.
@@ -1583,7 +1606,7 @@ The While Controller runs its children until the condition is "false".
 If the last sample just before the loop failed, don't enter loop.</li>
 <li>Otherwise - exit (or don't enter) the loop when the condition is equal to the string "false"</li>
 </ul>
-<note>In contrast to the IfController, the condition is not evaluated as a JavaScript expression.
+<note>
 The condition can be any variable or function that eventually evaluates to the string "false". 
 This allows the use of JavaScript, BeanShell, properties or variables as needed.
 </note>
@@ -2099,6 +2122,10 @@ the performance history of each machine for the last hour.</p>
 The monitor requires Tomcat 5 or above. 
 Use a browser to check that you can access the Tomcat status servlet OK.
 </note>
+<p>
+For a detailed description of how to use the monitor, please refer to
+<a href="build-monitor-test-plan.html">Building a Monitor Test Plan</a>
+</p>
 </description>
 </component>
 
@@ -2453,7 +2480,7 @@ by using suitable labels and adding the summarisers to appropriate parts of the 
 
 <component name="HTTP Authorization Manager" index="&sect-num;.4.3"  width="490" height="253" screenshot="http-config/http-auth-manager.png">
 <note>If there is more than one Authorization Manager in the scope of a Sampler,
-there is currently no way to sepcify which one is to be used.</note>
+there is currently no way to specify which one is to be used.</note>
 
 <description>
 <p>The Authorization Manager lets you specify one or more user logins for web pages that are
@@ -2503,6 +2530,7 @@ In JMeter 2.2, the domain and realm did not have separate columns, and were enco
 the user name in the form: [domain\]username[@realm].
 This was an experimental feature and has been removed.
 </note>
+<br></br>
 <b>Controls:</b>
 <ul>
   <li>Add Button - Add an entry to the authorization table.</li>
@@ -2648,10 +2676,18 @@ JMeter 2.3 and later treat all port values equally; a sampler that does not spec
 </component>
 
 <component name="HTTP Header Manager" index="&sect-num;.4.6"  width="" height="" screenshot="http-config/http-header-manager.gif">
-<note>If there is more than one Header Manager in the scope of a Sampler,
-there is currently no way to sepcify which one is to be used.</note>
-
-<description><p>The Header Manager lets you add or override HTTP request headers.</p>
+<description>
+<p>The Header Manager lets you add or override HTTP request headers.</p>
+<p>
+Versions of JMeter up to 2.3.2 supported only one Header Manager per sampler;
+if there were more in scope, then only the last one would be used.
+</p>
+<p>
+<b>JMeter now supports multiple Header Managers</b>. The header entries are merged to form the list for the sampler.
+If an entry to be merged matches an existing header name, it replaces the previous entry,
+unless the entry value is empty, in which case any existing entry is removed.
+This allows one to set up a default set of headers, and apply adjustments to particular samplers. 
+</p>
 </description>
 
 <properties>
@@ -2782,19 +2818,22 @@ The Database URL and JDBC Driver class are defined by the provider of the JDBC i
 </component>
 
 <component name="User Defined Variables" index="&sect-num;.4.13"  width="690" height="394" screenshot="user_defined_variables.png">
-<description><p>The User Defined Variables lets you define variables for use in other test elements, just as in the <complink name="Test Plan" />.
-The variables in User Defined Variables components will take precedence over those defined closer to the tree root -- including those defined in the Test Plan.
+<description><p>The User Defined Variables lets you define an initial set of variables, just as in the <complink name="Test Plan" />.
 Note that all the UDV elements in a test plan - no matter where they are - are processed at the start.
+They are processed in the order they appear in the Plan, from top to bottom.
 </p>
 <p>
 For simplicity, it is suggested that UDVs are placed only at the start of a Thread Group
 (or perhaps under the Test Plan itself).
 </p>
 <p>
+Once the Test Plan and all UDVs have been processed, the resulting set of variables is
+copied to each thread to provide the initial set of variables.
+</p>
+<p>
 If a runtime element such as a User Parameters Pre-Processor or Regular Expression Extractor defines a variable
-with the same name as one of the global variables, then other test elements will see the local
-local value of the variable.
-The global value is not affected.
+with the same name as one of the UDV variables, then this will replace the initial value, and all other test
+elements in the thread will see the updated value.
 </p>
 </description>
 <note>
