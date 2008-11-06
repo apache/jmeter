@@ -69,13 +69,18 @@ public interface TCPClient {
     String read(InputStream is);
 
     /**
+     * Get the end-of-line/end-of-message byte.
      * @return Returns the eolByte.
      */
     public byte getEolByte();
 
     /**
-     * @param eolByte
-     *            The eolByte to set.
+     * Set the end-of-line/end-of-message byte.
+     * If the value is out of range of a byte, then it is to be ignored.
+     * 
+     * @param eolInt
+     *            The value to set
      */
-    public void setEolByte(byte eolByte);
+    public void setEolByte(int eolInt);
+
 }
