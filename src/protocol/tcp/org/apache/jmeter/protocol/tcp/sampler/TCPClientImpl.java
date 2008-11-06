@@ -50,13 +50,10 @@ public class TCPClientImpl extends AbstractTCPClient {
     private int eolInt = JMeterUtils.getPropDefault("tcp.eolByte", 1000); // $NON-NLS-1$
     // default is not in range of a byte
 
-    private byte eolByte = (byte) eolInt; // -128 to +127
-
-    private boolean eolIgnore = eolInt < -128 || eolInt > 127;
-
     public TCPClientImpl() {
         super();
-        if (!eolIgnore) {
+        setEolByte(eolInt);
+        if (useEolByte) {
             log.info("Using eolByte=" + eolByte);
         }
     }
@@ -108,7 +105,7 @@ public class TCPClientImpl extends AbstractTCPClient {
         try {
             while ((x = is.read(buffer)) > -1) {
                 w.write(buffer, 0, x);
-                if (!eolIgnore && (buffer[x - 1] == eolByte)) {
+                if (useEolByte && (buffer[x - 1] == eolByte)) {
                     break;
                 }
             }
@@ -139,21 +136,5 @@ public class TCPClientImpl extends AbstractTCPClient {
         // do we need to close byte array (or flush it?)
         log.debug("Read: " + w.size() + "\n" + w.toString());
         return w.toString();
-    }
-
-    /**
-     * @return Returns the eolByte.
-     */
-    public byte getEolByte() {
-        return eolByte;
-    }
-
-    /**
-     * @param eolByte
-     *            The eolByte to set.
-     */
-    public void setEolByte(byte eolByte) {
-        this.eolByte = eolByte;
-        eolIgnore = false;
     }
 }
