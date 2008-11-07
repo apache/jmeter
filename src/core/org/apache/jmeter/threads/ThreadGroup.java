@@ -19,34 +19,24 @@
 package org.apache.jmeter.threads;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.control.LoopController;
 import org.apache.jmeter.engine.event.LoopIterationListener;
-import org.apache.jmeter.samplers.RemoteSampleListener;
-import org.apache.jmeter.samplers.SampleEvent;
-import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.LongProperty;
-import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 /**
  * ThreadGroup
  *
  */
-public class ThreadGroup extends AbstractTestElement implements SampleListener, Serializable, Controller {
-    private final static Logger log = LoggingManager.getLoggerForClass();
+public class ThreadGroup extends AbstractTestElement implements Serializable, Controller {
 
     private static final long serialVersionUID = 233L;
 
@@ -74,16 +64,6 @@ public class ThreadGroup extends AbstractTestElement implements SampleListener, 
     public final static String ON_SAMPLE_ERROR_STOPTHREAD = "stopthread";
 
     public final static String ON_SAMPLE_ERROR_STOPTEST = "stoptest";
-
-    private final static int DEFAULT_NUM_THREADS = 1;
-
-    private final static int DEFAULT_RAMP_UP = 0;
-
-    private SampleQueue queue = null;
-
-    private LinkedList listeners = new LinkedList();
-
-    private LinkedList remoteListeners = new LinkedList();
 
     private int numberOfThreads = 0; // Number of threads currently running
                                         // in this group
@@ -269,24 +249,6 @@ public class ThreadGroup extends AbstractTestElement implements SampleListener, 
     }
 
     /**
-     * Get the default number of threads.
-     *
-     * @return the default number of threads.
-     */
-    public int getDefaultNumThreads() {
-        return DEFAULT_NUM_THREADS;
-    }
-
-    /**
-     * Get the default ramp-up value.
-     *
-     * @return the default ramp-up value (in seconds).
-     */
-    public int getDefaultRampUp() {
-        return DEFAULT_RAMP_UP;
-    }
-
-    /**
      * Add a test element.
      *
      * @param child
@@ -294,110 +256,6 @@ public class ThreadGroup extends AbstractTestElement implements SampleListener, 
      */
     public void addTestElement(TestElement child) {
         getSamplerController().addTestElement(child);
-    }
-
-    // TODO - does the ThreadGroup ever get any samples? Does it need to implement SampleListener?
-    
-    /**
-     * A sample has occurred.
-     *
-     * @param e
-     *            the sample event.
-     */
-    public void sampleOccurred(SampleEvent e) {
-        if (queue == null) {
-            queue = new SampleQueue();
-            Thread thread = new Thread(queue);
-            // thread.setPriority(Thread.MAX_PRIORITY);
-            thread.start();
-        }
-        queue.sampleOccurred(e);
-    }
-
-    /**
-     * A sample has started.
-     *
-     * @param e
-     *            the sample event.
-     */
-    public void sampleStarted(SampleEvent e) {
-    }
-
-    /**
-     * A sample has stopped.
-     *
-     * @param e
-     *            the sample event
-     */
-    public void sampleStopped(SampleEvent e) {
-    }
-
-    /**
-     * Separate thread to deliver all SampleEvents. This ensures that sample
-     * listeners will get sample events one at a time and can thus ignore thread
-     * issues.
-     */
-    private class SampleQueue implements Runnable {
-        List occurredQ = Collections.synchronizedList(new LinkedList());
-
-        /**
-         * No-arg constructor.
-         */
-        public SampleQueue() {
-        }
-
-        /**
-         * A sample occurred.
-         *
-         * @param e
-         *            the sample event.
-         */
-        public synchronized void sampleOccurred(SampleEvent e) {
-            occurredQ.add(e);
-            this.notifyAll();
-        }
-
-        /**
-         * Run the thread.
-         *
-         * @see java.lang.Runnable#run()
-         */
-        public void run() {
-            SampleEvent event = null;
-            while (true) {
-                try {
-                    event = (SampleEvent) occurredQ.remove(0);
-                } catch (Exception ex) {
-                    log.warn("Problem removing an item from the queue", ex);
-                    // Drop thru to wait
-                }
-                try {
-                    if (event != null) {
-                        Iterator iter = listeners.iterator();
-                        while (iter.hasNext()) {
-                            ((SampleListener) iter.next()).sampleOccurred(event);
-                        }
-                        iter = remoteListeners.iterator();
-                        while (iter.hasNext()) {
-                            try {
-                                ((RemoteSampleListener) iter.next()).sampleOccurred(event);
-                            } catch (Exception ex) {
-                                log.error("Could not invoke sampleOccured on remote listener", ex);
-                            }
-                        }
-                    } else {
-                        try {
-                            this.wait();
-                        } catch (Exception ex) {
-                            log.warn("Error occured during wait", ex);
-                        }
-                    }
-                } catch (Throwable ex) {
-                    log.error("", ex);
-                }
-
-            }
-        }
     }
 
     /*
