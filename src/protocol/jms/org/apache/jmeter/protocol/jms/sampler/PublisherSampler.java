@@ -110,7 +110,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
      */
     public synchronized void initClient() {
         this.PUB = new Publisher(this.getUseJNDIPropertiesAsBoolean(), this.getJNDIInitialContextFactory(), this
-                .getProviderUrl(), this.getConnectionFactory(), this.getTopic(), this.getUseAuth(), this.getUsername(),
+                .getProviderUrl(), this.getConnectionFactory(), this.getTopic(), this.isUseAuth(), this.getUsername(),
                 this.getPassword());
         ClientPool.addClient(this.PUB);
         log.info("PublisherSampler.initClient called");

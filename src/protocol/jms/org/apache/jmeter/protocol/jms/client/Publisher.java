@@ -52,7 +52,7 @@ public class Publisher {
     /**
      *
      */
-    public Publisher(boolean useProps, String jndi, String url, String connfactory, String topic, String useAuth,
+    public Publisher(boolean useProps, String jndi, String url, String connfactory, String topic, boolean useAuth,
             String user, String pwd) {
         super();
         Context ctx = initJNDI(useProps, jndi, url, useAuth, user, pwd);
@@ -63,7 +63,7 @@ public class Publisher {
         }
     }
 
-    public Context initJNDI(boolean useProps, String jndi, String url, String useAuth, String user, String pwd) {
+    public Context initJNDI(boolean useProps, String jndi, String url, boolean useAuth, String user, String pwd) {
         if (useProps) {
             try {
                 return new InitialContext();
