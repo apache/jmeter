@@ -98,29 +98,17 @@ public class LengthPrefixedBinaryTCPClientImpl extends TCPClientDecorator {
             if (is.read(lengthBuffer, 0, lengthPrefixLen) == lengthPrefixLen) {
                 msgLen = byteArrayToInt(lengthBuffer);
                 msg = new byte[msgLen];
-                is.read(msg);
+                int bytes = is.read(msg);
+                if (bytes < msgLen){
+                    log.warn("Incomplete message read, expected: "+msgLen+" got: "+bytes);
+                }
             }
-            /*
-             * Timeout is reported as follows: JDK1.3: InterruptedIOException
-             * JDK1.4: SocketTimeoutException, which extends
-             * InterruptedIOException
-             * 
-             * So to make the code work on both, just check for
-             * InterruptedIOException
-             * 
-             * If 1.3 support is dropped, can change to using
-             * SocketTimeoutException
-             * 
-             * For more accurate detection of timeouts under 1.3, one could
-             * perhaps examine the Exception message text...
-             */
         } catch (SocketTimeoutException e) {
             // drop out to handle buffer
         } catch (InterruptedIOException e) {
             // drop out to handle buffer
         } catch (IOException e) {
             log.warn("Read error:" + e);
-            return JOrphanUtils.baToHexString(msg);
         }
 
         String buffer = JOrphanUtils.baToHexString(msg);
