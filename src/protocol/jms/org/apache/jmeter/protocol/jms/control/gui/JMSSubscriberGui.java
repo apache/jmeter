@@ -68,14 +68,8 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.eve
     private JLabeledTextField iterations =
         new JLabeledTextField(JMeterUtils.getResString("jms_itertions")); // $NON-NLS-1$
 
-    private static final String required = JMeterUtils.getResString("jms_auth_required"); // $NON-NLS-1$
-
-    private static final String not_req = JMeterUtils.getResString("jms_auth_not_required"); // $NON-NLS-1$
-
-    private static final String[] auth_items = { required, not_req };
-
-    private JLabeledRadio reqAuth =
-        new JLabeledRadio(JMeterUtils.getResString("jms_authentication"), auth_items, not_req); // $NON-NLS-1$
+    private JCheckBox useAuth = 
+        new JCheckBox(JMeterUtils.getResString("jms_use_auth"), false); //$NON-NLS-1$
 
     private JCheckBox readResponse =
         new JCheckBox(JMeterUtils.getResString("jms_read_response"), true); // $NON-NLS-1$
@@ -118,7 +112,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.eve
         sampler.setTopic(jmsTopic.getText());
         sampler.setUsername(jmsUser.getText());
         sampler.setPassword(jmsPwd.getText());
-        sampler.setUseAuth(reqAuth.getText());
+        sampler.setUseAuth(useAuth.isSelected());
         sampler.setIterations(iterations.getText());
         sampler.setReadResponse(String.valueOf(readResponse.isSelected()));
         sampler.setClientChoice(clientChoice.getText());
@@ -140,7 +134,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.eve
         sampler.setTopic(jmsTopic.getText());
         sampler.setUsername(jmsUser.getText());
         sampler.setPassword(jmsPwd.getText());
-        sampler.setUseAuth(reqAuth.getText());
+        sampler.setUseAuth(useAuth.isSelected());
         sampler.setIterations(iterations.getText());
         sampler.setReadResponse(String.valueOf(readResponse.isSelected()));
         sampler.setClientChoice(clientChoice.getText());
@@ -179,13 +173,11 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.eve
         lookup.add(urlField);
         lookup.add(jndiConnFac);
 
-        reqAuth.addChangeListener(this);
-
         JPanel commonParams = new JPanel();
         commonParams.setLayout(new VerticalLayout(6, VerticalLayout.LEFT));
         mainPanel.add(commonParams);
         commonParams.add(jmsTopic);
-        commonParams.add(reqAuth);
+        commonParams.add(useAuth);
         commonParams.add(jmsUser);
         commonParams.add(jmsPwd);
         commonParams.add(iterations);
@@ -210,7 +202,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.eve
         jmsUser.setText(sampler.getUsername());
         jmsPwd.setText(sampler.getPassword());
         iterations.setText(sampler.getIterations());
-        reqAuth.setText(sampler.getUseAuth());
+        useAuth.setSelected(sampler.isUseAuth());
         readResponse.setSelected(sampler.getReadResponseAsBoolean());
         clientChoice.setText(sampler.getClientChoice());
     }
@@ -225,7 +217,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.eve
         jmsUser.setText(""); // $NON-NLS-1$
         jmsPwd.setText(""); // $NON-NLS-1$
         iterations.setText(""); // $NON-NLS-1$
-        reqAuth.setText(""); // $NON-NLS-1$
+        useAuth.setSelected(false);
         readResponse.setSelected(true);
         clientChoice.setText(""); // $NON-NLS-1$
     }

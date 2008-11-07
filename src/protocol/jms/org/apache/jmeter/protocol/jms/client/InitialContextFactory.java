@@ -29,7 +29,6 @@ import javax.jms.Topic;
 
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
-import org.apache.jmeter.protocol.jms.sampler.BaseJMSSampler;
 
 /**
  * InitialContextFactory is responsible for getting and instance of the initial
@@ -41,13 +40,13 @@ public class InitialContextFactory {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    public static synchronized Context lookupContext(String jndi, String url, String useAuth, String user, String pwd) {
+    public static synchronized Context lookupContext(String jndi, String url, boolean useAuth, String user, String pwd) {
         Context ctx = (Context) MAP.get(jndi + url);
         if (ctx == null) {
             Properties props = new Properties();
             props.setProperty(Context.INITIAL_CONTEXT_FACTORY, jndi);
             props.setProperty(Context.PROVIDER_URL, url);
-            if (useAuth != null && useAuth.equals(BaseJMSSampler.required) && user != null && pwd != null
+            if (useAuth && user != null && pwd != null
                     && user.length() > 0 && pwd.length() > 0) {
                 props.setProperty(Context.SECURITY_PRINCIPAL, user);
                 props.setProperty(Context.SECURITY_CREDENTIALS, pwd);
