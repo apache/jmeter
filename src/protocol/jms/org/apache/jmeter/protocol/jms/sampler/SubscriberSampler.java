@@ -51,9 +51,7 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
 
     private transient int counter = 0;
 
-    private transient int loop = 0;
-
-    private transient boolean RUN = true;
+    private volatile boolean isRunning;
 
     private static final String CLIENT_CHOICE = "jms.client_choice"; // $NON-NLS-1$
 
@@ -74,7 +72,7 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
      */
     public synchronized void testEnded() {
         log.info("SubscriberSampler.testEnded called");
-        this.RUN = false;
+        this.isRunning = false;
         this.resetCount();
         ClientPool.clearClient();
         this.BUFFER = null;
@@ -99,7 +97,7 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
      * listener.
      *
      */
-    public synchronized OnMessageSubscriber initListenerClient() {
+    private OnMessageSubscriber initListenerClient() {
         OnMessageSubscriber sub = (OnMessageSubscriber) ClientPool.get(this);
         if (sub == null) {
             sub = new OnMessageSubscriber(this.getUseJNDIPropertiesAsBoolean(), this.getJNDIInitialContextFactory(),
@@ -112,7 +110,6 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
             log.info("SubscriberSampler.initListenerClient called");
             log.info("loop count " + this.getIterations());
         }
-        this.RUN = true;
         return sub;
     }
 
@@ -156,15 +153,16 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
      *
      * @return the sample result
      */
-    public SampleResult sampleWithListener() {
+    private SampleResult sampleWithListener() {
         SampleResult result = new SampleResult();
         result.setSampleLabel(getName());
-        OnMessageSubscriber sub = initListenerClient();
+        initListenerClient();
+        this.isRunning = true;
 
-        this.loop = this.getIterationCount();
+        int loop = this.getIterationCount();
 
         result.sampleStart();
-        while (this.RUN && this.count(0) < this.loop) {
+        while (this.isRunning && this.count(0) < loop) {
             try {
                 Thread.sleep(0, 50);
             } catch (Exception e) {
@@ -173,10 +171,12 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
         }
         result.sampleEnd();
         result.setResponseMessage(loop + " samples messages recieved");
-        if (this.getReadResponseAsBoolean()) {
-            result.setResponseData(this.BUFFER.toString().getBytes());
-        } else {
-            result.setBytes(this.BUFFER.toString().getBytes().length);
+        synchronized (this) {
+            if (this.getReadResponseAsBoolean()) {
+                result.setResponseData(this.BUFFER.toString().getBytes());
+            } else {
+                result.setBytes(this.BUFFER.toString().getBytes().length);
+            }            
         }
         result.setSuccessful(true);
         result.setResponseCode(loop + " message(s) recieved successfully");
@@ -193,18 +193,18 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
      *
      * @return the sample result
      */
-    public SampleResult sampleWithReceive() {
+    private SampleResult sampleWithReceive() {
         SampleResult result = new SampleResult();
         result.setSampleLabel(getName());
         if (this.SUBSCRIBER == null) {
             this.initReceiveClient();
             this.SUBSCRIBER.start();
         }
-        this.loop = this.getIterationCount();
-        this.SUBSCRIBER.setLoop(this.loop);
+        int loop = this.getIterationCount();
+        this.SUBSCRIBER.setLoop(loop);
 
         result.sampleStart();
-        while (this.SUBSCRIBER.count(0) < this.loop) {
+        while (this.SUBSCRIBER.count(0) < loop) {
             try {
                 Thread.sleep(0, 50);
             } catch (Exception e) {
@@ -221,7 +221,7 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
         result.setSuccessful(true);
         result.setResponseCode(loop + " message(s) recieved successfully");
         result.setSamplerData("Not applicable");
-        result.setSampleCount(this.loop);
+        result.setSampleCount(loop);
 
         this.SUBSCRIBER.clear();
         this.SUBSCRIBER.resetCount();
@@ -253,7 +253,7 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
      * @param increment
      * @return the new value
      */
-    public synchronized int count(int increment) {
+    private synchronized int count(int increment) {
         this.counter += increment;
         return this.counter;
     }
@@ -262,7 +262,7 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
      * resetCount will set the counter to zero and set the length of the
      * StringBuffer to zero.
      */
-    public synchronized void resetCount() {
+    private synchronized void resetCount() {
         this.counter = 0;
         this.BUFFER.setLength(0);
     }
