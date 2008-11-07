@@ -40,8 +40,14 @@ public class Receiver implements Runnable {
 
     // private static Receiver receiver;
 
-    private Receiver(QueueConnectionFactory factory, Queue receiveQueue) throws JMSException {
-        conn = factory.createQueueConnection();
+    private Receiver(QueueConnectionFactory factory, Queue receiveQueue, String principal, String credentials) throws JMSException {
+        if (null != principal && null != credentials) {
+            log.info("creating receiver WITH authorisation credentials");
+            conn = factory.createQueueConnection(principal, credentials);
+        }else{
+            log.info("creating receiver without authorisation credentials");
+            conn = factory.createQueueConnection(); 
+        }
         session = conn.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
         consumer = session.createReceiver(receiveQueue);
         log.debug("Receiver - ctor. Starting connection now");
@@ -49,14 +55,12 @@ public class Receiver implements Runnable {
         log.info("Receiver - ctor. Connection to messaging system established");
     }
 
-    // TODO - does this need to be synchronized now that the variables are final?
-    public static synchronized Receiver createReceiver(QueueConnectionFactory factory, Queue receiveQueue)
+    public static Receiver createReceiver(QueueConnectionFactory factory, Queue receiveQueue,
+            String principal, String credentials)
             throws JMSException {
-        // if (receiver == null) {
-        Receiver receiver = new Receiver(factory, receiveQueue);
+        Receiver receiver = new Receiver(factory, receiveQueue, principal, credentials);
         Thread thread = new Thread(receiver);
         thread.start();
-        // }
         return receiver;
     }
 

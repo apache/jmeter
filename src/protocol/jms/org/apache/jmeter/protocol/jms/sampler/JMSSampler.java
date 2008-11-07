@@ -46,6 +46,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -88,6 +89,10 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
     //--
 
+    // Should we use java.naming.security.[principal|credentials] to create the QueueConnection?
+    private static final boolean USE_SECURITY_PROPERTIES = 
+        JMeterUtils.getPropDefault("JMSSampler.useSecurity.properties", true); // $NON-NLS-1$
+    
     //
     // Member variables
     //
@@ -277,15 +282,6 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         return getQueueConnectionFactory() + ", queue: " + getSendQueue();
     }
 
-    public synchronized void testStarted() {
-        LOGGER.debug("testStarted, thread: " + Thread.currentThread().getName());
-
-    }
-
-    public synchronized void testEnded() {
-        LOGGER.debug("testEndded(), thread: " + Thread.currentThread().getName());
-    }
-
     public void testIterationStart(LoopIterationEvent event) {
         // LOGGER.debug("testIterationStart");
     }
@@ -309,10 +305,20 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
             sendQueue = queue;
             if (!useTemporyQueue()) {
                 receiveQueue = (Queue) context.lookup(getReceiveQueue());
-                receiverThread = Receiver.createReceiver(factory, receiveQueue);
+                receiverThread = Receiver.createReceiver(factory, receiveQueue, getPrincipal(context), getCredentials(context));
             }
 
-            connection = factory.createQueueConnection();
+            String principal = null;
+            String credentials = null;
+            if (USE_SECURITY_PROPERTIES){
+                principal = getPrincipal(context);
+                credentials = getCredentials(context);                
+            }
+            if (principal != null && credentials != null) {
+                connection = factory.createQueueConnection(principal, credentials);
+            } else {
+                connection = factory.createQueueConnection();
+            }
 
             session = connection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
 
@@ -483,6 +489,30 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     public void setContextProvider(String string) {
         setProperty(JNDI_CONTEXT_PROVIDER_URL, string);
 
+    }
+
+    /**
+     * get the principal from the context property java.naming.security.principal
+     *
+     * @param context
+     * @return
+     * @throws NamingException
+     */
+    private String getPrincipal(Context context) throws NamingException{
+            Hashtable env = context.getEnvironment();
+            return (String) env.get("java.naming.security.principal"); // $NON-NLS-1$
+    }
+
+    /**
+     * get the credentials from the context property java.naming.security.credentials
+     *
+     * @param context
+     * @return
+     * @throws NamingException
+     */
+    private String getCredentials(Context context) throws NamingException{
+            Hashtable env = context.getEnvironment();
+            return (String) env.get("java.naming.security.credentials"); // $NON-NLS-1$
     }
 
 }

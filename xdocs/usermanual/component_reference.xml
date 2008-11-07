@@ -1150,6 +1150,11 @@ Currently the only way to changes these is via the SampleResult methods:
 		This sampler sends and optionally receives JMS Messages through point-to-point connections (queues).
         It is different from pub/sub messages and is generally used for handling transactions.
 		</p>
+		<p>
+		Versions of JMeter after 2.3.2 use the properties java.naming.security.[principal|credentials] - if present -
+		when creating the Queue Connection. If this behaviour is not desired, set the JMeter property
+		<b>JMSSampler.useSecurity.properties=false</b>
+		</p>
 		<br></br>
 <note>JMeter does not include the JMS jar; this must be downloaded and put in the lib directory</note>
 	</description>
