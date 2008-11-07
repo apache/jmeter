@@ -20,6 +20,7 @@ package org.apache.jmeter.protocol.http.control;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.IOException;
 import java.net.Socket;
 
 import org.apache.jmeter.util.JMeterUtils;
@@ -139,7 +140,7 @@ public class HttpMirrorThread extends Thread {
                 }
             }
             out.flush();
-        } catch (Exception e) {
+        } catch (IOException e) {
             log.error("", e);
         } finally {
             JOrphanUtils.closeQuietly(out);
