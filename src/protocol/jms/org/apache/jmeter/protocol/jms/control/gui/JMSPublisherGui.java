@@ -65,12 +65,6 @@ public class JMSPublisherGui extends AbstractSamplerGui implements java.awt.even
 
     private String[] msgTypes = { text_msg, object_msg };
 
-    private String required = JMeterUtils.getResString("jms_auth_required"); //$NON-NLS-1$
-
-    private String not_req = JMeterUtils.getResString("jms_auth_not_required"); //$NON-NLS-1$
-
-    private String[] auth_items = { required, not_req };
-
     JCheckBox useProperties = new JCheckBox(JMeterUtils.getResString("jms_use_properties_file"), false); //$NON-NLS-1$
 
     JLabeledRadio configChoice = new JLabeledRadio(JMeterUtils.getResString("jms_config"), items, use_text); //$NON-NLS-1$
@@ -83,7 +77,8 @@ public class JMSPublisherGui extends AbstractSamplerGui implements java.awt.even
 
     JLabeledTextField jmsTopic = new JLabeledTextField(JMeterUtils.getResString("jms_topic")); //$NON-NLS-1$
 
-    JLabeledRadio reqAuth = new JLabeledRadio(JMeterUtils.getResString("jms_authentication"), auth_items, not_req); //$NON-NLS-1$
+    private JCheckBox useAuth = 
+        new JCheckBox(JMeterUtils.getResString("jms_use_auth"), false); //$NON-NLS-1$
 
     JLabeledTextField jmsUser = new JLabeledTextField(JMeterUtils.getResString("jms_user")); //$NON-NLS-1$
 
@@ -138,7 +133,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements java.awt.even
         sampler.setConfigChoice(configChoice.getText());
         sampler.setMessageChoice(msgChoice.getText());
         sampler.setIterations(iterations.getText());
-        sampler.setUseAuth(reqAuth.getText());
+        sampler.setUseAuth(useAuth.isSelected());
         return sampler;
     }
 
@@ -163,7 +158,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements java.awt.even
         sampler.setConfigChoice(configChoice.getText());
         sampler.setMessageChoice(msgChoice.getText());
         sampler.setIterations(iterations.getText());
-        sampler.setUseAuth(reqAuth.getText());
+        sampler.setUseAuth(useAuth.isSelected());
     }
 
     /**
@@ -201,13 +196,12 @@ public class JMSPublisherGui extends AbstractSamplerGui implements java.awt.even
 
         configChoice.addChangeListener(this);
         msgChoice.addChangeListener(this);
-        reqAuth.addChangeListener(this);
 
         JPanel commonParams = new JPanel();
         commonParams.setLayout(new VerticalLayout(6, VerticalLayout.LEFT));
         mainPanel.add(commonParams);
         commonParams.add(jmsTopic);
-        commonParams.add(reqAuth);
+        commonParams.add(useAuth);
         commonParams.add(jmsUser);
         commonParams.add(jmsPwd);
         commonParams.add(iterations);
@@ -244,7 +238,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements java.awt.even
         configChoice.setText(use_text);
         updateConfig(use_text);
         iterations.setText(""); // $NON-NLS-1$
-        reqAuth.setText(""); // $NON-NLS-1$
+        useAuth.setSelected(false);
     }
 
     /**
@@ -267,7 +261,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements java.awt.even
         msgChoice.setText(sampler.getMessageChoice());
         updateConfig(sampler.getConfigChoice());
         iterations.setText(sampler.getIterations());
-        reqAuth.setText(sampler.getUseAuth());
+        useAuth.setSelected(sampler.isUseAuth());
     }
 
     /**
