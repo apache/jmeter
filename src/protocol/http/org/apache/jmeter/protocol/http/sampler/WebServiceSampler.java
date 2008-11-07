@@ -50,7 +50,6 @@ import org.apache.log.Logger;
 import org.apache.soap.Envelope;
 import org.apache.soap.messaging.Message;
 import org.apache.soap.rpc.SOAPContext;
-import org.apache.soap.transport.SOAPTransport;
 import org.apache.soap.transport.http.SOAPHTTPConnection;
 import org.apache.soap.util.xml.XMLParserUtils;
 import org.apache.soap.SOAPException;
