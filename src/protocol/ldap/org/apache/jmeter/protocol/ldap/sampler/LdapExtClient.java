@@ -29,6 +29,7 @@ import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.ModificationItem;
 import javax.naming.directory.SearchControls;
 
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -49,7 +50,7 @@ import org.apache.log.Logger;
 public class LdapExtClient {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final String CONTEXT_IS_NULL = "Context is null"; //TODO should perhaps be a resource
+    private static final String CONTEXT_IS_NULL = "Context is null";
 
     /**
      * Constructor for the LdapClient object
@@ -135,7 +136,7 @@ public class LdapExtClient {
                     " scope=" + scope +
                     " countlim=" + countlim +
                     " timelim=" + timelim +
-                    " attrs=" + attrs +
+                    " attrs=" + JMeterUtils.unsplit(attrs,",") +
                     " retobj=" + retobj +
                     " deref=" + deref +
                     " filter=" + searchFilter
