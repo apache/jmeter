@@ -52,9 +52,8 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
     private static final String READ_RESPONSE = "jms.read_response"; // $NON-NLS-1$
     //--
 
-    public static final String required = JMeterUtils.getResString("jms_auth_required"); // $NON-NLS-1$
-
-    public static final String not_req = JMeterUtils.getResString("jms_auth_not_required"); // $NON-NLS-1$
+    // See BUG 45460. We need to keep the resource in order to interpret existing files
+    private static final String REQUIRED = JMeterUtils.getResString("jms_auth_required"); // $NON-NLS-1$
 
     public BaseJMSSampler() {
     }
@@ -211,10 +210,10 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
     /**
      * Set whether authentication is required for JNDI
      *
-     * @param auth
+     * @param useAuth
      */
-    public void setUseAuth(String auth) {
-        setProperty(USE_AUTH, auth);
+    public void setUseAuth(boolean useAuth) {
+        setProperty(USE_AUTH, useAuth);
     }
 
     /**
@@ -222,8 +221,9 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
      *
      * @return whether jndi requires authentication
      */
-    public String getUseAuth() {
-        return getPropertyAsString(USE_AUTH);
+    public boolean isUseAuth() {
+        final String useAuth = getPropertyAsString(USE_AUTH);
+        return useAuth.equalsIgnoreCase("true") || useAuth.equals(REQUIRED); // $NON-NLS-1$
     }
 
     /**

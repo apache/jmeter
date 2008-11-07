@@ -103,7 +103,7 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
         OnMessageSubscriber sub = (OnMessageSubscriber) ClientPool.get(this);
         if (sub == null) {
             sub = new OnMessageSubscriber(this.getUseJNDIPropertiesAsBoolean(), this.getJNDIInitialContextFactory(),
-                    this.getProviderUrl(), this.getConnectionFactory(), this.getTopic(), this.getUseAuth(), this
+                    this.getProviderUrl(), this.getConnectionFactory(), this.getTopic(), this.isUseAuth(), this
                             .getUsername(), this.getPassword());
             sub.setMessageListener(this);
             sub.resume();
@@ -122,7 +122,7 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
     public void initReceiveClient() {
         this.SUBSCRIBER = new ReceiveSubscriber(this.getUseJNDIPropertiesAsBoolean(), this
                 .getJNDIInitialContextFactory(), this.getProviderUrl(), this.getConnectionFactory(), this.getTopic(),
-                this.getUseAuth(), this.getUsername(), this.getPassword());
+                this.isUseAuth(), this.getUsername(), this.getPassword());
         this.SUBSCRIBER.resume();
         ClientPool.addClient(this.SUBSCRIBER);
         log.info("SubscriberSampler.initReceiveClient called");

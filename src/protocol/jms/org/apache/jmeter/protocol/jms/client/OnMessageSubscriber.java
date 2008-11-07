@@ -73,7 +73,7 @@ public class OnMessageSubscriber {
      * @param pwd
      */
     public OnMessageSubscriber(boolean useProps, String jndi, String url, String connfactory, String topic,
-            String useAuth, String user, String pwd) {
+            boolean useAuth, String user, String pwd) {
         Context ctx = initJNDI(useProps, jndi, url, useAuth, user, pwd);
         if (ctx != null) {
             initConnection(ctx, connfactory, topic);
@@ -93,7 +93,7 @@ public class OnMessageSubscriber {
      * @param pwd
      * @return the context or null
      */
-    public Context initJNDI(boolean useProps, String jndi, String url, String useAuth, String user, String pwd) {
+    public Context initJNDI(boolean useProps, String jndi, String url, boolean useAuth, String user, String pwd) {
         if (useProps) {
             try {
                 return new InitialContext();
