@@ -1091,7 +1091,7 @@ Currently the only way to changes these is via the SampleResult methods:
 </properties>
 </component>
 
-<component name="JMS Publisher" index="&sect-num;.1.13"  width="438" height="750" screenshot="jmspublisher.png">
+<component name="JMS Publisher" index="&sect-num;.1.13"  width="435" height="745" screenshot="jmspublisher.png">
 <note>ALPHA CODE</note>
 	<description>
 		<p>
@@ -1117,7 +1117,7 @@ Currently the only way to changes these is via the SampleResult methods:
 </properties>
 </component>
 
-<component name="JMS Subscriber" index="&sect-num;.1.14"  width="497" height="434" screenshot="jmssubscriber.png">
+<component name="JMS Subscriber" index="&sect-num;.1.14"  width="502" height="417" screenshot="jmssubscriber.png">
 <note>ALPHA CODE</note>
 	<description>
 		<p>
