@@ -35,7 +35,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.avalon.framework.configuration.DefaultConfigurationSerializer;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
