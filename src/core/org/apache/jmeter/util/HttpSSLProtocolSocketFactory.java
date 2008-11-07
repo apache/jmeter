@@ -26,7 +26,6 @@ import java.net.UnknownHostException;
 import java.security.GeneralSecurityException;
 
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
