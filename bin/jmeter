@@ -80,8 +80,11 @@ PERM="-XX:PermSize=64m -XX:MaxPermSize=64m"
 # Finally, some tracing to help in case things go astray:
 #DEBUG="-verbose:gc -XX:+PrintTenuringDistribution"
 
+# Always dump on OOM (does not cost anything unless triggered)
+DUMP="-XX:+HeapDumpOnOutOfMemoryError"
+
 SERVER="-server"
 
-ARGS="$SERVER $HEAP $NEW $SURVIVOR $TENURING $EVACUATION $RMIGC $PERM"
+ARGS="$SERVER $DUMP $HEAP $NEW $SURVIVOR $TENURING $EVACUATION $RMIGC $PERM"
 
 java $ARGS $JVM_ARGS -jar `dirname $0`/ApacheJMeter.jar "$@"
