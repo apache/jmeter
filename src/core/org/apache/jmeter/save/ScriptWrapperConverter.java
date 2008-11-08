@@ -46,7 +46,7 @@ public class ScriptWrapperConverter implements Converter {
         return "$Revision$"; // $NON-NLS-1$
     }
 
-    Mapper classMapper;
+    private final Mapper classMapper;
 
     public ScriptWrapperConverter(Mapper classMapper) {
         this.classMapper = classMapper;
