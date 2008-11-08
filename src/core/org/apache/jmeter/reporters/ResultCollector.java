@@ -181,10 +181,11 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     }
 
     /**
-     * Decides whether or not to a sample is wanted based on:
-     * - errorOnly
-     * - successOnly
-     * - sample success
+     * Decides whether or not to a sample is wanted based on:<br/>
+     * - errorOnly<br/>
+     * - successOnly<br/>
+     * - sample success<br/>
+     * Should only be called for single samples.
      *
      * @param success is sample successful
      * @return whether to log/display the sample
@@ -192,6 +193,23 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     public boolean isSampleWanted(boolean success){
         boolean errorOnly = isErrorLogging();
         boolean successOnly = isSuccessOnlyLogging();
+        return isSampleWanted(success, errorOnly, successOnly);
+    }
+
+    /**
+     * Decides whether or not to a sample is wanted based on: <br/>
+     * - errorOnly <br/>
+     * - successOnly <br/>
+     * - sample success <br/>
+     * This version is intended to be called by code that loops over many samples;
+     * it is cheaper than fetching the settings each time.
+     * @param success status of sample
+     * @param errorOnly if errors only wanted
+     * @param successOnly if success only wanted
+     * @return whether to log/display the sample
+     */
+    public boolean isSampleWanted(boolean success, boolean errorOnly,
+            boolean successOnly) {
         return (!errorOnly && !successOnly) ||
                (success && successOnly) ||
                (!success && errorOnly);
@@ -425,10 +443,12 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     // Only called if visualizer is non-null
     private void readSamples(TestResultWrapper testResults, Visualizer visualizer) throws Exception {
         Collection samples = testResults.getSampleResults();
+        final boolean errorsOnly = isErrorLogging();
+        final boolean successOnly = isSuccessOnlyLogging();
         Iterator iter = samples.iterator();
         while (iter.hasNext()) {
             SampleResult result = (SampleResult) iter.next();
-            if (isSampleWanted(result.isSuccessful())) {
+            if (isSampleWanted(result.isSuccessful(), errorsOnly, successOnly)) {
                 visualizer.add(result);
             }
         }
