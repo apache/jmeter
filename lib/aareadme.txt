@@ -10,14 +10,14 @@ batik-awt-util-1.6 (org.apache.batik.ext)
 - SaveGraphicsService
 
 commons-codec-1.3
-- used by commons-httpclient-3.0
+- used by commons-httpclient-3.1
 - also HtmlParserTester for Base64
 
 commons-collections-3.2
 - ListenerNotifier
 - Anakia
 
-commons-httpclient-3.1-rc1
+commons-httpclient-3.1
 - httpclient
 
 commons-io-1.3.1
