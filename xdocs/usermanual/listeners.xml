@@ -459,8 +459,13 @@ If necessary, just create a dummy testplan with the appropriate Listener in it.
 When reading from CSV results files, the header (if present) is used to determine which fields were saved.
 <b>In order to interpret a header-less CSV file correctly, the appropriate JMeter properties must be set.</b>
 </p>
+<note>
+Versions of JMeter up to 2.3.2 used to clear any current data before loading the new file.
+This is no longer done, thus allowing files to be merged.
+If the previous behaviour is required, 
+use the menu item Run/Clear (Ctrl+Shift+E) or Run/Clear All (Ctrl+E) before loading the file.
+</note>
 </section>
-</body>
 <section name="&sect-num;.10 Saving Listener GUI data" anchor="screencap">
 <p>JMeter is capable of saving any listener as a PNG file. To do so, select the
 listener in the left panel. Click edit -> Save As Image. A file dialog will
@@ -475,4 +480,5 @@ e.g. a spreadsheet or text editor.
 <figure image="save_image.png">Figure 1 - Edit -> Save As Image</figure>
 
 </section>
+</body>
 </document>
