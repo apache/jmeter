@@ -492,7 +492,7 @@ public final class OldSaveService {
         final boolean successOnly = rc.isSuccessOnlyLogging();
         for (int i = 0; i < samples.length; i++) {
             SampleResult result = OldSaveService.getSampleResult(samples[i]);
-            if (rc.isSampleWanted(result.isSuccessful(), errorsOnly, successOnly)) {
+            if (ResultCollector.isSampleWanted(result.isSuccessful(), errorsOnly, successOnly)) {
                 visualizer.add(result);
             }
         }

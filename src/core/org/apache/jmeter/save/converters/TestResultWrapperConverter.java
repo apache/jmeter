@@ -24,15 +24,17 @@ package org.apache.jmeter.save.converters;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.apache.jmeter.reporters.ResultCollectorHelper;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.save.TestResultWrapper;
 
-import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.converters.collections.AbstractCollectionConverter;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import com.thoughtworks.xstream.mapper.Mapper;
 
 /**
  * XStream Class to convert TestResultWrapper
@@ -76,8 +78,12 @@ public class TestResultWrapperConverter extends AbstractCollectionConverter {
         // ResultCollector class
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Read test results from JTL files and pass them to the visualiser directly.
+     * If the ResultCollector helper object is defined, then pass the samples to that
+     * rather than adding them to the test result wrapper.
+     * 
+     * @return the test result wrapper (may be empty)
      *
      * @see com.thoughtworks.xstream.converters.Converter#unmarshal(com.thoughtworks.xstream.io.HierarchicalStreamReader,
      *      com.thoughtworks.xstream.converters.UnmarshallingContext)
@@ -90,12 +96,16 @@ public class TestResultWrapperConverter extends AbstractCollectionConverter {
             ver = "1.0";  //$NON-NLS-1$
         }
         results.setVersion(ver);
-        ConversionHelp.setInVersion(ver);// Make sure decoding follows input
-                                            // file
+        ConversionHelp.setInVersion(ver);// Make sure decoding follows input file
+        final ResultCollectorHelper resultCollectorHelper = (ResultCollectorHelper) context.get(SaveService.RESULTCOLLECTOR_HELPER_OBJECT);
         while (reader.hasMoreChildren()) {
             reader.moveDown();
-            SampleResult res = (SampleResult) readItem(reader, context, results);
-            samples.add(res);
+            SampleResult sample = (SampleResult) readItem(reader, context, results);
+            if (resultCollectorHelper != null) {
+                resultCollectorHelper.add(sample);
+            } else {
+                samples.add(sample);
+            }
             reader.moveUp();
         }
         results.setSampleResults(samples);
