@@ -488,9 +488,11 @@ public final class OldSaveService {
         DefaultConfigurationBuilder cfgbuilder = new DefaultConfigurationBuilder();
         Configuration savedSamples = cfgbuilder.buildFromFile(filename);
         Configuration[] samples = savedSamples.getChildren();
+        final boolean errorsOnly = rc.isErrorLogging();
+        final boolean successOnly = rc.isSuccessOnlyLogging();
         for (int i = 0; i < samples.length; i++) {
             SampleResult result = OldSaveService.getSampleResult(samples[i]);
-            if (rc.isSampleWanted(result.isSuccessful())) {
+            if (rc.isSampleWanted(result.isSuccessful(), errorsOnly, successOnly)) {
                 visualizer.add(result);
             }
         }
