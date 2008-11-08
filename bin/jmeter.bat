@@ -63,6 +63,7 @@ rem and for NT handling to skip to.
 
 rem The following link describes the -XX options:
 rem http://java.sun.com/javase/technologies/hotspot/vmoptions.jsp
+rem http://java.sun.com/developer/TechTips/2000/tt1222.html has some more descriptions
 
 rem See the unix startup file for the rationale of the following parameters,
 rem including some tuning recommendations
@@ -73,7 +74,10 @@ set TENURING=-XX:MaxTenuringThreshold=2
 set EVACUATION=-XX:MaxLiveObjectEvacuationRatio=20%
 set RMIGC=-Dsun.rmi.dgc.client.gcInterval=600000 -Dsun.rmi.dgc.server.gcInterval=600000
 set PERM=-XX:PermSize=64m -XX:MaxPermSize=64m
-set DEBUG=-verbose:gc -XX:+PrintTenuringDistribution
+rem set DEBUG=-verbose:gc -XX:+PrintTenuringDistribution
+
+rem Always dump on OOM (does not cost anything unless triggered)
+set DUMP=-XX:+HeapDumpOnOutOfMemoryError
 
 rem Additional settings that might help improve GUI performance on some platforms
 rem See: http://java.sun.com/products/java-media/2D/perf_graphics.html
@@ -90,7 +94,7 @@ rem set DDRAW=%DDRAW% -Dsun.java2d.ddscale=true
 
 rem Server mode
 rem Collect the settings defined above
-set ARGS=%HEAP% %NEW% %SURVIVOR% %TENURING% %EVACUATION% %RMIGC% %PERM% %DDRAW%
+set ARGS=%DUMP% %HEAP% %NEW% %SURVIVOR% %TENURING% %EVACUATION% %RMIGC% %PERM% %DDRAW%
 
 %JM_START% %JM_LAUNCH% %ARGS% %JVM_ARGS% -jar "%JMETER_BIN%ApacheJMeter.jar" %JMETER_CMD_LINE_ARGS%
 
