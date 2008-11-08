@@ -33,6 +33,7 @@ import java.util.Properties;
 
 import java.nio.charset.Charset;
 
+import org.apache.jmeter.reporters.ResultCollectorHelper;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -51,6 +52,7 @@ import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.DataHolder;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
+import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
 
 /**
  * Handles setting up XStream serialisation.
@@ -61,9 +63,15 @@ public class SaveService {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    // Names of DataHolder entries
     public static final String SAMPLE_EVENT_OBJECT = "SampleEvent"; // $NON-NLS-1$
+    public static final String RESULTCOLLECTOR_HELPER_OBJECT = "ResultCollectorHelper"; // $NON-NLS-1$
 
-    private static final XStream saver = new XStream(new PureJavaReflectionProvider()){
+    private static final class XStreamWrapper extends XStream {
+        private XStreamWrapper(ReflectionProvider reflectionProvider) {
+            super(reflectionProvider);
+        }
+
         // Override wrapMapper in order to insert the Wrapper in the chain
         protected MapperWrapper wrapMapper(MapperWrapper next) {
             // Provide our own aliasing using strings rather than classes
@@ -83,8 +91,14 @@ public class SaveService {
                 }
             };
         }
-    };
+    }
 
+    private static final XStream JMXSAVER = new XStreamWrapper(new PureJavaReflectionProvider());
+    private static final XStream JTLSAVER = new XStreamWrapper(new PureJavaReflectionProvider());
+    static {
+        JTLSAVER.setMode(XStream.NO_REFERENCES); // This is needed to stop XStream keeping copies of each class
+    }
+    
     // The XML header, with placeholder for encoding, since that is controlled by property
     private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"<ph>\"?>"; // $NON-NLS-1$
 
@@ -195,16 +209,14 @@ public class SaveService {
                     } else {
                         key = key.substring(1);// Remove the leading "_"
                         try {
-                            if (val.trim().equals("collection")) { // $NON-NLS-1$
-                                saver.registerConverter((Converter) Class.forName(key).getConstructor(
-                                        new Class[] { Mapper.class }).newInstance(
-                                        new Object[] { saver.getMapper() }));
-                            } else if (val.trim().equals("mapping")) { // $NON-NLS-1$
-                                saver.registerConverter((Converter) Class.forName(key).getConstructor(
-                                        new Class[] { Mapper.class }).newInstance(
-                                        new Object[] { saver.getMapper() }));
+                            final String trimmedValue = val.trim();
+                            if (trimmedValue.equals("collection") // $NON-NLS-1$
+                             || trimmedValue.equals("mapping")) { // $NON-NLS-1$
+                                registerConverter(key, JMXSAVER, true);
+                                registerConverter(key, JTLSAVER, true);
                             } else {
-                                saver.registerConverter((Converter) Class.forName(key).newInstance());
+                                registerConverter(key, JMXSAVER, false);
+                                registerConverter(key, JTLSAVER, false);
                             }
                         } catch (IllegalAccessException e1) {
                             log.warn("Can't register a converter: " + key, e1);
@@ -230,6 +242,31 @@ public class SaveService {
         }
     }
 
+    /**
+     * Register converter.
+     * @param key
+     * @param jmxsaver
+     * @param useMapper
+     *  
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     * @throws NoSuchMethodException
+     * @throws ClassNotFoundException
+     */
+    private static void registerConverter(String key, XStream jmxsaver, boolean useMapper)
+            throws InstantiationException, IllegalAccessException,
+            InvocationTargetException, NoSuchMethodException,
+            ClassNotFoundException {
+        if (useMapper){
+            jmxsaver.registerConverter((Converter) Class.forName(key).getConstructor(
+                    new Class[] { Mapper.class }).newInstance(
+                            new Object[] { jmxsaver.getMapper() }));
+        } else {
+            jmxsaver.registerConverter((Converter) Class.forName(key).newInstance());            
+        }
+    }
+
     // For converters to use
     public static String aliasToClass(String s){
         String r = aliasToClass.getProperty(s);
@@ -250,7 +287,7 @@ public class SaveService {
         // Use deprecated method, to avoid duplicating code
         ScriptWrapper wrapper = new ScriptWrapper();
         wrapper.testPlan = tree;
-        saver.toXML(wrapper, outputStreamWriter);
+        JMXSAVER.toXML(wrapper, outputStreamWriter);
         outputStreamWriter.write('\n');// Ensure terminated properly
         outputStreamWriter.close();
     }
@@ -261,7 +298,7 @@ public class SaveService {
         OutputStreamWriter outputStreamWriter = getOutputStreamWriter(out);
         writeXmlHeader(outputStreamWriter);
         // Use deprecated method, to avoid duplicating code
-        saver.toXML(el, outputStreamWriter);
+        JMXSAVER.toXML(el, outputStreamWriter);
         outputStreamWriter.close();
     }
 
@@ -270,7 +307,7 @@ public class SaveService {
         // Get the InputReader to use
         InputStreamReader inputStreamReader = getInputStreamReader(in);
         // Use deprecated method, to avoid duplicating code
-        Object element = saver.fromXML(inputStreamReader);
+        Object element = JMXSAVER.fromXML(inputStreamReader);
         inputStreamReader.close();
         return element;
     }
@@ -283,11 +320,11 @@ public class SaveService {
      */
     // Used by ResultCollector#recordResult()
     public synchronized static void saveSampleResult(SampleEvent evt, Writer writer) throws IOException {
-        DataHolder dh = saver.newDataHolder();
+        DataHolder dh = JTLSAVER.newDataHolder();
         dh.put(SAMPLE_EVENT_OBJECT, evt);
         // This is effectively the same as saver.toXML(Object, Writer) except we get to provide the DataHolder
         // Don't know why there is no method for this in the XStream class
-        saver.marshal(evt.getResult(), new XppDriver().createWriter(writer), dh);
+        JTLSAVER.marshal(evt.getResult(), new XppDriver().createWriter(writer), dh);
         writer.write('\n');
     }
 
@@ -297,7 +334,7 @@ public class SaveService {
      */
     // Used by ResultCollector#recordStats()
     public synchronized static void saveTestElement(TestElement elem, Writer writer) throws IOException {
-        saver.toXML(elem, writer);
+        JMXSAVER.toXML(elem, writer); // TODO should this be JTLSAVER? Only seems to be called by MonitorHealthVisualzer
         writer.write('\n');
     }
 
@@ -377,14 +414,30 @@ public class SaveService {
         return versionsOK;
     }
 
-    public static TestResultWrapper loadTestResults(InputStream reader) throws Exception {
+    /**
+     * Read results from JTL file.
+     *  
+     * @param reader of the file
+     * @param resultCollectorHelper helper class to enable TestResultWrapperConverter to deliver the samples
+     * @throws Exception
+     */
+    public static void loadTestResults(InputStream reader, ResultCollectorHelper resultCollectorHelper) throws Exception {
         // Get the InputReader to use
         InputStreamReader inputStreamReader = getInputStreamReader(reader);
-        TestResultWrapper wrapper = (TestResultWrapper) saver.fromXML(inputStreamReader);
+        DataHolder dh = JTLSAVER.newDataHolder();
+        dh.put(RESULTCOLLECTOR_HELPER_OBJECT, resultCollectorHelper); // Allow TestResultWrapper to feed back the samples
+        // This is effectively the same as saver.fromXML(InputStream) except we get to provide the DataHolder
+        // Don't know why there is no method for this in the XStream class
+        JTLSAVER.unmarshal(new XppDriver().createReader(reader), null, dh);
         inputStreamReader.close();
-        return wrapper;
     }
 
+    /**
+     * Load a Test tree (JMX file)
+     * @param reader on the JMX file
+     * @return the loaded tree
+     * @throws Exception if there is a problem reading the file or processing it
+     */
     public static HashTree loadTree(InputStream reader) throws Exception {
         if (!reader.markSupported()) {
             reader = new BufferedInputStream(reader);
@@ -394,7 +447,7 @@ public class SaveService {
         try {
             // Get the InputReader to use
             InputStreamReader inputStreamReader = getInputStreamReader(reader);
-            wrapper = (ScriptWrapper) saver.fromXML(inputStreamReader);
+            wrapper = (ScriptWrapper) JMXSAVER.fromXML(inputStreamReader);
             inputStreamReader.close();
             if (wrapper == null){
                 log.error("Problem loading new style: see above.");
