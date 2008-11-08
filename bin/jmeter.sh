@@ -22,9 +22,9 @@
 ##   Environment variables:
 ##   JVM_ARGS - optional java args, e.g. -Dprop=val
 ##
+##   e.g.
+##   JVM_ARGS="-Xms512m -Xmx512m" jmeter.sh etc.
+##
 ##   ==============================================
 
-# Hopefully this is an universal option:
-SERVER=-server
-
-java $SERVER $JVM_ARGS -jar `dirname $0`/ApacheJMeter.jar "$@"
+java $JVM_ARGS -jar `dirname $0`/ApacheJMeter.jar "$@"
