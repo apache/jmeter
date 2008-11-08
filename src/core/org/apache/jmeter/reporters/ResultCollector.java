@@ -31,7 +31,6 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -49,7 +48,6 @@ import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.save.OldSaveService;
 import org.apache.jmeter.save.SaveService;
-import org.apache.jmeter.save.TestResultWrapper;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
@@ -208,7 +206,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
      * @param successOnly if success only wanted
      * @return whether to log/display the sample
      */
-    public boolean isSampleWanted(boolean success, boolean errorOnly,
+    public static boolean isSampleWanted(boolean success, boolean errorOnly,
             boolean successOnly) {
         return (!errorOnly && !successOnly) ||
                (success && successOnly) ||
@@ -274,7 +272,6 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
         String filename = getFilename();
         File file = new File(filename);
         if (file.exists()) {
-            clearVisualizer();
             BufferedReader dataReader = null;
             BufferedInputStream bufferedInputStream = null;
             try {
@@ -292,8 +289,8 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                     } else { // We are processing XML
                         try { // Assume XStream
                             bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
-                            // TODO change to process samples one by one
-                            readSamples(SaveService.loadTestResults(bufferedInputStream), visualizer);
+                            SaveService.loadTestResults(bufferedInputStream, 
+                                    new ResultCollectorHelper(this, visualizer));
                             parsedOK = true;
                         } catch (Exception e) {
                             log.info("Failed to load "+filename+" using XStream, trying old XML format. Error was: "+e);
@@ -311,6 +308,8 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             } catch (JMeterError e){
                 log.warn("Problem reading JTL file: "+file);
             } catch (RuntimeException e){ // e.g. NullPointerException
+                log.warn("Problem reading JTL file: "+file,e);
+            } catch (OutOfMemoryError e) {
                 log.warn("Problem reading JTL file: "+file,e);
             } finally {
                 JOrphanUtils.closeQuietly(dataReader);
@@ -438,28 +437,6 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             }
         }
         return true;
-    }
-
-    // Only called if visualizer is non-null
-    private void readSamples(TestResultWrapper testResults, Visualizer visualizer) throws Exception {
-        Collection samples = testResults.getSampleResults();
-        final boolean errorsOnly = isErrorLogging();
-        final boolean successOnly = isSuccessOnlyLogging();
-        Iterator iter = samples.iterator();
-        while (iter.hasNext()) {
-            SampleResult result = (SampleResult) iter.next();
-            if (isSampleWanted(result.isSuccessful(), errorsOnly, successOnly)) {
-                visualizer.add(result);
-            }
-        }
-    }
-
-    public void clearVisualizer() {
-        // current = -1;
-        if (getVisualizer() != null && getVisualizer() instanceof Clearable) {
-            ((Clearable) getVisualizer()).clearData();
-        }
-        finalizeFileOutput();
     }
 
     public void sampleStarted(SampleEvent e) {

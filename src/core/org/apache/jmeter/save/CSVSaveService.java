@@ -142,7 +142,7 @@ public final class CSVSaveService {
                 SampleEvent event = CSVSaveService.makeResultFromDelimitedString(parts,saveConfig,lineNumber);
                 if (event != null){
                     final SampleResult result = event.getResult();
-                    if (resultCollector.isSampleWanted(result.isSuccessful(),errorsOnly, successOnly)) {
+                    if (ResultCollector.isSampleWanted(result.isSuccessful(),errorsOnly, successOnly)) {
                         visualizer.add(result);
                     }
                 }

@@ -68,6 +68,12 @@ To override the default local language, set the JMeter property "language" befor
 
 <h3>Incompatible changes</h3>
 <p>
+When loading sample results from a file, previous results are no longer cleared.
+This allows one to merge multiple files.
+If the previous behaviour is required,
+use the menu item Run/Clear (Ctrl+Shift+E) or Run/Clear All (Ctrl+E) before loading the file.
+</p>
+<p>
 The test elements "Save Results to a file" and "Generate Summary Results" are now shown as Listeners.
 They were previously shown as Post-Processors, even though they are implemented as Listeners.
 </p>
@@ -179,6 +185,8 @@ These are implemented in the AbstractTestElement class which all elements should
 <li>JDBC Request now handles quoted strings.</li>
 <li>JDBC Request now handles arbitray variable types.</li>
 <li>Bug 46030 - Extend TCP Sampler to Support Length-Prefixed Binary Data</li>
+<li>Process JVM_ARGS last so users can override default settings</li>
+<li>Read XML JTL files more efficiently - pass samples to visualisers as they are read, rather than saving them all and then processing them</li>
 </ul>
 
 <h3>Non-functional changes</h3>
@@ -188,6 +196,7 @@ These are implemented in the AbstractTestElement class which all elements should
 <li>Remove unnecessary clone() methods from function classes</li>
 <li>Moved PreProcessor invocation to JMeterThread class</li>
 <li>Made HashTree Map field final</li>
+<li>Improve performance of calling ResultCollector#isSampleWanted() for multiple samples</li>
 </ul>
 </section> 
 </body> 
