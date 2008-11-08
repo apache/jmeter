@@ -118,6 +118,8 @@ public final class CSVSaveService {
     public static void processSamples(String filename, Visualizer visualizer,
             ResultCollector resultCollector) throws IOException {
         BufferedReader dataReader = null;
+        final boolean errorsOnly = resultCollector.isErrorLogging();
+        final boolean successOnly = resultCollector.isSuccessOnlyLogging();
         try {
             dataReader = new BufferedReader(new FileReader(filename));
             dataReader.mark(400);// Enough to read the header column names
@@ -140,7 +142,7 @@ public final class CSVSaveService {
                 SampleEvent event = CSVSaveService.makeResultFromDelimitedString(parts,saveConfig,lineNumber);
                 if (event != null){
                     final SampleResult result = event.getResult();
-                    if (resultCollector.isSampleWanted(result.isSuccessful())) {
+                    if (resultCollector.isSampleWanted(result.isSuccessful(),errorsOnly, successOnly)) {
                         visualizer.add(result);
                     }
                 }
