@@ -456,13 +456,20 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
         if (isSampleWanted(result.isSuccessful())) {
             sendToVisualizer(result);
-            if ( out != null) {// no point otherwise
+            if (out != null && !isResultMarked(result) && !this.isStats) {
                 SampleSaveConfiguration config = getSaveConfig();
                 result.setSaveConfig(config);
                 try {
                     if (config.saveAsXml()) {
-                        recordResult(event);
-                    } else {
+                        if (SaveService.isSaveTestLogFormat20()) {
+                            if (serializer == null) {
+                                serializer = new DefaultConfigurationSerializer();
+                            }
+                            out.write(OldSaveService.getSerializedSampleResult(result, serializer, config));
+                        } else { // !LogFormat20
+                            SaveService.saveSampleResult(event, out);
+                        }
+                    } else { // !saveAsXml
                         String savee = CSVSaveService.resultToDelimitedString(event);
                         out.println(savee);
                     }
@@ -476,21 +483,6 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     protected final void sendToVisualizer(SampleResult r) {
         if (getVisualizer() != null) {
             getVisualizer().add(r);
-        }
-    }
-
-    // Only called if out != null
-    private void recordResult(SampleEvent event) throws Exception {
-        SampleResult result = event.getResult();
-        if (!isResultMarked(result) && !this.isStats) {
-            if (SaveService.isSaveTestLogFormat20()) {
-                if (serializer == null) {
-                    serializer = new DefaultConfigurationSerializer();
-                }
-                out.write(OldSaveService.getSerializedSampleResult(result, serializer, getSaveConfig()));
-            } else {
-                SaveService.saveSampleResult(event, out);
-            }
         }
     }
 
