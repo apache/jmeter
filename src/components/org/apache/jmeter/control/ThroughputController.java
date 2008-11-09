@@ -54,11 +54,25 @@ public class ThroughputController extends GenericController implements Serializa
 
     private static final String PERCENTTHROUGHPUT = "ThroughputController.percentThroughput";// $NON-NLS-1$
 
-    private static int globalNumExecutions;
+    private static class MutableInteger{
+        private int integer;
+        MutableInteger(int value){
+            integer=value;
+        }
+        int incr(){
+            return ++integer;
+        }
+        public int intValue() {
+            return integer;
+        }
+    }
+    
+    // These items are shared between threads in a group by the clone() method
+    private MutableInteger globalNumExecutions;
 
-    private static int globalIteration;
+    private MutableInteger globalIteration;
 
-    private static final Object counterLock = new Object(); // ensure counts are updated correctly
+    private Object counterLock = new Object(); // ensure counts are updated correctly
 
     /**
      * Number of iterations on which we've chosen to deliver samplers.
@@ -154,7 +168,7 @@ public class ThroughputController extends GenericController implements Serializa
     private int getExecutions() {
         if (!isPerThread()) {
             synchronized (counterLock) {
-                return globalNumExecutions;
+                return globalNumExecutions.intValue();
             }
         }
         return numExecutions;
@@ -199,16 +213,20 @@ public class ThroughputController extends GenericController implements Serializa
         clone.numExecutions = numExecutions;
         clone.iteration = iteration;
         clone.runThisTime = false;
+        // Ensure global counters and lock are shared across threads in the group
+        clone.globalIteration = globalIteration;
+        clone.globalNumExecutions = globalNumExecutions;
+        clone.counterLock = counterLock;
         return clone;
     }
 
     public void iterationStart(LoopIterationEvent iterEvent) {
         if (!isPerThread()) {
             synchronized (counterLock) {
-                globalIteration++;
-                runThisTime = decide(globalNumExecutions, globalIteration);
+                globalIteration.incr();
+                runThisTime = decide(globalNumExecutions.intValue(), globalIteration.intValue());
                 if (runThisTime) {
-                    globalNumExecutions++;
+                    globalNumExecutions.incr();
                 }
             }
         } else {
@@ -222,8 +240,8 @@ public class ThroughputController extends GenericController implements Serializa
 
     public void testStarted() {
         synchronized (counterLock) {
-            globalNumExecutions = 0;
-            globalIteration = -1;
+            globalNumExecutions = new MutableInteger(0);
+            globalIteration = new MutableInteger(-1);
         }
     }
 
