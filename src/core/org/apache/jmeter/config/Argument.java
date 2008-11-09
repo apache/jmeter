@@ -135,4 +135,23 @@ public class Argument extends AbstractTestElement implements Serializable {
     public String toString() {
         return getName() + getMetaData() + getValue();
     }
+    
+    /**
+     * Is this parameter skippable, i.e. empty/blank string
+     * or it looks like an unrecognised variable.
+     * 
+     * @param parameterName - parameter name
+     * @return true if parameter should be skipped
+     */
+    public boolean isSkippable(String parameterName) {
+        if (parameterName.trim().length()==0){
+            return true; // Skip parameters with a blank name (allows use of optional variables in parameter lists)
+        }
+        // TODO: improve this test  
+        if (parameterName.trim().startsWith("${") && parameterName.endsWith("}")){// $NON-NLS-1$ $NON-NLS-2$
+            return true; // Missing variable name
+        }
+        return false;
+    }
+
 }
