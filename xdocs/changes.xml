@@ -156,6 +156,7 @@ These are implemented in the AbstractTestElement class which all elements should
 <li>Bug 45460 - JMS TestPlan elements depend on resource property</li>
 <li>Bug 34096 - Duplicate samples not eliminated when writing to CSV files</li>
 <li>Bug 44521 - empty variables for a POST in the HTTP Request don't get ignored</li>
+<li>Bug 44941 - Throughput controllers should not share global counters</li>
 </ul>
 
 <h3>Improvements</h3>
