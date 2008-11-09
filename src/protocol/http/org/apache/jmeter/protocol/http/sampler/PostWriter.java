@@ -188,8 +188,8 @@ public class PostWriter {
             while (args.hasNext()) {
                 HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
                 String parameterName = arg.getName();
-                if (parameterName.length()==0){
-                    continue; // Skip parameters with a blank name (allows use of optional variables in parameter lists)
+                if (arg.isSkippable(parameterName)){
+                    continue;
                 }
                 // End the previous multipart
                 bos.write(CRLF);

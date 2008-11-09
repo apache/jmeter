@@ -267,22 +267,18 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                 contentEncoding = null;
             }
 
-            // Check how many parts we need, one for each parameter and file
-            int noParts = getArguments().getArgumentCount();
-            noParts += files.length;
-
+            // We don't know how many entries will be skipped
+            ArrayList partlist = new ArrayList();
             // Create the parts
-            Part[] parts = new Part[noParts];
-            int partNo = 0;
             // Add any parameters
             PropertyIterator args = getArguments().iterator();
             while (args.hasNext()) {
                HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
                String parameterName = arg.getName();
-               if (parameterName.length()==0){
-                   continue; // Skip parameters with a blank name (allows use of optional variables in parameter lists)
+               if (arg.isSkippable(parameterName)){
+                   continue;
                }
-               parts[partNo++] = new StringPart(arg.getName(), arg.getValue(), contentEncoding);
+               partlist.add(new StringPart(arg.getName(), arg.getValue(), contentEncoding));
             }
 
             // Add any files
@@ -292,10 +288,12 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                 // We do not know the char set of the file to be uploaded, so we set it to null
                 ViewableFilePart filePart = new ViewableFilePart(file.getParamName(), inputFile, file.getMimeType(), null);
                 filePart.setCharSet(null); // We do not know what the char set of the file is
-                parts[partNo++] = filePart;
+                partlist.add(filePart);
             }
 
             // Set the multipart for the post
+            int partNo = partlist.size();
+            Part[] parts = (Part[])partlist.toArray(new Part[partNo]);
             MultipartRequestEntity multiPart = new MultipartRequestEntity(parts, post.getParams());
             post.setRequestEntity(multiPart);
 
@@ -394,7 +392,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                         }
                     }
 
-                    // Just append all the non-empty parameter values, and use that as the post body
+                    // Just append all the parameter values, and use that as the post body
                     StringBuffer postBody = new StringBuffer();
                     PropertyIterator args = getArguments().iterator();
                     while (args.hasNext()) {
@@ -425,8 +423,8 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                         // so if the argument is already encoded, we have to decode
                         // it before adding it to the post request
                         String parameterName = arg.getName();
-                        if (parameterName.length()==0){
-                            continue; // Skip parameters with a blank name (allows use of optional variables in parameter lists)
+                        if (arg.isSkippable(parameterName)){
+                            continue;
                         }
                         String parameterValue = arg.getValue();
                         if(!arg.isAlwaysEncoded()) {
