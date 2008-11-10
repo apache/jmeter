@@ -63,32 +63,32 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 
     private JCheckBox storeMimeMessageBox;
 
-    // Labels
-    private final static String POP3Label = JMeterUtils.getResString("mail_reader_pop3");// $NON-NLS-1$
+    // Labels - don't make these static, else language change will not work
+    private final String POP3Label = JMeterUtils.getResString("mail_reader_pop3");// $NON-NLS-1$
 
-    private final static String IMAPLabel = JMeterUtils.getResString("mail_reader_imap");// $NON-NLS-1$
+    private final String IMAPLabel = JMeterUtils.getResString("mail_reader_imap");// $NON-NLS-1$
 
-    private final static String POP3SLabel = JMeterUtils.getResString("mail_reader_pop3s");// $NON-NLS-1$
+    private final String POP3SLabel = JMeterUtils.getResString("mail_reader_pop3s");// $NON-NLS-1$
 
-    private final static String IMAPSLabel = JMeterUtils.getResString("mail_reader_imaps");// $NON-NLS-1$
+    private final String IMAPSLabel = JMeterUtils.getResString("mail_reader_imaps");// $NON-NLS-1$
 
-    private final static String ServerTypeLabel = JMeterUtils.getResString("mail_reader_server_type");// $NON-NLS-1$
+    private final String ServerTypeLabel = JMeterUtils.getResString("mail_reader_server_type");// $NON-NLS-1$
 
-    private final static String ServerLabel = JMeterUtils.getResString("mail_reader_server");// $NON-NLS-1$
+    private final String ServerLabel = JMeterUtils.getResString("mail_reader_server");// $NON-NLS-1$
 
-    private final static String AccountLabel = JMeterUtils.getResString("mail_reader_account");// $NON-NLS-1$
+    private final String AccountLabel = JMeterUtils.getResString("mail_reader_account");// $NON-NLS-1$
 
-    private final static String PasswordLabel = JMeterUtils.getResString("mail_reader_password");// $NON-NLS-1$
+    private final String PasswordLabel = JMeterUtils.getResString("mail_reader_password");// $NON-NLS-1$
 
-    private final static String NumMessagesLabel = JMeterUtils.getResString("mail_reader_num_messages");// $NON-NLS-1$
+    private final String NumMessagesLabel = JMeterUtils.getResString("mail_reader_num_messages");// $NON-NLS-1$
 
-    private final static String AllMessagesLabel = JMeterUtils.getResString("mail_reader_all_messages");// $NON-NLS-1$
+    private final String AllMessagesLabel = JMeterUtils.getResString("mail_reader_all_messages");// $NON-NLS-1$
 
-    private final static String DeleteLabel = JMeterUtils.getResString("mail_reader_delete");// $NON-NLS-1$
+    private final String DeleteLabel = JMeterUtils.getResString("mail_reader_delete");// $NON-NLS-1$
 
-    private final static String FolderLabel = JMeterUtils.getResString("mail_reader_folder");// $NON-NLS-1$
+    private final String FolderLabel = JMeterUtils.getResString("mail_reader_folder");// $NON-NLS-1$
 
-    private final static String STOREMIME = JMeterUtils.getResString("mail_reader_storemime");// $NON-NLS-1$
+    private final String STOREMIME = JMeterUtils.getResString("mail_reader_storemime");// $NON-NLS-1$
 
     private static final String INBOX = "INBOX"; // $NON-NLS-1$
 
