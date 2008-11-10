@@ -46,15 +46,14 @@ public class ThroughputControllerGui extends AbstractControllerGui {
 
     private boolean isPerThread = true;
 
-    private String BYNUMBER_LABEL = JMeterUtils.getResString("throughput_control_bynumber_label"); // $NON-NLS-1$
+    // These must not be static, otherwise Language change does not work
+    private final String BYNUMBER_LABEL = JMeterUtils.getResString("throughput_control_bynumber_label"); // $NON-NLS-1$
 
-    private String BYPERCENT_LABEL = JMeterUtils.getResString("throughput_control_bypercent_label"); // $NON-NLS-1$
+    private final String BYPERCENT_LABEL = JMeterUtils.getResString("throughput_control_bypercent_label"); // $NON-NLS-1$
 
-    private String THROUGHPUT_LABEL = JMeterUtils.getResString("throughput_control_tplabel"); // $NON-NLS-1$
+    private final String THROUGHPUT_LABEL = JMeterUtils.getResString("throughput_control_tplabel"); // $NON-NLS-1$
 
-    private String THROUGHPUT = "Througput Field"; // $NON-NLS-1$
-
-    private String PERTHREAD_LABEL = JMeterUtils.getResString("throughput_control_perthread_label"); // $NON-NLS-1$
+    private final String PERTHREAD_LABEL = JMeterUtils.getResString("throughput_control_perthread_label"); // $NON-NLS-1$
 
     public ThroughputControllerGui() {
         init();
@@ -144,7 +143,6 @@ public class ThroughputControllerGui extends AbstractControllerGui {
         // TEXT FIELD
         throughput = new JTextField(5);
         tpPanel.add(throughput);
-        throughput.setName(THROUGHPUT);
         throughput.setText("1"); // $NON-NLS-1$
         // throughput.addActionListener(this);
         tpPanel.add(throughput);

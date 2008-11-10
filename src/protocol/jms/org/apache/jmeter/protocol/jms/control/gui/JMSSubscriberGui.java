@@ -74,11 +74,12 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.eve
     private JCheckBox readResponse =
         new JCheckBox(JMeterUtils.getResString("jms_read_response"), true); // $NON-NLS-1$
 
-    public static final String receive_str = JMeterUtils.getResString("jms_subscriber_receive"); // $NON-NLS-1$
+    // These must not be static, otherwise Language change does not work
+    public final String receive_str = JMeterUtils.getResString("jms_subscriber_receive"); // $NON-NLS-1$
 
-    public static final String onmessage_str = JMeterUtils.getResString("jms_subscriber_on_message"); // $NON-NLS-1$
+    public final String onmessage_str = JMeterUtils.getResString("jms_subscriber_on_message"); // $NON-NLS-1$
 
-    private static final String[] client_items = { receive_str, onmessage_str };
+    private final String[] client_items = { receive_str, onmessage_str };
 
     private JLabeledRadio clientChoice =
         new JLabeledRadio(JMeterUtils.getResString("jms_client_type"), client_items, // $NON-NLS-1$
