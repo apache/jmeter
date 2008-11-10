@@ -45,15 +45,16 @@ public class MonitorHealthPanel extends JPanel implements MonitorListener, Clear
     private JScrollPane SCROLL = null;
 
     // NOTUSED Font plainText = new Font("plain", Font.PLAIN, 9);
-    public static final String INFO_H = JMeterUtils.getResString("monitor_equation_healthy"); //$NON-NLS-1$
+    // These must not be static, otherwise Language change does not work
+    public final String INFO_H = JMeterUtils.getResString("monitor_equation_healthy"); //$NON-NLS-1$
 
-    public static final String INFO_A = JMeterUtils.getResString("monitor_equation_active"); //$NON-NLS-1$
+    public final String INFO_A = JMeterUtils.getResString("monitor_equation_active"); //$NON-NLS-1$
 
-    public static final String INFO_W = JMeterUtils.getResString("monitor_equation_warning"); //$NON-NLS-1$
+    public final String INFO_W = JMeterUtils.getResString("monitor_equation_warning"); //$NON-NLS-1$
 
-    public static final String INFO_D = JMeterUtils.getResString("monitor_equation_dead"); //$NON-NLS-1$
+    public final String INFO_D = JMeterUtils.getResString("monitor_equation_dead"); //$NON-NLS-1$
 
-    public static final String INFO_LOAD = JMeterUtils.getResString("monitor_equation_load"); //$NON-NLS-1$
+    public final String INFO_LOAD = JMeterUtils.getResString("monitor_equation_load"); //$NON-NLS-1$
 
     /**
      *
@@ -78,7 +79,7 @@ public class MonitorHealthPanel extends JPanel implements MonitorListener, Clear
      */
     private void init() {// called from ctor, so must not be overridable
         this.setLayout(new BorderLayout());
-        ImageIcon legend = JMeterUtils.getImage("monitor-legend.gif"); //$NON-NLS-1$
+        ImageIcon legend = JMeterUtils.getImage("monitor-legend.gif"); // I18N: Contains fixed English text ...
         JLabel label = new JLabel(legend);
         label.setPreferredSize(new Dimension(550, 25));
         this.add(label, BorderLayout.NORTH);

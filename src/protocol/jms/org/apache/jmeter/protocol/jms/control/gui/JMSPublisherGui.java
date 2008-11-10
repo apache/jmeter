@@ -51,11 +51,12 @@ public class JMSPublisherGui extends AbstractSamplerGui implements java.awt.even
 
     private static final String ALL_FILES = "*.*"; //$NON-NLS-1$
 
-    public static final String use_file = JMeterUtils.getResString("jms_use_file"); //$NON-NLS-1$
+    // These must not be static, otherwise Language change does not work
+    public final String use_file = JMeterUtils.getResString("jms_use_file"); //$NON-NLS-1$
 
-    public static final String use_random = JMeterUtils.getResString("jms_use_random_file"); //$NON-NLS-1$
+    public final String use_random = JMeterUtils.getResString("jms_use_random_file"); //$NON-NLS-1$
 
-    public static final String use_text = JMeterUtils.getResString("jms_use_text"); //$NON-NLS-1$
+    public final String use_text = JMeterUtils.getResString("jms_use_text"); //$NON-NLS-1$
 
     private String[] items = { use_file, use_random, use_text };
 
