@@ -58,19 +58,20 @@ public class TestActionGui extends AbstractSamplerGui {
     private String durationString;
 
     // String in the panel
-    private static final String targetLabel = JMeterUtils.getResString("test_action_target"); // $NON-NLS-1$
+    // Do not make these static, otherwise language changes don't work
+    private final String targetLabel = JMeterUtils.getResString("test_action_target"); // $NON-NLS-1$
 
-    private static final String threadTarget = JMeterUtils.getResString("test_action_target_thread"); // $NON-NLS-1$
+    private final String threadTarget = JMeterUtils.getResString("test_action_target_thread"); // $NON-NLS-1$
 
-    private static final String testTarget = JMeterUtils.getResString("test_action_target_test"); // $NON-NLS-1$
+    private final String testTarget = JMeterUtils.getResString("test_action_target_test"); // $NON-NLS-1$
 
-    private static final String actionLabel = JMeterUtils.getResString("test_action_action"); // $NON-NLS-1$
+    private final String actionLabel = JMeterUtils.getResString("test_action_action"); // $NON-NLS-1$
 
-    private static final String pauseAction = JMeterUtils.getResString("test_action_pause"); // $NON-NLS-1$
+    private final String pauseAction = JMeterUtils.getResString("test_action_pause"); // $NON-NLS-1$
 
-    private static final String stopAction = JMeterUtils.getResString("test_action_stop"); // $NON-NLS-1$
+    private final String stopAction = JMeterUtils.getResString("test_action_stop"); // $NON-NLS-1$
 
-    private static final String durationLabel = JMeterUtils.getResString("test_action_duration"); // $NON-NLS-1$
+    private final String durationLabel = JMeterUtils.getResString("test_action_duration"); // $NON-NLS-1$
 
     public TestActionGui() {
         super();
