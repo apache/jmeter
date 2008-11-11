@@ -35,6 +35,9 @@ import javax.swing.event.ChangeListener;
 
 /**
  * JLabeledRadio will create a set of Radio buttons with a label.
+ * 
+ * @see JLabeledRadioI18N for a version that is better suited to
+ * multi-language use.
  */
 public class JLabeledRadio extends JPanel implements JLabeledField, ActionListener {
 
