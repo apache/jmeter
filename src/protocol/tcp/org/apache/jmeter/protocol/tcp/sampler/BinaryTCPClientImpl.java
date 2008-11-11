@@ -134,21 +134,6 @@ public class BinaryTCPClientImpl extends AbstractTCPClient {
                     break;
                 }
             }
-            /*
-             * Timeout is reported as follows: JDK1.3: InterruptedIOException
-             * JDK1.4: SocketTimeoutException, which extends
-             * InterruptedIOException
-             *
-             * So to make the code work on both, just check for
-             * InterruptedIOException
-             *
-             * If 1.3 support is dropped, can change to using
-             * SocketTimeoutException
-             *
-             * For more accurate detection of timeouts under 1.3, one could
-             * perhaps examine the Exception message text...
-             *
-             */
         } catch (SocketTimeoutException e) {
             // drop out to handle buffer
         } catch (InterruptedIOException e) {
