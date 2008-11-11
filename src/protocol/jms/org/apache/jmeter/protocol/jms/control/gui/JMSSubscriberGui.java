@@ -33,9 +33,9 @@ import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
-import org.apache.jorphan.gui.JLabeledRadio;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
+import org.apache.jmeter.gui.util.JLabeledRadioI18N;
 import org.apache.jmeter.protocol.jms.sampler.SubscriberSampler;
 
 /**
@@ -44,53 +44,49 @@ import org.apache.jmeter.protocol.jms.sampler.SubscriberSampler;
  */
 public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.event.ActionListener, ChangeListener {
 
-    private JCheckBox useProperties =
+    private final JCheckBox useProperties =
         new JCheckBox(JMeterUtils.getResString("jms_use_properties_file"), false); // $NON-NLS-1$
 
-    private JLabeledTextField jndiICF =
+    private final JLabeledTextField jndiICF =
         new JLabeledTextField(JMeterUtils.getResString("jms_initial_context_factory")); // $NON-NLS-1$
 
-    private JLabeledTextField urlField =
+    private final JLabeledTextField urlField =
         new JLabeledTextField(JMeterUtils.getResString("jms_provider_url")); // $NON-NLS-1$
 
-    private JLabeledTextField jndiConnFac =
+    private final JLabeledTextField jndiConnFac =
         new JLabeledTextField(JMeterUtils.getResString("jms_connection_factory")); // $NON-NLS-1$
 
-    private JLabeledTextField jmsTopic =
+    private final JLabeledTextField jmsTopic =
         new JLabeledTextField(JMeterUtils.getResString("jms_topic")); // $NON-NLS-1$
 
-    private JLabeledTextField jmsUser =
+    private final JLabeledTextField jmsUser =
         new JLabeledTextField(JMeterUtils.getResString("jms_user")); // $NON-NLS-1$
 
-    private JLabeledTextField jmsPwd =
+    private final JLabeledTextField jmsPwd =
         new JLabeledTextField(JMeterUtils.getResString("jms_pwd")); // $NON-NLS-1$
 
-    private JLabeledTextField iterations =
+    private final JLabeledTextField iterations =
         new JLabeledTextField(JMeterUtils.getResString("jms_itertions")); // $NON-NLS-1$
 
-    private JCheckBox useAuth = 
+    private final JCheckBox useAuth = 
         new JCheckBox(JMeterUtils.getResString("jms_use_auth"), false); //$NON-NLS-1$
 
-    private JCheckBox readResponse =
+    private final JCheckBox readResponse =
         new JCheckBox(JMeterUtils.getResString("jms_read_response"), true); // $NON-NLS-1$
 
-    // These must not be static, otherwise Language change does not work
-    public final String receive_str = JMeterUtils.getResString("jms_subscriber_receive"); // $NON-NLS-1$
+    //++ Do not change these strings; they are used in JMX files to record the button settings
+    public final static String RECEIVE_RSC = "jms_subscriber_receive"; // $NON-NLS-1$
 
-    public final String onmessage_str = JMeterUtils.getResString("jms_subscriber_on_message"); // $NON-NLS-1$
+    public final static String ON_MESSAGE_RSC = "jms_subscriber_on_message"; // $NON-NLS-1$
+    //--
+    
+    // Button group resources
+    private final static String[] CLIENT_ITEMS = { RECEIVE_RSC, ON_MESSAGE_RSC };
 
-    private final String[] client_items = { receive_str, onmessage_str };
-
-    private JLabeledRadio clientChoice =
-        new JLabeledRadio(JMeterUtils.getResString("jms_client_type"), client_items, // $NON-NLS-1$
-            receive_str);
-
-    /**
-     * This is the font for the note.
-     */
-    //Font plainText = new Font("plain", Font.PLAIN, 10); // $NON-NLS-1$
-
-    private JPanel lookup = null;
+    private final JLabeledRadioI18N clientChoice =
+        new JLabeledRadioI18N("jms_client_type", CLIENT_ITEMS, RECEIVE_RSC); // $NON-NLS-1$
+            
+    private final JPanel lookup = new JPanel();
 
     public JMSSubscriberGui() {
         init();
@@ -165,7 +161,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.eve
         mainPanel.add(getNamePanel());
 
         // Button for browsing webservice wsdl
-        lookup = new JPanel();
+
         lookup.setLayout(new VerticalLayout(6, VerticalLayout.LEFT));
         mainPanel.add(lookup);
         lookup.add(useProperties);
@@ -220,7 +216,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.eve
         iterations.setText(""); // $NON-NLS-1$
         useAuth.setSelected(false);
         readResponse.setSelected(true);
-        clientChoice.setText(""); // $NON-NLS-1$
+        clientChoice.setText(RECEIVE_RSC);
     }
 
     /**
