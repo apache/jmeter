@@ -22,9 +22,9 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
-import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 
 import org.apache.jmeter.protocol.jms.control.gui.JMSSubscriberGui;
@@ -42,17 +42,18 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
 
     private static final long serialVersionUID = 233L;
 
-    // private Subscriber SUBSCRIBER = null;
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    // No need to synch/ - only used by sampler and ClientPool (which does its own synch)
     private transient ReceiveSubscriber SUBSCRIBER = null;
 
-    private StringBuffer BUFFER = new StringBuffer();
+    //@GuardedBy("this")
+    private final StringBuffer BUFFER = new StringBuffer();
 
+    //@GuardedBy("this")
     private transient int counter = 0;
 
-    private volatile boolean isRunning;
-
+    // Don't change the string, as it is used in JMX files
     private static final String CLIENT_CHOICE = "jms.client_choice"; // $NON-NLS-1$
 
     public SubscriberSampler() {
@@ -67,18 +68,12 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
     }
 
     /**
-     * testEnded is called by Jmeter's engine. the implementation will reset the
-     * count, set RUN to false and clear the StringBuffer.
+     * testEnded is called by Jmeter's engine.
+     * Clears the client pool.
      */
-    public synchronized void testEnded() {
-        log.info("SubscriberSampler.testEnded called");
-        this.isRunning = false;
-        this.resetCount();
+    public void testEnded() {
+        log.debug("SubscriberSampler.testEnded called");
         ClientPool.clearClient();
-        this.BUFFER = null;
-        if (this.SUBSCRIBER != null) {
-            this.SUBSCRIBER = null;
-        }
     }
 
     /*
@@ -107,8 +102,8 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
             sub.resume();
             ClientPool.addClient(sub);
             ClientPool.put(this, sub);
-            log.info("SubscriberSampler.initListenerClient called");
-            log.info("loop count " + this.getIterations());
+            log.debug("SubscriberSampler.initListenerClient called");
+            log.debug("loop count " + this.getIterations());
         }
         return sub;
     }
@@ -116,22 +111,13 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
     /**
      * Create the ReceiveSubscriber client for the sampler.
      */
-    public void initReceiveClient() {
+    private void initReceiveClient() {
         this.SUBSCRIBER = new ReceiveSubscriber(this.getUseJNDIPropertiesAsBoolean(), this
                 .getJNDIInitialContextFactory(), this.getProviderUrl(), this.getConnectionFactory(), this.getTopic(),
                 this.isUseAuth(), this.getUsername(), this.getPassword());
         this.SUBSCRIBER.resume();
         ClientPool.addClient(this.SUBSCRIBER);
-        log.info("SubscriberSampler.initReceiveClient called");
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.samplers.Sampler#sample(org.apache.jmeter.samplers.Entry)
-     */
-    public SampleResult sample(Entry e) {
-        return this.sample();
+        log.debug("SubscriberSampler.initReceiveClient called");
     }
 
     /**
@@ -141,7 +127,7 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
      * @return the appropriate sample result
      */
     public SampleResult sample() {
-        if (this.getClientChoice().equals(JMSSubscriberGui.receive_str)) {
+        if (this.getClientChoice().equals(JMSSubscriberGui.RECEIVE_RSC)) {
             return sampleWithReceive();
         } else {
             return sampleWithListener();
@@ -157,21 +143,20 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
         SampleResult result = new SampleResult();
         result.setSampleLabel(getName());
         initListenerClient();
-        this.isRunning = true;
 
         int loop = this.getIterationCount();
 
         result.sampleStart();
-        while (this.isRunning && this.count(0) < loop) {
+        while (this.count(0) < loop) {
             try {
                 Thread.sleep(0, 50);
-            } catch (Exception e) {
-                log.info(e.getMessage());
+            } catch (InterruptedException e) {
+                log.debug(e.getMessage());
             }
         }
         result.sampleEnd();
         result.setResponseMessage(loop + " samples messages recieved");
-        synchronized (this) {
+        synchronized (this) {// Need to synch because buffer is shared with onMessageHandler
             if (this.getReadResponseAsBoolean()) {
                 result.setResponseData(this.BUFFER.toString().getBytes());
             } else {
@@ -207,8 +192,8 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
         while (this.SUBSCRIBER.count(0) < loop) {
             try {
                 Thread.sleep(0, 50);
-            } catch (Exception e) {
-                log.info(e.getMessage());
+            } catch (InterruptedException e) {
+                log.debug(e.getMessage());
             }
         }
         result.sampleEnd();
@@ -223,8 +208,7 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
         result.setSamplerData("Not applicable");
         result.setSampleCount(loop);
 
-        this.SUBSCRIBER.clear();
-        this.SUBSCRIBER.resetCount();
+        this.SUBSCRIBER.reset();
         return result;
     }
 
@@ -279,9 +263,18 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
     /**
      * Return the client choice.
      *
-     * @return the client choice
+     * @return the client choice, either RECEIVE_RSC or ON_MESSAGE_RSC
      */
     public String getClientChoice() {
-        return getPropertyAsString(CLIENT_CHOICE);
+        String choice = getPropertyAsString(CLIENT_CHOICE);
+        // Convert the old test plan entry (which is the language dependent string) to the resource name
+        if (choice.equals(RECEIVE_STR)){
+            choice = JMSSubscriberGui.RECEIVE_RSC;
+        } else if (!choice.equals(JMSSubscriberGui.RECEIVE_RSC)){
+            choice = JMSSubscriberGui.ON_MESSAGE_RSC;
+        }
+        return choice;
     }
+    // This was the old value that was checked for
+    private final static String RECEIVE_STR = JMeterUtils.getResString(JMSSubscriberGui.RECEIVE_RSC); // $NON-NLS-1$
 }
