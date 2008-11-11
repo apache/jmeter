@@ -216,20 +216,6 @@ public final class JOrphanUtils {
 
     /**
      * Convert a boolean to its string representation Equivalent to
-     * Boolean.toString(boolean) but valid also for JDK 1.3, which
-     * does not have toString(boolean)
-     *
-     * @param value
-     *            boolean to convert
-     * @return "true" or "false"
-     * @deprecated Use Boolean.toString(boolean) instead.
-     */
-    public static String booleanToString(boolean value) {
-        return value ? "true" : "false";
-    }
-
-    /**
-     * Convert a boolean to its string representation Equivalent to
      * Boolean.valueOf(boolean).toString().toUpperCase() but valid also for JDK
      * 1.3, which does not have valueOf(boolean)
      *
@@ -239,20 +225,6 @@ public final class JOrphanUtils {
      */
     public static String booleanToSTRING(boolean value) {
         return value ? "TRUE" : "FALSE";
-    }
-
-    /**
-     * Version of Boolean.valueOf(boolean) for JDK 1.3
-     *
-     * @param value
-     *            boolean to convert
-     * @return Boolean.TRUE or Boolean.FALSE
-     *
-     * @deprecated use Boolean.valueOf(boolean)
-     *
-     */
-    public static Boolean valueOf(boolean value) {
-        return value ? Boolean.TRUE : Boolean.FALSE;
     }
 
     /**
