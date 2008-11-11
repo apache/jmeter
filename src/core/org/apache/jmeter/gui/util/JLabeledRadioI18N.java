@@ -16,7 +16,7 @@
  *
  */
 
-package org.apache.jorphan.gui;
+package org.apache.jmeter.gui.util;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,6 +34,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.JLabeledField;
 
 /**
  * JLabeledRadio will create a set of Radio buttons with a label.

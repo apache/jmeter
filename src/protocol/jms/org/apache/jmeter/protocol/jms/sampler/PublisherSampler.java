@@ -22,6 +22,7 @@ import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 
 import org.apache.jmeter.protocol.jms.control.gui.JMSPublisherGui;
@@ -52,12 +53,16 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
     private static final String MESSAGE_CHOICE = "jms.config_msg_type"; //$NON-NLS-1$
     //--
 
+    // Does not need to be synch. because it is only accessed from the sampler thread
+    // The ClientPool does access it in a different thread, but ClientPool is fully synch.
     private transient Publisher PUB = null;
 
-    private StringBuffer BUFFER = new StringBuffer();
+    // Does not need to be synch. because only used by the sample method as a temporary buffer
+    private final StringBuffer BUFFER = new StringBuffer();
 
     private static final FileServer FSERVER = FileServer.getFileServer();
 
+    // Cache for file. Only used by sample() in a single thread
     private String file_contents = null;
 
     public PublisherSampler() {
@@ -83,19 +88,11 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
      * @see junit.framework.TestListener#endTest(junit.framework.Test)
      */
     public void testEnded() {
-        log.info("PublisherSampler.testEnded called");
-        Thread.currentThread().interrupt();
-        this.PUB = null;
-        this.BUFFER.setLength(0);
-        this.BUFFER = null;
+        log.debug("PublisherSampler.testEnded called");
         ClientPool.clearClient();
     }
 
-    /**
-     * the implementation creates a new StringBuffer
-     */
     public void testStarted() {
-        this.BUFFER = new StringBuffer();
     }
 
     /**
@@ -108,12 +105,12 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
      * initialize the Publisher client.
      *
      */
-    public synchronized void initClient() {
+    private void initClient() {
         this.PUB = new Publisher(this.getUseJNDIPropertiesAsBoolean(), this.getJNDIInitialContextFactory(), this
                 .getProviderUrl(), this.getConnectionFactory(), this.getTopic(), this.isUseAuth(), this.getUsername(),
                 this.getPassword());
         ClientPool.addClient(this.PUB);
-        log.info("PublisherSampler.initClient called");
+        log.debug("PublisherSampler.initClient called");
     }
 
     /**
@@ -161,15 +158,15 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
      *
      * @return the contents for the message
      */
-    public String getMessageContent() {
-        if (this.getConfigChoice().equals(JMSPublisherGui.use_file)) {
+    private String getMessageContent() {
+        if (this.getConfigChoice().equals(JMSPublisherGui.USE_FILE_RSC)) {
             // in the case the test uses a file, we set it locally and
             // prevent loading the file repeatedly
             if (this.file_contents == null) {
                 this.file_contents = this.getFileContent(this.getInputFile());
             }
             return this.file_contents;
-        } else if (this.getConfigChoice().equals(JMSPublisherGui.use_random)) {
+        } else if (this.getConfigChoice().equals(JMSPublisherGui.USE_RANDOM_RSC)) {
             // Maybe we should consider creating a global cache for the
             // random files to make JMeter more efficient.
             String fname = FSERVER.getRandomFile(this.getRandomPath(), new String[] { ".txt", ".obj" })
@@ -202,12 +199,25 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
         setProperty(CONFIG_CHOICE, choice);
     }
 
+    private static final String USE_FILE_LOCALNAME = JMeterUtils.getResString(JMSPublisherGui.USE_FILE_RSC);
+    private static final String USE_RANDOM_LOCALNAME = JMeterUtils.getResString(JMSPublisherGui.USE_RANDOM_RSC);
+
     /**
      * return the config choice
-     *
+     * Converts from old JMX files which used the local language string
      */
     public String getConfigChoice() {
-        return getPropertyAsString(CONFIG_CHOICE);
+        // Allow for the old JMX file which used the local language string
+        String config = getPropertyAsString(CONFIG_CHOICE);
+        if (config.equals(USE_FILE_LOCALNAME) 
+         || config.equals(JMSPublisherGui.USE_FILE_RSC)){
+            return JMSPublisherGui.USE_FILE_RSC;
+        }
+        if (config.equals(USE_RANDOM_LOCALNAME)
+         || config.equals(JMSPublisherGui.USE_RANDOM_RSC)){
+            return JMSPublisherGui.USE_RANDOM_RSC;
+        }
+        return config; // will be the 3rd option, which is not checked specifically
     }
 
     /**

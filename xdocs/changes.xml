@@ -106,6 +106,11 @@ with LAST, blank or false.
 </p>
 
 <p>
+The following deprecated methods were removed from JOrphanUtils: booleanToString(boolean) and valueOf(boolean).
+Java 1.4+ has these methods in the Boolean class.
+</p>
+
+<p>
 The TestElement interface has some new methods:
 <ul>
 <li>void setProperty(String key, String value, String dflt)</li>
@@ -157,6 +162,8 @@ These are implemented in the AbstractTestElement class which all elements should
 <li>Bug 34096 - Duplicate samples not eliminated when writing to CSV files</li>
 <li>Bug 44521 - empty variables for a POST in the HTTP Request don't get ignored</li>
 <li>Bug 44941 - Throughput controllers should not share global counters</li>
+<li>Various ReceiveSubscriber thread-safety fixes</li>
+<li>JMSPublisher and Subscriber fixes: thread-safety, support dynamic locale changes, locale independence for JMX attribute values</li>
 </ul>
 
 <h3>Improvements</h3>
