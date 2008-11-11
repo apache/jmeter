@@ -26,6 +26,9 @@ import java.util.Iterator;
  * ClientPool holds the client instances in an ArrayList. The main purpose of
  * this is to make it easier to clean up all the instances at the end of a test.
  * If we didn't do this, threads might become zombie.
+ * 
+ * N.B. This class needs to be fully synchronized as it is called from sample threads
+ * and the thread that runs testEnded() methods.
  */
 public class ClientPool {
 
@@ -39,7 +42,7 @@ public class ClientPool {
      *
      * @param client
      */
-    public static void addClient(ReceiveSubscriber client) {
+    public static synchronized void addClient(ReceiveSubscriber client) {
         clients.add(client);
     }
 
@@ -49,7 +52,7 @@ public class ClientPool {
      *
      * @param client
      */
-    public static void addClient(OnMessageSubscriber client) {
+    public static synchronized void addClient(OnMessageSubscriber client) {
         clients.add(client);
     }
 
@@ -59,7 +62,7 @@ public class ClientPool {
      *
      * @param client
      */
-    public static void addClient(Publisher client) {
+    public static synchronized void addClient(Publisher client) {
         clients.add(client);
     }
 
@@ -71,7 +74,7 @@ public class ClientPool {
      * zombie. In those cases, it is not the responsibility of JMeter for those
      * bugs.
      */
-    public static void clearClient() {
+    public static synchronized void clearClient() {
         Iterator itr = clients.iterator();
         while (itr.hasNext()) {
             Object client = itr.next();
@@ -93,15 +96,15 @@ public class ClientPool {
         client_map.clear();
     }
 
-    public static void put(Object key, OnMessageSubscriber client) {
+    public static synchronized void put(Object key, OnMessageSubscriber client) {
         client_map.put(key, client);
     }
 
-    public static void put(Object key, Publisher client) {
+    public static synchronized void put(Object key, Publisher client) {
         client_map.put(key, client);
     }
 
-    public static Object get(Object key) {
+    public static synchronized Object get(Object key) {
         return client_map.get(key);
     }
 }
