@@ -44,9 +44,7 @@ import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.gui.RendererUtils;
 import org.apache.jorphan.gui.RightAlignRenderer;
 import org.apache.jorphan.gui.layout.VerticalLayout;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.Functor;
-import org.apache.log.Logger;
 
 /**
  * This class implements a statistical analyser that calculates both the average
@@ -57,26 +55,27 @@ import org.apache.log.Logger;
  *
  */
 public class TableVisualizer extends AbstractVisualizer implements Clearable {
-    private static final Logger log = LoggingManager.getLoggerForClass();
 
+    // Note: the resource string won't respond to locale-changes,
+    // however this does not matter as it is only used when pasting to the clipboard
     private static final ImageIcon imageSuccess = JMeterUtils.getImage(
             JMeterUtils.getPropDefault("viewResultsTree.success",  //$NON-NLS-1$
-                    "icon_success_sml.gif"), //$NON-NLS-1$
+                                       "icon_success_sml.gif"),    //$NON-NLS-1$
             JMeterUtils.getResString("table_visualizer_success")); //$NON-NLS-1$
 
     private static final ImageIcon imageFailure = JMeterUtils.getImage(
             JMeterUtils.getPropDefault("viewResultsTree.failure",  //$NON-NLS-1$
-                    "icon_warning_sml.gif"), //$NON-NLS-1$
+                                       "icon_warning_sml.gif"),    //$NON-NLS-1$
             JMeterUtils.getResString("table_visualizer_warning")); //$NON-NLS-1$
 
-    private final String[] COLUMNS = new String[] {
-            JMeterUtils.getResString("table_visualizer_sample_num"), // $NON-NLS-1$
-            JMeterUtils.getResString("table_visualizer_start_time"), // $NON-NLS-1$
-            JMeterUtils.getResString("table_visualizer_thread_name"),// $NON-NLS-1$
-            JMeterUtils.getResString("sampler_label"),  // $NON-NLS-1$
-            JMeterUtils.getResString("table_visualizer_sample_time"), // $NON-NLS-1$
-            JMeterUtils.getResString("table_visualizer_status"),  // $NON-NLS-1$
-            JMeterUtils.getResString("table_visualizer_bytes") }; // $NON-NLS-1$
+    private static final String[] COLUMNS = new String[] {
+            "table_visualizer_sample_num",  // $NON-NLS-1$
+            "table_visualizer_start_time",  // $NON-NLS-1$
+            "table_visualizer_thread_name", // $NON-NLS-1$
+            "sampler_label",                // $NON-NLS-1$
+            "table_visualizer_sample_time", // $NON-NLS-1$
+            "table_visualizer_status",      // $NON-NLS-1$
+            "table_visualizer_bytes" };     // $NON-NLS-1$
 
     private ObjectTableModel model = null;
 

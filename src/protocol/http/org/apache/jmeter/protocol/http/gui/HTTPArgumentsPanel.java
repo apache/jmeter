@@ -39,13 +39,13 @@ import org.apache.jorphan.reflect.Functor;
  */
 public class HTTPArgumentsPanel extends ArgumentsPanel {
 
-    private static final String ENCODE_OR_NOT = JMeterUtils.getResString("encode?"); //$NON-NLS-1$
+    private static final String ENCODE_OR_NOT = "encode?"; //$NON-NLS-1$
 
-    private static final String INCLUDE_EQUALS = JMeterUtils.getResString("include_equals"); //$NON-NLS-1$
+    private static final String INCLUDE_EQUALS = "include_equals"; //$NON-NLS-1$
 
     protected void initializeTableModel() {
         tableModel = new ObjectTableModel(new String[] {
-                ArgumentsPanel.COLUMN_NAMES_0, ArgumentsPanel.COLUMN_NAMES_1, ENCODE_OR_NOT, INCLUDE_EQUALS },
+                ArgumentsPanel.COLUMN_RESOURCE_NAMES_0, ArgumentsPanel.COLUMN_RESOURCE_NAMES_1, ENCODE_OR_NOT, INCLUDE_EQUALS },
                 HTTPArgument.class,
                 new Functor[] {
                 new Functor("getName"), //$NON-NLS-1$
@@ -57,7 +57,7 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
                 new Functor("setValue"), //$NON-NLS-1$
                 new Functor("setAlwaysEncoded"), //$NON-NLS-1$
                 new Functor("setUseEquals") }, //$NON-NLS-1$
-                new Class[] {String.class, String.class, Boolean.class, Boolean.class });
+                new Class[] {String.class, String.class, Boolean.class, Boolean.class }, true);
     }
 
     public static boolean testFunctors(){

@@ -58,9 +58,9 @@ public class PropertyControlGui extends AbstractConfigGui
 
     private static final long serialVersionUID = 1L;
 
-    private static final String COLUMN_NAMES_0 = JMeterUtils.getResString("name"); // $NON-NLS-1$
+    private static final String COLUMN_NAMES_0 = "name"; // $NON-NLS-1$
 
-    private static final String COLUMN_NAMES_1 = JMeterUtils.getResString("value"); // $NON-NLS-1$
+    private static final String COLUMN_NAMES_1 = "value"; // $NON-NLS-1$
 
     // TODO: add and delete not currently supported
     private static final String ADD = "add"; // $NON-NLS-1$
@@ -124,7 +124,7 @@ public class PropertyControlGui extends AbstractConfigGui
     }
 
     public TestElement createTestElement() {
-        TestElement el = new ConfigTestElement();// TODO replace with simpler version?
+        TestElement el = new ConfigTestElement();
         modifyTestElement(el);
         return el;
     }
@@ -247,6 +247,6 @@ public class PropertyControlGui extends AbstractConfigGui
                 null, //new Functor("setName"), // $NON-NLS-1$
                 new Functor(Map.Entry.class,"setValue", new Class[] { Object.class }) // $NON-NLS-1$
             },
-                new Class[] { String.class, String.class });
+                new Class[] { String.class, String.class }, true);
     }
 }
