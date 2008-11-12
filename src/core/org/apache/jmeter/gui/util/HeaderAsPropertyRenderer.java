@@ -29,12 +29,14 @@ import javax.swing.table.JTableHeader;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * Renders items in a JTable right-aligned
+ * Renders items in a JTable by converting from resource names.
  */
 public class HeaderAsPropertyRenderer extends DefaultTableCellRenderer {
+    
     public HeaderAsPropertyRenderer() {
         super();
     }
+    
     public Component getTableCellRendererComponent(JTable table, Object value,
             boolean isSelected, boolean hasFocus, int row, int column) {
         if (table != null) {
@@ -44,10 +46,25 @@ public class HeaderAsPropertyRenderer extends DefaultTableCellRenderer {
                 setBackground(header.getBackground());
                 setFont(header.getFont());
             }
-            setText(value == null ? "" : JMeterUtils.getResString(value.toString()));
+            setText(getText(value, row, column));
             setBorder(UIManager.getBorder("TableHeader.cellBorder"));
             setHorizontalAlignment(JLabel.CENTER);
         }
         return this;
+    }
+
+    /**
+     * Get the text for the value as the translation of the resource name.
+     * 
+     * @param value
+     * @param column 
+     * @param row 
+     * @return
+     */
+    protected String getText(Object value, int row, int column) {
+        if (value == null){
+            return "";
+        }
+        return JMeterUtils.getResString(value.toString());
     }
 }
