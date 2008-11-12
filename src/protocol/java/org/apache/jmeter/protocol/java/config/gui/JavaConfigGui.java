@@ -21,6 +21,7 @@ package org.apache.jmeter.protocol.java.config.gui;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -118,7 +119,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
      * @return a panel containing the relevant components
      */
     private JPanel createClassnamePanel() {
-        List possibleClasses = null;
+        List possibleClasses = new ArrayList();
 
         try {
             // Find all the classes which implement the JavaSamplerClient
