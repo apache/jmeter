@@ -75,10 +75,10 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
     private static final String DELETE = "delete"; //$NON-NLS-1$
 
     private static final String[] COLUMN_NAMES = {
-            JMeterUtils.getResString("attribute"), //$NON-NLS-1$
-            JMeterUtils.getResString("value"),  //$NON-NLS-1$
-            JMeterUtils.getResString("opcode"),  //$NON-NLS-1$
-            JMeterUtils.getResString("metadata") }; //$NON-NLS-1$
+            "attribute", //$NON-NLS-1$
+            "value",  //$NON-NLS-1$
+            "opcode",  //$NON-NLS-1$
+            "metadata" }; //$NON-NLS-1$
 
     /**
      * Create a new LDAPArgumentsPanel, using the default title.
@@ -315,7 +315,7 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
                 LDAPArgument.class,
                 new Functor[] { new Functor("getName"), new Functor("getValue"), new Functor("getOpcode") },
                 new Functor[] { new Functor("setName"), new Functor("setValue"), new Functor("setOpcode") },
-                new Class[] { String.class, String.class, String.class });
+                new Class[] { String.class, String.class, String.class }, true);
     }
 
     public static boolean testFunctors(){
