@@ -83,6 +83,7 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
      * These have the values 0,1,2 so can be used as indexes in the array
      * as well as the value for the search itself.
      */
+    // TODO I18N
     private static final String[] SCOPE_STRINGS = new String[]{
         JMeterUtils.getResString("ldap_search_baseobject"),// $NON-NLS-1$
         JMeterUtils.getResString("ldap_search_onelevel"),// $NON-NLS-1$
@@ -489,12 +490,7 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
     private JPanel createSCPanel() {
         VerticalPanel SCPanel = new VerticalPanel();
 
-        JPanel SC0Panel = new JPanel(new BorderLayout(5, 0));
-        JLabel label0 = new JLabel(JMeterUtils.getResString("scope")); // $NON-NLS-1$
-        label0.setLabelFor(scope);
-        SC0Panel.add(label0, BorderLayout.WEST);
-        SC0Panel.add(scope, BorderLayout.CENTER);
-        SCPanel.add(SC0Panel);
+        SCPanel.add(scope);
 
         JPanel SC1Panel = new JPanel(new BorderLayout(5, 0));
         JLabel label1 = new JLabel(JMeterUtils.getResString("countlim")); // $NON-NLS-1$
