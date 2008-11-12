@@ -37,6 +37,7 @@ import javax.swing.table.TableCellEditor;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.util.FileDialoger;
+import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.gui.util.PowerTableModel;
 import org.apache.jmeter.protocol.http.control.Cookie;
 import org.apache.jmeter.protocol.http.control.CookieManager;
@@ -292,7 +293,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
      * Shows the main cookie configuration panel.
      */
     private void init() {
-        tableModel = new PowerTableModel(COLUMN_RESOURCE_NAMES, columnClasses, true);
+        tableModel = new PowerTableModel(COLUMN_RESOURCE_NAMES, columnClasses);
         clearEachIteration = 
             new JCheckBox(JMeterUtils.getResString("clear_cookies_per_iter"), false); //$NON-NLS-1$
         policy = new JLabeledChoice(
@@ -313,6 +314,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
     public JPanel createCookieTablePanel() {
         // create the JTable that holds one cookie per row
         cookieTable = new JTable(tableModel);
+        cookieTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         cookieTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         cookieTable.setPreferredScrollableViewportSize(new Dimension(100, 70));
 

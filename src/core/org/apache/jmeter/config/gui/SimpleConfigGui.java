@@ -31,6 +31,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.TableCellEditor;
 
 import org.apache.jmeter.config.ConfigTestElement;
+import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.gui.util.PowerTableModel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.JMeterProperty;
@@ -196,9 +197,10 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
     private Component createTablePanel() {
         tableModel = new PowerTableModel(
                 new String[] { COLUMN_NAMES_0, COLUMN_NAMES_1 },
-                new Class[] { String.class, String.class }, true);
+                new Class[] { String.class, String.class });
 
         table = new JTable(tableModel);
+        table.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         return makeScrollPane(table);
     }

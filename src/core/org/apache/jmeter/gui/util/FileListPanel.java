@@ -189,7 +189,7 @@ public class FileListPanel extends JPanel implements ActionListener {
     protected void initializeTableModel() {
         tableModel = new ObjectTableModel(new String[] { "Library" },
                 new Functor[0] , new Functor[0] , // i.e. bypass the Functors
-                new Class[] { String.class }, false);
+                new Class[] { String.class });
     }
 
     public void actionPerformed(ActionEvent e) {
