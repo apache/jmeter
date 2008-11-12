@@ -127,7 +127,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
                 new Functor("getBytes") }, // $NON-NLS-1$
                 new Functor[] { null, null, null, null, null, null, null },
                 new Class[] {
-                Long.class, String.class, String.class, String.class, Long.class, ImageIcon.class, Integer.class });
+                Long.class, String.class, String.class, String.class, Long.class, ImageIcon.class, Integer.class }, true);
         init();
     }
 
