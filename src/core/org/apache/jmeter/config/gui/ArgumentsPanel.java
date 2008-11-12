@@ -38,6 +38,7 @@ import javax.swing.table.TableCellEditor;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
+import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
@@ -349,7 +350,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
                 new Functor[] {
                 new Functor("setName"), // $NON-NLS-1$
                 new Functor("setValue") }, // $NON-NLS-1$
-                new Class[] { String.class, String.class }, true);
+                new Class[] { String.class, String.class });
     }
 
     public static boolean testFunctors(){
@@ -375,6 +376,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     private Component makeMainPanel() {
         initializeTableModel();
         table = new JTable(tableModel);
+        table.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         if (this.background != null) {
             table.setBackground(this.background);
