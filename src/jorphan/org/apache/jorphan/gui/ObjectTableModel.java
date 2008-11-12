@@ -66,8 +66,7 @@ public class ObjectTableModel extends DefaultTableModel {
      * @param editorClasses - class for each column
      */
     public ObjectTableModel(String[] headers, Class _objClass, Functor[] readFunctors, Functor[] writeFunctors, Class[] editorClasses) {
-        this(headers, _objClass, readFunctors, writeFunctors, editorClasses,
-                false);
+        this(headers, _objClass, readFunctors, writeFunctors, editorClasses, false);
     }
 
     /**
@@ -82,7 +81,7 @@ public class ObjectTableModel extends DefaultTableModel {
      * @param useHeaderAsResource - should headers be treated as resource names?
      */
     public ObjectTableModel(String[] headers, Class _objClass, Functor[] readFunctors, Functor[] writeFunctors, Class[] editorClasses, boolean useHeaderAsResource) {
-        this(headers, readFunctors, writeFunctors, editorClasses, false);
+        this(headers, readFunctors, writeFunctors, editorClasses, useHeaderAsResource);
         this.objectClass=_objClass;
     }
 
