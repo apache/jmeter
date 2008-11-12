@@ -2598,17 +2598,22 @@ This may cause problems for Assertions.
 </description>
 </component>
 
-<component name="HTTP Cookie Manager" index="&sect-num;.4.4"  width="548" height="319" screenshot="http-config/http-cookie-manager.png">
+<component name="HTTP Cookie Manager" index="&sect-num;.4.4"  width="445" height="328" screenshot="http-config/http-cookie-manager.png">
 
 <note>If there is more than one Cookie Manager in the scope of a Sampler,
-there is currently no way to specify which one is to be used.</note>
+there is currently no way to specify which one is to be used.
+Also, a cookie stored in one cookie manager is not available to any other manager,
+so use multiple Cookie Managers with care.</note>
 
 <description><p>The Cookie Manager element has two functions:<br></br>
 First, it stores and sends cookies just like a web browser. If you have an HTTP Request and
 the response contains a cookie, the Cookie Manager automatically stores that cookie and will
 use it for all future requests to that particular web site.  Each JMeter thread has its own
 "cookie storage area".  So, if you are testing a web site that uses a cookie for storing
-session information, each JMeter thread will have its own session.</p>
+session information, each JMeter thread will have its own session.
+Note that such cookies do not appear on the Cookie Manager display, but they can be seen using
+the <complink name="View Results Tree"/> Listener.
+</p>
 <p>
 Received Cookies can be stored as JMeter thread variables
 (versions of JMeter after 2.3.2 no longer do this by default).
@@ -2637,7 +2642,7 @@ Note also that the cookie name must be unique - if a second cookie is defined wi
   http://jakarta.apache.org/httpcomponents/httpclient-3.x/apidocs/org/apache/commons/httpclient/cookie/CookiePolicy.html
   [Note: "ignoreCookies" is equivalent to omitting the CookieManager.]
     </property>
-  <property name="Cookies Stored in the Cookie Manager" required="No (discouraged, unless you know what you're doing)">This
+  <property name="User-Defined Cookies" required="No (discouraged, unless you know what you're doing)">This
   gives you the opportunity to use hardcoded cookies that will be used by all threads during the test execution.
   <br></br>
   The "domain" is the hostname of the server (without http://); the port is currently ignored.
