@@ -62,6 +62,13 @@ public class JLabeledRadioI18N extends JPanel implements JLabeledField, ActionLi
     }
 
     /**
+     * @deprecated - only for use in testing
+     */
+    public JLabeledRadioI18N() {
+        super();
+    }
+
+    /**
      * Method is responsible for creating the JRadioButtons and adding them to
      * the ButtonGroup.
      *
