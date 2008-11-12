@@ -34,6 +34,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import org.apache.jmeter.assertions.ResponseAssertion;
+import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.gui.util.PowerTableModel;
 import org.apache.jmeter.gui.util.TextAreaCellRenderer;
 import org.apache.jmeter.gui.util.TextAreaTableCellEditor;
@@ -346,8 +347,9 @@ public class AssertionGui extends AbstractAssertionGui {
      * @return a new panel for adding string patterns
      */
     private JPanel createStringPanel() {
-        tableModel = new PowerTableModel(new String[] { COL_RESOURCE_NAME }, new Class[] { String.class }, true);
+        tableModel = new PowerTableModel(new String[] { COL_RESOURCE_NAME }, new Class[] { String.class });
         stringTable = new JTable(tableModel);
+        stringTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
 
         TextAreaCellRenderer renderer = new TextAreaCellRenderer();
         stringTable.setRowHeight(renderer.getPreferredHeight());

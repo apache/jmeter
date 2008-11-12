@@ -41,6 +41,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
 import org.apache.jmeter.gui.util.FileDialoger;
+import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.CSVSaveService;
@@ -127,7 +128,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
                 },
                 new Functor[] { null, null, null, null, null, null, null, null , null, null },
                 new Class[] { String.class, Long.class, Long.class, Long.class, Long.class,
-                              String.class, String.class, String.class, String.class, String.class }, true);
+                              String.class, String.class, String.class, String.class, String.class });
         clearData();
         init();
     }
@@ -193,6 +194,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
         mainPanel.add(makeTitlePanel());
 
         myJTable = new JTable(model);
+        myJTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         myJTable.setPreferredScrollableViewportSize(new Dimension(500, 70));
         RendererUtils.applyRenderers(myJTable, RENDERERS);
         myScrollPane = new JScrollPane(myJTable);

@@ -35,6 +35,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
+import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.Calculator;
@@ -127,7 +128,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
                 new Functor("getBytes") }, // $NON-NLS-1$
                 new Functor[] { null, null, null, null, null, null, null },
                 new Class[] {
-                Long.class, String.class, String.class, String.class, Long.class, ImageIcon.class, Integer.class }, true);
+                Long.class, String.class, String.class, String.class, Long.class, ImageIcon.class, Integer.class });
         init();
     }
 
@@ -191,6 +192,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
         // Set up the table itself
         table = new JTable(model);
+        table.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         // table.getTableHeader().setReorderingAllowed(false);
         RendererUtils.applyRenderers(table, RENDERERS);
 

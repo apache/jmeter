@@ -36,6 +36,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.TableCellEditor;
 
 import org.apache.jmeter.config.gui.AbstractConfigGui;
+import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
@@ -315,7 +316,7 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
                 LDAPArgument.class,
                 new Functor[] { new Functor("getName"), new Functor("getValue"), new Functor("getOpcode") },
                 new Functor[] { new Functor("setName"), new Functor("setValue"), new Functor("setOpcode") },
-                new Class[] { String.class, String.class, String.class }, true);
+                new Class[] { String.class, String.class, String.class });
     }
 
     public static boolean testFunctors(){
@@ -351,6 +352,7 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
     private Component makeMainPanel() {
         initializeTableModel();
         table = new JTable(tableModel);
+        table.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         return makeScrollPane(table);
     }

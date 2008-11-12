@@ -57,7 +57,7 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
                 new Functor("setValue"), //$NON-NLS-1$
                 new Functor("setAlwaysEncoded"), //$NON-NLS-1$
                 new Functor("setUseEquals") }, //$NON-NLS-1$
-                new Class[] {String.class, String.class, Boolean.class, Boolean.class }, true);
+                new Class[] {String.class, String.class, Boolean.class, Boolean.class });
     }
 
     public static boolean testFunctors(){

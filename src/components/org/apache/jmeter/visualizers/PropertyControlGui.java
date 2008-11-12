@@ -46,6 +46,7 @@ import javax.swing.ListSelectionModel;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.UnsharedComponent;
+import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
@@ -168,6 +169,7 @@ public class PropertyControlGui extends AbstractConfigGui
     private Component makeMainPanel() {
         initializeTableModel();
         table = new JTable(tableModel);
+        table.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         return makeScrollPane(table);
     }
@@ -247,6 +249,6 @@ public class PropertyControlGui extends AbstractConfigGui
                 null, //new Functor("setName"), // $NON-NLS-1$
                 new Functor(Map.Entry.class,"setValue", new Class[] { Object.class }) // $NON-NLS-1$
             },
-                new Class[] { String.class, String.class }, true);
+                new Class[] { String.class, String.class });
     }
 }
