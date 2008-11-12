@@ -59,6 +59,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    //++ Action command names
     private static final String ADD_COMMAND = "Add"; //$NON-NLS-1$
 
     private static final String DELETE_COMMAND = "Delete"; //$NON-NLS-1$
@@ -66,6 +67,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
     private static final String LOAD_COMMAND = "Load"; //$NON-NLS-1$
 
     private static final String SAVE_COMMAND = "Save"; //$NON-NLS-1$
+    //--
 
     private JTable cookieTable;
 
@@ -73,14 +75,12 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
 
     private JCheckBox clearEachIteration;
 
-    private static final String clearEachIterationLabel = "clear_cookies_per_iter"; //$NON-NLS-1$
-
-    private static final String[] columnNames = {
-        JMeterUtils.getResString("name"),   //$NON-NLS-1$
-        JMeterUtils.getResString("value"),  //$NON-NLS-1$
-        JMeterUtils.getResString("domain"), //$NON-NLS-1$
-        JMeterUtils.getResString("path"),   //$NON-NLS-1$
-        JMeterUtils.getResString("secure"), //$NON-NLS-1$
+    private static final String[] COLUMN_RESOURCE_NAMES = {
+        ("name"),   //$NON-NLS-1$
+        ("value"),  //$NON-NLS-1$
+        ("domain"), //$NON-NLS-1$
+        ("path"),   //$NON-NLS-1$
+        ("secure"), //$NON-NLS-1$
         // removed expiration because it's just an annoyance for static cookies
     };
 
@@ -292,8 +292,9 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
      * Shows the main cookie configuration panel.
      */
     private void init() {
-        tableModel = new PowerTableModel(columnNames, columnClasses);
-        clearEachIteration = new JCheckBox(JMeterUtils.getResString(clearEachIterationLabel), false);
+        tableModel = new PowerTableModel(COLUMN_RESOURCE_NAMES, columnClasses, true);
+        clearEachIteration = 
+            new JCheckBox(JMeterUtils.getResString("clear_cookies_per_iter"), false); //$NON-NLS-1$
         policy = new JLabeledChoice(
                 JMeterUtils.getResString("cookie_manager_policy"), //$NON-NLS-1$
                 policies);
