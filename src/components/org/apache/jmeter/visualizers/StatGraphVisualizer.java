@@ -77,16 +77,18 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
 ActionListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private final String[] COLUMNS = { JMeterUtils.getResString("sampler_label"), //$NON-NLS-1$
-            JMeterUtils.getResString("aggregate_report_count"),         //$NON-NLS-1$
-            JMeterUtils.getResString("average"),                        //$NON-NLS-1$
-            JMeterUtils.getResString("aggregate_report_median"),        //$NON-NLS-1$
-            JMeterUtils.getResString("aggregate_report_90%_line"),      //$NON-NLS-1$
-            JMeterUtils.getResString("aggregate_report_min"),           //$NON-NLS-1$
-            JMeterUtils.getResString("aggregate_report_max"),           //$NON-NLS-1$
-            JMeterUtils.getResString("aggregate_report_error%"),        //$NON-NLS-1$
-            JMeterUtils.getResString("aggregate_report_rate"),          //$NON-NLS-1$
-            JMeterUtils.getResString("aggregate_report_bandwidth") };   //$NON-NLS-1$
+    // Column resource names
+    private static final String[] COLUMNS = {
+            "sampler_label",                  //$NON-NLS-1$
+            "aggregate_report_count",         //$NON-NLS-1$
+            "average",                        //$NON-NLS-1$
+            "aggregate_report_median",        //$NON-NLS-1$
+            "aggregate_report_90%_line",      //$NON-NLS-1$
+            "aggregate_report_min",           //$NON-NLS-1$
+            "aggregate_report_max",           //$NON-NLS-1$
+            "aggregate_report_error%",        //$NON-NLS-1$
+            "aggregate_report_rate",          //$NON-NLS-1$
+            "aggregate_report_bandwidth" };   //$NON-NLS-1$
 
     private final String[] GRAPH_COLUMNS = {JMeterUtils.getResString("average"),//$NON-NLS-1$
             JMeterUtils.getResString("aggregate_report_median"),        //$NON-NLS-1$
@@ -319,7 +321,7 @@ ActionListener {
     public double[][] getData() {
         if (model.getRowCount() > 1) {
             int count = model.getRowCount() -1;
-            int col = model.findColumn(columns.getText());
+            int col = model.findColumn(columns.getText()); // TODO is this locale-safe?
             double[][] data = new double[1][count];
             for (int idx=0; idx < count; idx++) {
                 data[0][idx] = ((Number)model.getValueAt(idx,col)).doubleValue();
@@ -384,7 +386,7 @@ ActionListener {
             try {
                 writer = new FileWriter(chooser.getSelectedFile());
                 Vector data = this.getAllTableData();
-                CSVSaveService.saveCSVStats(data,writer,saveHeaders.isSelected() ? COLUMNS : null);
+                CSVSaveService.saveCSVStats(data,writer,saveHeaders.isSelected() ? model.getColumnNames() : null);
             } catch (FileNotFoundException e) {
                 log.warn(e.getMessage());
             } catch (IOException e) {

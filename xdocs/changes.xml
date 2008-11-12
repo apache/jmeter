@@ -165,6 +165,7 @@ These are implemented in the AbstractTestElement class which all elements should
 <li>Various ReceiveSubscriber thread-safety fixes</li>
 <li>JMSPublisher and Subscriber fixes: thread-safety, support dynamic locale changes, locale independence for JMX attribute values</li>
 <li>Enhance PowerTableModel to support header resource names; use this to fix locale changes in Proxy, Response Assertion, Cookie Manager</li>
+<li>Enhance ObjectTableModel to support header resource names; use this to fix locale changes in various GUI elements</li>
 </ul>
 
 <h3>Improvements</h3>

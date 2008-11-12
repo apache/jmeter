@@ -84,12 +84,9 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     /** Command for removing a row from the table. */
     private static final String DELETE = "delete"; // $NON-NLS-1$
 
-    public static final String COLUMN_NAMES_0 = JMeterUtils.getResString("name"); // $NON-NLS-1$
+    public static final String COLUMN_RESOURCE_NAMES_0 = "name"; // $NON-NLS-1$
 
-    public static final String COLUMN_NAMES_1 = JMeterUtils.getResString("value"); // $NON-NLS-1$
-
-    // NOTUSED private static final String COLUMN_NAMES_2 =
-    // JMeterUtils.getResString("metadata");
+    public static final String COLUMN_RESOURCE_NAMES_1 = "value"; // $NON-NLS-1$
 
     /**
      * Create a new ArgumentsPanel as a standalone component.
@@ -344,7 +341,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      * Initialize the table model used for the arguments table.
      */
     protected void initializeTableModel() {
-        tableModel = new ObjectTableModel(new String[] { COLUMN_NAMES_0, COLUMN_NAMES_1 },
+        tableModel = new ObjectTableModel(new String[] { COLUMN_RESOURCE_NAMES_0, COLUMN_RESOURCE_NAMES_1 },
                 Argument.class,
                 new Functor[] {
                 new Functor("getName"), // $NON-NLS-1$
@@ -352,7 +349,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
                 new Functor[] {
                 new Functor("setName"), // $NON-NLS-1$
                 new Functor("setValue") }, // $NON-NLS-1$
-                new Class[] { String.class, String.class });
+                new Class[] { String.class, String.class }, true);
     }
 
     public static boolean testFunctors(){
