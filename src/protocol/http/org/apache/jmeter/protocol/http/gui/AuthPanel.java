@@ -43,6 +43,7 @@ import javax.swing.table.TableColumn;
 
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.util.FileDialoger;
+import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.testelement.TestElement;
@@ -241,6 +242,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
     public JPanel createAuthTablePanel() {
         // create the JTable that holds auth per row
         authTable = new JTable(tableModel);
+        authTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         authTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         authTable.setPreferredScrollableViewportSize(new Dimension(100, 70));
 
