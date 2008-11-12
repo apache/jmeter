@@ -47,7 +47,8 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class AssertionGui extends AbstractAssertionGui {
     /** The name of the table column in the list of patterns. */
-    private static final String COL_NAME = JMeterUtils.getResString("assertion_patterns_to_test"); //$NON-NLS-1$
+    
+    private static final String COL_RESOURCE_NAME = "assertion_patterns_to_test"; //$NON-NLS-1$
 
     /** Radio button indicating that the text response should be tested. */
     private JRadioButton responseStringButton;
@@ -137,7 +138,7 @@ public class AssertionGui extends AbstractAssertionGui {
             saveScopeSettings(ra);
             
             ra.clearTestStrings();
-            String[] testStrings = tableModel.getData().getColumn(COL_NAME);
+            String[] testStrings = tableModel.getData().getColumn(COL_RESOURCE_NAME);
             for (int i = 0; i < testStrings.length; i++) {
                 ra.addTestString(testStrings[i]);
             }
@@ -345,7 +346,7 @@ public class AssertionGui extends AbstractAssertionGui {
      * @return a new panel for adding string patterns
      */
     private JPanel createStringPanel() {
-        tableModel = new PowerTableModel(new String[] { COL_NAME }, new Class[] { String.class });
+        tableModel = new PowerTableModel(new String[] { COL_RESOURCE_NAME }, new Class[] { String.class }, true);
         stringTable = new JTable(tableModel);
 
         TextAreaCellRenderer renderer = new TextAreaCellRenderer();
