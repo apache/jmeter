@@ -46,11 +46,13 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
 
     public static final String HEADERS = "HeaderManager.headers";// $NON-NLS-1$
 
-    private final static int columnCount = 2;
+    private final static String[] COLUMN_RESOURCE_NAMES = {
+          "name",             // $NON-NLS-1$
+          "value"             // $NON-NLS-1$
+        };
 
-    private final static String[] columnNames
-    = { JMeterUtils.getResString("name")// $NON-NLS-1$
-        , JMeterUtils.getResString("value") };// $NON-NLS-1$
+    private final static int COLUMN_COUNT = COLUMN_RESOURCE_NAMES.length;
+
 
     /**
      * Apache SOAP driver does not provide an easy way to get and set the cookie
@@ -73,15 +75,15 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
     }
 
     public int getColumnCount() {
-        return columnCount;
+        return COLUMN_COUNT;
     }
 
     public String getColumnName(int column) {
-        return columnNames[column];
+        return COLUMN_RESOURCE_NAMES[column];
     }
 
     public Class getColumnClass(int column) {
-        return columnNames[column].getClass();
+        return COLUMN_RESOURCE_NAMES[column].getClass();
     }
 
     public Header getHeader(int row) {

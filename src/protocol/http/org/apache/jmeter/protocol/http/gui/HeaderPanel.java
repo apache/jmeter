@@ -36,6 +36,7 @@ import javax.swing.table.TableCellEditor;
 
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.util.FileDialoger;
+import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.testelement.TestElement;
@@ -225,6 +226,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
     public JPanel createHeaderTablePanel() {
         // create the JTable that holds header per row
         headerTable = new JTable(tableModel);
+        headerTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         headerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         headerTable.setPreferredScrollableViewportSize(new Dimension(100, 70));
 
