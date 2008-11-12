@@ -84,14 +84,13 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
     /** Command for removing a row from the table. */
     private static final String DELETE = "delete"; // $NON-NLS-1$
 
-    // Properties should not be static, otherwise language change does not work
-    private final String FILEPATH = JMeterUtils.getResString("send_file_filename_label"); // $NON-NLS-1$
+    private static final String FILEPATH = "send_file_filename_label"; // $NON-NLS-1$
 
     /** The parameter name column title of file table. */
-    private final String PARAMNAME = JMeterUtils.getResString("send_file_param_name_label"); //$NON-NLS-1$
+    private static final String PARAMNAME = "send_file_param_name_label"; //$NON-NLS-1$
 
     /** The mime type column title of file table. */
-    private final String MIMETYPE = JMeterUtils.getResString("send_file_mime_label"); //$NON-NLS-1$
+    private static final String MIMETYPE = "send_file_mime_label"; //$NON-NLS-1$
 
     public HTTPFileArgsPanel() {
         this(""); // required for unit tests
@@ -124,7 +123,7 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
                 new Functor("setPath"), //$NON-NLS-1$
                 new Functor("setParamName"), //$NON-NLS-1$
                 new Functor("setMimeType")}, //$NON-NLS-1$
-            new Class[] {String.class, String.class, String.class});
+            new Class[] {String.class, String.class, String.class}, true);
     }
 
     public static boolean testFunctors(){
