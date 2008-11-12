@@ -58,12 +58,12 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
 
     private final static String AUTH_LIST = "AuthManager.auth_list"; //$NON-NLS-1$
 
-    private final static String[] columnNames = {
-        JMeterUtils.getResString("auth_base_url"), //$NON-NLS-1$
-        JMeterUtils.getResString("username"),  //$NON-NLS-1$
-        JMeterUtils.getResString("password"),  //$NON-NLS-1$
-        JMeterUtils.getResString("domain"),  //$NON-NLS-1$
-        JMeterUtils.getResString("realm"),  //$NON-NLS-1$
+    private final static String[] COLUMN_RESOURCE_NAMES = {
+        "auth_base_url", //$NON-NLS-1$
+        "username",      //$NON-NLS-1$
+        "password",      //$NON-NLS-1$
+        "domain",        //$NON-NLS-1$
+        "realm",         //$NON-NLS-1$
         };
 
     // Column numbers - must agree with order above
@@ -73,7 +73,7 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
     public final static int COL_DOMAIN = 3;
     public final static int COL_REALM = 4;
 
-    private final static int columnCount = columnNames.length;
+    private final static int COLUMN_COUNT = COLUMN_RESOURCE_NAMES.length;
 
     /**
      * Default Constructor.
@@ -104,15 +104,15 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
     }
 
     public int getColumnCount() {
-        return columnCount;
+        return COLUMN_COUNT;
     }
 
     public String getColumnName(int column) {
-        return columnNames[column];
+        return COLUMN_RESOURCE_NAMES[column];
     }
 
     public Class getColumnClass(int column) {
-        return columnNames[column].getClass();
+        return COLUMN_RESOURCE_NAMES[column].getClass();
     }
 
     public Authorization getAuthObjectAt(int row) {
