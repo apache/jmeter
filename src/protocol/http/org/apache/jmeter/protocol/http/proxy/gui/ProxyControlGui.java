@@ -178,9 +178,10 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     private static final String DELETE_EXCLUDE = "delete_exclude"; // $NON-NLS-1$
     //- action names
 
-    private static final String INCLUDE_COL = JMeterUtils.getResString("patterns_to_include"); // $NON-NLS-1$
+    // Resource names for column headers
+    private static final String INCLUDE_COL = "patterns_to_include"; // $NON-NLS-1$
 
-    private static final String EXCLUDE_COL = JMeterUtils.getResString("patterns_to_exclude"); // $NON-NLS-1$
+    private static final String EXCLUDE_COL = "patterns_to_exclude"; // $NON-NLS-1$
 
     // Used by itemListener
     private static final String PORTFIELD = "portField"; // $NON-NLS-1$
@@ -690,7 +691,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     }
 
     private JPanel createIncludePanel() {
-        includeModel = new PowerTableModel(new String[] { INCLUDE_COL }, new Class[] { String.class });
+        includeModel = new PowerTableModel(new String[] { INCLUDE_COL }, new Class[] { String.class }, true);
         includeTable = new JTable(includeModel);
         includeTable.setPreferredScrollableViewportSize(new Dimension(100, 30));
 
@@ -705,7 +706,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     }
 
     private JPanel createExcludePanel() {
-        excludeModel = new PowerTableModel(new String[] { EXCLUDE_COL }, new Class[] { String.class });
+        excludeModel = new PowerTableModel(new String[] { EXCLUDE_COL }, new Class[] { String.class }, true);
         excludeTable = new JTable(excludeModel);
         excludeTable.setPreferredScrollableViewportSize(new Dimension(100, 30));
 
