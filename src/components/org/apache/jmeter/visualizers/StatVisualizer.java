@@ -71,17 +71,17 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private final String[] COLUMNS = {
-            JMeterUtils.getResString("sampler_label"),  //$NON-NLS-1$
-            JMeterUtils.getResString("aggregate_report_count"),  //$NON-NLS-1$
-            JMeterUtils.getResString("average"),  //$NON-NLS-1$
-            JMeterUtils.getResString("aggregate_report_median"),  //$NON-NLS-1$
-            JMeterUtils.getResString("aggregate_report_90%_line"),  //$NON-NLS-1$
-            JMeterUtils.getResString("aggregate_report_min"),  //$NON-NLS-1$
-            JMeterUtils.getResString("aggregate_report_max"),  //$NON-NLS-1$
-            JMeterUtils.getResString("aggregate_report_error%"),  //$NON-NLS-1$
-            JMeterUtils.getResString("aggregate_report_rate"),  //$NON-NLS-1$
-            JMeterUtils.getResString("aggregate_report_bandwidth") };  //$NON-NLS-1$
+    private static final String[] COLUMNS = {
+            "sampler_label",                 //$NON-NLS-1$
+            "aggregate_report_count",        //$NON-NLS-1$
+            "average",                       //$NON-NLS-1$
+            "aggregate_report_median",       //$NON-NLS-1$
+            "aggregate_report_90%_line",     //$NON-NLS-1$
+            "aggregate_report_min",          //$NON-NLS-1$
+            "aggregate_report_max",          //$NON-NLS-1$
+            "aggregate_report_error%",       //$NON-NLS-1$
+            "aggregate_report_rate",         //$NON-NLS-1$
+            "aggregate_report_bandwidth" };  //$NON-NLS-1$
 
     private final String TOTAL_ROW_LABEL
         = JMeterUtils.getResString("aggregate_report_total_label");  //$NON-NLS-1$
@@ -119,7 +119,7 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
                 },
                 new Functor[] { null, null, null, null, null, null, null, null, null, null },
                 new Class[] { String.class, Long.class, Long.class, Long.class, Long.class,
-                              Long.class, Long.class, String.class, String.class, String.class });
+                              Long.class, Long.class, String.class, String.class, String.class }, true);
         clearData();
         init();
     }
