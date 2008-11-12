@@ -18,7 +18,6 @@
 
 package org.apache.jorphan.gui;
 
-import java.io.ObjectStreamException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -27,7 +26,6 @@ import java.util.List;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.Functor;
 import org.apache.log.Logger;
@@ -52,8 +50,6 @@ public class ObjectTableModel extends DefaultTableModel {
     private transient ArrayList writeFunctors = new ArrayList();
 
     private transient Class objectClass = null; // if provided
-    
-    private final boolean useHeaderAsResource;
 
     /**
      * The ObjectTableModel is a TableModel whose rows are objects;
@@ -66,22 +62,7 @@ public class ObjectTableModel extends DefaultTableModel {
      * @param editorClasses - class for each column
      */
     public ObjectTableModel(String[] headers, Class _objClass, Functor[] readFunctors, Functor[] writeFunctors, Class[] editorClasses) {
-        this(headers, _objClass, readFunctors, writeFunctors, editorClasses, false);
-    }
-
-    /**
-     * The ObjectTableModel is a TableModel whose rows are objects;
-     * columns are defined as Functors on the object.
-     *
-     * @param headers - Column names
-     * @param _objClass - Object class that will be used
-     * @param readFunctors - used to get the values
-     * @param writeFunctors - used to set the values
-     * @param editorClasses - class for each column
-     * @param useHeaderAsResource - should headers be treated as resource names?
-     */
-    public ObjectTableModel(String[] headers, Class _objClass, Functor[] readFunctors, Functor[] writeFunctors, Class[] editorClasses, boolean useHeaderAsResource) {
-        this(headers, readFunctors, writeFunctors, editorClasses, useHeaderAsResource);
+        this(headers, readFunctors, writeFunctors, editorClasses);
         this.objectClass=_objClass;
     }
 
@@ -95,27 +76,11 @@ public class ObjectTableModel extends DefaultTableModel {
      * @param editorClasses - class for each column
      */
     public ObjectTableModel(String[] headers, Functor[] readFunctors, Functor[] writeFunctors, Class[] editorClasses) {
-        this(headers, readFunctors, writeFunctors, editorClasses, false);
-    }
-
-    /**
-     * The ObjectTableModel is a TableModel whose rows are objects;
-     * columns are defined as Functors on the object.
-     *
-     * @param headers - Column names
-     * @param readFunctors - used to get the values
-     * @param writeFunctors - used to set the values
-     * @param editorClasses - class for each column
-     * @param useHeaderAsResource - should headers be treated as resource names?
-     */
-    public ObjectTableModel(String[] headers, Functor[] readFunctors, Functor[] writeFunctors, Class[] editorClasses, boolean useHeaderAsResource) {
         this.headers.addAll(Arrays.asList(headers));
         this.classes.addAll(Arrays.asList(editorClasses));
         this.readFunctors = new ArrayList(Arrays.asList(readFunctors));
         this.writeFunctors = new ArrayList(Arrays.asList(writeFunctors));
 
-        this.useHeaderAsResource = useHeaderAsResource;
-        
         int numHeaders = headers.length;
 
         int numClasses = classes.size();
@@ -135,10 +100,7 @@ public class ObjectTableModel extends DefaultTableModel {
         }
     }
 
-    /**
-     * @throws ObjectStreamException  
-     */
-    private Object readResolve() throws ObjectStreamException{
+    private Object readResolve() {
         objects = new ArrayList();
         headers = new ArrayList();
         classes = new ArrayList();
@@ -183,29 +145,10 @@ public class ObjectTableModel extends DefaultTableModel {
     }
 
     /**
-     * Note: the column name will be localised if that option was selected.
-     * 
      * @see javax.swing.table.TableModel#getColumnName(int)
      */
     public String getColumnName(int col) {
-        String rawName = (String) headers.get(col);
-        if (useHeaderAsResource){
-            return JMeterUtils.getResString(rawName);
-        }
-        return rawName;
-    }
-
-    /**
-     * Get the list of column names, localised if that option was selected.
-     * @return column names
-     */
-    public String[] getColumnNames(){
-        int rowCount = getRowCount();
-        String[] names = new String[rowCount];
-        for (int i=0; i < rowCount; i++){
-            names[i]=getColumnName(i);
-        }
-        return names;
+        return (String) headers.get(col);
     }
 
     /**

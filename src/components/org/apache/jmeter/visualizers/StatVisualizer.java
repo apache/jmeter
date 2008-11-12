@@ -46,6 +46,7 @@ import javax.swing.table.TableCellRenderer;
 //import javax.swing.table.TableModel;
 
 import org.apache.jmeter.gui.util.FileDialoger;
+import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.CSVSaveService;
@@ -119,7 +120,7 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
                 },
                 new Functor[] { null, null, null, null, null, null, null, null, null, null },
                 new Class[] { String.class, Long.class, Long.class, Long.class, Long.class,
-                              Long.class, Long.class, String.class, String.class, String.class }, true);
+                              Long.class, Long.class, String.class, String.class, String.class });
         clearData();
         init();
     }
@@ -202,6 +203,7 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
         // SortFilterModel mySortedModel =
         // new SortFilterModel(myStatTableModel);
         myJTable = new JTable(model);
+        myJTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         myJTable.setPreferredScrollableViewportSize(new Dimension(500, 70));
         RendererUtils.applyRenderers(myJTable, RENDERERS);
         myScrollPane = new JScrollPane(myJTable);

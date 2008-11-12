@@ -39,6 +39,7 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 
 import org.apache.jmeter.gui.util.FileDialoger;
+import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.testelement.TestElement;
@@ -123,7 +124,7 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
                 new Functor("setPath"), //$NON-NLS-1$
                 new Functor("setParamName"), //$NON-NLS-1$
                 new Functor("setMimeType")}, //$NON-NLS-1$
-            new Class[] {String.class, String.class, String.class}, true);
+            new Class[] {String.class, String.class, String.class});
     }
 
     public static boolean testFunctors(){
@@ -348,6 +349,7 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
     private Component makeMainPanel() {
         initializeTableModel();
         table = new JTable(tableModel);
+        table.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         return makeScrollPane(table);
     }
