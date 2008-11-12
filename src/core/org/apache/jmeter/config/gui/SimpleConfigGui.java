@@ -47,6 +47,8 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
 
     // TODO: This class looks a lot like ArgumentsPanel. What exactly is the
     // difference? Could they be combined?
+    // Note: it seems that this class is not actually used ...
+    
     /** The table of configuration parameters. */
     private JTable table;
 
@@ -70,15 +72,12 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
      * If true, this is a standalone component. If false, this component is
      * intended to be used as a subpanel for another component.
      */
-    private boolean displayName = true;
+    private final boolean displayName;
 
-    /** The names of the columns in the table. */
-    private static final String COLUMN_NAMES_0 = JMeterUtils.getResString("name"); // $NON-NLS-1$
+    /** The resource names of the columns in the table. */
+    private static final String COLUMN_NAMES_0 = "name"; // $NON-NLS-1$
 
-    private static final String COLUMN_NAMES_1 = JMeterUtils.getResString("value"); // $NON-NLS-1$
-
-    // NOTUSED private static final String COLUMN_NAMES_2 =
-    // JMeterUtils.getResString("metadata");
+    private static final String COLUMN_NAMES_1 = "value"; // $NON-NLS-1$
 
     /**
      * Create a new standalone SimpleConfigGui.
@@ -195,8 +194,9 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
      * @return a GUI panel containing the parameter table
      */
     private Component createTablePanel() {
-        tableModel = new PowerTableModel(new String[] { COLUMN_NAMES_0, COLUMN_NAMES_1 }, new Class[] { String.class,
-                String.class });
+        tableModel = new PowerTableModel(
+                new String[] { COLUMN_NAMES_0, COLUMN_NAMES_1 },
+                new Class[] { String.class, String.class }, true);
 
         table = new JTable(tableModel);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
