@@ -24,6 +24,7 @@ import java.util.List;
 
 import javax.swing.table.DefaultTableModel;
 
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.Data;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -31,19 +32,39 @@ import org.apache.log.Logger;
 public class PowerTableModel extends DefaultTableModel {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    Data model = new Data();
+    private Data model = new Data();
 
-    Class[] columnClasses;
+    private Class[] columnClasses;
 
-    public PowerTableModel(String[] headers, Class[] cc) {
-        if (headers.length != cc.length){
-            throw new IllegalArgumentException("Header and column array sizes differ");
-        }
-        model.setHeaders(headers);
-        columnClasses = cc;
+    private final boolean headersAreResouceNames;
+    
+    /**
+     * Define a table with fixed headers.
+     * 
+     * @param headers list of header names
+     * @param columnClasses list of column classes
+     */
+    public PowerTableModel(String[] headers, Class[] columnClasses) {
+        this(headers, columnClasses, false);
     }
 
-    public PowerTableModel() {
+    /**
+     * Define a table with header names that can be locale-sensitive.
+     * If the useAsResourceNames parameter is true, then the header
+     * values are assumed to be resource names when generating the column headings.
+     * The column names in the data table are not translated.
+     * 
+     * @param headers list of header names
+     * @param columnClasses list of column classes
+     * @param useAsResourceNames set true to use the headers as resource names
+     */
+    public PowerTableModel(String[] headers, Class[] columnClasses, boolean useAsResourceNames) {
+        if (headers.length != columnClasses.length){
+            throw new IllegalArgumentException("Header and column array sizes differ");
+        }
+        this.model.setHeaders(headers);
+        this.columnClasses = columnClasses;
+        this.headersAreResouceNames = useAsResourceNames;
     }
 
     public void setRowValues(int row, Object[] values) {
@@ -237,7 +258,11 @@ public class PowerTableModel extends DefaultTableModel {
      * @return the ColumnName value
      */
     public String getColumnName(int column) {
-        return model.getHeaders()[column];
+        String rawName = model.getHeaders()[column];
+        if (headersAreResouceNames){
+            return JMeterUtils.getResString(rawName);
+        }
+        return rawName;
     }
 
     public boolean isCellEditable(int row, int column) {
