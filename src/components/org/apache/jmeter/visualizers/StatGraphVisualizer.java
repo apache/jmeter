@@ -48,6 +48,7 @@ import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.SaveGraphics;
 import org.apache.jmeter.gui.util.FileDialoger;
+import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.samplers.Clearable;
@@ -171,7 +172,7 @@ ActionListener {
                 new Functor("getKBPerSecond") },            //$NON-NLS-1$
                 new Functor[] { null, null, null, null, null, null, null, null,    null, null },
                 new Class[] { String.class, Long.class, Long.class, Long.class, Long.class, Long.class,
-                Long.class, String.class, String.class, String.class }, true);
+                Long.class, String.class, String.class, String.class });
         clearData();
         init();
     }
@@ -242,6 +243,7 @@ ActionListener {
         mainPanel.add(makeTitlePanel());
 
         myJTable = new JTable(model);
+        myJTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         myJTable.setPreferredScrollableViewportSize(new Dimension(500, 80));
         RendererUtils.applyRenderers(myJTable, RENDERERS);
         myScrollPane = new JScrollPane(myJTable);
@@ -386,7 +388,7 @@ ActionListener {
             try {
                 writer = new FileWriter(chooser.getSelectedFile());
                 Vector data = this.getAllTableData();
-                CSVSaveService.saveCSVStats(data,writer,saveHeaders.isSelected() ? model.getColumnNames() : null);
+                CSVSaveService.saveCSVStats(data,writer,saveHeaders.isSelected() ? getColumnNames() : null);
             } catch (FileNotFoundException e) {
                 log.warn(e.getMessage());
             } catch (IOException e) {
@@ -395,6 +397,15 @@ ActionListener {
                 JOrphanUtils.closeQuietly(writer);
             }
         }
+    }
+
+    // TODO consider using the table methods to return data and headers in actual order
+    private String[] getColumnNames(){
+        String [] names = new String[COLUMNS.length];
+        for (int i=0; i < COLUMNS.length; i++){
+            names[i]=JMeterUtils.getResString(COLUMNS[i]);
+        }
+        return names;
     }
 
     public JComponent getPrintableComponent() {
