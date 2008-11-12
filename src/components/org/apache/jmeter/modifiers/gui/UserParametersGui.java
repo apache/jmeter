@@ -36,6 +36,7 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableCellEditor;
 
+import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.gui.util.PowerTableModel;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.modifiers.UserParameters;
@@ -48,9 +49,12 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 public class UserParametersGui extends AbstractPreProcessorGui {
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private String THREAD_COLUMNS_PREFIX = JMeterUtils.getResString("user") + "_"; // $NON-NLS-1$ $NON-NLS-2$
+    private static final String NAME_COL_RESOURCE = "name"; // $NON-NLS-1$
+    private static final String USER_COL_RESOURCE = "user"; // $NON-NLS-1$
+    private static final String UNDERSCORE = "_"; // $NON-NLS-1$
 
     private JTable paramTable;
 
@@ -84,7 +88,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
         }
         int count = 2;
         while (iter.hasNext()) {
-            String colName = THREAD_COLUMNS_PREFIX + count;
+            String colName = getUserColName(count);
             tableModel.addNewColumn(colName, String.class);
             tableModel.setColumnData(count, (List) iter.next().getObjectValue());
             count++;
@@ -111,18 +115,18 @@ public class UserParametersGui extends AbstractPreProcessorGui {
         if (paramTable.isEditing()) {
             paramTable.getCellEditor().stopCellEditing();
         }
-        ((UserParameters) params).setNames(new CollectionProperty(UserParameters.NAMES, tableModel
-                .getColumnData(JMeterUtils.getResString("name")))); // $NON-NLS-1$
+        UserParameters userParams = ((UserParameters) params);
+        userParams.setNames(new CollectionProperty(UserParameters.NAMES, tableModel.getColumnData(NAME_COL_RESOURCE)));
         CollectionProperty threadLists = new CollectionProperty(UserParameters.THREAD_VALUES, new ArrayList());
-        log.debug("making threadlists from gui = " + threadLists);
-        for (int x = 1; x < tableModel.getColumnCount(); x++) {
-            threadLists.addItem(tableModel.getColumnData(THREAD_COLUMNS_PREFIX + x));
-            log.debug("Adding column to threadlist: " + tableModel.getColumnData(THREAD_COLUMNS_PREFIX + x));
+        log.debug("making threadlists from gui");
+        for (int col = 1; col < tableModel.getColumnCount(); col++) {
+            threadLists.addItem(tableModel.getColumnData(getUserColName(col)));
+            log.debug("Adding column to threadlist: " + tableModel.getColumnData(getUserColName(col)));
             log.debug("Threadlists now = " + threadLists);
         }
         log.debug("In the end, threadlists = " + threadLists);
-        ((UserParameters) params).setThreadLists(threadLists);
-        ((UserParameters) params).setPerIteration(perIterationCheck.isSelected());
+        userParams.setThreadLists(threadLists);
+        userParams.setPerIteration(perIterationCheck.isSelected());
         super.configureTestElement(params);
     }
 
@@ -134,7 +138,23 @@ public class UserParametersGui extends AbstractPreProcessorGui {
 
         initTableModel();
         paramTable.setModel(tableModel);
+        HeaderAsPropertyRenderer defaultRenderer = new HeaderAsPropertyRenderer(){
+            protected String getText(Object value, int row, int column) {
+                if (column >= 1){ // Don't process the NAME column
+                    String val = value.toString();
+                    if (val.startsWith(USER_COL_RESOURCE+UNDERSCORE)){
+                        return JMeterUtils.getResString(USER_COL_RESOURCE)+val.substring(val.indexOf(UNDERSCORE));
+                    }
+                }
+                return super.getText(value, row, column);
+            }
+        };
+        paramTable.getTableHeader().setDefaultRenderer(defaultRenderer);
         perIterationCheck.setSelected(false);
+    }
+
+    private String getUserColName(int user){
+        return USER_COL_RESOURCE+UNDERSCORE+user;
     }
 
     private void init() {
@@ -174,8 +194,8 @@ public class UserParametersGui extends AbstractPreProcessorGui {
     }
 
     protected void initTableModel() {
-        tableModel = new PowerTableModel(new String[] { JMeterUtils.getResString("name"), // $NON-NLS-1$
-                THREAD_COLUMNS_PREFIX + numUserColumns }, new Class[] { String.class, String.class });
+        tableModel = new PowerTableModel(new String[] { NAME_COL_RESOURCE, // $NON-NLS-1$
+                getUserColName(numUserColumns) }, new Class[] { String.class, String.class });
     }
 
     private JPanel makeButtonPanel() {
@@ -225,7 +245,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
                 cellEditor.stopCellEditing();
             }
 
-            tableModel.addNewColumn(THREAD_COLUMNS_PREFIX + tableModel.getColumnCount(), String.class);
+            tableModel.addNewColumn(getUserColName(tableModel.getColumnCount()), String.class);
             tableModel.fireTableDataChanged();
 
             // Enable DELETE (which may already be enabled, but it won't hurt)
