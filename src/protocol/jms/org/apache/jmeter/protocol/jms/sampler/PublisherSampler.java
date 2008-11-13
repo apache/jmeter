@@ -199,6 +199,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
         setProperty(CONFIG_CHOICE, choice);
     }
 
+    // These static variables are only used to convert existing files
     private static final String USE_FILE_LOCALNAME = JMeterUtils.getResString(JMSPublisherGui.USE_FILE_RSC);
     private static final String USE_RANDOM_LOCALNAME = JMeterUtils.getResString(JMSPublisherGui.USE_RANDOM_RSC);
 
