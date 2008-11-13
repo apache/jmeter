@@ -66,7 +66,7 @@ public class MonitorPerformancePanel extends JSplitPane implements TreeSelection
 
     public final String LEGEND_MEM = JMeterUtils.getResString("monitor_legend_memory_per"); //$NON-NLS-1$
 
-    public static final String LEGEND_THREAD = JMeterUtils.getResString("monitor_legend_thread_per"); //$NON-NLS-1$
+    public final String LEGEND_THREAD = JMeterUtils.getResString("monitor_legend_thread_per"); //$NON-NLS-1$
 
     public final ImageIcon LEGEND_HEALTH_ICON = JMeterUtils.getImage("monitor-green-legend.gif"); //$NON-NLS-1$
 
