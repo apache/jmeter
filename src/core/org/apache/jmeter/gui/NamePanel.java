@@ -34,7 +34,6 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jmeter.util.LocaleChangeEvent;
 
 public class NamePanel extends JPanel implements JMeterGUIComponent {
     /** A text field containing the name. */
@@ -182,17 +181,6 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
         if (getNode() != null) {
             ((NamedTreeNode)getNode()).nameChanged();
         }
-    }
-
-    /**
-     * Called when the locale is changed so that the label can be updated. This
-     * method is not currently used.
-     *
-     * @param event
-     *            the event to be handled
-     */
-    public void localeChanged(LocaleChangeEvent event) {
-        nameLabel.setText(JMeterUtils.getResString(nameLabel.getName()));
     }
 
     /*
