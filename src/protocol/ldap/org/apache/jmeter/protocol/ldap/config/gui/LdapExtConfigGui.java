@@ -79,12 +79,18 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
     private JTextField port = new JTextField(20);
 
     /*
-     * N.B. These entries MUST agree with the LDAP SearchControls SCOPE_LEVELS
+     * N.B. These entry indexes MUST agree with the SearchControls SCOPE_LEVELS, i.e.
+     * 
+     * javax.naming.directory.SearchControls.OBJECT_SCOPE, ONELEVEL_SCOPE, SUBTREE_SCOPE
+     * 
      * These have the values 0,1,2 so can be used as indexes in the array
      * as well as the value for the search itself.
+     * 
+     * N.B. Although the strings are used to set and get the options, language change
+     * does not currently cause a problem, because that always saves the current settings first,
+     * and then recreates all the GUI classes.
      */
-    // TODO I18N
-    private static final String[] SCOPE_STRINGS = new String[]{
+    private final String[] SCOPE_STRINGS = new String[]{
         JMeterUtils.getResString("ldap_search_baseobject"),// $NON-NLS-1$
         JMeterUtils.getResString("ldap_search_onelevel"),// $NON-NLS-1$
         JMeterUtils.getResString("ldap_search_subtree"),// $NON-NLS-1$
