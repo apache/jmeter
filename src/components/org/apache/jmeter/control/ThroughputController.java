@@ -68,9 +68,10 @@ public class ThroughputController extends GenericController implements Serializa
     }
     
     // These items are shared between threads in a group by the clone() method
-    private MutableInteger globalNumExecutions;
+    // They are initialised by testStarted() so don't need to be serialised
+    private transient MutableInteger globalNumExecutions;
 
-    private MutableInteger globalIteration;
+    private transient MutableInteger globalIteration;
 
     private String counterLock = ""; // ensure counts are updated correctly
     // Need to use something that is serializable, so Object is no use
