@@ -37,6 +37,8 @@ import org.apache.log.Logger;
 public class UserParameters extends AbstractTestElement implements Serializable, PreProcessor, LoopIterationListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final long serialVersionUID = 233L;
+
     public static final String NAMES = "UserParameters.names";// $NON-NLS-1$
 
     public static final String THREAD_VALUES = "UserParameters.thread_values";// $NON-NLS-1$
@@ -52,6 +54,11 @@ public class UserParameters extends AbstractTestElement implements Serializable,
      * important for functions such as __CSVRead and _StringFromFile.
      */
     private transient Object lock = new Object();
+
+    private Object readResolve(){ // Lock object must exist
+        lock = new Object();
+        return this;
+    }
 
     public CollectionProperty getNames() {
         return (CollectionProperty) getProperty(NAMES);
