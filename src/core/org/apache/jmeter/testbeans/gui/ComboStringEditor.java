@@ -78,6 +78,8 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
      * non-editable during processing of secondary events.
      */
 
+    // TODO - do these behave properly during language change? Probably not.
+    
     // Needs to be visible to test cases
     static final Object UNDEFINED = new UniqueObject(JMeterUtils.getResString("property_undefined")); //$NON-NLS-1$
 
