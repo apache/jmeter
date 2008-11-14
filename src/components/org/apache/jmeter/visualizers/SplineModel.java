@@ -31,28 +31,32 @@ public class SplineModel implements Clearable {
 
     protected final boolean SHOW_INCOMING_SAMPLES = true;
 
+    // These are not currently updated
     protected int numberOfNodes = DEFAULT_NUMBER_OF_NODES;
 
     protected int refreshPeriod = DEFAULT_REFRESH_PERIOD;
 
     /** Current Spline curve. */
-    protected Spline3 dataCurve = null;
+    //@GuardedBy("this")
+    private Spline3 dataCurve = null;
 
-    SamplingStatCalculator samples;
+    final SamplingStatCalculator samples;
 
+    //@GuardedBy("this")
     private GraphListener listener;
 
+    //@GuardedBy("this")
     private String name;
 
     public SplineModel() {
         samples = new SamplingStatCalculator("Spline");
     }
 
-    public void setListener(GraphListener vis) {
+    public synchronized void setListener(GraphListener vis) {
         listener = vis;
     }
 
-    public void setName(String newName) {
+    public synchronized void setName(String newName) {
         name = newName;
     }
 
@@ -60,7 +64,7 @@ public class SplineModel implements Clearable {
         return true;
     }
 
-    public Spline3 getDataCurve() {
+    public synchronized Spline3 getDataCurve() {
         return dataCurve;
     }
 
@@ -100,7 +104,7 @@ public class SplineModel implements Clearable {
         return samples.getCount();
     }
 
-    public String getName() {
+    public synchronized String getName() {
         return name;
     }
 
