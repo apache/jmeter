@@ -20,7 +20,6 @@ package org.apache.jmeter.protocol.http.control.gui;
 import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui;
 import org.apache.jmeter.protocol.http.sampler.AjpSampler;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.util.JMeterUtils;
 
 public class AjpSamplerGui extends HttpTestSampleGui {
 
@@ -34,8 +33,8 @@ public class AjpSamplerGui extends HttpTestSampleGui {
         return sampler;
     }
 
-    public String getStaticLabel() {
-        return JMeterUtils.getResString("ajp_sampler_title"); // $NON-NLS-1$
+    public String getLabelResource() {
+        return "ajp_sampler_title"; // $NON-NLS-1$
     }
     
     public String getDocAnchor() {// reuse documentation
