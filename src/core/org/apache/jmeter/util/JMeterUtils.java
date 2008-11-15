@@ -88,6 +88,8 @@ public class JMeterUtils implements UnitTestManager {
     private static String localHostName = null;
     //@GuardedBy("this")
     private static String localHostFullName = null;
+    
+    private static volatile boolean ignoreResorces = false; // Special flag for use in debugging resources
 
     private static final ThreadLocal localMatcher = new ThreadLocal() {
         protected Object initialValue() {
@@ -294,7 +296,6 @@ public class JMeterUtils implements UnitTestManager {
      */
     public static void setLocale(Locale loc) {
         log.info("Setting Locale to " + loc.toString());
-        locale = loc;
         /*
          * See bug 29920. getBundle() defaults to the property file for the
          * default Locale before it defaults to the base property file, so we
@@ -311,7 +312,15 @@ public class JMeterUtils implements UnitTestManager {
                 def = null; // no need to reset Locale
             }
         }
-        resources = ResourceBundle.getBundle("org.apache.jmeter.resources.messages", locale); // $NON-NLS-1$
+        if (loc.toString().equals("ignoreResources")){ // $NON-NLS-1$
+            log.warn("Resource bundles will be ignored");
+            ignoreResorces = true;
+            // Keep existing settings
+        } else {
+            ignoreResorces = false;
+            locale = loc;
+            resources = ResourceBundle.getBundle("org.apache.jmeter.resources.messages", locale); // $NON-NLS-1$
+        }
         notifyLocaleChangeListeners();
         /*
          * Reset Locale if necessary so other locales are properly handled
@@ -395,14 +404,20 @@ public class JMeterUtils implements UnitTestManager {
         if (key == null) {
             return null;
         }
-        // Resource keys cannot contain spaces
-        key = key.replace(' ', '_'); // $NON-NLS-1$ // $NON-NLS-2$
-        key = key.toLowerCase(java.util.Locale.ENGLISH);
+        // Resource keys cannot contain spaces, and are forced to lower case
+        String resKey = key.replace(' ', '_'); // $NON-NLS-1$ // $NON-NLS-2$
+        resKey = resKey.toLowerCase(java.util.Locale.ENGLISH);
         String resString = null;
         try {
-            resString = resources.getString(key);
+            resString = resources.getString(resKey);
+            if (ignoreResorces ){ // Special mode for debugging resource handling
+                return "["+key+"]";
+            }
         } catch (MissingResourceException mre) {
-            log.warn("ERROR! Resource string not found: [" + key + "]", mre);
+            if (ignoreResorces ){ // Special mode for debugging resource handling
+                return "[?"+key+"?]";
+            }
+            log.warn("ERROR! Resource string not found: [" + resKey + "]", mre);
             resString = defaultValue;
         }
         return resString;
