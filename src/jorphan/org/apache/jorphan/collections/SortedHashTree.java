@@ -24,9 +24,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.TreeMap;
 
-// NOTUSED import org.apache.jorphan.logging.LoggingManager;
-// NOTUSED import org.apache.log.Logger;
-
 /**
  * SortedHashTree is a different implementation of the {@link HashTree}
  * collection class. In the SortedHashTree, the ordering of values in the tree
@@ -36,37 +33,32 @@ import java.util.TreeMap;
  * @see HashTree
  * @see HashTreeTraverser
  *
- * @version $Revision$
  */
 public class SortedHashTree extends HashTree implements Serializable {
-    // NOTUSED private static Logger log = LoggingManager.getLoggerForClass();
 
     private static final long serialVersionUID = 233L;
 
-    protected transient Comparator comparator;
-
     public SortedHashTree() {
-        super(new TreeMap());
+        super(new TreeMap()); // equivalent to new TreeMap((Comparator)null);
     }
 
+    // non-null Comparators don't appear to be used at present
     public SortedHashTree(Comparator comper) {
         super(new TreeMap(comper));
-        comparator = comper;
     }
 
     public SortedHashTree(Object key) {
-        super(new TreeMap());
+        this();
         data.put(key, new SortedHashTree());
     }
 
     public SortedHashTree(Object key, Comparator comper) {
-        super(new TreeMap(comper));
-        comparator = comper;
-        data.put(key, new SortedHashTree(comparator));
+        this(comper);
+        data.put(key, new SortedHashTree(comper));
     }
 
     public SortedHashTree(Collection keys) {
-        super(new TreeMap());
+        this();
         Iterator it = keys.iterator();
         while (it.hasNext()) {
             data.put(it.next(), new SortedHashTree());
@@ -74,70 +66,40 @@ public class SortedHashTree extends HashTree implements Serializable {
     }
 
     public SortedHashTree(Collection keys, Comparator comper) {
-        super(new TreeMap(comper));
-        comparator = comper;
+        this(comper);
         Iterator it = keys.iterator();
         while (it.hasNext()) {
-            data.put(it.next(), new SortedHashTree(comparator));
+            data.put(it.next(), new SortedHashTree(comper));
         }
     }
 
     public SortedHashTree(Object[] keys) {
-        super(new TreeMap());
+        this();
         for (int x = 0; x < keys.length; x++) {
             data.put(keys[x], new SortedHashTree());
         }
     }
 
     public SortedHashTree(Object[] keys, Comparator comper) {
-        super(new TreeMap(comper));
-        comparator = comper;
+        this(comper);
         for (int x = 0; x < keys.length; x++) {
-            data.put(keys[x], new SortedHashTree(comparator));
+            data.put(keys[x], new SortedHashTree(comper));
         }
     }
 
     protected HashTree createNewTree() {
-        if (comparator == null) {
-            return new SortedHashTree();
-        } else {
-            return new SortedHashTree(comparator);
-        }
+        Comparator comparator = ((TreeMap)data).comparator();
+        return new SortedHashTree(comparator);
     }
 
     protected HashTree createNewTree(Object key) {
-        if (comparator == null) {
-            return new SortedHashTree(key);
-        } else {
-            return new SortedHashTree(key, comparator);
-        }
+        Comparator comparator = ((TreeMap)data).comparator();
+        return new SortedHashTree(key, comparator);
     }
 
     protected HashTree createNewTree(Collection values) {
-        if (comparator == null) {
-            return new SortedHashTree(values);
-        } else {
-            return new SortedHashTree(values, comparator);
-        }
+        Comparator comparator = ((TreeMap)data).comparator();
+        return new SortedHashTree(values, comparator);
     }
 
-// Does not seem to be used (and class does not implement Cloneable)
-//    public Object clone() {
-//        HashTree newTree = null;
-//        if (comparator == null) {
-//            newTree = new SortedHashTree();
-//        } else {
-//            newTree = new SortedHashTree(comparator);
-//        }
-//        newTree.data = (Map) ((HashMap) data).clone();
-//        return newTree;
-//    }
-
-    /**
-     * @param comparator
-     *            The comparator to set.
-     */
-    public void setComparator(Comparator comparator) {
-        this.comparator = comparator;
-    }
 }
