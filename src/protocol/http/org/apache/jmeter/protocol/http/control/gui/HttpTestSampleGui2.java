@@ -21,6 +21,7 @@ package org.apache.jmeter.protocol.http.control.gui;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * HTTP Sampler GUI for Apache HTTPClient HTTP implementation
@@ -37,8 +38,9 @@ public class HttpTestSampleGui2 extends HttpTestSampleGui {
         return sampler;
     }
 
-    public String getLabelResource() {
-        return "web_testing2_title"; //$NON-NLS-1$
+    // Use this instead of getLabelResource() otherwise getDocAnchor() below does not work
+    public String getStaticLabel() {
+        return JMeterUtils.getResString("web_testing2_title"); //$NON-NLS-1$
     }
 
     // Documentation is shared with our parent
