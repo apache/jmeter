@@ -18,13 +18,39 @@
 
 package org.apache.jmeter.gui.util;
 
+import org.apache.jmeter.gui.JMeterGUIComponent;
+
+/**
+ * Class to hold additional information needed when building the GUI lists
+ */
 public class MenuInfo {
-    public String label;
+    
+    private final String label;
 
-    public String className;
+    private final String className;
 
-    public MenuInfo(String l, String cn) {
-        label = l;
-        className = cn;
+    private final JMeterGUIComponent guiComp;
+    
+    public MenuInfo(String displayLabel, String classFullName) {
+        label = displayLabel;
+        className = classFullName;
+        guiComp = null;
+    }
+
+    public MenuInfo(JMeterGUIComponent item, String classFullName) {
+        label = item.getStaticLabel();
+        className = classFullName;
+        guiComp = item;
+    }
+    
+    public String getLabel(){
+        if (guiComp != null) {
+            return guiComp.getStaticLabel();
+        }
+        return label;
+    }
+    
+    public String getClassName(){
+        return className;
     }
 }
