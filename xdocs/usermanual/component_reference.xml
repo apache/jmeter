@@ -1770,6 +1770,12 @@ as the name is used to find the target controller when a test plan is reloaded.
 The include controller is designed to use an external jmx file. To use it, add
 samples to a simple controller, then save the simple controller as a jmx file.
 The file can then be used in a test plan.
+The included test plan must not include a Thread Group.
+It should only contain the Simple Controller and any samplers, controllers etc below it.
+</p>
+<p>
+If the test uses a Cookie Manager or User Defined Variables, these should be placed in the top-level
+test plan, not the included file, otherwise they are not guaranteed to work.
 </p>
 <note>
 This element does not support variables/functions in the filename field.<br></br>
