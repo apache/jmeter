@@ -19,17 +19,18 @@
 package org.apache.jmeter.gui.util;
 
 import java.awt.Component;
+import java.awt.event.KeyEvent;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.KeyStroke;
 import javax.swing.MenuElement;
 import javax.swing.UIManager;
 
@@ -130,6 +131,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         }
         this.getRemoteItems();
         createMenuBar();
+        JMeterUtils.addLocaleChangeListener(this);
     }
 
     public void setFileSaveEnabled(boolean enabled) {
@@ -165,6 +167,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         }
     }
 
+    // Does not appear to be used; called by MainFrame#setEditAddMenu() but that is not called
     public void setEditAddMenu(JMenu menu) {
         // If the Add menu already exists, remove it.
         if (edit_add != null) {
@@ -175,6 +178,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         editMenu.insert(edit_add, 0);
     }
 
+    // Called by MainFrame#setEditMenu() which is called by EditCommand#doAction and GuiPackage#localeChanged
     public void setEditMenu(JPopupMenu menu) {
         if (menu != null) {
             editMenu.removeAll();
@@ -248,31 +252,18 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
     private void makeHelpMenu() {
         // HELP MENU
-        helpMenu = new JMenu(JMeterUtils.getResString("help")); //$NON-NLS-1$
-        helpMenu.setMnemonic('H');
-        JMenuItem contextHelp = new JMenuItem(JMeterUtils.getResString("help"), 'H'); //$NON-NLS-1$
-        contextHelp.setActionCommand(ActionNames.HELP);
-        contextHelp.setAccelerator(KeyStrokes.HELP);
-        contextHelp.addActionListener(ActionRouter.getInstance());
+        helpMenu = makeMenuRes("help",'H'); //$NON-NLS-1$
+        
+        JMenuItem contextHelp = makeMenuItemRes("help", 'H', ActionNames.HELP, KeyStrokes.HELP); //$NON-NLS-1$
 
-        JMenuItem whatClass = new JMenuItem(JMeterUtils.getResString("help_node"), 'W');//$NON-NLS-1$
-        whatClass.setActionCommand(ActionNames.WHAT_CLASS);
-        whatClass.setAccelerator(KeyStrokes.WHAT_CLASS);
-        whatClass.addActionListener(ActionRouter.getInstance());
+        JMenuItem whatClass = makeMenuItemRes("help_node", 'W', ActionNames.WHAT_CLASS, KeyStrokes.WHAT_CLASS);//$NON-NLS-1$
 
-        JMenuItem setDebug = new JMenuItem(JMeterUtils.getResString("debug_on"));//$NON-NLS-1$
-        setDebug.setActionCommand(ActionNames.DEBUG_ON);
-        setDebug.setAccelerator(KeyStrokes.DEBUG_ON);
-        setDebug.addActionListener(ActionRouter.getInstance());
+        JMenuItem setDebug = makeMenuItemRes("debug_on", ActionNames.DEBUG_ON, KeyStrokes.DEBUG_ON);//$NON-NLS-1$
 
-        JMenuItem resetDebug = new JMenuItem(JMeterUtils.getResString("debug_off"));//$NON-NLS-1$
-        resetDebug.setActionCommand(ActionNames.DEBUG_OFF);
-        resetDebug.setAccelerator(KeyStrokes.DEBUG_OFF);
-        resetDebug.addActionListener(ActionRouter.getInstance());
+        JMenuItem resetDebug = makeMenuItemRes("debug_off", ActionNames.DEBUG_OFF, KeyStrokes.DEBUG_OFF);//$NON-NLS-1$
 
-        help_about = new JMenuItem(JMeterUtils.getResString("about"), 'A'); //$NON-NLS-1$
-        help_about.setActionCommand(ActionNames.ABOUT);
-        help_about.addActionListener(ActionRouter.getInstance());
+        help_about = makeMenuItemRes("about", 'A', ActionNames.ABOUT); //$NON-NLS-1$
+
         helpMenu.add(contextHelp);
         helpMenu.addSeparator();
         helpMenu.add(whatClass);
@@ -284,173 +275,122 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
     private void makeOptionsMenu() {
         // OPTIONS MENU
-        optionsMenu = new JMenu(JMeterUtils.getResString("option")); //$NON-NLS-1$
-        JMenuItem functionHelper = new JMenuItem(JMeterUtils.getResString("function_dialog_menu_item"), 'F'); //$NON-NLS-1$
-        functionHelper.addActionListener(ActionRouter.getInstance());
-        functionHelper.setActionCommand(ActionNames.FUNCTIONS);
-        functionHelper.setAccelerator(KeyStrokes.FUNCTIONS);
-        lafMenu = new JMenu(JMeterUtils.getResString("appearance")); //$NON-NLS-1$
+        optionsMenu = makeMenuRes("option",'O'); //$NON-NLS-1$
+        JMenuItem functionHelper = makeMenuItemRes("function_dialog_menu_item", 'F', ActionNames.FUNCTIONS, KeyStrokes.FUNCTIONS); //$NON-NLS-1$
+
+        lafMenu = makeMenuRes("appearance",'L'); //$NON-NLS-1$
         UIManager.LookAndFeelInfo lafs[] = UIManager.getInstalledLookAndFeels();
         for (int i = 0; i < lafs.length; ++i) {
             JMenuItem laf = new JMenuItem(lafs[i].getName());
             laf.addActionListener(ActionRouter.getInstance());
             laf.setActionCommand(ActionNames.LAF_PREFIX + lafs[i].getClassName());
-            lafMenu.setMnemonic('L');
             lafMenu.add(laf);
         }
-        optionsMenu.setMnemonic('O');
         optionsMenu.add(functionHelper);
         optionsMenu.add(lafMenu);
         if (SSLManager.isSSLSupported()) {
-            sslManager = new JMenuItem(JMeterUtils.getResString("sslmanager")); //$NON-NLS-1$
-            sslManager.addActionListener(ActionRouter.getInstance());
-            sslManager.setActionCommand(ActionNames.SSL_MANAGER);
-            sslManager.setMnemonic('S');
-            sslManager.setAccelerator(KeyStrokes.SSL_MANAGER);
+            sslManager = makeMenuItemRes("sslmanager", 'S', ActionNames.SSL_MANAGER, KeyStrokes.SSL_MANAGER); //$NON-NLS-1$
             optionsMenu.add(sslManager);
         }
         optionsMenu.add(makeLanguageMenu());
 
-        JMenuItem collapse = new JMenuItem(JMeterUtils.getResString("menu_collapse_all")); //$NON-NLS-1$
-        collapse.addActionListener(ActionRouter.getInstance());
-        collapse.setActionCommand(ActionNames.COLLAPSE_ALL);
-        collapse.setAccelerator(KeyStrokes.COLLAPSE_ALL);
+        JMenuItem collapse = makeMenuItemRes("menu_collapse_all", ActionNames.COLLAPSE_ALL, KeyStrokes.COLLAPSE_ALL); //$NON-NLS-1$
         optionsMenu.add(collapse);
 
-        JMenuItem expand = new JMenuItem(JMeterUtils.getResString("menu_expand_all")); //$NON-NLS-1$
-        expand.addActionListener(ActionRouter.getInstance());
-        expand.setActionCommand(ActionNames.EXPAND_ALL);
-        expand.setAccelerator(KeyStrokes.EXPAND_ALL);
+        JMenuItem expand = makeMenuItemRes("menu_expand_all", ActionNames.EXPAND_ALL, KeyStrokes.EXPAND_ALL); //$NON-NLS-1$
         optionsMenu.add(expand);
     }
 
+    private static class LangMenuHelper{
+        final ActionRouter actionRouter = ActionRouter.getInstance();
+        final JMenu languageMenu;
+        
+        LangMenuHelper(JMenu _languageMenu){
+            languageMenu = _languageMenu;
+        }
+        
+        /**
+         * Create a language entry from the locale name.
+         * 
+         * @param locale - must also be a valid resource name
+         */
+        void addLang(String locale){
+            String localeString = JMeterUtils.getLocaleString(locale);
+            JMenuItem language = new JMenuItem(localeString);
+            language.addActionListener(actionRouter);
+            language.setActionCommand(ActionNames.CHANGE_LANGUAGE);
+            language.setName(locale); // This is used by the ChangeLanguage class to define the Locale
+            languageMenu.add(language);                
+        }
+
+   }
+
     // TODO fetch list of languages from a file?
-    // N.B. Changes to language list need to be reflected in
-    // resources/PackageTest.java
+    // N.B. Changes to language list need to be reflected in resources/PackageTest.java
     private JMenu makeLanguageMenu() {
+        final JMenu languageMenu = makeMenuRes("choose_language",'C'); //$NON-NLS-1$
+        
+        LangMenuHelper langMenu = new LangMenuHelper(languageMenu);
+
         /*
          * Note: the item name is used by ChangeLanguage to create a Locale for
          * that language, so need to ensure that the language strings are valid
-         * If they exist, use the Locale language constants
+         * If they exist, use the Locale language constants.
+         * Also, need to ensure that the names are valid resource entries too.
          */
-        // TODO: do accelerator keys make sense? The key may not be present in
-        // translations
-        JMenu languageMenu = new JMenu(JMeterUtils.getResString("choose_language")); //$NON-NLS-1$
-        languageMenu.setMnemonic('C');
-        // add english
-        JMenuItem english = new JMenuItem(JMeterUtils.getResString("en"), 'E'); //$NON-NLS-1$
-        english.addActionListener(ActionRouter.getInstance());
-        english.setActionCommand(ActionNames.CHANGE_LANGUAGE);
-        english.setName(Locale.ENGLISH.getLanguage());
-        languageMenu.add(english);
-        // add Japanese
-        JMenuItem japanese = new JMenuItem(JMeterUtils.getResString("ja"), 'J'); //$NON-NLS-1$
-        japanese.addActionListener(ActionRouter.getInstance());
-        japanese.setActionCommand(ActionNames.CHANGE_LANGUAGE);
-        japanese.setName(Locale.JAPANESE.getLanguage());
-        languageMenu.add(japanese);
-        // add Norwegian
-        JMenuItem norway = new JMenuItem(JMeterUtils.getResString("no"), 'N'); //$NON-NLS-1$
-        norway.addActionListener(ActionRouter.getInstance());
-        norway.setActionCommand(ActionNames.CHANGE_LANGUAGE);
-        norway.setName("no"); // No default for Norwegian
-        languageMenu.add(norway);
-        // add German
-        JMenuItem german = new JMenuItem(JMeterUtils.getResString("de"), 'G'); //$NON-NLS-1$
-        german.addActionListener(ActionRouter.getInstance());
-        german.setActionCommand(ActionNames.CHANGE_LANGUAGE);
-        german.setName(Locale.GERMAN.getLanguage());
-        languageMenu.add(german);
-        // add French
-        JMenuItem french = new JMenuItem(JMeterUtils.getResString("fr"), 'F'); //$NON-NLS-1$
-        french.addActionListener(ActionRouter.getInstance());
-        french.setActionCommand(ActionNames.CHANGE_LANGUAGE);
-        french.setName(Locale.FRENCH.getLanguage());
-        languageMenu.add(french);
-        // add chinese (simple)
-        JMenuItem chineseSimple = new JMenuItem(JMeterUtils.getResString("zh_cn")); //$NON-NLS-1$
-        chineseSimple.addActionListener(ActionRouter.getInstance());
-        chineseSimple.setActionCommand(ActionNames.CHANGE_LANGUAGE);
-        chineseSimple.setName(Locale.SIMPLIFIED_CHINESE.toString());
-        languageMenu.add(chineseSimple);
-        // add chinese (traditional)
-        JMenuItem chineseTrad = new JMenuItem(JMeterUtils.getResString("zh_tw")); //$NON-NLS-1$
-        chineseTrad.addActionListener(ActionRouter.getInstance());
-        chineseTrad.setActionCommand(ActionNames.CHANGE_LANGUAGE);
-        chineseTrad.setName(Locale.TRADITIONAL_CHINESE.toString());
-        languageMenu.add(chineseTrad);
-        // add spanish
-        JMenuItem spanish = new JMenuItem(JMeterUtils.getResString("es")); //$NON-NLS-1$
-        spanish.addActionListener(ActionRouter.getInstance());
-        spanish.setActionCommand(ActionNames.CHANGE_LANGUAGE);
-        spanish.setName("es"); //$NON-NLS-1$
-        languageMenu.add(spanish);
-        // add turkish
-        JMenuItem turkish = new JMenuItem(JMeterUtils.getResString("tr")); //$NON-NLS-1$
-        turkish.addActionListener(ActionRouter.getInstance());
-        turkish.setActionCommand(ActionNames.CHANGE_LANGUAGE);
-        turkish.setName("tr"); //$NON-NLS-1$
-        languageMenu.add(turkish);
+
+        langMenu.addLang(Locale.ENGLISH.toString()); // en
+        langMenu.addLang(Locale.FRENCH.toString()); // fr
+        langMenu.addLang(Locale.GERMAN.toString()); // de
+        langMenu.addLang("no"); // $NON-NLS-1$
+        langMenu.addLang("es"); // $NON-NLS-1$
+        langMenu.addLang("tr"); // $NON-NLS-1$
+        langMenu.addLang(Locale.JAPANESE.toString()); // ja
+        langMenu.addLang(Locale.SIMPLIFIED_CHINESE.toString()); // zh_CN
+        langMenu.addLang(Locale.TRADITIONAL_CHINESE.toString()); // zh_TW
+        String [] addLanguages =JMeterUtils.getPropDefault("locales.add","").split(","); // $NON-NLS-1$
+        for(int i=0; i < addLanguages.length; i++){
+            log.info("Adding locale "+addLanguages[i]);
+            langMenu.addLang(addLanguages[i]);
+        }
         return languageMenu;
     }
 
     private void makeRunMenu() {
         // RUN MENU
-        runMenu = new JMenu(JMeterUtils.getResString("run")); //$NON-NLS-1$
-        runMenu.setMnemonic('R');
-        run_start = new JMenuItem(JMeterUtils.getResString("start"), 'S'); //$NON-NLS-1$
-        run_start.setAccelerator(KeyStrokes.ACTION_START);
-        run_start.addActionListener(ActionRouter.getInstance());
-        run_start.setActionCommand(ActionNames.ACTION_START);
-        run_stop = new JMenuItem(JMeterUtils.getResString("stop"), 'T'); //$NON-NLS-1$
-        run_stop.setAccelerator(KeyStrokes.ACTION_STOP);
+        runMenu = makeMenuRes("run",'R'); //$NON-NLS-1$
+
+        run_start = makeMenuItemRes("start", 'S', ActionNames.ACTION_START, KeyStrokes.ACTION_START); //$NON-NLS-1$
+
+        run_stop = makeMenuItemRes("stop", 'T', ActionNames.ACTION_STOP, KeyStrokes.ACTION_STOP); //$NON-NLS-1$
         run_stop.setEnabled(false);
-        run_stop.addActionListener(ActionRouter.getInstance());
-        run_stop.setActionCommand(ActionNames.ACTION_STOP);
 
-        run_shut = new JMenuItem(JMeterUtils.getResString("shutdown"), 'Y'); //$NON-NLS-1$
-        run_shut.setAccelerator(KeyStrokes.ACTION_SHUTDOWN);
+        run_shut = makeMenuItemRes("shutdown", 'Y', ActionNames.ACTION_SHUTDOWN, KeyStrokes.ACTION_SHUTDOWN); //$NON-NLS-1$
         run_shut.setEnabled(false);
-        run_shut.addActionListener(ActionRouter.getInstance());
-        run_shut.setActionCommand(ActionNames.ACTION_SHUTDOWN);
 
-        run_clear = new JMenuItem(JMeterUtils.getResString("clear"), 'C'); //$NON-NLS-1$
-        run_clear.addActionListener(ActionRouter.getInstance());
-        run_clear.setActionCommand(ActionNames.CLEAR);
-        run_clear.setAccelerator(KeyStrokes.CLEAR);
+        run_clear = makeMenuItemRes("clear", 'C', ActionNames.CLEAR, KeyStrokes.CLEAR); //$NON-NLS-1$
 
-        run_clearAll = new JMenuItem(JMeterUtils.getResString("clear_all"), 'a'); //$NON-NLS-1$
-        run_clearAll.addActionListener(ActionRouter.getInstance());
-        run_clearAll.setActionCommand(ActionNames.CLEAR_ALL);
-        run_clearAll.setAccelerator(KeyStrokes.CLEAR_ALL);
+        run_clearAll = makeMenuItemRes("clear_all", 'a', ActionNames.CLEAR_ALL, KeyStrokes.CLEAR_ALL); //$NON-NLS-1$
 
         runMenu.add(run_start);
         if (remote_start != null) {
             runMenu.add(remote_start);
         }
-        remote_start_all = new JMenuItem(JMeterUtils.getResString("remote_start_all")); //$NON-NLS-1$
-        remote_start_all.setName("remote_start_all"); //$NON-NLS-1$
-        remote_start_all.setAccelerator(KeyStrokes.REMOTE_START_ALL);
-        remote_start_all.addActionListener(ActionRouter.getInstance());
-        remote_start_all.setActionCommand(ActionNames.REMOTE_START_ALL);
+        remote_start_all = makeMenuItemRes("remote_start_all", ActionNames.REMOTE_START_ALL, KeyStrokes.REMOTE_START_ALL); //$NON-NLS-1$
+
         runMenu.add(remote_start_all);
         runMenu.add(run_stop);
         runMenu.add(run_shut);
         if (remote_stop != null) {
             runMenu.add(remote_stop);
         }
-        remote_stop_all = new JMenuItem(JMeterUtils.getResString("remote_stop_all"), 'X'); //$NON-NLS-1$
-        remote_stop_all.setAccelerator(KeyStrokes.REMOTE_STOP_ALL);
-        remote_stop_all.addActionListener(ActionRouter.getInstance());
-        remote_stop_all.setActionCommand(ActionNames.REMOTE_STOP_ALL);
+        remote_stop_all = makeMenuItemRes("remote_stop_all", 'X', ActionNames.REMOTE_STOP_ALL, KeyStrokes.REMOTE_STOP_ALL); //$NON-NLS-1$
         runMenu.add(remote_stop_all);
 
         if (remote_exit != null) {
             runMenu.add(remote_exit);
         }
-        remote_exit_all = new JMenuItem(JMeterUtils.getResString("remote_exit_all")); //$NON-NLS-1$
-        remote_exit_all.addActionListener(ActionRouter.getInstance());
-        remote_exit_all.setActionCommand(ActionNames.REMOTE_EXIT_ALL);
+        remote_exit_all = makeMenuItemRes("remote_exit_all", ActionNames.REMOTE_EXIT_ALL); //$NON-NLS-1$
         runMenu.add(remote_exit_all);
 
         runMenu.addSeparator();
@@ -460,8 +400,8 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
     private void makeEditMenu() {
         // EDIT MENU
-        editMenu = new JMenu(JMeterUtils.getResString("edit")); //$NON-NLS-1$
-        editMenu.setMnemonic('E');
+        editMenu = makeMenuRes("edit",'E'); //$NON-NLS-1$
+
         // From the Java Look and Feel Guidelines: If all items in a menu
         // are disabled, then disable the menu. Makes sense.
         editMenu.setEnabled(false);
@@ -469,56 +409,35 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
     private void makeFileMenu() {
         // FILE MENU
-        fileMenu = new JMenu(JMeterUtils.getResString("file")); //$NON-NLS-1$
-        fileMenu.setMnemonic('F');
-        JMenuItem file_save = new JMenuItem(JMeterUtils.getResString("save"), 'S'); //$NON-NLS-1$
-        file_save.setAccelerator(KeyStrokes.SAVE);
-        file_save.setActionCommand(ActionNames.SAVE);
-        file_save.addActionListener(ActionRouter.getInstance());
+        fileMenu = makeMenuRes("file",'F'); //$NON-NLS-1$
+        
+        JMenuItem file_save = makeMenuItemRes("save", 'S', ActionNames.SAVE, KeyStrokes.SAVE); //$NON-NLS-1$
         file_save.setEnabled(true);
 
-        file_save_as = new JMenuItem(JMeterUtils.getResString("save_all_as"), 'A'); //$NON-NLS-1$
-        file_save_as.setAccelerator(KeyStrokes.SAVE_ALL_AS);
-        file_save_as.setActionCommand(ActionNames.SAVE_ALL_AS);
-        file_save_as.addActionListener(ActionRouter.getInstance());
+        file_save_as = makeMenuItemRes("save_all_as", 'A', ActionNames.SAVE_ALL_AS, KeyStrokes.SAVE_ALL_AS); //$NON-NLS-1$
         file_save_as.setEnabled(true);
 
-        file_selection_as = new JMenuItem(JMeterUtils.getResString("save_as")); //$NON-NLS-1$
-        file_selection_as.setActionCommand(ActionNames.SAVE_AS);
-        file_selection_as.addActionListener(ActionRouter.getInstance());
+        file_selection_as = makeMenuItemRes("save_as", ActionNames.SAVE_AS); //$NON-NLS-1$
         file_selection_as.setEnabled(true);
 
-        file_revert = new JMenuItem(JMeterUtils.getResString("revert_project"), 'R'); //$NON-NLS-1$
-        file_revert.setActionCommand(ActionNames.REVERT_PROJECT);
-        file_revert.addActionListener(ActionRouter.getInstance());
+        file_revert = makeMenuItemRes("revert_project", 'R', ActionNames.REVERT_PROJECT); //$NON-NLS-1$
         file_revert.setEnabled(false);
 
-        file_load = new JMenuItem(JMeterUtils.getResString("menu_open"), 'O'); //$NON-NLS-1$
-        file_load.setAccelerator(KeyStrokes.OPEN);
-        file_load.addActionListener(ActionRouter.getInstance());
+        file_load = makeMenuItemRes("menu_open", 'O', ActionNames.OPEN, KeyStrokes.OPEN); //$NON-NLS-1$
         // Set default SAVE menu item to disabled since the default node that
         // is selected is ROOT, which does not allow items to be inserted.
         file_load.setEnabled(false);
-        file_load.setActionCommand(ActionNames.OPEN);
 
-        file_close = new JMenuItem(JMeterUtils.getResString("menu_close"), 'C'); //$NON-NLS-1$
-        file_close.setAccelerator(KeyStrokes.CLOSE);
-        file_close.setActionCommand(ActionNames.CLOSE);
-        file_close.addActionListener(ActionRouter.getInstance());
+        file_close = makeMenuItemRes("menu_close", 'C', ActionNames.CLOSE, KeyStrokes.CLOSE); //$NON-NLS-1$
 
-        file_exit = new JMenuItem(JMeterUtils.getResString("exit"), 'X'); //$NON-NLS-1$
-        file_exit.setAccelerator(KeyStrokes.EXIT);
-        file_exit.setActionCommand(ActionNames.EXIT);
-        file_exit.addActionListener(ActionRouter.getInstance());
+        file_exit = makeMenuItemRes("exit", 'X', ActionNames.EXIT, KeyStrokes.EXIT); //$NON-NLS-1$
 
-        file_merge = new JMenuItem(JMeterUtils.getResString("menu_merge"), 'M'); //$NON-NLS-1$
+        file_merge = makeMenuItemRes("menu_merge", 'M', ActionNames.MERGE); //$NON-NLS-1$
         // file_merge.setAccelerator(
         // KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_MASK));
-        file_merge.addActionListener(ActionRouter.getInstance());
         // Set default SAVE menu item to disabled since the default node that
         // is selected is ROOT, which does not allow items to be inserted.
         file_merge.setEnabled(false);
-        file_merge.setActionCommand(ActionNames.MERGE);
 
         fileMenu.add(file_close);
         fileMenu.add(file_load);
@@ -571,29 +490,23 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
     private void getRemoteItems() {
         if (remoteHosts.length > 0) {
-            remote_start = new JMenu(JMeterUtils.getResString("remote_start")); //$NON-NLS-1$
-            remote_stop = new JMenu(JMeterUtils.getResString("remote_stop")); //$NON-NLS-1$
-            remote_exit = new JMenu(JMeterUtils.getResString("remote_exit")); //$NON-NLS-1$
+            remote_start = makeMenuRes("remote_start"); //$NON-NLS-1$
+            remote_stop = makeMenuRes("remote_stop"); //$NON-NLS-1$
+            remote_exit = makeMenuRes("remote_exit"); //$NON-NLS-1$
 
             for (int i = 0; i < remoteHosts.length; i++) {
                 remoteHosts[i] = remoteHosts[i].trim();
-                JMenuItem item = new JMenuItem(remoteHosts[i]);
-                item.setActionCommand(ActionNames.REMOTE_START);
-                item.setName(remoteHosts[i]);
-                item.addActionListener(ActionRouter.getInstance());
+
+                JMenuItem item = makeMenuItemNoRes(remoteHosts[i], ActionNames.REMOTE_START);
                 remote_engine_start.add(item);
                 remote_start.add(item);
-                item = new JMenuItem(remoteHosts[i]);
-                item.setActionCommand(ActionNames.REMOTE_STOP);
-                item.setName(remoteHosts[i]);
-                item.addActionListener(ActionRouter.getInstance());
+
+                item = makeMenuItemNoRes(remoteHosts[i], ActionNames.REMOTE_STOP);
                 item.setEnabled(false);
                 remote_engine_stop.add(item);
                 remote_stop.add(item);
-                item = new JMenuItem(remoteHosts[i]);
-                item.setActionCommand(ActionNames.REMOTE_EXIT);
-                item.setName(remoteHosts[i]);
-                item.addActionListener(ActionRouter.getInstance());
+
+                item = makeMenuItemNoRes(remoteHosts[i],ActionNames.REMOTE_EXIT);
                 item.setEnabled(false);
                 remote_engine_exit.add(item);
                 remote_exit.add(item);
@@ -602,8 +515,8 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     }
 
     /**
-     * Processes a locale change notification. Changes the texts in all menus to
-     * the new language.
+     * Processes a locale change notification. 
+     * Changes the texts in all menus to the new language.
      */
     public void localeChanged(LocaleChangeEvent event) {
         updateMenuElement(fileMenu);
@@ -614,16 +527,31 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     }
 
     /**
-     * Refreshes all texts in the menu and all submenus to a new locale.
+     * <p>Refreshes all texts in the menu and all submenus to a new locale.</p>
+     * 
+     * <p>Assumes that the item name is set to the resource key, so the resource can be retrieved.
+     * Certain action types do not follow this rule, @see JMeterMenuBar#isNotResource(String)</p>
+     *
+     * The Language Change event assumes that the name is the same as the locale name,
+     * so this additionally means that all supported locales must be defined as resources.
+     * 
      */
     private void updateMenuElement(MenuElement menu) {
         Component component = menu.getComponent();
-
-        if (component.getName() != null) {
+        final String compName = component.getName();
+        if (compName != null) {
             if (component instanceof JMenu) {
-                ((JMenu) component).setText(JMeterUtils.getResString(component.getName()));
+                final JMenu jMenu = (JMenu) component;
+                if (isResource(jMenu.getActionCommand())){
+                    jMenu.setText(JMeterUtils.getResString(compName));
+                }
             } else {
-                ((JMenuItem) component).setText(JMeterUtils.getResString(component.getName()));
+                final JMenuItem jMenuItem = (JMenuItem) component;
+                if (isResource(jMenuItem.getActionCommand())){
+                    jMenuItem.setText(JMeterUtils.getResString(compName));
+                } else if  (ActionNames.CHANGE_LANGUAGE.equals(jMenuItem.getActionCommand())){
+                    jMenuItem.setText(JMeterUtils.getLocaleString(compName));
+                }
             }
         }
 
@@ -632,5 +560,104 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         for (int i = 0; i < subelements.length; i++) {
             updateMenuElement(subelements[i]);
         }
+    }
+
+    /**
+     * Return true if component name is a resource.<br/>
+     * i.e it is not a hostname:<br/>
+     * 
+     * <tt>ActionNames.REMOTE_START</tt><br/>
+     * <tt>ActionNames.REMOTE_STOP</tt><br/>
+     * <tt>ActionNames.REMOTE_EXIT</tt><br/>
+     * 
+     * nor a filename:<br/>
+     * <tt>ActionNames.OPEN_RECENT</tt>
+     * 
+     * nor a look and feel prefix:<br/>
+     * <tt>ActionNames.LAF_PREFIX</tt>
+     */
+    private static boolean isResource(String actionCommand) {
+        if (ActionNames.CHANGE_LANGUAGE.equals(actionCommand)){//
+            return false;
+        }
+        if (ActionNames.ADD.equals(actionCommand)){//
+            return false;
+        }
+        if (ActionNames.REMOTE_START.equals(actionCommand)){//
+            return false;
+        }
+        if (ActionNames.REMOTE_STOP.equals(actionCommand)){//
+            return false;
+        }
+        if (ActionNames.REMOTE_EXIT.equals(actionCommand)){//
+            return false;
+        }
+        if (ActionNames.OPEN_RECENT.equals(actionCommand)){//
+            return false;
+        }
+        if (actionCommand != null && actionCommand.startsWith(ActionNames.LAF_PREFIX)){
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Make a menu from a resource string.
+     * @param resource used to name menu and set text.
+     * @return the menu
+     */
+    private static JMenu makeMenuRes(String resource) {
+        JMenu menu = new JMenu(JMeterUtils.getResString(resource));
+        menu.setName(resource);
+        return menu;
+    }
+
+    /**
+     * Make a menu from a resource string and set its mnemonic.
+     * 
+     * @param resource
+     * @param mnemonic
+     * @return the menu
+     */
+    private static JMenu makeMenuRes(String resource, int mnemonic){
+        JMenu menu = makeMenuRes(resource);
+        menu.setMnemonic(mnemonic);
+        return menu;
+    }
+
+    /**
+     * Make a menuItem using a fixed label which is also used as the item name.
+     * This is used for items such as recent files and hostnames which are not resources
+     * @param label (this is not used as a resource key)
+     * @param actionCommand
+     * @return the menu item
+     */
+    private static JMenuItem makeMenuItemNoRes(String label, String actionCommand) {
+        JMenuItem menuItem = new JMenuItem(label);
+        menuItem.setName(label);
+        menuItem.setActionCommand(actionCommand);
+        menuItem.addActionListener(ActionRouter.getInstance());
+        return menuItem;
+    }
+
+    private static JMenuItem makeMenuItemRes(String resource, String actionCommand) {
+        return makeMenuItemRes(resource, KeyEvent.VK_UNDEFINED, actionCommand, null);
+    }
+
+    private static JMenuItem makeMenuItemRes(String resource, String actionCommand, KeyStroke keyStroke) {
+        return makeMenuItemRes(resource, KeyEvent.VK_UNDEFINED, actionCommand, keyStroke);
+    }
+
+    private static JMenuItem makeMenuItemRes(String resource, int mnemonic, String actionCommand) {
+        return makeMenuItemRes(resource, mnemonic, actionCommand, null);
+    }
+
+    private static JMenuItem makeMenuItemRes(String resource, int mnemonic, String actionCommand, KeyStroke keyStroke){
+        JMenuItem menuItem = new JMenuItem(JMeterUtils.getResString(resource), mnemonic);
+        menuItem.setName(resource);
+        menuItem.setActionCommand(actionCommand);
+        menuItem.setAccelerator(keyStroke);
+        menuItem.addActionListener(ActionRouter.getInstance());
+        return menuItem;
     }
 }

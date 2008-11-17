@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.gui.util;
 
+import java.awt.Component;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
@@ -113,11 +114,29 @@ public final class MenuFactory {
     private static final String[] MENU_PARENT_SAMPLER = new String[] {
         MenuFactory.CONTROLLERS };
 
-    private static List timers, controllers, samplers, configElements,
+    private static final List timers, controllers, samplers, configElements,
         assertions, listeners, nonTestElements,
         postProcessors, preProcessors;
 
     static {
+        timers = new LinkedList();
+        controllers = new LinkedList();
+        samplers = new LinkedList();
+        configElements = new LinkedList();
+        assertions = new LinkedList();
+        listeners = new LinkedList();
+        postProcessors = new LinkedList();
+        preProcessors = new LinkedList();
+        nonTestElements = new LinkedList();
+        menuMap.put(TIMERS, timers);
+        menuMap.put(ASSERTIONS, assertions);
+        menuMap.put(CONFIG_ELEMENTS, configElements);
+        menuMap.put(CONTROLLERS, controllers);
+        menuMap.put(LISTENERS, listeners);
+        menuMap.put(NON_TEST_ELEMENTS, nonTestElements);
+        menuMap.put(SAMPLERS, samplers);
+        menuMap.put(POST_PROCESSORS, postProcessors);
+        menuMap.put(PRE_PROCESSORS, preProcessors);
         try {
             String[] classesToSkip =
                 JOrphanUtils.split(JMeterUtils.getPropDefault("not_in_menu", ""), ","); //$NON-NLS-1$
@@ -140,65 +159,46 @@ public final class MenuFactory {
     public static void addEditMenu(JPopupMenu menu, boolean removable) {
         addSeparator(menu);
         if (removable) {
-            menu.add(makeMenuItem(JMeterUtils.getResString("cut"), //$NON-NLS-1$
-                "Cut", ActionNames.CUT, //$NON-NLS-1$
-                KeyStrokes.CUT));
+            menu.add(makeMenuItemRes("cut", ActionNames.CUT, KeyStrokes.CUT)); //$NON-NLS-1$
         }
-        menu.add(makeMenuItem(JMeterUtils.getResString("copy"),  //$NON-NLS-1$
-                "Copy", ActionNames.COPY, //$NON-NLS-1$
-                KeyStrokes.COPY));
-        menu.add(makeMenuItem(JMeterUtils.getResString("paste"), //$NON-NLS-1$
-                "Paste", ActionNames.PASTE, //$NON-NLS-1$
-                KeyStrokes.PASTE));
-        menu.add(makeMenuItem(JMeterUtils.getResString("reset_gui"), //$NON-NLS-1$
-                "Reset", ActionNames.RESET_GUI //$NON-NLS-1$
-                ));
+        menu.add(makeMenuItemRes("copy", ActionNames.COPY, KeyStrokes.COPY));  //$NON-NLS-1$
+        menu.add(makeMenuItemRes("paste", ActionNames.PASTE, KeyStrokes.PASTE)); //$NON-NLS-1$
+        menu.add(makeMenuItemRes("reset_gui", ActionNames.RESET_GUI )); //$NON-NLS-1$
         if (removable) {
-            menu.add(makeMenuItem(JMeterUtils.getResString("remove"), //$NON-NLS-1$
-                    "Remove", ActionNames.REMOVE, //$NON-NLS-1$
-                    KeyStrokes.REMOVE));
+            menu.add(makeMenuItemRes("remove", ActionNames.REMOVE, KeyStrokes.REMOVE)); //$NON-NLS-1$
         }
     }
 
     public static void addPasteResetMenu(JPopupMenu menu) {
         addSeparator(menu);
-        menu.add(makeMenuItem(JMeterUtils.getResString("paste"), //$NON-NLS-1$
-                "Paste", ActionNames.PASTE, //$NON-NLS-1$
-                KeyStrokes.PASTE));
-        menu.add(makeMenuItem(JMeterUtils.getResString("reset_gui"), //$NON-NLS-1$
-                "Reset", ActionNames.RESET_GUI //$NON-NLS-1$
-                ));
+        menu.add(makeMenuItemRes("paste", ActionNames.PASTE, KeyStrokes.PASTE)); //$NON-NLS-1$
+        menu.add(makeMenuItemRes("reset_gui", ActionNames.RESET_GUI )); //$NON-NLS-1$
     }
 
     public static void addFileMenu(JPopupMenu menu) {
         addSeparator(menu);
-        menu.add(makeMenuItem(JMeterUtils.getResString("open"),// $NON-NLS-1$
-                "Open", ActionNames.OPEN));// $NON-NLS-1$
-        menu.add(makeMenuItem(JMeterUtils.getResString("menu_merge"),// $NON-NLS-1$
-                "Merge", ActionNames.MERGE));// $NON-NLS-1$
-        menu.add(makeMenuItem(JMeterUtils.getResString("save_as"),// $NON-NLS-1$
-                "Save As", ActionNames.SAVE_AS));// $NON-NLS-1$
+        menu.add(makeMenuItemRes("open", ActionNames.OPEN));// $NON-NLS-1$
+        menu.add(makeMenuItemRes("menu_merge", ActionNames.MERGE));// $NON-NLS-1$
+        menu.add(makeMenuItemRes("save_as", ActionNames.SAVE_AS));// $NON-NLS-1$
 
         addSeparator(menu);
-        JMenuItem savePicture = makeMenuItem(JMeterUtils.getResString("save_as_image"),// $NON-NLS-1$
-                "Save Image", ActionNames.SAVE_GRAPHICS,// $NON-NLS-1$
+        JMenuItem savePicture = makeMenuItemRes("save_as_image",// $NON-NLS-1$
+                ActionNames.SAVE_GRAPHICS,
                 KeyStrokes.SAVE_GRAPHICS);
         menu.add(savePicture);
         if (!(GuiPackage.getInstance().getCurrentGui() instanceof Printable)) {
             savePicture.setEnabled(false);
         }
 
-        JMenuItem savePictureAll = makeMenuItem(JMeterUtils.getResString("save_as_image_all"),// $NON-NLS-1$
-                "Save Image All", ActionNames.SAVE_GRAPHICS_ALL,// $NON-NLS-1$
+        JMenuItem savePictureAll = makeMenuItemRes("save_as_image_all",// $NON-NLS-1$
+                ActionNames.SAVE_GRAPHICS_ALL,
                 KeyStrokes.SAVE_GRAPHICS_ALL);
         menu.add(savePictureAll);
 
         addSeparator(menu);
 
-        JMenuItem disabled = makeMenuItem(JMeterUtils.getResString("disable"),// $NON-NLS-1$
-                "Disable", ActionNames.DISABLE);// $NON-NLS-1$
-        JMenuItem enabled = makeMenuItem(JMeterUtils.getResString("enable"),// $NON-NLS-1$
-                "Enable", ActionNames.ENABLE);// $NON-NLS-1$
+        JMenuItem disabled = makeMenuItemRes("disable", ActionNames.DISABLE);// $NON-NLS-1$
+        JMenuItem enabled = makeMenuItemRes("enable", ActionNames.ENABLE);// $NON-NLS-1$
         boolean isEnabled = GuiPackage.getInstance().getTreeListener().getCurrentNode().isEnabled();
         if (isEnabled) {
             disabled.setEnabled(true);
@@ -210,8 +210,7 @@ public final class MenuFactory {
         menu.add(enabled);
         menu.add(disabled);
         addSeparator(menu);
-        menu.add(makeMenuItem(JMeterUtils.getResString("help"), // $NON-NLS-1$
-                "Help", ActionNames.HELP));// $NON-NLS-1$
+        menu.add(makeMenuItemRes("help", ActionNames.HELP));// $NON-NLS-1$
     }
 
     public static JMenu makeMenus(String[] categories, String label, String actionCommand) {
@@ -309,7 +308,7 @@ public final class MenuFactory {
         JMenu menu = new JMenu(menuName);
         while (iter.hasNext()) {
             MenuInfo info = (MenuInfo) iter.next();
-            menu.add(makeMenuItem(info.label, info.className, actionCommand));
+            menu.add(makeMenuItem(info, actionCommand));
         }
         return menu;
     }
@@ -339,6 +338,50 @@ public final class MenuFactory {
 
         return newMenuChoice;
     }
+    
+    /**
+     * Create a single menu item from the resource name.
+     *
+     * @param resource for the MenuItem
+     * @param actionCommand - predefined string, e.g. ActionNames.ADD
+     *     @see org.apache.jmeter.gui.action.ActionNames
+     * @return the menu item
+     */
+    public static JMenuItem makeMenuItemRes(String resource, String actionCommand) {
+        JMenuItem newMenuChoice = new JMenuItem(JMeterUtils.getResString(resource));
+        newMenuChoice.setName(resource);
+        newMenuChoice.addActionListener(ActionRouter.getInstance());
+        if (actionCommand != null) {
+            newMenuChoice.setActionCommand(actionCommand);
+        }
+
+        return newMenuChoice;
+    }
+
+    /**
+     * Create a single menu item from a MenuInfo object
+     *
+     * @param info the MenuInfo object
+     * @param actionCommand - predefined string, e.g. ActionNames.ADD
+     *     @see org.apache.jmeter.gui.action.ActionNames
+     * @return the menu item
+     */
+    public static Component makeMenuItem(MenuInfo info, String actionCommand) {
+        JMenuItem newMenuChoice = new JMenuItem(info.getLabel());
+        newMenuChoice.setName(info.getClassName());
+        newMenuChoice.addActionListener(ActionRouter.getInstance());
+        if (actionCommand != null) {
+            newMenuChoice.setActionCommand(actionCommand);
+        }
+
+        return newMenuChoice;
+    }
+
+    public static JMenuItem makeMenuItemRes(String resource, String actionCommand, KeyStroke accel) {
+        JMenuItem item = makeMenuItemRes(resource, actionCommand);
+        item.setAccelerator(accel);
+        return item;
+    }
 
     public static JMenuItem makeMenuItem(String label, String name, String actionCommand, KeyStroke accel) {
         JMenuItem item = makeMenuItem(label, name, actionCommand);
@@ -350,24 +393,6 @@ public final class MenuFactory {
         try {
             List guiClasses = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] {
                     JMeterGUIComponent.class, TestBean.class });
-            timers = new LinkedList();
-            controllers = new LinkedList();
-            samplers = new LinkedList();
-            configElements = new LinkedList();
-            assertions = new LinkedList();
-            listeners = new LinkedList();
-            postProcessors = new LinkedList();
-            preProcessors = new LinkedList();
-            nonTestElements = new LinkedList();
-            menuMap.put(TIMERS, timers);
-            menuMap.put(ASSERTIONS, assertions);
-            menuMap.put(CONFIG_ELEMENTS, configElements);
-            menuMap.put(CONTROLLERS, controllers);
-            menuMap.put(LISTENERS, listeners);
-            menuMap.put(NON_TEST_ELEMENTS, nonTestElements);
-            menuMap.put(SAMPLERS, samplers);
-            menuMap.put(POST_PROCESSORS, postProcessors);
-            menuMap.put(PRE_PROCESSORS, preProcessors);
             Collections.sort(guiClasses);
             Iterator iter = guiClasses.iterator();
             while (iter.hasNext()) {
@@ -411,38 +436,38 @@ public final class MenuFactory {
                     continue;
                 }
                 if (categories.contains(TIMERS)) {
-                    timers.add(new MenuInfo(item.getStaticLabel(), name));
+                    timers.add(new MenuInfo(item, name));
                 }
 
                 if (categories.contains(POST_PROCESSORS)) {
-                    postProcessors.add(new MenuInfo(item.getStaticLabel(), name));
+                    postProcessors.add(new MenuInfo(item, name));
                 }
 
                 if (categories.contains(PRE_PROCESSORS)) {
-                    preProcessors.add(new MenuInfo(item.getStaticLabel(), name));
+                    preProcessors.add(new MenuInfo(item, name));
                 }
 
                 if (categories.contains(CONTROLLERS)) {
-                    controllers.add(new MenuInfo(item.getStaticLabel(), name));
+                    controllers.add(new MenuInfo(item, name));
                 }
 
                 if (categories.contains(SAMPLERS)) {
-                    samplers.add(new MenuInfo(item.getStaticLabel(), name));
+                    samplers.add(new MenuInfo(item, name));
                 }
 
                 if (categories.contains(NON_TEST_ELEMENTS)) {
-                    nonTestElements.add(new MenuInfo(item.getStaticLabel(), name));
+                    nonTestElements.add(new MenuInfo(item, name));
                 }
 
                 if (categories.contains(LISTENERS)) {
-                    listeners.add(new MenuInfo(item.getStaticLabel(), name));
+                    listeners.add(new MenuInfo(item, name));
                 }
 
                 if (categories.contains(CONFIG_ELEMENTS)) {
-                    configElements.add(new MenuInfo(item.getStaticLabel(), name));
+                    configElements.add(new MenuInfo(item, name));
                 }
                 if (categories.contains(ASSERTIONS)) {
-                    assertions.add(new MenuInfo(item.getStaticLabel(), name));
+                    assertions.add(new MenuInfo(item, name));
                 }
 
             }
