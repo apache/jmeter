@@ -231,7 +231,7 @@ public final class ReportMenuFactory {
         JMenu menu = new JMenu(menuName);
         while (iter.hasNext()) {
             MenuInfo info = (MenuInfo) iter.next();
-            menu.add(makeMenuItem(info.label, info.className, actionCommand));
+            menu.add(makeMenuItem(info.getLabel(), info.getClassName(), actionCommand));
         }
         return menu;
     }
