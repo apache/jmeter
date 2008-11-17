@@ -51,6 +51,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.test.UnitTestManager;
+import org.apache.jorphan.util.JMeterError;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 import org.apache.oro.text.PatternCacheLRU;
@@ -303,7 +304,9 @@ public class JMeterUtils implements UnitTestManager {
          * found.
          */
         Locale def = null;
+        boolean isDefault = false; // Are we the default language?
         if (loc.getLanguage().equals(Locale.ENGLISH.getLanguage())) {
+            isDefault = true;
             def = Locale.getDefault();
             // Don't change locale from en_GB to en
             if (!def.getLanguage().equals(Locale.ENGLISH.getLanguage())) {
@@ -318,8 +321,14 @@ public class JMeterUtils implements UnitTestManager {
             // Keep existing settings
         } else {
             ignoreResorces = false;
-            locale = loc;
-            resources = ResourceBundle.getBundle("org.apache.jmeter.resources.messages", locale); // $NON-NLS-1$
+            ResourceBundle resBund = ResourceBundle.getBundle("org.apache.jmeter.resources.messages", loc); // $NON-NLS-1$
+            if (isDefault || resBund.getLocale().equals(loc)) {// language change worked
+                resources = resBund;
+                locale = loc;                
+            } else {
+                log.error("Unable to change language to "+loc.toString());
+                throw new JMeterError("Unable to change language to "+loc.toString());
+            }
         }
         notifyLocaleChangeListeners();
         /*
@@ -423,6 +432,23 @@ public class JMeterUtils implements UnitTestManager {
         return resString;
     }
 
+    /**
+     * Get the locale name as a resource.
+     * Does not log an error if the resource does not exist.
+     * This is needed to support additional locales, as they won't be in existing messages files.
+     * 
+     * @param locale name
+     * @return the locale display name as defined in the current Locale or the original string if not present
+     */
+    public static String getLocaleString(String locale){
+        // All keys in messages.properties are lowercase (historical reasons?)
+        String resKey = locale.toLowerCase(java.util.Locale.ENGLISH);
+        try {
+            return resources.getString(resKey);
+        } catch (MissingResourceException e) {
+        }
+        return locale;
+    }
     /**
      * This gets the currently defined appProperties. It can only be called
      * after the {@link #getProperties(String)} method is called.
