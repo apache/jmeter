@@ -26,6 +26,7 @@ import java.util.Set;
 
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JMeterError;
 import org.apache.log.Logger;
 
 /**
@@ -54,7 +55,11 @@ public class ChangeLanguage implements Command {
             loc = new Locale(locale, "");
         }
         log.debug("Changing locale to " + loc.toString());
-        JMeterUtils.setLocale(loc);
+        try {
+            JMeterUtils.setLocale(loc);
+        } catch (JMeterError err) {
+            JMeterUtils.reportErrorToUser(err.toString());
+        }
     }
 
     /**
