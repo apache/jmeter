@@ -344,7 +344,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         english.setName(Locale.ENGLISH.getLanguage());
         languageMenu.add(english);
         // add Japanese
-        JMenuItem japanese = new JMenuItem(JMeterUtils.getResString("jp"), 'J'); //$NON-NLS-1$
+        JMenuItem japanese = new JMenuItem(JMeterUtils.getResString("ja"), 'J'); //$NON-NLS-1$
         japanese.addActionListener(ActionRouter.getInstance());
         japanese.setActionCommand(ActionNames.CHANGE_LANGUAGE);
         japanese.setName(Locale.JAPANESE.getLanguage());
