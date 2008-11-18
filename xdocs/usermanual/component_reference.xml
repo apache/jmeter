@@ -385,12 +385,16 @@ the additional variables for rows 4, 5 and 6 will be removed.
         </property>
         <property name="Parameter types" required="Yes, if a prepared or callable statement has parameters">
         Comma-separated list of SQL parameter types (e.g. INTEGER, DATE, VARCHAR, DOUBLE).
+        These are defined as fields in the class java.sql.Types, see for example:
+        <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/sql/Types.html">Javadoc for java.sql.Types</a>.
+        [Note: JMeter will use whatever types are defined by the runtime JVM, 
+        so if you are running on a different JVM, be sure to check the appropriate document]
         If the callable statement has INOUT or OUT parameters, then these must be indicated by prefixing the
         appropriate parameter types, e.g. instead of "INTEGER", use "INOUT INTEGER".
         If not specified, "IN" is assumed, i.e. "DATE" is the same as "IN DATE".
         <br></br>
-        If the type is not one of the standard Java SQL types, versions of JMeter after 2.3.2 also
-        accept the corresponding integer number, e.g. INTEGER == 4.
+        If the type is not one of the fields found in java.sql.Types, versions of JMeter after 2.3.2 also
+        accept the corresponding integer number, e.g. since INTEGER == 4, you can use "INOUT 4".
         <br></br>
         There must be as many types as there are placeholders in the statement.
         </property>
