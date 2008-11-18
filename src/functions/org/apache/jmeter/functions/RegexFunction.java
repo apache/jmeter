@@ -60,7 +60,9 @@ public class RegexFunction extends AbstractFunction {
 
     private static final List desc = new LinkedList();
 
-    private Pattern templatePattern;// initialised to the regex \$(\d+)\$
+    private static final String TEMPLATE_PATTERN = "\\$(\\d+)\\$";  //$NON-NLS-1$
+    /** initialised to the regex \$(\d+)\$ */
+    private final Pattern templatePattern;
 
     // Number of parameters expected - used to reject invalid calls
     private static final int MIN_PARAMETER_COUNT = 2;
@@ -77,11 +79,7 @@ public class RegexFunction extends AbstractFunction {
     }
 
     public RegexFunction() {
-        initPattern();
-    }
-
-    private void initPattern() {
-        templatePattern = JMeterUtils.getPatternCache().getPattern("\\$(\\d+)\\$",  //$NON-NLS-1$
+        templatePattern = JMeterUtils.getPatternCache().getPattern(TEMPLATE_PATTERN,
                 Perl5Compiler.READ_ONLY_MASK);
     }
 
@@ -242,8 +240,11 @@ public class RegexFunction extends AbstractFunction {
         PatternMatcher matcher = JMeterUtils.getMatcher();
         Util.split(pieces, matcher, templatePattern, rawTemplate);
         PatternMatcherInput input = new PatternMatcherInput(rawTemplate);
-        Iterator iter = pieces.iterator();
         boolean startsWith = isFirstElementGroup(rawTemplate);
+        if (startsWith) {
+            pieces.remove(0);// Remove initial empty entry
+        }
+        Iterator iter = pieces.iterator();
         while (iter.hasNext()) {
             boolean matchExists = matcher.contains(input, templatePattern);
             if (startsWith) {
