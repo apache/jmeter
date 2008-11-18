@@ -169,6 +169,9 @@ See the <a href="#classpath">JMeter Classpath</a> section for more details on in
 where you want JMeter to be installed.  Provided that you have a JRE/JDK correctly installed
 and the JAVA_HOME environment variable set, there is nothing more for you to do.</p>
 <p>
+Note: there can be problems (especially with client-server mode) if the directory path contains any spaces.
+</p>
+<p>
 The installation directory structure should look something like this (for version 2.3.1):
 <pre>
 jakarta-jmeter-2.3.1
@@ -180,7 +183,7 @@ jakarta-jmeter-2.3.1/lib/ext
 jakarta-jmeter-2.3.1/lib/junit
 jakarta-jmeter-2.3.1/printable_docs
 </pre>
-You can rename the parent directory (e.g. jakarta-jmeter-2.3.1) if you want, but do not change any of the sub-directory names.
+You can rename the parent directory (i.e. jakarta-jmeter-2.3.1) if you want, but do not change any of the sub-directory names.
 </p>
 </section>
 
@@ -206,11 +209,30 @@ and means the last test plan that was run interactively.
 </p>
 
 <p>
+The environment variable can be used to override settings in the jmeter.bat script.
+For example:
+<pre>
+set JVM_ARGS="-Xms1024m -Xmx1024m -Dpropname=propvalue"
+jmeter -t test.jmx ...
+</pre>
+</p>
+
+<p>
 Un*x script files; should work on most Linux/Unix systems.
+The 
 <ul>
-<li>jmeter - run JMeter (in GUI mode by default)</li>
-<li>jmeter-server - start JMeter in server mode</li>
+<li>jmeter - run JMeter (in GUI mode by default). Defines some JVM settings which may not work for all JVMs.</li>
+<li>jmeter-server - start JMeter in server mode (calls jmeter script with appropriate parameters)</li>
+<li>jmeter.sh - very basic JMeter script with no JVM options specified.</li>
 </ul>
+</p>
+<p>
+It may be necessary to edit the jmeter shell script if some of the JVM options are not supported.
+The JVM_ARGS environment variable can be used to override or set additional JVM options, for example:
+<pre>
+JVM_ARGS="-Xms1024m -Xmx1024m" jmeter -t test.jmx [etc.]
+</pre>
+will override the HEAP settings in the script.
 </p>
 <subsection name="&sect-num;.4.1 JMeter's Classpath" anchor="classpath">
 <p>JMeter automatically finds classes from jars in the following directories:</p>
