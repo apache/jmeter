@@ -22,11 +22,6 @@
 
 DIRNAME=`dirname $0`
 
-## No longer needed - JMeter server creates the registry itself
-##CLASSPATH=${DIRNAME}/../lib/ext/ApacheJMeter_core.jar:${DIRNAME}/../lib/jorphan.jar:${DIRNAME}/../lib/logkit-1.2.jar rmiregistry $SERVER_PORT &
-# stop rmiregistry on interrupt 
-##trap "kill $!" 2
-
 # If the client fails with:
 # ERROR - jmeter.engine.ClientJMeterEngine: java.rmi.ConnectException: Connection refused to host: 127.0.0.1
 # then it may be due to the server host returning 127.0.0.1 as its address 
