@@ -127,6 +127,158 @@ public class TestRegexFunction extends JMeterTestCase {
             assertEquals("times", vars.getObject("OUTVAR_g2"));
         }
 
+        public void testVariableExtractionFromVariable2() throws Exception {
+            params = new LinkedList();
+            params.add(new CompoundVariable("(\\d+)\\s+(\\w+)"));
+            params.add(new CompoundVariable("$1$$2$")); // template
+            params.add(new CompoundVariable("1")); // match number
+            params.add(new CompoundVariable("-")); // ALL separator
+            params.add(new CompoundVariable("default"));
+            params.add(new CompoundVariable("OUTVAR"));
+            params.add(new CompoundVariable(INPUT_VARIABLE_NAME));
+            variable.setParameters(params);
+            String match = variable.execute(result, null);
+            assertEquals("1", vars.getObject("OUTVAR_matchNr"));
+            assertEquals("123times", match);
+            assertEquals("123times", vars.getObject("OUTVAR"));
+            assertEquals("123 times", vars.getObject("OUTVAR_g0"));
+            assertEquals("123", vars.getObject("OUTVAR_g1"));
+            assertEquals("times", vars.getObject("OUTVAR_g2"));
+        }
+
+        public void testVariableExtractionFromVariable3() throws Exception {
+            params = new LinkedList();
+            params.add(new CompoundVariable("(\\d+)\\s+(\\w+)"));
+            params.add(new CompoundVariable("pre$2$post")); // template
+            params.add(new CompoundVariable("1")); // match number
+            params.add(new CompoundVariable("-")); // ALL separator
+            params.add(new CompoundVariable("default"));
+            params.add(new CompoundVariable("OUTVAR"));
+            params.add(new CompoundVariable(INPUT_VARIABLE_NAME));
+            variable.setParameters(params);
+            String match = variable.execute(result, null);
+            assertEquals("1", vars.getObject("OUTVAR_matchNr"));
+            assertEquals("pretimespost", match);
+            assertEquals("pretimespost", vars.getObject("OUTVAR"));
+            assertEquals("123 times", vars.getObject("OUTVAR_g0"));
+            assertEquals("123", vars.getObject("OUTVAR_g1"));
+            assertEquals("times", vars.getObject("OUTVAR_g2"));
+        }
+
+        public void testVariableExtractionFromVariable4() throws Exception {
+            params = new LinkedList();
+            params.add(new CompoundVariable("(\\d+)\\s+(\\w+)"));
+            params.add(new CompoundVariable("pre$2$")); // template
+            params.add(new CompoundVariable("1")); // match number
+            params.add(new CompoundVariable("-")); // ALL separator
+            params.add(new CompoundVariable("default"));
+            params.add(new CompoundVariable("OUTVAR"));
+            params.add(new CompoundVariable(INPUT_VARIABLE_NAME));
+            variable.setParameters(params);
+            String match = variable.execute(result, null);
+            assertEquals("1", vars.getObject("OUTVAR_matchNr"));
+            assertEquals("pretimes", match);
+            assertEquals("pretimes", vars.getObject("OUTVAR"));
+            assertEquals("123 times", vars.getObject("OUTVAR_g0"));
+            assertEquals("123", vars.getObject("OUTVAR_g1"));
+            assertEquals("times", vars.getObject("OUTVAR_g2"));
+        }
+
+        public void testVariableExtractionFromVariable5() throws Exception {
+            params = new LinkedList();
+            params.add(new CompoundVariable("(\\d+)\\s+(\\w+)"));
+            params.add(new CompoundVariable("$2$post")); // template
+            params.add(new CompoundVariable("1")); // match number
+            params.add(new CompoundVariable("-")); // ALL separator
+            params.add(new CompoundVariable("default"));
+            params.add(new CompoundVariable("OUTVAR"));
+            params.add(new CompoundVariable(INPUT_VARIABLE_NAME));
+            variable.setParameters(params);
+            String match = variable.execute(result, null);
+            assertEquals("1", vars.getObject("OUTVAR_matchNr"));
+            assertEquals("timespost", match);
+            assertEquals("timespost", vars.getObject("OUTVAR"));
+            assertEquals("123 times", vars.getObject("OUTVAR_g0"));
+            assertEquals("123", vars.getObject("OUTVAR_g1"));
+            assertEquals("times", vars.getObject("OUTVAR_g2"));
+        }
+
+        public void testVariableExtractionFromVariable6() throws Exception {
+            params = new LinkedList();
+            params.add(new CompoundVariable("(\\d+)\\s+(\\w+)"));
+            params.add(new CompoundVariable("$2$$2$")); // template
+            params.add(new CompoundVariable("1")); // match number
+            params.add(new CompoundVariable("-")); // ALL separator
+            params.add(new CompoundVariable("default"));
+            params.add(new CompoundVariable("OUTVAR"));
+            params.add(new CompoundVariable(INPUT_VARIABLE_NAME));
+            variable.setParameters(params);
+            String match = variable.execute(result, null);
+            assertEquals("1", vars.getObject("OUTVAR_matchNr"));
+            assertEquals("timestimes", match);
+            assertEquals("timestimes", vars.getObject("OUTVAR"));
+            assertEquals("123 times", vars.getObject("OUTVAR_g0"));
+            assertEquals("123", vars.getObject("OUTVAR_g1"));
+            assertEquals("times", vars.getObject("OUTVAR_g2"));
+        }
+
+        public void testVariableExtractionFromVariable7() throws Exception {
+            params = new LinkedList();
+            params.add(new CompoundVariable("(\\d+)\\s+(\\w+)"));
+            params.add(new CompoundVariable("pre$1$mid$2$post")); // template
+            params.add(new CompoundVariable("1")); // match number
+            params.add(new CompoundVariable("-")); // ALL separator
+            params.add(new CompoundVariable("default"));
+            params.add(new CompoundVariable("OUTVAR"));
+            params.add(new CompoundVariable(INPUT_VARIABLE_NAME));
+            variable.setParameters(params);
+            String match = variable.execute(result, null);
+            assertEquals("1", vars.getObject("OUTVAR_matchNr"));
+            assertEquals("pre123midtimespost", match);
+            assertEquals("pre123midtimespost", vars.getObject("OUTVAR"));
+            assertEquals("123 times", vars.getObject("OUTVAR_g0"));
+            assertEquals("123", vars.getObject("OUTVAR_g1"));
+            assertEquals("times", vars.getObject("OUTVAR_g2"));
+        }
+
+        public void testVariableExtractionFromVariable8() throws Exception {
+            params = new LinkedList();
+            params.add(new CompoundVariable("(\\d+)\\s+(\\w+)"));
+            params.add(new CompoundVariable("pre$1$mid$2$")); // template
+            params.add(new CompoundVariable("1")); // match number
+            params.add(new CompoundVariable("-")); // ALL separator
+            params.add(new CompoundVariable("default"));
+            params.add(new CompoundVariable("OUTVAR"));
+            params.add(new CompoundVariable(INPUT_VARIABLE_NAME));
+            variable.setParameters(params);
+            String match = variable.execute(result, null);
+            assertEquals("1", vars.getObject("OUTVAR_matchNr"));
+            assertEquals("pre123midtimes", match);
+            assertEquals("pre123midtimes", vars.getObject("OUTVAR"));
+            assertEquals("123 times", vars.getObject("OUTVAR_g0"));
+            assertEquals("123", vars.getObject("OUTVAR_g1"));
+            assertEquals("times", vars.getObject("OUTVAR_g2"));
+        }
+
+        public void testVariableExtractionFromVariable9() throws Exception {
+            params = new LinkedList();
+            params.add(new CompoundVariable("(\\d+)\\s+(\\w+)"));
+            params.add(new CompoundVariable("$1$mid$2$post")); // template
+            params.add(new CompoundVariable("1")); // match number
+            params.add(new CompoundVariable("-")); // ALL separator
+            params.add(new CompoundVariable("default"));
+            params.add(new CompoundVariable("OUTVAR"));
+            params.add(new CompoundVariable(INPUT_VARIABLE_NAME));
+            variable.setParameters(params);
+            String match = variable.execute(result, null);
+            assertEquals("1", vars.getObject("OUTVAR_matchNr"));
+            assertEquals("123midtimespost", match);
+            assertEquals("123midtimespost", vars.getObject("OUTVAR"));
+            assertEquals("123 times", vars.getObject("OUTVAR_g0"));
+            assertEquals("123", vars.getObject("OUTVAR_g1"));
+            assertEquals("times", vars.getObject("OUTVAR_g2"));
+        }
+
 		public void testVariableExtraction2() throws Exception {
 			params = new LinkedList();
 			params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
