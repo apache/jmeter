@@ -166,6 +166,7 @@ These are implemented in the AbstractTestElement class which all elements should
 <li>JMSPublisher and Subscriber fixes: thread-safety, support dynamic locale changes, locale independence for JMX attribute values</li>
 <li>Add HeaderAsPropertyRenderer to support header resource names; use this to fix locale changes in various GUI elements</li>
 <li>Fixed language change handling for menus (does not yet work for TestBeans)</li>
+<li>Fix regex function - was failing to process $m$mid$n$ correctly</li>
 </ul>
 
 <h3>Improvements</h3>
