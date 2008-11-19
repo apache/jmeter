@@ -48,7 +48,6 @@ import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.SaveGraphics;
 import org.apache.jmeter.gui.util.FileDialoger;
-import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.samplers.Clearable;
@@ -78,18 +77,16 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
 ActionListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    // Column resource names
-    private static final String[] COLUMNS = {
-            "sampler_label",                  //$NON-NLS-1$
-            "aggregate_report_count",         //$NON-NLS-1$
-            "average",                        //$NON-NLS-1$
-            "aggregate_report_median",        //$NON-NLS-1$
-            "aggregate_report_90%_line",      //$NON-NLS-1$
-            "aggregate_report_min",           //$NON-NLS-1$
-            "aggregate_report_max",           //$NON-NLS-1$
-            "aggregate_report_error%",        //$NON-NLS-1$
-            "aggregate_report_rate",          //$NON-NLS-1$
-            "aggregate_report_bandwidth" };   //$NON-NLS-1$
+    private final String[] COLUMNS = { JMeterUtils.getResString("sampler_label"), //$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_count"),         //$NON-NLS-1$
+            JMeterUtils.getResString("average"),                        //$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_median"),        //$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_90%_line"),      //$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_min"),           //$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_max"),           //$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_error%"),        //$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_rate"),          //$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_bandwidth") };   //$NON-NLS-1$
 
     private final String[] GRAPH_COLUMNS = {JMeterUtils.getResString("average"),//$NON-NLS-1$
             JMeterUtils.getResString("aggregate_report_median"),        //$NON-NLS-1$
@@ -243,7 +240,6 @@ ActionListener {
         mainPanel.add(makeTitlePanel());
 
         myJTable = new JTable(model);
-        myJTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         myJTable.setPreferredScrollableViewportSize(new Dimension(500, 80));
         RendererUtils.applyRenderers(myJTable, RENDERERS);
         myScrollPane = new JScrollPane(myJTable);
@@ -323,7 +319,7 @@ ActionListener {
     public double[][] getData() {
         if (model.getRowCount() > 1) {
             int count = model.getRowCount() -1;
-            int col = model.findColumn(columns.getText()); // TODO is this locale-safe?
+            int col = model.findColumn(columns.getText());
             double[][] data = new double[1][count];
             for (int idx=0; idx < count; idx++) {
                 data[0][idx] = ((Number)model.getValueAt(idx,col)).doubleValue();
@@ -388,7 +384,7 @@ ActionListener {
             try {
                 writer = new FileWriter(chooser.getSelectedFile());
                 Vector data = this.getAllTableData();
-                CSVSaveService.saveCSVStats(data,writer,saveHeaders.isSelected() ? getColumnNames() : null);
+                CSVSaveService.saveCSVStats(data,writer,saveHeaders.isSelected() ? COLUMNS : null);
             } catch (FileNotFoundException e) {
                 log.warn(e.getMessage());
             } catch (IOException e) {
@@ -397,15 +393,6 @@ ActionListener {
                 JOrphanUtils.closeQuietly(writer);
             }
         }
-    }
-
-    // TODO consider using the table methods to return data and headers in actual order
-    private String[] getColumnNames(){
-        String [] names = new String[COLUMNS.length];
-        for (int i=0; i < COLUMNS.length; i++){
-            names[i]=JMeterUtils.getResString(COLUMNS[i]);
-        }
-        return names;
     }
 
     public JComponent getPrintableComponent() {
