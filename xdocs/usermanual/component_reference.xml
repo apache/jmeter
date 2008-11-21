@@ -3477,7 +3477,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 		Preprocessors are used to modify the Samplers in their scope.
 	<br></br>
 	</description>
-<component name="HTML Link Parser" index="&sect-num;.7.1" anchor="html_link_parser">
+<component name="HTML Link Parser" index="&sect-num;.7.1" width="239" height="113" screenshot="html_link_parser.png" anchor="html_link_parser">
 <description>
 <p>This modifier parses HTML response from the server and extracts
 links and forms.  A URL test sample that passes through this modifier will be examined to
