@@ -21,7 +21,6 @@
  */
 package org.apache.jmeter.samplers;
 
-import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -440,7 +439,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
         xml = value;
     }
 
-    private Object readResolve() throws ObjectStreamException{
+    private Object readResolve(){
        formatter = _formatter;
        return this;
     }

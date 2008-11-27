@@ -95,7 +95,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
     }
 
     // create transient item
-    private Object readResolve() throws java.io.ObjectStreamException {
+    private Object readResolve(){
         threadGroups = new LinkedList();
         return this;
     }
