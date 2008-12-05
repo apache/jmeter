@@ -47,13 +47,9 @@ public class HttpSSLProtocolSocketFactory
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private JsseSSLManager sslManager;
+    private final JsseSSLManager sslManager;
 
     private final int CPS; // Characters per second to emulate
-
-    private HttpSSLProtocolSocketFactory(){
-        CPS=0;
-    }
 
     public HttpSSLProtocolSocketFactory(JsseSSLManager sslManager) {
         super();
@@ -175,6 +171,16 @@ public class HttpSSLProtocolSocketFactory
             host,
             port
         );
+        setSocket(sock);
+        return wrapSocket(sock);
+    }
+
+    /**
+     * @see javax.net.SocketFactory#createSocket()
+     */
+    public Socket createSocket() throws IOException, UnknownHostException {
+        SSLSocketFactory sslfac = getSSLSocketFactory();
+        Socket sock = sslfac.createSocket();
         setSocket(sock);
         return wrapSocket(sock);
     }
