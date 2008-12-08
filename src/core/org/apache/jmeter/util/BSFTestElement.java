@@ -38,12 +38,18 @@ import org.apache.log.Logger;
 public abstract class BSFTestElement extends AbstractTestElement
     implements Serializable, Cloneable
 {
-    private static final long serialVersionUID = 232L;
+    private static final long serialVersionUID = 233L;
+    
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     static {
         BSFManager.registerScriptingEngine("jexl", //$NON-NLS-1$
                 "org.apache.commons.jexl.bsf.JexlEngine", //$NON-NLS-1$
                 new String[]{"jexl"}); //$NON-NLS-1$
+        log.info("Registering JMeter version of JavaScript engine as work-round for BSF-22");
+        BSFManager.registerScriptingEngine("javascript", //$NON-NLS-1$
+                "org.apache.jmeter.util.BSFJavaScriptEngine", //$NON-NLS-1$
+                new String[]{"js"}); //$NON-NLS-1$
     }
 
     //++ For TestBean implementations only
@@ -109,10 +115,10 @@ public abstract class BSFTestElement extends AbstractTestElement
         mgr.declareBean("OUT", System.out, PrintStream.class); // $NON-NLS-1$
 
         // Most subclasses will need these:
-        SampleResult prev = jmctx.getPreviousResult();
-        mgr.declareBean("prev", prev, SampleResult.class);
         Sampler sampler = jmctx.getCurrentSampler();
         mgr.declareBean("sampler", sampler, Sampler.class);
+        SampleResult prev = jmctx.getPreviousResult();
+        mgr.declareBean("prev", prev, SampleResult.class);
     }
 
     protected void processFileOrScript(BSFManager mgr) throws BSFException{
