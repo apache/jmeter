@@ -169,6 +169,7 @@ These are implemented in the AbstractTestElement class which all elements should
 <li>Fix regex function - was failing to process $m$mid$n$ correctly</li>
 <li>Fix Java 1.6 https error: java.net.SocketException: Unconnected sockets not implemented</li>
 <li>Bug 46359 - BSF JavaScript Preprocessor cannot access sampler variable on first interation (Implement temporary work-round for BSF-22)</li>
+<li>Bug 46332 - HTTP Cookie Manager ignores manually defined cookies (bug introduced in r707810)</li>
 </ul>
 
 <h3>Improvements</h3>
