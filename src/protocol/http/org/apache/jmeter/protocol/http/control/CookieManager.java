@@ -445,7 +445,6 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 
     public void testStarted() {
         initialCookies = getCookies();
-        clearCookies();
         cookieSpec = CookiePolicy.getCookieSpec(getPolicy());
         if (log.isDebugEnabled()){
             log.debug("Policy: "+getPolicy()+" Clear: "+getClearEachIteration());
