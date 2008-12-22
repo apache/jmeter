@@ -495,7 +495,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
                 }
                 if (t.isAlive()) {
                     stoppedAll = false;
-                    log.info("Thread won't die: " + t.getName());
+                    log.warn("Thread won't die: " + t.getName());
                 }
             }
         }
