@@ -244,7 +244,7 @@ public class HttpRequestHdr {
                 manager.add((Header) headers.get(key));
             }
         }
-        manager.setName("Browser-derived headers");
+        manager.setName(JMeterUtils.getResString("header_manager_title")); // $NON-NLS-1$
         manager.setProperty(TestElement.TEST_CLASS, HeaderManager.class.getName());
         manager.setProperty(TestElement.GUI_CLASS, HeaderPanel.class.getName());
         return manager;
