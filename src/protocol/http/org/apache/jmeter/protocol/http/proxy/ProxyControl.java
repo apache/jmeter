@@ -252,10 +252,6 @@ public class ProxyControl extends GenericController {
         setProperty(new StringProperty(CONTENT_TYPE_INCLUDE, contentTypeInclude));
     }
 
-    public String getClassLabel() {
-        return JMeterUtils.getResString("proxy_title"); // $NON-NLS-1$
-    }
-
     public boolean getAssertions() {
         return getPropertyAsBoolean(ADD_ASSERTIONS);
     }
@@ -514,7 +510,7 @@ public class ProxyControl extends GenericController {
     private void addAssertion(JMeterTreeModel model, JMeterTreeNode node) throws IllegalUserActionException {
         ResponseAssertion ra = new ResponseAssertion();
         ra.setProperty(TestElement.GUI_CLASS, ASSERTION_GUI);
-        ra.setName("Check response");
+        ra.setName(JMeterUtils.getResString("assertion_title")); // $NON-NLS-1$
         ra.setTestFieldResponseData();
         model.addComponent(ra, node);
     }
