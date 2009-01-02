@@ -22,7 +22,6 @@ import java.util.Collection;
 
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.util.JMeterUtils;
 
 public class SplineModel implements Clearable {
     public final int DEFAULT_NUMBER_OF_NODES = 10;
@@ -74,10 +73,6 @@ public class SplineModel implements Clearable {
 
     public Collection getAddList() {
         return null;
-    }
-
-    public String getClassLabel() {
-        return JMeterUtils.getResString("spline_visualizer_title");// $NON-NLS-1$
     }
 
     public long getMinimum() {
