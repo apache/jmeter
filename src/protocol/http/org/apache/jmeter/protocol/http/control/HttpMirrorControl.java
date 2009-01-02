@@ -20,7 +20,6 @@ package org.apache.jmeter.protocol.http.control;
 
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.IntegerProperty;
-import org.apache.jmeter.util.JMeterUtils;
 
 //For unit tests, @see TestHttpMirrorControl
 
@@ -60,11 +59,6 @@ public class HttpMirrorControl extends AbstractTestElement {
     public void setPort(String port) {
         setProperty(PORT, port);
     }
-
-    public String getClassLabel() {
-        return JMeterUtils.getResString("httpmirror_title"); //$NON-NLS-1$
-    }
-
 
     public int getPort() {
         return getPropertyAsInt(PORT);
