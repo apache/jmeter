@@ -33,7 +33,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.CollectionProperty;
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
 
 /**
@@ -233,10 +232,6 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
         for (Enumeration e = removeIndices.elements(); e.hasMoreElements();) {
             getHeaders().remove(((Integer) e.nextElement()).intValue());
         }
-    }
-
-    public String getClassLabel() {
-        return JMeterUtils.getResString("header_manager_title");// $NON-NLS-1$
     }
 
     /**

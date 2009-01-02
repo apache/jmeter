@@ -439,10 +439,6 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
         }
     }
 
-    public String getClassLabel() {
-        return JMeterUtils.getResString("cookie_manager_title");// $NON-NLS-1$
-    }
-
     public void testStarted() {
         initialCookies = getCookies();
         cookieSpec = CookiePolicy.getCookieSpec(getPolicy());
