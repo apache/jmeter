@@ -123,10 +123,6 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
         return true;
     }
 
-    public String getClassLabel() {
-        return JMeterUtils.getResString("auth_manager_title"); //$NON-NLS-1$
-    }
-
     public Class getGuiClass() {
         return org.apache.jmeter.protocol.http.gui.AuthPanel.class;
     }
