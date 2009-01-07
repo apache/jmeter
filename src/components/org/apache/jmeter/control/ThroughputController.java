@@ -42,6 +42,8 @@ import org.apache.jmeter.testelement.property.StringProperty;
 public class ThroughputController extends GenericController implements Serializable, LoopIterationListener,
         TestListener {
 
+    private static final long serialVersionUID = 233L;
+
     public static final int BYNUMBER = 0;
 
     public static final int BYPERCENT = 1;
