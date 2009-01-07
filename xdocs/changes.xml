@@ -171,6 +171,9 @@ These are implemented in the AbstractTestElement class which all elements should
 <li>Bug 46359 - BSF JavaScript Preprocessor cannot access sampler variable on first interation (Implement temporary work-round for BSF-22)</li>
 <li>Bug 46332 - HTTP Cookie Manager ignores manually defined cookies (bug introduced in r707810)</li>
 <li>Bug 46407 - BSF elements do not load script files, attempt to interpret filename as script</li>
+<li>Bug 46423 - I18N of Proxy Recorder</li>
+<li>Better handling of Exceptions during test shutdown</li>
+<li>Protect against possible NPE in RegexFunction if called during test shutdown.</li>
 </ul>
 
 <h3>Improvements</h3>
