@@ -127,6 +127,10 @@ public class RegexFunction extends AbstractFunction {
         // Relatively expensive operation, so do it once
         JMeterVariables vars = getVariables();
 
+        if (vars == null){// Can happen if called during test closedown
+            return defaultValue;
+        }
+
         if (name.length() > 0) {
             vars.put(name, defaultValue);
         }
