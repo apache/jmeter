@@ -243,13 +243,17 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         Iterator iter = testListeners.getSearchResults().iterator();
         while (iter.hasNext()) {
             TestListener tl = (TestListener) iter.next();
-            if (tl instanceof TestBean) {
-                TestBeanHelper.prepare((TestElement) tl); // TODO is this necessary? It was called by start.
-            }
-            if (host == null) {
-                tl.testEnded();
-            } else {
-                tl.testEnded(host);
+            try {
+                if (tl instanceof TestBean) {
+                    TestBeanHelper.prepare((TestElement) tl); // TODO is this necessary? It was called by start.
+                }
+                if (host == null) {
+                    tl.testEnded();
+                } else {
+                    tl.testEnded(host);
+                }
+            } catch (Exception e) {
+                log.warn("Error encountered during shutdown",e);
             }
         }
         log.info("Test has ended");
