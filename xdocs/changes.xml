@@ -106,6 +106,10 @@ with LAST, blank or false.
 </p>
 
 <p>
+The "threadName" variable in the _jexl() and __javaScript() functions was previously misspelt as "theadName".
+</p>
+
+<p>
 The following deprecated methods were removed from JOrphanUtils: booleanToString(boolean) and valueOf(boolean).
 Java 1.4+ has these methods in the Boolean class.
 </p>
@@ -174,12 +178,14 @@ These are implemented in the AbstractTestElement class which all elements should
 <li>Bug 46423 - I18N of Proxy Recorder</li>
 <li>Better handling of Exceptions during test shutdown</li>
 <li>Protect against possible NPE in RegexFunction if called during test shutdown.</li>
+<li>Correct the variable name "theadName" to "threadName" in the __jexl() and __javaScript() functions</li>
 </ul>
 
 <h3>Improvements</h3>
 <ul>
 <li>LDAP result data now formatted with line breaks</li>
-<li>Add OUT variable to jexl function</li>
+<li>Add OUT and log variables to __jexl() function</li>
+<li>Add log variable to the __javaScript() function</li>
 <li>Save Responses to a file can save the generated filename(s) to variables.</li>
 <li>Add BSF Listener element</li>
 <li>Bug 45200 - MailReaderSampler: store the whole MIME message in the SamplerResult</li>

@@ -76,10 +76,12 @@ public class JexlFunction extends AbstractFunction {
             Script script = ScriptFactory.createScript(exp);
             JexlContext jc = JexlHelper.createContext();
             final Map jexlVars = jc.getVars();
+            jexlVars.put("log", log); //$NON-NLS-1$
             jexlVars.put("ctx", jmctx); //$NON-NLS-1$
             jexlVars.put("vars", vars); //$NON-NLS-1$
             jexlVars.put("props", JMeterUtils.getJMeterProperties()); //$NON-NLS-1$
-            jexlVars.put("theadName", Thread.currentThread().getName()); //$NON-NLS-1$
+            // Previously mis-spelt as theadName
+            jexlVars.put("threadName", Thread.currentThread().getName()); //$NON-NLS-1$
             jexlVars.put("sampler", currentSampler); //$NON-NLS-1$ (may be null)
             jexlVars.put("sampleResult", previousResult); //$NON-NLS-1$ (may be null)
             jexlVars.put("OUT", System.out);//$NON-NLS-1$
