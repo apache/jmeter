@@ -475,9 +475,10 @@ For details of the language, please see <a href="http://www.mozilla.org/rhino/ov
 The following variables are made available to the script:
 </p>
 <ul>
+<li>log - the logger for the function</li>
 <li>ctx - JMeterContext object</li>
 <li>vars - JMeterVariables object</li>
-<li>threadName - String</li>
+<li>threadName - String containing the current thread name (in 2.3.2 it was misspelt as "theadName")</li>
 <li>sampler - current Sampler object (if any)</li>
 <li>sampleResult - previous SampleResult object (if any)</li>
 <li>props - JMeter Properties object</li>
@@ -724,7 +725,7 @@ The following variables are set before the script is executed:
 <li>ctx - the current JMeter context variable</li>
 <li>vars - the current JMeter variables</li>
 <li>props - JMeter Properties object</li>
-<li>threadName - the threadName</li>
+<li>threadName - the threadName (String)</li>
 <li>Sampler the current Sampler, if any</li>
 <li>SampleResult - the current SampleResult, if any</li>
 </ul>
@@ -888,10 +889,11 @@ time.YMD=yyMMdd
 The following variables are made available to the script:
 </p>
 <ul>
+<li>log - the logger for the function</li>
 <li>ctx - JMeterContext object</li>
 <li>vars - JMeterVariables object</li>
 <li>props - JMeter Properties object</li>
-<li>threadName - String</li>
+<li>threadName - String containing the current thread name (in 2.3.2 it was misspelt as "theadName")</li>
 <li>sampler - current Sampler object (if any)</li>
 <li>sampleResult - previous SampleResult object (if any)</li>
 <li>OUT - System.out - e.g. OUT.println("message")</li>

@@ -77,10 +77,12 @@ public class JavaScript extends AbstractFunction {
             Scriptable scope = cx.initStandardObjects(null);
 
             // Set up some objects for the script to play with
+            scope.put("log", scope, log); //$NON-NLS-1$
             scope.put("ctx", scope, jmctx); //$NON-NLS-1$
             scope.put("vars", scope, vars); //$NON-NLS-1$
             scope.put("props", scope, JMeterUtils.getJMeterProperties()); //$NON-NLS-1$
-            scope.put("theadName", scope, Thread.currentThread().getName()); //$NON-NLS-1$
+            // Previously mis-spelt as theadName
+            scope.put("threadName", scope, Thread.currentThread().getName()); //$NON-NLS-1$
             scope.put("sampler", scope, currentSampler); //$NON-NLS-1$
             scope.put("sampleResult", scope, previousResult); //$NON-NLS-1$
 
