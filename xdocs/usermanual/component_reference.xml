@@ -1565,6 +1565,11 @@ setting is reset when a parent Loop Controller restarts.
 		Also, variable expressions can return any value, whereas the
 		Javascript condition must return "true"/"false" or an error is logged.
 		</p>
+		<note>
+		No variables are made available to the script when the condition is interpreted as Javascript.
+		If you need access to such variables, then select "Interpret Condition as Variable Expression?" and use
+		a __javaScript() function call. You can then use the objects "vars", "log", "ctx" etc. in the script.
+		</note>
 	</description>
 <properties>
     <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
