@@ -38,18 +38,20 @@ import org.apache.log.Logger;
  * and retrieval of the data into and out of string arrays. It is also handy for
  * reading CSV files.
  *
+ * WARNING: the class assumes that column names are unique, but does not enforce this.
+ * 
  */
 public class Data implements Serializable {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    Map data;
+    private Map data;
 
     // Map iterators = new HashMap();
     // Hashtable dataLine;
-    ArrayList header;
+    private ArrayList header;
 
     // saves current position in data Vector
-    int currentPos, size;
+    private int currentPos, size;
 
     /**
      * Constructor - takes no arguments.
@@ -464,6 +466,7 @@ public class Data implements Serializable {
      *
      * @param h
      *            array of strings representing the column headers.
+     *            these must be distinct - duplicates will cause incorrect behaviour
      */
     public void setHeaders(String[] h) {
         int x = 0;
