@@ -43,7 +43,6 @@ import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.collections.Data;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -183,8 +182,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
                 ResultSet rs = null;
                 try {
                     rs = stmt.executeQuery(getQuery());
-                    Data data = getDataFromResultSet(rs);
-                    res.setResponseData(data.toString().getBytes(ENCODING));
+                    res.setResponseData(getStringFromResultSet(rs).getBytes(ENCODING));
                 } finally {
                     close(rs);
                 }
@@ -269,9 +267,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
                 ResultSet rs = null;
                 try {
                     rs = pstmt.getResultSet();
-                    Data data = getDataFromResultSet(rs);
-                    sb.append(data.toString()).append("\n"); // $NON-NLS-1$
-                    data.getDataAsText();
+                    sb.append(getStringFromResultSet(rs)).append("\n"); // $NON-NLS-1$
                 } finally {
                     close(rs);
                 }
@@ -414,15 +410,19 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
      * @throws java.sql.SQLException
      * @throws UnsupportedEncodingException 
      */
-    private Data getDataFromResultSet(ResultSet rs) throws SQLException, UnsupportedEncodingException {
+    private String getStringFromResultSet(ResultSet rs) throws SQLException, UnsupportedEncodingException {
         ResultSetMetaData meta = rs.getMetaData();
-        Data data = new Data();
 
+        StrBuilder sb = new StrBuilder();
+        
         int numColumns = meta.getColumnCount();
-        String[] dbCols = new String[numColumns];
-        for (int i = 0; i < numColumns; i++) {
-            dbCols[i] = meta.getColumnName(i + 1);
-            data.addHeader(dbCols[i]);
+        for (int i = 1; i <= numColumns; i++) {
+            sb.append(meta.getColumnName(i));
+            if (i==numColumns){
+                sb.append('\n');
+            } else {
+                sb.append('\t');
+            }
         }
 
         JMeterVariables jmvars = null;
@@ -433,13 +433,17 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
         int j = 0;
         while (rs.next()) {
             j++;
-            data.next();
-            for (int i = 0; i < numColumns; i++) {
-                Object o = rs.getObject(i + 1);
+            for (int i = 1; i <= numColumns; i++) {
+                Object o = rs.getObject(i);
                 if (o instanceof byte[]) {
                     o = new String((byte[]) o, ENCODING);
                 }
-                data.addColumnValue(dbCols[i], o);
+                sb.append(o);
+                if (i==numColumns){
+                    sb.append('\n');
+                } else {
+                    sb.append('\t');
+                }
                 if (jmvars != null && i < varnames.length) {
                     String name = varnames[i].trim();
                     if (name.length()>0){ // Save the value in the variable if present
@@ -465,7 +469,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
             }
         }
         
-        return data;
+        return sb.toString();
     }
 
     public static void close(Connection c) {
