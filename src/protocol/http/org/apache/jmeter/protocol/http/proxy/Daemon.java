@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.protocol.http.proxy;
 
+import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -48,31 +49,21 @@ public class Daemon extends Thread {
     private static final int ACCEPT_TIMEOUT = 1000;
 
     /** The port to listen on. */
-    private int daemonPort;
+    private final int daemonPort;
+
+    private final ServerSocket mainSocket;
 
     /** True if the Daemon is currently running. */
-    private boolean running;
+    private volatile boolean running;
 
     /** The target which will receive the generated JMeter test components. */
-    private ProxyControl target;
+    private final ProxyControl target;
 
     /**
      * The proxy class which will be used to handle individual requests. This
      * class must be the {@link Proxy} class or a subclass.
      */
-    private Class proxyClass = Proxy.class;
-
-    /** A Map of url string to page character encoding of that page */
-    private Map pageEncodings;
-    /** A Map of url string to character encoding for the form */
-    private Map formEncodings;
-
-    /**
-     * Default constructor.
-     */
-    public Daemon() {
-        super("HTTP Proxy Daemon");
-    }
+    private final Class proxyClass;
 
     /**
      * Create a new Daemon with the specified port and target.
@@ -82,11 +73,10 @@ public class Daemon extends Thread {
      * @param target
      *            the target which will receive the generated JMeter test
      *            components.
+     * @throws IOException 
      */
-    public Daemon(int port, ProxyControl target) {
-        this();
-        this.target = target;
-        configureProxy(port);
+    public Daemon(int port, ProxyControl target) throws IOException {
+        this(port, target, Proxy.class);
     }
 
     /**
@@ -101,21 +91,16 @@ public class Daemon extends Thread {
      * @param proxyClass
      *            the proxy class to use to handle individual requests. This
      *            class must be the {@link Proxy} class or a subclass.
+     * @throws IOException 
      */
-    public Daemon(int port, ProxyControl target, Class proxyClass) {
-        this(port, target);
+    public Daemon(int port, ProxyControl target, Class proxyClass) throws IOException {
+        super("HTTP Proxy Daemon");
+        this.target = target;
+        this.daemonPort = port;
         this.proxyClass = proxyClass;
-    }
-
-    /**
-     * Configure the Daemon to listen on the specified port.
-     *
-     * @param _daemonPort
-     *            the port to listen on
-     */
-    public void configureProxy(int _daemonPort) {
-        this.daemonPort = _daemonPort;
-        log.info("Proxy: OK");
+        log.info("Creating Daemon Socket on port: " + daemonPort);
+        mainSocket = new ServerSocket(daemonPort);
+        mainSocket.setSoTimeout(ACCEPT_TIMEOUT);
     }
 
     /**
@@ -124,18 +109,13 @@ public class Daemon extends Thread {
      */
     public void run() {
         running = true;
-        ServerSocket mainSocket = null;
+        log.info("Proxy up and running!");
 
         // Maps to contain page and form encodings
-        pageEncodings = Collections.synchronizedMap(new HashMap());
-        formEncodings = Collections.synchronizedMap(new HashMap());
+        Map pageEncodings = Collections.synchronizedMap(new HashMap());
+        Map formEncodings = Collections.synchronizedMap(new HashMap());
 
         try {
-            log.info("Creating Daemon Socket... on port " + daemonPort);
-            mainSocket = new ServerSocket(daemonPort);
-            mainSocket.setSoTimeout(ACCEPT_TIMEOUT);
-            log.info("Proxy up and running!");
-
             while (running) {
                 try {
                     // Listen on main socket
