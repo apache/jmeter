@@ -66,7 +66,7 @@ public class JMeterThread implements Runnable {
 
     private Controller controller;
 
-    private boolean running;
+    private volatile boolean running; // may be set from a different thread
 
     private HashTree testTree;
 
@@ -513,7 +513,7 @@ public class JMeterThread implements Runnable {
         return threadName;
     }
 
-    public void stop() {
+    public void stop() { // Called by StandardJMeterEngine
         running = false;
         log.info("Stopping " + threadName);
     }
