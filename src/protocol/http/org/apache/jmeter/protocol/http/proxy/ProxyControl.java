@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.protocol.http.proxy;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -324,10 +325,15 @@ public class ProxyControl extends GenericController {
     public void addConfigElement(ConfigElement config) {
     }
 
-    public void startProxy() {
+    public void startProxy() throws IOException {
         notifyTestListenersOfStart();
-        server = new Daemon(getPort(), this);
-        server.start();
+        try {
+            server = new Daemon(getPort(), this);
+            server.start();
+        } catch (IOException e) {
+            log.error("Could not create Proxy daemon", e);
+            throw e;
+        }
     }
 
     public void addExcludedPattern(String pattern) {
