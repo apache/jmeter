@@ -30,10 +30,17 @@
 <section name="&sect-num;. Glossary" anchor="glossary">
 
 <p>
+<a name="Elapsed"><b>Elapsed time</b></a>. JMeter measures the elapsed time from just before sending the request to
+just after the last response has been received.
+JMeter does not include the time needed to render the response, nor does JMeter process any client code, for example
+Javascript.
+</p>
+
+<p>
 <a name="Latency"><b>Latency</b></a>. JMeter measures the latency from just before sending the request to
 just after the first response has been received. Thus the time
 includes all the processing needed to assemble the request as well as
-assembling the response, which in general will be longer than one
+assembling the first part of the response, which in general will be longer than one
 byte.
 Protocol analysers (such as Wireshark) measure the time when bytes are actually sent/received over the interface.
 The JMeter time should be closer to that which is experienced by a
