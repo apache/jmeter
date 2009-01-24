@@ -181,6 +181,7 @@ These are implemented in the AbstractTestElement class which all elements should
 <li>Correct the variable name "theadName" to "threadName" in the __jexl() and __javaScript() functions</li>
 <li>Bug 46522 - Incorrect "Response data" in JDBC sample when column names are missing</li>
 <li>Bug 46424 - corrections to French translation</li>
+<li>Bug 46436 - Improve error reporting in Proxy Gui</li>
 </ul>
 
 <h3>Improvements</h3>

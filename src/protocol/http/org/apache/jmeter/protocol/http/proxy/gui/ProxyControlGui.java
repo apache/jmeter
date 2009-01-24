@@ -26,6 +26,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
+import java.net.BindException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -380,6 +382,16 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
                     JMeterUtils.getResString("invalid_variables"), // $NON-NLS-1$
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
+        } catch (BindException e) {
+            JOptionPane.showMessageDialog(this,
+                    JMeterUtils.getResString("proxy_daemon_bind_error"), // $NON-NLS-1$
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this,
+                    JMeterUtils.getResString("proxy_daemon_error"), // $NON-NLS-1$
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -611,32 +623,6 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         HorizontalPanel panel = new HorizontalPanel();
         panel.add(label);
         panel.add(targetNodes);
-
-        /*
-         * This listener subscription prevents freeing up the GUI when it's no
-         * longer in use (e.g. on locale change)... plus causes some anoying
-         * NPEs in the GUI instance created by the menu manager just to find out
-         * our name and which menus we want to be in... ... plus I don't think
-         * it's really necessary: configure(TestElement) already takes care of
-         * reinitializing the target combo when we come back to it. And I can't
-         * see how the tree can change in a relevant way without we leaving this
-         * GUI (since it is very unlikely that we will want to record into one
-         * of the controllers created by the proxy). I'll comment it out for the
-         * time being: TODO: remove once we're convinced it's really
-         * unnecessary.
-         */
-        /*
-         * try { Class addToTree =
-         * Class.forName("org.apache.jmeter.gui.action.AddToTree"); Class remove =
-         * Class.forName("org.apache.jmeter.gui.action.Remove"); ActionListener
-         * listener = new ActionListener() { public void
-         * actionPerformed(ActionEvent e) { reinitializeTargetCombo(); } };
-         * ActionRouter ar = ActionRouter.getInstance();
-         * ar.addPostActionListener(addToTree, listener);
-         * ar.addPostActionListener(remove, listener); } catch
-         * (ClassNotFoundException e) { // This should never happen -- throw an
-         * Error: throw new Error(e.toString());//JDK1.4: remove .toString() }
-         */
 
         return panel;
     }
