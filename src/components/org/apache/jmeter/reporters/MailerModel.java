@@ -115,24 +115,23 @@ public class MailerModel extends AbstractTestElement implements Serializable {
      * @return a Vector of String-objects wherein each String represents a
      *         mail-address.
      */
-    public synchronized Vector getAddressVector() {
-        String theAddressie = getToAddress();
+    public Vector getAddressVector() {
+        String addressees = getToAddress();
         Vector addressVector = new Vector();
 
-        if (theAddressie != null) {
-            String addressSep = ","; //$NON-NLS-1$
+        if (addressees != null) {
 
-            StringTokenizer next = new StringTokenizer(theAddressie, addressSep);
+            StringTokenizer next = new StringTokenizer(addressees, ","); //$NON-NLS-1$
 
             while (next.hasMoreTokens()) {
                 String theToken = next.nextToken().trim();
 
                 if (theToken.indexOf("@") > 0) { //$NON-NLS-1$
                     addressVector.addElement(theToken);
+                } else {
+                    log.warn("Ignored unexpected e-mail address: "+theToken);
                 }
             }
-        } else {
-            return new Vector(0);
         }
 
         return addressVector;
@@ -289,10 +288,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
 
         log.info(attText);
 
-        Vector destination = new Vector();
-        destination.add(to);
-
-        sendMail(from, destination, subject, attText, smtpHost);
+        sendMail(from, getAddressVector(), subject, attText, smtpHost);
         log.info("Test mail sent successfully!!");
     }
 
