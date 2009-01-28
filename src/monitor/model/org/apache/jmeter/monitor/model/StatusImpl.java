@@ -26,7 +26,7 @@ import java.util.List;
 public class StatusImpl implements Status {
     private Jvm jvm = null;
 
-    private List connectors = null;
+    private final List connectors;
 
     /**
      *
