@@ -46,11 +46,21 @@ public final class JMeterContextService {
     private JMeterContextService() {
     }
 
-    static public JMeterContext getContext() {
+    /**
+     * Gives access to the current thread context.
+     * 
+     * @return the current thread Context
+     */
+    public static JMeterContext getContext() {
         return (JMeterContext) threadContext.get();
     }
 
-    static public synchronized void startTest() {
+    /**
+     * Method is called by the JMeterEngine class when a test run is started.
+     * Zeroes numberOfActiveThreads.
+     * Saves current time in a field and in the JMeter property "TESTSTART.MS"
+     */
+    public static synchronized void startTest() {
         if (testStart == 0) {
             numberOfActiveThreads = 0;
             testStart = System.currentTimeMillis();
@@ -76,16 +86,20 @@ public final class JMeterContextService {
      * Get the number of currently active threads
      * @return active thread count
      */
-    static public synchronized int getNumberOfThreads() {
+    public static synchronized int getNumberOfThreads() {
         return numberOfActiveThreads;
     }
 
-    static public synchronized void endTest() {
+    /**
+     * Called by MainFrame#testEnded().
+     * Clears number of active threads and start time field.
+     */
+    public static synchronized void endTest() {
         testStart = 0;
         numberOfActiveThreads = 0;
     }
 
-    static public synchronized long getTestStartTime() {// NOT USED
+    public static synchronized long getTestStartTime() {// NOT USED
         return testStart;
     }
 
