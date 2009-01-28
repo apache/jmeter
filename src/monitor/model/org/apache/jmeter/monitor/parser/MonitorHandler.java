@@ -29,7 +29,6 @@ import org.apache.jmeter.monitor.model.Jvm;
 import org.apache.jmeter.monitor.model.Memory;
 import org.apache.jmeter.monitor.model.RequestInfo;
 import org.apache.jmeter.monitor.model.Status;
-import org.apache.jmeter.monitor.model.StatusImpl;
 import org.apache.jmeter.monitor.model.ThreadInfo;
 import org.apache.jmeter.monitor.model.Worker;
 import org.apache.jmeter.monitor.model.Workers;
@@ -135,7 +134,7 @@ public class MonitorHandler extends DefaultHandler {
         } else if (qName.equals(Constants.CONNECTOR)) {
             connector = factory.createConnector();
             if (stacktree.peek() instanceof Status || stacktree.peek() instanceof Connector) {
-                ((StatusImpl) status).addConnector(connector);
+                status.addConnector(connector);
                 stacktree.push(connector);
                 if (attributes != null) {
                     for (int idx = 0; idx < attributes.getLength(); idx++) {
