@@ -2191,7 +2191,7 @@ If these are not present in the lib directory, the element will not appear in th
 <properties>
         <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
         <property name="From" required="Yes">Email address to send messages from.</property>
-        <property name="Addressie(s)" required="Yes">Email address to send messages to.</property>
+        <property name="Addressee(s)" required="Yes">Email address to send messages to, comma-separated.</property>
         <property name="SMTP Host" required="No">IP address or host name of SMTP (email redirector)
         server.</property>
         <property name="Failure Subject" required="No">Email subject line for fail messages.</property>
