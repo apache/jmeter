@@ -221,7 +221,9 @@ public class Proxy extends Thread {
             result = generateErrorResult(result, uhe); // Generate result (if nec.) and populate it
         } catch (IllegalArgumentException e) {
             log.error("Not implemented (probably used https)", e);
-            writeErrorToClient(HttpReplyHdr.formNotImplemented());
+            writeErrorToClient(HttpReplyHdr.formNotImplemented("Probably used https instead of http. " +
+            		"To record https requests, see " +
+            		"<a href=\"http://jakarta.apache.org/jmeter/usermanual/component_reference.html#HTTP_Proxy_Server\">HTTP Proxy Server documentation</a>"));
             result = generateErrorResult(result, e); // Generate result (if nec.) and populate it
         } catch (Exception e) {
             log.error("Exception when processing sample", e);
