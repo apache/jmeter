@@ -184,6 +184,7 @@ These are implemented in the AbstractTestElement class which all elements should
 <li>Bug 46436 - Improve error reporting in Proxy Gui</li>
 <li>Fix potential thread safety issue in JMeterThread class</li>
 <li>Mailer Visualiser - fix parsing of multiple e-mail address when using Test button</li>
+<li>Bug 46435 - More verbose error msg for error 501 (Proxy Server)</li>
 </ul>
 
 <h3>Improvements</h3>

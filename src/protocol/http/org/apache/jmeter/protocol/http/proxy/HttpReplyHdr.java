@@ -245,6 +245,16 @@ public final class HttpReplyHdr {
     }
 
     /**
+     * Server does not do the requested feature.
+     *
+     * @param reason detailed information for causing the failure
+     * @return The header in a string;
+     */
+    public static String formNotImplemented(String reason) {
+        return formError("501 Method not implemented", "Service not implemented. " + reason);
+    }
+    
+    /**
      * Server is overloaded, client should try again latter.
      *
      * @return The header in a string;
