@@ -155,6 +155,9 @@ https.sessioncontext.shared=true
 https.default.protocol=SSLv3
 </pre> 
         </p>
+        <p>
+        JMeter also allows one to enable additional protocols, by changing the property <tt>https.socket.protocols</tt>.
+        </p>
         <p>If the request uses cookies, then you will also need an
         <complink name="HTTP Cookie Manager"/>.  You can
         add either of these elements to the Thread Group or the HTTP Request.  If you have
