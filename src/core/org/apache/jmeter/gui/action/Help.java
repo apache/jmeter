@@ -67,7 +67,7 @@ public class Help implements Command {
         try {
             helpDoc.setPage(HELP_PAGE);
             currentPage = HELP_PAGE;
-        } catch (IOException err) {
+        } catch (Exception err) {
             String msg = "Couldn't load help file " + err.toString();
             log.error(msg);
             currentPage = "";// Avoid NPE in resetPage() // $NON-NLS-1$
