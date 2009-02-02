@@ -46,6 +46,7 @@ public class LoadRecentProject extends Load {
     }
 
     private static final Preferences prefs = Preferences.userNodeForPackage(LoadRecentProject.class);
+    // Note: Windows user preferences are stored relative to: HKEY_CURRENT_USER\Software\JavaSoft\Prefs
 
     public LoadRecentProject() {
         super();
