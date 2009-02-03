@@ -18,9 +18,7 @@
 
 package org.apache.jmeter.config;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.StringReader;
 
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
@@ -135,8 +133,9 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
             String line = server.readLine(alias,getRecycle());
             if (line!=null) {// i.e. not EOF
                 String[] lineValues = getQuotedData() ?
-                        CSVSaveService.csvReadFile(new BufferedReader(new StringReader(line)), delim.charAt(0))
+                        CSVSaveService.csvSplitString(line, delim.charAt(0))
                         : JOrphanUtils.split(line, delim, false);
+               System.out.println(line+ " count "+lineValues.length+ " vars "+vars.length);
                 for (int a = 0; a < vars.length && a < lineValues.length; a++) {
                     threadVars.put(vars[a], lineValues[a]);
                 }
