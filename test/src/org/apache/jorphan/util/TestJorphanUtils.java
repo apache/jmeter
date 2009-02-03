@@ -66,6 +66,8 @@ public class TestJorphanUtils extends TestCase {
         assertEquals("img src=xyz ", JOrphanUtils.replaceFirst("img src=xyz alt=\"\" ", "alt=\"\" ", ""));
     }
 
+    // Note: the split tests should agree as far as possible with CSVSaveService.csvSplitString()
+    
     // Tests for split(String,String,boolean)
     public void testSplit1() {
         String in = "a,bc,,"; // Test ignore trailing split characters
@@ -167,6 +169,12 @@ public class TestJorphanUtils extends TestCase {
         assertEquals("", out[6]);
         assertEquals("f",out[7]);
         
+    }
+
+    // Empty string
+    public void testEmpty(){
+        String out[] = JOrphanUtils.split("", ",",false);   
+        assertEquals(0,out.length);
     }
 
     // Tests for split(String,String,String)
