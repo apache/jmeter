@@ -3757,6 +3757,12 @@ The script (or file) is processed using the BSFEngine.exec() method, which does 
 	<code>prev.getSubResults()</code> which returns an array of SampleResults.
 	The array will be empty if there are none.
 	</p>
+	<p>
+	Post-Processors are run before Assertions, so they do not have access to any Assertion Results, nor will
+	the sample status reflect the results of any Assertions. If you require access to Assertion Results, try
+	using a Listener instead. Also note that the variable JMeterThread.last_sample_ok is set to "true" or "false"
+	after all Assertions have been run.
+	</p>
 	</description>
 <component name="Regular Expression Extractor" index="&sect-num;.8.1"  width="618" height="256" screenshot="regex_extractor.png">
 <description><p>Allows the user to extract values from a server response using a Perl-type regular expression.  As a post-processor,
