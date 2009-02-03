@@ -58,6 +58,7 @@ import org.apache.oro.text.regex.Perl5Matcher;
 /**
  * This class provides a means for saving/reading test results as CSV files.
  */
+// For unit tests, @see TestCSVSaveService
 public final class CSVSaveService {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -137,7 +138,11 @@ public final class CSVSaveService {
                 lineNumber = 0;
             }
             String [] parts;
-            while ((parts = csvReadFile(dataReader, saveConfig.getDelimiter().charAt(0))).length != 0) {
+            final char delim = saveConfig.getDelimiter().charAt(0);
+            // TODO: does it matter that an empty line will terminate the loop?
+            // CSV output files should never contain empty lines, so probably not
+            // If so, then need to check whether the reader is at EOF
+            while ((parts = csvReadFile(dataReader, delim)).length != 0) {
                 lineNumber++;
                 SampleEvent event = CSVSaveService.makeResultFromDelimitedString(parts,saveConfig,lineNumber);
                 if (event != null){
@@ -208,6 +213,8 @@ public final class CSVSaveService {
                         timeStamp = Long.parseLong(text);
                     } catch (NumberFormatException e) {// see if this works
                         log.warn(e.toString());
+                        // method is only ever called from one thread at a time
+                        // so it's OK to use a static DateFormat
                         Date stamp = DEFAULT_DATE_FORMAT.parse(text);
                         timeStamp = stamp.getTime();
                         log.warn("Setting date format to: "+DEFAULT_DATE_FORMAT_STRING);
@@ -911,9 +918,11 @@ public final class CSVSaveService {
     /**
      * Reads from file and splits input into strings according to the delimiter,
      * taking note of quoted strings.
-     *
+     * <p>
      * Handles DOS (CRLF), Unix (LF), and Mac (CR) line-endings equally.
-     *
+     * <p>
+     * N.B. a blank line is returned as a zero length array, whereas "" is returned
+     * as an empty string. This is inconsistent.
      * @param infile input file  - must support mark(1)
      * @param delim delimiter (e.g. comma)
      * @return array of strings
@@ -924,8 +933,9 @@ public final class CSVSaveService {
         int state = INITIAL;
         List list = new ArrayList();
         ByteArrayOutputStream baos = new ByteArrayOutputStream(200);
+        boolean push = false;
         while(-1 != (ch=infile.read())){
-            boolean push = false;
+            push = false;
             switch(state){
             case INITIAL:
                 if (ch == QUOTING_CHAR){
@@ -983,15 +993,19 @@ public final class CSVSaveService {
                 break;
             }
         } // while not EOF
-        if (ch == -1){
+        if (ch == -1){// EOF (or end of string) so collect any remaining data
             if (state == QUOTED){
                 throw new IOException(state+" Missing trailing quote-char in quoted field:[\""+baos.toString()+"]");
             }
-            if (baos.size() > 0) {
+            // Do we have some data, or a trailing empty field?
+            if (baos.size() > 0 // we have some data
+                    || push     // we've started a field
+                    || state == EMBEDDEDQUOTE // Just seen ""
+                ) {
                 list.add(baos.toString());
             }
         }
-        return (String[]) list.toArray(new String[]{});
+        return (String[]) list.toArray(new String[list.size()]);
     }
 
     private static boolean isDelimOrEOL(char delim, int ch) {
