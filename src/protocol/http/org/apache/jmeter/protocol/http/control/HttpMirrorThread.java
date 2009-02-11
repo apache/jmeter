@@ -93,6 +93,10 @@ public class HttpMirrorThread extends Thread {
             if(contentLengthHeaderValue != null) {
                 contentLength = new Integer(contentLengthHeaderValue).intValue();
             }
+            String sleepHeaderValue = getRequestHeaderValue(headerString, "X-Sleep"); //$NON-NLS-1$
+            if(sleepHeaderValue != null) {
+                Thread.sleep(Integer.parseInt(sleepHeaderValue));
+            }
             String transferEncodingHeaderValue = getRequestHeaderValue(headerString, "Transfer-Encoding"); //$NON-NLS-1$
             if(transferEncodingHeaderValue != null) {
                 isChunked = transferEncodingHeaderValue.equalsIgnoreCase("chunked"); //$NON-NLS-1$
@@ -141,6 +145,8 @@ public class HttpMirrorThread extends Thread {
             }
             out.flush();
         } catch (IOException e) {
+            log.error("", e);
+        } catch (InterruptedException e) {
             log.error("", e);
         } finally {
             JOrphanUtils.closeQuietly(out);
