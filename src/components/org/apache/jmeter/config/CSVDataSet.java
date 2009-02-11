@@ -135,7 +135,6 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
                 String[] lineValues = getQuotedData() ?
                         CSVSaveService.csvSplitString(line, delim.charAt(0))
                         : JOrphanUtils.split(line, delim, false);
-               System.out.println(line+ " count "+lineValues.length+ " vars "+vars.length);
                 for (int a = 0; a < vars.length && a < lineValues.length; a++) {
                     threadVars.put(vars[a], lineValues[a]);
                 }
