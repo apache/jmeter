@@ -28,7 +28,7 @@ import org.apache.jmeter.visualizers.*;
 public class MemoryBenchmark {
 
     public static void main(String[] args) {
-        if (args.length != 1) {
+        if (args.length == 1) {
             int objects = 10000;
             if (args[0] != null) {
                 objects = Integer.parseInt(args[0]);
