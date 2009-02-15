@@ -186,6 +186,7 @@ These are implemented in the AbstractTestElement class which all elements should
 <li>Mailer Visualiser - fix parsing of multiple e-mail address when using Test button</li>
 <li>Bug 46435 - More verbose error msg for error 501 (Proxy Server)</li>
 <li>Bug 46491 - Incorrect value for the last variable in "CSV Data Set Config" (error in processing quoted strings)</li>
+<li>The JMeter variable "sample_variables" is sent to all server instances to ensure the data is available to the client.</li>
 </ul>
 
 <h3>Improvements</h3>
