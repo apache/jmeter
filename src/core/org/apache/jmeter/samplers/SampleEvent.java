@@ -36,6 +36,8 @@ public class SampleEvent implements Serializable {
 
     private static final long serialVersionUID = 232L;
 
+    public static final String SAMPLE_VARIABLES = "sample_variables"; // $NON-NLS-1$
+
     public static final String HOSTNAME;
 
     // List of variable names to be saved in JTL files
@@ -55,7 +57,7 @@ public class SampleEvent implements Serializable {
         }
         HOSTNAME=hn;
 
-        String vars = JMeterUtils.getProperty("sample_variables"); // $NON-NLS-1$
+        String vars = JMeterUtils.getProperty(SAMPLE_VARIABLES);
            variableNames=vars != null ? vars.split(",") : new String[0];
            varCount=variableNames.length;
         if (varCount>0){

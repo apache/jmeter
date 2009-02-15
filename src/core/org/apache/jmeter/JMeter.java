@@ -61,6 +61,7 @@ import org.apache.jmeter.plugin.PluginManager;
 import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.reporters.Summariser;
 import org.apache.jmeter.samplers.Remoteable;
+import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestElement;
@@ -640,6 +641,10 @@ public class JMeter implements JMeterPlugin {
             }
         }
 
+        String sample_variables = (String) jmeterProps.get(SampleEvent.SAMPLE_VARIABLES);
+        if (sample_variables != null){
+            remoteProps.put(SampleEvent.SAMPLE_VARIABLES, sample_variables);
+        }
     }
 
     /*
