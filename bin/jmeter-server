@@ -29,4 +29,4 @@ DIRNAME=`dirname $0`
 # One way to fix this is to define RMI_HOST_DEF below
 #RMI_HOST_DEF=-Djava.rmi.server.hostname=xxx.xxx.xxx.xxx
 
-${DIRNAME}/jmeter -Dserver_port=${SERVER_PORT:-1099} -s -j jmeter-server.log "$@"
+${DIRNAME}/jmeter ${RMI_HOST_DEF} -Dserver_port=${SERVER_PORT:-1099} -s -j jmeter-server.log "$@"
