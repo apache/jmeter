@@ -17,7 +17,6 @@
 -->
 <document>
   <properties>
-    <author email="bburns@apache.org">Brendan Burns, et al.</author>
     <title>Extending JMeter</title>
   </properties>
 <body>

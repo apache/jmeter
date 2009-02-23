@@ -19,8 +19,6 @@
 
   <properties>
 
-	 <author email="mstover1@apache.org">Michael Stover</author>
-
 	 <title>Extending JMeter</title>
 
   </properties>
