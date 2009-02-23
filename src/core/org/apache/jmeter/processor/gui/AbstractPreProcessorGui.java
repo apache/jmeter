@@ -26,10 +26,6 @@ import javax.swing.JPopupMenu;
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
 import org.apache.jmeter.gui.util.MenuFactory;
 
-/**
- *
- * @version $Revision$ $Date$
- */
 public abstract class AbstractPreProcessorGui extends AbstractJMeterGuiComponent {
 
     public JPopupMenu createPopupMenu() {

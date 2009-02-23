@@ -29,8 +29,6 @@ import org.apache.jmeter.util.JMeterUtils;
  * This class implements a constant timer with its own panel and fields for
  * value update and user interaction.
  *
- * @author <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
- * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
  */
 public class ConstantTimer extends AbstractTestElement implements Timer, Serializable, LoopIterationListener {
 

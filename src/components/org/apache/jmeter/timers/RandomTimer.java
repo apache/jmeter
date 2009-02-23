@@ -24,14 +24,11 @@ import java.util.Random;
 import org.apache.jmeter.testelement.property.DoubleProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 
-/*******************************************************************************
+/**
  * This class implements a random timer with its own panel and fields for value
  * update and user interaction. Since this class does not define the delay()
  * method, is abstract and must be extended to provide full functionality.
  *
- * @author <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
- * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
- * @version $Id$
  */
 public abstract class RandomTimer extends ConstantTimer implements Timer, Serializable {
     public final static String RANGE = "RandomTimer.range";

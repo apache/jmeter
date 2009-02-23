@@ -75,12 +75,6 @@ import org.apache.log.Logger;
  *
  * </PRE>
  *
- * Have fun with it !<BR>
- * Any comments, feedback, bug reports or suggestions will be <a
- * href="mailto:norguet@bigfoot.com?subject=Spline3">appreciated</a>.
- *
- * @author <a href="norguet@bigfoot.com">Jean-Pierre Norguet</a>
- * @version $Revison$ updated $Date$
  */
 public class Spline3 {
     private static final Logger log = LoggingManager.getLoggerForClass();

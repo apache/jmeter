@@ -25,7 +25,6 @@ import org.apache.log.Logger;
 
 /**
  * AbstractTable is the base Element for different kinds of report tables.
- * @author pete
  *
  */
 public abstract class AbstractTable extends AbstractTestElement

@@ -32,7 +32,6 @@ import org.jdom.input.SAXBuilder;
 /**
  * Checks if the result is a well-formed XML content using jdom
  * 
- * @author <a href="mailto:gottfried@szing.at">Gottfried Szing</a>
  */
 public class XMLAssertion extends AbstractTestElement implements Serializable, Assertion {
     private static final Logger log = LoggingManager.getLoggerForClass();

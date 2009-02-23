@@ -31,11 +31,6 @@ import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 
-/**
- * 
- * @author unattributed
- * @version $Revision$ $Date$
- */
 public class PackageTest extends TestCase {
 	public PackageTest(String arg0) {
 		super(arg0);

@@ -16,10 +16,6 @@
  */
 package org.apache.jmeter.monitor.model.benchmark;
 
-/**
- * 
- * @version $Revision$ on $Date$
- */
 public class ParseBenchmark {
 
 	/**

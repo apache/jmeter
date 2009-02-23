@@ -44,10 +44,6 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.reflect.Functor;
 
-/**
- * @author Peter Lin
- * @version $Revision$ Last updated: $Date$
- */
 public class FileListPanel extends JPanel implements ActionListener {
     private JTable files = null;
 

@@ -18,11 +18,6 @@
 
 package org.apache.jmeter.visualizers;
 
-/**
- * @author Michael Stover
- * @version 1.0
- */
-
 public interface GraphListener {
     public void updateGui(Sample s);
 
