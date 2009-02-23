@@ -30,7 +30,6 @@ import java.io.Serializable;
 /**
  * Implements batch reporting for remote testing.
  *
- * @author Michael Freeman
  */
 public class BatchSampleSender implements SampleSender, Serializable {
     private static final Logger log = LoggingManager.getLoggerForClass();

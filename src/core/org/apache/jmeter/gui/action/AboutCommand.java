@@ -44,8 +44,6 @@ import org.apache.jmeter.util.JMeterUtils;
  * About Command. It may be extended in the future to add a list of installed
  * protocols, config options, etc.
  *
- * @author <a href="bloritsch@apache.org">Berin Loritsch</a>
- * @version CVS $Revision$ $Date$
  */
 public class AboutCommand implements Command {
     private static Set commandSet;

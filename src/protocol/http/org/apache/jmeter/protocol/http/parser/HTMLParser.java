@@ -31,8 +31,6 @@ import org.apache.log.Logger;
 /**
  * HtmlParsers can parse HTML content to obtain URLs.
  *
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
- * @version $Revision$ updated on $Date$
  */
 public abstract class HTMLParser {
 

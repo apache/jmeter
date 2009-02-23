@@ -27,9 +27,6 @@ import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.config.ConfigElement;
 
 // TODO - not used at present - could perhaps be removed
-/**
- * @author Michael Stover
- */
 public class Entry {
 
     private Map configSet;

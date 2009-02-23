@@ -28,7 +28,6 @@ import org.apache.jmeter.config.Arguments;
  * arguments (or parameters) are usually used to provide configuration values
  * for some other component.
  * 
- * @version $Revision$ on $Date$
  */
 public class TestArgumentsPanel extends TestCase {
 		/**

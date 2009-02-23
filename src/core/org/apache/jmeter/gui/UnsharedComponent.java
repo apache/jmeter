@@ -23,8 +23,6 @@ package org.apache.jmeter.gui;
  * The GUI instance will be shared among all test elements of a given type if
  * the GUI component class does not implement this interface.
  * 
- * @author unknown
- * @version $Revision$
  */
 public interface UnsharedComponent {
 }

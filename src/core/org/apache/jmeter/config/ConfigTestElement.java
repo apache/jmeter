@@ -23,10 +23,6 @@ import java.io.Serializable;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 
-/**
- * @author Michael Stover
- * @version $Revision$
- */
 public class ConfigTestElement extends AbstractTestElement implements Serializable, ConfigElement {
     public final static String USERNAME = "ConfigTestElement.username";
 

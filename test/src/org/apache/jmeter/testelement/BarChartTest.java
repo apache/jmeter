@@ -25,10 +25,6 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/**
- * @author peter lin
- *
- */
 public class BarChartTest extends JMeterTestCase {
 	
 	private static final Logger log = LoggingManager.getLoggerForClass();
