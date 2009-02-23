@@ -29,7 +29,6 @@ import org.apache.jmeter.gui.util.MenuFactory;
 /**
  * This is the base class for JMeter GUI components which manage controllers.
  *
- * @version $Revision$ on $Date$
  */
 public abstract class AbstractControllerGui extends AbstractJMeterGuiComponent {
     /**

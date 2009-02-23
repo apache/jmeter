@@ -26,10 +26,6 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 
-/**
- * @author Michael Stover
- * @version $Revision$
- */
 public class UrlConfigTest extends JMeterTestCase {
 	HTTPSamplerBase config;
 

@@ -25,8 +25,7 @@ import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.samplers.Sampler;
 
 /**
- * @author Michael Stover Created March 13, 2001
- * @version $Revision$ Last updated: $Date$
+ * Controller to run its children once per cycle.
  */
 public class OnceOnlyController extends GenericController implements Serializable, LoopIterationListener {
 

@@ -22,10 +22,6 @@ import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.junit.stubs.TestSampler;
 import org.apache.jmeter.testelement.TestElement;
 
-/**
- * @author Michael Stover Created March 13, 2001
- * @version $Revision$ Last updated: $Date$
- */
 public class TestOnceOnlyController extends JMeterTestCase {
 		public TestOnceOnlyController(String name) {
 			super(name);

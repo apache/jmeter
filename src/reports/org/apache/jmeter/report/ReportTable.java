@@ -1,4 +1,3 @@
-//$Header$
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -20,10 +19,6 @@ package org.apache.jmeter.report;
 
 import java.util.List;
 
-/**
- * @author Peter Lin
- *
- */
 public interface ReportTable {
     String[][] getTableData(List data);
 }

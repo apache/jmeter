@@ -36,9 +36,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author Michael Stover
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
- * @version $Revision$ updated on $Date$
+ * Perfom replacement of ${variable} references.
  */
 public class ValueReplacer {
     private static final Logger log = LoggingManager.getLoggerForClass();

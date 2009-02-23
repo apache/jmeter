@@ -49,7 +49,6 @@ import java.util.Map;
  * @see HashTree
  * @see HashTreeTraverser
  *
- * @author Michael Stover (mstover1 at apache.org)
  * @version $Revision$
  */
 public class SearchByClass implements HashTreeTraverser {

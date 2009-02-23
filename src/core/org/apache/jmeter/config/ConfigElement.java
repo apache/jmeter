@@ -18,10 +18,6 @@
 
 package org.apache.jmeter.config;
 
-/**
- * @author Michael Stover
- * @version $Revision$
- */
 public interface ConfigElement extends Cloneable {
 
     /**

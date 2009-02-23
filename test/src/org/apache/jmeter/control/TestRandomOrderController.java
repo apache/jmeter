@@ -23,12 +23,6 @@ import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.junit.stubs.TestSampler;
 import org.apache.jmeter.testelement.TestElement;
 
-/**
- * A controller that runs its children each at most once, but in a random order.
- * 
- * @author Mike Verdone
- * @version $Revision$ updated on $Date$
- */
 public class TestRandomOrderController extends JMeterTestCase {
 
 		public TestRandomOrderController(String name) {

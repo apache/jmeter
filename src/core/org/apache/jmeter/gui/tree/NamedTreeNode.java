@@ -18,10 +18,6 @@
 
 package org.apache.jmeter.gui.tree;
 
-/**
- * @author pete
- *
- */
 public interface NamedTreeNode {
 
     void setName(String name);

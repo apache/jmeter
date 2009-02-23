@@ -31,11 +31,6 @@ import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 
-/**
- * @author Michael Stover
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
- * @version $Revision: 325648 $ updated on $Date: 2005-08-18 21:38:49 +0100 (Thu, 18 Aug 2005) $
- */
 public class TestValueReplacer extends JMeterTestCase {
 		TestPlan variables;
 

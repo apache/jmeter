@@ -274,7 +274,6 @@ public class JsseSSLManager extends SSLManager {
      * This is the X509KeyManager we have defined for the sole purpose of
      * selecting the proper key and certificate based on the keystore available.
      *
-     * @author MStover Created March 21, 2002
      */
     private static class WrappedX509KeyManager implements X509KeyManager {
         /**

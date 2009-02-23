@@ -30,9 +30,6 @@ import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui;
 import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui2;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 
-/**
- * @version $Revision$ last updated $Date$
- */
 public class PackageTest extends TestCase {
 	public PackageTest(String arg0) {
 		super(arg0);

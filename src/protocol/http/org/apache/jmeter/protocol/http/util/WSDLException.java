@@ -21,8 +21,6 @@ package org.apache.jmeter.protocol.http.util;
 /**
  * Created on: Jun 3, 2003<br>
  *
- * @author Peter Lin
- * @version $Revision$
  */
 public class WSDLException extends Exception {
 

@@ -18,11 +18,6 @@
 
 package org.apache.jmeter.functions;
 
-/**
- * @author mstover
- *
- * @version $Revision$
- */
 public class InvalidVariableException extends Exception {
     public InvalidVariableException() {
     }
