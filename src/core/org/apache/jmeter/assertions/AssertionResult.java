@@ -21,7 +21,7 @@ package org.apache.jmeter.assertions;
 import java.io.Serializable;
 
 /**
- * @author Michael Stover
+ * Implements Response Assertion checking.
  */
 public class AssertionResult implements Serializable {
     public static final String RESPONSE_WAS_NULL = "Response was null"; // $NON-NLS-1$

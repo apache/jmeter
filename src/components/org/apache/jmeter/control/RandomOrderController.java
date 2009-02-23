@@ -24,8 +24,6 @@ import java.util.List;
 /**
  * A controller that runs its children each at most once, but in a random order.
  *
- * @author Mike Verdone
- * @version $Revision$ updated on $Date$
  */
 public class RandomOrderController extends GenericController implements Serializable {
     /**

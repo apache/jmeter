@@ -27,7 +27,6 @@ import org.apache.jmeter.util.JMeterUtils;
  * and implements a random delay with an average value and a uniformly
  * distributed variation.
  *
- * @author <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
  */
 public class UniformRandomTimer extends RandomTimer implements Serializable {
     public long delay() {

@@ -1,4 +1,3 @@
-//$Header$
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -21,7 +20,6 @@ package org.apache.jmeter.report.writers;
 import org.apache.jmeter.testelement.TestElement;
 
 /**
- * @author Peter Lin
  *
  * ReportWriter defines the basic operations of a report writer. A report
  * plan may have multiple report writers. it might be nice to have a pdf

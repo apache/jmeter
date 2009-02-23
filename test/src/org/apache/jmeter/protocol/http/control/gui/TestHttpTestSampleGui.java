@@ -22,9 +22,6 @@ import junit.framework.TestCase;
 
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 
-/**
- * @version $Revision$ on $Date$
- */
 public class TestHttpTestSampleGui extends TestCase {
 		private HttpTestSampleGui gui;
 

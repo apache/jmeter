@@ -51,7 +51,6 @@ import org.apache.jmeter.util.SSLManager;
  * it only allows a change of keystore at run-time, or to provide one if not
  * already defined via the property.
  *
- * @author <a href="bloritsch@apache.org">Berin Loritsch</a>
  */
 public class SSLManagerCommand implements Command {
     private static Set commandSet;
