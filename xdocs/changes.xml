@@ -217,11 +217,12 @@ These are implemented in the AbstractTestElement class which all elements should
 <li>Use Script to evaluate __jexl() function so can have multiple statements.</li>
 <li>JDBC Request can optionally save the results of Select statements to variables.</li>
 <li>JDBC Request now handles quoted strings.</li>
-<li>JDBC Request now handles arbitray variable types.</li>
+<li>JDBC Request now handles arbitrary variable types.</li>
 <li>Bug 46030 - Extend TCP Sampler to Support Length-Prefixed Binary Data</li>
 <li>Process JVM_ARGS last so users can override default settings</li>
 <li>Read XML JTL files more efficiently - pass samples to visualisers as they are read, rather than saving them all and then processing them</li>
 <li>Added locales.add property to allow for new Locales</li>
+<li>Bug 40045 - Allow Results monitor to select a specific connector</li>
 </ul>
 
 <h3>Non-functional changes</h3>

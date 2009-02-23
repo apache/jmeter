@@ -25,6 +25,8 @@ import java.util.List;
  */
 public class StatusImpl implements Status {
     private Jvm jvm = null;
+    
+    private String connectorPrefix = null;
 
     private final List connectors;
 
@@ -67,4 +69,11 @@ public class StatusImpl implements Status {
         this.connectors.add(conn);
     }
 
+    public void setConnectorPrefix(String prefix) {
+        connectorPrefix = prefix;
+    }
+
+    public String getConnectorPrefix(){
+        return connectorPrefix;
+    }
 }
