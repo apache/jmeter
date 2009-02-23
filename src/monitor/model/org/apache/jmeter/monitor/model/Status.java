@@ -24,4 +24,8 @@ public interface Status {
     java.util.List getConnector();
     
     void addConnector(Connector conn);
+
+    void setConnectorPrefix(String prefix);
+
+    String getConnectorPrefix();
 }

@@ -49,6 +49,9 @@ public class MonitorAccumModel implements Clearable, Serializable {
      */
     private int DEFAULT_BUFFER = 800;
 
+    // optional connector name prefix
+    private String connectorPrefix = null;
+
     /**
      *
      */
@@ -63,6 +66,10 @@ public class MonitorAccumModel implements Clearable, Serializable {
 
     public void setBufferSize(int buffer) {
         DEFAULT_BUFFER = buffer;
+    }
+
+    public void setPrefix(String prefix) {
+        connectorPrefix = prefix;
     }
 
     /**
@@ -153,7 +160,8 @@ public class MonitorAccumModel implements Clearable, Serializable {
             if (sample.isResponseCodeOK() && ((HTTPSampleResult) sample).isMonitor()) {
                 ObjectFactory of = ObjectFactory.getInstance();
                 Status st = of.parseBytes(sample.getResponseData());
-                if (st != null && surl != null) {// surl can be null if read from a file
+                st.setConnectorPrefix(connectorPrefix);
+                if (surl != null) {// surl can be null if read from a file
                     MonitorStats stat = new MonitorStats(Stats.calculateStatus(st), Stats.calculateLoad(st), 0, Stats
                             .calculateMemoryLoad(st), Stats.calculateThreadLoad(st), surl.getHost(), String.valueOf(surl
                             .getPort()), surl.getProtocol(), System.currentTimeMillis());
