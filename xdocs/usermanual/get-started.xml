@@ -42,7 +42,6 @@ Other software that you may need to download:
 <li><a href="http://java.sun.com/products/javabeans/glasgow/jaf.html">Java Activation Framework</a> - needed for JavaMail</li>
 <li><a href="http://java.sun.com/products/javamail/index.jsp">Java Mail</a> - needed for Mail Visualiser, Mail Reader and WebService(SOAP) sampler</li>
 <li><a href="http://java.sun.com/products/jms/docs.html">JMS</a> - for JMS samplers</li>
-<li><a href="http://java.sun.com/downloads/">General Java download page</a></li>
 </ul>
 </p>
 <note>
@@ -113,7 +112,7 @@ implementation.</p>
 </subsection>
 
 <subsection name="&sect-num;.2.3 Email Support" anchor="opt_email">
-<p>JMeter has limited Email capabilities. It can send email based on test results, and has a POP/IMAP sampler.
+<p>JMeter has limited Email capabilities. It can send email based on test results, and has a POP3(S)/IMAP(S) sampler.
 It does not currently support SMTP sampling.
 To enable Email support, add Sun's JavaMail packages and the activation packages to JMeter's <a href="#classpath">classpath</a>.</p>
 </subsection>
