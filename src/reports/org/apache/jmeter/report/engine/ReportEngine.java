@@ -1,4 +1,3 @@
-//$Header$
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -22,7 +21,6 @@ import org.apache.jmeter.engine.JMeterEngineException;
 import org.apache.jorphan.collections.HashTree;
 
 /**
- * @author peter lin
  *
  * ReportEngine is the base interface for report engines
  */

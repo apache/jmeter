@@ -22,8 +22,6 @@ package org.apache.jmeter.visualizers;
  * The Interface to be implemented by any class that wants to be notified by
  * model which makes use of this callback-Interface.
  *
- * @author <a href="mailto:wolfram.rittmeyer@web.de">Wolfram Rittmeyer</a>
- * @version $Revision$ $Date$
  */
 public interface ModelListener {
 

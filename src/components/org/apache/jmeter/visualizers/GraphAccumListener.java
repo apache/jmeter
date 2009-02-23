@@ -20,11 +20,6 @@ package org.apache.jmeter.visualizers;
 
 import org.apache.jmeter.samplers.SampleResult;
 
-/**
- * @author Khor Soon Hin Created 2001/08/12
- * @version $Revision$ Last updated: $Date$
- */
-
 public interface GraphAccumListener {
     public void updateGui(SampleResult s);
 

@@ -27,8 +27,6 @@ import org.apache.jmeter.util.JMeterUtils;
  * and implements a random delay with an average value and a gaussian
  * distributed variation.
  *
- * @author <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
- * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
  */
 public class GaussianRandomTimer extends RandomTimer implements Serializable {
     public long delay() {

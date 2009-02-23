@@ -1,4 +1,3 @@
-//$Header$
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -19,8 +18,6 @@
 package org.apache.jmeter.report.writers;
 
 /**
- * @author pete
- *
  * PageSummary defines the summary of a report page and the runtime
  * information for debugging and logging purposes. It's a good idea
  * to return summary so that automated process can start the report

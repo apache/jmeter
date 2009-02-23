@@ -22,7 +22,6 @@
  * The assertion will fail when the expected hex is different from the <br/>
  * one calculated from the response OR when the expected hex is left empty.
  * 
- * @author  <a href="mailto:jh@domek.be">Jorg Heymans</a>
  */
 package org.apache.jmeter.assertions;
 

@@ -25,8 +25,6 @@ import java.beans.Customizer;
  * The interface is equivalent to Customizer -- the only difference is that
  * setElement can be called multiple times to change the element it works on.
  * 
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
- * @version $Revision$ updated on $Date$
  */
 public interface SharedCustomizer extends Customizer {
 }

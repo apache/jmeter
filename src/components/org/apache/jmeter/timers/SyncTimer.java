@@ -31,8 +31,6 @@ import org.apache.log.Logger;
  * have been blocked, and then they are all released at once. A SyncTimer can
  * thus create large instant loads at various points of the test plan.
  *
- * @author mike
- *
  */
 public class SyncTimer extends AbstractTestElement implements Timer, Serializable, TestBean {
     private static final long serialVersionUID = 2;

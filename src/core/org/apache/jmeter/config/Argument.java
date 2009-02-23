@@ -27,8 +27,6 @@ import org.apache.jmeter.testelement.property.StringProperty;
  * Class representing an argument. Each argument consists of a name/value pair,
  * as well as (optional) metadata.
  *
- * @author Michael Stover
- * @author Mark Walsh
  */
 public class Argument extends AbstractTestElement implements Serializable {
      /** Name used to store the argument's name. */
