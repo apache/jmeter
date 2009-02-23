@@ -27,9 +27,11 @@ import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 
+import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -42,6 +44,10 @@ import org.apache.log.Logger;
  */
 public class MonitorHealthVisualizer extends AbstractVisualizer implements ImageVisualizer, ItemListener,
         GraphListener, Clearable {
+
+    private static final String CONNECTOR_PREFIX = "connector.prefix"; // $NON-NLS-1$
+    private static final String CONNECTOR_PREFIX_DEFAULT = ""; // $NON-NLS-1$
+
     private MonitorTabPane TABPANE;
 
     private MonitorHealthPanel HEALTHPANE;
@@ -51,6 +57,8 @@ public class MonitorHealthVisualizer extends AbstractVisualizer implements Image
     private MonitorAccumModel MODEL;
 
     private MonitorGraph GRAPH;
+
+    private JLabeledTextField prefixField;
 
     public static final String BUFFER = "monitor.buffer.size"; // $NON-NLS-1$
 
@@ -65,6 +73,18 @@ public class MonitorHealthVisualizer extends AbstractVisualizer implements Image
         init();
     }
 
+    public void configure(TestElement el) {
+        super.configure(el);
+        prefixField.setText(el.getPropertyAsString(CONNECTOR_PREFIX, CONNECTOR_PREFIX_DEFAULT));
+        MODEL.setPrefix(prefixField.getText());
+    }
+
+    public void modifyTestElement(TestElement c) {
+        super.modifyTestElement(c);
+        c.setProperty(CONNECTOR_PREFIX,prefixField.getText(),CONNECTOR_PREFIX_DEFAULT);
+        MODEL.setPrefix(prefixField.getText());
+    }
+    
     private void initModel() {
         MODEL = new MonitorAccumModel();
         GRAPH = new MonitorGraph(MODEL);
@@ -121,6 +141,8 @@ public class MonitorHealthVisualizer extends AbstractVisualizer implements Image
         // Add the main panel and the graph
         this.add(this.makeTitlePanel(), BorderLayout.NORTH);
         this.createTabs();
+        prefixField = new JLabeledTextField(JMeterUtils.getResString("monitor_label_prefix")); // $NON-NLS-1$
+        add(prefixField, BorderLayout.SOUTH);
     }
 
     private void createTabs() {
