@@ -19,8 +19,6 @@
 
   <properties>
 
-	 <author email="bburns@apache.org">Michael Stover, brendan Burns, et al.</author>
-
 	 <title>Extending JMeter</title>
 
   </properties>

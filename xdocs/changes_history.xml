@@ -1296,7 +1296,6 @@ with "\" if they are literal values</li>
 <li>Various bug fixes.</li>
 </ul>
 
-<b>Changes: for more info, contact <a href="mailto:mstover1@apache.org">Michael Stover</a></b>
 <h3>Version 1.7.3</h3>
 <ul>
 <li>New Functions that provide more ability to change requests dynamically during test runs.</li>
@@ -1420,61 +1419,51 @@ test engine code.</li>
 </ul> 
 </p> 
 <p> 
-<b>Apache JMeter 1.4.1-dev</b> (<a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>)  
+<b>Apache JMeter 1.4.1-dev</b> 
 <ul>
    <li>Cleaned up URLSampler code after tons of patches for better readability. (SM)</li>
    <li>Made JMeter send a special &quot;user-agent&quot; identifier. (SM)</li>
    <li>Fixed problems with redirection not sending cookies and authentication info and removed
-     a warning with jikes compilation. Thanks to <a href="mailto:wtanaka@yahoo.com">Wesley
-     Tanaka</a> for the patches (SM)</li>
+     a warning with jikes compilation. Thanks to Wesley Tanaka for the patches (SM)</li>
    <li>Fixed a bug in the URLSampler that caused to skip one URL when testing lists of URLs and
-     a problem with Cookie handling. Thanks to <a
-     href="mailto:gjohnson@investlearning.com">Graham Johnson</a> for the patches (SM)</li>
-   <li>Fixed a problem with POST actions. Thanks to <a href="mailto:sschaub@bju.edu">Stephen
-     Schaub</a> for the patch (SM)</li>
+     a problem with Cookie handling. Thanks to Graham Johnson for the patches (SM)</li>
+   <li>Fixed a problem with POST actions. Thanks to Stephen Schaub for the patch (SM)</li>
  </ul>
  </p>
  <p>
- <b>Apache JMeter 1.4</b> - Jul 11 1999 (<a href="mailto:cimjpno@be.ibm.com">Jean-Pierre Norguet</a>,
- <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>)
+ <b>Apache JMeter 1.4</b> - Jul 11 1999
   <ul>
-   <li>Fixed a problem with POST actions. Thanks to <a href="mailto:bburns@labs.gte.com">Brendan
-     Burns</a> for the patch (SM)</li>
+   <li>Fixed a problem with POST actions. Thanks to Brendan Burns for the patch (SM)</li>
    <li>Added close button to the About box for those window managers who don't provide it.
      Thanks to Jan-Henrik Haukeland for pointing it out. (SM)</li>
    <li>Added the simple Spline sample visualizer (JPN)</li> 
 </ul> </p>
   <p><b>Apache JMeter 1.3</b> - Apr 16 1999
-  (<a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>,
- <a href="mailto:luta.raphael@networks.vivendi.net">Raphaël Luta</a>)
 <ul>
    <li>Run the Garbage Collector and run finalization before starting to sampling to ensure
      same state every time (SM)</li>
    <li>Fixed some NullPointerExceptions here and there (SM)</li>
    <li>Added HTTP authentication capabilities (RL)</li>
    <li>Added windowed sample visualizer (SM)</li>
-   <li>Fixed stupid bug for command line arguments. Thanks to <a
-     href="mailto:jbracer@infoneers.com">Jorge Bracer</a> for pointing this out (SM)</li> 
+   <li>Fixed stupid bug for command line arguments. Thanks to Jorge Bracer for pointing this out (SM)</li> 
 </ul> </p>
-  <p><b>Apache JMeter 1.2</b> - Mar 17 1999 (<a href="mailto:sdowd@arcmail.com">Sean Dowd</a>, 
-<a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>)  
+  <p><b>Apache JMeter 1.2</b> - Mar 17 1999
 <ul>
    <li>Integrated cookie capabilities with JMeter (SM)</li>
    <li>Added the Cookie manager and Netscape file parser (SD)</li>
    <li>Fixed compilation error for JDK 1.1 (SD)</li> </ul> </p>  
-<p> <b>Apache JMeter 1.1</b> - Feb 24 1999 (<a href="mailto:sdowd@arcmail.com">Sean Dowd</a>, 
-<a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>)  
+<p> <b>Apache JMeter 1.1</b> - Feb 24 1999
 <ul>
    <li>Created the opportunity to create URL aliasing from the properties file as well as the
-     ability to associate aliases to URL sequences instead of single URLs (SM) Thanks to <a
-     href="mailto:chatfield@evergreen.com">Simon Chatfield</a> for the very nice suggestions
+     ability to associate aliases to URL sequences instead of single URLs (SM) Thanks to
+     Simon Chatfield for the very nice suggestions
      and code examples.</li>
    <li>Removed the TextVisualizer and replaced it with the much more useful FileVisualizer (SM)</li>
    <li>Added the known bug list (SM)</li>
    <li>Removed the Java Apache logo (SM)</li>
    <li>Fixed a couple of typos (SM)</li>
    <li>Added UNIX makefile (SD)</li> </ul> </p> 
-<p> <b>Apache JMeter 1.0.1</b> - Jan 25 1999 (<a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>)  
+<p> <b>Apache JMeter 1.0.1</b> - Jan 25 1999
 <ul>
    <li>Removed pending issues doc issues (SM)</li>
    <li>Fixed the unix script (SM)</li>
@@ -1483,7 +1472,7 @@ test engine code.</li>
    <li>Some small updates: fixed Swing location after Java 2(tm) release, license update and
      small cleanups (SM)</li> 
 </ul> </p> 
-<p> <b>Apache JMeter 1.0</b> - Dec 15 1998 (<a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>) 
+<p> <b>Apache JMeter 1.0</b> - Dec 15 1998
 <ul>
    <li>Initial version. (SM)</li> 
 </ul> </p> 
