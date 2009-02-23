@@ -48,12 +48,10 @@ behavior under heavy concurrent load.
 	    <li>Database via JDBC</li>
 	    <li>LDAP</li>
 	    <li>JMS</li>
-	    <li>Mail - POP3</li>
+	    <li>Mail - POP3(S) and IMAP(S)</li>
 	    </ul>
 	</li>
 	<li>Complete portability and <b>100% Java purity</b>.</li>
-	<li>Full <b>Swing</b> and lightweight component support (precompiled JAR uses packages
-		<code>javax.swing.*</code>).</li>
 	<li>Full <b>multithreading</b> framework allows concurrent sampling by many threads and
 		simultaneous sampling of different functions by seperate thread groups.</li>
 	<li>Careful <b>GUI</b> design allows faster operation and more precise timings.</li>
