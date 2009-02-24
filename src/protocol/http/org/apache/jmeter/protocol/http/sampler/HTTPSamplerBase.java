@@ -1028,14 +1028,14 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     private HTTPSampleResult fileSample(URI uri) throws IOException {
 
-        String urlStr = uri.toString();
+        //String urlStr = uri.toString();
 
 
         HTTPSampleResult res = new HTTPSampleResult();
         res.setMonitor(isMonitor());
         res.setHTTPMethod(GET); // Dummy
-        res.setURL(new URL(urlStr));
-        res.setSampleLabel(urlStr);
+        res.setURL(uri.toURL());
+        res.setSampleLabel(uri.toString());
         FileReader reader = null;
         res.sampleStart();
         try {
@@ -1341,7 +1341,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         totalRes.setDataType(lastRes.getDataType());
         totalRes.setResponseHeaders(lastRes.getResponseHeaders());
         totalRes.setContentType(lastRes.getContentType());
-        totalRes.setDataEncoding(lastRes.getDataEncoding());
+        totalRes.setDataEncoding(lastRes.getDataEncodingNoDefault());
         return totalRes;
     }
 
