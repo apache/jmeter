@@ -61,7 +61,7 @@ Add --&gt; ThreadGroup.</p>
 see the element, "expand" the Test Plan tree by clicking on the Test Plan element.</p>
 
 <figure image="webtest/threadgroup.png">
-Figure 10.1. Thread Group with Default Values</figure>
+Figure &sect-num;.1. Thread Group with Default Values</figure>
 
 <p>Change the loop count to forever (or some large number) so that enough samples are generated.</p>
 
@@ -123,7 +123,14 @@ select the Browse button and browse to a directory and then enter a filename.</p
 <section name="&sect-num;.6 Adding Monitor Results" anchor="add_monitor_listener">
 
 <p>Add the <a href="component_reference.html#listeners">Listener</a> by selecting the
-test plan element (Add --&gt; Listener -- &gt; Monitor Results). There are two tabs in
+test plan element (Add --&gt; Listener -- &gt; Monitor Results). 
+<br></br>
+By default, the Listener will select the results from the first connector in the sample response.
+The Connector prefix field can be used to select a different connector.
+If specified, the Listener will choose the first connector which matches the prefix.
+If no match is found, then the first connector is selected.
+</p>
+<p>There are two tabs in
 the monitor results listener. The first is the "Health", which displays the status of
 the last sample the monitor received. The second tab is "Performance", which shows a
 historical view of the server's performance. 
