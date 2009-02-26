@@ -33,8 +33,6 @@ public interface RemoteJMeterEngine extends Remote {
 
     void reset() throws RemoteException;
 
-    void setHost(String host) throws RemoteException;
-
     void setProperties(Properties p) throws RemoteException;
 
     void exit() throws RemoteException;
