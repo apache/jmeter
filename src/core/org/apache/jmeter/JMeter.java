@@ -664,7 +664,7 @@ public class JMeter implements JMeterPlugin {
 
     private void startServer(int port) {
         try {
-            new RemoteJMeterEngineImpl(port);
+            RemoteJMeterEngineImpl.startServer(port);
         } catch (Exception ex) {
             log.error("Giving up, as server failed with:", ex);
             System.err.println("Server failed to start: "+ex);

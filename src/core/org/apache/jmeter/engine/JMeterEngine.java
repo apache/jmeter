@@ -31,8 +31,6 @@ public interface JMeterEngine {
 
     void reset();
 
-    void setHost(String host);
-
     void setProperties(Properties p);
 
     void exit();
