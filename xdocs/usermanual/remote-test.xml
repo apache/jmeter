@@ -45,8 +45,9 @@ all the data from them.  This offers the following features:
 </p>
 <p>
 However, remote mode does use more resources than running the same number of non-GUI tests independently.
+If many server instances are used, the client JMeter can become overloaded, as can the client network connection.
 </p>
-<p>Note that while you can indeed execute the JMeterEngine on your application 
+<p>Note that while you can execute the JMeterEngine on your application 
 server, you need to be mindful of the fact that this will be adding processing 
 overhead on the application server and thus your testing results will be 
 somewhat tainted.  The recommended approach is to have one or more machines on
@@ -62,6 +63,11 @@ itself.
 <p>Since JMeter 2.3.1, the JMeter server application starts the RMI registry itself; 
 there is no need to start RMI registry separately.
 To revert to the previous behaviour, define the JMeter property server.rmi.create=false on the server host systems.
+</p>
+<p>
+By default, RMI uses a dynamic port for the JMeter server engine. This can cause problems for firewalls,
+so versions of JMeter after 2.3.2 will check for the JMeter property <b>server.rmi.localport</b>.
+If this is non-zero, it will be used as the local port number for the server engine.
 </p>
 <p><b>Step 2: Add the server IP to your client's Properties File</b></p>
 <p>Edit the properties file <i>on the controlling JMeter machine</i>.  In /bin/jmeter.properties, find the property named, "remote_hosts", and   

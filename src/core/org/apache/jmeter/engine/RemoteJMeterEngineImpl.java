@@ -37,6 +37,8 @@ import org.apache.log.Logger;
 public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject implements RemoteJMeterEngine {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    static final String JMETER_ENGINE_RMI_NAME = "JMeterEngine"; // $NON-NLS-1$
+
     private JMeterEngine backingEngine;
 
     private String hostName;
@@ -44,16 +46,26 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
     public static final int DEFAULT_RMI_PORT =
         JMeterUtils.getPropDefault("server.rmi.port", 1099); // $NON-NLS-1$
 
+    private static final int DEFAULT_LOCAL_PORT =
+        JMeterUtils.getPropDefault("server.rmi.localport", 0); // $NON-NLS-1$
+
+    static{
+        if (DEFAULT_LOCAL_PORT != 0){
+            System.out.println("Using local port: "+DEFAULT_LOCAL_PORT);
+        }
+    }
     // Should we create our own copy of the RMI registry?
     private static final boolean createServer =
         JMeterUtils.getPropDefault("server.rmi.create", true); // $NON-NLS-1$
 
-    public RemoteJMeterEngineImpl() throws RemoteException {
-        init(DEFAULT_RMI_PORT);
+    private RemoteJMeterEngineImpl(int port) throws RemoteException {
+        super(port); // Create this object using the specified port (0 means anonymous)
+        System.out.println("Created remote object: "+this.getRef().remoteToString());
     }
 
-    public RemoteJMeterEngineImpl(int port) throws RemoteException {
-        init(port == 0 ? DEFAULT_RMI_PORT : port);
+    public static void startServer(int port) throws RemoteException {
+        RemoteJMeterEngineImpl engine = new RemoteJMeterEngineImpl(DEFAULT_LOCAL_PORT);
+        engine.init(port == 0 ? DEFAULT_RMI_PORT : port);
     }
 
     private void init(int port) throws RemoteException {
@@ -85,20 +97,13 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
             Registry reg = LocateRegistry.getRegistry(port);
             log.info("Creating JMeter engine on host "+hostName);
             backingEngine = new StandardJMeterEngine(hostName);// see setHost()
-            reg.rebind("JMeterEngine", this); // $NON-NLS-1$
+            reg.rebind(JMETER_ENGINE_RMI_NAME, this);
             log.info("Bound to registry on port " + port);
         } catch (Exception ex) {
             log.error("rmiregistry needs to be running to start JMeter in server " + "mode\n\t" + ex.toString());
             // Throw an Exception to ensure caller knows ...
             throw new RemoteException("Cannot start. See server log file.");
         }
-    }
-
-    // TODO: is this really needed? The hostname is passed in when the engine is created
-    public void setHost(String host) {
-        hostName=host;
-        log.info("received host: " + host);
-        backingEngine.setHost(host);
     }
 
     /**
