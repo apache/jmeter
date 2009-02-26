@@ -21,7 +21,9 @@ package org.apache.jmeter.engine;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.rmi.server.RemoteObject;
 import java.util.Properties;
 
 import org.apache.jmeter.testelement.TestListener;
@@ -37,28 +39,30 @@ import org.apache.log.Logger;
 public class ClientJMeterEngine implements JMeterEngine, Runnable {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    RemoteJMeterEngine remote;
+    private RemoteJMeterEngine remote;
 
-    HashTree test;
+    private HashTree test;
 
-    SearchByClass testListeners;
-
-    ConvertListeners sampleListeners;
-
-    private String host;
+    private final String host;
 
     private static RemoteJMeterEngine getEngine(String h) throws MalformedURLException, RemoteException,
             NotBoundException {
-        return (RemoteJMeterEngine) Naming.lookup("//" + h + "/JMeterEngine"); // $NON-NLS-1$ $NON-NLS-2$
+       final String name = "//" + h + "/" + RemoteJMeterEngineImpl.JMETER_ENGINE_RMI_NAME; // $NON-NLS-1$ $NON-NLS-2$
+       Remote remobj = Naming.lookup(name);
+       if (remobj instanceof RemoteJMeterEngine){
+           final RemoteJMeterEngine rje = (RemoteJMeterEngine) remobj;
+           if (remobj instanceof RemoteObject){
+               RemoteObject robj = (RemoteObject) remobj;
+               System.out.println("Using remote object: "+robj.getRef().remoteToString());
+           }
+           return rje;           
+       }
+       throw new RemoteException("Could not find "+name);
     }
 
     public ClientJMeterEngine(String host) throws MalformedURLException, NotBoundException, RemoteException {
-        this(getEngine(host));
+        this.remote = getEngine(host);
         this.host = host;
-    }
-
-    public ClientJMeterEngine(RemoteJMeterEngine remote) {
-        this.remote = remote;
     }
 
     protected HashTree getTestTree() {
@@ -69,10 +73,6 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
         TreeCloner cloner = new TreeCloner(false);
         testTree.traverse(cloner);
         test = cloner.getClonedTree();
-    }
-
-    public void setHost(String host) {
-        this.host = host;
     }
 
     public void runTest() {
@@ -110,8 +110,8 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
      */
     public void run() {
         log.info("running clientengine run method");
-        testListeners = new SearchByClass(TestListener.class);
-        sampleListeners = new ConvertListeners();
+        SearchByClass testListeners = new SearchByClass(TestListener.class);
+        ConvertListeners sampleListeners = new ConvertListeners();
         HashTree testTree = getTestTree();
         PreCompiler compiler = new PreCompiler(true); // limit the changes to client only test elements
         synchronized(testTree) {
@@ -123,8 +123,6 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
 
         try {
             JMeterContextService.startTest();
-            remote.setHost(host);
-            log.info("sent host =" + host);
             remote.configure(test);
             log.info("sent test");
             remote.runTest();
