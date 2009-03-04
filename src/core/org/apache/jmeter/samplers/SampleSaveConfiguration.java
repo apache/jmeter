@@ -453,8 +453,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
             return clone;
         }
         catch(CloneNotSupportedException e) {
-            // this should not happen
-            return null;
+            throw new RuntimeException("Should not happen",e);
         }
     }
 
