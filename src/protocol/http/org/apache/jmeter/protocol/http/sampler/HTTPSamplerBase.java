@@ -17,7 +17,7 @@
 package org.apache.jmeter.protocol.http.sampler;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -1036,20 +1036,18 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         res.setHTTPMethod(GET); // Dummy
         res.setURL(uri.toURL());
         res.setSampleLabel(uri.toString());
-        FileReader reader = null;
+        FileInputStream fis = null;
         res.sampleStart();
         try {
             byte[] responseData;
             StringBuffer ctb=new StringBuffer("text/html"); // $NON-NLS-1$
-            reader = new FileReader(getPath());
+            fis = new FileInputStream(getPath());
             String contentEncoding = getContentEncoding();
-            if (contentEncoding.length() == 0) {
-                responseData = IOUtils.toByteArray(reader);
-            } else {
+            if (contentEncoding.length() > 0) {
                 ctb.append("; charset="); // $NON-NLS-1$
                 ctb.append(contentEncoding);
-                responseData = IOUtils.toByteArray(reader,contentEncoding);
             }
+            responseData = IOUtils.toByteArray(fis);
             res.sampleEnd();
             res.setResponseData(responseData);
             res.setResponseCodeOK();
@@ -1059,7 +1057,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             res.setContentType(ct);
             res.setEncodingAndType(ct);
         } finally {
-            IOUtils.closeQuietly(reader);
+            IOUtils.closeQuietly(fis);
         }
 
         //res.setResponseHeaders("");
