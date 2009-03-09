@@ -188,6 +188,7 @@ These are implemented in the AbstractTestElement class which all elements should
 <li>Bug 46491 - Incorrect value for the last variable in "CSV Data Set Config" (error in processing quoted strings)</li>
 <li>The JMeter variable "sample_variables" is sent to all server instances to ensure the data is available to the client.</li>
 <li>Bug 46821 - JDBC select request doesn't store the first column in the variables</li>
+<li>Fix bug in HTTP file: handling - read bytes, not characters in the default encoding.</li>
 </ul>
 
 <h3>Improvements</h3>
