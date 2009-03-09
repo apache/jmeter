@@ -621,18 +621,18 @@ public class WebServiceSampler extends HTTPSamplerBase {
         return buf.toString();
     }
 
-    /**
-     * Process headerLines
-     * @param en enumeration of Strings
-     * @return String containing the lines
-     */
-    private String convertSoapHeaders(Enumeration en) {
-        StringBuffer buf = new StringBuffer(100);
-        while (en.hasMoreElements()) {
-            buf.append(en.nextElement()).append("\n"); //$NON-NLS-1$
-        }
-        return buf.toString();
-    }
+//    /**
+//     * Process headerLines
+//     * @param en enumeration of Strings
+//     * @return String containing the lines
+//     */
+//    private String convertSoapHeaders(Enumeration en) {
+//        StringBuffer buf = new StringBuffer(100);
+//        while (en.hasMoreElements()) {
+//            buf.append(en.nextElement()).append("\n"); //$NON-NLS-1$
+//        }
+//        return buf.toString();
+//    }
 
     public String getTimeout() {
         return getPropertyAsString(TIMEOUT);
