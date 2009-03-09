@@ -18,18 +18,12 @@
 
 package org.apache.jmeter.report.engine;
 
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-
 
 import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.testelement.ReportPlan;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.property.JMeterProperty;
-//import org.apache.jorphan.logging.LoggingManager;
-//import org.apache.log.Logger;
 
 public class ValueReplacer {
 //  private static final Logger log = LoggingManager.getLoggerForClass();
@@ -47,6 +41,9 @@ public class ValueReplacer {
         this.variables = variables;
     }
 
+    /**
+     * @throws InvalidVariableException not thrown currently 
+     */
     public void replaceValues(TestElement el) throws InvalidVariableException {
         /**
         Collection newProps = replaceValues(el.propertyIterator(), new ReplaceStringWithFunctions(masterFunction,
@@ -55,14 +52,17 @@ public class ValueReplacer {
         **/
     }
 
-    private void setProperties(TestElement el, Collection newProps) {
-        Iterator iter = newProps.iterator();
-        el.clear();
-        while (iter.hasNext()) {
-            el.setProperty((JMeterProperty) iter.next());
-        }
-    }
+//    private void setProperties(TestElement el, Collection newProps) {
+//        Iterator iter = newProps.iterator();
+//        el.clear();
+//        while (iter.hasNext()) {
+//            el.setProperty((JMeterProperty) iter.next());
+//        }
+//    }
 
+    /**
+     * @throws InvalidVariableException not thrown currently 
+     */
     public void reverseReplace(TestElement el) throws InvalidVariableException {
         /**
         Collection newProps = replaceValues(el.propertyIterator(), new ReplaceFunctionsWithStrings(masterFunction,
@@ -71,6 +71,9 @@ public class ValueReplacer {
         **/
     }
 
+    /**
+     * @throws InvalidVariableException not thrown currently 
+     */
     public void reverseReplace(TestElement el, boolean regexMatch) throws InvalidVariableException {
         /**
         Collection newProps = replaceValues(el.propertyIterator(), new ReplaceFunctionsWithStrings(masterFunction,
@@ -79,6 +82,9 @@ public class ValueReplacer {
         **/
     }
 
+    /**
+     * @throws InvalidVariableException not thrown currently 
+     */
     public void undoReverseReplace(TestElement el) throws InvalidVariableException {
         /**
         Collection newProps = replaceValues(el.propertyIterator(), new UndoVariableReplacement(masterFunction,
