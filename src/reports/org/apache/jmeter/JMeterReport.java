@@ -38,21 +38,18 @@ import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.gui.ReportGuiPackage;
 import org.apache.jmeter.plugin.JMeterPlugin;
 import org.apache.jmeter.plugin.PluginManager;
-import org.apache.jmeter.samplers.Remoteable;
-import org.apache.jmeter.save.SaveService;
-import org.apache.jmeter.services.FileServer;
-import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.TestListener;
-import org.apache.jmeter.testelement.ReportPlan;
 import org.apache.jmeter.report.gui.ReportPageGui;
-import org.apache.jmeter.report.gui.action.ReportLoad;
 import org.apache.jmeter.report.gui.action.ReportActionRouter;
 import org.apache.jmeter.report.gui.action.ReportCheckDirty;
+import org.apache.jmeter.report.gui.action.ReportLoad;
 import org.apache.jmeter.report.gui.tree.ReportTreeListener;
 import org.apache.jmeter.report.gui.tree.ReportTreeModel;
 import org.apache.jmeter.report.writers.gui.HTMLReportWriterGui;
-import org.apache.jmeter.reporters.ResultCollector;
-import org.apache.jmeter.reporters.Summariser;
+import org.apache.jmeter.samplers.Remoteable;
+import org.apache.jmeter.save.SaveService;
+import org.apache.jmeter.testelement.ReportPlan;
+import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractListenerGui;
 import org.apache.jorphan.collections.HashTree;
@@ -240,75 +237,75 @@ public class JMeterReport implements JMeterPlugin {
         }
     }
 
-    private void run(String testFile, String logFile, boolean remoteStart) {
-        FileInputStream reader = null;
-        try {
-            File f = new File(testFile);
-            if (!f.exists() || !f.isFile()) {
-                System.out.println("Could not open " + testFile);
-                return;
-            }
-            FileServer.getFileServer().setBasedir(f.getAbsolutePath());
-
-            reader = new FileInputStream(f);
-            log.info("Loading file: " + f);
-
-            HashTree tree = SaveService.loadTree(reader);
-
-            // Remove the disabled items
-            // For GUI runs this is done in Start.java
-            convertSubTree(tree);
-
-            if (logFile != null) {
-                ResultCollector logger = new ResultCollector();
-                logger.setFilename(logFile);
-                tree.add(tree.getArray()[0], logger);
-            }
-            String summariserName = JMeterUtils.getPropDefault(
-                    "summariser.name", "");//$NON-NLS-1$
-            if (summariserName.length() > 0) {
-                log.info("Creating summariser <" + summariserName + ">");
-                System.out.println("Creating summariser <" + summariserName + ">");
-                Summariser summer = new Summariser(summariserName);
-                tree.add(tree.getArray()[0], summer);
-            }
-            tree.add(tree.getArray()[0], new ListenToTest(parent));
-            System.out.println("Created the tree successfully");
-            /**
-            JMeterEngine engine = null;
-            if (!remoteStart) {
-                engine = new StandardJMeterEngine();
-                engine.configure(tree);
-                System.out.println("Starting the test");
-                engine.runTest();
-            } else {
-                String remote_hosts_string = JMeterUtils.getPropDefault(
-                        "remote_hosts", "127.0.0.1");
-                java.util.StringTokenizer st = new java.util.StringTokenizer(
-                        remote_hosts_string, ",");
-                List engines = new LinkedList();
-                while (st.hasMoreElements()) {
-                    String el = (String) st.nextElement();
-                    System.out.println("Configuring remote engine for " + el);
-                    // engines.add(doRemoteInit(el.trim(), tree));
-                }
-                System.out.println("Starting remote engines");
-                Iterator iter = engines.iterator();
-                while (iter.hasNext()) {
-                    engine = (JMeterEngine) iter.next();
-                    engine.runTest();
-                }
-                System.out.println("Remote engines have been started");
-            }
-            **/
-        } catch (Exception e) {
-            System.out.println("Error in NonGUIDriver " + e.toString());
-            log.error("", e);
-        }
-        finally{
-            JOrphanUtils.closeQuietly(reader);
-        }
-    }
+//    private void run(String testFile, String logFile, boolean remoteStart) {
+//        FileInputStream reader = null;
+//        try {
+//            File f = new File(testFile);
+//            if (!f.exists() || !f.isFile()) {
+//                System.out.println("Could not open " + testFile);
+//                return;
+//            }
+//            FileServer.getFileServer().setBasedir(f.getAbsolutePath());
+//
+//            reader = new FileInputStream(f);
+//            log.info("Loading file: " + f);
+//
+//            HashTree tree = SaveService.loadTree(reader);
+//
+//            // Remove the disabled items
+//            // For GUI runs this is done in Start.java
+//            convertSubTree(tree);
+//
+//            if (logFile != null) {
+//                ResultCollector logger = new ResultCollector();
+//                logger.setFilename(logFile);
+//                tree.add(tree.getArray()[0], logger);
+//            }
+//            String summariserName = JMeterUtils.getPropDefault(
+//                    "summariser.name", "");//$NON-NLS-1$
+//            if (summariserName.length() > 0) {
+//                log.info("Creating summariser <" + summariserName + ">");
+//                System.out.println("Creating summariser <" + summariserName + ">");
+//                Summariser summer = new Summariser(summariserName);
+//                tree.add(tree.getArray()[0], summer);
+//            }
+//            tree.add(tree.getArray()[0], new ListenToTest(parent));
+//            System.out.println("Created the tree successfully");
+//            /**
+//            JMeterEngine engine = null;
+//            if (!remoteStart) {
+//                engine = new StandardJMeterEngine();
+//                engine.configure(tree);
+//                System.out.println("Starting the test");
+//                engine.runTest();
+//            } else {
+//                String remote_hosts_string = JMeterUtils.getPropDefault(
+//                        "remote_hosts", "127.0.0.1");
+//                java.util.StringTokenizer st = new java.util.StringTokenizer(
+//                        remote_hosts_string, ",");
+//                List engines = new LinkedList();
+//                while (st.hasMoreElements()) {
+//                    String el = (String) st.nextElement();
+//                    System.out.println("Configuring remote engine for " + el);
+//                    // engines.add(doRemoteInit(el.trim(), tree));
+//                }
+//                System.out.println("Starting remote engines");
+//                Iterator iter = engines.iterator();
+//                while (iter.hasNext()) {
+//                    engine = (JMeterEngine) iter.next();
+//                    engine.runTest();
+//                }
+//                System.out.println("Remote engines have been started");
+//            }
+//            **/
+//        } catch (Exception e) {
+//            System.out.println("Error in NonGUIDriver " + e.toString());
+//            log.error("", e);
+//        }
+//        finally{
+//            JOrphanUtils.closeQuietly(reader);
+//        }
+//    }
 
 
     /**
