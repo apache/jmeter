@@ -444,8 +444,8 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
                 } else {
                     sb.append('\t');
                 }
-                if (jmvars != null && i < varnames.length) {
-                    String name = varnames[i].trim();
+                if (jmvars != null && i <= varnames.length) {
+                    String name = varnames[i - 1].trim();
                     if (name.length()>0){ // Save the value in the variable if present
                         jmvars.put(name+UNDERSCORE+j, o == null ? null : o.toString());
                     }
