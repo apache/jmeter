@@ -4149,12 +4149,12 @@ Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).</p>
 You also need to set up your browser to use the JMeter proxy port as the proxy for HTTP requests.
 Do not use JMeter as the proxy for any other request types - HTTPS, FTP, etc. - as the JMeter proxy cannot handle them.
 </p>
-<p>
+<note>
 If your browser currently uses a proxy (e.g. a company intranet may route all external requests via a proxy),
 then you need to <a href="get-started.html#proxy_server">tell JMeter to use that proxy</a> before starting JMeter, 
-using the <a href="get-started.html#options">command-line options -H and -P</a>.
+using the <a href="get-started.html#options">command-line options</a> -H and -P.
 This setting will also be needed when running the generated test plan.
-</p>
+</note>
 </description>
 
 <properties>
