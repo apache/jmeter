@@ -250,7 +250,7 @@ public class ReportTreeListener implements TreeSelectionListener, MouseListener,
                 if (tree.getSelectionCount() < 2) {
                     tree.setSelectionPath(currentPath);
                 }
-                if (getCurrentNode() instanceof ReportTreeNode) {
+                if (getCurrentNode() != null) {
                     log.debug("About to display pop-up");
                     displayPopUp(e);
                 }
