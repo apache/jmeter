@@ -425,6 +425,14 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
         }
 
     }
+    /**
+     * Check if cookies match, i.e. name, path and domain are equal.
+     * <br/>
+     * TODO - should we compare secure too?
+     * @param a
+     * @param b
+     * @return true if cookies match
+     */
     private boolean match(Cookie a, Cookie b){
         return
         a.getName().equals(b.getName())
@@ -439,7 +447,7 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
         PropertyIterator iter = getCookies().iterator();
         while (iter.hasNext()) {
             Cookie cookie = (Cookie) iter.next().getObjectValue();
-            if (cookie == null) {
+            if (cookie == null) {// TODO is this possible?
                 continue;
             }
             if (match(cookie,newCookie)) {
