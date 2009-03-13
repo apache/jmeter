@@ -2876,8 +2876,12 @@ OR<br/>jdbc:oracle:thin:@(description=(address=(host={mc-name})(protocol=tcp)(po
 
 <component name="User Defined Variables" index="&sect-num;.4.13"  width="690" height="394" screenshot="user_defined_variables.png">
 <description><p>The User Defined Variables lets you define an initial set of variables, just as in the <complink name="Test Plan" />.
+<b>
 Note that all the UDV elements in a test plan - no matter where they are - are processed at the start.
-They are processed in the order they appear in the Plan, from top to bottom.
+So you cannot reference variables which are defined as part of a test run, e.g. in a Post-Processor.
+</b>
+For defining variables during a test run, see <complink name="User Parameters"/>.
+UDVs are processed in the order they appear in the Plan, from top to bottom.
 </p>
 <p>
 For simplicity, it is suggested that UDVs are placed only at the start of a Thread Group
@@ -2896,7 +2900,7 @@ elements in the thread will see the updated value.
 <note>
 If you have more than one Thread Group, make sure you use different names for different values, as UDVs are shared between Thread Groups.
 Also, the variables are not available for use until after the element has been processed, 
-so you cannot use variables that are defined in the same element.
+so you cannot re-use variables that are defined in the same element.
 You can reference variables defined in earlier UDVs or on the Test Plan. 
 </note>
 <properties>
