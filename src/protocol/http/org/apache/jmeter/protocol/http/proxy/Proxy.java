@@ -178,17 +178,14 @@ public class Proxy extends Thread {
             /*
              * If we are trying to spoof https, change the protocol
              */
-            boolean forcedHTTP = false; // so we know when to revert
             if (httpsSpoof) {
                 if (httpsSpoofMatch.length() > 0){
                     String url = request.getUrl();
                     if (url.matches(httpsSpoofMatch)){
                         sampler.setProtocol(HTTPConstants.PROTOCOL_HTTPS);
-                        forcedHTTP = true;
                     }
                 } else {
                     sampler.setProtocol(HTTPConstants.PROTOCOL_HTTPS);
-                    forcedHTTP = true;
                 }
             }
             sampler.threadStarted(); // Needed for HTTPSampler2
@@ -199,7 +196,7 @@ public class Proxy extends Thread {
              * replace all occurences of "https://" with "http://" for the client.
              * TODO - also check the match string to restrict the changes further?
              */
-            if (forcedHTTP && SampleResult.TEXT.equals(result.getDataType()))
+            if (httpsSpoof && SampleResult.TEXT.equals(result.getDataType()))
             {
                 final String enc = result.getDataEncodingWithDefault();
                 String noHttpsResult = new String(result.getResponseData(),enc);
