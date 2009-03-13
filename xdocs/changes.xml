@@ -190,6 +190,7 @@ These are implemented in the AbstractTestElement class which all elements should
 <li>Bug 46821 - JDBC select request doesn't store the first column in the variables</li>
 <li>Fix bug in HTTP file: handling - read bytes, not characters in the default encoding.</li>
 <li>Change HTTPS spoofing so https: links are replaced even when URL match fails</li>
+<li>Check validity of cookies before storing them.</li>
 </ul>
 
 <h3>Improvements</h3>
