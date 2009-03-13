@@ -83,6 +83,9 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
     private static final boolean SAVE_COOKIES =
         JMeterUtils.getPropDefault("CookieManager.save.cookies", false);// $NON-NLS-1$
 
+    private static final boolean CHECK_COOKIES =
+        JMeterUtils.getPropDefault("CookieManager.check.cookies", true);// $NON-NLS-1$
+
     private transient CookieSpec cookieSpec;
 
     private transient CollectionProperty initialCookies;
@@ -383,31 +386,41 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
             return;
         }
         for(int i=0;i<cookies.length;i++){
-            Date expiryDate = cookies[i].getExpiryDate();
-            long exp = 0;
-            if (expiryDate!= null) {
-                exp=expiryDate.getTime();
-            }
-            Cookie newCookie = new Cookie(
-                    cookies[i].getName(),
-                    cookies[i].getValue(),
-                    cookies[i].getDomain(),
-                    cookies[i].getPath(),
-                    cookies[i].getSecure(),
-                    exp / 1000,
-                    cookies[i].isPathAttributeSpecified(),
-                    cookies[i].isDomainAttributeSpecified()
-                    );
-
-            // Store session cookies as well as unexpired ones
-            if (exp == 0 || exp >= System.currentTimeMillis()) {
-                newCookie.setVersion(cookies[i].getVersion());
-                add(newCookie); // Has its own debug log; removes matching cookies
-            } else {
-                removeMatchingCookies(newCookie);
-                if (debugEnabled){
-                    log.debug("Dropping expired Cookie: "+newCookie.toString());
+            org.apache.commons.httpclient.Cookie cookie = cookies[i];
+            try {
+                if (CHECK_COOKIES) {
+                    cookieSpec.validate(host, port, path, isSecure, cookie);
                 }
+                Date expiryDate = cookie.getExpiryDate();
+                long exp = 0;
+                if (expiryDate!= null) {
+                    exp=expiryDate.getTime();
+                }
+                Cookie newCookie = new Cookie(
+                        cookie.getName(),
+                        cookie.getValue(),
+                        cookie.getDomain(),
+                        cookie.getPath(),
+                        cookie.getSecure(),
+                        exp / 1000,
+                        cookie.isPathAttributeSpecified(),
+                        cookie.isDomainAttributeSpecified()
+                        );
+
+                // Store session cookies as well as unexpired ones
+                if (exp == 0 || exp >= System.currentTimeMillis()) {
+                    newCookie.setVersion(cookie.getVersion());
+                    add(newCookie); // Has its own debug log; removes matching cookies
+                } else {
+                    removeMatchingCookies(newCookie);
+                    if (debugEnabled){
+                        log.debug("Dropping expired Cookie: "+newCookie.toString());
+                    }
+                }
+            } catch (MalformedCookieException e) { // This means the cookie was wrong for the URL
+                log.debug("Not storing invalid cookie: <"+cookieHeader+"> for URL "+url+" ("+e.getLocalizedMessage()+")");
+            } catch (IllegalArgumentException e) {
+                log.warn(cookieHeader+e.getLocalizedMessage());
             }
         }
 

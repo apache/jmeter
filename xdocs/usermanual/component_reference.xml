@@ -2640,6 +2640,12 @@ Note that such cookies do not appear on the Cookie Manager display, but they can
 the <complink name="View Results Tree"/> Listener.
 </p>
 <p>
+JMeter version 2.3.2 and earlier did not check that received cookies were valid for the URL.
+This meant that cross-domain cookies were stored, and might be used later.
+This has been fixed in later versions.
+To revert to the earlier behaviour, define the JMeter property "CookieManager.check.cookies=false".
+</p>
+<p>
 Received Cookies can be stored as JMeter thread variables
 (versions of JMeter after 2.3.2 no longer do this by default).
 To save cookies as variables, define the property "CookieManager.save.cookies=true".

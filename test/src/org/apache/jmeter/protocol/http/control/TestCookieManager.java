@@ -90,6 +90,15 @@ public class TestCookieManager extends JMeterTestCase {
             assertNotNull(man.getCookieHeaderForURL(url));
         }
 
+        public void testCrossDomainHandling() throws Exception {
+            URL url = new URL("http://jakarta.apache.org/");
+            assertEquals(0,man.getCookieCount()); // starts empty
+            man.addCookieFromHeader("test=2;domain=.hc.apache.org", url);
+            assertEquals(0,man.getCookieCount()); // should not be stored
+            man.addCookieFromHeader("test=1;domain=.jakarta.apache.org", url);
+            assertEquals(1,man.getCookieCount()); // OK
+        }
+
         /**
          * Test that we won't be tricked by similar host names (this was a past
          * bug, although it never got reported in the bug database):
@@ -309,7 +318,7 @@ public class TestCookieManager extends JMeterTestCase {
         public void testCookiePolicyNetscape() throws Exception {
             man.setCookiePolicy(CookiePolicy.NETSCAPE);
             man.testStarted(); // ensure policy is picked up
-            URL url = new URL("http://order.now/sub1/moo.html");
+            URL url = new URL("http://www.order.now/sub1/moo.html");
             man.addCookieFromHeader("test1=moo1;", url);
             man.addCookieFromHeader("test2=moo2;path=/sub1", url);
             man.addCookieFromHeader("test2=moo3;path=/", url);
