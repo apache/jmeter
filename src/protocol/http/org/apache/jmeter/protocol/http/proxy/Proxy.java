@@ -178,14 +178,17 @@ public class Proxy extends Thread {
             /*
              * If we are trying to spoof https, change the protocol
              */
+            boolean forcedHTTPS = false; // so we know when to revert
             if (httpsSpoof) {
                 if (httpsSpoofMatch.length() > 0){
                     String url = request.getUrl();
                     if (url.matches(httpsSpoofMatch)){
                         sampler.setProtocol(HTTPConstants.PROTOCOL_HTTPS);
+                        forcedHTTPS = true;
                     }
                 } else {
                     sampler.setProtocol(HTTPConstants.PROTOCOL_HTTPS);
+                    forcedHTTPS = true;
                 }
             }
             sampler.threadStarted(); // Needed for HTTPSampler2
@@ -211,7 +214,7 @@ public class Proxy extends Thread {
             String pageEncoding = addPageEncoding(result);
             addFormEncodings(result, pageEncoding);
 
-            writeToClient(result, new BufferedOutputStream(clientSocket.getOutputStream()), forcedHTTP);
+            writeToClient(result, new BufferedOutputStream(clientSocket.getOutputStream()), forcedHTTPS);
         } catch (UnknownHostException uhe) {
             log.warn("Server Not Found.", uhe);
             writeErrorToClient(HttpReplyHdr.formServerNotFound());
@@ -267,13 +270,13 @@ public class Proxy extends Thread {
      *            the bytes to write
      * @param out
      *            the output stream to write to
-     * @param forcedHTTP if we changed the protocol to http
+     * @param forcedHTTPS if we changed the protocol to https
      * @throws IOException
      *             if an IOException occurs while writing
      */
-    private void writeToClient(SampleResult res, OutputStream out, boolean forcedHTTP) throws IOException {
+    private void writeToClient(SampleResult res, OutputStream out, boolean forcedHTTPS) throws IOException {
         try {
-            String responseHeaders = massageResponseHeaders(res, forcedHTTP);
+            String responseHeaders = massageResponseHeaders(res, forcedHTTPS);
             out.write(responseHeaders.getBytes());
             out.write(CRLF_BYTES);
             out.write(res.getResponseData());
@@ -296,17 +299,17 @@ public class Proxy extends Thread {
      * header must be removed and the content-length header should be corrected.
      *
      * The Transfer-Encoding header is also removed.
-     *
+     * If the protocol was changed to HTTPS then change any Location header back to http
      * @param res - response
-     * @param forcedHTTP  if we changed the protocol to http
+     * @param forcedHTTPS  if we changed the protocol to https
      *
      * @return updated headers to be sent to client
      */
-    private String massageResponseHeaders(SampleResult res, boolean forcedHTTP) {
+    private String massageResponseHeaders(SampleResult res, boolean forcedHTTPS) {
         String headers = res.getResponseHeaders();
         String [] headerLines=headers.split(NEW_LINE, 0); // drop empty trailing content
         int contentLengthIndex=-1;
-        boolean fixContentLength = forcedHTTP;
+        boolean fixContentLength = forcedHTTPS;
         for (int i=0;i<headerLines.length;i++){
             String line=headerLines[i];
             String[] parts=line.split(":\\s+",2); // $NON-NLS-1$
@@ -328,7 +331,7 @@ public class Proxy extends Thread {
                     continue;
                 }
                 final String HTTPS_PREFIX = "https://";
-                if (forcedHTTP && HTTPConstants.HEADER_LOCATION.equalsIgnoreCase(parts[0])
+                if (forcedHTTPS && HTTPConstants.HEADER_LOCATION.equalsIgnoreCase(parts[0])
                         && parts[1].substring(0, HTTPS_PREFIX.length()).equalsIgnoreCase(HTTPS_PREFIX)){
                     headerLines[i]=headerLines[i].replaceFirst(HTTPS_PREFIX, "http://");
                     continue;
