@@ -185,6 +185,10 @@ public class HTTPFileArg extends AbstractTestElement implements Serializable {
             + "'|mimetype:'" + getMimeType() + "'";
     }
 
+    /**
+     * Check if the entry is not empty.
+     * @return true if Path, name or mimetype fields are not the empty string
+     */
     public boolean isNotEmpty() {
         return getPath().length() > 0
             || getParamName().length() > 0
