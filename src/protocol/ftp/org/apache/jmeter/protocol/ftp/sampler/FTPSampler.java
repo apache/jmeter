@@ -201,7 +201,7 @@ public class FTPSampler extends AbstractSampler {
                         } else {
                             long bytes = IOUtils.copy(input,target);
                             ftpOK = bytes > 0;
-                            if (saveResponse){
+                            if (saveResponse && baos != null){
                                 res.setResponseData(baos.toByteArray());
                                 if (!binaryTransfer) {
                                     res.setDataType(SampleResult.TEXT);
@@ -235,6 +235,10 @@ public class FTPSampler extends AbstractSampler {
             res.setResponseMessage(ex.toString());
         } finally {
             if (ftp.isConnected()) {
+                try {
+                    ftp.logout();
+                } catch (IOException ignored) {
+                }
                 try {
                     ftp.disconnect();
                 } catch (IOException ignored) {
