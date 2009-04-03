@@ -1597,6 +1597,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 w.write(readBuffer, 0, bytesRead);
             }
         }
+        if (first){ // Bug 46838 - if there was no data, still need to set latency
+            sampleResult.latencyEnd();
+        }
         in.close();
         w.flush();
         if (asMD5 && md != null) {
