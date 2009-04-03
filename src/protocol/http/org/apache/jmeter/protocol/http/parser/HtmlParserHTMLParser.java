@@ -22,6 +22,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
 
+import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 import org.htmlparser.Node;
@@ -131,7 +132,7 @@ class HtmlParserHTMLParser extends HTMLParser {
                 try {
                     if (!baseref.equals(""))// Bugzilla 30713
                     {
-                        baseUrl.url = new URL(baseUrl.url, baseHref.getBaseUrl());
+                        baseUrl.url = ConversionUtils.makeRelativeURL(baseUrl.url, baseHref.getBaseUrl());
                     }
                 } catch (MalformedURLException e1) {
                     throw new HTMLParseException(e1);

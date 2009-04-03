@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.jmeter.protocol.http.util.ConversionUtils;
 
 /**
  * Collection class designed for handling URLs
@@ -91,7 +92,7 @@ public class URLCollection {
         url=StringEscapeUtils.unescapeXml(url);
         boolean b = false;
         try {
-            b = this.add(new URL(baseUrl, url));
+            b = this.add(ConversionUtils.makeRelativeURL(baseUrl, url));
         } catch (MalformedURLException mfue) {
             // TODO log a warning message?
             b = this.add(url);// Add the string if cannot create the URL
