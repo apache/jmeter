@@ -18,6 +18,8 @@
 
 package org.apache.jmeter.protocol.http.util;
 
+import java.net.URL;
+
 import junit.framework.TestCase;
 
 public class TestHTTPUtils extends TestCase {
@@ -34,5 +36,15 @@ public class TestHTTPUtils extends TestCase {
             assertNull(ConversionUtils.getEncodingFromContentType("charset="));
             assertNull(ConversionUtils.getEncodingFromContentType(";charset=;"));
             assertNull(ConversionUtils.getEncodingFromContentType(";charset=no-such-charset;"));
+		}
+		
+		public void testMakeRelativeURL() throws Exception {
+		    URL base = new URL("http://host/a/b/c");
+		    assertEquals(new URL("http://host/a/b/d"),ConversionUtils.makeRelativeURL(base,"d"));
+            assertEquals(new URL("http://host/a/d"),ConversionUtils.makeRelativeURL(base,"../d"));
+            assertEquals(new URL("http://host/d"),ConversionUtils.makeRelativeURL(base,"../../d"));
+            assertEquals(new URL("http://host/d"),ConversionUtils.makeRelativeURL(base,"../../../d"));
+            assertEquals(new URL("http://host/d"),ConversionUtils.makeRelativeURL(base,"../../../../d"));
+            assertEquals(new URL("http://host/../d"),ConversionUtils.makeRelativeURL(base,"/../d"));
 		}
 }

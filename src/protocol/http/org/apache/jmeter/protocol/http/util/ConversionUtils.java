@@ -18,7 +18,11 @@
 
 package org.apache.jmeter.protocol.http.util;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.jorphan.util.JOrphanUtils;
 
@@ -68,5 +72,33 @@ public class ConversionUtils {
             }
         }
         return charSet;
+    }
+    
+    /**
+     * Generate a relative URL, allowing for extraneous leading "../" segments.
+     * The Java {@link URL#URL(URL, String)} constructor does not remove these.
+     * 
+     * @param baseURL
+     * @param location relative location, possibly with extraneous leading "../"
+     * @return URL with extraneous ../ removed
+     * @throws MalformedURLException
+     */
+    public static URL makeRelativeURL(URL baseURL, String location) throws MalformedURLException{
+        URL initial = new URL(baseURL,location);
+        // skip expensive processing if it cannot apply
+        if (!location.startsWith("../")){// $NON-NLS-1$
+            return initial;
+        }
+        String path = initial.getPath();
+        // Match /../[../] etc.
+        Pattern p = Pattern.compile("^/((?:\\.\\./)+)"); // $NON-NLS-1$
+        Matcher m = p.matcher(path);
+        if (m.lookingAt()){
+            String prefix = m.group(1); // get ../ or ../../ etc.
+            if (location.startsWith(prefix)){
+                return new URL(baseURL, location.substring(prefix.length()));
+            }
+        }
+        return initial;
     }
 }
