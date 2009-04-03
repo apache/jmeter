@@ -23,6 +23,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
 
+import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 import org.w3c.dom.Document;
@@ -102,7 +103,7 @@ class JTidyHTMLParser extends HTMLParser {
                 String tmp = getValue(attrs, ATT_HREF);
                 if (tmp != null) {
                     try {
-                        baseUrl = new URL(baseUrl, tmp);
+                        baseUrl = ConversionUtils.makeRelativeURL(baseUrl, tmp);
                     } catch (MalformedURLException e) {
                         throw new HTMLParseException(e);
                     }
