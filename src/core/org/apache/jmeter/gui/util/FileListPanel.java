@@ -45,11 +45,16 @@ import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.reflect.Functor;
 
 public class FileListPanel extends JPanel implements ActionListener {
+
+    private static final long serialVersionUID = 1L;
+
     private JTable files = null;
 
     private transient ObjectTableModel tableModel = null;
 
     private static final String ACTION_BROWSE = "browse"; // $NON-NLS-1$
+
+    private static final String LABEL_LIBRARY = "library"; // $NON-NLS-1$
 
     private JButton browse = new JButton(JMeterUtils.getResString(ACTION_BROWSE));
 
@@ -183,7 +188,7 @@ public class FileListPanel extends JPanel implements ActionListener {
     }
 
     protected void initializeTableModel() {
-        tableModel = new ObjectTableModel(new String[] { "Library" },
+        tableModel = new ObjectTableModel(new String[] { JMeterUtils.getResString(LABEL_LIBRARY) },
                 new Functor[0] , new Functor[0] , // i.e. bypass the Functors
                 new Class[] { String.class });
     }
