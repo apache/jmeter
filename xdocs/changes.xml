@@ -197,6 +197,7 @@ These are implemented in the AbstractTestElement class which all elements should
 Bug 46690 - handling of 302 redirects with invalid relative paths.
 JMeter now removes extraneous leading "../" segments (as do many browsers)
 </li>
+<li>Bug 46844 -  "Library" label in test plan are not I18N</li>
 </ul>
 
 <h3>Improvements</h3>
