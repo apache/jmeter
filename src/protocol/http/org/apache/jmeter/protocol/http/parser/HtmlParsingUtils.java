@@ -30,6 +30,7 @@ import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
+import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -260,7 +261,7 @@ public final class HtmlParsingUtils {
         if (log.isDebugEnabled()) {
             log.debug("Creating URL from Anchor: " + parsedUrlString + ", base: " + context);
         }
-        URL url = new URL(context, parsedUrlString);
+        URL url = ConversionUtils.makeRelativeURL(context, parsedUrlString);
         HTTPSamplerBase sampler =HTTPSamplerFactory.newInstance();
         sampler.setDomain(url.getHost());
         sampler.setProtocol(url.getProtocol());

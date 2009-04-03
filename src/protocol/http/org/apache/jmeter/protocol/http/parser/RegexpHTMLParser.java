@@ -22,6 +22,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
 
+import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -165,7 +166,7 @@ class RegexpHTMLParser extends HTMLParser {
                         log.debug("new baseUrl: " + s + " - " + baseUrl.toString());
                     }
                     try {
-                        baseUrl = new URL(baseUrl, s);
+                        baseUrl = ConversionUtils.makeRelativeURL(baseUrl, s);
                     } catch (MalformedURLException e) {
                         // Doesn't even look like a URL?
                         // Maybe it isn't: Ignore the exception.
