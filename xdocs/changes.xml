@@ -191,6 +191,8 @@ These are implemented in the AbstractTestElement class which all elements should
 <li>Fix bug in HTTP file: handling - read bytes, not characters in the default encoding.</li>
 <li>Change HTTPS spoofing so https: links are replaced even when URL match fails</li>
 <li>Check validity of cookies before storing them.</li>
+<li>FTP Sampler now logs out before disconnecting.</li>
+<li>Bug 46838 - if there was no data, still need to set latency in HTTPSampler</li>
 </ul>
 
 <h3>Improvements</h3>
