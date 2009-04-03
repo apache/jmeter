@@ -193,6 +193,10 @@ These are implemented in the AbstractTestElement class which all elements should
 <li>Check validity of cookies before storing them.</li>
 <li>FTP Sampler now logs out before disconnecting.</li>
 <li>Bug 46838 - if there was no data, still need to set latency in HTTPSampler</li>
+<li>
+Bug 46690 - handling of 302 redirects with invalid relative paths.
+JMeter now removes extraneous leading "../" segments (as do many browsers)
+</li>
 </ul>
 
 <h3>Improvements</h3>

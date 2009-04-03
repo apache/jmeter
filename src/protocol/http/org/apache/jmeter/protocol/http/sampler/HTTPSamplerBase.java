@@ -45,6 +45,7 @@ import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.parser.HTMLParseException;
 import org.apache.jmeter.protocol.http.parser.HTMLParser;
+import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
@@ -1292,7 +1293,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             // this behaviour.
             String location = encodeSpaces(lastRes.getRedirectLocation());
             try {
-                lastRes = sample(new URL(lastRes.getURL(), location), GET, true, frameDepth);
+                lastRes = sample(ConversionUtils.makeRelativeURL(lastRes.getURL(), location), GET, true, frameDepth);
             } catch (MalformedURLException e) {
                 lastRes = errorResult(e, lastRes);
                 // The redirect URL we got was not a valid URL

@@ -34,6 +34,7 @@ import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.protocol.http.parser.HtmlParsingUtils;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
+import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -184,7 +185,7 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
                 continue; // No point trying these
             }
             try {
-                HTTPSamplerBase newUrl = HtmlParsingUtils.createUrlFromAnchor(hrefStr, new URL(result.getURL(), base));
+                HTTPSamplerBase newUrl = HtmlParsingUtils.createUrlFromAnchor(hrefStr, ConversionUtils.makeRelativeURL(result.getURL(), base));
                 newUrl.setMethod(HTTPConstants.GET);
                 if (log.isDebugEnabled()) {
                     log.debug("Potential <a href> match: " + newUrl);
@@ -217,7 +218,7 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
            String hrefStr = namedItem.getNodeValue();
            try {
                HTTPSamplerBase newUrl = HtmlParsingUtils.createUrlFromAnchor(
-                       hrefStr, new URL(result.getURL(), base));
+                       hrefStr, ConversionUtils.makeRelativeURL(result.getURL(), base));
                newUrl.setMethod(HTTPConstants.GET);
                if (log.isDebugEnabled()) {
                    log.debug("Potential <frame src> match: " + newUrl);
