@@ -4065,6 +4065,8 @@ If more data is required for a particular sampler only, then add a Listener to i
 <p>A Thread Group defines a pool of users that will execute a particular test case against your server.  In the Thread Group GUI, you can control the number of users simulated (num of threads), the ramp up time (how long it takes to start all the threads), the number of times to perform the test, and optionally, a start and stop time for the test.</p>
 <p>
 When using the scheduler, JMeter runs the thread group until either the number of loops is reached or the duration/end-time is reached - whichever occurs first.
+Note that the condition is only checked between samples; when the end condition is reached, that thread will stop.
+JMeter does not interrupt samplers which are waiting for a response, so the end time may be delayed arbitrarily.
 </p>
 </description>
 

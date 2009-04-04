@@ -747,7 +747,9 @@ ${__BeanShell(123*456)} - returns 56088
 ${__BeanShell(source("function.bsh"))} - processes the script in function.bsh
 </pre>
 </p>
-<note>Remember to include any necessary quotes for text strings and JMeter variables</note>
+<note>
+Remember to include any necessary quotes for text strings and JMeter variables that represent text strings.
+</note>
 </component>
 
 <component index="&sect-num;.5.14" name="__split">
