@@ -26,6 +26,7 @@ import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
+import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
@@ -44,7 +45,7 @@ import java.util.zip.GZIPInputStream;
 /**
  * Commons HTTPClient based soap sampler
  */
-public class SoapSampler extends HTTPSampler2 {
+public class SoapSampler extends HTTPSampler2 implements Interruptible { // Implemented by parent class
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     public static final String XML_DATA = "HTTPSamper.xml_data"; //$NON-NLS-1$
@@ -245,6 +246,7 @@ public class SoapSampler extends HTTPSampler2 {
         try {
             int content_len = setPostHeaders(httpMethod);
             client = setupConnection(url, httpMethod, res);
+            savedClient = client;
 
             res.setQueryString(sendPostData(httpMethod,content_len));
             int statusCode = client.executeMethod(httpMethod);
@@ -345,6 +347,7 @@ public class SoapSampler extends HTTPSampler2 {
             return err;
         } finally {
             JOrphanUtils.closeQuietly(instream);
+            savedClient = null;
             httpMethod.releaseConnection();
         }
     }
