@@ -39,6 +39,7 @@ import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 
+import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
@@ -55,7 +56,7 @@ import org.apache.log.Logger;
  * HTTP requests, including cookies and authentication.
  *
  */
-public class HTTPSampler extends HTTPSamplerBase {
+public class HTTPSampler extends HTTPSamplerBase implements Interruptible {
     private static final long serialVersionUID = 233L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -72,6 +73,8 @@ public class HTTPSampler extends HTTPSamplerBase {
 
     /** Handles writing of a post or put request */
     private transient PostWriter postOrPutWriter;
+
+    private volatile HttpURLConnection savedConn;
 
     /**
      * Constructor for the HTTPSampler object.
@@ -214,6 +217,7 @@ public class HTTPSampler extends HTTPSamplerBase {
         // works OK even if ContentEncoding is null
         boolean gzipped = ENCODING_GZIP.equals(conn.getContentEncoding());
 
+        savedConn = conn;
         try {
             if (gzipped) {
                 in = new BufferedInputStream(new GZIPInputStream(conn.getInputStream()));
@@ -251,6 +255,8 @@ public class HTTPSampler extends HTTPSamplerBase {
                 log.error("Cause: "+cause);
             }
             in = new BufferedInputStream(conn.getErrorStream());
+        } finally {
+            savedConn = null;
         }
         return readResponse(res, in, contentLength);
     }
@@ -430,6 +436,7 @@ public class HTTPSampler extends HTTPSamplerBase {
                 try {
                     conn = setupConnection(url, method, res);
                     // Attempt the connection:
+                    savedConn = conn;
                     conn.connect();
                     break;
                 } catch (BindException e) {
@@ -446,6 +453,8 @@ public class HTTPSampler extends HTTPSamplerBase {
                 } catch (IOException e) {
                     log.debug("Connection failed, giving up");
                     throw e;
+                } finally {
+                    savedConn = null;                    
                 }
             }
             if (retry > MAX_CONN_RETRIES) {
@@ -579,5 +588,15 @@ public class HTTPSampler extends HTTPSamplerBase {
                 }
             }
         }
+    }
+
+    /** {@inheritDoc} */
+    public boolean interrupt() {
+        HttpURLConnection conn = savedConn;
+        if (conn != null) {
+            savedConn = null;
+            conn.disconnect();
+        }
+        return conn != null;
     }
 }
