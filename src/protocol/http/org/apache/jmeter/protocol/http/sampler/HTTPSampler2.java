@@ -39,6 +39,7 @@ import java.util.zip.GZIPInputStream;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpConnectionManager;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.httpclient.HttpVersion;
@@ -75,6 +76,7 @@ import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.protocol.http.util.LoopbackHttpClientSocketFactory;
 import org.apache.jmeter.protocol.http.util.SlowHttpClientSocketFactory;
+import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
@@ -88,7 +90,7 @@ import org.apache.log.Logger;
  * HTTP requests, including cookies and authentication.
  *
  */
-public class HTTPSampler2 extends HTTPSamplerBase {
+public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -235,6 +237,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
         }
     }
 
+    private volatile HttpClient savedClient;
 
     /**
      * Constructor for the HTTPSampler2 object.
@@ -836,6 +839,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
             }
 
 
+            savedClient = client;
             int statusCode = client.executeMethod(httpMethod);
 
             // Needs to be done after execute to pick up all the headers
@@ -917,6 +921,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
             err.setSampleLabel("Error: " + url.toString());
             return err;
         } finally {
+            savedClient = null;
             JOrphanUtils.closeQuietly(instream);
             if (httpMethod != null) {
                 httpMethod.releaseConnection();
@@ -1090,5 +1095,19 @@ public class HTTPSampler2 extends HTTPSamplerBase {
             }
             map.clear();
         }
+    }
+
+    /** {@inheritDoc} */
+    public boolean interrupt() {
+        HttpClient client = savedClient;
+        if (client != null) {
+            savedClient = null;
+            // TODO - not sure this is the best method
+            final HttpConnectionManager httpConnectionManager = client.getHttpConnectionManager();
+            if (httpConnectionManager instanceof SimpleHttpConnectionManager) {// Should be true
+                ((SimpleHttpConnectionManager)httpConnectionManager).shutdown();
+            }
+        }
+        return client != null;
     }
 }
