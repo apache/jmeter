@@ -29,6 +29,9 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpConnectionManager;
+import org.apache.commons.httpclient.SimpleHttpConnectionManager;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.io.output.TeeOutputStream;
@@ -39,6 +42,7 @@ import org.apache.commons.net.ftp.FTPReply;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
+import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -47,7 +51,7 @@ import org.apache.log.Logger;
  * A sampler which understands FTP file requests.
  *
  */
-public class FTPSampler extends AbstractSampler {
+public class FTPSampler extends AbstractSampler implements Interruptible {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     public final static String SERVER = "FTPSampler.server"; // $NON-NLS-1$
@@ -69,6 +73,8 @@ public class FTPSampler extends AbstractSampler {
     // Should the file data be saved in the response?
     public final static String SAVE_RESPONSE = "FTPSampler.saveresponse"; // $NON-NLS-1$
 
+    private volatile FTPClient savedClient;
+    
     public FTPSampler() {
     }
 
@@ -152,6 +158,7 @@ public class FTPSampler extends AbstractSampler {
         res.sampleStart();
         FTPClient ftp = new FTPClient();
         try {
+            savedClient = ftp;
             ftp.connect(getServer());
             res.latencyEnd();
             int reply = ftp.getReplyCode();
@@ -234,6 +241,7 @@ public class FTPSampler extends AbstractSampler {
             res.setResponseCode("000"); // TODO
             res.setResponseMessage(ex.toString());
         } finally {
+            savedClient = null;
             if (ftp.isConnected()) {
                 try {
                     ftp.logout();
@@ -250,5 +258,19 @@ public class FTPSampler extends AbstractSampler {
 
         res.sampleEnd();
         return res;
+    }
+
+    /** {@inheritDoc} */
+    public boolean interrupt() {
+        FTPClient client = savedClient;
+        if (client != null) {
+            savedClient = null;
+            try {
+                client.abort();
+                client.disconnect();
+            } catch (IOException ignored) {
+            }
+        }
+        return client != null;
     }
 }
