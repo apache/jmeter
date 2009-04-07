@@ -133,6 +133,8 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
 
     private static final int nonProxyHostSuffixSize;
 
+    protected volatile HttpClient savedClient;
+
     private static boolean isNonProxy(String host){
         return nonProxyHostFull.contains(host) || isPartialMatch(host);
     }
@@ -236,8 +238,6 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
             LoopbackHttpClientSocketFactory.setup();
         }
     }
-
-    private volatile HttpClient savedClient;
 
     /**
      * Constructor for the HTTPSampler2 object.
