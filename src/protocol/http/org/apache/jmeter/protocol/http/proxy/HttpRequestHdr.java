@@ -218,16 +218,12 @@ public class HttpRequestHdr {
      * If name = "content-length", then return value as int, else return 0
      */
     private int parseLine(String nextLine) {
-        StringTokenizer tz;
-        tz = new StringTokenizer(nextLine);
-        String token = getToken(tz);
-        // look for termination of HTTP command
-        if (0 == token.length()) {
-            return 0;
+        int colon = nextLine.indexOf(':');
+        if (colon <= 0){
+            return 0; // Nothing to do
         }
-        String trimmed = token.trim();
-        String name = trimmed.substring(0, trimmed.length() - 1);// drop ':'
-        String value = getRemainder(tz);
+        String name = nextLine.substring(0, colon).trim();
+        String value = nextLine.substring(colon+1).trim();
         headers.put(name.toLowerCase(java.util.Locale.ENGLISH), new Header(name, value));
         if (name.equalsIgnoreCase(CONTENT_LENGTH)) {
             return Integer.parseInt(value);
