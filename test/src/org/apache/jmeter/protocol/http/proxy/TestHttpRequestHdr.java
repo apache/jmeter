@@ -20,6 +20,7 @@ package org.apache.jmeter.protocol.http.proxy;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.HashMap;
@@ -27,6 +28,8 @@ import java.util.Map;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.junit.JMeterTestCase;
+import org.apache.jmeter.protocol.http.control.Header;
+import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 
@@ -441,6 +444,34 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
         assertEquals(2, arguments.getArgumentCount());
         checkArgument((HTTPArgument)arguments.getArgument(0), "title", titleValue, titleValue, contentEncoding, false);
         checkArgument((HTTPArgument)arguments.getArgument(1), "description", descriptionValue, descriptionValue, contentEncoding, false);
+    }
+
+    public void testParse1() throws Exception {// no space after :
+        HttpRequestHdr req = new HttpRequestHdr();
+        ByteArrayInputStream bis = null;
+        bis = new ByteArrayInputStream("GET xxx HTTP/1.0\r\nname:value \r\n".getBytes("ISO-8859-1"));
+        req.parse(bis);
+        bis.close();
+        HeaderManager mgr = req.getHeaderManager();
+        Header header;
+        mgr.getHeaders();
+        header = mgr.getHeader(0);
+        assertEquals("name",header.getName());
+        assertEquals("value",header.getValue());
+    }
+
+    public void testParse2() throws Exception {// spaces after :
+        HttpRequestHdr req = new HttpRequestHdr();
+        ByteArrayInputStream bis = null;
+        bis = new ByteArrayInputStream("GET xxx HTTP/1.0\r\nname:           value \r\n".getBytes("ISO-8859-1"));
+        req.parse(bis);
+        bis.close();
+        HeaderManager mgr = req.getHeaderManager();
+        Header header;
+        mgr.getHeaders();
+        header = mgr.getHeader(0);
+        assertEquals("name",header.getName());
+        assertEquals("value",header.getValue());
     }
 
     public void testPostMultipartFileUpload() throws Exception {
