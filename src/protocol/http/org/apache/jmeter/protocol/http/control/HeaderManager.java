@@ -33,6 +33,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.CollectionProperty;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jorphan.util.JOrphanUtils;
 
 /**
@@ -69,6 +70,11 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
         setProperty(new CollectionProperty(HEADERS, new ArrayList()));
     }
 
+    /**
+     * Get the collection of JMeterProperty entries representing the headers.
+     * 
+     * @return the header collection property
+     */
     public CollectionProperty getHeaders() {
         return (CollectionProperty) getProperty(HEADERS);
     }
@@ -100,8 +106,10 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
         }
         PrintWriter writer = new PrintWriter(new FileWriter(file));
         writer.println("# JMeter generated Header file");// $NON-NLS-1$
-        for (int i = 0; i < getHeaders().size(); i++) {
-            Header head = (Header) getHeaders().get(i);
+        final CollectionProperty hdrs = getHeaders();
+        for (int i = 0; i < hdrs.size(); i++) {
+            final JMeterProperty hdr = hdrs.get(i);
+            Header head = (Header) hdr.getObjectValue();
             writer.println(head.toString());
         }
         writer.flush();
