@@ -299,7 +299,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
     }
 
     private class StopTest implements Runnable {
-        boolean now;
+        final boolean now;
 
         private StopTest() {
             now = true;
@@ -507,10 +507,11 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         Iterator iter = new HashSet(allThreads.keySet()).iterator();
         while (iter.hasNext()) {
             JMeterThread item = (JMeterThread) iter.next();
-            item.stop();
+            item.stop(); // set stop flag
+            item.interrupt(); // interrupt sampler if possible
             Thread t = (Thread) allThreads.get(item);
             if (t != null) {
-                t.interrupt();
+                t.interrupt(); // also interrupt JVM thread
             } else {
                 log.warn("Lost thread: " + item.getThreadName());
                 allThreads.remove(item);
