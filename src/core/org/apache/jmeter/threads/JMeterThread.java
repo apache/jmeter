@@ -34,6 +34,7 @@ import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.processor.PreProcessor;
+import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
@@ -59,7 +60,7 @@ import org.apache.log.Logger;
  * timing, add listeners for sampling events and to stop the sampling process.
  *
  */
-public class JMeterThread implements Runnable {
+public class JMeterThread implements Runnable, Interruptible {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private int initialDelay = 0;
@@ -516,6 +517,21 @@ public class JMeterThread implements Runnable {
     public void stop() { // Called by StandardJMeterEngine
         running = false;
         log.info("Stopping " + threadName);
+    }
+
+    /** {@inheritDoc} */
+    public boolean interrupt(){
+        log.warn("Interrupting " + threadName);
+        Sampler samp = threadContext.getCurrentSampler();
+        if (samp instanceof Interruptible){
+            try {
+                ((Interruptible)samp).interrupt();
+            } catch (Exception e) {
+                log.warn("Caught Exception interrupting sampler: "+e.toString());
+            }
+            return true;
+        }
+        return false;
     }
 
     private void stopTest() {
