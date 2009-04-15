@@ -20,7 +20,6 @@ package org.apache.jmeter.protocol.http.modifier;
 
 import java.io.Serializable;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
