@@ -35,9 +35,10 @@ import junit.framework.TestSuite;
 /*
  * Created on Nov 29, 2003
  * 
- * Test the composition of the properties files - properties files exist
- * (default, DE, NO, JA) - properties files don't have duplicate keys -
- * non-default properties files don't have any extra keys.
+ * Test the composition of the properties files
+ * - properties files exist
+ * - properties files don't have duplicate keys
+ * - non-default properties files don't have any extra keys.
  * 
  * N.B. If there is a default resource, ResourceBundle does not detect missing
  * resources, i.e. the presence of messages.properties means that the
@@ -150,11 +151,7 @@ public class PackageTest extends TestCase {
 				String key = null;
 				try {
 					key = (String) enumr.nextElement();
-					String val =defaultPRB.getString(key);
-                    if (!resname.equalsIgnoreCase("de") && !resname.equalsIgnoreCase("fr") && val.equals(prb.getString(key))){
-                        System.out.println("Possible duplicate value for "+key+" in "+res);
-                        subTestFailures++;
-                    }
+					defaultPRB.getString(key); // Check key is in default
 				} catch (MissingResourceException e) {
 					subTestFailures++;
 					System.out.println("Locale: " + resname + " has unexpected key: " + key);
@@ -180,6 +177,7 @@ public class PackageTest extends TestCase {
 		ts.addTest(new PackageTest("atestzh_TW"));
 		ts.addTest(new PackageTest("atestFR"));
 		ts.addTest(new PackageTest("atestES"));
+        ts.addTest(new PackageTest("atestPL"));
 		return ts;
 	}
 
@@ -217,6 +215,10 @@ public class PackageTest extends TestCase {
 	public void atestES() throws Exception {
 		check("es");
 	}
+
+	public void atestPL() throws Exception {
+        check("pl");
+    }
 
 	public void atestDefault() throws Exception {
 		check("");
