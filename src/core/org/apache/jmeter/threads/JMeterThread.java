@@ -258,7 +258,7 @@ public class JMeterThread implements Runnable, Interruptible {
             log.error("Test failed!", e);
         } finally {
             threadContext.clear();
-            log.info("Thread " + threadName + " is done");
+            log.info("Thread finished: " + threadName);
             monitor.threadFinished(this);
             threadFinished();
         }
@@ -440,7 +440,7 @@ public class JMeterThread implements Runnable, Interruptible {
             startScheduler();
         }
         rampUpDelay();
-        log.info("Thread " + Thread.currentThread().getName() + " started");
+        log.info("Thread started: " + Thread.currentThread().getName());
         JMeterContextService.incrNumberOfThreads();
         threadGroup.incrNumberOfThreads();
         GuiPackage gp =GuiPackage.getInstance();
@@ -516,12 +516,12 @@ public class JMeterThread implements Runnable, Interruptible {
 
     public void stop() { // Called by StandardJMeterEngine
         running = false;
-        log.info("Stopping " + threadName);
+        log.info("Stopping: " + threadName);
     }
 
     /** {@inheritDoc} */
     public boolean interrupt(){
-        log.warn("Interrupting " + threadName);
+        log.warn("Interrupting: " + threadName);
         Sampler samp = threadContext.getCurrentSampler();
         if (samp instanceof Interruptible){
             try {
@@ -536,7 +536,7 @@ public class JMeterThread implements Runnable, Interruptible {
 
     private void stopTest() {
         running = false;
-        log.info("Stop Test detected by thread " + threadName);
+        log.info("Stop Test detected by thread: " + threadName);
         // engine.stopTest();
         if (engine != null) {
             engine.askThreadsToStop();
@@ -545,7 +545,7 @@ public class JMeterThread implements Runnable, Interruptible {
 
     private void stopThread() {
         running = false;
-        log.info("Stop Thread detected by thread " + threadName);
+        log.info("Stop Thread detected by thread: " + threadName);
     }
 
     private void checkAssertions(List assertions, SampleResult parent) {
