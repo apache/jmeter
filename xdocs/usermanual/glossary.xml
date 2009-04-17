@@ -64,6 +64,26 @@ See, for example: <a href="http://en.wikipedia.org/wiki/Percentile">Percentile</
 </p>
 
 <p>
+<a name="ThreadName">The <b>Thread Name</b></a> as it appears in Listeners and logfiles
+is derived from the Thread Group name and the thread within the group.<br/>
+The name has the format
+<code>groupName + " " + groupIndex + "-" + threadIndex</code>
+where:
+<ul>
+<li>groupName - name of the Thread Group element</li>
+<li>groupIndex - number of the Thread Group in the Test Plan, starting from 1</li>
+<li>threadIndex - number of the thread within the Thread Group, starting from 1</li>
+</ul>
+A test plan with two Thread Groups each with two threads would use the names:
+<pre>
+Thread Group 1-1
+Thread Group 1-2
+Thread Group 2-1
+Thread Group 2-2
+</pre>
+</p>
+
+<p>
 <a name="Throughput"><b>Throughput</b></a> is calculated as requests/unit of time.
 The time is calculated from the start of the first sample to the end of the last sample.
 This includes any intervals between samples.   
