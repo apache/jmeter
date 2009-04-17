@@ -1587,6 +1587,7 @@ run JMeter unless all the JMeter jars are added.
   <target name="batchtestserver" description="Run the batch test using client-server mode">
   	<property name="batchtestserver.out" location="${basedir}/bin"/>
   	<property name="batchtestserver.log" value="BatchTestServer.log"/>
+    <property name="rmi_port" value="2099"/>
   	<parallel>
   		<daemons>
   		    <java classname="org.apache.jmeter.NewDriver" fork="yes" dir="${batchtestserver.out}">
@@ -1599,6 +1600,7 @@ run JMeter unless all the JMeter jars are added.
   		        <arg value="-ptestfiles/jmeter-batch.properties"/>
   		        <arg value="-j"/>
   		        <arg value="${batchtestserver.out}/${batchtestserver.log}"/>
+                <arg value="-Dserver_port=${rmi_port}"/>
    		        <arg value="-s"/>
   		    	<arg value="-Jserver.exitaftertest=true"/>
   		     </java>
@@ -1606,7 +1608,7 @@ run JMeter unless all the JMeter jars are added.
   		<sequential>
   	  		<sleep seconds="1"/>
   			<antcall target="batchtest">
-  				<param name="remote" value="-Rlocalhost"/>
+  				<param name="remote" value="-Rlocalhost:${rmi_port}"/>
   			</antcall>
   		</sequential>
   	</parallel>
