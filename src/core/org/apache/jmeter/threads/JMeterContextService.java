@@ -92,11 +92,10 @@ public final class JMeterContextService {
 
     /**
      * Called by MainFrame#testEnded().
-     * Clears number of active threads and start time field.
+     * Clears start time field.
      */
     public static synchronized void endTest() {
         testStart = 0;
-        numberOfActiveThreads = 0;
     }
 
     public static synchronized long getTestStartTime() {// NOT USED
