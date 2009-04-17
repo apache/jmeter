@@ -18,6 +18,9 @@
  * 
  */
 
+// N.B. to enable this file to be used, define the JMeter property:
+// beanshell.function.init=BeanShellFunction.bshrc
+
 //print("Initialisation started");
 
 import org.apache.jmeter.util.JMeterUtils;
@@ -46,8 +49,16 @@ stopThread(){// Stop current JMeter thread
 }
 
 // Fix ampersands in a string
+// e.g. fixAmps("Something containing &amp; ...")
+// or   fixAmps(vars.get("VARNAME")) - useful if VARNAME may contain "
 String fixAmps(s) {
   return s.replaceAll("&amp;","&");
+}
+
+// Fix ampersands in a variable
+// e.g. fixAmps("VARNAME")
+String fixAmpsInVar(String varname) {
+  return fixAmps(vars.get(varname));
 }
 
 //print("Initialisation complete");
