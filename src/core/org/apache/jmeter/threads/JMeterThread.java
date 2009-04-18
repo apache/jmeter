@@ -63,27 +63,33 @@ import org.apache.log.Logger;
 public class JMeterThread implements Runnable, Interruptible {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private int initialDelay = 0;
+    public static final String PACKAGE_OBJECT = "JMeterThread.pack"; // $NON-NLS-1$
 
-    private Controller controller;
+    public static final String LAST_SAMPLE_OK = "JMeterThread.last_sample_ok"; // $NON-NLS-1$
 
-    private volatile boolean running; // may be set from a different thread
+    private final Controller controller;
 
-    private HashTree testTree;
+    private final HashTree testTree;
 
-    private TestCompiler compiler;
+    private final TestCompiler compiler;
 
-    private JMeterThreadMonitor monitor;
+    private final JMeterThreadMonitor monitor;
 
+    private final JMeterVariables threadVars;
+
+    private final Collection testListeners;
+
+    private final ListenerNotifier notifier;
+
+    /*
+     * The following variables are set by StandardJMeterEngine.
+     * This is done before start() is called, so the values will be published to the thread safely
+     * TODO - consider passing them to the constructor, so that they can be made final
+     * (to avoid adding lots of parameters, perhaps have a parameter wrapper object.
+     */
     private String threadName;
 
-    private JMeterContext threadContext;
-
-    private JMeterVariables threadVars;
-
-    private Collection testListeners;
-
-    private ListenerNotifier notifier;
+    private int initialDelay = 0;
 
     private int threadNum = 0;
 
@@ -92,24 +98,23 @@ public class JMeterThread implements Runnable, Interruptible {
     private long endTime = 0;
 
     private boolean scheduler = false;
-
     // based on this scheduler is enabled or disabled
 
-    private ThreadGroup threadGroup; // Gives access to parent thread
-                                        // threadGroup
+    // Gives access to parent thread threadGroup
+    private ThreadGroup threadGroup;
 
     private StandardJMeterEngine engine = null; // For access to stop methods.
 
-    private boolean onErrorStopTest;
+    /*
+     * The following variables may be set/read from multiple threads.
+     */
+    private volatile boolean running; // may be set from a different thread
 
-    private boolean onErrorStopThread;
+    private volatile boolean onErrorStopTest;
 
-    public static final String PACKAGE_OBJECT = "JMeterThread.pack"; // $NON-NLS-1$
-
-    public static final String LAST_SAMPLE_OK = "JMeterThread.last_sample_ok"; // $NON-NLS-1$
-
-    public JMeterThread() {
-    }
+    private volatile boolean onErrorStopThread;
+    
+    private volatile Sampler currentSampler;
 
     public JMeterThread(HashTree test, JMeterThreadMonitor monitor, ListenerNotifier note) {
         this.monitor = monitor;
@@ -126,13 +131,6 @@ public class JMeterThread implements Runnable, Interruptible {
 
     public void setInitialContext(JMeterContext context) {
         threadVars.putAll(context.getVariables());
-    }
-
-    /**
-     * Checks whether the JMeterThread is Scheduled.
-     */
-    public boolean isScheduled() {
-        return this.scheduler;
     }
 
     /**
@@ -232,12 +230,14 @@ public class JMeterThread implements Runnable, Interruptible {
     }
 
     public void run() {
+        // threadContext is not thread-safe, so keep within thread
+        JMeterContext threadContext = JMeterContextService.getContext();
         try {
-            initRun();
+            initRun(threadContext);
             while (running) {
                 Sampler sam;
                 while (running && (sam = controller.next()) != null) {
-                    process_sampler(sam, null);
+                    process_sampler(sam, null, threadContext);
                 }
                 if (controller.isDone()) {
                     running = false;
@@ -269,12 +269,14 @@ public class JMeterThread implements Runnable, Interruptible {
      *
      * @param current sampler
      * @param parent sampler
+     * @param threadContext 
      * @return SampleResult if a transaction was processed
      */
-    private SampleResult process_sampler(Sampler current, Sampler parent) {
+    private SampleResult process_sampler(Sampler current, Sampler parent, JMeterContext threadContext) {
         SampleResult transactionResult = null;
         try {
             threadContext.setCurrentSampler(current);
+            currentSampler = current;
 
             // Check if we are running a transaction
             TransactionSampler transactionSampler = null;
@@ -295,7 +297,7 @@ public class JMeterThread implements Runnable, Interruptible {
                     transactionResult.setAllThreads(JMeterContextService.getNumberOfThreads());
 
                     // Check assertions for the transaction sample
-                    checkAssertions(transactionPack.getAssertions(), transactionResult);
+                    checkAssertions(transactionPack.getAssertions(), transactionResult, threadContext);
                     // Notify listeners with the transaction sample result
                     if (!(parent instanceof TransactionSampler)){
                         notifyListeners(transactionPack.getSampleListeners(), transactionResult);
@@ -309,8 +311,9 @@ public class JMeterThread implements Runnable, Interruptible {
                     // It is the sub sampler of the transaction that will be sampled
                     current = transactionSampler.getSubSampler();
                     if (current instanceof TransactionSampler){
-                        SampleResult res = process_sampler(current, prev);// recursive call
+                        SampleResult res = process_sampler(current, prev, threadContext);// recursive call
                         threadContext.setCurrentSampler(prev);
+                        currentSampler = prev;
                         current=null;
                         if (res!=null){
                             transactionSampler.addSubSamplerResult(res);
@@ -346,7 +349,7 @@ public class JMeterThread implements Runnable, Interruptible {
                     result.setThreadName(threadName);
                     threadContext.setPreviousResult(result);
                     runPostProcessors(pack.getPostProcessors());
-                    checkAssertions(pack.getAssertions(), result);
+                    checkAssertions(pack.getAssertions(), result, threadContext);
                     // Do not send subsamples to listeners which receive the transaction sample
                     List sampleListeners = getSampleListeners(pack, transactionPack, transactionSampler);
                     notifyListeners(sampleListeners, result);
@@ -423,10 +426,10 @@ public class JMeterThread implements Runnable, Interruptible {
     }
 
     /**
+     * @param threadContext 
      *
      */
-    protected void initRun() {
-        threadContext = JMeterContextService.getContext();
+    private void initRun(JMeterContext threadContext) {
         threadContext.setVariables(threadVars);
         threadContext.setThreadNum(getThreadNum());
         threadContext.getVariables().put(LAST_SAMPLE_OK, "true");
@@ -522,7 +525,7 @@ public class JMeterThread implements Runnable, Interruptible {
     /** {@inheritDoc} */
     public boolean interrupt(){
         log.warn("Interrupting: " + threadName);
-        Sampler samp = threadContext.getCurrentSampler();
+        Sampler samp = currentSampler; // fetch once
         if (samp instanceof Interruptible){
             try {
                 ((Interruptible)samp).interrupt();
@@ -548,7 +551,7 @@ public class JMeterThread implements Runnable, Interruptible {
         log.info("Stop Thread detected by thread: " + threadName);
     }
 
-    private void checkAssertions(List assertions, SampleResult parent) {
+    private void checkAssertions(List assertions, SampleResult parent, JMeterContext threadContext) {
         Iterator iter = assertions.iterator();
         while (iter.hasNext()) {
             Assertion assertion = (Assertion) iter.next();
