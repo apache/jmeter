@@ -21,6 +21,7 @@ package org.apache.jmeter.engine;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -53,29 +54,26 @@ import org.apache.log.Logger;
 public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, Runnable {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final long serialVersionUID = 231L; // Remember to change this when the class changes ...
-
-    private transient Thread runningThread;
+    private static final long serialVersionUID = 233L; // Remember to change this when the class changes ...
 
     private static final long WAIT_TO_DIE = 5 * 1000; // 5 seconds
 
-    private Map allThreads;
+    /** JMeterThread => its JVM thread */
+    private final Map/*<JMeterThread, Thread>*/ allThreads;
 
     private volatile boolean startingGroups; // flag to show that groups are still being created
 
-    private boolean running = false;
+    private volatile boolean running = false;
 
-    private boolean serialized = false;
+    private volatile boolean serialized = false;
 
-    private volatile boolean schcdule_run = false;
+    private volatile boolean schedule_run = false;
 
     private HashTree test;
 
     private SearchByClass testListeners;
 
-    private String host = null;
-
-    private ListenerNotifier notifier;
+    private final String host;
 
     // Should we exit at end of the test? (only applies to server, because host is non-null)
     private static final boolean exitAfterTest =
@@ -94,11 +92,12 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
     // e.g. from beanshell server
     // Assumes that there is only one instance of the engine
     // at any one time so it is not guaranteed to work ...
-    private static Map allThreadNames;
+    private static Map/*<String, JMeterThread>*/ allThreadNames; //TODO does not appear to be set up yet
 
     private static StandardJMeterEngine engine;
 
-    private static Map allThreadsSave;
+    /** Unmodifiable static version of {@link allThreads} JMeterThread => JVM Thread */
+    private static Map/*<JMeterThread, Thread>*/  allThreadsSave;
 
     public static void stopEngineNow() {
         if (engine != null) {// May be null if called from Unit test
@@ -113,7 +112,9 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
     }
 
     /*
-     * Allow functions etc to register for testStopped notification
+     * Allow functions etc to register for testStopped notification.
+     * Only used by the function parser so far.
+     * The list is merged with the testListeners and then cleared.
      */
     private static final List testList = new ArrayList();
 
@@ -156,32 +157,20 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
     // End of code to allow engine to be controlled remotely
 
     public StandardJMeterEngine() {
-        allThreads = new HashMap();
-        engine = this;
-        allThreadNames = new HashMap();
-        allThreadsSave = allThreads;
+        this(null);
     }
 
     public StandardJMeterEngine(String host) {
-        this();
         this.host = host;
+        this.allThreads = new HashMap();
+        // Hacks to allow external control
+        engine = this;
+        allThreadNames = new HashMap();
+        allThreadsSave = Collections.unmodifiableMap(allThreads);
     }
 
     public void configure(HashTree testTree) {
         test = testTree;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    protected HashTree getTestTree() {
-        return test;
-    }
-
-    protected void compileTree() {
-        PreCompiler compiler = new PreCompiler();
-        getTestTree().traverse(compiler);
     }
 
     // TODO: in Java1.5, perhaps we can use Thread.setUncaughtExceptionHandler() instead
@@ -196,11 +185,11 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
                 System.err.println("Uncaught Exception " + e + ". See log file for details.");
             }
           }
-
     }
+
     public void runTest() throws JMeterEngineException {
         try {
-            runningThread = new Thread(new MyThreadGroup("JMeterThreadGroup"),this);
+            Thread runningThread = new Thread(new MyThreadGroup("JMeterThreadGroup"),this);
             runningThread.start();
         } catch (Exception err) {
             stopTest();
@@ -223,7 +212,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         }
     }
 
-    protected void notifyTestListenersOfStart() {
+    private void notifyTestListenersOfStart() {
         Iterator iter = testListeners.getSearchResults().iterator();
         while (iter.hasNext()) {
             TestListener tl = (TestListener) iter.next();
@@ -238,8 +227,8 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         }
     }
 
-    protected void notifyTestListenersOfEnd() {
-        log.info("Notifying test listeners of end of test");
+    private void notifyTestListenersOfEnd() {
+        log.info("Notifying test listeners of end of test", new Throwable());
         Iterator iter = testListeners.getSearchResults().iterator();
         while (iter.hasNext()) {
             TestListener tl = (TestListener) iter.next();
@@ -279,7 +268,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         try {
             allThreads.remove(thread);
             log.info("Ending thread " + thread.getThreadName());
-            if (!serialized && !schcdule_run && !startingGroups && allThreads.size() == 0 ) {
+            if (!serialized && !schedule_run && !startingGroups && allThreads.size() == 0 ) {
                 log.info("Stopping test");
                 stopTest();
             }
@@ -289,8 +278,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
     }
 
     public synchronized void stopTest() {
-        Thread stopThread = new Thread(new StopTest());
-        stopThread.start();
+        stopTest(true);
     }
 
     public synchronized void stopTest(boolean b) {
@@ -299,11 +287,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
     }
 
     private class StopTest implements Runnable {
-        final boolean now;
-
-        private StopTest() {
-            now = true;
-        }
+        private final boolean now;
 
         private StopTest(boolean b) {
             now = b;
@@ -334,7 +318,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         running = true;
 
         SearchByClass testPlan = new SearchByClass(TestPlan.class);
-        getTestTree().traverse(testPlan);
+        test.traverse(testPlan);
         Object[] plan = testPlan.getSearchResults().toArray();
         if (plan.length == 0) {
             System.err.println("Could not find the TestPlan!");
@@ -346,7 +330,8 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         }
         JMeterContextService.startTest();
         try {
-            compileTree();
+            PreCompiler compiler = new PreCompiler();
+            test.traverse(compiler);
         } catch (RuntimeException e) {
             log.error("Error occurred compiling the tree:",e);
             JMeterUtils.reportErrorToUser("Error occurred compiling the tree: - see log file");
@@ -357,7 +342,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
          * replacement, but before setting RunningVersion to true.
          */
         testListeners = new SearchByClass(TestListener.class);
-        getTestTree().traverse(testListeners);
+        test.traverse(testListeners);
 
         // Merge in any additional test listeners
         // currently only used by the function parser
@@ -365,13 +350,13 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         testList.clear(); // no longer needed
 
         if (!startListenersLater ) { notifyTestListenersOfStart(); }
-        getTestTree().traverse(new TurnElementsOn());
+        test.traverse(new TurnElementsOn());
         if (startListenersLater) { notifyTestListenersOfStart(); }
 
-        List testLevelElements = new LinkedList(getTestTree().list(getTestTree().getArray()[0]));
+        List testLevelElements = new LinkedList(test.list(test.getArray()[0]));
         removeThreadGroups(testLevelElements);
         SearchByClass searcher = new SearchByClass(ThreadGroup.class);
-        getTestTree().traverse(searcher);
+        test.traverse(searcher);
         TestCompiler.initialize();
         // for each thread group, generate threads
         // hand each thread the sampler controller
@@ -385,9 +370,9 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
          */
         System.gc();
 
-        notifier = new ListenerNotifier();
+        ListenerNotifier notifier = new ListenerNotifier();
 
-        schcdule_run = true;
+        schedule_run = true;
         JMeterContextService.getContext().setSamplingStarted(true);
         int groupCount = 0;
         JMeterContextService.clearTotalThreads();
@@ -409,7 +394,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
             } else if (onErrorStopThread) {
                 log.info("Thread will stop on error");
             } else {
-                log.info("Continue on error");
+                log.info("Thread will continue on error");
             }
 
             ListedHashTree threadGroupTree = (ListedHashTree) searcher.getSubTree(group);
@@ -420,7 +405,8 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
                 jmeterThread.setThreadGroup(group);
                 jmeterThread.setInitialContext(JMeterContextService.getContext());
                 jmeterThread.setInitialDelay((int) (perThreadDelay * i));
-                jmeterThread.setThreadName(groupName + " " + (groupCount) + "-" + (i + 1));
+                final String threadName = groupName + " " + (groupCount) + "-" + (i + 1);
+                jmeterThread.setThreadName(threadName);
 
                 scheduleThread(jmeterThread, group);
 
@@ -430,7 +416,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
                 jmeterThread.setOnErrorStopThread(onErrorStopThread);
 
                 Thread newThread = new Thread(jmeterThread);
-                newThread.setName(jmeterThread.getThreadName());
+                newThread.setName(threadName);
                 allThreads.put(jmeterThread, newThread);
                 if (serialized && !iter.hasNext() && i == numThreads - 1) // last thread
                 {
@@ -438,7 +424,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
                 }
                 newThread.start();
             }
-            schcdule_run = false;
+            schedule_run = false;
             if (serialized) {
                 while (running && allThreads.size() > 0) {
                     try {
