@@ -65,10 +65,6 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
         this.host = host;
     }
 
-    protected HashTree getTestTree() {
-        return test;
-    }
-
     public void configure(HashTree testTree) {
         TreeCloner cloner = new TreeCloner(false);
         testTree.traverse(cloner);
@@ -112,7 +108,7 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
         log.info("running clientengine run method");
         SearchByClass testListeners = new SearchByClass(TestListener.class);
         ConvertListeners sampleListeners = new ConvertListeners();
-        HashTree testTree = getTestTree();
+        HashTree testTree = test;
         PreCompiler compiler = new PreCompiler(true); // limit the changes to client only test elements
         synchronized(testTree) {
             testTree.traverse(compiler);
