@@ -259,8 +259,8 @@ public class JMeterThread implements Runnable, Interruptible {
         } finally {
             threadContext.clear();
             log.info("Thread finished: " + threadName);
-            monitor.threadFinished(this);
             threadFinished();
+            monitor.threadFinished(this); // Tell the engine we are done
         }
     }
 
@@ -276,7 +276,6 @@ public class JMeterThread implements Runnable, Interruptible {
         SampleResult transactionResult = null;
         try {
             threadContext.setCurrentSampler(current);
-            currentSampler = current;
 
             // Check if we are running a transaction
             TransactionSampler transactionSampler = null;
@@ -313,7 +312,6 @@ public class JMeterThread implements Runnable, Interruptible {
                     if (current instanceof TransactionSampler){
                         SampleResult res = process_sampler(current, prev, threadContext);// recursive call
                         threadContext.setCurrentSampler(prev);
-                        currentSampler = prev;
                         current=null;
                         if (res!=null){
                             transactionSampler.addSubSamplerResult(res);
@@ -338,8 +336,9 @@ public class JMeterThread implements Runnable, Interruptible {
                 TestBeanHelper.prepare(sampler);
 
                 // Perform the actual sample
-                SampleResult
-                result = sampler.sample(null);
+                currentSampler = sampler;
+                SampleResult result = sampler.sample(null);
+                currentSampler = null;
                 // TODO: remove this useless Entry parameter
 
                 // If we got any results, then perform processing on the result
@@ -444,12 +443,6 @@ public class JMeterThread implements Runnable, Interruptible {
         }
         rampUpDelay();
         log.info("Thread started: " + Thread.currentThread().getName());
-        JMeterContextService.incrNumberOfThreads();
-        threadGroup.incrNumberOfThreads();
-        GuiPackage gp =GuiPackage.getInstance();
-        if (gp != null) {// check there is a GUI
-            gp.getMainFrame().updateCounts();
-        }
         /*
          * Setting SamplingStarted before the contollers are initialised allows
          * them to access the running values of functions and variables (however
@@ -466,24 +459,24 @@ public class JMeterThread implements Runnable, Interruptible {
         threadStarted();
     }
 
-    /**
-     *
-     */
     private void threadStarted() {
+        JMeterContextService.incrNumberOfThreads();
+        threadGroup.incrNumberOfThreads();
+        GuiPackage gp =GuiPackage.getInstance();
+        if (gp != null) {// check there is a GUI
+            gp.getMainFrame().updateCounts();
+        }
         ThreadListenerTraverser startup = new ThreadListenerTraverser(true);
-        testTree.traverse(startup);
+        testTree.traverse(startup); // call ThreadListener.threadStarted()
     }
 
-    /**
-     *
-     */
     private void threadFinished() {
         ThreadListenerTraverser shut = new ThreadListenerTraverser(false);
-        testTree.traverse(shut);
+        testTree.traverse(shut); // call ThreadListener.threadFinished()
         JMeterContextService.decrNumberOfThreads();
         threadGroup.decrNumberOfThreads();
         GuiPackage gp = GuiPackage.getInstance();
-        if (gp != null){
+        if (gp != null){// check there is a GUI
             gp.getMainFrame().updateCounts();
         }
     }
@@ -731,10 +724,6 @@ public class JMeterThread implements Runnable, Interruptible {
      */
     public void setOnErrorStopThread(boolean b) {
         onErrorStopThread = b;
-    }
-
-    public ThreadGroup getThreadGroup() {
-        return threadGroup;
     }
 
     public void setThreadGroup(ThreadGroup group) {
