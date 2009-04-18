@@ -71,7 +71,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
     private HashTree test;
 
-    private SearchByClass testListeners;
+    private volatile SearchByClass testListenersSave;
 
     private final String host;
 
@@ -92,9 +92,9 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
     // e.g. from beanshell server
     // Assumes that there is only one instance of the engine
     // at any one time so it is not guaranteed to work ...
-    private static Map/*<String, JMeterThread>*/ allThreadNames; //TODO does not appear to be set up yet
+    private static Map/*<String, JMeterThread>*/ allThreadNames; //TODO does not appear to be populated yet
 
-    private static StandardJMeterEngine engine;
+    private volatile static StandardJMeterEngine engine;
 
     /** Unmodifiable static version of {@link allThreads} JMeterThread => JVM Thread */
     private static Map/*<JMeterThread, Thread>*/  allThreadsSave;
@@ -212,7 +212,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         }
     }
 
-    private void notifyTestListenersOfStart() {
+    private void notifyTestListenersOfStart(SearchByClass testListeners) {
         Iterator iter = testListeners.getSearchResults().iterator();
         while (iter.hasNext()) {
             TestListener tl = (TestListener) iter.next();
@@ -227,7 +227,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         }
     }
 
-    private void notifyTestListenersOfEnd() {
+    private void notifyTestListenersOfEnd(SearchByClass testListeners) {
         log.info("Notifying test listeners of end of test", new Throwable());
         Iterator iter = testListeners.getSearchResults().iterator();
         while (iter.hasNext()) {
@@ -307,7 +307,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
                 }
                 boolean stopped = verifyThreadsStopped();
                 if (stopped || now) {
-                    notifyTestListenersOfEnd();
+                    notifyTestListenersOfEnd(testListenersSave);
                 }
             }
         }
@@ -341,7 +341,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
          * Notification of test listeners needs to happen after function
          * replacement, but before setting RunningVersion to true.
          */
-        testListeners = new SearchByClass(TestListener.class);
+        SearchByClass testListeners = new SearchByClass(TestListener.class);
         test.traverse(testListeners);
 
         // Merge in any additional test listeners
@@ -349,9 +349,11 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         testListeners.getSearchResults().addAll(testList);
         testList.clear(); // no longer needed
 
-        if (!startListenersLater ) { notifyTestListenersOfStart(); }
+        testListenersSave = testListeners;
+
+        if (!startListenersLater ) { notifyTestListenersOfStart(testListeners); }
         test.traverse(new TurnElementsOn());
-        if (startListenersLater) { notifyTestListenersOfStart(); }
+        if (startListenersLater) { notifyTestListenersOfStart(testListeners); }
 
         List testLevelElements = new LinkedList(test.list(test.getArray()[0]));
         removeThreadGroups(testLevelElements);
