@@ -33,40 +33,51 @@ import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 
 /**
- * ThreadGroup
- *
+ * ThreadGroup holds the settings for a JMeter thread group.
+ * 
+ * This class is intended to be ThreadSafe.
  */
 public class ThreadGroup extends AbstractTestElement implements Serializable, Controller {
 
     private static final long serialVersionUID = 233L;
 
+    /** Number of threads in the thread group */
     public final static String NUM_THREADS = "ThreadGroup.num_threads";
 
+    /** Ramp-up time */
     public final static String RAMP_TIME = "ThreadGroup.ramp_time";
 
     public final static String MAIN_CONTROLLER = "ThreadGroup.main_controller";
 
+    /** Whether scheduler is being used */
     public final static String SCHEDULER = "ThreadGroup.scheduler";
 
+    /** Scheduler absolute start time */
     public final static String START_TIME = "ThreadGroup.start_time";
 
+    /** Scheduler absolute end time */
     public final static String END_TIME = "ThreadGroup.end_time";
 
+    /** Scheduler duration, overrides end time */
     public final static String DURATION = "ThreadGroup.duration";
 
+    /** Scheduler start delay, overrides start time */
     public final static String DELAY = "ThreadGroup.delay";
 
-    /* Action to be taken when a Sampler error occurs */
+    /** Action to be taken when a Sampler error occurs */
     public final static String ON_SAMPLE_ERROR = "ThreadGroup.on_sample_error"; // int
 
+    /** Continue, i.e. ignore sampler errors */
     public final static String ON_SAMPLE_ERROR_CONTINUE = "continue";
 
+    /** Stop current thread if sampler error occurs */
     public final static String ON_SAMPLE_ERROR_STOPTHREAD = "stopthread";
 
+    /** Stop test (all threads) if sampler error occurs */
     public final static String ON_SAMPLE_ERROR_STOPTEST = "stoptest";
 
-    private int numberOfThreads = 0; // Number of threads currently running
-                                        // in this group
+    // @GuardedBy("this")
+    private int numberOfThreads = 0; // Number of active threads in this group
 
     /**
      * No-arg constructor.
@@ -75,7 +86,7 @@ public class ThreadGroup extends AbstractTestElement implements Serializable, Co
     }
 
     /**
-     * Set the number of threads to start
+     * Set the total number of threads to start
      *
      * @param numThreads
      *            the number of threads.
@@ -84,47 +95,57 @@ public class ThreadGroup extends AbstractTestElement implements Serializable, Co
         setProperty(new IntegerProperty(NUM_THREADS, numThreads));
     }
 
+    /**
+     * Increment the number of active threads
+     */
     synchronized void incrNumberOfThreads() {
         numberOfThreads++;
     }
 
+    /**
+     * Decrement the number of active threads
+     */
     synchronized void decrNumberOfThreads() {
         numberOfThreads--;
     }
 
+    /**
+     * Get the number of active threads
+     */
     public synchronized int getNumberOfThreads() {
         return numberOfThreads;
     }
 
+    /** {@inheritDoc} */
     public boolean isDone() {
         return getSamplerController().isDone();
     }
 
+    /** {@inheritDoc} */
     public Sampler next() {
         return getSamplerController().next();
     }
 
     /**
-     * Set the Scheduler value.
+     * Set whether scheduler is being used
      *
-     * @param Scheduler
-     *            the Scheduler value.
+     * @param Scheduler true is scheduler is to be used
      */
     public void setScheduler(boolean Scheduler) {
         setProperty(new BooleanProperty(SCHEDULER, Scheduler));
     }
 
     /**
-     * Get the Scheduler value.
+     * Get whether scheduler is being used
      *
-     * @return the Scheduler value.
+     * @return true if scheduler is being used
      */
     public boolean getScheduler() {
         return getPropertyAsBoolean(SCHEDULER);
     }
 
     /**
-     * Set the StartTime value.
+     * Set the absolute StartTime value.
      *
      * @param stime -
      *            the StartTime value.
@@ -134,7 +155,7 @@ public class ThreadGroup extends AbstractTestElement implements Serializable, Co
     }
 
     /**
-     * Get the start time value.
+     * Get the absolute start time value.
      *
      * @return the start time value.
      */
@@ -143,7 +164,7 @@ public class ThreadGroup extends AbstractTestElement implements Serializable, Co
     }
 
     /**
-     * Get the duration
+     * Get the desired duration of the thread group test run
      *
      * @return the duration (in secs)
      */
@@ -152,7 +173,7 @@ public class ThreadGroup extends AbstractTestElement implements Serializable, Co
     }
 
     /**
-     * Set the duration
+     * Set the desired duration of the thread group test run
      *
      * @param duration
      *            in seconds
@@ -162,7 +183,7 @@ public class ThreadGroup extends AbstractTestElement implements Serializable, Co
     }
 
     /**
-     * Get the delay
+     * Get the startup delay
      *
      * @return the delay (in secs)
      */
@@ -171,7 +192,7 @@ public class ThreadGroup extends AbstractTestElement implements Serializable, Co
     }
 
     /**
-     * Set the delay
+     * Set the startup delay
      *
      * @param delay
      *            in seconds
@@ -258,20 +279,12 @@ public class ThreadGroup extends AbstractTestElement implements Serializable, Co
         getSamplerController().addTestElement(child);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see Controller#addIterationListener(LoopIterationListener)
-     */
+    /** {@inheritDoc} */
     public void addIterationListener(LoopIterationListener lis) {
         getSamplerController().addIterationListener(lis);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see Controller#initialize()
-     */
+    /** {@inheritDoc} */
     public void initialize() {
         Controller c = getSamplerController();
         JMeterProperty property = c.getProperty(TestElement.NAME);
@@ -283,7 +296,7 @@ public class ThreadGroup extends AbstractTestElement implements Serializable, Co
     /**
      * Check if a sampler error should cause thread to stop.
      *
-     * @return true if should stop
+     * @return true if thread should stop
      */
     public boolean getOnErrorStopThread() {
         return getPropertyAsString(ThreadGroup.ON_SAMPLE_ERROR).equalsIgnoreCase(ON_SAMPLE_ERROR_STOPTHREAD);
@@ -292,7 +305,7 @@ public class ThreadGroup extends AbstractTestElement implements Serializable, Co
     /**
      * Check if a sampler error should cause test to stop.
      *
-     * @return true if should stop
+     * @return true if test (all threads) should stop
      */
     public boolean getOnErrorStopTest() {
         return getPropertyAsString(ThreadGroup.ON_SAMPLE_ERROR).equalsIgnoreCase(ON_SAMPLE_ERROR_STOPTEST);
