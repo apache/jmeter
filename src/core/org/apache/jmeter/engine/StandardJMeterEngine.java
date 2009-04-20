@@ -229,7 +229,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
     }
 
     private void notifyTestListenersOfEnd(SearchByClass testListeners) {
-        log.info("Notifying test listeners of end of test", new Throwable());
+        log.info("Notifying test listeners of end of test");
         Iterator iter = testListeners.getSearchResults().iterator();
         while (iter.hasNext()) {
             TestListener tl = (TestListener) iter.next();
