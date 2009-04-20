@@ -68,6 +68,7 @@ public class TestAction extends AbstractSampler {
             pause(getDurationAsString());
         } else if (action == STOP) {
             if (target == THREAD) {
+                log.info("Stopping current thread");
                 context.getThread().stop();
             }
             // Not yet implemented
@@ -75,6 +76,7 @@ public class TestAction extends AbstractSampler {
             // {
             // }
             else if (target == TEST) {
+                log.info("Stopping all threads");
                    context.getEngine().askThreadsToStop();
             }
         }
