@@ -453,8 +453,6 @@ public class HTTPSampler extends HTTPSamplerBase implements Interruptible {
                 } catch (IOException e) {
                     log.debug("Connection failed, giving up");
                     throw e;
-                } finally {
-                    savedConn = null;                    
                 }
             }
             if (retry > MAX_CONN_RETRIES) {
@@ -472,6 +470,8 @@ public class HTTPSampler extends HTTPSamplerBase implements Interruptible {
             }
             // Request sent. Now get the response:
             byte[] responseData = readResponse(conn, res);
+
+            savedConn = null;
 
             res.sampleEnd();
             // Done with the sampling proper.
@@ -553,6 +553,7 @@ public class HTTPSampler extends HTTPSamplerBase implements Interruptible {
             // but indicates we're through with it. The JVM should close
             // it when necessary.
             disconnect(conn); // Disconnect unless using KeepAlive
+            savedConn = null;
         }
     }
 
