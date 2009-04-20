@@ -34,6 +34,8 @@ import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.processor.PreProcessor;
+import org.apache.jmeter.protocol.http.sampler.AccessLogSampler;
+import org.apache.jmeter.sampler.TestAction;
 import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
@@ -441,7 +443,7 @@ public class JMeterThread implements Runnable, Interruptible {
             // set the scheduler to start
             startScheduler();
         }
-        rampUpDelay();
+        rampUpDelay(); // TODO - how to handle thread stopped here
         log.info("Thread started: " + Thread.currentThread().getName());
         /*
          * Setting SamplingStarted before the contollers are initialised allows
@@ -510,7 +512,7 @@ public class JMeterThread implements Runnable, Interruptible {
         return threadName;
     }
 
-    public void stop() { // Called by StandardJMeterEngine
+    public void stop() { // Called by StandardJMeterEngine, TestAction and AccessLogSampler
         running = false;
         log.info("Stopping: " + threadName);
     }
@@ -662,9 +664,12 @@ public class JMeterThread implements Runnable, Interruptible {
      */
     private void rampUpDelay() {
         if (initialDelay > 0) {
+            long start = System.currentTimeMillis();
             try {
                 Thread.sleep(initialDelay);
             } catch (InterruptedException e) {
+                long actual = System.currentTimeMillis() - start;
+                log.warn("Starting delay was interrupted. Waited "+actual+" milli-seconds out of "+initialDelay);
             }
         }
     }
