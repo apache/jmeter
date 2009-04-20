@@ -61,13 +61,14 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
     /** JMeterThread => its JVM thread */
     private final Map/*<JMeterThread, Thread>*/ allThreads;
 
-    private volatile boolean startingGroups; // flag to show that groups are still being created
+    /** flag to show that groups are still being created, i.e test plan is not complete */
+    private volatile boolean startingGroups;
 
+    /** Flag to show whether test is running. Set to false to stop creating more threads. */
     private volatile boolean running = false;
 
+    /** Thread Groups run sequentially */
     private volatile boolean serialized = false;
-
-    private volatile boolean schedule_run = false;
 
     private HashTree test;
 
@@ -264,11 +265,12 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         }
     }
 
+    // Called by JMeter thread when it finishes
     public synchronized void threadFinished(JMeterThread thread) {
         try {
             allThreads.remove(thread);
             log.info("Ending thread " + thread.getThreadName());
-            if (!serialized && !schedule_run && !startingGroups && allThreads.size() == 0 ) {
+            if (!startingGroups && allThreads.size() == 0 ) {
                 log.info("Stopping test");
                 stopTest();
             }
@@ -374,12 +376,11 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
         ListenerNotifier notifier = new ListenerNotifier();
 
-        schedule_run = true;
         JMeterContextService.getContext().setSamplingStarted(true);
         int groupCount = 0;
         JMeterContextService.clearTotalThreads();
         startingGroups = true;
-        while (iter.hasNext()) {
+        while (running && iter.hasNext()) {// for each thread group
             groupCount++;
             ThreadGroup group = (ThreadGroup) iter.next();
             int numThreads = group.getNumThreads();
@@ -420,14 +421,10 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
                 Thread newThread = new Thread(jmeterThread);
                 newThread.setName(threadName);
                 allThreads.put(jmeterThread, newThread);
-                if (serialized && !iter.hasNext() && i == numThreads - 1) // last thread
-                {
-                    serialized = false;
-                }
                 newThread.start();
-            }
-            schedule_run = false;
-            if (serialized) {
+            } // end of thread startup for this thread group
+            if (serialized && !iter.hasNext()) {
+                log.info("Waiting for thread group: "+groupName+" to finish before starting next group");
                 while (running && allThreads.size() > 0) {
                     try {
                         Thread.sleep(1000);
@@ -435,6 +432,11 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
                     }
                 }
             }
+        } // end of thread groups
+        if (running) {
+            log.info("All threads have been started");
+        } else {
+            log.info("Test stopped - no more threads will be started");
         }
         startingGroups = false;
     }
@@ -509,6 +511,10 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
     public void askThreadsToStop() {
         engine.stopTest(false);
+    }
+
+    public void askThreadsToStopNow() {
+        engine.stopTest(true);
     }
 
     private void stopAllThreads() {
