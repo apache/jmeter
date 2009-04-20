@@ -217,7 +217,6 @@ public class HTTPSampler extends HTTPSamplerBase implements Interruptible {
         // works OK even if ContentEncoding is null
         boolean gzipped = ENCODING_GZIP.equals(conn.getContentEncoding());
 
-        savedConn = conn;
         try {
             if (gzipped) {
                 in = new BufferedInputStream(new GZIPInputStream(conn.getInputStream()));
@@ -255,8 +254,6 @@ public class HTTPSampler extends HTTPSamplerBase implements Interruptible {
                 log.error("Cause: "+cause);
             }
             in = new BufferedInputStream(conn.getErrorStream());
-        } finally {
-            savedConn = null;
         }
         return readResponse(res, in, contentLength);
     }
@@ -470,8 +467,6 @@ public class HTTPSampler extends HTTPSamplerBase implements Interruptible {
             }
             // Request sent. Now get the response:
             byte[] responseData = readResponse(conn, res);
-
-            savedConn = null;
 
             res.sampleEnd();
             // Done with the sampling proper.
