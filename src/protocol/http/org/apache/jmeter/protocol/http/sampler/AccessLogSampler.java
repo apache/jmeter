@@ -148,6 +148,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
             }
             if (thisCount == 0) {
                 if (count == 0 || filter == null) {
+                    log.info("Stopping current thread");
                     JMeterContextService.getContext().getThread().stop();
                 }
                 if (filter != null) {
