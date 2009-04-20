@@ -240,6 +240,7 @@ JMeter now removes extraneous leading "../" segments (as do many browsers)
 <li>Bug 46636 - rmi ports</li>
 <li>Mirror server now supports "X-Sleep" header - if this is set, the responding thread will wait for the specified number of milliseconds</li>
 <li>Make some samplers interruptible: HTTP (both), SoapSampler, FTPSampler</li>
+<li>Test Action now supports "Stop Now" action</li>
 </ul>
 
 <h3>Non-functional changes</h3>
