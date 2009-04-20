@@ -76,7 +76,7 @@ public class TestAction extends AbstractSampler {
             } else if (target == TEST) {
                 if (action == STOP_NOW) {
                     log.info("Stopping all threads now");
-                    context.getEngine().askThreadsToStopNow();
+                    context.getEngine().stopTest();
                 } else {
                     log.info("Stopping all threads");
                     context.getEngine().askThreadsToStop();                    
