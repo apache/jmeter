@@ -519,15 +519,20 @@ public class JMeterThread implements Runnable, Interruptible {
 
     /** {@inheritDoc} */
     public boolean interrupt(){
-        log.warn("Interrupting: " + threadName);
         Sampler samp = currentSampler; // fetch once
         if (samp instanceof Interruptible){
+            log.warn("Interrupting: " + threadName + " sampler: " +samp.getName());
             try {
-                ((Interruptible)samp).interrupt();
+                boolean found = ((Interruptible)samp).interrupt();
+                if (!found) { 
+                    log.warn("No operation pending");
+                }
+                return found;
             } catch (Exception e) {
                 log.warn("Caught Exception interrupting sampler: "+e.toString());
             }
-            return true;
+        } else if (samp != null){
+            log.warn("Sampler is not Interruptible: "+samp.getName());
         }
         return false;
     }
@@ -669,7 +674,7 @@ public class JMeterThread implements Runnable, Interruptible {
                 Thread.sleep(initialDelay);
             } catch (InterruptedException e) {
                 long actual = System.currentTimeMillis() - start;
-                log.warn("Starting delay was interrupted. Waited "+actual+" milli-seconds out of "+initialDelay);
+                log.warn("RampUp delay for "+threadName+" was interrupted. Waited "+actual+" milli-seconds out of "+initialDelay);
             }
         }
     }
