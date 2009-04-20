@@ -48,6 +48,8 @@ public class TestActionGui extends AbstractSamplerGui {
 
     private JRadioButton stopButton;
 
+    private JRadioButton stopNowButton;
+
     private JTextField durationField;
 
     // State variables
@@ -70,6 +72,8 @@ public class TestActionGui extends AbstractSamplerGui {
     private final String pauseAction = JMeterUtils.getResString("test_action_pause"); // $NON-NLS-1$
 
     private final String stopAction = JMeterUtils.getResString("test_action_stop"); // $NON-NLS-1$
+
+    private final String stopNowAction = JMeterUtils.getResString("test_action_stop_now"); // $NON-NLS-1$
 
     private final String durationLabel = JMeterUtils.getResString("test_action_duration"); // $NON-NLS-1$
 
@@ -98,6 +102,8 @@ public class TestActionGui extends AbstractSamplerGui {
         action = ta.getAction();
         if (action == TestAction.PAUSE) {
             pauseButton.setSelected(true);
+        } else if (action == TestAction.STOP_NOW) {
+            stopNowButton.setSelected(true);
         } else {
             stopButton.setSelected(true);
         }
@@ -138,7 +144,6 @@ public class TestActionGui extends AbstractSamplerGui {
         durationString = ""; //$NON-NLS-1$
         durationField.setText(""); //$NON-NLS-1$
         pauseButton.setSelected(true);
-        stopButton.setSelected(false);
         action = TestAction.PAUSE;
         target = TestAction.THREAD;
 
@@ -190,11 +195,22 @@ public class TestActionGui extends AbstractSamplerGui {
                 }
             }
         });
+        stopNowButton = new JRadioButton(stopNowAction, false);
+        stopNowButton.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                if (stopNowButton.isSelected()) {
+                    action = TestAction.STOP_NOW;
+                    durationField.setEnabled(false);
+                }
+            }
+        });
         actionButtons.add(pauseButton);
         actionButtons.add(stopButton);
+        actionButtons.add(stopNowButton);
         actionPanel.add(new JLabel(actionLabel));
         actionPanel.add(pauseButton);
         actionPanel.add(stopButton);
+        actionPanel.add(stopNowButton);
         add(actionPanel);
 
         // Duration
