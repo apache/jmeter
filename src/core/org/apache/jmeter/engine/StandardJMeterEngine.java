@@ -423,7 +423,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
                 allThreads.put(jmeterThread, newThread);
                 newThread.start();
             } // end of thread startup for this thread group
-            if (serialized && !iter.hasNext()) {
+            if (serialized && iter.hasNext()) {
                 log.info("Waiting for thread group: "+groupName+" to finish before starting next group");
                 while (running && allThreads.size() > 0) {
                     try {
