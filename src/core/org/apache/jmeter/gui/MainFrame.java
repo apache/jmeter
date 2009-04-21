@@ -277,6 +277,9 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
      *            the host where JMeter threads are stopping
      */
     public void showStoppingMessage(String host) {
+        if (stoppingMessage != null){
+            stoppingMessage.dispose();
+        }
         stoppingMessage = new JDialog(this, JMeterUtils.getResString("stopping_test_title"), true); //$NON-NLS-1$
         JLabel stopLabel = new JLabel(JMeterUtils.getResString("stopping_test") + ": " + host); //$NON-NLS-1$$NON-NLS-2$
         stopLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
