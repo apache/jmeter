@@ -2788,11 +2788,11 @@ instead. (see figures 9 and 10).</p>
 		</property>
 		<property name="Max Number of Connections" required="Yes">Maximum number of connections allowed in the pool.
 		To ensure that threads don't have to wait for connections, set the max count to the same as	the number of threads.
-		In versions of JMeter after 2.3, the value "0" is treated specially.
+		<b>In versions of JMeter after 2.3, the value "0" is treated specially.</b>
 		Instead of sharing the pool between all threads in the test plan, a pool containing a single connection
 		is created for each thread. This ensures that the same connection can be re-used for multiple samplers
 		in the same thread.
-		Multiple such pools can be used - e.g. for connecting to different databases - just give them different names.
+		Multiple pools can be used - e.g. for connecting to different databases - just give them different names.
 		</property>
 		<property name="Pool timeout" required="Yes">Pool throws an error if the timeout period is exceeded in the 
 		process of trying to retrieve a connection</property>
