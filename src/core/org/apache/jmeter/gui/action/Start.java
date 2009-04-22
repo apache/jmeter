@@ -70,22 +70,21 @@ public class Start extends AbstractAction {
             startEngine();
         } else if (e.getActionCommand().equals(ActionNames.ACTION_STOP)) {
             if (engine != null) {
+                log.info("Stopping test");
                 GuiPackage.getInstance().getMainFrame().showStoppingMessage("");
                 engine.stopTest();
-                engine = null;
             }
         } else if (e.getActionCommand().equals(ActionNames.ACTION_SHUTDOWN)) {
             if (engine != null) {
+                log.info("Shutting test down");
                 GuiPackage.getInstance().getMainFrame().showStoppingMessage("");
                 engine.askThreadsToStop();
-                engine = null;
             }
         }
     }
 
     protected void startEngine() {
         GuiPackage gui = GuiPackage.getInstance();
-        engine = new StandardJMeterEngine();
         HashTree testTree = gui.getTreeModel().getTestPlan();
         JMeter.convertSubTree(testTree);
         DisabledComponentRemover remover = new DisabledComponentRemover(testTree);
@@ -95,6 +94,7 @@ public class Start extends AbstractAction {
                 + ((TestPlan) testTree.getArray()[0]).isRunningVersion());
         TreeCloner cloner = new TreeCloner(false);
         testTree.traverse(cloner);
+        engine = new StandardJMeterEngine();
         engine.configure(cloner.getClonedTree());
         try {
             engine.runTest();
