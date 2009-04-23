@@ -789,7 +789,7 @@ run JMeter unless all the JMeter jars are added.
 
     <!-- JMeter launch jar -->
     <jar jarfile="${dest.jar.jmeter}/ApacheJMeter.jar" 
-        includes="**/NewDriver*,**/DynamicClassLoader*" 
+        includes="**/NewDriver*,**/DynamicClassLoader*,**/ShutdownClient.class" 
         basedir="${build.core}" 
         manifest="${build.dir}/MANIFEST_BIN.MF">
         <metainf dir="." includes="LICENSE,NOTICE"/>
@@ -1003,7 +1003,8 @@ run JMeter unless all the JMeter jars are added.
       List of Unix executable files in the binary distribution
       These need special handling to create the correct file mode
   -->
-  <property name="dist.executables" value="${dest.jar.jmeter}/jmeter ${dest.jar.jmeter}/jmeter.sh ${dest.jar.jmeter}/jmeter-server"/>
+  <property name="dist.executables" 
+  	value="${dest.jar.jmeter}/jmeter ${dest.jar.jmeter}/jmeter-server ${dest.jar.jmeter}/*.sh"/>
 
   <!-- List of files in source distribution that are eol=native -->
   <patternset id="dist.sources.native">

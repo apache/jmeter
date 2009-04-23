@@ -79,22 +79,49 @@ the Edit menu.
 </subsection>
 
 <subsection name="&sect-num;.5 Running a Test Plan" anchor="run">
-<p>To run your test plan, choose "start" from the "run" menu item.  To stop your test
-plan, choose "stop" from the same menu.  
+<p>To run your test plan, choose "Start" (Control + r) from the "Run" menu item.  
 When JMeter is running, it shows a small green box at the right hand end of the section just under the menu bar.
-You can also check the "run" menu.  
-If "start" is disabled, and "stop" is enabled,
+You can also check the "Run" menu.  
+If "Start" is disabled, and "Stop" is enabled,
 then JMeter is running your test plan (or, at least, it thinks it is).</p>
 <p>
-There are two types of stop command:
-<ul>
-<li>Stop (Control + '.') - stops the threads immediately</li>
-<li>Shutdown (Control + ',')- requests the threads to stop at the end of any current work</li>
-</ul>
+The numbers to the left of the green box are the number of active threads / total number of threads.
 </p>
 </subsection>
 
-<subsection name="&sect-num;.6 Error reporting" anchor="error_reporting">
+<subsection name="&sect-num;.6 Stopping a Test" anchor="stop">
+<p>
+There are two types of stop command available from the menu:
+<ul>
+<li>Stop (Control + '.') - stops the threads immediately if possible.
+In Versions of JMeter after 2.3.2, many samplers are now Interruptible which means that active samples can be terminated early.
+The stop command will check that all threads have stopped within the default timeout, which is 5000 ms = 5 seconds.
+[This can be changed using the JMeter property <code>jmeterengine.threadstop.wait</code>]
+If the threads have not stopped, then a message is displayed.
+The Stop command can be retried, but if it fails, then it is necessary to exit JMeter to clean up.
+</li>
+<li>Shutdown (Control + ',')- requests the threads to stop at the end of any current work.
+Will not interrupt any active samples.
+The modal shutdown dialog box will remain active until all threads have stopped.</li>
+</ul>
+Versions of JMeter after 2.3.2 allow a Stop to be initiated if Shutdown is taking too long.
+Close the Shutdown dialog box and select Run/Stop, or just press Control + '.'.
+</p>
+<p>
+When running JMeter in non-GUI mode, there is no Menu, and JMeter does not react to keystrokes such as Control + '.'.
+So in versions after 2.3.2, JMeter non-GUI mode will listen for commands on a specific port
+(default 4445, see the JMeter property <code>jmeterengine.nongui.port</code>).
+The commands currently supported are:
+<ul>
+<li>Shutdown - graceful shutdown</li>
+<li>StopTestNow - immediate shutdown</li>
+</ul>
+These commands can be sent by using the <code>shutdown[.cmd|.sh]</code> or <code>stoptest[.cmd|.sh]</code> script
+respectively. The scripts are to be found in the JMeter <code>bin</code> directory.
+</p>
+</subsection>
+
+<subsection name="&sect-num;.7 Error reporting" anchor="error_reporting">
 <p>
 JMeter reports warnings and errors to the jmeter.log file, as well as some information on the test run itself.
 Just occasionally there may be some errors that JMeter is unable to trap and log; these will appear on the command console.
