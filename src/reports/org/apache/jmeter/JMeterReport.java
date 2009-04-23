@@ -197,7 +197,7 @@ public class JMeterReport implements JMeterPlugin {
     }
 
     public void startNonGui(CLOption testFile, CLOption logFile){
-        System.setProperty("JMeter.NonGui", "true");
+        System.setProperty(JMeter.JMETER_NON_GUI, "true");
         JMeterReport driver = new JMeterReport();
         driver.parent = this;
         PluginManager.install(this, false);
