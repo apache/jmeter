@@ -57,7 +57,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
     private static final long serialVersionUID = 233L; // Remember to change this when the class changes ...
 
-    private static final long WAIT_TO_DIE = 5 * 1000; // 5 seconds
+    private static final long WAIT_TO_DIE = JMeterUtils.getPropDefault("jmeterengine.threadstop.wait", 5 * 1000); // 5 seconds
 
     /** JMeterThread => its JVM thread */
     private final Map/*<JMeterThread, Thread>*/ allThreads;
