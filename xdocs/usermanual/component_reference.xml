@@ -1320,6 +1320,10 @@ For variable delays, set the pause time to zero, and add a Timer as a child.</p>
 <p>
 The "Stop" action stops the thread or test after completing any samples that are in progress.
 The "Stop Now" action stops the test without waiting for samples to complete; it will interrupt any active samples.
+If some threads fail to stop within the 5 second time-limit, a message will be displayed in GUI mode.
+You can try using the Stop command to see if this will stop the threads, but if not, you should exit JMeter.
+In non-GUI mode, JMeter will exit if some threads fail to stop within the 5 second time limit.
+[This can be changed using the JMeter property <code>jmeterengine.threadstop.wait</code>]
 </p>
 </description>
 <properties>

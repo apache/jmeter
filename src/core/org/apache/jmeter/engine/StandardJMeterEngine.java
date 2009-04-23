@@ -20,6 +20,9 @@ package org.apache.jmeter.engine;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -59,6 +62,36 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
     private static final long WAIT_TO_DIE = JMeterUtils.getPropDefault("jmeterengine.threadstop.wait", 5 * 1000); // 5 seconds
 
+    /** UDP port used in non-GUI runs. Disabled if <=1000. */
+    private static final int UDP_PORT = JMeterUtils.getPropDefault("jmeterengine.nongui.port", 4445);
+
+    // Should we exit at end of the test? (only applies to server, because host is non-null)
+    private static final boolean exitAfterTest =
+        JMeterUtils.getPropDefault("server.exitaftertest", false);  // $NON-NLS-1$
+
+    private static final boolean startListenersLater =
+        JMeterUtils.getPropDefault("jmeterengine.startlistenerslater", true); // $NON-NLS-1$
+
+    static {
+        if (startListenersLater){
+            log.info("Listeners will be started after enabling running version");
+            log.info("To revert to the earlier behaviour, define jmeterengine.startlistenerslater=false");
+        }
+    }
+
+    // Allow engine and threads to be stopped from outside a thread
+    // e.g. from beanshell server
+    // Assumes that there is only one instance of the engine
+    // at any one time so it is not guaranteed to work ...
+    private volatile static StandardJMeterEngine engine;
+
+    /*
+     * Allow functions etc to register for testStopped notification.
+     * Only used by the function parser so far.
+     * The list is merged with the testListeners and then cleared.
+     */
+    private static final List testList = new ArrayList();
+
     /** JMeterThread => its JVM thread */
     private final Map/*<JMeterThread, Thread>*/ allThreads;
 
@@ -77,25 +110,6 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
     private final String host;
 
-    // Should we exit at end of the test? (only applies to server, because host is non-null)
-    private static final boolean exitAfterTest =
-        JMeterUtils.getPropDefault("server.exitaftertest", false);  // $NON-NLS-1$
-
-    private static final boolean startListenersLater =
-        JMeterUtils.getPropDefault("jmeterengine.startlistenerslater", true); // $NON-NLS-1$
-
-    static {
-        if (startListenersLater){
-            log.info("Listeners will be started after enabling running version");
-            log.info("To revert to the earlier behaviour, define jmeterengine.startlistenerslater=false");
-        }
-    }
-    // Allow engine and threads to be stopped from outside a thread
-    // e.g. from beanshell server
-    // Assumes that there is only one instance of the engine
-    // at any one time so it is not guaranteed to work ...
-    private volatile static StandardJMeterEngine engine;
-
     public static void stopEngineNow() {
         if (engine != null) {// May be null if called from Unit test
             engine.stopTest(true);
@@ -107,13 +121,6 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
             engine.stopTest(false);
         }
     }
-
-    /*
-     * Allow functions etc to register for testStopped notification.
-     * Only used by the function parser so far.
-     * The list is merged with the testListeners and then cleared.
-     */
-    private static final List testList = new ArrayList();
 
     public static synchronized void register(TestListener tl) {
         testList.add(tl);
@@ -190,6 +197,15 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         try {
             Thread runningThread = new Thread(new MyThreadGroup("JMeterThreadGroup"),this);
             runningThread.start();
+            if (JMeter.isNonGUI() && UDP_PORT > 1000){
+                Thread waiter = new Thread(){
+                    public void run() {
+                        waitForSignals();
+                    }
+                };
+                waiter.setDaemon(true);
+                waiter.start();
+            }
         } catch (Exception err) {
             stopTest();
             StringWriter string = new StringWriter();
@@ -197,6 +213,42 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
             err.printStackTrace(writer);
             throw new JMeterEngineException(string.toString());
         }
+    }
+
+    private void waitForSignals() {
+        byte[] buf = new byte[80];
+        DatagramSocket socket = null;
+        System.out.println("Waiting for possible shutdown message on port "+UDP_PORT);
+        try {
+            socket = new DatagramSocket(UDP_PORT);
+            DatagramPacket request = new DatagramPacket(buf, buf.length);
+            while(true) {
+                socket.receive(request);
+                InetAddress address = request.getAddress();
+                // Only accept commands from the local host
+                if (address.isLoopbackAddress()){
+                    String command = new String(request.getData(), request.getOffset(), request.getLength(),"ASCII");
+                    System.out.println("Command: "+command+" received from "+address);
+                    log.info("Command: "+command+" received from "+address);
+                    if (command.equals("StopTestNow")){
+                        stopTest();
+                        break;
+                    } else if (command.equals("Shutdown")) {
+                        askThreadsToStop();
+                        break;                        
+                    } else {
+                    }
+                }
+            }
+            socket.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (socket != null) {
+                socket.close();
+            }
+        }
+        
     }
 
     private void removeThreadGroups(List elements) {
