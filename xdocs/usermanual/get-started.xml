@@ -97,7 +97,7 @@ Even if your OS is not listed above, JMeter should run on it provided that the J
 </section>
 
 <section name="&sect-num;.2 Optional" anchor="optional">
-<p>If you plan on doing JMeter development or want to use Sun's Java Standard Extension packages, then you will need one or more optional packages listed below.</p>
+<p>If you plan on doing JMeter development, then you will need one or more optional packages listed below.</p>
 
 
 <subsection name="&sect-num;.2.1 Java Compiler" anchor="opt_compiler">
@@ -208,7 +208,7 @@ and means the last test plan that was run interactively.
 </p>
 
 <p>
-The environment variable can be used to override settings in the jmeter.bat script.
+The environment variable JVM_ARGS can be used to override JVM settings in the jmeter.bat script.
 For example:
 <pre>
 set JVM_ARGS="-Xms1024m -Xmx1024m -Dpropname=propvalue"
@@ -217,8 +217,7 @@ jmeter -t test.jmx ...
 </p>
 
 <p>
-Un*x script files; should work on most Linux/Unix systems.
-The 
+Un*x script files; should work on most Linux/Unix systems:
 <ul>
 <li>jmeter - run JMeter (in GUI mode by default). Defines some JVM settings which may not work for all JVMs.</li>
 <li>jmeter-server - start JMeter in server mode (calls jmeter script with appropriate parameters)</li>
@@ -245,7 +244,7 @@ JMeter will automatically find JMeter components in any jars found here.
 </p>
 <p>Support jars (libraries etc) should be placed in the <b>lib</b> directory.</p>
 
-<p>If you don't want to put the extension jars in the <b>lib/ext</b> directory,
+<p>If you don't want to put JMeter extension jars in the <b>lib/ext</b> directory,
 then define the property <b>search_paths</b> in jmeter.properties.
 Do not use lib/ext for utility jars; it is only intended for JMeter components.
 </p>
@@ -343,7 +342,6 @@ jmeter -LDEBUG</pre>
 	<p>If JMeter detects an error during a test, a message will be written to the log file. 
 		The log file name is defined in the jmeter.properties file (or using the -j option, see below).
 		It defaults to <b>jmeter.log</b>, and will be found in the directory from which JMeter was launched.
-		[in JMeter 2.2 and earlier, this was forced to be the JMeter bin directory.]
 		</p>
 		<p>
 		JMeter versions after 2.2 added a new command-line option, -j jmeterlogfile. 
