@@ -83,7 +83,7 @@ public class Start extends AbstractAction {
         }
     }
 
-    protected void startEngine() {
+    private void startEngine() {
         GuiPackage gui = GuiPackage.getInstance();
         HashTree testTree = gui.getTreeModel().getTestPlan();
         JMeter.convertSubTree(testTree);
