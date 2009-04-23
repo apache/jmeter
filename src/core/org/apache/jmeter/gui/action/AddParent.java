@@ -46,8 +46,10 @@ public class AddParent implements Command {
 
     public void doAction(ActionEvent e) {
         String name = ((Component) e.getSource()).getName();
+        GuiPackage guiPackage = GuiPackage.getInstance();
         try {
-            TestElement controller = GuiPackage.getInstance().createTestElement(name);
+            guiPackage.updateCurrentNode();
+            TestElement controller = guiPackage.createTestElement(name);
             addParentToTree(controller);
         } catch (Exception err) {
             log.error("", err);
