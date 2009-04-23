@@ -52,6 +52,7 @@ import org.apache.jorphan.collections.HashTreeTraverser;
 import org.apache.jorphan.collections.SearchByClass;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterStopTestException;
+import org.apache.jorphan.util.JMeterStopTestNowException;
 import org.apache.jorphan.util.JMeterStopThreadException;
 import org.apache.log.Logger;
 
@@ -248,6 +249,10 @@ public class JMeterThread implements Runnable, Interruptible {
         catch (JMeterStopTestException e) {
             log.info("Stopping Test: " + e.toString());
             stopTest();
+        }
+        catch (JMeterStopTestNowException e) {
+            log.info("Stopping Test Now: " + e.toString());
+            stopTestNow();
         } catch (JMeterStopThreadException e) {
             log.info("Stop Thread seen: " + e.toString());
         } catch (Exception e) {
@@ -538,9 +543,16 @@ public class JMeterThread implements Runnable, Interruptible {
     private void stopTest() {
         running = false;
         log.info("Stop Test detected by thread: " + threadName);
-        // engine.stopTest();
         if (engine != null) {
             engine.askThreadsToStop();
+        }
+    }
+
+    private void stopTestNow() {
+        running = false;
+        log.info("Stop Test Now detected by thread: " + threadName);
+        if (engine != null) {
+            engine.stopTest();
         }
     }
 
