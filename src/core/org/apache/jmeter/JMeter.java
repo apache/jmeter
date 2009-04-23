@@ -91,6 +91,7 @@ public class JMeter implements JMeterPlugin {
 
     public static final String HTTP_PROXY_USER = "http.proxyUser"; // $NON-NLS-1$
 
+    public static final String JMETER_NON_GUI = "JMeter.NonGui"; // $NON-NLS-1$
 
     // If the -t flag is to "LAST", then the last loaded file (if any) is used
     private static final String USE_LAST_JMX = "LAST";
@@ -676,7 +677,7 @@ public class JMeter implements JMeterPlugin {
             throws IllegalUserActionException {
         // add a system property so samplers can check to see if JMeter
         // is running in NonGui mode
-        System.setProperty("JMeter.NonGui", "true");// $NON-NLS-1$
+        System.setProperty(JMETER_NON_GUI, "true");// $NON-NLS-1$
         JMeter driver = new JMeter();// TODO - why does it create a new instance?
         driver.remoteProps = this.remoteProps;
         driver.remoteStop = this.remoteStop;
@@ -999,6 +1000,15 @@ public class JMeter implements JMeterPlugin {
 
     public String[][] getResourceBundles() {
         return new String[0][];
+    }
+
+    /**
+     * Check if JMeter is running in non-GUI mode.
+     * 
+     * @return true if JMeter is running in non-GUI mode.
+     */
+    public static boolean isNonGUI(){
+        return "true".equals(System.getProperty(JMeter.JMETER_NON_GUI)); //$NON-NLS-1$
     }
 
     private void logProperty(String prop){
