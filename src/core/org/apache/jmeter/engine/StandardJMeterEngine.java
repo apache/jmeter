@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.jmeter.JMeter;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.TestBeanHelper;
 import org.apache.jmeter.testelement.TestElement;
@@ -93,12 +94,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
     // e.g. from beanshell server
     // Assumes that there is only one instance of the engine
     // at any one time so it is not guaranteed to work ...
-    private static Map/*<String, JMeterThread>*/ allThreadNames; //TODO does not appear to be populated yet
-
     private volatile static StandardJMeterEngine engine;
-
-    /** Unmodifiable static version of {@link allThreads} JMeterThread => JVM Thread */
-    private static Map/*<JMeterThread, Thread>*/  allThreadsSave;
 
     public static void stopEngineNow() {
         if (engine != null) {// May be null if called from Unit test
@@ -132,20 +128,24 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
     }
 
     private static boolean stopThread(String threadName, boolean now) {
-        if (allThreadNames == null) {
+        if (engine == null) {
             return false;// e.g. not yet started
         }
-        JMeterThread thrd;
-        try {
-            thrd = (JMeterThread) allThreadNames.get(threadName);
-        } catch (Exception e) {
-            log.warn("stopThread: " + e);
-            return false;
+        JMeterThread thrd=null;
+        synchronized (engine.allThreads) { // Protect iterator
+            Iterator iter = engine.allThreads.keySet().iterator();
+            while(iter.hasNext()){
+                thrd = (JMeterThread) iter.next();
+                if (thrd.getThreadName().equals(threadName)){
+                    break; // Found matching thread
+                }
+            }
         }
         if (thrd != null) {
             thrd.stop();
+            thrd.interrupt();
             if (now) {
-                Thread t = (Thread) allThreadsSave.get(thrd);
+                Thread t = (Thread) engine.allThreads.get(thrd);
                 if (t != null) {
                     t.interrupt();
                 }
@@ -163,11 +163,9 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
     public StandardJMeterEngine(String host) {
         this.host = host;
-        this.allThreads = new HashMap();
-        // Hacks to allow external control
+        this.allThreads = Collections.synchronizedMap(new HashMap());
+        // Hack to allow external control
         engine = this;
-        allThreadNames = new HashMap();
-        allThreadsSave = Collections.unmodifiableMap(allThreads);
     }
 
     public void configure(HashTree testTree) {
@@ -267,15 +265,15 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
     // Called by JMeter thread when it finishes
     public synchronized void threadFinished(JMeterThread thread) {
-        try {
-            allThreads.remove(thread);
-            log.info("Ending thread " + thread.getThreadName());
-            if (!startingGroups && allThreads.size() == 0 ) {
-                log.info("Stopping test");
-                stopTest();
-            }
-        } catch (Throwable e) {
-            log.fatalError("Call to threadFinished should never throw an exception - this can deadlock JMeter",e);
+        log.info("Ending thread " + thread.getThreadName());
+        allThreads.remove(thread);
+        if (!startingGroups && allThreads.size() == 0 ) {// All threads have exitted
+            new Thread(){// Ensure that the current sampler thread can exit cleanly
+                public void run() {
+                    log.info("Stopping test");
+                    notifyTestListenersOfEnd(testListenersSave);
+                }                    
+            }.start();
         }
     }
 
@@ -296,21 +294,25 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         }
 
         public void run() {
-            if (running) {
-                running = false;
-                if (now) {
-                    tellThreadsToStop();
-                } else {
-                    stopAllThreads();
-                }
-                try {
-                    Thread.sleep(10 * allThreads.size());
-                } catch (InterruptedException e) {
-                }
+            running = false;
+            engine = null;
+            if (now) {
+                tellThreadsToStop();
+                pause(10 * allThreads.size());
                 boolean stopped = verifyThreadsStopped();
-                if (stopped || now) {
+                if (!stopped) {
                     notifyTestListenersOfEnd(testListenersSave);
-                }
+                    if (JMeter.isNonGUI()) {
+                        exit();
+                    } else {
+                        JMeterUtils.reportErrorToUser(
+                                JMeterUtils.getResString("stopping_test_failed"), 
+                                JMeterUtils.getResString("stopping_test_title"));
+                        // TODO - perhaps allow option to stop them?
+                    }
+                } // else will be done by threadFinished()
+            } else {
+                stopAllThreads();
             }
         }
     }
@@ -426,10 +428,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
             if (serialized && iter.hasNext()) {
                 log.info("Waiting for thread group: "+groupName+" to finish before starting next group");
                 while (running && allThreads.size() > 0) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                    }
+                    pause(1000);
                 }
             }
         } // end of thread groups
@@ -476,17 +475,26 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
     private boolean verifyThreadsStopped() {
         boolean stoppedAll = true;
-        Iterator iter = new HashSet(allThreads.keySet()).iterator();
-        while (iter.hasNext()) {
-            Thread t = (Thread) allThreads.get(iter.next());
-            if (t != null && t.isAlive()) {
+        List/*<Thread>*/ threadsToCheck = new ArrayList/*<Thread>*/(allThreads.size());
+        synchronized (allThreads) { // Protect iterator
+            Iterator/*<Thread>*/ iter = allThreads.keySet().iterator();
+            while (iter.hasNext()) {
+                Thread t = (Thread) allThreads.get(iter.next());
+                if (t != null) {
+                    threadsToCheck.add(t); // Do work later to reduce time in synch block.
+                }
+            }
+        }
+        for(int i=0; i < threadsToCheck.size(); i++) {
+            Thread t = (Thread) threadsToCheck.get(i);
+            if (t.isAlive()) {
                 try {
                     t.join(WAIT_TO_DIE);
                 } catch (InterruptedException e) {
                 }
                 if (t.isAlive()) {
                     stoppedAll = false;
-                    log.warn("Thread won't die: " + t.getName());
+                    log.warn("Thread won't exit: " + t.getName());
                 }
             }
         }
@@ -494,17 +502,14 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
     }
 
     private void tellThreadsToStop() {
-        Iterator iter = new HashSet(allThreads.keySet()).iterator();
-        while (iter.hasNext()) {
-            JMeterThread item = (JMeterThread) iter.next();
-            item.stop(); // set stop flag
-            item.interrupt(); // interrupt sampler if possible
-            Thread t = (Thread) allThreads.get(item);
-            if (t != null) {
+        synchronized (allThreads) { // Protect iterator
+            Iterator iter = new HashSet(allThreads.keySet()).iterator();
+            while (iter.hasNext()) {
+                JMeterThread item = (JMeterThread) iter.next();
+                item.stop(); // set stop flag
+                item.interrupt(); // interrupt sampler if possible
+                Thread t = (Thread) allThreads.get(item);
                 t.interrupt(); // also interrupt JVM thread
-            } else {
-                log.warn("Lost thread: " + item.getThreadName());
-                allThreads.remove(item);
             }
         }
     }
@@ -513,15 +518,13 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         engine.stopTest(false);
     }
 
-    public void askThreadsToStopNow() {
-        engine.stopTest(true);
-    }
-
     private void stopAllThreads() {
-        Iterator iter = new HashSet(allThreads.keySet()).iterator();
-        while (iter.hasNext()) {
-            JMeterThread item = (JMeterThread) iter.next();
-            item.stop();
+        synchronized (allThreads) {// Protect iterator
+            Iterator iter = new HashSet(allThreads.keySet()).iterator();
+            while (iter.hasNext()) {
+                JMeterThread item = (JMeterThread) iter.next();
+                item.stop(); // This is quick
+            }
         }
     }
 
@@ -531,16 +534,20 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         Thread t = new Thread() {
             public void run() {
                 // log.info("Pausing");
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                }
+                pause(1000); // Allow RMI to complete
                 log.info("Bye");
                 System.exit(0);
             }
         };
         log.info("Starting Closedown");
         t.start();
+    }
+
+    private void pause(long ms){
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException e) {
+        }        
     }
 
     public void setProperties(Properties p) {
