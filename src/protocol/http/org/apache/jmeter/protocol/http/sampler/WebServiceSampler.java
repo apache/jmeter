@@ -312,7 +312,7 @@ public class WebServiceSampler extends HTTPSamplerBase {
      * passed to JMeter.java.
      */
     private void checkProxy() {
-        if (System.getProperty("JMeter.NonGui") != null && System.getProperty("JMeter.NonGui").equals("true")) {
+        if (JMeter.isNonGUI()) {
             this.setUseProxy(true);
             // we check to see if the proxy host and port are set
             String port = this.getPropertyAsString(PROXY_PORT);
