@@ -368,8 +368,6 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
             stoppingMessage.dispose();
             stoppingMessage = null;
         }
-        activeThreads.setText("0");
-        totalThreads.setText("0");
     }
 
     /* Implements TestListener#testIterationStart(LoopIterationEvent) */
