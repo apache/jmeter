@@ -49,19 +49,13 @@ public class BeanShellServer implements Runnable {
         serverport = port;
     }
 
-    private BeanShellServer() {// do not use!
-        super();
-        serverport = 0;
-        serverfile = "";
-    }
-
     // For use by the server script
-    private static String getprop(String s) {
+    static String getprop(String s) {
         return JMeterUtils.getPropDefault(s, s);
     }
 
     // For use by the server script
-    private static void setprop(String s, String v) {
+    static void setprop(String s, String v) {
         JMeterUtils.getJMeterProperties().setProperty(s, v);
     }
 

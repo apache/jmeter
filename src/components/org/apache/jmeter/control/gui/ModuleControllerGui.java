@@ -52,16 +52,19 @@ public class ModuleControllerGui extends AbstractControllerGui
 
     private JMeterTreeNode selected = null;
 
-    private JComboBox nodes;
+    private final JComboBox nodes;
 
-    private DefaultComboBoxModel nodesModel;
+    private final DefaultComboBoxModel nodesModel;
 
-    private JLabel warningLabel;
+    private final JLabel warningLabel;
 
     /**
      * Initializes the gui panel for the ModuleController instance.
      */
     public ModuleControllerGui() {
+        nodesModel = new DefaultComboBoxModel();
+        nodes = new JComboBox(nodesModel);
+        warningLabel = new JLabel(""); // $NON-NLS-1$
         init();
     }
 
@@ -172,12 +175,9 @@ public class ModuleControllerGui extends AbstractControllerGui
         JPanel modulesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 5));
         JLabel nodesLabel = new JLabel(JMeterUtils.getResString("module_controller_module_to_run")); // $NON-NLS-1$
         modulesPanel.add(nodesLabel);
-        nodesModel = new DefaultComboBoxModel();
-        nodes = new JComboBox(nodesModel);
         nodesLabel.setLabelFor(nodes);
         reinitialize();
         modulesPanel.add(nodes);
-        warningLabel = new JLabel(""); // $NON-NLS-1$
         modulesPanel.add(warningLabel);
         add(modulesPanel);
     }
@@ -249,12 +249,9 @@ public class ModuleControllerGui extends AbstractControllerGui
 
 class TreeNodeWrapper {
 
-    private JMeterTreeNode tn;
+    private final JMeterTreeNode tn;
 
-    private String label;
-
-    private TreeNodeWrapper() {
-    }
+    private final String label;
 
     public TreeNodeWrapper(JMeterTreeNode tn, String label) {
         this.tn = tn;
