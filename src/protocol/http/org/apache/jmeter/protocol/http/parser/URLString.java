@@ -27,19 +27,13 @@ import java.net.URL;
  *
  * @version $Revision$
  */
-public class URLString implements Comparable // To allow use in Sorted
-                                                // Collections
-{
+public class URLString implements Comparable {
 
-    private URL url;
+    private final URL url;
 
-    private String urlAsString;
+    private final String urlAsString;
 
-    private int hashCode;
-
-    private URLString()// not instantiable
-    {
-    }
+    private final int hashCode;
 
     public URLString(URL u) {
         url = u;

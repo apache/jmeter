@@ -23,8 +23,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
@@ -34,7 +32,6 @@ import org.apache.commons.cli.avalon.CLOptionDescriptor;
 import org.apache.commons.cli.avalon.CLUtil;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.control.gui.ReportGui;
-import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.gui.ReportGuiPackage;
 import org.apache.jmeter.plugin.JMeterPlugin;
 import org.apache.jmeter.plugin.PluginManager;
@@ -45,11 +42,7 @@ import org.apache.jmeter.report.gui.action.ReportLoad;
 import org.apache.jmeter.report.gui.tree.ReportTreeListener;
 import org.apache.jmeter.report.gui.tree.ReportTreeModel;
 import org.apache.jmeter.report.writers.gui.HTMLReportWriterGui;
-import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.save.SaveService;
-import org.apache.jmeter.testelement.ReportPlan;
-import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractListenerGui;
 import org.apache.jorphan.collections.HashTree;
@@ -107,8 +100,6 @@ public class JMeterReport implements JMeterPlugin {
 
     private static final int JMETER_HOME_OPT = 'd';
 
-    private JMeterReport parent;
-
     private static final CLOptionDescriptor[] options = new CLOptionDescriptor[] {
             new CLOptionDescriptor("help", CLOptionDescriptor.ARGUMENT_DISALLOWED, HELP_OPT,
                     "print usage information and exit"),
@@ -141,8 +132,6 @@ public class JMeterReport implements JMeterPlugin {
                     "Start remote servers from non-gui mode"),
             new CLOptionDescriptor("homedir", CLOptionDescriptor.ARGUMENT_REQUIRED, JMETER_HOME_OPT,
                     "the jmeter home directory to use"), };
-
-    transient boolean testEnded = false;
 
     /**
      *
@@ -198,8 +187,6 @@ public class JMeterReport implements JMeterPlugin {
 
     public void startNonGui(CLOption testFile, CLOption logFile){
         System.setProperty(JMeter.JMETER_NON_GUI, "true");
-        JMeterReport driver = new JMeterReport();
-        driver.parent = this;
         PluginManager.install(this, false);
     }
 
@@ -410,110 +397,4 @@ public class JMeterReport implements JMeterPlugin {
         }
 
     }
-
-    /**
-     * Code copied from AbstractAction.java and modified to suit TestElements
-     *
-     * @param tree
-     */
-    private void convertSubTree(HashTree tree) {// TODO check build dependencies
-        Iterator iter = new LinkedList(tree.list()).iterator();
-        while (iter.hasNext()) {
-            TestElement item = (TestElement) iter.next();
-            if (item.isEnabled()) {
-                // This is done for GUI runs in JMeterTreeModel.addSubTree()
-                if (item instanceof ReportPlan) {
-                    ReportPlan tp = (ReportPlan) item;
-                }
-                // TODO handle ReplaceableControllers
-                // if (item instanceof ReplaceableController)
-                // {
-                // System.out.println("Replaceable "+item.getClass().getName());
-                // HashTree subTree = tree.getTree(item);
-                //
-                // if (subTree != null)
-                // {
-                // ReplaceableController rc =
-                // (ReplaceableController) item;//.createTestElement();
-                // rc.replace(subTree);
-                // convertSubTree(subTree);
-                // tree.replace(item, rc.getReplacement());
-                // }
-                // }
-                // else
-                {
-                    // System.out.println("NonReplaceable
-                    // "+item.getClass().getName());
-                    convertSubTree(tree.getTree(item));
-                    // TestElement testElement = item.createTestElement();
-                    // tree.replace(item, testElement);
-                }
-            } else {
-                // System.out.println("Disabled "+item.getClass().getName());
-                tree.remove(item);
-            }
-        }
-    }
-
-    /**
-     * Listen to test and exit program after test completes, after a 5 second
-     * delay to give listeners a chance to close out their files.
-     */
-    private static class ListenToTest implements TestListener, Runnable, Remoteable {
-        int started = 0;
-
-        private JMeterReport _parent;
-
-        private ListenToTest(JMeterReport parent) {
-            _parent = parent;
-        }
-
-        public synchronized void testEnded(String host) {
-            started--;
-            log.info("Remote host " + host + " finished");
-            if (started == 0) {
-                testEnded();
-            }
-        }
-
-        public void testEnded() {
-            Thread stopSoon = new Thread(this);
-            stopSoon.start();
-        }
-
-        public synchronized void testStarted(String host) {
-            started++;
-            log.info("Started remote host: " + host);
-        }
-
-        public void testStarted() {
-            log.info(JMeterUtils.getResString("running_test"));
-        }
-
-        /**
-         * This is a hack to allow listeners a chance to close their files. Must
-         * implement a queue for sample responses tied to the engine, and the
-         * engine won't deliver testEnded signal till all sample responses have
-         * been delivered. Should also improve performance of remote JMeter
-         * testing.
-         */
-        public void run() {
-            System.out.println("Tidying up ...");
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                // ignored
-            }
-            System.out.println("... end of run");
-            _parent.testEnded = true;
-        }
-
-        /**
-         * @see TestListener#testIterationStart(LoopIterationEvent)
-         */
-        public void testIterationStart(LoopIterationEvent event) {
-            // ignored
-        }
-    }
-
 }

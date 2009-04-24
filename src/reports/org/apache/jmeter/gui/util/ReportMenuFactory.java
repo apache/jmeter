@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.gui.util;
 
-import java.awt.event.KeyEvent;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -120,10 +119,6 @@ public final class ReportMenuFactory {
      * Private constructor to prevent instantiation.
      */
     private ReportMenuFactory() {
-    }
-
-    public static String doNothing() {
-        return "doing nothing";
     }
 
     public static void addEditMenu(JPopupMenu menu, boolean removable) {
