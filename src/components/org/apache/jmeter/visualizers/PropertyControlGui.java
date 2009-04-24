@@ -33,10 +33,10 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import javax.swing.BorderFactory;
+//import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
-import javax.swing.JButton;
+//import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -83,11 +83,11 @@ public class PropertyControlGui extends AbstractConfigGui
     /** The model for the arguments table. */
     protected transient ObjectTableModel tableModel;
 
-    /** A button for adding new arguments to the table. */
-    private JButton add;
-
-    /** A button for removing arguments from the table. */
-    private JButton delete;
+//    /** A button for adding new arguments to the table. */
+//    private JButton add;
+//
+//    /** A button for removing arguments from the table. */
+//    private JButton delete;
 
     public PropertyControlGui() {
         super();
@@ -196,27 +196,27 @@ public class PropertyControlGui extends AbstractConfigGui
         return labelPanel;
     }
 
-    /**
-     * Create a panel containing the add and delete buttons.
-     *
-     * @return a GUI panel containing the buttons
-     */
-    private JPanel makeButtonPanel() {// Not currently used
-        add = new JButton(JMeterUtils.getResString("add")); // $NON-NLS-1$
-        add.setActionCommand(ADD);
-        add.setEnabled(true);
-
-        delete = new JButton(JMeterUtils.getResString("delete")); // $NON-NLS-1$
-        delete.setActionCommand(DELETE);
-
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
-         add.addActionListener(this);
-        delete.addActionListener(this);
-        buttonPanel.add(add);
-        buttonPanel.add(delete);
-        return buttonPanel;
-    }
+//    /**
+//     * Create a panel containing the add and delete buttons.
+//     *
+//     * @return a GUI panel containing the buttons
+//     */
+//    private JPanel makeButtonPanel() {// Not currently used
+//        add = new JButton(JMeterUtils.getResString("add")); // $NON-NLS-1$
+//        add.setActionCommand(ADD);
+//        add.setEnabled(true);
+//
+//        delete = new JButton(JMeterUtils.getResString("delete")); // $NON-NLS-1$
+//        delete.setActionCommand(DELETE);
+//
+//        JPanel buttonPanel = new JPanel();
+//        buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+//         add.addActionListener(this);
+//        delete.addActionListener(this);
+//        buttonPanel.add(add);
+//        buttonPanel.add(delete);
+//        return buttonPanel;
+//    }
 
     /**
      * Initialize the components and layout of this component.

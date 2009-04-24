@@ -50,7 +50,7 @@ import org.apache.log.Logger;
 public class FileReporter extends JPanel {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private Hashtable data = new Hashtable();
+    private final Hashtable data = new Hashtable();
 
     /** initalize a file reporter from a file */
     public void init(String file) throws IOException {
@@ -136,9 +136,6 @@ private static class GraphPanel extends JPanel {
     Vector keys = new Vector();
 
     Vector colorList = new Vector();
-
-    private GraphPanel() {
-    }
 
     public GraphPanel(Hashtable data) {
         this.data = data;

@@ -147,7 +147,6 @@ public class GenericController extends AbstractTestElement implements Controller
                 }
             }
         } catch (NextIsNullException e) {
-            returnValue = null;
         }
         return returnValue;
     }
