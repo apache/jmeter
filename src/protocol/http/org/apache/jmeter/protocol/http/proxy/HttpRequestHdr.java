@@ -582,24 +582,24 @@ public class HttpRequestHdr {
         return "";// $NON-NLS-1$
     }
 
-    /**
-     * Returns the remainder of a tokenized string.
-     *
-     * @param tk
-     *            String that is partially tokenized.
-     * @return The remainder
-     */
-    private String getRemainder(StringTokenizer tk) {
-        StringBuffer strBuff = new StringBuffer();
-        if (tk.hasMoreTokens()) {
-            strBuff.append(tk.nextToken());
-        }
-        while (tk.hasMoreTokens()) {
-            strBuff.append(" "); // $NON-NLS-1$
-            strBuff.append(tk.nextToken());
-        }
-        return strBuff.toString();
-    }
+//    /**
+//     * Returns the remainder of a tokenized string.
+//     *
+//     * @param tk
+//     *            String that is partially tokenized.
+//     * @return The remainder
+//     */
+//    private String getRemainder(StringTokenizer tk) {
+//        StringBuffer strBuff = new StringBuffer();
+//        if (tk.hasMoreTokens()) {
+//            strBuff.append(tk.nextToken());
+//        }
+//        while (tk.hasMoreTokens()) {
+//            strBuff.append(" "); // $NON-NLS-1$
+//            strBuff.append(tk.nextToken());
+//        }
+//        return strBuff.toString();
+//    }
 
     private String getUrlWithoutQuery(URL _url) {
         String fullUrl = _url.toString();

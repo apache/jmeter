@@ -33,12 +33,10 @@ import org.apache.jmeter.samplers.Clearable;
  * <p>
  */
 public class MonitorGraph extends JComponent implements MouseListener, MonitorGuiListener, Clearable {
-    // NOTUSED protected static int width = 500;
+
     private MonitorAccumModel MODEL;
 
     private MonitorModel CURRENT;
-
-    private boolean CPU = false;// TODO is this needed? It's never read
 
     private boolean HEALTH = true;
 
@@ -52,31 +50,17 @@ public class MonitorGraph extends JComponent implements MouseListener, MonitorGu
 
     private boolean XGRID = true;
 
-    private int GRAPHMAX = 0;// TODO is this needed? It's never read
-
     /**
-     *
+     * Needed for Serialization tests.
      * @deprecated Only for use in unit testing
      */
     public MonitorGraph() {
         // log.warn("Only for use in unit testing");
     }
 
-    /**
-     *
-     */
     public MonitorGraph(MonitorAccumModel model) {
         this.MODEL = model;
-        GRAPHMAX = model.getBufferSize();
-        init();
-    }
-
-    private void init() {
         repaint();
-    }
-
-    public void setCpu(boolean cpu) {
-        this.CPU = cpu;
     }
 
     public void setHealth(boolean health) {
@@ -95,49 +79,29 @@ public class MonitorGraph extends JComponent implements MouseListener, MonitorGu
         this.THREAD = thread;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
-     */
+    /** {@inheritDoc} */
     public void mouseClicked(MouseEvent e) {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.awt.event.MouseListener#mouseEntered(java.awt.event.MouseEvent)
-     */
+    /** {@inheritDoc} */
     public void mouseEntered(MouseEvent e) {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.awt.event.MouseListener#mouseExited(java.awt.event.MouseEvent)
-     */
+    /** {@inheritDoc} */
     public void mouseExited(MouseEvent e) {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent)
-     */
+    /** {@inheritDoc} */
     public void mousePressed(MouseEvent e) {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
-     */
+    /** {@inheritDoc} */
     public void mouseReleased(MouseEvent e) {
 
     }
 
     /**
-     * The method will fist check to see if the graph is visible. If it is, it
+     * The method will first check to see if the graph is visible. If it is, it
      * will repaint the graph.
      */
     public void updateGui(final MonitorModel model) {

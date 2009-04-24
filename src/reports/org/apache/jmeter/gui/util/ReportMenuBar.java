@@ -19,7 +19,6 @@
 package org.apache.jmeter.gui.util;
 
 import java.awt.Component;
-import java.awt.event.KeyEvent;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -50,68 +49,68 @@ import org.apache.log.Logger;
 public class ReportMenuBar extends JMenuBar implements LocaleChangeListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    JMenu fileMenu;
+    private JMenu fileMenu;
 
-    JMenuItem file_save_as;
+    private JMenuItem file_save_as;
 
-    JMenuItem file_load;
+    private JMenuItem file_load;
 
-    JMenuItem file_merge;
+    private JMenuItem file_merge;
 
-    JMenuItem file_exit;
+    private JMenuItem file_exit;
 
-    JMenuItem file_close;
+    private JMenuItem file_close;
 
-    JMenu editMenu;
+    private JMenu editMenu;
 
-    JMenu edit_add;
+    private JMenu edit_add;
 
     // JMenu edit_add_submenu;
-    JMenuItem edit_remove; // TODO - should this be created?
+    private JMenuItem edit_remove; // TODO - should this be created?
 
-    JMenu runMenu;
+    private JMenu runMenu;
 
-    JMenuItem run_start;
+    private JMenuItem run_start;
 
-    JMenu remote_start;
+    private JMenu remote_start;
 
-    JMenuItem remote_start_all;
+    private JMenuItem remote_start_all;
 
-    Collection remote_engine_start;
+    private final Collection remote_engine_start;
 
-    JMenuItem run_stop;
+    private JMenuItem run_stop;
 
     private JMenuItem run_shut; // all the others could be private too?
 
-    JMenu remote_stop;
+    private JMenu remote_stop;
 
-    JMenuItem remote_stop_all;
+    private JMenuItem remote_stop_all;
 
-    Collection remote_engine_stop;
+    private final Collection remote_engine_stop;
 
-    JMenuItem run_clear;
+    private JMenuItem run_clear;
 
-    JMenuItem run_clearAll;
+    private JMenuItem run_clearAll;
 
     // JMenu reportMenu;
     // JMenuItem analyze;
-    JMenu optionsMenu;
+    private JMenu optionsMenu;
 
-    JMenu lafMenu;
+    private JMenu lafMenu;
 
-    JMenuItem sslManager;
+    private JMenuItem sslManager;
 
-    JMenu helpMenu;
+    private JMenu helpMenu;
 
-    JMenuItem help_about;
+    private JMenuItem help_about;
 
-    String[] remoteHosts;
+    private String[] remoteHosts;
 
     private JMenu remote_exit;
 
     private JMenuItem remote_exit_all;
 
-    private Collection remote_engine_exit;
+    private final Collection remote_engine_exit;
 
     public ReportMenuBar() {
         remote_engine_start = new LinkedList();

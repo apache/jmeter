@@ -37,11 +37,7 @@ import org.apache.jmeter.protocol.http.util.ConversionUtils;
  *
  */
 public class URLCollection {
-    Collection coll;
-
-    // Inaccessible default constructor
-    private URLCollection() {
-    }
+    private final Collection coll;
 
     /**
      * Creates a new URLCollection from an existing Collection
@@ -109,7 +105,7 @@ public class URLCollection {
      *
      */
     private static class UrlIterator implements Iterator {
-        Iterator iter;
+        private final Iterator iter;
 
         UrlIterator(Iterator i) {
             iter = i;

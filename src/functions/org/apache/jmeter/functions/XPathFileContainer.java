@@ -57,13 +57,6 @@ public class XPathFileContainer {
         return nextRow;
     }
 
-    private XPathFileContainer()// Not intended to be called directly
-    {
-        fileName=null;
-        xpath=null;
-        nodeList=null;
-    }
-
     public XPathFileContainer(String file, String xpath) throws FileNotFoundException, IOException,
             ParserConfigurationException, SAXException, TransformerException {
         log.debug("XPath(" + file + ") xpath " + xpath + "");

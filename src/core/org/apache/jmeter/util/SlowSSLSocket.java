@@ -43,12 +43,6 @@ public class SlowSSLSocket extends SSLSocket {
 
     private final SSLSocket sslSock; // Save the actual socket
 
-    // Ensure we can't be called without suitable parameters
-    private SlowSSLSocket(){
-        CPS=0;
-        throw new IllegalArgumentException("No such constructor");
-    }
-
     /**
      * Wrap an SSLSocket with slow input and output streams
      * @param sock SSLSocket to be wrapped
