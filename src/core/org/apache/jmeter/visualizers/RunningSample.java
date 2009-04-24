@@ -58,10 +58,6 @@ public class RunningSample {
 
     private final int index;
 
-    private RunningSample() {// Don't (can't) use this...
-        this("", 0);
-    }
-
     /**
      * Use this constructor to create the initial instance
      */
@@ -103,7 +99,7 @@ public class RunningSample {
      * Clear the counters (useful for differential stats)
      *
      */
-    public synchronized void clear() {
+    public void clear() {
         init();
     }
 
@@ -205,7 +201,7 @@ public class RunningSample {
      * Records a sample.
      *
      */
-    public synchronized void addSample(SampleResult res) {
+    public void addSample(SampleResult res) {
         long aTimeInMillis = res.getTime();
         boolean aSuccessFlag = res.isSuccessful();
 
@@ -238,10 +234,10 @@ public class RunningSample {
     }
 
     /**
-     * Adds another RunningSample to this one Does not check if it has the same
-     * label and index
+     * Adds another RunningSample to this one.
+     * Does not check if it has the same label and index.
      */
-    public synchronized void addSample(RunningSample rs) {
+    public void addSample(RunningSample rs) {
         this.counter += rs.counter;
         this.errorCount += rs.errorCount;
         this.runningSum += rs.runningSum;
