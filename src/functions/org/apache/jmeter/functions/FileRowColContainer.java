@@ -38,9 +38,9 @@ public class FileRowColContainer {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private ArrayList fileData; // Lines in the file, split into columns
+    private final ArrayList fileData; // Lines in the file, split into columns
 
-    private String fileName; // name of the file
+    private final String fileName; // name of the file
 
     public static final String DELIMITER
         = JMeterUtils.getPropDefault("csvread.delimiter",  // $NON-NLS-1$
@@ -50,17 +50,14 @@ public class FileRowColContainer {
     private int nextRow;
 
     /** Delimiter for this file */
-    private String delimiter;
-
-    private FileRowColContainer()// Not intended to be called directly
-    {
-    }
+    private final String delimiter;
 
     public FileRowColContainer(String file, String delim) throws IOException, FileNotFoundException {
         log.debug("FRCC(" + file + "," + delim + ")");
         fileName = file;
         delimiter = delim;
         nextRow = 0;
+        fileData = new ArrayList();
         load();
     }
 
@@ -69,11 +66,11 @@ public class FileRowColContainer {
         fileName = file;
         delimiter = DELIMITER;
         nextRow = 0;
+        fileData = new ArrayList();
         load();
     }
 
     private void load() throws IOException, FileNotFoundException {
-        fileData = new ArrayList();
 
         BufferedReader myBread = null;
         try {
@@ -89,11 +86,11 @@ public class FileRowColContainer {
                 line = myBread.readLine();
             }
         } catch (FileNotFoundException e) {
-            fileData = null;
+            fileData.clear();
             log.warn(e.toString());
             throw e;
         } catch (IOException e) {
-            fileData = null;
+            fileData.clear();
             log.warn(e.toString());
             throw e;
         } finally {

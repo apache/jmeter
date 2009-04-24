@@ -809,12 +809,9 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 }
 
 class TreeNodeWrapper {
-    private JMeterTreeNode tn;
+    private final JMeterTreeNode tn;
 
-    private String label;
-
-    private TreeNodeWrapper() {
-    }
+    private final String label;
 
     public TreeNodeWrapper(JMeterTreeNode tn, String label) {
         this.tn = tn;
