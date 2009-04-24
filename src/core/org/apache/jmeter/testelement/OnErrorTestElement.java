@@ -35,6 +35,8 @@ public abstract class OnErrorTestElement extends AbstractTestElement {
 
     public final static int ON_ERROR_STOPTEST = 2;
 
+    public final static int ON_ERROR_STOPTEST_NOW = 3;
+
     /* Property name */
     public final static String ON_ERROR_ACTION = "OnError.action";
 
@@ -52,17 +54,18 @@ public abstract class OnErrorTestElement extends AbstractTestElement {
     }
 
     public boolean isContinue() {
-        int value = getErrorAction();
-        return value == ON_ERROR_CONTINUE;
+        return getErrorAction() == ON_ERROR_CONTINUE;
     }
 
     public boolean isStopThread() {
-        int value = getErrorAction();
-        return value == ON_ERROR_STOPTHREAD;
+        return getErrorAction() == ON_ERROR_STOPTHREAD;
     }
 
     public boolean isStopTest() {
-        int value = getErrorAction();
-        return value == ON_ERROR_STOPTEST;
+        return getErrorAction() == ON_ERROR_STOPTEST;
+    }
+
+    public boolean isStopTestNow() {
+        return getErrorAction() == ON_ERROR_STOPTEST_NOW;
     }
 }

@@ -36,6 +36,8 @@ public class OnErrorPanel extends JPanel {
 
     private JRadioButton stopTestBox;
 
+    private JRadioButton stopTestNowBox;
+
     private JPanel createOnErrorPanel() {
         JPanel panel = new JPanel();
         panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("sampler_on_error_action"))); //$NON-NLS-1$
@@ -54,6 +56,10 @@ public class OnErrorPanel extends JPanel {
         stopTestBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_stop_test")); //$NON-NLS-1$
         group.add(stopTestBox);
         panel.add(stopTestBox);
+
+        stopTestNowBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_stop_test_now")); //$NON-NLS-1$
+        group.add(stopTestNowBox);
+        panel.add(stopTestNowBox);
 
         return panel;
     }
@@ -74,12 +80,16 @@ public class OnErrorPanel extends JPanel {
     }
 
     public void configure(int errorAction) {
+        stopTestNowBox.setSelected(errorAction == OnErrorTestElement.ON_ERROR_STOPTEST_NOW);
         stopTestBox.setSelected(errorAction == OnErrorTestElement.ON_ERROR_STOPTEST);
         stopThrdBox.setSelected(errorAction == OnErrorTestElement.ON_ERROR_STOPTHREAD);
         continueBox.setSelected(errorAction == OnErrorTestElement.ON_ERROR_CONTINUE);
     }
 
     public int getOnErrorSetting() {
+        if (stopTestNowBox.isSelected()) {
+            return OnErrorTestElement.ON_ERROR_STOPTEST_NOW;
+        }
         if (stopTestBox.isSelected()) {
             return OnErrorTestElement.ON_ERROR_STOPTEST;
         }

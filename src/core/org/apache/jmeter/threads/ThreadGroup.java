@@ -76,6 +76,9 @@ public class ThreadGroup extends AbstractTestElement implements Serializable, Co
     /** Stop test (all threads) if sampler error occurs */
     public final static String ON_SAMPLE_ERROR_STOPTEST = "stoptest";
 
+    /** Stop test NOW (all threads) if sampler error occurs */
+    public final static String ON_SAMPLE_ERROR_STOPTEST_NOW = "stoptestnow";
+
     // @GuardedBy("this")
     private int numberOfThreads = 0; // Number of active threads in this group
 
@@ -309,6 +312,15 @@ public class ThreadGroup extends AbstractTestElement implements Serializable, Co
      */
     public boolean getOnErrorStopTest() {
         return getPropertyAsString(ThreadGroup.ON_SAMPLE_ERROR).equalsIgnoreCase(ON_SAMPLE_ERROR_STOPTEST);
+    }
+
+    /**
+     * Check if a sampler error should cause test to stop now.
+     *
+     * @return true if test (all threads) should stop immediately
+     */
+    public boolean getOnErrorStopTestNow() {
+        return getPropertyAsString(ThreadGroup.ON_SAMPLE_ERROR).equalsIgnoreCase(ON_SAMPLE_ERROR_STOPTEST_NOW);
     }
 
 }

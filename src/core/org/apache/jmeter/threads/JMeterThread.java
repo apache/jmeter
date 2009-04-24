@@ -113,6 +113,8 @@ public class JMeterThread implements Runnable, Interruptible {
 
     private volatile boolean onErrorStopTest;
 
+    private volatile boolean onErrorStopTestNow;
+
     private volatile boolean onErrorStopThread;
     
     private volatile Sampler currentSampler;
@@ -369,6 +371,9 @@ public class JMeterThread implements Runnable, Interruptible {
                     }
                     if (result.isStopTest() || (!result.isSuccessful() && onErrorStopTest)) {
                         stopTest();
+                    }
+                    if (result.isStopTestNow() || (!result.isSuccessful() && onErrorStopTestNow)) {
+                        stopTestNow();
                     }
                 } else {
                     compiler.done(pack); // Finish up
@@ -734,6 +739,16 @@ public class JMeterThread implements Runnable, Interruptible {
      */
     public void setOnErrorStopTest(boolean b) {
         onErrorStopTest = b;
+    }
+
+    /**
+     * Should Test stop abruptly on sampler error?
+     *
+     * @param b -
+     *            true or false
+     */
+    public void setOnErrorStopTestNow(boolean b) {
+        onErrorStopTestNow = b;
     }
 
     /**
