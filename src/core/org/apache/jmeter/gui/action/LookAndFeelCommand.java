@@ -20,6 +20,7 @@ package org.apache.jmeter.gui.action;
 
 import java.awt.event.ActionEvent;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.swing.SwingUtilities;
@@ -34,6 +35,8 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class LookAndFeelCommand implements Command {
 
+    private static final String JMETER_LAF = "jmeter.laf"; // $NON-NLS-1$
+    
     private static final Set commands = new HashSet();
 
     static {
@@ -43,14 +46,43 @@ public class LookAndFeelCommand implements Command {
         }
 
         try {
-            String defaultUI = JMeterUtils.getPropDefault("jmeter.laf", UIManager
-                    .getCrossPlatformLookAndFeelClassName());
-            UIManager.setLookAndFeel(defaultUI);
+            UIManager.setLookAndFeel(getJMeterLaf());
         } catch (IllegalAccessException e) {
         } catch (ClassNotFoundException e) {
         } catch (InstantiationException e) {
         } catch (UnsupportedLookAndFeelException e) {
         }
+    }
+
+    /**
+     * Get LookAndFeel classname from the following properties:
+     * <ul>
+     * <li>jmeter.laf.&lt;os.name> - lowercased; spaces replaced by '_'</li>
+     * <li>jmeter.laf.&lt;os.family> - lowercased.</li>
+     * <li>jmeter.laf</li>
+     * <li>UIManager.getCrossPlatformLookAndFeelClassName()</li>
+     * </ul>
+     * @return LAF classname
+     */
+    private static String getJMeterLaf(){
+        String osName = System.getProperty("os.name") // $NON-NLS-1$
+                        .toLowerCase(Locale.ENGLISH);
+        String laf;
+        // Spaces are not allowed in property names read from files
+        laf = JMeterUtils.getProperty(JMETER_LAF+"."+osName.replace(' ', '_'));
+        if (laf != null) {
+            return laf;
+        }
+        String osFamily = osName.substring(0, osName.indexOf(' '));// e.g. windows xp => windows
+        laf = JMeterUtils.getProperty(JMETER_LAF+"."+osFamily);
+        if (laf != null) {
+            return laf;
+        }
+        laf = JMeterUtils.getProperty(JMETER_LAF);
+        if (laf != null) {
+            return laf;
+        }
+        return UIManager.getCrossPlatformLookAndFeelClassName();
     }
 
     public LookAndFeelCommand() {
