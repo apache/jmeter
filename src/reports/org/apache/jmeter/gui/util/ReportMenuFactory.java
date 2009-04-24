@@ -38,6 +38,7 @@ import javax.swing.MenuElement;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.ReportGuiPackage;
 import org.apache.jmeter.gui.action.ActionNames;
+import org.apache.jmeter.gui.action.KeyStrokes;
 import org.apache.jmeter.report.gui.action.ReportActionRouter;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.TestBeanGUI;
@@ -128,15 +129,11 @@ public final class ReportMenuFactory {
     public static void addEditMenu(JPopupMenu menu, boolean removable) {
         addSeparator(menu);
         if (removable) {
-            menu.add(makeMenuItem(JMeterUtils.getResString("remove"), "Remove", "remove", KeyStroke.getKeyStroke(
-                    KeyEvent.VK_DELETE, 0)));
+            menu.add(makeMenuItem(JMeterUtils.getResString("remove"), "Remove", "remove", KeyStrokes.REMOVE));
         }
-        menu.add(makeMenuItem(JMeterUtils.getResString("cut"), "Cut", "Cut", KeyStroke.getKeyStroke(KeyEvent.VK_X,
-                KeyEvent.CTRL_MASK)));
-        menu.add(makeMenuItem(JMeterUtils.getResString("copy"), "Copy", "Copy", KeyStroke.getKeyStroke(KeyEvent.VK_C,
-                KeyEvent.CTRL_MASK)));
-        menu.add(makeMenuItem(JMeterUtils.getResString("paste"), "Paste", "Paste", KeyStroke.getKeyStroke(
-                KeyEvent.VK_V, KeyEvent.CTRL_MASK)));
+        menu.add(makeMenuItem(JMeterUtils.getResString("cut"), "Cut", "Cut", KeyStrokes.CUT));
+        menu.add(makeMenuItem(JMeterUtils.getResString("copy"), "Copy", "Copy", KeyStrokes.COPY));
+        menu.add(makeMenuItem(JMeterUtils.getResString("paste"), "Paste", "Paste", KeyStrokes.PASTE));
         menu.add(makeMenuItem(JMeterUtils.getResString("paste_insert"), "Paste Insert", "Paste Insert"));
     }
 
@@ -145,7 +142,7 @@ public final class ReportMenuFactory {
         menu.add(makeMenuItem(JMeterUtils.getResString("open"), "Open", "open"));
         menu.add(makeMenuItem(JMeterUtils.getResString("save_as"), "Save As", "save_as"));
         JMenuItem savePicture = makeMenuItem(JMeterUtils.getResString("save_as_image"), "Save Image", "save_graphics",
-                KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_MASK));
+                KeyStrokes.SAVE_GRAPHICS);
         menu.add(savePicture);
         if (!(ReportGuiPackage.getInstance().getCurrentGui() instanceof Printable)) {
             savePicture.setEnabled(false);
