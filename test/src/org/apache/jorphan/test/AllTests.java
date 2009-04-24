@@ -143,8 +143,8 @@ public final class AllTests {
 		logprop("java.home", true);
 		logprop("user.home");
 		logprop("user.dir", true);
-		logprop("os.name");
-		logprop("os.version");
+		logprop("os.name", true);
+		logprop("os.version", true);
 		logprop("os.arch");
 		logprop("java.class.version");
 		// logprop("java.class.path");
