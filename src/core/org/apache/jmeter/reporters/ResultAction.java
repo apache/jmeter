@@ -56,6 +56,9 @@ public class ResultAction extends OnErrorTestElement implements Serializable, Sa
         SampleResult s = e.getResult();
         log.debug(s.getSampleLabel() + " OK? " + s.isSuccessful());
         if (!s.isSuccessful()) {
+            if (isStopTestNow()) {
+                s.setStopTestNow(true);
+            }
             if (isStopTest()) {
                 s.setStopTest(true);
             }
