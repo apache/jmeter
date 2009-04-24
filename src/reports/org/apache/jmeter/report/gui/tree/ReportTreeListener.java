@@ -286,7 +286,7 @@ public class ReportTreeListener implements TreeSelectionListener, MouseListener,
     }
 
     private boolean isRightClick(MouseEvent e) {
-        return (MouseEvent.BUTTON2_MASK & e.getModifiers()) > 0 || (MouseEvent.BUTTON3_MASK == e.getModifiers());
+        return e.isPopupTrigger() || (MouseEvent.BUTTON2_MASK & e.getModifiers()) > 0 || (MouseEvent.BUTTON3_MASK == e.getModifiers());
     }
 
     /*
