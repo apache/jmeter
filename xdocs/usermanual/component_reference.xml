@@ -3931,11 +3931,21 @@ generate the template string, and store the result into the given variable name.
  
 </component>
 
-<component name="Result Status Action Handler" index="&sect-num;.8.3"  width="697" height="132" screenshot="resultstatusactionhandler.png">
+<component name="Result Status Action Handler" index="&sect-num;.8.3"  width="435" height="146" screenshot="resultstatusactionhandler.png">
    <description>This test element allows the user to stop the thread or the whole test if the relevant sampler failed.
    </description>
    <properties>
    <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+   <property name="Action to be taken after a Sampler error">
+   Determines what happens if a sampler error occurs, either because the sample itself failed or an assertion failed.
+   The possible choices are:
+   <ul>
+   <li>Continue - ignore the error and continue with the test</li>
+   <li>Stop Thread - current thread exits</li>
+   <li>Stop Test - the entire test is stopped at the end of any current samples.</li>
+   <li>Stop Test Now - the entire test is stopped abruptly. Any current samplers are interrupted if possible.</li>
+   </ul>
+   </property>
    </properties>
 </component>
 
@@ -4068,7 +4078,7 @@ If more data is required for a particular sampler only, then add a Listener to i
 <p>In jmeter.properties, edit "user.classpath" to include additional libraries.</p></description>
 </component>
 
-<component name="Thread Group" index="&sect-num;.9.2"  width="305" height="390" screenshot="threadgroup.png">
+<component name="Thread Group" index="&sect-num;.9.2"  width="411" height="419" screenshot="threadgroup.png">
 <description>
 <p>A Thread Group defines a pool of users that will execute a particular test case against your server.  In the Thread Group GUI, you can control the number of users simulated (num of threads), the ramp up time (how long it takes to start all the threads), the number of times to perform the test, and optionally, a start and stop time for the test.</p>
 <p>
@@ -4080,9 +4090,19 @@ JMeter does not interrupt samplers which are waiting for a response, so the end 
 
 <properties>
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+        <property name="Action to be taken after a Sampler error">
+        Determines what happens if a sampler error occurs, either because the sample itself failed or an assertion failed.
+        The possible choices are:
+        <ul>
+        <li>Continue - ignore the error and continue with the test</li>
+        <li>Stop Thread - current thread exits</li>
+        <li>Stop Test - the entire test is stopped at the end of any current samples.</li>
+        <li>Stop Test Now - the entire test is stopped abruptly. Any current samplers are interrupted if possible.</li>
+        </ul>
+        </property>
         <property name="Number of Threads" required="Yes">Number of users to simulate.</property>
         <property name="Ramp-up Period" required="Yes">How long JMeter should take to get all the threads started.  If there are 10 threads and a ramp-up time of 100 seconds, then each thread will begin 10 seconds after the previous thread started, for a total time of 100 seconds to get the test fully up to speed.</property>
-        <property name="Loop Count" required="No">Number of times to perform the test case.  Alternatively, "forever" can be selected causing the test to run until manually stopped.</property>
+        <property name="Loop Count" required="Yes, unless forever is selected">Number of times to perform the test case.  Alternatively, "forever" can be selected causing the test to run until manually stopped.</property>
         <property name="Start Time" required="No">If the scheduler checkbox is selected, one can choose an absolute start time.  When you start your test, JMeter will wait until the specified start time to begin testing.
         	Note: the Startup Delay field over-rides this - see below.
         	</property>
