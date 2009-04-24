@@ -37,9 +37,7 @@
 
 <xsl:template match="TestPlan">
     <xsl:call-template name="header"/>
-    <pre>
-    <xsl:value-of select='stringProp[@name="TestPlan.comments"]'/>
-    </pre>
+    <xsl:call-template name="comment"/>
     <xsl:for-each select='elementProp/collectionProp/elementProp'>
         <br/>
         <xsl:value-of select='stringProp[@name="Argument.name"]'/>
@@ -50,18 +48,20 @@
 
 <xsl:template match="ThreadGroup">
     <xsl:call-template name="header"/>
-    <xsl:text> threads: </xsl:text>
-    <xsl:value-of select='stringProp[@name="ThreadGroup.num_threads"]'/>
-    <xsl:text> loops: </xsl:text>
-    <xsl:value-of select='elementProp/*[@name="LoopController.loops"]'/>
-    <xsl:text> ramp up: </xsl:text>
-    <xsl:value-of select='stringProp[@name="ThreadGroup.ramp_time"]'/>
     <xsl:call-template name="comment"/>
+    <br/>
+    <xsl:text>Threads: </xsl:text>
+    <xsl:value-of select='stringProp[@name="ThreadGroup.num_threads"]'/>
+    <xsl:text> Loops: </xsl:text>
+    <xsl:value-of select='elementProp/*[@name="LoopController.loops"]'/>
+    <xsl:text> Ramp up: </xsl:text>
+    <xsl:value-of select='stringProp[@name="ThreadGroup.ramp_time"]'/>
 </xsl:template>
 
-<xsl:template match="HTTPSampler|HTTPSampler2">
+<xsl:template match="HTTPSampler|HTTPSampler2|ConfigTestElement[@guiclass='HttpDefaultsGui']">
     <xsl:call-template name="header"/>
-    <xsl:text> : </xsl:text>
+    <xsl:call-template name="comment"/>
+    <br/>
     <xsl:value-of select='stringProp[@name="HTTPSampler.method"]'/>
     <xsl:text> </xsl:text>
     <xsl:value-of select='stringProp[@name="HTTPSampler.protocol"]'/>
@@ -71,16 +71,16 @@
     <xsl:value-of select='stringProp[@name="HTTPSampler.port"]'/>
     <xsl:text>/</xsl:text>
     <xsl:value-of select='stringProp[@name="HTTPSampler.path"]'/>
-    <xsl:call-template name="comment"/>
 </xsl:template>
 
 <xsl:template match="ResultCollector">
     <xsl:call-template name="header"/>
+    <xsl:call-template name="comment"/>
     <xsl:if test='stringProp[@name="filename"]!=""'>
+        <br/>
         Output: <xsl:value-of select='stringProp[@name="filename"]'/>
         XML: <xsl:value-of select='objProp/value/xml'/>
     </xsl:if>
-    <xsl:call-template name="comment"/>
 </xsl:template>
 
 <xsl:template match="*">
