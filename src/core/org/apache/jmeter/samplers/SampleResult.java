@@ -193,6 +193,8 @@ public class SampleResult implements Serializable {
 
     private boolean stopTest = false; // Should test terminate?
 
+    private boolean stopTestNow = false; // Should test terminate abruptly?
+
     private boolean isMonitor = false;
 
     private int sampleCount = 1;
@@ -755,22 +757,27 @@ public class SampleResult implements Serializable {
     }
 
     /**
+     * @return whether to stop the test now
+     */
+    public boolean isStopTestNow() {
+        return stopTestNow;
+    }
+
+    /**
      * @return whether to stop this thread
      */
     public boolean isStopThread() {
         return stopThread;
     }
 
-    /**
-     * @param b
-     */
     public void setStopTest(boolean b) {
         stopTest = b;
     }
 
-    /**
-     * @param b
-     */
+    public void setStopTestNow(boolean b) {
+        stopTestNow = b;
+    }
+
     public void setStopThread(boolean b) {
         stopThread = b;
     }

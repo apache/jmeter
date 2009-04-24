@@ -81,6 +81,8 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
 
     private JRadioButton stopTestBox;
 
+    private JRadioButton stopTestNowBox;
+    
     public ThreadGroupGui() {
         super();
         init();
@@ -119,14 +121,23 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
     }
 
     private void setSampleErrorBoxes(ThreadGroup te) {
-        stopTestBox.setSelected(te.getOnErrorStopTest());
-        stopThrdBox.setSelected(te.getOnErrorStopThread());
-        continueBox.setSelected(!te.getOnErrorStopThread() && !te.getOnErrorStopTest());
+        if (te.getOnErrorStopTest()) {
+            stopTestBox.setSelected(true);
+        } else if (te.getOnErrorStopTestNow()) {
+            stopTestNowBox.setSelected(true);
+        } else if (te.getOnErrorStopThread()) {
+            stopThrdBox.setSelected(true);
+        } else {
+            continueBox.setSelected(true);
+        }
     }
 
     private String onSampleError() {
         if (stopTestBox.isSelected()) {
             return ThreadGroup.ON_SAMPLE_ERROR_STOPTEST;
+        }
+        if (stopTestNowBox.isSelected()) {
+            return ThreadGroup.ON_SAMPLE_ERROR_STOPTEST_NOW;
         }
         if (stopThrdBox.isSelected()) {
             return ThreadGroup.ON_SAMPLE_ERROR_STOPTHREAD;
@@ -279,6 +290,10 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
         stopTestBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_stop_test")); // $NON-NLS-1$
         group.add(stopTestBox);
         panel.add(stopTestBox);
+
+        stopTestNowBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_stop_test_now")); // $NON-NLS-1$
+        group.add(stopTestNowBox);
+        panel.add(stopTestNowBox);
 
         return panel;
     }
