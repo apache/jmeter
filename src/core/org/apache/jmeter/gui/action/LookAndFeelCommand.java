@@ -73,8 +73,8 @@ public class LookAndFeelCommand implements Command {
         if (laf != null) {
             return laf;
         }
-        String osFamily = osName.substring(0, osName.indexOf(' '));// e.g. windows xp => windows
-        laf = JMeterUtils.getProperty(JMETER_LAF+"."+osFamily);
+        String[] osFamily = osName.split("\\s"); // e.g. windows xp => windows
+        laf = JMeterUtils.getProperty(JMETER_LAF+"."+osFamily[0]);
         if (laf != null) {
             return laf;
         }
