@@ -91,7 +91,8 @@ public class IterationCounter extends AbstractFunction {
             counterString = String.valueOf(globalCounter);
         }
 
-        if (varName.length() > 0) {
+        // vars will be null on Test Plan
+        if (vars != null && varName.length() > 0) {
             vars.put(varName, counterString);
         }
         return counterString;
