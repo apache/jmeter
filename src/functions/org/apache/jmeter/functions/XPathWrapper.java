@@ -44,8 +44,11 @@ public class XPathWrapper {
      * This Map serves two purposes:
      * - maps names to  containers
      * - ensures only one container per file across all threads
+     * The key is the concatenation of the file name and the XPath string
      */
-    private static final Map fileContainers = new HashMap();
+    //@GuardedBy("fileContainers")
+    private static final Map/*<String, XPathFileContainer>*/ fileContainers =
+        new HashMap/*<String, XPathFileContainer>*/();
 
     /* The cache of file packs - for faster local access */
     private static final ThreadLocal filePacks = new ThreadLocal() {
@@ -102,10 +105,14 @@ public class XPathWrapper {
             }
             // TODO improve the error handling
             if (xpfc == null) {
-                log.error("XPathWrapper is null!");
+                log.error("XPathFileContainer is null!");
                 return ""; //$NON-NLS-1$
             }
             my.put(key,xpfc); // save our local copy
+        }
+        if (xpfc.size()==0){
+            log.warn("XPathFileContainer has no nodes: "+file+" "+xpathString);
+            return ""; //$NON-NLS-1$
         }
         int currentRow = xpfc.nextRow();
         log.debug("getting match number " + currentRow);
@@ -118,6 +125,8 @@ public class XPathWrapper {
         my.clear();
         String tname = Thread.currentThread().getName();
         log.info(tname+": clearing container");
-        fileContainers.clear();
+        synchronized (fileContainers) {
+            fileContainers.clear();
+        }
     }
 }
