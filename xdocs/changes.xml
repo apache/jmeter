@@ -203,6 +203,7 @@ JMeter now removes extraneous leading "../" segments (as do many browsers)
 <li>Bug 46993 - Saving from Header Manager generates ClassCastException</li>
 <li>Bug 47009 - Insert parent caused child controller name to be reset</li>
 <li>Bug 47064 - fixes for Mac LAF</li>
+<li>Avoid NPE if XPath function does not match any nodes</li>
 </ul>
 
 <h3>Improvements</h3>
