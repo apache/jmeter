@@ -803,7 +803,9 @@ If omitted, <b>,</b> is used. Note that <b>,</b> would need to be specified as <
 	The XPath function reads an XML file and matches the XPath.
 	Each time the function is called, the next match will be returned.
 	At end of file, it will wrap around to the start.
-	<note>Note that the entire file is held in memory, so this function should not be used for very large files.</note>
+	If no nodes matched, then the function will return the empty string,
+	and a warning message will be written to the JMeter log file.
+	<note>Note that the entire NodeList is held in memory.</note>
 	</p>
 	<p/>
 	Example:
