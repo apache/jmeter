@@ -458,7 +458,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
         xmlButton.setEnabled(false);
     }
 
-    protected void showTextResponse(String response) {
+    private void showTextResponse(String response) {
         results.setContentType("text/plain"); // $NON-NLS-1$
         results.setText(response == null ? "" : response); // $NON-NLS-1$
         results.setCaretPosition(0);
@@ -633,7 +633,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
         }
     }
 
-    protected void showRenderedResponse(String response, SampleResult res) {
+    private void showRenderedResponse(String response, SampleResult res) {
         if (response == null) {
             results.setText("");
             return;
