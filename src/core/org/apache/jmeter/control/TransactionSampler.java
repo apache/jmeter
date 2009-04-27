@@ -60,12 +60,11 @@ public class TransactionSampler extends AbstractSampler {
     }
 
     /**
-     * One cannot sample the TransactionSample directly.
+     * One cannot sample the TransactionSampler directly.
      */
     public SampleResult sample(Entry e) {
-        // It is the JMeterThread which knows how to sample a
-        // real sampler
-        return null;
+        throw new RuntimeException("Cannot sample TransactionSampler directly");
+        // It is the JMeterThread which knows how to sample a real sampler
     }
 
     public Sampler getSubSampler() {
