@@ -2041,20 +2041,18 @@ There are several ways to view the response, selectable by a radio button.</p>
 The default "Show text" view shows all of the text contained in the
 response. 
 Note that this will only work if the response content-type is considered to be text.
-If the content-type begins with any of the following, it is considered as text,
-otherwise it is considered to be binary.
+If the content-type begins with any of the following, it is considered as binary,
+otherwise it is considered to be text.
 <pre>
-text/
-application/javascript
-application/json
-application/soap+xml
-application/vnd.wap.xhtml+xml
-application/xhtml+xml
-application/xml
+image/
+audio/
+video/
 </pre>
-Additional types can be added by defining the JMeter property
-<b>content-type_text</b> 
-as a comma-separated list of the content-type prefixes to be matched.
+If there is no content-type provided, then the content
+will not be displayed in the any of the Response Data panels.
+You can use <complink name="Save Responses to a file"/> to save the data in this case.
+Note that the response data will still be available in the sample result,
+so can still be accessed using Post-Processors.
 </p>
 <p>If the response data is larger than 200K, then it won't be displayed.
 To change this limit, set the JMeter property <b>view.results.tree.max_size</b>.
