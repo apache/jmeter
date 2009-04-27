@@ -282,8 +282,6 @@ public class JMeterThread implements Runnable, Interruptible {
     private SampleResult process_sampler(Sampler current, Sampler parent, JMeterContext threadContext) {
         SampleResult transactionResult = null;
         try {
-            threadContext.setCurrentSampler(current);
-
             // Check if we are running a transaction
             TransactionSampler transactionSampler = null;
             if(current instanceof TransactionSampler) {
@@ -329,6 +327,7 @@ public class JMeterThread implements Runnable, Interruptible {
 
             // Check if we have a sampler to sample
             if(current != null) {
+                threadContext.setCurrentSampler(current);
                 // Get the sampler ready to sample
                 SamplePackage pack = compiler.configureSampler(current);
                 runPreProcessors(pack.getPreProcessors());
