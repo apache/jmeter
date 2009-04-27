@@ -15,7 +15,7 @@
 
 # Properties file used to define additional httpclient parameters
 #
-# See: http://jakarta.apache.org/commons/httpclient/preference-api.html
+# See: http://hc.apache.org/httpclient-3.x/preference-api.html
 #
 # This file is enabled by setting the JMeter property: httpclient.parameters.file
 # entries are of the form:
