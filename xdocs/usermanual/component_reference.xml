@@ -2883,11 +2883,24 @@ OR<br/>jdbc:oracle:thin:@(description=(address=(host={mc-name})(protocol=tcp)(po
 </component>
 
 <component name="User Defined Variables" index="&sect-num;.4.13"  width="690" height="394" screenshot="user_defined_variables.png">
-<description><p>The User Defined Variables lets you define an initial set of variables, just as in the <complink name="Test Plan" />.
+<description><p>The User Defined Variables element lets you define an <b>initial set of variables</b>, just as in the <complink name="Test Plan" />.
 <b>
 Note that all the UDV elements in a test plan - no matter where they are - are processed at the start.
-So you cannot reference variables which are defined as part of a test run, e.g. in a Post-Processor.
 </b>
+So you cannot reference variables which are defined as part of a test run, e.g. in a Post-Processor.
+</p>
+<p>
+<b>
+UDVs should not be used with functions that generate different results each time they are called.
+Only the result of the first function call will be saved in the variable. 
+</b>
+However, UDVs can be used with functions such as __P(), for example:
+<pre>
+HOST      ${__P(host,localhost)} 
+</pre>
+which would define the variable "HOST" to have the value of the JMeter property "host", defaulting to "localhost" if not defined.
+</p>
+<p>
 For defining variables during a test run, see <complink name="User Parameters"/>.
 UDVs are processed in the order they appear in the Plan, from top to bottom.
 </p>
@@ -2908,7 +2921,7 @@ elements in the thread will see the updated value.
 <note>
 If you have more than one Thread Group, make sure you use different names for different values, as UDVs are shared between Thread Groups.
 Also, the variables are not available for use until after the element has been processed, 
-so you cannot re-use variables that are defined in the same element.
+so you cannot reference variables that are defined in the same element.
 You can reference variables defined in earlier UDVs or on the Test Plan. 
 </note>
 <properties>
