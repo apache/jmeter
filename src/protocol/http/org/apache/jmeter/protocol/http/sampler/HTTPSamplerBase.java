@@ -94,6 +94,10 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     public static final String PORT = "HTTPSampler.port"; // $NON-NLS-1$
 
+    public static final String CONNECT_TIMEOUT = "HTTPSampler.connect_timeout"; // $NON-NLS-1$
+
+    public static final String RESPONSE_TIMEOUT = "HTTPSampler.response_timeout"; // $NON-NLS-1$
+
     public static final String METHOD = "HTTPSampler.method"; // $NON-NLS-1$
 
     public static final String CONTENT_ENCODING = "HTTPSampler.contentEncoding"; // $NON-NLS-1$
@@ -691,6 +695,22 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     public String getDomain() {
         return getPropertyAsString(DOMAIN);
+    }
+
+    public void setConnectTimeout(String value) {
+        setProperty(CONNECT_TIMEOUT, value);
+    }
+
+    public int getConnectTimeout() {
+        return getPropertyAsInt(CONNECT_TIMEOUT, 0);
+    }
+
+    public void setResponseTimeout(String value) {
+        setProperty(RESPONSE_TIMEOUT, value);
+    }
+
+    public int getResponseTimeout() {
+        return getPropertyAsInt(RESPONSE_TIMEOUT, 0);
     }
 
     public void setArguments(Arguments value) {

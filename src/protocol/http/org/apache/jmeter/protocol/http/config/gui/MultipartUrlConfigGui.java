@@ -62,32 +62,22 @@ public class MultipartUrlConfigGui extends UrlConfigGui {
     private void init() {// called from ctor, so must not be overridable
         this.setLayout(new BorderLayout());
 
-        // WEB SERVER PANEL
-        VerticalPanel webServerPanel = new VerticalPanel();
-        webServerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
-                JMeterUtils.getResString("web_server"))); // $NON-NLS-1$
-        final JPanel domainPanel = getDomainPanel();
-        final JPanel portPanel = getPortPanel();
-        domainPanel.add(portPanel,BorderLayout.EAST);
-        webServerPanel.add(domainPanel);
-        //webServerPanel.add(getPortPanel());
-
-        JPanel northPanel = new JPanel();
-        northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.Y_AXIS));
-        northPanel.add(getProtocolAndMethodPanel());
-        northPanel.add(getPathPanel());
-
         // WEB REQUEST PANEL
         JPanel webRequestPanel = new JPanel();
         webRequestPanel.setLayout(new BorderLayout());
         webRequestPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("web_request"))); // $NON-NLS-1$
 
+        JPanel northPanel = new JPanel();
+        northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.Y_AXIS));
+        northPanel.add(getProtocolAndMethodPanel());
+        northPanel.add(getPathPanel());
+
         webRequestPanel.add(northPanel, BorderLayout.NORTH);
         webRequestPanel.add(getParameterPanel(), BorderLayout.CENTER);
         webRequestPanel.add(getHTTPFileArgsPanel(), BorderLayout.SOUTH);
 
-        this.add(webServerPanel, BorderLayout.NORTH);
+        this.add(getWebServerTimeoutPanel(), BorderLayout.NORTH);
         this.add(webRequestPanel, BorderLayout.CENTER);
     }
 

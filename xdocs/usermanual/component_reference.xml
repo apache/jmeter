@@ -81,7 +81,7 @@ JMeter assumes the FTP server is listening on the default port.</property>
 
 </component>
 
-<component name="HTTP Request" index="&sect-num;.1.2"  width="682" height="619" screenshot="webtest/http-request.png">
+<component name="HTTP Request" index="&sect-num;.1.2"  width="730" height="618" screenshot="webtest/http-request.png">
 
 <description>
         <p>This sampler lets you send an HTTP/HTTPS request to a web server.  It
@@ -172,8 +172,10 @@ https.default.protocol=SSLv3
 </description>
 <properties>
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
-        <property name="Server" required="No">Domain name or IP address of the web server. e.g. www.example.com. [Do not include the http:// prefix.]</property>
+        <property name="Server" required="Yes, unless provided by HTTP Request Defaults">Domain name or IP address of the web server. e.g. www.example.com. [Do not include the http:// prefix.]</property>
         <property name="Port" required="No">Port the web server is listening to. Default: 80</property>
+        <property name="Connect Timeout" required="No">Connection Timeout. Number of milliseconds to wait for a connection to open. Requires Java 1.5 or later when using the default Java HTTP implementation.</property>
+        <property name="Response Timeout" required="No">Response Timeout. Number of milliseconds to wait for a response. Requires Java 1.5 or later when using the default Java HTTP implementation.</property>
         <property name="Protocol" required="No">HTTP, HTTPS or FILE. Default: HTTP</property>
         <property name="Method" required="Yes">GET, POST, HEAD, TRACE, OPTIONS, PUT, DELETE</property>
         <property name="Content Encoding" required="No">Content encoding to be used (for POST and FILE)</property>
@@ -2696,7 +2698,7 @@ cookie table entries.</property>
 </component>
 
 <component name="HTTP Request Defaults" index="&sect-num;.4.5" 
-         width="581" height="385" screenshot="http-config/http-request-defaults.png">
+         width="727" height="396" screenshot="http-config/http-request-defaults.png">
 <description><p>This element lets you set default values that your HTTP Request controllers use.  For example, if you are
 creating a Test Plan with 25 HTTP Request controllers and all of the requests are being sent to the same server,
 you could add a single HTTP Request Defaults element with the "Server Name or IP" field filled in.  Then, when
@@ -2712,6 +2714,8 @@ JMeter 2.3 and later treat all port values equally; a sampler that does not spec
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
         <property name="Server" required="No">Domain name or IP address of the web server. e.g. www.example.com. [Do not include the http:// prefix.</property>
         <property name="Port" required="No">Port the web server is listening to.</property>
+        <property name="Connect Timeout" required="No">Connection Timeout. Number of milliseconds to wait for a connection to open. Requires Java 1.5 or later when using the default Java HTTP implementation.</property>
+        <property name="Response Timeout" required="No">Response Timeout. Number of milliseconds to wait for a response. Requires Java 1.5 or later when using the default Java HTTP implementation.</property>
         <property name="Protocol" required="Yes">HTTP or HTTPS.</property>
         <property name="Method" required="No">HTTP GET or HTTP POST.</property>
         <property name="Path" required="No">The path to resource (for example, /servlets/myServlet). If the

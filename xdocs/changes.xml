@@ -249,6 +249,7 @@ JMeter now removes extraneous leading "../" segments (as do many browsers)
 In GUI mode it can be cancelled and Stop run instead. 
 Stop now reports if some threads will not exit, and exits if running in non-GUI mode</li>
 <li>Add UDP server to wait for shutdown message if running in non-GUI mode; add UDP client to send the message.</li>
+<li>HTTP Samplers now support connection and request timeouts (requires Java 1.5 for Java Http sampler)</li>
 </ul>
 
 <h3>Non-functional changes</h3>
