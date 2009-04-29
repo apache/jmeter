@@ -201,6 +201,11 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         this.add(webRequestPanel, BorderLayout.CENTER);
     }
 
+    /**
+     * Create a panel containing the webserver (domain+port) and timeouts (connect+request).
+     * 
+     * @return the panel
+     */
     protected final JPanel getWebServerTimeoutPanel() {
         // WEB SERVER PANEL
         JPanel webServerPanel = new HorizontalPanel();
@@ -208,8 +213,8 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
                 JMeterUtils.getResString("web_server"))); // $NON-NLS-1$
         final JPanel domainPanel = getDomainPanel();
         final JPanel portPanel = getPortPanel();
-        webServerPanel.add(domainPanel);
-        webServerPanel.add(portPanel);
+        webServerPanel.add(domainPanel, BorderLayout.CENTER);
+        webServerPanel.add(portPanel, BorderLayout.EAST);
         
         JPanel timeOut = new HorizontalPanel();
         timeOut.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
