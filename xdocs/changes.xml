@@ -205,6 +205,7 @@ JMeter now removes extraneous leading "../" segments (as do many browsers)
 <li>Bug 47064 - fixes for Mac LAF</li>
 <li>Avoid NPE if XPath function does not match any nodes</li>
 <li>Fix processing of Transaction Sampler parent mode so current sampler is set to actual sampler</li>
+<li>Fix processing of first file name in HTTP POST so functions/variables work (bug introduced with multiple file support)</li>
 </ul>
 
 <h3>Improvements</h3>
