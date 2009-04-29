@@ -31,11 +31,11 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 public class HorizontalPanel extends JPanel {
-    private Box subPanel = Box.createHorizontalBox();
+    private final Box subPanel = Box.createHorizontalBox();
 
-    private float verticalAlign;
+    private final float verticalAlign;
 
-    private int hgap;
+    private final int hgap;
 
     public HorizontalPanel() {
         this(5, CENTER_ALIGNMENT);
