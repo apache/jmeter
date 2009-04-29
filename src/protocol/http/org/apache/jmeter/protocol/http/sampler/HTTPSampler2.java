@@ -225,7 +225,7 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
         } catch (ProtocolException e) {
             log.warn("Problem setting protocol version "+e.getLocalizedMessage());
         }
-        String to= JMeterUtils.getProperty("httpclient.timeout");
+        String to= JMeterUtils.getProperty("httpclient.timeout"); // $NON-NLS-1$
         if (to != null){
             params.setIntParameter(HttpMethodParams.SO_TIMEOUT, Integer.parseInt(to));
         }
@@ -570,6 +570,17 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
                 log.debug("Reusing the HttpClient: @"+System.identityHashCode(httpClient));
             }
         }
+
+        int rto = getResponseTimeout();
+        if (rto > 0){
+            httpMethod.getParams().setSoTimeout(1);
+        }
+
+        int cto = getConnectTimeout();
+        if (cto > 0){
+            httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(cto);
+        }
+
 
         // Allow HttpClient to handle the redirects:
         httpMethod.setFollowRedirects(getAutoRedirects());

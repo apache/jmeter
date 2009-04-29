@@ -21,6 +21,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.BindException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -65,8 +67,49 @@ public class HTTPSampler extends HTTPSamplerBase implements Interruptible {
         JMeterUtils.getPropDefault("http.java.sampler.retries" // $NON-NLS-1$
                 ,10); // Maximum connection retries
 
+    // TODO - these can be removed when JMeter moves up to Java 1.5+
+    private static final Method setReadTimeout;
+    
+    private static final Method setConnectTimeout;
+    
     static {
         log.info("Maximum connection retries = "+MAX_CONN_RETRIES); // $NON-NLS-1$
+        // Temporary copies, so can set the final ones
+        Method _setConnectTimeout = null, _setReadTimeout = null;
+        Class clazz = URLConnection.class;
+        try {
+            _setConnectTimeout = clazz.getMethod("setConnectTimeout", //$NON-NLS-1$
+                    new Class[] { Integer.TYPE });
+            _setReadTimeout = clazz.getMethod("setReadTimeout", //$NON-NLS-1$
+                    new Class[] { Integer.TYPE });
+        } catch (SecurityException e) {
+            log.warn("Error trying to find timeout methods: "+e);
+        } catch (NoSuchMethodException e) {
+        } finally {
+            if (_setReadTimeout != null) {
+                log.info("Connection and read timeouts are available on this JVM");
+            } else {
+                log.info("Connection and read timeouts are *not* available on this JVM");
+            }
+            setReadTimeout = _setReadTimeout;
+            setConnectTimeout = _setConnectTimeout;
+        }
+    }
+
+    private static void setTimeout(Method method, URLConnection conn ,int timeout){
+        if (method == null){
+            log.warn("Connect/Read Timeout is not supported on this JVM");
+            return;
+        }
+        try {
+            method.invoke(conn, new Integer[]{new Integer(timeout)});
+        } catch (IllegalArgumentException e1) {
+            log.warn("Failed to set timeout: "+e1);
+        } catch (IllegalAccessException e1) {
+            log.warn("Failed to set timeout: "+e1);
+        } catch (InvocationTargetException e1) {
+            log.warn("Failed to set timeout: "+e1);
+        }        
     }
 
     private static final byte[] NULL_BA = new byte[0];// can share these
@@ -151,6 +194,16 @@ public class HTTPSampler extends HTTPSamplerBase implements Interruptible {
         // Update follow redirects setting just for this connection
         conn.setInstanceFollowRedirects(getAutoRedirects());
 
+        int cto = getConnectTimeout();
+        if (cto > 0){
+            setTimeout(setConnectTimeout, conn, cto);
+        }
+        
+        int rto = getResponseTimeout();
+        if (rto > 0){
+            setTimeout(setReadTimeout, conn, rto);
+        }
+        
         if (PROTOCOL_HTTPS.equalsIgnoreCase(u.getProtocol())) {
             try {
                 if (null != sslmgr){
