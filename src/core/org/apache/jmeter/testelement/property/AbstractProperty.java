@@ -100,13 +100,11 @@ public abstract class AbstractProperty implements JMeterProperty {
      */
     public Object clone() {
         try {
-            AbstractProperty prop = (AbstractProperty) this.getClass().newInstance();
+            AbstractProperty prop = (AbstractProperty) super.clone();
             prop.name = name;
             prop.runningVersion = runningVersion;
             return prop;
-        } catch (InstantiationException e) {
-            throw new AssertionError(e); // clone should never return null
-        } catch (IllegalAccessException e) {
+        } catch (CloneNotSupportedException e) {
             throw new AssertionError(e); // clone should never return null
         }
     }
