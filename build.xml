@@ -1403,6 +1403,17 @@ run JMeter unless all the JMeter jars are added.
     </zip>
     </target>
 
+	<!-- Create a zip of all resource files for translators -->
+	<target name="pack-resources">   
+	    <mkdir dir="${dist.dir}"/>
+	    <zip  zipfile="${dist.dir}/resources.zip">
+	      <zipfileset dir="." defaultexcludes="yes">
+	        <patternset includes="${src.dir}/**/*Resources.properties" />
+            <patternset includes="${src.dir}/**/messages.properties" />
+	      </zipfileset>
+	    </zip>
+	</target>
+
 <!-- 
     Utility target to create MD5 checksums in standard format (with *filename) 
     Usage:
@@ -1793,7 +1804,6 @@ run JMeter unless all the JMeter jars are added.
   <target name="junit"  description="Run individual JUnit test">
   <mkdir dir="reports"/>
   <property name="test.format" value="brief"/>
-  <property name="test.case1" value="org.apache.jmeter.junit.JMeterTest"/>
   <property name="test.case" value="org.apache.jorphan.test.AllTests"/>
   <junit fork="true"
    dir="${basedir}/bin"
