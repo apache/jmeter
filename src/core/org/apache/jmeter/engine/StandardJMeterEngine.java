@@ -232,15 +232,12 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
                     log.info("Command: "+command+" received from "+address);
                     if (command.equals("StopTestNow")){
                         stopTest();
-                        break;
                     } else if (command.equals("Shutdown")) {
                         askThreadsToStop();
-                        break;                        
                     } else {
                     }
                 }
             }
-            socket.close();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
