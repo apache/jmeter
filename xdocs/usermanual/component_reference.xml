@@ -3839,8 +3839,16 @@ generate the template string, and store the result into the given variable name.
         		<li> Negative numbers are used in conjunction with the ForEach controller - see below.</li>
         	</ul>
         </property>
-        <property name="Default Value" required="No">
-        If no matches are found - and a default is provided - the default value is stored in the variable.
+        <property name="Default Value" required="No, but recommended">
+        If the regular expression does not match, then the reference variable will be set to the default value.
+        This is particularly useful for debugging tests. If no default is provided, then it is difficult to tell
+        whether the regular expression did not match, or the RE element was not processed or maybe the wrong variable
+        is being used.
+        <p>
+        However, if you have several test elements that set the same variable, 
+        you may wish to leave the variable unchanged if the expression does not match.
+        In this case, remove the default value once debugging is complete.
+        </p> 
         </property>
 </properties>
 <p>
