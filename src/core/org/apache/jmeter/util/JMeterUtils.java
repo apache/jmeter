@@ -324,7 +324,12 @@ public class JMeterUtils implements UnitTestManager {
             ResourceBundle resBund = ResourceBundle.getBundle("org.apache.jmeter.resources.messages", loc); // $NON-NLS-1$
             if (isDefault || resBund.getLocale().equals(loc)) {// language change worked
                 resources = resBund;
-                locale = loc;                
+                locale = loc;
+            // Check if we at least found the correct language:
+            } else if (resBund.getLocale().getLanguage().equals(loc.getLanguage())) {
+                log.warn("Unable to change language to '"+loc.toString()+"', using '"+loc.getLanguage()+"'");
+                resources = resBund;
+                locale = loc;
             } else {
                 log.error("Unable to change language to "+loc.toString());
                 throw new JMeterError("Unable to change language to "+loc.toString());
