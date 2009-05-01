@@ -207,7 +207,7 @@ JMeter now removes extraneous leading "../" segments (as do many browsers)
 <li>Fix processing of Transaction Sampler parent mode so current sampler is set to actual sampler</li>
 <li>Fix processing of first file name in HTTP POST so functions/variables work (bug introduced with multiple file support)</li>
 <li>Bug 47127 -  Unable to change language to pl_PL</li>
-<li> Bug 47120 -  Throughput Controller: change percent executions to total executions, the value is stored in a String and interpreted as 1 execution</li>
+<li>Bug 47120 -  Throughput Controller: change percent executions to total executions, the value is stored in a String and interpreted as 1 execution</li>
 <li>Bug 47137 - Labels in View Results Tree aren't I18N</li>
 </ul>
 
@@ -254,6 +254,7 @@ In GUI mode it can be cancelled and Stop run instead.
 Stop now reports if some threads will not exit, and exits if running in non-GUI mode</li>
 <li>Add UDP server to wait for shutdown message if running in non-GUI mode; add UDP client to send the message.</li>
 <li>HTTP Samplers now support connection and request timeouts (requires Java 1.5 for Java Http sampler)</li>
+<li>Bug 47132 - Brazilian Portuguese translations</li>
 </ul>
 
 <h3>Non-functional changes</h3>
