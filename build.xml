@@ -1410,6 +1410,7 @@ run JMeter unless all the JMeter jars are added.
 	      <zipfileset dir="." defaultexcludes="yes">
 	        <patternset includes="${src.dir}/**/*Resources.properties" />
             <patternset includes="${src.dir}/**/messages.properties" />
+            <patternset includes="${src.dir}/**/i18nedit.properties" />
 	      </zipfileset>
 	    </zip>
 	</target>
