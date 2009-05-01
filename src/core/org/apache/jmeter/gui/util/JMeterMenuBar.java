@@ -345,10 +345,13 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         lang.add(Locale.JAPANESE.toString()); // ja
         lang.add(Locale.SIMPLIFIED_CHINESE.toString()); // zh_CN
         lang.add(Locale.TRADITIONAL_CHINESE.toString()); // zh_TW
-        String [] addLanguages =JMeterUtils.getPropDefault("locales.add","").split(","); // $NON-NLS-1$
-        for(int i=0; i < addLanguages.length; i++){
-            log.info("Adding locale "+addLanguages[i]);
-            lang.add(addLanguages[i]);
+        final String addedLocales = JMeterUtils.getProperty("locales.add");
+        if (addedLocales != null){
+            String [] addLanguages =addedLocales.split(","); // $NON-NLS-1$
+            for(int i=0; i < addLanguages.length; i++){
+                log.info("Adding locale "+addLanguages[i]);
+                lang.add(addLanguages[i]);
+            }
         }
         return (String[]) lang.toArray(new String[lang.size()]);
     }
