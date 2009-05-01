@@ -29,6 +29,8 @@ import java.util.List;
 import java.util.MissingResourceException;
 import java.util.PropertyResourceBundle;
 
+import org.apache.jmeter.gui.util.JMeterMenuBar;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -174,60 +176,35 @@ public class PackageTest extends TestCase {
 	public static Test suite() {
 		TestSuite ts = new TestSuite("Resources PackageTest");
 		ts.addTest(new PackageTest("atestDefault"));
-		ts.addTest(new PackageTest("atestDE"));
-		ts.addTest(new PackageTest("atestNO"));
-		ts.addTest(new PackageTest("atestJA"));
-		ts.addTest(new PackageTest("atestzh_CN"));
-		ts.addTest(new PackageTest("atestzh_TW"));
-		ts.addTest(new PackageTest("atestFR"));
-		ts.addTest(new PackageTest("atestES"));
-        ts.addTest(new PackageTest("atestPL"));
-        ts.addTest(new PackageTest("atestpt_BR"));
+		String lang[] = JMeterMenuBar.getLanguages();
+        for(int i=0; i < lang.length; i++ ){
+            if (!"en".equals(lang[i])){
+                ts.addTest(new PackageTest("testLang",lang[i]));
+            }
+        }
+
 		return ts;
 	}
 
 	private int subTestFailures;
 
-	public PackageTest(String string) {
-		super(string);
+	private final String lang;
+	
+	public PackageTest(String testName) {
+		super(testName);
+		lang=null;
 		subTestFailures = 0;
 	}
 
-    public void atestpt_BR() throws Exception {
-        check("pt_BR");
+    public PackageTest(String testName, String _lang) {
+        super(testName);
+        lang=_lang;
+        subTestFailures = 0;
     }
 
-	public void atestDE() throws Exception {
-		check("de");
+	public void testLang() throws Exception{
+	    check(lang);
 	}
-
-	public void atestJA() throws Exception {
-		check("ja");
-	}
-
-	public void atestzh_CN() throws Exception {
-		check("zh_CN");
-	}
-
-	public void atestzh_TW() throws Exception {
-		check("zh_TW");
-	}
-
-	public void atestNO() throws Exception {
-		check("no");
-	}
-
-	public void atestFR() throws Exception {
-		check("fr");
-	}
-
-	public void atestES() throws Exception {
-		check("es");
-	}
-
-	public void atestPL() throws Exception {
-        check("pl");
-    }
 
 	public void atestDefault() throws Exception {
 		check("");
