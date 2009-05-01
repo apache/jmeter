@@ -57,12 +57,16 @@ import junit.framework.TestSuite;
 
 public class PackageTest extends TestCase {
 
-	// private static List defaultList = null;
-	private static PropertyResourceBundle defaultPRB;
+	private static final String MESSAGES = "messages";
+
+    private static PropertyResourceBundle defaultPRB;
 
 	// Read resource into ResourceBundle and store in List
 	private PropertyResourceBundle getRAS(String res) throws Exception {
 		InputStream ras = this.getClass().getResourceAsStream(res);
+		if (ras == null){
+		    return null;
+		}
 		return new PropertyResourceBundle(ras);
 	}
 
@@ -73,7 +77,11 @@ public class PackageTest extends TestCase {
 		int fails = 0;
 		InputStream ras = this.getClass().getResourceAsStream(res);
 		if (ras==null){
-		    throw new IOException("Cannot open resource file "+res);
+		    if (MESSAGES.equals(resourcePrefix)|| lang.length() == 0 ){
+		        throw new IOException("Cannot open resource file "+res);
+		    } else {
+		        return 0;
+		    }
 		}
 		BufferedReader fileReader = new BufferedReader(new InputStreamReader(ras));
 		String s;
@@ -81,13 +89,15 @@ public class PackageTest extends TestCase {
 			if (s.length() > 0 && !s.startsWith("#") && !s.startsWith("!")) {
 				int equ = s.indexOf('=');
 				String key = s.substring(0, equ);
-				/*
-				 * JMeterUtils.getResString() converts space to _ and lowercases
-				 * the key, so make sure all keys pass the test
-				 */
-				if ((key.indexOf(' ') >= 0) || !key.toLowerCase(java.util.Locale.ENGLISH).equals(key)) {
-					System.out.println("Invalid key for JMeterUtils " + key);
-					fails++;
+				if (resourcePrefix.equals(MESSAGES)){// Only relevant for messages
+    				/*
+    				 * JMeterUtils.getResString() converts space to _ and lowercases
+    				 * the key, so make sure all keys pass the test
+    				 */
+    				if ((key.indexOf(' ') >= 0) || !key.toLowerCase(java.util.Locale.ENGLISH).equals(key)) {
+    					System.out.println("Invalid key for JMeterUtils " + key);
+    					fails++;
+    				}
 				}
 				String val = s.substring(equ + 1);
 				l.add(key); // Store the key
@@ -113,11 +123,11 @@ public class PackageTest extends TestCase {
 	}
 
 	// Helper method to construct resource name
-	private static String getResName(String lang) {
+	private String getResName(String lang) {
 		if (lang.length() == 0) {
-			return "messages.properties";
+			return resourcePrefix+".properties";
 		} else {
-			return "messages_" + lang + ".properties";
+			return resourcePrefix+"_" + lang + ".properties";
 		}
 	}
 
@@ -152,6 +162,9 @@ public class PackageTest extends TestCase {
 		} else if (checkUnexpected) {
 			// Check all the keys are in the default props file
             PropertyResourceBundle prb = getRAS(res); 
+            if (prb == null){
+                return;
+            }
 			Enumeration enumr = prb.getKeys();
 			while (enumr.hasMoreElements()) {
 				String key = null;
@@ -160,7 +173,7 @@ public class PackageTest extends TestCase {
 					defaultPRB.getString(key); // Check key is in default
 				} catch (MissingResourceException e) {
 					subTestFailures++;
-					System.out.println("Locale: " + resname + " has unexpected key: " + key);
+					System.out.println(resourcePrefix + "_" + resname + " has unexpected key: " + key);
 				}
 			}
 		}
@@ -170,18 +183,46 @@ public class PackageTest extends TestCase {
 		}
 	}
 
+	// TODO generate list by scanning for *Resources.properties
+	private static final String[] prefixList={
+	    MESSAGES,
+        "/org/apache/jmeter/assertions/BSFAssertionResources",
+        "/org/apache/jmeter/config/CSVDataSetResources",
+        "/org/apache/jmeter/config/RandomVariableConfigResources",
+        "/org/apache/jmeter/extractor/BeanShellPostProcessorResources",
+        "/org/apache/jmeter/extractor/BSFPostProcessorResources",
+        "/org/apache/jmeter/extractor/DebugPostProcessorResources",
+        "/org/apache/jmeter/modifiers/BeanShellPreProcessorResources",
+        "/org/apache/jmeter/modifiers/BSFPreProcessorResources",
+        "/org/apache/jmeter/sampler/DebugSamplerResources",
+        "/org/apache/jmeter/timers/BeanShellTimerResources",
+        "/org/apache/jmeter/timers/ConstantThroughputTimerResources",
+        "/org/apache/jmeter/timers/SyncTimerResources",
+        "/org/apache/jmeter/visualizers/BeanShellListenerResources",
+        "/org/apache/jmeter/visualizers/BSFListenerResources",
+        "/org/apache/jmeter/examples/testbeans/example2/Example2Resources",
+        "/org/apache/jmeter/protocol/http/sampler/AccessLogSamplerResources",
+        "/org/apache/jmeter/protocol/jdbc/config/DataSourceElementResources",
+        "/org/apache/jmeter/protocol/jdbc/sampler/JDBCSamplerResources",
+    };
+
 	/*
-	 * Use a suite to ensure that the default is done first
-	 */
+     * Use a suite to ensure that the default is done first
+    */
 	public static Test suite() {
 		TestSuite ts = new TestSuite("Resources PackageTest");
-		ts.addTest(new PackageTest("atestDefault"));
-		String lang[] = JMeterMenuBar.getLanguages();
-        for(int i=0; i < lang.length; i++ ){
-            if (!"en".equals(lang[i])){
-                ts.addTest(new PackageTest("testLang",lang[i]));
-            }
-        }
+		for(int j=0; j < prefixList.length; j++){
+		    String prefix = prefixList[j];
+		    TestSuite pfx = new TestSuite(prefix) ;
+		    pfx.addTest(new PackageTest("testLang","", prefix)); // load the default resource
+	        String lang[] = JMeterMenuBar.getLanguages();
+	        for(int i=0; i < lang.length; i++ ){
+	            if (!"en".equals(lang[i])){ // Don't try to check the default language
+	                pfx.addTest(new PackageTest("testLang", lang[i], prefix));
+	            }
+	        }
+	        ts.addTest(pfx);
+		}
 
 		return ts;
 	}
@@ -190,23 +231,21 @@ public class PackageTest extends TestCase {
 
 	private final String lang;
 	
-	public PackageTest(String testName) {
-		super(testName);
-		lang=null;
-		subTestFailures = 0;
-	}
+    private final String resourcePrefix; // e.g. "messages"
 
     public PackageTest(String testName, String _lang) {
+        this(testName, _lang, MESSAGES);
+    }
+
+    public PackageTest(String testName, String _lang, String propName) {
         super(testName);
         lang=_lang;
         subTestFailures = 0;
+        resourcePrefix = propName;
     }
 
 	public void testLang() throws Exception{
 	    check(lang);
 	}
 
-	public void atestDefault() throws Exception {
-		check("");
-	}
 }
