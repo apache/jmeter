@@ -19,6 +19,7 @@
 package org.apache.jmeter.resources;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ import junit.framework.TestSuite;
 /*
  * Created on Nov 29, 2003
  * 
- * Test the composition of the properties files
+ * Test the composition of the messages*.properties files
  * - properties files exist
  * - properties files don't have duplicate keys
  * - non-default properties files don't have any extra keys.
@@ -69,6 +70,9 @@ public class PackageTest extends TestCase {
 	private int readRF(String res, List l) throws Exception {
 		int fails = 0;
 		InputStream ras = this.getClass().getResourceAsStream(res);
+		if (ras==null){
+		    throw new IOException("Cannot open resource file "+res);
+		}
 		BufferedReader fileReader = new BufferedReader(new InputStreamReader(ras));
 		String s;
 		while ((s = fileReader.readLine()) != null) {
@@ -178,6 +182,7 @@ public class PackageTest extends TestCase {
 		ts.addTest(new PackageTest("atestFR"));
 		ts.addTest(new PackageTest("atestES"));
         ts.addTest(new PackageTest("atestPL"));
+        ts.addTest(new PackageTest("atestpt_BR"));
 		return ts;
 	}
 
@@ -187,6 +192,10 @@ public class PackageTest extends TestCase {
 		super(string);
 		subTestFailures = 0;
 	}
+
+    public void atestpt_BR() throws Exception {
+        check("pt_BR");
+    }
 
 	public void atestDE() throws Exception {
 		check("de");
