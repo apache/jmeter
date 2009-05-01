@@ -20,6 +20,7 @@ package org.apache.jmeter.gui.util;
 
 import java.awt.Component;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -325,8 +326,33 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
    }
 
-    // TODO fetch list of languages from a file?
-    // N.B. Changes to language list need to be reflected in resources/PackageTest.java
+    /**
+     * Generate the list of supported languages.
+     * 
+     * @return list of languages
+     */
+    // Also used by org.apache.jmeter.resources.PackageTest
+    public static String[] getLanguages(){
+        List lang = new ArrayList(20);
+        lang.add(Locale.ENGLISH.toString()); // en
+        lang.add(Locale.FRENCH.toString()); // fr
+        lang.add(Locale.GERMAN.toString()); // de
+        lang.add("no"); // $NON-NLS-1$
+        lang.add("pl"); // $NON-NLS-1$
+        lang.add("pt_BR"); // $NON-NLS-1$
+        lang.add("es"); // $NON-NLS-1$
+        lang.add("tr"); // $NON-NLS-1$
+        lang.add(Locale.JAPANESE.toString()); // ja
+        lang.add(Locale.SIMPLIFIED_CHINESE.toString()); // zh_CN
+        lang.add(Locale.TRADITIONAL_CHINESE.toString()); // zh_TW
+        String [] addLanguages =JMeterUtils.getPropDefault("locales.add","").split(","); // $NON-NLS-1$
+        for(int i=0; i < addLanguages.length; i++){
+            log.info("Adding locale "+addLanguages[i]);
+            lang.add(addLanguages[i]);
+        }
+        return (String[]) lang.toArray(new String[lang.size()]);
+    }
+
     private JMenu makeLanguageMenu() {
         final JMenu languageMenu = makeMenuRes("choose_language",'C'); //$NON-NLS-1$
         
@@ -339,20 +365,9 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
          * Also, need to ensure that the names are valid resource entries too.
          */
 
-        langMenu.addLang(Locale.ENGLISH.toString()); // en
-        langMenu.addLang(Locale.FRENCH.toString()); // fr
-        langMenu.addLang(Locale.GERMAN.toString()); // de
-        langMenu.addLang("no"); // $NON-NLS-1$
-        langMenu.addLang("pl"); // $NON-NLS-1$
-        langMenu.addLang("es"); // $NON-NLS-1$
-        langMenu.addLang("tr"); // $NON-NLS-1$
-        langMenu.addLang(Locale.JAPANESE.toString()); // ja
-        langMenu.addLang(Locale.SIMPLIFIED_CHINESE.toString()); // zh_CN
-        langMenu.addLang(Locale.TRADITIONAL_CHINESE.toString()); // zh_TW
-        String [] addLanguages =JMeterUtils.getPropDefault("locales.add","").split(","); // $NON-NLS-1$
-        for(int i=0; i < addLanguages.length; i++){
-            log.info("Adding locale "+addLanguages[i]);
-            langMenu.addLang(addLanguages[i]);
+        String lang[] = getLanguages();
+        for(int i=0; i < lang.length; i++ ){
+            langMenu.addLang(lang[i]);
         }
         return languageMenu;
     }
