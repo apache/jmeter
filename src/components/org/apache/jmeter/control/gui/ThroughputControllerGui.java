@@ -78,7 +78,8 @@ public class ThroughputControllerGui extends AbstractControllerGui {
             try {
                 ((ThroughputController) tc).setMaxThroughput(Integer.parseInt(throughput.getText().trim()));
             } catch (NumberFormatException e) {
-                ((ThroughputController) tc).setMaxThroughput(throughput.getText());
+                // In case we are converting back from floating point, drop the decimal fraction
+                ((ThroughputController) tc).setMaxThroughput((throughput.getText().trim().split("\\.")[0])); // $NON-NLS-1$
             }
         } else {
             try {
@@ -103,10 +104,10 @@ public class ThroughputControllerGui extends AbstractControllerGui {
         super.configure(el);
         if (((ThroughputController) el).getStyle() == ThroughputController.BYNUMBER) {
             styleBox.getModel().setSelectedItem(BYNUMBER_LABEL);
-            throughput.setText(String.valueOf(((ThroughputController) el).getMaxThroughput()));
+            throughput.setText(((ThroughputController) el).getMaxThroughput());
         } else {
             styleBox.setSelectedItem(BYPERCENT_LABEL);
-            throughput.setText(String.valueOf(((ThroughputController) el).getPercentThroughput()));
+            throughput.setText(((ThroughputController) el).getPercentThroughput());
         }
         perthread.setSelected(((ThroughputController) el).isPerThread());
     }
