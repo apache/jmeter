@@ -71,18 +71,29 @@ public class LookAndFeelCommand implements Command {
         // Spaces are not allowed in property names read from files
         laf = JMeterUtils.getProperty(JMETER_LAF+"."+osName.replace(' ', '_'));
         if (laf != null) {
-            return laf;
+            return checkLafName(laf);
         }
         String[] osFamily = osName.split("\\s"); // e.g. windows xp => windows
         laf = JMeterUtils.getProperty(JMETER_LAF+"."+osFamily[0]);
         if (laf != null) {
-            return laf;
+            return checkLafName(laf);
         }
         laf = JMeterUtils.getProperty(JMETER_LAF);
         if (laf != null) {
-            return laf;
+            return checkLafName(laf);
         }
         return UIManager.getCrossPlatformLookAndFeelClassName();
+    }
+
+    // Check if LAF is a built-in one
+    private static String checkLafName(String laf){
+        if ("system".equalsIgnoreCase(laf)){ // $NON-NLS-1$
+            return UIManager.getSystemLookAndFeelClassName();
+        }
+        if ("crossplatform".equalsIgnoreCase(laf)){ // $NON-NLS-1$
+            return UIManager.getCrossPlatformLookAndFeelClassName();
+        }
+        return laf;
     }
 
     public LookAndFeelCommand() {
