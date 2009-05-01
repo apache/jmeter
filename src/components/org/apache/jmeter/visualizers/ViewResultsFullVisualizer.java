@@ -95,6 +95,8 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
         implements ActionListener, TreeSelectionListener, Clearable
     {
 
+    private static final long serialVersionUID = 1L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     // Maximum size that we will display
@@ -293,7 +295,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
      * @return description of this visualizer
      */
     public String toString() {
-        String desc = "Shows the text results of sampling in tree form";
+        String desc = JMeterUtils.getResString("view_results_desc"); //$NON-NLS-1$
 
         if (log.isDebugEnabled()) {
             log.debug("toString1 : Returning description - " + desc);
@@ -338,7 +340,9 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
                         if (rh != null) {
                             StringBuffer sb = new StringBuffer(sd.length() + rh.length()+20);
                             sb.append(sd);
-                            sb.append("\nRequest Headers:\n");
+                            sb.append("\n"); //$NON-NLS-1$
+                            sb.append(JMeterUtils.getResString("view_results_request_headers")); //$NON-NLS-1$
+                            sb.append("\n"); //$NON-NLS-1$
                             sb.append(rh);
                             sd = sb.toString();
                         }
@@ -346,14 +350,14 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
                     }
 
                     StringBuffer statsBuff = new StringBuffer(200);
-                    statsBuff.append("Thread Name: ").append(res.getThreadName()).append(NL);
+                    statsBuff.append(JMeterUtils.getResString("view_results_thread_name")).append(res.getThreadName()).append(NL); //$NON-NLS-1$
                     String startTime = dateFormat.format(new Date(res.getStartTime()));
-                    statsBuff.append("Sample Start: ").append(startTime).append(NL);
-                    statsBuff.append("Load time: ").append(res.getTime()).append(NL);
-                    statsBuff.append("Latency: ").append(res.getLatency()).append(NL);
-                    statsBuff.append("Size in bytes: ").append(res.getBytes()).append(NL);
-                    statsBuff.append("Sample Count: ").append(res.getSampleCount()).append(NL);
-                    statsBuff.append("Error Count: ").append(res.getErrorCount()).append(NL);
+                    statsBuff.append(JMeterUtils.getResString("view_results_sample_start")).append(startTime).append(NL); //$NON-NLS-1$
+                    statsBuff.append(JMeterUtils.getResString("view_results_load_time")).append(res.getTime()).append(NL); //$NON-NLS-1$
+                    statsBuff.append(JMeterUtils.getResString("view_results_latency")).append(res.getLatency()).append(NL); //$NON-NLS-1$
+                    statsBuff.append(JMeterUtils.getResString("view_results_size_in_bytes")).append(res.getBytes()).append(NL); //$NON-NLS-1$
+                    statsBuff.append(JMeterUtils.getResString("view_results_sample_count")).append(res.getSampleCount()).append(NL); //$NON-NLS-1$
+                    statsBuff.append(JMeterUtils.getResString("view_results_error_count")).append(res.getErrorCount()).append(NL); //$NON-NLS-1$
                     statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), null);
                     statsBuff = new StringBuffer(); //reset for reuse
 
@@ -382,7 +386,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
                         break;
                     }
 
-                    statsBuff.append("Response code: ").append(responseCode).append(NL);
+                    statsBuff.append(JMeterUtils.getResString("view_results_response_code")).append(responseCode).append(NL); //$NON-NLS-1$
                     statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), style);
                     statsBuff = new StringBuffer(100); //reset for reuse
 
@@ -390,14 +394,14 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
                     String responseMsgStr = res.getResponseMessage();
 
                     log.debug("valueChanged1 : response message - " + responseMsgStr);
-                    statsBuff.append("Response message: ").append(responseMsgStr).append(NL);
+                    statsBuff.append(JMeterUtils.getResString("view_results_response_message")).append(responseMsgStr).append(NL); //$NON-NLS-1$
 
                     statsBuff.append(NL);
-                    statsBuff.append("Response headers:").append(NL);
+                    statsBuff.append(JMeterUtils.getResString("view_results_response_headers")).append(NL); //$NON-NLS-1$
                     statsBuff.append(res.getResponseHeaders()).append(NL);
                     statsBuff.append(NL);
                     final String samplerClass = res.getClass().getName();
-                    statsBuff.append(samplerClass.substring(1+samplerClass.lastIndexOf('.'))).append(" fields:").append(NL);
+                    statsBuff.append(samplerClass.substring(1+samplerClass.lastIndexOf('.'))).append(" " + JMeterUtils.getResString("view_results_fields")).append(NL); //$NON-NLS-1$
                     statsBuff.append("ContentType: ").append(res.getContentType()).append(NL);
                     statsBuff.append("DataEncoding: ").append(res.getDataEncodingNoDefault()).append(NL);
                     statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), null);
@@ -435,9 +439,9 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
                     }
 
                     StringBuffer statsBuff = new StringBuffer(100);
-                    statsBuff.append("Assertion error: ").append(res.isError()).append(NL);
-                    statsBuff.append("Assertion failure: ").append(res.isFailure()).append(NL);
-                    statsBuff.append("Assertion failure message : ").append(res.getFailureMessage()).append(NL);
+                    statsBuff.append(JMeterUtils.getResString("view_results_assertion_error")).append(res.isError()).append(NL); //$NON-NLS-1$
+                    statsBuff.append(JMeterUtils.getResString("view_results_assertion_failure")).append(res.isFailure()).append(NL); //$NON-NLS-1$
+                    statsBuff.append(JMeterUtils.getResString("view_results_assertion_failure_message")).append(res.getFailureMessage()).append(NL); //$NON-NLS-1$
                     statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), null);
                     statsBuff = null;
                 }
@@ -586,7 +590,8 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
             // he's ready to wait.
             int len = res.getResponseData().length;
             if (MAX_DISPLAY_SIZE > 0 && len > MAX_DISPLAY_SIZE) {
-                response = "Response too large to be displayed. Size: " + len + " > Max: "+MAX_DISPLAY_SIZE;
+                response = JMeterUtils.getResString("view_results_response_too_large_message") //$NON-NLS-1$
+                    + len + " > Max: "+MAX_DISPLAY_SIZE;
                 log.warn(response);
             } else {
                 response = res.getResponseDataAsString();
