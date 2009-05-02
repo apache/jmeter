@@ -188,7 +188,7 @@ public class PackageTest extends TestCase {
 
 	// TODO generate list by scanning for *Resources.properties
 	private static final String[] prefixList={
-	    MESSAGES,
+	    MESSAGES, // This is in the same package, so no need for full path name
         "/org/apache/jmeter/assertions/BSFAssertionResources",
         "/org/apache/jmeter/config/CSVDataSetResources",
         "/org/apache/jmeter/config/RandomVariableConfigResources",
@@ -203,7 +203,7 @@ public class PackageTest extends TestCase {
         "/org/apache/jmeter/timers/SyncTimerResources",
         "/org/apache/jmeter/visualizers/BeanShellListenerResources",
         "/org/apache/jmeter/visualizers/BSFListenerResources",
-        "/org/apache/jmeter/examples/testbeans/example2/Example2Resources",
+//        "/org/apache/jmeter/examples/testbeans/example2/Example2Resources", // examples are not built by default
         "/org/apache/jmeter/protocol/http/sampler/AccessLogSamplerResources",
         "/org/apache/jmeter/protocol/jdbc/config/DataSourceElementResources",
         "/org/apache/jmeter/protocol/jdbc/sampler/JDBCSamplerResources",
