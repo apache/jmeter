@@ -159,6 +159,9 @@ public class PackageTest extends TestCase {
 		if (resname.length() == 0) // Must be the default resource file
 		{
 			defaultPRB = getRAS(res);
+			if (defaultPRB == null){
+			    throw new IOException("Could not find required file: "+res);
+			}
 		} else if (checkUnexpected) {
 			// Check all the keys are in the default props file
             PropertyResourceBundle prb = getRAS(res); 
