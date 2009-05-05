@@ -101,6 +101,9 @@ public class LoopController extends GenericController implements Serializable {
      */
     public Sampler next() {
         if(endOfLoop()) {
+            if (!getContinueForever()) {
+                setDone(true);
+            }
             return null;
         }
         return super.next();
