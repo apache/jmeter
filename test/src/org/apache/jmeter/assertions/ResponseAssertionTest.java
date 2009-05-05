@@ -191,4 +191,53 @@ public class ResponseAssertionTest  extends TestCase {
         assertTrue("Expecting failure",result.isFailure());     
         
     }
+    volatile int threadsRunning;
+
+    volatile int failed;
+
+    public void testThreadSafety() throws Exception {
+        Thread[] threads = new Thread[100];
+        for (int i = 0; i < threads.length; i++) {
+            threads[i] = new TestThread();
+        }
+        failed = 0;
+        for (int i = 0; i < threads.length; i++) {
+            threads[i].start();
+            threadsRunning++;
+        }
+        synchronized (this) {
+            while (threadsRunning > 0) {
+                wait();
+            }
+        }
+        assertEquals(failed, 0);
+    }
+
+    class TestThread extends Thread {
+        static final String TEST_STRING = "DAbale arroz a la zorra el abad.";
+
+        // Used to be 'dábale', but caused trouble on Gump. Reasons
+        // unknown.
+        static final String TEST_PATTERN = ".*A.*\\.";
+
+        public void run() {
+            ResponseAssertion assertion = new ResponseAssertion();
+            assertion.setTestFieldResponseData();
+            assertion.setToContainsType();
+            assertion.addTestString(TEST_PATTERN);
+            SampleResult response = new SampleResult();
+            response.setResponseData(TEST_STRING.getBytes());
+            for (int i = 0; i < 100; i++) {
+                AssertionResult result;
+                result = assertion.getResult(response);
+                if (result.isFailure() || result.isError()) {
+                    failed++;
+                }
+            }
+            synchronized (ResponseAssertionTest.this) {
+                threadsRunning--;
+                ResponseAssertionTest.this.notifyAll();
+            }
+        }
+    }
 }
