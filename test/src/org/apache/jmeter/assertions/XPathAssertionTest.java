@@ -28,8 +28,11 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 public class XPathAssertionTest extends JMeterTestCase {
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private XPathAssertion assertion;
 
@@ -47,15 +50,25 @@ public class XPathAssertionTest extends JMeterTestCase {
 		super.setUp();
 		jmctx = JMeterContextService.getContext();
 		assertion = new XPathAssertion();
-		assertion.setThreadContext(jmctx);// This would be done by the run
-											// command
+		assertion.setThreadContext(jmctx);// This would be done by the run command
 		result = new SampleResult();
 		result.setResponseData(readFile("testfiles/XPathAssertionTest.xml"));
 		vars = new JMeterVariables();
 		jmctx.setVariables(vars);
-		//jmctx.setPreviousResult(result);
+		jmctx.setPreviousResult(result);
 		//testLog.setPriority(org.apache.log.Priority.DEBUG);
 	}
+
+	private void setAlternateResponseData(){
+        String data = "<company-xmlext-query-ret>" + "<row>" + "<value field=\"RetCode\">LIS_OK</value>"
+              + "<value field=\"RetCodeExtension\"></value>" + "<value field=\"alias\"></value>"
+              + "<value field=\"positioncount\"></value>" + "<value field=\"invalidpincount\">0</value>"
+              + "<value field=\"pinposition1\">1</value>" + "<value field=\"pinpositionvalue1\"></value>"
+              + "<value field=\"pinposition2\">5</value>" + "<value field=\"pinpositionvalue2\"></value>"
+              + "<value field=\"pinposition3\">6</value>" + "<value field=\"pinpositionvalue3\"></value>"
+              + "</row>" + "</company-xmlext-query-ret>";
+        result.setResponseData(data.getBytes());
+    }
 
 	private ByteArrayOutputStream readBA(String name) throws IOException {
 		BufferedInputStream bis = new BufferedInputStream(new FileInputStream(findTestFile(name)));
@@ -184,5 +197,125 @@ public class XPathAssertionTest extends JMeterTestCase {
 		assertTrue("Should be an error",res.isError());
 		assertFalse("Should not be a failure", res.isFailure());
 	}
+
+    public void testNoTolerance() throws Exception {
+        String data = "<html><head><title>testtitle</title></head>" + "<body>"
+                + "<p><i><b>invalid tag nesting</i></b><hr>" + "</body></html>";
+
+        result.setResponseData(data.getBytes());
+        vars = new JMeterVariables();
+        jmctx.setVariables(vars);
+        jmctx.setPreviousResult(result);
+        assertion.setXPathString("/html/head/title");
+        assertion.setValidating(false);
+        assertion.setTolerant(false);
+        AssertionResult res = assertion.getResult(result);
+        log.debug("failureMessage: " + res.getFailureMessage());
+        assertTrue(res.isError());
+        assertFalse(res.isFailure());
+    }
+
+    public void testAssertion() throws Exception {
+        setAlternateResponseData();
+        assertion.setXPathString("//row/value[@field = 'alias']");
+        AssertionResult res = assertion.getResult(jmctx.getPreviousResult());
+        log.debug(" res " + res.isError());
+        log.debug(" failure " + res.getFailureMessage());
+        assertFalse(res.isError());
+        assertFalse(res.isFailure());
+    }
+
+    public void testNegateAssertion() throws Exception {
+        setAlternateResponseData();
+        assertion.setXPathString("//row/value[@field = 'noalias']");
+        assertion.setNegated(true);
+
+        AssertionResult res = assertion.getResult(jmctx.getPreviousResult());
+        log.debug(" res " + res.isError());
+        log.debug(" failure " + res.getFailureMessage());
+        assertFalse(res.isError());
+        assertFalse(res.isFailure());
+    }
+
+    public void testValidationFailure() throws Exception {
+        setAlternateResponseData();
+        assertion.setXPathString("//row/value[@field = 'alias']");
+        assertion.setNegated(false);
+        assertion.setValidating(true);
+        AssertionResult res = assertion.getResult(jmctx.getPreviousResult());
+        log.debug(res.getFailureMessage() + " error: " + res.isError() + " failure: " + res.isFailure());
+        assertTrue(res.isError());
+        assertFalse(res.isFailure());
+    }
+
+    public void testValidationSuccess() throws Exception {
+        String data = "<?xml version=\"1.0\"?>" + "<!DOCTYPE BOOK [" + "<!ELEMENT p (#PCDATA)>"
+                + "<!ELEMENT BOOK         (OPENER,SUBTITLE?,INTRODUCTION?,(SECTION | PART)+)>"
+                + "<!ELEMENT OPENER       (TITLE_TEXT)*>" + "<!ELEMENT TITLE_TEXT   (#PCDATA)>"
+                + "<!ELEMENT SUBTITLE     (#PCDATA)>" + "<!ELEMENT INTRODUCTION (HEADER, p+)+>"
+                + "<!ELEMENT PART         (HEADER, CHAPTER+)>" + "<!ELEMENT SECTION      (HEADER, p+)>"
+                + "<!ELEMENT HEADER       (#PCDATA)>" + "<!ELEMENT CHAPTER      (CHAPTER_NUMBER, CHAPTER_TEXT)>"
+                + "<!ELEMENT CHAPTER_NUMBER (#PCDATA)>" + "<!ELEMENT CHAPTER_TEXT (p)+>" + "]>" + "<BOOK>"
+                + "<OPENER>" + "<TITLE_TEXT>All About Me</TITLE_TEXT>" + "</OPENER>" + "<PART>"
+                + "<HEADER>Welcome To My Book</HEADER>" + "<CHAPTER>"
+                + "<CHAPTER_NUMBER>CHAPTER 1</CHAPTER_NUMBER>" + "<CHAPTER_TEXT>"
+                + "<p>Glad you want to hear about me.</p>" + "<p>There's so much to say!</p>"
+                + "<p>Where should we start?</p>" + "<p>How about more about me?</p>" + "</CHAPTER_TEXT>"
+                + "</CHAPTER>" + "</PART>" + "</BOOK>";
+
+        result.setResponseData(data.getBytes());
+        vars = new JMeterVariables();
+        jmctx.setVariables(vars);
+        jmctx.setPreviousResult(result);
+        assertion.setXPathString("/");
+        assertion.setValidating(true);
+        AssertionResult res = assertion.getResult(result);
+        assertFalse(res.isError());
+        assertFalse(res.isFailure());
+    }
+
+    public void testValidationFailureWithDTD() throws Exception {
+        String data = "<?xml version=\"1.0\"?>" + "<!DOCTYPE BOOK [" + "<!ELEMENT p (#PCDATA)>"
+                + "<!ELEMENT BOOK         (OPENER,SUBTITLE?,INTRODUCTION?,(SECTION | PART)+)>"
+                + "<!ELEMENT OPENER       (TITLE_TEXT)*>" + "<!ELEMENT TITLE_TEXT   (#PCDATA)>"
+                + "<!ELEMENT SUBTITLE     (#PCDATA)>" + "<!ELEMENT INTRODUCTION (HEADER, p+)+>"
+                + "<!ELEMENT PART         (HEADER, CHAPTER+)>" + "<!ELEMENT SECTION      (HEADER, p+)>"
+                + "<!ELEMENT HEADER       (#PCDATA)>" + "<!ELEMENT CHAPTER      (CHAPTER_NUMBER, CHAPTER_TEXT)>"
+                + "<!ELEMENT CHAPTER_NUMBER (#PCDATA)>" + "<!ELEMENT CHAPTER_TEXT (p)+>" + "]>" + "<BOOK>"
+                + "<OPENER>" + "<TITLE_TEXT>All About Me</TITLE_TEXT>" + "</OPENER>" + "<PART>"
+                + "<HEADER>Welcome To My Book</HEADER>" + "<CHAPTER>"
+                + "<CHAPTER_NUMBER>CHAPTER 1</CHAPTER_NUMBER>" + "<CHAPTER_TEXT>"
+                + "<p>Glad you want to hear about me.</p>" + "<p>There's so much to say!</p>"
+                + "<p>Where should we start?</p>" + "<p>How about more about me?</p>" + "</CHAPTER_TEXT>"
+                + "</CHAPTER>" + "<illegal>not defined in dtd</illegal>" + "</PART>" + "</BOOK>";
+
+        result.setResponseData(data.getBytes());
+        vars = new JMeterVariables();
+        jmctx.setVariables(vars);
+        jmctx.setPreviousResult(result);
+        assertion.setXPathString("/");
+        assertion.setValidating(true);
+        AssertionResult res = assertion.getResult(result);
+        log.debug("failureMessage: " + res.getFailureMessage());
+        assertTrue(res.isError());
+        assertFalse(res.isFailure());
+    }
+
+    public void testTolerance() throws Exception {
+        String data = "<html><head><title>testtitle</title></head>" + "<body>"
+                + "<p><i><b>invalid tag nesting</i></b><hr>" + "</body></html>";
+
+        result.setResponseData(data.getBytes());
+        vars = new JMeterVariables();
+        jmctx.setVariables(vars);
+        jmctx.setPreviousResult(result);
+        assertion.setXPathString("/html/head/title");
+        assertion.setValidating(true);
+        assertion.setTolerant(true);
+        AssertionResult res = assertion.getResult(result);
+        log.debug("failureMessage: " + res.getFailureMessage());
+        assertFalse(res.isFailure());
+        assertFalse(res.isError());
+    }
 
 }
