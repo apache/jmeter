@@ -138,6 +138,10 @@ Or perhaps use the Access Log Sampler.
 <li>Only save the data that you need</li>
 <li>Use as few Assertions as possible</li>
 </ul>
+<p>
+If your test needs large amounts of data - particularly if it needs to be randomised - create the test data in a file
+that can be read with CSV Dataset. This avoids wasting resources at run-time. 
+</p>
 </section>
 
 <section name="&sect-num;.7 BeanShell server" anchor="beanshell_server">
