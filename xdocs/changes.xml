@@ -209,6 +209,7 @@ JMeter now removes extraneous leading "../" segments (as do many browsers)
 <li>Bug 47127 -  Unable to change language to pl_PL</li>
 <li>Bug 47120 -  Throughput Controller: change percent executions to total executions, the value is stored in a String and interpreted as 1 execution</li>
 <li>Bug 47137 - Labels in View Results Tree aren't I18N</li>
+<li>Bug 47150 - ThreadGroup with a loop count of zero causes infinite loop</li>
 </ul>
 
 <h3>Improvements</h3>
