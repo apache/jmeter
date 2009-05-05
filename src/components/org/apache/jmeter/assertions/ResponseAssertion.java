@@ -38,7 +38,7 @@ import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
 
-// @see org.apache.jmeter.assertions.PackageTest for unit tests
+// @see org.apache.jmeter.assertions.ResponseAssertionTest for unit tests
 
 /**
  * Test element to handle Response Assertions, @see AssertionGui
