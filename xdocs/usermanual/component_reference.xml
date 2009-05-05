@@ -1059,9 +1059,8 @@ Currently the only way to changes these is via the SampleResult methods:
 		</p>
 		<p><b>TCPClientImpl</b><br></br>
 		This implementation is fairly basic.
-		In particular, it does not report timeouts - though these can be handled by the use of Response Assertions.
-		The implementation reads input up to the end of the stream, 
-		or the eolByte if that is defined using the property <b>tcp.eolByte</b>
+        When reading the response, it reads until the end of line byte, if this is defined
+        by setting the property <b>tcp.eolByte</b>, otherwise until the end of the input stream.
         </p>
         <p><b>BinaryTCPClientImpl</b><br></br>
         This implementation converts the GUI input, which must be a hex-encoded string, into binary,
@@ -1073,6 +1072,11 @@ Currently the only way to changes these is via the SampleResult methods:
         This implementation extends BinaryTCPClientImpl by prefixing the binary message data with a binary length byte.
         The length prefix defaults to 2 bytes.
         This can be changed by setting the property <b>tcp.binarylength.prefix.length</b>.
+        </p>
+        <p><b>Timeout handling</b>
+        If the timeout is set, the read will be terminated when this expires. 
+        So if you are using an eolByte/eomByte, make sure the timeout is sufficiently long,
+        otherwise the read will be terminated early.    
 		</p>
 		<p><b>Response handling</b>
 		<br></br>
@@ -1089,7 +1093,7 @@ Currently the only way to changes these is via the SampleResult methods:
 		Response codes in the range "400"-"499" and "500"-"599" are currently regarded as failures;
 		all others are successful. [This needs to be made configurable!]
 		</p>
-<note>The login name/password are not used by the supplied TCP implementation.</note>
+<note>The login name/password are not used by the supplied TCP implementations.</note>
 		<br></br>
 		Sockets are disconnected at the end of a test run.
 </description>
@@ -1099,8 +1103,9 @@ Currently the only way to changes these is via the SampleResult methods:
   <property name="ServerName or IP" required="Yes">Name or IP of TCP server</property>
   <property name="Port Number" required="Yes">Port to be used</property>
   <property name="Re-use connection" required="Yes">If selected, the connection is kept open. Otherwise it is closed when the data has been read.</property>
-  <property name="Timeout (milliseconds)" required="No">Timeout for replies</property>
-  <property name="Set Nodelay" required="No">Should the nodelay property be set?</property>
+  <property name="Timeout (milliseconds)" required="No">Timeout for replies.</property>
+  <property name="Set Nodelay" required="Yes">See java.net.Socket.setTcpNoDelay().
+  If selected, this will disable Nagle's algorithm, otherwise Nagle's algorithm will be used.</property>
   <property name="Text to Send" required="Yes">Text to be sent</property>
   <property name="Login User" required="No">User Name - not used by default implementation</property>
   <property name="Password" required="No">Password - not used by default implementation</property>
