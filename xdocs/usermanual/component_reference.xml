@@ -2455,6 +2455,14 @@ by using suitable labels and adding the summarisers to appropriate parts of the 
     <p>
 	CSV Data Set Config is used to read lines from a file, and split them into variables.
 	It is easier to use than the __CSVRead() and _StringFromFile() functions.
+	It is well suited to handling large numbers of variables, and is also useful for tesing with
+	"random" and unique values.
+	Generating unique random values at run-time is expensive in terms of CPU and memory, so just create the data
+	in advance of the test. If necessary, the "random" data from the file can be used in conjunction with
+	a run-time parameter to create different sets of values from each run - e.g. using concatenation - which is
+	much cheaper than generating everything at run-time.
+    </p>
+    <p>
 	Versions of JMeter after 2.3.1 allow variables to be quoted; this allows the value to contain a delimiter.
 	Previously it was necessary to choose a delimiter that was not used in any values.
 	</p>
