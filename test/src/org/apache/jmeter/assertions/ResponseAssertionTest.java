@@ -131,6 +131,18 @@ public class ResponseAssertionTest  extends TestCase {
         assertPassed();
 
     }
+
+    // Bug 46831 - check can match dollars
+    public void testResponseAssertionContainsDollar() throws Exception {
+        sample.setResponseData("value=\"${ID}\" Group$ctl00$drpEmails".getBytes());
+        assertion.unsetNotType();
+        assertion.setToContainsType();
+        assertion.setTestFieldResponseData();
+        assertion.addTestString("value=\"\\${ID}\" Group\\$ctl00\\$drpEmails");
+        
+        result = assertion.getResult(sample);
+        assertPassed();        
+    }
     
     public void testResponseAssertionSubstring() throws Exception{
         assertion.unsetNotType();
