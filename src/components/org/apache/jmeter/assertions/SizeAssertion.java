@@ -27,7 +27,7 @@ import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jmeter.util.JMeterUtils;
 
-//@see org.apache.jmeter.assertions.PackageTest for unit tests
+//@see org.apache.jmeter.assertions.SizeAssertionTest for unit tests
 
 /**
  * Checks if the results of a Sample matches a particular size.
