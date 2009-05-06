@@ -246,6 +246,12 @@ public final class LoggingManager {
         return name;
     }
 
+    /**
+     * Removes the standard prefix, i.e. "org.apache.".
+     * 
+     * @param name from which to remove the prefix
+     * @return the name with the prefix removed
+     */
     public static String removePrefix(String name){
         if (name.startsWith(PACKAGE_PREFIX)) { // remove the package prefix
             name = name.substring(PACKAGE_PREFIX.length());
@@ -263,39 +269,77 @@ public final class LoggingManager {
         return Hierarchy.getDefaultHierarchy().getLoggerFor(removePrefix(className));
     }
 
+    /**
+     * Get the Logger for a class.
+     * 
+     * @param category - the full name of the logger category
+     *
+     * @return Logger
+     */
     public static Logger getLoggerFor(String category) {
         return Hierarchy.getDefaultHierarchy().getLoggerFor(category);
     }
 
+    /**
+     * Get the Logger for a class.
+     * 
+     * @param category - the full name of the logger category, this will have the prefix removed.
+     *
+     * @return Logger
+     */
     public static Logger getLoggerForShortName(String category) {
         return Hierarchy.getDefaultHierarchy().getLoggerFor(removePrefix(category));
     }
 
-    public static void setPriority(String p, String category) {
-        setPriority(Priority.getPriorityForName(p), category);
+    /**
+     * Set the logging priority for a category.
+     * 
+     * @param priority - string containing the priority name, e.g. "INFO", "WARN", "DEBUG", "FATAL_ERROR"
+     * @param category - string containing the category
+     */
+    public static void setPriority(String priority, String category) {
+        setPriority(Priority.getPriorityForName(priority), category);
     }
 
     /**
-     *
-     * @param p - priority, e.g. DEBUG, INFO
-     * @param fullName - e.g. org.apache.jmeter.etc
+     * Set the logging priority for a category.
+     * 
+     * @param priority - priority, e.g. DEBUG, INFO
+     * @param fullName - e.g. org.apache.jmeter.etc, will have the prefix removed.
      */
-    public static void setPriorityFullName(String p, String fullName) {
-        setPriority(Priority.getPriorityForName(p), removePrefix(fullName));
+    public static void setPriorityFullName(String priority, String fullName) {
+        setPriority(Priority.getPriorityForName(priority), removePrefix(fullName));
     }
 
-    public static void setPriority(Priority p, String category) {
-        Hierarchy.getDefaultHierarchy().getLoggerFor(category).setPriority(p);
+    /**
+     * Set the logging priority for a category.
+     * 
+     * @param priority - e.g. Priority.DEBUG
+     * @param category - string containing the category
+     */
+    public static void setPriority(Priority priority, String category) {
+        Hierarchy.getDefaultHierarchy().getLoggerFor(category).setPriority(priority);
     }
 
     public static void setPriority(String p) {
         setPriority(Priority.getPriorityForName(p));
     }
 
-    public static void setPriority(Priority p) {
-        Hierarchy.getDefaultHierarchy().setDefaultPriority(p);
+    /**
+     * Set the default logging priority.
+     * 
+     * @param priority e.g. Priority.DEBUG
+     */
+    public static void setPriority(Priority priority) {
+        Hierarchy.getDefaultHierarchy().setDefaultPriority(priority);
     }
 
+    /**
+     * Set the logging target for a category.
+     * 
+     * @param target the LogTarget
+     * @param category the category name
+     */
     public static void setTarget(LogTarget target, String category) {
         Logger logger = Hierarchy.getDefaultHierarchy().getLoggerFor(category);
         logger.setLogTargets(new LogTarget[] { target });
