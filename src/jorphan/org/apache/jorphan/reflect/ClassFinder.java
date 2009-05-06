@@ -225,11 +225,12 @@ public final class ClassFinder {
      * Returns the classpath entries that match the search list of jars and paths
      */
     private static List getClasspathMatches(String[] strPathsOrJars) {
-        log.debug("Classpath = " + System.getProperty("java.class.path")); // $NON-NLS-1$
+        final String javaClassPath = System.getProperty("java.class.path"); // $NON-NLS-1$
         StringTokenizer stPaths =
-            new StringTokenizer(System.getProperty("java.class.path"), // $NON-NLS-1$
+            new StringTokenizer(javaClassPath,
                 System.getProperty("path.separator")); // $NON-NLS-1$
         if (log.isDebugEnabled()) {
+            log.debug("Classpath = " + javaClassPath);
             for (int i = 0; i < strPathsOrJars.length; i++) {
                 log.debug("strPathsOrJars[" + i + "] : " + strPathsOrJars[i]);
             }
