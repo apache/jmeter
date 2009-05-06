@@ -80,6 +80,12 @@ public class CompoundVariable implements Function {
                     functions.put("_StringFromFile", tempFunc.getClass());//$NON-NLS-1$
                 }
             }
+            final int functionCount = functions.size();
+            if (functionCount == 0){
+                log.warn("Did not find any functions");
+            } else {
+                log.debug("Function count: "+functionCount);
+            }
         } catch (Exception err) {
             log.error("", err);
         }
