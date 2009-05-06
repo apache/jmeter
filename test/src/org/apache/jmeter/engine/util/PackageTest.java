@@ -24,8 +24,7 @@ package org.apache.jmeter.engine.util;
 import java.util.HashMap;
 import java.util.Map;
 
-import junit.framework.TestCase;
-
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
@@ -33,19 +32,19 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 
-public class PackageTest extends TestCase {
-	Map variables;
+/*
+ * To run this test stand-alone, ensure that ApacheJMeter_functions.jar is on the classpath,
+ * as it is needed to resolve the functions.
+ */
+public class PackageTest extends JMeterTestCase {
+	private Map variables;
 
-	SampleResult result;
+	private SampleResult result;
 
-	ReplaceStringWithFunctions transformer;
+	private ReplaceStringWithFunctions transformer;
 
-	/**
-	 * @param arg0
-	 */
 	public PackageTest(String arg0) {
 		super(arg0);
-		// TODO Auto-generated constructor stub
 	}
 
 	private JMeterContext jmctx = null;
@@ -157,6 +156,25 @@ public class PackageTest extends TestCase {
 		assertEquals("org.apache.jmeter.testelement.property.FunctionProperty", newProp.getClass().getName());
 		assertEquals("$3.47,$5.67", newProp.getStringValue());
 	}
+
+	// Escaped dollar with no variable reference
+    public void testParseExample11() throws Exception {
+        StringProperty prop = new StringProperty("html", "\\$a jakarta.apache.org");
+        JMeterProperty newProp = transformer.transformValue(prop);
+        newProp.setRunningVersion(true);
+        assertEquals("org.apache.jmeter.testelement.property.StringProperty", newProp.getClass().getName());
+        assertEquals("\\$a jakarta.apache.org", newProp.getStringValue());
+    }
+
+    // Escaped dollar with variable reference
+    // TODO - currently fails - see Bug 46831
+    public void xtestParseExample12() throws Exception {
+        StringProperty prop = new StringProperty("html", "\\$a ${server}");
+        JMeterProperty newProp = transformer.transformValue(prop);
+        newProp.setRunningVersion(true);
+        assertEquals("org.apache.jmeter.testelement.property.FunctionProperty", newProp.getClass().getName());
+        assertEquals("\\$a jakarta.apache.org", newProp.getStringValue());
+    }
 
 	public void testNestedExample1() throws Exception {
 		StringProperty prop = new StringProperty("html", "${__regexFunction(<html>(${my_regex})</html>,"
