@@ -71,7 +71,6 @@ public class CompoundVariable implements Function {
                     new Class[] { Function.class }, true, contain, notContain);
             Iterator iter = classes.iterator();
             while (iter.hasNext()) {
-                // TODO skip class init - e.g. update findClassesThatExtend() to return classes instead of strings
                 Function tempFunc = (Function) Class.forName((String) iter.next()).newInstance();
                 String referenceKey = tempFunc.getReferenceKey();
                 functions.put(referenceKey, tempFunc.getClass());
