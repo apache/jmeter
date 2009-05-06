@@ -73,13 +73,13 @@ public class JMeterUtils implements UnitTestManager {
 
     private static final String EXPERT_MODE_PROPERTY = "jmeter.expertMode"; // $NON-NLS-1$
 
-    private static Properties appProperties;
+    private static volatile Properties appProperties;
 
     private static final Vector localeChangeListeners = new Vector();
 
-    private static Locale locale;
+    private static volatile Locale locale;
 
-    private static ResourceBundle resources;
+    private static volatile ResourceBundle resources;
 
     // What host am I running on?
 
@@ -1079,6 +1079,7 @@ public class JMeterUtils implements UnitTestManager {
         jmBin = jmDir + File.separator + "bin"; // $NON-NLS-1$
     }
 
+    // TODO needs to be synch? Probably not changed after threads have started
     private static String jmDir; // JMeter Home directory (excludes trailing separator)
     private static String jmBin; // JMeter bin directory (excludes trailing separator)
 
