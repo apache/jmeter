@@ -129,7 +129,6 @@ class FunctionParser {
                 } else if (current[0] == '(' && previous != ' ') {
                     String funcName = buffer.toString();
                     function = CompoundVariable.getNamedFunction(funcName);
-                    buffer.setLength(0);
                     if (function instanceof Function) {
                         ((Function) function).setParameters(parseParams(reader));
                         if (reader.read(current) == 0 || current[0] != '}') {
@@ -143,6 +142,8 @@ class FunctionParser {
                             StandardJMeterEngine.register((TestListener) function);
                         }
                         return function;
+                    } else { // Function does not exist, so treat as per missing variable
+                        buffer.append(current[0]);
                     }
                     continue;
                 } else if (current[0] == '}') {// variable, or function with no parameter list
