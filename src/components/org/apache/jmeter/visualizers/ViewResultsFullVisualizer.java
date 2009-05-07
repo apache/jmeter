@@ -923,7 +923,6 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
                 this.add(domJScrollPane);
                 ToolTipManager.sharedInstance().registerComponent(domJTree);
                 domJTree.setCellRenderer(new DomTreeRenderer());
-                this.setPreferredSize(new Dimension(800, 600));
             } catch (SAXException e) {
                 log.warn("", e);
             }
