@@ -214,8 +214,14 @@ and the contents of the variable XPATH as the expression to search for.
 <p>
 JMeter provides a tool to help you construct
 function calls for various built-in functions, which you can then copy-paste. 
-It will not automatically escape values for you, since functions can be parameters to other functions, and you should only escape values you intend as literal.</p>
-
+It will not automatically escape values for you, since functions can be parameters to other functions, and you should only escape values you intend as literal.
+</p>
+<note>
+If a string contains a backslash('\') and also contains a function or variable reference, the backslash will be removed if
+it appears before '$' or ',' or '\'.
+This behaviour is necessary to allow for nested functions that include commas or the string ${.
+Backslashes before '$' or ',' or '\' are not removed if the string does not contain a function or variable reference. 
+</note>
 <p>
 <b>The value of a variable or function can be reported</b> using the <a href="#__logn">__logn()</a> function.
 The __logn() function reference can be used anywhere in the test plan after the variable has been defined.
