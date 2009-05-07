@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -98,7 +99,7 @@ public class IncludeController extends GenericController implements ReplaceableC
         return SUBTREE;
     }
 
-    public void resolveReplacementSubTree(Object context) {
+    public void resolveReplacementSubTree(JMeterTreeNode context) {
         this.SUBTREE = this.loadIncludedElements();
     }
 
