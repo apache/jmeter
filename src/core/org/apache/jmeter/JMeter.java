@@ -800,51 +800,48 @@ public class JMeter implements JMeterPlugin {
                 if (item.isEnabled()) {
                     if (item instanceof ReplaceableController) {
                         // HACK: force the controller to load its tree
-                        ReplaceableController rc = (ReplaceableController) item
-                            .clone();
+                        ReplaceableController rc = (ReplaceableController) item.clone();
                         HashTree subTree = tree.getTree(item);
                         if (subTree != null) {
-                            HashTree replacementTree = rc
-                                .getReplacementSubTree();
+                            HashTree replacementTree = rc.getReplacementSubTree();
                             if (replacementTree != null) {
                                 convertSubTree(replacementTree);
                                 tree.replace(item, rc);
                                 tree.set(rc, replacementTree);
                             }
-                        } else {
+                        } else { // null subTree
                             convertSubTree(tree.getTree(item));
                         }
-                    } else {
+                    } else { // not Replaceable Controller
                         convertSubTree(tree.getTree(item));
                     }
-                } else {
+                } else { // Not enabled
                     tree.remove(item);
                 }
-            } else {
+            } else { // Not a TestElement
                 JMeterTreeNode item = (JMeterTreeNode) o;
                 if (item.isEnabled()) {
                     // Replacement only needs to occur when starting the engine
                     // @see StandardJMeterEngine.run()
                     if (item.getUserObject() instanceof ReplaceableController) {
-                        ReplaceableController rc = (ReplaceableController) item
-                            .getTestElement();
+                        ReplaceableController rc = 
+                            (ReplaceableController) item.getTestElement();
                         HashTree subTree = tree.getTree(item);
 
                         if (subTree != null) {
-                            HashTree replacementTree = rc
-                                .getReplacementSubTree();
+                            HashTree replacementTree = rc.getReplacementSubTree();
                             if (replacementTree != null) {
                                 convertSubTree(replacementTree);
                                 tree.replace(item, rc);
                                 tree.set(rc, replacementTree);
                             }
                         }
-                    } else {
+                    } else { // Not a ReplaceableController
                         convertSubTree(tree.getTree(item));
                         TestElement testElement = item.getTestElement();
                         tree.replace(item, testElement);
                     }
-                 } else {
+                 } else { // Not enabled
                     tree.remove(item);
                 }
             }
