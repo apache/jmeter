@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.control;
 
+import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jorphan.collections.HashTree;
 
 /**
@@ -41,5 +42,5 @@ public interface ReplaceableController {
      *
      * @param context
      */
-    public void resolveReplacementSubTree(Object context);
+    public void resolveReplacementSubTree(JMeterTreeNode context);
 }
