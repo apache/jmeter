@@ -128,12 +128,11 @@ public class ModuleController extends GenericController implements ReplaceableCo
      * Compute the replacement tree.
      * @param context
      */
-    public void resolveReplacementSubTree(Object context) {
-        JMeterTreeNode root = (JMeterTreeNode) context;
+    public void resolveReplacementSubTree(JMeterTreeNode context) {
         if (selectedNode == null) {
             List nodePathList = getNodePath();
             if (nodePathList != null && nodePathList.size() > 0) {
-                traverse(root, nodePathList, 1);
+                traverse(context, nodePathList, 1);
             }
         }
     }
