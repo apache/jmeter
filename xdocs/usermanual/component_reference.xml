@@ -4374,7 +4374,7 @@ Double-check the browser options.
 If you are trying to record from a server running on the same host,
 then check that the browser is not set to "Bypass proxy server for local addresses"
 (this example is from IE7, but there will be similar options for other browsers).
-If JMeter does not record browser URLs such as http://localhost/ or http://128.0.0.1/,
+If JMeter does not record browser URLs such as http://localhost/ or http://127.0.0.1/,
 try using the non-loopback hostname or IP address, e.g. http://myhost/ or http://192.168.0.2/.
 </p>
 
