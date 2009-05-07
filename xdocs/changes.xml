@@ -211,6 +211,7 @@ JMeter now removes extraneous leading "../" segments (as do many browsers)
 <li>Bug 47137 - Labels in View Results Tree aren't I18N</li>
 <li>Bug 47150 - ThreadGroup with a loop count of zero causes infinite loop</li>
 <li>A reference to a missing function - e.g. ${__missing(a)} - is now treated the same as a missing variable. Previously the function name - and leading { - were dropped.</li>
+<li>Bug 47165 - Using the same module name in command line mode causes NPE</li>
 </ul>
 
 <h3>Improvements</h3>
