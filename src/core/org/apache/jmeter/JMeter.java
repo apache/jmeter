@@ -697,14 +697,14 @@ public class JMeter implements JMeterPlugin {
             throw new IllegalUserActionException("Non-GUI runs require a test plan");
         }
         if (logFile == null) {
-            driver.run(testFile, null, remoteStart != null,remote_hosts_string);
+            driver.runNonGui(testFile, null, remoteStart != null,remote_hosts_string);
         } else {
-            driver.run(testFile, logFile, remoteStart != null,remote_hosts_string);
+            driver.runNonGui(testFile, logFile, remoteStart != null,remote_hosts_string);
         }
     }
 
     // run test in batch mode
-    private void run(String testFile, String logFile, boolean remoteStart, String remote_hosts_string) {
+    private void runNonGui(String testFile, String logFile, boolean remoteStart, String remote_hosts_string) {
         FileInputStream reader = null;
         try {
             File f = new File(testFile);
