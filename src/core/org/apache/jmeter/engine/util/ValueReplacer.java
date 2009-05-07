@@ -41,7 +41,7 @@ import org.apache.log.Logger;
 public class ValueReplacer {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private CompoundVariable masterFunction = new CompoundVariable();
+    private final CompoundVariable masterFunction = new CompoundVariable();
 
     private Map variables = new HashMap();
 
