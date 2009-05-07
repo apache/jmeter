@@ -157,23 +157,44 @@ public class PackageTest extends JMeterTestCase {
 		assertEquals("$3.47,$5.67", newProp.getStringValue());
 	}
 
-	// Escaped dollar with no variable reference
+	// Escaped dollar commma and backslash with no variable reference
     public void testParseExample11() throws Exception {
-        StringProperty prop = new StringProperty("html", "\\$a jakarta.apache.org");
+        StringProperty prop = new StringProperty("html", "\\$a \\, \\\\ jakarta.apache.org");
         JMeterProperty newProp = transformer.transformValue(prop);
         newProp.setRunningVersion(true);
         assertEquals("org.apache.jmeter.testelement.property.StringProperty", newProp.getClass().getName());
-        assertEquals("\\$a jakarta.apache.org", newProp.getStringValue());
+        assertEquals("\\$a \\, \\\\ jakarta.apache.org", newProp.getStringValue());
     }
 
-    // Escaped dollar with variable reference
-    // TODO - currently fails - see Bug 46831
-    public void xtestParseExample12() throws Exception {
-        StringProperty prop = new StringProperty("html", "\\$a ${server}");
+    // N.B. See Bug 46831 which wanted to changed the behaviour of \$
+    // It's too late now, as this would invalidate some existing test plans,
+    // so document the current behaviour with some more tests.
+    
+    // Escaped dollar commma and backslash with variable reference
+    public void testParseExample12() throws Exception {
+        StringProperty prop = new StringProperty("html", "\\$a \\, \\\\ ${server} \\$b \\, \\\\ cd");
         JMeterProperty newProp = transformer.transformValue(prop);
         newProp.setRunningVersion(true);
-        assertEquals("org.apache.jmeter.testelement.property.FunctionProperty", newProp.getClass().getName());
-        assertEquals("\\$a jakarta.apache.org", newProp.getStringValue());
+        // N.B. Backslashes are removed before dollar, comma and backslash
+        assertEquals("$a , \\ jakarta.apache.org $b , \\ cd", newProp.getStringValue());
+    }
+
+    // Escaped dollar commma and backslash with missing variable reference
+    public void testParseExample13() throws Exception {
+        StringProperty prop = new StringProperty("html", "\\$a \\, \\\\ ${missing} \\$b \\, \\\\ cd");
+        JMeterProperty newProp = transformer.transformValue(prop);
+        newProp.setRunningVersion(true);
+        // N.B. Backslashes are removed before dollar, comma and backslash
+        assertEquals("$a , \\ ${missing} $b , \\ cd", newProp.getStringValue());
+    }
+
+    // Escaped dollar commma and backslash with missing function reference
+    public void testParseExample14() throws Exception {
+        StringProperty prop = new StringProperty("html", "\\$a \\, \\\\ ${__missing(a)} \\$b \\, \\\\ cd");
+        JMeterProperty newProp = transformer.transformValue(prop);
+        newProp.setRunningVersion(true);
+        // N.B. Backslashes are removed before dollar, comma and backslash
+        assertEquals("$a , \\ ${__missing(a)} $b , \\ cd", newProp.getStringValue());
     }
 
 	public void testNestedExample1() throws Exception {
