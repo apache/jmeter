@@ -169,6 +169,7 @@ public class CompoundVariable implements Function {
     }
 
     public void clear() {
+        // TODO should this also clear isDynamic, rawParameters, permanentResults?
         hasFunction = false;
         compiledComponents.clear();
     }
