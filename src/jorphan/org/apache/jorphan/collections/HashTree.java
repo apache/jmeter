@@ -31,8 +31,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 /**
  * This class is used to create a tree structure of objects. Each element in the
@@ -57,7 +55,7 @@ public class HashTree implements Serializable, Map, Cloneable {
     // GetLoggerForClass() uses ClassContext, which
     // causes a Security violation in RemoteJMeterImpl
     // so we use getLoggerFor() instead
-    private static final Logger log = LoggingManager.getLoggerFor(HashTree.class.getName());
+//    private static final Logger log = LoggingManager.getLoggerFor(HashTree.class.getName());
     
     // Used for the RuntimeException to short-circuit the traversal
     private static final String FOUND = "found"; // $NON-NLS-1$
@@ -986,11 +984,7 @@ public class HashTree implements Serializable, Map, Cloneable {
                 Object item = iter.next();
                 final HashTree treeItem = getTree(item);
                 visitor.addNode(item, treeItem);
-                if (treeItem != null){
-                    treeItem.traverseInto(visitor);
-                } else {
-                    log.warn("Null tree for "+item, new Throwable());
-                }
+                treeItem.traverseInto(visitor);
             }
         }
         visitor.subtractNode();
