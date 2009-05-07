@@ -30,6 +30,10 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.jmeter.testelement.TestElement;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
+
 /**
  * This class is used to create a tree structure of objects. Each element in the
  * tree is also a key to the next node down in the tree. It provides many ways
@@ -49,13 +53,12 @@ import java.util.Set;
  * @see SearchByClass
  */
 public class HashTree implements Serializable, Map, Cloneable {
+
     // GetLoggerForClass() uses ClassContext, which
     // causes a Security violation in RemoteJMeterImpl
-    // Currently log is only used by test code, so moved there.
-    // N.B. Can still add logging, but would beed to use getLoggerFor() instead
-    // private static Logger log =
-    // LoggingManager.getLoggerForClass();
-
+    // so we use getLoggerFor() instead
+    private static final Logger log = LoggingManager.getLoggerFor(HashTree.class.getName());
+    
     // Used for the RuntimeException to short-circuit the traversal
     private static final String FOUND = "found"; // $NON-NLS-1$
 
@@ -981,24 +984,38 @@ public class HashTree implements Serializable, Map, Cloneable {
             Iterator iter = list().iterator();
             while (iter.hasNext()) {
                 Object item = iter.next();
-                visitor.addNode(item, getTree(item));
-                getTree(item).traverseInto(visitor);
+                final HashTree treeItem = getTree(item);
+                visitor.addNode(item, treeItem);
+                if (treeItem != null){
+                    treeItem.traverseInto(visitor);
+                } else {
+                    log.warn("Null tree for "+item, new Throwable());
+                }
             }
         }
         visitor.subtractNode();
     }
 
+    /**
+     * Generate a printable representation of the tree.
+     * 
+     * @return a representation of the tree
+     */
     public String toString() {
         ConvertToString converter = new ConvertToString();
-        traverse(converter);
+        try {
+            traverse(converter);
+        } catch (Exception e) { // Just in case
+            converter.reportError(e);
+        }
         return converter.toString();
     }
 
     private static class TreeSearcher implements HashTreeTraverser {
 
-        Object target;
+        private final Object target;
 
-        HashTree result;
+        private HashTree result;
 
         public TreeSearcher(Object t) {
             target = t;
@@ -1008,12 +1025,7 @@ public class HashTree implements Serializable, Map, Cloneable {
             return result;
         }
 
-        /*
-         * (non-Javadoc)
-         *
-         * @see org.apache.jorphan.collections.HashTreeTraverser#addNode(java.lang.Object,
-         *      org.apache.jorphan.collections.HashTree)
-         */
+        /** {@inheritDoc} */
         public void addNode(Object node, HashTree subTree) {
             result = subTree.getTree(target);
             if (result != null) {
@@ -1022,35 +1034,31 @@ public class HashTree implements Serializable, Map, Cloneable {
             }
         }
 
-        /*
-         * (non-Javadoc)
-         *
-         * @see org.apache.jorphan.collections.HashTreeTraverser#processPath()
-         */
+        /** {@inheritDoc} */
         public void processPath() {
             // Not used
         }
 
-        /*
-         * (non-Javadoc)
-         *
-         * @see org.apache.jorphan.collections.HashTreeTraverser#subtractNode()
-         */
+        /** {@inheritDoc} */
         public void subtractNode() {
             // Not used
         }
     }
 
     private static class ConvertToString implements HashTreeTraverser {
-        StringBuffer string = new StringBuffer(getClass().getName() + "{");
+        private final StringBuffer string = new StringBuffer(getClass().getName() + "{");
 
-        StringBuffer spaces = new StringBuffer();
+        private final StringBuffer spaces = new StringBuffer();
 
-        int depth = 0;
+        private int depth = 0;
 
         public void addNode(Object key, HashTree subTree) {
             depth++;
-            string.append("\n" + getSpaces() + key + " {");
+            string.append("\n").append(getSpaces()).append(key);
+            if (key instanceof TestElement){
+                string.append(" ").append(((TestElement)key).getName());
+            }
+            string.append(" {");
         }
 
         public void subtractNode() {
@@ -1064,6 +1072,10 @@ public class HashTree implements Serializable, Map, Cloneable {
         public String toString() {
             string.append("\n}");
             return string.toString();
+        }
+
+        void reportError(Throwable t){
+            string.append("Error: ").append(t.toString());
         }
 
         private String getSpaces() {
