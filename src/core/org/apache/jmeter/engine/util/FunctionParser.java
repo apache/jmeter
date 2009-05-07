@@ -46,6 +46,8 @@ class FunctionParser {
      *
      * Calls {@link #makeFunction(StringReader)} if it detects an unescaped "${".
      *
+     * Removes escapes from '$', ',' and '\'.
+     * 
      * @param value string containing the function / variable references (if any)
      *
      * @return list of strings or Objects representing functions
@@ -58,11 +60,13 @@ class FunctionParser {
         char[] current = new char[1];
         try {
             while (reader.read(current) == 1) {
-                if (current[0] == '\\') {
+                if (current[0] == '\\') { // Handle escapes
                     previous = current[0];
                     if (reader.read(current) == 0) {
                         break;
                     }
+                    // Keep the '\' unless it is one of the escapable chars '$' ',' or '\'
+                    // N.B. This method is used to parse function parameters, so must treat ',' as special
                     if (current[0] != '$' && current[0] != ',' && current[0] != '\\') {
                         buffer.append(previous); // i.e. '\\'
                     }
@@ -164,6 +168,14 @@ class FunctionParser {
     /**
      * Compile a String into a list of parameters, each made into a
      * CompoundVariable.
+     * 
+     * Parses strings of the following form:
+     * <ul>
+     * <li>text)</li>
+     * <li>text,text)</li>
+     * <li></li>
+     * </ul>
+     * @param reader a StringReader pointing to the current input location, just after "("
      */
     LinkedList parseParams(StringReader reader) throws InvalidVariableException {
         LinkedList result = new LinkedList();
@@ -174,13 +186,13 @@ class FunctionParser {
         int parenRecursion = 0;
         try {
             while (reader.read(current) == 1) {
-                if (current[0] == '\\') {
-                    buffer.append(current[0]);
+                if (current[0] == '\\') { // Process escaped characters
+                    buffer.append(current[0]); // Store the \
                     if (reader.read(current) == 0) {
-                        break;
+                        break; // end of buffer
                     }
                     previous = ' ';
-                    buffer.append(current[0]);
+                    buffer.append(current[0]); // store the following character
                     continue;
                 } else if (current[0] == ',' && functionRecursion == 0) {
                     CompoundVariable param = new CompoundVariable();
@@ -192,6 +204,7 @@ class FunctionParser {
                     if (buffer.length() == 0 && result.isEmpty()){
                         return result;
                     }
+                    // Normal exit occurs here
                     CompoundVariable param = new CompoundVariable();
                     param.setParameters(buffer.toString());
                     buffer.setLength(0);
@@ -218,9 +231,10 @@ class FunctionParser {
                     previous = current[0];
                 }
             }
-        } catch (IOException e) {
+        } catch (IOException e) {// Should not happen with StringReader
             log.error("Error parsing function: " + buffer.toString(), e);
         }
+        // Dropped out, i.e. did not find closing ')'
         log.warn("Probably an invalid function string: " + buffer.toString());
         CompoundVariable var = new CompoundVariable();
         var.setParameters(buffer.toString());
