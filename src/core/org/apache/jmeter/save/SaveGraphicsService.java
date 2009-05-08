@@ -27,8 +27,8 @@ import java.io.OutputStream;
 
 import javax.swing.JComponent;
 
-import org.apache.batik.ext.awt.image.codec.PNGEncodeParam;
-import org.apache.batik.ext.awt.image.codec.PNGImageEncoder;
+import org.apache.batik.ext.awt.image.codec.png.PNGEncodeParam;
+import org.apache.batik.ext.awt.image.codec.png.PNGImageEncoder;
 import org.apache.batik.ext.awt.image.codec.tiff.TIFFEncodeParam;
 import org.apache.batik.ext.awt.image.codec.tiff.TIFFImageEncoder;
 import org.apache.jorphan.logging.LoggingManager;
