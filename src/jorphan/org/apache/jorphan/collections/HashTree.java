@@ -30,8 +30,6 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.jmeter.testelement.TestElement;
-
 /**
  * This class is used to create a tree structure of objects. Each element in the
  * tree is also a key to the next node down in the tree. It provides many ways
@@ -1049,9 +1047,6 @@ public class HashTree implements Serializable, Map, Cloneable {
         public void addNode(Object key, HashTree subTree) {
             depth++;
             string.append("\n").append(getSpaces()).append(key);
-            if (key instanceof TestElement){
-                string.append(" ").append(((TestElement)key).getName());
-            }
             string.append(" {");
         }
 
