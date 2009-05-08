@@ -23,6 +23,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 
 import javax.swing.JComponent;
@@ -31,21 +32,15 @@ import org.apache.batik.ext.awt.image.codec.png.PNGEncodeParam;
 import org.apache.batik.ext.awt.image.codec.png.PNGImageEncoder;
 import org.apache.batik.ext.awt.image.codec.tiff.TIFFEncodeParam;
 import org.apache.batik.ext.awt.image.codec.tiff.TIFFImageEncoder;
-import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
 
 /**
  * Class is responsible for taking a component and saving it as a JPEG, PNG or
  * TIFF. The class is very simple. Thanks to Batik and the developers who worked
- * so hard on it. The original implementation I used JAI, which allows
- * redistribution but requires indemnification. Luckily Batik has an alternative
- * to JAI. Hurray for Apache projects. I don't see any noticeable differences
- * between Batik and JAI.
+ * so hard on it.
  */
 public class SaveGraphicsService {
-
-    private static final Logger log = LoggingManager.getLoggerForClass();
 
     public static final int PNG = 0;
 
@@ -134,12 +129,15 @@ public class SaveGraphicsService {
     public void savePNGWithBatik(String filename, BufferedImage image) {
         File outfile = new File(filename);
         OutputStream fos = createFile(outfile);
+        if (fos == null) {
+            return;
+        }
         PNGEncodeParam param = PNGEncodeParam.getDefaultEncodeParam(image);
         PNGImageEncoder encoder = new PNGImageEncoder(fos, param);
         try {
             encoder.encode(image);
-        } catch (Exception e) {
-            // do nothing
+        } catch (IOException e) {
+            JMeterUtils.reportErrorToUser("PNGImageEncoder reported: "+e.getMessage(), "Problem creating image file");
         } finally {
             JOrphanUtils.closeQuietly(fos);
         }
@@ -154,12 +152,21 @@ public class SaveGraphicsService {
     public void saveTIFFWithBatik(String filename, BufferedImage image) {
         File outfile = new File(filename);
         OutputStream fos = createFile(outfile);
+        if (fos == null) {
+            return;
+        }
         TIFFEncodeParam param = new TIFFEncodeParam();
         TIFFImageEncoder encoder = new TIFFImageEncoder(fos, param);
         try {
             encoder.encode(image);
-        } catch (Exception e) {
-            // do nothing
+        } catch (IOException e) {
+            JMeterUtils.reportErrorToUser("TIFFImageEncoder reported: "+e.getMessage(), "Problem creating image file");
+        // Yuck: TIFFImageEncoder uses Error to report runtime problems
+        } catch (Error e) {
+            JMeterUtils.reportErrorToUser("TIFFImageEncoder reported: "+e.getMessage(), "Problem creating image file");
+            if (e.getClass() != Error.class){// rethrow other errors
+                throw e;
+            }
         } finally {
             JOrphanUtils.closeQuietly(fos);
         }
@@ -172,11 +179,11 @@ public class SaveGraphicsService {
      * @param filename
      * @return output stream created from the filename
      */
-    public FileOutputStream createFile(File filename) {
+    private FileOutputStream createFile(File filename) {
         try {
             return new FileOutputStream(filename);
         } catch (FileNotFoundException e) {
-            log.warn(e.toString());
+            JMeterUtils.reportErrorToUser("Could not create file: "+e.getMessage(), "Problem creating image file");
             return null;
         }
     }
