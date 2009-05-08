@@ -107,7 +107,7 @@ public class SaveGraphicsService {
      */
     public void saveJComponent(String filename, int type, JComponent component) {
         Dimension size = component.getSize();
-        BufferedImage image = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_RGB);
+        BufferedImage image = new BufferedImage(size.width, size.height, BufferedImage.TYPE_BYTE_INDEXED);
         Graphics2D grp = image.createGraphics();
         component.paint(grp);
 
