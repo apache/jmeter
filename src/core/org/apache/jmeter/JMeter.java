@@ -40,7 +40,6 @@ import org.apache.commons.cli.avalon.CLArgsParser;
 import org.apache.commons.cli.avalon.CLOption;
 import org.apache.commons.cli.avalon.CLOptionDescriptor;
 import org.apache.commons.cli.avalon.CLUtil;
-import org.apache.jmeter.control.ModuleController;
 import org.apache.jmeter.control.ReplaceableController;
 import org.apache.jmeter.engine.ClientJMeterEngine;
 import org.apache.jmeter.engine.JMeterEngine;
@@ -801,12 +800,16 @@ public class JMeter implements JMeterPlugin {
                 if (item.isEnabled()) {
                     if (item instanceof ReplaceableController) {
                         ReplaceableController rc;
-                        if (item instanceof ModuleController){ // Bug 47165
+
+                        // TODO this bit of code needs to be tidied up
+                        // Unfortunately ModuleController is in components, not core
+                        if (item.getClass().getName().equals("org.apache.jmeter.control.ModuleController")){ // Bug 47165
                             rc = (ReplaceableController) item;
                         } else {
                             // HACK: force the controller to load its tree
                             rc = (ReplaceableController) item.clone();
                         }
+
                         HashTree subTree = tree.getTree(item);
                         if (subTree != null) {
                             HashTree replacementTree = rc.getReplacementSubTree();
