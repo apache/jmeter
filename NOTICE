@@ -14,9 +14,6 @@ Unit testing support is provided by JUnit
 under the Common Public License Version 1.0: http://www.opensource.org/licenses/cpl.php
 See http://www.junit.org/
 
-PNG and TIFF encoding is provided by Apache XML-Batik
-See http://xml.apache.org/
-
 XML Serialization is provided by XStream and XPP3
 XStream:(http://xstream.codehaus.org/)
 Copyright (c) 2003-2004, Joe Walnes
