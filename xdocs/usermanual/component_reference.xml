@@ -2313,7 +2313,7 @@ This allows identical labels from different thread groups to be collated separat
 </div>
 </component>
 
-<component name="Save Responses to a file" index="&sect-num;.3.16"  width="359" height="202" screenshot="savetofile.png">
+<component name="Save Responses to a file" index="&sect-num;.3.16"  width="358" height="225" screenshot="savetofile.png">
     <description>
         <p>
         This test element can be placed anywhere in the test plan.
@@ -2324,6 +2324,8 @@ This allows identical labels from different thread groups to be collated separat
         The file name is created from the specified prefix, plus a number (unless this is disabled, see below).
         The file extension is created from the document type, if known.
         If not known, the file extension is set to 'unknown'.
+        If numbering is disabled, and adding a suffix is disabled, then the file prefix is
+        taken as the entire file name. This allows a fixed file name to be generated if required.
         The generated file name is stored in the sample response, and can be saved
         in the test log output file if required.
         </p>
@@ -2345,6 +2347,7 @@ This allows identical labels from different thread groups to be collated separat
  <property name="Save Failed Responses only" required="Yes">If selected, then only failed responses are saved</property>
  <property name="Save Successful Responses only" required="Yes">If selected, then only successful responses are saved</property>
  <property name="Don't add number to prefix" required="Yes">If selected, then no number is added to the prefix. If you select this option, make sure that the prefix is unique or the file may be overwritten.</property>
+ <property name="Don't add suffix" required="Yes">If selected, then no suffix is added. If you select this option, make sure that the prefix is unique or the file may be overwritten.</property>
  </properties>
 </component>
 
