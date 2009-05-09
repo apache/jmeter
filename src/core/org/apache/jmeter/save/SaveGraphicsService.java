@@ -28,10 +28,10 @@ import java.io.OutputStream;
 
 import javax.swing.JComponent;
 
-import org.apache.batik.ext.awt.image.codec.png.PNGEncodeParam;
-import org.apache.batik.ext.awt.image.codec.png.PNGImageEncoder;
-import org.apache.batik.ext.awt.image.codec.tiff.TIFFEncodeParam;
-import org.apache.batik.ext.awt.image.codec.tiff.TIFFImageEncoder;
+import org.apache.xmlgraphics.image.codec.png.PNGEncodeParam;
+import org.apache.xmlgraphics.image.codec.png.PNGImageEncoder;
+import org.apache.xmlgraphics.image.codec.tiff.TIFFEncodeParam;
+import org.apache.xmlgraphics.image.codec.tiff.TIFFImageEncoder;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
 
