@@ -34,20 +34,20 @@ import org.apache.jmeter.samplers.SampleResult;
 
 public class MonitorAccumModel implements Clearable, Serializable {
 
-    private HashMap MAP;
+    private final HashMap/*<String, List>*/ serverListMap;
 
     /**
      * we use this to set the current monitorModel so that we can save the stats
      * to the resultcolllector.
      */
-    private MonitorModel CURRENT;
+    private MonitorModel current;
 
-    private List listeners;
+    private final List/*<MonitorListener>*/ listeners;
 
     /**
      * By default, we set the default to 800
      */
-    private int DEFAULT_BUFFER = 800;
+    private int defaultBufferSize = 800;
 
     // optional connector name prefix
     private String connectorPrefix = null;
@@ -56,16 +56,16 @@ public class MonitorAccumModel implements Clearable, Serializable {
      *
      */
     public MonitorAccumModel() {
-        MAP = new HashMap();
-        listeners = new LinkedList();
+        serverListMap = new HashMap/*<String, List>*/();
+        listeners = new LinkedList/*<MonitorListener>*/();
     }
 
     public int getBufferSize() {
-        return DEFAULT_BUFFER;
+        return defaultBufferSize;
     }
 
     public void setBufferSize(int buffer) {
-        DEFAULT_BUFFER = buffer;
+        defaultBufferSize = buffer;
     }
 
     public void setPrefix(String prefix) {
@@ -78,7 +78,7 @@ public class MonitorAccumModel implements Clearable, Serializable {
      * @return current sample
      */
     public MonitorModel getLastSample() {
-        return this.CURRENT;
+        return this.current;
     }
 
     /**
@@ -88,14 +88,14 @@ public class MonitorAccumModel implements Clearable, Serializable {
      * @param model
      */
     public void addSample(MonitorModel model) {
-        this.CURRENT = model;
-        if (MAP.containsKey(model.getURL())) {
-            List newlist = updateArray(model, (List) MAP.get(model.getURL()));
-            MAP.put(model.getURL(), newlist);
+        this.current = model;
+        if (serverListMap.containsKey(model.getURL())) {
+            List newlist = updateArray(model, (List) serverListMap.get(model.getURL()));
+            serverListMap.put(model.getURL(), newlist);
         } else {
             List samples = Collections.synchronizedList(new LinkedList());
             samples.add(model);
-            MAP.put(model.getURL(), samples);
+            serverListMap.put(model.getURL(), samples);
         }
     }
 
@@ -106,7 +106,7 @@ public class MonitorAccumModel implements Clearable, Serializable {
      * @param model
      */
     private List updateArray(MonitorModel model, List list) {
-        if (list.size() < DEFAULT_BUFFER) {
+        if (list.size() < defaultBufferSize) {
             list.add(model);
         } else {
             list.add(model);
@@ -122,10 +122,10 @@ public class MonitorAccumModel implements Clearable, Serializable {
      * @return list
      */
     public List getAllSamples(String url) {
-        if (!MAP.containsKey(url)) {
+        if (!serverListMap.containsKey(url)) {
             return Collections.synchronizedList(new LinkedList());
         } else {
-            return (List) MAP.get(url);
+            return (List) serverListMap.get(url);
         }
     }
 
@@ -136,8 +136,8 @@ public class MonitorAccumModel implements Clearable, Serializable {
      * @return list
      */
     public MonitorModel getSample(String url) {
-        if (MAP.containsKey(url)) {
-            ArrayList list = (ArrayList) MAP.get(url);
+        if (serverListMap.containsKey(url)) {
+            ArrayList list = (ArrayList) serverListMap.get(url);
             return (MonitorModel) list.get(0);
         } else {
             return null;
@@ -207,12 +207,12 @@ public class MonitorAccumModel implements Clearable, Serializable {
      * changes.
      */
     public void clearData() {
-        Iterator itr = this.MAP.keySet().iterator();
+        Iterator itr = this.serverListMap.keySet().iterator();
         while (itr.hasNext()) {
-            List lt = (List) this.MAP.get(itr.next());
+            List lt = (List) this.serverListMap.get(itr.next());
             lt.clear();
         }
-        this.MAP.clear();
+        this.serverListMap.clear();
     }
 
     /**

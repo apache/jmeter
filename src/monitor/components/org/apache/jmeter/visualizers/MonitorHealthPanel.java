@@ -36,25 +36,25 @@ import org.apache.jmeter.samplers.Clearable;
  * only uses the most current information to show the status.
  */
 public class MonitorHealthPanel extends JPanel implements MonitorListener, Clearable {
-    private HashMap SERVERMAP = new HashMap();
+    private final HashMap/*<String, ServerPanel>*/ serverPanelMap = new HashMap/*<String, ServerPanel>*/();
 
-    private JPanel SERVERS = null;
+    private JPanel servers = null;
 
-    private MonitorAccumModel MODEL;
+    private final MonitorAccumModel model;
 
-    private JScrollPane SCROLL = null;
+    private JScrollPane serverScrollPane = null;
 
     // NOTUSED Font plainText = new Font("plain", Font.PLAIN, 9);
     // These must not be static, otherwise Language change does not work
-    public final String INFO_H = JMeterUtils.getResString("monitor_equation_healthy"); //$NON-NLS-1$
+    private final String INFO_H = JMeterUtils.getResString("monitor_equation_healthy"); //$NON-NLS-1$
 
-    public final String INFO_A = JMeterUtils.getResString("monitor_equation_active"); //$NON-NLS-1$
+    private final String INFO_A = JMeterUtils.getResString("monitor_equation_active"); //$NON-NLS-1$
 
-    public final String INFO_W = JMeterUtils.getResString("monitor_equation_warning"); //$NON-NLS-1$
+    private final String INFO_W = JMeterUtils.getResString("monitor_equation_warning"); //$NON-NLS-1$
 
-    public final String INFO_D = JMeterUtils.getResString("monitor_equation_dead"); //$NON-NLS-1$
+    private final String INFO_D = JMeterUtils.getResString("monitor_equation_dead"); //$NON-NLS-1$
 
-    public final String INFO_LOAD = JMeterUtils.getResString("monitor_equation_load"); //$NON-NLS-1$
+    private final String INFO_LOAD = JMeterUtils.getResString("monitor_equation_load"); //$NON-NLS-1$
 
     /**
      *
@@ -62,14 +62,15 @@ public class MonitorHealthPanel extends JPanel implements MonitorListener, Clear
      */
     public MonitorHealthPanel() {
         // log.warn("Only for use in unit testing");
+        model = null;
     }
 
     /**
      *
      */
     public MonitorHealthPanel(MonitorAccumModel model) {
-        this.MODEL = model;
-        this.MODEL.addListener(this);
+        this.model = model;
+        this.model.addListener(this);
         init();
     }
 
@@ -84,13 +85,13 @@ public class MonitorHealthPanel extends JPanel implements MonitorListener, Clear
         label.setPreferredSize(new Dimension(550, 25));
         this.add(label, BorderLayout.NORTH);
 
-        this.SERVERS = new JPanel();
-        this.SERVERS.setLayout(new BoxLayout(SERVERS, BoxLayout.Y_AXIS));
-        this.SERVERS.setAlignmentX(Component.LEFT_ALIGNMENT);
+        this.servers = new JPanel();
+        this.servers.setLayout(new BoxLayout(servers, BoxLayout.Y_AXIS));
+        this.servers.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        SCROLL = new JScrollPane(this.SERVERS);
-        SCROLL.setPreferredSize(new Dimension(300, 300));
-        this.add(SCROLL, BorderLayout.CENTER);
+        serverScrollPane = new JScrollPane(this.servers);
+        serverScrollPane.setPreferredSize(new Dimension(300, 300));
+        this.add(serverScrollPane, BorderLayout.CENTER);
 
         // the equations
         String eqstring1 = " " + INFO_H + "   |   " + INFO_A;
@@ -110,22 +111,22 @@ public class MonitorHealthPanel extends JPanel implements MonitorListener, Clear
      * @param model
      */
     public void addSample(MonitorModel model) {
-        if (SERVERMAP.containsKey(model.getURL())) {
+        if (serverPanelMap.containsKey(model.getURL())) {
             ServerPanel pane = null;
-            if (SERVERMAP.get(model.getURL()) != null) {
-                pane = (ServerPanel) SERVERMAP.get((model.getURL()));
+            if (serverPanelMap.get(model.getURL()) != null) {
+                pane = (ServerPanel) serverPanelMap.get((model.getURL()));
             } else {
                 pane = new ServerPanel(model);
-                SERVERMAP.put(model.getURL(), pane);
+                serverPanelMap.put(model.getURL(), pane);
             }
             pane.updateGui(model);
         } else {
             ServerPanel newpane = new ServerPanel(model);
-            SERVERMAP.put(model.getURL(), newpane);
-            this.SERVERS.add(newpane);
+            serverPanelMap.put(model.getURL(), newpane);
+            this.servers.add(newpane);
             newpane.updateGui(model);
         }
-        this.SERVERS.updateUI();
+        this.servers.updateUI();
     }
 
     /**
@@ -133,8 +134,8 @@ public class MonitorHealthPanel extends JPanel implements MonitorListener, Clear
      * pane, and update the ui.
      */
     public void clearData() {
-        this.SERVERMAP.clear();
-        this.SERVERS.removeAll();
-        this.SERVERS.updateUI();
+        this.serverPanelMap.clear();
+        this.servers.removeAll();
+        this.servers.updateUI();
     }
 }
