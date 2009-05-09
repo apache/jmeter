@@ -60,41 +60,41 @@ public class MonitorPerformancePanel extends JSplitPane implements TreeSelection
     private SampleResult ROOTSAMPLE;
 
     // Don't make these static, otherwise language change does not work
-    public final String LEGEND_HEALTH = JMeterUtils.getResString("monitor_legend_health"); //$NON-NLS-1$
+    private final String LEGEND_HEALTH = JMeterUtils.getResString("monitor_legend_health"); //$NON-NLS-1$
 
-    public final String LEGEND_LOAD = JMeterUtils.getResString("monitor_legend_load"); //$NON-NLS-1$
+    private final String LEGEND_LOAD = JMeterUtils.getResString("monitor_legend_load"); //$NON-NLS-1$
 
-    public final String LEGEND_MEM = JMeterUtils.getResString("monitor_legend_memory_per"); //$NON-NLS-1$
+    private final String LEGEND_MEM = JMeterUtils.getResString("monitor_legend_memory_per"); //$NON-NLS-1$
 
-    public final String LEGEND_THREAD = JMeterUtils.getResString("monitor_legend_thread_per"); //$NON-NLS-1$
+    private final String LEGEND_THREAD = JMeterUtils.getResString("monitor_legend_thread_per"); //$NON-NLS-1$
 
-    public final ImageIcon LEGEND_HEALTH_ICON = JMeterUtils.getImage("monitor-green-legend.gif"); //$NON-NLS-1$
+    private final ImageIcon LEGEND_HEALTH_ICON = JMeterUtils.getImage("monitor-green-legend.gif"); //$NON-NLS-1$
 
-    public final ImageIcon LEGEND_LOAD_ICON = JMeterUtils.getImage("monitor-blue-legend.gif"); //$NON-NLS-1$
+    private final ImageIcon LEGEND_LOAD_ICON = JMeterUtils.getImage("monitor-blue-legend.gif"); //$NON-NLS-1$
 
-    public final ImageIcon LEGEND_MEM_ICON = JMeterUtils.getImage("monitor-orange-legend.gif"); //$NON-NLS-1$
+    private final ImageIcon LEGEND_MEM_ICON = JMeterUtils.getImage("monitor-orange-legend.gif"); //$NON-NLS-1$
 
-    public final ImageIcon LEGEND_THREAD_ICON = JMeterUtils.getImage("monitor-red-legend.gif"); //$NON-NLS-1$
+    private final ImageIcon LEGEND_THREAD_ICON = JMeterUtils.getImage("monitor-red-legend.gif"); //$NON-NLS-1$
 
-    public final String GRID_LABEL_TOP = JMeterUtils.getResString("monitor_label_left_top"); //$NON-NLS-1$
+    private final String GRID_LABEL_TOP = JMeterUtils.getResString("monitor_label_left_top"); //$NON-NLS-1$
 
-    public final String GRID_LABEL_MIDDLE = JMeterUtils.getResString("monitor_label_left_middle"); //$NON-NLS-1$
+    private final String GRID_LABEL_MIDDLE = JMeterUtils.getResString("monitor_label_left_middle"); //$NON-NLS-1$
 
-    public final String GRID_LABEL_BOTTOM = JMeterUtils.getResString("monitor_label_left_bottom"); //$NON-NLS-1$
+    private final String GRID_LABEL_BOTTOM = JMeterUtils.getResString("monitor_label_left_bottom"); //$NON-NLS-1$
 
-    public final String GRID_LABEL_HEALTHY = JMeterUtils.getResString("monitor_label_right_healthy"); //$NON-NLS-1$
+    private final String GRID_LABEL_HEALTHY = JMeterUtils.getResString("monitor_label_right_healthy"); //$NON-NLS-1$
 
-    public final String GRID_LABEL_ACTIVE = JMeterUtils.getResString("monitor_label_right_active"); //$NON-NLS-1$
+//    private final String GRID_LABEL_ACTIVE = JMeterUtils.getResString("monitor_label_right_active"); //$NON-NLS-1$
 
-    public final String GRID_LABEL_WARNING = JMeterUtils.getResString("monitor_label_right_warning"); //$NON-NLS-1$
+//    private final String GRID_LABEL_WARNING = JMeterUtils.getResString("monitor_label_right_warning"); //$NON-NLS-1$
 
-    public final String GRID_LABEL_DEAD = JMeterUtils.getResString("monitor_label_right_dead"); //$NON-NLS-1$
+    private final String GRID_LABEL_DEAD = JMeterUtils.getResString("monitor_label_right_dead"); //$NON-NLS-1$
 
-    public final String PERF_TITLE = JMeterUtils.getResString("monitor_performance_title"); //$NON-NLS-1$
+    private final String PERF_TITLE = JMeterUtils.getResString("monitor_performance_title"); //$NON-NLS-1$
 
-    public final String SERVER_TITLE = JMeterUtils.getResString("monitor_performance_servers"); //$NON-NLS-1$
+    private final String SERVER_TITLE = JMeterUtils.getResString("monitor_performance_servers"); //$NON-NLS-1$
 
-    protected Font plaintext = new Font("plain", Font.TRUETYPE_FONT, 10); //$NON-NLS-1$
+    private Font plaintext = new Font("plain", Font.TRUETYPE_FONT, 10); //$NON-NLS-1$
 
     /**
      *
@@ -159,7 +159,7 @@ public class MonitorPerformancePanel extends JSplitPane implements TreeSelection
      *
      * @return JPanel
      */
-    public JPanel createLegend() {
+    private JPanel createLegend() {
         Dimension lsize = new Dimension(130, 18);
 
         JPanel legend = new JPanel();
@@ -197,7 +197,7 @@ public class MonitorPerformancePanel extends JSplitPane implements TreeSelection
      *
      * @return JPanel
      */
-    public JPanel createLeftGridLabels() {
+    private JPanel createLeftGridLabels() {
         Dimension lsize = new Dimension(33, 20);
         JPanel labels = new JPanel();
         labels.setLayout(new BorderLayout());
@@ -225,7 +225,7 @@ public class MonitorPerformancePanel extends JSplitPane implements TreeSelection
      *
      * @return JPanel
      */
-    public JPanel createRightGridLabels() {
+    private JPanel createRightGridLabels() {
         JPanel labels = new JPanel();
         labels.setLayout(new BorderLayout());
         labels.setPreferredSize(new Dimension(40, GRAPHPANEL.getWidth() - 100));
