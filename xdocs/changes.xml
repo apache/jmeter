@@ -261,6 +261,7 @@ Stop now reports if some threads will not exit, and exits if running in non-GUI 
 <li>Bug 46900 - Polish translations</li>
 <li>Bug 41209 - JLabeled* and ToolTips</li>
 <li>Add option to skip suffix generation in Save Responses to a File</li>
+<li>Bug 47176 -  Monitor Results : improve load status graphic</li>
 </ul>
 
 <h3>Non-functional changes</h3>
