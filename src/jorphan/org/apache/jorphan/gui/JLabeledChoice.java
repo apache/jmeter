@@ -236,6 +236,9 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
      * @return the text of the tool tip
      */
    public String getToolTipText() {
+       if (choiceList == null){ // Necessary to avoid NPE when testing serialisation
+           return null;
+       }
        return choiceList.getToolTipText();
    }
 
