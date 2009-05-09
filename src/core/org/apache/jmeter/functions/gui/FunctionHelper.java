@@ -49,15 +49,15 @@ import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.reflect.ClassFinder;
 
 public class FunctionHelper extends JDialog implements ActionListener, ChangeListener {
-    JLabeledChoice functionList;
+    private JLabeledChoice functionList;
 
-    ArgumentsPanel parameterPanel;
+    private ArgumentsPanel parameterPanel;
 
-    JLabeledTextField cutPasteFunction;
+    private JLabeledTextField cutPasteFunction;
 
-    private Map functionMap = new HashMap();
+    private final Map functionMap = new HashMap();
 
-    JButton generateButton;
+    private JButton generateButton;
 
     public FunctionHelper() {
         super((JFrame) null, JMeterUtils.getResString("function_helper_title"), false); //$NON-NLS-1$
