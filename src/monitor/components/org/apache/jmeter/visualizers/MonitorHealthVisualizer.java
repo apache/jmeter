@@ -45,24 +45,24 @@ import org.apache.log.Logger;
 public class MonitorHealthVisualizer extends AbstractVisualizer implements ImageVisualizer, ItemListener,
         GraphListener, Clearable {
 
+    private static final Logger log = LoggingManager.getLoggerForClass();
+
     private static final String CONNECTOR_PREFIX = "connector.prefix"; // $NON-NLS-1$
     private static final String CONNECTOR_PREFIX_DEFAULT = ""; // $NON-NLS-1$
 
-    private MonitorTabPane TABPANE;
+    private static final String BUFFER = "monitor.buffer.size"; // $NON-NLS-1$
 
-    private MonitorHealthPanel HEALTHPANE;
+    private MonitorTabPane tabPane;
 
-    private MonitorPerformancePanel PERFPANE;
+    private MonitorHealthPanel healthPane;
 
-    private MonitorAccumModel MODEL;
+    private MonitorPerformancePanel perfPane;
 
-    private MonitorGraph GRAPH;
+    private MonitorAccumModel model;
+
+    private MonitorGraph graph;
 
     private JLabeledTextField prefixField;
-
-    public static final String BUFFER = "monitor.buffer.size"; // $NON-NLS-1$
-
-    private static final Logger log = LoggingManager.getLoggerForClass();
 
     /**
      * Constructor for the GraphVisualizer object.
@@ -76,19 +76,19 @@ public class MonitorHealthVisualizer extends AbstractVisualizer implements Image
     public void configure(TestElement el) {
         super.configure(el);
         prefixField.setText(el.getPropertyAsString(CONNECTOR_PREFIX, CONNECTOR_PREFIX_DEFAULT));
-        MODEL.setPrefix(prefixField.getText());
+        model.setPrefix(prefixField.getText());
     }
 
     public void modifyTestElement(TestElement c) {
         super.modifyTestElement(c);
         c.setProperty(CONNECTOR_PREFIX,prefixField.getText(),CONNECTOR_PREFIX_DEFAULT);
-        MODEL.setPrefix(prefixField.getText());
+        model.setPrefix(prefixField.getText());
     }
     
     private void initModel() {
-        MODEL = new MonitorAccumModel();
-        GRAPH = new MonitorGraph(MODEL);
-        MODEL.setBufferSize(JMeterUtils.getPropDefault(BUFFER, 800));
+        model = new MonitorAccumModel();
+        graph = new MonitorGraph(model);
+        model.setBufferSize(JMeterUtils.getPropDefault(BUFFER, 800));
     }
 
     public String getLabelResource() {
@@ -101,9 +101,9 @@ public class MonitorHealthVisualizer extends AbstractVisualizer implements Image
      * to run for a very long time without eating up all the memory.
      */
     public void add(SampleResult res) {
-        MODEL.addSample(res);
+        model.addSample(res);
         try {
-            collector.recordStats(this.MODEL.getLastSample().cloneMonitorStats());
+            collector.recordStats(this.model.getLastSample().cloneMonitorStats());
         } catch (Exception e) {
             // for now just swallow the exception
             log.debug("StatsModel was null", e);
@@ -111,9 +111,9 @@ public class MonitorHealthVisualizer extends AbstractVisualizer implements Image
     }
 
     public Image getImage() {
-        Image result = GRAPH.createImage(this.getWidth(), this.getHeight());
+        Image result = graph.createImage(this.getWidth(), this.getHeight());
         Graphics image = result.getGraphics();
-        GRAPH.paintComponent(image);
+        graph.paintComponent(image);
         return result;
     }
 
@@ -146,10 +146,10 @@ public class MonitorHealthVisualizer extends AbstractVisualizer implements Image
     }
 
     private void createTabs() {
-        TABPANE = new MonitorTabPane();
-        createHealthPane(TABPANE);
-        createPerformancePane(TABPANE);
-        this.add(TABPANE, BorderLayout.CENTER);
+        tabPane = new MonitorTabPane();
+        createHealthPane(tabPane);
+        createPerformancePane(tabPane);
+        this.add(tabPane, BorderLayout.CENTER);
     }
 
     /**
@@ -158,8 +158,8 @@ public class MonitorHealthVisualizer extends AbstractVisualizer implements Image
      * @param pane
      */
     private void createHealthPane(MonitorTabPane pane) {
-        HEALTHPANE = new MonitorHealthPanel(MODEL);
-        pane.addTab(JMeterUtils.getResString("monitor_health_tab_title"), HEALTHPANE); // $NON-NLS-1$
+        healthPane = new MonitorHealthPanel(model);
+        pane.addTab(JMeterUtils.getResString("monitor_health_tab_title"), healthPane); // $NON-NLS-1$
     }
 
     /**
@@ -168,17 +168,17 @@ public class MonitorHealthVisualizer extends AbstractVisualizer implements Image
      * @param pane
      */
     private void createPerformancePane(MonitorTabPane pane) {
-        PERFPANE = new MonitorPerformancePanel(MODEL, GRAPH);
-        pane.addTab(JMeterUtils.getResString("monitor_performance_tab_title"), PERFPANE); // $NON-NLS-1$
+        perfPane = new MonitorPerformancePanel(model, graph);
+        pane.addTab(JMeterUtils.getResString("monitor_performance_tab_title"), perfPane); // $NON-NLS-1$
     }
 
     /**
      * Clears the MonitorAccumModel.
      */
     public void clearData() {
-        this.MODEL.clearData();
-        this.HEALTHPANE.clearData();
-        this.PERFPANE.clearData();
+        this.model.clearData();
+        this.healthPane.clearData();
+        this.perfPane.clearData();
     }
 
 }
