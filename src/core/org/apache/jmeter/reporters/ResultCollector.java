@@ -492,6 +492,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
      * @param e
      * @throws Exception
      */
+    // Used by: MonitorHealthVisualizer.add(SampleResult res)
     public void recordStats(TestElement e) throws Exception {
         if (out == null) {
             initializeFileOutput();
