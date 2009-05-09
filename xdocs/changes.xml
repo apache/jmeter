@@ -271,7 +271,7 @@ Stop now reports if some threads will not exit, and exits if running in non-GUI 
 <li>Moved PreProcessor invocation to JMeterThread class</li>
 <li>Made HashTree Map field final</li>
 <li>Improve performance of calling ResultCollector#isSampleWanted() for multiple samples</li>
-<li>Updated to new versions of: batik-codec (1.7), jdom (1.1), xstream (1.3.1), velocity (1.6.2)</li>
+<li>Updated to new versions of: xmlgraphics-commons (1.3.1), jdom (1.1), xstream (1.3.1), velocity (1.6.2)</li>
 </ul>
 </section> 
 </body> 
