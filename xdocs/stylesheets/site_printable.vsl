@@ -78,7 +78,7 @@
 #end
 <td bgcolor="$tabletdbg" colspan="$!colspan" rowspan="$!rowspan" valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
- #if ($value.getText().length() != 0 || $value.hasChildren())
+#if ($value.getText().length() != 0 || $value.hasChildren())
 $xmlout.outputString($value, true)
 #else
 &nbsp;
