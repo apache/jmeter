@@ -17,18 +17,12 @@
 package org.apache.jmeter.visualizers;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.apache.jmeter.samplers.Clearable;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-
 public class MonitorModel implements Clearable, Serializable, Cloneable {
-
-    // private String name;
-    private List listeners;
 
     private MonitorStats current = new MonitorStats(0, 0, 0, 0, 0, "", "", "", System.currentTimeMillis());
 
@@ -37,19 +31,10 @@ public class MonitorModel implements Clearable, Serializable, Cloneable {
      */
     public MonitorModel() {
         super();
-        listeners = new LinkedList();
     }
 
     public MonitorModel(MonitorStats stat) {
         this.current = stat;
-    }
-
-    public void setName(String name) {
-        // this.name = name;
-    }
-
-    public String getName() {
-        return this.getURL();
     }
 
     public int getHealth() {
@@ -115,22 +100,6 @@ public class MonitorModel implements Clearable, Serializable, Cloneable {
      */
     public void clearData() {
         current = new MonitorStats(0, 0, 0, 0, 0, "", "", "", System.currentTimeMillis());
-    }
-
-    /**
-     * notify the listeners with the MonitorModel object.
-     *
-     * @param model
-     */
-    public void notifyListeners(MonitorModel model) {
-        for (int idx = 0; idx < listeners.size(); idx++) {
-            MonitorListener ml = (MonitorListener) listeners.get(idx);
-            ml.addSample(model);
-        }
-    }
-
-    public void addListener(MonitorListener listener) {
-        listeners.add(listener);
     }
 
     /**
