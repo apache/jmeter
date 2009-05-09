@@ -18,8 +18,6 @@ package org.apache.jmeter.visualizers;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.Iterator;
 import java.util.List;
 
@@ -32,23 +30,23 @@ import org.apache.jmeter.samplers.Clearable;
  * 4 lines:
  * <p>
  */
-public class MonitorGraph extends JComponent implements MouseListener, MonitorGuiListener, Clearable {
+public class MonitorGraph extends JComponent implements MonitorGuiListener, Clearable {
 
-    private MonitorAccumModel MODEL;
+    private final MonitorAccumModel model;
 
-    private MonitorModel CURRENT;
+    private MonitorModel current;
 
-    private boolean HEALTH = true;
+    private boolean drawHealth = true;
 
-    private boolean LOAD = true;
+    private boolean drawLoad = true;
 
-    private boolean MEM = true;
+    private boolean drawMemory = true;
 
-    private boolean THREAD = true;
+    private boolean drawThread = true;
 
-    private boolean YGRID = true;
+    private boolean drawYgrid = true;
 
-    private boolean XGRID = true;
+    private boolean drawXgrid = true;
 
     /**
      * Needed for Serialization tests.
@@ -56,48 +54,28 @@ public class MonitorGraph extends JComponent implements MouseListener, MonitorGu
      */
     public MonitorGraph() {
         // log.warn("Only for use in unit testing");
+        model = null;
     }
 
     public MonitorGraph(MonitorAccumModel model) {
-        this.MODEL = model;
+        this.model = model;
         repaint();
     }
 
     public void setHealth(boolean health) {
-        this.HEALTH = health;
+        this.drawHealth = health;
     }
 
     public void setLoad(boolean load) {
-        this.LOAD = load;
+        this.drawLoad = load;
     }
 
     public void setMem(boolean mem) {
-        this.MEM = mem;
+        this.drawMemory = mem;
     }
 
     public void setThread(boolean thread) {
-        this.THREAD = thread;
-    }
-
-    /** {@inheritDoc} */
-    public void mouseClicked(MouseEvent e) {
-    }
-
-    /** {@inheritDoc} */
-    public void mouseEntered(MouseEvent e) {
-    }
-
-    /** {@inheritDoc} */
-    public void mouseExited(MouseEvent e) {
-    }
-
-    /** {@inheritDoc} */
-    public void mousePressed(MouseEvent e) {
-    }
-
-    /** {@inheritDoc} */
-    public void mouseReleased(MouseEvent e) {
-
+        this.drawThread = thread;
     }
 
     /**
@@ -106,7 +84,7 @@ public class MonitorGraph extends JComponent implements MouseListener, MonitorGu
      */
     public void updateGui(final MonitorModel model) {
         if (this.isShowing()) {
-            this.CURRENT = model;
+            this.current = model;
             repaint();
         }
     }
@@ -118,9 +96,9 @@ public class MonitorGraph extends JComponent implements MouseListener, MonitorGu
      */
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (this.CURRENT != null) {
-            synchronized (MODEL) {
-                List samples = MODEL.getAllSamples(this.CURRENT.getURL());
+        if (this.current != null) {
+            synchronized (model) {
+                List samples = model.getAllSamples(this.current.getURL());
                 int size = samples.size();
                 synchronized (samples) {
                     Iterator e;
@@ -167,7 +145,7 @@ public class MonitorGraph extends JComponent implements MouseListener, MonitorGu
         // draw grid only when x is 1. If we didn't
         // the grid line would draw over the data
         // lines making it look bad.
-        if (YGRID && x == 1) {
+        if (drawYgrid && x == 1) {
             int q1 = (int) (height * 0.25);
             int q2 = (int) (height * 0.50);
             int q3 = (int) (height * 0.75);
@@ -176,7 +154,7 @@ public class MonitorGraph extends JComponent implements MouseListener, MonitorGu
             g.drawLine(0, q2, getWidth(), q2);
             g.drawLine(0, q3, getWidth(), q3);
         }
-        if (XGRID && x == 1) {
+        if (drawXgrid && x == 1) {
             int x1 = (int) (width * 0.25);
             int x2 = (int) (width * 0.50);
             int x3 = (int) (width * 0.75);
@@ -186,7 +164,7 @@ public class MonitorGraph extends JComponent implements MouseListener, MonitorGu
             g.drawLine(getWidth(), 0, getWidth(), getHeight());
         }
 
-        if (HEALTH) {
+        if (drawHealth) {
             int hly = (int) (height - (height * (model.getHealth() / 3.0)));
             int lasty = (int) (height - (height * (last.getHealth() / 3.0)));
 
@@ -194,7 +172,7 @@ public class MonitorGraph extends JComponent implements MouseListener, MonitorGu
             g.drawLine(lastx, lasty, xaxis, hly);
         }
 
-        if (LOAD) {
+        if (drawLoad) {
             int ldy = (int) (height - (height * (model.getLoad() / 100.0)));
             int lastldy = (int) (height - (height * (last.getLoad() / 100.0)));
 
@@ -202,7 +180,7 @@ public class MonitorGraph extends JComponent implements MouseListener, MonitorGu
             g.drawLine(lastx, lastldy, xaxis, ldy);
         }
 
-        if (MEM) {
+        if (drawMemory) {
             int mmy = (int) (height - (height * (model.getMemload() / 100.0)));
             int lastmmy = (int) (height - (height * (last.getMemload() / 100.0)));
 
@@ -210,7 +188,7 @@ public class MonitorGraph extends JComponent implements MouseListener, MonitorGu
             g.drawLine(lastx, lastmmy, xaxis, mmy);
         }
 
-        if (THREAD) {
+        if (drawThread) {
             int thy = (int) (height - (height * (model.getThreadload() / 100.0)));
             int lastthy = (int) (height - (height * (last.getThreadload() / 100.0)));
 
