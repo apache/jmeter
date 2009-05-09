@@ -59,6 +59,8 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
 
     public static final String SKIP_AUTO_NUMBER = "FileSaver.skipautonumber"; // $NON-NLS-1$
 
+    public static final String SKIP_SUFFIX = "FileSaver.skipsuffix"; // $NON-NLS-1$
+
     private synchronized long nextNumber() {
         return ++sequenceNumber;
     }
@@ -136,7 +138,7 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
             }
         }
 
-        String fileName = makeFileName(s.getContentType(), getSkipAutoNumber());
+        String fileName = makeFileName(s.getContentType(), getSkipAutoNumber(), getSkipSuffix());
         log.debug("Saving " + s.getSampleLabel() + " in " + fileName);
         s.setResultFileName(fileName);// Associate sample with file name
         String variable = getVariableName();
@@ -167,25 +169,30 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
      *         from the contentType e.g. Content-Type:
      *         text/html;charset=ISO-8859-1
      */
-    private String makeFileName(String contentType, boolean skipAutoNumber) {
-        String suffix = "unknown";
-        if (contentType != null) {
-            int i = contentType.indexOf("/"); // $NON-NLS-1$
-            if (i != -1) {
-                int j = contentType.indexOf(";"); // $NON-NLS-1$
-                if (j != -1) {
-                    suffix = contentType.substring(i + 1, j);
+    private String makeFileName(String contentType, boolean skipAutoNumber, boolean skipSuffix) {
+        StrBuilder sb = new StrBuilder(getFilename());
+        if (!skipAutoNumber){
+            sb.append(nextNumber());
+        }
+        if (!skipSuffix){
+            sb.append('.');
+            if (contentType != null) {
+                int i = contentType.indexOf("/"); // $NON-NLS-1$
+                if (i != -1) {
+                    int j = contentType.indexOf(";"); // $NON-NLS-1$
+                    if (j != -1) {
+                        sb.append(contentType.substring(i + 1, j));
+                    } else {
+                        sb.append(contentType.substring(i + 1));
+                    }
                 } else {
-                    suffix = contentType.substring(i + 1);
+                    sb.append("unknown");                    
                 }
+            } else {
+                sb.append("unknown");
             }
         }
-        if (skipAutoNumber) {
-            return getFilename() + "." + suffix; // $NON-NLS-1$
-        }
-        else {
-            return getFilename() + nextNumber() + "." + suffix; // $NON-NLS-1$
-        }
+        return sb.toString();
     }
 
     /*
@@ -220,6 +227,10 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
 
     private boolean getSkipAutoNumber() {
         return getPropertyAsBoolean(SKIP_AUTO_NUMBER);
+    }
+
+    private boolean getSkipSuffix() {
+        return getPropertyAsBoolean(SKIP_SUFFIX);
     }
 
     private boolean getSuccessOnly() {
