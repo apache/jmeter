@@ -221,6 +221,24 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
         return mLabel.getText();
     }
 
+   /**
+    * Registers the text to display in a tool tip.
+    * The text displays when the cursor lingers over the component.
+    * @param text the string to display; if the text is null,
+    *      the tool tip is turned off for this component
+    */
+   public void setToolTipText(String text) {
+       choiceList.setToolTipText(text);
+   }
+
+   /**
+     * Returns the tooltip string that has been set with setToolTipText
+     * @return the text of the tool tip
+     */
+   public String getToolTipText() {
+       return choiceList.getToolTipText();
+   }
+
     /**
      * Adds a change listener, that will be notified when the text in the text
      * field is changed. The ChangeEvent that will be passed to registered
