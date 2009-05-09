@@ -45,6 +45,7 @@ import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.CSVSaveService;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.Calculator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
@@ -65,6 +66,8 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final String USE_GROUP_NAME = "useGroupName"; //$NON-NLS-1$
+
     private static final String[] COLUMNS = {
             "sampler_label",               //$NON-NLS-1$
             "aggregate_report_count",      //$NON-NLS-1$
@@ -81,19 +84,19 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
     private final String TOTAL_ROW_LABEL
         = JMeterUtils.getResString("aggregate_report_total_label");  //$NON-NLS-1$
 
-    protected JTable myJTable;
+    private JTable myJTable;
 
-    protected JScrollPane myScrollPane;
+    private JScrollPane myScrollPane;
 
-    protected JButton saveTable =
+    private final JButton saveTable =
         new JButton(JMeterUtils.getResString("aggregate_graph_save_table"));            //$NON-NLS-1$
 
-    private JCheckBox useGroupName =
+    private final JCheckBox useGroupName =
         new JCheckBox(JMeterUtils.getResString("aggregate_graph_use_group_name"));            //$NON-NLS-1$
 
     private transient ObjectTableModel model;
 
-    Map tableRows = Collections.synchronizedMap(new HashMap());
+    private final Map tableRows = Collections.synchronizedMap(new HashMap());
 
     // Column renderers
     private static final TableCellRenderer[] RENDERERS =
@@ -133,6 +136,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
         init();
     }
 
+    /** @deprecated - only for use in testing */
     public static boolean testFunctors(){
         SummaryReport instance = new SummaryReport();
         return instance.model.checkFunctors(null,instance.getClass());
@@ -205,6 +209,16 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
         opts.add(useGroupName, BorderLayout.WEST);
         opts.add(saveTable, BorderLayout.CENTER);
         this.add(opts,BorderLayout.SOUTH);
+    }
+
+    public void modifyTestElement(TestElement c) {
+        super.modifyTestElement(c);
+        c.setProperty(USE_GROUP_NAME, useGroupName.isSelected(), false);
+    }
+
+    public void configure(TestElement el) {
+        super.configure(el);
+        useGroupName.setSelected(el.getPropertyAsBoolean(USE_GROUP_NAME, false));
     }
 
     public void actionPerformed(ActionEvent ev) {
