@@ -318,7 +318,7 @@ public class SaveService {
      * @param evt sampleResult wrapped in a sampleEvent
      * @param writer output stream which must be created using {@link #getFileEncoding(String)}
      */
-    // Used by ResultCollector#recordResult()
+    // Used by ResultCollector.sampleOccurred(SampleEvent event)
     public synchronized static void saveSampleResult(SampleEvent evt, Writer writer) throws IOException {
         DataHolder dh = JTLSAVER.newDataHolder();
         dh.put(SAMPLE_EVENT_OBJECT, evt);
