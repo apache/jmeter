@@ -42,7 +42,7 @@ public class HTTPFileArg extends AbstractTestElement implements Serializable {
     /** Name used to store the file's mimetype. */
     private static final String MIMETYPE = "File.mimetype";
 
-    /** temporary storage for header. */
+    /** temporary storage area for the body header. */
     private String header;
 
     /**
@@ -154,9 +154,11 @@ public class HTTPFileArg extends AbstractTestElement implements Serializable {
     }
 
    /**
-    * Sets the http headers for the HTTPFileArg object. Header
+    * Sets the body header for the HTTPFileArg object. Header
     * contains path, parameter name and mime type information.
-    *
+    * This is only intended for use by methods which need to store information
+    * temporarily whilst creating the HTTP body.
+    * 
     * @param newHeader
     *  the new Header value
     */
@@ -165,7 +167,7 @@ public class HTTPFileArg extends AbstractTestElement implements Serializable {
    }
 
    /**
-    * Gets the http headers for the HTTPFileArg object.
+    * Gets the saved body header for the HTTPFileArg object.
     */
    public String getHeader() {
        return header;
