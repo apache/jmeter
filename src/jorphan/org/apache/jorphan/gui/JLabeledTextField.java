@@ -46,7 +46,7 @@ public class JLabeledTextField extends JPanel implements JLabeledField, FocusLis
     private JTextField mTextField;
 
     // Maybe move to vector if MT problems occur
-    private ArrayList mChangeListeners = new ArrayList(3);
+    private final ArrayList mChangeListeners = new ArrayList(3);
 
     // A temporary cache for the focus listener
     private String oldValue = "";
@@ -190,7 +190,10 @@ public class JLabeledTextField extends JPanel implements JLabeledField, FocusLis
       * @return the text of the tool tip
       */
     public String getToolTipText() {
-        return mTextField.getToolTipText();
+        if (mTextField == null){ // Necessary to avoid NPE when testing serialisation
+            return null;
+        }
+       return mTextField.getToolTipText();
     }
 
     /**
