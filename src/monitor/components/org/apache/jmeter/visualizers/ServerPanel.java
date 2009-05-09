@@ -49,36 +49,38 @@ public class ServerPanel extends JPanel implements MonitorGuiListener {
     /**
      * Health Icons
      */
-    public static final ImageIcon HEALTHY = JMeterUtils.getImage("monitor-healthy.gif");
+    private static final ImageIcon HEALTHY = JMeterUtils.getImage("monitor-healthy.gif");
 
-    public static final ImageIcon ACTIVE = JMeterUtils.getImage("monitor-active.gif");
+    private static final ImageIcon ACTIVE = JMeterUtils.getImage("monitor-active.gif");
 
-    public static final ImageIcon WARNING = JMeterUtils.getImage("monitor-warning.gif");
+    private static final ImageIcon WARNING = JMeterUtils.getImage("monitor-warning.gif");
 
-    public static final ImageIcon DEAD = JMeterUtils.getImage("monitor-dead.gif");
+    private static final ImageIcon DEAD = JMeterUtils.getImage("monitor-dead.gif");
 
     /**
      * Load Icons
      */
-    public static final ImageIcon LOAD_1 = JMeterUtils.getImage("monitor-load-1.gif");
+    private static final ImageIcon LOAD_0 = JMeterUtils.getImage("monitor-load-0.gif");
 
-    public static final ImageIcon LOAD_2 = JMeterUtils.getImage("monitor-load-2.gif");
+    private static final ImageIcon LOAD_1 = JMeterUtils.getImage("monitor-load-1.gif");
 
-    public static final ImageIcon LOAD_3 = JMeterUtils.getImage("monitor-load-3.gif");
+    private static final ImageIcon LOAD_2 = JMeterUtils.getImage("monitor-load-2.gif");
 
-    public static final ImageIcon LOAD_4 = JMeterUtils.getImage("monitor-load-4.gif");
+    private static final ImageIcon LOAD_3 = JMeterUtils.getImage("monitor-load-3.gif");
 
-    public static final ImageIcon LOAD_5 = JMeterUtils.getImage("monitor-load-5.gif");
+    private static final ImageIcon LOAD_4 = JMeterUtils.getImage("monitor-load-4.gif");
 
-    public static final ImageIcon LOAD_6 = JMeterUtils.getImage("monitor-load-6.gif");
+    private static final ImageIcon LOAD_5 = JMeterUtils.getImage("monitor-load-5.gif");
 
-    public static final ImageIcon LOAD_7 = JMeterUtils.getImage("monitor-load-7.gif");
+    private static final ImageIcon LOAD_6 = JMeterUtils.getImage("monitor-load-6.gif");
 
-    public static final ImageIcon LOAD_8 = JMeterUtils.getImage("monitor-load-8.gif");
+    private static final ImageIcon LOAD_7 = JMeterUtils.getImage("monitor-load-7.gif");
 
-    public static final ImageIcon LOAD_9 = JMeterUtils.getImage("monitor-load-9.gif");
+    private static final ImageIcon LOAD_8 = JMeterUtils.getImage("monitor-load-8.gif");
 
-    public static final ImageIcon LOAD_10 = JMeterUtils.getImage("monitor-load-10.gif");
+    private static final ImageIcon LOAD_9 = JMeterUtils.getImage("monitor-load-9.gif");
+
+    private static final ImageIcon LOAD_10 = JMeterUtils.getImage("monitor-load-10.gif");
 
     // private MonitorModel DATA;
 
@@ -124,7 +126,7 @@ public class ServerPanel extends JPanel implements MonitorGuiListener {
      * @param health
      * @return image for the status
      */
-    public static ImageIcon getHealthyImageIcon(int health) {
+    private static ImageIcon getHealthyImageIcon(int health) {
         ImageIcon i = null;
         switch (health) {
         case Stats.HEALTHY:
@@ -149,8 +151,10 @@ public class ServerPanel extends JPanel implements MonitorGuiListener {
      * @param load
      * @return image for the load
      */
-    public static ImageIcon getLoadImageIcon(int load) {
-        if (load <= 10) {
+    private static ImageIcon getLoadImageIcon(int load) {
+        if (load == 0) {
+            return LOAD_0;
+        } else if (load > 0 && load <= 10) {
             return LOAD_1;
         } else if (load > 10 && load <= 20) {
             return LOAD_2;
