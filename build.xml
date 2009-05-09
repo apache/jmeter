@@ -298,7 +298,7 @@
   <patternset id="external.jars">
     <include name="${apache-bsf.jar}"/>
     <include name="${avalon-framework.jar}"/>
-    <include name="${batik-codec.jar}"/>
+    <include name="${xmlgraphics-commons.jar}"/>
     <include name="${commons-codec.jar}"/>
     <include name="${commons-collections.jar}"/>
     <include name="${commons-httpclient.jar}"/>
@@ -350,7 +350,7 @@
     <!-- Externally produced jars -->
     <pathelement location="${apache-bsf.jar}"/>
     <pathelement location="${avalon-framework.jar}"/>
-    <pathelement location="${batik-codec.jar}"/>
+    <pathelement location="${xmlgraphics-commons.jar}"/>
     <pathelement location="${commons-codec.jar}"/>
     <pathelement location="${commons-collections.jar}"/>
     <pathelement location="${commons-httpclient.jar}"/>
