@@ -7,9 +7,9 @@ avalon-framework-4.1.4 (org.apache.avalon.framework)
 - LogKit (used by HttpClient ?)
 - Configuration (ResultCollector, SaveService, SampleResult, TestElementSaver)
 
-batik-codec-1.7 (org.apache.batik.ext.image.codec)
+xmlgraphics-commons-1.3.1 (org.apache.xmlgraphics.image.codec)
 ------------------
-Download: http://xmlgraphics.apache.org/batik/download.cgi
+http://xmlgraphics.apache.org/commons/download.html
 - SaveGraphicsService
 
 commons-codec-1.3
