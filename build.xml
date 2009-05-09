@@ -1539,6 +1539,7 @@ run JMeter unless all the JMeter jars are added.
     <anakia basedir="${src.docs}" destdir="${dest.docs}/" extension=".html" style="${eclipse.anakia}/xdocs/stylesheets/site.vsl" projectFile="./stylesheets/project.xml" 
         excludes="**/stylesheets/** extending.xml extending/*.xml" 
         includes="**/*.xml" lastModifiedCheck="true" velocityPropertiesFile="${src.docs}/velocity.properties"/>
+    <fixcrlf srcdir="${dest.docs}/" includes="**/*.html" fixlast="false"/>
     <copy todir="${dest.docs}/images">
       <fileset dir="${src.images}"/>
     </copy>
