@@ -41,54 +41,54 @@ public class TestCVSDataSet extends JMeterTestCase {
     }
 
     public void tearDown() throws IOException{
-    	FileServer.getFileServer().closeFiles();
+        FileServer.getFileServer().closeFiles();
     }
     
     public void testopen() throws Exception {
-		JMeterContext jmcx = JMeterContextService.getContext();
-		jmcx.setVariables(new JMeterVariables());
-		JMeterVariables threadVars = jmcx.getVariables();
-    	threadVars.put("b", "value");
+        JMeterContext jmcx = JMeterContextService.getContext();
+        jmcx.setVariables(new JMeterVariables());
+        JMeterVariables threadVars = jmcx.getVariables();
+        threadVars.put("b", "value");
 
-    	CSVDataSet csv = new CSVDataSet();
-    	csv.setFilename("No.such.filename");
-    	csv.setVariableNames("a,b,c");
-    	csv.setDelimiter(",");
-    	csv.iterationStart(null);
-		assertNull(threadVars.get("a"));
-		assertEquals("value",threadVars.get("b"));
-		assertNull(threadVars.get("c"));
+        CSVDataSet csv = new CSVDataSet();
+        csv.setFilename("No.such.filename");
+        csv.setVariableNames("a,b,c");
+        csv.setDelimiter(",");
+        csv.iterationStart(null);
+        assertNull(threadVars.get("a"));
+        assertEquals("value",threadVars.get("b"));
+        assertNull(threadVars.get("c"));
 
-		csv = new CSVDataSet();
-    	csv.setFilename("testfiles/testempty.csv");
-    	csv.setVariableNames("a,b,c");
-    	csv.setDelimiter(",");
-    	
-    	csv.iterationStart(null);
-		assertEquals("",threadVars.get("a"));
-		assertEquals("b1",threadVars.get("b"));
-		assertEquals("c1",threadVars.get("c"));
+        csv = new CSVDataSet();
+        csv.setFilename("testfiles/testempty.csv");
+        csv.setVariableNames("a,b,c");
+        csv.setDelimiter(",");
+        
+        csv.iterationStart(null);
+        assertEquals("",threadVars.get("a"));
+        assertEquals("b1",threadVars.get("b"));
+        assertEquals("c1",threadVars.get("c"));
 
-    	csv.iterationStart(null);
-		assertEquals("a2",threadVars.get("a"));
-		assertEquals("",threadVars.get("b"));
-		assertEquals("c2",threadVars.get("c"));
+        csv.iterationStart(null);
+        assertEquals("a2",threadVars.get("a"));
+        assertEquals("",threadVars.get("b"));
+        assertEquals("c2",threadVars.get("c"));
 
-		csv.iterationStart(null);
-		assertEquals("a3",threadVars.get("a"));
-		assertEquals("b3",threadVars.get("b"));
-		assertEquals("",threadVars.get("c"));
+        csv.iterationStart(null);
+        assertEquals("a3",threadVars.get("a"));
+        assertEquals("b3",threadVars.get("b"));
+        assertEquals("",threadVars.get("c"));
 
 
-		csv.iterationStart(null);
-		assertEquals("a4",threadVars.get("a"));
-		assertEquals("b4",threadVars.get("b"));
-		assertEquals("c4",threadVars.get("c"));
-    	
-    	csv.iterationStart(null); // Restart file
-		assertEquals("",threadVars.get("a"));
-		assertEquals("b1",threadVars.get("b"));
-		assertEquals("c1",threadVars.get("c"));
+        csv.iterationStart(null);
+        assertEquals("a4",threadVars.get("a"));
+        assertEquals("b4",threadVars.get("b"));
+        assertEquals("c4",threadVars.get("c"));
+        
+        csv.iterationStart(null); // Restart file
+        assertEquals("",threadVars.get("a"));
+        assertEquals("b1",threadVars.get("b"));
+        assertEquals("c1",threadVars.get("c"));
     }
 
     private CSVDataSet initCSV(){

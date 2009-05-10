@@ -21,16 +21,16 @@ package org.apache.jmeter.assertions;
 import junit.framework.TestCase;
 public class MD5HexAssertionTest extends TestCase {
 
-	public MD5HexAssertionTest() {
-		super();
-	}
+    public MD5HexAssertionTest() {
+        super();
+    }
 
-	public MD5HexAssertionTest(String arg0) {
-		super(arg0);
-	}
+    public MD5HexAssertionTest(String arg0) {
+        super(arg0);
+    }
 
-	public void testMD5() throws Exception {
-		assertEquals("D41D8CD98F00B204E9800998ECF8427E", MD5HexAssertion.baMD5Hex(new byte[] {}).toUpperCase(java.util.Locale.ENGLISH));
-	}
+    public void testMD5() throws Exception {
+        assertEquals("D41D8CD98F00B204E9800998ECF8427E", MD5HexAssertion.baMD5Hex(new byte[] {}).toUpperCase(java.util.Locale.ENGLISH));
+    }
 
 }

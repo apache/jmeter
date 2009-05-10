@@ -22,53 +22,53 @@ import org.apache.jmeter.junit.JMeterTestCase;
 //import org.apache.jmeter.testelement.TestElement;
 
 public class TestIfController extends JMeterTestCase {
-		public TestIfController(String name) {
-			super(name);
-		}
+        public TestIfController(String name) {
+            super(name);
+        }
 
-		public void testProcessing() throws Exception {
+        public void testProcessing() throws Exception {
 
-			GenericController controller = new GenericController();
+            GenericController controller = new GenericController();
 
-			controller.addTestElement(new IfController("false==false"));
-			controller.addTestElement(new IfController(" \"a\".equals(\"a\")"));
-			controller.addTestElement(new IfController("2<100"));
+            controller.addTestElement(new IfController("false==false"));
+            controller.addTestElement(new IfController(" \"a\".equals(\"a\")"));
+            controller.addTestElement(new IfController("2<100"));
 
             //TODO enable some proper tests!!
             
-			/*
-			 * GenericController sub_1 = new GenericController();
-			 * sub_1.addTestElement(new IfController("3==3"));
-			 * controller.addTestElement(sub_1); controller.addTestElement(new
-			 * IfController("false==true"));
-			 */
+            /*
+             * GenericController sub_1 = new GenericController();
+             * sub_1.addTestElement(new IfController("3==3"));
+             * controller.addTestElement(sub_1); controller.addTestElement(new
+             * IfController("false==true"));
+             */
 
-			/*
-			 * GenericController controller = new GenericController();
-			 * GenericController sub_1 = new GenericController();
-			 * sub_1.addTestElement(new IfController("10<100"));
-			 * sub_1.addTestElement(new IfController("true==false"));
-			 * controller.addTestElement(sub_1); controller.addTestElement(new
-			 * IfController("false==false"));
-			 * 
-			 * IfController sub_2 = new IfController(); sub_2.setCondition( "10<10000");
-			 * GenericController sub_3 = new GenericController();
-			 * 
-			 * sub_2.addTestElement(new IfController( " \"a\".equals(\"a\")" ) );
-			 * sub_3.addTestElement(new IfController("2>100"));
-			 * sub_3.addTestElement(new IfController("false==true"));
-			 * sub_2.addTestElement(sub_3); sub_2.addTestElement(new
-			 * IfController("2==3")); controller.addTestElement(sub_2);
-			 */
+            /*
+             * GenericController controller = new GenericController();
+             * GenericController sub_1 = new GenericController();
+             * sub_1.addTestElement(new IfController("10<100"));
+             * sub_1.addTestElement(new IfController("true==false"));
+             * controller.addTestElement(sub_1); controller.addTestElement(new
+             * IfController("false==false"));
+             * 
+             * IfController sub_2 = new IfController(); sub_2.setCondition( "10<10000");
+             * GenericController sub_3 = new GenericController();
+             * 
+             * sub_2.addTestElement(new IfController( " \"a\".equals(\"a\")" ) );
+             * sub_3.addTestElement(new IfController("2>100"));
+             * sub_3.addTestElement(new IfController("false==true"));
+             * sub_2.addTestElement(sub_3); sub_2.addTestElement(new
+             * IfController("2==3")); controller.addTestElement(sub_2);
+             */
 
-			/*
-			 * IfController controller = new IfController("12==12");
-			 * controller.initialize();
-			 */
-//			TestElement sampler = null;
-//			while ((sampler = controller.next()) != null) {
-//				logger.debug("    ->>>  Gonna assertTrue :" + sampler.getClass().getName() + " Property is   ---->>>"
-//						+ sampler.getName());
-//			}
-		}
+            /*
+             * IfController controller = new IfController("12==12");
+             * controller.initialize();
+             */
+//          TestElement sampler = null;
+//          while ((sampler = controller.next()) != null) {
+//              logger.debug("    ->>>  Gonna assertTrue :" + sampler.getClass().getName() + " Property is   ---->>>"
+//                      + sampler.getName());
+//          }
+        }
 }
