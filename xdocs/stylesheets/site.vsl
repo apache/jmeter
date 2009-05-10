@@ -249,8 +249,8 @@ No
 #subsection ($u_node)
 #elseif ($u_node.getName().equals("scope"))
 #scope ($u_node)
-#elseif ($node.getName().equals("bugzilla"))
-#bugzilla ($node)
+#elseif ($u_node.getName().equals("bugzilla"))
+#bugzilla ($u_node)
 #else
 #outputTag($u_node)
 #runloop($u_node)
