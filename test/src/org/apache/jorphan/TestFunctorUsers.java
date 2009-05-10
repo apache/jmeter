@@ -33,35 +33,35 @@ import org.apache.jmeter.visualizers.TableVisualizer;
  */
 public class TestFunctorUsers extends JMeterTestCase {
 
-	public TestFunctorUsers(String arg0) {
-		super(arg0);
-	}
+    public TestFunctorUsers(String arg0) {
+        super(arg0);
+    }
     
-	public void testSummaryReport() throws Exception{
-		assertTrue("SummaryReport Functor",SummaryReport.testFunctors());
-	}
+    public void testSummaryReport() throws Exception{
+        assertTrue("SummaryReport Functor",SummaryReport.testFunctors());
+    }
     
-	public void testTableVisualizer() throws Exception{
-		assertTrue("TableVisualizer Functor",TableVisualizer.testFunctors());
-	}
+    public void testTableVisualizer() throws Exception{
+        assertTrue("TableVisualizer Functor",TableVisualizer.testFunctors());
+    }
     
-	public void testStatGraphVisualizer() throws Exception{
-		assertTrue("StatGraphVisualizer Functor",StatGraphVisualizer.testFunctors());
-	}
+    public void testStatGraphVisualizer() throws Exception{
+        assertTrue("StatGraphVisualizer Functor",StatGraphVisualizer.testFunctors());
+    }
     
-	public void testStatVisualizer() throws Exception{
-		assertTrue("StatVisualizer Functor",StatVisualizer.testFunctors());
-	}
+    public void testStatVisualizer() throws Exception{
+        assertTrue("StatVisualizer Functor",StatVisualizer.testFunctors());
+    }
     
-	public void testArgumentsPanel() throws Exception{
-		assertTrue("ArgumentsPanel Functor",ArgumentsPanel.testFunctors());
-	}
+    public void testArgumentsPanel() throws Exception{
+        assertTrue("ArgumentsPanel Functor",ArgumentsPanel.testFunctors());
+    }
     
-	public void testHTTPArgumentsPanel() throws Exception{
-		assertTrue("HTTPArgumentsPanel Functor",HTTPArgumentsPanel.testFunctors());
-	}
+    public void testHTTPArgumentsPanel() throws Exception{
+        assertTrue("HTTPArgumentsPanel Functor",HTTPArgumentsPanel.testFunctors());
+    }
     
-	public void testLDAPArgumentsPanel() throws Exception{
-		assertTrue("LDAPArgumentsPanel Functor",LDAPArgumentsPanel.testFunctors());
-	}
+    public void testLDAPArgumentsPanel() throws Exception{
+        assertTrue("LDAPArgumentsPanel Functor",LDAPArgumentsPanel.testFunctors());
+    }
 }

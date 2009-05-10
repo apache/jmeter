@@ -54,7 +54,7 @@ import junit.extensions.TestSetup;
  * started when the unit tests are executed.
  */
 public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
-	private final static int HTTP_SAMPLER = 0;
+    private final static int HTTP_SAMPLER = 0;
     private final static int HTTP_SAMPLER2 = 1;
     
     /** The encodings used for http headers and control information */
@@ -62,7 +62,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
     private static final String US_ASCII = "US-ASCII"; // $NON-NLS-1$
 
     private static final byte[] CRLF = { 0x0d, 0x0A };
-	private static final int MIRROR_PORT = 8081; // Different from TestHTTPMirrorThread port
+    private static final int MIRROR_PORT = 8081; // Different from TestHTTPMirrorThread port
     private static byte[] TEST_FILE_CONTENT;
 
     private static File temporaryFile;
@@ -72,31 +72,31 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
     }
     
     public static Test suite(){
-    	TestSetup setup = new TestSetup(new TestSuite(TestHTTPSamplersAgainstHttpMirrorServer.class)){
-    	    private HttpMirrorServer httpServer;
-    		protected void setUp() throws Exception {
-	    			httpServer = TestHTTPMirrorThread.startHttpMirror(MIRROR_PORT);
-    		        // Create the test file content
-    		        TEST_FILE_CONTENT = new String("some foo content &?=01234+56789-\u007c\u2aa1\u266a\u0153\u20a1\u0115\u0364\u00c5\u2052\uc385%C3%85").getBytes("UTF-8");
+        TestSetup setup = new TestSetup(new TestSuite(TestHTTPSamplersAgainstHttpMirrorServer.class)){
+            private HttpMirrorServer httpServer;
+            protected void setUp() throws Exception {
+                    httpServer = TestHTTPMirrorThread.startHttpMirror(MIRROR_PORT);
+                    // Create the test file content
+                    TEST_FILE_CONTENT = new String("some foo content &?=01234+56789-\u007c\u2aa1\u266a\u0153\u20a1\u0115\u0364\u00c5\u2052\uc385%C3%85").getBytes("UTF-8");
 
-    		        // create a temporary file to make sure we always have a file to give to the PostWriter 
-    		        // Whereever we are or Whatever the current path is.
-    		        temporaryFile = File.createTempFile("TestHTTPSamplersAgainstHttpMirrorServer", "tmp");
-    		        OutputStream output = new FileOutputStream(temporaryFile);
-    		        output.write(TEST_FILE_CONTENT);
-    		        output.flush();
-    		        output.close();
-    		}
-    		
-    		protected void tearDown() throws Exception {
-    		        // Shutdown mirror server
-	    			httpServer.stopServer();
-	    			httpServer = null;
-    		        // delete temporay file
-    		        temporaryFile.delete();
-    		}
-    	};
-    	return setup;
+                    // create a temporary file to make sure we always have a file to give to the PostWriter 
+                    // Whereever we are or Whatever the current path is.
+                    temporaryFile = File.createTempFile("TestHTTPSamplersAgainstHttpMirrorServer", "tmp");
+                    OutputStream output = new FileOutputStream(temporaryFile);
+                    output.write(TEST_FILE_CONTENT);
+                    output.flush();
+                    output.close();
+            }
+            
+            protected void tearDown() throws Exception {
+                    // Shutdown mirror server
+                    httpServer.stopServer();
+                    httpServer = null;
+                    // delete temporay file
+                    temporaryFile.delete();
+            }
+        };
+        return setup;
     }
     
     public void testPostRequest_UrlEncoded() throws Exception {
@@ -1003,10 +1003,10 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
     }
     
     private void checkHeaderTypeLength(String requestHeaders, String contentType, int contentLen) {
-    	boolean typeOK = isInRequestHeaders(requestHeaders, HTTPSamplerBase.HEADER_CONTENT_TYPE, contentType);
-    	boolean lengOK = isInRequestHeaders(requestHeaders, HTTPSamplerBase.HEADER_CONTENT_LENGTH, Integer.toString(contentLen));
+        boolean typeOK = isInRequestHeaders(requestHeaders, HTTPSamplerBase.HEADER_CONTENT_TYPE, contentType);
+        boolean lengOK = isInRequestHeaders(requestHeaders, HTTPSamplerBase.HEADER_CONTENT_LENGTH, Integer.toString(contentLen));
         if (!typeOK || !lengOK){
-        	fail("Expected type:" + contentType + " & length: " +contentLen + " in:\n"+ requestHeaders);
+            fail("Expected type:" + contentType + " & length: " +contentLen + " in:\n"+ requestHeaders);
         }
     }
    
@@ -1090,21 +1090,21 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
      * @param httpSampler
      */
     private void setupFileUploadData(
-    		HTTPSamplerBase httpSampler,
-    		boolean isEncoded,
-    		String titleField,
-    		String titleValue,
-    		String descriptionField,
-    		String descriptionValue,
-    		String fileField,
-    		File fileValue,
-    		String fileMimeType) {
-    	// Set the form data
-    	setupFormData(httpSampler, isEncoded, titleField, titleValue, descriptionField, descriptionValue);
-    	// Set the file upload data
-    	httpSampler.setFileField(fileField);
-    	httpSampler.setFilename(fileValue.getAbsolutePath());
-    	httpSampler.setMimetype(fileMimeType);    	
+            HTTPSamplerBase httpSampler,
+            boolean isEncoded,
+            String titleField,
+            String titleValue,
+            String descriptionField,
+            String descriptionValue,
+            String fileField,
+            File fileValue,
+            String fileMimeType) {
+        // Set the form data
+        setupFormData(httpSampler, isEncoded, titleField, titleValue, descriptionField, descriptionValue);
+        // Set the file upload data
+        httpSampler.setFileField(fileField);
+        httpSampler.setFilename(fileValue.getAbsolutePath());
+        httpSampler.setMimetype(fileMimeType);      
     }
 
     /**
@@ -1117,21 +1117,21 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
     private void checkArraysHaveSameContent(byte[] expected, byte[] actual) throws UnsupportedEncodingException {
         if(expected != null && actual != null) {
             if(expected.length != actual.length) {
-            	System.out.println(">>>>>>>>>>>>>>>>>>>>");
-            	System.out.println(new String(expected,"UTF-8"));
-            	System.out.println("====================");
-            	System.out.println(new String(actual,"UTF-8"));
-            	System.out.println("<<<<<<<<<<<<<<<<<<<<");
+                System.out.println(">>>>>>>>>>>>>>>>>>>>");
+                System.out.println(new String(expected,"UTF-8"));
+                System.out.println("====================");
+                System.out.println(new String(actual,"UTF-8"));
+                System.out.println("<<<<<<<<<<<<<<<<<<<<");
                 fail("arrays have different length, expected is " + expected.length + ", actual is " + actual.length);
             }
             else {
                 for(int i = 0; i < expected.length; i++) {
                     if(expected[i] != actual[i]) {
-                    	System.out.println(">>>>>>>>>>>>>>>>>>>>");
-                       	System.out.println(new String(expected,0,i+1));
-                    	System.out.println("====================");
-                    	System.out.println(new String(actual,0,i+1));
-                    	System.out.println("<<<<<<<<<<<<<<<<<<<<");
+                        System.out.println(">>>>>>>>>>>>>>>>>>>>");
+                        System.out.println(new String(expected,0,i+1));
+                        System.out.println("====================");
+                        System.out.println(new String(actual,0,i+1));
+                        System.out.println("<<<<<<<<<<<<<<<<<<<<");
 /*                        
                         // Useful to when debugging
                         for(int j = 0; j  < expected.length; j++) {

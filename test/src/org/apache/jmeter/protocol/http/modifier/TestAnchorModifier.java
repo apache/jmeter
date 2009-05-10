@@ -34,65 +34,65 @@ import org.apache.jorphan.io.TextFile;
 
 public class TestAnchorModifier extends JMeterTestCase {
         private AnchorModifier parser = new AnchorModifier();
-		public TestAnchorModifier(String name) {
-			super(name);
-		}
+        public TestAnchorModifier(String name) {
+            super(name);
+        }
 
-		private JMeterContext jmctx = null;
+        private JMeterContext jmctx = null;
 
-		public void setUp() {
-			jmctx = JMeterContextService.getContext();
+        public void setUp() {
+            jmctx = JMeterContextService.getContext();
             parser.setThreadContext(jmctx);
-		}
+        }
 
-		public void testProcessingHTMLFile(String HTMLFileName) throws Exception {
-			HTTPSamplerBase config = (HTTPSamplerBase) SaveService.loadTree(
-					new FileInputStream(System.getProperty("user.dir") + "/testfiles/load_bug_list.jmx")).getArray()[0];
-			config.setRunningVersion(true);
-			HTTPSampleResult result = new HTTPSampleResult();
-			HTTPSamplerBase context = (HTTPSamplerBase) SaveService.loadTree(
-					new FileInputStream(System.getProperty("user.dir") + "/testfiles/Load_JMeter_Page.jmx")).getArray()[0];
-			jmctx.setCurrentSampler(context);
-			jmctx.setCurrentSampler(config);
-			result.setResponseData(new TextFile(System.getProperty("user.dir") + HTMLFileName).getText().getBytes());
-			result.setSampleLabel(context.toString());
-			result.setSamplerData(context.toString());
-			result.setURL(new URL("http://issues.apache.org/fakepage.html"));
-			jmctx.setPreviousResult(result);
-			AnchorModifier modifier = new AnchorModifier();
-			modifier.setThreadContext(jmctx);
-			modifier.process();
-			assertEquals("http://issues.apache.org/bugzilla/buglist.cgi?"
-					+ "bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED"
-					+ "&email1=&emailtype1=substring&emailassigned_to1=1"
-					+ "&email2=&emailtype2=substring&emailreporter2=1" + "&bugidtype=include&bug_id=&changedin=&votes="
-					+ "&chfieldfrom=&chfieldto=Now&chfieldvalue="
-					+ "&product=JMeter&short_desc=&short_desc_type=substring"
-					+ "&long_desc=&long_desc_type=substring&bug_file_loc=" + "&bug_file_loc_type=substring&keywords="
-					+ "&keywords_type=anywords" + "&field0-0-0=noop&type0-0-0=noop&value0-0-0="
-					+ "&cmdtype=doit&order=Reuse+same+sort+as+last+time", config.toString());
-			config.recoverRunningVersion();
-			assertEquals("http://issues.apache.org/bugzilla/buglist.cgi?"
-					+ "bug_status=.*&bug_status=.*&bug_status=.*&email1="
-					+ "&emailtype1=substring&emailassigned_to1=1&email2=" + "&emailtype2=substring&emailreporter2=1"
-					+ "&bugidtype=include&bug_id=&changedin=&votes=" + "&chfieldfrom=&chfieldto=Now&chfieldvalue="
-					+ "&product=JMeter&short_desc=&short_desc_type=substring"
-					+ "&long_desc=&long_desc_type=substring&bug_file_loc=" + "&bug_file_loc_type=substring&keywords="
-					+ "&keywords_type=anywords&field0-0-0=noop" + "&type0-0-0=noop&value0-0-0=&cmdtype=doit"
-					+ "&order=Reuse+same+sort+as+last+time", config.toString());
-		}
+        public void testProcessingHTMLFile(String HTMLFileName) throws Exception {
+            HTTPSamplerBase config = (HTTPSamplerBase) SaveService.loadTree(
+                    new FileInputStream(System.getProperty("user.dir") + "/testfiles/load_bug_list.jmx")).getArray()[0];
+            config.setRunningVersion(true);
+            HTTPSampleResult result = new HTTPSampleResult();
+            HTTPSamplerBase context = (HTTPSamplerBase) SaveService.loadTree(
+                    new FileInputStream(System.getProperty("user.dir") + "/testfiles/Load_JMeter_Page.jmx")).getArray()[0];
+            jmctx.setCurrentSampler(context);
+            jmctx.setCurrentSampler(config);
+            result.setResponseData(new TextFile(System.getProperty("user.dir") + HTMLFileName).getText().getBytes());
+            result.setSampleLabel(context.toString());
+            result.setSamplerData(context.toString());
+            result.setURL(new URL("http://issues.apache.org/fakepage.html"));
+            jmctx.setPreviousResult(result);
+            AnchorModifier modifier = new AnchorModifier();
+            modifier.setThreadContext(jmctx);
+            modifier.process();
+            assertEquals("http://issues.apache.org/bugzilla/buglist.cgi?"
+                    + "bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED"
+                    + "&email1=&emailtype1=substring&emailassigned_to1=1"
+                    + "&email2=&emailtype2=substring&emailreporter2=1" + "&bugidtype=include&bug_id=&changedin=&votes="
+                    + "&chfieldfrom=&chfieldto=Now&chfieldvalue="
+                    + "&product=JMeter&short_desc=&short_desc_type=substring"
+                    + "&long_desc=&long_desc_type=substring&bug_file_loc=" + "&bug_file_loc_type=substring&keywords="
+                    + "&keywords_type=anywords" + "&field0-0-0=noop&type0-0-0=noop&value0-0-0="
+                    + "&cmdtype=doit&order=Reuse+same+sort+as+last+time", config.toString());
+            config.recoverRunningVersion();
+            assertEquals("http://issues.apache.org/bugzilla/buglist.cgi?"
+                    + "bug_status=.*&bug_status=.*&bug_status=.*&email1="
+                    + "&emailtype1=substring&emailassigned_to1=1&email2=" + "&emailtype2=substring&emailreporter2=1"
+                    + "&bugidtype=include&bug_id=&changedin=&votes=" + "&chfieldfrom=&chfieldto=Now&chfieldvalue="
+                    + "&product=JMeter&short_desc=&short_desc_type=substring"
+                    + "&long_desc=&long_desc_type=substring&bug_file_loc=" + "&bug_file_loc_type=substring&keywords="
+                    + "&keywords_type=anywords&field0-0-0=noop" + "&type0-0-0=noop&value0-0-0=&cmdtype=doit"
+                    + "&order=Reuse+same+sort+as+last+time", config.toString());
+        }
 
-		public void testModifySampler() throws Exception {
-			testProcessingHTMLFile("/testfiles/jmeter_home_page.html");
-		}
+        public void testModifySampler() throws Exception {
+            testProcessingHTMLFile("/testfiles/jmeter_home_page.html");
+        }
 
-		public void testModifySamplerWithRelativeLink() throws Exception {
-			testProcessingHTMLFile("/testfiles/jmeter_home_page_with_relative_links.html");
-		}
+        public void testModifySamplerWithRelativeLink() throws Exception {
+            testProcessingHTMLFile("/testfiles/jmeter_home_page_with_relative_links.html");
+        }
 
-		public void testModifySamplerWithBaseHRef() throws Exception {
-			testProcessingHTMLFile("/testfiles/jmeter_home_page_with_base_href.html");
-		}
+        public void testModifySamplerWithBaseHRef() throws Exception {
+            testProcessingHTMLFile("/testfiles/jmeter_home_page_with_base_href.html");
+        }
 
         public void testSimpleParse() throws Exception {
             HTTPSamplerBase config = makeUrlConfig(".*/index\\.html");

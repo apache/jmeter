@@ -22,16 +22,16 @@ import junit.framework.TestCase;
 
 public class PackageTest extends TestCase {
 
-	public PackageTest(String arg0) {
-		super(arg0);
-	}
+    public PackageTest(String arg0) {
+        super(arg0);
+    }
 
-	//TODO add tests for SaveGraphics
-	public void testSaveGraphics() throws Exception {
-	}
-	
-	//TODO add tests for ReportSaveGraphics
-	public void testReportSaveGraphics() throws Exception {
-	}
-	
+    //TODO add tests for SaveGraphics
+    public void testSaveGraphics() throws Exception {
+    }
+    
+    //TODO add tests for ReportSaveGraphics
+    public void testReportSaveGraphics() throws Exception {
+    }
+    
 }

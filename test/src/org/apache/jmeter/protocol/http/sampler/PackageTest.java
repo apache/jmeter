@@ -31,34 +31,34 @@ import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui2;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 
 public class PackageTest extends TestCase {
-	public PackageTest(String arg0) {
-		super(arg0);
-	}
+    public PackageTest(String arg0) {
+        super(arg0);
+    }
 
-	public void testConfiguring() throws Exception {
-		HTTPSamplerBase sampler = (HTTPSamplerBase) new HttpTestSampleGui().createTestElement();
-		configure(sampler);
-	}
+    public void testConfiguring() throws Exception {
+        HTTPSamplerBase sampler = (HTTPSamplerBase) new HttpTestSampleGui().createTestElement();
+        configure(sampler);
+    }
 
-	public void testConfiguring2() throws Exception {
-		HTTPSamplerBase sampler = (HTTPSamplerBase) new HttpTestSampleGui2().createTestElement();
-		configure(sampler);
-	}
+    public void testConfiguring2() throws Exception {
+        HTTPSamplerBase sampler = (HTTPSamplerBase) new HttpTestSampleGui2().createTestElement();
+        configure(sampler);
+    }
 
-	private void configure(HTTPSamplerBase sampler) throws Exception {
-		sampler.addArgument("arg1", "val1");
-		ConfigTestElement config = (ConfigTestElement) new HttpDefaultsGui().createTestElement();
-		((Arguments) config.getProperty(HTTPSamplerBase.ARGUMENTS).getObjectValue()).addArgument(new HTTPArgument(
-				"config1", "configValue"));
-		config.setRunningVersion(true);
-		sampler.setRunningVersion(true);
-		sampler.setRunningVersion(true);
-		sampler.addTestElement(config);
-		assertEquals("config1=configValue", sampler.getArguments().getArgument(1).toString());
-		sampler.recoverRunningVersion();
-		config.recoverRunningVersion();
-		assertEquals(1, sampler.getArguments().getArgumentCount());
-		sampler.addTestElement(config);
-		assertEquals("config1=configValue", sampler.getArguments().getArgument(1).toString());
-	}
+    private void configure(HTTPSamplerBase sampler) throws Exception {
+        sampler.addArgument("arg1", "val1");
+        ConfigTestElement config = (ConfigTestElement) new HttpDefaultsGui().createTestElement();
+        ((Arguments) config.getProperty(HTTPSamplerBase.ARGUMENTS).getObjectValue()).addArgument(new HTTPArgument(
+                "config1", "configValue"));
+        config.setRunningVersion(true);
+        sampler.setRunningVersion(true);
+        sampler.setRunningVersion(true);
+        sampler.addTestElement(config);
+        assertEquals("config1=configValue", sampler.getArguments().getArgument(1).toString());
+        sampler.recoverRunningVersion();
+        config.recoverRunningVersion();
+        assertEquals(1, sampler.getArguments().getArgumentCount());
+        sampler.addTestElement(config);
+        assertEquals("config1=configValue", sampler.getArguments().getArgument(1).toString());
+    }
 }

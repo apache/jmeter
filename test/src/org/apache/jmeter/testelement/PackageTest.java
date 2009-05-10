@@ -32,47 +32,47 @@ import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 
 public class PackageTest extends TestCase {
-	public PackageTest(String arg0) {
-		super(arg0);
-	}
+    public PackageTest(String arg0) {
+        super(arg0);
+    }
 
-	public void testRecovery() throws Exception {
-		ConfigTestElement config = new ConfigTestElement();
-		config.addProperty(new StringProperty("name", "config"));
-		config.setRunningVersion(true);
-		LoginConfig loginConfig = new LoginConfig();
-		loginConfig.setUsername("user1");
-		loginConfig.setPassword("pass1");
-		assertTrue(config.getProperty("login") instanceof NullProperty);
-		// This test should work whether or not all Nulls are equal
-		assertEquals(new NullProperty("login"), config.getProperty("login"));
-		config.addProperty(new TestElementProperty("login", loginConfig));
-		assertEquals(loginConfig.toString(), config.getPropertyAsString("login"));
-		config.recoverRunningVersion();
-		assertTrue(config.getProperty("login") instanceof NullProperty);
-		assertEquals(new NullProperty("login"), config.getProperty("login"));
-	}
+    public void testRecovery() throws Exception {
+        ConfigTestElement config = new ConfigTestElement();
+        config.addProperty(new StringProperty("name", "config"));
+        config.setRunningVersion(true);
+        LoginConfig loginConfig = new LoginConfig();
+        loginConfig.setUsername("user1");
+        loginConfig.setPassword("pass1");
+        assertTrue(config.getProperty("login") instanceof NullProperty);
+        // This test should work whether or not all Nulls are equal
+        assertEquals(new NullProperty("login"), config.getProperty("login"));
+        config.addProperty(new TestElementProperty("login", loginConfig));
+        assertEquals(loginConfig.toString(), config.getPropertyAsString("login"));
+        config.recoverRunningVersion();
+        assertTrue(config.getProperty("login") instanceof NullProperty);
+        assertEquals(new NullProperty("login"), config.getProperty("login"));
+    }
 
-	public void testArguments() throws Exception {
-		Arguments args = new Arguments();
-		args.addArgument("arg1", "val1", "=");
-		TestElementProperty prop = new TestElementProperty("args", args);
-		ConfigTestElement te = new ConfigTestElement();
-		te.addProperty(prop);
-		te.setRunningVersion(true);
-		Arguments config = new Arguments();
-		config.addArgument("config1", "configValue", "=");
-		TestElementProperty configProp = new TestElementProperty("args", config);
-		ConfigTestElement te2 = new ConfigTestElement();
-		te2.addProperty(configProp);
-		te.addTestElement(te2);
-		assertEquals(2, args.getArgumentCount());
-		assertEquals("config1=configValue", args.getArgument(1).toString());
-		te.recoverRunningVersion();
-		te.addTestElement(te2);
-		assertEquals(2, args.getArgumentCount());
-		assertEquals("config1=configValue", args.getArgument(1).toString());
+    public void testArguments() throws Exception {
+        Arguments args = new Arguments();
+        args.addArgument("arg1", "val1", "=");
+        TestElementProperty prop = new TestElementProperty("args", args);
+        ConfigTestElement te = new ConfigTestElement();
+        te.addProperty(prop);
+        te.setRunningVersion(true);
+        Arguments config = new Arguments();
+        config.addArgument("config1", "configValue", "=");
+        TestElementProperty configProp = new TestElementProperty("args", config);
+        ConfigTestElement te2 = new ConfigTestElement();
+        te2.addProperty(configProp);
+        te.addTestElement(te2);
+        assertEquals(2, args.getArgumentCount());
+        assertEquals("config1=configValue", args.getArgument(1).toString());
+        te.recoverRunningVersion();
+        te.addTestElement(te2);
+        assertEquals(2, args.getArgumentCount());
+        assertEquals("config1=configValue", args.getArgument(1).toString());
 
-	}
+    }
 
 }
