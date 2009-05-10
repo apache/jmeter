@@ -191,9 +191,9 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
             
             // WebsphereMQ does not allow corr. id. to be set using setStringProperty()
             if("JMSCorrelationID".equalsIgnoreCase(name)) { // $NON-NLS-1$
-            	msg.setJMSCorrelationID(value);
+                msg.setJMSCorrelationID(value);
             } else {
-            	msg.setStringProperty(name, value);
+                msg.setStringProperty(name, value);
             }
         }
     }

@@ -331,7 +331,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
                 String stringPattern = iter.next().getStringValue();
                 Pattern pattern = null;
                 if (contains || matches) {
-                	pattern = JMeterUtils.getPatternCache().getPattern(stringPattern, Perl5Compiler.READ_ONLY_MASK);
+                    pattern = JMeterUtils.getPatternCache().getPattern(stringPattern, Perl5Compiler.READ_ONLY_MASK);
                 }
                 boolean found;
                 if (contains) {
