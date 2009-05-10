@@ -82,7 +82,7 @@ public class Stats {
             // of the list. Peter 12.22.04
             double threadWeight = 0;
             if (stat.getConnector().size() > 0) {
-            	Connector cntr = fetchConnector(stat);
+                Connector cntr = fetchConnector(stat);
                 int maxThread = cntr.getThreadInfo().getMaxThreads();
                 int curThread = cntr.getThreadInfo().getCurrentThreadsBusy();
                 double thdiv = (double) curThread / (double) maxThread;
@@ -109,7 +109,7 @@ public class Stats {
      */
     public static int calculateStatus(Status stat) {
         if (stat != null && stat.getConnector().size() > 0) {
-        	Connector cntr = fetchConnector(stat);
+            Connector cntr = fetchConnector(stat);
             int max = cntr.getThreadInfo().getMaxThreads();
             int current = cntr.getThreadInfo().getCurrentThreadsBusy();
             // int spare = cntr.getThreadInfo().getMaxSpareThreads();
@@ -172,9 +172,9 @@ public class Stats {
      * @return connector
      */
     private static Connector fetchConnector(Status stat) {
-    	Connector cntr = null;
-    	String connectorPrefix = stat.getConnectorPrefix();
-    	if (connectorPrefix != null && connectorPrefix.length() > 0) {
+        Connector cntr = null;
+        String connectorPrefix = stat.getConnectorPrefix();
+        if (connectorPrefix != null && connectorPrefix.length() > 0) {
            // loop to fetch desired connector
            for (int i = 0; i < stat.getConnector().size(); i++) {
                cntr = (Connector) stat.getConnector().get(i);
@@ -182,10 +182,10 @@ public class Stats {
                    return cntr;
                }
            }           
-    	}
+        }
         // default : get first connector
         cntr = (Connector) stat.getConnector().get(0);
-    	return cntr;
+        return cntr;
     }
 
 }
