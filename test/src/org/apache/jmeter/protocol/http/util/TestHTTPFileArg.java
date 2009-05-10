@@ -21,46 +21,46 @@ package org.apache.jmeter.protocol.http.util;
 import junit.framework.TestCase;
 
 public class TestHTTPFileArg extends TestCase {
-	public TestHTTPFileArg(String name) {
-		super(name);
-	}
+    public TestHTTPFileArg(String name) {
+        super(name);
+    }
 
-	public void testConstructors() throws Exception {
-		HTTPFileArg file = new HTTPFileArg();
-		assertEquals("no parameter failure", "", file.getPath());
-		assertEquals("no parameter failure", "", file.getParamName());
-		assertEquals("no parameter failure", "", file.getMimeType());
-		file = new HTTPFileArg("path");
-		assertEquals("single parameter failure", "path", file.getPath());
-		assertEquals("single parameter failure", "", file.getParamName());
-		assertEquals("single parameter failure", "", file.getMimeType());
-		file = new HTTPFileArg("path", "param", "mimetype");
-		assertEquals("three parameter failure", "path", file.getPath());
-		assertEquals("three parameter failure", "param", file.getParamName());
-		assertEquals("three parameter failure", "mimetype", file.getMimeType());
-		HTTPFileArg file2 = new HTTPFileArg(file);
-		assertEquals("copy constructor failure", "path", file2.getPath());
-		assertEquals("copy constructor failure", "param", file2.getParamName());
-		assertEquals("copy constructor failure", "mimetype", file2.getMimeType());
-	}
+    public void testConstructors() throws Exception {
+        HTTPFileArg file = new HTTPFileArg();
+        assertEquals("no parameter failure", "", file.getPath());
+        assertEquals("no parameter failure", "", file.getParamName());
+        assertEquals("no parameter failure", "", file.getMimeType());
+        file = new HTTPFileArg("path");
+        assertEquals("single parameter failure", "path", file.getPath());
+        assertEquals("single parameter failure", "", file.getParamName());
+        assertEquals("single parameter failure", "", file.getMimeType());
+        file = new HTTPFileArg("path", "param", "mimetype");
+        assertEquals("three parameter failure", "path", file.getPath());
+        assertEquals("three parameter failure", "param", file.getParamName());
+        assertEquals("three parameter failure", "mimetype", file.getMimeType());
+        HTTPFileArg file2 = new HTTPFileArg(file);
+        assertEquals("copy constructor failure", "path", file2.getPath());
+        assertEquals("copy constructor failure", "param", file2.getParamName());
+        assertEquals("copy constructor failure", "mimetype", file2.getMimeType());
+    }
 
-	public void testGettersSetters() throws Exception {
-		HTTPFileArg file = new HTTPFileArg();
-		assertEquals("", file.getPath());
-		assertEquals("", file.getParamName());
-		assertEquals("", file.getMimeType());
-		file.setPath("path");
-		file.setParamName("param");
-		file.setMimeType("mimetype");
-		file.setHeader("header");
-		assertEquals("path", file.getPath());
-		assertEquals("param", file.getParamName());
-		assertEquals("mimetype", file.getMimeType());
-		assertEquals("header", file.getHeader());
-	}
+    public void testGettersSetters() throws Exception {
+        HTTPFileArg file = new HTTPFileArg();
+        assertEquals("", file.getPath());
+        assertEquals("", file.getParamName());
+        assertEquals("", file.getMimeType());
+        file.setPath("path");
+        file.setParamName("param");
+        file.setMimeType("mimetype");
+        file.setHeader("header");
+        assertEquals("path", file.getPath());
+        assertEquals("param", file.getParamName());
+        assertEquals("mimetype", file.getMimeType());
+        assertEquals("header", file.getHeader());
+    }
 
-	public void testToString() throws Exception {
-		HTTPFileArg file = new HTTPFileArg("path1", "param1", "mimetype1");
-		assertEquals("path:'path1'|param:'param1'|mimetype:'mimetype1'", file.toString());
-	}
+    public void testToString() throws Exception {
+        HTTPFileArg file = new HTTPFileArg("path1", "param1", "mimetype1");
+        assertEquals("path:'path1'|param:'param1'|mimetype:'mimetype1'", file.toString());
+    }
 }

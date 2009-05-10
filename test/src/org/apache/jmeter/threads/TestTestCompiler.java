@@ -25,35 +25,35 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jorphan.collections.ListedHashTree;
 
 public class TestTestCompiler extends junit.framework.TestCase {
-		public TestTestCompiler(String name) {
-			super(name);
-		}
+        public TestTestCompiler(String name) {
+            super(name);
+        }
 
-		public void testConfigGathering() throws Exception {
-			ListedHashTree testing = new ListedHashTree();
-			GenericController controller = new GenericController();
-			ConfigTestElement config1 = new ConfigTestElement();
-			config1.setName("config1");
-			config1.setProperty("test.property", "A test value");
-			TestSampler sampler = new TestSampler();
-			sampler.setName("sampler");
-			testing.add(controller, config1);
-			testing.add(controller, sampler);
-			TestCompiler.initialize();
+        public void testConfigGathering() throws Exception {
+            ListedHashTree testing = new ListedHashTree();
+            GenericController controller = new GenericController();
+            ConfigTestElement config1 = new ConfigTestElement();
+            config1.setName("config1");
+            config1.setProperty("test.property", "A test value");
+            TestSampler sampler = new TestSampler();
+            sampler.setName("sampler");
+            testing.add(controller, config1);
+            testing.add(controller, sampler);
+            TestCompiler.initialize();
 
-			TestCompiler compiler = new TestCompiler(testing, new JMeterVariables());
-			testing.traverse(compiler);
-			sampler = (TestSampler) compiler.configureSampler(sampler).getSampler();
-			assertEquals("A test value", sampler.getPropertyAsString("test.property"));
-		}
+            TestCompiler compiler = new TestCompiler(testing, new JMeterVariables());
+            testing.traverse(compiler);
+            sampler = (TestSampler) compiler.configureSampler(sampler).getSampler();
+            assertEquals("A test value", sampler.getPropertyAsString("test.property"));
+        }
 
-		class TestSampler extends AbstractSampler {
-			public SampleResult sample(org.apache.jmeter.samplers.Entry e) {
-				return null;
-			}
+        class TestSampler extends AbstractSampler {
+            public SampleResult sample(org.apache.jmeter.samplers.Entry e) {
+                return null;
+            }
 
-			public Object clone() {
-				return new TestSampler();
-			}
-		}
+            public Object clone() {
+                return new TestSampler();
+            }
+        }
 }

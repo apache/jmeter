@@ -24,26 +24,26 @@ import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
 
 public class TestSave extends junit.framework.TestCase {
-		Save save;
+        Save save;
 
-		public TestSave(String name) {
-			super(name);
-		}
+        public TestSave(String name) {
+            super(name);
+        }
 
-		public void setUp() {
-			save = new Save();
-		}
+        public void setUp() {
+            save = new Save();
+        }
 
-		public void testTreeConversion() throws Exception {
-			HashTree tree = new ListedHashTree();
-			JMeterTreeNode root = new JMeterTreeNode(new Arguments(), null);
-			tree.add(root, root);
-			tree.getTree(root).add(root, root);
-			save.convertSubTree(tree);
-			assertEquals(tree.getArray()[0].getClass().getName(), root.getTestElement().getClass().getName());
-			tree = tree.getTree(tree.getArray()[0]);
-			assertEquals(tree.getArray()[0].getClass().getName(), root.getTestElement().getClass().getName());
-			assertEquals(tree.getTree(tree.getArray()[0]).getArray()[0].getClass().getName(), root.getTestElement()
-					.getClass().getName());
-		}
+        public void testTreeConversion() throws Exception {
+            HashTree tree = new ListedHashTree();
+            JMeterTreeNode root = new JMeterTreeNode(new Arguments(), null);
+            tree.add(root, root);
+            tree.getTree(root).add(root, root);
+            save.convertSubTree(tree);
+            assertEquals(tree.getArray()[0].getClass().getName(), root.getTestElement().getClass().getName());
+            tree = tree.getTree(tree.getArray()[0]);
+            assertEquals(tree.getArray()[0].getClass().getName(), root.getTestElement().getClass().getName());
+            assertEquals(tree.getTree(tree.getArray()[0]).getArray()[0].getClass().getName(), root.getTestElement()
+                    .getClass().getName());
+        }
 }

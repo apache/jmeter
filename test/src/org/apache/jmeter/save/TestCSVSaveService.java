@@ -26,14 +26,14 @@ import org.apache.jmeter.junit.JMeterTestCase;
 
 public class TestCSVSaveService extends JMeterTestCase {
 
-	public TestCSVSaveService(String name) {
-		super(name);
-	}
-	
-	private void checkSplitString(String input, char delim, String []expected) throws Exception {
-        String out[] = CSVSaveService.csvSplitString(input, delim);	    
+    public TestCSVSaveService(String name) {
+        super(name);
+    }
+    
+    private void checkSplitString(String input, char delim, String []expected) throws Exception {
+        String out[] = CSVSaveService.csvSplitString(input, delim);     
         checkStrings(expected, out);
-	}
+    }
 
     private void checkStrings(String[] expected, String[] out) {
         assertEquals("Incorrect number of strings returned",expected.length, out.length);
@@ -41,15 +41,15 @@ public class TestCSVSaveService extends JMeterTestCase {
            assertEquals("Incorrect entry returned",expected[i], out[i]);
         }
     }
-	
-	// This is what JOrphanUtils.split() does
-	public void testSplitEmpty() throws Exception {
+    
+    // This is what JOrphanUtils.split() does
+    public void testSplitEmpty() throws Exception {
         checkSplitString("",         ',', new String[]{});    
-	}
-	
-	// These tests should agree with those for JOrphanUtils.split() as far as possible
-	
-	public void testSplitUnquoted() throws Exception {
+    }
+    
+    // These tests should agree with those for JOrphanUtils.split() as far as possible
+    
+    public void testSplitUnquoted() throws Exception {
         checkSplitString("a",         ',', new String[]{"a"});
         checkSplitString("a,bc,d,e", ',', new String[]{"a","bc","d","e"});
         checkSplitString(",bc,d,e",  ',', new String[]{"","bc","d","e"});

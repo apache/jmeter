@@ -42,9 +42,9 @@ public class TestSampleResult extends TestCase {
             res.sampleStart();
             Thread.sleep(110); // Needs to be greater than the minimum to allow for boundary errors
             res.sampleEnd();
-        	long time = res.getTime();
+            long time = res.getTime();
             if(time < 100){
-				fail("Sample time should be >=100, actual "+time);
+                fail("Sample time should be >=100, actual "+time);
             }
         }
 
@@ -103,10 +103,10 @@ public class TestSampleResult extends TestCase {
         }
 
         public void testSubResults() throws Exception {
-        	// This test tries to emulate a http sample, with two
-        	// subsamples, representing images that are downloaded for the
-        	// page representing the first sample.
-        	
+            // This test tries to emulate a http sample, with two
+            // subsamples, representing images that are downloaded for the
+            // page representing the first sample.
+            
             // Sample that will get two sub results, simulates a web page load 
             SampleResult resWithSubResults = new SampleResult();            
 
@@ -119,7 +119,7 @@ public class TestSampleResult extends TestCase {
             resWithSubResults.setSuccessful(true);
             resWithSubResults.sampleEnd();
             long sampleWithSubResultsTime = resWithSubResults.getTime();
-        	
+            
             // Sample with no sub results, simulates an image download
             SampleResult resNoSubResults1 = new SampleResult();            
             resNoSubResults1.sampleStart();
@@ -167,10 +167,10 @@ public class TestSampleResult extends TestCase {
             // Check the sample times
             long allsamplesTime = sampleWithSubResultsTime + sample1Time + sample2Time;
             if (totalTime < allsamplesTime) {
-            	fail("Total: "+totalTime+" < sum(samples): "+ allsamplesTime);
+                fail("Total: "+totalTime+" < sum(samples): "+ allsamplesTime);
             }
             if (totalTime > overallTime) {
-            	fail("Total: "+totalTime+" > overall time: "+ overallTime);
+                fail("Total: "+totalTime+" > overall time: "+ overallTime);
             }
             
             // Check that calculator gets the correct statistics from the sample
@@ -186,40 +186,40 @@ public class TestSampleResult extends TestCase {
         // TODO some more invalid sequence tests needed
         
         public void testEncodingAndType() throws Exception {
-        	// check default
-        	SampleResult res = new SampleResult();
-        	assertEquals(SampleResult.DEFAULT_ENCODING,res.getDataEncoding());
-        	assertEquals(SampleResult.DEFAULT_ENCODING,res.getDataEncodingWithDefault());
-        	assertEquals("DataType should be blank","",res.getDataType());
-        	assertNull(res.getDataEncodingNoDefault());
-        	
-        	// check null changes nothing
-        	res.setEncodingAndType(null);
-        	assertEquals(SampleResult.DEFAULT_ENCODING,res.getDataEncoding());
-        	assertEquals(SampleResult.DEFAULT_ENCODING,res.getDataEncodingWithDefault());
-        	assertEquals("DataType should be blank","",res.getDataType());
-        	assertNull(res.getDataEncodingNoDefault());
+            // check default
+            SampleResult res = new SampleResult();
+            assertEquals(SampleResult.DEFAULT_ENCODING,res.getDataEncoding());
+            assertEquals(SampleResult.DEFAULT_ENCODING,res.getDataEncodingWithDefault());
+            assertEquals("DataType should be blank","",res.getDataType());
+            assertNull(res.getDataEncodingNoDefault());
+            
+            // check null changes nothing
+            res.setEncodingAndType(null);
+            assertEquals(SampleResult.DEFAULT_ENCODING,res.getDataEncoding());
+            assertEquals(SampleResult.DEFAULT_ENCODING,res.getDataEncodingWithDefault());
+            assertEquals("DataType should be blank","",res.getDataType());
+            assertNull(res.getDataEncodingNoDefault());
 
-        	// check no charset
-        	res.setEncodingAndType("text/html");
-        	assertEquals(SampleResult.DEFAULT_ENCODING,res.getDataEncoding());
-        	assertEquals(SampleResult.DEFAULT_ENCODING,res.getDataEncodingWithDefault());
-        	assertEquals("text",res.getDataType());
-        	assertNull(res.getDataEncodingNoDefault());
+            // check no charset
+            res.setEncodingAndType("text/html");
+            assertEquals(SampleResult.DEFAULT_ENCODING,res.getDataEncoding());
+            assertEquals(SampleResult.DEFAULT_ENCODING,res.getDataEncodingWithDefault());
+            assertEquals("text",res.getDataType());
+            assertNull(res.getDataEncodingNoDefault());
 
-        	// Check unquoted charset
-        	res.setEncodingAndType("text/html; charset=aBcd");
-        	assertEquals("aBcd",res.getDataEncodingWithDefault());
-        	assertEquals("aBcd",res.getDataEncodingNoDefault());
-        	assertEquals("aBcd",res.getDataEncoding());
-        	assertEquals("text",res.getDataType());
+            // Check unquoted charset
+            res.setEncodingAndType("text/html; charset=aBcd");
+            assertEquals("aBcd",res.getDataEncodingWithDefault());
+            assertEquals("aBcd",res.getDataEncodingNoDefault());
+            assertEquals("aBcd",res.getDataEncoding());
+            assertEquals("text",res.getDataType());
 
-        	// Check quoted charset
-        	res.setEncodingAndType("text/html; charset=\"aBCd\"");
-        	assertEquals("aBCd",res.getDataEncodingWithDefault());
-        	assertEquals("aBCd",res.getDataEncodingNoDefault());
-        	assertEquals("aBCd",res.getDataEncoding());
-        	assertEquals("text",res.getDataType());        	
+            // Check quoted charset
+            res.setEncodingAndType("text/html; charset=\"aBCd\"");
+            assertEquals("aBCd",res.getDataEncodingWithDefault());
+            assertEquals("aBCd",res.getDataEncodingNoDefault());
+            assertEquals("aBCd",res.getDataEncoding());
+            assertEquals("text",res.getDataType());         
         }
 }
 

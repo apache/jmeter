@@ -32,60 +32,60 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 
 public class TestValueReplacer extends JMeterTestCase {
-		TestPlan variables;
+        TestPlan variables;
 
-		public TestValueReplacer(String name) {
-			super(name);
-		}
+        public TestValueReplacer(String name) {
+            super(name);
+        }
 
-		public void setUp() {
-			variables = new TestPlan();
-			variables.addParameter("server", "jakarta.apache.org");
-			variables.addParameter("username", "jack");
-			// The following used to be jacks_password, but the Arguments class uses
-			// HashMap for which the order is not defined.
-			variables.addParameter("password", "his_password");
-			variables.addParameter("regex", ".*");
-			JMeterVariables vars = new JMeterVariables();
-			vars.put("server", "jakarta.apache.org");
-			JMeterContextService.getContext().setVariables(vars);
-			JMeterContextService.getContext().setSamplingStarted(true);
-		}
+        public void setUp() {
+            variables = new TestPlan();
+            variables.addParameter("server", "jakarta.apache.org");
+            variables.addParameter("username", "jack");
+            // The following used to be jacks_password, but the Arguments class uses
+            // HashMap for which the order is not defined.
+            variables.addParameter("password", "his_password");
+            variables.addParameter("regex", ".*");
+            JMeterVariables vars = new JMeterVariables();
+            vars.put("server", "jakarta.apache.org");
+            JMeterContextService.getContext().setVariables(vars);
+            JMeterContextService.getContext().setSamplingStarted(true);
+        }
 
-		public void testReverseReplacement() throws Exception {
-			ValueReplacer replacer = new ValueReplacer(variables);
-			assertTrue(variables.getUserDefinedVariables().containsKey("server"));
-			assertTrue(replacer.containsKey("server"));
-			TestElement element = new TestPlan();
-			element.setProperty(new StringProperty("domain", "jakarta.apache.org"));
-			List args = new ArrayList();
-			args.add("username is jack");
-			args.add("his_password");
-			element.setProperty(new CollectionProperty("args", args));
-			replacer.reverseReplace(element);
-			assertEquals("${server}", element.getPropertyAsString("domain"));
-			args = (List) element.getProperty("args").getObjectValue();
-			assertEquals("username is ${username}", ((JMeterProperty) args.get(0)).getStringValue());
-			assertEquals("${password}", ((JMeterProperty) args.get(1)).getStringValue());
-		}
+        public void testReverseReplacement() throws Exception {
+            ValueReplacer replacer = new ValueReplacer(variables);
+            assertTrue(variables.getUserDefinedVariables().containsKey("server"));
+            assertTrue(replacer.containsKey("server"));
+            TestElement element = new TestPlan();
+            element.setProperty(new StringProperty("domain", "jakarta.apache.org"));
+            List args = new ArrayList();
+            args.add("username is jack");
+            args.add("his_password");
+            element.setProperty(new CollectionProperty("args", args));
+            replacer.reverseReplace(element);
+            assertEquals("${server}", element.getPropertyAsString("domain"));
+            args = (List) element.getProperty("args").getObjectValue();
+            assertEquals("username is ${username}", ((JMeterProperty) args.get(0)).getStringValue());
+            assertEquals("${password}", ((JMeterProperty) args.get(1)).getStringValue());
+        }
 
-		public void testReplace() throws Exception {
-			ValueReplacer replacer = new ValueReplacer();
-			replacer.setUserDefinedVariables(variables.getUserDefinedVariables());
-			TestElement element = new ConfigTestElement();
-			element.setProperty(new StringProperty("domain", "${server}"));
-			replacer.replaceValues(element);
-			//log.debug("domain property = " + element.getProperty("domain"));
-			element.setRunningVersion(true);
-			assertEquals("jakarta.apache.org", element.getPropertyAsString("domain"));
-		}
+        public void testReplace() throws Exception {
+            ValueReplacer replacer = new ValueReplacer();
+            replacer.setUserDefinedVariables(variables.getUserDefinedVariables());
+            TestElement element = new ConfigTestElement();
+            element.setProperty(new StringProperty("domain", "${server}"));
+            replacer.replaceValues(element);
+            //log.debug("domain property = " + element.getProperty("domain"));
+            element.setRunningVersion(true);
+            assertEquals("jakarta.apache.org", element.getPropertyAsString("domain"));
+        }
 
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see junit.framework.TestCase#tearDown()
-		 */
-		protected void tearDown() throws Exception {
-			JMeterContextService.getContext().setSamplingStarted(false);
-		}
+        /*
+         * (non-Javadoc)
+         * 
+         * @see junit.framework.TestCase#tearDown()
+         */
+        protected void tearDown() throws Exception {
+            JMeterContextService.getContext().setSamplingStarted(false);
+        }
 }

@@ -31,24 +31,24 @@ import java.util.Properties;
  */
 public final class NullURLConnection extends URLConnection {
 
-	private Map data = new Properties();
+    private Map data = new Properties();
 
-	public NullURLConnection() throws MalformedURLException {
-		this(new URL("http://localhost"));
-	}
+    public NullURLConnection() throws MalformedURLException {
+        this(new URL("http://localhost"));
+    }
 
-	public NullURLConnection(URL url) {
-		super(url);
-	}
+    public NullURLConnection(URL url) {
+        super(url);
+    }
 
-	public void connect() {
-	}
+    public void connect() {
+    }
 
-	public void setRequestProperty(String name, String value) {
-		data.put(name, value);
-	}
+    public void setRequestProperty(String name, String value) {
+        data.put(name, value);
+    }
 
-	public String getRequestProperty(String name) {
-		return (String) data.get(name);
-	}
+    public String getRequestProperty(String name) {
+        return (String) data.get(name);
+    }
 }

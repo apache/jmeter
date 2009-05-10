@@ -23,23 +23,23 @@ import junit.framework.TestCase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 
 public class TestHttpTestSampleGui extends TestCase {
-		private HttpTestSampleGui gui;
+        private HttpTestSampleGui gui;
 
-		public TestHttpTestSampleGui(String name) {
-			super(name);
-		}
+        public TestHttpTestSampleGui(String name) {
+            super(name);
+        }
 
-		public void setUp() {
-			gui = new HttpTestSampleGui();
-		}
+        public void setUp() {
+            gui = new HttpTestSampleGui();
+        }
 
-		public void testCloneSampler() throws Exception {
-			HTTPSamplerBase sampler = (HTTPSamplerBase) gui.createTestElement();
-			sampler.addArgument("param", "value");
-			HTTPSamplerBase clonedSampler = (HTTPSamplerBase) sampler.clone();
-			clonedSampler.setRunningVersion(true);
-			sampler.getArguments().getArgument(0).setValue("new value");
-			assertEquals("Sampler didn't clone correctly", "new value", sampler.getArguments().getArgument(0)
-					.getValue());
-		}
+        public void testCloneSampler() throws Exception {
+            HTTPSamplerBase sampler = (HTTPSamplerBase) gui.createTestElement();
+            sampler.addArgument("param", "value");
+            HTTPSamplerBase clonedSampler = (HTTPSamplerBase) sampler.clone();
+            clonedSampler.setRunningVersion(true);
+            sampler.getArguments().getArgument(0).setValue("new value");
+            assertEquals("Sampler didn't clone correctly", "new value", sampler.getArguments().getArgument(0)
+                    .getValue());
+        }
 }

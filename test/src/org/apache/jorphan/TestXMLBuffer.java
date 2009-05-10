@@ -23,34 +23,34 @@ import org.apache.jorphan.util.XMLBuffer;
 
 public class TestXMLBuffer extends JMeterTestCase {
 
-	public TestXMLBuffer(String arg0) {
-		super(arg0);
-	}
+    public TestXMLBuffer(String arg0) {
+        super(arg0);
+    }
     
-	public void test1() throws Exception{
-		XMLBuffer xb = new XMLBuffer();
-		xb.openTag("start");
-		assertEquals("<start></start>\n",xb.toString());
-	}
-	
-	public void test2() throws Exception{
-		XMLBuffer xb = new XMLBuffer();
-		xb.tag("start","now");
-		assertEquals("<start>now</start>\n",xb.toString());
-	}
-	public void test3() throws Exception{
-		XMLBuffer xb = new XMLBuffer();
-		xb.openTag("abc");
-		xb.closeTag("abc");
-		assertEquals("<abc></abc>\n",xb.toString());
-	}
-	public void test4() throws Exception{
-		XMLBuffer xb = new XMLBuffer();
-		xb.openTag("abc");
-		try {
-			xb.closeTag("abcd");
-			fail("Should have caused IllegalArgumentException");
-		} catch (IllegalArgumentException e) {
-		}
-	}
+    public void test1() throws Exception{
+        XMLBuffer xb = new XMLBuffer();
+        xb.openTag("start");
+        assertEquals("<start></start>\n",xb.toString());
+    }
+    
+    public void test2() throws Exception{
+        XMLBuffer xb = new XMLBuffer();
+        xb.tag("start","now");
+        assertEquals("<start>now</start>\n",xb.toString());
+    }
+    public void test3() throws Exception{
+        XMLBuffer xb = new XMLBuffer();
+        xb.openTag("abc");
+        xb.closeTag("abc");
+        assertEquals("<abc></abc>\n",xb.toString());
+    }
+    public void test4() throws Exception{
+        XMLBuffer xb = new XMLBuffer();
+        xb.openTag("abc");
+        try {
+            xb.closeTag("abcd");
+            fail("Should have caused IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+        }
+    }
 }

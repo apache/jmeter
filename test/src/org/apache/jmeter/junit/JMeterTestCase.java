@@ -35,87 +35,87 @@ import org.apache.log.Logger;
  * Extend JUnit TestCase to provide common setup
  */
 public abstract class JMeterTestCase extends TestCase {
-	// Used by findTestFile
-	private static final String filePrefix;
+    // Used by findTestFile
+    private static final String filePrefix;
 
-	public JMeterTestCase() {
-		super();
-	}
+    public JMeterTestCase() {
+        super();
+    }
 
-	public JMeterTestCase(String name) {
-		super(name);
-	}
+    public JMeterTestCase(String name) {
+        super(name);
+    }
 
-	/*
-	 * If not running under AllTests.java, make sure that the properties (and
-	 * log file) are set up correctly.
-	 * 
-	 * N.B. In order for this to work correctly, the JUnit test must be started
-	 * in the bin directory, and all the JMeter jars (plus any others needed at
-	 * run-time) need to be on the classpath.
-	 * 
-	 */
-	static {
-		if (JMeterUtils.getJMeterProperties() == null) {
-			String file = "testfiles/jmetertest.properties";
-			File f = new File(file);
-			if (!f.canRead()) {
-				System.out.println("Can't find " + file + " - trying bin directory");
-				file = "bin/" + file;// JMeterUtils assumes Unix-style
-										// separators
-				// Also need to set working directory so test files can be found
-				System.setProperty("user.dir", System.getProperty("user.dir") + File.separatorChar + "bin");
-				System.out.println("Setting user.dir=" + System.getProperty("user.dir"));
-				filePrefix = "bin/";
-			} else {
-				filePrefix = "";
-			}
-			// Used to be done in initializeProperties
-			String home=new File(System.getProperty("user.dir")).getParent();
-			System.out.println("Setting JMeterHome: "+home);
-			JMeterUtils.setJMeterHome(home);
-			JMeterUtils jmu = new JMeterUtils();
-			try {
-				jmu.initializeProperties(file);
-			} catch (MissingResourceException e) {
-				System.out.println("** Can't find resources - continuing anyway **");
-			}
-			logprop("java.version");
+    /*
+     * If not running under AllTests.java, make sure that the properties (and
+     * log file) are set up correctly.
+     * 
+     * N.B. In order for this to work correctly, the JUnit test must be started
+     * in the bin directory, and all the JMeter jars (plus any others needed at
+     * run-time) need to be on the classpath.
+     * 
+     */
+    static {
+        if (JMeterUtils.getJMeterProperties() == null) {
+            String file = "testfiles/jmetertest.properties";
+            File f = new File(file);
+            if (!f.canRead()) {
+                System.out.println("Can't find " + file + " - trying bin directory");
+                file = "bin/" + file;// JMeterUtils assumes Unix-style
+                                        // separators
+                // Also need to set working directory so test files can be found
+                System.setProperty("user.dir", System.getProperty("user.dir") + File.separatorChar + "bin");
+                System.out.println("Setting user.dir=" + System.getProperty("user.dir"));
+                filePrefix = "bin/";
+            } else {
+                filePrefix = "";
+            }
+            // Used to be done in initializeProperties
+            String home=new File(System.getProperty("user.dir")).getParent();
+            System.out.println("Setting JMeterHome: "+home);
+            JMeterUtils.setJMeterHome(home);
+            JMeterUtils jmu = new JMeterUtils();
+            try {
+                jmu.initializeProperties(file);
+            } catch (MissingResourceException e) {
+                System.out.println("** Can't find resources - continuing anyway **");
+            }
+            logprop("java.version");
             logprop("java.vm.name");
-			logprop("java.vendor");
-			logprop("java.home");
-			logprop("user.home");
-			logprop("user.dir");
-			logprop("java.class.version");
-			logprop("os.name");
-			logprop("os.version");
-			logprop("os.arch");
-			logprop("java.class.path");
-			// String cp = System.getProperty("java.class.path");
-			// String cpe[]= JOrphanUtils.split(cp,File.pathSeparator);
-			// System.out.println("java.class.path=");
-			// for (int i=0;i<cpe.length;i++){
-			// System.out.println(cpe[i]);
-			// }
-		} else {
-			filePrefix = "";
-		}
-	}
+            logprop("java.vendor");
+            logprop("java.home");
+            logprop("user.home");
+            logprop("user.dir");
+            logprop("java.class.version");
+            logprop("os.name");
+            logprop("os.version");
+            logprop("os.arch");
+            logprop("java.class.path");
+            // String cp = System.getProperty("java.class.path");
+            // String cpe[]= JOrphanUtils.split(cp,File.pathSeparator);
+            // System.out.println("java.class.path=");
+            // for (int i=0;i<cpe.length;i++){
+            // System.out.println(cpe[i]);
+            // }
+        } else {
+            filePrefix = "";
+        }
+    }
 
-	private static void logprop(String prop) {
-		System.out.println(prop + "=" + System.getProperty(prop));
-	}
+    private static void logprop(String prop) {
+        System.out.println(prop + "=" + System.getProperty(prop));
+    }
 
-	// Helper method to find a file
-	protected static File findTestFile(String file) {
-		File f = new File(file);
-		if (filePrefix.length() > 0 && !f.isAbsolute()) {
-			f = new File(filePrefix + file);// Add the offset
-		}
-		return f;
-	}
+    // Helper method to find a file
+    protected static File findTestFile(String file) {
+        File f = new File(file);
+        if (filePrefix.length() > 0 && !f.isAbsolute()) {
+            f = new File(filePrefix + file);// Add the offset
+        }
+        return f;
+    }
 
-	protected static final Logger testLog = LoggingManager.getLoggerForClass();
+    protected static final Logger testLog = LoggingManager.getLoggerForClass();
 
     protected void checkInvalidParameterCounts(AbstractFunction func, int minimum)
             throws Exception {
