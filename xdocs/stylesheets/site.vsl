@@ -221,6 +221,10 @@ No
 <a href="build-test-plan.html#scoping_rules">$scope.getText()</a>
 #end
 #end
+##
+#macro ( bugzilla $id)
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=$id.getText()">Bug $id.getText()</a>
+#end
 
 #macro (unknown $u_node)
 #if($u_node.getName() == "note")
@@ -245,6 +249,8 @@ No
 #subsection ($u_node)
 #elseif ($u_node.getName().equals("scope"))
 #scope ($u_node)
+#elseif ($node.getName().equals("bugzilla"))
+#bugzilla ($node)
 #else
 #outputTag($u_node)
 #runloop($u_node)
