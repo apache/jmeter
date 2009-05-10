@@ -93,107 +93,107 @@ import org.apache.log.Logger;
  * @see UnitTestManager
  */
 public final class AllTests {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	/**
-	 * Private constructor to prevent instantiation.
-	 */
-	private AllTests() {
-	}
+    /**
+     * Private constructor to prevent instantiation.
+     */
+    private AllTests() {
+    }
 
-	private static void logprop(String prop, boolean show) {
-		String value = System.getProperty(prop);
-		log.info(prop + "=" + value);
-		if (show) {
-			System.out.println(prop + "=" + value);
-		}
-	}
+    private static void logprop(String prop, boolean show) {
+        String value = System.getProperty(prop);
+        log.info(prop + "=" + value);
+        if (show) {
+            System.out.println(prop + "=" + value);
+        }
+    }
 
-	private static void logprop(String prop) {
-		logprop(prop, false);
-	}
+    private static void logprop(String prop) {
+        logprop(prop, false);
+    }
 
-	/**
-	 * Starts a run through all unit tests found in the specified classpaths.
-	 * The first argument should be a list of paths to search. The second
-	 * argument is optional and specifies a properties file used to initialize
-	 * logging. The third argument is also optional, and specifies a class that
-	 * implements the UnitTestManager interface. This provides a means of
-	 * initializing your application with a configuration file prior to the
-	 * start of any unit tests.
-	 * 
-	 * @param args
-	 *            the command line arguments
-	 */
-	public static void main(String[] args) {
-		if (args.length < 1) {
-			System.out.println("You must specify a comma-delimited list of paths to search " + "for unit tests");
-			System.exit(1);
-		}
-		String home=new File(System.getProperty("user.dir")).getParent();
-		System.out.println("Setting JMeterHome: "+home);
-		JMeterUtils.setJMeterHome(home);
-		initializeLogging(args);
-		initializeManager(args);
+    /**
+     * Starts a run through all unit tests found in the specified classpaths.
+     * The first argument should be a list of paths to search. The second
+     * argument is optional and specifies a properties file used to initialize
+     * logging. The third argument is also optional, and specifies a class that
+     * implements the UnitTestManager interface. This provides a means of
+     * initializing your application with a configuration file prior to the
+     * start of any unit tests.
+     * 
+     * @param args
+     *            the command line arguments
+     */
+    public static void main(String[] args) {
+        if (args.length < 1) {
+            System.out.println("You must specify a comma-delimited list of paths to search " + "for unit tests");
+            System.exit(1);
+        }
+        String home=new File(System.getProperty("user.dir")).getParent();
+        System.out.println("Setting JMeterHome: "+home);
+        JMeterUtils.setJMeterHome(home);
+        initializeLogging(args);
+        initializeManager(args);
 
-		log.info("JMeterVersion="+JMeterUtils.getJMeterVersion());
-		logprop("java.version", true);
+        log.info("JMeterVersion="+JMeterUtils.getJMeterVersion());
+        logprop("java.version", true);
         logprop("java.vm.name");
-		logprop("java.vendor");
-		logprop("java.home", true);
-		logprop("user.home");
-		logprop("user.dir", true);
-		logprop("os.name", true);
-		logprop("os.version", true);
-		logprop("os.arch");
-		logprop("java.class.version");
-		// logprop("java.class.path");
-		String cp = System.getProperty("java.class.path");
-		String cpe[] = JOrphanUtils.split(cp, java.io.File.pathSeparator);
-		StringBuffer sb = new StringBuffer(3000);
-		sb.append("java.class.path=");
-		for (int i = 0; i < cpe.length; i++) {
-			sb.append("\n");
-			sb.append(cpe[i]);
-			if (new java.io.File(cpe[i]).exists()) {
-				sb.append(" - OK");
-			} else {
-				sb.append(" - ??");
-			}
-		}
-		log.info(sb.toString());
+        logprop("java.vendor");
+        logprop("java.home", true);
+        logprop("user.home");
+        logprop("user.dir", true);
+        logprop("os.name", true);
+        logprop("os.version", true);
+        logprop("os.arch");
+        logprop("java.class.version");
+        // logprop("java.class.path");
+        String cp = System.getProperty("java.class.path");
+        String cpe[] = JOrphanUtils.split(cp, java.io.File.pathSeparator);
+        StringBuffer sb = new StringBuffer(3000);
+        sb.append("java.class.path=");
+        for (int i = 0; i < cpe.length; i++) {
+            sb.append("\n");
+            sb.append(cpe[i]);
+            if (new java.io.File(cpe[i]).exists()) {
+                sb.append(" - OK");
+            } else {
+                sb.append(" - ??");
+            }
+        }
+        log.info(sb.toString());
 
-		// ++
-		// GUI tests throw the error
-		// testArgumentCreation(org.apache.jmeter.config.gui.ArgumentsPanel$Test)java.lang.NoClassDefFoundError
-		// at java.lang.Class.forName0(Native Method)
-		// at java.lang.Class.forName(Class.java:141)
-		// at
-		// java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment(GraphicsEnvironment.java:62)
-		//
-		// Try to find out why this is ...
+        // ++
+        // GUI tests throw the error
+        // testArgumentCreation(org.apache.jmeter.config.gui.ArgumentsPanel$Test)java.lang.NoClassDefFoundError
+        // at java.lang.Class.forName0(Native Method)
+        // at java.lang.Class.forName(Class.java:141)
+        // at
+        // java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment(GraphicsEnvironment.java:62)
+        //
+        // Try to find out why this is ...
 
-		System.out.println("+++++++++++");
-		logprop("java.awt.headless", true);
-		logprop("java.awt.graphicsenv", true);
-		//
-		// try {//
-		// Class c = Class.forName(n);
-		// System.out.println("Found class: "+n);
-		// // c.newInstance();
-		// // System.out.println("Instantiated: "+n);
-		// } catch (Exception e1) {
-		// System.out.println("Error finding class "+n+" "+e1);
-		// } catch (java.lang.InternalError e1){
-		// System.out.println("Error finding class "+n+" "+e1);
-		// }
-		//
-		System.out.println("------------");
-		// don't call isHeadless() here, as it has a side effect.
-		// --
-		System.out.println("Creating test suite");
-		TestSuite suite = suite(args[0]);
-		int countTestCases = suite.countTestCases();
+        System.out.println("+++++++++++");
+        logprop("java.awt.headless", true);
+        logprop("java.awt.graphicsenv", true);
+        //
+        // try {//
+        // Class c = Class.forName(n);
+        // System.out.println("Found class: "+n);
+        // // c.newInstance();
+        // // System.out.println("Instantiated: "+n);
+        // } catch (Exception e1) {
+        // System.out.println("Error finding class "+n+" "+e1);
+        // } catch (java.lang.InternalError e1){
+        // System.out.println("Error finding class "+n+" "+e1);
+        // }
+        //
+        System.out.println("------------");
+        // don't call isHeadless() here, as it has a side effect.
+        // --
+        System.out.println("Creating test suite");
+        TestSuite suite = suite(args[0]);
+        int countTestCases = suite.countTestCases();
         System.out.println("Starting test run, test count = "+countTestCases);
 //        for (int i=0;i<suite.testCount();i++){
 //           Test testAt = suite.testAt(i);
@@ -209,154 +209,154 @@ public final class AllTests {
 //            }                
 //        }
         
-		// Jeremy Arnold: This method used to attempt to write results to
-		// a file, but it had a bug and instead just wrote to System.out.
-		// Since nobody has complained about this behavior, I'm changing
-		// the code to not attempt to write to a file, so it will continue
-		// behaving as it did before. It would be simple to make it write
-		// to a file instead if that is the desired behavior.
-		TestRunner.run(suite);
-		// ++
-		// Recheck settings:
-		//System.out.println("+++++++++++");
-		// System.out.println(e+"="+System.getProperty(e));
-		// System.out.println(g+"="+System.getProperty(g));
-		// System.out.println("Headless?
-		// "+java.awt.GraphicsEnvironment.isHeadless());//JDK 1.4
-		// try {
-		// Class c = Class.forName(n);
-		// System.out.println("Found class: "+n);
-		// c.newInstance();
-		// System.out.println("Instantiated: "+n);
-		// } catch (Exception e1) {
-		// System.out.println("Error with class "+n+" "+e1);
-		// } catch (java.lang.InternalError e1){
-		// System.out.println("Error with class "+n+" "+e1);
-		// }
-		//System.out.println("------------");
-		// --
-		System.exit(0); // this is needed because the test may start the AWT EventQueue thread which is not a daemon.
-	}
+        // Jeremy Arnold: This method used to attempt to write results to
+        // a file, but it had a bug and instead just wrote to System.out.
+        // Since nobody has complained about this behavior, I'm changing
+        // the code to not attempt to write to a file, so it will continue
+        // behaving as it did before. It would be simple to make it write
+        // to a file instead if that is the desired behavior.
+        TestRunner.run(suite);
+        // ++
+        // Recheck settings:
+        //System.out.println("+++++++++++");
+        // System.out.println(e+"="+System.getProperty(e));
+        // System.out.println(g+"="+System.getProperty(g));
+        // System.out.println("Headless?
+        // "+java.awt.GraphicsEnvironment.isHeadless());//JDK 1.4
+        // try {
+        // Class c = Class.forName(n);
+        // System.out.println("Found class: "+n);
+        // c.newInstance();
+        // System.out.println("Instantiated: "+n);
+        // } catch (Exception e1) {
+        // System.out.println("Error with class "+n+" "+e1);
+        // } catch (java.lang.InternalError e1){
+        // System.out.println("Error with class "+n+" "+e1);
+        // }
+        //System.out.println("------------");
+        // --
+        System.exit(0); // this is needed because the test may start the AWT EventQueue thread which is not a daemon.
+    }
 
-	/**
-	 * An overridable method that initializes the logging for the unit test run,
-	 * using the properties file passed in as the second argument.
-	 * 
-	 * @param args
-	 */
-	protected static void initializeLogging(String[] args) {
-		if (args.length >= 2) {
-			Properties props = new Properties();
-			try {
-				System.out.println("Setting up logging props using file: " + args[1]);
-				props.load(new FileInputStream(args[1]));
-				LoggingManager.initializeLogging(props);
-			} catch (FileNotFoundException e) {
-				System.out.println(e.getLocalizedMessage());
-			} catch (IOException e) {
-				System.out.println(e.getLocalizedMessage());
-			}
-		}
-	}
+    /**
+     * An overridable method that initializes the logging for the unit test run,
+     * using the properties file passed in as the second argument.
+     * 
+     * @param args
+     */
+    protected static void initializeLogging(String[] args) {
+        if (args.length >= 2) {
+            Properties props = new Properties();
+            try {
+                System.out.println("Setting up logging props using file: " + args[1]);
+                props.load(new FileInputStream(args[1]));
+                LoggingManager.initializeLogging(props);
+            } catch (FileNotFoundException e) {
+                System.out.println(e.getLocalizedMessage());
+            } catch (IOException e) {
+                System.out.println(e.getLocalizedMessage());
+            }
+        }
+    }
 
-	/**
-	 * An overridable method that that instantiates a UnitTestManager (if one
-	 * was specified in the command-line arguments), and hands it the name of
-	 * the properties file to use to configure the system.
-	 * 
-	 * @param args
-	 */
-	protected static void initializeManager(String[] args) {
-		if (args.length >= 3) {
-			try {
-				System.out.println("Using initializeProperties() from " + args[2]);
-				UnitTestManager um = (UnitTestManager) Class.forName(args[2]).newInstance();
-				System.out.println("Setting up initial properties using: " + args[1]);
-				um.initializeProperties(args[1]);
-			} catch (ClassNotFoundException e) {
-				System.out.println("Couldn't create: " + args[2]);
-				e.printStackTrace();
-			} catch (InstantiationException e) {
-				System.out.println("Couldn't create: " + args[2]);
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				System.out.println("Couldn't create: " + args[2]);
-				e.printStackTrace();
-			}
-		}
-	}
+    /**
+     * An overridable method that that instantiates a UnitTestManager (if one
+     * was specified in the command-line arguments), and hands it the name of
+     * the properties file to use to configure the system.
+     * 
+     * @param args
+     */
+    protected static void initializeManager(String[] args) {
+        if (args.length >= 3) {
+            try {
+                System.out.println("Using initializeProperties() from " + args[2]);
+                UnitTestManager um = (UnitTestManager) Class.forName(args[2]).newInstance();
+                System.out.println("Setting up initial properties using: " + args[1]);
+                um.initializeProperties(args[1]);
+            } catch (ClassNotFoundException e) {
+                System.out.println("Couldn't create: " + args[2]);
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                System.out.println("Couldn't create: " + args[2]);
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                System.out.println("Couldn't create: " + args[2]);
+                e.printStackTrace();
+            }
+        }
+    }
 
-	/*
-	 * Externally callable suite() method for use by JUnit Allows tests to be
-	 * run directly under JUnit, rather than using the startup code in the rest
-	 * of the module. No parameters can be passed in, so it is less flexible.
-	 */
-	public static TestSuite suite() {
-		String args[] = { "../lib/ext", "./jmetertest.properties", "org.apache.jmeter.util.JMeterUtils" };
+    /*
+     * Externally callable suite() method for use by JUnit Allows tests to be
+     * run directly under JUnit, rather than using the startup code in the rest
+     * of the module. No parameters can be passed in, so it is less flexible.
+     */
+    public static TestSuite suite() {
+        String args[] = { "../lib/ext", "./jmetertest.properties", "org.apache.jmeter.util.JMeterUtils" };
 
-		initializeManager(args);
-		return suite(args[0]);
-	}
+        initializeManager(args);
+        return suite(args[0]);
+    }
 
-	/**
-	 * A unit test suite for JUnit.
-	 * 
-	 * @return The test suite
-	 */
-	private static TestSuite suite(String searchPaths) {
-		TestSuite suite = new TestSuite("All Tests");
+    /**
+     * A unit test suite for JUnit.
+     * 
+     * @return The test suite
+     */
+    private static TestSuite suite(String searchPaths) {
+        TestSuite suite = new TestSuite("All Tests");
         System.out.println("Scanning "+searchPaths+ " for test cases");
-		int tests=0;
-		int suites=0;
-		try {
+        int tests=0;
+        int suites=0;
+        try {
             log.info("ClassFinder(TestCase)");
-			List classList = ClassFinder.findClassesThatExtend(JOrphanUtils.split(searchPaths, ","),
-					new Class[] { TestCase.class }, true);
-			int sz=classList.size();
+            List classList = ClassFinder.findClassesThatExtend(JOrphanUtils.split(searchPaths, ","),
+                    new Class[] { TestCase.class }, true);
+            int sz=classList.size();
             log.info("ClassFinder(TestCase) found: "+sz+ " TestCase classes");
-			System.out.println("ClassFinder found: "+sz+ " TestCase classes");
-			Iterator classes = classList.iterator();
-			while (classes.hasNext()) {
-				String name = (String) classes.next();
-				try {
-					/*
-					 * TestSuite only finds testXXX() methods, and does not look
-					 * for suite() methods.
-					 * 
-					 * To provide more compatibilty with stand-alone tests,
-					 * where JUnit does look for a suite() method, check for it
-					 * first here.
-					 * 
-					 */
+            System.out.println("ClassFinder found: "+sz+ " TestCase classes");
+            Iterator classes = classList.iterator();
+            while (classes.hasNext()) {
+                String name = (String) classes.next();
+                try {
+                    /*
+                     * TestSuite only finds testXXX() methods, and does not look
+                     * for suite() methods.
+                     * 
+                     * To provide more compatibilty with stand-alone tests,
+                     * where JUnit does look for a suite() method, check for it
+                     * first here.
+                     * 
+                     */
 
-					Class clazz = Class.forName(name);
-					Test t = null;
-					try {
-						Method m = clazz.getMethod("suite", new Class[0]);
-						t = (Test) m.invoke(clazz, null);
-						suites++;
-					} catch (NoSuchMethodException e) {
-					} // this is not an error, the others are
-					// catch (SecurityException e) {}
-					// catch (IllegalAccessException e) {}
-					// catch (IllegalArgumentException e) {}
-					// catch (InvocationTargetException e) {}
+                    Class clazz = Class.forName(name);
+                    Test t = null;
+                    try {
+                        Method m = clazz.getMethod("suite", new Class[0]);
+                        t = (Test) m.invoke(clazz, null);
+                        suites++;
+                    } catch (NoSuchMethodException e) {
+                    } // this is not an error, the others are
+                    // catch (SecurityException e) {}
+                    // catch (IllegalAccessException e) {}
+                    // catch (IllegalArgumentException e) {}
+                    // catch (InvocationTargetException e) {}
 
-					if (t == null) {
-						t = new TestSuite(clazz);
-					}
+                    if (t == null) {
+                        t = new TestSuite(clazz);
+                    }
 
-					tests++;
-					suite.addTest(t);
-				} catch (Exception ex) {
-					System.out.println("Error adding test for class " + name + " " + ex.toString());
-					log.error("error adding test :", ex);
-				}
-			}
-		} catch (IOException e) {
-			log.error("", e);
-		}
-		System.out.println("Created: "+tests+" tests including "+suites+" suites");
-		return suite;
-	}
+                    tests++;
+                    suite.addTest(t);
+                } catch (Exception ex) {
+                    System.out.println("Error adding test for class " + name + " " + ex.toString());
+                    log.error("error adding test :", ex);
+                }
+            }
+        } catch (IOException e) {
+            log.error("", e);
+        }
+        System.out.println("Created: "+tests+" tests including "+suites+" suites");
+        return suite;
+    }
 }

@@ -26,53 +26,53 @@ public class TestObjectFactory extends TestCase {
     public void testSomething() throws Exception{
         
     }
-	/**
-	 * Basic method for testing the class
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		if (args != null && args.length == 2) {
-			String file = null;
-			// int count = 1;
-			if (args[0] != null) {
-				file = args[0];
-			}
-			if (args[1] != null) {
-				// count = Integer.parseInt(args[1]);
-			}
-			try {
-				ObjectFactory of = ObjectFactory.getInstance();
-				java.io.File infile = new java.io.File(file);
-				java.io.FileInputStream fis = new java.io.FileInputStream(infile);
-				java.io.InputStreamReader isr = new java.io.InputStreamReader(fis);
-				StringBuffer buf = new StringBuffer();
-				java.io.BufferedReader br = new java.io.BufferedReader(isr);
-				String line = null;
-				while ((line = br.readLine()) != null) {
-					buf.append(line);
-				}
-				System.out.println("contents: ");
-				System.out.println(buf.toString());
-				System.out.println("----------------------");
-				Status st = of.parseBytes(buf.toString().getBytes());
-				if (st == null) {
-					System.out.println("parse failed");
-				} else {
-					System.out.println("parse successful:");
-					System.out.println(st.getJvm().getMemory().getFree());
-					System.out.println(st.getJvm().getMemory().getTotal());
-					System.out.println(st.getJvm().getMemory().getMax());
-					System.out.println("connector size: " + st.getConnector().size());
-					Connector conn = (Connector) st.getConnector().get(0);
-					System.out.println("conn: " + conn.getThreadInfo().getMaxThreads());
-				}
-			} catch (java.io.FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (java.io.IOException e) {
-				e.printStackTrace();
-			}
-		} else {
-		}
-	}
+    /**
+     * Basic method for testing the class
+     * 
+     * @param args
+     */
+    public static void main(String[] args) {
+        if (args != null && args.length == 2) {
+            String file = null;
+            // int count = 1;
+            if (args[0] != null) {
+                file = args[0];
+            }
+            if (args[1] != null) {
+                // count = Integer.parseInt(args[1]);
+            }
+            try {
+                ObjectFactory of = ObjectFactory.getInstance();
+                java.io.File infile = new java.io.File(file);
+                java.io.FileInputStream fis = new java.io.FileInputStream(infile);
+                java.io.InputStreamReader isr = new java.io.InputStreamReader(fis);
+                StringBuffer buf = new StringBuffer();
+                java.io.BufferedReader br = new java.io.BufferedReader(isr);
+                String line = null;
+                while ((line = br.readLine()) != null) {
+                    buf.append(line);
+                }
+                System.out.println("contents: ");
+                System.out.println(buf.toString());
+                System.out.println("----------------------");
+                Status st = of.parseBytes(buf.toString().getBytes());
+                if (st == null) {
+                    System.out.println("parse failed");
+                } else {
+                    System.out.println("parse successful:");
+                    System.out.println(st.getJvm().getMemory().getFree());
+                    System.out.println(st.getJvm().getMemory().getTotal());
+                    System.out.println(st.getJvm().getMemory().getMax());
+                    System.out.println("connector size: " + st.getConnector().size());
+                    Connector conn = (Connector) st.getConnector().get(0);
+                    System.out.println("conn: " + conn.getThreadInfo().getMaxThreads());
+                }
+            } catch (java.io.FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (java.io.IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+        }
+    }
 }

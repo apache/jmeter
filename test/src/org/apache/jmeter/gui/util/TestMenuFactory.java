@@ -22,32 +22,32 @@ import org.apache.jmeter.junit.JMeterTestCase;
 
 public final class TestMenuFactory extends JMeterTestCase {
 
-		public TestMenuFactory() {
-			super();
-		}
+        public TestMenuFactory() {
+            super();
+        }
 
-		public TestMenuFactory(String name) {
-			super(name);
-		}
+        public TestMenuFactory(String name) {
+            super(name);
+        }
 
-		private static void check(String s, int i) throws Exception {
-			assertFalse("The number of " + s + " should not be 0", 0 == i);
-		}
+        private static void check(String s, int i) throws Exception {
+            assertFalse("The number of " + s + " should not be 0", 0 == i);
+        }
 
-		public void testMenu() throws Exception {
-			check("menumap", MenuFactory.menuMap_size());
+        public void testMenu() throws Exception {
+            check("menumap", MenuFactory.menuMap_size());
 
-			check("assertions", MenuFactory.assertions_size());
-			check("configElements", MenuFactory.configElements_size());
-			check("controllers", MenuFactory.controllers_size());
-			check("listeners", MenuFactory.listeners_size());
-			check("nonTestElements", MenuFactory.nonTestElements_size());
-			check("postProcessors", MenuFactory.postProcessors_size());
-			check("preProcessors", MenuFactory.preProcessors_size());
-			check("samplers", MenuFactory.samplers_size());
-			check("timers", MenuFactory.timers_size());
+            check("assertions", MenuFactory.assertions_size());
+            check("configElements", MenuFactory.configElements_size());
+            check("controllers", MenuFactory.controllers_size());
+            check("listeners", MenuFactory.listeners_size());
+            check("nonTestElements", MenuFactory.nonTestElements_size());
+            check("postProcessors", MenuFactory.postProcessors_size());
+            check("preProcessors", MenuFactory.preProcessors_size());
+            check("samplers", MenuFactory.samplers_size());
+            check("timers", MenuFactory.timers_size());
 
-			check("elementstoskip", MenuFactory.elementsToSkip_size());
+            check("elementstoskip", MenuFactory.elementsToSkip_size());
 
-		}
+        }
 }

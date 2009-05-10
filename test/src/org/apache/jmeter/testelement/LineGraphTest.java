@@ -27,14 +27,14 @@ import org.apache.log.Logger;
 
 public class LineGraphTest extends JMeterTestCase {
 
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	/**
-	 * @param arg0
-	 */
-	public LineGraphTest(String arg0) {
-		super(arg0);
-	}
+    /**
+     * @param arg0
+     */
+    public LineGraphTest(String arg0) {
+        super(arg0);
+    }
 
     public void testGenerateLineChart() {
         log.info("jtl version=" + JMeterUtils.getProperty("file_format.testlog"));
