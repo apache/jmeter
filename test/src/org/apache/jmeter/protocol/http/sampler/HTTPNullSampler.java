@@ -26,14 +26,14 @@ import java.net.URL;
  */
 public final class HTTPNullSampler extends HTTPSamplerBase {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase#sample(java.net.URL,
-	 *      java.lang.String, boolean, int)
-	 */
-	protected HTTPSampleResult sample(URL u, String s, boolean b, int i) {
-		throw new UnsupportedOperationException("For test purposes only");
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase#sample(java.net.URL,
+     *      java.lang.String, boolean, int)
+     */
+    protected HTTPSampleResult sample(URL u, String s, boolean b, int i) {
+        throw new UnsupportedOperationException("For test purposes only");
+    }
 
 }

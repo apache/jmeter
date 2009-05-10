@@ -29,52 +29,52 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 
 public class TestRegexFunction extends JMeterTestCase {
-		private static final String INPUT_VARIABLE_NAME = "INVAR";
+        private static final String INPUT_VARIABLE_NAME = "INVAR";
 
         RegexFunction variable;
 
-		SampleResult result;
+        SampleResult result;
 
-		Collection params;
+        Collection params;
 
-		private JMeterVariables vars;
+        private JMeterVariables vars;
 
-		private JMeterContext jmctx = null;
+        private JMeterContext jmctx = null;
 
-		public TestRegexFunction(String name) {
-			super(name);
-		}
+        public TestRegexFunction(String name) {
+            super(name);
+        }
 
-		public void setUp() {
-			variable = new RegexFunction();
-			result = new SampleResult();
-			jmctx = JMeterContextService.getContext();
-			String data = "<company-xmlext-query-ret><row>" + "<value field=\"RetCode\">" + "LIS_OK</value><value"
-					+ " field=\"RetCodeExtension\"></value>" + "<value field=\"alias\"></value><value"
-					+ " field=\"positioncount\"></value>" + "<value field=\"invalidpincount\">0</value><value"
-					+ " field=\"pinposition1\">1</value><value" + " field=\"pinpositionvalue1\"></value><value"
-					+ " field=\"pinposition2\">5</value><value" + " field=\"pinpositionvalue2\"></value><value"
-					+ " field=\"pinposition3\">6</value><value" + " field=\"pinpositionvalue3\"></value>"
-					+ "</row></company-xmlext-query-ret>";
-			result.setResponseData(data.getBytes());
-			vars = new JMeterVariables();
-			String data2 = "The quick brown fox jumped over the lazy dog 123 times";
-			vars.put(INPUT_VARIABLE_NAME, data2);
-			jmctx.setVariables(vars);
-			jmctx.setPreviousResult(result);
-		}
+        public void setUp() {
+            variable = new RegexFunction();
+            result = new SampleResult();
+            jmctx = JMeterContextService.getContext();
+            String data = "<company-xmlext-query-ret><row>" + "<value field=\"RetCode\">" + "LIS_OK</value><value"
+                    + " field=\"RetCodeExtension\"></value>" + "<value field=\"alias\"></value><value"
+                    + " field=\"positioncount\"></value>" + "<value field=\"invalidpincount\">0</value><value"
+                    + " field=\"pinposition1\">1</value><value" + " field=\"pinpositionvalue1\"></value><value"
+                    + " field=\"pinposition2\">5</value><value" + " field=\"pinpositionvalue2\"></value><value"
+                    + " field=\"pinposition3\">6</value><value" + " field=\"pinpositionvalue3\"></value>"
+                    + "</row></company-xmlext-query-ret>";
+            result.setResponseData(data.getBytes());
+            vars = new JMeterVariables();
+            String data2 = "The quick brown fox jumped over the lazy dog 123 times";
+            vars.put(INPUT_VARIABLE_NAME, data2);
+            jmctx.setVariables(vars);
+            jmctx.setPreviousResult(result);
+        }
 
-		public void testVariableExtraction() throws Exception {
-			params = new LinkedList();
-			params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
-			params.add(new CompoundVariable("$2$"));
-			params.add(new CompoundVariable("2"));
-			variable.setParameters(params);
-			String match = variable.execute(result, null);
-			assertEquals("5", match);
-		}
+        public void testVariableExtraction() throws Exception {
+            params = new LinkedList();
+            params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
+            params.add(new CompoundVariable("$2$"));
+            params.add(new CompoundVariable("2"));
+            variable.setParameters(params);
+            String match = variable.execute(result, null);
+            assertEquals("5", match);
+        }
 
-		// Test with output variable name
+        // Test with output variable name
         public void testVariableExtraction1a() throws Exception {
             params = new LinkedList();
             params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
@@ -279,78 +279,78 @@ public class TestRegexFunction extends JMeterTestCase {
             assertEquals("times", vars.getObject("OUTVAR_g2"));
         }
 
-		public void testVariableExtraction2() throws Exception {
-			params = new LinkedList();
-			params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
-			params.add(new CompoundVariable("$1$"));
-			params.add(new CompoundVariable("3"));
-			variable.setParameters(params);
-			String match = variable.execute(result, null);
-			assertEquals("pinposition3", match);
-		}
+        public void testVariableExtraction2() throws Exception {
+            params = new LinkedList();
+            params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
+            params.add(new CompoundVariable("$1$"));
+            params.add(new CompoundVariable("3"));
+            variable.setParameters(params);
+            String match = variable.execute(result, null);
+            assertEquals("pinposition3", match);
+        }
 
-		public void testVariableExtraction5() throws Exception {
-			params = new LinkedList();
-			params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
-			params.add(new CompoundVariable("$1$"));
-			params.add(new CompoundVariable("ALL"));
-			params.add(new CompoundVariable("_"));
-			variable.setParameters(params);
-			String match = variable.execute(result, null);
-			assertEquals("pinposition1_pinposition2_pinposition3", match);
-		}
+        public void testVariableExtraction5() throws Exception {
+            params = new LinkedList();
+            params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
+            params.add(new CompoundVariable("$1$"));
+            params.add(new CompoundVariable("ALL"));
+            params.add(new CompoundVariable("_"));
+            variable.setParameters(params);
+            String match = variable.execute(result, null);
+            assertEquals("pinposition1_pinposition2_pinposition3", match);
+        }
 
-		public void testVariableExtraction6() throws Exception {
-			params = new LinkedList();
-			params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
-			params.add(new CompoundVariable("$2$"));
-			params.add(new CompoundVariable("4"));
-			params.add(new CompoundVariable(""));
-			params.add(new CompoundVariable("default"));
-			variable.setParameters(params);
-			String match = variable.execute(result, null);
-			assertEquals("default", match);
-		}
+        public void testVariableExtraction6() throws Exception {
+            params = new LinkedList();
+            params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
+            params.add(new CompoundVariable("$2$"));
+            params.add(new CompoundVariable("4"));
+            params.add(new CompoundVariable(""));
+            params.add(new CompoundVariable("default"));
+            variable.setParameters(params);
+            String match = variable.execute(result, null);
+            assertEquals("default", match);
+        }
 
-		public void testComma() throws Exception {
-			params = new LinkedList();
-			params.add(new CompoundVariable("<value,? field=\"(pinposition\\d+)\">(\\d+)</value>"));
-			params.add(new CompoundVariable("$1$"));
-			params.add(new CompoundVariable("3"));
-			variable.setParameters(params);
-			String match = variable.execute(result, null);
-			assertEquals("pinposition3", match);
-		}
+        public void testComma() throws Exception {
+            params = new LinkedList();
+            params.add(new CompoundVariable("<value,? field=\"(pinposition\\d+)\">(\\d+)</value>"));
+            params.add(new CompoundVariable("$1$"));
+            params.add(new CompoundVariable("3"));
+            variable.setParameters(params);
+            String match = variable.execute(result, null);
+            assertEquals("pinposition3", match);
+        }
 
-		public void testVariableExtraction3() throws Exception {
-			params = new LinkedList();
-			params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
-			params.add(new CompoundVariable("_$1$"));
-			params.add(new CompoundVariable("2"));
-			variable.setParameters(params);
-			String match = variable.execute(result, null);
-			assertEquals("_pinposition2", match);
-		}
+        public void testVariableExtraction3() throws Exception {
+            params = new LinkedList();
+            params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
+            params.add(new CompoundVariable("_$1$"));
+            params.add(new CompoundVariable("2"));
+            variable.setParameters(params);
+            String match = variable.execute(result, null);
+            assertEquals("_pinposition2", match);
+        }
 
-		public void testVariableExtraction4() throws Exception {
-			params = new LinkedList();
-			params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
-			params.add(new CompoundVariable("$2$, "));
-			params.add(new CompoundVariable(".333"));
-			variable.setParameters(params);
-			String match = variable.execute(result, null);
-			assertEquals("1, ", match);
-		}
+        public void testVariableExtraction4() throws Exception {
+            params = new LinkedList();
+            params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
+            params.add(new CompoundVariable("$2$, "));
+            params.add(new CompoundVariable(".333"));
+            variable.setParameters(params);
+            String match = variable.execute(result, null);
+            assertEquals("1, ", match);
+        }
 
-		public void testDefaultValue() throws Exception {
-			params = new LinkedList();
-			params.add(new CompoundVariable("<value,, field=\"(pinposition\\d+)\">(\\d+)</value>"));
-			params.add(new CompoundVariable("$2$, "));
-			params.add(new CompoundVariable(".333"));
-			params.add(new CompoundVariable(""));
-			params.add(new CompoundVariable("No Value Found"));
-			variable.setParameters(params);
-			String match = variable.execute(result, null);
-			assertEquals("No Value Found", match);
-		}
+        public void testDefaultValue() throws Exception {
+            params = new LinkedList();
+            params.add(new CompoundVariable("<value,, field=\"(pinposition\\d+)\">(\\d+)</value>"));
+            params.add(new CompoundVariable("$2$, "));
+            params.add(new CompoundVariable(".333"));
+            params.add(new CompoundVariable(""));
+            params.add(new CompoundVariable("No Value Found"));
+            variable.setParameters(params);
+            String match = variable.execute(result, null);
+            assertEquals("No Value Found", match);
+        }
 }

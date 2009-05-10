@@ -18,33 +18,33 @@ package org.apache.jmeter.testbeans.gui;
 
 
 public class TestFieldStringEditor extends junit.framework.TestCase {
-		public TestFieldStringEditor(String name) {
-			super(name);
-		}
+        public TestFieldStringEditor(String name) {
+            super(name);
+        }
 
-		private void testSetGet(ComboStringEditor e, Object value) throws Exception {
-			e.setValue(value);
-			assertEquals(value, e.getValue());
-		}
+        private void testSetGet(ComboStringEditor e, Object value) throws Exception {
+            e.setValue(value);
+            assertEquals(value, e.getValue());
+        }
 
-		private void testSetGetAsText(ComboStringEditor e, String text) throws Exception {
-			e.setAsText(text);
-			assertEquals(text, e.getAsText());
-		}
+        private void testSetGetAsText(ComboStringEditor e, String text) throws Exception {
+            e.setAsText(text);
+            assertEquals(text, e.getAsText());
+        }
 
-		public void testSetGet() throws Exception {
-			ComboStringEditor e = new ComboStringEditor();
+        public void testSetGet() throws Exception {
+            ComboStringEditor e = new ComboStringEditor();
 
-			testSetGet(e, "any string");
-			testSetGet(e, "");
-			testSetGet(e, "${var}");
-		}
+            testSetGet(e, "any string");
+            testSetGet(e, "");
+            testSetGet(e, "${var}");
+        }
 
-		public void testSetGetAsText() throws Exception {
-			ComboStringEditor e = new ComboStringEditor();
+        public void testSetGetAsText() throws Exception {
+            ComboStringEditor e = new ComboStringEditor();
 
-			testSetGetAsText(e, "any string");
-			testSetGetAsText(e, "");
-			testSetGetAsText(e, "${var}");
-		}
+            testSetGetAsText(e, "any string");
+            testSetGetAsText(e, "");
+            testSetGetAsText(e, "${var}");
+        }
 }

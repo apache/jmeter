@@ -30,44 +30,44 @@ import org.apache.jmeter.samplers.SampleResult;
 
 public class TestSampler extends AbstractSampler {
 
-	private long wait = 0;
+    private long wait = 0;
 
-	private long samples = 0; // number of samples taken
+    private long samples = 0; // number of samples taken
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.samplers.Sampler#sample(org.apache.jmeter.samplers.Entry)
-	 */
-	public SampleResult sample(Entry e) {
-		if (wait > 0) {
-			try {
-				Thread.sleep(wait);
-			} catch (InterruptedException e1) {
-				// ignore
-			}
-		}
-		samples++;
-		return null;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.jmeter.samplers.Sampler#sample(org.apache.jmeter.samplers.Entry)
+     */
+    public SampleResult sample(Entry e) {
+        if (wait > 0) {
+            try {
+                Thread.sleep(wait);
+            } catch (InterruptedException e1) {
+                // ignore
+            }
+        }
+        samples++;
+        return null;
+    }
 
-	public TestSampler(String name, long wait) {
-		setName(name);
-		this.wait = wait;
-	}
+    public TestSampler(String name, long wait) {
+        setName(name);
+        this.wait = wait;
+    }
 
-	public TestSampler(String name) {
-		setName(name);
-	}
+    public TestSampler(String name) {
+        setName(name);
+    }
 
-	public TestSampler() {
-	}
+    public TestSampler() {
+    }
 
-	public String toString() {
-		return getName();
-	}
+    public String toString() {
+        return getName();
+    }
 
-	public long getSamples() {
-		return samples;
-	}
+    public long getSamples() {
+        return samples;
+    }
 }

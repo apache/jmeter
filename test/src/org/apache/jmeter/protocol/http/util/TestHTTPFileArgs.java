@@ -25,94 +25,94 @@ import junit.framework.TestCase;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 
 public class TestHTTPFileArgs extends TestCase {
-	public TestHTTPFileArgs(String name) {
-		super(name);
-	}
+    public TestHTTPFileArgs(String name) {
+        super(name);
+    }
 
-	public void testConstructors() throws Exception {
-		HTTPFileArgs files = new HTTPFileArgs();
-		assertEquals(0, files.getHTTPFileArgCount());
-	}
+    public void testConstructors() throws Exception {
+        HTTPFileArgs files = new HTTPFileArgs();
+        assertEquals(0, files.getHTTPFileArgCount());
+    }
 
-	public void testAdding() throws Exception {
-		HTTPFileArgs files = new HTTPFileArgs();
-		assertEquals(0, files.getHTTPFileArgCount());
-		files.addHTTPFileArg("hede");
-		assertEquals(1, files.getHTTPFileArgCount());
-		assertEquals("hede", ((HTTPFileArg) files.iterator().next().getObjectValue()).getPath());
-		HTTPFileArg file = new HTTPFileArg("hodo");
-		files.addHTTPFileArg(file);
-		assertEquals(2, files.getHTTPFileArgCount());
-		PropertyIterator iter = files.iterator();
-		assertEquals("hede", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
-		assertEquals("hodo", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
-		files.addEmptyHTTPFileArg();
-		assertEquals(3, files.getHTTPFileArgCount());
-		iter = files.iterator();
-		assertEquals("hede", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
-		assertEquals("hodo", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
-		assertEquals("", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
-	}
+    public void testAdding() throws Exception {
+        HTTPFileArgs files = new HTTPFileArgs();
+        assertEquals(0, files.getHTTPFileArgCount());
+        files.addHTTPFileArg("hede");
+        assertEquals(1, files.getHTTPFileArgCount());
+        assertEquals("hede", ((HTTPFileArg) files.iterator().next().getObjectValue()).getPath());
+        HTTPFileArg file = new HTTPFileArg("hodo");
+        files.addHTTPFileArg(file);
+        assertEquals(2, files.getHTTPFileArgCount());
+        PropertyIterator iter = files.iterator();
+        assertEquals("hede", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
+        assertEquals("hodo", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
+        files.addEmptyHTTPFileArg();
+        assertEquals(3, files.getHTTPFileArgCount());
+        iter = files.iterator();
+        assertEquals("hede", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
+        assertEquals("hodo", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
+        assertEquals("", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
+    }
 
-	public void testSetHTTPFileArgs() throws Exception {
-		List newHTTPFileArgs = new LinkedList();
-		newHTTPFileArgs.add(new HTTPFileArg("hede"));
-		HTTPFileArgs files = new HTTPFileArgs();
-		files.setHTTPFileArgs(newHTTPFileArgs);
-		assertEquals(1, files.getHTTPFileArgCount());
-		assertEquals("hede", ((HTTPFileArg) files.iterator().next().getObjectValue()).getPath());
-	}
+    public void testSetHTTPFileArgs() throws Exception {
+        List newHTTPFileArgs = new LinkedList();
+        newHTTPFileArgs.add(new HTTPFileArg("hede"));
+        HTTPFileArgs files = new HTTPFileArgs();
+        files.setHTTPFileArgs(newHTTPFileArgs);
+        assertEquals(1, files.getHTTPFileArgCount());
+        assertEquals("hede", ((HTTPFileArg) files.iterator().next().getObjectValue()).getPath());
+    }
 
-	public void testRemoving() throws Exception {
-		HTTPFileArgs files = new HTTPFileArgs();
-		assertEquals(0, files.getHTTPFileArgCount());
-		files.addHTTPFileArg("hede");
-		assertEquals(1, files.getHTTPFileArgCount());
-		files.clear();
-		assertEquals(0, files.getHTTPFileArgCount());
-		files.addHTTPFileArg("file1");
-		files.addHTTPFileArg("file2");
-		files.addHTTPFileArg("file3");
-		HTTPFileArg file = new HTTPFileArg("file4");
-		files.addHTTPFileArg(file);
-		files.addHTTPFileArg("file5");
-		files.addHTTPFileArg("file6");
-		assertEquals(6, files.getHTTPFileArgCount());
-		files.removeHTTPFileArg("file3");
-		assertEquals(5, files.getHTTPFileArgCount());
-		PropertyIterator iter = files.iterator();
-		assertEquals("file1", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
-		assertEquals("file2", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
-		assertEquals("file4", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
-		assertEquals("file5", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
-		assertEquals("file6", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
-		files.removeHTTPFileArg(file);
-		assertEquals(4, files.getHTTPFileArgCount());
-		iter = files.iterator();
-		assertEquals("file1", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
-		assertEquals("file2", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
-		assertEquals("file5", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
-		assertEquals("file6", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
-		files.removeHTTPFileArg(new HTTPFileArg("file5"));
-		assertEquals(3, files.getHTTPFileArgCount());
-		iter = files.iterator();
-		assertEquals("file1", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
-		assertEquals("file2", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
-		assertEquals("file6", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
-		files.removeHTTPFileArg(1);
-		assertEquals(2, files.getHTTPFileArgCount());
-		iter = files.iterator();
-		assertEquals("file1", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
-		assertEquals("file6", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
-		files.removeAllHTTPFileArgs();
-		assertEquals(0, files.getHTTPFileArgCount());
-	}
+    public void testRemoving() throws Exception {
+        HTTPFileArgs files = new HTTPFileArgs();
+        assertEquals(0, files.getHTTPFileArgCount());
+        files.addHTTPFileArg("hede");
+        assertEquals(1, files.getHTTPFileArgCount());
+        files.clear();
+        assertEquals(0, files.getHTTPFileArgCount());
+        files.addHTTPFileArg("file1");
+        files.addHTTPFileArg("file2");
+        files.addHTTPFileArg("file3");
+        HTTPFileArg file = new HTTPFileArg("file4");
+        files.addHTTPFileArg(file);
+        files.addHTTPFileArg("file5");
+        files.addHTTPFileArg("file6");
+        assertEquals(6, files.getHTTPFileArgCount());
+        files.removeHTTPFileArg("file3");
+        assertEquals(5, files.getHTTPFileArgCount());
+        PropertyIterator iter = files.iterator();
+        assertEquals("file1", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
+        assertEquals("file2", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
+        assertEquals("file4", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
+        assertEquals("file5", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
+        assertEquals("file6", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
+        files.removeHTTPFileArg(file);
+        assertEquals(4, files.getHTTPFileArgCount());
+        iter = files.iterator();
+        assertEquals("file1", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
+        assertEquals("file2", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
+        assertEquals("file5", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
+        assertEquals("file6", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
+        files.removeHTTPFileArg(new HTTPFileArg("file5"));
+        assertEquals(3, files.getHTTPFileArgCount());
+        iter = files.iterator();
+        assertEquals("file1", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
+        assertEquals("file2", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
+        assertEquals("file6", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
+        files.removeHTTPFileArg(1);
+        assertEquals(2, files.getHTTPFileArgCount());
+        iter = files.iterator();
+        assertEquals("file1", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
+        assertEquals("file6", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
+        files.removeAllHTTPFileArgs();
+        assertEquals(0, files.getHTTPFileArgCount());
+    }
 
-	public void testToString() throws Exception {
-		HTTPFileArgs files = new HTTPFileArgs();
-		files.addHTTPFileArg("file1");
-		files.addHTTPFileArg("file2");
-		files.addHTTPFileArg("file3");
-		assertEquals("file1&file2&file3", files.toString());
-	}
+    public void testToString() throws Exception {
+        HTTPFileArgs files = new HTTPFileArgs();
+        files.addHTTPFileArg("file1");
+        files.addHTTPFileArg("file2");
+        files.addHTTPFileArg("file3");
+        assertEquals("file1&file2&file3", files.toString());
+    }
 }

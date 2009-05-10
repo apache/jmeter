@@ -30,13 +30,13 @@ import org.apache.log.Logger;
 
 public class PackageTest extends JMeterTestCase {
 
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     public PackageTest(String arg0) {
-		super(arg0);
-	}
+        super(arg0);
+    }
 
-	public void testTimer1() throws Exception {
+    public void testTimer1() throws Exception {
         ConstantThroughputTimer timer = new ConstantThroughputTimer();
         assertEquals(0,timer.getCalcModeInt());// Assume this thread only
         timer.setThroughput(60.0);// 1 per second
@@ -45,7 +45,7 @@ public class PackageTest extends JMeterTestCase {
         Thread.sleep(500);
         long diff=Math.abs(timer.delay()-500);
         assertTrue("Delay is approximately 500",diff<=50);
-	}
+    }
 
     public void testTimer2() throws Exception {
         ConstantThroughputTimer timer = new ConstantThroughputTimer();
@@ -79,11 +79,11 @@ public class PackageTest extends JMeterTestCase {
     }
 
     public void testTimerBSH() throws Exception {
-		if (!BeanShellInterpreter.isInterpreterPresent()){
-			final String msg = "BeanShell jar not present, test ignored";
-			log.warn(msg);
-			return;
-		}
+        if (!BeanShellInterpreter.isInterpreterPresent()){
+            final String msg = "BeanShell jar not present, test ignored";
+            log.warn(msg);
+            return;
+        }
         BeanShellTimer timer = new BeanShellTimer();
         long delay;
         
