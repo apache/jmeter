@@ -41,7 +41,7 @@ import org.apache.log.Logger;
 
 public class PostWriterTest extends TestCase {
 
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final String UTF_8 = "UTF-8";
     private final static String HTTP_ENCODING = "ISO-8859-1";
@@ -80,7 +80,7 @@ public class PostWriterTest extends TestCase {
      * This method test sending a request which contains both formdata and file content
      */
     public void testSendPostData() throws IOException {
-    	sampler.setMethod(HTTPSamplerBase.POST);
+        sampler.setMethod(HTTPSamplerBase.POST);
         setupFilepart(sampler);
         String titleValue = "mytitle";
         String descriptionValue = "mydescription";
@@ -202,10 +202,10 @@ public class PostWriterTest extends TestCase {
         String otherEncoding;
         final String fileEncoding = System.getProperty( "file.encoding");// $NON-NLS-1$
         log.info("file.encoding: "+fileEncoding);
-		if (UTF_8.equalsIgnoreCase(fileEncoding) || "UTF8".equalsIgnoreCase(fileEncoding)){// $NON-NLS-1$
-        	otherEncoding="ISO-8859-1"; // $NON-NLS-1$
+        if (UTF_8.equalsIgnoreCase(fileEncoding) || "UTF8".equalsIgnoreCase(fileEncoding)){// $NON-NLS-1$
+            otherEncoding="ISO-8859-1"; // $NON-NLS-1$
         } else {
-        	otherEncoding=UTF_8;
+            otherEncoding=UTF_8;
         }
         log.info("Using other encoding: "+otherEncoding);
         establishConnection();
@@ -217,7 +217,7 @@ public class PostWriterTest extends TestCase {
         checkContentLength(connection, TEST_FILE_CONTENT.length);        
         checkArraysHaveSameContent(TEST_FILE_CONTENT, connection.getOutputStreamContent());
         // Check that other encoding is not the current encoding
-       	checkArraysHaveDifferentContent(new String(TEST_FILE_CONTENT).getBytes(otherEncoding), connection.getOutputStreamContent());
+        checkArraysHaveDifferentContent(new String(TEST_FILE_CONTENT).getBytes(otherEncoding), connection.getOutputStreamContent());
         
         // If we have both file as body, and form data, then only form data will be sent
         setupFormData(sampler);
@@ -237,7 +237,7 @@ public class PostWriterTest extends TestCase {
      * This method test sending only a file multipart.
      */
     public void testSendFileData_Multipart() throws IOException {
-    	sampler.setMethod(HTTPSamplerBase.POST);
+        sampler.setMethod(HTTPSamplerBase.POST);
         String fileField = "upload";
         String mimeType = "text/plain";
         File file = temporaryFile;
@@ -291,7 +291,7 @@ public class PostWriterTest extends TestCase {
      * This method test sending only a formdata, as a multipart/form-data request.
      */
     public void testSendFormData_Multipart() throws IOException {
-    	sampler.setMethod(HTTPSamplerBase.POST);
+        sampler.setMethod(HTTPSamplerBase.POST);
         String titleField = "title";
         String titleValue = "mytitle";
         String descriptionField = "description";
@@ -542,7 +542,7 @@ public class PostWriterTest extends TestCase {
      * Test method for 'org.apache.jmeter.protocol.http.sampler.postWriter.setHeaders(URLConnection, HTTPSampler)'
      */
     public void testSetHeaders() throws IOException {
-    	sampler.setMethod(HTTPSamplerBase.POST);
+        sampler.setMethod(HTTPSamplerBase.POST);
         setupFilepart(sampler);
         setupFormData(sampler);
         
@@ -813,19 +813,19 @@ public class PostWriterTest extends TestCase {
     private void checkArraysHaveSameContent(byte[] expected, byte[] actual) throws UnsupportedEncodingException {
         if(expected != null && actual != null) {
             if(expected.length != actual.length) {
-            	System.out.println(new String(expected,UTF_8));
-            	System.out.println("--------------------");
-            	System.out.println(new String(actual,UTF_8));
-            	System.out.println("====================");
+                System.out.println(new String(expected,UTF_8));
+                System.out.println("--------------------");
+                System.out.println(new String(actual,UTF_8));
+                System.out.println("====================");
                 fail("arrays have different length, expected is " + expected.length + ", actual is " + actual.length);
             }
             else {
                 for(int i = 0; i < expected.length; i++) {
                     if(expected[i] != actual[i]) {
-                       	System.out.println(new String(expected,0,i+1));
-                    	System.out.println("--------------------");
-                    	System.out.println(new String(actual,0,i+1));
-                    	System.out.println("====================");
+                        System.out.println(new String(expected,0,i+1));
+                        System.out.println("--------------------");
+                        System.out.println(new String(actual,0,i+1));
+                        System.out.println("====================");
                         fail("byte at position " + i + " is different, expected is " + expected[i] + ", actual is " + actual[i]);
                     }
                 }

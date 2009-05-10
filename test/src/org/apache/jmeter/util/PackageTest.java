@@ -22,39 +22,39 @@ import junit.framework.TestCase;
 
 public class PackageTest extends TestCase {
 
-	public PackageTest() {
-		super();
-	}
+    public PackageTest() {
+        super();
+    }
 
-	public PackageTest(String arg0) {
-		super(arg0);
-	}
+    public PackageTest(String arg0) {
+        super(arg0);
+    }
 
-	public void testServer() throws Exception {
-		BeanShellServer bshs = new BeanShellServer(9876, "");
-		assertNotNull(bshs);
-		// Not sure we can test anything else here
-	}
-	public void testSub1() throws Exception {
-		String input = "http://jakarta.apache.org/jmeter/index.html";
-		String pattern = "jakarta.apache.org";
-		String sub = "${server}";
-		assertEquals("http://${server}/jmeter/index.html", StringUtilities.substitute(input, pattern, sub));
-	}
+    public void testServer() throws Exception {
+        BeanShellServer bshs = new BeanShellServer(9876, "");
+        assertNotNull(bshs);
+        // Not sure we can test anything else here
+    }
+    public void testSub1() throws Exception {
+        String input = "http://jakarta.apache.org/jmeter/index.html";
+        String pattern = "jakarta.apache.org";
+        String sub = "${server}";
+        assertEquals("http://${server}/jmeter/index.html", StringUtilities.substitute(input, pattern, sub));
+    }
 
-	public void testSub2() throws Exception {
-		String input = "arg1=param1;param1";
-		String pattern = "param1";
-		String sub = "${value}";
-		assertEquals("arg1=${value};${value}", StringUtilities.substitute(input, pattern, sub));
-	}
+    public void testSub2() throws Exception {
+        String input = "arg1=param1;param1";
+        String pattern = "param1";
+        String sub = "${value}";
+        assertEquals("arg1=${value};${value}", StringUtilities.substitute(input, pattern, sub));
+    }
 
-	public void testSub3() throws Exception {
-		String input = "jakarta.apache.org";
-		String pattern = "jakarta.apache.org";
-		String sub = "${server}";
-		assertEquals("${server}", StringUtilities.substitute(input, pattern, sub));
-	}
+    public void testSub3() throws Exception {
+        String input = "jakarta.apache.org";
+        String pattern = "jakarta.apache.org";
+        String sub = "${server}";
+        assertEquals("${server}", StringUtilities.substitute(input, pattern, sub));
+    }
 
     public void testSub4() throws Exception {
         String input = "//a///b////c";

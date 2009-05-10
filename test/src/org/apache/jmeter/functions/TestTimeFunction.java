@@ -30,31 +30,31 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 
 public class TestTimeFunction extends JMeterTestCase {
-		private Function variable;
+        private Function variable;
 
-		private SampleResult result;
+        private SampleResult result;
 
-		private Collection params;
+        private Collection params;
 
-		private JMeterVariables vars;
+        private JMeterVariables vars;
 
-		private JMeterContext jmctx = null;
+        private JMeterContext jmctx = null;
 
         private String value;
         
-		public TestTimeFunction(String name) {
-			super(name);
-		}
+        public TestTimeFunction(String name) {
+            super(name);
+        }
 
-		public void setUp() {
-			jmctx = JMeterContextService.getContext();
-			vars = new JMeterVariables();
-			jmctx.setVariables(vars);
-			jmctx.setPreviousResult(result);
+        public void setUp() {
+            jmctx = JMeterContextService.getContext();
+            vars = new JMeterVariables();
+            jmctx.setVariables(vars);
+            jmctx.setPreviousResult(result);
             params = new LinkedList();
             result = new SampleResult();
             variable = new TimeFunction();
-		}
+        }
 
         public void testDefault() throws Exception {
             variable.setParameters(params);
@@ -105,14 +105,14 @@ public class TestTimeFunction extends JMeterTestCase {
             }
         }
         
-		public void testYMD() throws Exception {
-			params.add(new CompoundVariable("YMD"));
-			params.add(new CompoundVariable("NAME"));
-			variable.setParameters(params);
-			value = variable.execute(result, null);
-			assertEquals(8,value.length());
+        public void testYMD() throws Exception {
+            params.add(new CompoundVariable("YMD"));
+            params.add(new CompoundVariable("NAME"));
+            variable.setParameters(params);
+            value = variable.execute(result, null);
+            assertEquals(8,value.length());
             assertEquals(value,vars.get("NAME"));
-		}
+        }
 
         public void testYMDnoV() throws Exception {
             params.add(new CompoundVariable("YMD"));

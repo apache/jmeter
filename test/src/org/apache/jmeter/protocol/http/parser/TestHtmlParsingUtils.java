@@ -26,81 +26,81 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 // TODO: need more tests
 public final class TestHtmlParsingUtils extends JMeterTestCase {
 
-		public TestHtmlParsingUtils(String name) {
-			super(name);
-		}
+        public TestHtmlParsingUtils(String name) {
+            super(name);
+        }
 
-		protected void setUp() {
-		}
+        protected void setUp() {
+        }
 
-		public void testGetParser() throws Exception {
+        public void testGetParser() throws Exception {
             HtmlParsingUtils.getParser();
-		}
+        }
 
-		public void testGetDom() throws Exception {
+        public void testGetDom() throws Exception {
             HtmlParsingUtils.getDOM("<HTML></HTML>");
             HtmlParsingUtils.getDOM("");
-		}
+        }
 
-		public void testIsArgumentMatched() throws Exception {
-			Argument arg = new Argument();
-			Argument argp = new Argument();
-			assertTrue(HtmlParsingUtils.isArgumentMatched(arg, argp));
+        public void testIsArgumentMatched() throws Exception {
+            Argument arg = new Argument();
+            Argument argp = new Argument();
+            assertTrue(HtmlParsingUtils.isArgumentMatched(arg, argp));
 
-			arg = new Argument("test", "abcd");
-			argp = new Argument("test", "a.*d");
-			assertTrue(HtmlParsingUtils.isArgumentMatched(arg, argp));
+            arg = new Argument("test", "abcd");
+            argp = new Argument("test", "a.*d");
+            assertTrue(HtmlParsingUtils.isArgumentMatched(arg, argp));
 
-			arg = new Argument("test", "abcd");
-			argp = new Argument("test", "a.*e");
-			assertFalse(HtmlParsingUtils.isArgumentMatched(arg, argp));
-		}
-		
-		public void testIsAnchorMatched() throws Exception {
-			HTTPSamplerBase target=new HTTPNullSampler();
-			HTTPSamplerBase pattern=new HTTPNullSampler();
+            arg = new Argument("test", "abcd");
+            argp = new Argument("test", "a.*e");
+            assertFalse(HtmlParsingUtils.isArgumentMatched(arg, argp));
+        }
+        
+        public void testIsAnchorMatched() throws Exception {
+            HTTPSamplerBase target=new HTTPNullSampler();
+            HTTPSamplerBase pattern=new HTTPNullSampler();
 
-			assertTrue(HtmlParsingUtils.isAnchorMatched(target, pattern));
+            assertTrue(HtmlParsingUtils.isAnchorMatched(target, pattern));
 
-			target.setProtocol("http:");
-			assertFalse(HtmlParsingUtils.isAnchorMatched(target, pattern));
+            target.setProtocol("http:");
+            assertFalse(HtmlParsingUtils.isAnchorMatched(target, pattern));
 
-			pattern.setProtocol(".*");
-			assertTrue(HtmlParsingUtils.isAnchorMatched(target, pattern));
-			
-			target.setDomain("a.b.c");
-			assertTrue(HtmlParsingUtils.isAnchorMatched(target, pattern));
+            pattern.setProtocol(".*");
+            assertTrue(HtmlParsingUtils.isAnchorMatched(target, pattern));
+            
+            target.setDomain("a.b.c");
+            assertTrue(HtmlParsingUtils.isAnchorMatched(target, pattern));
 
-			pattern.setDomain(".*");
-			assertTrue(HtmlParsingUtils.isAnchorMatched(target, pattern));
-			
-			target.setPath("/abc");
-			assertFalse(HtmlParsingUtils.isAnchorMatched(target, pattern));
+            pattern.setDomain(".*");
+            assertTrue(HtmlParsingUtils.isAnchorMatched(target, pattern));
+            
+            target.setPath("/abc");
+            assertFalse(HtmlParsingUtils.isAnchorMatched(target, pattern));
 
-			pattern.setPath(".*");
-			assertTrue(HtmlParsingUtils.isAnchorMatched(target, pattern));
-			
-			target.addArgument("param2", "value2", "=");
-			assertTrue(HtmlParsingUtils.isAnchorMatched(target, pattern));
-			
-			pattern.addArgument("param1", ".*", "=");
-			assertFalse(HtmlParsingUtils.isAnchorMatched(target, pattern));
-			
-			target.addArgument("param1", "value1", "=");
-			assertTrue(HtmlParsingUtils.isAnchorMatched(target, pattern));
-		}
-		
-		public void testisEqualOrMatches() throws Exception {
-			assertTrue(HtmlParsingUtils.isEqualOrMatches("http:","http:"));
-			assertFalse(HtmlParsingUtils.isEqualOrMatches("http:","htTp:"));
-			assertTrue(HtmlParsingUtils.isEqualOrMatches("http:","ht+p:"));
-			assertFalse(HtmlParsingUtils.isEqualOrMatches("ht+p:","http:"));
-		}
+            pattern.setPath(".*");
+            assertTrue(HtmlParsingUtils.isAnchorMatched(target, pattern));
+            
+            target.addArgument("param2", "value2", "=");
+            assertTrue(HtmlParsingUtils.isAnchorMatched(target, pattern));
+            
+            pattern.addArgument("param1", ".*", "=");
+            assertFalse(HtmlParsingUtils.isAnchorMatched(target, pattern));
+            
+            target.addArgument("param1", "value1", "=");
+            assertTrue(HtmlParsingUtils.isAnchorMatched(target, pattern));
+        }
+        
+        public void testisEqualOrMatches() throws Exception {
+            assertTrue(HtmlParsingUtils.isEqualOrMatches("http:","http:"));
+            assertFalse(HtmlParsingUtils.isEqualOrMatches("http:","htTp:"));
+            assertTrue(HtmlParsingUtils.isEqualOrMatches("http:","ht+p:"));
+            assertFalse(HtmlParsingUtils.isEqualOrMatches("ht+p:","http:"));
+        }
 
-		public void testisEqualOrMatchesCaseBlind() throws Exception {
-			assertTrue(HtmlParsingUtils.isEqualOrMatchesCaseBlind("http:","http:"));
-			assertTrue(HtmlParsingUtils.isEqualOrMatchesCaseBlind("http:","htTp:"));
-			assertTrue(HtmlParsingUtils.isEqualOrMatches("http:","ht+p:"));
-			assertFalse(HtmlParsingUtils.isEqualOrMatches("ht+p:","http:"));
-		}
+        public void testisEqualOrMatchesCaseBlind() throws Exception {
+            assertTrue(HtmlParsingUtils.isEqualOrMatchesCaseBlind("http:","http:"));
+            assertTrue(HtmlParsingUtils.isEqualOrMatchesCaseBlind("http:","htTp:"));
+            assertTrue(HtmlParsingUtils.isEqualOrMatches("http:","ht+p:"));
+            assertFalse(HtmlParsingUtils.isEqualOrMatches("ht+p:","http:"));
+        }
 }

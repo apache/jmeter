@@ -25,9 +25,9 @@ import java.beans.PropertyEditorManager;
  * 
  */
 public class TestBooleanPropertyEditor extends junit.framework.TestCase {
-		public TestBooleanPropertyEditor(String name) {
-			super(name);
-		}
+        public TestBooleanPropertyEditor(String name) {
+            super(name);
+        }
 
         public void testBooleanEditor(){
             PropertyEditor propertyEditor = PropertyEditorManager.findEditor(boolean.class);

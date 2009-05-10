@@ -23,12 +23,12 @@ import java.net.URL;
 import junit.framework.TestCase;
 
 public class TestHTTPUtils extends TestCase {
-		public TestHTTPUtils(String name) {
-			super(name);
-		}
+        public TestHTTPUtils(String name) {
+            super(name);
+        }
 
-		public void testgetEncoding() throws Exception {
-		    assertNull(ConversionUtils.getEncodingFromContentType("xyx"));
+        public void testgetEncoding() throws Exception {
+            assertNull(ConversionUtils.getEncodingFromContentType("xyx"));
             assertEquals("utf8",ConversionUtils.getEncodingFromContentType("charset=utf8"));
             assertEquals("utf8",ConversionUtils.getEncodingFromContentType("charset=\"utf8\""));
             assertEquals("utf8",ConversionUtils.getEncodingFromContentType("text/plain ;charset=utf8"));
@@ -36,15 +36,15 @@ public class TestHTTPUtils extends TestCase {
             assertNull(ConversionUtils.getEncodingFromContentType("charset="));
             assertNull(ConversionUtils.getEncodingFromContentType(";charset=;"));
             assertNull(ConversionUtils.getEncodingFromContentType(";charset=no-such-charset;"));
-		}
-		
-		public void testMakeRelativeURL() throws Exception {
-		    URL base = new URL("http://host/a/b/c");
-		    assertEquals(new URL("http://host/a/b/d"),ConversionUtils.makeRelativeURL(base,"d"));
+        }
+        
+        public void testMakeRelativeURL() throws Exception {
+            URL base = new URL("http://host/a/b/c");
+            assertEquals(new URL("http://host/a/b/d"),ConversionUtils.makeRelativeURL(base,"d"));
             assertEquals(new URL("http://host/a/d"),ConversionUtils.makeRelativeURL(base,"../d"));
             assertEquals(new URL("http://host/d"),ConversionUtils.makeRelativeURL(base,"../../d"));
             assertEquals(new URL("http://host/d"),ConversionUtils.makeRelativeURL(base,"../../../d"));
             assertEquals(new URL("http://host/d"),ConversionUtils.makeRelativeURL(base,"../../../../d"));
             assertEquals(new URL("http://host/../d"),ConversionUtils.makeRelativeURL(base,"/../d"));
-		}
+        }
 }

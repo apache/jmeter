@@ -26,15 +26,15 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 public class BarChartTest extends JMeterTestCase {
-	
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	/**
-	 * @param arg0
-	 */
-	public BarChartTest(String arg0) {
-		super(arg0);
-	}
+    /**
+     * @param arg0
+     */
+    public BarChartTest(String arg0) {
+        super(arg0);
+    }
 
     public void testGenerateBarChart() {
         log.info("jtl version=" + JMeterUtils.getProperty("file_format.testlog"));

@@ -27,67 +27,67 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 
 public class TestXPathExtractor extends TestCase {
-		XPathExtractor extractor;
+        XPathExtractor extractor;
 
-		SampleResult result;
+        SampleResult result;
 
-		JMeterVariables vars;
+        JMeterVariables vars;
 
-		public TestXPathExtractor(String name) {
-			super(name);
-		}
+        public TestXPathExtractor(String name) {
+            super(name);
+        }
 
-		private JMeterContext jmctx = null;
+        private JMeterContext jmctx = null;
 
         private final static String VAL_NAME = "value";
         private final static String VAL_NAME_NR = "value_matchNr";
-		public void setUp() {
-			jmctx = JMeterContextService.getContext();
-			extractor = new XPathExtractor();
-			extractor.setThreadContext(jmctx);// This would be done by the run command
-			extractor.setRefName(VAL_NAME);
+        public void setUp() {
+            jmctx = JMeterContextService.getContext();
+            extractor = new XPathExtractor();
+            extractor.setThreadContext(jmctx);// This would be done by the run command
+            extractor.setRefName(VAL_NAME);
             extractor.setDefaultValue("Default");
-			result = new SampleResult();
-			String data = "<book><preface title='Intro'>zero</preface><page>one</page><page>two</page><empty></empty><a><b></b></a></book>";
-			result.setResponseData(data.getBytes());
-			vars = new JMeterVariables();
-			jmctx.setVariables(vars);
-			jmctx.setPreviousResult(result);
-		}
+            result = new SampleResult();
+            String data = "<book><preface title='Intro'>zero</preface><page>one</page><page>two</page><empty></empty><a><b></b></a></book>";
+            result.setResponseData(data.getBytes());
+            vars = new JMeterVariables();
+            jmctx.setVariables(vars);
+            jmctx.setPreviousResult(result);
+        }
 
-		public void testAttributeExtraction() throws Exception {
-			extractor.setXPathQuery("/book/preface/@title");
-			extractor.process();
-			assertEquals("Intro", vars.get(VAL_NAME));
+        public void testAttributeExtraction() throws Exception {
+            extractor.setXPathQuery("/book/preface/@title");
+            extractor.process();
+            assertEquals("Intro", vars.get(VAL_NAME));
             assertEquals("1", vars.get(VAL_NAME_NR));
             assertEquals("Intro", vars.get(VAL_NAME+"_1"));
             assertNull(vars.get(VAL_NAME+"_2"));
 
             extractor.setXPathQuery("/book/preface[@title]");
-			extractor.process();
-			assertEquals("zero", vars.get(VAL_NAME));
+            extractor.process();
+            assertEquals("zero", vars.get(VAL_NAME));
             assertEquals("1", vars.get(VAL_NAME_NR));
             assertEquals("zero", vars.get(VAL_NAME+"_1"));
             assertNull(vars.get(VAL_NAME+"_2"));
 
             extractor.setXPathQuery("/book/preface[@title='Intro']");
-			extractor.process();
-			assertEquals("zero", vars.get(VAL_NAME));
+            extractor.process();
+            assertEquals("zero", vars.get(VAL_NAME));
             assertEquals("1", vars.get(VAL_NAME_NR));
             assertEquals("zero", vars.get(VAL_NAME+"_1"));
             assertNull(vars.get(VAL_NAME+"_2"));
 
             extractor.setXPathQuery("/book/preface[@title='xyz']");
-			extractor.process();
-			assertEquals("Default", vars.get(VAL_NAME));
+            extractor.process();
+            assertEquals("Default", vars.get(VAL_NAME));
             assertEquals("0", vars.get(VAL_NAME_NR));
             assertNull(vars.get(VAL_NAME+"_1"));
-		}
-		
+        }
+        
         public void testVariableExtraction() throws Exception {
-			extractor.setXPathQuery("/book/preface");
-			extractor.process();
-			assertEquals("zero", vars.get(VAL_NAME));
+            extractor.setXPathQuery("/book/preface");
+            extractor.process();
+            assertEquals("zero", vars.get(VAL_NAME));
             assertEquals("1", vars.get(VAL_NAME_NR));
             assertEquals("zero", vars.get(VAL_NAME+"_1"));
             assertNull(vars.get(VAL_NAME+"_2"));
@@ -134,7 +134,7 @@ public class TestXPathExtractor extends TestCase {
             extractor.process();
             assertEquals("Default", vars.get(VAL_NAME));
             assertEquals("0", vars.get(VAL_NAME_NR));
-		}
+        }
 
         public void testInvalidDocument() throws Exception {
             result.setResponseData("<z>".getBytes());

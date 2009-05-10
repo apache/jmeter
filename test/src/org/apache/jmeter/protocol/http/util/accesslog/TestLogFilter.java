@@ -22,136 +22,136 @@ import org.apache.jmeter.junit.JMeterTestCase;
 
 public class TestLogFilter extends JMeterTestCase {
 
-		private static final String TESTSTR = "/test/helloworld.html";
+        private static final String TESTSTR = "/test/helloworld.html";
 
-		private static final String TESTSTROUT = "/test/helloworld.jsp";
+        private static final String TESTSTROUT = "/test/helloworld.jsp";
 
-		private static class TestData {
-			private final String file;
+        private static class TestData {
+            private final String file;
 
-			private final boolean exclfile;
+            private final boolean exclfile;
 
-			private final boolean inclfile;
+            private final boolean inclfile;
 
-			private final boolean exclpatt;
+            private final boolean exclpatt;
 
-			private final boolean inclpatt;
+            private final boolean inclpatt;
 
-			TestData(String f, boolean exf, boolean inf, boolean exp, boolean inp) {
-				file = f;
-				exclfile = exf;
-				inclfile = inf;
-				exclpatt = exp;
-				inclpatt = inp;
-			}
-		}
+            TestData(String f, boolean exf, boolean inf, boolean exp, boolean inp) {
+                file = f;
+                exclfile = exf;
+                inclfile = inf;
+                exclpatt = exp;
+                inclpatt = inp;
+            }
+        }
 
-		private static final String[] INCL = { "hello.html", "index.html", "/index.jsp" };
+        private static final String[] INCL = { "hello.html", "index.html", "/index.jsp" };
 
-		private static final String[] PATTERNS = { "index", ".jtml" };
+        private static final String[] PATTERNS = { "index", ".jtml" };
 
-		private static final TestData[] TESTDATA = {
-		// file exclf inclf exclp inclp
-				new TestData("/test/hello.jsp", true, false, true, false),
-				new TestData("/test/one/hello.html", false, true, true, false),
-				new TestData("hello.jsp", true, false, true, false),
-				new TestData("hello.htm", true, false, true, false),
-				new TestData("/test/open.jsp", true, false, true, false),
-				new TestData("/test/open.html", true, false, true, false),
-				new TestData("/index.jsp", false, true, false, true),
-				new TestData("/index.jhtml", true, false, false, true),
-				new TestData("newindex.jsp", true, false, false, true),
-				new TestData("oldindex.jsp", true, false, false, true),
-				new TestData("oldindex1.jsp", true, false, false, true),
-				new TestData("oldindex2.jsp", true, false, false, true),
-				new TestData("oldindex3.jsp", true, false, false, true),
-				new TestData("oldindex4.jsp", true, false, false, true),
-				new TestData("oldindex5.jsp", true, false, false, true),
-				new TestData("oldindex6.jsp", true, false, false, true),
-				new TestData("/test/index.htm", true, false, false, true) };
+        private static final TestData[] TESTDATA = {
+        // file exclf inclf exclp inclp
+                new TestData("/test/hello.jsp", true, false, true, false),
+                new TestData("/test/one/hello.html", false, true, true, false),
+                new TestData("hello.jsp", true, false, true, false),
+                new TestData("hello.htm", true, false, true, false),
+                new TestData("/test/open.jsp", true, false, true, false),
+                new TestData("/test/open.html", true, false, true, false),
+                new TestData("/index.jsp", false, true, false, true),
+                new TestData("/index.jhtml", true, false, false, true),
+                new TestData("newindex.jsp", true, false, false, true),
+                new TestData("oldindex.jsp", true, false, false, true),
+                new TestData("oldindex1.jsp", true, false, false, true),
+                new TestData("oldindex2.jsp", true, false, false, true),
+                new TestData("oldindex3.jsp", true, false, false, true),
+                new TestData("oldindex4.jsp", true, false, false, true),
+                new TestData("oldindex5.jsp", true, false, false, true),
+                new TestData("oldindex6.jsp", true, false, false, true),
+                new TestData("/test/index.htm", true, false, false, true) };
 
-		public void testConstruct() {
-			new LogFilter();
-		}
+        public void testConstruct() {
+            new LogFilter();
+        }
 
-		private LogFilter testf;
+        private LogFilter testf;
 
-		public void setUp() {
-			testf = new LogFilter();
-		}
+        public void setUp() {
+            testf = new LogFilter();
+        }
 
-		public void testReplaceExtension() {
-			testf.setReplaceExtension("html", "jsp");
-			testf.isFiltered(TESTSTR,null);// set the required variables
-			assertEquals(TESTSTROUT, testf.filter(TESTSTR));
-		}
+        public void testReplaceExtension() {
+            testf.setReplaceExtension("html", "jsp");
+            testf.isFiltered(TESTSTR,null);// set the required variables
+            assertEquals(TESTSTROUT, testf.filter(TESTSTR));
+        }
 
-		public void testExcludeFiles() {
-			testf.excludeFiles(INCL);
-			for (int idx = 0; idx < TESTDATA.length; idx++) {
-				TestData td = TESTDATA[idx];
-				String theFile = td.file;
-				boolean expect = td.exclfile;
+        public void testExcludeFiles() {
+            testf.excludeFiles(INCL);
+            for (int idx = 0; idx < TESTDATA.length; idx++) {
+                TestData td = TESTDATA[idx];
+                String theFile = td.file;
+                boolean expect = td.exclfile;
 
-				testf.isFiltered(theFile,null);
-				String line = testf.filter(theFile);
-				if (line != null) {
-					assertTrue("Expect to accept " + theFile, expect);
-				} else {
-					assertFalse("Expect to reject " + theFile, expect);
-				}
-			}
-		}
+                testf.isFiltered(theFile,null);
+                String line = testf.filter(theFile);
+                if (line != null) {
+                    assertTrue("Expect to accept " + theFile, expect);
+                } else {
+                    assertFalse("Expect to reject " + theFile, expect);
+                }
+            }
+        }
 
-		public void testIncludeFiles() {
-			testf.includeFiles(INCL);
-			for (int idx = 0; idx < TESTDATA.length; idx++) {
-				TestData td = TESTDATA[idx];
-				String theFile = td.file;
-				boolean expect = td.inclfile;
+        public void testIncludeFiles() {
+            testf.includeFiles(INCL);
+            for (int idx = 0; idx < TESTDATA.length; idx++) {
+                TestData td = TESTDATA[idx];
+                String theFile = td.file;
+                boolean expect = td.inclfile;
 
-				testf.isFiltered(theFile,null);
-				String line = testf.filter(theFile);
-				if (line != null) {
-					assertTrue("Expect to accept " + theFile, expect);
-				} else {
-					assertFalse("Expect to reject " + theFile, expect);
-				}
-			}
+                testf.isFiltered(theFile,null);
+                String line = testf.filter(theFile);
+                if (line != null) {
+                    assertTrue("Expect to accept " + theFile, expect);
+                } else {
+                    assertFalse("Expect to reject " + theFile, expect);
+                }
+            }
 
-		}
+        }
 
-		public void testExcludePattern() {
-			testf.excludePattern(PATTERNS);
-			for (int idx = 0; idx < TESTDATA.length; idx++) {
-				TestData td = TESTDATA[idx];
-				String theFile = td.file;
-				boolean expect = td.exclpatt;
+        public void testExcludePattern() {
+            testf.excludePattern(PATTERNS);
+            for (int idx = 0; idx < TESTDATA.length; idx++) {
+                TestData td = TESTDATA[idx];
+                String theFile = td.file;
+                boolean expect = td.exclpatt;
 
-				assertEquals(!expect, testf.isFiltered(theFile,null));
-				String line = testf.filter(theFile);
-				if (line != null) {
-					assertTrue("Expect to accept " + theFile, expect);
-				} else {
-					assertFalse("Expect to reject " + theFile, expect);
-				}
-			}
-		}
+                assertEquals(!expect, testf.isFiltered(theFile,null));
+                String line = testf.filter(theFile);
+                if (line != null) {
+                    assertTrue("Expect to accept " + theFile, expect);
+                } else {
+                    assertFalse("Expect to reject " + theFile, expect);
+                }
+            }
+        }
 
-		public void testIncludePattern() {
-			testf.includePattern(PATTERNS);
-			for (int idx = 0; idx < TESTDATA.length; idx++) {
-				TestData td = TESTDATA[idx];
-				String theFile = td.file;
-				boolean expect = td.inclpatt;
+        public void testIncludePattern() {
+            testf.includePattern(PATTERNS);
+            for (int idx = 0; idx < TESTDATA.length; idx++) {
+                TestData td = TESTDATA[idx];
+                String theFile = td.file;
+                boolean expect = td.inclpatt;
 
-				assertEquals(!expect, testf.isFiltered(theFile,null));
-				String line = testf.filter(theFile);
-				if (line != null) {
-					assertTrue("Expect to accept " + theFile, expect);
-				} else {
-					assertFalse("Expect to reject " + theFile, expect);
-				}
-			}
-		}
+                assertEquals(!expect, testf.isFiltered(theFile,null));
+                String line = testf.filter(theFile);
+                if (line != null) {
+                    assertTrue("Expect to accept " + theFile, expect);
+                } else {
+                    assertFalse("Expect to reject " + theFile, expect);
+                }
+            }
+        }
 }
