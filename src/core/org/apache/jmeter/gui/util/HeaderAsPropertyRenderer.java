@@ -59,7 +59,7 @@ public class HeaderAsPropertyRenderer extends DefaultTableCellRenderer {
      * @param value
      * @param column 
      * @param row 
-     * @return
+     * @return the text
      */
     protected String getText(Object value, int row, int column) {
         if (value == null){
