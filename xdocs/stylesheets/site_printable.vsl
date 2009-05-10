@@ -216,6 +216,18 @@ No
 </table></p>
 #end
 
+#macro (scope $scope)
+#if ($scope.getText() == "")
+<a href="build-test-plan.html#scoping_rules">scope</a>
+#else
+<a href="build-test-plan.html#scoping_rules">$scope.getText()</a>
+#end
+#end
+
+#macro ( bugzilla $id)
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=$id.getText()">Bug $id.getText()</a>
+#end
+
 #macro (unknown $node)
 #if($node.getName() == "note")
 #note($node)
@@ -237,6 +249,10 @@ No
 #component($node)
 #elseif ($node.getName().equals("subsection"))
 #subsection ($node)
+#elseif ($u_node.getName().equals("scope"))
+#scope ($u_node)
+#elseif ($node.getName().equals("bugzilla"))
+#bugzilla ($node)
 #else
 #outputTag($node)
 #runloop($node)
