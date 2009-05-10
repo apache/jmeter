@@ -23,6 +23,8 @@
 
 <!-- Outstanding Compatibility Issues (with Anakia-based stylesheets):
 
+            *****  THIS STYLESHEET IS NOW VERY OUT OF DATE  *****
+            
 * Calculation of the hyperlink for navigation menu items (site.xsl prefixes
   with relative path unconditionally; needs conditional logic like the
   "projectanchor" macro).
