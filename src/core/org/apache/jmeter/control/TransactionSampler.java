@@ -29,8 +29,8 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 
 /**
- * Transaction Controller to measure transaction times
- *
+ * Transaction Sampler class to measure transaction times
+ * (not exposed a a GUI class, as it is only used internally)
  */
 public class TransactionSampler extends AbstractSampler {
   private boolean transactionDone = false;
