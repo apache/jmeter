@@ -412,9 +412,9 @@
         <isset property="svn.revision"/>
     </condition>
     <property name="display.version" value="${implementation.version}"/>
-    <echo>jmeter.version = ${jmeter.version}</echo>
-    <echo>display.version = ${display.version}</echo>
-    <echo>implementation.version = ${implementation.version}</echo>
+    <echo level="info">jmeter.version = ${jmeter.version}</echo>
+    <echo level="info">display.version = ${display.version}</echo>
+    <echo level="info">implementation.version = ${implementation.version}</echo>
   </target>
 
   <!-- JMeter Javadoc version (own variable is used so can be overriden independently) -->
@@ -427,14 +427,15 @@
     <!-- Copy the value to avoid duplication of revision in Manifests -->
     <property name="implementation.version" value="${jmeter.version}"/>
     <property name="display.version" value="${jmeter.version}"/>
-    <echo>jmeter.version = ${jmeter.version}</echo>
-    <echo>display.version = ${display.version}</echo>
-    <echo>implementation.version = ${implementation.version}</echo>
+    <echo level="info">svn.revision = ${svn.revision}</echo>
+    <echo level="info">jmeter.version = ${jmeter.version}</echo>
+    <echo level="info">display.version = ${display.version}</echo>
+    <echo level="info">implementation.version = ${implementation.version}</echo>
   </target>
 
 
   <target name="init-docs" depends="check-anakia,report-anakia-missing">
-    <echo>eclipse.anakia = ${eclipse.anakia}</echo>
+    <echo level="info">eclipse.anakia = ${eclipse.anakia}</echo>
     </target>
 
   <!--
@@ -471,7 +472,7 @@
   </target>
 
   <target name="update-version" unless="version.noupdate">
-    <echo>Updating version string to "${display.version}"</echo>
+    <echo level="info">Updating version string to "${display.version}"</echo>
     <replaceregexp file="${src.core}/org/apache/jmeter/util/JMeterVersion.java"
         match="VERSION = &quot;.*?&quot;"
     replace="VERSION = &quot;${display.version}&quot;"/>
@@ -971,6 +972,8 @@ run JMeter unless all the JMeter jars are added.
     <include name="${dest.jar.jmeter}/user.properties"/>
     <!-- Exclude any files that might be present from testing the release -->
     <exclude name="${dest.jar.jmeter}/*.log"/>
+    <include name="${dest.jar.jmeter}/examples/**"/>
+    <exclude name="${dest.jar.jmeter}/examples/*.jmx"/>
     <include name="${dest.printable_docs}/**"/>
     <exclude name="${dest.printable_docs}/**/*.pdf"/>
     <exclude name="${dest.printable_docs}/**/*.jmx"/>
@@ -993,6 +996,7 @@ run JMeter unless all the JMeter jars are added.
     <include name="${lib.dir}/jorphan.jar"/>
     <include name="${lib.dir}/junit/test.jar"/>
     <include name="${dest.jar.jmeter}/ApacheJMeter.jar"/>
+    <include name="${dest.jar.jmeter}/examples/*.jmx"/>
     <include name="${dest.printable_docs}/**/*.pdf"/>
     <include name="${dest.printable_docs}/**/*.jmx"/>
     <include name="${extras.dir}/*.jar"/>
@@ -1062,14 +1066,14 @@ run JMeter unless all the JMeter jars are added.
     <!-- Convert eol:native source files to appropriate format if required -->
     <target name="_filter" unless="native.${eoltype}">
         <property name="workdir" value="${dist.dir}/${eoltype}"/>
-        <echo>Copying files to work directory ${workdir}</echo>
+        <echo level="info">Copying files to work directory ${workdir}</echo>
         <mkdir dir="${workdir}"/>
         <copy includeemptydirs="false" todir="${workdir}">
             <fileset dir=".">
                 <patternset refid="${fileset}"/>
             </fileset>
         </copy>
-        <echo>Converting work files to eol=${eoltype}</echo>
+        <echo level="info">Converting work files to eol=${eoltype}</echo>
         <fixcrlf fixlast="false" eol="${eoltype}" srcdir="${workdir}">
         </fixcrlf>
     </target>
@@ -1131,7 +1135,7 @@ run JMeter unless all the JMeter jars are added.
     <target name="_distribution" depends="check-versions,_eolcheck">
     <property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
     <property name="pack.name" value="${dist.name}"/>
-    <echo>Creating JMeter distribution ${dist.name} ${svn.revision}</echo>
+    <echo level="info">Creating JMeter distribution ${dist.name} ${svn.revision}</echo>
     <mkdir dir="${dist.dir}"/>
 
     <!-- Delete work directories just in case -->
@@ -1530,7 +1534,9 @@ run JMeter unless all the JMeter jars are added.
     <anakia basedir="${src.docs}" destdir="${dest.docs}/" extension=".html" style="${eclipse.anakia}/xdocs/stylesheets/site.vsl" projectFile="./stylesheets/project.xml" 
         excludes="**/stylesheets/** extending.xml extending/*.xml" 
         includes="**/*.xml" lastModifiedCheck="true" velocityPropertiesFile="${src.docs}/velocity.properties"/>
-    <fixcrlf srcdir="${dest.docs}/" includes="**/*.html" fixlast="false"/>
+  	<echo level="info">Fixing EOL</echo>
+    <fixcrlf srcdir="${dest.docs}/" includes="**/*.html" excludes="api/**" fixlast="false"/>
+    <echo level="info">Copying files</echo>
     <copy todir="${dest.docs}/images">
       <fileset dir="${src.images}"/>
     </copy>
@@ -1551,11 +1557,13 @@ run JMeter unless all the JMeter jars are added.
     <anakia basedir="${src.docs}" destdir="${dest.printable_docs}/" extension=".html" style="${eclipse.anakia}/xdocs/stylesheets/site_printable.vsl" projectFile="./stylesheets/printable_project.xml"
         excludes="**/stylesheets/** extending.xml extending/*.xml" 
         includes="**/*.xml" lastModifiedCheck="true" velocityPropertiesFile="${src.docs}/velocity.properties"/>
+    <echo level="info">Fixing EOL</echo>
     <fixcrlf srcdir="${dest.printable_docs}/" includes="**/*.html" fixlast="false"/>
     <!--
     Share images with non-printable version
     Means printable version won't work on web-site
     -->
+    <echo level="info">Copying files</echo>
     <copy todir="${dest.docs}/images">
       <fileset dir="${src.images}"/>
     </copy>
