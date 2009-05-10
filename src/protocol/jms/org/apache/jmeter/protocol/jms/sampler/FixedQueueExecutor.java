@@ -89,7 +89,7 @@ public class FixedQueueExecutor implements QueueExecutor {
         producer.send(request);
         
         if(useReqMsgIdAsCorrelId) {
-        	id = request.getJMSMessageID();
+            id = request.getJMSMessageID();
         }
 
         MessageAdmin.getAdmin().putRequest(id, request);
