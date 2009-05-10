@@ -23,36 +23,36 @@ import org.apache.jmeter.junit.stubs.TestSampler;
 import org.apache.jmeter.testelement.TestElement;
 
 public class TestGenericController extends JMeterTestCase {
-		public TestGenericController(String name) {
-			super(name);
-		}
+        public TestGenericController(String name) {
+            super(name);
+        }
 
-		public void testProcessing() throws Exception {
-			testLog.debug("Testing Generic Controller");
-			GenericController controller = new GenericController();
-			GenericController sub_1 = new GenericController();
-			sub_1.addTestElement(new TestSampler("one"));
-			sub_1.addTestElement(new TestSampler("two"));
-			controller.addTestElement(sub_1);
-			controller.addTestElement(new TestSampler("three"));
-			GenericController sub_2 = new GenericController();
-			GenericController sub_3 = new GenericController();
-			sub_2.addTestElement(new TestSampler("four"));
-			sub_3.addTestElement(new TestSampler("five"));
-			sub_3.addTestElement(new TestSampler("six"));
-			sub_2.addTestElement(sub_3);
-			sub_2.addTestElement(new TestSampler("seven"));
-			controller.addTestElement(sub_2);
-			String[] order = new String[] { "one", "two", "three", "four", "five", "six", "seven" };
-			int counter = 7;
-			controller.initialize();
-			for (int i = 0; i < 2; i++) {
-				assertEquals(7, counter);
-				counter = 0;
-				TestElement sampler = null;
-				while ((sampler = controller.next()) != null) {
-					assertEquals(order[counter++], sampler.getName());
-				}
-			}
-		}
+        public void testProcessing() throws Exception {
+            testLog.debug("Testing Generic Controller");
+            GenericController controller = new GenericController();
+            GenericController sub_1 = new GenericController();
+            sub_1.addTestElement(new TestSampler("one"));
+            sub_1.addTestElement(new TestSampler("two"));
+            controller.addTestElement(sub_1);
+            controller.addTestElement(new TestSampler("three"));
+            GenericController sub_2 = new GenericController();
+            GenericController sub_3 = new GenericController();
+            sub_2.addTestElement(new TestSampler("four"));
+            sub_3.addTestElement(new TestSampler("five"));
+            sub_3.addTestElement(new TestSampler("six"));
+            sub_2.addTestElement(sub_3);
+            sub_2.addTestElement(new TestSampler("seven"));
+            controller.addTestElement(sub_2);
+            String[] order = new String[] { "one", "two", "three", "four", "five", "six", "seven" };
+            int counter = 7;
+            controller.initialize();
+            for (int i = 0; i < 2; i++) {
+                assertEquals(7, counter);
+                counter = 0;
+                TestElement sampler = null;
+                while ((sampler = controller.next()) != null) {
+                    assertEquals(order[counter++], sampler.getName());
+                }
+            }
+        }
 }
