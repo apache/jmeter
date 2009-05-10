@@ -24,5 +24,5 @@ package org.apache.jmeter.control;
 /**
  * Used by the Generic and Interleave controllers to signal the end of their samples
  */
-class NextIsNullException extends Exception {
+public class NextIsNullException extends Exception {
 }
