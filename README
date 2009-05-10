@@ -33,6 +33,7 @@
       BeanShell (bsh.jar) - www.beanshell.org
       JavaMail (activation.jar, mail.jar) - java.sun.com
       JMS (jms.jar) - java.sun.com
+      JDBC - available from database supplier
 
    o  Java Compiler [OPTIONAL]:
 
@@ -73,7 +74,7 @@
 
   Please note:
   To avoid unnecessary duplication, the source archives do not contain 
-  the source files also needed to run JMeter (for example properties files and scripts).
+  the source files which are needed to run JMeter (for example properties files and scripts).
     
   - Release builds
   Unpack both the binary and source archives into the same directory structure.
@@ -107,7 +108,6 @@
   For legal and licensing issues, please look the files:
   LICENSE
   NOTICE
-  LICENSE*
 
 Cryptographic Software Notice
 -----------------------------
