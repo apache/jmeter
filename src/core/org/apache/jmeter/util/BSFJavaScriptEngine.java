@@ -216,7 +216,7 @@ public class BSFJavaScriptEngine extends BSFEngineImpl {
             global.put("bsf", global, bsf);
 
             for(Iterator it = declaredBeans.iterator(); it.hasNext();) {
-            	declareBean((BSFDeclaredBean) it.next());
+                declareBean((BSFDeclaredBean) it.next());
             }
         } 
         catch (Throwable t) {
