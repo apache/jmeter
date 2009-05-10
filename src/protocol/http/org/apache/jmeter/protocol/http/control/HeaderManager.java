@@ -262,54 +262,54 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
         this.SOAPHeader = header;
     }
 
-	/**
-	 * Merge the attributes with a another HeaderManager's attributes.
-	 * @param element The object to be merged with
-	 * @param preferLocalValues When both objects have a value for the 
-	 *        same attribute, this flag determines which value is preferresd. 
-	 */
-	public HeaderManager merge(TestElement element, boolean preferLocalValues) {
-		if (!(element instanceof HeaderManager)) {
-			throw new IllegalArgumentException("Cannot merge type:" + this.getClass().getName() + " with type:" + element.getClass().getName());
-		}
-		
-		// start off with a merged object as a copy of the local object
-		HeaderManager merged = (HeaderManager)this.clone();
-		
-		HeaderManager other = (HeaderManager)element;
-		// iterate thru each of the other headers
-		for (int i = 0; i < other.getHeaders().size(); i++) {
-			Header otherHeader = other.get(i);
-			boolean found = false;
-			// find the same property in the local headers
-			for (int j = 0; j < merged.getHeaders().size(); j++) {
-				Header mergedHeader = merged.get(j);
-				if (mergedHeader.getName().equalsIgnoreCase(otherHeader.getName())) {
-					// we have a match
-					found = true;
-					if (!preferLocalValues) {
-						// prefer values from the other object
-						if ( (otherHeader.getValue() == null) || (otherHeader.getValue().length() == 0) ) {
-							// the other object has an empty value, so remove this value from the merged object
-							merged.remove(j);
-						} else {
-							// use the other object's value
-							mergedHeader.setValue(otherHeader.getValue());
-						}
-					}
-					// break out of the inner loop
-					break;
-				}
-			}
-			if (!found) {
-				// the other object has a new value to be added to the merged
-				merged.add(otherHeader);
-			}
-		}
-		
-		// finally, merge the names so it's clear they've been merged
-		merged.setName(merged.getName() + ":" + other.getName());
-		
-		return merged;
-	}
+    /**
+     * Merge the attributes with a another HeaderManager's attributes.
+     * @param element The object to be merged with
+     * @param preferLocalValues When both objects have a value for the 
+     *        same attribute, this flag determines which value is preferresd. 
+     */
+    public HeaderManager merge(TestElement element, boolean preferLocalValues) {
+        if (!(element instanceof HeaderManager)) {
+            throw new IllegalArgumentException("Cannot merge type:" + this.getClass().getName() + " with type:" + element.getClass().getName());
+        }
+        
+        // start off with a merged object as a copy of the local object
+        HeaderManager merged = (HeaderManager)this.clone();
+        
+        HeaderManager other = (HeaderManager)element;
+        // iterate thru each of the other headers
+        for (int i = 0; i < other.getHeaders().size(); i++) {
+            Header otherHeader = other.get(i);
+            boolean found = false;
+            // find the same property in the local headers
+            for (int j = 0; j < merged.getHeaders().size(); j++) {
+                Header mergedHeader = merged.get(j);
+                if (mergedHeader.getName().equalsIgnoreCase(otherHeader.getName())) {
+                    // we have a match
+                    found = true;
+                    if (!preferLocalValues) {
+                        // prefer values from the other object
+                        if ( (otherHeader.getValue() == null) || (otherHeader.getValue().length() == 0) ) {
+                            // the other object has an empty value, so remove this value from the merged object
+                            merged.remove(j);
+                        } else {
+                            // use the other object's value
+                            mergedHeader.setValue(otherHeader.getValue());
+                        }
+                    }
+                    // break out of the inner loop
+                    break;
+                }
+            }
+            if (!found) {
+                // the other object has a new value to be added to the merged
+                merged.add(otherHeader);
+            }
+        }
+        
+        // finally, merge the names so it's clear they've been merged
+        merged.setName(merged.getName() + ":" + other.getName());
+        
+        return merged;
+    }
 }
