@@ -25,49 +25,49 @@ import org.apache.jmeter.testelement.TestElement;
 
 public class TestRandomOrderController extends JMeterTestCase {
 
-		public TestRandomOrderController(String name) {
-			super(name);
-		}
+        public TestRandomOrderController(String name) {
+            super(name);
+        }
 
-		public void testRandomOrder() {
-			testLog.debug("Testing RandomOrderController");
-			RandomOrderController roc = new RandomOrderController();
-			roc.addTestElement(new TestSampler("zero"));
-			roc.addTestElement(new TestSampler("one"));
-			roc.addTestElement(new TestSampler("two"));
-			roc.addTestElement(new TestSampler("three"));
-			TestElement sampler = null;
-			List usedSamplers = new ArrayList();
-			roc.initialize();
-			while ((sampler = roc.next()) != null) {
-				String samplerName = sampler.getName();
-				if (usedSamplers.contains(samplerName)) {
-					assertTrue("Duplicate sampler returned from next()", false);
-				}
-				usedSamplers.add(samplerName);
-			}
-			assertTrue("All samplers were returned", usedSamplers.size() == 4);
-		}
+        public void testRandomOrder() {
+            testLog.debug("Testing RandomOrderController");
+            RandomOrderController roc = new RandomOrderController();
+            roc.addTestElement(new TestSampler("zero"));
+            roc.addTestElement(new TestSampler("one"));
+            roc.addTestElement(new TestSampler("two"));
+            roc.addTestElement(new TestSampler("three"));
+            TestElement sampler = null;
+            List usedSamplers = new ArrayList();
+            roc.initialize();
+            while ((sampler = roc.next()) != null) {
+                String samplerName = sampler.getName();
+                if (usedSamplers.contains(samplerName)) {
+                    assertTrue("Duplicate sampler returned from next()", false);
+                }
+                usedSamplers.add(samplerName);
+            }
+            assertTrue("All samplers were returned", usedSamplers.size() == 4);
+        }
 
-		public void testRandomOrderNoElements() {
-			RandomOrderController roc = new RandomOrderController();
-			roc.initialize();
-			assertTrue(roc.next() == null);
-		}
+        public void testRandomOrderNoElements() {
+            RandomOrderController roc = new RandomOrderController();
+            roc.initialize();
+            assertTrue(roc.next() == null);
+        }
 
-		public void testRandomOrderOneElement() {
-			RandomOrderController roc = new RandomOrderController();
-			roc.addTestElement(new TestSampler("zero"));
-			TestElement sampler = null;
-			List usedSamplers = new ArrayList();
-			roc.initialize();
-			while ((sampler = roc.next()) != null) {
-				String samplerName = sampler.getName();
-				if (usedSamplers.contains(samplerName)) {
-					assertTrue("Duplicate sampler returned from next()", false);
-				}
-				usedSamplers.add(samplerName);
-			}
-			assertTrue("All samplers were returned", usedSamplers.size() == 1);
-		}
+        public void testRandomOrderOneElement() {
+            RandomOrderController roc = new RandomOrderController();
+            roc.addTestElement(new TestSampler("zero"));
+            TestElement sampler = null;
+            List usedSamplers = new ArrayList();
+            roc.initialize();
+            while ((sampler = roc.next()) != null) {
+                String samplerName = sampler.getName();
+                if (usedSamplers.contains(samplerName)) {
+                    assertTrue("Duplicate sampler returned from next()", false);
+                }
+                usedSamplers.add(samplerName);
+            }
+            assertTrue("All samplers were returned", usedSamplers.size() == 1);
+        }
 }

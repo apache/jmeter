@@ -30,31 +30,31 @@ import org.apache.jmeter.config.Arguments;
  * 
  */
 public class TestArgumentsPanel extends TestCase {
-		/**
-		 * Create a new test.
-		 * 
-		 * @param name
-		 *            the name of the test
-		 */
-		public TestArgumentsPanel(String name) {
-			super(name);
-		}
+        /**
+         * Create a new test.
+         * 
+         * @param name
+         *            the name of the test
+         */
+        public TestArgumentsPanel(String name) {
+            super(name);
+        }
 
-		/**
-		 * Test that adding an argument to the table results in an appropriate
-		 * TestElement being created.
-		 * 
-		 * @throws Exception
-		 *             if an exception occurred during the test
-		 */
-		public void testArgumentCreation() throws Exception {
-			ArgumentsPanel gui = new ArgumentsPanel();
-			gui.tableModel.addRow(new Argument());
-			gui.tableModel.setValueAt("howdy", 0, 0);
-			gui.tableModel.addRow(new Argument());
-			gui.tableModel.setValueAt("doody", 0, 1);
+        /**
+         * Test that adding an argument to the table results in an appropriate
+         * TestElement being created.
+         * 
+         * @throws Exception
+         *             if an exception occurred during the test
+         */
+        public void testArgumentCreation() throws Exception {
+            ArgumentsPanel gui = new ArgumentsPanel();
+            gui.tableModel.addRow(new Argument());
+            gui.tableModel.setValueAt("howdy", 0, 0);
+            gui.tableModel.addRow(new Argument());
+            gui.tableModel.setValueAt("doody", 0, 1);
 
-			assertEquals("=", ((Argument) ((Arguments) gui.createTestElement()).getArguments().get(0).getObjectValue())
-					.getMetaData());
-		}
+            assertEquals("=", ((Argument) ((Arguments) gui.createTestElement()).getArguments().get(0).getObjectValue())
+                    .getMetaData());
+        }
 }
