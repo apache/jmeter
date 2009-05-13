@@ -56,6 +56,7 @@ public class Remove implements Command {
     }
 
     public void doAction(ActionEvent e) {
+        // TODO - removes the nodes from the CheckDirty map - should it be done later, in case some can't be removed?
         ActionRouter.getInstance().actionPerformed(new ActionEvent(e.getSource(), e.getID(), ActionNames.CHECK_REMOVE));
         GuiPackage guiPackage = GuiPackage.getInstance();
         JMeterTreeNode[] nodes = guiPackage.getTreeListener().getSelectedNodes();
@@ -68,7 +69,7 @@ public class Remove implements Command {
         guiPackage.updateCurrentGui();
     }
 
-    public static void removeNode(JMeterTreeNode node) {
+    private static void removeNode(JMeterTreeNode node) {
         TestElement testElement = node.getTestElement();
         if (testElement.canRemove()) {
             GuiPackage.getInstance().getTreeModel().removeNodeFromParent(node);
