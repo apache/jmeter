@@ -160,42 +160,91 @@ History of Previous Changes
 </td></tr>
 </table>
 </p>
-<h2>
+<h1>
 Version 2.3.3
-</h2>
-<h3>
+</h1>
+<h2>
 Summary of main changes
-</h3>
-<h4>
-Bug fixes
-</h4>
+</h2>
 <p>
 
+The handling of test closedown is much improved. 
+The gradual "Shutdown" command now waits until all threads have stopped,
+and does not report an error if threads don't stop within 5 seconds.
+The immediate "Stop" command can now be used if "Shutdown" takes too long.
+Also the immediate "Stop" command is able to interrupt samplers which support the new Interruptible interface (e.g. HTTP and SOAP, FTP).
+This allows immediate completion of pending responses.
+Non-GUI mode tests can also now be sent a "Shutdown" or "Stop" message.
 
-<ul>
-
-
-</ul>
-
+<a href="./usermanual/component_reference.html#Test_Action">Test Action</a>
+ now supports a "Stop Now" action, 
+as do the 
+<a href="./usermanual/component_reference.html#Thread_Group">Thread Group</a>
+ and 
+<a href="./usermanual/component_reference.html#Result_Status_Action_Handler">Result Status Action Handler</a>
+ Post Processor elements.
 
 </p>
-<h4>
-Improvements
-</h4>
 <p>
 
-
-<ul>
-
-
-</ul>
-
-
+HTTP Cookie handling is improved, and HTTP POST can now use variable file names correctly.
+HTTP, SOAP/XML-RPC and WebService(SOAP) sampler character encodings updated to be more consistent.
+HTTP Samplers now support connection and response timeouts (requires JVM 1.5 for the HTTP Java sampler).
+Together with the closedown improvements described above, this should avoid most cases where a test run hangs.
+Multiple Header Manager elements are now supported for a single HTTP sampler.
+The Proxy Server is improved, and no longer stores "Host" headers by default.
 
 </p>
-<h3>
+<p>
+
+JDBC Request can optionally save the results of Select statements to variables.
+JDBC Request now handles quoted strings and UTF-8, and can handle arbitrary variable types.
+
+</p>
+<p>
+
+There are several new 
+<a href="usermanual/functions.html">
+functions
+</a>
+:
+__char() function: allows arbitrary Unicode characters to be entered in fields.
+__unescape() function: allows Java-escaped strings to be used.
+_unescapeHtml() function: decodes Html-encoded text.
+__escapeHtml() function: encodes text using Html-encoding. 
+A reference to a missing function - e.g. ${__missing(a)} - is now treated the same as a missing variable.
+Previously the function name - and leading { - were dropped. This makes it easier to debug test plans.
+
+</p>
+<p>
+
+Some Assertions can now be applied to sub-samples as well as (or instead of) just the parent sample.
+There is a new 
+<a href="./usermanual/component_reference.html#Random_Variable">Random Variable</a>
+ Configuration element.
+
+</p>
+<p>
+
+JMS samplers are much improved (see details below). The 
+<a href="./usermanual/component_reference.html#TCP_Sampler">TCP Sampler</a>
+ now supports some additional clients and is a bit more flexible.
+
+</p>
+<p>
+
+Client-server mode has been improved, and the server can optionally use a fixed RMI port, which should help with setting up firewalls. 
+
+</p>
+<p>
+
+Various I18N changes have been made; language change works better (though not perfect yet).
+There are improved French translations as well as new Polish and Brazilian Portugese translations.
+
+</p>
+<h2>
 Known bugs
-</h3>
+</h2>
 <p>
 
 The Include Controller has some problems in non-GUI mode. 
@@ -203,18 +252,19 @@ In particular, it can cause a NullPointerException if there are two include cont
 
 </p>
 <p>
-Once Only controller behaves OK under a Thread Group or Loop Controller,
+Once Only controller behaves correctly under a Thread Group or Loop Controller,
 but otherwise its behaviour is not consistent (or clearly specified).
 </p>
 <p>
 
 The menu item Options / Choose Language does not change all the displayed text to the new language.
-To override the default local language, set the JMeter property "language" before starting JMeter. 
+[The behaviour has improved, but language change is still not fully working]
+To override the default local language fully, set the JMeter property "language" before starting JMeter. 
 
 </p>
-<h3>
+<h2>
 Incompatible changes
-</h3>
+</h2>
 <p>
 
 When loading sample results from a file, previous results are no longer cleared.
@@ -315,127 +365,18 @@ int getPropertyAsInt(String key, int defaultValue)
 These are implemented in the AbstractTestElement class which all elements should extend so this is unlikely to cause a problem.
 
 </p>
-<h3>
+<h2>
 Bug fixes
+</h2>
+<h3>
+HTTP Samplers and Proxy
 </h3>
 <ul>
 
 
 <li>
-Bug 45199 - don't try to replace blank variables in Proxy recording
-</li>
-
-
-<li>
-The "prev" and "sampler" objects are now defined for BSF test elements
-</li>
-
-
-<li>
-Prompt to overwrite an existing file when first saving a new test plan
-</li>
-
-
-<li>
-The test element "Save Results to a file" is now shown as a Listener
-</li>
-
-
-<li>
-Amend TestBeans to show the correct popup menu for Listeners
-</li>
-
-
-<li>
-Fix NPE when using nested Transaction Controllers with parent samples
-</li>
-
-
-<li>
-Bug 45185 - CSV dataset blank delimiter causes OOM
-</li>
-
-
-<li>
-Bug 43791 - ensure QueueReceiver is closed
-</li>
-
-
-<li>
-Fix NPE (in DataSourceElement) when using JDBC in client-server mode
-</li>
-
-
-<li>
-Bug 45749 - Response Assertion does not work with a substring that is not a valid RE
-</li>
-
-
-<li>
-Mailer Visualizer documentation now agrees with code i.e. failure/success counts need to be exceeded.
-</li>
-
-
-<li>
-Mailer Visualizer now shows the failure count
-</li>
-
-
-<li>
-Fix incorrect GUI classifications: 
-"Save Results to a file" and "Generate Summary Results" are now shown as Listeners.
-"Counter" is now shown as a Configuration element.
-
-</li>
-
-
-<li>
-HTTPSamplers can now use variables in POSTed file names
-</li>
-
-
-<li>
-Bug 45831 - WS Sampler reports incorrect throughput if SOAP packet creation fails
-</li>
-
-
-<li>
-Bug 45887 - TCPSampler: timeout property incorrectly set
-</li>
-
-
-<li>
-Bug 45928 - AJP/1.3 Sampler doesn't retrieve his label from messages.properties
-</li>
-
-
-<li>
-Bug 45904 - Allow 'Not' Response Assertion to succeed with null sample
-</li>
-
-
-<li>
-HTTP, SOAP/XML-RPC and WebService(SOAP) sampler character encodings updated to be more consistent
-</li>
-
-
-<li>
-Bug 45976 - incomplete result file when using remote testing with more than 1 server
-</li>
-
-
-<li>
-Fix Summariser so it works in client server mode
-</li>
-
-
-<li>
-Bug 45425 - JDBC Request does not support Unicode (changed sampler to use UTF-8)
-</li>
-
-
-<li>
-Bug 46016 - avoid possible NPE in JMSSampler
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=46332">Bug 46332</a>
+ - HTTP Cookie Manager ignores manually defined cookies (bug introduced in r707810)
 </li>
 
 
@@ -455,52 +396,175 @@ Cookie Manager now saves/restores cookie versions
 
 
 <li>
-Bug 41608 - misleading warning log message removed
+Check validity of cookies before storing them.
+</li>
+
+
+
+<li>
+HTTPSamplers can now use variables in POSTed file names
 </li>
 
 
 <li>
-CSVSaveService - check for EOF while reading quoted string
+Fix processing of first file name in HTTP POST so functions/variables work (bug introduced with multiple file support)
 </li>
 
 
 <li>
-Bug 46142 - JMS Receiver now uses MessageID
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=45831">Bug 45831</a>
+ - WS Sampler reports incorrect throughput if SOAP packet creation fails
 </li>
 
 
 <li>
-Bug 46148 - HTTP sampler fails on SSL requests when logging for jmeter.util is set to DEBUG
+HTTP, SOAP/XML-RPC and WebService(SOAP) sampler character encodings updated to be more consistent
+</li>
+
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=46148">Bug 46148</a>
+ - HTTP sampler fails on SSL requests when logging for jmeter.util is set to DEBUG
 </li>
 
 
 <li>
-TCP sampler now calls setupTest() and teardownTest() methods
+Fix Java 1.6 https error: java.net.SocketException: Unconnected sockets not implemented
+</li>
+
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=46838">Bug 46838</a>
+ - if there was no data, still need to set latency in HTTPSampler
 </li>
 
 
 <li>
-Bug 45458 - Point to Point JMS in combination with authentication
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=46993">Bug 46993</a>
+ - Saving from Header Manager generates ClassCastException
 </li>
 
 
 <li>
-Bug 45460 - JMS TestPlan elements depend on resource property
+
+
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=46690">Bug 46690</a>
+ - handling of 302 redirects with invalid relative paths.
+JMeter now removes extraneous leading "../" segments (as do many browsers)
+
 </li>
 
 
 <li>
-Bug 34096 - Duplicate samples not eliminated when writing to CSV files
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=44521">Bug 44521</a>
+ - empty variables for a POST in the HTTP Request don't get ignored
 </li>
 
 
 <li>
-Bug 44521 - empty variables for a POST in the HTTP Request don't get ignored
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=46977">Bug 46977</a>
+ - JMeter does not handle HTTP headers not delimited by whitespace
 </li>
 
 
 <li>
-Bug 44941 - Throughput controllers should not share global counters
+Fix bug in HTTP file: handling - read bytes, not characters in the default encoding.
+</li>
+
+
+
+<li>
+Remove Host from headers saved by the Proxy server, as that will normally be generated by the HTTP stack
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=45199">Bug 45199</a>
+ - don't try to replace blank variables in Proxy recording
+</li>
+
+
+<li>
+Change HTTPS spoofing so https: links are replaced even when URL match fails
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=46436">Bug 46436</a>
+ - Improve error reporting in Proxy Gui
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=46435">Bug 46435</a>
+ - More verbose error msg for error 501 (Proxy Server)
+</li>
+
+
+</ul>
+<h3>
+Other Samplers
+</h3>
+<ul>
+
+
+<li>
+The "prev" and "sampler" objects are now defined for BSF test elements
+</li>
+
+
+<li>
+Fix NPE (in DataSourceElement) when using JDBC in client-server mode
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=45425">Bug 45425</a>
+ - JDBC Request does not support Unicode (changed sampler to use UTF-8)
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=46522">Bug 46522</a>
+ - Incorrect "Response data" in JDBC sample when column names are missing
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=46821">Bug 46821</a>
+ - JDBC select request doesn't store the first column in the variables
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=43791">Bug 43791</a>
+ - ensure QueueReceiver is closed in JMS Point to Point sampler
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=46016">Bug 46016</a>
+ - avoid possible NPE in JMSSampler
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=46142">Bug 46142</a>
+ - JMS Receiver now uses MessageID
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=45458">Bug 45458</a>
+ - Point to Point JMS in combination with authentication
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=45460">Bug 45460</a>
+ - JMS TestPlan elements depend on resource property
 </li>
 
 
@@ -515,77 +579,82 @@ JMSPublisher and Subscriber fixes: thread-safety, support dynamic locale changes
 
 
 <li>
-Add HeaderAsPropertyRenderer to support header resource names; use this to fix locale changes in various GUI elements
+FTP Sampler now logs out before disconnecting.
 </li>
 
 
 <li>
-Fixed language change handling for menus (does not yet work for TestBeans)
+TCP sampler now calls setupTest() and teardownTest() methods
 </li>
 
 
 <li>
-Fix regex function - was failing to process $m$mid$n$ correctly
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=45887">Bug 45887</a>
+ - TCPSampler: timeout property incorrectly set
+</li>
+
+
+</ul>
+<h3>
+Controllers
+</h3>
+<ul>
+
+
+<li>
+Fix NPE when using nested Transaction Controllers with parent samples
 </li>
 
 
 <li>
-Fix Java 1.6 https error: java.net.SocketException: Unconnected sockets not implemented
+Fix processing of Transaction Controller parent mode so current sampler is set to actual sampler
 </li>
 
 
 <li>
-Bug 46359 - BSF JavaScript Preprocessor cannot access sampler variable on first interation (Implement temporary work-round for BSF-22)
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=44941">Bug 44941</a>
+ - Throughput controllers should not share global counters
 </li>
 
 
 <li>
-Bug 46332 - HTTP Cookie Manager ignores manually defined cookies (bug introduced in r707810)
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=47120">Bug 47120</a>
+ - Throughput Controller: change percent executions to total executions, the value is stored in a String and interpreted as 1 execution
 </li>
 
 
 <li>
-Bug 46407 - BSF elements do not load script files, attempt to interpret filename as script
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=47150">Bug 47150</a>
+ - ThreadGroup with a loop count of zero causes infinite loop
 </li>
 
 
 <li>
-Bug 46423 - I18N of Proxy Recorder
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=47009">Bug 47009</a>
+ - Insert parent caused child controller name to be reset
 </li>
 
 
 <li>
-Better handling of Exceptions during test shutdown
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=47165">Bug 47165</a>
+ - Using duplicate Module Controller names in command line mode causes NPE
+</li>
+
+
+</ul>
+<h3>
+Listeners
+</h3>
+<ul>
+
+
+<li>
+Mailer Visualizer documentation now agrees with code i.e. failure/success counts need to be exceeded to trigger the mail.
 </li>
 
 
 <li>
-Protect against possible NPE in RegexFunction if called during test shutdown.
-</li>
-
-
-<li>
-Correct the variable name "theadName" to "threadName" in the __jexl() and __javaScript() functions
-</li>
-
-
-<li>
-Bug 46522 - Incorrect "Response data" in JDBC sample when column names are missing
-</li>
-
-
-<li>
-Bug 46424 - corrections to French translation
-</li>
-
-
-<li>
-Bug 46436 - Improve error reporting in Proxy Gui
-</li>
-
-
-<li>
-Fix potential thread safety issue in JMeterThread class
+Mailer Visualizer now shows the failure count
 </li>
 
 
@@ -595,12 +664,24 @@ Mailer Visualiser - fix parsing of multiple e-mail address when using Test butto
 
 
 <li>
-Bug 46435 - More verbose error msg for error 501 (Proxy Server)
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=45976">Bug 45976</a>
+ - incomplete result file when using remote testing with more than 1 server
 </li>
 
 
 <li>
-Bug 46491 - Incorrect value for the last variable in "CSV Data Set Config" (error in processing quoted strings)
+Fix Summariser so it works in client server mode
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=34096">Bug 34096</a>
+ - Duplicate samples not eliminated when writing to CSV files
+</li>
+
+
+<li>
+Save "Include group Name in Label" setting in Aggregate and Summary reports
 </li>
 
 
@@ -610,70 +691,43 @@ The JMeter variable "sample_variables" is sent to all server instances to ensure
 
 
 <li>
-Bug 46821 - JDBC select request doesn't store the first column in the variables
+CSVSaveService - check for EOF while reading quoted string
+</li>
+
+
+</ul>
+<h3>
+Assertions
+</h3>
+<ul>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=45749">Bug 45749</a>
+ - Response Assertion does not work with a substring that happens to be an invalid RE
 </li>
 
 
 <li>
-Fix bug in HTTP file: handling - read bytes, not characters in the default encoding.
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=45904">Bug 45904</a>
+ - Allow 'Not' Response Assertion to succeed with null sample
+</li>
+
+
+</ul>
+<h3>
+Functions
+</h3>
+<ul>
+
+
+<li>
+Fix regex function - was failing to process $m$mid$n$ correctly
 </li>
 
 
 <li>
-Change HTTPS spoofing so https: links are replaced even when URL match fails
-</li>
-
-
-<li>
-Check validity of cookies before storing them.
-</li>
-
-
-<li>
-FTP Sampler now logs out before disconnecting.
-</li>
-
-
-<li>
-Bug 46838 - if there was no data, still need to set latency in HTTPSampler
-</li>
-
-
-<li>
-
-Bug 46690 - handling of 302 redirects with invalid relative paths.
-JMeter now removes extraneous leading "../" segments (as do many browsers)
-
-</li>
-
-
-<li>
-Bug 46844 -  "Library" label in test plan are not I18N
-</li>
-
-
-<li>
-Bug 46977 -  JMeter does not handle HTTP headers not delimited by whitespace
-</li>
-
-
-<li>
-Remove Host from headers saved by the Proxy server, as that will normally be generated by the HTTP stack
-</li>
-
-
-<li>
-Bug 46993 - Saving from Header Manager generates ClassCastException
-</li>
-
-
-<li>
-Bug 47009 - Insert parent caused child controller name to be reset
-</li>
-
-
-<li>
-Bug 47064 - fixes for Mac LAF
+Protect against possible NPE in RegexFunction if called during test shutdown.
 </li>
 
 
@@ -683,32 +737,7 @@ Avoid NPE if XPath function does not match any nodes
 
 
 <li>
-Fix processing of Transaction Sampler parent mode so current sampler is set to actual sampler
-</li>
-
-
-<li>
-Fix processing of first file name in HTTP POST so functions/variables work (bug introduced with multiple file support)
-</li>
-
-
-<li>
-Bug 47127 -  Unable to change language to pl_PL
-</li>
-
-
-<li>
-Bug 47120 -  Throughput Controller: change percent executions to total executions, the value is stored in a String and interpreted as 1 execution
-</li>
-
-
-<li>
-Bug 47137 - Labels in View Results Tree aren't I18N
-</li>
-
-
-<li>
-Bug 47150 - ThreadGroup with a loop count of zero causes infinite loop
+Correct the variable name "theadName" to "threadName" in the __jexl() and __javaScript() functions
 </li>
 
 
@@ -717,130 +746,149 @@ A reference to a missing function - e.g. ${__missing(a)} - is now treated the sa
 </li>
 
 
-<li>
-Bug 47165 - Using the same module name in command line mode causes NPE
-</li>
-
-
-<li>
-Save "Include group Name in Label" settings in Aggregate and Summary reports
-</li>
-
-
 </ul>
 <h3>
-Improvements
+I18N
 </h3>
 <ul>
 
 
 <li>
-LDAP result data now formatted with line breaks
+Fixed language change handling for menus (does not yet work for TestBeans)
 </li>
 
 
 <li>
-Add OUT and log variables to __jexl() function
+Add HeaderAsPropertyRenderer to support header resource names; use this to fix locale changes in various GUI elements
 </li>
 
 
 <li>
-Add log variable to the __javaScript() function
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=46424">Bug 46424</a>
+ - corrections to French translation
 </li>
 
 
 <li>
-Save Responses to a file can save the generated filename(s) to variables.
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=46844">Bug 46844</a>
+ -  "Library" label in test plan are not I18N
 </li>
 
 
 <li>
-Add BSF Listener element
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=47064">Bug 47064</a>
+ - fixes for Mac LAF
 </li>
 
 
 <li>
-Bug 45200 - MailReaderSampler: store the whole MIME message in the SamplerResult
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=47127">Bug 47127</a>
+ -  Unable to change language to pl_PL
 </li>
 
 
 <li>
-Added __char() function: allows arbitrary Unicode characters to be entered in fields.
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=47137">Bug 47137</a>
+ - Labels in View Results Tree aren't I18N
 </li>
 
 
 <li>
-Added __unescape() function: allows Java-escaped strings to be used.
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=46423">Bug 46423</a>
+ - I18N of Proxy Recorder
 </li>
 
 
 <li>
-Add Body (unescaped) source option to Regular Expression Extractor.
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=45928">Bug 45928</a>
+ - AJP/1.3 Sampler doesn't retrieve its label from messages.properties
+</li>
+
+
+</ul>
+<h3>
+General
+</h3>
+<ul>
+
+
+<li>
+Prompt to overwrite an existing file when first saving a new test plan
 </li>
 
 
 <li>
-Added __unescapeHtml() function: decodes Html-encoded text.
+Amend TestBeans to show the correct popup menu for Listeners
 </li>
 
 
 <li>
-Added __escapeHtml() function: encodes text using Html-encoding.
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=45185">Bug 45185</a>
+ - CSV dataset blank delimiter causes OOM
 </li>
 
 
 <li>
-Allow spaces in JMeter path names (apply work-round for Java bug 4496398)
+Fix incorrect GUI classifications: 
+"Save Results to a file" and "Generate Summary Results" are now shown as Listeners.
+"Counter" is now shown as a Configuration element.
+
 </li>
 
 
 <li>
-Bug 45694 - Support GZIP compressed logs
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=41608">Bug 41608</a>
+ - misleading warning log message removed
 </li>
 
 
 <li>
-Random Variable - new configuration element to create random numeric variables
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=46359">Bug 46359</a>
+ - BSF JavaScript Preprocessor cannot access sampler variable on first interation (Implement temporary work-round for BSF-22)
 </li>
 
 
 <li>
-Bug 45929 - improved French translations
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=46407">Bug 46407</a>
+ - BSF elements do not load script files, attempt to interpret filename as script
 </li>
 
 
 <li>
-Bug 45571 - JMS Sampler correlation enhancement
+Better handling of Exceptions during test shutdown
 </li>
 
 
 <li>
-Bug 45479 - Support for multiple HTTP Header Manager nodes
+Fix potential thread safety issue in JMeterThread class
 </li>
 
 
 <li>
-Bug 43119 - Save Responses to file: optionally omit the file number
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=46491">Bug 46491</a>
+ - Incorrect value for the last variable in "CSV Data Set Config" (error in processing quoted strings)
+</li>
+
+
+
+</ul>
+<h2>
+Improvements
+</h2>
+<h3>
+HTTP Samplers
+</h3>
+<ul>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=45479">Bug 45479</a>
+ - Support for multiple HTTP Header Manager nodes
 </li>
 
 
 <li>
-Allow If Controller to use variable expressions (not just Javascript)
-</li>
-
-
-<li>
-Bug 45903 - allow Assertions to apply to sub-samples
-</li>
-
-
-<li>
-Trim spaces from While Controller condition before comparing against LAST, blank or false
-</li>
-
-
-<li>
-Add classname field to TCP Sampler GUIs
+HTTP Samplers now support connection and request timeouts (requires Java 1.5 for Java Http sampler)
 </li>
 
 
@@ -850,8 +898,21 @@ Apache SOAP 2.3.1 does not give access to HTTP response code/message, so WebServ
 
 
 <li>
-Use Script to evaluate __jexl() function so can have multiple statements.
+Mirror server now supports "X-Sleep" header - if this is set, the responding thread will wait for the specified number of milliseconds
 </li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=45694">Bug 45694</a>
+ - Support GZIP compressed logs in Access Log Sampler
+</li>
+
+
+</ul>
+<h3>
+Other samplers
+</h3>
+<ul>
 
 
 <li>
@@ -870,12 +931,87 @@ JDBC Request now handles arbitrary variable types.
 
 
 <li>
-Bug 46030 - Extend TCP Sampler to Support Length-Prefixed Binary Data
+LDAP result data now formatted with line breaks
 </li>
 
 
 <li>
-Process JVM_ARGS last so users can override default settings
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=45200">Bug 45200</a>
+ - MailReaderSampler: store the whole MIME message in the SamplerResult
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=45571">Bug 45571</a>
+ - JMS Sampler correlation enhancement
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=46030">Bug 46030</a>
+ - Extend TCP Sampler to Support Length-Prefixed Binary Data
+</li>
+
+
+<li>
+Add classname field to TCP Sampler GUIs
+</li>
+
+
+</ul>
+<h3>
+Controllers
+</h3>
+<ul>
+
+
+<li>
+Allow If Controller to use variable expressions (not just Javascript)
+</li>
+
+
+<li>
+Trim spaces from While Controller condition before comparing against LAST, blank or false
+</li>
+
+
+</ul>
+<h3>
+Listeners
+</h3>
+<ul>
+
+
+<li>
+Save Responses to a file can save the generated filename(s) to variables.
+</li>
+
+
+<li>
+Add option to skip suffix generation in Save Responses to a File
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=43119">Bug 43119</a>
+ - Save Responses to file: optionally omit the file number
+</li>
+
+
+<li>
+Add BSF Listener element
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=47176">Bug 47176</a>
+ -  Monitor Results : improve load status graphic
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=40045">Bug 40045</a>
+ - Allow Results monitor to select a specific connector
 </li>
 
 
@@ -884,23 +1020,125 @@ Read XML JTL files more efficiently - pass samples to visualisers as they are re
 </li>
 
 
+</ul>
+<h3>
+Assertions, Config, Pre- & Post-Processors
+</h3>
+<ul>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=45903">Bug 45903</a>
+ - allow Assertions to apply to sub-samples
+</li>
+
+
+<li>
+Add Body (unescaped) source option to Regular Expression Extractor.
+</li>
+
+
+<li>
+Random Variable - new configuration element to create random numeric variables
+</li>
+
+
+</ul>
+<h3>
+Functions
+</h3>
+<ul>
+
+
+<li>
+Add OUT and log variables to __jexl() function
+</li>
+
+
+<li>
+Use Script to evaluate __jexl() function so can have multiple statements.
+</li>
+
+
+<li>
+Add log variable to the __javaScript() function
+</li>
+
+
+<li>
+Added __char() function: allows arbitrary Unicode characters to be entered in fields.
+</li>
+
+
+<li>
+Added __unescape() function: allows Java-escaped strings to be used.
+</li>
+
+
+<li>
+Added __unescapeHtml() function: decodes Html-encoded text.
+</li>
+
+
+<li>
+Added __escapeHtml() function: encodes text using Html-encoding.
+</li>
+
+
+</ul>
+<h3>
+I18N
+</h3>
+<ul>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=45929">Bug 45929</a>
+ - improved French translations
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=47132">Bug 47132</a>
+ - Brazilian Portuguese translations
+</li>
+
+
+<li>
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=46900">Bug 46900</a>
+ - Polish translations
+</li>
+
+
 <li>
 Added locales.add property to allow for new Locales
 </li>
 
 
+</ul>
+<h3>
+General
+</h3>
+<ul>
+
+
 <li>
-Bug 40045 - Allow Results monitor to select a specific connector
+Allow spaces in JMeter path names (apply work-round for 
+<a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4496398">
+Java Bug 4496398
+</a>
+)
 </li>
 
 
 <li>
-Bug 46636 - rmi ports
+Process JVM_ARGS last in script files so users can override default settings
 </li>
 
 
 <li>
-Mirror server now supports "X-Sleep" header - if this is set, the responding thread will wait for the specified number of milliseconds
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=46636">Bug 46636</a>
+ - Allow server mode to optionally use a fixed rmi port
 </li>
 
 
@@ -927,39 +1165,15 @@ Add UDP server to wait for shutdown message if running in non-GUI mode; add UDP 
 
 
 <li>
-HTTP Samplers now support connection and request timeouts (requires Java 1.5 for Java Http sampler)
-</li>
-
-
-<li>
-Bug 47132 - Brazilian Portuguese translations
-</li>
-
-
-<li>
-Bug 46900 - Polish translations
-</li>
-
-
-<li>
-Bug 41209 - JLabeled* and ToolTips
-</li>
-
-
-<li>
-Add option to skip suffix generation in Save Responses to a File
-</li>
-
-
-<li>
-Bug 47176 -  Monitor Results : improve load status graphic
+<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=41209">Bug 41209</a>
+ - JLabeled* and ToolTips
 </li>
 
 
 </ul>
-<h3>
+<h2>
 Non-functional changes
-</h3>
+</h2>
 <ul>
 
 
@@ -969,7 +1183,7 @@ Introduce AbstractListenerGui class to make it easier to create Listeners with n
 
 
 <li>
-Assertions run after PostProcessors; change order of pop-up menus accordingly
+Assertions are run after PostProcessors; change order of pop-up menus accordingly
 </li>
 
 
