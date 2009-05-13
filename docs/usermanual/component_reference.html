@@ -5764,12 +5764,19 @@ For example:
 
 <pre>
 
-Test Plan / Protocol: JDBC / Control / Interleave Controller
+Test Plan / Protocol: JDBC / Control / Interleave Controller (Module1)
 
 </pre>
 
-Any fragments used by the Module Controller must have a unique name,
+Any 
+<b>
+fragments used by the Module Controller must have a unique name
+</b>
+,
 as the name is used to find the target controller when a test plan is reloaded.
+For this reason it is best to ensure that the Controller name is changed from the default
+- as shown in the example above -
+otherwise a duplicate may be accidentally created when new elements are added to the test plan. 
 
 </p>
 
