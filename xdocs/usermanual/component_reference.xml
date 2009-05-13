@@ -1783,10 +1783,13 @@ the appropriate controller in its drop down box.  This provides convenience for 
 A fragment name is made up of the Controller name and all its parent names.
 For example:
 <pre>
-Test Plan / Protocol: JDBC / Control / Interleave Controller
+Test Plan / Protocol: JDBC / Control / Interleave Controller (Module1)
 </pre>
-Any fragments used by the Module Controller must have a unique name,
+Any <b>fragments used by the Module Controller must have a unique name</b>,
 as the name is used to find the target controller when a test plan is reloaded.
+For this reason it is best to ensure that the Controller name is changed from the default
+- as shown in the example above -
+otherwise a duplicate may be accidentally created when new elements are added to the test plan. 
 </p>
 </description>
 <note>The Module Controller should not be used with remote testing or non-gui testing in conjunction with Workbench components since the Workbench test elements are not part of test plan .jmx files.  Any such test will fail.</note>
@@ -1795,7 +1798,6 @@ as the name is used to find the target controller when a test plan is reloaded.
         <property name="Module to Run" required="Yes">The module controller provides a list of all controllers loaded into the gui.  Select
         the one you want to substitute in at runtime.</property>
 </properties>
-
 </component>
 
 <component name="Include Controller" index="&sect-num;.2.14"  width="419" height="118" screenshot="includecontroller.png">
