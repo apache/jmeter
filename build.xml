@@ -1100,7 +1100,7 @@ run JMeter unless all the JMeter jars are added.
     Creates runtime and source distributions and site documentation
     -->
     <target name="distribution" 
-        depends="svnCheck,check-versions,clean,install,docs-printable,test,_distribution"
+        depends="svnCheck,check-versions,clean,install,docs-printable,docs-api,test,_distribution"
         description="Build JMeter for end-user distribution"/>
 
     <target name="check-versions">
