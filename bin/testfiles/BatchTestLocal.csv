@@ -105,9 +105,19 @@ Java If once 1,,,Thread Group 1-2,,false,,0,1,1,null,,1,1
 Java If once 2,200,OK,Thread Group 1-2,,true,,0,1,1,null,,1,0
 Java If all 1,,,Thread Group 1-2,,false,,0,1,1,null,,1,1
 Java OK,200,OK,Thread Group 1-2,,true,,0,1,1,null,,1,0
-"HTTP ""Request,",200,OK,Thread Group 2-1,text,true,,73007,1,1,file:testfiles/BatchTestLocal.jmx,,1,0
+"HTTP ""Request,",200,OK,Thread Group 2-1,text,true,,98994,1,1,file:testfiles/BatchTestLocal.jmx,,1,0
 1 1,200,OK,Thread Group 2-1,,true,,0,1,1,null,,1,0
 2 2,200,OK,Thread Group 2-1,,true,,0,1,1,null,,1,0
 3 3,200,OK,Thread Group 2-1,,true,,0,1,1,null,,1,0
 0 4,200,OK,Thread Group 2-1,,true,,0,1,1,null,,1,0
 NAME USER1,200,OK,Thread Group 3-1,,true,,0,1,1,null,,1,0
+TG1 = 3,200,OK,Thread Group 4-1,,true,,0,1,1,null,,1,0
+TG OO = 1,200,OK,Thread Group 4-1,,true,,0,1,1,null,,1,0
+TG Loop =3,200,OK,Thread Group 4-1,,true,,0,1,1,null,,1,0
+TG2 = 3,200,OK,Thread Group 4-1,,true,,0,1,1,null,,1,0
+TG1 = 3,200,OK,Thread Group 4-1,,true,,0,1,1,null,,1,0
+TG Loop =3,200,OK,Thread Group 4-1,,true,,0,1,1,null,,1,0
+TG2 = 3,200,OK,Thread Group 4-1,,true,,0,1,1,null,,1,0
+TG1 = 3,200,OK,Thread Group 4-1,,true,,0,1,1,null,,1,0
+TG Loop =3,200,OK,Thread Group 4-1,,true,,0,1,1,null,,1,0
+TG2 = 3,200,OK,Thread Group 4-1,,true,,0,1,1,null,,1,0
