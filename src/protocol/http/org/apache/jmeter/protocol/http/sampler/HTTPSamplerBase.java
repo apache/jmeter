@@ -698,7 +698,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
 
     public void setConnectTimeout(String value) {
-        setProperty(CONNECT_TIMEOUT, value);
+        setProperty(CONNECT_TIMEOUT, value, "");
     }
 
     public int getConnectTimeout() {
@@ -706,7 +706,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
 
     public void setResponseTimeout(String value) {
-        setProperty(RESPONSE_TIMEOUT, value);
+        setProperty(RESPONSE_TIMEOUT, value, "");
     }
 
     public int getResponseTimeout() {
