@@ -145,12 +145,7 @@ Make sure the file is a jar file, not a zip.
 <p>Apache SOAP requires mail.jar and activation.jar. You need to download and copy these two jar files to your <b>jmeter/lib</b> directory. Once the files are in there, JMeter will automatically pick them up.</p>
 </subsection>
 
-<subsection name="&sect-num;.2.7 BeanShell" anchor="opt_beanshell">
-<p>To run the BeanShell function or any of the BeanShell test elements (sampler, timer etc),
- you need to download the beanshell jar from <a href="http://www.beanshell.org/">http://www.beanshell.org/</a> and copy the jar file to the <b>jmeter/lib directory</b>, where JMeter will automatically pick it up.</p>
-</subsection>
-
-<subsection name="&sect-num;.2.8 Libraries for ActiveMQ 3.0" anchor="libraries_activemq">
+<subsection name="&sect-num;.2.7 Libraries for ActiveMQ 3.0" anchor="libraries_activemq">
 <p>See <a href="http://activemq.apache.org/initial-configuration.html">http://activemq.apache.org/initial-configuration.html</a>
 for details.
 </p>
@@ -249,7 +244,7 @@ then define the property <b>search_paths</b> in jmeter.properties.
 Do not use lib/ext for utility jars; it is only intended for JMeter components.
 </p>
 <p>
-Other jars (such as JDBC, JavaMail, Beanshell and any other support libaries needed by the JMeter code)
+Other jars (such as JDBC, JavaMail and any other support libaries needed by the JMeter code)
  should be placed in the <b>lib</b> directory - not the <b>lib/ext</b> directory</p>
 <p>Note: JMeter will only find .jar files, not .zip.</p>
 <p>You can also install utility Jar files in $JAVA_HOME/jre/lib/ext, or (since 2.1.1) you can set the property <b>user.classpath</b> in jmeter.properties</p>
