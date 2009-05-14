@@ -1167,7 +1167,7 @@ run JMeter unless all the JMeter jars are added.
     <gzip zipfile="${dist.dir}/${pack.name}.tgz" src="${dist.dir}/${pack.name}.tar" />
     <!-- no longer needed -->
     <delete file="${dist.dir}/${pack.name}.tar"/>
-    <antcall target="_md5">
+    <antcall target="_hash">
         <param name="path" value="${dist.dir}/${dist.name}.tgz"/>
     </antcall>
 
@@ -1183,7 +1183,7 @@ run JMeter unless all the JMeter jars are added.
          <patternset refid="dist_bin_files_native"/>
       </zipfileset>
     </zip>
-    <antcall target="_md5">
+    <antcall target="_hash">
         <param name="path" value="${dist.dir}/${dist.name}.zip"/>
     </antcall>
     <!-- Delete work directory (may not exist) -->
@@ -1208,7 +1208,7 @@ run JMeter unless all the JMeter jars are added.
     <gzip zipfile="${dist.dir}/${pack.name}_src.tgz" src="${dist.dir}/${pack.name}_src.tar" />
     <!-- no longer needed -->
     <delete file="${dist.dir}/${pack.name}_src.tar"/>
-    <antcall target="_md5">
+    <antcall target="_hash">
         <param name="path" value="${dist.dir}/${dist.name}_src.tgz"/>
     </antcall>
 
@@ -1225,7 +1225,7 @@ run JMeter unless all the JMeter jars are added.
         <patternset refid="dist.sources.non.native"/>
       </zipfileset>
     </zip>
-    <antcall target="_md5">
+    <antcall target="_hash">
         <param name="path" value="${dist.dir}/${dist.name}_src.zip"/>
     </antcall>
     <!-- Delete work directory (may not exist) -->
@@ -1428,16 +1428,19 @@ run JMeter unless all the JMeter jars are added.
 <!-- 
     Utility target to create MD5 checksums in standard format (with *filename) 
     Usage:
-    <antcall target="_md5">
+    <antcall target="_hash">
         <param name="path" value="archive.jar|zip|gz"/>
     </antcall>
 -->
 
-    <target name="_md5" unless="md5.skip">
+    <target name="_hash" unless="hash.skip">
         <echo message="Creating MD5 for ${path}"/>
         <basename property="_base" file="${path}"/>
-        <checksum file="${path}" property="md5"/>
+        <checksum algorithm="MD5" file="${path}" property="md5"/>
         <echo message="${md5} *${_base}" file="${path}.md5"/>
+        <echo message="Creating SHA for ${path}"/>
+        <checksum algorithm="SHA" file="${path}" property="sha"/>
+        <echo message="${sha} *${_base}" file="${path}.sha"/>
     </target>
 
   <!--
