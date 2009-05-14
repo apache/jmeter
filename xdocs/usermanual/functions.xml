@@ -705,9 +705,7 @@ For example:
 	The BeanShell function evaluates the script passed to it, and returns the result.
 </p>
 <p>
-<b>Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
-<br></br>
-For full details on using BeanShell, please see the BeanShell web-site at <a href="http://www.beanshell.org/">http://www.beanshell.org/</a>
+<b>For full details on using BeanShell, please see the BeanShell web-site at <a href="http://www.beanshell.org/">http://www.beanshell.org/</a>
 </b>
 </p>
 <p>

@@ -297,6 +297,7 @@
   <!-- Jars for binary release -->
   <patternset id="external.jars">
     <include name="${apache-bsf.jar}"/>
+    <include name="${beanshell.jar}"/>
     <include name="${avalon-framework.jar}"/>
     <include name="${xmlgraphics-commons.jar}"/>
     <include name="${commons-codec.jar}"/>
@@ -349,6 +350,7 @@
   <path id="classpath">
     <!-- Externally produced jars -->
     <pathelement location="${apache-bsf.jar}"/>
+    <pathelement location="${beanshell.jar}"/>
     <pathelement location="${avalon-framework.jar}"/>
     <pathelement location="${xmlgraphics-commons.jar}"/>
     <pathelement location="${commons-codec.jar}"/>
@@ -1742,14 +1744,8 @@ run JMeter unless all the JMeter jars are added.
 
   </target>
 
-  <available classname="bsh.Interpreter" classpathref="classpath" property="beanshell.present"/>
-
-  <target name="_beanshell_message" unless="beanshell.present">
-    <echo>BeanShell Interpreter is not present, some tests will be skipped</echo>
-  </target>
-
    <!-- Generic test target, not intended to be called directly -->
-   <target name="_test" depends="_beanshell_message">
+   <target name="_test">
    <!-- 
    The property java.awt.headless is not automatically passed on,
    because the tests are run in a separate JVM from the build.

@@ -855,9 +855,7 @@ to configure this via the GUI, so it cannot really be used.
 <component name="BeanShell Sampler" index="&sect-num;.1.10"  width="592" height="303" screenshot="beanshellsampler.png">
 	<description><p>This sampler allows you to write a sampler using the BeanShell scripting language.		
 </p><p>
-		<b>Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
-		<br></br>
-        For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
+<b>For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
 </p>
 <p>
 The test element supports the ThreadListener and TestListener methods.
@@ -2238,9 +2236,7 @@ If these are not present in the lib directory, the element will not appear in th
 The BeanShell Listener allows the use of BeanShell for processing samples for saving etc.
 </p>
 <p>
-		<b>Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
-		<br></br>
-        For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
+<b>For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
 </p>
 <p>
 The test element supports the ThreadListener and TestListener methods.
@@ -3208,10 +3204,7 @@ validate the XML based on a DTD or schema or do any further validation.</p></des
 <description><p>The BeanShell Assertion allows the user to perform assertion checking using a BeanShell script.
 </p>
 <p>
-<b>Please note that the BeanShell jar file is not included with JMeter;
-it needs to be downloaded separately and placed in the lib directory.
-<br></br>
-For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
+<b>For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
 </p><p>
 Note that a different Interpreter is used for each independent occurence of the assertion
 in each thread in a test script, but the same Interpreter is used for subsequent invocations.
@@ -3509,9 +3502,7 @@ points of the test plan.
 The BeanShell Timer can be used to generate a delay.
 </p>
 <p>
-		<b>Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
-		<br></br>
-        For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
+<b>For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
 </p>
 <p>
 The test element supports the ThreadListener and TestListener methods.
@@ -3720,9 +3711,7 @@ To add a new value to the series, click the 'Add User' button and fill in the de
 The BeanShell PreProcessor allows arbitrary code to be applied before taking a sample.
 </p>
 <p>
-		<b>Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
-		<br></br>
-        For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
+<b>For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
 </p>
 <p>
 The test element supports the ThreadListener and TestListener methods.
@@ -3997,9 +3986,7 @@ The BeanShell PreProcessor allows arbitrary code to be applied after taking a sa
 </p>
 <p>For JMeter versions after 2.2 the BeanShell Post-Processor no longer ignores samples with zero-length result data</p>
 <p>
-		<b>Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
-		<br></br>
-        For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
+<b>For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
 </p>
 <p>
 The test element supports the ThreadListener and TestListener methods.

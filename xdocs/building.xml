@@ -40,7 +40,7 @@ You may want to also download the source so it can be used by the IDE.
 <p>Or you can download the binary and source archives for a release and unpack them in the same directory structure.</p>
 <h3>Other jars you may need</h3>
 <p>
-You may also need to download JAF/JavaMail, BeanShell, JMS and JDBC jars
+You may also need to download JAF/JavaMail, JMS and JDBC jars
  - see <a href="usermanual/get-started.html">Getting Started</a>
 </p>
 <h3>Compiling and packaging JMeter using Ant</h3>
