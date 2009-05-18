@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 
 import junit.framework.Test;
@@ -143,6 +144,11 @@ public final class AllTests {
         logprop("java.home", true);
         logprop("user.home");
         logprop("user.dir", true);
+        logprop("user.language");
+        logprop("user.region");
+        logprop("user.country");
+        logprop("user.variant");
+        log.info("Locale="+Locale.getDefault().toString());
         logprop("os.name", true);
         logprop("os.version", true);
         logprop("os.arch");
