@@ -21,6 +21,7 @@ package org.apache.jmeter.junit;
 import java.io.File;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Locale;
 import java.util.MissingResourceException;
 
 import junit.framework.TestCase;
@@ -86,6 +87,11 @@ public abstract class JMeterTestCase extends TestCase {
             logprop("java.home");
             logprop("user.home");
             logprop("user.dir");
+            logprop("user.language");
+            logprop("user.region");
+            logprop("user.country");
+            logprop("user.variant");
+            System.out.println("Locale="+Locale.getDefault().toString());
             logprop("java.class.version");
             logprop("os.name");
             logprop("os.version");
