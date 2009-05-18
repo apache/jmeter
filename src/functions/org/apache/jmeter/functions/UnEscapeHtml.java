@@ -33,10 +33,14 @@ import org.apache.jmeter.util.JMeterUtils;
  * Function to unescape a string containing entity escapes
  * to a string containing the actual Unicode characters corresponding to the escapes. 
  * Supports HTML 4.0 entities.
- * For example, the string "&lt;Fran&ccedil;ais&gt;" will become "<Français>"
+ * <p>
+ * For example, the string "&amp;lt;Fran&amp;ccedil;ais&amp;gt;" will become "&lt;Fran&ccedil;ais&gt;"
+ * </p>
+ * <p>
  * If an entity is unrecognized, it is left alone, and inserted verbatim into the result string.
- * e.g. "&gt;&zzzz;x" will become ">&zzzz;x".
- * @see StringEscapeUtils#unescapeHtml(String) (Commons Lang)
+ * e.g. "&amp;gt;&amp;zzzz;x" will become "&gt;&amp;zzzz;x".
+ * </p>
+ * @see org.apache.commons.lang.StringEscapeUtils#unescapeHtml(String)
  */
 public class UnEscapeHtml extends AbstractFunction {
 
