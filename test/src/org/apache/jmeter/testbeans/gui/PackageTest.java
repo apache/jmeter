@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import org.apache.jmeter.gui.util.JMeterMenuBar;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestElement;
@@ -49,25 +50,15 @@ import junit.framework.TestSuite;
 public class PackageTest extends JMeterTestCase {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private ResourceBundle defaultBundle;
-
-    private Class testBeanClass;
-
     // ResourceBundle i18nEdit=
     // ResourceBundle.getBundle("org.apache.jmeter.resources.i18nedit");
     private static final Locale defaultLocale = new Locale("en",""); // i18nEdit.getString("locale.default");
 
-    // TODO: find a clean way to get these from i18nedit.properties
+    private final ResourceBundle defaultBundle;
 
-    private static final Locale[] locales = new Locale[] {
-    // new Locale("de"), // No resources yet
-            new Locale("ja",""),
-            // new Locale("no",""), // No resources yet
-            // new Locale("fr",""), // No resources yet
-            // new Locale("zh","CN"), //No resources yet
-            new Locale("zh", "TW") };
+    private final Class testBeanClass;
 
-    private Locale testLocale;
+    private final Locale testLocale;
 
     private PackageTest(Class testBeanClass, Locale locale, ResourceBundle defaultBundle) {
         super(testBeanClass.getName() + " - " + locale.getLanguage() + " - " + locale.getCountry());
@@ -78,6 +69,9 @@ public class PackageTest extends JMeterTestCase {
 
     private PackageTest(String name){
         super(name);
+        this.testBeanClass = null;
+        this.testLocale = null;
+        this.defaultBundle = null;
     }
     
     BeanInfo beanInfo;
@@ -194,15 +188,21 @@ public class PackageTest extends JMeterTestCase {
                     continue;
                 }
                 errorDetected=true;
-                log.error("No default bundle found for " + className);
+                log.error("No default bundle found for " + className + " using " + defaultLocale.toString());
                 //throw new Error("No default bundle for class " + className);
                 continue;
             }
 
             suite.addTest(new PackageTest(testBeanClass, defaultLocale, defaultBundle));
 
-            for (int i = 0; i < locales.length; i++) {
-                suite.addTest(new PackageTest(testBeanClass, locales[i], defaultBundle));
+            String [] languages = JMeterMenuBar.getLanguages();
+            for (int i=0; i < languages.length; i++){
+                final String[] language = languages[i].split("_");
+                if (language.length == 1){
+                    suite.addTest(new PackageTest(testBeanClass, new Locale(language[0]), defaultBundle));                                    
+                } else if (language.length == 2){
+                    suite.addTest(new PackageTest(testBeanClass, new Locale(language[0], language[1]), defaultBundle));                                                        
+                }
             }
         }
 
