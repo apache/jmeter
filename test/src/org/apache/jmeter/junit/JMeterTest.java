@@ -74,6 +74,8 @@ public class JMeterTest extends JMeterTestCase {
     
     private static final Locale TEST_LOCALE = Locale.ENGLISH; 
     
+    private static final Locale DEFAULT_LOCALE = Locale.getDefault(); 
+    
     public JMeterTest(String name) {
         super(name);
     }
@@ -130,6 +132,8 @@ public class JMeterTest extends JMeterTestCase {
     public static Test suite() throws Exception {
         // The Locale used to instantiate the GUI objects
         JMeterUtils.setLocale(TEST_LOCALE);
+        Locale.setDefault(TEST_LOCALE);
+        // Needs to be done before any GUI classes are instantiated
         
         TestSuite suite = new TestSuite("JMeterTest");
         suite.addTest(new JMeterTest("readAliases"));
@@ -143,7 +147,15 @@ public class JMeterTest extends JMeterTestCase {
         suite.addTest(suiteFunctions());
         suite.addTest(new JMeterTest("checkGuiSet"));
         suite.addTest(new JMeterTest("checkFunctionSet"));
+        
+        suite.addTest(new JMeterTest("resetLocale")); // revert
         return suite;
+    }
+
+    // Restore the original Locale
+    public void resetLocale(){
+        JMeterUtils.setLocale(DEFAULT_LOCALE);
+        Locale.setDefault(DEFAULT_LOCALE);
     }
 
     /*
@@ -392,9 +404,6 @@ public class JMeterTest extends JMeterTestCase {
      * Test GUI elements - run for all components
      */
     public void GUIComponents1() throws Exception {
-        // We must set the Locale to the same value that was used when the
-        // GUI objects was instantiated in this class
-        JMeterUtils.setLocale(TEST_LOCALE);
         String name = guiItem.getClass().getName();
 
         assertEquals("Name should be same as static label for " + name, guiItem.getStaticLabel(), guiItem.getName());
