@@ -356,7 +356,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         return (String[]) lang.toArray(new String[lang.size()]);
     }
 
-    private JMenu makeLanguageMenu() {
+    static JMenu makeLanguageMenu() {
         final JMenu languageMenu = makeMenuRes("choose_language",'C'); //$NON-NLS-1$
         
         LangMenuHelper langMenu = new LangMenuHelper(languageMenu);
