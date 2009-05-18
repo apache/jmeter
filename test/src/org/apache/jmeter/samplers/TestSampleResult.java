@@ -62,8 +62,8 @@ public class TestSampleResult extends TestCase {
             Thread.sleep(100);
             res.sampleEnd();
             long sampleTime = res.getTime();
-            if ((sampleTime < 200) || (sampleTime > 290)) {
-                fail("Accumulated time (" + sampleTime + ") was not between 200 and 290 ms");
+            if ((sampleTime < 198) || (sampleTime > 290)) {
+                fail("Accumulated time (" + sampleTime + ") was not between 198 and 290 ms");
             }
         }
 
