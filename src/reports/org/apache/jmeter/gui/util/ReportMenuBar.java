@@ -22,7 +22,6 @@ import java.awt.Component;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Locale;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -273,64 +272,7 @@ public class ReportMenuBar extends JMenuBar implements LocaleChangeListener {
     // N.B. Changes to language list need to be reflected in
     // resources/PackageTest.java
     private JMenu makeLanguageMenu() {
-        /*
-         * Note: the item name is used by ChangeLanguage to create a Locale for
-         * that language, so need to ensure that the language strings are valid
-         * If they exist, use the Locale language constants
-         */
-        // TODO: do accelerator keys make sense? The key may not be present in
-        // translations
-        JMenu languageMenu = new JMenu(JMeterUtils.getResString("choose_language"));
-        languageMenu.setMnemonic('C');
-        // add english
-        JMenuItem english = new JMenuItem(JMeterUtils.getResString("en"), 'E');
-        english.addActionListener(ReportActionRouter.getInstance());
-        english.setActionCommand(ActionNames.CHANGE_LANGUAGE);
-        english.setName(Locale.ENGLISH.getLanguage());
-        languageMenu.add(english);
-        // add Japanese
-        JMenuItem japanese = new JMenuItem(JMeterUtils.getResString("jp"), 'J');
-        japanese.addActionListener(ReportActionRouter.getInstance());
-        japanese.setActionCommand(ActionNames.CHANGE_LANGUAGE);
-        japanese.setName(Locale.JAPANESE.getLanguage());
-        languageMenu.add(japanese);
-        // add Norwegian
-        JMenuItem norway = new JMenuItem(JMeterUtils.getResString("no"), 'N');
-        norway.addActionListener(ReportActionRouter.getInstance());
-        norway.setActionCommand(ActionNames.CHANGE_LANGUAGE);
-        norway.setName("no"); // No default for Norwegian
-        languageMenu.add(norway);
-        // add German
-        JMenuItem german = new JMenuItem(JMeterUtils.getResString("de"), 'G');
-        german.addActionListener(ReportActionRouter.getInstance());
-        german.setActionCommand(ActionNames.CHANGE_LANGUAGE);
-        german.setName(Locale.GERMAN.getLanguage());
-        languageMenu.add(german);
-        // add French
-        JMenuItem french = new JMenuItem(JMeterUtils.getResString("fr"), 'F');
-        french.addActionListener(ReportActionRouter.getInstance());
-        french.setActionCommand(ActionNames.CHANGE_LANGUAGE);
-        french.setName(Locale.FRENCH.getLanguage());
-        languageMenu.add(french);
-        // add chinese (simple)
-        JMenuItem chineseSimple = new JMenuItem(JMeterUtils.getResString("zh_cn"));
-        chineseSimple.addActionListener(ReportActionRouter.getInstance());
-        chineseSimple.setActionCommand(ActionNames.CHANGE_LANGUAGE);
-        chineseSimple.setName(Locale.SIMPLIFIED_CHINESE.toString());
-        languageMenu.add(chineseSimple);
-        // add chinese (traditional)
-        JMenuItem chineseTrad = new JMenuItem(JMeterUtils.getResString("zh_TW"));
-        chineseTrad.addActionListener(ReportActionRouter.getInstance());
-        chineseTrad.setActionCommand(ActionNames.CHANGE_LANGUAGE);
-        chineseTrad.setName(Locale.TRADITIONAL_CHINESE.toString());
-        languageMenu.add(chineseTrad);
-        // add spanish
-        JMenuItem spanish = new JMenuItem(JMeterUtils.getResString("es"));
-        spanish.addActionListener(ReportActionRouter.getInstance());
-        spanish.setActionCommand(ActionNames.CHANGE_LANGUAGE);
-        spanish.setName("es");
-        languageMenu.add(spanish);
-        return languageMenu;
+        return JMeterMenuBar.makeLanguageMenu();
     }
 
     /*
