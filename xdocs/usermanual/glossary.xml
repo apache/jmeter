@@ -64,6 +64,12 @@ See, for example: <a href="http://en.wikipedia.org/wiki/Percentile">Percentile</
 </p>
 
 <p>
+<a name="StandardDeviation"><b>Standard Deviation</b></a> is a measure of the variability
+of a data set. This is a standard statistical measure.
+See, for example: <a href="http://en.wikipedia.org/wiki/Standard_deviation">Standard Deviation</a> entry at Wikipedia.
+</p>
+
+<p>
 <a name="ThreadName">The <b>Thread Name</b></a> as it appears in Listeners and logfiles
 is derived from the Thread Group name and the thread within the group.<br/>
 The name has the format
@@ -86,7 +92,8 @@ Thread Group 2-2
 <p>
 <a name="Throughput"><b>Throughput</b></a> is calculated as requests/unit of time.
 The time is calculated from the start of the first sample to the end of the last sample.
-This includes any intervals between samples.   
+This includes any intervals between samples, as it is supposed to represent the load on the server.<br/> 
+The formula is: Throughput = (number of requests) / (total time).
 </p>
 
 
