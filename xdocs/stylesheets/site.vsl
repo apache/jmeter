@@ -189,9 +189,9 @@ No
 
 #macro (figure $figure)
 #set ($width = "")
-#set ($width = $component.getAttributeValue('width') )
+#set ($width = $figure.getAttributeValue('width') )
 #set ($height = "")
-#set ($height = $component.getAttributeValue('height') )
+#set ($height = $figure.getAttributeValue('height') )
 #set ($dim= "")
 #if  ($width != "")
 #set ($dim = "width='$width' height='$height'")
