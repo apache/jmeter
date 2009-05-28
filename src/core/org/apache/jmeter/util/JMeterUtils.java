@@ -51,7 +51,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.test.UnitTestManager;
-import org.apache.jorphan.util.JMeterError;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 import org.apache.oro.text.PatternCacheLRU;
@@ -72,6 +71,8 @@ public class JMeterUtils implements UnitTestManager {
             new Perl5Compiler());
 
     private static final String EXPERT_MODE_PROPERTY = "jmeter.expertMode"; // $NON-NLS-1$
+
+    private static final String ENGLISH_LANGUAGE = Locale.ENGLISH.getLanguage();
 
     private static volatile Properties appProperties;
 
@@ -305,11 +306,11 @@ public class JMeterUtils implements UnitTestManager {
          */
         Locale def = null;
         boolean isDefault = false; // Are we the default language?
-        if (loc.getLanguage().equals(Locale.ENGLISH.getLanguage())) {
+        if (loc.getLanguage().equals(ENGLISH_LANGUAGE)) {
             isDefault = true;
             def = Locale.getDefault();
             // Don't change locale from en_GB to en
-            if (!def.getLanguage().equals(Locale.ENGLISH.getLanguage())) {
+            if (!def.getLanguage().equals(ENGLISH_LANGUAGE)) {
                 Locale.setDefault(Locale.ENGLISH);
             } else {
                 def = null; // no need to reset Locale
@@ -322,17 +323,15 @@ public class JMeterUtils implements UnitTestManager {
         } else {
             ignoreResorces = false;
             ResourceBundle resBund = ResourceBundle.getBundle("org.apache.jmeter.resources.messages", loc); // $NON-NLS-1$
-            if (isDefault || resBund.getLocale().equals(loc)) {// language change worked
-                resources = resBund;
-                locale = loc;
+            resources = resBund;
+            locale = loc;
+            final Locale resBundLocale = resBund.getLocale();
+            if (isDefault || resBundLocale.equals(loc)) {// language change worked
             // Check if we at least found the correct language:
-            } else if (resBund.getLocale().getLanguage().equals(loc.getLanguage())) {
-                log.warn("Unable to change language to '"+loc.toString()+"', using '"+loc.getLanguage()+"'");
-                resources = resBund;
-                locale = loc;
+            } else if (resBundLocale.getLanguage().equals(loc.getLanguage())) {
+                log.warn("Could not find resources for '"+loc.toString()+"', using '"+resBundLocale.toString()+"'");
             } else {
-                log.error("Unable to change language to "+loc.toString());
-                throw new JMeterError("Unable to change language to "+loc.toString());
+                log.error("Could not find resources for '"+loc.toString()+"'");
             }
         }
         notifyLocaleChangeListeners();
