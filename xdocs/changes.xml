@@ -31,7 +31,7 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 
 <!--  ===================  -->
 
-<h1>Version 2.3.3</h1>
+<h1>Version 2.3.4</h1>
 
 <h2>Summary of main changes</h2>
 
@@ -90,6 +90,7 @@ To override the default local language fully, set the JMeter property "language"
 
 <h3>I18N</h3>
 <ul>
+Fixed bug introduced in 2.3.3: JMeter does not start up if there is no messages.properties file for the default Locale.
 </ul>
 
 <h3>General</h3>
