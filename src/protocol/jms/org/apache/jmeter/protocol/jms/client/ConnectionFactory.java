@@ -39,6 +39,10 @@ import org.apache.log.Logger;
  * the connection factory should read an external configuration file and create
  * a pool of connections. The current implementation just does the basics. Once
  * the tires get kicked a bit, we can add connection pooling support.
+ * 
+ * Note: the connection factory will retry to get the connection factory 5 times
+ * before giving up. Thanks to Peter Johnson for catching the bug and providing
+ * the patch.
  */
 public class ConnectionFactory implements TestListener {
 
@@ -49,6 +53,16 @@ public class ConnectionFactory implements TestListener {
 
     //@GuardedBy("this")
     private static QueueConnectionFactory qfactory = null;
+
+    /**
+     * Maximum number of times we will attempt to obtain a connection factory.
+     */
+    private static final int MAX_RETRY = 5;
+
+    /**
+     * Amount of time to pause between connection factory lookup attempts.
+     */
+    private static final int PAUSE_MILLIS = 100;
 
     /**
      *
@@ -86,31 +100,53 @@ public class ConnectionFactory implements TestListener {
     }
 
     public static synchronized TopicConnectionFactory getTopicConnectionFactory(Context ctx, String fac) {
-        while (factory == null) {
-            try {
-                Object objfac = ctx.lookup(fac);
-                if (objfac instanceof TopicConnectionFactory) {
-                    factory = (TopicConnectionFactory) objfac;
+        int counter = MAX_RETRY;
+        while (factory == null && counter > 0) {
+             try {
+                 Object objfac = ctx.lookup(fac);
+                 if (objfac instanceof TopicConnectionFactory) {
+                     factory = (TopicConnectionFactory) objfac;
+                 }
+             } catch (NamingException e) {
+                if (counter == MAX_RETRY) {
+                    log.error("Unable to find connection factory " + fac + ", will retry. Error: " + e.toString());
+                } else if (counter == 1) {
+                    log.error("Unable to find connection factory " + fac + ", giving up. Error: " + e.toString());
                 }
-            } catch (NamingException e) {
-                log.error(e.toString());
-            }
-        }
-        return factory;
+                counter--;
+                try {
+                    Thread.currentThread().sleep(PAUSE_MILLIS);
+                } catch (InterruptedException ie) {
+                    // do nothing, getting interrupted is acceptable
+                }
+             }
+         }
+         return factory;
     }
 
     public static synchronized QueueConnectionFactory getQueueConnectionFactory(Context ctx, String fac) {
-        while (qfactory == null) {
-            try {
-                Object objfac = ctx.lookup(fac);
-                if (objfac instanceof QueueConnectionFactory) {
-                    qfactory = (QueueConnectionFactory) objfac;
+        int counter = MAX_RETRY;
+        while (qfactory == null && counter > 0) {
+             try {
+                 Object objfac = ctx.lookup(fac);
+                 if (objfac instanceof QueueConnectionFactory) {
+                     qfactory = (QueueConnectionFactory) objfac;
+                 }
+             } catch (NamingException e) {
+                if (counter == MAX_RETRY) {
+                    log.error("Unable to find connection factory " + fac + ", will retry. Error: " + e.toString());
+                } else if (counter == 1) {
+                    log.error("Unable to find connection factory " + fac + ", giving up. Error: " + e.toString());
                 }
-            } catch (NamingException e) {
-                log.error(e.getMessage());
-            }
-        }
-        return qfactory;
+                counter--;
+                try {
+                    Thread.currentThread().sleep(PAUSE_MILLIS);
+                } catch (InterruptedException ie) {
+                  // do nothing, getting interrupted is acceptable
+                }
+             }
+         }
+         return qfactory;
     }
 
     public static synchronized TopicConnection getTopicConnection() {
