@@ -375,7 +375,8 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             // and create it - if there is one
             File pdir = new File(filename).getParentFile();
             if (pdir != null) {
-                if (!pdir.mkdirs()){
+                pdir.mkdirs();// returns false if directory already exists, so need to check again
+                if (!pdir.exists()){
                     log.warn("Error creating directories for "+pdir.toString());
                 }
             }
