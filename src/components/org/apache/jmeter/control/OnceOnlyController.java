@@ -39,7 +39,12 @@ public class OnceOnlyController extends GenericController implements Serializabl
      * @see LoopIterationListener#iterationStart(LoopIterationEvent)
      */
     public void iterationStart(LoopIterationEvent event) {
-        if (event.getIteration() == 1) {
+        int numIteration = 1;
+        // Bug 39509: iteration to 0 for all controller which not LoopController (and TG)
+        if (!(event.getSource() instanceof LoopController)) {
+            numIteration = 0;
+        }
+        if (event.getIteration() == numIteration) {
             reInitialize();
         }
     }
