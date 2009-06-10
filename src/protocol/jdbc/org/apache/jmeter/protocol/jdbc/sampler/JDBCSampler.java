@@ -163,8 +163,6 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
         res.sampleStart();
         Connection conn = null;
         Statement stmt = null;
-        CallableStatement cstmt = null;
-        PreparedStatement pstmt = null;
 
         try {
 
@@ -187,7 +185,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
                     close(rs);
                 }
             } else if (CALLABLE.equals(_queryType)) {
-                cstmt = getCallableStatement(conn);
+                CallableStatement cstmt = getCallableStatement(conn);
                 int out[]=setArguments(cstmt);
                 // A CallableStatement can return more than 1 ResultSets
                 // plus a number of update counts.
@@ -201,13 +199,13 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
                 String results = updateCount + " updates";
                 res.setResponseData(results.getBytes(ENCODING));
             } else if (PREPARED_SELECT.equals(_queryType)) {
-                pstmt = getPreparedStatement(conn);
+                PreparedStatement pstmt = getPreparedStatement(conn);
                 setArguments(pstmt);
-                pstmt.executeQuery(); // FindBugs: the statement is closed in resultSetsToString()
+                pstmt.executeQuery();
                 String sb = resultSetsToString(pstmt,true,null);
                 res.setResponseData(sb.getBytes(ENCODING));
             } else if (PREPARED_UPDATE.equals(_queryType)) {
-                pstmt = getPreparedStatement(conn);
+                PreparedStatement pstmt = getPreparedStatement(conn);
                 setArguments(pstmt);
                 pstmt.executeUpdate();
                 String sb = resultSetsToString(pstmt,false,null);
@@ -246,8 +244,6 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
         } finally {
             close(stmt);
             close(conn);
-            close(pstmt);
-            close(cstmt);
         }
 
         // TODO: process warnings? Set Code and Message to success?
