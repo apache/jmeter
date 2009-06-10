@@ -573,7 +573,7 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
 
         int rto = getResponseTimeout();
         if (rto > 0){
-            httpMethod.getParams().setSoTimeout(1);
+            httpMethod.getParams().setSoTimeout(rto);
         }
 
         int cto = getConnectTimeout();
