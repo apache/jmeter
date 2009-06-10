@@ -253,7 +253,6 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 
     private String resultSetsToString(PreparedStatement pstmt, boolean result, int[] out) throws SQLException, UnsupportedEncodingException {
         StrBuilder sb = new StrBuilder();
-        sb.append("\n"); // $NON-NLS-1$
         int updateCount = 0;
         if (!result) {
             updateCount = pstmt.getUpdateCount();
