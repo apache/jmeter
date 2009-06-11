@@ -41,8 +41,6 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
 
     private JMeterEngine backingEngine;
 
-    private String hostName;
-
     public static final int DEFAULT_RMI_PORT =
         JMeterUtils.getPropDefault("server.rmi.port", 1099); // $NON-NLS-1$
 
@@ -77,7 +75,7 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
             throw new RemoteException("Cannot start. Unable to get local host IP address.");
         }
         log.info("IP address="+localHost.getHostAddress());
-        hostName = localHost.getHostName();
+        String hostName = localHost.getHostName();
         if (localHost.isLoopbackAddress()){
             throw new RemoteException("Cannot start. "+hostName+" is a loopback address.");
         }
@@ -95,8 +93,6 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
         }
         try {
             Registry reg = LocateRegistry.getRegistry(port);
-            log.info("Creating JMeter engine on host "+hostName);
-            backingEngine = new StandardJMeterEngine(hostName);// see setHost()
             reg.rebind(JMETER_ENGINE_RMI_NAME, this);
             log.info("Bound to registry on port " + port);
         } catch (Exception ex) {
@@ -113,16 +109,14 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
      * @param testTree
      *            the feature to be added to the ThreadGroup attribute
      */
-    public void configure(HashTree testTree) throws RemoteException {
-        log.info("received test tree");
+    public void configure(HashTree testTree, String host) throws RemoteException {
+        log.info("Creating JMeter engine on host "+host);
+        backingEngine = new StandardJMeterEngine(host);
         backingEngine.configure(testTree);
     }
 
     public void runTest() throws RemoteException, JMeterEngineException {
         log.info("running test");
-        log.debug("This = " + this);
-        long now=System.currentTimeMillis();
-        System.out.println("Starting the test on host " + hostName + " @ "+new Date(now)+" ("+now+")");
         backingEngine.runTest();
     }
 
