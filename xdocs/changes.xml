@@ -83,6 +83,7 @@ To override the default local language fully, set the JMeter property "language"
 <h3>Listeners</h3>
 <ul>
 <li>Change ResultCollector to only warn if the directory was not created</li>
+<li>Fix some synchronisation issues in ResultCollector and SampleResult (wrong locks were being used)</li>
 </ul>
 
 <h3>Assertions</h3>
