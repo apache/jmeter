@@ -194,6 +194,10 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
     }
 
     public void runTest() throws JMeterEngineException {
+        if (host != null){
+            long now=System.currentTimeMillis();
+            System.out.println("Starting the test on host " + host + " @ "+new Date(now)+" ("+now+")");
+        }
         try {
             Thread runningThread = new Thread(new MyThreadGroup("JMeterThreadGroup"),this);
             runningThread.start();

@@ -25,7 +25,7 @@ import java.util.Properties;
 import org.apache.jorphan.collections.HashTree;
 
 public interface RemoteJMeterEngine extends Remote {
-    void configure(HashTree testTree) throws RemoteException;
+    void configure(HashTree testTree, String host) throws RemoteException;
 
     void runTest() throws RemoteException, JMeterEngineException;
 
