@@ -148,7 +148,8 @@ public class SampleResult implements Serializable {
 
     private boolean success;
 
-    private Set files; // files that this sample has been saved in
+    //@GuardedBy("this"")
+    private final Set files = new HashSet(); // files that this sample has been saved in
 
     private String dataEncoding;// (is this really the character set?) e.g.
                                 // ISO-8895-1, UTF-8
@@ -390,15 +391,14 @@ public class SampleResult implements Serializable {
         setTimes(now - elapsed, now);
     }
 
-    public void setMarked(String filename) {
-        if (files == null) {
-            files = new HashSet();
-        }
-        files.add(filename);
-    }
-
-    public boolean isMarked(String filename) {
-        return files != null && files.contains(filename);
+    /**
+     * Set the "marked" flag to show that the result has been written to the file.
+     * 
+     * @param filename
+     * @return true if the result was previously marked
+     */
+    public synchronized boolean markFile(String filename) {
+        return !files.add(filename);
     }
 
     public String getResponseCode() {
