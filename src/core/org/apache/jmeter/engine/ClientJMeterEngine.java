@@ -72,7 +72,7 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
     }
 
     public void runTest() {
-        log.info("about to run remote test");
+        log.info("about to run remote test on "+host);
         new Thread(this).start();
         log.info("done initiating run command");
     }
@@ -119,10 +119,18 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
 
         try {
             JMeterContextService.startTest();
-            remote.configure(test);
-            log.info("sent test");
+            remote.configure(test, host);
+            log.info("sent test to " + host);
+            if (savep != null){
+                log.info("Sending properties "+savep);
+                try {
+                    remote.setProperties(savep);
+                } catch (RemoteException e) {
+                    log.warn("Could not set properties: " + e.toString());
+                }
+            }
             remote.runTest();
-            log.info("sent run command");
+            log.info("sent run command to "+ host);
         } catch (Exception ex) {
             log.error("", ex); // $NON-NLS-1$
         }
@@ -142,12 +150,9 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
         }
     }
 
+    private Properties savep;
     public void setProperties(Properties p) {
-        log.info("Sending properties "+p);
-        try {
-            remote.setProperties(p);
-        } catch (RemoteException e) {
-            log.warn("Could not set properties: " + e.toString());
-        }
+        savep = p;
+        // Sent later
     }
 }
