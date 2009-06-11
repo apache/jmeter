@@ -95,6 +95,10 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     
     // Static variables
 
+    // Lock used to guard static mutable variables
+    private static final Object LOCK = new Object();
+    
+    //@GuardedBy("LOCK")
     private static final Map files = new HashMap(); // key=filename, entry=FileEntry
 
     /*
@@ -111,11 +115,18 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
         }
     }
 
+    /**
+     * The instance count is used to keep track of whether any tests are currently running.
+     * It's not possible to use the constructor or threadStarted etc as tests may overlap
+     * e.g. a remote test may be started,
+     * and then a local test started whilst the remote test is still running. 
+     */
+    //@GuardedBy("LOCK")
     private static int instanceCount; // Keep track of how many instances are active
 
     // Instance variables
     
-    private transient DefaultConfigurationSerializer serializer;
+    private transient volatile DefaultConfigurationSerializer serializer;
 
     private transient volatile PrintWriter out;
 
@@ -130,16 +141,6 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
         setErrorLogging(false);
         setSuccessOnlyLogging(false);
         setProperty(new ObjectProperty(SAVE_CONFIG, new SampleSaveConfiguration()));
-        /*
-         * All instances are created before the test starts.
-         * This is guaranteed so long as all remote test plans are initialised
-         * before they are started.
-         * So we use this to ensure that the static variables are reset.
-         */
-        synchronized(this){
-            files.clear();
-            instanceCount=0;
-        }
     }
 
     // Ensure that the sample save config is not shared between copied nodes
@@ -226,23 +227,27 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
         setFilenameProperty(f);
     }
 
-    public synchronized void testEnded(String host) {
-        instanceCount--;
-        if (instanceCount <= 0) {
-            finalizeFileOutput();
-            inTest = false;
+    public void testEnded(String host) {
+        synchronized(LOCK){
+            instanceCount--;
+            if (instanceCount <= 0) {
+                finalizeFileOutput();
+                inTest = false;
+            }            
         }
     }
 
     public synchronized void testStarted(String host) {
-        instanceCount++;
-        try {
-            initializeFileOutput();
-            if (getVisualizer() != null) {
-                this.isStats = getVisualizer().isStats();
+        synchronized(LOCK){
+            instanceCount++;
+            try {
+                initializeFileOutput();
+                if (getVisualizer() != null) {
+                    this.isStats = getVisualizer().isStats();
+                }
+            } catch (Exception e) {
+                log.error("", e);
             }
-        } catch (Exception e) {
-            log.error("", e);
         }
         inTest = true;
     }
@@ -356,7 +361,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
         }
     }
 
-    private static synchronized PrintWriter getFileWriter(String filename, SampleSaveConfiguration saveConfig)
+    private static PrintWriter getFileWriter(String filename, SampleSaveConfiguration saveConfig)
             throws IOException {
         if (filename == null || filename.length() == 0) {
             return null;
@@ -495,28 +500,25 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
      */
     // Used by: MonitorHealthVisualizer.add(SampleResult res)
     public void recordStats(TestElement e) throws Exception {
-        if (out == null) {
-            initializeFileOutput();
-        }
         if (out != null) {
             SaveService.saveTestElement(e, out);
         }
     }
 
-    private synchronized boolean isResultMarked(SampleResult res) {
+    /**
+     * Checks if the sample result is marked or not, and marks it
+     * @param res - the sample result to check
+     * @return <code>true</code> if the result was marked
+     */
+    private boolean isResultMarked(SampleResult res) {
         String filename = getFilename();
-        boolean marked = res.isMarked(filename);
-
-        if (!marked) {
-            res.setMarked(filename);
-        }
-        return marked;
+        return res.markFile(filename);
     }
 
     private void initializeFileOutput() throws IOException {
 
         String filename = getFilename();
-        if (out == null && filename != null) {
+        if (filename != null) {
             if (out == null) {
                 try {
                     out = getFileWriter(filename, getSaveConfig());
@@ -527,7 +529,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
         }
     }
 
-    private synchronized void finalizeFileOutput() {
+    private void finalizeFileOutput() {
         Iterator it = files.entrySet().iterator();
         while(it.hasNext()){
             Map.Entry me = (Map.Entry) it.next();
@@ -535,6 +537,9 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             FileEntry fe = (FileEntry) me.getValue();
             writeFileEnd(fe.pw, fe.config);
             fe.pw.close();
+            if (fe.pw.checkError()){
+                log.warn("Problem detected during use of "+me.getKey());
+            }
         }
         files.clear();
     }
