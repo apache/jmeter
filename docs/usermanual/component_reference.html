@@ -25,6 +25,7 @@
 <!-- ====================================================================== -->
 <html>
 <head>
+<link rel="stylesheet" type="text/css" href="../css/style.css"/>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
 
 
@@ -276,8 +277,7 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="samplers"><strong>18.1 Samplers</strong></a>
-</font>
+<a name="samplers"><strong>18.1 Samplers</strong></a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -4130,7 +4130,7 @@ Here are some general guidelines for writing Junit tests so they work well with 
 5. Each sampler creates an instance of the test class, so write your test so the setup happens in oneTimeSetUp and oneTimeTearDown.
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='522' height='405' src="../images/screenshots/junit_sampler.png"></div>
+<div align="center"><img width='525' height='479' src="../images/screenshots/junit_sampler.png"></div>
 <p>
 <b>Parameters</b>
 <table border="1" cellspacing="0" cellpadding="2">
@@ -4156,7 +4156,7 @@ No
 <td>Fully qualified name of the JUnit test class.
 </td>
 <td>
-No
+Yes
 </td>
 </tr>
 <tr>
@@ -4173,7 +4173,7 @@ No
 <td>The method to test.
 </td>
 <td>
-No
+Yes
 </td>
 </tr>
 <tr>
@@ -4232,7 +4232,23 @@ No
      this option should be checked.
 </td>
 <td>
-No
+Yes
+</td>
+</tr>
+<tr>
+<td>Append assertion errors</td>
+<td>Whether or not to append assertion errors to the response message.
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>Append runtime exceptions</td>
+<td>Whether or not to append runtime exceptions to the response message. Only applies if "Append assertion errors" is not selected.
+</td>
+<td>
+Yes
 </td>
 </tr>
 </table>
@@ -4441,8 +4457,7 @@ Yes, if Pause is selected
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="logic_controllers"><strong>18.2 Logic Controllers</strong></a>
-</font>
+<a name="logic_controllers"><strong>18.2 Logic Controllers</strong></a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -4757,132 +4772,132 @@ requests per thread. See the table below for the sequence JMeter sends the HTTP 
 
 <table>
 <tr>
-<td bgcolor="#039acc" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#039acc"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 Loop Iteration
 </font>
 </td>
-<td bgcolor="#039acc" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#039acc"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 Each JMeter Thread Sends These HTTP Requests
 </font>
 </td>
 </tr>
 <tr>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 1
 </font>
 </td>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 News Page
 </font>
 </td>
 </tr>
 <tr>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 1
 </font>
 </td>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 Log Page
 </font>
 </td>
 </tr>
 <tr>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 2
 </font>
 </td>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 FAQ Page
 </font>
 </td>
 </tr>
 <tr>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 2
 </font>
 </td>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 Log Page
 </font>
 </td>
 </tr>
 <tr>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 3
 </font>
 </td>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 Gump Page
 </font>
 </td>
 </tr>
 <tr>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 3
 </font>
 </td>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 Log Page
 </font>
 </td>
 </tr>
 <tr>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 4
 </font>
 </td>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 Because there are no more requests in the controller,<br> </br> JMeter starts over and sends the first HTTP Request, which is the News Page.
 </font>
 </td>
 </tr>
 <tr>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 4
 </font>
 </td>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 Log Page
 </font>
 </td>
 </tr>
 <tr>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 5
 </font>
 </td>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 FAQ Page
 </font>
 </td>
 </tr>
 <tr>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 5
 </font>
 </td>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 Log Page
 </font>
@@ -6044,8 +6059,7 @@ No
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="listeners"><strong>18.3 Listeners</strong></a>
-</font>
+<a name="listeners"><strong>18.3 Listeners</strong></a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -7706,8 +7720,7 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="config_elements"><strong>18.4 Configuration Elements</strong></a>
-</font>
+<a name="config_elements"><strong>18.4 Configuration Elements</strong></a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -8890,68 +8903,68 @@ java.net.ConnectException
 </p>
 <table>
 <tr>
-<td bgcolor="#039acc" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#039acc"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 Database
 </font>
 </td>
-<td bgcolor="#039acc" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#039acc"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 Driver class
 </font>
 </td>
-<td bgcolor="#039acc" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#039acc"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 Database URL
 </font>
 </td>
 </tr>
 <tr>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 MySQL
 </font>
 </td>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 com.mysql.jdbc.Driver
 </font>
 </td>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 jdbc:mysql://host[:port]/dbname
 </font>
 </td>
 </tr>
 <tr>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 PostgreSQL
 </font>
 </td>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 org.postgresql.Driver
 </font>
 </td>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 jdbc:postgresql:{dbname}
 </font>
 </td>
 </tr>
 <tr>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 Oracle
 </font>
 </td>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 oracle.jdbc.driver.OracleDriver
 </font>
 </td>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 jdbc:oracle:thin:@//host:port/service
 OR<br />jdbc:oracle:thin:@(description=(address=(host={mc-name})(protocol=tcp)(port={port-no}))(connect_data=(sid={sid})))
@@ -8959,51 +8972,51 @@ OR<br />jdbc:oracle:thin:@(description=(address=(host={mc-name})(protocol=tcp)(p
 </td>
 </tr>
 <tr>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 Ingres (2006)
 </font>
 </td>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 ingres.jdbc.IngresDriver
 </font>
 </td>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 jdbc:ingres://host:port/db[;attr=value]
 </font>
 </td>
 </tr>
 <tr>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 SQL Server (MS JDBC driver)
 </font>
 </td>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 com.microsoft.sqlserver.jdbc.SQLServerDriver
 </font>
 </td>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 jdbc:sqlserver://host:port;DatabaseName=dbname
 </font>
 </td>
 </tr>
 <tr>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 Apache Derby
 </font>
 </td>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 org.apache.derby.jdbc.ClientDriver
 </font>
 </td>
-<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+<td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 jdbc:derby://server[:port]/databaseName[;URLAttributes=value[;...]]
 </font>
@@ -9602,8 +9615,7 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="assertions"><strong>18.5 Assertions</strong></a>
-</font>
+<a name="assertions"><strong>18.5 Assertions</strong></a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -10816,8 +10828,7 @@ For futher details of all the methods available on each of the above variables, 
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="timers"><strong>18.6 Timers</strong></a>
-</font>
+<a name="timers"><strong>18.6 Timers</strong></a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -11345,8 +11356,7 @@ beanshell.timer.init
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="preprocessors"><strong>18.7 Pre Processors</strong></a>
-</font>
+<a name="preprocessors"><strong>18.7 Pre Processors</strong></a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -12131,8 +12141,7 @@ For details of all the methods available on each of the above variables, please 
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="postprocessors"><strong>18.8 Post-Processors</strong></a>
-</font>
+<a name="postprocessors"><strong>18.8 Post-Processors</strong></a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -12757,7 +12766,7 @@ Stop Test Now - the entire test is stopped abruptly. Any current samplers are in
    
 </td>
 <td>
-$items.getAttributeValue("required")
+No
 </td>
 </tr>
 </table>
@@ -13098,8 +13107,7 @@ For details of all the methods available on each of the above variables, please 
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="Miscellaneous_Features"><strong>18.9 Miscellaneous Features</strong></a>
-</font>
+<a name="Miscellaneous_Features"><strong>18.9 Miscellaneous Features</strong></a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -13267,7 +13275,7 @@ Stop Test Now - the entire test is stopped abruptly. Any current samplers are in
         
 </td>
 <td>
-$items.getAttributeValue("required")
+No
 </td>
 </tr>
 <tr>
@@ -14263,8 +14271,7 @@ No
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="Reports"><strong>18.10 Reports</strong></a>
-</font>
+<a name="Reports"><strong>18.10 Reports</strong></a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -14385,6 +14392,13 @@ No
 <div align="center"><font color="#525D76" size="-1"><em>
 Copyright &copy; 1999-2009, Apache Software Foundation
 </em></font></div>
+</td></tr>
+<tr><td colspan="2">
+<div align="center"><font color="#525D76" size="-1">
+"Apache", the Apache feather, and the Apache JMeter logo are
+trademarks of the Apache Software Foundation for our open source software.
+</font>
+</div>
 </td></tr>
 </table>
 </body>
