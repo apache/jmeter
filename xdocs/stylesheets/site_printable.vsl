@@ -40,6 +40,7 @@
 #set ($udsc = "_")
 #set ($udsc = $udsc.charAt(0))
 #set ($imgdir = "$relativePath/../docs/images")
+#set ($cssdir = "$relativePath/../docs/css")
 #set ($sshotdir = "$imgdir/screenshots")
 #set ($year = $date.getYear()+1900)
 
@@ -76,9 +77,9 @@
 #if ($value.getAttributeValue("rowspan"))
 #set ($rowspan = $value.getAttributeValue("rowspan"))
 #end
-<td bgcolor="$tabletdbg" colspan="$!colspan" rowspan="$!rowspan" valign="top" align="left">
+<td bgcolor="$tabletdbg" #if ($colspan)colspan="$colspan"#end #if ($rowspan)rowspan="$rowspan"#end valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-#if ($value.getText().length() != 0 || $value.hasChildren())
+#if ($value.getText().length() != 0)
 $xmlout.outputString($value, true)
 #else
 &nbsp;
@@ -88,13 +89,9 @@ $xmlout.outputString($value, true)
 #end
 
 #macro ( th $value)
-#if ($value.getAttributeValue("colspan"))
 #set ($colspan = $value.getAttributeValue("colspan"))
-#end
-#if ($value.getAttributeValue("rowspan"))
 #set ($rowspan = $value.getAttributeValue("rowspan"))
-#end
-<td bgcolor="$tablethbg" colspan="$!colspan" rowspan="$!rowspan" valign="top" align="left">
+<td bgcolor="$tablethbg" #if ($colspan)colspan="$colspan"#end #if ($rowspan)rowspan="$rowspan"#end valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 #if ($value.getText().length() != 0 || $value.hasChildren())
 $xmlout.outputString($value, true)
@@ -165,7 +162,7 @@ $xmlout.outputString($value, true)
 <td>$items.getAttributeValue("name")</td>
 <td>#runloop($items)</td>
 <td>
-#if($items.getAttributeValue("required") != "")
+#if("$!items.getAttributeValue('required')" != "")
 $items.getAttributeValue("required")
 #else
 No
@@ -249,8 +246,8 @@ No
 #component($node)
 #elseif ($node.getName().equals("subsection"))
 #subsection ($node)
-#elseif ($u_node.getName().equals("scope"))
-#scope ($u_node)
+#elseif ($node.getName().equals("scope"))
+#scope ($node)
 #elseif ($node.getName().equals("bugzilla"))
 #bugzilla ($node)
 #else
@@ -377,7 +374,8 @@ $node.getText()
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="$bannerbg">
 <font color="$bannerfg" face="arial,helvetica,sanserif">
-<a name="$section.getAttributeValue("anchor")"><strong>$section.getAttributeValue("name")</strong></a>
+#set ($anchor = $section.getAttributeValue("anchor")) 
+#if($anchor)<a name="$anchor">#end<strong>$section.getAttributeValue("name")</strong>#if($anchor)</a>#end
 </font>
 </td></tr>
 <tr><td>
@@ -471,13 +469,17 @@ $comp.getAttributeValue("index")
 ## ======================================================================
 <html>
 <head>
+<link rel="stylesheet" type="text/css" href="$cssdir/style.css"/>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 #set ($authors = $root.getChild("properties").getChildren("author"))
 #foreach ( $au in $authors )
 #metaauthor ( $au.getText() $au.getAttributeValue("email") )
 #end
+#set ($next = "")
 #set ($next = $root.getAttributeValue("next"))
+#set ($prev = "")
 #set ($prev = $root.getAttributeValue("prev"))
+#set ($updated = "")
 #set ($updated = $root.getAttributeValue("date"))
 <title>$project.getChild("title").getText() - $root.getChild("properties").getChild("title").getText()</title>
 </head>
@@ -531,6 +533,13 @@ Updated: $updated
 </td>
 #end
 </tr>
+<tr><td colspan="2">
+<div align="center"><font color="$bodylink" size="-1">
+"Apache", the Apache feather, and the Apache JMeter logo are
+trademarks of the Apache Software Foundation for our open source software.
+</font>
+</div>
+</td></tr>
 </table>
 </td>
 </tr>
