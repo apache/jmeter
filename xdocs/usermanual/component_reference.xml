@@ -1231,7 +1231,7 @@ Currently the only way to changes these is via the SampleResult methods:
 
 
 
-<component name="JUnit Request" index="&sect-num;.1.16"  width="522" height="405" screenshot="junit_sampler.png">
+<component name="JUnit Request" index="&sect-num;.1.16"  width="525" height="479" screenshot="junit_sampler.png">
 <description>
 The current implementation supports standard Junit convention and extensions. It also
 includes extensions like oneTimeSetUp and oneTimeTearDown. The sampler works like the
@@ -1275,20 +1275,22 @@ Here are some general guidelines for writing Junit tests so they work well with 
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
   <property name="Package filter" required="">Comma separated list of packages to show. Example, org.apache.jmeter,junit.framework.</property>
-  <property name="Class name" required="">Fully qualified name of the JUnit test class.</property>
+  <property name="Class name" required="Yes">Fully qualified name of the JUnit test class.</property>
   <property name="Constructor string" required="">String pass to the string constructor. If a string is set, the sampler will use the
    string constructor instead of the empty constructor.</property>
-  <property name="Test method" required="">The method to test.</property>
+  <property name="Test method" required="Yes">The method to test.</property>
   <property name="Success message" required="">A descriptive message indicating what success means.</property>
   <property name="Success code" required="">An unique code indicating the test was successful.</property>
   <property name="Failure message" required="">A descriptive message indicating what failure means.</property>
   <property name="Failure code" required="">An unique code indicating the test failed.</property>
   <property name="Error message" required="">A description for errors.</property>
   <property name="Error code" required="">Some code for errors. Does not need to be unique.</property>
-  <property name="Do not call setUp and tearDown" required="">Set the sampler not to call setUp and tearDown.
+  <property name="Do not call setUp and tearDown" required="Yes">Set the sampler not to call setUp and tearDown.
    By default, setUp and tearDown should be called. Not calling those methods could affect the test and make it inaccurate.
     This option should only be used with calling oneTimeSetUp and oneTimeTearDown. If the selected method is oneTimeSetUp or oneTimeTearDown,
      this option should be checked.</property>
+  <property name="Append assertion errors" required="Yes">Whether or not to append assertion errors to the response message.</property>
+  <property name="Append runtime exceptions" required="Yes">Whether or not to append runtime exceptions to the response message. Only applies if "Append assertion errors" is not selected.</property>
 </properties>
 </component>
 
