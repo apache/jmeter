@@ -181,6 +181,7 @@
 
   <!-- Where the documentation sources live -->
   <property name="src.docs" value="xdocs"/>
+  <property name="src.css" value="xdocs/css"/>
   <property name="src.images" value="xdocs/images"/>
   <property name="src.demos" value="xdocs/demos"/>
 
@@ -986,7 +987,8 @@ run JMeter unless all the JMeter jars are added.
   </patternset>
 
   <patternset id="dist.binaries.non.native">
-    <!-- We also need the images for the printable docs -->
+    <!-- We also need the css & images for the printable docs -->
+    <include name="${dest.docs}/css/**"/>
     <include name="${dest.docs}/images/**"/>
     <include name="${dest.jar.jmeter}/jmeter*"/>
     <exclude name="${dest.jar.jmeter}/jmeter.properties"/>
@@ -1544,6 +1546,9 @@ run JMeter unless all the JMeter jars are added.
   	<echo level="info">Fixing EOL</echo>
     <fixcrlf srcdir="${dest.docs}/" includes="**/*.html" excludes="api/**" fixlast="false"/>
     <echo level="info">Copying files</echo>
+    <copy todir="${dest.docs}/css">
+      <fileset dir="${src.css}"/>
+    </copy>
     <copy todir="${dest.docs}/images">
       <fileset dir="${src.images}"/>
     </copy>
@@ -1571,6 +1576,9 @@ run JMeter unless all the JMeter jars are added.
     Means printable version won't work on web-site
     -->
     <echo level="info">Copying files</echo>
+    <copy todir="${dest.docs}/css">
+      <fileset dir="${src.css}"/>
+    </copy>
     <copy todir="${dest.docs}/images">
       <fileset dir="${src.images}"/>
     </copy>
