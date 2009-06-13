@@ -45,7 +45,9 @@ import org.apache.log.Logger;
  */
 public class JUnitSampler extends AbstractSampler {
 
-    private static final long serialVersionUID = 232L; // Remember to change this when the class changes ...
+    private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private static final long serialVersionUID = 2331L; // Remember to change this when the class changes ...
 
     /**
      * Property key representing the classname of the JavaSamplerClient to
@@ -68,17 +70,13 @@ public class JUnitSampler extends AbstractSampler {
     public static final String SETUP = "setUp";
     public static final String TEARDOWN = "tearDown";
     public static final String RUNTEST = "run";
+
     /// the Method objects for setUp and tearDown methods
-    protected transient Method SETUP_METHOD = null;
-    protected transient Method TDOWN_METHOD = null;
-    protected boolean checkStartUpTearDown = false;
+    private transient Method SETUP_METHOD = null;
+    private transient Method TDOWN_METHOD = null;
+    private boolean checkStartUpTearDown = false;
 
-    protected transient TestCase TEST_INSTANCE = null;
-
-    /**
-     * Logging
-     */
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private transient TestCase TEST_INSTANCE = null;
 
     public JUnitSampler(){
     }
@@ -87,7 +85,7 @@ public class JUnitSampler extends AbstractSampler {
      * Method tries to get the setUp and tearDown method for the class
      * @param tc
      */
-    public void initMethodObjects(TestCase tc){
+    private void initMethodObjects(TestCase tc){
         if (!this.checkStartUpTearDown && !getDoNotSetUpTearDown()) {
             if (SETUP_METHOD == null) {
                 SETUP_METHOD = getMethod(tc, SETUP);
@@ -314,25 +312,25 @@ public class JUnitSampler extends AbstractSampler {
      */
     public SampleResult sample(Entry entry) {
         SampleResult sresult = new SampleResult();
-        String rlabel = null;
-        if (getConstructorString().length() > 0) {
-            rlabel = getConstructorString();
-        } else {
+        String rlabel = getConstructorString();
+        if (rlabel.length()== 0) {
             rlabel = JUnitSampler.class.getName();
         }
         sresult.setSampleLabel(getName());// Bug 41522 - don't use rlabel here
-        sresult.setSamplerData(getClassname() + "." + getMethod());
+        final String methodName = getMethod();
+        final String className = getClassname();
+        sresult.setSamplerData(className + "." + methodName);
         // check to see if the test class is null. if it is, we create
         // a new instance. this should only happen at the start of a
         // test run
         if (this.TEST_INSTANCE == null) {
-            this.TEST_INSTANCE = (TestCase)getClassInstance(getClassname(),rlabel);
+            this.TEST_INSTANCE = (TestCase)getClassInstance(className,rlabel);
         }
         if (this.TEST_INSTANCE != null){
             initMethodObjects(this.TEST_INSTANCE);
             // create a new TestResult
             TestResult tr = new TestResult();
-            this.TEST_INSTANCE.setName(getMethod());
+            this.TEST_INSTANCE.setName(methodName);
             try {
 
                 if (!getDoNotSetUpTearDown() && SETUP_METHOD != null){
@@ -349,7 +347,7 @@ public class JUnitSampler extends AbstractSampler {
                                 new AssertionFailedError(e.getMessage()));
                     }
                 }
-                final Method m = getMethod(this.TEST_INSTANCE,getMethod());
+                final Method m = getMethod(this.TEST_INSTANCE,methodName);
                 final TestCase theClazz = this.TEST_INSTANCE;
                 tr.startTest(this.TEST_INSTANCE);
                 sresult.sampleStart();
