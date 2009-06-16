@@ -411,12 +411,22 @@ public final class ClassFinder {
         if (file.isDirectory()) {
             findClassesInPathsDir(strPath, file, listClasses);
         } else if (file.exists()) {
-            ZipFile zipFile = new ZipFile(file);
-            Enumeration entries = zipFile.entries();
-            while (entries.hasMoreElements()) {
-                String strEntry = entries.nextElement().toString();
-                if (strEntry.endsWith(DOT_CLASS)) {
-                    listClasses.add(fixClassName(strEntry));
+            ZipFile zipFile = null;
+            try {
+                zipFile = new ZipFile(file);
+                Enumeration entries = zipFile.entries();
+                while (entries.hasMoreElements()) {
+                    String strEntry = entries.nextElement().toString();
+                    if (strEntry.endsWith(DOT_CLASS)) {
+                        listClasses.add(fixClassName(strEntry));
+                        }
+                    }
+            } catch (IOException e) {
+                log.warn("Can not open the jar " + strPath + " " + e.getLocalizedMessage());
+            }
+            finally {
+                if(zipFile != null) {
+                    try {zipFile.close();} catch (Exception e) {}
                 }
             }
         }
