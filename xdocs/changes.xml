@@ -102,6 +102,7 @@ Fixed bug introduced in 2.3.3: JMeter does not start up if there is no messages.
 <h3>General</h3>
 <ul>
 <li>Fix problems with remote clients - bug introduced in 2.3.3</li>
+<li>Bug 47377 - Make ClassFinder more robust and close zipfile resources</li>
 </ul>
 
 <!-- ==================================================== -->
