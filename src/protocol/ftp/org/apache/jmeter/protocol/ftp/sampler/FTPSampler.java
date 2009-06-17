@@ -53,6 +53,8 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
 
     public final static String SERVER = "FTPSampler.server"; // $NON-NLS-1$
 
+    public final static String PORT = "FTPSampler.port"; // $NON-NLS-1$
+
     // N.B. Originally there was only one filename, and only get(RETR) was supported
     // To maintain backwards compatibility, the property name needs to remain the same
     public final static String REMOTE_FILENAME = "FTPSampler.filename"; // $NON-NLS-1$
@@ -91,6 +93,18 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
         return getPropertyAsString(SERVER);
     }
 
+    public void setPort(String newPort) {
+        this.setProperty(PORT, newPort, ""); // $NON-NLS-1$
+    }
+
+    public String getPort() {
+        return getPropertyAsString(PORT, ""); // $NON-NLS-1$
+    }
+
+    public int getPortAsInt() {
+        return getPropertyAsInt(PORT, 0);
+    }
+
     public String getRemoteFilename() {
         return getPropertyAsString(REMOTE_FILENAME);
     }
@@ -127,6 +141,11 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
         sb.setNullText("null");// $NON-NLS-1$
         sb.append("ftp://");// $NON-NLS-1$
         sb.append(getServer());
+        String port = getPort();
+        if (port.length() > 0){
+            sb.append(':');
+            sb.append(port);
+        }
         sb.append("/");// $NON-NLS-1$
         sb.append(getRemoteFilename());
         sb.append(isBinaryMode() ? " (Binary) " : " (Ascii) ");// $NON-NLS-1$ $NON-NLS-2$
@@ -156,7 +175,12 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
         FTPClient ftp = new FTPClient();
         try {
             savedClient = ftp;
-            ftp.connect(getServer());
+            final int port = getPortAsInt();
+            if (port > 0){
+                ftp.connect(getServer(),port);                
+            } else {
+                ftp.connect(getServer());
+            }
             res.latencyEnd();
             int reply = ftp.getReplyCode();
             if (FTPReply.isPositiveCompletion(reply))

@@ -168,6 +168,7 @@ Summary of main changes
 </h2>
 <p>
 
+This is a minor bug-fix release, mainly to correct some bugs that were accidentally added in 2.3.3.
 
 </p>
 <h2>
@@ -291,6 +292,16 @@ Fix problems with remote clients - bug introduced in 2.3.3
 </li>
 
 
+<li>
+Bug 47377 - Make ClassFinder more robust and close zipfile resources
+</li>
+
+
+<li>
+Fix some errors in generating the documentation (latent bug revealed in 2.3.3 when Velocity was upgraded)
+</li>
+
+
 </ul>
 <h2>
 Improvements
@@ -306,6 +317,11 @@ HTTP Samplers
 Other samplers
 </h3>
 <ul>
+
+
+<li>
+Bug 47266 - FTP Request Sampler: allow specifying an FTP port, other than the default
+</li>
 
 
 </ul>
