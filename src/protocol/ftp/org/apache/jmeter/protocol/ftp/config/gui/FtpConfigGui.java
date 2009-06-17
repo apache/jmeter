@@ -20,6 +20,7 @@ package org.apache.jmeter.protocol.ftp.config.gui;
 
 import java.awt.BorderLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -39,6 +40,8 @@ import org.apache.jmeter.util.JMeterUtils;
 public class FtpConfigGui extends AbstractConfigGui {
 
     private JTextField server;
+
+    private JTextField port;
 
     private JTextField remoteFile;
 
@@ -73,6 +76,7 @@ public class FtpConfigGui extends AbstractConfigGui {
         super.configure(element); // TODO - should this be done for embedded usage?
         // Note: the element is a ConfigTestElement when used standalone, so we cannot use FTPSampler access methods
         server.setText(element.getPropertyAsString(FTPSampler.SERVER));
+        port.setText(element.getPropertyAsString(FTPSampler.PORT));
         remoteFile.setText(element.getPropertyAsString(FTPSampler.REMOTE_FILENAME));
         localFile.setText(element.getPropertyAsString(FTPSampler.LOCAL_FILENAME));
         inputData.setText(element.getPropertyAsString(FTPSampler.INPUT_DATA));
@@ -101,6 +105,7 @@ public class FtpConfigGui extends AbstractConfigGui {
         configureTestElement(element);
         // Note: the element is a ConfigTestElement, so cannot use FTPSampler access methods
         element.setProperty(FTPSampler.SERVER,server.getText());
+        element.setProperty(FTPSampler.PORT,port.getText());
         element.setProperty(FTPSampler.REMOTE_FILENAME,remoteFile.getText());
         element.setProperty(FTPSampler.LOCAL_FILENAME,localFile.getText());
         element.setProperty(FTPSampler.INPUT_DATA,inputData.getText());
@@ -116,6 +121,7 @@ public class FtpConfigGui extends AbstractConfigGui {
         super.clearGui();
 
         server.setText(""); //$NON-NLS-1$
+        port.setText(""); //$NON-NLS-1$
         remoteFile.setText(""); //$NON-NLS-1$
         localFile.setText(""); //$NON-NLS-1$
         inputData.setText(""); //$NON-NLS-1$
@@ -135,6 +141,19 @@ public class FtpConfigGui extends AbstractConfigGui {
         serverPanel.add(label, BorderLayout.WEST);
         serverPanel.add(server, BorderLayout.CENTER);
         return serverPanel;
+    }
+
+    private JPanel getPortPanel() {
+        port = new JTextField(4);
+
+        JLabel label = new JLabel(JMeterUtils.getResString("web_server_port")); // $NON-NLS-1$
+        label.setLabelFor(port);
+
+        JPanel panel = new JPanel(new BorderLayout(5, 0));
+        panel.add(label, BorderLayout.WEST);
+        panel.add(port, BorderLayout.CENTER);
+
+        return panel;
     }
 
     private JPanel createLocalFilenamePanel() {
@@ -205,7 +224,10 @@ public class FtpConfigGui extends AbstractConfigGui {
 
         // MAIN PANEL
         VerticalPanel mainPanel = new VerticalPanel();
-        mainPanel.add(createServerPanel());
+        JPanel serverPanel = new HorizontalPanel();
+        serverPanel.add(createServerPanel(), BorderLayout.CENTER);
+        serverPanel.add(getPortPanel(), BorderLayout.EAST);
+        mainPanel.add(serverPanel);
         mainPanel.add(createRemoteFilenamePanel());
         mainPanel.add(createLocalFilenamePanel());
         mainPanel.add(createLocalFileContentsPanel());
