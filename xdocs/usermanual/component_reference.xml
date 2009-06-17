@@ -46,7 +46,7 @@
 	The sample results have various attributes (success/fail, elapsed time, data size etc) and can be viewed in the various listeners.
 	</p>
 </description>
-<component name="FTP Request" index="&sect-num;.1.1" width="502" height="299" screenshot="ftptest/ftp-request.png">
+<component name="FTP Request" index="&sect-num;.1.1" width="499" height="292" screenshot="ftptest/ftp-request.png">
 <description>
 This controller lets you send an FTP "retrieve file" or "upload file" request to an FTP server.
 If you are going to send multiple requests to the same FTP server, consider
@@ -59,8 +59,8 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
 </description>
 <properties>
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
-        <property name="Server Name or IP" required="Yes">Domain name or IP address of the FTP server.
-JMeter assumes the FTP server is listening on the default port.</property>
+        <property name="Server Name or IP" required="Yes">Domain name or IP address of the FTP server.</property>
+        <property name="Port" required="No">Port to use. If this is  >0, then this specific port is used, otherwise JMeter uses the default FTP port.</property>
         <property name="Remote File:" required="Yes">File to retrieve or name of destination file to upload.</property>
         <property name="Local File:" required="Yes, if uploading (*)">File to upload, or destination for downloads (defaults to remote file name).</property>
         <property name="Local File Contents:" required="Yes, if uploading (*)">Provides the contents for the upload, overrides the Local File property.</property>

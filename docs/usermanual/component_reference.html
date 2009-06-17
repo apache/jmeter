@@ -318,7 +318,7 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='502' height='299' src="../images/screenshots/ftptest/ftp-request.png"></div>
+<div align="center"><img width='499' height='292' src="../images/screenshots/ftptest/ftp-request.png"></div>
 <p>
 <b>Parameters</b>
 <table border="1" cellspacing="0" cellpadding="2">
@@ -334,10 +334,17 @@ No
 <tr>
 <td>Server Name or IP</td>
 <td>Domain name or IP address of the FTP server.
-JMeter assumes the FTP server is listening on the default port.
 </td>
 <td>
 Yes
+</td>
+</tr>
+<tr>
+<td>Port</td>
+<td>Port to use. If this is  >0, then this specific port is used, otherwise JMeter uses the default FTP port.
+</td>
+<td>
+No
 </td>
 </tr>
 <tr>
