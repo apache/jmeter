@@ -408,7 +408,7 @@
         JMeter version
         This is overridden for formal releases.
     -->
-    <property name="jmeter.version" value="2.3.3.${DSTAMP}"/>
+    <property name="jmeter.version" value="2.3.4.${DSTAMP}"/>
     <!-- Remember to change "docversion" below if necessary -->
     <condition property="implementation.version" 
           value="${jmeter.version} r${svn.revision}" else="${jmeter.version}">
@@ -421,7 +421,7 @@
   </target>
 
   <!-- JMeter Javadoc version (own variable is used so can be overriden independently) -->
-  <property name="docversion" value="2.3.3"/>
+  <property name="docversion" value="2.3.4"/>
 
     <!-- Get version from SVN status -->
   <target name="init-svnVersion" depends="svnCheck">
