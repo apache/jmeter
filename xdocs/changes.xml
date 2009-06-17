@@ -36,6 +36,7 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 <h2>Summary of main changes</h2>
 
 <p>
+This is a minor bug-fix release, mainly to correct some bugs that were accidentally added in 2.3.3.
 </p>
 
 
@@ -103,6 +104,7 @@ Fixed bug introduced in 2.3.3: JMeter does not start up if there is no messages.
 <ul>
 <li>Fix problems with remote clients - bug introduced in 2.3.3</li>
 <li>Bug 47377 - Make ClassFinder more robust and close zipfile resources</li>
+<li>Fix some errors in generating the documentation (latent bug revealed in 2.3.3 when Velocity was upgraded)</li>
 </ul>
 
 <!-- ==================================================== -->
@@ -115,6 +117,7 @@ Fixed bug introduced in 2.3.3: JMeter does not start up if there is no messages.
 
 <h3>Other samplers</h3>
 <ul>
+<li>Bug 47266 - FTP Request Sampler: allow specifying an FTP port, other than the default</li>
 </ul>
 
 <h3>Controllers</h3>
