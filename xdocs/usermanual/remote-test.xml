@@ -216,6 +216,8 @@ There are some JMeter properties that can be set to alter this behaviour.
     </ul>
     Other fields that vary between samples are lost. 
     </li>
+    <li>Custom implementation : set the mode parameter to your custom sample sender class name
+    </li>
     </ul>
 </ul>
 <p>The following properties apply to the Batch and Statistical modes:</p>
