@@ -18,10 +18,30 @@
 
 package org.apache.jmeter.samplers;
 
+import java.lang.reflect.Constructor;
+
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jmeter.samplers.StatisticalSampleSender;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 public class SampleSenderFactory {
+
+    private static final Logger log = LoggingManager.getLoggerForClass();
+    
+    private static final String MODE_STANDARD = "Standard"; // $NON-NLS-1$
+
+    private static final String MODE_HOLD = "Hold"; // $NON-NLS-1$
+
+    private static final String MODE_BATCH = "Batch"; // $NON-NLS-1$
+
+    private static final String MODE_STATISTICAL = "Statistical"; // $NON-NLS-1$
+
+    // Support original property name
+    private static final boolean holdSamples = JMeterUtils.getPropDefault("hold_samples", false); // $NON-NLS-1$
+
+    // Extended property name
+    private static final String type = JMeterUtils.getPropDefault("mode", MODE_STANDARD); // $NON-NLS-1$
+
     /**
      * Checks for the Jmeter property mode and returns the required class.
      *
@@ -30,24 +50,33 @@ public class SampleSenderFactory {
      *         hold_samples until end of test or batch samples.
      */
     static SampleSender getInstance(RemoteSampleListener listener) {
-        // Support original property name
-        boolean holdSamples = JMeterUtils.getPropDefault("hold_samples", false);
-
-        // Extended property name
-        String type = JMeterUtils.getPropDefault("mode", "Standard");
-
-        if (holdSamples || type.equalsIgnoreCase("Hold")) {
+        if (holdSamples || type.equalsIgnoreCase(MODE_HOLD)) {
             HoldSampleSender h = new HoldSampleSender(listener);
             return h;
-        } else if (type.equalsIgnoreCase("Batch")) {
+        } else if (type.equalsIgnoreCase(MODE_BATCH)) {
             BatchSampleSender b = new BatchSampleSender(listener);
             return b;
-        } else if (type.equalsIgnoreCase("Statistical")) {
+        } else if (type.equalsIgnoreCase(MODE_STATISTICAL)) {
             StatisticalSampleSender s = new StatisticalSampleSender(listener);
             return s;
-        } else {
+        } else if (type.equalsIgnoreCase(MODE_STANDARD)) {
             StandardSampleSender s = new StandardSampleSender(listener);
             return s;
+        } else {
+            // should be a user provided class name
+            SampleSender s = null;
+            try {
+                Class clazz = Class.forName(type);
+                Constructor cons = clazz.getConstructor(new Class[] {RemoteSampleListener.class});
+                s = (SampleSender) cons.newInstance(new Object [] {listener});
+            } catch (Exception e) {
+                // houston we have a problem !!
+                log.error("Unable to create a sample sender from class "+type);
+                throw new IllegalArgumentException(e.getMessage());
+            }
+
+            return s;
         }
+
     }
 }
