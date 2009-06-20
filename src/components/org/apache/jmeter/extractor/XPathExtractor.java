@@ -104,10 +104,14 @@ public class XPathExtractor extends AbstractTestElement implements
         try{
             Document d = parseResponse(previousResult);
             getValuesForXPath(d,getXPathQuery(),vars, refName);
-        }catch(IOException e){// Should not happen
-            final String errorMessage = "error on ("+getXPathQuery()+")";
+        }catch(IOException e){// e.g. DTD not reachable
+            final String errorMessage = "IOException on ("+getXPathQuery()+")";
             log.error(errorMessage,e);
-            throw new JMeterError(errorMessage,e);
+            AssertionResult ass = new AssertionResult("IOException"); // $NON-NLS-1$
+            ass.setFailure(true);
+            ass.setFailureMessage(e.getLocalizedMessage());
+            previousResult.addAssertionResult(ass);
+            previousResult.setSuccessful(false);
         } catch (ParserConfigurationException e) {// Should not happen
             final String errrorMessage = "error on ("+getXPathQuery()+")";
             log.error(errrorMessage,e);
@@ -119,7 +123,7 @@ public class XPathExtractor extends AbstractTestElement implements
         } catch (TidyException e) {
             AssertionResult ass = new AssertionResult("TidyException"); // $NON-NLS-1$
             ass.setFailure(true);
-            ass.setFailureMessage(e.getMessage());
+            ass.setFailureMessage(e.getLocalizedMessage());
             previousResult.addAssertionResult(ass);
             previousResult.setSuccessful(false);
         }
