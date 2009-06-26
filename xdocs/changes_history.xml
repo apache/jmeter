@@ -30,6 +30,74 @@ Current changes are detailed in <a href="changes.html">Changes</a>.
 <p><b>Changes sections are chronologically ordered from top (most recent) to bottom 
 (least recent)</b></p>  
 
+<h1>Version 2.3.4</h1>
+
+<h2>Summary of main changes</h2>
+
+<p>
+This is a minor bug-fix release, mainly to correct some bugs that were accidentally added in 2.3.3.
+</p>
+
+
+<h2>Known bugs</h2>
+
+<p>
+The Include Controller has some problems in non-GUI mode. 
+In particular, it can cause a NullPointerException if there are two include controllers with the same name.
+</p>
+
+<p>Once Only controller behaves correctly under a Thread Group or Loop Controller,
+but otherwise its behaviour is not consistent (or clearly specified).</p>
+
+<p>
+The menu item Options / Choose Language does not change all the displayed text to the new language.
+[The behaviour has improved, but language change is still not fully working]
+To override the default local language fully, set the JMeter property "language" before starting JMeter. 
+</p>
+
+<h2>Bug fixes</h2>
+
+<h3>HTTP Samplers and Proxy</h3>
+<ul>
+<li>Bug 47321 -  HTTPSampler2 response timeout not honored</li>
+</ul>
+
+<h3>Other Samplers</h3>
+<ul>
+<li>Bug 47290 -  Infinite loop on connection factory lookup (JMS)</li>
+<li>JDBC Sampler should not close Prepared or Callable statements as these are cached</li>
+</ul>
+
+<h3>Controllers</h3>
+<ul>
+<li>Bug 39509 -  Once-only controller running twice</li>
+</ul>
+
+<h3>Listeners</h3>
+<ul>
+<li>Change ResultCollector to only warn if the directory was not created</li>
+<li>Fix some synchronisation issues in ResultCollector and SampleResult (wrong locks were being used)</li>
+</ul>
+
+<h3>I18N</h3>
+<ul>
+<li>Fixed bug introduced in 2.3.3: JMeter does not start up if there is no messages.properties file for the default Locale.</li>
+</ul>
+
+<h3>General</h3>
+<ul>
+<li>Fix problems with remote clients - bug introduced in 2.3.3</li>
+<li>Bug 47377 - Make ClassFinder more robust and close zipfile resources</li>
+<li>Fix some errors in generating the documentation (latent bug revealed in 2.3.3 when Velocity was upgraded)</li>
+</ul>
+
+<h2>Improvements</h2>
+
+<h3>Other samplers</h3>
+<ul>
+<li>Bug 47266 - FTP Request Sampler: allow specifying an FTP port, other than the default</li>
+</ul>
+
 <!--  ===================  -->
 
 <h1>Version 2.3.3</h1>
