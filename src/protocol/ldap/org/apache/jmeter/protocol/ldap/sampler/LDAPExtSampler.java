@@ -604,7 +604,8 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
     private void addTest(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws NamingException {
         try {
             res.sampleStart();
-            ldap.createTest(dirContext, getUserAttributes(), getBaseEntryDN());
+            DirContext ctx = ldap.createTest(dirContext, getUserAttributes(), getBaseEntryDN());
+            ctx.close(); // the createTest() method creates an extra context which needs to be closed
         } finally {
             res.sampleEnd();
         }
