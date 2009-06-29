@@ -60,6 +60,7 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
     private static final String QUIET_KEY         = "XPath.quiet"; // $NON-NLS-1$
     private static final String REPORT_ERRORS_KEY = "XPath.report_errors"; // $NON-NLS-1$
     private static final String SHOW_WARNINGS_KEY = "XPath.show_warnings"; // $NON-NLS-1$
+    private static final String DOWNLOAD_DTDS     = "XPath.download_dtds"; // $NON-NLS-1$
     //- JMX file attributes
 
     public static final String DEFAULT_XPATH = "/";
@@ -91,7 +92,8 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
         
         try {
             doc = XPathUtil.makeDocument(new ByteArrayInputStream(responseData), isValidating(),
-                    isWhitespace(), isNamespace(), isTolerant(), isQuiet(), showWarnings() , reportErrors(), isXML);
+                    isWhitespace(), isNamespace(), isTolerant(), isQuiet(), showWarnings() , reportErrors(), isXML
+                    , isDownloadDTDs());
         } catch (SAXException e) {
             log.debug("Caught sax exception: " + e);
             result.setError(true);
@@ -298,4 +300,13 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
     public boolean isQuiet() {
         return getPropertyAsBoolean(QUIET_KEY, true);
     }
+
+    public void setDownloadDTDs(boolean val) {
+        setProperty(DOWNLOAD_DTDS, val, false);
+    }
+    
+    public boolean isDownloadDTDs() {
+        return getPropertyAsBoolean(DOWNLOAD_DTDS, false);
+    }
+
 }

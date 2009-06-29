@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.util;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -31,7 +32,9 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 import org.w3c.dom.Document;
 import org.w3c.tidy.Tidy;
+import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
@@ -45,6 +48,7 @@ public class XPathUtil {
         super();
     }
 
+    //@GuardedBy("this")
     private static DocumentBuilderFactory documentBuilderFactory;
 
     /**
@@ -77,67 +81,25 @@ public class XPathUtil {
      * @param validate should the parser validate documents?
      * @param whitespace should the parser eliminate whitespace in element content?
      * @param namespace should the parser be namespace aware?
+     * @param downloadDTDs if true, parser should attempt to resolve external entities
      * @return document builder
      * @throws ParserConfigurationException
      */
-    public static synchronized DocumentBuilder makeDocumentBuilder(boolean validate, boolean whitespace, boolean namespace)
+    public static DocumentBuilder makeDocumentBuilder(boolean validate, boolean whitespace, boolean namespace, boolean downloadDTDs)
             throws ParserConfigurationException {
-        // N.B. the factory is re-usable, but not necessarily thread-safe, so
-        // the method is synchronized to protect the creation of the builder
         DocumentBuilder builder = makeDocumentBuilderFactory(validate, whitespace, namespace).newDocumentBuilder();
         builder.setErrorHandler(new MyErrorHandler(validate, false));
+        if (!downloadDTDs){
+            EntityResolver er = new EntityResolver(){
+                public InputSource resolveEntity(String publicId, String systemId)
+                        throws SAXException, IOException {
+                    return new InputSource(new ByteArrayInputStream(new byte[]{}));
+                }
+            };
+            builder.setEntityResolver(er);
+        }
         return builder;
     }
-
-    /**
-     * Utility function to get new Document
-     *
-     * @param stream
-     *            Document Input stream
-     * @param validate
-     *            Validate Document (not Tidy)
-     * @param whitespace
-     *            Element Whitespace (not Tidy)
-     * @param namespace
-     *            Is Namespace aware.
-     * @param tolerant
-     *            Is tolerant - i.e. use the Tidy parser
-     *
-     * @return document
-     * @throws ParserConfigurationException
-     * @throws IOException
-     * @throws SAXException
-     * @throws TidyException
-     */
-    public static Document makeDocument(InputStream stream, boolean validate, boolean whitespace, boolean namespace,
-            boolean tolerant) throws ParserConfigurationException, SAXException, IOException, TidyException {
-        return makeDocument(stream, validate, whitespace, namespace, tolerant, true, false, false, false);
-
-    }
-
-    /**
-     * Utility function to get new Document
-     *
-     * @param stream - Document Input stream
-     * @param validate - Validate Document (not Tidy)
-     * @param whitespace - Element Whitespace (not Tidy)
-     * @param namespace - Is Namespace aware. (not Tidy)
-     * @param tolerant - Is tolerant - i.e. use the Tidy parser
-     * @param quiet - set Tidy quiet
-     * @param showWarnings - set Tidy warnings
-     * @param report_errors - throw TidyException if Tidy detects an error
-     * @return document
-     * @throws ParserConfigurationException
-     * @throws SAXException
-     * @throws IOException
-     * @throws TidyException
-     */
-    public static Document makeDocument(InputStream stream, boolean validate, boolean whitespace, boolean namespace,
-            boolean tolerant, boolean quiet, boolean showWarnings, boolean report_errors)
-            throws ParserConfigurationException, SAXException, IOException, TidyException {
-                return makeDocument(stream, validate, whitespace, namespace,
-                        tolerant, quiet, showWarnings, report_errors, false);
-            }
 
     /**
      * Utility function to get new Document
@@ -151,6 +113,7 @@ public class XPathUtil {
      * @param showWarnings - set Tidy warnings
      * @param report_errors - throw TidyException if Tidy detects an error
      * @param isXml - is document already XML (Tidy only)
+     * @param downloadDTDs - if true, try to download external DTDs
      * @return document
      * @throws ParserConfigurationException
      * @throws SAXException
@@ -158,13 +121,13 @@ public class XPathUtil {
      * @throws TidyException
      */
     public static Document makeDocument(InputStream stream, boolean validate, boolean whitespace, boolean namespace,
-            boolean tolerant, boolean quiet, boolean showWarnings, boolean report_errors, boolean isXml)
+            boolean tolerant, boolean quiet, boolean showWarnings, boolean report_errors, boolean isXml, boolean downloadDTDs)
             throws ParserConfigurationException, SAXException, IOException, TidyException {
         Document doc;
         if (tolerant) {
             doc = tidyDoc(stream, quiet, showWarnings, report_errors, isXml);
         } else {
-            doc = makeDocumentBuilder(validate, whitespace, namespace).parse(stream);
+            doc = makeDocumentBuilder(validate, whitespace, namespace, downloadDTDs).parse(stream);
         }
         return doc;
     }

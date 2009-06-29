@@ -27,6 +27,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
 import org.apache.jmeter.assertions.XPathAssertion;
+import org.apache.jmeter.extractor.XPathExtractor;
 import org.apache.jmeter.util.JMeterUtils;
 
 public class XMLConfPanel extends JPanel {
@@ -37,6 +38,8 @@ public class XMLConfPanel extends JPanel {
     private JCheckBox reportErrors; // Report Tidy errors as Assertion failure?
     
     private JCheckBox showWarnings; // Show Tidy warnings ?
+    
+    private JCheckBox downloadDTDs; // Should we download external DTDs?
 
     /**
      * 
@@ -46,125 +49,62 @@ public class XMLConfPanel extends JPanel {
         init();
     }
 
-    /**
-     * @param isDoubleBuffered
-     */
-    public XMLConfPanel(boolean isDoubleBuffered) {
-        super(isDoubleBuffered);
-        init();
-    }
-
     private void init() {
-        Box tidyOptions = Box.createHorizontalBox();
-        tidyOptions.setBorder(BorderFactory.createEtchedBorder());
-        tidyOptions.add(getTolerant());
         quiet = new JCheckBox(JMeterUtils.getResString("xpath_tidy_quiet"),true);//$NON-NLS-1$
         reportErrors = new JCheckBox(JMeterUtils.getResString("xpath_tidy_report_errors"),true);//$NON-NLS-1$
         showWarnings = new JCheckBox(JMeterUtils.getResString("xpath_tidy_show_warnings"),true);//$NON-NLS-1$
+        namespace = new JCheckBox(JMeterUtils.getResString("xml_namespace_button")); //$NON-NLS-1$
+        whitespace = new JCheckBox(JMeterUtils.getResString("xml_whitespace_button")); //$NON-NLS-1$
+        validate = new JCheckBox(JMeterUtils.getResString("xml_validate_button")); //$NON-NLS-1$
+        validate.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                tolerant();
+            }            
+        });
+        tolerant = new JCheckBox(JMeterUtils.getResString("xml_tolerant_button")); //$NON-NLS-1$
+        downloadDTDs = new JCheckBox(JMeterUtils.getResString("xml_download_dtds")); //$NON-NLS-1$
+        Box tidyOptions = Box.createHorizontalBox();
+        tidyOptions.setBorder(BorderFactory.createEtchedBorder());
+        tidyOptions.add(tolerant);
         tidyOptions.add(quiet);
         tidyOptions.add(reportErrors);
         tidyOptions.add(showWarnings);
-        add(tidyOptions);
-        add(getNamespace());
-        add(getValidate());
-        add(getWhitespace());
+        
+        Box untidyOptions = Box.createHorizontalBox();
+        untidyOptions.setBorder(BorderFactory.createEtchedBorder());
+        untidyOptions.add(namespace);
+        untidyOptions.add(validate);
+        untidyOptions.add(whitespace);
+        untidyOptions.add(downloadDTDs);
+        
+        Box options = Box.createVerticalBox();
+        options.add(tidyOptions);
+        options.add(untidyOptions);
+        add(options);
         setDefaultValues();
     }
 
     public void setDefaultValues() {
-        setWhitespace(false);
-        setValidate(false);
-        setTolerant(false);
-        setNamespace(false);
+        whitespace.setSelected(false);
+        validate.setSelected(false);
+        tolerant.setSelected(false);
+        namespace.setSelected(false);
         quiet.setSelected(true);
         reportErrors.setSelected(false);
         showWarnings.setSelected(false);
+        downloadDTDs.setSelected(false);
         tolerant();
     }
 
-    /**
-     * @return Returns the namespace.
-     */
-    private JCheckBox getNamespace() {
-        if (namespace == null) {
-            namespace = new JCheckBox(JMeterUtils.getResString("xml_namespace_button")); //$NON-NLS-1$
-        }
-        return namespace;
-    }
-
-    /**
-     * @return Returns the tolerant.
-     */
-    private JCheckBox getTolerant() {
-        if (tolerant == null) {
-            tolerant = new JCheckBox(JMeterUtils.getResString("xml_tolerant_button")); //$NON-NLS-1$
-            tolerant.addActionListener(new ActionListener() {
-
-                public void actionPerformed(ActionEvent e) {
-                    tolerant();
-                }
-            });
-        }
-        return tolerant;
-    }
-
-    /**
-     * @return Returns the validate.
-     */
-    private JCheckBox getValidate() {
-        if (validate == null) {
-            validate = new JCheckBox(JMeterUtils.getResString("xml_validate_button")); //$NON-NLS-1$
-        }
-        return validate;
-    }
-
-    /**
-     * @return Returns the whitespace.
-     */
-    private JCheckBox getWhitespace() {
-        if (whitespace == null) {
-            whitespace = new JCheckBox(JMeterUtils.getResString("xml_whitespace_button")); //$NON-NLS-1$
-        }
-        return whitespace;
-    }
-
-    private boolean isNamespace() {
-        return getNamespace().isSelected();
-    }
-
-    private void setNamespace(boolean namespace) {
-        getNamespace().setSelected(namespace);
-    }
-
-    private boolean isTolerant() {
-        return getTolerant().isSelected();
-    }
-
-    private void setTolerant(boolean tolerant) {
-        getTolerant().setSelected(tolerant);
-    }
-
-    private boolean isWhitespace() {
-        return getWhitespace().isSelected();
-    }
-
-    private void setWhitespace(boolean whitespace) {
-        getWhitespace().setSelected(whitespace);
-    }
-
-    private boolean isValidate() {
-        return getValidate().isSelected();
-    }
-
-    private void setValidate(boolean validating) {
-        getValidate().setSelected(validating);
-    }
-
+    // Process tolerant settings
     private void tolerant() {
-        final boolean isTolerant = isTolerant();
-        getValidate().setEnabled(!isTolerant);
-        getWhitespace().setEnabled(!isTolerant);
-        getNamespace().setEnabled(!isTolerant);
+        final boolean isTolerant = tolerant.isSelected();
+        // Non-Tidy options
+        validate.setEnabled(!isTolerant);
+        whitespace.setEnabled(!isTolerant);
+        namespace.setEnabled(!isTolerant);
+        downloadDTDs.setEnabled(!isTolerant);
+        // Tidy options
         quiet.setEnabled(isTolerant);
         reportErrors.setEnabled(isTolerant);
         showWarnings.setEnabled(isTolerant);
@@ -172,24 +112,51 @@ public class XMLConfPanel extends JPanel {
 
     // Called by XPathAssertionGui
     public void modifyTestElement(XPathAssertion assertion) {
-        assertion.setValidating(isValidate());
-        assertion.setWhitespace(isWhitespace());
-        assertion.setTolerant(isTolerant());
-        assertion.setNamespace(isNamespace());
+        assertion.setValidating(validate.isSelected());
+        assertion.setWhitespace(whitespace.isSelected());
+        assertion.setTolerant(tolerant.isSelected());
+        assertion.setNamespace(namespace.isSelected());
         assertion.setShowWarnings(showWarnings.isSelected());
         assertion.setReportErrors(reportErrors.isSelected());
-        assertion.setQuiet(quiet.isSelected());     
+        assertion.setQuiet(quiet.isSelected());
+        assertion.setDownloadDTDs(downloadDTDs.isSelected());
+    }
+
+    // Called by XPathExtractorGui
+    public void modifyTestElement(XPathExtractor assertion) {
+        assertion.setValidating(validate.isSelected());
+        assertion.setWhitespace(whitespace.isSelected());
+        assertion.setTolerant(tolerant.isSelected());
+        assertion.setNameSpace(namespace.isSelected());
+        assertion.setShowWarnings(showWarnings.isSelected());
+        assertion.setReportErrors(reportErrors.isSelected());
+        assertion.setQuiet(quiet.isSelected());
+        assertion.setDownloadDTDs(downloadDTDs.isSelected());
     }
 
     // Called by XPathAssertionGui
     public void configure(XPathAssertion assertion) {
-        setWhitespace(assertion.isWhitespace());
-        setValidate(assertion.isValidating());
-        setTolerant(assertion.isTolerant());
-        setNamespace(assertion.isNamespace());
+        whitespace.setSelected(assertion.isWhitespace());
+        validate.setSelected(assertion.isValidating());
+        tolerant.setSelected(assertion.isTolerant());
+        namespace.setSelected(assertion.isNamespace());
         quiet.setSelected(assertion.isQuiet());
         showWarnings.setSelected(assertion.showWarnings());
         reportErrors.setSelected(assertion.reportErrors());
+        downloadDTDs.setSelected(assertion.isDownloadDTDs());
+        tolerant();
+    }
+
+    // Called by XPathExtractorGui
+    public void configure(XPathExtractor assertion) {
+        whitespace.setSelected(assertion.isWhitespace());
+        validate.setSelected(assertion.isValidating());
+        tolerant.setSelected(assertion.isTolerant());
+        namespace.setSelected(assertion.useNameSpace());
+        quiet.setSelected(assertion.isQuiet());
+        showWarnings.setSelected(assertion.showWarnings());
+        reportErrors.setSelected(assertion.reportErrors());
+        downloadDTDs.setSelected(assertion.isDownloadDTDs());
         tolerant();
     }
 }

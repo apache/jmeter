@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.assertions.gui;
 
-import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -42,6 +41,7 @@ import org.w3c.dom.Element;
 public class XPathPanel extends JPanel {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    // Lazily constructed. Does not matter if it is constructed more than once.
     private static Document testDoc;
 
     private JCheckBox negated;
@@ -55,31 +55,6 @@ public class XPathPanel extends JPanel {
      */
     public XPathPanel() {
         super();
-        init();
-    }
-
-    /**
-     * @param isDoubleBuffered
-     */
-    public XPathPanel(boolean isDoubleBuffered) {
-        super(isDoubleBuffered);
-        init();
-    }
-
-    /**
-     * @param layout
-     */
-    public XPathPanel(LayoutManager layout) {
-        super(layout);
-        init();
-    }
-
-    /**
-     * @param layout
-     * @param isDoubleBuffered
-     */
-    public XPathPanel(LayoutManager layout, boolean isDoubleBuffered) {
-        super(layout, isDoubleBuffered);
         init();
     }
 
@@ -194,8 +169,8 @@ public class XPathPanel extends JPanel {
     }
 
     /**
-     * Test weather an XPath is valid. It seems the Xalan has no easy way to
-     * check, so this creates a test document, then tries to evaluate the xpath.
+     * Test whether an XPath is valid. It seems the Xalan has no easy way to
+     * check, so this creates a dummy test document, then tries to evaluate the xpath against it.
      * 
      * @param xpathString
      *            XPath String to validate
@@ -208,7 +183,7 @@ public class XPathPanel extends JPanel {
         boolean success = true;
         try {
             if (testDoc == null) {
-                testDoc = XPathUtil.makeDocumentBuilder(false, false, false).newDocument();
+                testDoc = XPathUtil.makeDocumentBuilder(false, false, false, false).newDocument();
                 Element el = testDoc.createElement("root"); //$NON-NLS-1$
                 testDoc.appendChild(el);
 
@@ -218,8 +193,8 @@ public class XPathPanel extends JPanel {
                 // because eval will throw an exception
                 // if xpath is invalid, but whatever, better
                 // safe
-                log.warn("xpath eval was null ");
                 ret = "xpath eval was null";
+                log.warn(ret+" "+xpathString);
                 success = false;
             }
 
