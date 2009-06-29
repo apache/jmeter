@@ -3326,14 +3326,15 @@ on XPath.
 
 <properties>
 <property name="Name"		required="No">Descriptive name for this element that is shown in the tree.</property>
-<property name="Tolerant Parser"	required="Yes">Be tolerant of XML/HTML errors (i.e. use Tidy)</property>
-<property name="Quiet"	required="If tolerant is selected">Sets the Tidy Quiet flag</property>
-<property name="Report Errors"	required="If tolerant is selected">If a Tidy error occurs, then set the Assertion accordingly</property>
-<property name="Show warnings"	required="If tolerant is selected">Sets the Tidy showWarnings option</property>
-<property name="Use Namespaces"	required="No">Should namespaces be honoured?</property>
-<property name="Validate XML"	required="No">Check the document against its schema.</property>
-<property name="XPath Assertion"		required="Yes">XPath to match in the document.</property>
-<property name="Ignore Whitespace"	required="No">Ignore Element Whitespace.</property>
+<property name="Use Tidy (tolerant parser)"	required="Yes">Use Tidy, i.e. be tolerant of XML/HTML errors</property>
+<property name="Quiet"	required="If Tidy is selected">Sets the Tidy Quiet flag</property>
+<property name="Report Errors"	required="If Tidy is selected">If a Tidy error occurs, then set the Assertion accordingly</property>
+<property name="Show warnings"	required="If Tidy is selected">Sets the Tidy showWarnings option</property>
+<property name="Use Namespaces"	required="If Tidy is not selected">Should namespaces be honoured?</property>
+<property name="Validate XML"	required="If Tidy is not selected">Check the document against its schema.</property>
+<property name="Ignore Whitespace"  required="If Tidy is not selected">Ignore Element Whitespace.</property>
+<property name="Fetch External DTDs"  required="If Tidy is not selected">If selected, external DTDs are fetched.</property>
+<property name="XPath Assertion"	required="Yes">XPath to match in the document.</property>
 <property name="True if nothing matches"	required="No">True if a XPath expression is not matched</property>
 </properties>
 <note>
@@ -3915,16 +3916,16 @@ generate the template string, and store the result into the given variable name.
    </description>
    <properties>
         <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
-	   <property name="Use Tidy" required="Yes">If checked use Tidy to parse HTML response into XHTML.
+	   <property name="Use Tidy (tolerant parser)" required="Yes">If checked use Tidy to parse HTML response into XHTML.
 	   <ul>
 		   <li>"Use Tidy" should be checked on for HTML response. Such response is converted to valid XHTML (XML compatible HTML) using Tidy</li>
 		   <li>"Use Tidy" should be unchecked for both XHTML or XML response (for example RSS)</li>
 	   </ul>
 	   </property>
-        <property name="Quiet"	required="If Tidy is selected">Sets the Tidy Quiet flag</property>
-        <property name="Report Errors"	required="If Tidy is selected">If a Tidy error occurs, then add an Assertion showing the details</property>
-        <property name="Show warnings"	required="If Tidy is selected">Sets the Tidy showWarnings option</property>
-        <property name="Use Namespace?" required="Yes">
+<property name="Quiet"  required="If Tidy is selected">Sets the Tidy Quiet flag</property>
+<property name="Report Errors"  required="If Tidy is selected">If a Tidy error occurs, then set the Assertion accordingly</property>
+<property name="Show warnings"  required="If Tidy is selected">Sets the Tidy showWarnings option</property>
+<property name="Use Namespaces" required="If Tidy is not selected">
         If checked, then the XML parser will use namespace resolution.
         Note that currently only namespaces declared on the root element will be recognised.
         A later version of JMeter may support user-definition of additional workspace names.
@@ -3939,8 +3940,11 @@ generate the template string, and store the result into the given variable name.
         where "uri-for-namespace" is the uri for the "mynamespace" namespace.
         
         (not applicable if Tidy is selected)
-        </property>
-        <property name="Reference Name" required="Yes">The name of the JMeter variable in which to store the result.</property>
+</property>
+    <property name="Validate XML"   required="If Tidy is not selected">Check the document against its schema.</property>
+    <property name="Ignore Whitespace"  required="If Tidy is not selected">Ignore Element Whitespace.</property>
+    <property name="Fetch External DTDs"  required="If Tidy is not selected">If selected, external DTDs are fetched.</property>
+    <property name="Reference Name" required="Yes">The name of the JMeter variable in which to store the result.</property>
 	<property name="XPath Query" required="Yes">Element query in XPath language. Can return more than one match. </property>
 	<property name="Default Value" required="">Default value returned when no match found</property>
    </properties>

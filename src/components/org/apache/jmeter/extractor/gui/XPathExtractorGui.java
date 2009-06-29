@@ -21,15 +21,13 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
+import org.apache.jmeter.assertions.gui.XMLConfPanel;
 import org.apache.jmeter.extractor.XPathExtractor;
 import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.testelement.TestElement;
@@ -39,8 +37,6 @@ import org.apache.jorphan.gui.JLabeledTextField;
  * GUI for XPathExtractor class.
  */
  /* This file is inspired by RegexExtractor.
- * author <a href="mailto:hpaluch@gitus.cz">Henryk Paluch</a>
- *            of <a href="http://www.gitus.com">Gitus a.s.</a>
  * See Bugzilla: 37183
  */
 public class XPathExtractorGui extends AbstractPostProcessorGui {
@@ -51,19 +47,8 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
 
     private JLabeledTextField refNameField;
 
-    private JCheckBox tolerant; // Should Tidy be run?
-
-    private JCheckBox quiet; // Should Tidy be quiet?
-
-    private JCheckBox reportErrors; // Report Tidy errors as Assertion failure?
-
-    private JCheckBox showWarnings; // Show Tidy warnings ?
-
-    private JCheckBox nameSpace; // Should parser be namespace aware?
-
-    // We could perhaps add validate/whitespace options, but they're probably not necessary for
-    // the XPathExtractor
-
+    private XMLConfPanel xml;
+    
     public String getLabelResource() {
         return "xpath_extractor_title"; //$NON-NLS-1$
     }
@@ -79,12 +64,7 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
         xpathQueryField.setText(xpe.getXPathQuery());
         defaultField.setText(xpe.getDefaultValue());
         refNameField.setText(xpe.getRefName());
-        tolerant.setSelected(xpe.isTolerant());
-        quiet.setSelected(xpe.isQuiet());
-        showWarnings.setSelected(xpe.showWarnings());
-        reportErrors.setSelected(xpe.reportErrors());
-        nameSpace.setSelected(xpe.useNameSpace());
-        setTidyOptions(tolerant.isSelected());
+        xml.configure(xpe);
     }
 
 
@@ -94,9 +74,6 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
         return extractor;
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(org.apache.jmeter.testelement.TestElement)
-     */
     public void modifyTestElement(TestElement extractor) {
         super.configureTestElement(extractor);
         if ( extractor instanceof XPathExtractor){
@@ -104,11 +81,7 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
             xpath.setDefaultValue(defaultField.getText());
             xpath.setRefName(refNameField.getText());
             xpath.setXPathQuery(xpathQueryField.getText());
-            xpath.setTolerant(tolerant.isSelected());
-            xpath.setNameSpace(nameSpace.isSelected());
-            xpath.setShowWarnings(showWarnings.isSelected());
-            xpath.setReportErrors(reportErrors.isSelected());
-            xpath.setQuiet(quiet.isSelected());
+            xml.modifyTestElement(xpath);
         }
     }
 
@@ -121,18 +94,7 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
         xpathQueryField.setText(""); // $NON-NLS-1$
         defaultField.setText(""); // $NON-NLS-1$
         refNameField.setText(""); // $NON-NLS-1$
-        tolerant.setSelected(false);
-        nameSpace.setSelected(true);
-        quiet.setSelected(true);
-        reportErrors.setSelected(false);
-        showWarnings.setSelected(false);
-    }
-
-    private void setTidyOptions(boolean tidySelected){
-        quiet.setEnabled(tidySelected);
-        reportErrors.setEnabled(tidySelected);
-        showWarnings.setEnabled(tidySelected);
-        nameSpace.setEnabled(!tidySelected);
+        xml.setDefaultValues();
     }
 
     private void init() {
@@ -141,30 +103,10 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
 
         Box box = Box.createVerticalBox();
         box.add(makeTitlePanel());
-        Box options = Box.createHorizontalBox();
-        tolerant = new JCheckBox(JMeterUtils.getResString("xpath_extractor_tolerant"));//$NON-NLS-1$
-        quiet = new JCheckBox(JMeterUtils.getResString("xpath_tidy_quiet"),true);//$NON-NLS-1$
-        reportErrors = new JCheckBox(JMeterUtils.getResString("xpath_tidy_report_errors"),true);//$NON-NLS-1$
-        showWarnings = new JCheckBox(JMeterUtils.getResString("xpath_tidy_show_warnings"),true);//$NON-NLS-1$
-        nameSpace = new JCheckBox(JMeterUtils.getResString("xpath_extractor_namespace"),true);//$NON-NLS-1$
-
-        tolerant.addActionListener(
-            new ActionListener(){
-                public void actionPerformed(ActionEvent e) {
-                    setTidyOptions(tolerant.isSelected());
-        }});
-
-        setTidyOptions(tolerant.isSelected());
-
-        Box tidyOptions = Box.createHorizontalBox();
-        tidyOptions.add(tolerant);
-        tidyOptions.add(quiet);
-        tidyOptions.add(reportErrors);
-        tidyOptions.add(showWarnings);
-        tidyOptions.setBorder(BorderFactory.createEtchedBorder());
-        options.add(tidyOptions);
-        options.add(nameSpace);
-        box.add(options);
+        xml = new XMLConfPanel();
+        xml.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
+                .getResString("xpath_assertion_option"))); //$NON-NLS-1$
+        box.add(xml);
         add(box, BorderLayout.NORTH);
         add(makeParameterPanel(), BorderLayout.CENTER);
     }
