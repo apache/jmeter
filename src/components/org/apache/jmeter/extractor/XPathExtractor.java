@@ -80,6 +80,9 @@ public class XPathExtractor extends AbstractTestElement implements
     private static final String QUIET           = "XPathExtractor.quiet"; // $NON-NLS-1$
     private static final String REPORT_ERRORS   = "XPathExtractor.report_errors"; // $NON-NLS-1$
     private static final String SHOW_WARNINGS   = "XPathExtractor.show_warnings"; // $NON-NLS-1$
+    private static final String DOWNLOAD_DTDS   = "XPathExtractor.download_dtds"; // $NON-NLS-1$
+    private static final String WHITESPACE      = "XPathExtractor.whitespace"; // $NON-NLS-1$
+    private static final String VALIDATE        = "XPathExtractor.validate"; // $NON-NLS-1$
     //- JMX file attributes
 
 
@@ -107,9 +110,9 @@ public class XPathExtractor extends AbstractTestElement implements
         }catch(IOException e){// e.g. DTD not reachable
             final String errorMessage = "IOException on ("+getXPathQuery()+")";
             log.error(errorMessage,e);
-            AssertionResult ass = new AssertionResult("IOException"); // $NON-NLS-1$
-            ass.setFailure(true);
-            ass.setFailureMessage(e.getLocalizedMessage());
+            AssertionResult ass = new AssertionResult(getName());
+            ass.setError(true);
+            ass.setFailureMessage(new StringBuffer("IOException: ").append(e.getLocalizedMessage()).toString());
             previousResult.addAssertionResult(ass);
             previousResult.setSuccessful(false);
         } catch (ParserConfigurationException e) {// Should not happen
@@ -222,7 +225,8 @@ public class XPathExtractor extends AbstractTestElement implements
       ByteArrayInputStream in = new ByteArrayInputStream(utf8data);
       boolean isXML = JOrphanUtils.isXML(utf8data);
       // this method assumes UTF-8 input data
-      return XPathUtil.makeDocument(in,false,false,useNameSpace(),isTolerant(),isQuiet(),showWarnings(),reportErrors(),isXML);
+      return XPathUtil.makeDocument(in,false,false,useNameSpace(),isTolerant(),isQuiet(),showWarnings(),reportErrors()
+              ,isXML, isDownloadDTDs());
     }
 
     /**
@@ -273,5 +277,29 @@ public class XPathExtractor extends AbstractTestElement implements
             vars.put(concat(refName, "1"), val);
             vars.remove(concat(refName, "2"));
         }
+    }
+
+    public void setWhitespace(boolean selected) {
+        setProperty(WHITESPACE, selected, false);        
+    }
+
+    public boolean isWhitespace() {
+        return getPropertyAsBoolean(WHITESPACE, false);
+    }
+
+    public void setValidating(boolean selected) {
+        setProperty(VALIDATE, selected);
+    }
+
+    public boolean isValidating() {
+        return getPropertyAsBoolean(VALIDATE, false);
+    }
+
+    public void setDownloadDTDs(boolean selected) {
+        setProperty(DOWNLOAD_DTDS, selected, false);
+    }
+
+    public boolean isDownloadDTDs() {
+        return getPropertyAsBoolean(DOWNLOAD_DTDS, false);
     }
 }
