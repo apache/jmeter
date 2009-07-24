@@ -49,17 +49,17 @@ public class DataSourceElement extends AbstractTestElement
 
     private static final long serialVersionUID = 233L;
 
-    transient String dataSource, driver, dbUrl, username, password, checkQuery, poolMax, connectionAge, timeout,
+    private transient String dataSource, driver, dbUrl, username, password, checkQuery, poolMax, connectionAge, timeout,
             trimInterval;
 
-    transient boolean keepAlive, autocommit;
+    private transient boolean keepAlive, autocommit;
 
     /*
      *  The datasource is set up by testStarted and cleared by testEnded.
      *  These are called from different threads, so access must be synchronized.
      *  The same instance is called in each case.
     */
-    transient ResourceLimitingJdbcDataSource excaliburSource;
+    private transient ResourceLimitingJdbcDataSource excaliburSource;
 
     // Keep a record of the pre-thread pools so that they can be disposed of at the end of a test
     private transient Set perThreadPoolSet;
