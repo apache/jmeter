@@ -210,9 +210,6 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
         return false;
     }
 
-    public void uncompile() {// TODO is this used?
-    }
-
     /**
      * Save the authentication data to a file.
      */
