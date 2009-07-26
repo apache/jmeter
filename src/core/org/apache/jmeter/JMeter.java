@@ -736,18 +736,26 @@ public class JMeter implements JMeterPlugin {
             // For GUI runs this is done in Start.java
             convertSubTree(tree);
 
-            if (logFile != null) {
-                ResultCollector logger = new ResultCollector();
-                logger.setFilename(logFile);
-                tree.add(tree.getArray()[0], logger);
-            }
+            Summariser summer = null;
             String summariserName = JMeterUtils.getPropDefault("summariser.name", "");//$NON-NLS-1$
             if (summariserName.length() > 0) {
                 log.info("Creating summariser <" + summariserName + ">");
                 println("Creating summariser <" + summariserName + ">");
-                Summariser summer = new Summariser(summariserName);
-                tree.add(tree.getArray()[0], summer);
+                summer = new Summariser(summariserName);
             }
+            
+            if (logFile != null) {
+                ResultCollector logger = new ResultCollector(summer);
+                logger.setFilename(logFile);
+                tree.add(tree.getArray()[0], logger);
+            }
+            else {
+            	// only add Summariser if it can not be shared with the ResultCollector
+	            if (summer != null) {
+	                tree.add(tree.getArray()[0], summer);
+	            }
+            }
+            
             List engines = new LinkedList();
             tree.add(tree.getArray()[0], new ListenToTest(parent, (remoteStart && remoteStop) ? engines : null));
             println("Created the tree successfully using "+testFile);
