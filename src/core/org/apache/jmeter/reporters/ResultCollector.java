@@ -133,14 +133,22 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     private volatile boolean inTest = false;
 
     private volatile boolean isStats = false;
+    
+    /** the summarizer to which this result collector will forward the samples */
+    private Summariser summariser;
 
     /**
      * No-arg constructor.
      */
     public ResultCollector() {
+        this(null);
+    }
+    
+    public ResultCollector(Summariser summer) {
         setErrorLogging(false);
         setSuccessOnlyLogging(false);
         setProperty(new ObjectProperty(SAVE_CONFIG, new SampleSaveConfiguration()));
+        summariser = summer;
     }
 
     // Ensure that the sample save config is not shared between copied nodes
@@ -148,6 +156,8 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     public Object clone(){
         ResultCollector clone = (ResultCollector) super.clone();
         clone.setSaveConfig((SampleSaveConfiguration)clone.getSaveConfig().clone());
+        // Unfortunately AbstractTestElement does not call super.clone()
+        clone.summariser = this.summariser;
         return clone;
     }
 
@@ -235,6 +245,10 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                 inTest = false;
             }            
         }
+
+        if(summariser != null) {
+            summariser.testEnded(host);
+        }
     }
 
     public synchronized void testStarted(String host) {
@@ -250,6 +264,10 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             }
         }
         inTest = true;
+
+        if(summariser != null) {
+            summariser.testStarted(host);
+        }
     }
 
     public void testEnded() {
@@ -484,6 +502,10 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                 }
             }
         }
+        
+        if(summariser != null) {
+        	summariser.sampleOccurred(event);
+        }
     }
 
     protected final void sendToVisualizer(SampleResult r) {
@@ -577,5 +599,4 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     // can find the Clearable nodes - the userObject has to implement the interface.
     public void clearData() {
     }
-
 }
