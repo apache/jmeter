@@ -198,6 +198,8 @@ public class TransactionController extends GenericController implements SampleLi
                     res.setSuccessful(false);
                     noFailingSamples++;
                 }
+                res.setAllThreads(sampleResult.getAllThreads());
+                res.setGroupThreads(sampleResult.getGroupThreads());
             }
         }
     }
