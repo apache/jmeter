@@ -995,6 +995,8 @@ run JMeter unless all the JMeter jars are added.
     <include name="${dest.jar.jmeter}/mirror-server.*"/>
     <include name="${dest.jar.jmeter}/shutdown.*"/>
     <include name="${dest.jar.jmeter}/stoptest.*"/>
+  	<!-- Fake SSL cert for JMeter proxy recorder in https -->
+  	<include name="${dest.jar.jmeter}/proxyserver.jks"/>
     <!-- Exclude any files that might be present from testing the release -->
     <exclude name="${dest.jar.jmeter}/*.log"/>
     <include name="${dest.jar}/"/>

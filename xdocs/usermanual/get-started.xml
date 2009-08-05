@@ -132,7 +132,7 @@ whether trusted or not, regardless of validity periods etc.</b>
 This is to allow the maximum flexibility in testing servers.</p>
 <p>If the server requires a client certificate, this can be provided.</p>
 <p>There is also the <complink name="SSL Manager"/>, for greater control of certificates.</p>
-<note>The JMeter proxy server (see below) does not support recording SSL (https).</note>
+<note>The JMeter proxy server (see below) supports recording HTTPS (SSL) in versions after 2.3.4</note>
 </subsection>
 
 <subsection name="&sect-num;.2.5 JDBC Driver" anchor="opt_jdbc">
@@ -268,7 +268,7 @@ from a command line with the following parameters:</p>
 <p><b>Example</b>: jmeter -H my.proxy.server -P 8000 -u username -a password -N localhost</p>
 <p>Alternatively, you can use --proxyHost, --proxyPort, --username, and --password</p>
 <note>JMeter also has its own in-built <complink name="HTTP Proxy Server">HTTP Proxy Server</complink>,
-which can be used for recording HTTP (but not HTTPS) browser sessions.
+which can be used for recording HTTP or HTTPS browser sessions.
 This is not to be confused with the proxy settings described above, which are used when JMeter makes HTTP or HTTPS requests itself.</note>
 </subsection>
 

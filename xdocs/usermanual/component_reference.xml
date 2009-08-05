@@ -4233,8 +4233,6 @@ Your WorkBench can be saved independently, if you like (right-click on WorkBench
 </component>
 
 <component name="HTTP Proxy Server" index="&sect-num;.9.5"  width="951" height="611" screenshot="proxy_control.png">
-<note>The Proxy Server can only record HTTP traffic. 
-It is not possible to record HTTPS (SSL) sessions; however there is an HTTPS spoofing mode - see below.</note>
 <description><p>The Proxy Server allows JMeter to watch and record your actions while you browse your web application
 with your normal browser.  JMeter will create test sample objects and store them
 directly into your test plan as you go (so you can view samples interactively while you make them).</p>
@@ -4243,8 +4241,21 @@ directly into your test plan as you go (so you can view samples interactively wh
 Select the WorkBench element in the tree, and right-click on this element to get the
 Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).</p>
 <p>
-You also need to set up your browser to use the JMeter proxy port as the proxy for HTTP requests.
-Do not use JMeter as the proxy for any other request types - HTTPS, FTP, etc. - as the JMeter proxy cannot handle them.
+You also need to set up your browser to use the JMeter proxy port as the proxy for HTTP and HTTPS requests.
+Do not use JMeter as the proxy for any other request types - FTP, etc. - as the JMeter proxy cannot handle them.
+</p>
+<p>
+When recording HTTPS, the JMeter proxy server uses a dummy certificate to enable it to accept the SSL connection from
+the browser. This certificate is not one of the certificates that browsers normally trust, and will not be for the
+correct host, so the browser should display a dialogue asking if you want to accept the certificate or not. For example:
+<code>
+1) The server's name "www.example.com" does not match the certificate's name
+   "JMeter Proxy". Somebody may be trying to eavesdrop on you.
+2) The certificate for "JMeter Proxy" is signed by the unknown Certificate Authority
+   "JMeter Proxy". It is not possible to verify that this is a valid certificate.
+</code> 
+You will need to accept the certificate in order to allow the JMeter Proxy to intercept the SSL traffic in order to
+record it. You should only accept the certificate temporarily.
 </p>
 <note>
 If your browser currently uses a proxy (e.g. a company intranet may route all external requests via a proxy),
@@ -4258,6 +4269,7 @@ This setting will also be needed when running the generated test plan.
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
         <property name="Port" required="Yes">The port that the Proxy Server listens to.  8080 is the default, but you can change it.</property>
         <property name="Attempt HTTPS Spoofing" required="Yes">
+          [Note: HTTPS spoofing should no longer be required]
           When you enable HTTPS spoofing, the following  happens:
           <ul>
             <li>All matching (see below) http requests from the client are turned into https (between the proxy

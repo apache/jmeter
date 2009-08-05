@@ -21,13 +21,30 @@ package org.apache.jmeter.protocol.http.proxy;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.net.URL;
+import java.net.UnknownHostException;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+import java.util.HashMap;
 import java.util.Map;
 
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+
+import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.parser.HTMLParseException;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
@@ -64,7 +81,36 @@ public class Proxy extends Thread {
     private static final String PROXY_HEADERS_REMOVE_DEFAULT = "If-Modified-Since,If-None-Match,Host"; // $NON-NLS-1$
 
     private static final String PROXY_HEADERS_REMOVE_SEPARATOR = ","; // $NON-NLS-1$
+    
+    // for ssl connection
+    private static final String KEYSTORE_TYPE = 
+        JMeterUtils.getPropDefault("proxy.cert.type", "JKS"); // $NON-NLS-1$ $NON-NLS-2$
+    
+    private static final String KEYMANAGERFACTORY =
+        JMeterUtils.getPropDefault("proxy.cert.factory", "SunX509"); // $NON-NLS-1$ $NON-NLS-2$
+    
+    private static final String SSLCONTEXT_PROTOCOL = 
+        JMeterUtils.getPropDefault("proxy.ssl.protocol", "SSLv3"); // $NON-NLS-1$ $NON-NLS-2$
+    
+    // HashMap to save ssl connection between Jmeter proxy and browser
+    private static HashMap hashHost = new HashMap();
+    
+    // Proxy configuration SSL
+    private static final String CERT_DIRECTORY =
+        JMeterUtils.getPropDefault("proxy.cert.directory", "."); // $NON-NLS-1$ $NON-NLS-2$
+    
+    private static final String CERT_FILE =
+        JMeterUtils.getPropDefault("proxy.cert.file", "proxyserver.jks"); // $NON-NLS-1$ $NON-NLS-2$
+    
+    private static final char[] KEYSTORE_PASSWORD =
+        JMeterUtils.getPropDefault("proxy.cert.keystorepass", "password").toCharArray(); // $NON-NLS-1$ $NON-NLS-2$
 
+    private static final char[] KEY_PASSWORD =
+        JMeterUtils.getPropDefault("proxy.cert.keypassword","password").toCharArray(); // $NON-NLS-1$ $NON-NLS-2$
+
+    // Use with SSL connection
+    private OutputStream outStreamClient = null;
+    
     static {
         String removeList = JMeterUtils.getPropDefault(PROXY_HEADERS_REMOVE,PROXY_HEADERS_REMOVE_DEFAULT);
         headersToRemove = JOrphanUtils.split(removeList,PROXY_HEADERS_REMOVE_SEPARATOR);
@@ -161,9 +207,28 @@ public class Proxy extends Thread {
         SampleResult result = null;
         HeaderManager headers = null;
 
-        try {
+        try {   
+            // Now, parse only first line
             request.parse(new BufferedInputStream(clientSocket.getInputStream()));
-
+            outStreamClient = clientSocket.getOutputStream();
+            
+            if ((request.getMethod().startsWith(HTTPConstants.CONNECT)) && (outStreamClient != null)) {
+                log.debug("Method CONNECT => SSL");
+                // write a OK reponse to browser, to engage SSL exchange
+                outStreamClient.write(("HTTP/1.0 200 OK\r\n\r\n").getBytes()); // $NON-NLS-1$
+                outStreamClient.flush();
+               // With ssl request, url is host:port (without https:// or path)
+                String[] param = request.getUrl().split(":");  // $NON-NLS-1$
+                if (param.length == 2) {
+                    log.debug("Start to negotiate SSL connection, host: " + param[0]);
+                    clientSocket = startSSL(clientSocket, param[0]);
+                } else {
+                    log.warn("In SSL request, unable to find host and port in CONNECT request");
+                }
+                // Re-parse (now it's the http request over SSL)
+                request.parse(new BufferedInputStream(clientSocket.getInputStream()));
+            }
+            
             // Populate the sampler. It is the same sampler as we sent into
             // the constructor of the HttpRequestHdr instance above
             request.getSampler(pageEncodings, formEncodings);
@@ -225,9 +290,17 @@ public class Proxy extends Thread {
                     "To record https requests, see " +
                     "<a href=\"http://jakarta.apache.org/jmeter/usermanual/component_reference.html#HTTP_Proxy_Server\">HTTP Proxy Server documentation</a>"));
             result = generateErrorResult(result, e); // Generate result (if nec.) and populate it
+        } catch (IOException ioe) {
+            log.error("Problem with SSL certificate? Ensure browser is set to accept the JMeter proxy cert: "+ioe.getLocalizedMessage());
+            // won't work: writeErrorToClient(HttpReplyHdr.formInternalError());
+            if (result == null) {
+                result = new SampleResult();
+                result.setSampleLabel("Sample failed");
+            }
+            result.setResponseMessage(ioe.getMessage()+ "\n**ensure browser is set to accept the JMeter proxy certificate**");
         } catch (Exception e) {
             log.error("Exception when processing sample", e);
-            writeErrorToClient(HttpReplyHdr.formTimeout());
+            writeErrorToClient(HttpReplyHdr.formInternalError());
             result = generateErrorResult(result, e); // Generate result (if nec.) and populate it
         } finally {
             if (log.isDebugEnabled()) {
@@ -252,6 +325,111 @@ public class Proxy extends Thread {
             }
             sampler.threadFinished(); // Needed for HTTPSampler2
         }
+    }
+    
+    /**
+     * Get SSL connection from hashmap, creating it if necessary.
+     * 
+     * @param host
+     * @return a ssl socket factory
+     * @throws IOException 
+     */
+    private SSLSocketFactory getSSLSocketFactory(String host) throws IOException {
+        synchronized (hashHost) {
+            if (hashHost.containsKey(host)) {
+                log.debug("Good, already in map, host=" + host);
+                return (SSLSocketFactory) hashHost.get(host);
+            }
+            InputStream in = getCertificate();
+            Exception except = null;
+            if (in != null) {
+                KeyStore ks = null;
+                KeyManagerFactory kmf = null;
+                SSLContext sslcontext = null;
+                try {
+                    ks = KeyStore.getInstance(KEYSTORE_TYPE);
+                    ks.load(in, KEYSTORE_PASSWORD);
+                    kmf = KeyManagerFactory.getInstance(KEYMANAGERFACTORY);
+                    kmf.init(ks, KEY_PASSWORD);
+                    sslcontext = SSLContext.getInstance(SSLCONTEXT_PROTOCOL);
+                    sslcontext.init(kmf.getKeyManagers(), null, null);
+                    SSLSocketFactory sslFactory = sslcontext.getSocketFactory();
+                    hashHost.put(host, sslFactory);
+                    log.info("KeyStore for SSL loaded OK and put host in map ("+host+")");
+                    return sslFactory;
+                } catch (NoSuchAlgorithmException e) {
+                    except=e;
+                } catch (KeyManagementException e) {
+                    except=e;
+                } catch (KeyStoreException e) {
+                    except=e;
+                } catch (UnrecoverableKeyException e) {
+                    except=e;
+                } catch (CertificateException e) {
+                    except=e;
+                } finally {
+                    if (except != null){
+                        log.error("Problem with SSL certificate",except);
+                    }
+                    IOUtils.closeQuietly(in);
+                }
+            } else {
+                throw new IOException("Unable to read keystore");
+            }
+            return null;
+        }
+    }
+
+    /**
+     * Negotiate a SSL connection.
+     * 
+     * @param sock socket in
+     * @param host
+     * @return a new client socket over ssl
+     * @throws Exception if negotiation failed
+     */
+    private Socket startSSL(Socket sock, String host) throws IOException {
+        SSLSocketFactory sslFactory = getSSLSocketFactory(host);
+        SSLSocket secureSocket;
+        if (sslFactory != null) {
+            try {
+                secureSocket = (SSLSocket) sslFactory.createSocket(sock, 
+                        sock.getInetAddress().getHostName(), sock.getPort(), true);
+                secureSocket.setUseClientMode(false);
+                if (log.isDebugEnabled()){
+                    log.debug("SSL transaction ok with cipher: " + secureSocket.getSession().getCipherSuite());
+                }
+                return secureSocket;
+            } catch (IOException e) {
+                log.error("Error in SSL socket negotiation: ", e);
+                throw e;
+            }
+        } else {
+            log.warn("Unable to negotiate SSL transaction, no keystore?");
+            throw new IOException("Unable to negotiate SSL transaction, no keystore?");
+        }
+    }
+    
+    /**
+     * Open the local certificate file.
+     * 
+     * @return stream to key cert; null if there was a problem opening it
+     */
+    private InputStream getCertificate() {
+        File certFile = new File(CERT_DIRECTORY, CERT_FILE);
+        InputStream in = null;
+        final String certPath = certFile.getAbsolutePath();
+        if (certFile.exists() && certFile.canRead()) {
+            try {
+                in = new FileInputStream(certFile);
+                log.info("Opened Keystore file: "+certPath);
+            } catch (FileNotFoundException e) {
+                log.error("No server cert file found: "+certPath, e);
+            }
+        } else {
+            log.error("No server cert file found: "+certPath);
+        }
+        return in;
     }
 
     private SampleResult generateErrorResult(SampleResult result, Exception e) {

@@ -38,6 +38,7 @@ public interface HTTPConstantsInterface {
     public static final String OPTIONS = "OPTIONS"; // $NON-NLS-1$
     public static final String TRACE = "TRACE"; // $NON-NLS-1$
     public static final String DELETE = "DELETE"; // $NON-NLS-1$
+    public static final String CONNECT = "CONNECT"; // $NON-NLS-1$
     public static final String HEADER_AUTHORIZATION = "Authorization"; // $NON-NLS-1$
     public static final String HEADER_COOKIE = "Cookie"; // $NON-NLS-1$
     public static final String HEADER_CONNECTION = "Connection"; // $NON-NLS-1$
