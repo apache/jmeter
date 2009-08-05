@@ -77,7 +77,7 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
             return;
         }
         initRegex(getArgumentName());
-        String text = new String(responseText.getResponseData());
+        String text = new String(responseText.getResponseData()); // TODO - charset?
         Perl5Matcher matcher = JMeterUtils.getMatcher();
         String value = "";
         if (isPathExtension() && isPathExtensionNoEquals() && isPathExtensionNoQuestionmark()) {

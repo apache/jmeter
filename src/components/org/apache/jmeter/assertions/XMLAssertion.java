@@ -61,7 +61,7 @@ public class XMLAssertion extends AbstractTestElement implements Serializable, A
         result.setFailure(false);
 
         // the result data
-        String resultData = new String(getResultBody(responseData));
+        String resultData = new String(getResultBody(responseData)); // TODO - charset?
 
         SAXBuilder builder = (SAXBuilder) myBuilder.get();
 

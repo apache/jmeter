@@ -384,7 +384,7 @@ public class Data implements Serializable {
             for (int i = 0; i < numColumns; i++) {
                 Object o = rs.getObject(i + 1);
                 if (o instanceof byte[]) {
-                    o = new String((byte[]) o);
+                    o = new String((byte[]) o); // TODO - charset?
                 }
                 data.addColumnValue(dbCols[i], o);
             }
