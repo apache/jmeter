@@ -73,7 +73,7 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
         if (data.length == 0) {
             return result.setResultForNull();
         }
-        String resultData = new String(getResultBody(data));
+        String resultData = new String(getResultBody(data)); // TODO - charset?
 
         String xsdFileName = getXsdFileName();
         if (log.isDebugEnabled()) {
