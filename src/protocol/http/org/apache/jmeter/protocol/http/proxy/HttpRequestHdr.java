@@ -92,9 +92,12 @@ public class HttpRequestHdr {
     }
 
     /**
-     * Http Request method. Such as get or post.
+     * Http Request method, uppercased, e.g. GET or POST.
      */
     private String method = ""; // $NON-NLS-1$
+    
+    /** CONNECT url. */
+    private String paramHttps = ""; // $NON-NLS-1$
 
     /**
      * The requested url. The universal resource locator that hopefully uniquely
@@ -192,15 +195,9 @@ public class HttpRequestHdr {
         if (log.isDebugEnabled()) {
             log.debug("browser request: " + firstLine);
         }
-        if (!CharUtils.isAsciiAlphanumeric(firstLine.charAt(0))) {
-            throw new IllegalArgumentException("Unrecognised header line (probably used HTTPS)");
-        }
         StringTokenizer tz = new StringTokenizer(firstLine);
         method = getToken(tz).toUpperCase(java.util.Locale.ENGLISH);
         url = getToken(tz);
-        if (url.toLowerCase(java.util.Locale.ENGLISH).startsWith(HTTPConstants.PROTOCOL_HTTPS)) {
-            throw new IllegalArgumentException("Cannot handle https URLS: " + url);
-        }
         version = getToken(tz);
         if (log.isDebugEnabled()) {
             log.debug("parser input:  " + firstLine);
@@ -208,9 +205,14 @@ public class HttpRequestHdr {
             log.debug("parsed url:    " + url);
             log.debug("parsed version:" + version);
         }
-        if ("CONNECT".equalsIgnoreCase(method)){
-            throw new IllegalArgumentException("Cannot handle CONNECT - probably used HTTPS");
+        // SSL connection
+        if (getMethod().startsWith(HTTPConstants.CONNECT)) {
+            paramHttps = url;
+        } 
+        if (url.startsWith("/")) {
+            url = HTTPS + "://" + paramHttps + url; // $NON-NLS-1$
         }
+        log.debug("First Line: " + url);
     }
 
     /*
@@ -401,7 +403,7 @@ public class HttpRequestHdr {
         if (log.isDebugEnabled()) {
             log.debug("Proxy: setting path: " + sampler.getPath());
         }
-        if (numberRequests) {
+        if (!HTTPConstants.CONNECT.equals(getMethod()) && numberRequests) {
             requestNumber++;
             sampler.setName(requestNumber + " " + sampler.getPath());
         } else {
@@ -416,7 +418,7 @@ public class HttpRequestHdr {
         // If it was a HTTP GET request, then all parameters in the URL
         // has been handled by the sampler.setPath above, so we just need
         // to do parse the rest of the request if it is not a GET request
-        if(!HTTPConstants.GET.equals(method)) {
+        if((!HTTPConstants.CONNECT.equals(getMethod())) && (!HTTPConstants.GET.equals(method))) {
             // Check if it was a multipart http post request
             final String contentType = getContentType();
             MultipartUrlConfig urlConfig = getMultipartConfig(contentType);
@@ -553,6 +555,15 @@ public class HttpRequestHdr {
      */
     public String getUrl(){
         return url;
+    }
+    
+    /**
+     * Returns the method string extracted from the first line of the client request.
+     *
+     * @return the method (will always be upper case)
+     */
+    public String getMethod(){
+        return method;
     }
 
     /**
