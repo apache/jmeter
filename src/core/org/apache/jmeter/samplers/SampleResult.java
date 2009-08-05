@@ -202,9 +202,11 @@ public class SampleResult implements Serializable {
 
     private int bytes = 0; // Allows override of sample size in case sampler does not want to store all the data
 
-    private volatile int groupThreads = 0; // Active threads in this thread group
+    /** Currently active threads in this thread group */
+    private volatile int groupThreads = 0;
 
-    private volatile int allThreads = 0; // Active threads in all thread groups
+    /** Currently active threads in all thread groups */
+    private volatile int allThreads = 0;
 
     // TODO do contentType and/or dataEncoding belong in HTTPSampleResult instead?
 
