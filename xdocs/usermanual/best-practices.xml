@@ -95,10 +95,13 @@ If JMeter does not record any samples, check that the brower really is using the
 If the browser works OK even if JMeter is not running, then the browser cannot be using the proxy.
 Some browsers ignore proxy settings for localhost or 127.0.0.1; try using the local hostname or IP instead.
 </p>
+<p>
+The error "unknown_ca" probably means that you are trying to record HTTPS, and the browser has not accepted the
+JMeter Proxy server certificate. 
+</p>
 <!--TODO: Describe how to use this to record against one server[name]
 and run against another. Actually, this particular example may be beter for the HTTP Request Defaults...
 a good similar example for the variables is http vs. https.-->
-<!--TODO: Hey! We need to mention that https is not supported and how to work around that!-->
 <!--SUMMARY of all TODO's above: we need some actual usage to identify best practices
 with this new features.-->
 </section>
