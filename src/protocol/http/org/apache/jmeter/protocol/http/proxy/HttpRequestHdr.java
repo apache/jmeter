@@ -182,7 +182,7 @@ public class HttpRequestHdr {
         rawPostData = line.toByteArray();
 
         if (log.isDebugEnabled()){
-            log.debug("rawPostData in default JRE encoding: " + new String(rawPostData));
+            log.debug("rawPostData in default JRE encoding: " + new String(rawPostData)); // TODO - charset?
             log.debug("Request: " + clientRequest.toString());
         }
         return clientRequest.toByteArray();
@@ -280,19 +280,6 @@ public class HttpRequestHdr {
             log.debug("getSampler: sampler path = " + sampler.getPath());
         }
         return sampler;
-    }
-
-    /**
-     *
-     * @return the sampler
-     * @throws MalformedURLException
-     * @throws IOException
-     * @throws ProtocolException
-     * @deprecated use the getSampler(HashMap pageEncodings, HashMap formEncodings) instead, since
-     * that properly handles the encodings of the page
-     */
-    public HTTPSamplerBase getSampler() throws MalformedURLException, IOException, ProtocolException {
-        return getSampler(null, null);
     }
 
     private String getContentType() {
