@@ -110,7 +110,7 @@ public class PostWriter {
                 byte[] header = file.getHeader().getBytes(); // TODO what encoding should be used here?
                 out.write(header);
                 // Retrieve the formatted data using the same encoding used to create it
-                postedBody.append(new String(header));
+                postedBody.append(new String(header)); // TODO - charset?
                 // Write the actual file content
                 writeFileToStream(file.getPath(), out);
                 // We just add placeholder text for file content

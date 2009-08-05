@@ -74,7 +74,7 @@ class HtmlParserHTMLParser extends HTMLParser {
 
         Parser htmlParser = null;
         try {
-            String contents = new String(html);
+            String contents = new String(html); // TODO - charset?
             htmlParser = new Parser();
             htmlParser.setInputHTML(contents);
         } catch (Exception e) {
