@@ -54,14 +54,24 @@ public class RandomVariableConfig extends ConfigTestElement
     private Random globalRandom = null;
 
     // Used for per-thread/user numbers
-    private transient ThreadLocal perThreadRandom = new ThreadLocal() {
-            protected Object initialValue() {
-                init();
-                return new Random(getRandomSeedAsLong());
-            }};
+    // Cannot be static, as random numbers are not to be shared between instances
+    private transient ThreadLocal perThreadRandom = initThreadLocal();
+
+    private ThreadLocal initThreadLocal() {
+        return new ThreadLocal() {
+                protected Object initialValue() {
+                    init();
+                    return new Random(getRandomSeedAsLong());
+                }};
+    }
         
     private int n;
     private long minimum;
+    
+    private Object readResolve(){
+        perThreadRandom = initThreadLocal();
+        return this;
+    }
     
     /*
      * nextInt(n) returns values in the range [0,n),
@@ -84,6 +94,8 @@ public class RandomVariableConfig extends ConfigTestElement
         }
         n = (int)rangeL;
     }
+    
+    /** {@inheritDoc} */
     public void iterationStart(LoopIterationEvent iterEvent) {
         Random randGen=null;
         if (getPerThread()){
