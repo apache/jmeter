@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -238,7 +237,9 @@ public class HttpRequestHdr {
         Iterator keys = headers.keySet().iterator();
         while (keys.hasNext()) {
             String key = (String) keys.next();
-            if (!key.equals(PROXY_CONNECTION) && !key.equals(CONTENT_LENGTH)) {
+            if (!key.equals(PROXY_CONNECTION) 
+             && !key.equals(CONTENT_LENGTH) 
+             && !key.equalsIgnoreCase(HTTPConstants.HEADER_CONNECTION)) {
                 manager.add((Header) headers.get(key));
             }
         }
