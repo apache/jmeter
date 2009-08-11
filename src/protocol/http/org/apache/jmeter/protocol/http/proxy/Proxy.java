@@ -514,6 +514,10 @@ public class Proxy extends Thread {
                     headerLines[i]=headerLines[i].replaceFirst(HTTPS_PREFIX, "http://");
                     continue;
                 }
+                if (forcedHTTPS && HTTPConstants.HEADER_COOKIE.equalsIgnoreCase(parts[0]) || HTTPConstants.HEADER_SET_COOKIE.equalsIgnoreCase(parts[0]))
+                {
+                	headerLines[i]=headerLines[i].replaceAll(" secure", "").trim(); //in forced https cookies need to be unsecured...
+                }
             }
         }
         if (fixContentLength && contentLengthIndex>=0){// Fix the content length
