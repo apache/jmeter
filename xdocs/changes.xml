@@ -68,6 +68,7 @@ The XPath Assertion and XPath Extractor elements no longer fetch external DTDs b
 <h3>HTTP Samplers and Proxy</h3>
 <ul>
 <li>Bug 47445 -  Using Proxy with https-spoofing secure cookies need to be unsecured</li>
+<li>Bug 47442 -  Missing replacement of https by http for certain conditions using https-spoofing</li>
 </ul>
 
 <h3>Other Samplers</h3>
