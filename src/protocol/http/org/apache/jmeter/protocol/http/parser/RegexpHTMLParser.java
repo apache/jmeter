@@ -115,9 +115,10 @@ class RegexpHTMLParser extends HTMLParser {
     /**
      * Thread-local input:
      */
-    private static final ThreadLocal localInput = new ThreadLocal() {
+    private static final ThreadLocal<PatternMatcherInput> localInput =
+        new ThreadLocal<PatternMatcherInput>() {
         @Override
-        protected Object initialValue() {
+        protected PatternMatcherInput initialValue() {
             return new PatternMatcherInput(new char[0]);
         }
     };
@@ -144,7 +145,7 @@ class RegexpHTMLParser extends HTMLParser {
     public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection urls) {
 
         Perl5Matcher matcher = JMeterUtils.getMatcher();
-        PatternMatcherInput input = (PatternMatcherInput) localInput.get();
+        PatternMatcherInput input = localInput.get();
         // TODO: find a way to avoid the cost of creating a String here --
         // probably a new PatternMatcherInput working on a byte[] would do
         // better.

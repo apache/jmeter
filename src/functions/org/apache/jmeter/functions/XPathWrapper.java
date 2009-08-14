@@ -47,14 +47,15 @@ public class XPathWrapper {
      * The key is the concatenation of the file name and the XPath string
      */
     //@GuardedBy("fileContainers")
-    private static final Map/*<String, XPathFileContainer>*/ fileContainers =
-        new HashMap/*<String, XPathFileContainer>*/();
+    private static final Map<String, XPathFileContainer> fileContainers =
+        new HashMap<String, XPathFileContainer>();
 
     /* The cache of file packs - for faster local access */
-    private static final ThreadLocal filePacks = new ThreadLocal() {
+    private static final ThreadLocal<Map<String, XPathFileContainer>> filePacks =
+        new ThreadLocal<Map<String, XPathFileContainer>>() {
         @Override
-        protected Object initialValue() {
-            return new HashMap();
+        protected Map<String, XPathFileContainer> initialValue() {
+            return new HashMap<String, XPathFileContainer>();
         }
     };
 
@@ -90,13 +91,13 @@ public class XPathWrapper {
      * @return the next row from the file container
      */
     public static String getXPathString(String file, String xpathString) {
-        Map my = (Map) filePacks.get();
+        Map<String, XPathFileContainer> my = filePacks.get();
         String key = file+xpathString;
-        XPathFileContainer xpfc = (XPathFileContainer) my.get(key);
+        XPathFileContainer xpfc = my.get(key);
         if (xpfc == null) // We don't have a local copy
         {
             synchronized(fileContainers){
-                xpfc = (XPathFileContainer) fileContainers.get(key);
+                xpfc = fileContainers.get(key);
                 if (xpfc == null) { // There's no global copy either
                     xpfc=open(file, xpathString);
                 }
@@ -122,8 +123,7 @@ public class XPathWrapper {
 
     public static void clearAll() {
         log.debug("clearAll()");
-        Map my = (Map) filePacks.get();
-        my.clear();
+        filePacks.get().clear();
         String tname = Thread.currentThread().getName();
         log.info(tname+": clearing container");
         synchronized (fileContainers) {
