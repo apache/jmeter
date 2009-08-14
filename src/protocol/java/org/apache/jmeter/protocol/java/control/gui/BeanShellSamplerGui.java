@@ -48,6 +48,7 @@ public class BeanShellSamplerGui extends AbstractSamplerGui {
         init();
     }
 
+    @Override
     public void configure(TestElement element) {
         scriptField.setText(element.getPropertyAsString(BeanShellSampler.SCRIPT));
         filename.setText(element.getPropertyAsString(BeanShellSampler.FILENAME));
@@ -79,6 +80,7 @@ public class BeanShellSamplerGui extends AbstractSamplerGui {
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
 

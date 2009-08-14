@@ -118,6 +118,7 @@ public class DataSourceElement extends AbstractTestElement
         testStarted();
     }
 
+    @Override
     public Object clone() {
         DataSourceElement el = (DataSourceElement) super.clone();
         el.excaliburSource = excaliburSource;
@@ -229,6 +230,7 @@ public class DataSourceElement extends AbstractTestElement
 
     // used to hold per-thread singleton connection pools
     private static final ThreadLocal perThreadPoolMap = new ThreadLocal(){
+        @Override
         protected synchronized Object initialValue() {
             return new HashMap();
         }

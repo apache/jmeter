@@ -197,6 +197,7 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
      * @param element
      *            the TestElement to configure
      */
+    @Override
     public void configure(TestElement element) {
         super.configure(element);
         servername.setText(element.getPropertyAsString(LDAPExtSampler.SERVERNAME));
@@ -330,6 +331,7 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
 

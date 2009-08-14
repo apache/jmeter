@@ -74,6 +74,7 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
         public String getEtag() {
             return etag;
         }
+        @Override
         public String toString(){
             return lastModified+" "+etag;
         }
@@ -193,6 +194,7 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
         setProperty(new BooleanProperty(CLEAR, clear));
     }
 
+    @Override
     public void clear(){
         super.clear();
         clearCache();
@@ -201,6 +203,7 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
     private void clearCache() {
         log.debug("Clear cache");
         threadCache = new ThreadLocal(){
+            @Override
             protected Object initialValue(){
                 return new HashMap();
             }

@@ -99,6 +99,7 @@ public class HTTPSampleResult extends SampleResult {
      *
      * @see org.apache.jmeter.samplers.SampleResult#getSamplerData()
      */
+    @Override
     public String getSamplerData() {
         StringBuffer sb = new StringBuffer();
         sb.append(method);
@@ -177,6 +178,7 @@ public class HTTPSampleResult extends SampleResult {
      *
      * @return the dataEncoding value as a String
      */
+    @Override
     public String getDataEncodingWithDefault() {
         if (getDataEncodingNoDefault() == null && getContentType().startsWith("text/html")){ // $NON-NLS-1$
             byte[] bytes=getResponseData();

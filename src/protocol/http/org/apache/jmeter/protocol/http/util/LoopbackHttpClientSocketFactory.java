@@ -80,6 +80,7 @@ public class LoopbackHttpClientSocketFactory implements ProtocolSocketFactory {
             public URLStreamHandler createURLStreamHandler(String protocol) {
                 if (protocol.equalsIgnoreCase(LOOPBACK)){
                     return new URLStreamHandler(){
+                        @Override
                         protected URLConnection openConnection(URL u) throws IOException {
                             return null;// not needed for HttpClient
                         }

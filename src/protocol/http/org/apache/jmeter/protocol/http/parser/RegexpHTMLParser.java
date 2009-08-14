@@ -116,11 +116,13 @@ class RegexpHTMLParser extends HTMLParser {
      * Thread-local input:
      */
     private static final ThreadLocal localInput = new ThreadLocal() {
+        @Override
         protected Object initialValue() {
             return new PatternMatcherInput(new char[0]);
         }
     };
 
+    @Override
     protected boolean isReusable() {
         return true;
     }
@@ -138,6 +140,7 @@ class RegexpHTMLParser extends HTMLParser {
      * @see org.apache.jmeter.protocol.http.parser.HtmlParser#getEmbeddedResourceURLs(byte[],
      *      java.net.URL)
      */
+    @Override
     public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection urls) {
 
         Perl5Matcher matcher = JMeterUtils.getMatcher();

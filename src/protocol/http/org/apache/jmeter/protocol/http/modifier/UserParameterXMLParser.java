@@ -33,6 +33,7 @@ import org.xml.sax.XMLReader;
  * This test element is deprecated. Test plans should use User Parameters instead.
  * @deprecated
  */
+@Deprecated
 public class UserParameterXMLParser {
 
     /**

@@ -466,6 +466,7 @@ public class HTTPSampler extends HTTPSamplerBase implements Interruptible {
      *            prevent infinite recursion.
      * @return results of the sampling
      */
+    @Override
     protected HTTPSampleResult sample(URL url, String method, boolean areFollowingRedirect, int frameDepth) {
         HttpURLConnection conn = null;
 

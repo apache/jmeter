@@ -60,6 +60,7 @@ public class HTTPResultConverter extends SampleResultConverter {
      *
      * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
      */
+    @Override
     public boolean canConvert(Class arg0) {
         return HTTPSampleResult.class.equals(arg0);
     }
@@ -71,6 +72,7 @@ public class HTTPResultConverter extends SampleResultConverter {
      *      com.thoughtworks.xstream.io.HierarchicalStreamWriter,
      *      com.thoughtworks.xstream.converters.MarshallingContext)
      */
+    @Override
     public void marshal(Object obj, HierarchicalStreamWriter writer, MarshallingContext context) {
         HTTPSampleResult res = (HTTPSampleResult) obj;
         SampleSaveConfiguration save = res.getSaveConfig();
@@ -109,6 +111,7 @@ public class HTTPResultConverter extends SampleResultConverter {
      * @see com.thoughtworks.xstream.converters.Converter#unmarshal(com.thoughtworks.xstream.io.HierarchicalStreamReader,
      *      com.thoughtworks.xstream.converters.UnmarshallingContext)
      */
+    @Override
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
         HTTPSampleResult res = (HTTPSampleResult) createCollection(context.getRequiredType());
         retrieveAttributes(reader, context, res);

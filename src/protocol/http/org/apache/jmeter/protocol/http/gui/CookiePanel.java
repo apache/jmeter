@@ -245,6 +245,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
 
@@ -280,6 +281,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
         return cookieManager;
     }
 
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
 

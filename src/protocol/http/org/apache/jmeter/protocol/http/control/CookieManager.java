@@ -97,6 +97,7 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
     }
 
     // ensure that the initial cookies are copied to the per-thread instances
+    @Override
     public Object clone(){
         CookieManager clone = (CookieManager) super.clone();
         clone.initialCookies = initialCookies;
@@ -226,10 +227,12 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
         return sb.toString();
     }
 
+    @Override
     public void recoverRunningVersion() {
         // do nothing, the cookie manager has to accept changes.
     }
 
+    @Override
     public void setRunningVersion(boolean running) {
         // do nothing, the cookie manager has to accept changes.
     }
@@ -260,6 +263,7 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
         }
     }
 
+    @Override
     public void clear(){
         super.clear();
         clearCookies(); // ensure data is set up OK initially

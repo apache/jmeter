@@ -39,6 +39,7 @@ public class FtpTestSamplerGui extends AbstractSamplerGui {
         init();
     }
 
+    @Override
     public void configure(TestElement element) {
         super.configure(element);
         loginPanel.configure(element);
@@ -66,6 +67,7 @@ public class FtpTestSamplerGui extends AbstractSamplerGui {
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
 

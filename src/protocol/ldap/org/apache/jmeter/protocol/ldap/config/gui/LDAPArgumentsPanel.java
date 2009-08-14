@@ -107,6 +107,7 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
      * @return a Collection of Strings, where each element is one of the
      *         constants defined in MenuFactory
      */
+    @Override
     public Collection getMenuCategories() {
         return null;
     }
@@ -150,6 +151,7 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
      * @param el
      *            the TestElement to configure
      */
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         if (el instanceof LDAPArguments) {

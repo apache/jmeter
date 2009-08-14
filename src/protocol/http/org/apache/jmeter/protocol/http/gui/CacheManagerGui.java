@@ -57,6 +57,7 @@ public class CacheManagerGui extends AbstractConfigGui {
      * @param element
      *            the TestElement to configure
      */
+    @Override
     public void configure(TestElement element) {
         super.configure(element);
         clearEachIteration.setSelected(((CacheManager)element).getClearEachIteration());
@@ -77,6 +78,7 @@ public class CacheManagerGui extends AbstractConfigGui {
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
         clearEachIteration.setSelected(false);
