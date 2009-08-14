@@ -171,23 +171,6 @@ public class Calculator {
      * calculates the average page size, which means divide the bytes by number
      * of samples.
      *
-     * This is an ambiguous name, so:
-     * @deprecated use getAvgPageBytes() instead.
-     *
-     * @return average page size
-     */
-    @Deprecated
-    public double getPageSize() {
-        if (count > 0 && bytes > 0) {
-            return (double) bytes / count;
-        }
-        return 0.0;
-    }
-
-    /**
-     * calculates the average page size, which means divide the bytes by number
-     * of samples.
-     *
      * @return average page size in bytes
      */
     public double getAvgPageBytes() {

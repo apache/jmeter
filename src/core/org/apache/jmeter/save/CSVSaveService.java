@@ -158,32 +158,6 @@ public final class CSVSaveService {
     }
 
     /**
-     * Make a SampleResult given a delimited string.
-     *
-     * @param inputLine - line from CSV file
-     * @param saveConfig - configuration
-     * @param lineNumber - line number for error reporting
-     * @return SampleResult
-     *
-     * @deprecated Does not handle quoted strings; use {@link #processSamples(String, Visualizer, ResultCollector)} instead
-     *
-     * @throws JMeterError
-     */
-    @Deprecated
-    public static SampleEvent makeResultFromDelimitedString(
-            final String inputLine,
-            final SampleSaveConfiguration saveConfig, // may be updated
-            final long lineNumber) {
-        /*
-         * Bug 40772: replaced StringTokenizer with String.split(), as the
-         * former does not return empty tokens.
-         */
-        // The \Q prefix is needed to ensure that meta-characters (e.g. ".") work.
-        String parts[]=inputLine.split("\\Q"+saveConfig.getDelimiter());// $NON-NLS-1$
-        return makeResultFromDelimitedString(parts, saveConfig, lineNumber);
-    }
-
-    /**
      * Make a SampleResult given a set of tokens
      * @param parts tokens parsed from the input
      * @param saveConfig the save configuration (may be updated)
