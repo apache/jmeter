@@ -193,6 +193,7 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
 
@@ -298,6 +299,7 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
     /**
      * the implementation loads the URL and the soap action for the request.
      */
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         WebServiceSampler sampler = (WebServiceSampler) el;

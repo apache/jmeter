@@ -32,6 +32,7 @@ public class HttpTestSampleGui2 extends HttpTestSampleGui {
         super();
     }
 
+    @Override
     public TestElement createTestElement() {
         HTTPSamplerBase sampler = HTTPSamplerFactory.newInstance(HTTPSamplerFactory.HTTP_SAMPLER_APACHE);
         modifyTestElement(sampler);
@@ -39,11 +40,13 @@ public class HttpTestSampleGui2 extends HttpTestSampleGui {
     }
 
     // Use this instead of getLabelResource() otherwise getDocAnchor() below does not work
+    @Override
     public String getStaticLabel() {
         return JMeterUtils.getResString("web_testing2_title"); //$NON-NLS-1$
     }
 
     // Documentation is shared with our parent
+    @Override
     public String getDocAnchor() {
         return super.getStaticLabel().replace(' ', '_'); // $NON-NLS-1$  // $NON-NLS-2$
     }

@@ -115,6 +115,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
     /**
      * Implements JMeterGUIComponent.clear
      */
+    @Override
     public void clearGui() {
         super.clearGui();
 
@@ -123,6 +124,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
         saveButton.setEnabled(false);
     }
 
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         tableModel.manager.clear();
@@ -309,11 +311,13 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
             manager.addAuth();
         }
 
+        @Override
         public boolean isCellEditable(int row, int column) {
             // all table cells are editable
             return true;
         }
 
+        @Override
         public Class getColumnClass(int column) {
             return getValueAt(0, column).getClass();
         }
@@ -335,6 +339,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
         /**
          * Required by table model interface.
          */
+        @Override
         public String getColumnName(int column) {
             return manager.getColumnName(column);
         }
@@ -361,6 +366,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
             }
         }
 
+        @Override
         public void setValueAt(Object value, int row, int column) {
             Authorization auth = manager.getAuthObjectAt(row);
             log.debug("Setting auth value: " + value);

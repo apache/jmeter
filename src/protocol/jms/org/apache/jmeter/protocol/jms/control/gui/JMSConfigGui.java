@@ -80,6 +80,7 @@ public class JMSConfigGui extends AbstractSamplerGui {
     /**
      * Clears all fields.
      */
+    @Override
     public void clearGui() {// renamed from clear
         super.clearGui();
         queueuConnectionFactory.setText(""); // $NON-NLS-1$
@@ -165,6 +166,7 @@ public class JMSConfigGui extends AbstractSamplerGui {
     /**
      * @param el
      */
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         JMSSampler sampler = (JMSSampler) el;

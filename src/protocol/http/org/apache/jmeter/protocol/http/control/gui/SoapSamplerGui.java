@@ -85,6 +85,7 @@ public class SoapSamplerGui extends AbstractSamplerGui {
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
 
@@ -147,6 +148,7 @@ public class SoapSamplerGui extends AbstractSamplerGui {
         add(mainPanel, BorderLayout.CENTER);
     }
 
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         SoapSampler sampler = (SoapSampler) el;
@@ -158,6 +160,7 @@ public class SoapSamplerGui extends AbstractSamplerGui {
         useKeepAlive.setSelected(sampler.getUseKeepAlive());
     }
 
+    @Override
     public Dimension getPreferredSize() {
         return getMinimumSize();
     }

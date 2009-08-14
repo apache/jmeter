@@ -113,6 +113,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 
     /** the cache of TCP Connections */
     private static final ThreadLocal tp = new ThreadLocal() {
+        @Override
         protected Object initialValue() {
             return new HashMap();
         }

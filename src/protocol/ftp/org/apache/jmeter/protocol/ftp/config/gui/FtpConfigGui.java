@@ -72,6 +72,7 @@ public class FtpConfigGui extends AbstractConfigGui {
         return "ftp_sample_title"; // $NON-NLS-1$
     }
 
+    @Override
     public void configure(TestElement element) {
         super.configure(element); // TODO - should this be done for embedded usage?
         // Note: the element is a ConfigTestElement when used standalone, so we cannot use FTPSampler access methods
@@ -117,6 +118,7 @@ public class FtpConfigGui extends AbstractConfigGui {
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
 

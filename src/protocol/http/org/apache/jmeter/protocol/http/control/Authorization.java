@@ -105,6 +105,7 @@ public class Authorization extends AbstractTestElement implements Serializable {
     }
 
     // Used for saving entries to a file
+    @Override
     public String toString() {
         return getURL() + TAB + getUser() + TAB + getPass() + TAB + getDomain() + TAB + getRealm();
     }

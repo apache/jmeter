@@ -44,6 +44,7 @@ class JTidyHTMLParser extends HTMLParser {
         super();
     }
 
+    @Override
     protected boolean isReusable() {
         return true;
     }
@@ -54,6 +55,7 @@ class JTidyHTMLParser extends HTMLParser {
      * @see org.apache.jmeter.protocol.http.parser.HTMLParser#getEmbeddedResourceURLs(byte[],
      *      java.net.URL)
      */
+    @Override
     public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection urls) throws HTMLParseException {
         Document dom = null;
         try {

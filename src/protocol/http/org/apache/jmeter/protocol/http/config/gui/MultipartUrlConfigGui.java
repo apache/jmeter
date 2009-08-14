@@ -48,11 +48,13 @@ public class MultipartUrlConfigGui extends UrlConfigGui {
         init();
     }
 
+    @Override
     public void modifyTestElement(TestElement sampler) {
         super.modifyTestElement(sampler);
         filesPanel.modifyTestElement(sampler);
     }
 
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         filesPanel.configure(el);
@@ -90,6 +92,7 @@ public class MultipartUrlConfigGui extends UrlConfigGui {
      *
      * @see org.apache.jmeter.protocol.http.config.gui.UrlConfigGui#clear()
      */
+    @Override
     public void clear() {
         super.clear();
         filesPanel.clear();

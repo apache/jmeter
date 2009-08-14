@@ -56,6 +56,7 @@ public class URLString implements Comparable {
         hashCode = urlAsString.hashCode();
     }
 
+    @Override
     public String toString() {
         return urlAsString;
     }
@@ -68,10 +69,12 @@ public class URLString implements Comparable {
         return urlAsString.compareTo(o.toString());
     }
 
+    @Override
     public boolean equals(Object o) {
         return (o instanceof URLString && urlAsString.equals(o.toString()));
     }
 
+    @Override
     public int hashCode() {
         return hashCode;
     }

@@ -95,6 +95,7 @@ public class LDAPArgument extends AbstractTestElement implements Serializable {
      * @param newName
      *            the new name
      */
+    @Override
     public void setName(String newName) {
         setProperty(new StringProperty(ARG_NAME, newName));
     }
@@ -104,6 +105,7 @@ public class LDAPArgument extends AbstractTestElement implements Serializable {
      *
      * @return the attribute's name
      */
+    @Override
     public String getName() {
         return getPropertyAsString(ARG_NAME);
     }

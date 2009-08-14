@@ -61,6 +61,7 @@ public class HttpMirrorControlGui extends LogicControllerGui
         init();
     }
 
+    @Override
     public TestElement createTestElement() {
         mirrorController = new HttpMirrorControl();
         log.debug("creating/configuring model = " + mirrorController);
@@ -73,6 +74,7 @@ public class HttpMirrorControlGui extends LogicControllerGui
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement el) {
         configureTestElement(el);
         if (el instanceof HttpMirrorControl) {
@@ -81,14 +83,17 @@ public class HttpMirrorControlGui extends LogicControllerGui
         }
     }
 
+    @Override
     public String getLabelResource() {
         return "httpmirror_title"; // $NON-NLS-1$
     }
 
+    @Override
     public Collection getMenuCategories() {
         return Arrays.asList(new String[] { MenuFactory.NON_TEST_ELEMENTS });
     }
 
+    @Override
     public void configure(TestElement element) {
         log.debug("Configuring gui with " + element);
         super.configure(element);
@@ -164,6 +169,7 @@ public class HttpMirrorControlGui extends LogicControllerGui
         return panel;
     }
 
+    @Override
     public void clearGui(){
         super.clearGui();
         portField.setText(HttpMirrorControl.DEFAULT_PORT_S);

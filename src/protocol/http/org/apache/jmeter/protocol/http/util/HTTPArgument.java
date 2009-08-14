@@ -154,6 +154,7 @@ public class HTTPArgument extends Argument implements Serializable {
      * @param newName
      *            the new Name value
      */
+    @Override
     public void setName(String newName) {
         if (newName == null || !newName.equals(getName())) {
             super.setName(newName);
