@@ -316,14 +316,14 @@ public final class AllTests {
         int suites=0;
         try {
             log.info("ClassFinder(TestCase)");
-            List classList = ClassFinder.findClassesThatExtend(JOrphanUtils.split(searchPaths, ","),
+            List<String> classList = ClassFinder.findClassesThatExtend(JOrphanUtils.split(searchPaths, ","),
                     new Class[] { TestCase.class }, true);
             int sz=classList.size();
             log.info("ClassFinder(TestCase) found: "+sz+ " TestCase classes");
             System.out.println("ClassFinder found: "+sz+ " TestCase classes");
-            Iterator classes = classList.iterator();
+            Iterator<String> classes = classList.iterator();
             while (classes.hasNext()) {
-                String name = (String) classes.next();
+                String name = classes.next();
                 try {
                     /*
                      * TestSuite only finds testXXX() methods, and does not look
@@ -335,11 +335,11 @@ public final class AllTests {
                      * 
                      */
 
-                    Class clazz = Class.forName(name);
+                    Class<?> clazz = Class.forName(name);
                     Test t = null;
                     try {
                         Method m = clazz.getMethod("suite", new Class[0]);
-                        t = (Test) m.invoke(clazz, null);
+                        t = (Test) m.invoke(clazz, (Object[])null);
                         suites++;
                     } catch (NoSuchMethodException e) {
                     } // this is not an error, the others are
