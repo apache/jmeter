@@ -91,6 +91,7 @@ public class MonitorModel implements Clearable, Serializable, Cloneable {
     /**
      * Method is used by DefaultMutableTreeNode to get the label for the node.
      */
+    @Override
     public String toString() {
         return getURL();
     }
@@ -106,6 +107,7 @@ public class MonitorModel implements Clearable, Serializable, Cloneable {
      * a clone method is provided for convienance. In some cases, it may be
      * desirable to clone the object.
      */
+    @Override
     public Object clone() {
         return new MonitorModel(cloneMonitorStats());
     }

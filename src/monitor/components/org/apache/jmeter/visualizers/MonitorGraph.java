@@ -52,6 +52,7 @@ public class MonitorGraph extends JComponent implements MonitorGuiListener, Clea
      * Needed for Serialization tests.
      * @deprecated Only for use in unit testing
      */
+    @Deprecated
     public MonitorGraph() {
         // log.warn("Only for use in unit testing");
         model = null;
@@ -94,6 +95,7 @@ public class MonitorGraph extends JComponent implements MonitorGuiListener, Clea
      * because of how screen works. Tried to use clipping, but I don't
      * understand it well enough to get the desired effect.
      */
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (this.current != null) {

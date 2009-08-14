@@ -45,6 +45,7 @@ public class IterationCounter extends AbstractFunction {
            globalCounter=0;
        }
        perThreadInt = new ThreadLocal(){
+            @Override
             protected synchronized Object initialValue() {
                 return new Integer(0);
             }
@@ -65,6 +66,7 @@ public class IterationCounter extends AbstractFunction {
      *
      * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
      */
+    @Override
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
 
@@ -103,6 +105,7 @@ public class IterationCounter extends AbstractFunction {
      *
      * @see org.apache.jmeter.functions.Function#setParameters(Collection)
      */
+    @Override
     public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
         checkParameterCount(parameters, 1, 2);
         variables = parameters.toArray();
@@ -113,6 +116,7 @@ public class IterationCounter extends AbstractFunction {
      *
      * @see org.apache.jmeter.functions.Function#getReferenceKey()
      */
+    @Override
     public String getReferenceKey() {
         return KEY;
     }

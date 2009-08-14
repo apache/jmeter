@@ -97,6 +97,7 @@ public class ServerPanel extends JPanel implements MonitorGuiListener {
      *
      * @deprecated Only for use in unit testing
      */
+    @Deprecated
     public ServerPanel() {
         // log.warn("Only for use in unit testing");
     }

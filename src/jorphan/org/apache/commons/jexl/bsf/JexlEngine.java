@@ -44,6 +44,7 @@ public class JexlEngine extends BSFEngineImpl {
     
     private JexlContext jc;
 
+    @Override
     public void initialize(BSFManager mgr, String lang, Vector declaredBeans)
             throws BSFException {
         super.initialize(mgr, lang, declaredBeans);
@@ -54,6 +55,7 @@ public class JexlEngine extends BSFEngineImpl {
         }
     }
 
+    @Override
     public void terminate() {
         if (jc != null) {
             jc.getVars().clear();
@@ -61,10 +63,12 @@ public class JexlEngine extends BSFEngineImpl {
         }
     }
 
+    @Override
     public void declareBean(BSFDeclaredBean bean) throws BSFException {
         jc.getVars().put(bean.name, bean.bean);
     }
 
+    @Override
     public void undeclareBean(BSFDeclaredBean bean) throws BSFException {
         jc.getVars().remove(bean.name);
     }
@@ -90,6 +94,7 @@ public class JexlEngine extends BSFEngineImpl {
         }
     }
 
+    @Override
     public void exec(String fileName, int lineNo, int colNo, Object script)
             throws BSFException {
         if (script == null) {
@@ -110,6 +115,7 @@ public class JexlEngine extends BSFEngineImpl {
         }
     }
 
+    @Override
     public void iexec(String fileName, int lineNo, int colNo, Object script)
             throws BSFException {
         exec(fileName, lineNo, colNo, script);

@@ -73,6 +73,7 @@ public class FileToString extends AbstractFunction {
     }
 
     /** {@inheritDoc} */
+    @Override
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
 
@@ -110,12 +111,14 @@ public class FileToString extends AbstractFunction {
 
 
     /** {@inheritDoc} */
+    @Override
     public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
         checkParameterCount(parameters, MIN_PARAM_COUNT, MAX_PARAM_COUNT);
         values = parameters.toArray();
     }
 
     /** {@inheritDoc} */
+    @Override
     public String getReferenceKey() {
         return KEY;
     }

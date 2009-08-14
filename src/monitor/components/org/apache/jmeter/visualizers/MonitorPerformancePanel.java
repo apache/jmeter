@@ -100,6 +100,7 @@ public class MonitorPerformancePanel extends JSplitPane implements TreeSelection
      *
      * @deprecated Only for use in unit testing
      */
+    @Deprecated
     public MonitorPerformancePanel() {
         // log.warn("Only for use in unit testing");
     }
