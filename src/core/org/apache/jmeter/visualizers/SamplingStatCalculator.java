@@ -133,25 +133,6 @@ public class SamplingStatCalculator {
     }
 
     /**
-     * Should calculate the average page size, which means divide the bytes by number
-     * of samples - actually calculates the throughput in bytes / second
-     *
-     * @deprecated use getBytesPerSecond() instead
-     * @see #getAvgPageBytes() for the average page size
-     */
-    @Deprecated
-    public double getPageSize() {
-        double rate = 0;
-        if (this.getElapsed() > 0 && calculator.getTotalBytes() > 0) {
-            rate = calculator.getTotalBytes() / ((double) this.getElapsed() / 1000);
-        }
-        if (rate < 0) {
-            rate = 0;
-        }
-        return rate;
-    }
-
-    /**
      * Throughput in bytes / second
      *
      * @return throughput in bytes/second
