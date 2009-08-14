@@ -188,21 +188,18 @@ public class TestSampleResult extends TestCase {
         public void testEncodingAndType() throws Exception {
             // check default
             SampleResult res = new SampleResult();
-            assertEquals(SampleResult.DEFAULT_ENCODING,res.getDataEncoding());
             assertEquals(SampleResult.DEFAULT_ENCODING,res.getDataEncodingWithDefault());
             assertEquals("DataType should be blank","",res.getDataType());
             assertNull(res.getDataEncodingNoDefault());
             
             // check null changes nothing
             res.setEncodingAndType(null);
-            assertEquals(SampleResult.DEFAULT_ENCODING,res.getDataEncoding());
             assertEquals(SampleResult.DEFAULT_ENCODING,res.getDataEncodingWithDefault());
             assertEquals("DataType should be blank","",res.getDataType());
             assertNull(res.getDataEncodingNoDefault());
 
             // check no charset
             res.setEncodingAndType("text/html");
-            assertEquals(SampleResult.DEFAULT_ENCODING,res.getDataEncoding());
             assertEquals(SampleResult.DEFAULT_ENCODING,res.getDataEncodingWithDefault());
             assertEquals("text",res.getDataType());
             assertNull(res.getDataEncodingNoDefault());
@@ -211,14 +208,12 @@ public class TestSampleResult extends TestCase {
             res.setEncodingAndType("text/html; charset=aBcd");
             assertEquals("aBcd",res.getDataEncodingWithDefault());
             assertEquals("aBcd",res.getDataEncodingNoDefault());
-            assertEquals("aBcd",res.getDataEncoding());
             assertEquals("text",res.getDataType());
 
             // Check quoted charset
             res.setEncodingAndType("text/html; charset=\"aBCd\"");
             assertEquals("aBCd",res.getDataEncodingWithDefault());
             assertEquals("aBCd",res.getDataEncodingNoDefault());
-            assertEquals("aBCd",res.getDataEncoding());
             assertEquals("text",res.getDataType());         
         }
 }

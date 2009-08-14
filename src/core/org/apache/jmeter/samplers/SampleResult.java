@@ -372,29 +372,6 @@ public class SampleResult implements Serializable {
     }
 
     /**
-     * Method to set the elapsed time for a sample. Retained for backward
-     * compatibility with 3rd party add-ons.
-     * It is assumed that the method is only called at the end of a sample
-     * and that timeStamps are end-times
-     *
-     * Also used by SampleResultConverter when creating results from files.
-     *
-     * Must not be used in conjunction with sampleStart()/End()
-     *
-     * @deprecated use sampleStart() and sampleEnd() instead
-     * @param elapsed
-     *            time in milliseconds
-     */
-    @Deprecated
-    public void setTime(long elapsed) {
-        if (startTime != 0 || endTime != 0){
-            throw new RuntimeException("Calling setTime() after start/end times have been set");
-        }
-        long now = currentTimeInMs();
-        setTimes(now - elapsed, now);
-    }
-
-    /**
      * Set the "marked" flag to show that the result has been written to the file.
      * 
      * @param filename
@@ -711,19 +688,6 @@ public class SampleResult implements Serializable {
     @Override
     public String toString() {
         return getSampleLabel();
-    }
-
-    /**
-     * Returns the dataEncoding or the default if no dataEncoding was provided
-     *
-     * @deprecated use getDataEncodingWithDefault() or getDataEncodingNoDefault() as needed.
-     */
-    @Deprecated
-    public String getDataEncoding() {
-        if (dataEncoding != null) {
-            return dataEncoding;
-        }
-        return DEFAULT_ENCODING;
     }
 
     /**
