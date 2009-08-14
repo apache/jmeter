@@ -606,6 +606,7 @@ public class HashTree implements Serializable, Map, Cloneable {
      * contents of the tree are not cloned).
      *
      */
+    @Override
     public Object clone() {
         HashTree newTree = new HashTree();
         cloneTree(newTree);
@@ -840,6 +841,7 @@ public class HashTree implements Serializable, Map, Cloneable {
      *
      * @see java.lang.Object#hashCode()
      */
+    @Override
     public int hashCode() {
         return data.hashCode() * 7;
     }
@@ -853,6 +855,7 @@ public class HashTree implements Serializable, Map, Cloneable {
      *            Object to be compared against
      * @see java.lang.Object#equals(Object)
      */
+    @Override
     public boolean equals(Object o) {
         if (!(o instanceof HashTree)) {
             return false;
@@ -993,6 +996,7 @@ public class HashTree implements Serializable, Map, Cloneable {
      * 
      * @return a representation of the tree
      */
+    @Override
     public String toString() {
         ConvertToString converter = new ConvertToString();
         try {
@@ -1058,6 +1062,7 @@ public class HashTree implements Serializable, Map, Cloneable {
         public void processPath() {
         }
 
+        @Override
         public String toString() {
             string.append("\n}");
             return string.toString();

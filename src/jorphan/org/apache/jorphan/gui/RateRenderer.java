@@ -36,6 +36,7 @@ public class RateRenderer extends NumberRenderer{
         super(format);
     }
 
+    @Override
     public void setValue(Object value) {
         if (value == null || ! (value instanceof Double)) {
             setText("#N/A"); // TODO: should this just call super()?

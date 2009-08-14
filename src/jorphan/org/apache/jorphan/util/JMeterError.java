@@ -62,6 +62,7 @@ public class JMeterError extends Error {
      * Local version of getCause() for JDK1.3 support
      *
      */
+    @Override
     public Throwable getCause() {
         return savedCause;
     }

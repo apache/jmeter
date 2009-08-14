@@ -39,6 +39,7 @@ public class ThreadNumber extends AbstractFunction {
      *
      * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
      */
+    @Override
     public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException {
         return Thread.currentThread().getName().substring(Thread.currentThread().getName().lastIndexOf("-") + 1); //$NON-NLS-1$
     }
@@ -48,6 +49,7 @@ public class ThreadNumber extends AbstractFunction {
      *
      * @see org.apache.jmeter.functions.Function#setParameters(Collection)
      */
+    @Override
     public void setParameters(Collection parameters) throws InvalidVariableException {
         checkParameterCount(parameters,0,0);
     }
@@ -57,6 +59,7 @@ public class ThreadNumber extends AbstractFunction {
      *
      * @see org.apache.jmeter.functions.Function#getReferenceKey()
      */
+    @Override
     public String getReferenceKey() {
         return KEY;
     }

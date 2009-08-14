@@ -64,6 +64,7 @@ public class BeanShell extends AbstractFunction {
      *
      * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
      */
+    @Override
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
 
@@ -133,6 +134,7 @@ public class BeanShell extends AbstractFunction {
      *
      * @see org.apache.jmeter.functions.Function#setParameters(Collection)
      */
+    @Override
     public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
 
         checkParameterCount(parameters, 1, 2);
@@ -151,6 +153,7 @@ public class BeanShell extends AbstractFunction {
      *
      * @see org.apache.jmeter.functions.Function#getReferenceKey()
      */
+    @Override
     public String getReferenceKey() {
         return KEY;
     }

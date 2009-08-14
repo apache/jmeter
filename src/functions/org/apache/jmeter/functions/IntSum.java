@@ -58,6 +58,7 @@ public class IntSum extends AbstractFunction {
      *
      * @see Function#execute(SampleResult, Sampler)
      */
+    @Override
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
 
@@ -90,6 +91,7 @@ public class IntSum extends AbstractFunction {
      *
      * @see Function#setParameters(Collection)
      */
+    @Override
     public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
         checkMinParameterCount(parameters, 2);
         values = parameters.toArray();
@@ -100,6 +102,7 @@ public class IntSum extends AbstractFunction {
      *
      * @see Function#getReferenceKey()
      */
+    @Override
     public String getReferenceKey() {
         return KEY;
     }

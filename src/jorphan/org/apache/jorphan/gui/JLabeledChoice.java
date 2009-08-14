@@ -227,7 +227,8 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
     * @param text the string to display; if the text is null,
     *      the tool tip is turned off for this component
     */
-   public void setToolTipText(String text) {
+   @Override
+public void setToolTipText(String text) {
        choiceList.setToolTipText(text);
    }
 
@@ -235,7 +236,8 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
      * Returns the tooltip string that has been set with setToolTipText
      * @return the text of the tool tip
      */
-   public String getToolTipText() {
+   @Override
+public String getToolTipText() {
        if (choiceList == null){ // Necessary to avoid NPE when testing serialisation
            return null;
        }

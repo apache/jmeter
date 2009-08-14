@@ -61,6 +61,7 @@ public class EscapeHtml extends AbstractFunction {
     public EscapeHtml() {
     }
 
+    @Override
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
 
@@ -69,11 +70,13 @@ public class EscapeHtml extends AbstractFunction {
 
     }
 
+    @Override
     public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
         checkParameterCount(parameters, 1);
         values = parameters.toArray();
     }
 
+    @Override
     public String getReferenceKey() {
         return KEY;
     }

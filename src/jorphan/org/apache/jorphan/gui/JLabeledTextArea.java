@@ -173,6 +173,7 @@ public class JLabeledTextArea extends JPanel implements JLabeledField, FocusList
         return mLabel.getText();
     }
 
+    @Override
     public void setEnabled(boolean enable) {
         super.setEnabled(enable);
         mTextArea.setEnabled(enable);
@@ -184,6 +185,7 @@ public class JLabeledTextArea extends JPanel implements JLabeledField, FocusList
      * @param text the string to display; if the text is null,
      *      the tool tip is turned off for this component
      */
+    @Override
     public void setToolTipText(String text) {
         mTextArea.setToolTipText(text);
     }
@@ -192,6 +194,7 @@ public class JLabeledTextArea extends JPanel implements JLabeledField, FocusList
       * Returns the tooltip string that has been set with setToolTipText
       * @return the text of the tool tip
       */
+    @Override
     public String getToolTipText() {
         return mTextArea.getToolTipText();
     }
