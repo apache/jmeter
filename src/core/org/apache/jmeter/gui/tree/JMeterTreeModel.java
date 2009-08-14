@@ -59,6 +59,7 @@ public class JMeterTreeModel extends DefaultTreeModel {
      * @deprecated - only for use by JMeter class!
      * @param o - dummy
      */
+    @Deprecated
     public JMeterTreeModel(Object o) {
         this(new TestPlan(),new WorkBench());
 //      super(new JMeterTreeNode(new WorkBench(), null));

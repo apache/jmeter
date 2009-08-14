@@ -154,6 +154,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
      *
      * @deprecated Do not use - only needed for JUnit tests
      */
+    @Deprecated
     public MainFrame() {
     }
 
@@ -468,6 +469,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
      */
     private JTree makeTree(TreeModel treeModel, JMeterTreeListener treeListener) {
         JTree treevar = new JTree(treeModel) {
+            @Override
             public String getToolTipText(MouseEvent event) {
                 TreePath path = this.getPathForLocation(event.getX(), event.getY());
                 if (path != null) {
@@ -542,6 +544,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
          * @param event
          *            the WindowEvent to handle
          */
+        @Override
         public void windowClosing(WindowEvent event) {
             ActionRouter.getInstance().actionPerformed(new ActionEvent(this, event.getID(), ActionNames.EXIT));
         }

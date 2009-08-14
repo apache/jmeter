@@ -118,6 +118,7 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
      * @param el
      *            the TestElement to configure
      */
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         tableModel.clearData();

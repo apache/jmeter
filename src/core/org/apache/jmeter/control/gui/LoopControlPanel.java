@@ -98,6 +98,7 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
      * @param element
      *            the TestElement to configure
      */
+    @Override
     public void configure(TestElement element) {
         super.configure(element);
         if (element instanceof LoopController) {
@@ -129,6 +130,7 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
 

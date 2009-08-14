@@ -43,6 +43,7 @@ public class DragNDrop extends AbstractAction {
     /**
      * @see Command#doAction(ActionEvent)
      */
+    @Override
     public void doAction(ActionEvent e) {
         String action = e.getActionCommand();
         GuiPackage guiPackage = GuiPackage.getInstance();
@@ -96,6 +97,7 @@ public class DragNDrop extends AbstractAction {
     /**
      * @see Command#getActionNames()
      */
+    @Override
     public Set getActionNames() {
         return commands;
     }

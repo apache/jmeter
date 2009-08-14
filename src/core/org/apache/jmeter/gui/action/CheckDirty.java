@@ -73,6 +73,7 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
     /**
      * @see Command#doAction(ActionEvent)
      */
+    @Override
     public void doAction(ActionEvent e) {
         String action = e.getActionCommand();
         if (action.equals(ActionNames.SUB_TREE_SAVED)) {
@@ -151,6 +152,7 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
     /**
      * @see Command#getActionNames()
      */
+    @Override
     public Set getActionNames() {
         return commands;
     }

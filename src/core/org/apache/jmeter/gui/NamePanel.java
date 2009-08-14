@@ -90,6 +90,7 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
      *
      * @return the current name
      */
+    @Override
     public String getName() {
         if (nameField != null) {
             return nameField.getText();
@@ -103,6 +104,7 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
      * @param name
      *            the name to display
      */
+    @Override
     public void setName(String name) {
         super.setName(name);
         nameField.setText(name);

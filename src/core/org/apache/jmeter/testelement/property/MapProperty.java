@@ -41,6 +41,7 @@ public class MapProperty extends MultiProperty {
         super();
     }
 
+    @Override
     public boolean equals(Object o) {
         if (o instanceof MapProperty) {
             if (value != null) {
@@ -56,6 +57,7 @@ public class MapProperty extends MultiProperty {
         }
     }
 
+    @Override
     public void addProperty(JMeterProperty prop) {
         addProperty(prop.getName(), prop);
     }
@@ -70,6 +72,7 @@ public class MapProperty extends MultiProperty {
      *
      * @see AbstractProperty#getPropertyType()
      */
+    @Override
     protected Class getPropertyType() {
         if (value.size() > 0) {
             return valueIterator().next().getClass();
@@ -91,6 +94,7 @@ public class MapProperty extends MultiProperty {
         return value;
     }
 
+    @Override
     public Object clone() {
         MapProperty prop = (MapProperty) super.clone();
         prop.value = cloneMap();
@@ -136,6 +140,7 @@ public class MapProperty extends MultiProperty {
         recoverRunningVersionOfSubElements(owner);
     }
 
+    @Override
     public void clear() {
         value.clear();
     }
@@ -145,6 +150,7 @@ public class MapProperty extends MultiProperty {
      *
      * @see MultiProperty#iterator()
      */
+    @Override
     public PropertyIterator iterator() {
         return valueIterator();
     }
@@ -154,6 +160,7 @@ public class MapProperty extends MultiProperty {
      *
      * @see JMeterProperty#setRunningVersion(boolean)
      */
+    @Override
     public void setRunningVersion(boolean running) {
         super.setRunningVersion(running);
         if (running) {

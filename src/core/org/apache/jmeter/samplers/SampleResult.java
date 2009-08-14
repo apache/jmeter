@@ -385,6 +385,7 @@ public class SampleResult implements Serializable {
      * @param elapsed
      *            time in milliseconds
      */
+    @Deprecated
     public void setTime(long elapsed) {
         if (startTime != 0 || endTime != 0){
             throw new RuntimeException("Calling setTime() after start/end times have been set");
@@ -570,6 +571,7 @@ public class SampleResult implements Serializable {
      *
      * @deprecated - only intended for use from BeanShell code
      */
+    @Deprecated
     public void setResponseData(String response) {
         try {
             responseData = response.getBytes(getDataEncodingWithDefault());
@@ -706,6 +708,7 @@ public class SampleResult implements Serializable {
      *
      * @return display name of this sample result
      */
+    @Override
     public String toString() {
         return getSampleLabel();
     }
@@ -715,6 +718,7 @@ public class SampleResult implements Serializable {
      *
      * @deprecated use getDataEncodingWithDefault() or getDataEncodingNoDefault() as needed.
      */
+    @Deprecated
     public String getDataEncoding() {
         if (dataEncoding != null) {
             return dataEncoding;

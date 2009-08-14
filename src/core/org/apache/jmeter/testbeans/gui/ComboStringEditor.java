@@ -102,6 +102,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
      *
      * @see java.beans.PropertyEditor#supportsCustomEditor()
      */
+    @Override
     public boolean supportsCustomEditor() {
         return true;
     }
@@ -111,6 +112,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
      *
      * @see java.beans.PropertyEditor#getCustomEditor()
      */
+    @Override
     public Component getCustomEditor() {
         return combo;
     }
@@ -120,6 +122,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
      *
      * @see java.beans.PropertyEditor#getValue()
      */
+    @Override
     public Object getValue() {
         return getAsText();
     }
@@ -129,6 +132,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
      *
      * @see java.beans.PropertyEditor#getAsText()
      */
+    @Override
     public String getAsText() {
         Object value = combo.getSelectedItem();
 
@@ -143,6 +147,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
      *
      * @see java.beans.PropertyEditor#setValue()
      */
+    @Override
     public void setValue(Object value) {
         setAsText((String) value);
     }
@@ -152,6 +157,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
      *
      * @see java.beans.PropertyEditor#setAsText()
      */
+    @Override
     public void setAsText(String value) {
         combo.setEditable(true);
 
@@ -221,6 +227,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
         return noUndefined;
     }
 
+    @Override
     public String[] getTags() {
         return tags;
     }
@@ -297,6 +304,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
             this.s = s;
         }
 
+        @Override
         public String toString() {
             return s;
         }

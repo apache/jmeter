@@ -132,6 +132,7 @@ public class IfController extends GenericController implements Serializable {
      * termination condition is reached. I.e. if the condition evaluates to
      * False - then isDone() returns TRUE
      */
+    @Override
     public boolean isDone() {
         // boolean result = true;
         // try {
@@ -148,6 +149,7 @@ public class IfController extends GenericController implements Serializable {
     /**
      * @see org.apache.jmeter.control.Controller#next()
      */
+    @Override
     public Sampler next() {
         // We should only evalute the condition if it is the first
         // time ( first "iteration" ) we are called.

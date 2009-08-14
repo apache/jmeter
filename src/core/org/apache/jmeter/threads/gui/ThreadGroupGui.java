@@ -147,6 +147,7 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
         return ThreadGroup.ON_SAMPLE_ERROR_CONTINUE;
     }
 
+    @Override
     public void configure(TestElement tg) {
         super.configure(tg);
         threadInput.setText(tg.getPropertyAsString(ThreadGroup.NUM_THREADS));
@@ -298,6 +299,7 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
         return panel;
     }
 
+    @Override
     public void clearGui(){
         super.clearGui();
         initGui();
@@ -386,6 +388,7 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
         getNamePanel().setNode(node);
     }
 
+    @Override
     public Dimension getPreferredSize() {
         return getMinimumSize();
     }

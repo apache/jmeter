@@ -146,6 +146,7 @@ public class JsseSSLManager extends SSLManager {
      * @param conn
      *            The new Context value
      */
+    @Override
     public void setContext(HttpURLConnection conn) {
         if (conn instanceof HttpsURLConnection) {
 /*
@@ -166,6 +167,7 @@ public class JsseSSLManager extends SSLManager {
      * @param p
      *            The new Provider value
      */
+    @Override
     protected final void setProvider(Provider p) {
         super.setProvider(p);
         if (null == this.pro) {

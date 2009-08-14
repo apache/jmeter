@@ -278,6 +278,7 @@ public class ThreadGroup extends AbstractTestElement implements Serializable, Co
      * @param child
      *            the test element to add.
      */
+    @Override
     public void addTestElement(TestElement child) {
         getSamplerController().addTestElement(child);
     }

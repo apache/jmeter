@@ -43,6 +43,7 @@ public class StatisticalSampleResult extends SampleResult implements
      * @param stamp
      * @param elapsed
      */
+    @Deprecated
     public StatisticalSampleResult(long stamp, long elapsed) {
         super(stamp, elapsed);
     }
@@ -80,18 +81,22 @@ public class StatisticalSampleResult extends SampleResult implements
 
     }
 
+    @Override
     public long getTime() {
         return getEndTime() - getStartTime() - this.getIdleTime();
     }
 
+    @Override
     public long getTimeStamp() {
         return getEndTime();
     }
 
+    @Override
     public int getErrorCount() {// Overrides SampleResult
         return errorCount;
     }
 
+    @Override
     public void setErrorCount(int e) {// for reading CSV files
         errorCount = e;
     }

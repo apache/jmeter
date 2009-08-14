@@ -79,6 +79,7 @@ public abstract class AbstractAssertionGui extends AbstractJMeterGuiComponent {
         return assertionScopePanel;
     }
 
+    @Override
     public void clearGui(){
         super.clearGui();
         if (assertionScopePanel != null) {

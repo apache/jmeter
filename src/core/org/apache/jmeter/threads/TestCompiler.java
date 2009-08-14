@@ -248,10 +248,12 @@ public class TestCompiler implements HashTreeTraverser {
             }
         }
 
+        @Override
         public int hashCode() {
             return child.hashCode() + parent.hashCode();
         }
 
+        @Override
         public boolean equals(Object o) {
             if (o instanceof ObjectPair) {
                 return child == ((ObjectPair) o).child && parent == ((ObjectPair) o).parent;

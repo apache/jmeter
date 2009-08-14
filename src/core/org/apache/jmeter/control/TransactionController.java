@@ -81,6 +81,7 @@ public class TransactionController extends GenericController implements SampleLi
     /**
      * @see org.apache.jmeter.control.Controller#next()
      */
+    @Override
     public Sampler next(){
         if (isParent()){
             return next1();
@@ -120,6 +121,7 @@ public class TransactionController extends GenericController implements SampleLi
         return transactionSampler;
     }
 
+    @Override
     protected Sampler nextIsAController(Controller controller) throws NextIsNullException {
         if (!isParent()) {
             return super.nextIsAController(controller);

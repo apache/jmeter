@@ -45,6 +45,7 @@ public class SimpleVariable {
     /**
      * @see org.apache.jmeter.functions.Function#execute
      */
+    @Override
     public String toString() {
         String ret = null;
         JMeterVariables vars = getVariables();
