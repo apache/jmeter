@@ -52,6 +52,7 @@ public class InterleaveControl extends GenericController implements Serializable
      *
      * @see org.apache.jmeter.control.GenericController#reInitialize()
      */
+    @Override
     public void reInitialize() {
         setFirst(true);
         currentReturnedAtLeastOne = false;
@@ -75,6 +76,7 @@ public class InterleaveControl extends GenericController implements Serializable
      *
      * @see org.apache.jmeter.control.Controller#next()
      */
+    @Override
     public Sampler next() {
         if (isSkipNext()) {
             reInitialize();
@@ -88,6 +90,7 @@ public class InterleaveControl extends GenericController implements Serializable
      *
      * @see GenericController#nextIsAController(Controller)
      */
+    @Override
     protected Sampler nextIsAController(Controller controller) throws NextIsNullException {
         Sampler sampler = controller.next();
         if (sampler == null) {
@@ -109,6 +112,7 @@ public class InterleaveControl extends GenericController implements Serializable
      *
      * @see org.apache.jmeter.control.GenericController#nextIsASampler(Sampler)
      */
+    @Override
     protected Sampler nextIsASampler(Sampler element) throws NextIsNullException {
         skipNext = true;
         incrementCurrent();
@@ -121,6 +125,7 @@ public class InterleaveControl extends GenericController implements Serializable
      *
      * @see org.apache.jmeter.control.GenericController#nextIsNull()
      */
+    @Override
     protected Sampler nextIsNull() {
         resetCurrent();
         return next();
@@ -131,6 +136,7 @@ public class InterleaveControl extends GenericController implements Serializable
      *
      * @see GenericController#setCurrentElement(TestElement)
      */
+    @Override
     protected void setCurrentElement(TestElement currentElement) throws NextIsNullException {
         // Set the position when next is first called, and don't overwrite
         // until reInitialize is called.
@@ -149,6 +155,7 @@ public class InterleaveControl extends GenericController implements Serializable
      *
      * @see GenericController#currentReturnedNull(Controller)
      */
+    @Override
     protected void currentReturnedNull(Controller c) {
         if (c.isDone()) {
             removeCurrentElement();
@@ -176,6 +183,7 @@ public class InterleaveControl extends GenericController implements Serializable
      *
      * @see org.apache.jmeter.control.GenericController#incrementCurrent()
      */
+    @Override
     protected void incrementCurrent() {
         if (currentReturnedAtLeastOne) {
             skipNext = true;

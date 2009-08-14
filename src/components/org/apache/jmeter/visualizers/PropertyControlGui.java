@@ -98,6 +98,7 @@ public class PropertyControlGui extends AbstractConfigGui
         return "property_visualiser_title"; // $NON-NLS-1$
     }
 
+    @Override
     public Collection getMenuCategories() {
         return Arrays.asList(new String[] { MenuFactory.NON_TEST_ELEMENTS });
     }
@@ -129,6 +130,7 @@ public class PropertyControlGui extends AbstractConfigGui
         modifyTestElement(el);
         return el;
     }
+    @Override
     public void configure(TestElement element) {
         super.configure(element);
         setUpData();

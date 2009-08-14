@@ -395,6 +395,7 @@ ActionListener {
         }
     }
 
+    @Override
     public JComponent getPrintableComponent() {
         if (saveGraphToFile == true) {
             saveGraphToFile = false;

@@ -29,10 +29,12 @@ import org.apache.jmeter.util.JMeterUtils;
  *
  */
 public class GaussianRandomTimer extends RandomTimer implements Serializable {
+    @Override
     public long delay() {
         return (long) Math.abs((this.random.nextGaussian() * getRange()) + super.delay());
     }
 
+    @Override
     public String toString() {
         return JMeterUtils.getResString("gaussian_timer_memo"); //$NON-NLS-1$
     }

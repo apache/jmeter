@@ -58,6 +58,7 @@ public class XPathAssertionGui extends AbstractAssertionGui {
         return JMeterUtils.getResString("xpath_assertion_test"); //$NON-NLS-1$
     }
 
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         XPathAssertion assertion = (XPathAssertion) el;
@@ -107,6 +108,7 @@ public class XPathAssertionGui extends AbstractAssertionGui {
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
         

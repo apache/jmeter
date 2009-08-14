@@ -160,6 +160,7 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
         repaint();
     }
 
+    @Override
     public String toString() {
         return "Show the samples analysis as dot plots";
     }

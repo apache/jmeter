@@ -61,6 +61,7 @@ public class ModuleController extends GenericController implements ReplaceableCo
         super();
     }
 
+    @Override
     public Object clone() {
         ModuleController clone = (ModuleController) super.clone();
         if (selectedNode == null) {

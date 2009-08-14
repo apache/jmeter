@@ -56,11 +56,13 @@ public class SwitchControllerGui extends AbstractControllerGui {
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
         switchValue.setText(""); // $NON-NLS-1$
     }
 
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         switchValue.setText(((SwitchController) el).getSelection());

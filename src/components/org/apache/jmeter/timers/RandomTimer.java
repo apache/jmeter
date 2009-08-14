@@ -45,6 +45,7 @@ public abstract class RandomTimer extends ConstantTimer implements Timer, Serial
     /**
      * Set the range value.
      */
+    @Override
     public void setRange(double range) {
         setProperty(new DoubleProperty(RANGE, range));
     }
@@ -58,6 +59,7 @@ public abstract class RandomTimer extends ConstantTimer implements Timer, Serial
      *
      * @return double
      */
+    @Override
     public double getRange() {
         return this.getPropertyAsDouble(RANGE);
     }

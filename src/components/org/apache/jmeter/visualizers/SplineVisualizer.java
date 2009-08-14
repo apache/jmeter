@@ -207,6 +207,7 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
         }
     }
 
+    @Override
     public String toString() {
         return "Show the samples analysis as a Spline curve";
     }
@@ -286,6 +287,7 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
             this.repaint();
         }
 
+        @Override
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
 

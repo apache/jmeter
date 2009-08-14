@@ -171,6 +171,7 @@ public class UserParameters extends AbstractTestElement implements Serializable,
      *
      * @see java.lang.Object#clone()
      */
+    @Override
     public Object clone() {
         UserParameters up = (UserParameters) super.clone();
         up.lock = lock; // ensure that clones share the same lock object
@@ -182,6 +183,7 @@ public class UserParameters extends AbstractTestElement implements Serializable,
      *
      * @see AbstractTestElement#mergeIn(TestElement)
      */
+    @Override
     protected void mergeIn(TestElement element) {
         // super.mergeIn(element);
     }

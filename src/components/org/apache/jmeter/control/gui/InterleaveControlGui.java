@@ -32,6 +32,7 @@ public class InterleaveControlGui extends AbstractControllerGui {
         init();
     }
 
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         if (((InterleaveControl) el).getStyle() == InterleaveControl.IGNORE_SUB_CONTROLLERS) {
@@ -64,6 +65,7 @@ public class InterleaveControlGui extends AbstractControllerGui {
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
         style.setSelected(false);

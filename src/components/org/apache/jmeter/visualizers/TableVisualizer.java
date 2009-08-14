@@ -173,6 +173,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
         repaint();
     }
 
+    @Override
     public String toString() {
         return "Show the samples in a table";
     }
@@ -270,6 +271,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
             super(methodName);
         }
 
+        @Override
         public Object invoke(Object p_invokee) {
             Boolean success = (Boolean)super.invoke(p_invokee);
 

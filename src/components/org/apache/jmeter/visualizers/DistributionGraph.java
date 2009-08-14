@@ -131,6 +131,7 @@ public class DistributionGraph extends JComponent implements Scrollable, Clearab
     /**
      * Method is responsible for calling drawSample and updating the graph.
      */
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         final SamplingStatCalculator m = this.model;
