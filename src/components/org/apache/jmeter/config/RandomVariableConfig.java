@@ -55,12 +55,12 @@ public class RandomVariableConfig extends ConfigTestElement
 
     // Used for per-thread/user numbers
     // Cannot be static, as random numbers are not to be shared between instances
-    private transient ThreadLocal perThreadRandom = initThreadLocal();
+    private transient ThreadLocal<Random> perThreadRandom = initThreadLocal();
 
-    private ThreadLocal initThreadLocal() {
-        return new ThreadLocal() {
+    private ThreadLocal<Random> initThreadLocal() {
+        return new ThreadLocal<Random>() {
                 @Override
-                protected Object initialValue() {
+                protected Random initialValue() {
                     init();
                     return new Random(getRandomSeedAsLong());
                 }};
@@ -100,7 +100,7 @@ public class RandomVariableConfig extends ConfigTestElement
     public void iterationStart(LoopIterationEvent iterEvent) {
         Random randGen=null;
         if (getPerThread()){
-            randGen = (Random) perThreadRandom.get();
+            randGen = perThreadRandom.get();
         } else {
             synchronized(this){
                 if (globalRandom == null){

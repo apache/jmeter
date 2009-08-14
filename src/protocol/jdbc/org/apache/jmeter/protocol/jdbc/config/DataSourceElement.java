@@ -62,7 +62,7 @@ public class DataSourceElement extends AbstractTestElement
     private transient ResourceLimitingJdbcDataSource excaliburSource;
 
     // Keep a record of the pre-thread pools so that they can be disposed of at the end of a test
-    private transient Set perThreadPoolSet;
+    private transient Set<ResourceLimitingJdbcDataSource> perThreadPoolSet;
 
     public DataSourceElement() {
     }
@@ -75,9 +75,9 @@ public class DataSourceElement extends AbstractTestElement
             excaliburSource = null;
         }
         if (perThreadPoolSet != null) {// in case
-            Iterator it = perThreadPoolSet.iterator();
+            Iterator<ResourceLimitingJdbcDataSource> it = perThreadPoolSet.iterator();
             while(it.hasNext()){
-                ResourceLimitingJdbcDataSource dsc = (ResourceLimitingJdbcDataSource)it.next();
+                ResourceLimitingJdbcDataSource dsc = it.next();
                 log.debug("Disposing pool: "+dsc.getInstrumentableName()+" @"+System.identityHashCode(dsc));
                 dsc.dispose();
             }
@@ -101,7 +101,7 @@ public class DataSourceElement extends AbstractTestElement
             log.error("JDBC data source already defined for: "+poolName);
         } else {
             String maxPool = getPoolMax();
-            perThreadPoolSet = Collections.synchronizedSet(new HashSet());
+            perThreadPoolSet = Collections.synchronizedSet(new HashSet<ResourceLimitingJdbcDataSource>());
             if (maxPool.equals("0")){ // i.e. if we want per thread pooling
                 variables.putObject(poolName, new DataSourceComponentImpl()); // pool will be created later
             } else {
@@ -229,10 +229,11 @@ public class DataSourceElement extends AbstractTestElement
     }
 
     // used to hold per-thread singleton connection pools
-    private static final ThreadLocal perThreadPoolMap = new ThreadLocal(){
+    private static final ThreadLocal<Map<String, ResourceLimitingJdbcDataSource>> perThreadPoolMap =
+        new ThreadLocal<Map<String, ResourceLimitingJdbcDataSource>>(){
         @Override
-        protected synchronized Object initialValue() {
-            return new HashMap();
+        protected Map<String, ResourceLimitingJdbcDataSource> initialValue() {
+            return new HashMap<String, ResourceLimitingJdbcDataSource>();
         }
     };
 
@@ -259,8 +260,8 @@ public class DataSourceElement extends AbstractTestElement
             if (sharedDSC != null){ // i.e. shared pool
                 dsc = sharedDSC;
             } else {
-                Map poolMap = (Map) perThreadPoolMap.get();
-                dsc = (ResourceLimitingJdbcDataSource) poolMap.get(getDataSource());
+                Map<String, ResourceLimitingJdbcDataSource> poolMap = (Map) perThreadPoolMap.get();
+                dsc = poolMap.get(getDataSource());
                 if (dsc == null){
                     dsc = initPool("1");
                     poolMap.put(getDataSource(),dsc);

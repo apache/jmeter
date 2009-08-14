@@ -52,7 +52,8 @@ public class FileWrapper {
      * - maps file names to  containers
      * - ensures only one container per file across all threads
      */
-    private static final Map fileContainers = new HashMap();
+    private static final Map<String, FileRowColContainer> fileContainers =
+        new HashMap<String, FileRowColContainer>();
 
     /*
      * Only needed locally
@@ -64,10 +65,11 @@ public class FileWrapper {
     }
 
     /* The cache of file packs - used to improve thread access */
-    private static final ThreadLocal filePacks = new ThreadLocal() {
+    private static final ThreadLocal<Map<String, FileWrapper>> filePacks = 
+        new ThreadLocal<Map<String, FileWrapper>>() {
         @Override
-        protected Object initialValue() {
-            return new HashMap();
+        protected Map<String, FileWrapper> initialValue() {
+            return new HashMap<String, FileWrapper>();
         }
     };
 
@@ -93,7 +95,7 @@ public class FileWrapper {
             log.error("Alias cannot be empty");
             return;
         }
-        Map m = (Map) filePacks.get();
+        Map<String, FileWrapper> m = filePacks.get();
         if (m.get(alias) == null) {
             FileRowColContainer frcc;
             try {
@@ -110,7 +112,7 @@ public class FileWrapper {
 
     private static FileRowColContainer getFile(String file, String alias) throws FileNotFoundException, IOException {
         FileRowColContainer frcc;
-        if ((frcc = (FileRowColContainer) fileContainers.get(alias)) == null) {
+        if ((frcc = fileContainers.get(alias)) == null) {
             frcc = new FileRowColContainer(file);
             fileContainers.put(alias, frcc);
             log.info("Saved " + file + " as " + alias + " delimiter=<" + frcc.getDelimiter() + ">");
@@ -128,8 +130,8 @@ public class FileWrapper {
      */
     public static void endRow(String file) {
         file = checkDefault(file);
-        Map my = (Map) filePacks.get();
-        FileWrapper fw = (FileWrapper) (my).get(file);
+        Map<String, FileWrapper> my = filePacks.get();
+        FileWrapper fw = my.get(file);
         if (fw == null) {
             log.warn("endRow(): no entry for " + file);
         } else {
@@ -145,8 +147,8 @@ public class FileWrapper {
     }
 
     public static String getColumn(String file, int col) {
-        Map my = (Map) filePacks.get();
-        FileWrapper fw = (FileWrapper) (my).get(file);
+        Map<String, FileWrapper> my = filePacks.get();
+        FileWrapper fw = my.get(file);
         if (fw == null) // First call
         {
             if (file.startsWith("*")) { //$NON-NLS-1$
@@ -155,7 +157,7 @@ public class FileWrapper {
                 file = checkDefault(file);
                 log.info("Attaching " + file);
                 open(file, file);
-                fw = (FileWrapper) my.get(file);
+                fw = my.get(file);
             }
             // TODO improve the error handling
             if (fw == null) {
@@ -181,8 +183,8 @@ public class FileWrapper {
      */
     public static int getCurrentRow(String file) {
 
-        Map my = (Map) filePacks.get();
-        FileWrapper fw = (FileWrapper) (my).get(file);
+        Map<String, FileWrapper> my = filePacks.get();
+        FileWrapper fw = my.get(file);
         if (fw == null) // Not yet open
         {
             return -1;
@@ -195,9 +197,9 @@ public class FileWrapper {
      */
     public static void clearAll() {
         log.debug("clearAll()");
-        Map my = (Map) filePacks.get();
-        for (Iterator i = my.entrySet().iterator(); i.hasNext();) {
-            Object fw = i.next();
+        Map<String, FileWrapper> my = filePacks.get();
+        for (Iterator<Map.Entry<String, FileWrapper>>  i = my.entrySet().iterator(); i.hasNext();) {
+            Map.Entry<String, FileWrapper> fw = i.next();
             log.info("Removing " + fw.toString());
             i.remove();
         }

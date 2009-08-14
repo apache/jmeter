@@ -30,11 +30,11 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class IterationCounter extends AbstractFunction {
 
-    private static final List desc = new LinkedList();
+    private static final List<String> desc = new LinkedList<String>();
 
     private static final String KEY = "__counter"; //$NON-NLS-1$
 
-    private ThreadLocal perThreadInt;
+    private ThreadLocal<Integer> perThreadInt;
 
     private Object[] variables;
 
@@ -44,9 +44,9 @@ public class IterationCounter extends AbstractFunction {
        synchronized(this){
            globalCounter=0;
        }
-       perThreadInt = new ThreadLocal(){
+       perThreadInt = new ThreadLocal<Integer>(){
             @Override
-            protected synchronized Object initialValue() {
+            protected Integer initialValue() {
                 return new Integer(0);
             }
         };
@@ -86,7 +86,7 @@ public class IterationCounter extends AbstractFunction {
 
         if (perThread) {
             int threadCounter;
-            threadCounter = ((Integer) perThreadInt.get()).intValue() + 1;
+            threadCounter = perThreadInt.get().intValue() + 1;
             perThreadInt.set(new Integer(threadCounter));
             counterString = String.valueOf(threadCounter);
         } else {
@@ -126,7 +126,7 @@ public class IterationCounter extends AbstractFunction {
      *
      * @see org.apache.jmeter.functions.Function#getArgumentDesc()
      */
-    public List getArgumentDesc() {
+    public List<String> getArgumentDesc() {
         return desc;
     }
 }

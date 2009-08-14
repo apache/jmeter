@@ -50,7 +50,7 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
 
     public static final String CLEAR = "clearEachIteration"; // $NON-NLS-1$
 
-    private transient ThreadLocal threadCache;
+    private transient ThreadLocal<Map<String, CacheEntry>> threadCache;
 
     public CacheManager() {
         setProperty(new BooleanProperty(CLEAR, false));
@@ -142,7 +142,7 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
      * @param method where to set the headers
      */
     public void setHeaders(URL url, HttpMethod method) {
-        CacheEntry entry = (CacheEntry) getCache().get(url.toString());
+        CacheEntry entry = getCache().get(url.toString());
         if (log.isDebugEnabled()){
             log.debug(method.getName()+"(OAHC) "+url.toString()+" "+entry);
         }
@@ -166,7 +166,7 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
      * @param conn where to set the headers
      */
     public void setHeaders(HttpURLConnection conn, URL url) {
-        CacheEntry entry = (CacheEntry) getCache().get(url.toString());
+        CacheEntry entry = getCache().get(url.toString());
         if (log.isDebugEnabled()){
             log.debug(conn.getRequestMethod()+"(Java) "+url.toString()+" "+entry);
         }
@@ -182,8 +182,8 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
         }
     }
 
-    private Map getCache(){
-        return (Map) threadCache.get();
+    private Map<String, CacheEntry> getCache(){
+        return threadCache.get();
     }
 
     public boolean getClearEachIteration() {
@@ -202,10 +202,10 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
 
     private void clearCache() {
         log.debug("Clear cache");
-        threadCache = new ThreadLocal(){
+        threadCache = new ThreadLocal<Map<String, CacheEntry>>(){
             @Override
-            protected Object initialValue(){
-                return new HashMap();
+            protected Map<String, CacheEntry> initialValue(){
+                return new HashMap<String, CacheEntry>();
             }
         };
     }
