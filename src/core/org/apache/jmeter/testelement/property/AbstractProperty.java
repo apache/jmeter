@@ -334,7 +334,7 @@ public abstract class AbstractProperty implements JMeterProperty {
             Object prop = entry.getValue();
             if (newColl == null) {
                 try {
-                    newColl = (Map) coll.getClass().newInstance();
+                    newColl = coll.getClass().newInstance();
                 } catch (Exception e) {
                     log.error("Bad collection", e);
                     return coll;

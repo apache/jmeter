@@ -103,7 +103,7 @@ public class MapProperty extends MultiProperty {
 
     private Map cloneMap() {
         try {
-            Map newCol = (Map) value.getClass().newInstance();
+            Map newCol = value.getClass().newInstance();
             PropertyIterator iter = valueIterator();
             while (iter.hasNext()) {
                 JMeterProperty item = iter.next();
