@@ -71,6 +71,7 @@ public class LineChart extends AbstractChart {
         return dataset;
     }
 
+    @Override
     public JComponent renderChart(List dataset) {
         ArrayList dset = new ArrayList();
         ArrayList xlabels = new ArrayList();

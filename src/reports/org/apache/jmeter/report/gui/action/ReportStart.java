@@ -51,10 +51,12 @@ public class ReportStart extends AbstractAction {
      *
      * @return the ActionNames value
      */
+    @Override
     public Set getActionNames() {
         return commands;
     }
 
+    @Override
     public void doAction(ActionEvent e) {
         if (e.getActionCommand().equals(ActionNames.ACTION_START)) {
             popupShouldSave(e);

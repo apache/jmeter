@@ -125,6 +125,7 @@ public class ReportPlan extends AbstractTestElement implements Serializable, Tes
         return plan;
     }
 
+    @Override
     public void addTestElement(TestElement tg) {
         super.addTestElement(tg);
         if (tg instanceof ThreadGroup && !isRunningVersion()) {
