@@ -29,6 +29,7 @@ public class Table extends AbstractTable {
      * for now the method isn't implemented. I still need to decide how
      * it should be implemented.
      */
+    @Override
     public String[][] getTableData(List data) {
         return new String[0][0];
     }

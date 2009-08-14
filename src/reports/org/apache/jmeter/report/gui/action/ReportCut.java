@@ -37,6 +37,7 @@ public class ReportCut extends AbstractAction {
     /**
      * @see org.apache.jmeter.gui.action.Command#getActionNames()
      */
+    @Override
     public Set getActionNames() {
         return commands;
     }
@@ -44,6 +45,7 @@ public class ReportCut extends AbstractAction {
     /**
      * @see org.apache.jmeter.gui.action.Command#doAction(ActionEvent)
      */
+    @Override
     public void doAction(ActionEvent e) {
         ReportGuiPackage guiPack = ReportGuiPackage.getInstance();
         ReportTreeNode[] currentNodes = guiPack.getTreeListener().getSelectedNodes();

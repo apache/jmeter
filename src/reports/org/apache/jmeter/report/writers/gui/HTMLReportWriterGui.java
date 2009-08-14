@@ -40,10 +40,12 @@ public class HTMLReportWriterGui extends AbstractReportGui {
         init();
     }
 
+    @Override
     public String getLabelResource() {
         return "report_writer_html";
     }
 
+    @Override
     public JPopupMenu createPopupMenu() {
         JPopupMenu pop = new JPopupMenu();
         ReportMenuFactory.addFileMenu(pop);
@@ -88,6 +90,7 @@ public class HTMLReportWriterGui extends AbstractReportGui {
         wr.setTargetDirectory(outputDirectory.getFilename());
     }
 
+    @Override
     public void configure(TestElement element) {
         super.configure(element);
         HTMLReportWriter wr = (HTMLReportWriter)element;

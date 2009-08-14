@@ -43,6 +43,7 @@ public class ReportPaste extends AbstractAction {
     /**
      * @see org.apache.jmeter.gui.action.Command#getActionNames()
      */
+    @Override
     public Set getActionNames() {
         return commands;
     }
@@ -50,6 +51,7 @@ public class ReportPaste extends AbstractAction {
     /**
      * @see org.apache.jmeter.gui.action.Command#doAction(ActionEvent)
      */
+    @Override
     public void doAction(ActionEvent e) {
         ReportTreeNode draggedNodes[] = ReportCopy.getCopiedNodes();
         ReportTreeListener treeListener = ReportGuiPackage.getInstance().getTreeListener();

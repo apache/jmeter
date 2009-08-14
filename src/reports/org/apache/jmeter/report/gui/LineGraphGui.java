@@ -59,10 +59,12 @@ public class LineGraphGui extends AbstractReportGui {
         init();
     }
 
+    @Override
     public String getLabelResource() {
         return "report_line_graph";
     }
 
+    @Override
     public JPopupMenu createPopupMenu() {
         JPopupMenu pop = new JPopupMenu();
         ReportMenuFactory.addFileMenu(pop);
@@ -134,6 +136,7 @@ public class LineGraphGui extends AbstractReportGui {
         bc.setURLs(urls.getText());
     }
 
+    @Override
     public void configure(TestElement element) {
         super.configure(element);
         LineChart bc = (LineChart)element;

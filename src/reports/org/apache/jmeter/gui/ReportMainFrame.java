@@ -439,6 +439,7 @@ public class ReportMainFrame extends JFrame implements TestListener, Remoteable 
          * @param event
          *            the WindowEvent to handle
          */
+        @Override
         public void windowClosing(WindowEvent event) {
             ReportActionRouter.getInstance().actionPerformed(new ActionEvent(this, event.getID(), "exit"));
         }
