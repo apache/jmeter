@@ -54,12 +54,12 @@ public class CounterConfig extends AbstractTestElement
     private long globalCounter = Long.MIN_VALUE;
 
     // Used for per-thread/user numbers
-    private transient ThreadLocal perTheadNumber;
+    private transient ThreadLocal<Long> perTheadNumber;
 
     private void init() {
-        perTheadNumber = new ThreadLocal() {
+        perTheadNumber = new ThreadLocal<Long>() {
             @Override
-            protected synchronized Object initialValue() {
+            protected Long initialValue() {
                 return new Long(getStart());
             }
         };
@@ -89,7 +89,7 @@ public class CounterConfig extends AbstractTestElement
             variables.put(getVarName(), formatNumber(globalCounter));
             globalCounter += increment;
         } else {
-            long current = ((Long) perTheadNumber.get()).longValue();
+            long current = perTheadNumber.get().longValue();
             variables.put(getVarName(), formatNumber(current));
             current += increment;
             if (current > end) {
