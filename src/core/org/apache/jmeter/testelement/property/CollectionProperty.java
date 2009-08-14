@@ -139,7 +139,7 @@ public class CollectionProperty extends MultiProperty {
 
     private Collection cloneCollection() {
         try {
-            Collection newCol = (Collection) value.getClass().newInstance();
+            Collection newCol = value.getClass().newInstance();
             PropertyIterator iter = iterator();
             while (iter.hasNext()) {
                 newCol.add(iter.next().clone());
