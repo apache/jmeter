@@ -958,6 +958,7 @@ public class ProxyControl extends GenericController {
         }
     }
 
+    @Override
     public boolean canRemove() {
         return null == server;
     }

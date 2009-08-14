@@ -83,6 +83,7 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
         cookieManagers.clear();
     }
 
+    @Override
     public Object clone() {
         if(cookieManagers == null)
         {

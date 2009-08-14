@@ -53,6 +53,7 @@ public class HttpMirrorThread extends Thread {
     /**
      * Main processing method for the HttpMirror object
      */
+    @Override
     public void run() {
         log.info("Starting thread");
         BufferedInputStream in = null;

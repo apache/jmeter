@@ -226,6 +226,7 @@ public class SoapSampler extends HTTPSampler2 implements Interruptible { // Impl
         return postedBody.toString();
     }
 
+    @Override
     protected HTTPSampleResult sample(URL url, String method, boolean areFollowingRedirect, int frameDepth) {
 
         String urlStr = url.toString();
@@ -352,6 +353,7 @@ public class SoapSampler extends HTTPSampler2 implements Interruptible { // Impl
         }
     }
 
+    @Override
     public URL getUrl() throws MalformedURLException {
         return new URL(getURLData());
     }

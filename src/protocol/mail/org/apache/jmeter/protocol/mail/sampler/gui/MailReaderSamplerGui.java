@@ -106,6 +106,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(org.apache.jmeter.testelement.TestElement)
      */
+    @Override
     public void configure(TestElement element) {
         MailReaderSampler mrs = (MailReaderSampler) element;
         if (mrs.getServerType().equals(MailReaderSampler.TYPE_POP3)) {
@@ -277,6 +278,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
         add(storeMimeMessageBox);
     }
 
+    @Override
     public void clearGui() {
         super.clearGui();
         initGui();

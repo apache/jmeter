@@ -195,6 +195,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         init();
     }
 
+    @Override
     public TestElement createTestElement() {
         model = makeProxyControl();
         log.debug("creating/configuring model = " + model);
@@ -212,6 +213,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement el) {
         if (excludeTable.isEditing()) {// Bug 42948
             excludeTable.getCellEditor().stopCellEditing();
@@ -266,14 +268,17 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         return list;
     }
 
+    @Override
     public String getLabelResource() {
         return "proxy_title"; // $NON-NLS-1$
     }
 
+    @Override
     public Collection getMenuCategories() {
         return Arrays.asList(new String[] { MenuFactory.NON_TEST_ELEMENTS });
     }
 
+    @Override
     public void configure(TestElement element) {
         log.debug("Configuring gui with " + element);
         super.configure(element);
@@ -822,6 +827,7 @@ class TreeNodeWrapper {
         return tn;
     }
 
+    @Override
     public String toString() {
         return label;
     }

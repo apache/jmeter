@@ -278,6 +278,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         setProperty(new BooleanProperty(USE_REQ_MSGID_AS_CORRELID, value));
     }
 
+    @Override
     public String toString() {
         return getQueueConnectionFactory() + ", queue: " + getSendQueue();
     }

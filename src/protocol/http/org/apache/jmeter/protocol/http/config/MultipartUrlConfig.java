@@ -46,6 +46,7 @@ public class MultipartUrlConfig implements Serializable {
     /**
      * @deprecated only for use by unit tests
      */
+    @Deprecated
     public MultipartUrlConfig(){
         this(null);
     }

@@ -104,6 +104,7 @@ public class URLRewritingModifierGui extends AbstractPreProcessorGui {
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
 
@@ -114,6 +115,7 @@ public class URLRewritingModifierGui extends AbstractPreProcessorGui {
         shouldCache.setSelected(false);
     }
 
+    @Override
     public void configure(TestElement el) {
         URLRewritingModifier rewritingModifier = ((URLRewritingModifier) el);
         argumentName.setText(rewritingModifier.getArgumentName());

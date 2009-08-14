@@ -116,6 +116,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
     /**
      * The implementation calls sample() without any parameters
      */
+    @Override
     public SampleResult sample(Entry e) {
         return this.sample();
     }
@@ -126,6 +127,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
      *
      * @return the populated sample result
      */
+    @Override
     public SampleResult sample() {
         SampleResult result = new SampleResult();
         result.setSampleLabel(getName());

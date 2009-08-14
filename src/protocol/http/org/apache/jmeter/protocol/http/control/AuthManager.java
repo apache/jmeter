@@ -82,6 +82,7 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
         setProperty(new CollectionProperty(AUTH_LIST, new ArrayList()));
     }
 
+    @Override
     public void clear() {
         super.clear();
         setProperty(new CollectionProperty(AUTH_LIST, new ArrayList()));
@@ -195,6 +196,7 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
         return null;
     }
 
+    @Override
     public void addConfigElement(ConfigElement config) {
     }
 
@@ -206,6 +208,7 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
         getAuthObjects().addItem(new Authorization());
     }
 
+    @Override
     public boolean expectsModification() {
         return false;
     }

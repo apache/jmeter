@@ -42,11 +42,13 @@ public class LoopbackHTTPSocket extends Socket {
     // wrap read() methods to track output buffer
     static class LoopBackInputStream extends ByteArrayInputStream{
         LoopbackOutputStream os;
+        @Override
         public synchronized int read() {
             buf=os.getBuffer();   // make sure buffer details
             count=buf.length; // track the output
             return super.read();
         }
+        @Override
         public synchronized int read(byte[] b, int off, int len) {
             buf=os.getBuffer();
             count=buf.length;
@@ -80,11 +82,13 @@ public class LoopbackHTTPSocket extends Socket {
     }
 
     // Override so we can intercept the stream
+    @Override
     public OutputStream getOutputStream() throws IOException {
         return os;
     }
 
     // Override so we can intercept the stream
+    @Override
     public InputStream getInputStream() throws IOException {
         return new LoopBackInputStream(os);
     }

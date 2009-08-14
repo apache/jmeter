@@ -126,6 +126,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
      */
     private static final Map perConnCache = new LinkedHashMap(MAX_ENTRIES){
         private static final long serialVersionUID = 1L;
+        @Override
         protected boolean removeEldestEntry(java.util.Map.Entry arg0) {
             if (size() > MAX_ENTRIES) {
                 final Object value = arg0.getValue();
@@ -360,6 +361,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
         if (null == preparedStatementMap ) {
             // MRU PreparedStatements cache.
             preparedStatementMap = new LinkedHashMap(MAX_ENTRIES) {
+                @Override
                 protected boolean removeEldestEntry(java.util.Map.Entry arg0) {
                     final int theSize = size();
                     if (theSize > MAX_ENTRIES) {
@@ -501,6 +503,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
         return query;
     }
 
+    @Override
     public String toString() {
         StrBuilder sb = new StrBuilder(80);
         sb.append("["); // $NON-NLS-1$

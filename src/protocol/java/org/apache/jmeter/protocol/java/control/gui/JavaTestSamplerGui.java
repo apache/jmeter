@@ -77,6 +77,7 @@ public class JavaTestSamplerGui extends AbstractSamplerGui {
     }
 
     /* Overrides AbstractJMeterGuiComponent.configure(TestElement) */
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         javaPanel.configure(el);

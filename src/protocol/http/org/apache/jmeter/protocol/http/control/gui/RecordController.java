@@ -23,10 +23,12 @@ import org.apache.jmeter.protocol.http.control.RecordingController;
 import org.apache.jmeter.testelement.TestElement;
 
 public class RecordController extends LogicControllerGui {
+    @Override
     public String getLabelResource() {
         return "record_controller_title"; // $NON-NLS-1$
     }
 
+    @Override
     public TestElement createTestElement() {
         RecordingController con = new RecordingController();
         this.configureTestElement(con);

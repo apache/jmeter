@@ -92,6 +92,7 @@ public class HttpMirrorControl extends AbstractTestElement {
         }
     }
 
+    @Override
     public boolean canRemove() {
         return null == server;
     }

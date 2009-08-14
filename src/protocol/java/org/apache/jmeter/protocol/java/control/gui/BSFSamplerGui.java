@@ -49,6 +49,7 @@ public class BSFSamplerGui extends AbstractSamplerGui {
         init();
     }
 
+    @Override
     public void configure(TestElement element) {
         super.configure(element);
         BSFSampler sampler = (BSFSampler) element;
@@ -82,6 +83,7 @@ public class BSFSamplerGui extends AbstractSamplerGui {
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
 

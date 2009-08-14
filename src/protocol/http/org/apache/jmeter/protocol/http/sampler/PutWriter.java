@@ -41,6 +41,7 @@ public class PutWriter extends PostWriter {
         super(null);
     }
 
+    @Override
     public void setHeaders(URLConnection connection, HTTPSampler sampler) throws IOException {
         // Get the encoding to use for the request
         String contentEncoding = sampler.getContentEncoding();

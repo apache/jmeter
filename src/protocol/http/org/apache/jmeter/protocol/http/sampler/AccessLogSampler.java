@@ -178,6 +178,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
      *            ignored
      * @return the new sample
      */
+    @Override
     public SampleResult sample(Entry e) {
         return sampleWithParser();
     }
@@ -227,6 +228,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
     /**
      * @return Returns the domain.
      */
+    @Override
     public String getDomain() { // N.B. Must be in this class for the TestBean code to work
         return super.getDomain();
     }
@@ -235,6 +237,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
      * @param domain
      *            The domain to set.
      */
+    @Override
     public void setDomain(String domain) { // N.B. Must be in this class for the TestBean code to work
         super.setDomain(domain);
     }
@@ -291,6 +294,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
      *
      * @see java.lang.Object#clone()
      */
+    @Override
     public Object clone() {
         AccessLogSampler s = (AccessLogSampler) super.clone();
         if (started) {
@@ -323,6 +327,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
      *
      * @see org.apache.jmeter.testelement.TestListener#testEnded()
      */
+    @Override
     public void testEnded() {
         if (PARSER != null) {
             PARSER.close();
@@ -337,6 +342,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
      *
      * @see org.apache.jmeter.testelement.TestListener#testStarted()
      */
+    @Override
     public void testStarted() {
         started = true;
         super.testStarted();
@@ -345,6 +351,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
     /* (non-Javadoc)
      * @see org.apache.jmeter.testelement.AbstractTestElement#threadFinished()
      */
+    @Override
     public void threadFinished() {
         if(PARSER instanceof ThreadListener) {
             ((ThreadListener)PARSER).threadFinished();
