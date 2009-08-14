@@ -30,6 +30,7 @@ public class HTMLReportWriter extends AbstractReportWriter {
         super();
     }
 
+    @Override
     public ReportSummary writeReport(TestElement element) {
         return null;
     }

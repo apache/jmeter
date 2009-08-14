@@ -44,10 +44,12 @@ public class ReportCopy extends AbstractAction {
     /*
      * @see org.apache.jmeter.report.gui.action.Command#getActionNames()
      */
+    @Override
     public Set getActionNames() {
         return commands;
     }
 
+    @Override
     public void doAction(ActionEvent e) {
         ReportTreeListener treeListener = ReportGuiPackage.getInstance()
                 .getTreeListener();

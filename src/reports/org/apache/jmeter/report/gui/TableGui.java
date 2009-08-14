@@ -55,6 +55,7 @@ public class TableGui extends AbstractReportGui implements ChangeListener {
         init();
     }
 
+    @Override
     public String getLabelResource() {
         return "report_table";
     }
@@ -97,6 +98,7 @@ public class TableGui extends AbstractReportGui implements ChangeListener {
         add(options,BorderLayout.CENTER);
     }
 
+    @Override
     public JPopupMenu createPopupMenu() {
         JPopupMenu pop = new JPopupMenu();
         ReportMenuFactory.addFileMenu(pop);
@@ -124,6 +126,7 @@ public class TableGui extends AbstractReportGui implements ChangeListener {
         tb.setTransferRate(String.valueOf(transferRateCheck.isSelected()));
     }
 
+    @Override
     public void configure(TestElement element) {
         super.configure(element);
         Table tb = (Table)element;

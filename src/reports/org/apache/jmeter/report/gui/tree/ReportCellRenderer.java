@@ -28,6 +28,7 @@ public class ReportCellRenderer extends DefaultTreeCellRenderer {
     public ReportCellRenderer() {
     }
 
+    @Override
     public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded,
             boolean leaf, int row, boolean p_hasFocus) {
         super.getTreeCellRendererComponent(tree, ((ReportTreeNode) value).getName(), sel, expanded, leaf, row,

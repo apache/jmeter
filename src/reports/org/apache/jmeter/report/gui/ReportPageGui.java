@@ -88,6 +88,7 @@ public class ReportPageGui extends AbstractReportGui {
         add(options,BorderLayout.CENTER);
     }
 
+    @Override
     public JPopupMenu createPopupMenu() {
         JPopupMenu pop = new JPopupMenu();
         JMenu addMenu = new JMenu(JMeterUtils.getResString("Add"));
@@ -129,6 +130,7 @@ public class ReportPageGui extends AbstractReportGui {
         page.setTitle(pageTitle.getText());
     }
 
+    @Override
     public void configure(TestElement element) {
         super.configure(element);
         ReportPage page = (ReportPage)element;
