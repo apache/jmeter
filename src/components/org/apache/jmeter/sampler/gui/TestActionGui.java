@@ -89,6 +89,7 @@ public class TestActionGui extends AbstractSamplerGui {
         return "test_action_title"; // $NON-NLS-1$
     }
 
+    @Override
     public void configure(TestElement element) {
         super.configure(element);
         TestAction ta = (TestAction) element;
@@ -137,6 +138,7 @@ public class TestActionGui extends AbstractSamplerGui {
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
 

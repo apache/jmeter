@@ -179,6 +179,7 @@ public class AssertionGui extends AbstractAssertionGui {
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
         
@@ -204,6 +205,7 @@ public class AssertionGui extends AbstractAssertionGui {
      * @param el
      *            the TestElement to configure
      */
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         ResponseAssertion model = (ResponseAssertion) el;

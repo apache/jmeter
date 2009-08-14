@@ -126,6 +126,7 @@ public class LineGraph extends JPanel {
         this.height = h;
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         // reset the paint counter
         this.paint_counter = -1;

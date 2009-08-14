@@ -30,6 +30,7 @@ public class RandomController extends InterleaveControl implements Serializable 
     /**
      * @see org.apache.jmeter.control.GenericController#resetCurrent()
      */
+    @Override
     protected void resetCurrent() {
         if (getSubControllers().size() > 0) {
             current = rand.nextInt(this.getSubControllers().size());
@@ -41,6 +42,7 @@ public class RandomController extends InterleaveControl implements Serializable 
     /**
      * @see org.apache.jmeter.control.GenericController#incrementCurrent()
      */
+    @Override
     protected void incrementCurrent() {
         super.incrementCurrent();
         current = rand.nextInt(this.getSubControllers().size());

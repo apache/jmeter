@@ -41,6 +41,7 @@ public class BeanShellPreProcessor extends BeanShellTestElement
     // can be specified in jmeter.properties
     private static final String INIT_FILE = "beanshell.preprocessor.init"; //$NON-NLS-1$
 
+    @Override
     protected String getInitFileProperty() {
         return INIT_FILE;
     }

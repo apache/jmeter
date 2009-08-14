@@ -52,6 +52,7 @@ public class IncludeControllerGui extends AbstractControllerGui
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(TestElement)
      */
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         IncludeController controller = (IncludeController) el;
@@ -83,11 +84,13 @@ public class IncludeControllerGui extends AbstractControllerGui
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
         includePanel.clearGui();
     }
 
+    @Override
     public JPopupMenu createPopupMenu() {
         JPopupMenu menu = new JPopupMenu();
         JMenu addMenu = MenuFactory.makeMenus(new String[] {

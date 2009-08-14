@@ -32,6 +32,7 @@ public class MailerResultCollector extends ResultCollector implements Serializab
         setProperty(new TestElementProperty(MAILER_MODEL, new MailerModel()));
     }
 
+    @Override
     public void clear() {
         super.clear();
         setProperty(new TestElementProperty(MAILER_MODEL, new MailerModel()));
@@ -42,6 +43,7 @@ public class MailerResultCollector extends ResultCollector implements Serializab
      *
      * @see SampleListener#sampleOccurred(SampleEvent)
      */
+    @Override
     public void sampleOccurred(SampleEvent e) {
         super.sampleOccurred(e);
         getMailerModel().add(e.getResult());

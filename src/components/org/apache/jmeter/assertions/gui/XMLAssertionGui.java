@@ -57,6 +57,7 @@ public class XMLAssertionGui extends AbstractAssertionGui {
      * 
      * @param el
      */
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
     }

@@ -98,6 +98,7 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
      * communication if our synctimers are to be able to determine when to block
      * and when to release.
      */
+    @Override
     public Object clone() {
         SyncTimer newTimer = (SyncTimer) super.clone();
         newTimer.timerCounter = timerCounter;

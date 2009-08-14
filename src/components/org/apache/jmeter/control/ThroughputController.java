@@ -181,6 +181,7 @@ public class ThroughputController extends GenericController implements Serializa
     /**
      * @see org.apache.jmeter.control.Controller#next()
      */
+    @Override
     public Sampler next() {
         if (runThisTime) {
             return super.next();
@@ -201,6 +202,7 @@ public class ThroughputController extends GenericController implements Serializa
     /**
      * @see org.apache.jmeter.control.Controller#isDone()
      */
+    @Override
     public boolean isDone() {
         if (subControllersAndSamplers.size() == 0) {
             return true;
@@ -212,6 +214,7 @@ public class ThroughputController extends GenericController implements Serializa
         }
     }
 
+    @Override
     public Object clone() {
         ThroughputController clone = (ThroughputController) super.clone();
         clone.numExecutions = numExecutions;

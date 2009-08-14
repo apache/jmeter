@@ -25,6 +25,7 @@ import org.apache.jmeter.testelement.TestElement;
  */
 public class RandomOrderControllerGui extends LogicControllerGui {
 
+    @Override
     public String getLabelResource() {
         return "random_order_control_title"; // $NON-NLS-1$
     }
@@ -34,6 +35,7 @@ public class RandomOrderControllerGui extends LogicControllerGui {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
      */
+    @Override
     public TestElement createTestElement() {
         RandomOrderController ic = new RandomOrderController();
         modifyTestElement(ic);
@@ -45,6 +47,7 @@ public class RandomOrderControllerGui extends LogicControllerGui {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(org.apache.jmeter.testelement.TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement ic) {
         configureTestElement(ic);
     }

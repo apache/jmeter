@@ -92,6 +92,7 @@ public class ConstantTimerGui extends AbstractTimerGui {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(TestElement)
      */
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         delayField.setText(((ConstantTimer) el).getDelay());
@@ -122,6 +123,7 @@ public class ConstantTimerGui extends AbstractTimerGui {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#clearGui()
      */
+    @Override
     public void clearGui() {
         delayField.setText(DEFAULT_DELAY);
         super.clearGui();

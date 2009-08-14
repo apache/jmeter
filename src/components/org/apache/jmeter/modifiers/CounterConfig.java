@@ -58,6 +58,7 @@ public class CounterConfig extends AbstractTestElement
 
     private void init() {
         perTheadNumber = new ThreadLocal() {
+            @Override
             protected synchronized Object initialValue() {
                 return new Long(getStart());
             }

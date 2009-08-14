@@ -72,12 +72,14 @@ public class DurationAssertionGui extends AbstractAssertionGui {
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
         
         duration.setText(""); //$NON-NLS-1$
     }    
 
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         if (el instanceof DurationAssertion){

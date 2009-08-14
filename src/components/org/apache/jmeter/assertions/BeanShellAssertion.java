@@ -48,22 +48,27 @@ public class BeanShellAssertion extends BeanShellTestElement implements Assertio
     // can be specified in jmeter.properties
     public static final String INIT_FILE = "beanshell.assertion.init"; //$NON-NLS-1$
 
+    @Override
     protected String getInitFileProperty() {
         return INIT_FILE;
     }
 
+    @Override
     public String getScript() {
         return getPropertyAsString(SCRIPT);
     }
 
+    @Override
     public String getFilename() {
         return getPropertyAsString(FILENAME);
     }
 
+    @Override
     public String getParameters() {
         return getPropertyAsString(PARAMETERS);
     }
     
+    @Override
     public boolean isResetInterpreter() {
         return getPropertyAsBoolean(RESET_INTERPRETER);
     }
