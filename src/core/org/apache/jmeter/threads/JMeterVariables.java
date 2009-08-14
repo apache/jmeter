@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -31,7 +32,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * These are similar to properties, but they are local to a single thread.
  */
 public class JMeterVariables {
-    private Map variables = new HashMap();
+    private final Map<String, Object> variables = new HashMap<String, Object>();
 
     private int iteration = 0;
 
@@ -87,7 +88,7 @@ public class JMeterVariables {
         variables.put(key, value);
     }
 
-    public void putAll(Map vars) {
+    public void putAll(Map<String, ?> vars) {
         variables.putAll(vars);
     }
 
@@ -107,12 +108,12 @@ public class JMeterVariables {
         return variables.get(key);
     }
 
-    public Iterator getIterator(){
+    public Iterator<Entry<String, Object>> getIterator(){
         return Collections.unmodifiableMap(variables).entrySet().iterator() ;
     }
 
     // Used by DebugSampler
-    public Set entrySet(){
+    public Set<Entry<String, Object>> entrySet(){
         return Collections.unmodifiableMap(variables).entrySet();
     }
 }
