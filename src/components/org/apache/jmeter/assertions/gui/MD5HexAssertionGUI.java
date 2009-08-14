@@ -67,6 +67,7 @@ public class MD5HexAssertionGUI extends AbstractAssertionGui {
 
     }
 
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         MD5HexAssertion assertion = (MD5HexAssertion) el;
@@ -104,6 +105,7 @@ public class MD5HexAssertionGUI extends AbstractAssertionGui {
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
         

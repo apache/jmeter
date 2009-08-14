@@ -40,6 +40,7 @@ public class XMLAssertion extends AbstractTestElement implements Serializable, A
 
     // one builder for all requests in a thread
     private static final ThreadLocal myBuilder = new ThreadLocal() {
+        @Override
         protected Object initialValue() {
             return new SAXBuilder();
         }

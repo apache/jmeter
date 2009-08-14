@@ -97,6 +97,7 @@ public class ForeachControlPanel extends AbstractControllerGui {
      * @param element
      *            the TestElement to configure
      */
+    @Override
     public void configure(TestElement element) {
         super.configure(element);
         inputVal.setText(((ForeachController) element).getInputValString());
@@ -132,6 +133,7 @@ public class ForeachControlPanel extends AbstractControllerGui {
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
 

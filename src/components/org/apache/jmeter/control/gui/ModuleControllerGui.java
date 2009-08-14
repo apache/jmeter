@@ -77,6 +77,7 @@ public class ModuleControllerGui extends AbstractControllerGui
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(TestElement)
      */
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         ModuleController controller = (ModuleController) el;
@@ -141,6 +142,7 @@ public class ModuleControllerGui extends AbstractControllerGui
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
 
@@ -149,6 +151,7 @@ public class ModuleControllerGui extends AbstractControllerGui
     }
 
 
+    @Override
     public JPopupMenu createPopupMenu() {
         JPopupMenu menu = new JPopupMenu();
         JMenu addMenu = MenuFactory.makeMenus(
@@ -262,6 +265,7 @@ class TreeNodeWrapper {
         return tn;
     }
 
+    @Override
     public String toString() {
         return label;
     }

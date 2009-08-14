@@ -120,6 +120,7 @@ public class AxisGraph extends JPanel {
         this.height = h;
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         if (data != null && this.title != null && this.xAxisLabels != null &&
                 this.xAxisTitle != null && this.yAxisLabel != null &&

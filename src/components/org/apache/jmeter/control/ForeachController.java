@@ -87,6 +87,7 @@ public class ForeachController extends GenericController implements Serializable
      *
      * @see org.apache.jmeter.control.Controller#isDone()
      */
+    @Override
     public boolean isDone() {
         JMeterContext context = getThreadContext();
         String inputVariable = getInputVal() + getSeparator() + (loopCount + 1);
@@ -114,6 +115,7 @@ public class ForeachController extends GenericController implements Serializable
     }
 
     // Prevent entry if nothing to do
+    @Override
     public Sampler next() {
         if (emptyList()) {
             reInitialize();
@@ -145,6 +147,7 @@ public class ForeachController extends GenericController implements Serializable
      *
      * @see org.apache.jmeter.control.GenericController#nextIsNull()
      */
+    @Override
     protected Sampler nextIsNull() throws NextIsNullException {
         reInitialize();
         if (endOfArguments()) {
@@ -168,6 +171,7 @@ public class ForeachController extends GenericController implements Serializable
      *
      * @see org.apache.jmeter.control.GenericController#getIterCount()
      */
+    @Override
     protected int getIterCount() {
         return loopCount + 1;
     }
@@ -177,6 +181,7 @@ public class ForeachController extends GenericController implements Serializable
      *
      * @see org.apache.jmeter.control.GenericController#reInitialize()
      */
+    @Override
     protected void reInitialize() {
         setFirst(true);
         resetCurrent();

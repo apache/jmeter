@@ -100,6 +100,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
         setProperty(new CollectionProperty(TEST_STRINGS, new ArrayList()));
     }
 
+    @Override
     public void clear() {
         super.clear();
         setProperty(new CollectionProperty(TEST_STRINGS, new ArrayList()));

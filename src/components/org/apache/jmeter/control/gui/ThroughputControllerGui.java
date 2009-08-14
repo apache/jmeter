@@ -93,6 +93,7 @@ public class ThroughputControllerGui extends AbstractControllerGui {
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
         styleBox.setSelectedIndex(0);
@@ -100,6 +101,7 @@ public class ThroughputControllerGui extends AbstractControllerGui {
         perthread.setSelected(true);
     }
 
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         if (((ThroughputController) el).getStyle() == ThroughputController.BYNUMBER) {

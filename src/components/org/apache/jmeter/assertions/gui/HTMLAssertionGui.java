@@ -147,6 +147,7 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListene
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
 
@@ -165,6 +166,7 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListene
      * 
      * @param inElement
      */
+    @Override
     public void configure(TestElement inElement) {
         super.configure(inElement);
         HTMLAssertion lAssertion = (HTMLAssertion) inElement;

@@ -188,6 +188,7 @@ public class Graph extends JComponent implements Scrollable, Clearable {
         });
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 

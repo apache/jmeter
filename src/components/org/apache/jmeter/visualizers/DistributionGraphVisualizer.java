@@ -116,6 +116,7 @@ public class DistributionGraphVisualizer extends AbstractVisualizer implements I
         repaint();
     }
 
+    @Override
     public String toString() {
         return "Show the samples in a distribution graph";
     }
@@ -220,6 +221,7 @@ public class DistributionGraphVisualizer extends AbstractVisualizer implements I
      * internal component. The Action class can then print or save the graphics
      * to a file.
      */
+    @Override
     public JComponent getPrintableComponent() {
         return this.graphPanel;
     }

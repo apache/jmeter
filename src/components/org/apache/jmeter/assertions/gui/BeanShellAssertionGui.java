@@ -47,6 +47,7 @@ public class BeanShellAssertionGui extends AbstractAssertionGui {
         init();
     }
 
+    @Override
     public void configure(TestElement element) {
         scriptField.setText(element.getPropertyAsString(BeanShellAssertion.SCRIPT));
         filename.setText(element.getPropertyAsString(BeanShellAssertion.FILENAME));
@@ -154,6 +155,7 @@ public class BeanShellAssertionGui extends AbstractAssertionGui {
         return panel;
     }
 
+    @Override
     public void clearGui() {
         super.clearGui();
         filename.setText(""); // $NON-NLS-1$
