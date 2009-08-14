@@ -43,6 +43,7 @@ public class TestJexlFunction extends JMeterTestCase {
         super(name);
     }
 
+    @Override
     public void setUp() {
         function = new JexlFunction();
         result = new SampleResult();

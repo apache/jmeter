@@ -32,6 +32,7 @@ public final class HTTPNullSampler extends HTTPSamplerBase {
      * @see org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase#sample(java.net.URL,
      *      java.lang.String, boolean, int)
      */
+    @Override
     protected HTTPSampleResult sample(URL u, String s, boolean b, int i) {
         throw new UnsupportedOperationException("For test purposes only");
     }

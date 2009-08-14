@@ -46,6 +46,7 @@ public class TestTimeFunction extends JMeterTestCase {
             super(name);
         }
 
+        @Override
         public void setUp() {
             jmctx = JMeterContextService.getContext();
             vars = new JMeterVariables();

@@ -40,6 +40,7 @@ public class TestURLRewritingModifier extends JMeterTestCase {
             super(name);
         }
 
+        @Override
         public void setUp() {
             context = JMeterContextService.getContext();
             mod = new URLRewritingModifier();

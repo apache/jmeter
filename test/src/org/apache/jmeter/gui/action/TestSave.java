@@ -30,6 +30,7 @@ public class TestSave extends junit.framework.TestCase {
             super(name);
         }
 
+        @Override
         public void setUp() {
             save = new Save();
         }
