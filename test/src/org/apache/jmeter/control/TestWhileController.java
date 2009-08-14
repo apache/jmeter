@@ -42,6 +42,7 @@ public class TestWhileController extends JMeterTestCase {
         private JMeterContext jmctx;
         private JMeterVariables jmvars;
         
+        @Override
         public void setUp() {
             jmctx = JMeterContextService.getContext();
             jmctx.setVariables(new JMeterVariables());

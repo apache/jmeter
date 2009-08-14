@@ -61,6 +61,7 @@ public class TestFunctor extends JMeterTestCase {
         Test1a(String s){
             super("1a:"+s);
         }
+        @Override
         public String getName(){
             return super.getName()+".";
         }
@@ -85,6 +86,7 @@ public class TestFunctor extends JMeterTestCase {
         super(arg0);
     }
     
+    @Override
     public void setUp(){
         LoggingManager.setPriority("FATAL_ERROR",LoggingManager.removePrefix(Functor.class.getName()));     
     }

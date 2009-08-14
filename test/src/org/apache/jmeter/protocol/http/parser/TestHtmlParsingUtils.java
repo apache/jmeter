@@ -30,6 +30,7 @@ public final class TestHtmlParsingUtils extends JMeterTestCase {
             super(name);
         }
 
+        @Override
         protected void setUp() {
         }
 

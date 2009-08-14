@@ -45,6 +45,7 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
         super(arg0);
     }
 
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         jmctx = JMeterContextService.getContext();
@@ -58,6 +59,7 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
         // LoggingManager.setPriority("DEBUG","jmeter");
     }
 
+    @Override
     protected void tearDown() throws Exception {
         super.tearDown();
     }

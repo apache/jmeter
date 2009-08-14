@@ -680,6 +680,7 @@ public final class ClutilTestCase extends TestCase {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { YOU };
 
         final ParserControl control = new AbstractParserControl() {
+            @Override
             public boolean isFinished(int lastOptionCode) {
                 return (lastOptionCode == YOU_OPT);
             }
@@ -702,6 +703,7 @@ public final class ClutilTestCase extends TestCase {
         final CLOptionDescriptor[] options2 = new CLOptionDescriptor[] { ALL, CLEAR1, CLEAR2, CLEAR3, CLEAR5 };
 
         final ParserControl control1 = new AbstractParserControl() {
+            @Override
             public boolean isFinished(int lastOptionCode) {
                 return (lastOptionCode == YOU_OPT);
             }
@@ -740,6 +742,7 @@ public final class ClutilTestCase extends TestCase {
         final CLOptionDescriptor[] options2 = new CLOptionDescriptor[] {};
 
         final ParserControl control1 = new AbstractParserControl() {
+            @Override
             public boolean isFinished(final int lastOptionCode) {
                 return (lastOptionCode == CLEAR1_OPT);
             }

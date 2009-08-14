@@ -41,13 +41,16 @@ public final class NullURLConnection extends URLConnection {
         super(url);
     }
 
+    @Override
     public void connect() {
     }
 
+    @Override
     public void setRequestProperty(String name, String value) {
         data.put(name, value);
     }
 
+    @Override
     public String getRequestProperty(String name) {
         return (String) data.get(name);
     }

@@ -46,6 +46,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         super(arg0);
     }
 
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         jmctx = JMeterContextService.getContext();

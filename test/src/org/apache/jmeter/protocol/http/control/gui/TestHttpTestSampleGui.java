@@ -29,6 +29,7 @@ public class TestHttpTestSampleGui extends TestCase {
             super(name);
         }
 
+        @Override
         public void setUp() {
             gui = new HttpTestSampleGui();
         }
