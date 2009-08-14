@@ -61,7 +61,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
     @Override
     public Object clone() {
         try {
-            TestElement clonedElement = (TestElement) this.getClass().newInstance();
+            TestElement clonedElement = this.getClass().newInstance();
 
             PropertyIterator iter = propertyIterator();
             while (iter.hasNext()) {
