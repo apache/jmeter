@@ -55,6 +55,7 @@ public class HTTPFileArgs extends ConfigTestElement implements Serializable {
     /**
      * Clear the files.
      */
+    @Override
     public void clear() {
         super.clear();
         setProperty(new CollectionProperty(HTTP_FILE_ARGS, new ArrayList()));
@@ -133,6 +134,7 @@ public class HTTPFileArgs extends ConfigTestElement implements Serializable {
      *
      * @return the string representation of the files
      */
+    @Override
     public String toString() {
         StringBuffer str = new StringBuffer();
         PropertyIterator iter = getHTTPFileArgsCollection().iterator();

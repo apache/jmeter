@@ -95,6 +95,7 @@ public class AjpSampler extends HTTPSamplerBase {
     public AjpSampler() {
     }
 
+    @Override
     protected HTTPSampleResult sample(URL url, 
                        String method,
                        boolean frd,
@@ -118,6 +119,7 @@ public class AjpSampler extends HTTPSamplerBase {
         }
     }
 
+    @Override
     public void threadFinished() {
         if(channel != null) {
             try {

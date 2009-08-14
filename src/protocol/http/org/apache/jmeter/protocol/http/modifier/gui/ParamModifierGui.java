@@ -83,6 +83,7 @@ public class ParamModifierGui extends AbstractPreProcessorGui implements FocusLi
         return "html_parameter_mask"; //$NON-NLS-1$
     }
 
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         ParamModifier model = (ParamModifier) el;
@@ -117,6 +118,7 @@ public class ParamModifierGui extends AbstractPreProcessorGui implements FocusLi
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
 

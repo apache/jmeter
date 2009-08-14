@@ -50,6 +50,7 @@ public class BeanShellSampler extends BeanShellTestElement implements Sampler
 
     public static final String RESET_INTERPRETER = "BeanShellSampler.resetInterpreter"; //$NON-NLS-1$
 
+    @Override
     protected String getInitFileProperty() {
         return INIT_FILE;
     }
@@ -64,18 +65,22 @@ public class BeanShellSampler extends BeanShellTestElement implements Sampler
         return getName();
     }
 
+    @Override
     public String getScript() {
         return this.getPropertyAsString(SCRIPT);
     }
 
+    @Override
     public String getFilename() {
         return getPropertyAsString(FILENAME);
     }
 
+    @Override
     public String getParameters() {
         return getPropertyAsString(PARAMETERS);
     }
 
+    @Override
     public boolean isResetInterpreter() {
         return getPropertyAsBoolean(RESET_INTERPRETER);
     }

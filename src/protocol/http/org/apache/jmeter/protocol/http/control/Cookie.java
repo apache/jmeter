@@ -212,6 +212,7 @@ public class Cookie extends AbstractTestElement implements Serializable {
     /**
      * creates a string representation of this cookie
      */
+    @Override
     public String toString() {
         StringBuffer sb=new StringBuffer(80);
         sb.append(getDomain());

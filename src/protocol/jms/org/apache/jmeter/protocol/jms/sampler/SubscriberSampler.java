@@ -126,6 +126,7 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
      *
      * @return the appropriate sample result
      */
+    @Override
     public SampleResult sample() {
         if (this.getClientChoice().equals(JMSSubscriberGui.RECEIVE_RSC)) {
             return sampleWithReceive();

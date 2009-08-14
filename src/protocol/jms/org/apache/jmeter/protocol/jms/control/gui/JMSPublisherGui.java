@@ -215,6 +215,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements java.awt.even
         this.add(mainPanel);
     }
 
+    @Override
     public void clearGui(){
         super.clearGui();
         useProperties.setSelected(false);
@@ -237,6 +238,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements java.awt.even
     /**
      * the implementation loads the URL and the soap action for the request.
      */
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         PublisherSampler sampler = (PublisherSampler) el;

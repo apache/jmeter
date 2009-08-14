@@ -103,6 +103,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
 
@@ -111,6 +112,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
         saveButton.setEnabled(false);
     }
 
+    @Override
     public void configure(TestElement el) {
         headerManager.clear();
         super.configure(el);
@@ -283,11 +285,13 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
             manager.add();
         }
 
+        @Override
         public boolean isCellEditable(int row, int column) {
             // all table cells are editable
             return true;
         }
 
+        @Override
         public Class getColumnClass(int column) {
             return getValueAt(0, column).getClass();
         }
@@ -306,6 +310,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
         /**
          * Required by table model interface.
          */
+        @Override
         public String getColumnName(int column) {
             return manager.getColumnName(column);
         }
@@ -326,6 +331,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
         /**
          * Required by table model interface.
          */
+        @Override
         public void setValueAt(Object value, int row, int column) {
             Header header = manager.getHeader(row);
 

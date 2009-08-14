@@ -798,6 +798,7 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
      *            prevent infinite recursion.
      * @return results of the sampling
      */
+    @Override
     protected HTTPSampleResult sample(URL url, String method, boolean areFollowingRedirect, int frameDepth) {
 
         String urlStr = url.toString();
@@ -1048,6 +1049,7 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
             this.hideFileData = hideFileData;
         }
 
+        @Override
         protected void sendData(OutputStream out) throws IOException {
             // Check if we should send only placeholder text for the
             // file content, or the real file content
@@ -1081,6 +1083,7 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
     }
 
 
+    @Override
     public void threadStarted() {
         log.debug("Thread Started");
 
@@ -1088,6 +1091,7 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
         httpClients.set ( new HashMap() );
     }
 
+    @Override
     public void threadFinished() {
         log.debug("Thread Finished");
 

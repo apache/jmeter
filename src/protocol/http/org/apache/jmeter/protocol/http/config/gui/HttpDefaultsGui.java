@@ -76,12 +76,14 @@ public class HttpDefaultsGui extends AbstractConfigGui {
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
         urlConfig.clear();
         imageParser.setSelected(false);
     }
 
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         urlConfig.configure(el);
@@ -101,6 +103,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         add(imageParser, BorderLayout.SOUTH);
     }
 
+    @Override
     public Dimension getPreferredSize() {
         return getMinimumSize();
     }

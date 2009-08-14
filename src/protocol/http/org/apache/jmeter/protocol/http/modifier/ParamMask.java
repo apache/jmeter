@@ -225,6 +225,7 @@ public class ParamMask extends AbstractTestElement implements Serializable {
      *
      * @return a <code>String</code> representing the object
      */
+    @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append("-------------------------------\n");

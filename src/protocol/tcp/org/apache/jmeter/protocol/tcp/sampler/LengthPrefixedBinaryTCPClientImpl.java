@@ -121,6 +121,7 @@ public class LengthPrefixedBinaryTCPClientImpl extends TCPClientDecorator {
      * 
      * @return Returns the eolByte.
      */
+    @Override
     public byte getEolByte() {
         return tcpClient.getEolByte();
     }
@@ -129,6 +130,7 @@ public class LengthPrefixedBinaryTCPClientImpl extends TCPClientDecorator {
      * @param eolInt
      *            The eolByte to set.
      */
+    @Override
     public void setEolByte(int eolInt) {
         throw new UnsupportedOperationException("Cannot set eomByte for prefixed messages");
     }

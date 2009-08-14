@@ -28,6 +28,7 @@ public class AjpSamplerGui extends HttpTestSampleGui {
         super();
     }
 
+    @Override
     public TestElement createTestElement() {
         AjpSampler sampler = new AjpSampler();
         modifyTestElement(sampler);
@@ -35,10 +36,12 @@ public class AjpSamplerGui extends HttpTestSampleGui {
     }
 
     // Use this instead of getLabelResource() otherwise getDocAnchor() below does not work
+    @Override
     public String getStaticLabel() {
         return JMeterUtils.getResString("ajp_sampler_title"); // $NON-NLS-1$
     }
     
+    @Override
     public String getDocAnchor() {// reuse documentation
         return super.getStaticLabel().replace(' ', '_'); //$NON-NLS-1$ //$NON-NLS-2$
     }

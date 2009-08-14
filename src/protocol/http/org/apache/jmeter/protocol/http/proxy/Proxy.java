@@ -191,6 +191,7 @@ public class Proxy extends Thread {
     /**
      * Main processing method for the Proxy object
      */
+    @Override
     public void run() {
         // Check which HTTPSampler class we should use
         String httpSamplerName = HTTPSamplerFactory.DEFAULT_CLASSNAME;

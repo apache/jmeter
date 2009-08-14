@@ -44,6 +44,7 @@ import org.apache.log.Logger;
  * This test element is deprecated. Test plans should use User Parameters instead.
  * @deprecated
  */
+@Deprecated
 public class UserParameterModifier extends ConfigTestElement implements PreProcessor, Serializable, TestListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -156,6 +157,7 @@ public class UserParameterModifier extends ConfigTestElement implements PreProce
      *
      * @see java.lang.Object#clone()
      */
+    @Override
     public Object clone() {
         UserParameterModifier clone = (UserParameterModifier) super.clone();
         clone.allAvailableUsers = allAvailableUsers;

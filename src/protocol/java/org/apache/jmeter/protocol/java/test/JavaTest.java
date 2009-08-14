@@ -186,6 +186,7 @@ public class JavaTest extends AbstractJavaSamplerClient implements Serializable 
      *            the context to run with. This provides access to
      *            initialization parameters.
      */
+    @Override
     public void setupTest(JavaSamplerContext context) {
         getLogger().debug(whoAmI() + "\tsetupTest()");
         listParameters(context);
@@ -203,6 +204,7 @@ public class JavaTest extends AbstractJavaSamplerClient implements Serializable 
      * @return a specification of the parameters used by this test which should
      *         be listed in the GUI, or null if no parameters should be listed.
      */
+    @Override
     public Arguments getDefaultParameters() {
         Arguments params = new Arguments();
         params.addArgument(SLEEP_NAME, String.valueOf(DEFAULT_SLEEP_TIME));
@@ -317,6 +319,7 @@ public class JavaTest extends AbstractJavaSamplerClient implements Serializable 
      *            the context to run with. This provides access to
      *            initialization parameters.
      */
+    @Override
     public void teardownTest(JavaSamplerContext context) {
         getLogger().debug(whoAmI() + "\tteardownTest()");
         listParameters(context);

@@ -258,6 +258,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * The name parameter to be applied to the file
      * @deprecated use setHTTPFiles() instead
      */
+    @Deprecated
     public void setFileField(String value) {
         fileList = null; // Force rebuild
         setFileFieldProperty(value);
@@ -274,6 +275,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * The name parameter to be applied to the file
      * @deprecated Use getHTTPFiles() array instead
      */
+    @Deprecated
     public String getFileField() {
         checkCount("getFileField");
         return getPropertyAsString(FILE_FIELD);
@@ -283,6 +285,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * The actual name of the file to POST
      * @deprecated use setHTTPFiles() instead
      */
+    @Deprecated
     public void setFilename(String value) {
         fileList = null; // Force rebuild
         setFilenameProperty(value);
@@ -299,6 +302,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * The actual name of the file to POST
      * @deprecated Use getHTTPFiles() array instead
      */
+    @Deprecated
     public String getFilename() {
         checkCount("getFilename");
         return getPropertyAsString(FILE_NAME);
@@ -309,6 +313,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @deprecated use setHTTPFiles() instead
      * @param value
      */
+    @Deprecated
     public void setMimetype(String value) {
         fileList = null; // Force rebuild
         setMimetypeProperty(value);
@@ -324,6 +329,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     /**
      * @deprecated Use getHTTPFiles() array instead
      */
+    @Deprecated
     public String getMimetype() {
         checkCount("getMimetype");
         return getPropertyAsString(MIMETYPE);
@@ -603,6 +609,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         return getArguments().getArgumentCount() > 0;
     }
 
+    @Override
     public void addTestElement(TestElement el) {
         if (el instanceof CookieManager) {
             setCookieManager((CookieManager) el);
@@ -997,6 +1004,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         parseArguments(queryString, null);
     }
 
+    @Override
     public String toString() {
         try {
             StringBuffer stringBuffer = new StringBuffer();
@@ -1279,6 +1287,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      *
      * @see java.lang.Object#clone()
      */
+    @Override
     public Object clone() {
         HTTPSamplerBase base = (HTTPSamplerBase) super.clone();
         base.dynamicPath = dynamicPath;

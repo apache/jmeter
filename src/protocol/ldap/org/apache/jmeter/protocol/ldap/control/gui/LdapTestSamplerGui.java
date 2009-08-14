@@ -48,6 +48,7 @@ public class LdapTestSamplerGui extends AbstractSamplerGui {
      * @param element
      *            the TestElement to configure
      */
+    @Override
     public void configure(TestElement element) {
         super.configure(element);
         loginPanel.configure(element);
@@ -75,6 +76,7 @@ public class LdapTestSamplerGui extends AbstractSamplerGui {
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
 
