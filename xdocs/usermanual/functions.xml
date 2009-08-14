@@ -93,6 +93,7 @@ and need to be referenced using the __P or __property function.
         <tr><td>Information</td><td> <a href="#__log">log</a></td><td>log (or display) a message (and return the value)</td></tr>
         <tr><td>Information</td><td> <a href="#__logn">logn</a></td><td>log (or display) a message (empty return value)</td></tr>
         <tr><td>Input</td><td> <a href="#__StringFromFile">StringFromFile</a></td><td>read a line from a file</td></tr>
+        <tr><td>Input</td><td> <a href="#__FileToString">FileToString</a></td><td>read an entire file</td></tr>
         <tr><td>Input</td><td> <a href="#__CSVRead">CSVRead</a></td><td>read from CSV delimited file</td></tr>
         <tr><td>Input</td><td> <a href="#__XPath">XPath</a></td><td>Use an XPath expression to read from a file</td></tr>
         <tr><td>Calculation</td><td> <a href="#__counter">counter</a></td><td>generate an incrementing number</td></tr>
@@ -1091,6 +1092,28 @@ becomes:
 </component>
 
 </subsection>
+
+<component index="&sect-num;.5.26" name="__FileToString">
+
+<description>
+    <p>
+    The FileToString function can be used to read an entire file.
+    Each time it is called it reads the entire file.
+    </p> 
+    <p>If an error occurs opening or reading the file, then the function returns the string "**ERR**"</p>
+</description>
+
+<properties>
+        <property name="File Name" required="Yes">Path to the file name.
+            (The path can be relative to the JMeter launch directory)
+        </property>
+        <property name="Variable Name" required="No">
+A reference name - refName - for reusing the value created by this function. Stored values are of the form ${refName}.
+        </property>
+</properties>
+<p>The file name parameter and reference name parameter (if supplied) are resolved every time the function is executed.</p>
+</component>
+
 
 <subsection name="&sect-num;.6 Pre-defined Variables" anchor="predefinedvars">
 <p>
