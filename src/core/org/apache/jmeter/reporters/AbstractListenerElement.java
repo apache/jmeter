@@ -45,6 +45,7 @@ public abstract class AbstractListenerElement extends AbstractTestElement {
         listener = new WeakReference(vis);
     }
 
+    @Override
     public Object clone() {
         AbstractListenerElement clone = (AbstractListenerElement) super.clone();
 

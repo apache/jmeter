@@ -51,6 +51,7 @@ public class ResultActionGui extends AbstractPostProcessorGui {
     /**
      * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(TestElement)
      */
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         errorPanel.configure(((OnErrorTestElement) el).getErrorAction());
@@ -78,6 +79,7 @@ public class ResultActionGui extends AbstractPostProcessorGui {
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
 

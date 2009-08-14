@@ -164,6 +164,7 @@ public class HttpSSLProtocolSocketFactory
     /**
      * @see SecureProtocolSocketFactory#createSocket(java.lang.String,int)
      */
+    @Override
     public Socket createSocket(String host, int port)
         throws IOException, UnknownHostException {
         SSLSocketFactory sslfac = getSSLSocketFactory();
@@ -178,6 +179,7 @@ public class HttpSSLProtocolSocketFactory
     /**
      * @see javax.net.SocketFactory#createSocket()
      */
+    @Override
     public Socket createSocket() throws IOException, UnknownHostException {
         SSLSocketFactory sslfac = getSSLSocketFactory();
         Socket sock = sslfac.createSocket();
@@ -188,6 +190,7 @@ public class HttpSSLProtocolSocketFactory
     /**
      * @see SecureProtocolSocketFactory#createSocket(java.net.Socket,java.lang.String,int,boolean)
      */
+    @Override
     public Socket createSocket(
         Socket socket,
         String host,
@@ -208,6 +211,7 @@ public class HttpSSLProtocolSocketFactory
     /**
      * @see SecureProtocolSocketFactory#createSocket(java.lang.String,int,java.net.InetAddress,int)
      */
+    @Override
     public Socket createSocket(
         String host,
         int port,
@@ -226,6 +230,7 @@ public class HttpSSLProtocolSocketFactory
         return wrapSocket(sock);
     }
 
+    @Override
     public Socket createSocket(InetAddress host, int port) throws IOException {
         SSLSocketFactory sslfac = getSSLSocketFactory();
         Socket sock=sslfac.createSocket(host,port);
@@ -233,6 +238,7 @@ public class HttpSSLProtocolSocketFactory
         return wrapSocket(sock);
     }
 
+    @Override
     public Socket createSocket(InetAddress address, int port, InetAddress localAddress, int localPort) throws IOException {
         SSLSocketFactory sslfac = getSSLSocketFactory();
         Socket sock=sslfac.createSocket(address, port, localAddress, localPort);
@@ -240,6 +246,7 @@ public class HttpSSLProtocolSocketFactory
         return wrapSocket(sock);
     }
 
+    @Override
     public String[] getDefaultCipherSuites() {
         try {
             SSLSocketFactory sslfac = getSSLSocketFactory();
@@ -249,6 +256,7 @@ public class HttpSSLProtocolSocketFactory
         }
     }
 
+    @Override
     public String[] getSupportedCipherSuites() {
         try {
             SSLSocketFactory sslfac = getSSLSocketFactory();

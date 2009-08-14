@@ -52,6 +52,7 @@ public class FunctionProperty extends AbstractProperty {
         }
     }
 
+    @Override
     public boolean equals(Object o) {
         if (o instanceof FunctionProperty) {
             if (function != null) {
@@ -99,6 +100,7 @@ public class FunctionProperty extends AbstractProperty {
         return function;
     }
 
+    @Override
     public Object clone() {
         FunctionProperty prop = (FunctionProperty) super.clone();
         prop.cacheValue = cacheValue;

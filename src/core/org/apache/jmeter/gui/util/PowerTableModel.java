@@ -73,6 +73,7 @@ public class PowerTableModel extends DefaultTableModel {
         this.fireTableStructureChanged();
     }
 
+    @Override
     public void removeRow(int row) {
         log.debug("remove row: " + row);
         if (model.size() > row) {
@@ -101,6 +102,7 @@ public class PowerTableModel extends DefaultTableModel {
         this.fireTableDataChanged();
     }
 
+    @Override
     public void addRow(Object data[]) {
         if (data.length != model.getHeaderCount()){
             throw new IllegalArgumentException("Incorrect number of data items");
@@ -217,6 +219,7 @@ public class PowerTableModel extends DefaultTableModel {
      *
      * @return the RowCount value
      */
+    @Override
     public int getRowCount() {
         if (model == null) {
             return 0;
@@ -229,6 +232,7 @@ public class PowerTableModel extends DefaultTableModel {
      *
      * @return the ColumnCount value
      */
+    @Override
     public int getColumnCount() {
         return model.getHeaders().length;
     }
@@ -238,15 +242,18 @@ public class PowerTableModel extends DefaultTableModel {
      *
      * @return the ColumnName value
      */
+    @Override
     public String getColumnName(int column) {
         return model.getHeaders()[column];
     }
 
+    @Override
     public boolean isCellEditable(int row, int column) {
         // all table cells are editable
         return true;
     }
 
+    @Override
     public Class getColumnClass(int column) {
         return columnClasses[column];
     }
@@ -254,6 +261,7 @@ public class PowerTableModel extends DefaultTableModel {
     /**
      * Required by table model interface. return the ValueAt value
      */
+    @Override
     public Object getValueAt(int row, int column) {
         return model.getColumnValue(column, row);
     }
@@ -264,6 +272,7 @@ public class PowerTableModel extends DefaultTableModel {
      * @param value
      *            the new ValueAt value
      */
+    @Override
     public void setValueAt(Object value, int row, int column) {
         if (row < model.size()) {
             model.setCurrentPos(row);

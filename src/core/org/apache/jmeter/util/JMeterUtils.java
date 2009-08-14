@@ -94,6 +94,7 @@ public class JMeterUtils implements UnitTestManager {
     private static volatile boolean ignoreResorces = false; // Special flag for use in debugging resources
 
     private static final ThreadLocal localMatcher = new ThreadLocal() {
+        @Override
         protected Object initialValue() {
             return new Perl5Matcher();
         }
@@ -405,6 +406,7 @@ public class JMeterUtils implements UnitTestManager {
      * @deprecated Only intended for use in development; use
      *             getResString(String) normally
      */
+    @Deprecated
     public static String getResString(String key, String defaultValue) {
         return getResStringDefault(key, defaultValue);
     }

@@ -26,6 +26,7 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public final class JMeterContextService {
     private static final ThreadLocal threadContext = new ThreadLocal() {
+        @Override
         public Object initialValue() {
             return new JMeterContext();
         }

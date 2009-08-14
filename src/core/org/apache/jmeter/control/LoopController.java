@@ -99,6 +99,7 @@ public class LoopController extends GenericController implements Serializable {
      *
      * @see org.apache.jmeter.control.Controller#next()
      */
+    @Override
     public Sampler next() {
         if(endOfLoop()) {
             if (!getContinueForever()) {
@@ -119,6 +120,7 @@ public class LoopController extends GenericController implements Serializable {
      *
      * @see org.apache.jmeter.control.GenericController#nextIsNull()
      */
+    @Override
     protected Sampler nextIsNull() throws NextIsNullException {
         reInitialize();
         if (endOfLoop()) {
@@ -145,6 +147,7 @@ public class LoopController extends GenericController implements Serializable {
      *
      * @see org.apache.jmeter.control.GenericController#getIterCount()
      */
+    @Override
     protected int getIterCount() {
         return loopCount + 1;
     }
@@ -154,6 +157,7 @@ public class LoopController extends GenericController implements Serializable {
      *
      * @see org.apache.jmeter.control.GenericController#reInitialize()
      */
+    @Override
     protected void reInitialize() {
         setFirst(true);
         resetCurrent();

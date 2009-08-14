@@ -31,6 +31,7 @@ public class ConfigTestElement extends AbstractTestElement implements Serializab
     public ConfigTestElement() {
     }
 
+    @Override
     public void addTestElement(TestElement parm1) {
         if (parm1 instanceof ConfigTestElement) {
             mergeIn(parm1);

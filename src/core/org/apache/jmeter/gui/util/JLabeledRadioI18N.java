@@ -64,6 +64,7 @@ public class JLabeledRadioI18N extends JPanel implements JLabeledField, ActionLi
     /**
      * @deprecated - only for use in testing
      */
+    @Deprecated
     public JLabeledRadioI18N() {
         super();
     }

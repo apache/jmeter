@@ -49,6 +49,7 @@ public class TestBeanHelper {
      *
      * @deprecated to limit it's usage in expectation of moving it elsewhere.
      */
+    @Deprecated
     public static void prepare(TestElement el) {
         if (!(el instanceof TestBean)) {
             return;

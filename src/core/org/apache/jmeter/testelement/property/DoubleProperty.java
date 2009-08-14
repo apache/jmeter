@@ -40,10 +40,12 @@ public class DoubleProperty extends NumberProperty {
         this.value = value;
     }
 
+    @Override
     protected void setNumberValue(Number n) {
         value = n.doubleValue();
     }
 
+    @Override
     protected void setNumberValue(String n) throws NumberFormatException {
         value = Double.parseDouble(n);
     }
@@ -62,6 +64,7 @@ public class DoubleProperty extends NumberProperty {
         return new Double(value);
     }
 
+    @Override
     public Object clone() {
         DoubleProperty prop = (DoubleProperty) super.clone();
         prop.value = value;
@@ -71,6 +74,7 @@ public class DoubleProperty extends NumberProperty {
     /**
      * @see JMeterProperty#getBooleanValue()
      */
+    @Override
     public boolean getBooleanValue() {
         return value > 0 ? true : false;
     }
@@ -78,6 +82,7 @@ public class DoubleProperty extends NumberProperty {
     /**
      * @see JMeterProperty#getDoubleValue()
      */
+    @Override
     public double getDoubleValue() {
         return value;
     }
@@ -85,6 +90,7 @@ public class DoubleProperty extends NumberProperty {
     /**
      * @see JMeterProperty#getFloatValue()
      */
+    @Override
     public float getFloatValue() {
         return (float) value;
     }
@@ -92,6 +98,7 @@ public class DoubleProperty extends NumberProperty {
     /**
      * @see JMeterProperty#getIntValue()
      */
+    @Override
     public int getIntValue() {
         return (int) value;
     }
@@ -99,6 +106,7 @@ public class DoubleProperty extends NumberProperty {
     /**
      * @see JMeterProperty#getLongValue()
      */
+    @Override
     public long getLongValue() {
         return (long) value;
     }
@@ -108,6 +116,7 @@ public class DoubleProperty extends NumberProperty {
      *
      * @see org.apache.jmeter.testelement.property.JMeterProperty#setRunningVersion(boolean)
      */
+    @Override
     public void setRunningVersion(boolean runningVersion) {
         savedValue = value;
         super.setRunningVersion(runningVersion);

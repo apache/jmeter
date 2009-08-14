@@ -60,6 +60,7 @@ public class RunTime extends GenericController implements Serializable {
      *
      * @see org.apache.jmeter.control.Controller#isDone()
      */
+    @Override
     public boolean isDone() {
         if (getRuntime() > 0 && getSubControllers().size() > 0) {
             return super.isDone();
@@ -71,6 +72,7 @@ public class RunTime extends GenericController implements Serializable {
         return System.currentTimeMillis() - startTime >= 1000 * getRuntime();
     }
 
+    @Override
     public Sampler next() {
         if (startTime == 0) {
             startTime = System.currentTimeMillis();
@@ -88,6 +90,7 @@ public class RunTime extends GenericController implements Serializable {
      *
      * @see org.apache.jmeter.control.GenericController#nextIsNull()
      */
+    @Override
     protected Sampler nextIsNull() throws NextIsNullException {
         reInitialize();
         if (endOfLoop()) {
@@ -109,10 +112,12 @@ public class RunTime extends GenericController implements Serializable {
     /*
      * This is needed for OnceOnly to work like other Loop Controllers
      */
+    @Override
     protected int getIterCount() {
         return loopCount + 1;
     }
 
+    @Override
     protected void reInitialize() {
         setFirst(true);
         resetCurrent();

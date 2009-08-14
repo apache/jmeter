@@ -288,6 +288,7 @@ public class GenericController extends AbstractTestElement implements Controller
         current = 0;
     }
 
+    @Override
     public void addTestElement(TestElement child) {
         if (child instanceof Controller || child instanceof Sampler) {
             addElement(child);

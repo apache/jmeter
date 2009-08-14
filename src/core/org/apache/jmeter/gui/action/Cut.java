@@ -38,6 +38,7 @@ public class Cut extends AbstractAction {
     /**
      * @see Command#getActionNames()
      */
+    @Override
     public Set getActionNames() {
         return commands;
     }
@@ -45,6 +46,7 @@ public class Cut extends AbstractAction {
     /**
      * @see Command#doAction(ActionEvent)
      */
+    @Override
     public void doAction(ActionEvent e) {
         GuiPackage guiPack = GuiPackage.getInstance();
         JMeterTreeNode[] currentNodes = guiPack.getTreeListener().getSelectedNodes();

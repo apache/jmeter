@@ -61,6 +61,7 @@ public class BooleanProperty extends AbstractProperty {
         return Boolean.valueOf(value);
     }
 
+    @Override
     public Object clone() {
         BooleanProperty prop = (BooleanProperty) super.clone();
         prop.value = value;
@@ -70,6 +71,7 @@ public class BooleanProperty extends AbstractProperty {
     /**
      * @see JMeterProperty#getBooleanValue()
      */
+    @Override
     public boolean getBooleanValue() {
         return value;
     }
@@ -79,6 +81,7 @@ public class BooleanProperty extends AbstractProperty {
      *
      * @see org.apache.jmeter.testelement.property.JMeterProperty#setRunningVersion(boolean)
      */
+    @Override
     public void setRunningVersion(boolean runningVersion) {
         savedValue = value;
         super.setRunningVersion(runningVersion);
