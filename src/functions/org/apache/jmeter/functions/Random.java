@@ -58,6 +58,7 @@ public class Random extends AbstractFunction {
      *
      * @see Function#execute(SampleResult, Sampler)
      */
+    @Override
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
 
@@ -86,6 +87,7 @@ public class Random extends AbstractFunction {
      *
      * @see Function#setParameters(Collection)
      */
+    @Override
     public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
         checkParameterCount(parameters, 2, 3);
         Object[] values = parameters.toArray();
@@ -105,6 +107,7 @@ public class Random extends AbstractFunction {
      *
      * @see Function#getReferenceKey()
      */
+    @Override
     public String getReferenceKey() {
         return KEY;
     }

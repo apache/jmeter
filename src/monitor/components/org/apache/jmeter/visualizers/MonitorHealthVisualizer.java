@@ -73,12 +73,14 @@ public class MonitorHealthVisualizer extends AbstractVisualizer implements Image
         init();
     }
 
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         prefixField.setText(el.getPropertyAsString(CONNECTOR_PREFIX, CONNECTOR_PREFIX_DEFAULT));
         model.setPrefix(prefixField.getText());
     }
 
+    @Override
     public void modifyTestElement(TestElement c) {
         super.modifyTestElement(c);
         c.setProperty(CONNECTOR_PREFIX,prefixField.getText(),CONNECTOR_PREFIX_DEFAULT);

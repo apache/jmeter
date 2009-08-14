@@ -65,6 +65,7 @@ public class ExampleSamplerGui extends AbstractSamplerGui {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(org.apache.jmeter.testelement.TestElement)
      */
+    @Override
     public void configure(TestElement element) {
         data.setText(element.getPropertyAsString(ExampleSampler.DATA));
         super.configure(element);
@@ -125,6 +126,7 @@ public class ExampleSamplerGui extends AbstractSamplerGui {
         return dataPanel;
     }
 
+    @Override
     public void clearGui() {
         super.clearGui();
         data.setText(""); // $NON-NLS-1$

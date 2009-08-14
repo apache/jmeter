@@ -93,6 +93,7 @@ public class JLabeledTextField extends JPanel implements JLabeledField, FocusLis
         return comps;
     }
 
+    @Override
     public void setEnabled(boolean enable) {
         super.setEnabled(enable);
         mTextField.setEnabled(enable);
@@ -181,6 +182,7 @@ public class JLabeledTextField extends JPanel implements JLabeledField, FocusLis
      * @param text the string to display; if the text is null,
      *      the tool tip is turned off for this component
      */
+    @Override
     public void setToolTipText(String text) {
         mTextField.setToolTipText(text);
     }
@@ -189,6 +191,7 @@ public class JLabeledTextField extends JPanel implements JLabeledField, FocusLis
       * Returns the tooltip string that has been set with setToolTipText
       * @return the text of the tool tip
       */
+    @Override
     public String getToolTipText() {
         if (mTextField == null){ // Necessary to avoid NPE when testing serialisation
             return null;

@@ -50,6 +50,7 @@ public class CharFunction extends AbstractFunction {
     public CharFunction() {
     }
 
+    @Override
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
 
@@ -73,11 +74,13 @@ public class CharFunction extends AbstractFunction {
 
     }
 
+    @Override
     public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
         checkMinParameterCount(parameters, 1);
         values = parameters.toArray();
     }
 
+    @Override
     public String getReferenceKey() {
         return KEY;
     }

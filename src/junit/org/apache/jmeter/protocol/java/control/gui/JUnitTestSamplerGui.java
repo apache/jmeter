@@ -239,6 +239,7 @@ implements ChangeListener, ActionListener
         errorCode.setText(JMeterUtils.getResString("junit_error_default_code")); //$NON-NLS-1$
     }
 
+    @Override
     public void clearGui() {
         super.clearGui();
         initGui();
@@ -277,6 +278,7 @@ implements ChangeListener, ActionListener
     }
 
     /* Overrides AbstractJMeterGuiComponent.configure(TestElement) */
+    @Override
     public void configure(TestElement el)
     {
         super.configure(el);

@@ -125,6 +125,7 @@ public class XMLBuffer{
     /**
      * Convert the buffer to a string, closing any open tags
      */
+    @Override
     public String toString(){
         while(!tags.isEmpty()){
             endTag((String)tags.pop());

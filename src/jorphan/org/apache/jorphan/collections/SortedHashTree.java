@@ -87,16 +87,19 @@ public class SortedHashTree extends HashTree implements Serializable {
         }
     }
 
+    @Override
     protected HashTree createNewTree() {
         Comparator comparator = ((TreeMap)data).comparator();
         return new SortedHashTree(comparator);
     }
 
+    @Override
     protected HashTree createNewTree(Object key) {
         Comparator comparator = ((TreeMap)data).comparator();
         return new SortedHashTree(key, comparator);
     }
 
+    @Override
     protected HashTree createNewTree(Collection values) {
         Comparator comparator = ((TreeMap)data).comparator();
         return new SortedHashTree(values, comparator);

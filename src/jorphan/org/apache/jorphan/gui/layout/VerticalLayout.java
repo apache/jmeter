@@ -207,6 +207,7 @@ public class VerticalLayout implements LayoutManager, Serializable {
     public void removeLayoutComponent(Component comp) {
     }
 
+    @Override
     public String toString() {
         return getClass().getName() + "[vgap=" + vgap + " align=" + alignment + " anchor=" + anchor + "]";
     }

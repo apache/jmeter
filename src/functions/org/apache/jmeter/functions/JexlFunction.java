@@ -55,6 +55,7 @@ public class JexlFunction extends AbstractFunction {
 
     private Object[] values;
 
+    @Override
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException
     {
@@ -108,11 +109,13 @@ public class JexlFunction extends AbstractFunction {
         return desc;
     }
 
+    @Override
     public String getReferenceKey()
     {
         return KEY;
     }
 
+    @Override
     public synchronized void setParameters(Collection parameters)
             throws InvalidVariableException
     {
