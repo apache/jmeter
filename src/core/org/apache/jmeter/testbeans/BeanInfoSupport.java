@@ -190,34 +190,42 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
         getBeanDescriptor().setValue(GenericTestBeanCustomizer.ORDER(group), new Integer(numCreatedGroups));
     }
 
+    @Override
     public BeanInfo[] getAdditionalBeanInfo() {
         return rootBeanInfo.getAdditionalBeanInfo();
     }
 
+    @Override
     public BeanDescriptor getBeanDescriptor() {
         return rootBeanInfo.getBeanDescriptor();
     }
 
+    @Override
     public int getDefaultEventIndex() {
         return rootBeanInfo.getDefaultEventIndex();
     }
 
+    @Override
     public int getDefaultPropertyIndex() {
         return rootBeanInfo.getDefaultPropertyIndex();
     }
 
+    @Override
     public EventSetDescriptor[] getEventSetDescriptors() {
         return rootBeanInfo.getEventSetDescriptors();
     }
 
+    @Override
     public Image getIcon(int iconKind) {
         return icons[iconKind];
     }
 
+    @Override
     public MethodDescriptor[] getMethodDescriptors() {
         return rootBeanInfo.getMethodDescriptors();
     }
 
+    @Override
     public PropertyDescriptor[] getPropertyDescriptors() {
         return rootBeanInfo.getPropertyDescriptors();
     }

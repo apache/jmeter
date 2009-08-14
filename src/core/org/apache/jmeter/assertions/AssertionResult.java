@@ -43,6 +43,7 @@ public class AssertionResult implements Serializable {
      * error.
      * @deprecated - use the named constructor
      */
+    @Deprecated
     public AssertionResult() { // Needs to be public for tests
     }
 
@@ -163,6 +164,7 @@ public class AssertionResult implements Serializable {
         return this;
     }
 
+    @Override
     public String toString() {
         return getName() != null ? getName() : super.toString();
     }

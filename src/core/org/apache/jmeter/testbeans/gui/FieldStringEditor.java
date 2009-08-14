@@ -60,19 +60,23 @@ class FieldStringEditor extends PropertyEditorSupport implements ActionListener,
         textField.addFocusListener(this);
     }
 
+    @Override
     public String getAsText() {
         return textField.getText();
     }
 
+    @Override
     public void setAsText(String value) {
         initialValue = value;
         textField.setText(value);
     }
 
+    @Override
     public Object getValue() {
         return getAsText();
     }
 
+    @Override
     public void setValue(Object value) {
         if (value instanceof String) {
             setAsText((String) value);
@@ -86,6 +90,7 @@ class FieldStringEditor extends PropertyEditorSupport implements ActionListener,
      *
      * @see java.beans.PropertyEditor#getCustomEditor()
      */
+    @Override
     public Component getCustomEditor() {
         return textField;
     }
@@ -93,6 +98,7 @@ class FieldStringEditor extends PropertyEditorSupport implements ActionListener,
     /*
      * (non-Javadoc) Avoid needlessly firing PropertyChanged events.
      */
+    @Override
     public void firePropertyChange() {
         String newValue = getAsText();
 

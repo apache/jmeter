@@ -185,7 +185,8 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
             super(s);
           }
 
-          public void uncaughtException(Thread t, Throwable e) {
+          @Override
+        public void uncaughtException(Thread t, Throwable e) {
             if (!(e instanceof ThreadDeath)) {
                 log.error("Uncaught exception: ", e);
                 System.err.println("Uncaught Exception " + e + ". See log file for details.");
@@ -203,6 +204,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
             runningThread.start();
             if (JMeter.isNonGUI() && UDP_PORT > 1000){
                 Thread waiter = new Thread(){
+                    @Override
                     public void run() {
                         waitForSignals();
                     }
@@ -322,6 +324,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         allThreads.remove(thread);
         if (!startingGroups && allThreads.size() == 0 ) {// All threads have exitted
             new Thread(){// Ensure that the current sampler thread can exit cleanly
+                @Override
                 public void run() {
                     log.info("Stopping test");
                     notifyTestListenersOfEnd(testListenersSave);
@@ -589,6 +592,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
     public void exit() {
         // Needs to be run in a separate thread to allow RMI call to return OK
         Thread t = new Thread() {
+            @Override
             public void run() {
                 // log.info("Pausing");
                 pause(1000); // Allow RMI to complete

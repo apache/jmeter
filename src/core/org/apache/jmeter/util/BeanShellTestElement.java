@@ -95,6 +95,7 @@ public abstract class BeanShellTestElement extends AbstractTestElement
         return this;
     }
 
+    @Override
     public Object clone() {
         BeanShellTestElement o = (BeanShellTestElement) super.clone();
         o.init();

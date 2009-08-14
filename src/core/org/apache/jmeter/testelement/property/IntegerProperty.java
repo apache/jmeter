@@ -38,6 +38,7 @@ public class IntegerProperty extends NumberProperty {
      *
      * @see org.apache.jmeter.testelement.property.JMeterProperty#setRunningVersion(boolean)
      */
+    @Override
     public void setRunningVersion(boolean runningVersion) {
         savedValue = value;
         super.setRunningVersion(runningVersion);
@@ -64,10 +65,12 @@ public class IntegerProperty extends NumberProperty {
         this.value = value;
     }
 
+    @Override
     protected void setNumberValue(Number n) {
         value = n.intValue();
     }
 
+    @Override
     protected void setNumberValue(String n) throws NumberFormatException {
         value = Integer.parseInt(n);
     }
@@ -86,6 +89,7 @@ public class IntegerProperty extends NumberProperty {
         return new Integer(value);
     }
 
+    @Override
     public Object clone() {
         IntegerProperty prop = (IntegerProperty) super.clone();
         prop.value = value;
@@ -95,6 +99,7 @@ public class IntegerProperty extends NumberProperty {
     /**
      * @see JMeterProperty#getBooleanValue()
      */
+    @Override
     public boolean getBooleanValue() {
         return getIntValue() > 0 ? true : false;
     }
@@ -102,6 +107,7 @@ public class IntegerProperty extends NumberProperty {
     /**
      * @see JMeterProperty#getDoubleValue()
      */
+    @Override
     public double getDoubleValue() {
         return value;
     }
@@ -109,6 +115,7 @@ public class IntegerProperty extends NumberProperty {
     /**
      * @see JMeterProperty#getFloatValue()
      */
+    @Override
     public float getFloatValue() {
         return value;
     }
@@ -116,6 +123,7 @@ public class IntegerProperty extends NumberProperty {
     /**
      * @see JMeterProperty#getIntValue()
      */
+    @Override
     public int getIntValue() {
         return value;
     }
@@ -123,6 +131,7 @@ public class IntegerProperty extends NumberProperty {
     /**
      * @see JMeterProperty#getLongValue()
      */
+    @Override
     public long getLongValue() {
         return value;
     }

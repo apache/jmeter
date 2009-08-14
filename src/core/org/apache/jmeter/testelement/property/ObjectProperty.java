@@ -41,6 +41,7 @@ public class ObjectProperty extends AbstractProperty {
         }
     }
 
+    @Override
     public void setRunningVersion(boolean runningVersion) {
         super.setRunningVersion(runningVersion);
         if (runningVersion) {
@@ -55,6 +56,7 @@ public class ObjectProperty extends AbstractProperty {
      *
      * @see java.lang.Object#clone()
      */
+    @Override
     public Object clone() {
         ObjectProperty p = (ObjectProperty) super.clone();
         p.value = value;

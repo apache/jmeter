@@ -153,6 +153,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
     // Ensure that the sample save config is not shared between copied nodes
     // N.B. clone only seems to be used for client-server tests
+    @Override
     public Object clone(){
         ResultCollector clone = (ResultCollector) super.clone();
         clone.setSaveConfig((SampleSaveConfiguration)clone.getSaveConfig().clone());

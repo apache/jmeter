@@ -444,6 +444,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
        return this;
     }
 
+    @Override
     public Object clone() {
         try {
             SampleSaveConfiguration clone = (SampleSaveConfiguration)super.clone();
@@ -457,6 +458,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
         }
     }
 
+    @Override
     public boolean equals(Object obj) {
         if(this == obj) {
             return true;
@@ -507,6 +509,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
         return primitiveValues && stringValues && complexValues;
     }
 
+    @Override
     public int hashCode() {
         int hash = 7;
         hash = 31 * hash + (time ? 1 : 0);

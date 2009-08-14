@@ -87,6 +87,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
      * Provides a default implementation for setting the name property. It's unlikely
      * developers will need to override.
      */
+    @Override
     public void setName(String name) {
         namePanel.setName(name);
     }
@@ -103,6 +104,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
      * Provides a default implementation for the enabled property. It's unlikely
      * developers will need to override.
      */
+    @Override
     public boolean isEnabled() {
         return enabled;
     }
@@ -111,6 +113,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
      * Provides a default implementation for the enabled property. It's unlikely
      * developers will need to override.
      */
+    @Override
     public void setEnabled(boolean e) {
         log.debug("Setting enabled: " + e);
         enabled = e;
@@ -120,6 +123,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
      * Provides a default implementation for the name property. It's unlikely
      * developers will need to override.
      */
+    @Override
     public String getName() {
         if (getNamePanel() != null) {
             return getNamePanel().getName();

@@ -70,6 +70,7 @@ public class LoginConfig extends ConfigTestElement implements Serializable
         return getPropertyAsString(ConfigTestElement.PASSWORD);
     }
 
+    @Override
     public String toString() {
         return getUsername() + "=" + getPassword(); //$NON-NLS-1$
     }

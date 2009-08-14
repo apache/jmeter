@@ -47,6 +47,7 @@ public class TransactionControllerGui extends AbstractControllerGui {
         return lc;
     }
 
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         parent.setSelected(((TransactionController) el).isParent());

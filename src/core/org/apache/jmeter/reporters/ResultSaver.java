@@ -92,6 +92,7 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
      * start of the test. The super.clear() method clears the name (and all
      * other properties), so it is called last.
      */
+    @Override
     public void clear() {
         super.clear();
         synchronized(this){

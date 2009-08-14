@@ -58,6 +58,7 @@ public final class NullProperty extends AbstractProperty {
     /**
      * @see JMeterProperty#isRunningVersion()
      */
+    @Override
     public boolean isRunningVersion() {
         return false;
     }
@@ -72,10 +73,12 @@ public final class NullProperty extends AbstractProperty {
     /**
      * @see JMeterProperty#mergeIn(JMeterProperty)
      */
+    @Override
     public void mergeIn(JMeterProperty prop) {
         tempValue = prop;
     }
 
+    @Override
     public final Object clone() {
         return this;
     }
@@ -83,6 +86,7 @@ public final class NullProperty extends AbstractProperty {
     /**
      * @see JMeterProperty#getBooleanValue()
      */
+    @Override
     public boolean getBooleanValue() {
         return false;
     }
@@ -90,6 +94,7 @@ public final class NullProperty extends AbstractProperty {
     /**
      * @see JMeterProperty#getDoubleValue()
      */
+    @Override
     public double getDoubleValue() {
         return 0;
     }
@@ -97,6 +102,7 @@ public final class NullProperty extends AbstractProperty {
     /**
      * @see JMeterProperty#getFloatValue()
      */
+    @Override
     public float getFloatValue() {
         return 0;
     }
@@ -104,6 +110,7 @@ public final class NullProperty extends AbstractProperty {
     /**
      * @see JMeterProperty#getIntValue()
      */
+    @Override
     public int getIntValue() {
         return 0;
     }
@@ -111,6 +118,7 @@ public final class NullProperty extends AbstractProperty {
     /**
      * @see JMeterProperty#getLongValue()
      */
+    @Override
     public long getLongValue() {
         return 0;
     }

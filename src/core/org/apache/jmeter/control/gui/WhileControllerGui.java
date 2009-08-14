@@ -60,6 +60,7 @@ public class WhileControllerGui extends AbstractControllerGui implements ActionL
      * @param element
      *            the TestElement to configure
      */
+    @Override
     public void configure(TestElement element) {
         super.configure(element);
         if (element instanceof WhileController) {
@@ -94,6 +95,7 @@ public class WhileControllerGui extends AbstractControllerGui implements ActionL
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
         theCondition.setText(""); // $NON-NLS-1$

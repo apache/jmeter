@@ -61,6 +61,7 @@ public class RemoteStart extends AbstractAction {
     public RemoteStart() {
     }
 
+    @Override
     public void doAction(ActionEvent e) {
         String name = ((Component) e.getSource()).getName();
         if (name != null) {
@@ -174,6 +175,7 @@ public class RemoteStart extends AbstractAction {
         initEngine(engine, name);
     }
 
+    @Override
     public Set getActionNames() {
         return commands;
     }

@@ -86,11 +86,13 @@ public class SlowSocket extends Socket {
     }
 
     // Override so we can intercept the stream
+    @Override
     public OutputStream getOutputStream() throws IOException {
         return new SlowOutputStream(super.getOutputStream(), CPS);
     }
 
     // Override so we can intercept the stream
+    @Override
     public InputStream getInputStream() throws IOException {
         return new SlowInputStream(super.getInputStream(), CPS);
     }

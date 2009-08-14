@@ -225,6 +225,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 //      return plan;
 //  }
 
+    @Override
     public void addTestElement(TestElement tg) {
         super.addTestElement(tg);
         if (tg instanceof ThreadGroup && !isRunningVersion()) {

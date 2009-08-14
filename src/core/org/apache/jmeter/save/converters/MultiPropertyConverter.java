@@ -48,6 +48,7 @@ public class MultiPropertyConverter extends AbstractCollectionConverter {
      *
      * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
      */
+    @Override
     public boolean canConvert(Class arg0) {
         return arg0.equals(CollectionProperty.class) || arg0.equals(MapProperty.class);
     }
@@ -59,6 +60,7 @@ public class MultiPropertyConverter extends AbstractCollectionConverter {
      *      com.thoughtworks.xstream.io.HierarchicalStreamWriter,
      *      com.thoughtworks.xstream.converters.MarshallingContext)
      */
+    @Override
     public void marshal(Object arg0, HierarchicalStreamWriter writer, MarshallingContext context) {
         MultiProperty prop = (MultiProperty) arg0;
         writer.addAttribute(ATT_NAME, ConversionHelp.encode(prop.getName()));
@@ -75,6 +77,7 @@ public class MultiPropertyConverter extends AbstractCollectionConverter {
      * @see com.thoughtworks.xstream.converters.Converter#unmarshal(com.thoughtworks.xstream.io.HierarchicalStreamReader,
      *      com.thoughtworks.xstream.converters.UnmarshallingContext)
      */
+    @Override
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
         MultiProperty prop = (MultiProperty) createCollection(context.getRequiredType());
         prop.setName(ConversionHelp.decode(reader.getAttribute(ATT_NAME)));

@@ -141,6 +141,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
      * @param el
      *            the TestElement to configure
      */
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         if (el instanceof TestPlan) {
@@ -196,6 +197,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
         add(southPanel, BorderLayout.SOUTH);
     }
 
+    @Override
     public void clearGui() {
         super.clearGui();
         functionalMode.setSelected(false);

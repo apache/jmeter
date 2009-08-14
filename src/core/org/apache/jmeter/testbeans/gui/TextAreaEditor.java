@@ -85,6 +85,7 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
      *
      * @see java.beans.PropertyEditor#getAsText()
      */
+    @Override
     public String getAsText() {
         return textUI.getText();
     }
@@ -94,6 +95,7 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
      *
      * @see java.beans.PropertyEditor#getCustomEditor()
      */
+    @Override
     public Component getCustomEditor() {
         return scroller;
     }
@@ -103,6 +105,7 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
      *
      * @see java.beans.PropertyEditor#setAsText(java.lang.String)
      */
+    @Override
     public void setAsText(String text) throws IllegalArgumentException {
         textUI.setText(text);
     }
@@ -112,6 +115,7 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
      *
      * @see java.beans.PropertyEditor#setValue(java.lang.Object)
      */
+    @Override
     public void setValue(Object value) {
         if (value != null) {
             textUI.setText(value.toString());
@@ -125,6 +129,7 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
      *
      * @see java.beans.PropertyEditor#getValue()
      */
+    @Override
     public Object getValue() {
         return textUI.getText();
     }
@@ -134,6 +139,7 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
      *
      * @see java.beans.PropertyEditor#supportsCustomEditor()
      */
+    @Override
     public boolean supportsCustomEditor() {
         return true;
     }

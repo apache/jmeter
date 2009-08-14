@@ -139,6 +139,7 @@ public class SamplingStatCalculator {
      * @deprecated use getBytesPerSecond() instead
      * @see #getAvgPageBytes() for the average page size
      */
+    @Deprecated
     public double getPageSize() {
         double rate = 0;
         if (this.getElapsed() > 0 && calculator.getTotalBytes() > 0) {
@@ -303,6 +304,7 @@ public class SamplingStatCalculator {
     /**
      * For debugging purposes, only.
      */
+    @Override
     public String toString() {
         StringBuffer mySB = new StringBuffer();
 

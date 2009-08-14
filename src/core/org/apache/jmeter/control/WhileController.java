@@ -73,6 +73,7 @@ public class WhileController extends GenericController implements Serializable {
      *
      * @see org.apache.jmeter.control.GenericController#nextIsNull()
      */
+    @Override
     protected Sampler nextIsNull() throws NextIsNullException {
         reInitialize();
         if (endOfLoop(true)){
@@ -84,6 +85,7 @@ public class WhileController extends GenericController implements Serializable {
     /*
      * This skips controller entirely if the condition is false on first entry.
      */
+    @Override
     public Sampler next(){
         if (isFirst()){
             if (endOfLoop(false)){

@@ -68,10 +68,12 @@ public class TextAreaTableCellEditor extends AbstractCellEditor implements Table
         editorComponent.setRows(3);
         this.clickCountToStart = 2;
         delegate = new EditorDelegate() {
+            @Override
             public void setValue(Object value) {
                 editorComponent.setText((value != null) ? value.toString() : "");
             }
 
+            @Override
             public Object getCellEditorValue() {
                 return editorComponent.getText();
             }
@@ -133,6 +135,7 @@ public class TextAreaTableCellEditor extends AbstractCellEditor implements Table
      *
      * @see EditorDelegate#isCellEditable(EventObject)
      */
+    @Override
     public boolean isCellEditable(EventObject anEvent) {
         return delegate.isCellEditable(anEvent);
     }
@@ -143,6 +146,7 @@ public class TextAreaTableCellEditor extends AbstractCellEditor implements Table
      *
      * @see EditorDelegate#shouldSelectCell(EventObject)
      */
+    @Override
     public boolean shouldSelectCell(EventObject anEvent) {
         return delegate.shouldSelectCell(anEvent);
     }
@@ -153,6 +157,7 @@ public class TextAreaTableCellEditor extends AbstractCellEditor implements Table
      *
      * @see EditorDelegate#stopCellEditing
      */
+    @Override
     public boolean stopCellEditing() {
         return delegate.stopCellEditing();
     }
@@ -163,6 +168,7 @@ public class TextAreaTableCellEditor extends AbstractCellEditor implements Table
      *
      * @see EditorDelegate#cancelCellEditing
      */
+    @Override
     public void cancelCellEditing() {
         delegate.cancelCellEditing();
     }

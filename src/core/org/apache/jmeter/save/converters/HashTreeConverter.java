@@ -44,6 +44,7 @@ public class HashTreeConverter extends AbstractCollectionConverter {
      *
      * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
      */
+    @Override
     public boolean canConvert(Class arg0) {
         return HashTree.class.isAssignableFrom(arg0);
     }
@@ -55,6 +56,7 @@ public class HashTreeConverter extends AbstractCollectionConverter {
      *      com.thoughtworks.xstream.io.HierarchicalStreamWriter,
      *      com.thoughtworks.xstream.converters.MarshallingContext)
      */
+    @Override
     public void marshal(Object arg0, HierarchicalStreamWriter writer, MarshallingContext context) {
         HashTree tree = (HashTree) arg0;
         Iterator iter = tree.list().iterator();
@@ -72,6 +74,7 @@ public class HashTreeConverter extends AbstractCollectionConverter {
      * @see com.thoughtworks.xstream.converters.Converter#unmarshal(com.thoughtworks.xstream.io.HierarchicalStreamReader,
      *      com.thoughtworks.xstream.converters.UnmarshallingContext)
      */
+    @Override
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
         boolean isKey = true;
         Object current = null;

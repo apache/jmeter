@@ -90,6 +90,7 @@ public class IfControllerPanel extends AbstractControllerGui implements ActionLi
      * @param element
      *            the TestElement to configure
      */
+    @Override
     public void configure(TestElement element) {
         super.configure(element);
         if (element instanceof IfController) {
@@ -126,6 +127,7 @@ public class IfControllerPanel extends AbstractControllerGui implements ActionLi
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
         theCondition.setText(""); // $NON-NLS-1$

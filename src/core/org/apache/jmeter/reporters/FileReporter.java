@@ -306,6 +306,7 @@ private static class GraphPanel extends JPanel {
     /**
      * Draws the graph.
      */
+    @Override
     public void update(Graphics g) {
         // setup drawing area
         int base = 10;
@@ -369,6 +370,7 @@ private static class GraphPanel extends JPanel {
         }
     }
 
+    @Override
     public void paint(Graphics g) {
         update(g);
     }

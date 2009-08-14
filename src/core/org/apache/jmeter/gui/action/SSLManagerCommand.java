@@ -114,6 +114,7 @@ public class SSLManagerCommand implements Command {
          *
          * @return description
          */
+        @Override
         public String getDescription() {
             return JMeterUtils.getResString("pkcs12_desc"); //$NON-NLS-1$
         }
@@ -125,6 +126,7 @@ public class SSLManagerCommand implements Command {
          *            file to test
          * @return true if file is accepted, false otherwise
          */
+        @Override
         public boolean accept(File testFile) {
             return testFile.isDirectory()
             || testFile.getName().endsWith(".p12")  //$NON-NLS-1$

@@ -42,6 +42,7 @@ public class StringProperty extends AbstractProperty {
     /**
      * @see JMeterProperty#setRunningVersion(boolean)
      */
+    @Override
     public void setRunningVersion(boolean runningVersion) {
         super.setRunningVersion(runningVersion);
         if (runningVersion) {
@@ -69,6 +70,7 @@ public class StringProperty extends AbstractProperty {
         return value;
     }
 
+    @Override
     public Object clone() {
         StringProperty prop = (StringProperty) super.clone();
         prop.value = value;

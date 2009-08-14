@@ -101,6 +101,7 @@ public class BSFJavaScriptEngine extends BSFEngineImpl {
         return retval;
     }
 
+    @Override
     public void declareBean(BSFDeclaredBean bean) throws BSFException {
         if ((bean.bean instanceof Number) ||
             (bean.bean == null) ||
@@ -203,6 +204,7 @@ public class BSFJavaScriptEngine extends BSFEngineImpl {
      * Put the manager into the context-manager
      * map hashtable too.
      */
+    @Override
     public void initialize(BSFManager mgr, String lang, Vector declaredBeans)
         throws BSFException {
         
@@ -227,6 +229,7 @@ public class BSFJavaScriptEngine extends BSFEngineImpl {
         }
     }
 
+    @Override
     public void undeclareBean(BSFDeclaredBean bean) throws BSFException {
         global.delete(bean.name);
     }
