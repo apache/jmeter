@@ -366,6 +366,7 @@ public class Functor {
      *
      * @return true if method exists
      */
+    @Deprecated
     public boolean checkMethod(Object _invokee){
         Method m = null;
         try {
@@ -383,6 +384,7 @@ public class Functor {
      *
      * @return true if method exists
      */
+    @Deprecated
     public boolean checkMethod(Object _invokee, Class c){
         Method m = null;
         try {
@@ -393,6 +395,7 @@ public class Functor {
         return null != m;
     }
 
+    @Override
     public String toString(){
         StringBuffer sb = new StringBuffer(100);
         if (clazz != null){

@@ -56,6 +56,7 @@ public class EvalFunction extends AbstractFunction {
     public EvalFunction() {
     }
 
+    @Override
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
         String parameter = ((CompoundVariable) values[0]).execute();
@@ -63,11 +64,13 @@ public class EvalFunction extends AbstractFunction {
         return cv.execute();
     }
 
+    @Override
     public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
         checkParameterCount(parameters, MIN_PARAMETER_COUNT, MAX_PARAMETER_COUNT);
         values = parameters.toArray();
     }
 
+    @Override
     public String getReferenceKey() {
         return KEY;
     }

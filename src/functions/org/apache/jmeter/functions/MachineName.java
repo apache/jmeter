@@ -44,6 +44,7 @@ public class MachineName extends AbstractFunction {
     public MachineName() {
     }
 
+    @Override
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
 
@@ -67,11 +68,13 @@ public class MachineName extends AbstractFunction {
 
     }
 
+    @Override
     public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
         checkParameterCount(parameters, 0, 1);
         values = parameters.toArray();
     }
 
+    @Override
     public String getReferenceKey() {
         return KEY;
     }

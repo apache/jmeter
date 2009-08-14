@@ -75,10 +75,12 @@ public class MonitorHandler extends DefaultHandler {
         this.factory = factory;
     }
 
+    @Override
     public void startDocument() throws SAXException {
         // this.startDoc = true;
     }
 
+    @Override
     public void endDocument() throws SAXException {
         // this.startDoc = false;
         // this.endDoc = true;
@@ -103,6 +105,7 @@ public class MonitorHandler extends DefaultHandler {
      *                Any SAX exception, possibly wrapping another exception.
      * @see org.xml.sax.ContentHandler#startElement
      */
+    @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         if (qName.equals(Constants.STATUS)) {
             status = factory.createStatus();
@@ -250,6 +253,7 @@ public class MonitorHandler extends DefaultHandler {
      *                Any SAX exception, possibly wrapping another exception.
      * @see org.xml.sax.ContentHandler#endElement
      */
+    @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
         if (qName.equals(Constants.STATUS)) {
             if (stacktree.peek() instanceof Status) {
@@ -305,6 +309,7 @@ public class MonitorHandler extends DefaultHandler {
      *                Any SAX exception, possibly wrapping another exception.
      * @see org.xml.sax.ContentHandler#characters
      */
+    @Override
     public void characters(char ch[], int start, int length) throws SAXException {
     }
 

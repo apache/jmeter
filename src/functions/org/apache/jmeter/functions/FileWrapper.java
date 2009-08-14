@@ -65,6 +65,7 @@ public class FileWrapper {
 
     /* The cache of file packs - used to improve thread access */
     private static final ThreadLocal filePacks = new ThreadLocal() {
+        @Override
         protected Object initialValue() {
             return new HashMap();
         }

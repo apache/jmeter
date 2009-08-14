@@ -42,6 +42,7 @@ public class NumberRenderer extends DefaultTableCellRenderer {
         setHorizontalAlignment(JLabel.RIGHT);
     }
 
+    @Override
     public void setValue(Object value) {
         setText((value == null) ? "" : formatter.format(value));
     }

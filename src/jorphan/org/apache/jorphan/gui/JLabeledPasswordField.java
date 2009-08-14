@@ -40,6 +40,7 @@ public class JLabeledPasswordField extends JLabeledTextField {
         super(pLabel);
     }
 
+    @Override
     protected JTextField createTextField(int size) {
         return new JPasswordField(size);
     }
