@@ -96,6 +96,7 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
      *
      * @see javax.swing.JDialog#dialogInit()
      */
+    @Override
     protected void dialogInit() {
         if (saveConfig != null) {
             super.dialogInit();

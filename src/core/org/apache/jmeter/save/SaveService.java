@@ -73,15 +73,18 @@ public class SaveService {
         }
 
         // Override wrapMapper in order to insert the Wrapper in the chain
+        @Override
         protected MapperWrapper wrapMapper(MapperWrapper next) {
             // Provide our own aliasing using strings rather than classes
             return new MapperWrapper(next){
             // Translate alias to classname and then delegate to wrapped class
+            @Override
             public Class realClass(String alias) {
                 String fullName = aliasToClass(alias);
                 return super.realClass(fullName == null ? alias : fullName);
             }
             // Translate to alias and then delegate to wrapped class
+            @Override
             public String serializedClass(Class type) {
                 if (type == null) {
                     return super.serializedClass(null); // was type, but that caused FindBugs warning

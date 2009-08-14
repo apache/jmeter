@@ -176,6 +176,7 @@ public class Calculator {
      *
      * @return average page size
      */
+    @Deprecated
     public double getPageSize() {
         if (count > 0 && bytes > 0) {
             return (double) bytes / count;

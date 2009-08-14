@@ -51,19 +51,23 @@ public class PasswordEditor extends PropertyEditorSupport implements ActionListe
         textField.addFocusListener(this);
     }
 
+    @Override
     public String getAsText() {
         return new String(textField.getPassword());
     }
 
+    @Override
     public void setAsText(String value) {
         initialValue = value;
         textField.setText(value);
     }
 
+    @Override
     public Object getValue() {
         return getAsText();
     }
 
+    @Override
     public void setValue(Object value) {
         if (value instanceof String) {
             setAsText((String) value);
@@ -77,10 +81,12 @@ public class PasswordEditor extends PropertyEditorSupport implements ActionListe
      *
      * @see java.beans.PropertyEditor#getCustomEditor()
      */
+    @Override
     public Component getCustomEditor() {
         return textField;
     }
 
+    @Override
     public boolean supportsCustomEditor() {
         return true;
     }
@@ -88,6 +94,7 @@ public class PasswordEditor extends PropertyEditorSupport implements ActionListe
     /*
      * (non-Javadoc) Avoid needlessly firing PropertyChanged events.
      */
+    @Override
     public void firePropertyChange() {
         String newValue = getAsText();
 

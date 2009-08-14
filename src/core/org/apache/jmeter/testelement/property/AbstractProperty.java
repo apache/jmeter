@@ -98,6 +98,7 @@ public abstract class AbstractProperty implements JMeterProperty {
      *
      * @see Object#clone()
      */
+    @Override
     public Object clone() {
         try {
             AbstractProperty prop = (AbstractProperty) super.clone();
@@ -197,6 +198,7 @@ public abstract class AbstractProperty implements JMeterProperty {
      *
      * @return true if names are equal and values are equal (or both null)
      */
+    @Override
     public boolean equals(Object o) {
         if (!(o instanceof JMeterProperty)) {
             return false;
@@ -213,6 +215,7 @@ public abstract class AbstractProperty implements JMeterProperty {
         return s1 == null ? s2 == null : s1.equals(s2);
     }
 
+    @Override
     public int hashCode() {
         int result = 17;
         result = result * 37 + name.hashCode();// name cannot be null
@@ -392,6 +395,7 @@ public abstract class AbstractProperty implements JMeterProperty {
      *
      * @return the string value
      */
+    @Override
     public String toString() {
         // N.B. Other classes rely on this returning just the string.
         return getStringValue();

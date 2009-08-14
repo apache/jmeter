@@ -40,10 +40,12 @@ public class CreateFunctionDialog extends AbstractAction {
     /**
      * Provide the list of Action names that are available in this command.
      */
+    @Override
     public Set getActionNames() {
         return commands;
     }
 
+    @Override
     public void doAction(ActionEvent arg0) {
         helper.show();
     }

@@ -55,6 +55,7 @@ public class Arguments extends ConfigTestElement implements Serializable {
     /**
      * Clear the arguments.
      */
+    @Override
     public void clear() {
         super.clear();
         setProperty(new CollectionProperty(ARGUMENTS, new ArrayList()));
@@ -147,6 +148,7 @@ public class Arguments extends ConfigTestElement implements Serializable {
      *
      * @return the string representation of the arguments
      */
+    @Override
     public String toString() {
         StringBuffer str = new StringBuffer();
         PropertyIterator iter = getArguments().iterator();

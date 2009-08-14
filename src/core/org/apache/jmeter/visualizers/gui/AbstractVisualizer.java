@@ -271,6 +271,7 @@ public abstract class AbstractVisualizer
     }
 
     /* Overrides AbstractJMeterGuiComponent.configure(TestElement) */
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         setFile(el.getPropertyAsString(ResultCollector.FILENAME));
@@ -320,6 +321,7 @@ public abstract class AbstractVisualizer
      * @return a panel containing the component title, name panel, file panel,
      *         and error logging checkbox
      */
+    @Override
     protected Container makeTitlePanel() {
         Container panel = super.makeTitlePanel();
         // Note: the file panel already includes the error logging checkbox,
@@ -339,6 +341,7 @@ public abstract class AbstractVisualizer
         this.collector = collector;
     }
 
+    @Override
     public void clearGui(){
         super.clearGui();
         filePanel.clearGui();

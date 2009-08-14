@@ -52,10 +52,12 @@ public class LoadRecentProject extends Load {
         super();
     }
 
+    @Override
     public Set getActionNames() {
         return commands;
     }
 
+    @Override
     public void doAction(ActionEvent e) {
         // We must ask the user if it is ok to close current project
         if (!Close.performAction(e)) {

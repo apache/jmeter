@@ -54,6 +54,7 @@ public class ProxyAuthenticator extends Authenticator {
      * @return a PasswordAuthentication instance to use for authenticating with
      *         the proxy
      */
+    @Override
     protected PasswordAuthentication getPasswordAuthentication() {
         return new PasswordAuthentication(userName, password);
     }

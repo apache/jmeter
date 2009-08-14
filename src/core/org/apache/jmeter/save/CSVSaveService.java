@@ -169,6 +169,7 @@ public final class CSVSaveService {
      *
      * @throws JMeterError
      */
+    @Deprecated
     public static SampleEvent makeResultFromDelimitedString(
             final String inputLine,
             final SampleSaveConfiguration saveConfig, // may be updated
@@ -751,6 +752,7 @@ public final class CSVSaveService {
                 sb.append(b);
             }
 
+            @Override
             public String toString(){
                 return sb.toString();
             }

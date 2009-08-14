@@ -53,6 +53,7 @@ public abstract class MultiProperty extends AbstractProperty {
      */
     public abstract void clear();
 
+    @Override
     public void setRunningVersion(boolean running) {
         super.setRunningVersion(running);
         PropertyIterator iter = iterator();
@@ -73,6 +74,7 @@ public abstract class MultiProperty extends AbstractProperty {
         }
     }
 
+    @Override
     public void mergeIn(JMeterProperty prop) {
         if (prop.getObjectValue() == getObjectValue()) {
             return;

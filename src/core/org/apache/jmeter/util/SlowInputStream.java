@@ -40,12 +40,14 @@ public class SlowInputStream extends FilterInputStream {
         pauser = new CPSPauser(cps);
     }
 
+    @Override
     public int read() throws IOException {
         pauser.pause(1);
         return in.read();
     }
 
     // Also handles read(byte[])
+    @Override
     public int read(byte[] b, int off, int len) throws IOException {
         pauser.pause(len);
         return in.read(b, off, len);

@@ -42,6 +42,7 @@ public class CollectionProperty extends MultiProperty {
         value = new ArrayList();
     }
 
+    @Override
     public boolean equals(Object o) {
         if (o instanceof CollectionProperty) {
             if (value != null) {
@@ -51,6 +52,7 @@ public class CollectionProperty extends MultiProperty {
         return false;
     }
 
+    @Override
     public int hashCode() {
         return (value == null ? 0 : value.hashCode());
     }
@@ -96,6 +98,7 @@ public class CollectionProperty extends MultiProperty {
 
     }
 
+    @Override
     public PropertyIterator iterator() {
         return getIterator(value);
     }
@@ -127,6 +130,7 @@ public class CollectionProperty extends MultiProperty {
      *
      * @see Object#clone()
      */
+    @Override
     public Object clone() {
         CollectionProperty prop = (CollectionProperty) super.clone();
         prop.value = cloneCollection();
@@ -151,6 +155,7 @@ public class CollectionProperty extends MultiProperty {
         value = normalizeList(coll);
     }
 
+    @Override
     public void clear() {
         value.clear();
     }
@@ -160,6 +165,7 @@ public class CollectionProperty extends MultiProperty {
      *
      * @param prop
      */
+    @Override
     public void addProperty(JMeterProperty prop) {
         value.add(prop);
     }
@@ -174,6 +180,7 @@ public class CollectionProperty extends MultiProperty {
      *
      * @see AbstractProperty#getPropertyType()
      */
+    @Override
     protected Class getPropertyType() {
         if (value.size() > 0) {
             return value.iterator().next().getClass();
@@ -198,6 +205,7 @@ public class CollectionProperty extends MultiProperty {
      *
      * @see JMeterProperty#setRunningVersion(boolean)
      */
+    @Override
     public void setRunningVersion(boolean running) {
         super.setRunningVersion(running);
         if (running) {

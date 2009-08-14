@@ -130,6 +130,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      * @return a Collection of Strings, where each element is one of the
      *         constants defined in MenuFactory
      */
+    @Override
     public Collection getMenuCategories() {
         if (standalone) {
             return super.getMenuCategories();
@@ -174,6 +175,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      * @param el
      *            the TestElement to configure
      */
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         if (el instanceof Arguments) {
@@ -236,6 +238,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         }
     }
 
+    @Override
     public void clearGui(){
         super.clearGui();
         clear();

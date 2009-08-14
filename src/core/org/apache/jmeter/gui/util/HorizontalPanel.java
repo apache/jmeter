@@ -59,6 +59,7 @@ public class HorizontalPanel extends JPanel {
      *
      * @see java.awt.Container#add(java.awt.Component)
      */
+    @Override
     public Component add(Component c) {
         // This won't work right if we remove components. But we don't, so I'm
         // not going to worry about it right now.

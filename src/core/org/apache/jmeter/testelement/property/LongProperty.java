@@ -42,6 +42,7 @@ public class LongProperty extends NumberProperty {
      *
      * @see org.apache.jmeter.testelement.property.JMeterProperty#setRunningVersion(boolean)
      */
+    @Override
     public void setRunningVersion(boolean runningVersion) {
         savedValue = value;
         super.setRunningVersion(runningVersion);
@@ -60,10 +61,12 @@ public class LongProperty extends NumberProperty {
         this.value = value;
     }
 
+    @Override
     protected void setNumberValue(Number n) {
         value = n.longValue();
     }
 
+    @Override
     protected void setNumberValue(String n) throws NumberFormatException {
         value = Long.parseLong(n);
     }
@@ -82,6 +85,7 @@ public class LongProperty extends NumberProperty {
         return new Long(value);
     }
 
+    @Override
     public Object clone() {
         LongProperty prop = (LongProperty) super.clone();
         prop.value = value;
@@ -91,6 +95,7 @@ public class LongProperty extends NumberProperty {
     /**
      * @see JMeterProperty#getBooleanValue()
      */
+    @Override
     public boolean getBooleanValue() {
         return getLongValue() > 0 ? true : false;
     }
@@ -98,6 +103,7 @@ public class LongProperty extends NumberProperty {
     /**
      * @see JMeterProperty#getDoubleValue()
      */
+    @Override
     public double getDoubleValue() {
         return value;
     }
@@ -105,6 +111,7 @@ public class LongProperty extends NumberProperty {
     /**
      * @see JMeterProperty#getFloatValue()
      */
+    @Override
     public float getFloatValue() {
         return value;
     }
@@ -112,6 +119,7 @@ public class LongProperty extends NumberProperty {
     /**
      * @see JMeterProperty#getIntValue()
      */
+    @Override
     public int getIntValue() {
         return (int) value;
     }
@@ -119,6 +127,7 @@ public class LongProperty extends NumberProperty {
     /**
      * @see JMeterProperty#getLongValue()
      */
+    @Override
     public long getLongValue() {
         return value;
     }

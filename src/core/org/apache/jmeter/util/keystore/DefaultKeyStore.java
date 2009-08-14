@@ -42,6 +42,7 @@ public class DefaultKeyStore extends JmeterKeyStore {
         this.store = KeyStore.getInstance(type);
     }
 
+    @Override
     public void load(InputStream is, String pword) throws Exception {
         store.load(is, pword.toCharArray());
         PrivateKey _key = null;
@@ -77,14 +78,17 @@ public class DefaultKeyStore extends JmeterKeyStore {
         this.certChain = _certChain;
     }
 
+    @Override
     public final X509Certificate[] getCertificateChain() {
         return this.certChain;
     }
 
+    @Override
     public final PrivateKey getPrivateKey() {
         return this.key;
     }
 
+    @Override
     public final String getAlias() {
         return this.alias;
     }

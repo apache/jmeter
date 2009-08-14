@@ -84,6 +84,7 @@ public class AboutCommand implements Command {
         if (about == null) {
             about = new JDialog(mainFrame, "About Apache JMeter...", false);
             about.addMouseListener(new MouseAdapter() {
+                @Override
                 public void mouseClicked(MouseEvent e) {
                     about.setVisible(false);
                 }

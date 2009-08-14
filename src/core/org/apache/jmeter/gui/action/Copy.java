@@ -50,10 +50,12 @@ public class Copy extends AbstractAction {
     /*
      * @see org.apache.jmeter.gui.action.Command#getActionNames()
      */
+    @Override
     public Set getActionNames() {
         return commands;
     }
 
+    @Override
     public void doAction(ActionEvent e) {
         JMeterTreeListener treeListener = GuiPackage.getInstance().getTreeListener();
         JMeterTreeNode[] nodes = treeListener.getSelectedNodes();

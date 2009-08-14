@@ -31,6 +31,7 @@ public class JMeterCellRenderer extends DefaultTreeCellRenderer {
     public JMeterCellRenderer() {
     }
 
+    @Override
     public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded,
             boolean leaf, int row, boolean p_hasFocus) {
         super.getTreeCellRendererComponent(tree, ((JMeterTreeNode) value).getName(), sel, expanded, leaf, row,

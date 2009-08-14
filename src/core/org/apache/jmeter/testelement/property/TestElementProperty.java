@@ -42,6 +42,7 @@ public class TestElementProperty extends MultiProperty {
      * @return true if the value is not null and equals the other Objects value;
      *         false otherwise (even if both values are null)
      */
+    @Override
     public boolean equals(Object o) {
         if (o instanceof TestElementProperty) {
             if (this == o) {
@@ -54,6 +55,7 @@ public class TestElementProperty extends MultiProperty {
         return false;
     }
 
+    @Override
     public int hashCode() {
         return value == null ? 0 : value.hashCode();
     }
@@ -91,6 +93,7 @@ public class TestElementProperty extends MultiProperty {
      *
      * @see java.lang.Object#clone()
      */
+    @Override
     public Object clone() {
         TestElementProperty prop = (TestElementProperty) super.clone();
         prop.value = (TestElement) value.clone();
@@ -100,6 +103,7 @@ public class TestElementProperty extends MultiProperty {
     /*
      * (non-Javadoc) #mergeIn(JMeterProperty)
      */
+    @Override
     public void mergeIn(JMeterProperty prop) {
         if (isEqualType(prop)) {
             value.addTestElement((TestElement) prop.getObjectValue());
@@ -119,6 +123,7 @@ public class TestElementProperty extends MultiProperty {
     /*
      * (non-Javadoc) #setRunningVersion(boolean)
      */
+    @Override
     public void setRunningVersion(boolean runningVersion) {
         super.setRunningVersion(runningVersion);
         value.setRunningVersion(runningVersion);
@@ -134,6 +139,7 @@ public class TestElementProperty extends MultiProperty {
      *
      * @see MultiProperty#addProperty(JMeterProperty)
      */
+    @Override
     public void addProperty(JMeterProperty prop) {
         value.setProperty(prop);
     }
@@ -143,6 +149,7 @@ public class TestElementProperty extends MultiProperty {
      *
      * @see MultiProperty#clear()
      */
+    @Override
     public void clear() {
         value.clear();
 
@@ -153,6 +160,7 @@ public class TestElementProperty extends MultiProperty {
      *
      * @see MultiProperty#iterator()
      */
+    @Override
     public PropertyIterator iterator() {
         return value.propertyIterator();
     }

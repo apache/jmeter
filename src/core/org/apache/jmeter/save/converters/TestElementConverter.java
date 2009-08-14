@@ -52,6 +52,7 @@ public class TestElementConverter extends AbstractCollectionConverter {
      *
      * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
      */
+    @Override
     public boolean canConvert(Class arg0) {
         return TestElement.class.isAssignableFrom(arg0);
     }
@@ -63,6 +64,7 @@ public class TestElementConverter extends AbstractCollectionConverter {
      *      com.thoughtworks.xstream.io.HierarchicalStreamWriter,
      *      com.thoughtworks.xstream.converters.MarshallingContext)
      */
+    @Override
     public void marshal(Object arg0, HierarchicalStreamWriter writer, MarshallingContext context) {
         TestElement el = (TestElement) arg0;
         if (testFormat22){
@@ -92,6 +94,7 @@ public class TestElementConverter extends AbstractCollectionConverter {
      * @see com.thoughtworks.xstream.converters.Converter#unmarshal(com.thoughtworks.xstream.io.HierarchicalStreamReader,
      *      com.thoughtworks.xstream.converters.UnmarshallingContext)
      */
+    @Override
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
         String classAttribute = reader.getAttribute(ConversionHelp.ATT_CLASS);
         Class type;

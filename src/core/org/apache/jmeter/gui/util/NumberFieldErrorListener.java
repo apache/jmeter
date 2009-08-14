@@ -36,6 +36,7 @@ public class NumberFieldErrorListener extends FocusAdapter {
         return listener;
     }
 
+    @Override
     public void focusLost(FocusEvent e) {
         Component source = (Component) e.getSource();
         String text = "";
