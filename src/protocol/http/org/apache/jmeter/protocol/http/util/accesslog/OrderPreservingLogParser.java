@@ -38,6 +38,7 @@ public class OrderPreservingLogParser extends SharedTCLogParser {
      * @param count
      * @return lines parsed
      */
+    @Override
     public synchronized int parseAndConfigure(int count, TestElement el) {
         return this.parse(el, count);
     }

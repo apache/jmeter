@@ -62,6 +62,7 @@ public class HTMLParseError extends Error {
      * Local verstion of getCause() for JDK1.3 support
      *
      */
+    @Override
     public Throwable getCause() {
         return savedCause;
     }

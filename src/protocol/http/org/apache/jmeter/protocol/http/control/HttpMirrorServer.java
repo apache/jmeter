@@ -67,6 +67,7 @@ public class HttpMirrorServer extends Thread {
      * Listen on the daemon port and handle incoming requests. This method will
      * not exit until {@link #stopServer()} is called or an error occurs.
      */
+    @Override
     public void run() {
         except = null;
         running = true;

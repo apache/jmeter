@@ -415,6 +415,7 @@ public class WebServiceSampler extends HTTPSamplerBase {
      * sample()
      */
 
+    @Override
     protected HTTPSampleResult sample(URL u, String s, boolean b, int i) {
         throw new RuntimeException("Not implemented - should not be called");
     }
@@ -426,6 +427,7 @@ public class WebServiceSampler extends HTTPSamplerBase {
      * reader will read, but do nothing with it. Essentially, the stream from
      * the server goes into the ether.
      */
+    @Override
     public SampleResult sample() {
         SampleResult result = new SampleResult();
         result.setSuccessful(false); // Assume it will fail
@@ -608,6 +610,7 @@ public class WebServiceSampler extends HTTPSamplerBase {
      * implementation. We want to reuse the other parts of HTTPSampler, but not
      * the connection. The connection is handled by the Apache SOAP driver.
      */
+    @Override
     public void addEncodedArgument(String name, String value, String metaData) {
     }
 

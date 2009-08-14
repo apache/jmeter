@@ -65,6 +65,7 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
         setProperty(new CollectionProperty(HEADERS, new ArrayList()));
     }
 
+    @Override
     public void clear() {
         super.clear();
         setProperty(new CollectionProperty(HEADERS, new ArrayList()));

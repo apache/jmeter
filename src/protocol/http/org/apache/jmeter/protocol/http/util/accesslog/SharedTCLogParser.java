@@ -37,6 +37,7 @@ public class SharedTCLogParser extends TCLogParser implements TestCloneable {
     /* (non-Javadoc)
      * @see java.lang.Object#clone()
      */
+    @Override
     public Object clone() {
         SharedTCLogParser parser = new SharedTCLogParser();
         parser.FILENAME = FILENAME;
@@ -47,6 +48,7 @@ public class SharedTCLogParser extends TCLogParser implements TestCloneable {
     /* (non-Javadoc)
      * @see org.apache.jmeter.protocol.http.util.accesslog.TCLogParser#parse(org.apache.jmeter.testelement.TestElement, int)
      */
+    @Override
     public int parse(TestElement el, int parseCount) {
         FileServer fileServer = FileServer.getFileServer();
         fileServer.reserveFile(FILENAME);
@@ -97,6 +99,7 @@ public class SharedTCLogParser extends TCLogParser implements TestCloneable {
         return actualCount;
     }
 
+    @Override
     public void close() {
         try {
             FileServer.getFileServer().closeFile(FILENAME);

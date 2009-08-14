@@ -60,6 +60,7 @@ public class Header extends AbstractTestElement implements Serializable {
     /**
      * Get the name for this object.
      */
+    @Override
     public synchronized String getName() {
         return getPropertyAsString(HNAME);
     }
@@ -67,6 +68,7 @@ public class Header extends AbstractTestElement implements Serializable {
     /**
      * Set the name for this object.
      */
+    @Override
     public synchronized void setName(String name) {
         this.setProperty(HNAME, name);
     }
@@ -88,6 +90,7 @@ public class Header extends AbstractTestElement implements Serializable {
     /**
      * Creates a string representation of this header.
      */
+    @Override
     public String toString() {
         return getName() + "\t" + getValue(); //$NON-NLS-1$
     }

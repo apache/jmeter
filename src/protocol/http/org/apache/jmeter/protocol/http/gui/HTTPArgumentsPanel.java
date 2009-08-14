@@ -43,6 +43,7 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
 
     private static final String INCLUDE_EQUALS = "include_equals"; //$NON-NLS-1$
 
+    @Override
     protected void initializeTableModel() {
         tableModel = new ObjectTableModel(new String[] {
                 ArgumentsPanel.COLUMN_RESOURCE_NAMES_0, ArgumentsPanel.COLUMN_RESOURCE_NAMES_1, ENCODE_OR_NOT, INCLUDE_EQUALS },
@@ -66,6 +67,7 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
         return instance.tableModel.checkFunctors(null,instance.getClass());
     }
 
+    @Override
     protected void sizeColumns(JTable table) {
         int resizeMode = table.getAutoResizeMode();
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -74,6 +76,7 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
         table.setAutoResizeMode(resizeMode);
     }
 
+    @Override
     protected Object makeNewArgument() {
         HTTPArgument arg = new HTTPArgument("", "");
         arg.setAlwaysEncoded(false);
@@ -93,6 +96,7 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
         super(JMeterUtils.getResString("paramtable")); //$NON-NLS-1$
     }
 
+    @Override
     public TestElement createTestElement() {
         stopTableEditing();
         Iterator modelData = tableModel.iterator();
@@ -105,6 +109,7 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
         return (TestElement) args.clone();
     }
 
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         if (el instanceof Arguments) {

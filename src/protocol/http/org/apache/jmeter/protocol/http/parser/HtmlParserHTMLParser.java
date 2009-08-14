@@ -56,6 +56,7 @@ class HtmlParserHTMLParser extends HTMLParser {
         log.info("Using htmlparser version: "+Parser.getVersion());
     }
 
+    @Override
     protected boolean isReusable() {
         return true;
     }
@@ -66,6 +67,7 @@ class HtmlParserHTMLParser extends HTMLParser {
      * @see org.apache.jmeter.protocol.http.parser.HtmlParser#getEmbeddedResourceURLs(byte[],
      *      java.net.URL)
      */
+    @Override
     public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection urls) throws HTMLParseException {
 
         if (log.isDebugEnabled()) {

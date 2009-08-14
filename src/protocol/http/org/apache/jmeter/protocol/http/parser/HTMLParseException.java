@@ -57,6 +57,7 @@ public class HTMLParseException extends Exception {
      * Local verstion of getCause() for JDK1.3 support
      *
      */
+    @Override
     public Throwable getCause() {
         return savedCause;
     }

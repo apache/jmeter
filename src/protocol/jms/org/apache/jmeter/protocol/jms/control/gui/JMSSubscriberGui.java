@@ -188,6 +188,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.eve
     /**
      * the implementation loads the URL and the soap action for the request.
      */
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         SubscriberSampler sampler = (SubscriberSampler) el;
@@ -204,6 +205,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.eve
         clientChoice.setText(sampler.getClientChoice());
     }
 
+    @Override
     public void clearGui(){
         super.clearGui();
         useProperties.setSelected(false); // $NON-NLS-1$

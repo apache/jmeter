@@ -218,6 +218,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
     }
 
     /* Overrides AbstractJMeterGuiComponent.configure(TestElement) */
+    @Override
     public void configure(TestElement config) {
         super.configure(config);
 

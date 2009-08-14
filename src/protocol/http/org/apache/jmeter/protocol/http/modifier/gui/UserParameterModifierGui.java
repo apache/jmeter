@@ -39,6 +39,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * This test element is deprecated. Test plans should use User Parameters instead.
  * @deprecated
  */
+@Deprecated
 public class UserParameterModifierGui extends AbstractPreProcessorGui {
     // -------------------------------------------
     // Constants and Data Members
@@ -72,6 +73,7 @@ public class UserParameterModifierGui extends AbstractPreProcessorGui {
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
 
@@ -85,6 +87,7 @@ public class UserParameterModifierGui extends AbstractPreProcessorGui {
         return "http_user_parameter_modifier"; // $NON-NLS-1$
     }
 
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         fileNameField.setText(((UserParameterModifier) el).getXmlUri());
@@ -128,6 +131,7 @@ public class UserParameterModifierGui extends AbstractPreProcessorGui {
         return fileLocator;
     }
 
+    @Override
     public Dimension getPreferredSize() {
         return getMinimumSize();
     }

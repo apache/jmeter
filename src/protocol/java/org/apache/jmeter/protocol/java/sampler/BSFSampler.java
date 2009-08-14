@@ -53,34 +53,42 @@ public class BSFSampler extends BSFTestElement implements Sampler {
         super();
     }
 
+    @Override
     public String getFilename() {
         return getPropertyAsString(FILENAME);
     }
 
+    @Override
     public void setFilename(String newFilename) {
         this.setProperty(FILENAME, newFilename);
     }
 
+    @Override
     public String getScript() {
         return this.getPropertyAsString(SCRIPT);
     }
 
+    @Override
     public void setScript(String newScript) {
         this.setProperty(SCRIPT, newScript);
     }
 
+    @Override
     public String getParameters() {
         return this.getPropertyAsString(PARAMETERS);
     }
 
+    @Override
     public void setParameters(String newScript) {
         this.setProperty(PARAMETERS, newScript);
     }
 
+    @Override
     public String getScriptLanguage() {
         return this.getPropertyAsString(LANGUAGE);
     }
 
+    @Override
     public void setScriptLanguage(String lang) {
         this.setProperty(LANGUAGE, lang);
     }

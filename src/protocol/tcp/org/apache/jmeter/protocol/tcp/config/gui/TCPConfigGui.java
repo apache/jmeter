@@ -66,6 +66,7 @@ public class TCPConfigGui extends AbstractConfigGui {
         return "tcp_config_title"; // $NON-NLS-1$
     }
 
+    @Override
     public void configure(TestElement element) {
         super.configure(element);
         // N.B. this will be a config element, so we cannot use the getXXX() methods
@@ -107,6 +108,7 @@ public class TCPConfigGui extends AbstractConfigGui {
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
 

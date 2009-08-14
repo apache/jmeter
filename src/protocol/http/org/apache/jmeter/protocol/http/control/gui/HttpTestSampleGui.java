@@ -56,6 +56,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         init();
     }
 
+    @Override
     public void configure(TestElement element) {
         super.configure(element);
         final HTTPSamplerBase samplerBase = (HTTPSamplerBase) element;
@@ -137,6 +138,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         return optionalTasksPanel;
     }
 
+    @Override
     public Dimension getPreferredSize() {
         return getMinimumSize();
     }
@@ -146,6 +148,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#clearGui()
      */
+    @Override
     public void clearGui() {
         super.clearGui();
         getImages.setSelected(false);
