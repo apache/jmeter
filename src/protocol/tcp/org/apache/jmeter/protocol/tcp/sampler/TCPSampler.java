@@ -112,10 +112,12 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
     }
 
     /** the cache of TCP Connections */
-    private static final ThreadLocal tp = new ThreadLocal() {
+    // KEY = TCPKEY or ERRKEY, Entry= Socket or String
+    private static final ThreadLocal<Map<String, Object>> tp =
+        new ThreadLocal<Map<String, Object>>() {
         @Override
-        protected Object initialValue() {
-            return new HashMap();
+        protected Map<String, Object> initialValue() {
+            return new HashMap<String, Object>();
         }
     };
 
@@ -126,12 +128,12 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
     }
 
     private String getError() {
-        Map cp = (Map) tp.get();
+        Map<String, Object> cp = tp.get();
         return (String) cp.get(ERRKEY);
     }
 
     private Socket getSocket() {
-        Map cp = (Map) tp.get();
+        Map<String, Object> cp = tp.get();
         Socket con = null;
         if (isReUseConnection()) {
             con = (Socket) cp.get(TCPKEY);
@@ -250,7 +252,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
     private static final String protoPrefix = "org.apache.jmeter.protocol.tcp.sampler."; //$NON-NLS-1$
 
     private Class getClass(String className) {
-        Class c = null;
+        Class<?> c = null;
         try {
             c = Class.forName(className, false, Thread.currentThread().getContextClassLoader());
         } catch (ClassNotFoundException e) {
@@ -266,7 +268,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 
     private TCPClient getProtocol() {
         TCPClient TCPClient = null;
-        Class javaClass = getClass(getClassname());
+        Class<?> javaClass = getClass(getClassname());
         if (javaClass == null){
             return null;
         }
@@ -375,7 +377,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 }
 
     private void closeSocket() {
-        Map cp = (Map) tp.get();
+        Map<String, Object> cp = tp.get();
         Socket con = (Socket) cp.remove(TCPKEY);
         if (con != null) {
             log.debug(this + " Closing connection " + con); //$NON-NLS-1$

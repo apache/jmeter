@@ -97,13 +97,13 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
             = JMeterUtils.getPropDefault("assertion.equals_diff_delta_end", "]]]");
 
     public ResponseAssertion() {
-        setProperty(new CollectionProperty(TEST_STRINGS, new ArrayList()));
+        setProperty(new CollectionProperty(TEST_STRINGS, new ArrayList<String>()));
     }
 
     @Override
     public void clear() {
         super.clear();
-        setProperty(new CollectionProperty(TEST_STRINGS, new ArrayList()));
+        setProperty(new CollectionProperty(TEST_STRINGS, new ArrayList<String>()));
     }
 
     private void setTestField(String testField) {

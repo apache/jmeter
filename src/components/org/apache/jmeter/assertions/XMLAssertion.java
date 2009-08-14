@@ -39,9 +39,9 @@ public class XMLAssertion extends AbstractTestElement implements Serializable, A
     private static final char NEW_LINE = '\n'; // $NON-NLS-1$
 
     // one builder for all requests in a thread
-    private static final ThreadLocal myBuilder = new ThreadLocal() {
+    private static final ThreadLocal<SAXBuilder> myBuilder = new ThreadLocal<SAXBuilder>() {
         @Override
-        protected Object initialValue() {
+        protected SAXBuilder initialValue() {
             return new SAXBuilder();
         }
     };
@@ -64,7 +64,7 @@ public class XMLAssertion extends AbstractTestElement implements Serializable, A
         // the result data
         String resultData = new String(getResultBody(responseData)); // TODO - charset?
 
-        SAXBuilder builder = (SAXBuilder) myBuilder.get();
+        SAXBuilder builder = myBuilder.get();
 
         try {
             builder.build(new StringReader(resultData));

@@ -89,7 +89,7 @@ public class JsseSSLManager extends SSLManager {
     private Provider pro = null;
 
     private SSLContext defaultContext; // If we are using a single session
-    private ThreadLocal threadlocal; // Otherwise
+    private ThreadLocal<SSLContext> threadlocal; // Otherwise
 
     /**
      * Create the SSLContext, and wrap all the X509KeyManagers with
@@ -109,7 +109,7 @@ public class JsseSSLManager extends SSLManager {
                 log.debug("Creating shared context");
                 this.defaultContext = createContext();
             } else {
-                this.threadlocal = new ThreadLocal();
+                this.threadlocal = new ThreadLocal<SSLContext>();
             }
 
             /*
@@ -190,7 +190,7 @@ public class JsseSSLManager extends SSLManager {
             return this.defaultContext;
         }
 
-        SSLContext sslContext = (SSLContext) this.threadlocal.get();
+        SSLContext sslContext = this.threadlocal.get();
         if (sslContext == null) {
             if (log.isDebugEnabled()){
                 log.debug("Creating threadLocal SSL context for: "+Thread.currentThread().getName());

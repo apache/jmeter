@@ -76,7 +76,7 @@ public class JMeterUtils implements UnitTestManager {
 
     private static volatile Properties appProperties;
 
-    private static final Vector localeChangeListeners = new Vector();
+    private static final Vector<LocaleChangeListener> localeChangeListeners = new Vector<LocaleChangeListener>();
 
     private static volatile Locale locale;
 
@@ -93,9 +93,9 @@ public class JMeterUtils implements UnitTestManager {
     
     private static volatile boolean ignoreResorces = false; // Special flag for use in debugging resources
 
-    private static final ThreadLocal localMatcher = new ThreadLocal() {
+    private static final ThreadLocal<Perl5Matcher> localMatcher = new ThreadLocal<Perl5Matcher>() {
         @Override
-        protected Object initialValue() {
+        protected Perl5Matcher initialValue() {
             return new Perl5Matcher();
         }
     };
@@ -107,7 +107,7 @@ public class JMeterUtils implements UnitTestManager {
      * Gets Perl5Matcher for this thread.
      */
     public static Perl5Matcher getMatcher() {
-        return (Perl5Matcher) localMatcher.get();
+        return localMatcher.get();
     }
 
     /**
@@ -570,8 +570,8 @@ public class JMeterUtils implements UnitTestManager {
     // TODO - does not appear to be called directly
     public static Vector getControllers(Properties properties) {
         String name = "controller."; // $NON-NLS-1$
-        Vector v = new Vector();
-        Enumeration names = properties.keys();
+        Vector<Object> v = new Vector<Object>();
+        Enumeration<?> names = properties.keys();
         while (names.hasMoreElements()) {
             String prop = (String) names.nextElement();
             if (prop.startsWith(name)) {
@@ -816,9 +816,9 @@ public class JMeterUtils implements UnitTestManager {
         }
 
         try {
-            Class c = Class.forName(impls);
+            Class<?> c = Class.forName(impls);
             try {
-                Class o = Class.forName(className);
+                Class<?> o = Class.forName(className);
                 Object res = o.newInstance();
                 if (c.isInstance(res)) {
                     return res;
@@ -851,7 +851,7 @@ public class JMeterUtils implements UnitTestManager {
     public static Vector instantiate(Vector v, String className) {
         Vector i = new Vector();
         try {
-            Class c = Class.forName(className);
+            Class<?> c = Class.forName(className);
             Enumeration elements = v.elements();
             while (elements.hasMoreElements()) {
                 String name = (String) elements.nextElement();
