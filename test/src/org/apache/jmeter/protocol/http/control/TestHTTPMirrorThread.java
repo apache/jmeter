@@ -65,10 +65,12 @@ public class TestHTTPMirrorThread extends TestCase {
         TestSetup setup = new TestSetup(new TestSuite(TestHTTPMirrorThread.class)){         
             private HttpMirrorServer httpServer;
             
+            @Override
             protected void setUp() throws Exception {
                 httpServer = startHttpMirror(HTTP_SERVER_PORT);
             }
             
+            @Override
             protected void tearDown() throws Exception {
                 // Shutdown the http server
                 httpServer.stopServer();

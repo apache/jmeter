@@ -39,6 +39,7 @@ public class TestFileServer extends JMeterTestCase {
         super(arg0);
     }
 
+    @Override
     public void tearDown() throws IOException{
         FS.closeFiles();
         FS.resetBase();

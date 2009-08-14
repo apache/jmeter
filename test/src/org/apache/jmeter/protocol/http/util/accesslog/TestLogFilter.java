@@ -76,6 +76,7 @@ public class TestLogFilter extends JMeterTestCase {
 
         private LogFilter testf;
 
+        @Override
         public void setUp() {
             testf = new LogFilter();
         }

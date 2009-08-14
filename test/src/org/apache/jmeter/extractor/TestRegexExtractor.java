@@ -41,6 +41,7 @@ public class TestRegexExtractor extends TestCase {
 
         private JMeterContext jmctx = null;
 
+        @Override
         public void setUp() {
             jmctx = JMeterContextService.getContext();
             extractor = new RegexExtractor();

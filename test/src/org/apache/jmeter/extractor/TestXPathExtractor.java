@@ -41,6 +41,7 @@ public class TestXPathExtractor extends TestCase {
 
         private final static String VAL_NAME = "value";
         private final static String VAL_NAME_NR = "value_matchNr";
+        @Override
         public void setUp() {
             jmctx = JMeterContextService.getContext();
             extractor = new XPathExtractor();

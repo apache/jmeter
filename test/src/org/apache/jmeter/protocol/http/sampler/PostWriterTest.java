@@ -53,6 +53,7 @@ public class PostWriterTest extends TestCase {
     private File temporaryFile;
     
     PostWriter postWriter;
+    @Override
     protected void setUp() throws Exception {
         establishConnection();
         sampler = new HTTPSampler();// This must be the original (Java) HTTP sampler
@@ -70,6 +71,7 @@ public class PostWriterTest extends TestCase {
         output.close();
     }
 
+    @Override
     protected void tearDown() throws Exception {
         // delete temporay file
         temporaryFile.delete();
@@ -886,24 +888,30 @@ public class PostWriterTest extends TestCase {
             super(new URL(url));
         }
 
+        @Override
         public void connect() throws IOException {
         }
         
+        @Override
         public OutputStream getOutputStream() throws IOException {
             return output;
         }
 
+        @Override
         public void disconnect() {
         }
 
+        @Override
         public boolean usingProxy() {
             return false;
         }
 
+        @Override
         public String getRequestProperty(String key) {
             return (String) properties.get(key);
         }
 
+        @Override
         public void setRequestProperty(String key, String value) {
             properties.put(key, value);
         }

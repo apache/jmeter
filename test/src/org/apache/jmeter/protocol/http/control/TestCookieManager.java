@@ -37,6 +37,7 @@ public class TestCookieManager extends JMeterTestCase {
 
         private JMeterContext jmctx = null;
 
+        @Override
         public void setUp() throws Exception {
             super.setUp();
             jmctx = JMeterContextService.getContext();

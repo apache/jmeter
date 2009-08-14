@@ -34,7 +34,8 @@ public class SizeAssertionTest extends JMeterTestCase{
       private String data1 = "response Data\n" +  "line 2\n\nEOF";
       private int data1Len=data1.length();
       
-      public void setUp() {
+      @Override
+    public void setUp() {
           jmctx = JMeterContextService.getContext();
           assertion = new SizeAssertion();
           assertion.setThreadContext(jmctx);
