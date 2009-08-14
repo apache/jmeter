@@ -94,6 +94,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
         changeListener = list;
     }
 
+    @Override
     public Object clone() {
         MailerModel m = (MailerModel) super.clone();
         m.changeListener = changeListener;
@@ -205,6 +206,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
      * reset any mail-specific attributes (like sender, mail-subject...) since
      * they are independent of the sampling.
      */
+    @Override
     public synchronized void clear() {// TODO: should this be clearData()?
         failureCount = 0;
         successCount = 0;
@@ -222,6 +224,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
      *
      * @return A String-representation of this object.
      */
+    @Override
     public String toString() {
         return "E-Mail Notification";
     }

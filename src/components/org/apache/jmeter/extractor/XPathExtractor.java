@@ -132,7 +132,8 @@ public class XPathExtractor extends AbstractTestElement implements
         }
     }
 
-   public Object clone() {
+    @Override
+    public Object clone() {
         XPathExtractor cloned = (XPathExtractor) super.clone();
         return cloned;
     }

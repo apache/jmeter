@@ -74,6 +74,7 @@ public class CounterConfigGui extends AbstractConfigGui {
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
 
@@ -85,6 +86,7 @@ public class CounterConfigGui extends AbstractConfigGui {
         perUserField.setSelected(false);
     }
 
+    @Override
     public void configure(TestElement element) {
         super.configure(element);
         CounterConfig config = (CounterConfig) element;

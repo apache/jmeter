@@ -251,6 +251,7 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
         }
     }
 
+    @Override
     public Object clone() {
         RegexExtractor cloned = (RegexExtractor) super.clone();
         cloned.template = this.template;

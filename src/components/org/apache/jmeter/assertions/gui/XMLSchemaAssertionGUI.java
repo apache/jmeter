@@ -84,6 +84,7 @@ public class XMLSchemaAssertionGUI extends AbstractAssertionGui {
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
         
@@ -96,6 +97,7 @@ public class XMLSchemaAssertionGUI extends AbstractAssertionGui {
      * @param el -
      *            the test element (should be XMLSchemaAssertion)
      */
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         XMLSchemaAssertion assertion = (XMLSchemaAssertion) el;

@@ -56,11 +56,13 @@ public class RandomControlGui extends AbstractControllerGui {
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
         style.setSelected(false);
     }
 
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         if (((RandomController) el).getStyle() == InterleaveControl.IGNORE_SUB_CONTROLLERS) {

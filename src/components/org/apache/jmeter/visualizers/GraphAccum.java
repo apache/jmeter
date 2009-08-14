@@ -219,6 +219,7 @@ public class GraphAccum extends JComponent implements Scrollable, GraphAccumList
         log.debug("End : updateGui2");
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         log.debug("Start : paintComponent1");

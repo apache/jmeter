@@ -294,6 +294,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
      *
      * @return description of this visualizer
      */
+    @Override
     public String toString() {
         String desc = JMeterUtils.getResString("view_results_desc"); //$NON-NLS-1$
 
@@ -845,6 +846,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
     }
 
     private static class ResultsNodeRenderer extends DefaultTreeCellRenderer {
+        @Override
         public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded,
                 boolean leaf, int row, boolean focus) {
             super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, focus);
@@ -873,6 +875,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 
         private static final ViewFactory defaultFactory = new LocalHTMLFactory();
 
+        @Override
         public ViewFactory getViewFactory() {
             return defaultFactory;
         }
@@ -883,6 +886,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
              * related resources: - FRAMEs - IMAGEs TODO create better dummy
              * displays TODO suppress LINK somehow
              */
+            @Override
             public View create(Element elem) {
                 Object o = elem.getAttributes().getAttribute(StyleConstants.NameAttribute);
                 if (o instanceof HTML.Tag) {
@@ -957,6 +961,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
          * support html. author <a href="mailto:d.maung@mdl.com">Dave Maung</a>
          */
         private static class DomTreeRenderer extends DefaultTreeCellRenderer {
+            @Override
             public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded,
                     boolean leaf, int row, boolean phasFocus) {
                 super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, phasFocus);

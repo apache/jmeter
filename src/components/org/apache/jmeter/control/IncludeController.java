@@ -55,6 +55,7 @@ public class IncludeController extends GenericController implements ReplaceableC
         super();
     }
 
+    @Override
     public Object clone() {
         // TODO - fix so that this is only called once per test, instead of at every clone
         // Perhaps save previous filename, and only load if it has changed?
