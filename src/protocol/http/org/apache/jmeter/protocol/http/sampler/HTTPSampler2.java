@@ -60,6 +60,7 @@ import org.apache.commons.httpclient.methods.TraceMethod;
 import org.apache.commons.httpclient.methods.multipart.FilePart;
 import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
+import org.apache.commons.httpclient.methods.multipart.PartBase;
 import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.apache.commons.httpclient.params.DefaultHttpParams;
 import org.apache.commons.httpclient.params.HttpMethodParams;
@@ -126,10 +127,11 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
     /*
      * Connection is re-used within the thread if possible
      */
-    static final ThreadLocal httpClients = new ThreadLocal();
+    static final ThreadLocal<Map<HostConfiguration, HttpClient>> httpClients =
+        new ThreadLocal<Map<HostConfiguration, HttpClient>>();
 
-    private static final Set nonProxyHostFull   = new HashSet();// www.apache.org
-    private static final List nonProxyHostSuffix = new ArrayList();// .apache.org
+    private static final Set<String> nonProxyHostFull   = new HashSet<String>();// www.apache.org
+    private static final List<String> nonProxyHostSuffix = new ArrayList<String>();// .apache.org
 
     private static final int nonProxyHostSuffixSize;
 
@@ -141,7 +143,7 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
 
     private static boolean isPartialMatch(String host) {
         for (int i=0;i<nonProxyHostSuffixSize;i++){
-            if (host.endsWith((String)nonProxyHostSuffix.get(i))) {
+            if (host.endsWith(nonProxyHostSuffix.get(i))) {
                 return true;
             }
         }
@@ -271,7 +273,7 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
             }
 
             // We don't know how many entries will be skipped
-            ArrayList partlist = new ArrayList();
+            ArrayList<PartBase> partlist = new ArrayList<PartBase>();
             // Create the parts
             // Add any parameters
             PropertyIterator args = getArguments().iterator();
@@ -296,7 +298,7 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
 
             // Set the multipart for the post
             int partNo = partlist.size();
-            Part[] parts = (Part[])partlist.toArray(new Part[partNo]);
+            Part[] parts = partlist.toArray(new Part[partNo]);
             MultipartRequestEntity multiPart = new MultipartRequestEntity(parts, post.getParams());
             post.setRequestEntity(multiPart);
 
@@ -544,8 +546,8 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
             hc.setProxy(PROXY_HOST, PROXY_PORT);
         }
 
-        Map map = (Map) httpClients.get();
-        HttpClient httpClient = (HttpClient) map.get(hc);
+        Map<HostConfiguration, HttpClient> map = httpClients.get();
+        HttpClient httpClient = map.get(hc);
 
         if ( httpClient == null )
         {
@@ -1088,7 +1090,7 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
         log.debug("Thread Started");
 
         // Does not need to be synchronised, as all access is from same thread
-        httpClients.set ( new HashMap() );
+        httpClients.set ( new HashMap<HostConfiguration, HttpClient>() );
     }
 
     @Override
@@ -1096,13 +1098,13 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
         log.debug("Thread Finished");
 
         // Does not need to be synchronised, as all access is from same thread
-        Map map = (Map)httpClients.get();
+        Map<HostConfiguration, HttpClient> map = httpClients.get();
 
         if ( map != null ) {
-            for ( Iterator it = map.entrySet().iterator(); it.hasNext(); )
+            for ( Iterator<Map.Entry<HostConfiguration, HttpClient> > it = map.entrySet().iterator(); it.hasNext(); )
             {
-                Map.Entry entry = (Map.Entry) it.next();
-                HttpClient cl = (HttpClient) entry.getValue();
+                Map.Entry<HostConfiguration, HttpClient> entry = it.next();
+                HttpClient cl = entry.getValue();
                 // Can cause NPE in HttpClient 3.1
                 //((SimpleHttpConnectionManager)cl.getHttpConnectionManager()).shutdown();// Closes the connection
                 // Revert to original method:

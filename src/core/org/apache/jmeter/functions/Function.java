@@ -65,5 +65,5 @@ public interface Function {
      * least return a List containing the correct number of blank strings, one
      * for each argument.
      */
-    public List getArgumentDesc();
+    public List<String> getArgumentDesc();
 }
