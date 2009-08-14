@@ -62,7 +62,7 @@ public class ClassTools {
     {
         Object instance = null;
         try {
-            Class clazz = ClassUtils.getClass(className);
+            Class<?> clazz = ClassUtils.getClass(className);
             clazz.getConstructor(new Class [] {Integer.TYPE});
             instance = ClassUtils.getClass(className).newInstance();
         } catch (ClassNotFoundException e) {
@@ -94,7 +94,7 @@ public class ClassTools {
         Method m;
         try {
             m = ClassUtils.getPublicMethod(instance.getClass(), methodName, new Class [] {});
-            m.invoke(instance, null);
+            m.invoke(instance, (Object [])null);
         } catch (NoSuchMethodException e) {
             throw new JMeterException(e);
         } catch (IllegalAccessException e) {
