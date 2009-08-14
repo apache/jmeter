@@ -57,6 +57,7 @@ public abstract class AbstractReportGui extends AbstractJMeterGuiComponent
         return "report_page";
     }
 
+    @Override
     public void configureTestElement(TestElement element) {
         super.configureTestElement(element);
     }
@@ -87,6 +88,7 @@ public abstract class AbstractReportGui extends AbstractJMeterGuiComponent
      * a white background instead of the default grey.
      * @return a panel containing the component title and name panel
      */
+    @Override
     protected Container makeTitlePanel() {
         VerticalPanel titlePanel = new VerticalPanel();
         titlePanel.setBackground(Color.white);
@@ -99,6 +101,7 @@ public abstract class AbstractReportGui extends AbstractJMeterGuiComponent
      * This implementaion differs a bit from the normal jmeter gui. it uses
      * a white background instead of the default grey.
      */
+    @Override
     protected Component createTitleLabel() {
         JLabel titleLabel = new JLabel(getStaticLabel());
         Font curFont = titleLabel.getFont();
