@@ -52,6 +52,7 @@ public class TestTestCompiler extends junit.framework.TestCase {
                 return null;
             }
 
+            @Override
             public Object clone() {
                 return new TestSampler();
             }

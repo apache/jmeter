@@ -74,6 +74,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
     public static Test suite(){
         TestSetup setup = new TestSetup(new TestSuite(TestHTTPSamplersAgainstHttpMirrorServer.class)){
             private HttpMirrorServer httpServer;
+            @Override
             protected void setUp() throws Exception {
                     httpServer = TestHTTPMirrorThread.startHttpMirror(MIRROR_PORT);
                     // Create the test file content
@@ -88,6 +89,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
                     output.close();
             }
             
+            @Override
             protected void tearDown() throws Exception {
                     // Shutdown mirror server
                     httpServer.stopServer();

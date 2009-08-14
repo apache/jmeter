@@ -45,6 +45,7 @@ public class TestRegexFunction extends JMeterTestCase {
             super(name);
         }
 
+        @Override
         public void setUp() {
             variable = new RegexFunction();
             result = new SampleResult();

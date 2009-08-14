@@ -33,6 +33,7 @@ public class TestProxyControl  extends TestCase {
             super(name);
         }
 
+        @Override
         public void setUp() {
             control = new ProxyControl();
             control.addIncludedPattern(".*\\.jsp");

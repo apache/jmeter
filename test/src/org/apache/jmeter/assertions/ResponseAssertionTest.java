@@ -39,6 +39,7 @@ public class ResponseAssertionTest  extends TestCase {
     private JMeterVariables vars;
     private AssertionResult result;
     
+    @Override
     public void setUp() throws MalformedURLException {
         jmctx = JMeterContextService.getContext();
         assertion = new ResponseAssertion();
@@ -232,6 +233,7 @@ public class ResponseAssertionTest  extends TestCase {
         // unknown.
         static final String TEST_PATTERN = ".*A.*\\.";
 
+        @Override
         public void run() {
             ResponseAssertion assertion = new ResponseAssertion();
             assertion.setTestFieldResponseData();

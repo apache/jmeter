@@ -63,6 +63,7 @@ public class TestSampler extends AbstractSampler {
     public TestSampler() {
     }
 
+    @Override
     public String toString() {
         return getName();
     }

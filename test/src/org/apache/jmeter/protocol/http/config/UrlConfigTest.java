@@ -37,6 +37,7 @@ public class UrlConfigTest extends JMeterTestCase {
         super(name);
     }
 
+    @Override
     protected void setUp() {
         Arguments args = new Arguments();
         args.addArgument("username", "mstover");

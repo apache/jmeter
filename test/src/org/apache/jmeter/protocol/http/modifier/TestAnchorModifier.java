@@ -40,6 +40,7 @@ public class TestAnchorModifier extends JMeterTestCase {
 
         private JMeterContext jmctx = null;
 
+        @Override
         public void setUp() {
             jmctx = JMeterContextService.getContext();
             parser.setThreadContext(jmctx);

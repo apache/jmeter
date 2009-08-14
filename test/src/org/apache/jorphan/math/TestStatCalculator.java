@@ -38,6 +38,7 @@ public class TestStatCalculator extends TestCase {
         super(arg0);
     }
 
+    @Override
     public void setUp() {
         calc = new StatCalculator();
     }

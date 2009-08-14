@@ -49,6 +49,7 @@ public class PackageTest extends JMeterTestCase {
 
     private JMeterContext jmctx = null;
 
+    @Override
     public void setUp() {
         jmctx = JMeterContextService.getContext();
         variables = new HashMap();
