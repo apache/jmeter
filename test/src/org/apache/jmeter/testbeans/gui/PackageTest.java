@@ -78,6 +78,7 @@ public class PackageTest extends JMeterTestCase {
 
     ResourceBundle bundle;
 
+    @Override
     public void setUp() {
         if (testLocale == null) {
             return;// errorDetected()
@@ -96,10 +97,12 @@ public class PackageTest extends JMeterTestCase {
         }
     }
 
+    @Override
     public void tearDown() {
         JMeterUtils.setLocale(Locale.getDefault());
     }
 
+    @Override
     public void runTest() throws Throwable {
         if (testLocale == null) {
             super.runTest();

@@ -38,6 +38,7 @@ public class TestValueReplacer extends JMeterTestCase {
             super(name);
         }
 
+        @Override
         public void setUp() {
             variables = new TestPlan();
             variables.addParameter("server", "jakarta.apache.org");
@@ -85,6 +86,7 @@ public class TestValueReplacer extends JMeterTestCase {
          * 
          * @see junit.framework.TestCase#tearDown()
          */
+        @Override
         protected void tearDown() throws Exception {
             JMeterContextService.getContext().setSamplingStarted(false);
         }

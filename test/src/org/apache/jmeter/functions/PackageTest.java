@@ -220,6 +220,7 @@ public class PackageTest extends JMeterTestCase {
 
     private JMeterVariables vars = null;
 
+    @Override
     public void setUp() {
         jmctx = JMeterContextService.getContext();
         jmctx.setVariables(new JMeterVariables());
