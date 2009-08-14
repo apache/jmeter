@@ -1091,8 +1091,6 @@ becomes:
 </properties>
 </component>
 
-</subsection>
-
 <component index="&sect-num;.5.26" name="__FileToString">
 
 <description>
@@ -1114,6 +1112,7 @@ A reference name - refName - for reusing the value created by this function. Sto
 <p>The file name parameter and reference name parameter (if supplied) are resolved every time the function is executed.</p>
 </component>
 
+</subsection>
 
 <subsection name="&sect-num;.6 Pre-defined Variables" anchor="predefinedvars">
 <p>
