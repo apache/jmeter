@@ -67,6 +67,7 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable {
     /**
      * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(TestElement)
      */
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         filename.setText(el.getPropertyAsString(ResultSaver.FILENAME));
@@ -105,6 +106,7 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable {
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
 

@@ -85,6 +85,7 @@ public class LoginConfigGui extends AbstractConfigGui {
      * @param element
      *            the TestElement to configure
      */
+    @Override
     public void configure(TestElement element) {
         super.configure(element);
         username.setText(element.getPropertyAsString(ConfigTestElement.USERNAME));
@@ -109,6 +110,7 @@ public class LoginConfigGui extends AbstractConfigGui {
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
 

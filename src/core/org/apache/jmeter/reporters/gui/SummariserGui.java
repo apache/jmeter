@@ -39,6 +39,7 @@ public class SummariserGui extends AbstractListenerGui {
         return "summariser_title"; //$NON-NLS-1$
     }
 
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
     }

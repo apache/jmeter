@@ -24,6 +24,7 @@ public class IllegalUserActionException extends Exception {
     /**
      * @deprecated - use IllegalUserActionException(String)
      */
+    @Deprecated
     public IllegalUserActionException() {
         super();
     }

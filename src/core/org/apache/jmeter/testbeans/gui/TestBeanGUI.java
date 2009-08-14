@@ -190,6 +190,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
      */
+    @Override
     public String getStaticLabel() {
         if (beanInfo == null){
             return "null";// $NON-NLS-1$
@@ -304,6 +305,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(org.apache.jmeter.testelement.TestElement)
      */
+    @Override
     public void configure(TestElement element) {
         if (!initialized){
             init();
@@ -436,6 +438,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#clearGui()
      */
+    @Override
     public void clearGui() {
         super.clearGui();
         if (customizer instanceof GenericTestBeanCustomizer) {

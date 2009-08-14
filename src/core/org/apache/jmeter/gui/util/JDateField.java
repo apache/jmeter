@@ -171,6 +171,7 @@ public class JDateField extends JTextField {
         KeyFocus() {
         }
 
+        @Override
         public void keyPressed(KeyEvent e) {
             if (e.getKeyCode() == KeyEvent.VK_UP) {
                 update(1, e.isShiftDown());

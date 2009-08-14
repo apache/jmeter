@@ -105,6 +105,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
      *
      * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
      */
+    @Override
     public boolean canConvert(Class arg0) {
         return SampleResult.class.equals(arg0);
     }
@@ -116,6 +117,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
      *      com.thoughtworks.xstream.io.HierarchicalStreamWriter,
      *      com.thoughtworks.xstream.converters.MarshallingContext)
      */
+    @Override
     public void marshal(Object obj, HierarchicalStreamWriter writer, MarshallingContext context) {
         SampleResult res = (SampleResult) obj;
         SampleSaveConfiguration save = res.getSaveConfig();
@@ -312,6 +314,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
      * @see com.thoughtworks.xstream.converters.Converter#unmarshal(com.thoughtworks.xstream.io.HierarchicalStreamReader,
      *      com.thoughtworks.xstream.converters.UnmarshallingContext)
      */
+    @Override
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
         SampleResult res = (SampleResult) createCollection(context.getRequiredType());
         retrieveAttributes(reader, context, res);

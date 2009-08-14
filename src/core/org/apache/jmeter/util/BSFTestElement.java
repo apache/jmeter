@@ -82,6 +82,7 @@ public abstract class BSFTestElement extends AbstractTestElement
         return this;
     }
 
+    @Override
     public Object clone() {
         BSFTestElement o = (BSFTestElement) super.clone();
         o.init();

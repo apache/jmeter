@@ -84,6 +84,7 @@ public class RunTimeGui extends AbstractControllerGui implements ActionListener 
      * @param element
      *            the TestElement to configure
      */
+    @Override
     public void configure(TestElement element) {
         super.configure(element);
         if (element instanceof RunTime) {
@@ -115,6 +116,7 @@ public class RunTimeGui extends AbstractControllerGui implements ActionListener 
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
 

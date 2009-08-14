@@ -72,6 +72,7 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
             super(wrapped);
         }
 
+        @Override
         public boolean shouldSerializeMember(Class definedIn, String fieldName) {
             if (SampleSaveConfiguration.class != definedIn) { return true; }
             // These are new fields; not saved unless true
@@ -105,6 +106,7 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
      *
      * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
      */
+    @Override
     public boolean canConvert(Class arg0) {
         return arg0.equals(SampleSaveConfiguration.class);
     }
@@ -116,6 +118,7 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
      *      com.thoughtworks.xstream.io.HierarchicalStreamWriter,
      *      com.thoughtworks.xstream.converters.MarshallingContext)
      */
+    @Override
     public void marshal(Object obj, HierarchicalStreamWriter writer, MarshallingContext context) {
         super.marshal(obj, writer, context); // Save most things
 
@@ -143,6 +146,7 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
     /*
      *
      */
+    @Override
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
         final Class thisClass = SampleSaveConfiguration.class;
         final Class requiredType = context.getRequiredType();

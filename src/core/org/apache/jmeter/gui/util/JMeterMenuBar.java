@@ -501,6 +501,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         }
     }
 
+    @Override
     public void setEnabled(boolean enable) {
         run_start.setEnabled(!enable);
         run_stop.setEnabled(enable);

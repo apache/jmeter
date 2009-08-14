@@ -49,6 +49,7 @@ public class Paste extends AbstractAction {
     /**
      * @see Command#getActionNames()
      */
+    @Override
     public Set getActionNames() {
         return commands;
     }
@@ -56,6 +57,7 @@ public class Paste extends AbstractAction {
     /**
      * @see Command#doAction(ActionEvent)
      */
+    @Override
     public void doAction(ActionEvent e) {
         JMeterTreeNode draggedNodes[] = Copy.getCopiedNodes();
         JMeterTreeListener treeListener = GuiPackage.getInstance().getTreeListener();

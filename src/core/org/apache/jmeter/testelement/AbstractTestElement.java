@@ -58,6 +58,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
 
     private transient String threadName = null;
 
+    @Override
     public Object clone() {
         try {
             TestElement clonedElement = (TestElement) this.getClass().newInstance();
@@ -83,6 +84,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
         propMap.remove(key);
     }
 
+    @Override
     public boolean equals(Object o) {
         if (o instanceof AbstractTestElement) {
             return ((AbstractTestElement) o).propMap.equals(propMap);
@@ -93,6 +95,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
 
     // TODO temporary hack to avoid unnecessary bug reports for subclasses
 
+    @Override
     public int hashCode(){
         return System.identityHashCode(this);
     }

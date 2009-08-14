@@ -340,6 +340,7 @@ public class RunningSample {
     /**
      * For debugging purposes, mainly.
      */
+    @Override
     public String toString() {
         StringBuffer mySB = new StringBuffer();
 

@@ -175,6 +175,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
          *
          * @see java.beans.PropertyEditor#getAsText()
          */
+        @Override
         public String getAsText() {
             return ((File) super.getValue()).getPath();
         }
@@ -184,6 +185,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
          *
          * @see java.beans.PropertyEditor#setAsText(java.lang.String)
          */
+        @Override
         public void setAsText(String text) throws IllegalArgumentException {
             super.setValue(new File(text));
         }
@@ -192,6 +194,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
          * Oh, I forgot: JMeter doesn't support File properties yet. Need to
          * work on this as a String :-(
          */
+        @Override
         public Object getValue() {
             return getAsText(); // should be super.getValue();
         }
@@ -199,6 +202,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
         /**
          * Tsk, tsk... I need to handle Strings when setting too.
          */
+        @Override
         public void setValue(Object file) {
             setAsText((String) file);
         }

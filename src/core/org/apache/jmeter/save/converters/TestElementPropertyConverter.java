@@ -55,6 +55,7 @@ public class TestElementPropertyConverter extends AbstractCollectionConverter {
      *
      * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
      */
+    @Override
     public boolean canConvert(Class arg0) {
         return arg0.equals(TestElementProperty.class);
     }
@@ -66,6 +67,7 @@ public class TestElementPropertyConverter extends AbstractCollectionConverter {
      *      com.thoughtworks.xstream.io.HierarchicalStreamWriter,
      *      com.thoughtworks.xstream.converters.MarshallingContext)
      */
+    @Override
     public void marshal(Object arg0, HierarchicalStreamWriter writer, MarshallingContext context) {
         TestElementProperty prop = (TestElementProperty) arg0;
         writer.addAttribute(ConversionHelp.ATT_NAME, ConversionHelp.encode(prop.getName()));
@@ -113,6 +115,7 @@ public class TestElementPropertyConverter extends AbstractCollectionConverter {
      * @see com.thoughtworks.xstream.converters.Converter#unmarshal(com.thoughtworks.xstream.io.HierarchicalStreamReader,
      *      com.thoughtworks.xstream.converters.UnmarshallingContext)
      */
+    @Override
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
         try {
             TestElementProperty prop = (TestElementProperty) createCollection(context.getRequiredType());

@@ -141,14 +141,17 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
         _guiEditor.addPropertyChangeListener(this);
     }
 
+    @Override
     public boolean supportsCustomEditor() {
         return true;
     }
 
+    @Override
     public Component getCustomEditor() {
         return guiEditor.getCustomEditor();
     }
 
+    @Override
     public String[] getTags() {
         return guiEditor.getTags();
     }
@@ -260,6 +263,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
      * @see java.beans.PropertyEditor#getValue()
      * @see org.apache.jmeter.testelement.property.JMeterProperty
      */
+    @Override
     public Object getValue() {
         String text = (String) guiEditor.getValue();
 
@@ -306,6 +310,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
         return value;
     }
 
+    @Override
     public void setValue(Object value) {
         String text;
 
@@ -352,6 +357,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
         return asText;
     }
 
+    @Override
     public String getAsText() {
         String text = fixGetAsTextBug(guiEditor.getAsText());
 
@@ -380,6 +386,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
         return text;
     }
 
+    @Override
     public void setAsText(String text) throws IllegalArgumentException {
         if (log.isDebugEnabled()) {
             log.debug(text == null ? "<-null" : "<-\"" + text + "\"");
