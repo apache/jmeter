@@ -75,6 +75,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
         return "user_parameters_title"; // $NON-NLS-1$
     }
 
+    @Override
     public void configure(TestElement el) {
         initTableModel();
         paramTable.setModel(tableModel);
@@ -133,12 +134,14 @@ public class UserParametersGui extends AbstractPreProcessorGui {
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
 
         initTableModel();
         paramTable.setModel(tableModel);
         HeaderAsPropertyRenderer defaultRenderer = new HeaderAsPropertyRenderer(){
+            @Override
             protected String getText(Object value, int row, int column) {
                 if (column >= 1){ // Don't process the NAME column
                     String val = value.toString();

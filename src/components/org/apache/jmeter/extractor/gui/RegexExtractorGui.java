@@ -73,6 +73,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
         return "regex_extractor_title"; //$NON-NLS-1$
     }
 
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         if (el instanceof RegexExtractor){
@@ -121,6 +122,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
 

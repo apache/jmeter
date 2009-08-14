@@ -144,6 +144,7 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
         };
 
     /** @deprecated - only for use in testing */
+    @Deprecated
     public static boolean testFunctors(){
         StatVisualizer instance = new StatVisualizer();
         return instance.model.checkFunctors(null,instance.getClass());
@@ -220,11 +221,13 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
         this.add(opts,BorderLayout.SOUTH);
     }
 
+    @Override
     public void modifyTestElement(TestElement c) {
         super.modifyTestElement(c);
         c.setProperty(USE_GROUP_NAME, useGroupName.isSelected(), false);
     }
 
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         useGroupName.setSelected(el.getPropertyAsBoolean(USE_GROUP_NAME, false));

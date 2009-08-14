@@ -40,6 +40,7 @@ public class BeanShellPostProcessor extends BeanShellTestElement
     // can be specified in jmeter.properties
     private static final String INIT_FILE = "beanshell.postprocessor.init"; //$NON-NLS-1$
 
+    @Override
     protected String getInitFileProperty() {
         return INIT_FILE;
     }

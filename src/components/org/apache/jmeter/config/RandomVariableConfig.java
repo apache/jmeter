@@ -59,6 +59,7 @@ public class RandomVariableConfig extends ConfigTestElement
 
     private ThreadLocal initThreadLocal() {
         return new ThreadLocal() {
+                @Override
                 protected Object initialValue() {
                     init();
                     return new Random(getRandomSeedAsLong());

@@ -58,6 +58,7 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
         init();
     }
 
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         XPathExtractor xpe = (XPathExtractor) el;
@@ -88,6 +89,7 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
 

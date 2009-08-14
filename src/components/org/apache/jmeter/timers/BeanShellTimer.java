@@ -36,6 +36,7 @@ public class BeanShellTimer extends BeanShellTestElement implements Cloneable, T
     // can be specified in jmeter.properties
     private static final String INIT_FILE = "beanshell.timer.init"; //$NON-NLS-1$
 
+    @Override
     protected String getInitFileProperty() {
         return INIT_FILE;
     }

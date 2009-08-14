@@ -102,6 +102,7 @@ public class UniformRandomTimerGui extends AbstractTimerGui {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(TestElement)
      */
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         delayField.setText(el.getPropertyAsString(RandomTimer.DELAY));
@@ -158,6 +159,7 @@ public class UniformRandomTimerGui extends AbstractTimerGui {
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#clearGui()
      */
+    @Override
     public void clearGui() {
         rangeField.setText(DEFAULT_RANGE);
         delayField.setText(DEFAULT_DELAY);

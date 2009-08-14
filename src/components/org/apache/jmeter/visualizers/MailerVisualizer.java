@@ -116,6 +116,7 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
         }
     }
 
+    @Override
     public String toString() {
         return "E-Mail Notification";
     }
@@ -288,6 +289,7 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
     /**
      * Restores MailerVisualizer.
      */
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         updateVisualizer(((MailerResultCollector) el).getMailerModel());
@@ -296,6 +298,7 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
     /**
      * Makes MailerVisualizer storable.
      */
+    @Override
     public TestElement createTestElement() {
         if (getModel() == null) {
             setModel(new MailerResultCollector());
@@ -309,6 +312,7 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
+    @Override
     public void modifyTestElement(TestElement c) {
         super.modifyTestElement(c);
         MailerModel mailerModel = ((MailerResultCollector) c).getMailerModel();
@@ -362,6 +366,7 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
      *
      * @see ChangeListener#stateChanged(ChangeEvent)
      */
+    @Override
     public void stateChanged(ChangeEvent e) {
         if (e.getSource() instanceof MailerModel) {
             MailerModel testModel = (MailerModel) e.getSource();

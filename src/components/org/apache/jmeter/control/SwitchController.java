@@ -55,6 +55,7 @@ public class SwitchController extends GenericController implements Serializable 
         super();
     }
 
+    @Override
     public Sampler next() {
         if (isFirst()) { // Set the selection once per iteration
             current = getSelectionAsInt();
@@ -73,6 +74,7 @@ public class SwitchController extends GenericController implements Serializable 
      *
      * @see org.apache.jmeter.control.GenericController#incrementCurrent()
      */
+    @Override
     protected void incrementCurrent() {
         current=Integer.MAX_VALUE;
     }

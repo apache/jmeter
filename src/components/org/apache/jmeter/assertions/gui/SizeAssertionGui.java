@@ -86,6 +86,7 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
     /**
      * Implements JMeterGUIComponent.clearGui
      */
+    @Override
     public void clearGui() {
         super.clearGui();
         
@@ -99,6 +100,7 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
         execState = SizeAssertion.EQUAL;
     }    
 
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         SizeAssertion assertion = (SizeAssertion) el;
