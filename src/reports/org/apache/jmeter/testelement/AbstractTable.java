@@ -129,6 +129,7 @@ public abstract class AbstractTable extends AbstractTestElement
         setProperty(REPORT_TABLE_ERROR_RATE,set);
     }
 
+    @Override
     public void addTestElement(TestElement el) {
         if (el != null) {
             super.addTestElement(el);

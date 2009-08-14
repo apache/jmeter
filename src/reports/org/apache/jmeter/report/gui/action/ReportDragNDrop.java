@@ -49,6 +49,7 @@ public class ReportDragNDrop extends AbstractAction {
     /**
      * @see org.apache.jmeter.gui.action.Command#doAction(ActionEvent)
      */
+    @Override
     public void doAction(ActionEvent e) {
         String action = e.getActionCommand();
         ReportGuiPackage guiPackage = ReportGuiPackage.getInstance();
@@ -121,6 +122,7 @@ public class ReportDragNDrop extends AbstractAction {
     /**
      * @see org.apache.jmeter.gui.action.Command#getActionNames()
      */
+    @Override
     public Set getActionNames() {
         return commands;
     }

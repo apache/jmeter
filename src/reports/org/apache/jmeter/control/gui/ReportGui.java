@@ -72,6 +72,7 @@ public class ReportGui extends AbstractReportGui {
      * Need to update this to make the context popupmenu correct
      * @return a JPopupMenu appropriate for the component.
      */
+    @Override
     public JPopupMenu createPopupMenu() {
         JPopupMenu pop = new JPopupMenu();
         JMenu addMenu = new JMenu(JMeterUtils.getResString("Add"));
@@ -106,6 +107,7 @@ public class ReportGui extends AbstractReportGui {
         }
     }
 
+    @Override
     public String getLabelResource() {
         return "report_plan";
     }
@@ -118,6 +120,7 @@ public class ReportGui extends AbstractReportGui {
      * @return a Collection of Strings, where each element is one of the
      *         constants defined in MenuFactory
      */
+    @Override
     public Collection getMenuCategories() {
         return null;
     }
@@ -131,6 +134,7 @@ public class ReportGui extends AbstractReportGui {
      * @param el
      *            the TestElement to configure
      */
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
 

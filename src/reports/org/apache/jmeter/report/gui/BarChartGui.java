@@ -58,10 +58,12 @@ public class BarChartGui extends AbstractReportGui {
         init();
     }
 
+    @Override
     public String getLabelResource() {
         return "report_bar_chart";
     }
 
+    @Override
     public JPopupMenu createPopupMenu() {
         JPopupMenu pop = new JPopupMenu();
         ReportMenuFactory.addFileMenu(pop);
@@ -134,6 +136,7 @@ public class BarChartGui extends AbstractReportGui {
         bc.setURL(url.getText());
     }
 
+    @Override
     public void configure(TestElement element) {
         super.configure(element);
         BarChart bc = (BarChart)element;
