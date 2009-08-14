@@ -83,6 +83,7 @@ public class RegexFunction extends AbstractFunction {
                 Perl5Compiler.READ_ONLY_MASK);
     }
 
+    @Override
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
         String valueIndex = "", defaultValue = "", between = ""; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -229,10 +230,12 @@ public class RegexFunction extends AbstractFunction {
         return result.toString();
     }
 
+    @Override
     public String getReferenceKey() {
         return KEY;
     }
 
+    @Override
     public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
         checkParameterCount(parameters, MIN_PARAMETER_COUNT, MAX_PARAMETER_COUNT);
         values = parameters.toArray();

@@ -46,6 +46,7 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
         order = new LinkedList();
     }
 
+    @Override
     public Object clone() {
         ListedHashTree newTree = new ListedHashTree();
         cloneTree(newTree);
@@ -79,6 +80,7 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
         }
     }
 
+    @Override
     public void set(Object key, Object value) {
         if (!data.containsKey(key)) {
             order.add(key);
@@ -86,6 +88,7 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
         super.set(key, value);
     }
 
+    @Override
     public void set(Object key, HashTree t) {
         if (!data.containsKey(key)) {
             order.add(key);
@@ -93,6 +96,7 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
         super.set(key, t);
     }
 
+    @Override
     public void set(Object key, Object[] values) {
         if (!data.containsKey(key)) {
             order.add(key);
@@ -100,6 +104,7 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
         super.set(key, values);
     }
 
+    @Override
     public void set(Object key, Collection values) {
         if (!data.containsKey(key)) {
             order.add(key);
@@ -107,6 +112,7 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
         super.set(key, values);
     }
 
+    @Override
     public void replace(Object currentKey, Object newKey) {
         HashTree tree = getTree(currentKey);
         data.remove(currentKey);
@@ -114,18 +120,22 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
         order.set(order.indexOf(currentKey), newKey);
     }
 
+    @Override
     public HashTree createNewTree() {
         return new ListedHashTree();
     }
 
+    @Override
     public HashTree createNewTree(Object key) {
         return new ListedHashTree(key);
     }
 
+    @Override
     public HashTree createNewTree(Collection values) {
         return new ListedHashTree(values);
     }
 
+    @Override
     public HashTree add(Object key) {
         if (!data.containsKey(key)) {
             HashTree newTree = createNewTree();
@@ -136,20 +146,24 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
         return getTree(key);
     }
 
+    @Override
     public Collection list() {
         return order;
     }
 
+    @Override
     public Object remove(Object key) {
         order.remove(key);
         return data.remove(key);
     }
 
+    @Override
     public Object[] getArray() {
         return order.toArray();
     }
 
     // Make sure the hashCode depends on the order as well
+    @Override
     public int hashCode() {
         int hc = 17;
         hc = hc * 37 + (order == null ? 0 : order.hashCode());
@@ -157,6 +171,7 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
         return hc;
     }
 
+    @Override
     public boolean equals(Object o) {
         if (!(o instanceof ListedHashTree)) {
             return false;
@@ -198,10 +213,12 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
         // return flag;
     }
 
+    @Override
     public Set keySet() {
         return data.keySet();
     }
 
+    @Override
     public int size() {
         return data.size();
     }
@@ -219,6 +236,7 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
      *
      * @see java.util.Map#clear()
      */
+    @Override
     public void clear() {
         super.clear();
         order.clear();

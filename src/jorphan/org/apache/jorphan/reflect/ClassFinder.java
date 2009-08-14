@@ -88,6 +88,7 @@ public final class ClassFinder {
          *
          * @see java.util.TreeSet#add(java.lang.Object)
          */
+        @Override
         public boolean add(Object o){
             if (contains(o)) {
                 return false;// No need to check it again

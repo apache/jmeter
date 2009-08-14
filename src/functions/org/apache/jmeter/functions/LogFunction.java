@@ -74,6 +74,7 @@ public class LogFunction extends AbstractFunction {
     public LogFunction() {
     }
 
+    @Override
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
         String stringToLog = ((CompoundVariable) values[0]).execute();
@@ -158,11 +159,13 @@ public class LogFunction extends AbstractFunction {
 
     }
 
+    @Override
     public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
         checkParameterCount(parameters, MIN_PARAMETER_COUNT, MAX_PARAMETER_COUNT);
         values = parameters.toArray();
     }
 
+    @Override
     public String getReferenceKey() {
         return KEY;
     }

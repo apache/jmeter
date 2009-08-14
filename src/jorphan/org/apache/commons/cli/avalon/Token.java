@@ -60,6 +60,7 @@ class Token {
     /**
      * Convert to a string
      */
+    @Override
     public final String toString() {
         final StringBuffer sb = new StringBuffer();
         sb.append(m_type);

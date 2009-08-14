@@ -60,6 +60,7 @@ public class MonitorHealthPanel extends JPanel implements MonitorListener, Clear
      *
      * @deprecated Only for use in unit testing
      */
+    @Deprecated
     public MonitorHealthPanel() {
         // log.warn("Only for use in unit testing");
         model = null;

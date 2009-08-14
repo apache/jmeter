@@ -52,6 +52,7 @@ public class XPathWrapper {
 
     /* The cache of file packs - for faster local access */
     private static final ThreadLocal filePacks = new ThreadLocal() {
+        @Override
         protected Object initialValue() {
             return new HashMap();
         }

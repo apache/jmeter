@@ -69,6 +69,7 @@ public class XPath extends AbstractFunction {
     /**
      * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
      */
+    @Override
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
         String myValue = ""; //$NON-NLS-1$
@@ -99,6 +100,7 @@ public class XPath extends AbstractFunction {
     /**
      * @see org.apache.jmeter.functions.Function#getReferenceKey()
      */
+    @Override
     public String getReferenceKey() {
         return KEY;
     }
@@ -106,6 +108,7 @@ public class XPath extends AbstractFunction {
     /**
      * @see org.apache.jmeter.functions.Function#setParameters(Collection)
      */
+    @Override
     public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
         log.debug("setParameter - Collection.size=" + parameters.size());
 
