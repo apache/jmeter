@@ -26,8 +26,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.lang.reflect.Method;
-import java.lang.reflect.InvocationTargetException;
 
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.jmeter.assertions.AssertionResult;
@@ -140,48 +138,22 @@ public class SampleResult implements Serializable {
 
     private long pauseTime = 0;// Start of pause (if any)
 
-    private List assertionResults;
+    private List<AssertionResult> assertionResults;
 
-    private List subResults;
+    private List<SampleResult> subResults;
 
     private String dataType=""; // Don't return null if not set
 
     private boolean success;
 
     //@GuardedBy("this"")
-    private final Set files = new HashSet(); // files that this sample has been saved in
+    private final Set<String> files = new HashSet<String>(); // files that this sample has been saved in
 
     private String dataEncoding;// (is this really the character set?) e.g.
                                 // ISO-8895-1, UTF-8
 
-    private static Method initNanoTimeMethod() {
-        try {
-            return System.class.getMethod("nanoTime", null);
-        } catch (NoSuchMethodException e) {
-            return null;
-        }
-    }
-
-    private static boolean haveNanoTime() {
-        return nanoTimeMethod != null;
-    }
-
-    private static long nanoTime() {
-        Long result = null;
-        try {
-            result = (Long) nanoTimeMethod.invoke(null, null);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        }
-        return result.longValue();
-    }
-
-    private static final Method nanoTimeMethod = initNanoTimeMethod();
-
     // a reference time from the nanosecond clock
-    private static final long referenceTimeNsClock = haveNanoTime() ? sampleNsClockInMs() : Long.MIN_VALUE;
+    private static final long referenceTimeNsClock = sampleNsClockInMs();
 
     // a reference time from the millisecond clock
     private static final long referenceTimeMsClock = System.currentTimeMillis();
@@ -331,17 +303,13 @@ public class SampleResult implements Serializable {
     }
 
     private static long sampleNsClockInMs() {
-        return nanoTime() / 1000000;
+        return System.nanoTime() / 1000000;
     }
 
     // Helper method to get 1 ms resolution timing.
     public static long currentTimeInMs() {
-        if (haveNanoTime()) {
-            long elapsedInMs = sampleNsClockInMs() - referenceTimeNsClock;
-            return referenceTimeMsClock + elapsedInMs;
-        } else {
-            return System.currentTimeMillis();
-        }
+        long elapsedInMs = sampleNsClockInMs() - referenceTimeNsClock;
+        return referenceTimeMsClock + elapsedInMs;
     }
 
     // Helper method to maintain timestamp relationships
@@ -458,7 +426,7 @@ public class SampleResult implements Serializable {
 
     public void addAssertionResult(AssertionResult assertResult) {
         if (assertionResults == null) {
-            assertionResults = new ArrayList();
+            assertionResults = new ArrayList<AssertionResult>();
         }
         assertionResults.add(assertResult);
     }
@@ -473,7 +441,7 @@ public class SampleResult implements Serializable {
         if (assertionResults == null) {
             return EMPTY_AR;
         }
-        return (AssertionResult[]) assertionResults.toArray(new AssertionResult[0]);
+        return assertionResults.toArray(new AssertionResult[0]);
     }
 
     public void addSubResult(SampleResult subResult) {
@@ -484,7 +452,7 @@ public class SampleResult implements Serializable {
         }
         subResult.setThreadName(tn);
         if (subResults == null) {
-            subResults = new ArrayList();
+            subResults = new ArrayList<SampleResult>();
         }
         subResults.add(subResult);
         // Extend the time to the end of the added sample
@@ -503,7 +471,7 @@ public class SampleResult implements Serializable {
      */
     public void storeSubResult(SampleResult subResult) {
         if (subResults == null) {
-            subResults = new ArrayList();
+            subResults = new ArrayList<SampleResult>();
         }
         subResults.add(subResult);
         subResult.setParent(this);
@@ -519,7 +487,7 @@ public class SampleResult implements Serializable {
         if (subResults == null) {
             return EMPTY_SR;
         }
-        return (SampleResult[]) subResults.toArray(new SampleResult[0]);
+        return subResults.toArray(new SampleResult[0]);
     }
 
     public void configure(Configuration info) {
