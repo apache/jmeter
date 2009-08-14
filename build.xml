@@ -281,8 +281,8 @@
   <!-- Compilation parameters -->
   <property name="optimize" value="on"/>
   <property name="deprecation" value="off"/>
-  <property name="target.java.version" value="1.4"/>
-  <property name="src.java.version" value="1.4"/>
+  <property name="target.java.version" value="1.5"/>
+  <property name="src.java.version" value="1.5"/>
   <property name="encoding" value="UTF-8"/>
 
   <!-- 3rd party libraries to be included in the binary distribution -->
@@ -408,7 +408,7 @@
         JMeter version
         This is overridden for formal releases.
     -->
-    <property name="jmeter.version" value="2.3.4.${DSTAMP}"/>
+    <property name="jmeter.version" value="2.5.${DSTAMP}"/>
     <!-- Remember to change "docversion" below if necessary -->
     <condition property="implementation.version" 
           value="${jmeter.version} r${svn.revision}" else="${jmeter.version}">
@@ -421,7 +421,7 @@
   </target>
 
   <!-- JMeter Javadoc version (own variable is used so can be overriden independently) -->
-  <property name="docversion" value="2.3.4"/>
+  <property name="docversion" value="${jmeter.version}"/>
 
     <!-- Get version from SVN status -->
   <target name="init-svnVersion" depends="svnCheck">
@@ -1511,7 +1511,7 @@ run JMeter unless all the JMeter jars are added.
       packagenames="org.apache.jmeter.*,org.apache.jorphan.*"
       excludepackagenames="org.apache.jorphan.timer">
       <classpath refid="classpath"/>
-      <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
+      <link href="http://java.sun.com/j2se/1.5.0/docs/api/"/>
     </javadoc>
   </target>
 
