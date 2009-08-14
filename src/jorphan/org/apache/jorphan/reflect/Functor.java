@@ -71,7 +71,7 @@ public class Functor {
      *
      *  Can be used instead of invokee, e.g. when using interfaces.
     */
-    private final Class clazz;
+    private final Class<?> clazz;
 
     // Methondname must always be provided.
     private final String methodName;
@@ -85,7 +85,7 @@ public class Functor {
      * Argument types used to create the method.
      * May be provided explicitly, or derived from the constructor argument list.
      */
-    private final Class[] types;
+    private final Class<?>[] types;
 
     /*
      * This depends on the class or invokee and either args or types;
@@ -119,7 +119,7 @@ public class Functor {
      * @param _clazz class to be used
      * @param _methodName method name
      */
-    public Functor(Class _clazz, String _methodName) {
+    public Functor(Class<?> _clazz, String _methodName) {
         this(_clazz, null, _methodName, null, null);
     }
 
@@ -132,7 +132,7 @@ public class Functor {
      * @param _methodName method name
      * @param _types
      */
-    public Functor(Object _invokee, String _methodName, Class[] _types) {
+    public Functor(Object _invokee, String _methodName, Class<?>[] _types) {
         this(null, _invokee, _methodName, null, _types);
     }
 
@@ -145,7 +145,7 @@ public class Functor {
      * @param _methodName method name
      * @param _types
      */
-    public Functor(Class _clazz, String _methodName, Class[] _types) {
+    public Functor(Class<?> _clazz, String _methodName, Class<?>[] _types) {
         this(_clazz, null, _methodName, null, _types);
     }
 
@@ -168,7 +168,7 @@ public class Functor {
      * @param _methodName method name
      * @param _types parameter types
      */
-    public Functor(String _methodName, Class[] _types) {
+    public Functor(String _methodName, Class<?>[] _types) {
         this(null, null, _methodName, null, _types);
     }
 
@@ -213,7 +213,7 @@ public class Functor {
      * - both class and invokee are specified
      * - both arguments and types are specified
      */
-    private Functor(Class _clazz, Object _invokee, String _methodName, Object[] _args, Class[] _types) {
+    private Functor(Class<?> _clazz, Object _invokee, String _methodName, Object[] _args, Class<?>[] _types) {
         if (_methodName == null){
             throw new IllegalArgumentException("Methodname must not be null");
         }
@@ -240,8 +240,8 @@ public class Functor {
      * Should only be called after any defaults have been applied.
      *
      */
-    private Object doInvoke(Class _class, Object _invokee, Object[] _args) {
-        Class[] argTypes = getTypes(_args);
+    private Object doInvoke(Class<?> _class, Object _invokee, Object[] _args) {
+        Class<?>[] argTypes = getTypes(_args);
         try {
             Method method = doCreateMethod(_class , argTypes);
             if (method == null){
@@ -320,7 +320,7 @@ public class Functor {
      * Low-level (recursive) routine to define the method - if not already defined.
      * Synchronized to protect access to methodToInvoke.
      */
-    private synchronized Method doCreateMethod(Class p_class, Class[] p_types) {
+    private synchronized Method doCreateMethod(Class<?> p_class, Class<?>[] p_types) {
         if (log.isDebugEnabled()){
             log.debug("doCreateMethod() using "+this.toString()
                 +"class="
@@ -332,21 +332,21 @@ public class Functor {
                 methodToInvoke = p_class.getMethod(methodName, p_types);
             } catch (Exception e) {
                 for (int i = 0; i < p_types.length; i++) {
-                    Class primitive = getPrimitive(p_types[i]);
+                    Class<?> primitive = getPrimitive(p_types[i]);
                     if (primitive != null) {
                         methodToInvoke = doCreateMethod(p_class, getNewArray(i, primitive, p_types));
                         if (methodToInvoke != null) {
                             return methodToInvoke;
                         }
                     }
-                    Class[] interfaces = p_types[i].getInterfaces();
+                    Class<?>[] interfaces = p_types[i].getInterfaces();
                     for (int j = 0; j < interfaces.length; j++) {
                         methodToInvoke = doCreateMethod(p_class,getNewArray(i, interfaces[j], p_types));
                         if (methodToInvoke != null) {
                             return methodToInvoke;
                         }
                     }
-                    Class parent = p_types[i].getSuperclass();
+                    Class<?> parent = p_types[i].getSuperclass();
                     if (parent != null) {
                         methodToInvoke = doCreateMethod(p_class,getNewArray(i, parent, p_types));
                         if (methodToInvoke != null) {
@@ -385,7 +385,7 @@ public class Functor {
      * @return true if method exists
      */
     @Deprecated
-    public boolean checkMethod(Object _invokee, Class c){
+    public boolean checkMethod(Object _invokee, Class<?> c){
         Method m = null;
         try {
             m = doCreateMethod(_invokee.getClass(), new Class[]{c});
@@ -411,7 +411,7 @@ public class Functor {
         return sb.toString();
     }
 
-    private void typesToString(StringBuffer sb,Class[] _types) {
+    private void typesToString(StringBuffer sb,Class<?>[] _types) {
         sb.append("(");
         if (_types != null){
             for(int i=0; i < _types.length; i++){
@@ -424,13 +424,13 @@ public class Functor {
         sb.append(")");
     }
 
-    private String typesToString(Class[] argTypes) {
+    private String typesToString(Class<?>[] argTypes) {
         StringBuffer sb = new StringBuffer();
         typesToString(sb,argTypes);
         return sb.toString();
     }
 
-    private Class getPrimitive(Class t) {
+    private Class<?> getPrimitive(Class<?> t) {
         if (t==null) {
             return null;
         }
@@ -454,8 +454,8 @@ public class Functor {
         return null;
     }
 
-    private Class[] getNewArray(int i, Class replacement, Class[] orig) {
-        Class[] newArray = new Class[orig.length];
+    private Class<?>[] getNewArray(int i, Class<?> replacement, Class<?>[] orig) {
+        Class<?>[] newArray = new Class[orig.length];
         for (int j = 0; j < newArray.length; j++) {
             if (j == i) {
                 newArray[j] = replacement;
@@ -466,7 +466,7 @@ public class Functor {
         return newArray;
     }
 
-    private Class[] getTypes(Object[] _args) {
+    private Class<?>[] getTypes(Object[] _args) {
         if (types == null)
         {
             return _getTypes(_args);
@@ -474,8 +474,8 @@ public class Functor {
         return types;
     }
 
-    private static Class[] _getTypes(Object[] _args) {
-        Class[] _types;
+    private static Class<?>[] _getTypes(Object[] _args) {
+        Class<?>[] _types;
         if (_args != null) {
             _types = new Class[_args.length];
             for (int i = 0; i < _args.length; i++) {
