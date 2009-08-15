@@ -167,8 +167,8 @@ public class ProxyControl extends GenericController {
 
     public ProxyControl() {
         setPort(DEFAULT_PORT);
-        setExcludeList(new HashSet());
-        setIncludeList(new HashSet());
+        setExcludeList(new HashSet<String>());
+        setIncludeList(new HashSet<String>());
         setCaptureHttpHeaders(true); // maintain original behaviour
     }
 
@@ -221,12 +221,12 @@ public class ProxyControl extends GenericController {
         setProperty(new BooleanProperty(SAMPLER_DOWNLOAD_IMAGES, b));
     }
 
-    public void setIncludeList(Collection list) {
-        setProperty(new CollectionProperty(INCLUDE_LIST, new HashSet(list)));
+    public void setIncludeList(Collection<String> list) {
+        setProperty(new CollectionProperty(INCLUDE_LIST, new HashSet<String>(list)));
     }
 
-    public void setExcludeList(Collection list) {
-        setProperty(new CollectionProperty(EXCLUDE_LIST, new HashSet(list)));
+    public void setExcludeList(Collection<String> list) {
+        setProperty(new CollectionProperty(EXCLUDE_LIST, new HashSet<String>(list)));
     }
 
     /**
@@ -318,7 +318,7 @@ public class ProxyControl extends GenericController {
     }
 
 
-    public Class getGuiClass() {
+    public Class<?> getGuiClass() {
         return org.apache.jmeter.protocol.http.proxy.gui.ProxyControlGui.class;
     }
 
@@ -601,7 +601,7 @@ public class ProxyControl extends GenericController {
      * @return the first node of the given type in the test component tree, or
      *         <code>null</code> if none was found.
      */
-    private JMeterTreeNode findFirstNodeOfType(Class type) {
+    private JMeterTreeNode findFirstNodeOfType(Class<?> type) {
         JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
         List nodes = treeModel.getNodesOfType(type);
         Iterator iter = nodes.iterator();
@@ -668,12 +668,12 @@ public class ProxyControl extends GenericController {
      *
      * @return a collection of applicable objects of the given class.
      */
-    private Collection findApplicableElements(JMeterTreeNode myTarget, Class myClass, boolean ascending) {
+    private Collection<TestElement> findApplicableElements(JMeterTreeNode myTarget, Class<?> myClass, boolean ascending) {
         JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
-        LinkedList elements = new LinkedList();
+        LinkedList<TestElement> elements = new LinkedList<TestElement>();
 
         // Look for elements directly within the HTTP proxy:
-        Enumeration kids = treeModel.getNodeOf(this).children();
+        Enumeration<?> kids = treeModel.getNodeOf(this).children();
         while (kids.hasMoreElements()) {
             JMeterTreeNode subNode = (JMeterTreeNode) kids.nextElement();
             if (subNode.isEnabled()) {
@@ -799,7 +799,7 @@ public class ProxyControl extends GenericController {
      * @param configurations
      *            ConfigTestElements in descending priority.
      */
-    private void removeValuesFromSampler(HTTPSamplerBase sampler, Collection configurations) {
+    private void removeValuesFromSampler(HTTPSamplerBase sampler, Collection<ConfigTestElement> configurations) {
         for (PropertyIterator props = sampler.propertyIterator(); props.hasNext();) {
             JMeterProperty prop = props.next();
             String name = prop.getName();
@@ -811,8 +811,8 @@ public class ProxyControl extends GenericController {
                 continue; // go on with next property.
             }
 
-            for (Iterator configs = configurations.iterator(); configs.hasNext();) {
-                ConfigTestElement config = (ConfigTestElement) configs.next();
+            for (Iterator<ConfigTestElement> configs = configurations.iterator(); configs.hasNext();) {
+                ConfigTestElement config = configs.next();
 
                 String configValue = config.getPropertyAsString(name);
 
@@ -870,12 +870,12 @@ public class ProxyControl extends GenericController {
      *            Collection of Arguments to use to do the replacement, ordered
      *            by ascending priority.
      */
-    private void replaceValues(TestElement sampler, TestElement[] configs, Collection variables) {
+    private void replaceValues(TestElement sampler, TestElement[] configs, Collection<Arguments> variables) {
         // Build the replacer from all the variables in the collection:
         ValueReplacer replacer = new ValueReplacer();
-        for (Iterator vars = variables.iterator(); vars.hasNext();) {
-            final Map map = ((Arguments) vars.next()).getArgumentsAsMap();
-            for (Iterator vals = map.values().iterator(); vals.hasNext();){
+        for (Iterator<Arguments> vars = variables.iterator(); vars.hasNext();) {
+            final Map<String, String> map = vars.next().getArgumentsAsMap();
+            for (Iterator<String> vals = map.values().iterator(); vals.hasNext();){
                final Object next = vals.next();
                if ("".equals(next)) {// Drop any empty values (Bug 45199)
                    vals.remove();

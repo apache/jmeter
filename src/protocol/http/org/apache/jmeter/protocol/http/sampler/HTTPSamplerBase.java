@@ -132,7 +132,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         DELETE,
         };
 
-    private static final List METHODLIST = Collections.unmodifiableList(Arrays.asList(METHODS));
+    private static final List<String> METHODLIST = Collections.unmodifiableList(Arrays.asList(METHODS));
 
 
     public static final String USE_KEEPALIVE = "HTTPSampler.use_keepalive"; // $NON-NLS-1$
@@ -207,7 +207,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
 
     // Derive the mapping of content types to parsers
-    private static final Map parsersForType = new HashMap();
+    private static final Map<String, String> parsersForType = new HashMap<String, String>();
     // Not synch, but it is not modified after creation
 
     private static final String RESPONSE_PARSERS= // list of parsers
@@ -1136,7 +1136,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @return "Container" result with one subsample per request issued
      */
     protected HTTPSampleResult downloadPageResources(HTTPSampleResult res, HTTPSampleResult container, int frameDepth) {
-        Iterator urls = null;
+        Iterator<URL> urls = null;
         try {
             final byte[] responseData = res.getResponseData();
             if (responseData.length > 0){  // Bug 39205
@@ -1219,7 +1219,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      */
     private String getParserClass(HTTPSampleResult res) {
         final String ct = res.getMediaType();
-        return (String)parsersForType.get(ct);
+        return parsersForType.get(ct);
     }
 
     // TODO: make static?
@@ -1561,7 +1561,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
 
     public static String[] getValidMethodsAsArray(){
-        return (String[]) METHODLIST.toArray(new String[0]);
+        return METHODLIST.toArray(new String[0]);
     }
 
     public static boolean isSecure(String protocol){

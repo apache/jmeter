@@ -73,7 +73,10 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
         }
 
         @Override
-        public boolean shouldSerializeMember(Class definedIn, String fieldName) {
+        public boolean shouldSerializeMember(
+                @SuppressWarnings("unchecked") // superclass does not use types
+                Class definedIn, 
+                String fieldName) {
             if (SampleSaveConfiguration.class != definedIn) { return true; }
             // These are new fields; not saved unless true
             if (fieldName.equals(NODE_BYTES)) { return false; }
@@ -89,6 +92,7 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
             return true;
         }
     }
+
     public SampleSaveConfigurationConverter(Mapper arg0) {
         super(new MyWrapper(arg0),rp);
     }
@@ -101,23 +105,14 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
         return "$Revision$"; // $NON-NLS-1$
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
-     */
+    /** {@inheritDoc} */
+    @SuppressWarnings("unchecked") // superclass does not use types
     @Override
     public boolean canConvert(Class arg0) {
         return arg0.equals(SampleSaveConfiguration.class);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.thoughtworks.xstream.converters.Converter#marshal(java.lang.Object,
-     *      com.thoughtworks.xstream.io.HierarchicalStreamWriter,
-     *      com.thoughtworks.xstream.converters.MarshallingContext)
-     */
+    /** {@inheritDoc} */
     @Override
     public void marshal(Object obj, HierarchicalStreamWriter writer, MarshallingContext context) {
         super.marshal(obj, writer, context); // Save most things
@@ -143,13 +138,11 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
         writer.endNode();
     }
 
-    /*
-     *
-     */
+    /** {@inheritDoc} */
     @Override
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
-        final Class thisClass = SampleSaveConfiguration.class;
-        final Class requiredType = context.getRequiredType();
+        final Class<SampleSaveConfiguration> thisClass = SampleSaveConfiguration.class;
+        final Class<?> requiredType = context.getRequiredType();
         if (requiredType != thisClass) {
             throw new IllegalArgumentException("Unexpected class: "+requiredType.getName());
         }
@@ -161,7 +154,7 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
             if (!"formatter".equals(nn)){// Skip formatter (if present) bug 42674 $NON-NLS-1$
                 String fieldName = mapper.realMember(thisClass, nn);
                 java.lang.reflect.Field field = reflectionProvider.getField(thisClass,fieldName);
-                Class type = field.getType();
+                Class<?> type = field.getType();
                 Object value = unmarshallField(context, result, type, field);
                 reflectionProvider.writeField(result, nn, value, thisClass);
             }
