@@ -49,19 +49,19 @@ public class BeanShellInterpreter {
 
     private static final Method bshSource;
 
-    private static final Class bshClass;
+    private static final Class<?> bshClass;
 
     private static final String BSH_INTERPRETER = "bsh.Interpreter"; //$NON-NLS-1$
 
     static {
         // Temporary copies, so can set the final ones
         Method get = null, eval = null, set = null, source = null;
-        Class clazz = null;
+        Class<?> clazz = null;
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         try {
             clazz = loader.loadClass(BSH_INTERPRETER);
-            Class string = String.class;
-            Class object = Object.class;
+            Class<String> string = String.class;
+            Class<Object> object = Object.class;
 
             get = clazz.getMethod("get", //$NON-NLS-1$
                     new Class[] { string });
