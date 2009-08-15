@@ -59,13 +59,13 @@ public class TestValueReplacer extends JMeterTestCase {
             assertTrue(replacer.containsKey("server"));
             TestElement element = new TestPlan();
             element.setProperty(new StringProperty("domain", "jakarta.apache.org"));
-            List args = new ArrayList();
+            List<Object> args = new ArrayList<Object>();
             args.add("username is jack");
             args.add("his_password");
             element.setProperty(new CollectionProperty("args", args));
             replacer.reverseReplace(element);
             assertEquals("${server}", element.getPropertyAsString("domain"));
-            args = (List) element.getProperty("args").getObjectValue();
+            args = (List<Object>) element.getProperty("args").getObjectValue();
             assertEquals("username is ${username}", ((JMeterProperty) args.get(0)).getStringValue());
             assertEquals("${password}", ((JMeterProperty) args.get(1)).getStringValue());
         }

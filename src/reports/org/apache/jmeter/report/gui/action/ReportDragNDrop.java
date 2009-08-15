@@ -72,13 +72,15 @@ public class ReportDragNDrop extends AbstractAction {
         } else if (INSERT_BEFORE.equals(action) && canAddTo(parentNode)) {
             removeNodesFromParents(draggedNodes);
             for (int i = 0; i < draggedNodes.length; i++) {
-                int index = parentNode.getIndex(currentNode);
+                @SuppressWarnings("null")
+                int index = parentNode.getIndex(currentNode); // can't be null - this is checked by canAddTo
                 ReportGuiPackage.getInstance().getTreeModel().insertNodeInto(draggedNodes[i], parentNode, index);
             }
         } else if (INSERT_AFTER.equals(action) && canAddTo(parentNode)) {
             removeNodesFromParents(draggedNodes);
             for (int i = 0; i < draggedNodes.length; i++) {
-                int index = parentNode.getIndex(currentNode) + 1;
+                @SuppressWarnings("null")
+                int index = parentNode.getIndex(currentNode) + 1; // can't be null - this is checked by canAddTo
                 ReportGuiPackage.getInstance().getTreeModel().insertNodeInto(draggedNodes[i], parentNode, index);
             }
         }

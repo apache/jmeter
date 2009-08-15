@@ -50,11 +50,11 @@ public class ReportPlan extends AbstractTestElement implements Serializable, Tes
 
     public static final String BASEDIR = "ReportPlan.basedir";
 
-    private transient List reportPages = new LinkedList();
+    private transient List<ThreadGroup> reportPages = new LinkedList<ThreadGroup>();
 
-    private transient List configs = new LinkedList();
+    private transient List<ConfigElement> configs = new LinkedList<ConfigElement>();
 
-    private static final List itemsCanAdd = new LinkedList();
+    private static final List<String> itemsCanAdd = new LinkedList<String>();
 
     private static ReportPlan plan;
 
@@ -86,7 +86,7 @@ public class ReportPlan extends AbstractTestElement implements Serializable, Tes
         setProperty(BASEDIR, b);
     }
 
-    public Map getUserDefinedVariables() {
+    public Map<String, String> getUserDefinedVariables() {
         Arguments args = getVariables();
         return args.getArgumentsAsMap();
     }
@@ -144,7 +144,7 @@ public class ReportPlan extends AbstractTestElement implements Serializable, Tes
      *
      * @return the ThreadGroups value
      */
-    public Collection getReportPages() {
+    public Collection<ThreadGroup> getReportPages() {
         return reportPages;
     }
 

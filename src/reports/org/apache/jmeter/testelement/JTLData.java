@@ -40,7 +40,7 @@ import org.apache.jmeter.visualizers.SamplingStatCalculator;
  */
 public class JTLData implements Serializable, DataSet {
 
-    protected HashMap data = new HashMap();
+    protected final HashMap<String, SamplingStatCalculator> data = new HashMap<String, SamplingStatCalculator>();
     protected String jtl_file = null;
     protected long startTimestamp = 0;
     protected long endTimestamp = 0;
@@ -57,7 +57,7 @@ public class JTLData implements Serializable, DataSet {
      * Return a Set of the URLs
      * @return set of URLs
      */
-    public Set getURLs() {
+    public Set<?> getURLs() {
         return this.data.keySet();
     }
 
@@ -65,14 +65,15 @@ public class JTLData implements Serializable, DataSet {
      * Return a Set of the values
      * @return values
      */
-    public Set getStats() {
-        return this.data.entrySet();
+    public Set<SamplingStatCalculator>  getStats() {
+        return (Set<SamplingStatCalculator>) this.data.values();
     }
 
     /**
      * The purpose of the method is to make it convienant to pass a list
      * of the URLs and return a list of the SamplingStatCalculators. If
      * no URLs match, the list is empty.
+     * TODO - this method seems to be wrong - it does not agree with the Javadoc
      * The SamplingStatCalculators will be returned in the same sequence
      * as the url list.
      * @param urls
@@ -155,7 +156,7 @@ public class JTLData implements Serializable, DataSet {
      */
     public SamplingStatCalculator getStatistics(String url) {
         if (this.data.containsKey(url)) {
-            return (SamplingStatCalculator)this.data.get(url);
+            return this.data.get(url);
         } else {
             return null;
         }
@@ -195,7 +196,7 @@ public class JTLData implements Serializable, DataSet {
         if (url == null) {
             url = sample.getURL().toString();
         }
-        SamplingStatCalculator row = (SamplingStatCalculator)data.get(url);
+        SamplingStatCalculator row = data.get(url);
         if (row == null) {
             row = new SamplingStatCalculator();
             // just like the aggregate listener, we use the sample label to represent

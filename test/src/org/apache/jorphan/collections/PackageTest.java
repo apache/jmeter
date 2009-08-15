@@ -33,7 +33,7 @@ public class PackageTest extends TestCase {
 
         public void testAdd1() throws Exception {
             Logger log = LoggingManager.getLoggerForClass();
-            Collection treePath = Arrays.asList(new String[] { "1", "2", "3", "4" });
+            Collection<String> treePath = Arrays.asList(new String[] { "1", "2", "3", "4" });
             HashTree tree = new HashTree();
             log.debug("treePath = " + treePath);
             tree.add(treePath, "value");

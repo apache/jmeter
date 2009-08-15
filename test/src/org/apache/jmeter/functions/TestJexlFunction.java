@@ -33,7 +33,7 @@ public class TestJexlFunction extends JMeterTestCase {
 
     SampleResult result;
 
-    Collection params;
+    Collection<CompoundVariable> params;
 
     private JMeterVariables vars;
 
@@ -53,7 +53,7 @@ public class TestJexlFunction extends JMeterTestCase {
         vars = new JMeterVariables();
         jmctx.setVariables(vars);
         jmctx.setPreviousResult(result);
-        params = new LinkedList();
+        params = new LinkedList<CompoundVariable>();
     }
 
     public void testParameterCount() throws Exception {

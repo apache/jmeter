@@ -882,7 +882,7 @@ public class PostWriterTest extends TestCase {
      */
     private static class StubURLConnection extends HttpURLConnection {
         private ByteArrayOutputStream output = new ByteArrayOutputStream();
-        private Map properties = new HashMap();
+        private Map<String, String> properties = new HashMap<String, String>();
         
         public StubURLConnection(String url) throws MalformedURLException {
             super(new URL(url));
@@ -908,7 +908,7 @@ public class PostWriterTest extends TestCase {
 
         @Override
         public String getRequestProperty(String key) {
-            return (String) properties.get(key);
+            return properties.get(key);
         }
 
         @Override

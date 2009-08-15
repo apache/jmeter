@@ -21,7 +21,6 @@ package org.apache.jmeter.protocol.http.sampler;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.MalformedURLException;
-import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -31,7 +30,7 @@ import java.util.Properties;
  */
 public final class NullURLConnection extends URLConnection {
 
-    private Map data = new Properties();
+    private Properties data = new Properties();
 
     public NullURLConnection() throws MalformedURLException {
         this(new URL("http://localhost"));

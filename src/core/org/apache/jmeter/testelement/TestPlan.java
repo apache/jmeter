@@ -55,7 +55,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 
     private final static String BASEDIR = "basedir";
 
-    private transient List threadGroups = new LinkedList();
+    private transient List<ThreadGroup> threadGroups = new LinkedList<ThreadGroup>();
 
     // Does not appear to be needed
 //  private transient List configs = new LinkedList();
@@ -96,7 +96,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 
     // create transient item
     private Object readResolve(){
-        threadGroups = new LinkedList();
+        threadGroups = new LinkedList<ThreadGroup>();
         return this;
     }
 
@@ -135,7 +135,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
         return getVariables();
     }
 
-    public Map getUserDefinedVariables() {
+    public Map<String, String> getUserDefinedVariables() {
         Arguments args = getVariables();
         return args.getArgumentsAsMap();
     }
