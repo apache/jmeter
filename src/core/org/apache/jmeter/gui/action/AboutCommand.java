@@ -46,12 +46,12 @@ import org.apache.jmeter.util.JMeterUtils;
  *
  */
 public class AboutCommand implements Command {
-    private static Set commandSet;
+    private static Set<String> commandSet;
 
     private static JDialog about;
 
     static {
-        HashSet commands = new HashSet();
+        HashSet<String> commands = new HashSet<String>();
         commands.add(ActionNames.ABOUT);
         commandSet = Collections.unmodifiableSet(commands);
     }

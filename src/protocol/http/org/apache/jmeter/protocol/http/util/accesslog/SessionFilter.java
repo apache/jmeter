@@ -52,8 +52,8 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
      * These objects are static across multiple threads in a test, via clone()
      * method.
      */
-    protected Map cookieManagers;
-    protected Set managersInUse;
+    protected Map<String, CookieManager> cookieManagers;
+    protected Set<CookieManager> managersInUse;
 
     protected CookieManager lastUsed;
 
@@ -87,11 +87,11 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
     public Object clone() {
         if(cookieManagers == null)
         {
-            cookieManagers = Collections.synchronizedMap(new HashMap());
+            cookieManagers = Collections.synchronizedMap(new HashMap<String, CookieManager>());
         }
         if(managersInUse == null)
         {
-            managersInUse = Collections.synchronizedSet(new HashSet());
+            managersInUse = Collections.synchronizedSet(new HashSet<CookieManager>());
         }
         SessionFilter f = new SessionFilter();
         f.cookieManagers = cookieManagers;
@@ -181,7 +181,7 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
         // it up
         synchronized(managersInUse)
         {
-            cm = (CookieManager)cookieManagers.get(ipAddr);
+            cm = cookieManagers.get(ipAddr);
             if(cm == null)
             {
                 cm = new CookieManager();

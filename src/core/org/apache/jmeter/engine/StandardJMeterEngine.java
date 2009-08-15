@@ -90,10 +90,10 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
      * Only used by the function parser so far.
      * The list is merged with the testListeners and then cleared.
      */
-    private static final List testList = new ArrayList();
+    private static final List<TestListener> testList = new ArrayList<TestListener>();
 
     /** JMeterThread => its JVM thread */
-    private final Map/*<JMeterThread, Thread>*/ allThreads;
+    private final Map<JMeterThread, Thread> allThreads;
 
     /** flag to show that groups are still being created, i.e test plan is not complete */
     private volatile boolean startingGroups;
@@ -140,9 +140,9 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         }
         JMeterThread thrd=null;
         synchronized (engine.allThreads) { // Protect iterator
-            Iterator iter = engine.allThreads.keySet().iterator();
+            Iterator<JMeterThread> iter = engine.allThreads.keySet().iterator();
             while(iter.hasNext()){
-                thrd = (JMeterThread) iter.next();
+                thrd = iter.next();
                 if (thrd.getThreadName().equals(threadName)){
                     break; // Found matching thread
                 }
@@ -152,7 +152,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
             thrd.stop();
             thrd.interrupt();
             if (now) {
-                Thread t = (Thread) engine.allThreads.get(thrd);
+                Thread t = engine.allThreads.get(thrd);
                 if (t != null) {
                     t.interrupt();
                 }
@@ -170,7 +170,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
     public StandardJMeterEngine(String host) {
         this.host = host;
-        this.allThreads = Collections.synchronizedMap(new HashMap());
+        this.allThreads = Collections.synchronizedMap(new HashMap<JMeterThread, Thread>());
         // Hack to allow external control
         engine = this;
     }
@@ -535,18 +535,18 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
     private boolean verifyThreadsStopped() {
         boolean stoppedAll = true;
-        List/*<Thread>*/ threadsToCheck = new ArrayList/*<Thread>*/(allThreads.size());
+        List<Thread> threadsToCheck = new ArrayList<Thread>(allThreads.size());
         synchronized (allThreads) { // Protect iterator
-            Iterator/*<Thread>*/ iter = allThreads.keySet().iterator();
+            Iterator<JMeterThread> iter = allThreads.keySet().iterator();
             while (iter.hasNext()) {
-                Thread t = (Thread) allThreads.get(iter.next());
+                Thread t = allThreads.get(iter.next());
                 if (t != null) {
                     threadsToCheck.add(t); // Do work later to reduce time in synch block.
                 }
             }
         }
         for(int i=0; i < threadsToCheck.size(); i++) {
-            Thread t = (Thread) threadsToCheck.get(i);
+            Thread t = threadsToCheck.get(i);
             if (t.isAlive()) {
                 try {
                     t.join(WAIT_TO_DIE);
@@ -563,12 +563,12 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
     private void tellThreadsToStop() {
         synchronized (allThreads) { // Protect iterator
-            Iterator iter = new HashSet(allThreads.keySet()).iterator();
+            Iterator<JMeterThread> iter = new HashSet<JMeterThread>(allThreads.keySet()).iterator();
             while (iter.hasNext()) {
-                JMeterThread item = (JMeterThread) iter.next();
+                JMeterThread item = iter.next();
                 item.stop(); // set stop flag
                 item.interrupt(); // interrupt sampler if possible
-                Thread t = (Thread) allThreads.get(item);
+                Thread t = allThreads.get(item);
                 t.interrupt(); // also interrupt JVM thread
             }
         }
@@ -580,9 +580,9 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
     private void stopAllThreads() {
         synchronized (allThreads) {// Protect iterator
-            Iterator iter = new HashSet(allThreads.keySet()).iterator();
+            Iterator<JMeterThread> iter = new HashSet<JMeterThread>(allThreads.keySet()).iterator();
             while (iter.hasNext()) {
-                JMeterThread item = (JMeterThread) iter.next();
+                JMeterThread item = iter.next();
                 item.stop(); // This is quick
             }
         }

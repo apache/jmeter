@@ -91,7 +91,7 @@ public final class JOrphanUtils {
                 splittee = splittee.substring(0,splittee.length()-splitLength);
             }
         }
-        Vector returns = new Vector();
+        Vector<String> returns = new Vector<String>();
         final int length = splittee.length(); // This is the new length
         int start = 0;
         spot = 0;
@@ -146,7 +146,7 @@ public final class JOrphanUtils {
     public static String[] split(String splittee, String delims, String def) {
         StringTokenizer tokens = new StringTokenizer(splittee,delims,def!=null);
         boolean lastWasDelim=false;
-        List strList=new ArrayList();
+        List<String> strList=new ArrayList<String>();
         while (tokens.hasMoreTokens()) {
             String tok=tokens.nextToken();
             if (   tok.length()==1 // we have a single character; could be a token
@@ -164,7 +164,7 @@ public final class JOrphanUtils {
         if (lastWasDelim) {
             strList.add(def);
         }
-        return (String[])strList.toArray(new String[0]);
+        return strList.toArray(new String[0]);
     }
 
 

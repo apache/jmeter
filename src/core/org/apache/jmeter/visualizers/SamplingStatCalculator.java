@@ -39,7 +39,7 @@ public class SamplingStatCalculator {
 
     private final StatCalculator calculator = new StatCalculator();
 
-    private final List storedValues = new Vector();
+    private final List<Sample> storedValues = new Vector<Sample>();
 
     private double maxThroughput;
 
@@ -102,7 +102,7 @@ public class SamplingStatCalculator {
             if (storedValues.size() == 0) {
                 return new Sample();
             }
-            return (Sample) storedValues.get(storedValues.size() - 1);
+            return storedValues.get(storedValues.size() - 1);
         }
     }
 
@@ -232,14 +232,14 @@ public class SamplingStatCalculator {
         }
     }
 
-    public List getSamples() {
+    public List<Sample> getSamples() {
         return storedValues;
     }
 
     public Sample getSample(int index) {
         synchronized( storedValues ){
             if (index < storedValues.size()) {
-                return (Sample) storedValues.get(index);
+                return storedValues.get(index);
             }
         return null;
         }

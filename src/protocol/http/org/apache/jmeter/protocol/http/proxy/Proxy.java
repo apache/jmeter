@@ -93,7 +93,7 @@ public class Proxy extends Thread {
         JMeterUtils.getPropDefault("proxy.ssl.protocol", "SSLv3"); // $NON-NLS-1$ $NON-NLS-2$
     
     // HashMap to save ssl connection between Jmeter proxy and browser
-    private static HashMap hashHost = new HashMap();
+    private static HashMap<String, SSLSocketFactory> hashHost = new HashMap<String, SSLSocketFactory>();
     
     // Proxy configuration SSL
     private static final String CERT_DIRECTORY =
@@ -132,9 +132,9 @@ public class Proxy extends Thread {
     private String httpsSpoofMatch; // if non-empty, then URLs must match in order to be spoofed
 
     /** Reference to Deamon's Map of url string to page character encoding of that page */
-    private Map pageEncodings;
+    private Map<String, String> pageEncodings;
     /** Reference to Deamon's Map of url string to character encoding for the form */
-    private Map formEncodings;
+    private Map<String, String> formEncodings;
 
     /**
      * Default constructor - used by newInstance call in Daemon
@@ -178,7 +178,7 @@ public class Proxy extends Thread {
      * @param formEncodingsEncodings
      *            reference to the Map of Deamon, with mappings from form action urls to encoding used
      */
-    void configure(Socket _clientSocket, ProxyControl _target, Map _pageEncodings, Map _formEncodings) {
+    void configure(Socket _clientSocket, ProxyControl _target, Map<String, String> _pageEncodings, Map<String, String> _formEncodings) {
         this.target = _target;
         this.clientSocket = _clientSocket;
         this.captureHttpHeaders = _target.getCaptureHttpHeaders();
@@ -339,7 +339,7 @@ public class Proxy extends Thread {
         synchronized (hashHost) {
             if (hashHost.containsKey(host)) {
                 log.debug("Good, already in map, host=" + host);
-                return (SSLSocketFactory) hashHost.get(host);
+                return hashHost.get(host);
             }
             InputStream in = getCertificate();
             Exception except = null;

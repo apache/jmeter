@@ -18,7 +18,6 @@ package org.apache.jmeter.visualizers;
 
 import java.io.Serializable;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -34,7 +33,7 @@ import org.apache.jmeter.samplers.SampleResult;
 
 public class MonitorAccumModel implements Clearable, Serializable {
 
-    private final HashMap/*<String, List>*/ serverListMap;
+    private final HashMap<String, List<MonitorModel>> serverListMap;
 
     /**
      * we use this to set the current monitorModel so that we can save the stats
@@ -42,7 +41,7 @@ public class MonitorAccumModel implements Clearable, Serializable {
      */
     private MonitorModel current;
 
-    private final List/*<MonitorListener>*/ listeners;
+    private final List<MonitorListener> listeners;
 
     /**
      * By default, we set the default to 800
@@ -56,8 +55,8 @@ public class MonitorAccumModel implements Clearable, Serializable {
      *
      */
     public MonitorAccumModel() {
-        serverListMap = new HashMap/*<String, List>*/();
-        listeners = new LinkedList/*<MonitorListener>*/();
+        serverListMap = new HashMap<String, List<MonitorModel>>();
+        listeners = new LinkedList<MonitorListener>();
     }
 
     public int getBufferSize() {
@@ -90,10 +89,10 @@ public class MonitorAccumModel implements Clearable, Serializable {
     public void addSample(MonitorModel model) {
         this.current = model;
         if (serverListMap.containsKey(model.getURL())) {
-            List newlist = updateArray(model, (List) serverListMap.get(model.getURL()));
+            List<MonitorModel> newlist = updateArray(model, serverListMap.get(model.getURL()));
             serverListMap.put(model.getURL(), newlist);
         } else {
-            List samples = Collections.synchronizedList(new LinkedList());
+            List<MonitorModel> samples = Collections.synchronizedList(new LinkedList<MonitorModel>());
             samples.add(model);
             serverListMap.put(model.getURL(), samples);
         }
@@ -105,7 +104,7 @@ public class MonitorAccumModel implements Clearable, Serializable {
      *
      * @param model
      */
-    private List updateArray(MonitorModel model, List list) {
+    private List<MonitorModel> updateArray(MonitorModel model, List<MonitorModel> list) {
         if (list.size() < defaultBufferSize) {
             list.add(model);
         } else {
@@ -121,11 +120,11 @@ public class MonitorAccumModel implements Clearable, Serializable {
      * @param url
      * @return list
      */
-    public List getAllSamples(String url) {
+    public List<MonitorModel> getAllSamples(String url) {
         if (!serverListMap.containsKey(url)) {
-            return Collections.synchronizedList(new LinkedList());
+            return Collections.synchronizedList(new LinkedList<MonitorModel>());
         } else {
-            return (List) serverListMap.get(url);
+            return serverListMap.get(url);
         }
     }
 
@@ -137,8 +136,7 @@ public class MonitorAccumModel implements Clearable, Serializable {
      */
     public MonitorModel getSample(String url) {
         if (serverListMap.containsKey(url)) {
-            ArrayList list = (ArrayList) serverListMap.get(url);
-            return (MonitorModel) list.get(0);
+            return serverListMap.get(url).get(0);
         } else {
             return null;
         }
@@ -207,10 +205,9 @@ public class MonitorAccumModel implements Clearable, Serializable {
      * changes.
      */
     public void clearData() {
-        Iterator itr = this.serverListMap.keySet().iterator();
+        Iterator<String> itr = this.serverListMap.keySet().iterator();
         while (itr.hasNext()) {
-            List lt = (List) this.serverListMap.get(itr.next());
-            lt.clear();
+            this.serverListMap.get(itr.next()).clear();
         }
         this.serverListMap.clear();
     }
@@ -222,7 +219,7 @@ public class MonitorAccumModel implements Clearable, Serializable {
      */
     public void notifyListeners(MonitorModel model) {
         for (int idx = 0; idx < listeners.size(); idx++) {
-            MonitorListener ml = (MonitorListener) listeners.get(idx);
+            MonitorListener ml = listeners.get(idx);
             ml.addSample(model);
         }
     }

@@ -37,33 +37,25 @@ import org.apache.log.Logger;
 public class GraphAccumModel implements Clearable, Serializable {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    protected String name;
+    private String name;
 
-    protected List samples;
+    private final List<SampleResult> samples;
 
-    protected List listeners;
+    private final List<GraphAccumListener> listeners;
 
-    protected long averageSum = 0;
+    private long max = 1;
 
-    protected long variationSum = 0;
+    private boolean bigChange = false;
 
-    protected long counter = 0;
-
-    protected long previous = 0;
-
-    protected long max = 1;
-
-    protected boolean bigChange = false;
-
-    protected SampleResult current;
+    private SampleResult current;
 
     /**
      * Constructor.
      */
     public GraphAccumModel() {
         log.debug("Start : GraphAccumModel1");
-        listeners = new LinkedList();
-        samples = Collections.synchronizedList(new LinkedList());
+        listeners = new LinkedList<GraphAccumListener>();
+        samples = Collections.synchronizedList(new LinkedList<SampleResult>());
         log.debug("End : GraphAccumModel1");
     }
 
@@ -91,7 +83,7 @@ public class GraphAccumModel implements Clearable, Serializable {
      *
      * @return the List value
      */
-    public List getList() {
+    public List<SampleResult> getList() {
         return samples;
     }
 
@@ -169,11 +161,11 @@ public class GraphAccumModel implements Clearable, Serializable {
      */
     protected void fireDataChanged() {
         log.debug("Start : fireDataChanged1");
-        Iterator iter = listeners.iterator();
+        Iterator<GraphAccumListener> iter = listeners.iterator();
 
         if (bigChange) {
             while (iter.hasNext()) {
-                ((GraphAccumListener) iter.next()).updateGui();
+                iter.next().updateGui();
             }
             bigChange = false;
         } else {
@@ -187,10 +179,10 @@ public class GraphAccumModel implements Clearable, Serializable {
      * not need to rescale graph.
      */
     protected void quickUpdate(SampleResult s) {
-        Iterator iter = listeners.iterator();
+        Iterator<GraphAccumListener> iter = listeners.iterator();
         {
             while (iter.hasNext()) {
-                ((GraphAccumListener) iter.next()).updateGui(s);
+                iter.next().updateGui(s);
             }
         }
     }
