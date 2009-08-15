@@ -37,7 +37,7 @@ public class LookAndFeelCommand implements Command {
 
     private static final String JMETER_LAF = "jmeter.laf"; // $NON-NLS-1$
     
-    private static final Set commands = new HashSet();
+    private static final Set<String> commands = new HashSet<String>();
 
     static {
         UIManager.LookAndFeelInfo[] lfs = UIManager.getInstalledLookAndFeels();
@@ -115,7 +115,7 @@ public class LookAndFeelCommand implements Command {
         }
     }
 
-    public Set getActionNames() {
+    public Set<String> getActionNames() {
         return commands;
     }
 }

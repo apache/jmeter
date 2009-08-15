@@ -29,7 +29,7 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class ExitCommand implements Command {
 
-    private static final Set commands = new HashSet();
+    private static final Set<String> commands = new HashSet<String>();
 
     static {
         commands.add(ActionNames.EXIT);
@@ -46,7 +46,7 @@ public class ExitCommand implements Command {
      *
      * @return The ActionNames value
      */
-    public Set getActionNames() {
+    public Set<String> getActionNames() {
         return commands;
     }
 

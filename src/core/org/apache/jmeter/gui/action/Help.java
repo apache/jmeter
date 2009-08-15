@@ -41,7 +41,7 @@ import org.apache.log.Logger;
 public class Help implements Command {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final Set commands = new HashSet();
+    private static final Set<String> commands = new HashSet<String>();
 
     private static final String HELP_DOCS = "file:///"  // $NON-NLS-1$
         + JMeterUtils.getJMeterHome()
@@ -117,7 +117,7 @@ public class Help implements Command {
     /**
      * @see org.apache.jmeter.gui.action.Command#getActionNames()
      */
-    public Set getActionNames() {
+    public Set<String> getActionNames() {
         return commands;
     }
 }
