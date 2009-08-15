@@ -27,9 +27,9 @@ import org.apache.jmeter.functions.gui.FunctionHelper;
 public class CreateFunctionDialog extends AbstractAction {
     private FunctionHelper helper = null;
 
-    private static Set commands;
+    private static final Set<String> commands;
     static {
-        commands = new HashSet();
+        commands = new HashSet<String>();
         commands.add(ActionNames.FUNCTIONS);
     }
 
@@ -41,7 +41,7 @@ public class CreateFunctionDialog extends AbstractAction {
      * Provide the list of Action names that are available in this command.
      */
     @Override
-    public Set getActionNames() {
+    public Set<String> getActionNames() {
         return commands;
     }
 

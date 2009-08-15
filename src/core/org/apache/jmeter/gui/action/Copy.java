@@ -41,7 +41,7 @@ public class Copy extends AbstractAction {
 
     private static JMeterTreeNode copiedNodes[] = null;
 
-    private static final HashSet commands = new HashSet();
+    private static final HashSet<String> commands = new HashSet<String>();
 
     static {
         commands.add(ActionNames.COPY);
@@ -51,7 +51,7 @@ public class Copy extends AbstractAction {
      * @see org.apache.jmeter.gui.action.Command#getActionNames()
      */
     @Override
-    public Set getActionNames() {
+    public Set<String> getActionNames() {
         return commands;
     }
 

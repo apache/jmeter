@@ -35,7 +35,7 @@ import org.apache.log.Logger;
 public class AddParent implements Command {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final Set commands = new HashSet();
+    private static final Set<String> commands = new HashSet<String>();
 
     static {
         commands.add(ActionNames.ADD_PARENT);
@@ -57,7 +57,7 @@ public class AddParent implements Command {
 
     }
 
-    public Set getActionNames() {
+    public Set<String> getActionNames() {
         return commands;
     }
 

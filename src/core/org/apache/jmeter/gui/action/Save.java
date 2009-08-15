@@ -54,7 +54,7 @@ public class Save implements Command {
 
     public static final String JMX_FILE_EXTENSION = ".jmx"; // $NON-NLS-1$
 
-    private static final Set commands = new HashSet();
+    private static final Set<String> commands = new HashSet<String>();
 
     static {
         commands.add(ActionNames.SAVE_AS); // Save (Selection) As
@@ -73,7 +73,7 @@ public class Save implements Command {
      *
      * @return the ActionNames value
      */
-    public Set getActionNames() {
+    public Set<String> getActionNames() {
         return commands;
     }
 
