@@ -56,7 +56,7 @@ public abstract class AbstractTimerGui extends AbstractJMeterGuiComponent {
      * @return a Collection of Strings, where each element is one of the
      *         constants defined in MenuFactory
      */
-    public Collection getMenuCategories() {
+    public Collection<String> getMenuCategories() {
         return Arrays.asList(new String[] { MenuFactory.TIMERS });
     }
 }

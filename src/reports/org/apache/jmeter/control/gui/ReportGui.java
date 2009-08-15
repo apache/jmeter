@@ -121,7 +121,7 @@ public class ReportGui extends AbstractReportGui {
      *         constants defined in MenuFactory
      */
     @Override
-    public Collection getMenuCategories() {
+    public Collection<String> getMenuCategories() {
         return null;
     }
 

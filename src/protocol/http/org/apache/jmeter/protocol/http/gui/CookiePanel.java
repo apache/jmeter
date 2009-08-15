@@ -85,7 +85,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
         // removed expiration because it's just an annoyance for static cookies
     };
 
-    private static final Class[] columnClasses = {
+    private static final Class<?>[] columnClasses = {
         String.class,
         String.class,
         String.class,

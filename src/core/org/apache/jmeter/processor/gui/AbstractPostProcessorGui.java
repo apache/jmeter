@@ -34,7 +34,7 @@ public abstract class AbstractPostProcessorGui extends AbstractJMeterGuiComponen
         return MenuFactory.getDefaultExtractorMenu();
     }
 
-    public Collection getMenuCategories() {
+    public Collection<String> getMenuCategories() {
         return Arrays.asList(new String[] { MenuFactory.POST_PROCESSORS });
     }
 }

@@ -131,7 +131,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      *         constants defined in MenuFactory
      */
     @Override
-    public Collection getMenuCategories() {
+    public Collection<String> getMenuCategories() {
         if (standalone) {
             return super.getMenuCategories();
         }

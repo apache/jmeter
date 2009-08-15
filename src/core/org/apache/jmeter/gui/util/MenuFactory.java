@@ -82,9 +82,10 @@ public final class MenuFactory {
 
     public static final String LISTENERS = "menu_listener"; //$NON-NLS-1$
 
-    private static final Map menuMap = new HashMap();
+    private static final Map<String, List<MenuInfo>> menuMap =
+        new HashMap<String, List<MenuInfo>>();
 
-    private static final Set elementsToSkip = new HashSet();
+    private static final Set<String> elementsToSkip = new HashSet<String>();
 
     // MENU_ADD_xxx - controls which items are in the ADD menu
     // MENU_PARENT_xxx - controls which items are in the Insert Parent menu
@@ -114,20 +115,20 @@ public final class MenuFactory {
     private static final String[] MENU_PARENT_SAMPLER = new String[] {
         MenuFactory.CONTROLLERS };
 
-    private static final List timers, controllers, samplers, configElements,
+    private static final List<MenuInfo> timers, controllers, samplers, configElements,
         assertions, listeners, nonTestElements,
         postProcessors, preProcessors;
 
     static {
-        timers = new LinkedList();
-        controllers = new LinkedList();
-        samplers = new LinkedList();
-        configElements = new LinkedList();
-        assertions = new LinkedList();
-        listeners = new LinkedList();
-        postProcessors = new LinkedList();
-        preProcessors = new LinkedList();
-        nonTestElements = new LinkedList();
+        timers = new LinkedList<MenuInfo>();
+        controllers = new LinkedList<MenuInfo>();
+        samplers = new LinkedList<MenuInfo>();
+        configElements = new LinkedList<MenuInfo>();
+        assertions = new LinkedList<MenuInfo>();
+        listeners = new LinkedList<MenuInfo>();
+        postProcessors = new LinkedList<MenuInfo>();
+        preProcessors = new LinkedList<MenuInfo>();
+        nonTestElements = new LinkedList<MenuInfo>();
         menuMap.put(TIMERS, timers);
         menuMap.put(ASSERTIONS, assertions);
         menuMap.put(CONFIG_ELEMENTS, configElements);
@@ -291,7 +292,7 @@ public final class MenuFactory {
      * @return the menu
      */
     public static JMenu makeMenu(String category, String actionCommand) {
-        return makeMenu((Collection) menuMap.get(category), actionCommand, JMeterUtils.getResString(category));
+        return makeMenu(menuMap.get(category), actionCommand, JMeterUtils.getResString(category));
     }
 
     /**
@@ -303,11 +304,11 @@ public final class MenuFactory {
      * @param menuName
      * @return the menu
      */
-    public static JMenu makeMenu(Collection menuInfo, String actionCommand, String menuName) {
-        Iterator iter = menuInfo.iterator();
+    public static JMenu makeMenu(Collection<MenuInfo> menuInfo, String actionCommand, String menuName) {
         JMenu menu = new JMenu(menuName);
+        Iterator<MenuInfo> iter = menuInfo.iterator();
         while (iter.hasNext()) {
-            MenuInfo info = (MenuInfo) iter.next();
+            MenuInfo info = iter.next();
             menu.add(makeMenuItem(info, actionCommand));
         }
         return menu;
@@ -391,12 +392,12 @@ public final class MenuFactory {
 
     private static void initializeMenus() {
         try {
-            List guiClasses = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] {
+            List<String> guiClasses = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] {
                     JMeterGUIComponent.class, TestBean.class });
             Collections.sort(guiClasses);
-            Iterator iter = guiClasses.iterator();
+            Iterator<String> iter = guiClasses.iterator();
             while (iter.hasNext()) {
-                String name = (String) iter.next();
+                String name = iter.next();
 
                 /*
                  * JMeterTreeNode and TestBeanGUI are special GUI classes, and
@@ -411,7 +412,7 @@ public final class MenuFactory {
 
                 JMeterGUIComponent item;
                 try {
-                    Class c = Class.forName(name);
+                    Class<?> c = Class.forName(name);
                     if (TestBean.class.isAssignableFrom(c)) {
                         item = new TestBeanGUI(c);
                     } else {
@@ -430,7 +431,7 @@ public final class MenuFactory {
                 } else {
                     elementsToSkip.add(name);
                 }
-                Collection categories = item.getMenuCategories();
+                Collection<String> categories = item.getMenuCategories();
                 if (categories == null) {
                     log.debug(name + " participates in no menus.");
                     continue;
@@ -549,7 +550,7 @@ public final class MenuFactory {
     }
 
     // Is any node an instance of one of the classes?
-    private static boolean foundClass(JMeterTreeNode nodes[],Class classes[]){
+    private static boolean foundClass(JMeterTreeNode nodes[],Class<?> classes[]){
         for (int i = 0; i < nodes.length; i++) {
             JMeterTreeNode node = nodes[i];
             for (int j=0; j < classes.length; j++) {
@@ -562,7 +563,7 @@ public final class MenuFactory {
     }
 
     // Is any node an instance of one of the classes, but not an exception?
-    private static boolean foundClass(JMeterTreeNode nodes[],Class classes[], Class except){
+    private static boolean foundClass(JMeterTreeNode nodes[],Class<?> classes[], Class<?> except){
         for (int i = 0; i < nodes.length; i++) {
             JMeterTreeNode node = nodes[i];
             Object userObject = node.getUserObject();

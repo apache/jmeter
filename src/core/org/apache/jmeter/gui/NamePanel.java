@@ -98,12 +98,7 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
         return ""; // $NON-NLS-1$
     }
 
-    /**
-     * Set the name displayed in this component.
-     *
-     * @param name
-     *            the name to display
-     */
+    /** {@inheritDoc} */
     @Override
     public void setName(String name) {
         super.setName(name);
@@ -119,53 +114,44 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
         return node;
     }
 
-    /**
-     * Set the tree node which this component provides the name for.
-     *
-     * @param node
-     *            the tree node corresponding to this component
-     */
+    /** {@inheritDoc} */
     public void setNode(TreeNode node) {
         this.node = node;
     }
 
-    /* Implements JMeterGUIComponent.configure(TestElement) */
+    /** {@inheritDoc} */
     public void configure(TestElement testElement) {
         setName(testElement.getName());
     }
 
-    /* Implements JMeterGUIComponent.createPopupMenu() */
+    /** {@inheritDoc} */
     public JPopupMenu createPopupMenu() {
         return null;
     }
 
-    /* Implements JMeterGUIComponent.getStaticLabel() */
+    /** {@inheritDoc} */
     public String getStaticLabel() {
         return JMeterUtils.getResString(getLabelResource());
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#getLabelResource()
-     */
+    /** {@inheritDoc} */
     public String getLabelResource() {
         return "root"; // $NON-NLS-1$
     }
 
-    /* Implements JMeterGUIComponent.getMenuCategories() */
-    public Collection getMenuCategories() {
+    /** {@inheritDoc} */
+    public Collection<String> getMenuCategories() {
         return null;
     }
 
-    /* Implements JMeterGUIComponent.createTestElement() */
+    /** {@inheritDoc} */
     public TestElement createTestElement() {
         WorkBench wb = new WorkBench();
         modifyTestElement(wb);
         return wb;
     }
 
-    /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
+    /** {@inheritDoc} */
     public void modifyTestElement(TestElement wb) {
         wb.setName(getName());
         wb.setProperty(new StringProperty(TestElement.GUI_CLASS, this.getClass().getName()));
