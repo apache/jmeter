@@ -49,7 +49,7 @@ public class ReportLoad implements Command {
 
     XStream loadService = new XStream();
 
-    private static final Set commands = new HashSet();
+    private static final Set<String> commands = new HashSet<String>();
     static {
         commands.add("open");
         commands.add("merge");
@@ -59,7 +59,7 @@ public class ReportLoad implements Command {
         super();
     }
 
-    public Set getActionNames() {
+    public Set<String> getActionNames() {
         return commands;
     }
 

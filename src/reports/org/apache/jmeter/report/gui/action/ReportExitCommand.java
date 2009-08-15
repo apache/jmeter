@@ -34,7 +34,7 @@ public class ReportExitCommand implements Command {
 
     public static final String EXIT = "exit";
 
-    private static final Set commands = new HashSet();
+    private static final Set<String> commands = new HashSet<String>();
     static {
         commands.add(EXIT);
     }
@@ -50,7 +50,7 @@ public class ReportExitCommand implements Command {
      *
      * @return The ActionNames value
      */
-    public Set getActionNames() {
+    public Set<String> getActionNames() {
         return commands;
     }
 
