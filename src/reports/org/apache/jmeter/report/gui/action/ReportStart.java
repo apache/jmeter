@@ -31,7 +31,7 @@ import org.apache.jmeter.gui.action.ActionNames;
 public class ReportStart extends AbstractAction {
     //private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final Set commands = new HashSet();
+    private static final Set<String> commands = new HashSet<String>();
     static {
         commands.add(ActionNames.ACTION_START);
         commands.add(ActionNames.ACTION_STOP);
@@ -52,7 +52,7 @@ public class ReportStart extends AbstractAction {
      * @return the ActionNames value
      */
     @Override
-    public Set getActionNames() {
+    public Set<String> getActionNames() {
         return commands;
     }
 

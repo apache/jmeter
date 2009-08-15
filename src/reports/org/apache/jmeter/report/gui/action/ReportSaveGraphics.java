@@ -48,7 +48,7 @@ public class ReportSaveGraphics implements Command {
 
     public static final String SAVE_GRAPHICS = "save_graphics"; // $NON-NLS-1$
 
-    private static final Set commands = new HashSet();
+    private static final Set<String> commands = new HashSet<String>();
     static {
         commands.add(SAVE_GRAPHICS);
     }
@@ -66,7 +66,7 @@ public class ReportSaveGraphics implements Command {
      *
      * @return the ActionNames value
      */
-    public Set getActionNames() {
+    public Set<String> getActionNames() {
         return commands;
     }
 

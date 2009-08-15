@@ -27,7 +27,7 @@ import org.apache.jmeter.gui.ReportGuiPackage;
 import org.apache.jmeter.gui.NamePanel;
 
 public class ReportEditCommand implements Command {
-    private static final Set commands = new HashSet();
+    private static final Set<String> commands = new HashSet<String>();
     static {
         commands.add("edit");
     }
@@ -51,7 +51,7 @@ public class ReportEditCommand implements Command {
         }
     }
 
-    public Set getActionNames() {
+    public Set<String> getActionNames() {
         return commands;
     }
 }

@@ -39,7 +39,7 @@ public class ReportDragNDrop extends AbstractAction {
 
     public static final String INSERT_AFTER = "drag_n_drop.insert_after";//$NON-NLS-1$
 
-    private static final Set commands = new HashSet();
+    private static final Set<String> commands = new HashSet<String>();
     static {
         commands.add(ADD);
         commands.add(INSERT_BEFORE);
@@ -123,7 +123,7 @@ public class ReportDragNDrop extends AbstractAction {
      * @see org.apache.jmeter.gui.action.Command#getActionNames()
      */
     @Override
-    public Set getActionNames() {
+    public Set<String> getActionNames() {
         return commands;
     }
 }

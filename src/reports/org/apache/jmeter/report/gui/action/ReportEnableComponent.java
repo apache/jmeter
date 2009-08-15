@@ -35,7 +35,7 @@ public class ReportEnableComponent implements Command {
 
     public static final String DISABLE = "disable";
 
-    private static final Set commands = new HashSet();
+    private static final Set<String> commands = new HashSet<String>();
     static {
         commands.add(ENABLE);
         commands.add(DISABLE);
@@ -67,7 +67,7 @@ public class ReportEnableComponent implements Command {
     /**
      * @see org.apache.jmeter.gui.action.Command#getActionNames()
      */
-    public Set getActionNames() {
+    public Set<String> getActionNames() {
         return commands;
     }
 }
