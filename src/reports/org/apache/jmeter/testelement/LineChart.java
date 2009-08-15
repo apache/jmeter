@@ -58,12 +58,12 @@ public class LineChart extends AbstractChart {
         setProperty(REPORT_CHART_URLS,urls);
     }
 
-    public double[][] convertToDouble(List data) {
+    private double[][] convertToDouble(List<DataSet> data) {
         String[] urls = this.getURLs().split(URL_DELIM);
         double[][] dataset = new double[urls.length][data.size()];
         for (int idx=0; idx < urls.length; idx++) {
             for (int idz=0; idz < data.size(); idz++) {
-                DataSet dset = (DataSet)data.get(idz);
+                DataSet dset = data.get(idz);
                 SamplingStatCalculator ss = dset.getStatistics(urls[idx]);
                 dataset[idx][idz] = getValue(ss);
             }
@@ -73,11 +73,11 @@ public class LineChart extends AbstractChart {
 
     @Override
     public JComponent renderChart(List dataset) {
-        ArrayList dset = new ArrayList();
-        ArrayList xlabels = new ArrayList();
-        Iterator itr = dataset.iterator();
+        ArrayList<DataSet> dset = new ArrayList<DataSet>();
+        ArrayList<String> xlabels = new ArrayList<String>();
+        Iterator<DataSet> itr = dataset.iterator();
         while (itr.hasNext()) {
-            DataSet item = (DataSet)itr.next();
+            DataSet item = itr.next();
             if (item != null) {
                 // we add the entry
                 dset.add(item);
@@ -89,7 +89,7 @@ public class LineChart extends AbstractChart {
             }
         }
         double[][] dbset = convertToDouble(dset);
-        return renderGraphics(dbset, (String[])xlabels.toArray(new String[xlabels.size()]));
+        return renderGraphics(dbset, xlabels.toArray(new String[xlabels.size()]));
     }
 
     public JComponent renderGraphics(double[][] data, String[] xAxisLabels) {

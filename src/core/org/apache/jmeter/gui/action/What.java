@@ -39,10 +39,10 @@ import org.apache.jorphan.logging.LoggingManager;
  */
 public class What implements Command {
 
-    private static final Set commandSet;
+    private static final Set<String> commandSet;
 
     static {
-        HashSet commands = new HashSet();
+        HashSet<String> commands = new HashSet<String>();
         commands.add(ActionNames.WHAT_CLASS);
         commands.add(ActionNames.DEBUG_ON);
         commands.add(ActionNames.DEBUG_OFF);
@@ -67,7 +67,7 @@ public class What implements Command {
     /**
      * Provide the list of Action names that are available in this command.
      */
-    public Set getActionNames() {
+    public Set<String> getActionNames() {
         return commandSet;
     }
 }

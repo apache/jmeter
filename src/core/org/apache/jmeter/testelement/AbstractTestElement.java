@@ -47,9 +47,10 @@ import org.apache.log.Logger;
 public abstract class AbstractTestElement implements TestElement, Serializable {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private Map propMap = Collections.synchronizedMap(new LinkedHashMap());
+    private final Map<String, JMeterProperty> propMap =
+        Collections.synchronizedMap(new LinkedHashMap<String, JMeterProperty>());
 
-    private transient Set temporaryProperties;
+    private transient Set<JMeterProperty> temporaryProperties;
 
     private transient boolean runningVersion = false;
 
@@ -140,7 +141,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
      * created with the same name and returned.
      */
     public JMeterProperty getProperty(String key) {
-        JMeterProperty prop = (JMeterProperty) propMap.get(key);
+        JMeterProperty prop = propMap.get(key);
         if (prop == null) {
             prop = new NullProperty(key);
         }
@@ -373,10 +374,10 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
     }
 
     public void recoverRunningVersion() {
-        Iterator iter = propMap.entrySet().iterator();
+        Iterator<Map.Entry<String, JMeterProperty>>  iter = propMap.entrySet().iterator();
         while (iter.hasNext()) {
-            Map.Entry entry = (Map.Entry) iter.next();
-            JMeterProperty prop = (JMeterProperty) entry.getValue();
+            Map.Entry<String, JMeterProperty> entry = iter.next();
+            JMeterProperty prop = entry.getValue();
             if (isTemporary(prop)) {
                 iter.remove();
                 clearTemporary(prop);
@@ -413,7 +414,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
      */
     public void setTemporary(JMeterProperty property) {
         if (temporaryProperties == null) {
-            temporaryProperties = new LinkedHashSet();
+            temporaryProperties = new LinkedHashSet<JMeterProperty>();
         }
         temporaryProperties.add(property);
         if (property instanceof MultiProperty) {
