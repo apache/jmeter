@@ -88,7 +88,7 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
         return COLUMN_RESOURCE_NAMES[column];
     }
 
-    public Class getColumnClass(int column) {
+    public Class<? extends String> getColumnClass(int column) {
         return COLUMN_RESOURCE_NAMES[column].getClass();
     }
 
@@ -227,7 +227,7 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
      *  }
      */
     public void removeHeaderNamed(String name) {
-        Vector removeIndices = new Vector();
+        Vector<Integer> removeIndices = new Vector<Integer>();
         for (int i = getHeaders().size() - 1; i >= 0; i--) {
             Header header = (Header) getHeaders().get(i).getObjectValue();
             if (header == null) {
@@ -238,8 +238,8 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
             }
         }
 
-        for (Enumeration e = removeIndices.elements(); e.hasMoreElements();) {
-            getHeaders().remove(((Integer) e.nextElement()).intValue());
+        for (Enumeration<Integer> e = removeIndices.elements(); e.hasMoreElements();) {
+            getHeaders().remove(e.nextElement().intValue());
         }
     }
 

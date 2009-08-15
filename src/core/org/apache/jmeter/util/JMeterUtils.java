@@ -367,10 +367,10 @@ public class JMeterUtils implements UnitTestManager {
      */
     private static void notifyLocaleChangeListeners() {
         LocaleChangeEvent event = new LocaleChangeEvent(JMeterUtils.class, locale);
-        Iterator iterator = ((Vector) localeChangeListeners.clone()).iterator();
+        Iterator<LocaleChangeListener> iterator = ((Vector) localeChangeListeners.clone()).iterator();
 
         while (iterator.hasNext()) {
-            LocaleChangeListener listener = (LocaleChangeListener) iterator.next();
+            LocaleChangeListener listener = iterator.next();
             listener.localeChanged(event);
         }
     }
@@ -543,7 +543,7 @@ public class JMeterUtils implements UnitTestManager {
      *            Description of Parameter
      * @return The Timers value
      */
-    public static Vector getTimers(Properties properties) {
+    public static Vector<Object> getTimers(Properties properties) {
         return instantiate(getVector(properties, "timer."), // $NON-NLS-1$
                 "org.apache.jmeter.timers.Timer"); // $NON-NLS-1$
     }
@@ -555,7 +555,7 @@ public class JMeterUtils implements UnitTestManager {
      *            Description of Parameter
      * @return The Visualizers value
      */
-    public static Vector getVisualizers(Properties properties) {
+    public static Vector<Object> getVisualizers(Properties properties) {
         return instantiate(getVector(properties, "visualizer."), // $NON-NLS-1$
                 "org.apache.jmeter.visualizers.Visualizer"); // $NON-NLS-1$
     }
@@ -568,7 +568,7 @@ public class JMeterUtils implements UnitTestManager {
      * @return The Controllers value
      */
     // TODO - does not appear to be called directly
-    public static Vector getControllers(Properties properties) {
+    public static Vector<Object> getControllers(Properties properties) {
         String name = "controller."; // $NON-NLS-1$
         Vector<Object> v = new Vector<Object>();
         Enumeration<?> names = properties.keys();
@@ -593,7 +593,7 @@ public class JMeterUtils implements UnitTestManager {
      * @return The TestSamples value
      */
     public static String[] getTestSamples(Properties properties, String name) {
-        return (String[]) getVector(properties, name + ".testsample").toArray(new String[0]); // $NON-NLS-1$
+        return getVector(properties, name + ".testsample").toArray(new String[0]); // $NON-NLS-1$
     }
 
     /**
@@ -620,10 +620,9 @@ public class JMeterUtils implements UnitTestManager {
      * Creates the vector of alias strings.
      *
      * @param properties
-     *            Description of Parameter
      * @return The Alias value
      */
-    public static Hashtable getAlias(Properties properties) {
+    public static Hashtable<String, String> getAlias(Properties properties) {
         return getHashtable(properties, "alias."); // $NON-NLS-1$
     }
 
@@ -637,9 +636,9 @@ public class JMeterUtils implements UnitTestManager {
      *            Description of Parameter
      * @return The Vector value
      */
-    public static Vector getVector(Properties properties, String name) {
-        Vector v = new Vector();
-        Enumeration names = properties.keys();
+    public static Vector<String> getVector(Properties properties, String name) {
+        Vector<String> v = new Vector<String>();
+        Enumeration<?> names = properties.keys();
         while (names.hasMoreElements()) {
             String prop = (String) names.nextElement();
             if (prop.startsWith(name)) {
@@ -653,19 +652,18 @@ public class JMeterUtils implements UnitTestManager {
      * Creates a table of strings for all the properties that start with a
      * common prefix.
      *
-     * @param properties
-     *            Description of Parameter
-     * @param name
-     *            Description of Parameter
-     * @return The Hashtable value
+     * @param properties input to search
+     * @param prefix to match against properties
+     * @return a Hashtable where the keys are the original keys with the prefix removed
      */
-    public static Hashtable getHashtable(Properties properties, String name) {
-        Hashtable t = new Hashtable();
-        Enumeration names = properties.keys();
+    public static Hashtable<String, String> getHashtable(Properties properties, String prefix) {
+        Hashtable<String, String> t = new Hashtable<String, String>();
+        Enumeration<?> names = properties.keys();
+        final int length = prefix.length();
         while (names.hasMoreElements()) {
             String prop = (String) names.nextElement();
-            if (prop.startsWith(name)) {
-                t.put(prop.substring(name.length()), properties.getProperty(prop));
+            if (prop.startsWith(prefix)) {
+                t.put(prop.substring(length), properties.getProperty(prop));
             }
         }
         return t;
@@ -788,6 +786,7 @@ public class JMeterUtils implements UnitTestManager {
     /**
      * Sets the selection of the JComboBox to the Object 'name' from the list in
      * namVec.
+     * NOTUSED?
      */
     public static void selJComboBoxItem(Properties properties, JComboBox combo, Vector namVec, String name) {
         int idx = namVec.indexOf(name);
@@ -848,13 +847,13 @@ public class JMeterUtils implements UnitTestManager {
      *            Description of Parameter
      * @return Description of the Returned Value
      */
-    public static Vector instantiate(Vector v, String className) {
-        Vector i = new Vector();
+    public static Vector<Object> instantiate(Vector<String> v, String className) {
+        Vector<Object> i = new Vector<Object>();
         try {
             Class<?> c = Class.forName(className);
-            Enumeration elements = v.elements();
+            Enumeration<String> elements = v.elements();
             while (elements.hasMoreElements()) {
-                String name = (String) elements.nextElement();
+                String name = elements.nextElement();
                 try {
                     Object o = Class.forName(name).newInstance();
                     if (c.isInstance(o)) {
@@ -886,8 +885,8 @@ public class JMeterUtils implements UnitTestManager {
      * @return Description of the Returned Value
      */
     //TODO move to JOrphanUtils ?
-    public static Vector tokenize(String string, String separator) {
-        Vector v = new Vector();
+    public static Vector<String> tokenize(String string, String separator) {
+        Vector<String> v = new Vector<String>();
         StringTokenizer s = new StringTokenizer(string, separator);
         while (s.hasMoreTokens()) {
             v.addElement(s.nextToken());

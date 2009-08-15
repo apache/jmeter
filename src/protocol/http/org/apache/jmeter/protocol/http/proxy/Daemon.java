@@ -63,7 +63,7 @@ public class Daemon extends Thread {
      * The proxy class which will be used to handle individual requests. This
      * class must be the {@link Proxy} class or a subclass.
      */
-    private final Class proxyClass;
+    private final Class<?> proxyClass;
 
     /**
      * Create a new Daemon with the specified port and target.
@@ -93,7 +93,7 @@ public class Daemon extends Thread {
      *            class must be the {@link Proxy} class or a subclass.
      * @throws IOException 
      */
-    public Daemon(int port, ProxyControl target, Class proxyClass) throws IOException {
+    public Daemon(int port, ProxyControl target, Class<?> proxyClass) throws IOException {
         super("HTTP Proxy Daemon");
         this.target = target;
         this.daemonPort = port;
@@ -113,8 +113,8 @@ public class Daemon extends Thread {
         log.info("Proxy up and running!");
 
         // Maps to contain page and form encodings
-        Map pageEncodings = Collections.synchronizedMap(new HashMap());
-        Map formEncodings = Collections.synchronizedMap(new HashMap());
+        Map<String, String> pageEncodings = Collections.synchronizedMap(new HashMap<String, String>());
+        Map<String, String> formEncodings = Collections.synchronizedMap(new HashMap<String, String>());
 
         try {
             while (running) {

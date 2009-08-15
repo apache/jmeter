@@ -116,9 +116,9 @@ public class MailerModel extends AbstractTestElement implements Serializable {
      * @return a Vector of String-objects wherein each String represents a
      *         mail-address.
      */
-    public Vector getAddressVector() {
+    public Vector<String> getAddressVector() {
         String addressees = getToAddress();
-        Vector addressVector = new Vector();
+        Vector<String> addressVector = new Vector<String>();
 
         if (addressees != null) {
 
@@ -161,7 +161,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
 
         if ((failureCount > getFailureLimit()) && !siteDown && !failureMsgSent) {
             // Send the mail ...
-            Vector addressVector = getAddressVector();
+            Vector<String> addressVector = getAddressVector();
 
             if (addressVector.size() != 0) {
                 try {
@@ -180,7 +180,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
         if (siteDown && (sample.getTime() != -1) && !successMsgSent) {
             // Send the mail ...
             if (successCount > getSuccessLimit()) {
-                Vector addressVector = getAddressVector();
+                Vector<String> addressVector = getAddressVector();
 
                 try {
                     sendMail(getFromAddress(), addressVector, getSuccessSubject(), "URL Restarted: "
@@ -244,7 +244,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
      * @param smtpHost
      *            the smtp-server used to send the mail.
      */
-    public synchronized void sendMail(String from, Vector vEmails, String subject, String attText, String smtpHost)
+    public synchronized void sendMail(String from, Vector<String> vEmails, String subject, String attText, String smtpHost)
             throws AddressException, MessagingException {
         String host = smtpHost;
         boolean debug = Boolean.valueOf(host).booleanValue();
