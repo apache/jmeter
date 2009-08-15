@@ -37,13 +37,13 @@ import org.apache.jmeter.protocol.http.util.ConversionUtils;
  *
  */
 public class URLCollection {
-    private final Collection coll;
+    private final Collection<URLString> coll;
 
     /**
      * Creates a new URLCollection from an existing Collection
      *
      */
-    public URLCollection(Collection c) {
+    public URLCollection(Collection<URLString> c) {
         coll = c;
     }
 
@@ -96,7 +96,7 @@ public class URLCollection {
         return b;
     }
 
-    public Iterator iterator() {
+    public Iterator<URL> iterator() {
         return new UrlIterator(coll.iterator());
     }
 
@@ -104,10 +104,10 @@ public class URLCollection {
      * Private iterator used to unwrap the URL from the URLString class
      *
      */
-    private static class UrlIterator implements Iterator {
-        private final Iterator iter;
+    private static class UrlIterator implements Iterator<URL> {
+        private final Iterator<URLString> iter;
 
-        UrlIterator(Iterator i) {
+        UrlIterator(Iterator<URLString> i) {
             iter = i;
         }
 
@@ -118,8 +118,8 @@ public class URLCollection {
         /*
          * Unwraps the URLString class to return the URL
          */
-        public Object next() {
-            return ((URLString) iter.next()).getURL();
+        public URL next() {
+            return iter.next().getURL();
         }
 
         public void remove() {
