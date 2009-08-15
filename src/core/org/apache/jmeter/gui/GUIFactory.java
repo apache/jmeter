@@ -31,14 +31,14 @@ import org.apache.jmeter.testbeans.gui.TestBeanGUI;
  *
  */
 public final class GUIFactory {
-    /** A Map from String to JComponent of registered GUI classes. */
-    private static final Map GUI_MAP = new HashMap();
+    /** A Map from String to JMeterGUIComponent of registered GUI classes. */
+    private static final Map<String, JMeterGUIComponent> GUI_MAP = new HashMap<String, JMeterGUIComponent>();
 
     /** A Map from String to ImageIcon of registered icons. */
-    private static final Map ICON_MAP = new HashMap();
+    private static final Map<String, ImageIcon> ICON_MAP = new HashMap<String, ImageIcon>();
 
     /** A Map from String to ImageIcon of registered icons. */
-    private static final Map DISABLED_ICON_MAP = new HashMap();
+    private static final Map<String, ImageIcon> DISABLED_ICON_MAP = new HashMap<String, ImageIcon>();
 
     /**
      * Prevent instantiation since this is a static utility class.
@@ -55,7 +55,7 @@ public final class GUIFactory {
      * @return the associated icon, or null if this class or its superclass has
      *         not been registered
      */
-    public static ImageIcon getIcon(Class elementClass) {
+    public static ImageIcon getIcon(Class<?> elementClass) {
         return getIcon(elementClass, true);
 
     }
@@ -72,9 +72,9 @@ public final class GUIFactory {
      * @return the associated icon, or null if this class or its superclass has
      *         not been registered
      */
-    public static ImageIcon getIcon(Class elementClass, boolean enabled) {
+    public static ImageIcon getIcon(Class<?> elementClass, boolean enabled) {
         String key = elementClass.getName();
-        ImageIcon icon = (ImageIcon) (enabled ? ICON_MAP.get(key) : DISABLED_ICON_MAP.get(key));
+        ImageIcon icon = (enabled ? ICON_MAP.get(key) : DISABLED_ICON_MAP.get(key));
 
         if (icon != null) {
             return icon;
@@ -97,7 +97,7 @@ public final class GUIFactory {
      * @return an instance of the class, or null if this class or its superclass
      *         has not been registered
      */
-    public static JComponent getGUI(Class elementClass) {
+    public static JComponent getGUI(Class<?> elementClass) {
         // TODO: This method doesn't appear to be used.
         String key = elementClass.getName();
         JComponent gui = (JComponent) GUI_MAP.get(key);
@@ -159,7 +159,7 @@ public final class GUIFactory {
      *             if access rights do not permit an instance of the GUI class
      *             to be created
      */
-    public static void registerGUI(String key, Class guiClass, Class testClass) throws InstantiationException,
+    public static void registerGUI(String key, Class<?> guiClass, Class<?> testClass) throws InstantiationException,
             IllegalAccessException {
         // TODO: This method doesn't appear to be used.
         JMeterGUIComponent gui;

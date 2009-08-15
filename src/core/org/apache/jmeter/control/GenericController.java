@@ -46,14 +46,16 @@ import org.apache.log.Logger;
  */
 public class GenericController extends AbstractTestElement implements Controller, Serializable {
 
-    private static final long serialVersionUID = 233L;
+    private static final long serialVersionUID = 234L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private transient LinkedList iterationListeners = new LinkedList();
+    private transient LinkedList<LoopIterationListener> iterationListeners =
+        new LinkedList<LoopIterationListener>();
 
     // May be replaced by RandomOrderController
-    protected transient List subControllersAndSamplers = new ArrayList();
+    protected transient List<TestElement> subControllersAndSamplers =
+        new ArrayList<TestElement>();
 
     protected transient int current;
 
@@ -74,7 +76,7 @@ public class GenericController extends AbstractTestElement implements Controller
         first = true; // TODO should this use setFirst()?
         TestElement elem;
         for (int i = 0; i < subControllersAndSamplers.size(); i++) {
-            elem = (TestElement) subControllersAndSamplers.get(i);
+            elem = subControllersAndSamplers.get(i);
             if (elem instanceof Controller) {
                 ((Controller) elem).initialize();
             }
@@ -232,7 +234,7 @@ public class GenericController extends AbstractTestElement implements Controller
      *
      * @return the SubControllers value
      */
-    protected List getSubControllers() {
+    protected List<TestElement> getSubControllers() {
         return subControllersAndSamplers;
     }
 
@@ -263,7 +265,7 @@ public class GenericController extends AbstractTestElement implements Controller
      */
     protected TestElement getCurrentElement() throws NextIsNullException {
         if (current < subControllersAndSamplers.size()) {
-            return (TestElement) subControllersAndSamplers.get(current);
+            return subControllersAndSamplers.get(current);
         }
         if (subControllersAndSamplers.size() == 0) {
             setDone(true);
@@ -312,10 +314,10 @@ public class GenericController extends AbstractTestElement implements Controller
     }
 
     protected void fireIterationStart() {
-        Iterator iter = iterationListeners.iterator();
+        Iterator<LoopIterationListener> iter = iterationListeners.iterator();
         LoopIterationEvent event = new LoopIterationEvent(this, getIterCount());
         while (iter.hasNext()) {
-            LoopIterationListener item = (LoopIterationListener) iter.next();
+            LoopIterationListener item = iter.next();
             item.iterationStart(event);
         }
     }

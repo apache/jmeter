@@ -77,9 +77,9 @@ public class Arguments extends ConfigTestElement implements Serializable {
      *
      * @return a new Map with String keys and values containing the arguments
      */
-    public Map getArgumentsAsMap() {
+    public Map<String, String> getArgumentsAsMap() {
         PropertyIterator iter = getArguments().iterator();
-        Map argMap = new LinkedHashMap();
+        Map<String, String> argMap = new LinkedHashMap<String, String>();
         while (iter.hasNext()) {
             Argument arg = (Argument) iter.next().getObjectValue();
             // Because CollectionProperty.mergeIn will not prevent adding two

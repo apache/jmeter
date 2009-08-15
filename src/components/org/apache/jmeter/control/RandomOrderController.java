@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.jmeter.testelement.TestElement;
+
 /**
  * A controller that runs its children each at most once, but in a random order.
  *
@@ -57,13 +59,13 @@ public class RandomOrderController extends GenericController implements Serializ
         int numElements = this.subControllersAndSamplers.size();
 
         // Create a new list containing numElements null elements.
-        List reordered = new ArrayList(this.subControllersAndSamplers.size());
+        List<TestElement> reordered = new ArrayList<TestElement>(this.subControllersAndSamplers.size());
         for (int i = 0; i < numElements; i++) {
             reordered.add(null);
         }
 
         // Insert the subControllersAndSamplers into random list positions.
-        for (Iterator i = this.subControllersAndSamplers.iterator(); i.hasNext();) {
+        for (Iterator<TestElement> i = this.subControllersAndSamplers.iterator(); i.hasNext();) {
             int idx = (int) Math.floor(Math.random() * reordered.size());
             while (true) {
                 if (idx == numElements) {
