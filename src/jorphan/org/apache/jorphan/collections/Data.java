@@ -44,11 +44,9 @@ import org.apache.log.Logger;
 public class Data implements Serializable {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private Map data;
+    private final Map<String, List<Object>> data;
 
-    // Map iterators = new HashMap();
-    // Hashtable dataLine;
-    private ArrayList header;
+    private ArrayList<String> header;
 
     // saves current position in data Vector
     private int currentPos, size;
@@ -57,8 +55,8 @@ public class Data implements Serializable {
      * Constructor - takes no arguments.
      */
     public Data() {
-        header = new ArrayList();
-        data = new HashMap();
+        header = new ArrayList<String>();
+        data = new HashMap<String, List<Object>>();
         currentPos = -1;
         size = currentPos + 1;
     }
@@ -72,10 +70,10 @@ public class Data implements Serializable {
      *            New header name.
      */
     public void replaceHeader(String oldHeader, String newHeader) {
-        List tempList;
+        List<Object> tempList;
         int index = header.indexOf(oldHeader);
         header.set(index, newHeader);
-        tempList = (List) data.remove(oldHeader);
+        tempList = data.remove(oldHeader);
         data.put(newHeader, tempList);
     }
 
@@ -123,13 +121,13 @@ public class Data implements Serializable {
      * Removes the current row.
      */
     public void removeRow() {
-        List tempList;
-        Iterator it = data.keySet().iterator();
+        List<Object> tempList;
+        Iterator<String> it = data.keySet().iterator();
         log.debug("removing row, size = " + size);
         if (currentPos > -1 && currentPos < size) {
             log.debug("got to here");
             while (it.hasNext()) {
-                tempList = (List) data.get(it.next());
+                tempList = data.get(it.next());
                 tempList.remove(currentPos);
             }
             if (currentPos > 0) {
@@ -150,10 +148,10 @@ public class Data implements Serializable {
 
     public void addRow() {
         String[] headers = getHeaders();
-        List tempList = new ArrayList();
+        List<Object> tempList = new ArrayList<Object>();
         for (int i = 0; i < headers.length; i++) {
-            if ((tempList = (ArrayList) data.get(header.get(i))) == null) {
-                tempList = new ArrayList();
+            if ((tempList = data.get(header.get(i))) == null) {
+                tempList = new ArrayList<Object>();
                 data.put(headers[i], tempList);
             }
             tempList.add("");
@@ -189,11 +187,11 @@ public class Data implements Serializable {
     }
 
     private void swapRows(int row1, int row2) {
-        List temp;
+        List<Object> temp;
         Object o;
-        Iterator it = data.keySet().iterator();
+        Iterator<String> it = data.keySet().iterator();
         while (it.hasNext()) {
-            temp = (List) data.get(it.next());
+            temp = data.get(it.next());
             o = temp.get(row1);
             temp.set(row1, temp.get(row2));
             temp.set(row2, o);
@@ -213,17 +211,17 @@ public class Data implements Serializable {
      */
     private void sortData(String column, int start, int end) {
         int x = start, y = end - 1;
-        String basis = ((List) data.get(column)).get((x + y) / 2).toString();
+        String basis = ((List<?>) data.get(column)).get((x + y) / 2).toString();
         if (x == y) {
             return;
         }
 
         while (x <= y) {
-            while (x < end && ((List) data.get(column)).get(x).toString().compareTo(basis) < 0) {
+            while (x < end && ((List<?>) data.get(column)).get(x).toString().compareTo(basis) < 0) {
                 x++;
             }
 
-            while (y >= (start - 1) && ((List) data.get(column)).get(y).toString().compareTo(basis) > 0) {
+            while (y >= (start - 1) && ((List<?>) data.get(column)).get(y).toString().compareTo(basis) > 0) {
                 y--;
             }
 
@@ -268,9 +266,9 @@ public class Data implements Serializable {
      *            value to set into column.
      */
     public void addColumnValue(String column, Object value) {
-        ArrayList tempList;
-        if ((tempList = (ArrayList) data.get(column)) == null) {
-            tempList = new ArrayList();
+        ArrayList<Object> tempList;
+        if ((tempList = (ArrayList<Object>) data.get(column)) == null) {
+            tempList = new ArrayList<Object>();
             data.put(column, tempList);
         }
         int s = tempList.size();
@@ -304,10 +302,7 @@ public class Data implements Serializable {
      * @return row # where value exists.
      */
     public int findValue(String column, Object value) {
-        List list = (List) data.get(column);
-        int ret = -1;
-        ret = list.indexOf(value);
-        return ret;
+        return data.get(column).indexOf(value);
     }
 
     /**
@@ -320,9 +315,9 @@ public class Data implements Serializable {
      *            value to set into column.
      */
     public void setColumnValue(String column, Object value) {
-        List tempList;
-        if ((tempList = (List) data.get(column)) == null) {
-            tempList = new ArrayList();
+        List<Object> tempList;
+        if ((tempList = data.get(column)) == null) {
+            tempList = new ArrayList<Object>();
             data.put(column, tempList);
         }
 
@@ -419,7 +414,7 @@ public class Data implements Serializable {
     public Object getColumnValue(String column) {
         try {
             if (currentPos < size) {
-                return ((List) data.get(column)).get(currentPos);
+                return ((List<?>) data.get(column)).get(currentPos);
             } else {
                 return null;
             }
@@ -436,10 +431,10 @@ public class Data implements Serializable {
      * @return an Object which holds the value of the column.
      */
     public Object getColumnValue(int column) {
-        String columnName = (String) header.get(column);
+        String columnName = header.get(column);
         try {
             if (currentPos < size) {
-                return ((List) data.get(columnName)).get(currentPos);
+                return ((List<?>) data.get(columnName)).get(currentPos);
             } else {
                 return null;
             }
@@ -454,7 +449,7 @@ public class Data implements Serializable {
     }
 
     public void removeColumn(int col) {
-        String columnName = (String) header.get(col);
+        String columnName = header.get(col);
         data.remove(columnName);
         header.remove(columnName);
     }
@@ -470,10 +465,10 @@ public class Data implements Serializable {
      */
     public void setHeaders(String[] h) {
         int x = 0;
-        header = new ArrayList(h.length);
+        header = new ArrayList<String>(h.length);
         for (x = 0; x < h.length; x++) {
             header.add(h[x]);
-            data.put(h[x], new ArrayList());
+            data.put(h[x], new ArrayList<Object>());
         }
     }
 
@@ -485,7 +480,7 @@ public class Data implements Serializable {
     public String[] getHeaders() {
         String[] r = new String[header.size()];
         if (r.length > 0) {
-            r = (String[]) header.toArray(r);
+            r = header.toArray(r);
         }
         return r;
     }
@@ -502,8 +497,8 @@ public class Data implements Serializable {
      *            name of the column.
      * @return array of Objects representing the data.
      */
-    public List getColumnAsObjectArray(String columnName) {
-        return (List) data.get(columnName);
+    public List<Object> getColumnAsObjectArray(String columnName) {
+        return data.get(columnName);
     }
 
     /**
@@ -518,10 +513,10 @@ public class Data implements Serializable {
     public String[] getColumn(String columnName) {
         String[] returnValue;
         Object o;
-        List temp = (List) data.get(columnName);
+        List<?> temp = data.get(columnName);
         if (temp != null) {
             returnValue = new String[temp.size()];
-            Iterator it = temp.iterator();
+            Iterator<?> it = temp.iterator();
             int index = 0;
             while (it.hasNext()) {
                 o = it.next();
@@ -573,16 +568,16 @@ public class Data implements Serializable {
      * Sets the data for every row in the column.
      */
     public void setColumnData(String colName, Object value) {
-        List list = this.getColumnAsObjectArray(colName);
+        List<Object> list = this.getColumnAsObjectArray(colName);
         while (list.size() < size()) {
             list.add(value);
         }
     }
 
-    public void setColumnData(int col, List data) {
+    public void setColumnData(int col, List<?> data) {
         reset();
-        Iterator iter = data.iterator();
-        String columnName = (String) header.get(col);
+        Iterator<?> iter = data.iterator();
+        String columnName = header.get(col);
         while (iter.hasNext()) {
             next();
             setColumnValue(columnName, iter.next());
@@ -597,7 +592,7 @@ public class Data implements Serializable {
      */
     public void addHeader(String s) {
         header.add(s);
-        data.put(s, new ArrayList(Math.max(size(), 100)));
+        data.put(s, new ArrayList<Object>(Math.max(size(), 100)));
     }
 
     /**
@@ -609,10 +604,10 @@ public class Data implements Serializable {
      *            array of strings representing column values.
      */
     public void setLine(String[] line) {
-        List tempList;
+        List<Object> tempList;
         String[] h = getHeaders();
         for (int count = 0; count < h.length; count++) {
-            tempList = (List) data.get(h[count]);
+            tempList = data.get(h[count]);
             if (count < line.length && line[count].length() > 0) {
                 tempList.add(line[count]);
             } else {
@@ -634,10 +629,10 @@ public class Data implements Serializable {
      *            headers.
      */
     public void setLine(String[] line, String deflt) {
-        List tempList;
+        List<Object> tempList;
         String[] h = getHeaders();
         for (int count = 0; count < h.length; count++) {
-            tempList = (List) data.get(h[count]);
+            tempList = data.get(h[count]);
             if (count < line.length && line[count].length() > 0) {
                 tempList.add(line[count]);
             } else {

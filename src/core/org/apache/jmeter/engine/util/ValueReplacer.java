@@ -43,7 +43,7 @@ public class ValueReplacer {
 
     private final CompoundVariable masterFunction = new CompoundVariable();
 
-    private Map variables = new HashMap();
+    private Map<String, String> variables = new HashMap<String, String>();
 
     public ValueReplacer() {
     }
@@ -55,7 +55,8 @@ public class ValueReplacer {
     boolean containsKey(String k){
         return variables.containsKey(k);
     }
-    public void setUserDefinedVariables(Map variables) {
+
+    public void setUserDefinedVariables(Map<String, String> variables) {
         this.variables = variables;
     }
 
@@ -101,7 +102,7 @@ public class ValueReplacer {
      * @param vars
      *            A map of variable name-value pairs (String-to-String).
      */
-    public void addVariables(Map vars) {
+    public void addVariables(Map<String, String> vars) {
         variables.putAll(vars);
     }
 
