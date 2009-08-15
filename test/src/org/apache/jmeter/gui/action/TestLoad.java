@@ -40,7 +40,7 @@ public class TestLoad extends JMeterTestCase {
     private static final File testfiledir = new File(basedir,"bin/testfiles");
     private static final File demofiledir = new File(basedir,"xdocs/demos");
     
-    private static final Set notTestPlan = new HashSet();// not full test plans
+    private static final Set<String> notTestPlan = new HashSet<String>();// not full test plans
     
     static{
         notTestPlan.add("load_bug_list.jmx");// used by TestAnchorModifier

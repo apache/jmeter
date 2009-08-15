@@ -36,7 +36,7 @@ public class ReportCopy extends AbstractAction {
 
     private static final String COPY = "Copy";
 
-    private static final HashSet commands = new HashSet();
+    private static final HashSet<String> commands = new HashSet<String>();
     static {
         commands.add(COPY);
     }
@@ -45,7 +45,7 @@ public class ReportCopy extends AbstractAction {
      * @see org.apache.jmeter.report.gui.action.Command#getActionNames()
      */
     @Override
-    public Set getActionNames() {
+    public Set<String> getActionNames() {
         return commands;
     }
 

@@ -32,7 +32,7 @@ import org.apache.jmeter.report.gui.tree.ReportTreeNode;
 import org.apache.jmeter.testelement.TestElement;
 
 public class ReportRemove implements Command {
-    private static final Set commands = new HashSet();
+    private static final Set<String> commands = new HashSet<String>();
     static {
         commands.add("remove");
     }
@@ -48,7 +48,7 @@ public class ReportRemove implements Command {
      *
      * @return the ActionNames value
      */
-    public Set getActionNames() {
+    public Set<String> getActionNames() {
         return commands;
     }
 

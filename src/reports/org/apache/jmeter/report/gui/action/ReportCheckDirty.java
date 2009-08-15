@@ -30,6 +30,7 @@ import org.apache.jmeter.report.gui.action.AbstractAction;
 import org.apache.jmeter.report.gui.action.ReportActionRouter;
 import org.apache.jmeter.report.gui.action.ReportExitCommand;
 import org.apache.jmeter.report.gui.tree.ReportTreeNode;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.HashTreeTraverser;
 import org.apache.jorphan.collections.ListedHashTree;
@@ -39,7 +40,7 @@ import org.apache.log.Logger;
 public class ReportCheckDirty extends AbstractAction implements HashTreeTraverser, ActionListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static Map previousGuiItems;
+    private static Map<ReportTreeNode, TestElement> previousGuiItems;
 
     public static final String CHECK_DIRTY = "check_dirty";
 
@@ -60,7 +61,7 @@ public class ReportCheckDirty extends AbstractAction implements HashTreeTraverse
 
     boolean dirty = false;
 
-    private static final Set commands = new HashSet();
+    private static final Set<String> commands = new HashSet<String>();
     static {
         commands.add(CHECK_DIRTY);
         commands.add(SUB_TREE_SAVED);
@@ -70,7 +71,7 @@ public class ReportCheckDirty extends AbstractAction implements HashTreeTraverse
     }
 
     public ReportCheckDirty() {
-        previousGuiItems = new HashMap();
+        previousGuiItems = new HashMap<ReportTreeNode, TestElement>();
         ReportActionRouter.getInstance().addPreActionListener(ReportExitCommand.class, this);
     }
 
@@ -130,7 +131,7 @@ public class ReportCheckDirty extends AbstractAction implements HashTreeTraverse
         } else if (removeMode) {
             previousGuiItems.remove(treeNode);
         } else {
-            previousGuiItems.put(treeNode, treeNode.getTestElement().clone());
+            previousGuiItems.put(treeNode, (TestElement) treeNode.getTestElement().clone());
         }
     }
 
@@ -154,7 +155,7 @@ public class ReportCheckDirty extends AbstractAction implements HashTreeTraverse
      * @see org.apache.jmeter.gui.action.Command#getActionNames()
      */
     @Override
-    public Set getActionNames() {
+    public Set<String> getActionNames() {
         return commands;
     }
 }
