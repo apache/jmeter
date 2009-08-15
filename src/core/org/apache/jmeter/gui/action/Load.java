@@ -57,7 +57,7 @@ public class Load implements Command {
 
     private static final boolean expandTree = JMeterUtils.getPropDefault("onload.expandtree", true); //$NON-NLS-1$
 
-    private static final Set commands = new HashSet();
+    private static final Set<String> commands = new HashSet<String>();
 
     static {
         commands.add(ActionNames.OPEN);
@@ -68,7 +68,7 @@ public class Load implements Command {
         super();
     }
 
-    public Set getActionNames() {
+    public Set<String> getActionNames() {
         return commands;
     }
 

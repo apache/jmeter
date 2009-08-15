@@ -27,6 +27,7 @@ import java.util.Set;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.HashTreeTraverser;
 import org.apache.jorphan.collections.ListedHashTree;
@@ -40,7 +41,7 @@ import org.apache.log.Logger;
 public class CheckDirty extends AbstractAction implements HashTreeTraverser, ActionListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private final Map previousGuiItems;
+    private final Map<JMeterTreeNode, TestElement> previousGuiItems;
 
     private boolean checkMode = false;
 
@@ -48,7 +49,7 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
 
     private boolean dirty = false;
 
-    private static final Set commands = new HashSet();
+    private static final Set<String> commands = new HashSet<String>();
 
     static {
         commands.add(ActionNames.CHECK_DIRTY);
@@ -60,7 +61,7 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
     }
 
     public CheckDirty() {
-        previousGuiItems = new HashMap();
+        previousGuiItems = new HashMap<JMeterTreeNode, TestElement>();
         ActionRouter.getInstance().addPreActionListener(ExitCommand.class, this);
     }
 
@@ -129,7 +130,7 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
         } else if (removeMode) {
             previousGuiItems.remove(treeNode);
         } else {
-            previousGuiItems.put(treeNode, treeNode.getTestElement().clone());
+            previousGuiItems.put(treeNode, (TestElement) treeNode.getTestElement().clone());
         }
     }
 
@@ -153,7 +154,7 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
      * @see Command#getActionNames()
      */
     @Override
-    public Set getActionNames() {
+    public Set<String> getActionNames() {
         return commands;
     }
 }

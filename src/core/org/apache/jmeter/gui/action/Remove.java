@@ -34,7 +34,7 @@ import org.apache.jmeter.testelement.TestElement;
  */
 public class Remove implements Command {
 
-    private static final Set commands = new HashSet();
+    private static final Set<String> commands = new HashSet<String>();
 
     static {
         commands.add(ActionNames.REMOVE);
@@ -51,7 +51,7 @@ public class Remove implements Command {
      *
      * @return the ActionNames value
      */
-    public Set getActionNames() {
+    public Set<String> getActionNames() {
         return commands;
     }
 

@@ -40,15 +40,17 @@ import org.apache.jorphan.util.JMeterError;
 import org.apache.log.Logger;
 
 public final class ActionRouter implements ActionListener {
-    private Map commands = new HashMap();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static ActionRouter router;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private Map<String, Set<Command>> commands = new HashMap<String, Set<Command>>();
 
-    private Map preActionListeners = new HashMap();
+    private Map<String, HashSet<ActionListener>> preActionListeners =
+        new HashMap<String, HashSet<ActionListener>>();
 
-    private Map postActionListeners = new HashMap();
+    private Map<String, HashSet<ActionListener>> postActionListeners =
+        new HashMap<String, HashSet<ActionListener>>();
 
     private ActionRouter() {
     }
@@ -71,11 +73,11 @@ public final class ActionRouter implements ActionListener {
                 log.error("performAction(" + actionCommand + ") updateCurrentGui() on" + e.toString() + " caused", err);
                 JMeterUtils.reportErrorToUser("Problem updating GUI - see log file for details");
             }
-            Set commandObjects = (Set) commands.get(actionCommand);
-            Iterator iter = commandObjects.iterator();
+            Set<Command> commandObjects = commands.get(actionCommand);
+            Iterator<Command> iter = commandObjects.iterator();
             while (iter.hasNext()) {
                 try {
-                    Command c = (Command) iter.next();
+                    Command c = iter.next();
                     preActionPerformed(c.getClass(), e);
                     c.doAction(e);
                     postActionPerformed(c.getClass(), e);
@@ -101,10 +103,10 @@ public final class ActionRouter implements ActionListener {
         performAction(e);
     }
 
-    public Set getAction(String actionName) {
-        Set set = new HashSet();
-        Set commandObjects = (Set) commands.get(actionName);
-        Iterator iter = commandObjects.iterator();
+    public Set<Command> getAction(String actionName) {
+        Set<Command> set = new HashSet<Command>();
+        Set<Command> commandObjects = commands.get(actionName);
+        Iterator<Command> iter = commandObjects.iterator();
         while (iter.hasNext()) {
             try {
                 set.add(iter.next());
@@ -115,12 +117,12 @@ public final class ActionRouter implements ActionListener {
         return set;
     }
 
-    public Command getAction(String actionName, Class actionClass) {
-        Set commandObjects = (Set) commands.get(actionName);
-        Iterator iter = commandObjects.iterator();
+    public Command getAction(String actionName, Class<?> actionClass) {
+        Set<Command> commandObjects = commands.get(actionName);
+        Iterator<Command> iter = commandObjects.iterator();
         while (iter.hasNext()) {
             try {
-                Command com = (Command) iter.next();
+                Command com = iter.next();
                 if (com.getClass().equals(actionClass)) {
                     return com;
                 }
@@ -132,11 +134,11 @@ public final class ActionRouter implements ActionListener {
     }
 
     public Command getAction(String actionName, String className) {
-        Set commandObjects = (Set) commands.get(actionName);
-        Iterator iter = commandObjects.iterator();
+        Set<Command> commandObjects = commands.get(actionName);
+        Iterator<Command> iter = commandObjects.iterator();
         while (iter.hasNext()) {
             try {
-                Command com = (Command) iter.next();
+                Command com = iter.next();
                 if (com.getClass().getName().equals(className)) {
                     return com;
                 }
@@ -158,11 +160,11 @@ public final class ActionRouter implements ActionListener {
      * @param listener
      *            the ActionListener to receive the notifications
      */
-    public void addPreActionListener(Class action, ActionListener listener) {
+    public void addPreActionListener(Class<?> action, ActionListener listener) {
         if (action != null) {
-            HashSet set = (HashSet) preActionListeners.get(action.getName());
+            HashSet<ActionListener> set = preActionListeners.get(action.getName());
             if (set == null) {
-                set = new HashSet();
+                set = new HashSet<ActionListener>();
             }
             set.add(listener);
             preActionListeners.put(action.getName(), set);
@@ -180,9 +182,9 @@ public final class ActionRouter implements ActionListener {
      * @param listener
      *            the ActionListener to receive the notifications
      */
-    public void removePreActionListener(Class action, ActionListener listener) {
+    public void removePreActionListener(Class<?> action, ActionListener listener) {
         if (action != null) {
-            HashSet set = (HashSet) preActionListeners.get(action.getName());
+            HashSet<ActionListener> set = preActionListeners.get(action.getName());
             if (set != null) {
                 set.remove(listener);
                 preActionListeners.put(action.getName(), set);
@@ -200,11 +202,11 @@ public final class ActionRouter implements ActionListener {
      *            org.apache.jmeter.gui.action.Command.
      * @param listener
      */
-    public void addPostActionListener(Class action, ActionListener listener) {
+    public void addPostActionListener(Class<?> action, ActionListener listener) {
         if (action != null) {
-            HashSet set = (HashSet) postActionListeners.get(action.getName());
+            HashSet<ActionListener> set = postActionListeners.get(action.getName());
             if (set == null) {
-                set = new HashSet();
+                set = new HashSet<ActionListener>();
             }
             set.add(listener);
             postActionListeners.put(action.getName(), set);
@@ -221,9 +223,9 @@ public final class ActionRouter implements ActionListener {
      *            org.apache.jmeter.gui.action.Command.
      * @param listener
      */
-    public void removePostActionListener(Class action, ActionListener listener) {
+    public void removePostActionListener(Class<?> action, ActionListener listener) {
         if (action != null) {
-            HashSet set = (HashSet) postActionListeners.get(action.getName());
+            HashSet<ActionListener> set = postActionListeners.get(action.getName());
             if (set != null) {
                 set.remove(listener);
                 postActionListeners.put(action.getName(), set);
@@ -231,9 +233,9 @@ public final class ActionRouter implements ActionListener {
         }
     }
 
-    protected void preActionPerformed(Class action, ActionEvent e) {
+    protected void preActionPerformed(Class<? extends Command> action, ActionEvent e) {
         if (action != null) {
-            HashSet listenerSet = (HashSet) preActionListeners.get(action.getName());
+            HashSet<ActionListener> listenerSet = preActionListeners.get(action.getName());
             if (listenerSet != null && listenerSet.size() > 0) {
                 Object[] listeners = listenerSet.toArray();
                 for (int i = 0; i < listeners.length; i++) {
@@ -243,44 +245,44 @@ public final class ActionRouter implements ActionListener {
         }
     }
 
-    protected void postActionPerformed(Class action, ActionEvent e) {
+    protected void postActionPerformed(Class<? extends Command> action, ActionEvent e) {
         if (action != null) {
-            HashSet listenerSet = (HashSet) postActionListeners.get(action.getName());
+            HashSet<ActionListener> listenerSet = postActionListeners.get(action.getName());
             if (listenerSet != null && listenerSet.size() > 0) {
-                Object[] listeners = listenerSet.toArray();
+                ActionListener[] listeners = (ActionListener[]) listenerSet.toArray();
                 for (int i = 0; i < listeners.length; i++) {
-                    ((ActionListener) listeners[i]).actionPerformed(e);
+                    listeners[i].actionPerformed(e);
                 }
             }
         }
     }
 
     private void populateCommandMap() {
-        List listClasses;
+        List<String> listClasses;
         Command command;
-        Iterator iterClasses;
-        Class commandClass;
+        Class<?> commandClass;
         try {
             listClasses = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] { Class
                     .forName("org.apache.jmeter.gui.action.Command") });
-            commands = new HashMap(listClasses.size());
+            commands = new HashMap<String, Set<Command>>(listClasses.size());
             if (listClasses.size() == 0) {
                 log.fatalError("!!!!!Uh-oh, didn't find any action handlers!!!!!");
                 throw new JMeterError("No action handlers found - check JMeterHome and libraries");
             }
+            Iterator<String> iterClasses;
             iterClasses = listClasses.iterator();
             while (iterClasses.hasNext()) {
-                String strClassName = (String) iterClasses.next();
+                String strClassName = iterClasses.next();
                 if (strClassName.startsWith("org.apache.jmeter.gui")) {
                     commandClass = Class.forName(strClassName);
                     if (!Modifier.isAbstract(commandClass.getModifiers())) {
                         command = (Command) commandClass.newInstance();
-                        Iterator iter = command.getActionNames().iterator();
+                        Iterator<String> iter = command.getActionNames().iterator();
                         while (iter.hasNext()) {
-                            String commandName = (String) iter.next();
-                            Set commandObjects = (Set) commands.get(commandName);
+                            String commandName = iter.next();
+                            Set<Command> commandObjects = commands.get(commandName);
                             if (commandObjects == null) {
-                                commandObjects = new HashSet();
+                                commandObjects = new HashSet<Command>();
                                 commands.put(commandName, commandObjects);
                             }
                             commandObjects.add(command);

@@ -32,7 +32,7 @@ import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.WorkBench;
 
 public class DragNDrop extends AbstractAction {
-    private static final Set commands = new HashSet();
+    private static final Set<String> commands = new HashSet<String>();
 
     static {
         commands.add(ActionNames.DRAG_ADD);
@@ -88,7 +88,7 @@ public class DragNDrop extends AbstractAction {
         return ok;
     }
 
-    protected void removeNodesFromParents(JMeterTreeNode[] nodes) {
+    private void removeNodesFromParents(JMeterTreeNode[] nodes) {
         for (int i = 0; i < nodes.length; i++) {
             GuiPackage.getInstance().getTreeModel().removeNodeFromParent(nodes[i]);
         }
@@ -98,7 +98,7 @@ public class DragNDrop extends AbstractAction {
      * @see Command#getActionNames()
      */
     @Override
-    public Set getActionNames() {
+    public Set<String> getActionNames() {
         return commands;
     }
 }

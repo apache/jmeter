@@ -33,7 +33,7 @@ import org.apache.log.Logger;
 public class EnableComponent implements Command {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final Set commands = new HashSet();
+    private static final Set<String> commands = new HashSet<String>();
 
     static {
         commands.add(ActionNames.ENABLE);
@@ -66,7 +66,7 @@ public class EnableComponent implements Command {
     /**
      * @see org.apache.jmeter.gui.action.Command#getActionNames()
      */
-    public Set getActionNames() {
+    public Set<String> getActionNames() {
         return commands;
     }
 }
