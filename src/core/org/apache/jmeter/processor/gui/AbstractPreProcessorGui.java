@@ -32,7 +32,7 @@ public abstract class AbstractPreProcessorGui extends AbstractJMeterGuiComponent
         return MenuFactory.getDefaultExtractorMenu();
     }
 
-    public Collection getMenuCategories() {
+    public Collection<String> getMenuCategories() {
         return Arrays.asList(new String[] { MenuFactory.PRE_PROCESSORS });
     }
 

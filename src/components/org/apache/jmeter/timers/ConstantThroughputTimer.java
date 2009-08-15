@@ -26,6 +26,7 @@ import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -70,7 +71,8 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
     private final static ThroughputInfo allThreadsInfo = new ThroughputInfo();
 
     //For holding the ThrougputInfo objects for all ThreadGroups. Keyed by ThreadGroup objects
-    private final static Map threadGroupsInfoMap = new Hashtable();
+    private final static Map<ThreadGroup, ThroughputInfo> threadGroupsInfoMap =
+        new Hashtable<ThreadGroup, ThroughputInfo>();
 
 
     /**
@@ -167,7 +169,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
                 JMeterContextService.getContext().getThreadGroup();
             ThroughputInfo groupInfo;
             synchronized (threadGroupsInfoMap) {
-                groupInfo = (ThroughputInfo)threadGroupsInfoMap.get(group);
+                groupInfo = threadGroupsInfoMap.get(group);
                 if (groupInfo == null) {
                     groupInfo = new ThroughputInfo();
                     threadGroupsInfoMap.put(group, groupInfo);

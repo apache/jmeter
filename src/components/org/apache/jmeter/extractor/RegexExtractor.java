@@ -129,7 +129,7 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
            }
         try {
             Pattern pattern = JMeterUtils.getPatternCache().getPattern(regex, Perl5Compiler.READ_ONLY_MASK);
-            List matches = new ArrayList();
+            List<MatchResult> matches = new ArrayList<MatchResult>();
             int x = 0;
             boolean done = false;
             do {
@@ -276,8 +276,9 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
         if (template != null) {
             return;
         }
-        List pieces = new ArrayList();
-        List combined = new LinkedList();
+        List<String> pieces = new ArrayList<String>();
+        // Contains Strings and Integers
+        List<Object> combined = new LinkedList<Object>();
         String rawTemplate = getTemplate();
         PatternMatcher matcher = JMeterUtils.getMatcher();
         Pattern templatePattern = JMeterUtils.getPatternCache().getPattern("\\$(\\d+)\\$"  // $NON-NLS-1$
@@ -292,7 +293,7 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
         if (startsWith) {
             pieces.remove(0);// Remove initial empty entry
         }
-        Iterator iter = pieces.iterator();
+        Iterator<String> iter = pieces.iterator();
         while (iter.hasNext()) {
             boolean matchExists = matcher.contains(input, templatePattern);
             if (startsWith) {
@@ -335,7 +336,7 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
      *            the entry number in the list
      * @return MatchResult
      */
-    private MatchResult getCorrectMatch(List matches, int entry) {
+    private MatchResult getCorrectMatch(List<MatchResult> matches, int entry) {
         int matchSize = matches.size();
 
         if (matchSize <= 0 || entry > matchSize){
@@ -344,10 +345,10 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 
         if (entry == 0) // Random match
         {
-            return (MatchResult) matches.get(JMeterUtils.getRandomInt(matchSize));
+            return matches.get(JMeterUtils.getRandomInt(matchSize));
         }
 
-        return (MatchResult) matches.get(entry - 1);
+        return matches.get(entry - 1);
     }
 
     public void setRegex(String regex) {

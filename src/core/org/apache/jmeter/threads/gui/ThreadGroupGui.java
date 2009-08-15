@@ -89,7 +89,7 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
         initGui();
     }
 
-    public Collection getMenuCategories() {
+    public Collection<String> getMenuCategories() {
         return null;
     }
 
