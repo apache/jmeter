@@ -195,6 +195,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         init();
     }
 
+    /** {@inheritDoc} */
     @Override
     public TestElement createTestElement() {
         model = makeProxyControl();
@@ -208,11 +209,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         return local;
     }
 
-    /**
-     * Modifies a given TestElement to mirror the data in the gui components.
-     *
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-     */
+    /** {@inheritDoc} */
     @Override
     public void modifyTestElement(TestElement el) {
         if (excludeTable.isEditing()) {// Bug 42948
@@ -250,34 +247,37 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     }
 
     protected void setIncludeListInProxyControl(ProxyControl element) {
-        List includeList = getDataList(includeModel, INCLUDE_COL);
+        List<String> includeList = getDataList(includeModel, INCLUDE_COL);
         element.setIncludeList(includeList);
     }
 
     protected void setExcludeListInProxyControl(ProxyControl element) {
-        List excludeList = getDataList(excludeModel, EXCLUDE_COL);
+        List<String> excludeList = getDataList(excludeModel, EXCLUDE_COL);
         element.setExcludeList(excludeList);
     }
 
-    private List getDataList(PowerTableModel p_model, String colName) {
+    private List<String> getDataList(PowerTableModel p_model, String colName) {
         String[] dataArray = p_model.getData().getColumn(colName);
-        List list = new LinkedList();
+        List<String> list = new LinkedList<String>();
         for (int i = 0; i < dataArray.length; i++) {
             list.add(dataArray[i]);
         }
         return list;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getLabelResource() {
         return "proxy_title"; // $NON-NLS-1$
     }
 
+    /** {@inheritDoc} */
     @Override
-    public Collection getMenuCategories() {
+    public Collection<String> getMenuCategories() {
         return Arrays.asList(new String[] { MenuFactory.NON_TEST_ELEMENTS });
     }
 
+    /** {@inheritDoc} */
     @Override
     public void configure(TestElement element) {
         log.debug("Configuring gui with " + element);
@@ -319,17 +319,13 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
      * activated whenever the Proxy is selected in the Test Plan
      * Also handles samplerTypeName
      */
+    /** {@inheritDoc} */
     public void itemStateChanged(ItemEvent e) {
         // System.err.println(e.paramString());
         enableRestart();
     }
 
-    /***************************************************************************
-     * !ToDo (Method description)
-     *
-     * @param action
-     *            !ToDo (Parameter description)
-     **************************************************************************/
+    /** {@inheritDoc} */
     public void actionPerformed(ActionEvent action) {
         String command = action.getActionCommand();
 
@@ -407,30 +403,15 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         }
     }
 
-    /***************************************************************************
-     * !ToDo (Method description)
-     *
-     * @param e
-     *            !ToDo (Parameter description)
-     **************************************************************************/
+    /** {@inheritDoc} */
     public void keyPressed(KeyEvent e) {
     }
 
-    /***************************************************************************
-     * !ToDo (Method description)
-     *
-     * @param e
-     *            !ToDo (Parameter description)
-     **************************************************************************/
+    /** {@inheritDoc} */
     public void keyTyped(KeyEvent e) {
     }
 
-    /***************************************************************************
-     * !ToDo (Method description)
-     *
-     * @param e
-     *            !ToDo (Parameter description)
-     **************************************************************************/
+    /** {@inheritDoc} */
     public void keyReleased(KeyEvent e) {
         String fieldName = e.getComponent().getName();
 
@@ -827,6 +808,7 @@ class TreeNodeWrapper {
         return tn;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         return label;

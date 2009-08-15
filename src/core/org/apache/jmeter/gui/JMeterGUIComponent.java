@@ -176,7 +176,7 @@ public interface JMeterGUIComponent {
      *
      * @see org.apache.jmeter.gui.util.MenuFactory
      */
-    Collection getMenuCategories();
+    Collection<String> getMenuCategories();
 
     /**
      * Sets the tree node which this component is associated with.

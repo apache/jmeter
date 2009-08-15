@@ -79,7 +79,7 @@ public abstract class AbstractReportGui extends AbstractJMeterGuiComponent
     /* (non-Javadoc)
      * @see org.apache.jmeter.gui.JMeterGUIComponent#getMenuCategories()
      */
-    public Collection getMenuCategories() {
+    public Collection<String> getMenuCategories() {
         return Arrays.asList(new String[] { ReportMenuFactory.TABLES });
     }
 

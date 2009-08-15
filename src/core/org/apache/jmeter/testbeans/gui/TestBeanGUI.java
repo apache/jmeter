@@ -88,11 +88,11 @@ import org.apache.log.Logger;
 public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUIComponent {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private final Class testBeanClass;
+    private final Class<?> testBeanClass;
 
     private transient BeanInfo beanInfo;
 
-    private final Class customizerClass;
+    private final Class<?> customizerClass;
 
     /**
      * The single customizer if the customizer class implements
@@ -106,7 +106,8 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
      * needs to be limited, though, to avoid memory issues when editing very
      * large test plans.
      */
-    private final Map customizers = new LRUMap(20);
+    @SuppressWarnings("unchecked")
+    private final Map<TestElement, Customizer> customizers = new LRUMap(20);
 
     /**
      * Index of the customizer in the JPanel's child component list:
@@ -116,7 +117,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
     /**
      * The property name to value map that the active customizer edits:
      */
-    private final Map propertyMap = new HashMap();
+    private final Map<String, Object> propertyMap = new HashMap<String, Object>();
 
     /**
      * Whether the GUI components have been created.
@@ -124,14 +125,14 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
     private boolean initialized = false;
 
     static {
-        List paths = new LinkedList();
+        List<String> paths = new LinkedList<String>();
         paths.add("org.apache.jmeter.testbeans.gui");// $NON-NLS-1$
         paths.addAll(Arrays.asList(PropertyEditorManager.getEditorSearchPath()));
         String s = JMeterUtils.getPropDefault("propertyEditorSearchPath", null);// $NON-NLS-1$
         if (s != null) {
             paths.addAll(Arrays.asList(JOrphanUtils.split(s, ",", "")));// $NON-NLS-1$ // $NON-NLS-2$
         }
-        PropertyEditorManager.setEditorSearchPath((String[]) paths.toArray(new String[0]));
+        PropertyEditorManager.setEditorSearchPath(paths.toArray(new String[0]));
     }
 
     // Dummy for JUnit test
@@ -141,7 +142,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
         customizerClass = null;
     }
 
-    public TestBeanGUI(Class testBeanClass) {
+    public TestBeanGUI(Class<?> testBeanClass) {
         super();
         log.debug("testing class: " + testBeanClass.getName());
         // A quick verification, just in case:
@@ -326,7 +327,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
             if (initialized){
                 remove(customizerIndexInPanel);
             }
-            Customizer c = (Customizer) customizers.get(element);
+            Customizer c = customizers.get(element);
             if (c == null) {
                 c = createCustomizer();
                 c.setObject(propertyMap);
@@ -338,13 +339,9 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
         initialized = true;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#getMenuCategories()
-     */
-    public Collection getMenuCategories() {
-        List menuCategories = new LinkedList();
+    /** {@inheritDoc} */
+    public Collection<String> getMenuCategories() {
+        List<String> menuCategories = new LinkedList<String>();
         BeanDescriptor bd = beanInfo.getBeanDescriptor();
 
         // We don't want to show expert beans in the menus unless we're
