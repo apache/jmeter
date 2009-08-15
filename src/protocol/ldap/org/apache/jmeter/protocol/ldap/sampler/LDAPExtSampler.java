@@ -139,9 +139,11 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
     private static final String SEMI_COLON = ";"; // $NON-NLS-1$
 
 
-    private static final Hashtable ldapConnections = new Hashtable();
+    private static final Hashtable<String, LdapExtClient> ldapConnections =
+        new Hashtable<String, LdapExtClient>();
 
-    private static final Hashtable ldapContexts = new Hashtable();
+    private static final Hashtable<String, DirContext> ldapContexts =
+        new Hashtable<String, DirContext>();
 
     private static final int MAX_SORTED_RESULTS =
         JMeterUtils.getPropDefault("ldapsampler.max_sorted_results", 1000); // $NON-NLS-1$
@@ -643,7 +645,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
      *
      **************************************************************************/
     private void bindOp(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws NamingException {
-        DirContext ctx = (DirContext) ldapContexts.remove(getThreadName());
+        DirContext ctx = ldapContexts.remove(getThreadName());
         if (ctx != null) {
             log.warn("Closing previous context for thread: " + getThreadName());
             ctx.close();
@@ -720,8 +722,8 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
         res.setContentType("text/xml");// $NON-NLS-1$
         boolean isSuccessful = true;
         res.setSampleLabel(getName());
-        LdapExtClient temp_client = (LdapExtClient) ldapConnections.get(getThreadName());
-        DirContext dirContext = (DirContext) ldapContexts.get(getThreadName());
+        LdapExtClient temp_client = ldapConnections.get(getThreadName());
+        DirContext dirContext = ldapContexts.get(getThreadName());
         if (temp_client == null) {
             temp_client = new LdapExtClient();
             try {
@@ -759,7 +761,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
                                 + getPropertyAsString(COMPAREDN));
                 xmlBuffer.tag("comparedn",getPropertyAsString(COMPAREDN)); // $NON-NLS-1$
                 xmlBuffer.tag("comparefilter",getPropertyAsString(COMPAREFILT)); // $NON-NLS-1$
-                NamingEnumeration cmp=null;
+                NamingEnumeration<SearchResult> cmp=null;
                 try {
                     res.sampleStart();
                     cmp = temp_client.compare(dirContext, getPropertyAsString(COMPAREFILT),
@@ -810,7 +812,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
                 xmlBuffer.tag("countlimit",countLimit); // $NON-NLS-1$
                 xmlBuffer.tag("timelimit",timeLimit); // $NON-NLS-1$
 
-                NamingEnumeration srch=null;
+                NamingEnumeration<SearchResult> srch=null;
                 try {
                     res.sampleStart();
                     srch = temp_client.searchTest(
@@ -873,18 +875,18 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
      * unless the number of results exceeds {@link #MAX_SORTED_RESULTS} in which case just stream
      * the results out without sorting.
      */
-    private void writeSearchResults(final XMLBuffer xmlb, final NamingEnumeration srch)
+    private void writeSearchResults(final XMLBuffer xmlb, final NamingEnumeration<SearchResult> srch)
             throws NamingException
     {
 
-        final ArrayList     sortedResults = new ArrayList(MAX_SORTED_RESULTS);
+        final ArrayList<SearchResult>     sortedResults = new ArrayList<SearchResult>(MAX_SORTED_RESULTS);
         final String        searchBase = getPropertyAsString(SEARCHBASE);
         final String        rootDn = getRootdn();
 
         // read all sortedResults into memory so we can guarantee ordering
         try {
             while (srch.hasMore() && (sortedResults.size() < MAX_SORTED_RESULTS)) {
-                final SearchResult    sr = (SearchResult) srch.next();
+                final SearchResult    sr = srch.next();
 
                     // must be done prior to sorting
                 normaliseSearchDN(sr, searchBase, rootDn);
@@ -894,15 +896,15 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 
             sortResults(sortedResults);
 
-            for (Iterator it = sortedResults.iterator(); it.hasNext();)
+            for (Iterator<SearchResult> it = sortedResults.iterator(); it.hasNext();)
             {
-                final SearchResult  sr = (SearchResult) it.next();
+                final SearchResult  sr = it.next();
                 writeSearchResult(sr, xmlb);
             }
         }
 
         while (srch.hasMore()) { // If there's anything left ...
-            final SearchResult    sr = (SearchResult) srch.next();
+            final SearchResult    sr = srch.next();
 
             normaliseSearchDN(sr, searchBase, rootDn);
             writeSearchResult(sr, xmlb);
@@ -914,7 +916,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
     {
         final Attributes    attrs = sr.getAttributes();
         final int           size = attrs.size();
-        final ArrayList     sortedAttrs = new ArrayList(size);
+        final ArrayList<Attribute>     sortedAttrs = new ArrayList<Attribute>(size);
 
         xmlb.openTag("searchresult"); // $NON-NLS-1$
         xmlb.tag("dn", sr.getName()); // $NON-NLS-1$
@@ -922,22 +924,22 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
          xmlb.openTag("attributes"); // $NON-NLS-1$
 
          try {
-            for (NamingEnumeration en = attrs.getAll(); en.hasMore(); )
+            for (NamingEnumeration<? extends Attribute> en = attrs.getAll(); en.hasMore(); )
             {
-                final Attribute     attr = (Attribute) en.next();
+                final Attribute     attr = en.next();
 
                 sortedAttrs.add(attr);
             }
             sortAttributes(sortedAttrs);
-            for (Iterator ait = sortedAttrs.iterator(); ait.hasNext();)
+            for (Iterator<Attribute> ait = sortedAttrs.iterator(); ait.hasNext();)
             {
-                final Attribute     attr = (Attribute) ait.next();
+                final Attribute     attr = ait.next();
 
                 StringBuffer sb = new StringBuffer();
                 if (attr.size() == 1) {
                     sb.append(getWriteValue(attr.get()));
                 } else {
-                    final ArrayList     sortedVals = new ArrayList(attr.size());
+                    final ArrayList<String>     sortedVals = new ArrayList<String>(attr.size());
                     boolean             first = true;
 
                     for (NamingEnumeration ven = attr.getAll(); ven.hasMore(); )
@@ -948,9 +950,9 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 
                     Collections.sort(sortedVals);
 
-                    for (Iterator vit = sortedVals.iterator(); vit.hasNext();)
+                    for (Iterator<String> vit = sortedVals.iterator(); vit.hasNext();)
                     {
-                        final String    value = (String) vit.next();
+                        final String    value = vit.next();
                         if (first) {
                             first = false;
                         } else {
@@ -967,7 +969,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
         }
     }
 
-    private void sortAttributes(final ArrayList sortedAttrs) {
+    private void sortAttributes(final ArrayList<Attribute> sortedAttrs) {
         Collections.sort(sortedAttrs, new Comparator()
         {
             public int compare(Object o1, Object o2)
@@ -980,7 +982,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
         });
     }
 
-    private void sortResults(final ArrayList sortedResults) {
+    private void sortResults(final ArrayList<SearchResult> sortedResults) {
         Collections.sort(sortedResults, new Comparator()
         {
             private int compareToReverse(final String s1, final String s2)
@@ -1073,11 +1075,11 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 
     // Ensure any remaining contexts are closed
     public void testEnded(String host) {
-        Iterator it = ldapContexts.entrySet().iterator();
+        Iterator<Map.Entry<String, DirContext>> it = ldapContexts.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry entry = (Map.Entry) it.next();
-            String key = (String) entry.getKey();
-            DirContext dc = (DirContext) entry.getValue();
+            Map.Entry<String, DirContext> entry = it.next();
+            String key = entry.getKey();
+            DirContext dc = entry.getValue();
             try {
                 log.warn("Tidying old Context for thread: " + key);
                 dc.close();

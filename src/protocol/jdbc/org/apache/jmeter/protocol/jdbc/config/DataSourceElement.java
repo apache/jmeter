@@ -260,7 +260,7 @@ public class DataSourceElement extends AbstractTestElement
             if (sharedDSC != null){ // i.e. shared pool
                 dsc = sharedDSC;
             } else {
-                Map<String, ResourceLimitingJdbcDataSource> poolMap = (Map) perThreadPoolMap.get();
+                Map<String, ResourceLimitingJdbcDataSource> poolMap = perThreadPoolMap.get();
                 dsc = poolMap.get(getDataSource());
                 if (dsc == null){
                     dsc = initPool("1");

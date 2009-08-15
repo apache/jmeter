@@ -29,7 +29,7 @@ import org.apache.jmeter.visualizers.Visualizer;
 
 public abstract class AbstractListenerElement extends AbstractTestElement {
     // TODO should class implement SampleListener?
-    private transient WeakReference listener;
+    private transient WeakReference<Visualizer> listener;
 
     public AbstractListenerElement() {
     }
@@ -38,11 +38,11 @@ public abstract class AbstractListenerElement extends AbstractTestElement {
         if (listener == null){ // e.g. in non-GUI mode
             return null;
         }
-        return (Visualizer)listener.get();
+        return listener.get();
     }
 
     public void setListener(Visualizer vis) {
-        listener = new WeakReference(vis);
+        listener = new WeakReference<Visualizer>(vis);
     }
 
     @Override

@@ -65,9 +65,10 @@ public final class CLArgsParser {
 
     private final CLOptionDescriptor[] m_optionDescriptors;
 
-    private final Vector m_options;
+    private final Vector<CLOption> m_options;
 
-    private Hashtable m_optionIndex;
+    // Key is String or Integer
+    private Hashtable<Object, CLOption> m_optionIndex;
 
     private final ParserControl m_control;
 
@@ -111,7 +112,7 @@ public final class CLArgsParser {
      *
      * @return the list of options
      */
-    public final Vector getArguments() {
+    public final Vector<CLOption> getArguments() {
         // System.out.println( "Arguments: " + m_options );
         return m_options;
     }
@@ -127,7 +128,7 @@ public final class CLArgsParser {
      * @see CLOption
      */
     public final CLOption getArgumentById(final int id) {
-        return (CLOption) m_optionIndex.get(new Integer(id));
+        return m_optionIndex.get(new Integer(id));
     }
 
     /**
@@ -141,7 +142,7 @@ public final class CLArgsParser {
      * @see CLOption
      */
     public final CLOption getArgumentByName(final String name) {
-        return (CLOption) m_optionIndex.get(name);
+        return m_optionIndex.get(name);
     }
 
     /**
@@ -222,7 +223,7 @@ public final class CLArgsParser {
     public CLArgsParser(final String[] args, final CLOptionDescriptor[] optionDescriptors, final ParserControl control) {
         m_optionDescriptors = optionDescriptors;
         m_control = control;
-        m_options = new Vector();
+        m_options = new Vector<CLOption>();
         m_args = args;
 
         try {
@@ -244,11 +245,11 @@ public final class CLArgsParser {
      * @param arguments
      *            the arguments
      */
-    private final void checkIncompatibilities(final Vector arguments) throws ParseException {
+    private final void checkIncompatibilities(final Vector<CLOption> arguments) throws ParseException {
         final int size = arguments.size();
 
         for (int i = 0; i < size; i++) {
-            final CLOption option = (CLOption) arguments.elementAt(i);
+            final CLOption option = arguments.elementAt(i);
             final int id = option.getDescriptor().getId();
             final CLOptionDescriptor descriptor = getDescriptorFor(id);
 
@@ -264,7 +265,7 @@ public final class CLArgsParser {
         }
     }
 
-    private final void checkIncompatible(final Vector arguments, final int[] incompatible, final int original)
+    private final void checkIncompatible(final Vector<CLOption> arguments, final int[] incompatible, final int original)
             throws ParseException {
         final int size = arguments.size();
 
@@ -273,12 +274,12 @@ public final class CLArgsParser {
                 continue;
             }
 
-            final CLOption option = (CLOption) arguments.elementAt(i);
+            final CLOption option = arguments.elementAt(i);
             final int id = option.getDescriptor().getId();
 
             for (int j = 0; j < incompatible.length; j++) {
                 if (id == incompatible[j]) {
-                    final CLOption originalOption = (CLOption) arguments.elementAt(original);
+                    final CLOption originalOption = arguments.elementAt(original);
                     final int originalId = originalOption.getDescriptor().getId();
 
                     String message = null;
@@ -665,10 +666,10 @@ public final class CLArgsParser {
      */
     private final void buildOptionIndex() {
         final int size = m_options.size();
-        m_optionIndex = new Hashtable(size * 2);
+        m_optionIndex = new Hashtable<Object, CLOption>(size * 2);
 
         for (int i = 0; i < size; i++) {
-            final CLOption option = (CLOption) m_options.get(i);
+            final CLOption option = m_options.get(i);
             final CLOptionDescriptor optionDescriptor = getDescriptorFor(option.getDescriptor().getId());
 
             m_optionIndex.put(new Integer(option.getDescriptor().getId()), option);

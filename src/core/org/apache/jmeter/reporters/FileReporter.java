@@ -50,7 +50,7 @@ import org.apache.log.Logger;
 public class FileReporter extends JPanel {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private final Hashtable data = new Hashtable();
+    private final Hashtable<String, Vector<Integer>> data = new Hashtable<String, Vector<Integer>>();
 
     /** initalize a file reporter from a file */
     public void init(String file) throws IOException {
@@ -83,10 +83,10 @@ public class FileReporter extends JPanel {
                     } else {
                         value = new Integer(line.substring(splitter + 1));
                     }
-                    Vector v = getData(key);
+                    Vector<Integer> v = getData(key);
 
                     if (v == null) {
-                        v = new Vector();
+                        v = new Vector<Integer>();
                         this.data.put(key, v);
                     }
                     v.addElement(value);
@@ -103,8 +103,8 @@ public class FileReporter extends JPanel {
         showPanel();
     }
 
-    public Vector getData(String key) {
-        return (Vector) data.get(key);
+    public Vector<Integer> getData(String key) {
+        return data.get(key);
     }
 
     /**
@@ -121,7 +121,7 @@ public class FileReporter extends JPanel {
         add(gp.getLegend(), BorderLayout.NORTH);
         f.setSize(500, 300);
         f.getContentPane().add(this);
-        f.show();
+        f.setVisible(true);
     }
 
 /**
@@ -131,18 +131,18 @@ public class FileReporter extends JPanel {
  */
 private static class GraphPanel extends JPanel {
     // boolean autoScale = true;
-    Hashtable data;
+    Hashtable<String, Vector<Integer>> data;
 
-    Vector keys = new Vector();
+    Vector<String> keys = new Vector<String>();
 
-    Vector colorList = new Vector();
+    Vector<Color> colorList = new Vector<Color>();
 
-    public GraphPanel(Hashtable data) {
+    public GraphPanel(Hashtable<String, Vector<Integer>> data) {
         this.data = data;
-        Enumeration e = data.keys();
+        Enumeration<String> e = data.keys();
 
         while (e.hasMoreElements()) {
-            String key = (String) e.nextElement();
+            String key = e.nextElement();
 
             keys.addElement(key);
         }
@@ -162,11 +162,11 @@ private static class GraphPanel extends JPanel {
         float maxValue = 0;
 
         for (int t = 0; t < keys.size(); t++) {
-            String key = (String) keys.elementAt(t);
-            Vector temp = (Vector) data.get(key);
+            String key = keys.elementAt(t);
+            Vector<Integer> temp = data.get(key);
 
             for (int j = 0; j < temp.size(); j++) {
-                float f = ((Integer) temp.elementAt(j)).intValue();
+                float f = temp.elementAt(j).intValue();
 
                 maxValue = Math.max(f, maxValue);
             }
@@ -181,11 +181,11 @@ private static class GraphPanel extends JPanel {
         float minValue = 9999999;
 
         for (int t = 0; t < keys.size(); t++) {
-            String key = (String) keys.elementAt(t);
-            Vector temp = (Vector) data.get(key);
+            String key = keys.elementAt(t);
+            Vector<Integer> temp = data.get(key);
 
             for (int j = 0; j < temp.size(); j++) {
-                float f = ((Integer) temp.elementAt(j)).intValue();
+                float f = temp.elementAt(j).intValue();
 
                 minValue = Math.min(f, minValue);
             }
@@ -208,10 +208,10 @@ private static class GraphPanel extends JPanel {
         c.gridwidth = 1;
         c.gridheight = 1;
         for (int t = 0; t < keys.size(); t++) {
-            String key = (String) keys.elementAt(t);
+            String key = keys.elementAt(t);
             JLabel colorSwatch = new JLabel("  ");
 
-            colorSwatch.setBackground((Color) colorList.elementAt(t % colorList.size()));
+            colorSwatch.setBackground(colorList.elementAt(t % colorList.size()));
             colorSwatch.setOpaque(true);
             c.gridx = 1;
             c.gridy = t;
@@ -237,11 +237,11 @@ private static class GraphPanel extends JPanel {
         float minValue = 999999;
 
         for (int t = 0; t < keys.size(); t++) {
-            String key = (String) keys.elementAt(t);
-            Vector temp = (Vector) data.get(key);
+            String key = keys.elementAt(t);
+            Vector<Integer> temp = data.get(key);
 
             for (int j = 0; j < temp.size(); j++) {
-                float f = ((Integer) temp.elementAt(j)).intValue();
+                float f = temp.elementAt(j).intValue();
 
                 minValue = Math.min(f, minValue);
                 maxValue = Math.max(f, maxValue);
@@ -295,10 +295,8 @@ private static class GraphPanel extends JPanel {
         int size = 0;
 
         for (int t = 0; t < keys.size(); t++) {
-            String key = (String) keys.elementAt(t);
-            Vector v = (Vector) data.get(key);
-
-            size = Math.max(size, v.size());
+            String key = keys.elementAt(t);
+            size = Math.max(size, data.get(key).size());
         }
         return size;
     }
@@ -347,14 +345,14 @@ private static class GraphPanel extends JPanel {
         int start = 0;
 
         for (int t = 0; t < keys.size(); t++) {
-            String key = (String) keys.elementAt(t);
-            Vector v = (Vector) data.get(key);
+            String key = keys.elementAt(t);
+            Vector<Integer> v = data.get(key);
 
             start = 0;
-            g.setColor((Color) colorList.elementAt(t % colorList.size()));
+            g.setColor(colorList.elementAt(t % colorList.size()));
             for (int i = 0; i < v.size() - 1; i++) {
-                float y1 = ((Integer) v.elementAt(i)).intValue();
-                float y2 = ((Integer) v.elementAt(i + 1)).intValue();
+                float y1 = v.elementAt(i).intValue();
+                float y2 = v.elementAt(i + 1).intValue();
 
                 y1 = y1 - minValue;
                 y2 = y2 - minValue;

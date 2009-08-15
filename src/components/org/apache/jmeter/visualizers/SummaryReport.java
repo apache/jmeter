@@ -96,7 +96,8 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
 
     private transient ObjectTableModel model;
 
-    private final Map tableRows = Collections.synchronizedMap(new HashMap());
+    private final Map<String, Calculator> tableRows =
+        Collections.synchronizedMap(new HashMap<String, Calculator>());
 
     // Column renderers
     private static final TableCellRenderer[] RENDERERS =
@@ -151,7 +152,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
         Calculator row = null;
         final String sampleLabel = res.getSampleLabel(useGroupName.isSelected());
         synchronized (tableRows) {
-            row = (Calculator) tableRows.get(sampleLabel);
+            row = tableRows.get(sampleLabel);
             if (row == null) {
                 row = new Calculator(sampleLabel);
                 tableRows.put(row.getLabel(), row);
@@ -164,7 +165,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
         synchronized(row) {
             row.addSample(res);
         }
-        Calculator tot = ((Calculator) tableRows.get(TOTAL_ROW_LABEL));
+        Calculator tot = tableRows.get(TOTAL_ROW_LABEL);
         synchronized(tot) {
             tot.addSample(res);
         }
