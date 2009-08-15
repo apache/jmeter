@@ -47,6 +47,6 @@ public class CreateFunctionDialog extends AbstractAction {
 
     @Override
     public void doAction(ActionEvent arg0) {
-        helper.show();
+        helper.setVisible(true);
     }
 }
