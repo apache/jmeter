@@ -54,23 +54,23 @@ public class BarChart extends AbstractChart {
      * @param data
      * @return data values
      */
-    public double[][] convertToDouble(List data) {
+    public double[][] convertToDouble(List<SamplingStatCalculator> data) {
         double[][] dataset = new double[1][data.size()];
         //Iterator itr = data.iterator();
         for (int idx=0; idx < data.size(); idx++) {
-            SamplingStatCalculator stat = (SamplingStatCalculator)data.get(idx);
+            SamplingStatCalculator stat = data.get(idx);
             dataset[0][idx] = getValue(stat);
         }
         return dataset;
     }
 
     @Override
-    public JComponent renderChart(List data) {
-        ArrayList dset = new ArrayList();
-        ArrayList xlabels = new ArrayList();
-        Iterator itr = data.iterator();
+    public JComponent renderChart(List<DataSet> data) {
+        ArrayList<SamplingStatCalculator> dset = new ArrayList<SamplingStatCalculator>();
+        ArrayList<String> xlabels = new ArrayList<String>();
+        Iterator<DataSet> itr = data.iterator();
         while (itr.hasNext()) {
-            DataSet item = (DataSet)itr.next();
+            DataSet item = itr.next();
             SamplingStatCalculator ss = item.getStatistics(this.getURL());
             if (ss != null) {
                 // we add the entry
@@ -83,7 +83,7 @@ public class BarChart extends AbstractChart {
             }
         }
         double[][] dbset = convertToDouble(dset);
-        return renderGraphics(dbset, (String[])xlabels.toArray(new String[xlabels.size()]));
+        return renderGraphics(dbset, xlabels.toArray(new String[xlabels.size()]));
     }
 
     public JComponent renderGraphics(double[][] data, String[] xAxisLabels) {

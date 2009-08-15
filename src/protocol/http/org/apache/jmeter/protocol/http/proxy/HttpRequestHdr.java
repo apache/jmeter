@@ -72,7 +72,7 @@ public class HttpRequestHdr {
                                    ".binary"); // $NON-NLS-1$
 
     /** Which content-types will be treated as binary (exact match) */
-    private static final Set binaryContentTypes = new HashSet();
+    private static final Set<String> binaryContentTypes = new HashSet<String>();
 
     /** Where to store the temporary binary files */
     private static final String binaryDirectory =
@@ -111,7 +111,7 @@ public class HttpRequestHdr {
 
     private byte[] rawPostData;
 
-    private final Map headers = new HashMap();
+    private final Map<String, Header> headers = new HashMap<String, Header>();
 
     private final HTTPSamplerBase sampler;
 
@@ -234,13 +234,13 @@ public class HttpRequestHdr {
 
     private HeaderManager createHeaderManager() {
         HeaderManager manager = new HeaderManager();
-        Iterator keys = headers.keySet().iterator();
+        Iterator<String> keys = headers.keySet().iterator();
         while (keys.hasNext()) {
-            String key = (String) keys.next();
+            String key = keys.next();
             if (!key.equals(PROXY_CONNECTION) 
              && !key.equals(CONTENT_LENGTH) 
              && !key.equalsIgnoreCase(HTTPConstants.HEADER_CONNECTION)) {
-                manager.add((Header) headers.get(key));
+                manager.add(headers.get(key));
             }
         }
         manager.setName(JMeterUtils.getResString("header_manager_title")); // $NON-NLS-1$
@@ -256,7 +256,7 @@ public class HttpRequestHdr {
         return headerManager;
     }
 
-    public HTTPSamplerBase getSampler(Map pageEncodings, Map formEncodings)
+    public HTTPSamplerBase getSampler(Map<String, String> pageEncodings, Map<String, String> formEncodings)
             throws MalformedURLException, IOException {
         // Damn! A whole new GUI just to instantiate a test element?
         // Isn't there a beter way?
@@ -286,7 +286,7 @@ public class HttpRequestHdr {
     }
 
     private String getContentType() {
-        Header contentTypeHeader = (Header) headers.get(CONTENT_TYPE);
+        Header contentTypeHeader = headers.get(CONTENT_TYPE);
         if (contentTypeHeader != null) {
             return contentTypeHeader.getValue();
         }
@@ -309,7 +309,7 @@ public class HttpRequestHdr {
         return null;
     }
 
-    private void populateSampler(Map pageEncodings, Map formEncodings)
+    private void populateSampler(Map<String, String> pageEncodings, Map<String, String> formEncodings)
             throws MalformedURLException, UnsupportedEncodingException {
         sampler.setDomain(serverName());
         if (log.isDebugEnabled()) {
@@ -359,13 +359,13 @@ public class HttpRequestHdr {
             // Check if we know the encoding of the page
             if (pageEncodings != null) {
                 synchronized (pageEncodings) {
-                    contentEncoding = (String) pageEncodings.get(urlWithoutQuery);
+                    contentEncoding = pageEncodings.get(urlWithoutQuery);
                 }
             }
             // Check if we know the encoding of the form
             if (formEncodings != null) {
                 synchronized (formEncodings) {
-                    String formEncoding = (String) formEncodings.get(urlWithoutQuery);
+                    String formEncoding = formEncodings.get(urlWithoutQuery);
                     // Form encoding has priority over page encoding
                     if (formEncoding != null) {
                         contentEncoding = formEncoding;

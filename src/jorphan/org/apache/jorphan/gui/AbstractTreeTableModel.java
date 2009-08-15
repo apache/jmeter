@@ -34,15 +34,15 @@ public abstract class AbstractTreeTableModel extends DefaultTableModel implement
     protected TreeNode rootNode = null;
     protected EventListenerList listener = new EventListenerList();
 
-    protected transient ArrayList objects = new ArrayList();
+    protected transient ArrayList<Object> objects = new ArrayList<Object>();
 
-    protected transient List headers = new ArrayList();
+    protected transient List<String> headers = new ArrayList<String>();
 
-    protected transient ArrayList classes = new ArrayList();
+    protected transient ArrayList<Class<?>> classes = new ArrayList<Class<?>>();
 
-    protected transient ArrayList readFunctors = new ArrayList();
+    protected transient ArrayList<Functor> readFunctors = new ArrayList<Functor>();
 
-    protected transient ArrayList writeFunctors = new ArrayList();
+    protected transient ArrayList<Functor> writeFunctors = new ArrayList<Functor>();
 
     public AbstractTreeTableModel(TreeNode root) {
         this.rootNode = root;
@@ -55,11 +55,11 @@ public abstract class AbstractTreeTableModel extends DefaultTableModel implement
     public AbstractTreeTableModel(String[] headers,
             Functor[] readFunctors,
             Functor[] writeFunctors,
-            Class[] editorClasses) {
+            Class<?>[] editorClasses) {
         this.headers.addAll(Arrays.asList(headers));
         this.classes.addAll(Arrays.asList(editorClasses));
-        this.readFunctors = new ArrayList(Arrays.asList(readFunctors));
-        this.writeFunctors = new ArrayList(Arrays.asList(writeFunctors));
+        this.readFunctors = new ArrayList<Functor>(Arrays.asList(readFunctors));
+        this.writeFunctors = new ArrayList<Functor>(Arrays.asList(writeFunctors));
     }
 
     /**
@@ -119,8 +119,8 @@ public abstract class AbstractTreeTableModel extends DefaultTableModel implement
     }
 
     @Override
-    public Class getColumnClass(int arg0) {
-        return (Class) classes.get(arg0);
+    public Class<?> getColumnClass(int arg0) {
+        return classes.get(arg0);
     }
 
     /**
@@ -145,7 +145,7 @@ public abstract class AbstractTreeTableModel extends DefaultTableModel implement
      */
     @Override
     public String getColumnName(int columnIndex) {
-        return (String) headers.get(columnIndex);
+        return headers.get(columnIndex);
     }
 
     public int getChildCount(Object parent) {

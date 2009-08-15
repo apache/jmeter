@@ -54,7 +54,7 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
 
     private static final long serialVersionUID = 232L;
 
-    private static final Map functors = new HashMap();
+    private static final Map<String, Functor> functors = new HashMap<String, Functor>();
 
     private static final String NAME_SAVE_PFX   = "save";  // $NON-NLS-1$ i.e. boolean saveXXX()
     private static final String NAME_SET_PREFIX = "set";   // $NON-NLS-1$ i.e. void setXXX(boolean)
@@ -143,7 +143,7 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
      */
     public void actionPerformed(ActionEvent e) {
         String action = e.getActionCommand();
-        Functor f = (Functor) functors.get(action);
+        Functor f = functors.get(action);
         f.invoke(saveConfig, new Object[] {
                 Boolean.valueOf(((JCheckBox) e.getSource()).isSelected()) });
     }

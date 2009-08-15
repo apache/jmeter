@@ -77,12 +77,12 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
     private static final String ENCODING = "UTF-8"; // $NON-NLS-1$
 
     // key: name (lowercase) from java.sql.Types; entry: corresponding int value
-    private static final Map mapJdbcNameToInt;
+    private static final Map<String, Integer> mapJdbcNameToInt;
 
     static {
         // based on e291. Getting the Name of a JDBC Type from javaalmanac.com
         // http://javaalmanac.com/egs/java.sql/JdbcInt2Str.html
-        mapJdbcNameToInt = new HashMap();
+        mapJdbcNameToInt = new HashMap<String, Integer>();
 
         //Get all fields in java.sql.Types and store the corresponding int values
         Field[] fields = java.sql.Types.class.getFields();
@@ -121,17 +121,18 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
     /**
      *  Cache of PreparedStatements stored in a per-connection basis. Each entry of this
      *  cache is another Map mapping the statement string to the actual PreparedStatement.
-     *  The cache has a fixed size of MAX_ENTRIES and it will throw aways all PreparedStatements
+     *  The cache has a fixed size of MAX_ENTRIES and it will throw away all PreparedStatements
      *  from the least recently used connections.
      */
-    private static final Map perConnCache = new LinkedHashMap(MAX_ENTRIES){
+    private static final Map<Connection, Map<String, PreparedStatement>> perConnCache =
+        new LinkedHashMap<Connection, Map<String, PreparedStatement>>(MAX_ENTRIES){
         private static final long serialVersionUID = 1L;
         @Override
-        protected boolean removeEldestEntry(java.util.Map.Entry arg0) {
+        protected boolean removeEldestEntry(Map.Entry<Connection, Map<String, PreparedStatement>> arg0) {
             if (size() > MAX_ENTRIES) {
                 final Object value = arg0.getValue();
-                if (value instanceof Map) {
-                    closeAllStatements(((Map)value).values());
+                if (value instanceof Map<?,?>) {
+                    closeAllStatements(((Map<?,?>)value).values());
                 }
                 return true;
             }
@@ -336,7 +337,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 
 
     private static int getJdbcType(String jdbcType) throws SQLException {
-        Integer entry = (Integer)mapJdbcNameToInt.get(jdbcType.toLowerCase(java.util.Locale.ENGLISH));
+        Integer entry = mapJdbcNameToInt.get(jdbcType.toLowerCase(java.util.Locale.ENGLISH));
         if (entry == null) {
             try {
                 entry = Integer.decode(jdbcType);
@@ -357,12 +358,12 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
     }
 
     private PreparedStatement getPreparedStatement(Connection conn, boolean callable) throws SQLException {
-        Map preparedStatementMap = (Map) perConnCache.get(conn);
+        Map<String, PreparedStatement> preparedStatementMap = perConnCache.get(conn);
         if (null == preparedStatementMap ) {
             // MRU PreparedStatements cache.
-            preparedStatementMap = new LinkedHashMap(MAX_ENTRIES) {
+            preparedStatementMap = new LinkedHashMap<String, PreparedStatement>(MAX_ENTRIES) {
                 @Override
-                protected boolean removeEldestEntry(java.util.Map.Entry arg0) {
+                protected boolean removeEldestEntry(Map.Entry<String, PreparedStatement> arg0) {
                     final int theSize = size();
                     if (theSize > MAX_ENTRIES) {
                         Object value = arg0.getValue();
@@ -377,7 +378,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
             };
             perConnCache.put(conn, preparedStatementMap);
         }
-        PreparedStatement pstmt = (PreparedStatement) preparedStatementMap.get(getQuery());
+        PreparedStatement pstmt = preparedStatementMap.get(getQuery());
         if (null == pstmt) {
             if (callable) {
                 pstmt = conn.prepareCall(getQuery());
@@ -390,8 +391,8 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
         return pstmt;
     }
 
-    private static void closeAllStatements(Collection collection) {
-        Iterator iterator = collection.iterator();
+    private static void closeAllStatements(Collection<?> collection) {
+        Iterator<?> iterator = collection.iterator();
         while (iterator.hasNext()) {
             PreparedStatement pstmt = (PreparedStatement) iterator.next();
             close(pstmt);

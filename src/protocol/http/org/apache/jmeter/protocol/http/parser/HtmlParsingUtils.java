@@ -272,9 +272,9 @@ public final class HtmlParsingUtils {
         return sampler;
     }
 
-    public static List createURLFromForm(Node doc, URL context) {
+    public static List<HTTPSamplerBase> createURLFromForm(Node doc, URL context) {
         String selectName = null;
-        LinkedList urlConfigs = new LinkedList();
+        LinkedList<HTTPSamplerBase> urlConfigs = new LinkedList<HTTPSamplerBase>();
         recurseForm(doc, urlConfigs, context, selectName, false);
         /*
          * NamedNodeMap atts = formNode.getAttributes();
@@ -288,13 +288,13 @@ public final class HtmlParsingUtils {
     }
 
     // N.B. Since the tags are extracted from an HTML Form, any values must already have been encoded
-    private static boolean recurseForm(Node tempNode, LinkedList urlConfigs, URL context, String selectName,
+    private static boolean recurseForm(Node tempNode, LinkedList<HTTPSamplerBase> urlConfigs, URL context, String selectName,
             boolean inForm) {
         NamedNodeMap nodeAtts = tempNode.getAttributes();
         String tag = tempNode.getNodeName();
         try {
             if (inForm) {
-                HTTPSamplerBase url = (HTTPSamplerBase) urlConfigs.getLast();
+                HTTPSamplerBase url = urlConfigs.getLast();
                 if (tag.equalsIgnoreCase("form")) { // $NON-NLS-1$
                     try {
                         urlConfigs.add(createFormUrlConfig(tempNode, context));

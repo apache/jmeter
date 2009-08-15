@@ -55,7 +55,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
 
     private JLabeledTextField cutPasteFunction;
 
-    private final Map functionMap = new HashMap();
+    private final Map<String, Class<?>> functionMap = new HashMap<String, Class<?>>();
 
     private JButton generateButton;
 
@@ -88,13 +88,13 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
 
     private void initializeFunctionList() {
         try {
-            List functionClasses = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(),
+            List<String> functionClasses = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(),
                     new Class[] { Function.class }, true);
-            Iterator iter = functionClasses.iterator();
+            Iterator<String> iter = functionClasses.iterator();
             String[] functionNames = new String[functionClasses.size()];
             int count = 0;
             while (iter.hasNext()) {
-                Class cl = Class.forName((String) iter.next());
+                Class<?> cl = Class.forName(iter.next());
                 functionNames[count] = ((Function) cl.newInstance()).getReferenceKey();
                 functionMap.put(functionNames[count], cl);
                 count++;
@@ -111,11 +111,11 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
     public void stateChanged(ChangeEvent event) {
         try {
             Arguments args = new Arguments();
-            Function function = (Function) ((Class) functionMap.get(functionList.getText())).newInstance();
-            List argumentDesc = function.getArgumentDesc();
-            Iterator iter = argumentDesc.iterator();
+            Function function = (Function) ((Class<?>) functionMap.get(functionList.getText())).newInstance();
+            List<String> argumentDesc = function.getArgumentDesc();
+            Iterator<String> iter = argumentDesc.iterator();
             while (iter.hasNext()) {
-                String help = (String) iter.next();
+                String help = iter.next();
                 args.addArgument(help, ""); //$NON-NLS-1$
             }
             parameterPanel.configure(args);

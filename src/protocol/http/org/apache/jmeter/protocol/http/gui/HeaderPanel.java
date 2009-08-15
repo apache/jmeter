@@ -292,7 +292,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
         }
 
         @Override
-        public Class getColumnClass(int column) {
+        public Class<?> getColumnClass(int column) {
             return getValueAt(0, column).getClass();
         }
 

@@ -35,9 +35,9 @@ public class PowerTableModel extends DefaultTableModel {
 
     private Data model = new Data();
 
-    private Class[] columnClasses;
+    private Class<?>[] columnClasses;
 
-    public PowerTableModel(String[] headers, Class[] classes) {
+    public PowerTableModel(String[] headers, Class<?>[] classes) {
         if (headers.length != classes.length){
             throw new IllegalArgumentException("Header and column array sizes differ");
         }
@@ -62,9 +62,9 @@ public class PowerTableModel extends DefaultTableModel {
         return model;
     }
 
-    public void addNewColumn(String colName, Class colClass) {
+    public void addNewColumn(String colName, Class<?> colClass) {
         model.addHeader(colName);
-        Class[] newClasses = new Class[columnClasses.length + 1];
+        Class<?>[] newClasses = new Class[columnClasses.length + 1];
         System.arraycopy(columnClasses, 0, newClasses, 0, columnClasses.length);
         newClasses[newClasses.length - 1] = colClass;
         columnClasses = newClasses;
@@ -87,11 +87,11 @@ public class PowerTableModel extends DefaultTableModel {
         this.fireTableStructureChanged();
     }
 
-    public void setColumnData(int col, List data) {
+    public void setColumnData(int col, List<?> data) {
         model.setColumnData(col, data);
     }
 
-    public List getColumnData(String colName) {
+    public List<?> getColumnData(String colName) {
         return model.getColumnAsObjectArray(colName);
     }
 
@@ -134,12 +134,12 @@ public class PowerTableModel extends DefaultTableModel {
     }
 
     private Object createDefaultValue(int i) {
-        Class colClass = getColumnClass(i);
+        Class<?> colClass = getColumnClass(i);
         try {
             return colClass.newInstance();
         } catch (Exception e) {
             try {
-                Constructor constr = colClass.getConstructor(new Class[] { String.class });
+                Constructor<?> constr = colClass.getConstructor(new Class[] { String.class });
                 return constr.newInstance(new Object[] { "" });
             } catch (NoSuchMethodException err) {
             } catch (InstantiationException err) {
@@ -147,7 +147,7 @@ public class PowerTableModel extends DefaultTableModel {
             } catch (InvocationTargetException err) {
             }
             try {
-                Constructor constr = colClass.getConstructor(new Class[] { Integer.TYPE });
+                Constructor<?> constr = colClass.getConstructor(new Class[] { Integer.TYPE });
                 return constr.newInstance(new Object[] { new Integer(0) });
             } catch (NoSuchMethodException err) {
             } catch (InstantiationException err) {
@@ -155,7 +155,7 @@ public class PowerTableModel extends DefaultTableModel {
             } catch (InvocationTargetException err) {
             }
             try {
-                Constructor constr = colClass.getConstructor(new Class[] { Long.TYPE });
+                Constructor<?> constr = colClass.getConstructor(new Class[] { Long.TYPE });
                 return constr.newInstance(new Object[] { new Long(0L) });
             } catch (NoSuchMethodException err) {
             } catch (InstantiationException err) {
@@ -163,7 +163,7 @@ public class PowerTableModel extends DefaultTableModel {
             } catch (InvocationTargetException err) {
             }
             try {
-                Constructor constr = colClass.getConstructor(new Class[] { Boolean.TYPE });
+                Constructor<?> constr = colClass.getConstructor(new Class[] { Boolean.TYPE });
                 return constr.newInstance(new Object[] { Boolean.FALSE });
             } catch (NoSuchMethodException err) {
             } catch (InstantiationException err) {
@@ -171,7 +171,7 @@ public class PowerTableModel extends DefaultTableModel {
             } catch (InvocationTargetException err) {
             }
             try {
-                Constructor constr = colClass.getConstructor(new Class[] { Float.TYPE });
+                Constructor<?> constr = colClass.getConstructor(new Class[] { Float.TYPE });
                 return constr.newInstance(new Object[] { new Float(0F) });
             } catch (NoSuchMethodException err) {
             } catch (InstantiationException err) {
@@ -179,7 +179,7 @@ public class PowerTableModel extends DefaultTableModel {
             } catch (InvocationTargetException err) {
             }
             try {
-                Constructor constr = colClass.getConstructor(new Class[] { Double.TYPE });
+                Constructor<?> constr = colClass.getConstructor(new Class[] { Double.TYPE });
                 return constr.newInstance(new Object[] { new Double(0D) });
             } catch (NoSuchMethodException err) {
             } catch (InstantiationException err) {
@@ -187,7 +187,7 @@ public class PowerTableModel extends DefaultTableModel {
             } catch (InvocationTargetException err) {
             }
             try {
-                Constructor constr = colClass.getConstructor(new Class[] { Character.TYPE });
+                Constructor<?> constr = colClass.getConstructor(new Class[] { Character.TYPE });
                 return constr.newInstance(new Object[] { new Character(' ') });
             } catch (NoSuchMethodException err) {
             } catch (InstantiationException err) {
@@ -195,7 +195,7 @@ public class PowerTableModel extends DefaultTableModel {
             } catch (InvocationTargetException err) {
             }
             try {
-                Constructor constr = colClass.getConstructor(new Class[] { Byte.TYPE });
+                Constructor<?> constr = colClass.getConstructor(new Class[] { Byte.TYPE });
                 return constr.newInstance(new Object[] { new Byte(Byte.MIN_VALUE) });
             } catch (NoSuchMethodException err) {
             } catch (InstantiationException err) {
@@ -203,7 +203,7 @@ public class PowerTableModel extends DefaultTableModel {
             } catch (InvocationTargetException err) {
             }
             try {
-                Constructor constr = colClass.getConstructor(new Class[] { Short.TYPE });
+                Constructor<?> constr = colClass.getConstructor(new Class[] { Short.TYPE });
                 return constr.newInstance(new Object[] { new Short(Short.MIN_VALUE) });
             } catch (NoSuchMethodException err) {
             } catch (InstantiationException err) {
@@ -254,7 +254,7 @@ public class PowerTableModel extends DefaultTableModel {
     }
 
     @Override
-    public Class getColumnClass(int column) {
+    public Class<?> getColumnClass(int column) {
         return columnClasses[column];
     }
 

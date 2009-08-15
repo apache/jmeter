@@ -28,7 +28,7 @@ import java.util.Iterator;
  */
 public class DefaultReportSummary implements ReportSummary {
 
-    protected ArrayList pages = new ArrayList();
+    private final ArrayList<PageSummary> pages = new ArrayList<PageSummary>();
 
     /**
      *
@@ -50,9 +50,9 @@ public class DefaultReportSummary implements ReportSummary {
      */
     public long getElapsedTime() {
         long elpasedTime = 0;
-        Iterator itr = this.pages.iterator();
+        Iterator<PageSummary> itr = this.pages.iterator();
         while (itr.hasNext()) {
-            elpasedTime += ((PageSummary)itr.next()).getElapsedTime();
+            elpasedTime += itr.next().getElapsedTime();
         }
         return elpasedTime;
     }
@@ -62,7 +62,7 @@ public class DefaultReportSummary implements ReportSummary {
      */
     public PageSummary[] getPagesSummaries() {
         PageSummary[] ps = new PageSummary[this.pages.size()];
-        return (PageSummary[])this.pages.toArray(ps);
+        return this.pages.toArray(ps);
     }
 
     /**
