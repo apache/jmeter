@@ -87,7 +87,7 @@ public class ReportHelp implements Command {
         }
         helpWindow.getContentPane().removeAll();
         helpWindow.getContentPane().add(scroller);
-        helpWindow.show();
+        helpWindow.setVisible(true);
         if (e.getSource() instanceof String[]) {
             String[] source = (String[]) e.getSource();
             resetPage(source[0]);
