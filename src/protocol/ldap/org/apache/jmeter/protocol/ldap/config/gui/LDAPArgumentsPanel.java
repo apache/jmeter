@@ -108,7 +108,7 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
      *         constants defined in MenuFactory
      */
     @Override
-    public Collection getMenuCategories() {
+    public Collection<String> getMenuCategories() {
         return null;
     }
 
@@ -128,11 +128,11 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
     /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
     public void modifyTestElement(TestElement args) {
         stopTableEditing();
-        Iterator modelData = tableModel.iterator();
         LDAPArguments arguments = null;
         if (args instanceof LDAPArguments) {
             arguments = (LDAPArguments) args;
             arguments.clear();
+            Iterator modelData = tableModel.iterator();
             while (modelData.hasNext()) {
                 LDAPArgument arg = (LDAPArgument) modelData.next();
                 arg.setMetaData("=");

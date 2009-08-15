@@ -63,7 +63,7 @@ public class ObsoleteGui extends AbstractJMeterGuiComponent {
         return null;
     }
 
-    public Collection getMenuCategories() {
+    public Collection<String> getMenuCategories() {
         return null;
     }
 

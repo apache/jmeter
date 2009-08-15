@@ -89,7 +89,7 @@ public class HttpMirrorControlGui extends LogicControllerGui
     }
 
     @Override
-    public Collection getMenuCategories() {
+    public Collection<String> getMenuCategories() {
         return Arrays.asList(new String[] { MenuFactory.NON_TEST_ELEMENTS });
     }
 

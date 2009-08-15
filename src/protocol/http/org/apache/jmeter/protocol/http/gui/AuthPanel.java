@@ -288,11 +288,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 
     private static class InnerTableModel extends AbstractTableModel {
         private static final long serialVersionUID = 4638155137475747946L;
-        AuthManager manager;
-
-        public InnerTableModel(AuthManager man) {
-            manager = man;
-        }
+        final AuthManager manager;
 
         public InnerTableModel() {
             manager = new AuthManager();
@@ -318,7 +314,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
         }
 
         @Override
-        public Class getColumnClass(int column) {
+        public Class<?> getColumnClass(int column) {
             return getValueAt(0, column).getClass();
         }
 
