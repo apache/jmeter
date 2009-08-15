@@ -39,7 +39,7 @@ import org.apache.log.Logger;
 public class Start extends AbstractAction {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final Set commands = new HashSet();
+    private static final Set<String> commands = new HashSet<String>();
 
     static {
         commands.add(ActionNames.ACTION_START);
@@ -61,7 +61,7 @@ public class Start extends AbstractAction {
      * @return the ActionNames value
      */
     @Override
-    public Set getActionNames() {
+    public Set<String> getActionNames() {
         return commands;
     }
 

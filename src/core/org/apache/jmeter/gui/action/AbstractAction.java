@@ -40,7 +40,7 @@ public abstract class AbstractAction implements Command {
     /**
      * @see Command#getActionNames()
      */
-    abstract public Set getActionNames();
+    abstract public Set<String> getActionNames();
 
     /**
      * @param e

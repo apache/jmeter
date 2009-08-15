@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.prefs.Preferences;
 
+import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 
@@ -39,7 +40,7 @@ public class LoadRecentProject extends Load {
     private static final String USER_PREFS_KEY = "recent_file_"; //$NON-NLS-1$
     /** The number of menu items used for recent files */
     private static final int NUMBER_OF_MENU_ITEMS = 9;
-    private static final Set commands = new HashSet();
+    private static final Set<String> commands = new HashSet<String>();
 
     static {
         commands.add(ActionNames.OPEN_RECENT);
@@ -53,7 +54,7 @@ public class LoadRecentProject extends Load {
     }
 
     @Override
-    public Set getActionNames() {
+    public Set<String> getActionNames() {
         return commands;
     }
 
@@ -81,8 +82,8 @@ public class LoadRecentProject extends Load {
      *
      * @return a List of JMenuItem and a JSeparator, representing recent files
      */
-    public static List getRecentFileMenuItems() {
-        LinkedList menuItems = new LinkedList();
+    public static List<JComponent> getRecentFileMenuItems() {
+        LinkedList<JComponent> menuItems = new LinkedList<JComponent>();
         // Get the preference for the recent files
         for(int i = 0; i < NUMBER_OF_MENU_ITEMS; i++) {
             // Create the menu item
@@ -117,10 +118,10 @@ public class LoadRecentProject extends Load {
      * @param loadedFileName the file name of the project file that has just
      * been loaded
      */
-    public static void updateRecentFileMenuItems(List menuItems, String loadedFileName) {
+    public static void updateRecentFileMenuItems(List<JComponent> menuItems, String loadedFileName) {
         // Get the preference for the recent files
 
-        LinkedList newRecentFiles = new LinkedList();
+        LinkedList<String> newRecentFiles = new LinkedList<String>();
         // Check if the new file is already in the recent list
         boolean alreadyExists = false;
         for(int i = 0; i < NUMBER_OF_MENU_ITEMS; i++) {
@@ -140,7 +141,7 @@ public class LoadRecentProject extends Load {
         }
         // Store the recent files
         for(int i = 0; i < NUMBER_OF_MENU_ITEMS; i++) {
-            String fileName = (String)newRecentFiles.get(i);
+            String fileName = newRecentFiles.get(i);
             if(fileName != null) {
                 setRecentFile(i, fileName);
             }
@@ -153,7 +154,7 @@ public class LoadRecentProject extends Load {
      * Set the content and visibility of menu items and menu separator,
      * based on the recent file stored user preferences.
      */
-    private static void updateMenuItems(List menuItems) {
+    private static void updateMenuItems(List<JComponent> menuItems) {
         // Assume no recent files
         boolean someRecentFiles = false;
         // Update the menu items

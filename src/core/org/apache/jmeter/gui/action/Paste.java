@@ -40,7 +40,7 @@ public class Paste extends AbstractAction {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final Set commands = new HashSet();
+    private static final Set<String> commands = new HashSet<String>();
 
     static {
         commands.add(ActionNames.PASTE);
@@ -50,7 +50,7 @@ public class Paste extends AbstractAction {
      * @see Command#getActionNames()
      */
     @Override
-    public Set getActionNames() {
+    public Set<String> getActionNames() {
         return commands;
     }
 

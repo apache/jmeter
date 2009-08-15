@@ -39,7 +39,7 @@ import org.apache.log.Logger;
 public class Clear implements Command {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final Set commands = new HashSet();
+    private static final Set<String> commands = new HashSet<String>();
 
     static {
         commands.add(ActionNames.CLEAR);
@@ -50,7 +50,7 @@ public class Clear implements Command {
     public Clear() {
     }
 
-    public Set getActionNames() {
+    public Set<String> getActionNames() {
         return commands;
     }
 
@@ -71,8 +71,7 @@ public class Clear implements Command {
                 JMeterTreeNode node = null;
                 JMeterGUIComponent guiComp = null;
                 try {
-                    Object next = iter.next();
-                    node = (JMeterTreeNode) next;
+                    node = (JMeterTreeNode) iter.next();
                     guiComp = guiPackage.getGui(node.getTestElement());
                     if (guiComp instanceof Clearable){
                         Clearable item = (Clearable) guiComp;

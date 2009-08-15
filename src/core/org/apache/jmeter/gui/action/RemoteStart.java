@@ -45,7 +45,7 @@ public class RemoteStart extends AbstractAction {
 
     private static final String REMOTE_HOSTS_SEPARATOR = ","; // $NON-NLS-1$
 
-    private static final Set commands = new HashSet();
+    private static final Set<String> commands = new HashSet<String>();
 
     static {
         commands.add(ActionNames.REMOTE_START);
@@ -56,7 +56,7 @@ public class RemoteStart extends AbstractAction {
         commands.add(ActionNames.REMOTE_EXIT_ALL);
     }
 
-    private final Map remoteEngines = new HashMap();
+    private final Map<String, JMeterEngine> remoteEngines = new HashMap<String, JMeterEngine>();
 
     public RemoteStart() {
     }
@@ -115,7 +115,7 @@ public class RemoteStart extends AbstractAction {
      */
     private void doRemoteStop(String name) {
         GuiPackage.getInstance().getMainFrame().showStoppingMessage(name);
-        JMeterEngine engine = (JMeterEngine) remoteEngines.get(name);
+        JMeterEngine engine = remoteEngines.get(name);
         engine.stopTest();
     }
 
@@ -127,7 +127,7 @@ public class RemoteStart extends AbstractAction {
      *
      */
     private void doRemoteExit(String name) {
-        JMeterEngine engine = (JMeterEngine) remoteEngines.get(name);
+        JMeterEngine engine = remoteEngines.get(name);
         if (engine == null) {
             return;
         }
@@ -143,7 +143,7 @@ public class RemoteStart extends AbstractAction {
      *
      */
     private void doRemoteStart(String name) {
-        JMeterEngine engine = (JMeterEngine) remoteEngines.get(name);
+        JMeterEngine engine = remoteEngines.get(name);
         if (engine != null) {
             try {
                 engine.runTest();
@@ -157,7 +157,7 @@ public class RemoteStart extends AbstractAction {
      * Initializes remote engines
      */
     private void doRemoteInit(String name) {
-        JMeterEngine engine = (JMeterEngine) remoteEngines.get(name);
+        JMeterEngine engine = remoteEngines.get(name);
         if (engine == null) {
             try {
                 log.info("Initialising remote engine: "+name);
@@ -176,7 +176,7 @@ public class RemoteStart extends AbstractAction {
     }
 
     @Override
-    public Set getActionNames() {
+    public Set<String> getActionNames() {
         return commands;
     }
 
