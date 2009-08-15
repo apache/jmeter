@@ -62,7 +62,7 @@ public class FileListPanel extends JPanel implements ActionListener {
 
     private JButton delete = new JButton(JMeterUtils.getResString("delete")); // $NON-NLS-1$
 
-    private List listeners = new LinkedList();
+    private List<ChangeListener> listeners = new LinkedList<ChangeListener>();
 
     private String title;
 
@@ -181,9 +181,9 @@ public class FileListPanel extends JPanel implements ActionListener {
     }
 
     private void fireFileChanged() {
-        Iterator iter = listeners.iterator();
+        Iterator<ChangeListener> iter = listeners.iterator();
         while (iter.hasNext()) {
-            ((ChangeListener) iter.next()).stateChanged(new ChangeEvent(this));
+            iter.next().stateChanged(new ChangeEvent(this));
         }
     }
 
