@@ -43,7 +43,7 @@ public final class DOMPool {
      * test on an old system will likely run into memory or CPU problems long
      * before the HashMap is an issue.
      */
-    private static final HashMap MEMCACHE = new HashMap(50);
+    private static final HashMap<Object, Document> MEMCACHE = new HashMap<Object, Document>(50);
 
     /**
      * Return a document.
@@ -52,7 +52,7 @@ public final class DOMPool {
      * @return Document
      */
     public static synchronized Document getDocument(Object key) {
-        return (Document) MEMCACHE.get(key);
+        return MEMCACHE.get(key);
     }
 
     /**
@@ -61,7 +61,7 @@ public final class DOMPool {
      * @param key
      * @param data
      */
-    public static synchronized void putDocument(Object key, Object data) {
+    public static synchronized void putDocument(Object key, Document data) {
         MEMCACHE.put(key, data);
     }
 
