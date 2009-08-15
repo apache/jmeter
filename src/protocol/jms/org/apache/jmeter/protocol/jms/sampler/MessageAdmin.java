@@ -33,7 +33,7 @@ import org.apache.log.Logger;
 public class MessageAdmin {
     private static final MessageAdmin SINGLETON = new MessageAdmin();
 
-    private Map table = new Hashtable();
+    private Map<String, PlaceHolder> table = new Hashtable<String, PlaceHolder>();
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -55,7 +55,7 @@ public class MessageAdmin {
     }
 
     public void putReply(String id, Message reply) {
-        PlaceHolder holder = (PlaceHolder) table.get(id);
+        PlaceHolder holder = table.get(id);
         if (log.isDebugEnabled()) {
             log.debug("RPL_ID [" + id + "] for holder " + holder);
         }
@@ -77,7 +77,7 @@ public class MessageAdmin {
      * @return the received message or <code>null</code>
      */
     public Message get(String id) {
-        PlaceHolder holder = (PlaceHolder) table.remove(id);
+        PlaceHolder holder = table.remove(id);
         if (log.isDebugEnabled()) {
             log.debug("GET_ID [" + id + "] for " + holder);
         }

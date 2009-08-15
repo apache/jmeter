@@ -75,7 +75,7 @@ public class ReportMenuBar extends JMenuBar implements LocaleChangeListener {
 
     private JMenuItem remote_start_all;
 
-    private final Collection remote_engine_start;
+    private final Collection<JMenuItem> remote_engine_start;
 
     private JMenuItem run_stop;
 
@@ -85,7 +85,7 @@ public class ReportMenuBar extends JMenuBar implements LocaleChangeListener {
 
     private JMenuItem remote_stop_all;
 
-    private final Collection remote_engine_stop;
+    private final Collection<JMenuItem> remote_engine_stop;
 
     private JMenuItem run_clear;
 
@@ -109,12 +109,12 @@ public class ReportMenuBar extends JMenuBar implements LocaleChangeListener {
 
     private JMenuItem remote_exit_all;
 
-    private final Collection remote_engine_exit;
+    private final Collection<JMenuItem> remote_engine_exit;
 
     public ReportMenuBar() {
-        remote_engine_start = new LinkedList();
-        remote_engine_stop = new LinkedList();
-        remote_engine_exit = new LinkedList();
+        remote_engine_start = new LinkedList<JMenuItem>();
+        remote_engine_stop = new LinkedList<JMenuItem>();
+        remote_engine_exit = new LinkedList<JMenuItem>();
         remoteHosts = JOrphanUtils.split(JMeterUtils.getPropDefault("remote_hosts", ""), ",");
         if (remoteHosts.length == 1 && remoteHosts[0].equals("")) {
             remoteHosts = new String[0];
@@ -409,13 +409,13 @@ public class ReportMenuBar extends JMenuBar implements LocaleChangeListener {
     public void setRunning(boolean running, String host) {
         log.info("setRunning(" + running + "," + host + ")");
 
-        Iterator iter = remote_engine_start.iterator();
-        Iterator iter2 = remote_engine_stop.iterator();
-        Iterator iter3 = remote_engine_exit.iterator();
+        Iterator<JMenuItem> iter = remote_engine_start.iterator();
+        Iterator<JMenuItem> iter2 = remote_engine_stop.iterator();
+        Iterator<JMenuItem> iter3 = remote_engine_exit.iterator();
         while (iter.hasNext() && iter2.hasNext() && iter3.hasNext()) {
-            JMenuItem start = (JMenuItem) iter.next();
-            JMenuItem stop = (JMenuItem) iter2.next();
-            JMenuItem exit = (JMenuItem) iter3.next();
+            JMenuItem start = iter.next();
+            JMenuItem stop = iter2.next();
+            JMenuItem exit = iter3.next();
             if (start.getText().equals(host)) {
                 log.info("Found start host: " + start.getText());
                 start.setEnabled(!running);

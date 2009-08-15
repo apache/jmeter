@@ -132,9 +132,9 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
         if (args instanceof LDAPArguments) {
             arguments = (LDAPArguments) args;
             arguments.clear();
-            Iterator modelData = tableModel.iterator();
+            Iterator<LDAPArgument> modelData = tableModel.iterator();
             while (modelData.hasNext()) {
-                LDAPArgument arg = (LDAPArgument) modelData.next();
+                LDAPArgument arg = modelData.next();
                 arg.setMetaData("=");
                 arguments.addArgument(arg);
             }

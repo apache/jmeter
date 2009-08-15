@@ -170,11 +170,11 @@ public class JMeterTest extends JMeterTestCase {
         doc = bldr.build(compref);
         Element root = doc.getRootElement();
         Element body = root.getChild("body");
-        List sections = body.getChildren("section");
+        List<Element> sections = body.getChildren("section");
         for (int i = 0; i < sections.size(); i++) {
-            List components = ((Element) sections.get(i)).getChildren("component");
+            List<Element> components = sections.get(i).getChildren("component");
             for (int j = 0; j < components.size(); j++) {
-                Element comp = (Element) components.get(j);
+                Element comp = components.get(j);
                 String nm=comp.getAttributeValue("name");
                 if (!nm.equals("SSL Manager")){// Not a true GUI component
                     guiTitles.put(nm.replace(' ','_'), Boolean.FALSE);
@@ -198,11 +198,11 @@ public class JMeterTest extends JMeterTestCase {
         doc = bldr.build(compref);
         Element root = doc.getRootElement();
         Element body = root.getChild("body");
-        List sections = body.getChildren("section");
+        List<Element> sections = body.getChildren("section");
         for (int i = 0; i < sections.size(); i++) {
-            List components = ((Element) sections.get(i)).getChildren("component");
+            List<Element> components = sections.get(i).getChildren("component");
             for (int j = 0; j < components.size(); j++) {
-                Element comp = (Element) components.get(j);
+                Element comp = components.get(j);
                 guiTags.put(comp.getAttributeValue("tag"), Boolean.FALSE);
             }
         }
@@ -221,11 +221,11 @@ public class JMeterTest extends JMeterTestCase {
         Element root = doc.getRootElement();
         Element body = root.getChild("body");
         Element section = body.getChild("section");
-        List sections = section.getChildren("subsection");
+        List<Element> sections = section.getChildren("subsection");
         for (int i = 0; i < sections.size(); i++) {
-            List components = ((Element) sections.get(i)).getChildren("component");
+            List<Element> components = sections.get(i).getChildren("component");
             for (int j = 0; j < components.size(); j++) {
-                Element comp = (Element) components.get(j);
+                Element comp = components.get(j);
                 funcTitles.put(comp.getAttributeValue("name"), Boolean.FALSE);
             }
         }
@@ -267,7 +267,7 @@ public class JMeterTest extends JMeterTestCase {
      */
     private static Test suiteGUIComponents() throws Exception {
         TestSuite suite = new TestSuite("GuiComponents");
-        Iterator iter = getObjects(JMeterGUIComponent.class).iterator();
+        Iterator<Object> iter = getObjects(JMeterGUIComponent.class).iterator();
         while (iter.hasNext()) {
             JMeterGUIComponent item = (JMeterGUIComponent) iter.next();
             if (item instanceof JMeterTreeNode) {
@@ -295,7 +295,7 @@ public class JMeterTest extends JMeterTestCase {
      */
     private static Test suiteFunctions() throws Exception {
         TestSuite suite = new TestSuite("Functions");
-        Iterator iter = getObjects(Function.class).iterator();
+        Iterator<Object> iter = getObjects(Function.class).iterator();
         while (iter.hasNext()) {
             Object item = iter.next();
             if (item.getClass().equals(CompoundVariable.class)) {
@@ -314,7 +314,7 @@ public class JMeterTest extends JMeterTestCase {
      */
     private static Test suiteBeanComponents() throws Exception {
         TestSuite suite = new TestSuite("BeanComponents");
-        Iterator iter = getObjects(TestBean.class).iterator();
+        Iterator<Object> iter = getObjects(TestBean.class).iterator();
         while (iter.hasNext()) {
             Class<? extends Object> c = iter.next().getClass();
             try {
@@ -463,7 +463,7 @@ public class JMeterTest extends JMeterTestCase {
      */
     private static Test suiteSerializableElements() throws Exception {
         TestSuite suite = new TestSuite("SerializableElements");
-        Iterator iter = getObjects(Serializable.class).iterator();
+        Iterator<Object> iter = getObjects(Serializable.class).iterator();
         while (iter.hasNext()) {
             Serializable serObj = (Serializable) iter.next();
             if (serObj.getClass().getName().endsWith("_Stub")) {
@@ -502,7 +502,7 @@ public class JMeterTest extends JMeterTestCase {
      */
     private static Test suiteTestElements() throws Exception {
         TestSuite suite = new TestSuite("TestElements");
-        Iterator iter = getObjects(TestElement.class).iterator();
+        Iterator<Object> iter = getObjects(TestElement.class).iterator();
         while (iter.hasNext()) {
             TestElement item = (TestElement) iter.next();
             TestSuite ts = new TestSuite(item.getClass().getName());
@@ -543,12 +543,12 @@ public class JMeterTest extends JMeterTestCase {
         }
     }
 
-    private static Collection getObjects(Class<?> extendsClass) throws Exception {
+    private static Collection<Object> getObjects(Class<?> extendsClass) throws Exception {
         String exName = extendsClass.getName();
         Object myThis = "";
         Iterator<String> classes = ClassFinder
                 .findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] { extendsClass }).iterator();
-        List objects = new LinkedList();
+        List<Object> objects = new LinkedList<Object>();
         String n = "";
         boolean caughtError = true;
         Throwable caught = null;
