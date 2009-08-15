@@ -61,11 +61,7 @@ public class IterationCounter extends AbstractFunction {
         init();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
@@ -100,32 +96,20 @@ public class IterationCounter extends AbstractFunction {
         return counterString;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.functions.Function#setParameters(Collection)
-     */
+    /** {@inheritDoc} */
     @Override
-    public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
+    public synchronized void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
         checkParameterCount(parameters, 1, 2);
         variables = parameters.toArray();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.functions.Function#getReferenceKey()
-     */
+    /** {@inheritDoc} */
     @Override
     public String getReferenceKey() {
         return KEY;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.functions.Function#getArgumentDesc()
-     */
+    /** {@inheritDoc} */
     public List<String> getArgumentDesc() {
         return desc;
     }

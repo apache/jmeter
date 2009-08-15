@@ -63,7 +63,7 @@ import org.apache.log.Logger;
 public class StringFromFile extends AbstractFunction implements TestListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final List desc = new LinkedList();
+    private static final List<String> desc = new LinkedList<String>();
 
     private static final String KEY = "__StringFromFile";//$NON-NLS-1$
 
@@ -211,11 +211,7 @@ public class StringFromFile extends AbstractFunction implements TestListener {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
@@ -286,14 +282,9 @@ public class StringFromFile extends AbstractFunction implements TestListener {
 
     }
 
-    /*
-     * (non-Javadoc) Parameters: - file name - variable name (optional) - start
-     * index (optional) - end index or count (optional)
-     *
-     * @see org.apache.jmeter.functions.Function#setParameters(Collection)
-     */
+    /** {@inheritDoc} */
     @Override
-    public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
+    public synchronized void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
 
         log.debug(this + "::StringFromFile.setParameters()");//$NON-NLS-1$
         checkParameterCount(parameters, MIN_PARAM_COUNT, MAX_PARAM_COUNT);
@@ -317,41 +308,38 @@ public class StringFromFile extends AbstractFunction implements TestListener {
         firstTime = true;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.functions.Function#getReferenceKey()
-     */
+    /** {@inheritDoc} */
     @Override
     public String getReferenceKey() {
         return KEY;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.functions.Function#getArgumentDesc()
-     */
-    public List getArgumentDesc() {
+    /** {@inheritDoc} */
+    public List<String> getArgumentDesc() {
         return desc;
     }
 
+    /** {@inheritDoc} */
     public void testStarted() {
         //
     }
 
+    /** {@inheritDoc} */
     public void testStarted(String host) {
         //
     }
 
+    /** {@inheritDoc} */
     public void testEnded() {
         this.testEnded(""); //$NON-NLS-1$
     }
 
+    /** {@inheritDoc} */
     public void testEnded(String host) {
         closeFile();
     }
 
+    /** {@inheritDoc} */
     public void testIterationStart(LoopIterationEvent event) {
         //
     }

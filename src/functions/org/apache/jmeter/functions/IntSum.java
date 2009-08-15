@@ -35,7 +35,7 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class IntSum extends AbstractFunction {
 
-    private static final List desc = new LinkedList();
+    private static final List<String> desc = new LinkedList<String>();
 
     private static final String KEY = "__intSum"; //$NON-NLS-1$
 
@@ -53,11 +53,7 @@ public class IntSum extends AbstractFunction {
     public IntSum() {
     }
 
-    /**
-     * Execute the function.
-     *
-     * @see Function#execute(SampleResult, Sampler)
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
@@ -86,33 +82,21 @@ public class IntSum extends AbstractFunction {
 
     }
 
-    /**
-     * Set the parameters for the function.
-     *
-     * @see Function#setParameters(Collection)
-     */
+    /** {@inheritDoc} */
     @Override
-    public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
+    public synchronized void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
         checkMinParameterCount(parameters, 2);
         values = parameters.toArray();
     }
 
-    /**
-     * Get the invocation key for this function.
-     *
-     * @see Function#getReferenceKey()
-     */
+    /** {@inheritDoc} */
     @Override
     public String getReferenceKey() {
         return KEY;
     }
 
-    /**
-     * Get the description of this function.
-     *
-     * @see Function#getArgumentDesc()
-     */
-    public List getArgumentDesc() {
+    /** {@inheritDoc} */
+    public List<String> getArgumentDesc() {
         return desc;
     }
 }
