@@ -36,7 +36,8 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
 public class TestElementSaver implements TestElementTraverser {
     private String name;
 
-    private LinkedList stack = new LinkedList();
+    // DefaultConfiguration or String
+    private LinkedList<Object> stack = new LinkedList<Object>();
 
     private DefaultConfiguration rootConfig = null;
 
@@ -175,7 +176,7 @@ public class TestElementSaver implements TestElementTraverser {
         } else if (key instanceof MapProperty) {
             startMap((MapProperty) key);
         } else if (key instanceof TestElementProperty) {
-            stack.addLast(key.getName());
+            stack.addLast(key.getName()); // TODO: why do we add a String here?
         } else {
             DefaultConfiguration config = new DefaultConfiguration("property", "property");
             config.setValue(key.getStringValue());

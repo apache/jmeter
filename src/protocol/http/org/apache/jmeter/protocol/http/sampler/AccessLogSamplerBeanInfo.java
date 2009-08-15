@@ -58,7 +58,7 @@ public class AccessLogSamplerBeanInfo extends BeanInfoSupport {
             p.setValue(DEFAULT, AccessLogSampler.DEFAULT_CLASS);
             p.setValue(NOT_OTHER, Boolean.TRUE);
             p.setValue(NOT_EXPRESSION, Boolean.TRUE);
-            final List logParserClasses = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] { LogParser.class });
+            final List<String> logParserClasses = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] { LogParser.class });
             if (log.isDebugEnabled()) {
                 log.debug("found parsers: " + logParserClasses);
             }

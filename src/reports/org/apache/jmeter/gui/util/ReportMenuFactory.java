@@ -69,9 +69,9 @@ public final class ReportMenuFactory {
 
     public static final String TABLES = "menu_tables";
 
-    private static final Map menuMap = new HashMap();
+    private static final Map<String, List<MenuInfo>> menuMap = new HashMap<String, List<MenuInfo>>();
 
-    private static final Set elementsToSkip = new HashSet();
+    private static final Set<String> elementsToSkip = new HashSet<String>();
 
     // MENU_ADD_xxx - controls which items are in the ADD menu
     // MENU_PARENT_xxx - controls which items are in the Insert Parent menu
@@ -81,26 +81,8 @@ public final class ReportMenuFactory {
 
     private static final String[] MENU_PARENT_CONTROLLER = new String[] { ReportMenuFactory.CONTROLLERS };
 
-//  private static final String[] MENU_ADD_REPORT_PAGE = new String[] { ReportMenuFactory.CONFIG_ELEMENTS,
-//          ReportMenuFactory.PRE_PROCESSORS, ReportMenuFactory.POST_PROCESSORS,
-//          ReportMenuFactory.TABLES };
-//
-//  private static final String[] MENU_ADD_TABLES = new String[] { ReportMenuFactory.TABLES };
-//
-//  private static final String[] MENU_PARENT_SAMPLER = new String[] { ReportMenuFactory.CONTROLLERS };
-
-    private static List controllers, configElements, listeners, nonTestElements,
+    private static List<MenuInfo> controllers, configElements, listeners, nonTestElements,
             postProcessors, preProcessors, reportPage, tables;
-
-    // private static JMenu timerMenu;
-    // private static JMenu controllerMenu;
-    // private static JMenu generativeControllerMenu;
-    // private static JMenu listenerMenu;
-    // private static JMenu assertionMenu;
-    // private static JMenu configMenu;
-    // private static JMenu insertControllerMenu;
-    // private static JMenu postProcessorMenu;
-    // private static JMenu preProcessorMenu;
 
     static {
         try {
@@ -215,14 +197,14 @@ public final class ReportMenuFactory {
     }
 
     public static JMenu makeMenu(String category, String actionCommand) {
-        return makeMenu((Collection) menuMap.get(category), actionCommand, JMeterUtils.getResString(category));
+        return makeMenu(menuMap.get(category), actionCommand, JMeterUtils.getResString(category));
     }
 
-    public static JMenu makeMenu(Collection menuInfo, String actionCommand, String menuName) {
-        Iterator iter = menuInfo.iterator();
+    public static JMenu makeMenu(Collection<MenuInfo> menuInfo, String actionCommand, String menuName) {
+        Iterator<MenuInfo> iter = menuInfo.iterator();
         JMenu menu = new JMenu(menuName);
         while (iter.hasNext()) {
-            MenuInfo info = (MenuInfo) iter.next();
+            MenuInfo info = iter.next();
             menu.add(makeMenuItem(info.getLabel(), info.getClassName(), actionCommand));
         }
         return menu;
@@ -253,16 +235,16 @@ public final class ReportMenuFactory {
 
     private static void initializeMenus() {
         try {
-            List guiClasses = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] {
+            List<String> guiClasses = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] {
                     JMeterGUIComponent.class, TestBean.class });
-            controllers = new LinkedList();
-            configElements = new LinkedList();
-            listeners = new LinkedList();
-            postProcessors = new LinkedList();
-            preProcessors = new LinkedList();
-            tables = new LinkedList();
-            reportPage = new LinkedList();
-            nonTestElements = new LinkedList();
+            controllers = new LinkedList<MenuInfo>();
+            configElements = new LinkedList<MenuInfo>();
+            listeners = new LinkedList<MenuInfo>();
+            postProcessors = new LinkedList<MenuInfo>();
+            preProcessors = new LinkedList<MenuInfo>();
+            tables = new LinkedList<MenuInfo>();
+            reportPage = new LinkedList<MenuInfo>();
+            nonTestElements = new LinkedList<MenuInfo>();
             menuMap.put(CONFIG_ELEMENTS, configElements);
             menuMap.put(CONTROLLERS, controllers);
             menuMap.put(LISTENERS, listeners);
@@ -272,9 +254,9 @@ public final class ReportMenuFactory {
             menuMap.put(REPORT_PAGE, reportPage);
             menuMap.put(TABLES, tables);
             Collections.sort(guiClasses);
-            Iterator iter = guiClasses.iterator();
+            Iterator<String> iter = guiClasses.iterator();
             while (iter.hasNext()) {
-                String name = (String) iter.next();
+                String name = iter.next();
 
                 /*
                  * JMeterTreeNode and TestBeanGUI are special GUI classes, and
@@ -288,7 +270,7 @@ public final class ReportMenuFactory {
 
                 JMeterGUIComponent item;
                 try {
-                    Class c = Class.forName(name);
+                    Class<?> c = Class.forName(name);
                     if (TestBean.class.isAssignableFrom(c)) {
                         item = new TestBeanGUI(c);
                     } else {
@@ -307,7 +289,7 @@ public final class ReportMenuFactory {
                 } else {
                     elementsToSkip.add(name);
                 }
-                Collection categories = item.getMenuCategories();
+                Collection<String> categories = item.getMenuCategories();
                 if (categories == null) {
                     log.debug(name + " participates in no menus.");
                     continue;

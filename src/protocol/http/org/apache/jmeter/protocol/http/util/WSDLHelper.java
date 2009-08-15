@@ -67,7 +67,7 @@ public class WSDLHelper {
 
     protected Object[] SOAPOPS = null;
 
-    protected HashMap ACTIONS = new HashMap();
+    protected HashMap<String, String> ACTIONS = new HashMap<String, String>();
 
     protected AuthManager AUTH = null;
 
@@ -272,7 +272,7 @@ public class WSDLHelper {
             String key = ((Element) act).getAttribute("name");
             this.ACTIONS.put(key, value);
         }
-        Set keys = this.ACTIONS.keySet();
+        Set<String> keys = this.ACTIONS.keySet();
         String[] stringmeth = new String[keys.size()];
         Object[] stringKeys = keys.toArray();
         System.arraycopy(stringKeys, 0, stringmeth, 0, keys.size());
@@ -283,7 +283,7 @@ public class WSDLHelper {
      * Return the soap action matching the operation name.
      */
     public String getSoapAction(String key) {
-        return (String) this.ACTIONS.get(key);
+        return this.ACTIONS.get(key);
     }
 
     /**
@@ -300,7 +300,7 @@ public class WSDLHelper {
      * @return Node[]
      */
     public Object[] getSOAPBindings() {
-        ArrayList list = new ArrayList();
+        ArrayList<Element> list = new ArrayList<Element>();
         NodeList bindings = WSDLDOC.getElementsByTagName("binding");
         String soapBind = "soap:binding";
         if (bindings.getLength() == 0) {
@@ -346,7 +346,7 @@ public class WSDLHelper {
      */
     public Object[] getOperations() {
         Object[] res = this.getSOAPBindings();
-        ArrayList ops = new ArrayList();
+        ArrayList<Element> ops = new ArrayList<Element>();
         // first we iterate through the bindings
         for (int idx = 0; idx < res.length; idx++) {
             Element one = (Element) res[idx];

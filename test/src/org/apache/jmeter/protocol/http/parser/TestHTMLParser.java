@@ -236,10 +236,10 @@ public class TestHTMLParser extends JMeterTestCase {
         public void testParserList() throws Exception {
             HTMLParser p = HTMLParser.getParser(parserName);
             filetest(p, TESTS[testNumber].fileName, TESTS[testNumber].baseURL, TESTS[testNumber].expectedList,
-                    new Vector(), true);
+                    new Vector<URLString>(), true);
         }
 
-        private static void filetest(HTMLParser p, String file, String url, String resultFile, Collection c,
+        private static void filetest(HTMLParser p, String file, String url, String resultFile, Collection<URLString> c,
                 boolean orderMatters) // Does the order matter?
                 throws Exception {
             String parserName = p.getClass().getName().substring("org.apache.jmeter.protocol.http.parser.".length());
@@ -249,7 +249,7 @@ public class TestHTMLParser extends JMeterTestCase {
             byte[] buffer = new byte[(int) f.length()];
             int len = new FileInputStream(f).read(buffer);
             assertEquals(len, buffer.length);
-            Iterator result;
+            Iterator<URL> result;
             if (c == null) {
                 result = p.getEmbeddedResourceURLs(buffer, new URL(url));
             } else {
@@ -259,13 +259,13 @@ public class TestHTMLParser extends JMeterTestCase {
              * TODO: Exact ordering is only required for some tests; change the
              * comparison to do a set compare where necessary.
              */
-            Iterator expected;
+            Iterator<String> expected;
             if (orderMatters) {
                 expected = getFile(resultFile).iterator();
             } else {
                 // Convert both to Sets
-                expected = new TreeSet(getFile(resultFile)).iterator();
-                TreeSet temp = new TreeSet(new Comparator() {
+                expected = new TreeSet<String>(getFile(resultFile)).iterator();
+                TreeSet<URL> temp = new TreeSet<URL>(new Comparator<Object>() {
                     public int compare(Object o1, Object o2) {
                         return (o1.toString().compareTo(o2.toString()));
                     }
@@ -280,7 +280,7 @@ public class TestHTMLParser extends JMeterTestCase {
                 Object next = expected.next();
                 assertTrue(fname+"::"+parserName + "::Expecting another result " + next, result.hasNext());
                 try {
-                    assertEquals(fname+"::"+parserName + "(next)", next, ((URL) result.next()).toString());
+                    assertEquals(fname+"::"+parserName + "(next)", next, result.next().toString());
                 } catch (ClassCastException e) {
                     fail(fname+"::"+parserName + "::Expected URL, but got " + e.toString());
                 }
@@ -289,8 +289,8 @@ public class TestHTMLParser extends JMeterTestCase {
         }
 
         // Get expected results as a List
-        private static List getFile(String file) throws Exception {
-            ArrayList al = new ArrayList();
+        private static List<String> getFile(String file) throws Exception {
+            ArrayList<String> al = new ArrayList<String>();
             if (file != null && file.length() > 0) {
                 BufferedReader br = new BufferedReader(new FileReader(findTestFile(file)));
                 String line = br.readLine();
