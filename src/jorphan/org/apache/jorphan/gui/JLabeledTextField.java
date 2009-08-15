@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -46,7 +47,7 @@ public class JLabeledTextField extends JPanel implements JLabeledField, FocusLis
     private JTextField mTextField;
 
     // Maybe move to vector if MT problems occur
-    private final ArrayList mChangeListeners = new ArrayList(3);
+    private final ArrayList<ChangeListener> mChangeListeners = new ArrayList<ChangeListener>(3);
 
     // A temporary cache for the focus listener
     private String oldValue = "";
@@ -86,13 +87,15 @@ public class JLabeledTextField extends JPanel implements JLabeledField, FocusLis
         init();
     }
 
-    public List getComponentList() {
-        List comps = new LinkedList();
+    /** {@inheritDoc} */
+    public List<JComponent> getComponentList() {
+        List<JComponent> comps = new LinkedList<JComponent>();
         comps.add(mLabel);
         comps.add(mTextField);
         return comps;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void setEnabled(boolean enable) {
         super.setEnabled(enable);
@@ -229,7 +232,7 @@ public class JLabeledTextField extends JPanel implements JLabeledField, FocusLis
     protected void notifyChangeListeners() {
         ChangeEvent ce = new ChangeEvent(this);
         for (int index = 0; index < mChangeListeners.size(); index++) {
-            ((ChangeListener) mChangeListeners.get(index)).stateChanged(ce);
+            mChangeListeners.get(index).stateChanged(ce);
         }
     }
 }

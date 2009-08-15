@@ -38,6 +38,7 @@ public class TestValueReplacer extends JMeterTestCase {
             super(name);
         }
 
+        /** {@inheritDoc} */
         @Override
         public void setUp() {
             variables = new TestPlan();
@@ -59,15 +60,15 @@ public class TestValueReplacer extends JMeterTestCase {
             assertTrue(replacer.containsKey("server"));
             TestElement element = new TestPlan();
             element.setProperty(new StringProperty("domain", "jakarta.apache.org"));
-            List<Object> args = new ArrayList<Object>();
-            args.add("username is jack");
-            args.add("his_password");
-            element.setProperty(new CollectionProperty("args", args));
+            List<Object> argsin = new ArrayList<Object>();
+            argsin.add("username is jack");
+            argsin.add("his_password");
+            element.setProperty(new CollectionProperty("args", argsin));
             replacer.reverseReplace(element);
             assertEquals("${server}", element.getPropertyAsString("domain"));
-            args = (List<Object>) element.getProperty("args").getObjectValue();
-            assertEquals("username is ${username}", ((JMeterProperty) args.get(0)).getStringValue());
-            assertEquals("${password}", ((JMeterProperty) args.get(1)).getStringValue());
+            List<JMeterProperty> args = (List<JMeterProperty>) element.getProperty("args").getObjectValue();
+            assertEquals("username is ${username}", args.get(0).getStringValue());
+            assertEquals("${password}", args.get(1).getStringValue());
         }
 
         public void testReplace() throws Exception {
@@ -81,11 +82,7 @@ public class TestValueReplacer extends JMeterTestCase {
             assertEquals("jakarta.apache.org", element.getPropertyAsString("domain"));
         }
 
-        /*
-         * (non-Javadoc)
-         * 
-         * @see junit.framework.TestCase#tearDown()
-         */
+        /** {@inheritDoc} */
         @Override
         protected void tearDown() throws Exception {
             JMeterContextService.getContext().setSamplingStarted(false);

@@ -71,9 +71,11 @@ public class ConnectionFactory implements TestListener {
         super();
     }
 
+    /** {@inheritDoc} */
     public void testStarted(String test) {
     }
 
+    /** {@inheritDoc} */
     public void testEnded(String test) {
         testEnded();
     }
@@ -96,6 +98,7 @@ public class ConnectionFactory implements TestListener {
     public void testStarted() {
     }
 
+    /** {@inheritDoc} */
     public void testIterationStart(LoopIterationEvent event) {
     }
 
@@ -115,7 +118,7 @@ public class ConnectionFactory implements TestListener {
                 }
                 counter--;
                 try {
-                    Thread.currentThread().sleep(PAUSE_MILLIS);
+                    Thread.sleep(PAUSE_MILLIS);
                 } catch (InterruptedException ie) {
                     // do nothing, getting interrupted is acceptable
                 }
@@ -140,7 +143,7 @@ public class ConnectionFactory implements TestListener {
                 }
                 counter--;
                 try {
-                    Thread.currentThread().sleep(PAUSE_MILLIS);
+                    Thread.sleep(PAUSE_MILLIS);
                 } catch (InterruptedException ie) {
                   // do nothing, getting interrupted is acceptable
                 }
