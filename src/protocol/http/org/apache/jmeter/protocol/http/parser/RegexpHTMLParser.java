@@ -142,7 +142,7 @@ class RegexpHTMLParser extends HTMLParser {
      *      java.net.URL)
      */
     @Override
-    public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection urls) {
+    public Iterator<URL> getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection urls) {
 
         Perl5Matcher matcher = JMeterUtils.getMatcher();
         PatternMatcherInput input = localInput.get();

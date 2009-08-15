@@ -166,7 +166,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
 
                 Arguments currArgs = new Arguments();
                 argsPanel.modifyTestElement(currArgs);
-                Map currArgsMap = currArgs.getArgumentsAsMap();
+                Map<String, String> currArgsMap = currArgs.getArgumentsAsMap();
 
                 Arguments newArgs = new Arguments();
                 Arguments testParams = null;
@@ -190,7 +190,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
                         // parameters, those parameters should have the same
                         // values that they did in the original test.
                         if (currArgsMap.containsKey(name)) {
-                            String newVal = (String) currArgsMap.get(name);
+                            String newVal = currArgsMap.get(name);
                             if (newVal != null && newVal.length() > 0) {
                                 value = newVal;
                             }
