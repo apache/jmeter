@@ -86,24 +86,24 @@ public interface DataSet extends Visualizer {
      * Classes implementing the method should return the URL's in the 
      * DataSet. It is up to the class to return Strings or URL.
      */
-    public Set getURLs();
+    public Set<?> getURLs();
     /**
      * Classes implementing the method should return instance of 
      * SamplingStatCalculator.
      * @return the set of statistics
      */
-    public Set getStats();
+    public Set<SamplingStatCalculator> getStats();
     /**
      * Return the SamplingStatCalculator for a specific URL.
      * @param url
      */
     public SamplingStatCalculator getStatistics(String url);
     /**
-     * Convienance method for getting all the SamplingStatCalculators for
+     * Convienence method for getting all the SamplingStatCalculators for
      * a given URL.
      * @param urls
      */
-    public List getStats(List urls);
+    public List<SamplingStatCalculator> getStats(List urls);
     /**
      * Classes implementing the method should load the data from
      * the target location. It doesn't necessarily have to be a

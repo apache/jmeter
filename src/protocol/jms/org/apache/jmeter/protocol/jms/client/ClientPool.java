@@ -32,9 +32,9 @@ import java.util.Iterator;
  */
 public class ClientPool {
 
-    private static final ArrayList clients = new ArrayList();
+    private static final ArrayList<Object> clients = new ArrayList<Object>();
 
-    private static final HashMap client_map = new HashMap();
+    private static final HashMap<Object, Object> client_map = new HashMap<Object, Object>();
 
     /**
      * Add a ReceiveClient to the ClientPool. This is so that we can make sure
@@ -75,7 +75,7 @@ public class ClientPool {
      * bugs.
      */
     public static synchronized void clearClient() {
-        Iterator itr = clients.iterator();
+        Iterator<Object> itr = clients.iterator();
         while (itr.hasNext()) {
             Object client = itr.next();
             if (client instanceof ReceiveSubscriber) {

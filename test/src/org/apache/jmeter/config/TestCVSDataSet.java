@@ -105,7 +105,7 @@ public class TestCVSDataSet extends JMeterTestCase {
         JMeterVariables threadVars = jmcx.getVariables();
         threadVars.put("b", "value");
         
-        CSVDataSetBeanInfo cbi = new CSVDataSetBeanInfo(); // needs to be initialised
+        new CSVDataSetBeanInfo(); // needs to be initialised
         CSVDataSet csv0 = initCSV();
         CSVDataSet csv1 = initCSV();
         assertNull(csv1.getShareMode());

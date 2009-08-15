@@ -56,11 +56,11 @@ public class PackageTest extends JMeterTestCase {
 
     private final ResourceBundle defaultBundle;
 
-    private final Class testBeanClass;
+    private final Class<?> testBeanClass;
 
     private final Locale testLocale;
 
-    private PackageTest(Class testBeanClass, Locale locale, ResourceBundle defaultBundle) {
+    private PackageTest(Class<?> testBeanClass, Locale locale, ResourceBundle defaultBundle) {
         super(testBeanClass.getName() + " - " + locale.getLanguage() + " - " + locale.getCountry());
         this.testBeanClass = testBeanClass;
         this.testLocale = locale;
@@ -117,8 +117,8 @@ public class PackageTest extends JMeterTestCase {
 
     public void checkNoInventedKeys() {
         // Check that all keys in the bundle are also in the default bundle:
-        for (Enumeration keys = bundle.getKeys(); keys.hasMoreElements();) {
-            String key = (String) keys.nextElement();
+        for (Enumeration<String> keys = bundle.getKeys(); keys.hasMoreElements();) {
+            String key = keys.nextElement();
             defaultBundle.getString(key);
             // Will throw MissingResourceException if key is not there.
         }
@@ -167,14 +167,14 @@ public class PackageTest extends JMeterTestCase {
     public static Test suite() throws Exception {
         TestSuite suite = new TestSuite("Bean Resource Test Suite");
 
-        Iterator iter = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] { TestBean.class })
+        Iterator<String> iter = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] { TestBean.class })
                 .iterator();
 
         boolean errorDetected = false;
         JMeterUtils.setLocale(defaultLocale);
         while (iter.hasNext()) {
-            String className = (String) iter.next();
-            Class testBeanClass = Class.forName(className);
+            String className = iter.next();
+            Class<?> testBeanClass = Class.forName(className);
             ResourceBundle defaultBundle = null;
             try {
                 defaultBundle = (ResourceBundle) Introspector.getBeanInfo(testBeanClass).getBeanDescriptor().getValue(

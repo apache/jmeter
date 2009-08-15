@@ -179,12 +179,12 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     }
 
     private void addJMSProperties(TextMessage msg) throws JMSException {
-        Map map = getArguments(JMSSampler.JMS_PROPERTIES).getArgumentsAsMap();
-        Iterator argIt = map.entrySet().iterator();
+        Map<String, String> map = getArguments(JMSSampler.JMS_PROPERTIES).getArgumentsAsMap();
+        Iterator<Map.Entry<String, String>>  argIt = map.entrySet().iterator();
         while (argIt.hasNext()) {
-            Map.Entry me = (Map.Entry) argIt.next();
-            String name = (String) me.getKey();
-            String value = (String) me.getValue();
+            Map.Entry<String, String> me = argIt.next();
+            String name = me.getKey();
+            String value = me.getValue();
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Adding property [" + name + "=" + value + "]");
             }
@@ -369,7 +369,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     }
 
     private Context getInitialContext() throws NamingException {
-        Hashtable table = new Hashtable();
+        Hashtable<String, String> table = new Hashtable<String, String>();
 
         if (getInitialContextFactory() != null && getInitialContextFactory().trim().length() > 0) {
             if (LOGGER.isDebugEnabled()) {
@@ -383,7 +383,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
             }
             table.put(Context.PROVIDER_URL, getContextProvider());
         }
-        Map map = getArguments(JMSSampler.JNDI_PROPERTIES).getArgumentsAsMap();
+        Map<String, String> map = getArguments(JMSSampler.JNDI_PROPERTIES).getArgumentsAsMap();
         if (LOGGER.isDebugEnabled()) {
             if (map.isEmpty()) {
                 LOGGER.debug("Empty JNDI properties");
@@ -391,9 +391,9 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
                 LOGGER.debug("Number of JNDI properties: " + map.size());
             }
         }
-        Iterator it = map.entrySet().iterator();
+        Iterator<Map.Entry<String, String>> it = map.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry me = (Map.Entry) it.next();
+            Map.Entry<String, String> me = it.next();
             table.put(me.getKey(), me.getValue());
         }
 
@@ -405,11 +405,11 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     }
 
     private void printEnvironment(Context context) throws NamingException {
-        Hashtable env = context.getEnvironment();
+        Hashtable<?,?> env = context.getEnvironment();
         LOGGER.debug("Initial Context Properties");
-        Enumeration keys = env.keys();
+        Enumeration<String> keys = (Enumeration<String>) env.keys();
         while (keys.hasMoreElements()) {
-            String key = (String) keys.nextElement();
+            String key = keys.nextElement();
             LOGGER.debug(key + "=" + env.get(key));
         }
     }
@@ -500,7 +500,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
      * @throws NamingException
      */
     private String getPrincipal(Context context) throws NamingException{
-            Hashtable env = context.getEnvironment();
+            Hashtable<?,?> env = context.getEnvironment();
             return (String) env.get("java.naming.security.principal"); // $NON-NLS-1$
     }
 
@@ -512,7 +512,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
      * @throws NamingException
      */
     private String getCredentials(Context context) throws NamingException{
-            Hashtable env = context.getEnvironment();
+            Hashtable<?,?> env = context.getEnvironment();
             return (String) env.get("java.naming.security.credentials"); // $NON-NLS-1$
     }
 

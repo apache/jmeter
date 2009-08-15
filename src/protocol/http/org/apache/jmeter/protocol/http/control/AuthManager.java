@@ -112,7 +112,7 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
         return COLUMN_RESOURCE_NAMES[column];
     }
 
-    public Class getColumnClass(int column) {
+    public Class<?> getColumnClass(int column) {
         return COLUMN_RESOURCE_NAMES[column].getClass();
     }
 
@@ -124,7 +124,7 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
         return true;
     }
 
-    public Class getGuiClass() {
+    public Class<?> getGuiClass() {
         return org.apache.jmeter.protocol.http.gui.AuthPanel.class;
     }
 
