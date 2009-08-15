@@ -36,10 +36,10 @@ import org.apache.log.Logger;
 public class ReportAddToTree implements Command {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private Map allJMeterComponentCommands;
+    private Map<String, String> allJMeterComponentCommands;
 
     public ReportAddToTree() {
-        allJMeterComponentCommands = new HashMap();
+        allJMeterComponentCommands = new HashMap<String, String>();
         allJMeterComponentCommands.put("Add", "Add");
     }
 
@@ -48,7 +48,7 @@ public class ReportAddToTree implements Command {
      *
      * @return the ActionNames value
      */
-    public Set getActionNames() {
+    public Set<String> getActionNames() {
         return allJMeterComponentCommands.keySet();
     }
 

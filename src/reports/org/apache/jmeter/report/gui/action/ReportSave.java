@@ -52,7 +52,7 @@ public class ReportSave implements Command {
 
     // NOTUSED private String chosenFile;
 
-    private static final Set commands = new HashSet();
+    private static final Set<String> commands = new HashSet<String>();
     static {
         commands.add(SAVE_AS);
         commands.add(SAVE_ALL_AS);
@@ -70,7 +70,7 @@ public class ReportSave implements Command {
      *
      * @return the ActionNames value
      */
-    public Set getActionNames() {
+    public Set<String> getActionNames() {
         return commands;
     }
 

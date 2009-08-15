@@ -41,7 +41,7 @@ public class ReportHelp implements Command {
 
     public static final String HELP = "help";
 
-    private static final Set commands = new HashSet();
+    private static final Set<String> commands = new HashSet<String>();
 
     public static final String HELP_DOCS = "file:///" + JMeterUtils.getJMeterHome() + "/printable_docs/usermanual/";
 
@@ -115,7 +115,7 @@ public class ReportHelp implements Command {
     /**
      * @see org.apache.jmeter.gui.action.Command#getActionNames()
      */
-    public Set getActionNames() {
+    public Set<String> getActionNames() {
         return commands;
     }
 }
