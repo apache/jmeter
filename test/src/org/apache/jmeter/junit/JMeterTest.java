@@ -64,11 +64,11 @@ import org.jdom.input.SAXBuilder;
 public class JMeterTest extends JMeterTestCase {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static Map guiTitles;
+    private static Map<String, Boolean> guiTitles;
 
-    private static Map guiTags;
+    private static Map<String, Boolean> guiTags;
 
-    private static Map funcTitles;
+    private static Map<String, Boolean> funcTitles;
 
     private static Properties nameMap;
     
@@ -162,7 +162,7 @@ public class JMeterTest extends JMeterTestCase {
      * Extract titles from component_reference.xml
      */
     public void createTitleSet() throws Exception {
-        guiTitles = new HashMap(90);
+        guiTitles = new HashMap<String, Boolean>(90);
 
         String compref = "../xdocs/usermanual/component_reference.xml";
         SAXBuilder bldr = new SAXBuilder();
@@ -190,7 +190,7 @@ public class JMeterTest extends JMeterTestCase {
      * Extract titles from component_reference.xml
      */
     public void createTagSet() throws Exception {
-        guiTags = new HashMap(90);
+        guiTags = new HashMap<String, Boolean>(90);
 
         String compref = "../xdocs/usermanual/component_reference.xml";
         SAXBuilder bldr = new SAXBuilder();
@@ -212,7 +212,7 @@ public class JMeterTest extends JMeterTestCase {
      * Extract titles from functions.xml
      */
     public void createFunctionSet() throws Exception {
-        funcTitles = new HashMap(20);
+        funcTitles = new HashMap<String, Boolean>(20);
 
         String compref = "../xdocs/usermanual/functions.xml";
         SAXBuilder bldr = new SAXBuilder();
@@ -231,15 +231,15 @@ public class JMeterTest extends JMeterTestCase {
         }
     }
 
-    private int scanprintMap(Map m, String t) {
-        Set s = m.keySet();
+    private int scanprintMap(Map<String, Boolean> m, String t) {
+        Set<String> s = m.keySet();
         int unseen = 0;
         if (s.size() == 0) {
             return 0;
         }
-        Iterator i = s.iterator();
+        Iterator<String> i = s.iterator();
         while (i.hasNext()) {
-            Object key = i.next();
+            String key = i.next();
             if (!m.get(key).equals(Boolean.TRUE)) {
                 if (unseen == 0)// first time
                 {
@@ -316,7 +316,7 @@ public class JMeterTest extends JMeterTestCase {
         TestSuite suite = new TestSuite("BeanComponents");
         Iterator iter = getObjects(TestBean.class).iterator();
         while (iter.hasNext()) {
-            Class c = iter.next().getClass();
+            Class<? extends Object> c = iter.next().getClass();
             try {
                 JMeterGUIComponent item = new TestBeanGUI(c);
                 // JMeterGUIComponent item = (JMeterGUIComponent) iter.next();
@@ -392,7 +392,7 @@ public class JMeterTest extends JMeterTestCase {
      * Check that function descriptions are OK
      */
     public void runFunction2() throws Exception {
-        Iterator i = funcItem.getArgumentDesc().iterator();
+        Iterator<?> i = funcItem.getArgumentDesc().iterator();
         while (i.hasNext()) {
             Object o = i.next();
             assertTrue("Description must be a String", o instanceof String);
@@ -543,10 +543,10 @@ public class JMeterTest extends JMeterTestCase {
         }
     }
 
-    private static Collection getObjects(Class extendsClass) throws Exception {
+    private static Collection getObjects(Class<?> extendsClass) throws Exception {
         String exName = extendsClass.getName();
         Object myThis = "";
-        Iterator classes = ClassFinder
+        Iterator<String> classes = ClassFinder
                 .findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] { extendsClass }).iterator();
         List objects = new LinkedList();
         String n = "";
@@ -554,12 +554,12 @@ public class JMeterTest extends JMeterTestCase {
         Throwable caught = null;
         try {
             while (classes.hasNext()) {
-                n = (String) classes.next();
+                n = classes.next();
                 // TODO - improve this check
                 if (n.endsWith("RemoteJMeterEngineImpl")) {
                     continue; // Don't try to instantiate remote server
                 }
-                Class c = null;
+                Class<?> c = null;
                 try {
                     c = Class.forName(n);
                     try {

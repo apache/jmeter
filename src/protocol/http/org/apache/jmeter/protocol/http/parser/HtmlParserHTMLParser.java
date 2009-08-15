@@ -68,7 +68,7 @@ class HtmlParserHTMLParser extends HTMLParser {
      *      java.net.URL)
      */
     @Override
-    public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection urls) throws HTMLParseException {
+    public Iterator<URL> getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection urls) throws HTMLParseException {
 
         if (log.isDebugEnabled()) {
             log.debug("Parsing html of: " + baseUrl);

@@ -47,13 +47,14 @@ public class CompoundVariable implements Function {
 
     private static final FunctionParser functionParser = new FunctionParser();
 
-    private static final Map functions = new HashMap();
+    private static final Map<String, Class<? extends Function>> functions =
+        new HashMap<String, Class<? extends Function>>();
 
     private boolean hasFunction, isDynamic;
 
     private String permanentResults = ""; // $NON-NLS-1$
 
-    private LinkedList compiledComponents = new LinkedList();
+    private LinkedList<Object> compiledComponents = new LinkedList<Object>();
 
     static {
         try {
@@ -67,11 +68,11 @@ public class CompoundVariable implements Function {
             if (notContain!=null){
                 log.info("Note: Function class names must not contain the string: '"+notContain+"'");
             }
-            List classes = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(),
+            List<String> classes = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(),
                     new Class[] { Function.class }, true, contain, notContain);
-            Iterator iter = classes.iterator();
+            Iterator<String> iter = classes.iterator();
             while (iter.hasNext()) {
-                Function tempFunc = (Function) Class.forName((String) iter.next()).newInstance();
+                Function tempFunc = (Function) Class.forName(iter.next()).newInstance();
                 String referenceKey = tempFunc.getReferenceKey();
                 functions.put(referenceKey, tempFunc.getClass());
                 // Add alias for original StringFromFile name (had only one underscore)
@@ -123,18 +124,14 @@ public class CompoundVariable implements Function {
         return rawParameters;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see Function#execute(SampleResult, Sampler)
-     */
+    /** {@inheritDoc} */
     public String execute(SampleResult previousResult, Sampler currentSampler) {
         if (compiledComponents == null || compiledComponents.size() == 0) {
             return ""; // $NON-NLS-1$
         }
         boolean testDynamic = false;
         StringBuffer results = new StringBuffer();
-        Iterator iter = compiledComponents.iterator();
+        Iterator<Object> iter = compiledComponents.iterator();
         while (iter.hasNext()) {
             Object item = iter.next();
             if (item instanceof Function) {
@@ -164,8 +161,9 @@ public class CompoundVariable implements Function {
         return func;
     }
 
-    public List getArgumentDesc() {
-        return new LinkedList();
+    /** {@inheritDoc} */
+    public List<String> getArgumentDesc() {
+        return new LinkedList<String>();
     }
 
     public void clear() {
@@ -189,7 +187,7 @@ public class CompoundVariable implements Function {
     static Object getNamedFunction(String functionName) throws InvalidVariableException {
         if (functions.containsKey(functionName)) {
             try {
-                return ((Class) functions.get(functionName)).newInstance();
+                return ((Class<?>) functions.get(functionName)).newInstance();
             } catch (Exception e) {
                 log.error("", e); // $NON-NLS-1$
                 throw new InvalidVariableException();
@@ -204,13 +202,12 @@ public class CompoundVariable implements Function {
 
     // Dummy methods needed by Function interface
 
-    /**
-     * @see Function#getReferenceKey()
-     */
+    /** {@inheritDoc} */
     public String getReferenceKey() {
         return ""; // $NON-NLS-1$
     }
 
-    public void setParameters(Collection parameters) throws InvalidVariableException {
+    /** {@inheritDoc} */
+    public void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
     }
 }
