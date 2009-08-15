@@ -39,7 +39,7 @@ import org.mozilla.javascript.WrappedException;
 
 public class JavaScript extends AbstractFunction {
 
-    private static final List desc = new LinkedList();
+    private static final List<String> desc = new LinkedList<String>();
 
     private static final String KEY = "__javaScript"; //$NON-NLS-1$
 
@@ -55,11 +55,7 @@ public class JavaScript extends AbstractFunction {
     public JavaScript() {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
@@ -111,33 +107,21 @@ public class JavaScript extends AbstractFunction {
 
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.functions.Function#setParameters(Collection)
-     */
+    /** {@inheritDoc} */
     @Override
-    public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
+    public synchronized void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
         checkParameterCount(parameters, 1, 2);
         values = parameters.toArray();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.functions.Function#getReferenceKey()
-     */
+    /** {@inheritDoc} */
     @Override
     public String getReferenceKey() {
         return KEY;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.functions.Function#getArgumentDesc()
-     */
-    public List getArgumentDesc() {
+    /** {@inheritDoc} */
+    public List<String> getArgumentDesc() {
         return desc;
     }
 

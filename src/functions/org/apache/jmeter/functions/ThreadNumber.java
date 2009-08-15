@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 
@@ -32,44 +33,28 @@ public class ThreadNumber extends AbstractFunction {
 
     private static final String KEY = "__threadNum"; //$NON-NLS-1$
 
-    private static final List desc = new LinkedList();
+    private static final List<String> desc = new LinkedList<String>();
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
-     */
+    /** {@inheritDoc} */
     @Override
     public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException {
         return Thread.currentThread().getName().substring(Thread.currentThread().getName().lastIndexOf("-") + 1); //$NON-NLS-1$
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.functions.Function#setParameters(Collection)
-     */
+    /** {@inheritDoc} */
     @Override
-    public void setParameters(Collection parameters) throws InvalidVariableException {
+    public void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
         checkParameterCount(parameters,0,0);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.functions.Function#getReferenceKey()
-     */
+    /** {@inheritDoc} */
     @Override
     public String getReferenceKey() {
         return KEY;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.functions.Function#getArgumentDesc()
-     */
-    public List getArgumentDesc() {
+    /** {@inheritDoc} */
+    public List<String> getArgumentDesc() {
         return desc;
     }
 }

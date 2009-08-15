@@ -41,7 +41,7 @@ public class BeanShell extends AbstractFunction {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final List desc = new LinkedList();
+    private static final List<String> desc = new LinkedList<String>();
 
     private static final String KEY = "__BeanShell"; //$NON-NLS-1$
 
@@ -59,11 +59,7 @@ public class BeanShell extends AbstractFunction {
     public BeanShell() {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
@@ -129,13 +125,9 @@ public class BeanShell extends AbstractFunction {
         log.info(s);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.functions.Function#setParameters(Collection)
-     */
+    /** {@inheritDoc} */
     @Override
-    public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
+    public synchronized void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
 
         checkParameterCount(parameters, 1, 2);
 
@@ -148,22 +140,14 @@ public class BeanShell extends AbstractFunction {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.functions.Function#getReferenceKey()
-     */
+    /** {@inheritDoc} */
     @Override
     public String getReferenceKey() {
         return KEY;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.functions.Function#getArgumentDesc()
-     */
-    public List getArgumentDesc() {
+    /** {@inheritDoc} */
+    public List<String> getArgumentDesc() {
         return desc;
     }
 

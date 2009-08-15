@@ -20,6 +20,7 @@ package org.apache.jmeter.functions;
 
 import java.util.Collection;
 
+import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterContext;
@@ -59,7 +60,7 @@ public abstract class AbstractFunction implements Function {
      * Note: This is always called even if no parameters are provided 
      * (versions of JMeter after 2.3.1)
      */
-    abstract public void setParameters(Collection parameters) throws InvalidVariableException;
+    abstract public void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException;
 
     /**
      * @see Function#getReferenceKey()
@@ -79,7 +80,7 @@ public abstract class AbstractFunction implements Function {
      * 
      * @throws InvalidVariableException if the number of parameters is incorrect
      */
-    protected void checkParameterCount(Collection parameters, int min, int max) 
+    protected void checkParameterCount(Collection<CompoundVariable> parameters, int min, int max) 
         throws InvalidVariableException
     {
         int num = parameters.size();
@@ -104,7 +105,7 @@ public abstract class AbstractFunction implements Function {
      * 
      * @throws InvalidVariableException if the number of parameters is incorrect
      */
-    protected void checkParameterCount(Collection parameters, int count) 
+    protected void checkParameterCount(Collection<CompoundVariable> parameters, int count) 
         throws InvalidVariableException
     {
         int num = parameters.size();
@@ -124,7 +125,7 @@ public abstract class AbstractFunction implements Function {
      * 
      * @throws InvalidVariableException if the number of parameters is incorrect
      */
-    protected void checkMinParameterCount(Collection parameters, int minimum) 
+    protected void checkMinParameterCount(Collection<CompoundVariable> parameters, int minimum) 
         throws InvalidVariableException
     {
         int num = parameters.size();

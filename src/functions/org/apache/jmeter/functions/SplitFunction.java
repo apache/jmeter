@@ -58,7 +58,7 @@ import org.apache.log.Logger;
 public class SplitFunction extends AbstractFunction {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final List desc = new LinkedList();
+    private static final List<String> desc = new LinkedList<String>();
 
     private static final String KEY = "__split";// $NON-NLS-1$
 
@@ -77,6 +77,7 @@ public class SplitFunction extends AbstractFunction {
     public SplitFunction() {
     }
 
+    /** {@inheritDoc} */
     @Override
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
@@ -107,18 +108,21 @@ public class SplitFunction extends AbstractFunction {
 
     }
 
+    /** {@inheritDoc} */
     @Override
-    public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
+    public synchronized void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
         checkParameterCount(parameters, MIN_PARAMETER_COUNT, MAX_PARAMETER_COUNT);
         values = parameters.toArray();
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getReferenceKey() {
         return KEY;
     }
 
-    public List getArgumentDesc() {
+    /** {@inheritDoc} */
+    public List<String> getArgumentDesc() {
         return desc;
     }
 
