@@ -28,5 +28,5 @@ public interface ReportChart {
      * @param data list of DataSet
      * @return the component
      */
-    JComponent renderChart(List data);
+    JComponent renderChart(List<DataSet> data);
 }

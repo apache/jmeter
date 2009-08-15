@@ -78,7 +78,7 @@ public class JMeterThread implements Runnable, Interruptible {
 
     private final JMeterVariables threadVars;
 
-    private final Collection testListeners;
+    private final Collection<TestListener> testListeners;
 
     private final ListenerNotifier notifier;
 
@@ -356,7 +356,7 @@ public class JMeterThread implements Runnable, Interruptible {
                     runPostProcessors(pack.getPostProcessors());
                     checkAssertions(pack.getAssertions(), result, threadContext);
                     // Do not send subsamples to listeners which receive the transaction sample
-                    List sampleListeners = getSampleListeners(pack, transactionPack, transactionSampler);
+                    List<SampleListener> sampleListeners = getSampleListeners(pack, transactionPack, transactionSampler);
                     notifyListeners(sampleListeners, result);
                     compiler.done(pack);
                     // Add the result as subsample of transaction if we are in a transaction
@@ -407,17 +407,17 @@ public class JMeterThread implements Runnable, Interruptible {
      * @param transactionSampler
      * @return the listeners who should receive the sample result
      */
-    private List getSampleListeners(SamplePackage samplePack, SamplePackage transactionPack, TransactionSampler transactionSampler) {
-        List sampleListeners = samplePack.getSampleListeners();
+    private List<SampleListener> getSampleListeners(SamplePackage samplePack, SamplePackage transactionPack, TransactionSampler transactionSampler) {
+        List<SampleListener> sampleListeners = samplePack.getSampleListeners();
         // Do not send subsamples to listeners which receive the transaction sample
         if(transactionSampler != null) {
-            ArrayList onlySubSamplerListeners = new ArrayList();
-            List transListeners = transactionPack.getSampleListeners();
-            for(Iterator i = sampleListeners.iterator(); i.hasNext();) {
-                SampleListener listener = (SampleListener)i.next();
+            ArrayList<SampleListener> onlySubSamplerListeners = new ArrayList<SampleListener>();
+            List<SampleListener> transListeners = transactionPack.getSampleListeners();
+            for(Iterator<SampleListener> i = sampleListeners.iterator(); i.hasNext();) {
+                SampleListener listener = i.next();
                 // Check if this instance is present in transaction listener list
                 boolean found = false;
-                for(Iterator j = transListeners.iterator(); j.hasNext();) {
+                for(Iterator<SampleListener> j = transListeners.iterator(); j.hasNext();) {
                     // Check for the same instance
                     if(j.next() == listener) {
                         found = true;
@@ -565,10 +565,10 @@ public class JMeterThread implements Runnable, Interruptible {
         log.info("Stop Thread detected by thread: " + threadName);
     }
 
-    private void checkAssertions(List assertions, SampleResult parent, JMeterContext threadContext) {
-        Iterator iter = assertions.iterator();
+    private void checkAssertions(List<Assertion> assertions, SampleResult parent, JMeterContext threadContext) {
+        Iterator<Assertion> iter = assertions.iterator();
         while (iter.hasNext()) {
-            Assertion assertion = (Assertion) iter.next();
+            Assertion assertion = iter.next();
             TestBeanHelper.prepare((TestElement) assertion);
             if (assertion instanceof AbstractScopedAssertion){
                 AbstractScopedAssertion scopedAssertion = (AbstractScopedAssertion) assertion;
@@ -606,29 +606,29 @@ public class JMeterThread implements Runnable, Interruptible {
         result.addAssertionResult(assertionResult);
     }
 
-    private void runPostProcessors(List extractors) {
-        ListIterator iter;
+    private void runPostProcessors(List<PostProcessor> extractors) {
+        ListIterator<PostProcessor> iter;
         if (reversePostProcessors) {// Original (rather odd) behaviour
             iter = extractors.listIterator(extractors.size());// start at the end
             while (iter.hasPrevious()) {
-                PostProcessor ex = (PostProcessor) iter.previous();
+                PostProcessor ex = iter.previous();
                 TestBeanHelper.prepare((TestElement) ex);
                 ex.process();
             }
         } else {
             iter = extractors.listIterator(); // start at the beginning
             while (iter.hasNext()) {
-                PostProcessor ex = (PostProcessor) iter.next();
+                PostProcessor ex = iter.next();
                 TestBeanHelper.prepare((TestElement) ex);
                 ex.process();
             }
         }
     }
 
-    private void runPreProcessors(List preProcessors) {
-        Iterator iter = preProcessors.iterator();
+    private void runPreProcessors(List<PreProcessor> preProcessors) {
+        Iterator<PreProcessor> iter = preProcessors.iterator();
         while (iter.hasNext()) {
-            PreProcessor ex = (PreProcessor) iter.next();
+            PreProcessor ex = iter.next();
             if (log.isDebugEnabled()) {
                 log.debug("Running preprocessor: " + ((AbstractTestElement) ex).getName());
             }
@@ -637,11 +637,11 @@ public class JMeterThread implements Runnable, Interruptible {
         }
     }
 
-    private void delay(List timers) {
+    private void delay(List<Timer> timers) {
         long sum = 0;
-        Iterator iter = timers.iterator();
+        Iterator<Timer> iter = timers.iterator();
         while (iter.hasNext()) {
-            Timer timer = (Timer) iter.next();
+            Timer timer = iter.next();
             TestBeanHelper.prepare((TestElement) timer);
             sum += timer.delay();
         }
@@ -656,9 +656,9 @@ public class JMeterThread implements Runnable, Interruptible {
 
     private void notifyTestListeners() {
         threadVars.incIteration();
-        Iterator iter = testListeners.iterator();
+        Iterator<TestListener> iter = testListeners.iterator();
         while (iter.hasNext()) {
-            TestListener listener = (TestListener) iter.next();
+            TestListener listener = iter.next();
             if (listener instanceof TestElement) {
                 listener.testIterationStart(new LoopIterationEvent(controller, threadVars.getIteration()));
                 ((TestElement) listener).recoverRunningVersion();
@@ -668,7 +668,7 @@ public class JMeterThread implements Runnable, Interruptible {
         }
     }
 
-    private void notifyListeners(List listeners, SampleResult result) {
+    private void notifyListeners(List<SampleListener> listeners, SampleResult result) {
         SampleEvent event = new SampleEvent(result, threadGroup.getName(), threadVars);
         notifier.notifyListeners(event, listeners);
 

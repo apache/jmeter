@@ -51,7 +51,7 @@ public class DefaultTreeTableModel extends AbstractTreeTableModel {
      * @param editorClasses
      */
     public DefaultTreeTableModel(String[] headers, Functor[] readFunctors,
-            Functor[] writeFunctors, Class[] editorClasses) {
+            Functor[] writeFunctors, Class<?>[] editorClasses) {
         super(headers, readFunctors, writeFunctors, editorClasses);
     }
 

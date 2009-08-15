@@ -942,7 +942,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
                     final ArrayList<String>     sortedVals = new ArrayList<String>(attr.size());
                     boolean             first = true;
 
-                    for (NamingEnumeration ven = attr.getAll(); ven.hasMore(); )
+                    for (NamingEnumeration<?> ven = attr.getAll(); ven.hasMore(); )
                     {
                         final Object    value = getWriteValue(ven.next());
                         sortedVals.add(value.toString());
@@ -970,12 +970,12 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
     }
 
     private void sortAttributes(final ArrayList<Attribute> sortedAttrs) {
-        Collections.sort(sortedAttrs, new Comparator()
+        Collections.sort(sortedAttrs, new Comparator<Attribute>()
         {
-            public int compare(Object o1, Object o2)
+            public int compare(Attribute o1, Attribute o2)
             {
-                String      nm1 = ((Attribute) o1).getID();
-                String      nm2 = ((Attribute) o2).getID();
+                String      nm1 = o1.getID();
+                String      nm2 = o2.getID();
 
                 return nm1.compareTo(nm2);
             }
@@ -983,7 +983,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
     }
 
     private void sortResults(final ArrayList<SearchResult> sortedResults) {
-        Collections.sort(sortedResults, new Comparator()
+        Collections.sort(sortedResults, new Comparator<SearchResult>()
         {
             private int compareToReverse(final String s1, final String s2)
             {
@@ -1004,10 +1004,10 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
                 return len1 - len2;
             }
 
-            public int compare(Object o1, Object o2)
+            public int compare(SearchResult o1, SearchResult o2)
             {
-                String      nm1 = ((SearchResult) o1).getName();
-                String      nm2 = ((SearchResult) o2).getName();
+                String      nm1 = o1.getName();
+                String      nm2 = o2.getName();
 
                 if (nm1 == null) {
                     nm1 = "";

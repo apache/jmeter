@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.swing.JComponent;
 
+import org.apache.jmeter.report.DataSet;
 import org.apache.jmeter.report.ReportChart;
 import org.apache.jmeter.visualizers.SamplingStatCalculator;
 import org.apache.jorphan.util.JOrphanUtils;
@@ -187,7 +188,7 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
      * 3. pass the data to the chart library
      * 4. return the generated chart
      */
-    public abstract JComponent renderChart(List data);
+    public abstract JComponent renderChart(List<DataSet> data);
 
     /**
      * this makes it easy to get the bufferedImage

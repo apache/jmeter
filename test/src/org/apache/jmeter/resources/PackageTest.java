@@ -73,7 +73,7 @@ public class PackageTest extends TestCase {
     private static final Object[] DUMMY_PARAMS = new Object[] { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
     // Read resource file saving the keys
-    private int readRF(String res, List l) throws Exception {
+    private int readRF(String res, List<String> l) throws Exception {
         int fails = 0;
         InputStream ras = this.getClass().getResourceAsStream(res);
         if (ras==null){
@@ -140,7 +140,7 @@ public class PackageTest extends TestCase {
      * 
      */
     private void check(String resname, boolean checkUnexpected) throws Exception {
-        ArrayList alf = new ArrayList(500);// holds keys from file
+        ArrayList<String> alf = new ArrayList<String>(500);// holds keys from file
         String res = getResName(resname);
         subTestFailures += readRF(res, alf);
         Collections.sort(alf);
@@ -148,7 +148,7 @@ public class PackageTest extends TestCase {
         // Look for duplicate keys in the file
         String last = "";
         for (int i = 0; i < alf.size(); i++) {
-            String curr = (String) alf.get(i);
+            String curr = alf.get(i);
             if (curr.equals(last)) {
                 subTestFailures++;
                 System.out.println("\nDuplicate key =" + curr + " in " + res);
@@ -168,11 +168,10 @@ public class PackageTest extends TestCase {
             if (prb == null){
                 return;
             }
-            Enumeration enumr = prb.getKeys();
+            Enumeration<String> enumr = prb.getKeys();
             while (enumr.hasMoreElements()) {
-                String key = null;
+                String key = enumr.nextElement();
                 try {
-                    key = (String) enumr.nextElement();
                     defaultPRB.getString(key); // Check key is in default
                 } catch (MissingResourceException e) {
                     subTestFailures++;
