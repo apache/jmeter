@@ -26,6 +26,7 @@ import java.util.MissingResourceException;
 
 import junit.framework.TestCase;
 
+import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.functions.AbstractFunction;
 import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.util.JMeterUtils;
@@ -125,7 +126,7 @@ public abstract class JMeterTestCase extends TestCase {
 
     protected void checkInvalidParameterCounts(AbstractFunction func, int minimum)
             throws Exception {
-        Collection parms = new LinkedList();
+        Collection<CompoundVariable> parms = new LinkedList<CompoundVariable>();
         for (int c = 0; c < minimum; c++) {
             try {
                 func.setParameters(parms);
@@ -133,14 +134,14 @@ public abstract class JMeterTestCase extends TestCase {
                         + " parameters");
             } catch (InvalidVariableException ignored) {
             }
-            parms.add("");
+            parms.add(new CompoundVariable());
         }
         func.setParameters(parms);
     }
     
     protected void checkInvalidParameterCounts(AbstractFunction func, int min,
             int max) throws Exception {
-        Collection parms = new LinkedList();
+        Collection<CompoundVariable> parms = new LinkedList<CompoundVariable>();
         for (int count = 0; count < min; count++) {
             try {
                 func.setParameters(parms);
@@ -148,13 +149,13 @@ public abstract class JMeterTestCase extends TestCase {
                         + " parameters");
             } catch (InvalidVariableException ignored) {
             }
-            parms.add("");
+            parms.add(new CompoundVariable());
         }
         for (int count = min; count <= max; count++) {
             func.setParameters(parms);
-            parms.add("");
+            parms.add(new CompoundVariable());
         }
-        parms.add("");
+        parms.add(new CompoundVariable());
         try {
             func.setParameters(parms);
             fail("Should have generated InvalidVariableException for " + parms.size()

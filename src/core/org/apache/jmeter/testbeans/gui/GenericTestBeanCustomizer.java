@@ -147,7 +147,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
     /**
      * The Map we're currently customizing. Set by setObject().
      */
-    private Map propertyMap;
+    private Map<String, Object> propertyMap;
 
     public GenericTestBeanCustomizer(){
         log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
@@ -182,7 +182,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
             }
 
             PropertyEditor propertyEditor;
-            Class editorClass = descriptors[i].getPropertyEditorClass();
+            Class<?> editorClass = descriptors[i].getPropertyEditorClass();
 
             if (log.isDebugEnabled()) {
                 log.debug("Property " + name + " has editor class " + editorClass);
@@ -199,7 +199,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
                     throw new Error(e.toString());
                 }
             } else {
-                Class c = descriptors[i].getPropertyType();
+                Class<?> c = descriptors[i].getPropertyType();
                 propertyEditor = PropertyEditorManager.findEditor(c);
             }
 
@@ -307,13 +307,13 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
         editors[i].setValue(value);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(org.apache.jmeter.testelement.TestElement)
+
+    /**
+     * {@inheritDoc}
+     * @param map must be an instance of Map<String, Object>
      */
     public void setObject(Object map) {
-        propertyMap = (Map) map;
+        propertyMap = (Map<String, Object>) map;
 
         if (propertyMap.size() == 0) {
             // Uninitialized -- set it to the defaults:
@@ -508,12 +508,8 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
     /**
      * Comparator used to sort properties for presentation in the GUI.
      */
-    private class PropertyComparator implements Comparator, Serializable {
-        public int compare(Object o1, Object o2) {
-            return compare((PropertyDescriptor) o1, (PropertyDescriptor) o2);
-        }
-
-        private int compare(PropertyDescriptor d1, PropertyDescriptor d2) {
+    private class PropertyComparator implements Comparator<PropertyDescriptor>, Serializable {
+        public int compare(PropertyDescriptor d1, PropertyDescriptor d2) {
             int result;
 
             String g1 = group(d1), g2 = group(d2);

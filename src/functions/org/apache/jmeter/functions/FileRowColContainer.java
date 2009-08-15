@@ -38,7 +38,7 @@ public class FileRowColContainer {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private final ArrayList fileData; // Lines in the file, split into columns
+    private final ArrayList<ArrayList<String>> fileData; // Lines in the file, split into columns
 
     private final String fileName; // name of the file
 
@@ -57,7 +57,7 @@ public class FileRowColContainer {
         fileName = file;
         delimiter = delim;
         nextRow = 0;
-        fileData = new ArrayList();
+        fileData = new ArrayList<ArrayList<String>>();
         load();
     }
 
@@ -66,7 +66,7 @@ public class FileRowColContainer {
         fileName = file;
         delimiter = DELIMITER;
         nextRow = 0;
-        fileData = new ArrayList();
+        fileData = new ArrayList<ArrayList<String>>();
         load();
     }
 
@@ -113,7 +113,7 @@ public class FileRowColContainer {
      */
     public String getColumn(int row, int col) throws IndexOutOfBoundsException {
         String colData;
-        colData = (String) ((ArrayList) fileData.get(row)).get(col);
+        colData = fileData.get(row).get(col);
         log.debug(fileName + "(" + row + "," + col + "): " + colData);
         return colData;
     }
@@ -142,8 +142,8 @@ public class FileRowColContainer {
      * @return an ArrayList of Strings containing one element for each value in
      *         the line
      */
-    private static ArrayList splitLine(String theLine, String delim) {
-        ArrayList result = new ArrayList();
+    private static ArrayList<String> splitLine(String theLine, String delim) {
+        ArrayList<String> result = new ArrayList<String>();
         StringTokenizer tokener = new StringTokenizer(theLine, delim, true);
         /*
          * the beginning of the line is a "delimiter" so that ,a,b,c returns ""

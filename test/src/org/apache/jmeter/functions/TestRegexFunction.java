@@ -35,7 +35,7 @@ public class TestRegexFunction extends JMeterTestCase {
 
         SampleResult result;
 
-        Collection params;
+        Collection<CompoundVariable> params;
 
         private JMeterVariables vars;
 
@@ -66,7 +66,7 @@ public class TestRegexFunction extends JMeterTestCase {
         }
 
         public void testVariableExtraction() throws Exception {
-            params = new LinkedList();
+            params = new LinkedList<CompoundVariable>();
             params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
             params.add(new CompoundVariable("$2$"));
             params.add(new CompoundVariable("2"));
@@ -77,7 +77,7 @@ public class TestRegexFunction extends JMeterTestCase {
 
         // Test with output variable name
         public void testVariableExtraction1a() throws Exception {
-            params = new LinkedList();
+            params = new LinkedList<CompoundVariable>();
             params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
             params.add(new CompoundVariable("$2$")); // template
             params.add(new CompoundVariable("2")); // match number
@@ -96,7 +96,7 @@ public class TestRegexFunction extends JMeterTestCase {
 
         // Test with empty output variable name
         public void testVariableExtraction1b() throws Exception {
-            params = new LinkedList();
+            params = new LinkedList<CompoundVariable>();
             params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
             params.add(new CompoundVariable("$2$")); // template
             params.add(new CompoundVariable("2")); // match number
@@ -110,7 +110,7 @@ public class TestRegexFunction extends JMeterTestCase {
         }
 
         public void testVariableExtractionFromVariable() throws Exception {
-            params = new LinkedList();
+            params = new LinkedList<CompoundVariable>();
             params.add(new CompoundVariable("(\\d+)\\s+(\\w+)"));
             params.add(new CompoundVariable("$2$")); // template
             params.add(new CompoundVariable("1")); // match number
@@ -129,7 +129,7 @@ public class TestRegexFunction extends JMeterTestCase {
         }
 
         public void testVariableExtractionFromVariable2() throws Exception {
-            params = new LinkedList();
+            params = new LinkedList<CompoundVariable>();
             params.add(new CompoundVariable("(\\d+)\\s+(\\w+)"));
             params.add(new CompoundVariable("$1$$2$")); // template
             params.add(new CompoundVariable("1")); // match number
@@ -148,7 +148,7 @@ public class TestRegexFunction extends JMeterTestCase {
         }
 
         public void testVariableExtractionFromVariable3() throws Exception {
-            params = new LinkedList();
+            params = new LinkedList<CompoundVariable>();
             params.add(new CompoundVariable("(\\d+)\\s+(\\w+)"));
             params.add(new CompoundVariable("pre$2$post")); // template
             params.add(new CompoundVariable("1")); // match number
@@ -167,7 +167,7 @@ public class TestRegexFunction extends JMeterTestCase {
         }
 
         public void testVariableExtractionFromVariable4() throws Exception {
-            params = new LinkedList();
+            params = new LinkedList<CompoundVariable>();
             params.add(new CompoundVariable("(\\d+)\\s+(\\w+)"));
             params.add(new CompoundVariable("pre$2$")); // template
             params.add(new CompoundVariable("1")); // match number
@@ -186,7 +186,7 @@ public class TestRegexFunction extends JMeterTestCase {
         }
 
         public void testVariableExtractionFromVariable5() throws Exception {
-            params = new LinkedList();
+            params = new LinkedList<CompoundVariable>();
             params.add(new CompoundVariable("(\\d+)\\s+(\\w+)"));
             params.add(new CompoundVariable("$2$post")); // template
             params.add(new CompoundVariable("1")); // match number
@@ -205,7 +205,7 @@ public class TestRegexFunction extends JMeterTestCase {
         }
 
         public void testVariableExtractionFromVariable6() throws Exception {
-            params = new LinkedList();
+            params = new LinkedList<CompoundVariable>();
             params.add(new CompoundVariable("(\\d+)\\s+(\\w+)"));
             params.add(new CompoundVariable("$2$$2$")); // template
             params.add(new CompoundVariable("1")); // match number
@@ -224,7 +224,7 @@ public class TestRegexFunction extends JMeterTestCase {
         }
 
         public void testVariableExtractionFromVariable7() throws Exception {
-            params = new LinkedList();
+            params = new LinkedList<CompoundVariable>();
             params.add(new CompoundVariable("(\\d+)\\s+(\\w+)"));
             params.add(new CompoundVariable("pre$1$mid$2$post")); // template
             params.add(new CompoundVariable("1")); // match number
@@ -243,7 +243,7 @@ public class TestRegexFunction extends JMeterTestCase {
         }
 
         public void testVariableExtractionFromVariable8() throws Exception {
-            params = new LinkedList();
+            params = new LinkedList<CompoundVariable>();
             params.add(new CompoundVariable("(\\d+)\\s+(\\w+)"));
             params.add(new CompoundVariable("pre$1$mid$2$")); // template
             params.add(new CompoundVariable("1")); // match number
@@ -262,7 +262,7 @@ public class TestRegexFunction extends JMeterTestCase {
         }
 
         public void testVariableExtractionFromVariable9() throws Exception {
-            params = new LinkedList();
+            params = new LinkedList<CompoundVariable>();
             params.add(new CompoundVariable("(\\d+)\\s+(\\w+)"));
             params.add(new CompoundVariable("$1$mid$2$post")); // template
             params.add(new CompoundVariable("1")); // match number
@@ -281,7 +281,7 @@ public class TestRegexFunction extends JMeterTestCase {
         }
 
         public void testVariableExtraction2() throws Exception {
-            params = new LinkedList();
+            params = new LinkedList<CompoundVariable>();
             params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
             params.add(new CompoundVariable("$1$"));
             params.add(new CompoundVariable("3"));
@@ -291,7 +291,7 @@ public class TestRegexFunction extends JMeterTestCase {
         }
 
         public void testVariableExtraction5() throws Exception {
-            params = new LinkedList();
+            params = new LinkedList<CompoundVariable>();
             params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
             params.add(new CompoundVariable("$1$"));
             params.add(new CompoundVariable("ALL"));
@@ -302,7 +302,7 @@ public class TestRegexFunction extends JMeterTestCase {
         }
 
         public void testVariableExtraction6() throws Exception {
-            params = new LinkedList();
+            params = new LinkedList<CompoundVariable>();
             params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
             params.add(new CompoundVariable("$2$"));
             params.add(new CompoundVariable("4"));
@@ -314,7 +314,7 @@ public class TestRegexFunction extends JMeterTestCase {
         }
 
         public void testComma() throws Exception {
-            params = new LinkedList();
+            params = new LinkedList<CompoundVariable>();
             params.add(new CompoundVariable("<value,? field=\"(pinposition\\d+)\">(\\d+)</value>"));
             params.add(new CompoundVariable("$1$"));
             params.add(new CompoundVariable("3"));
@@ -324,7 +324,7 @@ public class TestRegexFunction extends JMeterTestCase {
         }
 
         public void testVariableExtraction3() throws Exception {
-            params = new LinkedList();
+            params = new LinkedList<CompoundVariable>();
             params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
             params.add(new CompoundVariable("_$1$"));
             params.add(new CompoundVariable("2"));
@@ -334,7 +334,7 @@ public class TestRegexFunction extends JMeterTestCase {
         }
 
         public void testVariableExtraction4() throws Exception {
-            params = new LinkedList();
+            params = new LinkedList<CompoundVariable>();
             params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
             params.add(new CompoundVariable("$2$, "));
             params.add(new CompoundVariable(".333"));
@@ -344,7 +344,7 @@ public class TestRegexFunction extends JMeterTestCase {
         }
 
         public void testDefaultValue() throws Exception {
-            params = new LinkedList();
+            params = new LinkedList<CompoundVariable>();
             params.add(new CompoundVariable("<value,, field=\"(pinposition\\d+)\">(\\d+)</value>"));
             params.add(new CompoundVariable("$2$, "));
             params.add(new CompoundVariable(".333"));
