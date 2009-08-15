@@ -34,7 +34,7 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class Close implements Command {
 
-    private static final Set commands = new HashSet();
+    private static final Set<String> commands = new HashSet<String>();
 
     static {
         commands.add(ActionNames.CLOSE);
@@ -51,7 +51,7 @@ public class Close implements Command {
      *
      * @return the ActionNames value
      */
-    public Set getActionNames() {
+    public Set<String> getActionNames() {
         return commands;
     }
 
