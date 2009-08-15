@@ -464,6 +464,7 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
         }
     }
 
+    /** {@inheritDoc} */
     public void testStarted() {
         initialCookies = getCookies();
         cookieSpec = CookiePolicy.getCookieSpec(getPolicy());
@@ -472,16 +473,20 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
         }
     }
 
+    /** {@inheritDoc} */
     public void testEnded() {
     }
 
+    /** {@inheritDoc} */
     public void testStarted(String host) {
         testStarted();
     }
 
+    /** {@inheritDoc} */
     public void testEnded(String host) {
     }
 
+    /** {@inheritDoc} */
     public void testIterationStart(LoopIterationEvent event) {
         if (getClearEachIteration()) {
             log.debug("Initialise cookies from pre-defined list");

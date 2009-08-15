@@ -37,7 +37,7 @@ import org.apache.jmeter.monitor.model.WorkersImpl;
 public class MonitorHandler extends DefaultHandler {
     // private boolean startDoc = false;
     // private boolean endDoc = false;
-    private Stack stacktree = new Stack();
+    private Stack<Object> stacktree = new Stack<Object>();
 
     private ObjectFactory factory = null;
 
@@ -75,11 +75,13 @@ public class MonitorHandler extends DefaultHandler {
         this.factory = factory;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void startDocument() throws SAXException {
         // this.startDoc = true;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void endDocument() throws SAXException {
         // this.startDoc = false;

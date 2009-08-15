@@ -36,12 +36,12 @@ import org.apache.log.Logger;
  */
 public class InitialContextFactory {
 
-    private static final java.util.HashMap MAP = new HashMap();
+    private static final HashMap<String, Context> MAP = new HashMap<String, Context>();
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     public static synchronized Context lookupContext(String jndi, String url, boolean useAuth, String user, String pwd) {
-        Context ctx = (Context) MAP.get(jndi + url);
+        Context ctx = MAP.get(jndi + url);
         if (ctx == null) {
             Properties props = new Properties();
             props.setProperty(Context.INITIAL_CONTEXT_FACTORY, jndi);
@@ -92,9 +92,9 @@ public class InitialContextFactory {
      * clear all the InitialContext objects.
      */
     public static void close() {
-        Iterator itr = MAP.keySet().iterator();
+        Iterator<?> itr = MAP.keySet().iterator();
         while (itr.hasNext()) {
-            Context ctx = (Context) MAP.get(itr.next());
+            Context ctx = MAP.get(itr.next());
             try {
                 ctx.close();
             } catch (NamingException e) {
