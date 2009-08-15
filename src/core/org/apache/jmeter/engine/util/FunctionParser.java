@@ -50,11 +50,11 @@ class FunctionParser {
      * 
      * @param value string containing the function / variable references (if any)
      *
-     * @return list of strings or Objects representing functions
+     * @return list of Strings or Objects representing functions
      */
-    LinkedList compileString(String value) throws InvalidVariableException {
+    LinkedList<Object> compileString(String value) throws InvalidVariableException {
         StringReader reader = new StringReader(value);
-        LinkedList result = new LinkedList();
+        LinkedList<Object> result = new LinkedList<Object>();
         StringBuffer buffer = new StringBuffer();
         char previous = ' '; // TODO - why use space?
         char[] current = new char[1];
@@ -149,7 +149,7 @@ class FunctionParser {
                 } else if (current[0] == '}') {// variable, or function with no parameter list
                     function = CompoundVariable.getNamedFunction(buffer.toString());
                     if (function instanceof Function){// ensure that setParameters() is called.
-                        ((Function) function).setParameters(new LinkedList());
+                        ((Function) function).setParameters(new LinkedList<CompoundVariable>());
                     }
                     buffer.setLength(0);
                     return function;
@@ -177,9 +177,10 @@ class FunctionParser {
      * <li></li>
      * </ul>
      * @param reader a StringReader pointing to the current input location, just after "("
+     * @return a list of CompoundVariable elements
      */
-    LinkedList parseParams(StringReader reader) throws InvalidVariableException {
-        LinkedList result = new LinkedList();
+    LinkedList<CompoundVariable> parseParams(StringReader reader) throws InvalidVariableException {
+        LinkedList<CompoundVariable> result = new LinkedList<CompoundVariable>();
         StringBuffer buffer = new StringBuffer();
         char[] current = new char[1];
         char previous = ' ';

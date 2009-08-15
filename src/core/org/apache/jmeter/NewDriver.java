@@ -50,7 +50,7 @@ public final class NewDriver {
     private static final String jmDir;
 
     static {
-        List jars = new LinkedList();
+        List<URL> jars = new LinkedList<URL>();
         final String initial_classpath = System.getProperty(JAVA_CLASS_PATH);
 
         // Find JMeter home dir from the initial classpath
@@ -120,7 +120,7 @@ public final class NewDriver {
 
         // ClassFinder needs the classpath
         System.setProperty(JAVA_CLASS_PATH, initial_classpath + classpath.toString());
-        loader = new DynamicClassLoader((URL[]) jars.toArray(new URL[0]));
+        loader = new DynamicClassLoader(jars.toArray(new URL[0]));
     }
 
     /**
@@ -196,7 +196,7 @@ public final class NewDriver {
         }
 
         try {
-            Class initialClass;
+            Class<?> initialClass;
             if (args != null && args.length > 0 && args[0].equals("report")) {// $NON-NLS-1$
                 initialClass = loader.loadClass("org.apache.jmeter.JMeterReport");// $NON-NLS-1$
             } else {

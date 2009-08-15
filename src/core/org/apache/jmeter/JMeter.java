@@ -547,11 +547,11 @@ public class JMeter implements JMeterPlugin {
         // Process command line property definitions
         // These can potentially occur multiple times
 
-        List clOptions = parser.getArguments();
+        List<CLOption> clOptions = parser.getArguments();
         int size = clOptions.size();
 
         for (int i = 0; i < size; i++) {
-            CLOption option = (CLOption) clOptions.get(i);
+            CLOption option = clOptions.get(i);
             String name = option.getArgument(0);
             String value = option.getArgument(1);
             FileInputStream fis = null;
@@ -756,7 +756,7 @@ public class JMeter implements JMeterPlugin {
 	            }
             }
             
-            List engines = new LinkedList();
+            List<JMeterEngine> engines = new LinkedList<JMeterEngine>();
             tree.add(tree.getArray()[0], new ListenToTest(parent, (remoteStart && remoteStop) ? engines : null));
             println("Created the tree successfully using "+testFile);
             JMeterEngine engine = null;
@@ -777,9 +777,9 @@ public class JMeter implements JMeterPlugin {
                 println("Starting remote engines");
                 long now=System.currentTimeMillis();
                 println("Starting the test @ "+new Date(now)+" ("+now+")");
-                Iterator iter = engines.iterator();
+                Iterator<JMeterEngine> iter = engines.iterator();
                 while (iter.hasNext()) {
-                    engine = (JMeterEngine) iter.next();
+                    engine = iter.next();
                     if (engine != null){
                         engine.runTest();
                     }
@@ -891,9 +891,9 @@ public class JMeter implements JMeterPlugin {
 
         //NOT YET USED private JMeter _parent;
 
-        private List engines;
+        private List<JMeterEngine> engines;
 
-        public ListenToTest(JMeter parent, List engines) {
+        public ListenToTest(JMeter parent, List<JMeterEngine> engines) {
             //_parent = parent;
             this.engines=engines;
         }
@@ -942,9 +942,9 @@ public class JMeter implements JMeterPlugin {
              */
             if (engines!=null){ // it will be null unless remoteStop = true
                 System.out.println("Exitting remote servers");
-                Iterator it = engines.iterator();
+                Iterator<JMeterEngine> it = engines.iterator();
                 while(it.hasNext()){
-                    JMeterEngine e = (JMeterEngine) it.next();
+                    JMeterEngine e = it.next();
                     e.exit();
                 }
             }
@@ -997,7 +997,7 @@ public class JMeter implements JMeterPlugin {
         }
         log.info("Loaded icon properties from " + iconProp);
         String[][] iconlist = new String[p.size()][3];
-        Enumeration pe = p.keys();
+        Enumeration<?> pe = p.keys();
         int i = 0;
         while (pe.hasMoreElements()) {
             String key = (String) pe.nextElement();
