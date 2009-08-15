@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -46,7 +47,7 @@ public class JLabeledTextArea extends JPanel implements JLabeledField, FocusList
     private JTextArea mTextArea;
 
     // Maybe move to vector if MT problems occur
-    private ArrayList mChangeListeners = new ArrayList(3);
+    private final ArrayList<ChangeListener> mChangeListeners = new ArrayList<ChangeListener>(3);
 
     // A temporary cache for the focus listener
     private String oldValue = "";
@@ -84,8 +85,9 @@ public class JLabeledTextArea extends JPanel implements JLabeledField, FocusList
         }
     }
 
-    public List getComponentList() {
-        List comps = new LinkedList();
+    /** {@inheritDoc} */
+    public List<JComponent> getComponentList() {
+        List<JComponent> comps = new LinkedList<JComponent>();
         comps.add(mLabel);
         comps.add(mTextArea);
         return comps;
@@ -173,6 +175,7 @@ public class JLabeledTextArea extends JPanel implements JLabeledField, FocusList
         return mLabel.getText();
     }
 
+    /** {@inheritDoc} */
     @Override
     public void setEnabled(boolean enable) {
         super.setEnabled(enable);
@@ -229,7 +232,7 @@ public class JLabeledTextArea extends JPanel implements JLabeledField, FocusList
     private void notifyChangeListeners() {
         ChangeEvent ce = new ChangeEvent(this);
         for (int index = 0; index < mChangeListeners.size(); index++) {
-            ((ChangeListener) mChangeListeners.get(index)).stateChanged(ce);
+            mChangeListeners.get(index).stateChanged(ce);
         }
     }
 }
