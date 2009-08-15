@@ -74,4 +74,18 @@ public class TestStatCalculator extends TestCase {
         assertEquals(3, calc.getMin().intValue());
         assertEquals(15, calc.getMedian().intValue());
     }
+    public void testLong(){
+        calc.addValue(0L);
+        calc.addValue(2L);
+        assertEquals(Long.valueOf(2),calc.getMax());
+        assertEquals(Long.valueOf(0),calc.getMin());
+        calc.getDistribution();
+    }
+    public void testInteger(){
+        calc.addValue(0);
+        calc.addValue(2);
+        assertEquals(Integer.valueOf(2),calc.getMax());
+        assertEquals(Integer.valueOf(0),calc.getMin());
+//        calc.getDistribution(); // currently fails with ClassCastException
+    }
 }
