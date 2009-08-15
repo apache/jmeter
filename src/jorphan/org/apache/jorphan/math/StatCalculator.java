@@ -27,6 +27,10 @@ import java.util.List;
 /**
  * This class serves as a way to calculate the median of a list of values. It is
  * not threadsafe.
+ * 
+ * TODO - currently only works properly for Long (because getDistribution() assumes Long)
+ * Will never work for mixed values (e.g. Long and Integer) so should probably be converted to
+ * typed class.
  */
 public class StatCalculator {
     List values = new ArrayList();
@@ -136,7 +140,7 @@ public class StatCalculator {
         Iterator itr = this.values.iterator();
         Number[] dis;
         while (itr.hasNext()) {
-            Long nx = (Long) itr.next();
+            Long nx = (Long) itr.next(); // TODO this assumes the entries are all Long
             if (items.containsKey(nx)) {
                 dis = (Number[]) items.get(nx);
                 dis[1] = new Integer(dis[1].intValue() + 1);

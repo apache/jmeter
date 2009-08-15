@@ -29,37 +29,37 @@ import org.apache.jmeter.config.ConfigElement;
 // TODO - not used at present - could perhaps be removed
 public class Entry {
 
-    private Map configSet;
+    private Map<Class<?>, ConfigElement> configSet;
 
     // Set clonedSet;
-    private Class sampler;
+    private Class<?> sampler;
 
-    private List assertions;
+    private List<Assertion> assertions;
 
     public Entry() {
-        configSet = new HashMap();
+        configSet = new HashMap<Class<?>, ConfigElement>();
         // clonedSet = new HashSet();
-        assertions = new LinkedList();
+        assertions = new LinkedList<Assertion>();
     }
 
     public void addAssertion(Assertion assertion) {
         assertions.add(assertion);
     }
 
-    public List getAssertions() {
+    public List<Assertion> getAssertions() {
         return assertions;
     }
 
-    public void setSamplerClass(Class samplerClass) {
+    public void setSamplerClass(Class<?> samplerClass) {
         this.sampler = samplerClass;
     }
 
-    public Class getSamplerClass() {
+    public Class<?> getSamplerClass() {
         return this.sampler;
     }
 
-    public ConfigElement getConfigElement(Class configClass) {
-        return (ConfigElement) configSet.get(configClass);
+    public ConfigElement getConfigElement(Class<?> configClass) {
+        return configSet.get(configClass);
     }
 
     public void addConfigElement(ConfigElement config) {
@@ -70,9 +70,9 @@ public class Entry {
      * Add a config element as a specific class. Usually this is done to add a
      * subclass as one of it's parent classes.
      */
-    public void addConfigElement(ConfigElement config, Class asClass) {
+    public void addConfigElement(ConfigElement config, Class<?> asClass) {
         if (config != null) {
-            ConfigElement current = (ConfigElement) configSet.get(asClass);
+            ConfigElement current = configSet.get(asClass);
             if (current == null) {
                 configSet.put(asClass, cloneIfNecessary(config));
             } else {
