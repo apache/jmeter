@@ -38,31 +38,40 @@ import org.apache.log.Logger;
 public class SamplePackage {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    List sampleListeners = new LinkedList();
+    private List<SampleListener> sampleListeners = new LinkedList<SampleListener>();
 
-    List timers = new LinkedList();
+    private List<Timer> timers = new LinkedList<Timer>();
 
-    List assertions = new LinkedList();
+    private List<Assertion> assertions = new LinkedList<Assertion>();
 
-    List postProcessors = new LinkedList();
+    private List<PostProcessor> postProcessors = new LinkedList<PostProcessor>();
 
-    List preProcessors = new LinkedList();
+    private List<PreProcessor> preProcessors = new LinkedList<PreProcessor>();
 
-    List responseModifiers;
+    // TODO the following lists don't seem to be used at present
+    private List responseModifiers;
 
-    List configs;
+    private List configs;
 
-    List modifiers;
+    private List modifiers;
 
-    List controllers;
+    private List controllers;
 
-    Sampler sampler;
+    private Sampler sampler;
 
     public SamplePackage() {
     }
 
-    public SamplePackage(List configs, List modifiers, List responseModifiers, List listeners, List timers,
-            List assertions, List extractors, List pres, List controllers) {
+    public SamplePackage(
+            List configs,
+            List modifiers,
+            List responseModifiers, 
+            List<SampleListener> listeners,
+            List<Timer> timers,
+            List<Assertion> assertions, 
+            List<PostProcessor> postProcessors, 
+            List<PreProcessor> preProcessors,
+            List controllers) {
         log.debug("configs is null: " + (configs == null));
         this.configs = configs;
         this.modifiers = modifiers;
@@ -70,8 +79,8 @@ public class SamplePackage {
         this.sampleListeners = listeners;
         this.timers = timers;
         this.assertions = assertions;
-        this.postProcessors = extractors;
-        this.preProcessors = pres;
+        this.postProcessors = postProcessors;
+        this.preProcessors = preProcessors;
         this.controllers = controllers;
     }
 
@@ -88,6 +97,7 @@ public class SamplePackage {
         sampler.setRunningVersion(running);
     }
 
+    // TODO: Unfortunately, few of the test element interfaces implement TestElement
     private void setRunningVersion(List list, boolean running) {
         Iterator iter = list.iterator();
         while (iter.hasNext()) {
@@ -115,7 +125,7 @@ public class SamplePackage {
         sampler.recoverRunningVersion();
     }
 
-    public List getSampleListeners() {
+    public List<SampleListener> getSampleListeners() {
         return sampleListeners;
     }
 
@@ -123,7 +133,7 @@ public class SamplePackage {
         sampleListeners.add(listener);
     }
 
-    public List getTimers() {
+    public List<Timer> getTimers() {
         return timers;
     }
 
@@ -143,11 +153,11 @@ public class SamplePackage {
         assertions.add(asser);
     }
 
-    public List getAssertions() {
+    public List<Assertion> getAssertions() {
         return assertions;
     }
 
-    public List getPostProcessors() {
+    public List<PostProcessor> getPostProcessors() {
         return postProcessors;
     }
 
@@ -162,7 +172,7 @@ public class SamplePackage {
     /**
      * Returns the preProcessors.
      */
-    public List getPreProcessors() {
+    public List<PreProcessor> getPreProcessors() {
         return preProcessors;
     }
 
@@ -172,7 +182,7 @@ public class SamplePackage {
      * @param preProcessors
      *            the preProcessors to set
      */
-    public void setPreProcessors(List preProcessors) {
+    public void setPreProcessors(List<PreProcessor> preProcessors) {
         this.preProcessors = preProcessors;
     }
 
@@ -235,7 +245,7 @@ public class SamplePackage {
      * @param postProcessors
      *            the postProcessors to set
      */
-    public void setPostProcessors(List postProcessors) {
+    public void setPostProcessors(List<PostProcessor> postProcessors) {
         this.postProcessors = postProcessors;
     }
 
@@ -255,7 +265,7 @@ public class SamplePackage {
      * @param sampleListeners
      *            the sampleListeners to set
      */
-    public void setSampleListeners(List sampleListeners) {
+    public void setSampleListeners(List<SampleListener> sampleListeners) {
         this.sampleListeners = sampleListeners;
     }
 
@@ -265,7 +275,7 @@ public class SamplePackage {
      * @param timers
      *            the timers to set
      */
-    public void setTimers(List timers) {
+    public void setTimers(List<Timer> timers) {
         this.timers = timers;
     }
 }

@@ -18,8 +18,6 @@
 
 package org.apache.jmeter.visualizers;
 
-import java.util.Collection;
-
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 
@@ -67,12 +65,8 @@ public class SplineModel implements Clearable {
         return dataCurve;
     }
 
-    public Class getGuiClass() {
+    public Class<?> getGuiClass() {
         return org.apache.jmeter.visualizers.SplineVisualizer.class;
-    }
-
-    public Collection getAddList() {
-        return null;
     }
 
     public long getMinimum() {

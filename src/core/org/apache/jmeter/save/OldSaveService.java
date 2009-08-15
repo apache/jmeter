@@ -94,7 +94,7 @@ public final class OldSaveService {
 
 
     public static void saveSubTree(HashTree subTree, OutputStream writer) throws IOException {
-        Configuration config = (Configuration) getConfigsFromTree(subTree).get(0);
+        Configuration config = getConfigsFromTree(subTree).get(0);
         DefaultConfigurationSerializer saver = new DefaultConfigurationSerializer();
 
         saver.setIndent(true);
@@ -143,20 +143,20 @@ public final class OldSaveService {
         return result;
     }
 
-    private static List getConfigsFromTree(HashTree subTree) {
-        Iterator iter = subTree.list().iterator();
-        List configs = new LinkedList();
+    private static List<Configuration> getConfigsFromTree(HashTree subTree) {
+        Iterator<TestElement> iter = subTree.list().iterator();
+        List<Configuration> configs = new LinkedList<Configuration>();
 
         while (iter.hasNext()) {
-            TestElement item = (TestElement) iter.next();
+            TestElement item = iter.next();
             DefaultConfiguration config = new DefaultConfiguration("node", "node"); // $NON-NLS-1$ // $NON-NLS-2$
 
             config.addChild(getConfigForTestElement(null, item));
-            List configList = getConfigsFromTree(subTree.getTree(item));
-            Iterator iter2 = configList.iterator();
+            List<Configuration> configList = getConfigsFromTree(subTree.getTree(item));
+            Iterator<Configuration> iter2 = configList.iterator();
 
             while (iter2.hasNext()) {
-                config.addChild((Configuration) iter2.next());
+                config.addChild(iter2.next());
             }
             configs.add(config);
         }
@@ -374,9 +374,9 @@ public final class OldSaveService {
         return element;
     }
 
-    private static Collection createCollection(Configuration config, String testClass) throws ConfigurationException,
+    private static Collection<JMeterProperty> createCollection(Configuration config, String testClass) throws ConfigurationException,
             ClassNotFoundException, IllegalAccessException, InstantiationException {
-        Collection coll = (Collection) Class.forName(config.getAttribute("class")).newInstance(); // $NON-NLS-1$
+        Collection<JMeterProperty> coll = (Collection<JMeterProperty>) Class.forName(config.getAttribute("class")).newInstance(); // $NON-NLS-1$
         Configuration[] items = config.getChildren();
 
         for (int i = 0; i < items.length; i++) {
@@ -432,9 +432,9 @@ public final class OldSaveService {
         return prop;
     }
 
-    private static Map createMap(Configuration config, String testClass) throws ConfigurationException,
+    private static Map<String, JMeterProperty> createMap(Configuration config, String testClass) throws ConfigurationException,
             ClassNotFoundException, IllegalAccessException, InstantiationException {
-        Map map = (Map) Class.forName(config.getAttribute("class")).newInstance();
+        Map<String, JMeterProperty> map = (Map<String, JMeterProperty>) Class.forName(config.getAttribute("class")).newInstance();
         Configuration[] items = config.getChildren();
 
         for (int i = 0; i < items.length; i++) {

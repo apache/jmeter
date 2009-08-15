@@ -72,19 +72,19 @@ public final class GuiPackage implements LocaleChangeListener {
      * Map from TestElement to JMeterGUIComponent, mapping the nodes in the tree
      * to their corresponding GUI components.
      */
-    private Map nodesToGui = new HashMap();
+    private Map<TestElement, JMeterGUIComponent> nodesToGui = new HashMap<TestElement, JMeterGUIComponent>();
 
     /**
      * Map from Class to JMeterGUIComponent, mapping the Class of a GUI
      * component to an instance of that component.
      */
-    private Map guis = new HashMap();
+    private Map<Class<?>, JMeterGUIComponent> guis = new HashMap<Class<?>, JMeterGUIComponent>();
 
     /**
      * Map from Class to TestBeanGUI, mapping the Class of a TestBean to an
      * instance of TestBeanGUI to be used to edit such components.
      */
-    private Map testBeanGUIs = new HashMap();
+    private Map<Class<?>, JMeterGUIComponent> testBeanGUIs = new HashMap<Class<?>, JMeterGUIComponent>();
 
     /** The currently selected node in the tree. */
     private JMeterTreeNode currentNode = null;
@@ -155,13 +155,13 @@ public final class GuiPackage implements LocaleChangeListener {
         String testClassName = node.getPropertyAsString(TestElement.TEST_CLASS);
         String guiClassName = node.getPropertyAsString(TestElement.GUI_CLASS);
         try {
-            Class testClass;
+            Class<?> testClass;
             if (testClassName.equals("")) { // $NON-NLS-1$
                 testClass = node.getClass();
             } else {
                 testClass = Class.forName(testClassName);
             }
-            Class guiClass = null;
+            Class<?> guiClass = null;
             if (!guiClassName.equals("")) { // $NON-NLS-1$
                 guiClass = Class.forName(guiClassName);
             }
@@ -190,9 +190,9 @@ public final class GuiPackage implements LocaleChangeListener {
      *
      * @return the GUI component corresponding to the specified test element
      */
-    public JMeterGUIComponent getGui(TestElement node, Class guiClass, Class testClass) {
+    public JMeterGUIComponent getGui(TestElement node, Class<?> guiClass, Class<?> testClass) {
         try {
-            JMeterGUIComponent comp = (JMeterGUIComponent) nodesToGui.get(node);
+            JMeterGUIComponent comp = nodesToGui.get(node);
             if (comp == null) {
                 comp = getGuiFromCache(guiClass, testClass);
                 nodesToGui.put(node, comp);
@@ -259,7 +259,7 @@ public final class GuiPackage implements LocaleChangeListener {
      *            this GUI component.
      * @return the test element corresponding to the specified GUI class.
      */
-    public TestElement createTestElement(Class guiClass, Class testClass) {
+    public TestElement createTestElement(Class<?> guiClass, Class<?> testClass) {
         try {
             JMeterGUIComponent comp = getGuiFromCache(guiClass, testClass);
             comp.clearGui();
@@ -285,7 +285,7 @@ public final class GuiPackage implements LocaleChangeListener {
      */
     public TestElement createTestElement(String objClass) {
         JMeterGUIComponent comp;
-        Class c;
+        Class<?> c;
         try {
             c = Class.forName(objClass);
             if (TestBean.class.isAssignableFrom(c)) {
@@ -344,17 +344,17 @@ public final class GuiPackage implements LocaleChangeListener {
      * @throws ClassNotFoundException
      *             if the specified GUI class cannot be found
      */
-    private JMeterGUIComponent getGuiFromCache(Class guiClass, Class testClass) throws InstantiationException,
+    private JMeterGUIComponent getGuiFromCache(Class<?> guiClass, Class<?> testClass) throws InstantiationException,
             IllegalAccessException {
         JMeterGUIComponent comp;
         if (guiClass == TestBeanGUI.class) {
-            comp = (TestBeanGUI) testBeanGUIs.get(testClass);
+            comp = testBeanGUIs.get(testClass);
             if (comp == null) {
                 comp = new TestBeanGUI(testClass);
                 testBeanGUIs.put(testClass, comp);
             }
         } else {
-            comp = (JMeterGUIComponent) guis.get(guiClass);
+            comp = guis.get(guiClass);
             if (comp == null) {
                 comp = (JMeterGUIComponent) guiClass.newInstance();
                 if (!(comp instanceof UnsharedComponent)) {
@@ -576,9 +576,9 @@ public final class GuiPackage implements LocaleChangeListener {
 
         // Forget about all GUIs we've created so far: we'll need to re-created
         // them all!
-        guis = new HashMap();
-        nodesToGui = new HashMap();
-        testBeanGUIs = new HashMap();
+        guis = new HashMap<Class<?>, JMeterGUIComponent>();
+        nodesToGui = new HashMap<TestElement, JMeterGUIComponent>();
+        testBeanGUIs = new HashMap<Class<?>, JMeterGUIComponent>();
 
         // BeanInfo objects also contain locale-sensitive data -- flush them
         // away:

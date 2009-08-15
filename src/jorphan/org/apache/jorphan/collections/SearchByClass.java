@@ -52,11 +52,11 @@ import java.util.Map;
  * @version $Revision$
  */
 public class SearchByClass implements HashTreeTraverser {
-    List objectsOfClass = new LinkedList();
+    List<Object> objectsOfClass = new LinkedList<Object>();
 
-    Map subTrees = new HashMap();
+    Map<Object, ListedHashTree> subTrees = new HashMap<Object, ListedHashTree>();
 
-    Class searchClass = null;
+    Class<?> searchClass = null;
 
     /**
      * Creates an instance of SearchByClass. However, without setting the Class
@@ -71,7 +71,7 @@ public class SearchByClass implements HashTreeTraverser {
      *
      * @param searchClass
      */
-    public SearchByClass(Class searchClass) {
+    public SearchByClass(Class<?> searchClass) {
         this.searchClass = searchClass;
     }
 
@@ -94,7 +94,7 @@ public class SearchByClass implements HashTreeTraverser {
      * @return HashTree
      */
     public HashTree getSubTree(Object root) {
-        return (HashTree) subTrees.get(root);
+        return subTrees.get(root);
     }
 
     public void addNode(Object node, HashTree subTree) {

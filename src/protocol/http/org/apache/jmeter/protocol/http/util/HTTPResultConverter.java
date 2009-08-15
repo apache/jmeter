@@ -60,6 +60,7 @@ public class HTTPResultConverter extends SampleResultConverter {
      *
      * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
      */
+    @SuppressWarnings("unchecked") // superclass does not support types
     @Override
     public boolean canConvert(Class arg0) {
         return HTTPSampleResult.class.equals(arg0);
