@@ -24,6 +24,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JCheckBox;
@@ -131,10 +132,10 @@ implements ChangeListener, ActionListener
     private JComboBox classnameCombo;
     private JComboBox methodName;
     private transient TestCase TESTCLASS = null;
-    private List METHODLIST = null;
+    private List<String> METHODLIST = null;
 
     private transient ClassFilter FILTER = new ClassFilter();
-    private List CLASSLIST = null;
+    private List<String> CLASSLIST = null;
 
     /**
      * Constructor for JUnitTestSamplerGui
@@ -166,7 +167,7 @@ implements ChangeListener, ActionListener
 
     private JPanel createClassPanel()
     {
-        METHODLIST = new java.util.ArrayList();
+        METHODLIST = new ArrayList<String>();
 
         try
         {
@@ -346,7 +347,7 @@ implements ChangeListener, ActionListener
     public void configureMethodCombo(){
         if (TESTCLASS != null) {
             clearMethodCombo();
-            String [] names = getMethodNames(getMethods(TESTCLASS,METHODLIST));
+            String [] names = getMethodNames(getMethods(TESTCLASS));
             for (int idx=0; idx < names.length; idx++){
                 methodName.addItem(names[idx]);
                 METHODLIST.add(names[idx]);
@@ -360,9 +361,10 @@ implements ChangeListener, ActionListener
         METHODLIST.clear();
     }
 
-    public Method[] getMethods(Object obj, List list)
+    public Method[] getMethods(Object obj)
     {
         Method[] meths = obj.getClass().getMethods();
+        List<Method> list = new ArrayList<Method>();
         for (int idx=0; idx < meths.length; idx++){
             if (meths[idx].getName().startsWith(PREFIX) ||
                     meths[idx].getName().equals(ONETIMESETUP) ||
@@ -373,7 +375,7 @@ implements ChangeListener, ActionListener
         }
         if (list.size() > 0){
             Method[] rmeth = new Method[list.size()];
-            return (Method[])list.toArray(rmeth);
+            return list.toArray(rmeth);
         }
         return new Method[0];
     }
@@ -387,9 +389,9 @@ implements ChangeListener, ActionListener
         return names;
     }
 
-    public Class[] filterClasses(Class[] clz) {
+    public Class<?>[] filterClasses(Class<?>[] clz) {
         if (clz != null && clz.length > 0){
-            Class[] nclz = null;
+            Class<?>[] nclz = null;
             return nclz;
         }
         return clz;
