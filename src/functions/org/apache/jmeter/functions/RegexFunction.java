@@ -58,7 +58,7 @@ public class RegexFunction extends AbstractFunction {
 
     private static final Random rand = new Random();
 
-    private static final List desc = new LinkedList();
+    private static final List<String> desc = new LinkedList<String>();
 
     private static final String TEMPLATE_PATTERN = "\\$(\\d+)\\$";  //$NON-NLS-1$
     /** initialised to the regex \$(\d+)\$ */
@@ -83,6 +83,7 @@ public class RegexFunction extends AbstractFunction {
                 Perl5Compiler.READ_ONLY_MASK);
     }
 
+    /** {@inheritDoc} */
     @Override
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
@@ -148,7 +149,7 @@ public class RegexFunction extends AbstractFunction {
             return defaultValue;
         }
 
-        List collectAllMatches = new ArrayList();
+        List<MatchResult> collectAllMatches = new ArrayList<MatchResult>();
         try {
             PatternMatcher matcher = JMeterUtils.getMatcher();
             PatternMatcherInput input = new PatternMatcherInput(textToMatch);
@@ -171,7 +172,7 @@ public class RegexFunction extends AbstractFunction {
 
         if (valueIndex.equals(ALL)) {
             StringBuffer value = new StringBuffer();
-            Iterator it = collectAllMatches.iterator();
+            Iterator<MatchResult> it = collectAllMatches.iterator();
             boolean first = true;
             while (it.hasNext()) {
                 if (!first) {
@@ -179,20 +180,20 @@ public class RegexFunction extends AbstractFunction {
                 } else {
                     first = false;
                 }
-                value.append(generateResult((MatchResult) it.next(), name, tmplt, vars));
+                value.append(generateResult(it.next(), name, tmplt, vars));
             }
             return value.toString();
         } else if (valueIndex.equals(RAND)) {
-            MatchResult result = (MatchResult) collectAllMatches.get(rand.nextInt(collectAllMatches.size()));
+            MatchResult result = collectAllMatches.get(rand.nextInt(collectAllMatches.size()));
             return generateResult(result, name, tmplt, vars);
         } else {
             try {
                 int index = Integer.parseInt(valueIndex) - 1;
-                MatchResult result = (MatchResult) collectAllMatches.get(index);
+                MatchResult result = collectAllMatches.get(index);
                 return generateResult(result, name, tmplt, vars);
             } catch (NumberFormatException e) {
                 float ratio = Float.parseFloat(valueIndex);
-                MatchResult result = (MatchResult) collectAllMatches
+                MatchResult result = collectAllMatches
                         .get((int) (collectAllMatches.size() * ratio + .5) - 1);
                 return generateResult(result, name, tmplt, vars);
             } catch (IndexOutOfBoundsException e) {
@@ -210,7 +211,8 @@ public class RegexFunction extends AbstractFunction {
         }
     }
 
-    public List getArgumentDesc() {
+    /** {@inheritDoc} */
+    public List<String> getArgumentDesc() {
         return desc;
     }
 
@@ -230,20 +232,23 @@ public class RegexFunction extends AbstractFunction {
         return result.toString();
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getReferenceKey() {
         return KEY;
     }
 
+    /** {@inheritDoc} */
     @Override
-    public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
+    public synchronized void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
         checkParameterCount(parameters, MIN_PARAMETER_COUNT, MAX_PARAMETER_COUNT);
         values = parameters.toArray();
     }
 
     private Object[] generateTemplate(String rawTemplate) {
-        List pieces = new ArrayList();
-        List combined = new LinkedList();
+        List<String> pieces = new ArrayList<String>();
+        // String or Integer
+        List<Object> combined = new LinkedList<Object>();
         PatternMatcher matcher = JMeterUtils.getMatcher();
         Util.split(pieces, matcher, templatePattern, rawTemplate);
         PatternMatcherInput input = new PatternMatcherInput(rawTemplate);
@@ -251,7 +256,7 @@ public class RegexFunction extends AbstractFunction {
         if (startsWith) {
             pieces.remove(0);// Remove initial empty entry
         }
-        Iterator iter = pieces.iterator();
+        Iterator<String> iter = pieces.iterator();
         while (iter.hasNext()) {
             boolean matchExists = matcher.contains(input, templatePattern);
             if (startsWith) {

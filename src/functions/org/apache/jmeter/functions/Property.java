@@ -44,7 +44,7 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class Property extends AbstractFunction {
 
-    private static final List desc = new LinkedList();
+    private static final List<String> desc = new LinkedList<String>();
 
     private static final String KEY = "__property"; //$NON-NLS-1$
 
@@ -63,6 +63,7 @@ public class Property extends AbstractFunction {
     public Property() {
     }
 
+    /** {@inheritDoc} */
     @Override
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
@@ -85,18 +86,21 @@ public class Property extends AbstractFunction {
 
     }
 
+    /** {@inheritDoc} */
     @Override
-    public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
+    public synchronized void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
         checkParameterCount(parameters, MIN_PARAMETER_COUNT, MAX_PARAMETER_COUNT);
         values = parameters.toArray();
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getReferenceKey() {
         return KEY;
     }
 
-    public List getArgumentDesc() {
+    /** {@inheritDoc} */
+    public List<String> getArgumentDesc() {
         return desc;
     }
 

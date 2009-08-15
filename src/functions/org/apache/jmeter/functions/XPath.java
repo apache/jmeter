@@ -54,7 +54,7 @@ public class XPath extends AbstractFunction {
     // }
     private static final String KEY = "__XPath"; // Function name //$NON-NLS-1$
 
-    private static final List desc = new LinkedList();
+    private static final List<String> desc = new LinkedList<String>();
 
     private Object[] values; // Parameter list
 
@@ -66,9 +66,7 @@ public class XPath extends AbstractFunction {
     public XPath() {
     }
 
-    /**
-     * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
@@ -90,26 +88,20 @@ public class XPath extends AbstractFunction {
         return myValue;
     }
 
-    /**
-     * @see org.apache.jmeter.functions.Function#getArgumentDesc()
-     */
-    public List getArgumentDesc() {
+    /** {@inheritDoc} */
+    public List<String> getArgumentDesc() {
         return desc;
     }
 
-    /**
-     * @see org.apache.jmeter.functions.Function#getReferenceKey()
-     */
+    /** {@inheritDoc} */
     @Override
     public String getReferenceKey() {
         return KEY;
     }
 
-    /**
-     * @see org.apache.jmeter.functions.Function#setParameters(Collection)
-     */
+    /** {@inheritDoc} */
     @Override
-    public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
+    public synchronized void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
         log.debug("setParameter - Collection.size=" + parameters.size());
 
         values = parameters.toArray();
