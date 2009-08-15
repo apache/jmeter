@@ -110,7 +110,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
     private int previousDragYLocation = 0;
 
     /** The set of currently running hosts. */
-    private Set hosts = new HashSet();
+    private Set<String> hosts = new HashSet<String>();
 
     /** A message dialog shown while JMeter threads are stopping. */
     private JDialog stoppingMessage;
