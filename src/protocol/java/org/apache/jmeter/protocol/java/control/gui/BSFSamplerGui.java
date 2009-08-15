@@ -145,9 +145,9 @@ public class BSFSamplerGui extends AbstractSamplerGui {
         Properties p = JMeterUtils.loadProperties("org/apache/bsf/Languages.properties"); // $NON-NLS-1$
         // We have added Jexl in BSFSampler.
         p.put("jexl", ""); // $NON-NLS-1$
-        Set keySet = p.keySet();
+        Set<Object> keySet = p.keySet();
         // TODO - perhaps weed out ones which don't exist?
-        String [] items = (String[]) keySet.toArray(new String[]{});
+        String [] items = keySet.toArray(new String[]{});
         Arrays.sort(items);
 
         langField = new JComboBox(items);

@@ -72,7 +72,7 @@ public class JavaSampler extends AbstractSampler implements TestListener {
      * Set used to register all active JavaSamplers. This is used so that the
      * samplers can be notified when the test ends.
      */
-    private static final Set allSamplers = new HashSet();
+    private static final Set<JavaSampler> allSamplers = new HashSet<JavaSampler>();
 
     /**
      * Create a JavaSampler.
@@ -180,7 +180,7 @@ public class JavaSampler extends AbstractSampler implements TestListener {
     private JavaSamplerClient createJavaClient() {
         if (javaClient == null) {
             try {
-                Class javaClass = Class.forName(getClassname().trim(), false, Thread.currentThread()
+                Class<?> javaClass = Class.forName(getClassname().trim(), false, Thread.currentThread()
                         .getContextClassLoader());
                 javaClient = (JavaSamplerClient) javaClass.newInstance();
                 context = new JavaSamplerContext(getArguments());
@@ -243,9 +243,9 @@ public class JavaSampler extends AbstractSampler implements TestListener {
     public void testEnded() {
         log.debug(whoAmI() + "\ttestEnded");
         synchronized (allSamplers) {
-            Iterator i = allSamplers.iterator();
+            Iterator<JavaSampler> i = allSamplers.iterator();
             while (i.hasNext()) {
-                JavaSampler sampler = (JavaSampler) i.next();
+                JavaSampler sampler = i.next();
                 sampler.releaseJavaClient();
                 i.remove();
             }

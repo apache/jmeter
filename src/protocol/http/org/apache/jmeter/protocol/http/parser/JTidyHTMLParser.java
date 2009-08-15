@@ -56,7 +56,7 @@ class JTidyHTMLParser extends HTMLParser {
      *      java.net.URL)
      */
     @Override
-    public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection urls) throws HTMLParseException {
+    public Iterator<URL> getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection urls) throws HTMLParseException {
         Document dom = null;
         try {
             dom = (Document) getDOM(html);

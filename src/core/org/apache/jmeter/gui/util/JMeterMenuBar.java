@@ -60,7 +60,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
     private JMenuItem file_load;
 
-    private List file_load_recent_files;
+    private List<JComponent> file_load_recent_files;
 
     private JMenuItem file_merge;
 
@@ -83,7 +83,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
     private JMenuItem remote_start_all;
 
-    private Collection remote_engine_start;
+    private Collection<JMenuItem> remote_engine_start;
 
     private JMenuItem run_stop;
 
@@ -93,7 +93,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
     private JMenuItem remote_stop_all;
 
-    private Collection remote_engine_stop;
+    private Collection<JMenuItem> remote_engine_stop;
 
     private JMenuItem run_clear;
 
@@ -117,15 +117,15 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
     private JMenuItem remote_exit_all;
 
-    private Collection remote_engine_exit;
+    private Collection<JMenuItem> remote_engine_exit;
 
     public JMeterMenuBar() {
         // List for recent files menu items
-        file_load_recent_files = new LinkedList();
+        file_load_recent_files = new LinkedList<JComponent>();
         // Lists for remote engines menu items
-        remote_engine_start = new LinkedList();
-        remote_engine_stop = new LinkedList();
-        remote_engine_exit = new LinkedList();
+        remote_engine_start = new LinkedList<JMenuItem>();
+        remote_engine_stop = new LinkedList<JMenuItem>();
+        remote_engine_exit = new LinkedList<JMenuItem>();
         remoteHosts = JOrphanUtils.split(JMeterUtils.getPropDefault("remote_hosts", ""), ","); //$NON-NLS-1$
         if (remoteHosts.length == 1 && remoteHosts[0].equals("")) {
             remoteHosts = new String[0];
@@ -333,7 +333,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
      */
     // Also used by org.apache.jmeter.resources.PackageTest
     public static String[] getLanguages(){
-        List lang = new ArrayList(20);
+        List<String> lang = new ArrayList<String>(20);
         lang.add(Locale.ENGLISH.toString()); // en
         lang.add(Locale.FRENCH.toString()); // fr
         lang.add(Locale.GERMAN.toString()); // de
@@ -353,7 +353,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
                 lang.add(addLanguages[i]);
             }
         }
-        return (String[]) lang.toArray(new String[lang.size()]);
+        return lang.toArray(new String[lang.size()]);
     }
 
     static JMenu makeLanguageMenu() {
@@ -470,8 +470,8 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         // Add the recent files, which will also add a separator that is
         // visible when needed
         file_load_recent_files = LoadRecentProject.getRecentFileMenuItems();
-        for(Iterator i = file_load_recent_files.iterator(); i.hasNext();) {
-            fileMenu.add((JComponent)i.next());
+        for(Iterator<JComponent> i = file_load_recent_files.iterator(); i.hasNext();) {
+            fileMenu.add(i.next());
         }
         fileMenu.add(file_exit);
     }
@@ -479,13 +479,13 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     public void setRunning(boolean running, String host) {
         log.info("setRunning(" + running + "," + host + ")");
 
-        Iterator iter = remote_engine_start.iterator();
-        Iterator iter2 = remote_engine_stop.iterator();
-        Iterator iter3 = remote_engine_exit.iterator();
+        Iterator<JMenuItem> iter = remote_engine_start.iterator();
+        Iterator<JMenuItem> iter2 = remote_engine_stop.iterator();
+        Iterator<JMenuItem> iter3 = remote_engine_exit.iterator();
         while (iter.hasNext() && iter2.hasNext() && iter3.hasNext()) {
-            JMenuItem start = (JMenuItem) iter.next();
-            JMenuItem stop = (JMenuItem) iter2.next();
-            JMenuItem exit = (JMenuItem) iter3.next();
+            JMenuItem start = iter.next();
+            JMenuItem stop = iter2.next();
+            JMenuItem exit = iter3.next();
             if (start.getText().equals(host)) {
                 log.debug("Found start host: " + start.getText());
                 start.setEnabled(!running);
@@ -501,6 +501,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void setEnabled(boolean enable) {
         run_start.setEnabled(!enable);
@@ -534,10 +535,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         }
     }
 
-    /**
-     * Processes a locale change notification. 
-     * Changes the texts in all menus to the new language.
-     */
+    /** {@inheritDoc} */
     public void localeChanged(LocaleChangeEvent event) {
         updateMenuElement(fileMenu);
         updateMenuElement(editMenu);

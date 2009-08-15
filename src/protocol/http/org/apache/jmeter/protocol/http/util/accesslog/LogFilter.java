@@ -98,9 +98,9 @@ public class LogFilter implements Filter, Serializable {
 
     protected boolean PTRNFILTER = false;
 
-    protected ArrayList EXCPATTERNS = new ArrayList();
+    protected ArrayList<Pattern> EXCPATTERNS = new ArrayList<Pattern>();
 
-    protected ArrayList INCPATTERNS = new ArrayList();
+    protected ArrayList<Pattern> INCPATTERNS = new ArrayList<Pattern>();
 
     protected String NEWFILE = null;
 
@@ -329,7 +329,7 @@ public class LogFilter implements Filter, Serializable {
     protected boolean incPattern(String text) {
         this.USEFILE = false;
         for (int idx = 0; idx < this.INCPATTERNS.size(); idx++) {
-            if (JMeterUtils.getMatcher().contains(text, (Pattern) this.INCPATTERNS.get(idx))) {
+            if (JMeterUtils.getMatcher().contains(text, this.INCPATTERNS.get(idx))) {
                 this.USEFILE = true;
                 break;
             }
@@ -348,7 +348,7 @@ public class LogFilter implements Filter, Serializable {
         this.USEFILE = true;
         boolean exc = false;
         for (int idx = 0; idx < this.EXCPATTERNS.size(); idx++) {
-            if (JMeterUtils.getMatcher().contains(text, (Pattern) this.EXCPATTERNS.get(idx))) {
+            if (JMeterUtils.getMatcher().contains(text, this.EXCPATTERNS.get(idx))) {
                 exc = true;
                 this.USEFILE = false;
                 break;
