@@ -45,7 +45,7 @@ public class JexlFunction extends AbstractFunction {
 
     private static final String KEY = "__jexl"; //$NON-NLS-1$
 
-    private static final List desc = new LinkedList();
+    private static final List<String> desc = new LinkedList<String>();
 
     static
     {
@@ -55,6 +55,7 @@ public class JexlFunction extends AbstractFunction {
 
     private Object[] values;
 
+    /** {@inheritDoc} */
     @Override
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException
@@ -76,7 +77,7 @@ public class JexlFunction extends AbstractFunction {
         {
             Script script = ScriptFactory.createScript(exp);
             JexlContext jc = JexlHelper.createContext();
-            final Map jexlVars = jc.getVars();
+            final Map<String, Object> jexlVars = jc.getVars();
             jexlVars.put("log", log); //$NON-NLS-1$
             jexlVars.put("ctx", jmctx); //$NON-NLS-1$
             jexlVars.put("vars", vars); //$NON-NLS-1$
@@ -104,19 +105,22 @@ public class JexlFunction extends AbstractFunction {
         return str;
     }
 
-    public List getArgumentDesc()
+    /** {@inheritDoc} */
+    public List<String> getArgumentDesc()
     {
         return desc;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getReferenceKey()
     {
         return KEY;
     }
 
+    /** {@inheritDoc} */
     @Override
-    public synchronized void setParameters(Collection parameters)
+    public synchronized void setParameters(Collection<CompoundVariable> parameters)
             throws InvalidVariableException
     {
         checkParameterCount(parameters, 1, 2);
