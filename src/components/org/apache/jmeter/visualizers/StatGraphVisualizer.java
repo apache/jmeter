@@ -97,59 +97,60 @@ ActionListener {
     private final String TOTAL_ROW_LABEL =
         JMeterUtils.getResString("aggregate_report_total_label");       //$NON-NLS-1$
 
-    protected JTable myJTable;
+    private JTable myJTable;
 
-    protected JScrollPane myScrollPane;
+    private JScrollPane myScrollPane;
 
     private transient ObjectTableModel model;
 
-    Map tableRows = Collections.synchronizedMap(new HashMap());
+    private final Map<String, SamplingStatCalculator> tableRows =
+        Collections.synchronizedMap(new HashMap<String, SamplingStatCalculator>());
 
-    protected AxisGraph graphPanel = null;
+    private AxisGraph graphPanel = null;
 
-    protected VerticalPanel graph = null;
+    private VerticalPanel graph = null;
 
-    protected JScrollPane graphScroll = null;
+    private JScrollPane graphScroll = null;
 
-    protected JSplitPane spane = null;
+    private JSplitPane spane = null;
 
-    protected JLabeledChoice columns =
+    private JLabeledChoice columns =
         new JLabeledChoice(JMeterUtils.getResString("aggregate_graph_column"),GRAPH_COLUMNS);//$NON-NLS-1$
 
     //NOT USED protected double[][] data = null;
 
-    protected JButton displayButton =
+    private JButton displayButton =
         new JButton(JMeterUtils.getResString("aggregate_graph_display"));                //$NON-NLS-1$
 
-    protected JButton saveGraph =
+    private JButton saveGraph =
         new JButton(JMeterUtils.getResString("aggregate_graph_save"));                    //$NON-NLS-1$
 
-    protected JButton saveTable =
+    private JButton saveTable =
         new JButton(JMeterUtils.getResString("aggregate_graph_save_table"));            //$NON-NLS-1$
 
     private JCheckBox saveHeaders = // should header be saved with the data?
         new JCheckBox(JMeterUtils.getResString("aggregate_graph_save_table_header"));    //$NON-NLS-1$
 
-    JLabeledTextField graphTitle =
+    private JLabeledTextField graphTitle =
         new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_user_title"));    //$NON-NLS-1$
 
-    JLabeledTextField maxLengthXAxisLabel =
+    private JLabeledTextField maxLengthXAxisLabel =
         new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_max_length_xaxis_label"));//$NON-NLS-1$
 
-    JLabeledTextField graphWidth =
+    private JLabeledTextField graphWidth =
         new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_width"));        //$NON-NLS-1$
-    JLabeledTextField graphHeight =
+    private JLabeledTextField graphHeight =
         new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_height"));        //$NON-NLS-1$
 
-    protected String yAxisLabel = JMeterUtils.getResString("aggregate_graph_response_time");//$NON-NLS-1$
+    private String yAxisLabel = JMeterUtils.getResString("aggregate_graph_response_time");//$NON-NLS-1$
 
-    protected String yAxisTitle = JMeterUtils.getResString("aggregate_graph_ms");        //$NON-NLS-1$
+    private String yAxisTitle = JMeterUtils.getResString("aggregate_graph_ms");        //$NON-NLS-1$
 
-    protected boolean saveGraphToFile = false;
+    private boolean saveGraphToFile = false;
 
-    protected int defaultWidth = 400;
+    private int defaultWidth = 400;
 
-    protected int defaultHeight = 300;
+    private int defaultHeight = 300;
 
     public StatGraphVisualizer() {
         super();
@@ -202,7 +203,7 @@ ActionListener {
         SamplingStatCalculator row = null;
         final String sampleLabel = res.getSampleLabel();
         synchronized (tableRows) {
-            row = (SamplingStatCalculator) tableRows.get(sampleLabel);
+            row = tableRows.get(sampleLabel);
             if (row == null) {
                 row = new SamplingStatCalculator(sampleLabel);
                 tableRows.put(row.getLabel(), row);
@@ -210,7 +211,7 @@ ActionListener {
             }
         }
         row.addSample(res);
-        ((SamplingStatCalculator) tableRows.get(TOTAL_ROW_LABEL)).addSample(res);
+        tableRows.get(TOTAL_ROW_LABEL).addSample(res);
         model.fireTableDataChanged();
     }
 
@@ -347,12 +348,12 @@ ActionListener {
      * work as expected.
      * @return the data from the model
      */
-    public Vector getAllTableData() {
-        Vector data = new Vector();
+    public Vector<Vector<Object>> getAllTableData() {
+        Vector<Vector<Object>> data = new Vector<Vector<Object>>();
         if (model.getRowCount() > 0) {
             for (int rw=0; rw < model.getRowCount(); rw++) {
                 int cols = model.getColumnCount();
-                Vector column = new Vector();
+                Vector<Object> column = new Vector<Object>();
                 data.add(column);
                 for (int idx=0; idx < cols; idx++) {
                     Object val = model.getValueAt(rw,idx);
@@ -383,8 +384,7 @@ ActionListener {
             FileWriter writer = null;
             try {
                 writer = new FileWriter(chooser.getSelectedFile());
-                Vector data = this.getAllTableData();
-                CSVSaveService.saveCSVStats(data,writer,saveHeaders.isSelected() ? COLUMNS : null);
+                CSVSaveService.saveCSVStats(getAllTableData(),writer,saveHeaders.isSelected() ? COLUMNS : null);
             } catch (FileNotFoundException e) {
                 log.warn(e.getMessage());
             } catch (IOException e) {

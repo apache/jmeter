@@ -37,10 +37,10 @@ import org.apache.log.Logger;
 public class AddToTree implements Command {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static Set commandSet;
+    private static Set<String> commandSet;
 
     static {
-        HashSet commands = new HashSet();
+        HashSet<String> commands = new HashSet<String>();
         commands.add(ActionNames.ADD);
         commandSet = Collections.unmodifiableSet(commands);
     }
@@ -54,7 +54,7 @@ public class AddToTree implements Command {
      *
      * @return the ActionNames value
      */
-    public Set getActionNames() {
+    public Set<String> getActionNames() {
         return commandSet;
     }
 

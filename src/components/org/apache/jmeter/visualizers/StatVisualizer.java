@@ -102,7 +102,8 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
 
     private transient ObjectTableModel model;
 
-    private final Map tableRows = Collections.synchronizedMap(new HashMap());
+    private final Map<String, SamplingStatCalculator> tableRows =
+        Collections.synchronizedMap(new HashMap<String, SamplingStatCalculator>());
 
     public StatVisualizer() {
         super();
@@ -158,7 +159,7 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
         SamplingStatCalculator row = null;
         final String sampleLabel = res.getSampleLabel(useGroupName.isSelected());
         synchronized (tableRows) {
-            row = (SamplingStatCalculator) tableRows.get(sampleLabel);
+            row = tableRows.get(sampleLabel);
             if (row == null) {
                 row = new SamplingStatCalculator(sampleLabel);
                 tableRows.put(row.getLabel(), row);
@@ -171,7 +172,7 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
         synchronized(row) {
             row.addSample(res);
         }
-        SamplingStatCalculator tot = (SamplingStatCalculator) tableRows.get(TOTAL_ROW_LABEL);
+        SamplingStatCalculator tot = tableRows.get(TOTAL_ROW_LABEL);
         synchronized(tot) {
             tot.addSample(res);
         }

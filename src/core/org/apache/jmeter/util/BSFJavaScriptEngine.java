@@ -205,7 +205,9 @@ public class BSFJavaScriptEngine extends BSFEngineImpl {
      * map hashtable too.
      */
     @Override
-    public void initialize(BSFManager mgr, String lang, Vector declaredBeans)
+    public void initialize(BSFManager mgr, String lang, 
+            @SuppressWarnings("unchecked") // superclass does not support types
+            Vector declaredBeans)
         throws BSFException {
         
         super.initialize(mgr, lang, declaredBeans);
@@ -217,8 +219,11 @@ public class BSFJavaScriptEngine extends BSFEngineImpl {
             Scriptable bsf = Context.toObject(new BSFFunctions(mgr, this), global);
             global.put("bsf", global, bsf);
 
-            for(Iterator it = declaredBeans.iterator(); it.hasNext();) {
-                declareBean((BSFDeclaredBean) it.next());
+            for(
+                @SuppressWarnings("unchecked")
+                Iterator<BSFDeclaredBean> it = declaredBeans.iterator(); 
+                it.hasNext();) {
+                declareBean(it.next());
             }
         } 
         catch (Throwable t) {

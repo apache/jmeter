@@ -28,6 +28,7 @@ import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.ModificationItem;
 import javax.naming.directory.SearchControls;
+import javax.naming.directory.SearchResult;
 
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -73,7 +74,7 @@ public class LdapExtClient {
     public DirContext connect(String host, String port, String rootdn, String username, String password, String connTimeOut, boolean secure)
             throws NamingException {
         DirContext dirContext;
-        Hashtable env = new Hashtable();
+        Hashtable<String, String> env = new Hashtable<String, String>();
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory"); // $NON-NLS-1$
         StringBuffer sb = new StringBuffer(80);
         if (secure) {
@@ -125,7 +126,7 @@ public class LdapExtClient {
      * @param searchFilter
      *            filter filter this value from the base
      **************************************************************************/
-    public NamingEnumeration searchTest(DirContext dirContext, String searchBase, String searchFilter, int scope, long countlim,
+    public NamingEnumeration<SearchResult> searchTest(DirContext dirContext, String searchBase, String searchFilter, int scope, long countlim,
             int timelim, String[] attrs, boolean retobj, boolean deref) throws NamingException {
         if (dirContext == null) {
             throw new NamingException(CONTEXT_IS_NULL);
@@ -153,7 +154,7 @@ public class LdapExtClient {
      * @param filter
      *            filter this value from the base
      **************************************************************************/
-    public NamingEnumeration compare(DirContext dirContext, String filter, String entrydn) throws NamingException {
+    public NamingEnumeration<SearchResult> compare(DirContext dirContext, String filter, String entrydn) throws NamingException {
         if (dirContext == null) {
             throw new NamingException(CONTEXT_IS_NULL);
         }

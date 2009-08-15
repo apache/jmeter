@@ -461,11 +461,11 @@ public class TCLogParser implements LogParser {
      * @param stringparams
      */
     public NVPair[] convertStringtoNVPair(String stringparams) {
-        Vector vparams = this.parseParameters(stringparams);
+        Vector<String> vparams = this.parseParameters(stringparams);
         NVPair[] nvparams = new NVPair[vparams.size()];
         // convert the Parameters
         for (int idx = 0; idx < nvparams.length; idx++) {
-            nvparams[idx] = this.parseOneParameter((String) vparams.get(idx));
+            nvparams[idx] = this.parseOneParameter(vparams.get(idx));
         }
         return nvparams;
     }
@@ -517,11 +517,11 @@ public class TCLogParser implements LogParser {
      * @param parameters
      * @return Vector
      */
-    protected Vector parseParameters(String parameters) {
-        Vector parsedParams = new Vector();
+    protected Vector<String> parseParameters(String parameters) {
+        Vector<String> parsedParams = new Vector<String>();
         StringTokenizer paramtokens = this.tokenize(parameters, "&");
         while (paramtokens.hasMoreElements()) {
-            parsedParams.add(paramtokens.nextElement());
+            parsedParams.add(paramtokens.nextToken());
         }
         return parsedParams;
     }
