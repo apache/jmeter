@@ -290,7 +290,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 if (stoppingMessage != null) {// TODO - how can this be null?
-                    stoppingMessage.show();
+                    stoppingMessage.setVisible(true);
                 }
             }
         });

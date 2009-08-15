@@ -243,7 +243,7 @@ public class ReportMainFrame extends JFrame implements TestListener, Remoteable 
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 if (stoppingMessage != null) {
-                    stoppingMessage.show();
+                    stoppingMessage.setVisible(true);
                 }
             }
         });
