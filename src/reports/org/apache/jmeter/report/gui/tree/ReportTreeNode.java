@@ -42,7 +42,7 @@ public class ReportTreeNode extends DefaultMutableTreeNode implements
         NamedTreeNode {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private ReportTreeModel treeModel;
+    private final ReportTreeModel treeModel;
 
     // boolean enabled = true;
 
@@ -108,7 +108,7 @@ public class ReportTreeNode extends DefaultMutableTreeNode implements
         }
     }
 
-    public Collection getMenuCategories() {
+    public Collection<String> getMenuCategories() {
         try {
             return ReportGuiPackage.getInstance().getGui(getTestElement())
                     .getMenuCategories();
@@ -142,14 +142,17 @@ public class ReportTreeNode extends DefaultMutableTreeNode implements
                 .getDocAnchor();
     }
 
+    /** {@inheritDoc} */
     public void setName(String name) {
         ((TestElement) getUserObject()).setName(name);
     }
 
+    /** {@inheritDoc} */
     public String getName() {
         return ((TestElement) getUserObject()).getName();
     }
 
+    /** {@inheritDoc} */
     public void nameChanged() {
         treeModel.nodeChanged(this);
     }

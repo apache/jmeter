@@ -404,7 +404,7 @@ public class JUnitSampler extends AbstractSampler {
                 sresult.setSuccessful(false);
                 StringBuffer buf = new StringBuffer();
                 buf.append( getFailure() );
-                Enumeration en = tr.errors();
+                Enumeration<?> en = tr.errors();
                 while (en.hasMoreElements()){
                     Object item = en.nextElement();
                     if (getAppendError() && item instanceof TestFailure) {
@@ -447,9 +447,9 @@ public class JUnitSampler extends AbstractSampler {
     public static Object getClassInstance(String className, String label){
         Object testclass = null;
         if (className != null){
-            Constructor con = null;
-            Constructor strCon = null;
-            Class theclazz = null;
+            Constructor<?> con = null;
+            Constructor<?> strCon = null;
+            Class<?> theclazz = null;
             Object[] strParams = null;
             Object[] params = null;
             try
@@ -533,7 +533,7 @@ public class JUnitSampler extends AbstractSampler {
             // log.info("class " + clazz.getClass().getName() +
             //        " method name is " + RUNTEST);
             try {
-                Class[] param = {TestResult.class};
+                Class<?>[] param = {TestResult.class};
                 return clazz.getClass().getMethod(RUNTEST,param);
             } catch (NoSuchMethodException e) {
                 log.warn(e.getMessage());

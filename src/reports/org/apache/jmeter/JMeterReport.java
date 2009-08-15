@@ -151,9 +151,7 @@ public class JMeterReport implements JMeterPlugin {
             { ReportGui.class.getName(), "org/apache/jmeter/images/new/book.png" }
     };
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.plugin.JMeterPlugin#getIconMappings()
-     */
+    /** {@inheritDoc} */
     public String[][] getIconMappings() {
         String iconProp = JMeterUtils.getPropDefault("jmeter.icons", "org/apache/jmeter/images/icon.properties");
         Properties p = JMeterUtils.loadProperties(iconProp);
@@ -163,7 +161,7 @@ public class JMeterReport implements JMeterPlugin {
         }
         log.info("Loaded icon properties from " + iconProp);
         String[][] iconlist = new String[p.size()][3];
-        Enumeration pe = p.keys();
+        Enumeration<Object> pe = p.keys();
         int i = 0;
         while (pe.hasMoreElements()) {
             String key = (String) pe.nextElement();
@@ -178,9 +176,7 @@ public class JMeterReport implements JMeterPlugin {
         return iconlist;
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.plugin.JMeterPlugin#getResourceBundles()
-     */
+    /** {@inheritDoc} */
     public String[][] getResourceBundles() {
         return new String[0][];
     }
@@ -347,11 +343,11 @@ public class JMeterReport implements JMeterPlugin {
         // Process command line property definitions (can occur multiple times)
 
         Properties jmeterProps = JMeterUtils.getJMeterProperties();
-        List clOptions = parser.getArguments();
+        List<CLOption> clOptions = parser.getArguments();
         int size = clOptions.size();
 
         for (int i = 0; i < size; i++) {
-            CLOption option = (CLOption) clOptions.get(i);
+            CLOption option = clOptions.get(i);
             String name = option.getArgument(0);
             String value = option.getArgument(1);
 

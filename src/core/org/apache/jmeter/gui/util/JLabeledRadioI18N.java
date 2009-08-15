@@ -25,8 +25,10 @@ import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.ButtonModel;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -48,7 +50,7 @@ public class JLabeledRadioI18N extends JPanel implements JLabeledField, ActionLi
 
     private final ButtonGroup bGroup = new ButtonGroup();
 
-    private final ArrayList mChangeListeners = new ArrayList(3);
+    private final ArrayList<ChangeListener> mChangeListeners = new ArrayList<ChangeListener>(3);
 
     /**
      * 
@@ -111,9 +113,9 @@ public class JLabeledRadioI18N extends JPanel implements JLabeledField, ActionLi
      * @param resourcename name of resource whose button is to be selected
      */
     public void setText(String resourcename) {
-        Enumeration en = this.bGroup.getElements();
+        Enumeration<AbstractButton> en = this.bGroup.getElements();
         while (en.hasMoreElements()) {
-            ButtonModel model = ((JRadioButton) en.nextElement()).getModel();
+            ButtonModel model = en.nextElement().getModel();
             if (model.getActionCommand().equals(resourcename)) {
                 this.bGroup.setSelected(model, true);
             } else {
@@ -131,11 +133,7 @@ public class JLabeledRadioI18N extends JPanel implements JLabeledField, ActionLi
         this.mLabel.setText(JMeterUtils.getResString(label_resource));
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jorphan.gui.JLabeledField#addChangeListener(javax.swing.event.ChangeListener)
-     */
+    /** {@inheritDoc} */
     public void addChangeListener(ChangeListener pChangeListener) {
         this.mChangeListeners.add(pChangeListener);
     }
@@ -147,7 +145,7 @@ public class JLabeledRadioI18N extends JPanel implements JLabeledField, ActionLi
     private void notifyChangeListeners() {
         ChangeEvent ce = new ChangeEvent(this);
         for (int index = 0; index < mChangeListeners.size(); index++) {
-            ((ChangeListener) mChangeListeners.get(index)).stateChanged(ce);
+            mChangeListeners.get(index).stateChanged(ce);
         }
     }
 
@@ -155,10 +153,10 @@ public class JLabeledRadioI18N extends JPanel implements JLabeledField, ActionLi
      * Method will return all the label and JRadioButtons. ButtonGroup is
      * excluded from the list.
      */
-    public List getComponentList() {
-        List comps = new LinkedList();
+    public List<JComponent> getComponentList() {
+        List<JComponent> comps = new LinkedList<JComponent>();
         comps.add(mLabel);
-        Enumeration en = this.bGroup.getElements();
+        Enumeration<AbstractButton> en = this.bGroup.getElements();
         while (en.hasMoreElements()) {
             comps.add(en.nextElement());
         }
