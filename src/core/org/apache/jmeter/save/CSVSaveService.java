@@ -583,7 +583,7 @@ public final class CSVSaveService {
      * @param writer output file
      * @throws IOException
      */
-    public static void saveCSVStats(Vector data, FileWriter writer) throws IOException {
+    public static void saveCSVStats(Vector<?> data, FileWriter writer) throws IOException {
         saveCSVStats(data, writer, null);
     }
 
@@ -597,7 +597,7 @@ public final class CSVSaveService {
      * @param headers header names (if non-null)
      * @throws IOException
      */
-    public static void saveCSVStats(Vector data, FileWriter writer, String headers[]) throws IOException {
+    public static void saveCSVStats(Vector<?> data, FileWriter writer, String headers[]) throws IOException {
         final char DELIM = ',';
         final String LINE_SEP = System.getProperty("line.separator"); // $NON-NLS-1$
         final char SPECIALS[] = new char[] {DELIM, QUOTING_CHAR};
@@ -611,7 +611,7 @@ public final class CSVSaveService {
             writer.write(LINE_SEP);
         }
         for (int idx=0; idx < data.size(); idx++) {
-            Vector row = (Vector)data.elementAt(idx);
+            Vector<?> row = (Vector<?>)data.elementAt(idx);
             for (int idy=0; idy < row.size(); idy++) {
                 if (idy > 0) {
                     writer.write(DELIM);
@@ -907,7 +907,7 @@ public final class CSVSaveService {
     public static String[] csvReadFile(BufferedReader infile, char delim) throws IOException {
         int ch;
         int state = INITIAL;
-        List list = new ArrayList();
+        List<String> list = new ArrayList<String>();
         ByteArrayOutputStream baos = new ByteArrayOutputStream(200);
         boolean push = false;
         while(-1 != (ch=infile.read())){
@@ -981,7 +981,7 @@ public final class CSVSaveService {
                 list.add(baos.toString());
             }
         }
-        return (String[]) list.toArray(new String[list.size()]);
+        return list.toArray(new String[list.size()]);
     }
 
     private static boolean isDelimOrEOL(char delim, int ch) {
