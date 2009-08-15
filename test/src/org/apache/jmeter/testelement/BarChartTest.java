@@ -19,6 +19,7 @@ package org.apache.jmeter.testelement;
 
 import javax.swing.JComponent;
 
+import org.apache.jmeter.report.DataSet;
 import org.apache.jmeter.save.SaveGraphicsService;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.util.JMeterUtils;
@@ -56,7 +57,7 @@ public class BarChartTest extends JMeterTestCase {
         assertTrue((input.getEndTimestamp() > input.getStartTimestamp()));
         assertTrue((input.getURLs().size() > 0));
         log.info("URL count=" + input.getURLs().size());
-        java.util.ArrayList list = new java.util.ArrayList();
+        java.util.ArrayList<DataSet> list = new java.util.ArrayList<DataSet>();
         list.add(input);
         list.add(input2);
         list.add(input3);

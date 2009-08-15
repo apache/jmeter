@@ -251,7 +251,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 
     private static final String protoPrefix = "org.apache.jmeter.protocol.tcp.sampler."; //$NON-NLS-1$
 
-    private Class getClass(String className) {
+    private Class<?> getClass(String className) {
         Class<?> c = null;
         try {
             c = Class.forName(className, false, Thread.currentThread().getContextClassLoader());

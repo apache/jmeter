@@ -748,7 +748,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         else {
             fail("No header and body section found");
         }
-        // Check response headers
+         // Check response headers
         checkHeaderTypeLength(headersSent, "multipart/form-data" + "; boundary=" + boundaryString, expectedPostBody.length);
         // Check post body which was sent to the mirror server, and
         // sent back by the mirror server

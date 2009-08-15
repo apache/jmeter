@@ -126,9 +126,9 @@ public class ReportSave implements Command {
     }
 
     private void convertSubTree(HashTree tree) {
-        Iterator iter = new LinkedList(tree.list()).iterator();
+        Iterator<ReportTreeNode> iter = new LinkedList<ReportTreeNode>(tree.list()).iterator();
         while (iter.hasNext()) {
-            ReportTreeNode item = (ReportTreeNode) iter.next();
+            ReportTreeNode item = iter.next();
             convertSubTree(tree.getTree(item));
             TestElement testElement = item.getTestElement();
             tree.replace(item, testElement);

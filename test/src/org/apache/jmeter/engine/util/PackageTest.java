@@ -37,7 +37,7 @@ import org.apache.jmeter.threads.JMeterVariables;
  * as it is needed to resolve the functions.
  */
 public class PackageTest extends JMeterTestCase {
-    private Map variables;
+    private Map<String, String> variables;
 
     private SampleResult result;
 
@@ -52,7 +52,7 @@ public class PackageTest extends JMeterTestCase {
     @Override
     public void setUp() {
         jmctx = JMeterContextService.getContext();
-        variables = new HashMap();
+        variables = new HashMap<String, String>();
         variables.put("my_regex", ".*");
         variables.put("server", "jakarta.apache.org");
         result = new SampleResult();

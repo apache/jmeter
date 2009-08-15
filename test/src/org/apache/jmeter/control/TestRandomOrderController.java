@@ -37,7 +37,7 @@ public class TestRandomOrderController extends JMeterTestCase {
             roc.addTestElement(new TestSampler("two"));
             roc.addTestElement(new TestSampler("three"));
             TestElement sampler = null;
-            List usedSamplers = new ArrayList();
+            List<String> usedSamplers = new ArrayList<String>();
             roc.initialize();
             while ((sampler = roc.next()) != null) {
                 String samplerName = sampler.getName();
@@ -59,7 +59,7 @@ public class TestRandomOrderController extends JMeterTestCase {
             RandomOrderController roc = new RandomOrderController();
             roc.addTestElement(new TestSampler("zero"));
             TestElement sampler = null;
-            List usedSamplers = new ArrayList();
+            List<String> usedSamplers = new ArrayList<String>();
             roc.initialize();
             while ((sampler = roc.next()) != null) {
                 String samplerName = sampler.getName();

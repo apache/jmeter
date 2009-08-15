@@ -49,8 +49,8 @@ public class ReportTreeModel extends DefaultTreeModel {
      * Returns a list of tree nodes that hold objects of the given class type.
      * If none are found, an empty list is returned.
      */
-    public List getNodesOfType(Class type) {
-        List nodeList = new LinkedList();
+    public List<ReportTreeNode> getNodesOfType(Class<?> type) {
+        List<ReportTreeNode> nodeList = new LinkedList<ReportTreeNode>();
         traverseAndFind(type, (ReportTreeNode) this.getRoot(), nodeList);
         return nodeList;
     }
@@ -68,9 +68,9 @@ public class ReportTreeModel extends DefaultTreeModel {
      */
     public HashTree addSubTree(HashTree subTree, ReportTreeNode current)
             throws IllegalUserActionException {
-        Iterator iter = subTree.list().iterator();
+        Iterator<TestElement> iter = subTree.list().iterator();
         while (iter.hasNext()) {
-            TestElement item = (TestElement) iter.next();
+            TestElement item = iter.next();
             if (item instanceof ReportPlan) {
                 current = (ReportTreeNode) ((ReportTreeNode) getRoot())
                         .getChildAt(0);
@@ -126,13 +126,13 @@ public class ReportTreeModel extends DefaultTreeModel {
         }
     }
 
-    private void traverseAndFind(Class type, ReportTreeNode node, List nodeList) {
+    private void traverseAndFind(Class<?> type, ReportTreeNode node, List<ReportTreeNode> nodeList) {
         if (type.isInstance(node.getUserObject())) {
             nodeList.add(node);
         }
-        Enumeration enumNode = node.children();
+        Enumeration<ReportTreeNode> enumNode = node.children();
         while (enumNode.hasMoreElements()) {
-            ReportTreeNode child = (ReportTreeNode) enumNode.nextElement();
+            ReportTreeNode child = enumNode.nextElement();
             traverseAndFind(type, child, nodeList);
         }
     }
@@ -142,9 +142,9 @@ public class ReportTreeModel extends DefaultTreeModel {
         if (userObject == node.getUserObject()) {
             return node;
         }
-        Enumeration enumNode = node.children();
+        Enumeration<ReportTreeNode> enumNode = node.children();
         while (enumNode.hasMoreElements()) {
-            ReportTreeNode child = (ReportTreeNode) enumNode.nextElement();
+            ReportTreeNode child = enumNode.nextElement();
             ReportTreeNode result = traverseAndFind(userObject, child);
             if (result != null) {
                 return result;
@@ -155,9 +155,9 @@ public class ReportTreeModel extends DefaultTreeModel {
 
     public HashTree getCurrentSubTree(ReportTreeNode node) {
         ListedHashTree hashTree = new ListedHashTree(node);
-        Enumeration enumNode = node.children();
+        Enumeration<ReportTreeNode> enumNode = node.children();
         while (enumNode.hasMoreElements()) {
-            ReportTreeNode child = (ReportTreeNode) enumNode.nextElement();
+            ReportTreeNode child = enumNode.nextElement();
             hashTree.add(node, getCurrentSubTree(child));
         }
         return hashTree;

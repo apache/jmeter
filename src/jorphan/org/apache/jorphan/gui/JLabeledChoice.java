@@ -30,6 +30,7 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
@@ -43,7 +44,7 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
     private final JComboBox choiceList;
 
     // Maybe move to vector if MT problems occur
-    private final ArrayList mChangeListeners = new ArrayList(3);
+    private final ArrayList<ChangeListener> mChangeListeners = new ArrayList<ChangeListener>(3);
 
     private JButton delete, add;
 
@@ -90,8 +91,8 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
         init();
     }
 
-    public List getComponentList() {
-        List comps = new LinkedList();
+    public List<JComponent> getComponentList() {
+        List<JComponent> comps = new LinkedList<JComponent>();
         comps.add(mLabel);
         comps.add(choiceList);
         return comps;
@@ -274,7 +275,7 @@ public String getToolTipText() {
     private void notifyChangeListeners() {
         ChangeEvent ce = new ChangeEvent(this);
         for (int index = 0; index < mChangeListeners.size(); index++) {
-            ((ChangeListener) mChangeListeners.get(index)).stateChanged(ce);
+            mChangeListeners.get(index).stateChanged(ce);
         }
     }
 
