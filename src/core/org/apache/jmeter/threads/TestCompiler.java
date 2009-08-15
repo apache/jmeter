@@ -50,9 +50,10 @@ public class TestCompiler implements HashTreeTraverser {
 
     private final LinkedList stack = new LinkedList();
 
-    private final Map samplerConfigMap = new HashMap();
+    private final Map<Sampler, SamplePackage> samplerConfigMap = new HashMap<Sampler, SamplePackage>();
 
-    private final Map transactionControllerConfigMap = new HashMap();
+    private final Map<TransactionController, SamplePackage> transactionControllerConfigMap =
+        new HashMap<TransactionController, SamplePackage>();
 
     private final HashTree testTree;
 
@@ -60,7 +61,7 @@ public class TestCompiler implements HashTreeTraverser {
      * This set keeps track of which ObjectPairs have been seen.
      * Its purpose is not entirely clear (please document if you know!) but it is needed,..
      */
-    private static final Set pairing = new HashSet();
+    private static final Set<ObjectPair> pairing = new HashSet<ObjectPair>();
 
     //List loopIterListeners = new ArrayList();
 
@@ -80,7 +81,7 @@ public class TestCompiler implements HashTreeTraverser {
     }
 
     public SamplePackage configureSampler(Sampler sampler) {
-        SamplePackage pack = (SamplePackage) samplerConfigMap.get(sampler);
+        SamplePackage pack = samplerConfigMap.get(sampler);
         pack.setSampler(sampler);
         configureWithConfigElements(sampler, pack.getConfigs());
         return pack;
@@ -88,7 +89,7 @@ public class TestCompiler implements HashTreeTraverser {
 
     public SamplePackage configureTransactionSampler(TransactionSampler transactionSampler) {
         TransactionController controller = transactionSampler.getTransactionController();
-        SamplePackage pack = (SamplePackage) transactionControllerConfigMap.get(controller);
+        SamplePackage pack = transactionControllerConfigMap.get(controller);
         pack.setSampler(transactionSampler);
         return pack;
     }
@@ -145,39 +146,39 @@ public class TestCompiler implements HashTreeTraverser {
     }
 
     private void saveSamplerConfigs(Sampler sam) {
-        List configs = new LinkedList();
+        List<ConfigTestElement> configs = new LinkedList<ConfigTestElement>();
         List modifiers = new LinkedList();
-        List controllers = new LinkedList();
+        List<TestElement> controllers = new LinkedList<TestElement>();
         List responseModifiers = new LinkedList();
-        List listeners = new LinkedList();
-        List timers = new LinkedList();
-        List assertions = new LinkedList();
-        LinkedList posts = new LinkedList();
-        LinkedList pres = new LinkedList();
+        List<SampleListener> listeners = new LinkedList<SampleListener>();
+        List<Timer> timers = new LinkedList<Timer>();
+        List<Assertion> assertions = new LinkedList<Assertion>();
+        LinkedList<PostProcessor> posts = new LinkedList<PostProcessor>();
+        LinkedList<PreProcessor> pres = new LinkedList<PreProcessor>();
         for (int i = stack.size(); i > 0; i--) {
             addDirectParentControllers(controllers, (TestElement) stack.get(i - 1));
-            Iterator iter = testTree.list(stack.subList(0, i)).iterator();
-            List tempPre = new LinkedList();
-            List tempPost = new LinkedList();
+            Iterator<TestElement> iter = testTree.list(stack.subList(0, i)).iterator();
+            List<PreProcessor>  tempPre = new LinkedList<PreProcessor> ();
+            List<PostProcessor> tempPost = new LinkedList<PostProcessor>();
             while (iter.hasNext()) {
-                TestElement item = (TestElement) iter.next();
+                TestElement item = iter.next();
                 if ((item instanceof ConfigTestElement)) {
-                    configs.add(item);
+                    configs.add((ConfigTestElement) item);
                 }
                 if (item instanceof SampleListener) {
-                    listeners.add(item);
+                    listeners.add((SampleListener) item);
                 }
                 if (item instanceof Timer) {
-                    timers.add(item);
+                    timers.add((Timer) item);
                 }
                 if (item instanceof Assertion) {
-                    assertions.add(item);
+                    assertions.add((Assertion) item);
                 }
                 if (item instanceof PostProcessor) {
-                    tempPost.add(item);
+                    tempPost.add((PostProcessor) item);
                 }
                 if (item instanceof PreProcessor) {
-                    tempPre.add(item);
+                    tempPre.add((PreProcessor) item);
                 }
             }
             pres.addAll(0, tempPre);
@@ -196,9 +197,9 @@ public class TestCompiler implements HashTreeTraverser {
         List modifiers = new LinkedList();
         List controllers = new LinkedList();
         List responseModifiers = new LinkedList();
-        List listeners = new LinkedList();
+        List<SampleListener> listeners = new LinkedList<SampleListener>();
         List timers = new LinkedList();
-        List assertions = new LinkedList();
+        List<Assertion> assertions = new LinkedList<Assertion>();
         LinkedList posts = new LinkedList();
         LinkedList pres = new LinkedList();
         for (int i = stack.size(); i > 0; i--) {
@@ -207,10 +208,10 @@ public class TestCompiler implements HashTreeTraverser {
             while (iter.hasNext()) {
                 TestElement item = (TestElement) iter.next();
                 if (item instanceof SampleListener) {
-                    listeners.add(item);
+                    listeners.add((SampleListener) item);
                 }
                 if (item instanceof Assertion) {
-                    assertions.add(item);
+                    assertions.add((Assertion) item);
                 }
             }
         }
@@ -262,10 +263,10 @@ public class TestCompiler implements HashTreeTraverser {
         }
     }
 
-    private void configureWithConfigElements(Sampler sam, List configs) {
-        Iterator iter = configs.iterator();
+    private void configureWithConfigElements(Sampler sam, List<ConfigTestElement> configs) {
+        Iterator<ConfigTestElement> iter = configs.iterator();
         while (iter.hasNext()) {
-            ConfigTestElement config = (ConfigTestElement) iter.next();
+            ConfigTestElement config = iter.next();
             sam.addTestElement(config);
         }
     }
