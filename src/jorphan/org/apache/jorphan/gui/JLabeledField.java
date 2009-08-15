@@ -20,6 +20,7 @@ package org.apache.jorphan.gui;
 
 import java.util.List;
 
+import javax.swing.JComponent;
 import javax.swing.event.ChangeListener;
 
 /**
@@ -34,5 +35,5 @@ public interface JLabeledField {
 
     public void addChangeListener(ChangeListener pChangeListener);
 
-    public List getComponentList();
+    public List<JComponent> getComponentList();
 }

@@ -51,7 +51,7 @@ public class JavaSamplerContext {
     /**
      * Map containing the initialization parameters for the JavaSamplerClient.
      */
-    private Map params = null;
+    private Map<String, String> params = null;
 
     /**
      * Create a new JavaSampler with the specified initialization parameters.
@@ -82,7 +82,7 @@ public class JavaSamplerContext {
      * @return an Iterator of Strings listing the names of the parameters which
      *         have been specified for this test.
      */
-    public Iterator getParameterNamesIterator() {
+    public Iterator<String> getParameterNamesIterator() {
         return params.keySet().iterator();
     }
 
@@ -115,7 +115,7 @@ public class JavaSamplerContext {
         if (params == null || !params.containsKey(name)) {
             return defaultValue;
         }
-        return (String) params.get(name);
+        return params.get(name);
     }
 
     /**
@@ -138,7 +138,7 @@ public class JavaSamplerContext {
             throw new NumberFormatException("No value for parameter named '" + name + "'.");
         }
 
-        return Integer.decode((String) params.get(name)).intValue();
+        return Integer.decode(params.get(name)).intValue();
     }
 
     /**
@@ -164,7 +164,7 @@ public class JavaSamplerContext {
         }
 
         try {
-            return Integer.decode((String) params.get(name)).intValue();
+            return Integer.decode(params.get(name)).intValue();
         } catch (NumberFormatException e) {
             log.warn("Value for parameter '" + name + "' not an integer: '" + params.get(name) + "'.  Using default: '"
                     + defaultValue + "'.", e);
@@ -192,7 +192,7 @@ public class JavaSamplerContext {
             throw new NumberFormatException("No value for parameter named '" + name + "'.");
         }
 
-        return Long.decode((String) params.get(name)).longValue();
+        return Long.decode(params.get(name)).longValue();
     }
 
     /**
@@ -216,7 +216,7 @@ public class JavaSamplerContext {
             return defaultValue;
         }
         try {
-            return Long.decode((String) params.get(name)).longValue();
+            return Long.decode(params.get(name)).longValue();
         } catch (NumberFormatException e) {
             log.warn("Value for parameter '" + name + "' not a long: '" + params.get(name) + "'.  Using default: '"
                     + defaultValue + "'.", e);

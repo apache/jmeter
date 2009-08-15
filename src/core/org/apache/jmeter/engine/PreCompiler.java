@@ -58,11 +58,7 @@ public class PreCompiler implements HashTreeTraverser {
         isRemote = remote;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see HashTreeTraverser#addNode(Object, HashTree)
-     */
+    /** {@inheritDoc} */
     public void addNode(Object node, HashTree subTree) {
         if(isRemote && node instanceof ResultCollector)
         {
@@ -85,7 +81,7 @@ public class PreCompiler implements HashTreeTraverser {
         }
         if (node instanceof TestPlan) {
             ((TestPlan)node).prepareForPreCompile(); //A hack to make user-defined variables in the testplan element more dynamic
-            Map args = ((TestPlan) node).getUserDefinedVariables();
+            Map<String, String> args = ((TestPlan) node).getUserDefinedVariables();
             replacer.setUserDefinedVariables(args);
             JMeterVariables vars = new JMeterVariables();
             vars.putAll(args);
@@ -94,25 +90,17 @@ public class PreCompiler implements HashTreeTraverser {
 
         if (node instanceof Arguments) {
             ((Arguments)node).setRunningVersion(true);
-            Map args = ((Arguments) node).getArgumentsAsMap();
+            Map<String, String> args = ((Arguments) node).getArgumentsAsMap();
             replacer.addVariables(args);
             JMeterContextService.getContext().getVariables().putAll(args);
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see HashTreeTraverser#subtractNode()
-     */
+    /** {@inheritDoc} */
     public void subtractNode() {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see HashTreeTraverser#processPath()
-     */
+    /** {@inheritDoc} */
     public void processPath() {
     }
 }

@@ -36,42 +36,40 @@ import javax.swing.event.ChangeListener;
 import org.apache.jmeter.util.JMeterUtils;
 
 public class ReportFilePanel extends HorizontalPanel implements ActionListener {
-    JTextField filename = new JTextField(20);
+    private final JTextField filename = new JTextField(20);
 
-    JLabel label = new JLabel(JMeterUtils.getResString("file_visualizer_filename"));
+    private final JLabel label = new JLabel(JMeterUtils.getResString("file_visualizer_filename"));
 
-    JButton browse = new JButton(JMeterUtils.getResString("browse"));
+    private final JButton browse = new JButton(JMeterUtils.getResString("browse"));
 
-    List listeners = new LinkedList();
+    private final List<ChangeListener> listeners = new LinkedList<ChangeListener>();
 
-    String title;
+    private final String title;
 
-    String filetype;
+    private final String filetype;
 
     /**
      * Constructor for the FilePanel object.
      */
     public ReportFilePanel() {
-        title = "";
-        init();
+        this("");
     }
 
     public ReportFilePanel(String title) {
-        this.title = title;
-        init();
+        this(title, null);
     }
 
     public ReportFilePanel(String title, String filetype) {
-        this(title);
+        this.title = title;
         this.filetype = filetype;
+        init();
     }
 
     /**
      * Constructor for the FilePanel object.
      */
     public ReportFilePanel(ChangeListener l, String title) {
-        this.title = title;
-        init();
+        this(title);
         listeners.add(l);
     }
 
@@ -122,12 +120,13 @@ public class ReportFilePanel extends HorizontalPanel implements ActionListener {
     }
 
     private void fireFileChanged() {
-        Iterator iter = listeners.iterator();
+        Iterator<ChangeListener> iter = listeners.iterator();
         while (iter.hasNext()) {
-            ((ChangeListener) iter.next()).stateChanged(new ChangeEvent(this));
+            iter.next().stateChanged(new ChangeEvent(this));
         }
     }
 
+    /** {@inheritDoc} */
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("browse")) {
             JFileChooser chooser = ReportFileDialoger.promptToOpenFile(new String[] { filetype });
