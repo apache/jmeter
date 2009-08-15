@@ -48,7 +48,7 @@ import org.apache.log.Logger;
 public class TestCompiler implements HashTreeTraverser {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private final LinkedList stack = new LinkedList();
+    private final LinkedList<Object> stack = new LinkedList<Object>();
 
     private final Map<Sampler, SamplePackage> samplerConfigMap = new HashMap<Sampler, SamplePackage>();
 

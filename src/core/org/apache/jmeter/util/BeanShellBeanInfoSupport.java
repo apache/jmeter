@@ -28,7 +28,7 @@ import org.apache.jmeter.testbeans.gui.TextAreaEditor;
  */
 public abstract class BeanShellBeanInfoSupport extends BeanInfoSupport {
 
-    protected BeanShellBeanInfoSupport(Class beanClass) {
+    protected BeanShellBeanInfoSupport(Class<?> beanClass) {
         super(beanClass);
         PropertyDescriptor p;
 

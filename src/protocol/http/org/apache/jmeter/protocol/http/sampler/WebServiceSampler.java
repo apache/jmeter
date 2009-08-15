@@ -614,12 +614,12 @@ public class WebServiceSampler extends HTTPSamplerBase {
     public void addEncodedArgument(String name, String value, String metaData) {
     }
 
-    public String convertSoapHeaders(Hashtable ht) {
-        Enumeration en = ht.keys();
+    public String convertSoapHeaders(Hashtable<String, String> ht) {
+        Enumeration<String> en = ht.keys();
         StringBuffer buf = new StringBuffer();
         while (en.hasMoreElements()) {
-            Object key = en.nextElement();
-            buf.append((String) key).append("=").append((String) ht.get(key)).append("\n"); //$NON-NLS-1$ //$NON-NLS-2$
+            String key = en.nextElement();
+            buf.append(key).append("=").append(ht.get(key)).append("\n"); //$NON-NLS-1$ //$NON-NLS-2$
         }
         return buf.toString();
     }

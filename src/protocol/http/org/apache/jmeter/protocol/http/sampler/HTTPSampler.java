@@ -76,7 +76,7 @@ public class HTTPSampler extends HTTPSamplerBase implements Interruptible {
         log.info("Maximum connection retries = "+MAX_CONN_RETRIES); // $NON-NLS-1$
         // Temporary copies, so can set the final ones
         Method _setConnectTimeout = null, _setReadTimeout = null;
-        Class clazz = URLConnection.class;
+        Class<URLConnection> clazz = URLConnection.class;
         try {
             _setConnectTimeout = clazz.getMethod("setConnectTimeout", //$NON-NLS-1$
                     new Class[] { Integer.TYPE });
@@ -406,18 +406,18 @@ public class HTTPSampler extends HTTPSamplerBase implements Interruptible {
     private String getConnectionHeaders(HttpURLConnection conn) {
         // Get all the request properties, which are the headers set on the connection
         StringBuffer hdrs = new StringBuffer(100);
-        Map requestHeaders = conn.getRequestProperties();
-        Set headerFields = requestHeaders.entrySet();
-        for(Iterator i = headerFields.iterator(); i.hasNext();) {
-            Map.Entry entry = (Map.Entry)i.next();
-            String headerKey=(String) entry.getKey();
+        Map<String, List<String>> requestHeaders = conn.getRequestProperties();
+        Set<Map.Entry<String, List<String>>> headerFields = requestHeaders.entrySet();
+        for(Iterator<Map.Entry<String, List<String>>> i = headerFields.iterator(); i.hasNext();) {
+            Map.Entry<String, List<String>> entry = i.next();
+            String headerKey=entry.getKey();
             // Exclude the COOKIE header, since cookie is reported separately in the sample
             if(!HEADER_COOKIE.equalsIgnoreCase(headerKey)) {
-                List values = (List) entry.getValue();// value is a List of Strings
+                List<String> values = entry.getValue();// value is a List of Strings
                 for (int j=0;j<values.size();j++){
                     hdrs.append(headerKey);
                     hdrs.append(": "); // $NON-NLS-1$
-                    hdrs.append((String) values.get(j));
+                    hdrs.append(values.get(j));
                     hdrs.append("\n"); // $NON-NLS-1$
                 }
             }

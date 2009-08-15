@@ -39,44 +39,42 @@ import org.apache.jmeter.util.JMeterUtils;
  * author Michael Stover Created April 18, 2002
  */
 public class FilePanel extends HorizontalPanel implements ActionListener {
-    JTextField filename = new JTextField(20);
+    private final JTextField filename = new JTextField(20);
 
-    JLabel label = new JLabel(JMeterUtils.getResString("file_visualizer_filename")); //$NON-NLS-1$
+    private final JLabel label = new JLabel(JMeterUtils.getResString("file_visualizer_filename")); //$NON-NLS-1$
 
-    JButton browse = new JButton(JMeterUtils.getResString("browse")); //$NON-NLS-1$
+    private final JButton browse = new JButton(JMeterUtils.getResString("browse")); //$NON-NLS-1$
 
     private static final String ACTION_BROWSE = "browse"; //$NON-NLS-1$
 
-    List listeners = new LinkedList();
+    private final List<ChangeListener> listeners = new LinkedList<ChangeListener>();
 
-    String title;
+    private final String title;
 
-    String filetype;
+    private final String filetype;
 
     /**
      * Constructor for the FilePanel object.
      */
     public FilePanel() {
-        title = ""; //$NON-NLS-1$
-        init();
+        this("", null);
     }
 
     public FilePanel(String title) {
-        this.title = title;
-        init();
+        this(title, null);
     }
 
     public FilePanel(String title, String filetype) {
-        this(title);
+        this.title = title;
         this.filetype = filetype;
+        init();
     }
 
     /**
      * Constructor for the FilePanel object.
      */
     public FilePanel(ChangeListener l, String title) {
-        this.title = title;
-        init();
+        this(title, null);
         listeners.add(l);
     }
 
@@ -131,9 +129,9 @@ public class FilePanel extends HorizontalPanel implements ActionListener {
     }
 
     private void fireFileChanged() {
-        Iterator iter = listeners.iterator();
+        Iterator<ChangeListener> iter = listeners.iterator();
         while (iter.hasNext()) {
-            ((ChangeListener) iter.next()).stateChanged(new ChangeEvent(this));
+            iter.next().stateChanged(new ChangeEvent(this));
         }
     }
 
