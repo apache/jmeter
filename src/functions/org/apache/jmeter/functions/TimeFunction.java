@@ -41,9 +41,9 @@ public class TimeFunction extends AbstractFunction {
 
     private static final String KEY = "__time"; // $NON-NLS-1$
 
-    private static final List desc = new LinkedList();
+    private static final List<String> desc = new LinkedList<String>();
 
-    private static final Map aliases = new HashMap();
+    private static final Map<String, String> aliases = new HashMap<String, String>();
 
     static {
         desc.add(JMeterUtils.getResString("time_format")); //$NON-NLS-1$
@@ -71,11 +71,7 @@ public class TimeFunction extends AbstractFunction {
         super();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException {
         String datetime;
@@ -83,7 +79,7 @@ public class TimeFunction extends AbstractFunction {
             datetime = Long.toString(System.currentTimeMillis());
         } else {
             // Resolve any aliases
-            String fmt = (String) aliases.get(format);
+            String fmt = aliases.get(format);
             if (fmt == null) {
                 fmt = format;// Not found
             }
@@ -100,15 +96,9 @@ public class TimeFunction extends AbstractFunction {
         return datetime;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * It appears that this is not called if no parameters are provided.
-     *
-     * @see org.apache.jmeter.functions.Function#setParameters(Collection)
-     */
+    /** {@inheritDoc} */
     @Override
-    public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
+    public synchronized void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
 
         checkParameterCount(parameters, 0, 2);
 
@@ -125,22 +115,14 @@ public class TimeFunction extends AbstractFunction {
 
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.functions.Function#getReferenceKey()
-     */
+    /** {@inheritDoc} */
     @Override
     public String getReferenceKey() {
         return KEY;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.functions.Function#getArgumentDesc()
-     */
-    public List getArgumentDesc() {
+    /** {@inheritDoc} */
+    public List<String> getArgumentDesc() {
         return desc;
     }
 }

@@ -44,7 +44,7 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class UnEscapeHtml extends AbstractFunction {
 
-    private static final List desc = new LinkedList();
+    private static final List<String> desc = new LinkedList<String>();
 
     private static final String KEY = "__unescapeHtml"; //$NON-NLS-1$
 
@@ -57,6 +57,7 @@ public class UnEscapeHtml extends AbstractFunction {
     public UnEscapeHtml() {
     }
 
+    /** {@inheritDoc} */
     @Override
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
@@ -66,18 +67,21 @@ public class UnEscapeHtml extends AbstractFunction {
 
     }
 
+    /** {@inheritDoc} */
     @Override
-    public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
+    public synchronized void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
         checkParameterCount(parameters, 1);
         values = parameters.toArray();
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getReferenceKey() {
         return KEY;
     }
 
-    public List getArgumentDesc() {
+    /** {@inheritDoc} */
+    public List<String> getArgumentDesc() {
         return desc;
     }
 }

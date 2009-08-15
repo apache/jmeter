@@ -21,6 +21,7 @@ package org.apache.jmeter.functions;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 
@@ -40,14 +41,14 @@ public interface Function {
 
     /**
      * A collection of the parameters used to configure your function. Each
-     * parameter is a CompoundFunction and can be resolved by calling the
-     * execute() method of the CompoundFunction (which should be done at
+     * parameter is a CompoundVariable and can be resolved by calling the
+     * execute() method of the CompoundVariable (which should be done at
      * execution.)
      *
      * @param parameters
      * @throws InvalidVariableException
      */
-    public void setParameters(Collection parameters) throws InvalidVariableException;
+    public void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException;
 
     /**
      * Return the name of your function. Convention is to prepend "__" to the
