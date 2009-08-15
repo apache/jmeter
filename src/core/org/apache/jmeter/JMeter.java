@@ -222,7 +222,7 @@ public class JMeter implements JMeterPlugin {
         GuiPackage.getInstance(treeLis, treeModel);
         MainFrame main = new MainFrame(ActionRouter.getInstance(), treeModel, treeLis);
         ComponentUtil.centerComponentInWindow(main, 80);
-        main.show();
+        main.setVisible(true);
         ActionRouter.getInstance().actionPerformed(new ActionEvent(main, 1, ActionNames.ADD_ALL));
         if (testFile != null) {
             FileInputStream reader = null;

@@ -200,7 +200,7 @@ public class JMeterReport implements JMeterPlugin {
             new org.apache.jmeter.gui.ReportMainFrame(ReportActionRouter.getInstance(),
                 treeModel, treeLis);
         ComponentUtil.centerComponentInWindow(main, 80);
-        main.show();
+        main.setVisible(true);
 
         ReportActionRouter.getInstance().actionPerformed(new ActionEvent(main, 1, ReportCheckDirty.ADD_ALL));
         if (testFile != null) {
