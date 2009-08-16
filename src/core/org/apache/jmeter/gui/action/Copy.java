@@ -105,7 +105,7 @@ public class Copy extends AbstractAction {
     }
 
     private static void cloneChildren(JMeterTreeNode to, JMeterTreeNode from) {
-        Enumeration enumFrom = from.children();
+        Enumeration<?> enumFrom = from.children();
         while (enumFrom.hasMoreElements()) {
             JMeterTreeNode child = (JMeterTreeNode) enumFrom.nextElement();
             JMeterTreeNode childClone = (JMeterTreeNode) child.clone();

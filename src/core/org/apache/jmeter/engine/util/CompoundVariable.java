@@ -156,7 +156,7 @@ public class CompoundVariable implements Function {
 
     public CompoundVariable getFunction() {
         CompoundVariable func = new CompoundVariable();
-        func.compiledComponents = (LinkedList) compiledComponents.clone();
+        func.compiledComponents = (LinkedList<Object>) compiledComponents.clone();
         func.rawParameters = rawParameters;
         return func;
     }
