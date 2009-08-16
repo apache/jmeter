@@ -53,12 +53,12 @@ public class ClassFilter {
         return inc;
     }
 
-    public Object[] filterArray(List items) {
-        Iterator itr = items.iterator();
-        ArrayList newlist = new ArrayList();
+    public Object[] filterArray(List<String> items) {
+        Iterator<String> itr = items.iterator();
+        ArrayList<Object> newlist = new ArrayList<Object>();
         while (itr.hasNext()) {
-            Object item = itr.next();
-            if (include((String)item)) {
+            String item = itr.next();
+            if (include(item)) {
                 newlist.add(item);
             }
         }

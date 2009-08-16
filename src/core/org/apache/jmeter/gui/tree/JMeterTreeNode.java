@@ -40,7 +40,7 @@ import org.apache.log.Logger;
 public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeNode {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private JMeterTreeModel treeModel;
+    private final JMeterTreeModel treeModel;
 
     public JMeterTreeNode() {// Allow serializable test to work
         // TODO: is the serializable test necessary now that JMeterTreeNode is
@@ -70,7 +70,7 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
         TestElement testElement = getTestElement();
         try {
             if (testElement instanceof TestBean) {
-                Class testClass = testElement.getClass();
+                Class<?> testClass = testElement.getClass();
                 try {
                     Image img = Introspector.getBeanInfo(testClass).getIcon(BeanInfo.ICON_COLOR_16x16);
                     // If icon has not been defined, then use GUI_CLASS property
@@ -97,7 +97,7 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
         }
     }
 
-    public Collection getMenuCategories() {
+    public Collection<String> getMenuCategories() {
         try {
             return GuiPackage.getInstance().getGui(getTestElement()).getMenuCategories();
         } catch (Exception e) {
@@ -127,14 +127,17 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
         return GuiPackage.getInstance().getGui((TestElement) getUserObject()).getDocAnchor();
     }
 
+    /** {@inheritDoc} */
     public void setName(String name) {
         ((TestElement) getUserObject()).setName(name);
     }
 
+    /** {@inheritDoc} */
     public String getName() {
         return ((TestElement) getUserObject()).getName();
     }
 
+    /** {@inheritDoc} */
     public void nameChanged() {
         treeModel.nodeChanged(this);
     }

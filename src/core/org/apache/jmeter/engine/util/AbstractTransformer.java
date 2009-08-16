@@ -25,10 +25,11 @@ import java.util.Map;
 
 abstract class AbstractTransformer implements ValueTransformer {
 
-    protected CompoundVariable masterFunction;
+    private CompoundVariable masterFunction;
 
-    protected Map variables;
+    private Map<String, String> variables;
 
+    /** {@inheritDoc} */
     public void setMasterFunction(CompoundVariable variable) {
         masterFunction = variable;
     }
@@ -37,11 +38,12 @@ abstract class AbstractTransformer implements ValueTransformer {
         return masterFunction;
     }
 
-    public Map getVariables() {
+    public Map<String, String> getVariables() {
         return variables;
     }
 
-    public void setVariables(Map map) {
+    /** {@inheritDoc} */
+    public void setVariables(Map<String, String> map) {
         variables = map;
     }
 }

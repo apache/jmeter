@@ -44,6 +44,7 @@ public class HashTreeConverter extends AbstractCollectionConverter {
      *
      * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
      */
+    @SuppressWarnings("unchecked") // superclass does not use types
     @Override
     public boolean canConvert(Class arg0) {
         return HashTree.class.isAssignableFrom(arg0);
@@ -59,7 +60,7 @@ public class HashTreeConverter extends AbstractCollectionConverter {
     @Override
     public void marshal(Object arg0, HierarchicalStreamWriter writer, MarshallingContext context) {
         HashTree tree = (HashTree) arg0;
-        Iterator iter = tree.list().iterator();
+        Iterator<?> iter = tree.list().iterator();
         while (iter.hasNext()) {
             Object item = iter.next();
             writeItem(item, context, writer);

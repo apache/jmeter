@@ -23,6 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.jmeter.assertions.Assertion;
+import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.samplers.SampleListener;
@@ -51,11 +52,11 @@ public class SamplePackage {
     // TODO the following lists don't seem to be used at present
     private List responseModifiers;
 
-    private List configs;
+    private List<ConfigTestElement> configs;
 
     private List modifiers;
 
-    private List controllers;
+    private List<TestElement> controllers;
 
     private Sampler sampler;
 
@@ -63,7 +64,7 @@ public class SamplePackage {
     }
 
     public SamplePackage(
-            List configs,
+            List<ConfigTestElement> configs,
             List modifiers,
             List responseModifiers, 
             List<SampleListener> listeners,
@@ -71,7 +72,7 @@ public class SamplePackage {
             List<Assertion> assertions, 
             List<PostProcessor> postProcessors, 
             List<PreProcessor> preProcessors,
-            List controllers) {
+            List<TestElement> controllers) {
         log.debug("configs is null: " + (configs == null));
         this.configs = configs;
         this.modifiers = modifiers;
@@ -98,17 +99,18 @@ public class SamplePackage {
     }
 
     // TODO: Unfortunately, few of the test element interfaces implement TestElement
-    private void setRunningVersion(List list, boolean running) {
-        Iterator iter = list.iterator();
+    // (though all the implementation classes do)
+    private void setRunningVersion(List<?> list, boolean running) {
+        Iterator<TestElement> iter = (Iterator<TestElement>) list.iterator();
         while (iter.hasNext()) {
-            ((TestElement) iter.next()).setRunningVersion(running);
+            iter.next().setRunningVersion(running);
         }
     }
 
-    private void recoverRunningVersion(List list) {
-        Iterator iter = list.iterator();
+    private void recoverRunningVersion(List<?> list) {
+        Iterator<TestElement> iter = (Iterator<TestElement>) list.iterator();
         while (iter.hasNext()) {
-            ((TestElement) iter.next()).recoverRunningVersion();
+            iter.next().recoverRunningVersion();
         }
     }
 
@@ -191,7 +193,7 @@ public class SamplePackage {
      *
      * @return List
      */
-    public List getConfigs() {
+    public List<ConfigTestElement> getConfigs() {
         return configs;
     }
 
@@ -215,7 +217,7 @@ public class SamplePackage {
      * @param assertions
      *            the assertions to set
      */
-    public void setAssertions(List assertions) {
+    public void setAssertions(List<Assertion> assertions) {
         this.assertions = assertions;
     }
 
@@ -225,7 +227,7 @@ public class SamplePackage {
      * @param configs
      *            the configs to set
      */
-    public void setConfigs(List configs) {
+    public void setConfigs(List<ConfigTestElement> configs) {
         this.configs = configs;
     }
 

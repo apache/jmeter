@@ -188,16 +188,17 @@ public class Graph extends JComponent implements Scrollable, Clearable {
         });
     }
 
+    /** {@inheritDoc}} */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        List samples = model.getSamples();
+        List<Sample> samples = model.getSamples();
         synchronized (samples ) {
-            Iterator e = samples.iterator();
+            Iterator<Sample> e = samples.iterator();
 
             for (int i = 0; e.hasNext(); i++) {
-                Sample s = (Sample) e.next();
+                Sample s = e.next();
 
                 drawSample(i, s, g);
             }
