@@ -49,13 +49,13 @@ public class MonitorPerformancePanel extends JSplitPane implements TreeSelection
 
     private DefaultTreeModel TREEMODEL;
 
-    private MonitorGraph GRAPH;
+    private final MonitorGraph GRAPH;
 
     private DefaultMutableTreeNode ROOTNODE;
 
-    private HashMap SERVERMAP;
+    private final HashMap<String, DefaultMutableTreeNode> SERVERMAP;
 
-    private MonitorAccumModel MODEL;
+    private final MonitorAccumModel MODEL;
 
     private SampleResult ROOTSAMPLE;
 
@@ -103,6 +103,9 @@ public class MonitorPerformancePanel extends JSplitPane implements TreeSelection
     @Deprecated
     public MonitorPerformancePanel() {
         // log.warn("Only for use in unit testing");
+        SERVERMAP = null;
+        MODEL = null;
+        GRAPH = null;
     }
 
     /**
@@ -110,7 +113,7 @@ public class MonitorPerformancePanel extends JSplitPane implements TreeSelection
      */
     public MonitorPerformancePanel(MonitorAccumModel model, MonitorGraph graph) {
         super();
-        this.SERVERMAP = new HashMap();
+        this.SERVERMAP = new HashMap<String, DefaultMutableTreeNode>();
         this.MODEL = model;
         this.MODEL.addListener(this);
         this.GRAPH = graph;

@@ -79,6 +79,7 @@ public class JTLData implements Serializable, DataSet {
      * @param urls
      * @return array list of non-null entries (may be empty)
      */
+    @SuppressWarnings("unchecked") // Method is broken anyway
     public List getStats(List urls) {
         ArrayList items = new ArrayList();
         Iterator itr = urls.iterator();
