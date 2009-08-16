@@ -415,7 +415,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         test.traverse(new TurnElementsOn());
         if (startListenersLater) { notifyTestListenersOfStart(testListeners); }
 
-        List testLevelElements = new LinkedList(test.list(test.getArray()[0]));
+        List<?> testLevelElements = new LinkedList<Object>(test.list(test.getArray()[0]));
         removeThreadGroups(testLevelElements);
         SearchByClass searcher = new SearchByClass(ThreadGroup.class);
         test.traverse(searcher);
