@@ -62,14 +62,14 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
     private Object SOAPHeader = null;
 
     public HeaderManager() {
-        setProperty(new CollectionProperty(HEADERS, new ArrayList()));
+        setProperty(new CollectionProperty(HEADERS, new ArrayList<Object>()));
     }
 
     /** {@inheritDoc} */
     @Override
     public void clear() {
         super.clear();
-        setProperty(new CollectionProperty(HEADERS, new ArrayList()));
+        setProperty(new CollectionProperty(HEADERS, new ArrayList<Object>()));
     }
 
     /**
