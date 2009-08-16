@@ -36,48 +36,48 @@ import javax.swing.event.ChangeListener;
 import org.apache.jmeter.util.JMeterUtils;
 
 public class DirectoryPanel extends HorizontalPanel implements ActionListener {
-    protected JTextField filename = new JTextField(20);
 
-    protected JButton browse = new JButton(JMeterUtils.getResString("browse"));
+    private static final String ACTION_BROWSE = "browse"; // $NON-NSL-1$
 
-    List listeners = new LinkedList();
+    private final JTextField filename = new JTextField(20);
 
-    String title;
+    private final JButton browse = new JButton(JMeterUtils.getResString("browse"));
 
-    String filetype;
+    private final List<ChangeListener> listeners = new LinkedList<ChangeListener>();
 
-    Color background;
+    private final String title;
+
+//    private final String filetype; // NOT USED
+
+    private final Color background;
 
     /**
      * Constructor for the FilePanel object.
      */
     public DirectoryPanel() {
-        title = "";
-        init();
+        this("", null, null);
     }
 
     public DirectoryPanel(String title) {
-        this.title = title;
-        init();
+        this(title, null, null);
     }
 
     public DirectoryPanel(String title, String filetype, Color bk) {
-        this(title,filetype);
+        this.title = title;
+//        this.filetype = filetype;
         this.background = bk;
         init();
     }
 
     public DirectoryPanel(String title, String filetype) {
-        this(title);
-        this.filetype = filetype;
+        this(title, filetype, null);
     }
 
     /**
      * Constructor for the FilePanel object.
      */
     public DirectoryPanel(ChangeListener l, String title) {
-        this.title = title;
-        init();
+        this(title);
         listeners.add(l);
     }
 
@@ -93,7 +93,7 @@ public class DirectoryPanel extends HorizontalPanel implements ActionListener {
         add(Box.createHorizontalStrut(5));
         filename.addActionListener(this);
         add(browse);
-        browse.setActionCommand("browse");
+        browse.setActionCommand(ACTION_BROWSE);
         browse.addActionListener(this);
     }
 
@@ -127,14 +127,14 @@ public class DirectoryPanel extends HorizontalPanel implements ActionListener {
     }
 
     private void fireFileChanged() {
-        Iterator iter = listeners.iterator();
+        Iterator<ChangeListener> iter = listeners.iterator();
         while (iter.hasNext()) {
-            ((ChangeListener) iter.next()).stateChanged(new ChangeEvent(this));
+            iter.next().stateChanged(new ChangeEvent(this));
         }
     }
 
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("browse")) {
+        if (e.getActionCommand().equals(ACTION_BROWSE)) {
             JFileChooser chooser = DirectoryDialoger.promptToOpenFile();
             if (chooser.getSelectedFile() != null) {
                 filename.setText(chooser.getSelectedFile().getPath());
