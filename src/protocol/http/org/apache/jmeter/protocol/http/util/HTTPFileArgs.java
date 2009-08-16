@@ -40,7 +40,7 @@ public class HTTPFileArgs extends ConfigTestElement implements Serializable {
      * Create a new HTTPFileArgs object with no files.
      */
     public HTTPFileArgs() {
-        setProperty(new CollectionProperty(HTTP_FILE_ARGS, new ArrayList()));
+        setProperty(new CollectionProperty(HTTP_FILE_ARGS, new ArrayList<HTTPFileArg>()));
     }
 
     /**
@@ -58,7 +58,7 @@ public class HTTPFileArgs extends ConfigTestElement implements Serializable {
     @Override
     public void clear() {
         super.clear();
-        setProperty(new CollectionProperty(HTTP_FILE_ARGS, new ArrayList()));
+        setProperty(new CollectionProperty(HTTP_FILE_ARGS, new ArrayList<HTTPFileArg>()));
     }
 
     /**
@@ -66,7 +66,7 @@ public class HTTPFileArgs extends ConfigTestElement implements Serializable {
      *
      * @param files the new files
      */
-    public void setHTTPFileArgs(List files) {
+    public void setHTTPFileArgs(List<HTTPFileArg> files) {
         setProperty(new CollectionProperty(HTTP_FILE_ARGS, files));
     }
 

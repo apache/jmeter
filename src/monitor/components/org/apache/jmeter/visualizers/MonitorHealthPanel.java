@@ -36,7 +36,7 @@ import org.apache.jmeter.samplers.Clearable;
  * only uses the most current information to show the status.
  */
 public class MonitorHealthPanel extends JPanel implements MonitorListener, Clearable {
-    private final HashMap/*<String, ServerPanel>*/ serverPanelMap = new HashMap/*<String, ServerPanel>*/();
+    private final HashMap<String, ServerPanel> serverPanelMap = new HashMap<String, ServerPanel>();
 
     private JPanel servers = null;
 
@@ -115,7 +115,7 @@ public class MonitorHealthPanel extends JPanel implements MonitorListener, Clear
         if (serverPanelMap.containsKey(model.getURL())) {
             ServerPanel pane = null;
             if (serverPanelMap.get(model.getURL()) != null) {
-                pane = (ServerPanel) serverPanelMap.get((model.getURL()));
+                pane = serverPanelMap.get((model.getURL()));
             } else {
                 pane = new ServerPanel(model);
                 serverPanelMap.put(model.getURL(), pane);
