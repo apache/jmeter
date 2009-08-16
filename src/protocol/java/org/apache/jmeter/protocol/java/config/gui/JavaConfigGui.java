@@ -53,9 +53,6 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
     /** Logging */
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    /** The name of the classnameCombo JComboBox */
-    private static final String CLASSNAMECOMBO = "classnamecombo";
-
     /** A combo box allowing the user to choose a test class. */
     private JComboBox classnameCombo;
 
@@ -90,6 +87,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
         init();
     }
 
+    /** {@inheritDoc} */
     public String getLabelResource() {
         return "java_request_defaults"; // $NON-NLS-1$
     }
@@ -119,7 +117,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
      * @return a panel containing the relevant components
      */
     private JPanel createClassnamePanel() {
-        List possibleClasses = new ArrayList();
+        List<String> possibleClasses = new ArrayList<String>();
 
         try {
             // Find all the classes which implement the JavaSamplerClient
@@ -139,7 +137,6 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
 
         classnameCombo = new JComboBox(possibleClasses.toArray());
         classnameCombo.addActionListener(this);
-        classnameCombo.setName(CLASSNAMECOMBO);
         classnameCombo.setEditable(false);
         label.setLabelFor(classnameCombo);
 
@@ -217,7 +214,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
         return argsPanel;
     }
 
-    /* Overrides AbstractJMeterGuiComponent.configure(TestElement) */
+    /** {@inheritDoc} */
     @Override
     public void configure(TestElement config) {
         super.configure(config);
@@ -227,14 +224,14 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
         classnameCombo.setSelectedItem(config.getPropertyAsString(JavaSampler.CLASSNAME));
     }
 
-    /* Implements JMeterGUIComponent.createTestElement() */
+    /** {@inheritDoc} */
     public TestElement createTestElement() {
         JavaConfig config = new JavaConfig();
         modifyTestElement(config);
         return config;
     }
 
-    /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
+    /** {@inheritDoc} */
     public void modifyTestElement(TestElement config) {
         configureTestElement(config);
         ((JavaConfig) config).setArguments((Arguments) argsPanel.createTestElement());

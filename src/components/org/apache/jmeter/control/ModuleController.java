@@ -131,14 +131,14 @@ public class ModuleController extends GenericController implements ReplaceableCo
      */
     public void resolveReplacementSubTree(JMeterTreeNode context) {
         if (selectedNode == null) {
-            List nodePathList = getNodePath();
+            List<?> nodePathList = getNodePath();
             if (nodePathList != null && nodePathList.size() > 0) {
                 traverse(context, nodePathList, 1);
             }
         }
     }
 
-    private void traverse(JMeterTreeNode node, List nodePath, int level) {
+    private void traverse(JMeterTreeNode node, List<?> nodePath, int level) {
         if (node != null && nodePath.size() > level) {
             for (int i = 0; i < node.getChildCount(); i++) {
                 JMeterTreeNode cur = (JMeterTreeNode) node.getChildAt(i);
@@ -170,9 +170,9 @@ public class ModuleController extends GenericController implements ReplaceableCo
     }
 
     private void createSubTree(HashTree tree, JMeterTreeNode node) {
-        Enumeration e = node.children();
+        Enumeration<JMeterTreeNode> e = node.children();
         while (e.hasMoreElements()) {
-            JMeterTreeNode subNode = (JMeterTreeNode) e.nextElement();
+            JMeterTreeNode subNode = e.nextElement();
             tree.add(subNode);
             createSubTree(tree.getTree(subNode), subNode);
         }
@@ -186,9 +186,9 @@ public class ModuleController extends GenericController implements ReplaceableCo
     }
 
     private static void cloneChildren(JMeterTreeNode to, JMeterTreeNode from) {
-        Enumeration enumr = from.children();
+        Enumeration<JMeterTreeNode> enumr = from.children();
         while (enumr.hasMoreElements()) {
-            JMeterTreeNode child = (JMeterTreeNode) enumr.nextElement();
+            JMeterTreeNode child = enumr.nextElement();
             JMeterTreeNode childClone = (JMeterTreeNode) child.clone();
             childClone.setUserObject(((TestElement) child.getUserObject()).clone());
             to.add(childClone);

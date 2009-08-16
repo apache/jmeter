@@ -64,10 +64,10 @@ public class BeanShellServer implements Runnable {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
 
         try {
-            Class Interpreter = loader.loadClass("bsh.Interpreter");//$NON-NLS-1$
+            Class<?> Interpreter = loader.loadClass("bsh.Interpreter");//$NON-NLS-1$
             Object instance = Interpreter.newInstance();
-            Class string = String.class;
-            Class object = Object.class;
+            Class<String> string = String.class;
+            Class<Object> object = Object.class;
 
             Method eval = Interpreter.getMethod("eval", new Class[] { string });//$NON-NLS-1$
             Method setObj = Interpreter.getMethod("set", new Class[] { string, object });//$NON-NLS-1$

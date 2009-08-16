@@ -34,12 +34,13 @@ import java.io.Serializable;
 public class HoldSampleSender implements SampleSender, Serializable {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private List sampleStore = new ArrayList();
+    private final List<SampleEvent> sampleStore = new ArrayList<SampleEvent>();
 
-    private RemoteSampleListener listener;
+    private final RemoteSampleListener listener;
 
     public HoldSampleSender(){
         log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
+        listener = null;
     }
 
     HoldSampleSender(RemoteSampleListener listener) {
@@ -47,40 +48,43 @@ public class HoldSampleSender implements SampleSender, Serializable {
         this.listener = listener;
     }
 
+    /** {@inheritDoc} */
     public void testEnded() {
         log.info("Test ended()");
         try {
             synchronized (sampleStore) {
-                Iterator i = sampleStore.iterator();
+                Iterator<SampleEvent> i = sampleStore.iterator();
                 while (i.hasNext()) {
-                    SampleEvent se = (SampleEvent) i.next();
+                    SampleEvent se = i.next();
                     listener.sampleOccurred(se);
                 }
             }
             listener.testEnded();
-            sampleStore = null;
+            sampleStore.clear();
         } catch (Throwable ex) {
             log.warn("testEnded()", ex);
         }
 
     }
 
+    /** {@inheritDoc} */
     public void testEnded(String host) {
         log.info("Test Ended on " + host); // should this be debug?
         try {
-            Iterator i = sampleStore.iterator();
+            Iterator<SampleEvent> i = sampleStore.iterator();
             while (i.hasNext()) {
-                SampleEvent se = (SampleEvent) i.next();
+                SampleEvent se = i.next();
                 listener.sampleOccurred(se);
             }
             listener.testEnded(host);
-            sampleStore = null;
+            sampleStore.clear();
         } catch (Throwable ex) {
             log.error("testEnded(host)", ex);
         }
 
     }
 
+    /** {@inheritDoc} */
     public void sampleOccurred(SampleEvent e) {
         log.debug("Sample occurred");
         synchronized (sampleStore) {

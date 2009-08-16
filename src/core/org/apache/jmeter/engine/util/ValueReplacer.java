@@ -61,33 +61,33 @@ public class ValueReplacer {
     }
 
     public void replaceValues(TestElement el) throws InvalidVariableException {
-        Collection newProps = replaceValues(el.propertyIterator(), new ReplaceStringWithFunctions(masterFunction,
+        Collection<JMeterProperty> newProps = replaceValues(el.propertyIterator(), new ReplaceStringWithFunctions(masterFunction,
                 variables));
         setProperties(el, newProps);
     }
 
-    private void setProperties(TestElement el, Collection newProps) {
-        Iterator iter = newProps.iterator();
+    private void setProperties(TestElement el, Collection<JMeterProperty> newProps) {
         el.clear();
+        Iterator<JMeterProperty> iter = newProps.iterator();
         while (iter.hasNext()) {
-            el.setProperty((JMeterProperty) iter.next());
+            el.setProperty(iter.next());
         }
     }
 
     public void reverseReplace(TestElement el) throws InvalidVariableException {
-        Collection newProps = replaceValues(el.propertyIterator(), new ReplaceFunctionsWithStrings(masterFunction,
+        Collection<JMeterProperty> newProps = replaceValues(el.propertyIterator(), new ReplaceFunctionsWithStrings(masterFunction,
                 variables));
         setProperties(el, newProps);
     }
 
     public void reverseReplace(TestElement el, boolean regexMatch) throws InvalidVariableException {
-        Collection newProps = replaceValues(el.propertyIterator(), new ReplaceFunctionsWithStrings(masterFunction,
+        Collection<JMeterProperty> newProps = replaceValues(el.propertyIterator(), new ReplaceFunctionsWithStrings(masterFunction,
                 variables, regexMatch));
         setProperties(el, newProps);
     }
 
     public void undoReverseReplace(TestElement el) throws InvalidVariableException {
-        Collection newProps = replaceValues(el.propertyIterator(), new UndoVariableReplacement(masterFunction,
+        Collection<JMeterProperty> newProps = replaceValues(el.propertyIterator(), new UndoVariableReplacement(masterFunction,
                 variables));
         setProperties(el, newProps);
     }
@@ -106,8 +106,8 @@ public class ValueReplacer {
         variables.putAll(vars);
     }
 
-    private Collection replaceValues(PropertyIterator iter, ValueTransformer transform) throws InvalidVariableException {
-        List props = new LinkedList();
+    private Collection<JMeterProperty> replaceValues(PropertyIterator iter, ValueTransformer transform) throws InvalidVariableException {
+        List<JMeterProperty> props = new LinkedList<JMeterProperty>();
         while (iter.hasNext()) {
             JMeterProperty val = iter.next();
             if (log.isDebugEnabled()) {
@@ -124,11 +124,11 @@ public class ValueReplacer {
                 }
             } else if (val instanceof MultiProperty) {
                 MultiProperty multiVal = (MultiProperty) val;
-                Collection newValues = replaceValues(multiVal.iterator(), transform);
+                Collection<JMeterProperty> newValues = replaceValues(multiVal.iterator(), transform);
                 multiVal.clear();
-                Iterator propIter = newValues.iterator();
+                Iterator<JMeterProperty> propIter = newValues.iterator();
                 while (propIter.hasNext()) {
-                    multiVal.addProperty((JMeterProperty) propIter.next());
+                    multiVal.addProperty(propIter.next());
                 }
                 if (log.isDebugEnabled()) {
                     log.debug("Replacement result: " + multiVal);

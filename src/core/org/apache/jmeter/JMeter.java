@@ -726,9 +726,9 @@ public class JMeter implements JMeterPlugin {
             // Hack to resolve ModuleControllers in non GUI mode
             SearchByClass replaceableControllers = new SearchByClass(ReplaceableController.class);
             tree.traverse(replaceableControllers);
-            Collection replaceableControllersRes = replaceableControllers.getSearchResults();
-            for (Iterator iter = replaceableControllersRes.iterator(); iter.hasNext();) {
-                ReplaceableController replaceableController = (ReplaceableController) iter.next();
+            Collection<ReplaceableController> replaceableControllersRes = replaceableControllers.getSearchResults();
+            for (Iterator<ReplaceableController> iter = replaceableControllersRes.iterator(); iter.hasNext();) {
+                ReplaceableController replaceableController = iter.next();
                 replaceableController.resolveReplacementSubTree(root);
             }
 
@@ -800,7 +800,7 @@ public class JMeter implements JMeterPlugin {
      * @param tree
      */
     public static void convertSubTree(HashTree tree) {
-        Iterator iter = new LinkedList(tree.list()).iterator();
+        Iterator<?> iter = new LinkedList(tree.list()).iterator();
         while (iter.hasNext()) {
             Object o = iter.next();
             if (o instanceof TestElement) {

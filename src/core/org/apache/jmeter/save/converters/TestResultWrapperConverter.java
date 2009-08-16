@@ -62,6 +62,7 @@ public class TestResultWrapperConverter extends AbstractCollectionConverter {
      *
      * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
      */
+    @SuppressWarnings("unchecked") // superclass does not use types
     @Override
     public boolean canConvert(Class arg0) {
         return arg0.equals(TestResultWrapper.class);
@@ -93,7 +94,7 @@ public class TestResultWrapperConverter extends AbstractCollectionConverter {
     @Override
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
         TestResultWrapper results = new TestResultWrapper();
-        Collection samples = new ArrayList();
+        Collection<SampleResult> samples = new ArrayList<SampleResult>();
         String ver = reader.getAttribute("version");  //$NON-NLS-1$
         if (ver == null || ver.length() == 0) {
             ver = "1.0";  //$NON-NLS-1$

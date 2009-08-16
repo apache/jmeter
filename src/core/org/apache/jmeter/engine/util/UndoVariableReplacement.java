@@ -30,27 +30,22 @@ import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.StringUtilities;
 
 public class UndoVariableReplacement extends AbstractTransformer {
-    public UndoVariableReplacement(CompoundVariable masterFunction, Map variables) {
+    public UndoVariableReplacement(CompoundVariable masterFunction, Map<String, String> variables) {
         super();
         setMasterFunction(masterFunction);
         setVariables(variables);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see ValueTransformer#transformValue(JMeterProperty)
-     */
+    /** {@inheritDoc} */
     public JMeterProperty transformValue(JMeterProperty prop) throws InvalidVariableException {
-        Iterator iter = getVariables().keySet().iterator();
+        Iterator<String> iter = getVariables().keySet().iterator();
         String input = prop.getStringValue();
         while (iter.hasNext()) {
-            String key = (String) iter.next();
-            String value = (String) getVariables().get(key);
+            String key = iter.next();
+            String value = getVariables().get(key);
             input = StringUtilities.substitute(input, "${" + key + "}", value);
         }
         StringProperty newProp = new StringProperty(prop.getName(), input);
         return newProp;
     }
-
 }

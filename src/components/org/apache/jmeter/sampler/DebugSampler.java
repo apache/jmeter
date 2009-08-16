@@ -82,18 +82,18 @@ public class DebugSampler extends AbstractSampler implements TestBean {
     }
 
     private void formatSet(StringBuffer sb, Set s) {
-        ArrayList al = new ArrayList(s);
-        Collections.sort(al, new Comparator(){
-            public int compare(Object o1, Object o2) {
+        ArrayList<Map.Entry<Object, Object>> al = new ArrayList<Map.Entry<Object, Object>>(s);
+        Collections.sort(al, new Comparator<Map.Entry<Object, Object>>(){
+            public int compare(Map.Entry<Object, Object> o1, Map.Entry<Object, Object> o2) {
                 String m1,m2;
-                m1=(String)((Map.Entry)o1).getKey();
-                m2=(String)((Map.Entry)o2).getKey();
+                m1=(String)o1.getKey();
+                m2=(String)o2.getKey();
                 return m1.compareTo(m2);
             }
         });
-        Iterator i = al.iterator();
+        Iterator<Map.Entry<Object, Object>> i = al.iterator();
         while(i.hasNext()){
-            Map.Entry me = (Map.Entry) i.next();
+            Map.Entry<Object, Object> me = i.next();
             sb.append(me.getKey());
             sb.append("=");
             sb.append(me.getValue());

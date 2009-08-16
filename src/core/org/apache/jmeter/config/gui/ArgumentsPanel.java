@@ -152,13 +152,13 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
     public void modifyTestElement(TestElement args) {
         stopTableEditing();
-        Iterator modelData = tableModel.iterator();
         Arguments arguments = null;
         if (args instanceof Arguments) {
             arguments = (Arguments) args;
             arguments.clear();
+            Iterator<Argument> modelData = (Iterator<Argument>) tableModel.iterator();
             while (modelData.hasNext()) {
-                Argument arg = (Argument) modelData.next();
+                Argument arg = modelData.next();
                 arg.setMetaData("="); // $NON-NLS-1$
                 arguments.addArgument(arg);
             }
