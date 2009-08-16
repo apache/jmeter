@@ -118,7 +118,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
         }
         UserParameters userParams = ((UserParameters) params);
         userParams.setNames(new CollectionProperty(UserParameters.NAMES, tableModel.getColumnData(NAME_COL_RESOURCE)));
-        CollectionProperty threadLists = new CollectionProperty(UserParameters.THREAD_VALUES, new ArrayList());
+        CollectionProperty threadLists = new CollectionProperty(UserParameters.THREAD_VALUES, new ArrayList<Object>());
         log.debug("making threadlists from gui");
         for (int col = 1; col < tableModel.getColumnCount(); col++) {
             threadLists.addItem(tableModel.getColumnData(getUserColName(col)));

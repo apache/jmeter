@@ -77,11 +77,11 @@ public class ListenerNotifier {
      *            must not be null and must contain only SampleListener
      *            elements.
      */
-    public void notifyListeners(SampleEvent res, List listeners) {
-        Iterator iter = listeners.iterator();
+    public void notifyListeners(SampleEvent res, List<SampleListener> listeners) {
+        Iterator<SampleListener> iter = listeners.iterator();
         while (iter.hasNext()) {
             try {
-                SampleListener sampleListener = ((SampleListener) iter.next());
+                SampleListener sampleListener = iter.next();
                 TestBeanHelper.prepare((TestElement) sampleListener);
                 sampleListener.sampleOccurred(res);
             } catch (RuntimeException e) {

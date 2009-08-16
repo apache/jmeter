@@ -40,7 +40,7 @@ public class Arguments extends ConfigTestElement implements Serializable {
      * Create a new Arguments object with no arguments.
      */
     public Arguments() {
-        setProperty(new CollectionProperty(ARGUMENTS, new ArrayList()));
+        setProperty(new CollectionProperty(ARGUMENTS, new ArrayList<Argument>()));
     }
 
     /**
@@ -58,7 +58,7 @@ public class Arguments extends ConfigTestElement implements Serializable {
     @Override
     public void clear() {
         super.clear();
-        setProperty(new CollectionProperty(ARGUMENTS, new ArrayList()));
+        setProperty(new CollectionProperty(ARGUMENTS, new ArrayList<Argument>()));
     }
 
     /**
@@ -67,7 +67,7 @@ public class Arguments extends ConfigTestElement implements Serializable {
      * @param arguments
      *            the new arguments
      */
-    public void setArguments(List arguments) {
+    public void setArguments(List<Argument> arguments) {
         setProperty(new CollectionProperty(ARGUMENTS, arguments));
     }
 
