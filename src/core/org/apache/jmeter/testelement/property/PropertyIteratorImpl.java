@@ -23,30 +23,23 @@ import java.util.Iterator;
 
 public class PropertyIteratorImpl implements PropertyIterator {
 
-    Iterator iter;
+    private final Iterator<JMeterProperty> iter;
 
-    public PropertyIteratorImpl(Collection value) {
+    public PropertyIteratorImpl(Collection<JMeterProperty> value) {
         iter = value.iterator();
     }
 
-    public PropertyIteratorImpl() {
-    }
-
-    public void setCollection(Collection value) {
-        iter = value.iterator();
-    }
-
+    /** {@inheritDoc} */
     public boolean hasNext() {
         return iter.hasNext();
     }
 
+    /** {@inheritDoc} */
     public JMeterProperty next() {
-        return (JMeterProperty) iter.next();
+        return iter.next();
     }
 
-    /**
-     * @see org.apache.jmeter.testelement.property.PropertyIterator#remove()
-     */
+    /** {@inheritDoc} */
     public void remove() {
         iter.remove();
     }
