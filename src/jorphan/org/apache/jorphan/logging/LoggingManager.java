@@ -215,7 +215,7 @@ public final class LoggingManager {
      * category.
      */
     public static void setLoggingLevels(Properties appProperties) {
-        Iterator props = appProperties.keySet().iterator();
+        Iterator<?> props = appProperties.keySet().iterator();
         while (props.hasNext()) {
             String prop = (String) props.next();
             if (prop.startsWith(LOG_PRIORITY + ".")) //$NON_NLS-1$
