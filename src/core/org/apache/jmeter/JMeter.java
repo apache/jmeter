@@ -800,7 +800,7 @@ public class JMeter implements JMeterPlugin {
      * @param tree
      */
     public static void convertSubTree(HashTree tree) {
-        Iterator<?> iter = new LinkedList(tree.list()).iterator();
+        Iterator<Object> iter = new LinkedList<Object>(tree.list()).iterator();
         while (iter.hasNext()) {
             Object o = iter.next();
             if (o instanceof TestElement) {
