@@ -100,9 +100,9 @@ public class ReportCopy extends AbstractAction {
     }
 
     private static void cloneChildren(ReportTreeNode to, ReportTreeNode from) {
-        Enumeration enumFrom = from.children();
+        Enumeration<ReportTreeNode> enumFrom = from.children();
         while (enumFrom.hasMoreElements()) {
-            ReportTreeNode child = (ReportTreeNode) enumFrom.nextElement();
+            ReportTreeNode child = enumFrom.nextElement();
             ReportTreeNode childClone = (ReportTreeNode) child.clone();
             childClone.setUserObject(((TestElement) child.getUserObject())
                     .clone());

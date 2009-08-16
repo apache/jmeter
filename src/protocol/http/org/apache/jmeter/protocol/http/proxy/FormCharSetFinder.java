@@ -54,7 +54,7 @@ class FormCharSetFinder {
      * @param pageEncoding the encoding used for the whole page
      * @throws HTMLParseException
      */
-    public void addFormActionsAndCharSet(String html, Map formEncodings, String pageEncoding)
+    public void addFormActionsAndCharSet(String html, Map<String, String> formEncodings, String pageEncoding)
             throws HTMLParseException {
         if (log.isDebugEnabled()) {
             log.debug("Parsing html of: " + html);
@@ -85,7 +85,7 @@ class FormCharSetFinder {
      * @param formEncodings the Map where we should add form encodings found
      * @param pageEncoding the encoding used for the page where the nodes are present
      */
-    private void parseNodes(final NodeIterator e, Map formEncodings, String pageEncoding)
+    private void parseNodes(final NodeIterator e, Map<String, String> formEncodings, String pageEncoding)
         throws HTMLParseException, ParserException {
         while(e.hasMoreNodes()) {
             Node node = e.nextNode();

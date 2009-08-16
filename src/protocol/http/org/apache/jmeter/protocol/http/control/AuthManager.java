@@ -28,7 +28,6 @@ import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
@@ -79,14 +78,14 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
      * Default Constructor.
      */
     public AuthManager() {
-        setProperty(new CollectionProperty(AUTH_LIST, new ArrayList()));
+        setProperty(new CollectionProperty(AUTH_LIST, new ArrayList<Object>()));
     }
 
     /** {@inheritDoc} */
     @Override
     public void clear() {
         super.clear();
-        setProperty(new CollectionProperty(AUTH_LIST, new ArrayList()));
+        setProperty(new CollectionProperty(AUTH_LIST, new ArrayList<Object>()));
     }
 
     /**
@@ -127,10 +126,6 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
 
     public Class<?> getGuiClass() {
         return org.apache.jmeter.protocol.http.gui.AuthPanel.class;
-    }
-
-    public Collection getAddList() {
-        return null;
     }
 
     /**

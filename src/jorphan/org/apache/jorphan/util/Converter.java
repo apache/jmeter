@@ -40,7 +40,7 @@ public class Converter {
      * @param toType
      * @return Object
      */
-    public static Object convert(Object value, Class toType) {
+    public static Object convert(Object value, Class<?> toType) {
         if (value == null) {
             value = "";
         } else if (toType.isAssignableFrom(value.getClass())) {
