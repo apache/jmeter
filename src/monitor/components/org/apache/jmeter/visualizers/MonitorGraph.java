@@ -100,10 +100,10 @@ public class MonitorGraph extends JComponent implements MonitorGuiListener, Clea
         super.paintComponent(g);
         if (this.current != null) {
             synchronized (model) {
-                List samples = model.getAllSamples(this.current.getURL());
+                List<MonitorModel> samples = model.getAllSamples(this.current.getURL());
                 int size = samples.size();
                 synchronized (samples) {
-                    Iterator e;
+                    Iterator<MonitorModel> e;
                     if (size > getWidth()) {
                         e = samples.listIterator(size - getWidth());
                     } else {
@@ -111,7 +111,7 @@ public class MonitorGraph extends JComponent implements MonitorGuiListener, Clea
                     }
                     MonitorModel last = null;
                     for (int i = 0; e.hasNext(); i++) {
-                        MonitorModel s = (MonitorModel) e.next();
+                        MonitorModel s = e.next();
                         if (last == null) {
                             last = s;
                         }

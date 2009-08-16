@@ -50,11 +50,11 @@ public class SamplePackage {
     private List<PreProcessor> preProcessors = new LinkedList<PreProcessor>();
 
     // TODO the following lists don't seem to be used at present
-    private List responseModifiers;
+    private List<?> responseModifiers;
 
     private List<ConfigTestElement> configs;
 
-    private List modifiers;
+    private List<?> modifiers;
 
     private List<TestElement> controllers;
 
@@ -65,8 +65,8 @@ public class SamplePackage {
 
     public SamplePackage(
             List<ConfigTestElement> configs,
-            List modifiers,
-            List responseModifiers, 
+            List<?> modifiers,
+            List<?> responseModifiers, 
             List<SampleListener> listeners,
             List<Timer> timers,
             List<Assertion> assertions, 
@@ -100,6 +100,7 @@ public class SamplePackage {
 
     // TODO: Unfortunately, few of the test element interfaces implement TestElement
     // (though all the implementation classes do)
+    @SuppressWarnings("unchecked")
     private void setRunningVersion(List<?> list, boolean running) {
         Iterator<TestElement> iter = (Iterator<TestElement>) list.iterator();
         while (iter.hasNext()) {
@@ -107,6 +108,7 @@ public class SamplePackage {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void recoverRunningVersion(List<?> list) {
         Iterator<TestElement> iter = (Iterator<TestElement>) list.iterator();
         while (iter.hasNext()) {
@@ -200,14 +202,14 @@ public class SamplePackage {
     /**
      * Returns the modifiers.
      */
-    public List getModifiers() {
+    public List<?> getModifiers() {
         return modifiers;
     }
 
     /**
      * Returns the responseModifiers.
      */
-    public List getResponseModifiers() {
+    public List<?> getResponseModifiers() {
         return responseModifiers;
     }
 
@@ -237,7 +239,7 @@ public class SamplePackage {
      * @param modifiers
      *            the modifiers to set
      */
-    public void setModifiers(List modifiers) {
+    public void setModifiers(List<?> modifiers) {
         this.modifiers = modifiers;
     }
 
@@ -257,7 +259,7 @@ public class SamplePackage {
      * @param responseModifiers
      *            the responseModifiers to set
      */
-    public void setResponseModifiers(List responseModifiers) {
+    public void setResponseModifiers(List<?> responseModifiers) {
         this.responseModifiers = responseModifiers;
     }
 
