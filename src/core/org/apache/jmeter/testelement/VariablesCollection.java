@@ -28,14 +28,17 @@ import org.apache.jmeter.threads.JMeterVariables;
  * @version $Revision$
  */
 public class VariablesCollection implements Serializable {
-    private Map varMap = new HashMap();
+    
+    private static final long serialVersionUID = 240L;
+    
+    private Map<String, JMeterVariables> varMap = new HashMap<String, JMeterVariables>();
 
     public void addJMeterVariables(JMeterVariables jmVars) {
         varMap.put(Thread.currentThread().getName(), jmVars);
     }
 
     public JMeterVariables getVariables() {
-        return (JMeterVariables) varMap.get(Thread.currentThread().getName());
+        return varMap.get(Thread.currentThread().getName());
     }
 
 }
