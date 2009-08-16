@@ -52,17 +52,18 @@ import java.util.Map;
  * @version $Revision$
  */
 public class SearchByClass implements HashTreeTraverser {
-    List<Object> objectsOfClass = new LinkedList<Object>();
+    private final List<Object> objectsOfClass = new LinkedList<Object>();
 
-    Map<Object, ListedHashTree> subTrees = new HashMap<Object, ListedHashTree>();
+    private final Map<Object, ListedHashTree> subTrees = new HashMap<Object, ListedHashTree>();
 
-    Class<?> searchClass = null;
+    private final Class<?> searchClass;
 
     /**
      * Creates an instance of SearchByClass. However, without setting the Class
      * to search for, it will be a useless object.
      */
     public SearchByClass() {
+        searchClass = null;
     }
 
     /**
@@ -81,7 +82,7 @@ public class SearchByClass implements HashTreeTraverser {
      *
      * @return Collection All found nodes of the requested type
      */
-    public Collection getSearchResults() {
+    public Collection getSearchResults() { // TODO specify collection type without breaking callers
         return objectsOfClass;
     }
 
@@ -97,6 +98,7 @@ public class SearchByClass implements HashTreeTraverser {
         return subTrees.get(root);
     }
 
+    /** {@inheritDoc} */
     public void addNode(Object node, HashTree subTree) {
         if (searchClass.isAssignableFrom(node.getClass())) {
             objectsOfClass.add(node);
@@ -106,9 +108,11 @@ public class SearchByClass implements HashTreeTraverser {
         }
     }
 
+    /** {@inheritDoc} */
     public void subtractNode() {
     }
 
+    /** {@inheritDoc} */
     public void processPath() {
     }
 }
