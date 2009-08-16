@@ -28,17 +28,13 @@ import org.apache.jmeter.testelement.property.FunctionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 
 public class ReplaceStringWithFunctions extends AbstractTransformer {
-    public ReplaceStringWithFunctions(CompoundVariable masterFunction, Map variables) {
+    public ReplaceStringWithFunctions(CompoundVariable masterFunction, Map<String, String> variables) {
         super();
         setMasterFunction(masterFunction);
         setVariables(variables);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see ValueTransformer#transformValue(JMeterProperty)
-     */
+    /** {@inheritDoc} */
     public JMeterProperty transformValue(JMeterProperty prop) throws InvalidVariableException {
         JMeterProperty newValue = prop;
         getMasterFunction().clear();

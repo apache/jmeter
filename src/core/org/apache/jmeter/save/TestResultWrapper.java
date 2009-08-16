@@ -23,17 +23,19 @@ package org.apache.jmeter.save;
 
 import java.util.Collection;
 
+import org.apache.jmeter.samplers.SampleResult;
+
 public class TestResultWrapper {
-    String version = "";
+    private String version = "";
 
-    Collection sampleResults;
+    private Collection<SampleResult> sampleResults;
 
-    long testStartTime;
+    private long testStartTime;
 
     /**
      * @return Returns the sampleResults.
      */
-    public Collection getSampleResults() {
+    public Collection<SampleResult> getSampleResults() {
         return sampleResults;
     }
 
@@ -41,7 +43,7 @@ public class TestResultWrapper {
      * @param sampleResults
      *            The sampleResults to set.
      */
-    public void setSampleResults(Collection sampleResults) {
+    public void setSampleResults(Collection<SampleResult> sampleResults) {
         this.sampleResults = sampleResults;
     }
 

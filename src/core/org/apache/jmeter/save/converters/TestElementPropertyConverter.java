@@ -56,6 +56,7 @@ public class TestElementPropertyConverter extends AbstractCollectionConverter {
      * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
      */
     @Override
+    @SuppressWarnings("unchecked") // superclass does not use types
     public boolean canConvert(Class arg0) {
         return arg0.equals(TestElementProperty.class);
     }
@@ -71,7 +72,7 @@ public class TestElementPropertyConverter extends AbstractCollectionConverter {
     public void marshal(Object arg0, HierarchicalStreamWriter writer, MarshallingContext context) {
         TestElementProperty prop = (TestElementProperty) arg0;
         writer.addAttribute(ConversionHelp.ATT_NAME, ConversionHelp.encode(prop.getName()));
-        Class clazz = prop.getObjectValue().getClass();
+        Class<?> clazz = prop.getObjectValue().getClass();
         writer.addAttribute(ConversionHelp.ATT_ELEMENT_TYPE,
                 testFormat22 ?  mapper().serializedClass(clazz) : clazz.getName());
         if (testFormat22){

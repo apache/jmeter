@@ -48,7 +48,7 @@ import org.apache.log.Logger;
 public class TestCompiler implements HashTreeTraverser {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private final LinkedList<Object> stack = new LinkedList<Object>();
+    private final LinkedList<TestElement> stack = new LinkedList<TestElement>();
 
     private final Map<Sampler, SamplePackage> samplerConfigMap = new HashMap<Sampler, SamplePackage>();
 
@@ -98,13 +98,15 @@ public class TestCompiler implements HashTreeTraverser {
         pack.recoverRunningVersion();
     }
 
+    /** {@inheritDoc} */
     public void addNode(Object node, HashTree subTree) {
-        stack.addLast(node);
+        stack.addLast((TestElement) node);
     }
 
+    /** {@inheritDoc} */
     public void subtractNode() {
         log.debug("Subtracting node, stack size = " + stack.size());
-        TestElement child = (TestElement) stack.getLast();
+        TestElement child = stack.getLast();
         trackIterationListeners(stack);
         if (child instanceof Sampler) {
             saveSamplerConfigs((Sampler) child);
@@ -114,7 +116,7 @@ public class TestCompiler implements HashTreeTraverser {
         }
         stack.removeLast();
         if (stack.size() > 0) {
-            ObjectPair pair = new ObjectPair(child, (TestElement) stack.getLast());
+            ObjectPair pair = new ObjectPair(child, stack.getLast());
             synchronized (pairing) {// Called from multiple threads
                 if (!pairing.contains(pair)) {
                     pair.addTestElements();
@@ -124,12 +126,12 @@ public class TestCompiler implements HashTreeTraverser {
         }
     }
 
-    private void trackIterationListeners(LinkedList p_stack) {
-        TestElement child = (TestElement) p_stack.getLast();
+    private void trackIterationListeners(LinkedList<TestElement> p_stack) {
+        TestElement child = p_stack.getLast();
         if (child instanceof LoopIterationListener) {
-            ListIterator iter = p_stack.listIterator(p_stack.size());
+            ListIterator<TestElement> iter = p_stack.listIterator(p_stack.size());
             while (iter.hasPrevious()) {
-                TestElement item = (TestElement) iter.previous();
+                TestElement item = iter.previous();
                 if (item == child) {
                     continue;
                 }
@@ -142,6 +144,7 @@ public class TestCompiler implements HashTreeTraverser {
         }
     }
 
+    /** {@inheritDoc} */
     public void processPath() {
     }
 
@@ -156,7 +159,7 @@ public class TestCompiler implements HashTreeTraverser {
         LinkedList<PostProcessor> posts = new LinkedList<PostProcessor>();
         LinkedList<PreProcessor> pres = new LinkedList<PreProcessor>();
         for (int i = stack.size(); i > 0; i--) {
-            addDirectParentControllers(controllers, (TestElement) stack.get(i - 1));
+            addDirectParentControllers(controllers, stack.get(i - 1));
             Iterator<TestElement> iter = testTree.list(stack.subList(0, i)).iterator();
             List<PreProcessor>  tempPre = new LinkedList<PreProcessor> ();
             List<PostProcessor> tempPost = new LinkedList<PostProcessor>();
@@ -193,20 +196,20 @@ public class TestCompiler implements HashTreeTraverser {
     }
 
     private void saveTransactionControllerConfigs(TransactionController tc) {
-        List configs = new LinkedList();
+        List<ConfigTestElement> configs = new LinkedList<ConfigTestElement>();
         List modifiers = new LinkedList();
-        List controllers = new LinkedList();
+        List<TestElement> controllers = new LinkedList<TestElement>();
         List responseModifiers = new LinkedList();
         List<SampleListener> listeners = new LinkedList<SampleListener>();
-        List timers = new LinkedList();
+        List<Timer> timers = new LinkedList<Timer>();
         List<Assertion> assertions = new LinkedList<Assertion>();
-        LinkedList posts = new LinkedList();
-        LinkedList pres = new LinkedList();
+        LinkedList<PostProcessor> posts = new LinkedList<PostProcessor>();
+        LinkedList<PreProcessor> pres = new LinkedList<PreProcessor>();
         for (int i = stack.size(); i > 0; i--) {
-            addDirectParentControllers(controllers, (TestElement) stack.get(i - 1));
-            Iterator iter = testTree.list(stack.subList(0, i)).iterator();
+            addDirectParentControllers(controllers, stack.get(i - 1));
+            Iterator<TestElement> iter = testTree.list(stack.subList(0, i)).iterator();
             while (iter.hasNext()) {
-                TestElement item = (TestElement) iter.next();
+                TestElement item = iter.next();
                 if (item instanceof SampleListener) {
                     listeners.add((SampleListener) item);
                 }
@@ -227,7 +230,7 @@ public class TestCompiler implements HashTreeTraverser {
      * @param controllers
      * @param i
      */
-    private void addDirectParentControllers(List controllers, TestElement maybeController) {
+    private void addDirectParentControllers(List<TestElement> controllers, TestElement maybeController) {
         if (maybeController instanceof Controller) {
             log.debug("adding controller: " + maybeController + " to sampler config");
             controllers.add(maybeController);
@@ -249,11 +252,13 @@ public class TestCompiler implements HashTreeTraverser {
             }
         }
 
+        /** {@inheritDoc} */
         @Override
         public int hashCode() {
             return child.hashCode() + parent.hashCode();
         }
 
+        /** {@inheritDoc} */
         @Override
         public boolean equals(Object o) {
             if (o instanceof ObjectPair) {

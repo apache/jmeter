@@ -43,6 +43,7 @@ public class IntegerPropertyConverter implements Converter {
      *
      * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
      */
+    @SuppressWarnings("unchecked") // superclass does not use types
     public boolean canConvert(Class arg0) {
         return arg0.equals(IntegerProperty.class);
     }

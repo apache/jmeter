@@ -68,15 +68,11 @@ public class ModuleControllerGui extends AbstractControllerGui
         init();
     }
 
+    /** {@inheritDoc}} */
     public String getLabelResource() {
         return "module_controller_title"; // $NON-NLS-1$
     }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(TestElement)
-     */
+    /** {@inheritDoc}} */
     @Override
     public void configure(TestElement el) {
         super.configure(el);
@@ -91,8 +87,8 @@ public class ModuleControllerGui extends AbstractControllerGui
         reinitialize();
     }
 
-    private String renderPath(Collection path) {
-        Iterator iter = path.iterator();
+    private String renderPath(Collection<?> path) {
+        Iterator<?> iter = path.iterator();
         StringBuffer buf = new StringBuffer();
         boolean first = true;
         while (iter.hasNext()) {
@@ -109,11 +105,7 @@ public class ModuleControllerGui extends AbstractControllerGui
         return buf.toString();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
-     */
+    /** {@inheritDoc}} */
     public TestElement createTestElement() {
         ModuleController mc = new ModuleController();
         configureTestElement(mc);
@@ -123,11 +115,7 @@ public class ModuleControllerGui extends AbstractControllerGui
         return mc;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-     */
+    /** {@inheritDoc}} */
     public void modifyTestElement(TestElement element) {
         configureTestElement(element);
         TreeNodeWrapper tnw = (TreeNodeWrapper) nodesModel.getSelectedItem();
@@ -139,9 +127,7 @@ public class ModuleControllerGui extends AbstractControllerGui
         }
     }
 
-    /**
-     * Implements JMeterGUIComponent.clearGui
-     */
+    /** {@inheritDoc}} */
     @Override
     public void clearGui() {
         super.clearGui();
@@ -151,6 +137,7 @@ public class ModuleControllerGui extends AbstractControllerGui
     }
 
 
+    /** {@inheritDoc}} */
     @Override
     public JPopupMenu createPopupMenu() {
         JPopupMenu menu = new JPopupMenu();
@@ -265,6 +252,7 @@ class TreeNodeWrapper {
         return tn;
     }
 
+    /** {@inheritDoc}} */
     @Override
     public String toString() {
         return label;

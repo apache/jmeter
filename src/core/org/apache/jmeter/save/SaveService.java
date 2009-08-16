@@ -30,6 +30,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Map.Entry;
 
 import java.nio.charset.Charset;
 
@@ -79,11 +80,12 @@ public class SaveService {
             return new MapperWrapper(next){
             // Translate alias to classname and then delegate to wrapped class
             @Override
-            public Class realClass(String alias) {
+            public Class<?> realClass(String alias) {
                 String fullName = aliasToClass(alias);
                 return super.realClass(fullName == null ? alias : fullName);
             }
             // Translate to alias and then delegate to wrapped class
+            @SuppressWarnings("unchecked") // superclass is not typed
             @Override
             public String serializedClass(Class type) {
                 if (type == null) {
@@ -191,9 +193,9 @@ public class SaveService {
         try {
             Properties nameMap = loadProperties();
             // now create the aliases
-            Iterator it = nameMap.entrySet().iterator();
+            Iterator<Entry<Object, Object>> it = nameMap.entrySet().iterator();
             while (it.hasNext()) {
-                Map.Entry me = (Map.Entry) it.next();
+                Map.Entry<Object, Object> me = it.next();
                 String key = (String) me.getKey();
                 String val = (String) me.getValue();
                 if (!key.startsWith("_")) {

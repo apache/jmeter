@@ -219,6 +219,7 @@ public class GraphAccum extends JComponent implements Scrollable, GraphAccumList
         log.debug("End : updateGui2");
     }
 
+    /** {@inheritDoc}} */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -228,10 +229,10 @@ public class GraphAccum extends JComponent implements Scrollable, GraphAccumList
             // For repainting set this to false because all the points needs to
             // be redrawn so no need(shouldn't) use the previousPts.
             previousPtsAlloc = false;
-            Iterator e = model.getList().iterator();
+            Iterator<SampleResult> e = model.getList().iterator();
 
             for (int i = 0; e.hasNext(); i++) {
-                SampleResult s = (SampleResult) e.next();
+                SampleResult s = e.next();
 
                 drawSample(i * PLOT_X_WIDTH, s, g);
             }

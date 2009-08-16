@@ -54,31 +54,27 @@ public class ReplaceFunctionsWithStrings extends AbstractTransformer {
 
     private boolean regexMatch;// Should we match using regexes?
 
-    public ReplaceFunctionsWithStrings(CompoundVariable masterFunction, Map variables) {
+    public ReplaceFunctionsWithStrings(CompoundVariable masterFunction, Map<String, String> variables) {
         this(masterFunction, variables, false);
     }
 
-    public ReplaceFunctionsWithStrings(CompoundVariable masterFunction, Map variables, boolean regexMatch) {
+    public ReplaceFunctionsWithStrings(CompoundVariable masterFunction, Map<String, String> variables, boolean regexMatch) {
         super();
         setMasterFunction(masterFunction);
         setVariables(variables);
         this.regexMatch = regexMatch;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see ValueTransformer#transformValue(JMeterProperty)
-     */
+    /** {@inheritDoc} */
     public JMeterProperty transformValue(JMeterProperty prop) throws InvalidVariableException {
         PatternMatcher pm = JMeterUtils.getMatcher();
         Pattern pattern = null;
         PatternCompiler compiler = new Perl5Compiler();
-        Iterator iter = getVariables().keySet().iterator();
+        Iterator<String> iter = getVariables().keySet().iterator();
         String input = prop.getStringValue();
         while (iter.hasNext()) {
-            String key = (String) iter.next();
-            String value = (String) getVariables().get(key);
+            String key = iter.next();
+            String value = getVariables().get(key);
             if (regexMatch) {
                 try {
                     pattern = compiler.compile(value);

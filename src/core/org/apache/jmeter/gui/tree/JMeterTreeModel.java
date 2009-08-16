@@ -71,8 +71,8 @@ public class JMeterTreeModel extends DefaultTreeModel {
      * Returns a list of tree nodes that hold objects of the given class type.
      * If none are found, an empty list is returned.
      */
-    public List getNodesOfType(Class type) {
-        List nodeList = new LinkedList();
+    public List<JMeterTreeNode> getNodesOfType(Class<?> type) {
+        List<JMeterTreeNode> nodeList = new LinkedList<JMeterTreeNode>();
         traverseAndFind(type, (JMeterTreeNode) this.getRoot(), nodeList);
         return nodeList;
     }
@@ -89,9 +89,9 @@ public class JMeterTreeModel extends DefaultTreeModel {
      * the added sub tree was a full test plan.
      */
     public HashTree addSubTree(HashTree subTree, JMeterTreeNode current) throws IllegalUserActionException {
-        Iterator iter = subTree.list().iterator();
+        Iterator<TestElement> iter = subTree.list().iterator();
         while (iter.hasNext()) {
-            TestElement item = (TestElement) iter.next();
+            TestElement item = iter.next();
             if (item instanceof TestPlan) {
                 TestPlan tp = (TestPlan) item;
                 current = (JMeterTreeNode) ((JMeterTreeNode) getRoot()).getChildAt(0);
@@ -156,13 +156,13 @@ public class JMeterTreeModel extends DefaultTreeModel {
         }
     }
 
-    private void traverseAndFind(Class type, JMeterTreeNode node, List nodeList) {
+    private void traverseAndFind(Class<?> type, JMeterTreeNode node, List<JMeterTreeNode> nodeList) {
         if (type.isInstance(node.getUserObject())) {
             nodeList.add(node);
         }
-        Enumeration enumNode = node.children();
+        Enumeration<JMeterTreeNode> enumNode = node.children();
         while (enumNode.hasMoreElements()) {
-            JMeterTreeNode child = (JMeterTreeNode) enumNode.nextElement();
+            JMeterTreeNode child = enumNode.nextElement();
             traverseAndFind(type, child, nodeList);
         }
     }
@@ -171,9 +171,9 @@ public class JMeterTreeModel extends DefaultTreeModel {
         if (userObject == node.getUserObject()) {
             return node;
         }
-        Enumeration enumNode = node.children();
+        Enumeration<JMeterTreeNode> enumNode = node.children();
         while (enumNode.hasMoreElements()) {
-            JMeterTreeNode child = (JMeterTreeNode) enumNode.nextElement();
+            JMeterTreeNode child = enumNode.nextElement();
             JMeterTreeNode result = traverseAndFind(userObject, child);
             if (result != null) {
                 return result;
@@ -184,9 +184,9 @@ public class JMeterTreeModel extends DefaultTreeModel {
 
     public HashTree getCurrentSubTree(JMeterTreeNode node) {
         ListedHashTree hashTree = new ListedHashTree(node);
-        Enumeration enumNode = node.children();
+        Enumeration<JMeterTreeNode> enumNode = node.children();
         while (enumNode.hasMoreElements()) {
-            JMeterTreeNode child = (JMeterTreeNode) enumNode.nextElement();
+            JMeterTreeNode child = enumNode.nextElement();
             hashTree.add(node, getCurrentSubTree(child));
         }
         return hashTree;

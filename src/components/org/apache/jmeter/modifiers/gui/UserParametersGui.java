@@ -82,16 +82,16 @@ public class UserParametersGui extends AbstractPreProcessorGui {
         UserParameters params = (UserParameters) el;
         CollectionProperty names = params.getNames();
         CollectionProperty threadValues = params.getThreadLists();
-        tableModel.setColumnData(0, (List) names.getObjectValue());
+        tableModel.setColumnData(0, (List<?>) names.getObjectValue());
         PropertyIterator iter = threadValues.iterator();
         if (iter.hasNext()) {
-            tableModel.setColumnData(1, (List) iter.next().getObjectValue());
+            tableModel.setColumnData(1, (List<?>) iter.next().getObjectValue());
         }
         int count = 2;
         while (iter.hasNext()) {
             String colName = getUserColName(count);
             tableModel.addNewColumn(colName, String.class);
-            tableModel.setColumnData(count, (List) iter.next().getObjectValue());
+            tableModel.setColumnData(count, (List<?>) iter.next().getObjectValue());
             count++;
         }
         perIterationCheck.setSelected(params.isPerIteration());

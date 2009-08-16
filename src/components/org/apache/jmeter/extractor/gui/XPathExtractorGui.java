@@ -18,13 +18,13 @@
 package org.apache.jmeter.extractor.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import org.apache.jmeter.assertions.gui.XMLConfPanel;
@@ -132,12 +132,12 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
     }
 
     private void addField(JPanel panel, JLabeledTextField field, GridBagConstraints gbc) {
-        List item = field.getComponentList();
-        panel.add((Component) item.get(0), gbc.clone());
+        List<JComponent> item = field.getComponentList();
+        panel.add(item.get(0), gbc.clone());
         gbc.gridx++;
         gbc.weightx = 1;
         gbc.fill=GridBagConstraints.HORIZONTAL;
-        panel.add((Component) item.get(1), gbc.clone());
+        panel.add(item.get(1), gbc.clone());
     }
 
     private void resetContraints(GridBagConstraints gbc) {

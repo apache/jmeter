@@ -37,19 +37,19 @@ import org.apache.log.Logger;
 public class ObjectTableModel extends DefaultTableModel {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final long serialVersionUID = 233L;
+    private static final long serialVersionUID = 240L;
 
-    private transient ArrayList objects = new ArrayList();
+    private transient ArrayList<Object> objects = new ArrayList<Object>();
 
-    private transient List headers = new ArrayList();
+    private transient List<String> headers = new ArrayList<String>();
 
-    private transient ArrayList classes = new ArrayList();
+    private transient ArrayList<Class<?>> classes = new ArrayList<Class<?>>();
 
-    private transient ArrayList readFunctors = new ArrayList();
+    private transient ArrayList<Functor> readFunctors = new ArrayList<Functor>();
 
-    private transient ArrayList writeFunctors = new ArrayList();
+    private transient ArrayList<Functor> writeFunctors = new ArrayList<Functor>();
 
-    private transient Class objectClass = null; // if provided
+    private transient Class<?> objectClass = null; // if provided
 
     /**
      * The ObjectTableModel is a TableModel whose rows are objects;
@@ -61,7 +61,7 @@ public class ObjectTableModel extends DefaultTableModel {
      * @param writeFunctors - used to set the values
      * @param editorClasses - class for each column
      */
-    public ObjectTableModel(String[] headers, Class _objClass, Functor[] readFunctors, Functor[] writeFunctors, Class[] editorClasses) {
+    public ObjectTableModel(String[] headers, Class<?> _objClass, Functor[] readFunctors, Functor[] writeFunctors, Class<?>[] editorClasses) {
         this(headers, readFunctors, writeFunctors, editorClasses);
         this.objectClass=_objClass;
     }
@@ -75,11 +75,11 @@ public class ObjectTableModel extends DefaultTableModel {
      * @param writeFunctors - used to set the values
      * @param editorClasses - class for each column
      */
-    public ObjectTableModel(String[] headers, Functor[] readFunctors, Functor[] writeFunctors, Class[] editorClasses) {
+    public ObjectTableModel(String[] headers, Functor[] readFunctors, Functor[] writeFunctors, Class<?>[] editorClasses) {
         this.headers.addAll(Arrays.asList(headers));
         this.classes.addAll(Arrays.asList(editorClasses));
-        this.readFunctors = new ArrayList(Arrays.asList(readFunctors));
-        this.writeFunctors = new ArrayList(Arrays.asList(writeFunctors));
+        this.readFunctors = new ArrayList<Functor>(Arrays.asList(readFunctors));
+        this.writeFunctors = new ArrayList<Functor>(Arrays.asList(writeFunctors));
 
         int numHeaders = headers.length;
 
@@ -101,15 +101,15 @@ public class ObjectTableModel extends DefaultTableModel {
     }
 
     private Object readResolve() {
-        objects = new ArrayList();
-        headers = new ArrayList();
-        classes = new ArrayList();
-        readFunctors = new ArrayList();
-        writeFunctors = new ArrayList();
+        objects = new ArrayList<Object>();
+        headers = new ArrayList<String>();
+        classes = new ArrayList<Class<?>>();
+        readFunctors = new ArrayList<Functor>();
+        writeFunctors = new ArrayList<Functor>();
         return this;
     }
 
-    public Iterator iterator() {
+    public Iterator<?> iterator() {
         return objects.iterator();
     }
 
@@ -122,7 +122,7 @@ public class ObjectTableModel extends DefaultTableModel {
     public void addRow(Object value) {
         log.debug("Adding row value: " + value);
         if (objectClass != null) {
-            final Class valueClass = value.getClass();
+            final Class<?> valueClass = value.getClass();
             if (!objectClass.isAssignableFrom(valueClass)){
                 throw new IllegalArgumentException("Trying to add class: "+valueClass.getName()
                         +"; expecting class: "+objectClass.getName());
@@ -137,25 +137,19 @@ public class ObjectTableModel extends DefaultTableModel {
         super.fireTableRowsInserted(index, index + 1);
     }
 
-    /**
-     * @see javax.swing.table.TableModel#getColumnCount()
-     */
+    /** {@inheritDoc} */
     @Override
     public int getColumnCount() {
         return headers.size();
     }
 
-    /**
-     * @see javax.swing.table.TableModel#getColumnName(int)
-     */
+    /** {@inheritDoc} */
     @Override
     public String getColumnName(int col) {
-        return (String) headers.get(col);
+        return headers.get(col);
     }
 
-    /**
-     * @see javax.swing.table.TableModel#getRowCount()
-     */
+    /** {@inheritDoc} */
     @Override
     public int getRowCount() {
         if (objects == null) {
@@ -164,9 +158,7 @@ public class ObjectTableModel extends DefaultTableModel {
         return objects.size();
     }
 
-    /**
-     * @see javax.swing.table.TableModel#getValueAt(int, int)
-     */
+    /** {@inheritDoc} */
     @Override
     public Object getValueAt(int row, int col) {
         log.debug("Getting row value");
@@ -174,27 +166,23 @@ public class ObjectTableModel extends DefaultTableModel {
         if(headers.size() == 1 && col >= readFunctors.size()) {
             return value;
         }
-        Functor getMethod = (Functor) readFunctors.get(col);
+        Functor getMethod = readFunctors.get(col);
         if (getMethod != null && value != null) {
             return getMethod.invoke(value);
         }
         return null;
     }
 
-    /**
-     * @see javax.swing.table.TableModel#isCellEditable(int, int)
-     */
+    /** {@inheritDoc} */
     @Override
     public boolean isCellEditable(int arg0, int arg1) {
         return true;
     }
 
-    /**
-     * @see javax.swing.table.DefaultTableModel#moveRow(int, int, int)
-     */
+    /** {@inheritDoc} */
     @Override
     public void moveRow(int start, int end, int to) {
-        List subList = objects.subList(start, end);
+        List<Object> subList = objects.subList(start, end);
         for (int x = end - 1; x >= start; x--) {
             objects.remove(x);
         }
@@ -202,24 +190,20 @@ public class ObjectTableModel extends DefaultTableModel {
         super.fireTableChanged(new TableModelEvent(this));
     }
 
-    /**
-     * @see javax.swing.table.DefaultTableModel#removeRow(int)
-     */
+    /** {@inheritDoc} */
     @Override
     public void removeRow(int row) {
         objects.remove(row);
         super.fireTableRowsDeleted(row, row);
     }
 
-    /**
-     * @see javax.swing.table.TableModel#setValueAt(java.lang.Object, int, int)
-     */
+    /** {@inheritDoc} */
     @Override
     public void setValueAt(Object cellValue, int row, int col) {
         if (row < objects.size()) {
             Object value = objects.get(row);
             if (col < writeFunctors.size()) {
-                Functor setMethod = (Functor) writeFunctors.get(col);
+                Functor setMethod = writeFunctors.get(col);
                 if (setMethod != null) {
                     setMethod.invoke(value, new Object[] { cellValue });
                     super.fireTableDataChanged();
@@ -232,12 +216,10 @@ public class ObjectTableModel extends DefaultTableModel {
         }
     }
 
-    /**
-     * @see javax.swing.table.TableModel#getColumnClass(int)
-     */
+    /** {@inheritDoc} */
     @Override
-    public Class getColumnClass(int arg0) {
-        return (Class) classes.get(arg0);
+    public Class<?> getColumnClass(int arg0) {
+        return classes.get(arg0);
     }
 
     /**
@@ -253,7 +235,7 @@ public class ObjectTableModel extends DefaultTableModel {
      *
      * @return false if at least one Functor cannot be found.
      */
-    public boolean checkFunctors(Object _value, Class caller){
+    public boolean checkFunctors(Object _value, Class<?> caller){
         Object value;
         if (_value == null && objectClass != null) {
             try {
@@ -270,14 +252,14 @@ public class ObjectTableModel extends DefaultTableModel {
         }
         boolean status = true;
         for(int i=0;i<getColumnCount();i++){
-            Functor setMethod = (Functor) writeFunctors.get(i);
+            Functor setMethod = writeFunctors.get(i);
             if (setMethod != null) {
                 if (!setMethod.checkMethod(value,getColumnClass(i))){
                     status=false;
                     log.warn(caller.getName()+" is attempting to use nonexistent "+setMethod.toString());
                 }
             }
-            Functor getMethod = (Functor) readFunctors.get(i);
+            Functor getMethod = readFunctors.get(i);
             if (getMethod != null) {
                 if (!getMethod.checkMethod(value)){
                     status=false;
