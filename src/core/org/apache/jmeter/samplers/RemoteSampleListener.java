@@ -46,7 +46,7 @@ public interface RemoteSampleListener extends java.rmi.Remote {
      *            the list of sample events to be fired locally.
      * @throws RemoteException
      */
-    public void processBatch(List samples) throws RemoteException;
+    public void processBatch(List<SampleEvent> samples) throws RemoteException;
 
     /**
      * A sample has started and stopped.

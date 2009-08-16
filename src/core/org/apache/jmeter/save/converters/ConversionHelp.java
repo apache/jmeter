@@ -123,7 +123,7 @@ public class ConversionHelp {
     }
 
     // Names of properties that are handled specially
-    private static final Map propertyToAttribute=new HashMap();
+    private static final Map<String, String> propertyToAttribute=new HashMap<String, String>();
 
     private static void mapentry(String prop, String att){
         propertyToAttribute.put(prop,att);
@@ -139,12 +139,12 @@ public class ConversionHelp {
     private static void saveClass(TestElement el, HierarchicalStreamWriter writer, String prop){
         String clazz=el.getPropertyAsString(prop);
         if (clazz.length()>0) {
-            writer.addAttribute((String)propertyToAttribute.get(prop),SaveService.classToAlias(clazz));
+            writer.addAttribute(propertyToAttribute.get(prop),SaveService.classToAlias(clazz));
         }
     }
 
     private static void restoreClass(TestElement el, HierarchicalStreamReader reader, String prop) {
-        String att=(String) propertyToAttribute.get(prop);
+        String att=propertyToAttribute.get(prop);
         String alias=reader.getAttribute(att);
         if (alias!=null){
             el.setProperty(prop,SaveService.aliasToClass(alias));
@@ -158,13 +158,13 @@ public class ConversionHelp {
             if (encode) {
                 item=ConversionHelp.encode(item);
             }
-            writer.addAttribute((String)propertyToAttribute.get(prop),item);
+            writer.addAttribute(propertyToAttribute.get(prop),item);
         }
     }
 
     private static void restoreItem(TestElement el, HierarchicalStreamReader reader, String prop,
             boolean decode) {
-        String att=(String) propertyToAttribute.get(prop);
+        String att=propertyToAttribute.get(prop);
         String value=reader.getAttribute(att);
         if (value!=null){
             if (decode) {
