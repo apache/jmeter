@@ -27,6 +27,7 @@ import org.apache.jmeter.visualizers.*;
  */
 public class MemoryBenchmark {
 
+    @SuppressWarnings("unchecked")
     public static void main(String[] args) {
         if (args.length == 1) {
             int objects = 10000;

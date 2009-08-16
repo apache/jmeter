@@ -79,15 +79,15 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
     /** The class for which we're providing the bean info. */
     // NOTREAD private Class beanClass;
     /** The BeanInfo for our class as obtained by the introspector. */
-    private BeanInfo rootBeanInfo;
+    private final BeanInfo rootBeanInfo;
 
     /** The icons for this bean. */
-    private Image[] icons = new Image[5];
+    private final Image[] icons = new Image[5];
 
     /**
      * Construct a BeanInfo for the given class.
      */
-    protected BeanInfoSupport(Class beanClass) {
+    protected BeanInfoSupport(Class<?> beanClass) {
         // NOTREAD this.beanClass= beanClass;
 
         try {
@@ -190,41 +190,49 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
         getBeanDescriptor().setValue(GenericTestBeanCustomizer.ORDER(group), new Integer(numCreatedGroups));
     }
 
+    /** {@inheritDoc} */
     @Override
     public BeanInfo[] getAdditionalBeanInfo() {
         return rootBeanInfo.getAdditionalBeanInfo();
     }
 
+    /** {@inheritDoc} */
     @Override
     public BeanDescriptor getBeanDescriptor() {
         return rootBeanInfo.getBeanDescriptor();
     }
 
+    /** {@inheritDoc} */
     @Override
     public int getDefaultEventIndex() {
         return rootBeanInfo.getDefaultEventIndex();
     }
 
+    /** {@inheritDoc} */
     @Override
     public int getDefaultPropertyIndex() {
         return rootBeanInfo.getDefaultPropertyIndex();
     }
 
+    /** {@inheritDoc} */
     @Override
     public EventSetDescriptor[] getEventSetDescriptors() {
         return rootBeanInfo.getEventSetDescriptors();
     }
 
+    /** {@inheritDoc} */
     @Override
     public Image getIcon(int iconKind) {
         return icons[iconKind];
     }
 
+    /** {@inheritDoc} */
     @Override
     public MethodDescriptor[] getMethodDescriptors() {
         return rootBeanInfo.getMethodDescriptors();
     }
 
+    /** {@inheritDoc} */
     @Override
     public PropertyDescriptor[] getPropertyDescriptors() {
         return rootBeanInfo.getPropertyDescriptors();

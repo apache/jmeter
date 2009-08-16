@@ -44,7 +44,7 @@ public final class ClassContext extends SecurityManager {
      *
      * @return Class[] - list of classes in the callers context
      */
-    public static Class[] getMyClassContext() {
+    public static Class<?>[] getMyClassContext() {
         return _instance.getClassContext();
     }
 
