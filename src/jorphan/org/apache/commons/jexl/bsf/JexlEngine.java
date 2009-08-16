@@ -44,8 +44,11 @@ public class JexlEngine extends BSFEngineImpl {
     
     private JexlContext jc;
 
+    /** {@inheritDoc} */
+    @SuppressWarnings("unchecked")
     @Override
-    public void initialize(BSFManager mgr, String lang, Vector declaredBeans)
+    public void initialize(BSFManager mgr, String lang, 
+            Vector declaredBeans)
             throws BSFException {
         super.initialize(mgr, lang, declaredBeans);
         jc = JexlHelper.createContext();
@@ -55,6 +58,7 @@ public class JexlEngine extends BSFEngineImpl {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void terminate() {
         if (jc != null) {
@@ -63,16 +67,20 @@ public class JexlEngine extends BSFEngineImpl {
         }
     }
 
+    /** {@inheritDoc} */
+    @SuppressWarnings("unchecked")
     @Override
     public void declareBean(BSFDeclaredBean bean) throws BSFException {
         jc.getVars().put(bean.name, bean.bean);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void undeclareBean(BSFDeclaredBean bean) throws BSFException {
         jc.getVars().remove(bean.name);
     }
 
+    /** {@inheritDoc} */
     public Object eval(String fileName, int lineNo, int colNo, Object expr)
             throws BSFException {
         if (expr == null) {
@@ -94,6 +102,7 @@ public class JexlEngine extends BSFEngineImpl {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void exec(String fileName, int lineNo, int colNo, Object script)
             throws BSFException {
@@ -115,16 +124,18 @@ public class JexlEngine extends BSFEngineImpl {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void iexec(String fileName, int lineNo, int colNo, Object script)
             throws BSFException {
         exec(fileName, lineNo, colNo, script);
     }
 
+    /** {@inheritDoc} */
     public Object call(Object object, String name, Object[] args)
             throws BSFException {
         try {
-            Class[] types = new Class[args.length];
+            Class<?>[] types = new Class[args.length];
             for (int i = 0; i < args.length; i++) {
                 types[i] = args[i].getClass();
             }

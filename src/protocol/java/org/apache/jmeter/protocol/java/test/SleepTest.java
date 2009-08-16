@@ -195,9 +195,9 @@ public class SleepTest extends AbstractJavaSamplerClient implements Serializable
      */
     private void listParameters(JavaSamplerContext context) {
         if (getLogger().isDebugEnabled()) {
-            Iterator argsIt = context.getParameterNamesIterator();
+            Iterator<String> argsIt = context.getParameterNamesIterator();
             while (argsIt.hasNext()) {
-                String name = (String) argsIt.next();
+                String name = argsIt.next();
                 getLogger().debug(name + "=" + context.getParameter(name));
             }
         }

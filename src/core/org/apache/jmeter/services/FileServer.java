@@ -63,7 +63,7 @@ public class FileServer {
 
     //TODO - make "files" and "random" static as the class is a singleton?
 
-    private final Map files = new HashMap();
+    private final Map<String, FileEntry> files = new HashMap<String, FileEntry>();
 
     private static final FileServer server = new FileServer();
 
@@ -169,7 +169,7 @@ public class FileServer {
      * @throws IOException
      */
     public synchronized String readLine(String filename, boolean recycle) throws IOException {
-        FileEntry fileEntry = (FileEntry) files.get(filename);
+        FileEntry fileEntry = files.get(filename);
         if (fileEntry != null) {
             if (fileEntry.inputOutputObject == null) {
                 fileEntry.inputOutputObject = createBufferedReader(fileEntry, filename);
@@ -204,7 +204,7 @@ public class FileServer {
     }
 
     public synchronized void write(String filename, String value) throws IOException {
-        FileEntry fileEntry = (FileEntry) files.get(filename);
+        FileEntry fileEntry = files.get(filename);
         if (fileEntry != null) {
             if (fileEntry.inputOutputObject == null) {
                 fileEntry.inputOutputObject = createBufferedWriter(fileEntry, filename);
@@ -233,10 +233,10 @@ public class FileServer {
     }
 
     public void closeFiles() throws IOException {
-        Iterator iter = files.entrySet().iterator();
+        Iterator<Map.Entry<String, FileEntry>>  iter = files.entrySet().iterator();
         while (iter.hasNext()) {
-            Map.Entry me = (Map.Entry) iter.next();
-            closeFile((String)me.getKey(),(FileEntry)me.getValue() );
+            Map.Entry<String, FileEntry> me = iter.next();
+            closeFile(me.getKey(),me.getValue() );
         }
         files.clear();
     }
@@ -246,7 +246,7 @@ public class FileServer {
      * @throws IOException
      */
     public synchronized void closeFile(String name) throws IOException {
-        FileEntry fileEntry = (FileEntry) files.get(name);
+        FileEntry fileEntry = files.get(name);
         closeFile(name, fileEntry);
     }
 
@@ -265,9 +265,9 @@ public class FileServer {
     }
 
     protected boolean filesOpen() {
-        Iterator iter = files.values().iterator();
+        Iterator<FileEntry> iter = files.values().iterator();
         while (iter.hasNext()) {
-            FileEntry fileEntry = (FileEntry) iter.next();
+            FileEntry fileEntry = iter.next();
             if (fileEntry.inputOutputObject != null) {
                 return true;
             }
