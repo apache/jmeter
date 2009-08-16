@@ -49,5 +49,5 @@ interface ValueTransformer {
      *
      * @param vars
      */
-    public void setVariables(Map vars);
+    public void setVariables(Map<String, String> vars);
 }

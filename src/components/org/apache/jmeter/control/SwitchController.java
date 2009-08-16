@@ -107,13 +107,12 @@ public class SwitchController extends GenericController implements Serializable 
     }
 
     private int scanControllerNames(String sel){
-        Iterator iter = getSubControllers().iterator();
+        Iterator<TestElement> iter = getSubControllers().iterator();
         int i = 0;
         int default_pos = Integer.MAX_VALUE;
         while(iter.hasNext()) {
-            String name;
-            TestElement el = (TestElement)iter.next();
-            name=el.getName();
+            TestElement el = iter.next();
+            String name=el.getName();
             if (name.equals(sel)) {
                 return i;
             }

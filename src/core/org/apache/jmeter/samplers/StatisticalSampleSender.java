@@ -40,22 +40,25 @@ public class StatisticalSampleSender implements SampleSender, Serializable {
 
     private static final long DEFAULT_TIME_THRESHOLD = 60000L;
 
-    private RemoteSampleListener listener;
+    private final RemoteSampleListener listener;
 
-    private List sampleStore = new ArrayList();
+    private final List<SampleEvent> sampleStore = new ArrayList<SampleEvent>();
 
-    private Map sampleTable = new HashMap();
+    private final Map<String, StatisticalSampleResult> sampleTable = new HashMap<String, StatisticalSampleResult>();
 
-    private int numSamplesThreshold;
+    private final int numSamplesThreshold = JMeterUtils.getPropDefault(
+            "num_sample_threshold", DEFAULT_NUM_SAMPLE_THRESHOLD);
 
     private int sampleCount;
 
-    private long timeThreshold;
+    private final long timeThreshold = JMeterUtils.getPropDefault("time_threshold",
+            DEFAULT_TIME_THRESHOLD);
 
     private long batchSendTime = -1;
 
     public StatisticalSampleSender(){
         log.warn("Constructor only intended for use in testing");
+        listener = null;
     }
 
 
@@ -66,20 +69,8 @@ public class StatisticalSampleSender implements SampleSender, Serializable {
      */
     StatisticalSampleSender(RemoteSampleListener listener) {
         this.listener = listener;
-        init();
         log.info("Using batching for this run." + " Thresholds: num="
                 + numSamplesThreshold + ", time=" + timeThreshold);
-    }
-
-    /**
-     * Checks for the Jmeter properties num_sample_threshold and time_threshold,
-     * and assigns defaults if not found.
-     */
-    private void init() {
-        this.numSamplesThreshold = JMeterUtils.getPropDefault(
-                "num_sample_threshold", DEFAULT_NUM_SAMPLE_THRESHOLD);
-        this.timeThreshold = JMeterUtils.getPropDefault("time_threshold",
-                DEFAULT_TIME_THRESHOLD);
     }
 
     /**
@@ -127,8 +118,7 @@ public class StatisticalSampleSender implements SampleSender, Serializable {
         synchronized (sampleStore) {
             // Locate the statistical sample colector
             String key = StatisticalSampleResult.getKey(e);
-            StatisticalSampleResult statResult = (StatisticalSampleResult) sampleTable
-                    .get(key);
+            StatisticalSampleResult statResult = sampleTable.get(key);
             if (statResult == null) {
                 statResult = new StatisticalSampleResult(e.getResult());
                 // store the new statistical result collector

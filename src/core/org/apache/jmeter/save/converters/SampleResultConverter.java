@@ -106,6 +106,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
      * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
      */
     @Override
+    @SuppressWarnings("unchecked") // superclass does not use types
     public boolean canConvert(Class arg0) {
         return SampleResult.class.equals(arg0);
     }
