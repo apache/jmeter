@@ -49,6 +49,7 @@ public class MultiPropertyConverter extends AbstractCollectionConverter {
      * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
      */
     @Override
+    @SuppressWarnings("unchecked") // superclass does not use types
     public boolean canConvert(Class arg0) {
         return arg0.equals(CollectionProperty.class) || arg0.equals(MapProperty.class);
     }

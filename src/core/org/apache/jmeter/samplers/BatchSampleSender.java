@@ -38,18 +38,21 @@ public class BatchSampleSender implements SampleSender, Serializable {
 
     private static final long DEFAULT_TIME_THRESHOLD = 60000L;
 
-    private RemoteSampleListener listener;
+    private final RemoteSampleListener listener;
 
-    private List sampleStore = new ArrayList();
+    private final List<SampleEvent> sampleStore = new ArrayList<SampleEvent>();
 
-    private int numSamplesThreshold;
+    private final int numSamplesThreshold = 
+        JMeterUtils.getPropDefault("num_sample_threshold", DEFAULT_NUM_SAMPLE_THRESHOLD); // $NON-NLS-1$
 
-    private long timeThreshold;
+    private final long timeThreshold =
+        JMeterUtils.getPropDefault("time_threshold", DEFAULT_TIME_THRESHOLD); // $NON-NLS-1$
 
     private long batchSendTime = -1;
 
     public BatchSampleSender(){
         log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
+        listener = null;
     }
     /**
      * Constructor
@@ -59,19 +62,9 @@ public class BatchSampleSender implements SampleSender, Serializable {
      */
     BatchSampleSender(RemoteSampleListener listener) {
         this.listener = listener;
-        init();
         log.info("Using batching for this run."
                 + " Thresholds: num=" + numSamplesThreshold
                 + ", time=" + timeThreshold);
-    }
-
-    /**
-     * Checks for the Jmeter properties num_sample_threshold and time_threshold,
-     * and assigns defaults if not found.
-     */
-    private void init() {
-        this.numSamplesThreshold = JMeterUtils.getPropDefault("num_sample_threshold", DEFAULT_NUM_SAMPLE_THRESHOLD);
-        this.timeThreshold = JMeterUtils.getPropDefault("time_threshold", DEFAULT_TIME_THRESHOLD);
     }
 
     /**

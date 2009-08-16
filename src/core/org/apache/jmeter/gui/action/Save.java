@@ -153,9 +153,9 @@ public class Save implements Command {
 
     // package protected to all for separate test code
     void convertSubTree(HashTree tree) {
-        Iterator iter = new LinkedList(tree.list()).iterator();
+        Iterator<JMeterTreeNode> iter = new LinkedList<JMeterTreeNode>(tree.list()).iterator();
         while (iter.hasNext()) {
-            JMeterTreeNode item = (JMeterTreeNode) iter.next();
+            JMeterTreeNode item = iter.next();
             convertSubTree(tree.getTree(item));
             TestElement testElement = item.getTestElement();
             tree.replace(item, testElement);

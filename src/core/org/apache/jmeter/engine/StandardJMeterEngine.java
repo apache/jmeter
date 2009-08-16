@@ -254,8 +254,8 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         
     }
 
-    private void removeThreadGroups(List elements) {
-        Iterator iter = elements.iterator();
+    private void removeThreadGroups(List<?> elements) {
+        Iterator<?> iter = elements.iterator();
         while (iter.hasNext()) {
             Object item = iter.next();
             if (item instanceof ThreadGroup) {
@@ -267,9 +267,9 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
     }
 
     private void notifyTestListenersOfStart(SearchByClass testListeners) {
-        Iterator iter = testListeners.getSearchResults().iterator();
+        Iterator<TestListener> iter = testListeners.getSearchResults().iterator();
         while (iter.hasNext()) {
-            TestListener tl = (TestListener) iter.next();
+            TestListener tl = iter.next();
             if (tl instanceof TestBean) {
                 TestBeanHelper.prepare((TestElement) tl);
             }
@@ -283,9 +283,9 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
     private void notifyTestListenersOfEnd(SearchByClass testListeners) {
         log.info("Notifying test listeners of end of test");
-        Iterator iter = testListeners.getSearchResults().iterator();
+        Iterator<TestListener> iter = testListeners.getSearchResults().iterator();
         while (iter.hasNext()) {
-            TestListener tl = (TestListener) iter.next();
+            TestListener tl = iter.next();
             try {
                 if (host == null) {
                     tl.testEnded();
@@ -423,7 +423,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         // for each thread group, generate threads
         // hand each thread the sampler controller
         // and the listeners, and the timer
-        Iterator iter = searcher.getSearchResults().iterator();
+        Iterator<ThreadGroup> iter = searcher.getSearchResults().iterator();
 
         /*
          * Here's where the test really starts. Run a Full GC now: it's no harm
@@ -440,7 +440,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         startingGroups = true;
         while (running && iter.hasNext()) {// for each thread group
             groupCount++;
-            ThreadGroup group = (ThreadGroup) iter.next();
+            ThreadGroup group = iter.next();
             int numThreads = group.getNumThreads();
             JMeterContextService.addTotalThreads(numThreads);
             boolean onErrorStopTest = group.getOnErrorStopTest();

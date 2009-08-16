@@ -57,6 +57,7 @@ public class ScriptWrapperConverter implements Converter {
      *
      * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
      */
+    @SuppressWarnings("unchecked") // superclass is not typed
     public boolean canConvert(Class arg0) {
         return arg0.equals(ScriptWrapper.class);
     }
@@ -118,9 +119,9 @@ public class ScriptWrapperConverter implements Converter {
         return conversionException;
     }
 
-    protected Class getNextType(HierarchicalStreamReader reader) {
+    protected Class<?> getNextType(HierarchicalStreamReader reader) {
         String classAttribute = reader.getAttribute(ConversionHelp.ATT_CLASS);
-        Class type;
+        Class<?> type;
         if (classAttribute == null) {
             type = classMapper.realClass(reader.getNodeName());
         } else {

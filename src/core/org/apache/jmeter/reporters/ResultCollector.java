@@ -99,7 +99,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     private static final Object LOCK = new Object();
     
     //@GuardedBy("LOCK")
-    private static final Map files = new HashMap(); // key=filename, entry=FileEntry
+    private static final Map<String, FileEntry> files = new HashMap<String, FileEntry>();
 
     /*
      * Keep track of the file writer and the configuration,
@@ -385,7 +385,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
         if (filename == null || filename.length() == 0) {
             return null;
         }
-        FileEntry fe = (FileEntry) files.get(filename);
+        FileEntry fe = files.get(filename);
         PrintWriter writer = null;
         boolean trimmed = true;
 
@@ -553,11 +553,11 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     }
 
     private void finalizeFileOutput() {
-        Iterator it = files.entrySet().iterator();
+        Iterator<Map.Entry<String,ResultCollector.FileEntry>> it = files.entrySet().iterator();
         while(it.hasNext()){
-            Map.Entry me = (Map.Entry) it.next();
+            Map.Entry<String,ResultCollector.FileEntry> me = it.next();
             log.debug("Closing: "+me.getKey());
-            FileEntry fe = (FileEntry) me.getValue();
+            FileEntry fe = me.getValue();
             writeFileEnd(fe.pw, fe.config);
             fe.pw.close();
             if (fe.pw.checkError()){

@@ -53,6 +53,7 @@ public class TestElementConverter extends AbstractCollectionConverter {
      * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
      */
     @Override
+    @SuppressWarnings("unchecked") // superclass does not use types
     public boolean canConvert(Class arg0) {
         return TestElement.class.isAssignableFrom(arg0);
     }
@@ -97,7 +98,7 @@ public class TestElementConverter extends AbstractCollectionConverter {
     @Override
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
         String classAttribute = reader.getAttribute(ConversionHelp.ATT_CLASS);
-        Class type;
+        Class<?> type;
         if (classAttribute == null) {
             type = mapper().realClass(reader.getNodeName());
         } else {

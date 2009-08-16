@@ -40,18 +40,20 @@ public class DisabledComponentRemover implements HashTreeTraverser {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    HashTree tree;
+    private final HashTree tree;
 
-    LinkedList stack = new LinkedList();
+    private final LinkedList<Object> stack = new LinkedList<Object>();
 
     public DisabledComponentRemover(HashTree tree) {
         this.tree = tree;
     }
 
+    /** {@inheritDoc} */
     public void addNode(Object node, HashTree subTree) {
         stack.addLast(node);
     }
 
+    /** {@inheritDoc} */
     public void subtractNode() {
         Object removeLast = stack.removeLast();
         if (!(removeLast instanceof TestElement)) {
@@ -65,6 +67,7 @@ public class DisabledComponentRemover implements HashTreeTraverser {
         }
     }
 
+    /** {@inheritDoc} */
     public void processPath() {
     }
 }
