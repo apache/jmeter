@@ -87,11 +87,11 @@ public class RemoteSampleListenerImpl extends java.rmi.server.UnicastRemoteObjec
      * @param samples
      *            the list of sample events to be fired locally
      */
-    public void processBatch(List samples) {
+    public void processBatch(List<SampleEvent> samples) {
         if (samples != null) {
-            Iterator iter = samples.iterator();
+            Iterator<SampleEvent> iter = samples.iterator();
             while (iter.hasNext()) {
-                SampleEvent e = (SampleEvent) iter.next();
+                SampleEvent e = iter.next();
                 sampleOccurred(e);
             }
         }
