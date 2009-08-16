@@ -66,7 +66,7 @@ public class TestBeanHelper {
             for (int x = 0; x < desc.length; x++) {
                 // Obtain a value of the appropriate type for this property.
                 JMeterProperty jprop = el.getProperty(desc[x].getName());
-                Class type = desc[x].getPropertyType();
+                Class<?> type = desc[x].getPropertyType();
                 Object value = Converter.convert(jprop.getStringValue(), type);
 
                 if (log.isDebugEnabled()) {

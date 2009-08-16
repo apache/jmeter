@@ -55,24 +55,17 @@ public abstract class AbstractProperty implements JMeterProperty {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see JMeterProperty#isRunningVersion()
-     */
+    /** {@inheritDoc} */
     public boolean isRunningVersion() {
         return runningVersion;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see JMeterProperty#getName()
-     */
+    /** {@inheritDoc} */
     public String getName() {
         return name;
     }
 
+    /** {@inheritDoc} */
     public void setName(String name) {
         if (name == null) {
             throw new IllegalArgumentException("Name cannot be null");
@@ -80,11 +73,7 @@ public abstract class AbstractProperty implements JMeterProperty {
         this.name = name;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see JMeterProperty#setRunningVersion(boolean)
-     */
+    /** {@inheritDoc} */
     public void setRunningVersion(boolean runningVersion) {
         this.runningVersion = runningVersion;
     }
@@ -93,11 +82,7 @@ public abstract class AbstractProperty implements JMeterProperty {
         return new PropertyIteratorImpl(values);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see Object#clone()
-     */
+    /** {@inheritDoc} */
     @Override
     public Object clone() {
         try {
@@ -215,6 +200,7 @@ public abstract class AbstractProperty implements JMeterProperty {
         return s1 == null ? s2 == null : s1.equals(s2);
     }
 
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         int result = 17;
@@ -371,11 +357,11 @@ public abstract class AbstractProperty implements JMeterProperty {
             return new TestElementProperty(((TestElement) item).getName(),
                     (TestElement) item);
         }
-        if (item instanceof Collection) {
-            return new CollectionProperty("" + item.hashCode(), (Collection) item);
+        if (item instanceof Collection<?>) {
+            return new CollectionProperty("" + item.hashCode(), (Collection<?>) item);
         }
-        if (item instanceof Map) {
-            return new MapProperty("" + item.hashCode(), (Map) item);
+        if (item instanceof Map<?, ?>) {
+            return new MapProperty("" + item.hashCode(), (Map<?, ?>) item);
         }
         return null;
     }
@@ -401,11 +387,7 @@ public abstract class AbstractProperty implements JMeterProperty {
         return getStringValue();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#mergeIn(org.apache.jmeter.testelement.property.JMeterProperty)
-     */
+    /** {@inheritDoc} */
     public void mergeIn(JMeterProperty prop) {
     }
 }

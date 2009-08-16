@@ -27,7 +27,7 @@ import java.net.URL;
  *
  * @version $Revision$
  */
-public class URLString implements Comparable {
+public class URLString implements Comparable<URLString> {
 
     private final URL url;
 
@@ -56,6 +56,7 @@ public class URLString implements Comparable {
         hashCode = urlAsString.hashCode();
     }
 
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         return urlAsString;
@@ -65,15 +66,18 @@ public class URLString implements Comparable {
         return url;
     }
 
-    public int compareTo(Object o) {
+    /** {@inheritDoc} */
+    public int compareTo(URLString o) {
         return urlAsString.compareTo(o.toString());
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean equals(Object o) {
         return (o instanceof URLString && urlAsString.equals(o.toString()));
     }
 
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         return hashCode;

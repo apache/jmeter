@@ -22,6 +22,8 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.util.NoThreadClone;
@@ -88,7 +90,7 @@ public class Summariser extends AbstractTestElement
      * This map allows summarisers with the same name to contribute to the same totals.
      */
     //@GuardedBy("accumulators")
-    private static final Hashtable accumulators = new Hashtable();
+    private static final Hashtable<String, Totals> accumulators = new Hashtable<String, Totals>();
     
     //@GuardedBy("accumulators")
     private static int instanceCount; // number of active tests
@@ -263,20 +265,12 @@ public class Summariser extends AbstractTestElement
         return sb.toString();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.samplers.SampleListener#sampleStarted(org.apache.jmeter.samplers.SampleEvent)
-     */
+    /** {@inheritDoc} */
     public void sampleStarted(SampleEvent e) {
         // not used
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.samplers.SampleListener#sampleStopped(org.apache.jmeter.samplers.SampleEvent)
-     */
+    /** {@inheritDoc} */
     public void sampleStopped(SampleEvent e) {
         // not used
     }
@@ -292,20 +286,12 @@ public class Summariser extends AbstractTestElement
      */
     
     
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.TestListener#testStarted()
-     */
+    /** {@inheritDoc} */
     public void testStarted() {
         testStarted("local");
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.TestListener#testEnded()
-     */
+    /** {@inheritDoc} */
     public void testEnded() {
         testEnded("local");
     }
@@ -323,10 +309,11 @@ public class Summariser extends AbstractTestElement
      *
      * @see org.apache.jmeter.testelement.TestListener#testStarted(java.lang.String)
      */
+    /** {@inheritDoc} */
     public void testStarted(String host) {
         synchronized (accumulators) {
             myName = getName();
-            myTotals = (Totals) accumulators.get(myName);
+            myTotals = accumulators.get(myName);
             if (myTotals == null){
                 myTotals = new Totals();
                 accumulators.put(myName, myTotals);
@@ -341,22 +328,22 @@ public class Summariser extends AbstractTestElement
      * So synch is needed to fetch the accumulator, and the myName field will already be set up.
      * @see org.apache.jmeter.testelement.TestListener#testEnded(java.lang.String)
      */
+    /** {@inheritDoc} */
     public void testEnded(String host) {
-        Object[] totals = null;
+        Set<Entry<String, Totals>> totals = null;
         synchronized (accumulators) {
             instanceCount--;
             if (instanceCount <= 0){
-                totals = accumulators.entrySet().toArray();                
+                totals = accumulators.entrySet();                
             }
         }
         if (totals == null) {// We're not done yet
             return;
         }
-        for (int i=0; i<totals.length; i++) {
-            Map.Entry me = (Map.Entry)totals[i];
+        for(Map.Entry<String, Totals> entry : totals){
             String str;
-            String name = (String) me.getKey();
-            Totals total = (Totals) me.getValue();
+            String name = entry.getKey();
+            Totals total = entry.getValue();
             // Only print final delta if there were some samples in the delta
             // and there has been at least one sample reported previously
             if (total.delta.getNumSamples() > 0 && total.total.getNumSamples() >  0) {
@@ -375,15 +362,11 @@ public class Summariser extends AbstractTestElement
             }
             if (TOOUT) {
                 System.out.println(str);
-            }
+            }            
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.TestListener#testIterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)
-     */
+    /** {@inheritDoc} */
     public void testIterationStart(LoopIterationEvent event) {
         // not used
     }

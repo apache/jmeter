@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.text.Format;
 import java.util.Date;
 
-public class Sample implements Serializable, Comparable {
+public class Sample implements Serializable, Comparable<Sample> {
     private final long data; // = elapsed
 
     private final long average;
@@ -197,13 +197,9 @@ public class Sample implements Serializable, Comparable {
         return throughput;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.lang.Comparable#compareTo(java.lang.Object)
-     */
-    public int compareTo(Object o) {
-        Sample oo = (Sample) o;
+    /** {@inheritDoc} */
+    public int compareTo(Sample o) {
+        Sample oo = o;
         return ((count - oo.count) < 0 ? -1 : (count == oo.count ? 0 : 1));
     }
 
