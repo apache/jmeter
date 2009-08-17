@@ -39,12 +39,12 @@ public class SortedHashTree extends HashTree implements Serializable {
     private static final long serialVersionUID = 233L;
 
     public SortedHashTree() {
-        super(new TreeMap()); // equivalent to new TreeMap((Comparator)null);
+        super(new TreeMap<Object, HashTree>()); // equivalent to new TreeMap((Comparator)null);
     }
 
     // non-null Comparators don't appear to be used at present
     public SortedHashTree(Comparator comper) {
-        super(new TreeMap(comper));
+        super(new TreeMap<Object, HashTree>(comper));
     }
 
     public SortedHashTree(Object key) {
@@ -59,7 +59,7 @@ public class SortedHashTree extends HashTree implements Serializable {
 
     public SortedHashTree(Collection keys) {
         this();
-        Iterator it = keys.iterator();
+        Iterator<?> it = keys.iterator();
         while (it.hasNext()) {
             data.put(it.next(), new SortedHashTree());
         }
@@ -67,7 +67,7 @@ public class SortedHashTree extends HashTree implements Serializable {
 
     public SortedHashTree(Collection keys, Comparator comper) {
         this(comper);
-        Iterator it = keys.iterator();
+        Iterator<?> it = keys.iterator();
         while (it.hasNext()) {
             data.put(it.next(), new SortedHashTree(comper));
         }
@@ -87,21 +87,24 @@ public class SortedHashTree extends HashTree implements Serializable {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected HashTree createNewTree() {
-        Comparator comparator = ((TreeMap)data).comparator();
+        Comparator<?> comparator = ((TreeMap<?,?>)data).comparator();
         return new SortedHashTree(comparator);
     }
 
+    /** {@inheritDoc} */
     @Override
     protected HashTree createNewTree(Object key) {
-        Comparator comparator = ((TreeMap)data).comparator();
+        Comparator<?> comparator = ((TreeMap<?,?>)data).comparator();
         return new SortedHashTree(key, comparator);
     }
 
+    /** {@inheritDoc} */
     @Override
-    protected HashTree createNewTree(Collection values) {
-        Comparator comparator = ((TreeMap)data).comparator();
+    protected HashTree createNewTree(Collection<?> values) {
+        Comparator<?> comparator = ((TreeMap<?,?>)data).comparator();
         return new SortedHashTree(values, comparator);
     }
 
