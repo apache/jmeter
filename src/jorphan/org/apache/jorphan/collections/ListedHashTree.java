@@ -39,31 +39,22 @@ import java.util.Set;
  * @see HashTree
  */
 public class ListedHashTree extends HashTree implements Serializable, Cloneable {
-    private List order;
+    private final List<Object> order;
 
     public ListedHashTree() {
         super();
-        order = new LinkedList();
-    }
-
-    @Override
-    public Object clone() {
-        ListedHashTree newTree = new ListedHashTree();
-        cloneTree(newTree);
-        return newTree;
+        order = new LinkedList<Object>();
     }
 
     public ListedHashTree(Object key) {
-        super();
-        order = new LinkedList();
+        this();
         data.put(key, new ListedHashTree());
         order.add(key);
     }
 
-    public ListedHashTree(Collection keys) {
-        super();
-        order = new LinkedList();
-        Iterator it = keys.iterator();
+    public ListedHashTree(Collection<?> keys) {
+        this();
+        Iterator<?> it = keys.iterator();
         while (it.hasNext()) {
             Object temp = it.next();
             data.put(temp, new ListedHashTree());
@@ -72,14 +63,22 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
     }
 
     public ListedHashTree(Object[] keys) {
-        super();
-        order = new LinkedList();
+        this();
         for (int x = 0; x < keys.length; x++) {
             data.put(keys[x], new ListedHashTree());
             order.add(keys[x]);
         }
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public Object clone() {
+        ListedHashTree newTree = new ListedHashTree();
+        cloneTree(newTree);
+        return newTree;
+    }
+
+    /** {@inheritDoc} */
     @Override
     public void set(Object key, Object value) {
         if (!data.containsKey(key)) {
@@ -88,6 +87,7 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
         super.set(key, value);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void set(Object key, HashTree t) {
         if (!data.containsKey(key)) {
@@ -96,6 +96,7 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
         super.set(key, t);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void set(Object key, Object[] values) {
         if (!data.containsKey(key)) {
@@ -104,6 +105,7 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
         super.set(key, values);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void set(Object key, Collection values) {
         if (!data.containsKey(key)) {
@@ -112,6 +114,7 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
         super.set(key, values);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void replace(Object currentKey, Object newKey) {
         HashTree tree = getTree(currentKey);
@@ -120,21 +123,25 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
         order.set(order.indexOf(currentKey), newKey);
     }
 
+    /** {@inheritDoc} */
     @Override
     public HashTree createNewTree() {
         return new ListedHashTree();
     }
 
+    /** {@inheritDoc} */
     @Override
     public HashTree createNewTree(Object key) {
         return new ListedHashTree(key);
     }
 
+    /** {@inheritDoc} */
     @Override
     public HashTree createNewTree(Collection values) {
         return new ListedHashTree(values);
     }
 
+    /** {@inheritDoc} */
     @Override
     public HashTree add(Object key) {
         if (!data.containsKey(key)) {
@@ -146,22 +153,26 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
         return getTree(key);
     }
 
+    /** {@inheritDoc} */
     @Override
     public Collection list() {
         return order;
     }
 
+    /** {@inheritDoc} */
     @Override
     public Object remove(Object key) {
         order.remove(key);
         return data.remove(key);
     }
 
+    /** {@inheritDoc} */
     @Override
     public Object[] getArray() {
         return order.toArray();
     }
 
+    /** {@inheritDoc} */
     // Make sure the hashCode depends on the order as well
     @Override
     public int hashCode() {
@@ -171,6 +182,7 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
         return hc;
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof ListedHashTree)) {
@@ -213,11 +225,13 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
         // return flag;
     }
 
+    /** {@inheritDoc} */
     @Override
     public Set keySet() {
         return data.keySet();
     }
 
+    /** {@inheritDoc} */
     @Override
     public int size() {
         return data.size();
@@ -231,11 +245,7 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
         oos.defaultWriteObject();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.util.Map#clear()
-     */
+    /** {@inheritDoc} */
     @Override
     public void clear() {
         super.clear();
