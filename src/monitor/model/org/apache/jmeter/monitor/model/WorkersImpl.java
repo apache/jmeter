@@ -24,17 +24,17 @@ import java.util.List;
  * @version $Revision$
  */
 public class WorkersImpl implements Workers {
-    private List worker = null;
+    private final List<Worker> worker;
 
     /**
      *
      */
     public WorkersImpl() {
         super();
-        worker = new LinkedList();
+        worker = new LinkedList<Worker>();
     }
 
-    public List getWorker() {
+    public List<Worker> getWorker() {
         return worker;
     }
 

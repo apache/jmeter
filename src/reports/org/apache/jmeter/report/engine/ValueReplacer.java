@@ -28,7 +28,7 @@ import org.apache.jmeter.testelement.TestElement;
 public class ValueReplacer {
 //  private static final Logger log = LoggingManager.getLoggerForClass();
 
-    Map variables = new HashMap();
+    private Map<String, String> variables = new HashMap<String, String>();
 
     public ValueReplacer() {
     }
@@ -37,7 +37,7 @@ public class ValueReplacer {
         setUserDefinedVariables(tp.getUserDefinedVariables());
     }
 
-    public void setUserDefinedVariables(Map variables) {
+    public void setUserDefinedVariables(Map<String, String> variables) {
         this.variables = variables;
     }
 
@@ -103,7 +103,7 @@ public class ValueReplacer {
      * @param vars
      *            A map of variable name-value pairs (String-to-String).
      */
-    public void addVariables(Map vars) {
+    public void addVariables(Map<String, String> vars) {
         variables.putAll(vars);
     }
 
