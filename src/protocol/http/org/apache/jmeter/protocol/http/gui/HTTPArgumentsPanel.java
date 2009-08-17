@@ -99,10 +99,10 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
     @Override
     public TestElement createTestElement() {
         stopTableEditing();
-        Iterator modelData = tableModel.iterator();
+        Iterator<HTTPArgument> modelData = (Iterator<HTTPArgument>) tableModel.iterator();
         Arguments args = new Arguments();
         while (modelData.hasNext()) {
-            HTTPArgument arg = (HTTPArgument) modelData.next();
+            HTTPArgument arg = modelData.next();
             args.addArgument(arg);
         }
         this.configureTestElement(args);

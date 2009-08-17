@@ -17,10 +17,13 @@
 
 package org.apache.jmeter.monitor.model;
 
+import java.util.List;
+
 /**
  * @version $Revision$
  */
 public interface Workers {
-    java.util.List getWorker();
+
+    List<Worker> getWorker();
 
 }
