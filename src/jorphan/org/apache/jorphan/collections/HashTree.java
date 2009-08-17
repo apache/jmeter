@@ -58,19 +58,19 @@ public class HashTree implements Serializable, Map, Cloneable {
     // Used for the RuntimeException to short-circuit the traversal
     private static final String FOUND = "found"; // $NON-NLS-1$
 
-    protected final Map data;
+    protected final Map<Object, HashTree> data;
 
     /**
      * Creates an empty new HashTree.
      */
     public HashTree() {
-        data = new HashMap();
+        data = new HashMap<Object, HashTree>();
     }
 
     /**
      * Allow subclasses to provide their own Map.
      */
-    protected HashTree(Map _map) {
+    protected HashTree(Map<Object, HashTree> _map) {
         data = _map;
     }
 
@@ -80,7 +80,7 @@ public class HashTree implements Serializable, Map, Cloneable {
      * @param key
      */
     public HashTree(Object key) {
-        data = new HashMap();
+        data = new HashMap<Object, HashTree>();
         data.put(key, new HashTree());
     }
 
@@ -176,7 +176,7 @@ public class HashTree implements Serializable, Map, Cloneable {
      * @param newTree
      */
     public void add(HashTree newTree) {
-        Iterator iter = newTree.list().iterator();
+        Iterator<?> iter = newTree.list().iterator();
         while (iter.hasNext()) {
             Object item = iter.next();
             add(item);
@@ -192,8 +192,8 @@ public class HashTree implements Serializable, Map, Cloneable {
      *            a collection of objects to be added to the created HashTree.
      */
     public HashTree(Collection keys) {
-        data = new HashMap();
-        Iterator it = keys.iterator();
+        data = new HashMap<Object, HashTree>();
+        Iterator<?> it = keys.iterator();
         while (it.hasNext()) {
             data.put(it.next(), new HashTree());
         }
@@ -204,7 +204,7 @@ public class HashTree implements Serializable, Map, Cloneable {
      * top-level nodes in the tree.
      */
     public HashTree(Object[] keys) {
-        data = new HashMap();
+        data = new HashMap<Object, HashTree>();
         for (int x = 0; x < keys.length; x++) {
             data.put(keys[x], new HashTree());
         }
@@ -414,7 +414,7 @@ public class HashTree implements Serializable, Map, Cloneable {
      *            Collection of Keys to be added to HashTree.
      */
     public void add(Collection keys) {
-        Iterator it = keys.iterator();
+        Iterator<?> it = keys.iterator();
         while (it.hasNext()) {
             add(it.next());
         }
@@ -557,7 +557,7 @@ public class HashTree implements Serializable, Map, Cloneable {
 
     protected HashTree addTreePath(Collection treePath) {
         HashTree tree = this;
-        Iterator iter = treePath.iterator();
+        Iterator<?> iter = treePath.iterator();
         while (iter.hasNext()) {
             Object temp = iter.next();
             tree.add(temp);
@@ -573,7 +573,7 @@ public class HashTree implements Serializable, Map, Cloneable {
      *            Key used to find appropriate HashTree()
      */
     public HashTree getTree(Object key) {
-        return (HashTree) data.get(key);
+        return data.get(key);
     }
 
     /**
@@ -614,7 +614,7 @@ public class HashTree implements Serializable, Map, Cloneable {
     }
 
     protected void cloneTree(HashTree newTree) {
-        Iterator iter = list().iterator();
+        Iterator<?> iter = list().iterator();
         while (iter.hasNext()) {
             Object key = iter.next();
             newTree.set(key, (HashTree) getTree(key).clone());
@@ -659,7 +659,7 @@ public class HashTree implements Serializable, Map, Cloneable {
      *
      * @return HashTree
      */
-    protected HashTree createNewTree(Collection values) {
+    protected HashTree createNewTree(Collection<?> values) {
         return new HashTree(values);
     }
 
@@ -697,11 +697,11 @@ public class HashTree implements Serializable, Map, Cloneable {
      * @return Set of all keys in found HashTree.
      */
     public Collection list(Object key) {
-        HashTree temp = (HashTree) data.get(key);
+        HashTree temp = data.get(key);
         if (temp != null) {
             return temp.list();
         }
-        return new LinkedList();
+        return new LinkedList(); // should we use: new HashTree().list()
     }
 
     /**
@@ -747,7 +747,7 @@ public class HashTree implements Serializable, Map, Cloneable {
         if (tree != null) {
             return tree.list();
         }
-        return new LinkedList();
+        return new LinkedList(); // should we use: new HashTree().list()
     }
 
     /**
@@ -825,7 +825,7 @@ public class HashTree implements Serializable, Map, Cloneable {
 
     protected HashTree getTreePath(Collection treePath) {
         HashTree tree = this;
-        Iterator iter = treePath.iterator();
+        Iterator<?> iter = treePath.iterator();
         while (iter.hasNext()) {
             if (tree == null) {
                 return null;
@@ -963,7 +963,7 @@ public class HashTree implements Serializable, Map, Cloneable {
      * @see HashTreeTraverser
      */
     public void traverse(HashTreeTraverser visitor) {
-        Iterator iter = list().iterator();
+        Iterator<?> iter = list().iterator();
         while (iter.hasNext()) {
             Object item = iter.next();
             visitor.addNode(item, getTree(item));
@@ -980,7 +980,7 @@ public class HashTree implements Serializable, Map, Cloneable {
         if (list().size() == 0) {
             visitor.processPath();
         } else {
-            Iterator iter = list().iterator();
+            Iterator<?> iter = list().iterator();
             while (iter.hasNext()) {
                 Object item = iter.next();
                 final HashTree treeItem = getTree(item);
