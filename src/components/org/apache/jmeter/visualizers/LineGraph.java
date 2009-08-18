@@ -68,7 +68,7 @@ public class LineGraph extends JPanel {
     private static final Paint[] PAINT_ARRAY = {Color.black,
             Color.blue,Color.green,Color.magenta,Color.orange,
             Color.red,Color.yellow,Color.darkGray,Color.gray,Color.lightGray,
-            Color.pink,Color.cyan};// Using lower-case for JDK 1.3 compatibility
+            Color.pink,Color.cyan};
     protected int shape_counter = 0;
     protected int paint_counter = -1;
 
