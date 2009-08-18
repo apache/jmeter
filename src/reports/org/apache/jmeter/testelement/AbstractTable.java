@@ -142,6 +142,7 @@ public abstract class AbstractTable extends AbstractTestElement
      * need to filter the data in the list and return statistics.
      * The statistics should be like the aggregate listener.
      */
+    @SuppressWarnings("unchecked") // TODO fix this when there is a real implementation
     public abstract String[][] getTableData(List data);
 
 }
