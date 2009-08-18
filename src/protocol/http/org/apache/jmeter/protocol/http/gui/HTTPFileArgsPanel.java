@@ -170,11 +170,11 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
         if (testElement instanceof HTTPSamplerBase) {
             HTTPSamplerBase base = (HTTPSamplerBase) testElement;
             int rows = tableModel.getRowCount();
-            Iterator modelData = tableModel.iterator();
+            Iterator<HTTPFileArg> modelData = (Iterator<HTTPFileArg>) tableModel.iterator();
             HTTPFileArg[] files = new HTTPFileArg[rows];
             int row=0;
             while (modelData.hasNext()) {
-                HTTPFileArg file = (HTTPFileArg) modelData.next();
+                HTTPFileArg file = modelData.next();
                 files[row++]=file;
             }
             base.setHTTPFiles(files);
