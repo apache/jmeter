@@ -42,6 +42,7 @@ public class DefaultKeyStore extends JmeterKeyStore {
         this.store = KeyStore.getInstance(type);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void load(InputStream is, String pword) throws Exception {
         store.load(is, pword.toCharArray());
@@ -50,9 +51,9 @@ public class DefaultKeyStore extends JmeterKeyStore {
 
         if (null != is){ // No point checking an empty keystore
 
-            Enumeration aliases = store.aliases();
+            Enumeration<String> aliases = store.aliases();
             while (aliases.hasMoreElements()) {
-                this.alias = (String) aliases.nextElement();
+                this.alias = aliases.nextElement();
                 if (store.isKeyEntry(alias)) {
                     _key = (PrivateKey) store.getKey(alias, pword.toCharArray());
                     Certificate[] chain = store.getCertificateChain(alias);
@@ -78,16 +79,19 @@ public class DefaultKeyStore extends JmeterKeyStore {
         this.certChain = _certChain;
     }
 
+    /** {@inheritDoc} */
     @Override
     public final X509Certificate[] getCertificateChain() {
         return this.certChain;
     }
 
+    /** {@inheritDoc} */
     @Override
     public final PrivateKey getPrivateKey() {
         return this.key;
     }
 
+    /** {@inheritDoc} */
     @Override
     public final String getAlias() {
         return this.alias;
