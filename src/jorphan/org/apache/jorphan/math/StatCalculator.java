@@ -81,9 +81,9 @@ public class StatCalculator {
     }
 
     public void addAll(StatCalculator calc) {
-        Iterator iter = calc.values.iterator();
+        Iterator<Number> iter = calc.values.iterator();
         while (iter.hasNext()) {
-            addValue((Number) iter.next());
+            addValue(iter.next());
         }
     }
 
@@ -136,13 +136,14 @@ public class StatCalculator {
      *
      */
     public synchronized HashMap getDistribution() {
-        HashMap items = new HashMap();
-        Iterator itr = this.values.iterator();
+        HashMap<Long, Number[]> items = new HashMap<Long, Number[]>();
+        Iterator<Number> itr = this.values.iterator();
         Number[] dis;
         while (itr.hasNext()) {
-            Long nx = (Long) itr.next(); // TODO this assumes the entries are all Long
+            Number num = itr.next();
+            Long nx = new Long(itr.next().longValue()); // TODO this assumes the entries are all Long
             if (items.containsKey(nx)) {
-                dis = (Number[]) items.get(nx);
+                dis = items.get(nx);
                 dis[1] = new Integer(dis[1].intValue() + 1);
                 items.put(nx, dis);
             } else {

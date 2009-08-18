@@ -99,10 +99,11 @@ public interface DataSet extends Visualizer {
      */
     public SamplingStatCalculator getStatistics(String url);
     /**
-     * Convienence method for getting all the SamplingStatCalculators for
+     * Convenience method for getting all the SamplingStatCalculators for
      * a given URL.
      * @param urls
      */
+    @SuppressWarnings("unchecked") // Method is broken anyway
     public List<SamplingStatCalculator> getStats(List urls);
     /**
      * Classes implementing the method should load the data from
