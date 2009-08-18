@@ -17,48 +17,28 @@
  */
 package org.apache.jmeter.protocol.http.parser;
 
+/**
+ * Exception class for use with HTMLParser classes. 
+ * The main rationale for the class
+ * was to support chained Exceptions in JDK 1.3,
+ * however it is now used in its own right.
+ *
+ * @version $Revision$
+ */
 public class HTMLParseException extends Exception {
-    private Throwable savedCause; // Support JDK1.4 getCause() on JDK1.3
-
-    /**
-     *
-     */
     public HTMLParseException() {
         super();
     }
 
-    /**
-     * @param message
-     */
     public HTMLParseException(String message) {
         super(message);
     }
 
-    /**
-     * @param cause
-     */
     public HTMLParseException(Throwable cause) {
-        // JDK1.4: super(cause);
-        super();
-        savedCause = cause;
+        super(cause);
     }
 
-    /**
-     * @param message
-     * @param cause
-     */
     public HTMLParseException(String message, Throwable cause) {
-        // JDK1.4: super(message, cause);
-        super(message);
-        savedCause = cause;
-    }
-
-    /**
-     * Local verstion of getCause() for JDK1.3 support
-     *
-     */
-    @Override
-    public Throwable getCause() {
-        return savedCause;
+        super(message, cause);
     }
 }

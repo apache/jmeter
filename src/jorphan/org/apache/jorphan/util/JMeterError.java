@@ -19,52 +19,27 @@
 package org.apache.jorphan.util;
 
 /**
- * The rationale for this class is to support chained Errors in JDK 1.3
- *
+ * The rationale for this class was originally to support chained Errors in JDK 1.3
+ * However, the class is now used in its own right.
+ * 
  * @version $Revision$
  */
 public class JMeterError extends Error {
-    private Throwable savedCause; // Support JDK1.4 getCause() on JDK1.3
 
-    /**
-     *
-     */
     public JMeterError() {
         super();
     }
 
-    /**
-     * @param s
-     */
     public JMeterError(String s) {
         super(s);
     }
 
-    /**
-     * @param cause
-     */
     public JMeterError(Throwable cause) {
-        // JDK1.4: super(cause);
-        savedCause = cause;
+        super(cause);
     }
 
-    /**
-     * @param message
-     * @param cause
-     */
     public JMeterError(String message, Throwable cause) {
-        // JDK1.4: super(message, cause);
-        super(message);
-        savedCause = cause;
-    }
-
-    /**
-     * Local version of getCause() for JDK1.3 support
-     *
-     */
-    @Override
-    public Throwable getCause() {
-        return savedCause;
+        super(message, cause);
     }
 
 }
