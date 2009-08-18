@@ -18,52 +18,27 @@
 package org.apache.jmeter.protocol.http.parser;
 
 /**
- * Error class for use with HTMLParser classes. The main rationale for the class
- * is to support chained Errors in JDK 1.3
+ * Error class for use with HTMLParser classes. 
+ * The main rationale for the class
+ * was to support chained Errors in JDK 1.3,
+ * however it is now used in its own right.
  *
  * @version $Revision$
  */
 public class HTMLParseError extends Error {
-    private Throwable savedCause; // Support JDK1.4 getCause() on JDK1.3
-
-    /**
-     *
-     */
     public HTMLParseError() {
         super();
     }
 
-    /**
-     * @param message
-     */
     public HTMLParseError(String message) {
         super(message);
     }
 
-    /**
-     * @param cause
-     */
     public HTMLParseError(Throwable cause) {
-        // JDK1.4: super(cause);
-        savedCause = cause;
+        super(cause);
     }
 
-    /**
-     * @param message
-     * @param cause
-     */
     public HTMLParseError(String message, Throwable cause) {
-        // JDK1.4: super(message, cause);
-        super(message);
-        savedCause = cause;
-    }
-
-    /**
-     * Local verstion of getCause() for JDK1.3 support
-     *
-     */
-    @Override
-    public Throwable getCause() {
-        return savedCause;
+        super(message, cause);
     }
 }
