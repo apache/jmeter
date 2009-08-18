@@ -215,9 +215,8 @@ public final class JOrphanUtils {
     }
 
     /**
-     * Convert a boolean to its string representation Equivalent to
-     * Boolean.valueOf(boolean).toString().toUpperCase() but valid also for JDK
-     * 1.3, which does not have valueOf(boolean)
+     * Convert a boolean to its upper case string representation.
+     * Equivalent to Boolean.valueOf(boolean).toString().toUpperCase().
      *
      * @param value
      *            boolean to convert
