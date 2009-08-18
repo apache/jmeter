@@ -150,9 +150,9 @@ public class TestCompiler implements HashTreeTraverser {
 
     private void saveSamplerConfigs(Sampler sam) {
         List<ConfigTestElement> configs = new LinkedList<ConfigTestElement>();
-        List modifiers = new LinkedList();
+        List<?> modifiers = new LinkedList<Object>();
         List<TestElement> controllers = new LinkedList<TestElement>();
-        List responseModifiers = new LinkedList();
+        List<?> responseModifiers = new LinkedList<Object>();
         List<SampleListener> listeners = new LinkedList<SampleListener>();
         List<Timer> timers = new LinkedList<Timer>();
         List<Assertion> assertions = new LinkedList<Assertion>();
@@ -197,9 +197,9 @@ public class TestCompiler implements HashTreeTraverser {
 
     private void saveTransactionControllerConfigs(TransactionController tc) {
         List<ConfigTestElement> configs = new LinkedList<ConfigTestElement>();
-        List modifiers = new LinkedList();
+        List<?> modifiers = new LinkedList<Object>();
         List<TestElement> controllers = new LinkedList<TestElement>();
-        List responseModifiers = new LinkedList();
+        List<?> responseModifiers = new LinkedList<Object>();
         List<SampleListener> listeners = new LinkedList<SampleListener>();
         List<Timer> timers = new LinkedList<Timer>();
         List<Assertion> assertions = new LinkedList<Assertion>();
