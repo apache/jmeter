@@ -26,9 +26,9 @@ public class MapProperty extends MultiProperty {
 
     private static final long serialVersionUID = 221L; // Remember to change this when the class changes ...
 
-    private Map value;
+    private Map<String, JMeterProperty> value;
 
-    private transient Map savedValue = null;
+    private transient Map<String, JMeterProperty> savedValue = null;
 
     public MapProperty(String name, Map value) {
         super(name);
@@ -41,6 +41,7 @@ public class MapProperty extends MultiProperty {
         super();
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean equals(Object o) {
         if (o instanceof MapProperty) {
@@ -51,19 +52,21 @@ public class MapProperty extends MultiProperty {
         return false;
     }
 
+    /** {@inheritDoc} */
     public void setObjectValue(Object v) {
-        if (v instanceof Map) {
-            setMap((Map) v);
+        if (v instanceof Map<?, ?>) {
+            setMap((Map<?, ?>) v);
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void addProperty(JMeterProperty prop) {
         addProperty(prop.getName(), prop);
     }
 
     public JMeterProperty get(String key) {
-        return (JMeterProperty) value.get(key);
+        return value.get(key);
     }
 
     /**
@@ -73,27 +76,24 @@ public class MapProperty extends MultiProperty {
      * @see AbstractProperty#getPropertyType()
      */
     @Override
-    protected Class getPropertyType() {
+    protected Class<?> getPropertyType() {
         if (value.size() > 0) {
             return valueIterator().next().getClass();
         }
         return NullProperty.class;
     }
 
-    /**
-     * @see JMeterProperty#getStringValue()
-     */
+    /** {@inheritDoc} */
     public String getStringValue() {
         return value.toString();
     }
 
-    /**
-     * @see JMeterProperty#getObjectValue()
-     */
+    /** {@inheritDoc} */
     public Object getObjectValue() {
         return value;
     }
 
+    /** {@inheritDoc} */
     @Override
     public Object clone() {
         MapProperty prop = (MapProperty) super.clone();
@@ -101,13 +101,13 @@ public class MapProperty extends MultiProperty {
         return prop;
     }
 
-    private Map cloneMap() {
+    private Map<String, JMeterProperty> cloneMap() {
         try {
-            Map newCol = value.getClass().newInstance();
+            Map<String, JMeterProperty> newCol = value.getClass().newInstance();
             PropertyIterator iter = valueIterator();
             while (iter.hasNext()) {
                 JMeterProperty item = iter.next();
-                newCol.put(item.getName(), item.clone());
+                newCol.put(item.getName(), (JMeterProperty) item.clone());
             }
             return newCol;
         } catch (Exception e) {
@@ -130,9 +130,7 @@ public class MapProperty extends MultiProperty {
         value = normalizeMap(newMap);
     }
 
-    /**
-     * @see JMeterProperty#recoverRunningVersion(TestElement)
-     */
+    /** {@inheritDoc} */
     public void recoverRunningVersion(TestElement owner) {
         if (savedValue != null) {
             value = savedValue;
@@ -140,26 +138,19 @@ public class MapProperty extends MultiProperty {
         recoverRunningVersionOfSubElements(owner);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void clear() {
         value.clear();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see MultiProperty#iterator()
-     */
+    /** {@inheritDoc} */
     @Override
     public PropertyIterator iterator() {
         return valueIterator();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see JMeterProperty#setRunningVersion(boolean)
-     */
+    /** {@inheritDoc} */
     @Override
     public void setRunningVersion(boolean running) {
         super.setRunningVersion(running);
