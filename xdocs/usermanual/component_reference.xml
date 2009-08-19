@@ -174,8 +174,8 @@ https.default.protocol=SSLv3
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
         <property name="Server" required="Yes, unless provided by HTTP Request Defaults">Domain name or IP address of the web server. e.g. www.example.com. [Do not include the http:// prefix.]</property>
         <property name="Port" required="No">Port the web server is listening to. Default: 80</property>
-        <property name="Connect Timeout" required="No">Connection Timeout. Number of milliseconds to wait for a connection to open. Requires Java 1.5 or later when using the default Java HTTP implementation.</property>
-        <property name="Response Timeout" required="No">Response Timeout. Number of milliseconds to wait for a response. Requires Java 1.5 or later when using the default Java HTTP implementation.</property>
+        <property name="Connect Timeout" required="No">Connection Timeout. Number of milliseconds to wait for a connection to open.</property>
+        <property name="Response Timeout" required="No">Response Timeout. Number of milliseconds to wait for a response.</property>
         <property name="Protocol" required="No">HTTP, HTTPS or FILE. Default: HTTP</property>
         <property name="Method" required="Yes">GET, POST, HEAD, TRACE, OPTIONS, PUT, DELETE</property>
         <property name="Content Encoding" required="No">Content encoding to be used (for POST and FILE)</property>
@@ -398,7 +398,7 @@ the additional variables for rows 4, 5 and 6 will be removed.
         <property name="Parameter types" required="Yes, if a prepared or callable statement has parameters">
         Comma-separated list of SQL parameter types (e.g. INTEGER, DATE, VARCHAR, DOUBLE).
         These are defined as fields in the class java.sql.Types, see for example:
-        <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/sql/Types.html">Javadoc for java.sql.Types</a>.
+        <a href="http://java.sun.com/j2se/1.5/docs/api/java/sql/Types.html">Javadoc for java.sql.Types</a>.
         [Note: JMeter will use whatever types are defined by the runtime JVM, 
         so if you are running on a different JVM, be sure to check the appropriate document]
         If the callable statement has INOUT or OUT parameters, then these must be indicated by prefixing the
