@@ -143,32 +143,11 @@ public class Proxy extends Thread {
     }
 
     /**
-     * Create and configure a new Proxy object.
-     *
-     * @param clientSocket
-     *            the socket connection to the client
-     * @param target
-     *            the ProxyControl which will receive the generated sampler
-     */
-    Proxy(Socket clientSocket, ProxyControl target) {
-        configure(clientSocket, target);
-    }
-
-    /**
      * Configure the Proxy.
-     *
-     * @param clientSocket
-     *            the socket connection to the client
-     * @param target
-     *            the ProxyControl which will receive the generated sampler
-     */
-    void configure(Socket _clientSocket, ProxyControl _target) {
-        configure(_clientSocket, _target, null, null);
-    }
-
-    /**
-     * Configure the Proxy.
-     *
+     * Intended to be called directly after construction.
+     * Should not be called after it has been passed to a new thread,
+     * otherwise the variables may not be published correctly.
+     * 
      * @param _clientSocket
      *            the socket connection to the client
      * @param _target
