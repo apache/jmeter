@@ -63,7 +63,7 @@ public class Daemon extends Thread {
      * The proxy class which will be used to handle individual requests. This
      * class must be the {@link Proxy} class or a subclass.
      */
-    private final Class<?> proxyClass;
+    private final Class<? extends Proxy> proxyClass;
 
     /**
      * Create a new Daemon with the specified port and target.
@@ -93,7 +93,7 @@ public class Daemon extends Thread {
      *            class must be the {@link Proxy} class or a subclass.
      * @throws IOException 
      */
-    public Daemon(int port, ProxyControl target, Class<?> proxyClass) throws IOException {
+    public Daemon(int port, ProxyControl target, Class<? extends Proxy> proxyClass) throws IOException {
         super("HTTP Proxy Daemon");
         this.target = target;
         this.daemonPort = port;
@@ -123,7 +123,7 @@ public class Daemon extends Thread {
                     Socket clientSocket = mainSocket.accept();
                     if (running) {
                         // Pass request to new proxy thread
-                        Proxy thd = (Proxy) proxyClass.newInstance();
+                        Proxy thd = proxyClass.newInstance();
                         thd.configure(clientSocket, target, pageEncodings, formEncodings);
                         thd.start();
                     }
