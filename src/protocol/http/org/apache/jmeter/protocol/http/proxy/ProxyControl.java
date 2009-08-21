@@ -383,8 +383,8 @@ public class ProxyControl extends GenericController {
     public synchronized void deliverSampler(HTTPSamplerBase sampler, TestElement[] subConfigs, SampleResult result) {
         if (filterContentType(result) && filterUrl(sampler)) {
             JMeterTreeNode myTarget = findTargetControllerNode();
-            Collection defaultConfigurations = findApplicableElements(myTarget, ConfigTestElement.class, false);
-            Collection userDefinedVariables = findApplicableElements(myTarget, Arguments.class, true);
+            Collection<ConfigTestElement> defaultConfigurations = (Collection<ConfigTestElement>) findApplicableElements(myTarget, ConfigTestElement.class, false);
+            Collection<Arguments> userDefinedVariables = (Collection<Arguments>) findApplicableElements(myTarget, Arguments.class, true);
 
             removeValuesFromSampler(sampler, defaultConfigurations);
             replaceValues(sampler, subConfigs, userDefinedVariables);
@@ -668,7 +668,8 @@ public class ProxyControl extends GenericController {
      *
      * @return a collection of applicable objects of the given class.
      */
-    private Collection<TestElement> findApplicableElements(JMeterTreeNode myTarget, Class<?> myClass, boolean ascending) {
+    // TODO - could be converted to generic class?
+    private Collection<?> findApplicableElements(JMeterTreeNode myTarget, Class<? extends TestElement> myClass, boolean ascending) {
         JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
         LinkedList<TestElement> elements = new LinkedList<TestElement>();
 
