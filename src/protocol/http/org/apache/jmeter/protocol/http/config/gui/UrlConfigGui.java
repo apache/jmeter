@@ -60,6 +60,14 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
 
     private JTextField port;
 
+    private JTextField proxyHost;
+
+    private JTextField proxyPort;
+
+    private JTextField proxyUser;
+
+    private JTextField proxyPass;
+
     private JTextField connectTimeOut;
     
     private JTextField responseTimeOut;
@@ -104,6 +112,10 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         }
         path.setText(""); // $NON-NLS-1$
         port.setText(""); // $NON-NLS-1$
+        proxyHost.setText(""); // $NON-NLS-1$
+        proxyPort.setText(""); // $NON-NLS-1$
+        proxyUser.setText(""); // $NON-NLS-1$
+        proxyPass.setText(""); // $NON-NLS-1$
         connectTimeOut.setText(""); // $NON-NLS-1$
         responseTimeOut.setText(""); // $NON-NLS-1$
         protocol.setText(""); // $NON-NLS-1$
@@ -133,6 +145,10 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         element.setProperty(new TestElementProperty(HTTPSamplerBase.ARGUMENTS, args));
         element.setProperty(HTTPSamplerBase.DOMAIN, domain.getText());
         element.setProperty(HTTPSamplerBase.PORT, port.getText());
+        element.setProperty(HTTPSamplerBase.PROXYHOST, proxyHost.getText(),"");
+        element.setProperty(HTTPSamplerBase.PROXYPORT, proxyPort.getText(),"");
+        element.setProperty(HTTPSamplerBase.PROXYUSER, proxyUser.getText(),"");
+        element.setProperty(HTTPSamplerBase.PROXYPASS, proxyPass.getText(),"");
         element.setProperty(HTTPSamplerBase.CONNECT_TIMEOUT, connectTimeOut.getText());
         element.setProperty(HTTPSamplerBase.RESPONSE_TIMEOUT, responseTimeOut.getText());
         element.setProperty(HTTPSamplerBase.PROTOCOL, protocol.getText());
@@ -166,6 +182,10 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         } else {
             port.setText(portString);
         }
+        proxyHost.setText(el.getPropertyAsString(HTTPSamplerBase.PROXYHOST));
+        proxyPort.setText(el.getPropertyAsString(HTTPSamplerBase.PROXYPORT));
+        proxyUser.setText(el.getPropertyAsString(HTTPSamplerBase.PROXYUSER));
+        proxyPass.setText(el.getPropertyAsString(HTTPSamplerBase.PROXYPASS));
         connectTimeOut.setText(el.getPropertyAsString(HTTPSamplerBase.CONNECT_TIMEOUT));
         responseTimeOut.setText(el.getPropertyAsString(HTTPSamplerBase.RESPONSE_TIMEOUT));
         protocol.setText(el.getPropertyAsString(HTTPSamplerBase.PROTOCOL));
@@ -223,12 +243,29 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         final JPanel reqPanel = getResponseTimeOutPanel();
         timeOut.add(connPanel);
         timeOut.add(reqPanel);
-        
-        
+                
         JPanel webServerTimeoutPanel = new VerticalPanel();
         webServerTimeoutPanel.add(webServerPanel, BorderLayout.CENTER);
         webServerTimeoutPanel.add(timeOut, BorderLayout.EAST);
-        return webServerTimeoutPanel;
+        
+        JPanel proxyServer = new HorizontalPanel();
+        proxyServer.add(getProxyHostPanel(), BorderLayout.CENTER);
+        proxyServer.add(getProxyPortPanel(), BorderLayout.EAST);
+        
+        JPanel proxyLogin = new HorizontalPanel();
+        proxyLogin.add(getProxyUserPanel());
+        proxyLogin.add(getProxyPassPanel());
+                
+        JPanel proxyServerPanel = new HorizontalPanel();
+        proxyServerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+                JMeterUtils.getResString("web_proxy_server_title"))); // $NON-NLS-1$
+        proxyServerPanel.add(proxyServer, BorderLayout.CENTER);
+        proxyServerPanel.add(proxyLogin, BorderLayout.EAST);
+        
+        JPanel bigPanel = new VerticalPanel();
+        bigPanel.add(webServerTimeoutPanel);
+        bigPanel.add(proxyServerPanel);
+        return bigPanel;
     }
 
     private JPanel getPortPanel() {
@@ -240,6 +277,19 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         JPanel panel = new JPanel(new BorderLayout(5, 0));
         panel.add(label, BorderLayout.WEST);
         panel.add(port, BorderLayout.CENTER);
+
+        return panel;
+    }
+
+    private JPanel getProxyPortPanel() {
+        proxyPort = new JTextField(4);
+
+        JLabel label = new JLabel(JMeterUtils.getResString("web_server_port")); // $NON-NLS-1$
+        label.setLabelFor(proxyPort);
+
+        JPanel panel = new JPanel(new BorderLayout(5, 0));
+        panel.add(label, BorderLayout.WEST);
+        panel.add(proxyPort, BorderLayout.CENTER);
 
         return panel;
     }
@@ -279,6 +329,42 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         JPanel panel = new JPanel(new BorderLayout(5, 0));
         panel.add(label, BorderLayout.WEST);
         panel.add(domain, BorderLayout.CENTER);
+        return panel;
+    }
+
+    private JPanel getProxyHostPanel() {
+        proxyHost = new JTextField(20);
+
+        JLabel label = new JLabel(JMeterUtils.getResString("web_server_domain")); // $NON-NLS-1$
+        label.setLabelFor(proxyHost);
+
+        JPanel panel = new JPanel(new BorderLayout(5, 0));
+        panel.add(label, BorderLayout.WEST);
+        panel.add(proxyHost, BorderLayout.CENTER);
+        return panel;
+    }
+
+    private JPanel getProxyUserPanel() {
+        proxyUser = new JTextField(5);
+
+        JLabel label = new JLabel(JMeterUtils.getResString("username")); // $NON-NLS-1$
+        label.setLabelFor(proxyUser);
+
+        JPanel panel = new JPanel(new BorderLayout(5, 0));
+        panel.add(label, BorderLayout.WEST);
+        panel.add(proxyUser, BorderLayout.CENTER);
+        return panel;
+    }
+
+    private JPanel getProxyPassPanel() {
+        proxyPass = new JTextField(5);
+
+        JLabel label = new JLabel(JMeterUtils.getResString("password")); // $NON-NLS-1$
+        label.setLabelFor(proxyPass);
+
+        JPanel panel = new JPanel(new BorderLayout(5, 0));
+        panel.add(label, BorderLayout.WEST);
+        panel.add(proxyPass, BorderLayout.CENTER);
         return panel;
     }
 

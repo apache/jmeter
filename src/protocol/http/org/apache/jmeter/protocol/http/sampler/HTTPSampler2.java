@@ -99,22 +99,22 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
 
     private static final boolean canSetPreEmptive; // OK to set pre-emptive auth?
 
-    static final String PROXY_HOST =
+    private static final String PROXY_HOST =
         System.getProperty("http.proxyHost",""); // $NON-NLS-1$
 
     private static final String NONPROXY_HOSTS =
         System.getProperty("http.nonProxyHosts",""); // $NON-NLS-1$
 
-    static final int PROXY_PORT =
+    private static final int PROXY_PORT =
         Integer.parseInt(System.getProperty("http.proxyPort","0")); // $NON-NLS-1$
 
     // Have proxy details been provided?
     private static final boolean PROXY_DEFINED = PROXY_HOST.length() > 0 && PROXY_PORT > 0;
 
-    static final String PROXY_USER =
+    private static final String PROXY_USER =
         JMeterUtils.getPropDefault(JMeter.HTTP_PROXY_USER,""); // $NON-NLS-1$
 
-    static final String PROXY_PASS =
+    private static final String PROXY_PASS =
         JMeterUtils.getPropDefault(JMeter.HTTP_PROXY_PASS,""); // $NON-NLS-1$
 
     private static final String PROXY_DOMAIN =
@@ -538,15 +538,26 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
             hc.setLocalAddress(localAddress);
         }
 
-        boolean useProxy = PROXY_DEFINED && !isNonProxy(host);
-        if (useProxy) {
-            if (log.isDebugEnabled()){
-                log.debug("Setting proxy: "+PROXY_HOST+":"+PROXY_PORT);
+        boolean useStaticProxy = PROXY_DEFINED && !isNonProxy(host);
+        boolean useDynamicProxy = false;
+        
+        final String proxyHost = getProxyHost();
+        final int proxyPort = getProxyPortInt();
+        if (proxyHost.length() > 0 && proxyPort > 0){
+            hc.setProxy(proxyHost, proxyPort);
+            useStaticProxy = false; // Dynamic proxy overrules static proxy
+            useDynamicProxy = true;
+        } else {
+            if (useStaticProxy) {
+                if (log.isDebugEnabled()){
+                    log.debug("Setting proxy: "+PROXY_HOST+":"+PROXY_PORT);
+                }
+                hc.setProxy(PROXY_HOST, PROXY_PORT);
             }
-            hc.setProxy(PROXY_HOST, PROXY_PORT);
         }
 
         Map<HostConfiguration, HttpClient> map = httpClients.get();
+        // N.B. HostConfiguration.equals() includes proxy settings in the compare.
         HttpClient httpClient = map.get(hc);
 
         if ( httpClient == null )
@@ -557,22 +568,36 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
             }
             httpClient.setHostConfiguration(hc);
             map.put(hc, httpClient);
-            // These items don't change, so only need to be done once
-            if (useProxy) {
-                if (PROXY_USER.length() > 0){
-                    httpClient.getState().setProxyCredentials(
-                        new AuthScope(PROXY_HOST,PROXY_PORT,null,AuthScope.ANY_SCHEME),
-                        new NTCredentials(PROXY_USER,PROXY_PASS,localHost,PROXY_DOMAIN)
-                    );
-                }
-            }
-
         } else {
             if (log.isDebugEnabled()) {
                 log.debug("Reusing the HttpClient: @"+System.identityHashCode(httpClient));
             }
         }
 
+        // Set up any required Proxy credentials
+        if (useDynamicProxy){
+            String user = getProxyUser();
+            if (user.length() > 0){
+                httpClient.getState().setProxyCredentials(
+                        new AuthScope(proxyHost,proxyPort,null,AuthScope.ANY_SCHEME),
+                        new NTCredentials(user,getProxyPass(),localHost,PROXY_DOMAIN)
+                    );                
+            } else {
+                httpClient.getState().clearProxyCredentials();                
+            }
+        } else {
+            if (useStaticProxy) {
+                if (PROXY_USER.length() > 0){
+                    httpClient.getState().setProxyCredentials(
+                        new AuthScope(PROXY_HOST,PROXY_PORT,null,AuthScope.ANY_SCHEME),
+                        new NTCredentials(PROXY_USER,PROXY_PASS,localHost,PROXY_DOMAIN)
+                    );
+                }
+            } else {
+                httpClient.getState().clearProxyCredentials();
+            }
+        }
+        
         int rto = getResponseTimeout();
         if (rto > 0){
             httpMethod.getParams().setSoTimeout(rto);
