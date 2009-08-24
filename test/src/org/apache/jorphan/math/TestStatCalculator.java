@@ -18,11 +18,13 @@
 
 package org.apache.jorphan.math;
 
+import java.util.Map;
+
 import junit.framework.TestCase;
 
 public class TestStatCalculator extends TestCase {
 
-    StatCalculator calc;
+    private StatCalculatorLong calc;
 
     /**
      * 
@@ -40,7 +42,7 @@ public class TestStatCalculator extends TestCase {
 
     @Override
     public void setUp() {
-        calc = new StatCalculator();
+        calc = new StatCalculatorLong();
     }
 
     public void testPercentagePoint() throws Exception {
@@ -77,15 +79,25 @@ public class TestStatCalculator extends TestCase {
     public void testLong(){
         calc.addValue(0L);
         calc.addValue(2L);
-        assertEquals(Long.valueOf(2),calc.getMax());
-        assertEquals(Long.valueOf(0),calc.getMin());
-        calc.getDistribution();
+        calc.addValue(2L);
+        final Long long0 = Long.valueOf(0);
+        final Long long2 = Long.valueOf(2);
+        assertEquals(long2,calc.getMax());
+        assertEquals(long0,calc.getMin());
+        Map<Number, Number[]> map = calc.getDistribution();
+        assertTrue(map.containsKey(long0));
+        assertTrue(map.containsKey(long2));
     }
+    
     public void testInteger(){
-        calc.addValue(0);
-        calc.addValue(2);
-        assertEquals(Integer.valueOf(2),calc.getMax());
-        assertEquals(Integer.valueOf(0),calc.getMin());
-//        calc.getDistribution(); // currently fails with ClassCastException
+        StatCalculatorInteger calci = new StatCalculatorInteger();
+        calci.addValue(0);
+        calci.addValue(2);
+        calci.addValue(2);
+        assertEquals(Integer.valueOf(2),calci.getMax());
+        assertEquals(Integer.valueOf(0),calci.getMin());
+        Map<Number, Number[]> map = calci.getDistribution();
+        assertTrue(map.containsKey(Integer.valueOf(0)));
+        assertTrue(map.containsKey(Integer.valueOf(2)));
     }
 }

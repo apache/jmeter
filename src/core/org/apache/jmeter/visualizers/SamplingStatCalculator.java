@@ -25,7 +25,7 @@ import java.util.Vector;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.math.StatCalculator;
+import org.apache.jorphan.math.StatCalculatorLong;
 import org.apache.log.Logger;
 
 /**
@@ -37,7 +37,7 @@ import org.apache.log.Logger;
 public class SamplingStatCalculator {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private final StatCalculator calculator = new StatCalculator();
+    private final StatCalculatorLong calculator = new StatCalculatorLong();
 
     private final List<Sample> storedValues = new Vector<Sample>();
 
@@ -312,7 +312,7 @@ public class SamplingStatCalculator {
         return maxThroughput;
     }
 
-    public HashMap getDistribution() {
+    public HashMap<Number, Number[]> getDistribution() {
         return calculator.getDistribution();
     }
 
