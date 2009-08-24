@@ -25,27 +25,45 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * This class serves as a way to calculate the median of a list of values. It is
- * not threadsafe.
+ * This class serves as a way to calculate the median, max, min etc. of a list of values.
+ * It is not threadsafe.
  * 
- * TODO - currently only works properly for Long (because getDistribution() assumes Long)
- * Will never work for mixed values (e.g. Long and Integer) so should probably be converted to
- * typed class.
  */
-public class StatCalculator {
-    List values = new LinkedList();
+public abstract class StatCalculator<T extends Number & Comparable<T>> {
+    
+    private final List<T> values = new LinkedList<T>();
 
-    double sum = 0;
+    private double sum = 0;
 
-    double sumOfSquares = 0;
+    private double sumOfSquares = 0;
 
-    double mean = 0;
+    private double mean = 0;
 
-    double deviation = 0;
+    private double deviation = 0;
 
-    int count = 0;
+    private int count = 0;
 
-    long bytes = 0;
+    private long bytes = 0;
+
+    private final T ZERO;
+    
+    private final T MAX_VALUE;
+    
+    private final T MIN_VALUE;
+    
+    /**
+     * This constructor is used to set up particular values for the generic class instance.
+     *
+     * @param zero - value to return for Median and PercentPoint if there are no values
+     * @param min - value to return for minimum if there are no values
+     * @param max - value to return for maximum if there are no values
+     */
+    public StatCalculator(T zero, T min, T max) {
+        super();
+        ZERO = zero;
+        MAX_VALUE = max;
+        MIN_VALUE = min;
+    }
 
     public void clear() {
         values.clear();
@@ -56,32 +74,13 @@ public class StatCalculator {
         count = 0;
     }
 
-    public void addValue(long newValue) {
-        Number val = new Long(newValue);
-        addValue(val);
-    }
-
-    public void addValue(int newValue) {
-        Number val = new Integer(newValue);
-        addValue(val);
-    }
-
-    public void addValue(float newValue) {
-        Number val = new Float(newValue);
-        addValue(val);
-    }
-
-    public void addValue(double newValue) {
-        Number val = new Double(newValue);
-        addValue(val);
-    }
 
     public void addBytes(long newValue) {
         bytes += newValue;
     }
 
-    public void addAll(StatCalculator calc) {
-        Iterator<Number> iter = calc.values.iterator();
+    public void addAll(StatCalculator<T> calc) {
+        Iterator<T> iter = calc.values.iterator();
         while (iter.hasNext()) {
             addValue(iter.next());
         }
@@ -89,9 +88,9 @@ public class StatCalculator {
 
     public Number getMedian() {
         if (count > 0) {
-            return (Number) values.get((int) (values.size() * .5));
+            return values.get((int) (values.size() * .5));
         }
-        return new Long(0);
+        return ZERO;
     }
 
     public long getTotalBytes() {
@@ -107,11 +106,11 @@ public class StatCalculator {
      * @param percent
      * @return number of values less than the percentage
      */
-    public Number getPercentPoint(float percent) {
+    public T getPercentPoint(float percent) {
         if (count > 0) {
-            return (Number) values.get((int) (values.size() * percent));
+            return values.get((int) (values.size() * percent));
         }
-        return new Long(0);
+        return ZERO;
     }
 
     /**
@@ -123,25 +122,30 @@ public class StatCalculator {
      * @param percent
      * @return number of values less than the percentage
      */
-    public Number getPercentPoint(double percent) {
+    public T getPercentPoint(double percent) {
         if (count > 0) {
-            return (Number) values.get((int) (values.size() * percent));
+            return values.get((int) (values.size() * percent));
         }
-        return new Long(0);
+        return ZERO;
     }
 
     /**
-     * The method has a limit of 1% as the finest granularity. We do this to
-     * make sure we get a whole number for iterating.
+     * Returns the distribution of the values in the list.
+     * 
+     * TODO round values to reduce the number of distinct entries.
      *
+     * @return map containing either Integer or Long keys; entries are a Number array containing the key and the [Integer] count.
+     * TODO - why is the key value also stored in the entry array?
      */
-    public synchronized HashMap getDistribution() {
-        HashMap<Long, Number[]> items = new HashMap<Long, Number[]>();
-        Iterator<Number> itr = this.values.iterator();
+    public synchronized HashMap<Number, Number[]> getDistribution() {
+        HashMap<Number, Number[]> items = new HashMap<Number, Number[]>();
+        Iterator<T> itr = this.values.iterator();
         Number[] dis;
         while (itr.hasNext()) {
-            Number num = itr.next();
-            Long nx = new Long(itr.next().longValue()); // TODO this assumes the entries are all Long
+            Number nx = itr.next();
+            if (!(nx instanceof Integer || nx instanceof Long)){
+                nx=new Long(nx.longValue()); // convert to Long unless Integer or Long
+            }
             if (items.containsKey(nx)) {
                 dis = items.get(nx);
                 dis[1] = new Integer(dis[1].intValue() + 1);
@@ -164,25 +168,25 @@ public class StatCalculator {
         return deviation;
     }
 
-    public Number getMin() {
+    public T getMin() {
         if (count > 0) {
-            return (Number) values.get(0);
+            return values.get(0);
         }
-        return new Long(Long.MIN_VALUE);
+        return MIN_VALUE;
     }
 
-    public Number getMax() {
+    public T getMax() {
         if (count > 0) {
-            return (Number) values.get(count - 1);
+            return values.get(count - 1);
         }
-        return new Long(Long.MAX_VALUE);
+        return MAX_VALUE;
     }
 
     public int getCount() {
         return count;
     }
 
-    public void addValue(Number val) {
+    public void addValue(T val) {
         addSortedValue(val);
         count++;
         double currentVal = val.doubleValue();
@@ -192,10 +196,7 @@ public class StatCalculator {
         deviation = Math.sqrt((sumOfSquares / count) - (mean * mean));
     }
 
-    /**
-     * @param val
-     */
-    private void addSortedValue(Number val) {
+    private void addSortedValue(T val) {
         int index = Collections.binarySearch(values, val);
         if (index >= 0 && index < values.size()) {
             values.add(index, val);
