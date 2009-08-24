@@ -29,10 +29,10 @@ import java.net.PasswordAuthentication;
  */
 public class ProxyAuthenticator extends Authenticator {
     /** The username to authenticate with. */
-    private String userName;
+    private final String userName;
 
     /** The password to authenticate with. */
-    private char password[];
+    private final char password[];
 
     /**
      * Create a ProxyAuthenticator with the specified username and password.
