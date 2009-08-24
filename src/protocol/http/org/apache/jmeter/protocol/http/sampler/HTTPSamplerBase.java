@@ -94,6 +94,14 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     public static final String PORT = "HTTPSampler.port"; // $NON-NLS-1$
 
+    public static final String PROXYHOST = "HTTPSampler.proxyHost"; // $NON-NLS-1$
+
+    public static final String PROXYPORT = "HTTPSampler.proxyPort"; // $NON-NLS-1$
+
+    public static final String PROXYUSER = "HTTPSampler.proxyUser"; // $NON-NLS-1$
+
+    public static final String PROXYPASS = "HTTPSampler.proxyPass"; // $NON-NLS-1$
+
     public static final String CONNECT_TIMEOUT = "HTTPSampler.connect_timeout"; // $NON-NLS-1$
 
     public static final String RESPONSE_TIMEOUT = "HTTPSampler.response_timeout"; // $NON-NLS-1$
@@ -718,6 +726,22 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     public int getResponseTimeout() {
         return getPropertyAsInt(RESPONSE_TIMEOUT, 0);
+    }
+
+    public String getProxyHost() {
+        return getPropertyAsString(PROXYHOST);
+    }
+
+    public int getProxyPortInt() {
+        return getPropertyAsInt(PROXYPORT, 0);
+    }
+
+    public String getProxyUser() {
+        return getPropertyAsString(PROXYUSER);
+    }
+
+    public String getProxyPass() {
+        return getPropertyAsString(PROXYPASS);
     }
 
     public void setArguments(Arguments value) {

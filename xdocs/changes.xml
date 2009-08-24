@@ -109,6 +109,7 @@ The XPath Assertion and XPath Extractor elements no longer fetch external DTDs b
 <h3>HTTP Samplers</h3>
 <ul>
 <li>Bug 47622 - enable recording of HTTPS sessions</li>
+<li>Allow Proxy Server to be specified on HTTP Sampler GUI and HTTP Config GUI</li>
 </ul>
 
 <h3>Other samplers</h3>
