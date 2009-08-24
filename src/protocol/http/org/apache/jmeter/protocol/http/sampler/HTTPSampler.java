@@ -23,6 +23,8 @@ import java.io.InputStream;
 
 import java.net.BindException;
 import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -148,7 +150,22 @@ public class HTTPSampler extends HTTPSamplerBase implements Interruptible {
             }
         }
 
-        HttpURLConnection conn = (HttpURLConnection) u.openConnection();
+        final HttpURLConnection conn;
+        final String proxyHost = getProxyHost();
+        final int proxyPort = getProxyPortInt();
+        if (proxyHost.length() > 0 && proxyPort > 0){
+            Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort));
+            //TODO - how to define proxy authentication for a single connection?
+            // It's not clear if this is possible
+//            String user = getProxyUser();
+//            if (user.length() > 0){
+//                Authenticator auth = new ProxyAuthenticator(user, getProxyPass());
+//            }
+            conn = (HttpURLConnection) u.openConnection(proxy);
+        } else {
+            conn = (HttpURLConnection) u.openConnection();
+        }
+
         // Update follow redirects setting just for this connection
         conn.setInstanceFollowRedirects(getAutoRedirects());
 
@@ -435,6 +452,7 @@ public class HTTPSampler extends HTTPSamplerBase implements Interruptible {
         res.setMonitor(isMonitor());
 
         res.setSampleLabel(urlStr);
+        
         res.sampleStart(); // Count the retries as well in the time
         try {
             // Sampling proper - establish the connection and read the response:
@@ -446,7 +464,7 @@ public class HTTPSampler extends HTTPSamplerBase implements Interruptible {
                     conn = setupConnection(url, method, res);
                     // Attempt the connection:
                     savedConn = conn;
-                    conn.connect();
+                    conn.connect();                        
                     break;
                 } catch (BindException e) {
                     if (retry >= MAX_CONN_RETRIES) {
