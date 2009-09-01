@@ -55,19 +55,15 @@ public abstract class NumberProperty extends AbstractProperty {
      * @see Comparable#compareTo(Object)
      */
     @Override
-    public int compareTo(Object arg0) {
-        if (arg0 instanceof JMeterProperty) {
-            double compareValue = getDoubleValue() - ((JMeterProperty) arg0).getDoubleValue();
+    public int compareTo(JMeterProperty arg0) {
+        double compareValue = getDoubleValue() - arg0.getDoubleValue();
 
-            if (compareValue < 0) {
-                return -1;
-            } else if (compareValue == 0) {
-                return 0;
-            } else {
-                return 1;
-            }
-        } else {
+        if (compareValue < 0) {
             return -1;
+        } else if (compareValue == 0) {
+            return 0;
+        } else {
+            return 1;
         }
     }
 }

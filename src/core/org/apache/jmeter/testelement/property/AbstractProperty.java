@@ -218,28 +218,24 @@ public abstract class AbstractProperty implements JMeterProperty {
      * @return 0 if equal values or both values null; -1 otherwise
      * @see Comparable#compareTo(Object)
      */
-    public int compareTo(Object arg0) {
-        if (arg0 instanceof JMeterProperty) {
-            // We don't expect the string values to ever be null. But (as in
-            // bug 19499) sometimes they are. So have null compare less than
-            // any other value. Log a warning so we can try to find the root
-            // cause of the null value.
-            String val = getStringValue();
-            String val2 = ((JMeterProperty) arg0).getStringValue();
-            if (val == null) {
-                log.warn("Warning: Unexpected null value for property: " + name);
+    public int compareTo(JMeterProperty arg0) {
+        // We don't expect the string values to ever be null. But (as in
+        // bug 19499) sometimes they are. So have null compare less than
+        // any other value. Log a warning so we can try to find the root
+        // cause of the null value.
+        String val = getStringValue();
+        String val2 = arg0.getStringValue();
+        if (val == null) {
+            log.warn("Warning: Unexpected null value for property: " + name);
 
-                if (val2 == null) {
-                    // Two null values -- return equal
-                    return 0;
-                } else {
-                    return -1;
-                }
+            if (val2 == null) {
+                // Two null values -- return equal
+                return 0;
+            } else {
+                return -1;
             }
-            return val.compareTo(val2);
-        } else {
-            return -1;
         }
+        return val.compareTo(val2);
     }
 
     /**
