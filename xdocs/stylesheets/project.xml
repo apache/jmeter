@@ -54,5 +54,10 @@
 		<item name="Mailing Lists"       href="/site/mail.html"/>
 		<item name="SVN Repositories"    href="/site/cvsindex.html"/>
 	 </menu>
+     <menu name="Foundation">
+        <item name="ASF"                 href="http://www.apache.org/"/>
+        <item name="Sponsorship"         href="http://www.apache.org/foundation/sponsorship.html"/>
+        <item name="Thanks"              href="http://www.apache.org/foundation/thanks.html"/>
+     </menu>
 	 </body>
 </project>
