@@ -41,9 +41,9 @@ public class UserSequence implements Serializable {
     // -------------------------------------------
     // Constants and Data Members
     // -------------------------------------------
-    private List allUsers;
+    private List<Map<String, String>> allUsers;
 
-    private transient Iterator indexOfUsers;
+    private transient Iterator<Map<String, String>> indexOfUsers;
 
     // -------------------------------------------
     // Constructors
@@ -58,7 +58,7 @@ public class UserSequence implements Serializable {
      * ie a Set of Mapped "parameter names and parameter values" for each user
      * to be loaded into the sequencer.
      */
-    public UserSequence(List allUsers) {
+    public UserSequence(List<Map<String, String>> allUsers) {
         this.allUsers = allUsers;
 
         // initalise pointer to first user
@@ -75,19 +75,19 @@ public class UserSequence implements Serializable {
      * @return a Map object of parameter names and matching parameter values for
      *         the next user
      */
-    public synchronized Map getNextUserMods() {
+    public synchronized Map<String, String> getNextUserMods() {
         // Use round robin allocation of user details
         if (!indexOfUsers.hasNext()) {
             indexOfUsers = allUsers.iterator();
         }
 
-        Map user;
+        Map<String, String> user;
         if (indexOfUsers.hasNext()) {
-            user = (Map) indexOfUsers.next();
+            user = indexOfUsers.next();
             log.debug("UserSequence.getNextuserMods(): current parameters will be " + "changed to: " + user);
         } else {
             // no entries in all users, therefore create an empty Map object
-            user = new HashMap();
+            user = new HashMap<String, String>();
         }
 
         return user;

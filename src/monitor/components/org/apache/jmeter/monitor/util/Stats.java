@@ -177,14 +177,14 @@ public class Stats {
         if (connectorPrefix != null && connectorPrefix.length() > 0) {
            // loop to fetch desired connector
            for (int i = 0; i < stat.getConnector().size(); i++) {
-               cntr = (Connector) stat.getConnector().get(i);
+               cntr = stat.getConnector().get(i);
                if (cntr.getName().startsWith(connectorPrefix)) {
                    return cntr;
                }
            }           
         }
         // default : get first connector
-        cntr = (Connector) stat.getConnector().get(0);
+        cntr = stat.getConnector().get(0);
         return cntr;
     }
 

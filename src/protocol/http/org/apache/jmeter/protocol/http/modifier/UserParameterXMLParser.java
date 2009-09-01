@@ -20,6 +20,7 @@ package org.apache.jmeter.protocol.http.modifier;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.jmeter.util.JMeterUtils;
 import org.xml.sax.InputSource;
@@ -43,7 +44,7 @@ public class UserParameterXMLParser {
      *            name of the XML to load users parameter data
      * @return all users name value pairs obtained from XML file
      */
-    public List getXMLParameters(String xmlURI) throws SAXException, IOException {
+    public List<Map<String, String>> getXMLParameters(String xmlURI) throws SAXException, IOException {
         // create instances needed for parsing
         XMLReader reader = JMeterUtils.getXMLParser();
         // XMLReaderFactory.createXMLReader(vendorParseClass);
