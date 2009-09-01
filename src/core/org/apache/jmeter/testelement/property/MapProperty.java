@@ -76,9 +76,9 @@ public class MapProperty extends MultiProperty {
      * @see AbstractProperty#getPropertyType()
      */
     @Override
-    protected Class<?> getPropertyType() {
+    protected Class<? extends AbstractProperty> getPropertyType() {
         if (value.size() > 0) {
-            return valueIterator().next().getClass();
+            return (Class<? extends AbstractProperty>) valueIterator().next().getClass();
         }
         return NullProperty.class;
     }

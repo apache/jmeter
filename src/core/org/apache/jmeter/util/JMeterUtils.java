@@ -788,7 +788,7 @@ public class JMeterUtils implements UnitTestManager {
      * namVec.
      * NOTUSED?
      */
-    public static void selJComboBoxItem(Properties properties, JComboBox combo, Vector namVec, String name) {
+    public static void selJComboBoxItem(Properties properties, JComboBox combo, Vector<?> namVec, String name) {
         int idx = namVec.indexOf(name);
         combo.setSelectedIndex(idx);
         // Redisplay.

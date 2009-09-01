@@ -73,7 +73,7 @@ public class UserParameters extends AbstractTestElement implements Serializable,
      * the same order as the sub lists that are given to
      * {@link #setThreadLists(Collection)}.
      */
-    public void setNames(Collection list) {
+    public void setNames(Collection<?> list) {
         setProperty(new CollectionProperty(NAMES, list));
     }
 
@@ -92,7 +92,7 @@ public class UserParameters extends AbstractTestElement implements Serializable,
      * values can be supplied in this fashion to cause JMeter to set different
      * values to variables for different test threads.
      */
-    public void setThreadLists(Collection threadLists) {
+    public void setThreadLists(Collection<?> threadLists) {
         setProperty(new CollectionProperty(THREAD_VALUES, threadLists));
     }
 

@@ -109,7 +109,7 @@ public class ModuleController extends GenericController implements ReplaceableCo
         setProperty(new CollectionProperty(NODE_PATH, nodePath));
     }
 
-    public List getNodePath() {
+    public List<?> getNodePath() {
         JMeterProperty prop = getProperty(NODE_PATH);
         if (!(prop instanceof NullProperty)) {
             return (List<?>) ((CollectionProperty) prop).getObjectValue();
