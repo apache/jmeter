@@ -21,7 +21,7 @@ public interface Status {
 
     void setJvm(Jvm vm);
 
-    java.util.List getConnector();
+    java.util.List<Connector> getConnector();
     
     void addConnector(Connector conn);
 

@@ -28,40 +28,28 @@ public class StatusImpl implements Status {
     
     private String connectorPrefix = null;
 
-    private final List connectors;
+    private final List<Connector> connectors;
 
     /**
      *
      */
     public StatusImpl() {
         super();
-        connectors = new LinkedList();
+        connectors = new LinkedList<Connector>();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.monitor.model.Status#getJvm()
-     */
+    /** {@inheritDoc} */
     public Jvm getJvm() {
         return jvm;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.monitor.model.Status#setJvm(org.apache.jmeter.monitor.model.Jvm)
-     */
+    /** {@inheritDoc} */
     public void setJvm(Jvm vm) {
         this.jvm = vm;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.monitor.model.Status#getConnector()
-     */
-    public List getConnector() {
+    /** {@inheritDoc} */
+    public List<Connector> getConnector() {
         return this.connectors;
     }
 

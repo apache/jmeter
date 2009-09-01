@@ -64,7 +64,7 @@ public class TestObjectFactory extends TestCase {
                     System.out.println(st.getJvm().getMemory().getTotal());
                     System.out.println(st.getJvm().getMemory().getMax());
                     System.out.println("connector size: " + st.getConnector().size());
-                    Connector conn = (Connector) st.getConnector().get(0);
+                    Connector conn = st.getConnector().get(0);
                     System.out.println("conn: " + conn.getThreadInfo().getMaxThreads());
                 }
             } catch (java.io.FileNotFoundException e) {
