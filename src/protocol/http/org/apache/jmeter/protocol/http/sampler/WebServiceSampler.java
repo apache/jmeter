@@ -265,6 +265,7 @@ public class WebServiceSampler extends HTTPSamplerBase {
      *
      * @return the proxy hostname
      */
+    @Override
     public String getProxyHost() {
         this.checkProxy();
         return this.getPropertyAsString(PROXY_HOST);
