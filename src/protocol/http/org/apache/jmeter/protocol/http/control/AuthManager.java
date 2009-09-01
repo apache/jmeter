@@ -124,10 +124,6 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
         return true;
     }
 
-    public Class<?> getGuiClass() {
-        return org.apache.jmeter.protocol.http.gui.AuthPanel.class;
-    }
-
     /**
      * Return the record at index i
      */
