@@ -72,10 +72,6 @@ public class HttpMirrorControl extends AbstractTestElement {
         return DEFAULT_PORT;
     }
 
-    public Class getGuiClass() {
-        return org.apache.jmeter.protocol.http.control.gui.HttpMirrorControlGui.class;
-    }
-
     public void startHttpMirror() {
         server = new HttpMirrorServer(getPort());
         server.start();
