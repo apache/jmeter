@@ -317,11 +317,6 @@ public class ProxyControl extends GenericController {
         return getPropertyAsString(CONTENT_TYPE_INCLUDE);
     }
 
-
-    public Class<?> getGuiClass() {
-        return org.apache.jmeter.protocol.http.proxy.gui.ProxyControlGui.class;
-    }
-
     public void addConfigElement(ConfigElement config) {
     }
 
@@ -566,9 +561,9 @@ public class ProxyControl extends GenericController {
         variables.addParameter("T", Long.toString(deltaT)); // $NON-NLS-1$
         ValueReplacer replacer = new ValueReplacer(variables);
         JMeterTreeNode mySelf = model.getNodeOf(this);
-        Enumeration children = mySelf.children();
+        Enumeration<JMeterTreeNode> children = mySelf.children();
         while (children.hasMoreElements()) {
-            JMeterTreeNode templateNode = (JMeterTreeNode) children.nextElement();
+            JMeterTreeNode templateNode = children.nextElement();
             if (templateNode.isEnabled()) {
                 TestElement template = templateNode.getTestElement();
                 if (template instanceof Timer) {
@@ -603,10 +598,10 @@ public class ProxyControl extends GenericController {
      */
     private JMeterTreeNode findFirstNodeOfType(Class<?> type) {
         JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
-        List nodes = treeModel.getNodesOfType(type);
-        Iterator iter = nodes.iterator();
+        List<JMeterTreeNode> nodes = treeModel.getNodesOfType(type);
+        Iterator<JMeterTreeNode> iter = nodes.iterator();
         while (iter.hasNext()) {
-            JMeterTreeNode node = (JMeterTreeNode) iter.next();
+            JMeterTreeNode node = iter.next();
             if (node.isEnabled()) {
                 return node;
             }
@@ -909,9 +904,9 @@ public class ProxyControl extends GenericController {
     private void notifySampleListeners(SampleEvent event) {
         JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
         JMeterTreeNode myNode = treeModel.getNodeOf(this);
-        Enumeration kids = myNode.children();
+        Enumeration<JMeterTreeNode> kids = myNode.children();
         while (kids.hasMoreElements()) {
-            JMeterTreeNode subNode = (JMeterTreeNode) kids.nextElement();
+            JMeterTreeNode subNode = kids.nextElement();
             if (subNode.isEnabled()) {
                 TestElement testElement = subNode.getTestElement();
                 if (testElement instanceof SampleListener) {
@@ -928,9 +923,9 @@ public class ProxyControl extends GenericController {
     private void notifyTestListenersOfStart() {
         JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
         JMeterTreeNode myNode = treeModel.getNodeOf(this);
-        Enumeration kids = myNode.children();
+        Enumeration<JMeterTreeNode> kids = myNode.children();
         while (kids.hasMoreElements()) {
-            JMeterTreeNode subNode = (JMeterTreeNode) kids.nextElement();
+            JMeterTreeNode subNode = kids.nextElement();
             if (subNode.isEnabled()) {
                 TestElement testElement = subNode.getTestElement();
                 if (testElement instanceof TestListener) {
@@ -947,9 +942,9 @@ public class ProxyControl extends GenericController {
     private void notifyTestListenersOfEnd() {
         JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
         JMeterTreeNode myNode = treeModel.getNodeOf(this);
-        Enumeration kids = myNode.children();
+        Enumeration<JMeterTreeNode> kids = myNode.children();
         while (kids.hasMoreElements()) {
-            JMeterTreeNode subNode = (JMeterTreeNode) kids.nextElement();
+            JMeterTreeNode subNode = kids.nextElement();
             if (subNode.isEnabled()) {
                 TestElement testElement = subNode.getTestElement();
                 if (testElement instanceof TestListener) {

@@ -65,10 +65,6 @@ public class SplineModel implements Clearable {
         return dataCurve;
     }
 
-    public Class<?> getGuiClass() {
-        return org.apache.jmeter.visualizers.SplineVisualizer.class;
-    }
-
     public long getMinimum() {
         return samples.getMin().longValue();
     }
