@@ -30,15 +30,12 @@ public class JvmImpl implements Jvm {
         super();
     }
 
+    /** {@inheritDoc} */
     public Memory getMemory() {
         return this.memory;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.monitor.model.Jvm#setMemory(org.apache.jmeter.monitor.model.Memory)
-     */
+    /** {@inheritDoc} */
     public void setMemory(Memory mem) {
         this.memory = mem;
     }
