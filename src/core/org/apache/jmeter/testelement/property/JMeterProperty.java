@@ -22,7 +22,7 @@ import java.io.Serializable;
 
 import org.apache.jmeter.testelement.TestElement;
 
-public interface JMeterProperty extends Serializable, Cloneable, Comparable {
+public interface JMeterProperty extends Serializable, Cloneable, Comparable<JMeterProperty> {
     /**
      * Returns whether the property is a running version.
      *
