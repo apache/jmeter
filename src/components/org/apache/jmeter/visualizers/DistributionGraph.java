@@ -167,7 +167,7 @@ public class DistributionGraph extends JComponent implements Scrollable, Clearab
             Number fifty = p_model.getPercentPoint(0.50);
 
             int total = p_model.getCount();
-            Collection values = p_model.getDistribution().values();
+            Collection<?> values = p_model.getDistribution().values();
             Object[] objval = new Object[values.size()];
             objval = values.toArray(objval);
             // we sort the objects

@@ -78,7 +78,7 @@ public abstract class AbstractProperty implements JMeterProperty {
         this.runningVersion = runningVersion;
     }
 
-    protected PropertyIterator getIterator(Collection values) {
+    protected PropertyIterator getIterator(Collection<JMeterProperty> values) {
         return new PropertyIteratorImpl(values);
     }
 
@@ -246,13 +246,13 @@ public abstract class AbstractProperty implements JMeterProperty {
      * Get the property type for this property. Used to convert raw values into
      * JMeterProperties.
      */
-    protected Class getPropertyType() {
+    protected Class<? extends AbstractProperty> getPropertyType() {
         return getClass();
     }
 
     protected JMeterProperty getBlankProperty() {
         try {
-            JMeterProperty prop = (JMeterProperty) getPropertyType().newInstance();
+            JMeterProperty prop = getPropertyType().newInstance();
             if (prop instanceof NullProperty) {
                 return new StringProperty();
             }
@@ -285,9 +285,9 @@ public abstract class AbstractProperty implements JMeterProperty {
         }
     }
 
-    protected Collection normalizeList(Collection coll) {
-        Iterator iter = coll.iterator();
-        Collection newColl = null;
+    protected Collection<JMeterProperty> normalizeList(Collection<JMeterProperty> coll) {
+        Iterator<?> iter = coll.iterator();
+        Collection<JMeterProperty> newColl = null;
         while (iter.hasNext()) {
             Object item = iter.next();
             if (newColl == null) {
@@ -312,10 +312,10 @@ public abstract class AbstractProperty implements JMeterProperty {
      * objects, appropriate for a MapProperty object.
      */
     protected Map normalizeMap(Map coll) {
-        Iterator iter = coll.entrySet().iterator();
-        Map newColl = null;
+        Iterator<Map.Entry<?,?>> iter = coll.entrySet().iterator();
+        Map<Object, JMeterProperty> newColl = null;
         while (iter.hasNext()) {
-            Map.Entry entry = (Map.Entry) iter.next();
+            Map.Entry<?,?> entry = iter.next();
             Object item = entry.getKey();
             Object prop = entry.getValue();
             if (newColl == null) {

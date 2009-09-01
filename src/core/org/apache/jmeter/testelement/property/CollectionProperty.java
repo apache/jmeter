@@ -28,9 +28,9 @@ public class CollectionProperty extends MultiProperty {
 
     private static final long serialVersionUID = 221L; // Remember to change this when the class changes ...
 
-    private Collection value;
+    private Collection<JMeterProperty> value;
 
-    private transient Collection savedValue;
+    private transient Collection<JMeterProperty> savedValue;
 
     public CollectionProperty(String name, Collection value) {
         super(name);
@@ -39,7 +39,7 @@ public class CollectionProperty extends MultiProperty {
 
     public CollectionProperty() {
         super();
-        value = new ArrayList();
+        value = new ArrayList<JMeterProperty>();
     }
 
     @Override
@@ -67,33 +67,33 @@ public class CollectionProperty extends MultiProperty {
     }
 
     public void set(int index, String prop) {
-        if (value instanceof List) {
-            ((List) value).set(index, new StringProperty(prop, prop));
+        if (value instanceof List<?>) {
+            ((List<JMeterProperty>) value).set(index, new StringProperty(prop, prop));
         }
     }
 
     public void set(int index, JMeterProperty prop) {
-        if (value instanceof List) {
-            ((List) value).set(index, prop);
+        if (value instanceof List<?>) {
+            ((List<JMeterProperty>) value).set(index, prop);
         }
     }
 
     public JMeterProperty get(int row) {
-        if (value instanceof List) {
-            return (JMeterProperty) ((List) value).get(row);
+        if (value instanceof List<?>) {
+            return ((List<JMeterProperty>) value).get(row);
         }
         return null;
     }
 
     public void remove(int index) {
-        if (value instanceof List) {
-            ((List) value).remove(index);
+        if (value instanceof List<?>) {
+            ((List<?>) value).remove(index);
         }
     }
 
     public void setObjectValue(Object v) {
-        if (v instanceof Collection) {
-            setCollection((Collection) v);
+        if (v instanceof Collection<?>) {
+            setCollection((Collection<?>) v);
         }
 
     }
