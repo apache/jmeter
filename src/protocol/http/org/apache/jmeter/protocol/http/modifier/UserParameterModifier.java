@@ -64,7 +64,7 @@ public class UserParameterModifier extends ConfigTestElement implements PreProce
      */
     public void testStarted() {
         // try to populate allUsers, if fail, leave as any empty set
-        List allUsers = new LinkedList();
+        List<Map<String, String>> allUsers = new LinkedList<Map<String, String>>();
         try {
             UserParameterXMLParser readXMLParameters = new UserParameterXMLParser();
             allUsers = readXMLParameters.getXMLParameters(getXmlUri());
@@ -103,7 +103,7 @@ public class UserParameterModifier extends ConfigTestElement implements PreProce
             return;
         }
         HTTPSamplerBase config = (HTTPSamplerBase) entry;
-        Map currentUser = allAvailableUsers.getNextUserMods();
+        Map<String, String> currentUser = allAvailableUsers.getNextUserMods();
         PropertyIterator iter = config.getArguments().iterator();
         while (iter.hasNext()) {
             Argument arg = (Argument) iter.next().getObjectValue();
@@ -111,7 +111,7 @@ public class UserParameterModifier extends ConfigTestElement implements PreProce
             // then change its value
             // (Note: each jmeter thread (ie user) gets to have unique values)
             if (currentUser.containsKey(arg.getName())) {
-                arg.setValue((String) currentUser.get(arg.getName()));
+                arg.setValue(currentUser.get(arg.getName()));
             }
         }
     }
@@ -144,19 +144,11 @@ public class UserParameterModifier extends ConfigTestElement implements PreProce
         setProperty(XMLURI, xmlURI);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see TestListener#testIterationStart(LoopIterationEvent)
-     */
+    /** {@inheritDoc} */
     public void testIterationStart(LoopIterationEvent event) {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.lang.Object#clone()
-     */
+    /** {@inheritDoc} */
     @Override
     public Object clone() {
         UserParameterModifier clone = (UserParameterModifier) super.clone();
