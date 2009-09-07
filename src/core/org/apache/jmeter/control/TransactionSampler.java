@@ -45,6 +45,10 @@ public class TransactionSampler extends AbstractSampler {
 
     private int noFailingSamples = 0;
 
+    /**
+     * @deprecated only for use by test code
+     */
+    @Deprecated
     public TransactionSampler(){
         //log.warn("Constructor only intended for use in testing");
     }
