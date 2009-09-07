@@ -27,7 +27,7 @@ public class AssertionResult implements Serializable {
     public static final String RESPONSE_WAS_NULL = "Response was null"; // $NON-NLS-1$
 
     /** Name of the assertion. */
-    private String name;
+    private final String name;
 
     /** True if the assertion failed. */
     private boolean failure;
@@ -45,6 +45,7 @@ public class AssertionResult implements Serializable {
      */
     @Deprecated
     public AssertionResult() { // Needs to be public for tests
+        this.name = null;
     }
 
     /**
@@ -54,7 +55,7 @@ public class AssertionResult implements Serializable {
      * @param name the name of the assertion
      */
     public AssertionResult(String name) {
-        setName(name);
+        this.name = name;
     }
 
     /**
@@ -64,15 +65,6 @@ public class AssertionResult implements Serializable {
      */
     public String getName() {
         return name;
-    }
-
-    /**
-     * Set the name of the assertion
-     *
-     * @param name the name of the assertion
-     */
-    public void setName(String name) {
-        this.name = name;
     }
 
     /**
