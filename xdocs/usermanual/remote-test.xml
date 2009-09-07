@@ -216,7 +216,11 @@ There are some JMeter properties that can be set to alter this behaviour.
     </ul>
     Other fields that vary between samples are lost. 
     </li>
-    <li>Custom implementation : set the mode parameter to your custom sample sender class name
+    <li>Stripped - remove responseData from succesful samples</li>
+    <li>StrippedBatch - remove responseData from succesful samples, and send as batches</li>
+    <li>Custom implementation : set the mode parameter to your custom sample sender class name.
+    This must implement the interface SampleSender and have a constructor which takes a single
+    parameter of type RemoteSampleListener. 
     </li>
     </ul>
 </ul>
