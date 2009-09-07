@@ -149,6 +149,10 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
      */
     private Map<String, Object> propertyMap;
 
+    /**
+     * @deprecated only for use by test code
+     */
+    @Deprecated
     public GenericTestBeanCustomizer(){
         log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
     }
