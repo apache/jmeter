@@ -72,6 +72,8 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
 
     public static final String NOT_OTHER = GenericTestBeanCustomizer.NOT_OTHER;
 
+    public static final String MULTILINE = "multiline";
+
     public static final String DEFAULT = GenericTestBeanCustomizer.DEFAULT;
 
     public static final String RESOURCE_BUNDLE = GenericTestBeanCustomizer.RESOURCE_BUNDLE;
