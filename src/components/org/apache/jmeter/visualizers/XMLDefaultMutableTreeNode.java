@@ -42,6 +42,10 @@ public class XMLDefaultMutableTreeNode extends DefaultMutableTreeNode {
     // private boolean isRoot;
     private transient Node xmlNode;
 
+    /**
+     * @deprecated only for use by test code
+     */
+    @Deprecated
     public XMLDefaultMutableTreeNode(){
         log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
     }
