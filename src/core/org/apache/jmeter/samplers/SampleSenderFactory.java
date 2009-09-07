@@ -36,6 +36,10 @@ public class SampleSenderFactory {
 
     private static final String MODE_STATISTICAL = "Statistical"; // $NON-NLS-1$
 
+    private static final String MODE_STRIPPED = "Stripped"; // $NON-NLS-1$
+
+    private static final String MODE_STRIPPED_BATCH = "StrippedBatch"; // $NON-NLS-1$
+
     // Support original property name
     private static final boolean holdSamples = JMeterUtils.getPropDefault("hold_samples", false); // $NON-NLS-1$
 
@@ -62,6 +66,10 @@ public class SampleSenderFactory {
         } else if (type.equalsIgnoreCase(MODE_STANDARD)) {
             StandardSampleSender s = new StandardSampleSender(listener);
             return s;
+        }  else if(type.equalsIgnoreCase(MODE_STRIPPED_BATCH)) {
+            return new DataStrippingSampleSender(new BatchSampleSender(listener));
+        } else if(type.equalsIgnoreCase(MODE_STRIPPED)){
+            return new DataStrippingSampleSender(listener);
         } else {
             // should be a user provided class name
             SampleSender s = null;
