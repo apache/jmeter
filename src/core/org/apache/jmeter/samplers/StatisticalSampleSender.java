@@ -56,6 +56,10 @@ public class StatisticalSampleSender implements SampleSender, Serializable {
 
     private long batchSendTime = -1;
 
+    /**
+     * @deprecated only for use by test code
+     */
+    @Deprecated
     public StatisticalSampleSender(){
         log.warn("Constructor only intended for use in testing");
         listener = null;

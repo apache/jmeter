@@ -50,6 +50,10 @@ public class BatchSampleSender implements SampleSender, Serializable {
 
     private long batchSendTime = -1;
 
+    /**
+     * @deprecated only for use by test code
+     */
+    @Deprecated
     public BatchSampleSender(){
         log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
         listener = null;
