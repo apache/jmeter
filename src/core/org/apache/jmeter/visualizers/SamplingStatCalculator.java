@@ -47,6 +47,10 @@ public class SamplingStatCalculator {
 
     private String label;
 
+    /**
+     * @deprecated only for use by test code
+     */
+    @Deprecated
     public SamplingStatCalculator() {// Don't (can't) use this...
         log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
     }

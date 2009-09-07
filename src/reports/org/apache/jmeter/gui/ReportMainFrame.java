@@ -107,6 +107,10 @@ public class ReportMainFrame extends JFrame implements TestListener, Remoteable 
     /** A message dialog shown while JMeter threads are stopping. */
     private JDialog stoppingMessage;
 
+    /**
+     * @deprecated only for use by test code
+     */
+    @Deprecated
     public ReportMainFrame(){
         log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
     }
