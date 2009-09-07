@@ -220,6 +220,10 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
                     log.debug("Editor for property " + name + " is wrapped in " + propertyEditor);
                 }
             }
+            if(propertyEditor instanceof TestBeanPropertyEditor)
+            {
+                ((TestBeanPropertyEditor)propertyEditor).setDescriptor(descriptors[i]);
+            }
             if (propertyEditor.getCustomEditor() instanceof JScrollPane) {
                 scrollerCount++;
             }
