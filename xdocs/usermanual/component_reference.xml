@@ -2456,6 +2456,16 @@ by using suitable labels and adding the summarisers to appropriate parts of the 
  </properties>
 </component>
 
+<component name="Comparison Assertion Visualizer" index="&sect-num;.3.19"  width="777" height="266" screenshot="comparison_assertion_visualizer.png">
+<description>
+The Comparison Assertion Visualizer shows the results of any <complink name="Compare Assertion"/> elements.
+</description>
+ <properties>
+ <property name="Name" required="Yes">Descriptive name for this element that is shown in the tree.
+ </property>
+ </properties>
+</component>
+
 <a href="#">^</a>
 
 </section>
@@ -3392,6 +3402,23 @@ The script can check various aspects of the SampleResult.
 If an error is detected, the script should use AssertionResult.setFailureMessage("message") and AssertionResult.setFailure(true).
 </p>
 <p>For futher details of all the methods available on each of the above variables, please check the Javadoc</p>
+</component>
+
+<component name="Compare Assertion" index="&sect-num;.5.11"  width="292" height="296" screenshot="assertion/compare.png">
+<description>
+The Compare Assertion can be used to compare sample results within its scope.
+Either the contents or the elapsed time can be compared, and the contents can be filtered before comparison.
+The assertion comparisons can be seen in the <complink name="Comparison Assertion Visualizer"/>.
+</description>
+<properties>
+    <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
+    <property name="Compare Content" required="Yes">Whether or not to compare the content (response data)</property>
+    <property name="Compare Time" required="Yes">If the value is >=0, then check if the time difference is no greater than the value. 
+    I.e. if the value is 0, then the times must be exactly equal.</property>
+    <property name="Comparison Filters" required="No">Filters can be used to remove strings from the content comparison.
+    For example, if the page has a time-stamp, it might be matched with: "Time: \d\d:\d\d:\d\d" and replaced with a dummy fixed time "Time: HH:MM:SS".
+    </property>
+</properties>
 </component>
 
 <a href="#">^</a>
