@@ -20,6 +20,16 @@ public class DataStrippingSampleSender implements SampleSender, Serializable {
 	private final RemoteSampleListener listener;
 	private final SampleSender decoratedSender;
 
+	/**
+	 * @deprecated only for use by test code
+	 */
+    @Deprecated
+    public DataStrippingSampleSender(){
+        log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
+        listener = null;
+        decoratedSender = null;
+    }
+
 	DataStrippingSampleSender(RemoteSampleListener listener) {
 		this.listener = listener;
 		decoratedSender = null;
