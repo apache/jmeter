@@ -235,6 +235,7 @@ public class ObjectTableModel extends DefaultTableModel {
      *
      * @return false if at least one Functor cannot be found.
      */
+    @SuppressWarnings("deprecation")
     public boolean checkFunctors(Object _value, Class<?> caller){
         Object value;
         if (_value == null && objectClass != null) {
@@ -269,5 +270,17 @@ public class ObjectTableModel extends DefaultTableModel {
 
         }
         return status;
+    }
+
+    public Object getObjectList() { // used by TableEditor
+        return objects;
+    }
+
+    public void setRows(Iterable<?> rows) { // used by TableEditor
+        clearData();
+        for(Object val : rows)
+        {
+            addRow(val);
+        }
     }
 }

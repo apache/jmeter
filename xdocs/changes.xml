@@ -147,6 +147,7 @@ The XPath Assertion and XPath Extractor elements no longer fetch external DTDs b
 
 <h2>Non-functional changes</h2>
 <ul>
+<li>Add TestBean Table Editor support</li>
 </ul>
 
 </section> 
