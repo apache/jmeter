@@ -34,6 +34,10 @@ public class StandardSampleSender implements SampleSender, Serializable {
 
     private RemoteSampleListener listener;
 
+    /**
+     * @deprecated only for use by test code
+     */
+    @Deprecated
     public StandardSampleSender(){
         log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
     }

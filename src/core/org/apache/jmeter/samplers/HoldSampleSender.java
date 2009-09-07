@@ -38,6 +38,10 @@ public class HoldSampleSender implements SampleSender, Serializable {
 
     private final RemoteSampleListener listener;
 
+    /**
+     * @deprecated only for use by test code
+     */
+    @Deprecated
     public HoldSampleSender(){
         log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
         listener = null;
