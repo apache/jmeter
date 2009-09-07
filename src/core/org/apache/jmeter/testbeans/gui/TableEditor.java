@@ -222,7 +222,12 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
 	}
 
 	public void focusLost(FocusEvent e) {
-		CellEditor ce = table.getCellEditor(table.getEditingRow(),table.getEditingColumn());
+		final int editingRow = table.getEditingRow();
+        final int editingColumn = table.getEditingColumn();
+        CellEditor ce = null;
+        if (editingRow != -1 && editingColumn != -1){
+            ce = table.getCellEditor(editingRow,editingColumn);
+        }
 		Component editor = table.getEditorComponent();
 		if(ce != null && (editor == null || editor != e.getOppositeComponent()))
 		{
