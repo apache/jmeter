@@ -62,7 +62,6 @@ The other specific Test Plan sections are:
 <li><a href="build-ldap-test-plan.html">LDAP</a></li>
 <li><a href="build-ldapext-test-plan.html">LDAP Extended</a></li>
 <li><a href="build-ws-test-plan.html">WebServices (SOAP)</a></li>
-<li></li>
 </ul>
 </p>
 <p>Once you are comfortable with building and running JMeter Test Plans, you can look into the
