@@ -22,9 +22,12 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
 import java.text.DateFormat;
@@ -33,11 +36,17 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.InputMap;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -49,6 +58,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.JTree;
+import javax.swing.KeyStroke;
 import javax.swing.ToolTipManager;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -182,10 +192,16 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
     private JRadioButton xmlButton;
 
     private JCheckBox downloadAll;
+    
+    private JLabel renderLabel;
 
     private JTree jTree;
 
     private JTabbedPane rightSide;
+
+    private SearchTextExtension searchTextExtension;
+    
+    private JPanel searchPanel = null;
 
     private static final ImageIcon imageSuccess = JMeterUtils.getImage(
             JMeterUtils.getPropDefault("viewResultsTree.success",  //$NON-NLS-1$
@@ -408,6 +424,9 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
                     statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), null);
                     statsBuff = null; // Done
 
+                    // Reset search
+                    searchTextExtension.resetTextToFind();
+                    
                     // get the text response and image icon
                     // to determine which is NOT null
                     if ((SampleResult.TEXT).equals(res.getDataType())) // equals(null) is OK
@@ -422,10 +441,16 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
                         } else if (command.equals(XML_COMMAND)) {
                             showRenderXMLResponse(res);
                         }
+                        if (!searchTextExtension.isEnabled()) {
+                            searchTextExtension.setEnabled(true);
+                        }
                     } else {
                         byte[] responseBytes = res.getResponseData();
                         if (responseBytes != null) {
                             showImage(new ImageIcon(responseBytes)); //TODO implement other non-text types
+                            if (searchTextExtension.isEnabled()) {
+                                searchTextExtension.setEnabled(false);
+                            }
                         }
                     }
                 }
@@ -457,10 +482,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
     private void showImage(Icon image) {
         imageLabel.setIcon(image);
         resultsScrollPane.setViewportView(imageLabel);
-        textButton.setEnabled(false);
-        htmlButton.setEnabled(false);
-        jsonButton.setEnabled(false);
-        xmlButton.setEnabled(false);
+        setEnabledButtons(false);
     }
 
     private void showTextResponse(String response) {
@@ -469,10 +491,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
         results.setCaretPosition(0);
         resultsScrollPane.setViewportView(results);
 
-        textButton.setEnabled(true);
-        htmlButton.setEnabled(true);
-        jsonButton.setEnabled(true);
-        xmlButton.setEnabled(true);
+        setEnabledButtons(true);
     }
 
     // It might be useful also to make this available in the 'Request' tab, for
@@ -536,10 +555,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
         results.setCaretPosition(0);
         resultsScrollPane.setViewportView(results);
 
-        textButton.setEnabled(true);
-        htmlButton.setEnabled(true);
-        jsonButton.setEnabled(true);
-        xmlButton.setEnabled(true);
+        setEnabledButtons(true);
     }
 
     private void showRenderXMLResponse(SampleResult res) {
@@ -571,10 +587,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
         JPanel domTreePanel = new DOMTreePanel(document);
         view = domTreePanel;
         resultsScrollPane.setViewportView(view);
-        textButton.setEnabled(true);
-        htmlButton.setEnabled(true);
-        jsonButton.setEnabled(true);
-        xmlButton.setEnabled(true);
+        setEnabledButtons(true);
     }
 
     private static String getResponseAsString(SampleResult res) {
@@ -623,7 +636,8 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
                 results.setText("");
                 return;
             }
-
+            searchTextExtension.resetTextToFind();
+            
             SampleResult res = (SampleResult) node.getUserObject();
             String response = getResponseAsString(res);
 
@@ -688,47 +702,61 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
         results.setCaretPosition(0);
         resultsScrollPane.setViewportView(results);
 
-        textButton.setEnabled(true);
-        htmlButton.setEnabled(true);
-        jsonButton.setEnabled(true);
-        xmlButton.setEnabled(true);
+        setEnabledButtons(true);
     }
 
     private Component createHtmlOrTextPane() {
         ButtonGroup group = new ButtonGroup();
+        Font font = new Font("SansSerif", Font.PLAIN, 10);
+        Font fontBold = new Font("SansSerif", Font.BOLD, 10);
+
+        renderLabel = new JLabel(JMeterUtils
+                .getResString("view_results_render")); // $NON-NLS-1$
+        renderLabel.setFont(fontBold);
 
         textButton = new JRadioButton(JMeterUtils.getResString("view_results_render_text")); // $NON-NLS-1$
+        textButton.setFont(font);
         textButton.setActionCommand(TEXT_COMMAND);
         textButton.addActionListener(this);
         textButton.setSelected(textMode);
         group.add(textButton);
 
         htmlButton = new JRadioButton(JMeterUtils.getResString("view_results_render_html")); // $NON-NLS-1$
+        htmlButton.setFont(font);
         htmlButton.setActionCommand(HTML_COMMAND);
         htmlButton.addActionListener(this);
         htmlButton.setSelected(!textMode);
         group.add(htmlButton);
 
         jsonButton = new JRadioButton(JMeterUtils.getResString("view_results_render_json")); // $NON-NLS-1$
+        jsonButton.setFont(font);
         jsonButton.setActionCommand(JSON_COMMAND);
         jsonButton.addActionListener(this);
         jsonButton.setSelected(!textMode);
         group.add(jsonButton);
 
         xmlButton = new JRadioButton(JMeterUtils.getResString("view_results_render_xml")); // $NON-NLS-1$
+        xmlButton.setFont(font);
         xmlButton.setActionCommand(XML_COMMAND);
         xmlButton.addActionListener(this);
         xmlButton.setSelected(!textMode);
         group.add(xmlButton);
 
         downloadAll = new JCheckBox(JMeterUtils.getResString("view_results_render_embedded")); // $NON-NLS-1$
-
+        downloadAll.setFont(font);
+        
         JPanel pane = new JPanel();
+        pane.setLayout(new BoxLayout(pane, BoxLayout.X_AXIS));
+        pane.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+        pane.add(searchTextExtension.createShowSearchPanel());
+        pane.add(Box.createRigidArea(new Dimension(30, 0)));
+        pane.add(renderLabel);
         pane.add(textButton);
         pane.add(htmlButton);
         pane.add(xmlButton);
         pane.add(jsonButton);
         pane.add(downloadAll);
+        
         return pane;
     }
 
@@ -751,6 +779,8 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 
         JSplitPane mainSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftSide, rightSide);
         add(mainSplit, BorderLayout.CENTER);
+        
+        searchTextExtension.init(resultsPane);
     }
 
     private void setupTabPaneForSampleResult() {
@@ -838,11 +868,33 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
         resultsScrollPane = makeScrollPane(results);
         imageLabel = new JLabel();
 
+        // Add search text extension
+        searchTextExtension = new SearchTextExtension();
+        searchPanel = searchTextExtension.createSearchTextPanel();
+        searchTextExtension.setResults(results);
+        searchPanel.setVisible(false);
+        JPanel panelSouth = new JPanel(new BorderLayout());
+        panelSouth.add(createHtmlOrTextPane(), BorderLayout.CENTER);
+        panelSouth.add(searchPanel, BorderLayout.SOUTH);
+        
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(resultsScrollPane, BorderLayout.CENTER);
-        panel.add(createHtmlOrTextPane(), BorderLayout.SOUTH);
+        panel.add(panelSouth, BorderLayout.SOUTH);
 
         return panel;
+    }
+
+    private void setEnabledButtons(boolean b) {
+        renderLabel.setEnabled(b); 
+        textButton.setEnabled(b);
+        htmlButton.setEnabled(b);
+        jsonButton.setEnabled(b);
+        xmlButton.setEnabled(b);
+        if (b && command.equals(HTML_COMMAND)) {
+            downloadAll.setEnabled(b);
+        } else {
+            downloadAll.setEnabled(false);
+        }
     }
 
     private static class ResultsNodeRenderer extends DefaultTreeCellRenderer {
