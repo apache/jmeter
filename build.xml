@@ -297,38 +297,38 @@
 
   <!-- Jars for binary release -->
   <patternset id="external.jars">
-    <include name="${apache-bsf.jar}"/>
-    <include name="${beanshell.jar}"/>
-    <include name="${avalon-framework.jar}"/>
-    <include name="${xmlgraphics-commons.jar}"/>
-    <include name="${commons-codec.jar}"/>
-    <include name="${commons-collections.jar}"/>
-    <include name="${commons-httpclient.jar}"/>
-    <include name="${commons-io.jar}"/>
-    <include name="${commons-jexl.jar}"/>
-    <include name="${commons-lang.jar}"/>
-    <include name="${commons-logging.jar}"/>
-    <include name="${commons-net.jar}"/>
-    <include name="${excalibur-datasource.jar}"/>
-    <include name="${excalibur-instrument.jar}"/>
-    <include name="${excalibur-logger.jar}"/>
-    <include name="${excalibur-pool.jar}"/>
-    <include name="${htmllexer.jar}"/>
-    <include name="${htmlparser.jar}"/>
-    <include name="${jakarta-oro.jar}"/>
-    <include name="${jcharts.jar}"/>
-    <include name="${jdom.jar}"/>
-    <include name="${js_rhino.jar}"/>
-    <include name="${junit.jar}"/>
-    <include name="${logkit.jar}"/>
-    <include name="${serializer.jar}"/>
-    <include name="${soap.jar}"/>
-    <include name="${tidy.jar}"/>
-    <include name="${xalan.jar}"/>
-    <include name="${xerces.jar}"/>
-    <include name="${xml-apis.jar}"/>
-    <include name="${xpp3.jar}"/>
-    <include name="${xstream.jar}"/>
+    <include name="${lib.dir}/${apache-bsf.jar}"/>
+    <include name="${lib.dir}/${beanshell.jar}"/>
+    <include name="${lib.dir}/${avalon-framework.jar}"/>
+    <include name="${lib.dir}/${xmlgraphics-commons.jar}"/>
+    <include name="${lib.dir}/${commons-codec.jar}"/>
+    <include name="${lib.dir}/${commons-collections.jar}"/>
+    <include name="${lib.dir}/${commons-httpclient.jar}"/>
+    <include name="${lib.dir}/${commons-io.jar}"/>
+    <include name="${lib.dir}/${commons-jexl.jar}"/>
+    <include name="${lib.dir}/${commons-lang.jar}"/>
+    <include name="${lib.dir}/${commons-logging.jar}"/>
+    <include name="${lib.dir}/${commons-net.jar}"/>
+    <include name="${lib.dir}/${excalibur-datasource.jar}"/>
+    <include name="${lib.dir}/${excalibur-instrument.jar}"/>
+    <include name="${lib.dir}/${excalibur-logger.jar}"/>
+    <include name="${lib.dir}/${excalibur-pool.jar}"/>
+    <include name="${lib.dir}/${htmllexer.jar}"/>
+    <include name="${lib.dir}/${htmlparser.jar}"/>
+    <include name="${lib.dir}/${jakarta-oro.jar}"/>
+    <include name="${lib.dir}/${jcharts.jar}"/>
+    <include name="${lib.dir}/${jdom.jar}"/>
+    <include name="${lib.dir}/${js_rhino.jar}"/>
+    <include name="${lib.dir}/${junit.jar}"/>
+    <include name="${lib.dir}/${logkit.jar}"/>
+    <include name="${lib.dir}/${serializer.jar}"/>
+    <include name="${lib.dir}/${soap.jar}"/>
+    <include name="${lib.dir}/${tidy.jar}"/>
+    <include name="${lib.dir}/${xalan.jar}"/>
+    <include name="${lib.dir}/${xerces.jar}"/>
+    <include name="${lib.dir}/${xml-apis.jar}"/>
+    <include name="${lib.dir}/${xpp3.jar}"/>
+    <include name="${lib.dir}/${xstream.jar}"/>
   </patternset>
 
   <!--
@@ -350,55 +350,55 @@
   <!-- Build classpath (includes the optional jar directory) -->
   <path id="classpath">
     <!-- Externally produced jars -->
-    <pathelement location="${apache-bsf.jar}"/>
-    <pathelement location="${beanshell.jar}"/>
-    <pathelement location="${avalon-framework.jar}"/>
-    <pathelement location="${xmlgraphics-commons.jar}"/>
-    <pathelement location="${commons-codec.jar}"/>
-    <pathelement location="${commons-collections.jar}"/>
-    <pathelement location="${commons-httpclient.jar}"/>
-    <pathelement location="${commons-io.jar}"/>
-    <pathelement location="${commons-jexl.jar}"/>
-    <pathelement location="${commons-lang.jar}"/>
-    <pathelement location="${commons-logging.jar}"/>
-    <pathelement location="${commons-net.jar}"/>
-    <pathelement location="${excalibur-datasource.jar}"/>
-    <pathelement location="${excalibur-instrument.jar}"/>
-    <pathelement location="${excalibur-logger.jar}"/>
-    <pathelement location="${excalibur-pool.jar}"/>
-    <pathelement location="${htmllexer.jar}"/>
-    <pathelement location="${htmlparser.jar}"/>
-    <pathelement location="${jakarta-oro.jar}"/>
-    <pathelement location="${jcharts.jar}"/>
-    <pathelement location="${jdom.jar}"/>
-    <pathelement location="${js_rhino.jar}"/>
-    <pathelement location="${junit.jar}"/>
-    <pathelement location="${logkit.jar}"/>
-    <pathelement location="${serializer.jar}"/>
-    <pathelement location="${soap.jar}"/>
-    <pathelement location="${tidy.jar}"/>
-    <pathelement location="${xalan.jar}"/>
-    <pathelement location="${xerces.jar}"/>
-    <pathelement location="${xml-apis.jar}"/>
-    <pathelement location="${xpp3.jar}"/>
-    <pathelement location="${xstream.jar}"/>
+    <pathelement location="${lib.dir}/${apache-bsf.jar}"/>
+    <pathelement location="${lib.dir}/${beanshell.jar}"/>
+    <pathelement location="${lib.dir}/${avalon-framework.jar}"/>
+    <pathelement location="${lib.dir}/${xmlgraphics-commons.jar}"/>
+    <pathelement location="${lib.dir}/${commons-codec.jar}"/>
+    <pathelement location="${lib.dir}/${commons-collections.jar}"/>
+    <pathelement location="${lib.dir}/${commons-httpclient.jar}"/>
+    <pathelement location="${lib.dir}/${commons-io.jar}"/>
+    <pathelement location="${lib.dir}/${commons-jexl.jar}"/>
+    <pathelement location="${lib.dir}/${commons-lang.jar}"/>
+    <pathelement location="${lib.dir}/${commons-logging.jar}"/>
+    <pathelement location="${lib.dir}/${commons-net.jar}"/>
+    <pathelement location="${lib.dir}/${excalibur-datasource.jar}"/>
+    <pathelement location="${lib.dir}/${excalibur-instrument.jar}"/>
+    <pathelement location="${lib.dir}/${excalibur-logger.jar}"/>
+    <pathelement location="${lib.dir}/${excalibur-pool.jar}"/>
+    <pathelement location="${lib.dir}/${htmllexer.jar}"/>
+    <pathelement location="${lib.dir}/${htmlparser.jar}"/>
+    <pathelement location="${lib.dir}/${jakarta-oro.jar}"/>
+    <pathelement location="${lib.dir}/${jcharts.jar}"/>
+    <pathelement location="${lib.dir}/${jdom.jar}"/>
+    <pathelement location="${lib.dir}/${js_rhino.jar}"/>
+    <pathelement location="${lib.dir}/${junit.jar}"/>
+    <pathelement location="${lib.dir}/${logkit.jar}"/>
+    <pathelement location="${lib.dir}/${serializer.jar}"/>
+    <pathelement location="${lib.dir}/${soap.jar}"/>
+    <pathelement location="${lib.dir}/${tidy.jar}"/>
+    <pathelement location="${lib.dir}/${xalan.jar}"/>
+    <pathelement location="${lib.dir}/${xerces.jar}"/>
+    <pathelement location="${lib.dir}/${xml-apis.jar}"/>
+    <pathelement location="${lib.dir}/${xpp3.jar}"/>
+    <pathelement location="${lib.dir}/${xstream.jar}"/>
     <!-- Generated jars -->
     <fileset dir="${lib.dir}" includes="jorphan.jar"/>
     <!-- API-only jars-->
-    <pathelement location="${activation.jar}"/>
-    <pathelement location="${javamail.jar}"/>
-    <pathelement location="${jms.jar}"/>
+    <pathelement location="${lib.api}/${activation.jar}"/>
+    <pathelement location="${lib.api}/${javamail.jar}"/>
+    <pathelement location="${lib.api}/${jms.jar}"/>
     <!-- Optional jars -->
     <fileset dir="${lib.opt}" includes="*.jar"/>
   </path>
 
   <!-- Anakia classpath -->
   <path id="anakia.classpath">
-    <pathelement location="${velocity.jar}"/>
-    <pathelement location="${jdom.jar}"/>
-    <pathelement location="${commons-collections.jar}"/>
-    <pathelement location="${commons-lang.jar}"/>
-    <pathelement location="${logkit.jar}"/>
+    <pathelement location="${lib.doc}/${velocity.jar}"/>
+    <pathelement location="${lib.dir}/${jdom.jar}"/>
+    <pathelement location="${lib.dir}/${commons-collections.jar}"/>
+    <pathelement location="${lib.dir}/${commons-lang.jar}"/>
+    <pathelement location="${lib.dir}/${logkit.jar}"/>
   </path>
 
 
@@ -1055,7 +1055,7 @@ run JMeter unless all the JMeter jars are added.
 
   <!-- Non-native items -->
   <patternset id="dist.sources.non.native">
-    <include name="${velocity.jar}"/>
+    <include name="${lib.doc}/${velocity.jar}"/>
     <include name="${lib.api}/*.jar"/>
     <include name="${src.dir}/**/*.gif"/>
     <include name="${src.dir}/**/*.jpg"/>
@@ -1860,5 +1860,28 @@ run JMeter unless all the JMeter jars are added.
       </redirector>
     </exec>
     <echoproperties prefix="svn"/>
+  </target>
+	
+  <macrodef name="get_jarfile">
+  	<attribute name="jar.file"/>
+  	<attribute name="src.dir"/>
+  	<attribute name="dest.dir" default="${lib.dir}"/>
+  	<sequential>
+      <get   src="@{src.dir}/@{jar.file}"
+      	   dest="@{dest.dir}/@{jar.file}" 
+      	   usetimestamp="true" 
+           ignoreerrors="false"/>  	  
+    </sequential>
+  </macrodef>
+
+  <target name="get-dep-library.jar" description="o Download the dependency : junit.jar">
+    <get_jarfile jar.file="${commons-codec.jar}" src.dir="${commons-codec.loc}"/>
+    <get_jarfile jar.file="${commons-collections.jar}" src.dir="${commons-collections.loc}"/>
+    <get_jarfile jar.file="${commons-httpclient.jar}" src.dir="${commons-httpclient.loc}"/>
+    <get_jarfile jar.file="${commons-io.jar}" src.dir="${commons-io.loc}"/>
+    <get_jarfile jar.file="${commons-jexl.jar}" src.dir="${commons-jexl.loc}"/>
+    <get_jarfile jar.file="${commons-lang.jar}" src.dir="${commons-lang.loc}"/>
+    <get_jarfile jar.file="${commons-logging.jar}" src.dir="${commons-logging.loc}"/>
+    <get_jarfile jar.file="${commons-net.jar}" src.dir="${commons-net.loc}"/>
   </target>
 </project>
