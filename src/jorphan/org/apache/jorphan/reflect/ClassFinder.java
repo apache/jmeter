@@ -21,6 +21,8 @@ package org.apache.jorphan.reflect;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -108,6 +110,40 @@ public final class ClassFinder {
             return false;
         }
     }
+    
+    private static class AnnoFilterTreeSet extends TreeSet<String>{
+        private final boolean inner; // are inner classes OK?
+
+        private final Class<? extends Annotation>[] annotations; // annotation classes to check
+        private final transient ClassLoader contextClassLoader 
+            = Thread.currentThread().getContextClassLoader(); // Potentially expensive; do it once
+        AnnoFilterTreeSet(Class<? extends Annotation> []annotations, boolean inner){
+            super();
+            this.annotations = annotations;
+            this.inner=inner;
+        }
+        /**
+         * Override the superclass so we only add classnames that
+         * meet the criteria.
+         *
+         * @param s - classname (must be a String)
+         * @return true if it is a new entry
+         *
+         * @see java.util.TreeSet#add(java.lang.Object)
+         */
+        @Override
+        public boolean add(String s){
+            if (contains(s)) {
+                return false;// No need to check it again
+            }
+            if ((s.indexOf("$") == -1) || inner) { // $NON-NLS-1$
+                if (hasAnnotationOnMethod(annotations,s, contextClassLoader)) {
+                    return super.add(s);
+                }
+            }
+            return false;
+        }
+    }
 
     /**
      * Convenience method for
@@ -173,10 +209,42 @@ public final class ClassFinder {
             final Class<?>[] superClasses, final boolean innerClasses,
             String contains, String notContains)
             throws IOException  {
-
+        return findClassesThatExtend(strPathsOrJars, superClasses, innerClasses, contains, notContains, false);
+    }
+    
+    /**
+     * Find classes in the provided path(s)/jar(s) that extend the class(es).
+     * @param strPathsOrJars - pathnames or jarfiles to search for classes
+     * @param annotations - required annotations
+     * @param innerClasses - should we include inner classes?
+     *
+     * @return List containing discovered classes
+     */
+    public static List<String> findAnnotatedClasses(String[] strPathsOrJars,
+            final Class<? extends Annotation>[] annotations, final boolean innerClasses)
+            throws IOException  {
+        return findClassesThatExtend(strPathsOrJars, annotations, innerClasses, null, null, true);
+    }
+    
+    /**
+     * Find classes in the provided path(s)/jar(s) that extend the class(es).
+     * @param strPathsOrJars - pathnames or jarfiles to search for classes
+     * @param classNames - required parent class(es) or annotations
+     * @param innerClasses - should we include inner classes?
+     * @param contains - classname should contain this string
+     * @param notContains - classname should not contain this string
+     * @param annotations - true if classnames are annotations
+     *
+     * @return List containing discovered classes
+     */
+    @SuppressWarnings("unchecked")
+    public static List<String> findClassesThatExtend(String[] strPathsOrJars,
+                final Class<?>[] classNames, final boolean innerClasses,
+                String contains, String notContains, boolean annotations)
+                throws IOException  {
         if (log.isDebugEnabled()) {
-            for (int i = 0; i < superClasses.length ; i++){
-                log.debug("superclass: "+superClasses[i].getName());
+            for (int i = 0; i < classNames.length ; i++){
+                log.debug("superclass: "+classNames[i].getName());
             }
         }
 
@@ -198,7 +266,11 @@ public final class ClassFinder {
             }
         }
 
-        Set<String> listClasses = new FilterTreeSet(superClasses, innerClasses, contains, notContains);
+        Set<String> listClasses =
+            annotations ?
+                new AnnoFilterTreeSet((Class<? extends Annotation>[]) classNames, innerClasses)
+                :
+                new FilterTreeSet(classNames, innerClasses, contains, notContains);
         // first get all the classes
         findClassesInPaths(listPaths, listClasses);
         if (log.isDebugEnabled()) {
@@ -384,9 +456,27 @@ public final class ClassFinder {
                         }
                     }
                 }
-            } catch (Throwable ignored) {
+            } catch (ClassNotFoundException ignored) {
                 log.debug(ignored.getLocalizedMessage());
             }
+        return false;
+    }
+    
+    private static boolean hasAnnotationOnMethod(Class<? extends Annotation>[] annotations, String classInQuestion,
+        ClassLoader contextClassLoader ){
+        try{
+            Class<?> c = Class.forName(classInQuestion, false, contextClassLoader);
+            for(Method method : c.getMethods()) {
+                for(int i = 0;i<annotations.length;i++) {
+                    Class<? extends Annotation> annotation = annotations[i];
+                    if(method.isAnnotationPresent(annotation)) {
+                        return true;
+                    }
+                }
+            }
+        } catch (ClassNotFoundException ignored) {
+            log.debug(ignored.getLocalizedMessage());
+        }
         return false;
     }
 
