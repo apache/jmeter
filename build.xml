@@ -1864,24 +1864,51 @@ run JMeter unless all the JMeter jars are added.
 	
   <macrodef name="get_jarfile">
   	<attribute name="jar.file"/>
+    <attribute name="jar.md5"/>
   	<attribute name="src.dir"/>
   	<attribute name="dest.dir" default="${lib.dir}"/>
   	<sequential>
+  		<!--
       <get   src="@{src.dir}/@{jar.file}"
       	   dest="@{dest.dir}/@{jar.file}" 
       	   usetimestamp="true" 
-           ignoreerrors="false"/>  	  
+           ignoreerrors="false"/>
+           -->
+  		<!-- Need to use antcall so MD5OK property is localised -->
+  		<antcall target="_checkMD5">
+  			<param name="file" value="@{jar.file}"/>
+            <param name="path" value="@{dest.dir}"/>
+            <param name="md5" value="@{jar.md5}"/>
+  		</antcall>
     </sequential>
   </macrodef>
 
-  <target name="get-dep-library.jar" description="o Download the dependency : junit.jar">
-    <get_jarfile jar.file="${commons-codec.jar}" src.dir="${commons-codec.loc}"/>
-    <get_jarfile jar.file="${commons-collections.jar}" src.dir="${commons-collections.loc}"/>
-    <get_jarfile jar.file="${commons-httpclient.jar}" src.dir="${commons-httpclient.loc}"/>
-    <get_jarfile jar.file="${commons-io.jar}" src.dir="${commons-io.loc}"/>
-    <get_jarfile jar.file="${commons-jexl.jar}" src.dir="${commons-jexl.loc}"/>
-    <get_jarfile jar.file="${commons-lang.jar}" src.dir="${commons-lang.loc}"/>
-    <get_jarfile jar.file="${commons-logging.jar}" src.dir="${commons-logging.loc}"/>
-    <get_jarfile jar.file="${commons-net.jar}" src.dir="${commons-net.loc}"/>
+  <!-- Ant subroutine, required to localise MD5OK property -->
+  <target name="_checkMD5">
+    <checksum algorithm="MD5" file="${path}/${file}" property="MD5"/>
+    <condition property="MD5OK">
+        <equals arg1="${MD5}" arg2="${md5}" casesensitive="false"/>
+    </condition>
+    <fail message="Bad Checksum: for ${file} expected ${md5} actual ${MD5}" unless="MD5OK"/>
+    <echo level="info" message="Checksum OK: ${file}"/>
   </target>
+
+  <target name="get-dep-library.jar" description="o Download the dependency : junit.jar">
+    <get_jarfile jar.file="${apache-bsf.jar}" src.dir="${apache-bsf.loc}" jar.md5="${apache-bsf.md5}"/>
+    <get_jarfile jar.file="${avalon-framework.jar}" src.dir="${avalon-framework.loc}" jar.md5="${avalon-framework.md5}"/>
+    <get_jarfile jar.file="${beanshell.jar}" src.dir="${beanshell.loc}" jar.md5="${beanshell.md5}"/>
+    <get_jarfile jar.file="${commons-codec.jar}" src.dir="${commons-codec.loc}" jar.md5="${commons-codec.md5}"/>
+    <get_jarfile jar.file="${commons-collections.jar}" src.dir="${commons-collections.loc}" jar.md5="${commons-collections.md5}"/>
+    <get_jarfile jar.file="${commons-httpclient.jar}" src.dir="${commons-httpclient.loc}" jar.md5="${commons-httpclient.md5}"/>
+    <get_jarfile jar.file="${commons-io.jar}" src.dir="${commons-io.loc}" jar.md5="${commons-io.md5}"/>
+    <get_jarfile jar.file="${commons-jexl.jar}" src.dir="${commons-jexl.loc}" jar.md5="${commons-jexl.md5}"/>
+    <get_jarfile jar.file="${commons-lang.jar}" src.dir="${commons-lang.loc}" jar.md5="${commons-lang.md5}"/>
+    <get_jarfile jar.file="${commons-logging.jar}" src.dir="${commons-logging.loc}" jar.md5="${commons-logging.md5}"/>
+    <get_jarfile jar.file="${commons-net.jar}" src.dir="${commons-net.loc}" jar.md5="${commons-net.md5}"/>
+    <get_jarfile jar.file="${junit.jar}" src.dir="${junit.loc}" jar.md5="${junit.md5}"/>
+  	<!--
+  	Faulty loc
+    <get_jarfile jar.file="${htmlparser.jar}" src.dir="${htmlparser.loc}" jar.md5="${htmlparser.md5}"/>
+  	-->
+</target>
 </project>
