@@ -109,13 +109,11 @@
 	</target>
 
 	<property name="lib.dir" value="${jmeter.home}/lib"/>
-    <property name="xalan.jar" value="${lib.dir}/xalan_2_7_1.jar"/>
-    <property name="serializer.jar" value="${lib.dir}/serializer-2_9_1.jar"/>
 	
 	<!-- Use xalan copy from JMeter lib directory to ensure consistent processing with Java 1.4+ -->
     <path id="xslt.classpath">
-       <pathelement location="${xalan.jar}"/>
-       <pathelement location="${serializer.jar}"/>
+        <fileset dir="${lib.dir}" includes="xalan*.jar"/>
+        <fileset dir="${lib.dir}" includes="serializer*.jar"/>
     </path>
 
 	<target name="report" depends="_message_xalan">
@@ -141,7 +139,7 @@
 	<target name="_message_xalan" unless="xalan.present">
 	  	<echo>Cannot find all xalan and/or serialiser jars</echo>
 		<echo>The XSLT formatting may not work correctly.</echo>
-		<echo>Check you have ${xalan.jar} and ${serializer.jar}</echo>
+		<echo>Check you have xalan and serializer jars in ${lib.dir}</echo>
 	</target>
 
 
