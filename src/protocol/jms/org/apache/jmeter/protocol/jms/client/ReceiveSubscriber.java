@@ -84,8 +84,8 @@ public class ReceiveSubscriber implements Runnable {
                 ConnectionFactory.getTopicConnectionFactory(ctx,connfactory);
                 _conn = ConnectionFactory.getTopicConnection();
                 _topic = InitialContextFactory.lookupTopic(ctx, topic);
-                _session = this.CONN.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
-                _subscriber = this.SESSION.createSubscriber(this.TOPIC);
+                _session = _conn.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
+                _subscriber = _session.createSubscriber(this.TOPIC);
                 log.info("created the topic connection successfully");
             } catch (JMSException e) {
                 log.error("Connection error: " + e.getMessage());
