@@ -7,19 +7,23 @@ avalon-framework-4.1.4 (org.apache.avalon.framework)
 - LogKit (used by HttpClient ?)
 - Configuration (ResultCollector, SaveService, SampleResult, TestElementSaver)
 
-xmlgraphics-commons-1.3.1 (org.apache.xmlgraphics.image.codec)
-------------------
-http://xmlgraphics.apache.org/commons/download.html
-- SaveGraphicsService
+bsf-2.4.0.jar (org.apache.bsf)
+-------------
+http://jakarta.apache.org/site/downloads/downloads_bsf.cgi
+- BSF test elements (sampler etc.)
 
-commons-codec-1.3
+bsh-2.0b5.jar (org.bsh)
+-------------
+- BeanShell test elements
+
+commons-codec-1.4
 -----------------
 http://commons.apache.org/downloads/download_codec.cgi
 - used by commons-httpclient-3.1
 - also HtmlParserTester for Base64
 
-commons-collections-3.2
------------------------
+commons-collections-3.2.1
+-------------------------
 http://commons.apache.org/downloads/download_collections.cgi
 - ListenerNotifier
 - Anakia
@@ -79,11 +83,6 @@ htmllexer-2.0-20060923
 http://htmlparser.sourceforge.net/
 - http: parsing html
 
-jakarta-oro-2.0.8
------------------
-http://jakarta.apache.org/site/downloads/downloads_oro.cgi
-- regular expressions: various
-
 jCharts-0.7.5 (org.jCharts)
 -------------
 http://jcharts.sourceforge.net/downloads.html
@@ -95,27 +94,33 @@ http://www.jdom.org/downloads/index.html
 - XMLAssertion, JMeterTest ONLY
 - Anakia
 
-js_rhino1_6R5
--------------
+js-1.6R5
+--------
 http://www.mozilla.org/rhino/download.html
 - javascript function
+- BSF (Javascript)
 
-junit 3.8.2
+junit 4.7
 -----------
 - unit tests
 
-logkit-1.2
+logkit-2.0
 ----------
 - logging
 - Anakia
 
-serialiser-2_9_1
+oro-2.0.8
+---------
+http://jakarta.apache.org/site/downloads/downloads_oro.cgi
+- regular expressions: various
+
+serialiser-2.7.1
 ----------------
 http://www.apache.org/dyn/closer.cgi/xml/xalan-j
 - xalan
 
-soap (appears to be version 2.3.1)
-----
+soap-2.3.1
+----------
 - WebServiceSampler ONLY
 
 Tidy
@@ -129,18 +134,18 @@ velocity-1.6.2
 http://velocity.apache.org/download.cgi
 - Anakia (create documentation) Not used by JMeter runtime
 
-xalan_2_7_1
+xalan_2.7.1
 -----------
 http://www.apache.org/dyn/closer.cgi/xml/xalan-j
 +org.apache.xalan|xml|xpath
 
-xercesimpl-2_9_1
+xercesimpl-2.9.1
 ----------------
 http://xerces.apache.org/xerces2-j/download.cgi
 +org.apache.html.dom|org.apache.wml|org.apache.xerces|org.apache.xml.serialize
 +org.w3c.dom.html|ls
 
-xml-apis-2_9_1
+xml-apis-1.3.04
 --------------
 http://xerces.apache.org/xerces2-j/download.cgi
 +javax.xml
@@ -148,6 +153,11 @@ http://xerces.apache.org/xerces2-j/download.cgi
 +org.xml.sax
 
 The x* jars above are used for XML handling
+
+xmlgraphics-commons-1.3.1 (org.apache.xmlgraphics.image.codec)
+------------------
+http://xmlgraphics.apache.org/commons/download.html
+- SaveGraphicsService
 
 xpp3_min-1.1.4c
 ---------------
