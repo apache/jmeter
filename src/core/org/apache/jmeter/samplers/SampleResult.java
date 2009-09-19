@@ -1051,4 +1051,19 @@ public class SampleResult implements Serializable {
     public void setAllThreads(int n) {
         this.allThreads = n;
     }
+
+    // Bug 47394
+	/**
+	 * Allow custom SampleSenders to drop unwanted assertionResults 
+	 */
+	public void removeAssertionResults() {
+		this.assertionResults = null;
+	}
+	
+	/**
+     * Allow custom SampleSenders to drop unwanted subResults 
+	 */
+	public void removeSubResults() {
+		this.subResults = null;
+	}
 }
