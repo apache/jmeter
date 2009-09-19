@@ -941,6 +941,7 @@ run JMeter unless all the JMeter jars are added.
   <target name="_message_3rdParty" unless="3rdparty.present">
     <echo>Cannot find all the required 3rd party libraries.</echo>
     <echo>If building from a release, you need both source and binary archives.</echo>
+    <echo>If building from SVN, use "ant download_jars" to download them.</echo>
     <fail message="Cannot find required classes"/>
   </target>
 
@@ -1140,7 +1141,7 @@ run JMeter unless all the JMeter jars are added.
     </target>
 
     <!-- Internal target -->
-    <target name="_distribution" depends="check-versions,_eolcheck">
+    <target name="_distribution" depends="check-versions,_eolcheck,check_jars">
     <property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
     <property name="pack.name" value="${dist.name}"/>
     <echo level="info">Creating JMeter distribution ${dist.name} ${svn.revision}</echo>
@@ -1238,24 +1239,20 @@ run JMeter unless all the JMeter jars are added.
 
   <!--
   Gump targets.
-  There are separate build, test and documentation projects for the jmeter module.
+  There are separate build and test projects for the jmeter module.
   -->
   <!-- Used by project jakarta-jmeter-cvs -->
   <target name="gump-build" 
       depends="_gump_properties,clean,install" 
       description="Build JMeter">
     <property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
+  	<available file="${velocity.jar}" property="3rdparty.present"/>
+  	<antcall target="download_jars"/>
     <!-- No need to create the archives for Gump
     <antcall target="_pack-binaries"/>
     <antcall target="_pack-libraries"/>
     <antcall target="_pack-source"/>
     -->
-  </target>
-
-  <!-- Used by project jakarta-jmeter -->
-  <target name="gump-compile" 
-      depends="_gump_properties,clean,compile" 
-      description="Compile JMeter only">
   </target>
 
   <!-- Used by project jakarta-jmeter-test -->
@@ -1267,23 +1264,6 @@ run JMeter unless all the JMeter jars are added.
       <filelist dir="bin" files="jmeter-test.log" />
     </concat>
      -->
-    <!--antcall target="gump-check"/-->
-  </target>
-
-    <target name="gump-check">
-        <!-- check if /usr and /x1 are the same -->
-        <checksum file="/usr/local/gump/public/workspace/jakarta-jmeter-22/lib/jorphan.jar" property="usrMD5"/>
-        <echo>usrMD5 = ${usrMD5}</echo>
-        <checksum        file="/x1/gump/public/workspace/jakarta-jmeter-22/lib/jorphan.jar" property="x1MD5"/>
-        <echo>x1MD5  = ${x1MD5}</echo>
-    </target>
-
-    <!-- Used by project jakarta-jmeter-javadoc -->
-  <target name="gump-javadoc"
-      depends="_gump_properties,docs-api"
-      description="Create JMeter javadocs">
-    <property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
-    <antcall target="_pack-javadoc"/>
   </target>
 
   <target name="_gump_properties">
@@ -1862,53 +1842,182 @@ run JMeter unless all the JMeter jars are added.
     <echoproperties prefix="svn"/>
   </target>
 	
-  <macrodef name="get_jarfile">
-  	<attribute name="jar.file"/>
-    <attribute name="jar.md5"/>
-  	<attribute name="src.dir"/>
-  	<attribute name="dest.dir" default="${lib.dir}"/>
-  	<sequential>
-  		<!--
-      <get   src="@{src.dir}/@{jar.file}"
-      	   dest="@{dest.dir}/@{jar.file}" 
-      	   usetimestamp="true" 
-           ignoreerrors="false"/>
-           -->
-  		<!-- Need to use antcall so MD5OK property is localised -->
-  		<antcall target="_checkMD5">
-  			<param name="file" value="@{jar.file}"/>
-            <param name="path" value="@{dest.dir}"/>
-            <param name="md5" value="@{jar.md5}"/>
-  		</antcall>
-    </sequential>
-  </macrodef>
+    <!-- Macro is needed to be able to perform indirect evaluation of property names -->
+	<macrodef name="process_jarfile">
+  	    <attribute name="jarname"/>
+  	    <attribute name="dest.dir" default="${lib.dir}"/>
+  	    <sequential>
+  	        <!-- Call all possible targets; these are only executed if the appropriate property is set -->
+  	        <antcall target="_check_exists">
+  	            <param name="file" value="@{dest.dir}/${@{jarname}.jar}"/>
+                <param name="loc" value="${@{jarname}.loc}"/>
+                <param name="jar" value="${@{jarname}.jar}"/>
+                <param name="path" value="@{dest.dir}"/>
+                <param name="md5"  value="${@{jarname}.md5}"/>
+        	    <param name="_checkMD5" value="true"/>
+  	        </antcall>
+            <antcall target="_check_jarfile">
+                <param name="loc" value="${@{jarname}.loc}"/>
+                <param name="jar" value="${@{jarname}.jar}"/>
+                <param name="path" value="@{dest.dir}"/>
+                <param name="md5"  value="${@{jarname}.md5}"/>
+        	    <param name="_checkMD5" value="true"/>
+                <param name="zip" value="${@{jarname}.zip}"/>
+                <param name="ent" value="${@{jarname}.ent}"/>
+                <param name="zipprop" value="@{jarname}.zip"/>
+            </antcall>
+        </sequential>
+      </macrodef>
 
-  <!-- Ant subroutine, required to localise MD5OK property -->
-  <target name="_checkMD5">
-    <checksum algorithm="MD5" file="${path}/${file}" property="MD5"/>
-    <condition property="MD5OK">
-        <equals arg1="${MD5}" arg2="${md5}" casesensitive="false"/>
-    </condition>
-    <fail message="Bad Checksum: for ${file} expected ${md5} actual ${MD5}" unless="MD5OK"/>
-    <echo level="info" message="Checksum OK: ${file}"/>
-  </target>
+	<!-- Check if jarfile exists, and set properties for calling zip or jar download -->
+    <target name="_check_jarfile" if="_get_file">
+  	    <!-- Check if file exists -->
+  	    <fail message="Error in build file or calling sequence" if="file.exists"/>
+        <available file="${path}/${jar}" property="file.exists"/>
+        <condition property="_get_zipfile">
+            <isset property="${zipprop}"/>
+        </condition>
+        <condition property="_get_jarfile">
+            <not>
+                <isset property="${zipprop}"/>
+            </not>
+        </condition>
+    	<!-- Emulate conditional execution; targets use if/unless to suppress execution -->
+        <antcall target="_get_jarfile"/>
+        <antcall target="_get_zipfile"/>
+    </target>
 
-  <target name="get-dep-library.jar" description="o Download the dependency : junit.jar">
-    <get_jarfile jar.file="${apache-bsf.jar}" src.dir="${apache-bsf.loc}" jar.md5="${apache-bsf.md5}"/>
-    <get_jarfile jar.file="${avalon-framework.jar}" src.dir="${avalon-framework.loc}" jar.md5="${avalon-framework.md5}"/>
-    <get_jarfile jar.file="${beanshell.jar}" src.dir="${beanshell.loc}" jar.md5="${beanshell.md5}"/>
-    <get_jarfile jar.file="${commons-codec.jar}" src.dir="${commons-codec.loc}" jar.md5="${commons-codec.md5}"/>
-    <get_jarfile jar.file="${commons-collections.jar}" src.dir="${commons-collections.loc}" jar.md5="${commons-collections.md5}"/>
-    <get_jarfile jar.file="${commons-httpclient.jar}" src.dir="${commons-httpclient.loc}" jar.md5="${commons-httpclient.md5}"/>
-    <get_jarfile jar.file="${commons-io.jar}" src.dir="${commons-io.loc}" jar.md5="${commons-io.md5}"/>
-    <get_jarfile jar.file="${commons-jexl.jar}" src.dir="${commons-jexl.loc}" jar.md5="${commons-jexl.md5}"/>
-    <get_jarfile jar.file="${commons-lang.jar}" src.dir="${commons-lang.loc}" jar.md5="${commons-lang.md5}"/>
-    <get_jarfile jar.file="${commons-logging.jar}" src.dir="${commons-logging.loc}" jar.md5="${commons-logging.md5}"/>
-    <get_jarfile jar.file="${commons-net.jar}" src.dir="${commons-net.loc}" jar.md5="${commons-net.md5}"/>
-    <get_jarfile jar.file="${junit.jar}" src.dir="${junit.loc}" jar.md5="${junit.md5}"/>
-  	<!--
-  	Faulty loc
-    <get_jarfile jar.file="${htmlparser.jar}" src.dir="${htmlparser.loc}" jar.md5="${htmlparser.md5}"/>
-  	-->
-</target>
+	<!-- Get a zip file and unpack it -->
+	<target name="_get_zipfile" if="_get_zipfile" unless="file.exists">
+        <get src="${loc}/${zip}"
+        	 dest="${build.dir}/${zip}"
+        	 usetimestamp="true" ignoreerrors="false"/>
+		<unzip dest="${build.dir}" src="${build.dir}/${zip}">
+		    <patternset>
+		        <include name="**/${ent}"/>
+		    </patternset>
+		    <mapper type="flatten"/>
+		</unzip>
+        <antcall target="_checkMD5">
+            <param name="file" value="${ent}"/>
+            <param name="path" value="${build.dir}"/>
+            <param name="md5"  value="${md5}"/>
+        </antcall>
+		<move preservelastmodified="true" overwrite="true" 
+			file="${build.dir}/${ent}" tofile="${path}/${jar}" verbose="true"/>
+    </target>
+
+	<!-- Download a jar file and check its hash; if correct, move to correct directory -->
+	<target name="_get_jarfile" if="_get_jarfile" unless="file.exists">
+        <echo message="Fetching: ${path}/${jar}" level="info"/>
+        <get src="${loc}/${jar}" 
+             dest="${build.dir}/${jar}" 
+             usetimestamp="false" ignoreerrors="false"/>
+        <antcall target="_checkMD5">
+            <param name="file" value="${jar}"/>
+            <param name="path" value="${build.dir}"/>
+            <param name="md5"  value="${md5}"/>
+        </antcall>
+        <move preservelastmodified="true" overwrite="true" 
+        	file="${build.dir}/${jar}" tofile="${path}/${jar}" verbose="true"/>
+    </target>
+
+    <!-- Ant subroutine, required to localise MD5OK property -->
+    <target name="_checkMD5" if="_checkMD5">
+  	    <!--
+  	    @param path - location of file
+        @param file - file name
+  	    -->
+        <checksum algorithm="MD5" file="${path}/${file}" property="MD5"/>
+        <condition property="MD5OK">
+            <equals arg1="${MD5}" arg2="${md5}" casesensitive="false"/>
+        </condition>
+        <fail unless="MD5OK">Bad Checksum: for ${file}
+        expected ${md5} 
+        actual   ${MD5}</fail>
+        <echo level="info" message="Checksum OK: ${file}"/>
+    </target>
+
+	<!--
+	Generic target to process all external jars.
+	The "process_jarfile" macro resolves the properties that begin with the jarname
+	and calls all the possible targets. The targets use "if" and "unless" to provide
+	conditional execution (it would be a lot easier if antcall supported if/unless). 
+	-->
+    <target name="_process_all_jars">
+        <process_jarfile jarname="apache-bsf"/>
+        <process_jarfile jarname="avalon-framework"/>
+        <process_jarfile jarname="beanshell"/>
+        <process_jarfile jarname="commons-codec"/>
+        <process_jarfile jarname="commons-collections"/>
+        <process_jarfile jarname="commons-httpclient"/>
+        <process_jarfile jarname="commons-io"/>
+        <process_jarfile jarname="commons-jexl"/>
+        <process_jarfile jarname="commons-lang"/>
+        <process_jarfile jarname="commons-logging"/>
+        <process_jarfile jarname="commons-net"/>
+        <process_jarfile jarname="excalibur-datasource"/>
+        <process_jarfile jarname="excalibur-instrument"/>
+        <process_jarfile jarname="excalibur-logger"/>
+        <process_jarfile jarname="excalibur-pool"/>  	
+        <process_jarfile jarname="htmllexer"/>
+        <process_jarfile jarname="htmlparser"/>
+        <process_jarfile jarname="jakarta-oro"/>
+        <process_jarfile jarname="jcharts"/>
+        <process_jarfile jarname="jdom"/>
+        <process_jarfile jarname="js_rhino"/>
+        <process_jarfile jarname="junit"/>
+        <process_jarfile jarname="logkit"/>
+        <process_jarfile jarname="soap"/>
+        <process_jarfile jarname="tidy"/>
+        <process_jarfile jarname="xstream"/>
+        <process_jarfile jarname="xpp3"/>
+        <process_jarfile jarname="serializer"/>
+        <process_jarfile jarname="xalan"/>
+        <process_jarfile jarname="xerces"/>
+        <process_jarfile jarname="xml-apis"/>
+        <process_jarfile jarname="xmlgraphics-commons"/>
+        <process_jarfile jarname="activation" dest.dir="${lib.api}"/>
+        <process_jarfile jarname="javamail"   dest.dir="${lib.api}"/>
+        <process_jarfile jarname="jms"        dest.dir="${lib.api}"/>
+        <process_jarfile jarname="velocity"   dest.dir="${lib.doc}"/>
+    </target>
+
+	<!-- Download jars only needed by Gump (unless already done) -->
+    <target name="_process_gump_jars" unless="3rdparty.present">
+        <process_jarfile jarname="excalibur-datasource"/>
+        <process_jarfile jarname="excalibur-instrument"/>
+        <process_jarfile jarname="excalibur-logger"/>
+        <process_jarfile jarname="excalibur-pool"/>     
+        <process_jarfile jarname="htmllexer"/>
+        <process_jarfile jarname="htmlparser"/>
+        <process_jarfile jarname="jakarta-oro"/>
+        <process_jarfile jarname="jcharts"/>
+        <process_jarfile jarname="soap"/>
+    </target>
+	
+	<!-- Download all missing jars.-->
+    <target name="download_jars" description="Download any missing jar files">
+        <antcall target="_process_all_jars">
+            <param name="_get_file" value="true"/>
+        </antcall>
+    </target>
+
+    <target name="_check_exists" if="_check_exists">
+        <fail message="Invalid call sequence - file.exists should not be defined" if="file.exists"/>
+        <available file="${file}" property="file.exists"/>
+        <fail message="Could not find file ${file}" unless="file.exists"/>
+        <antcall target="_checkMD5">
+            <param name="file" value="${jar}"/>
+            <param name="path" value="${path}"/>
+            <param name="md5"  value="${md5}"/>
+        </antcall>
+        <!--echo level="info" message="Found ${file}"/-->
+    </target>
+
+    <target name="check_jars" description="Check that all required jar files are present">
+        <antcall target="_process_all_jars">
+            <param name="_check_exists" value="true"/>
+        </antcall>
+    </target>
 </project>
