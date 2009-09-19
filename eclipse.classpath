@@ -24,9 +24,9 @@
 	<classpathentry kind="lib" path="lib/api/geronimo-jms_1.1_spec-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/avalon-framework-4.1.4.jar"/>
 	<classpathentry kind="lib" path="lib/bsf-2.4.0.jar"/>
-	<classpathentry kind="lib" path="lib/bsh-2.0b4.jar"/>
-	<classpathentry kind="lib" path="lib/commons-codec-1.3.jar"/>
-	<classpathentry kind="lib" path="lib/commons-collections-3.2.jar"/>
+	<classpathentry kind="lib" path="lib/bsh-2.0b5.jar"/>
+	<classpathentry kind="lib" path="lib/commons-codec-1.4.jar"/>
+	<classpathentry kind="lib" path="lib/commons-collections-3.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-httpclient-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-io-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/commons-jexl-1.1.jar"/>
@@ -39,18 +39,18 @@
 	<classpathentry kind="lib" path="lib/excalibur-pool-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/htmllexer-2.0-20060923.jar"/>
 	<classpathentry kind="lib" path="lib/htmlparser-2.0-20060923.jar"/>
-	<classpathentry kind="lib" path="lib/jakarta-oro-2.0.8.jar"/>
 	<classpathentry kind="lib" path="lib/jCharts-0.7.5.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/js_rhino1_6R5.jar"/>
-	<classpathentry kind="lib" path="lib/junit3.8.2.jar"/>
-	<classpathentry kind="lib" path="lib/logkit-1.2.jar"/>
-	<classpathentry kind="lib" path="lib/serializer-2_9_1.jar"/>
-	<classpathentry kind="lib" path="lib/soap.jar"/>
+	<classpathentry kind="lib" path="lib/js-1.6R5.jar"/>
+	<classpathentry kind="lib" path="lib/junit-4.7.jar"/>
+	<classpathentry kind="lib" path="lib/logkit-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/oro-2.0.8.jar"/>
+	<classpathentry kind="lib" path="lib/serializer-2.7.1.jar"/>
+	<classpathentry kind="lib" path="lib/soap-2.3.1.jar"/>
 	<classpathentry kind="lib" path="lib/Tidy.jar"/>
-	<classpathentry kind="lib" path="lib/xalan_2_7_1.jar"/>
-	<classpathentry kind="lib" path="lib/xercesImpl-2_9_1.jar"/>
-	<classpathentry kind="lib" path="lib/xml-apis-2_9_1.jar"/>
+	<classpathentry kind="lib" path="lib/xalan-2.7.1.jar"/>
+	<classpathentry kind="lib" path="lib/xercesImpl-2.9.1.jar"/>
+	<classpathentry kind="lib" path="lib/xml-apis-1.2.04.jar"/>
 	<classpathentry kind="lib" path="lib/xmlgraphics-commons-1.3.1.jar"/>
 	<classpathentry kind="lib" path="lib/xpp3_min-1.1.4c.jar"/>
 	<classpathentry kind="lib" path="lib/xstream-1.3.1.jar"/>
