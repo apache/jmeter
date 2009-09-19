@@ -21,28 +21,20 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class ClassFilter {
+class ClassFilter {
 
-    protected String[] pkgs = new String[0];
-    /**
-     *
-     */
-    public ClassFilter() {
+    private String[] pkgs = new String[0];
+
+    ClassFilter() {
         super();
     }
 
-    public void setPackges(String[] pk) {
+    void setPackges(String[] pk) {
         this.pkgs = pk;
     }
 
-    public void addPackage(String pkg) {
-        String[] newpkg = new String[pkgs.length + 1];
-        System.arraycopy(pkgs,0,newpkg,0,pkgs.length);
-        newpkg[pkgs.length] = pkg;
-        pkgs = newpkg;
-    }
-
-    public boolean include(String text) {
+    private boolean include(String text) {
+        if (pkgs.length == 0) return true; // i.e. no filter
         boolean inc = false;
         for (int idx=0; idx < pkgs.length; idx++) {
             if (text.startsWith(pkgs[idx])){
@@ -53,7 +45,7 @@ public class ClassFilter {
         return inc;
     }
 
-    public Object[] filterArray(List<String> items) {
+    Object[] filterArray(List<String> items) {
         Iterator<String> itr = items.iterator();
         ArrayList<Object> newlist = new ArrayList<Object>();
         while (itr.hasNext()) {
@@ -69,7 +61,7 @@ public class ClassFilter {
         }
     }
 
-    public int size(){
+    int size(){
         return pkgs.length;
     }
 }
