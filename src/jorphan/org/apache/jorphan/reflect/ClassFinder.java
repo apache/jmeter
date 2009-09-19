@@ -228,6 +228,21 @@ public final class ClassFinder {
     
     /**
      * Find classes in the provided path(s)/jar(s) that extend the class(es).
+     * Inner classes are not searched.
+     * 
+     * @param strPathsOrJars - pathnames or jarfiles to search for classes
+     * @param annotations - required annotations
+     *
+     * @return List containing discovered classes
+     */
+    public static List<String> findAnnotatedClasses(String[] strPathsOrJars,
+            final Class<? extends Annotation>[] annotations)
+            throws IOException  {
+        return findClassesThatExtend(strPathsOrJars, annotations, false, null, null, true);
+    }
+    
+    /**
+     * Find classes in the provided path(s)/jar(s) that extend the class(es).
      * @param strPathsOrJars - pathnames or jarfiles to search for classes
      * @param classNames - required parent class(es) or annotations
      * @param innerClasses - should we include inner classes?
