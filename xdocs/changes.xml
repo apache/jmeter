@@ -151,6 +151,19 @@ The XPath Assertion and XPath Extractor elements no longer fetch external DTDs b
 <h2>Non-functional changes</h2>
 <ul>
 <li>Add TestBean Table Editor support</li>
+<li>Remove external libraries from SVN as far as possible; add download Ant target</li>
+<li>Updated various jar files:
+<ul>
+<li>BeanShell - 2.0b4 => 2.0b5</li>
+<li>Commons Codec - 1.3 => 1.4</li>
+<li>Commons-Collections - 3.2 => 3.2.1</li>
+<li>JUnit - 3.8.2 => 4.7</li>
+<li>Logkit - 1.2 => 2.0</li>
+<li>Xalan Serializer = 2.7.1 (previously erroneously shown as 2.9.1)</li>
+<li>Xerces xml-apis = 1.3.04 (previously erroneously shown as 2.9.1)</li>
+<li>Some jar files were renamed.</li>
+</ul>
+</li>
 </ul>
 
 </section> 
