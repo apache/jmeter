@@ -456,6 +456,8 @@ public final class ClassFinder {
                         }
                     }
                 }
+            } catch (NoClassDefFoundError ignored) {
+                log.debug(ignored.getLocalizedMessage());
             } catch (ClassNotFoundException ignored) {
                 log.debug(ignored.getLocalizedMessage());
             }
@@ -474,6 +476,8 @@ public final class ClassFinder {
                     }
                 }
             }
+        } catch (NoClassDefFoundError ignored) {
+            log.debug(ignored.getLocalizedMessage());
         } catch (ClassNotFoundException ignored) {
             log.debug(ignored.getLocalizedMessage());
         }
@@ -510,8 +514,8 @@ public final class ClassFinder {
                     String strEntry = entries.nextElement().toString();
                     if (strEntry.endsWith(DOT_CLASS)) {
                         listClasses.add(fixClassName(strEntry));
-                        }
                     }
+                }
             } catch (IOException e) {
                 log.warn("Can not open the jar " + strPath + " " + e.getLocalizedMessage());
             }
