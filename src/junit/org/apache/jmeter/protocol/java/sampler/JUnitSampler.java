@@ -47,29 +47,27 @@ public class JUnitSampler extends AbstractSampler {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final long serialVersionUID = 2331L; // Remember to change this when the class changes ...
+    private static final long serialVersionUID = 240L; // Remember to change this when the class changes ...
 
-    /**
-     * Property key representing the classname of the JavaSamplerClient to
-     * user.
-     */
-    public static final String CLASSNAME = "junitSampler.classname";
-    public static final String CONSTRUCTORSTRING = "junitsampler.constructorstring";
-    public static final String METHOD = "junitsampler.method";
-    public static final String ERROR = "junitsampler.error";
-    public static final String ERRORCODE = "junitsampler.error.code";
-    public static final String FAILURE = "junitsampler.failure";
-    public static final String FAILURECODE = "junitsampler.failure.code";
-    public static final String SUCCESS = "junitsampler.success";
-    public static final String SUCCESSCODE = "junitsampler.success.code";
-    public static final String FILTER = "junitsampler.pkg.filter";
-    public static final String DOSETUP = "junitsampler.exec.setup";
-    public static final String APPEND_ERROR = "junitsampler.append.error";
-    public static final String APPEND_EXCEPTION = "junitsampler.append.exception";
+    //++ JMX file attributes - do not change
+    private static final String CLASSNAME = "junitSampler.classname";
+    private static final String CONSTRUCTORSTRING = "junitsampler.constructorstring";
+    private static final String METHOD = "junitsampler.method";
+    private static final String ERROR = "junitsampler.error";
+    private static final String ERRORCODE = "junitsampler.error.code";
+    private static final String FAILURE = "junitsampler.failure";
+    private static final String FAILURECODE = "junitsampler.failure.code";
+    private static final String SUCCESS = "junitsampler.success";
+    private static final String SUCCESSCODE = "junitsampler.success.code";
+    private static final String FILTER = "junitsampler.pkg.filter";
+    private static final String DOSETUP = "junitsampler.exec.setup";
+    private static final String APPEND_ERROR = "junitsampler.append.error";
+    private static final String APPEND_EXCEPTION = "junitsampler.append.exception";
+    private static final String JUNIT4 = "junitsampler.junit4";
+    //-- JMX file attributes - do not change
 
-    public static final String SETUP = "setUp";
-    public static final String TEARDOWN = "tearDown";
-    public static final String RUNTEST = "run";
+    private static final String SETUP = "setUp";
+    private static final String TEARDOWN = "tearDown";
 
     /// the Method objects for setUp and tearDown methods
     private transient Method SETUP_METHOD = null;
@@ -290,6 +288,11 @@ public class JUnitSampler extends AbstractSampler {
         return getPropertyAsBoolean(APPEND_ERROR,false);
     }
 
+    /**
+     * Set whether to append errors or not.
+     * 
+     * @param error the setting to apply
+     */
     public void setAppendError(boolean error) {
         setProperty(APPEND_ERROR,String.valueOf(error));
     }
@@ -303,13 +306,35 @@ public class JUnitSampler extends AbstractSampler {
         return getPropertyAsBoolean(APPEND_EXCEPTION,false);
     }
 
+    /**
+     * Set whether to append exceptions or not.
+     * 
+     * @param exc the setting to apply.
+     */
     public void setAppendException(boolean exc) {
         setProperty(APPEND_EXCEPTION,String.valueOf(exc));
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.samplers.Sampler#sample(org.apache.jmeter.samplers.Entry)
+    /**
+     * Check if JUnit4 (annotations) are to be used instead of
+     * the JUnit3 style (TestClass and specific method names)
+     * 
+     * @return true if JUnit4 (annotations) are to be used.
+     * Default is false.
      */
+    public boolean getJunit4() {
+        return getPropertyAsBoolean(JUNIT4, false);
+    }
+
+    /**
+     * Set whether to use JUnit4 style or not.
+     * @param junit4 true if JUnit4 style is to be used.
+     */
+    public void setJunit4(boolean junit4) {
+        setProperty(JUNIT4, junit4, false);
+    }
+
+    /** @{inheritDoc} */
     public SampleResult sample(Entry entry) {
         SampleResult sresult = new SampleResult();
         String rlabel = getConstructorString();
@@ -444,7 +469,7 @@ public class JUnitSampler extends AbstractSampler {
      * class, it returns null and logs all the exceptions at
      * warning level.
      */
-    public static Object getClassInstance(String className, String label){
+    private static Object getClassInstance(String className, String label){
         Object testclass = null;
         if (className != null){
             Constructor<?> con = null;
@@ -510,31 +535,16 @@ public class JUnitSampler extends AbstractSampler {
     }
 
     /**
-     *
-     * @param clazz
-     * @param method
+     * Get a method.
+     * @param clazz the classname (may be null)
+     * @param method the method name (may be null)
      * @return the method or null if an error occurred
+     * (or either parameter is null)
      */
-    public Method getMethod(Object clazz, String method){
+    private Method getMethod(Object clazz, String method){
         if (clazz != null && method != null){
-            // log.info("class " + clazz.getClass().getName() +
-            //        " method name is " + method);
             try {
                 return clazz.getClass().getMethod(method,new Class[0]);
-            } catch (NoSuchMethodException e) {
-                log.warn(e.getMessage());
-            }
-        }
-        return null;
-    }
-
-    public Method getRunTestMethod(Object clazz){
-        if (clazz != null){
-            // log.info("class " + clazz.getClass().getName() +
-            //        " method name is " + RUNTEST);
-            try {
-                Class<?>[] param = {TestResult.class};
-                return clazz.getClass().getMethod(RUNTEST,param);
             } catch (NoSuchMethodException e) {
                 log.warn(e.getMessage());
             }
