@@ -1243,11 +1243,10 @@ run JMeter unless all the JMeter jars are added.
   -->
   <!-- Used by project jakarta-jmeter-cvs -->
   <target name="gump-build" 
-      depends="_gump_properties,clean,install" 
+      depends="_gump_properties,download_jars,clean,install" 
       description="Build JMeter">
     <property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
   	<available file="${velocity.jar}" property="3rdparty.present"/>
-  	<antcall target="download_jars"/>
     <!-- No need to create the archives for Gump
     <antcall target="_pack-binaries"/>
     <antcall target="_pack-libraries"/>
