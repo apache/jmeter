@@ -30,7 +30,6 @@ import java.util.List;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -58,12 +57,9 @@ implements ChangeListener, ActionListener
 {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    /** The name of the classnameCombo JComboBox */
-    private static final String CLASSNAMECOMBO = "classnamecombo"; //$NON-NLS-1$
-    private static final String METHODCOMBO = "methodcombo"; //$NON-NLS-1$
-    private static final String PREFIX = "test"; //$NON-NLS-1$
+    private static final String TESTMETHOD_PREFIX = "test"; //$NON-NLS-1$
 
-    // Names of JUnit methods
+    // Names of JUnit3 methods
     private static final String ONETIMESETUP = "oneTimeSetUp"; //$NON-NLS-1$
     private static final String ONETIMETEARDOWN = "oneTimeTearDown"; //$NON-NLS-1$
     private static final String SUITE = "suite"; //$NON-NLS-1$
@@ -131,11 +127,9 @@ implements ChangeListener, ActionListener
     /** A combo box allowing the user to choose a test class. */
     private JComboBox classnameCombo;
     private JComboBox methodName;
-    private transient TestCase TESTCLASS = null;
-    private List<String> METHODLIST = null;
 
-    private transient ClassFilter FILTER = new ClassFilter();
-    private List<String> CLASSLIST = null;
+    private final transient ClassLoader contextClassLoader =
+        Thread.currentThread().getContextClassLoader(); // Potentially expensive; do it once
 
     /**
      * Constructor for JUnitTestSamplerGui
@@ -165,55 +159,55 @@ implements ChangeListener, ActionListener
         add(createClassPanel(), BorderLayout.CENTER);
     }
 
-    private JPanel createClassPanel()
-    {
-        METHODLIST = new ArrayList<String>();
-
+    private void setupClasslist(){
+        classnameCombo.removeAllItems();
+        methodName.removeAllItems();
         try
         {
-            // Find all the classes which extend junit.framework.TestCase
-            CLASSLIST =
-                ClassFinder.findClassesThatExtend(
-                    SPATHS,
-                    new Class[] { TestCase.class });
+            List<String> CLASSLIST = ClassFinder.findClassesThatExtend(SPATHS,
+                new Class[] { TestCase.class });
+            ClassFilter filter = new ClassFilter();
+            filter.setPackges(JOrphanUtils.split(filterpkg.getText(),",")); //$NON-NLS-1$
+            // change the classname drop down
+            Object[] clist = filter.filterArray(CLASSLIST);
+            for (int idx=0; idx < clist.length; idx++) {
+                classnameCombo.addItem(clist[idx]);
+            }
         }
         catch (IOException e)
         {
             log.error("Exception getting interfaces.", e);
         }
+    }
 
+    private JPanel createClassPanel()
+    {
         JLabel label =
             new JLabel(JMeterUtils.getResString("protocol_java_classname")); //$NON-NLS-1$
 
-        classnameCombo = new JComboBox(CLASSLIST.toArray());
+        classnameCombo = new JComboBox();
         classnameCombo.addActionListener(this);
-        classnameCombo.setName(CLASSNAMECOMBO);
         classnameCombo.setEditable(false);
         label.setLabelFor(classnameCombo);
 
-        if (FILTER != null && FILTER.size() > 0) {
-            methodName = new JComboBox(FILTER.filterArray(METHODLIST));
-        } else {
-            methodName = new JComboBox(METHODLIST.toArray());
-        }
+        methodName = new JComboBox();
         methodName.addActionListener(this);
-        methodName.setName(METHODCOMBO);
         methodLabel.setLabelFor(methodName);
+
+        setupClasslist();
 
         VerticalPanel panel = new VerticalPanel();
         panel.add(filterpkg);
-        panel.add(label);
         filterpkg.addChangeListener(this);
 
-        if (classnameCombo != null){
-            panel.add(classnameCombo);
-        }
+        panel.add(label);
+        panel.add(classnameCombo);
+
         constructorLabel.setText("");
         panel.add(constructorLabel);
         panel.add(methodLabel);
-        if (methodName != null){
-            panel.add(methodName);
-        }
+        panel.add(methodName);
+
         panel.add(successMsg);
         panel.add(successCode);
         panel.add(failureMsg);
@@ -226,7 +220,7 @@ implements ChangeListener, ActionListener
         return panel;
     }
 
-    private void initGui(){ // TODO - unfinished?
+    private void initGui(){
         appendError.setSelected(false);
         appendExc.setSelected(false);
         doSetup.setSelected(false);
@@ -240,13 +234,14 @@ implements ChangeListener, ActionListener
         errorCode.setText(JMeterUtils.getResString("junit_error_default_code")); //$NON-NLS-1$
     }
 
+    /** @{inheritDoc} */
     @Override
     public void clearGui() {
         super.clearGui();
         initGui();
     }
 
-    /* Implements JMeterGuiComponent.createTestElement() */
+    /** @{inheritDoc} */
     public TestElement createTestElement()
     {
         JUnitSampler sampler = new JUnitSampler();
@@ -254,7 +249,7 @@ implements ChangeListener, ActionListener
         return sampler;
     }
 
-    /* Implements JMeterGuiComponent.modifyTestElement(TestElement) */
+    /** @{inheritDoc} */
     public void modifyTestElement(TestElement el)
     {
         JUnitSampler sampler = (JUnitSampler)el;
@@ -278,14 +273,14 @@ implements ChangeListener, ActionListener
         sampler.setAppendException(appendExc.isSelected());
     }
 
-    /* Overrides AbstractJMeterGuiComponent.configure(TestElement) */
+    /** @{inheritDoc} */
     @Override
     public void configure(TestElement el)
     {
         super.configure(el);
         JUnitSampler sampler = (JUnitSampler)el;
         classnameCombo.setSelectedItem(sampler.getClassname());
-        instantiateClass();
+        setupMethods();
         methodName.setSelectedItem(sampler.getMethod());
         filterpkg.setText(sampler.getFilterString());
         constructorLabel.setText(sampler.getConstructorString());
@@ -324,82 +319,46 @@ implements ChangeListener, ActionListener
         appendExc.setSelected(sampler.getAppendException());
     }
 
-    public void instantiateClass(){
+    private void setupMethods(){
         String className =
             ((String) classnameCombo.getSelectedItem());
-        if (className != null) {
-            TESTCLASS = (TestCase)JUnitSampler.getClassInstance(className,
-                    constructorLabel.getText());
-            if (TESTCLASS == null) {
-                clearMethodCombo();
-            }
-            configureMethodCombo();
-        }
-    }
-
-    public void showErrorDialog() {
-        JOptionPane.showConfirmDialog(this,
-                JMeterUtils.getResString("junit_constructor_error"),  //$NON-NLS-1$
-                "Warning",
-                JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
-    }
-
-    public void configureMethodCombo(){
-        if (TESTCLASS != null) {
-            clearMethodCombo();
-            String [] names = getMethodNames(getMethods(TESTCLASS));
-            for (int idx=0; idx < names.length; idx++){
-                methodName.addItem(names[idx]);
-                METHODLIST.add(names[idx]);
-            }
-            methodName.repaint();
-        }
-    }
-
-    public void clearMethodCombo(){
         methodName.removeAllItems();
-        METHODLIST.clear();
+        if (className != null) {
+            try {
+                // Don't instantiate class
+                Class<?> testClass = Class.forName(className, false, contextClassLoader);
+                String [] names = getMethodNames(testClass);
+                for (int idx=0; idx < names.length; idx++){
+                    methodName.addItem(names[idx]);
+                }
+                methodName.repaint();
+            } catch (ClassNotFoundException e) {
+            }
+        }
     }
 
-    public Method[] getMethods(Object obj)
+    private String[] getMethodNames(Class<?> clazz)
     {
-        Method[] meths = obj.getClass().getMethods();
-        List<Method> list = new ArrayList<Method>();
+        Method[] meths = clazz.getMethods();
+        List<String> list = new ArrayList<String>();
         for (int idx=0; idx < meths.length; idx++){
-            if (meths[idx].getName().startsWith(PREFIX) ||
-                    meths[idx].getName().equals(ONETIMESETUP) ||
-                    meths[idx].getName().equals(ONETIMETEARDOWN) ||
-                    meths[idx].getName().equals(SUITE)) {
-                list.add(meths[idx]);
+            final String method = meths[idx].getName();
+            if (method.startsWith(TESTMETHOD_PREFIX) ||
+                method.equals(ONETIMESETUP) ||
+                method.equals(ONETIMETEARDOWN) ||
+                method.equals(SUITE)) {
+                    list.add(method);
             }
         }
         if (list.size() > 0){
-            Method[] rmeth = new Method[list.size()];
-            return list.toArray(rmeth);
+            return list.toArray(new String[list.size()]);
         }
-        return new Method[0];
-    }
-
-    public String[] getMethodNames(Method[] meths)
-    {
-        String[] names = new String[meths.length];
-        for (int idx=0; idx < meths.length; idx++){
-            names[idx] = meths[idx].getName();
-        }
-        return names;
-    }
-
-    public Class<?>[] filterClasses(Class<?>[] clz) {
-        if (clz != null && clz.length > 0){
-            Class<?>[] nclz = null;
-            return nclz;
-        }
-        return clz;
+        return new String[0];
     }
 
     /**
      * Handle action events for this component.  This method currently handles
-     * events for the classname combo box.
+     * events for the classname combo box, and sets up the associated method names.
      *
      * @param evt  the ActionEvent to be handled
      */
@@ -407,7 +366,7 @@ implements ChangeListener, ActionListener
     {
         if (evt.getSource() == classnameCombo)
         {
-            instantiateClass();
+            setupMethods();
         }
     }
 
@@ -417,13 +376,7 @@ implements ChangeListener, ActionListener
      */
     public void stateChanged(ChangeEvent event) {
         if ( event.getSource() == filterpkg) {
-            FILTER.setPackges(JOrphanUtils.split(filterpkg.getText(),",")); //$NON-NLS-1$
-            classnameCombo.removeAllItems();
-            // change the classname drop down
-            Object[] clist = FILTER.filterArray(CLASSLIST);
-            for (int idx=0; idx < clist.length; idx++) {
-                classnameCombo.addItem(clist[idx]);
-            }
+            setupClasslist();
         }
     }
 }
