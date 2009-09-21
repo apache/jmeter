@@ -1,40 +1,41 @@
 /*
- * Created on Jul 28, 2005
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
  */
+
 package woolfel;
 
-/**
- * @author pete
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
 public class SubDummyTest2 extends DummyTestCase {
 
-	/**
-	 * 
-	 */
-	private SubDummyTest2() {
+	@SuppressWarnings("unused")
+    private SubDummyTest2() {
 		super();
-        System.out.println("private empty constructor");
+        System.out.println("private SubDummyTest2()");
 	}
 
-	/**
-	 * @param arg0
-	 */
 	public SubDummyTest2(String arg0) {
 		super(arg0);
-        System.out.println("public string constructor");
+        System.out.println("public SubDummyTest2("+arg0+")");
 	}
 
     public void oneTimeSetUp() {
-        System.out.println("oneTimeSetUp called -- ");
+        System.out.println("SubDummyTest2#oneTimeSetUp(): "+getName());
     }
     
     public void oneTimeTearDown() {
-        System.out.println("oneTimeTearDown called -- ");
+        System.out.println("SubDummyTest2#oneTimeTearDown(): "+getName());
     }
 }
