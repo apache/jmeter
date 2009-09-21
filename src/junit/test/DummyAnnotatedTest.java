@@ -18,10 +18,15 @@
 
 package test;
 
+import static org.junit.Assert.fail;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * Sample test cases for demonstrating JUnit4 sampler.
+ * 
+ */
 public class DummyAnnotatedTest
 {
     public String name;
@@ -30,26 +35,35 @@ public class DummyAnnotatedTest
     public DummyAnnotatedTest() {
         name="NOT SET";
     }
+
     public DummyAnnotatedTest(String name) {
         this.name = name;
     }
 
+    // Generates expected Exception
     @Test(expected=RuntimeException.class)
-    public void fail() {
+    public void expectedExceptionPass() {
         throw new RuntimeException();
+    }
+    
+    // Fails to generate expected Exception
+    @Test(expected=RuntimeException.class)
+    public void expectedExceptionFail() {
     }
     
     @Before
     public void verifyTwo() {
+        System.out.println("DummyAnnotatedTest#verifyTwo()");
         two = 2;
     }
     
     @After
     public void printDone() {
-        System.out.println("done with an annotated test.");
+        System.out.println("DummyAnnotatedTest#printDone()");
     }
     
     @Test
+    // Succeeds only if Before method - verifyTwo() - is run.
     public void add() {
         int four = two+2;
         if(4!=four) {
@@ -61,9 +75,29 @@ public class DummyAnnotatedTest
     
     //should always fail
     @Test(timeout=1000)
-    public void timeOut() {
+    public void timeOutFail() {
         try{
             Thread.sleep(2000);
         }catch (InterruptedException e) { }
+    }
+
+    //should not fail
+    @Test(timeout=1000)
+    public void timeOutPass() {
+        try{
+            Thread.sleep(500);
+        }catch (InterruptedException e) { }
+    }
+   
+    @Test
+    public void alwaysFail() {
+        fail("This always fails");
+    }
+    
+    @Test
+    // Generate a test error
+    public void divideByZero() {
+        @SuppressWarnings("unused")
+        int i = 27 / 0; // will generate Divide by zero error
     }
 }
