@@ -17,6 +17,7 @@
  */
 package org.apache.jmeter.protocol.java.sampler;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -35,6 +36,10 @@ import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.Test.None;
 
 /**
  *
@@ -74,22 +79,32 @@ public class JUnitSampler extends AbstractSampler {
     private transient Method TDOWN_METHOD = null;
     private boolean checkStartUpTearDown = false;
 
+    // The TestCase to run
     private transient TestCase TEST_INSTANCE = null;
+    // The test object; same as TEST_INSTANCE for JUnit3 tests
+    // but different for JUnit4 tests
+    private transient Object TEST_OBJECT = null;
 
     public JUnitSampler(){
     }
 
     /**
      * Method tries to get the setUp and tearDown method for the class
-     * @param tc
+     * @param testObject
      */
-    private void initMethodObjects(TestCase tc){
+    private void initMethodObjects(Object testObject){
         if (!this.checkStartUpTearDown && !getDoNotSetUpTearDown()) {
             if (SETUP_METHOD == null) {
-                SETUP_METHOD = getMethod(tc, SETUP);
+                SETUP_METHOD = getJunit4() ? 
+                    getMethodWithAnnotation(testObject, Before.class) 
+                    : 
+                    getMethod(testObject, SETUP);
             }
             if (TDOWN_METHOD == null) {
-                TDOWN_METHOD = getMethod(tc, TEARDOWN);
+                TDOWN_METHOD = getJunit4() ?
+                    getMethodWithAnnotation(testObject, After.class)
+                    :
+                    getMethod(testObject, TEARDOWN);
             }
             this.checkStartUpTearDown = true;
         }
@@ -348,19 +363,40 @@ public class JUnitSampler extends AbstractSampler {
         // check to see if the test class is null. if it is, we create
         // a new instance. this should only happen at the start of a
         // test run
-        if (this.TEST_INSTANCE == null) {
-            this.TEST_INSTANCE = (TestCase)getClassInstance(className,rlabel);
+        if (this.TEST_OBJECT == null) {
+            this.TEST_OBJECT = getClassInstance(className,rlabel);
         }
-        if (this.TEST_INSTANCE != null){
-            initMethodObjects(this.TEST_INSTANCE);
+        if (this.TEST_OBJECT != null){
+            initMethodObjects(this.TEST_OBJECT);
+            final Method m = getMethod(this.TEST_OBJECT,methodName);
             // create a new TestResult
             TestResult tr = new TestResult();
+            long timeout = 0L;
+            Class<? extends Throwable> expectedException = null;
+            if (getJunit4()){
+                try {
+                    TEST_INSTANCE = new AnnotatedTestCase();
+                } catch (SecurityException e) {
+                    log.error(e.getLocalizedMessage(),e);
+                    return sresult;
+                } catch( NoSuchMethodException e) {
+                    log.error(e.getLocalizedMessage(),e);
+                    return sresult;
+                }            
+                Test annotation = m.getAnnotation(Test.class);
+                if(null != annotation) {
+                    expectedException = annotation.expected();
+                    timeout = annotation.timeout();
+                }
+            } else {
+                this.TEST_INSTANCE = (TestCase) this.TEST_OBJECT;
+            }
             this.TEST_INSTANCE.setName(methodName);
             try {
 
                 if (!getDoNotSetUpTearDown() && SETUP_METHOD != null){
                     try {
-                        SETUP_METHOD.invoke(this.TEST_INSTANCE,new Object[0]);
+                        SETUP_METHOD.invoke(this.TEST_OBJECT,new Object[0]);
                     } catch (InvocationTargetException e) {
                         tr.addFailure(this.TEST_INSTANCE,
                                 new AssertionFailedError(e.getMessage()));
@@ -372,7 +408,6 @@ public class JUnitSampler extends AbstractSampler {
                                 new AssertionFailedError(e.getMessage()));
                     }
                 }
-                final Method m = getMethod(this.TEST_INSTANCE,methodName);
                 final TestCase theClazz = this.TEST_INSTANCE;
                 tr.startTest(this.TEST_INSTANCE);
                 sresult.sampleStart();
@@ -380,26 +415,64 @@ public class JUnitSampler extends AbstractSampler {
                 // call setUp and tearDown. Doing that will result in calling
                 // the setUp and tearDown method twice and the elapsed time
                 // will include setup and teardown.
-                Protectable p = new Protectable() {
-                    public void protect() throws Throwable {
-                        m.invoke(theClazz,new Object[0]);
+                Throwable thrown = null;
+                if (getJunit4()){
+                    try {
+                        theClazz.runBare();
+                    } catch(Throwable t) {
+                        thrown = t;
                     }
-                };
-                tr.runProtected(theClazz, p);
+                } else { 
+                    Protectable p = new Protectable() {
+                        public void protect() throws Throwable {
+                            m.invoke(theClazz,new Object[0]);
+                        }
+                    };
+                    tr.runProtected(theClazz, p);
+                }
                 tr.endTest(this.TEST_INSTANCE);
                 sresult.sampleEnd();
-
+                if (getJunit4()){
+                    if(null == thrown) {
+                        if (expectedException != None.class) {
+                            tr.addFailure(
+                                    this.TEST_INSTANCE,
+                                new AssertionFailedError(
+                                    "No error was generated for a test case which specifies an error."));
+                            throw new Exception(
+                                "Unexpected lack of exception from the test case: "
+                                    + getMethod());
+                        }
+                        else {
+                            //this is a pass condition
+                        }
+                    }
+                    else {
+                        //unravel 1x.  InvocationTargetException wraps the real exception.
+                        thrown = thrown.getCause();
+                        if (expectedException.isAssignableFrom(thrown.getClass()))
+    //                            && thrown.getClass().isAssignableFrom(expectedException))
+                        {
+                            //The test actually passed
+                            log.debug("Test passed for " + getMethod());
+                        } else {
+                            tr.addFailure(this.TEST_INSTANCE, new AssertionFailedError("The wrong exception was thrown from the test case"));
+                            throw new Exception("The wrong exception was thrown from the test case");
+                        }
+                    }
+                    if( timeout > 0L && timeout < sresult.getTime()) {
+                        tr.addFailure(this.TEST_INSTANCE, new AssertionFailedError("Test took longer than speficied timeout."));
+                    }
+                }
                 if (!getDoNotSetUpTearDown() && TDOWN_METHOD != null){
-                    TDOWN_METHOD.invoke(TEST_INSTANCE,new Object[0]);
+                    TDOWN_METHOD.invoke(TEST_OBJECT,new Object[0]);
                 }
             } catch (InvocationTargetException e) {
-                // log.warn(e.getMessage());
                 sresult.setResponseCode(getErrorCode());
                 sresult.setResponseMessage(getError());
                 sresult.setResponseData(e.getMessage().getBytes());
                 sresult.setSuccessful(false);
             } catch (IllegalAccessException e) {
-                // log.warn(e.getMessage());
                 sresult.setResponseCode(getErrorCode());
                 sresult.setResponseMessage(getError());
                 sresult.setResponseData(e.getMessage().getBytes());
@@ -550,5 +623,28 @@ public class JUnitSampler extends AbstractSampler {
             }
         }
         return null;
+    }
+    
+    private Method getMethodWithAnnotation(Object clazz, Class<? extends Annotation> annotation) {
+        if(null != clazz && null != annotation) {
+            for(Method m : clazz.getClass().getMethods()) {
+                if(m.isAnnotationPresent(annotation)) {
+                    return m;
+                }
+            }
+        }
+        return null;
+    }
+    
+    private class AnnotatedTestCase extends TestCase {
+        private final Method m;
+        public AnnotatedTestCase() throws SecurityException, NoSuchMethodException {
+            m = TEST_OBJECT.getClass().getMethod(getMethod(), (Class[])null);
+        }
+        
+        @Override
+        protected void runTest() throws Throwable {
+            m.invoke(TEST_OBJECT, (Object[])null);
+        }
     }
 }
