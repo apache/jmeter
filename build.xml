@@ -872,10 +872,18 @@ run JMeter unless all the JMeter jars are added.
 
     <!-- junit -->
     <jar jarfile="${dest.jar}/ApacheJMeter_junit.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
-      <fileset dir="${build.junit}" includes="**/*.class" />
+      <fileset dir="${build.junit}" includes="org/**/*.class" />
       <fileset dir="${src.junit}" includes="**/*.properties" />
       <metainf dir="." includes="LICENSE,NOTICE"/>
     </jar>
+  	<!-- Build junit/test.jar sample -->
+    <jar jarfile="${lib.dir}/junit/test.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
+      <fileset dir="${build.junit}" includes="**/*.class" />
+      <fileset dir="${build.junit}" excludes="org/**/*" />
+      <fileset dir="${src.junit}"   excludes="org/**/*" />
+      <metainf dir="." includes="LICENSE,NOTICE"/>
+    </jar>
+
 
     <!-- report -->
     <jar jarfile="${dest.jar}/ApacheJMeter_report.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
