@@ -21,6 +21,8 @@ package org.apache.jmeter.protocol.java.control.gui;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -46,6 +48,9 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
  * The <code>JUnitTestSamplerGui</code> class provides the user interface
@@ -53,7 +58,7 @@ import org.apache.log.Logger;
  *
  */
 public class JUnitTestSamplerGui extends AbstractSamplerGui
-implements ChangeListener, ActionListener
+implements ChangeListener, ActionListener, ItemListener
 {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -123,6 +128,7 @@ implements ChangeListener, ActionListener
     private JCheckBox doSetup = new JCheckBox(JMeterUtils.getResString("junit_do_setup_teardown")); //$NON-NLS-1$
     private JCheckBox appendError = new JCheckBox(JMeterUtils.getResString("junit_append_error")); //$NON-NLS-1$
     private JCheckBox appendExc = new JCheckBox(JMeterUtils.getResString("junit_append_exception")); //$NON-NLS-1$
+    private JCheckBox junit4 = new JCheckBox(JMeterUtils.getResString("junit_junit4")); //$NON-NLS-1$
 
     /** A combo box allowing the user to choose a test class. */
     private JComboBox classnameCombo;
@@ -159,17 +165,24 @@ implements ChangeListener, ActionListener
         add(createClassPanel(), BorderLayout.CENTER);
     }
 
+    @SuppressWarnings("unchecked")
     private void setupClasslist(){
         classnameCombo.removeAllItems();
         methodName.removeAllItems();
         try
         {
-            List<String> CLASSLIST = ClassFinder.findClassesThatExtend(SPATHS,
-                new Class[] { TestCase.class });
+            List<String> classList;
+            if (junit4.isSelected()){
+                classList = ClassFinder.findAnnotatedClasses(SPATHS,
+                    new Class[] {Test.class}, false);
+            } else {
+                classList = ClassFinder.findClassesThatExtend(SPATHS,
+                     new Class[] { TestCase.class });
+            }
             ClassFilter filter = new ClassFilter();
             filter.setPackges(JOrphanUtils.split(filterpkg.getText(),",")); //$NON-NLS-1$
             // change the classname drop down
-            Object[] clist = filter.filterArray(CLASSLIST);
+            Object[] clist = filter.filterArray(classList);
             for (int idx=0; idx < clist.length; idx++) {
                 classnameCombo.addItem(clist[idx]);
             }
@@ -197,6 +210,8 @@ implements ChangeListener, ActionListener
         setupClasslist();
 
         VerticalPanel panel = new VerticalPanel();
+        panel.add(junit4);
+        junit4.addItemListener(this);
         panel.add(filterpkg);
         filterpkg.addChangeListener(this);
 
@@ -224,6 +239,7 @@ implements ChangeListener, ActionListener
         appendError.setSelected(false);
         appendExc.setSelected(false);
         doSetup.setSelected(false);
+        junit4.setSelected(false);
         filterpkg.setText(""); //$NON-NLS-1$
         constructorLabel.setText(""); //$NON-NLS-1$
         successCode.setText(JMeterUtils.getResString("junit_success_default_code")); //$NON-NLS-1$
@@ -257,11 +273,15 @@ implements ChangeListener, ActionListener
         if (classnameCombo.getSelectedItem() != null &&
                 classnameCombo.getSelectedItem() instanceof String) {
             sampler.setClassname((String)classnameCombo.getSelectedItem());
+        } else {
+            sampler.setClassname(null);
         }
         sampler.setConstructorString(constructorLabel.getText());
         if (methodName.getSelectedItem() != null) {
             Object mobj = methodName.getSelectedItem();
             sampler.setMethod((String)mobj);
+        } else {
+            sampler.setMethod(null);
         }
         sampler.setFilterString(filterpkg.getText());
         sampler.setSuccess(successMsg.getText());
@@ -271,6 +291,7 @@ implements ChangeListener, ActionListener
         sampler.setDoNotSetUpTearDown(doSetup.isSelected());
         sampler.setAppendError(appendError.isSelected());
         sampler.setAppendException(appendExc.isSelected());
+        sampler.setJunit4(junit4.isSelected());
     }
 
     /** @{inheritDoc} */
@@ -279,10 +300,11 @@ implements ChangeListener, ActionListener
     {
         super.configure(el);
         JUnitSampler sampler = (JUnitSampler)el;
+        junit4.setSelected(sampler.getJunit4());
+        filterpkg.setText(sampler.getFilterString());
         classnameCombo.setSelectedItem(sampler.getClassname());
         setupMethods();
         methodName.setSelectedItem(sampler.getMethod());
-        filterpkg.setText(sampler.getFilterString());
         constructorLabel.setText(sampler.getConstructorString());
         if (sampler.getSuccessCode().length() > 0) {
             successCode.setText(sampler.getSuccessCode());
@@ -342,12 +364,21 @@ implements ChangeListener, ActionListener
         Method[] meths = clazz.getMethods();
         List<String> list = new ArrayList<String>();
         for (int idx=0; idx < meths.length; idx++){
-            final String method = meths[idx].getName();
-            if (method.startsWith(TESTMETHOD_PREFIX) ||
-                method.equals(ONETIMESETUP) ||
-                method.equals(ONETIMETEARDOWN) ||
-                method.equals(SUITE)) {
-                    list.add(method);
+            final Method method = meths[idx];
+            final String name = method.getName();
+            if (junit4.isSelected()){
+                if (method.isAnnotationPresent(Test.class) ||
+                    method.isAnnotationPresent(BeforeClass.class) ||
+                    method.isAnnotationPresent(AfterClass.class)) {
+                        list.add(name);
+                }
+            } else {
+                if (name.startsWith(TESTMETHOD_PREFIX) ||
+                    name.equals(ONETIMESETUP) ||
+                    name.equals(ONETIMETEARDOWN) ||
+                    name.equals(SUITE)) {
+                        list.add(name);
+                }
             }
         }
         if (list.size() > 0){
@@ -367,6 +398,16 @@ implements ChangeListener, ActionListener
         if (evt.getSource() == classnameCombo)
         {
             setupMethods();
+        }
+    }
+
+    /**
+     * Handle change events: currently handles events for the JUnit4
+     * checkbox, and sets up the relevant class names.
+     */
+    public void itemStateChanged(ItemEvent event) {
+        if (event.getItem() == junit4){
+            setupClasslist();            
         }
     }
 
