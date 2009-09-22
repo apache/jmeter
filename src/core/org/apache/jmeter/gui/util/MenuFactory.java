@@ -283,6 +283,13 @@ public final class MenuFactory {
         return pop;
     }
 
+    public static JPopupMenu getDefaultMenu() { // if type is unknown
+        JPopupMenu pop = new JPopupMenu();
+        MenuFactory.addEditMenu(pop, true);
+        MenuFactory.addFileMenu(pop);
+        return pop;
+    }
+
     /**
      * Create a menu from a menu category.
      *

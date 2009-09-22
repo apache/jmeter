@@ -101,6 +101,7 @@ The XPath Assertion and XPath Extractor elements no longer fetch external DTDs b
 <h3>General</h3>
 <ul>
 <li>Bug 47646 -  NullPointerException in the "Random Variable" element</li>
+<li>Disallow adding any child elements to JDBC Configuration</li>
 </ul>
 
 <!-- ==================================================== -->
