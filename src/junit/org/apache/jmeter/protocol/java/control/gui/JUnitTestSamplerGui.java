@@ -288,6 +288,8 @@ implements ChangeListener, ActionListener, ItemListener
         sampler.setSuccessCode(successCode.getText());
         sampler.setFailure(failureMsg.getText());
         sampler.setFailureCode(failureCode.getText());
+        sampler.setError(errorMsg.getText());
+        sampler.setErrorCode(errorCode.getText());
         sampler.setDoNotSetUpTearDown(doSetup.isSelected());
         sampler.setAppendError(appendError.isSelected());
         sampler.setAppendException(appendExc.isSelected());
