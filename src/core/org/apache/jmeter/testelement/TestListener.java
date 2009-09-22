@@ -62,7 +62,7 @@ public interface TestListener {
      * </b>
      * </p>
      * @see org.apache.jmeter.engine.StandardJMeterEngine#run()
-     *
+     * @param host name of host
      */
     public void testStarted(String host);
 
@@ -96,6 +96,7 @@ public interface TestListener {
      * </b>
      * </p>
      * @see org.apache.jmeter.engine.StandardJMeterEngine#stopTest()
+     * @param host name of host
      *
      */
 
