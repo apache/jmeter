@@ -74,15 +74,17 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
     private static final String SETUP = "setUp";
     private static final String TEARDOWN = "tearDown";
 
-    /// the Method objects for setUp and tearDown methods
-    private transient Method SETUP_METHOD;
-    private transient Method TDOWN_METHOD;
+    // the Method objects for setUp (@Before) and tearDown (@After) methods
+    // Will be null if not provided or not required
+    private transient Method setUpMethod;
+    private transient Method tearDownMethod;
 
     // The TestCase to run
-    private transient TestCase TEST_INSTANCE;
-    // The test object; same as TEST_INSTANCE for JUnit3 tests
+    private transient TestCase testCase;
+    // The test object, i.e. the instance of the class containing the test method
+    // This is the same as testCase for JUnit3 tests
     // but different for JUnit4 tests which use a wrapper
-    private transient Object TEST_OBJECT;
+    private transient Object testObject;
 
     // The method name to be invoked
     private transient String methodName;
@@ -99,14 +101,14 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
      * @param testObject
      */
     private void initMethodObjects(Object testObject){
-        SETUP_METHOD = null;
-        TDOWN_METHOD = null;
+        setUpMethod = null;
+        tearDownMethod = null;
         if (!getDoNotSetUpTearDown()) {
-            SETUP_METHOD = getJunit4() ? 
+            setUpMethod = getJunit4() ? 
                 getMethodWithAnnotation(testObject, Before.class) 
                 : 
                 getMethod(testObject, SETUP);
-            TDOWN_METHOD = getJunit4() ?
+            tearDownMethod = getJunit4() ?
                 getMethodWithAnnotation(testObject, After.class)
                 :
                 getMethod(testObject, TEARDOWN);
@@ -362,25 +364,25 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
         sresult.setSuccessful(true);
         sresult.setResponseMessage(getSuccess());
         sresult.setResponseCode(getSuccessCode());
-        if (this.TEST_INSTANCE != null){
+        if (this.testCase != null){
             // create a new TestResult
             TestResult tr = new TestResult();
-            final TestCase theClazz = this.TEST_INSTANCE;
+            final TestCase theClazz = this.testCase;
             try {
-                if (SETUP_METHOD != null){
-                    SETUP_METHOD.invoke(this.TEST_OBJECT,new Object[0]);
+                if (setUpMethod != null){
+                    setUpMethod.invoke(this.testObject,new Object[0]);
                 }
                 sresult.sampleStart();
-                tr.startTest(this.TEST_INSTANCE);
+                tr.startTest(this.testCase);
                 // Do not use TestCase.run(TestResult) method, since it will
                 // call setUp and tearDown. Doing that will result in calling
                 // the setUp and tearDown method twice and the elapsed time
                 // will include setup and teardown.
                 tr.runProtected(theClazz, protectable);
-                tr.endTest(this.TEST_INSTANCE);
+                tr.endTest(this.testCase);
                 sresult.sampleEnd();
-                if (TDOWN_METHOD != null){
-                    TDOWN_METHOD.invoke(TEST_OBJECT,new Object[0]);
+                if (tearDownMethod != null){
+                    tearDownMethod.invoke(testObject,new Object[0]);
                 }
             } catch (InvocationTargetException e) {
                 Throwable cause = e.getCause();
@@ -560,7 +562,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
         protected void runTest() throws Throwable {
             try {
                 long start = System.currentTimeMillis();
-                method.invoke(TEST_OBJECT, (Object[])null);
+                method.invoke(testObject, (Object[])null);
                 if (expectedException != None.class) {
                     throw new AssertionFailedError(
                     "No error was generated for a test case which specifies an error.");
@@ -593,8 +595,8 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
      * Set up all variables that don't change between samples.
      */
     public void threadStarted() {
-        TEST_OBJECT = null;
-        TEST_INSTANCE = null;
+        testObject = null;
+        testCase = null;
         methodName = getMethod();
         className = getClassname();
         final Method m;
@@ -603,10 +605,10 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
         if (rlabel.length()== 0) {
             rlabel = JUnitSampler.class.getName();
         }
-        this.TEST_OBJECT = getClassInstance(className,rlabel);
-        if (this.TEST_OBJECT != null){
-            initMethodObjects(this.TEST_OBJECT);
-            m = getMethod(this.TEST_OBJECT,methodName);
+        this.testObject = getClassInstance(className,rlabel);
+        if (this.testObject != null){
+            initMethodObjects(this.testObject);
+            m = getMethod(this.testObject,methodName);
             if (getJunit4()){
                 Class<? extends Throwable> expectedException = None.class;
                 long timeout = 0;
@@ -616,15 +618,15 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
                     timeout = annotation.timeout();
                 }
                 final AnnotatedTestCase at = new AnnotatedTestCase(m, expectedException, timeout);
-                TEST_INSTANCE = at;
+                testCase = at;
                 protectable = new Protectable() {
                     public void protect() throws Throwable {
                         at.runTest();
                     }
                 };
             } else {
-                this.TEST_INSTANCE = (TestCase) this.TEST_OBJECT;
-                final Object theClazz = this.TEST_OBJECT; // Must be final to create instance
+                this.testCase = (TestCase) this.testObject;
+                final Object theClazz = this.testObject; // Must be final to create instance
                 protectable = new Protectable() {
                     public void protect() throws Throwable {
                         try {
@@ -644,8 +646,8 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
                     }
                 };
             }
-            if (this.TEST_INSTANCE != null){
-                this.TEST_INSTANCE.setName(methodName);
+            if (this.testCase != null){
+                this.testCase.setName(methodName);
             }
         }
     }
