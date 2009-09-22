@@ -88,4 +88,12 @@ public class DummyTestCase extends TestCase {
         @SuppressWarnings("unused")
         int i = 27 / 0; // will generate Divide by zero error
     }
+
+    public void testStringCompareFail(){
+        assertEquals("this","that");
+    }
+
+    public void testObjectCompareFail(){
+        assertEquals(new Object(),new Object());
+    }
 }
