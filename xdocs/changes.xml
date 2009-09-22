@@ -116,6 +116,7 @@ The XPath Assertion and XPath Extractor elements no longer fetch external DTDs b
 
 <h3>Other samplers</h3>
 <ul>
+<li>JUnit sampler now supports JUnit4 tests (using annotations)</li>
 </ul>
 
 <h3>Controllers</h3>
