@@ -840,7 +840,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      */
     protected HTTPSampleResult errorResult(Throwable e, HTTPSampleResult res) {
         res.setSampleLabel("Error");
-        res.setDataType(HTTPSampleResult.TEXT);
+        res.setDataType(SampleResult.TEXT);
         ByteArrayOutputStream text = new ByteArrayOutputStream(200);
         e.printStackTrace(new PrintStream(text));
         res.setResponseData(text.toByteArray());
