@@ -45,7 +45,7 @@ public class DebugPostProcessor extends AbstractTestElement implements PostProce
          }
          SampleResult sr = new SampleResult();
          sr.setResponseData(sb.toString().getBytes());
-         sr.setDataType("text");
+         sr.setDataType(SampleResult.TEXT);
          sr.setSampleLabel(getName());
          sr.setSuccessful(true);
          sr.setSamplerData("SamplerPropertyValues");
