@@ -50,7 +50,7 @@ import org.apache.log.Logger;
  * user a username to use and pass the appropriate password.
  *
  */
-public class AuthManager extends ConfigTestElement implements ConfigElement, Serializable {
+public class AuthManager extends ConfigTestElement implements Serializable {
     private static final long serialVersionUID = 233L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
