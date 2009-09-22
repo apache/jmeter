@@ -18,7 +18,9 @@
 
 package test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,15 +31,9 @@ import org.junit.Test;
  */
 public class DummyAnnotatedTest
 {
-    public String name;
     public int two = 1; //very wrong.
     
     public DummyAnnotatedTest() {
-        name="NOT SET";
-    }
-
-    public DummyAnnotatedTest(String name) {
-        this.name = name;
     }
 
     // Generates expected Exception
@@ -99,5 +95,15 @@ public class DummyAnnotatedTest
     public void divideByZero() {
         @SuppressWarnings("unused")
         int i = 27 / 0; // will generate Divide by zero error
+    }
+    
+    @Test
+    public void stringCompareFail(){
+        assertEquals("this","that");
+    }
+
+    @Test
+    public void objectCompareFail(){
+        assertEquals(new Object(),new Object());
     }
 }
