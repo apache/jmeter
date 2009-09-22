@@ -38,7 +38,6 @@ import org.apache.commons.collections.map.LRUMap;
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.assertions.gui.AbstractAssertionGui;
 import org.apache.jmeter.config.ConfigElement;
-import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.control.gui.AbstractControllerGui;
@@ -279,7 +278,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
         {
             return MenuFactory.getDefaultSamplerMenu();
         }
-        else if(ConfigTestElement.class.isAssignableFrom(testBeanClass))
+        else if(ConfigElement.class.isAssignableFrom(testBeanClass))
         {
             return MenuFactory.getDefaultConfigElementMenu();
         }
@@ -296,8 +295,13 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
         {
             return MenuFactory.getDefaultVisualizerMenu();
         }
-        else {
+        else if(Controller.class.isAssignableFrom(testBeanClass))
+        {
             return MenuFactory.getDefaultControllerMenu();
+        }
+        else {
+            log.warn("Cannot determine PopupMenu for "+testBeanClass.getName());
+            return MenuFactory.getDefaultMenu();
         }
     }
 
