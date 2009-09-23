@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -523,6 +524,27 @@ public class SampleResult implements Serializable {
         } catch (UnsupportedEncodingException e) {
             log.warn("Could not convert string, using default encoding. "+e.getLocalizedMessage());
             responseData = response.getBytes();
+        }
+    }
+
+    /**
+     * Sets the encoding and responseData attributes of the SampleResult object.
+     *
+     * @param response the new responseData value (String)
+     * @param encoding the encoding to set and then use (if null, use platform default)
+     *
+     */
+    public void setResponseData(final String response, final String encoding) {
+        String defaultEncodingName = Charset.defaultCharset().name();
+        String encodeUsing = encoding != null? encoding : defaultEncodingName; 
+        try {
+            responseData = response.getBytes(encodeUsing);
+            setDataEncoding(encodeUsing);
+        } catch (UnsupportedEncodingException e) {
+            log.warn("Could not convert string using "+encodeUsing+
+                    ", using default encoding: "+defaultEncodingName+" "+e.getLocalizedMessage());
+            responseData = response.getBytes();
+            setDataEncoding(defaultEncodingName);
         }
     }
 
