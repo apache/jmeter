@@ -471,6 +471,8 @@ public final class ClassFinder {
                         }
                     }
                 }
+            } catch (UnsupportedClassVersionError ignored) {
+                log.debug(ignored.getLocalizedMessage());
             } catch (NoClassDefFoundError ignored) {
                 log.debug(ignored.getLocalizedMessage());
             } catch (ClassNotFoundException ignored) {
