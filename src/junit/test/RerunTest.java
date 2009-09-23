@@ -18,6 +18,8 @@
 
 package test;
 
+import org.junit.Test;
+
 import junit.framework.TestCase;
 
 /**
@@ -26,6 +28,7 @@ import junit.framework.TestCase;
 public class RerunTest extends TestCase {
 
     private int i = 123;
+    @Test
     public void testRerun(){
         assertEquals(123,i);
         i++;
