@@ -18,6 +18,9 @@
 
 package test;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import junit.framework.TestCase;
 
 /**
@@ -26,10 +29,12 @@ import junit.framework.TestCase;
 public class SetupTestFail extends TestCase {
 
     @Override
+    @Before
     public void setUp(){
         fail("setUp()");
     }
     
+    @Test
     public void testSetUpFail(){
         // Dummy to ensure there is a test to run
     }
