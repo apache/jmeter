@@ -387,10 +387,16 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
             } catch (InvocationTargetException e) {
                 Throwable cause = e.getCause();
                 if (cause instanceof AssertionFailedError){
-                    log.warn("AFE:"+cause.toString());
-                    tr.addFailure(theClazz, (AssertionFailedError) cause);                        
+                    tr.addFailure(theClazz, (AssertionFailedError) cause);
+                } else if (cause instanceof AssertionError) {
+                    // Convert JUnit4 failure to Junit3 style
+                    AssertionFailedError afe = new AssertionFailedError(cause.toString());
+                    // copy the original stack trace
+                    afe.setStackTrace(cause.getStackTrace());
+                    tr.addFailure(theClazz, afe);
+                } else if (cause != null) {
+                    tr.addError(theClazz, cause);                        
                 } else {
-                    log.warn("ANY:"+e.toString()+" "+cause);
                     tr.addError(theClazz, e);                        
                 }
             } catch (IllegalAccessException e) {
@@ -401,6 +407,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
             if ( !tr.wasSuccessful() ){
                 sresult.setSuccessful(false);
                 StringBuffer buf = new StringBuffer();
+                StringBuffer buftrace = new StringBuffer();
                 Enumeration<TestFailure> en;
                 if (getAppendError()) {
                     en = tr.failures();
@@ -411,11 +418,14 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
                     }
                     while (en.hasMoreElements()){
                         TestFailure item = en.nextElement();
-                        buf.append( "Trace -- ");
-                        buf.append( item.trace() );
                         buf.append( "Failure -- ");
                         buf.append( item.toString() );
                         buf.append("\n");
+                        buftrace.append( "Failure -- ");
+                        buftrace.append( item.toString() );
+                        buftrace.append("\n");
+                        buftrace.append( "Trace -- ");
+                        buftrace.append( item.trace() );
                     }
                     en = tr.errors();
                     if (en.hasMoreElements()){
@@ -425,14 +435,18 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
                     }
                     while (en.hasMoreElements()){
                         TestFailure item = en.nextElement();
-                        buf.append( "Trace -- ");
-                        buf.append( item.trace() );
                         buf.append( "Error -- ");
                         buf.append( item.toString() );
                         buf.append("\n");
+                        buftrace.append( "Error -- ");
+                        buftrace.append( item.toString() );
+                        buftrace.append("\n");
+                        buftrace.append( "Trace -- ");
+                        buftrace.append( item.trace() );
                     }
                 }
                 sresult.setResponseMessage(buf.toString());
+                sresult.setResponseData(buftrace.toString(), null);
             }
         } else {
             // we should log a warning, but allow the test to keep running
@@ -579,6 +593,14 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
                     throw e;
                 }
                 if (expectedException == None.class){
+                    // Convert JUnit4 AssertionError failures to JUnit3 style so
+                    // will be treated as failure rather than error.
+                    if (thrown instanceof AssertionError && !(thrown instanceof AssertionFailedError)){
+                        AssertionFailedError afe = new AssertionFailedError(thrown.toString());
+                        // copy the original stack trace
+                        afe.setStackTrace(thrown.getStackTrace());
+                        throw afe;
+                    }
                     throw thrown;                    
                 }
                 if (!expectedException.isAssignableFrom(thrown.getClass())){
