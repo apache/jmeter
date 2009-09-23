@@ -18,18 +18,23 @@
 
 package test;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import junit.framework.TestCase;
 
 /**
- * Test to demonstrate how setUp failures are handled
+ * Test to demonstrate how setUp errors are handled
  */
 public class SetupTestError extends TestCase {
 
     @Override
+    @Before
     public void setUp(){
         throw new Error("setUp()");
     }
     
+    @Test
     public void testSetUpError(){
         // Dummy to ensure there is a test to run
     }
