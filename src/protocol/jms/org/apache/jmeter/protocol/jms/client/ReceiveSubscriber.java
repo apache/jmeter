@@ -53,8 +53,6 @@ public class ReceiveSubscriber implements Runnable {
 
     private final TopicSession SESSION;
 
-    private final Topic TOPIC;
-
     private final TopicSubscriber SUBSCRIBER;
 
     //@GuardedBy("this")
@@ -85,7 +83,7 @@ public class ReceiveSubscriber implements Runnable {
                 _conn = ConnectionFactory.getTopicConnection();
                 _topic = InitialContextFactory.lookupTopic(ctx, topic);
                 _session = _conn.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
-                _subscriber = _session.createSubscriber(this.TOPIC);
+                _subscriber = _session.createSubscriber(_topic);
                 log.info("created the topic connection successfully");
             } catch (JMSException e) {
                 log.error("Connection error: " + e.getMessage());
@@ -94,7 +92,6 @@ public class ReceiveSubscriber implements Runnable {
             log.error("Could not initialize JNDI Initial Context Factory");
         }
         this.CONN = _conn;
-        this.TOPIC = _topic;
         this.SESSION = _session;
         this.SUBSCRIBER = _subscriber;
     }
