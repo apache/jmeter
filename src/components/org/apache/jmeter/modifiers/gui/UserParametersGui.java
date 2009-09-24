@@ -122,10 +122,14 @@ public class UserParametersGui extends AbstractPreProcessorGui {
         log.debug("making threadlists from gui");
         for (int col = 1; col < tableModel.getColumnCount(); col++) {
             threadLists.addItem(tableModel.getColumnData(getUserColName(col)));
-            log.debug("Adding column to threadlist: " + tableModel.getColumnData(getUserColName(col)));
-            log.debug("Threadlists now = " + threadLists);
+            if (log.isDebugEnabled()) {
+                log.debug("Adding column to threadlist: " + tableModel.getColumnData(getUserColName(col)));
+                log.debug("Threadlists now = " + threadLists);
+            }
         }
-        log.debug("In the end, threadlists = " + threadLists);
+        if (log.isDebugEnabled()) {
+            log.debug("In the end, threadlists = " + threadLists);
+        }
         userParams.setThreadLists(threadLists);
         userParams.setPerIteration(perIterationCheck.isSelected());
         super.configureTestElement(params);

@@ -138,7 +138,9 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
                 lastPosition = LAST_POSITION_DEFAULT;
             }
 
-            log.debug("lastPosition=" + lastPosition);
+            if (log.isDebugEnabled()) {
+                log.debug("lastPosition=" + lastPosition);
+            }
             Matcher matcher = null;
             try {
                 Pattern pattern = createPattern(textToFind);

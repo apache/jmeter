@@ -133,8 +133,10 @@ public class Spline3 {
                 long endTime = System.currentTimeMillis();
                 long elapsedTime = endTime - startTime;
 
-                log.debug("New Spline curve interpolated in ");
-                log.debug(elapsedTime + " ms");
+                if (log.isDebugEnabled()) {
+                    log.debug("New Spline curve interpolated in ");
+                    log.debug(elapsedTime + " ms");
+                }
             }
         } catch (Exception e) {
             log.error("Error when interpolating : ", e);
