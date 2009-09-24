@@ -261,14 +261,18 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
     private String generateResult(MatchResult match) {
         StringBuffer result = new StringBuffer();
         for (int a = 0; a < template.length; a++) {
-            log.debug("RegexExtractor: Template piece #" + a + " = " + template[a]);
+            if (log.isDebugEnabled()) {
+                log.debug("RegexExtractor: Template piece #" + a + " = " + template[a]);
+            }
             if (template[a] instanceof String) {
                 result.append(template[a]);
             } else {
                 result.append(match.group(((Integer) template[a]).intValue()));
             }
         }
-        log.debug("Regex Extractor result = " + result.toString());
+        if (log.isDebugEnabled()) {
+            log.debug("Regex Extractor result = " + result.toString());
+        }
         return result.toString();
     }
 
@@ -284,12 +288,16 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
         Pattern templatePattern = JMeterUtils.getPatternCache().getPattern("\\$(\\d+)\\$"  // $NON-NLS-1$
                 , Perl5Compiler.READ_ONLY_MASK
                 & Perl5Compiler.SINGLELINE_MASK);
-        log.debug("Pattern = " + templatePattern);
-        log.debug("template = " + rawTemplate);
+        if (log.isDebugEnabled()) {
+            log.debug("Pattern = " + templatePattern);
+            log.debug("template = " + rawTemplate);
+        }
         Util.split(pieces, matcher, templatePattern, rawTemplate);
         PatternMatcherInput input = new PatternMatcherInput(rawTemplate);
         boolean startsWith = isFirstElementGroup(rawTemplate);
-        log.debug("template split into " + pieces.size() + " pieces, starts with = " + startsWith);
+        if (log.isDebugEnabled()) {
+            log.debug("template split into " + pieces.size() + " pieces, starts with = " + startsWith);
+        }
         if (startsWith) {
             pieces.remove(0);// Remove initial empty entry
         }

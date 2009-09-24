@@ -154,15 +154,19 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
         }
 
         if (nodeList == null || nodeList.getLength() == 0) {
-            log.debug(new StringBuffer("nodeList null no match  ").append(pathString).toString());
+            if (log.isDebugEnabled()) {
+                log.debug(new StringBuffer("nodeList null no match  ").append(pathString).toString());
+            }
             result.setFailure(!isNegated());
             result.setFailureMessage("No Nodes Matched " + pathString);
             return result;
         }
-        log.debug("nodeList length " + nodeList.getLength());
-        if (log.isDebugEnabled() & !isNegated()) {
-            for (int i = 0; i < nodeList.getLength(); i++){
-                log.debug(new StringBuffer("nodeList[").append(i).append("] ").append(nodeList.item(i)).toString());
+        if (log.isDebugEnabled()) {
+            log.debug("nodeList length " + nodeList.getLength());
+            if (!isNegated()) {
+                for (int i = 0; i < nodeList.getLength(); i++){
+                    log.debug(new StringBuffer("nodeList[").append(i).append("] ").append(nodeList.item(i)).toString());
+                }
             }
         }
         result.setFailure(isNegated());
