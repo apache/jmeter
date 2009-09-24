@@ -102,7 +102,9 @@ public class GraphAccumModel implements Clearable, Serializable {
      * @return the Max value
      */
     public long getMax() {
-        log.debug("getMax1 : Returning - " + max);
+        if (log.isDebugEnabled()) {
+            log.debug("getMax1 : Returning - " + max);
+        }
         return max;
     }
 

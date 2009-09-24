@@ -218,7 +218,9 @@ public class Graph extends JComponent implements Scrollable, Clearable {
                 g.setColor(JMeterColor.YELLOW);
             }
             g.drawLine(x % width, height - data, x % width, height - data - 1);
-            log.debug("Drawing coords = " + (x % width) + "," + (height - data));
+            if (log.isDebugEnabled()) {
+                log.debug("Drawing coords = " + (x % width) + "," + (height - data));
+            }
         }
 
         if (wantAverage) {

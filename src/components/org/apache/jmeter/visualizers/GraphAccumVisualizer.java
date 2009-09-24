@@ -137,8 +137,6 @@ public class GraphAccumVisualizer extends AbstractVisualizer implements ImageVis
     @Override
     public String toString() {
         String toString = "Show the samples analysys as dot plots";
-
-        log.debug("toString1 : Returning - " + toString);
         return toString;
     }
 

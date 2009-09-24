@@ -339,11 +339,9 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 
                     if (log.isDebugEnabled()) {
                         log.debug("valueChanged1 : sample result - " + res);
+                        log.debug("valueChanged1 : load time - " + res.getTime());
                     }
 
-                    // load time label
-
-                    log.debug("valueChanged1 : load time - " + res.getTime());
                     String sd = res.getSamplerData();
                     if (sd != null) {
                         String rh = res.getRequestHeaders();
@@ -372,8 +370,9 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
                     statsBuff = new StringBuffer(); //reset for reuse
 
                     String responseCode = res.getResponseCode();
-                    log.debug("valueChanged1 : response code - " + responseCode);
-
+                    if (log.isDebugEnabled()) {
+                        log.debug("valueChanged1 : response code - " + responseCode);
+                    }
                     int responseLevel = 0;
                     if (responseCode != null) {
                         try {
@@ -403,7 +402,9 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
                     // response message label
                     String responseMsgStr = res.getResponseMessage();
 
-                    log.debug("valueChanged1 : response message - " + responseMsgStr);
+                    if (log.isDebugEnabled()) {
+                        log.debug("valueChanged1 : response message - " + responseMsgStr);
+                    }
                     statsBuff.append(JMeterUtils.getResString("view_results_response_message")).append(responseMsgStr).append(NL); //$NON-NLS-1$
 
                     statsBuff.append(NL);
