@@ -87,14 +87,16 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
         // create parser
         Tidy tidy = null;
         try {
-            log.debug("HTMLAssertions.getResult(): Setup tidy ...");
-            log.debug("doctype: " + getDoctype());
-            log.debug("errors only: " + isErrorsOnly());
-            log.debug("error threshold: " + getErrorThreshold());
-            log.debug("warning threshold: " + getWarningThreshold());
-            log.debug("html mode: " + isHTML());
-            log.debug("xhtml mode: " + isXHTML());
-            log.debug("xml mode: " + isXML());
+            if (log.isDebugEnabled()){
+                log.debug("HTMLAssertions.getResult(): Setup tidy ...");
+                log.debug("doctype: " + getDoctype());
+                log.debug("errors only: " + isErrorsOnly());
+                log.debug("error threshold: " + getErrorThreshold());
+                log.debug("warning threshold: " + getWarningThreshold());
+                log.debug("html mode: " + isHTML());
+                log.debug("xhtml mode: " + isXHTML());
+                log.debug("xml mode: " + isXML());
+            }
             tidy = new Tidy();
             tidy.setCharEncoding(org.w3c.tidy.Configuration.UTF8);
             tidy.setQuiet(false);
@@ -106,13 +108,13 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
             } else if (isXML()) {
                 tidy.setXmlTags(true);
             }
-            log.debug("err file: " + getFilename());
             tidy.setErrfile(getFilename());
 
             if (log.isDebugEnabled()) {
+                log.debug("err file: " + getFilename());
                 log.debug("getParser : tidy parser created - " + tidy);
+                log.debug("HTMLAssertions.getResult(): Tidy instance created!");
             }
-            log.debug("HTMLAssertions.getResult(): Tidy instance created!");
 
         } catch (Exception e) {//TODO replace with proper Exception
             log.error("Unable to instantiate tidy parser", e);
@@ -137,10 +139,10 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
             Node node = tidy.parse(new ByteArrayInputStream(inResponse.getResponseData()), os);
             if (log.isDebugEnabled()) {
                 log.debug("node : " + node);
+                log.debug("End   : parse");
+                log.debug("HTMLAssertions.getResult(): parsing with tidy done!");
+                log.debug("Output: " + os.toString());
             }
-            log.debug("End   : parse");
-            log.debug("HTMLAssertions.getResult(): parsing with tidy done!");
-            log.debug("Output: " + os.toString());
 
             // write output to file
             writeOutput(errbuf.toString());
@@ -148,8 +150,10 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
             // evaluate result
             if ((tidy.getParseErrors() > getErrorThreshold())
                     || (!isErrorsOnly() && (tidy.getParseWarnings() > getWarningThreshold()))) {
-                log.debug("HTMLAssertions.getResult(): errors/warnings detected:");
-                log.debug(errbuf.toString());
+                if (log.isDebugEnabled()) {
+                    log.debug("HTMLAssertions.getResult(): errors/warnings detected:");
+                    log.debug(errbuf.toString());
+                }
                 result.setFailure(true);
                 result.setFailureMessage(MessageFormat.format("Tidy Parser errors:   " + tidy.getParseErrors()
                         + " (allowed " + getErrorThreshold() + ") " + "Tidy Parser warnings: "
@@ -197,7 +201,9 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
                 // flush
                 lOutputWriter.flush();
 
-                log.debug("writeOutput() -> output successfully written to file " + lFilename);
+                if (log.isDebugEnabled()) {
+                    log.debug("writeOutput() -> output successfully written to file " + lFilename);
+                }
 
             } catch (IOException ex) {
                 log.warn("writeOutput() -> could not write output to file " + lFilename, ex);
