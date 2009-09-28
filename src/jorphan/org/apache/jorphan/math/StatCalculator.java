@@ -86,7 +86,7 @@ public abstract class StatCalculator<T extends Number & Comparable<T>> {
         }
     }
 
-    public Number getMedian() {
+    public T getMedian() {
         if (count > 0) {
             return values.get((int) (values.size() * .5));
         }
