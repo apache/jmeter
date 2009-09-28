@@ -18,10 +18,10 @@
 
 package org.apache.jorphan.math;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -31,7 +31,7 @@ import java.util.List;
  */
 public abstract class StatCalculator<T extends Number & Comparable<T>> {
     
-    private final List<T> values = new LinkedList<T>();
+    private final List<T> values = new ArrayList<T>();
 
     private double sum = 0;
 
