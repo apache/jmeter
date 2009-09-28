@@ -1250,7 +1250,7 @@ run JMeter unless all the JMeter jars are added.
   -->
   <!-- Used by project jakarta-jmeter-cvs -->
   <target name="gump-build" 
-      depends="_gump_properties,download_jars,clean,install" 
+      depends="_gump_properties,clean,install" 
       description="Build JMeter">
     <property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
   	<available file="${velocity.jar}" property="3rdparty.present"/>
