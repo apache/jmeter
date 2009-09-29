@@ -20,16 +20,16 @@ package woolfel;
 
 public class SubDummyTest2 extends DummyTestCase {
 
-	@SuppressWarnings("unused")
+    @SuppressWarnings("unused")
     private SubDummyTest2() {
-		super();
+        super();
         System.out.println("private SubDummyTest2()");
-	}
+    }
 
-	public SubDummyTest2(String arg0) {
-		super(arg0);
+    public SubDummyTest2(String arg0) {
+        super(arg0);
         System.out.println("public SubDummyTest2("+arg0+")");
-	}
+    }
 
     public void oneTimeSetUp() {
         System.out.println("SubDummyTest2#oneTimeSetUp(): "+getName());
