@@ -491,12 +491,12 @@ public class Proxy extends Thread {
                 final String HTTPS_PREFIX = "https://";
                 if (forcedHTTPS && HTTPConstants.HEADER_LOCATION.equalsIgnoreCase(parts[0])
                         && parts[1].substring(0, HTTPS_PREFIX.length()).equalsIgnoreCase(HTTPS_PREFIX)){
-                	headerLines[i]=headerLines[i].replaceFirst(parts[1].substring(0,HTTPS_PREFIX.length()), "http://");
+                    headerLines[i]=headerLines[i].replaceFirst(parts[1].substring(0,HTTPS_PREFIX.length()), "http://");
                     continue;
                 }
                 if (forcedHTTPS && HTTPConstants.HEADER_COOKIE.equalsIgnoreCase(parts[0]) || HTTPConstants.HEADER_SET_COOKIE.equalsIgnoreCase(parts[0]))
                 {
-                	headerLines[i]=headerLines[i].replaceAll(" secure", "").trim(); //in forced https cookies need to be unsecured...
+                    headerLines[i]=headerLines[i].replaceAll(" secure", "").trim(); //in forced https cookies need to be unsecured...
                 }
             }
         }

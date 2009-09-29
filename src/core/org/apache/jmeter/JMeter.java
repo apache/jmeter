@@ -750,10 +750,10 @@ public class JMeter implements JMeterPlugin {
                 tree.add(tree.getArray()[0], logger);
             }
             else {
-            	// only add Summariser if it can not be shared with the ResultCollector
-	            if (summer != null) {
-	                tree.add(tree.getArray()[0], summer);
-	            }
+                // only add Summariser if it can not be shared with the ResultCollector
+                if (summer != null) {
+                    tree.add(tree.getArray()[0], summer);
+                }
             }
             
             List<JMeterEngine> engines = new LinkedList<JMeterEngine>();

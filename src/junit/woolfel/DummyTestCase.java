@@ -22,15 +22,15 @@ import junit.framework.TestCase;
 
 public class DummyTestCase extends TestCase {
 
-	public DummyTestCase() {
-		super();
-		System.out.println("public DummyTestCase()");
-	}
+    public DummyTestCase() {
+        super();
+        System.out.println("public DummyTestCase()");
+    }
 
-	protected DummyTestCase(String arg0) {
-		super(arg0);
+    protected DummyTestCase(String arg0) {
+        super(arg0);
         System.out.println("protected DummyTestCase("+arg0+")");
-	}
+    }
 
     @Override
     public void setUp(){
