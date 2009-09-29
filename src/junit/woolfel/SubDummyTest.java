@@ -20,15 +20,15 @@ package woolfel;
 
 public class SubDummyTest extends DummyTestCase {
 
-	public SubDummyTest() {
-		super();
+    public SubDummyTest() {
+        super();
         System.out.println("public SubDummyTest()");
-	}
+    }
 
-	public SubDummyTest(String arg0) {
-		super(arg0);
+    public SubDummyTest(String arg0) {
+        super(arg0);
         System.out.println("public SubDummyTest("+arg0+")");
-	}
+    }
 
     public void oneTimeSetUp() {
         System.out.println("SubDummyTest#oneTimeSetUp(): "+getName());

@@ -505,7 +505,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
         }
         
         if(summariser != null) {
-        	summariser.sampleOccurred(event);
+            summariser.sampleOccurred(event);
         }
     }
 
