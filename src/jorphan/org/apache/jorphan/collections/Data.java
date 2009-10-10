@@ -649,7 +649,7 @@ public class Data implements Serializable {
      * @return array of strings.
      */
     public String[] getDataAsText() {
-        StringBuffer temp = new StringBuffer("");
+        StringBuilder temp = new StringBuilder("");
         String[] line = new String[size + 1];
         String[] elements = getHeaders();
         for (int count = 0; count < elements.length; count++) {
@@ -662,7 +662,7 @@ public class Data implements Serializable {
         reset();
         int index = 1;
         while (next()) {
-            temp = new StringBuffer("");
+            temp = new StringBuilder("");
             for (int count = 0; count < elements.length; count++) {
                 temp.append(getColumnValue(count));
                 if (count + 1 < elements.length) {
@@ -677,7 +677,7 @@ public class Data implements Serializable {
     @Override
     public String toString() {
         String[] contents = getDataAsText();
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         boolean first = true;
         for (int x = 0; x < contents.length; x++) {
             if (!first) {

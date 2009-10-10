@@ -107,7 +107,7 @@ public class SoapSampler extends HTTPSampler2 implements Interruptible { // Impl
 
     public String getSOAPActionQuoted() {
         String action = getSOAPAction();
-        StringBuffer sb = new StringBuffer(action.length()+2);
+        StringBuilder sb = new StringBuilder(action.length()+2);
         sb.append(DOUBLE_QUOTE);
         sb.append(action);
         sb.append(DOUBLE_QUOTE);
@@ -158,7 +158,7 @@ public class SoapSampler extends HTTPSampler2 implements Interruptible { // Impl
      */
     private String sendPostData(PostMethod post, final int length) {
         // Buffer to hold the post body, except file content
-        StringBuffer postedBody = new StringBuffer(1000);
+        StringBuilder postedBody = new StringBuilder(1000);
         final String xmlFile = getXmlFile();
         if (xmlFile != null && xmlFile.length() > 0) {
             // We just add placeholder text for file content

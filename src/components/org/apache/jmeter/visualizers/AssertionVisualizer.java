@@ -48,7 +48,7 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
     }
 
     public void add(SampleResult sample) {
-        StringBuffer sb = new StringBuffer(100);
+        StringBuilder sb = new StringBuilder(100);
         sb.append(sample.getSampleLabel());
         sb.append(getAssertionResult(sample));
         sb.append("\n"); // $NON-NLS-1$
@@ -63,7 +63,7 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
 
     private String getAssertionResult(SampleResult res) {
         if (res != null) {
-            StringBuffer display = new StringBuffer();
+            StringBuilder display = new StringBuilder();
             AssertionResult assertionResults[] = res.getAssertionResults();
             for (int i = 0; i < assertionResults.length; i++) {
                 AssertionResult item = assertionResults[i];

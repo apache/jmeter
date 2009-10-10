@@ -503,7 +503,7 @@ public class Proxy extends Thread {
         if (fixContentLength && contentLengthIndex>=0){// Fix the content length
             headerLines[contentLengthIndex]=HTTPConstants.HEADER_CONTENT_LENGTH+": "+res.getResponseData().length;
         }
-        StringBuffer sb = new StringBuffer(headers.length());
+        StringBuilder sb = new StringBuilder(headers.length());
         for (int i=0;i<headerLines.length;i++){
             String line=headerLines[i];
             if (line != null){

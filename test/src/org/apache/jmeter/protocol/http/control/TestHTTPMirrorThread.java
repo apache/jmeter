@@ -191,7 +191,7 @@ public class TestHTTPMirrorThread extends TestCase {
         OutputStream outputStream = clientSocket.getOutputStream();
         InputStream inputStream = clientSocket.getInputStream();
         // Construct body
-        StringBuffer postBodyBuffer = new StringBuffer();
+        StringBuilder postBodyBuffer = new StringBuilder();
         for(int i = 0; i < 1000; i++) {
             postBodyBuffer.append("abc");
         }
@@ -281,7 +281,7 @@ public class TestHTTPMirrorThread extends TestCase {
         outputStream = clientSocket.getOutputStream();
         inputStream = clientSocket.getInputStream();
         // Construct body
-        postBodyBuffer = new StringBuffer();
+        postBodyBuffer = new StringBuilder();
         for(int i = 0; i < 1000; i++) {
             postBodyBuffer.append("\u0364\u00c5\u2052");
         }

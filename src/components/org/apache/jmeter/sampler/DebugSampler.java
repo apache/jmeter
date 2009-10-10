@@ -50,8 +50,8 @@ public class DebugSampler extends AbstractSampler implements TestBean {
         SampleResult res = new SampleResult();
         res.setSampleLabel(getName());
         res.sampleStart();
-        StringBuffer sb = new StringBuffer(100);
-        StringBuffer rd = new StringBuffer(20); // for request Data
+        StringBuilder sb = new StringBuilder(100);
+        StringBuilder rd = new StringBuilder(20); // for request Data
         if (isDisplayJMeterVariables()){
             rd.append("JMeterVariables\n");
             sb.append("JMeterVariables:\n");
@@ -82,7 +82,7 @@ public class DebugSampler extends AbstractSampler implements TestBean {
     }
 
     @SuppressWarnings("unchecked")
-    private void formatSet(StringBuffer sb, Set s) {
+    private void formatSet(StringBuilder sb, Set s) {
         ArrayList<Map.Entry<Object, Object>> al = new ArrayList<Map.Entry<Object, Object>>(s);
         Collections.sort(al, new Comparator<Map.Entry<Object, Object>>(){
             public int compare(Map.Entry<Object, Object> o1, Map.Entry<Object, Object> o2) {

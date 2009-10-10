@@ -397,7 +397,7 @@ public class Functor {
 
     @Override
     public String toString(){
-        StringBuffer sb = new StringBuffer(100);
+        StringBuilder sb = new StringBuilder(100);
         if (clazz != null){
             sb.append(clazz.getName());
         }
@@ -411,7 +411,7 @@ public class Functor {
         return sb.toString();
     }
 
-    private void typesToString(StringBuffer sb,Class<?>[] _types) {
+    private void typesToString(StringBuilder sb,Class<?>[] _types) {
         sb.append("(");
         if (_types != null){
             for(int i=0; i < _types.length; i++){
@@ -425,7 +425,7 @@ public class Functor {
     }
 
     private String typesToString(Class<?>[] argTypes) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         typesToString(sb,argTypes);
         return sb.toString();
     }

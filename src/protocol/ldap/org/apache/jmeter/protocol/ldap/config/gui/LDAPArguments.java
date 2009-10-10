@@ -149,7 +149,7 @@ public class LDAPArguments extends ConfigTestElement implements Serializable {
      */
     @Override
     public String toString() {
-        StringBuffer str = new StringBuffer();
+        StringBuilder str = new StringBuilder();
         PropertyIterator iter = getArguments().iterator();
         while (iter.hasNext()) {
             LDAPArgument arg = (LDAPArgument) iter.next().getObjectValue();

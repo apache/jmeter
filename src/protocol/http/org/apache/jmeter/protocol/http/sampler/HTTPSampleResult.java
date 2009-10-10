@@ -101,7 +101,7 @@ public class HTTPSampleResult extends SampleResult {
      */
     @Override
     public String getSamplerData() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append(method);
         URL u = super.getURL();
         if (u != null) {

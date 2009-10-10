@@ -42,7 +42,7 @@ public final class Base64Encoder {
     }
 
     public final static String encode(byte[] bs) {
-        StringBuffer out = new StringBuffer("");
+        StringBuilder out = new StringBuilder();
         int bl = bs.length;
         for (int i = 0; i < bl; i += 3) {
             out.append(encodeAtom(bs, i, (bl - i)));
@@ -51,7 +51,7 @@ public final class Base64Encoder {
     }
 
     public final static String encodeAtom(byte[] b, int strt, int left) {
-        StringBuffer out = new StringBuffer("");
+        StringBuilder out = new StringBuilder();
         if (left == 1) {
             byte b1 = b[strt];
             int k = 0;

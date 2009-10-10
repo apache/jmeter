@@ -902,7 +902,7 @@ public final class ClutilTestCase extends TestCase {
         assertNotNull(optionByID);
         assertEquals('n', optionByID.getDescriptor().getId());
 
-        final StringBuffer sb = CLUtil.describeOptions(options);
+        final StringBuilder sb = CLUtil.describeOptions(options);
         final String lineSeparator = System.getProperty("line.separator");
         assertEquals("Testing display of null description", "\t-n, --nulltest" + lineSeparator, sb.toString());
     }
@@ -950,7 +950,7 @@ public final class ClutilTestCase extends TestCase {
 
         final List<CLOption> clOptions = parser.getArguments();
         final int size = clOptions.size();
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i=0; i< size; i++){
             if (i>0) {
                 sb.append(" ");

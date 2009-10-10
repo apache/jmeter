@@ -156,7 +156,7 @@ public final class AllTests {
         // logprop("java.class.path");
         String cp = System.getProperty("java.class.path");
         String cpe[] = JOrphanUtils.split(cp, java.io.File.pathSeparator);
-        StringBuffer sb = new StringBuffer(3000);
+        StringBuilder sb = new StringBuilder(3000);
         sb.append("java.class.path=");
         for (int i = 0; i < cpe.length; i++) {
             sb.append("\n");

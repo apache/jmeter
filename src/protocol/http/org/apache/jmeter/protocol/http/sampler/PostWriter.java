@@ -82,7 +82,7 @@ public class PostWriter {
      */
     public String sendPostData(URLConnection connection, HTTPSampler sampler) throws IOException {
         // Buffer to hold the post body, except file content
-        StringBuffer postedBody = new StringBuffer(1000);
+        StringBuilder postedBody = new StringBuilder(1000);
 
         HTTPFileArg files[] = sampler.getHTTPFiles();
 
@@ -299,7 +299,7 @@ public class PostWriter {
                     }
 
                     // Just append all the parameter values, and use that as the post body
-                    StringBuffer postBodyBuffer = new StringBuffer();
+                    StringBuilder postBodyBuffer = new StringBuilder();
                     PropertyIterator args = sampler.getArguments().iterator();
                     while (args.hasNext()) {
                         HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();

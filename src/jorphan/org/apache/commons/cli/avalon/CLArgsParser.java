@@ -301,7 +301,7 @@ public final class CLArgsParser {
         if (null == descriptor) {
             return "<parameter>";
         } else {
-            final StringBuffer sb = new StringBuffer();
+            final StringBuilder sb = new StringBuilder();
             boolean hasCharOption = false;
 
             if (Character.isLetter((char) id)) {
@@ -483,7 +483,7 @@ public final class CLArgsParser {
             return new Token(TOKEN_SEPARATOR, null);
         }
 
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
 
         do {
             sb.append(m_ch);
@@ -601,7 +601,7 @@ public final class CLArgsParser {
                 }
             } else // 2nd argument
             {
-                final StringBuffer sb = new StringBuffer();
+                final StringBuilder sb = new StringBuilder();
 
                 m_ch = getChar();
                 while (!isSeparator(m_ch, NULL_SEPARATORS)) {

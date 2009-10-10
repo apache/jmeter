@@ -173,15 +173,15 @@ public final class JOrphanUtils {
     private static final int SPACES_LEN = SPACES.length();
 
     /**
-     * Right aligns some text in a StringBuffer N.B. modifies the input buffer
+     * Right aligns some text in a StringBuilder N.B. modifies the input buffer
      *
      * @param in
-     *            StringBuffer containing some text
+     *            StringBuilder containing some text
      * @param len
      *            output length desired
-     * @return input StringBuffer, with leading spaces
+     * @return input StringBuilder, with leading spaces
      */
-    public static StringBuffer rightAlign(StringBuffer in, int len) {
+    public static StringBuilder rightAlign(StringBuilder in, int len) {
         int pfx = len - in.length();
         if (pfx <= 0) {
             return in;
@@ -194,15 +194,15 @@ public final class JOrphanUtils {
     }
 
     /**
-     * Left aligns some text in a StringBuffer N.B. modifies the input buffer
+     * Left aligns some text in a StringBuilder N.B. modifies the input buffer
      *
      * @param in
-     *            StringBuffer containing some text
+     *            StringBuilder containing some text
      * @param len
      *            output length desired
-     * @return input StringBuffer, with trailing spaces
+     * @return input StringBuilder, with trailing spaces
      */
-    public static StringBuffer leftAlign(StringBuffer in, int len) {
+    public static StringBuilder leftAlign(StringBuilder in, int len) {
         int sfx = len - in.length();
         if (sfx <= 0) {
             return in;
@@ -263,7 +263,7 @@ public final class JOrphanUtils {
      */
     public static String replaceAllChars(String source, char search, String replace) {
         char[] chars = source.toCharArray();
-        StringBuffer sb = new StringBuffer(source.length()+20);
+        StringBuilder sb = new StringBuilder(source.length()+20);
         for(int i = 0; i < chars.length; i++){
             char c = chars[i];
             if (c == search){
@@ -286,7 +286,7 @@ public final class JOrphanUtils {
      * @return the updated string
      */
     public static String substitute(final String input, final String pattern, final String sub) {
-        StringBuffer ret = new StringBuffer(input.length());
+        StringBuilder ret = new StringBuilder(input.length());
         int start = 0;
         int index = -1;
         final int length = pattern.length();

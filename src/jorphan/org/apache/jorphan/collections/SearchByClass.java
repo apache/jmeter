@@ -27,8 +27,8 @@ import java.util.Map;
 /**
  * Useful for finding all nodes in the tree that represent objects of a
  * particular type. For instance, if your tree contains all strings, and a few
- * StringBuffer objects, you can use the SearchByClass traverser to find all the
- * StringBuffer objects in your tree.
+ * StringBuilder objects, you can use the SearchByClass traverser to find all the
+ * StringBuilder objects in your tree.
  * <p>
  * Usage is simple. Given a {@link HashTree} object "tree", and a SearchByClass
  * object:
@@ -36,11 +36,11 @@ import java.util.Map;
  * <pre>
  * HashTree tree = new HashTree();
  * // ... tree gets filled with objects
- * SearchByClass searcher = new SearchByClass(StringBuffer.class);
+ * SearchByClass searcher = new SearchByClass(StringBuilder.class);
  * tree.traverse(searcher);
  * Iterator iter = searcher.getSearchResults().iterator();
  * while (iter.hasNext()) {
- *  StringBuffer foundNode = (StringBuffer) iter.next();
+ *  StringBuilder foundNode = (StringBuilder) iter.next();
  *  HashTree subTreeOfFoundNode = searcher.getSubTree(foundNode);
  *  //  .... do something with node and subTree...
  * }

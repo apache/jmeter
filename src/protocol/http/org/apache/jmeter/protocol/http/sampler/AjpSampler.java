@@ -216,7 +216,7 @@ public class AjpSampler extends HTTPSamplerBase {
     throws IOException {
         HeaderManager headers = getHeaderManager();
         AuthManager auth = getAuthManager();
-        StringBuffer hbuf = new StringBuffer();
+        StringBuilder hbuf = new StringBuilder();
         // Allow Headers to override Host setting
         hbuf.append("Host").append(COLON_SPACE).append(host).append(NEWLINE);//$NON-NLS-1$
         setInt(0xA00b); //Host 
@@ -256,7 +256,7 @@ public class AjpSampler extends HTTPSamplerBase {
                 hbuf.append(HEADER_CONTENT_TYPE).append(COLON_SPACE).append(APPLICATION_X_WWW_FORM_URLENCODED).append(NEWLINE);
                 setInt(0xA007); // content-type
                 setString(APPLICATION_X_WWW_FORM_URLENCODED);
-                StringBuffer sb = new StringBuffer();
+                StringBuilder sb = new StringBuilder();
                 boolean first = true;
                 PropertyIterator args = getArguments().iterator();
                 while(args.hasNext()) {
@@ -288,7 +288,7 @@ public class AjpSampler extends HTTPSamplerBase {
     }
 
     private String encode(String value)  {
-        StringBuffer newValue = new StringBuffer();
+        StringBuilder newValue = new StringBuilder();
         char[] chars = value.toCharArray();
         for (int i = 0; i < chars.length; i++)
         {
@@ -413,7 +413,7 @@ public class AjpSampler extends HTTPSamplerBase {
         String msg = getString();
         res.setResponseMessage(msg);
         int nh = getInt();
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append(HTTP_1_1 ).append(status).append(" ").append(msg).append(NEWLINE);//$NON-NLS-1$//$NON-NLS-2$
         for(int i=0; i < nh; i++) {
             // Currently, no Tomcat version sends translated headers

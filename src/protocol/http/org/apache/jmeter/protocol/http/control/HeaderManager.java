@@ -194,7 +194,7 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
      * (!url.getProtocol().toUpperCase().trim().equals("HTTP") &&
      * !url.getProtocol().toUpperCase().trim().equals("HTTPS")) { return null; }
      *
-     * StringBuffer sbHeader = new StringBuffer(); for (Iterator enum =
+     * StringBuilder sbHeader = new StringBuilder(); for (Iterator enum =
      * headers.iterator(); enum.hasNext();) { Header header = (Header)
      * enum.next(); if (url.getHost().endsWith(header.getDomain()) &&
      * url.getFile().startsWith(header.getPath()) && (System.currentTimeMillis() /

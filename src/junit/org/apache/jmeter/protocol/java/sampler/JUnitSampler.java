@@ -406,8 +406,8 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
             }
             if ( !tr.wasSuccessful() ){
                 sresult.setSuccessful(false);
-                StringBuffer buf = new StringBuffer();
-                StringBuffer buftrace = new StringBuffer();
+                StringBuilder buf = new StringBuilder();
+                StringBuilder buftrace = new StringBuilder();
                 Enumeration<TestFailure> en;
                 if (getAppendError()) {
                     en = tr.failures();

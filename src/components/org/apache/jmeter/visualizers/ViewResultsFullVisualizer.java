@@ -346,7 +346,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
                     if (sd != null) {
                         String rh = res.getRequestHeaders();
                         if (rh != null) {
-                            StringBuffer sb = new StringBuffer(sd.length() + rh.length()+20);
+                            StringBuilder sb = new StringBuilder(sd.length() + rh.length()+20);
                             sb.append(sd);
                             sb.append("\n"); //$NON-NLS-1$
                             sb.append(JMeterUtils.getResString("view_results_request_headers")); //$NON-NLS-1$
@@ -357,7 +357,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
                         sampleDataField.setText(sd);
                     }
 
-                    StringBuffer statsBuff = new StringBuffer(200);
+                    StringBuilder statsBuff = new StringBuilder(200);
                     statsBuff.append(JMeterUtils.getResString("view_results_thread_name")).append(res.getThreadName()).append(NL); //$NON-NLS-1$
                     String startTime = dateFormat.format(new Date(res.getStartTime()));
                     statsBuff.append(JMeterUtils.getResString("view_results_sample_start")).append(startTime).append(NL); //$NON-NLS-1$
@@ -367,7 +367,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
                     statsBuff.append(JMeterUtils.getResString("view_results_sample_count")).append(res.getSampleCount()).append(NL); //$NON-NLS-1$
                     statsBuff.append(JMeterUtils.getResString("view_results_error_count")).append(res.getErrorCount()).append(NL); //$NON-NLS-1$
                     statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), null);
-                    statsBuff = new StringBuffer(); //reset for reuse
+                    statsBuff = new StringBuilder(); //reset for reuse
 
                     String responseCode = res.getResponseCode();
                     if (log.isDebugEnabled()) {
@@ -397,7 +397,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 
                     statsBuff.append(JMeterUtils.getResString("view_results_response_code")).append(responseCode).append(NL); //$NON-NLS-1$
                     statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), style);
-                    statsBuff = new StringBuffer(100); //reset for reuse
+                    statsBuff = new StringBuilder(100); //reset for reuse
 
                     // response message label
                     String responseMsgStr = res.getResponseMessage();
@@ -458,7 +458,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
                         log.debug("valueChanged1 : sample result - " + res);
                     }
 
-                    StringBuffer statsBuff = new StringBuffer(100);
+                    StringBuilder statsBuff = new StringBuilder(100);
                     statsBuff.append(JMeterUtils.getResString("view_results_assertion_error")).append(res.isError()).append(NL); //$NON-NLS-1$
                     statsBuff.append(JMeterUtils.getResString("view_results_assertion_failure")).append(res.isFailure()).append(NL); //$NON-NLS-1$
                     statsBuff.append(JMeterUtils.getResString("view_results_assertion_failure_message")).append(res.getFailureMessage()).append(NL); //$NON-NLS-1$
@@ -491,10 +491,10 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
     // It might be useful also to make this available in the 'Request' tab, for
     // when posting JSON.
     private static String prettyJSON(String json) {
-        StringBuffer pretty = new StringBuffer(json.length() * 2); // Educated guess
+        StringBuilder pretty = new StringBuilder(json.length() * 2); // Educated guess
 
         final String tab = ":   "; // $NON-NLS-1$
-        StringBuffer index = new StringBuffer();
+        StringBuilder index = new StringBuilder();
         String nl = ""; // $NON-NLS-1$
 
         Matcher valueOrPair = VALUE_OR_PAIR_PATTERN.matcher(json);
@@ -1026,7 +1026,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
              * @return
              */
             private String getHTML(String str, String separator, int maxChar) {
-                StringBuffer strBuf = new StringBuffer("<html><body bgcolor=\"yellow\"><b>"); // $NON-NLS-1$
+                StringBuilder strBuf = new StringBuilder("<html><body bgcolor=\"yellow\"><b>"); // $NON-NLS-1$
                 char[] chars = str.toCharArray();
                 for (int i = 0; i < chars.length; i++) {
 

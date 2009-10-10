@@ -113,7 +113,7 @@ public class LogFunction extends AbstractFunction {
     private static void printDetails(java.io.PrintStream ps, String s, Throwable t, String c) {
         String tn = Thread.currentThread().getName();
 
-        StringBuffer sb = new StringBuffer(80);
+        StringBuilder sb = new StringBuilder(80);
         sb.append("Log: ");
         sb.append(tn);
         if (c.length()>0){
@@ -145,7 +145,7 @@ public class LogFunction extends AbstractFunction {
             Priority p = Priority.getPriorityForName(prio);
             if (log.isPriorityEnabled(p)) {// Thread method is potentially expensive
                 String tn = Thread.currentThread().getName();
-                StringBuffer sb = new StringBuffer(40);
+                StringBuilder sb = new StringBuilder(40);
                 sb.append(tn);
                 if (c.length()>0){
                     sb.append(" ");

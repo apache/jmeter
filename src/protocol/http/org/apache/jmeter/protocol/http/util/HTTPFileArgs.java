@@ -136,7 +136,7 @@ public class HTTPFileArgs extends ConfigTestElement implements Serializable {
      */
     @Override
     public String toString() {
-        StringBuffer str = new StringBuffer();
+        StringBuilder str = new StringBuilder();
         PropertyIterator iter = getHTTPFileArgsCollection().iterator();
         while (iter.hasNext()) {
             HTTPFileArg file = (HTTPFileArg) iter.next().getObjectValue();

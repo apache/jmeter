@@ -76,7 +76,7 @@ public class LdapExtClient {
         DirContext dirContext;
         Hashtable<String, String> env = new Hashtable<String, String>();
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory"); // $NON-NLS-1$
-        StringBuffer sb = new StringBuffer(80);
+        StringBuilder sb = new StringBuilder(80);
         if (secure) {
             sb.append("ldaps://"); // $NON-NLS-1$
         } else {

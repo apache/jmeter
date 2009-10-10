@@ -935,7 +935,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
             {
                 final Attribute     attr = ait.next();
 
-                StringBuffer sb = new StringBuffer();
+                StringBuilder sb = new StringBuilder();
                 if (attr.size() == 1) {
                     sb.append(getWriteValue(attr.get()));
                 } else {
