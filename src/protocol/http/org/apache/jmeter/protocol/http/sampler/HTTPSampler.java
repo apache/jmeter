@@ -294,7 +294,7 @@ public class HTTPSampler extends HTTPSamplerBase implements Interruptible {
      * @return string containing the headers, one per line
      */
     protected String getResponseHeaders(HttpURLConnection conn) {
-        StringBuffer headerBuf = new StringBuffer();
+        StringBuilder headerBuf = new StringBuilder();
         headerBuf.append(conn.getHeaderField(0));// Leave header as is
         // headerBuf.append(conn.getHeaderField(0).substring(0, 8));
         // headerBuf.append(" ");
@@ -380,7 +380,7 @@ public class HTTPSampler extends HTTPSamplerBase implements Interruptible {
      */
     private String getConnectionHeaders(HttpURLConnection conn) {
         // Get all the request properties, which are the headers set on the connection
-        StringBuffer hdrs = new StringBuffer(100);
+        StringBuilder hdrs = new StringBuilder(100);
         Map<String, List<String>> requestHeaders = conn.getRequestProperties();
         Set<Map.Entry<String, List<String>>> headerFields = requestHeaders.entrySet();
         for(Iterator<Map.Entry<String, List<String>>> i = headerFields.iterator(); i.hasNext();) {

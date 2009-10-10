@@ -37,16 +37,16 @@ public final class CLUtil {
     }
 
     /**
-     * Format options into StringBuffer and return. This is typically used to
+     * Format options into StringBuilder and return. This is typically used to
      * print "Usage" text in response to a "--help" or invalid option.
      *
      * @param options
      *            the option descriptors
      * @return the formatted description/help for options
      */
-    public static final StringBuffer describeOptions(final CLOptionDescriptor[] options) {
+    public static final StringBuilder describeOptions(final CLOptionDescriptor[] options) {
         final String lSep = System.getProperty("line.separator");
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < options.length; i++) {
             final char ch = (char) options[i].getId();

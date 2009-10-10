@@ -866,7 +866,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @throws MalformedURLException
      */
     public URL getUrl() throws MalformedURLException {
-        StringBuffer pathAndQuery = new StringBuffer(100);
+        StringBuilder pathAndQuery = new StringBuilder(100);
         String path = this.getPath();
         // Hack to allow entire URL to be provided in host field
         if (path.startsWith(HTTP_PREFIX)
@@ -924,7 +924,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
              // We use the encoding which should be used according to the HTTP spec, which is UTF-8
              contentEncoding = EncoderCache.URL_ARGUMENT_ENCODING;
          }
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         PropertyIterator iter = getArguments().iterator();
         boolean first = true;
         while (iter.hasNext()) {
@@ -1031,7 +1031,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     @Override
     public String toString() {
         try {
-            StringBuffer stringBuffer = new StringBuffer();
+            StringBuilder stringBuffer = new StringBuilder();
             stringBuffer.append(this.getUrl().toString());
             // Append body if it is a post or put
             if(POST.equals(getMethod()) || PUT.equals(getMethod())) {
@@ -1093,7 +1093,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         res.sampleStart();
         try {
             byte[] responseData;
-            StringBuffer ctb=new StringBuffer("text/html"); // $NON-NLS-1$
+            StringBuilder ctb=new StringBuilder("text/html"); // $NON-NLS-1$
             fis = new FileInputStream(getPath());
             String contentEncoding = getContentEncoding();
             if (contentEncoding.length() > 0) {
@@ -1454,7 +1454,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
 
     protected static String encodeBackSlashes(String value) {
-        StringBuffer newValue = new StringBuffer();
+        StringBuilder newValue = new StringBuilder();
         for (int i = 0; i < value.length(); i++) {
             char charAt = value.charAt(i);
             if (charAt == '\\') { // $NON-NLS-1$

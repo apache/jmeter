@@ -186,7 +186,7 @@ public final class CLOptionDescriptor {
      */
     @Override
     public final String toString() {
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
         sb.append("[OptionDescriptor ");
         sb.append(m_name);
         sb.append(", ");

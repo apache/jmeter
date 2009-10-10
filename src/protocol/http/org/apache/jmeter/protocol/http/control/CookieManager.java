@@ -215,7 +215,7 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
     }
 
     private String cookieToString(Cookie c){
-        StringBuffer sb=new StringBuffer(80);
+        StringBuilder sb=new StringBuilder(80);
         sb.append(c.getDomain());
         //flag - if all machines within a given domain can access the variable.
         //(from http://www.cookiecentral.com/faq/ 3.5)

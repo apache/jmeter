@@ -1042,9 +1042,9 @@ public class HashTree implements Serializable, Map, Cloneable {
     }
 
     private static class ConvertToString implements HashTreeTraverser {
-        private final StringBuffer string = new StringBuffer(getClass().getName() + "{");
+        private final StringBuilder string = new StringBuilder(getClass().getName() + "{");
 
-        private final StringBuffer spaces = new StringBuffer();
+        private final StringBuilder spaces = new StringBuilder();
 
         private int depth = 0;
 

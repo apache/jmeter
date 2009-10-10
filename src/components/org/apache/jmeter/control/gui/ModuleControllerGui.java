@@ -89,7 +89,7 @@ public class ModuleControllerGui extends AbstractControllerGui
 
     private String renderPath(Collection<?> path) {
         Iterator<?> iter = path.iterator();
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         boolean first = true;
         while (iter.hasNext()) {
             if (first) {
@@ -200,7 +200,7 @@ public class ModuleControllerGui extends AbstractControllerGui
         String seperator = " > "; // $NON-NLS-1$
         if (node != null) {
             for (int i = 0; i < node.getChildCount(); i++) {
-                StringBuffer name = new StringBuffer();
+                StringBuilder name = new StringBuilder();
                 JMeterTreeNode cur = (JMeterTreeNode) node.getChildAt(i);
                 TestElement te = cur.getTestElement();
                 if (te instanceof ThreadGroup) {
@@ -214,7 +214,7 @@ public class ModuleControllerGui extends AbstractControllerGui
                     name.append(cur.getName());
                     TreeNodeWrapper tnw = new TreeNodeWrapper(cur, name.toString());
                     nodesModel.addElement(tnw);
-                    name = new StringBuffer();
+                    name = new StringBuilder();
                     name.append(cur.getName());
                     name.append(seperator);
                     buildNodesModel(cur, name.toString(), level + 1);
@@ -229,7 +229,7 @@ public class ModuleControllerGui extends AbstractControllerGui
 
     private String spaces(int level) {
         int multi = 4;
-        StringBuffer spaces = new StringBuffer(level * multi);
+        StringBuilder spaces = new StringBuilder(level * multi);
         for (int i = 0; i < level * multi; i++) {
             spaces.append(" "); // $NON-NLS-1$
         }

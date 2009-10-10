@@ -370,7 +370,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
     // TODO strings should be resources
     private String getFailText(String stringPattern, String toCheck) {
         
-        StringBuffer sb = new StringBuffer(200);
+        StringBuilder sb = new StringBuilder(200);
         sb.append("Test failed: ");
 
         if (isTestFieldResponseData()) {
@@ -446,9 +446,8 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
      * @return  Two lines of text separated by newlines, and then forward and backward pointers
      *      denoting first position of difference.
      */
-    private static StringBuffer equalsComparisonText(final String received, final String comparison)
+    private static StringBuilder equalsComparisonText(final String received, final String comparison)
     {
-        final StringBuffer      text;
         int                     firstDiff;
         int                     lastRecDiff = -1;
         int                     lastCompDiff = -1;
@@ -459,10 +458,8 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
         String                  recDeltaSeq = "";
         String                  compDeltaSeq = "";
         String                  endingEqSeq = "";
-        final StringBuffer      pad;
 
-
-        text = new StringBuffer(Math.max(recLength, compLength) * 2);
+        final StringBuilder text = new StringBuilder(Math.max(recLength, compLength) * 2);
         for (firstDiff = 0; firstDiff < minLength; firstDiff++) {
             if (received.charAt(firstDiff) != comparison.charAt(firstDiff)){
                 break;
@@ -494,7 +491,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
             recDeltaSeq = trunc(true, received.substring(firstDiff, lastRecDiff + 1));
             compDeltaSeq = trunc(true, comparison.substring(firstDiff, lastCompDiff + 1));
         }
-        pad = new StringBuffer(Math.abs(recDeltaSeq.length() - compDeltaSeq.length()));
+        final StringBuilder pad = new StringBuilder(Math.abs(recDeltaSeq.length() - compDeltaSeq.length()));
         for (int i = 0; i < pad.capacity(); i++){
             pad.append(' ');
         }

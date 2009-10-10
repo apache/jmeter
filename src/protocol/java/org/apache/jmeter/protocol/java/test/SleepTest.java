@@ -209,7 +209,7 @@ public class SleepTest extends AbstractJavaSamplerClient implements Serializable
      * @return a String identifier for this test instance
      */
     private String whoAmI() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append(Thread.currentThread().toString());
         sb.append("@");
         sb.append(Integer.toHexString(hashCode()));

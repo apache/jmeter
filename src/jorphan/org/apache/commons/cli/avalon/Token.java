@@ -62,7 +62,7 @@ class Token {
      */
     @Override
     public final String toString() {
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
         sb.append(m_type);
         sb.append(":");
         sb.append(m_value);

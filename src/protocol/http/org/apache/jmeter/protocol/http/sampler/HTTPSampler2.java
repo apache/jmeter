@@ -260,7 +260,7 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
      */
     private String sendPostData(PostMethod post) throws IOException {
         // Buffer to hold the post body, except file content
-        StringBuffer postedBody = new StringBuffer(1000);
+        StringBuilder postedBody = new StringBuilder(1000);
         HTTPFileArg files[] = getHTTPFiles();
         // Check if we should do a multipart/form-data or an
         // application/x-www-form-urlencoded post request
@@ -398,7 +398,7 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
                     }
 
                     // Just append all the parameter values, and use that as the post body
-                    StringBuffer postBody = new StringBuffer();
+                    StringBuilder postBody = new StringBuilder();
                     PropertyIterator args = getArguments().iterator();
                     while (args.hasNext()) {
                         HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
@@ -652,7 +652,7 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
      * @return string containing the headers, one per line
      */
     protected String getResponseHeaders(HttpMethod method) {
-        StringBuffer headerBuf = new StringBuffer();
+        StringBuilder headerBuf = new StringBuilder();
         org.apache.commons.httpclient.Header rh[] = method.getResponseHeaders();
         headerBuf.append(method.getStatusLine());// header[0] is not the status line...
         headerBuf.append("\n"); // $NON-NLS-1$
@@ -736,7 +736,7 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
      */
     protected String getConnectionHeaders(HttpMethod method) {
         // Get all the request headers
-        StringBuffer hdrs = new StringBuffer(100);
+        StringBuilder hdrs = new StringBuilder(100);
         Header[] requestHeaders = method.getRequestHeaders();
         for(int i = 0; i < requestHeaders.length; i++) {
             // Exclude the COOKIE header, since cookie is reported separately in the sample
@@ -973,7 +973,7 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
      */
     private String sendPutData(PutMethod put) throws IOException {
         // Buffer to hold the put body, except file content
-        StringBuffer putBody = new StringBuffer(1000);
+        StringBuilder putBody = new StringBuilder(1000);
         boolean hasPutBody = false;
 
         // Check if the header manager had a content type header
@@ -1009,7 +1009,7 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
             }
 
             // Just append all the parameter values, and use that as the post body
-            StringBuffer putBodyContent = new StringBuffer();
+            StringBuilder putBodyContent = new StringBuilder();
             PropertyIterator args = getArguments().iterator();
             while (args.hasNext()) {
                 HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();

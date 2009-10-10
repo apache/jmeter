@@ -826,7 +826,7 @@ public class ProxyControl extends GenericController {
     }
 
     private String generateMatchUrl(HTTPSamplerBase sampler) {
-        StringBuffer buf = new StringBuffer(sampler.getDomain());
+        StringBuilder buf = new StringBuilder(sampler.getDomain());
         buf.append(':'); // $NON-NLS-1$
         buf.append(sampler.getPort());
         buf.append(sampler.getPath());
