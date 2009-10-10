@@ -78,7 +78,7 @@ public class HttpMirrorThread extends Thread {
             int contentLength = -1;
             boolean isChunked = false;
             byte[] buffer = new byte[1024];
-            StringBuffer headers = new StringBuffer();
+            StringBuilder headers = new StringBuilder();
             int length = 0;
             int positionOfBody = 0;
             while(positionOfBody <= 0 && ((length = in.read(buffer)) != -1)) {

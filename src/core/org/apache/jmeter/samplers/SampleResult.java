@@ -415,7 +415,7 @@ public class SampleResult implements Serializable {
      */
     public String getSampleLabel(boolean includeGroup) {
         if (includeGroup) {
-            StringBuffer sb = new StringBuffer(threadName.substring(0,threadName.lastIndexOf(" "))); //$NON-NLS-1$
+            StringBuilder sb = new StringBuilder(threadName.substring(0,threadName.lastIndexOf(" "))); //$NON-NLS-1$
             return sb.append(":").append(label).toString(); //$NON-NLS-1$
         }
         return label;

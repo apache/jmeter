@@ -45,7 +45,7 @@ public class ParseBenchmark {
             java.io.File infile = new java.io.File(file);
             java.io.FileInputStream fis = null;
             java.io.InputStreamReader isr = null;
-            StringBuffer buf = new StringBuffer();
+            StringBuilder buf = new StringBuilder();
             try {
                 fis = new java.io.FileInputStream(infile);
                 isr = new java.io.InputStreamReader(fis);

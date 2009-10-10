@@ -109,7 +109,7 @@ public class MailReaderSampler extends AbstractSampler {
             // Get directory
             Message messages[] = folder.getMessages();
             Message message;
-            StringBuffer pdata = new StringBuffer();
+            StringBuilder pdata = new StringBuilder();
             pdata.append(messages.length);
             pdata.append(" messages found\n");
 
@@ -119,7 +119,7 @@ public class MailReaderSampler extends AbstractSampler {
             }
 
             for (int i = 0; i < n; i++) {
-                StringBuffer cdata = new StringBuffer();
+                StringBuilder cdata = new StringBuilder();
                 SampleResult child = new SampleResult();
                 child.sampleStart();
                 message = messages[i];
@@ -188,7 +188,7 @@ public class MailReaderSampler extends AbstractSampler {
         return parent;
     }
 
-    private void appendMessageData(StringBuffer cdata, Message message)
+    private void appendMessageData(StringBuilder cdata, Message message)
             throws MessagingException, IOException {
         cdata.append("Date: "); // $NON-NLS-1$
         cdata.append(message.getSentDate());// TODO - use a different format here?
@@ -242,7 +242,7 @@ public class MailReaderSampler extends AbstractSampler {
         }
     }
 
-    private void appendMessageAsMime(StringBuffer cdata, Message message)
+    private void appendMessageAsMime(StringBuilder cdata, Message message)
             throws MessagingException, IOException {
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
         message.writeTo(bout);

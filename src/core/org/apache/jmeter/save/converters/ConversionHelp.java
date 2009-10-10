@@ -116,7 +116,7 @@ public class ConversionHelp {
     }
 
     public static String cdata(byte[] chars, String encoding) throws UnsupportedEncodingException {
-        StringBuffer buf = new StringBuffer("<![CDATA[");
+        StringBuilder buf = new StringBuilder("<![CDATA[");
         buf.append(new String(chars, encoding));
         buf.append("]]>");
         return buf.toString();

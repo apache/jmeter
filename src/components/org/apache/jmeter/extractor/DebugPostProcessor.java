@@ -32,7 +32,7 @@ import org.apache.jmeter.threads.JMeterContext;
 public class DebugPostProcessor extends AbstractTestElement implements PostProcessor, TestBean {
 
     public void process(){
-        StringBuffer sb = new StringBuffer(100);
+        StringBuilder sb = new StringBuilder(100);
         JMeterContext threadContext = getThreadContext();
         PropertyIterator i = threadContext.getCurrentSampler().propertyIterator();
         while(i.hasNext())

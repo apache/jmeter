@@ -357,7 +357,7 @@ public class Converter {
         if (v == null) {
             return "";
         }
-        StringBuffer replacement = new StringBuffer();
+        StringBuilder replacement = new StringBuilder();
         StringTokenizer tokens = new StringTokenizer(v, "\n", true);
         while (tokens.hasMoreTokens()) {
             String token = tokens.nextToken();

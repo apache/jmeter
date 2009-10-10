@@ -748,7 +748,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         String seperator = " > ";
         if (node != null) {
             for (int i = 0; i < node.getChildCount(); i++) {
-                StringBuffer name = new StringBuffer();
+                StringBuilder name = new StringBuilder();
                 JMeterTreeNode cur = (JMeterTreeNode) node.getChildAt(i);
                 TestElement te = cur.getTestElement();
                 /*
@@ -766,7 +766,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
                     name.append(cur.getName());
                     TreeNodeWrapper tnw = new TreeNodeWrapper(cur, name.toString());
                     targetNodesModel.addElement(tnw);
-                    name = new StringBuffer();
+                    name = new StringBuilder();
                     name.append(cur.getName());
                     name.append(seperator);
                     buildNodesModel(cur, name.toString(), level + 1);
@@ -782,7 +782,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 
     private String spaces(int level) {
         int multi = 4;
-        StringBuffer spaces = new StringBuffer(level * multi);
+        StringBuilder spaces = new StringBuilder(level * multi);
         for (int i = 0; i < level * multi; i++) {
             spaces.append(" "); // $NON-NLS-1$
         }

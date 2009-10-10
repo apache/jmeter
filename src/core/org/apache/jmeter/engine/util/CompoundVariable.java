@@ -130,7 +130,7 @@ public class CompoundVariable implements Function {
             return ""; // $NON-NLS-1$
         }
         boolean testDynamic = false;
-        StringBuffer results = new StringBuffer();
+        StringBuilder results = new StringBuilder();
         Iterator<Object> iter = compiledComponents.iterator();
         while (iter.hasNext()) {
             Object item = iter.next();

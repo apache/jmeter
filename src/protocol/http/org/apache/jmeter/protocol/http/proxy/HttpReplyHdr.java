@@ -49,7 +49,7 @@ public final class HttpReplyHdr {
      * @return a string with the header in it
      */
     public static String formOk(String contentType, long contentLength) {
-        StringBuffer out = new StringBuffer();
+        StringBuilder out = new StringBuilder();
 
         out.append(HTTP_PROTOCOL).append(" 200 Ok").append(CR);
         out.append("Server: ").append(HTTP_SERVER).append(CR);
@@ -80,7 +80,7 @@ public final class HttpReplyHdr {
      * @return A string with the HTML description body
      */
     private static String formErrorBody(String error, String description) {
-        StringBuffer out = new StringBuffer();
+        StringBuilder out = new StringBuilder();
         // Generate Error Body
         out.append("<HTML><HEAD><TITLE>");
         out.append(error);
@@ -111,7 +111,7 @@ public final class HttpReplyHdr {
          */
 
         String body = formErrorBody(error, description);
-        StringBuffer header = new StringBuffer();
+        StringBuilder header = new StringBuilder();
 
         header.append(HTTP_PROTOCOL).append(" ").append(error).append(CR);
         header.append("Server: ").append(HTTP_SERVER).append(CR);

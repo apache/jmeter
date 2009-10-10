@@ -59,8 +59,6 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
 
     public static final String XSD_FILENAME_KEY = "xmlschema_assertion_filename";
 
-    // private StringBuffer failureMessage = new StringBuffer();
-
     /**
      * getResult
      * 
@@ -162,7 +160,7 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
 
     // Helper method to construct SAX error details
     private static String errorDetails(SAXParseException spe) {
-        StringBuffer str = new StringBuffer(80);
+        StringBuilder str = new StringBuilder(80);
         int i;
         i = spe.getLineNumber();
         if (i != -1) {

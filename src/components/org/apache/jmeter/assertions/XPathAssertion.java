@@ -81,9 +81,9 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
         result.setFailureMessage("");
 
         if (log.isDebugEnabled()) {
-            log.debug(new StringBuffer("Validation is set to ").append(isValidating()).toString());
-            log.debug(new StringBuffer("Whitespace is set to ").append(isWhitespace()).toString());
-            log.debug(new StringBuffer("Tolerant is set to ").append(isTolerant()).toString());
+            log.debug(new StringBuilder("Validation is set to ").append(isValidating()).toString());
+            log.debug(new StringBuilder("Whitespace is set to ").append(isWhitespace()).toString());
+            log.debug(new StringBuilder("Tolerant is set to ").append(isTolerant()).toString());
         }
 
         Document doc = null;
@@ -97,17 +97,17 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
         } catch (SAXException e) {
             log.debug("Caught sax exception: " + e);
             result.setError(true);
-            result.setFailureMessage(new StringBuffer("SAXException: ").append(e.getMessage()).toString());
+            result.setFailureMessage(new StringBuilder("SAXException: ").append(e.getMessage()).toString());
             return result;
         } catch (IOException e) {
             log.warn("Cannot parse result content", e);
             result.setError(true);
-            result.setFailureMessage(new StringBuffer("IOException: ").append(e.getMessage()).toString());
+            result.setFailureMessage(new StringBuilder("IOException: ").append(e.getMessage()).toString());
             return result;
         } catch (ParserConfigurationException e) {
             log.warn("Cannot parse result content", e);
             result.setError(true);
-            result.setFailureMessage(new StringBuffer("ParserConfigurationException: ").append(e.getMessage())
+            result.setFailureMessage(new StringBuilder("ParserConfigurationException: ").append(e.getMessage())
                     .toString());
             return result;
         } catch (TidyException e) {                     
@@ -145,7 +145,7 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
         } catch (TransformerException e) {
             result.setError(true);
             result.setFailureMessage(
-                    new StringBuffer("TransformerException: ")
+                    new StringBuilder("TransformerException: ")
                     .append(e.getMessage())
                     .append(" for:")
                     .append(pathString)
@@ -155,7 +155,7 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
 
         if (nodeList == null || nodeList.getLength() == 0) {
             if (log.isDebugEnabled()) {
-                log.debug(new StringBuffer("nodeList null no match  ").append(pathString).toString());
+                log.debug(new StringBuilder("nodeList null no match  ").append(pathString).toString());
             }
             result.setFailure(!isNegated());
             result.setFailureMessage("No Nodes Matched " + pathString);
@@ -165,7 +165,7 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
             log.debug("nodeList length " + nodeList.getLength());
             if (!isNegated()) {
                 for (int i = 0; i < nodeList.getLength(); i++){
-                    log.debug(new StringBuffer("nodeList[").append(i).append("] ").append(nodeList.item(i)).toString());
+                    log.debug(new StringBuilder("nodeList[").append(i).append("] ").append(nodeList.item(i)).toString());
                 }
             }
         }

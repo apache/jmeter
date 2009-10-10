@@ -515,7 +515,7 @@ public class JMeterUtils implements UnitTestManager {
             String lineEnd = System.getProperty("line.separator"); // $NON-NLS-1$
             fileReader = new BufferedReader(new InputStreamReader(JMeterUtils.class.getClassLoader()
                     .getResourceAsStream(name)));
-            StringBuffer text = new StringBuffer();
+            StringBuilder text = new StringBuilder();
             String line = "NOTNULL"; // $NON-NLS-1$
             while (line != null) {
                 line = fileReader.readLine();
@@ -1011,7 +1011,7 @@ public class JMeterUtils implements UnitTestManager {
      */
     //TODO - move to JOrphanUtils?
     public static String unsplit(Object[] splittee, Object splitChar) {
-        StringBuffer retVal = new StringBuffer();
+        StringBuilder retVal = new StringBuilder();
         int count = -1;
         while (++count < splittee.length) {
             if (splittee[count] != null) {
@@ -1041,7 +1041,7 @@ public class JMeterUtils implements UnitTestManager {
      */
     //TODO - move to JOrphanUtils?
     public static String unsplit(Object[] splittee, Object splitChar, String def) {
-        StringBuffer retVal = new StringBuffer();
+        StringBuilder retVal = new StringBuilder();
         int count = -1;
         while (++count < splittee.length) {
             if (splittee[count] != null) {
