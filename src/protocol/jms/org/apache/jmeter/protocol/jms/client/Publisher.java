@@ -63,7 +63,7 @@ public class Publisher {
         }
     }
 
-    public Context initJNDI(boolean useProps, String jndi, String url, boolean useAuth, String user, String pwd) {
+    private Context initJNDI(boolean useProps, String jndi, String url, boolean useAuth, String user, String pwd) {
         if (useProps) {
             try {
                 return new InitialContext();
@@ -76,7 +76,7 @@ public class Publisher {
         }
     }
 
-    public void initConnection(Context ctx, String connfactory, String topic) {
+    private void initConnection(Context ctx, String connfactory, String topic) {
         try {
             ConnectionFactory.getTopicConnectionFactory(ctx,connfactory);
             this.CONN = ConnectionFactory.getTopicConnection();
