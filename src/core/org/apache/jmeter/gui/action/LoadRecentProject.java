@@ -166,7 +166,7 @@ public class LoadRecentProject extends Load {
             String recentFilePath = getRecentFile(i);
             if(recentFilePath != null) {
                 File file = new File(recentFilePath);
-                StringBuffer sb = new StringBuffer(60);
+                StringBuilder sb = new StringBuilder(60);
                 if (i<9) {
                     sb.append(i+1).append(" "); //$NON-NLS-1$
                 }

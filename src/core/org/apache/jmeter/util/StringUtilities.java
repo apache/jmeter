@@ -38,7 +38,7 @@ public final class StringUtilities {
      * @return the updated string
      */
     public static String substitute(final String input, final String pattern, final String sub) {
-        StringBuffer ret = new StringBuffer(input.length());
+        StringBuilder ret = new StringBuilder(input.length());
         int start = 0;
         int index = -1;
         final int length = pattern.length();

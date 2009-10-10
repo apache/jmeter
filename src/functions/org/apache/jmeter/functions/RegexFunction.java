@@ -171,7 +171,7 @@ public class RegexFunction extends AbstractFunction {
         }
 
         if (valueIndex.equals(ALL)) {
-            StringBuffer value = new StringBuffer();
+            StringBuilder value = new StringBuilder();
             Iterator<MatchResult> it = collectAllMatches.iterator();
             boolean first = true;
             while (it.hasNext()) {
@@ -218,7 +218,7 @@ public class RegexFunction extends AbstractFunction {
 
     private String generateResult(MatchResult match, String namep, Object[] template, JMeterVariables vars) {
         saveGroups(match, namep, vars);
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         for (int a = 0; a < template.length; a++) {
             if (template[a] instanceof String) {
                 result.append(template[a]);

@@ -617,7 +617,7 @@ public class WebServiceSampler extends HTTPSamplerBase {
 
     public String convertSoapHeaders(Hashtable<String, String> ht) {
         Enumeration<String> en = ht.keys();
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         while (en.hasMoreElements()) {
             String key = en.nextElement();
             buf.append(key).append("=").append(ht.get(key)).append("\n"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -631,7 +631,7 @@ public class WebServiceSampler extends HTTPSamplerBase {
 //     * @return String containing the lines
 //     */
 //    private String convertSoapHeaders(Enumeration en) {
-//        StringBuffer buf = new StringBuffer(100);
+//        StringBuilder buf = new StringBuilder(100);
 //        while (en.hasMoreElements()) {
 //            buf.append(en.nextElement()).append("\n"); //$NON-NLS-1$
 //        }

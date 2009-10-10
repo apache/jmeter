@@ -46,7 +46,7 @@ public class TestObjectFactory extends TestCase {
                 java.io.File infile = new java.io.File(file);
                 java.io.FileInputStream fis = new java.io.FileInputStream(infile);
                 java.io.InputStreamReader isr = new java.io.InputStreamReader(fis);
-                StringBuffer buf = new StringBuffer();
+                StringBuilder buf = new StringBuilder();
                 java.io.BufferedReader br = new java.io.BufferedReader(isr);
                 String line = null;
                 while ((line = br.readLine()) != null) {

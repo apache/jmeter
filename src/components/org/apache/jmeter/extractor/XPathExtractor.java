@@ -87,7 +87,7 @@ public class XPathExtractor extends AbstractTestElement implements
 
 
     private String concat(String s1,String s2){
-        return new StringBuffer(s1).append("_").append(s2).toString(); // $NON-NLS-1$
+        return new StringBuilder(s1).append("_").append(s2).toString(); // $NON-NLS-1$
     }
 
     /**
@@ -112,7 +112,7 @@ public class XPathExtractor extends AbstractTestElement implements
             log.error(errorMessage,e);
             AssertionResult ass = new AssertionResult(getName());
             ass.setError(true);
-            ass.setFailureMessage(new StringBuffer("IOException: ").append(e.getLocalizedMessage()).toString());
+            ass.setFailureMessage(new StringBuilder("IOException: ").append(e.getLocalizedMessage()).toString());
             previousResult.addAssertionResult(ass);
             previousResult.setSuccessful(false);
         } catch (ParserConfigurationException e) {// Should not happen

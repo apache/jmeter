@@ -111,7 +111,7 @@ public class StatisticalSampleResult extends SampleResult implements
      * @return the key to use for aggregating samples
      */
     public static String getKey(SampleEvent event) {
-        StringBuffer sb = new StringBuffer(80);
+        StringBuilder sb = new StringBuilder(80);
         sb.append(event.getResult().getSampleLabel()).append("-").append(event.getThreadGroup());
         return sb.toString();
     }

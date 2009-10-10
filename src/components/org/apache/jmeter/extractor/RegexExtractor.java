@@ -172,7 +172,7 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
                     for (int i = 1; i <= matchCount; i++) {
                         match = getCorrectMatch(matches, i);
                         if (match != null) {
-                            final String refName_n = new StringBuffer(refName).append(UNDERSCORE).append(i).toString();
+                            final String refName_n = new StringBuilder(refName).append(UNDERSCORE).append(i).toString();
                             vars.put(refName_n, generateResult(match));
                             saveGroups(vars, refName_n, match);
                         }
@@ -180,7 +180,7 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
                 }
                 // Remove any left-over variables
                 for (int i = matchCount + 1; i <= prevCount; i++) {
-                    final String refName_n = new StringBuffer(refName).append(UNDERSCORE).append(i).toString();
+                    final String refName_n = new StringBuilder(refName).append(UNDERSCORE).append(i).toString();
                     vars.remove(refName_n);
                     removeGroups(vars, refName_n);
                 }
@@ -198,7 +198,7 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
      * basename_g = number of groups (apart from g0)
      */
     private void saveGroups(JMeterVariables vars, String basename, MatchResult match) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append(basename);
         buf.append("_g"); // $NON-NLS-1$
         int pfxlen=buf.length();
@@ -232,7 +232,7 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
      * basename_g = number of groups (apart from g0)
      */
     private void removeGroups(JMeterVariables vars, String basename) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append(basename);
         buf.append("_g"); // $NON-NLS-1$
         int pfxlen=buf.length();
@@ -259,7 +259,7 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
     }
 
     private String generateResult(MatchResult match) {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         for (int a = 0; a < template.length; a++) {
             if (log.isDebugEnabled()) {
                 log.debug("RegexExtractor: Template piece #" + a + " = " + template[a]);

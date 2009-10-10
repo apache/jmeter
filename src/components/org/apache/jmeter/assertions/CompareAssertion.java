@@ -78,11 +78,11 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
 				}
 				if (!success) {
 					result.setFailure(true);
-                    StringBuffer buf = new StringBuffer();
+                    StringBuilder buf = new StringBuilder();
                     appendResultDetails(buf, prevResult);
                     buf.append("Response Time: ").append(prevTime);
 					result.addToBaseResult(buf.toString());
-					buf = new StringBuffer();
+					buf = new StringBuilder();
                     appendResultDetails(buf, sResult);
 					buf.append("Response Time: ").append(currentTime);
 					result.addToSecondaryResult(buf.toString());
@@ -110,11 +110,11 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
 				}
 				if (!success) {
 					result.setFailure(true);
-                    StringBuffer buf = new StringBuffer();
+					StringBuilder buf = new StringBuilder();
                     appendResultDetails(buf, prevResult);
 					buf.append(prevContent);
 					result.addToBaseResult(buf.toString());
-					buf = new StringBuffer();
+					buf = new StringBuilder();
 					appendResultDetails(buf, sResult);
 					buf.append(currentContent);
 					result.addToSecondaryResult(buf.toString());
@@ -127,7 +127,7 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
 		}
 	}
 
-    private void appendResultDetails(StringBuffer buf, SampleResult result) {
+    private void appendResultDetails(StringBuilder buf, SampleResult result) {
         final String samplerData = result.getSamplerData();
         if (samplerData != null){
             buf.append(samplerData.trim());

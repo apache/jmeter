@@ -176,7 +176,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
     }
 
     public void setTestPlanClasspathArray(String[] text) {
-        StringBuffer cat = new StringBuffer();
+        StringBuilder cat = new StringBuilder();
         for (int idx=0; idx < text.length; idx++) {
             if (idx > 0) {
                 cat.append(CLASSPATH_SEPARATOR);

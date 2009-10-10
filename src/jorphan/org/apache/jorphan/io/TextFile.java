@@ -130,7 +130,7 @@ public class TextFile extends File {
      */
     public String getText() {
         String lineEnd = System.getProperty("line.separator"); //$NON-NLS-1$
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         Reader reader = null;
         BufferedReader br = null;
         try {

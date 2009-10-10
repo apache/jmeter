@@ -342,7 +342,7 @@ public class RunningSample {
      */
     @Override
     public String toString() {
-        StringBuffer mySB = new StringBuffer();
+        StringBuilder mySB = new StringBuilder();
 
         mySB.append("Samples: " + this.getNumSamples() + "  ");
         mySB.append("Avg: " + this.getAverage() + "  ");

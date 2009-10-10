@@ -214,7 +214,7 @@ public class Cookie extends AbstractTestElement implements Serializable {
      */
     @Override
     public String toString() {
-        StringBuffer sb=new StringBuffer(80);
+        StringBuilder sb=new StringBuilder(80);
         sb.append(getDomain());
         // flag - if all machines within a given domain can access the variable.
         //(from http://www.cookiecentral.com/faq/ 3.5)
