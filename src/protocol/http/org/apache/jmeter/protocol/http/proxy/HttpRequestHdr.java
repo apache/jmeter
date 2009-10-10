@@ -589,7 +589,7 @@ public class HttpRequestHdr {
 //     * @return The remainder
 //     */
 //    private String getRemainder(StringTokenizer tk) {
-//        StringBuffer strBuff = new StringBuffer();
+//        StringBuilder strBuff = new StringBuilder();
 //        if (tk.hasMoreTokens()) {
 //            strBuff.append(tk.nextToken());
 //        }

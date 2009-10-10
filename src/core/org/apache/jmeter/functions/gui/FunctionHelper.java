@@ -132,7 +132,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
     }
 
     public void actionPerformed(ActionEvent e) {
-        StringBuffer functionCall = new StringBuffer("${");
+        StringBuilder functionCall = new StringBuilder("${");
         functionCall.append(functionList.getText());
         Arguments args = (Arguments) parameterPanel.createTestElement();
         if (args.getArguments().size() > 0) {

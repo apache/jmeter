@@ -82,7 +82,7 @@ public final class NewDriver {
         boolean usesUNC = OS_NAME_LC.startsWith("windows");// $NON-NLS-1$
 
         // Add standard jar locations to initial classpath
-        StringBuffer classpath = new StringBuffer();
+        StringBuilder classpath = new StringBuilder();
         File[] libDirs = new File[] { new File(jmDir + File.separator + "lib"),// $NON-NLS-1$ $NON-NLS-2$
                 new File(jmDir + File.separator + "lib" + File.separator + "ext"),// $NON-NLS-1$ $NON-NLS-2$
                 new File(jmDir + File.separator + "lib" + File.separator + "junit")};// $NON-NLS-1$ $NON-NLS-2$
@@ -165,7 +165,7 @@ public final class NewDriver {
             file = new File(path + "/");// $NON-NLS-1$
         }
         loader.addURL(file.toURI().toURL()); // See Java bug 4496398
-        StringBuffer sb = new StringBuffer(System.getProperty(JAVA_CLASS_PATH));
+        StringBuilder sb = new StringBuilder(System.getProperty(JAVA_CLASS_PATH));
         sb.append(CLASSPATH_SEPARATOR);
         sb.append(path);
         // ClassFinder needs this

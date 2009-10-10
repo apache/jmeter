@@ -132,7 +132,7 @@ public final class CLOption {
      */
     @Override
     public final String toString() {
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
         sb.append("[");
         final char id = (char) m_descriptor.getId();
         if (id == TEXT_ARGUMENT) {
@@ -158,7 +158,7 @@ public final class CLOption {
      * @return the string value
      */
     final String toShortString() {
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
         final char id = (char) m_descriptor.getId();
         if (id != TEXT_ARGUMENT) {
             sb.append("-");

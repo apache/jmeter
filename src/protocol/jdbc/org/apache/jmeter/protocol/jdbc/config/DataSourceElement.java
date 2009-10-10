@@ -151,7 +151,7 @@ public class DataSourceElement extends AbstractTestElement
         DefaultConfiguration config = new DefaultConfiguration("rl-jdbc"); // $NON-NLS-1$
 
         if (log.isDebugEnabled()) {
-            StringBuffer sb = new StringBuffer(40);
+            StringBuilder sb = new StringBuilder(40);
             sb.append("MaxPool: ");
             sb.append(maxPool);
             sb.append(" Timeout: ");
@@ -175,7 +175,7 @@ public class DataSourceElement extends AbstractTestElement
         config.addChild(autoCommit);
 
         if (log.isDebugEnabled()) {
-            StringBuffer sb = new StringBuffer(40);
+            StringBuilder sb = new StringBuilder(40);
             sb.append("KeepAlive: ");
             sb.append(isKeepAlive());
             sb.append(" Age: ");
@@ -192,7 +192,7 @@ public class DataSourceElement extends AbstractTestElement
 
         String _username = getUsername();
         if (log.isDebugEnabled()) {
-            StringBuffer sb = new StringBuffer(40);
+            StringBuilder sb = new StringBuilder(40);
             sb.append("Driver: ");
             sb.append(getDriver());
             sb.append(" DbUrl: ");

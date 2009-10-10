@@ -351,7 +351,7 @@ public final class HtmlParsingUtils {
     }
 
     private static String printNode(Node node) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append("<"); // $NON-NLS-1$
         buf.append(node.getNodeName());
         NamedNodeMap atts = node.getAttributes();

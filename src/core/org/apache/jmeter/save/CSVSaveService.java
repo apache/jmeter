@@ -341,7 +341,7 @@ public final class CSVSaveService {
      * @return the field names as a string
      */
     public static String printableFieldNamesToString(SampleSaveConfiguration saveConfig) {
-        StringBuffer text = new StringBuffer();
+        StringBuilder text = new StringBuilder();
         String delim = saveConfig.getDelimiter();
 
         if (saveConfig.saveTimestamp()) {
@@ -687,7 +687,7 @@ public final class CSVSaveService {
          * - quotes any strings that require it
          */
         final class StringQuoter{
-            final StringBuffer sb = new StringBuffer();
+            final StringBuilder sb = new StringBuilder();
             private final char[] specials;
             private boolean addDelim;
             public StringQuoter(char delim) {
@@ -874,7 +874,7 @@ public final class CSVSaveService {
         if (StringUtils.containsNone(input, specialChars)) {
             return input;
         }
-        StringBuffer buffer = new StringBuffer(input.length() + 10);
+        StringBuilder buffer = new StringBuilder(input.length() + 10);
         final char quote = specialChars[1];
         buffer.append(quote);
         for (int i = 0; i < input.length(); i++) {

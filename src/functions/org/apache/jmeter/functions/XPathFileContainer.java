@@ -116,7 +116,7 @@ public class XPathFileContainer {
         {
             nextRow = 0;
         }
-        log.debug(new StringBuffer("Row: ").append(row).toString());
+        log.debug(new StringBuilder("Row: ").append(row).toString());
         return row;
     }
 

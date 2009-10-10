@@ -213,7 +213,7 @@ public class JavaSampler extends AbstractSampler implements TestListener {
      * @return a String identifier for this sampler instance
      */
     private String whoAmI() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append(Thread.currentThread().getName());
         sb.append("@");
         sb.append(Integer.toHexString(hashCode()));

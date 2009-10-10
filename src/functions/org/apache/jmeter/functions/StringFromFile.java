@@ -290,7 +290,7 @@ public class StringFromFile extends AbstractFunction implements TestListener {
         checkParameterCount(parameters, MIN_PARAM_COUNT, MAX_PARAM_COUNT);
         values = parameters.toArray();
 
-        StringBuffer sb = new StringBuffer(40);
+        StringBuilder sb = new StringBuilder(40);
         sb.append("setParameters(");//$NON-NLS-1$
         for (int i = 0; i < values.length; i++) {
             if (i > 0) {

@@ -28,7 +28,7 @@ import org.apache.commons.collections.ArrayStack;
  *
  */
 public class XMLBuffer{
-    private StringBuffer sb = new StringBuffer(); // the string so far
+    private StringBuilder sb = new StringBuilder(); // the string so far
 
     private ArrayStack tags = new ArrayStack(); // opened tags
 
@@ -111,7 +111,7 @@ public class XMLBuffer{
      * @param content
      * @return this
      */
-    public XMLBuffer tag(String tagname,StringBuffer content){
+    public XMLBuffer tag(String tagname,StringBuilder content){
         if (content.length() == 0) {
             emptyTag(tagname);
         } else {

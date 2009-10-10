@@ -87,7 +87,7 @@ public class PutWriter extends PostWriter {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
             // Just append all the parameter values, and use that as the put body
-            StringBuffer putBodyBuffer = new StringBuffer();
+            StringBuilder putBodyBuffer = new StringBuilder();
             PropertyIterator args = sampler.getArguments().iterator();
             while (args.hasNext()) {
                 HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();

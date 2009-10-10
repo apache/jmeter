@@ -55,10 +55,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
 
     // Does not need to be synch. because it is only accessed from the sampler thread
     // The ClientPool does access it in a different thread, but ClientPool is fully synch.
-    private transient Publisher PUB = null;
-
-    // Does not need to be synch. because only used by the sample method as a temporary buffer
-    private final StringBuffer BUFFER = new StringBuffer();
+    private transient Publisher PUB = null; // TODO URGENT probably needs to be synch.
 
     private static final FileServer FSERVER = FileServer.getFileServer();
 
@@ -134,23 +131,23 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
         if (this.PUB == null) {
             this.initClient();
         }
+        StringBuilder buffer = new StringBuilder();
         int loop = this.getIterationCount();
         if (this.PUB != null) {
             result.sampleStart();
             for (int idx = 0; idx < loop; idx++) {
                 String tmsg = this.getMessageContent();
                 this.PUB.publish(tmsg);
-                this.BUFFER.append(tmsg);
+                buffer.append(tmsg);
             }
             result.sampleEnd();
-            String content = this.BUFFER.toString();
+            String content = buffer.toString();
             result.setBytes(content.getBytes().length);
             result.setResponseCode("message published successfully");
             result.setResponseMessage(loop + " messages published");
             result.setSuccessful(true);
             result.setResponseData(content.getBytes());
             result.setSampleCount(loop);
-            this.BUFFER.setLength(0);
         }
         return result;
     }
