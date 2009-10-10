@@ -61,7 +61,7 @@ public class ReceiveSubscriber implements Runnable {
     private int loop = 1; // TODO never read
 
     //@GuardedBy("this")
-    private StringBuffer buffer = new StringBuffer();
+    private final StringBuffer buffer = new StringBuffer();
 
     //@GuardedBy("this")
     private volatile boolean RUN = true;
