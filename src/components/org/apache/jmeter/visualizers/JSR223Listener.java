@@ -18,15 +18,15 @@
 
 package org.apache.jmeter.visualizers;
 
-import javax.script.ScriptEngineManager;
+import java.io.IOException;
 
-import org.apache.bsf.BSFException;
-import org.apache.bsf.BSFManager;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
-import org.apache.jmeter.util.BSFTestElement;
 import org.apache.jmeter.util.JSR223TestElement;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -42,16 +42,14 @@ public class JSR223Listener extends JSR223TestElement
     public void sampleOccurred(SampleEvent event) {
         try {
             ScriptEngineManager sem = getManager();
-            if (sem == null) {
-                log.error("Problem creating JSR 223 manager");
-                return; 
-            }
-            sem.put("sampleEvent", SampleEvent.class);
-            SampleResult result = event.getResult();
-            sem.put("sampleResult", SampleResult.class);
+            if (sem == null) { return; }
+            sem.put("sampleEvent", event);
+            sem.put("sampleResult", event.getResult());
             processFileOrScript(sem);
-        } catch (Exception e) {
-            log.warn("Problem in JSR 223 script " + e);
+        } catch (ScriptException e) {
+            log.warn("Problem in JSR223 script "+e);
+        } catch (IOException e) {
+            log.warn("Problem in JSR223 script "+e);
         }
     }
 
