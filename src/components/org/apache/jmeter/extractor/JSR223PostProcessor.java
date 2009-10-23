@@ -37,19 +37,14 @@ public class JSR223PostProcessor extends JSR223TestElement implements Cloneable,
 
     public void process() {
     	
-    	ScriptEngineManager sem = null;
-    	try {
-    		sem = getManager();
-    	} catch(Exception e) {
-    		e.printStackTrace();
-    	}
-    	
-    	if(sem == null) { return; }
-    	try {
+        try {
+        	ScriptEngineManager sem = getManager();
+        	if(sem == null) { return; }
     		processFileOrScript(sem);
-    	} catch (Exception e) {
-    		e.printStackTrace();
+        } catch (ScriptException e) {
+            log.warn("Problem in JSR223 script "+e);
+    	} catch (IOException e) {
+            log.warn("Problem in JSR223 script "+e);
 		}
-
     }
 }
