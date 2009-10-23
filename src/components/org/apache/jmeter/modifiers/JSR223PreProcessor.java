@@ -18,7 +18,10 @@
 
 package org.apache.jmeter.modifiers;
 
+import java.io.IOException;
+
 import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 
 import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.testbeans.TestBean;
@@ -38,8 +41,10 @@ public class JSR223PreProcessor extends JSR223TestElement implements Cloneable, 
         	ScriptEngineManager sem = getManager();
         	if(sem == null) { return; }
         	processFileOrScript(sem);
-        } catch (Exception e) {
-        	log.warn("Problem in JSR223 script " + e);
+        } catch (ScriptException e) {
+            log.warn("Problem in JSR223 script "+e);
+        } catch (IOException e) {
+            log.warn("Problem in JSR223 script "+e);
 		}
     }
 }
