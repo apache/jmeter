@@ -22,19 +22,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.io.Serializable;
 import java.util.Properties;
 
-import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
-import org.apache.bsf.BSFEngine;
-import org.apache.bsf.BSFException;
-import org.apache.bsf.BSFManager;
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -44,8 +39,6 @@ import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
-
-import sun.security.action.GetLongAction;
 
 public abstract class JSR223TestElement extends AbstractTestElement
     implements Serializable, Cloneable
@@ -81,6 +74,7 @@ public abstract class JSR223TestElement extends AbstractTestElement
         return this;
     }
 
+    @Override
     public Object clone() {
         JSR223TestElement o = (JSR223TestElement) super.clone();
         o.init();
@@ -126,22 +120,22 @@ public abstract class JSR223TestElement extends AbstractTestElement
     
     protected void processFileOrScript(ScriptEngineManager sem) throws IOException, ScriptException {
     	
-    	ScriptEngine scriptEngine = sem.getEngineByName(getScriptLanguage());
+    	final String lang = getScriptLanguage();
+        ScriptEngine scriptEngine = sem.getEngineByName(lang);
     	if (scriptEngine == null) {
-    		log.warn("Not supported scripting engine");
-    		setScriptLanguage("groovy");
-    		scriptEngine = sem.getEngineByName(getScriptLanguage());
-    	} else {
-    		System.out.println("Script engine found : " + getScriptLanguage());
+    		log.error("Unsupported scripting engine: "+lang);
+    		return;
     	}
     	
     	File scriptFile = new File(getFilename());
     	if (scriptFile.exists()) {
-    		BufferedReader fileReader = new BufferedReader(new FileReader(scriptFile));
-    		String line;
-    		while ((line = fileReader.readLine()) != null) {
-    			scriptEngine.eval(line);
-    		}
+    	    BufferedReader fileReader = null;
+    		try {
+                fileReader = new BufferedReader(new FileReader(scriptFile));
+                scriptEngine.eval(fileReader);
+            } finally {
+                IOUtils.closeQuietly(fileReader);
+            }
     	} else {
     		scriptEngine.eval(getScript());
     	}
