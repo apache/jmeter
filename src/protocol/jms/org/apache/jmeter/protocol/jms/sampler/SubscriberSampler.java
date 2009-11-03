@@ -153,7 +153,8 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         int loop = this.getIterationCount();
 
         result.sampleStart();
-        while (this.count(0) < loop && interrupted == false) {
+        int read;
+        while ((read=this.count(0)) < loop && interrupted == false) {
             try {
                 Thread.sleep(0, 50);
             } catch (InterruptedException e) {
@@ -161,7 +162,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
             }
         }
         result.sampleEnd();
-        result.setResponseMessage(loop + " samples messages received");
+        result.setResponseMessage(read + " samples messages received");
         synchronized (this) {// Need to synch because buffer is shared with onMessageHandler
             if (this.getReadResponseAsBoolean()) {
                 result.setResponseData(this.BUFFER.toString().getBytes());
@@ -170,9 +171,9 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
             }            
         }
         result.setSuccessful(true);
-        result.setResponseCode(loop + " message(s) received successfully");
+        result.setResponseCode(read + " message(s) received successfully");
         result.setSamplerData("Not applicable");
-        result.setSampleCount(loop);
+        result.setSampleCount(read);
 
         this.resetCount();
         return result;
