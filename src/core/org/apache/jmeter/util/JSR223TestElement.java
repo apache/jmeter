@@ -118,13 +118,13 @@ public abstract class JSR223TestElement extends AbstractTestElement
     }
 
     
-    protected void processFileOrScript(ScriptEngineManager sem) throws IOException, ScriptException {
+    protected Object processFileOrScript(ScriptEngineManager sem) throws IOException, ScriptException {
     	
     	final String lang = getScriptLanguage();
         ScriptEngine scriptEngine = sem.getEngineByName(lang);
     	if (scriptEngine == null) {
     		log.error("Unsupported scripting engine: "+lang);
-    		return;
+    		return null;
     	}
     	
     	File scriptFile = new File(getFilename());
@@ -132,12 +132,12 @@ public abstract class JSR223TestElement extends AbstractTestElement
     	    BufferedReader fileReader = null;
     		try {
                 fileReader = new BufferedReader(new FileReader(scriptFile));
-                scriptEngine.eval(fileReader);
+                return scriptEngine.eval(fileReader);
             } finally {
                 IOUtils.closeQuietly(fileReader);
             }
     	} else {
-    		scriptEngine.eval(getScript());
+    		return scriptEngine.eval(getScript());
     	}
     	
     }
