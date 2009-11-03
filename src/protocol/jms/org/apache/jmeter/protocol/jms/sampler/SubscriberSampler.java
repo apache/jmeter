@@ -162,17 +162,18 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
             }
         }
         result.sampleEnd();
-        result.setResponseMessage(read + " samples messages received");
         synchronized (this) {// Need to synch because buffer is shared with onMessageHandler
             if (this.getReadResponseAsBoolean()) {
                 result.setResponseData(this.BUFFER.toString().getBytes());
             } else {
                 result.setBytes(this.BUFFER.toString().getBytes().length);
-            }            
+            }
+            read=this.count(0);
         }
         result.setSuccessful(true);
-        result.setResponseCode(read + " message(s) received successfully");
-        result.setSamplerData("Not applicable");
+        result.setResponseCodeOK();
+        result.setResponseMessage(read + " messages received");
+        result.setSamplerData(loop + " messages expected");
         result.setSampleCount(read);
 
         this.resetCount();
