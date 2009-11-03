@@ -141,6 +141,22 @@ public abstract class BSFTestElement extends AbstractTestElement
         }
     }
 
+    protected Object evalFileOrScript(BSFManager mgr) throws BSFException{
+        BSFEngine bsfEngine = mgr.loadScriptingEngine(getScriptLanguage());
+        final String scriptFile = getFilename();
+        if (scriptFile.length() == 0) {
+            return bsfEngine.eval("[script]",0,0,getScript());
+        } else {// we have a file, read and process it
+            try {
+                String script=FileUtils.readFileToString(new File(scriptFile));
+                return bsfEngine.eval(scriptFile,0,0,script);
+            } catch (IOException e) {
+                log.warn(e.getLocalizedMessage());
+                throw new BSFException(BSFException.REASON_IO_ERROR,"Problem reading script file",e);
+            }
+        }
+    }
+
     /**
      * Return the script (TestBean version).
      * Must be overridden for subclasses that don't implement TestBean
