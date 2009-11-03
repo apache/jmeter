@@ -22,6 +22,7 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
+import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.util.JMeterUtils;
@@ -38,7 +39,7 @@ import org.apache.log.Logger;
 /**
  * This class implements the JMS Subcriber sampler
  */
-public class SubscriberSampler extends BaseJMSSampler implements TestListener, MessageListener {
+public class SubscriberSampler extends BaseJMSSampler implements Interruptible, TestListener, MessageListener {
 
     private static final long serialVersionUID = 233L;
 
@@ -52,6 +53,8 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
 
     //@GuardedBy("this")
     private transient int counter = 0;
+    
+    private transient volatile boolean interrupted = false;
 
     // Don't change the string, as it is used in JMX files
     private static final String CLIENT_CHOICE = "jms.client_choice"; // $NON-NLS-1$
@@ -93,6 +96,7 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
      *
      */
     private OnMessageSubscriber initListenerClient() {
+    	interrupted = false;
         OnMessageSubscriber sub = (OnMessageSubscriber) ClientPool.get(this);
         if (sub == null) {
             sub = new OnMessageSubscriber(this.getUseJNDIPropertiesAsBoolean(), this.getJNDIInitialContextFactory(),
@@ -112,6 +116,7 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
      * Create the ReceiveSubscriber client for the sampler.
      */
     private void initReceiveClient() {
+    	interrupted = false;
         this.SUBSCRIBER = new ReceiveSubscriber(this.getUseJNDIPropertiesAsBoolean(), this
                 .getJNDIInitialContextFactory(), this.getProviderUrl(), this.getConnectionFactory(), this.getTopic(),
                 this.isUseAuth(), this.getUsername(), this.getPassword());
@@ -148,7 +153,7 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
         int loop = this.getIterationCount();
 
         result.sampleStart();
-        while (this.count(0) < loop) {
+        while (this.count(0) < loop && interrupted == false) {
             try {
                 Thread.sleep(0, 50);
             } catch (InterruptedException e) {
@@ -156,7 +161,7 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
             }
         }
         result.sampleEnd();
-        result.setResponseMessage(loop + " samples messages recieved");
+        result.setResponseMessage(loop + " samples messages received");
         synchronized (this) {// Need to synch because buffer is shared with onMessageHandler
             if (this.getReadResponseAsBoolean()) {
                 result.setResponseData(this.BUFFER.toString().getBytes());
@@ -165,7 +170,7 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
             }            
         }
         result.setSuccessful(true);
-        result.setResponseCode(loop + " message(s) recieved successfully");
+        result.setResponseCode(loop + " message(s) received successfully");
         result.setSamplerData("Not applicable");
         result.setSampleCount(loop);
 
@@ -190,7 +195,7 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
         this.SUBSCRIBER.setLoop(loop);
 
         result.sampleStart();
-        while (this.SUBSCRIBER.count(0) < loop) {
+        while (this.SUBSCRIBER.count(0) < loop && interrupted == false) {
             try {
                 Thread.sleep(0, 50);
             } catch (InterruptedException e) {
@@ -198,14 +203,14 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
             }
         }
         result.sampleEnd();
-        result.setResponseMessage(loop + " samples messages recieved");
+        result.setResponseMessage(loop + " samples messages received");
         if (this.getReadResponseAsBoolean()) {
             result.setResponseData(this.SUBSCRIBER.getMessage().getBytes());
         } else {
             result.setBytes(this.SUBSCRIBER.getMessage().getBytes().length);
         }
         result.setSuccessful(true);
-        result.setResponseCode(loop + " message(s) recieved successfully");
+        result.setResponseCode(loop + " message(s) received successfully");
         result.setSamplerData("Not applicable");
         result.setSampleCount(loop);
 
@@ -276,6 +281,16 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
         }
         return choice;
     }
+    
+    /**
+     * Handle an interrupt of the test.
+     */
+    public boolean interrupt() {
+        boolean oldvalue = interrupted;
+    	interrupted = true;   // so we break the loops in SampleWithListener and SampleWithReceive
+    	return !oldvalue;
+    }
+
     // This was the old value that was checked for
     private final static String RECEIVE_STR = JMeterUtils.getResString(JMSSubscriberGui.RECEIVE_RSC); // $NON-NLS-1$
 }
