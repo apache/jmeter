@@ -76,6 +76,7 @@ The XPath Assertion and XPath Extractor elements no longer fetch external DTDs b
 <li>Bug 47420 - LDAP extended request not closing connections during add request</li>
 <li>Bug 47870 - JMSSubscriber fails due to NPE</li>
 <li>Bug 47899 -  NullPointerExceptions in ReceiveSubscriber constructor</li>
+<li>Bug 48144 - NPE in OnMessageSubscriber</li>
 </ul>
 
 <h3>Controllers</h3>
