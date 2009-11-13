@@ -53,7 +53,8 @@ public class TestCacheManager extends JMeterTestCase {
 		super(name);
 	}
 
-	public void setUp() throws Exception {
+	@Override
+    public void setUp() throws Exception {
 		super.setUp();
 		this.cacheManager = new CacheManager();
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
@@ -67,7 +68,8 @@ public class TestCacheManager extends JMeterTestCase {
 		this.httpUrlConnection = new HttpURLConnection(this.httpMethod, this.url);
 	}
 
-	protected void tearDown() throws Exception {
+	@Override
+    protected void tearDown() throws Exception {
 		this.httpUrlConnection = null;
 		this.httpMethod = null;
 		this.urlConnection = null;
@@ -180,16 +182,16 @@ public class TestCacheManager extends JMeterTestCase {
 		return sampleResult;
 	}
 
-	@SuppressWarnings("unchecked")
 	private Map<String, CacheManager.CacheEntry> getThreadCache() throws Exception {
 		Field threadLocalfield = CacheManager.class.getDeclaredField("threadCache");
 		threadLocalfield.setAccessible(true);
+	    @SuppressWarnings("unchecked")
 		ThreadLocal<Map<String, CacheEntry>> threadLocal = (ThreadLocal<Map<String, CacheManager.CacheEntry>>) threadLocalfield.get(this.cacheManager);
-		return (Map<String, CacheManager.CacheEntry>) threadLocal.get();
+		return threadLocal.get();
 	}
 
 	private CacheManager.CacheEntry getThreadCacheEntry(String url) throws Exception {
-		return (CacheManager.CacheEntry) getThreadCache().get(url);
+		return getThreadCache().get(url);
 	}
 
 	private void saveDetailsWithHttpMethodAndSampleResultWithResponseCode(String responseCode) throws Exception {
