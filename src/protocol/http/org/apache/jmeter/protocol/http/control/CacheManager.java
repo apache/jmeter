@@ -61,7 +61,8 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
      * Holder for storing cache details.
      * Perhaps add original response later?
      */
-    private static class CacheEntry{
+    // package-protected to allow access by unit-test cases
+    static class CacheEntry{
         private final String lastModified;
         private final String etag;
         public CacheEntry(String lastModified, String etag){
