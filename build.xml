@@ -2004,6 +2004,8 @@ run JMeter unless all the JMeter jars are added.
 	
 	<!-- Download all missing jars.-->
     <target name="download_jars" description="Download any missing jar files">
+    	<!-- build.dir may be needed as a temporary work area -->
+    	<mkdir dir="${build.dir}" />
         <antcall target="_process_all_jars">
             <param name="_get_file" value="true"/>
         </antcall>
