@@ -163,8 +163,8 @@ public class ModuleController extends GenericController implements ReplaceableCo
                 selectedNode = cloneTreeNode(selectedNode);
                 selectedNode.setEnabled(true);
             }
-            tree.add(selectedNode);
-            createSubTree(tree, selectedNode);
+            HashTree subtree = tree.add(selectedNode);
+            createSubTree(subtree, selectedNode);
         }
         return tree;
     }

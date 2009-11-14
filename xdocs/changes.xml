@@ -83,6 +83,7 @@ The XPath Assertion and XPath Extractor elements no longer fetch external DTDs b
 <h3>Controllers</h3>
 <ul>
 <li>Bug 47385 - TransactionController should set AllThreads and GroupThreads</li>
+<li>Bug 47940 - Module controller incorrectly creates the replacement Sub Tree</li>
 </ul>
 
 <h3>Listeners</h3>
