@@ -27,30 +27,30 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class CompareAssertionBeanInfo extends BeanInfoSupport {
 
-	public CompareAssertionBeanInfo() {
-		super(CompareAssertion.class);
-		createPropertyGroup("compareChoices", new String[] { "compareContent", "compareTime" }); //$NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$
+    public CompareAssertionBeanInfo() {
+        super(CompareAssertion.class);
+        createPropertyGroup("compareChoices", new String[] { "compareContent", "compareTime" }); //$NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$
         createPropertyGroup("comparison_filters", new String[]{"stringsToSkip"}); //$NON-NLS-1$ $NON-NLS-2$
         PropertyDescriptor p = property("compareContent"); //$NON-NLS-1$
-		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-		p.setValue(DEFAULT, Boolean.TRUE);
-		p.setValue(NOT_EXPRESSION, Boolean.TRUE);
-		p = property("compareTime"); //$NON-NLS-1$
-		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-		p.setValue(DEFAULT, new Long(-1));
-		p.setValue(NOT_EXPRESSION, Boolean.FALSE);	
-		p = property("stringsToSkip"); //$NON-NLS-1$
-		p.setPropertyEditorClass(TableEditor.class);
-		p.setValue(TableEditor.CLASSNAME,SubstitutionElement.class.getName());
-		p.setValue(TableEditor.HEADERS,new String[]{
-		        JMeterUtils.getResString("comparison_regex_string"), //$NON-NLS-1$
-		        JMeterUtils.getResString("comparison_regex_substitution")}); //$NON-NLS-1$
-		p.setValue(TableEditor.OBJECT_PROPERTIES, // These are the names of the get/set methods
-		        new String[]{SubstitutionElement.REGEX, SubstitutionElement.SUBSTITUTE});
-		p.setValue(NOT_UNDEFINED,Boolean.TRUE);
-		p.setValue(DEFAULT,new ArrayList<Object>());
-		p.setValue(MULTILINE,Boolean.TRUE);
-		
-	}
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, Boolean.TRUE);
+        p.setValue(NOT_EXPRESSION, Boolean.TRUE);
+        p = property("compareTime"); //$NON-NLS-1$
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, new Long(-1));
+        p.setValue(NOT_EXPRESSION, Boolean.FALSE);    
+        p = property("stringsToSkip"); //$NON-NLS-1$
+        p.setPropertyEditorClass(TableEditor.class);
+        p.setValue(TableEditor.CLASSNAME,SubstitutionElement.class.getName());
+        p.setValue(TableEditor.HEADERS,new String[]{
+                JMeterUtils.getResString("comparison_regex_string"), //$NON-NLS-1$
+                JMeterUtils.getResString("comparison_regex_substitution")}); //$NON-NLS-1$
+        p.setValue(TableEditor.OBJECT_PROPERTIES, // These are the names of the get/set methods
+                new String[]{SubstitutionElement.REGEX, SubstitutionElement.SUBSTITUTE});
+        p.setValue(NOT_UNDEFINED,Boolean.TRUE);
+        p.setValue(DEFAULT,new ArrayList<Object>());
+        p.setValue(MULTILINE,Boolean.TRUE);
+        
+    }
 
 }
