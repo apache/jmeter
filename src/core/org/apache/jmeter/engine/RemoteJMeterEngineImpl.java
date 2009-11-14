@@ -69,7 +69,13 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
         log.info("Starting backing engine on " + port);
         InetAddress localHost=null;
         try {
-            localHost = InetAddress.getLocalHost();
+            // Bug 47980
+            String host = System.getProperties().getProperty("java.rmi.server.hostname"); // $NON-NLS-1$
+            if( host==null ) {
+                localHost = InetAddress.getLocalHost();
+            } else {
+                localHost = InetAddress.getByName(host);
+            }
         } catch (UnknownHostException e1) {
             throw new RemoteException("Cannot start. Unable to get local host IP address.");
         }
