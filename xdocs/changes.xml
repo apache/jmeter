@@ -162,6 +162,7 @@ The XPath Assertion and XPath Extractor elements no longer fetch external DTDs b
 <ul>
 <li>Bug 47223 - Slow Aggregate Report Performance (StatCalculator)</li>
 <li>Bug 47980 - hostname resolves to 127.0.0.1 - specifiying IP not possible</li>
+<li>Bug 47943 - DisabledComponentRemover is not used in Start class</li>
 </ul>
 
 <h2>Non-functional changes</h2>
