@@ -96,7 +96,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
      *
      */
     private OnMessageSubscriber initListenerClient() {
-    	interrupted = false;
+        interrupted = false;
         OnMessageSubscriber sub = (OnMessageSubscriber) ClientPool.get(this);
         if (sub == null) {
             sub = new OnMessageSubscriber(this.getUseJNDIPropertiesAsBoolean(), this.getJNDIInitialContextFactory(),
@@ -116,7 +116,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
      * Create the ReceiveSubscriber client for the sampler.
      */
     private void initReceiveClient() {
-    	interrupted = false;
+        interrupted = false;
         this.SUBSCRIBER = new ReceiveSubscriber(this.getUseJNDIPropertiesAsBoolean(), this
                 .getJNDIInitialContextFactory(), this.getProviderUrl(), this.getConnectionFactory(), this.getTopic(),
                 this.isUseAuth(), this.getUsername(), this.getPassword());
@@ -289,8 +289,8 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
      */
     public boolean interrupt() {
         boolean oldvalue = interrupted;
-    	interrupted = true;   // so we break the loops in SampleWithListener and SampleWithReceive
-    	return !oldvalue;
+        interrupted = true;   // so we break the loops in SampleWithListener and SampleWithReceive
+        return !oldvalue;
     }
 
     // This was the old value that was checked for
