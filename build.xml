@@ -1786,6 +1786,8 @@ run JMeter unless all the JMeter jars are added.
         <fileset dir="${dest.jar}" includes="*.jar"/>
         <pathelement location="${build.test}"/>
         <path refid="classpath"/>
+      	<!-- Needed for testing under Java 1.5 -->
+      	<fileset dir="${lib.dir}" includes="bsf-api*.jar"/>
       </classpath>
       <jvmarg value="-server"/>
       <sysproperty key="java.awt.headless" value="${test.headless}"/>
