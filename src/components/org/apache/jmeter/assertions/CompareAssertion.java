@@ -40,7 +40,7 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
     
 	private transient List<SampleResult> responses;
 
-	private transient final StringSubstitution emptySub = new StringSubstitution("");
+	private transient final StringSubstitution emptySub = new StringSubstitution(""); //$NON-NLS-1$
 
 	private boolean compareContent = true;
 
@@ -80,13 +80,14 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
 					result.setFailure(true);
                     StringBuilder buf = new StringBuilder();
                     appendResultDetails(buf, prevResult);
-                    buf.append("Response Time: ").append(prevTime);
+                    buf.append(JMeterUtils.getResString("comparison_response_time")).append(prevTime);
 					result.addToBaseResult(buf.toString());
 					buf = new StringBuilder();
                     appendResultDetails(buf, sResult);
-					buf.append("Response Time: ").append(currentTime);
+                    buf.append(JMeterUtils.getResString("comparison_response_time")).append(currentTime);
 					result.addToSecondaryResult(buf.toString());
-					result.setFailureMessage("Responses differ in response time by more than "+compareTime+" ms");
+                   result.setFailureMessage(JMeterUtils.getResString("comparison_differ_time") //$NON-NLS-1$
+                           +compareTime+JMeterUtils.getResString("comparison_unit")); //$NON-NLS-1$
 					break;
 				}
 				prevResult = sResult;
@@ -118,7 +119,7 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
 					appendResultDetails(buf, sResult);
 					buf.append(currentContent);
 					result.addToSecondaryResult(buf.toString());
-					result.setFailureMessage("Responses differ in content");
+					result.setFailureMessage(JMeterUtils.getResString("comparison_differ_content")); //$NON-NLS-1$
 					break;
 				}
 				prevResult = sResult;
@@ -132,12 +133,12 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
         if (samplerData != null){
             buf.append(samplerData.trim());
         }
-        buf.append("\n");
+        buf.append("\n"); //$NON-NLS-1$
         final String requestHeaders = result.getRequestHeaders();
         if (requestHeaders != null){
             buf.append(requestHeaders);
         }
-        buf.append("\n\n");        
+        buf.append("\n\n"); //$NON-NLS-1$
     }
 
 	private String filterString(String content) {

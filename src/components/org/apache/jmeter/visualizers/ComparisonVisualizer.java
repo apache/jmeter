@@ -39,6 +39,7 @@ import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.assertions.CompareAssertionResult;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 
 public class ComparisonVisualizer extends AbstractVisualizer implements Clearable {
@@ -65,7 +66,7 @@ public class ComparisonVisualizer extends AbstractVisualizer implements Clearabl
 	}
 
 	public String getLabelResource() {
-		return "comparison_visualizer_title";
+		return "comparison_visualizer_title"; //$NON-NLS-1$
 	}
 
 	private void init() {
@@ -92,16 +93,19 @@ public class ComparisonVisualizer extends AbstractVisualizer implements Clearabl
 
 	private JTextPane getBaseTextPane() {
 		base = new JTextPane();
+		base.setEditable(false);
+		base.setBackground(getBackground());
 		return base;
 	}
 
 	private JTextPane getSecondaryTextPane() {
 		secondary = new JTextPane();
+		secondary.setEditable(false);
 		return secondary;
 	}
 
 	private JComponent getTreePanel() {
-		root = new DefaultMutableTreeNode("Root");
+		root = new DefaultMutableTreeNode("Root"); //$NON-NLS-1$
 		treeModel = new DefaultTreeModel(root);
 		resultsTree = new JTree(treeModel);
 		resultsTree.setCellRenderer(new TreeNodeRenderer());
@@ -141,8 +145,8 @@ public class ComparisonVisualizer extends AbstractVisualizer implements Clearabl
 				base.setText(result.getBaseResult());
 				secondary.setText(result.getSecondaryResult());
 			} catch (Exception err) {
-				base.setText("Invalid Node " + err);
-				secondary.setText("Invalid Node " + err);
+                base.setText(JMeterUtils.getResString("comparison_invalid_node") + err); //$NON-NLS-1$
+                secondary.setText(JMeterUtils.getResString("comparison_invalid_node") + err); //$NON-NLS-1$
 			}
 			base.setCaretPosition(0);
 			secondary.setCaretPosition(0);
@@ -155,8 +159,8 @@ public class ComparisonVisualizer extends AbstractVisualizer implements Clearabl
 			// the child to be removed will always be 0 'cos as the nodes are
 			// removed the nth node will become (n-1)th
 			treeModel.removeNodeFromParent((DefaultMutableTreeNode) root.getChildAt(0));
-			base.setText("");
-			secondary.setText("");
+            base.setText(""); //$NON-NLS-1$
+            secondary.setText(""); //$NON-NLS-1$
 		}
 	}
 
