@@ -30,27 +30,18 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 public class TextAreaEditor extends PropertyEditorSupport implements FocusListener {
-    JTextArea textUI;
+    
+    private JTextArea textUI;
 
-    JScrollPane scroller;
+    private JScrollPane scroller;
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.awt.event.FocusListener#focusGained(java.awt.event.FocusEvent)
-     */
+    /** {@inheritDoc} */
     public void focusGained(FocusEvent e) {
-
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.awt.event.FocusListener#focusLost(java.awt.event.FocusEvent)
-     */
+    /** {@inheritDoc} */
     public void focusLost(FocusEvent e) {
         firePropertyChange();
-
     }
 
     private void init() {// called from ctor, so must not be overridable
@@ -68,7 +59,6 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
     public TextAreaEditor() {
         super();
         init();
-
     }
 
     /**
@@ -80,41 +70,25 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
         setValue(source);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.beans.PropertyEditor#getAsText()
-     */
+    /** {@inheritDoc} */
     @Override
     public String getAsText() {
         return textUI.getText();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.beans.PropertyEditor#getCustomEditor()
-     */
+    /** {@inheritDoc} */
     @Override
     public Component getCustomEditor() {
         return scroller;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.beans.PropertyEditor#setAsText(java.lang.String)
-     */
+    /** {@inheritDoc} */
     @Override
     public void setAsText(String text) throws IllegalArgumentException {
         textUI.setText(text);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.beans.PropertyEditor#setValue(java.lang.Object)
-     */
+    /** {@inheritDoc} */
     @Override
     public void setValue(Object value) {
         if (value != null) {
@@ -124,21 +98,13 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.beans.PropertyEditor#getValue()
-     */
+    /** {@inheritDoc} */
     @Override
     public Object getValue() {
         return textUI.getText();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.beans.PropertyEditor#supportsCustomEditor()
-     */
+    /** {@inheritDoc} */
     @Override
     public boolean supportsCustomEditor() {
         return true;
