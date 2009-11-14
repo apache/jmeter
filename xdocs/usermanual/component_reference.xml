@@ -1019,6 +1019,15 @@ Currently the only way to changes these is via the SampleResult methods:
 </p>
 </component>
 
+<component name="JSR223 Sampler" index="&sect-num;.1.11.1">
+<description>
+<p>
+The JSR223 Sampler allows JSR223 script code to be used to perform a sample.
+For details, see <complink name="BSF Sampler"/>.
+</p>
+</description>
+</component>
+
 <component name="TCP Sampler" index="&sect-num;.1.12"  width="477" height="343" screenshot="tcpsampler.png">
 	<description>
 		<p>
@@ -3404,7 +3413,16 @@ If an error is detected, the script should use AssertionResult.setFailureMessage
 <p>For futher details of all the methods available on each of the above variables, please check the Javadoc</p>
 </component>
 
-<component name="Compare Assertion" index="&sect-num;.5.11"  width="292" height="296" screenshot="assertion/compare.png">
+<component name="JSR223 Assertion" index="&sect-num;.5.11">
+<description>
+<p>
+The JSR223 Assertion allows JSR223 script code to be used to check the status of the previous sample.
+For details, see <complink name="BSF Assertion"/>.
+</p>
+</description>
+</component>
+
+<component name="Compare Assertion" index="&sect-num;.5.12"  width="292" height="296" screenshot="assertion/compare.png">
 <description>
 The Compare Assertion can be used to compare sample results within its scope.
 Either the contents or the elapsed time can be compared, and the contents can be filtered before comparison.
@@ -3589,6 +3607,56 @@ See the file BeanShellListeners.bshrc for example definitions.
 <p>If the property <b>beanshell.timer.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
 </component>
 
+
+<component name="BSF Timer" index="&sect-num;.6.7"  width="548" height="350" screenshot="timers/bsf_timer.png">
+<description>
+<p>
+The BSF Timer can be used to generate a delay using a BSF scripting language.
+</p>
+</description>
+<properties>
+    <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
+    <property name="ScriptLanguage" required="Yes">
+        The scripting language to be used.
+    </property>
+    <property name="Parameters" required="No">Parameters to pass to the script.
+    The parameters are stored in the following variables:
+    <ul>
+        <li>Parameters - string containing the parameters as a single variable</li>
+        <li>args - String array containing parameters, split on white-space</li>
+    </ul>
+    </property>
+    <property name="Script file" required="No">
+    A file containing the script to run.
+     The return value is converted to a long integer and used as the number of milliseconds to wait.
+     </property>
+    <property name="Script" required="Yes (unless script file is provided)">
+        The script. The return value is used as the number of milliseconds to wait.
+    </property>
+</properties>
+<p>Before invoking the script, some variables are set up in the script interpreter:</p>
+<ul>
+<li>log - (Logger) - can be used to write to the log file</li>
+<li>ctx - (JMeterContext) - gives access to the context</li>
+<li>vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());</li>
+<li>props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
+<li>prev - the previous SampleResult (if any)</li>
+<li>sampler - the current Sampler</li>
+<li>Label - the name of the Timer</li>
+<li>Filename - the file name (if any)</li>
+<li>OUT - System.out</li>
+</ul>
+<p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
+</component>
+
+<component name="JSR223 Timer" index="&sect-num;.6.8">
+<description>
+<p>
+The JSR223 Timer can be used to generate a delay using a JSR223 scripting language,
+For details, see <complink name="BSF Timer"/>.
+</p>
+</description>
+</component>
 
 <a href="#">^</a>
 
@@ -3830,6 +3898,15 @@ The script (or file) is processed using the BSFEngine.exec() method, which does 
 <li>OUT - System.out - e.g. OUT.println("message")</li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
+</component>
+
+<component name="JSR223 PreProcessor" index="&sect-num;.7.8">
+<description>
+<p>
+The JSR223 PreProcessor allows JSR223 script code to be applied before taking a sample.
+For details, see <complink name="BSF PreProcessor"/>.
+</p>
+</description>
 </component>
 
 <a href="#">^</a>
@@ -4111,6 +4188,15 @@ Note that these are BSF variables - i.e. they can be used directly in the script
 <li>OUT - System.out - e.g. OUT.println("message")</li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
+</component>
+
+<component name="JSR223 PostProcessor" index="&sect-num;.8.6">
+<description>
+<p>
+The JSR223 PostProcessor allows JSR223 script code to be applied after taking a sample.
+For details, see the <complink name="BSF PostProcessor"/>.
+</p>
+</description>
 </component>
 
 <a href="#">^</a>
