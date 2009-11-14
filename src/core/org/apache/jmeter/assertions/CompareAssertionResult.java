@@ -75,7 +75,7 @@ public class CompareAssertionResult extends AssertionResult {
 			}
 			else
 			{
-				baseResult = baseResult + "\n\n" + r;
+				baseResult = baseResult + "\n\n" + r; //$NON-NLS-1$
 			}
 		}
 		
@@ -87,7 +87,7 @@ public class CompareAssertionResult extends AssertionResult {
 			}
 			else
 			{
-				secondaryResult = secondaryResult + "\n\n" + r;
+				secondaryResult = secondaryResult + "\n\n" + r; //$NON-NLS-1$
 			}
 		}
 	}
