@@ -45,25 +45,25 @@ public class TreeNodeRenderer extends DefaultTreeCellRenderer {
             JMeterUtils.getPropDefault("viewResultsTree.failure",  //$NON-NLS-1$
                     "icon_warning_sml.gif")); //$NON-NLS-1$
     
-	public TreeNodeRenderer() {
-		super();
-	}
-	
-	@Override
+    public TreeNodeRenderer() {
+        super();
+    }
+
+    @Override
     public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded,
-			boolean leaf, int row, boolean focus) {
-		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, focus);
-		Object obj = ((DefaultMutableTreeNode) value).getUserObject();
-		if(obj instanceof SampleResult)
-		{
-			if (!((SampleResult) obj).isSuccessful()) {
-				this.setForeground(Color.red);
+            boolean leaf, int row, boolean focus) {
+        super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, focus);
+        Object obj = ((DefaultMutableTreeNode) value).getUserObject();
+        if(obj instanceof SampleResult)
+        {
+            if (!((SampleResult) obj).isSuccessful()) {
+                this.setForeground(Color.red);
                 this.setIcon(imageFailure);
             } else {
                 this.setIcon(imageSuccess);
-			}
-		}
-		return this;
-	}
+            }
+        }
+        return this;
+    }
 
 }
