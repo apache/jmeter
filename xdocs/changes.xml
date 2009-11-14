@@ -133,8 +133,9 @@ The XPath Assertion and XPath Extractor elements no longer fetch external DTDs b
 <li>Bug 47398 - SampleEvents are sent twice over RMI in distributed testing and non gui mode</li>
 <li>Added DataStrippingSample sender - supports "Stripped" and "StrippedBatch" modes.</li>
 <li>Added Comparison Assertion Visualizer</li>
+<li>Bug 47907 - Improvements (enhancements and I18N) Comparison Assertion and Comparison Visualizer</li>
 <li>Bug 36726 - add search function to Tree View Listener</li>
-<li>Bug 47869 -  Ability to cleanup fields of SampleResult</li>
+<li>Bug 47869 - Ability to cleanup fields of SampleResult</li>
 <li>Bug 47952 - Added JSR223 Listener</li>
 </ul>
 

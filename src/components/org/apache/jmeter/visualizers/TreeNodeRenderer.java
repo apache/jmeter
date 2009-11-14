@@ -21,17 +21,30 @@ package org.apache.jmeter.visualizers;
 import java.awt.Color;
 import java.awt.Component;
 
+import javax.swing.ImageIcon;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Tree cell renderer used by ComparisonVisualizer.
  */
 public class TreeNodeRenderer extends DefaultTreeCellRenderer {
 
+    private static final long serialVersionUID = 240L;
+
+    // Same ViewResultsTree
+    private static final ImageIcon imageSuccess = JMeterUtils.getImage(
+            JMeterUtils.getPropDefault("viewResultsTree.success",  //$NON-NLS-1$
+                    "icon_success_sml.gif")); //$NON-NLS-1$
+
+    private static final ImageIcon imageFailure = JMeterUtils.getImage(
+            JMeterUtils.getPropDefault("viewResultsTree.failure",  //$NON-NLS-1$
+                    "icon_warning_sml.gif")); //$NON-NLS-1$
+    
 	public TreeNodeRenderer() {
 		super();
 	}
@@ -45,6 +58,9 @@ public class TreeNodeRenderer extends DefaultTreeCellRenderer {
 		{
 			if (!((SampleResult) obj).isSuccessful()) {
 				this.setForeground(Color.red);
+                this.setIcon(imageFailure);
+            } else {
+                this.setIcon(imageSuccess);
 			}
 		}
 		return this;
