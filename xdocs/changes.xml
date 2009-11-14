@@ -127,6 +127,7 @@ The XPath Assertion and XPath Extractor elements no longer fetch external DTDs b
 
 <h3>Controllers</h3>
 <ul>
+<li>Bug 47909 - TransactionController should sum the latency</li>
 </ul>
 
 <h3>Listeners</h3>
