@@ -3440,8 +3440,8 @@ The assertion comparisons can be seen in the <complink name="Comparison Assertio
 <properties>
     <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
     <property name="Compare Content" required="Yes">Whether or not to compare the content (response data)</property>
-    <property name="Compare Time" required="Yes">If the value is >=0, then check if the time difference is no greater than the value. 
-    I.e. if the value is 0, then the times must be exactly equal.</property>
+    <property name="Compare Time" required="Yes">If the value is >=0, then check if the response time difference is no greater than the value. 
+    I.e. if the value is 0, then the response times must be exactly equal.</property>
     <property name="Comparison Filters" required="No">Filters can be used to remove strings from the content comparison.
     For example, if the page has a time-stamp, it might be matched with: "Time: \d\d:\d\d:\d\d" and replaced with a dummy fixed time "Time: HH:MM:SS".
     </property>
