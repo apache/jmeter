@@ -34,99 +34,99 @@ import org.apache.oro.text.regex.StringSubstitution;
 import org.apache.oro.text.regex.Util;
 
 public class CompareAssertion extends AbstractTestElement implements Assertion, TestBean, Serializable,
-		LoopIterationListener {
+        LoopIterationListener {
 
     private static final long serialVersionUID = 240L;
     
-	private transient List<SampleResult> responses;
+    private transient List<SampleResult> responses;
 
-	private transient final StringSubstitution emptySub = new StringSubstitution(""); //$NON-NLS-1$
+    private transient final StringSubstitution emptySub = new StringSubstitution(""); //$NON-NLS-1$
 
-	private boolean compareContent = true;
+    private boolean compareContent = true;
 
-	private long compareTime = -1;
+    private long compareTime = -1;
 
-	private Collection<SubstitutionElement> stringsToSkip;
+    private Collection<SubstitutionElement> stringsToSkip;
 
-	public CompareAssertion() {
-		super();
-	}
+    public CompareAssertion() {
+        super();
+    }
 
-	public AssertionResult getResult(SampleResult response) {
-		responses.add(response);
-		if (responses.size() > 1) {
-			CompareAssertionResult result = new CompareAssertionResult(getName());
-			compareContent(result);
-			compareTime(result);
-			return result;
-		} else
-			return new AssertionResult(getName());
-	}
+    public AssertionResult getResult(SampleResult response) {
+        responses.add(response);
+        if (responses.size() > 1) {
+            CompareAssertionResult result = new CompareAssertionResult(getName());
+            compareContent(result);
+            compareTime(result);
+            return result;
+        } else
+            return new AssertionResult(getName());
+    }
 
-	private void compareTime(CompareAssertionResult result) {
-		if (compareTime >= 0) {
-			Iterator<SampleResult> iter = responses.iterator();
-			long prevTime = -1;
-			SampleResult prevResult = null;
-			boolean success = true;
-			while (iter.hasNext()) {
-				SampleResult sResult = iter.next();
-				long currentTime = sResult.getTime();
-				if (prevTime != -1) {
-					success = Math.abs(prevTime - currentTime) <= compareTime;
-					prevResult = sResult;
-				}
-				if (!success) {
-					result.setFailure(true);
+    private void compareTime(CompareAssertionResult result) {
+        if (compareTime >= 0) {
+            Iterator<SampleResult> iter = responses.iterator();
+            long prevTime = -1;
+            SampleResult prevResult = null;
+            boolean success = true;
+            while (iter.hasNext()) {
+                SampleResult sResult = iter.next();
+                long currentTime = sResult.getTime();
+                if (prevTime != -1) {
+                    success = Math.abs(prevTime - currentTime) <= compareTime;
+                    prevResult = sResult;
+                }
+                if (!success) {
+                    result.setFailure(true);
                     StringBuilder buf = new StringBuilder();
                     appendResultDetails(buf, prevResult);
                     buf.append(JMeterUtils.getResString("comparison_response_time")).append(prevTime);
-					result.addToBaseResult(buf.toString());
-					buf = new StringBuilder();
+                    result.addToBaseResult(buf.toString());
+                    buf = new StringBuilder();
                     appendResultDetails(buf, sResult);
                     buf.append(JMeterUtils.getResString("comparison_response_time")).append(currentTime);
-					result.addToSecondaryResult(buf.toString());
+                    result.addToSecondaryResult(buf.toString());
                    result.setFailureMessage(JMeterUtils.getResString("comparison_differ_time") //$NON-NLS-1$
                            +compareTime+JMeterUtils.getResString("comparison_unit")); //$NON-NLS-1$
-					break;
-				}
-				prevResult = sResult;
-				prevTime = currentTime;
-			}
-		}
-	}
+                    break;
+                }
+                prevResult = sResult;
+                prevTime = currentTime;
+            }
+        }
+    }
 
     private void compareContent(CompareAssertionResult result) {
-		if (compareContent) {
-			Iterator<SampleResult> iter = responses.iterator();
-			String prevContent = null;
-			SampleResult prevResult = null;
-			boolean success = true;
-			while (iter.hasNext()) {
-				SampleResult sResult = iter.next();
-				String currentContent = sResult.getResponseDataAsString();
-				currentContent = filterString(currentContent);
-				if (prevContent != null) {
-					success = prevContent.equals(currentContent);
-				}
-				if (!success) {
-					result.setFailure(true);
-					StringBuilder buf = new StringBuilder();
+        if (compareContent) {
+            Iterator<SampleResult> iter = responses.iterator();
+            String prevContent = null;
+            SampleResult prevResult = null;
+            boolean success = true;
+            while (iter.hasNext()) {
+                SampleResult sResult = iter.next();
+                String currentContent = sResult.getResponseDataAsString();
+                currentContent = filterString(currentContent);
+                if (prevContent != null) {
+                    success = prevContent.equals(currentContent);
+                }
+                if (!success) {
+                    result.setFailure(true);
+                    StringBuilder buf = new StringBuilder();
                     appendResultDetails(buf, prevResult);
-					buf.append(prevContent);
-					result.addToBaseResult(buf.toString());
-					buf = new StringBuilder();
-					appendResultDetails(buf, sResult);
-					buf.append(currentContent);
-					result.addToSecondaryResult(buf.toString());
-					result.setFailureMessage(JMeterUtils.getResString("comparison_differ_content")); //$NON-NLS-1$
-					break;
-				}
-				prevResult = sResult;
-				prevContent = currentContent;
-			}
-		}
-	}
+                    buf.append(prevContent);
+                    result.addToBaseResult(buf.toString());
+                    buf = new StringBuilder();
+                    appendResultDetails(buf, sResult);
+                    buf.append(currentContent);
+                    result.addToSecondaryResult(buf.toString());
+                    result.setFailureMessage(JMeterUtils.getResString("comparison_differ_content")); //$NON-NLS-1$
+                    break;
+                }
+                prevResult = sResult;
+                prevContent = currentContent;
+            }
+        }
+    }
 
     private void appendResultDetails(StringBuilder buf, SampleResult result) {
         final String samplerData = result.getSamplerData();
@@ -141,70 +141,70 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
         buf.append("\n\n"); //$NON-NLS-1$
     }
 
-	private String filterString(String content) {
-		if (stringsToSkip == null || stringsToSkip.size() == 0) {
-			return content;
-		} else {
-			for (SubstitutionElement regex : stringsToSkip) {
-				emptySub.setSubstitution(regex.getSubstitute());
-				content = Util.substitute(JMeterUtils.getMatcher(), JMeterUtils.getPatternCache().getPattern(regex.getRegex()),
-						emptySub, content, Util.SUBSTITUTE_ALL);
-			}
-		}
-		return content;
-	}
+    private String filterString(String content) {
+        if (stringsToSkip == null || stringsToSkip.size() == 0) {
+            return content;
+        } else {
+            for (SubstitutionElement regex : stringsToSkip) {
+                emptySub.setSubstitution(regex.getSubstitute());
+                content = Util.substitute(JMeterUtils.getMatcher(), JMeterUtils.getPatternCache().getPattern(regex.getRegex()),
+                        emptySub, content, Util.SUBSTITUTE_ALL);
+            }
+        }
+        return content;
+    }
 
-	public void iterationStart(LoopIterationEvent iterEvent) {
-		responses = new LinkedList<SampleResult>();
-	}
+    public void iterationStart(LoopIterationEvent iterEvent) {
+        responses = new LinkedList<SampleResult>();
+    }
 
-	public void iterationEnd(LoopIterationEvent iterEvent) {
-		responses = null;
-	}
+    public void iterationEnd(LoopIterationEvent iterEvent) {
+        responses = null;
+    }
 
-	/**
-	 * @return Returns the compareContent.
-	 */
-	public boolean isCompareContent() {
-		return compareContent;
-	}
+    /**
+     * @return Returns the compareContent.
+     */
+    public boolean isCompareContent() {
+        return compareContent;
+    }
 
-	/**
-	 * @param compareContent
-	 *            The compareContent to set.
-	 */
-	public void setCompareContent(boolean compareContent) {
-		this.compareContent = compareContent;
-	}
+    /**
+     * @param compareContent
+     *            The compareContent to set.
+     */
+    public void setCompareContent(boolean compareContent) {
+        this.compareContent = compareContent;
+    }
 
-	/**
-	 * @return Returns the compareTime.
-	 */
-	public long getCompareTime() {
-		return compareTime;
-	}
+    /**
+     * @return Returns the compareTime.
+     */
+    public long getCompareTime() {
+        return compareTime;
+    }
 
-	/**
-	 * @param compareTime
-	 *            The compareTime to set.
-	 */
-	public void setCompareTime(long compareTime) {
-		this.compareTime = compareTime;
-	}
+    /**
+     * @param compareTime
+     *            The compareTime to set.
+     */
+    public void setCompareTime(long compareTime) {
+        this.compareTime = compareTime;
+    }
 
-	/**
-	 * @return Returns the stringsToSkip.
-	 */
-	public Collection<SubstitutionElement> getStringsToSkip() {
-		return stringsToSkip;
-	}
+    /**
+     * @return Returns the stringsToSkip.
+     */
+    public Collection<SubstitutionElement> getStringsToSkip() {
+        return stringsToSkip;
+    }
 
-	/**
-	 * @param stringsToSkip
-	 *            The stringsToSkip to set.
-	 */
-	public void setStringsToSkip(Collection<SubstitutionElement> stringsToSkip) {
-		this.stringsToSkip = stringsToSkip;
-	}
+    /**
+     * @param stringsToSkip
+     *            The stringsToSkip to set.
+     */
+    public void setStringsToSkip(Collection<SubstitutionElement> stringsToSkip) {
+        this.stringsToSkip = stringsToSkip;
+    }
 
 }

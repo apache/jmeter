@@ -43,125 +43,124 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 
 public class ComparisonVisualizer extends AbstractVisualizer implements Clearable {
-	private JTree resultsTree;
+    private JTree resultsTree;
 
-	private DefaultTreeModel treeModel;
+    private DefaultTreeModel treeModel;
 
-	private DefaultMutableTreeNode root;
+    private DefaultMutableTreeNode root;
 
-	private JTextPane base, secondary;
+    private JTextPane base, secondary;
 
-	public ComparisonVisualizer() {
-		super();
-		init();
-	}
+    public ComparisonVisualizer() {
+        super();
+        init();
+    }
 
-	public void add(SampleResult sample) {
+    public void add(SampleResult sample) {
 
-		DefaultMutableTreeNode currNode = new DefaultMutableTreeNode(sample);
-		treeModel.insertNodeInto(currNode, root, root.getChildCount());
-		if (root.getChildCount() == 1) {
-			resultsTree.expandPath(new TreePath(root));
-		}
-	}
+        DefaultMutableTreeNode currNode = new DefaultMutableTreeNode(sample);
+        treeModel.insertNodeInto(currNode, root, root.getChildCount());
+        if (root.getChildCount() == 1) {
+            resultsTree.expandPath(new TreePath(root));
+        }
+    }
 
-	public String getLabelResource() {
-		return "comparison_visualizer_title"; //$NON-NLS-1$
-	}
+    public String getLabelResource() {
+        return "comparison_visualizer_title"; //$NON-NLS-1$
+    }
 
-	private void init() {
-		setLayout(new BorderLayout());
-		setBorder(makeBorder());
-		add(makeTitlePanel(), BorderLayout.NORTH);
-		JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-		split.add(getTreePanel());
-		split.add(getSideBySidePanel());
-		add(split, BorderLayout.CENTER);
-	}
+    private void init() {
+        setLayout(new BorderLayout());
+        setBorder(makeBorder());
+        add(makeTitlePanel(), BorderLayout.NORTH);
+        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        split.add(getTreePanel());
+        split.add(getSideBySidePanel());
+        add(split, BorderLayout.CENTER);
+    }
 
-	private JComponent getSideBySidePanel() {
-		JPanel main = new JPanel(new GridLayout(1, 2));
-		JScrollPane base = new JScrollPane(getBaseTextPane());
-		base.setPreferredSize(base.getMinimumSize());
-		JScrollPane secondary = new JScrollPane(getSecondaryTextPane());
-		secondary.setPreferredSize(secondary.getMinimumSize());
-		main.add(base);
-		main.add(secondary);
-		main.setPreferredSize(main.getMinimumSize());
-		return main;
-	}
+    private JComponent getSideBySidePanel() {
+        JPanel main = new JPanel(new GridLayout(1, 2));
+        JScrollPane base = new JScrollPane(getBaseTextPane());
+        base.setPreferredSize(base.getMinimumSize());
+        JScrollPane secondary = new JScrollPane(getSecondaryTextPane());
+        secondary.setPreferredSize(secondary.getMinimumSize());
+        main.add(base);
+        main.add(secondary);
+        main.setPreferredSize(main.getMinimumSize());
+        return main;
+    }
 
-	private JTextPane getBaseTextPane() {
-		base = new JTextPane();
-		base.setEditable(false);
-		base.setBackground(getBackground());
-		return base;
-	}
+    private JTextPane getBaseTextPane() {
+        base = new JTextPane();
+        base.setEditable(false);
+        base.setBackground(getBackground());
+        return base;
+    }
 
-	private JTextPane getSecondaryTextPane() {
-		secondary = new JTextPane();
-		secondary.setEditable(false);
-		return secondary;
-	}
+    private JTextPane getSecondaryTextPane() {
+        secondary = new JTextPane();
+        secondary.setEditable(false);
+        return secondary;
+    }
 
-	private JComponent getTreePanel() {
-		root = new DefaultMutableTreeNode("Root"); //$NON-NLS-1$
-		treeModel = new DefaultTreeModel(root);
-		resultsTree = new JTree(treeModel);
-		resultsTree.setCellRenderer(new TreeNodeRenderer());
-		resultsTree.setCellRenderer(new TreeNodeRenderer());
-		resultsTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-		resultsTree.addTreeSelectionListener(new Selector());
-		resultsTree.setRootVisible(false);
-		resultsTree.setShowsRootHandles(true);
+    private JComponent getTreePanel() {
+        root = new DefaultMutableTreeNode("Root"); //$NON-NLS-1$
+        treeModel = new DefaultTreeModel(root);
+        resultsTree = new JTree(treeModel);
+        resultsTree.setCellRenderer(new TreeNodeRenderer());
+        resultsTree.setCellRenderer(new TreeNodeRenderer());
+        resultsTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        resultsTree.addTreeSelectionListener(new Selector());
+        resultsTree.setRootVisible(false);
+        resultsTree.setShowsRootHandles(true);
 
-		JScrollPane treePane = new JScrollPane(resultsTree);
-		treePane.setPreferredSize(new Dimension(150, 50));
-		JPanel panel = new JPanel(new GridLayout(1, 1));
-		panel.add(treePane);
-		return panel;
-	}
+        JScrollPane treePane = new JScrollPane(resultsTree);
+        treePane.setPreferredSize(new Dimension(150, 50));
+        JPanel panel = new JPanel(new GridLayout(1, 1));
+        panel.add(treePane);
+        return panel;
+    }
 
-	private class Selector implements TreeSelectionListener {
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see javax.swing.event.TreeSelectionListener#valueChanged(javax.swing.event.TreeSelectionEvent)
-		 */
-		public void valueChanged(TreeSelectionEvent e) {
-			try {
-				DefaultMutableTreeNode node = (DefaultMutableTreeNode) resultsTree.getLastSelectedPathComponent();
-				SampleResult sr = (SampleResult) node.getUserObject();
-				AssertionResult[] results = sr.getAssertionResults();
-				CompareAssertionResult result = null;
-				for (AssertionResult r : results) {
-					if (r instanceof CompareAssertionResult) {
-						result = (CompareAssertionResult) r;
-						break;
-					}
-				}
-				if (result == null)
-					result = new CompareAssertionResult();
-				base.setText(result.getBaseResult());
-				secondary.setText(result.getSecondaryResult());
-			} catch (Exception err) {
+    private class Selector implements TreeSelectionListener {
+        /*
+         * (non-Javadoc)
+         * 
+         * @see javax.swing.event.TreeSelectionListener#valueChanged(javax.swing.event.TreeSelectionEvent)
+         */
+        public void valueChanged(TreeSelectionEvent e) {
+            try {
+                DefaultMutableTreeNode node = (DefaultMutableTreeNode) resultsTree.getLastSelectedPathComponent();
+                SampleResult sr = (SampleResult) node.getUserObject();
+                AssertionResult[] results = sr.getAssertionResults();
+                CompareAssertionResult result = null;
+                for (AssertionResult r : results) {
+                    if (r instanceof CompareAssertionResult) {
+                        result = (CompareAssertionResult) r;
+                        break;
+                    }
+                }
+                if (result == null)
+                    result = new CompareAssertionResult();
+                base.setText(result.getBaseResult());
+                secondary.setText(result.getSecondaryResult());
+            } catch (Exception err) {
                 base.setText(JMeterUtils.getResString("comparison_invalid_node") + err); //$NON-NLS-1$
                 secondary.setText(JMeterUtils.getResString("comparison_invalid_node") + err); //$NON-NLS-1$
-			}
-			base.setCaretPosition(0);
-			secondary.setCaretPosition(0);
-		}
+            }
+            base.setCaretPosition(0);
+            secondary.setCaretPosition(0);
+        }
+    }
 
-	}
-
-	public void clearData() {
-		while (root.getChildCount() > 0) {
-			// the child to be removed will always be 0 'cos as the nodes are
-			// removed the nth node will become (n-1)th
-			treeModel.removeNodeFromParent((DefaultMutableTreeNode) root.getChildAt(0));
+    public void clearData() {
+        while (root.getChildCount() > 0) {
+            // the child to be removed will always be 0 'cos as the nodes are
+            // removed the nth node will become (n-1)th
+            treeModel.removeNodeFromParent((DefaultMutableTreeNode) root.getChildAt(0));
             base.setText(""); //$NON-NLS-1$
             secondary.setText(""); //$NON-NLS-1$
-		}
-	}
+        }
+    }
 
 }

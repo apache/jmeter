@@ -36,15 +36,15 @@ public class JSR223PostProcessor extends JSR223TestElement implements Cloneable,
     private static final long serialVersionUID = 232L;
 
     public void process() {
-    	
+
         try {
-        	ScriptEngineManager sem = getManager();
-        	if(sem == null) { return; }
-    		processFileOrScript(sem);
+            ScriptEngineManager sem = getManager();
+            if(sem == null) { return; }
+            processFileOrScript(sem);
         } catch (ScriptException e) {
             log.warn("Problem in JSR223 script "+e);
-    	} catch (IOException e) {
+        } catch (IOException e) {
             log.warn("Problem in JSR223 script "+e);
-		}
+        }
     }
 }
