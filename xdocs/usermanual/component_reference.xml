@@ -2418,6 +2418,15 @@ Note that these are BSF variables - i.e. they can be used directly in the script
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
 </component>
 
+<component name="JSR223 Listener" index="&sect-num;.3.18.1">
+<description>
+<p>
+The JSR223 Listener allows JSR223 script code to be applied to sample results.
+For details, see <complink name="BSF Listener"/>.
+</p>
+</description>
+</component>
+
 <component name="Generate Summary Results" index="&sect-num;.3.18"  width="358" height="131" screenshot="summary.png">
     <description>This test element can be placed anywhere in the test plan.
 Generates a summary of the test run so far to the log file and/or 
