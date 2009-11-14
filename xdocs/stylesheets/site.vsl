@@ -309,7 +309,7 @@ $rl_node.getText()
 #foreach ( $c_items in $component.getChildren() )
 #if ($c_items.getName().equals("description"))
 #runloop($c_items)
-#if ($screenshot != "")                        
+#if ("$!screenshot" != "")                        
 <p><b>Control Panel</b></p>
 <div align="center"><img $dim src="$sshotdir/$screenshot"></div>
 #end
