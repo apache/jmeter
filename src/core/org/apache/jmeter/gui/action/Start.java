@@ -28,7 +28,6 @@ import org.apache.jmeter.JMeter;
 import org.apache.jmeter.engine.JMeterEngineException;
 import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.engine.TreeCloner;
-import org.apache.jmeter.engine.util.DisabledComponentRemover;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.util.JMeterUtils;
@@ -89,8 +88,6 @@ public class Start extends AbstractAction {
         GuiPackage gui = GuiPackage.getInstance();
         HashTree testTree = gui.getTreeModel().getTestPlan();
         JMeter.convertSubTree(testTree);
-        DisabledComponentRemover remover = new DisabledComponentRemover(testTree);
-        testTree.traverse(remover);
         testTree.add(testTree.getArray()[0], gui.getMainFrame());
         log.debug("test plan before cloning is running version: "
                 + ((TestPlan) testTree.getArray()[0]).isRunningVersion());
