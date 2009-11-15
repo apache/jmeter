@@ -61,6 +61,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     private static final long serialVersionUID = 233L;
 
     private static final int DEFAULT_TIMEOUT = 2000;
+    private static final String DEFAULT_TIMEOUT_STRING = Integer.toString(DEFAULT_TIMEOUT);
 
     //++ These are JMX names, and must not be changed
     private static final String JNDI_INITIAL_CONTEXT_FACTORY = "JMSSampler.initialContextFactory"; // $NON-NLS-1$
@@ -341,7 +342,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
                     if (isNonPersistent()) {
                         producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
                     }
-                    executor = new FixedQueueExecutor(producer, getTimeout(), isUseReqMsgIdAsCorrelId());
+                    executor = new FixedQueueExecutor(producer, getTimeoutAsInt(), isUseReqMsgIdAsCorrelId());
                 }
             }
             if (LOGGER.isDebugEnabled()) {
@@ -407,6 +408,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     private void printEnvironment(Context context) throws NamingException {
         Hashtable<?,?> env = context.getEnvironment();
         LOGGER.debug("Initial Context Properties");
+        @SuppressWarnings("unchecked")
         Enumeration<String> keys = (Enumeration<String>) env.keys();
         while (keys.hasMoreElements()) {
             String key = keys.nextElement();
@@ -425,11 +427,15 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         }
     }
 
-    public int getTimeout() {
+    private int getTimeoutAsInt() {
         if (getPropertyAsInt(TIMEOUT) < 1) {
             return DEFAULT_TIMEOUT;
         }
         return getPropertyAsInt(TIMEOUT);
+    }
+    
+    public String getTimeout() {
+        return getPropertyAsString(TIMEOUT, DEFAULT_TIMEOUT_STRING);
     }
 
     /*
