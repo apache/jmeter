@@ -53,13 +53,6 @@ public class OnMessageSubscriber {
     private TopicSubscriber SUBSCRIBER = null;
 
     /**
-     *
-     */
-    public OnMessageSubscriber() {
-        super();
-    }
-
-    /**
      * Constructor takes the necessary JNDI related parameters to create a
      * connection and begin receiving messages.
      *
@@ -93,7 +86,7 @@ public class OnMessageSubscriber {
      * @param pwd
      * @return the context or null
      */
-    public Context initJNDI(boolean useProps, String jndi, String url, boolean useAuth, String user, String pwd) {
+    private Context initJNDI(boolean useProps, String jndi, String url, boolean useAuth, String user, String pwd) {
         if (useProps) {
             try {
                 return new InitialContext();
@@ -113,7 +106,7 @@ public class OnMessageSubscriber {
      * @param connfactory
      * @param topic
      */
-    public void initConnection(Context ctx, String connfactory, String topic) {
+    private void initConnection(Context ctx, String connfactory, String topic) {
         try {
             ConnectionFactory.getTopicConnectionFactory(ctx, connfactory);
             this.CONN = ConnectionFactory.getTopicConnection();
@@ -150,8 +143,6 @@ public class OnMessageSubscriber {
             this.SESSION = null;
             this.CONN = null;
         } catch (JMSException e) {
-            log.error(e.getMessage());
-        } catch (Throwable e) {
             log.error(e.getMessage());
         }
     }
