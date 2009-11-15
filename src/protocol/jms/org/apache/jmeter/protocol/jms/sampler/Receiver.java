@@ -30,7 +30,7 @@ import javax.jms.*;
 public class Receiver implements Runnable {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private boolean active;
+    private volatile boolean active;
 
     private final QueueSession session;
 
@@ -65,10 +65,10 @@ public class Receiver implements Runnable {
     }
 
     public void run() {
-        activate();
+        active = true;
         Message reply;
 
-        while (isActive()) {
+        while (active) {
             reply = null;
             try {
                 reply = consumer.receive(5000);
@@ -111,16 +111,8 @@ public class Receiver implements Runnable {
         }
     }
 
-    public synchronized void activate() {
-        active = true;
-    }
-
-    public synchronized void deactivate() {
+    public void deactivate() {
         active = false;
-    }
-
-    private synchronized boolean isActive() {
-        return active;
     }
 
 }
