@@ -186,7 +186,7 @@ public class JMSConfigGui extends AbstractSamplerGui {
         useNonPersistentDelivery.setSelected(sampler.isNonPersistent());
         useReqMsgIdAsCorrelId.setSelected(sampler.isUseReqMsgIdAsCorrelId());
         
-        timeout.setText(String.valueOf(sampler.getTimeout()));
+        timeout.setText(sampler.getTimeout());
         soapXml.setText(sampler.getContent());
         initialContextFactory.setText(sampler.getInitialContextFactory());
         providerUrl.setText(sampler.getContextProvider());
