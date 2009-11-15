@@ -33,7 +33,7 @@ import org.apache.log.Logger;
 public class MessageAdmin {
     private static final MessageAdmin SINGLETON = new MessageAdmin();
 
-    private Map<String, PlaceHolder> table = new Hashtable<String, PlaceHolder>();
+    private final Map<String, PlaceHolder> table = new Hashtable<String, PlaceHolder>();
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
