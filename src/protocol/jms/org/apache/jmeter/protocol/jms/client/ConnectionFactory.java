@@ -80,11 +80,7 @@ public class ConnectionFactory implements TestListener {
         testEnded();
     }
 
-    /**
-     * endTest cleans up the client
-     *
-     * @see junit.framework.TestListener#endTest(junit.framework.Test)
-     */
+    /** {@inheritDoc} */
     public synchronized void testEnded() {
         ConnectionFactory.factory = null;//N.B. static reference
     }
