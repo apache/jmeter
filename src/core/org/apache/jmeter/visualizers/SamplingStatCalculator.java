@@ -291,7 +291,7 @@ public class SamplingStatCalculator {
      */
     @Override
     public String toString() {
-        StringBuffer mySB = new StringBuffer();
+        StringBuilder mySB = new StringBuilder();
 
         mySB.append("Samples: " + this.getCount() + "  ");
         mySB.append("Avg: " + this.getMean() + "  ");
