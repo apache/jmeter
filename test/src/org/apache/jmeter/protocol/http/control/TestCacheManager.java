@@ -18,11 +18,14 @@
 
 package org.apache.jmeter.protocol.http.control;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.SimpleTimeZone;
@@ -30,6 +33,7 @@ import java.util.SimpleTimeZone;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.URI;
+import org.apache.commons.httpclient.URIException;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.util.HttpURLConnection;
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -39,7 +43,83 @@ import org.apache.jmeter.samplers.SampleResult;
 
 public class TestCacheManager extends JMeterTestCase {
     
-    private static final String APACHE = "http://jakarta.apache.org/";
+    private class URLConnectionStub extends URLConnection {
+        
+        protected URLConnectionStub(URL url) {
+            super(url);
+        }
+        
+        private URLConnectionStub(URLConnection urlConnection) {
+            super(urlConnection.getURL());
+        }
+        
+        @Override
+        public void connect() throws IOException {
+        }
+        
+        @Override
+        public String getHeaderField(String name) {
+            if (HTTPConstantsInterface.LAST_MODIFIED.equals(name)) {
+                return currentTimeInGMT;
+            } else if (HTTPConstantsInterface.ETAG.equals(name)) {
+                return EXPECTED_ETAG;
+            }
+            return super.getHeaderField(name);
+        }
+        @Override
+        public URL getURL() {
+            return url;
+        }
+    }
+    
+    private class HttpMethodStub extends PostMethod {
+        Header lastModifiedHeader;
+        Header etagHeader;
+        
+        HttpMethodStub() {
+            this.lastModifiedHeader = new Header(HTTPConstantsInterface.LAST_MODIFIED, currentTimeInGMT);
+            this.etagHeader = new Header(HTTPConstantsInterface.ETAG, EXPECTED_ETAG);
+        }
+        
+        @Override
+        public Header getResponseHeader(String headerName) {
+            if (HTTPConstantsInterface.LAST_MODIFIED.equals(headerName)) {
+                return this.lastModifiedHeader;
+            } else if (HTTPConstantsInterface.ETAG.equals(headerName)) {
+                return this.etagHeader;
+            }
+            return null;
+        }
+
+        @Override
+        public URI getURI() throws URIException {
+            return uri;
+        }
+    }
+    
+    private class HttpURLConnectionStub extends HttpURLConnection {
+        Map<String, List<String>> properties;
+        
+        public HttpURLConnectionStub(HttpMethod method, URL url) {
+            super(method, url);
+            this.properties = new HashMap<String, List<String>>();
+        }
+        
+        @Override
+        public void addRequestProperty(String key, String value) {
+            List<String> list = new ArrayList<String>();
+            list.add(value);
+            this.properties.put(key, list);
+        }
+        
+        @Override
+        public Map<String, List<String>> getRequestProperties() {
+            return this.properties;
+        }
+        
+    }
+    
+    private static final String LOCAL_HOST = "http://localhost/";
     private static final String EXPECTED_ETAG = "0xCAFEBABEDEADBEEF";
     private CacheManager cacheManager;
     private String currentTimeInGMT;
@@ -61,11 +141,11 @@ public class TestCacheManager extends JMeterTestCase {
         simpleDateFormat.setTimeZone(new SimpleTimeZone(0, "GMT"));
         simpleDateFormat.applyPattern("EEE, dd MMM yyyy HH:mm:ss z");
         this.currentTimeInGMT = simpleDateFormat.format(new Date());
-        this.uri = new URI(APACHE, false);
-        this.url = new URL(APACHE);
-        this.urlConnection = this.url.openConnection();
-        this.httpMethod = new PostMethod();
-        this.httpUrlConnection = new HttpURLConnection(this.httpMethod, this.url);
+        this.uri = new URI(LOCAL_HOST, false);
+        this.url = new URL(LOCAL_HOST);
+        this.urlConnection =  new URLConnectionStub(this.url.openConnection());
+        this.httpMethod = new HttpMethodStub();
+        this.httpUrlConnection = new HttpURLConnectionStub(this.httpMethod, this.url);
     }
 
     @Override
@@ -97,16 +177,16 @@ public class TestCacheManager extends JMeterTestCase {
         saveDetailsWithConnectionAndSampleResultWithResponseCode("200");
         CacheManager.CacheEntry cacheEntry = getThreadCacheEntry(this.url.toString());
         assertNotNull("Saving details with SampleResult & connection with 200 response should make cache entry.", cacheEntry);
-        assertNotNull("Saving details with SampleResult & connection with 200 response should make cache entry with an etag.", cacheEntry.getEtag());
-        assertNotNull("Saving details with SampleResult & connection with 200 response should make cache entry with last modified date.", cacheEntry.getLastModified());
+        assertEquals("Saving details with SampleResult & connection with 200 response should make cache entry with an etag.", EXPECTED_ETAG, cacheEntry.getEtag());
+        assertEquals("Saving details with SampleResult & connection with 200 response should make cache entry with last modified date.", this.currentTimeInGMT, cacheEntry.getLastModified());
     }
 
     public void testSaveDetailsHttpMethodWithSampleResultWithResponseCode200GivesCacheEntry() throws Exception {
         saveDetailsWithHttpMethodAndSampleResultWithResponseCode("200");
         CacheManager.CacheEntry cacheEntry = getThreadCacheEntry(this.httpMethod.getURI().toString());
         assertNotNull("Saving SampleResult with HttpMethod & 200 response should make cache entry.", cacheEntry);
-        assertNull("Saving details with SampleResult & HttpMethod with 200 response should make cache entry with no etag.", cacheEntry.getEtag());
-        assertNull("Saving details with SampleResult & HttpMethod with 200 response should make cache entry with no last modified date.", cacheEntry.getLastModified());
+        assertEquals("Saving details with SampleResult & HttpMethod with 200 response should make cache entry with no etag.", EXPECTED_ETAG, cacheEntry.getEtag());
+        assertEquals("Saving details with SampleResult & HttpMethod with 200 response should make cache entry with no last modified date.", this.currentTimeInGMT, cacheEntry.getLastModified());
     }
 
     public void testSaveDetailsURLConnectionWithSampleResultWithResponseCode404GivesNoCacheEntry() throws Exception {
@@ -124,7 +204,6 @@ public class TestCacheManager extends JMeterTestCase {
         this.httpMethod.addRequestHeader(new Header(HTTPConstantsInterface.IF_MODIFIED_SINCE, this.currentTimeInGMT, false));
         this.httpMethod.addRequestHeader(new Header(HTTPConstantsInterface.ETAG, EXPECTED_ETAG, false));
         saveDetailsWithHttpMethodAndSampleResultWithResponseCode("200");
-        setFieldInCacheEntry(getThreadCacheEntry(this.httpMethod.getURI().toString()), "etag", EXPECTED_ETAG);
         setHeadersWithUrlAndHttpMethod();
         checkRequestHeader(HTTPConstantsInterface.IF_NONE_MATCH, EXPECTED_ETAG);
         checkRequestHeader(HTTPConstantsInterface.IF_MODIFIED_SINCE, this.currentTimeInGMT);
@@ -139,9 +218,6 @@ public class TestCacheManager extends JMeterTestCase {
 
     public void testSetHeadersHttpURLConnectionWithSampleResultWithResponseCode200GivesCacheEntry() throws Exception {
         saveDetailsWithConnectionAndSampleResultWithResponseCode("200");
-        CacheManager.CacheEntry cacheEntry = getThreadCacheEntry(httpUrlConnection.getURL().toString());
-        setFieldInCacheEntry(cacheEntry, "etag", EXPECTED_ETAG);
-        setFieldInCacheEntry(cacheEntry, "lastModified", this.currentTimeInGMT);
         setHeadersWithHttpUrlConnectionAndUrl();
         Map<String, List<String>> properties = this.httpUrlConnection.getRequestProperties();
         checkProperty(properties, HTTPConstantsInterface.IF_NONE_MATCH, EXPECTED_ETAG);
@@ -202,12 +278,6 @@ public class TestCacheManager extends JMeterTestCase {
     private void saveDetailsWithConnectionAndSampleResultWithResponseCode(String responseCode) {
         SampleResult sampleResult = getSampleResultWithSpecifiedResponseCode(responseCode);
         this.cacheManager.saveDetails(this.urlConnection, sampleResult);
-    }
-
-    private void setFieldInCacheEntry(CacheManager.CacheEntry cacheEntry, String fieldName, String expectedValue) throws Exception {
-        Field field = CacheManager.CacheEntry.class.getDeclaredField(fieldName);
-        field.setAccessible(true);
-        field.set(cacheEntry, expectedValue);
     }
 
     private void setHeadersWithHttpUrlConnectionAndUrl() {
