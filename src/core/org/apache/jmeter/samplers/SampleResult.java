@@ -354,14 +354,15 @@ public class SampleResult implements Serializable {
         return responseCode;
     }
 
-    private static final String OK = Integer.toString(HttpURLConnection.HTTP_OK);
+    private static final String OK_CODE = Integer.toString(HttpURLConnection.HTTP_OK);
+    private static final String OK_MSG = "OK"; // $NON-NLS-1$
 
     /**
      * Set response code to OK, i.e. "200"
      *
      */
     public void setResponseCodeOK(){
-        responseCode=OK;
+        responseCode=OK_CODE;
     }
 
     public void setResponseCode(String code) {
@@ -369,7 +370,7 @@ public class SampleResult implements Serializable {
     }
 
     public boolean isResponseCodeOK(){
-        return responseCode.equals(OK);
+        return responseCode.equals(OK_CODE);
     }
     public String getResponseMessage() {
         return responseMessage;
@@ -380,7 +381,7 @@ public class SampleResult implements Serializable {
     }
 
     public void setResponseMessageOK() {
-        responseMessage = "OK"; // $NON-NLS-1$
+        responseMessage = OK_MSG;
     }
 
     public String getThreadName() {
