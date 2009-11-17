@@ -2684,9 +2684,10 @@ Before executing the next sample, the sampler checks to see if there is an entry
 and if so, the If-Last-Modified and If-None-Match conditional headers are set for the request.
 </p>
 <p>
-Additionally, if the "Use Expires header" option is selected, then the Expires value is checked against the current time.
+Additionally, if the "Use Cache-Control/Expires header" option is selected, then the Cache-Control/Expires value is checked against the current time.
 If the request is a GET request, and the timestamp is in the future, then the sampler returns immediately,
 without requesting the URL from the remote server. This is intended to emulate browser behaviour.
+Note that the Cache-Control header must be "public" and only the "max-age" expiry option is processed.
 </p>
 <p>
 If the requested document has not changed since it was cached, then the response body will be empty.
