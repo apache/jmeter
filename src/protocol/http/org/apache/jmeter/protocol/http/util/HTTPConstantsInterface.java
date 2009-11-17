@@ -62,5 +62,6 @@ public interface HTTPConstantsInterface {
     public static final String ETAG = "Etag"; // $NON-NLS-1$
     public static final String LAST_MODIFIED = "Last-Modified"; // $NON-NLS-1$
     public static final String EXPIRES = "Expires"; // $NON-NLS-1$
+    public static final String CACHE_CONTROL = "Cache-Control";  //e.g. public, max-age=259200
 
 }
