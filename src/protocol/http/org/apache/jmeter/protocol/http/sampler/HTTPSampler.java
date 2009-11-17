@@ -454,6 +454,19 @@ public class HTTPSampler extends HTTPSamplerBase implements Interruptible {
         res.setSampleLabel(urlStr);
         
         res.sampleStart(); // Count the retries as well in the time
+
+        // Check cache for an entry with an Expires header in the future
+        final CacheManager cacheManager = getCacheManager();
+        if (cacheManager != null && GET.equalsIgnoreCase(method)) {
+           if (cacheManager.inCache(url)) {
+               res.sampleEnd();
+               res.setResponseCodeOK();
+               res.setResponseMessage("Cached");
+               res.setSuccessful(true);
+               return res;
+           }
+        }
+        
         try {
             // Sampling proper - establish the connection and read the response:
             // Repeatedly try to connect:
@@ -556,7 +569,6 @@ public class HTTPSampler extends HTTPSamplerBase implements Interruptible {
             saveConnectionCookies(conn, url, getCookieManager());
 
             // Save cache information
-            final CacheManager cacheManager = getCacheManager();
             if (cacheManager != null){
                 cacheManager.saveDetails(conn, res);
             }

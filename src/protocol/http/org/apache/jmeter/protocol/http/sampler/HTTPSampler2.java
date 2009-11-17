@@ -859,6 +859,16 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
                 httpMethod = new DeleteMethod(urlStr);
             } else if (method.equals(GET)){
                 httpMethod = new GetMethod(urlStr);
+                final CacheManager cacheManager = getCacheManager();
+                if (cacheManager != null && GET.equalsIgnoreCase(method)) {
+                   if (cacheManager.inCache(url)) {
+                       res.sampleEnd();
+                       res.setResponseCodeOK();
+                       res.setResponseMessage("Cached");
+                       res.setSuccessful(true);
+                       return res;
+                   }
+                }
             } else {
                 log.error("Unexpected method (converted to GET): "+method);
                 httpMethod = new GetMethod(urlStr);
