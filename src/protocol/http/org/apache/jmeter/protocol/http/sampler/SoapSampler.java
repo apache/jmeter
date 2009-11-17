@@ -241,6 +241,7 @@ public class SoapSampler extends HTTPSampler2 implements Interruptible { // Impl
 
         res.setSampleLabel(urlStr); // May be replaced later
         res.setHTTPMethod(HTTPConstants.POST);
+        res.setURL(url);
         res.sampleStart(); // Count the retries as well in the time
         HttpClient client = null;
         InputStream instream = null;
