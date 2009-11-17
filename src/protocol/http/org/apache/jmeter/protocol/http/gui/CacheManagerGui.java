@@ -37,6 +37,8 @@ public class CacheManagerGui extends AbstractConfigGui {
 
     private JCheckBox clearEachIteration;
 
+    private JCheckBox useExpires;
+
     /**
      * Create a new LoginConfigGui as a standalone component.
      */
@@ -60,7 +62,9 @@ public class CacheManagerGui extends AbstractConfigGui {
     @Override
     public void configure(TestElement element) {
         super.configure(element);
-        clearEachIteration.setSelected(((CacheManager)element).getClearEachIteration());
+        final CacheManager cacheManager = (CacheManager)element;
+        clearEachIteration.setSelected(cacheManager.getClearEachIteration());
+        useExpires.setSelected(cacheManager.getUseExpires());
     }
 
     /* Implements JMeterGUIComponent.createTestElement() */
@@ -73,8 +77,11 @@ public class CacheManagerGui extends AbstractConfigGui {
     /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
     public void modifyTestElement(TestElement element) {
         configureTestElement(element);
-        ((CacheManager)element).setClearEachIteration(clearEachIteration.isSelected());
+        final CacheManager cacheManager = (CacheManager)element;
+        cacheManager.setClearEachIteration(clearEachIteration.isSelected());
+        cacheManager.setUseExpires(useExpires.isSelected());
     }
+
     /**
      * Implements JMeterGUIComponent.clearGui
      */
@@ -82,6 +89,7 @@ public class CacheManagerGui extends AbstractConfigGui {
     public void clearGui() {
         super.clearGui();
         clearEachIteration.setSelected(false);
+        useExpires.setSelected(false);
     }
 
     /**
@@ -92,11 +100,13 @@ public class CacheManagerGui extends AbstractConfigGui {
         setBorder(makeBorder());
 
         clearEachIteration = new JCheckBox(JMeterUtils.getResString("clear_cache_per_iter"), false);
+        useExpires = new JCheckBox(JMeterUtils.getResString("use_expires"), false);
 
         JPanel northPanel = new JPanel();
         northPanel.setLayout(new VerticalLayout(5, VerticalLayout.BOTH));
         northPanel.add(makeTitlePanel());
         northPanel.add(clearEachIteration);
+        northPanel.add(useExpires);
         add(northPanel, BorderLayout.NORTH);
     }
 
