@@ -628,7 +628,6 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
         setConnectionAuthorization(httpClient, u, getAuthManager());
 
         if (res != null) {
-            res.setURL(u);
             res.setCookies(cookies);
         }
 
@@ -840,6 +839,8 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
 
         res.setSampleLabel(urlStr); // May be replaced later
         res.setHTTPMethod(method);
+        res.setURL(url);
+
         res.sampleStart(); // Count the retries as well in the time
         HttpClient client = null;
         InputStream instream = null;
@@ -863,8 +864,7 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
                 if (cacheManager != null && GET.equalsIgnoreCase(method)) {
                    if (cacheManager.inCache(url)) {
                        res.sampleEnd();
-                       res.setResponseCodeOK();
-                       res.setResponseMessage("Cached");
+                       res.setResponseNoContent();
                        res.setSuccessful(true);
                        return res;
                    }
