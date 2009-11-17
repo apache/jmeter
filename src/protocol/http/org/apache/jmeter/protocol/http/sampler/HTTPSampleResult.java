@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
+import java.net.HttpURLConnection;
 import java.net.URL;
 
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
@@ -37,6 +38,9 @@ public class HTTPSampleResult extends SampleResult {
 
     private String queryString = ""; // never null
 
+    private static final String HTTP_NO_CONTENT_CODE = Integer.toString(HttpURLConnection.HTTP_NO_CONTENT);
+    private static final String HTTP_NO_CONTENT_MSG = "No Content"; // $NON-NLS-1$
+    
     public HTTPSampleResult() {
         super();
         setDataEncoding(DEFAULT_HTTP_ENCODING); // default if encoding not provided be the page
@@ -197,5 +201,10 @@ public class HTTPSampleResult extends SampleResult {
             }
         }
         return super.getDataEncodingWithDefault();
+    }
+    
+    public void setResponseNoContent(){
+        setResponseCode(HTTP_NO_CONTENT_CODE);
+        setResponseMessage(HTTP_NO_CONTENT_MSG);
     }
 }
