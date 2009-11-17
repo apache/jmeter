@@ -61,5 +61,6 @@ public interface HTTPConstantsInterface {
     public static final String IF_MODIFIED_SINCE = "If-Modified-Since"; // $NON-NLS-1$
     public static final String ETAG = "Etag"; // $NON-NLS-1$
     public static final String LAST_MODIFIED = "Last-Modified"; // $NON-NLS-1$
+    public static final String EXPIRES = "Expires"; // $NON-NLS-1$
 
 }
