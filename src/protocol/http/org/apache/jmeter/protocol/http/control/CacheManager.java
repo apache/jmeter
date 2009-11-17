@@ -108,7 +108,8 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
             String expires = conn.getHeaderField(HTTPConstantsInterface.EXPIRES);
             String etag = conn.getHeaderField(HTTPConstantsInterface.ETAG);
             String url = conn.getURL().toString();
-            setCache(lastModified, expires, etag, url);
+            String cacheControl = conn.getHeaderField(HTTPConstantsInterface.CACHE_CONTROL);
+            setCache(lastModified, cacheControl, expires, etag, url);
         }
     }
 
@@ -124,24 +125,32 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
             String expires = getHeader(method ,HTTPConstantsInterface.EXPIRES);
             String etag = getHeader(method ,HTTPConstantsInterface.ETAG);
             String url = method.getURI().toString();
-            setCache(lastModified, expires, etag, url);
+            String cacheControl = getHeader(method, HTTPConstantsInterface.CACHE_CONTROL);
+            setCache(lastModified, cacheControl, expires, etag, url);
         }
     }
 
     // helper method to save the cache entry
-    private void setCache(String lastModified, String expires, String etag, String url) {
+    private void setCache(String lastModified, String cacheControl, String expires, String etag, String url) {
         if (log.isDebugEnabled()){
-            log.debug("SET(both) "+url + " " + lastModified + " " + " " + expires + " " + etag);
+            log.debug("SET(both) "+url + " " + cacheControl + " " + lastModified + " " + " " + expires + " " + etag);
         }
         Date expiresDate = null; // i.e. not using Expires
-        if (expires != null && useExpires) {// Check that the header is present and we are processing Expires
-            try {
-                expiresDate = DateUtil.parseDate(expires);
-            } catch (DateParseException e) {
-                if (log.isDebugEnabled()){
-                    log.debug("Unable to parse Expires: '"+expires+"' "+e);
+        if (useExpires) {// Check that we are processing Expires/CacheControl
+            final String MAX_AGE = "max-age=";
+            // TODO - check for other CacheControl attributes?
+            if (cacheControl != null && cacheControl.contains("public") && cacheControl.contains(MAX_AGE)) {
+                long maxAge = Long.parseLong(cacheControl.substring(cacheControl.indexOf(MAX_AGE)+MAX_AGE.length()))*1000;
+                expiresDate=new Date(System.currentTimeMillis()+maxAge);
+            } else if (expires != null) {
+                try {
+                    expiresDate = DateUtil.parseDate(expires);
+                } catch (DateParseException e) {
+                    if (log.isDebugEnabled()){
+                        log.debug("Unable to parse Expires: '"+expires+"' "+e);
+                    }
+                    expiresDate = new Date(0L); // invalid dates must be treated as expired
                 }
-                expiresDate = new Date(0L); // invalid dates must be treated as expired
             }
         }
         getCache().put(url, new CacheEntry(lastModified, expiresDate, etag));
@@ -228,8 +237,10 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
                         log.debug("Expires= " + expiresDate + " (Valid)");
                     }
                     return true;
-                } else if (log.isDebugEnabled()){
-                    log.debug("Expires= " + expiresDate + " (Expired)");
+                } else {
+                    if (log.isDebugEnabled()){
+                        log.debug("Expires= " + expiresDate + " (Expired)");
+                    }
                 }
             }
         }
