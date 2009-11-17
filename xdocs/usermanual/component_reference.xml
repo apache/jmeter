@@ -2679,12 +2679,18 @@ be able to run it.  However, you can use it as a reference in constructing your 
 The HTTP Cache Manager is used to add caching functionality to HTTP requests within its scope.
 </p>
 <p>
-If a sample is successful (i.e. has response code 2xx) then the Last-Modified and Etag values are saved for the URL.
+If a sample is successful (i.e. has response code 2xx) then the Last-Modified and Etag (and Expired if relevant) values are saved for the URL.
 Before executing the next sample, the sampler checks to see if there is an entry in the cache, 
 and if so, the If-Last-Modified and If-None-Match conditional headers are set for the request.
 </p>
 <p>
+Additionally, if the "Use Expires header" option is selected, then the Expires value is checked against the current time.
+If the request is a GET request, and the timestamp is in the future, then the sampler returns immediately,
+without requesting the URL from the remote server. This is intended to emulate browser behaviour.
+</p>
+<p>
 If the requested document has not changed since it was cached, then the response body will be empty.
+Likewise if the Expires date is in the future.
 This may cause problems for Assertions.
 </p>
 
