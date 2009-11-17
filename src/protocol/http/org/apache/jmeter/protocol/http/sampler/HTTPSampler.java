@@ -212,8 +212,6 @@ public class HTTPSampler extends HTTPSamplerBase implements Interruptible {
         }
 
         if (res != null) {
-            res.setURL(u);
-            res.setHTTPMethod(method);
             res.setRequestHeaders(getConnectionHeaders(conn));
             res.setCookies(cookies);
         }
@@ -452,6 +450,8 @@ public class HTTPSampler extends HTTPSamplerBase implements Interruptible {
         res.setMonitor(isMonitor());
 
         res.setSampleLabel(urlStr);
+        res.setURL(url);
+        res.setHTTPMethod(method);
         
         res.sampleStart(); // Count the retries as well in the time
 
@@ -460,8 +460,7 @@ public class HTTPSampler extends HTTPSamplerBase implements Interruptible {
         if (cacheManager != null && GET.equalsIgnoreCase(method)) {
            if (cacheManager.inCache(url)) {
                res.sampleEnd();
-               res.setResponseCodeOK();
-               res.setResponseMessage("Cached");
+               res.setResponseNoContent();
                res.setSuccessful(true);
                return res;
            }
