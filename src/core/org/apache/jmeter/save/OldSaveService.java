@@ -376,6 +376,7 @@ public final class OldSaveService {
 
     private static Collection<JMeterProperty> createCollection(Configuration config, String testClass) throws ConfigurationException,
             ClassNotFoundException, IllegalAccessException, InstantiationException {
+        @SuppressWarnings("unchecked") // OK
         Collection<JMeterProperty> coll = (Collection<JMeterProperty>) Class.forName(config.getAttribute("class")).newInstance(); // $NON-NLS-1$
         Configuration[] items = config.getChildren();
 
@@ -434,6 +435,7 @@ public final class OldSaveService {
 
     private static Map<String, JMeterProperty> createMap(Configuration config, String testClass) throws ConfigurationException,
             ClassNotFoundException, IllegalAccessException, InstantiationException {
+        @SuppressWarnings("unchecked") // OK
         Map<String, JMeterProperty> map = (Map<String, JMeterProperty>) Class.forName(config.getAttribute("class")).newInstance();
         Configuration[] items = config.getChildren();
 

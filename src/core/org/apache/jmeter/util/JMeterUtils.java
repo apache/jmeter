@@ -367,6 +367,7 @@ public class JMeterUtils implements UnitTestManager {
      */
     private static void notifyLocaleChangeListeners() {
         LocaleChangeEvent event = new LocaleChangeEvent(JMeterUtils.class, locale);
+        @SuppressWarnings("unchecked") // clone will produce correct type
         Iterator<LocaleChangeListener> iterator = ((Vector<LocaleChangeListener>) localeChangeListeners.clone()).iterator();
 
         while (iterator.hasNext()) {

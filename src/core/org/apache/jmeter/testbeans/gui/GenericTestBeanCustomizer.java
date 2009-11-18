@@ -318,8 +318,9 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 
     /**
      * {@inheritDoc}
-     * @param map must be an instance of Map<String, Object>
+     * @param map must be an instance of Map&lt;String, Object&gt;
      */
+    @SuppressWarnings("unchecked")
     public void setObject(Object map) {
         propertyMap = (Map<String, Object>) map;
 

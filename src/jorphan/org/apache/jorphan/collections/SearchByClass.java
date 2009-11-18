@@ -59,14 +59,6 @@ public class SearchByClass implements HashTreeTraverser {
     private final Class<?> searchClass;
 
     /**
-     * Creates an instance of SearchByClass. However, without setting the Class
-     * to search for, it will be a useless object.
-     */
-    public SearchByClass() {
-        searchClass = null;
-    }
-
-    /**
      * Creates an instance of SearchByClass, and sets the Class to be searched
      * for.
      *
