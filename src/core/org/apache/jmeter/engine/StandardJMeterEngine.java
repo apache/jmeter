@@ -106,7 +106,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
     private HashTree test;
 
-    private volatile SearchByClass testListenersSave;
+    private volatile SearchByClass<TestListener> testListenersSave;
 
     private final String host;
 
@@ -266,7 +266,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         }
     }
 
-    private void notifyTestListenersOfStart(SearchByClass testListeners) {
+    private void notifyTestListenersOfStart(SearchByClass<TestListener> testListeners) {
         Iterator<TestListener> iter = testListeners.getSearchResults().iterator();
         while (iter.hasNext()) {
             TestListener tl = iter.next();
@@ -281,7 +281,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         }
     }
 
-    private void notifyTestListenersOfEnd(SearchByClass testListeners) {
+    private void notifyTestListenersOfEnd(SearchByClass<TestListener> testListeners) {
         log.info("Notifying test listeners of end of test");
         Iterator<TestListener> iter = testListeners.getSearchResults().iterator();
         while (iter.hasNext()) {
@@ -377,7 +377,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         log.info("Running the test!");
         running = true;
 
-        SearchByClass testPlan = new SearchByClass(TestPlan.class);
+        SearchByClass<TestPlan> testPlan = new SearchByClass<TestPlan>(TestPlan.class);
         test.traverse(testPlan);
         Object[] plan = testPlan.getSearchResults().toArray();
         if (plan.length == 0) {
@@ -401,7 +401,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
          * Notification of test listeners needs to happen after function
          * replacement, but before setting RunningVersion to true.
          */
-        SearchByClass testListeners = new SearchByClass(TestListener.class);
+        SearchByClass<TestListener> testListeners = new SearchByClass<TestListener>(TestListener.class);
         test.traverse(testListeners);
 
         // Merge in any additional test listeners
@@ -417,7 +417,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
         List<?> testLevelElements = new LinkedList<Object>(test.list(test.getArray()[0]));
         removeThreadGroups(testLevelElements);
-        SearchByClass searcher = new SearchByClass(ThreadGroup.class);
+        SearchByClass<ThreadGroup> searcher = new SearchByClass<ThreadGroup>(ThreadGroup.class);
         test.traverse(searcher);
         TestCompiler.initialize();
         // for each thread group, generate threads
