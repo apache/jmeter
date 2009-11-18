@@ -60,7 +60,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     private transient JTable table;
 
     /** The model for the arguments table. */
-    protected transient ObjectTableModel tableModel;
+    protected transient ObjectTableModel tableModel; // will only contain Argument or HTTPArgument
 
     /** A button for adding new arguments to the table. */
     private JButton add;
@@ -156,6 +156,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         if (args instanceof Arguments) {
             arguments = (Arguments) args;
             arguments.clear();
+            @SuppressWarnings("unchecked") // only contains Argument (or HTTPArgument)
             Iterator<Argument> modelData = (Iterator<Argument>) tableModel.iterator();
             while (modelData.hasNext()) {
                 Argument arg = modelData.next();
@@ -326,7 +327,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      *
      * @return a new Argument object
      */
-    protected Object makeNewArgument() {
+    protected Argument makeNewArgument() {
         return new Argument("", ""); // $NON-NLS-1$ // $NON-NLS-2$
     }
 
