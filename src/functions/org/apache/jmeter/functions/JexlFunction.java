@@ -77,6 +77,7 @@ public class JexlFunction extends AbstractFunction {
         {
             Script script = ScriptFactory.createScript(exp);
             JexlContext jc = JexlHelper.createContext();
+            @SuppressWarnings("unchecked")
             final Map<String, Object> jexlVars = jc.getVars();
             jexlVars.put("log", log); //$NON-NLS-1$
             jexlVars.put("ctx", jmctx); //$NON-NLS-1$
