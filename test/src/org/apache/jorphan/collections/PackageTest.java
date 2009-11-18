@@ -162,7 +162,7 @@ public class PackageTest extends TestCase {
 
         public void testSearch() throws Exception {
             ListedHashTree tree = new ListedHashTree();
-            SearchByClass searcher = new SearchByClass(Integer.class);
+            SearchByClass<Integer> searcher = new SearchByClass<Integer>(Integer.class);
             String one = "one";
             String two = "two";
             Integer o = new Integer(1);
