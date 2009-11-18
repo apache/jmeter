@@ -23,6 +23,7 @@ import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.util.Collection;
+import java.util.Enumeration;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPopupMenu;
@@ -140,5 +141,12 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
     /** {@inheritDoc} */
     public void nameChanged() {
         treeModel.nodeChanged(this);
+    }
+    
+    // Override in order to provide type safety
+    @Override
+    @SuppressWarnings("unchecked")
+    public Enumeration<JMeterTreeNode> children() {
+        return super.children();
     }
 }

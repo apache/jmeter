@@ -77,7 +77,7 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
     }
 
     @Override
-    protected Object makeNewArgument() {
+    protected HTTPArgument makeNewArgument() {
         HTTPArgument arg = new HTTPArgument("", "");
         arg.setAlwaysEncoded(false);
         arg.setUseEquals(true);
@@ -99,6 +99,7 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
     @Override
     public TestElement createTestElement() {
         stopTableEditing();
+        @SuppressWarnings("unchecked") // only contains Argument (or HTTPArgument)
         Iterator<HTTPArgument> modelData = (Iterator<HTTPArgument>) tableModel.iterator();
         Arguments args = new Arguments();
         while (modelData.hasNext()) {

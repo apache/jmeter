@@ -65,7 +65,7 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
     private transient JTable table;
 
     /** The model for the files table. */
-    private transient ObjectTableModel tableModel;
+    private transient ObjectTableModel tableModel; // only contains HTTPFileArg elements
 
     /** A button for adding new files to the table. */
     private JButton add;
@@ -170,6 +170,7 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
         if (testElement instanceof HTTPSamplerBase) {
             HTTPSamplerBase base = (HTTPSamplerBase) testElement;
             int rows = tableModel.getRowCount();
+            @SuppressWarnings("unchecked") // we only put HTTPFileArgs in it
             Iterator<HTTPFileArg> modelData = (Iterator<HTTPFileArg>) tableModel.iterator();
             HTTPFileArg[] files = new HTTPFileArg[rows];
             int row=0;

@@ -154,6 +154,7 @@ public class CompoundVariable implements Function {
         return results.toString();
     }
 
+    @SuppressWarnings("unchecked") // clone will produce correct type
     public CompoundVariable getFunction() {
         CompoundVariable func = new CompoundVariable();
         func.compiledComponents = (LinkedList<Object>) compiledComponents.clone();

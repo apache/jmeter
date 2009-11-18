@@ -378,7 +378,9 @@ public class ProxyControl extends GenericController {
     public synchronized void deliverSampler(HTTPSamplerBase sampler, TestElement[] subConfigs, SampleResult result) {
         if (filterContentType(result) && filterUrl(sampler)) {
             JMeterTreeNode myTarget = findTargetControllerNode();
+            @SuppressWarnings("unchecked") // OK, because find only returns correct element types
             Collection<ConfigTestElement> defaultConfigurations = (Collection<ConfigTestElement>) findApplicableElements(myTarget, ConfigTestElement.class, false);
+            @SuppressWarnings("unchecked") // OK, because find only returns correct element types
             Collection<Arguments> userDefinedVariables = (Collection<Arguments>) findApplicableElements(myTarget, Arguments.class, true);
 
             removeValuesFromSampler(sampler, defaultConfigurations);

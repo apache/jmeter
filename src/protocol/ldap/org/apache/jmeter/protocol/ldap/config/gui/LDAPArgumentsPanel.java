@@ -61,7 +61,8 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
     private transient JTable table;
 
     /** The model for the arguments table. */
-    protected transient ObjectTableModel tableModel;
+    // needs to be accessible from test code
+    transient ObjectTableModel tableModel; // Only contains LDAPArgument entries
 
     /** A button for adding new arguments to the table. */
     private JButton add;
@@ -132,6 +133,7 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
         if (args instanceof LDAPArguments) {
             arguments = (LDAPArguments) args;
             arguments.clear();
+            @SuppressWarnings("unchecked") // Only contains LDAPArgument entries
             Iterator<LDAPArgument> modelData = (Iterator<LDAPArgument>) tableModel.iterator();
             while (modelData.hasNext()) {
                 LDAPArgument arg = modelData.next();
@@ -166,46 +168,10 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
     }
 
     /**
-     * Get the table used to enter arguments.
-     *
-     * @return the table used to enter arguments
-     */
-    protected JTable getTable() {
-        return table;
-    }
-
-    /**
-     * Get the title label for this component.
-     *
-     * @return the title label displayed with the table
-     */
-    protected JLabel getTableLabel() {
-        return tableLabel;
-    }
-
-    /**
-     * Get the button used to delete rows from the table.
-     *
-     * @return the button used to delete rows from the table
-     */
-    protected JButton getDeleteButton() {
-        return delete;
-    }
-
-    /**
-     * Get the button used to add rows to the table.
-     *
-     * @return the button used to add rows to the table
-     */
-    protected JButton getAddButton() {
-        return add;
-    }
-
-    /**
      * Enable or disable the delete button depending on whether or not there is
      * a row to be deleted.
      */
-    protected void checkDeleteStatus() {
+    private void checkDeleteStatus() {
         // Disable DELETE if there are no rows in the table to delete.
         if (tableModel.getRowCount() == 0) {
             delete.setEnabled(false);
@@ -240,7 +206,7 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
     /**
      * Remove the currently selected argument from the table.
      */
-    protected void deleteArgument() {
+    private void deleteArgument() {
         // If a table cell is being edited, we must cancel the editing before
         // deleting the row
         if (table.isEditing()) {
@@ -275,7 +241,7 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
     /**
      * Add a new argument row to the table.
      */
-    protected void addArgument() {
+    private void addArgument() {
         // If a table cell is being edited, we should accept the current value
         // and stop the editing before adding a new row.
         stopTableEditing();
@@ -295,7 +261,7 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
      *
      * @return a new LDAPArgument object
      */
-    protected Object makeNewLDAPArgument() {
+    private LDAPArgument makeNewLDAPArgument() {
         return new LDAPArgument("", "", "");
     }
 
@@ -313,7 +279,7 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
     /**
      * Initialize the table model used for the arguments table.
      */
-    protected void initializeTableModel() {
+    private void initializeTableModel() {
         tableModel = new ObjectTableModel(new String[] { COLUMN_NAMES[0], COLUMN_NAMES[1], COLUMN_NAMES[2] },
                 LDAPArgument.class,
                 new Functor[] { new Functor("getName"), new Functor("getValue"), new Functor("getOpcode") },
@@ -343,7 +309,7 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
      * @param _table
      *            the table to resize columns for
      */
-    protected void sizeColumns(JTable _table) {
+    private void sizeColumns(JTable _table) {
     }
 
     /**
@@ -364,7 +330,7 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
      *
      * @return a panel containing the title label
      */
-    protected Component makeLabelPanel() {
+    private Component makeLabelPanel() {
         JPanel labelPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         labelPanel.add(tableLabel);
         return labelPanel;
