@@ -170,8 +170,10 @@ public class JMeterTest extends JMeterTestCase {
         doc = bldr.build(compref);
         Element root = doc.getRootElement();
         Element body = root.getChild("body");
+        @SuppressWarnings("unchecked")
         List<Element> sections = body.getChildren("section");
         for (int i = 0; i < sections.size(); i++) {
+            @SuppressWarnings("unchecked")
             List<Element> components = sections.get(i).getChildren("component");
             for (int j = 0; j < components.size(); j++) {
                 Element comp = components.get(j);
@@ -198,8 +200,10 @@ public class JMeterTest extends JMeterTestCase {
         doc = bldr.build(compref);
         Element root = doc.getRootElement();
         Element body = root.getChild("body");
+        @SuppressWarnings("unchecked")
         List<Element> sections = body.getChildren("section");
         for (int i = 0; i < sections.size(); i++) {
+            @SuppressWarnings("unchecked")
             List<Element> components = sections.get(i).getChildren("component");
             for (int j = 0; j < components.size(); j++) {
                 Element comp = components.get(j);
@@ -221,8 +225,10 @@ public class JMeterTest extends JMeterTestCase {
         Element root = doc.getRootElement();
         Element body = root.getChild("body");
         Element section = body.getChild("section");
+        @SuppressWarnings("unchecked")
         List<Element> sections = section.getChildren("subsection");
         for (int i = 0; i < sections.size(); i++) {
+            @SuppressWarnings("unchecked")
             List<Element> components = sections.get(i).getChildren("component");
             for (int j = 0; j < components.size(); j++) {
                 Element comp = components.get(j);
