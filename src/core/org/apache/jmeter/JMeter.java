@@ -724,7 +724,7 @@ public class JMeter implements JMeterPlugin {
             treeModel.addSubTree(tree, root);
 
             // Hack to resolve ModuleControllers in non GUI mode
-            SearchByClass replaceableControllers = new SearchByClass(ReplaceableController.class);
+            SearchByClass<ReplaceableController> replaceableControllers = new SearchByClass<ReplaceableController>(ReplaceableController.class);
             tree.traverse(replaceableControllers);
             Collection<ReplaceableController> replaceableControllersRes = replaceableControllers.getSearchResults();
             for (Iterator<ReplaceableController> iter = replaceableControllersRes.iterator(); iter.hasNext();) {
