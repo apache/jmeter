@@ -66,6 +66,7 @@ public class TestValueReplacer extends JMeterTestCase {
             element.setProperty(new CollectionProperty("args", argsin));
             replacer.reverseReplace(element);
             assertEquals("${server}", element.getPropertyAsString("domain"));
+            @SuppressWarnings("unchecked")
             List<JMeterProperty> args = (List<JMeterProperty>) element.getProperty("args").getObjectValue();
             assertEquals("username is ${username}", args.get(0).getStringValue());
             assertEquals("${password}", args.get(1).getStringValue());
