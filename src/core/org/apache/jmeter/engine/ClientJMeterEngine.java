@@ -65,18 +65,21 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
         this.host = host;
     }
 
+    /** {@inheritDoc} */
     public void configure(HashTree testTree) {
         TreeCloner cloner = new TreeCloner(false);
         testTree.traverse(cloner);
         test = cloner.getClonedTree();
     }
 
+    /** {@inheritDoc} */
     public void runTest() {
         log.info("about to run remote test on "+host);
         new Thread(this).start();
         log.info("done initiating run command");
     }
 
+    /** {@inheritDoc} */
     public void stopTest() {
         log.info("about to stop remote test on "+host);
         try {
@@ -86,6 +89,7 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
         }
     }
 
+    /** {@inheritDoc} */
     public void reset() {
         try {
             try {
@@ -99,14 +103,10 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.lang.Runnable#run()
-     */
+    /** {@inheritDoc} */
     public void run() {
         log.info("running clientengine run method");
-        SearchByClass testListeners = new SearchByClass(TestListener.class);
+        SearchByClass<TestListener> testListeners = new SearchByClass<TestListener>(TestListener.class);
         ConvertListeners sampleListeners = new ConvertListeners();
         HashTree testTree = test;
         PreCompiler compiler = new PreCompiler(true); // limit the changes to client only test elements
@@ -136,11 +136,7 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.engine.JMeterEngine#exit()
-     */
+    /** {@inheritDoc} */
     public void exit() {
         log.info("about to exit remote server on "+host);
         try {
@@ -151,6 +147,7 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
     }
 
     private Properties savep;
+    /** {@inheritDoc} */
     public void setProperties(Properties p) {
         savep = p;
         // Sent later
