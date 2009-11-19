@@ -199,7 +199,7 @@ public class JTLData implements Serializable, DataSet {
         }
         SamplingStatCalculator row = data.get(url);
         if (row == null) {
-            row = new SamplingStatCalculator();
+            row = new SamplingStatCalculator(url);
             // just like the aggregate listener, we use the sample label to represent
             // a row. in this case, we use it as a key.
             this.data.put(url,row);
