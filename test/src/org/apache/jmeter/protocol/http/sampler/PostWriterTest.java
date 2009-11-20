@@ -588,6 +588,7 @@ public class PostWriterTest extends TestCase {
      * 
      * @param httpSampler
      */
+    @SuppressWarnings("deprecation")
     private void setupFilepart(HTTPSampler httpSampler, String fileField, File file, String mimeType) {
         httpSampler.setFileField(fileField);
         if(file != null) {
