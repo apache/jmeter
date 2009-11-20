@@ -191,7 +191,7 @@ public class HashTree implements Serializable, Map, Cloneable {
      * @param keys
      *            a collection of objects to be added to the created HashTree.
      */
-    public HashTree(Collection keys) {
+    public HashTree(Collection<?> keys) {
         data = new HashMap<Object, HashTree>();
         Iterator<?> it = keys.iterator();
         while (it.hasNext()) {
@@ -286,7 +286,7 @@ public class HashTree implements Serializable, Map, Cloneable {
      *            Collection of objects to be added as keys in the secondary
      *            node
      */
-    public void set(Object key, Collection values) {
+    public void set(Object key, Collection<?> values) {
         data.put(key, createNewTree(values));
     }
 
@@ -324,7 +324,7 @@ public class HashTree implements Serializable, Map, Cloneable {
      * @param values
      *            Collection of values to be added as keys to bottom-most node
      */
-    public void set(Object[] treePath, Collection values) {
+    public void set(Object[] treePath, Collection<?> values) {
         if (treePath != null) {
             set(Arrays.asList(treePath), values);
         }
@@ -356,7 +356,7 @@ public class HashTree implements Serializable, Map, Cloneable {
      * @param values
      *            Collection of objects to set as nodes.
      */
-    public void set(Collection values) {
+    public void set(Collection<?> values) {
         clear();
         this.add(values);
     }
@@ -375,7 +375,7 @@ public class HashTree implements Serializable, Map, Cloneable {
      * @param values
      *            collection of values to be added as keys to bottom-most node
      */
-    public void set(Collection treePath, Collection values) {
+    public void set(Collection treePath, Collection<?> values) {
         HashTree tree = addTreePath(treePath);
         tree.set(values);
     }
@@ -413,7 +413,7 @@ public class HashTree implements Serializable, Map, Cloneable {
      * @param keys
      *            Collection of Keys to be added to HashTree.
      */
-    public void add(Collection keys) {
+    public void add(Collection<?> keys) {
         Iterator<?> it = keys.iterator();
         while (it.hasNext()) {
             add(it.next());
@@ -459,7 +459,7 @@ public class HashTree implements Serializable, Map, Cloneable {
      *            Collection of objects to be added as keys in the secondary
      *            node
      */
-    public void add(Object key, Collection values) {
+    public void add(Object key, Collection<?> values) {
         add(key);
         getTree(key).add(values);
     }
@@ -494,7 +494,7 @@ public class HashTree implements Serializable, Map, Cloneable {
      * @param values
      *            collection of values to be added as keys to bottom-most node
      */
-    public void add(Object[] treePath, Collection values) {
+    public void add(Object[] treePath, Collection<?> values) {
         if (treePath != null) {
             add(Arrays.asList(treePath), values);
         }
@@ -550,7 +550,7 @@ public class HashTree implements Serializable, Map, Cloneable {
      * @param values
      *            Collection of values to be added as keys to bottom-most node
      */
-    public void add(Collection treePath, Collection values) {
+    public void add(Collection treePath, Collection<?> values) {
         HashTree tree = addTreePath(treePath);
         tree.add(values);
     }
