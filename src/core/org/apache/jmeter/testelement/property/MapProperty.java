@@ -76,9 +76,9 @@ public class MapProperty extends MultiProperty {
      * @see AbstractProperty#getPropertyType()
      */
     @Override
-    protected Class<? extends AbstractProperty> getPropertyType() {
+    protected Class<? extends JMeterProperty> getPropertyType() {
         if (value.size() > 0) {
-            return (Class<? extends AbstractProperty>) valueIterator().next().getClass();
+            return valueIterator().next().getClass();
         }
         return NullProperty.class;
     }
@@ -103,6 +103,7 @@ public class MapProperty extends MultiProperty {
 
     private Map<String, JMeterProperty> cloneMap() {
         try {
+            @SuppressWarnings("unchecked") // value is the correct class
             Map<String, JMeterProperty> newCol = value.getClass().newInstance();
             PropertyIterator iter = valueIterator();
             while (iter.hasNext()) {
@@ -126,7 +127,7 @@ public class MapProperty extends MultiProperty {
         }
     }
 
-    public void setMap(Map newMap) {
+    public void setMap(Map<?,?> newMap) {
         value = normalizeMap(newMap);
     }
 
