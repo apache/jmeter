@@ -4424,6 +4424,7 @@ This setting will also be needed when running the generated test plan.
              <li>Add separators between groups: add a controller named "--------------" to create a visual separation between the groups. Otherwise the samplers are all stored sequentially.</li>
              <li>Put each group in a new controller: create a new <complink name="Simple Controller"/> for each group, and store all samplers for that group in it.</li>
              <li>Store 1st sampler of each group only: only the first request in each group will be recorded. The "Follow Redirects" and "Retrieve All Embedded Resources..." flags will be turned on in those samplers.</li>
+             <li>Put each group in a new transaction controller: create a new <complink name="Transaction Controller"/> for each group, and store all samplers for that group in it.</li>
            </ul>
            The property <b>proxy.pause</b> determines the minimum gap that JMeter needs between requests
            to treat them as separate "clicks". The default is 1000 (milliseconds) i.e. 1 second.
