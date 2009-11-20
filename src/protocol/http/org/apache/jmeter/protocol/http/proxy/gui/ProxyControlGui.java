@@ -621,6 +621,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         m.addElement(JMeterUtils.getResString("grouping_add_separators")); // $NON-NLS-1$
         m.addElement(JMeterUtils.getResString("grouping_in_controllers")); // $NON-NLS-1$
         m.addElement(JMeterUtils.getResString("grouping_store_first_only")); // $NON-NLS-1$
+        m.addElement(JMeterUtils.getResString("grouping_in_transaction_controllers")); // $NON-NLS-1$
         groupingMode = new JComboBox(m);
         groupingMode.setSelectedIndex(0);
         groupingMode.addItemListener(this);
