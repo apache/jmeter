@@ -370,6 +370,9 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
                 } // else will be done by threadFinished()
             } else {
                 stopAllThreads();
+                if (serialized) {
+                    notifyTestListenersOfEnd(testListenersSave);
+                }
             }
         }
     }
