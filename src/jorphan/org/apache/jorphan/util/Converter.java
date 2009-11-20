@@ -17,7 +17,6 @@
  */
 package org.apache.jorphan.util;
 
-import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -123,10 +122,6 @@ public class Converter {
         return getDate(date, Calendar.getInstance().getTime());
     }
 
-    public static String urlEncode(Object toEncode) {
-        return URLEncoder.encode(getString(toEncode));
-    }
-
     public static Date getDate(Object date, Date defaultValue) {
         Date val = null;
         if (date != null && date instanceof java.util.Date) {
@@ -158,11 +153,6 @@ public class Converter {
             return defaultValue;
         }
         return val;
-    }
-
-    public String formatNumber(float num, String pattern) {
-        NumberFormat format = new DecimalFormat(pattern);
-        return format.format(num);
     }
 
     public static float getFloat(Object o, float defaultValue) {
