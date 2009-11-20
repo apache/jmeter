@@ -242,7 +242,7 @@ public abstract class AbstractProperty implements JMeterProperty {
      * Get the property type for this property. Used to convert raw values into
      * JMeterProperties.
      */
-    protected Class<? extends AbstractProperty> getPropertyType() {
+    protected Class<? extends JMeterProperty> getPropertyType() {
         return getClass();
     }
 
