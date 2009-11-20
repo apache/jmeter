@@ -23,7 +23,6 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.util.Collection;
 
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
@@ -48,8 +47,6 @@ import org.apache.jmeter.util.JMeterUtils;
  * @version $Revision$
  */
 public class ReportGui extends AbstractReportGui {
-
-    private JCheckBox serializedMode;
 
     /** A panel to contain comments on the test plan. */
     private JTextField commentPanel;
