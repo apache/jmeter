@@ -151,7 +151,7 @@ public class Save implements Command {
         GuiPackage.getInstance().updateCurrentGui();
     }
 
-    // package protected to all for separate test code
+    // package protected to allow access from test code
     void convertSubTree(HashTree tree) {
         Iterator<JMeterTreeNode> iter = new LinkedList<JMeterTreeNode>(tree.list()).iterator();
         while (iter.hasNext()) {
