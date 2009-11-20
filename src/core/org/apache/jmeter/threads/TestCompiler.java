@@ -126,6 +126,7 @@ public class TestCompiler implements HashTreeTraverser {
         }
     }
 
+    @SuppressWarnings("deprecation") // TestBeanHelper.prepare() is OK
     private void trackIterationListeners(LinkedList<TestElement> p_stack) {
         TestElement child = p_stack.getLast();
         if (child instanceof LoopIterationListener) {
