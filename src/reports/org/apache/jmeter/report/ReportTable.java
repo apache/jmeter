@@ -20,5 +20,6 @@ package org.apache.jmeter.report;
 import java.util.List;
 
 public interface ReportTable {
+    @SuppressWarnings("unchecked") // TODO fix this when there is a real implementation
     String[][] getTableData(List data);
 }
