@@ -68,6 +68,7 @@ public class ReportTreeModel extends DefaultTreeModel {
      */
     public HashTree addSubTree(HashTree subTree, ReportTreeNode current)
             throws IllegalUserActionException {
+        @SuppressWarnings("unchecked") // OK
         Iterator<TestElement> iter = subTree.list().iterator();
         while (iter.hasNext()) {
             TestElement item = iter.next();
@@ -130,6 +131,7 @@ public class ReportTreeModel extends DefaultTreeModel {
         if (type.isInstance(node.getUserObject())) {
             nodeList.add(node);
         }
+        @SuppressWarnings("unchecked") // OK
         Enumeration<ReportTreeNode> enumNode = node.children();
         while (enumNode.hasMoreElements()) {
             ReportTreeNode child = enumNode.nextElement();
@@ -142,6 +144,7 @@ public class ReportTreeModel extends DefaultTreeModel {
         if (userObject == node.getUserObject()) {
             return node;
         }
+        @SuppressWarnings("unchecked") // OK
         Enumeration<ReportTreeNode> enumNode = node.children();
         while (enumNode.hasMoreElements()) {
             ReportTreeNode child = enumNode.nextElement();
@@ -155,6 +158,7 @@ public class ReportTreeModel extends DefaultTreeModel {
 
     public HashTree getCurrentSubTree(ReportTreeNode node) {
         ListedHashTree hashTree = new ListedHashTree(node);
+        @SuppressWarnings("unchecked") // OK
         Enumeration<ReportTreeNode> enumNode = node.children();
         while (enumNode.hasMoreElements()) {
             ReportTreeNode child = enumNode.nextElement();
