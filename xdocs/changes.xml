@@ -127,6 +127,7 @@ The XPath Assertion and XPath Extractor elements no longer fetch external DTDs b
 <li>Bug 47900 - Allow JMS SubscriberSampler to be interrupted</li>
 <li>Added JSR223 Sampler</li>
 <li>Bug 47556 - JMS-PoinToPoint-Sampler Timout field should use Strings</li>
+<li>Bug 47947 - Mail Reader Sampler should allow port to be overridden</li>
 </ul>
 
 <h3>Controllers</h3>

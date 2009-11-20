@@ -47,8 +47,10 @@ import org.apache.log.Logger;
 public class MailReaderSampler extends AbstractSampler {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    //+ JMX attributes - do not change the values
     private final static String SERVER_TYPE = "host_type"; // $NON-NLS-1$
     private final static String SERVER = "host"; // $NON-NLS-1$
+    private final static String PORT = "port"; // $NON-NLS-1$
     private final static String USERNAME = "username"; // $NON-NLS-1$
     private final static String PASSWORD = "password"; // $NON-NLS-1$
     private final static String FOLDER = "folder"; // $NON-NLS-1$
@@ -62,7 +64,9 @@ public class MailReaderSampler extends AbstractSampler {
     public final static String TYPE_POP3S = "pop3s"; // $NON-NLS-1$
     public final static String TYPE_IMAP = "imap"; // $NON-NLS-1$
     public final static String TYPE_IMAPS = "imaps"; // $NON-NLS-1$
-    public static final int ALL_MESSAGES = -1;
+    //-
+    
+    public static final int ALL_MESSAGES = -1; // special value
 
     public MailReaderSampler() {
         setServerType(TYPE_POP3);
@@ -82,7 +86,12 @@ public class MailReaderSampler extends AbstractSampler {
         boolean deleteMessages = getDeleteMessages();
 
         parent.setSampleLabel(getName());
-        parent.setSamplerData(getServerType() + "://" + getUserName() + "@" + getServer());
+        int port=getPortAsInt();
+        if (port > 0){
+            parent.setSamplerData(getServerType() + "://" + getUserName() + "@" + getServer()+ ":" + port);
+        } else {
+            parent.setSamplerData(getServerType() + "://" + getUserName() + "@" + getServer());
+        }
         /*
          * Perform the sampling
          */
@@ -96,7 +105,11 @@ public class MailReaderSampler extends AbstractSampler {
 
             // Get the store
             Store store = session.getStore(getServerType());
-            store.connect(getServer(), getUserName(), getPassword());
+            if (port > 0){
+                store.connect(getServer(), port, getUserName(), getPassword());
+            } else {
+                store.connect(getServer(), getUserName(), getPassword());
+            }
 
             // Get folder
             Folder folder = store.getFolder(getFolder());
@@ -268,7 +281,7 @@ public class MailReaderSampler extends AbstractSampler {
      * @return Server Type
      */
     public String getServerType() {
-        return getProperty(SERVER_TYPE).toString();
+        return getPropertyAsString(SERVER_TYPE);
     }
 
     /**
@@ -283,7 +296,19 @@ public class MailReaderSampler extends AbstractSampler {
      * @return The name or address of the remote server.
      */
     public String getServer() {
-        return getProperty(SERVER).toString();
+        return getPropertyAsString(SERVER);
+    }
+
+    public String getPort() {
+        return getPropertyAsString(PORT);
+    }
+
+    private int getPortAsInt() {
+        return getPropertyAsInt(PORT);
+    }
+
+    public void setPort(String port) {
+        setProperty(PORT, port, "");
     }
 
     /**
@@ -298,7 +323,7 @@ public class MailReaderSampler extends AbstractSampler {
      * @return The username of the mail account.
      */
     public String getUserName() {
-        return getProperty(USERNAME).toString();
+        return getPropertyAsString(USERNAME);
     }
 
     /**
@@ -312,7 +337,7 @@ public class MailReaderSampler extends AbstractSampler {
      * @return password
      */
     public String getPassword() {
-        return getProperty(PASSWORD).toString();
+        return getPropertyAsString(PASSWORD);
     }
 
     /**
@@ -328,7 +353,7 @@ public class MailReaderSampler extends AbstractSampler {
      * @return folder
      */
     public String getFolder() {
-        return getProperty(FOLDER).toString();
+        return getPropertyAsString(FOLDER);
     }
 
     /**
