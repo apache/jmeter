@@ -739,7 +739,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         String dataSentToMirrorServer = new String(res.getResponseData(), contentEncoding);
         int posDividerHeadersAndBody = getPositionOfBody(dataSentToMirrorServer);
         String headersSent = null;
-        String bodySent = null;
+        String bodySent = "";
         if(posDividerHeadersAndBody >= 0) {
             headersSent = dataSentToMirrorServer.substring(0, posDividerHeadersAndBody);
             // Skip the blank line with crlf dividing headers and body
@@ -820,7 +820,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         String dataSentToMirrorServer = new String(res.getResponseData(), contentEncoding);
         int posDividerHeadersAndBody = getPositionOfBody(dataSentToMirrorServer);
         String headersSent = null;
-        String bodySent = null;
+        String bodySent = "";
         if(posDividerHeadersAndBody >= 0) {
             headersSent = dataSentToMirrorServer.substring(0, posDividerHeadersAndBody);
             // Skip the blank line with crlf dividing headers and body
@@ -853,7 +853,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         String dataSentToMirrorServer = new String(res.getResponseData(), EncoderCache.URL_ARGUMENT_ENCODING);
         int posDividerHeadersAndBody = getPositionOfBody(dataSentToMirrorServer);
         String headersSent = null;
-        String bodySent = null;
+        String bodySent = "";
         if(posDividerHeadersAndBody >= 0) {
             headersSent = dataSentToMirrorServer.substring(0, posDividerHeadersAndBody);
             // Skip the blank line with crlf dividing headers and body
@@ -902,7 +902,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         String dataSentToMirrorServer = new String(res.getResponseData(), EncoderCache.URL_ARGUMENT_ENCODING);
         int posDividerHeadersAndBody = getPositionOfBody(dataSentToMirrorServer);
         String headersSent = null;
-        String bodySent = null;
+        String bodySent = "";
         if(posDividerHeadersAndBody >= 0) {
             headersSent = dataSentToMirrorServer.substring(0, posDividerHeadersAndBody);
             // Skip the blank line with crlf dividing headers and body
@@ -1091,6 +1091,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
      * 
      * @param httpSampler
      */
+    @SuppressWarnings("deprecation")
     private void setupFileUploadData(
             HTTPSamplerBase httpSampler,
             boolean isEncoded,
