@@ -31,6 +31,7 @@ public class MultipartUrlConfigTest extends TestCase {
         super(name);
     }
 
+    @SuppressWarnings("deprecation")
     public void testConstructors() {
         MultipartUrlConfig muc = new MultipartUrlConfig();
         assertEquals(0, muc.getArguments().getArgumentCount());
