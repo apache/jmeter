@@ -45,6 +45,8 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 
     private JTextField serverBox;
 
+    private JTextField portBox;
+
     private JTextField usernameBox;
 
     private JTextField passwordBox;
@@ -75,6 +77,8 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
     private final String ServerTypeLabel = JMeterUtils.getResString("mail_reader_server_type");// $NON-NLS-1$
 
     private final String ServerLabel = JMeterUtils.getResString("mail_reader_server");// $NON-NLS-1$
+
+    private final String PortLabel = JMeterUtils.getResString("mail_reader_port");// $NON-NLS-1$
 
     private final String AccountLabel = JMeterUtils.getResString("mail_reader_account");// $NON-NLS-1$
 
@@ -123,6 +127,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
             folderBox.setText(mrs.getFolder());
         }
         serverBox.setText(mrs.getServer());
+        portBox.setText(mrs.getPort());
         usernameBox.setText(mrs.getUserName());
         passwordBox.setText(mrs.getPassword());
         if (mrs.getNumMessages() == MailReaderSampler.ALL_MESSAGES) {
@@ -173,6 +178,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 
         mrs.setFolder(folderBox.getText());
         mrs.setServer(serverBox.getText());
+        mrs.setPort(portBox.getText());
         mrs.setUserName(usernameBox.getText());
         mrs.setPassword(passwordBox.getText());
         if (allMessagesButton.isSelected()) {
@@ -223,6 +229,12 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
         serverBox = new JTextField(20);
         serverPanel.add(serverBox);
         add(serverPanel);
+
+        JPanel portPanel = new JPanel();
+        portPanel.add(new JLabel(PortLabel));
+        portBox = new JTextField(20);
+        portPanel.add(portBox);
+        add(portPanel);
 
         JPanel accountNamePanel = new JPanel();
         accountNamePanel.add(new JLabel(AccountLabel));
@@ -294,6 +306,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
         serverTypeBox.setSelectedIndex(0);
         passwordBox.setText("");// $NON-NLS-1$
         serverBox.setText("");// $NON-NLS-1$
+        portBox.setText("");// $NON-NLS-1$
         usernameBox.setText("");// $NON-NLS-1$
     }
 }

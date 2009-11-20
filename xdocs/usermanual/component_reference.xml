@@ -1317,6 +1317,7 @@ To use POP3S or IMAPS requires a recent version of JavaMail (e.g. JavaMail 1.4.1
 <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
 <property name="Server Type" required="Yes">The protocol used by the server: POP3, POP3S, IMAP, IMAPS</property>
 <property name="Server" required="Yes">Hostname or IP address of the server</property>
+<property name="Port" required="No">Port to be used to connect to the server (optional)</property>
 <property name="Username" required="">User login name</property>
 <property name="Password" required="">User login password (N.B. this is stored unencrypted in the test plan)</property>
 <property name="Folder" required="Yes, if using IMAP(S)">The IMAP(S) folder to use</property>
