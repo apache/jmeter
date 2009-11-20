@@ -33,7 +33,9 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.control.GenericController;
+import org.apache.jmeter.control.TransactionController;
 import org.apache.jmeter.control.gui.LogicControllerGui;
+import org.apache.jmeter.control.gui.TransactionControllerGui;
 import org.apache.jmeter.engine.util.ValueReplacer;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.functions.InvalidVariableException;
@@ -79,6 +81,9 @@ public class ProxyControl extends GenericController {
 
     private static final String ASSERTION_GUI = AssertionGui.class.getName();
 
+    
+    private static final String TRANSACTION_CONTROLLER_GUI = TransactionControllerGui.class.getName();
+    
     private static final String LOGIC_CONTROLLER_GUI = LogicControllerGui.class.getName();
 
     private static final String HEADER_PANEL = HeaderPanel.class.getName();
@@ -125,13 +130,13 @@ public class ProxyControl extends GenericController {
     private static final String CONTENT_TYPE_INCLUDE = "ProxyControlGui.content_type_include"; // $NON-NLS-1$
     //- JMX file attributes
 
-    public static final int GROUPING_NO_GROUPS = 0;
-
-    public static final int GROUPING_ADD_SEPARATORS = 1;
-
-    public static final int GROUPING_IN_CONTROLLERS = 2;
-
-    public static final int GROUPING_STORE_FIRST_ONLY = 3;
+    // Must agree with the order of entries in the drop-down
+    // created in ProxyControlGui.createGroupingPanel()
+    //private static final int GROUPING_NO_GROUPS = 0;
+    private static final int GROUPING_ADD_SEPARATORS = 1;
+    private static final int GROUPING_IN_SIMPLE_CONTROLLERS = 2;
+    private static final int GROUPING_STORE_FIRST_ONLY = 3;
+    private static final int GROUPING_IN_TRANSACTION_CONTROLLERS = 4;
 
     // Must agree with the order of entries in the drop-down
     // created in ProxyControlGui.createHTTPSamplerPanel()
@@ -547,6 +552,23 @@ public class ProxyControl extends GenericController {
     }
 
     /**
+     * Helper method to add a Transaction Controller to contain the samplers.
+     *
+     * @param model
+     *            Test component tree model
+     * @param node
+     *            Node in the tree where we will add the Controller
+     * @param name
+     *            A name for the Controller
+     */
+    private void addTransactionController(JMeterTreeModel model, JMeterTreeNode node, String name)
+            throws IllegalUserActionException {
+    	TransactionController sc = new TransactionController();
+        sc.setProperty(TestElement.GUI_CLASS, TRANSACTION_CONTROLLER_GUI);
+        sc.setName(name);
+        model.addComponent(sc, node);
+    }
+    /**
      * Helpler method to replicate any timers found within the Proxy Controller
      * into the provided sampler, while replacing any occurences of string _T_
      * in the timer's configuration with the provided deltaT.
@@ -733,8 +755,11 @@ public class ProxyControl extends GenericController {
                 if (!myTarget.isLeaf() && groupingMode == GROUPING_ADD_SEPARATORS) {
                     addDivider(treeModel, myTarget);
                 }
-                if (groupingMode == GROUPING_IN_CONTROLLERS) {
+                if (groupingMode == GROUPING_IN_SIMPLE_CONTROLLERS) {
                     addSimpleController(treeModel, myTarget, sampler.getName());
+                }
+                if (groupingMode == GROUPING_IN_TRANSACTION_CONTROLLERS) {
+                    addTransactionController(treeModel, myTarget, sampler.getName());
                 }
                 firstInBatch = true;// Remember this was first in its batch
             }
@@ -754,7 +779,8 @@ public class ProxyControl extends GenericController {
                 sampler.setImageParser(true);
             }
 
-            if (groupingMode == GROUPING_IN_CONTROLLERS) {
+            if (groupingMode == GROUPING_IN_SIMPLE_CONTROLLERS || 
+            		groupingMode == GROUPING_IN_TRANSACTION_CONTROLLERS) {
                 // Find the last controller in the target to store the
                 // sampler there:
                 for (int i = myTarget.getChildCount() - 1; i >= 0; i--) {
