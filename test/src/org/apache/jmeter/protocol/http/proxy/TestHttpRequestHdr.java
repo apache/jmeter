@@ -473,6 +473,7 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
         assertEquals("value",header.getValue());
     }
 
+    @SuppressWarnings("deprecation")
     public void testPostMultipartFileUpload() throws Exception {
         String url = "http://localhost/matrix.html";
         // A HTTP POST request, multipart/form-data, simple values,

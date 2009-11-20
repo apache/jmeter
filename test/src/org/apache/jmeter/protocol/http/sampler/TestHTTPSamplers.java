@@ -221,6 +221,7 @@ public class TestHTTPSamplers extends TestCase {
             assertEquals("http://www.apache.org/index.html", config.getUrl().toString());
         }
         
+        @SuppressWarnings("deprecation")
         public void testFileList(){
             HTTPSamplerBase config = new HTTPNullSampler();
             HTTPFileArg[] arg;
@@ -292,6 +293,7 @@ public class TestHTTPSamplers extends TestCase {
             assertEquals(2,arg.length);
      }
 
+    @SuppressWarnings("deprecation")
     public void testSetAndGetFileField() {
         HTTPSamplerBase sampler = new HTTPNullSampler();
         sampler.setFileField("param");
@@ -305,6 +307,7 @@ public class TestHTTPSamplers extends TestCase {
         assertEquals("param2", file.getParamName());
     }
 
+    @SuppressWarnings("deprecation")
     public void testSetAndGetFilename() {
         HTTPSamplerBase sampler = new HTTPNullSampler();
         sampler.setFilename("name");
@@ -318,6 +321,7 @@ public class TestHTTPSamplers extends TestCase {
         assertEquals("name2", file.getPath());
     }
 
+    @SuppressWarnings("deprecation")
     public void testSetAndGetMimetype() {
         HTTPSamplerBase sampler = new HTTPNullSampler();
         sampler.setMimetype("mime");
