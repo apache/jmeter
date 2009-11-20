@@ -107,7 +107,7 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
 
     /** {@inheritDoc} */
     @Override
-    public void set(Object key, Collection values) {
+    public void set(Object key, Collection<?> values) {
         if (!data.containsKey(key)) {
             order.add(key);
         }
@@ -137,7 +137,7 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
 
     /** {@inheritDoc} */
     @Override
-    public HashTree createNewTree(Collection values) {
+    public HashTree createNewTree(Collection<?> values) {
         return new ListedHashTree(values);
     }
 
@@ -155,7 +155,7 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
 
     /** {@inheritDoc} */
     @Override
-    public Collection list() {
+    public Collection<Object> list() {
         return order;
     }
 
@@ -227,7 +227,7 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
 
     /** {@inheritDoc} */
     @Override
-    public Set keySet() {
+    public Set<Object> keySet() {
         return data.keySet();
     }
 
