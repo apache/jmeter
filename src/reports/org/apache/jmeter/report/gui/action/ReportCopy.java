@@ -100,6 +100,7 @@ public class ReportCopy extends AbstractAction {
     }
 
     private static void cloneChildren(ReportTreeNode to, ReportTreeNode from) {
+        @SuppressWarnings("unchecked") // OK
         Enumeration<ReportTreeNode> enumFrom = from.children();
         while (enumFrom.hasMoreElements()) {
             ReportTreeNode child = enumFrom.nextElement();
