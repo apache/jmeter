@@ -37,6 +37,7 @@ public class TestFunctorUsers extends JMeterTestCase {
         super(arg0);
     }
     
+    @SuppressWarnings("deprecation")
     public void testSummaryReport() throws Exception{
         assertTrue("SummaryReport Functor",SummaryReport.testFunctors());
     }
@@ -49,6 +50,7 @@ public class TestFunctorUsers extends JMeterTestCase {
         assertTrue("StatGraphVisualizer Functor",StatGraphVisualizer.testFunctors());
     }
     
+    @SuppressWarnings("deprecation")
     public void testStatVisualizer() throws Exception{
         assertTrue("StatVisualizer Functor",StatVisualizer.testFunctors());
     }
