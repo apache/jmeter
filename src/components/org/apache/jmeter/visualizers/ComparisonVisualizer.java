@@ -141,7 +141,7 @@ public class ComparisonVisualizer extends AbstractVisualizer implements Clearabl
                     }
                 }
                 if (result == null)
-                    result = new CompareAssertionResult();
+                    result = new CompareAssertionResult(getName());
                 base.setText(result.getBaseResult());
                 secondary.setText(result.getSecondaryResult());
             } catch (Exception err) {
