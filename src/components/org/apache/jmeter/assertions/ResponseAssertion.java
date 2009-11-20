@@ -72,7 +72,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
      */
     private final static int MATCH = 1 << 0;
 
-    final static int CONTAINS = 1 << 1;
+    private final static int CONTAINS = 1 << 1;
 
     private final static int NOT = 1 << 2;
 
