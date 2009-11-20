@@ -266,6 +266,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         }
     }
 
+    @SuppressWarnings("deprecation") // Deliberate use of deprecated method
     private void notifyTestListenersOfStart(SearchByClass<TestListener> testListeners) {
         Iterator<TestListener> iter = testListeners.getSearchResults().iterator();
         while (iter.hasNext()) {
