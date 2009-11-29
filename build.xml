@@ -705,13 +705,13 @@
     <rmic base="${build.core}" classname="org.apache.jmeter.engine.RemoteJMeterEngineImpl">
       <classpath>
         <pathelement location="${build.jorphan}"/>
-        <pathelement path="${build.core}"/>
+        <pathelement location="${build.core}"/>
         <path refid="classpath"/>
       </classpath>
     </rmic>
     <rmic base="${build.core}" classname="org.apache.jmeter.samplers.RemoteSampleListenerImpl">
       <classpath>
-        <pathelement path="${build.core}"/>
+        <pathelement location="${build.core}"/>
         <path refid="classpath"/>
       </classpath>
     </rmic>
