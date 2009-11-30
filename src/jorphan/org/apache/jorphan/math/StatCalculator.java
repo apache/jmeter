@@ -29,7 +29,7 @@ import java.util.List;
  * It is not threadsafe.
  * 
  */
-public abstract class StatCalculator<T extends Number & Comparable<T>> {
+public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
     
     private final List<T> values = new ArrayList<T>();
 
