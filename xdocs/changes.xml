@@ -120,6 +120,7 @@ The XPath Assertion and XPath Extractor elements no longer fetch external DTDs b
 <li>Bug 47461 - Update Cache Manager to handle Expires HTTP header</li>
 <li>Bug 48153 - Support for Cache-Control and Expires headers</li>
 <li>Bug 47946 - Proxy should enable Grouping inside a Transaction Controller</li>
+<li>Bug 48300 - Allow override of IP source address for HTTP HttpClient requests</li>
 </ul>
 
 <h3>Other samplers</h3>
