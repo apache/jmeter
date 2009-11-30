@@ -35,6 +35,7 @@ import java.util.TreeSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
@@ -147,7 +148,21 @@ public final class ClassFinder {
 
     /**
      * Convenience method for
-     * <code>findClassesThatExtend(Class[], boolean)</code>
+     * {@link #findClassesThatExtend(String[], Class[], boolean)}
+     * with the option to include inner classes in the search set to false
+     * and the path list is derived from JMeterUtils.getSearchPaths().
+     *
+     * @param superClass - single class to search for
+     * @return List of Strings containing discovered class names.
+     */
+    public static List<String> findClassesThatExtend(Class<?> superClass)
+        throws IOException {
+        return findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[]{superClass}, false);
+    }
+
+    /**
+     * Convenience method for
+     * {@link #findClassesThatExtend(String[], Class[], boolean)}
      * with the option to include inner classes in the search set to false.
      *
      * @return List of Strings containing discovered class names.
@@ -252,8 +267,7 @@ public final class ClassFinder {
      *
      * @return List containing discovered classes
      */
-    @SuppressWarnings("unchecked")
-    public static List<String> findClassesThatExtend(String[] strPathsOrJars,
+    private static List<String> findClassesThatExtend(String[] strPathsOrJars,
                 final Class<?>[] classNames, final boolean innerClasses,
                 String contains, String notContains, boolean annotations)
                 throws IOException  {
@@ -281,9 +295,11 @@ public final class ClassFinder {
             }
         }
 
+        @SuppressWarnings("unchecked") // Should only be called with classes that extend annotations
+        final Class<? extends Annotation>[] annoclassNames = (Class<? extends Annotation>[]) classNames;
         Set<String> listClasses =
             annotations ?
-                new AnnoFilterTreeSet((Class<? extends Annotation>[]) classNames, innerClasses)
+                new AnnoFilterTreeSet(annoclassNames, innerClasses)
                 :
                 new FilterTreeSet(classNames, innerClasses, contains, notContains);
         // first get all the classes
