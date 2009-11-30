@@ -119,6 +119,8 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
 
     private static final String PROXY_DOMAIN =
         JMeterUtils.getPropDefault("http.proxyDomain",""); // $NON-NLS-1$ $NON-NLS-2$
+    
+    public static final String IP_SOURCE = "HTTPSampler.ipSource"; // $NON-NLS-1$
 
     static final InetAddress localAddress;
 
@@ -536,6 +538,12 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
         // Set up the local address if one exists
         if (localAddress != null){
             hc.setLocalAddress(localAddress);
+        } else {
+            final String ipSource = getIpSource();
+            if (ipSource.length() > 0) {// Use special field ip source address (for pseudo 'ip spoofing')
+                InetAddress inetAddr = InetAddress.getByName(ipSource);
+                hc.setLocalAddress(inetAddr);
+            }
         }
 
         boolean useStaticProxy = PROXY_DEFINED && !isNonProxy(host);
@@ -1161,5 +1169,14 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
             }
         }
         return client != null;
+    }
+
+    
+    public void setIpSource(String value) {
+        setProperty(IP_SOURCE, value, "");
+    }
+
+    public String getIpSource() {
+        return getPropertyAsString(IP_SOURCE,"");
     }
 }

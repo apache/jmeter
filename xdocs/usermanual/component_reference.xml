@@ -81,7 +81,7 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
 
 </component>
 
-<component name="HTTP Request" index="&sect-num;.1.2"  width="730" height="618" screenshot="webtest/http-request.png">
+<component name="HTTP Request" index="&sect-num;.1.2"  width="735" height="646" screenshot="webtest/http-request.png">
 
 <description>
         <p>This sampler lets you send an HTTP/HTTPS request to a web server.  It
@@ -176,6 +176,10 @@ https.default.protocol=SSLv3
         <property name="Port" required="No">Port the web server is listening to. Default: 80</property>
         <property name="Connect Timeout" required="No">Connection Timeout. Number of milliseconds to wait for a connection to open.</property>
         <property name="Response Timeout" required="No">Response Timeout. Number of milliseconds to wait for a response.</property>
+        <property name="Server (proxy)" required="No">Hostname or IP address of a proxy server to perform request. [Do not include the http:// prefix.]</property>
+        <property name="Port" required="No">Port the proxy server is listening to.</property>
+        <property name="Username" required="No">(Optional) username for proxy server.</property>
+        <property name="Password" required="No">(Optional) password for proxy server.</property>
         <property name="Protocol" required="No">HTTP, HTTPS or FILE. Default: HTTP</property>
         <property name="Method" required="Yes">GET, POST, HEAD, TRACE, OPTIONS, PUT, DELETE</property>
         <property name="Content Encoding" required="No">Content encoding to be used (for POST and FILE)</property>
@@ -251,6 +255,12 @@ and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSS
         If present, this must be a regular expression that is used to match against any embedded URLs found.
         So if you only want to download embedded resources from http://example.com/, use the expression:
         http://example\.com/.*
+        </property>
+        <property name="Source IP address:" required="No">
+        [Only for HTTP Request HTTPClient] 
+        Override the default local IP address for this sample.
+        The JMeter host must have multiple IP addresses (i.e. IP aliases or network interfaces). 
+        If the property <b>httpclient.localaddress</b> is defined, that is used for all HttpClient requests.
         </property>
 </properties>
 <p>
