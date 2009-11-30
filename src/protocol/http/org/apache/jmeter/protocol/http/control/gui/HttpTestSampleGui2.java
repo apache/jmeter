@@ -18,15 +18,24 @@
 
 package org.apache.jmeter.protocol.http.control.gui;
 
-import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
+import java.awt.BorderLayout;
+import javax.swing.JPanel;
+
+import org.apache.jmeter.protocol.http.sampler.HTTPSampler2;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.JLabeledTextField;
 
 /**
  * HTTP Sampler GUI for Apache HTTPClient HTTP implementation
  */
 public class HttpTestSampleGui2 extends HttpTestSampleGui {
+    
+    private static final long serialVersionUID = 240L;
+    
+    private JLabeledTextField sourceIpAddr;
 
     public HttpTestSampleGui2() {
         super();
@@ -51,4 +60,44 @@ public class HttpTestSampleGui2 extends HttpTestSampleGui {
         return super.getStaticLabel().replace(' ', '_'); // $NON-NLS-1$  // $NON-NLS-2$
     }
 
+    @Override
+    protected JPanel createOptionalTasksPanel() {
+        JPanel optionalTasksPanel = super.createOptionalTasksPanel();
+        // Add a new field source ip address
+        sourceIpAddr = new JLabeledTextField(JMeterUtils
+                .getResString("web_testing2_source_ip"), 15); // $NON-NLS-1$
+        optionalTasksPanel.add(sourceIpAddr, BorderLayout.EAST);
+        
+        return optionalTasksPanel;
+    }
+    
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui#clearGui()
+     */
+    @Override
+    public void clearGui() {
+        super.clearGui();
+        sourceIpAddr.setText(""); // $NON-NLS-1$
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui#configure(org.apache.jmeter.testelement.TestElement)
+     */
+    @Override
+    public void configure(TestElement element) {
+        super.configure(element);
+        final HTTPSampler2 samplerBase = (HTTPSampler2) element;
+        sourceIpAddr.setText(samplerBase.getIpSource());
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui#modifyTestElement(org.apache.jmeter.testelement.TestElement)
+     */
+    @Override
+    public void modifyTestElement(TestElement sampler) {
+        // TODO Auto-generated method stub
+        super.modifyTestElement(sampler);
+        final HTTPSampler2 samplerBase = (HTTPSampler2) sampler;
+        samplerBase.setIpSource(sourceIpAddr.getText());
+    }
 }

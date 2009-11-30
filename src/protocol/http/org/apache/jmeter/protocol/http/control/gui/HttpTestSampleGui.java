@@ -113,7 +113,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         add(createOptionalTasksPanel(), BorderLayout.SOUTH);
     }
 
-    private JPanel createOptionalTasksPanel() {
+    protected JPanel createOptionalTasksPanel() {
         // OPTIONAL TASKS
         JPanel optionalTasksPanel = new VerticalPanel();
         optionalTasksPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
@@ -134,7 +134,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 
         // Embedded URL match regex
         embeddedRE = new JLabeledTextField(JMeterUtils.getResString("web_testing_embedded_url_pattern"),30); // $NON-NLS-1$
-        optionalTasksPanel.add(embeddedRE);
+        optionalTasksPanel.add(embeddedRE, BorderLayout.CENTER);
         return optionalTasksPanel;
     }
 
