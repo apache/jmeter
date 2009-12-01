@@ -65,7 +65,7 @@ public class HttpTestSampleGui2 extends HttpTestSampleGui {
         JPanel optionalTasksPanel = super.createOptionalTasksPanel();
         // Add a new field source ip address
         sourceIpAddr = new JLabeledTextField(JMeterUtils
-                .getResString("web_testing2_source_ip"), 15); // $NON-NLS-1$
+                .getResString("web_testing2_source_ip")); // $NON-NLS-1$
         optionalTasksPanel.add(sourceIpAddr, BorderLayout.EAST);
         
         return optionalTasksPanel;
