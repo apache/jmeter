@@ -176,7 +176,7 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
      */
     private JPanel createRegexpTasksPanel() {
         JPanel regexpActionPanel = new JPanel();
-        regexpField = new JLabeledTextField(JMeterUtils.getResString("regexp_tester_field"), 30); // $NON-NLS-1$
+        regexpField = new JLabeledTextField(JMeterUtils.getResString("regexp_tester_field")); // $NON-NLS-1$
         regexpActionPanel.add(regexpField, BorderLayout.WEST);
 
         JButton regexpTester = new JButton(JMeterUtils.getResString("regexp_tester_button_test")); // $NON-NLS-1$
