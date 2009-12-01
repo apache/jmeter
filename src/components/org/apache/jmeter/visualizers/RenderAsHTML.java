@@ -32,12 +32,8 @@ import javax.swing.text.html.HTMLEditorKit;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 public class RenderAsHTML extends SamplerResultTab implements ResultRenderer {
-
-    private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final String TEXT_HTML = "text/html"; // $NON-NLS-1$
 
@@ -82,7 +78,6 @@ public class RenderAsHTML extends SamplerResultTab implements ResultRenderer {
          * To disable downloading and rendering of images and frames, enable the
          * editor-kit. The Stream property can then be
          */
-        log.debug("html embedded=" + embedded);
         // Must be done before setContentType
         results.setEditorKitForContentType(TEXT_HTML, embedded ? defaultHtmlEditor : customisedEditor);
 
