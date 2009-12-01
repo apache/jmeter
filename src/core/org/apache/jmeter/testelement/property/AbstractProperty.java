@@ -288,7 +288,9 @@ public abstract class AbstractProperty implements JMeterProperty {
             Object item = iter.next();
             if (newColl == null) {
                 try {
-                    newColl = coll.getClass().newInstance();
+                    @SuppressWarnings("unchecked") // coll is of the correct type
+                    final Class<Collection<JMeterProperty>> class1 = (Class<Collection<JMeterProperty>>) coll.getClass();
+                    newColl = class1.newInstance();
                 } catch (Exception e) {
                     log.error("Bad collection", e);
                     return coll;
