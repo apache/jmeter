@@ -55,7 +55,6 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.log.Logger;
 
 /**
@@ -278,7 +277,7 @@ implements ActionListener, TreeSelectionListener, Clearable {
         // if no results render in jmeter.properties, load Standard (default)
         List<String> classesToAdd = Collections.<String>emptyList();
         try {
-            classesToAdd = ClassFinder.findClassesThatExtend(ResultRenderer.class);
+            classesToAdd = JMeterUtils.findClassesThatExtend(ResultRenderer.class);
         } catch (IOException e1) {
             // ignored
         }
