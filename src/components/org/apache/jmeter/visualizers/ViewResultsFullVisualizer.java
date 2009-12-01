@@ -223,7 +223,7 @@ implements ActionListener, TreeSelectionListener, Clearable {
             }
             Object userObject = node.getUserObject();
             resultsRender.setSamplerResult(userObject);
-            resultsRender.setupTabPane();
+            resultsRender.setupTabPane(); // Processes Assertions
             // display a SampleResult
             if (userObject instanceof SampleResult) {
                 SampleResult sampleResult = (SampleResult) userObject;
@@ -267,7 +267,7 @@ implements ActionListener, TreeSelectionListener, Clearable {
      * Create the drop-down list to changer render
      * @return List of all render (implement ResultsRender)
      */
-    private Component createComboRender() {// TODO move to bottom of renderer
+    private Component createComboRender() {
         ComboBoxModel nodesModel = new DefaultComboBoxModel();
         // drop-down list for renderer
         selectRenderPanel = new JComboBox(nodesModel);
@@ -281,16 +281,22 @@ implements ActionListener, TreeSelectionListener, Clearable {
         } catch (IOException e1) {
             // ignored
         }
+        String textRenderer = JMeterUtils.getResString("view_results_render_text"); // $NON-NLS-1$
+        Object textObject = null;
         for (String clazz : classesToAdd) {
             try {
                 // Instantiate render classes
                 final ResultRenderer renderer = (ResultRenderer) Class.forName(clazz).newInstance();
+                if (textRenderer.equals(renderer.toString())){
+                    textObject=renderer;
+                }
                 renderer.setBackgroundColor(getBackground());
                 selectRenderPanel.addItem(renderer);
             } catch (Exception e) {
                 log.warn("Error in load result render:" + clazz, e);
             }
         }
+        nodesModel.setSelectedItem(textObject); // preset to "Text" option
         return selectRenderPanel;
     }
 
