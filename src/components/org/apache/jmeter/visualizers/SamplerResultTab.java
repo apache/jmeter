@@ -45,12 +45,8 @@ import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 public abstract class SamplerResultTab implements ResultRenderer {
-
-    private static final Logger log = LoggingManager.getLoggerForClass();
 
     // N.B. these are not multi-threaded, so don't make it static
     private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z"); // ISO format $NON-NLS-1$
@@ -127,7 +123,6 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 setupTabPaneForSampleResult();
 
                 // load time label
-                log.debug("valueChanged1 : load time - " + sampleResult.getTime());
                 String sd = sampleResult.getSamplerData();
                 if (sd != null) {
                     String rh = sampleResult.getRequestHeaders();
@@ -156,7 +151,6 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 statsBuff = new StringBuffer(); // reset for reuse
 
                 String responseCode = sampleResult.getResponseCode();
-                log.debug("valueChanged1 : response code - " + responseCode);
 
                 int responseLevel = 0;
                 if (responseCode != null) {
@@ -187,7 +181,6 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 // response message label
                 String responseMsgStr = sampleResult.getResponseMessage();
 
-                log.debug("valueChanged1 : response message - " + responseMsgStr);
                 statsBuff.append(JMeterUtils.getResString("view_results_response_message")).append(responseMsgStr).append(NL); //$NON-NLS-1$
 
                 statsBuff.append(NL);
@@ -212,10 +205,6 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 // We are displaying an AssertionResult
                 setupTabPaneForAssertionResult();
 
-                if (log.isDebugEnabled()) {
-                    log.debug("valueChanged1 : sample result - " + assertionResult);
-                }
-
                 StringBuffer statsBuff = new StringBuffer(100);
                 statsBuff.append(JMeterUtils.getResString("view_results_assertion_error")).append(assertionResult.isError()).append(NL); //$NON-NLS-1$
                 statsBuff.append(JMeterUtils.getResString("view_results_assertion_failure")).append(assertionResult.isFailure()).append(NL); //$NON-NLS-1$
@@ -224,8 +213,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 statsBuff = null;
             }
         } catch (BadLocationException exc) {
-            log.error("Error setting statistics text", exc);
-            stats.setText("");
+            stats.setText(exc.getLocalizedMessage());
         }
     }
 

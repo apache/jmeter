@@ -89,11 +89,11 @@ public class RenderAsXML extends SamplerResultTab
         resultsScrollPane.setViewportView(domTreePanel);
     }
 
-    /**
+    /*
      *
      * A Dom tree panel for to display response as tree view author <a
-     * href="mailto:d.maung@mdl.com">Dave Maung</a> TODO implement to find any
-     * nodes in the tree using TreePath.
+     * href="mailto:d.maung@mdl.com">Dave Maung</a> 
+     * TODO implement to find any nodes in the tree using TreePath.
      *
      */
     private static class DOMTreePanel extends JPanel {
@@ -117,7 +117,7 @@ public class RenderAsXML extends SamplerResultTab
                 ToolTipManager.sharedInstance().registerComponent(domJTree);
                 domJTree.setCellRenderer(new DomTreeRenderer());
             } catch (SAXException e) {
-                log.warn("", e);
+                log.warn("Error trying to parse document", e);
             }
 
         }
@@ -216,7 +216,7 @@ public class RenderAsXML extends SamplerResultTab
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        return JMeterUtils.getResString("view_results_render_xml");
+        return JMeterUtils.getResString("view_results_render_xml"); // $NON-NLS-1$
     }
 
 }
