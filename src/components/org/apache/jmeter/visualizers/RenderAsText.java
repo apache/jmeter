@@ -40,7 +40,7 @@ public class RenderAsText extends SamplerResultTab implements ResultRenderer {
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        return JMeterUtils.getResString("view_results_render_text");
+        return JMeterUtils.getResString("view_results_render_text"); // $NON-NLS-1$
     }
 
 }
