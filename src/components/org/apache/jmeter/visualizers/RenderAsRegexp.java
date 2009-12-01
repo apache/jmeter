@@ -41,8 +41,6 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 import org.apache.oro.text.PatternCacheLRU;
 import org.apache.oro.text.regex.MatchResult;
 import org.apache.oro.text.regex.Pattern;
@@ -54,8 +52,6 @@ import org.apache.oro.text.regex.Perl5Matcher;
  * Implement ResultsRender for Regexp tester
  */
 public class RenderAsRegexp implements ResultRenderer, ActionListener {
-
-    private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final String REGEXP_TESTER_COMMAND = "regexp_tester"; // $NON-NLS-1$
 
@@ -73,7 +69,10 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
 
     /** {@inheritDoc} */
     public void clearData() {
-        this.clearFields();
+        this.regexpDataField.setText(""); // $NON-NLS-1$
+        // don't set empty to keep regexp
+        // regexpField.setText(""); // $NON-NLS-1$
+        this.regexpResultField.setText(""); // $NON-NLS-1$
     }
 
     /** {@inheritDoc} */
@@ -103,7 +102,6 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
     private void executeAndShowRegexpTester(String textToParse) {
         if (textToParse != null && textToParse.length() > 0
                 && this.regexpField.getText().length() > 0) {
-            log.debug("regexpField = " + this.regexpField.getText());
             this.regexpResultField.setText(process(textToParse));
         }
     }
@@ -116,26 +114,18 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
         PatternCacheLRU pcLRU = new PatternCacheLRU();
         Pattern pattern = pcLRU.getPattern(regexpField.getText(), Perl5Compiler.READ_ONLY_MASK);
         List<MatchResult> matches = new LinkedList<MatchResult>();
-        int x = 0;
-        boolean done = false;
-        do {
-            if (matcher.contains(input, pattern)) {
-                //log.debug("RegexExtractor: Match found!");
-                matches.add(matcher.getMatch());
-            } else {
-                done = true;
-            }
-            x++;
-        } while (!done);
-
+        while (matcher.contains(input, pattern)) {
+            matches.add(matcher.getMatch());
+        }
         // Construct a multi-line string with all matches
-        StringBuffer sb = new StringBuffer();
-        for (int j = 0; j < matches.size(); j++) {
+        StringBuilder sb = new StringBuilder();
+        final int size = matches.size();
+        sb.append("Match count: ").append(size).append("\n");
+        for (int j = 0; j < size; j++) {
             MatchResult mr = matches.get(j);
             final int groups = mr.groups();
             for (int i = 0; i < groups; i++) {
-                sb.append(" group[" + j + "][" + i + "]=" + mr.group(i) + "\n");
-
+                sb.append("Match[").append(j+1).append("][").append(i).append("]=").append(mr.group(i)).append("\n");
             }
         }
         return sb.toString();
@@ -143,15 +133,10 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
     }
     /** {@inheritDoc} */
    public void renderResult(SampleResult sampleResult) {
-        this.clearFields();
-
-        if ((SampleResult.TEXT).equals(sampleResult.getDataType())) {
-            String response = ViewResultsFullVisualizer.getResponseAsString(sampleResult);
-            regexpDataField.setText(response);
-            regexpDataField.setCaretPosition(0);
-        } else {
-            regexpDataField.setText(JMeterUtils.getResString("regexp_render_no_text"));
-        }
+       clearData();
+        String response = ViewResultsFullVisualizer.getResponseAsString(sampleResult);
+        regexpDataField.setText(response);
+        regexpDataField.setCaretPosition(0);
     }
 
     /** {@inheritDoc} */
@@ -194,7 +179,7 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
         regexpField = new JLabeledTextField(JMeterUtils.getResString("regexp_tester_field"), 30); // $NON-NLS-1$
         regexpActionPanel.add(regexpField, BorderLayout.WEST);
 
-        JButton regexpTester = new JButton(JMeterUtils.getResString("regexp_tester_button_test"));
+        JButton regexpTester = new JButton(JMeterUtils.getResString("regexp_tester_button_test")); // $NON-NLS-1$
         regexpTester.setActionCommand(REGEXP_TESTER_COMMAND);
         regexpTester.addActionListener(this);
         regexpActionPanel.add(regexpTester, BorderLayout.EAST);
@@ -209,13 +194,6 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
         regexpTasksPanel.add(GuiUtils.makeScrollPane(regexpResultField), BorderLayout.CENTER);
 
         return regexpTasksPanel;
-    }
-
-    private void clearFields() {
-        regexpDataField.setText(""); // $NON-NLS-1$
-        // don't set empty to keep regexp
-        // regexpField.setText(""); // $NON-NLS-1$
-        regexpResultField.setText(""); // $NON-NLS-1$
     }
 
     /** {@inheritDoc} */
@@ -238,12 +216,13 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        return JMeterUtils.getResString("regexp_tester_title");
+        return JMeterUtils.getResString("regexp_tester_title"); // $NON-NLS-1$
     }
 
     /** {@inheritDoc} */
     public void renderImage(SampleResult sampleResult) {
         clearData();
+        regexpDataField.setText(JMeterUtils.getResString("regexp_render_no_text")); // $NON-NLS-1$
     }
 
     /** {@inheritDoc} */
