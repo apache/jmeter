@@ -35,7 +35,6 @@ import java.util.TreeSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
@@ -144,20 +143,6 @@ public final class ClassFinder {
             }
             return false;
         }
-    }
-
-    /**
-     * Convenience method for
-     * {@link #findClassesThatExtend(String[], Class[], boolean)}
-     * with the option to include inner classes in the search set to false
-     * and the path list is derived from JMeterUtils.getSearchPaths().
-     *
-     * @param superClass - single class to search for
-     * @return List of Strings containing discovered class names.
-     */
-    public static List<String> findClassesThatExtend(Class<?> superClass)
-        throws IOException {
-        return findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[]{superClass}, false);
     }
 
     /**

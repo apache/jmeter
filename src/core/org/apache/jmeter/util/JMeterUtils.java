@@ -33,6 +33,7 @@ import java.net.UnknownHostException;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Properties;
@@ -50,6 +51,7 @@ import javax.swing.JOptionPane;
 import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.test.UnitTestManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
@@ -263,6 +265,20 @@ public class JMeterUtils implements UnitTestManager {
     public void initializeProperties(String file) {
         System.out.println("Initializing Properties: " + file);
         getProperties(file);
+    }
+
+    /**
+     * Convenience method for
+     * {@link ClassFinder#findClassesThatExtend(String[], Class[], boolean)}
+     * with the option to include inner classes in the search set to false
+     * and the path list is derived from JMeterUtils.getSearchPaths().
+     *
+     * @param superClass - single class to search for
+     * @return List of Strings containing discovered class names.
+     */
+    public static List<String> findClassesThatExtend(Class<?> superClass)
+        throws IOException {
+        return ClassFinder.findClassesThatExtend(getSearchPaths(), new Class[]{superClass}, false);
     }
 
     public static String[] getSearchPaths() {
