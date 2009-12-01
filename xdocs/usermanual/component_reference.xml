@@ -2060,23 +2060,30 @@ are part of the test plan.</p></description>
 </links>
 </component>
 
-<component name="View Results Tree" index="&sect-num;.3.6"  width="791" height="506" screenshot="view_results_tree.png">
+<component name="View Results Tree" index="&sect-num;.3.6"  width="778" height="642" screenshot="view_results_tree.png">
 <description>The View Results Tree shows a tree of all sample responses, allowing you to view the
 response for any sample.  In addition to showing the response, you can see the time it took to get
 this response, and some response codes.
 Note that the Request panel only shows the headers added by JMeter.
 It does not show any headers (such as Host) that may be added by the HTTP protocol implementation.
 <p>
-There are several ways to view the response, selectable by a radio button.</p>
+There are several ways to view the response, selectable by a drop-down box at the bottom of the left hand panel.</p>
 <ul>
-<li>Show text</li>
-<li>Render HTML</li>
-<li>Render XML</li>
-<li>Render JSON</li>
+<li>HTML</li>
+<li>HTML (download embedded resources)</li>
+<li>JSON</li>
+<li>Regexp Tester</li>
+<li>Text</li>
+<li>XML</li>
 </ul>
 <p>
-The default "Show text" view shows all of the text contained in the
-response. 
+Additional renderers can be created.
+The class must implement the interface <code>org.apache.jmeter.visualizers.ResultRenderer</code>
+and/or extend the abstract class <code>org.apache.jmeter.visualizers.SamplerResultTab</code>, and the
+compiled code must be available to JMeter (e.g. by adding it to the lib/ext directory).
+</p>
+<p>
+The default "Text" view shows all of the text contained in the response. 
 Note that this will only work if the response content-type is considered to be text.
 If the content-type begins with any of the following, it is considered as binary,
 otherwise it is considered to be text.
@@ -2099,20 +2106,48 @@ You can also use save the entire response to a file using
 <p>The HTML view attempts to render the response as
 HTML.  The rendered HTML is likely to compare poorly to the view one
 would get in any web browser; however, it does provide a quick
-approximation that is helpful for initial result evaluation. 
-If the "Download embedded resources" check-box is selected, the renderer
+approximation that is helpful for initial result evaluation.
+No images etc are downloaded. 
+If the HTML (download embedded resources) option is selected, the renderer
 may download images and style-sheets etc referenced by the HTML. 
-If the checkbox is not selected, the renderer will not download images etc.
 </p>
-<p>The Render XML view will show response in tree style. 
+<p>The XML view will show response in tree style. 
 Any DTD nodes or Prolog nodes will not show up in tree; however, response may contain those nodes.
 </p>
-<p>The Render JSON view will show the response in tree style (also handles JSON embedded in JavaScript).</p>
+<p>The JSON view will show the response in tree style (also handles JSON embedded in JavaScript).</p>
+<p>
+Most of the views also allow the displayed data to be searched; the result of the search will be high-lighted
+in the display above. For example the Control panel screenshot below shows one result of searching for "Java".
+Note that the search operates on the visible text, so you may get different results when searching
+the Text and HTML views.
+</p>
+<p>The "Regexp Tester" view only works for text responses. It shows the plain text in the upper panel.
+The "Test" button allows the user to apply the Regular Expression to the upper panel and the results
+will be displayed in the lower panel.
+For example, the RE <b>(JMeter\w*).*</b> applied to the current JMeter home page gives the following output:
+</p>
+<pre>
+Match count: 26
+Match[1][0]=JMeter - Apache JMeter&amp;lt;/title>
+Match[1][1]=JMeter
+Match[2][0]=JMeter" title="JMeter" border="0"/>&amp;lt;/a>
+Match[2][1]=JMeter
+Match[3][0]=JMeterCommitters">Contributors&amp;lt;/a>
+Match[3][1]=JMeterCommitters
+... and so on ...
+</pre>
+<p>
+The first number in [] is the match number; the second number is the group. 
+Group [0] is whatever matched the whole RE.
+Group [1] is whatever matched the 1st group, i.e. (JMeter\w*) in this case.
+See Figure 9b (below).
+</p>
 </description>
 <p>
 	The Control Panel (above) shows an example of an HTML display.
 	Figure 9 (below) shows an example of an XML display.
 <figure width="751" height="461" image="view_results_tree_xml.png">Figure 9 Sample XML display</figure>
+<figure width="824" height="637" image="view_results_tree_regex.png">Figure 9a Sample Regexp Test display</figure>
 </p>
 </component>
 
