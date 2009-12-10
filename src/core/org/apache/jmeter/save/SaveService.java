@@ -119,8 +119,6 @@ public class SaveService {
     private static final String FILE_FORMAT_TESTLOG = "file_format.testlog"; // $NON-NLS-1$
 
     // Define file format versions
-    private static final String VERSION_2_0 = "2.0";  // $NON-NLS-1$
-    //NOT USED private static final String VERSION_2_1 = "2.1";  // $NON-NLS-1$
     private static final String VERSION_2_2 = "2.2";  // $NON-NLS-1$
 
     // Default to overall format, and then to version 2.2
@@ -132,13 +130,23 @@ public class SaveService {
         = JMeterUtils.getPropDefault(FILE_FORMAT_TESTLOG
         , JMeterUtils.getPropDefault(FILE_FORMAT, VERSION_2_2));
 
-    private static final boolean IS_TESTPLAN_FORMAT_20
-        = VERSION_2_0.equals(TESTPLAN_FORMAT);
+    private static boolean validateFormat(String format){
+        if ("2.2".equals(format)) return true;
+        if ("2.1".equals(format)) return true;
+        return false;
+    }
 
-    private static final boolean IS_TESTLOG_FORMAT_20
-    = VERSION_2_0.equals(TESTLOG_FORMAT);
+    static{
+        if (!validateFormat(TESTPLAN_FORMAT)){
+            log.error("Invalid test plan format: "+TESTPLAN_FORMAT);
+        }
+        if (!validateFormat(TESTLOG_FORMAT)){
+            log.error("Invalid test log format: "+TESTLOG_FORMAT);
+        }
+    }
 
-    private static final boolean IS_TESTPLAN_FORMAT_22
+    /** New XStream format - more compressed class names */
+    public static final boolean IS_TESTPLAN_FORMAT_22
         = VERSION_2_2.equals(TESTPLAN_FORMAT);
 
     // Holds the mappings from the saveservice properties file
@@ -455,14 +463,13 @@ public class SaveService {
             wrapper = (ScriptWrapper) JMXSAVER.fromXML(inputStreamReader);
             inputStreamReader.close();
             if (wrapper == null){
-                log.error("Problem loading new style: see above.");
+                log.error("Problem loading XML: see above.");
                 return null;
             }
             return wrapper.testPlan;
         } catch (CannotResolveClassException e) {
-            log.warn("Problem loading new style: " + e.getLocalizedMessage());
-            reader.reset();
-            return OldSaveService.loadSubTree(reader);
+            log.warn("Problem loading XML: " + e.getLocalizedMessage());
+            return null;
         } catch (NoClassDefFoundError e) {
             log.error("Missing class "+e);
             return null;
@@ -534,20 +541,6 @@ public class SaveService {
             writer.write('\n');
         }
     }
-
-    public static boolean isSaveTestPlanFormat20() {
-        return IS_TESTPLAN_FORMAT_20;
-    }
-
-    public static boolean isSaveTestLogFormat20() {
-        return IS_TESTLOG_FORMAT_20;
-    }
-
-    // New test format - more compressed class names
-    public static boolean isSaveTestPlanFormat22() {
-        return IS_TESTPLAN_FORMAT_22;
-    }
-
 
 //  Normal output
 //  ---- Debugging information ----

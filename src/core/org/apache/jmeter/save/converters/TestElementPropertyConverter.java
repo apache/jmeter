@@ -37,8 +37,6 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class TestElementPropertyConverter extends AbstractCollectionConverter {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private final boolean testFormat22=SaveService.isSaveTestPlanFormat22();
-
     private static final String HEADER_CLASSNAME
         = "org.apache.jmeter.protocol.http.control.Header"; // $NON-NLS-1$
 
@@ -64,8 +62,8 @@ public class TestElementPropertyConverter extends AbstractCollectionConverter {
         writer.addAttribute(ConversionHelp.ATT_NAME, ConversionHelp.encode(prop.getName()));
         Class<?> clazz = prop.getObjectValue().getClass();
         writer.addAttribute(ConversionHelp.ATT_ELEMENT_TYPE,
-                testFormat22 ?  mapper().serializedClass(clazz) : clazz.getName());
-        if (testFormat22){
+                SaveService.IS_TESTPLAN_FORMAT_22 ?  mapper().serializedClass(clazz) : clazz.getName());
+        if (SaveService.IS_TESTPLAN_FORMAT_22){
             TestElement te = (TestElement)prop.getObjectValue();
             ConversionHelp.saveSpecialProperties(te,writer);
         }
@@ -73,7 +71,7 @@ public class TestElementPropertyConverter extends AbstractCollectionConverter {
         while (iter.hasNext()) {
             JMeterProperty jmp=iter.next();
             // Skip special properties if required
-            if (!testFormat22 || !ConversionHelp.isSpecialProperty(jmp.getName()))
+            if (!SaveService.IS_TESTPLAN_FORMAT_22 || !ConversionHelp.isSpecialProperty(jmp.getName()))
             {
                 // Don't save empty comments
                    if (!(TestElement.COMMENTS.equals(jmp.getName())
