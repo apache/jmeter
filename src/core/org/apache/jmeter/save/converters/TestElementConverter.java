@@ -37,8 +37,6 @@ public class TestElementConverter extends AbstractCollectionConverter {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
 
-    private final boolean testFormat22=SaveService.isSaveTestPlanFormat22();
-
     /**
      * Returns the converter version; used to check for possible
      * incompatibilities
@@ -58,14 +56,14 @@ public class TestElementConverter extends AbstractCollectionConverter {
     @Override
     public void marshal(Object arg0, HierarchicalStreamWriter writer, MarshallingContext context) {
         TestElement el = (TestElement) arg0;
-        if (testFormat22){
+        if (SaveService.IS_TESTPLAN_FORMAT_22){
             ConversionHelp.saveSpecialProperties(el,writer);
         }
         PropertyIterator iter = el.propertyIterator();
         while (iter.hasNext()) {
             JMeterProperty jmp=iter.next();
             // Skip special properties if required
-            if (!testFormat22 || !ConversionHelp.isSpecialProperty(jmp.getName())) {
+            if (!SaveService.IS_TESTPLAN_FORMAT_22 || !ConversionHelp.isSpecialProperty(jmp.getName())) {
                 // Don't save empty comments - except for the TestPlan (to maintain compatibility)
                    if (!(
                            TestElement.COMMENTS.equals(jmp.getName())

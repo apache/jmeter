@@ -33,7 +33,6 @@ import org.apache.jmeter.report.gui.action.ReportActionRouter;
 import org.apache.jmeter.gui.action.Command;
 import org.apache.jmeter.gui.util.ReportFileDialoger;
 import org.apache.jmeter.report.gui.tree.ReportTreeNode;
-import org.apache.jmeter.save.OldSaveService;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.collections.HashTree;
@@ -109,13 +108,8 @@ public class ReportSave implements Command {
         FileOutputStream ostream = null;
         try {
             ostream = new FileOutputStream(updateFile);
-            if (SaveService.isSaveTestPlanFormat20()) {
-                OldSaveService.saveSubTree(subTree, ostream);
-                log.info("saveSubTree");
-            } else {
-                SaveService.saveTree(subTree, ostream);
-                log.info("saveTree");
-            }
+            SaveService.saveTree(subTree, ostream);
+            log.info("saveTree");
         } catch (Throwable ex) {
             ReportGuiPackage.getInstance().setReportPlanFile(null);
             log.error("", ex);

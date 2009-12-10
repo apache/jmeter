@@ -60,6 +60,10 @@ To override the default local language fully, set the JMeter property "language"
 <h2>Incompatible changes</h2>
 
 <p>
+The Avalon file format for JMX and JTL files is no longer supported.
+</p>
+
+<p>
 The XPath Assertion and XPath Extractor elements no longer fetch external DTDs by default; this can be changed in the GUI.
 </p>
 

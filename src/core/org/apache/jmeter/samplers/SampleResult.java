@@ -28,7 +28,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -490,10 +489,6 @@ public class SampleResult implements Serializable {
             return EMPTY_SR;
         }
         return subResults.toArray(new SampleResult[0]);
-    }
-
-    public void configure(Configuration info) {
-        time = info.getAttributeAsLong(TOTAL_TIME, 0L);
     }
 
     /**
