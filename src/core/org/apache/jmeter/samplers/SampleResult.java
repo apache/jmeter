@@ -844,6 +844,15 @@ public class SampleResult implements Serializable {
             time = endTime - startTime - idleTime;
         }
     }
+    
+    /**
+     * Set idle time pause.
+     * For use by SampleResultConverter/CSVSaveService.
+     * @param idle long
+     */
+    public void setIdleTime(long idle) {
+        idleTime = idle;
+    }
 
     private void setTimes(long start, long end) {
         setStartTime(start);
