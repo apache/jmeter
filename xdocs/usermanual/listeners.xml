@@ -143,6 +143,7 @@ The full set of properties that affect result file output is shown below.
 #jmeter.save.saveservice.hostname=false
 #jmeter.save.saveservice.thread_counts=false
 #jmeter.save.saveservice.sample_count=false
+#jmeter.save.saveservice.idle_time=false
 
 # Timestamp format
 # legitimate values: none, ms, or a format suitable for SimpleDateFormat
@@ -275,6 +276,7 @@ The order of appearance of columns is fixed, and is as follows:
 <li>SampleCount - number of samples (1, unless multiple samples are aggregated)</li>
 <li>ErrorCount - number of errors (0 or 1, unless multiple samples are aggregated)</li>
 <li>Hostname where the sample was generated</li>
+<li>IdleTime - number of milliseconds of 'Idle' time (normally 0)</li>
 <li>Variables, if specified</li>
 </ul>
 
@@ -416,6 +418,7 @@ The sample attributes have the following meaning:
 <tr><td>dt</td><td>Data type</td></tr>
 <tr><td>ec</td><td>Error count (0 or 1, unless multiple samples are aggregated)</td></tr>
 <tr><td>hn</td><td>Hostname where the sample was generated</td></tr>
+<tr><td>it</td><td>Idle Time = time not spent sampling (milliseconds) (generally 0)</td></tr>
 <tr><td>lb</td><td>Label</td></tr>
 <tr><td>lt</td><td>Latency = time to initial response (milliseconds) - not all samplers support this</td></tr>
 <tr><td>na</td><td>Number of active threads for all thread groups</td></tr>
