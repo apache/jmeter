@@ -38,16 +38,13 @@ public class SampleEventConverter implements Converter {
         return "$Revision$"; //$NON-NLS-1$
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
-     */
+    /** {@inheritDoc} */
     @SuppressWarnings("unchecked") // superclass does not use types
     public boolean canConvert(Class arg0) {
         return SampleEvent.class.equals(arg0);
     }
 
+    /** {@inheritDoc} */
     // TODO save hostname; save sample type (plain or http)
     public void marshal(Object source, HierarchicalStreamWriter writer,
             MarshallingContext context) {
@@ -56,6 +53,7 @@ public class SampleEventConverter implements Converter {
         context.convertAnother(res);
     }
 
+    /** {@inheritDoc} */
     // TODO does not work yet; need to determine the sample type
     public Object unmarshal(HierarchicalStreamReader reader,
             UnmarshallingContext context) {
