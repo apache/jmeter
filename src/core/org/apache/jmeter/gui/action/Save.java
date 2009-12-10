@@ -34,7 +34,6 @@ import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.FileDialoger;
-import org.apache.jmeter.save.OldSaveService;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -136,11 +135,7 @@ public class Save implements Command {
         FileOutputStream ostream = null;
         try {
             ostream = new FileOutputStream(updateFile);
-            if (SaveService.isSaveTestPlanFormat20()) {
-                OldSaveService.saveSubTree(subTree, ostream);
-            } else {
-                SaveService.saveTree(subTree, ostream);
-            }
+            SaveService.saveTree(subTree, ostream);
         } catch (Throwable ex) {
             GuiPackage.getInstance().setTestPlanFile(null);
             log.error("", ex);
