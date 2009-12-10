@@ -72,6 +72,7 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
             super(wrapped);
         }
 
+        /** {@inheritDoc} */
         @Override
         public boolean shouldSerializeMember(
                 @SuppressWarnings("unchecked") // superclass does not use types

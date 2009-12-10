@@ -38,35 +38,20 @@ public class IntegerPropertyConverter implements Converter {
         return "$Revision$"; // $NON-NLS-1$
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
-     */
+    /** {@inheritDoc} */
     @SuppressWarnings("unchecked") // superclass does not use types
     public boolean canConvert(Class arg0) {
         return arg0.equals(IntegerProperty.class);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.thoughtworks.xstream.converters.Converter#marshal(java.lang.Object,
-     *      com.thoughtworks.xstream.io.HierarchicalStreamWriter,
-     *      com.thoughtworks.xstream.converters.MarshallingContext)
-     */
+    /** {@inheritDoc} */
     public void marshal(Object obj, HierarchicalStreamWriter writer, MarshallingContext arg2) {
         IntegerProperty prop = (IntegerProperty) obj;
         writer.addAttribute(ATT_NAME, ConversionHelp.encode(prop.getName()));
         writer.setValue(prop.getStringValue());
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.thoughtworks.xstream.converters.Converter#unmarshal(com.thoughtworks.xstream.io.HierarchicalStreamReader,
-     *      com.thoughtworks.xstream.converters.UnmarshallingContext)
-     */
+    /** {@inheritDoc} */
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext arg1) {
         IntegerProperty prop = new IntegerProperty(ConversionHelp.decode(reader.getAttribute(ATT_NAME)), Integer
                 .parseInt(reader.getValue()));

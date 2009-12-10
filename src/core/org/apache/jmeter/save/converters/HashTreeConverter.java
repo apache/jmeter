@@ -39,24 +39,14 @@ public class HashTreeConverter extends AbstractCollectionConverter {
         return "$Revision$";  //$NON-NLS-1$
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
-     */
+    /** {@inheritDoc} */
     @SuppressWarnings("unchecked") // superclass does not use types
     @Override
     public boolean canConvert(Class arg0) {
         return HashTree.class.isAssignableFrom(arg0);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.thoughtworks.xstream.converters.Converter#marshal(java.lang.Object,
-     *      com.thoughtworks.xstream.io.HierarchicalStreamWriter,
-     *      com.thoughtworks.xstream.converters.MarshallingContext)
-     */
+    /** {@inheritDoc} */
     @Override
     public void marshal(Object arg0, HierarchicalStreamWriter writer, MarshallingContext context) {
         HashTree tree = (HashTree) arg0;
@@ -69,12 +59,7 @@ public class HashTreeConverter extends AbstractCollectionConverter {
 
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.thoughtworks.xstream.converters.Converter#unmarshal(com.thoughtworks.xstream.io.HierarchicalStreamReader,
-     *      com.thoughtworks.xstream.converters.UnmarshallingContext)
-     */
+    /** {@inheritDoc} */
     @Override
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
         boolean isKey = true;
@@ -96,9 +81,6 @@ public class HashTreeConverter extends AbstractCollectionConverter {
         return tree;
     }
 
-    /**
-     * @param arg0
-     */
     public HashTreeConverter(Mapper arg0) {
         super(arg0);
     }
