@@ -29,6 +29,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import org.apache.jmeter.protocol.jms.sampler.BaseJMSSampler;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -82,6 +83,9 @@ public class ReceiveSubscriber implements Runnable {
                 ConnectionFactory.getTopicConnectionFactory(ctx,connfactory);
                 _conn = ConnectionFactory.getTopicConnection();
                 _topic = InitialContextFactory.lookupTopic(ctx, topic);
+                if (_topic == null){
+                    log.warn("topic <"+topic+"> could not be found.");
+                }
                 _session = _conn.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
                 _subscriber = _session.createSubscriber(_topic);
                 log.info("created the topic connection successfully");
@@ -235,6 +239,9 @@ public class ReceiveSubscriber implements Runnable {
                     String text = msg.getText();
                     if (text.trim().length() > 0) {
                         synchronized (this) {
+                            this.buffer.append(BaseJMSSampler
+                                .getMessageHeaders(message));
+                            this.buffer.append("JMS Message Text:\n\n");
                             this.buffer.append(text);
                             count(1);
                         }

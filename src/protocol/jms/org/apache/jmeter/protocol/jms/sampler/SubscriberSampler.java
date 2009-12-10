@@ -147,6 +147,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
      */
     private SampleResult sampleWithListener() {
         SampleResult result = new SampleResult();
+        result.setDataType(SampleResult.TEXT);
         result.setSampleLabel(getName());
         initListenerClient();
 
@@ -188,6 +189,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
      */
     private SampleResult sampleWithReceive() {
         SampleResult result = new SampleResult();
+        result.setDataType(SampleResult.TEXT);
         result.setSampleLabel(getName());
         if (this.SUBSCRIBER == null) {
             this.initReceiveClient();
@@ -205,16 +207,17 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
             }
         }
         result.sampleEnd();
-        result.setResponseMessage(loop + " samples messages received");
+        int read = this.SUBSCRIBER.count(0);
         if (this.getReadResponseAsBoolean()) {
             result.setResponseData(this.SUBSCRIBER.getMessage().getBytes());
         } else {
             result.setBytes(this.SUBSCRIBER.getMessage().getBytes().length);
         }
         result.setSuccessful(true);
-        result.setResponseCode(loop + " message(s) received successfully");
-        result.setSamplerData("Not applicable");
-        result.setSampleCount(loop);
+        result.setResponseCodeOK();
+        result.setResponseMessage(read + " message(s) received successfully");
+        result.setSamplerData(loop + " messages expected");
+        result.setSampleCount(read);
 
         this.SUBSCRIBER.reset();
         return result;
@@ -230,6 +233,8 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
                 TextMessage msg = (TextMessage) message;
                 String content = msg.getText();
                 if (content != null) {
+                    this.BUFFER.append(getMessageHeaders(message));
+                    this.BUFFER.append("JMS Message Text:\n\n");
                     this.BUFFER.append(content);
                     count(1);
                 }

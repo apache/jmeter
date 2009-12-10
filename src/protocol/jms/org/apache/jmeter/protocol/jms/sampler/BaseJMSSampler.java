@@ -17,6 +17,13 @@
 
 package org.apache.jmeter.protocol.jms.sampler;
 
+import java.util.Date;
+
+import javax.jms.DeliveryMode;
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.Message;
+
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
@@ -279,5 +286,63 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
      */
     public boolean getUseJNDIPropertiesAsBoolean() {
         return getPropertyAsBoolean(USE_PROPERTIES_FILE);
+    }
+    
+    
+    /**
+     * Returns a String with the JMS Message Header values.
+     * 
+     * @param message JMS Message
+     * @return String with message header values.
+     */
+    public static String getMessageHeaders(Message message) {
+        final StringBuffer response = new StringBuffer(256);
+        try {
+            response.append("JMS Message Header Attributes:");
+            response.append("\n   Correlation ID: ");
+            response.append(message.getJMSCorrelationID());
+
+            response.append("\n   Delivery Mode: ");
+            if (message.getJMSDeliveryMode() == DeliveryMode.PERSISTENT) {
+                response.append("PERSISTANT");
+            } else {
+                response.append("NON-PERSISTANT");
+            }
+
+            final Destination destination = message.getJMSDestination();
+
+            response.append("\n   Destination: ");
+            response.append((destination == null ? null : destination
+                .toString()));
+
+            response.append("\n   Expiration: ");
+            response.append(new Date(message.getJMSExpiration()));
+
+            response.append("\n   Message ID: ");
+            response.append(message.getJMSMessageID());
+
+            response.append("\n   Priority: ");
+            response.append(message.getJMSPriority());
+
+            response.append("\n   Redelivered: ");
+            response.append(message.getJMSRedelivered());
+
+            final Destination replyTo = message.getJMSReplyTo();
+            response.append("\n   Reply to: ");
+            response.append((replyTo == null ? null : replyTo.toString()));
+
+            response.append("\n   Timestamp: ");
+            response.append(new Date(message.getJMSTimestamp()));
+
+            response.append("\n   Type: ");
+            response.append(message.getJMSType());
+
+            response.append("\n\n");
+
+        } catch (JMSException e) {
+            e.printStackTrace();
+        }
+
+        return new String(response);
     }
 }
