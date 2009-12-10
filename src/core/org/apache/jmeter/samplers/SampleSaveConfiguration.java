@@ -36,13 +36,17 @@ import org.apache.jorphan.util.JMeterError;
  * N.B. to add a new field, remember the following
  * - static _xyz
  * - instance xyz=_xyz
- * - clone s.xyz = xyz
+ * - clone s.xyz = xyz (perhaps)
  * - setXyz(boolean)
  * - saveXyz()
  * - update SampleSaveConfigurationConverter to add new fields to marshall() and shouldSerialiseMember()
  * - update SampleResultConverter and/or HTTPSampleConverter
- * - update CSV routines in OldSaveService
+ * - update CSVSaveService: CSV_XXXX, makeResultFromDelimitedString, printableFieldNamesToString, static{}
  * - update messages.properties to add save_xyz entry
+ * - update jmeter.properties to add new property
+ * - update listeners.xml to add new property, CSV and XML names etc.
+ * - take screenshot sample_result_config.png
+ * - update listeners.xml and component_reference.xml with new dimensions (might not change)
  *
  */
 /**
@@ -199,10 +203,11 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     // <?xml-stylesheet type="text/xsl" href="../extras/jmeter-results-detail-report_21.xsl"?>
     private static final String XML_PI               = "jmeter.save.saveservice.xml_pi"; // $NON_NLS-1$
 
-    private static final String SAVE_THREAD_COUNTS = "jmeter.save.saveservice.thread_counts"; // $NON_NLS-1$
+    private static final String SAVE_THREAD_COUNTS   = "jmeter.save.saveservice.thread_counts"; // $NON_NLS-1$
 
-    private static final String SAVE_SAMPLE_COUNT = "jmeter.save.saveservice.sample_count"; // $NON_NLS-1$
+    private static final String SAVE_SAMPLE_COUNT    = "jmeter.save.saveservice.sample_count"; // $NON_NLS-1$
 
+    private static final String SAVE_IDLE_TIME       = "jmeter.save.saveservice.idle_time"; // $NON_NLS-1$
     // N.B. Remember to update the equals and hashCode methods when adding new variables.
 
     // Initialise values from properties
@@ -221,6 +226,8 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     private boolean threadCounts = _threadCounts;
 
     private boolean sampleCount = _sampleCount;
+    
+    private boolean idleTime = _idleTime;
 
     // Does not appear to be used (yet)
     private int assertionsResultsToSave = _assertionsResultsToSave;
@@ -277,6 +284,8 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
      * comma for CSV files.
      */
     private static final String _delimiter;
+    
+    private static final boolean _idleTime;
 
     private static final String DEFAULT_DELIMITER = ","; // $NON_NLS-1$
 
@@ -378,6 +387,8 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
         _threadCounts=TRUE.equalsIgnoreCase(props.getProperty(SAVE_THREAD_COUNTS, FALSE));
 
         _sampleCount=TRUE.equalsIgnoreCase(props.getProperty(SAVE_SAMPLE_COUNT, FALSE));
+
+        _idleTime=TRUE.equalsIgnoreCase(props.getProperty(SAVE_IDLE_TIME, FALSE));
     }
 
     // Don't save this, as not settable via GUI
@@ -495,6 +506,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
             s.fileName == fileName &&
             s.hostname == hostname &&
             s.sampleCount == sampleCount &&
+            s.idleTime == idleTime &&
             s.threadCounts == threadCounts;
 
         boolean stringValues = false;
@@ -542,6 +554,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
         hash = 31 * hash + (delimiter != null  ? delimiter.hashCode() : 0);
         hash = 31 * hash + (formatter != null  ? formatter.hashCode() : 0);
         hash = 31 * hash + (sampleCount ? 1 : 0);
+        hash = 31 * hash + (idleTime ? 1 : 0);
 
         return hash;
     }
@@ -803,5 +816,13 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
     public void setHostname(boolean save){
         hostname = save;
+    }
+
+    public boolean saveIdleTime() {
+        return idleTime;
+    }
+    
+    public void setIdleTime(boolean save) {
+        idleTime = save;
     }
 }
