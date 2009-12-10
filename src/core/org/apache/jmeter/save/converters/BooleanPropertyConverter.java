@@ -38,23 +38,13 @@ public class BooleanPropertyConverter implements Converter {
         return "$Revision$"; // $NON-NLS-1$
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
-     */
+    /** {@inheritDoc} */
     @SuppressWarnings("unchecked") // superclass does not use types
     public boolean canConvert(Class arg0) {
         return arg0.equals(BooleanProperty.class);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.thoughtworks.xstream.converters.Converter#marshal(java.lang.Object,
-     *      com.thoughtworks.xstream.io.HierarchicalStreamWriter,
-     *      com.thoughtworks.xstream.converters.MarshallingContext)
-     */
+    /** {@inheritDoc} */
     public void marshal(Object obj, HierarchicalStreamWriter writer, MarshallingContext arg2) {
         BooleanProperty prop = (BooleanProperty) obj;
         writer.addAttribute(ATT_NAME, ConversionHelp.encode(prop.getName()));
@@ -62,12 +52,7 @@ public class BooleanPropertyConverter implements Converter {
 
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.thoughtworks.xstream.converters.Converter#unmarshal(com.thoughtworks.xstream.io.HierarchicalStreamReader,
-     *      com.thoughtworks.xstream.converters.UnmarshallingContext)
-     */
+    /** {@inheritDoc} */
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext arg1) {
         BooleanProperty prop = new BooleanProperty(ConversionHelp.decode(reader.getAttribute(ATT_NAME)), Boolean.valueOf(
                 reader.getValue()).booleanValue());
