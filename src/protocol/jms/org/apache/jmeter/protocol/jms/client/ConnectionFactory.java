@@ -148,15 +148,17 @@ public class ConnectionFactory implements TestListener {
          return qfactory;
     }
 
-    public static synchronized TopicConnection getTopicConnection() {
+    /**
+     * Use the factory to create a topic connection.
+     * 
+     * @return the connection
+     * @throws JMSException if the factory is null or the create() method fails
+     */
+    public static synchronized TopicConnection getTopicConnection() throws JMSException {
         if (factory != null) {
-            try {
-                return factory.createTopicConnection();
-            } catch (JMSException e) {
-                log.error(e.getMessage());
-            }
+            return factory.createTopicConnection();
         }
-        return null;
+        throw new JMSException("Factory has not been initialised");
     }
 
     public static synchronized QueueConnection getQueueConnection(Context ctx, String queueConn) {
