@@ -90,6 +90,7 @@ public final class CSVSaveService {
     private static final String CSV_LATENCY = "Latency"; // $NON-NLS-1$
     private static final String CSV_ENCODING = "Encoding"; // $NON-NLS-1$
     private static final String CSV_HOSTNAME = "Hostname"; // $NON-NLS-1$
+    private static final String CSV_IDLETIME = "IdleTime"; // $NON-NLS-1$
 
     // Used to enclose variable name labels, to distinguish from any of the above labels
     private static final String VARIABLE_NAME_QUOTE_CHAR = "\"";  // $NON-NLS-1$
@@ -309,6 +310,12 @@ public final class CSVSaveService {
                 hostname = parts[i++];
             }
 
+            if (saveConfig.saveIdleTime()) {
+                field = CSV_IDLETIME;
+                text = parts[i++];
+                result.setIdleTime(Long.parseLong(text));
+            }
+
             if (i + saveConfig.getVarCount() < parts.length){
                 log.warn("Line: "+lineNumber+". Found "+parts.length+" fields, expected "+i+". Extra fields have been ignored.");
             }
@@ -433,6 +440,11 @@ public final class CSVSaveService {
             text.append(delim);
         }
 
+        if (saveConfig.saveIdleTime()) {
+            text.append(CSV_IDLETIME);
+            text.append(delim);
+        }
+
         for (int i = 0; i < SampleEvent.getVarCount(); i++){
             text.append(VARIABLE_NAME_QUOTE_CHAR);
             text.append(SampleEvent.getVarName(i));
@@ -480,6 +492,7 @@ public final class CSVSaveService {
             headerLabelMethods.put(CSV_SAMPLE_COUNT, new Functor("setSampleCount"));
             headerLabelMethods.put(CSV_ERROR_COUNT, new Functor("setSampleCount"));
             headerLabelMethods.put(CSV_HOSTNAME, new Functor("setHostname"));
+            headerLabelMethods.put(CSV_IDLETIME, new Functor("setIdleTime"));
     }
 
     /**
