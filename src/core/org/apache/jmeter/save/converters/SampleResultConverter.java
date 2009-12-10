@@ -89,6 +89,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
     private static final String ATT_SUCCESS           = "s";  //$NON-NLS-1$
     private static final String ATT_SAMPLE_COUNT      = "sc"; //$NON-NLS-1$
     private static final String ATT_TIME              = "t";  //$NON-NLS-1$
+    private static final String ATT_IDLETIME          = "it"; //$NON-NLS-1$
     private static final String ATT_THREADNAME        = "tn"; //$NON-NLS-1$
     private static final String ATT_TIME_STAMP        = "ts"; //$NON-NLS-1$
 
@@ -100,24 +101,14 @@ public class SampleResultConverter extends AbstractCollectionConverter {
         return "$Revision$"; //$NON-NLS-1$
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
-     */
+    /** {@inheritDoc} */
     @Override
     @SuppressWarnings("unchecked") // superclass does not use types
     public boolean canConvert(Class arg0) {
         return SampleResult.class.equals(arg0);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.thoughtworks.xstream.converters.Converter#marshal(java.lang.Object,
-     *      com.thoughtworks.xstream.io.HierarchicalStreamWriter,
-     *      com.thoughtworks.xstream.converters.MarshallingContext)
-     */
+    /** {@inheritDoc} */
     @Override
     public void marshal(Object obj, HierarchicalStreamWriter writer, MarshallingContext context) {
         SampleResult res = (SampleResult) obj;
@@ -244,6 +235,9 @@ public class SampleResultConverter extends AbstractCollectionConverter {
         if (save.saveTime()) {
             writer.addAttribute(ATT_TIME, Long.toString(res.getTime()));
         }
+        if (save.saveIdleTime()) {
+            writer.addAttribute(ATT_IDLETIME, Long.toString(res.getIdleTime()));
+        }
         if (save.saveLatency()) {
             writer.addAttribute(ATT_LATENCY, Long.toString(res.getLatency()));
         }
@@ -283,12 +277,10 @@ public class SampleResultConverter extends AbstractCollectionConverter {
            writer.addAttribute(ATT_ALL_THRDS, String.valueOf(res.getAllThreads()));
         }
         SampleEvent event = (SampleEvent) context.get(SaveService.SAMPLE_EVENT_OBJECT);
-        if (save.saveHostname()){
-            if (event != null) {
+        if (event != null) {
+            if (save.saveHostname()){
                 writer.addAttribute(ATT_HOSTNAME, event.getHostname());
             }
-        }
-        if (event != null) {
             for (int i = 0; i < SampleEvent.getVarCount(); i++){
                writer.addAttribute(SampleEvent.getVarName(i), ConversionHelp.encode(event.getVarValue(i)));
             }
@@ -309,12 +301,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.thoughtworks.xstream.converters.Converter#unmarshal(com.thoughtworks.xstream.io.HierarchicalStreamReader,
-     *      com.thoughtworks.xstream.converters.UnmarshallingContext)
-     */
+    /** {@inheritDoc} */
     @Override
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
         SampleResult res = (SampleResult) createCollection(context.getRequiredType());
@@ -394,6 +381,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
         res.setThreadName(ConversionHelp.decode(reader.getAttribute(ATT_THREADNAME)));
         res.setStampAndTime(Converter.getLong(reader.getAttribute(ATT_TIME_STAMP)),
                 Converter.getLong(reader.getAttribute(ATT_TIME)));
+        res.setIdleTime(Converter.getLong(reader.getAttribute(ATT_IDLETIME)));
         res.setLatency(Converter.getLong(reader.getAttribute(ATT_LATENCY)));
         res.setBytes(Converter.getInt(reader.getAttribute(ATT_BYTES)));
         res.setSampleCount(Converter.getInt(reader.getAttribute(ATT_SAMPLE_COUNT),1)); // default is 1
