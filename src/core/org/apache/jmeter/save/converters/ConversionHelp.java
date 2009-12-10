@@ -178,16 +178,39 @@ public class ConversionHelp {
        return propertyToAttribute.containsKey(name);
     }
 
-    public static void saveSpecialProperties(TestElement el, HierarchicalStreamWriter writer) {
-        saveClass(el,writer,TestElement.GUI_CLASS);
-        saveClass(el,writer,TestElement.TEST_CLASS);
-        saveItem(el,writer,TestElement.NAME,true);
-        saveItem(el,writer,TestElement.ENABLED,false);
+    /**
+     * Save the special properties:
+     * <ul>
+     * <li>TestElement.GUI_CLASS</li>
+     * <li>TestElement.TEST_CLASS</li>
+     * <li>TestElement.NAME</li>
+     * <li>TestElement.ENABLED</li>
+     * </ul>
+     * @param testElement
+     * @param writer
+     */
+    public static void saveSpecialProperties(TestElement testElement, HierarchicalStreamWriter writer) {
+        saveClass(testElement,writer,TestElement.GUI_CLASS);
+        saveClass(testElement,writer,TestElement.TEST_CLASS);
+        saveItem(testElement,writer,TestElement.NAME,true);
+        saveItem(testElement,writer,TestElement.ENABLED,false);
     }
-    public static void restoreSpecialProperties(TestElement el, HierarchicalStreamReader reader) {
-        restoreClass(el,reader,TestElement.GUI_CLASS);
-        restoreClass(el,reader,TestElement.TEST_CLASS);
-        restoreItem(el,reader,TestElement.NAME,true);
-        restoreItem(el,reader,TestElement.ENABLED,false);
+
+    /**
+     * Restore the special properties:
+     * <ul>
+     * <li>TestElement.GUI_CLASS</li>
+     * <li>TestElement.TEST_CLASS</li>
+     * <li>TestElement.NAME</li>
+     * <li>TestElement.ENABLED</li>
+     * </ul>
+     * @param testElement
+     * @param reader
+     */
+    public static void restoreSpecialProperties(TestElement testElement, HierarchicalStreamReader reader) {
+        restoreClass(testElement,reader,TestElement.GUI_CLASS);
+        restoreClass(testElement,reader,TestElement.TEST_CLASS);
+        restoreItem(testElement,reader,TestElement.NAME,true);
+        restoreItem(testElement,reader,TestElement.ENABLED,false);
     }
 }
