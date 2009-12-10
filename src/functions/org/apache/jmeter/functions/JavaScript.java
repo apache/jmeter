@@ -32,10 +32,8 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 import org.mozilla.javascript.Context;
-import org.mozilla.javascript.EcmaError;
-import org.mozilla.javascript.JavaScriptException;
+import org.mozilla.javascript.RhinoException;
 import org.mozilla.javascript.Scriptable;
-import org.mozilla.javascript.WrappedException;
 
 public class JavaScript extends AbstractFunction {
 
@@ -90,13 +88,7 @@ public class JavaScript extends AbstractFunction {
                 vars.put(varName, resultStr);
             }
 
-        } catch (WrappedException e) {
-            log.error("Error processing Javascript", e);
-            throw new InvalidVariableException();
-        } catch (EcmaError e) {
-            log.error("Error processing Javascript", e);
-            throw new InvalidVariableException();
-        } catch (JavaScriptException e) {
+        } catch (RhinoException e) {
             log.error("Error processing Javascript", e);
             throw new InvalidVariableException();
         } finally {
