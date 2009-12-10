@@ -35,7 +35,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.avalon.framework.configuration.DefaultConfigurationSerializer;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.gui.GuiPackage;
@@ -46,7 +45,6 @@ import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.save.CSVSaveService;
-import org.apache.jmeter.save.OldSaveService;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
@@ -126,8 +124,6 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
     // Instance variables
     
-    private transient volatile DefaultConfigurationSerializer serializer;
-
     private transient volatile PrintWriter out;
 
     private volatile boolean inTest = false;
@@ -317,13 +313,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                                     new ResultCollectorHelper(this, visualizer));
                             parsedOK = true;
                         } catch (Exception e) {
-                            log.info("Failed to load "+filename+" using XStream, trying old XML format. Error was: "+e);
-                            try {
-                                OldSaveService.processSamples(filename, visualizer, this);
-                                parsedOK = true;
-                            } catch (Exception e1) {
-                                log.warn("Error parsing Avalon XML. " + e1.getLocalizedMessage());
-                            }
+                            log.warn("Failed to load "+filename+" using XStream. Error was: "+e);
                         }
                     }
                 }
@@ -486,14 +476,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                 result.setSaveConfig(config);
                 try {
                     if (config.saveAsXml()) {
-                        if (SaveService.isSaveTestLogFormat20()) {
-                            if (serializer == null) {
-                                serializer = new DefaultConfigurationSerializer();
-                            }
-                            out.write(OldSaveService.getSerializedSampleResult(result, serializer, config));
-                        } else { // !LogFormat20
-                            SaveService.saveSampleResult(event, out);
-                        }
+                        SaveService.saveSampleResult(event, out);
                     } else { // !saveAsXml
                         String savee = CSVSaveService.resultToDelimitedString(event);
                         out.println(savee);

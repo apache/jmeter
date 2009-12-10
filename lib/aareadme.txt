@@ -4,8 +4,8 @@ Which jars are used by which modules?
 
 avalon-framework-4.1.4 (org.apache.avalon.framework)
 ----------------------
-- LogKit (used by HttpClient ?)
-- Configuration (ResultCollector, SaveService, SampleResult, TestElementSaver)
+- LogKit (LoggingManager)
+- Configuration (DataSourceElement)
 
 bsf-2.4.0.jar (org.apache.bsf)
 -------------
@@ -61,8 +61,7 @@ http://commons.apache.org/downloads/download_net.cgi
 
 excalibur-datasource-1.1.1 (org.apache.avalon.excalibur.datasource)
 --------------------------
-- jdbc - DataSourceElement
-- JDBCSampler
+- DataSourceElement (JDBC)
 
 excalibur-instrument-1.0 (org.apache.excalibur.instrument)
 ------------------------
@@ -70,7 +69,6 @@ excalibur-instrument-1.0 (org.apache.excalibur.instrument)
 
 excalibur-logger-1.1 (org.apache.avalon.excalibur.logger)
 --------------------
-- httpclient?
 - LoggingManager
 
 excalibur-pool-1.2 (org.apache.avalon.excalibur.pool)
