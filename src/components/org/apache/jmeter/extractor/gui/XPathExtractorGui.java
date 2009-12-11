@@ -24,6 +24,7 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
@@ -47,6 +48,8 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
 
     private JLabeledTextField refNameField;
 
+    private JCheckBox getFragment; // Should we return fragment as text, rather than text of fragment?
+    
     private XMLConfPanel xml;
     
     public String getLabelResource() {
@@ -65,6 +68,7 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
         xpathQueryField.setText(xpe.getXPathQuery());
         defaultField.setText(xpe.getDefaultValue());
         refNameField.setText(xpe.getRefName());
+        getFragment.setSelected(xpe.getFragment());
         xml.configure(xpe);
     }
 
@@ -82,6 +86,7 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
             xpath.setDefaultValue(defaultField.getText());
             xpath.setRefName(refNameField.getText());
             xpath.setXPathQuery(xpathQueryField.getText());
+            xpath.setFragment(getFragment.isSelected());
             xml.modifyTestElement(xpath);
         }
     }
@@ -109,8 +114,10 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
         xml.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
                 .getResString("xpath_assertion_option"))); //$NON-NLS-1$
         box.add(xml);
+        getFragment = new JCheckBox(JMeterUtils.getResString("xpath_extractor_fragment"));//$NON-NLS-1$
+        box.add(getFragment);
+        box.add(makeParameterPanel());
         add(box, BorderLayout.NORTH);
-        add(makeParameterPanel(), BorderLayout.CENTER);
     }
 
 
