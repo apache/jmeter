@@ -56,12 +56,12 @@ public class XMLConfPanel extends JPanel {
         namespace = new JCheckBox(JMeterUtils.getResString("xml_namespace_button")); //$NON-NLS-1$
         whitespace = new JCheckBox(JMeterUtils.getResString("xml_whitespace_button")); //$NON-NLS-1$
         validate = new JCheckBox(JMeterUtils.getResString("xml_validate_button")); //$NON-NLS-1$
-        validate.addActionListener(new ActionListener(){
+        tolerant = new JCheckBox(JMeterUtils.getResString("xml_tolerant_button")); //$NON-NLS-1$
+        tolerant.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e) {
                 tolerant();
             }            
         });
-        tolerant = new JCheckBox(JMeterUtils.getResString("xml_tolerant_button")); //$NON-NLS-1$
         downloadDTDs = new JCheckBox(JMeterUtils.getResString("xml_download_dtds")); //$NON-NLS-1$
         Box tidyOptions = Box.createHorizontalBox();
         tidyOptions.setBorder(BorderFactory.createEtchedBorder());
