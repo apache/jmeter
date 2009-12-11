@@ -3395,7 +3395,7 @@ These are strings unless otherwise noted:
 
 </properties>
 </component>
-<component name="XPath Assertion" index="&sect-num;.5.8"  width="872" height="266" screenshot="xpath_assertion.png">
+<component name="XPath Assertion" index="&sect-num;.5.8"  width="692" height="293" screenshot="xpath_assertion.png">
 <description><p>The XPath Assertion tests a document for well formedness, has the option
 of validating against a DTD, or putting the document through JTidy and testing for an
 XPath.  If that XPath exists, the Assertion is true.  Using "/" will match any well-formed
@@ -3622,7 +3622,7 @@ points of the test plan.
 
 </component>
 
-<component name="BeanShell Timer" index="&sect-num;.6.6"  width="516" height="286" screenshot="timers/beanshell_timer.png">
+<component name="BeanShell Timer" index="&sect-num;.6.6"  width="597" height="303" screenshot="timers/beanshell_timer.png">
 <description>
 <p>
 The BeanShell Timer can be used to generate a delay.
@@ -4075,7 +4075,7 @@ generate the template string, and store the result into the given variable name.
 </p>
 </component>
 
-<component name="XPath Extractor" index="&sect-num;.8.2"  width="535" height="176" screenshot="xpath_extractor.png">
+<component name="XPath Extractor" index="&sect-num;.8.2"  width="541" height="247" screenshot="xpath_extractor.png">
 	<description>This test element allows the user to extract value from 
 		structured response - XML or (X)HTML - using XPath
 		query language.
