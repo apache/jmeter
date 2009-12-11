@@ -162,6 +162,7 @@ The XPath Assertion and XPath Extractor elements no longer fetch external DTDs b
 <li>Bug 47952 - Added JSR223 PreProcessor and PostProcessor</li>
 <li>Added JSR223 Assertion</li>
 <li>Added BSF Timer and JSR223 Timer</li>
+<li>Bug 48331 - XpathExtractor does not return XML string representations for a Nodeset</li>
 </ul>
 
 <h3>Functions</h3>

@@ -4075,7 +4075,7 @@ generate the template string, and store the result into the given variable name.
 </p>
 </component>
 
-<component name="XPath Extractor" index="&sect-num;.8.2"  width="541" height="247" screenshot="xpath_extractor.png">
+<component name="XPath Extractor" index="&sect-num;.8.2"  width="613" height="269" screenshot="xpath_extractor.png">
 	<description>This test element allows the user to extract value from 
 		structured response - XML or (X)HTML - using XPath
 		query language.
@@ -4110,9 +4110,15 @@ generate the template string, and store the result into the given variable name.
     <property name="Validate XML"   required="If Tidy is not selected">Check the document against its schema.</property>
     <property name="Ignore Whitespace"  required="If Tidy is not selected">Ignore Element Whitespace.</property>
     <property name="Fetch External DTDs"  required="If Tidy is not selected">If selected, external DTDs are fetched.</property>
+    <property name="Return entire XPath fragment instead of text content?" required="Yes">
+    If selected, the fragment will be returned rather than the text content.<br></br>
+    For example //title would return "&amp;lt;title>Apache JMeter&amp;lt;/title>" rather than "Apache JMeter".<br></br>
+    In this case, //title/text() would return "Apache JMeter".
+    </property>
     <property name="Reference Name" required="Yes">The name of the JMeter variable in which to store the result.</property>
-	<property name="XPath Query" required="Yes">Element query in XPath language. Can return more than one match. </property>
-	<property name="Default Value" required="">Default value returned when no match found</property>
+	<property name="XPath Query" required="Yes">Element query in XPath language. Can return more than one match.</property>
+	<property name="Default Value" required="">Default value returned when no match found. 
+	It is also returned if the node has no value and the fragment option is not selected.</property>
    </properties>
    <p>To allow for use in a ForEach Controller, the following variables are set on return:</p>
    <ul>

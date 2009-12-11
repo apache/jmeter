@@ -21,6 +21,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.io.StringWriter;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -46,6 +47,12 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 //@see org.apache.jmeter.extractor.TestXPathExtractor for unit tests
 
 /**
@@ -58,6 +65,10 @@ import org.xml.sax.SAXException;
  *     <dd>extracts value attribute of option element that match text 'Czech Republic'
  *                 inside of select element with name attribute  'country' inside of
  *                 form with name attribute 'countryForm'</dd>
+ * <dt>//head</dt>
+ *     <dd>extracts the XML fragment for head node.</dd>
+ * <dt>//head/text()</dt>
+ *     <dd>extracts the text content for head node.</dd>
  * </dl>
  */
  /* This file is inspired by RegexExtractor.
@@ -83,6 +94,7 @@ public class XPathExtractor extends AbstractTestElement implements
     private static final String DOWNLOAD_DTDS   = "XPathExtractor.download_dtds"; // $NON-NLS-1$
     private static final String WHITESPACE      = "XPathExtractor.whitespace"; // $NON-NLS-1$
     private static final String VALIDATE        = "XPathExtractor.validate"; // $NON-NLS-1$
+    private static final String FRAGMENT        = "XPathExtractor.fragment"; // $NON-NLS-1$
     //- JMX file attributes
 
 
@@ -203,6 +215,22 @@ public class XPathExtractor extends AbstractTestElement implements
         return getPropertyAsBoolean(QUIET, true);
     }
 
+    /**
+     * Should we return fragment as text, rather than text of fragment?
+     * @return true if we should return fragment rather than text
+     */
+    public boolean getFragment() {
+        return getPropertyAsBoolean(FRAGMENT, false);
+    }
+
+    /**
+     * Should we return fragment as text, rather than text of fragment?
+     * @param selected true to return fragment.
+     */
+    public void setFragment(boolean selected) {
+        setProperty(FRAGMENT, selected, false);
+    }
+
     /*================= internal business =================*/
     /**
      * Converts (X)HTML response to DOM object Tree.
@@ -249,13 +277,17 @@ public class XPathExtractor extends AbstractTestElement implements
             for (int i = 0 ; i < length; i++) {
                 Node match = matches.item(i);
                 if ( match instanceof Element){
-                // elements have empty nodeValue, but we are usually interested in their content
-                   final Node firstChild = match.getFirstChild();
-                   if (firstChild != null) {
-                       val = firstChild.getNodeValue();
-                   } else {
-                       val = match.getNodeValue(); // TODO is this correct?
-                   }
+                    if (getFragment()){
+                        val = getValueForNode(match);                        
+                    } else {
+                        // elements have empty nodeValue, but we are usually interested in their content
+                        final Node firstChild = match.getFirstChild();
+                        if (firstChild != null) {
+                            val = firstChild.getNodeValue();
+                        } else {
+                            val = match.getNodeValue(); // TODO is this correct?
+                        }
+                    }                   
                 } else {
                    val = match.getNodeValue();
                 }
@@ -302,5 +334,17 @@ public class XPathExtractor extends AbstractTestElement implements
 
     public boolean isDownloadDTDs() {
         return getPropertyAsBoolean(DOWNLOAD_DTDS, false);
+    }     
+    
+    private String getValueForNode(Node node) {
+        StringWriter sw = new StringWriter();
+        try {
+            Transformer t = TransformerFactory.newInstance().newTransformer();
+            t.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+            t.transform(new DOMSource(node), new StreamResult(sw));
+        } catch (TransformerException e) {
+            sw.write(e.getMessageAndLocation());
+        }
+        return sw.toString();
     }
 }
