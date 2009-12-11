@@ -128,6 +128,26 @@ public class TestXPathExtractor extends TestCase {
             assertEquals("Default", vars.get(VAL_NAME));
             assertEquals("1", vars.get(VAL_NAME_NR));
             assertNull(vars.get(VAL_NAME+"_1"));
+
+            // No text
+            extractor.setXPathQuery("//a");
+            extractor.process();
+            assertEquals("Default", vars.get(VAL_NAME));
+
+            // Test fragment
+            extractor.setXPathQuery("/book/page[2]");
+            extractor.setFragment(true);
+            extractor.process();
+            assertEquals("<page>two</page>", vars.get(VAL_NAME));
+            // Now get its text
+            extractor.setXPathQuery("/book/page[2]/text()");
+            extractor.process();
+            assertEquals("two", vars.get(VAL_NAME));
+
+            // No text, but using fragment mode
+            extractor.setXPathQuery("//a");
+            extractor.process();
+            assertEquals("<a><b/></a>", vars.get(VAL_NAME));
         }
 
         public void testInvalidXpath() throws Exception {
