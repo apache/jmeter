@@ -39,6 +39,7 @@ import org.apache.log.Logger;
  *
  * Parameters:
  * - file name
+ * - file encoding (optional)
  * - variable name (optional)
  *
  * Returns:
@@ -58,14 +59,17 @@ public class FileToString extends AbstractFunction {
 
     static {
         desc.add(JMeterUtils.getResString("string_from_file_file_name"));//$NON-NLS-1$
+        desc.add(JMeterUtils.getResString("string_from_file_encoding"));//$NON-NLS-1$
         desc.add(JMeterUtils.getResString("function_name_paropt"));//$NON-NLS-1$
     }
 
     private static final int MIN_PARAM_COUNT = 1;
 
-    private static final int MAX_PARAM_COUNT = 2;
+    private static final int MAX_PARAM_COUNT = 3;
 
-    private static final int PARAM_NAME = 2;
+    private static final int ENCODING = 2;
+    
+    private static final int PARAM_NAME = 3;
 
     private Object[] values;
 
@@ -79,6 +83,11 @@ public class FileToString extends AbstractFunction {
 
         String fileName = ((CompoundVariable) values[0]).execute();
         
+        String encoding = null;//means platform default
+        if (values.length >= ENCODING) {
+            encoding = ((CompoundVariable) values[ENCODING - 1]).execute().trim();
+        }
+
         String myName = "";//$NON-NLS-1$
         if (values.length >= PARAM_NAME) {
             myName = ((CompoundVariable) values[PARAM_NAME - 1]).execute().trim();
@@ -87,7 +96,7 @@ public class FileToString extends AbstractFunction {
         String myValue = ERR_IND;
         
         try {
-            myValue = FileUtils.readFileToString(new File(fileName), null);
+            myValue = FileUtils.readFileToString(new File(fileName), encoding);
         } catch (IOException e) {
             log.warn("Could not read file: "+fileName+" "+e.getMessage());
             throw new JMeterStopThreadException("End of sequence");
