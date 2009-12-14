@@ -32,6 +32,8 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 public class TransactionControllerGui extends AbstractControllerGui {
 
     private JCheckBox parent; // If selected, then generate parent sample, otherwise as per original controller
+	
+    private JCheckBox includeTimers; // if selected, add duration of timers to total runtime
 
     /**
      * Create a new TransactionControllerGui instance.
@@ -51,12 +53,16 @@ public class TransactionControllerGui extends AbstractControllerGui {
     public void configure(TestElement el) {
         super.configure(el);
         parent.setSelected(((TransactionController) el).isParent());
+		includeTimers.setSelected(((TransactionController) el).isIncludeTimers());
     }
 
     /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
     public void modifyTestElement(TestElement el) {
         configureTestElement(el);
         ((TransactionController) el).setParent(parent.isSelected());
+        TransactionController tc = ((TransactionController) el);
+        tc.setParent(parent.isSelected());
+        tc.setIncludeTimers(includeTimers.isSelected());
     }
 
     public String getLabelResource() {
@@ -72,5 +78,7 @@ public class TransactionControllerGui extends AbstractControllerGui {
         add(makeTitlePanel());
         parent = new JCheckBox(JMeterUtils.getResString("transaction_controller_parent")); // $NON-NLS-1$
         add(parent);
+        includeTimers = new JCheckBox(JMeterUtils.getResString("transaction_controller_include_timers"), true); // $NON-NLS-1$
+        add(includeTimers);
     }
 }
