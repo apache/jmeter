@@ -1105,11 +1105,14 @@ becomes:
         <property name="File Name" required="Yes">Path to the file name.
             (The path can be relative to the JMeter launch directory)
         </property>
+        <property name="File encoding if not the platform default" required="No">
+        The encoding to be used to read the file. If not specified, the platform default is used.
+        </property>
         <property name="Variable Name" required="No">
 A reference name - refName - for reusing the value created by this function. Stored values are of the form ${refName}.
         </property>
 </properties>
-<p>The file name parameter and reference name parameter (if supplied) are resolved every time the function is executed.</p>
+<p>The file name, encoding and reference name parameters are resolved every time the function is executed.</p>
 </component>
 
 </subsection>
