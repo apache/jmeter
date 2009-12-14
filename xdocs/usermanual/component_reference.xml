@@ -1844,7 +1844,7 @@ the contents are used to prefix the pathname.
 </properties>
 </component>
 
-<component name="Transaction Controller" index="&sect-num;.2.15"  width="258" height="125" screenshot="transactioncontroller.png">
+<component name="Transaction Controller" index="&sect-num;.2.15"  width="288" height="155" screenshot="transactioncontroller.png">
 	<description>
 	    <p>
 	    The Transaction Controller generates an additional
@@ -1884,6 +1884,10 @@ the contents are used to prefix the pathname.
 	<property name="Generate Parent Sample" required="Yes">
 	If checked, then the sample is generated as a parent of the other samples,
 	otherwise the sample is generated as an independent sample.
+	</property>
+	<property name="Include timer duration in generated sample" required="Yes">
+	Whether to include timer, pre- and post-processing delays in the generated sample.
+	Default is true to be compatible with the behaviour in previous versions of JMeter.
 	</property>
 </properties>
 </component>

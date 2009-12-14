@@ -56,7 +56,19 @@ public class TransactionController extends GenericController implements SampleLi
 
     private transient int noFailingSamples;
 
+    /**
+     * Cumulated pause time to excluse timer and post/pre processor times
+     */
+    private transient long pauseTime;
+    
+    /**
+     * Previous end time
+     */
+    private transient long prevEndTime;
+    
     private static final String PARENT = "TransactionController.parent";// $NON-NLS-1$
+
+    private final static String INCLUDE_TIMERS = "TransactionController.includeTimers";// $NON-NLS-1$
 
     /**
      * Creates a Transaction Controller
@@ -152,6 +164,8 @@ public class TransactionController extends GenericController implements SampleLi
             // Assume success
             res.setSuccessful(true);
             res.sampleStart();
+            prevEndTime = res.getStartTime();//???
+            pauseTime = 0;
         }
 
         Sampler returnValue = super.next();
@@ -159,7 +173,8 @@ public class TransactionController extends GenericController implements SampleLi
         if (returnValue == null) // Must be the end of the controller
         {
             if (res != null) {
-                res.sampleEnd();
+                res.setIdleTime(pauseTime+res.getIdleTime());
+ 			    res.sampleEnd();
                 res.setResponseMessage("Number of samples in transaction : " + calls + ", number of failing samples : " + noFailingSamples);
                 if(res.isSuccessful()) {
                     res.setResponseCodeOK();
@@ -196,6 +211,10 @@ public class TransactionController extends GenericController implements SampleLi
                 SampleResult sampleResult = se.getResult();
                 res.setThreadName(sampleResult.getThreadName());
                 res.setBytes(res.getBytes() + sampleResult.getBytes());
+                if (!isIncludeTimers()) {// Accumulate waiting time for later
+                	pauseTime += sampleResult.getEndTime() - sampleResult.getTime() - prevEndTime;
+                	prevEndTime = sampleResult.getEndTime();
+                }
                 if(!sampleResult.isSuccessful()) {
                     res.setSuccessful(false);
                     noFailingSamples++;
@@ -212,4 +231,22 @@ public class TransactionController extends GenericController implements SampleLi
 
     public void sampleStopped(SampleEvent e) {
     }
+    
+    /**
+     * Whether to include timers and pre/post processor time in overall sample.
+     * @param includeTimers
+     */
+    public void setIncludeTimers(boolean includeTimers) {
+        setProperty(INCLUDE_TIMERS, includeTimers, true); // default true for compatibility
+    }
+
+    /**
+     * Whether to include timer and pre/post processor time in overall sample.
+     * 
+     * @return boolean (defaults to true for backwards compatibility)
+     */
+    public boolean isIncludeTimers() {
+    	return getPropertyAsBoolean(INCLUDE_TIMERS, true);
+    }
+
 }
