@@ -74,36 +74,51 @@ See also <a href="placement">Placement of modifiers</a> below.
 </p>
 </subsection>
 <subsection name="&sect-num;.2 Examples" anchor="examples">
+<h3>Extract single string</h3>
 <p>
-Extract single string
-<br/>
 Suppose you want to match the following portion of a web-page: 
 <br/>
-name="file" value="readme.txt" and you want to extract readme.txt.
+<code>name="file" value="readme.txt"></code>
 <br/>
-A suitable reqular expression would be:
+and you want to extract <code>readme.txt</code>.
 <br/>
-name="file" value="(.+?)"
+A suitable regular expression would be:
+<br/>
+<code>name="file" value="(.+?)"></code>
 <p>
 The special characters above are:
 </p>
 <ul>
 <li>( and ) - these enclose the portion of the match string to be returned</li>
-<li>. - match any character. + - one or more times. 
-? - don't be greedy, i.e. stop when first match succeeds</li>
+<li>. - match any character</li>
+<li>+ - one or more times</li> 
+<li>? - don't be greedy, i.e. stop when first match succeeds</li>
 </ul>
 <p>
-Note: without the ?, the .+ would continue past the first " until it found the last possible " - probably not what was intended.
+Note: without the ?, the .+ would continue past the first <code>"></code>
+until it found the last possible <code>"></code> - which is probably not what was intended.
 </p>
-<p>Extract multiple strings</p>
-
-Suppose you want to match the following portion of a web-page: name="file.name" value="readme.txt" and you want to extract file.name and readme.txt.
+<p>
+Note: although the above expression works, it's more efficient to use the following expression:
+<br/>
+<code>name="file" value="([^"]+)"></code>
+where<br></br>
+[^"] - means match anything except "<br></br>
+In this case, the matching engine can stop looking as soon as it sees the first <code>"</code>, 
+whereas in the previous case the engine has to check that it has found <code>"></code> rather than say <code>" ></code>.
+</p>
+<h3>Extract multiple strings</h3>
+<p>
+Suppose you want to match the following portion of a web-page:<br/>
+<code>name="file.name" value="readme.txt"</code> 
+and you want to extract both <code>file.name</code> and <code>readme.txt</code>.
 <br/>
 A suitable reqular expression would be:
 <br/>
-name="(.+?)" value="(.+?)"
+<code>name="([^"]+)" value="([^"]+)"</code>
 <br/>
 This would create 2 groups, which could be used in the JMeter Regular Expression Extractor template as $1$ and $2$.
+</p>
 <p>
 The JMeter Regex Extractor saves the values of the groups in additional variables.
 </p>
