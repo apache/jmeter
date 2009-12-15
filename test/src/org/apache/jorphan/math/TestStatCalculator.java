@@ -33,9 +33,6 @@ public class TestStatCalculator extends TestCase {
         super();
     }
 
-    /**
-     * @param arg0
-     */
     public TestStatCalculator(String arg0) {
         super(arg0);
     }
@@ -60,6 +57,8 @@ public class TestStatCalculator extends TestCase {
         assertEquals(9, calc.getPercentPoint(0.8999999).intValue());
     }
     public void testCalculation() {
+        assertEquals(Long.MIN_VALUE, calc.getMax().longValue());
+        assertEquals(Long.MAX_VALUE, calc.getMin().longValue());
         calc.addValue(18);
         calc.addValue(10);
         calc.addValue(9);
@@ -91,6 +90,8 @@ public class TestStatCalculator extends TestCase {
     
     public void testInteger(){
         StatCalculatorInteger calci = new StatCalculatorInteger();
+        assertEquals(Integer.MIN_VALUE, calci.getMax().intValue());
+        assertEquals(Integer.MAX_VALUE, calci.getMin().intValue());
         calci.addValue(0);
         calci.addValue(2);
         calci.addValue(2);
