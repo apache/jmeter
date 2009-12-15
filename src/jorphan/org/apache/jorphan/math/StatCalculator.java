@@ -18,11 +18,10 @@
 
 package org.apache.jorphan.math;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.TreeSet;
+
+import org.apache.commons.lang.mutable.MutableLong;
 
 /**
  * This class serves as a way to calculate the median, max, min etc. of a list of values.
@@ -31,8 +30,10 @@ import java.util.List;
  */
 public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
     
-    private final List<T> values = new ArrayList<T>();
+    // key is the type to collect (usually long), value = count of entries
+    private final HashMap<T, MutableLong> valuesMap = new HashMap<T, MutableLong>();
 
+    // Running values, updated for each sample
     private double sum = 0;
 
     private double sumOfSquares = 0;
@@ -43,13 +44,19 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
 
     private int count = 0;
 
+    private T min;
+
+    private T max;
+
+    private transient TreeSet<T> sortedKeys; // cached sorted set
+    
     private long bytes = 0;
 
     private final T ZERO;
     
-    private final T MAX_VALUE;
+    private final T MAX_VALUE; // e.g. Long.MAX_VALUE
     
-    private final T MIN_VALUE;
+    private final T MIN_VALUE; // e.g. Long.MIN_VALUE
     
     /**
      * This constructor is used to set up particular values for the generic class instance.
@@ -58,20 +65,27 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
      * @param min - value to return for minimum if there are no values
      * @param max - value to return for maximum if there are no values
      */
-    public StatCalculator(T zero, T min, T max) {
+    public StatCalculator(final T zero, final T min, final T max) {
         super();
         ZERO = zero;
         MAX_VALUE = max;
         MIN_VALUE = min;
+        this.min = MAX_VALUE;
+        this.max = MIN_VALUE;
+        sortedKeys = null;
     }
 
     public void clear() {
-        values.clear();
+        valuesMap.clear();
+        sortedKeys = null;
         sum = 0;
         sumOfSquares = 0;
         mean = 0;
         deviation = 0;
         count = 0;
+        bytes = 0;
+        max = MIN_VALUE;
+        min = MAX_VALUE;
     }
 
 
@@ -80,17 +94,13 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
     }
 
     public void addAll(StatCalculator<T> calc) {
-        Iterator<T> iter = calc.values.iterator();
-        while (iter.hasNext()) {
-            addValue(iter.next());
+        for (T val : calc.valuesMap.keySet()) {
+            addValue(val);
         }
     }
 
     public T getMedian() {
-        if (count > 0) {
-            return values.get((int) (values.size() * .5));
-        }
-        return ZERO;
+        return getPercentPoint(0.5);
     }
 
     public long getTotalBytes() {
@@ -107,10 +117,7 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
      * @return number of values less than the percentage
      */
     public T getPercentPoint(float percent) {
-        if (count > 0) {
-            return values.get((int) (values.size() * percent));
-        }
-        return ZERO;
+        return getPercentPoint((double) percent);
     }
 
     /**
@@ -120,42 +127,45 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
      * are below, the remaining 10% are above.
      *
      * @param percent
-     * @return number of values less than the percentage
+     * @return the value which %percent% of the values are less than
      */
     public T getPercentPoint(double percent) {
-        if (count > 0) {
-            return values.get((int) (values.size() * percent));
+        if (count <= 0) {
+                return ZERO;
         }
-        return ZERO;
+        if (percent >= 1.0) {
+            return getMax();
+        }
+
+        // use Math.round () instead of simple (long) to provide correct value rounding 
+        long target = Math.round (count * percent);
+        if (sortedKeys == null){
+            sortedKeys = new TreeSet<T> (valuesMap.keySet());
+        }
+        for (T val : sortedKeys) {
+            target -= valuesMap.get(val).longValue();
+            if (target <= 0){
+                return val;
+            }
+        }
+        return ZERO; // TODO should this be getMin()?
     }
 
     /**
      * Returns the distribution of the values in the list.
      * 
-     * TODO round values to reduce the number of distinct entries.
-     *
      * @return map containing either Integer or Long keys; entries are a Number array containing the key and the [Integer] count.
      * TODO - why is the key value also stored in the entry array?
      */
     public synchronized HashMap<Number, Number[]> getDistribution() {
-        HashMap<Number, Number[]> items = new HashMap<Number, Number[]>();
-        Iterator<T> itr = this.values.iterator();
+        HashMap<Number, Number[]> items = new HashMap <Number, Number[]> ();
         Number[] dis;
-        while (itr.hasNext()) {
-            Number nx = itr.next();
-            if (!(nx instanceof Integer || nx instanceof Long)){
-                nx=new Long(nx.longValue()); // convert to Long unless Integer or Long
-            }
-            if (items.containsKey(nx)) {
-                dis = items.get(nx);
-                dis[1] = new Integer(dis[1].intValue() + 1);
-                items.put(nx, dis);
-            } else {
-                dis = new Number[2];
-                dis[0] = nx;
-                dis[1] = new Integer(1);
-                items.put(nx, dis);
-            }
+
+        for (T nx : valuesMap.keySet()) {
+            dis = new Number[2];
+            dis[0] = nx;
+            dis[1] = valuesMap.get(nx);
+            items.put(nx, dis);
         }
         return items;
     }
@@ -169,17 +179,11 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
     }
 
     public T getMin() {
-        if (count > 0) {
-            return values.get(0);
-        }
-        return MIN_VALUE;
+        return min;
     }
 
     public T getMax() {
-        if (count > 0) {
-            return values.get(count - 1);
-        }
-        return MAX_VALUE;
+        return max;
     }
 
     public int getCount() {
@@ -187,23 +191,29 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
     }
 
     public void addValue(T val) {
-        addSortedValue(val);
+        sortedKeys = null;
+        updateValueCount(val);
         count++;
         double currentVal = val.doubleValue();
         sum += currentVal;
         sumOfSquares += currentVal * currentVal;
         mean = sum / count;
         deviation = Math.sqrt((sumOfSquares / count) - (mean * mean));
+        if (val.compareTo(max) > 0){
+            max=val;
+        }
+        if (val.compareTo(min) < 0){
+            min=val;
+        }
     }
 
-    private void addSortedValue(T val) {
-        int index = Collections.binarySearch(values, val);
-        if (index >= 0 && index < values.size()) {
-            values.add(index, val);
-        } else if (index == values.size() || values.size() == 0) {
-            values.add(val);
+    private void updateValueCount(T val) {
+        MutableLong count = valuesMap.get(val);
+        if (count != null) {
+            count.increment();
         } else {
-            values.add((index * (-1)) - 1, val);
+            // insert new value
+            valuesMap.put(val, new MutableLong(1L));
         }
     }
 }
