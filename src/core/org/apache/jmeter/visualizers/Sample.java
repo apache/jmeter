@@ -49,17 +49,6 @@ public class Sample implements Serializable, Comparable<Sample> {
 
     private final int bytes;
 
-
-    // TODO - is this used?
-    public Sample(long data, long average, long deviation, double throughput, long median, boolean success) {
-        this(null, data, average, deviation, median, 0, throughput, 0, success, 0, 0);
-    }
-
-    // TODO - is this used?
-    public Sample(long data) {
-        this(null, data, 0, 0, 0, 0, 0, 0, false, 0, 0);
-    }
-
     public Sample(String name, long data, long average, long deviation, long median, long distributionLine,
             double throughput, long errorCount, boolean success, long num, long endTime) {
         this.data = data;
@@ -74,23 +63,6 @@ public class Sample implements Serializable, Comparable<Sample> {
         this.count = num;
         this.endTime = endTime;
         this.bytes = 0;
-        this.threadName = "";
-    }
-
-    public Sample(String name, long data, long average, long deviation, long median, long distributionLine,
-            double throughput, long errorCount, boolean success, long num, long endTime, int bytes) {
-        this.data = data;
-        this.average = average;
-        this.deviation = deviation;
-        this.throughput = throughput;
-        this.success = success;
-        this.median = median;
-        this.distributionLine = distributionLine;
-        this.label = name;
-        this.errorCount = errorCount;
-        this.count = num;
-        this.endTime = endTime;
-        this.bytes = bytes;
         this.threadName = "";
     }
 
