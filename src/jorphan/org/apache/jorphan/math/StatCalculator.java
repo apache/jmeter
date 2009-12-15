@@ -18,8 +18,10 @@
 
 package org.apache.jorphan.math;
 
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
-import java.util.TreeSet;
+import java.util.TreeMap;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang.mutable.MutableLong;
 
@@ -31,7 +33,8 @@ import org.apache.commons.lang.mutable.MutableLong;
 public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
     
     // key is the type to collect (usually long), value = count of entries
-    private final HashMap<T, MutableLong> valuesMap = new HashMap<T, MutableLong>();
+    private final TreeMap<T, MutableLong> valuesMap = new TreeMap<T, MutableLong>();
+    // We use a TreeMap because we need the entries to be sorted
 
     // Running values, updated for each sample
     private double sum = 0;
@@ -48,8 +51,6 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
 
     private T max;
 
-    private transient TreeSet<T> sortedKeys; // cached sorted set
-    
     private long bytes = 0;
 
     private final T ZERO;
@@ -72,12 +73,10 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
         MIN_VALUE = min;
         this.min = MAX_VALUE;
         this.max = MIN_VALUE;
-        sortedKeys = null;
     }
 
     public void clear() {
         valuesMap.clear();
-        sortedKeys = null;
         sum = 0;
         sumOfSquares = 0;
         mean = 0;
@@ -139,14 +138,15 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
 
         // use Math.round () instead of simple (long) to provide correct value rounding 
         long target = Math.round (count * percent);
-        if (sortedKeys == null){
-            sortedKeys = new TreeSet<T> (valuesMap.keySet());
-        }
-        for (T val : sortedKeys) {
-            target -= valuesMap.get(val).longValue();
-            if (target <= 0){
-                return val;
+        try {
+            for (Entry<T, MutableLong> val : valuesMap.entrySet()) {
+                target -= val.getValue().longValue();
+                if (target <= 0){
+                    return val.getKey();
+                }
             }
+        } catch (ConcurrentModificationException ignored) {
+            // ignored. May happen occasionally, but no harm done if so.
         }
         return ZERO; // TODO should this be getMin()?
     }
@@ -191,7 +191,6 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
     }
 
     public void addValue(T val) {
-        sortedKeys = null;
         updateValueCount(val);
         count++;
         double currentVal = val.doubleValue();
