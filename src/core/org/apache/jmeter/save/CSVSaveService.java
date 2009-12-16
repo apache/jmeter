@@ -103,6 +103,8 @@ public final class CSVSaveService {
     private static final String DEFAULT_DATE_FORMAT_STRING = "MM/dd/yy HH:mm:ss"; // $NON-NLS-1$
     private static final DateFormat DEFAULT_DATE_FORMAT = new SimpleDateFormat(DEFAULT_DATE_FORMAT_STRING);
 
+    private static final String LINE_SEP = System.getProperty("line.separator"); // $NON-NLS-1$
+
     /**
      * Private constructor to prevent instantiation.
      */
@@ -612,7 +614,6 @@ public final class CSVSaveService {
      */
     public static void saveCSVStats(Vector<?> data, FileWriter writer, String headers[]) throws IOException {
         final char DELIM = ',';
-        final String LINE_SEP = System.getProperty("line.separator"); // $NON-NLS-1$
         final char SPECIALS[] = new char[] {DELIM, QUOTING_CHAR};
         if (headers != null){
             for (int i=0; i < headers.length; i++){
@@ -637,7 +638,7 @@ public final class CSVSaveService {
     }
 
     /**
-     * Method saves aggregate statistics as CSV from a table model.
+     * Method saves aggregate statistics (with header names) as CSV from a table model.
      * Same as {@link #saveCSVStats(Vector, FileWriter, String[])} except
      * that there is no need to create a Vector containing the data.
      *
@@ -646,18 +647,33 @@ public final class CSVSaveService {
      * @throws IOException
      */
     public static void saveCSVStats(DefaultTableModel model, FileWriter writer) throws IOException {
+        saveCSVStats(model, writer, true);
+    }
+
+    /**
+     * Method saves aggregate statistics as CSV from a table model.
+     * Same as {@link #saveCSVStats(Vector, FileWriter, String[])} except
+     * that there is no need to create a Vector containing the data.
+     *
+     * @param model table model containing the data
+     * @param writer output file
+     * @param saveHeaders whether or not to save headers
+     * @throws IOException
+     */
+    public static void saveCSVStats(DefaultTableModel model, FileWriter writer, boolean saveHeaders) throws IOException {
         final char DELIM = ',';
-        final String LINE_SEP = System.getProperty("line.separator"); // $NON-NLS-1$
         final char SPECIALS[] = new char[] {DELIM, QUOTING_CHAR};
         final int columns = model.getColumnCount();
         final int rows = model.getRowCount();
-        for (int i=0; i < columns; i++){
-            if (i>0) {
-                writer.write(DELIM);
+        if (saveHeaders){
+            for (int i=0; i < columns; i++){
+                if (i>0) {
+                    writer.write(DELIM);
+                }
+                writer.write(quoteDelimiters(model.getColumnName(i),SPECIALS));
             }
-            writer.write(quoteDelimiters(model.getColumnName(i),SPECIALS));
+            writer.write(LINE_SEP);
         }
-        writer.write(LINE_SEP);
         for (int row=0; row < rows; row++) {
             for (int column=0; column < columns; column++) {
                 if (column > 0) {
