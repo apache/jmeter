@@ -1954,11 +1954,20 @@ Most of the listeners currently keep a copy of every sample in their scope, apar
 </p>
 <ul>
 <li>Simple Data Writer</li>
-<li>BeanShell Listener</li>
-<li>Assertion Results</li>
+<li>BeanShell/BSF Listener</li>
 <li>Mailer Visualizer</li>
 <li>Monitor Results</li>
 <li>Summary Report</li>
+</ul>
+<p>
+The following Listeners no longer need to keep copies of every single sample.
+Instead, samples with the same elapsed time are aggregated.
+Less memory is now needed, especially if most samples only take a second or two at most.
+</p>
+<ul>
+<li>Aggregate Report</li>
+<li>Aggregate Graph</li>
+<li>Distribution Graph</li>
 </ul>
 <p>To minimise the amount of memory needed, use the Simple Data Writer, and use the CSV format.</p>
 <p>
@@ -2170,10 +2179,14 @@ So two identical samplers with different names will have half the throughput of 
 It is important to choose the sampler names correctly to get the best results from
 the Aggregate Report.
 </p>
-<note>
-Calculation of the <a href="glossary.html#Median">Median</a> and 90% Line (90<sup>th</sup> <a href="glossary.html#Percentile">percentile</a>) values requires a lot of memory as details of every Sample have to be saved.
-See the <complink name="Summary Report"/> for a similar Listener that does not need so much memory.
-</note>
+<p>
+Calculation of the <a href="glossary.html#Median">Median</a> and 90% Line (90<sup>th</sup> <a href="glossary.html#Percentile">percentile</a>) values requires additional memory.
+For JMeter 2.3.4 and earlier, details of each sample were saved separately, which meant a lot of memory was needed.
+JMeter now combines samples with the same elapsed time, so far less memory is used.
+However, for samples that take more than a few seconds, the probability is that fewer samples will have identical times,
+in which case more memory will be needed.
+See the <complink name="Summary Report"/> for a similar Listener that does not store individual samples and so needs constant memory.
+</p>
 <ul>
 <li>Label - The label of the sample.
 If "Include group name in label?" is selected, then the name of the thread group is added as a prefix.
