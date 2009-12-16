@@ -241,11 +241,20 @@ Most of the listeners currently keep a copy of every sample they display, apart 
 </p>
 <ul>
 <li>Simple Data Writer</li>
-<li>BeanShell Listener</li>
-<li>Assertion Results</li>
+<li>BeanShell/BSF Listener</li>
 <li>Mailer Visualizer</li>
 <li>Monitor Results</li>
 <li>Summary Report</li>
+</ul>
+<p>
+The following Listeners no longer need to keep copies of every single sample.
+Instead, samples with the same elapsed time are aggregated.
+Less memory is now needed, especially if most samples only take a second or two at most.
+</p>
+<ul>
+<li>Aggregate Report</li>
+<li>Aggregate Graph</li>
+<li>Distribution Graph</li>
 </ul>
 <p>To minimise the amount of memory needed, use the Simple Data Writer, and use the CSV format.</p>
 </section>
