@@ -18,15 +18,10 @@
 
 package org.apache.jmeter.visualizers;
 
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Vector;
 
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.math.StatCalculatorLong;
-import org.apache.log.Logger;
 
 /**
  * Aggegate sample data container. Just instantiate a new instance of this
@@ -35,11 +30,7 @@ import org.apache.log.Logger;
  *
  */
 public class SamplingStatCalculator {
-    private static final Logger log = LoggingManager.getLoggerForClass();
-
     private final StatCalculatorLong calculator = new StatCalculatorLong();
-
-    private final List<Sample> storedValues = new Vector<Sample>();
 
     private double maxThroughput;
 
@@ -47,49 +38,22 @@ public class SamplingStatCalculator {
 
     private String label;
 
-    /**
-     * @deprecated only for use by test code
-     */
-    @Deprecated
-    public SamplingStatCalculator() {// Don't (can't) use this...
-        log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
+    private Sample currentSample;
+
+    public SamplingStatCalculator(){ // Only for use by test code
+        this("");
     }
 
-    /**
-     * Use this constructor.
-     */
     public SamplingStatCalculator(String label) {
         this.label = label;
         init();
     }
 
-    /**
-     * Essentially a copy function
-     *
-     * @param stat
-     */
-    public SamplingStatCalculator(SamplingStatCalculator stat) {
-        this(stat.label);
-        addSamples(stat);
-    }
-
     private void init() {
         firstTime = Long.MAX_VALUE;
         calculator.clear();
-        storedValues.clear();
         maxThroughput = Double.MIN_VALUE;
-    }
-
-    public void addSamples(SamplingStatCalculator ssc) {
-        calculator.addAll(ssc.calculator);
-        synchronized( storedValues )
-        {
-            storedValues.addAll(ssc.storedValues);
-            Collections.sort(storedValues);
-        }
-        if (firstTime > ssc.firstTime) {
-            firstTime = ssc.firstTime;
-        }
+        currentSample = new Sample();
     }
 
     /**
@@ -101,13 +65,7 @@ public class SamplingStatCalculator {
     }
 
     public Sample getCurrentSample() {
-        synchronized( storedValues )
-        {
-            if (storedValues.size() == 0) {
-                return new Sample();
-            }
-            return storedValues.get(storedValues.size() - 1);
-        }
+        return currentSample;
     }
 
     /**
@@ -227,26 +185,11 @@ public class SamplingStatCalculator {
             rbool = res.isSuccessful();
         }
 
-        synchronized( storedValues ){
-            int count = storedValues.size() + 1;
-            Sample s =
-                new Sample( null, rtime, cmean, cstdv, cmedian, cpercent, throughput, eCount, rbool, count, endTime );
-            storedValues.add( s );
-            return s;
-        }
-    }
-
-    public List<Sample> getSamples() {
-        return storedValues;
-    }
-
-    public Sample getSample(int index) {
-        synchronized( storedValues ){
-            if (index < storedValues.size()) {
-                return storedValues.get(index);
-            }
-        return null;
-        }
+        int count = calculator.getCount();
+        Sample s =
+            new Sample( null, rtime, cmean, cstdv, cmedian, cpercent, throughput, eCount, rbool, count, endTime );
+        currentSample = s;
+        return s;
     }
 
     private long getEndTime(SampleResult res) {

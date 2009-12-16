@@ -37,7 +37,7 @@ public class SplineModel implements Clearable {
     //@GuardedBy("this")
     private Spline3 dataCurve = null;
 
-    final SamplingStatCalculator samples;
+    final CachingStatCalculator samples;
 
     //@GuardedBy("this")
     private GraphListener listener;
@@ -46,7 +46,7 @@ public class SplineModel implements Clearable {
     private String name;
 
     public SplineModel() {
-        samples = new SamplingStatCalculator("Spline");
+        samples = new CachingStatCalculator("Spline");
     }
 
     public synchronized void setListener(GraphListener vis) {
