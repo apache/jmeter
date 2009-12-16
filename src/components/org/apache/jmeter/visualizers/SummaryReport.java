@@ -68,6 +68,8 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
 
     private static final String USE_GROUP_NAME = "useGroupName"; //$NON-NLS-1$
 
+    private static final String SAVE_HEADERS   = "saveHeaders"; //$NON-NLS-1$
+
     private static final String[] COLUMNS = {
             "sampler_label",               //$NON-NLS-1$
             "aggregate_report_count",      //$NON-NLS-1$
@@ -90,6 +92,9 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
 
     private final JButton saveTable =
         new JButton(JMeterUtils.getResString("aggregate_graph_save_table"));            //$NON-NLS-1$
+
+    private final JCheckBox saveHeaders = // should header be saved with the data?
+        new JCheckBox(JMeterUtils.getResString("aggregate_graph_save_table_header"),true);    //$NON-NLS-1$
 
     private final JCheckBox useGroupName =
         new JCheckBox(JMeterUtils.getResString("aggregate_graph_use_group_name"));            //$NON-NLS-1$
@@ -210,6 +215,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
         JPanel opts = new JPanel();
         opts.add(useGroupName, BorderLayout.WEST);
         opts.add(saveTable, BorderLayout.CENTER);
+        opts.add(saveHeaders, BorderLayout.EAST);
         this.add(opts,BorderLayout.SOUTH);
     }
 
@@ -217,12 +223,14 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
     public void modifyTestElement(TestElement c) {
         super.modifyTestElement(c);
         c.setProperty(USE_GROUP_NAME, useGroupName.isSelected(), false);
+        c.setProperty(SAVE_HEADERS, saveHeaders.isSelected(), true);
     }
 
     @Override
     public void configure(TestElement el) {
         super.configure(el);
         useGroupName.setSelected(el.getPropertyAsBoolean(USE_GROUP_NAME, false));
+        saveHeaders.setSelected(el.getPropertyAsBoolean(SAVE_HEADERS, true));
     }
 
     public void actionPerformed(ActionEvent ev) {
@@ -234,7 +242,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
             FileWriter writer = null;
             try {
                 writer = new FileWriter(chooser.getSelectedFile());
-                CSVSaveService.saveCSVStats(model,writer);
+                CSVSaveService.saveCSVStats(model,writer, saveHeaders.isSelected());
             } catch (FileNotFoundException e) {
                 log.warn(e.getMessage());
             } catch (IOException e) {
