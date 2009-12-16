@@ -51,7 +51,7 @@ public class Graph extends JComponent implements Scrollable, Clearable {
 
     private boolean wantMedian = true;
 
-    private SamplingStatCalculator model;
+    private CachingStatCalculator model;
 
     private static final int width = 2000;
 
@@ -69,17 +69,9 @@ public class Graph extends JComponent implements Scrollable, Clearable {
     /**
      * Constructor for the Graph object.
      */
-    public Graph(SamplingStatCalculator model) {
+    public Graph(CachingStatCalculator model) {
         this();
-        setModel(model);
-    }
-
-    /**
-     * Sets the Model attribute of the Graph object.
-     */
-    private void setModel(Object model) {
-        this.model = (SamplingStatCalculator) model;
-        repaint();
+        this.model = model;
     }
 
     /**

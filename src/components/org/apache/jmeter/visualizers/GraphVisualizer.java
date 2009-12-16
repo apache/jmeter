@@ -58,7 +58,7 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
 
     private NumberFormat nf = NumberFormat.getInstance(); // OK, because used in synchronised method
 
-    private SamplingStatCalculator model;
+    private CachingStatCalculator model;
 
     private JTextField maxYField = null;
 
@@ -94,7 +94,7 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
      * Constructor for the GraphVisualizer object.
      */
     public GraphVisualizer() {
-        model = new SamplingStatCalculator("Graph");
+        model = new CachingStatCalculator("Graph");
         graph = new Graph(model);
         init();
     }
