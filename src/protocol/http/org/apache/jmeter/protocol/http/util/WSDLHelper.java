@@ -53,37 +53,31 @@ public class WSDLHelper {
      * class to do its work --------------------------------------------
      */
 
-    protected URL WSDLURL = null;
+    private URL WSDLURL = null;
 
-    protected URLConnection CONN = null;
+    private URLConnection CONN = null;
 
-    protected Document WSDLDOC = null;
+    private Document WSDLDOC = null;
 
-    protected String SOAPBINDING = null;
+    private String SOAPBINDING = null;
 
-    public String BINDNAME = null;
+    private URL bindingURL = null;
 
-    protected URL bindingURL = null;
+    private Object[] SOAPOPS = null;
 
-    protected Object[] SOAPOPS = null;
+    private final HashMap<String, String> ACTIONS = new HashMap<String, String>();
 
-    protected HashMap<String, String> ACTIONS = new HashMap<String, String>();
-
-    protected AuthManager AUTH = null;
+    private final AuthManager AUTH;
 
     /**
      * Default constructor takes a string URL
      */
     public WSDLHelper(String url) throws MalformedURLException {
-        try {
-            WSDLURL = new URL(url);
-        } catch (MalformedURLException exception) {
-            throw exception;
-        }
+        this(url, null);
     }
 
     public WSDLHelper(String url, AuthManager auth) throws MalformedURLException {
-        this(url);
+        WSDLURL = new URL(url);
         this.AUTH = auth;
     }
 
@@ -317,8 +311,7 @@ public class WSDLHelper {
             Element nd = (Element) bindings.item(idx);
             NodeList slist = nd.getElementsByTagName(soapBind);
             if (slist.getLength() > 0) {
-                // NOTUSED Element soapbind = (Element) slist.item(0);
-                this.BINDNAME = nd.getAttribute("name");
+                nd.getAttribute("name");
                 list.add(nd);
             }
         }
