@@ -71,15 +71,16 @@ The XPath Assertion and XPath Extractor elements no longer fetch external DTDs b
 
 <h3>HTTP Samplers and Proxy</h3>
 <ul>
-<li>Bug 47445 -  Using Proxy with https-spoofing secure cookies need to be unsecured</li>
-<li>Bug 47442 -  Missing replacement of https by http for certain conditions using https-spoofing</li>
+<li>Bug 47445 - Using Proxy with https-spoofing secure cookies need to be unsecured</li>
+<li>Bug 47442 - Missing replacement of https by http for certain conditions using https-spoofing</li>
+<li>Bug 48451 - Error in: SoapSampler.setPostHeaders(PostMethod post) in the else branch</li>
 </ul>
 
 <h3>Other Samplers</h3>
 <ul>
 <li>Bug 47420 - LDAP extended request not closing connections during add request</li>
 <li>Bug 47870 - JMSSubscriber fails due to NPE</li>
-<li>Bug 47899 -  NullPointerExceptions in ReceiveSubscriber constructor</li>
+<li>Bug 47899 - NullPointerExceptions in ReceiveSubscriber constructor</li>
 <li>Bug 48144 - NPE in OnMessageSubscriber</li>
 <li>Bug 47992 - JMS Point-to-Point Request - Response option doesn't work</li>
 </ul>
