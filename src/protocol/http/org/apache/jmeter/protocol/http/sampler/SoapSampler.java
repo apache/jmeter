@@ -142,7 +142,7 @@ public class SoapSampler extends HTTPSampler2 implements Interruptible { // Impl
             }
         } else {
             // otherwise we use "text/xml" as the default
-            post.addParameter(HEADER_CONTENT_TYPE, DEFAULT_CONTENT_TYPE); //$NON-NLS-1$
+            post.setRequestHeader(HEADER_CONTENT_TYPE, DEFAULT_CONTENT_TYPE); //$NON-NLS-1$
         }
         if (getSendSOAPAction()) {
             post.setRequestHeader(SOAPACTION, getSOAPActionQuoted());
