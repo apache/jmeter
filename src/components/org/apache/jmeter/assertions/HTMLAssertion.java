@@ -98,7 +98,8 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
                 log.debug("xml mode: " + isXML());
             }
             tidy = new Tidy();
-            tidy.setCharEncoding(org.w3c.tidy.Configuration.UTF8);
+            tidy.setInputEncoding("UTF8");
+            tidy.setOutputEncoding("UTF8");
             tidy.setQuiet(false);
             tidy.setShowWarnings(true);
             tidy.setOnlyErrors(isErrorsOnly());
