@@ -73,8 +73,9 @@
 
   - Release builds
   Unpack the source archive into a suitable directory structure.
-  The 3rd party library files can either be extracted from the binary archive by unpacking it
-  into the same directory structure, or you can use Ant to download the files:
+  Most of the 3rd party library files can be extracted from the binary archive by unpacking it
+  into the same directory structure.
+  You can use Ant to download any missing files:
   
   ant download_jars 
   
@@ -95,7 +96,7 @@
   
   Change to the top-level directory and issue the command:
   
-  ant download_jars - if necessary 
+  ant download_jars ! only needs to be done once; will download any missing 3rd party jars 
 
   ant
 
