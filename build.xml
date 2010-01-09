@@ -437,7 +437,7 @@
   </target>
 
 
-  <target name="init-docs" depends="check-anakia,report-anakia-missing">
+  <target name="init-docs" depends="report-anakia-missing">
     <echo level="info">eclipse.anakia = ${eclipse.anakia}</echo>
     </target>
 
