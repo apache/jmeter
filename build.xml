@@ -1041,7 +1041,7 @@ run JMeter unless all the JMeter jars are added.
     <exclude name="${src.dir}/**/*.jpg"/>
     <exclude name="${src.dir}/**/*.png"/>
     <include name="${src.docs}/**"/>
-    <!-- Exclude binary types (and JMX, which are not OS-dependent) -->
+    <!-- Exclude binary types (and JMX/JTL, which are not OS-dependent) -->
     <exclude name="${src.docs}/images/**"/>
     <exclude name="${src.docs}/**/*.jmx"/>
     <exclude name="${src.docs}/**/*.pdf"/>
@@ -1052,7 +1052,6 @@ run JMeter unless all the JMeter jars are added.
     <include name="build.properties"/>
     <include name="${dest.jar.jmeter}/testfiles/**"/>
     <exclude name="${dest.jar.jmeter}/testfiles/*.jmx"/>
-  	<!-- JTL are temporary log files -->
     <exclude name="${dest.jar.jmeter}/testfiles/*.jtl"/>
     <!-- This one is generated with EOL=LF -->
     <exclude name="${dest.jar.jmeter}/testfiles/BatchTestLocal.xml"/>
