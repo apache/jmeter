@@ -208,7 +208,8 @@ public final class HtmlParsingUtils {
     public static Tidy getParser() {
         log.debug("Start : getParser1");
         Tidy tidy = new Tidy();
-        tidy.setCharEncoding(org.w3c.tidy.Configuration.UTF8);
+        tidy.setInputEncoding("UTF8");
+        tidy.setOutputEncoding("UTF8");
         tidy.setQuiet(true);
         tidy.setShowWarnings(false);
 
