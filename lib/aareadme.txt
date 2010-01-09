@@ -121,7 +121,7 @@ soap-2.3.1
 ----------
 - WebServiceSampler ONLY
 
-Tidy
+jTidy-r938
 ----
 - http: various modules for parsing html
 - org.xml.sax - various
