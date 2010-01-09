@@ -286,7 +286,7 @@
   <property name="encoding" value="UTF-8"/>
 
   <!-- 3rd party libraries to be included in the binary distribution -->
-  <property file="build.properties"/>
+  <property file="build.properties"/> <!-- defines the library version numbers -->
 
   <patternset id="external.jars.notices">
         <include name="LICENSE"/>
@@ -964,11 +964,9 @@ run JMeter unless all the JMeter jars are added.
     </jar>
   </target>
 
-  <!-- list of files needed for a binary distribution (excluding library files) -->
-  <patternset id="dist.binaries.native">
-    <include name="LICENSE"/>
-    <include name="NOTICE"/>
-    <include name="README"/>
+  <!-- lists of files needed for a binary distribution (excluding library files) -->
+  <!-- Source files also needed at runtime -->
+  <patternset id="dist.common.native">
     <include name="${dest.jar.jmeter}/BeanShell*.bshrc"/>
     <include name="${dest.jar.jmeter}/log4j.conf"/>
     <include name="${dest.jar.jmeter}/logkit.xml"/>
@@ -984,43 +982,58 @@ run JMeter unless all the JMeter jars are added.
     <!-- Exclude any files that might be present from testing the release -->
     <exclude name="${dest.jar.jmeter}/*.log"/>
     <include name="${dest.jar.jmeter}/examples/**"/>
-  	<!-- JMX files are in the non-native section -->
+    <!-- JMX files are in the non-native section -->
     <exclude name="${dest.jar.jmeter}/examples/*.jmx"/>
-    <include name="${dest.printable_docs}/**"/>
-    <!-- Binary file types -->
-    <exclude name="${dest.printable_docs}/**/*.pdf"/>
-    <exclude name="${dest.printable_docs}/**/*.jmx"/>
     <include name="${extras.dir}/**"/>
-  	<!-- Binary file types -->
+    <!-- Binary file types -->
     <exclude name="${extras.dir}/*.jar"/>
     <exclude name="${extras.dir}/*.jpg"/>
     <exclude name="${extras.dir}/*.jmx"/>
   </patternset>
-
-  <patternset id="dist.binaries.non.native">
-    <!-- We also need the css & images for the printable docs -->
+  
+  <patternset id="dist.binaries.native">
+    <include name="LICENSE"/>
+    <include name="NOTICE"/>
+    <include name="README"/>
+  	<patternset refid="dist.common.native"/>
+  	<!-- Help documentation -->
+    <include name="${dest.printable_docs}/**"/>
+    <!-- Binary file types -->
+    <exclude name="${dest.printable_docs}/**/*.pdf"/>
+    <exclude name="${dest.printable_docs}/**/*.jmx"/>
+    <!-- We also need the shared CSS for the printable docs -->
     <include name="${dest.docs}/css/**"/>
-    <include name="${dest.docs}/images/**"/>
+  </patternset>
+
+  <!-- Source files also needed at runtime -->
+  <patternset id="dist.common.non.native">
     <include name="${dest.jar.jmeter}/jmeter*"/>
     <exclude name="${dest.jar.jmeter}/jmeter.properties"/>
     <include name="${dest.jar.jmeter}/mirror-server.*"/>
     <include name="${dest.jar.jmeter}/shutdown.*"/>
     <include name="${dest.jar.jmeter}/stoptest.*"/>
-  	<!-- Fake SSL cert for JMeter proxy recorder in https -->
-  	<include name="${dest.jar.jmeter}/proxyserver.jks"/>
+    <!-- Fake SSL cert for JMeter proxy recorder in https -->
+    <include name="${dest.jar.jmeter}/proxyserver.jks"/>
     <!-- Exclude any files that might be present from testing the release -->
     <exclude name="${dest.jar.jmeter}/*.log"/>
+    <include name="${dest.jar.jmeter}/examples/*.jmx"/>
+    <include name="${extras.dir}/*.jar"/>
+    <include name="${extras.dir}/*.jpg"/>
+    <include name="${extras.dir}/*.jmx"/>
+  </patternset>
+
+  <patternset id="dist.binaries.non.native">
+    <patternset refid="dist.common.non.native"/>
     <include name="${dest.jar}/"/>
     <include name="${lib.dir}/bshclient.jar"/>
     <include name="${lib.dir}/jorphan.jar"/>
     <include name="${lib.dir}/junit/test.jar"/>
     <include name="${dest.jar.jmeter}/ApacheJMeter.jar"/>
-    <include name="${dest.jar.jmeter}/examples/*.jmx"/>
+  	<!-- Help documentation, binary files -->
     <include name="${dest.printable_docs}/**/*.pdf"/>
     <include name="${dest.printable_docs}/**/*.jmx"/>
-    <include name="${extras.dir}/*.jar"/>
-    <include name="${extras.dir}/*.jpg"/>
-    <include name="${extras.dir}/*.jmx"/>
+    <!-- We also need the shared images for the printable docs -->
+    <include name="${dest.docs}/images/**"/>
   </patternset>
 
   <!--
@@ -1031,6 +1044,11 @@ run JMeter unless all the JMeter jars are added.
   	value="${dest.jar.jmeter}/jmeter ${dest.jar.jmeter}/jmeter-server ${dest.jar.jmeter}/*.sh"/>
 
   <!-- List of files in source distribution that are eol=native -->
+  <!-- 
+  N.B. dist.sources[.non].native sets exclude source files present in dist.binaries[.non].native
+  so that the nightly build src archive does not duplicate stuff in the binary archive
+  (This may change, as the overlap does not waste much space)
+  -->
   <patternset id="dist.sources.native">
     <include name="LICENSE"/>
     <include name="NOTICE"/>
@@ -1099,7 +1117,18 @@ run JMeter unless all the JMeter jars are added.
         </fixcrlf>
     </target>
 
-    <!-- Files to be included in full download -->
+	<!-- Files to be included in full source download -->
+    <patternset id="dist_src_files_native">
+        <patternset refid="dist.sources.native"/>
+        <patternset refid="dist.common.native"/>
+    </patternset>
+
+    <patternset id="dist_src_files_non_native">
+        <patternset refid="dist.sources.non.native"/>
+        <patternset refid="dist.common.non.native"/>
+    </patternset>
+
+	<!-- Files to be included in full binary download -->
     <patternset id="dist_bin_files_native">
         <patternset refid="dist.binaries.native"/>
         <patternset refid="external.jars.notices"/>
@@ -1209,14 +1238,14 @@ run JMeter unless all the JMeter jars are added.
     <!-- Source archives -->
     <antcall target="_filter">
         <param name="eoltype" value="lf"/>
-        <param name="fileset" value="dist.sources.native"/>
+        <param name="fileset" value="dist_src_files_native"/>
     </antcall>
     <tar destfile="${dist.dir}/${pack.name}_src.tar" longfile="gnu">
       <tarfileset dir="${native.dir.lf}" prefix="${dist.name}">
-         <patternset refid="dist.sources.native"/>
+         <patternset refid="dist_src_files_native"/>
       </tarfileset>
       <tarfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
-        <patternset refid="dist.sources.non.native"/>
+        <patternset refid="dist_src_files_non_native"/>
       </tarfileset>
     </tar>
     <!-- Delete work directory (may not exist) -->
@@ -1231,15 +1260,15 @@ run JMeter unless all the JMeter jars are added.
 
     <antcall target="_filter">
         <param name="eoltype" value="crlf"/>
-        <param name="fileset" value="dist.sources.native"/>
+        <param name="fileset" value="dist_src_files_native"/>
     </antcall>
 
     <zip  zipfile="${dist.dir}/${pack.name}_src.zip">
       <zipfileset dir="${native.dir.crlf}" prefix="${dist.name}">
-         <patternset refid="dist.sources.native"/>
+         <patternset refid="dist_src_files_native"/>
       </zipfileset>
       <zipfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
-        <patternset refid="dist.sources.non.native"/>
+        <patternset refid="dist_src_files_non_native"/>
       </zipfileset>
     </zip>
     <antcall target="_hash">
@@ -2030,7 +2059,7 @@ run JMeter unless all the JMeter jars are added.
         <!--echo level="info" message="Found ${file}"/-->
     </target>
 
-    <target name="check_jars" description="Check that all required jar files are present">
+    <target name="check_jars" description="Check that all required jar files are present" unless="no_check_jars">
         <antcall target="_process_all_jars">
             <param name="_check_exists" value="true"/>
         </antcall>
