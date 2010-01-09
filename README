@@ -22,7 +22,7 @@
 
    o  Java Interpreter:
 
-      A fully compliant Java 1.4 (or later) Runtime Environment is required 
+      A fully compliant Java 1.5 (or later) Runtime Environment is required 
       for Apache JMeter to execute.
 
    o  Optional jars:
@@ -71,16 +71,20 @@
   Build instructions
   ------------------
 
-  Please note:
-  To avoid unnecessary duplication, the source archives do not contain 
-  the source files which are needed to run JMeter (for example properties files and scripts).
-    
   - Release builds
-  Unpack both the binary and source archives into the same directory structure.
+  Unpack the source archive into a suitable directory structure.
+  The 3rd party library files can either be extracted from the binary archive by unpacking it
+  into the same directory structure, or you can use Ant to download the files:
+  
+  ant download_jars 
   
   - Nightly builds
   Unpack the _src, _bin and _lib archives into the same directory structure.
-  
+
+  Please note:
+  To avoid unnecessary duplication, the nightly source archives do not contain 
+  the source files which are needed to run JMeter (for example properties files and scripts).
+
   Any optional jars (see above) should be placed in lib/opt and/or lib.
   
   Jars in lib/opt will be used for building JMeter and running the unit test, but won't be used at run-time.
@@ -91,6 +95,8 @@
   
   Change to the top-level directory and issue the command:
   
+  ant download_jars - if necessary 
+
   ant
 
   This will compile the application and enable you to run jmeter from the bin
