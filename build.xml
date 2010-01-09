@@ -947,8 +947,8 @@ run JMeter unless all the JMeter jars are added.
 
   <target name="_message_3rdParty" unless="3rdparty.present">
     <echo>Cannot find all the required 3rd party libraries.</echo>
-    <echo>If building from a release, you need both source and binary archives.</echo>
-    <echo>If building from SVN, use "ant download_jars" to download them.</echo>
+    <echo>If building from a release, you can get most of them from the binary archive.</echo>
+    <echo>Use "ant download_jars" to download any missing jars.</echo>
     <fail message="Cannot find required classes"/>
   </target>
 
