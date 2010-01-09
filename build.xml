@@ -1086,8 +1086,6 @@ run JMeter unless all the JMeter jars are added.
 
   <!-- Non-native items -->
   <patternset id="dist.sources.non.native">
-    <include name="${lib.doc}/${velocity.jar}"/>
-    <include name="${lib.api}/*.jar"/>
     <include name="${src.dir}/**/*.gif"/>
     <include name="${src.dir}/**/*.jpg"/>
     <include name="${src.dir}/**/*.png"/>
