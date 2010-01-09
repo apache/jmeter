@@ -192,6 +192,9 @@ In particular, Aggregate Report can now handle large numbers of samples.
 
 <h2>Non-functional changes</h2>
 <ul>
+<li>Bug 48136 - Essential files missing from source tarball.<br/>
+Source archives now contain all source files, including source files previously only provided in the binary archives.
+</li>
 <li>Add TestBean Table Editor support</li>
 <li>Remove external libraries from SVN as far as possible; add download Ant target</li>
 <li>Updated various jar files:
