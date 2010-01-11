@@ -59,6 +59,9 @@ import org.apache.log.Logger;
  *
  */
 public class HTTPSampler extends HTTPSamplerBase implements Interruptible {
+    private static final boolean OBEY_CONTENT_LENGTH = 
+        JMeterUtils.getPropDefault("httpsampler.obey_contentlength", false); // $NON-NLS-1$
+
     private static final long serialVersionUID = 233L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -233,10 +236,10 @@ public class HTTPSampler extends HTTPSamplerBase implements Interruptible {
 
         final int contentLength = conn.getContentLength();
         if ((contentLength == 0)
-            && JMeterUtils.getPropDefault("httpsampler.obey_contentlength", // $NON-NLS-1$
-            false)) {
+            && OBEY_CONTENT_LENGTH) {
             log.info("Content-Length: 0, not reading http-body");
             res.setResponseHeaders(getResponseHeaders(conn));
+            res.latencyEnd();
             return NULL_BA;
         }
 
@@ -263,6 +266,7 @@ public class HTTPSampler extends HTTPSamplerBase implements Interruptible {
             if (errorStream == null) {
                 log.info("Error Response Code: "+conn.getResponseCode()+", Server sent no Errorpage");
                 res.setResponseHeaders(getResponseHeaders(conn));
+                res.latencyEnd();
                 return NULL_BA;
             }
 
