@@ -113,6 +113,7 @@ The XPath Assertion and XPath Extractor elements no longer fetch external DTDs b
 <ul>
 <li>Bug 47646 -  NullPointerException in the "Random Variable" element</li>
 <li>Disallow adding any child elements to JDBC Configuration</li>
+<li>BeanInfoSupport now caches getBeanDescriptor() - should avoid an NPE on non-Sun JVMs when using CSVDataSet (and some other TestBeans)</li>
 </ul>
 
 <!-- ==================================================== -->
