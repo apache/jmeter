@@ -27,6 +27,7 @@ import java.net.Socket;
 import java.net.URL;
 
 import org.apache.jmeter.protocol.http.control.AuthManager;
+import org.apache.jmeter.protocol.http.control.Cookie;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
@@ -179,7 +180,7 @@ public class AjpSampler extends HTTPSamplerBase {
         setInt(getHeaderSize(method, url));
         String hdr = setConnectionHeaders(url, host, method);
         res.setRequestHeaders(hdr);
-        setConnectionCookies(url, getCookieManager());
+        res.setCookies(setConnectionCookies(url, getCookieManager()));
         setByte((byte)0xff); // Attributes not supported
     }
 
@@ -304,16 +305,19 @@ public class AjpSampler extends HTTPSamplerBase {
         return newValue.toString();
     }
 
-    private void setConnectionCookies(URL url, CookieManager cookies) {
+    private String setConnectionCookies(URL url, CookieManager cookies) {
+        String cookieHeader = null;
         if(cookies != null) {
+            cookieHeader = cookies.getCookieHeaderForURL(url);
             CollectionProperty coll = cookies.getCookies();
             PropertyIterator i = coll.iterator();
             while(i.hasNext()) {
-                JMeterProperty header = i.next();
+                Cookie cookie = (Cookie)(i.next().getObjectValue());
                 setInt(0xA009); // Cookie
-                setString(header.getName()+"="+header.getStringValue());//$NON-NLS-1$
+                setString(cookie.getName()+"="+cookie.getValue());//$NON-NLS-1$
             }
         }
+        return cookieHeader;
     }
 
     private int translateHeader(String n) {
