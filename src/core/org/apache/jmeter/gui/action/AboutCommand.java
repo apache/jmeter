@@ -46,7 +46,7 @@ import org.apache.jmeter.util.JMeterUtils;
  *
  */
 public class AboutCommand implements Command {
-    private static Set<String> commandSet;
+    private static final Set<String> commandSet;
 
     private static JDialog about;
 
