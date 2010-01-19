@@ -53,11 +53,11 @@ import org.apache.jmeter.util.SSLManager;
  *
  */
 public class SSLManagerCommand implements Command {
-    private static Set<String> commandSet;
+    private static final Set<String> commandSet;
     static {
         HashSet<String> commands = new HashSet<String>();
         commands.add(ActionNames.SSL_MANAGER);
-        SSLManagerCommand.commandSet = Collections.unmodifiableSet(commands);
+        commandSet = Collections.unmodifiableSet(commands);
     }
 
     private JFileChooser keyStoreChooser;
