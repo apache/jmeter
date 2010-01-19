@@ -507,7 +507,9 @@ public class WebServiceSampler extends HTTPSamplerBase {
             spconn.setMaintainSession(true);
             msg.setSOAPTransport(spconn);
             msg.send(this.getUrl(), this.getSoapAction(), msgEnv);
-            result.setResponseHeaders(convertSoapHeaders(spconn.getHeaders()));
+            @SuppressWarnings("unchecked") // API uses raw types
+            final Hashtable<String, String> headers = spconn.getHeaders();
+            result.setResponseHeaders(convertSoapHeaders(headers));
 
             if (this.getHeaderManager() != null) {
                 this.getHeaderManager().setSOAPHeader(spconn);
