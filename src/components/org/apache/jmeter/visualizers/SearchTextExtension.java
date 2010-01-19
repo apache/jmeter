@@ -59,7 +59,7 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
 
     private static final String SEARCH_TEXT_COMMAND = "search_text"; // $NON-NLS-1$
 
-    private static int LAST_POSITION_DEFAULT = 0;
+    private static volatile int LAST_POSITION_DEFAULT = 0;
 
     private int lastPosition = LAST_POSITION_DEFAULT;
 
