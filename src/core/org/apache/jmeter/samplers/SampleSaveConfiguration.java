@@ -254,7 +254,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
     private static final String _timeStampFormat;
 
-    private static int _assertionsResultsToSave;
+    private static final int _assertionsResultsToSave;
 
     // TODO turn into method?
     public static final int SAVE_NO_ASSERTIONS = 0;
@@ -374,6 +374,8 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
             _assertionsResultsToSave = SAVE_FIRST_ASSERTION;
         } else if (ALL.equals(whichAssertionResults)) {
             _assertionsResultsToSave = SAVE_ALL_ASSERTIONS;
+        } else {
+            _assertionsResultsToSave = 0;
         }
 
         String howToSave = props.getProperty(OUTPUT_FORMAT_PROP, XML);
