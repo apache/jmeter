@@ -93,7 +93,7 @@ public class Proxy extends Thread {
         JMeterUtils.getPropDefault("proxy.ssl.protocol", "SSLv3"); // $NON-NLS-1$ $NON-NLS-2$
     
     // HashMap to save ssl connection between Jmeter proxy and browser
-    private static HashMap<String, SSLSocketFactory> hashHost = new HashMap<String, SSLSocketFactory>();
+    private static final HashMap<String, SSLSocketFactory> hashHost = new HashMap<String, SSLSocketFactory>();
     
     // Proxy configuration SSL
     private static final String CERT_DIRECTORY =

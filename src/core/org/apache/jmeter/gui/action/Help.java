@@ -53,9 +53,9 @@ public class Help implements Command {
 
     private static JDialog helpWindow;
 
-    private static HtmlPane helpDoc;
+    private static final HtmlPane helpDoc;
 
-    private static JScrollPane scroller;
+    private static final JScrollPane scroller;
 
     private static String currentPage;
 

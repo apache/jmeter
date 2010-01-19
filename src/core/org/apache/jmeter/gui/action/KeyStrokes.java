@@ -33,7 +33,7 @@ public final class KeyStrokes {
     }
     
     // Bug 47064 - fixes for Mac LAF
-    private static int CONTROL_MASK =Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+    private static final int CONTROL_MASK =Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
     
     public static final KeyStroke CUT = KeyStroke.getKeyStroke(KeyEvent.VK_X, CONTROL_MASK);
     public static final KeyStroke COPY = KeyStroke.getKeyStroke(KeyEvent.VK_C, CONTROL_MASK);
