@@ -264,15 +264,14 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
      *
      */
     public class SplineGraph extends JComponent {
-        public boolean reinterpolated = false;
 
-        protected final Color WAITING_COLOR = Color.darkGray;
+        private final Color WAITING_COLOR = Color.darkGray;
 
-        protected int lastWidth = -1;
+        private int lastWidth = -1;
 
-        protected int lastHeight = -1;
+        private int lastHeight = -1;
 
-        protected int[] plot = null;
+        private int[] plot = null;
 
         public SplineGraph() {
         }
