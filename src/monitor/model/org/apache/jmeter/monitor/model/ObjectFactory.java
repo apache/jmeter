@@ -28,6 +28,7 @@ import org.apache.jmeter.samplers.SampleResult;
  */
 public class ObjectFactory {
 
+    //@GuardedBy("this")
     private static ObjectFactory FACTORY = null;
 
     private final Parser PARSER;
