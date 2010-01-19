@@ -46,10 +46,10 @@ public final class ActionRouter implements ActionListener {
 
     private Map<String, Set<Command>> commands = new HashMap<String, Set<Command>>();
 
-    private Map<String, HashSet<ActionListener>> preActionListeners =
+    private final Map<String, HashSet<ActionListener>> preActionListeners =
         new HashMap<String, HashSet<ActionListener>>();
 
-    private Map<String, HashSet<ActionListener>> postActionListeners =
+    private final Map<String, HashSet<ActionListener>> postActionListeners =
         new HashMap<String, HashSet<ActionListener>>();
 
     private ActionRouter() {

@@ -37,7 +37,7 @@ import org.apache.log.Logger;
 public class AddToTree implements Command {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static Set<String> commandSet;
+    private static final Set<String> commandSet;
 
     static {
         HashSet<String> commands = new HashSet<String>();
