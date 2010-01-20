@@ -22,9 +22,9 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
@@ -138,8 +138,8 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
     private static final String SEMI_COLON = ";"; // $NON-NLS-1$
 
 
-    private static final Hashtable<String, DirContext> ldapContexts =
-        new Hashtable<String, DirContext>();
+    private static final ConcurrentHashMap<String, DirContext> ldapContexts =
+        new ConcurrentHashMap<String, DirContext>();
 
     private static final int MAX_SORTED_RESULTS =
         JMeterUtils.getPropDefault("ldapsampler.max_sorted_results", 1000); // $NON-NLS-1$
