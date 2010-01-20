@@ -71,7 +71,7 @@ public class LdapExtClient {
      * @exception NamingException
      *                Description of Exception
      */
-    public DirContext connect(String host, String port, String rootdn, String username, String password, String connTimeOut, boolean secure)
+    public static DirContext connect(String host, String port, String rootdn, String username, String password, String connTimeOut, boolean secure)
             throws NamingException {
         DirContext dirContext;
         Hashtable<String, String> env = new Hashtable<String, String>();
@@ -105,7 +105,7 @@ public class LdapExtClient {
     /**
      * disconnect from the server
      */
-    public void disconnect(DirContext dirContext) {
+    public static void disconnect(DirContext dirContext) {
         if (dirContext == null) {
             log.info("Cannot disconnect null context");
             return;
@@ -126,7 +126,7 @@ public class LdapExtClient {
      * @param searchFilter
      *            filter filter this value from the base
      **************************************************************************/
-    public NamingEnumeration<SearchResult> searchTest(DirContext dirContext, String searchBase, String searchFilter, int scope, long countlim,
+    public static NamingEnumeration<SearchResult> searchTest(DirContext dirContext, String searchBase, String searchFilter, int scope, long countlim,
             int timelim, String[] attrs, boolean retobj, boolean deref) throws NamingException {
         if (dirContext == null) {
             throw new NamingException(CONTEXT_IS_NULL);
@@ -154,7 +154,7 @@ public class LdapExtClient {
      * @param filter
      *            filter this value from the base
      **************************************************************************/
-    public NamingEnumeration<SearchResult> compare(DirContext dirContext, String filter, String entrydn) throws NamingException {
+    public static NamingEnumeration<SearchResult> compare(DirContext dirContext, String filter, String entrydn) throws NamingException {
         if (dirContext == null) {
             throw new NamingException(CONTEXT_IS_NULL);
         }
@@ -166,7 +166,7 @@ public class LdapExtClient {
      * ModDN the data in the ldap directory for the given search base
      *
      **************************************************************************/
-    public void moddnOp(DirContext dirContext, String ddn, String newdn) throws NamingException {
+    public static void moddnOp(DirContext dirContext, String ddn, String newdn) throws NamingException {
         log.debug("ddn and newDn= " + ddn + "@@@@" + newdn);
         if (dirContext == null) {
             throw new NamingException(CONTEXT_IS_NULL);
@@ -182,7 +182,7 @@ public class LdapExtClient {
      * @param string
      *            The string (dn) value
      **************************************************************************/
-    public void modifyTest(DirContext dirContext, ModificationItem[] mods, String string) throws NamingException {
+    public static void modifyTest(DirContext dirContext, ModificationItem[] mods, String string) throws NamingException {
         if (dirContext == null) {
             throw new NamingException(CONTEXT_IS_NULL);
         }
@@ -198,7 +198,7 @@ public class LdapExtClient {
      * @param string
      *            The string (dn) value
      **************************************************************************/
-    public DirContext createTest(DirContext dirContext, Attributes attributes, String string)
+    public static DirContext createTest(DirContext dirContext, Attributes attributes, String string)
             throws NamingException {
         if (dirContext == null) {
             throw new NamingException(CONTEXT_IS_NULL);
@@ -212,7 +212,7 @@ public class LdapExtClient {
      * @param string
      *            The string (dn) value
      **************************************************************************/
-    public void deleteTest(DirContext dirContext, String string) throws NamingException {
+    public static void deleteTest(DirContext dirContext, String string) throws NamingException {
         if (dirContext == null) {
             throw new NamingException(CONTEXT_IS_NULL);
         }

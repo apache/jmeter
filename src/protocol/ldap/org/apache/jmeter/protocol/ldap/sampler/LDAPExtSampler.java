@@ -33,7 +33,6 @@ import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttribute;
 import javax.naming.directory.BasicAttributes;
 import javax.naming.directory.DirContext;
-import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.ModificationItem;
 import javax.naming.directory.SearchResult;
 
@@ -138,9 +137,6 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 
     private static final String SEMI_COLON = ";"; // $NON-NLS-1$
 
-
-    private static final Hashtable<String, LdapExtClient> ldapConnections =
-        new Hashtable<String, LdapExtClient>();
 
     private static final Hashtable<String, DirContext> ldapContexts =
         new Hashtable<String, DirContext>();
@@ -603,10 +599,10 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
      * This will do the add test for the User defined TestCase
      *
      **************************************************************************/
-    private void addTest(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws NamingException {
+    private void addTest(DirContext dirContext, SampleResult res) throws NamingException {
         try {
             res.sampleStart();
-            DirContext ctx = ldap.createTest(dirContext, getUserAttributes(), getBaseEntryDN());
+            DirContext ctx = LdapExtClient.createTest(dirContext, getUserAttributes(), getBaseEntryDN());
             ctx.close(); // the createTest() method creates an extra context which needs to be closed
         } finally {
             res.sampleEnd();
@@ -617,10 +613,10 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
      * This will do the delete test for the User defined TestCase
      *
      **************************************************************************/
-    private void deleteTest(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws NamingException {
+    private void deleteTest(DirContext dirContext, SampleResult res) throws NamingException {
         try {
             res.sampleStart();
-            ldap.deleteTest(dirContext, getPropertyAsString(DELETE));
+            LdapExtClient.deleteTest(dirContext, getPropertyAsString(DELETE));
         } finally {
             res.sampleEnd();
         }
@@ -630,10 +626,10 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
      * This will do the modify test for the User defined TestCase
      *
      **************************************************************************/
-    private void modifyTest(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws NamingException {
+    private void modifyTest(DirContext dirContext, SampleResult res) throws NamingException {
         try {
             res.sampleStart();
-            ldap.modifyTest(dirContext, getUserModAttributes(), getBaseEntryDN());
+            LdapExtClient.modifyTest(dirContext, getUserModAttributes(), getBaseEntryDN());
         } finally {
             res.sampleEnd();
         }
@@ -644,7 +640,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
      * the whole context
      *
      **************************************************************************/
-    private void bindOp(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws NamingException {
+    private void bindOp(DirContext dirContext, SampleResult res) throws NamingException {
         DirContext ctx = ldapContexts.remove(getThreadName());
         if (ctx != null) {
             log.warn("Closing previous context for thread: " + getThreadName());
@@ -652,7 +648,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
         }
         try {
             res.sampleStart();
-            ctx = ldap.connect(getServername(), getPort(), getRootdn(), getUserDN(), getUserPw(),getConnTimeOut(),isSecure());
+            ctx = LdapExtClient.connect(getServername(), getPort(), getRootdn(), getUserDN(), getUserPw(),getConnTimeOut(),isSecure());
         } finally {
             res.sampleEnd();
         }
@@ -664,12 +660,10 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
      *
      **************************************************************************/
     private void singleBindOp(SampleResult res) throws NamingException {
-        LdapExtClient ldap_temp;
-        ldap_temp = new LdapExtClient();
         try {
             res.sampleStart();
-            DirContext ctx = ldap_temp.connect(getServername(), getPort(), getRootdn(), getUserDN(), getUserPw(),getConnTimeOut(),isSecure());
-            ldap_temp.disconnect(ctx);
+            DirContext ctx = LdapExtClient.connect(getServername(), getPort(), getRootdn(), getUserDN(), getUserPw(),getConnTimeOut(),isSecure());
+            LdapExtClient.disconnect(ctx);
         } finally {
             res.sampleEnd();
         }
@@ -679,10 +673,10 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
      * This will do a moddn Opp for the User new DN defined
      *
      **************************************************************************/
-    private void renameTest(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws NamingException {
+    private void renameTest(DirContext dirContext, SampleResult res) throws NamingException {
         try {
             res.sampleStart();
-            ldap.moddnOp(dirContext, getPropertyAsString(MODDDN), getPropertyAsString(NEWDN));
+            LdapExtClient.moddnOp(dirContext, getPropertyAsString(MODDDN), getPropertyAsString(NEWDN));
         } finally {
             res.sampleEnd();
         }
@@ -693,14 +687,13 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
      * test case
      *
      **************************************************************************/
-    private void unbindOp(LdapExtClient ldap, DirContext dirContext, SampleResult res) {
+    private void unbindOp(DirContext dirContext, SampleResult res) {
         try {
             res.sampleStart();
-            ldap.disconnect(dirContext);
+            LdapExtClient.disconnect(dirContext);
         } finally {
             res.sampleEnd();
         }
-        ldapConnections.remove(getThreadName());
         ldapContexts.remove(getThreadName());
         log.info("context and LdapExtClients removed");
     }
@@ -722,17 +715,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
         res.setContentType("text/xml");// $NON-NLS-1$
         boolean isSuccessful = true;
         res.setSampleLabel(getName());
-        LdapExtClient temp_client = ldapConnections.get(getThreadName());
         DirContext dirContext = ldapContexts.get(getThreadName());
-        if (temp_client == null) {
-            temp_client = new LdapExtClient();
-            try {
-                dirContext = new InitialDirContext();
-            } catch (NamingException err) {
-                log.error("Ldap client context creation - ", err);
-            }
-            ldapConnections.put(getThreadName(), temp_client);
-        }
 
         try {
             xmlBuffer.openTag("operation"); // $NON-NLS-1$
@@ -743,13 +726,13 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
                 res.setSamplerData("Unbind");
                 xmlBuffer.tag("baseobj",getRootdn()); // $NON-NLS-1$
                 xmlBuffer.tag("binddn",getUserDN()); // $NON-NLS-1$
-                unbindOp(temp_client, dirContext, res);
+                unbindOp(dirContext, res);
             } else if (testType.equals(BIND)) {
                 res.setSamplerData("Bind as "+getUserDN());
                 xmlBuffer.tag("baseobj",getRootdn()); // $NON-NLS-1$
                 xmlBuffer.tag("binddn",getUserDN()); // $NON-NLS-1$
                 xmlBuffer.tag("connectionTO",getConnTimeOut()); // $NON-NLS-1$
-                bindOp(temp_client, dirContext, res);
+                bindOp(dirContext, res);
             } else if (testType.equals(SBIND)) {
                 res.setSamplerData("SingleBind as "+getUserDN());
                 xmlBuffer.tag("baseobj",getRootdn()); // $NON-NLS-1$
@@ -764,7 +747,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
                 NamingEnumeration<SearchResult> cmp=null;
                 try {
                     res.sampleStart();
-                    cmp = temp_client.compare(dirContext, getPropertyAsString(COMPAREFILT),
+                    cmp = LdapExtClient.compare(dirContext, getPropertyAsString(COMPAREFILT),
                             getPropertyAsString(COMPAREDN));
                     if (!cmp.hasMore()) {
                         res.setResponseCode("5"); // $NON-NLS-1$
@@ -781,21 +764,21 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
                 res.setSamplerData("Add object " + getBaseEntryDN());
                 xmlBuffer.tag("attributes",getArguments().toString()); // $NON-NLS-1$
                 xmlBuffer.tag("dn",getBaseEntryDN()); // $NON-NLS-1$
-                addTest(temp_client, dirContext, res);
+                addTest(dirContext, res);
             } else if (testType.equals(DELETE)) {
                 res.setSamplerData("Delete object " + getBaseEntryDN());
                 xmlBuffer.tag("dn",getBaseEntryDN()); // $NON-NLS-1$
-                deleteTest(temp_client, dirContext, res);
+                deleteTest(dirContext, res);
             } else if (testType.equals(MODIFY)) {
                 res.setSamplerData("Modify object " + getBaseEntryDN());
                 xmlBuffer.tag("dn",getBaseEntryDN()); // $NON-NLS-1$
                 xmlBuffer.tag("attributes",getLDAPArguments().toString()); // $NON-NLS-1$
-                modifyTest(temp_client, dirContext, res);
+                modifyTest(dirContext, res);
             } else if (testType.equals(RENAME)) {
                 res.setSamplerData("ModDN object " + getPropertyAsString(MODDDN) + " to " + getPropertyAsString(NEWDN));
                 xmlBuffer.tag("dn",getPropertyAsString(MODDDN)); // $NON-NLS-1$
                 xmlBuffer.tag("newdn",getPropertyAsString(NEWDN)); // $NON-NLS-1$
-                renameTest(temp_client, dirContext, res);
+                renameTest(dirContext, res);
             } else if (testType.equals(SEARCH)) {
                 final String            scopeStr = getScope();
                 final int               scope = getScopeAsInt();
@@ -815,7 +798,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
                 NamingEnumeration<SearchResult> srch=null;
                 try {
                     res.sampleStart();
-                    srch = temp_client.searchTest(
+                    srch = LdapExtClient.searchTest(
                             dirContext, searchBase, searchFilter,
                             scope, getCountlimAsLong(),
                             getTimelimAsInt(),
