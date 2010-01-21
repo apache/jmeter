@@ -20,6 +20,7 @@ package org.apache.jorphan.math;
 
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.TreeMap;
 import java.util.Map.Entry;
 
@@ -157,7 +158,7 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
      * @return map containing either Integer or Long keys; entries are a Number array containing the key and the [Integer] count.
      * TODO - why is the key value also stored in the entry array?
      */
-    public synchronized HashMap<Number, Number[]> getDistribution() {
+    public synchronized Map<Number, Number[]> getDistribution() {
         HashMap<Number, Number[]> items = new HashMap <Number, Number[]> ();
         Number[] dis;
 
