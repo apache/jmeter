@@ -128,18 +128,27 @@ public class XPathExtractor extends AbstractTestElement implements
             previousResult.addAssertionResult(ass);
             previousResult.setSuccessful(false);
         } catch (ParserConfigurationException e) {// Should not happen
-            final String errrorMessage = "error on ("+getXPathQuery()+")";
+            final String errrorMessage = "ParserConfigurationException while processing ("+getXPathQuery()+")";
             log.error(errrorMessage,e);
             throw new JMeterError(errrorMessage,e);
         } catch (SAXException e) {// Can happen for bad input document
-            log.warn("error on ("+getXPathQuery()+")"+e.getLocalizedMessage());
+            log.warn("SAXException while processing ("+getXPathQuery()+") "+e.getLocalizedMessage());
+            addAssertionFailure(previousResult, e, false); // Should this also fail the sample?
         } catch (TransformerException e) {// Can happen for incorrect XPath expression
-            log.warn("error on ("+getXPathQuery()+")"+e.getLocalizedMessage());
+            log.warn("TransformerException while processing ("+getXPathQuery()+") "+e.getLocalizedMessage());
+            addAssertionFailure(previousResult, e, false);
         } catch (TidyException e) {
-            AssertionResult ass = new AssertionResult("TidyException"); // $NON-NLS-1$
-            ass.setFailure(true);
-            ass.setFailureMessage(e.getLocalizedMessage());
-            previousResult.addAssertionResult(ass);
+            addAssertionFailure(previousResult, e, true); // fail the sample
+        }
+    }
+
+    private void addAssertionFailure(final SampleResult previousResult,
+            final Throwable thrown, final boolean setFailed) {
+        AssertionResult ass = new AssertionResult(thrown.getClass().getSimpleName()); // $NON-NLS-1$
+        ass.setFailure(true);
+        ass.setFailureMessage(getXPathQuery()+" => "+thrown.getLocalizedMessage());
+        previousResult.addAssertionResult(ass);
+        if (setFailed){
             previousResult.setSuccessful(false);
         }
     }
