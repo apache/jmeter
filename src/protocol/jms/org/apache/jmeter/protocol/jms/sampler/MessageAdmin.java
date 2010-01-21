@@ -18,8 +18,8 @@
 
 package org.apache.jmeter.protocol.jms.sampler;
 
-import java.util.Hashtable;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.jms.Message;
 
@@ -33,14 +33,14 @@ import org.apache.log.Logger;
 public class MessageAdmin {
     private static final MessageAdmin SINGLETON = new MessageAdmin();
 
-    private final Map<String, PlaceHolder> table = new Hashtable<String, PlaceHolder>();
+    private final Map<String, PlaceHolder> table = new ConcurrentHashMap<String, PlaceHolder>();
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private MessageAdmin() {
     }
 
-    public static synchronized MessageAdmin getAdmin() {
+    public static MessageAdmin getAdmin() {
         return SINGLETON;
     }
 
@@ -89,7 +89,7 @@ public class MessageAdmin {
 }
 
 class PlaceHolder {
-    private Object request;
+    private final Object request;
 
     private Object reply;
 

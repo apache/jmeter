@@ -29,9 +29,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.Map;
 import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -50,7 +50,7 @@ import org.apache.log.Logger;
 public class FileReporter extends JPanel {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private final Hashtable<String, Vector<Integer>> data = new Hashtable<String, Vector<Integer>>();
+    private final Map<String, Vector<Integer>> data = new ConcurrentHashMap<String, Vector<Integer>>();
 
     /** initalize a file reporter from a file */
     public void init(String file) throws IOException {
@@ -131,19 +131,15 @@ public class FileReporter extends JPanel {
  */
 private static class GraphPanel extends JPanel {
     // boolean autoScale = true;
-    Hashtable<String, Vector<Integer>> data;
+    private final Map<String, Vector<Integer>> data;
 
-    Vector<String> keys = new Vector<String>();
+    private final Vector<String> keys = new Vector<String>();
 
-    Vector<Color> colorList = new Vector<Color>();
+    private final Vector<Color> colorList = new Vector<Color>();
 
-    public GraphPanel(Hashtable<String, Vector<Integer>> data) {
+    public GraphPanel(Map<String, Vector<Integer>> data) {
         this.data = data;
-        Enumeration<String> e = data.keys();
-
-        while (e.hasMoreElements()) {
-            String key = e.nextElement();
-
+        for (String key : data.keySet()) {
             keys.addElement(key);
         }
         for (int a = 0x33; a < 0xFF; a += 0x66) {

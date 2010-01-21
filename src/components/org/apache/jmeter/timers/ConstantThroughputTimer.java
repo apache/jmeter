@@ -18,8 +18,8 @@
 
 package org.apache.jmeter.timers;
 
-import java.util.Hashtable;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.testbeans.TestBean;
@@ -72,7 +72,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
 
     //For holding the ThrougputInfo objects for all ThreadGroups. Keyed by ThreadGroup objects
     private final static Map<ThreadGroup, ThroughputInfo> threadGroupsInfoMap =
-        new Hashtable<ThreadGroup, ThroughputInfo>();
+        new ConcurrentHashMap<ThreadGroup, ThroughputInfo>();
 
 
     /**
