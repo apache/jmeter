@@ -228,7 +228,7 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
             cl.show(cards, CARDS_BIND);
         } else if (testType.equals(LDAPExtSampler.SBIND)) {
             sbind.setSelected(true);
-            cl.show(cards, CARDS_DEFAULT);
+            cl.show(cards, CARDS_BIND);
         } else if (testType.equals(LDAPExtSampler.COMPARE)) {
             compare.setSelected(true);
             cl.show(cards, CARDS_COMPARE);
