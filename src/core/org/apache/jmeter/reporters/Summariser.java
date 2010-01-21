@@ -24,6 +24,7 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.util.NoThreadClone;
@@ -89,8 +90,8 @@ public class Summariser extends AbstractTestElement
     /*
      * This map allows summarisers with the same name to contribute to the same totals.
      */
-    //@GuardedBy("accumulators")
-    private static final Hashtable<String, Totals> accumulators = new Hashtable<String, Totals>();
+    //@GuardedBy("accumulators") - needed to ensure consistency between this and instanceCount
+    private static final Map<String, Totals> accumulators = new ConcurrentHashMap<String, Totals>();
     
     //@GuardedBy("accumulators")
     private static int instanceCount; // number of active tests

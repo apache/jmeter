@@ -23,6 +23,8 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -55,7 +57,7 @@ public abstract class HTMLParser {
     protected static final String STYLESHEET        = "stylesheet";// $NON-NLS-1$
 
     // Cache of parsers - parsers must be re-usable
-    private static final Hashtable<String, HTMLParser> parsers = new Hashtable<String, HTMLParser>(3);
+    private static final Map<String, HTMLParser> parsers = new ConcurrentHashMap<String, HTMLParser>(3);
 
     public static final String PARSER_CLASSNAME = "htmlParser.className"; // $NON-NLS-1$
 
@@ -73,7 +75,7 @@ public abstract class HTMLParser {
         return getParser(JMeterUtils.getPropDefault(PARSER_CLASSNAME, DEFAULT_PARSER));
     }
 
-    public static final synchronized HTMLParser getParser(String htmlParserClassName) {
+    public static final HTMLParser getParser(String htmlParserClassName) {
 
         // Is there a cached parser?
         HTMLParser pars = parsers.get(htmlParserClassName);
