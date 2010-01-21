@@ -78,7 +78,8 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 
     // key: name (lowercase) from java.sql.Types; entry: corresponding int value
     private static final Map<String, Integer> mapJdbcNameToInt;
-
+    // read-only after class init
+    
     static {
         // based on e291. Getting the Name of a JDBC Type from javaalmanac.com
         // http://javaalmanac.com/egs/java.sql/JdbcInt2Str.html
