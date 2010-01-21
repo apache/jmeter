@@ -113,6 +113,7 @@ public class Daemon extends Thread {
         log.info("Proxy up and running!");
 
         // Maps to contain page and form encodings
+        // TODO - do these really need to be shared between all Proxy instances?
         Map<String, String> pageEncodings = Collections.synchronizedMap(new HashMap<String, String>());
         Map<String, String> formEncodings = Collections.synchronizedMap(new HashMap<String, String>());
 
