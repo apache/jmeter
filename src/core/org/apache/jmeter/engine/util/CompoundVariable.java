@@ -47,6 +47,7 @@ public class CompoundVariable implements Function {
 
     private static final FunctionParser functionParser = new FunctionParser();
 
+    // Created during class init; not modified thereafter 
     private static final Map<String, Class<? extends Function>> functions =
         new HashMap<String, Class<? extends Function>>();
 
