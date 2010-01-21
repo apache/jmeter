@@ -76,6 +76,7 @@ The XPath Assertion and XPath Extractor elements no longer fetch external DTDs b
 <li>Bug 48451 - Error in: SoapSampler.setPostHeaders(PostMethod post) in the else branch</li>
 <li>Bug 48542 - SoapSampler uses wrong response header field to decide if response is gzip encoded</li>
 <li>Bug 48568 - CookieManager broken for AjpSampler</li>
+<li>Bug 48570 - AjpSampler doesn't support query parameters (GET/POST)</li>
 </ul>
 
 <h3>Other Samplers</h3>
