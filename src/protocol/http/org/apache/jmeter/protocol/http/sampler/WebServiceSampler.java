@@ -26,9 +26,9 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URL;
 import java.net.MalformedURLException;
-import java.util.Enumeration;
+import java.util.Map;
 import java.util.Random;
-import java.util.Hashtable;
+import java.util.Map.Entry;
 
 import javax.xml.parsers.DocumentBuilder;
 
@@ -508,7 +508,7 @@ public class WebServiceSampler extends HTTPSamplerBase {
             msg.setSOAPTransport(spconn);
             msg.send(this.getUrl(), this.getSoapAction(), msgEnv);
             @SuppressWarnings("unchecked") // API uses raw types
-            final Hashtable<String, String> headers = spconn.getHeaders();
+            final Map<String, String> headers = spconn.getHeaders();
             result.setResponseHeaders(convertSoapHeaders(headers));
 
             if (this.getHeaderManager() != null) {
@@ -617,12 +617,10 @@ public class WebServiceSampler extends HTTPSamplerBase {
     public void addEncodedArgument(String name, String value, String metaData) {
     }
 
-    public String convertSoapHeaders(Hashtable<String, String> ht) {
-        Enumeration<String> en = ht.keys();
+    public String convertSoapHeaders(Map<String, String> ht) {
         StringBuilder buf = new StringBuilder();
-        while (en.hasMoreElements()) {
-            String key = en.nextElement();
-            buf.append(key).append("=").append(ht.get(key)).append("\n"); //$NON-NLS-1$ //$NON-NLS-2$
+        for (Entry<String, String> entry : ht.entrySet()) {
+            buf.append(entry.getKey()).append("=").append(entry.getValue()).append("\n"); //$NON-NLS-1$ //$NON-NLS-2$
         }
         return buf.toString();
     }
