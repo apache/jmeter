@@ -23,10 +23,10 @@ package org.apache.jmeter.protocol.http.util.accesslog;
 
 import java.io.Serializable;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
@@ -87,7 +87,7 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
     public Object clone() {
         if(cookieManagers == null)
         {
-            cookieManagers = Collections.synchronizedMap(new HashMap<String, CookieManager>());
+            cookieManagers = new ConcurrentHashMap<String, CookieManager>();
         }
         if(managersInUse == null)
         {

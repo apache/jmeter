@@ -25,9 +25,8 @@ import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -102,7 +101,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
     private transient ObjectTableModel model;
 
     private final Map<String, Calculator> tableRows =
-        Collections.synchronizedMap(new HashMap<String, Calculator>());
+        new ConcurrentHashMap<String, Calculator>();
 
     // Column renderers
     private static final TableCellRenderer[] RENDERERS =
