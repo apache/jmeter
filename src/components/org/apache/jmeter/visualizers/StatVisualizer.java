@@ -25,12 +25,8 @@ import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-//import java.awt.event.MouseAdapter;
-//import java.awt.event.MouseEvent;
-//import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -108,7 +104,7 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
     private transient ObjectTableModel model;
 
     private final Map<String, SamplingStatCalculator> tableRows =
-        Collections.synchronizedMap(new HashMap<String, SamplingStatCalculator>());
+        new ConcurrentHashMap<String, SamplingStatCalculator>();
 
     public StatVisualizer() {
         super();

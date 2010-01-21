@@ -18,7 +18,9 @@
 
 package org.apache.jmeter.protocol.http.util;
 
-import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.w3c.dom.Document;
 
 /**
@@ -43,7 +45,7 @@ public final class DOMPool {
      * test on an old system will likely run into memory or CPU problems long
      * before the HashMap is an issue.
      */
-    private static final HashMap<Object, Document> MEMCACHE = new HashMap<Object, Document>(50);
+    private static final Map<Object, Document> MEMCACHE = new ConcurrentHashMap<Object, Document>(50);
 
     /**
      * Return a document.
@@ -51,7 +53,7 @@ public final class DOMPool {
      * @param key
      * @return Document
      */
-    public static synchronized Document getDocument(Object key) {
+    public static Document getDocument(Object key) {
         return MEMCACHE.get(key);
     }
 
@@ -61,7 +63,7 @@ public final class DOMPool {
      * @param key
      * @param data
      */
-    public static synchronized void putDocument(Object key, Document data) {
+    public static void putDocument(Object key, Document data) {
         MEMCACHE.put(key, data);
     }
 
