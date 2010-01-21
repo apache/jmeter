@@ -18,7 +18,7 @@
 
 package org.apache.jmeter.visualizers;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jorphan.math.StatCalculatorLong;
@@ -259,7 +259,7 @@ public class SamplingStatCalculator {
         return maxThroughput;
     }
 
-    public HashMap<Number, Number[]> getDistribution() {
+    public Map<Number, Number[]> getDistribution() {
         return calculator.getDistribution();
     }
 
