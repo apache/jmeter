@@ -31,6 +31,7 @@ import org.apache.jmeter.protocol.http.control.Cookie;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
+import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
@@ -91,6 +92,7 @@ public class AjpSampler extends HTTPSamplerBase {
     private transient ByteArrayOutputStream responseData = new ByteArrayOutputStream();
     private int inpos = 0;
     private int outpos = 0;
+    private transient String stringBody = null;
     private transient InputStream body = null;
 
     public AjpSampler() {
@@ -131,6 +133,7 @@ public class AjpSampler extends HTTPSamplerBase {
         }
         channel = null;
         body = null;
+        stringBody = null;
     }
 
     private void setupConnection(URL url, 
@@ -171,7 +174,7 @@ public class AjpSampler extends HTTPSamplerBase {
         } else {
             setString(HTTP_1_1);
         }
-        setString(url.getFile());
+        setString(url.getPath());
         setString(localAddress);
         setString(localName);
         setString(host);
@@ -181,7 +184,12 @@ public class AjpSampler extends HTTPSamplerBase {
         String hdr = setConnectionHeaders(url, host, method);
         res.setRequestHeaders(hdr);
         res.setCookies(setConnectionCookies(url, getCookieManager()));
-        setByte((byte)0xff); // Attributes not supported
+        String query = url.getQuery();
+        if (query != null) {
+            setByte((byte)0x05); // Marker for query string attribute
+            setString(query);
+        }
+        setByte((byte)0xff); // More general attributes not supported
     }
 
     private int getHeaderSize(String method, URL url) {
@@ -267,9 +275,10 @@ public class AjpSampler extends HTTPSamplerBase {
                     } else {
                         sb.append('&');
                     }
-                    sb.append(arg.getName()).append('=').append(arg.getStringValue());
+                    sb.append(arg.getStringValue());
                 }
-                byte [] sbody = sb.toString().getBytes(); //FIXME - encoding
+                stringBody = sb.toString();
+                byte [] sbody = stringBody.getBytes(); //FIXME - encoding
                 cl = sbody.length;
                 body = new ByteArrayInputStream(sbody);
             }
@@ -364,6 +373,7 @@ public class AjpSampler extends HTTPSamplerBase {
     throws IOException {
         send();
         if(method.equals(POST)) {
+            res.setQueryString(stringBody);
             sendPostBody();
         }
         handshake(res);
