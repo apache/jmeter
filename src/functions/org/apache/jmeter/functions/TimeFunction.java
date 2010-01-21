@@ -43,6 +43,7 @@ public class TimeFunction extends AbstractFunction {
 
     private static final List<String> desc = new LinkedList<String>();
 
+    // Only modified in class init
     private static final Map<String, String> aliases = new HashMap<String, String>();
 
     static {

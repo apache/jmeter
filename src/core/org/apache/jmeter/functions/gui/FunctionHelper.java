@@ -55,6 +55,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
 
     private JLabeledTextField cutPasteFunction;
 
+    // Not modified after initial setup
     private final Map<String, Class<?>> functionMap = new HashMap<String, Class<?>>();
 
     private JButton generateButton;
