@@ -86,6 +86,7 @@ The XPath Assertion and XPath Extractor elements no longer fetch external DTDs b
 <li>Bug 48144 - NPE in OnMessageSubscriber</li>
 <li>Bug 47992 - JMS Point-to-Point Request - Response option doesn't work</li>
 <li>Bug 48573 - LDAPExtSampler directory context handling</li>
+<li>Bug 48579 - Single Bind does not show config information when LdapExt Sampler is accessed</li>
 </ul>
 
 <h3>Controllers</h3>
