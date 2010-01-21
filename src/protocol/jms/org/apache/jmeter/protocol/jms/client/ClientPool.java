@@ -20,6 +20,7 @@ package org.apache.jmeter.protocol.jms.client;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  *
@@ -34,7 +35,7 @@ public class ClientPool {
 
     private static final ArrayList<Object> clients = new ArrayList<Object>();
 
-    private static final HashMap<Object, Object> client_map = new HashMap<Object, Object>();
+    private static final Map<Object, Object> client_map = new HashMap<Object, Object>();
 
     /**
      * Add a ReceiveClient to the ClientPool. This is so that we can make sure
