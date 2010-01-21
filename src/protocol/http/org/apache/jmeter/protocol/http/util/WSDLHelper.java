@@ -25,6 +25,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -65,7 +66,7 @@ public class WSDLHelper {
 
     private Object[] SOAPOPS = null;
 
-    private final HashMap<String, String> ACTIONS = new HashMap<String, String>();
+    private final Map<String, String> ACTIONS = new HashMap<String, String>();
 
     private final AuthManager AUTH;
 
