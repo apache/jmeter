@@ -24,15 +24,14 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.jmeter.JMeter;
 import org.apache.jmeter.testbeans.TestBean;
@@ -170,7 +169,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
     public StandardJMeterEngine(String host) {
         this.host = host;
-        this.allThreads = Collections.synchronizedMap(new HashMap<JMeterThread, Thread>());
+        this.allThreads = new ConcurrentHashMap<JMeterThread, Thread>();
         // Hack to allow external control
         engine = this;
     }

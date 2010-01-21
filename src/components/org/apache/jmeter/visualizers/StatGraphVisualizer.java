@@ -25,10 +25,9 @@ import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -104,7 +103,7 @@ ActionListener {
     private transient ObjectTableModel model;
 
     private final Map<String, SamplingStatCalculator> tableRows =
-        Collections.synchronizedMap(new HashMap<String, SamplingStatCalculator>());
+        new ConcurrentHashMap<String, SamplingStatCalculator>();
 
     private AxisGraph graphPanel = null;
 
