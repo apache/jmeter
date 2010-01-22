@@ -67,6 +67,12 @@ public class HoldSampleSender implements SampleSender, Serializable {
             sampleStore.clear();
         } catch (Throwable ex) {
             log.warn("testEnded()", ex);
+            if (ex instanceof Error){
+                throw (Error) ex;
+            }
+            if (ex instanceof RuntimeException){
+                throw (RuntimeException) ex;
+            }
         }
 
     }
@@ -84,6 +90,12 @@ public class HoldSampleSender implements SampleSender, Serializable {
             sampleStore.clear();
         } catch (Throwable ex) {
             log.error("testEnded(host)", ex);
+            if (ex instanceof Error){
+                throw (Error) ex;
+            }
+            if (ex instanceof RuntimeException){
+                throw (RuntimeException) ex;
+            }
         }
 
     }
