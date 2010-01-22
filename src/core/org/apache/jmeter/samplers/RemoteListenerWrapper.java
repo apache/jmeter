@@ -61,6 +61,12 @@ public class RemoteListenerWrapper extends AbstractTestElement implements Sample
             listener.testStarted();
         } catch (Throwable ex) {
             log.warn("testStarted()", ex);
+            if (ex instanceof Error){
+                throw (Error) ex;
+            }
+            if (ex instanceof RuntimeException){
+                throw (RuntimeException) ex;
+            }
         }
 
     }
@@ -75,7 +81,13 @@ public class RemoteListenerWrapper extends AbstractTestElement implements Sample
             listener.testStarted(host);
         } catch (Throwable ex) {
             log.error("testStarted(host)", ex);
-        }
+            if (ex instanceof Error){
+                throw (Error) ex;
+            }
+            if (ex instanceof RuntimeException){
+                throw (RuntimeException) ex;
+            }
+}
     }
 
     public void testEnded(String host) {
