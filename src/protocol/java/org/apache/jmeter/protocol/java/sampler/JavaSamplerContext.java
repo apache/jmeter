@@ -51,7 +51,7 @@ public class JavaSamplerContext {
     /**
      * Map containing the initialization parameters for the JavaSamplerClient.
      */
-    private Map<String, String> params = null;
+    private final Map<String, String> params;
 
     /**
      * Create a new JavaSampler with the specified initialization parameters.
