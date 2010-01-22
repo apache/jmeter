@@ -139,6 +139,12 @@ public class Save implements Command {
         } catch (Throwable ex) {
             GuiPackage.getInstance().setTestPlanFile(null);
             log.error("", ex);
+            if (ex instanceof Error){
+                throw (Error) ex;
+            }
+            if (ex instanceof RuntimeException){
+                throw (RuntimeException) ex;
+            }
             throw new IllegalUserActionException("Couldn't save test plan to file: " + updateFile);
         } finally {
             JOrphanUtils.closeQuietly(ostream);
