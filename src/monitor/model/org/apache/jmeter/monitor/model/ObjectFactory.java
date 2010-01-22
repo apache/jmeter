@@ -28,8 +28,9 @@ import org.apache.jmeter.samplers.SampleResult;
  */
 public class ObjectFactory {
 
-    //@GuardedBy("this")
-    private static ObjectFactory FACTORY = null;
+    private static class ObjectFactoryHolder {
+        static final ObjectFactory FACTORY = new ObjectFactory();    
+      }
 
     private final Parser PARSER;
 
@@ -41,14 +42,11 @@ public class ObjectFactory {
         PARSER = new MonitorParser(this);
     }
 
-    public static synchronized ObjectFactory getInstance() {
-        if (FACTORY == null) {
-            FACTORY = new ObjectFactory();
-        }
-        return FACTORY;
+    public static ObjectFactory getInstance() {
+        return ObjectFactoryHolder.FACTORY;
     }
 
-    public synchronized Status parseBytes(byte[] bytes) {
+    public Status parseBytes(byte[] bytes) {
         return PARSER.parseBytes(bytes);
     }
 
