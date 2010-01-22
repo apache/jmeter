@@ -148,6 +148,12 @@ public final class MenuFactory {
             initializeMenus();
         } catch (Throwable e) {
             log.error("", e);
+            if (e instanceof Error){
+                throw (Error) e;
+            }
+            if (e instanceof RuntimeException){
+                throw (RuntimeException) e;
+            }
         }
     }
 
@@ -430,6 +436,12 @@ public final class MenuFactory {
                     continue;
                 } catch (Throwable e) {
                     log.warn("Could not instantiate " + name, e);
+                    if (e instanceof Error){
+                        throw (Error) e;
+                    }
+                    if (e instanceof RuntimeException){
+                        throw (RuntimeException) e;
+                    }
                     continue;
                 }
                 if (elementsToSkip.contains(name) || elementsToSkip.contains(item.getStaticLabel())) {

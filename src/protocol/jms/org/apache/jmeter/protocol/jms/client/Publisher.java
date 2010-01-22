@@ -123,6 +123,12 @@ public class Publisher {
             log.error(e.getMessage());
         } catch (Throwable e) {
             log.error(e.getMessage());
+            if (e instanceof Error){
+                throw (Error) e;
+            }
+            if (e instanceof RuntimeException){
+                throw (RuntimeException) e;
+            }
         }
     }
 
