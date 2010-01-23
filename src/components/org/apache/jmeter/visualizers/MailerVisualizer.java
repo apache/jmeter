@@ -300,11 +300,13 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
      */
     @Override
     public TestElement createTestElement() {
-        if (getModel() == null) {
-            setModel(new MailerResultCollector());
+        ResultCollector model = getModel();
+        if (model == null) {
+            model = new MailerResultCollector();
+            setModel(model);
         }
-        modifyTestElement(getModel());
-        return getModel();
+        modifyTestElement(model);
+        return model;
     }
 
     /*
