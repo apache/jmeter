@@ -1981,6 +1981,11 @@ run JMeter unless all the JMeter jars are added.
         <echo level="info" message="Checksum OK: ${file}"/>
     </target>
 
+    <!-- Optionally download BSF-API jar -->
+    <target name="_process_javax_script" unless="javax.script.present">
+        <process_jarfile jarname="apache-bsf-api" dest.dir="${lib.api}"/>
+    </target>
+
 	<!--
 	Generic target to process all external jars.
 	The "process_jarfile" macro resolves the properties that begin with the jarname
@@ -1989,8 +1994,9 @@ run JMeter unless all the JMeter jars are added.
 	-->
     <target name="_process_all_jars">
         <process_jarfile jarname="apache-bsf"/>
-        <!-- TODO: only download if javax.script.ScriptEngine not in JVM classlib -->
-        <process_jarfile jarname="apache-bsf-api" dest.dir="${lib.api}"/>
+        <!-- Only download if javax.script.ScriptEngine not in JVM classlib -->
+        <available classpathref="classpath" classname="javax.script.ScriptEngine" property="javax.script.present"/>
+        <antcall target="_process_javax_script"/>
         <process_jarfile jarname="avalon-framework"/>
         <process_jarfile jarname="beanshell"/>
         <process_jarfile jarname="commons-codec"/>
