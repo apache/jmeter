@@ -1913,6 +1913,7 @@ run JMeter unless all the JMeter jars are added.
     <target name="_check_jarfile" if="_get_file">
   	    <!-- Check if file exists -->
   	    <fail message="Error in build file or calling sequence" if="file.exists"/>
+        <echo level="info">Checking ${jar}</echo>
         <available file="${path}/${jar}" property="file.exists"/>
         <condition property="_get_zipfile">
             <isset property="${zipprop}"/>
