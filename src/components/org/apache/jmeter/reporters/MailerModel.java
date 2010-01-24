@@ -94,6 +94,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
         changeListener = list;
     }
 
+    /** {@inheritDoc} */
     @Override
     public Object clone() {
         MailerModel m = (MailerModel) super.clone();
@@ -139,16 +140,28 @@ public class MailerModel extends AbstractTestElement implements Serializable {
     }
 
     /**
-     * Adds a SampleResult. If SampleResult represents a change concerning the
-     * failure/success of the sampling a message might be send to the addressies
-     * according to the settings of <code>successCount</code> and
-     * <code>failureCount</code>.
+     * Adds a SampleResult for display in the Visualizer.
      *
      * @param sample
      *            the SampleResult encapsulating informations about the last
      *            sample.
      */
-    public synchronized void add(SampleResult sample) {
+    public void add(SampleResult sample) {
+        add(sample, false);
+    }
+
+    /**
+     * Adds a SampleResult. If SampleResult represents a change concerning the
+     * failure/success of the sampling a message might be sent to the addressies
+     * according to the settings of <code>successCount</code> and
+     * <code>failureCount</code>.
+     *
+     * @param sample
+     *            the SampleResult encapsulating information about the last
+     *            sample.
+     * @param sendMails whether or not to send e-mails
+     */
+    public synchronized void add(SampleResult sample, boolean sendMails) {
 
         // -1 is the code for a failed sample.
         //
@@ -159,7 +172,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
             successCount++;
         }
 
-        if ((failureCount > getFailureLimit()) && !siteDown && !failureMsgSent) {
+        if (sendMails && (failureCount > getFailureLimit()) && !siteDown && !failureMsgSent) {
             // Send the mail ...
             Vector<String> addressVector = getAddressVector();
 
@@ -168,7 +181,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
                     sendMail(getFromAddress(), addressVector, getFailureSubject(), "URL Failed: "
                             + sample.getSampleLabel(), getSmtpHost());
                 } catch (Exception e) {
-                    log.error("Problem sending mail", e);
+                    log.error("Problem sending mail: "+e);
                 }
                 siteDown = true;
                 failureMsgSent = true;
@@ -177,7 +190,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
             }
         }
 
-        if (siteDown && (sample.getTime() != -1) && !successMsgSent) {
+        if (sendMails && siteDown && (sample.getTime() != -1) && !successMsgSent) {
             // Send the mail ...
             if (successCount > getSuccessLimit()) {
                 Vector<String> addressVector = getAddressVector();
