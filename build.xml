@@ -135,6 +135,12 @@
           </fileset>
       </auxClasspath>
 
+      <auxClasspath>
+          <fileset dir="${lib.api}">
+              <include name="*.jar"/>
+          </fileset>
+      </auxClasspath>
+
     </findbugs>
     <antcall target="findbugs-style"/>
     <antcall target="findbugs-xsl"/>
@@ -385,9 +391,7 @@
     <!-- Generated jars -->
     <fileset dir="${lib.dir}" includes="jorphan.jar"/>
     <!-- API-only jars-->
-    <pathelement location="${lib.api}/${activation.jar}"/>
-    <pathelement location="${lib.api}/${javamail.jar}"/>
-    <pathelement location="${lib.api}/${jms.jar}"/>
+    <pathelement location="${lib.api}/*.jar"/>
     <!-- Optional jars -->
     <fileset dir="${lib.opt}" includes="*.jar"/>
   </path>
