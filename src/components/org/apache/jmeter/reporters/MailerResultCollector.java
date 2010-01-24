@@ -32,21 +32,18 @@ public class MailerResultCollector extends ResultCollector implements Serializab
         setProperty(new TestElementProperty(MAILER_MODEL, new MailerModel()));
     }
 
+    /** {@inheritDoc} */
     @Override
     public void clear() {
         super.clear();
         setProperty(new TestElementProperty(MAILER_MODEL, new MailerModel()));
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see SampleListener#sampleOccurred(SampleEvent)
-     */
+    /** {@inheritDoc} */
     @Override
     public void sampleOccurred(SampleEvent e) {
-        super.sampleOccurred(e);
-        getMailerModel().add(e.getResult());
+        super.sampleOccurred(e); // sends the result to the visualiser
+        getMailerModel().add(e.getResult(), true); // updates the model used for sending e-mails
     }
 
     public MailerModel getMailerModel() {
