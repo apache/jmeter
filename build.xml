@@ -391,7 +391,7 @@
     <!-- Generated jars -->
     <fileset dir="${lib.dir}" includes="jorphan.jar"/>
     <!-- API-only jars-->
-    <pathelement location="${lib.api}/*.jar"/>
+    <fileset dir="${lib.api}" includes="*.jar"/>
     <!-- Optional jars -->
     <fileset dir="${lib.opt}" includes="*.jar"/>
   </path>
