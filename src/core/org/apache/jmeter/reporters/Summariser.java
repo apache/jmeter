@@ -20,7 +20,6 @@ package org.apache.jmeter.reporters;
 
 import java.io.Serializable;
 import java.text.DecimalFormat;
-import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
