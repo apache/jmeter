@@ -240,7 +240,7 @@ public class TestCompiler implements HashTreeTraverser {
 
     private static class ObjectPair
     {
-        TestElement child, parent;
+        private TestElement child, parent;
 
         public ObjectPair(TestElement one, TestElement two) {
             this.child = one;

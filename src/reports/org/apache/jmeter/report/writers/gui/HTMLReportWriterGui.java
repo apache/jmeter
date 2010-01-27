@@ -32,7 +32,7 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class HTMLReportWriterGui extends AbstractReportGui {
 
-    ReportFilePanel outputDirectory = new ReportFilePanel(
+    private ReportFilePanel outputDirectory = new ReportFilePanel(
             JMeterUtils.getResString("report_output_directory"), "*");
 
     public HTMLReportWriterGui() {

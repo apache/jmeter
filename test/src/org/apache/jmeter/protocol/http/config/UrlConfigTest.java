@@ -27,11 +27,11 @@ import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 
 public class UrlConfigTest extends JMeterTestCase {
-    HTTPSamplerBase config;
+    private HTTPSamplerBase config;
 
-    HTTPSamplerBase defaultConfig;
+    private HTTPSamplerBase defaultConfig;
 
-    HTTPSamplerBase partialConfig;
+    private HTTPSamplerBase partialConfig;
 
     public UrlConfigTest(String name) {
         super(name);

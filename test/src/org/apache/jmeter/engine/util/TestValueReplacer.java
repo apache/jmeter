@@ -32,7 +32,7 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 
 public class TestValueReplacer extends JMeterTestCase {
-        TestPlan variables;
+        private TestPlan variables;
 
         public TestValueReplacer(String name) {
             super(name);

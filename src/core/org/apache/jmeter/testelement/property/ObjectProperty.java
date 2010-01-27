@@ -24,11 +24,11 @@ package org.apache.jmeter.testelement.property;
 import org.apache.jmeter.testelement.TestElement;
 
 public class ObjectProperty extends AbstractProperty {
-    static final long serialVersionUID = 1;
+    private static final long serialVersionUID = 1;
 
-    Object value;
+    private Object value;
 
-    Object savedValue;
+    private Object savedValue;
 
     /*
      * (non-Javadoc)

@@ -24,7 +24,7 @@ import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
 
 public class TestSave extends junit.framework.TestCase {
-        Save save;
+        private Save save;
 
         public TestSave(String name) {
             super(name);

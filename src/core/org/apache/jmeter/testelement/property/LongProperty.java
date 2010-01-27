@@ -24,9 +24,9 @@ import org.apache.jmeter.testelement.TestElement;
  * @version $Revision$
  */
 public class LongProperty extends NumberProperty {
-    long value;
+    private long value;
 
-    long savedValue;
+    private long savedValue;
 
     public LongProperty(String name, long value) {
         super(name);

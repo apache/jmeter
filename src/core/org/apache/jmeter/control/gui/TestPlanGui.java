@@ -19,12 +19,10 @@
 package org.apache.jmeter.control.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Container;
 import java.util.Collection;
 
 import javax.swing.JCheckBox;
 import javax.swing.JMenu;
-import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextArea;
 
@@ -52,19 +50,23 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
      * A checkbox allowing the user to specify whether or not JMeter should do
      * functional testing.
      */
-    private JCheckBox functionalMode;
+    private final JCheckBox functionalMode;
 
-    private JCheckBox serializedMode;
+    private final JCheckBox serializedMode;
 
     /** A panel allowing the user to define variables. */
-    private ArgumentsPanel argsPanel;
+    private final ArgumentsPanel argsPanel;
 
-    FileListPanel browseJar = null;
+    private final FileListPanel browseJar;
 
     /**
      * Create a new TestPlanGui.
      */
     public TestPlanGui() {
+        browseJar = new FileListPanel(JMeterUtils.getResString("test_plan_classpath_browse"), ".jar"); // $NON-NLS-1$ $NON-NLS-2$
+        argsPanel = new ArgumentsPanel(JMeterUtils.getResString("user_defined_variables")); // $NON-NLS-1$
+        serializedMode = new JCheckBox(JMeterUtils.getResString("testplan.serialized")); // $NON-NLS-1$
+        functionalMode = new JCheckBox(JMeterUtils.getResString("functional_mode")); // $NON-NLS-1$
         init();
     }
 
@@ -157,22 +159,6 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
     }
 
     /**
-     * Create a panel allowing the user to define variables for the test.
-     *
-     * @return a panel for user-defined variables
-     */
-    private JPanel createVariablePanel() {
-        argsPanel = new ArgumentsPanel(JMeterUtils.getResString("user_defined_variables")); // $NON-NLS-1$
-
-        return argsPanel;
-    }
-
-    protected Container createClassPathPanel() {
-        browseJar = new FileListPanel(JMeterUtils.getResString("test_plan_classpath_browse"), ".jar"); // $NON-NLS-1$ $NON-NLS-2$
-        return browseJar;
-    }
-
-    /**
      * Initialize the components and layout of this component.
      */
     private void init() {
@@ -181,18 +167,16 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
 
         add(makeTitlePanel(), BorderLayout.NORTH);
 
-        add(createVariablePanel(), BorderLayout.CENTER);
+        add(argsPanel, BorderLayout.CENTER);
 
         VerticalPanel southPanel = new VerticalPanel();
-        serializedMode = new JCheckBox(JMeterUtils.getResString("testplan.serialized")); // $NON-NLS-1$
         southPanel.add(serializedMode);
-        functionalMode = new JCheckBox(JMeterUtils.getResString("functional_mode")); // $NON-NLS-1$
         southPanel.add(functionalMode);
         JTextArea explain = new JTextArea(JMeterUtils.getResString("functional_mode_explanation")); // $NON-NLS-1$
         explain.setEditable(false);
         explain.setBackground(this.getBackground());
         southPanel.add(explain);
-        southPanel.add(createClassPathPanel());
+        southPanel.add(browseJar);
 
         add(southPanel, BorderLayout.SOUTH);
     }

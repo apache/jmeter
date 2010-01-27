@@ -25,9 +25,9 @@ import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 
 public class TestProxyControl  extends TestCase {
-        HTTPSamplerBase sampler;
+        private HTTPSamplerBase sampler;
 
-        ProxyControl control;
+        private ProxyControl control;
 
         public TestProxyControl(String name) {
             super(name);

@@ -31,31 +31,34 @@ import org.apache.jorphan.reflect.Functor;
 
 public abstract class AbstractTreeTableModel extends DefaultTableModel implements TreeTableModel {
 
-    protected TreeNode rootNode = null;
-    protected EventListenerList listener = new EventListenerList();
+    protected final TreeNode rootNode;
+    protected final EventListenerList listener = new EventListenerList();
 
-    protected transient ArrayList<Object> objects = new ArrayList<Object>();
+    protected transient final ArrayList<Object> objects = new ArrayList<Object>();
 
-    protected transient List<String> headers = new ArrayList<String>();
+    protected transient final List<String> headers = new ArrayList<String>();
 
-    protected transient ArrayList<Class<?>> classes = new ArrayList<Class<?>>();
+    protected transient final ArrayList<Class<?>> classes = new ArrayList<Class<?>>();
 
-    protected transient ArrayList<Functor> readFunctors = new ArrayList<Functor>();
+    protected transient final ArrayList<Functor> readFunctors;
 
-    protected transient ArrayList<Functor> writeFunctors = new ArrayList<Functor>();
+    protected transient final ArrayList<Functor> writeFunctors;
 
     public AbstractTreeTableModel(TreeNode root) {
         this.rootNode = root;
+        readFunctors = new ArrayList<Functor>();
+        writeFunctors = new ArrayList<Functor>();
     }
 
     public AbstractTreeTableModel(TreeNode root, boolean editable) {
-        this.rootNode = root;
+        this(root);
     }
 
     public AbstractTreeTableModel(String[] headers,
             Functor[] readFunctors,
             Functor[] writeFunctors,
             Class<?>[] editorClasses) {
+        this.rootNode = null;
         this.headers.addAll(Arrays.asList(headers));
         this.classes.addAll(Arrays.asList(editorClasses));
         this.readFunctors = new ArrayList<Functor>(Arrays.asList(readFunctors));
