@@ -27,17 +27,17 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 
 public class TestXPathExtractor extends TestCase {
-        XPathExtractor extractor;
+        private XPathExtractor extractor;
 
-        SampleResult result;
+        private SampleResult result;
 
-        JMeterVariables vars;
+        private JMeterVariables vars;
 
         public TestXPathExtractor(String name) {
             super(name);
         }
 
-        private JMeterContext jmctx = null;
+        private JMeterContext jmctx;
 
         private final static String VAL_NAME = "value";
         private final static String VAL_NAME_NR = "value_matchNr";

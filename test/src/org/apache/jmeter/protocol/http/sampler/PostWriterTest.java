@@ -52,7 +52,7 @@ public class PostWriterTest extends TestCase {
     private HTTPSampler sampler;
     private File temporaryFile;
     
-    PostWriter postWriter;
+    private PostWriter postWriter;
     @Override
     protected void setUp() throws Exception {
         establishConnection();

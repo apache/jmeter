@@ -29,17 +29,17 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 
 public class TestRegexExtractor extends TestCase {
-        RegexExtractor extractor;
+        private RegexExtractor extractor;
 
-        SampleResult result;
+        private SampleResult result;
 
-        JMeterVariables vars;
+        private JMeterVariables vars;
 
         public TestRegexExtractor(String name) {
             super(name);
         }
 
-        private JMeterContext jmctx = null;
+        private JMeterContext jmctx;
 
         @Override
         public void setUp() {
