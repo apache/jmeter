@@ -24,9 +24,9 @@ import org.apache.jmeter.testelement.TestElement;
  * @version $Revision$
  */
 public class IntegerProperty extends NumberProperty {
-    int value;
+    private int value;
 
-    int savedValue;
+    private int savedValue;
 
     public IntegerProperty(String name, int value) {
         super(name);

@@ -24,9 +24,9 @@ import org.apache.jmeter.testelement.TestElement;
  * @version $Revision$
  */
 public class FloatProperty extends NumberProperty {
-    float value;
+    private float value;
 
-    float savedValue;
+    private float savedValue;
 
     public FloatProperty(String name, float value) {
         super(name);

@@ -24,9 +24,9 @@ import org.apache.jmeter.testelement.TestElement;
  * @version $Revision$
  */
 public class DoubleProperty extends NumberProperty {
-    double value;
+    private double value;
 
-    double savedValue;
+    private double savedValue;
 
     public DoubleProperty(String name, double value) {
         super(name);

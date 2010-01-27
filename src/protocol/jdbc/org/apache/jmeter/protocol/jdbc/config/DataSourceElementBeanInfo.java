@@ -24,12 +24,8 @@ package org.apache.jmeter.protocol.jdbc.config;
 import java.beans.PropertyDescriptor;
 
 import org.apache.jmeter.testbeans.BeanInfoSupport;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 public class DataSourceElementBeanInfo extends BeanInfoSupport {
-    Logger log = LoggingManager.getLoggerForClass();
-
     public DataSourceElementBeanInfo() {
         super(DataSourceElement.class);
         createPropertyGroup("varName", new String[] { "dataSource" });

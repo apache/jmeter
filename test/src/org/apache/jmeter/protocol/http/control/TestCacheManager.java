@@ -111,7 +111,7 @@ public class TestCacheManager extends JMeterTestCase {
     }
     
     private class HttpURLConnectionStub extends HttpURLConnection {
-        Map<String, List<String>> properties;
+        private Map<String, List<String>> properties;
         
         public HttpURLConnectionStub(HttpMethod method, URL url) {
             super(method, url);

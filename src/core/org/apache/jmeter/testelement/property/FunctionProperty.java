@@ -29,11 +29,11 @@ import org.apache.jmeter.threads.JMeterContextService;
 public class FunctionProperty extends AbstractProperty {
     private static final long serialVersionUID = 233L;
 
-    transient CompoundVariable function;
+    private transient CompoundVariable function;
 
-    int testIteration = -1;
+    private int testIteration = -1;
 
-    String cacheValue;
+    private String cacheValue;
 
     public FunctionProperty(String name, CompoundVariable func) {
         super(name);
