@@ -20,7 +20,6 @@ package org.apache.jmeter.protocol.http.parser;
 
 import java.net.URL;
 import java.util.Collection;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
