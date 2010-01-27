@@ -154,18 +154,16 @@ public abstract class SSLManager {
     private String getPassword() {
         String password = this.defaultpw;
         if (null == password) {
-            if (null == defaultpw) {
-                this.defaultpw = System.getProperty(KEY_STORE_PASSWORD);
+            this.defaultpw = System.getProperty(KEY_STORE_PASSWORD);
 
-                if (null == defaultpw) {
-                    synchronized (this) {
-                        this.defaultpw = JOptionPane.showInputDialog(
-                                GuiPackage.getInstance().getMainFrame(),
-                                JMeterUtils.getResString("ssl_pass_prompt"),  // $NON-NLS-1$
-                                JMeterUtils.getResString("ssl_pass_title"),  // $NON-NLS-1$
-                                JOptionPane.QUESTION_MESSAGE);
-                        System.setProperty(KEY_STORE_PASSWORD, this.defaultpw);
-                    }
+            if (null == defaultpw) {
+                synchronized (this) {
+                    this.defaultpw = JOptionPane.showInputDialog(
+                            GuiPackage.getInstance().getMainFrame(),
+                            JMeterUtils.getResString("ssl_pass_prompt"),  // $NON-NLS-1$
+                            JMeterUtils.getResString("ssl_pass_title"),  // $NON-NLS-1$
+                            JOptionPane.QUESTION_MESSAGE);
+                    System.setProperty(KEY_STORE_PASSWORD, this.defaultpw);
                 }
             }
 
