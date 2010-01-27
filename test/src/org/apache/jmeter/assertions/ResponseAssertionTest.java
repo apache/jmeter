@@ -204,9 +204,9 @@ public class ResponseAssertionTest  extends TestCase {
         assertTrue("Expecting failure",result.isFailure());     
         
     }
-    volatile int threadsRunning;
+    private volatile int threadsRunning;
 
-    volatile int failed;
+    private volatile int failed;
 
     public void testThreadSafety() throws Exception {
         Thread[] threads = new Thread[100];

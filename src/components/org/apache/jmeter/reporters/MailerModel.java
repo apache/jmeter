@@ -78,7 +78,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
     private static final String DEFAULT_LIMIT = "2"; //$NON-NLS-1$
 
     /** The listener for changes. */
-    transient ChangeListener changeListener;
+    private transient ChangeListener changeListener;
 
     /**
      * Constructs a MailerModel.

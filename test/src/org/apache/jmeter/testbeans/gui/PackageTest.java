@@ -74,9 +74,9 @@ public class PackageTest extends JMeterTestCase {
         this.defaultBundle = null;
     }
     
-    BeanInfo beanInfo;
+    private BeanInfo beanInfo;
 
-    ResourceBundle bundle;
+    private ResourceBundle bundle;
 
     @Override
     public void setUp() {

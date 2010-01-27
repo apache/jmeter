@@ -40,11 +40,11 @@ import org.apache.jmeter.visualizers.SamplingStatCalculator;
  */
 public class JTLData implements Serializable, DataSet {
 
-    protected final HashMap<String, SamplingStatCalculator> data = new HashMap<String, SamplingStatCalculator>();
-    protected String jtl_file = null;
-    protected long startTimestamp = 0;
-    protected long endTimestamp = 0;
-    protected File inputFile = null;
+    private final HashMap<String, SamplingStatCalculator> data = new HashMap<String, SamplingStatCalculator>();
+    private String jtl_file = null;
+    private long startTimestamp = 0;
+    private long endTimestamp = 0;
+    private File inputFile = null;
 
     /**
      *

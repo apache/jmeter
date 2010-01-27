@@ -29,15 +29,15 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 
 public class TestJexlFunction extends JMeterTestCase {
-    JexlFunction function;
+    private JexlFunction function;
 
-    SampleResult result;
+    private SampleResult result;
 
-    Collection<CompoundVariable> params;
+    private Collection<CompoundVariable> params;
 
     private JMeterVariables vars;
 
-    private JMeterContext jmctx = null;
+    private JMeterContext jmctx;
 
     public TestJexlFunction(String name) {
         super(name);
