@@ -41,10 +41,7 @@ public class LineChart extends AbstractChart {
             PointChartProperties.SHAPE_DIAMOND,PointChartProperties.SHAPE_SQUARE,
             PointChartProperties.SHAPE_TRIANGLE};
 
-    protected int width = 350;
-    protected int height = 250;
-
-    protected int shape_counter = 0;
+    private int shape_counter = 0;
 
     public LineChart() {
         super();
