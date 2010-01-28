@@ -49,8 +49,11 @@ public class BeanShellPostProcessor extends BeanShellTestElement
         JMeterContext jmctx = JMeterContextService.getContext();
 
         SampleResult prev = jmctx.getPreviousResult();
+        if (prev == null) {
+            return;
+        }
         final BeanShellInterpreter bshInterpreter = getBeanShellInterpreter();
-        if (prev == null || bshInterpreter == null) {
+        if (bshInterpreter == null) {
             log.error("BeanShell not found");
             return;
         }
