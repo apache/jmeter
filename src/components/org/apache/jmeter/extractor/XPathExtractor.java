@@ -109,12 +109,15 @@ public class XPathExtractor extends AbstractTestElement implements
      */
     public void process() {
         JMeterContext context = getThreadContext();
+        final SampleResult previousResult = context.getPreviousResult();
+        if (previousResult == null){
+            return;
+        }
         JMeterVariables vars = context.getVariables();
         String refName = getRefName();
         vars.put(refName, getDefaultValue());
         vars.put(concat(refName,MATCH_NR), "0"); // In case parse fails // $NON-NLS-1$
         vars.remove(concat(refName,"1")); // In case parse fails // $NON-NLS-1$
-        final SampleResult previousResult = context.getPreviousResult();
 
         try{
             Document d = parseResponse(previousResult);
