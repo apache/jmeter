@@ -16,7 +16,7 @@
  *
  */
 
-package org.apache.jmeter.assertions.gui;
+package org.apache.jmeter.util;
 
 import java.awt.BorderLayout;
 
@@ -29,22 +29,20 @@ import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * Assertion scope panel for Assertions so users can choose whether
- * to apply the assertion to the parent sample, the child samples or both.
+ * Scope panel so users can choose whether
+ * to apply the test element to the parent sample, the child samples or both.
  * 
- * This class is a helper class for the AbstractAssertionGui.
- *
  */
-public class AssertionScopePanel extends JPanel {
+public class ScopePanel extends JPanel {
 
-    private JRadioButton parentButton;
-    private JRadioButton childButton;
-    private JRadioButton allButton;
+    private final JRadioButton parentButton;
+    private final JRadioButton childButton;
+    private final JRadioButton allButton;
     
-    /**
-     * Create a new NamePanel with the default name.
-     */
-    public AssertionScopePanel() {
+    public ScopePanel() {
+        allButton = new JRadioButton(JMeterUtils.getResString("sample_scope_all"));
+        parentButton = new JRadioButton(JMeterUtils.getResString("sample_scope_parent"));
+        childButton = new JRadioButton(JMeterUtils.getResString("sample_scope_children"));
         init();
     }
 
@@ -53,12 +51,9 @@ public class AssertionScopePanel extends JPanel {
      */
     private void init() {
         setLayout(new BorderLayout(5, 0));
-        setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("assertion_scope"))); //$NON-NLS-1$
+        setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("sample_scope_title"))); //$NON-NLS-1$
 
-        allButton = new JRadioButton(JMeterUtils.getResString("assertion_scope_all"));
-        parentButton = new JRadioButton(JMeterUtils.getResString("assertion_scope_parent"));
         parentButton.setSelected(true);
-        childButton = new JRadioButton(JMeterUtils.getResString("assertion_scope_children"));
         
         ButtonGroup group = new ButtonGroup();
         group.add(allButton);
