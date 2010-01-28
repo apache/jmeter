@@ -27,6 +27,7 @@ import javax.swing.JPopupMenu;
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.testelement.AbstractScopedAssertion;
+import org.apache.jmeter.util.ScopePanel;
 
 /**
  * This is the base class for JMeter GUI components which manage assertions.
@@ -39,7 +40,7 @@ import org.apache.jmeter.testelement.AbstractScopedAssertion;
  */
 public abstract class AbstractAssertionGui extends AbstractJMeterGuiComponent {
 
-    private AssertionScopePanel assertionScopePanel;
+    private ScopePanel assertionScopePanel;
     
     /**
      * When a user right-clicks on the component in the test tree, or selects
@@ -75,7 +76,7 @@ public abstract class AbstractAssertionGui extends AbstractJMeterGuiComponent {
      * @return the scope settings panel
      */
     protected JPanel createScopePanel(){
-        assertionScopePanel = new AssertionScopePanel();
+        assertionScopePanel = new ScopePanel();
         return assertionScopePanel;
     }
 
