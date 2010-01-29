@@ -25,6 +25,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 import java.util.MissingResourceException;
 import java.util.PropertyResourceBundle;
@@ -168,11 +169,18 @@ public class PackageTest extends TestCase {
             if (prb == null){
                 return;
             }
-            Enumeration<String> enumr = prb.getKeys();
-            while (enumr.hasMoreElements()) {
-                String key = enumr.nextElement();
+            final ArrayList<String> list = Collections.list(prb.getKeys());
+            Collections.sort(list);
+            Iterator<String> enumr = list.iterator();
+            final boolean mainResourceFile = resname.startsWith("messages");
+            while (enumr.hasNext()) {
+                String key = enumr.next();
                 try {
-                    defaultPRB.getString(key); // Check key is in default
+                    String val = defaultPRB.getString(key); // Also Check key is in default
+                    if (mainResourceFile && val.equals(prb.getString(key))){
+                        System.out.println("Duplicate value? "+key+"="+val+" in "+res);
+                        subTestFailures++;
+                    }
                 } catch (MissingResourceException e) {
                     subTestFailures++;
                     System.out.println(resourcePrefix + "_" + resname + " has unexpected key: " + key);
