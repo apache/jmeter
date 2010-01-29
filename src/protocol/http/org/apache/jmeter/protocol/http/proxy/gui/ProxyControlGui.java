@@ -130,6 +130,9 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
      */
     private JCheckBox httpsSpoof;
 
+    /*
+     * Only spoof the URLs that match (optional)
+     */
     private JTextField httpsMatch;
 
     /**
@@ -170,6 +173,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 
     private static final String RESTART = "restart"; // $NON-NLS-1$
 
+    // This is applied to fields that should cause a restart when changed
     private static final String ENABLE_RESTART = "enable_restart"; // $NON-NLS-1$
 
     private static final String ADD_INCLUDE = "add_include"; // $NON-NLS-1$
@@ -295,6 +299,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         regexMatch.setSelected(model.getRegexMatch());
         httpsSpoof.setSelected(model.getHttpsSpoof());
         httpsMatch.setText(model.getHttpsSpoofMatch());
+        httpsMatch.setEnabled(httpsSpoof.isSelected()); // Only valid if Spoof is selected
         contentTypeInclude.setText(model.getContentTypeInclude());
         contentTypeExclude.setText(model.getContentTypeExclude());
 
@@ -344,6 +349,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             startProxy();
         } else if (command.equals(ENABLE_RESTART)){
             enableRestart();
+            httpsMatch.setEnabled(httpsSpoof.isSelected()); // Only valid if Spoof is selected
         } else if (command.equals(ADD_EXCLUDE)) {
             excludeModel.addNewRow();
             excludeModel.fireTableDataChanged();
@@ -501,6 +507,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         httpsMatch = new JTextField(40);
         httpsMatch.addKeyListener(this);
         httpsMatch.setName(ENABLE_RESTART);
+        httpsMatch.setEnabled(false); // Only valid if Spoof is selected
 
         JLabel matchlabel = new JLabel(JMeterUtils.getResString("proxy_httpsspoofing_match")); // $NON-NLS-1$
         matchlabel.setLabelFor(httpsMatch);
