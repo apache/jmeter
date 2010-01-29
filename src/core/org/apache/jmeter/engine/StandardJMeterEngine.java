@@ -578,7 +578,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
     }
 
     public void askThreadsToStop() {
-        if (engine == null) { // Will be null if StopTest thread has started
+        if (engine != null) { // Will be null if StopTest thread has started
             engine.stopTest(false);
         }
     }
