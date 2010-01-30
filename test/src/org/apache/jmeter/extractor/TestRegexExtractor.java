@@ -65,6 +65,14 @@ public class TestRegexExtractor extends TestCase {
             jmctx.setPreviousResult(result);
         }
 
+        public void testVariableExtraction0() throws Exception {
+            extractor.setRegex("<(value) field=\"");
+            extractor.setTemplate("$1$");
+            extractor.setMatchNumber(0);
+            extractor.process();
+            assertEquals("value", vars.get("regVal"));
+        }
+
         public void testVariableExtraction() throws Exception {
             extractor.setRegex("<value field=\"(pinposition\\d+)\">(\\d+)</value>");
             extractor.setTemplate("$2$");
@@ -78,7 +86,7 @@ public class TestRegexExtractor extends TestCase {
             assertEquals("2",vars.get("regVal_g"));
         }
 
-        static void templateSetup(RegexExtractor rex, String tmp) {
+        private static void templateSetup(RegexExtractor rex, String tmp) {
             rex.setRegex("<company-(\\w+?)-(\\w+?)-(\\w+?)>");
             rex.setMatchNumber(1);
             rex.setTemplate(tmp);
