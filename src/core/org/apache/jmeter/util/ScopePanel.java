@@ -51,7 +51,7 @@ public class ScopePanel extends JPanel {
      */
     private void init() {
         setLayout(new BorderLayout(5, 0));
-        setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("sample_scope_title"))); //$NON-NLS-1$
+        setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("sample_scope"))); //$NON-NLS-1$
 
         parentButton.setSelected(true);
         
