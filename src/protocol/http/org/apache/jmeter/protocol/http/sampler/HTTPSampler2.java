@@ -886,6 +886,8 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
             setDefaultRequestHeaders(httpMethod);
             // Setup connection
             client = setupConnection(url, httpMethod, res);
+            savedClient = client;
+
             // Handle the various methods
             if (method.equals(POST)) {
                 String postBody = sendPostData((PostMethod)httpMethod);
@@ -895,8 +897,6 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
                 res.setQueryString(putBody);
             }
 
-
-            savedClient = client;
             int statusCode = client.executeMethod(httpMethod);
 
             // Needs to be done after execute to pick up all the headers
