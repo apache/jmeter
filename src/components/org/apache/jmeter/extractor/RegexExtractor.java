@@ -27,7 +27,7 @@ import java.util.List;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.testelement.AbstractScopedTestElement;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterVariables;
@@ -45,7 +45,7 @@ import org.apache.oro.text.regex.Util;
 
 // @see org.apache.jmeter.extractor.TestRegexExtractor for unit tests
 
-public class RegexExtractor extends AbstractTestElement implements PostProcessor, Serializable {
+public class RegexExtractor extends AbstractScopedTestElement implements PostProcessor, Serializable {
 
 
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -110,38 +110,10 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
             vars.put(refName, defaultValue);
         }
 
-        Perl5Matcher matcher = JMeterUtils.getMatcher();
-        String inputString =
-              useUrl() ? previousResult.getUrlAsString() // Bug 39707
-            : useHeaders() ? previousResult.getResponseHeaders()
-            : useCode() ? previousResult.getResponseCode() //Bug 43451
-            : useMessage() ? previousResult.getResponseMessage() //Bug 43451
-            : useUnescapedBody() ? StringEscapeUtils.unescapeHtml(previousResult.getResponseDataAsString())
-            : previousResult.getResponseDataAsString() // Bug 36898
-            ;
-           if (log.isDebugEnabled()) {
-               log.debug("Input = " + inputString);
-           }
-        PatternMatcherInput input = new PatternMatcherInput(inputString);
-           String regex = getRegex();
-        if (log.isDebugEnabled()) {
-            log.debug("Regex = " + regex);
-           }
-        try {
-            Pattern pattern = JMeterUtils.getPatternCache().getPattern(regex, Perl5Compiler.READ_ONLY_MASK);
-            List<MatchResult> matches = new ArrayList<MatchResult>();
-            int x = 0;
-            boolean done = false;
-            do {
-                if (matcher.contains(input, pattern)) {
-                    log.debug("RegexExtractor: Match found!");
-                    matches.add(matcher.getMatch());
-                } else {
-                    done = true;
-                }
-                x++;
-            } while (x != matchNumber && !done);
 
+        String regex = getRegex();
+        try {
+            List<MatchResult> matches = processMatches(regex, previousResult, matchNumber);
             int prevCount = 0;
             String prevString = vars.get(refName + REF_MATCH_NR);
             if (prevString != null) {
@@ -190,6 +162,61 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
         } catch (MalformedCachePatternException e) {
             log.warn("Error in pattern: " + regex);
         }
+    }
+
+    private String getInputString(SampleResult result) {
+        String inputString = useUrl() ? result.getUrlAsString() // Bug 39707
+                : useHeaders() ? result.getResponseHeaders()
+                : useCode() ? result.getResponseCode() // Bug 43451
+                : useMessage() ? result.getResponseMessage() // Bug 43451
+                : useUnescapedBody() ? StringEscapeUtils.unescapeHtml(result.getResponseDataAsString())
+                : result.getResponseDataAsString() // Bug 36898
+                ;
+       if (log.isDebugEnabled()) {
+           log.debug("Input = " + inputString);
+       }
+       return inputString;
+    }
+    
+    private List<MatchResult> processMatches(String regex, SampleResult result, int matchNumber) {
+        List<SampleResult> sampleList = new ArrayList<SampleResult>();
+
+        String scope = fetchScope();
+        if (isScopeParent(scope) || isScopeAll(scope)) {
+            sampleList.add(result);
+        }
+        if (isScopeChildren(scope) || isScopeAll(scope)) {
+            for (SampleResult subResult : result.getSubResults()) {
+                sampleList.add(subResult);
+            }
+        }
+
+        if (log.isDebugEnabled()) {
+            log.debug("Regex = " + regex);
+        }
+
+        Perl5Matcher matcher = JMeterUtils.getMatcher();
+        Pattern pattern = JMeterUtils.getPatternCache().getPattern(regex, Perl5Compiler.READ_ONLY_MASK);
+        List<MatchResult> matches = new ArrayList<MatchResult>();
+        int found = 0;
+
+        for (SampleResult sr : sampleList) {
+            String inputString = getInputString(sr);
+            PatternMatcherInput input = new PatternMatcherInput(inputString);
+            while (matchNumber <=0 || found != matchNumber) {
+                if (matcher.contains(input, pattern)) {
+                    log.debug("RegexExtractor: Match found!");
+                    matches.add(matcher.getMatch());
+                    found++;
+                } else {
+                    break;
+                }
+            }
+            if (matchNumber > 0 && found == matchNumber){// no need to process further
+                break;
+            }
+        }
+        return matches;
     }
 
     /**
@@ -262,7 +289,7 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
         StringBuilder result = new StringBuilder();
         for (int a = 0; a < template.length; a++) {
             if (log.isDebugEnabled()) {
-                log.debug("RegexExtractor: Template piece #" + a + " = " + template[a]);
+                log.debug("RegexExtractor: Template piece #" + a + " = " + template[a] + " " +template[a].getClass().getSimpleName());
             }
             if (template[a] instanceof String) {
                 result.append(template[a]);
@@ -289,7 +316,7 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
                 , Perl5Compiler.READ_ONLY_MASK
                 & Perl5Compiler.SINGLELINE_MASK);
         if (log.isDebugEnabled()) {
-            log.debug("Pattern = " + templatePattern);
+            log.debug("Pattern = " + templatePattern.getPattern());
             log.debug("template = " + rawTemplate);
         }
         Util.split(pieces, matcher, templatePattern, rawTemplate);
@@ -299,18 +326,26 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
             log.debug("template split into " + pieces.size() + " pieces, starts with = " + startsWith);
         }
         if (startsWith) {
-            pieces.remove(0);// Remove initial empty entry
+            String dropped = pieces.remove(0);// Remove initial empty entry
+            if (log.isDebugEnabled()) {
+                log.debug("Dropped leading: '"+dropped+"'");
+            }            
         }
         Iterator<String> iter = pieces.iterator();
         while (iter.hasNext()) {
+            final String next = iter.next();
             boolean matchExists = matcher.contains(input, templatePattern);
             if (startsWith) {
                 if (matchExists) {
                     combined.add(new Integer(matcher.getMatch().group(1)));
                 }
-                combined.add(iter.next());
+                if (next.length() > 0) {
+                    combined.add(next);
+                }
             } else {
-                combined.add(iter.next());
+                if (next.length() > 0) {
+                    combined.add(next);
+                }
                 if (matchExists) {
                     combined.add(new Integer(matcher.getMatch().group(1)));
                 }
