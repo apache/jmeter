@@ -489,6 +489,7 @@ public class HTTPSampler extends HTTPSamplerBase implements Interruptible {
                     }
                     log.debug("Bind exception, try again");
                     if (conn!=null) {
+                        savedConn = null; // we don't want interrupt to try disconnection again
                         conn.disconnect();
                     }
                     this.setUseKeepAlive(false);
@@ -584,16 +585,18 @@ public class HTTPSampler extends HTTPSamplerBase implements Interruptible {
             res.sampleEnd();
             // We don't want to continue using this connection, even if KeepAlive is set
             if (conn != null) { // May not exist
+                savedConn = null; // we don't want interrupt to try disconnection again
                 conn.disconnect();
             }
+            savedConn = null; // we don't want interrupt to try disconnection again
             conn=null; // Don't process again
             return errorResult(e, res);
         } finally {
             // calling disconnect doesn't close the connection immediately,
             // but indicates we're through with it. The JVM should close
             // it when necessary.
+            savedConn = null; // we don't want interrupt to try disconnection again
             disconnect(conn); // Disconnect unless using KeepAlive
-            savedConn = null;
         }
     }
 
