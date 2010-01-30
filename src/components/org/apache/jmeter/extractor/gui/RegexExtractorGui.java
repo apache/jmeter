@@ -78,6 +78,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
         super.configure(el);
         if (el instanceof RegexExtractor){
             RegexExtractor re = (RegexExtractor) el;
+            showScopeSettings(re);
             useHeaders.setSelected(re.useHeaders());
             useBody.setSelected(re.useBody());
             useUnescapedBody.setSelected(re.useUnescapedBody());
@@ -110,6 +111,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
         super.configureTestElement(extractor);
         if (extractor instanceof RegexExtractor) {
             RegexExtractor regex = (RegexExtractor) extractor;
+            saveScopeSettings(regex);
             regex.setUseField(group.getSelection().getActionCommand());
             regex.setRefName(refNameField.getText());
             regex.setRegex(regexField.getText());
@@ -141,6 +143,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
 
         Box box = Box.createVerticalBox();
         box.add(makeTitlePanel());
+        box.add(createScopePanel());
         box.add(makeSourcePanel());
         add(box, BorderLayout.NORTH);
         add(makeParameterPanel(), BorderLayout.CENTER);
