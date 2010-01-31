@@ -44,6 +44,7 @@ import org.apache.oro.text.regex.Perl5Matcher;
 
 public class RegexExtractor extends AbstractScopedTestElement implements PostProcessor, Serializable {
 
+    private static final long serialVersionUID = 240L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
