@@ -28,6 +28,8 @@ import org.apache.jmeter.testelement.TestElement;
  *
  */
 public class LogicControllerGui extends AbstractControllerGui {
+    private static final long serialVersionUID = 240L;
+
     /**
      * Create a new LogicControllerGui instance.
      */

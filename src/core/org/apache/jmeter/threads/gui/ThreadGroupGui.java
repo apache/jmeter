@@ -52,6 +52,8 @@ import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
 
 public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemListener {
+    private static final long serialVersionUID = 240L;
+
     private LoopControlPanel loopPanel;
 
     private VerticalPanel mainPanel;

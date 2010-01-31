@@ -52,6 +52,8 @@ public class IfController extends GenericController implements Serializable {
 
     private static final Logger logger = LoggingManager.getLoggerForClass();
 
+    private static final long serialVersionUID = 240L;
+
     private final static String CONDITION = "IfController.condition"; //$NON-NLS-1$
 
     private final static String EVALUATE_ALL = "IfController.evaluateAll"; //$NON-NLS-1$

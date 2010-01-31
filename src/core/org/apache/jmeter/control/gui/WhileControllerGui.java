@@ -34,6 +34,8 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class WhileControllerGui extends AbstractControllerGui implements ActionListener {
 
+    private static final long serialVersionUID = 240L;
+
     private static final String CONDITION_LABEL = "while_controller_label"; // $NON-NLS-1$
 
     /**

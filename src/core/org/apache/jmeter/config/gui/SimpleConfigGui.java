@@ -46,6 +46,8 @@ import org.apache.jorphan.collections.Data;
 public class SimpleConfigGui extends AbstractConfigGui implements ActionListener {
     /* This class created for enhancement Bug ID 9101. */
 
+    private static final long serialVersionUID = 240L;
+
     // TODO: This class looks a lot like ArgumentsPanel. What exactly is the
     // difference? Could they be combined?
     // Note: it seems that this class is not actually used ...

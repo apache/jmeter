@@ -30,6 +30,8 @@ import org.apache.jmeter.visualizers.gui.AbstractListenerGui;
  */
 public class SummariserGui extends AbstractListenerGui {
 
+    private static final long serialVersionUID = 240L;
+
     public SummariserGui() {
         super();
         init();

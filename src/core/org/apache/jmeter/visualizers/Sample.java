@@ -23,6 +23,8 @@ import java.text.Format;
 import java.util.Date;
 
 public class Sample implements Serializable, Comparable<Sample> {
+    private static final long serialVersionUID = 240L;
+
     private final long data; // = elapsed
 
     private final long average;

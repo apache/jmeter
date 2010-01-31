@@ -39,6 +39,8 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 
 public class RunTimeGui extends AbstractControllerGui implements ActionListener {
+    private static final long serialVersionUID = 240L;
+
     /**
      * A field allowing the user to specify the number of seconds the controller
      * should loop.

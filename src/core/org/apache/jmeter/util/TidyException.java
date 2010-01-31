@@ -23,6 +23,8 @@ package org.apache.jmeter.util;
  */
 public class TidyException extends Exception {
 
+    private static final long serialVersionUID = 240L;
+
     public TidyException() {
         this(0,0);
     }

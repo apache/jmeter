@@ -40,6 +40,8 @@ import org.apache.jmeter.util.ScopePanel;
  */
 public abstract class AbstractPostProcessorGui extends AbstractJMeterGuiComponent {
 
+    private static final long serialVersionUID = 240L;
+
     private ScopePanel scopePanel;
 
     public JPopupMenu createPopupMenu() {

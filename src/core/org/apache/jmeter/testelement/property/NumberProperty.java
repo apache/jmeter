@@ -22,6 +22,8 @@
 package org.apache.jmeter.testelement.property;
 
 public abstract class NumberProperty extends AbstractProperty {
+    private static final long serialVersionUID = 240L;
+
     public NumberProperty() {
         super();
     }

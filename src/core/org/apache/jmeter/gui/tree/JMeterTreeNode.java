@@ -39,6 +39,8 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeNode {
+    private static final long serialVersionUID = 240L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private final JMeterTreeModel treeModel;
