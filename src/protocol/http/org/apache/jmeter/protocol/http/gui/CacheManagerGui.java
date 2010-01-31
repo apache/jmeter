@@ -35,6 +35,8 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  */
 public class CacheManagerGui extends AbstractConfigGui {
 
+    private static final long serialVersionUID = 240L;
+
     private JCheckBox clearEachIteration;
 
     private JCheckBox useExpires;

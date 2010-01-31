@@ -48,6 +48,8 @@ import java.util.zip.GZIPInputStream;
 public class SoapSampler extends HTTPSampler2 implements Interruptible { // Implemented by parent class
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final long serialVersionUID = 240L;
+
     public static final String XML_DATA = "HTTPSamper.xml_data"; //$NON-NLS-1$
 
     public static final String URL_DATA = "SoapSampler.URL_DATA"; //$NON-NLS-1$

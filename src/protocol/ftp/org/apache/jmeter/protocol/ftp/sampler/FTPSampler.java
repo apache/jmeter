@@ -49,6 +49,8 @@ import org.apache.log.Logger;
  *
  */
 public class FTPSampler extends AbstractSampler implements Interruptible {
+    private static final long serialVersionUID = 240L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     public final static String SERVER = "FTPSampler.server"; // $NON-NLS-1$

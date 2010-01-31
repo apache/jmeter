@@ -34,6 +34,8 @@ import org.apache.oro.text.regex.Perl5Matcher;
  */
 public class MultipartUrlConfig implements Serializable {
 
+    private static final long serialVersionUID = 240L;
+
     private final String boundary;
 
     private final Arguments args;

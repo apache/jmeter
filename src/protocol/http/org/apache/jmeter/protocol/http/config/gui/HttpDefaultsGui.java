@@ -33,6 +33,8 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class HttpDefaultsGui extends AbstractConfigGui {
 
+    private static final long serialVersionUID = 240L;
+
     private JCheckBox imageParser;
 
     private UrlConfigGui urlConfig;

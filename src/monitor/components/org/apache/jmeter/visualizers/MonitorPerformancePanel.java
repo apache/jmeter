@@ -41,6 +41,8 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class MonitorPerformancePanel extends JSplitPane implements TreeSelectionListener, MonitorListener, Clearable {
 
+    private static final long serialVersionUID = 240L;
+
     private JScrollPane TREEPANE;
 
     private JPanel GRAPHPANEL;

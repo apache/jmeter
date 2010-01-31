@@ -44,6 +44,8 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class ParamModifierGui extends AbstractPreProcessorGui implements FocusListener {
 
+    private static final long serialVersionUID = 240L;
+
     /*
      * These are used as GUI item names;
      * LOWERBOUND, UPPERBOUND and INCREMENT are used in the focusLost() method

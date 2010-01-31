@@ -33,6 +33,8 @@ import org.apache.jmeter.samplers.SampleResult;
 
 public class MonitorAccumModel implements Clearable, Serializable {
 
+    private static final long serialVersionUID = 240L;
+
     private final HashMap<String, List<MonitorModel>> serverListMap;
 
     /**

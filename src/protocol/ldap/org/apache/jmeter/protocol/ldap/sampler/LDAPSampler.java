@@ -46,6 +46,8 @@ import org.apache.log.Logger;
 public class LDAPSampler extends AbstractSampler {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final long serialVersionUID = 240L;
+
     public static final String SERVERNAME = "servername"; //$NON-NLS-1$
 
     public static final String PORT = "port"; //$NON-NLS-1$

@@ -49,6 +49,8 @@ import org.apache.jmeter.protocol.jms.sampler.PublisherSampler;
  */
 public class JMSPublisherGui extends AbstractSamplerGui implements java.awt.event.ActionListener, ChangeListener {
 
+    private static final long serialVersionUID = 240L;
+
     private static final String ALL_FILES = "*.*"; //$NON-NLS-1$
 
     //++ These names are used in the JMX files, and must not be changed

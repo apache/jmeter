@@ -38,6 +38,8 @@ import org.apache.jmeter.testelement.TestElement;
  ******************************************************************************/
 
 public class LdapExtTestSamplerGui extends AbstractSamplerGui {
+    private static final long serialVersionUID = 240L;
+
     private LdapExtConfigGui ldapDefaultPanel;
 
     /***************************************************************************
