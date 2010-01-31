@@ -23,6 +23,8 @@ import org.apache.jmeter.protocol.http.control.RecordingController;
 import org.apache.jmeter.testelement.TestElement;
 
 public class RecordController extends LogicControllerGui {
+    private static final long serialVersionUID = 240L;
+
     @Override
     public String getLabelResource() {
         return "record_controller_title"; // $NON-NLS-1$

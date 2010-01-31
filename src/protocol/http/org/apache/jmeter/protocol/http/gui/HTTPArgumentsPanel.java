@@ -39,6 +39,8 @@ import org.apache.jorphan.reflect.Functor;
  */
 public class HTTPArgumentsPanel extends ArgumentsPanel {
 
+    private static final long serialVersionUID = 240L;
+
     private static final String ENCODE_OR_NOT = "encode?"; //$NON-NLS-1$
 
     private static final String INCLUDE_EQUALS = "include_equals"; //$NON-NLS-1$

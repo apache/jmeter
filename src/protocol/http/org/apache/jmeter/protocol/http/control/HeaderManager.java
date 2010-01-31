@@ -44,6 +44,8 @@ import org.apache.jorphan.util.JOrphanUtils;
  */
 public class HeaderManager extends ConfigTestElement implements Serializable {
 
+    private static final long serialVersionUID = 240L;
+
     public static final String HEADERS = "HeaderManager.headers";// $NON-NLS-1$
 
     private final static String[] COLUMN_RESOURCE_NAMES = {

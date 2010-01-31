@@ -50,6 +50,8 @@ import org.apache.log.Logger;
  *
  */
 public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
+    private static final long serialVersionUID = 240L;
+
     /** Logging */
     private static final Logger log = LoggingManager.getLoggerForClass();
 

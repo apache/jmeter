@@ -33,6 +33,8 @@ import org.apache.jmeter.testelement.property.StringProperty;
  */
 public class HTTPFileArg extends AbstractTestElement implements Serializable {
 
+    private static final long serialVersionUID = 240L;
+
     /** Name used to store the file's path. */
     private static final String FILEPATH = "File.path";
 

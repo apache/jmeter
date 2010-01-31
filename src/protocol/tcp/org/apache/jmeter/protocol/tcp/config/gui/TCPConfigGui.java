@@ -36,6 +36,8 @@ import org.apache.jorphan.gui.JLabeledTextField;
 
 public class TCPConfigGui extends AbstractConfigGui {
 
+    private static final long serialVersionUID = 240L;
+
     private JLabeledTextField classname;
 
     private JTextField server;

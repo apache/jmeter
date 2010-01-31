@@ -48,6 +48,8 @@ import org.apache.log.Logger;
 public class UserParameterModifier extends ConfigTestElement implements PreProcessor, Serializable, TestListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final long serialVersionUID = 240L;
+
     private static final String XMLURI = "UserParameterModifier.xmluri"; // $NON-NLS-1$
 
     private UserSequence allAvailableUsers;

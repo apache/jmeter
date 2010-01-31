@@ -32,6 +32,8 @@ import org.apache.jmeter.samplers.Clearable;
  */
 public class MonitorGraph extends JComponent implements MonitorGuiListener, Clearable {
 
+    private static final long serialVersionUID = 240L;
+
     private final MonitorAccumModel model;
 
     private MonitorModel current;

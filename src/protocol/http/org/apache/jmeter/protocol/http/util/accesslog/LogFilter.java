@@ -75,6 +75,8 @@ import org.apache.oro.text.regex.Perl5Compiler;
 
 public class LogFilter implements Filter, Serializable {
 
+    private static final long serialVersionUID = 240L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     /** protected members used by class to filter * */

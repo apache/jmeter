@@ -78,6 +78,8 @@ import org.apache.oro.text.regex.Perl5Matcher;
 public abstract class HTTPSamplerBase extends AbstractSampler
     implements TestListener, ThreadListener, HTTPConstantsInterface {
 
+    private static final long serialVersionUID = 240L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     public static final String ARGUMENTS = "HTTPsampler.Arguments"; // $NON-NLS-1$

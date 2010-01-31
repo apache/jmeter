@@ -24,6 +24,8 @@ package org.apache.jmeter.protocol.http.util;
  */
 public class WSDLException extends Exception {
 
+    private static final long serialVersionUID = 240L;
+
     public WSDLException() {
         super();
     }
