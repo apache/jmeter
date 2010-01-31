@@ -35,6 +35,8 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class TableGui extends AbstractReportGui implements ChangeListener {
 
+    private static final long serialVersionUID = 240L;
+
     private JCheckBox meanCheck = new JCheckBox(JMeterUtils.getResString("average"));
     private JCheckBox medianCheck = new JCheckBox(JMeterUtils.getResString("graph_results_median"));
     private JCheckBox maxCheck = new JCheckBox(JMeterUtils.getResString("aggregate_report_max"));

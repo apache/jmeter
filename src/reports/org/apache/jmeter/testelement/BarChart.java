@@ -35,6 +35,8 @@ import org.apache.jmeter.visualizers.SamplingStatCalculator;
  */
 public class BarChart extends AbstractChart {
 
+    private static final long serialVersionUID = 240L;
+
     public static final String REPORT_BAR_CHART_URL = "ReportChart.bar.chart.url";
 
     public BarChart() {

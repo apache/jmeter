@@ -37,6 +37,8 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class DirectoryPanel extends HorizontalPanel implements ActionListener {
 
+    private static final long serialVersionUID = 240L;
+
     private static final String ACTION_BROWSE = "browse"; // $NON-NSL-1$
 
     private final JTextField filename = new JTextField(20);

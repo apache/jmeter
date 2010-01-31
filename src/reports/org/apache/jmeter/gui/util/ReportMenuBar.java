@@ -46,6 +46,8 @@ import org.apache.log.Logger;
  * with the existing jmeter menubar.
  */
 public class ReportMenuBar extends JMenuBar implements LocaleChangeListener {
+    private static final long serialVersionUID = 240L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private JMenu fileMenu;
