@@ -48,6 +48,8 @@ import org.xml.sax.SAXException;
 public class XPathAssertion extends AbstractTestElement implements Serializable, Assertion {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final long serialVersionUID = 240L;
+
     // private static XPathAPI xpath = null;
 
     //+ JMX file attributes

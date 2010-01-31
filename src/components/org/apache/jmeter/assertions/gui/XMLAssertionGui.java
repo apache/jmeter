@@ -23,6 +23,8 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
 public class XMLAssertionGui extends AbstractAssertionGui {
+    private static final long serialVersionUID = 240L;
+
     /**
      * The constructor.
      */

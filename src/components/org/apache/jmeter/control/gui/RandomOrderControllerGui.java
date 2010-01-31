@@ -25,6 +25,8 @@ import org.apache.jmeter.testelement.TestElement;
  */
 public class RandomOrderControllerGui extends LogicControllerGui {
 
+    private static final long serialVersionUID = 240L;
+
     @Override
     public String getLabelResource() {
         return "random_order_control_title"; // $NON-NLS-1$

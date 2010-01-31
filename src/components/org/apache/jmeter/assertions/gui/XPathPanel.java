@@ -39,6 +39,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 public class XPathPanel extends JPanel {
+    private static final long serialVersionUID = 240L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     // Lazily constructed. Does not matter if it is constructed more than once.

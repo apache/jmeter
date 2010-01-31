@@ -57,6 +57,8 @@ import org.apache.jorphan.reflect.Functor;
  */
 public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
+    private static final long serialVersionUID = 240L;
+
     // Note: the resource string won't respond to locale-changes,
     // however this does not matter as it is only used when pasting to the clipboard
     private static final ImageIcon imageSuccess = JMeterUtils.getImage(

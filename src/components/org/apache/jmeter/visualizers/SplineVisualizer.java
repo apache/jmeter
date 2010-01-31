@@ -46,6 +46,8 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  */
 public class SplineVisualizer extends AbstractVisualizer implements ImageVisualizer, GraphListener, Clearable {
 
+    private static final long serialVersionUID = 240L;
+
     private static final String SUFFIX_MS = " ms";  //$NON-NLS-1$
 
     protected final Color BACKGROUND_COLOR = getBackground();
@@ -264,6 +266,8 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
      *
      */
     public class SplineGraph extends JComponent {
+
+        private static final long serialVersionUID = 240L;
 
         private final Color WAITING_COLOR = Color.darkGray;
 

@@ -38,6 +38,8 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class ForeachControlPanel extends AbstractControllerGui {
 
+    private static final long serialVersionUID = 240L;
+
     /**
      * A field allowing the user to specify the input variable the controller
      * should loop.

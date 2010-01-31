@@ -29,6 +29,8 @@ import org.apache.jmeter.samplers.Sampler;
  */
 public class OnceOnlyController extends GenericController implements Serializable, LoopIterationListener {
 
+    private static final long serialVersionUID = 240L;
+
     /**
      * Constructor for the OnceOnlyController object.
      */

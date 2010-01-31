@@ -31,6 +31,8 @@ import org.apache.log.Logger;
 public class ForeachController extends GenericController implements Serializable {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final long serialVersionUID = 240L;
+
     private final static String INPUTVAL = "ForeachController.inputVal";// $NON-NLS-1$
 
     private final static String RETURNVAL = "ForeachController.returnVal";// $NON-NLS-1$

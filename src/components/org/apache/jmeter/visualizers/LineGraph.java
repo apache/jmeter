@@ -49,6 +49,8 @@ import org.jCharts.types.ChartType;
  */
 public class LineGraph extends JPanel {
 
+    private static final long serialVersionUID = 240L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     protected double[][] data = null;

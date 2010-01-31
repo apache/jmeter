@@ -40,6 +40,8 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
 public class TestActionGui extends AbstractSamplerGui {
+    private static final long serialVersionUID = 240L;
+
     // Gui components
     private JComboBox targetBox;
 
