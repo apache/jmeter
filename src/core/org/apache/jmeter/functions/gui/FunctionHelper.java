@@ -49,6 +49,8 @@ import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.reflect.ClassFinder;
 
 public class FunctionHelper extends JDialog implements ActionListener, ChangeListener {
+    private static final long serialVersionUID = 240L;
+
     private JLabeledChoice functionList;
 
     private ArgumentsPanel parameterPanel;

@@ -25,6 +25,8 @@ import org.apache.jmeter.testelement.TestElement;
  *
  */
 public final class NullProperty extends AbstractProperty {
+    private static final long serialVersionUID = 240L;
+
     private JMeterProperty tempValue; // TODO - why does null property have a value?
 
     public NullProperty(String name) {

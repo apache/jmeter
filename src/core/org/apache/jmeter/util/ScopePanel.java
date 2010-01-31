@@ -35,6 +35,8 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class ScopePanel extends JPanel {
 
+    private static final long serialVersionUID = 240L;
+
     private final JRadioButton parentButton;
     private final JRadioButton childButton;
     private final JRadioButton allButton;

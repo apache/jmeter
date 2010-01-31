@@ -28,6 +28,8 @@ import org.apache.jmeter.visualizers.Visualizer;
  */
 
 public abstract class AbstractListenerElement extends AbstractTestElement {
+    private static final long serialVersionUID = 240L;
+
     // TODO should class implement SampleListener?
     private transient WeakReference<Visualizer> listener;
 

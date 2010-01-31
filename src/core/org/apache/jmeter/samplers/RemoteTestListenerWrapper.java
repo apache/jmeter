@@ -33,6 +33,8 @@ import org.apache.log.Logger;
 public class RemoteTestListenerWrapper extends AbstractTestElement implements TestListener, Serializable, NoThreadClone {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final long serialVersionUID = 240L;
+
     private final RemoteSampleListener listener;
 
     public RemoteTestListenerWrapper() {

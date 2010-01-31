@@ -48,6 +48,8 @@ import org.apache.log.Logger;
  * @version $Revision$
  */
 public class FileReporter extends JPanel {
+    private static final long serialVersionUID = 240L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private final Map<String, Vector<Integer>> data = new ConcurrentHashMap<String, Vector<Integer>>();
@@ -130,6 +132,8 @@ public class FileReporter extends JPanel {
  * objects
  */
 private static class GraphPanel extends JPanel {
+    private static final long serialVersionUID = 240L;
+
     // boolean autoScale = true;
     private final Map<String, Vector<Integer>> data;
 

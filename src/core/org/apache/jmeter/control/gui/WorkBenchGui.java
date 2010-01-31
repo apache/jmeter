@@ -37,6 +37,8 @@ import org.apache.jmeter.util.JMeterUtils;
  *
  */
 public class WorkBenchGui extends AbstractJMeterGuiComponent {
+    private static final long serialVersionUID = 240L;
+
     /**
      * Create a new WorkbenchGui.
      */

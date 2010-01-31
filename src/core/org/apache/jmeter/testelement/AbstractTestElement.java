@@ -45,6 +45,8 @@ import org.apache.log.Logger;
 /**
  */
 public abstract class AbstractTestElement implements TestElement, Serializable {
+    private static final long serialVersionUID = 240L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private final Map<String, JMeterProperty> propMap =

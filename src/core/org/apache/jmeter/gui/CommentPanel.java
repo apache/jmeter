@@ -31,6 +31,8 @@ import org.apache.jmeter.util.JMeterUtils;
  *
  */
 public class CommentPanel extends JPanel {
+    private static final long serialVersionUID = 240L;
+
     /** A text field containing the comment. */
     private JTextArea commentField;
 

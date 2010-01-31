@@ -34,6 +34,8 @@ import org.apache.jmeter.testelement.TestElement;
  */
 public class ResultActionGui extends AbstractPostProcessorGui {
 
+    private static final long serialVersionUID = 240L;
+
     private OnErrorPanel errorPanel;
 
     public ResultActionGui() {

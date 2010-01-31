@@ -20,6 +20,8 @@ package org.apache.jmeter.testelement;
 
 public class WorkBench extends AbstractTestElement {
 
+    private static final long serialVersionUID = 240L;
+
     /**
      * Constructor for the WorkBench object.
      */

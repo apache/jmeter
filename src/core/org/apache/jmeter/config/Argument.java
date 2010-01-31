@@ -29,7 +29,9 @@ import org.apache.jmeter.testelement.property.StringProperty;
  *
  */
 public class Argument extends AbstractTestElement implements Serializable {
-     /** Name used to store the argument's name. */
+    private static final long serialVersionUID = 240L;
+
+/** Name used to store the argument's name. */
     public static final String ARG_NAME = "Argument.name";
 
     /** Name used to store the argument's value. */

@@ -41,6 +41,8 @@ import org.apache.jorphan.collections.ListedHashTree;
 
 public class JMeterTreeModel extends DefaultTreeModel {
 
+    private static final long serialVersionUID = 240L;
+
     public JMeterTreeModel(TestElement tp, TestElement wb) {
         super(new JMeterTreeNode(wb, null));
         initTree(tp,wb);

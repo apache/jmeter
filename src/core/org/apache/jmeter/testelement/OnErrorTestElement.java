@@ -28,6 +28,8 @@ import org.apache.jmeter.testelement.property.IntegerProperty;
  * @version $Revision$
  */
 public abstract class OnErrorTestElement extends AbstractTestElement {
+    private static final long serialVersionUID = 240L;
+
     /* Action to be taken when a Sampler error occurs */
     public final static int ON_ERROR_CONTINUE = 0;
 

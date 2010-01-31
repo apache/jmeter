@@ -26,6 +26,8 @@ public class LoginConfig extends ConfigTestElement implements Serializable
 // TODO: move this to components -- the only reason why it's in core is because
 // it's used as a guinea pig by a couple of tests.
 {
+    private static final long serialVersionUID = 240L;
+
     /**
      * Constructor for the LoginConfig object.
      */

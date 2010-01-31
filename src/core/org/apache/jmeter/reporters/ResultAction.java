@@ -32,6 +32,9 @@ import org.apache.log.Logger;
  *
  */
 public class ResultAction extends OnErrorTestElement implements Serializable, SampleListener {
+
+    private static final long serialVersionUID = 240L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     /*
