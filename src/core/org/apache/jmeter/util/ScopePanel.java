@@ -42,9 +42,9 @@ public class ScopePanel extends JPanel {
     private final JRadioButton allButton;
     
     public ScopePanel() {
-        allButton = new JRadioButton(JMeterUtils.getResString("sample_scope_all"));
-        parentButton = new JRadioButton(JMeterUtils.getResString("sample_scope_parent"));
-        childButton = new JRadioButton(JMeterUtils.getResString("sample_scope_children"));
+        allButton = new JRadioButton(JMeterUtils.getResString("sample_scope_all")); //$NON-NLS-1$
+        parentButton = new JRadioButton(JMeterUtils.getResString("sample_scope_parent")); //$NON-NLS-1$
+        childButton = new JRadioButton(JMeterUtils.getResString("sample_scope_children")); //$NON-NLS-1$
         init();
     }
 
@@ -98,5 +98,9 @@ public class ScopePanel extends JPanel {
 
     public boolean isScopeChildren() {
         return childButton.isSelected();
+    }
+
+    public boolean isScopeAll() {
+        return allButton.isSelected();
     }
 }

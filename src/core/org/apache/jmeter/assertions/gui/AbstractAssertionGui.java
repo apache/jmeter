@@ -98,13 +98,13 @@ public abstract class AbstractAssertionGui extends AbstractJMeterGuiComponent {
     protected void saveScopeSettings(AbstractScopedAssertion assertion) {
         if (assertionScopePanel.isScopeParent()){
             assertion.setScopeParent();
-        } else
-        if (assertionScopePanel.isScopeChildren()){
+        } else if (assertionScopePanel.isScopeChildren()){
             assertion.setScopeChildren();
-        } else {
+        } else if (assertionScopePanel.isScopeAll()) {
             assertion.setScopeAll();
+        } else {
+            throw new IllegalArgumentException("Unexpected scope panel state");
         }
-        
     }
 
     /**
@@ -118,8 +118,10 @@ public abstract class AbstractAssertionGui extends AbstractJMeterGuiComponent {
                 assertionScopePanel.setScopeParent();                
         } else if (assertion.isScopeChildren(scope)){
             assertionScopePanel.setScopeChildren();
-        } else {
+        } else if (assertion.isScopeAll(scope)){
             assertionScopePanel.setScopeAll();
+        } else {
+            throw new IllegalArgumentException("Invalid scope: "+scope);
         }
     }
 }
