@@ -50,6 +50,8 @@ import org.apache.log.Logger;
 
 public class UserParametersGui extends AbstractPreProcessorGui {
 
+    private static final long serialVersionUID = 240L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final String NAME_COL_RESOURCE = "name"; // $NON-NLS-1$
@@ -145,6 +147,8 @@ public class UserParametersGui extends AbstractPreProcessorGui {
         initTableModel();
         paramTable.setModel(tableModel);
         HeaderAsPropertyRenderer defaultRenderer = new HeaderAsPropertyRenderer(){
+            private static final long serialVersionUID = 240L;
+
             @Override
             protected String getText(Object value, int row, int column) {
                 if (column >= 1){ // Don't process the NAME column

@@ -54,6 +54,8 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
  */
 public class GraphVisualizer extends AbstractVisualizer implements ImageVisualizer, ItemListener, Clearable {
 
+    private static final long serialVersionUID = 240L;
+
     private static final String ZERO = "0";  //$NON-NLS-1$
 
     private NumberFormat nf = NumberFormat.getInstance(); // OK, because used in synchronised method

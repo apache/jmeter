@@ -36,6 +36,8 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class MD5HexAssertionGUI extends AbstractAssertionGui {
 
+    private static final long serialVersionUID = 240L;
+
     private JTextField md5HexInput;
 
     public MD5HexAssertionGUI() {

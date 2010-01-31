@@ -51,6 +51,8 @@ import org.jCharts.types.ChartType;
  */
 public class AxisGraph extends JPanel {
 
+    private static final long serialVersionUID = 240L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final String ELLIPSIS = "..."; //$NON-NLS-1$

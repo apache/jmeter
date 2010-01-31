@@ -32,6 +32,8 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class ConstantTimer extends AbstractTestElement implements Timer, Serializable, LoopIterationListener {
 
+    private static final long serialVersionUID = 240L;
+
     public final static String DELAY = "ConstantTimer.delay"; //$NON-NLS-1$
 
     private long delay = 0;

@@ -80,6 +80,9 @@ import javax.xml.transform.stream.StreamResult;
 public class XPathExtractor extends AbstractTestElement implements
         PostProcessor, Serializable {
     private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private static final long serialVersionUID = 240L;
+
     private static final String MATCH_NR = "matchNr"; // $NON-NLS-1$
 
     //+ JMX file attributes

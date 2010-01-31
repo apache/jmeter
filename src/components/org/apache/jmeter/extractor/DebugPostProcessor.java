@@ -31,6 +31,8 @@ import org.apache.jmeter.threads.JMeterContext;
  */
 public class DebugPostProcessor extends AbstractTestElement implements PostProcessor, TestBean {
 
+    private static final long serialVersionUID = 240L;
+
     public void process(){
         StringBuilder sb = new StringBuilder(100);
         JMeterContext threadContext = getThreadContext();

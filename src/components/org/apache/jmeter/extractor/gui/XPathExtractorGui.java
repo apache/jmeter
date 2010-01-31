@@ -42,6 +42,8 @@ import org.apache.jorphan.gui.JLabeledTextField;
  */
 public class XPathExtractorGui extends AbstractPostProcessorGui {
 
+    private static final long serialVersionUID = 240L;
+
     private JLabeledTextField defaultField;
 
     private JLabeledTextField xpathQueryField;

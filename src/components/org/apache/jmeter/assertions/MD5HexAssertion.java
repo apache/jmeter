@@ -40,6 +40,8 @@ import org.apache.log.Logger;
 
 public class MD5HexAssertion extends AbstractTestElement implements Serializable, Assertion {
 
+    private static final long serialVersionUID = 240L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     /** Key for storing assertion-informations in the jmx-file. */

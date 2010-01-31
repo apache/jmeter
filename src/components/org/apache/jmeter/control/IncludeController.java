@@ -36,6 +36,8 @@ import org.apache.log.Logger;
 public class IncludeController extends GenericController implements ReplaceableController {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final long serialVersionUID = 240L;
+
     private static final String INCLUDE_PATH = "IncludeController.includepath"; //$NON-NLS-1$
 
     private static  final String prefix =
