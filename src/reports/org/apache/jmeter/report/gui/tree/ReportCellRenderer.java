@@ -25,6 +25,8 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 public class ReportCellRenderer extends DefaultTreeCellRenderer {
+    private static final long serialVersionUID = 240L;
+
     public ReportCellRenderer() {
     }
 

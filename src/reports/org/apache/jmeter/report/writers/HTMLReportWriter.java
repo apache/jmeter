@@ -26,6 +26,8 @@ import org.apache.jmeter.testelement.TestElement;
  */
 public class HTMLReportWriter extends AbstractReportWriter {
 
+    private static final long serialVersionUID = 240L;
+
     public HTMLReportWriter() {
         super();
     }

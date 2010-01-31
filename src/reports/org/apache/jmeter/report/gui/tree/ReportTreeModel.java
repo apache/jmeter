@@ -40,6 +40,8 @@ import org.apache.jorphan.collections.ListedHashTree;
 
 public class ReportTreeModel extends DefaultTreeModel {
 
+    private static final long serialVersionUID = 240L;
+
     public ReportTreeModel() {
         super(new ReportTreeNode(new ReportGui().createTestElement(), null));
         initTree();

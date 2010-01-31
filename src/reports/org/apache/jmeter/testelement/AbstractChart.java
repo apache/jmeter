@@ -35,6 +35,8 @@ import org.apache.jorphan.util.JOrphanUtils;
  */
 public abstract class AbstractChart extends AbstractTestElement implements ReportChart {
 
+    private static final long serialVersionUID = 240L;
+
     public static final String REPORT_CHART_X_AXIS = "ReportChart.chart.x.axis";
     public static final String REPORT_CHART_Y_AXIS = "ReportChart.chart.y.axis";
     public static final String REPORT_CHART_X_LABEL = "ReportChart.chart.x.label";

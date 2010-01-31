@@ -32,6 +32,8 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class HTMLReportWriterGui extends AbstractReportGui {
 
+    private static final long serialVersionUID = 240L;
+
     private ReportFilePanel outputDirectory = new ReportFilePanel(
             JMeterUtils.getResString("report_output_directory"), "*");
 
