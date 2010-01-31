@@ -80,7 +80,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
 
     private static final String UNDERSCORE = "_";  // $NON-NLS-1$
 
-    private List<Object> template;
+    private transient List<Object> template;
 
     /**
      * Parses the response data using regular expressions and saving the results
@@ -273,13 +273,6 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
             vars.remove(buf.toString());// remove the g0,g1...gn vars
             buf.setLength(pfxlen);
         }
-    }
-
-    @Override
-    public Object clone() {
-        RegexExtractor cloned = (RegexExtractor) super.clone();
-        cloned.template = this.template;
-        return cloned;
     }
 
     private String generateResult(MatchResult match) {
