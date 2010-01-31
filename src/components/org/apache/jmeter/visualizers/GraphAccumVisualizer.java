@@ -47,6 +47,8 @@ import org.apache.log.Logger;
  * Created 2001/08/11
  */
 public class GraphAccumVisualizer extends AbstractVisualizer implements ImageVisualizer, GraphAccumListener, Clearable {
+    private static final long serialVersionUID = 240L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     protected transient GraphAccumModel model;

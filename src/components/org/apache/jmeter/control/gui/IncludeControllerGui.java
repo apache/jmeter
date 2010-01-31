@@ -33,6 +33,8 @@ public class IncludeControllerGui extends AbstractControllerGui
        // implements UnsharedComponent
 {
 
+    private static final long serialVersionUID = 240L;
+
     private FilePanel includePanel =
         new FilePanel(JMeterUtils.getResString("include_path"), ".jmx"); //$NON-NLS-1$ //$NON-NLS-2$
 

@@ -37,6 +37,8 @@ import org.xml.sax.SAXException;
  *
  */
 public class XMLDefaultMutableTreeNode extends DefaultMutableTreeNode {
+    private static final long serialVersionUID = 240L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
     // private static final int LIMIT_STR_SIZE = 100;
     // private boolean isRoot;

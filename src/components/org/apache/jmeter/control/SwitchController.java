@@ -48,6 +48,8 @@ import org.apache.jmeter.testelement.property.StringProperty;
  * </p>
  */
 public class SwitchController extends GenericController implements Serializable {
+    private static final long serialVersionUID = 240L;
+
     // Package access for use by Test code
     final static String SWITCH_VALUE = "SwitchController.value"; //$NON-NLS-1$
 

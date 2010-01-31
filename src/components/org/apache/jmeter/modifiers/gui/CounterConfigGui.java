@@ -28,6 +28,8 @@ import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
 public class CounterConfigGui extends AbstractConfigGui {
+    private static final long serialVersionUID = 240L;
+
     private JLabeledTextField startField, incrField, endField, varNameField, formatField;
 
     private JCheckBox perUserField;

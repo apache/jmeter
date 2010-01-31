@@ -47,8 +47,9 @@ import org.apache.jmeter.util.JMeterUtils;
  * 
  */
 public class AssertionGui extends AbstractAssertionGui {
-    /** The name of the table column in the list of patterns. */
-    
+    private static final long serialVersionUID = 240L;
+
+    /** The name of the table column in the list of patterns. */    
     private static final String COL_RESOURCE_NAME = "assertion_patterns_to_test"; //$NON-NLS-1$
 
     /** Radio button indicating that the text response should be tested. */

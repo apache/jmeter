@@ -43,6 +43,8 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 
 public class ComparisonVisualizer extends AbstractVisualizer implements Clearable {
+    private static final long serialVersionUID = 240L;
+
     private JTree resultsTree;
 
     private DefaultTreeModel treeModel;

@@ -42,6 +42,8 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  */
 public class SizeAssertionGui extends AbstractAssertionGui implements FocusListener, ActionListener {
 
+    private static final long serialVersionUID = 240L;
+
     private JTextField size;
 
     private JRadioButton equalButton, notequalButton, greaterthanButton, lessthanButton, greaterthanequalButton,

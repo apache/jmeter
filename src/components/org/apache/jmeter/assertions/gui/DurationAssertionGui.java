@@ -35,6 +35,8 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class DurationAssertionGui extends AbstractAssertionGui {
 
+    private static final long serialVersionUID = 240L;
+
     private JTextField duration;
 
     public DurationAssertionGui() {

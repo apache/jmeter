@@ -45,6 +45,8 @@ import org.apache.jorphan.math.NumberComparator;
  */
 public class DistributionGraph extends JComponent implements Scrollable, Clearable {
 
+    private static final long serialVersionUID = 240L;
+
     private SamplingStatCalculator model;
 
     private final int xborder = 30;

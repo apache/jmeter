@@ -28,6 +28,9 @@ import org.apache.jmeter.testelement.TestElement;
  *
  */
 public class RandomOrderController extends GenericController implements Serializable {
+
+    private static final long serialVersionUID = 240L;
+
     /**
      * Create a new RandomOrderController.
      */
