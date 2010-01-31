@@ -159,12 +159,6 @@ public class XPathExtractor extends AbstractTestElement implements
         }
     }
 
-    @Override
-    public Object clone() {
-        XPathExtractor cloned = (XPathExtractor) super.clone();
-        return cloned;
-    }
-
     /*============= object properties ================*/
     public void setXPathQuery(String val){
         setProperty(XPATH_QUERY,val);
