@@ -77,15 +77,15 @@ public abstract class AbstractPostProcessorGui extends AbstractJMeterGuiComponen
      * @param testElement
      */
     protected void saveScopeSettings(AbstractScopedTestElement testElement) {
-        if (scopePanel.isScopeParent()){
+        if (scopePanel.isScopeParent()) {
             testElement.setScopeParent();
-        } else
-        if (scopePanel.isScopeChildren()){
+        } else if (scopePanel.isScopeChildren()) {
             testElement.setScopeChildren();
-        } else {
+        } else if (scopePanel.isScopeAll()) {
             testElement.setScopeAll();
+        } else {
+            throw new IllegalArgumentException("Unexpected scope panel state");
         }
-        
     }
 
     /**
@@ -99,8 +99,10 @@ public abstract class AbstractPostProcessorGui extends AbstractJMeterGuiComponen
                 scopePanel.setScopeParent();                
         } else if (testElement.isScopeChildren(scope)){
             scopePanel.setScopeChildren();
-        } else {
+        } else if (testElement.isScopeAll(scope)){
             scopePanel.setScopeAll();
+        } else {
+            throw new IllegalArgumentException("Invalid scope: "+scope);
         }
     }
 }
