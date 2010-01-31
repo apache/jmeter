@@ -42,6 +42,8 @@ import javax.swing.event.ChangeListener;
  * @version $Revision$
  */
 public class JLabeledTextField extends JPanel implements JLabeledField, FocusListener {
+    private static final long serialVersionUID = 240L;
+
     private JLabel mLabel;
 
     private JTextField mTextField;

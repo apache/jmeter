@@ -39,6 +39,8 @@ import java.util.Set;
  * @see HashTree
  */
 public class ListedHashTree extends HashTree implements Serializable, Cloneable {
+    private static final long serialVersionUID = 240L;
+
     private final List<Object> order;
 
     public ListedHashTree() {

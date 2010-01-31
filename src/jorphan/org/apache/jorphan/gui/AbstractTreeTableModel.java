@@ -31,6 +31,8 @@ import org.apache.jorphan.reflect.Functor;
 
 public abstract class AbstractTreeTableModel extends DefaultTableModel implements TreeTableModel {
 
+    private static final long serialVersionUID = 240L;
+
     protected final TreeNode rootNode;
     protected final EventListenerList listener = new EventListenerList();
 
