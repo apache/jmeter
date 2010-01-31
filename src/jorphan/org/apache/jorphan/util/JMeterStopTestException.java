@@ -25,6 +25,8 @@ package org.apache.jorphan.util;
  * @version $Revision$
  */
 public class JMeterStopTestException extends RuntimeException {
+    private static final long serialVersionUID = 240L;
+
     public JMeterStopTestException() {
         super();
     }

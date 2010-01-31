@@ -112,6 +112,8 @@ public final class ClassFinder {
     }
     
     private static class AnnoFilterTreeSet extends TreeSet<String>{
+        private static final long serialVersionUID = 240L;
+
         private final boolean inner; // are inner classes OK?
 
         private final Class<? extends Annotation>[] annotations; // annotation classes to check

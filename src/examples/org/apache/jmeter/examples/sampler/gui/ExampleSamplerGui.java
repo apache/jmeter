@@ -45,6 +45,8 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class ExampleSamplerGui extends AbstractSamplerGui {
 
+    private static final long serialVersionUID = 240L;
+
     private JTextArea data;
 
     public ExampleSamplerGui() {

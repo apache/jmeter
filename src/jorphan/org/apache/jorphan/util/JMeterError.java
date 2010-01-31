@@ -26,6 +26,8 @@ package org.apache.jorphan.util;
  */
 public class JMeterError extends Error {
 
+    private static final long serialVersionUID = 240L;
+
     public JMeterError() {
         super();
     }
