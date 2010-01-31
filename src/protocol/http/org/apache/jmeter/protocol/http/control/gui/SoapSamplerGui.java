@@ -37,6 +37,8 @@ import org.apache.jorphan.gui.JLabeledTextArea;
 import org.apache.jorphan.gui.JLabeledTextField;
 
 public class SoapSamplerGui extends AbstractSamplerGui {
+    private static final long serialVersionUID = 240L;
+
     private JLabeledTextField urlField;
     private JLabeledTextField soapAction;
     private JCheckBox sendSoapAction;

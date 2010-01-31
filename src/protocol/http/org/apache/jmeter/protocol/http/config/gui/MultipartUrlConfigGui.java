@@ -30,6 +30,8 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class MultipartUrlConfigGui extends UrlConfigGui {
 
+    private static final long serialVersionUID = 240L;
+
     /**
      * Files panel that holds file informations to be uploaded by
      * http request.

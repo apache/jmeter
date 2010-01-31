@@ -66,6 +66,8 @@ import org.w3c.dom.Document;
 public class WebServiceSampler extends HTTPSamplerBase {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final long serialVersionUID = 240L;
+
     //+ JMX file attribut names - do not change!
     private static final String XML_DATA = "HTTPSamper.xml_data"; //$NON-NLS-1$
 

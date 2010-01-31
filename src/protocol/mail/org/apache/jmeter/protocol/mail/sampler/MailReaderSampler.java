@@ -47,6 +47,8 @@ import org.apache.log.Logger;
 public class MailReaderSampler extends AbstractSampler {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final long serialVersionUID = 240L;
+
     //+ JMX attributes - do not change the values
     private final static String SERVER_TYPE = "host_type"; // $NON-NLS-1$
     private final static String SERVER = "host"; // $NON-NLS-1$

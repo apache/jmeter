@@ -20,6 +20,8 @@ import javax.swing.JTabbedPane;
 
 public class MonitorTabPane extends JTabbedPane {
 
+    private static final long serialVersionUID = 240L;
+
     /**
      *
      */

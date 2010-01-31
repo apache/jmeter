@@ -39,6 +39,8 @@ import org.apache.jmeter.config.ConfigTestElement;
  */
 
 public class LDAPArguments extends ConfigTestElement implements Serializable {
+    private static final long serialVersionUID = 240L;
+
     /** The name of the property used to store the arguments. */
     public static final String ARGUMENTS = "Arguments.arguments"; //$NON-NLS$
 

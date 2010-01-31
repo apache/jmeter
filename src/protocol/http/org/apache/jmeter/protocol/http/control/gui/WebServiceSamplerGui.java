@@ -55,33 +55,35 @@ import org.apache.jmeter.protocol.http.control.AuthManager;
  */
 public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt.event.ActionListener {
 
-    private JLabeledTextField domain = new JLabeledTextField(JMeterUtils.getResString("web_server_domain")); // $NON-NLS-1$
+    private static final long serialVersionUID = 240L;
 
-    private JLabeledTextField protocol = new JLabeledTextField(JMeterUtils.getResString("protocol")); // $NON-NLS-1$
+    private final JLabeledTextField domain = new JLabeledTextField(JMeterUtils.getResString("web_server_domain")); // $NON-NLS-1$
 
-    private JLabeledTextField port = new JLabeledTextField(JMeterUtils.getResString("web_server_port")); // $NON-NLS-1$
+    private final JLabeledTextField protocol = new JLabeledTextField(JMeterUtils.getResString("protocol")); // $NON-NLS-1$
 
-    private JLabeledTextField path = new JLabeledTextField(JMeterUtils.getResString("path")); // $NON-NLS-1$
+    private final JLabeledTextField port = new JLabeledTextField(JMeterUtils.getResString("web_server_port")); // $NON-NLS-1$
 
-    private JLabeledTextField soapAction = new JLabeledTextField(JMeterUtils.getResString("webservice_soap_action")); // $NON-NLS-1$
+    private final JLabeledTextField path = new JLabeledTextField(JMeterUtils.getResString("path")); // $NON-NLS-1$
 
-    private JLabeledTextArea soapXml = new JLabeledTextArea(JMeterUtils.getResString("soap_data_title")); // $NON-NLS-1$
+    private final JLabeledTextField soapAction = new JLabeledTextField(JMeterUtils.getResString("webservice_soap_action")); // $NON-NLS-1$
 
-    private JLabeledTextField wsdlField = new JLabeledTextField(JMeterUtils.getResString("wsdl_url")); // $NON-NLS-1$
+    private final JLabeledTextArea soapXml = new JLabeledTextArea(JMeterUtils.getResString("soap_data_title")); // $NON-NLS-1$
 
-    private JButton wsdlButton = new JButton(JMeterUtils.getResString("load_wsdl")); // $NON-NLS-1$
+    private final JLabeledTextField wsdlField = new JLabeledTextField(JMeterUtils.getResString("wsdl_url")); // $NON-NLS-1$
 
-    private JButton selectButton = new JButton(JMeterUtils.getResString("configure_wsdl")); // $NON-NLS-1$
+    private final JButton wsdlButton = new JButton(JMeterUtils.getResString("load_wsdl")); // $NON-NLS-1$
+
+    private final JButton selectButton = new JButton(JMeterUtils.getResString("configure_wsdl")); // $NON-NLS-1$
 
     private JLabeledChoice wsdlMethods = null;
 
     private transient WSDLHelper HELPER = null;
 
-    private FilePanel soapXmlFile = new FilePanel(JMeterUtils.getResString("get_xml_from_file"), ".xml"); // $NON-NLS-1$
+    private final FilePanel soapXmlFile = new FilePanel(JMeterUtils.getResString("get_xml_from_file"), ".xml"); // $NON-NLS-1$
 
-    private JLabeledTextField randomXmlFile = new JLabeledTextField(JMeterUtils.getResString("get_xml_from_random")); // $NON-NLS-1$
+    private final JLabeledTextField randomXmlFile = new JLabeledTextField(JMeterUtils.getResString("get_xml_from_random")); // $NON-NLS-1$
 
-    private JLabeledTextField connectTimeout = new JLabeledTextField(JMeterUtils.getResString("webservice_timeout")); // $NON-NLS-1$
+    private final JLabeledTextField connectTimeout = new JLabeledTextField(JMeterUtils.getResString("webservice_timeout")); // $NON-NLS-1$
 
     /**
      * We create several JLabel objects to display usage instructions in the

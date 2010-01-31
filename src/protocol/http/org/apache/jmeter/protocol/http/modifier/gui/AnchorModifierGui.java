@@ -25,6 +25,8 @@ import org.apache.jmeter.protocol.http.modifier.AnchorModifier;
 import org.apache.jmeter.testelement.TestElement;
 
 public class AnchorModifierGui extends AbstractPreProcessorGui {
+    private static final long serialVersionUID = 240L;
+
     public AnchorModifierGui() {
         init();
     }

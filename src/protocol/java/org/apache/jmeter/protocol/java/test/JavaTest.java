@@ -65,6 +65,8 @@ import org.apache.jmeter.testelement.TestElement;
  */
 
 public class JavaTest extends AbstractJavaSamplerClient implements Serializable {
+    private static final long serialVersionUID = 240L;
+
     /** The base number of milliseconds to sleep during each sample. */
     private long sleepTime;
 

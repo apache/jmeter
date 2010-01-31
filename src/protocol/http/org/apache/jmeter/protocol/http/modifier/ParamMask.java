@@ -30,6 +30,9 @@ import org.apache.jmeter.testelement.property.LongProperty;
  * @version $Revision$
  */
 public class ParamMask extends AbstractTestElement implements Serializable {
+
+    private static final long serialVersionUID = 240L;
+
     private String PREFIX = "ParamModifier.prefix";
 
     private String FIELD_NAME = "ParamModifier.field_name";

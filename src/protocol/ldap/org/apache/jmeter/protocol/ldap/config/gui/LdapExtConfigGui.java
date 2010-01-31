@@ -58,6 +58,9 @@ import org.apache.jorphan.gui.JLabeledChoice;
  ******************************************************************************/
 
 public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener {
+
+    private static final long serialVersionUID = 240L;
+
     // private final static String ROOTDN = "rootDn";
     // private final static String TEST = "tesT";
     // private static String testValue="NNNN";

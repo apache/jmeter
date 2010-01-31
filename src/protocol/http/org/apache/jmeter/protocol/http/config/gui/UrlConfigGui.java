@@ -54,6 +54,8 @@ import org.apache.jorphan.gui.JLabeledChoice;
  * - redirects & keepalive
  */
 public class UrlConfigGui extends JPanel implements ChangeListener {
+    private static final long serialVersionUID = 240L;
+
     private HTTPArgumentsPanel argsPanel;
 
     private JTextField domain;

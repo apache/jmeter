@@ -52,6 +52,8 @@ import org.w3c.dom.NodeList;
 public class AnchorModifier extends AbstractTestElement implements PreProcessor, Serializable {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final long serialVersionUID = 240L;
+
     private static final Random rand = new Random();
 
     public AnchorModifier() {

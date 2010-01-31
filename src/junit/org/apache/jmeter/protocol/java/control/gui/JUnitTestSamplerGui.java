@@ -60,6 +60,8 @@ import org.junit.Test;
 public class JUnitTestSamplerGui extends AbstractSamplerGui
 implements ChangeListener, ActionListener, ItemListener
 {
+    private static final long serialVersionUID = 240L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final String TESTMETHOD_PREFIX = "test"; //$NON-NLS-1$

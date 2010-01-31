@@ -31,6 +31,8 @@ import org.apache.jorphan.util.JOrphanUtils;
  *
  */
 public class Cookie extends AbstractTestElement implements Serializable {
+    private static final long serialVersionUID = 240L;
+
     private static final String TAB = "\t";
 
     private static final String VALUE = "Cookie.value"; //$NON-NLS-1$

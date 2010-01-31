@@ -24,6 +24,8 @@ import org.apache.jmeter.samplers.Clearable;
 
 public class MonitorModel implements Clearable, Serializable, Cloneable {
 
+    private static final long serialVersionUID = 240L;
+
     private MonitorStats current = new MonitorStats(0, 0, 0, 0, 0, "", "", "", System.currentTimeMillis());
 
     /**

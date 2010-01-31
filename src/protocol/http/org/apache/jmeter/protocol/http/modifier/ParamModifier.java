@@ -50,6 +50,8 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
  */
 public class ParamModifier extends AbstractTestElement implements TestListener, PreProcessor, Serializable {
 
+    private static final long serialVersionUID = 240L;
+
     /*
      * ------------------------------------------------------------------------
      * Fields
