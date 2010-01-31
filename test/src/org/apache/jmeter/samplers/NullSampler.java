@@ -25,6 +25,8 @@ package org.apache.jmeter.samplers;
  */
 public class NullSampler extends AbstractSampler {
 
+    private static final long serialVersionUID = 240L;
+
     public SampleResult sample(Entry e) {
         return new SampleResult();
     }

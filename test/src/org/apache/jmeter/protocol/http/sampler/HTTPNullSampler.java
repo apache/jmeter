@@ -26,6 +26,8 @@ import java.net.URL;
  */
 public final class HTTPNullSampler extends HTTPSamplerBase {
 
+    private static final long serialVersionUID = 240L;
+
     /*
      * (non-Javadoc)
      * 
