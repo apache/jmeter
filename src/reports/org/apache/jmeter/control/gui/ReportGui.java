@@ -101,7 +101,7 @@ public class ReportGui extends AbstractReportGui {
         if (plan instanceof ReportPlan) {
             ReportPlan rp = (ReportPlan) plan;
             rp.setUserDefinedVariables((Arguments) argsPanel.createTestElement());
-            rp.setProperty(ReportPlan.COMMENTS, commentPanel.getText());
+            rp.setProperty(ReportPlan.REPORT_COMMENTS, commentPanel.getText());
             rp.setBasedir(baseDir.getFilename());
         }
     }
@@ -140,7 +140,7 @@ public class ReportGui extends AbstractReportGui {
         if (el.getProperty(ReportPlan.USER_DEFINED_VARIABLES) != null) {
             argsPanel.configure((Arguments) el.getProperty(ReportPlan.USER_DEFINED_VARIABLES).getObjectValue());
         }
-        commentPanel.setText(el.getPropertyAsString(ReportPlan.COMMENTS));
+        commentPanel.setText(el.getPropertyAsString(ReportPlan.REPORT_COMMENTS));
         baseDir.setFilename(el.getPropertyAsString(ReportPlan.BASEDIR));
     }
 

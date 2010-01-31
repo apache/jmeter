@@ -46,7 +46,7 @@ public class ReportPlan extends AbstractTestElement implements Serializable, Tes
 
     public static final String USER_DEFINED_VARIABLES = "ReportPlan.user_defined_variables";
 
-    public static final String COMMENTS = "ReportPlan.comments";
+    public static final String REPORT_COMMENTS = "ReportPlan.comments";
 
     public static final String BASEDIR = "ReportPlan.basedir";
 
