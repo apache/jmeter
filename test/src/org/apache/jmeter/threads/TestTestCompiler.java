@@ -48,6 +48,8 @@ public class TestTestCompiler extends junit.framework.TestCase {
         }
 
         class TestSampler extends AbstractSampler {
+            private static final long serialVersionUID = 240L;
+
             public SampleResult sample(org.apache.jmeter.samplers.Entry e) {
                 return null;
             }

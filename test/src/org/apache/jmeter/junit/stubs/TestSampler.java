@@ -30,6 +30,8 @@ import org.apache.jmeter.samplers.SampleResult;
 
 public class TestSampler extends AbstractSampler {
 
+    private static final long serialVersionUID = 240L;
+
     private long wait = 0;
 
     private long samples = 0; // number of samples taken
