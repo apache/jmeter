@@ -26,6 +26,8 @@ package org.apache.jmeter.protocol.http.parser;
  * @version $Revision$
  */
 public class HTMLParseError extends Error {
+    private static final long serialVersionUID = 240L;
+
     public HTMLParseError() {
         super();
     }

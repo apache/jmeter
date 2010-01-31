@@ -44,6 +44,8 @@ import org.apache.jmeter.protocol.jms.sampler.SubscriberSampler;
  */
 public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.event.ActionListener, ChangeListener {
 
+    private static final long serialVersionUID = 240L;
+
     private final JCheckBox useProperties =
         new JCheckBox(JMeterUtils.getResString("jms_use_properties_file"), false); // $NON-NLS-1$
 

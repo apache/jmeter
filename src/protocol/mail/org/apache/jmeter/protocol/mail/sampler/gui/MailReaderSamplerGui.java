@@ -40,6 +40,8 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 
 public class MailReaderSamplerGui extends AbstractSamplerGui {
 
+    private static final long serialVersionUID = 240L;
+
     // Gui Components
     private JComboBox serverTypeBox;
 

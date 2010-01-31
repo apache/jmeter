@@ -29,6 +29,8 @@ import org.apache.jmeter.testelement.AbstractTestElement;
  */
 public class Header extends AbstractTestElement implements Serializable {
 
+    private static final long serialVersionUID = 240L;
+
     private static final String HNAME = "Header.name";  //$NON-NLS-1$
     // See TestElementPropertyConverter
 

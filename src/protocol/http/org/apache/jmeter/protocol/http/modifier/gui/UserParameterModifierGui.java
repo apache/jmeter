@@ -41,6 +41,8 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 @Deprecated
 public class UserParameterModifierGui extends AbstractPreProcessorGui {
+    private static final long serialVersionUID = 240L;
+
     // -------------------------------------------
     // Constants and Data Members
     // -------------------------------------------

@@ -30,6 +30,8 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 
 public class URLRewritingModifierGui extends AbstractPreProcessorGui {
+    private static final long serialVersionUID = 240L;
+
     private JLabeledTextField argumentName;
 
     private JCheckBox pathExt;

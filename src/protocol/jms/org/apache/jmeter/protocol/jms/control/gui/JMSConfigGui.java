@@ -44,6 +44,8 @@ import org.apache.jorphan.gui.JLabeledTextField;
  */
 public class JMSConfigGui extends AbstractSamplerGui {
 
+    private static final long serialVersionUID = 240L;
+
     private JLabeledTextField queueuConnectionFactory = new JLabeledTextField(
             JMeterUtils.getResString("jms_queue_connection_factory")); //$NON-NLS-1$
 

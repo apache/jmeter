@@ -31,6 +31,8 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class TCPSamplerGui extends AbstractSamplerGui {
 
+    private static final long serialVersionUID = 240L;
+
     private LoginConfigGui loginPanel;
 
     private TCPConfigGui TcpDefaultPanel;

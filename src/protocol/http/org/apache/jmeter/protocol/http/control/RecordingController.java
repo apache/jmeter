@@ -21,4 +21,6 @@ package org.apache.jmeter.protocol.http.control;
 import org.apache.jmeter.control.GenericController;
 
 public class RecordingController extends GenericController {
+    private static final long serialVersionUID = 240L;
+
 }

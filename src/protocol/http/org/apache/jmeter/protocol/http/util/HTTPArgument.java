@@ -40,6 +40,8 @@ import org.apache.log.Logger;
 public class HTTPArgument extends Argument implements Serializable {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final long serialVersionUID = 240L;
+
     private static final String ALWAYS_ENCODE = "HTTPArgument.always_encode";
 
     private static final String USE_EQUALS = "HTTPArgument.use_equals";

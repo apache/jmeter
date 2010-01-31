@@ -51,6 +51,8 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
 
+    private static final long serialVersionUID = 240L;
+
     private JTextField rootdn = new JTextField(20);
 
     private JTextField searchbase = new JTextField(20);

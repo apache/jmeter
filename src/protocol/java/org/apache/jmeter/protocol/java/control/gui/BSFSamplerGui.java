@@ -37,6 +37,8 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
 public class BSFSamplerGui extends AbstractSamplerGui {
+    private static final long serialVersionUID = 240L;
+
     private JTextArea scriptField;
 
     private JComboBox langField;// Language

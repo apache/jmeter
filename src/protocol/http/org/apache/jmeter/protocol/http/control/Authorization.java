@@ -30,6 +30,8 @@ import org.apache.jmeter.testelement.AbstractTestElement;
  */
 public class Authorization extends AbstractTestElement implements Serializable {
 
+    private static final long serialVersionUID = 240L;
+
     private static final String URL = "Authorization.url"; // $NON-NLS-1$
 
     private static final String USERNAME = "Authorization.username"; // $NON-NLS-1$
