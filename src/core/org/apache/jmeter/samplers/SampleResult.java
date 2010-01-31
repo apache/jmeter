@@ -182,8 +182,6 @@ public class SampleResult implements Serializable {
 
     // TODO do contentType and/or dataEncoding belong in HTTPSampleResult instead?
 
-    private final static String TOTAL_TIME = "totalTime"; // $NON-NLS-1$
-
     private static final boolean startTimeStamp
         = JMeterUtils.getPropDefault("sampleresult.timestamp.start", false);  // $NON-NLS-1$
 
