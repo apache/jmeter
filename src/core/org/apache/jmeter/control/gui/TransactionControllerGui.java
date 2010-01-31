@@ -31,6 +31,8 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  */
 public class TransactionControllerGui extends AbstractControllerGui {
 
+    private static final long serialVersionUID = 240L;
+
     private JCheckBox parent; // If selected, then generate parent sample, otherwise as per original controller
 	
     private JCheckBox includeTimers; // if selected, add duration of timers to total runtime

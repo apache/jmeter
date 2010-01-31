@@ -31,6 +31,8 @@ import org.apache.jmeter.testelement.TestListener;
 public class RemoteSampleListenerImpl extends java.rmi.server.UnicastRemoteObject 
     implements RemoteSampleListener, SampleListener, TestListener {
 
+    private static final long serialVersionUID = 240L;
+
     private final TestListener testListener;
 
     private final SampleListener sampleListener;

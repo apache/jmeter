@@ -37,6 +37,8 @@ import org.apache.jmeter.util.JMeterUtils;
  *
  */
 public class LoginConfigGui extends AbstractConfigGui {
+    private static final long serialVersionUID = 240L;
+
     /** Field allowing the user to enter a username. */
     private JTextField username = new JTextField(15);
 

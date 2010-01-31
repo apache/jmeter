@@ -40,6 +40,8 @@ import org.apache.jmeter.visualizers.gui.AbstractListenerGui;
  */
 public class ResultSaverGui extends AbstractListenerGui implements Clearable {
 
+    private static final long serialVersionUID = 240L;
+
     private JTextField filename;
 
     private JTextField variableName;

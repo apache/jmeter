@@ -41,6 +41,8 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 
 public class LoopControlPanel extends AbstractControllerGui implements ActionListener {
+    private static final long serialVersionUID = 240L;
+
     /**
      * A checkbox allowing the user to specify whether or not the controller
      * should loop forever.

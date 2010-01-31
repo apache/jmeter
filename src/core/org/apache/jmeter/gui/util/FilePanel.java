@@ -39,6 +39,8 @@ import org.apache.jmeter.util.JMeterUtils;
  * author Michael Stover Created April 18, 2002
  */
 public class FilePanel extends HorizontalPanel implements ActionListener {
+    private static final long serialVersionUID = 240L;
+
     private final JTextField filename = new JTextField(20);
 
     private final JLabel label = new JLabel(JMeterUtils.getResString("file_visualizer_filename")); //$NON-NLS-1$

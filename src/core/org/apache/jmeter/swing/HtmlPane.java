@@ -29,6 +29,8 @@ import org.apache.log.Logger;
  * Implements an HTML Pane with local hyperlinking enabled.
  */
 public class HtmlPane extends JTextPane {
+    private static final long serialVersionUID = 240L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     public HtmlPane() {

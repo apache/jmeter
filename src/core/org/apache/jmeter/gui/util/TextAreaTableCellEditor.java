@@ -36,6 +36,8 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.tree.TreeCellEditor;
 
 public class TextAreaTableCellEditor extends AbstractCellEditor implements TableCellEditor, TreeCellEditor {
+    private static final long serialVersionUID = 240L;
+
     //
     // Instance Variables
     //
@@ -68,6 +70,8 @@ public class TextAreaTableCellEditor extends AbstractCellEditor implements Table
         editorComponent.setRows(3);
         this.clickCountToStart = 2;
         delegate = new EditorDelegate() {
+            private static final long serialVersionUID = 240L;
+
             @Override
             public void setValue(Object value) {
                 editorComponent.setText((value != null) ? value.toString() : "");
@@ -203,6 +207,8 @@ public class TextAreaTableCellEditor extends AbstractCellEditor implements Table
      * The protected <code>EditorDelegate</code> class.
      */
     protected class EditorDelegate implements FocusListener, Serializable {
+        private static final long serialVersionUID = 240L;
+
         /** The value of this cell. */
         protected Object value;
 

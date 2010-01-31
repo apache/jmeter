@@ -92,6 +92,8 @@ import org.apache.log.Logger;
  * </dl>
  */
 public class GenericTestBeanCustomizer extends JPanel implements SharedCustomizer {
+    private static final long serialVersionUID = 240L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     public static final String GROUP = "group"; //$NON-NLS-1$
@@ -518,6 +520,8 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
      * Comparator used to sort properties for presentation in the GUI.
      */
     private class PropertyComparator implements Comparator<PropertyDescriptor>, Serializable {
+        private static final long serialVersionUID = 240L;
+
         public int compare(PropertyDescriptor d1, PropertyDescriptor d2) {
             int result;
 

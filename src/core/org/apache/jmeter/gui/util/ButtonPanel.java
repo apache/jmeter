@@ -31,6 +31,8 @@ import org.apache.jmeter.util.JMeterUtils;
 // TODO - does not appear to be used
 
 public class ButtonPanel extends JPanel {
+    private static final long serialVersionUID = 240L;
+
     public final static int ADD_BUTTON = 1;
 
     public final static int EDIT_BUTTON = 2;

@@ -34,6 +34,8 @@ import org.apache.log.Logger;
  * This is the JMeter server main code.
  */
 public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject implements RemoteJMeterEngine {
+    private static final long serialVersionUID = 240L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     static final String JMETER_ENGINE_RMI_NAME = "JMeterEngine"; // $NON-NLS-1$
