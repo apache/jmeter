@@ -33,6 +33,8 @@ import org.apache.jmeter.monitor.util.Stats;
  */
 public class ServerPanel extends JPanel implements MonitorGuiListener {
 
+    private static final long serialVersionUID = 240L;
+
     private JLabel serverField;
 
     private JLabel timestampField;

@@ -33,6 +33,8 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
  */
 public class HTTPFileArgs extends ConfigTestElement implements Serializable {
 
+    private static final long serialVersionUID = 240L;
+
     /** The name of the property used to store the files. */
     private static final String HTTP_FILE_ARGS = "HTTPFileArgs.files"; //$NON-NLS-1$
 

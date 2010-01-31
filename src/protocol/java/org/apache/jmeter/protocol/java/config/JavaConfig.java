@@ -35,6 +35,8 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
  */
 public class JavaConfig extends ConfigTestElement implements Serializable {
 
+    private static final long serialVersionUID = 240L;
+
     /**
      * Constructor for the JavaConfig object
      */

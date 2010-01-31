@@ -44,6 +44,8 @@ import org.apache.jmeter.samplers.SampleResult;
  * @version $Revision$
  */
 public class SleepTest extends AbstractJavaSamplerClient implements Serializable {
+    private static final long serialVersionUID = 240L;
+
     /**
      * The default value of the SleepTime parameter, in milliseconds.
      */

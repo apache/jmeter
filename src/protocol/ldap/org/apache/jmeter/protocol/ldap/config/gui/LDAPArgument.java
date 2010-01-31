@@ -38,6 +38,8 @@ import org.apache.jmeter.testelement.property.StringProperty;
 
 public class LDAPArgument extends AbstractTestElement implements Serializable {
 
+    private static final long serialVersionUID = 240L;
+
     // ** These constants are used in the JMX files, and so must not be changed **
 
     /** Name used to store the argument's name. */

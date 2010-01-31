@@ -51,6 +51,8 @@ import org.apache.log.Logger;
  */
 public class HeaderPanel extends AbstractConfigGui implements ActionListener
 {
+    private static final long serialVersionUID = 240L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final String ADD_COMMAND = "Add"; // $NON-NLS-1$
@@ -266,6 +268,8 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
     }
 
     private static class InnerTableModel extends AbstractTableModel {
+        private static final long serialVersionUID = 240L;
+
         private HeaderManager manager;
 
         public InnerTableModel(HeaderManager man) {

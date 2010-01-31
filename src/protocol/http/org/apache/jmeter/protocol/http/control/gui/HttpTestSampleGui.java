@@ -42,6 +42,8 @@ import org.apache.jorphan.gui.JLabeledTextField;
  *
  */
 public class HttpTestSampleGui extends AbstractSamplerGui {
+    private static final long serialVersionUID = 240L;
+
     private MultipartUrlConfigGui urlConfigGui;
 
     private JCheckBox getImages;

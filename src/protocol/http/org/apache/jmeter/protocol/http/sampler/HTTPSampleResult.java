@@ -30,6 +30,8 @@ import org.apache.jmeter.samplers.SampleResult;
  */
 public class HTTPSampleResult extends SampleResult {
 
+    private static final long serialVersionUID = 240L;
+
     private String cookies = ""; // never null
 
     private String method;

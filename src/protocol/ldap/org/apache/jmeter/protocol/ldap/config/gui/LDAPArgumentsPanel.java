@@ -51,6 +51,9 @@ import org.apache.jorphan.reflect.Functor;
  */
 
 public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListener {
+
+    private static final long serialVersionUID = 240L;
+
     /** Logging. */
     //private static final Logger log = LoggingManager.getLoggerForClass();
 

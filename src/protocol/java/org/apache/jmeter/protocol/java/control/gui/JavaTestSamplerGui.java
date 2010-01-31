@@ -32,6 +32,8 @@ import org.apache.jmeter.testelement.TestElement;
  *
  */
 public class JavaTestSamplerGui extends AbstractSamplerGui {
+    private static final long serialVersionUID = 240L;
+
     /** Panel containing the configuration options. */
     private JavaConfigGui javaPanel = null;
 

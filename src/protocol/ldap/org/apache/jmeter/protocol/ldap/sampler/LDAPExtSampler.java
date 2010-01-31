@@ -63,6 +63,8 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final long serialVersionUID = 240L;
+
     /*
      * The following strings are used in the test plan, and the values must not be changed
      * if test plans are to be upwardly compatible.

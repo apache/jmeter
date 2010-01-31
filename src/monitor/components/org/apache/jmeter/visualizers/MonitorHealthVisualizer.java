@@ -45,6 +45,8 @@ import org.apache.log.Logger;
 public class MonitorHealthVisualizer extends AbstractVisualizer implements ImageVisualizer, ItemListener,
         GraphListener, Clearable {
 
+    private static final long serialVersionUID = 240L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final String CONNECTOR_PREFIX = "connector.prefix"; // $NON-NLS-1$

@@ -363,6 +363,8 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
         if (null == preparedStatementMap ) {
             // MRU PreparedStatements cache.
             preparedStatementMap = new LinkedHashMap<String, PreparedStatement>(MAX_ENTRIES) {
+                private static final long serialVersionUID = 240L;
+
                 @Override
                 protected boolean removeEldestEntry(Map.Entry<String, PreparedStatement> arg0) {
                     final int theSize = size();

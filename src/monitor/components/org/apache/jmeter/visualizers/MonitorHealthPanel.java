@@ -36,6 +36,8 @@ import org.apache.jmeter.samplers.Clearable;
  * only uses the most current information to show the status.
  */
 public class MonitorHealthPanel extends JPanel implements MonitorListener, Clearable {
+    private static final long serialVersionUID = 240L;
+
     private final HashMap<String, ServerPanel> serverPanelMap = new HashMap<String, ServerPanel>();
 
     private JPanel servers = null;
