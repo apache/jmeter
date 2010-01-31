@@ -39,6 +39,8 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  */
 public class UniformRandomTimerGui extends AbstractTimerGui {
 
+    private static final long serialVersionUID = 240L;
+
     // TODO - are these gui item names needed?
     private static final String DELAY_FIELD = "Delay Field";
 

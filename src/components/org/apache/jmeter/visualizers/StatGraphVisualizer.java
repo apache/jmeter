@@ -72,8 +72,9 @@ import org.apache.log.Logger;
  * you!
  *
  */
-public class StatGraphVisualizer extends AbstractVisualizer implements Clearable,
-ActionListener {
+public class StatGraphVisualizer extends AbstractVisualizer implements Clearable, ActionListener {
+    private static final long serialVersionUID = 240L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private final String[] COLUMNS = { JMeterUtils.getResString("sampler_label"), //$NON-NLS-1$

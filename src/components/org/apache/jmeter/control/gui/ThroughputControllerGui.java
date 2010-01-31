@@ -36,6 +36,8 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
 public class ThroughputControllerGui extends AbstractControllerGui {
+    private static final long serialVersionUID = 240L;
+
     private JComboBox styleBox;
 
     private int style;

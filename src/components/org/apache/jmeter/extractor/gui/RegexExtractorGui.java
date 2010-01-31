@@ -40,6 +40,8 @@ import org.apache.jorphan.gui.JLabeledTextField;
  * Regular Expression Extractor Post-Processor GUI
  */
 public class RegexExtractorGui extends AbstractPostProcessorGui {
+    private static final long serialVersionUID = 240L;
+
     private JLabeledTextField regexField;
 
     private JLabeledTextField templateField;

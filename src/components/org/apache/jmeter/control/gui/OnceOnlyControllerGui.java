@@ -23,6 +23,8 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
 public class OnceOnlyControllerGui extends AbstractControllerGui {
+    private static final long serialVersionUID = 240L;
+
     public OnceOnlyControllerGui() {
         init();
     }

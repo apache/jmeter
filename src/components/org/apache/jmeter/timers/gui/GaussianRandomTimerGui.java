@@ -41,6 +41,8 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  */
 public class GaussianRandomTimerGui extends AbstractTimerGui {
 
+    private static final long serialVersionUID = 240L;
+
     private static final String DELAY_FIELD = "Delay Field";
 
     private static final String RANGE_FIELD = "Range Field";

@@ -31,6 +31,8 @@ import org.apache.jmeter.util.JMeterUtils;
  * 
  */
 public class DurationAssertion extends AbstractScopedAssertion implements Serializable, Assertion {
+    private static final long serialVersionUID = 240L;
+
     /** Key for storing assertion-informations in the jmx-file. */
     public static final String DURATION_KEY = "DurationAssertion.duration"; // $NON-NLS-1$
 

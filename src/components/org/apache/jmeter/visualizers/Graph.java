@@ -39,6 +39,8 @@ import org.apache.log.Logger;
  *
  */
 public class Graph extends JComponent implements Scrollable, Clearable {
+    private static final long serialVersionUID = 240L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private boolean wantData = true;

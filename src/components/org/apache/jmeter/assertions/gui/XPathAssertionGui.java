@@ -30,6 +30,8 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 
 public class XPathAssertionGui extends AbstractAssertionGui {
 
+    private static final long serialVersionUID = 240L;
+
     private XPathPanel xpath;
 
     private XMLConfPanel xml;

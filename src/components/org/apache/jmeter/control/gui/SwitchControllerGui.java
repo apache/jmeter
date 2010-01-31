@@ -29,6 +29,8 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
 public class SwitchControllerGui extends AbstractControllerGui {
+    private static final long serialVersionUID = 240L;
+
     private static final String SWITCH_LABEL = "switch_controller_label"; // $NON-NLS-1$
 
     private JTextField switchValue;

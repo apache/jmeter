@@ -37,6 +37,8 @@ import org.apache.log.Logger;
 public class GraphAccumModel implements Clearable, Serializable {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final long serialVersionUID = 240L;
+
     private String name;
 
     private final List<SampleResult> samples;
