@@ -20,8 +20,8 @@ package org.apache.jmeter.testelement;
 
 /**
  * <p>
- * Super-class for all TestElements that can be applied to main sample, sub-samples or both.
- * Test elements can use the 
+ * Super-class for TestElements that can be applied to main sample, sub-samples or both.
+ * [Assertions use a different class because they use a different value for the {@link #SCOPE} constant]
  * </p>
  * 
  * <p>
@@ -38,10 +38,12 @@ public abstract class AbstractScopedTestElement extends AbstractTestElement {
 
     private static final long serialVersionUID = 240L;
 
-    private static final String SCOPE = "Sample.scope";
-    private static final String SCOPE_PARENT = "parent";
-    private static final String SCOPE_CHILDREN = "children";
-    private static final String SCOPE_ALL = "all";
+    //+ JMX attributes - do not change
+    private static final String SCOPE = "Sample.scope"; // $NON-NLS-1$
+    private static final String SCOPE_PARENT = "parent"; // $NON-NLS-1$
+    private static final String SCOPE_CHILDREN = "children"; // $NON-NLS-1$
+    private static final String SCOPE_ALL = "all"; // $NON-NLS-1$
+    //- JMX
 
     /**
      * Get the scope setting
@@ -77,7 +79,7 @@ public abstract class AbstractScopedTestElement extends AbstractTestElement {
      * @param scope
      * @return if the assertion is to be applied to the all samples.
      */
-    protected boolean isScopeAll(String scope) {
+    public boolean isScopeAll(String scope) {
         return scope.equals(SCOPE_ALL);
     }
 
