@@ -68,6 +68,8 @@ import org.apache.log.Logger;
  */
 public class ReportMainFrame extends JFrame implements TestListener, Remoteable {
 
+    private static final long serialVersionUID = 240L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     // The default title for the Menu bar

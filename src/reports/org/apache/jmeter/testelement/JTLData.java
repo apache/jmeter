@@ -40,6 +40,8 @@ import org.apache.jmeter.visualizers.SamplingStatCalculator;
  */
 public class JTLData implements Serializable, DataSet {
 
+    private static final long serialVersionUID = 240L;
+
     private final HashMap<String, SamplingStatCalculator> data = new HashMap<String, SamplingStatCalculator>();
     private String jtl_file = null;
     private long startTimestamp = 0;

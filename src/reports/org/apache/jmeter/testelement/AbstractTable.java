@@ -31,6 +31,8 @@ public abstract class AbstractTable extends AbstractTestElement
     implements ReportTable
 {
 
+    private static final long serialVersionUID = 240L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     public static final String REPORT_TABLE_MEAN = "ReportTable.Mean";

@@ -25,6 +25,8 @@ import org.apache.jorphan.collections.HashTree;
 public class StandardReportEngine implements Runnable, Serializable,
         ReportEngine {
 
+    private static final long serialVersionUID = 240L;
+
     /**
      *
      */

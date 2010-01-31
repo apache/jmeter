@@ -35,6 +35,8 @@ import org.jCharts.properties.PointChartProperties;
 
 public class LineChart extends AbstractChart {
 
+    private static final long serialVersionUID = 240L;
+
     private static final String URL_DELIM = ","; //$NON-NLS-1$
     private static final String REPORT_CHART_URLS = "ReportChart.chart.urls"; //$NON-NLS-1$
     private static final Shape[] SHAPE_ARRAY = {PointChartProperties.SHAPE_CIRCLE,
