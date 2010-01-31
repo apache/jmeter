@@ -48,6 +48,8 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class ReportGui extends AbstractReportGui {
 
+    private static final long serialVersionUID = 240L;
+
     /** A panel to contain comments on the test plan. */
     private JTextField commentPanel;
 

@@ -29,6 +29,8 @@ import org.apache.jmeter.testelement.TestElement;
  */
 public abstract class AbstractReportWriter extends AbstractTestElement implements ReportWriter {
 
+    private static final long serialVersionUID = 240L;
+
     public static final String TARGET_DIRECTORY = "ReportWriter.target.directory";
 
     /**
