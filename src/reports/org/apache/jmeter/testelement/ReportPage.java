@@ -27,6 +27,8 @@ import org.apache.jmeter.testelement.AbstractTestElement;
  * 
  */
 public class ReportPage extends AbstractTestElement implements Serializable {
+    private static final long serialVersionUID = 240L;
+
 //    private static final Logger log = LoggingManager.getLoggerForClass();
 
     public static final String REPORT_PAGE_TITLE = "ReportPage.title";

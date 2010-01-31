@@ -35,6 +35,8 @@ import org.apache.jorphan.gui.JLabeledTextField;
 
 public class ReportPageGui extends AbstractReportGui {
 
+    private static final long serialVersionUID = 240L;
+
     private JLabeledTextField pageTitle = new JLabeledTextField(JMeterUtils.getResString("report_page_title"));
 
     private JCheckBox makeIndex = new JCheckBox(JMeterUtils.getResString("report_page_index"));

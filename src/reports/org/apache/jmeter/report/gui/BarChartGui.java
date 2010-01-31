@@ -38,6 +38,8 @@ import org.apache.jorphan.gui.JLabeledTextField;
 
 public class BarChartGui extends AbstractReportGui {
 
+    private static final long serialVersionUID = 240L;
+
     private JLabeledChoice xAxisLabel = new JLabeledChoice();
 
     private JLabeledTextField yAxisLabel =

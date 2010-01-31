@@ -21,6 +21,8 @@ import java.util.List;
 
 public class Table extends AbstractTable {
 
+    private static final long serialVersionUID = 240L;
+
     public Table() {
         super();
     }
