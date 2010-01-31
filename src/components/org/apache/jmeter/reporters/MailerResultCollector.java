@@ -25,6 +25,8 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
 
 
 public class MailerResultCollector extends ResultCollector implements Serializable {
+    private static final long serialVersionUID = 240L;
+
     public static final String MAILER_MODEL = "MailerResultCollector.mailer_model"; //$NON-NLS-1$
 
     public MailerResultCollector() {

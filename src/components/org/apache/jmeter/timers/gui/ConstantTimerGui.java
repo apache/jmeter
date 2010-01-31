@@ -34,6 +34,8 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  *
  */
 public class ConstantTimerGui extends AbstractTimerGui {
+    private static final long serialVersionUID = 240L;
+
     /**
      * The default value for the delay.
      */

@@ -48,7 +48,9 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
  */
 public class DistributionGraphVisualizer extends AbstractVisualizer implements ImageVisualizer, GraphListener,
         Clearable {
-    SamplingStatCalculator model;
+    private static final long serialVersionUID = 240L;
+
+    private SamplingStatCalculator model;
 
     private JPanel graphPanel = null;
 

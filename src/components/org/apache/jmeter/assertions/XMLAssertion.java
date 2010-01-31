@@ -36,6 +36,8 @@ import org.jdom.input.SAXBuilder;
 public class XMLAssertion extends AbstractTestElement implements Serializable, Assertion {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final long serialVersionUID = 240L;
+
     private static final char NEW_LINE = '\n'; // $NON-NLS-1$
 
     // one builder for all requests in a thread

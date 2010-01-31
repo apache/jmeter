@@ -22,7 +22,9 @@ import java.io.Serializable;
 import java.util.Random;
 
 public class RandomController extends InterleaveControl implements Serializable {
-    static final Random rand = new Random();
+    private static final long serialVersionUID = 240L;
+
+    private static final Random RAND = new Random();
 
     public RandomController() {
     }
@@ -33,7 +35,7 @@ public class RandomController extends InterleaveControl implements Serializable 
     @Override
     protected void resetCurrent() {
         if (getSubControllers().size() > 0) {
-            current = rand.nextInt(this.getSubControllers().size());
+            current = RAND.nextInt(this.getSubControllers().size());
         } else {
             current = 0;
         }
@@ -45,7 +47,7 @@ public class RandomController extends InterleaveControl implements Serializable 
     @Override
     protected void incrementCurrent() {
         super.incrementCurrent();
-        current = rand.nextInt(this.getSubControllers().size());
+        current = RAND.nextInt(this.getSubControllers().size());
     }
 
 }

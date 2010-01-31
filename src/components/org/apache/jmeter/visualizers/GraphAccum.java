@@ -46,6 +46,8 @@ import org.apache.log.Logger;
  */
 public class GraphAccum extends JComponent implements Scrollable, GraphAccumListener {
 
+    private static final long serialVersionUID = 240L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private GraphAccumModel model;

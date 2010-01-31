@@ -36,6 +36,8 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 
 public class AssertionVisualizer extends AbstractVisualizer implements Clearable {
 
+    private static final long serialVersionUID = 240L;
+
     private JTextArea textArea;
 
     public AssertionVisualizer() {

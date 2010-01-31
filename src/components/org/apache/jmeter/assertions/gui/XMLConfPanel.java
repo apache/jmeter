@@ -31,6 +31,8 @@ import org.apache.jmeter.extractor.XPathExtractor;
 import org.apache.jmeter.util.JMeterUtils;
 
 public class XMLConfPanel extends JPanel {
+    private static final long serialVersionUID = 240L;
+
     private JCheckBox validate, tolerant, whitespace, namespace;
 
     private JCheckBox quiet; // Should Tidy be quiet?

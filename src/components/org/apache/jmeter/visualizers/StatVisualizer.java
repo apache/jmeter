@@ -67,6 +67,8 @@ import org.apache.log.Logger;
  */
 public class StatVisualizer extends AbstractVisualizer implements Clearable, ActionListener {
 
+    private static final long serialVersionUID = 240L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final String USE_GROUP_NAME = "useGroupName"; //$NON-NLS-1$

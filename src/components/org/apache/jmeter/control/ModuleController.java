@@ -48,6 +48,8 @@ import org.apache.jorphan.collections.ListedHashTree;
  */
 public class ModuleController extends GenericController implements ReplaceableController {
 
+    private static final long serialVersionUID = 240L;
+
     private static final String NODE_PATH = "ModuleController.node_path";// $NON-NLS-1$
 
     private JMeterTreeNode selectedNode = null;

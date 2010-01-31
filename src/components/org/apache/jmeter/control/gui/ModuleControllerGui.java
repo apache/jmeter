@@ -50,6 +50,8 @@ public class ModuleControllerGui extends AbstractControllerGui
 // implements UnsharedComponent
 {
 
+    private static final long serialVersionUID = 240L;
+
     private JMeterTreeNode selected = null;
 
     private final JComboBox nodes;

@@ -26,6 +26,8 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
 public class InterleaveControlGui extends AbstractControllerGui {
+    private static final long serialVersionUID = 240L;
+
     private JCheckBox style;
 
     public InterleaveControlGui() {

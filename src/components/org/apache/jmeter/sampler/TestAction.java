@@ -36,6 +36,8 @@ public class TestAction extends AbstractSampler {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final long serialVersionUID = 240L;
+
     // Actions
     public final static int STOP = 0;
     public final static int PAUSE = 1;

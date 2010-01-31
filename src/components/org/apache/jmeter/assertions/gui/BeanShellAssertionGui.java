@@ -35,6 +35,8 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class BeanShellAssertionGui extends AbstractAssertionGui {
 
+    private static final long serialVersionUID = 240L;
+
     private JCheckBox resetInterpreter;// reset the bsh.Interpreter before each execution
 
     private JTextField filename;// script file name (if present)

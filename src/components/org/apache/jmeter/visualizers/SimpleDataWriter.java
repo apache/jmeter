@@ -30,6 +30,8 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
  ******************************************************************************/
 
 public class SimpleDataWriter extends AbstractVisualizer {
+    private static final long serialVersionUID = 240L;
+
     /***************************************************************************
      * Create the SimpleDataWriter.
      **************************************************************************/
