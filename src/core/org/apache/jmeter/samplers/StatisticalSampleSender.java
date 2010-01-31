@@ -34,6 +34,8 @@ import java.util.Map;
  *
  */
 public class StatisticalSampleSender implements SampleSender, Serializable {
+    private static final long serialVersionUID = 240L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final int DEFAULT_NUM_SAMPLE_THRESHOLD = 100;

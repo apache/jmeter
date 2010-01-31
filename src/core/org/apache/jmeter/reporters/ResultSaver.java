@@ -45,6 +45,8 @@ import org.apache.log.Logger;
 public class ResultSaver extends AbstractTestElement implements Serializable, SampleListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final long serialVersionUID = 240L;
+
     // File name sequence number
     //@GuardedBy("this")
     private static long sequenceNumber = 0;

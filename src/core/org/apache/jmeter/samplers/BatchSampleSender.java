@@ -34,6 +34,8 @@ import java.io.Serializable;
 public class BatchSampleSender implements SampleSender, Serializable {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final long serialVersionUID = 240L;
+
     private static final int DEFAULT_NUM_SAMPLE_THRESHOLD = 100;
 
     private static final long DEFAULT_TIME_THRESHOLD = 60000L;

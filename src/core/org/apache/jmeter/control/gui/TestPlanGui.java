@@ -46,6 +46,8 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class TestPlanGui extends AbstractJMeterGuiComponent {
 
+    private static final long serialVersionUID = 240L;
+
     /**
      * A checkbox allowing the user to specify whether or not JMeter should do
      * functional testing.

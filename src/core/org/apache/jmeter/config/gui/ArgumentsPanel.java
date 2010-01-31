@@ -53,6 +53,8 @@ import org.apache.jorphan.reflect.Functor;
  */
 public class ArgumentsPanel extends AbstractConfigGui implements ActionListener {
 
+    private static final long serialVersionUID = 240L;
+
     /** The title label for this component. */
     private JLabel tableLabel;
 

@@ -28,6 +28,8 @@ import org.apache.jmeter.gui.util.MenuFactory;
 
 public abstract class AbstractPreProcessorGui extends AbstractJMeterGuiComponent {
 
+    private static final long serialVersionUID = 240L;
+
     public JPopupMenu createPopupMenu() {
         return MenuFactory.getDefaultExtractorMenu();
     }

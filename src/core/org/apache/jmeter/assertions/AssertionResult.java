@@ -26,6 +26,8 @@ import java.io.Serializable;
 public class AssertionResult implements Serializable {
     public static final String RESPONSE_WAS_NULL = "Response was null"; // $NON-NLS-1$
 
+    private static final long serialVersionUID = 240L;
+
     /** Name of the assertion. */
     private final String name;
 

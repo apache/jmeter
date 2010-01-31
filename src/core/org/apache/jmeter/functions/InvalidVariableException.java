@@ -19,6 +19,8 @@
 package org.apache.jmeter.functions;
 
 public class InvalidVariableException extends Exception {
+    private static final long serialVersionUID = 240L;
+
     public InvalidVariableException() {
     }
 

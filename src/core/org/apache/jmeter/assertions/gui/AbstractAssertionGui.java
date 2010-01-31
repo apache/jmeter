@@ -40,6 +40,8 @@ import org.apache.jmeter.util.ScopePanel;
  */
 public abstract class AbstractAssertionGui extends AbstractJMeterGuiComponent {
 
+    private static final long serialVersionUID = 240L;
+
     private ScopePanel assertionScopePanel;
     
     /**

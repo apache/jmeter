@@ -36,6 +36,8 @@ package org.apache.jmeter.testelement;
  */
 public abstract class AbstractScopedAssertion extends AbstractTestElement {
 
+    private static final long serialVersionUID = 240L;
+
     private static final String SCOPE = "Assertion.scope";
     private static final String SCOPE_PARENT = "parent";
     private static final String SCOPE_CHILDREN = "children";
