@@ -28,6 +28,8 @@ import javax.swing.tree.DefaultTreeCellRenderer;
  * Class to render the test tree - sets the enabled/disabled versions of the icons
  */
 public class JMeterCellRenderer extends DefaultTreeCellRenderer {
+    private static final long serialVersionUID = 240L;
+
     public JMeterCellRenderer() {
     }
 

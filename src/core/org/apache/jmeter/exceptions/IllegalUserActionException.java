@@ -21,6 +21,8 @@ package org.apache.jmeter.exceptions;
 /**
  */
 public class IllegalUserActionException extends Exception {
+    private static final long serialVersionUID = 240L;
+
     /**
      * @deprecated - use IllegalUserActionException(String)
      */

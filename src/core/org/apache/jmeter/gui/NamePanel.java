@@ -36,6 +36,8 @@ import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
 
 public class NamePanel extends JPanel implements JMeterGUIComponent {
+    private static final long serialVersionUID = 240L;
+
     /** A text field containing the name. */
     private JTextField nameField = new JTextField(15);
 

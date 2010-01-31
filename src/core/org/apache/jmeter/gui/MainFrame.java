@@ -74,6 +74,8 @@ import org.apache.jorphan.gui.ComponentUtil;
  */
 public class MainFrame extends JFrame implements TestListener, Remoteable {
 
+    private static final long serialVersionUID = 240L;
+
     // This is used to keep track of local (non-remote) tests
     // The name is chosen to be an unlikely host-name
     private static final String LOCAL = "*local*"; // $NON-NLS-1$
@@ -469,6 +471,8 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
      */
     private JTree makeTree(TreeModel treeModel, JMeterTreeListener treeListener) {
         JTree treevar = new JTree(treeModel) {
+            private static final long serialVersionUID = 240L;
+
             @Override
             public String getToolTipText(MouseEvent event) {
                 TreePath path = this.getPathForLocation(event.getX(), event.getY());

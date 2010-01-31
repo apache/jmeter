@@ -29,6 +29,8 @@ import org.apache.jmeter.testelement.OnErrorTestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
 public class OnErrorPanel extends JPanel {
+    private static final long serialVersionUID = 240L;
+
     // Sampler error action buttons
     private JRadioButton continueBox;
 

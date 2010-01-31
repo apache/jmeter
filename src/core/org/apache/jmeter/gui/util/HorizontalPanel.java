@@ -31,6 +31,8 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 public class HorizontalPanel extends JPanel {
+    private static final long serialVersionUID = 240L;
+
     private final Box subPanel = Box.createHorizontalBox();
 
     private final float verticalAlign;

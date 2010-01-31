@@ -21,6 +21,8 @@ package org.apache.jmeter.gui.util;
 import java.awt.Color;
 
 public class JMeterColor extends Color {
+    private static final long serialVersionUID = 240L;
+
     public final static Color dark_green = new JMeterColor(0F, .5F, 0F);
 
     public final static Color LAVENDER = new JMeterColor(206F / 255F, 207F / 255F, 1F);

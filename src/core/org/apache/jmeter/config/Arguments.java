@@ -33,6 +33,8 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
  *
  */
 public class Arguments extends ConfigTestElement implements Serializable {
+    private static final long serialVersionUID = 240L;
+
     /** The name of the property used to store the arguments. */
     public static final String ARGUMENTS = "Arguments.arguments"; //$NON-NLS-1$
 

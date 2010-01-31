@@ -33,6 +33,8 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class HeaderAsPropertyRenderer extends DefaultTableCellRenderer {
     
+    private static final long serialVersionUID = 240L;
+
     public HeaderAsPropertyRenderer() {
         super();
     }

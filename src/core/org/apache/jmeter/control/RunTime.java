@@ -26,6 +26,8 @@ import org.apache.jmeter.testelement.property.StringProperty;
 
 public class RunTime extends GenericController implements Serializable {
 
+    private static final long serialVersionUID = 240L;
+
     private final static String SECONDS = "RunTime.seconds"; //$NON-NLS-1$
 
     private volatile long startTime = 0;

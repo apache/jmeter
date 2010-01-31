@@ -39,6 +39,8 @@ public class RemoteListenerWrapper extends AbstractTestElement implements Sample
         NoThreadClone {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final long serialVersionUID = 240L;
+
     private final RemoteSampleListener listener;
 
     private final SampleSender sender;

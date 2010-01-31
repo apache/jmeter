@@ -27,6 +27,8 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 public abstract class AbstractProperty implements JMeterProperty {
+    private static final long serialVersionUID = 240L;
+
     //TODO consider using private logs for each derived class
     protected static final Logger log = LoggingManager.getLoggerForClass();
 

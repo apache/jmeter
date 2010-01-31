@@ -104,6 +104,8 @@ public abstract class AbstractVisualizer
     extends AbstractListenerGui
     implements Visualizer, ChangeListener, UnsharedComponent, Clearable
     {
+    private static final long serialVersionUID = 240L;
+
     /** Logging. */
     private static final Logger log = LoggingManager.getLoggerForClass();
 

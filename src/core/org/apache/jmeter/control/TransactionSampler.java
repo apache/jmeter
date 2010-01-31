@@ -33,7 +33,9 @@ import org.apache.jmeter.samplers.Sampler;
  * (not exposed a a GUI class, as it is only used internally)
  */
 public class TransactionSampler extends AbstractSampler {
-  private boolean transactionDone = false;
+    private static final long serialVersionUID = 240L;
+
+    private boolean transactionDone = false;
 
     private TransactionController transactionController;
 

@@ -26,6 +26,8 @@ import java.util.Locale;
  */
 public class LocaleChangeEvent extends EventObject {
 
+    private static final long serialVersionUID = 240L;
+
     private Locale locale;
 
     public LocaleChangeEvent(Object source) {
