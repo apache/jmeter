@@ -20,8 +20,6 @@ package org.apache.jmeter.extractor;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.lang.StringEscapeUtils;
@@ -41,7 +39,6 @@ import org.apache.oro.text.regex.PatternMatcher;
 import org.apache.oro.text.regex.PatternMatcherInput;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
-import org.apache.oro.text.regex.Util;
 
 // @see org.apache.jmeter.extractor.TestRegexExtractor for unit tests
 
@@ -83,7 +80,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
 
     private static final String UNDERSCORE = "_";  // $NON-NLS-1$
 
-    private Object[] template = null;
+    private List<Object> template;
 
     /**
      * Parses the response data using regular expressions and saving the results
@@ -287,14 +284,14 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
 
     private String generateResult(MatchResult match) {
         StringBuilder result = new StringBuilder();
-        for (int a = 0; a < template.length; a++) {
+        for (Object obj : template) {
             if (log.isDebugEnabled()) {
-                log.debug("RegexExtractor: Template piece #" + a + " = " + template[a] + " " +template[a].getClass().getSimpleName());
+                log.debug("RegexExtractor: Template piece " + obj + " (" + obj.getClass().getSimpleName() + ")");
             }
-            if (template[a] instanceof String) {
-                result.append(template[a]);
+            if (obj instanceof Integer) {
+                result.append(match.group(((Integer) obj).intValue()));
             } else {
-                result.append(match.group(((Integer) template[a]).intValue()));
+                result.append(obj);
             }
         }
         if (log.isDebugEnabled()) {
@@ -307,9 +304,8 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         if (template != null) {
             return;
         }
-        List<String> pieces = new ArrayList<String>();
         // Contains Strings and Integers
-        List<Object> combined = new LinkedList<Object>();
+        List<Object> combined = new ArrayList<Object>();
         String rawTemplate = getTemplate();
         PatternMatcher matcher = JMeterUtils.getMatcher();
         Pattern templatePattern = JMeterUtils.getPatternCache().getPattern("\\$(\\d+)\\$"  // $NON-NLS-1$
@@ -319,55 +315,29 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
             log.debug("Pattern = " + templatePattern.getPattern());
             log.debug("template = " + rawTemplate);
         }
-        Util.split(pieces, matcher, templatePattern, rawTemplate);
-        PatternMatcherInput input = new PatternMatcherInput(rawTemplate);
-        boolean startsWith = isFirstElementGroup(rawTemplate);
-        if (log.isDebugEnabled()) {
-            log.debug("template split into " + pieces.size() + " pieces, starts with = " + startsWith);
+        int beginOffset = 0;
+        MatchResult currentResult;
+        PatternMatcherInput pinput = new PatternMatcherInput(rawTemplate);
+        while(matcher.contains(pinput, templatePattern)) {
+            currentResult = matcher.getMatch();
+            final int beginMatch = currentResult.beginOffset(0);
+            if (beginMatch > beginOffset) { // string is not empty
+                combined.add(rawTemplate.substring(beginOffset, beginMatch));
+            }
+            combined.add(new Integer(currentResult.group(1)));// add match as Integer
+            beginOffset = currentResult.endOffset(0);
         }
-        if (startsWith) {
-            String dropped = pieces.remove(0);// Remove initial empty entry
-            if (log.isDebugEnabled()) {
-                log.debug("Dropped leading: '"+dropped+"'");
-            }            
+        
+        if (beginOffset < rawTemplate.length()) { // trailing string is not empty
+            combined.add(rawTemplate.substring(beginOffset, rawTemplate.length()));
         }
-        Iterator<String> iter = pieces.iterator();
-        while (iter.hasNext()) {
-            final String next = iter.next();
-            boolean matchExists = matcher.contains(input, templatePattern);
-            if (startsWith) {
-                if (matchExists) {
-                    combined.add(new Integer(matcher.getMatch().group(1)));
-                }
-                if (next.length() > 0) {
-                    combined.add(next);
-                }
-            } else {
-                if (next.length() > 0) {
-                    combined.add(next);
-                }
-                if (matchExists) {
-                    combined.add(new Integer(matcher.getMatch().group(1)));
-                }
+        if (log.isDebugEnabled()){
+            log.debug("Template item count: "+combined.size());
+            for(Object o : combined){
+                log.debug(o.getClass().getSimpleName()+" '"+o.toString()+"'");
             }
         }
-        if (matcher.contains(input, templatePattern)) {
-            log.debug("Template does end with template pattern");
-            combined.add(new Integer(matcher.getMatch().group(1)));
-        }
-        template = combined.toArray();
-    }
-
-    private boolean isFirstElementGroup(String rawData) {
-        try {
-            Pattern pattern = JMeterUtils.getPatternCache().getPattern("^\\$\\d+\\$" // $NON-NLS-1$
-                    , Perl5Compiler.READ_ONLY_MASK
-                    & Perl5Compiler.SINGLELINE_MASK);
-            return (JMeterUtils.getMatcher()).contains(rawData, pattern);
-        } catch (RuntimeException e) {
-            log.error("", e);
-            return false;
-        }
+        template = combined;
     }
 
     /**
