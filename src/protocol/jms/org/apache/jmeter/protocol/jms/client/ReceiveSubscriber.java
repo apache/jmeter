@@ -59,6 +59,7 @@ public class ReceiveSubscriber implements Runnable {
     //@GuardedBy("this")
     private int counter;
 
+    @SuppressWarnings("unused")
     private int loop = 1; // TODO never read
 
     //@GuardedBy("this")
