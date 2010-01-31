@@ -37,6 +37,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 public class JLabeledChoice extends JPanel implements JLabeledField {
+    private static final long serialVersionUID = 240L;
+
     private static final Object[] EMPTY_OBJECT_ARRAY = new Object [0];
 
     private final JLabel mLabel = new JLabel();

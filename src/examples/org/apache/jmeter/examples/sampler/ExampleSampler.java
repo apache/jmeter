@@ -40,6 +40,8 @@ import org.apache.log.Logger;
  */
 public class ExampleSampler extends AbstractSampler {
 
+    private static final long serialVersionUID = 240L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     // The name of the property used to hold our data

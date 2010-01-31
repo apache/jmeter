@@ -49,6 +49,8 @@ import java.util.Set;
  */
 public class HashTree implements Serializable, Map, Cloneable {
 
+    private static final long serialVersionUID = 240L;
+
     // GetLoggerForClass() uses ClassContext, which
     // causes a Security violation in RemoteJMeterImpl
     // so we use getLoggerFor() instead

@@ -24,6 +24,8 @@ import javax.swing.JTable;
 
 public class JTreeTable extends JTable {
 
+    private static final long serialVersionUID = 240L;
+
     /**
      * The default implementation will use DefaultTreeTableModel
      */

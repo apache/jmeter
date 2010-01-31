@@ -26,6 +26,8 @@ import javax.swing.JTextField;
  */
 public class JLabeledPasswordField extends JLabeledTextField {
 
+    private static final long serialVersionUID = 240L;
+
     public JLabeledPasswordField() {
         super();
     }

@@ -43,6 +43,8 @@ import org.apache.log.Logger;
  * @version $Revision$
  */
 public class TextFile extends File {
+    private static final long serialVersionUID = 240L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     /**

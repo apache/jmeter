@@ -32,6 +32,8 @@ package org.apache.jorphan.gui;
  */
 public class RateRenderer extends NumberRenderer{
 
+    private static final long serialVersionUID = 240L;
+
     public RateRenderer(String format) {
         super(format);
     }

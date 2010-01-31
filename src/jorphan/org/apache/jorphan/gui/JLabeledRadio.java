@@ -42,6 +42,8 @@ import javax.swing.event.ChangeListener;
  */
 public class JLabeledRadio extends JPanel implements JLabeledField, ActionListener {
 
+    private static final long serialVersionUID = 240L;
+
     private final JLabel mLabel = new JLabel();
 
     private final ButtonGroup bGroup = new ButtonGroup();

@@ -25,6 +25,8 @@ import org.apache.jorphan.reflect.Functor;
 
 public class DefaultTreeTableModel extends AbstractTreeTableModel {
 
+    private static final long serialVersionUID = 240L;
+
     public DefaultTreeTableModel() {
         this(new DefaultMutableTreeNode());
     }

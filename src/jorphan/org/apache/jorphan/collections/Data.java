@@ -44,6 +44,8 @@ import org.apache.log.Logger;
 public class Data implements Serializable {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final long serialVersionUID = 240L;
+
     private final Map<String, List<Object>> data;
 
     private ArrayList<String> header;

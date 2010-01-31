@@ -42,6 +42,8 @@ import javax.swing.text.Document;
  *
  */
 public class JLabeledTextArea extends JPanel implements JLabeledField, FocusListener {
+    private static final long serialVersionUID = 240L;
+
     private JLabel mLabel;
 
     private JTextArea mTextArea;

@@ -37,6 +37,8 @@ import java.io.Serializable;
  * @version $Revision$
  */
 public class VerticalLayout implements LayoutManager, Serializable {
+    private static final long serialVersionUID = 240L;
+
     /**
      * The horizontal alignment constant that designates centering. Also used to
      * designate center anchoring.

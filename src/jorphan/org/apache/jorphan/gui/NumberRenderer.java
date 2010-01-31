@@ -28,6 +28,8 @@ import javax.swing.table.DefaultTableCellRenderer;
  * Renders numbers in a JTable with a specified format
  */
 public class NumberRenderer extends DefaultTableCellRenderer {
+    private static final long serialVersionUID = 240L;
+
     protected final NumberFormat formatter;
 
     public NumberRenderer() {
