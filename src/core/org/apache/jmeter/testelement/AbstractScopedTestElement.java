@@ -18,6 +18,11 @@
 
 package org.apache.jmeter.testelement;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.jmeter.samplers.SampleResult;
+
 /**
  * <p>
  * Super-class for TestElements that can be applied to main sample, sub-samples or both.
@@ -93,5 +98,27 @@ public abstract class AbstractScopedTestElement extends AbstractTestElement {
 
     public void setScopeAll() {
         setProperty(SCOPE, SCOPE_ALL);
+    }
+
+    /**
+     * Generate a list of qualifying sample results,
+     * depending on the scope.
+     * 
+     * @param result current sample
+     * @return list containing the current sample and/or its child samples
+     */
+    protected List<SampleResult> getSampleList(SampleResult result) {
+        List<SampleResult> sampleList = new ArrayList<SampleResult>();
+    
+        String scope = fetchScope();
+        if (isScopeParent(scope) || isScopeAll(scope)) {
+            sampleList.add(result);
+        }
+        if (isScopeChildren(scope) || isScopeAll(scope)) {
+            for (SampleResult subResult : result.getSubResults()) {
+                sampleList.add(subResult);
+            }
+        }
+        return sampleList;
     }
 }
