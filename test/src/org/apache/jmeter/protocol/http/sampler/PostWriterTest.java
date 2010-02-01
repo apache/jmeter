@@ -36,6 +36,7 @@ import junit.framework.TestCase;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
+import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -588,16 +589,9 @@ public class PostWriterTest extends TestCase {
      * 
      * @param httpSampler
      */
-    @SuppressWarnings("deprecation")
     private void setupFilepart(HTTPSampler httpSampler, String fileField, File file, String mimeType) {
-        httpSampler.setFileField(fileField);
-        if(file != null) {
-            httpSampler.setFilename(file.getAbsolutePath());
-        }
-        else {
-            httpSampler.setFilename("");
-        }
-        httpSampler.setMimetype(mimeType);
+        HTTPFileArg[] hfa = {new HTTPFileArg(file == null ? "" : file.getAbsolutePath(), fileField, mimeType)};
+        httpSampler.setHTTPFiles(hfa);
     }
 
     /**
