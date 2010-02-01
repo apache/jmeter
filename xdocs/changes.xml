@@ -178,7 +178,8 @@ In particular, Aggregate Report can now handle large numbers of samples.
 <li>Added JSR223 Assertion</li>
 <li>Added BSF Timer and JSR223 Timer</li>
 <li>Bug 48331 - XpathExtractor does not return XML string representations for a Nodeset</li>
-<li>Bug 48511 - add parent,child,all selection to regex extractor panel</li>
+<li>Bug 48511 - add parent,child,all selection to regex extractor</li>
+<li>Add Sampler scope selection to XPathExtractor</li>
 </ul>
 
 <h3>Functions</h3>

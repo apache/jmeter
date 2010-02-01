@@ -19,6 +19,8 @@
 package org.apache.jmeter.extractor;
 
 
+import java.io.UnsupportedEncodingException;
+
 import junit.framework.TestCase;
 
 import org.apache.jmeter.samplers.SampleResult;
@@ -31,6 +33,8 @@ public class TestXPathExtractor extends TestCase {
 
         private SampleResult result;
 
+        private String data;
+        
         private JMeterVariables vars;
 
         public TestXPathExtractor(String name) {
@@ -42,15 +46,15 @@ public class TestXPathExtractor extends TestCase {
         private final static String VAL_NAME = "value";
         private final static String VAL_NAME_NR = "value_matchNr";
         @Override
-        public void setUp() {
+        public void setUp() throws UnsupportedEncodingException {
             jmctx = JMeterContextService.getContext();
             extractor = new XPathExtractor();
             extractor.setThreadContext(jmctx);// This would be done by the run command
             extractor.setRefName(VAL_NAME);
             extractor.setDefaultValue("Default");
             result = new SampleResult();
-            String data = "<book><preface title='Intro'>zero</preface><page>one</page><page>two</page><empty></empty><a><b></b></a></book>";
-            result.setResponseData(data.getBytes());
+            data = "<book><preface title='Intro'>zero</preface><page>one</page><page>two</page><empty></empty><a><b></b></a></book>";
+            result.setResponseData(data.getBytes("UTF-8"));
             vars = new JMeterVariables();
             jmctx.setVariables(vars);
             jmctx.setPreviousResult(result);
@@ -148,6 +152,56 @@ public class TestXPathExtractor extends TestCase {
             extractor.setXPathQuery("//a");
             extractor.process();
             assertEquals("<a><b/></a>", vars.get(VAL_NAME));
+        }
+
+        public void testScope(){
+            extractor.setXPathQuery("/book/preface");
+            extractor.process();
+            assertEquals("zero", vars.get(VAL_NAME));
+            assertEquals("1", vars.get(VAL_NAME_NR));
+            assertEquals("zero", vars.get(VAL_NAME+"_1"));
+            assertNull(vars.get(VAL_NAME+"_2"));            
+
+            extractor.setScopeChildren(); // There aren't any
+            extractor.process();
+            assertEquals("Default", vars.get(VAL_NAME));
+            assertEquals("0", vars.get(VAL_NAME_NR));
+            assertNull(vars.get(VAL_NAME+"_1"));
+
+            extractor.setScopeAll(); // same as Parent
+            extractor.process();
+            assertEquals("zero", vars.get(VAL_NAME));
+            assertEquals("1", vars.get(VAL_NAME_NR));
+            assertEquals("zero", vars.get(VAL_NAME+"_1"));
+            assertNull(vars.get(VAL_NAME+"_2"));            
+
+            // Try to get data from subresult
+            result.sampleStart(); // Needed for addSubResult()
+            result.sampleEnd();
+            SampleResult subResult = new SampleResult();
+            subResult.sampleStart();
+            subResult.setResponseData(result.getResponseData());
+            subResult.sampleEnd();
+            result.addSubResult(subResult);
+            
+            
+            // Get data from both
+            extractor.setScopeAll();
+            extractor.process();
+            assertEquals("zero", vars.get(VAL_NAME));
+            assertEquals("2", vars.get(VAL_NAME_NR));
+            assertEquals("zero", vars.get(VAL_NAME+"_1"));
+            assertEquals("zero", vars.get(VAL_NAME+"_2"));
+            assertNull(vars.get(VAL_NAME+"_3"));
+
+            // get data from child
+            extractor.setScopeChildren();
+            extractor.process();
+            assertEquals("zero", vars.get(VAL_NAME));
+            assertEquals("1", vars.get(VAL_NAME_NR));
+            assertEquals("zero", vars.get(VAL_NAME+"_1"));
+            assertNull(vars.get(VAL_NAME+"_2"));
+            
         }
 
         public void testInvalidXpath() throws Exception {
