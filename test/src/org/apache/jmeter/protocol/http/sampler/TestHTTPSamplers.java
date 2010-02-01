@@ -221,7 +221,6 @@ public class TestHTTPSamplers extends TestCase {
             assertEquals("http://www.apache.org/index.html", config.getUrl().toString());
         }
         
-        @SuppressWarnings("deprecation")
         public void testFileList(){
             HTTPSamplerBase config = new HTTPNullSampler();
             HTTPFileArg[] arg;
@@ -229,14 +228,12 @@ public class TestHTTPSamplers extends TestCase {
             assertNotNull(arg);
             assertEquals(0,arg.length);
 
-            config.setFileField("");
-            config.setFilename("");
-            config.setMimetype("");
+            config.setHTTPFiles(new HTTPFileArg[]{new HTTPFileArg("","","")});
             arg = config.getHTTPFiles();
             assertNotNull(arg);
             assertEquals(0,arg.length);
             
-            config.setMimetype("text/plain");            
+            config.setHTTPFiles(new HTTPFileArg[]{new HTTPFileArg("","","text/plain")});
             arg = config.getHTTPFiles();
             assertNotNull(arg);
             assertEquals(1,arg.length);
@@ -244,8 +241,7 @@ public class TestHTTPSamplers extends TestCase {
             assertEquals("",arg[0].getPath());
             assertEquals("",arg[0].getParamName());
             
-            config.setFileField("test123.tmp");
-            config.setFilename("/tmp/test123.tmp");
+            config.setHTTPFiles(new HTTPFileArg[]{new HTTPFileArg("/tmp/test123.tmp","test123.tmp","text/plain")});
             arg = config.getHTTPFiles();
             assertNotNull(arg);
             assertEquals(1,arg.length);
@@ -293,44 +289,35 @@ public class TestHTTPSamplers extends TestCase {
             assertEquals(2,arg.length);
      }
 
-    @SuppressWarnings("deprecation")
     public void testSetAndGetFileField() {
         HTTPSamplerBase sampler = new HTTPNullSampler();
-        sampler.setFileField("param");
-        assertEquals("param", sampler.getFileField());
+        sampler.setHTTPFiles(new HTTPFileArg[]{new HTTPFileArg("","param","")});
         HTTPFileArg file = sampler.getHTTPFiles()[0];
         assertEquals("param", file.getParamName());
 
-        sampler.setFileField("param2");
-        assertEquals("param2", sampler.getFileField());
+        sampler.setHTTPFiles(new HTTPFileArg[]{new HTTPFileArg("","param2","")});
         file = sampler.getHTTPFiles()[0];
         assertEquals("param2", file.getParamName());
-    }
+}
 
-    @SuppressWarnings("deprecation")
     public void testSetAndGetFilename() {
         HTTPSamplerBase sampler = new HTTPNullSampler();
-        sampler.setFilename("name");
-        assertEquals("name", sampler.getFilename());
+        sampler.setHTTPFiles(new HTTPFileArg[]{new HTTPFileArg("name","","")});
         HTTPFileArg file = sampler.getHTTPFiles()[0];
         assertEquals("name", file.getPath());
 
-        sampler.setFilename("name2");
-        assertEquals("name2", sampler.getFilename());
+        sampler.setHTTPFiles(new HTTPFileArg[]{new HTTPFileArg("name2","","")});
         file = sampler.getHTTPFiles()[0];
         assertEquals("name2", file.getPath());
     }
 
-    @SuppressWarnings("deprecation")
     public void testSetAndGetMimetype() {
         HTTPSamplerBase sampler = new HTTPNullSampler();
-        sampler.setMimetype("mime");
-        assertEquals("mime", sampler.getMimetype());
+        sampler.setHTTPFiles(new HTTPFileArg[]{new HTTPFileArg("","","mime")});
         HTTPFileArg file = sampler.getHTTPFiles()[0];
         assertEquals("mime", file.getMimeType());
 
-        sampler.setMimetype("mime2");
-        assertEquals("mime2", sampler.getMimetype());
+        sampler.setHTTPFiles(new HTTPFileArg[]{new HTTPFileArg("","","mime2")});
         file = sampler.getHTTPFiles()[0];
         assertEquals("mime2", file.getMimeType());
     }
