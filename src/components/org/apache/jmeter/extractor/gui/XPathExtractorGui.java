@@ -44,16 +44,21 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
 
     private static final long serialVersionUID = 240L;
 
-    private JLabeledTextField defaultField;
+    private final JLabeledTextField defaultField = 
+        new JLabeledTextField(JMeterUtils.getResString("default_value_field"));//$NON-NLS-1$
 
-    private JLabeledTextField xpathQueryField;
+    private final JLabeledTextField xpathQueryField = 
+        new JLabeledTextField(JMeterUtils.getResString("xpath_extractor_query"));//$NON-NLS-1$
 
-    private JLabeledTextField refNameField;
+    private final JLabeledTextField refNameField = 
+        new JLabeledTextField(JMeterUtils.getResString("ref_name_field"));//$NON-NLS-1$
 
-    private JCheckBox getFragment; // Should we return fragment as text, rather than text of fragment?
+    // Should we return fragment as text, rather than text of fragment?
+    private final JCheckBox getFragment = 
+        new JCheckBox(JMeterUtils.getResString("xpath_extractor_fragment"));//$NON-NLS-1$
     
-    private XMLConfPanel xml;
-    
+    private final XMLConfPanel xml = new XMLConfPanel();
+
     public String getLabelResource() {
         return "xpath_extractor_title"; //$NON-NLS-1$
     }
@@ -67,6 +72,7 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
     public void configure(TestElement el) {
         super.configure(el);
         XPathExtractor xpe = (XPathExtractor) el;
+        showScopeSettings(xpe);
         xpathQueryField.setText(xpe.getXPathQuery());
         defaultField.setText(xpe.getDefaultValue());
         refNameField.setText(xpe.getRefName());
@@ -85,6 +91,7 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
         super.configureTestElement(extractor);
         if ( extractor instanceof XPathExtractor){
             XPathExtractor xpath = (XPathExtractor)extractor;
+            saveScopeSettings(xpath);
             xpath.setDefaultValue(defaultField.getText());
             xpath.setRefName(refNameField.getText());
             xpath.setXPathQuery(xpathQueryField.getText());
@@ -112,11 +119,10 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
 
         Box box = Box.createVerticalBox();
         box.add(makeTitlePanel());
-        xml = new XMLConfPanel();
+        box.add(createScopePanel());
         xml.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
                 .getResString("xpath_assertion_option"))); //$NON-NLS-1$
         box.add(xml);
-        getFragment = new JCheckBox(JMeterUtils.getResString("xpath_extractor_fragment"));//$NON-NLS-1$
         box.add(getFragment);
         box.add(makeParameterPanel());
         add(box, BorderLayout.NORTH);
@@ -124,10 +130,6 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
 
 
     private JPanel makeParameterPanel() {
-        xpathQueryField = new JLabeledTextField(JMeterUtils.getResString("xpath_extractor_query"));//$NON-NLS-1$
-        defaultField = new JLabeledTextField(JMeterUtils.getResString("default_value_field"));//$NON-NLS-1$
-        refNameField = new JLabeledTextField(JMeterUtils.getResString("ref_name_field"));//$NON-NLS-1$
-
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         initConstraints(gbc);

@@ -177,17 +177,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
     }
     
     private List<MatchResult> processMatches(String regex, SampleResult result, int matchNumber) {
-        List<SampleResult> sampleList = new ArrayList<SampleResult>();
-
-        String scope = fetchScope();
-        if (isScopeParent(scope) || isScopeAll(scope)) {
-            sampleList.add(result);
-        }
-        if (isScopeChildren(scope) || isScopeAll(scope)) {
-            for (SampleResult subResult : result.getSubResults()) {
-                sampleList.add(subResult);
-            }
-        }
+        List<SampleResult> sampleList = getSampleList(result);
 
         if (log.isDebugEnabled()) {
             log.debug("Regex = " + regex);
