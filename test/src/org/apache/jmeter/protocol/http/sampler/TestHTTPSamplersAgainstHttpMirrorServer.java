@@ -34,6 +34,7 @@ import org.apache.jmeter.protocol.http.control.HttpMirrorServer;
 import org.apache.jmeter.protocol.http.control.TestHTTPMirrorThread;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
+import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
@@ -1091,7 +1092,6 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
      * 
      * @param httpSampler
      */
-    @SuppressWarnings("deprecation")
     private void setupFileUploadData(
             HTTPSamplerBase httpSampler,
             boolean isEncoded,
@@ -1105,9 +1105,9 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         // Set the form data
         setupFormData(httpSampler, isEncoded, titleField, titleValue, descriptionField, descriptionValue);
         // Set the file upload data
-        httpSampler.setFileField(fileField);
-        httpSampler.setFilename(fileValue.getAbsolutePath());
-        httpSampler.setMimetype(fileMimeType);      
+        HTTPFileArg[] hfa = {new HTTPFileArg(fileValue == null ? "" : fileValue.getAbsolutePath(), fileField, fileMimeType)};
+        httpSampler.setHTTPFiles(hfa);
+
     }
 
     /**
