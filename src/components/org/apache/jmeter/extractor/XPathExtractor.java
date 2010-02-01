@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -29,7 +31,7 @@ import javax.xml.transform.TransformerException;
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.testelement.AbstractScopedTestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterVariables;
@@ -77,7 +79,7 @@ import javax.xml.transform.stream.StreamResult;
  *
  * See Bugzilla: 37183
  */
-public class XPathExtractor extends AbstractTestElement implements
+public class XPathExtractor extends AbstractScopedTestElement implements
         PostProcessor, Serializable {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -105,6 +107,10 @@ public class XPathExtractor extends AbstractTestElement implements
         return new StringBuilder(s1).append("_").append(s2).toString(); // $NON-NLS-1$
     }
 
+    private String concat(String s1, int i){
+        return new StringBuilder(s1).append("_").append(i).toString(); // $NON-NLS-1$
+    }
+
     /**
      * Do the job - extract value from (X)HTML response using XPath Query.
      * Return value as variable defined by REFNAME. Returns DEFAULT value
@@ -119,12 +125,42 @@ public class XPathExtractor extends AbstractTestElement implements
         JMeterVariables vars = context.getVariables();
         String refName = getRefName();
         vars.put(refName, getDefaultValue());
-        vars.put(concat(refName,MATCH_NR), "0"); // In case parse fails // $NON-NLS-1$
+        final String matchNR = concat(refName,MATCH_NR);
+        int prevCount=0; // number of previous matches
+        try {
+            prevCount=Integer.parseInt(vars.get(matchNR));
+        } catch (NumberFormatException e) {
+            // ignored
+        }
+        vars.put(matchNR, "0"); // In case parse fails // $NON-NLS-1$
         vars.remove(concat(refName,"1")); // In case parse fails // $NON-NLS-1$
 
+        List<SampleResult> samples = getSampleList(previousResult);
         try{
-            Document d = parseResponse(previousResult);
-            getValuesForXPath(d,getXPathQuery(),vars, refName);
+            List<String> matches = new ArrayList<String>();
+            for (SampleResult res : samples) {
+                Document d = parseResponse(res);
+                getValuesForXPath(d,getXPathQuery(),matches);
+            }
+            final int matchCount = matches.size();
+            vars.put(matchNR, String.valueOf(matchCount));
+            if (matchCount > 0){
+                String value = matches.get(0);
+                if (value != null) {
+                    vars.put(refName, value);
+                }
+                for(int i=0; i < matchCount; i++){
+                    value = matches.get(i);
+                    if (value != null) {
+                        vars.put(concat(refName,i+1),matches.get(i));                    
+                    }
+                }
+            }
+            vars.remove(concat(refName,matchCount+1)); // Just in case
+            // Clear any other remaining variables
+            for(int i=matchCount+2; i <= prevCount; i++) {
+                vars.remove(concat(refName,i));                
+            }
         }catch(IOException e){// e.g. DTD not reachable
             final String errorMessage = "IOException on ("+getXPathQuery()+")";
             log.error(errorMessage,e);
@@ -253,7 +289,6 @@ public class XPathExtractor extends AbstractTestElement implements
     {
       //TODO: validate contentType for reasonable types?
 
-      //TODO: is it really necessary to recode the data?
       // NOTE: responseData encoding is server specific
       //       Therefore we do byte -> unicode -> byte conversion
       //       to ensure UTF-8 encoding as required by XPathUtil
@@ -269,20 +304,20 @@ public class XPathExtractor extends AbstractTestElement implements
 
     /**
      * Extract value from Document d by XPath query.
-     * @param d
-     * @param query
+     * @param d the document
+     * @param query the query to execute
+     * @param matchStrings list of matched strings (may include nulls)
+     * 
      * @throws TransformerException
      */
-    private void getValuesForXPath(Document d,String query, JMeterVariables vars, String refName)
-     throws TransformerException
-    {
+    private void getValuesForXPath(Document d,String query, List<String> matchStrings)
+        throws TransformerException {
         String val = null;
-         XObject xObject = XPathAPI.eval(d, query);
+        XObject xObject = XPathAPI.eval(d, query);
         final int objectType = xObject.getType();
         if (objectType == XObject.CLASS_NODESET) {
             NodeList matches = xObject.nodelist();
             int length = matches.getLength();
-            vars.put(concat(refName,MATCH_NR), String.valueOf(length));
             for (int i = 0 ; i < length; i++) {
                 Node match = matches.item(i);
                 if ( match instanceof Element){
@@ -300,25 +335,16 @@ public class XPathExtractor extends AbstractTestElement implements
                 } else {
                    val = match.getNodeValue();
                 }
-                if ( val!=null){
-                    if (i==0) {// Treat 1st match specially
-                        vars.put(refName,val);
-                    }
-                    vars.put(concat(refName,String.valueOf(i+1)),val);
-                }
+                matchStrings.add(val);
             }
-            vars.remove(concat(refName,String.valueOf(length+1)));
         } else if (objectType == XObject.CLASS_NULL
                 || objectType == XObject.CLASS_UNKNOWN
                 || objectType == XObject.CLASS_UNRESOLVEDVARIABLE) {
             log.warn("Unexpected object type: "+xObject.getTypeString()+" returned for: "+getXPathQuery());
-         } else {
+        } else {
             val = xObject.toString();
-            vars.put(concat(refName, MATCH_NR), "1");
-            vars.put(refName, val);
-            vars.put(concat(refName, "1"), val);
-            vars.remove(concat(refName, "2"));
-        }
+            matchStrings.add(val);
+      }
     }
 
     public void setWhitespace(boolean selected) {
