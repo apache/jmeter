@@ -31,6 +31,7 @@ import org.apache.jmeter.protocol.http.control.Cookie;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
+import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
@@ -197,8 +198,8 @@ public class AjpSampler extends HTTPSamplerBase {
         AuthManager auth = getAuthManager();
         int hsz = 1; // Host always
         if(method.equals(POST)) {
-            String fn = getFilename();
-            if(fn != null && fn.trim().length() > 0) {
+            HTTPFileArg[] hfa = getHTTPFiles();
+            if(hfa.length > 0) {
                 hsz += 3;
             } else {
                 hsz += 2;
@@ -248,15 +249,17 @@ public class AjpSampler extends HTTPSamplerBase {
         }
         if(method.equals(POST)) {
             int cl = -1;
-            String fn = getFilename();
-            if(fn != null && fn.trim().length() > 0) {
+            HTTPFileArg[] hfa = getHTTPFiles();
+            if(hfa.length > 0) {
+                HTTPFileArg fa = hfa[0];
+                String fn = fa.getName();
                 File input = new File(fn);
                 cl = (int)input.length();
                 body = new FileInputStream(input);
                 setString(HEADER_CONTENT_DISPOSITION);
-                setString("form-data; name=\""+encode(getFileField())+
+                setString("form-data; name=\""+encode(fa.getParamName())+
                       "\"; filename=\"" + encode(fn) +"\""); //$NON-NLS-1$ //$NON-NLS-2$
-                String mt = getMimetype();
+                String mt = fa.getMimeType();
                 hbuf.append(HEADER_CONTENT_TYPE).append(COLON_SPACE).append(mt).append(NEWLINE);
                 setInt(0xA007); // content-type
                 setString(mt);
