@@ -31,6 +31,7 @@ import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
+import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 
 public class TestHttpRequestHdr  extends JMeterTestCase {
     public TestHttpRequestHdr(String name) {
@@ -473,7 +474,6 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
         assertEquals("value",header.getValue());
     }
 
-    @SuppressWarnings("deprecation")
     public void testPostMultipartFileUpload() throws Exception {
         String url = "http://localhost/matrix.html";
         // A HTTP POST request, multipart/form-data, simple values,
@@ -496,9 +496,10 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
         // Check arguments
         Arguments arguments = s.getArguments();
         assertEquals(0, arguments.getArgumentCount());
-        assertEquals(fileFieldValue, s.getFileField());
-        assertEquals(fileName, s.getFilename());
-        assertEquals(mimeType, s.getMimetype());
+        HTTPFileArg hfa = s.getHTTPFiles()[0]; // Assume there's at least one file
+        assertEquals(fileFieldValue, hfa.getParamName());
+        assertEquals(fileName, hfa.getPath());
+        assertEquals(mimeType, hfa.getMimeType());
     }        
 
     private String createMultipartFormBody(String titleValue, String descriptionValue, String contentEncoding, boolean includeExtraHeaders, String boundary, String endOfLine) {
