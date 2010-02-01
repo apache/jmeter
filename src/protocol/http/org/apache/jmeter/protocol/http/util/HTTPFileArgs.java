@@ -142,9 +142,9 @@ public class HTTPFileArgs extends ConfigTestElement implements Serializable {
         PropertyIterator iter = getHTTPFileArgsCollection().iterator();
         while (iter.hasNext()) {
             HTTPFileArg file = (HTTPFileArg) iter.next().getObjectValue();
-            str.append(file.getPath());
+            str.append(file.toString());
             if (iter.hasNext()) {
-                str.append("&"); //$NON-NLS-1$
+                str.append("\n"); //$NON-NLS-1$
             }
         }
         return str.toString();

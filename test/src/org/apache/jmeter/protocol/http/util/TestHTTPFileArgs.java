@@ -113,6 +113,9 @@ public class TestHTTPFileArgs extends TestCase {
         files.addHTTPFileArg("file1");
         files.addHTTPFileArg("file2");
         files.addHTTPFileArg("file3");
-        assertEquals("file1&file2&file3", files.toString());
+        assertEquals("path:'file1'|param:''|mimetype:''\n"
+                    +"path:'file2'|param:''|mimetype:''\n"
+                    +"path:'file3'|param:''|mimetype:''", 
+                    files.toString());
     }
 }
