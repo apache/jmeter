@@ -32,6 +32,7 @@ import javax.swing.JRadioButton;
 
 import org.apache.jmeter.extractor.RegexExtractor;
 import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
+import org.apache.jmeter.testelement.AbstractScopedTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
@@ -99,7 +100,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
      * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
      */
     public TestElement createTestElement() {
-        RegexExtractor extractor = new RegexExtractor();
+        AbstractScopedTestElement extractor = new RegexExtractor();
         modifyTestElement(extractor);
         return extractor;
     }
