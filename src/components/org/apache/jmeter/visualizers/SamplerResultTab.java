@@ -67,21 +67,19 @@ public abstract class SamplerResultTab implements ResultRenderer {
 
     private static final String STYLE_REDIRECT = "Redirect"; // $NON-NLS-1$
 
-    protected JEditorPane results;
-
     private JTextPane stats;
 
-    protected JScrollPane resultsScrollPane;
-
-    private JPanel resultsPane;
+    private JPanel resultsPane; /** Response Data pane */
+    protected JScrollPane resultsScrollPane; /** Contains results; contained in resultsPane */
+    protected JEditorPane results; /** Response Data shown here */
 
     private JLabel imageLabel;
 
     private JPanel requestPane;
 
-    private JTextArea sampleDataField;
+    private JTextArea sampleDataField; /** request pane content */
 
-    protected JTabbedPane rightSide;
+    protected JTabbedPane rightSide; /** holds the tabbed panes */
 
     private int lastSelectedTab;
 
