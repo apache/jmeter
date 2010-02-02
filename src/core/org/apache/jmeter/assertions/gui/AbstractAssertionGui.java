@@ -21,13 +21,9 @@ package org.apache.jmeter.assertions.gui;
 import java.util.Arrays;
 import java.util.Collection;
 
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 
-import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
+import org.apache.jmeter.gui.AbstractScopedJMeterGuiComponent;
 import org.apache.jmeter.gui.util.MenuFactory;
-import org.apache.jmeter.testelement.AbstractScopedAssertion;
-import org.apache.jmeter.util.ScopePanel;
 
 /**
  * This is the base class for JMeter GUI components which manage assertions.
@@ -38,26 +34,9 @@ import org.apache.jmeter.util.ScopePanel;
  * and GUI in synch.
  *
  */
-public abstract class AbstractAssertionGui extends AbstractJMeterGuiComponent {
+public abstract class AbstractAssertionGui extends AbstractScopedJMeterGuiComponent {
 
     private static final long serialVersionUID = 240L;
-
-    private ScopePanel assertionScopePanel;
-    
-    /**
-     * When a user right-clicks on the component in the test tree, or selects
-     * the edit menu when the component is selected, the component will be asked
-     * to return a JPopupMenu that provides all the options available to the
-     * user from this component.
-     * <p>
-     * This implementation returns menu items appropriate for most assertion
-     * components.
-     *
-     * @return a JPopupMenu appropriate for the component.
-     */
-    public JPopupMenu createPopupMenu() {
-        return MenuFactory.getDefaultAssertionMenu();
-    }
 
     /**
      * This is the list of menu categories this gui component will be available
@@ -70,58 +49,5 @@ public abstract class AbstractAssertionGui extends AbstractJMeterGuiComponent {
      */
     public Collection<String> getMenuCategories() {
         return Arrays.asList(new String[] { MenuFactory.ASSERTIONS });
-    }
-    
-    /**
-     * Create the scope settings panel.
-     * 
-     * @return the scope settings panel
-     */
-    protected JPanel createScopePanel(){
-        assertionScopePanel = new ScopePanel();
-        return assertionScopePanel;
-    }
-
-    @Override
-    public void clearGui(){
-        super.clearGui();
-        if (assertionScopePanel != null) {
-            assertionScopePanel.clearGui();
-        }
-    }
-
-    /**
-     * Save the scope settings in the test element.
-     * 
-     * @param assertion
-     */
-    protected void saveScopeSettings(AbstractScopedAssertion assertion) {
-        if (assertionScopePanel.isScopeParent()){
-            assertion.setScopeParent();
-        } else if (assertionScopePanel.isScopeChildren()){
-            assertion.setScopeChildren();
-        } else if (assertionScopePanel.isScopeAll()) {
-            assertion.setScopeAll();
-        } else {
-            throw new IllegalArgumentException("Unexpected scope panel state");
-        }
-    }
-
-    /**
-     * Show the scope settings from the test element.
-     * 
-     * @param assertion
-     */
-    protected void showScopeSettings(AbstractScopedAssertion assertion) {
-        String scope = assertion.fetchScope();
-        if (assertion.isScopeParent(scope)) {
-                assertionScopePanel.setScopeParent();                
-        } else if (assertion.isScopeChildren(scope)){
-            assertionScopePanel.setScopeChildren();
-        } else if (assertion.isScopeAll(scope)){
-            assertionScopePanel.setScopeAll();
-        } else {
-            throw new IllegalArgumentException("Invalid scope: "+scope);
-        }
     }
 }
