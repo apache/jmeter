@@ -264,7 +264,7 @@ public class AssertionGui extends AbstractAssertionGui {
         setBorder(makeBorder());
 
         box.add(makeTitlePanel());
-        box.add(createScopePanel());
+        box.add(createScopePanel(true));
         box.add(createFieldPanel());
         box.add(createTypePanel());
         add(box, BorderLayout.NORTH);

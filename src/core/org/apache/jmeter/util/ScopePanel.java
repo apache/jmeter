@@ -19,11 +19,14 @@
 package org.apache.jmeter.util;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.util.JMeterUtils;
@@ -33,18 +36,31 @@ import org.apache.jmeter.util.JMeterUtils;
  * to apply the test element to the parent sample, the child samples or both.
  * 
  */
-public class ScopePanel extends JPanel {
+public class ScopePanel extends JPanel implements ActionListener {
 
     private static final long serialVersionUID = 240L;
 
     private final JRadioButton parentButton;
     private final JRadioButton childButton;
     private final JRadioButton allButton;
-    
-    public ScopePanel() {
+    private final JRadioButton variableButton;
+    private final JTextField variableName;
+
+    public ScopePanel(){
+        this(false);
+    }
+
+    public ScopePanel(boolean enableVariableButton) {
         allButton = new JRadioButton(JMeterUtils.getResString("sample_scope_all")); //$NON-NLS-1$
         parentButton = new JRadioButton(JMeterUtils.getResString("sample_scope_parent")); //$NON-NLS-1$
         childButton = new JRadioButton(JMeterUtils.getResString("sample_scope_children")); //$NON-NLS-1$
+        if (enableVariableButton) {
+            variableButton = new JRadioButton(JMeterUtils.getResString("sample_scope_variable")); //$NON-NLS-1$
+            variableName = new JTextField(10);
+        } else {
+            variableButton = null;
+            variableName = null;
+        }
         init();
     }
 
@@ -57,15 +73,20 @@ public class ScopePanel extends JPanel {
 
         parentButton.setSelected(true);
         
+        JPanel buttonPanel = new HorizontalPanel();
         ButtonGroup group = new ButtonGroup();
         group.add(allButton);
         group.add(parentButton);
         group.add(childButton);
-        JPanel buttonPanel = new HorizontalPanel();
         buttonPanel.add(parentButton);
         buttonPanel.add(childButton);
         buttonPanel.add(allButton);
-        
+        if (variableButton != null){
+            variableButton.addActionListener(this);
+            group.add(variableButton);
+            buttonPanel.add(variableButton);
+            buttonPanel.add(variableName);
+        }
         add(buttonPanel);
     }
 
@@ -92,6 +113,11 @@ public class ScopePanel extends JPanel {
         parentButton.setSelected(true);
     }
 
+    public void setScopeVariable(String value){
+        variableButton.setSelected(true);
+        variableName.setText(value);
+    }
+
     public boolean isScopeParent() {
         return parentButton.isSelected();
     }
@@ -102,5 +128,17 @@ public class ScopePanel extends JPanel {
 
     public boolean isScopeAll() {
         return allButton.isSelected();
+    }
+
+    public boolean isScopeVariable() {
+        return variableButton.isSelected();
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        variableName.setEnabled(variableButton.isSelected());
+    }
+
+    public String getVariable() {
+        return variableName.getText();
     }
 }

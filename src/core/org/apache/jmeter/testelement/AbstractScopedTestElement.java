@@ -26,7 +26,7 @@ import org.apache.jmeter.samplers.SampleResult;
 /**
  * <p>
  * Super-class for TestElements that can be applied to main sample, sub-samples or both.
- * [Assertions use a different class because they use a different value for the {@link #SCOPE} constant]
+ * [Assertions use a different class because they use a different value for the {@link #getScopeName()} constant]
  * </p>
  * 
  * <p>
@@ -48,14 +48,21 @@ public abstract class AbstractScopedTestElement extends AbstractTestElement {
     private static final String SCOPE_PARENT = "parent"; // $NON-NLS-1$
     private static final String SCOPE_CHILDREN = "children"; // $NON-NLS-1$
     private static final String SCOPE_ALL = "all"; // $NON-NLS-1$
+    private static final String SCOPE_VARIABLE = "variable"; // $NON-NLS-1$
+    private static final String SCOPE_VARIABLE_NAME = "Scope.variable"; // $NON-NLS-1$
     //- JMX
+
+
+    protected String getScopeName() {
+        return SCOPE;
+    }
 
     /**
      * Get the scope setting
      * @return the scope, default parent
      */
     public String fetchScope() {
-        return getPropertyAsString(SCOPE, SCOPE_PARENT);
+        return getPropertyAsString(getScopeName(), SCOPE_PARENT);
     }
 
     /**
@@ -88,16 +95,44 @@ public abstract class AbstractScopedTestElement extends AbstractTestElement {
         return scope.equals(SCOPE_ALL);
     }
 
+    /**
+     * Is the assertion to be applied to the all samples?
+     * 
+     * @param scope
+     * @return if the assertion is to be applied to the all samples.
+     */
+    public boolean isScopeVariable(String scope) {
+        return scope.equals(SCOPE_VARIABLE);
+    }
+
+    /**
+     * Is the assertion to be applied to the all samples?
+     * 
+     * @return if the assertion is to be applied to the all samples.
+     */
+    protected boolean isScopeVariable() {
+        return isScopeVariable(fetchScope());
+    }
+
+    public String getVariableName(){
+        return getPropertyAsString(SCOPE_VARIABLE_NAME, "");
+    }
+
     public void setScopeParent() {
-        removeProperty(SCOPE);
+        removeProperty(getScopeName());
     }
 
     public void setScopeChildren() {
-        setProperty(SCOPE, SCOPE_CHILDREN);
+        setProperty(getScopeName(), SCOPE_CHILDREN);
     }
 
     public void setScopeAll() {
-        setProperty(SCOPE, SCOPE_ALL);
+        setProperty(getScopeName(), SCOPE_ALL);
+    }
+
+    public void setScopeVariable(String variableName) {
+        setProperty(getScopeName(), SCOPE_VARIABLE);
+        setProperty(SCOPE_VARIABLE_NAME, variableName);
     }
 
     /**

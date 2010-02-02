@@ -149,7 +149,7 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
 
         add(makeTitlePanel());
 
-        add(createScopePanel());
+        add(createScopePanel(true));
         
         // USER_INPUT
         JPanel sizePanel = new JPanel();
