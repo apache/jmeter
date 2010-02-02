@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="1.8">
+<jmeterTestPlan version="1.2" properties="2.1">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
       <collectionProp name="TestPlan.thread_groups"/>
@@ -16,12 +16,6 @@
         <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Simple Controller" enabled="true"/>
         <hashTree>
           <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Web Testing" enabled="true">
-            <stringProp name="HTTPSampler.path">/xdx/admin/inspect_job.jsp</stringProp>
-            <stringProp name="HTTPSampler.method">GET</stringProp>
-            <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
-            <stringProp name="HTTPSampler.protocol">http</stringProp>
-            <boolProp name="HTTPSampler.image_parser">false</boolProp>
-            <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
               <collectionProp name="Arguments.arguments">
                 <elementProp name="" elementType="HTTPArgument">
@@ -44,12 +38,15 @@
                 </elementProp>
               </collectionProp>
             </elementProp>
+            <stringProp name="HTTPSampler.path">/xdx/admin/inspect_job.jsp</stringProp>
+            <stringProp name="HTTPSampler.method">GET</stringProp>
+            <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+            <stringProp name="HTTPSampler.protocol">http</stringProp>
+            <boolProp name="HTTPSampler.image_parser">false</boolProp>
+            <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
             <stringProp name="HTTPSampler.port">80</stringProp>
-            <stringProp name="HTTPSampler.mimetype"></stringProp>
-            <stringProp name="HTTPSampler.FILE_FIELD"></stringProp>
             <stringProp name="HTTPSampler.monitor">false</stringProp>
             <stringProp name="HTTPSampler.domain"></stringProp>
-            <stringProp name="HTTPSampler.FILE_NAME"></stringProp>
             <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
           </HTTPSampler>
           <hashTree/>
