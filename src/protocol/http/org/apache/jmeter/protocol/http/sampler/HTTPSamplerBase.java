@@ -149,26 +149,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     public static final String DO_MULTIPART_POST = "HTTPSampler.DO_MULTIPART_POST"; // $NON-NLS-1$
 
-    /*
-     * JMeter 2.3.1 and earlier only had fields for one file on the GUI:
-     * - FILE_NAME
-     * - FILE_FIELD
-     * - MIMETYPE
-     * These were stored in their own individual properties.
-     *
-     * Version 2.3.3 introduced a list of files, each with their own path, name and mimetype.
-     *
-     * In order to maintain backwards compatibility of test plans, the 3 original properties
-     * have been retained; additional file entries are stored in an HTTPFileArgs class.
-     * The HTTPFileArgs class is only present if there is more than 1 file; this means that
-     * such test plans are backward compatible.
-     *
-     * The original get methods still work, but have been deprecated;
-     * the user is expected to retrieve the list of files using the getHTTPFiles() method.
-     *
-     * In order to speed up processing, the class maintains a copy of the current
-     * files in the fileList variable.
-     */
+    // @see mergeFileProperties
     // Must be private, as the file list needs special handling
     private final static String FILE_ARGS = "HTTPsampler.Files"; // $NON-NLS-1$
     // MIMETYPE is kept for backward compatibility with old test plans
@@ -254,102 +235,11 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     private boolean dynamicPath = false;// Set false if spaces are already encoded
 
-    // must be kept in synch with the various file properties
-    private transient HTTPFileArg[] fileList;
-    // The code assumes that this will be accessed from a single thread only
 
     ////////////////////// Code ///////////////////////////
 
     public HTTPSamplerBase() {
         setArguments(new Arguments());
-    }
-
-    /**
-     * The name parameter to be applied to the file
-     * @deprecated use setHTTPFiles() instead
-     */
-    @Deprecated
-    public void setFileField(String value) {
-        fileList = null; // Force rebuild
-        setFileFieldProperty(value);
-    }
-
-    private void setFileFieldProperty(String value) {
-        if (value == null) {
-            throw new IllegalArgumentException("Value must not be null");
-        }
-        setProperty(FILE_FIELD, value);
-    }
-
-    /**
-     * The name parameter to be applied to the file
-     * @deprecated Use getHTTPFiles() array instead
-     */
-    @Deprecated
-    public String getFileField() {
-        checkCount("getFileField");
-        return getPropertyAsString(FILE_FIELD);
-    }
-
-    /**
-     * The actual name of the file to POST
-     * @deprecated use setHTTPFiles() instead
-     */
-    @Deprecated
-    public void setFilename(String value) {
-        fileList = null; // Force rebuild
-        setFilenameProperty(value);
-    }
-
-    private void setFilenameProperty(String value) {
-        if (value == null) {
-            throw new IllegalArgumentException("Value must not be null");
-        }
-        setProperty(FILE_NAME, value);
-    }
-
-    /**
-     * The actual name of the file to POST
-     * @deprecated Use getHTTPFiles() array instead
-     */
-    @Deprecated
-    public String getFilename() {
-        checkCount("getFilename");
-        return getPropertyAsString(FILE_NAME);
-    }
-
-    /**
-     * Set the files mime type
-     * @deprecated use setHTTPFiles() instead
-     * @param value
-     */
-    @Deprecated
-    public void setMimetype(String value) {
-        fileList = null; // Force rebuild
-        setMimetypeProperty(value);
-    }
-
-    private void setMimetypeProperty(String value) {
-        if (value == null) {
-            throw new IllegalArgumentException("Value must not be null");
-        }
-        setProperty(MIMETYPE, value);
-    }
-
-    /**
-     * @deprecated Use getHTTPFiles() array instead
-     */
-    @Deprecated
-    public String getMimetype() {
-        checkCount("getMimetype");
-        return getPropertyAsString(MIMETYPE);
-    }
-
-    private void checkCount(String method) {
-        if (getHTTPFileCount() > 1) {
-            log.warn(method + "() called with more than 1 file; additional files may be ignored.");
-        }
-
     }
 
     /**
@@ -1317,7 +1207,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public Object clone() {
         HTTPSamplerBase base = (HTTPSamplerBase) super.clone();
         base.dynamicPath = dynamicPath;
-        base.fileList = null;
         return base;
     }
 
@@ -1475,7 +1364,11 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      *   HTTPFileArgs object that stores file list to be uploaded.
      */
     private void setHTTPFileArgs(HTTPFileArgs value) {
-        setProperty(new TestElementProperty(FILE_ARGS, value));
+        if (value.getHTTPFileArgCount() > 0){
+            setProperty(new TestElementProperty(FILE_ARGS, value));            
+        } else {
+            removeProperty(FILE_ARGS); // no point saving an empty list
+        }
     }
 
     /*
@@ -1483,15 +1376,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      */
     private HTTPFileArgs getHTTPFileArgs() {
         return (HTTPFileArgs) getProperty(FILE_ARGS).getObjectValue();
-    }
-
-    /*
-     * Method to clear the additional files list to be uploaded.
-     *
-     *   HTTPFileArgs object that stores file list to be uploaded.
-     */
-    private void clearHTTPFileArgs() {
-        removeProperty(FILE_ARGS);
     }
 
     /**
@@ -1504,34 +1388,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @return an array of file arguments (never null)
      */
     public HTTPFileArg[] getHTTPFiles() {
-        if (fileList != null){
-            return fileList;
-        }
-        HTTPFileArg[] outFiles;
-        // Check for original data names
-        // Use properties so variables and functions are not resolved too early
-        JMeterProperty fileName = getProperty(FILE_NAME);
-        JMeterProperty paramName = getProperty(FILE_FIELD);
-        JMeterProperty mimeType = getProperty(MIMETYPE);
-        HTTPFileArg file = new HTTPFileArg(fileName, paramName, mimeType);
-        if(file.isNotEmpty()) {
-            // Now deal with any additional file arguments
-            final HTTPFileArgs fileArgs = getHTTPFileArgs();
-            if(fileArgs != null) {
-                outFiles = new HTTPFileArg[1+fileArgs.getHTTPFileArgCount()];
-                outFiles[0] = file; // first file
-                HTTPFileArg[] infiles = fileArgs.asArray();
-                for (int i = 0; i < infiles.length; i++){
-                    outFiles[i+1] = infiles[i];
-                }
-            } else {
-                outFiles = new HTTPFileArg[]{file}; // just one file
-            }
-        } else {
-            outFiles = new HTTPFileArg[]{}; // no files, empty array
-        }
-        fileList = outFiles; // update the list cache
-        return fileList;
+        final HTTPFileArgs fileArgs = getHTTPFileArgs();
+        return fileArgs == null ? new HTTPFileArg[] {} : fileArgs.asArray();
     }
 
     public int getHTTPFileCount(){
@@ -1545,45 +1403,17 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @param files list of files to save
      */
     public void setHTTPFiles(HTTPFileArg[] files) {
-        clearHTTPFileArgs();
-        fileList = null; // it will be regenerated by get
-        // First weed out the empty files
-        HTTPFileArg[] nonEmptyFile = {};
-        int filesFound = 0;
+        HTTPFileArgs fileArgs = new HTTPFileArgs();
+        // Weed out the empty files
         if (files.length > 0) {
-            nonEmptyFile = new HTTPFileArg[files.length];
             for(int i=0; i < files.length; i++){
                 HTTPFileArg file = files[i];
                 if (file.isNotEmpty()){
-                    nonEmptyFile[filesFound++] = file;
+                    fileArgs.addHTTPFileArg(file);
                 }
             }
         }
-        // Any files left?
-        if (filesFound > 0){
-            HTTPFileArg file = nonEmptyFile[0];
-            setFilenameProperty(file.getPath());
-            setFileFieldProperty(file.getParamName());
-            setMimetypeProperty(file.getMimeType());
-            if (filesFound > 1){
-                HTTPFileArgs fileArgs = new HTTPFileArgs();
-                boolean empty=true;
-                for(int i=1; i < filesFound; i++){
-                    final HTTPFileArg fileArg = nonEmptyFile[i];
-                    if (fileArg.isNotEmpty()){
-                        fileArgs.addHTTPFileArg(fileArg);
-                        empty=false;
-                    }
-                }
-                if (!empty){
-                    setHTTPFileArgs(fileArgs);
-                }
-            }
-        } else {
-            setFilenameProperty("");
-            setFileFieldProperty("");
-            setMimetypeProperty("");
-        }
+        setHTTPFileArgs(fileArgs);
     }
 
     public static String[] getValidMethodsAsArray(){
@@ -1665,6 +1495,55 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         }
         w.close();
         return w.toByteArray();
+    }
+
+    /**
+     * JMeter 2.3.1 and earlier only had fields for one file on the GUI:
+     * - FILE_NAME
+     * - FILE_FIELD
+     * - MIMETYPE
+     * These were stored in their own individual properties.
+     *
+     * Version 2.3.3 introduced a list of files, each with their own path, name and mimetype.
+     *
+     * In order to maintain backwards compatibility of test plans, the 3 original properties
+     * were retained; additional file entries are stored in an HTTPFileArgs class.
+     * The HTTPFileArgs class was only present if there is more than 1 file; this means that
+     * such test plans are backward compatible.
+     *
+     * Versions after 2.3.4 dispense with the original set of 3 properties.
+     * Test plans that use them are converted to use a single HTTPFileArgs list.
+     * 
+     * @see HTTPSamplerBaseConverter
+     */
+    void mergeFileProperties() {
+        JMeterProperty fileName = getProperty(FILE_NAME);
+        JMeterProperty paramName = getProperty(FILE_FIELD);
+        JMeterProperty mimeType = getProperty(MIMETYPE);
+        HTTPFileArg oldStyleFile = new HTTPFileArg(fileName, paramName, mimeType);
+        
+        HTTPFileArgs fileArgs = getHTTPFileArgs();
+
+        HTTPFileArgs allFileArgs = new HTTPFileArgs();
+        if(oldStyleFile.isNotEmpty()) { // OK, we have an old-style file definition
+            allFileArgs.addHTTPFileArg(oldStyleFile); // save it
+            // Now deal with any additional file arguments
+            if(fileArgs != null) {
+                HTTPFileArg[] infiles = fileArgs.asArray();
+                for (int i = 0; i < infiles.length; i++){
+                    allFileArgs.addHTTPFileArg(infiles[i]);
+                }
+            }
+        } else {
+            if(fileArgs != null) { // for new test plans that don't have FILE/PARAM/MIME properties
+                allFileArgs = fileArgs;
+            }
+        }
+        // Updated the property lists
+        setHTTPFileArgs(allFileArgs);
+        removeProperty(FILE_FIELD);
+        removeProperty(FILE_NAME);
+        removeProperty(MIMETYPE);
     }
 }
 
