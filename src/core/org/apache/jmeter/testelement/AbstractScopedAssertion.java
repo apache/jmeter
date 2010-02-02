@@ -34,62 +34,17 @@ package org.apache.jmeter.testelement;
  * </ul>
  * </p>
  */
-public abstract class AbstractScopedAssertion extends AbstractTestElement {
+public abstract class AbstractScopedAssertion extends AbstractScopedTestElement {
 
     private static final long serialVersionUID = 240L;
 
+    //+ JMX attributes - do not change
     private static final String SCOPE = "Assertion.scope";
-    private static final String SCOPE_PARENT = "parent";
-    private static final String SCOPE_CHILDREN = "children";
-    private static final String SCOPE_ALL = "all";
+    //- JMX
 
-    /**
-     * Get the scope setting
-     * @return the scope, default parent
-     */
-    public String fetchScope() {
-        return getPropertyAsString(SCOPE, SCOPE_PARENT);
+    @Override
+    protected String getScopeName() {
+        return SCOPE;
     }
 
-    /**
-     * Is the assertion to be applied to the main (parent) sample?
-     * 
-     * @param scope
-     * @return if the assertion is to be applied to the parent sample.
-     */
-    public boolean isScopeParent(String scope) {
-        return scope.equals(SCOPE_PARENT);
-    }
-
-    /**
-     * Is the assertion to be applied to the sub-samples (children)?
-     * 
-     * @param scope
-     * @return if the assertion is to be applied to the children.
-     */
-    public boolean isScopeChildren(String scope) {
-        return scope.equals(SCOPE_CHILDREN);
-    }
-
-    /**
-     * Is the assertion to be applied to the all samples?
-     * 
-     * @param scope
-     * @return if the assertion is to be applied to the all samples.
-     */
-    public boolean isScopeAll(String scope) {
-        return scope.equals(SCOPE_ALL);
-    }
-
-    public void setScopeParent() {
-        removeProperty(SCOPE);
-    }
-
-    public void setScopeChildren() {
-        setProperty(SCOPE, SCOPE_CHILDREN);
-    }
-
-    public void setScopeAll() {
-        setProperty(SCOPE, SCOPE_ALL);
-    }
 }
