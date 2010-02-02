@@ -64,7 +64,20 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
     public AssertionResult getResult(SampleResult response) {
         AssertionResult result = new AssertionResult(getName());
         result.setFailure(false);
-        long resultSize = response.getBytes();
+        long resultSize=0;
+        if (isScopeVariable()){
+            String variableName = getVariableName();
+            String value = getThreadContext().getVariables().get(variableName);
+            try {
+                resultSize = Integer.parseInt(value);
+            } catch (NumberFormatException e) {
+                result.setFailure(true);
+                result.setFailureMessage("Error parsing variable name: "+variableName+" value: "+value);
+                return result;
+            }
+        } else {
+            resultSize = response.getBytes();
+        }
         // is the Sample the correct size?
         if (!(compareSize(resultSize))) {
             result.setFailure(true);
