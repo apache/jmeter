@@ -61,6 +61,7 @@ To override the default local language fully, set the JMeter property "language"
 
 <p>
 The Avalon file format for JMX and JTL files is no longer supported.
+Any such files will need to be converted by reading them in JMeter 2.3.4 and resaving them.
 </p>
 
 <p>
@@ -77,6 +78,7 @@ The XPath Assertion and XPath Extractor elements no longer fetch external DTDs b
 <li>Bug 48542 - SoapSampler uses wrong response header field to decide if response is gzip encoded</li>
 <li>Bug 48568 - CookieManager broken for AjpSampler</li>
 <li>Bug 48570 - AjpSampler doesn't support query parameters (GET/POST)</li>
+<li>Bug 46901 - HTTP Sampler does not process var/func refs correctly in first file parameter</li>
 </ul>
 
 <h3>Other Samplers</h3>

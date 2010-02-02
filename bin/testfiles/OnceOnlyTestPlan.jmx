@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="1.8">
+<jmeterTestPlan version="1.2" properties="2.1">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
       <collectionProp name="TestPlan.thread_groups"/>
@@ -18,8 +18,8 @@
         <stringProp name="ThreadGroup.num_threads">2</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
-          <stringProp name="LoopController.loops">3</stringProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">3</stringProp>
         </elementProp>
         <longProp name="ThreadGroup.end_time">0</longProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
@@ -39,46 +39,42 @@
         <OnceOnlyController guiclass="OnceOnlyControllerGui" testclass="OnceOnlyController" testname="Once Only Controller" enabled="true"/>
         <hashTree>
           <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Home Page" enabled="true">
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+              <collectionProp name="Arguments.arguments"/>
+            </elementProp>
             <stringProp name="HTTPSampler.path">/</stringProp>
             <stringProp name="HTTPSampler.method">GET</stringProp>
             <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
             <stringProp name="HTTPSampler.protocol">http</stringProp>
             <boolProp name="HTTPSampler.image_parser">false</boolProp>
             <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
-            <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-              <collectionProp name="Arguments.arguments"/>
-            </elementProp>
             <stringProp name="HTTPSampler.port"></stringProp>
-            <stringProp name="HTTPSampler.mimetype"></stringProp>
-            <stringProp name="HTTPSampler.FILE_FIELD"></stringProp>
             <stringProp name="HTTPSampler.monitor">false</stringProp>
             <stringProp name="HTTPSampler.domain"></stringProp>
-            <stringProp name="HTTPSampler.FILE_NAME"></stringProp>
             <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
           </HTTPSampler>
           <hashTree/>
         </hashTree>
         <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Bug Page" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
           <stringProp name="HTTPSampler.path">/site/bugs.html</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <boolProp name="HTTPSampler.image_parser">false</boolProp>
           <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-            <collectionProp name="Arguments.arguments"/>
-          </elementProp>
           <stringProp name="HTTPSampler.port"></stringProp>
-          <stringProp name="HTTPSampler.mimetype"></stringProp>
-          <stringProp name="HTTPSampler.FILE_FIELD"></stringProp>
           <stringProp name="HTTPSampler.monitor">false</stringProp>
           <stringProp name="HTTPSampler.domain"></stringProp>
-          <stringProp name="HTTPSampler.FILE_NAME"></stringProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
         </HTTPSampler>
         <hashTree/>
         <ResultCollector guiclass="GraphVisualizer" testclass="ResultCollector" testname="File Reporter" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
+            <name>saveConfig</name>
             <value class="SampleSaveConfiguration">
               <time>true</time>
               <latency>true</latency>
@@ -102,10 +98,8 @@
               <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
               <assertionsResultsToSave>0</assertionsResultsToSave>
             </value>
-            <name>saveConfig</name>
           </objProp>
           <stringProp name="filename">once-only-test.dat</stringProp>
-          <boolProp name="ResultCollector.error_logging">false</boolProp>
         </ResultCollector>
         <hashTree/>
       </hashTree>

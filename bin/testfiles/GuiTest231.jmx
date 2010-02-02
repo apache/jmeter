@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="2.0">
+<jmeterTestPlan version="1.2" properties="2.1">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="GUI231" enabled="true">
       <stringProp name="TestPlan.comments">All GUI test elements in JMeter 2.3.1</stringProp>
@@ -86,9 +86,9 @@
             <boolProp name="ThroughputController.perThread">true</boolProp>
             <intProp name="ThroughputController.maxThroughput">111</intProp>
             <FloatProperty>
+              <name>ThroughputController.percentThroughput</name>
               <value>100.0</value>
               <savedValue>0.0</savedValue>
-              <name>ThroughputController.percentThroughput</name>
             </FloatProperty>
           </ThroughputController>
           <hashTree/>
@@ -307,9 +307,9 @@
           <ConstantThroughputTimer guiclass="TestBeanGUI" testclass="ConstantThroughputTimer" testname="Constant Throughput Timer" enabled="true">
             <stringProp name="calcMode">this thread only</stringProp>
             <doubleProp>
+              <name>throughput</name>
               <value>11.0</value>
               <savedValue>0.0</savedValue>
-              <name>throughput</name>
             </doubleProp>
           </ConstantThroughputTimer>
           <hashTree/>
@@ -427,11 +427,17 @@
             <boolProp name="HTTPSampler.auto_redirects">true</boolProp>
             <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
             <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-            <stringProp name="HTTPSampler.mimetype">mime</stringProp>
-            <stringProp name="HTTPSampler.FILE_NAME">path</stringProp>
-            <stringProp name="HTTPSampler.FILE_FIELD">name</stringProp>
             <stringProp name="HTTPSampler.monitor">false</stringProp>
             <stringProp name="HTTPSampler.embedded_url_re">match</stringProp>
+            <elementProp name="HTTPsampler.Files" elementType="HTTPFileArgs">
+              <collectionProp name="HTTPFileArgs.files">
+                <elementProp name="path" elementType="HTTPFileArg">
+                  <stringProp name="File.path">path</stringProp>
+                  <stringProp name="File.mimetype">mime</stringProp>
+                  <stringProp name="File.paramname">name</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
           </AjpSampler>
           <hashTree/>
           <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="HTTP Request" enabled="true">
@@ -448,9 +454,6 @@
             <boolProp name="HTTPSampler.auto_redirects">true</boolProp>
             <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
             <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-            <stringProp name="HTTPSampler.mimetype"></stringProp>
-            <stringProp name="HTTPSampler.FILE_NAME"></stringProp>
-            <stringProp name="HTTPSampler.FILE_FIELD"></stringProp>
             <stringProp name="HTTPSampler.monitor">false</stringProp>
             <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
           </HTTPSampler>
@@ -469,9 +472,6 @@
             <boolProp name="HTTPSampler.auto_redirects">true</boolProp>
             <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
             <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-            <stringProp name="HTTPSampler.mimetype"></stringProp>
-            <stringProp name="HTTPSampler.FILE_NAME"></stringProp>
-            <stringProp name="HTTPSampler.FILE_FIELD"></stringProp>
             <stringProp name="HTTPSampler.monitor">false</stringProp>
             <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
           </HTTPSampler2>
@@ -655,11 +655,11 @@
           <MailReaderSampler guiclass="MailReaderSamplerGui" testclass="MailReaderSampler" testname="Mail Reader Sampler" enabled="true">
             <stringProp name="host_type">imap</stringProp>
             <stringProp name="folder">Trash</stringProp>
+            <intProp name="num_messages">-1</intProp>
+            <boolProp name="delete">false</boolProp>
             <stringProp name="host">server</stringProp>
             <stringProp name="username">user</stringProp>
             <stringProp name="password">pass</stringProp>
-            <intProp name="num_messages">-1</intProp>
-            <boolProp name="delete">false</boolProp>
           </MailReaderSampler>
           <hashTree/>
           <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="TCP Sampler" enabled="true">
@@ -785,6 +785,7 @@
           <ResultCollector guiclass="AssertionVisualizer" testclass="ResultCollector" testname="Assertion Results" enabled="true">
             <boolProp name="ResultCollector.error_logging">false</boolProp>
             <objProp>
+              <name>saveConfig</name>
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
@@ -809,7 +810,6 @@
                 <assertionsResultsToSave>0</assertionsResultsToSave>
                 <bytes>true</bytes>
               </value>
-              <name>saveConfig</name>
             </objProp>
             <stringProp name="filename"></stringProp>
           </ResultCollector>
@@ -823,6 +823,7 @@
           <ResultCollector guiclass="DistributionGraphVisualizer" testclass="ResultCollector" testname="Distribution Graph (alpha)" enabled="true">
             <boolProp name="ResultCollector.error_logging">false</boolProp>
             <objProp>
+              <name>saveConfig</name>
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
@@ -847,7 +848,6 @@
                 <assertionsResultsToSave>0</assertionsResultsToSave>
                 <bytes>true</bytes>
               </value>
-              <name>saveConfig</name>
             </objProp>
             <stringProp name="filename"></stringProp>
           </ResultCollector>
@@ -855,6 +855,7 @@
           <ResultCollector guiclass="GraphAccumVisualizer" testclass="ResultCollector" testname="Graph Full Results" enabled="true">
             <boolProp name="ResultCollector.error_logging">false</boolProp>
             <objProp>
+              <name>saveConfig</name>
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
@@ -879,7 +880,6 @@
                 <assertionsResultsToSave>0</assertionsResultsToSave>
                 <bytes>true</bytes>
               </value>
-              <name>saveConfig</name>
             </objProp>
             <stringProp name="filename"></stringProp>
           </ResultCollector>
@@ -887,6 +887,7 @@
           <ResultCollector guiclass="GraphVisualizer" testclass="ResultCollector" testname="Graph Results" enabled="true">
             <boolProp name="ResultCollector.error_logging">false</boolProp>
             <objProp>
+              <name>saveConfig</name>
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
@@ -911,7 +912,6 @@
                 <assertionsResultsToSave>0</assertionsResultsToSave>
                 <bytes>true</bytes>
               </value>
-              <name>saveConfig</name>
             </objProp>
             <stringProp name="filename"></stringProp>
           </ResultCollector>
@@ -919,6 +919,7 @@
           <MailerResultCollector guiclass="MailerVisualizer" testclass="MailerResultCollector" testname="Mailer Visualizer" enabled="true">
             <boolProp name="ResultCollector.error_logging">false</boolProp>
             <objProp>
+              <name>saveConfig</name>
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
@@ -943,7 +944,6 @@
                 <assertionsResultsToSave>0</assertionsResultsToSave>
                 <bytes>true</bytes>
               </value>
-              <name>saveConfig</name>
             </objProp>
             <elementProp name="MailerResultCollector.mailer_model" elementType="MailerModel">
               <stringProp name="MailerModel.successLimit">2</stringProp>
@@ -960,6 +960,7 @@
           <ResultCollector guiclass="MonitorHealthVisualizer" testclass="ResultCollector" testname="Monitor Results" enabled="true">
             <boolProp name="ResultCollector.error_logging">false</boolProp>
             <objProp>
+              <name>saveConfig</name>
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
@@ -984,7 +985,6 @@
                 <assertionsResultsToSave>0</assertionsResultsToSave>
                 <bytes>true</bytes>
               </value>
-              <name>saveConfig</name>
             </objProp>
             <stringProp name="filename"></stringProp>
           </ResultCollector>
@@ -992,6 +992,7 @@
           <ResultCollector guiclass="SimpleDataWriter" testclass="ResultCollector" testname="Simple Data Writer" enabled="true">
             <boolProp name="ResultCollector.error_logging">false</boolProp>
             <objProp>
+              <name>saveConfig</name>
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
@@ -1016,7 +1017,6 @@
                 <assertionsResultsToSave>0</assertionsResultsToSave>
                 <bytes>true</bytes>
               </value>
-              <name>saveConfig</name>
             </objProp>
             <stringProp name="filename"></stringProp>
           </ResultCollector>
@@ -1024,6 +1024,7 @@
           <ResultCollector guiclass="SplineVisualizer" testclass="ResultCollector" testname="Spline Visualizer" enabled="true">
             <boolProp name="ResultCollector.error_logging">false</boolProp>
             <objProp>
+              <name>saveConfig</name>
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
@@ -1048,7 +1049,6 @@
                 <assertionsResultsToSave>0</assertionsResultsToSave>
                 <bytes>true</bytes>
               </value>
-              <name>saveConfig</name>
             </objProp>
             <stringProp name="filename"></stringProp>
           </ResultCollector>
@@ -1056,6 +1056,7 @@
           <ResultCollector guiclass="StatGraphVisualizer" testclass="ResultCollector" testname="Aggregate Graph" enabled="true">
             <boolProp name="ResultCollector.error_logging">false</boolProp>
             <objProp>
+              <name>saveConfig</name>
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
@@ -1080,7 +1081,6 @@
                 <assertionsResultsToSave>0</assertionsResultsToSave>
                 <bytes>true</bytes>
               </value>
-              <name>saveConfig</name>
             </objProp>
             <stringProp name="filename"></stringProp>
           </ResultCollector>
@@ -1088,6 +1088,7 @@
           <ResultCollector guiclass="StatVisualizer" testclass="ResultCollector" testname="Aggregate Report" enabled="true">
             <boolProp name="ResultCollector.error_logging">false</boolProp>
             <objProp>
+              <name>saveConfig</name>
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
@@ -1112,7 +1113,6 @@
                 <assertionsResultsToSave>0</assertionsResultsToSave>
                 <bytes>true</bytes>
               </value>
-              <name>saveConfig</name>
             </objProp>
             <stringProp name="filename"></stringProp>
           </ResultCollector>
@@ -1120,6 +1120,7 @@
           <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
             <boolProp name="ResultCollector.error_logging">false</boolProp>
             <objProp>
+              <name>saveConfig</name>
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
@@ -1144,7 +1145,6 @@
                 <assertionsResultsToSave>0</assertionsResultsToSave>
                 <bytes>true</bytes>
               </value>
-              <name>saveConfig</name>
             </objProp>
             <stringProp name="filename"></stringProp>
           </ResultCollector>
@@ -1152,6 +1152,7 @@
           <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results in Table" enabled="true">
             <boolProp name="ResultCollector.error_logging">false</boolProp>
             <objProp>
+              <name>saveConfig</name>
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
@@ -1176,7 +1177,6 @@
                 <assertionsResultsToSave>0</assertionsResultsToSave>
                 <bytes>true</bytes>
               </value>
-              <name>saveConfig</name>
             </objProp>
             <stringProp name="filename"></stringProp>
           </ResultCollector>
@@ -1184,6 +1184,7 @@
           <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
             <boolProp name="ResultCollector.error_logging">false</boolProp>
             <objProp>
+              <name>saveConfig</name>
               <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
@@ -1208,7 +1209,6 @@
                 <assertionsResultsToSave>0</assertionsResultsToSave>
                 <bytes>true</bytes>
               </value>
-              <name>saveConfig</name>
             </objProp>
             <stringProp name="filename"></stringProp>
           </ResultCollector>
