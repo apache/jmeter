@@ -291,7 +291,9 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
         }
 
         // What are we testing against?
-        if (isTestFieldResponseData()) {
+        if (isScopeVariable()){
+            toCheck = getThreadContext().getVariables().get(getVariableName());
+        } else if (isTestFieldResponseData()) {
             toCheck = response.getResponseDataAsString(); // (bug25052)
         } else if (isTestFieldResponseCode()) {
             toCheck = response.getResponseCode();
@@ -375,7 +377,9 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
         StringBuilder sb = new StringBuilder(200);
         sb.append("Test failed: ");
 
-        if (isTestFieldResponseData()) {
+        if (isScopeVariable()){
+            sb.append("variable(").append(getVariableName()).append(')');            
+        } else if (isTestFieldResponseData()) {
             sb.append("text");
         } else if (isTestFieldResponseCode()) {
             sb.append("code");
