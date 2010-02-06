@@ -60,6 +60,12 @@ To override the default local language fully, set the JMeter property "language"
 <h2>Incompatible changes</h2>
 
 <p>
+HTTP Redirect now defaults to "Follow Redirects" rather than "Redirect Automatically".
+This is to enable JMeter to track cookies that may be sent during redirects.
+This does not affect existing test plans; it only affects the default for new HTTP Samplers.
+</p>
+
+<p>
 The Avalon file format for JMX and JTL files is no longer supported.
 Any such files will need to be converted by reading them in JMeter 2.3.4 and resaving them.
 </p>
