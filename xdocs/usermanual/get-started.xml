@@ -98,7 +98,7 @@ Even if your OS is not listed above, JMeter should run on it provided that the J
 
 
 <subsection name="&sect-num;.2.1 Java Compiler" anchor="opt_compiler">
-<p>If you want to build the JMeter source or develop JMeter plugins, then you will need a fully compliant JDK 1.4 or higher.</p>
+<p>If you want to build the JMeter source or develop JMeter plugins, then you will need a fully compliant JDK 1.5 or higher.</p>
 </subsection>
 
 <subsection name="&sect-num;.2.2 SAX XML Parser" anchor="opt_sax">
@@ -194,6 +194,9 @@ Windows script files (the .CMD files require Win2K or later):
 <li>jmeter-n-r.cmd - drop a JMX file on this to run a non-GUI test remotely</li>
 <li>jmeter-t.cmd - drop a JMX file on this to load it in GUI mode</li>
 <li>jmeter-server.bat - start JMeter in server mode</li>
+<li>mirror-server.cmd - runs the JMeter Mirror Server in non-GUI mode</li>
+<li>shutdown.cmd - Run the Shutdown client to stop a non-GUI instance gracefully</li>
+<li>stoptest.cmd - Run the Shutdown client to stop a non-GUI instance abruptly</li>
 </ul>
 Note: the special name LAST can be used with jmeter-n.cmd, jmeter-t.cmd and jmeter-n-r.cmd
 and means the last test plan that was run interactively.
@@ -214,10 +217,14 @@ Un*x script files; should work on most Linux/Unix systems:
 <li>jmeter - run JMeter (in GUI mode by default). Defines some JVM settings which may not work for all JVMs.</li>
 <li>jmeter-server - start JMeter in server mode (calls jmeter script with appropriate parameters)</li>
 <li>jmeter.sh - very basic JMeter script with no JVM options specified.</li>
+<li>mirror-server.sh - runs the JMeter Mirror Server in non-GUI mode</li>
+<li>shutdown.sh - Run the Shutdown client to stop a non-GUI instance gracefully</li>
+<li>stoptest.sh - Run the Shutdown client to stop a non-GUI instance abruptly</li>
 </ul>
 </p>
 <p>
-It may be necessary to edit the jmeter shell script if some of the JVM options are not supported.
+It may be necessary to edit the jmeter shell script if some of the JVM options are not supported
+by the JVM you are using.
 The JVM_ARGS environment variable can be used to override or set additional JVM options, for example:
 <pre>
 JVM_ARGS="-Xms1024m -Xmx1024m" jmeter -t test.jmx [etc.]
