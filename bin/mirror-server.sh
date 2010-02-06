@@ -15,6 +15,9 @@
 ##   See the License for the specific language governing permissions and
 ##   limitations under the License.
 
+#   Run the JMeter mirror server in non-GUI mode
+#   P1 = port to use (default 8080)
+
 cd `dirname $0`
 
 CP=../lib/ext/ApacheJMeter_http.jar;../lib/ext/ApacheJMeter_core.jar;../lib/jorphan.jar
