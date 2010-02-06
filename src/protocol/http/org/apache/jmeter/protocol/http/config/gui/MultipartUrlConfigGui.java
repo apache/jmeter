@@ -82,6 +82,7 @@ public class MultipartUrlConfigGui extends UrlConfigGui {
 
         this.add(getWebServerTimeoutPanel(), BorderLayout.NORTH);
         this.add(webRequestPanel, BorderLayout.CENTER);
+        this.add(getProxyServerPanel(), BorderLayout.SOUTH);
     }
 
     private JPanel getHTTPFileArgsPanel() {
