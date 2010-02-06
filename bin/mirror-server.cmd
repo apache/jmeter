@@ -15,6 +15,9 @@ rem   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 rem   See the License for the specific language governing permissions and
 rem   limitations under the License.
 
+rem   Run the JMeter mirror server in non-GUI mode
+rem   P1 = port to use (default 8080)
+
 setlocal
 
 cd /D %~dp0
