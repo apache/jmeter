@@ -15,7 +15,9 @@
 ##   See the License for the specific language governing permissions and
 ##   limitations under the License.
 
-# Run the JMeter shutdown client
+#   Run the Shutdown client to stop a non-GUI instance abruptly
+
+#   P1 = command port for JMeter instance (defaults to 4445)
 
 DIRNAME=`dirname $0`
 
