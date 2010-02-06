@@ -15,7 +15,9 @@ rem   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 rem   See the License for the specific language governing permissions and
 rem   limitations under the License.
 
-rem   Run the Shutdown client
+rem   Run the Shutdown client to stop a non-GUI instance gracefully
+
+rem   P1 = command port for JMeter instance (defaults to 4445)
 
 java -cp %~dp0ApacheJMeter.jar org.apache.jmeter.util.ShutdownClient Shutdown %*
 pause 
