@@ -258,7 +258,7 @@ your Thread Group. If you do not add a delay, JMeter could overwhelm your server
 making too many requests in a very short amount of time.</p>
 
 <p>The timer will cause JMeter to delay a certain amount of time <b>before</b> each
-request that a thread makes.</p>
+sampler which is in its <a href="#scoping_rules">scope</a>.</p>
 
 <p>
 If you choose to add more than one timer to a Thread Group, JMeter takes the sum of
@@ -285,6 +285,11 @@ the whole response.</p>
 add an assertion to a HTTP Request that checks for the text, "&amp;lt;/HTML&amp;gt;".  JMeter
 will then check that the text is present in the HTTP response.  If JMeter cannot find the
 text, then it will mark this as a failed request.</p>
+
+<p>
+Note that assertions apply to all samplers which are in its <a href="#scoping_rules">scope</a>.
+To restrict the assertion to a single sampler, add the assertion as a child of the sampler.
+</p>
 
 <p>To view the assertion results, add an Assertion Listener to the Thread Group.
 Failed Assertions will also show up in the Tree View and Table Listeners, 
