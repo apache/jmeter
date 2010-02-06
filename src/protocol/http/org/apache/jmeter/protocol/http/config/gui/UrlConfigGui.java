@@ -106,8 +106,8 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
     public void clear() {
         domain.setText(""); // $NON-NLS-1$
         if (notConfigOnly){
-            followRedirects.setSelected(false);
-            autoRedirects.setSelected(true);
+            followRedirects.setSelected(true);
+            autoRedirects.setSelected(false);
             method.setText(HTTPSamplerBase.DEFAULT_METHOD);
             useKeepAlive.setSelected(true);
             useMultipartForPost.setSelected(false);
@@ -221,6 +221,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
 
         this.add(getWebServerTimeoutPanel(), BorderLayout.NORTH);
         this.add(webRequestPanel, BorderLayout.CENTER);
+        this.add(getProxyServerPanel(), BorderLayout.SOUTH);
     }
 
     /**
@@ -250,6 +251,17 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         webServerTimeoutPanel.add(webServerPanel, BorderLayout.CENTER);
         webServerTimeoutPanel.add(timeOut, BorderLayout.EAST);
         
+        JPanel bigPanel = new VerticalPanel();
+        bigPanel.add(webServerTimeoutPanel);
+        return bigPanel;
+    }
+
+    /**
+     * Create a panel containing the proxy server details
+     * 
+     * @return the panel
+     */
+    protected final JPanel getProxyServerPanel(){
         JPanel proxyServer = new HorizontalPanel();
         proxyServer.add(getProxyHostPanel(), BorderLayout.CENTER);
         proxyServer.add(getProxyPortPanel(), BorderLayout.EAST);
@@ -264,10 +276,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         proxyServerPanel.add(proxyServer, BorderLayout.CENTER);
         proxyServerPanel.add(proxyLogin, BorderLayout.EAST);
         
-        JPanel bigPanel = new VerticalPanel();
-        bigPanel.add(webServerTimeoutPanel);
-        bigPanel.add(proxyServerPanel);
-        return bigPanel;
+        return proxyServerPanel;        
     }
 
     private JPanel getPortPanel() {
@@ -385,11 +394,12 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
 
         if (notConfigOnly){
             followRedirects = new JCheckBox(JMeterUtils.getResString("follow_redirects")); // $NON-NLS-1$
-            followRedirects.setSelected(false);
+            followRedirects.setSelected(true);
+            followRedirects.addChangeListener(this);
 
             autoRedirects = new JCheckBox(JMeterUtils.getResString("follow_redirects_auto")); //$NON-NLS-1$
             autoRedirects.addChangeListener(this);
-            autoRedirects.setSelected(true);// Default changed in 2.3
+            autoRedirects.setSelected(false);// Default changed in 2.3 and again in 2.4
 
             useKeepAlive = new JCheckBox(JMeterUtils.getResString("use_keepalive")); // $NON-NLS-1$
             useKeepAlive.setSelected(true);
@@ -457,13 +467,16 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         return argsPanel;
     }
 
-    // Disable follow redirects if Autoredirect is selected
+    // autoRedirects and followRedirects cannot both be selected
     public void stateChanged(ChangeEvent e) {
         if (e.getSource() == autoRedirects){
             if (autoRedirects.isSelected()) {
-                followRedirects.setEnabled(false);
-            } else {
-                followRedirects.setEnabled(true);
+                followRedirects.setSelected(false);
+            }
+        }
+        if (e.getSource() == followRedirects){
+            if (followRedirects.isSelected()) {
+                autoRedirects.setSelected(false);
             }
         }
     }
