@@ -111,7 +111,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
 
         String regex = getRegex();
         try {
-            List<MatchResult> matches = processMatches(regex, previousResult, matchNumber);
+            List<MatchResult> matches = processMatches(regex, previousResult, matchNumber, vars);
             int prevCount = 0;
             String prevString = vars.get(refName + REF_MATCH_NR);
             if (prevString != null) {
@@ -176,9 +176,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
        return inputString;
     }
     
-    private List<MatchResult> processMatches(String regex, SampleResult result, int matchNumber) {
-        List<SampleResult> sampleList = getSampleList(result);
-
+    private List<MatchResult> processMatches(String regex, SampleResult result, int matchNumber, JMeterVariables vars) {
         if (log.isDebugEnabled()) {
             log.debug("Regex = " + regex);
         }
@@ -188,23 +186,38 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         List<MatchResult> matches = new ArrayList<MatchResult>();
         int found = 0;
 
-        for (SampleResult sr : sampleList) {
-            String inputString = getInputString(sr);
-            PatternMatcherInput input = new PatternMatcherInput(inputString);
-            while (matchNumber <=0 || found != matchNumber) {
-                if (matcher.contains(input, pattern)) {
-                    log.debug("RegexExtractor: Match found!");
-                    matches.add(matcher.getMatch());
-                    found++;
-                } else {
+        if (isScopeVariable()){
+            String inputString=vars.get(getVariableName());
+            matchStrings(matchNumber, matcher, pattern, matches, found,
+                    inputString);            
+        } else {
+            List<SampleResult> sampleList = getSampleList(result);
+            for (SampleResult sr : sampleList) {
+                String inputString = getInputString(sr);
+                found = matchStrings(matchNumber, matcher, pattern, matches, found,
+                        inputString);
+                if (matchNumber > 0 && found == matchNumber){// no need to process further
                     break;
                 }
             }
-            if (matchNumber > 0 && found == matchNumber){// no need to process further
+        }
+        return matches;
+    }
+
+    private int matchStrings(int matchNumber, Perl5Matcher matcher,
+            Pattern pattern, List<MatchResult> matches, int found,
+            String inputString) {
+        PatternMatcherInput input = new PatternMatcherInput(inputString);
+        while (matchNumber <=0 || found != matchNumber) {
+            if (matcher.contains(input, pattern)) {
+                log.debug("RegexExtractor: Match found!");
+                matches.add(matcher.getMatch());
+                found++;
+            } else {
                 break;
             }
         }
-        return matches;
+        return found;
     }
 
     /**
