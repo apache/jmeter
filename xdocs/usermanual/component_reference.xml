@@ -81,7 +81,7 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
 
 </component>
 
-<component name="HTTP Request" index="&sect-num;.1.2"  width="735" height="646" screenshot="webtest/http-request.png">
+<component name="HTTP Request" index="&sect-num;.1.2"  width="687" height="661" screenshot="http-request.png">
 
 <description>
         <p>This sampler lets you send an HTTP/HTTPS request to a web server.  It
@@ -4027,7 +4027,7 @@ For details, see <complink name="BSF PreProcessor"/>.
 	after all Assertions have been run.
 	</p>
 	</description>
-<component name="Regular Expression Extractor" index="&sect-num;.8.1"  width="618" height="300" screenshot="regex_extractor.png">
+<component name="Regular Expression Extractor" index="&sect-num;.8.1"  width="728" height="301" screenshot="regex_extractor.png">
 <description><p>Allows the user to extract values from a server response using a Perl-type regular expression.  As a post-processor,
 this element will execute after each Sample request in its scope, applying the regular expression, extracting the requested values,
 generate the template string, and store the result into the given variable name.</p></description>
@@ -4470,7 +4470,7 @@ Your WorkBench can be saved independently, if you like (right-click on WorkBench
 </p>
 </component>
 
-<component name="HTTP Proxy Server" index="&sect-num;.9.5"  width="951" height="611" screenshot="proxy_control.png">
+<component name="HTTP Proxy Server" index="&sect-num;.9.5"  width="954" height="615" screenshot="proxy_control.png">
 <description><p>The Proxy Server allows JMeter to watch and record your actions while you browse your web application
 with your normal browser.  JMeter will create test sample objects and store them
 directly into your test plan as you go (so you can view samples interactively while you make them).</p>
