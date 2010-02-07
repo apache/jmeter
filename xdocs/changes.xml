@@ -188,7 +188,7 @@ In particular, Aggregate Report can now handle large numbers of samples.
 <li>Bug 48331 - XpathExtractor does not return XML string representations for a Nodeset</li>
 <li>Bug 48511 - add parent,child,all selection to regex extractor</li>
 <li>Add Sampler scope selection to XPathExtractor</li>
-<li>Response Assertion and Size Assertion can now be applied to a JMeter variable</li>
+<li>Regular Expression Extractor, Response Assertion and Size Assertion can now be applied to a JMeter variable</li>
 </ul>
 
 <h3>Functions</h3>
