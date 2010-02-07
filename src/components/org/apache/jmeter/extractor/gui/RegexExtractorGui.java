@@ -146,7 +146,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
 
         Box box = Box.createVerticalBox();
         box.add(makeTitlePanel());
-        box.add(createScopePanel());
+        box.add(createScopePanel(true));
         box.add(makeSourcePanel());
         add(box, BorderLayout.NORTH);
         add(makeParameterPanel(), BorderLayout.CENTER);

@@ -4040,6 +4040,7 @@ generate the template string, and store the result into the given variable name.
         <li>Main sample only - only applies to the main sample</li>
         <li>Sub-samples only - only applies to the sub-samples</li>
         <li>Main sample and sub-samples - applies to both.</li>
+        <li>JMeter Variable - assertion is to be applied to the contents of the named variable</li>
         </ul>
         Matching is applied to all qualifying samples in turn.
         For example if there is a main sample and 3 sub-samples, each of which contains a single match for the regex,
