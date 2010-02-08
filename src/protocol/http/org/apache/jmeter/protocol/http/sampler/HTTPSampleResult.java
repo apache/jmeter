@@ -36,6 +36,12 @@ public class HTTPSampleResult extends SampleResult {
 
     private String method;
 
+    /**
+     * The raw value of the Location: header; may be null. 
+     * This is supposed to be an absolute URL:
+     * <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.30">RFC2616 sec14.30</a>
+     * but is often relative.
+     */
     private String redirectLocation;
 
     private String queryString = ""; // never null
