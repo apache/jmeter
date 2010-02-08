@@ -39,12 +39,24 @@ public class TestHTTPUtils extends TestCase {
         }
         
         public void testMakeRelativeURL() throws Exception {
-            URL base = new URL("http://host/a/b/c");
-            assertEquals(new URL("http://host/a/b/d"),ConversionUtils.makeRelativeURL(base,"d"));
-            assertEquals(new URL("http://host/a/d"),ConversionUtils.makeRelativeURL(base,"../d"));
-            assertEquals(new URL("http://host/d"),ConversionUtils.makeRelativeURL(base,"../../d"));
-            assertEquals(new URL("http://host/d"),ConversionUtils.makeRelativeURL(base,"../../../d"));
-            assertEquals(new URL("http://host/d"),ConversionUtils.makeRelativeURL(base,"../../../../d"));
-            assertEquals(new URL("http://host/../d"),ConversionUtils.makeRelativeURL(base,"/../d"));
+            URL base = new URL("http://192.168.0.1/a/b/c"); // Trailing file
+            assertEquals(new URL("http://192.168.0.1/a/b/d"),ConversionUtils.makeRelativeURL(base,"d"));
+            assertEquals(new URL("http://192.168.0.1/a/d"),ConversionUtils.makeRelativeURL(base,"../d"));
+            assertEquals(new URL("http://192.168.0.1/d"),ConversionUtils.makeRelativeURL(base,"../../d"));
+            assertEquals(new URL("http://192.168.0.1/d"),ConversionUtils.makeRelativeURL(base,"../../../d"));
+            assertEquals(new URL("http://192.168.0.1/d"),ConversionUtils.makeRelativeURL(base,"../../../../d"));
+            assertEquals(new URL("http://192.168.0.1/../d"),ConversionUtils.makeRelativeURL(base,"/../d"));
+            assertEquals(new URL("http://192.168.0.1/a/b/d"),ConversionUtils.makeRelativeURL(base,"./d"));
+        }
+
+        public void testMakeRelativeURL2() throws Exception {
+            URL base = new URL("http://192.168.0.1/a/b/c/"); // Trailing directory
+            assertEquals(new URL("http://192.168.0.1/a/b/c/d"),ConversionUtils.makeRelativeURL(base,"d"));
+            assertEquals(new URL("http://192.168.0.1/a/b/d"),ConversionUtils.makeRelativeURL(base,"../d"));
+            assertEquals(new URL("http://192.168.0.1/a/d"),ConversionUtils.makeRelativeURL(base,"../../d"));
+            assertEquals(new URL("http://192.168.0.1/d"),ConversionUtils.makeRelativeURL(base,"../../../d"));
+            assertEquals(new URL("http://192.168.0.1/d"),ConversionUtils.makeRelativeURL(base,"../../../../d"));
+            assertEquals(new URL("http://192.168.0.1/../d"),ConversionUtils.makeRelativeURL(base,"/../d"));
+            assertEquals(new URL("http://192.168.0.1/a/b/c/d"),ConversionUtils.makeRelativeURL(base,"./d"));
         }
 }
