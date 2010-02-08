@@ -125,14 +125,38 @@ public class TestHTTPSamplers extends TestCase {
             assertEquals("http://www.apache.org/index.html?param1=value1", config.getUrl().toString());
         }
 
+        public void testRedirect() throws Exception {
+            HTTPSamplerBase config = new HTTPNullSampler();
+            config.setProtocol("http");
+            config.setMethod(HTTPSamplerBase.GET);
+            config.setDomain("192.168.0.1");
+            HTTPSampleResult res = new HTTPSampleResult();
+            res.sampleStart();
+            res.setURL(config.getUrl());
+            res.setResponseCode("301");
+            res.sampleEnd();
+
+            res.setRedirectLocation("./");
+            config.followRedirects(res , 0);
+            assertEquals("http://192.168.0.1/", config.getUrl().toString());
+            
+            res.setRedirectLocation(".");
+            config.followRedirects(res , 0);
+            assertEquals("http://192.168.0.1/", config.getUrl().toString());
+            
+            res.setRedirectLocation("../");
+            config.followRedirects(res , 0);
+            assertEquals("http://192.168.0.1/", config.getUrl().toString());
+        }
+
         public void testMakingUrl2() throws Exception {
             HTTPSamplerBase config = new HTTPNullSampler();
             config.setProtocol("http");
             config.setMethod(HTTPSamplerBase.GET);
             config.addArgument("param1", "value1");
             config.setPath("/index.html?p1=p2");
-            config.setDomain("www.apache.org");
-            assertEquals("http://www.apache.org/index.html?param1=value1&p1=p2", config.getUrl().toString());
+            config.setDomain("192.168.0.1");
+            assertEquals("http://192.168.0.1/index.html?param1=value1&p1=p2", config.getUrl().toString());
         }
 
         public void testMakingUrl3() throws Exception {
@@ -141,8 +165,8 @@ public class TestHTTPSamplers extends TestCase {
             config.setMethod(HTTPSamplerBase.POST);
             config.addArgument("param1", "value1");
             config.setPath("/index.html?p1=p2");
-            config.setDomain("www.apache.org");
-            assertEquals("http://www.apache.org/index.html?p1=p2", config.getUrl().toString());
+            config.setDomain("192.168.0.1");
+            assertEquals("http://192.168.0.1/index.html?p1=p2", config.getUrl().toString());
         }
 
         // test cases for making Url, and exercise method
@@ -154,8 +178,8 @@ public class TestHTTPSamplers extends TestCase {
             config.setMethod(HTTPSamplerBase.GET);
             config.addArgument("param1", "value1", "=");
             config.setPath("/index.html");
-            config.setDomain("www.apache.org");
-            assertEquals("http://www.apache.org/index.html?param1=value1", config.getUrl().toString());
+            config.setDomain("192.168.0.1");
+            assertEquals("http://192.168.0.1/index.html?param1=value1", config.getUrl().toString());
         }
 
         public void testMakingUrl5() throws Exception {
@@ -164,8 +188,8 @@ public class TestHTTPSamplers extends TestCase {
             config.setMethod(HTTPSamplerBase.GET);
             config.addArgument("param1", "", "=");
             config.setPath("/index.html");
-            config.setDomain("www.apache.org");
-            assertEquals("http://www.apache.org/index.html?param1=", config.getUrl().toString());
+            config.setDomain("192.168.0.1");
+            assertEquals("http://192.168.0.1/index.html?param1=", config.getUrl().toString());
         }
 
         public void testMakingUrl6() throws Exception {
@@ -174,8 +198,8 @@ public class TestHTTPSamplers extends TestCase {
             config.setMethod(HTTPSamplerBase.GET);
             config.addArgument("param1", "", "");
             config.setPath("/index.html");
-            config.setDomain("www.apache.org");
-            assertEquals("http://www.apache.org/index.html?param1", config.getUrl().toString());
+            config.setDomain("192.168.0.1");
+            assertEquals("http://192.168.0.1/index.html?param1", config.getUrl().toString());
         }
 
         // test cases for making Url, and exercise method
@@ -187,8 +211,8 @@ public class TestHTTPSamplers extends TestCase {
             config.setMethod(HTTPSamplerBase.GET);
             config.parseArguments("param1=value1");
             config.setPath("/index.html");
-            config.setDomain("www.apache.org");
-            assertEquals("http://www.apache.org/index.html?param1=value1", config.getUrl().toString());
+            config.setDomain("192.168.0.1");
+            assertEquals("http://192.168.0.1/index.html?param1=value1", config.getUrl().toString());
         }
 
         public void testMakingUrl8() throws Exception {
@@ -197,8 +221,8 @@ public class TestHTTPSamplers extends TestCase {
             config.setMethod(HTTPSamplerBase.GET);
             config.parseArguments("param1=");
             config.setPath("/index.html");
-            config.setDomain("www.apache.org");
-            assertEquals("http://www.apache.org/index.html?param1=", config.getUrl().toString());
+            config.setDomain("192.168.0.1");
+            assertEquals("http://192.168.0.1/index.html?param1=", config.getUrl().toString());
         }
 
         public void testMakingUrl9() throws Exception {
@@ -207,8 +231,8 @@ public class TestHTTPSamplers extends TestCase {
             config.setMethod(HTTPSamplerBase.GET);
             config.parseArguments("param1");
             config.setPath("/index.html");
-            config.setDomain("www.apache.org");
-            assertEquals("http://www.apache.org/index.html?param1", config.getUrl().toString());
+            config.setDomain("192.168.0.1");
+            assertEquals("http://192.168.0.1/index.html?param1", config.getUrl().toString());
         }
 
         public void testMakingUrl10() throws Exception {
@@ -217,8 +241,8 @@ public class TestHTTPSamplers extends TestCase {
             config.setMethod(HTTPSamplerBase.GET);
             config.parseArguments("");
             config.setPath("/index.html");
-            config.setDomain("www.apache.org");
-            assertEquals("http://www.apache.org/index.html", config.getUrl().toString());
+            config.setDomain("192.168.0.1");
+            assertEquals("http://192.168.0.1/index.html", config.getUrl().toString());
         }
         
         public void testFileList(){
