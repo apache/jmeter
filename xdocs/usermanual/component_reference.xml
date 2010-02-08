@@ -2577,6 +2577,10 @@ The Comparison Assertion Visualizer shows the results of any <complink name="Com
 	Previously it was necessary to choose a delimiter that was not used in any values.
 	</p>
 	<p>
+	Versions of JMeter after 2.3.4 support CSV files which have a header line defining the column names.
+	To enable this, leave the "Variable Names" field empty. The correct delimiter must be provided.
+	</p>
+	<p>
 	By default, the file is only opened once, and each thread will use a different line from the file.
 	However the order in which lines are passed to threads depends on the order in which they execute,
 	which may vary between iterations.
@@ -2620,7 +2624,11 @@ The Comparison Assertion Visualizer shows the results of any <complink name="Com
   If the OS does not distinguish between upper and lower case, csvData.TXT would also be opened separately. 
   </property>
   <property name="File Encoding" required="No">The encoding to be used to read the file, if not the platform default.</property>
-  <property name="Variable Names" required="Yes">List of variable names (comma-delimited)</property>
+  <property name="Variable Names" required="Yes">List of variable names (comma-delimited).
+  Versions of JMeter after 2.3.4 support CSV header lines:
+  if the variable name field empty, then the first line of the file is read and interpreted as the list of column names.
+  The names must be separated by the delimiter character. They can be quoted using double-quotes.
+  </property>
   <property name="Delimiter" required="Yes">Delimiter to be used to split the records in the file.
   If there are fewer values on the line than there are variables the remaining variables are not updated -
   so they will retain their previous value (if any).</property>
