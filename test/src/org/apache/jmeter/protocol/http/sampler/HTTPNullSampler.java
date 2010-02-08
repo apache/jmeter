@@ -28,15 +28,19 @@ public final class HTTPNullSampler extends HTTPSamplerBase {
 
     private static final long serialVersionUID = 240L;
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Returns a sample Result with the request fields filled in.
      * 
-     * @see org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase#sample(java.net.URL,
-     *      java.lang.String, boolean, int)
+     * {@inheritDoc}
      */
     @Override
-    protected HTTPSampleResult sample(URL u, String s, boolean b, int i) {
-        throw new UnsupportedOperationException("For test purposes only");
+    protected HTTPSampleResult sample(URL u, String method, boolean areFollowingRedirec, int depth) {
+        HTTPSampleResult res = new HTTPSampleResult();
+        res.sampleStart();
+        res.setURL(u);
+        res.sampleEnd();
+        return res;
+//        throw new UnsupportedOperationException("For test purposes only");
     }
 
 }
