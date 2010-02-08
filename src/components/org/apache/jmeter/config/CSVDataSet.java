@@ -91,10 +91,9 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
         recycle = true;
         return this;
     }
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.engine.event.LoopIterationListener#iterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)
+
+    /**
+     * {@inheritDoc}
      */
     public void iterationStart(LoopIterationEvent iterEvent) {
         FileServer server = FileServer.getFileServer();
@@ -117,8 +116,18 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
                     alias = _fileName+"@"+mode; // user-specified key
                     break;
             }
-            server.reserveFile(_fileName, getFileEncoding(), alias);
-            vars = JOrphanUtils.split(getVariableNames(), ","); // $NON-NLS-1$
+            final String names = getVariableNames();
+            if (names == null || names.length()==0) {
+                String header = server.reserveFile(_fileName, getFileEncoding(), alias, true);                
+                try {
+                    vars = CSVSaveService.csvSplitString(header, getDelimiter().charAt(0));
+                } catch (IOException e) {
+                    log.warn("Could not split CSV header line",e);
+                }                
+            } else {
+                server.reserveFile(_fileName, getFileEncoding(), alias);
+                vars = JOrphanUtils.split(names, ","); // $NON-NLS-1$                
+            }
         }
         try {
             String delim = getDelimiter();
