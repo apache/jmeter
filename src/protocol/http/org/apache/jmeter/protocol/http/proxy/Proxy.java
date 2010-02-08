@@ -97,10 +97,12 @@ public class Proxy extends Thread {
     
     // Proxy configuration SSL
     private static final String CERT_DIRECTORY =
-        JMeterUtils.getPropDefault("proxy.cert.directory", "."); // $NON-NLS-1$ $NON-NLS-2$
+        JMeterUtils.getPropDefault("proxy.cert.directory", JMeterUtils.getJMeterBinDir()); // $NON-NLS-1$
     
+    private static final String CERT_FILE_DEFAULT = "proxyserver.jks";// $NON-NLS-1$
+
     private static final String CERT_FILE =
-        JMeterUtils.getPropDefault("proxy.cert.file", "proxyserver.jks"); // $NON-NLS-1$ $NON-NLS-2$
+        JMeterUtils.getPropDefault("proxy.cert.file", CERT_FILE_DEFAULT); // $NON-NLS-1$
     
     private static final char[] KEYSTORE_PASSWORD =
         JMeterUtils.getPropDefault("proxy.cert.keystorepass", "password").toCharArray(); // $NON-NLS-1$ $NON-NLS-2$

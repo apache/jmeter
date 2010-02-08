@@ -4504,6 +4504,18 @@ correct host, so the browser should display a dialogue asking if you want to acc
 You will need to accept the certificate in order to allow the JMeter Proxy to intercept the SSL traffic in order to
 record it. You should only accept the certificate temporarily.
 </p>
+<p>
+The following properties can be used to change the certificate that is used:
+<ul>
+<li>proxy.cert.directory - the directory in which to find the certificate (default = JMeter bin/)</li>
+<li>proxy.cert.file - name of the keystore file (default "proxyserver.jks")</li>
+<li>proxy.cert.keystorepass - keystore password (default "password")</li>
+<li>proxy.cert.keypassword - certificate key password (default "password")</li>
+<li>proxy.cert.type - the certificate type (default "JKS")</li>
+<li>proxy.cert.factory - the factory (default "SunX509")</li>
+<li>proxy.ssl.protocol - the protocol to be used (default "SSLv3")</li>
+</ul>
+</p>
 <note>
 If your browser currently uses a proxy (e.g. a company intranet may route all external requests via a proxy),
 then you need to <a href="get-started.html#proxy_server">tell JMeter to use that proxy</a> before starting JMeter, 
