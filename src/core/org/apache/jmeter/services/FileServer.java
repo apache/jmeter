@@ -118,7 +118,7 @@ public class FileServer {
      * @param charsetName - the character set encoding to use for the file (may be null)
      */
     public synchronized void reserveFile(String filename, String charsetName) {
-        reserveFile(filename, charsetName, filename);
+        reserveFile(filename, charsetName, filename, false);
     }
 
     /**
@@ -130,23 +130,45 @@ public class FileServer {
      * @param alias - the name to be used to access the object (must not be null)
      */
     public synchronized void reserveFile(String filename, String charsetName, String alias) {
+        reserveFile(filename, charsetName, alias, false);
+    }
+
+    /**
+     * Creates an association between a filename and a File inputOutputObject,
+     * and stores it for later use - unless it is already stored.
+     *
+     * @param filename - relative (to base) or absolute file name (must not be null)
+     * @param charsetName - the character set encoding to use for the file (may be null)
+     * @param alias - the name to be used to access the object (must not be null)
+     * @param hasHeader true if the file has a header line describing the contents
+     */
+    public synchronized String reserveFile(String filename, String charsetName, String alias, boolean hasHeader) {
         if (filename == null){
             throw new IllegalArgumentException("Filename must not be null");
         }
         if (alias == null){
             throw new IllegalArgumentException("Alias must not be null");
         }
-        if (!files.containsKey(alias)) {
+        FileEntry fileEntry = files.get(alias);
+        if (fileEntry == null) {
             File f = new File(filename);
-            FileEntry file =
+            fileEntry =
                 new FileEntry(f.isAbsolute() ? f : new File(base, filename),null,charsetName);
             if (filename.equals(alias)){
                 log.info("Stored: "+filename);
             } else {
                 log.info("Stored: "+filename+" Alias: "+alias);
             }
-            files.put(alias, file);
+            files.put(alias, fileEntry);
+            if (hasHeader){
+                try {
+                    fileEntry.headerLine=readLine(alias, false);
+                } catch (IOException e) {
+                    throw new IllegalArgumentException("Could not read file header line",e);
+                }
+            }
         }
+        return fileEntry.headerLine;
     }
 
    /**
@@ -297,9 +319,10 @@ public class FileServer {
     }
 
     private static class FileEntry{
-        private File file;
+        private String headerLine;
+        private final File file;
         private Object inputOutputObject; // Reader/Writer
-        private String charSetEncoding;
+        private final String charSetEncoding;
         FileEntry(File f, Object o, String e){
             file=f;
             inputOutputObject=o;

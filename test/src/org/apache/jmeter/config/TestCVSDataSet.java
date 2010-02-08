@@ -32,12 +32,18 @@ import org.apache.jmeter.threads.JMeterVariables;
 
 public class TestCVSDataSet extends JMeterTestCase {
 
-    public TestCVSDataSet() {
-        super();
-    }
-
+    private JMeterVariables threadVars;
+    
     public TestCVSDataSet(String arg0) {
         super(arg0);
+    }
+
+    @Override
+    public void setUp(){
+        JMeterContext jmcx = JMeterContextService.getContext();
+        jmcx.setVariables(new JMeterVariables());
+        threadVars = jmcx.getVariables();        
+        threadVars.put("b", "value");
     }
 
     @Override
@@ -46,11 +52,6 @@ public class TestCVSDataSet extends JMeterTestCase {
     }
     
     public void testopen() throws Exception {
-        JMeterContext jmcx = JMeterContextService.getContext();
-        jmcx.setVariables(new JMeterVariables());
-        JMeterVariables threadVars = jmcx.getVariables();
-        threadVars.put("b", "value");
-
         CSVDataSet csv = new CSVDataSet();
         csv.setFilename("No.such.filename");
         csv.setVariableNames("a,b,c");
@@ -92,6 +93,26 @@ public class TestCVSDataSet extends JMeterTestCase {
         assertEquals("c1",threadVars.get("c"));
     }
 
+    // Test CSV file with a header line
+    public void testHeaderOpen(){
+        CSVDataSet csv = new CSVDataSet();
+        csv.setFilename("testfiles/testheader.csv");
+        csv.setDelimiter("|");
+        assertNull(csv.getVariableNames());
+        csv.iterationStart(null);
+        assertNull(threadVars.get("a"));
+        assertEquals("a1",threadVars.get("A"));
+        assertEquals("b1",threadVars.get("B"));
+        assertEquals("c1",threadVars.get("C"));
+        assertEquals("d1",threadVars.get("D 1"));
+        csv.iterationStart(null);
+        assertNull(threadVars.get("a"));
+        assertEquals("a2",threadVars.get("A"));
+        assertEquals("b2",threadVars.get("B"));
+        assertEquals("c2",threadVars.get("C"));
+        assertEquals("d2",threadVars.get("D 1"));
+    }
+
     private CSVDataSet initCSV(){
         CSVDataSet csv = new CSVDataSet();
         csv.setFilename("testfiles/test.csv");
@@ -99,11 +120,8 @@ public class TestCVSDataSet extends JMeterTestCase {
         csv.setDelimiter(",");
         return csv;
     }
+
     public void testShareMode(){
-        JMeterContext jmcx = JMeterContextService.getContext();
-        jmcx.setVariables(new JMeterVariables());
-        JMeterVariables threadVars = jmcx.getVariables();
-        threadVars.put("b", "value");
         
         new CSVDataSetBeanInfo(); // needs to be initialised
         CSVDataSet csv0 = initCSV();

@@ -189,6 +189,7 @@ In particular, Aggregate Report can now handle large numbers of samples.
 <li>Bug 48511 - add parent,child,all selection to regex extractor</li>
 <li>Add Sampler scope selection to XPathExtractor</li>
 <li>Regular Expression Extractor, Response Assertion and Size Assertion can now be applied to a JMeter variable</li>
+<li>Bug 46790 - CSV Data Set Config should be able to parse CSV headers</li>
 </ul>
 
 <h3>Functions</h3>
