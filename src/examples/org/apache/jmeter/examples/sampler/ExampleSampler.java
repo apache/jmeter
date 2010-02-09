@@ -56,10 +56,8 @@ public class ExampleSampler extends AbstractSampler {
         trace("ExampleSampler()");
     }
 
-    /*
-     * (non-Javadoc) Performs the sample, and returns the result
-     *
-     * @see org.apache.jmeter.samplers.Sampler#sample(org.apache.jmeter.samplers.Entry)
+    /**
+     * {@inheritDoc}
      */
     public SampleResult sample(Entry e) {
         trace("sample()");

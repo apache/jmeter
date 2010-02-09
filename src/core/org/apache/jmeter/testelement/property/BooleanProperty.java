@@ -48,14 +48,14 @@ public class BooleanProperty extends AbstractProperty {
     }
 
     /**
-     * @see JMeterProperty#getStringValue()
+     * {@inheritDoc}
      */
     public String getStringValue() {
         return Boolean.toString(value);
     }
 
     /**
-     * @see JMeterProperty#getObjectValue()
+     * {@inheritDoc}
      */
     public Object getObjectValue() {
         return Boolean.valueOf(value);
@@ -69,17 +69,15 @@ public class BooleanProperty extends AbstractProperty {
     }
 
     /**
-     * @see JMeterProperty#getBooleanValue()
+     * {@inheritDoc}
      */
     @Override
     public boolean getBooleanValue() {
         return value;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#setRunningVersion(boolean)
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void setRunningVersion(boolean runningVersion) {
@@ -87,10 +85,8 @@ public class BooleanProperty extends AbstractProperty {
         super.setRunningVersion(runningVersion);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#recoverRunningVersion(org.apache.jmeter.testelement.TestElement)
+    /**
+     * {@inheritDoc}
      */
     public void recoverRunningVersion(TestElement owner) {
         value = savedValue;

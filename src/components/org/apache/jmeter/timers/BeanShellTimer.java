@@ -41,10 +41,8 @@ public class BeanShellTimer extends BeanShellTestElement implements Cloneable, T
         return INIT_FILE;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.timers.Timer#delay()
+    /**
+     * {@inheritDoc}
      */
     public long delay() {
         String ret="0";

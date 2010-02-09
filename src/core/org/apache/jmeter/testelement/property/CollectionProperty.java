@@ -91,6 +91,9 @@ public class CollectionProperty extends MultiProperty {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void setObjectValue(Object v) {
         if (v instanceof Collection<?>) {
             setCollection((Collection<?>) v);
@@ -98,24 +101,23 @@ public class CollectionProperty extends MultiProperty {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PropertyIterator iterator() {
         return getIterator(value);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see JMeterProperty#getStringValue()
+    /**
+     * {@inheritDoc}
      */
     public String getStringValue() {
         return value.toString();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see JMeterProperty#getObjectValue()
+    /**
+     * {@inheritDoc}
      */
     public Object getObjectValue() {
         return value;
@@ -125,10 +127,8 @@ public class CollectionProperty extends MultiProperty {
         return value.size();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see Object#clone()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public Object clone() {
@@ -155,15 +155,16 @@ public class CollectionProperty extends MultiProperty {
         value = normalizeList(coll);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void clear() {
         value.clear();
     }
 
     /**
-     * Easy way to add properties to the list.
-     *
-     * @param prop
+     * {@inheritDoc}
      */
     @Override
     public void addProperty(JMeterProperty prop) {
@@ -188,10 +189,8 @@ public class CollectionProperty extends MultiProperty {
         return NullProperty.class;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see JMeterProperty#recoverRunningVersion(TestElement)
+    /**
+     * {@inheritDoc}
      */
     public void recoverRunningVersion(TestElement owner) {
         if (savedValue != null) {
@@ -200,10 +199,8 @@ public class CollectionProperty extends MultiProperty {
         recoverRunningVersionOfSubElements(owner);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see JMeterProperty#setRunningVersion(boolean)
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void setRunningVersion(boolean running) {

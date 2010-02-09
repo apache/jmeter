@@ -271,10 +271,8 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
         threadGroups.add(group);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.TestListener#testEnded()
+    /**
+     * {@inheritDoc}
      */
     public void testEnded() {
         try {
@@ -284,28 +282,22 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.TestListener#testEnded(java.lang.String)
+    /**
+     * {@inheritDoc}
      */
     public void testEnded(String host) {
         testEnded();
 
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.TestListener#testIterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)
+    /**
+     * {@inheritDoc}
      */
     public void testIterationStart(LoopIterationEvent event) {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.TestListener#testStarted()
+    /**
+     * {@inheritDoc}
      */
     public void testStarted() {
         if (getBasedir() != null && getBasedir().length() > 0) {
@@ -323,10 +315,8 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.TestListener#testStarted(java.lang.String)
+    /**
+     * {@inheritDoc}
      */
     public void testStarted(String host) {
         testStarted();

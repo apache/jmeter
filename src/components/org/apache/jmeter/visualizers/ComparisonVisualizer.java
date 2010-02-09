@@ -125,10 +125,8 @@ public class ComparisonVisualizer extends AbstractVisualizer implements Clearabl
     }
 
     private class Selector implements TreeSelectionListener {
-        /*
-         * (non-Javadoc)
-         * 
-         * @see javax.swing.event.TreeSelectionListener#valueChanged(javax.swing.event.TreeSelectionEvent)
+        /**
+         * {@inheritDoc}
          */
         public void valueChanged(TreeSelectionEvent e) {
             try {

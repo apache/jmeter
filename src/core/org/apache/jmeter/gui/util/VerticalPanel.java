@@ -58,10 +58,8 @@ public class VerticalPanel extends JPanel {
         this.horizontalAlign = horizontalAlign;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.awt.Container#add(java.awt.Component)
+    /**
+     * {@inheritDoc}
      */
     @Override
     public Component add(Component c) {

@@ -73,10 +73,8 @@ public class BeanShellAssertion extends BeanShellTestElement implements Assertio
         return getPropertyAsBoolean(RESET_INTERPRETER);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.jmeter.assertions.Assertion#getResult(org.apache.jmeter.samplers.SampleResult)
+    /**
+     * {@inheritDoc}
      */
     public AssertionResult getResult(SampleResult response) {
         AssertionResult result = new AssertionResult(getName());

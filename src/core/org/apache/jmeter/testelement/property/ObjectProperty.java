@@ -30,10 +30,8 @@ public class ObjectProperty extends AbstractProperty {
 
     private Object savedValue;
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#recoverRunningVersion(org.apache.jmeter.testelement.TestElement)
+    /**
+     * {@inheritDoc}
      */
     public void recoverRunningVersion(TestElement owner) {
         if (savedValue != null) {
@@ -41,6 +39,9 @@ public class ObjectProperty extends AbstractProperty {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setRunningVersion(boolean runningVersion) {
         super.setRunningVersion(runningVersion);
@@ -51,10 +52,8 @@ public class ObjectProperty extends AbstractProperty {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.lang.Object#clone()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public Object clone() {
@@ -83,28 +82,22 @@ public class ObjectProperty extends AbstractProperty {
         value = p;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getStringValue()
+    /**
+     * {@inheritDoc}
      */
     public String getStringValue() {
         return value.toString();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getObjectValue()
+    /**
+     * {@inheritDoc}
      */
     public Object getObjectValue() {
         return value;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#setObjectValue(java.lang.Object)
+    /**
+     * {@inheritDoc}
      */
     public void setObjectValue(Object value) {
         this.value = value;

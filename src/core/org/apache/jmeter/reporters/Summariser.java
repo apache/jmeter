@@ -296,20 +296,17 @@ public class Summariser extends AbstractTestElement
         testEnded("local");
     }
 
-    /*
-     * (non-Javadoc)
-     *
+    /**
      * Called once for each Summariser in the test plan.
      * There may be more than one summariser with the same name,
      * however they will all be called before the test proper starts.
-     * 
+     * <p> 
      * However, note that this applies to a single test only.
      * When running in client-server mode, testStarted() may be 
      * invoked after sampleOccurred().
-     *
-     * @see org.apache.jmeter.testelement.TestListener#testStarted(java.lang.String)
+     * <p>
+     * {@inheritDoc}
      */
-    /** {@inheritDoc} */
     public void testStarted(String host) {
         synchronized (accumulators) {
             myName = getName();
@@ -322,13 +319,12 @@ public class Summariser extends AbstractTestElement
         }
     }
 
-    /*
-     * (non-Javadoc)
+    /**
      * Called from a different thread as testStarted() but using the same instance.
      * So synch is needed to fetch the accumulator, and the myName field will already be set up.
-     * @see org.apache.jmeter.testelement.TestListener#testEnded(java.lang.String)
+     * <p>
+     * {@inheritDoc}
      */
-    /** {@inheritDoc} */
     public void testEnded(String host) {
         Set<Entry<String, Totals>> totals = null;
         synchronized (accumulators) {

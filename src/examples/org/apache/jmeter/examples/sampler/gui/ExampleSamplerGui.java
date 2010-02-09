@@ -53,19 +53,15 @@ public class ExampleSamplerGui extends AbstractSamplerGui {
         init();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
+    /**
+     * {@inheritDoc}
      */
     public String getLabelResource() {
         return "example_title"; // $NON-NLS-1$
     }
 
-    /*
-     * (non-Javadoc) Copy the data from the test element to the GUI
-     *
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(org.apache.jmeter.testelement.TestElement)
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void configure(TestElement element) {
@@ -73,10 +69,8 @@ public class ExampleSamplerGui extends AbstractSamplerGui {
         super.configure(element);
     }
 
-    /*
-     * (non-Javadoc) Create the corresponding Test Element and set up its data
-     *
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
+    /**
+     * {@inheritDoc}
      */
     public TestElement createTestElement() {
         ExampleSampler sampler = new ExampleSampler();
@@ -84,11 +78,8 @@ public class ExampleSamplerGui extends AbstractSamplerGui {
         return sampler;
     }
 
-    /*
-     * (non-Javadoc) Modifies a given TestElement to mirror the data in the gui
-     * components.
-     *
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+    /**
+     * {@inheritDoc}
      */
     public void modifyTestElement(TestElement te) {
         te.clear();
@@ -128,6 +119,9 @@ public class ExampleSamplerGui extends AbstractSamplerGui {
         return dataPanel;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void clearGui() {
         super.clearGui();

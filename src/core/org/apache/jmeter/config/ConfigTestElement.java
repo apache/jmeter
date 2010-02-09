@@ -40,19 +40,15 @@ public class ConfigTestElement extends AbstractTestElement implements Serializab
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.config.ConfigElement#addConfigElement(org.apache.jmeter.config.ConfigElement)
+    /**
+     * {@inheritDoc}
      */
     public void addConfigElement(ConfigElement config) {
         mergeIn((TestElement) config);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.config.ConfigElement#expectsModification()
+    /**
+     * {@inheritDoc}
      */
     public boolean expectsModification() {
         return false;

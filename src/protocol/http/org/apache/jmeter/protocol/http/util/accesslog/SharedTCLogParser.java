@@ -34,8 +34,8 @@ public class SharedTCLogParser extends TCLogParser implements TestCloneable {
         super(source);
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#clone()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public Object clone() {
@@ -45,8 +45,8 @@ public class SharedTCLogParser extends TCLogParser implements TestCloneable {
         return parser;
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.protocol.http.util.accesslog.TCLogParser#parse(org.apache.jmeter.testelement.TestElement, int)
+    /**
+     * {@inheritDoc}
      */
     @Override
     public int parse(TestElement el, int parseCount) {
@@ -99,6 +99,9 @@ public class SharedTCLogParser extends TCLogParser implements TestCloneable {
         return actualCount;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void close() {
         try {
@@ -107,7 +110,5 @@ public class SharedTCLogParser extends TCLogParser implements TestCloneable {
             // do nothing
         }
     }
-
-
 
 }
