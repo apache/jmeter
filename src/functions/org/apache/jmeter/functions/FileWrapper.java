@@ -39,10 +39,6 @@ public class FileWrapper {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private FileRowColContainer container;
-
-    private int currentRow;
-
     private static final int NO_LINE = -1;
 
     private static volatile String defaultFile = ""; // for omitted file names //$NON-NLS-1$
@@ -55,15 +51,6 @@ public class FileWrapper {
     private static final Map<String, FileRowColContainer> fileContainers =
         new HashMap<String, FileRowColContainer>();
 
-    /*
-     * Only needed locally
-     */
-    private FileWrapper(FileRowColContainer fdc) {
-        super();
-        container = fdc;
-        currentRow = -1;
-    }
-
     /* The cache of file packs - used to improve thread access */
     private static final ThreadLocal<Map<String, FileWrapper>> filePacks = 
         new ThreadLocal<Map<String, FileWrapper>>() {
@@ -72,6 +59,19 @@ public class FileWrapper {
             return new HashMap<String, FileWrapper>();
         }
     };
+
+    private final FileRowColContainer container;
+
+    private int currentRow;
+
+    /*
+     * Only needed locally
+     */
+    private FileWrapper(FileRowColContainer fdc) {
+        super();
+        container = fdc;
+        currentRow = -1;
+    }
 
     private static String checkDefault(String file) {
         if (file.length() == 0) {
