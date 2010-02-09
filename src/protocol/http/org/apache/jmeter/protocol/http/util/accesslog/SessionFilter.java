@@ -74,15 +74,16 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
         return matcher.getMatch().group(0);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#reset()
+    /**
+     * {@inheritDoc}
      */
     public void reset() {
         cookieManagers.clear();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Object clone() {
         if(cookieManagers == null)
@@ -105,51 +106,39 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
     public SessionFilter() {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#excludeFiles(java.lang.String[])
+    /**
+     * {@inheritDoc}
      */
     public void excludeFiles(String[] filenames) {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#excludePattern(java.lang.String[])
+    /**
+     * {@inheritDoc}
      */
     public void excludePattern(String[] regexp) {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#filter(java.lang.String)
+    /**
+     * {@inheritDoc}
      */
     public String filter(String text) {
         return text;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#includeFiles(java.lang.String[])
+    /**
+     * {@inheritDoc}
      */
     public void includeFiles(String[] filenames) {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#includePattern(java.lang.String[])
+    /**
+     * {@inheritDoc}
      */
     public void includePattern(String[] regexp) {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#isFiltered(java.lang.String)
+    /**
+     * {@inheritDoc}
      */
     public boolean isFiltered(String path,TestElement sampler) {
         String ipAddr = getIpAddress(path);
@@ -201,17 +190,14 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
         return cm;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#setReplaceExtension(java.lang.String,
-     *      java.lang.String)
+    /**
+     * {@inheritDoc}
      */
     public void setReplaceExtension(String oldextension, String newextension) {
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.ThreadListener#threadFinished()
+    /**
+     * {@inheritDoc}
      */
     public void threadFinished() {
         synchronized(managersInUse)
@@ -221,11 +207,9 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.ThreadListener#threadStarted()
+    /**
+     * {@inheritDoc}
      */
     public void threadStarted() {
-        // TODO Auto-generated method stub
-
     }
 }

@@ -58,6 +58,9 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         init();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void configure(TestElement element) {
         super.configure(element);
@@ -69,6 +72,9 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         embeddedRE.setText(samplerBase.getEmbeddedUrlRE());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public TestElement createTestElement() {
         HTTPSamplerBase sampler = HTTPSamplerFactory.newInstance();// create default sampler
         modifyTestElement(sampler);
@@ -77,8 +83,8 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
-     *
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     * <p>
+     * {@inheritDoc}
      */
     public void modifyTestElement(TestElement sampler) {
         sampler.clear();
@@ -97,6 +103,9 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         this.configureTestElement(sampler);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String getLabelResource() {
         return "web_testing_title"; // $NON-NLS-1$
     }
@@ -140,15 +149,16 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         return optionalTasksPanel;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Dimension getPreferredSize() {
         return getMinimumSize();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#clearGui()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void clearGui() {

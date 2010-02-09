@@ -77,10 +77,8 @@ public class MailReaderSampler extends AbstractSampler {
         setDeleteMessages(false);
     }
 
-    /*
-     * (non-Javadoc) Performs the sample, and returns the result
-     *
-     * @see org.apache.jmeter.samplers.Sampler#sample(org.apache.jmeter.samplers.Entry)
+    /**
+     * {@inheritDoc}
      */
     public SampleResult sample(Entry e) {
         SampleResult parent = new SampleResult();

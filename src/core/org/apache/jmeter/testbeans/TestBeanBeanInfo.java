@@ -45,64 +45,50 @@ public class TestBeanBeanInfo implements BeanInfo {
         return new BeanInfo[0];
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.beans.BeanInfo#getBeanDescriptor()
+    /**
+     * {@inheritDoc}
      */
     public BeanDescriptor getBeanDescriptor() {
         return null;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.beans.BeanInfo#getDefaultEventIndex()
+    /**
+     * {@inheritDoc}
      */
     public int getDefaultEventIndex() {
         return 0;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.beans.BeanInfo#getDefaultPropertyIndex()
+    /**
+     * {@inheritDoc}
      */
     public int getDefaultPropertyIndex() {
         return 0;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.beans.BeanInfo#getEventSetDescriptors()
+    /**
+     * {@inheritDoc}
      */
     public EventSetDescriptor[] getEventSetDescriptors() {
         return new EventSetDescriptor[0];
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.beans.BeanInfo#getIcon(int)
+    /**
+     * {@inheritDoc}
      */
     public Image getIcon(int iconKind) {
         return null;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.beans.BeanInfo#getMethodDescriptors()
+    /**
+     * {@inheritDoc}
      */
     public MethodDescriptor[] getMethodDescriptors() {
         return new MethodDescriptor[0];
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.beans.BeanInfo#getPropertyDescriptors()
+    /**
+     * {@inheritDoc}
      */
     public PropertyDescriptor[] getPropertyDescriptors() {
         return new PropertyDescriptor[0];

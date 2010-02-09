@@ -187,10 +187,8 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public String getStaticLabel() {
@@ -200,12 +198,10 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
         return beanInfo.getBeanDescriptor().getDisplayName();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
+    /**
+     * {@inheritDoc}
      */
-    public TestElement createTestElement() {
+   public TestElement createTestElement() {
         try {
             TestElement element = (TestElement) testBeanClass.newInstance();
             // configure(element);
@@ -224,11 +220,9 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(org.apache.jmeter.testelement.TestElement)
-     */
+   /**
+    * {@inheritDoc}
+    */
     public void modifyTestElement(TestElement element) {
         // Fetch data from screen fields
         if (customizer instanceof GenericTestBeanCustomizer) {
@@ -266,10 +260,8 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
         element.setProperty(jprop);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#createPopupMenu()
+    /**
+     * {@inheritDoc}
      */
     public JPopupMenu createPopupMenu() {
         if (Timer.class.isAssignableFrom(testBeanClass))
@@ -307,10 +299,8 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(org.apache.jmeter.testelement.TestElement)
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void configure(TestElement element) {
@@ -426,20 +416,16 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#getLabelResource()
+    /**
+     * {@inheritDoc}
      */
     public String getLabelResource() {
         // @see getStaticLabel
         return null;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#clearGui()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void clearGui() {

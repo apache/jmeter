@@ -105,11 +105,10 @@ public class HTTPSampleResult extends SampleResult {
         return false;
     }
 
-    /*
-     * (non-Javadoc)
+    /**
      * Overrides version in Sampler data to provide more details
-     *
-     * @see org.apache.jmeter.samplers.SampleResult#getSamplerData()
+     * <p>
+     * {@inheritDoc}
      */
     @Override
     public String getSamplerData() {

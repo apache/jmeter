@@ -65,10 +65,8 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
         this.groupSize = numThreads;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.timers.Timer#delay()
+    /**
+     * {@inheritDoc}
      */
     public long delay() {
         synchronized (sync) {

@@ -221,8 +221,8 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
 
     /**
      * Get the timer ready to compute delays for a new test.
-     *
-     * @see org.apache.jmeter.testelement.TestListener#testStarted()
+     * <p>
+     * {@inheritDoc}
      */
     public void testStarted()
     {
@@ -230,35 +230,27 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
         reset();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.TestListener#testEnded()
+    /**
+     * {@inheritDoc}
      */
     public void testEnded() {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.TestListener#testStarted(java.lang.String)
+    /**
+     * {@inheritDoc}
      */
     public void testStarted(String host) {
         testStarted();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.TestListener#testEnded(java.lang.String)
+    /**
+     * {@inheritDoc}
      */
     public void testEnded(String host) {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.TestListener#testIterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)
+    /**
+     * {@inheritDoc}
      */
     public void testIterationStart(LoopIterationEvent event) {
     }

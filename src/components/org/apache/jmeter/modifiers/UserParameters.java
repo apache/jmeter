@@ -178,10 +178,8 @@ public class UserParameters extends AbstractTestElement implements Serializable,
         return up;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see AbstractTestElement#mergeIn(TestElement)
+    /**
+     * {@inheritDoc}
      */
     @Override
     protected void mergeIn(TestElement element) {

@@ -47,10 +47,8 @@ public class InterleaveControl extends GenericController implements Serializable
     public InterleaveControl() {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.control.GenericController#reInitialize()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void reInitialize() {
@@ -71,10 +69,8 @@ public class InterleaveControl extends GenericController implements Serializable
         return getPropertyAsInt(STYLE);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.control.Controller#next()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public Sampler next() {
@@ -85,10 +81,8 @@ public class InterleaveControl extends GenericController implements Serializable
         return super.next();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see GenericController#nextIsAController(Controller)
+   /**
+     * {@inheritDoc}
      */
     @Override
     protected Sampler nextIsAController(Controller controller) throws NextIsNullException {
@@ -107,10 +101,8 @@ public class InterleaveControl extends GenericController implements Serializable
         return sampler;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.control.GenericController#nextIsASampler(Sampler)
+    /**
+     * {@inheritDoc}
      */
     @Override
     protected Sampler nextIsASampler(Sampler element) throws NextIsNullException {
@@ -122,8 +114,8 @@ public class InterleaveControl extends GenericController implements Serializable
     /**
      * If the current is null, reset and continue searching. The searchStart
      * attribute will break us off when we start a repeat.
-     *
-     * @see org.apache.jmeter.control.GenericController#nextIsNull()
+     * <p>
+     * {@inheritDoc}
      */
     @Override
     protected Sampler nextIsNull() {
@@ -131,10 +123,8 @@ public class InterleaveControl extends GenericController implements Serializable
         return next();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see GenericController#setCurrentElement(TestElement)
+    /**
+     * {@inheritDoc}
      */
     @Override
     protected void setCurrentElement(TestElement currentElement) throws NextIsNullException {
@@ -150,10 +140,8 @@ public class InterleaveControl extends GenericController implements Serializable
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see GenericController#currentReturnedNull(Controller)
+    /**
+     * {@inheritDoc}
      */
     @Override
     protected void currentReturnedNull(Controller c) {
@@ -164,24 +152,16 @@ public class InterleaveControl extends GenericController implements Serializable
         }
     }
 
-    /**
-     * @return skipNext
-     */
     protected boolean isSkipNext() {
         return skipNext;
     }
 
-    /**
-     * @param skipNext
-     */
     protected void setSkipNext(boolean skipNext) {
         this.skipNext = skipNext;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.control.GenericController#incrementCurrent()
+    /**
+     * {@inheritDoc}
      */
     @Override
     protected void incrementCurrent() {

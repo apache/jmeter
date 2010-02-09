@@ -32,10 +32,8 @@ public class RandomOrderControllerGui extends LogicControllerGui {
         return "random_order_control_title"; // $NON-NLS-1$
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public TestElement createTestElement() {
@@ -44,10 +42,8 @@ public class RandomOrderControllerGui extends LogicControllerGui {
         return ic;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(org.apache.jmeter.testelement.TestElement)
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void modifyTestElement(TestElement ic) {

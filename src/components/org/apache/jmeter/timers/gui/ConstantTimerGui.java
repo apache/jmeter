@@ -120,10 +120,8 @@ public class ConstantTimerGui extends AbstractTimerGui {
         add(delayPanel);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#clearGui()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void clearGui() {

@@ -116,47 +116,37 @@ public class StandardGenerator implements Generator, Serializable {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#close()
+    /**
+     * {@inheritDoc}
      */
     public void close() {
         JOrphanUtils.closeQuietly(OUTPUT);
         JOrphanUtils.closeQuietly(WRITER);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#setHost(java.lang.String)
+    /**
+     * {@inheritDoc}
      */
     public void setHost(String host) {
         SAMPLE.setDomain(host);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#setLabel(java.lang.String)
+    /**
+     * {@inheritDoc}
      */
     public void setLabel(String label) {
 
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#setMethod(java.lang.String)
+    /**
+     * {@inheritDoc}
      */
     public void setMethod(String post_get) {
         SAMPLE.setMethod(post_get);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#setParams(org.apache.jmeter.protocol.http.util.accesslog.NVPair[])
+    /**
+     * {@inheritDoc}
      */
     public void setParams(NVPair[] params) {
         for (int idx = 0; idx < params.length; idx++) {
@@ -164,53 +154,41 @@ public class StandardGenerator implements Generator, Serializable {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#setPath(java.lang.String)
+    /**
+     * {@inheritDoc}
      */
     public void setPath(String path) {
         SAMPLE.setPath(path);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#setPort(int)
+    /**
+     * {@inheritDoc}
      */
     public void setPort(int port) {
         SAMPLE.setPort(port);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#setQueryString(java.lang.String)
+    /**
+     * {@inheritDoc}
      */
     public void setQueryString(String querystring) {
         SAMPLE.parseArguments(querystring);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#setSourceLogs(java.lang.String)
+    /**
+     * {@inheritDoc}
      */
     public void setSourceLogs(String sourcefile) {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#setTarget(java.lang.Object)
+    /**
+     * {@inheritDoc}
      */
     public void setTarget(Object target) {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#generateRequest()
+    /**
+     * {@inheritDoc}
      */
     public Object generateRequest() {
         SAMPLE = HTTPSamplerFactory.newInstance();
@@ -231,11 +209,11 @@ public class StandardGenerator implements Generator, Serializable {
 
     /**
      * Reset the HTTPSampler to make sure it is a new instance.
+     * <p>
+     * {@inheritDoc}
      */
     public void reset() {
         SAMPLE = null;
         generateRequest();
     }
-
-    // TODO write some tests
 }

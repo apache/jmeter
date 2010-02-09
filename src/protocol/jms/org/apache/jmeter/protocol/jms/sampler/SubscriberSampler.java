@@ -79,14 +79,15 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         ClientPool.clearClient();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see junit.framework.TestListener#startTest(junit.framework.Test)
+    /**
+     * {@inheritDoc}
      */
     public void testStarted() {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void testIterationStart(LoopIterationEvent event) {
     }
 

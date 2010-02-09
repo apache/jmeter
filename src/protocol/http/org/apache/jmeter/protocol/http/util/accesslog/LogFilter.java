@@ -417,10 +417,8 @@ public class LogFilter implements Filter, Serializable {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#reset()
+    /**
+     * {@inheritDoc}
      */
     public void reset() {
 

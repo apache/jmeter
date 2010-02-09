@@ -131,19 +131,15 @@ public class JLabeledRadio extends JPanel implements JLabeledField, ActionListen
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jorphan.gui.JLabeledField#setLabel(java.lang.String)
+    /**
+     * {@inheritDoc}
      */
     public void setLabel(String pLabel) {
         this.mLabel.setText(pLabel);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jorphan.gui.JLabeledField#addChangeListener(javax.swing.event.ChangeListener)
+    /**
+     * {@inheritDoc}
      */
     public void addChangeListener(ChangeListener pChangeListener) {
         this.mChangeListeners.add(pChangeListener);

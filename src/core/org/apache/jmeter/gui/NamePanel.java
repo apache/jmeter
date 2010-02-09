@@ -173,10 +173,8 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#getDocAnchor()
+    /**
+     * {@inheritDoc}
      */
     public String getDocAnchor() {
         return null;

@@ -84,10 +84,8 @@ public class ForeachController extends GenericController implements Serializable
         return getPropertyAsBoolean(USE_SEPARATOR, true);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.control.Controller#isDone()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public boolean isDone() {
@@ -144,10 +142,8 @@ public class ForeachController extends GenericController implements Serializable
         return true;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.control.GenericController#nextIsNull()
+    /**
+     * {@inheritDoc}
      */
     @Override
     protected Sampler nextIsNull() throws NextIsNullException {
@@ -168,20 +164,16 @@ public class ForeachController extends GenericController implements Serializable
         loopCount = 0;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.control.GenericController#getIterCount()
+    /**
+     * {@inheritDoc}
      */
     @Override
     protected int getIterCount() {
         return loopCount + 1;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.control.GenericController#reInitialize()
+    /**
+     * {@inheritDoc}
      */
     @Override
     protected void reInitialize() {

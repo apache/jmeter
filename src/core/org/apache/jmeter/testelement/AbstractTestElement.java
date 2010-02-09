@@ -79,14 +79,23 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void clear() {
         propMap.clear();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void removeProperty(String key) {
         propMap.remove(key);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object o) {
         if (o instanceof AbstractTestElement) {
@@ -98,18 +107,20 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
 
     // TODO temporary hack to avoid unnecessary bug reports for subclasses
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode(){
         return System.identityHashCode(this);
     }
+
     /*
      * URGENT: TODO - sort out equals and hashCode() - at present equal
      * instances can/will have different hashcodes - problem is, when a proper
      * hashcode is used, tests stop working, e.g. listener data disappears when
      * switching views... This presumably means that instances currently
-     * regarded as equal, aren't really equal...
-     *
-     * (non-Javadoc)
+     * regarded as equal, aren't really equal.
      *
      * @see java.lang.Object#hashCode()
      */
@@ -118,6 +129,10 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
     // {
     // return propMap.hashCode();
     // }
+
+    /**
+     * {@inheritDoc}
+     */
     public void addTestElement(TestElement el) {
         mergeIn(el);
     }
@@ -396,10 +411,8 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.TestElement#isTemporary(org.apache.jmeter.testelement.property.JMeterProperty)
+    /**
+     * {@inheritDoc}
      */
     public boolean isTemporary(JMeterProperty property) {
         if (temporaryProperties == null) {
@@ -409,10 +422,8 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.TestElement#setTemporary(org.apache.jmeter.testelement.property.JMeterProperty)
+    /**
+     * {@inheritDoc}
      */
     public void setTemporary(JMeterProperty property) {
         if (temporaryProperties == null) {
@@ -481,11 +492,17 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
         super();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     // Default implementation
     public boolean canRemove() {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     // Moved from JMeter class
     public boolean isEnabled() {
         return getProperty(TestElement.ENABLED) instanceof NullProperty || getPropertyAsBoolean(TestElement.ENABLED);

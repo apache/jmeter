@@ -36,10 +36,8 @@ public class TestSampler extends AbstractSampler {
 
     private long samples = 0; // number of samples taken
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.jmeter.samplers.Sampler#sample(org.apache.jmeter.samplers.Entry)
+    /**
+     * {@inheritDoc}
      */
     public SampleResult sample(Entry e) {
         if (wait > 0) {
