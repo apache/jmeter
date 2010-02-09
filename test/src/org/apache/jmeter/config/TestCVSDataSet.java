@@ -104,13 +104,13 @@ public class TestCVSDataSet extends JMeterTestCase {
         assertEquals("a1",threadVars.get("A"));
         assertEquals("b1",threadVars.get("B"));
         assertEquals("c1",threadVars.get("C"));
-        assertEquals("d1",threadVars.get("D 1"));
+        assertEquals("d1",threadVars.get("D|1"));
         csv.iterationStart(null);
         assertNull(threadVars.get("a"));
         assertEquals("a2",threadVars.get("A"));
         assertEquals("b2",threadVars.get("B"));
         assertEquals("c2",threadVars.get("C"));
-        assertEquals("d2",threadVars.get("D 1"));
+        assertEquals("d2",threadVars.get("D|1"));
     }
 
     private CSVDataSet initCSV(){
