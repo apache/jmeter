@@ -289,10 +289,8 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.lang.Object#clone()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public Object clone() {
@@ -322,10 +320,8 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
         return s;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.TestListener#testEnded()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void testEnded() {
@@ -337,10 +333,8 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
         super.testEnded();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.TestListener#testStarted()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void testStarted() {
@@ -348,8 +342,8 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
         super.testStarted();
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.AbstractTestElement#threadFinished()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void threadFinished() {

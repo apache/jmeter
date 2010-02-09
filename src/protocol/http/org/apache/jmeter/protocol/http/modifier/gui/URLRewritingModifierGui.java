@@ -77,10 +77,8 @@ public class URLRewritingModifierGui extends AbstractPreProcessorGui {
         add(mainPanel, BorderLayout.CENTER);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
+    /**
+     * {@inheritDoc}
      */
     public TestElement createTestElement() {
         URLRewritingModifier modifier = new URLRewritingModifier();
@@ -90,8 +88,8 @@ public class URLRewritingModifierGui extends AbstractPreProcessorGui {
 
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
-     *
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     * <p>
+     * {@inheritDoc}
      */
     public void modifyTestElement(TestElement modifier) {
         this.configureTestElement(modifier);
@@ -104,7 +102,7 @@ public class URLRewritingModifierGui extends AbstractPreProcessorGui {
     }
 
     /**
-     * Implements JMeterGUIComponent.clearGui
+     * {@inheritDoc}
      */
     @Override
     public void clearGui() {
@@ -117,6 +115,9 @@ public class URLRewritingModifierGui extends AbstractPreProcessorGui {
         shouldCache.setSelected(false);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void configure(TestElement el) {
         URLRewritingModifier rewritingModifier = ((URLRewritingModifier) el);

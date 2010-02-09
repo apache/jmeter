@@ -157,10 +157,8 @@ public class GaussianRandomTimerGui extends AbstractTimerGui {
         new FocusRequester(rangeField);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#clearGui()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void clearGui() {

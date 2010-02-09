@@ -55,10 +55,8 @@ public class SoapSamplerGui extends AbstractSamplerGui {
         return "soap_sampler_title"; //$NON-NLS-1$
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
+    /**
+     * {@inheritDoc}
      */
     public TestElement createTestElement() {
         SoapSampler sampler = new SoapSampler();
@@ -150,6 +148,9 @@ public class SoapSamplerGui extends AbstractSamplerGui {
         add(mainPanel, BorderLayout.CENTER);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void configure(TestElement el) {
         super.configure(el);
@@ -162,6 +163,9 @@ public class SoapSamplerGui extends AbstractSamplerGui {
         useKeepAlive.setSelected(sampler.getUseKeepAlive());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Dimension getPreferredSize() {
         return getMinimumSize();

@@ -38,10 +38,8 @@ public class FloatProperty extends NumberProperty {
     public FloatProperty() {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#setRunningVersion(boolean)
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void setRunningVersion(boolean runningVersion) {
@@ -49,10 +47,8 @@ public class FloatProperty extends NumberProperty {
         super.setRunningVersion(runningVersion);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#recoverRunningVersion(org.apache.jmeter.testelement.TestElement)
+    /**
+     * {@inheritDoc}
      */
     public void recoverRunningVersion(TestElement owner) {
         value = savedValue;
@@ -62,30 +58,39 @@ public class FloatProperty extends NumberProperty {
         this.value = value;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void setNumberValue(Number n) {
         value = n.floatValue();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void setNumberValue(String n) throws NumberFormatException {
         value = Float.parseFloat(n);
     }
 
     /**
-     * @see JMeterProperty#getStringValue()
+     * {@inheritDoc}
      */
     public String getStringValue() {
         return Float.toString(value);
     }
 
     /**
-     * @see JMeterProperty#getObjectValue()
+     * {@inheritDoc}
      */
     public Object getObjectValue() {
         return new Float(value);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Object clone() {
         FloatProperty prop = (FloatProperty) super.clone();
@@ -94,7 +99,7 @@ public class FloatProperty extends NumberProperty {
     }
 
     /**
-     * @see JMeterProperty#getBooleanValue()
+     * {@inheritDoc}
      */
     @Override
     public boolean getBooleanValue() {
@@ -102,7 +107,7 @@ public class FloatProperty extends NumberProperty {
     }
 
     /**
-     * @see JMeterProperty#getDoubleValue()
+     * {@inheritDoc}
      */
     @Override
     public double getDoubleValue() {
@@ -110,7 +115,7 @@ public class FloatProperty extends NumberProperty {
     }
 
     /**
-     * @see JMeterProperty#getFloatValue()
+     * {@inheritDoc}
      */
     @Override
     public float getFloatValue() {
@@ -118,7 +123,7 @@ public class FloatProperty extends NumberProperty {
     }
 
     /**
-     * @see JMeterProperty#getIntValue()
+     * {@inheritDoc}
      */
     @Override
     public int getIntValue() {
@@ -126,7 +131,7 @@ public class FloatProperty extends NumberProperty {
     }
 
     /**
-     * @see JMeterProperty#getLongValue()
+     * {@inheritDoc}
      */
     @Override
     public long getLongValue() {

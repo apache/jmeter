@@ -71,19 +71,15 @@ public class ResultAction extends OnErrorTestElement implements Serializable, Sa
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.samplers.SampleListener#sampleStarted(org.apache.jmeter.samplers.SampleEvent)
+    /**
+     * {@inheritDoc}
      */
     public void sampleStarted(SampleEvent e) {
         // not used
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.samplers.SampleListener#sampleStopped(org.apache.jmeter.samplers.SampleEvent)
+    /**
+     * {@inheritDoc}
      */
     public void sampleStopped(SampleEvent e) {
         // not used

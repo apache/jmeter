@@ -49,11 +49,8 @@ class JTidyHTMLParser extends HTMLParser {
         return true;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.protocol.http.parser.HTMLParser#getEmbeddedResourceURLs(byte[],
-     *      java.net.URL)
+    /**
+     * {@inheritDoc}
      */
     @Override
     public Iterator<URL> getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection urls) throws HTMLParseException {

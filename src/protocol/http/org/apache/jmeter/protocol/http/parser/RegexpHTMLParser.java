@@ -123,6 +123,9 @@ class RegexpHTMLParser extends HTMLParser {
         }
     };
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected boolean isReusable() {
         return true;
@@ -135,11 +138,8 @@ class RegexpHTMLParser extends HTMLParser {
         super();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.protocol.http.parser.HtmlParser#getEmbeddedResourceURLs(byte[],
-     *      java.net.URL)
+    /**
+     * {@inheritDoc}
      */
     @Override
     public Iterator<URL> getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection urls) {

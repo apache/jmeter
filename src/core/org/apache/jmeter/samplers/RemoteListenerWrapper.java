@@ -126,10 +126,8 @@ public class RemoteListenerWrapper extends AbstractTestElement implements Sample
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see TestListener#testIterationStart(LoopIterationEvent)
+    /**
+     * {@inheritDoc}
      */
     public void testIterationStart(LoopIterationEvent event) {
     }

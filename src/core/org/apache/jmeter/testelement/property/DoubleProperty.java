@@ -42,30 +42,39 @@ public class DoubleProperty extends NumberProperty {
         this.value = value;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void setNumberValue(Number n) {
         value = n.doubleValue();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void setNumberValue(String n) throws NumberFormatException {
         value = Double.parseDouble(n);
     }
 
     /**
-     * @see JMeterProperty#getStringValue()
+     * {@inheritDoc}
      */
     public String getStringValue() {
         return Double.toString(value);
     }
 
     /**
-     * @see JMeterProperty#getObjectValue()
+     * {@inheritDoc}
      */
     public Object getObjectValue() {
         return new Double(value);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Object clone() {
         DoubleProperty prop = (DoubleProperty) super.clone();
@@ -74,7 +83,7 @@ public class DoubleProperty extends NumberProperty {
     }
 
     /**
-     * @see JMeterProperty#getBooleanValue()
+     * {@inheritDoc}
      */
     @Override
     public boolean getBooleanValue() {
@@ -82,7 +91,7 @@ public class DoubleProperty extends NumberProperty {
     }
 
     /**
-     * @see JMeterProperty#getDoubleValue()
+     * {@inheritDoc}
      */
     @Override
     public double getDoubleValue() {
@@ -90,7 +99,7 @@ public class DoubleProperty extends NumberProperty {
     }
 
     /**
-     * @see JMeterProperty#getFloatValue()
+     * {@inheritDoc}
      */
     @Override
     public float getFloatValue() {
@@ -98,7 +107,7 @@ public class DoubleProperty extends NumberProperty {
     }
 
     /**
-     * @see JMeterProperty#getIntValue()
+     * {@inheritDoc}
      */
     @Override
     public int getIntValue() {
@@ -113,10 +122,8 @@ public class DoubleProperty extends NumberProperty {
         return (long) value;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#setRunningVersion(boolean)
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void setRunningVersion(boolean runningVersion) {
@@ -124,10 +131,8 @@ public class DoubleProperty extends NumberProperty {
         super.setRunningVersion(runningVersion);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#recoverRunningVersion(org.apache.jmeter.testelement.TestElement)
+    /**
+     * {@inheritDoc}
      */
     public void recoverRunningVersion(TestElement owner) {
         value = savedValue;

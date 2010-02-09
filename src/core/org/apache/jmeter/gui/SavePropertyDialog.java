@@ -91,10 +91,8 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
         return count;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see javax.swing.JDialog#dialogInit()
+    /**
+     * {@inheritDoc}
      */
     @Override
     protected void dialogInit() {
@@ -136,10 +134,8 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+    /**
+     * {@inheritDoc}
      */
     public void actionPerformed(ActionEvent e) {
         String action = e.getActionCommand();

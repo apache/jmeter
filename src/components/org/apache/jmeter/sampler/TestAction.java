@@ -57,10 +57,8 @@ public class TestAction extends AbstractSampler {
         super();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.samplers.Sampler#sample(org.apache.jmeter.samplers.Entry)
+    /**
+     * {@inheritDoc}
      */
     public SampleResult sample(Entry e) {
         JMeterContext context = JMeterContextService.getContext();

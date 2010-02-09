@@ -311,10 +311,8 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
         return model;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void modifyTestElement(TestElement c) {
@@ -365,10 +363,8 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
         JOptionPane.showMessageDialog(null, message, isError ? "Error" : "Information", type);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see ChangeListener#stateChanged(ChangeEvent)
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void stateChanged(ChangeEvent e) {
