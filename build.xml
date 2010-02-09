@@ -1753,12 +1753,16 @@ run JMeter unless all the JMeter jars are added.
     </condition>
     <fail unless="BatchTestLocal.csv.OK">
         CSV Files are not identical.
+    	${batchtest.inp}/${batchtest.name}.csv
+    	${batchtest.out}/${batchtest.name}.csv
     </fail>
     <condition property="BatchTestLocal.xml.OK">
-       <filesmatch file1="${batchtest.inp}/${batchtest.name}.csv" file2="${batchtest.out}/${batchtest.name}.csv"/>
+       <filesmatch file1="${batchtest.inp}/${batchtest.name}.xml" file2="${batchtest.out}/${batchtest.name}.xml"/>
     </condition>
     <fail unless="BatchTestLocal.xml.OK">
         XML Files are not identical.
+    	${batchtest.inp}/${batchtest.name}.xml
+    	${batchtest.out}/${batchtest.name}.xml
     </fail>
 
     <echo level="info">${batchtest.name} output files compared OK</echo>
