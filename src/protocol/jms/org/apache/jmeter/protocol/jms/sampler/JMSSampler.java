@@ -121,10 +121,8 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
     private transient Receiver receiverThread = null;
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.samplers.Sampler#sample(org.apache.jmeter.samplers.Entry)
+    /**
+     * {@inheritDoc}
      */
     public SampleResult sample(Entry entry) {
         SampleResult res = new SampleResult();
@@ -438,10 +436,8 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         return getPropertyAsString(TIMEOUT, DEFAULT_TIMEOUT_STRING);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.TestElement#threadFinished()
+    /**
+     * {@inheritDoc}
      */
     public void threadFinished() {
         LOGGER.debug("Thread ended " + new Date());

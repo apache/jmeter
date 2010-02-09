@@ -52,22 +52,16 @@ public class ScriptWrapperConverter implements Converter {
         this.classMapper = classMapper;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
+    /**
+     * {@inheritDoc}
      */
     @SuppressWarnings("unchecked") // superclass is not typed
     public boolean canConvert(Class arg0) {
         return arg0.equals(ScriptWrapper.class);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.thoughtworks.xstream.converters.Converter#marshal(java.lang.Object,
-     *      com.thoughtworks.xstream.io.HierarchicalStreamWriter,
-     *      com.thoughtworks.xstream.converters.MarshallingContext)
+    /**
+     * {@inheritDoc}
      */
     public void marshal(Object arg0, HierarchicalStreamWriter writer, MarshallingContext context) {
         ScriptWrapper wrap = (ScriptWrapper) arg0;
@@ -80,11 +74,8 @@ public class ScriptWrapperConverter implements Converter {
         writer.endNode();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.thoughtworks.xstream.converters.Converter#unmarshal(com.thoughtworks.xstream.io.HierarchicalStreamReader,
-     *      com.thoughtworks.xstream.converters.UnmarshallingContext)
+    /**
+     * {@inheritDoc}
      */
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
         ScriptWrapper wrap = new ScriptWrapper();

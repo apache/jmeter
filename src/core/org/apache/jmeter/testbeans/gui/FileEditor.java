@@ -68,10 +68,8 @@ public class FileEditor implements PropertyEditor, ActionListener {
         panel.add(button, BorderLayout.EAST);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+    /**
+     * {@inheritDoc}
      */
     public void actionPerformed(ActionEvent e) {
         JFileChooser chooser = FileDialoger.promptToOpenFile();
@@ -170,29 +168,28 @@ public class FileEditor implements PropertyEditor, ActionListener {
     }
 
     private static class SimpleFileEditor extends PropertyEditorSupport {
-        /*
-         * (non-Javadoc)
-         *
-         * @see java.beans.PropertyEditor#getAsText()
+
+        /**
+         * {@inheritDoc}
          */
         @Override
         public String getAsText() {
             return ((File) super.getValue()).getPath();
         }
 
-        /*
-         * (non-Javadoc)
-         *
-         * @see java.beans.PropertyEditor#setAsText(java.lang.String)
+        /**
+         * {@inheritDoc}
          */
         @Override
         public void setAsText(String text) throws IllegalArgumentException {
             super.setValue(new File(text));
         }
 
-        /*
-         * Oh, I forgot: JMeter doesn't support File properties yet. Need to
+        /**
+         * JMeter doesn't support File properties yet. Need to
          * work on this as a String :-(
+         * <p>
+         * {@inheritDoc}
          */
         @Override
         public Object getValue() {
@@ -200,7 +197,9 @@ public class FileEditor implements PropertyEditor, ActionListener {
         }
 
         /**
-         * Tsk, tsk... I need to handle Strings when setting too.
+         * I need to handle Strings when setting too.
+         * <p>
+         * {@inheritDoc}
          */
         @Override
         public void setValue(Object file) {

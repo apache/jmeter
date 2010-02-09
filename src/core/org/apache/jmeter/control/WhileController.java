@@ -68,10 +68,10 @@ public class WhileController extends GenericController implements Serializable {
         return res;
     }
 
-    /*
-     * (non-Javadoc) Only called at End of Loop
-     *
-     * @see org.apache.jmeter.control.GenericController#nextIsNull()
+    /**
+     * Only called at End of Loop
+     * <p>
+     * {@inheritDoc}
      */
     @Override
     protected Sampler nextIsNull() throws NextIsNullException {
@@ -82,8 +82,10 @@ public class WhileController extends GenericController implements Serializable {
         return next();
     }
 
-    /*
+    /**
      * This skips controller entirely if the condition is false on first entry.
+     * <p>
+     * {@inheritDoc}
      */
     @Override
     public Sampler next(){

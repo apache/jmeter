@@ -46,10 +46,8 @@ import org.apache.log.Logger;
 public class ConvertListeners implements HashTreeTraverser {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see HashTreeTraverser#addNode(Object, HashTree)
+    /**
+     * {@inheritDoc}
      */
     public void addNode(Object node, HashTree subTree) {
         Iterator<?> iter = subTree.list().iterator();
@@ -84,18 +82,14 @@ public class ConvertListeners implements HashTreeTraverser {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see HashTreeTraverser#subtractNode()
+    /**
+     * {@inheritDoc}
      */
     public void subtractNode() {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see HashTreeTraverser#processPath()
+    /**
+     * {@inheritDoc}
      */
     public void processPath() {
     }

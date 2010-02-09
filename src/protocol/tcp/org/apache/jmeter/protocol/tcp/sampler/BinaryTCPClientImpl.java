@@ -104,12 +104,8 @@ public class BinaryTCPClientImpl extends AbstractTCPClient {
         return;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.apache.jmeter.protocol.tcp.sampler.TCPClient#write(java.io.OutputStream
-     * , java.io.InputStream)
+    /**
+     * {@inheritDoc}
      */
     public void write(OutputStream os, InputStream is) {
         throw new UnsupportedOperationException(

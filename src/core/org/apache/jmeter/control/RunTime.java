@@ -57,10 +57,8 @@ public class RunTime extends GenericController implements Serializable {
         return getPropertyAsString(SECONDS);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.control.Controller#isDone()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public boolean isDone() {
@@ -87,10 +85,8 @@ public class RunTime extends GenericController implements Serializable {
         return super.next();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.control.GenericController#nextIsNull()
+    /**
+     * {@inheritDoc}
      */
     @Override
     protected Sampler nextIsNull() throws NextIsNullException {

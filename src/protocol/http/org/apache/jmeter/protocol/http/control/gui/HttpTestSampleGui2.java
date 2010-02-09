@@ -41,6 +41,9 @@ public class HttpTestSampleGui2 extends HttpTestSampleGui {
         super();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public TestElement createTestElement() {
         HTTPSamplerBase sampler = HTTPSamplerFactory.newInstance(HTTPSamplerFactory.HTTP_SAMPLER_APACHE);
@@ -48,18 +51,27 @@ public class HttpTestSampleGui2 extends HttpTestSampleGui {
         return sampler;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     // Use this instead of getLabelResource() otherwise getDocAnchor() below does not work
     @Override
     public String getStaticLabel() {
         return JMeterUtils.getResString("web_testing2_title"); //$NON-NLS-1$
     }
 
+    /**
+     * {@inheritDoc}
+     */
     // Documentation is shared with our parent
     @Override
     public String getDocAnchor() {
         return super.getStaticLabel().replace(' ', '_'); // $NON-NLS-1$  // $NON-NLS-2$
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected JPanel createOptionalTasksPanel() {
         JPanel optionalTasksPanel = super.createOptionalTasksPanel();
@@ -71,8 +83,8 @@ public class HttpTestSampleGui2 extends HttpTestSampleGui {
         return optionalTasksPanel;
     }
     
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui#clearGui()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void clearGui() {
@@ -80,8 +92,8 @@ public class HttpTestSampleGui2 extends HttpTestSampleGui {
         sourceIpAddr.setText(""); // $NON-NLS-1$
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui#configure(org.apache.jmeter.testelement.TestElement)
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void configure(TestElement element) {
@@ -90,8 +102,8 @@ public class HttpTestSampleGui2 extends HttpTestSampleGui {
         sourceIpAddr.setText(samplerBase.getIpSource());
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui#modifyTestElement(org.apache.jmeter.testelement.TestElement)
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void modifyTestElement(TestElement sampler) {

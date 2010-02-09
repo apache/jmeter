@@ -717,10 +717,8 @@ public class JMeterThread implements Runnable, Interruptible {
     }
 
     private class IterationListener implements LoopIterationListener {
-        /*
-         * (non-Javadoc)
-         *
-         * @see LoopIterationListener#iterationStart(LoopIterationEvent)
+        /**
+         * {@inheritDoc}
          */
         public void iterationStart(LoopIterationEvent iterEvent) {
             notifyTestListeners();

@@ -75,28 +75,30 @@ public abstract class AbstractTreeTableModel extends DefaultTableModel implement
         return this.rootNode;
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jorphan.gui.TreeTableModel#getValueAt(java.lang.Object, int)
+    /**
+     * {@inheritDoc}
      */
     public Object getValueAt(Object node, int col) {
         return null;
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jorphan.gui.TreeTableModel#isCellEditable(java.lang.Object, int)
+    /**
+     * {@inheritDoc}
      */
     public boolean isCellEditable(Object node, int col) {
         return false;
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jorphan.gui.TreeTableModel#setValueAt(java.lang.Object, java.lang.Object, int)
+    /**
+     * {@inheritDoc}
      */
     public void setValueAt(Object val, Object node, int column) {
     }
 
     /**
      * The implementation is exactly the same as ObjectTableModel.getColumnCount.
+     * <p>
+     * {@inheritDoc}
      */
     @Override
     public int getColumnCount() {
@@ -105,6 +107,8 @@ public abstract class AbstractTreeTableModel extends DefaultTableModel implement
 
     /**
      * The implementation is exactly the same as ObjectTableModel.getRowCount.
+     * <p>
+     * {@inheritDoc}
      */
     @Override
     public int getRowCount() {
@@ -117,12 +121,17 @@ public abstract class AbstractTreeTableModel extends DefaultTableModel implement
     /**
      * By default the abstract class returns true. It is up to subclasses
      * to override the implementation.
+     * <p>
+     * {@inheritDoc}
      */
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Class<?> getColumnClass(int arg0) {
         return classes.get(arg0);
@@ -131,6 +140,8 @@ public abstract class AbstractTreeTableModel extends DefaultTableModel implement
     /**
      * Subclasses need to implement the logic for the method and
      * return the value at the specific cell.
+     * <p>
+     * {@inheritDoc}
      */
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
@@ -138,7 +149,7 @@ public abstract class AbstractTreeTableModel extends DefaultTableModel implement
     }
 
     /**
-     *
+     * {@inheritDoc}
      */
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
@@ -146,7 +157,7 @@ public abstract class AbstractTreeTableModel extends DefaultTableModel implement
     }
 
     /**
-     *
+     * {@inheritDoc}
      */
     @Override
     public String getColumnName(int columnIndex) {
@@ -176,7 +187,7 @@ public abstract class AbstractTreeTableModel extends DefaultTableModel implement
     }
 
     /**
-     *
+     * {@inheritDoc}
      */
     @Override
     public void addTableModelListener(TableModelListener l) {
@@ -184,7 +195,7 @@ public abstract class AbstractTreeTableModel extends DefaultTableModel implement
     }
 
     /**
-     *
+     * {@inheritDoc}
      */
     @Override
     public void removeTableModelListener(TableModelListener l) {

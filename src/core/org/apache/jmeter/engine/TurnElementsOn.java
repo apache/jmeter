@@ -25,11 +25,8 @@ import org.apache.jorphan.collections.HashTreeTraverser;
 
 public class TurnElementsOn implements HashTreeTraverser {
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jorphan.collections.HashTreeTraverser#addNode(java.lang.Object,
-     *      org.apache.jorphan.collections.HashTree)
+    /**
+     * {@inheritDoc}
      */
     public void addNode(Object node, HashTree subTree) {
         if (node instanceof TestElement && !(node instanceof TestPlan)) {
@@ -38,18 +35,14 @@ public class TurnElementsOn implements HashTreeTraverser {
 
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jorphan.collections.HashTreeTraverser#subtractNode()
+    /**
+     * {@inheritDoc}
      */
     public void subtractNode() {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jorphan.collections.HashTreeTraverser#processPath()
+    /**
+     * {@inheritDoc}
      */
     public void processPath() {
     }

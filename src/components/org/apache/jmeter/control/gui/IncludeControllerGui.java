@@ -49,10 +49,8 @@ public class IncludeControllerGui extends AbstractControllerGui
         return "include_controller";//$NON-NLS-1$
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(TestElement)
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void configure(TestElement el) {
@@ -61,10 +59,8 @@ public class IncludeControllerGui extends AbstractControllerGui
         this.includePanel.setFilename(controller.getIncludePath());
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
+    /**
+     * {@inheritDoc}
      */
     public TestElement createTestElement() {
         IncludeController mc = new IncludeController();
@@ -72,10 +68,8 @@ public class IncludeControllerGui extends AbstractControllerGui
         return mc;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+    /**
+     * {@inheritDoc}
      */
     public void modifyTestElement(TestElement element) {
         configureTestElement(element);

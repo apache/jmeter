@@ -1143,36 +1143,28 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         return JOrphanUtils.replaceAllChars(path, ' ', "%20"); // $NON-NLS-1$
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.TestListener#testEnded()
+    /**
+     * {@inheritDoc}
      */
     public void testEnded() {
         dynamicPath = false;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.TestListener#testEnded(java.lang.String)
+    /**
+     * {@inheritDoc}
      */
     public void testEnded(String host) {
         testEnded();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.TestListener#testIterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)
+    /**
+     * {@inheritDoc}
      */
     public void testIterationStart(LoopIterationEvent event) {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.TestListener#testStarted()
+    /**
+     * {@inheritDoc}
      */
     public void testStarted() {
         JMeterProperty pathP = getProperty(PATH);
@@ -1189,19 +1181,15 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         log.debug("path ending value = " + pathP.getStringValue());
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.TestListener#testStarted(java.lang.String)
+    /**
+     * {@inheritDoc}
      */
     public void testStarted(String host) {
         testStarted();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.lang.Object#clone()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public Object clone() {

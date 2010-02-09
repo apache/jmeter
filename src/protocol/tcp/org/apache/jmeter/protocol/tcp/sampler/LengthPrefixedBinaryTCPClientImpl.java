@@ -54,12 +54,8 @@ public class LengthPrefixedBinaryTCPClientImpl extends TCPClientDecorator {
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.apache.jmeter.protocol.tcp.sampler.TCPClient#write(java.io.OutputStream
-     * , java.lang.String)
+    /**
+     * {@inheritDoc}
      */
     public void write(OutputStream os, String s) {
         try {
@@ -72,23 +68,15 @@ public class LengthPrefixedBinaryTCPClientImpl extends TCPClientDecorator {
         return;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.apache.jmeter.protocol.tcp.sampler.TCPClient#write(java.io.OutputStream
-     * , java.io.InputStream)
+    /**
+     * {@inheritDoc}
      */
     public void write(OutputStream os, InputStream is) {
         this.tcpClient.write(os, is);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.apache.jmeter.protocol.tcp.sampler.TCPClient#read(java.io.InputStream
-     * )
+    /**
+     * {@inheritDoc}
      */
     public String read(InputStream is) {
         byte[] msg = new byte[0];
@@ -118,8 +106,8 @@ public class LengthPrefixedBinaryTCPClientImpl extends TCPClientDecorator {
 
     /**
      * Not useful, as the byte is never used.
-     * 
-     * @return Returns the eolByte.
+     * <p>
+     * {@inheritDoc}
      */
     @Override
     public byte getEolByte() {
@@ -127,8 +115,7 @@ public class LengthPrefixedBinaryTCPClientImpl extends TCPClientDecorator {
     }
 
     /**
-     * @param eolInt
-     *            The eolByte to set.
+     * {@inheritDoc}
      */
     @Override
     public void setEolByte(int eolInt) {

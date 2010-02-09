@@ -97,40 +97,32 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
         combo.setEditable(false);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.beans.PropertyEditor#supportsCustomEditor()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public boolean supportsCustomEditor() {
         return true;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.beans.PropertyEditor#getCustomEditor()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public Component getCustomEditor() {
         return combo;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.beans.PropertyEditor#getValue()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public Object getValue() {
         return getAsText();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.beans.PropertyEditor#getAsText()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public String getAsText() {
@@ -142,20 +134,16 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
         return (String) value;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.beans.PropertyEditor#setValue()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void setValue(Object value) {
         setAsText((String) value);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.beans.PropertyEditor#setAsText()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void setAsText(String value) {
@@ -172,10 +160,8 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.awt.event.ItemListener#itemStateChanged(java.awt.event.ItemEvent)
+    /**
+     * {@inheritDoc}
      */
     public void itemStateChanged(ItemEvent e) {
         if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -227,6 +213,9 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
         return noUndefined;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String[] getTags() {
         return tags;

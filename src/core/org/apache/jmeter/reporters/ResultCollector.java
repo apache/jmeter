@@ -550,10 +550,8 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
         files.clear();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see TestListener#testIterationStart(LoopIterationEvent)
+    /**
+     * {@inheritDoc}
      */
     public void testIterationStart(LoopIterationEvent event) {
     }
