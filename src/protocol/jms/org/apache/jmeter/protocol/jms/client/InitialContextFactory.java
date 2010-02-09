@@ -36,6 +36,7 @@ import org.apache.log.Logger;
  */
 public class InitialContextFactory {
 
+    //GuardedBy("this")
     private static final HashMap<String, Context> MAP = new HashMap<String, Context>();
 
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -91,7 +92,7 @@ public class InitialContextFactory {
     /**
      * clear all the InitialContext objects.
      */
-    public static void close() {
+    public synchronized static void close() { // TODO - why is this not used?
         Iterator<?> itr = MAP.keySet().iterator();
         while (itr.hasNext()) {
             Context ctx = MAP.get(itr.next());
@@ -101,6 +102,7 @@ public class InitialContextFactory {
                 log.error(e.getMessage());
             }
         }
+        MAP.clear();
         log.info("InitialContextFactory.close() called and Context instances cleaned up");
     }
 }
