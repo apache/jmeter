@@ -33,6 +33,7 @@ import java.util.Map;
  */
 public class ClientPool {
 
+    //GuardedBy("this")
     private static final ArrayList<Object> clients = new ArrayList<Object>();
 
     private static final Map<Object, Object> client_map = new HashMap<Object, Object>();
