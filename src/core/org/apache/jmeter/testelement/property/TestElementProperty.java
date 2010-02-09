@@ -60,21 +60,24 @@ public class TestElementProperty extends MultiProperty {
         return value == null ? 0 : value.hashCode();
     }
 
-    /*
-     * (non-Javadoc) #getStringValue()
+    /**
+     * {@inheritDoc}
      */
     public String getStringValue() {
         return value.toString();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void setObjectValue(Object v) {
         if (v instanceof TestElement) {
             value = (TestElement) v;
         }
     }
 
-    /*
-     * (non-Javadoc) #getObjectValue()
+    /**
+     * {@inheritDoc}
      */
     public Object getObjectValue() {
         return value;
@@ -88,10 +91,8 @@ public class TestElementProperty extends MultiProperty {
         value = el;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.lang.Object#clone()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public Object clone() {
@@ -100,8 +101,8 @@ public class TestElementProperty extends MultiProperty {
         return prop;
     }
 
-    /*
-     * (non-Javadoc) #mergeIn(JMeterProperty)
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void mergeIn(JMeterProperty prop) {
@@ -110,8 +111,8 @@ public class TestElementProperty extends MultiProperty {
         }
     }
 
-    /*
-     * (non-Javadoc) #recoverRunningVersion(TestElement)
+    /**
+     * {@inheritDoc}
      */
     public void recoverRunningVersion(TestElement owner) {
         if (savedValue != null) {
@@ -120,8 +121,8 @@ public class TestElementProperty extends MultiProperty {
         value.recoverRunningVersion();
     }
 
-    /*
-     * (non-Javadoc) #setRunningVersion(boolean)
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void setRunningVersion(boolean runningVersion) {
@@ -134,20 +135,16 @@ public class TestElementProperty extends MultiProperty {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see MultiProperty#addProperty(JMeterProperty)
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void addProperty(JMeterProperty prop) {
         value.setProperty(prop);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see MultiProperty#clear()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void clear() {
@@ -155,10 +152,8 @@ public class TestElementProperty extends MultiProperty {
 
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see MultiProperty#iterator()
+   /**
+     * {@inheritDoc}
      */
     @Override
     public PropertyIterator iterator() {

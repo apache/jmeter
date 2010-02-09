@@ -26,15 +26,15 @@ public abstract class AbstractTCPClient implements TCPClient {
     protected byte eolByte;
     protected boolean useEolByte = false;
     
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#getEolByte()
+    /**
+     * {@inheritDoc}
      */
     public byte getEolByte() {
         return eolByte;
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#setEolByte(int)
+    /**
+     * {@inheritDoc}
      */
     public void setEolByte(int eolInt) {
         if (eolInt >= Byte.MIN_VALUE && eolInt <= Byte.MAX_VALUE) {
@@ -45,14 +45,14 @@ public abstract class AbstractTCPClient implements TCPClient {
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#setupTest()
+    /**
+     * {@inheritDoc}
      */
     public void setupTest() {
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#teardownTest()
+    /**
+     * {@inheritDoc}
      */
     public void teardownTest() {
     }

@@ -79,10 +79,8 @@ public class RemoteTestListenerWrapper extends AbstractTestElement implements Te
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see TestListener#testIterationStart(LoopIterationEvent)
+    /**
+     * {@inheritDoc}
      */
     public void testIterationStart(LoopIterationEvent event) {
         //listener.testIterationStart(event);

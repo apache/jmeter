@@ -75,10 +75,8 @@ public class FixedQueueExecutor implements QueueExecutor {
         this.useReqMsgIdAsCorrelId = useReqMsgIdAsCorrelId;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.protocol.jms.sampler.QueueExecutor#sendAndReceive(javax.jms.Message)
+    /**
+     * {@inheritDoc}
      */
     public Message sendAndReceive(Message request) throws JMSException {
         String id = request.getJMSCorrelationID();

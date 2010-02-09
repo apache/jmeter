@@ -58,11 +58,8 @@ public class TCPClientImpl extends AbstractTCPClient {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#write(java.io.OutputStream,
-     *      java.lang.String)
+    /**
+     * {@inheritDoc}
      */
     public void write(OutputStream os, String s) {
         try {
@@ -75,11 +72,8 @@ public class TCPClientImpl extends AbstractTCPClient {
         return;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#write(java.io.OutputStream,
-     *      java.io.InputStream)
+    /**
+     * {@inheritDoc}
      */
     public void write(OutputStream os, InputStream is) {
         byte buff[]=new byte[512];

@@ -65,16 +65,14 @@ public class SwitchController extends GenericController implements Serializable 
         return super.next();
     }
 
-    /*
-     * (non-Javadoc)
-     *
+    /**
      * incrementCurrent is called when the current child (whether sampler or controller)
      * has been processed.
-     *
+     * <p>
      * Setting it to int.max marks the controller as having processed all its
      * children. Thus the controller processes one child per iteration.
-     *
-     * @see org.apache.jmeter.control.GenericController#incrementCurrent()
+     * <p>
+     * {@inheritDoc}
      */
     @Override
     protected void incrementCurrent() {

@@ -85,18 +85,16 @@ class FieldStringEditor extends PropertyEditorSupport implements ActionListener,
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.beans.PropertyEditor#getCustomEditor()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public Component getCustomEditor() {
         return textField;
     }
 
-    /*
-     * (non-Javadoc) Avoid needlessly firing PropertyChanged events.
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void firePropertyChange() {
@@ -110,27 +108,21 @@ class FieldStringEditor extends PropertyEditorSupport implements ActionListener,
         super.firePropertyChange();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+    /**
+     * {@inheritDoc}
      */
     public void actionPerformed(ActionEvent e) {
         firePropertyChange();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.awt.event.FocusListener#focusGained(java.awt.event.FocusEvent)
+    /**
+     * {@inheritDoc}
      */
     public void focusGained(FocusEvent e) {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.awt.event.FocusListener#focusLost(java.awt.event.FocusEvent)
+    /**
+     * {@inheritDoc}
      */
     public void focusLost(FocusEvent e) {
         firePropertyChange();

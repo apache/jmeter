@@ -50,10 +50,8 @@ public class TemporaryQueueExecutor implements QueueExecutor {
         requestor = new QueueRequestor(session, destination);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.protocol.jms.sampler.QueueExecutor#sendAndReceive(javax.jms.Message)
+    /**
+     * {@inheritDoc}
      */
     public Message sendAndReceive(Message request) throws JMSException {
         return requestor.request(request);

@@ -35,10 +35,8 @@ public class IntegerProperty extends NumberProperty {
         this.value = value;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#setRunningVersion(boolean)
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void setRunningVersion(boolean runningVersion) {
@@ -46,10 +44,8 @@ public class IntegerProperty extends NumberProperty {
         super.setRunningVersion(runningVersion);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#recoverRunningVersion(org.apache.jmeter.testelement.TestElement)
+    /**
+     * {@inheritDoc}
      */
     public void recoverRunningVersion(TestElement owner) {
         value = savedValue;
@@ -67,11 +63,17 @@ public class IntegerProperty extends NumberProperty {
         this.value = value;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void setNumberValue(Number n) {
         value = n.intValue();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void setNumberValue(String n) throws NumberFormatException {
         value = Integer.parseInt(n);
@@ -91,6 +93,9 @@ public class IntegerProperty extends NumberProperty {
         return new Integer(value);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Object clone() {
         IntegerProperty prop = (IntegerProperty) super.clone();

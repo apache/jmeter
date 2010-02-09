@@ -67,10 +67,8 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
     public BaseJMSSampler() {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.samplers.Sampler#sample(org.apache.jmeter.samplers.Entry)
+    /**
+     * {@inheritDoc}
      */
     public SampleResult sample(Entry e) {
         return this.sample();

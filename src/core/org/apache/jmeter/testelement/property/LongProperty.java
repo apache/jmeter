@@ -39,10 +39,8 @@ public class LongProperty extends NumberProperty {
         super();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#setRunningVersion(boolean)
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void setRunningVersion(boolean runningVersion) {
@@ -50,10 +48,8 @@ public class LongProperty extends NumberProperty {
         super.setRunningVersion(runningVersion);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#recoverRunningVersion(org.apache.jmeter.testelement.TestElement)
+    /**
+     * {@inheritDoc}
      */
     public void recoverRunningVersion(TestElement owner) {
         value = savedValue;
@@ -63,11 +59,17 @@ public class LongProperty extends NumberProperty {
         this.value = value;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void setNumberValue(Number n) {
         value = n.longValue();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void setNumberValue(String n) throws NumberFormatException {
         value = Long.parseLong(n);
@@ -87,6 +89,9 @@ public class LongProperty extends NumberProperty {
         return new Long(value);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Object clone() {
         LongProperty prop = (LongProperty) super.clone();

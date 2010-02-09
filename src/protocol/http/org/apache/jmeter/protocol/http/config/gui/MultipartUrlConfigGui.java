@@ -90,10 +90,8 @@ public class MultipartUrlConfigGui extends UrlConfigGui {
         return filesPanel;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.protocol.http.config.gui.UrlConfigGui#clear()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void clear() {
