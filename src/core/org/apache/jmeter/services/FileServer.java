@@ -59,10 +59,10 @@ public class FileServer {
 
     private static final String DEFAULT_BASE = JMeterUtils.getProperty("user.dir");
 
+    //@GuardedBy("this")
     private File base;
 
-    //TODO - make "files" and "random" static as the class is a singleton?
-
+    //@GuardedBy("this")
     private final Map<String, FileEntry> files = new HashMap<String, FileEntry>();
 
     private static final FileServer server = new FileServer();
@@ -254,7 +254,7 @@ public class FileServer {
         return new BufferedWriter(osw);
     }
 
-    public void closeFiles() throws IOException {
+    public synchronized void closeFiles() throws IOException {
         Iterator<Map.Entry<String, FileEntry>>  iter = files.entrySet().iterator();
         while (iter.hasNext()) {
             Map.Entry<String, FileEntry> me = iter.next();
@@ -286,7 +286,7 @@ public class FileServer {
         }
     }
 
-    protected boolean filesOpen() {
+    boolean filesOpen() { // package access for test code only
         Iterator<FileEntry> iter = files.values().iterator();
         while (iter.hasNext()) {
             FileEntry fileEntry = iter.next();
