@@ -57,6 +57,15 @@ public final class JMeterContextService {
     }
 
     /**
+     * Allows the thread Context to be completely cleared.
+     * <br/>
+     * Invokes {@link ThreadLocal#remove()}.
+     */
+    static void removeContext(){ // Currently only used by JMeterThread
+        threadContext.remove();
+    }
+
+    /**
      * Method is called by the JMeterEngine class when a test run is started.
      * Zeroes numberOfActiveThreads.
      * Saves current time in a field and in the JMeter property "TESTSTART.MS"
