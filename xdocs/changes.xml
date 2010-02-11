@@ -200,6 +200,7 @@ In particular, Aggregate Report can now handle large numbers of samples.
 <h3>I18N</h3>
 <ul>
 <li>Bug 47938 -  Adding some French translations for new elements</li>
+<li>Bug 48714 -  add new French messages</li>
 </ul>
 
 <h3>General</h3>
