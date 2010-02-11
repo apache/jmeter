@@ -433,7 +433,8 @@ the additional variables for rows 4, 5 and 6 will be removed.
 <component name="Java Request" index="&sect-num;.1.4"  width="406" height="307" screenshot="java_request.png">
 
 <description><p>This sampler lets you control a java class that implements the
-JavaSamplerClient interface.  By writing your own implementation of this interface,
+<b><code>org.apache.jmeter.protocol.java.sampler.JavaSamplerClient</code></b> interface.
+By writing your own implementation of this interface,
 you can use JMeter to harness multiple threads, input parameter control, and
 data collection.</p>
 <p>The pull-down menu provides the list of all such implementations found by
@@ -4371,8 +4372,17 @@ If more data is required for a particular sampler only, then add a Listener to i
 [The option does not affect CSV result files, which cannot currently store such information.]
 </p>
 <p>Also, an option exists here to instruct JMeter to run the <complink name="Thread Group"/> serially rather than in parallel.</p>
-<p>Test plan now provides an easy way to add classpath setting to a specific test plan. The feature is additive, meaning that you can add jar files or directories, but removing an entry requires restarting JMeter. In the past, users had to copy all the jar files to jmeter/lib/ directory. Now that is not necessary. JMeter properties also provides an entry for loading additional classpaths.</p>
-<p>In jmeter.properties, edit "user.classpath" to include additional libraries.</p></description>
+<p>
+Test plan now provides an easy way to add classpath setting to a specific test plan. 
+The feature is additive, meaning that you can add jar files or directories, but removing an entry requires restarting JMeter.
+Note that this cannot be used to add JMeter GUI plugins, because they are processed earlier.
+However it can be useful for utility jars such as JDBC drivers. 
+</p>
+<p>
+JMeter properties also provides an entry for loading additional classpaths.
+In jmeter.properties, edit "user.classpath" to include additional libraries.
+</p>
+</description>
 </component>
 
 <component name="Thread Group" index="&sect-num;.9.2"  width="411" height="419" screenshot="threadgroup.png">
