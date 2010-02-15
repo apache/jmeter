@@ -49,7 +49,7 @@ public class RenderAsXML extends SamplerResultTab
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final byte[] XML_PFX = "<?xml ".getBytes(); // $NON-NLS-1$
+    private static final byte[] XML_PFX = {'<','?','x','m','l',' '};//"<?xml "
 
     public RenderAsXML(){
         activateSearchExtension = false; // TODO work out how to search the XML pane
