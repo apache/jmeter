@@ -68,6 +68,9 @@ public class SampleResult implements Serializable {
             = JMeterUtils.getPropDefault("sampleresult.default.encoding", // $NON-NLS-1$
             DEFAULT_HTTP_ENCODING);
 
+    /* The default used by {@link #setResponseData(String, String)} */
+    private static final String DEFAULT_CHARSET = Charset.defaultCharset().name();
+
     /**
      * Data type value indicating that the response data is text.
      *
@@ -529,16 +532,15 @@ public class SampleResult implements Serializable {
      *
      */
     public void setResponseData(final String response, final String encoding) {
-        String defaultEncodingName = Charset.defaultCharset().name();
-        String encodeUsing = encoding != null? encoding : defaultEncodingName; 
+        String encodeUsing = encoding != null? encoding : DEFAULT_CHARSET; 
         try {
             responseData = response.getBytes(encodeUsing);
             setDataEncoding(encodeUsing);
         } catch (UnsupportedEncodingException e) {
             log.warn("Could not convert string using "+encodeUsing+
-                    ", using default encoding: "+defaultEncodingName+" "+e.getLocalizedMessage());
+                    ", using default encoding: "+DEFAULT_CHARSET+" "+e.getLocalizedMessage());
             responseData = response.getBytes();
-            setDataEncoding(defaultEncodingName);
+            setDataEncoding(DEFAULT_CHARSET);
         }
     }
 
