@@ -337,6 +337,11 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
             res.setResponseCode("500"); //$NON-NLS-1$
             res.setResponseMessage(ex.toString());
             closeSocket();
+        } catch (Exception ex) {
+            log.error("", ex);
+            isSuccessful=false;
+            res.setResponseCode("500");
+            res.setResponseMessage(ex.toString());
         } finally {
             // Calculate response time
             res.sampleEnd();
