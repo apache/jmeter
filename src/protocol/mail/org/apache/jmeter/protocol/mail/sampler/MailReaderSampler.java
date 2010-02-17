@@ -262,6 +262,7 @@ public class MailReaderSampler extends AbstractSampler {
                 sr.setContentType(contentType);
                 sr.setEncodingAndType(contentType);
                 sr.setResponseHeaders(bodyPart.getClass().getName());// TODO
+                sr.sampleStart();
                 if (bodyPartContent instanceof InputStream){
                     sr.setResponseData(IOUtils.toByteArray((InputStream) bodyPartContent));
                 } else {
