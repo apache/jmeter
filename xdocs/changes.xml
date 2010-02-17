@@ -210,6 +210,7 @@ In particular, Aggregate Report can now handle large numbers of samples.
 <li>Bug 47223 - Slow Aggregate Report Performance (StatCalculator)</li>
 <li>Bug 47980 - hostname resolves to 127.0.0.1 - specifiying IP not possible</li>
 <li>Bug 47943 - DisabledComponentRemover is not used in Start class</li>
+<li>HeapDumper class for runtime generation of dumps</li>
 </ul>
 
 <h2>Non-functional changes</h2>
