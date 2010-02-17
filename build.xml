@@ -906,6 +906,7 @@ run JMeter unless all the JMeter jars are added.
     <jar jarfile="${dest.jar}/ApacheJMeter_mail.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
       <fileset dir="${build.mail}" includes="**/*.class"  />
       <fileset dir="${src.mail}" includes="**/*.properties" />
+        <fileset dir="${src.mail}" includes="**/*.providers" />
       <metainf dir="." includes="LICENSE,NOTICE"/>
     </jar>
 
