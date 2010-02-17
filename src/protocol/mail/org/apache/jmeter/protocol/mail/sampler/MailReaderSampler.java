@@ -19,19 +19,24 @@ package org.apache.jmeter.protocol.mail.sampler;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Enumeration;
 import java.util.Properties;
 
 import javax.mail.Address;
 import javax.mail.BodyPart;
 import javax.mail.Flags;
 import javax.mail.Folder;
+import javax.mail.Header;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.MimeUtility;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
@@ -86,12 +91,10 @@ public class MailReaderSampler extends AbstractSampler {
         boolean deleteMessages = getDeleteMessages();
 
         parent.setSampleLabel(getName());
-        int port=getPortAsInt();
-        if (port > 0){
-            parent.setSamplerData(getServerType() + "://" + getUserName() + "@" + getServer()+ ":" + port);
-        } else {
-            parent.setSamplerData(getServerType() + "://" + getUserName() + "@" + getServer());
-        }
+        
+        String samplerString = toString();
+        parent.setSamplerData(samplerString);
+
         /*
          * Perform the sampling
          */
@@ -105,11 +108,7 @@ public class MailReaderSampler extends AbstractSampler {
 
             // Get the store
             Store store = session.getStore(getServerType());
-            if (port > 0){
-                store.connect(getServer(), port, getUserName(), getPassword());
-            } else {
-                store.connect(getServer(), getUserName(), getPassword());
-            }
+            store.connect(getServer(), getPortAsInt(), getUserName(), getPassword());
 
             // Get folder
             Folder folder = store.getFolder(getFolder());
@@ -121,47 +120,66 @@ public class MailReaderSampler extends AbstractSampler {
 
             // Get directory
             Message messages[] = folder.getMessages();
-            Message message;
             StringBuilder pdata = new StringBuilder();
             pdata.append(messages.length);
             pdata.append(" messages found\n");
+            parent.setResponseData(pdata.toString(),null);
+            parent.setDataType(SampleResult.TEXT);
+            parent.setContentType("text/plain"); // $NON-NLS-1$
 
             int n = getNumMessages();
             if (n == ALL_MESSAGES || n > messages.length) {
                 n = messages.length;
             }
 
+            parent.setSampleCount(n); // TODO is this sensible?
+            
             for (int i = 0; i < n; i++) {
                 StringBuilder cdata = new StringBuilder();
                 SampleResult child = new SampleResult();
                 child.sampleStart();
-                message = messages[i];
-
-                //if (i == 0)
-                { // Assumes all the messaged have the same type ...
-                    child.setContentType(message.getContentType());
-                }
-
+                Message message = messages[i];
+                
                 cdata.append("Message "); // $NON-NLS-1$
                 cdata.append(message.getMessageNumber());
                 child.setSampleLabel(cdata.toString());
                 child.setSamplerData(cdata.toString());
                 cdata.setLength(0);
 
+                final String contentType = message.getContentType();
+                child.setContentType(contentType);// Store the content-type
+
                 if (isStoreMimeMessage()) {
-                    appendMessageAsMime(cdata, message);
+                    // Don't save headers - they are already in the raw message
+                    ByteArrayOutputStream bout = new ByteArrayOutputStream();
+                    message.writeTo(bout);
+                    child.setResponseData(bout.toByteArray()); // Save raw message
+                    child.setDataType(SampleResult.TEXT);
+                    child.setDataEncoding("iso-8859-1"); // RFC 822 uses ascii
+                    child.setEncodingAndType(contentType);// Parse the content-type
                 } else {
-                    appendMessageData(cdata, message);
+                    child.setEncodingAndType(contentType);// Parse the content-type
+                    @SuppressWarnings("unchecked") // Javadoc for the API says this is OK
+                    Enumeration<Header> hdrs = message.getAllHeaders();
+                    while(hdrs.hasMoreElements()){
+                        Header hdr = hdrs.nextElement();
+                        String value = hdr.getValue();
+                        try {
+                            value = MimeUtility.decodeText(value);
+                        } catch (UnsupportedEncodingException uce) {
+                            // ignored
+                        }
+                        cdata.append(hdr.getName()).append(": ").append(value).append("\n");
+                    }
+                    child.setResponseHeaders(cdata.toString());
+                    cdata.setLength(0);
+                    appendMessageData(child, message);
                 }
 
                 if (deleteMessages) {
                     message.setFlag(Flags.Flag.DELETED, true);
                 }
-                child.setResponseData(cdata.toString().getBytes());
-                child.setDataType(SampleResult.TEXT);
-                child.setResponseCodeOK();
-                child.setResponseMessage("OK"); // $NON-NLS-1$
-                child.setSuccessful(true);
+                child.setResponseOK();
                 child.sampleEnd();
                 parent.addSubResult(child);
             }
@@ -170,15 +188,8 @@ public class MailReaderSampler extends AbstractSampler {
             folder.close(true);
             store.close();
 
-            /*
-             * Set up the sample result details
-             */
-            parent.setResponseData(pdata.toString().getBytes());
-            parent.setDataType(SampleResult.TEXT);
-            parent.setContentType("text/plain"); // $NON-NLS-1$
-
             parent.setResponseCodeOK();
-            parent.setResponseMessage("OK"); // $NON-NLS-1$
+            parent.setResponseMessageOK();
             isOK = true;
         } catch (NoClassDefFoundError ex) {
             log.debug("",ex);// No need to log normally, as we set the status
@@ -201,15 +212,16 @@ public class MailReaderSampler extends AbstractSampler {
         return parent;
     }
 
-    private void appendMessageData(StringBuilder cdata, Message message)
+    private void appendMessageData(SampleResult child, Message message)
             throws MessagingException, IOException {
+        StringBuilder cdata = new StringBuilder();
         cdata.append("Date: "); // $NON-NLS-1$
         cdata.append(message.getSentDate());// TODO - use a different format here?
         cdata.append(NEW_LINE);
 
         cdata.append("To: "); // $NON-NLS-1$
-        Address[] recips = message.getAllRecipients();
-        for (int j = 0; j < recips.length; j++) {
+        Address[] recips = message.getAllRecipients(); // may be null
+        for (int j = 0; recips != null && j < recips.length; j++) {
             cdata.append(recips[j].toString());
             if (j < recips.length - 1) {
                 cdata.append("; "); // $NON-NLS-1$
@@ -218,8 +230,8 @@ public class MailReaderSampler extends AbstractSampler {
         cdata.append(NEW_LINE);
 
         cdata.append("From: "); // $NON-NLS-1$
-        Address[] from = message.getFrom();
-        for (int j = 0; j < from.length; j++) {
+        Address[] from = message.getFrom(); // may be null
+        for (int j = 0; from != null && j < from.length; j++) {
             cdata.append(from[j].toString());
             if (j < from.length - 1) {
                 cdata.append("; "); // $NON-NLS-1$
@@ -235,31 +247,38 @@ public class MailReaderSampler extends AbstractSampler {
         Object content = message.getContent();
         if (content instanceof MimeMultipart) {
             MimeMultipart mmp = (MimeMultipart) content;
+            String preamble = mmp.getPreamble();
+            if (preamble != null ){
+                cdata.append(preamble);
+            }
+            child.setResponseData(cdata.toString(),child.getDataEncodingNoDefault());
             int count = mmp.getCount();
-            cdata.append("Multipart. Count: ");
-            cdata.append(count);
-            cdata.append(NEW_LINE);
             for (int j=0; j<count;j++){
                 BodyPart bodyPart = mmp.getBodyPart(j);
-                cdata.append("Type: ");
-                cdata.append(bodyPart.getContentType());
-                cdata.append(NEW_LINE);
-                try {
-                    cdata.append(bodyPart.getContent());
-                } catch (UnsupportedEncodingException ex){
-                    cdata.append(ex.getLocalizedMessage());
+                final Object bodyPartContent = bodyPart.getContent();
+                final String contentType = bodyPart.getContentType();
+                SampleResult sr = new SampleResult();
+                sr.setSampleLabel("Part: "+j);
+                sr.setContentType(contentType);
+                sr.setEncodingAndType(contentType);
+                sr.setResponseHeaders(bodyPart.getClass().getName());// TODO
+                if (bodyPartContent instanceof InputStream){
+                    sr.setResponseData(IOUtils.toByteArray((InputStream) bodyPartContent));
+                } else {
+                    sr.setResponseData(bodyPartContent.toString(),sr.getDataEncodingNoDefault());
                 }
+                sr.setResponseOK();
+                sr.sampleEnd();
+                child.addSubResult(sr);
             }
         } else {
-            cdata.append(content);
+            if (content instanceof InputStream){
+                child.setResponseData(IOUtils.toByteArray((InputStream) content));
+            } else {
+                cdata.append(content);
+                child.setResponseData(cdata.toString(),child.getDataEncodingNoDefault());
+            }
         }
-    }
-
-    private void appendMessageAsMime(StringBuilder cdata, Message message)
-            throws MessagingException, IOException {
-        ByteArrayOutputStream bout = new ByteArrayOutputStream();
-        message.writeTo(bout);
-        cdata.append(bout);
     }
 
     /**
@@ -304,7 +323,7 @@ public class MailReaderSampler extends AbstractSampler {
     }
 
     private int getPortAsInt() {
-        return getPropertyAsInt(PORT);
+        return getPropertyAsInt(PORT, -1);
     }
 
     public void setPort(String port) {
@@ -420,5 +439,25 @@ public class MailReaderSampler extends AbstractSampler {
      */
     public void setStoreMimeMessage(boolean storeMimeMessage) {
         setProperty(STORE_MIME_MESSAGE, storeMimeMessage, false);
+    }
+    
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(getServerType());
+        sb.append("://");
+        sb.append(getUserName());
+        sb.append("@");
+        sb.append(getServer());
+        int port=getPortAsInt();
+        if (port != -1){
+            sb.append(":").append(port);
+        }
+        sb.append("/");
+        sb.append(getFolder());
+        sb.append("[");
+        sb.append(getNumMessages());
+        sb.append("]");
+        return sb.toString();
     }
 }
