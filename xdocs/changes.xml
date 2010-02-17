@@ -152,6 +152,7 @@ The XPath Assertion and XPath Extractor elements no longer fetch external DTDs b
 <li>Bug 47556 - JMS-PoinToPoint-Sampler Timout field should use Strings</li>
 <li>Bug 47947 - Mail Reader Sampler should allow port to be overridden</li>
 <li>Bug 48155 - Multiple problems / enhancements with JMS protocol classes</li>
+<li>Allow MailReader sampler to use arbitrary protocols</li>
 </ul>
 
 <h3>Controllers</h3>
