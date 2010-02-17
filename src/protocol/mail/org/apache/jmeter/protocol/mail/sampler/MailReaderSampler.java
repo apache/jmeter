@@ -180,7 +180,9 @@ public class MailReaderSampler extends AbstractSampler {
                     message.setFlag(Flags.Flag.DELETED, true);
                 }
                 child.setResponseOK();
-                child.sampleEnd();
+                if (child.getEndTime()==0){// Avoid double-call if addSubResult was called.
+                    child.sampleEnd();
+                }
                 parent.addSubResult(child);
             }
 
@@ -261,7 +263,6 @@ public class MailReaderSampler extends AbstractSampler {
                 sr.setSampleLabel("Part: "+j);
                 sr.setContentType(contentType);
                 sr.setEncodingAndType(contentType);
-                sr.setResponseHeaders(bodyPart.getClass().getName());// TODO
                 sr.sampleStart();
                 if (bodyPartContent instanceof InputStream){
                     sr.setResponseData(IOUtils.toByteArray((InputStream) bodyPartContent));
