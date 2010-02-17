@@ -19,11 +19,11 @@ package org.apache.jmeter.protocol.mail.sampler.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import javax.swing.ButtonGroup;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -38,12 +38,12 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
-public class MailReaderSamplerGui extends AbstractSamplerGui {
+public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionListener, FocusListener {
 
     private static final long serialVersionUID = 240L;
 
     // Gui Components
-    private JComboBox serverTypeBox;
+    private JTextField serverTypeBox;
 
     private JTextField serverBox;
 
@@ -68,13 +68,6 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
     private JCheckBox storeMimeMessageBox;
 
     // Labels - don't make these static, else language change will not work
-    private final String POP3Label = JMeterUtils.getResString("mail_reader_pop3");// $NON-NLS-1$
-
-    private final String IMAPLabel = JMeterUtils.getResString("mail_reader_imap");// $NON-NLS-1$
-
-    private final String POP3SLabel = JMeterUtils.getResString("mail_reader_pop3s");// $NON-NLS-1$
-
-    private final String IMAPSLabel = JMeterUtils.getResString("mail_reader_imaps");// $NON-NLS-1$
 
     private final String ServerTypeLabel = JMeterUtils.getResString("mail_reader_server_type");// $NON-NLS-1$
 
@@ -113,23 +106,8 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
     @Override
     public void configure(TestElement element) {
         MailReaderSampler mrs = (MailReaderSampler) element;
-        final String serverType = mrs.getServerType();
-        if (serverType.equals(MailReaderSampler.TYPE_POP3)) {
-            serverTypeBox.setSelectedItem(POP3Label);
-            folderBox.setText(INBOX);
-        } else if (serverType.equals(MailReaderSampler.TYPE_POP3S)) {
-                serverTypeBox.setSelectedItem(POP3SLabel);
-                folderBox.setText(INBOX);
-        } else if (serverType.equals(MailReaderSampler.TYPE_IMAPS)) {
-            serverTypeBox.setSelectedItem(IMAPSLabel);
-            folderBox.setText(mrs.getFolder());
-        } else if (serverType.equals(MailReaderSampler.TYPE_IMAP)) {
-            serverTypeBox.setSelectedItem(IMAPLabel);
-            folderBox.setText(mrs.getFolder());
-        } else {
-            serverTypeBox.setSelectedItem(serverType);
-            folderBox.setText(mrs.getFolder());
-        }
+        serverTypeBox.setText(mrs.getServerType());
+        folderBox.setText(mrs.getFolder());
         serverBox.setText(mrs.getServer());
         portBox.setText(mrs.getPort());
         usernameBox.setText(mrs.getUserName());
@@ -164,19 +142,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 
         MailReaderSampler mrs = (MailReaderSampler) te;
 
-        final String item = (String) serverTypeBox.getSelectedItem();
-        if (item.equals(POP3Label)) {
-            mrs.setServerType(MailReaderSampler.TYPE_POP3);
-        } else if (item.equals(POP3SLabel)){
-            mrs.setServerType(MailReaderSampler.TYPE_POP3S);
-        } else if (item.equals(IMAPSLabel)){
-            mrs.setServerType(MailReaderSampler.TYPE_IMAPS);
-        } else if (item.equals(IMAPLabel)){
-            mrs.setServerType(MailReaderSampler.TYPE_IMAP);
-        } else {
-            mrs.setServerType(item);
-        }
-
+        mrs.setServerType(serverTypeBox.getText());
         mrs.setFolder(folderBox.getText());
         mrs.setServer(serverBox.getText());
         mrs.setPort(portBox.getText());
@@ -203,26 +169,9 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 
         JPanel serverTypePanel = new JPanel();
         serverTypePanel.add(new JLabel(ServerTypeLabel));
-        DefaultComboBoxModel serverTypeModel = new DefaultComboBoxModel();
-        serverTypeModel.addElement(POP3Label);
-        serverTypeModel.addElement(POP3SLabel);
-        serverTypeModel.addElement(IMAPLabel);
-        serverTypeModel.addElement(IMAPSLabel);
-        serverTypeBox = new JComboBox(serverTypeModel);
-        serverTypeBox.setEditable(true);
-        serverTypeBox.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                final String item = (String) serverTypeBox.getSelectedItem();
-                if (item.equals(POP3Label)||item.equals(POP3SLabel)) {
-                    folderLabel.setEnabled(false);
-                    folderBox.setText(INBOX);
-                    folderBox.setEnabled(false);
-                } else {
-                    folderLabel.setEnabled(true);
-                    folderBox.setEnabled(true);
-                }
-            }
-        });
+        serverTypeBox = new JTextField(20);
+        serverTypeBox.addActionListener(this);
+        serverTypeBox.addFocusListener(this);
         serverTypePanel.add(serverTypeBox);
         add(serverTypePanel);
 
@@ -300,15 +249,32 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 
     private void initGui() {
         allMessagesButton.setSelected(true);
-        //someMessagesButton.setSelected(false);
-        //someMessagesField.setText("0");
         deleteBox.setSelected(false);
         storeMimeMessageBox.setSelected(false);
         folderBox.setText(INBOX);
-        serverTypeBox.setSelectedIndex(0);
+        serverTypeBox.setText(MailReaderSampler.DEFAULT_PROTOCOL);
         passwordBox.setText("");// $NON-NLS-1$
         serverBox.setText("");// $NON-NLS-1$
         portBox.setText("");// $NON-NLS-1$
         usernameBox.setText("");// $NON-NLS-1$
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        final String item = serverTypeBox.getText();
+        if (item.equals("pop3")||item.equals("pop3s")) {
+            folderLabel.setEnabled(false);
+            folderBox.setText(INBOX);
+            folderBox.setEnabled(false);
+        } else {
+            folderLabel.setEnabled(true);
+            folderBox.setEnabled(true);
+        }
+    }
+
+    public void focusGained(FocusEvent e) {
+    }
+
+    public void focusLost(FocusEvent e) {
+        actionPerformed(null);
     }
 }
