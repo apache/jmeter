@@ -384,6 +384,20 @@ public class SampleResult implements Serializable {
         responseMessage = OK_MSG;
     }
 
+    /**
+     * Set result statuses OK - shorthand method to set:
+     * <ul>
+     * <li>ResponseCode</li>
+     * <li>ResponseMessage</li>
+     * <li>Successful status</li>
+     * </ul>
+     */
+    public void setResponseOK(){
+        setResponseCodeOK();
+        setResponseMessageOK();
+        setSuccessful(true);
+    }
+
     public String getThreadName() {
         return threadName;
     }
@@ -537,8 +551,8 @@ public class SampleResult implements Serializable {
             responseData = response.getBytes(encodeUsing);
             setDataEncoding(encodeUsing);
         } catch (UnsupportedEncodingException e) {
-            log.warn("Could not convert string using "+encodeUsing+
-                    ", using default encoding: "+DEFAULT_CHARSET+" "+e.getLocalizedMessage());
+            log.warn("Could not convert string using '"+encodeUsing+
+                    "', using default encoding: "+DEFAULT_CHARSET+" "+e.getLocalizedMessage());
             responseData = response.getBytes();
             setDataEncoding(DEFAULT_CHARSET);
         }
@@ -950,8 +964,10 @@ public class SampleResult implements Serializable {
     public void setErrorCount(int i){// for reading from CSV files
         // ignored currently
     }
+    
     /*
-     * TODO: error counting needs to be sorted out after 2.3 final.
+     * TODO: error counting needs to be sorted out.
+     * 
      * At present the Statistical Sampler tracks errors separately
      * It would make sense to move the error count here, but this would
      * mean lots of changes.
