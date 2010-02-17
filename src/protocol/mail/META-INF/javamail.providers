@@ -1,0 +1,1 @@
+protocol=file; type=store; class=org.apache.jmeter.protocol.mail.sampler.MailFileStore; vendor=ASF
