@@ -1326,7 +1326,10 @@ To use POP3S or IMAPS requires a recent version of JavaMail (e.g. JavaMail 1.4.1
 </description>
 <properties>
 <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-<property name="Server Type" required="Yes">The protocol used by the server: POP3, POP3S, IMAP, IMAPS</property>
+<property name="Server Type" required="Yes">The protocol used by the server: POP3, POP3S, IMAP, IMAPS
+or another string representing the server type.
+For example <code>file</code> for use with the read-only mail file provider.
+</property>
 <property name="Server" required="Yes">Hostname or IP address of the server</property>
 <property name="Port" required="No">Port to be used to connect to the server (optional)</property>
 <property name="Username" required="">User login name</property>
@@ -1334,8 +1337,23 @@ To use POP3S or IMAPS requires a recent version of JavaMail (e.g. JavaMail 1.4.1
 <property name="Folder" required="Yes, if using IMAP(S)">The IMAP(S) folder to use</property>
 <property name="Number of messages to retrieve" required="Yes">Set this to retrieve all or some messages</property>
 <property name="Delete messages from the server" required="Yes">If set, messages will be deleted after retrieval</property>
-<property name="Store the message using MIME" required="Yes">Whether to store the message as MIME. If not, fewer headers are stored (Date, To, From, Subject).</property>
+<property name="Store the message using MIME" required="Yes">Whether to store the message as MIME. 
+If so, then the entire raw message is stored in the Response Data; the headers are not stored as they are available in the data. 
+If not, the message headers are stored as Response Headers. 
+A few headers are stored (Date, To, From, Subject) in the body.
+</property>
 </properties>
+<p>
+Messages are stored as subsamples of the main sampler.
+In versions of JMeter after 2.3.4, multipart message parts are stored as subsamples of the message.
+</p>
+<p>
+The <code>file</code> JavaMail provider can be used to read raw messages from files.
+The <code>server</code> field is used to specify the path to the parent of the <code>folder</code>.
+Individual message files should be stored with the name <code>n.msg</code>,
+where <code>n</code> is the message number.
+The current implementation is quite basic, and is mainly intended for debugging purposes. 
+</p>
 </component>
 
 <component name="Test Action" index="&sect-num;.1.18"  width="344" height="181" screenshot="test_action.png">
