@@ -66,21 +66,17 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
     private final static String NUM_MESSAGES = "num_messages"; // $NON-NLS-1$
     private static final String NEW_LINE = "\n"; // $NON-NLS-1$
     private final static String STORE_MIME_MESSAGE = "storeMimeMessage";
-
-    // Needed by GUI
-    public final static String TYPE_POP3 = "pop3"; // $NON-NLS-1$
-    public final static String TYPE_POP3S = "pop3s"; // $NON-NLS-1$
-    public final static String TYPE_IMAP = "imap"; // $NON-NLS-1$
-    public final static String TYPE_IMAPS = "imaps"; // $NON-NLS-1$
     //-
     
+    public static final String DEFAULT_PROTOCOL = "pop3";  // $NON-NLS-1$
+
     public static final int ALL_MESSAGES = -1; // special value
 
     private volatile boolean busy;
 
     public MailReaderSampler() {
-        setServerType(TYPE_POP3);
-        setFolder("INBOX");
+        setServerType(DEFAULT_PROTOCOL);
+        setFolder("INBOX");  // $NON-NLS-1$
         setNumMessages(ALL_MESSAGES);
         setDeleteMessages(false);
     }
