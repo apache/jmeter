@@ -39,6 +39,7 @@ import javax.mail.internet.MimeUtility;
 import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
+import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
@@ -49,7 +50,7 @@ import org.apache.log.Logger;
 /**
  * Sampler that can read from POP3 and IMAP mail servers
  */
-public class MailReaderSampler extends AbstractSampler {
+public class MailReaderSampler extends AbstractSampler implements Interruptible {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final long serialVersionUID = 240L;
@@ -74,6 +75,8 @@ public class MailReaderSampler extends AbstractSampler {
     //-
     
     public static final int ALL_MESSAGES = -1; // special value
+
+    private volatile boolean busy;
 
     public MailReaderSampler() {
         setServerType(TYPE_POP3);
@@ -134,7 +137,8 @@ public class MailReaderSampler extends AbstractSampler {
 
             parent.setSampleCount(n); // TODO is this sensible?
             
-            for (int i = 0; i < n; i++) {
+            busy = true;
+            for (int i = 0; busy && i < n; i++) {
                 StringBuilder cdata = new StringBuilder();
                 SampleResult child = new SampleResult();
                 child.sampleStart();
@@ -205,6 +209,8 @@ public class MailReaderSampler extends AbstractSampler {
             log.debug("", ex);// No need to log normally, as we set the status
             parent.setResponseCode("500"); // $NON-NLS-1$
             parent.setResponseMessage(ex.toString());
+        } finally {
+            busy = false;
         }
 
         if (parent.getEndTime()==0){// not been set by any child samples
@@ -461,5 +467,14 @@ public class MailReaderSampler extends AbstractSampler {
         sb.append(getNumMessages());
         sb.append("]");
         return sb.toString();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean interrupt() {
+        boolean wasbusy = busy;
+        busy = false;
+        return wasbusy;
     }
 }
