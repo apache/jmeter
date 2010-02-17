@@ -38,10 +38,10 @@ rem Check file is supplied
 if a == a%1 goto winNT2
 
 rem Allow special name LAST
-if aLAST == a%1 goto winNT3
+if LAST == %1 goto winNT3
 
 rem Check it has extension .jmx
-if a%~x1 == a.jmx goto winNT3
+if "%~x1" == ".jmx" goto winNT3
 :winNT2
 echo Please supply a script name with the extension .jmx
 pause
