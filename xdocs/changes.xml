@@ -211,6 +211,7 @@ In particular, Aggregate Report can now handle large numbers of samples.
 <li>Bug 47980 - hostname resolves to 127.0.0.1 - specifiying IP not possible</li>
 <li>Bug 47943 - DisabledComponentRemover is not used in Start class</li>
 <li>HeapDumper class for runtime generation of dumps</li>
+<li>Basic read-only JavaMail provider implementation for reading raw mail files</li>
 </ul>
 
 <h2>Non-functional changes</h2>
