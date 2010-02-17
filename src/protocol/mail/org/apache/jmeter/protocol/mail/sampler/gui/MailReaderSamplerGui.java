@@ -113,17 +113,21 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
     @Override
     public void configure(TestElement element) {
         MailReaderSampler mrs = (MailReaderSampler) element;
-        if (mrs.getServerType().equals(MailReaderSampler.TYPE_POP3)) {
+        final String serverType = mrs.getServerType();
+        if (serverType.equals(MailReaderSampler.TYPE_POP3)) {
             serverTypeBox.setSelectedItem(POP3Label);
             folderBox.setText(INBOX);
-        } else if (mrs.getServerType().equals(MailReaderSampler.TYPE_POP3S)) {
+        } else if (serverType.equals(MailReaderSampler.TYPE_POP3S)) {
                 serverTypeBox.setSelectedItem(POP3SLabel);
                 folderBox.setText(INBOX);
-        } else if (mrs.getServerType().equals(MailReaderSampler.TYPE_IMAPS)) {
+        } else if (serverType.equals(MailReaderSampler.TYPE_IMAPS)) {
             serverTypeBox.setSelectedItem(IMAPSLabel);
             folderBox.setText(mrs.getFolder());
-        } else {
+        } else if (serverType.equals(MailReaderSampler.TYPE_IMAP)) {
             serverTypeBox.setSelectedItem(IMAPLabel);
+            folderBox.setText(mrs.getFolder());
+        } else {
+            serverTypeBox.setSelectedItem(serverType);
             folderBox.setText(mrs.getFolder());
         }
         serverBox.setText(mrs.getServer());
@@ -167,8 +171,10 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
             mrs.setServerType(MailReaderSampler.TYPE_POP3S);
         } else if (item.equals(IMAPSLabel)){
             mrs.setServerType(MailReaderSampler.TYPE_IMAPS);
-        } else {
+        } else if (item.equals(IMAPLabel)){
             mrs.setServerType(MailReaderSampler.TYPE_IMAP);
+        } else {
+            mrs.setServerType(item);
         }
 
         mrs.setFolder(folderBox.getText());
@@ -203,6 +209,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
         serverTypeModel.addElement(IMAPLabel);
         serverTypeModel.addElement(IMAPSLabel);
         serverTypeBox = new JComboBox(serverTypeModel);
+        serverTypeBox.setEditable(true);
         serverTypeBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 final String item = (String) serverTypeBox.getSelectedItem();
