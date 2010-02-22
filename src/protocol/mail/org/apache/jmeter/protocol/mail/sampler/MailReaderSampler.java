@@ -68,6 +68,8 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
     private final static String STORE_MIME_MESSAGE = "storeMimeMessage";
     //-
     
+    private static final String RFC_822_DEFAULT_ENCODING = "iso-8859-1"; // RFC 822 uses ascii per default
+
     public static final String DEFAULT_PROTOCOL = "pop3";  // $NON-NLS-1$
 
     public static final int ALL_MESSAGES = -1; // special value
@@ -148,6 +150,8 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
 
                 final String contentType = message.getContentType();
                 child.setContentType(contentType);// Store the content-type
+                child.setDataEncoding(RFC_822_DEFAULT_ENCODING); // RFC 822 uses ascii per default
+                child.setEncodingAndType(contentType);// Parse the content-type
 
                 if (isStoreMimeMessage()) {
                     // Don't save headers - they are already in the raw message
@@ -155,10 +159,7 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
                     message.writeTo(bout);
                     child.setResponseData(bout.toByteArray()); // Save raw message
                     child.setDataType(SampleResult.TEXT);
-                    child.setDataEncoding("iso-8859-1"); // RFC 822 uses ascii
-                    child.setEncodingAndType(contentType);// Parse the content-type
                 } else {
-                    child.setEncodingAndType(contentType);// Parse the content-type
                     @SuppressWarnings("unchecked") // Javadoc for the API says this is OK
                     Enumeration<Header> hdrs = message.getAllHeaders();
                     while(hdrs.hasMoreElements()){
@@ -250,38 +251,45 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
         cdata.append(NEW_LINE);
         Object content = message.getContent();
         if (content instanceof MimeMultipart) {
-            MimeMultipart mmp = (MimeMultipart) content;
-            String preamble = mmp.getPreamble();
-            if (preamble != null ){
-                cdata.append(preamble);
-            }
-            child.setResponseData(cdata.toString(),child.getDataEncodingNoDefault());
-            int count = mmp.getCount();
-            for (int j=0; j<count;j++){
-                BodyPart bodyPart = mmp.getBodyPart(j);
-                final Object bodyPartContent = bodyPart.getContent();
-                final String contentType = bodyPart.getContentType();
-                SampleResult sr = new SampleResult();
-                sr.setSampleLabel("Part: "+j);
-                sr.setContentType(contentType);
-                sr.setEncodingAndType(contentType);
-                sr.sampleStart();
-                if (bodyPartContent instanceof InputStream){
-                    sr.setResponseData(IOUtils.toByteArray((InputStream) bodyPartContent));
-                } else {
-                    sr.setResponseData(bodyPartContent.toString(),sr.getDataEncodingNoDefault());
-                }
-                sr.setResponseOK();
-                sr.sampleEnd();
-                child.addSubResult(sr);
-            }
+            appendMultiPart(child, cdata, (MimeMultipart) content);
+        } else if (content instanceof InputStream){
+            child.setResponseData(IOUtils.toByteArray((InputStream) content));
         } else {
-            if (content instanceof InputStream){
-                child.setResponseData(IOUtils.toByteArray((InputStream) content));
+            cdata.append(content);
+            child.setResponseData(cdata.toString(),child.getDataEncodingNoDefault());
+        }
+    }
+
+    private void appendMultiPart(SampleResult child, StringBuilder cdata,
+            MimeMultipart mmp) throws MessagingException, IOException {
+        String preamble = mmp.getPreamble();
+        if (preamble != null ){
+            cdata.append(preamble);
+        }
+        child.setResponseData(cdata.toString(),child.getDataEncodingNoDefault());
+        int count = mmp.getCount();
+        for (int j=0; j<count;j++){
+            BodyPart bodyPart = mmp.getBodyPart(j);
+            final Object bodyPartContent = bodyPart.getContent();
+            final String contentType = bodyPart.getContentType();
+            SampleResult sr = new SampleResult();
+            sr.setSampleLabel("Part: "+j);
+            sr.setContentType(contentType);
+            sr.setDataEncoding(RFC_822_DEFAULT_ENCODING);
+            sr.setEncodingAndType(contentType);
+            sr.sampleStart();
+            if (bodyPartContent instanceof InputStream){
+                sr.setResponseData(IOUtils.toByteArray((InputStream) bodyPartContent));
+            } else if (bodyPartContent instanceof MimeMultipart){
+                appendMultiPart(sr, cdata, (MimeMultipart) bodyPartContent);
             } else {
-                cdata.append(content);
-                child.setResponseData(cdata.toString(),child.getDataEncodingNoDefault());
+                sr.setResponseData(bodyPartContent.toString(),sr.getDataEncodingNoDefault());
             }
+            sr.setResponseOK();
+            if (sr.getEndTime()==0){// not been set by any child samples
+                sr.sampleEnd();
+            }
+            child.addSubResult(sr);
         }
     }
 
@@ -450,8 +458,11 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
         StringBuilder sb = new StringBuilder();
         sb.append(getServerType());
         sb.append("://");
-        sb.append(getUserName());
-        sb.append("@");
+        String name = getUserName();
+        if (name.length() > 0){
+            sb.append(name);
+            sb.append("@");
+        }
         sb.append(getServer());
         int port=getPortAsInt();
         if (port != -1){
