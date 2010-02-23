@@ -59,7 +59,7 @@ import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.StringProperty;
-import org.apache.jmeter.threads.ThreadGroup;
+import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.timers.Timer;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -638,7 +638,7 @@ public class ProxyControl extends GenericController {
      * <ul>
      * <li>The controller specified by the <code>target</code> property.
      * <li>If none was specified, the first RecordingController in the tree.
-     * <li>If none is found, the first ThreadGroup in the tree.
+     * <li>If none is found, the first AbstractThreadGroup in the tree.
      * <li>If none is found, the Workspace.
      * </ul>
      *
@@ -654,7 +654,7 @@ public class ProxyControl extends GenericController {
         if (myTarget != null) {
             return myTarget;
         }
-        myTarget = findFirstNodeOfType(ThreadGroup.class);
+        myTarget = findFirstNodeOfType(AbstractThreadGroup.class);
         if (myTarget != null) {
             return myTarget;
         }
