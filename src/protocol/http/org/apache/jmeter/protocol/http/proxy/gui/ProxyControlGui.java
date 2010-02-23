@@ -797,9 +797,6 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         return spaces.toString();
     }
 
-    public void setNode(JMeterTreeNode node) {
-        getNamePanel().setNode(node);
-    }
 }
 
 class TreeNodeWrapper {
