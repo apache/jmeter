@@ -201,7 +201,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
 
         JPanel folderPanel = new JPanel();
         folderLabel = new JLabel(FolderLabel);
-        folderBox = new JTextField(INBOX, 10);
+        folderBox = new JTextField(INBOX, 20);
         folderPanel.add(folderLabel);
         folderPanel.add(folderBox);
         add(folderPanel);
