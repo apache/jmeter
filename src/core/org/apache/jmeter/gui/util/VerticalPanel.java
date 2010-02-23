@@ -35,11 +35,11 @@ import javax.swing.JPanel;
 public class VerticalPanel extends JPanel {
     private static final long serialVersionUID = 240L;
 
-    private Box subPanel = Box.createVerticalBox();
+    private final Box subPanel = Box.createVerticalBox();
 
-    private float horizontalAlign;
+    private final float horizontalAlign;
 
-    private int vgap;
+    private final int vgap;
 
     public VerticalPanel() {
         this(5, LEFT_ALIGNMENT);
