@@ -44,7 +44,7 @@ import org.apache.jmeter.threads.JMeterThread;
 import org.apache.jmeter.threads.JMeterThreadMonitor;
 import org.apache.jmeter.threads.ListenerNotifier;
 import org.apache.jmeter.threads.TestCompiler;
-import org.apache.jmeter.threads.ThreadGroup;
+import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
@@ -257,7 +257,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         Iterator<?> iter = elements.iterator();
         while (iter.hasNext()) {
             Object item = iter.next();
-            if (item instanceof ThreadGroup) {
+            if (item instanceof AbstractThreadGroup) {
                 iter.remove();
             } else if (!(item instanceof TestElement)) {
                 iter.remove();
@@ -421,13 +421,13 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
         List<?> testLevelElements = new LinkedList<Object>(test.list(test.getArray()[0]));
         removeThreadGroups(testLevelElements);
-        SearchByClass<ThreadGroup> searcher = new SearchByClass<ThreadGroup>(ThreadGroup.class);
+        SearchByClass<AbstractThreadGroup> searcher = new SearchByClass<AbstractThreadGroup>(AbstractThreadGroup.class);
         test.traverse(searcher);
         TestCompiler.initialize();
         // for each thread group, generate threads
         // hand each thread the sampler controller
         // and the listeners, and the timer
-        Iterator<ThreadGroup> iter = searcher.getSearchResults().iterator();
+        Iterator<AbstractThreadGroup> iter = searcher.getSearchResults().iterator();
 
         /*
          * Here's where the test really starts. Run a Full GC now: it's no harm
@@ -444,16 +444,14 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         startingGroups = true;
         while (running && iter.hasNext()) {// for each thread group
             groupCount++;
-            ThreadGroup group = iter.next();
+            AbstractThreadGroup group = iter.next();
             int numThreads = group.getNumThreads();
             JMeterContextService.addTotalThreads(numThreads);
             boolean onErrorStopTest = group.getOnErrorStopTest();
             boolean onErrorStopTestNow = group.getOnErrorStopTestNow();
             boolean onErrorStopThread = group.getOnErrorStopThread();
             String groupName = group.getName();
-            int rampUp = group.getRampUp();
-            float perThreadDelay = ((float) (rampUp * 1000) / (float) numThreads);
-            log.info("Starting " + numThreads + " threads for group " + groupName + ". Ramp up = " + rampUp + ".");
+            log.info("Starting " + numThreads + " threads for group " + groupName + ".");
 
             if (onErrorStopTest) {
                 log.info("Test will stop on error");
@@ -464,7 +462,6 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
             } else {
                 log.info("Thread will continue on error");
             }
-
             ListedHashTree threadGroupTree = (ListedHashTree) searcher.getSubTree(group);
             threadGroupTree.add(group, testLevelElements);
             for (int i = 0; running && i < numThreads; i++) {
@@ -472,17 +469,14 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
                 jmeterThread.setThreadNum(i);
                 jmeterThread.setThreadGroup(group);
                 jmeterThread.setInitialContext(JMeterContextService.getContext());
-                jmeterThread.setInitialDelay((int) (perThreadDelay * i));
                 final String threadName = groupName + " " + (groupCount) + "-" + (i + 1);
                 jmeterThread.setThreadName(threadName);
-
-                scheduleThread(jmeterThread, group);
-
-                // Set up variables for stop handling
                 jmeterThread.setEngine(this);
                 jmeterThread.setOnErrorStopTest(onErrorStopTest);
                 jmeterThread.setOnErrorStopTestNow(onErrorStopTestNow);
                 jmeterThread.setOnErrorStopThread(onErrorStopThread);
+
+                group.scheduleThread(jmeterThread);
 
                 Thread newThread = new Thread(jmeterThread);
                 newThread.setName(threadName);
@@ -506,39 +500,6 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
             } else {
                 log.info("Test stopped - no more threads will be started");
             }
-        }
-    }
-
-    /**
-     * This will schedule the time for the JMeterThread.
-     *
-     * @param thread
-     * @param group
-     */
-    private void scheduleThread(JMeterThread thread, ThreadGroup group) {
-        // if true the Scheduler is enabled
-        if (group.getScheduler()) {
-            long now = System.currentTimeMillis();
-            // set the start time for the Thread
-            if (group.getDelay() > 0) {// Duration is in seconds
-                thread.setStartTime(group.getDelay() * 1000 + now);
-            } else {
-                long start = group.getStartTime();
-                if (start < now) {
-                    start = now; // Force a sensible start time
-                }
-                thread.setStartTime(start);
-            }
-
-            // set the endtime for the Thread
-            if (group.getDuration() > 0) {// Duration is in seconds
-                thread.setEndTime(group.getDuration() * 1000 + (thread.getStartTime()));
-            } else {
-                thread.setEndTime(group.getEndTime());
-            }
-
-            // Enables the scheduler
-            thread.setScheduled(true);
         }
     }
 

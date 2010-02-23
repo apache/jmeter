@@ -36,7 +36,6 @@ import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.property.JMeterProperty;
-import org.apache.jmeter.threads.gui.ThreadGroupGui;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -87,8 +86,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
     public JPopupMenu createPopupMenu() {
         JPopupMenu pop = new JPopupMenu();
         JMenu addMenu = new JMenu(JMeterUtils.getResString("add")); // $NON-NLS-1$
-        addMenu.add(MenuFactory.makeMenuItem(new ThreadGroupGui().getStaticLabel(), ThreadGroupGui.class.getName(),
-                ActionNames.ADD));
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.THREADS, ActionNames.ADD));
         addMenu.add(MenuFactory.makeMenu(MenuFactory.CONFIG_ELEMENTS, ActionNames.ADD));
         addMenu.add(MenuFactory.makeMenu(MenuFactory.TIMERS, ActionNames.ADD));
         addMenu.add(MenuFactory.makeMenu(MenuFactory.PRE_PROCESSORS, ActionNames.ADD));

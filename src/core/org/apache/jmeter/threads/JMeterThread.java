@@ -102,7 +102,7 @@ public class JMeterThread implements Runnable, Interruptible {
     // based on this scheduler is enabled or disabled
 
     // Gives access to parent thread threadGroup
-    private ThreadGroup threadGroup;
+    private AbstractThreadGroup threadGroup;
 
     private StandardJMeterEngine engine = null; // For access to stop methods.
 
@@ -764,7 +764,7 @@ public class JMeterThread implements Runnable, Interruptible {
         onErrorStopThread = b;
     }
 
-    public void setThreadGroup(ThreadGroup group) {
+    public void setThreadGroup(AbstractThreadGroup group) {
         this.threadGroup = group;
     }
 

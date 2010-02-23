@@ -64,6 +64,8 @@ public final class MenuFactory {
      *  These are used as menu categories in the menuMap Hashmap,
      *  and also for resource lookup in messages.properties
     */
+    public static final String THREADS = "menu_threads"; //$NON-NLS-1$
+
     public static final String TIMERS = "menu_timer"; //$NON-NLS-1$
 
     public static final String CONTROLLERS = "menu_logic_controller"; //$NON-NLS-1$
@@ -90,6 +92,7 @@ public final class MenuFactory {
     // MENU_ADD_xxx - controls which items are in the ADD menu
     // MENU_PARENT_xxx - controls which items are in the Insert Parent menu
     private static final String[] MENU_ADD_CONTROLLER = new String[] {
+        MenuFactory.THREADS,
         MenuFactory.CONTROLLERS,
         MenuFactory.CONFIG_ELEMENTS,
         MenuFactory.TIMERS,
@@ -115,11 +118,12 @@ public final class MenuFactory {
     private static final String[] MENU_PARENT_SAMPLER = new String[] {
         MenuFactory.CONTROLLERS };
 
-    private static final List<MenuInfo> timers, controllers, samplers, configElements,
-        assertions, listeners, nonTestElements,
+    private static final List<MenuInfo> timers, controllers, samplers, threads,
+        configElements, assertions, listeners, nonTestElements,
         postProcessors, preProcessors;
 
     static {
+        threads = new LinkedList<MenuInfo>();
         timers = new LinkedList<MenuInfo>();
         controllers = new LinkedList<MenuInfo>();
         samplers = new LinkedList<MenuInfo>();
@@ -129,6 +133,7 @@ public final class MenuFactory {
         postProcessors = new LinkedList<MenuInfo>();
         preProcessors = new LinkedList<MenuInfo>();
         nonTestElements = new LinkedList<MenuInfo>();
+        menuMap.put(THREADS, threads);
         menuMap.put(TIMERS, timers);
         menuMap.put(ASSERTIONS, assertions);
         menuMap.put(CONFIG_ELEMENTS, configElements);
@@ -455,6 +460,9 @@ public final class MenuFactory {
                     log.debug(name + " participates in no menus.");
                     continue;
                 }
+                if (categories.contains(THREADS)) {
+                    threads.add(new MenuInfo(item, name));
+                }
                 if (categories.contains(TIMERS)) {
                     timers.add(new MenuInfo(item, name));
                 }
@@ -545,14 +553,14 @@ public final class MenuFactory {
         if (parent instanceof TestPlan) {
             if (foundClass(nodes,
                      new Class[]{Sampler.class, Controller.class}, // Samplers and Controllers need not apply ...
-                     org.apache.jmeter.threads.ThreadGroup.class)  // but ThreadGroup (Controller) is OK
+                     org.apache.jmeter.threads.AbstractThreadGroup.class)  // but AbstractThreadGroup (Controller) is OK
                 ){
                 return false;
             }
             return true;
         }
-        // ThreadGroup is only allowed under a TestPlan
-        if (foundClass(nodes, new Class[]{org.apache.jmeter.threads.ThreadGroup.class})){
+        // AbstractThreadGroup is only allowed under a TestPlan
+        if (foundClass(nodes, new Class[]{org.apache.jmeter.threads.AbstractThreadGroup.class})){
             return false;
         }
         if (parent instanceof Controller) {// Includes thread group; anything goes
