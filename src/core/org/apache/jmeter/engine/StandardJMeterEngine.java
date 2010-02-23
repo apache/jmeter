@@ -496,12 +496,17 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
                 }
             }
         } // end of thread groups
-        if (running) {
-            log.info("All threads have been started");
-        } else {
-            log.info("Test stopped - no more threads will be started");
-        }
         startingGroups = false;
+        if (groupCount == 0){ // No TGs found
+            log.info("No enabled thread groups found");
+            notifyTestListenersOfEnd(testListenersSave);
+        } else {
+            if (running) {
+                log.info("All threads have been started");
+            } else {
+                log.info("Test stopped - no more threads will be started");
+            }
+        }
     }
 
     /**
