@@ -53,7 +53,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
 
     //@GuardedBy("this")
     private transient int counter = 0;
-    
+
     private transient volatile boolean interrupted = false;
 
     // Don't change the string, as it is used in JMX files
@@ -289,7 +289,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         }
         return choice;
     }
-    
+
     /**
      * Handle an interrupt of the test.
      */

@@ -18,13 +18,13 @@
 
 /*
  * TCP Sampler Client decorator to permit wrapping base client implementations with length prefixes.
- * For example, character data or binary data with character length or binary length 
+ * For example, character data or binary data with character length or binary length
  *
  */
 package org.apache.jmeter.protocol.tcp.sampler;
 
 public abstract class TCPClientDecorator extends AbstractTCPClient {
-    
+
     protected final TCPClient tcpClient; // the data implementation
 
     public TCPClientDecorator(TCPClient tcpClient) {
@@ -33,7 +33,7 @@ public abstract class TCPClientDecorator extends AbstractTCPClient {
 
     /**
      * Convert int to byte array.
-     * 
+     *
      * @param value
      *            - int to be converted
      * @param len
@@ -61,7 +61,7 @@ public abstract class TCPClientDecorator extends AbstractTCPClient {
 
     /**
      * Convert byte array to int.
-     * 
+     *
      * @param b
      *            - Byte array to be converted
      * @return Integer value of input byte array

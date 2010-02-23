@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -36,7 +36,7 @@ import org.apache.log.Logger;
 public class CharFunction extends AbstractFunction {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
-    
+
     private static final List<String> desc = new LinkedList<String>();
 
     private static final String KEY = "__char"; //$NON-NLS-1$

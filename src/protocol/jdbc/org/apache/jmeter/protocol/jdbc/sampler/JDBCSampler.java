@@ -79,7 +79,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
     // key: name (lowercase) from java.sql.Types; entry: corresponding int value
     private static final Map<String, Integer> mapJdbcNameToInt;
     // read-only after class init
-    
+
     static {
         // based on e291. Getting the Name of a JDBC Type from javaalmanac.com
         // http://javaalmanac.com/egs/java.sql/JdbcInt2Str.html
@@ -409,13 +409,13 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
      *            ResultSet passed in from a database query
      * @return a Data object
      * @throws java.sql.SQLException
-     * @throws UnsupportedEncodingException 
+     * @throws UnsupportedEncodingException
      */
     private String getStringFromResultSet(ResultSet rs) throws SQLException, UnsupportedEncodingException {
         ResultSetMetaData meta = rs.getMetaData();
 
         StrBuilder sb = new StrBuilder();
-        
+
         int numColumns = meta.getColumnCount();
         for (int i = 1; i <= numColumns; i++) {
             sb.append(meta.getColumnName(i));
@@ -469,7 +469,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
                 jmvars.put(varCount, Integer.toString(j)); // save the current count
             }
         }
-        
+
         return sb.toString();
     }
 

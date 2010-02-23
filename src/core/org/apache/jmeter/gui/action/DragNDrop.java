@@ -74,7 +74,7 @@ public class DragNDrop extends AbstractAction {
                 for (int i = 0; i < draggedNodes.length; i++) {
                     int index = parentNode.getIndex(currentNode) + 1;
                     GuiPackage.getInstance().getTreeModel().insertNodeInto(draggedNodes[i], parentNode, index);
-                }            
+                }
             }
         }
         GuiPackage.getInstance().getMainFrame().repaint();

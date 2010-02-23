@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.assertions.gui;
@@ -67,7 +67,7 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
 
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
-     * 
+     *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
     public void modifyTestElement(TestElement el) {
@@ -84,14 +84,14 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
         assertion.setCompOper(getState());
         saveScopeSettings(assertion);
     }
-    
+
     /**
      * Implements JMeterGUIComponent.clearGui
      */
     @Override
     public void clearGui() {
         super.clearGui();
-        
+
         size.setText(""); //$NON-NLS-1$
         equalButton.setSelected(true);
         notequalButton.setSelected(false);
@@ -100,7 +100,7 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
         greaterthanequalButton.setSelected(false);
         lessthanequalButton.setSelected(false);
         execState = SizeAssertion.EQUAL;
-    }    
+    }
 
     @Override
     public void configure(TestElement el) {
@@ -150,7 +150,7 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
         add(makeTitlePanel());
 
         add(createScopePanel(true));
-        
+
         // USER_INPUT
         JPanel sizePanel = new JPanel();
         sizePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
@@ -213,7 +213,7 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
                 isInvalid = true;
             }
             if (isInvalid) {
-                JOptionPane.showMessageDialog(null, 
+                JOptionPane.showMessageDialog(null,
                         JMeterUtils.getResString("size_assertion_input_error"), //$NON-NLS-1$
                         "Error",
                         JOptionPane.ERROR_MESSAGE);

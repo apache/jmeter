@@ -55,7 +55,7 @@ public class HashTree implements Serializable, Map, Cloneable {
     // causes a Security violation in RemoteJMeterImpl
     // so we use getLoggerFor() instead
 //    private static final Logger log = LoggingManager.getLoggerFor(HashTree.class.getName());
-    
+
     // Used for the RuntimeException to short-circuit the traversal
     private static final String FOUND = "found"; // $NON-NLS-1$
 
@@ -994,7 +994,7 @@ public class HashTree implements Serializable, Map, Cloneable {
 
     /**
      * Generate a printable representation of the tree.
-     * 
+     *
      * @return a representation of the tree
      */
     @Override

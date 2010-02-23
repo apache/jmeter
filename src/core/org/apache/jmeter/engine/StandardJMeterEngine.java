@@ -250,7 +250,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
                 socket.close();
             }
         }
-        
+
     }
 
     private void removeThreadGroups(List<?> elements) {
@@ -328,7 +328,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
                 public void run() {
                     log.info("Stopping test");
                     notifyTestListenersOfEnd(testListenersSave);
-                }                    
+                }
             }.start();
         }
     }
@@ -362,7 +362,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
                         exit();
                     } else {
                         JMeterUtils.reportErrorToUser(
-                                JMeterUtils.getResString("stopping_test_failed"), 
+                                JMeterUtils.getResString("stopping_test_failed"),
                                 JMeterUtils.getResString("stopping_test_title"));
                         // TODO - perhaps allow option to stop them?
                     }
@@ -613,7 +613,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         try {
             Thread.sleep(ms);
         } catch (InterruptedException e) {
-        }        
+        }
     }
 
     public void setProperties(Properties p) {

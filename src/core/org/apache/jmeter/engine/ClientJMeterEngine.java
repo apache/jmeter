@@ -55,7 +55,7 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
                RemoteObject robj = (RemoteObject) remobj;
                System.out.println("Using remote object: "+robj.getRef().remoteToString());
            }
-           return rje;           
+           return rje;
        }
        throw new RemoteException("Could not find "+name);
     }

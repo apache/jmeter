@@ -42,7 +42,7 @@ public abstract class BSFTestElement extends AbstractTestElement
     implements Serializable, Cloneable
 {
     private static final long serialVersionUID = 233L;
-    
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     static {

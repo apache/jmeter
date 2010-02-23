@@ -548,7 +548,7 @@ public class WebServiceSampler extends HTTPSamplerBase {
                 } else {
                     result.setSuccessful(false);
                     result.setResponseCode("999");
-                    result.setResponseMessage("Empty response");                    
+                    result.setResponseMessage("Empty response");
                 }
             } else {
                 result.sampleEnd();
@@ -594,10 +594,10 @@ public class WebServiceSampler extends HTTPSamplerBase {
                 result.setResponseMessage(exception.toString());
             }
         } finally {
-            // Make sure the sample start time and sample end time are recorded 
-            // in order not to confuse the statistics calculation methods: if 
+            // Make sure the sample start time and sample end time are recorded
+            // in order not to confuse the statistics calculation methods: if
             //  an error occurs and an exception is thrown it is possible that
-            // the result.sampleStart() or result.sampleEnd() won't be called  
+            // the result.sampleStart() or result.sampleEnd() won't be called
             if (result.getStartTime() == 0)
             {
                 result.sampleStart();

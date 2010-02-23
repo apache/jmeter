@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.util;
@@ -30,7 +30,7 @@ import java.net.Socket;
  * Implements a client that can talk to the JMeter BeanShell server.
  */
 public class BeanShellClient {
-    
+
     private static final int MINARGS = 3;
 
     public static void main(String [] args) throws Exception{
@@ -44,22 +44,22 @@ public class BeanShellClient {
         String host=args[0];
         String portString = args[1];
         String file=args[2];
-        
+
         int port=Integer.parseInt(portString)+1;// convert to telnet port
 
         System.out.println("Connecting to BSH server on "+host+":"+portString);
-        
+
         Socket sock = new Socket(host,port);
         InputStream is = sock.getInputStream();
-        
+
         OutputStream os = sock.getOutputStream();
-        
+
         InputStreamReader fis = new FileReader(file);
-        
+
         new SockRead(is).start();
-        
+
         sendLine("bsh.prompt=\"\";",os);// Prompt is unnecessary
-        
+
         sendLine("String [] args={",os);
         for (int i=MINARGS; i<args.length;i++){
             sendLine("\""+args[i]+"\",\n",os);
@@ -73,7 +73,7 @@ public class BeanShellClient {
         sendLine("bsh.prompt=\"bsh % \";",os);// Reset for other users
         os.flush();
         sock.shutdownOutput(); // Tell server that we are done
-    } 
+    }
 
     private static void sendLine( String line, OutputStream outPipe )
     throws IOException
@@ -85,12 +85,12 @@ public class BeanShellClient {
     private static class SockRead extends Thread {
 
         private final InputStream is;
-        
+
         public SockRead(InputStream _is) {
             this.is=_is;
             //this.setDaemon(true);
         }
-        
+
         @Override
         public void run(){
             System.out.println("Reading responses from server ...");
@@ -108,7 +108,7 @@ public class BeanShellClient {
                 } catch (IOException e) {
                 }
             }
-            
+
         }
 
     }

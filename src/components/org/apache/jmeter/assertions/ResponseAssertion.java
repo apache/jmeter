@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.assertions;
@@ -84,7 +84,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
 
     // Mask should contain all types (but not NOT)
     private final static int TYPE_MASK = CONTAINS | EQUALS | MATCH | SUBSTRING;
-    
+
     private static final int  EQUALS_SECTION_DIFF_LEN
             = JMeterUtils.getPropDefault("assertion.equals_section_diff_len", 100);
 
@@ -192,7 +192,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
 
     /***************************************************************************
      * !ToDoo (Method description)
-     * 
+     *
      * @return !ToDo (Return description)
      **************************************************************************/
     public String getTestField() {
@@ -201,7 +201,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
 
     /***************************************************************************
      * !ToDoo (Method description)
-     * 
+     *
      * @return !ToDo (Return description)
      **************************************************************************/
     public int getTestType() {
@@ -214,7 +214,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
 
     /***************************************************************************
      * !ToDoo (Method description)
-     * 
+     *
      * @return !ToDo (Return description)
      **************************************************************************/
     public CollectionProperty getTestStrings() {
@@ -275,7 +275,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
 
     /**
      * Make sure the response satisfies the specified assertion requirements.
-     * 
+     *
      * @param response
      *            an instance of SampleResult
      * @return an instance of AssertionResult
@@ -302,10 +302,10 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
         } else if (isTestFieldResponseHeaders()) {
             toCheck = response.getResponseHeaders();
         } else { // Assume it is the URL
-            toCheck = "";                
+            toCheck = "";
             final URL url = response.getURL();
             if (url != null){
-                toCheck = url.toString();                
+                toCheck = url.toString();
             }
         }
 
@@ -327,7 +327,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
         if (debugEnabled){
             log.debug("Type:" + (contains?"Contains":"Match") + (notTest? "(not)": ""));
         }
-        
+
         try {
             // Get the Matcher for this thread
             Perl5Matcher localMatcher = JMeterUtils.getMatcher();
@@ -367,18 +367,18 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
 
     /**
      * Generate the failure reason from the TestType
-     * 
+     *
      * @param stringPattern
-     * @return the message for the assertion report 
+     * @return the message for the assertion report
      */
     // TODO strings should be resources
     private String getFailText(String stringPattern, String toCheck) {
-        
+
         StringBuilder sb = new StringBuilder(200);
         sb.append("Test failed: ");
 
         if (isScopeVariable()){
-            sb.append("variable(").append(getVariableName()).append(')');            
+            sb.append("variable(").append(getVariableName()).append(')');
         } else if (isTestFieldResponseData()) {
             sb.append("text");
         } else if (isTestFieldResponseCode()) {
@@ -418,15 +418,15 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
         }
 
         sb.append("/");
-        
+
         if (isEqualsType()){
             sb.append(equalsComparisonText(toCheck, stringPattern));
         } else {
             sb.append(stringPattern);
         }
-        
+
         sb.append("/");
-        
+
         return sb.toString();
     }
 
@@ -506,7 +506,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
         } else {
             recDeltaSeq += pad.toString();
         }
-        
+
         text.append("\n\n");
         text.append(RECEIVED_STR);
         text.append(startingEqSeq);

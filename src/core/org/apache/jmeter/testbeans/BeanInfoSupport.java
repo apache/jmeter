@@ -82,10 +82,10 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
     // NOTREAD private Class beanClass;
     /** The BeanInfo for our class as obtained by the introspector. */
     private final BeanInfo rootBeanInfo;
-    
+
     /** The descriptor for our class */
     private final BeanDescriptor beanDescriptor;
-    
+
     /** The icons for this bean. */
     private final Image[] icons = new Image[5];
 
@@ -105,7 +105,7 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
         // N.B. JVMs other than Sun may return different instances each time
         // so we cache the value here (and avoid having to fetch it every time)
         beanDescriptor = rootBeanInfo.getBeanDescriptor();
-        
+
         try {
             ResourceBundle resourceBundle = ResourceBundle.getBundle(
                     beanClass.getName() + "Resources",  // $NON-NLS-1$

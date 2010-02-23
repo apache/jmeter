@@ -70,7 +70,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.eve
     private final JLabeledTextField iterations =
         new JLabeledTextField(JMeterUtils.getResString("jms_itertions")); // $NON-NLS-1$
 
-    private final JCheckBox useAuth = 
+    private final JCheckBox useAuth =
         new JCheckBox(JMeterUtils.getResString("jms_use_auth"), false); //$NON-NLS-1$
 
     private final JCheckBox readResponse =
@@ -81,13 +81,13 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.eve
 
     public final static String ON_MESSAGE_RSC = "jms_subscriber_on_message"; // $NON-NLS-1$
     //--
-    
+
     // Button group resources
     private final static String[] CLIENT_ITEMS = { RECEIVE_RSC, ON_MESSAGE_RSC };
 
     private final JLabeledRadioI18N clientChoice =
         new JLabeledRadioI18N("jms_client_type", CLIENT_ITEMS, RECEIVE_RSC); // $NON-NLS-1$
-            
+
     private final JPanel lookup = new JPanel();
 
     public JMSSubscriberGui() {

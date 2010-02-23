@@ -92,7 +92,7 @@ public class JMeterUtils implements UnitTestManager {
     private static String localHostName = null;
     //@GuardedBy("this")
     private static String localHostFullName = null;
-    
+
     private static volatile boolean ignoreResorces = false; // Special flag for use in debugging resources
 
     private static final ThreadLocal<Perl5Matcher> localMatcher = new ThreadLocal<Perl5Matcher>() {
@@ -459,7 +459,7 @@ public class JMeterUtils implements UnitTestManager {
      * Get the locale name as a resource.
      * Does not log an error if the resource does not exist.
      * This is needed to support additional locales, as they won't be in existing messages files.
-     * 
+     *
      * @param locale name
      * @return the locale display name as defined in the current Locale or the original string if not present
      */
@@ -1144,9 +1144,9 @@ public class JMeterUtils implements UnitTestManager {
     }
 
     /**
-     * Returns the cached result from calling 
+     * Returns the cached result from calling
      * InetAddress.getLocalHost().getHostAddress()
-     * 
+     *
      * @return String representation of local IP address
      */
     public static synchronized String getLocalHostIP(){
@@ -1157,9 +1157,9 @@ public class JMeterUtils implements UnitTestManager {
     }
 
     /**
-     * Returns the cached result from calling 
+     * Returns the cached result from calling
      * InetAddress.getLocalHost().getHostName()
-     * 
+     *
      * @return local host name
      */
     public static synchronized String getLocalHostName(){
@@ -1170,9 +1170,9 @@ public class JMeterUtils implements UnitTestManager {
     }
 
     /**
-     * Returns the cached result from calling 
+     * Returns the cached result from calling
      * InetAddress.getLocalHost().getCanonicalHostName()
-     * 
+     *
      * @return local host name in canonical form
      */
     public static synchronized String getLocalHostFullName(){

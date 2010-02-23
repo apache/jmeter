@@ -29,10 +29,10 @@ import org.apache.commons.lang.mutable.MutableLong;
 /**
  * This class serves as a way to calculate the median, max, min etc. of a list of values.
  * It is not threadsafe.
- * 
+ *
  */
 public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
-    
+
     // key is the type to collect (usually long), value = count of entries
     private final TreeMap<T, MutableLong> valuesMap = new TreeMap<T, MutableLong>();
     // We use a TreeMap because we need the entries to be sorted
@@ -55,11 +55,11 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
     private long bytes = 0;
 
     private final T ZERO;
-    
+
     private final T MAX_VALUE; // e.g. Long.MAX_VALUE
-    
+
     private final T MIN_VALUE; // e.g. Long.MIN_VALUE
-    
+
     /**
      * This constructor is used to set up particular values for the generic class instance.
      *
@@ -137,7 +137,7 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
             return getMax();
         }
 
-        // use Math.round () instead of simple (long) to provide correct value rounding 
+        // use Math.round () instead of simple (long) to provide correct value rounding
         long target = Math.round (count * percent);
         try {
             for (Entry<T, MutableLong> val : valuesMap.entrySet()) {
@@ -154,7 +154,7 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
 
     /**
      * Returns the distribution of the values in the list.
-     * 
+     *
      * @return map containing either Integer or Long keys; entries are a Number array containing the key and the [Integer] count.
      * TODO - why is the key value also stored in the entry array?
      */

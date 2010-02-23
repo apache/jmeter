@@ -189,7 +189,7 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
                         sb.append(contentType.substring(i + 1));
                     }
                 } else {
-                    sb.append("unknown");                    
+                    sb.append("unknown");
                 }
             } else {
                 sb.append("unknown");

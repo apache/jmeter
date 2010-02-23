@@ -30,7 +30,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 public class TextAreaEditor extends PropertyEditorSupport implements FocusListener {
-    
+
     private JTextArea textUI;
 
     private JScrollPane scroller;

@@ -164,7 +164,7 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
 
     /**
      * Save the GUI data in the HTTPSamplerBase element.
-     * 
+     *
      * @param testElement
      */
     public void modifyTestElement(TestElement testElement) {
@@ -198,7 +198,7 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
             tableModel.clearData();
             HTTPFileArg[] files = base.getHTTPFiles();
             for(int i=0; i< files.length; i++){
-                tableModel.addRow(files[i]);            
+                tableModel.addRow(files[i]);
             }
             checkDeleteAndBrowseStatus();
         }

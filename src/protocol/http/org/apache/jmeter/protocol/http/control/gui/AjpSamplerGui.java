@@ -42,7 +42,7 @@ public class AjpSamplerGui extends HttpTestSampleGui {
     public String getStaticLabel() {
         return JMeterUtils.getResString("ajp_sampler_title"); // $NON-NLS-1$
     }
-    
+
     @Override
     public String getDocAnchor() {// reuse documentation
         return super.getStaticLabel().replace(' ', '_'); //$NON-NLS-1$ //$NON-NLS-2$

@@ -44,7 +44,7 @@ public class TreeNodeRenderer extends DefaultTreeCellRenderer {
     private static final ImageIcon imageFailure = JMeterUtils.getImage(
             JMeterUtils.getPropDefault("viewResultsTree.failure",  //$NON-NLS-1$
                     "icon_warning_sml.gif")); //$NON-NLS-1$
-    
+
     public TreeNodeRenderer() {
         super();
     }
