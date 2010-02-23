@@ -37,7 +37,8 @@ public class MailFileFolder extends Folder {
     private static final String FILENAME_FORMAT = "%d.msg";
     private static final String FILENAME_REGEX = "\\d+\\.msg";
     private boolean isOpen;
-    private final File folderPath;
+    private final File folderPath;// Parent folder (or single message file)
+    private final boolean isFile;
     private static final FilenameFilter FILENAME_FILTER = new FilenameFilter(){
         public boolean accept(File dir, String name) {
             return name.matches(FILENAME_REGEX);
@@ -48,7 +49,13 @@ public class MailFileFolder extends Folder {
     public MailFileFolder(Store store, String path) {
         super(store);
         String base = store.getURLName().getHost(); // == ServerName from mail sampler
-        folderPath = new File(base,path);
+        File parentFolder = new File(base);
+        isFile = parentFolder.isFile();
+        if (isFile){
+            folderPath = new File(base);
+        } else {
+            folderPath = new File(base,path);            
+        }
     }
 
     public MailFileFolder(Store store, URLName path) {
@@ -98,7 +105,12 @@ public class MailFileFolder extends Folder {
 
     @Override
     public Message getMessage(int index) throws MessagingException {
-        File f = new File(folderPath,String.format(FILENAME_FORMAT, Integer.valueOf(index)));
+        File f;
+        if (isFile) {
+            f = folderPath;
+        } else {
+            f = new File(folderPath,String.format(FILENAME_FORMAT, Integer.valueOf(index)));
+        }
         try {
             FileInputStream fis = new FileInputStream(f);
             try {
@@ -115,6 +127,7 @@ public class MailFileFolder extends Folder {
     @Override
     public int getMessageCount() throws MessagingException {
         if (!isOpen) return -1;
+        if (isFile) return 1;
         File[] listFiles = folderPath.listFiles(FILENAME_FILTER);
         return listFiles != null ? listFiles.length : 0;
     }
