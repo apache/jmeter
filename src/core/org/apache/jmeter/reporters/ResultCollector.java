@@ -90,12 +90,12 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     private static final String ERROR_LOGGING = "ResultCollector.error_logging"; // $NON-NLS-1$
 
     private static final String SUCCESS_ONLY_LOGGING = "ResultCollector.success_only_logging"; // $NON-NLS-1$
-    
+
     // Static variables
 
     // Lock used to guard static mutable variables
     private static final Object LOCK = new Object();
-    
+
     //@GuardedBy("LOCK")
     private static final Map<String, FileEntry> files = new HashMap<String, FileEntry>();
 
@@ -117,19 +117,19 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
      * The instance count is used to keep track of whether any tests are currently running.
      * It's not possible to use the constructor or threadStarted etc as tests may overlap
      * e.g. a remote test may be started,
-     * and then a local test started whilst the remote test is still running. 
+     * and then a local test started whilst the remote test is still running.
      */
     //@GuardedBy("LOCK")
     private static int instanceCount; // Keep track of how many instances are active
 
     // Instance variables (guarded by volatile)
-    
+
     private transient volatile PrintWriter out;
 
     private volatile boolean inTest = false;
 
     private volatile boolean isStats = false;
-    
+
     /** the summarizer to which this result collector will forward the samples */
     private volatile Summariser summariser;
 
@@ -139,7 +139,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     public ResultCollector() {
         this(null);
     }
-    
+
     public ResultCollector(Summariser summer) {
         setErrorLogging(false);
         setSuccessOnlyLogging(false);
@@ -240,7 +240,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             if (instanceCount <= 0) {
                 finalizeFileOutput();
                 inTest = false;
-            }            
+            }
         }
 
         if(summariser != null) {
@@ -309,7 +309,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                     } else { // We are processing XML
                         try { // Assume XStream
                             bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
-                            SaveService.loadTestResults(bufferedInputStream, 
+                            SaveService.loadTestResults(bufferedInputStream,
                                     new ResultCollectorHelper(this, visualizer));
                             parsedOK = true;
                         } catch (Exception e) {
@@ -486,7 +486,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                 }
             }
         }
-        
+
         if(summariser != null) {
             summariser.sampleOccurred(event);
         }

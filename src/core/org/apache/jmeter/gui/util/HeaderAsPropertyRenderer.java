@@ -32,13 +32,13 @@ import org.apache.jmeter.util.JMeterUtils;
  * Renders items in a JTable by converting from resource names.
  */
 public class HeaderAsPropertyRenderer extends DefaultTableCellRenderer {
-    
+
     private static final long serialVersionUID = 240L;
 
     public HeaderAsPropertyRenderer() {
         super();
     }
-    
+
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value,
             boolean isSelected, boolean hasFocus, int row, int column) {
@@ -58,10 +58,10 @@ public class HeaderAsPropertyRenderer extends DefaultTableCellRenderer {
 
     /**
      * Get the text for the value as the translation of the resource name.
-     * 
+     *
      * @param value
-     * @param column 
-     * @param row 
+     * @param column
+     * @param row
      * @return the text
      */
     protected String getText(Object value, int row, int column) {

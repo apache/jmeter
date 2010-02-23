@@ -352,7 +352,7 @@ public final class MenuFactory {
 
         return newMenuChoice;
     }
-    
+
     /**
      * Create a single menu item from the resource name.
      *

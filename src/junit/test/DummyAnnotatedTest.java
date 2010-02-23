@@ -27,12 +27,12 @@ import org.junit.Test;
 
 /**
  * Sample test cases for demonstrating JUnit4 sampler.
- * 
+ *
  */
 public class DummyAnnotatedTest
 {
     public int two = 1; //very wrong.
-    
+
     public DummyAnnotatedTest() {
     }
 
@@ -41,23 +41,23 @@ public class DummyAnnotatedTest
     public void expectedExceptionPass() {
         throw new RuntimeException();
     }
-    
+
     // Fails to generate expected Exception
     @Test(expected=RuntimeException.class)
     public void expectedExceptionFail() {
     }
-    
+
     @Before
     public void verifyTwo() {
         System.out.println("DummyAnnotatedTest#verifyTwo()");
         two = 2;
     }
-    
+
     @After
     public void printDone() {
         System.out.println("DummyAnnotatedTest#printDone()");
     }
-    
+
     @Test
     // Succeeds only if Before method - verifyTwo() - is run.
     public void add() {
@@ -68,7 +68,7 @@ public class DummyAnnotatedTest
         //or if you have assertions enabled
         assert 4 == four;
     }
-    
+
     //should always fail
     @Test(timeout=1000)
     public void timeOutFail() {
@@ -84,19 +84,19 @@ public class DummyAnnotatedTest
             Thread.sleep(500);
         }catch (InterruptedException e) { }
     }
-   
+
     @Test
     public void alwaysFail() {
         fail("This always fails");
     }
-    
+
     @Test
     // Generate a test error
     public void divideByZero() {
         @SuppressWarnings("unused")
         int i = 27 / 0; // will generate Divide by zero error
     }
-    
+
     @Test
     public void stringCompareFail(){
         assertEquals("this","that");

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.testelement;
@@ -28,7 +28,7 @@ import org.apache.jmeter.samplers.SampleResult;
  * Super-class for TestElements that can be applied to main sample, sub-samples or both.
  * [Assertions use a different class because they use a different value for the {@link #getScopeName()} constant]
  * </p>
- * 
+ *
  * <p>
  * Their corresponding GUI classes need to add the ScopePanel to the GUI
  * using the AbstractXXXGui methods:
@@ -67,7 +67,7 @@ public abstract class AbstractScopedTestElement extends AbstractTestElement {
 
     /**
      * Is the assertion to be applied to the main (parent) sample?
-     * 
+     *
      * @param scope
      * @return if the assertion is to be applied to the parent sample.
      */
@@ -77,7 +77,7 @@ public abstract class AbstractScopedTestElement extends AbstractTestElement {
 
     /**
      * Is the assertion to be applied to the sub-samples (children)?
-     * 
+     *
      * @param scope
      * @return if the assertion is to be applied to the children.
      */
@@ -87,7 +87,7 @@ public abstract class AbstractScopedTestElement extends AbstractTestElement {
 
     /**
      * Is the assertion to be applied to the all samples?
-     * 
+     *
      * @param scope
      * @return if the assertion is to be applied to the all samples.
      */
@@ -97,7 +97,7 @@ public abstract class AbstractScopedTestElement extends AbstractTestElement {
 
     /**
      * Is the assertion to be applied to the all samples?
-     * 
+     *
      * @param scope
      * @return if the assertion is to be applied to the all samples.
      */
@@ -107,7 +107,7 @@ public abstract class AbstractScopedTestElement extends AbstractTestElement {
 
     /**
      * Is the assertion to be applied to the all samples?
-     * 
+     *
      * @return if the assertion is to be applied to the all samples.
      */
     protected boolean isScopeVariable() {
@@ -138,13 +138,13 @@ public abstract class AbstractScopedTestElement extends AbstractTestElement {
     /**
      * Generate a list of qualifying sample results,
      * depending on the scope.
-     * 
+     *
      * @param result current sample
      * @return list containing the current sample and/or its child samples
      */
     protected List<SampleResult> getSampleList(SampleResult result) {
         List<SampleResult> sampleList = new ArrayList<SampleResult>();
-    
+
         String scope = fetchScope();
         if (isScopeParent(scope) || isScopeAll(scope)) {
             sampleList.add(result);

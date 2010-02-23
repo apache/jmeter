@@ -44,7 +44,7 @@ public abstract class JSR223TestElement extends AbstractTestElement
     implements Serializable, Cloneable
 {
     private static final long serialVersionUID = 233L;
-    
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     //++ For TestBean implementations only
@@ -93,7 +93,7 @@ public abstract class JSR223TestElement extends AbstractTestElement
         final String scriptParameters = getParameters();
         // Use actual class name for log
         final Logger logger = LoggingManager.getLoggerForShortName(getClass().getName());
-        
+
         sem.put("log", logger);
         sem.put("Label", label);
         sem.put("FileName", fileName);
@@ -117,16 +117,16 @@ public abstract class JSR223TestElement extends AbstractTestElement
         sem.put("prev", prev);
     }
 
-    
+
     protected Object processFileOrScript(ScriptEngineManager sem) throws IOException, ScriptException {
-        
+
         final String lang = getScriptLanguage();
         ScriptEngine scriptEngine = sem.getEngineByName(lang);
         if (scriptEngine == null) {
             log.error("Unsupported scripting engine: "+lang);
             return null;
         }
-        
+
         File scriptFile = new File(getFilename());
         if (scriptFile.exists()) {
             BufferedReader fileReader = null;
@@ -139,7 +139,7 @@ public abstract class JSR223TestElement extends AbstractTestElement
         } else {
             return scriptEngine.eval(getScript());
         }
-        
+
     }
 
     /**

@@ -287,11 +287,11 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
     public boolean getUseJNDIPropertiesAsBoolean() {
         return getPropertyAsBoolean(USE_PROPERTIES_FILE);
     }
-    
-    
+
+
     /**
      * Returns a String with the JMS Message Header values.
-     * 
+     *
      * @param message JMS Message
      * @return String with message header values.
      */

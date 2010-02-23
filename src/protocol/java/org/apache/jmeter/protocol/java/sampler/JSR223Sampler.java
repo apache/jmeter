@@ -34,9 +34,9 @@ import org.apache.log.Logger;
 public class JSR223Sampler extends JSR223TestElement implements Cloneable, Sampler, TestBean {
 
     private static final long serialVersionUID = 234L;
-    
+
     private static final Logger log = LoggingManager.getLoggerForClass();
-    
+
     public SampleResult sample(Entry entry) {
         SampleResult result = new SampleResult();
         result.setSampleLabel(getName());
@@ -54,7 +54,7 @@ public class JSR223Sampler extends JSR223TestElement implements Cloneable, Sampl
                 result.setSuccessful(false);
                 result.setResponseCode("500"); // $NON-NLS-1$
                 result.setResponseMessage("Could not instantiate ScriptManager");
-                return result; 
+                return result;
             }
             Object ret = processFileOrScript(mgr);
             result.setSuccessful(true);

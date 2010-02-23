@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.assertions.gui;
@@ -59,7 +59,7 @@ public class DurationAssertionGui extends AbstractAssertionGui {
 
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
-     * 
+     *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
     public void modifyTestElement(TestElement el) {
@@ -77,9 +77,9 @@ public class DurationAssertionGui extends AbstractAssertionGui {
     @Override
     public void clearGui() {
         super.clearGui();
-        
+
         duration.setText(""); //$NON-NLS-1$
-    }    
+    }
 
     @Override
     public void configure(TestElement el) {
@@ -106,15 +106,15 @@ public class DurationAssertionGui extends AbstractAssertionGui {
                 getDurationAttributesTitle()));
 
         JPanel labelPanel = new JPanel(new BorderLayout(5, 0));
-        JLabel durationLabel = 
-            new JLabel(JMeterUtils.getResString("duration_assertion_label")); // $NON-NLS-1$ 
+        JLabel durationLabel =
+            new JLabel(JMeterUtils.getResString("duration_assertion_label")); // $NON-NLS-1$
         labelPanel.add(durationLabel, BorderLayout.WEST);
 
         duration = new JTextField();
         labelPanel.add(duration, BorderLayout.CENTER);
         durationLabel.setLabelFor(duration);
         durationPanel.add(labelPanel);
-        
+
         mainPanel.add(durationPanel);
         add(mainPanel, BorderLayout.CENTER);
     }

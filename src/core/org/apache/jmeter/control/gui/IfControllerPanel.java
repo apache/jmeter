@@ -51,7 +51,7 @@ public class IfControllerPanel extends AbstractControllerGui implements ActionLi
     private JTextField theCondition;
 
     private JCheckBox useExpression;
-    
+
     private JCheckBox evaluateAll;
 
     /**
@@ -194,11 +194,11 @@ public class IfControllerPanel extends AbstractControllerGui implements ActionLi
                 + theCondition.getPreferredSize().width), BorderLayout.NORTH);
 
         JPanel optionPanel = new JPanel();
-        
+
         // Use expression instead of Javascript
         useExpression = new JCheckBox(JMeterUtils.getResString("if_controller_expression")); // $NON-NLS-1$
         optionPanel.add(useExpression);
-        
+
         // Evaluate All checkbox
         evaluateAll = new JCheckBox(JMeterUtils.getResString("if_controller_evaluate_all")); // $NON-NLS-1$
         optionPanel.add(evaluateAll);

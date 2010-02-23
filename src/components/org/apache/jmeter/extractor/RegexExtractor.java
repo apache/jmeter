@@ -175,7 +175,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
        }
        return inputString;
     }
-    
+
     private List<MatchResult> processMatches(String regex, SampleResult result, int matchNumber, JMeterVariables vars) {
         if (log.isDebugEnabled()) {
             log.debug("Regex = " + regex);
@@ -189,7 +189,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         if (isScopeVariable()){
             String inputString=vars.get(getVariableName());
             matchStrings(matchNumber, matcher, pattern, matches, found,
-                    inputString);            
+                    inputString);
         } else {
             List<SampleResult> sampleList = getSampleList(result);
             for (SampleResult sr : sampleList) {
@@ -324,7 +324,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
             combined.add(new Integer(currentResult.group(1)));// add match as Integer
             beginOffset = currentResult.endOffset(0);
         }
-        
+
         if (beginOffset < rawTemplate.length()) { // trailing string is not empty
             combined.add(rawTemplate.substring(beginOffset, rawTemplate.length()));
         }

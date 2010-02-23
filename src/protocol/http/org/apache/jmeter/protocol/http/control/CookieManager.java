@@ -79,7 +79,7 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 
     private static final String COOKIE_NAME_PREFIX =
         JMeterUtils.getPropDefault("CookieManager.name.prefix", "COOKIE_").trim();// $NON-NLS-1$ $NON-NLS-2$
-    
+
     private static final boolean SAVE_COOKIES =
         JMeterUtils.getPropDefault("CookieManager.save.cookies", false);// $NON-NLS-1$
 

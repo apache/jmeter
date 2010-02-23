@@ -68,7 +68,7 @@ public class FileToString extends AbstractFunction {
     private static final int MAX_PARAM_COUNT = 3;
 
     private static final int ENCODING = 2;
-    
+
     private static final int PARAM_NAME = 3;
 
     private Object[] values;
@@ -82,7 +82,7 @@ public class FileToString extends AbstractFunction {
             throws InvalidVariableException {
 
         String fileName = ((CompoundVariable) values[0]).execute();
-        
+
         String encoding = null;//means platform default
         if (values.length >= ENCODING) {
             encoding = ((CompoundVariable) values[ENCODING - 1]).execute().trim();
@@ -94,14 +94,14 @@ public class FileToString extends AbstractFunction {
         }
 
         String myValue = ERR_IND;
-        
+
         try {
             myValue = FileUtils.readFileToString(new File(fileName), encoding);
         } catch (IOException e) {
             log.warn("Could not read file: "+fileName+" "+e.getMessage());
             throw new JMeterStopThreadException("End of sequence");
         }
-        
+
         if (myName.length() > 0) {
             JMeterVariables vars = getVariables();
             if (vars != null) {// Can be null if called from Config item testEnded() method
@@ -114,7 +114,7 @@ public class FileToString extends AbstractFunction {
             log.debug(tn + " name:" //$NON-NLS-1$
                     + myName + " value:" + myValue);//$NON-NLS-1$
         }
-        
+
         return myValue;
     }
 

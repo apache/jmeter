@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.assertions.gui;
@@ -36,7 +36,7 @@ import org.apache.log.Logger;
 
 /**
  * XMLSchemaAssertionGUI.java author <a href="mailto:d.maung@mdl.com">Dave Maung</a>
- * 
+ *
  */
 
 public class XMLSchemaAssertionGUI extends AbstractAssertionGui {
@@ -73,7 +73,7 @@ public class XMLSchemaAssertionGUI extends AbstractAssertionGui {
 
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
-     * 
+     *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
     public void modifyTestElement(TestElement inElement) {
@@ -89,13 +89,13 @@ public class XMLSchemaAssertionGUI extends AbstractAssertionGui {
     @Override
     public void clearGui() {
         super.clearGui();
-        
+
         xmlSchema.setText(""); //$NON-NLS-1$
-    }    
+    }
 
     /**
      * Configures the GUI from the associated test element.
-     * 
+     *
      * @param el -
      *            the test element (should be XMLSchemaAssertion)
      */

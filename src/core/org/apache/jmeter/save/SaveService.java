@@ -103,7 +103,7 @@ public class SaveService {
     static {
         JTLSAVER.setMode(XStream.NO_REFERENCES); // This is needed to stop XStream keeping copies of each class
     }
-    
+
     // The XML header, with placeholder for encoding, since that is controlled by property
     private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"<ph>\"?>"; // $NON-NLS-1$
 
@@ -260,7 +260,7 @@ public class SaveService {
      * @param key
      * @param jmxsaver
      * @param useMapper
-     *  
+     *
      * @throws InstantiationException
      * @throws IllegalAccessException
      * @throws InvocationTargetException
@@ -276,7 +276,7 @@ public class SaveService {
                     new Class[] { Mapper.class }).newInstance(
                             new Object[] { jmxsaver.getMapper() }));
         } else {
-            jmxsaver.registerConverter((Converter) Class.forName(key).newInstance());            
+            jmxsaver.registerConverter((Converter) Class.forName(key).newInstance());
         }
     }
 
@@ -429,7 +429,7 @@ public class SaveService {
 
     /**
      * Read results from JTL file.
-     *  
+     *
      * @param reader of the file
      * @param resultCollectorHelper helper class to enable TestResultWrapperConverter to deliver the samples
      * @throws Exception

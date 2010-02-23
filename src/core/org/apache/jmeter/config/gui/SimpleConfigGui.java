@@ -51,7 +51,7 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
     // TODO: This class looks a lot like ArgumentsPanel. What exactly is the
     // difference? Could they be combined?
     // Note: it seems that this class is not actually used ...
-    
+
     /** The table of configuration parameters. */
     private JTable table;
 

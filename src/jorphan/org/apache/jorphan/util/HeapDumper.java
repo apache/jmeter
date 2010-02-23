@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jorphan.util;
@@ -37,7 +37,7 @@ import javax.management.RuntimeMBeanException;
  * The code will only work on Sun Java 1.6+.
  */
 public class HeapDumper {
-    
+
     // SingletonHolder idiom for lazy initialisation
     private static class DumperHolder {
         private static final HeapDumper DUMPER = new HeapDumper();
@@ -46,18 +46,18 @@ public class HeapDumper {
     private static HeapDumper getInstance(){
         return DumperHolder.DUMPER;
     }
-    
+
     // This is the name of the HotSpot Diagnostic platform MBean (Sun Java 1.6)
     // See: http://java.sun.com/javase/6/docs/jre/api/management/extension/com/sun/management/HotSpotDiagnosticMXBean.html
     private static final String HOTSPOT_BEAN_NAME =
          "com.sun.management:type=HotSpotDiagnostic";
 
     private static final SimpleDateFormat TIME_STAMP_FORMAT = new SimpleDateFormat("yyyyMMdd_hhmmss_SSS");
-    
+
     // These are needed for invoking the method
     private final MBeanServer server;
     private final ObjectName hotspotDiagnosticBean;
-    
+
     // If we could not find the method, store the exception here
     private final Exception exception;
 
@@ -78,11 +78,11 @@ public class HeapDumper {
         exception = ex;
         hotspotDiagnosticBean = on;
     }
-    
+
     /**
      * Initialise the dumper, and report if there is a problem.
      * This is optional, as the dump methods will initialise if necessary.
-     * 
+     *
      * @throws Exception if there is a problem finding the heapDump MXBean
      */
     public static void init() throws Exception {
@@ -91,19 +91,19 @@ public class HeapDumper {
             throw e;
         }
     }
-    
+
     /**
      * Dumps the heap to the outputFile file in the same format as the hprof heap dump.
      * <p>
      * Calls the dumpHeap() method of the HotSpotDiagnostic MXBean, if available.
      * <p>
-     * See 
+     * See
      * <a href="http://java.sun.com/javase/6/docs/jre/api/management/extension/com/sun/management/HotSpotDiagnosticMXBean.html">
      * HotSpotDiagnosticMXBean
      * </a>
      * @param fileName name of the heap dump file. Must be creatable, i.e. must not exist.
      * @param live if true, dump only the live objects
-     * @throws Exception if the MXBean cannot be found, or if there is a problem during invocation 
+     * @throws Exception if the MXBean cannot be found, or if there is a problem during invocation
      */
     public static void dumpHeap(String fileName, boolean live) throws Exception{
         getInstance().dumpHeap0(fileName, live);
@@ -114,7 +114,7 @@ public class HeapDumper {
      * <p>
      * @see #dumpHeap(String, boolean)
      * @param fileName name of the heap dump file. Must be creatable, i.e. must not exist.
-     * @throws Exception if the MXBean cannot be found, or if there is a problem during invocation 
+     * @throws Exception if the MXBean cannot be found, or if there is a problem during invocation
      */
     public static void dumpHeap(String fileName) throws Exception{
         dumpHeap(fileName, true);
@@ -129,7 +129,7 @@ public class HeapDumper {
      * @see #dumpHeap(boolean)
      * @return the name of the dump file that was created
      * @throws IOException
-     * @throws Exception if the MXBean cannot be found, or if there is a problem during invocation 
+     * @throws Exception if the MXBean cannot be found, or if there is a problem during invocation
      */
     public static String dumpHeap() throws Exception{
         return dumpHeap(true);
@@ -143,14 +143,14 @@ public class HeapDumper {
      * <p>
      * @see #dumpHeap(String, boolean)
      * @param live true id only live objects are to be dumped.
-     * 
+     *
      * @return the name of the dump file that was created
      * @throws IOException
-     * @throws Exception if the MXBean cannot be found, or if there is a problem during invocation 
+     * @throws Exception if the MXBean cannot be found, or if there is a problem during invocation
      */
     public static String dumpHeap(boolean live) throws Exception {
         return dumpHeap(new File("."), live);
-    }        
+    }
 
     /**
      * Dumps objects from the heap to the outputFile file in the same format as the hprof heap dump.
@@ -161,10 +161,10 @@ public class HeapDumper {
      * @see #dumpHeap(String, boolean)
      * @param basedir File object for the target base directory.
      * @param live true id only live objects are to be dumped.
-     * 
+     *
      * @return the name of the dump file that was created
      * @throws IOException
-     * @throws Exception if the MXBean cannot be found, or if there is a problem during invocation 
+     * @throws Exception if the MXBean cannot be found, or if there is a problem during invocation
      */
     public static String dumpHeap(File basedir, boolean live) throws Exception {
         String stamp = TIME_STAMP_FORMAT.format(new Date());
@@ -176,17 +176,17 @@ public class HeapDumper {
 
     /**
      * Perform the dump using the dumpHeap method.
-     *  
+     *
      * @param fileName the file to use
      * @param live true to dump only live objects
-     * @throws Exception if the MXBean cannot be found, or if there is a problem during invocation 
+     * @throws Exception if the MXBean cannot be found, or if there is a problem during invocation
      */
     private void dumpHeap0(String fileName, boolean live) throws Exception {
         try {
             if (exception == null) {
-                server.invoke(hotspotDiagnosticBean, 
-                        "dumpHeap", 
-                        new Object[]{fileName, Boolean.valueOf(live)}, 
+                server.invoke(hotspotDiagnosticBean,
+                        "dumpHeap",
+                        new Object[]{fileName, Boolean.valueOf(live)},
                         new String[]{"java.lang.String", "boolean"});
             } else {
                 throw exception;

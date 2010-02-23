@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.gui.action;
@@ -21,7 +21,7 @@ package org.apache.jmeter.gui.action;
 /*
  * Collect all the action names together in one place.
  * This helps to ensure that there are no duplicates
- * 
+ *
  *
  */
 public class ActionNames {
@@ -82,6 +82,6 @@ public class ActionNames {
 
     // Prevent instantiation
     private ActionNames(){
-        
+
     }
 }

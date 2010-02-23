@@ -24,13 +24,13 @@ import org.apache.jmeter.gui.JMeterGUIComponent;
  * Class to hold additional information needed when building the GUI lists
  */
 public class MenuInfo {
-    
+
     private final String label;
 
     private final String className;
 
     private final JMeterGUIComponent guiComp;
-    
+
     public MenuInfo(String displayLabel, String classFullName) {
         label = displayLabel;
         className = classFullName;
@@ -42,14 +42,14 @@ public class MenuInfo {
         className = classFullName;
         guiComp = item;
     }
-    
+
     public String getLabel(){
         if (guiComp != null) {
             return guiComp.getStaticLabel();
         }
         return label;
     }
-    
+
     public String getClassName(){
         return className;
     }

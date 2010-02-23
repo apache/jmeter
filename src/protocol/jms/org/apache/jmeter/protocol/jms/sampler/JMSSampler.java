@@ -91,9 +91,9 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     //--
 
     // Should we use java.naming.security.[principal|credentials] to create the QueueConnection?
-    private static final boolean USE_SECURITY_PROPERTIES = 
+    private static final boolean USE_SECURITY_PROPERTIES =
         JMeterUtils.getPropDefault("JMSSampler.useSecurity.properties", true); // $NON-NLS-1$
-    
+
     //
     // Member variables
     //
@@ -187,7 +187,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Adding property [" + name + "=" + value + "]");
             }
-            
+
             // WebsphereMQ does not allow corr. id. to be set using setStringProperty()
             if("JMSCorrelationID".equalsIgnoreCase(name)) { // $NON-NLS-1$
                 msg.setJMSCorrelationID(value);
@@ -294,7 +294,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
             context = getInitialContext();
             Object obj = context.lookup(getQueueConnectionFactory());
             if (!(obj instanceof QueueConnectionFactory)) {
-                String msg = "QueueConnectionFactory expected, but got " 
+                String msg = "QueueConnectionFactory expected, but got "
                     + obj == null ? "null" :  obj.getClass().getName();
                 LOGGER.fatalError(msg);
                 throw new IllegalStateException(msg);
@@ -312,7 +312,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
             String credentials = null;
             if (USE_SECURITY_PROPERTIES){
                 principal = getPrincipal(context);
-                credentials = getCredentials(context);                
+                credentials = getCredentials(context);
             }
             if (principal != null && credentials != null) {
                 connection = factory.createQueueConnection(principal, credentials);
@@ -431,7 +431,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         }
         return getPropertyAsInt(TIMEOUT);
     }
-    
+
     public String getTimeout() {
         return getPropertyAsString(TIMEOUT, DEFAULT_TIMEOUT_STRING);
     }

@@ -94,7 +94,7 @@ public class HttpRequestHdr {
      * Http Request method, uppercased, e.g. GET or POST.
      */
     private String method = ""; // $NON-NLS-1$
-    
+
     /** CONNECT url. */
     private String paramHttps = ""; // $NON-NLS-1$
 
@@ -207,7 +207,7 @@ public class HttpRequestHdr {
         // SSL connection
         if (getMethod().startsWith(HTTPConstants.CONNECT)) {
             paramHttps = url;
-        } 
+        }
         if (url.startsWith("/")) {
             url = HTTPS + "://" + paramHttps + url; // $NON-NLS-1$
         }
@@ -237,8 +237,8 @@ public class HttpRequestHdr {
         Iterator<String> keys = headers.keySet().iterator();
         while (keys.hasNext()) {
             String key = keys.next();
-            if (!key.equals(PROXY_CONNECTION) 
-             && !key.equals(CONTENT_LENGTH) 
+            if (!key.equals(PROXY_CONNECTION)
+             && !key.equals(CONTENT_LENGTH)
              && !key.equalsIgnoreCase(HTTPConstants.HEADER_CONNECTION)) {
                 manager.add(headers.get(key));
             }
@@ -557,7 +557,7 @@ public class HttpRequestHdr {
     public String getUrl(){
         return url;
     }
-    
+
     /**
      * Returns the method string extracted from the first line of the client request.
      *

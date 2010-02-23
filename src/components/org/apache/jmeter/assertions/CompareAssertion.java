@@ -37,7 +37,7 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
         LoopIterationListener {
 
     private static final long serialVersionUID = 240L;
-    
+
     private transient List<SampleResult> responses;
 
     private transient final StringSubstitution emptySub = new StringSubstitution(""); //$NON-NLS-1$

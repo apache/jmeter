@@ -27,9 +27,9 @@ import org.apache.log.Logger;
 
 /**
  * Request/reply executor with a fixed reply queue. <br>
- * 
+ *
  * Used by JMS Sampler (Point to Point)
- * 
+ *
  * Created on: October 28, 2004
  *
  */
@@ -42,7 +42,7 @@ public class FixedQueueExecutor implements QueueExecutor {
 
     /** Timeout used for waiting on message. */
     private final int timeout;
-    
+
     private final boolean useReqMsgIdAsCorrelId;
 
     /**
@@ -85,7 +85,7 @@ public class FixedQueueExecutor implements QueueExecutor {
             return null;
         }
         producer.send(request);
-        
+
         if(useReqMsgIdAsCorrelId) {
             id = request.getJMSMessageID();
         }
