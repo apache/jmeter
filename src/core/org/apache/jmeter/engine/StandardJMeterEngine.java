@@ -352,12 +352,12 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         public void run() {
             running = false;
             engine = null;
+            boolean stopped = false;
             if (now) {
                 tellThreadsToStop();
                 pause(10 * allThreads.size());
-                boolean stopped = verifyThreadsStopped();
+                stopped = verifyThreadsStopped();
                 if (!stopped) {
-                    notifyTestListenersOfEnd(testListenersSave);
                     if (JMeter.isNonGUI()) {
                         exit();
                     } else {
@@ -369,9 +369,10 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
                 } // else will be done by threadFinished()
             } else {
                 stopAllThreads();
-                if (serialized) {
-                    notifyTestListenersOfEnd(testListenersSave);
-                }
+            }
+            //  for TGs which run consecutively or when thread don't stop 
+            if (serialized || !stopped) {
+                notifyTestListenersOfEnd(testListenersSave);
             }
         }
     }
