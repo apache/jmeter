@@ -25,11 +25,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.tree.TreeNode;
 
-import org.apache.jmeter.gui.tree.NamedTreeNode;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jmeter.testelement.property.StringProperty;
@@ -44,10 +40,7 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
     /** The label for the text field. */
     private JLabel nameLabel;
 
-    /** The node which this component is providing the name for. */
-    private TreeNode node;
-
-    /**
+   /**
      * Create a new NamePanel with the default name.
      */
     public NamePanel() {
@@ -64,20 +57,6 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
         nameLabel = new JLabel(JMeterUtils.getResString("name")); // $NON-NLS-1$
         nameLabel.setName("name");
         nameLabel.setLabelFor(nameField);
-
-        nameField.getDocument().addDocumentListener(new DocumentListener() {
-            public void insertUpdate(DocumentEvent e) {
-                updateName(nameField.getText());
-            }
-
-            public void removeUpdate(DocumentEvent e) {
-                updateName(nameField.getText());
-            }
-
-            public void changedUpdate(DocumentEvent e) {
-                // not for text fields
-            }
-        });
 
         add(nameLabel, BorderLayout.WEST);
         add(nameField, BorderLayout.CENTER);
@@ -105,20 +84,6 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
     public void setName(String name) {
         super.setName(name);
         nameField.setText(name);
-    }
-
-    /**
-     * Get the tree node which this component provides the name for.
-     *
-     * @return the tree node corresponding to this component
-     */
-    protected TreeNode getNode() {
-        return node;
-    }
-
-    /** {@inheritDoc} */
-    public void setNode(TreeNode node) {
-        this.node = node;
     }
 
     /** {@inheritDoc} */
@@ -158,19 +123,6 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
         wb.setName(getName());
         wb.setProperty(new StringProperty(TestElement.GUI_CLASS, this.getClass().getName()));
         wb.setProperty(new StringProperty(TestElement.TEST_CLASS, WorkBench.class.getName()));
-    }
-
-    /**
-     * Called when the name changes. The tree node which this component names
-     * will be notified of the change.
-     *
-     * @param newValue
-     *            the new name
-     */
-    private void updateName(String newValue) {
-        if (getNode() != null) {
-            ((NamedTreeNode)getNode()).nameChanged();
-        }
     }
 
     /**
