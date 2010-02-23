@@ -33,7 +33,7 @@ public class SubDummyTest extends DummyTestCase {
     public void oneTimeSetUp() {
         System.out.println("SubDummyTest#oneTimeSetUp(): "+getName());
     }
-    
+
     public void oneTimeTearDown() {
         System.out.println("SubDummyTest#oneTimeTearDown(): "+getName());
     }

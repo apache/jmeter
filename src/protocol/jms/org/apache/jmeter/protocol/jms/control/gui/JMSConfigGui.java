@@ -72,7 +72,7 @@ public class JMSConfigGui extends AbstractSamplerGui {
     private ArgumentsPanel jndiPropertiesPanel;
 
     private JCheckBox useNonPersistentDelivery;
-    
+
     private JCheckBox useReqMsgIdAsCorrelId;
 
     public JMSConfigGui() {
@@ -187,7 +187,7 @@ public class JMSConfigGui extends AbstractSamplerGui {
 
         useNonPersistentDelivery.setSelected(sampler.isNonPersistent());
         useReqMsgIdAsCorrelId.setSelected(sampler.isUseReqMsgIdAsCorrelId());
-        
+
         timeout.setText(sampler.getTimeout());
         soapXml.setText(sampler.getContent());
         initialContextFactory.setText(sampler.getInitialContextFactory());
@@ -236,7 +236,7 @@ public class JMSConfigGui extends AbstractSamplerGui {
                 JMeterUtils.getResString("jms_message_title"))); //$NON-NLS-1$
 
         useReqMsgIdAsCorrelId = new JCheckBox(JMeterUtils.getResString("jms_use_req_msgid_as_correlid"),false); //$NON-NLS-1$
-        
+
         JPanel messageNorthPanel = new JPanel(new BorderLayout());
         JPanel onewayPanel = new HorizontalPanel();
         onewayPanel.add(oneWay);

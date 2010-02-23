@@ -59,7 +59,7 @@ import org.apache.log.Logger;
  *
  */
 public class HTTPSampler extends HTTPSamplerBase implements Interruptible {
-    private static final boolean OBEY_CONTENT_LENGTH = 
+    private static final boolean OBEY_CONTENT_LENGTH =
         JMeterUtils.getPropDefault("httpsampler.obey_contentlength", false); // $NON-NLS-1$
 
     private static final long serialVersionUID = 233L;
@@ -176,12 +176,12 @@ public class HTTPSampler extends HTTPSamplerBase implements Interruptible {
         if (cto > 0){
             conn.setConnectTimeout(cto);
         }
-        
+
         int rto = getResponseTimeout();
         if (rto > 0){
             conn.setReadTimeout(rto);
         }
-        
+
         if (PROTOCOL_HTTPS.equalsIgnoreCase(u.getProtocol())) {
             try {
                 if (null != sslmgr){
@@ -456,7 +456,7 @@ public class HTTPSampler extends HTTPSamplerBase implements Interruptible {
         res.setSampleLabel(urlStr);
         res.setURL(url);
         res.setHTTPMethod(method);
-        
+
         res.sampleStart(); // Count the retries as well in the time
 
         // Check cache for an entry with an Expires header in the future
@@ -469,7 +469,7 @@ public class HTTPSampler extends HTTPSamplerBase implements Interruptible {
                return res;
            }
         }
-        
+
         try {
             // Sampling proper - establish the connection and read the response:
             // Repeatedly try to connect:
@@ -480,7 +480,7 @@ public class HTTPSampler extends HTTPSamplerBase implements Interruptible {
                     conn = setupConnection(url, method, res);
                     // Attempt the connection:
                     savedConn = conn;
-                    conn.connect();                        
+                    conn.connect();
                     break;
                 } catch (BindException e) {
                     if (retry >= MAX_CONN_RETRIES) {

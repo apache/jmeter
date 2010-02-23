@@ -42,21 +42,21 @@ import org.apache.log.Logger;
 /**
  * Selector for the AJP/1.3 protocol
  * (i.e. what Tomcat uses with mod_jk)
- * It allows you to test Tomcat in AJP mode without 
- * actually having Apache installed and configured 
+ * It allows you to test Tomcat in AJP mode without
+ * actually having Apache installed and configured
  *
  */
 public class AjpSampler extends HTTPSamplerBase {
 
     private static final long serialVersionUID = 233L;
 
-    private static final Logger log= LoggingManager.getLoggerForClass(); 
+    private static final Logger log= LoggingManager.getLoggerForClass();
 
     private static final char NEWLINE = '\n';
     private static final String COLON_SPACE = ": ";//$NON-NLS-1$
- 
+
     /**
-     *  Translates integer codes to request header names    
+     *  Translates integer codes to request header names
      */
     private static final String []headerTransArray = {
         "accept",               //$NON-NLS-1$
@@ -99,7 +99,7 @@ public class AjpSampler extends HTTPSamplerBase {
     }
 
     @Override
-    protected HTTPSampleResult sample(URL url, 
+    protected HTTPSampleResult sample(URL url,
                        String method,
                        boolean frd,
                        int fd) {
@@ -136,7 +136,7 @@ public class AjpSampler extends HTTPSamplerBase {
         stringBody = null;
     }
 
-    private void setupConnection(URL url, 
+    private void setupConnection(URL url,
                  String method,
                  HTTPSampleResult res) throws IOException {
 
@@ -228,7 +228,7 @@ public class AjpSampler extends HTTPSamplerBase {
         StringBuilder hbuf = new StringBuilder();
         // Allow Headers to override Host setting
         hbuf.append("Host").append(COLON_SPACE).append(host).append(NEWLINE);//$NON-NLS-1$
-        setInt(0xA00b); //Host 
+        setInt(0xA00b); //Host
         setString(host);
         if(headers != null) {
             CollectionProperty coll = headers.getHeaders();
@@ -371,7 +371,7 @@ public class AjpSampler extends HTTPSamplerBase {
         os.write(outbuf, 0, len);
     }
 
-    private void execute(String method, HTTPSampleResult res) 
+    private void execute(String method, HTTPSampleResult res)
     throws IOException {
         send();
         if(method.equals(POST)) {
@@ -387,7 +387,7 @@ public class AjpSampler extends HTTPSamplerBase {
         while(msg != 5) {
             if(msg == 3) {
             int len = getInt();
-                responseData.write(inbuf, inpos, len); 
+                responseData.write(inbuf, inpos, len);
             } else if(msg == 4) {
                 parseHeaders(res);
             } else if(msg == 6) {
@@ -421,7 +421,7 @@ public class AjpSampler extends HTTPSamplerBase {
     }
 
 
-    private void parseHeaders(HTTPSampleResult res) 
+    private void parseHeaders(HTTPSampleResult res)
     throws IOException {
         int status = getInt();
         res.setResponseCode(Integer.toString(status));
@@ -465,7 +465,7 @@ public class AjpSampler extends HTTPSamplerBase {
             channel = null;
             throw new IOException("Connection Closed: "+nr);
         }
-    //int mark = 
+    //int mark =
         getInt();
         int len = getInt();
         int toRead = len;

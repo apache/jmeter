@@ -121,7 +121,7 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
 
     private static final String PROXY_DOMAIN =
         JMeterUtils.getPropDefault("http.proxyDomain",""); // $NON-NLS-1$ $NON-NLS-2$
-    
+
     public static final String IP_SOURCE = "HTTPSampler.ipSource"; // $NON-NLS-1$
 
     static final InetAddress localAddress;
@@ -550,7 +550,7 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
 
         boolean useStaticProxy = PROXY_DEFINED && !isNonProxy(host);
         boolean useDynamicProxy = false;
-        
+
         final String proxyHost = getProxyHost();
         final int proxyPort = getProxyPortInt();
         if (proxyHost.length() > 0 && proxyPort > 0){
@@ -591,9 +591,9 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
                 httpClient.getState().setProxyCredentials(
                         new AuthScope(proxyHost,proxyPort,null,AuthScope.ANY_SCHEME),
                         new NTCredentials(user,getProxyPass(),localHost,PROXY_DOMAIN)
-                    );                
+                    );
             } else {
-                httpClient.getState().clearProxyCredentials();                
+                httpClient.getState().clearProxyCredentials();
             }
         } else {
             if (useStaticProxy) {
@@ -607,7 +607,7 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
                 httpClient.getState().clearProxyCredentials();
             }
         }
-        
+
         int rto = getResponseTimeout();
         if (rto > 0){
             httpMethod.getParams().setSoTimeout(rto);
@@ -1173,7 +1173,7 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
         return client != null;
     }
 
-    
+
     public void setIpSource(String value) {
         setProperty(IP_SOURCE, value, "");
     }

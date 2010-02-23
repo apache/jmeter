@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.util;
@@ -41,7 +41,7 @@ public class ShutdownClient {
         byte[] buf = command.getBytes("ASCII");
         InetAddress address = InetAddress.getByName("localhost");
         DatagramPacket packet = new DatagramPacket(buf, buf.length, address, port);
-        socket.send(packet);    
+        socket.send(packet);
         socket.close();
     }
 }

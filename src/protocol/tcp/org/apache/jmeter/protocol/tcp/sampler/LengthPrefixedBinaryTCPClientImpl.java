@@ -17,12 +17,12 @@
  */
 
 /*
- * TCP Sampler Client implementation which reads and writes length-prefixed binary data.  
- * 
+ * TCP Sampler Client implementation which reads and writes length-prefixed binary data.
+ *
  * Input/Output strings are passed as hex-encoded binary strings.
- * 
+ *
  * 2-Byte or 4-Byte length prefixes are supported.
- * 
+ *
  * Length prefix is binary of length specified by property "tcp.length.prefix.length".
  *
  */
@@ -45,7 +45,7 @@ import org.apache.log.Logger;
  */
 public class LengthPrefixedBinaryTCPClientImpl extends TCPClientDecorator {
     private static final Logger log = LoggingManager.getLoggerForClass();
-    
+
     private final int lengthPrefixLen = JMeterUtils.getPropDefault("tcp.binarylength.prefix.length", 2); // $NON-NLS-1$
 
     public LengthPrefixedBinaryTCPClientImpl() {

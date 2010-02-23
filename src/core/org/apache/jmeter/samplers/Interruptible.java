@@ -24,10 +24,10 @@ package org.apache.jmeter.samplers;
  *
  */
 public interface Interruptible {
-    
+
     /**
      * Interrupt the current operation if possible.
-     * 
+     *
      * @return <code>true</code> if there was an operation to interrupt.
      */
     public boolean interrupt();

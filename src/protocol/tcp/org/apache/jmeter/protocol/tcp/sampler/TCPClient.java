@@ -31,7 +31,7 @@ import java.io.OutputStream;
  * Interface required by TCPSampler for TCPClient implementations.
  */
 public interface TCPClient {
-    
+
     /**
      * Versions of JMeter after 2.3.2 invoke this method when the thread starts.
      */
@@ -77,7 +77,7 @@ public interface TCPClient {
     /**
      * Set the end-of-line/end-of-message byte.
      * If the value is out of range of a byte, then it is to be ignored.
-     * 
+     *
      * @param eolInt
      *            The value to set
      */

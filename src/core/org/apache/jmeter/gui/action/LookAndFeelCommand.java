@@ -36,7 +36,7 @@ import org.apache.jmeter.util.JMeterUtils;
 public class LookAndFeelCommand implements Command {
 
     private static final String JMETER_LAF = "jmeter.laf"; // $NON-NLS-1$
-    
+
     private static final Set<String> commands = new HashSet<String>();
 
     static {

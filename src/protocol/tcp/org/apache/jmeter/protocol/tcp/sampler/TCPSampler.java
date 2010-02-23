@@ -228,13 +228,13 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
     }
 
     public void setClassname(String classname) {
-        this.setProperty(CLASSNAME, classname, ""); //$NON-NLS-1$ 
+        this.setProperty(CLASSNAME, classname, ""); //$NON-NLS-1$
     }
 
     public String getClassname() {
         String clazz = getPropertyAsString(CLASSNAME,"");
         if (clazz==null || clazz.length()==0){
-            clazz = JMeterUtils.getPropDefault("tcp.handler", "TCPClientImpl"); //$NON-NLS-1$ $NON-NLS-2$            
+            clazz = JMeterUtils.getPropDefault("tcp.handler", "TCPClientImpl"); //$NON-NLS-1$ $NON-NLS-2$
         }
         return clazz;
     }
@@ -298,7 +298,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
                 res.setResponseMessage(getError());
             } else if (protocolHandler == null){
                 res.setResponseCode("500"); //$NON-NLS-1$
-                res.setResponseMessage("Protocol handler not found");                
+                res.setResponseMessage("Protocol handler not found");
             } else {
                 InputStream is = sock.getInputStream();
                 OutputStream os = sock.getOutputStream();

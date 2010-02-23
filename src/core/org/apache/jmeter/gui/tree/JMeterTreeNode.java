@@ -144,7 +144,7 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
     public void nameChanged() {
         treeModel.nodeChanged(this);
     }
-    
+
     // Override in order to provide type safety
     @Override
     @SuppressWarnings("unchecked")

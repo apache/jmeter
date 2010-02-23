@@ -79,7 +79,7 @@ public class TestAction extends AbstractSampler {
                     context.getEngine().stopTest();
                 } else {
                     log.info("Stopping all threads");
-                    context.getEngine().askThreadsToStop();                    
+                    context.getEngine().askThreadsToStop();
                 }
             }
         }

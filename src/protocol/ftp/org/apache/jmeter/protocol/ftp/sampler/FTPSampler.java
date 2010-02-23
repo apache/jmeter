@@ -75,7 +75,7 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
     public final static String SAVE_RESPONSE = "FTPSampler.saveresponse"; // $NON-NLS-1$
 
     private volatile FTPClient savedClient;
-    
+
     public FTPSampler() {
     }
 
@@ -179,7 +179,7 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
             savedClient = ftp;
             final int port = getPortAsInt();
             if (port > 0){
-                ftp.connect(getServer(),port);                
+                ftp.connect(getServer(),port);
             } else {
                 ftp.connect(getServer());
             }

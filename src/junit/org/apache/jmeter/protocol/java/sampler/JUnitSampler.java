@@ -104,9 +104,9 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
         setUpMethod = null;
         tearDownMethod = null;
         if (!getDoNotSetUpTearDown()) {
-            setUpMethod = getJunit4() ? 
-                getMethodWithAnnotation(testObject, Before.class) 
-                : 
+            setUpMethod = getJunit4() ?
+                getMethodWithAnnotation(testObject, Before.class)
+                :
                 getMethod(testObject, SETUP);
             tearDownMethod = getJunit4() ?
                 getMethodWithAnnotation(testObject, After.class)
@@ -310,7 +310,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
 
     /**
      * Set whether to append errors or not.
-     * 
+     *
      * @param error the setting to apply
      */
     public void setAppendError(boolean error) {
@@ -328,7 +328,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
 
     /**
      * Set whether to append exceptions or not.
-     * 
+     *
      * @param exc the setting to apply.
      */
     public void setAppendException(boolean exc) {
@@ -338,7 +338,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
     /**
      * Check if JUnit4 (annotations) are to be used instead of
      * the JUnit3 style (TestClass and specific method names)
-     * 
+     *
      * @return true if JUnit4 (annotations) are to be used.
      * Default is false.
      */
@@ -395,9 +395,9 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
                     afe.setStackTrace(cause.getStackTrace());
                     tr.addFailure(theClazz, afe);
                 } else if (cause != null) {
-                    tr.addError(theClazz, cause);                        
+                    tr.addError(theClazz, cause);
                 } else {
-                    tr.addError(theClazz, e);                        
+                    tr.addError(theClazz, e);
                 }
             } catch (IllegalAccessException e) {
                 tr.addError(theClazz, e);
@@ -414,7 +414,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
                     if (en.hasMoreElements()){
                         sresult.setResponseCode(getFailureCode());
                         buf.append( getFailure() );
-                        buf.append("\n");                        
+                        buf.append("\n");
                     }
                     while (en.hasMoreElements()){
                         TestFailure item = en.nextElement();
@@ -431,7 +431,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
                     if (en.hasMoreElements()){
                         sresult.setResponseCode(getErrorCode());
                         buf.append( getError() );
-                        buf.append("\n");                        
+                        buf.append("\n");
                     }
                     while (en.hasMoreElements()){
                         TestFailure item = en.nextElement();
@@ -545,7 +545,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
         }
         return null;
     }
-    
+
     private Method getMethodWithAnnotation(Object clazz, Class<? extends Annotation> annotation) {
         if(null != clazz && null != annotation) {
             for(Method m : clazz.getClass().getMethods()) {
@@ -556,10 +556,10 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
         }
         return null;
     }
-    
+
     /*
      * Wrapper to convert a JUnit4 class into a TestCase
-     * 
+     *
      *  TODO - work out how to convert JUnit4 assertions so they are treated as failures rather than errors
      */
     private class AnnotatedTestCase extends TestCase {
@@ -571,7 +571,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
             this.expectedException = expectedException2;
             this.timeout = timeout;
         }
-        
+
         @Override
         protected void runTest() throws Throwable {
             try {
@@ -601,7 +601,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
                         afe.setStackTrace(thrown.getStackTrace());
                         throw afe;
                     }
-                    throw thrown;                    
+                    throw thrown;
                 }
                 if (!expectedException.isAssignableFrom(thrown.getClass())){
                     throw new AssertionFailedError("The wrong exception was thrown from the test case");

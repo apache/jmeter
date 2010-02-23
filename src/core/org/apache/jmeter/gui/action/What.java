@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.gui.action;
@@ -30,10 +30,10 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.logging.LoggingManager;
 
 /**
- * 
+ *
  * Debug class to show details of the currently selected object
  * Currently shows TestElement and GUI class names
- * 
+ *
  * Also enables/disables debug for the test element.
  *
  */
@@ -59,7 +59,7 @@ public class What implements Command {
             System.out.println(guiClassName);
         } else if (ActionNames.DEBUG_ON.equals(e.getActionCommand())){
             LoggingManager.setPriorityFullName("DEBUG",te.getClass().getName());//$NON-NLS-1$
-        } else if (ActionNames.DEBUG_OFF.equals(e.getActionCommand())){            
+        } else if (ActionNames.DEBUG_OFF.equals(e.getActionCommand())){
             LoggingManager.setPriorityFullName("INFO",te.getClass().getName());//$NON-NLS-1$
         }
     }

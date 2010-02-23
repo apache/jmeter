@@ -84,7 +84,7 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
     private JRadioButton stopTestBox;
 
     private JRadioButton stopTestNowBox;
-    
+
     public ThreadGroupGui() {
         super();
         init();

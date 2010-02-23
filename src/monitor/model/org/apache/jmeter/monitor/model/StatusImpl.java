@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class StatusImpl implements Status {
     private Jvm jvm = null;
-    
+
     private String connectorPrefix = null;
 
     private final List<Connector> connectors;

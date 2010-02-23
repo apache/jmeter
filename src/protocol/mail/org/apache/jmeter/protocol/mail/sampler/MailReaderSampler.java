@@ -67,7 +67,7 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
     private static final String NEW_LINE = "\n"; // $NON-NLS-1$
     private final static String STORE_MIME_MESSAGE = "storeMimeMessage";
     //-
-    
+
     private static final String RFC_822_DEFAULT_ENCODING = "iso-8859-1"; // RFC 822 uses ascii per default
 
     public static final String DEFAULT_PROTOCOL = "pop3";  // $NON-NLS-1$
@@ -92,7 +92,7 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
         boolean deleteMessages = getDeleteMessages();
 
         parent.setSampleLabel(getName());
-        
+
         String samplerString = toString();
         parent.setSamplerData(samplerString);
 
@@ -134,14 +134,14 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
             }
 
             parent.setSampleCount(n); // TODO is this sensible?
-            
+
             busy = true;
             for (int i = 0; busy && i < n; i++) {
                 StringBuilder cdata = new StringBuilder();
                 SampleResult child = new SampleResult();
                 child.sampleStart();
                 Message message = messages[i];
-                
+
                 cdata.append("Message "); // $NON-NLS-1$
                 cdata.append(message.getMessageNumber());
                 child.setSampleLabel(cdata.toString());
@@ -452,7 +452,7 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
     public void setStoreMimeMessage(boolean storeMimeMessage) {
         setProperty(STORE_MIME_MESSAGE, storeMimeMessage, false);
     }
-    
+
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();

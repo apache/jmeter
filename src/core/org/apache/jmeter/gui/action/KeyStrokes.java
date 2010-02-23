@@ -31,10 +31,10 @@ public final class KeyStrokes {
     // Prevent instantiation
     private KeyStrokes(){
     }
-    
+
     // Bug 47064 - fixes for Mac LAF
     private static final int CONTROL_MASK =Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-    
+
     public static final KeyStroke CUT = KeyStroke.getKeyStroke(KeyEvent.VK_X, CONTROL_MASK);
     public static final KeyStroke COPY = KeyStroke.getKeyStroke(KeyEvent.VK_C, CONTROL_MASK);
     public static final KeyStroke PASTE = KeyStroke.getKeyStroke(KeyEvent.VK_V, CONTROL_MASK);
