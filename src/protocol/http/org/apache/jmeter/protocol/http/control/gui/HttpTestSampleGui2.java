@@ -32,9 +32,9 @@ import org.apache.jorphan.gui.JLabeledTextField;
  * HTTP Sampler GUI for Apache HTTPClient HTTP implementation
  */
 public class HttpTestSampleGui2 extends HttpTestSampleGui {
-    
+
     private static final long serialVersionUID = 240L;
-    
+
     private JLabeledTextField sourceIpAddr;
 
     public HttpTestSampleGui2() {
@@ -79,10 +79,10 @@ public class HttpTestSampleGui2 extends HttpTestSampleGui {
         sourceIpAddr = new JLabeledTextField(JMeterUtils
                 .getResString("web_testing2_source_ip")); // $NON-NLS-1$
         optionalTasksPanel.add(sourceIpAddr, BorderLayout.EAST);
-        
+
         return optionalTasksPanel;
     }
-    
+
     /**
      * {@inheritDoc}
      */

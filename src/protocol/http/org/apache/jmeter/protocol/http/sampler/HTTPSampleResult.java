@@ -37,7 +37,7 @@ public class HTTPSampleResult extends SampleResult {
     private String method;
 
     /**
-     * The raw value of the Location: header; may be null. 
+     * The raw value of the Location: header; may be null.
      * This is supposed to be an absolute URL:
      * <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.30">RFC2616 sec14.30</a>
      * but is often relative.
@@ -48,7 +48,7 @@ public class HTTPSampleResult extends SampleResult {
 
     private static final String HTTP_NO_CONTENT_CODE = Integer.toString(HttpURLConnection.HTTP_NO_CONTENT);
     private static final String HTTP_NO_CONTENT_MSG = "No Content"; // $NON-NLS-1$
-    
+
     public HTTPSampleResult() {
         super();
         setDataEncoding(DEFAULT_HTTP_ENCODING); // default if encoding not provided be the page
@@ -209,7 +209,7 @@ public class HTTPSampleResult extends SampleResult {
         }
         return super.getDataEncodingWithDefault();
     }
-    
+
     public void setResponseNoContent(){
         setResponseCode(HTTP_NO_CONTENT_CODE);
         setResponseMessage(HTTP_NO_CONTENT_MSG);

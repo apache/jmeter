@@ -81,29 +81,29 @@ public class Proxy extends Thread {
     private static final String PROXY_HEADERS_REMOVE_DEFAULT = "If-Modified-Since,If-None-Match,Host"; // $NON-NLS-1$
 
     private static final String PROXY_HEADERS_REMOVE_SEPARATOR = ","; // $NON-NLS-1$
-    
+
     // for ssl connection
-    private static final String KEYSTORE_TYPE = 
+    private static final String KEYSTORE_TYPE =
         JMeterUtils.getPropDefault("proxy.cert.type", "JKS"); // $NON-NLS-1$ $NON-NLS-2$
-    
+
     private static final String KEYMANAGERFACTORY =
         JMeterUtils.getPropDefault("proxy.cert.factory", "SunX509"); // $NON-NLS-1$ $NON-NLS-2$
-    
-    private static final String SSLCONTEXT_PROTOCOL = 
+
+    private static final String SSLCONTEXT_PROTOCOL =
         JMeterUtils.getPropDefault("proxy.ssl.protocol", "SSLv3"); // $NON-NLS-1$ $NON-NLS-2$
-    
+
     // HashMap to save ssl connection between Jmeter proxy and browser
     private static final HashMap<String, SSLSocketFactory> hashHost = new HashMap<String, SSLSocketFactory>();
-    
+
     // Proxy configuration SSL
     private static final String CERT_DIRECTORY =
         JMeterUtils.getPropDefault("proxy.cert.directory", JMeterUtils.getJMeterBinDir()); // $NON-NLS-1$
-    
+
     private static final String CERT_FILE_DEFAULT = "proxyserver.jks";// $NON-NLS-1$
 
     private static final String CERT_FILE =
         JMeterUtils.getPropDefault("proxy.cert.file", CERT_FILE_DEFAULT); // $NON-NLS-1$
-    
+
     private static final char[] KEYSTORE_PASSWORD =
         JMeterUtils.getPropDefault("proxy.cert.keystorepass", "password").toCharArray(); // $NON-NLS-1$ $NON-NLS-2$
 
@@ -112,7 +112,7 @@ public class Proxy extends Thread {
 
     // Use with SSL connection
     private OutputStream outStreamClient = null;
-    
+
     static {
         String removeList = JMeterUtils.getPropDefault(PROXY_HEADERS_REMOVE,PROXY_HEADERS_REMOVE_DEFAULT);
         headersToRemove = JOrphanUtils.split(removeList,PROXY_HEADERS_REMOVE_SEPARATOR);
@@ -149,7 +149,7 @@ public class Proxy extends Thread {
      * Intended to be called directly after construction.
      * Should not be called after it has been passed to a new thread,
      * otherwise the variables may not be published correctly.
-     * 
+     *
      * @param _clientSocket
      *            the socket connection to the client
      * @param _target
@@ -189,11 +189,11 @@ public class Proxy extends Thread {
         SampleResult result = null;
         HeaderManager headers = null;
 
-        try {   
+        try {
             // Now, parse only first line
             request.parse(new BufferedInputStream(clientSocket.getInputStream()));
             outStreamClient = clientSocket.getOutputStream();
-            
+
             if ((request.getMethod().startsWith(HTTPConstants.CONNECT)) && (outStreamClient != null)) {
                 log.debug("Method CONNECT => SSL");
                 // write a OK reponse to browser, to engage SSL exchange
@@ -210,7 +210,7 @@ public class Proxy extends Thread {
                 // Re-parse (now it's the http request over SSL)
                 request.parse(new BufferedInputStream(clientSocket.getInputStream()));
             }
-            
+
             // Populate the sampler. It is the same sampler as we sent into
             // the constructor of the HttpRequestHdr instance above
             request.getSampler(pageEncodings, formEncodings);
@@ -308,13 +308,13 @@ public class Proxy extends Thread {
             sampler.threadFinished(); // Needed for HTTPSampler2
         }
     }
-    
+
     /**
      * Get SSL connection from hashmap, creating it if necessary.
-     * 
+     *
      * @param host
      * @return a ssl socket factory
-     * @throws IOException 
+     * @throws IOException
      */
     private SSLSocketFactory getSSLSocketFactory(String host) throws IOException {
         synchronized (hashHost) {
@@ -364,7 +364,7 @@ public class Proxy extends Thread {
 
     /**
      * Negotiate a SSL connection.
-     * 
+     *
      * @param sock socket in
      * @param host
      * @return a new client socket over ssl
@@ -375,7 +375,7 @@ public class Proxy extends Thread {
         SSLSocket secureSocket;
         if (sslFactory != null) {
             try {
-                secureSocket = (SSLSocket) sslFactory.createSocket(sock, 
+                secureSocket = (SSLSocket) sslFactory.createSocket(sock,
                         sock.getInetAddress().getHostName(), sock.getPort(), true);
                 secureSocket.setUseClientMode(false);
                 if (log.isDebugEnabled()){
@@ -391,10 +391,10 @@ public class Proxy extends Thread {
             throw new IOException("Unable to negotiate SSL transaction, no keystore?");
         }
     }
-    
+
     /**
      * Open the local certificate file.
-     * 
+     *
      * @return stream to key cert; null if there was a problem opening it
      */
     private InputStream getCertificate() {

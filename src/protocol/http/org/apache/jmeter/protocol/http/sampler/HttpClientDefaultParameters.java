@@ -14,7 +14,7 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
- * under the License.    
+ * under the License.
  */
 
 package org.apache.jmeter.protocol.http.sampler;
@@ -43,9 +43,9 @@ public class HttpClientDefaultParameters {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     // Non-instantiable
-    private HttpClientDefaultParameters(){        
+    private HttpClientDefaultParameters(){
     }
-    
+
     public static void load(String file, HttpParams params){
         log.info("Reading httpclient parameters from "+file);
         File f = new File(file);
@@ -85,7 +85,7 @@ public class HttpClientDefaultParameters {
                 } catch (ProtocolException e) {
                     log.error("Error in property: "+key+"="+value+" "+e.toString());
                 }
-            }        
+            }
         } catch (FileNotFoundException e) {
             log.error("Problem loading properties "+e.toString());
         } catch (IOException e) {

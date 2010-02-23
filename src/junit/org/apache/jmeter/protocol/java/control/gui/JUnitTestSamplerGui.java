@@ -411,7 +411,7 @@ implements ChangeListener, ActionListener, ItemListener
      */
     public void itemStateChanged(ItemEvent event) {
         if (event.getItem() == junit4){
-            setupClasslist();            
+            setupClasslist();
         }
     }
 

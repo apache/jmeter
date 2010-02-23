@@ -34,7 +34,7 @@ public class SubDummyTest2 extends DummyTestCase {
     public void oneTimeSetUp() {
         System.out.println("SubDummyTest2#oneTimeSetUp(): "+getName());
     }
-    
+
     public void oneTimeTearDown() {
         System.out.println("SubDummyTest2#oneTimeTearDown(): "+getName());
     }

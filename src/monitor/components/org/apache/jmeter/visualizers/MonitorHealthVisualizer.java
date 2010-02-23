@@ -88,7 +88,7 @@ public class MonitorHealthVisualizer extends AbstractVisualizer implements Image
         c.setProperty(CONNECTOR_PREFIX,prefixField.getText(),CONNECTOR_PREFIX_DEFAULT);
         model.setPrefix(prefixField.getText());
     }
-    
+
     private void initModel() {
         model = new MonitorAccumModel();
         graph = new MonitorGraph(model);

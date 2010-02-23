@@ -152,14 +152,14 @@ public class XPathExtractor extends AbstractScopedTestElement implements
                 for(int i=0; i < matchCount; i++){
                     value = matches.get(i);
                     if (value != null) {
-                        vars.put(concat(refName,i+1),matches.get(i));                    
+                        vars.put(concat(refName,i+1),matches.get(i));
                     }
                 }
             }
             vars.remove(concat(refName,matchCount+1)); // Just in case
             // Clear any other remaining variables
             for(int i=matchCount+2; i <= prevCount; i++) {
-                vars.remove(concat(refName,i));                
+                vars.remove(concat(refName,i));
             }
         }catch(IOException e){// e.g. DTD not reachable
             final String errorMessage = "IOException on ("+getXPathQuery()+")";
@@ -307,7 +307,7 @@ public class XPathExtractor extends AbstractScopedTestElement implements
      * @param d the document
      * @param query the query to execute
      * @param matchStrings list of matched strings (may include nulls)
-     * 
+     *
      * @throws TransformerException
      */
     private void getValuesForXPath(Document d,String query, List<String> matchStrings)
@@ -322,7 +322,7 @@ public class XPathExtractor extends AbstractScopedTestElement implements
                 Node match = matches.item(i);
                 if ( match instanceof Element){
                     if (getFragment()){
-                        val = getValueForNode(match);                        
+                        val = getValueForNode(match);
                     } else {
                         // elements have empty nodeValue, but we are usually interested in their content
                         final Node firstChild = match.getFirstChild();
@@ -331,7 +331,7 @@ public class XPathExtractor extends AbstractScopedTestElement implements
                         } else {
                             val = match.getNodeValue(); // TODO is this correct?
                         }
-                    }                   
+                    }
                 } else {
                    val = match.getNodeValue();
                 }
@@ -348,7 +348,7 @@ public class XPathExtractor extends AbstractScopedTestElement implements
     }
 
     public void setWhitespace(boolean selected) {
-        setProperty(WHITESPACE, selected, false);        
+        setProperty(WHITESPACE, selected, false);
     }
 
     public boolean isWhitespace() {
@@ -369,8 +369,8 @@ public class XPathExtractor extends AbstractScopedTestElement implements
 
     public boolean isDownloadDTDs() {
         return getPropertyAsBoolean(DOWNLOAD_DTDS, false);
-    }     
-    
+    }
+
     private String getValueForNode(Node node) {
         StringWriter sw = new StringWriter();
         try {

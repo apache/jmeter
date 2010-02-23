@@ -60,12 +60,12 @@ public class TransactionController extends GenericController implements SampleLi
      * Cumulated pause time to excluse timer and post/pre processor times
      */
     private transient long pauseTime;
-    
+
     /**
      * Previous end time
      */
     private transient long prevEndTime;
-    
+
     private static final String PARENT = "TransactionController.parent";// $NON-NLS-1$
 
     private final static String INCLUDE_TIMERS = "TransactionController.includeTimers";// $NON-NLS-1$
@@ -231,7 +231,7 @@ public class TransactionController extends GenericController implements SampleLi
 
     public void sampleStopped(SampleEvent e) {
     }
-    
+
     /**
      * Whether to include timers and pre/post processor time in overall sample.
      * @param includeTimers
@@ -242,7 +242,7 @@ public class TransactionController extends GenericController implements SampleLi
 
     /**
      * Whether to include timer and pre/post processor time in overall sample.
-     * 
+     *
      * @return boolean (defaults to true for backwards compatibility)
      */
     public boolean isIncludeTimers() {

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.gui;
@@ -37,7 +37,7 @@ public abstract class AbstractScopedJMeterGuiComponent extends AbstractJMeterGui
         super.clearGui();
         if (scopePanel != null) {
             scopePanel.clearGui();
-        }        
+        }
     }
     /**
      * When a user right-clicks on the component in the test tree, or selects
@@ -56,7 +56,7 @@ public abstract class AbstractScopedJMeterGuiComponent extends AbstractJMeterGui
 
     /**
      * Create the scope settings panel.
-     * 
+     *
      * @return the scope settings panel
      */
     protected JPanel createScopePanel() {
@@ -75,7 +75,7 @@ public abstract class AbstractScopedJMeterGuiComponent extends AbstractJMeterGui
 
     /**
      * Save the scope settings in the test element.
-     * 
+     *
      * @param testElement
      */
     protected void saveScopeSettings(AbstractScopedTestElement testElement) {
@@ -94,13 +94,13 @@ public abstract class AbstractScopedJMeterGuiComponent extends AbstractJMeterGui
 
     /**
      * Show the scope settings from the test element.
-     * 
+     *
      * @param testElement
      */
     protected void showScopeSettings(AbstractScopedTestElement testElement) {
         String scope = testElement.fetchScope();
         if (testElement.isScopeParent(scope)) {
-                scopePanel.setScopeParent();                
+                scopePanel.setScopeParent();
         } else if (testElement.isScopeChildren(scope)){
             scopePanel.setScopeChildren();
         } else if (testElement.isScopeAll(scope)){

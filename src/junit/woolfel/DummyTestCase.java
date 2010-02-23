@@ -36,12 +36,12 @@ public class DummyTestCase extends TestCase {
     public void setUp(){
         System.out.println("DummyTestCase#setup(): "+getName());
     }
-    
+
     @Override
     public void tearDown(){
         System.out.println("DummyTestCase#tearDown(): "+getName());
     }
-    
+
     public void testMethodPass() {
         try {
             Thread.sleep(100);
@@ -50,7 +50,7 @@ public class DummyTestCase extends TestCase {
             e.printStackTrace();
         }
     }
-    
+
     public void testMethodPass2() {
         try {
             Thread.sleep(100);
@@ -68,7 +68,7 @@ public class DummyTestCase extends TestCase {
             e.printStackTrace();
         }
     }
-    
+
     public void testMethodFail2() {
         try {
             Thread.sleep(100);
@@ -77,12 +77,12 @@ public class DummyTestCase extends TestCase {
             e.printStackTrace();
         }
     }
-    
+
     // Normal test failure
     public void testFail() {
         fail("Test failure");
     }
-    
+
     // Generate test error
     public void testException() {
         @SuppressWarnings("unused")

@@ -28,9 +28,9 @@ import org.apache.jmeter.threads.JMeterVariables;
  * @version $Revision$
  */
 public class VariablesCollection implements Serializable {
-    
+
     private static final long serialVersionUID = 240L;
-    
+
     private Map<String, JMeterVariables> varMap = new HashMap<String, JMeterVariables>();
 
     public void addJMeterVariables(JMeterVariables jmVars) {

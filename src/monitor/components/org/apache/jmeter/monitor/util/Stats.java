@@ -164,10 +164,10 @@ public class Stats {
         }
         return load;
     }
-    
+
     /**
      * Method to get connector to use for calculate server status
-     * 
+     *
      * @param stat
      * @return connector
      */
@@ -181,7 +181,7 @@ public class Stats {
                if (cntr.getName().startsWith(connectorPrefix)) {
                    return cntr;
                }
-           }           
+           }
         }
         // default : get first connector
         cntr = stat.getConnector().get(0);

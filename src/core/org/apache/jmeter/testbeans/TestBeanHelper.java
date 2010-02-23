@@ -121,7 +121,7 @@ public class TestBeanHelper {
         else value = Converter.convert(jprop.getStringValue(), type);
         return value;
     }
-    
+
     private static Object unwrapCollection(MultiProperty prop,String type)
     {
         if(prop instanceof CollectionProperty)

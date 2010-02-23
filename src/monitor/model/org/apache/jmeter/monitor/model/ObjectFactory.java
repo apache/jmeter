@@ -29,7 +29,7 @@ import org.apache.jmeter.samplers.SampleResult;
 public class ObjectFactory {
 
     private static class ObjectFactoryHolder {
-        static final ObjectFactory FACTORY = new ObjectFactory();    
+        static final ObjectFactory FACTORY = new ObjectFactory();
       }
 
     private final Parser PARSER;

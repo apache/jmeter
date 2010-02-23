@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.reporters;
@@ -27,11 +27,11 @@ import org.apache.jmeter.visualizers.Visualizer;
  * directly to the visualiser if required.
  */
 public class ResultCollectorHelper {
-    
+
     private final Visualizer visualizer;
     private final boolean errorsOnly;
     private final boolean successOnly;
-    
+
     public ResultCollectorHelper(ResultCollector resultCollector, Visualizer visualizer) {
         this.visualizer = visualizer;
         this.errorsOnly = resultCollector.isErrorLogging();

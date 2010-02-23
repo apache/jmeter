@@ -13,12 +13,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 /**
  * GUI class supporting the MD5Hex assertion functionality.
- * 
+ *
  */
 package org.apache.jmeter.assertions.gui;
 
@@ -55,7 +55,7 @@ public class MD5HexAssertionGUI extends AbstractAssertionGui {
 
         // USER_INPUT
         HorizontalPanel md5HexPanel = new HorizontalPanel();
-        md5HexPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), 
+        md5HexPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("md5hex_assertion_md5hex_test"))); // $NON-NLS-1$
 
         md5HexPanel.add(new JLabel(JMeterUtils.getResString("md5hex_assertion_label"))); //$NON-NLS-1$
@@ -103,14 +103,14 @@ public class MD5HexAssertionGUI extends AbstractAssertionGui {
         }
         ((MD5HexAssertion) element).setAllowedMD5Hex(md5HexString);
     }
-    
+
     /**
      * Implements JMeterGUIComponent.clearGui
      */
     @Override
     public void clearGui() {
         super.clearGui();
-        
+
         md5HexInput.setText(""); //$NON-NLS-1$
-    }    
+    }
 }

@@ -38,7 +38,7 @@ public class CompareAssertionBeanInfo extends BeanInfoSupport {
         p = property("compareTime"); //$NON-NLS-1$
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, new Long(-1));
-        p.setValue(NOT_EXPRESSION, Boolean.FALSE);    
+        p.setValue(NOT_EXPRESSION, Boolean.FALSE);
         p = property("stringsToSkip"); //$NON-NLS-1$
         p.setPropertyEditorClass(TableEditor.class);
         p.setValue(TableEditor.CLASSNAME,SubstitutionElement.class.getName());
@@ -50,7 +50,7 @@ public class CompareAssertionBeanInfo extends BeanInfoSupport {
         p.setValue(NOT_UNDEFINED,Boolean.TRUE);
         p.setValue(DEFAULT,new ArrayList<Object>());
         p.setValue(MULTILINE,Boolean.TRUE);
-        
+
     }
 
 }

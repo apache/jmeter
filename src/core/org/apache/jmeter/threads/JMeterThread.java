@@ -116,7 +116,7 @@ public class JMeterThread implements Runnable, Interruptible {
     private volatile boolean onErrorStopTestNow;
 
     private volatile boolean onErrorStopThread;
-    
+
     private volatile Sampler currentSampler;
 
     public JMeterThread(HashTree test, JMeterThreadMonitor monitor, ListenerNotifier note) {
@@ -277,7 +277,7 @@ public class JMeterThread implements Runnable, Interruptible {
      *
      * @param current sampler
      * @param parent sampler
-     * @param threadContext 
+     * @param threadContext
      * @return SampleResult if a transaction was processed
      */
     @SuppressWarnings("deprecation") // OK to call TestBeanHelper.prepare()
@@ -436,7 +436,7 @@ public class JMeterThread implements Runnable, Interruptible {
     }
 
     /**
-     * @param threadContext 
+     * @param threadContext
      *
      */
     private void initRun(JMeterContext threadContext) {
@@ -533,7 +533,7 @@ public class JMeterThread implements Runnable, Interruptible {
             log.warn("Interrupting: " + threadName + " sampler: " +samp.getName());
             try {
                 boolean found = ((Interruptible)samp).interrupt();
-                if (!found) { 
+                if (!found) {
                     log.warn("No operation pending");
                 }
                 return found;

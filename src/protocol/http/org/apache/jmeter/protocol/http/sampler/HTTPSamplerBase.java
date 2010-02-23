@@ -1353,7 +1353,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      */
     private void setHTTPFileArgs(HTTPFileArgs value) {
         if (value.getHTTPFileArgCount() > 0){
-            setProperty(new TestElementProperty(FILE_ARGS, value));            
+            setProperty(new TestElementProperty(FILE_ARGS, value));
         } else {
             removeProperty(FILE_ARGS); // no point saving an empty list
         }
@@ -1501,7 +1501,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      *
      * Versions after 2.3.4 dispense with the original set of 3 properties.
      * Test plans that use them are converted to use a single HTTPFileArgs list.
-     * 
+     *
      * @see HTTPSamplerBaseConverter
      */
     void mergeFileProperties() {
@@ -1509,7 +1509,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         JMeterProperty paramName = getProperty(FILE_FIELD);
         JMeterProperty mimeType = getProperty(MIMETYPE);
         HTTPFileArg oldStyleFile = new HTTPFileArg(fileName, paramName, mimeType);
-        
+
         HTTPFileArgs fileArgs = getHTTPFileArgs();
 
         HTTPFileArgs allFileArgs = new HTTPFileArgs();

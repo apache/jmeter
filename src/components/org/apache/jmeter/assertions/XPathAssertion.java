@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.assertions;
@@ -43,7 +43,7 @@ import org.xml.sax.SAXException;
 /**
  * Checks if the result is a well-formed XML content and whether it matches an
  * XPath
- * 
+ *
  */
 public class XPathAssertion extends AbstractTestElement implements Serializable, Assertion {
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -91,7 +91,7 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
         Document doc = null;
 
         boolean isXML = JOrphanUtils.isXML(responseData);
-        
+
         try {
             doc = XPathUtil.makeDocument(new ByteArrayInputStream(responseData), isValidating(),
                     isWhitespace(), isNamespace(), isTolerant(), isQuiet(), showWarnings() , reportErrors(), isXML
@@ -112,7 +112,7 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
             result.setFailureMessage(new StringBuilder("ParserConfigurationException: ").append(e.getMessage())
                     .toString());
             return result;
-        } catch (TidyException e) {                     
+        } catch (TidyException e) {
             result.setError(true);
             result.setFailureMessage(e.getMessage());
             return result;
@@ -180,7 +180,7 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
 
     /**
      * Get The XPath String that will be used in matching the document
-     * 
+     *
      * @return String xpath String
      */
     public String getXPathString() {
@@ -189,7 +189,7 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
 
     /**
      * Set the XPath String this will be used as an xpath
-     * 
+     *
      * @param xpath
      *            String
      */
@@ -199,7 +199,7 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
 
     /**
      * Set whether to ignore element whitespace
-     * 
+     *
      * @param whitespace
      */
     public void setWhitespace(boolean whitespace) {
@@ -208,7 +208,7 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
 
     /**
      * Set use validation
-     * 
+     *
      * @param validate
      */
     public void setValidating(boolean validate) {
@@ -217,7 +217,7 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
 
     /**
      * Set whether this is namespace aware
-     * 
+     *
      * @param namespace
      */
     public void setNamespace(boolean namespace) {
@@ -226,7 +226,7 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
 
     /**
      * Set tolerant mode if required
-     * 
+     *
      * @param tolerant
      *            true/false
      */
@@ -240,7 +240,7 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
 
     /**
      * Is this whitepsace ignored.
-     * 
+     *
      * @return boolean
      */
     public boolean isWhitespace() {
@@ -249,7 +249,7 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
 
     /**
      * Is this validating
-     * 
+     *
      * @return boolean
      */
     public boolean isValidating() {
@@ -258,7 +258,7 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
 
     /**
      * Is this namespace aware?
-     * 
+     *
      * @return boolean
      */
     public boolean isNamespace() {
@@ -267,7 +267,7 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
 
     /**
      * Is this using tolerant mode?
-     * 
+     *
      * @return boolean
      */
     public boolean isTolerant() {
@@ -276,7 +276,7 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
 
     /**
      * Negate the XPath test, that is return true if something is not found.
-     * 
+     *
      * @return boolean negated
      */
     public boolean isNegated() {
@@ -286,23 +286,23 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
     public void setReportErrors(boolean val) {
         setProperty(REPORT_ERRORS_KEY, val, false);
     }
-    
+
     public boolean reportErrors() {
         return getPropertyAsBoolean(REPORT_ERRORS_KEY, false);
     }
-    
+
     public void setShowWarnings(boolean val) {
         setProperty(SHOW_WARNINGS_KEY, val, false);
     }
-    
+
     public boolean showWarnings() {
         return getPropertyAsBoolean(SHOW_WARNINGS_KEY, false);
     }
-    
+
     public void setQuiet(boolean val) {
         setProperty(QUIET_KEY, val, true);
     }
-    
+
     public boolean isQuiet() {
         return getPropertyAsBoolean(QUIET_KEY, true);
     }
@@ -310,7 +310,7 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
     public void setDownloadDTDs(boolean val) {
         setProperty(DOWNLOAD_DTDS, val, false);
     }
-    
+
     public boolean isDownloadDTDs() {
         return getPropertyAsBoolean(DOWNLOAD_DTDS, false);
     }
