@@ -43,7 +43,7 @@ public class JMeterContext {
 
     private JMeterThread thread;
 
-    private ThreadGroup threadGroup;
+    private AbstractThreadGroup threadGroup;
 
     private int threadNum;
 
@@ -145,11 +145,11 @@ public class JMeterContext {
         this.thread = thread;
     }
 
-    public ThreadGroup getThreadGroup() {
+    public AbstractThreadGroup getThreadGroup() {
         return this.threadGroup;
     }
 
-    public void setThreadGroup(ThreadGroup threadgrp) {
+    public void setThreadGroup(AbstractThreadGroup threadgrp) {
         this.threadGroup = threadgrp;
     }
 

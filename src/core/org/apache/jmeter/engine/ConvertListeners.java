@@ -30,7 +30,7 @@ import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.ThreadListener;
-import org.apache.jmeter.threads.ThreadGroup;
+import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.HashTreeTraverser;
 import org.apache.jorphan.logging.LoggingManager;
@@ -53,8 +53,8 @@ public class ConvertListeners implements HashTreeTraverser {
         Iterator<?> iter = subTree.list().iterator();
         while (iter.hasNext()) {
             Object item = iter.next();
-            if (item instanceof ThreadGroup) {
-                log.info("num threads = " + ((ThreadGroup) item).getNumThreads());
+            if (item instanceof AbstractThreadGroup) {
+                log.info("num threads = " + ((AbstractThreadGroup) item).getNumThreads());
             }
             if (item instanceof Remoteable) {
                 if (item instanceof ThreadListener){

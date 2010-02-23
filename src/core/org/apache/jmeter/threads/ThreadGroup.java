@@ -18,36 +18,20 @@
 
 package org.apache.jmeter.threads;
 
-import java.io.Serializable;
-
-import org.apache.jmeter.control.Controller;
-import org.apache.jmeter.control.LoopController;
-import org.apache.jmeter.engine.event.LoopIterationListener;
-import org.apache.jmeter.samplers.Sampler;
-import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
-import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.LongProperty;
-import org.apache.jmeter.testelement.property.TestElementProperty;
 
 /**
  * ThreadGroup holds the settings for a JMeter thread group.
  * 
  * This class is intended to be ThreadSafe.
  */
-public class ThreadGroup extends AbstractTestElement implements Serializable, Controller {
-
-    private static final long serialVersionUID = 233L;
-
-    /** Number of threads in the thread group */
-    public final static String NUM_THREADS = "ThreadGroup.num_threads";
+public class ThreadGroup extends AbstractThreadGroup {
+    private static final long serialVersionUID = 240L;
 
     /** Ramp-up time */
     public final static String RAMP_TIME = "ThreadGroup.ramp_time";
-
-    public final static String MAIN_CONTROLLER = "ThreadGroup.main_controller";
 
     /** Whether scheduler is being used */
     public final static String SCHEDULER = "ThreadGroup.scheduler";
@@ -64,70 +48,12 @@ public class ThreadGroup extends AbstractTestElement implements Serializable, Co
     /** Scheduler start delay, overrides start time */
     public final static String DELAY = "ThreadGroup.delay";
 
-    /** Action to be taken when a Sampler error occurs */
-    public final static String ON_SAMPLE_ERROR = "ThreadGroup.on_sample_error"; // int
-
-    /** Continue, i.e. ignore sampler errors */
-    public final static String ON_SAMPLE_ERROR_CONTINUE = "continue";
-
-    /** Stop current thread if sampler error occurs */
-    public final static String ON_SAMPLE_ERROR_STOPTHREAD = "stopthread";
-
-    /** Stop test (all threads) if sampler error occurs */
-    public final static String ON_SAMPLE_ERROR_STOPTEST = "stoptest";
-
-    /** Stop test NOW (all threads) if sampler error occurs */
-    public final static String ON_SAMPLE_ERROR_STOPTEST_NOW = "stoptestnow";
-
-    // @GuardedBy("this")
-    private int numberOfThreads = 0; // Number of active threads in this group
-
     /**
      * No-arg constructor.
      */
     public ThreadGroup() {
     }
 
-    /**
-     * Set the total number of threads to start
-     *
-     * @param numThreads
-     *            the number of threads.
-     */
-    public void setNumThreads(int numThreads) {
-        setProperty(new IntegerProperty(NUM_THREADS, numThreads));
-    }
-
-    /**
-     * Increment the number of active threads
-     */
-    synchronized void incrNumberOfThreads() {
-        numberOfThreads++;
-    }
-
-    /**
-     * Decrement the number of active threads
-     */
-    synchronized void decrNumberOfThreads() {
-        numberOfThreads--;
-    }
-
-    /**
-     * Get the number of active threads
-     */
-    public synchronized int getNumberOfThreads() {
-        return numberOfThreads;
-    }
-
-    /** {@inheritDoc} */
-    public boolean isDone() {
-        return getSamplerController().isDone();
-    }
-
-    /** {@inheritDoc} */
-    public Sampler next() {
-        return getSamplerController().next();
-    }
 
     /**
      * Set whether scheduler is being used
@@ -242,86 +168,46 @@ public class ThreadGroup extends AbstractTestElement implements Serializable, Co
         return getPropertyAsInt(ThreadGroup.RAMP_TIME);
     }
 
-    /**
-     * Get the sampler controller.
-     *
-     * @return the sampler controller.
-     */
-    public Controller getSamplerController() {
-        Controller c = (Controller) getProperty(MAIN_CONTROLLER).getObjectValue();
-        return c;
-    }
+   @Override
+   public void scheduleThread(JMeterThread thread)
+   {
+       int rampUp = getRampUp();
+       float perThreadDelay = ((float) (rampUp * 1000) / (float) getNumThreads());
+       thread.setInitialDelay((int) (perThreadDelay * thread.getThreadNum()));
+
+       scheduleThread(thread, this);
+   }
 
     /**
-     * Set the sampler controller.
+     * This will schedule the time for the JMeterThread.
      *
-     * @param c
-     *            the sampler controller.
+     * @param thread
+     * @param group
      */
-    public void setSamplerController(LoopController c) {
-        c.setContinueForever(false);
-        setProperty(new TestElementProperty(MAIN_CONTROLLER, c));
-    }
+    private void scheduleThread(JMeterThread thread, ThreadGroup group) {
+        // if true the Scheduler is enabled
+        if (group.getScheduler()) {
+            long now = System.currentTimeMillis();
+            // set the start time for the Thread
+            if (group.getDelay() > 0) {// Duration is in seconds
+                thread.setStartTime(group.getDelay() * 1000 + now);
+            } else {
+                long start = group.getStartTime();
+                if (start < now) {
+                    start = now; // Force a sensible start time
+                }
+                thread.setStartTime(start);
+            }
 
-    /**
-     * Get the number of threads.
-     *
-     * @return the number of threads.
-     */
-    public int getNumThreads() {
-        return this.getPropertyAsInt(ThreadGroup.NUM_THREADS);
-    }
+            // set the endtime for the Thread
+            if (group.getDuration() > 0) {// Duration is in seconds
+                thread.setEndTime(group.getDuration() * 1000 + (thread.getStartTime()));
+            } else {
+                thread.setEndTime(group.getEndTime());
+            }
 
-    /**
-     * Add a test element.
-     *
-     * @param child
-     *            the test element to add.
-     */
-    @Override
-    public void addTestElement(TestElement child) {
-        getSamplerController().addTestElement(child);
+            // Enables the scheduler
+            thread.setScheduled(true);
+        }
     }
-
-    /** {@inheritDoc} */
-    public void addIterationListener(LoopIterationListener lis) {
-        getSamplerController().addIterationListener(lis);
-    }
-
-    /** {@inheritDoc} */
-    public void initialize() {
-        Controller c = getSamplerController();
-        JMeterProperty property = c.getProperty(TestElement.NAME);
-        property.setObjectValue(getName()); // Copy our name into that of the controller
-        property.setRunningVersion(property.isRunningVersion());// otherwise name reverts
-        c.initialize();
-    }
-
-    /**
-     * Check if a sampler error should cause thread to stop.
-     *
-     * @return true if thread should stop
-     */
-    public boolean getOnErrorStopThread() {
-        return getPropertyAsString(ThreadGroup.ON_SAMPLE_ERROR).equalsIgnoreCase(ON_SAMPLE_ERROR_STOPTHREAD);
-    }
-
-    /**
-     * Check if a sampler error should cause test to stop.
-     *
-     * @return true if test (all threads) should stop
-     */
-    public boolean getOnErrorStopTest() {
-        return getPropertyAsString(ThreadGroup.ON_SAMPLE_ERROR).equalsIgnoreCase(ON_SAMPLE_ERROR_STOPTEST);
-    }
-
-    /**
-     * Check if a sampler error should cause test to stop now.
-     *
-     * @return true if test (all threads) should stop immediately
-     */
-    public boolean getOnErrorStopTestNow() {
-        return getPropertyAsString(ThreadGroup.ON_SAMPLE_ERROR).equalsIgnoreCase(ON_SAMPLE_ERROR_STOPTEST_NOW);
-    }
-
 }

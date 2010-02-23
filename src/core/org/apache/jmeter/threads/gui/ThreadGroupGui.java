@@ -19,39 +19,28 @@
 package org.apache.jmeter.threads.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.Collection;
 import java.util.Date;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.control.LoopController;
 import org.apache.jmeter.control.gui.LoopControlPanel;
-import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
-import org.apache.jmeter.gui.action.ActionNames;
-import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.FocusRequester;
 import org.apache.jmeter.gui.util.JDateField;
-import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.LongProperty;
-import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
 
-public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemListener {
+public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListener {
     private static final long serialVersionUID = 240L;
 
     private LoopControlPanel loopPanel;
@@ -76,23 +65,10 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
 
     private JTextField delay; // Relative start-up time
 
-    // Sampler error action buttons
-    private JRadioButton continueBox;
-
-    private JRadioButton stopThrdBox;
-
-    private JRadioButton stopTestBox;
-
-    private JRadioButton stopTestNowBox;
-
     public ThreadGroupGui() {
         super();
         init();
         initGui();
-    }
-
-    public Collection<String> getMenuCategories() {
-        return null;
     }
 
     public TestElement createTestElement() {
@@ -117,36 +93,8 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
         tg.setProperty(new LongProperty(ThreadGroup.START_TIME, start.getDate().getTime()));
         tg.setProperty(new LongProperty(ThreadGroup.END_TIME, end.getDate().getTime()));
         tg.setProperty(new BooleanProperty(ThreadGroup.SCHEDULER, scheduler.isSelected()));
-        tg.setProperty(new StringProperty(ThreadGroup.ON_SAMPLE_ERROR, onSampleError()));
         tg.setProperty(ThreadGroup.DURATION, duration.getText());
         tg.setProperty(ThreadGroup.DELAY, delay.getText());
-    }
-
-    private void setSampleErrorBoxes(ThreadGroup te) {
-        if (te.getOnErrorStopTest()) {
-            stopTestBox.setSelected(true);
-        } else if (te.getOnErrorStopTestNow()) {
-            stopTestNowBox.setSelected(true);
-        } else if (te.getOnErrorStopThread()) {
-            stopThrdBox.setSelected(true);
-        } else {
-            continueBox.setSelected(true);
-        }
-    }
-
-    private String onSampleError() {
-        if (stopTestBox.isSelected()) {
-            return ThreadGroup.ON_SAMPLE_ERROR_STOPTEST;
-        }
-        if (stopTestNowBox.isSelected()) {
-            return ThreadGroup.ON_SAMPLE_ERROR_STOPTEST_NOW;
-        }
-        if (stopThrdBox.isSelected()) {
-            return ThreadGroup.ON_SAMPLE_ERROR_STOPTHREAD;
-        }
-
-        // Defaults to continue
-        return ThreadGroup.ON_SAMPLE_ERROR_CONTINUE;
     }
 
     @Override
@@ -174,8 +122,6 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
         }
         duration.setText(tg.getPropertyAsString(ThreadGroup.DURATION));
         delay.setText(tg.getPropertyAsString(ThreadGroup.DELAY));
-
-        setSampleErrorBoxes((ThreadGroup) tg);
     }
 
     public void itemStateChanged(ItemEvent ie) {
@@ -186,25 +132,6 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
                 mainPanel.setVisible(false);
             }
         }
-    }
-
-    public JPopupMenu createPopupMenu() {
-        JPopupMenu pop = new JPopupMenu();
-        pop.add(MenuFactory.makeMenus(new String[] {
-                MenuFactory.CONTROLLERS,
-                MenuFactory.CONFIG_ELEMENTS,
-                MenuFactory.TIMERS,
-                MenuFactory.PRE_PROCESSORS,
-                MenuFactory.SAMPLERS,
-                MenuFactory.POST_PROCESSORS,
-                MenuFactory.ASSERTIONS,
-                MenuFactory.LISTENERS,
-                },
-                JMeterUtils.getResString("add"), // $NON-NLS-1$
-                ActionNames.ADD));
-        MenuFactory.addEditMenu(pop, true);
-        MenuFactory.addFileMenu(pop);
-        return pop;
     }
 
     private JPanel createControllerPanel() {
@@ -276,31 +203,6 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
         return "threadgroup"; // $NON-NLS-1$
     }
 
-    private JPanel createOnErrorPanel() {
-        JPanel panel = new JPanel();
-        panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("sampler_on_error_action"))); // $NON-NLS-1$
-
-        ButtonGroup group = new ButtonGroup();
-
-        continueBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_continue")); // $NON-NLS-1$
-        group.add(continueBox);
-        panel.add(continueBox);
-
-        stopThrdBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_stop_thread")); // $NON-NLS-1$
-        group.add(stopThrdBox);
-        panel.add(stopThrdBox);
-
-        stopTestBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_stop_test")); // $NON-NLS-1$
-        group.add(stopTestBox);
-        panel.add(stopTestBox);
-
-        stopTestNowBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_stop_test_now")); // $NON-NLS-1$
-        group.add(stopTestNowBox);
-        panel.add(stopTestNowBox);
-
-        return panel;
-    }
-
     @Override
     public void clearGui(){
         super.clearGui();
@@ -311,7 +213,6 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
     private void initGui(){
         threadInput.setText("1"); // $NON-NLS-1$
         rampInput.setText("1"); // $NON-NLS-1$
-        continueBox.setSelected(true);
         loopPanel.clearGui();
         scheduler.setSelected(false);
         Date today = new Date();
@@ -321,17 +222,7 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
         duration.setText(""); // $NON-NLS-1$
     }
 
-    private void init() {
-        setLayout(new BorderLayout(0, 5));
-        setBorder(makeBorder());
-
-        Box box = Box.createVerticalBox();
-        box.add(makeTitlePanel());
-        box.add(createOnErrorPanel());
-        add(box, BorderLayout.NORTH);
-
-        // JPanel mainPanel = new JPanel(new BorderLayout());
-
+   private void init() {
         // THREAD PROPERTIES
         VerticalPanel threadPropsPanel = new VerticalPanel();
         threadPropsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
@@ -384,14 +275,5 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
         intgrationPanel.add(threadPropsPanel);
         intgrationPanel.add(mainPanel);
         add(intgrationPanel, BorderLayout.CENTER);
-    }
-
-    public void setNode(JMeterTreeNode node) {
-        getNamePanel().setNode(node);
-    }
-
-    @Override
-    public Dimension getPreferredSize() {
-        return getMinimumSize();
     }
 }
