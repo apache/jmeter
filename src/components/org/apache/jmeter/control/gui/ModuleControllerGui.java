@@ -38,7 +38,7 @@ import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.WorkBench;
-import org.apache.jmeter.threads.ThreadGroup;
+import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
@@ -205,7 +205,7 @@ public class ModuleControllerGui extends AbstractControllerGui
                 StringBuilder name = new StringBuilder();
                 JMeterTreeNode cur = (JMeterTreeNode) node.getChildAt(i);
                 TestElement te = cur.getTestElement();
-                if (te instanceof ThreadGroup) {
+                if (te instanceof AbstractThreadGroup) {
                     name.append(parent_name);
                     name.append(cur.getName());
                     name.append(seperator);

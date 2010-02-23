@@ -31,7 +31,7 @@ import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
-import org.apache.jmeter.threads.ThreadGroup;
+import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
@@ -55,7 +55,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 
     private final static String BASEDIR = "basedir";
 
-    private transient List<ThreadGroup> threadGroups = new LinkedList<ThreadGroup>();
+    private transient List<AbstractThreadGroup> threadGroups = new LinkedList<AbstractThreadGroup>();
 
     // Does not appear to be needed
 //  private transient List configs = new LinkedList();
@@ -71,7 +71,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 
     static {
         // WARNING! This String value must be identical to the String value
-        // returned in org.apache.jmeter.threads.ThreadGroup.getClassLabel()
+        // returned in org.apache.jmeter.threads.AbstractThreadGroup.getClassLabel()
         // method. If it's not you will not be able to add a Thread Group
         // element to a Test Plan.
 
@@ -96,7 +96,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 
     // create transient item
     private Object readResolve(){
-        threadGroups = new LinkedList<ThreadGroup>();
+        threadGroups = new LinkedList<AbstractThreadGroup>();
         return this;
     }
 
@@ -228,15 +228,15 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
     @Override
     public void addTestElement(TestElement tg) {
         super.addTestElement(tg);
-        if (tg instanceof ThreadGroup && !isRunningVersion()) {
-            addThreadGroup((ThreadGroup) tg);
+        if (tg instanceof AbstractThreadGroup && !isRunningVersion()) {
+            addThreadGroup((AbstractThreadGroup) tg);
         }
     }
 
 //    // Does not appear to be needed
 //  public void addJMeterComponent(TestElement child) {
-//      if (child instanceof ThreadGroup) {
-//          addThreadGroup((ThreadGroup) child);
+//      if (child instanceof AbstractThreadGroup) {
+//          addThreadGroup((AbstractThreadGroup) child);
 //      }
 //  }
 
@@ -262,12 +262,12 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 //  }
 
     /**
-     * Adds a feature to the ThreadGroup attribute of the TestPlan object.
+     * Adds a feature to the AbstractThreadGroup attribute of the TestPlan object.
      *
      * @param group
-     *            the feature to be added to the ThreadGroup attribute
+     *            the feature to be added to the AbstractThreadGroup attribute
      */
-    public void addThreadGroup(ThreadGroup group) {
+    public void addThreadGroup(AbstractThreadGroup group) {
         threadGroups.add(group);
     }
 

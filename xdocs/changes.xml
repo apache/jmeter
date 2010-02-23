@@ -161,6 +161,7 @@ The XPath Assertion and XPath Extractor elements no longer fetch external DTDs b
 <ul>
 <li>Bug 47909 - TransactionController should sum the latency</li>
 <li>Bug 41418 - Exclude timer duration from Transaction Controller runtime in report</li>
+<li>Bug 48749 - Allowing custom Thread Groups</li>
 </ul>
 
 <h3>Listeners</h3>
