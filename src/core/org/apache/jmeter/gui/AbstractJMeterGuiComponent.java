@@ -28,7 +28,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.Border;
-import javax.swing.tree.TreeNode;
 
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
@@ -64,9 +63,6 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 
     /** Flag indicating whether or not this component is enabled. */
     private boolean enabled = true;
-
-    /** The tree node which this component is associated with. */
-    private TreeNode node;
 
     /** A GUI panel containing the name of this component. */
     protected NamePanel namePanel;
@@ -239,23 +235,6 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
         log.debug("setting element to enabled: " + enabled);
         mc.setProperty(new BooleanProperty(TestElement.ENABLED, enabled));
         mc.setComment(getComment());
-    }
-
-    /**
-     * Provides a default implementation for the node property. It is unlikely
-     * developers would need to override this method.
-     */
-    public void setNode(TreeNode node) {
-        this.node = node;
-        getNamePanel().setNode(node);
-    }
-
-    /**
-     * Provides a default implementation for the node property. It is unlikely
-     * developers would need to override this method.
-     */
-    protected TreeNode getNode() {
-        return node;
     }
 
     /**
