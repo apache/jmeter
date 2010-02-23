@@ -18,6 +18,8 @@
 
 package org.apache.jmeter.protocol.mail.sampler;
 
+import java.io.File;
+
 import javax.mail.Folder;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -31,8 +33,13 @@ public class MailFileStore extends Store {
     }
 
     @Override
-    protected boolean protocolConnect(String host, int port, String user, String password){
-        return true;
+    protected boolean protocolConnect(String host, int port, String user, String password)
+        throws MessagingException {
+        File base = new File(host);
+        if (base.isDirectory() || base.isFile()) {
+            return true;
+        }
+        throw new MessagingException("Host must be a valid directory or file");
     }
 
     @Override
