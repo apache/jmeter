@@ -32,7 +32,7 @@ import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
-import org.apache.jmeter.threads.ThreadGroup;
+import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -50,7 +50,7 @@ public class ReportPlan extends AbstractTestElement implements Serializable, Tes
 
     public static final String BASEDIR = "ReportPlan.basedir";
 
-    private transient List<ThreadGroup> reportPages = new LinkedList<ThreadGroup>();
+    private transient List<AbstractThreadGroup> reportPages = new LinkedList<AbstractThreadGroup>();
 
     private transient List<ConfigElement> configs = new LinkedList<ConfigElement>();
 
@@ -128,14 +128,14 @@ public class ReportPlan extends AbstractTestElement implements Serializable, Tes
     @Override
     public void addTestElement(TestElement tg) {
         super.addTestElement(tg);
-        if (tg instanceof ThreadGroup && !isRunningVersion()) {
-            addReportPage((ThreadGroup) tg);
+        if (tg instanceof AbstractThreadGroup && !isRunningVersion()) {
+            addReportPage((AbstractThreadGroup) tg);
         }
     }
 
     public void addJMeterComponent(TestElement child) {
-        if (child instanceof ThreadGroup) {
-            addReportPage((ThreadGroup) child);
+        if (child instanceof AbstractThreadGroup) {
+            addReportPage((AbstractThreadGroup) child);
         }
     }
 
@@ -144,7 +144,7 @@ public class ReportPlan extends AbstractTestElement implements Serializable, Tes
      *
      * @return the ThreadGroups value
      */
-    public Collection<ThreadGroup> getReportPages() {
+    public Collection<AbstractThreadGroup> getReportPages() {
         return reportPages;
     }
 
@@ -159,12 +159,12 @@ public class ReportPlan extends AbstractTestElement implements Serializable, Tes
     }
 
     /**
-     * Adds a feature to the ThreadGroup attribute of the TestPlan object.
+     * Adds a feature to the AbstractThreadGroup attribute of the TestPlan object.
      *
      * @param group
-     *            the feature to be added to the ThreadGroup attribute
+     *            the feature to be added to the AbstractThreadGroup attribute
      */
-    public void addReportPage(ThreadGroup group) {
+    public void addReportPage(AbstractThreadGroup group) {
         reportPages.add(group);
     }
 
