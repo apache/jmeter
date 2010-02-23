@@ -68,7 +68,7 @@ public class ThroughputController extends GenericController implements Serializa
             return integer;
         }
     }
-    
+
     // These items are shared between threads in a group by the clone() method
     // They are initialised by testStarted() so don't need to be serialised
     private transient MutableInteger globalNumExecutions;

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.samplers;
@@ -26,15 +26,15 @@ import org.apache.log.Logger;
 
 /**
  * The standard remote sample reporting should be more friendly to the main purpose of
- * remote testing - which is scalability.  To increase scalability, this class strips out the 
+ * remote testing - which is scalability.  To increase scalability, this class strips out the
  * response data before sending.
- * 
+ *
  *
  */
 public class DataStrippingSampleSender implements SampleSender, Serializable {
     private static final long serialVersionUID = 1;
     private static final Logger log = LoggingManager.getLoggerForClass();
-    
+
     private final RemoteSampleListener listener;
     private final SampleSender decoratedSender;
 
@@ -52,7 +52,7 @@ public class DataStrippingSampleSender implements SampleSender, Serializable {
         this.listener = listener;
         decoratedSender = null;
     }
-    
+
     DataStrippingSampleSender(SampleSender decorate)
     {
         this.decoratedSender = decorate;

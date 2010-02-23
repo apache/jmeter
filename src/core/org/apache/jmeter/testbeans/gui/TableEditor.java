@@ -50,11 +50,11 @@ import org.apache.log.Logger;
 
 public class TableEditor extends PropertyEditorSupport implements FocusListener,TestBeanPropertyEditor,TableModelListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
-    
+
     public static final String CLASSNAME = "tableObject.classname"; // $NON-NLS-1$
     public static final String HEADERS = "table.headers"; // $NON-NLS-1$
     public static final String OBJECT_PROPERTIES = "tableObject.properties"; // $NON-NLS-1$
-    
+
     private JTable table;
     private ObjectTableModel model;
     private Class<?> clazz;
@@ -82,7 +82,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
         pane.validate();
         return pane;
     }
-    
+
     private JComponent makePanel()
     {
         JPanel p = new JPanel(new BorderLayout());
@@ -104,7 +104,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
 
     @Override
     public void setAsText(String text) throws IllegalArgumentException {
-        //not interested in this method.        
+        //not interested in this method.
     }
 
     @Override
@@ -116,7 +116,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
         else model.clearData();
         this.firePropertyChange();
     }
-    
+
     private Collection<Object> convertCollection(Collection<?> values)
     {
         List<Object> l = new LinkedList<Object>();
@@ -140,8 +140,8 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
     }
 
     /**
-     * For the table editor, the tag must simply be the name of the class of object it will hold 
-     * where each row holds one object. 
+     * For the table editor, the tag must simply be the name of the class of object it will hold
+     * where each row holds one object.
      */
     public void setDescriptor(PropertyDescriptor descriptor) {
         try {
@@ -152,7 +152,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
             throw new RuntimeException("The Table Editor requires one TAG be set - the name of the object to represent a row",e);
         }
     }
-    
+
     void initializeModel()
     {
         if(clazz == String.class)
@@ -182,13 +182,13 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.addFocusListener(this);
     }
-    
+
     Functor createWriter(Class<?> c,String propName)
     {
         String setter = "set" + propName; // $NON-NLS-1$
         return new Functor(setter);
     }
-    
+
     Functor createReader(Class<?> c,String propName)
     {
         String getter = "get" + propName; // $NON-NLS-1$
@@ -199,7 +199,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
         }
         catch(Exception e) { return new Functor("is" + propName); }
     }
-    
+
     Class<?> getArgForWriter(Class<?> c,String propName)
     {
         String setter = "set" + propName; // $NON-NLS-1$
@@ -214,11 +214,11 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
     }
 
     public void tableChanged(TableModelEvent e) {
-        this.firePropertyChange();        
+        this.firePropertyChange();
     }
 
     public void focusGained(FocusEvent e) {
-        
+
     }
 
     public void focusLost(FocusEvent e) {
@@ -239,7 +239,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
         }
         this.firePropertyChange();
     }
-    
+
     private class AddListener implements ActionListener
     {
         public void actionPerformed(ActionEvent e)
@@ -253,7 +253,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
             }
         }
     }
-    
+
     private class RemoveListener implements ActionListener
     {
         public void actionPerformed(ActionEvent e)
@@ -261,7 +261,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
             model.removeRow(table.getSelectedRow());
         }
     }
-    
+
     private class ClearListener implements ActionListener
     {
         public void actionPerformed(ActionEvent e)

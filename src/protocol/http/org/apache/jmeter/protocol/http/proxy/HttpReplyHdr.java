@@ -253,7 +253,7 @@ public final class HttpReplyHdr {
     public static String formNotImplemented(String reason) {
         return formError("501 Method not implemented", "Service not implemented. " + reason);
     }
-    
+
     /**
      * Server is overloaded, client should try again latter.
      *

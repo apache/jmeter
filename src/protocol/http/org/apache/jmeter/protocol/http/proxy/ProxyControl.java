@@ -81,9 +81,9 @@ public class ProxyControl extends GenericController {
 
     private static final String ASSERTION_GUI = AssertionGui.class.getName();
 
-    
+
     private static final String TRANSACTION_CONTROLLER_GUI = TransactionControllerGui.class.getName();
-    
+
     private static final String LOGIC_CONTROLLER_GUI = LogicControllerGui.class.getName();
 
     private static final String HEADER_PANEL = HeaderPanel.class.getName();
@@ -779,7 +779,7 @@ public class ProxyControl extends GenericController {
                 sampler.setImageParser(true);
             }
 
-            if (groupingMode == GROUPING_IN_SIMPLE_CONTROLLERS || 
+            if (groupingMode == GROUPING_IN_SIMPLE_CONTROLLERS ||
             		groupingMode == GROUPING_IN_TRANSACTION_CONTROLLERS) {
                 // Find the last controller in the target to store the
                 // sampler there:

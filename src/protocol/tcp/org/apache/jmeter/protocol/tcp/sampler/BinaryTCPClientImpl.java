@@ -17,8 +17,8 @@
  */
 
 /*
- * TCP Sampler Client implementation which reads and writes binary data.  
- * 
+ * TCP Sampler Client implementation which reads and writes binary data.
+ *
  * Input/Output strings are passed as hex-encoded binary strings.
  *
  */
@@ -43,7 +43,7 @@ import org.apache.log.Logger;
  * If there is no EOM byte defined, then reads until
  * the end of the stream is reached.
  * The EOM byte is defined by the property "tcp.BinaryTCPClient.eomByte".
- * 
+ *
  * Input data is assumed to be in hex, and is converted to binary
  */
 public class BinaryTCPClientImpl extends AbstractTCPClient {
@@ -61,7 +61,7 @@ public class BinaryTCPClientImpl extends AbstractTCPClient {
 
     /**
      * Convert hex string to binary byte array.
-     * 
+     *
      * @param hexEncodedBinary - hex-encoded binary string
      * @return Byte array containing binary representation of input hex-encoded string
      * @throws IllegalArgumentException if string is not an even number of hex digits
@@ -76,7 +76,7 @@ public class BinaryTCPClientImpl extends AbstractTCPClient {
                 int nibble1 = Character.digit(sc[i * 2 + 1], 16);
                 if (nibble0 == -1 || nibble1 == -1){
                     throw new IllegalArgumentException(
-                    "Hex-encoded binary string contains an invalid hex digit in '"+sc[i * 2]+sc[i * 2 + 1]+"'");                    
+                    "Hex-encoded binary string contains an invalid hex digit in '"+sc[i * 2]+sc[i * 2 + 1]+"'");
                 }
                 ba[i] = (byte) ((nibble0 << 4) | (nibble1));
             }

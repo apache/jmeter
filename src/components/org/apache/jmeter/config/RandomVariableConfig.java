@@ -43,11 +43,11 @@ public class RandomVariableConfig extends ConfigTestElement
     private String maximumValue;
 
     private String variableName;
-    
+
     private String outputFormat;
 
     private String randomSeed;
-    
+
     private boolean perThread;
 
     // This class is not cloned per thread, so this is shared
@@ -65,15 +65,15 @@ public class RandomVariableConfig extends ConfigTestElement
                     return new Random(getRandomSeedAsLong());
                 }};
     }
-        
+
     private int n;
     private long minimum;
-    
+
     private Object readResolve(){
         perThreadRandom = initThreadLocal();
         return this;
     }
-    
+
     /*
      * nextInt(n) returns values in the range [0,n),
      * so n must be set to max-min+1
@@ -95,7 +95,7 @@ public class RandomVariableConfig extends ConfigTestElement
         }
         n = (int)rangeL;
     }
-    
+
     /** {@inheritDoc} */
     public void iterationStart(LoopIterationEvent iterEvent) {
         Random randGen=null;

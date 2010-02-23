@@ -61,7 +61,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements java.awt.even
     private static final String TEXT_MSG_RSC = "jms_text_message"; //$NON-NLS-1$
     private static final String OBJECT_MSG_RSC = "jms_object_message"; //$NON-NLS-1$
     //--
-    
+
     // Button group resources
     private static final String[] CONFIG_ITEMS = { USE_FILE_RSC, USE_RANDOM_RSC, USE_TEXT_RSC };
 
@@ -181,7 +181,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements java.awt.even
         mainPanel.add(getNamePanel());
 
         // Button for browsing webservice wsdl
-        
+
         lookup.setLayout(new VerticalLayout(6, VerticalLayout.LEFT));
         mainPanel.add(lookup);
         lookup.add(useProperties);

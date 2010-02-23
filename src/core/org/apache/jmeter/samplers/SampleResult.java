@@ -44,7 +44,7 @@ import org.apache.log.Logger;
 public class SampleResult implements Serializable {
 
     private static final long serialVersionUID = 233L;
-    
+
     // Needs to be accessible from Test code
     static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -342,7 +342,7 @@ public class SampleResult implements Serializable {
 
     /**
      * Set the "marked" flag to show that the result has been written to the file.
-     * 
+     *
      * @param filename
      * @return true if the result was previously marked
      */
@@ -546,7 +546,7 @@ public class SampleResult implements Serializable {
      *
      */
     public void setResponseData(final String response, final String encoding) {
-        String encodeUsing = encoding != null? encoding : DEFAULT_CHARSET; 
+        String encodeUsing = encoding != null? encoding : DEFAULT_CHARSET;
         try {
             responseData = response.getBytes(encodeUsing);
             setDataEncoding(encodeUsing);
@@ -619,7 +619,7 @@ public class SampleResult implements Serializable {
      * Extract and save the DataEncoding and DataType from the parameter provided.
      * Does not save the full content Type.
      * @see #setContentType(String) which should be used to save the full content-type string
-     * 
+     *
      * @param ct - content type (may be null)
      */
     public void setEncodingAndType(String ct){
@@ -692,7 +692,7 @@ public class SampleResult implements Serializable {
 
     /**
      * Returns the dataEncoding or the default if no dataEncoding was provided
-     * @return the value of the dataEncoding or DEFAULT_ENCODING 
+     * @return the value of the dataEncoding or DEFAULT_ENCODING
      */
     public String getDataEncodingWithDefault() {
         if (dataEncoding != null && dataEncoding.length() > 0) {
@@ -800,7 +800,7 @@ public class SampleResult implements Serializable {
     /**
      * Stores the content-type string, e.g. "text/xml; charset=utf-8"
      * @see #setEncodingAndType(String) which can be used to extract the charset.
-     * 
+     *
      * @param string
      */
     public void setContentType(String string) {
@@ -853,7 +853,7 @@ public class SampleResult implements Serializable {
             time = endTime - startTime - idleTime;
         }
     }
-    
+
     /**
      * Set idle time pause.
      * For use by SampleResultConverter/CSVSaveService.
@@ -964,10 +964,10 @@ public class SampleResult implements Serializable {
     public void setErrorCount(int i){// for reading from CSV files
         // ignored currently
     }
-    
+
     /*
      * TODO: error counting needs to be sorted out.
-     * 
+     *
      * At present the Statistical Sampler tracks errors separately
      * It would make sense to move the error count here, but this would
      * mean lots of changes.
@@ -1097,14 +1097,14 @@ public class SampleResult implements Serializable {
 
     // Bug 47394
     /**
-     * Allow custom SampleSenders to drop unwanted assertionResults 
+     * Allow custom SampleSenders to drop unwanted assertionResults
      */
     public void removeAssertionResults() {
         this.assertionResults = null;
     }
-    
+
     /**
-     * Allow custom SampleSenders to drop unwanted subResults 
+     * Allow custom SampleSenders to drop unwanted subResults
      */
     public void removeSubResults() {
         this.subResults = null;

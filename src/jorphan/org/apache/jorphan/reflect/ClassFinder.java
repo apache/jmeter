@@ -110,14 +110,14 @@ public final class ClassFinder {
             return false;
         }
     }
-    
+
     private static class AnnoFilterTreeSet extends TreeSet<String>{
         private static final long serialVersionUID = 240L;
 
         private final boolean inner; // are inner classes OK?
 
         private final Class<? extends Annotation>[] annotations; // annotation classes to check
-        private final transient ClassLoader contextClassLoader 
+        private final transient ClassLoader contextClassLoader
             = Thread.currentThread().getContextClassLoader(); // Potentially expensive; do it once
         AnnoFilterTreeSet(Class<? extends Annotation> []annotations, boolean inner){
             super();
@@ -213,7 +213,7 @@ public final class ClassFinder {
             throws IOException  {
         return findClassesThatExtend(strPathsOrJars, superClasses, innerClasses, contains, notContains, false);
     }
-    
+
     /**
      * Find classes in the provided path(s)/jar(s) that extend the class(es).
      * @param strPathsOrJars - pathnames or jarfiles to search for classes
@@ -227,11 +227,11 @@ public final class ClassFinder {
             throws IOException  {
         return findClassesThatExtend(strPathsOrJars, annotations, innerClasses, null, null, true);
     }
-    
+
     /**
      * Find classes in the provided path(s)/jar(s) that extend the class(es).
      * Inner classes are not searched.
-     * 
+     *
      * @param strPathsOrJars - pathnames or jarfiles to search for classes
      * @param annotations - required annotations
      *
@@ -242,7 +242,7 @@ public final class ClassFinder {
             throws IOException  {
         return findClassesThatExtend(strPathsOrJars, annotations, false, null, null, true);
     }
-    
+
     /**
      * Find classes in the provided path(s)/jar(s) that extend the class(es).
      * @param strPathsOrJars - pathnames or jarfiles to search for classes
@@ -483,7 +483,7 @@ public final class ClassFinder {
             }
         return false;
     }
-    
+
     private static boolean hasAnnotationOnMethod(Class<? extends Annotation>[] annotations, String classInQuestion,
         ClassLoader contextClassLoader ){
         try{

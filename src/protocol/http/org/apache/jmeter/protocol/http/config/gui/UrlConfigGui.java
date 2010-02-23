@@ -71,9 +71,9 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
     private JTextField proxyPass;
 
     private JTextField connectTimeOut;
-    
+
     private JTextField responseTimeOut;
-    
+
     private JTextField protocol;
 
     private JTextField contentEncoding;
@@ -226,7 +226,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
 
     /**
      * Create a panel containing the webserver (domain+port) and timeouts (connect+request).
-     * 
+     *
      * @return the panel
      */
     protected final JPanel getWebServerTimeoutPanel() {
@@ -238,7 +238,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         final JPanel portPanel = getPortPanel();
         webServerPanel.add(domainPanel, BorderLayout.CENTER);
         webServerPanel.add(portPanel, BorderLayout.EAST);
-        
+
         JPanel timeOut = new HorizontalPanel();
         timeOut.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("web_server_timeout_title"))); // $NON-NLS-1$
@@ -246,11 +246,11 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         final JPanel reqPanel = getResponseTimeOutPanel();
         timeOut.add(connPanel);
         timeOut.add(reqPanel);
-                
+
         JPanel webServerTimeoutPanel = new VerticalPanel();
         webServerTimeoutPanel.add(webServerPanel, BorderLayout.CENTER);
         webServerTimeoutPanel.add(timeOut, BorderLayout.EAST);
-        
+
         JPanel bigPanel = new VerticalPanel();
         bigPanel.add(webServerTimeoutPanel);
         return bigPanel;
@@ -258,25 +258,25 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
 
     /**
      * Create a panel containing the proxy server details
-     * 
+     *
      * @return the panel
      */
     protected final JPanel getProxyServerPanel(){
         JPanel proxyServer = new HorizontalPanel();
         proxyServer.add(getProxyHostPanel(), BorderLayout.CENTER);
         proxyServer.add(getProxyPortPanel(), BorderLayout.EAST);
-        
+
         JPanel proxyLogin = new HorizontalPanel();
         proxyLogin.add(getProxyUserPanel());
         proxyLogin.add(getProxyPassPanel());
-                
+
         JPanel proxyServerPanel = new HorizontalPanel();
         proxyServerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("web_proxy_server_title"))); // $NON-NLS-1$
         proxyServerPanel.add(proxyServer, BorderLayout.CENTER);
         proxyServerPanel.add(proxyLogin, BorderLayout.EAST);
-        
-        return proxyServerPanel;        
+
+        return proxyServerPanel;
     }
 
     private JPanel getPortPanel() {

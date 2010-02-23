@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -34,7 +34,7 @@ public abstract class AbstractFunction implements Function {
 
     /**
      * <p><b>
-     * N.B. setParameters() and execute() are called from different threads, 
+     * N.B. setParameters() and execute() are called from different threads,
      * so both must be synchronized unless there are no parameters to save
      * </b></p>
      * @see Function#execute(SampleResult, Sampler)
@@ -49,15 +49,15 @@ public abstract class AbstractFunction implements Function {
     }
 
     /**
-     * 
+     *
      * <p><b>
-     * N.B. setParameters() and execute() are called from different threads, 
+     * N.B. setParameters() and execute() are called from different threads,
      * so both must be synchronized unless there are no parameters to save
      * </b></p>
-     * 
+     *
      * @see Function#setParameters(Collection)
      * <br/>
-     * Note: This is always called even if no parameters are provided 
+     * Note: This is always called even if no parameters are provided
      * (versions of JMeter after 2.3.1)
      */
     abstract public void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException;
@@ -70,17 +70,17 @@ public abstract class AbstractFunction implements Function {
     protected JMeterVariables getVariables() {
         return JMeterContextService.getContext().getVariables();
     }
-    
+
     /**
      * Utility method to check parameter counts.
-     * 
+     *
      * @param parameters collection of parameters
      * @param min minimum number of parameters allowed
      * @param max maximum number of parameters allowed
-     * 
+     *
      * @throws InvalidVariableException if the number of parameters is incorrect
      */
-    protected void checkParameterCount(Collection<CompoundVariable> parameters, int min, int max) 
+    protected void checkParameterCount(Collection<CompoundVariable> parameters, int min, int max)
         throws InvalidVariableException
     {
         int num = parameters.size();
@@ -89,8 +89,8 @@ public abstract class AbstractFunction implements Function {
                     getReferenceKey() +
                     " called with wrong number of parameters. Actual: "+num+
                     (
-                        min==max ? 
-                        ". Expected: "+min+"." 
+                        min==max ?
+                        ". Expected: "+min+"."
                         : ". Expected: >= "+min+" and <= "+max
                     )
                     );
@@ -99,40 +99,40 @@ public abstract class AbstractFunction implements Function {
 
     /**
      * Utility method to check parameter counts.
-     * 
+     *
      * @param parameters collection of parameters
      * @param count number of parameters expected
-     * 
+     *
      * @throws InvalidVariableException if the number of parameters is incorrect
      */
-    protected void checkParameterCount(Collection<CompoundVariable> parameters, int count) 
+    protected void checkParameterCount(Collection<CompoundVariable> parameters, int count)
         throws InvalidVariableException
     {
         int num = parameters.size();
         if (num != count) {
             throw new InvalidVariableException(
                     getReferenceKey() +
-                    " called with wrong number of parameters. Actual: "+num+". Expected: "+count+"." 
+                    " called with wrong number of parameters. Actual: "+num+". Expected: "+count+"."
                    );
         }
     }
 
     /**
      * Utility method to check parameter counts.
-     * 
+     *
      * @param parameters collection of parameters
      * @param minimum number of parameters expected
-     * 
+     *
      * @throws InvalidVariableException if the number of parameters is incorrect
      */
-    protected void checkMinParameterCount(Collection<CompoundVariable> parameters, int minimum) 
+    protected void checkMinParameterCount(Collection<CompoundVariable> parameters, int minimum)
         throws InvalidVariableException
     {
         int num = parameters.size();
         if (num < minimum) {
             throw new InvalidVariableException(
                     getReferenceKey() +
-                    " called with wrong number of parameters. Actual: "+num+". Expected at least: "+minimum+"." 
+                    " called with wrong number of parameters. Actual: "+num+". Expected at least: "+minimum+"."
                    );
         }
     }

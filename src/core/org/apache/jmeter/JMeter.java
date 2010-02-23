@@ -744,7 +744,7 @@ public class JMeter implements JMeterPlugin {
                 println("Creating summariser <" + summariserName + ">");
                 summer = new Summariser(summariserName);
             }
-            
+
             if (logFile != null) {
                 ResultCollector logger = new ResultCollector(summer);
                 logger.setFilename(logFile);
@@ -756,7 +756,7 @@ public class JMeter implements JMeterPlugin {
                     tree.add(tree.getArray()[0], summer);
                 }
             }
-            
+
             List<JMeterEngine> engines = new LinkedList<JMeterEngine>();
             tree.add(tree.getArray()[0], new ListenToTest(parent, (remoteStart && remoteStop) ? engines : null));
             println("Created the tree successfully using "+testFile);
@@ -842,7 +842,7 @@ public class JMeter implements JMeterPlugin {
                     // Replacement only needs to occur when starting the engine
                     // @see StandardJMeterEngine.run()
                     if (item.getUserObject() instanceof ReplaceableController) {
-                        ReplaceableController rc = 
+                        ReplaceableController rc =
                             (ReplaceableController) item.getTestElement();
                         HashTree subTree = tree.getTree(item);
 
@@ -1019,7 +1019,7 @@ public class JMeter implements JMeterPlugin {
 
     /**
      * Check if JMeter is running in non-GUI mode.
-     * 
+     *
      * @return true if JMeter is running in non-GUI mode.
      */
     public static boolean isNonGUI(){

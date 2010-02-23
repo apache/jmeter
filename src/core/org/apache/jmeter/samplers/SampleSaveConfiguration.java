@@ -226,7 +226,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     private boolean threadCounts = _threadCounts;
 
     private boolean sampleCount = _sampleCount;
-    
+
     private boolean idleTime = _idleTime;
 
     // Does not appear to be used (yet)
@@ -284,7 +284,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
      * comma for CSV files.
      */
     private static final String _delimiter;
-    
+
     private static final boolean _idleTime;
 
     private static final String DEFAULT_DELIMITER = ","; // $NON_NLS-1$
@@ -823,7 +823,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     public boolean saveIdleTime() {
         return idleTime;
     }
-    
+
     public void setIdleTime(boolean save) {
         idleTime = save;
     }

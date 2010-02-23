@@ -34,7 +34,7 @@ import org.apache.log.Logger;
 public final class NameUpdater {
     private static final Properties nameMap;
     // Read-only access after class has been initialised
-    
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     static {

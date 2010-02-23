@@ -44,19 +44,19 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
 
     private static final long serialVersionUID = 240L;
 
-    private final JLabeledTextField defaultField = 
+    private final JLabeledTextField defaultField =
         new JLabeledTextField(JMeterUtils.getResString("default_value_field"));//$NON-NLS-1$
 
-    private final JLabeledTextField xpathQueryField = 
+    private final JLabeledTextField xpathQueryField =
         new JLabeledTextField(JMeterUtils.getResString("xpath_extractor_query"));//$NON-NLS-1$
 
-    private final JLabeledTextField refNameField = 
+    private final JLabeledTextField refNameField =
         new JLabeledTextField(JMeterUtils.getResString("ref_name_field"));//$NON-NLS-1$
 
     // Should we return fragment as text, rather than text of fragment?
-    private final JCheckBox getFragment = 
+    private final JCheckBox getFragment =
         new JCheckBox(JMeterUtils.getResString("xpath_extractor_fragment"));//$NON-NLS-1$
-    
+
     private final XMLConfPanel xml = new XMLConfPanel();
 
     public String getLabelResource() {

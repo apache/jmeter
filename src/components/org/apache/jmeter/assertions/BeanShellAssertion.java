@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.assertions;
@@ -30,7 +30,7 @@ import org.apache.log.Logger;
 
 /**
  * A sampler which understands BeanShell
- * 
+ *
  */
 public class BeanShellAssertion extends BeanShellTestElement implements Assertion {
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -42,7 +42,7 @@ public class BeanShellAssertion extends BeanShellTestElement implements Assertio
     public static final String SCRIPT = "BeanShellAssertion.query"; //$NON-NLS-1$
 
     public static final String PARAMETERS = "BeanShellAssertion.parameters"; //$NON-NLS-1$
-    
+
     public static final String RESET_INTERPRETER = "BeanShellAssertion.resetInterpreter"; //$NON-NLS-1$
 
     // can be specified in jmeter.properties
@@ -67,7 +67,7 @@ public class BeanShellAssertion extends BeanShellTestElement implements Assertio
     public String getParameters() {
         return getPropertyAsString(PARAMETERS);
     }
-    
+
     @Override
     public boolean isResetInterpreter() {
         return getPropertyAsBoolean(RESET_INTERPRETER);

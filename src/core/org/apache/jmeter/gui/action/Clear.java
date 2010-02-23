@@ -75,7 +75,7 @@ public class Clear implements Command {
                     guiComp = guiPackage.getGui(node.getTestElement());
                     if (guiComp instanceof Clearable){
                         Clearable item = (Clearable) guiComp;
-                        item.clearData();                        
+                        item.clearData();
                     }
                 } catch (Exception ex) {
                     log.error("Can't clear: "+node+" "+guiComp, ex);

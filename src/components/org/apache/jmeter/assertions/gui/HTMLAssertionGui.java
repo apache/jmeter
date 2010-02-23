@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.assertions.gui;
@@ -100,7 +100,7 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListene
 
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
-     * 
+     *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
     public void modifyTestElement(TestElement inElement) {
@@ -159,11 +159,11 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListene
         warningThresholdField.setText("0"); //$NON-NLS-1$
         filePanel.setFilename(""); //$NON-NLS-1$
         errorsOnly.setSelected(false);
-    }    
+    }
 
     /**
      * Configures the associated test element.
-     * 
+     *
      * @param inElement
      */
     @Override
@@ -261,7 +261,7 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListene
 
     /**
      * This method is called if one of the threshold field looses the focus
-     * 
+     *
      * @param inEvent
      */
     public void focusLost(FocusEvent inEvent) {
@@ -313,7 +313,7 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListene
 
     /**
      * This method is called from erros-only checkbox
-     * 
+     *
      * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
      */
     public void actionPerformed(ActionEvent e) {
@@ -335,7 +335,7 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListene
         if (fieldName.equals(WARNING_THRESHOLD_FIELD)) {
             validateInteger(warningThresholdField);
         }
-        
+
         if (fieldName.equals(ERROR_THRESHOLD_FIELD)) {
             validateInteger(errorThresholdField);
         }

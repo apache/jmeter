@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.assertions.gui;
@@ -36,15 +36,15 @@ public class XMLConfPanel extends JPanel {
     private JCheckBox validate, tolerant, whitespace, namespace;
 
     private JCheckBox quiet; // Should Tidy be quiet?
-    
+
     private JCheckBox reportErrors; // Report Tidy errors as Assertion failure?
-    
+
     private JCheckBox showWarnings; // Show Tidy warnings ?
-    
+
     private JCheckBox downloadDTDs; // Should we download external DTDs?
 
     /**
-     * 
+     *
      */
     public XMLConfPanel() {
         super();
@@ -62,7 +62,7 @@ public class XMLConfPanel extends JPanel {
         tolerant.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e) {
                 tolerant();
-            }            
+            }
         });
         downloadDTDs = new JCheckBox(JMeterUtils.getResString("xml_download_dtds")); //$NON-NLS-1$
         Box tidyOptions = Box.createHorizontalBox();
@@ -71,14 +71,14 @@ public class XMLConfPanel extends JPanel {
         tidyOptions.add(quiet);
         tidyOptions.add(reportErrors);
         tidyOptions.add(showWarnings);
-        
+
         Box untidyOptions = Box.createHorizontalBox();
         untidyOptions.setBorder(BorderFactory.createEtchedBorder());
         untidyOptions.add(namespace);
         untidyOptions.add(validate);
         untidyOptions.add(whitespace);
         untidyOptions.add(downloadDTDs);
-        
+
         Box options = Box.createVerticalBox();
         options.add(tidyOptions);
         options.add(untidyOptions);

@@ -42,7 +42,7 @@ import org.apache.jorphan.gui.JLabeledField;
  * JLabeledRadio will create a set of Radio buttons with a label.
  * This is a version of the original JLabelledRadio class, but modified
  * to accept resource names rather than language strings.
- *  
+ *
  */
 public class JLabeledRadioI18N extends JPanel implements JLabeledField, ActionListener {
 
@@ -55,7 +55,7 @@ public class JLabeledRadioI18N extends JPanel implements JLabeledField, ActionLi
     private final ArrayList<ChangeListener> mChangeListeners = new ArrayList<ChangeListener>(3);
 
     /**
-     * 
+     *
      * @param label_resouce text resource name for group label
      * @param item_resources list of resource names for individual buttons
      * @param selectedItem button to be selected (if not null)
@@ -79,10 +79,10 @@ public class JLabeledRadioI18N extends JPanel implements JLabeledField, ActionLi
      *
      * The resource name is used as the action command for the button model,
      * and the reource value is used to set the button label.
-     * 
+     *
      * @param resouces list of resource names
      * @param selected initially selected resource (if not null)
-     * 
+     *
      */
     private void init(String[] resouces, String selected) {
         this.add(mLabel);
@@ -128,7 +128,7 @@ public class JLabeledRadioI18N extends JPanel implements JLabeledField, ActionLi
 
     /**
      * Set the group label from the resource name.
-     * 
+     *
      * @param label_resource
      */
     public final void setLabel(String label_resource) {

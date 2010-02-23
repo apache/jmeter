@@ -34,7 +34,7 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * Scope panel so users can choose whether
  * to apply the test element to the parent sample, the child samples or both.
- * 
+ *
  */
 public class ScopePanel extends JPanel implements ActionListener {
 
@@ -72,7 +72,7 @@ public class ScopePanel extends JPanel implements ActionListener {
         setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("sample_scope"))); //$NON-NLS-1$
 
         parentButton.setSelected(true);
-        
+
         JPanel buttonPanel = new HorizontalPanel();
         ButtonGroup group = new ButtonGroup();
         group.add(allButton);
@@ -93,7 +93,7 @@ public class ScopePanel extends JPanel implements ActionListener {
     public void clearGui() {
         parentButton.setSelected(true);
     }
-    
+
     public int getSelection(){
         if (parentButton.isSelected()){
             return 0;
@@ -106,7 +106,7 @@ public class ScopePanel extends JPanel implements ActionListener {
     }
 
     public void setScopeChildren() {
-        childButton.setSelected(true);        
+        childButton.setSelected(true);
     }
 
     public void setScopeParent() {

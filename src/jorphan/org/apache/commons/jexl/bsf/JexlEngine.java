@@ -41,13 +41,13 @@ import org.apache.commons.jexl.ScriptFactory;
 public class JexlEngine extends BSFEngineImpl {
 
 //    private static final Logger log = LoggingManager.getLoggerForClass();
-    
+
     private JexlContext jc;
 
     /** {@inheritDoc} */
     @SuppressWarnings("unchecked")
     @Override
-    public void initialize(BSFManager mgr, String lang, 
+    public void initialize(BSFManager mgr, String lang,
             Vector declaredBeans)
             throws BSFException {
         super.initialize(mgr, lang, declaredBeans);

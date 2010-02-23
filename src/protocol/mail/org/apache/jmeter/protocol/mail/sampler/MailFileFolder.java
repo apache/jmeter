@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.mail.sampler;
@@ -43,9 +43,9 @@ public class MailFileFolder extends Folder {
         public boolean accept(File dir, String name) {
             return name.matches(FILENAME_REGEX);
         }
-        
+
     };
-    
+
     public MailFileFolder(Store store, String path) {
         super(store);
         String base = store.getURLName().getHost(); // == ServerName from mail sampler
@@ -54,7 +54,7 @@ public class MailFileFolder extends Folder {
         if (isFile){
             folderPath = new File(base);
         } else {
-            folderPath = new File(base,path);            
+            folderPath = new File(base,path);
         }
     }
 

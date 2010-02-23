@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.assertions.gui;
@@ -44,12 +44,12 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * GUI interface for a {@link ResponseAssertion}.
- * 
+ *
  */
 public class AssertionGui extends AbstractAssertionGui {
     private static final long serialVersionUID = 240L;
 
-    /** The name of the table column in the list of patterns. */    
+    /** The name of the table column in the list of patterns. */
     private static final String COL_RESOURCE_NAME = "assertion_patterns_to_test"; //$NON-NLS-1$
 
     /** Radio button indicating that the text response should be tested. */
@@ -138,7 +138,7 @@ public class AssertionGui extends AbstractAssertionGui {
             ResponseAssertion ra = (ResponseAssertion) el;
 
             saveScopeSettings(ra);
-            
+
             ra.clearTestStrings();
             String[] testStrings = tableModel.getData().getColumn(COL_RESOURCE_NAME);
             for (int i = 0; i < testStrings.length; i++) {
@@ -176,14 +176,14 @@ public class AssertionGui extends AbstractAssertionGui {
             }
         }
     }
-    
+
     /**
      * Implements JMeterGUIComponent.clearGui
      */
     @Override
     public void clearGui() {
         super.clearGui();
-        
+
         tableModel.clearData();
 
         responseStringButton.setSelected(true);
@@ -192,17 +192,17 @@ public class AssertionGui extends AbstractAssertionGui {
         responseMessageButton.setSelected(false);
         responseHeadersButton.setSelected(false);
         assumeSuccess.setSelected(false);
-        
+
         containsBox.setSelected(true);
         notBox.setSelected(false);
-    }    
+    }
 
     /**
      * A newly created component can be initialized with the contents of a Test
      * Element object by calling this method. The component is responsible for
      * querying the Test Element object for the relevant information to display
      * in its GUI.
-     * 
+     *
      * @param el
      *            the TestElement to configure
      */
@@ -212,7 +212,7 @@ public class AssertionGui extends AbstractAssertionGui {
         ResponseAssertion model = (ResponseAssertion) el;
 
         showScopeSettings(model);
-        
+
         if (model.isContainsType()) {
             containsBox.setSelected(true);
         } else if (model.isEqualsType()) {
@@ -274,7 +274,7 @@ public class AssertionGui extends AbstractAssertionGui {
     /**
      * Create a panel allowing the user to choose which response field should be
      * tested.
-     * 
+     *
      * @return a new panel for selecting the response field
      */
     private JPanel createFieldPanel() {
@@ -311,7 +311,7 @@ public class AssertionGui extends AbstractAssertionGui {
     /**
      * Create a panel allowing the user to choose what type of test should be
      * performed.
-     * 
+     *
      * @return a new panel for selecting the type of assertion test
      */
     private JPanel createTypePanel() {
@@ -346,7 +346,7 @@ public class AssertionGui extends AbstractAssertionGui {
     /**
      * Create a panel allowing the user to supply a list of string patterns to
      * test against.
-     * 
+     *
      * @return a new panel for adding string patterns
      */
     private JPanel createStringPanel() {
@@ -372,7 +372,7 @@ public class AssertionGui extends AbstractAssertionGui {
 
     /**
      * Create a panel with buttons to add and delete string patterns.
-     * 
+     *
      * @return the new panel with add and delete buttons
      */
     private JPanel createButtonPanel() {
@@ -391,7 +391,7 @@ public class AssertionGui extends AbstractAssertionGui {
 
     /**
      * An ActionListener for deleting a pattern.
-     * 
+     *
      */
     private class ClearPatternsListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
@@ -409,7 +409,7 @@ public class AssertionGui extends AbstractAssertionGui {
 
     /**
      * An ActionListener for adding a pattern.
-     * 
+     *
      */
     private class AddPatternListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {

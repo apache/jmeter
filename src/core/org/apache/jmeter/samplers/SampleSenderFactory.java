@@ -27,7 +27,7 @@ import org.apache.log.Logger;
 public class SampleSenderFactory {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
-    
+
     private static final String MODE_STANDARD = "Standard"; // $NON-NLS-1$
 
     private static final String MODE_HOLD = "Hold"; // $NON-NLS-1$

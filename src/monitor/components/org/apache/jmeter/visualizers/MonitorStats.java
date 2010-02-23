@@ -24,7 +24,7 @@ import org.apache.jmeter.testelement.AbstractTestElement;
  *  TODO - convert this into an immutable class using plain variables
  *  The current implementation is quite inefficient, as it stores everything
  *  in properties.
- *  
+ *
  *  This will require changes to ResultCollector.recordStats()
  *  and SaveService.saveTestElement() which are both currently only used by Monitor classes
  */

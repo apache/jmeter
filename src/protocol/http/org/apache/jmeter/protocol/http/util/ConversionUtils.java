@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.protocol.http.util;
@@ -39,7 +39,7 @@ public class ConversionUtils {
     /**
      * Extract the encoding (charset) from the Content-Type,
      * e.g. "text/html; charset=utf-8".
-     * 
+     *
      * @param contentType
      * @return the charset encoding - or null, if none was found or the charset is not supported
      */
@@ -73,11 +73,11 @@ public class ConversionUtils {
         }
         return charSet;
     }
-    
+
     /**
      * Generate a relative URL, allowing for extraneous leading "../" segments.
      * The Java {@link URL#URL(URL, String)} constructor does not remove these.
-     * 
+     *
      * @param baseURL
      * @param location relative location, possibly with extraneous leading "../"
      * @return URL with extraneous ../ removed

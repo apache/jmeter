@@ -76,7 +76,7 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
 
     /**
      * Get the collection of JMeterProperty entries representing the headers.
-     * 
+     *
      * @return the header collection property
      */
     public CollectionProperty getHeaders() {
@@ -269,17 +269,17 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
     /**
      * Merge the attributes with a another HeaderManager's attributes.
      * @param element The object to be merged with
-     * @param preferLocalValues When both objects have a value for the 
-     *        same attribute, this flag determines which value is preferresd. 
+     * @param preferLocalValues When both objects have a value for the
+     *        same attribute, this flag determines which value is preferresd.
      */
     public HeaderManager merge(TestElement element, boolean preferLocalValues) {
         if (!(element instanceof HeaderManager)) {
             throw new IllegalArgumentException("Cannot merge type:" + this.getClass().getName() + " with type:" + element.getClass().getName());
         }
-        
+
         // start off with a merged object as a copy of the local object
         HeaderManager merged = (HeaderManager)this.clone();
-        
+
         HeaderManager other = (HeaderManager)element;
         // iterate thru each of the other headers
         for (int i = 0; i < other.getHeaders().size(); i++) {
@@ -310,10 +310,10 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
                 merged.add(otherHeader);
             }
         }
-        
+
         // finally, merge the names so it's clear they've been merged
         merged.setName(merged.getName() + ":" + other.getName());
-        
+
         return merged;
     }
 }

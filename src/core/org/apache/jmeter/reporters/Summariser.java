@@ -54,17 +54,17 @@ import org.apache.log.Logger;
  * this means that the delta interval is likely to be longer than the reporting interval.
  *
  * Also, the sum of the delta intervals will be larger than the overall elapsed time.
- * 
+ *
  * Data is accumulated according to the test element name.
  *
  */
-public class Summariser extends AbstractTestElement 
+public class Summariser extends AbstractTestElement
     implements Serializable, SampleListener, TestListener, NoThreadClone, Remoteable {
 
     /*
      * N.B. NoThreadClone is used to ensure that the testStarted() methods will share the same
      * instance as the sampleOccured() methods, so the testStarted() method can fetch the
-     * Totals accumulator object for the samples to be stored in. 
+     * Totals accumulator object for the samples to be stored in.
      */
 
     private static final long serialVersionUID = 233L;
@@ -91,7 +91,7 @@ public class Summariser extends AbstractTestElement
      */
     //@GuardedBy("accumulators") - needed to ensure consistency between this and instanceCount
     private static final Map<String, Totals> accumulators = new ConcurrentHashMap<String, Totals>();
-    
+
     //@GuardedBy("accumulators")
     private static int instanceCount; // number of active tests
 
@@ -277,15 +277,15 @@ public class Summariser extends AbstractTestElement
 
     /*
      * The testStarted/testEnded methods are called at the start and end of a test.
-     * 
+     *
      * However, when a test is run on multiple nodes, there is no guarantee that all the
      * testStarted() methods will be called before all the threadStart() or sampleOccurred()
      * methods for other threads - nor that testEnded() will only be called after all
      * sampleOccurred() calls. The ordering is only guaranteed within a single test.
-     * 
+     *
      */
-    
-    
+
+
     /** {@inheritDoc} */
     public void testStarted() {
         testStarted("local");
@@ -300,9 +300,9 @@ public class Summariser extends AbstractTestElement
      * Called once for each Summariser in the test plan.
      * There may be more than one summariser with the same name,
      * however they will all be called before the test proper starts.
-     * <p> 
+     * <p>
      * However, note that this applies to a single test only.
-     * When running in client-server mode, testStarted() may be 
+     * When running in client-server mode, testStarted() may be
      * invoked after sampleOccurred().
      * <p>
      * {@inheritDoc}
@@ -330,7 +330,7 @@ public class Summariser extends AbstractTestElement
         synchronized (accumulators) {
             instanceCount--;
             if (instanceCount <= 0){
-                totals = accumulators.entrySet();                
+                totals = accumulators.entrySet();
             }
         }
         if (totals == null) {// We're not done yet
@@ -358,7 +358,7 @@ public class Summariser extends AbstractTestElement
             }
             if (TOOUT) {
                 System.out.println(str);
-            }            
+            }
         }
     }
 

@@ -42,7 +42,7 @@ import org.mozilla.javascript.Wrapper;
  * <p>
  * The original version of this code was first written by Adam Peller
  * for use in LotusXSL. Sanjiva took his code and adapted it for BSF.
- * 
+ *
  * Modified for JMeter to fix bug BSF-22.
  */
 public class BSFJavaScriptEngine extends BSFEngineImpl {
@@ -83,18 +83,18 @@ public class BSFJavaScriptEngine extends BSFEngineImpl {
             cx.setGeneratingSource(false);
             cx.setOptimizationLevel(0);
             cx.setDebugger(null, null);
-            
+
             retval =
                 ((Function) fun).call(cx, global, global, args);
-            
+
 //                ScriptRuntime.call(cx, fun, global, args, global);
 
             if (retval instanceof Wrapper)
                 retval = ((Wrapper) retval).unwrap();
-        } 
+        }
         catch (Throwable t) {
             handleError(t);
-        } 
+        }
         finally {
             Context.exit();
         }
@@ -108,7 +108,7 @@ public class BSFJavaScriptEngine extends BSFEngineImpl {
             (bean.bean instanceof String) ||
             (bean.bean instanceof Boolean)) {
             global.put(bean.name, global, bean.bean);
-        } 
+        }
         else {
             // Must wrap non-scriptable objects before presenting to Rhino
             Scriptable wrapped = Context.toObject(bean.bean, global);
@@ -143,10 +143,10 @@ public class BSFJavaScriptEngine extends BSFEngineImpl {
             if (retval instanceof NativeJavaObject)
                 retval = ((NativeJavaObject) retval).unwrap();
 
-        } 
+        }
         catch (Throwable t) { // includes JavaScriptException, rethrows Errors
             handleError(t);
-        } 
+        }
         finally {
             Context.exit();
         }
@@ -200,16 +200,16 @@ public class BSFJavaScriptEngine extends BSFEngineImpl {
     }
 
     /**
-     * Initialize the engine. 
+     * Initialize the engine.
      * Put the manager into the context-manager
      * map hashtable too.
      */
     @Override
-    public void initialize(BSFManager mgr, String lang, 
+    public void initialize(BSFManager mgr, String lang,
             @SuppressWarnings("unchecked") // superclass does not support types
             Vector declaredBeans)
         throws BSFException {
-        
+
         super.initialize(mgr, lang, declaredBeans);
 
         // Initialize context and global scope object
@@ -221,14 +221,14 @@ public class BSFJavaScriptEngine extends BSFEngineImpl {
 
             for(
                 @SuppressWarnings("unchecked")
-                Iterator<BSFDeclaredBean> it = declaredBeans.iterator(); 
+                Iterator<BSFDeclaredBean> it = declaredBeans.iterator();
                 it.hasNext();) {
                 declareBean(it.next());
             }
-        } 
+        }
         catch (Throwable t) {
 
-        } 
+        }
         finally {
             Context.exit();
         }
