@@ -105,6 +105,7 @@ The XPath Assertion and XPath Extractor elements no longer fetch external DTDs b
 <li>Bug 47940 - Module controller incorrectly creates the replacement Sub Tree</li>
 <li>Bug 47592 - Run Thread groups consecutively with "Stop test" on error, JMeter will not mark to finished</li>
 <li>Bug 48786 - Run Thread groups consecutively: with "Stop test now" on error or manual stop, JMeter leaves the green box active</li>
+<li>Bug 48727 - Cannot stop test if all thread groups are disabled</li>
 </ul>
 
 <h3>Listeners</h3>
