@@ -282,6 +282,7 @@ the following command options</p>
 <p>-n This specifies JMeter is to run in non-gui mode</p>
 <p>-t [name of JMX file that contains the Test Plan].</p>
 <p>-l [name of JTL file to log sample results to].</p>
+<p>-j [name of JMeter run log file].</p>
 <p>-r Run the test in the servers specified by the JMeter property "remote_hosts"</p>
 <p>-R [list of remote servers] Run the test in the specified remote servers</p>
 <p>The script also lets you specify the optional firewall/proxy server information:</p>
@@ -302,7 +303,7 @@ To start the server(s), run jmeter-server/jmeter-server.bat on each server host.
 </p>
 <p>To run the test from the client in non-GUI mode, use the following command:</p>
 <pre>
-jmeter -n -t testplan.jmx -r [-Gprop=val] [-Z]
+jmeter -n -t testplan.jmx -r [-Gprop=val] [-Gglobal.properties] [-Z]
 where:
 -G is used to define JMeter properties to be set in the servers
 -X means exit the servers at the end of the test
@@ -317,6 +318,7 @@ To do so, use the following options:</p>
 <p>-D[prop_name]=[value] - defines a java system property value.</p>
 <p>-J[prop name]=[value] - defines a local JMeter property.</p>
 <p>-G[prop name]=[value] - defines a JMeter property to be sent to all remote servers.</p>
+<p>-G[propertyfile] - defines a file containing JMeter properties to be sent to all remote servers.</p>
 <p>-L[category]=[priority] - overrides a logging setting, setting a particular category to the given priority level.</p>
 <p>The -L flag can also be used without the category name to set the root logging level.</p>
 	<p><b>Examples</b>:
