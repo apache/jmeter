@@ -17,13 +17,18 @@
  */
 package org.apache.jmeter.protocol.mail.sampler.gui;
 
+import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
+import javax.swing.Box;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -32,11 +37,11 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.apache.jmeter.gui.util.HorizontalPanel;
+import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.mail.sampler.MailReaderSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.gui.layout.VerticalLayout;
 
 public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionListener, FocusListener {
 
@@ -157,54 +162,36 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
         mrs.setStoreMimeMessage(storeMimeMessageBox.isSelected());
     }
 
-    // TODO - fix GUI layout problems
-
     /*
      * Helper method to set up the GUI screen
      */
     private void init() {
-        setLayout(new VerticalLayout(5, VerticalLayout.BOTH, VerticalLayout.TOP));
+        setLayout(new BorderLayout());
         setBorder(makeBorder());
-        add(makeTitlePanel());
 
-        JPanel serverTypePanel = new JPanel();
-        serverTypePanel.add(new JLabel(ServerTypeLabel));
+        JPanel settingsPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = getConstraints();
+        
         serverTypeBox = new JTextField(20);
         serverTypeBox.addActionListener(this);
         serverTypeBox.addFocusListener(this);
-        serverTypePanel.add(serverTypeBox);
-        add(serverTypePanel);
-
-        JPanel serverPanel = new JPanel();
-        serverPanel.add(new JLabel(ServerLabel));
+        addField(settingsPanel, ServerTypeLabel, serverTypeBox, gbc);
+        
         serverBox = new JTextField(20);
-        serverPanel.add(serverBox);
-        add(serverPanel);
+        addField(settingsPanel, ServerLabel, serverBox, gbc);
 
-        JPanel portPanel = new JPanel();
-        portPanel.add(new JLabel(PortLabel));
         portBox = new JTextField(20);
-        portPanel.add(portBox);
-        add(portPanel);
+        addField(settingsPanel, PortLabel, portBox, gbc);
 
-        JPanel accountNamePanel = new JPanel();
-        accountNamePanel.add(new JLabel(AccountLabel));
         usernameBox = new JTextField(20);
-        accountNamePanel.add(usernameBox);
-        add(accountNamePanel);
+        addField(settingsPanel, AccountLabel, usernameBox, gbc);
 
-        JPanel accountPassPanel = new JPanel();
-        accountPassPanel.add(new JLabel(PasswordLabel));
         passwordBox = new JTextField(20);
-        accountPassPanel.add(passwordBox);
-        add(accountPassPanel);
+        addField(settingsPanel, PasswordLabel, passwordBox, gbc);
 
-        JPanel folderPanel = new JPanel();
         folderLabel = new JLabel(FolderLabel);
         folderBox = new JTextField(INBOX, 20);
-        folderPanel.add(folderLabel);
-        folderPanel.add(folderBox);
-        add(folderPanel);
+        addField(settingsPanel, folderLabel, folderBox, gbc);
 
         HorizontalPanel numMessagesPanel = new HorizontalPanel();
         numMessagesPanel.add(new JLabel(NumMessagesLabel));
@@ -232,13 +219,53 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
         numMessagesPanel.add(allMessagesButton);
         numMessagesPanel.add(someMessagesButton);
         numMessagesPanel.add(someMessagesField);
-        add(numMessagesPanel);
 
         deleteBox = new JCheckBox(DeleteLabel);
-        add(deleteBox);
 
         storeMimeMessageBox = new JCheckBox(STOREMIME);
-        add(storeMimeMessageBox);
+        
+        JPanel settings = new VerticalPanel();
+        settings.add(Box.createVerticalStrut(5));
+        settings.add(settingsPanel);
+        settings.add(numMessagesPanel);
+        settings.add(deleteBox);
+        settings.add(storeMimeMessageBox);
+
+        add(makeTitlePanel(), BorderLayout.NORTH);
+        add(settings, BorderLayout.CENTER);
+    }
+
+    private void addField(JPanel panel, JLabel label, JComponent field, GridBagConstraints gbc) {
+        gbc.fill=GridBagConstraints.NONE;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        panel.add(label, gbc);
+        gbc.gridx++;
+        gbc.weightx = 1;
+        gbc.fill=GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        panel.add(field, gbc);
+        nextLine(gbc);
+    }
+
+    private void addField(JPanel panel, String text, JComponent field, GridBagConstraints gbc) {
+        addField(panel, new JLabel(text), field, gbc);
+    }
+
+    private void nextLine(GridBagConstraints gbc) {
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.weightx = 0;
+    }
+
+    private GridBagConstraints getConstraints() {
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridheight = 1;
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 0;
+        gbc.weighty = 0;
+        return gbc;
     }
 
     @Override
