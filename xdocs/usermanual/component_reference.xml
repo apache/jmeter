@@ -1314,7 +1314,7 @@ Here are some general guidelines for writing Junit tests so they work well with 
 </properties>
 </component>
 
-<component name="Mail Reader Sampler"  index="&sect-num;.1.17"  width="340" height="365" screenshot="mailreader_sampler.png">
+<component name="Mail Reader Sampler"  index="&sect-num;.1.17"  width="399" height="306" screenshot="mailreader_sampler.png">
 <description>
 <p>
 The Mail Reader Sampler can read (and optionally delete) mail messages using POP3(S) or IMAP(S) protocols.
