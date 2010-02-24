@@ -309,8 +309,8 @@ JMeter 2.1.2 introduces the a new property <b>HTTPResponse.parsers</b>, which is
  <p>See jmeter.properties file for the details of the settings. 
  If the HTTPResponse.parser property is not set, JMeter reverts to the previous behaviour,
  i.e. only text/html responses will be scanned</p>
-<b>Emulating slow connections:</b><br></br>
-The HttpClient sampler supports emulation of slow connections; see the following entries in jmeter.proerties:
+<b>Emulating slow connections (HttpClient only):</b><br></br>
+The HttpClient version of the sampler supports emulation of slow connections; see the following entries in jmeter.proerties:
 <pre>
 # Define characters per second > 0 to emulate slow connections
 #httpclient.socket.http.cps=0
