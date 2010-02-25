@@ -21,6 +21,9 @@ package org.apache.jorphan.gui;
 import java.awt.Component;
 
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 
 public class GuiUtils {
 
@@ -42,4 +45,23 @@ public class GuiUtils {
         return pane;
     }
 
+    /**
+     * Fix the size of a column according to the header text.
+     * 
+     * @param column to be resized
+     * @param table containing the column
+     */
+    public static void fixSize(TableColumn column, JTable table) {
+        TableCellRenderer rndr;
+        rndr = column.getHeaderRenderer();
+        if (rndr == null){
+            rndr = table.getTableHeader().getDefaultRenderer();
+        }
+        Component c = rndr.getTableCellRendererComponent(
+                table, column.getHeaderValue(), false, false, -1, column.getModelIndex());
+        int width = c.getPreferredSize().width+10;
+        column.setMaxWidth(width);
+        column.setPreferredWidth(width);
+        column.setResizable(false);        
+    }
 }
