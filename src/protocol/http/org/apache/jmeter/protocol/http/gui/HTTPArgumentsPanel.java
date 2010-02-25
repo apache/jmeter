@@ -21,7 +21,6 @@ package org.apache.jmeter.protocol.http.gui;
 import java.util.Iterator;
 
 import javax.swing.JTable;
-import javax.swing.table.TableColumn;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
@@ -29,6 +28,7 @@ import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.reflect.Functor;
 
@@ -71,11 +71,8 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
 
     @Override
     protected void sizeColumns(JTable table) {
-        int resizeMode = table.getAutoResizeMode();
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        fixSize(table.getColumn(INCLUDE_EQUALS));
-        fixSize(table.getColumn(ENCODE_OR_NOT));
-        table.setAutoResizeMode(resizeMode);
+        GuiUtils.fixSize(table.getColumn(INCLUDE_EQUALS), table);
+        GuiUtils.fixSize(table.getColumn(ENCODE_OR_NOT), table);
     }
 
     @Override
@@ -84,14 +81,6 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
         arg.setAlwaysEncoded(false);
         arg.setUseEquals(true);
         return arg;
-    }
-
-    private void fixSize(TableColumn column) {
-        column.sizeWidthToFit();
-        // column.setMinWidth(column.getWidth());
-        column.setMaxWidth((int) (column.getWidth() * 1.5));
-        column.setWidth(column.getMaxWidth());
-        column.setResizable(false);
     }
 
     public HTTPArgumentsPanel() {

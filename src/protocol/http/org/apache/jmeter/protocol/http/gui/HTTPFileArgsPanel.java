@@ -36,7 +36,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableColumn;
 
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
@@ -44,6 +43,7 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.reflect.Functor;
 
@@ -142,24 +142,8 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
      *  the table to resize columns for
      */
     private void sizeColumns(JTable table) {
-        int resizeMode = table.getAutoResizeMode();
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        fixSize(table.getColumn(PARAMNAME));
-        fixSize(table.getColumn(MIMETYPE));
-        table.setAutoResizeMode(resizeMode);
-    }
-
-    /**
-     * Resize the table column to a fixed size.
-     *
-     * @param column
-     *  the column whose size will be fixed
-     */
-    private void fixSize(TableColumn column) {
-        column.sizeWidthToFit();
-        column.setMaxWidth(column.getWidth() * 2);
-        column.setWidth(column.getMaxWidth());
-        column.setResizable(false);
+        GuiUtils.fixSize(table.getColumn(PARAMNAME), table);
+        GuiUtils.fixSize(table.getColumn(MIMETYPE), table);
     }
 
     /**
