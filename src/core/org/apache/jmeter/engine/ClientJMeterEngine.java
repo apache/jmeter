@@ -39,6 +39,8 @@ import org.apache.log.Logger;
 public class ClientJMeterEngine implements JMeterEngine, Runnable {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final Object LOCK = new Object();
+
     private RemoteJMeterEngine remote;
 
     private HashTree test;
@@ -119,7 +121,15 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
 
         try {
             JMeterContextService.startTest();
-            remote.configure(test, host);
+            /*
+             * Add fix for Deadlocks, see:
+             * 
+             * See https://issues.apache.org/bugzilla/show_bug.cgi?id=48350
+            */
+            synchronized(LOCK)
+            {
+                remote.configure(testTree, host);
+            }
             log.info("sent test to " + host);
             if (savep != null){
                 log.info("Sending properties "+savep);
