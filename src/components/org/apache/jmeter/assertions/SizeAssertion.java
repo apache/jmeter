@@ -37,8 +37,6 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
 
     private static final long serialVersionUID = 233L;
 
-    private transient String comparatorErrorMessage;// Only used for communication with compareSize()
-
     // * Static int to signify the type of logical comparitor to assert
     public final static int EQUAL = 1;
 
@@ -79,9 +77,10 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
             resultSize = response.getBytes();
         }
         // is the Sample the correct size?
-        if (!(compareSize(resultSize))) {
+        final String msg = compareSize(resultSize);
+        if (msg.length() > 0) {
             result.setFailure(true);
-            Object[] arguments = { new Long(resultSize), comparatorErrorMessage, new Long(getAllowedSize()) };
+            Object[] arguments = { new Long(resultSize), msg, new Long(getAllowedSize()) };
             String message = MessageFormat.format(JMeterUtils.getResString("size_assertion_failure"), arguments); //$NON-NLS-1$
             result.setFailureMessage(message);
         }
@@ -142,7 +141,8 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
      * than eqaul, less than equal, .
      * 
      */
-    private boolean compareSize(long resultSize) {
+    private String compareSize(long resultSize) {
+        String comparatorErrorMessage;
         boolean result = false;
         int comp = getCompOper();
         switch (comp) {
@@ -175,6 +175,6 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
             comparatorErrorMessage = "ERROR - invalid condition";
             break;
         }
-        return result;
+        return result ? "" : comparatorErrorMessage;
     }
 }
