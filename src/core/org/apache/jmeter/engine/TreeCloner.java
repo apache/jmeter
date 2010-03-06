@@ -28,23 +28,36 @@ import org.apache.jorphan.collections.ListedHashTree;
 
 public class TreeCloner implements HashTreeTraverser {
 
-    private ListedHashTree newTree;
+    private final ListedHashTree newTree;
 
-    private LinkedList<Object> objects = new LinkedList<Object>();
+    private final LinkedList<Object> objects = new LinkedList<Object>();
 
-    private boolean forThread = true;
+    private final boolean honourNoThreadClone;
 
+    /**
+     * Clone the test tree, honouring NoThreadClone markers.
+     * 
+     */
     public TreeCloner() {
         this(true);
     }
 
-    public TreeCloner(boolean forThread) {
+    /**
+     * Clone the test tree.
+     * 
+     * @param honourNoThreadClone set false to clone NoThreadClone nodes as well
+     */
+    public TreeCloner(boolean honourNoThreadClone) {
         newTree = new ListedHashTree();
-        this.forThread = forThread;
+        this.honourNoThreadClone = honourNoThreadClone;
     }
 
     public void addNode(Object node, HashTree subTree) {
-        if ((!forThread || !(node instanceof NoThreadClone)) && (node instanceof TestElement)) {
+        
+        if ( (node instanceof TestElement) // Check can cast for clone
+           // Don't clone NoThreadClone unless honourNoThreadClone == false
+          && (!honourNoThreadClone || !(node instanceof NoThreadClone))
+        ) {
             node = ((TestElement) node).clone();
             newTree.add(objects, node);
         } else {
