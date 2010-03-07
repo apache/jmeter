@@ -1251,7 +1251,7 @@ For details, see <complink name="BSF Sampler"/>.
 
 
 
-<component name="JUnit Request" index="&sect-num;.1.16"  width="525" height="479" screenshot="junit_sampler.png">
+<component name="JUnit Request" index="&sect-num;.1.16"  width="457" height="507" screenshot="junit_sampler.png">
 <description>
 The current implementation supports standard Junit convention and extensions. It also
 includes extensions like oneTimeSetUp and oneTimeTearDown. The sampler works like the
@@ -1294,6 +1294,7 @@ Here are some general guidelines for writing Junit tests so they work well with 
 </description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+  <property name="Search for JUnit4 annotations" required="Yes">Select this to search for JUnit 4 tests (@Test annotations)</property>
   <property name="Package filter" required="">Comma separated list of packages to show. Example, org.apache.jmeter,junit.framework.</property>
   <property name="Class name" required="Yes">Fully qualified name of the JUnit test class.</property>
   <property name="Constructor string" required="">String pass to the string constructor. If a string is set, the sampler will use the
@@ -1312,6 +1313,14 @@ Here are some general guidelines for writing Junit tests so they work well with 
   <property name="Append assertion errors" required="Yes">Whether or not to append assertion errors to the response message.</property>
   <property name="Append runtime exceptions" required="Yes">Whether or not to append runtime exceptions to the response message. Only applies if "Append assertion errors" is not selected.</property>
 </properties>
+<p>
+The following JUnit4 annotations are recognised:
+<ul>
+<li>@Test - used to find test methods and classes. The "expected" and "timeout" attributes are supported.</li>
+<li>@Before - treated the same as setUp() in JUnit3</li>
+<li>@After - treated the same as tearDown() in JUnit3</li>
+</ul>
+</p>
 </component>
 
 <component name="Mail Reader Sampler"  index="&sect-num;.1.17"  width="399" height="306" screenshot="mailreader_sampler.png">
