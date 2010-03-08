@@ -1319,7 +1319,12 @@ The following JUnit4 annotations are recognised:
 <li>@Test - used to find test methods and classes. The "expected" and "timeout" attributes are supported.</li>
 <li>@Before - treated the same as setUp() in JUnit3</li>
 <li>@After - treated the same as tearDown() in JUnit3</li>
+<li>@BeforeClass, @AfterClass - treated as test methods so they can be run independently as required</li>
 </ul>
+</p>
+<p>
+Note that JMeter currently runs the test methods directly, rather than leaving it to JUnit.
+This is to allow the setUp/tearDown methods to be excluded from the sample time. 
 </p>
 </component>
 
