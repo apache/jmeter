@@ -42,19 +42,19 @@ public class StatisticalSampleSender implements SampleSender, Serializable {
 
     private static final long DEFAULT_TIME_THRESHOLD = 60000L;
 
+    private static final int NUM_SAMPLES_THRESHOLD = JMeterUtils.getPropDefault(
+            "num_sample_threshold", DEFAULT_NUM_SAMPLE_THRESHOLD);
+
+    private static final long TIME_THRESHOLD_MS = JMeterUtils.getPropDefault("time_threshold",
+            DEFAULT_TIME_THRESHOLD);
+
     private final RemoteSampleListener listener;
 
     private final List<SampleEvent> sampleStore = new ArrayList<SampleEvent>();
 
     private final Map<String, StatisticalSampleResult> sampleTable = new HashMap<String, StatisticalSampleResult>();
 
-    private final int numSamplesThreshold = JMeterUtils.getPropDefault(
-            "num_sample_threshold", DEFAULT_NUM_SAMPLE_THRESHOLD);
-
-    private int sampleCount;
-
-    private static final long TIME_THRESHOLD_MS = JMeterUtils.getPropDefault("time_threshold",
-            DEFAULT_TIME_THRESHOLD);
+    private int sampleCount; // maintain separate count of samples for speed
 
     private long batchSendTime = -1;
 
@@ -76,7 +76,7 @@ public class StatisticalSampleSender implements SampleSender, Serializable {
     StatisticalSampleSender(RemoteSampleListener listener) {
         this.listener = listener;
         log.info("Using batching for this run." + " Thresholds: num="
-                + numSamplesThreshold + ", time=" + TIME_THRESHOLD_MS);
+                + NUM_SAMPLES_THRESHOLD + ", time=" + TIME_THRESHOLD_MS);
     }
 
     /**
@@ -135,39 +135,38 @@ public class StatisticalSampleSender implements SampleSender, Serializable {
             }
             statResult.add(e.getResult());
             sampleCount++;
-            if (numSamplesThreshold != -1) {
-                if (sampleCount >= numSamplesThreshold) {
-                    try {
-                        if (log.isDebugEnabled()) {
-                            log.debug("Firing sample");
-                        }
-                        sendBatch();
-                    } catch (RemoteException err) {
-                        log.warn("sampleOccurred", err);
-                    }
+            boolean sendNow = false;
+            if (NUM_SAMPLES_THRESHOLD != -1) {
+                if (sampleCount >= NUM_SAMPLES_THRESHOLD) {
+                    sendNow = true;
                 }
             }
 
+            long now = 0;
             if (TIME_THRESHOLD_MS != -1) {
-                long now = System.currentTimeMillis();
-                // Checking for and creating initial timestamp to cheak against
+                now = System.currentTimeMillis();
+                // Checking for and creating initial timestamp to check against
                 if (batchSendTime == -1) {
                     this.batchSendTime = now + TIME_THRESHOLD_MS;
                 }
-
                 if (batchSendTime < now) {
-                    try {
-                        if (log.isDebugEnabled()) {
-                            log.debug("Firing time");
-                        }
-                        sendBatch();
-                        this.batchSendTime = now + TIME_THRESHOLD_MS;
-                    } catch (RemoteException err) {
-                        log.warn("sampleOccurred", err);
-                    }
+                    sendNow = true;
                 }
             }
-        }
+            if (sendNow) {
+                try {
+                    if (log.isDebugEnabled()) {
+                        log.debug("Firing sample");
+                    }
+                    sendBatch();
+                    if (TIME_THRESHOLD_MS != -1) {
+                        this.batchSendTime = now + TIME_THRESHOLD_MS;
+                    }
+                } catch (RemoteException err) {
+                    log.warn("sampleOccurred", err);
+                }
+            }
+        } // synchronized(sampleStore)
     }
 
     private void sendBatch() throws RemoteException {
