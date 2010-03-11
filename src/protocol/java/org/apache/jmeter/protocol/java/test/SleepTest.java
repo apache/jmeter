@@ -126,9 +126,13 @@ public class SleepTest extends AbstractJavaSamplerClient implements Serializable
             // Record sample start time.
             results.sampleStart();
 
-            // Generate a random value using the current time.
-            long start = System.currentTimeMillis();
-            long sleep = getSleepTime() + (start % getSleepMask());
+            long sleep = sleepTime;
+            // Only do the calculation if it is needed
+            if (sleepTime > 0 && sleepMask > 0) {
+                long start = System.currentTimeMillis();
+                // Generate a random-ish offset value using the current time.
+                sleep = sleepTime + (start % sleepMask);
+            }
 
             results.setSampleLabel("Sleep Test: time = " + sleep);
 
@@ -216,24 +220,5 @@ public class SleepTest extends AbstractJavaSamplerClient implements Serializable
         sb.append("@");
         sb.append(Integer.toHexString(hashCode()));
         return sb.toString();
-    }
-
-    /**
-     * Get the value of the sleepTime field.
-     *
-     * @return the base number of milliseconds to sleep during each sample.
-     */
-    private long getSleepTime() {
-        return sleepTime;
-    }
-
-    /**
-     * Get the value of the sleepMask field.
-     *
-     * @return a mask to be applied to the current time in order to add a random
-     *         component to the sleep time.
-     */
-    private long getSleepMask() {
-        return sleepMask;
     }
 }
