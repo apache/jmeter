@@ -47,7 +47,7 @@ public class BatchSampleSender implements SampleSender, Serializable {
     private final int numSamplesThreshold = 
         JMeterUtils.getPropDefault("num_sample_threshold", DEFAULT_NUM_SAMPLE_THRESHOLD); // $NON-NLS-1$
 
-    private final long timeThreshold =
+    private static final long TIME_THRESHOLD_MS =
         JMeterUtils.getPropDefault("time_threshold", DEFAULT_TIME_THRESHOLD); // $NON-NLS-1$
 
     private long batchSendTime = -1;
@@ -70,7 +70,7 @@ public class BatchSampleSender implements SampleSender, Serializable {
         this.listener = listener;
         log.info("Using batching for this run."
                 + " Thresholds: num=" + numSamplesThreshold
-                + ", time=" + timeThreshold);
+                + ", time=" + TIME_THRESHOLD_MS);
     }
 
     /**
@@ -134,13 +134,13 @@ public class BatchSampleSender implements SampleSender, Serializable {
                 }
             }
 
-            if (timeThreshold != -1) {
+            if (TIME_THRESHOLD_MS != -1) {
                 SampleResult sr = e.getResult();
                 long timestamp = sr.getTimeStamp();
 
                 // Checking for and creating initial timestamp to cheak against
                 if (batchSendTime == -1) {
-                    this.batchSendTime = timestamp + timeThreshold;
+                    this.batchSendTime = timestamp + TIME_THRESHOLD_MS;
                 }
 
                 if (batchSendTime < timestamp) {
@@ -150,7 +150,7 @@ public class BatchSampleSender implements SampleSender, Serializable {
                             listener.processBatch(sampleStore);
                             sampleStore.clear();
                         }
-                        this.batchSendTime = timestamp + timeThreshold;
+                        this.batchSendTime = timestamp + TIME_THRESHOLD_MS;
                     } catch (RemoteException err) {
                         log.error("sampleOccurred", err);
                     }
