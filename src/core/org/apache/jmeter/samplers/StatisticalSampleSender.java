@@ -53,7 +53,7 @@ public class StatisticalSampleSender implements SampleSender, Serializable {
 
     private int sampleCount;
 
-    private final long timeThreshold = JMeterUtils.getPropDefault("time_threshold",
+    private static final long TIME_THRESHOLD_MS = JMeterUtils.getPropDefault("time_threshold",
             DEFAULT_TIME_THRESHOLD);
 
     private long batchSendTime = -1;
@@ -76,7 +76,7 @@ public class StatisticalSampleSender implements SampleSender, Serializable {
     StatisticalSampleSender(RemoteSampleListener listener) {
         this.listener = listener;
         log.info("Using batching for this run." + " Thresholds: num="
-                + numSamplesThreshold + ", time=" + timeThreshold);
+                + numSamplesThreshold + ", time=" + TIME_THRESHOLD_MS);
     }
 
     /**
@@ -148,11 +148,11 @@ public class StatisticalSampleSender implements SampleSender, Serializable {
                 }
             }
 
-            if (timeThreshold != -1) {
+            if (TIME_THRESHOLD_MS != -1) {
                 long now = System.currentTimeMillis();
                 // Checking for and creating initial timestamp to cheak against
                 if (batchSendTime == -1) {
-                    this.batchSendTime = now + timeThreshold;
+                    this.batchSendTime = now + TIME_THRESHOLD_MS;
                 }
 
                 if (batchSendTime < now) {
@@ -161,7 +161,7 @@ public class StatisticalSampleSender implements SampleSender, Serializable {
                             log.debug("Firing time");
                         }
                         sendBatch();
-                        this.batchSendTime = now + timeThreshold;
+                        this.batchSendTime = now + TIME_THRESHOLD_MS;
                     } catch (RemoteException err) {
                         log.warn("sampleOccurred", err);
                     }
