@@ -150,20 +150,8 @@ public class SamplingStatCalculator {
         double throughput;
         boolean rbool;
         synchronized (calculator) {
-            long byteslength = res.getBytes();
-            // if there was more than 1 loop in the sample, we
-            // handle it appropriately
-            if (res.getSampleCount() > 1) {
-                long time = res.getTime() / res.getSampleCount();
-                long resbytes = byteslength / res.getSampleCount();
-                for (int idx = 0; idx < res.getSampleCount(); idx++) {
-                    calculator.addValue(time);
-                    calculator.addBytes(resbytes);
-                }
-            } else {
-                calculator.addValue(res.getTime());
-                calculator.addBytes(byteslength);
-            }
+            calculator.addValue(res.getTime(), res.getSampleCount());
+            calculator.addBytes(res.getBytes());
             setStartTime(res);
             eCount = getCurrentSample().getErrorCount();
             if (!res.isSuccessful()) {
