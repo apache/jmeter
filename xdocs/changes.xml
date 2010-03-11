@@ -111,6 +111,8 @@ The XPath Assertion and XPath Extractor elements no longer fetch external DTDs b
 <h3>Listeners</h3>
 <ul>
 <li>Bug 48603 - Mailer Visualiser sends two emails for a single failed response</li>
+<li>Correct calculation of min/max/std.dev for aggregated samples (Summary Report)</li>
+<li>Bug 48889 - Wrong response time with mode=Statistical and num_sample_threshold > 1</li>
 </ul>
 
 <h3>Assertions</h3>
