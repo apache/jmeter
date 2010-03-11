@@ -28,9 +28,12 @@ import java.io.Serializable;
 public class StatisticalSampleResult extends SampleResult implements
         Serializable {
 
-    private static final long serialVersionUID = 24L;
+    private static final long serialVersionUID = 240L;
 
     private int errorCount;
+
+    // Need to maintain our own elapsed timer to ensure more accurate aggregation
+    private long elapsed;
 
     public StatisticalSampleResult(){// May be called by XStream
     }
@@ -51,10 +54,11 @@ public class StatisticalSampleResult extends SampleResult implements
     public StatisticalSampleResult(SampleResult res) {
         // Copy data that is shared between samples (i.e. the key items):
         setSampleLabel(res.getSampleLabel());
-        // Nothing else can be saved, as the samples may come from any thread
+        setThreadName(res.getThreadName());
 
         setSuccessful(true); // Assume result is OK
         setSampleCount(0); // because we add the sample count in later
+        elapsed = 0;
     }
 
     public void add(SampleResult res) {
@@ -79,11 +83,12 @@ public class StatisticalSampleResult extends SampleResult implements
 
         setLatency(getLatency()+ res.getLatency());
 
+        elapsed += res.getTime();
     }
 
     @Override
     public long getTime() {
-        return getEndTime() - getStartTime() - this.getIdleTime();
+        return elapsed;
     }
 
     @Override
@@ -103,7 +108,7 @@ public class StatisticalSampleResult extends SampleResult implements
 
     /**
      * Generates the key to be used for aggregating samples as follows:<br/>
-     * <code>sampleLabel</code> "-" <code>threadGroup</code>
+     * <code>sampleLabel</code> "-" <code>threadName</code>
      *
      * N.B. the key should agree with the fixed items that are saved in the sample.
      *
@@ -112,7 +117,8 @@ public class StatisticalSampleResult extends SampleResult implements
      */
     public static String getKey(SampleEvent event) {
         StringBuilder sb = new StringBuilder(80);
-        sb.append(event.getResult().getSampleLabel()).append("-").append(event.getThreadGroup());
+        sb.append(event.getResult().getSampleLabel());
+        sb.append('-').append(event.getResult().getThreadName());
         return sb.toString();
     }
 }
