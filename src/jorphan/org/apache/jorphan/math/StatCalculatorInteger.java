@@ -30,4 +30,13 @@ public class StatCalculatorInteger extends StatCalculator<Integer> {
     public void addValue(int val){
         super.addValue(new Integer(val));
     }
+
+    public void addValue(int val, int sampleCount){
+        super.addValue(new Integer(val), sampleCount);
+    }
+
+    @Override
+    protected Integer divide(Integer val, int n) {
+        return new Integer(val.intValue() / n);
+    }
 }

@@ -30,4 +30,13 @@ public class StatCalculatorLong extends StatCalculator<Long> {
     public void addValue(long val){
         super.addValue(new Long(val));
     }
+
+    public void addValue(long val, int sampleCount){
+        super.addValue(new Long(val), sampleCount);
+    }
+
+    @Override
+    protected Long divide(Long val, int n) {
+        return new Long(val.longValue() / n);
+    }
 }
