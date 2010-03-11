@@ -934,10 +934,10 @@ public class SampleResult implements Serializable {
     }
 
     /**
-     * For the JMS sampler, it can perform multiple samples for greater degree
-     * of accuracy.
-     *
-     * @param count
+     * The statistical sample sender aggregates several samples to save on
+     * transmission costs.
+     * 
+     * @param count number of samples represented by this instance
      */
     public void setSampleCount(int count) {
         sampleCount = count;
