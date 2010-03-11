@@ -20,7 +20,6 @@ package org.apache.jmeter.threads.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.ItemListener;
 import java.util.Arrays;
 import java.util.Collection;
 import javax.swing.BorderFactory;
@@ -39,7 +38,7 @@ import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
 
-public abstract class AbstractThreadGroupGui extends AbstractJMeterGuiComponent implements ItemListener {
+public abstract class AbstractThreadGroupGui extends AbstractJMeterGuiComponent {
     private static final long serialVersionUID = 240L;
 
     // Sampler error action buttons
