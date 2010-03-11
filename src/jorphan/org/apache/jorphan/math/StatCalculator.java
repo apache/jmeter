@@ -194,7 +194,6 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
     protected abstract T divide(T val, int n);
 
     public void addValue(T val, int sampleCount) {
-        updateValueCount(val, sampleCount);
         count += sampleCount;
         double currentVal = val.doubleValue();
         sum += currentVal;
@@ -208,6 +207,7 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
             sumOfSquares += currentVal * currentVal;
             actualValue = val;
         }
+        updateValueCount(actualValue, sampleCount);
         mean = sum / count;
         deviation = Math.sqrt((sumOfSquares / count) - (mean * mean));
         if (actualValue.compareTo(max) > 0){
@@ -222,13 +222,13 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
         addValue(val,1);
     }
 
-    private void updateValueCount(T val, int sampleCount) {
-        MutableLong count = valuesMap.get(val);
+    private void updateValueCount(T actualValue, int sampleCount) {
+        MutableLong count = valuesMap.get(actualValue);
         if (count != null) {
             count.add(sampleCount);
         } else {
             // insert new value
-            valuesMap.put(val, new MutableLong(sampleCount));
+            valuesMap.put(actualValue, new MutableLong(sampleCount));
         }
     }
 }
