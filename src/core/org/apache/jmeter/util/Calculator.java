@@ -73,11 +73,19 @@ public class Calculator {
 
     private void addValue(long newValue, int sampleCount) {
         count += sampleCount;
-        minimum=Math.min(newValue, minimum);
-        maximum=Math.max(newValue, maximum);
         double currentVal = newValue;
         sum += currentVal;
-        sumOfSquares += currentVal * currentVal;
+        if (sampleCount > 1){
+            minimum=Math.min(newValue/sampleCount, minimum);
+            maximum=Math.max(newValue/sampleCount, maximum);
+            // For n values in an aggregate sample the average value = (val/n)
+            // So need to add n * (val/n) * (val/n) = val * val / n
+            sumOfSquares += (currentVal * currentVal) / (sampleCount);
+        } else {
+            minimum=Math.min(newValue, minimum);
+            maximum=Math.max(newValue, maximum);
+            sumOfSquares += currentVal * currentVal;
+        }
         // Calculate each time, as likely to be called for each add
         mean = sum / count;
         deviation = Math.sqrt((sumOfSquares / count) - (mean * mean));
