@@ -25,6 +25,7 @@ import java.net.UnknownHostException;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JMeterError;
 import org.apache.log.Logger;
 
 /**
@@ -142,7 +143,11 @@ public class SampleEvent implements Serializable {
 
     /** Get the nth variable value (zero-based) */
     public String getVarValue(int i){
-        return values[i];
+        try {
+            return values[i];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            throw new JMeterError("Check the sample_variable settings!", e);
+        }
     }
 
     public SampleResult getResult() {
