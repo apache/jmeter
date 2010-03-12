@@ -48,6 +48,9 @@ public class StatisticalSampleSender implements SampleSender, Serializable {
     private static final long TIME_THRESHOLD_MS = JMeterUtils.getPropDefault("time_threshold",
             DEFAULT_TIME_THRESHOLD);
 
+    // should the samples be aggregated on thread name or thread group (default) ?
+    private static boolean KEY_ON_THREADNAME = JMeterUtils.getPropDefault("key_on_threadname", false);
+    
     private final RemoteSampleListener listener;
 
     private final List<SampleEvent> sampleStore = new ArrayList<SampleEvent>();
@@ -75,8 +78,9 @@ public class StatisticalSampleSender implements SampleSender, Serializable {
      */
     StatisticalSampleSender(RemoteSampleListener listener) {
         this.listener = listener;
-        log.info("Using batching for this run." + " Thresholds: num="
-                + NUM_SAMPLES_THRESHOLD + ", time=" + TIME_THRESHOLD_MS);
+        log.info("Using statistical sampling for this run." + " Thresholds: num="
+                + NUM_SAMPLES_THRESHOLD + ", time=" + TIME_THRESHOLD_MS
+                + ". Key uses ThreadName: " + KEY_ON_THREADNAME);
     }
 
     /**
@@ -123,10 +127,10 @@ public class StatisticalSampleSender implements SampleSender, Serializable {
     public void sampleOccurred(SampleEvent e) {
         synchronized (sampleStore) {
             // Locate the statistical sample colector
-            String key = StatisticalSampleResult.getKey(e);
+            String key = StatisticalSampleResult.getKey(e, KEY_ON_THREADNAME);
             StatisticalSampleResult statResult = sampleTable.get(key);
             if (statResult == null) {
-                statResult = new StatisticalSampleResult(e.getResult());
+                statResult = new StatisticalSampleResult(e.getResult(), KEY_ON_THREADNAME);
                 // store the new statistical result collector
                 sampleTable.put(key, statResult);
                 // add a new wrapper samplevent
