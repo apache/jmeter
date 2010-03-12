@@ -51,10 +51,19 @@ public class StatisticalSampleResult extends SampleResult implements
         super(stamp, elapsed);
     }
 
-    public StatisticalSampleResult(SampleResult res) {
+    /**
+     * Create a statistical sample result from an ordinary sample result.
+     * 
+     * @param res the sample result 
+     * @param keyOnThreadName true if key includes threadName, false if threadGroup
+     */
+    public StatisticalSampleResult(SampleResult res, boolean keyOnThreadName) {
         // Copy data that is shared between samples (i.e. the key items):
         setSampleLabel(res.getSampleLabel());
-        setThreadName(res.getThreadName());
+        
+        if (keyOnThreadName) {
+            setThreadName(res.getThreadName());
+        }
 
         setSuccessful(true); // Assume result is OK
         setSampleCount(0); // because we add the sample count in later
@@ -108,17 +117,22 @@ public class StatisticalSampleResult extends SampleResult implements
 
     /**
      * Generates the key to be used for aggregating samples as follows:<br/>
-     * <code>sampleLabel</code> "-" <code>threadName</code>
-     *
+     * <code>sampleLabel</code> "-" <code>[threadName|threadGroup]</code>
+     * <p>
      * N.B. the key should agree with the fixed items that are saved in the sample.
      *
      * @param event sample event whose key is to be calculated
+     * @param keyOnThreadName true if key should use thread name, otherwise use thread group
      * @return the key to use for aggregating samples
      */
-    public static String getKey(SampleEvent event) {
+    public static String getKey(SampleEvent event, boolean keyOnThreadName) {
         StringBuilder sb = new StringBuilder(80);
         sb.append(event.getResult().getSampleLabel());
-        sb.append('-').append(event.getResult().getThreadName());
+        if (keyOnThreadName){
+            sb.append('-').append(event.getResult().getThreadName());
+        } else {
+            sb.append('-').append(event.getThreadGroup());
+        }
         return sb.toString();
     }
 }
