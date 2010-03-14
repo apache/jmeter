@@ -252,14 +252,14 @@ implements ChangeListener, ActionListener, ItemListener
         errorCode.setText(JMeterUtils.getResString("junit_error_default_code")); //$NON-NLS-1$
     }
 
-    /** @{inheritDoc} */
+    /** {@inheritDoc} */
     @Override
     public void clearGui() {
         super.clearGui();
         initGui();
     }
 
-    /** @{inheritDoc} */
+    /** {@inheritDoc} */
     public TestElement createTestElement()
     {
         JUnitSampler sampler = new JUnitSampler();
@@ -267,7 +267,7 @@ implements ChangeListener, ActionListener, ItemListener
         return sampler;
     }
 
-    /** @{inheritDoc} */
+    /** {@inheritDoc} */
     public void modifyTestElement(TestElement el)
     {
         JUnitSampler sampler = (JUnitSampler)el;
@@ -298,7 +298,7 @@ implements ChangeListener, ActionListener, ItemListener
         sampler.setJunit4(junit4.isSelected());
     }
 
-    /** @{inheritDoc} */
+    /** {@inheritDoc} */
     @Override
     public void configure(TestElement el)
     {
