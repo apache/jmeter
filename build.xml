@@ -941,16 +941,18 @@ run JMeter unless all the JMeter jars are added.
   </target>
 
   <!-- Check that the 3rd party libraries are present -->
-  <condition property="3rdparty.present">
-    <and>
-        <!-- No need to check all jars; just check a few -->
-        <available classpathref="classpath" classname="org.apache.bsf.BSFEngine"/>
-        <available classpathref="classpath" classname="org.htmlparser.Parser"/>
-        <available classpathref="classpath" classname="com.thoughtworks.xstream.XStream"/>
-    </and>
-  </condition>
+  <target name="_check_3rdparty">
+    <condition property="3rdparty.present">
+      <and>
+          <!-- No need to check all jars; just check a few -->
+          <available classpathref="classpath" classname="org.apache.bsf.BSFEngine"/>
+          <available classpathref="classpath" classname="org.htmlparser.Parser"/>
+          <available classpathref="classpath" classname="com.thoughtworks.xstream.XStream"/>
+      </and>
+    </condition>
+  </target>
 
-  <target name="_message_3rdParty" unless="3rdparty.present">
+  <target name="_message_3rdParty" depends="_check_3rdparty" unless="3rdparty.present">
     <echo>Cannot find all the required 3rd party libraries.</echo>
     <echo>If building from a release, you can get most of them from the binary archive.</echo>
     <echo>Use "ant download_jars" to download any missing jars.</echo>
@@ -1290,7 +1292,7 @@ run JMeter unless all the JMeter jars are added.
       depends="_gump_properties,clean,install" 
       description="Build JMeter">
     <property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
-  	<available file="${velocity.jar}" property="3rdparty.present"/>
+  	<available file="${velocity.jar}" property="velocity.present"/>
     <!-- No need to create the archives for Gump
     <antcall target="_pack-binaries"/>
     <antcall target="_pack-libraries"/>
@@ -1525,6 +1527,7 @@ run JMeter unless all the JMeter jars are added.
       overview="${src.docs}/overview.html"
       additionalparam="-breakiterator" 
       destdir="${dest.docs.api}" 
+      verbose="false"
       protected="yes" 
       version="yes" 
       doctitle="Apache JMeter API" 
@@ -2040,7 +2043,7 @@ run JMeter unless all the JMeter jars are added.
     </target>
 
 	<!-- Download jars only needed by Gump (unless already done) -->
-    <target name="_process_gump_jars" unless="3rdparty.present">
+    <target name="_process_gump_jars" unless="velocity.present">
         <process_jarfile jarname="excalibur-datasource"/>
         <process_jarfile jarname="excalibur-instrument"/>
         <process_jarfile jarname="excalibur-logger"/>
