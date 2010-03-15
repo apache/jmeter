@@ -86,7 +86,6 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
                     log.warn(e.getLocalizedMessage());
                 }
             }
-            timerCounter[0]=0; // Reset for next time
         }
         return 0;
     }
