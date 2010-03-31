@@ -691,14 +691,25 @@ public class SampleResult implements Serializable {
     }
 
     /**
-     * Returns the dataEncoding or the default if no dataEncoding was provided
+     * Returns the dataEncoding or the default if no dataEncoding was provided.
+     * 
      * @return the value of the dataEncoding or DEFAULT_ENCODING
      */
     public String getDataEncodingWithDefault() {
+        return getDataEncodingWithDefault(DEFAULT_ENCODING);
+    }
+
+    /**
+     * Returns the dataEncoding or the default if no dataEncoding was provided.
+     * 
+     * @param defaultEncoding the default to be applied
+     * @return the value of the dataEncoding or the provided default
+     */
+    protected String getDataEncodingWithDefault(String defaultEncoding) {
         if (dataEncoding != null && dataEncoding.length() > 0) {
             return dataEncoding;
         }
-        return DEFAULT_ENCODING;
+        return defaultEncoding;
     }
 
     /**
