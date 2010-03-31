@@ -85,6 +85,7 @@ The XPath Assertion and XPath Extractor elements no longer fetch external DTDs b
 <li>Bug 48568 - CookieManager broken for AjpSampler</li>
 <li>Bug 48570 - AjpSampler doesn't support query parameters (GET/POST)</li>
 <li>Bug 46901 - HTTP Sampler does not process var/func refs correctly in first file parameter</li>
+<li>Bug 43678 - Handle META tag http-equiv charset?</li>
 </ul>
 
 <h3>Other Samplers</h3>
