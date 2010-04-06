@@ -66,7 +66,7 @@ public class InitialContextFactory {
             }
             try {
                 ctx = new InitialContext(props);
-                log.info("created the JNDI initial context factory");
+                log.info("created the JNDI initial context for the factory");
             } catch (NamingException e) {
                 log.error("lookupContext:: " + e.getMessage());
             }
