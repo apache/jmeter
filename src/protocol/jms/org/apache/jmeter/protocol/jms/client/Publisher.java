@@ -45,6 +45,8 @@ public class Publisher {
 
     private TopicPublisher publisher = null;
 
+    public final boolean isValid;
+    
     /**
      * Create a publisher using either the jndi.properties file or the provided parameters
      * @param useProps true if a jndi.properties file is to be used
@@ -56,6 +58,8 @@ public class Publisher {
      * @param securityPrincipal (ignored if useProps is true)
      * @param securityCredentials (ignored if useProps is true)
      */
+    // TODO - does it make sense to return a Publisher that has not been created successfully?
+    // Might be simpler just to return JMSException
     public Publisher(boolean useProps, String initialContextFactory, String providerUrl, 
             String connfactory, String topic, boolean useAuth,
             String securityPrincipal, String securityCredentials) {
@@ -67,6 +71,7 @@ public class Publisher {
         } else {
             log.error("Could not initialize JNDI Initial Context Factory");
         }
+        isValid = publisher != null; // This is the last item set up by initConnection
     }
 
     private Context initJNDI(boolean useProps, String initialContextFactory, 
