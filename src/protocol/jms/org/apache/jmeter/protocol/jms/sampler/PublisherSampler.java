@@ -128,12 +128,15 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
     public SampleResult sample() {
         SampleResult result = new SampleResult();
         result.setSampleLabel(getName());
+        result.setSuccessful(false); // Assume it will fail
+        result.setResponseCode("000"); // ditto $NON-NLS-1$
+        result.setResponseMessage("See log file for details"); // ditto
         if (publisher == null) {
             initClient();
         }
         StringBuilder buffer = new StringBuilder();
         int loop = getIterationCount();
-        if (publisher != null) {
+        if (publisher != null && publisher.isValid) {
             result.sampleStart();
             for (int idx = 0; idx < loop; idx++) {
                 String tmsg = getMessageContent();
