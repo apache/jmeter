@@ -98,19 +98,29 @@ public class ConnectionFactory implements TestListener {
     public void testIterationStart(LoopIterationEvent event) {
     }
 
-    public static synchronized TopicConnectionFactory getTopicConnectionFactory(Context ctx, String fac) {
+    /**
+     * Get the cached TopicConnectionFactory.
+     * 
+     * @param ctx the context to use
+     * @param factoryName the name of the factory
+     * @return the factory, or null if it could not be found
+     */
+    public static synchronized TopicConnectionFactory getTopicConnectionFactory(Context ctx, String factoryName) {
         int counter = MAX_RETRY;
         while (factory == null && counter > 0) {
              try {
-                 Object objfac = ctx.lookup(fac);
+                 Object objfac = ctx.lookup(factoryName);
                  if (objfac instanceof TopicConnectionFactory) {
                      factory = (TopicConnectionFactory) objfac;
+                 } else {
+                     log.error("Expected TopicConnectionFactory, found "+objfac.getClass().getName());
+                     break;
                  }
              } catch (NamingException e) {
                 if (counter == MAX_RETRY) {
-                    log.error("Unable to find connection factory " + fac + ", will retry. Error: " + e.toString());
+                    log.error("Unable to find topic connection factory " + factoryName + ", will retry. Error: " + e.toString());
                 } else if (counter == 1) {
-                    log.error("Unable to find connection factory " + fac + ", giving up. Error: " + e.toString());
+                    log.error("Unable to find topic connection factory " + factoryName + ", giving up. Error: " + e.toString());
                 }
                 counter--;
                 try {
@@ -123,19 +133,29 @@ public class ConnectionFactory implements TestListener {
          return factory;
     }
 
-    public static synchronized QueueConnectionFactory getQueueConnectionFactory(Context ctx, String fac) {
+    /**
+     * Get the cached QueueConnectionFactory.
+     * 
+     * @param ctx the context to use
+     * @param factoryName the queue factory name
+     * @return the factory, or null if the factory could not be found
+     */
+    public static synchronized QueueConnectionFactory getQueueConnectionFactory(Context ctx, String factoryName) {
         int counter = MAX_RETRY;
         while (qfactory == null && counter > 0) {
              try {
-                 Object objfac = ctx.lookup(fac);
+                 Object objfac = ctx.lookup(factoryName);
                  if (objfac instanceof QueueConnectionFactory) {
                      qfactory = (QueueConnectionFactory) objfac;
+                 } else {
+                     log.error("Expected QueueConnectionFactory, found "+objfac.getClass().getName());
+                     break;
                  }
              } catch (NamingException e) {
                 if (counter == MAX_RETRY) {
-                    log.error("Unable to find connection factory " + fac + ", will retry. Error: " + e.toString());
+                    log.error("Unable to find queue connection factory " + factoryName + ", will retry. Error: " + e.toString());
                 } else if (counter == 1) {
-                    log.error("Unable to find connection factory " + fac + ", giving up. Error: " + e.toString());
+                    log.error("Unable to find queue connection factory " + factoryName + ", giving up. Error: " + e.toString());
                 }
                 counter--;
                 try {
