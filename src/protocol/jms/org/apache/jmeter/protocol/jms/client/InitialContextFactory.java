@@ -41,16 +41,27 @@ public class InitialContextFactory {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    public static synchronized Context lookupContext(String jndi, String url, boolean useAuth, String user, String pwd) {
-        Context ctx = MAP.get(jndi + url);
+    /**
+     * Look up the context from the local cache, creating it if necessary.
+     * 
+     * @param initialContextFactory used to set the property {@link Context#INITIAL_CONTEXT_FACTORY}
+     * @param providerUrl used to set the property {@link Context#PROVIDER_URL}
+     * @param useAuth set true if security is to be used.
+     * @param securityPrincipal used to set the property {@link Context#SECURITY_PRINCIPAL}
+     * @param securityCredentials used to set the property {@link Context#SECURITY_CREDENTIALS}
+     * @return the context, may be null
+     */
+    public static synchronized Context lookupContext(String initialContextFactory, 
+            String providerUrl, boolean useAuth, String securityPrincipal, String securityCredentials) {
+        Context ctx = MAP.get(initialContextFactory + providerUrl);
         if (ctx == null) {
             Properties props = new Properties();
-            props.setProperty(Context.INITIAL_CONTEXT_FACTORY, jndi);
-            props.setProperty(Context.PROVIDER_URL, url);
-            if (useAuth && user != null && pwd != null
-                    && user.length() > 0 && pwd.length() > 0) {
-                props.setProperty(Context.SECURITY_PRINCIPAL, user);
-                props.setProperty(Context.SECURITY_CREDENTIALS, pwd);
+            props.setProperty(Context.INITIAL_CONTEXT_FACTORY, initialContextFactory);
+            props.setProperty(Context.PROVIDER_URL, providerUrl);
+            if (useAuth && securityPrincipal != null && securityCredentials != null
+                    && securityPrincipal.length() > 0 && securityCredentials.length() > 0) {
+                props.setProperty(Context.SECURITY_PRINCIPAL, securityPrincipal);
+                props.setProperty(Context.SECURITY_CREDENTIALS, securityCredentials);
                 log.info("authentication properties set");
             }
             try {
@@ -60,7 +71,7 @@ public class InitialContextFactory {
                 log.error("lookupContext:: " + e.getMessage());
             }
             if (ctx != null) {
-                MAP.put(jndi + url, ctx);
+                MAP.put(initialContextFactory + providerUrl, ctx);
             }
         }
         return ctx;
@@ -73,7 +84,9 @@ public class InitialContextFactory {
      * @param name
      * @return the topic or null
      */
-    public static synchronized Topic lookupTopic(Context ctx, String name) {
+    // TODO this method probably belongs in a separate utility class.
+    // Also, why allow null input? Better to throw NPE or IAE
+    public static Topic lookupTopic(Context ctx, String name) {
         Topic t = null;
         if (name != null && ctx != null) {
             try {
