@@ -55,7 +55,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
 
     // Does not need to be synch. because it is only accessed from the sampler thread
     // The ClientPool does access it in a different thread, but ClientPool is fully synch.
-    private transient Publisher PUB = null; // TODO URGENT probably needs to be synch.
+    private transient Publisher publisher = null;
 
     private static final FileServer FSERVER = FileServer.getFileServer();
 
@@ -103,10 +103,10 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
      *
      */
     private void initClient() {
-        this.PUB = new Publisher(this.getUseJNDIPropertiesAsBoolean(), this.getJNDIInitialContextFactory(), this
-                .getProviderUrl(), this.getConnectionFactory(), this.getTopic(), this.isUseAuth(), this.getUsername(),
-                this.getPassword());
-        ClientPool.addClient(this.PUB);
+        publisher = new Publisher(getUseJNDIPropertiesAsBoolean(), getJNDIInitialContextFactory(), this
+                .getProviderUrl(), getConnectionFactory(), getTopic(), isUseAuth(), getUsername(),
+                getPassword());
+        ClientPool.addClient(publisher);
         log.debug("PublisherSampler.initClient called");
     }
 
@@ -115,7 +115,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
      */
     @Override
     public SampleResult sample(Entry e) {
-        return this.sample();
+        return sample();
     }
 
     /**
@@ -128,16 +128,16 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
     public SampleResult sample() {
         SampleResult result = new SampleResult();
         result.setSampleLabel(getName());
-        if (this.PUB == null) {
-            this.initClient();
+        if (publisher == null) {
+            initClient();
         }
         StringBuilder buffer = new StringBuilder();
-        int loop = this.getIterationCount();
-        if (this.PUB != null) {
+        int loop = getIterationCount();
+        if (publisher != null) {
             result.sampleStart();
             for (int idx = 0; idx < loop; idx++) {
-                String tmsg = this.getMessageContent();
-                this.PUB.publish(tmsg);
+                String tmsg = getMessageContent();
+                publisher.publish(tmsg);
                 buffer.append(tmsg);
             }
             result.sampleEnd();
@@ -156,21 +156,21 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
      * @return the contents for the message
      */
     private String getMessageContent() {
-        if (this.getConfigChoice().equals(JMSPublisherGui.USE_FILE_RSC)) {
+        if (getConfigChoice().equals(JMSPublisherGui.USE_FILE_RSC)) {
             // in the case the test uses a file, we set it locally and
             // prevent loading the file repeatedly
-            if (this.file_contents == null) {
-                this.file_contents = this.getFileContent(this.getInputFile());
+            if (file_contents == null) {
+                file_contents = getFileContent(getInputFile());
             }
-            return this.file_contents;
-        } else if (this.getConfigChoice().equals(JMSPublisherGui.USE_RANDOM_RSC)) {
+            return file_contents;
+        } else if (getConfigChoice().equals(JMSPublisherGui.USE_RANDOM_RSC)) {
             // Maybe we should consider creating a global cache for the
             // random files to make JMeter more efficient.
-            String fname = FSERVER.getRandomFile(this.getRandomPath(), new String[] { ".txt", ".obj" })
+            String fname = FSERVER.getRandomFile(getRandomPath(), new String[] { ".txt", ".obj" })
                     .getAbsolutePath();
-            return this.getFileContent(fname);
+            return getFileContent(fname);
         } else {
-            return this.getTextMessage();
+            return getTextMessage();
         }
     }
 
