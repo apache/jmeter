@@ -37,25 +37,31 @@ public class Publisher {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private TopicConnection CONN = null;
+    private TopicConnection connection = null;
 
-    private TopicSession SESSION = null;
+    private TopicSession session = null;
 
-    private Topic TOPIC = null;
+    private Topic topic = null;
 
-    private TopicPublisher PUBLISHER = null;
-
-    //private byte[] RESULT = null;
-
-    //private Object OBJ_RESULT = null;
+    private TopicPublisher publisher = null;
 
     /**
-     *
+     * Create a publisher using either the jndi.properties file or the provided parameters
+     * @param useProps true if a jndi.properties file is to be used
+     * @param initialContextFactory the (ignored if useProps is true)
+     * @param providerUrl (ignored if useProps is true)
+     * @param connfactory
+     * @param topic
+     * @param useAuth (ignored if useProps is true)
+     * @param securityPrincipal (ignored if useProps is true)
+     * @param securityCredentials (ignored if useProps is true)
      */
-    public Publisher(boolean useProps, String jndi, String url, String connfactory, String topic, boolean useAuth,
-            String user, String pwd) {
+    public Publisher(boolean useProps, String initialContextFactory, String providerUrl, 
+            String connfactory, String topic, boolean useAuth,
+            String securityPrincipal, String securityCredentials) {
         super();
-        Context ctx = initJNDI(useProps, jndi, url, useAuth, user, pwd);
+        Context ctx = initJNDI(useProps, initialContextFactory, 
+                providerUrl, useAuth, securityPrincipal, securityCredentials);
         if (ctx != null) {
             initConnection(ctx, connfactory, topic);
         } else {
@@ -63,7 +69,8 @@ public class Publisher {
         }
     }
 
-    private Context initJNDI(boolean useProps, String jndi, String url, boolean useAuth, String user, String pwd) {
+    private Context initJNDI(boolean useProps, String initialContextFactory, 
+            String providerUrl, boolean useAuth, String securityPrincipal, String securityCredentials) {
         if (useProps) {
             try {
                 return new InitialContext();
@@ -72,17 +79,18 @@ public class Publisher {
                 return null;
             }
         } else {
-            return InitialContextFactory.lookupContext(jndi, url, useAuth, user, pwd);
+            return InitialContextFactory.lookupContext(initialContextFactory, 
+                    providerUrl, useAuth, securityPrincipal, securityCredentials);
         }
     }
 
-    private void initConnection(Context ctx, String connfactory, String topic) {
+    private void initConnection(Context ctx, String connfactory, String topicName) {
         try {
             ConnectionFactory.getTopicConnectionFactory(ctx,connfactory);
-            this.CONN = ConnectionFactory.getTopicConnection();
-            this.TOPIC = InitialContextFactory.lookupTopic(ctx, topic);
-            this.SESSION = this.CONN.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
-            this.PUBLISHER = this.SESSION.createPublisher(this.TOPIC);
+            connection = ConnectionFactory.getTopicConnection();
+            topic = InitialContextFactory.lookupTopic(ctx, topicName);
+            session = connection.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
+            publisher = session.createPublisher(topic);
             log.info("created the topic connection successfully");
         } catch (JMSException e) {
             log.error("Connection error: " + e.getMessage());
@@ -91,8 +99,8 @@ public class Publisher {
 
     public void publish(String text) {
         try {
-            TextMessage msg = this.SESSION.createTextMessage(text);
-            this.PUBLISHER.publish(msg);
+            TextMessage msg = session.createTextMessage(text);
+            publisher.publish(msg);
         } catch (JMSException e) {
             log.error(e.getMessage());
         }
@@ -100,25 +108,31 @@ public class Publisher {
 
     public void publish(Serializable contents) {
         try {
-            ObjectMessage msg = this.SESSION.createObjectMessage(contents);
-            this.PUBLISHER.publish(msg);
+            ObjectMessage msg = session.createObjectMessage(contents);
+            publisher.publish(msg);
         } catch (JMSException e) {
             log.error(e.getMessage());
         }
     }
 
     /**
-     * Clise will close the session
+     * Close will close the session
      */
     public void close() {
         try {
-            log.info("Publisher closed");
-            this.PUBLISHER.close();
-            this.SESSION.close();
-            this.CONN.close();
-            this.PUBLISHER = null;
-            this.SESSION = null;
-            this.CONN = null;
+            log.info("Publisher close()");
+            if (publisher != null){
+                publisher.close();
+            }
+            if (session != null){
+                session.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
+            publisher = null;
+            session = null;
+            connection = null;
         } catch (JMSException e) {
             log.error(e.getMessage());
         } catch (Throwable e) {
