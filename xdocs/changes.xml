@@ -135,6 +135,7 @@ The XPath Assertion and XPath Extractor elements no longer fetch external DTDs b
 <li>BeanInfoSupport now caches getBeanDescriptor() - should avoid an NPE on non-Sun JVMs when using CSVDataSet (and some other TestBeans)</li>
 <li>Bug 48350 - Deadlock on distributed testing with 2 clients</li>
 <li>Bug 48901 - Endless wait by adding Synchronizing Timer</li>
+<li>Bug 49149 - usermanual/index.html has typo in link to "Regular Expressions" page</li>
 </ul>
 
 <!-- ==================================================== -->
