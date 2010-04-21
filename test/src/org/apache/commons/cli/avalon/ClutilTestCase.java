@@ -761,7 +761,7 @@ public final class ClutilTestCase extends TestCase {
         assertEquals((clOptions1.get(2)).getDescriptor().getId(), ALL_OPT);
         assertEquals((clOptions1.get(3)).getDescriptor().getId(), CLEAR1_OPT);
 
-        assertTrue(parser1.getUnparsedArgs()[0].equals("ler"));
+        assertEquals("ler",parser1.getUnparsedArgs()[0]);
 
         final CLArgsParser parser2 = new CLArgsParser(parser1.getUnparsedArgs(), options2);
 

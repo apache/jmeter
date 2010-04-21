@@ -59,14 +59,14 @@ public class UrlConfigTest extends JMeterTestCase {
     }
 
     public void testSimpleConfig() {
-        assertTrue(config.getName().equals("Full Config"));
-        assertEquals(config.getDomain(), "www.lazer.com");
+        assertEquals("Full Config", config.getName());
+        assertEquals("www.lazer.com", config.getDomain());
     }
 
     public void testOverRide() {
         JMeterProperty jmp = partialConfig.getProperty(HTTPSamplerBase.DOMAIN);
         assertTrue(jmp instanceof NullProperty);
-        assertTrue(new NullProperty(HTTPSamplerBase.DOMAIN).equals(jmp));
+        assertEquals(jmp, new NullProperty(HTTPSamplerBase.DOMAIN));
         partialConfig.addTestElement(defaultConfig);
         assertEquals(partialConfig.getPropertyAsString(HTTPSamplerBase.DOMAIN), "www.xerox.com");
         assertEquals(partialConfig.getPropertyAsString(HTTPSamplerBase.PATH), "main.jsp");
