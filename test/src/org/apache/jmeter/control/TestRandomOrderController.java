@@ -46,13 +46,13 @@ public class TestRandomOrderController extends JMeterTestCase {
                 }
                 usedSamplers.add(samplerName);
             }
-            assertTrue("All samplers were returned", usedSamplers.size() == 4);
+            assertEquals("All samplers were returned", 4, usedSamplers.size());
         }
 
         public void testRandomOrderNoElements() {
             RandomOrderController roc = new RandomOrderController();
             roc.initialize();
-            assertTrue(roc.next() == null);
+            assertNull(roc.next());
         }
 
         public void testRandomOrderOneElement() {
@@ -68,6 +68,6 @@ public class TestRandomOrderController extends JMeterTestCase {
                 }
                 usedSamplers.add(samplerName);
             }
-            assertTrue("All samplers were returned", usedSamplers.size() == 1);
+            assertEquals("All samplers were returned", 1, usedSamplers.size());
         }
 }
