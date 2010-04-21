@@ -53,13 +53,13 @@ public class PackageTest extends TestCase {
             assertTrue(tree1.equals(tree2));
             assertTrue(tree2.equals(tree1));
             assertTrue(tree2.equals(tree2));
-            assertTrue(tree1.hashCode() == tree2.hashCode());
+            assertEquals(tree1.hashCode(), tree2.hashCode());
 
             assertTrue(tree3.equals(tree3));
             assertTrue(tree3.equals(tree4));
             assertTrue(tree4.equals(tree3));
             assertTrue(tree4.equals(tree4));
-            assertTrue(tree3.hashCode() == tree4.hashCode());
+            assertEquals(tree3.hashCode(), tree4.hashCode());
 
             assertNotSame(tree1, tree2);
             assertNotSame(tree1, tree3);
@@ -85,7 +85,7 @@ public class PackageTest extends TestCase {
             tree2.add("abcd", tree4);
             assertTrue(tree1.equals(tree2));
             assertTrue(tree2.equals(tree1));
-            assertTrue(tree1.hashCode() == tree2.hashCode());
+            assertEquals(tree1.hashCode(), tree2.hashCode());
         }
 
 
@@ -111,13 +111,13 @@ public class PackageTest extends TestCase {
             assertTrue(tree1.equals(tree2));
             assertTrue(tree2.equals(tree1));
             assertTrue(tree2.equals(tree2));
-            assertTrue(tree1.hashCode() == tree2.hashCode());
+            assertEquals(tree1.hashCode(), tree2.hashCode());
 
             assertTrue(tree3.equals(tree3));
             assertTrue(tree3.equals(tree4));
             assertTrue(tree4.equals(tree3));
             assertTrue(tree4.equals(tree4));
-            assertTrue(tree3.hashCode() == tree4.hashCode());
+            assertEquals(tree3.hashCode(), tree4.hashCode());
 
             assertNotSame(tree1, tree2);
             assertNotSame(tree1, tree3);
@@ -138,7 +138,7 @@ public class PackageTest extends TestCase {
             tree2.add("abcd", tree4);
             assertTrue(tree1.equals(tree2));
             assertTrue(tree2.equals(tree1));
-            assertTrue(tree1.hashCode() == tree2.hashCode());
+            assertEquals(tree1.hashCode(), tree2.hashCode());
 
             tree1.add("a1");
             tree1.add("a2");

@@ -82,7 +82,7 @@ public class TestSampleResult extends TestCase {
             SampleResult res = new SampleResult();
             res.sampleStart();
             res.samplePause();
-            assertTrue(wr.toString().length() == 0);
+            assertEquals(0, wr.toString().length());
             res.samplePause();
             assertFalse(wr.toString().length() == 0);
         }
