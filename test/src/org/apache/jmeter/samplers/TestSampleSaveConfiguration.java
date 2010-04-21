@@ -97,7 +97,7 @@ public class TestSampleSaveConfiguration extends JMeterTestCase {
     public void testFalse() throws Exception {
         SampleSaveConfiguration a = new SampleSaveConfiguration(false);
         SampleSaveConfiguration b = new SampleSaveConfiguration(false);
-        assertTrue("Hash codes should be equal",a.hashCode() == b.hashCode());
+        assertEquals("Hash codes should be equal",a.hashCode(), b.hashCode());
         assertTrue("Objects should be equal",a.equals(b));
         assertTrue("Objects should be equal",b.equals(a));
     }
@@ -105,7 +105,7 @@ public class TestSampleSaveConfiguration extends JMeterTestCase {
     public void testTrue() throws Exception {
         SampleSaveConfiguration a = new SampleSaveConfiguration(true);
         SampleSaveConfiguration b = new SampleSaveConfiguration(true);
-        assertTrue("Hash codes should be equal",a.hashCode() == b.hashCode());
+        assertEquals("Hash codes should be equal",a.hashCode(), b.hashCode());
         assertTrue("Objects should be equal",a.equals(b));
         assertTrue("Objects should be equal",b.equals(a));
     }
@@ -121,16 +121,16 @@ public class TestSampleSaveConfiguration extends JMeterTestCase {
         SampleSaveConfiguration a = new SampleSaveConfiguration(false);
         SampleSaveConfiguration b = new SampleSaveConfiguration(false);
         a.setFormatter(null);
-        assertTrue("Hash codes should be equal",a.hashCode() == b.hashCode());
+        assertEquals("Hash codes should be equal",a.hashCode(), b.hashCode());
         assertTrue("Objects should be equal",a.equals(b));
         assertTrue("Objects should be equal",b.equals(a));
         b.setFormatter(null);
-        assertTrue("Hash codes should be equal",a.hashCode() == b.hashCode());
+        assertEquals("Hash codes should be equal",a.hashCode(), b.hashCode());
         assertTrue("Objects should be equal",a.equals(b));
         assertTrue("Objects should be equal",b.equals(a));
         a.setFormatter(new SimpleDateFormat());
         b.setFormatter(new SimpleDateFormat());
-        assertTrue("Hash codes should be equal",a.hashCode() == b.hashCode());
+        assertEquals("Hash codes should be equal",a.hashCode(), b.hashCode());
         assertTrue("Objects should be equal",a.equals(b));
         assertTrue("Objects should be equal",b.equals(a));
     }
