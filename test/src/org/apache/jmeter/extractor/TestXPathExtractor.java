@@ -212,7 +212,7 @@ public class TestXPathExtractor extends TestCase {
         }
 
         public void testInvalidDocument() throws Exception {
-            result.setResponseData("<z>".getBytes());
+            result.setResponseData("<z>", null);
             extractor.setXPathQuery("<");
             extractor.process();
             assertEquals("Default", vars.get(VAL_NAME));

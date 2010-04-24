@@ -61,8 +61,7 @@ public class JSR223Sampler extends JSR223TestElement implements Cloneable, Sampl
             result.setResponseCodeOK();
             result.setResponseMessageOK();
             if (ret != null){
-                // TODO what encoding to use?
-                result.setResponseData(ret.toString().getBytes());
+                result.setResponseData(ret.toString(), null);
             }
         } catch (IOException e) {
             log.warn("Problem in JSR223 script "+e);

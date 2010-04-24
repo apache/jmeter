@@ -43,7 +43,7 @@ public class SizeAssertionTest extends JMeterTestCase{
           jmctx.setVariables(vars);
           sample0 = new SampleResult();
           sample1 = new SampleResult();
-          sample1.setResponseData(data1.getBytes());
+          sample1.setResponseData(data1, null);
       }
 
       public void testSizeAssertionEquals() throws Exception{

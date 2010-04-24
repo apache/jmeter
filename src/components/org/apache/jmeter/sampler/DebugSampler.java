@@ -73,7 +73,7 @@ public class DebugSampler extends AbstractSampler implements TestBean {
             sb.append("\n");
         }
 
-        res.setResponseData(sb.toString().getBytes());
+        res.setResponseData(sb.toString(), null);
         res.setDataType(SampleResult.TEXT);
         res.setSamplerData(rd.toString());
         res.setSuccessful(true);
