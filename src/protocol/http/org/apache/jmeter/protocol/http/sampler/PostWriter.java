@@ -40,7 +40,7 @@ import org.apache.jmeter.testelement.property.PropertyIterator;
 public class PostWriter {
 
     private static final String DASH_DASH = "--";  // $NON-NLS-1$
-    private static final byte[] DASH_DASH_BYTES = DASH_DASH.getBytes();
+    private static final byte[] DASH_DASH_BYTES = {'-', '-'};
 
     /** The bounday string between multiparts */
     protected final static String BOUNDARY = "---------------------------7d159c1302d0y0"; // $NON-NLS-1$
@@ -107,7 +107,7 @@ public class PostWriter {
             for (int i=0; i < files.length; i++) {
                 HTTPFileArg file = files[i];
                 // First write the start multipart file
-                byte[] header = file.getHeader().getBytes(); // TODO what encoding should be used here?
+                byte[] header = file.getHeader().getBytes();  // TODO - charset?
                 out.write(header);
                 // Retrieve the formatted data using the same encoding used to create it
                 postedBody.append(new String(header)); // TODO - charset?
@@ -122,7 +122,7 @@ public class PostWriter {
                 postedBody.append(new String(fileMultipartEndDivider, ENCODING));
                 if(i + 1 < files.length) {
                     out.write(CRLF);
-                    postedBody.append(new String(CRLF));
+                    postedBody.append(new String(CRLF)); // TODO - charset?
                 }
             }
             // Write end of multipart

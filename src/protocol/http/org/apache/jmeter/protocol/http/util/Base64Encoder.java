@@ -38,7 +38,7 @@ public final class Base64Encoder {
     }
 
     public final static String encode(String s) {
-        return encode(s.getBytes());
+        return encode(s.getBytes()); // TODO - charset?
     }
 
     public final static String encode(byte[] bs) {
