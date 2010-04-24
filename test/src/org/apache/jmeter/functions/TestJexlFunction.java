@@ -49,7 +49,7 @@ public class TestJexlFunction extends JMeterTestCase {
         result = new SampleResult();
         jmctx = JMeterContextService.getContext();
         String data = "The quick brown fox";
-        result.setResponseData(data.getBytes());
+        result.setResponseData(data, null);
         vars = new JMeterVariables();
         jmctx.setVariables(vars);
         jmctx.setPreviousResult(result);

@@ -81,7 +81,7 @@ public class ExampleSampler extends AbstractSampler {
              * Set up the sample result details
              */
             res.setSamplerData(data);
-            res.setResponseData(response.getBytes());
+            res.setResponseData(response, null);
             res.setDataType(SampleResult.TEXT);
 
             res.setResponseCodeOK();

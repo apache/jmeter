@@ -55,7 +55,7 @@ public class TestAnchorModifier extends JMeterTestCase {
                     new FileInputStream(System.getProperty("user.dir") + "/testfiles/Load_JMeter_Page.jmx")).getArray()[0];
             jmctx.setCurrentSampler(context);
             jmctx.setCurrentSampler(config);
-            result.setResponseData(new TextFile(System.getProperty("user.dir") + HTMLFileName).getText().getBytes());
+            result.setResponseData(new TextFile(System.getProperty("user.dir") + HTMLFileName).getText(), null);
             result.setSampleLabel(context.toString());
             result.setSamplerData(context.toString());
             result.setURL(new URL("http://issues.apache.org/fakepage.html"));
@@ -103,7 +103,7 @@ public class TestAnchorModifier extends JMeterTestCase {
             HTTPSampleResult result = new HTTPSampleResult();
             jmctx.setCurrentSampler(context);
             jmctx.setCurrentSampler(config);
-            result.setResponseData(responseText.getBytes());
+            result.setResponseData(responseText, null);
             result.setSampleLabel(context.toString());
             result.setSamplerData(context.toString());
             result.setURL(context.getUrl());
@@ -123,7 +123,7 @@ public class TestAnchorModifier extends JMeterTestCase {
             HTTPSampleResult result = new HTTPSampleResult();
             jmctx.setCurrentSampler(context);
             jmctx.setCurrentSampler(config);
-            result.setResponseData(responseText.getBytes());
+            result.setResponseData(responseText, null);
             result.setSampleLabel(context.toString());
             result.setSamplerData(context.toString());
             result.setURL(context.getUrl());
@@ -139,7 +139,7 @@ public class TestAnchorModifier extends JMeterTestCase {
                     + "<a href=\"/index.html\">Goto index page</a>" + "hfdfjiudfjdfjkjfkdjf"
                     + "<b>bold text</b><a href=lowerdir/index.html>lower</a>" + "</body></html>";
             HTTPSampleResult result = new HTTPSampleResult();
-            result.setResponseData(responseText.getBytes());
+            result.setResponseData(responseText, null);
             result.setSampleLabel(context.toString());
             result.setURL(context.getUrl());
             jmctx.setCurrentSampler(context);
@@ -158,7 +158,7 @@ public class TestAnchorModifier extends JMeterTestCase {
             String responseText = "<html><head><title>Test page</title></head><body>"
                     + "<a href=\"/home/index.html?param1=value1\">" + "Goto index page</a></body></html>";
             HTTPSampleResult result = new HTTPSampleResult();
-            result.setResponseData(responseText.getBytes());
+            result.setResponseData(responseText, null);
             result.setSampleLabel(context.toString());
             result.setURL(context.getUrl());
             jmctx.setCurrentSampler(context);
@@ -175,7 +175,7 @@ public class TestAnchorModifier extends JMeterTestCase {
             String responseText = "<html><head><title>Test page</title></head><body>"
                     + "<A HREF=\"index.html\">Goto index page</A></body></html>";
             HTTPSampleResult result = new HTTPSampleResult();
-            result.setResponseData(responseText.getBytes());
+            result.setResponseData(responseText, null);
             result.setSampleLabel(context.toString());
             result.setURL(context.getUrl());
             jmctx.setCurrentSampler(context);
@@ -192,7 +192,7 @@ public class TestAnchorModifier extends JMeterTestCase {
             String responseText = "<html><head><title>Test page</title></head><body>"
                     + "<a href=\"../index.html\">Goto index page</a></body></html>";
             HTTPSampleResult result = new HTTPSampleResult();
-            result.setResponseData(responseText.getBytes());
+            result.setResponseData(responseText, null);
             result.setSampleLabel(context.toString());
             result.setURL(context.getUrl());
             jmctx.setCurrentSampler(context);
@@ -210,7 +210,7 @@ public class TestAnchorModifier extends JMeterTestCase {
                     + "<a href=\"/home/index.html?param1=value1\">" + "Goto index page</a></body></html>";
             HTTPSampleResult result = new HTTPSampleResult();
             String newUrl = config.getUrl().toString();
-            result.setResponseData(responseText.getBytes());
+            result.setResponseData(responseText, null);
             result.setSampleLabel(context.toString());
             result.setURL(context.getUrl());
             jmctx.setCurrentSampler(context);
@@ -227,7 +227,7 @@ public class TestAnchorModifier extends JMeterTestCase {
                     + "<a href=\"/home/index.html?param1=value1\">" + "Goto index page</a></body></html>";
             HTTPSampleResult result = new HTTPSampleResult();
             String newUrl = config.getUrl().toString();
-            result.setResponseData(responseText.getBytes());
+            result.setResponseData(responseText, null);
             result.setSampleLabel(context.toString());
             result.setURL(context.getUrl());
             jmctx.setCurrentSampler(context);
@@ -243,7 +243,7 @@ public class TestAnchorModifier extends JMeterTestCase {
             String responseText = "<html><head><title>Test page</title></head><body>"
                     + "<a href=\"/home/index.html?param1=value1\">" + "Goto index page</a></body></html>";
             HTTPSampleResult result = new HTTPSampleResult();
-            result.setResponseData(responseText.getBytes());
+            result.setResponseData(responseText, null);
             result.setSampleLabel(context.toString());
             result.setURL(context.getUrl());
             jmctx.setCurrentSampler(context);
@@ -263,7 +263,7 @@ public class TestAnchorModifier extends JMeterTestCase {
                     + "<form action=\"index.html\" method=\"POST\">" + "<input type=\"checkbox\" name=\"test\""
                     + " value=\"goto\">Goto index page</form></body></html>";
             HTTPSampleResult result = new HTTPSampleResult();
-            result.setResponseData(responseText.getBytes());
+            result.setResponseData(responseText, null);
             result.setSampleLabel(context.toString());
             result.setURL(context.getUrl());
             jmctx.setCurrentSampler(context);
@@ -283,7 +283,7 @@ public class TestAnchorModifier extends JMeterTestCase {
                     + "<form action=\"index.html\" method=\"POST\">" + "<input type=\"checkbox\" name=\"te$st\""
                     + " value=\"goto\">Goto index page</form></body></html>";
             HTTPSampleResult result = new HTTPSampleResult();
-            result.setResponseData(responseText.getBytes());
+            result.setResponseData(responseText, null);
             result.setSampleLabel(context.toString());
             result.setURL(context.getUrl());
             jmctx.setCurrentSampler(context);
@@ -307,7 +307,7 @@ public class TestAnchorModifier extends JMeterTestCase {
             + " value=\"" + htmlEncodedFixture + "\">Goto index page</form></body></html>";
         
         HTTPSampleResult result = new HTTPSampleResult();
-        result.setResponseData(responseText.getBytes());
+        result.setResponseData(responseText, null);
         result.setSampleLabel(context.toString());
         result.setURL(context.getUrl());
         jmctx.setCurrentSampler(context);
