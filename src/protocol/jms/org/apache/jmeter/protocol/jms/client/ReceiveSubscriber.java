@@ -160,14 +160,6 @@ public class ReceiveSubscriber implements Runnable {
     }
 
     /**
-     * Get the message(s) as an array of byte[]
-     * 
-     */
-    public synchronized byte[] getByteResult() {
-        return this.buffer.toString().getBytes();
-    }
-
-    /**
      * close() will stop the connection first. Then it closes the subscriber,
      * session and connection.
      */
