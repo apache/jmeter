@@ -58,7 +58,7 @@ public class TestURLRewritingModifier extends JMeterTestCase {
         public void testGrabSessionId() throws Exception {
             String html = "location: http://server.com/index.html" + "?session_id=jfdkjdkf%20jddkfdfjkdjfdf%22;";
             response = new SampleResult();
-            response.setResponseData(html.getBytes());
+            response.setResponseData(html, null);
             mod.setArgumentName("session_id");
             HTTPSamplerBase sampler = createSampler();
             sampler.addArgument("session_id", "adfasdfdsafasdfasd");
@@ -74,7 +74,7 @@ public class TestURLRewritingModifier extends JMeterTestCase {
         public void testGrabSessionId2() throws Exception {
             String html = "<a href=\"http://server.com/index.html?" + "session_id=jfdkjdkfjddkfdfjkdjfdf\">";
             response = new SampleResult();
-            response.setResponseData(html.getBytes());
+            response.setResponseData(html, null);
             mod.setArgumentName("session_id");
             HTTPSamplerBase sampler = createSampler();
             context.setCurrentSampler(sampler);
@@ -96,7 +96,7 @@ public class TestURLRewritingModifier extends JMeterTestCase {
         public void testGrabSessionId3() throws Exception {
             String html = "href='index.html?session_id=jfdkjdkfjddkfdfjkdjfdf'";
             response = new SampleResult();
-            response.setResponseData(html.getBytes());
+            response.setResponseData(html, null);
             mod.setArgumentName("session_id");
             HTTPSamplerBase sampler = createSampler();
             context.setCurrentSampler(sampler);
@@ -109,7 +109,7 @@ public class TestURLRewritingModifier extends JMeterTestCase {
         public void testGrabSessionIdEndedInTab() throws Exception {
             String html = "href='index.html?session_id=jfdkjdkfjddkfdfjkdjfdf\t";
             response = new SampleResult();
-            response.setResponseData(html.getBytes());
+            response.setResponseData(html, null);
             mod.setArgumentName("session_id");
             HTTPSamplerBase sampler = createSampler();
             context.setCurrentSampler(sampler);
@@ -122,7 +122,7 @@ public class TestURLRewritingModifier extends JMeterTestCase {
         public void testGrabSessionId4() throws Exception {
             String html = "href='index.html;%24sid%24KQNq3AAADQZoEQAxlkX8uQV5bjqVBPbT'";
             response = new SampleResult();
-            response.setResponseData(html.getBytes());
+            response.setResponseData(html, null);
             mod.setArgumentName("%24sid%24");
             mod.setPathExtension(true);
             mod.setPathExtensionNoEquals(true);
@@ -137,7 +137,7 @@ public class TestURLRewritingModifier extends JMeterTestCase {
         public void testGrabSessionId5() throws Exception {
             String html = "location: http://server.com/index.html" + "?session[33]=jfdkjdkf%20jddkfdfjkdjfdf%22;";
             response = new SampleResult();
-            response.setResponseData(html.getBytes());
+            response.setResponseData(html, null);
             mod.setArgumentName("session[33]");
             HTTPSamplerBase sampler = createSampler();
             sampler.addArgument("session[33]", "adfasdfdsafasdfasd");
@@ -163,7 +163,7 @@ public class TestURLRewritingModifier extends JMeterTestCase {
                     };
             for (int i = 0; i < html.length; i++) {
                 response = new SampleResult();
-                response.setResponseData(html[i].getBytes());
+                response.setResponseData(html[i], null);
                 URLRewritingModifier newMod = new URLRewritingModifier();
                 newMod.setThreadContext(context);
                 newMod.setArgumentName("sid");
@@ -182,7 +182,7 @@ public class TestURLRewritingModifier extends JMeterTestCase {
             String html = 
                 "<a href=\"#\" onclick=\"$(\'frame\').src=\'/index?param1=bla&sessionid=xyzxyzxyz\\'";
             response = new SampleResult();
-            response.setResponseData(html.getBytes());
+            response.setResponseData(html, null);
             mod.setArgumentName("sessionid");
             HTTPSamplerBase sampler = createSampler();
             sampler.addArgument("sessionid", "xyzxyzxyz");
@@ -206,7 +206,7 @@ public class TestURLRewritingModifier extends JMeterTestCase {
             newMod.setPathExtension(false);
             for (int i = 0; i < html.length; i++) {
                 response = new SampleResult();
-                response.setResponseData(html[i].getBytes());
+                response.setResponseData(html[i], null);
                 HTTPSamplerBase sampler = createSampler();
                 context.setCurrentSampler(sampler);
                 context.setPreviousResult(response);
@@ -228,7 +228,7 @@ public class TestURLRewritingModifier extends JMeterTestCase {
             newMod.setShouldCache(false);
             for (int i = 0; i < html.length/2; i++) {
                 response = new SampleResult();
-                response.setResponseData(html[i*2].getBytes());
+                response.setResponseData(html[i*2], null);
                 HTTPSamplerBase sampler = createSampler();
                 context.setCurrentSampler(sampler);
                 context.setPreviousResult(response);

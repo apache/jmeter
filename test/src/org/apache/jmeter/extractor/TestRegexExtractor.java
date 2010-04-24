@@ -56,7 +56,7 @@ public class TestRegexExtractor extends TestCase {
                     + "<value field=\"pinposition2\">5</value>" + "<value field=\"pinpositionvalue2\"></value>"
                     + "<value field=\"pinposition3\">6</value>" + "<value field=\"pinpositionvalue3\"></value>"
                     + "</row>" + "</company-xmlext-query-ret>";
-            result.setResponseData(data.getBytes());
+            result.setResponseData(data, null);
             result.setResponseHeaders("Header1: Value1\nHeader2: Value2");
             result.setResponseCode("abcd");
             result.setResponseMessage("The quick brown fox");

@@ -711,7 +711,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
         XMLBuffer xmlBuffer = new XMLBuffer();
         xmlBuffer.openTag("ldapanswer"); // $NON-NLS-1$
         SampleResult res = new SampleResult();
-        res.setResponseData("successfull".getBytes());
+        res.setResponseData("successfull", null);
         res.setResponseMessage("Success"); // $NON-NLS-1$
         res.setResponseCode("0"); // $NON-NLS-1$
         res.setContentType("text/xml");// $NON-NLS-1$
@@ -847,7 +847,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
             xmlBuffer.closeTag("operation"); // $NON-NLS-1$
             xmlBuffer.tag("responsecode",res.getResponseCode()); // $NON-NLS-1$
             xmlBuffer.tag("responsemessage",res.getResponseMessage()); // $NON-NLS-1$
-            res.setResponseData(xmlBuffer.toString().getBytes());
+            res.setResponseData(xmlBuffer.toString(), null);
             res.setDataType(SampleResult.TEXT);
             res.setSuccessful(isSuccessful);
         }

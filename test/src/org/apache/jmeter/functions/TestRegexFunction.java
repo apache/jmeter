@@ -57,7 +57,7 @@ public class TestRegexFunction extends JMeterTestCase {
                     + " field=\"pinposition2\">5</value><value" + " field=\"pinpositionvalue2\"></value><value"
                     + " field=\"pinposition3\">6</value><value" + " field=\"pinpositionvalue3\"></value>"
                     + "</row></company-xmlext-query-ret>";
-            result.setResponseData(data.getBytes());
+            result.setResponseData(data, null);
             vars = new JMeterVariables();
             String data2 = "The quick brown fox jumped over the lazy dog 123 times";
             vars.put(INPUT_VARIABLE_NAME, data2);
