@@ -16,63 +16,59 @@
  */
 package org.apache.jmeter.monitor.model;
 
+import java.io.File;
+import java.util.List;
+
+import org.apache.commons.io.FileUtils;
+
 import junit.framework.TestCase;
 
 public class TestObjectFactory extends TestCase {
 
-
-    // TODO turn this into a proper test case
+    private ObjectFactory of;
     
-    public void testSomething() throws Exception{
-        
+    private Status status;
+
+    @Override
+    public void setUp(){
+        of = ObjectFactory.getInstance();
     }
-    /**
-     * Basic method for testing the class
-     * 
-     * @param args
-     */
-    public static void main(String[] args) {
-        if (args != null && args.length == 2) {
-            String file = null;
-            // int count = 1;
-            if (args[0] != null) {
-                file = args[0];
-            }
-            if (args[1] != null) {
-                // count = Integer.parseInt(args[1]);
-            }
-            try {
-                ObjectFactory of = ObjectFactory.getInstance();
-                java.io.File infile = new java.io.File(file);
-                java.io.FileInputStream fis = new java.io.FileInputStream(infile);
-                java.io.InputStreamReader isr = new java.io.InputStreamReader(fis);
-                StringBuilder buf = new StringBuilder();
-                java.io.BufferedReader br = new java.io.BufferedReader(isr);
-                String line = null;
-                while ((line = br.readLine()) != null) {
-                    buf.append(line);
-                }
-                System.out.println("contents: ");
-                System.out.println(buf.toString());
-                System.out.println("----------------------");
-                Status st = of.parseBytes(buf.toString().getBytes());
-                if (st == null) {
-                    System.out.println("parse failed");
-                } else {
-                    System.out.println("parse successful:");
-                    System.out.println(st.getJvm().getMemory().getFree());
-                    System.out.println(st.getJvm().getMemory().getTotal());
-                    System.out.println(st.getJvm().getMemory().getMax());
-                    System.out.println("connector size: " + st.getConnector().size());
-                    Connector conn = st.getConnector().get(0);
-                    System.out.println("conn: " + conn.getThreadInfo().getMaxThreads());
-                }
-            } catch (java.io.FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (java.io.IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-        }
+
+    public void testNoStatus() throws Exception {
+        status = of.parseString("<a></a>");
+        assertNull(status);
+    }
+
+    public void testStatus() throws Exception {
+        status = of.parseString("<status></status>");
+        assertNotNull(status);
+    }
+
+    public void testFileData() throws Exception {
+        byte[] bytes= FileUtils.readFileToByteArray(new File("bin/testfiles/monitorStatus.xml"));
+        status = of.parseBytes(bytes);
+        checkResult();
+    }
+    
+    public void testStringData() throws Exception {
+        String content = FileUtils.readFileToString(new File("bin/testfiles/monitorStatus.xml"));
+        status = of.parseString(content);
+        checkResult();
+    }
+    
+    private void checkResult(){
+        assertNotNull(status);
+        final Jvm jvm = status.getJvm();
+        assertNotNull(jvm);
+        final Memory memory = jvm.getMemory();
+        assertNotNull(memory);
+        assertEquals(10807352, memory.getFree());
+        assertEquals(16318464, memory.getTotal());
+        assertEquals(259522560, memory.getMax());
+        final List<Connector> connector = status.getConnector();
+        assertNotNull(connector);
+        assertEquals(2, connector.size());
+        Connector conn = connector.get(0);
+        assertEquals(200, conn.getThreadInfo().getMaxThreads());
     }
 }
