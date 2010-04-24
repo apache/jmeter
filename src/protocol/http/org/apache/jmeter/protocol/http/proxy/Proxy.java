@@ -437,7 +437,7 @@ public class Proxy extends Thread {
     private void writeToClient(SampleResult res, OutputStream out, boolean forcedHTTPS) throws IOException {
         try {
             String responseHeaders = massageResponseHeaders(res, forcedHTTPS);
-            out.write(responseHeaders.getBytes());
+            out.write(responseHeaders.getBytes()); // TODO - charset?
             out.write(CRLF_BYTES);
             out.write(res.getResponseData());
             out.flush();

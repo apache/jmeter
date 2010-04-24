@@ -1198,7 +1198,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
             output.write(titleValue.getBytes(contentEncoding));
         }
         else {
-            output.write(titleValue.getBytes());
+            output.write(titleValue.getBytes()); // TODO - charset?
         }
         output.write(CRLF);
         output.write(DASH_DASH);
@@ -1221,7 +1221,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
             output.write(descriptionValue.getBytes(contentEncoding));
         }
         else {
-            output.write(descriptionValue.getBytes());
+            output.write(descriptionValue.getBytes()); // TODO - charset?
         }
         output.write(CRLF);
         output.write(DASH_DASH);

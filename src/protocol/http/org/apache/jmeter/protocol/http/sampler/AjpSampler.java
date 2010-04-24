@@ -280,7 +280,7 @@ public class AjpSampler extends HTTPSamplerBase {
                     sb.append(arg.getStringValue());
                 }
                 stringBody = sb.toString();
-                byte [] sbody = stringBody.getBytes(); //FIXME - encoding
+                byte [] sbody = stringBody.getBytes(); // TODO - charset?
                 cl = sbody.length;
                 body = new ByteArrayInputStream(sbody);
             }
