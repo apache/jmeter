@@ -48,11 +48,7 @@ public class ResponseAssertionTest  extends TestCase {
         vars = new JMeterVariables();
         jmctx.setVariables(vars);
         jmctx.setPreviousResult(sample);
-        sample.setResponseData(
-                (
-                "response Data\n" +
-                "line 2\n\nEOF"
-                ).getBytes());
+        sample.setResponseData("response Data\nline 2\n\nEOF", null);
         sample.setURL(new URL("http://localhost/Sampler/Data/"));
         sample.setResponseCode("401");
         sample.setResponseHeaders("X-Header: abcd");
@@ -135,7 +131,7 @@ public class ResponseAssertionTest  extends TestCase {
 
     // Bug 46831 - check can match dollars
     public void testResponseAssertionContainsDollar() throws Exception {
-        sample.setResponseData("value=\"${ID}\" Group$ctl00$drpEmails".getBytes());
+        sample.setResponseData("value=\"${ID}\" Group$ctl00$drpEmails", null);
         assertion.unsetNotType();
         assertion.setToContainsType();
         assertion.setTestFieldResponseData();
@@ -240,7 +236,7 @@ public class ResponseAssertionTest  extends TestCase {
             assertion.setToContainsType();
             assertion.addTestString(TEST_PATTERN);
             SampleResult response = new SampleResult();
-            response.setResponseData(TEST_STRING.getBytes());
+            response.setResponseData(TEST_STRING, null);
             for (int i = 0; i < 100; i++) {
                 AssertionResult result;
                 result = assertion.getResult(response);

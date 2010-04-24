@@ -272,7 +272,7 @@ public class JavaTest extends AbstractJavaSamplerClient implements Serializable 
         }
 
         if (resultData != null && resultData.length() > 0) {
-            results.setResponseData(resultData.getBytes());
+            results.setResponseData(resultData, null);
             results.setDataType(SampleResult.TEXT);
         }
 

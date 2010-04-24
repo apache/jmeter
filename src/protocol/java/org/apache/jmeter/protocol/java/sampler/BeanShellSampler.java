@@ -141,7 +141,7 @@ public class BeanShellSampler extends BeanShellTestElement implements Sampler
 
             if (bshOut != null) {// Set response data
                 String out = bshOut.toString();
-                res.setResponseData(out.getBytes());
+                res.setResponseData(out, null);
             }
             // script can also use setResponseData() so long as it returns null
 

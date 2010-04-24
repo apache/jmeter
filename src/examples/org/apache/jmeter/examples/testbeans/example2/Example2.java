@@ -39,7 +39,7 @@ public class Example2 extends AbstractSampler implements TestBean {
         res.setSamplerData(myStringProperty);
         res.sampleStart();
         // Do something ...
-        res.setResponseData(myStringProperty.toLowerCase().getBytes());
+        res.setResponseData(myStringProperty.toLowerCase(), null);
         res.setDataType(SampleResult.TEXT);
         res.sampleEnd();
         res.setSuccessful(true);

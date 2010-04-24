@@ -279,7 +279,7 @@ public class JavaSampler extends AbstractSampler implements TestListener {
             Thread.yield();
             SampleResult results = new SampleResult();
             results.setSuccessful(false);
-            results.setResponseData(("Class not found: " + getClassname()).getBytes());
+            results.setResponseData(("Class not found: " + getClassname()), null);
             results.setSampleLabel("ERROR: " + getClassname());
             return results;
         }

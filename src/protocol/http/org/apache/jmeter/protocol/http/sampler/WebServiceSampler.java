@@ -538,7 +538,7 @@ public class WebServiceSampler extends HTTPSamplerBase {
                     // performance on slow clients
                     length=br.read();
                     result.sampleEnd();
-                    result.setResponseData(JMeterUtils.getResString("read_response_message").getBytes()); //$NON-NLS-1$
+                    result.setResponseData(JMeterUtils.getResString("read_response_message"), null); //$NON-NLS-1$
                 }
                 // It is not possible to access the actual HTTP response code, so we assume no data means failure
                 if (length > 0){

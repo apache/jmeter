@@ -166,9 +166,9 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         result.sampleEnd();
         synchronized (this) {// Need to synch because buffer is shared with onMessageHandler
             if (this.getReadResponseAsBoolean()) {
-                result.setResponseData(this.BUFFER.toString().getBytes());
+                result.setResponseData(this.BUFFER.toString(), null);
             } else {
-                result.setBytes(this.BUFFER.toString().getBytes().length);
+                result.setBytes(this.BUFFER.toString().length());
             }
             read=this.count(0);
         }
@@ -210,9 +210,9 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         result.sampleEnd();
         int read = this.SUBSCRIBER.count(0);
         if (this.getReadResponseAsBoolean()) {
-            result.setResponseData(this.SUBSCRIBER.getMessage().getBytes());
+            result.setResponseData(this.SUBSCRIBER.getMessage(), null);
         } else {
-            result.setBytes(this.SUBSCRIBER.getMessage().getBytes().length);
+            result.setBytes(this.SUBSCRIBER.getMessage().length());
         }
         result.setSuccessful(true);
         result.setResponseCodeOK();

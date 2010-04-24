@@ -68,7 +68,7 @@ public class XPathAssertionTest extends JMeterTestCase {
               + "<value field=\"pinposition2\">5</value>" + "<value field=\"pinpositionvalue2\"></value>"
               + "<value field=\"pinposition3\">6</value>" + "<value field=\"pinpositionvalue3\"></value>"
               + "</row>" + "</company-xmlext-query-ret>";
-        result.setResponseData(data.getBytes());
+        result.setResponseData(data, null);
     }
 
     private ByteArrayOutputStream readBA(String name) throws IOException {
@@ -180,7 +180,7 @@ public class XPathAssertionTest extends JMeterTestCase {
     }
 
     public void testAssertionEmptyResult() throws Exception {
-        result.setResponseData("".getBytes());
+        result.setResponseData("", null);
         AssertionResult res = assertion.getResult(result);
         testLog.debug("isError() " + res.isError() + " isFailure() " + res.isFailure());
         testLog.debug("failure message: " + res.getFailureMessage());
@@ -190,7 +190,7 @@ public class XPathAssertionTest extends JMeterTestCase {
     }
 
     public void testAssertionBlankResult() throws Exception {
-        result.setResponseData(" ".getBytes());
+        result.setResponseData(" ", null);
         AssertionResult res = assertion.getResult(result);
         testLog.debug("isError() " + res.isError() + " isFailure() " + res.isFailure());
         testLog.debug("failure message: " + res.getFailureMessage());
@@ -203,7 +203,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         String data = "<html><head><title>testtitle</title></head>" + "<body>"
                 + "<p><i><b>invalid tag nesting</i></b><hr>" + "</body></html>";
 
-        result.setResponseData(data.getBytes());
+        result.setResponseData(data, null);
         vars = new JMeterVariables();
         jmctx.setVariables(vars);
         jmctx.setPreviousResult(result);
@@ -264,7 +264,7 @@ public class XPathAssertionTest extends JMeterTestCase {
                 + "<p>Where should we start?</p>" + "<p>How about more about me?</p>" + "</CHAPTER_TEXT>"
                 + "</CHAPTER>" + "</PART>" + "</BOOK>";
 
-        result.setResponseData(data.getBytes());
+        result.setResponseData(data, null);
         vars = new JMeterVariables();
         jmctx.setVariables(vars);
         jmctx.setPreviousResult(result);
@@ -290,7 +290,7 @@ public class XPathAssertionTest extends JMeterTestCase {
                 + "<p>Where should we start?</p>" + "<p>How about more about me?</p>" + "</CHAPTER_TEXT>"
                 + "</CHAPTER>" + "<illegal>not defined in dtd</illegal>" + "</PART>" + "</BOOK>";
 
-        result.setResponseData(data.getBytes());
+        result.setResponseData(data, null);
         vars = new JMeterVariables();
         jmctx.setVariables(vars);
         jmctx.setPreviousResult(result);
@@ -306,7 +306,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         String data = "<html><head><title>testtitle</title></head>" + "<body>"
                 + "<p><i><b>invalid tag nesting</i></b><hr>" + "</body></html>";
 
-        result.setResponseData(data.getBytes());
+        result.setResponseData(data, null);
         vars = new JMeterVariables();
         jmctx.setVariables(vars);
         jmctx.setPreviousResult(result);
