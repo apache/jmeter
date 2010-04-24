@@ -160,7 +160,7 @@ public class PostWriterTest extends TestCase {
         postWriter.sendPostData(connection, sampler);
         
         checkContentTypeUrlEncoded(connection);
-        byte[] expectedUrl = "title=mytitle&description=mydescription".getBytes();
+        byte[] expectedUrl = "title=mytitle&description=mydescription".getBytes(); // TODO - charset?
         checkContentLength(connection, expectedUrl.length);
         checkArraysHaveSameContent(expectedUrl, connection.getOutputStreamContent());
         expectedUrl = "title=mytitle&description=mydescription".getBytes(UTF_8);
@@ -220,7 +220,8 @@ public class PostWriterTest extends TestCase {
         checkContentLength(connection, TEST_FILE_CONTENT.length);        
         checkArraysHaveSameContent(TEST_FILE_CONTENT, connection.getOutputStreamContent());
         // Check that other encoding is not the current encoding
-        checkArraysHaveDifferentContent(new String(TEST_FILE_CONTENT).getBytes(otherEncoding), connection.getOutputStreamContent());
+        checkArraysHaveDifferentContent(new String(TEST_FILE_CONTENT) // TODO - charset?
+            .getBytes(otherEncoding), connection.getOutputStreamContent());
         
         // If we have both file as body, and form data, then only form data will be sent
         setupFormData(sampler);
@@ -230,7 +231,7 @@ public class PostWriterTest extends TestCase {
         postWriter.sendPostData(connection, sampler);
         
         checkContentTypeUrlEncoded(connection);
-        byte[] expectedUrl = "title=mytitle&description=mydescription".getBytes();
+        byte[] expectedUrl = "title=mytitle&description=mydescription".getBytes(); // TODO - charset?
         checkContentLength(connection, expectedUrl.length);
         checkArraysHaveSameContent(expectedUrl, connection.getOutputStreamContent());
     }
@@ -712,7 +713,7 @@ public class PostWriterTest extends TestCase {
             output.write(titleValue.getBytes(contentEncoding));
         }
         else {
-            output.write(titleValue.getBytes());
+            output.write(titleValue.getBytes()); // TODO - charset?
         }
         output.write(CRLF);
         output.write(DASH_DASH);
@@ -734,7 +735,7 @@ public class PostWriterTest extends TestCase {
             output.write(descriptionValue.getBytes(contentEncoding));
         }
         else {
-            output.write(descriptionValue.getBytes());
+            output.write(descriptionValue.getBytes()); // TODO - charset?
         }
         output.write(CRLF);
         output.write(DASH_DASH);

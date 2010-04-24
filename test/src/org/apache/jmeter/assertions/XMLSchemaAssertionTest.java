@@ -134,7 +134,7 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
     }
 
     public void testAssertionEmptyResult() throws Exception {
-        result.setResponseData("".getBytes());
+        result.setResponseData("", null);
         assertion.setXsdFileName("testfiles/XMLSchema-fail.xsd");
         AssertionResult res = assertion.getResult(jmctx.getPreviousResult());
         testLog.debug("isError() " + res.isError() + " isFailure() " + res.isFailure());
@@ -145,7 +145,7 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
     }
 
     public void testAssertionBlankResult() throws Exception {
-        result.setResponseData(" ".getBytes());
+        result.setResponseData(" ", null);
         assertion.setXsdFileName("testfiles/XMLSchema-fail.xsd");
         AssertionResult res = assertion.getResult(jmctx.getPreviousResult());
         testLog.debug("isError() " + res.isError() + " isFailure() " + res.isFailure());
@@ -157,7 +157,7 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
 
     public void testXMLTrailingcontent() throws Exception {
         ByteArrayOutputStream baos = readBA("testfiles/XMLSchematest.xml");
-        baos.write("extra".getBytes());
+        baos.write("extra".getBytes()); // TODO - charset?
         result.setResponseData(baos.toByteArray());
         assertion.setXsdFileName("testfiles/XMLSchema-pass.xsd");
         AssertionResult res = assertion.getResult(jmctx.getPreviousResult());
@@ -170,7 +170,7 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
 
     public void testXMLTrailingwhitespace() throws Exception {
         ByteArrayOutputStream baos = readBA("testfiles/XMLSchematest.xml");
-        baos.write(" \t\n".getBytes());
+        baos.write(" \t\n".getBytes()); // TODO - charset?
         result.setResponseData(baos.toByteArray());
         assertion.setXsdFileName("testfiles/XMLSchema-pass.xsd");
         AssertionResult res = assertion.getResult(jmctx.getPreviousResult());

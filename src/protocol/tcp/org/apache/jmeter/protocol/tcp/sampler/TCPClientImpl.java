@@ -63,7 +63,7 @@ public class TCPClientImpl extends AbstractTCPClient {
      */
     public void write(OutputStream os, String s) {
         try {
-            os.write(s.getBytes());
+            os.write(s.getBytes()); // TODO - charset?
             os.flush();
         } catch (IOException e) {
             log.warn("Write error", e);
