@@ -599,7 +599,7 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
         }
         else {
             // Most browsers use ISO-8859-1 as default encoding, even if spec says UTF-8
-            return postBody.getBytes().length;
+            return postBody.getBytes().length; // TODO - charset?
         }
     }
 }
