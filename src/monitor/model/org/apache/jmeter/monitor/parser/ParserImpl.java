@@ -18,6 +18,7 @@ package org.apache.jmeter.monitor.parser;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.StringReader;
 
 import org.xml.sax.SAXException;
 import org.xml.sax.InputSource;
@@ -36,13 +37,11 @@ public abstract class ParserImpl implements Parser {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private SAXParserFactory PARSERFACTORY = null;
+    private final SAXParser PARSER;
 
-    private SAXParser PARSER = null;
+    private final MonitorHandler DOCHANDLER;
 
-    private MonitorHandler DOCHANDLER = null;
-
-    private ObjectFactory FACTORY = null;
+    private final ObjectFactory FACTORY;
 
     /**
      *
@@ -50,16 +49,20 @@ public abstract class ParserImpl implements Parser {
     public ParserImpl(ObjectFactory factory) {
         super();
         this.FACTORY = factory;
+        SAXParser parser = null;
+        MonitorHandler handler = null;
         try {
-            PARSERFACTORY = SAXParserFactory.newInstance();
-            PARSER = PARSERFACTORY.newSAXParser();
-            DOCHANDLER = new MonitorHandler();
-            DOCHANDLER.setObjectFactory(this.FACTORY);
+            SAXParserFactory parserFactory = SAXParserFactory.newInstance();
+            parser = parserFactory.newSAXParser();
+            handler = new MonitorHandler();
+            handler.setObjectFactory(this.FACTORY);
         } catch (SAXException e) {
             log.error("Failed to create the parser",e);
         } catch (ParserConfigurationException e) {
             log.error("Failed to create the parser",e);
         }
+        PARSER = parser;
+        DOCHANDLER = handler;
     }
 
     /**
@@ -90,7 +93,20 @@ public abstract class ParserImpl implements Parser {
      * @return Status
      */
     public Status parseString(String content) {
-        return parseBytes(content.getBytes());
+        try {
+            InputSource is = new InputSource();
+            is.setCharacterStream(new StringReader(content));
+            PARSER.parse(is, DOCHANDLER);
+            return DOCHANDLER.getContents();
+        } catch (SAXException e) {
+            log.error("Failed to parse the String",e);
+            // let bad input fail silently
+            return DOCHANDLER.getContents();
+        } catch (IOException e) { // Should never happen
+            log.error("Failed to read the String",e);
+            // let bad input fail silently
+            return DOCHANDLER.getContents();
+        }
     }
 
     /**
