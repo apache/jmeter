@@ -468,4 +468,26 @@ public final class JOrphanUtils {
         }
         return sb.toString();
     }
+
+    /**
+     * Convert binary byte array to hex string.
+     *
+     * @param ba input binary byte array
+     * @return hex representation of binary input
+     */
+    public static byte[] baToHexBytes(byte ba[]) {
+        byte[] hb = new byte[ba.length*2];
+        for (int i = 0; i < ba.length; i++) {
+            byte upper = (byte) ((ba[i] & 0xf0) >> 4);
+            byte lower = (byte) (ba[i] & 0x0f);
+            hb[2*i]=toHexChar(upper);
+            hb[2*i+1]=toHexChar(lower);
+        }
+        return hb;
+    }
+
+    private static byte toHexChar(byte in){
+        if (in < 10) return (byte) (in+'0');
+        return (byte) ((in-10)+'a');
+    }
 }
