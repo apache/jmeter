@@ -83,7 +83,7 @@ public class ParseBenchmark {
                 start = System.currentTimeMillis();
                 for (int idx = 0; idx < loops; idx++) {
                     // NOTUSED org.apache.jmeter.monitor.model.Status st =
-                    of.parseBytes(contents.getBytes());
+                    of.parseBytes(contents.getBytes()); // TODO - charset?
                 }
                 end = System.currentTimeMillis();
                 System.out.println("elapsed Time: " + (end - start));

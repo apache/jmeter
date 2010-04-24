@@ -78,7 +78,7 @@ public class BeanShellClient {
     private static void sendLine( String line, OutputStream outPipe )
     throws IOException
     {
-        outPipe.write( line.getBytes() );
+        outPipe.write( line.getBytes() ); // TODO - charset?
         outPipe.flush();
     }
 
