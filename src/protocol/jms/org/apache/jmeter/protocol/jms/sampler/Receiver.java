@@ -73,14 +73,13 @@ public class Receiver implements Runnable {
             try {
                 reply = consumer.receive(5000);
                 if (reply != null) {
-
-                    if (log.isDebugEnabled()) {
-                        log.debug("Received message, correlation id:" + reply.getJMSCorrelationID());
-                    }
-
-                    if (reply.getJMSCorrelationID() == null) {
+                    final String jmsCorrelationID = reply.getJMSCorrelationID();
+                    if (jmsCorrelationID == null) {
                         log.warn("Received message with correlation id null. Discarding message ...");
                     } else {
+                        if (log.isDebugEnabled()) {
+                            log.debug("Received message, correlation id:" + jmsCorrelationID);
+                        }
                         MessageAdmin.getAdmin().putReply(reply.getJMSCorrelationID(), reply);
                     }
                 }
