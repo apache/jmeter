@@ -347,7 +347,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
                 try {
                     res.setResponseData(responseData.getBytes(dataEncoding));
                 } catch (UnsupportedEncodingException e) {
-                    res.setResponseData(("Can't support the char set: " + dataEncoding).getBytes());
+                    res.setResponseData(("Can't support the char set: " + dataEncoding), null);
                     res.setDataType(SampleResult.TEXT);
                 }
             }

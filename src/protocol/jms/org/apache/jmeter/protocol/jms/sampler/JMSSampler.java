@@ -137,7 +137,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
             if (isOneway()) {
                 producer.send(msg);
                 res.setSuccessful(true);
-                res.setResponseData("Oneway request has no response data".getBytes());
+                res.setResponseData("Oneway request has no response data", null);
             } else {
                 if (!useTemporyQueue()) {
                     msg.setJMSReplyTo(receiveQueue);
@@ -151,9 +151,9 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
                     }
                 } else {
                     if (replyMsg instanceof TextMessage) {
-                        res.setResponseData(((TextMessage) replyMsg).getText().getBytes());
+                        res.setResponseData(((TextMessage) replyMsg).getText(), null);
                     } else {
-                        res.setResponseData(replyMsg.toString().getBytes());
+                        res.setResponseData(replyMsg.toString(), null);
                     }
                     res.setSuccessful(true);
                 }

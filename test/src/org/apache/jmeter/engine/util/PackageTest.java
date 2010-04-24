@@ -56,7 +56,7 @@ public class PackageTest extends JMeterTestCase {
         variables.put("my_regex", ".*");
         variables.put("server", "jakarta.apache.org");
         result = new SampleResult();
-        result.setResponseData("<html>hello world</html> costs: $3.47,$5.67".getBytes());
+        result.setResponseData("<html>hello world</html> costs: $3.47,$5.67", null);
         transformer = new ReplaceStringWithFunctions(new CompoundVariable(), variables);
         jmctx.setVariables(new JMeterVariables());
         jmctx.setSamplingStarted(true);

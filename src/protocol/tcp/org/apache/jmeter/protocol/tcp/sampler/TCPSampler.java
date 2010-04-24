@@ -307,7 +307,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
                 res.setSamplerData(req);
                 protocolHandler.write(os, req);
                 String in = protocolHandler.read(is);
-                res.setResponseData(in.getBytes());
+                res.setResponseData(in, null);
                 res.setDataType(SampleResult.TEXT);
                 res.setResponseCodeOK();
                 res.setResponseMessage("OK"); //$NON-NLS-1$

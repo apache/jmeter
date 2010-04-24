@@ -151,7 +151,7 @@ public class BSFSampler extends BSFTestElement implements Sampler {
             }
 
             if (bsfOut != null) {
-                res.setResponseData(bsfOut.toString().getBytes());
+                res.setResponseData(bsfOut.toString(), null);
             }
         } catch (BSFException ex) {
             log.warn("BSF error", ex);

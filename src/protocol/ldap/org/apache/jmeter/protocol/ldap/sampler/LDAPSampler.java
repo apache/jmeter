@@ -443,11 +443,11 @@ public class LDAPSampler extends AbstractSampler {
             if (getPropertyAsString(TEST).equals(SEARCHBASE) && !searchFoundEntries) {
                 res.setResponseCode("201");// TODO is this a sensible number? //$NON-NLS-1$
                 res.setResponseMessage("OK - no results");
-                res.setResponseData("successful - no results".getBytes());
+                res.setResponseData("successful - no results", null);
             } else {
                 res.setResponseCodeOK();
                 res.setResponseMessage("OK"); //$NON-NLS-1$
-                res.setResponseData("successful".getBytes());
+                res.setResponseData("successful", null);
             }
             res.setDataType(SampleResult.TEXT);
             isSuccessful = true;
