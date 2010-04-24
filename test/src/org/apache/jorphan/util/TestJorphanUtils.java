@@ -22,6 +22,8 @@
      
 package org.apache.jorphan.util;
 
+import java.io.UnsupportedEncodingException;
+
 import junit.framework.TestCase;
 
 public class TestJorphanUtils extends TestCase {
@@ -300,5 +302,18 @@ public class TestJorphanUtils extends TestCase {
         assertEquals("",JOrphanUtils.baToHexString(new byte[]{}));
         assertEquals("00",JOrphanUtils.baToHexString(new byte[]{0}));
         assertEquals("0f107f8081ff",JOrphanUtils.baToHexString(new byte[]{15,16,127,-128,-127,-1}));
+    }
+
+    public void testbaToByte() throws Exception{
+        assertEqualsArray(new byte[]{},JOrphanUtils.baToHexBytes(new byte[]{}));
+        assertEqualsArray(new byte[]{'0','0'},JOrphanUtils.baToHexBytes(new byte[]{0}));
+        assertEqualsArray("0f107f8081ff".getBytes("UTF-8"),JOrphanUtils.baToHexBytes(new byte[]{15,16,127,-128,-127,-1}));
+    }
+
+    private void assertEqualsArray(byte[] expected, byte[] actual){
+        assertEquals("arrays must be same length",expected.length, actual.length);
+        for(int i=0; i < expected.length; i++){
+            assertEquals("values must be the same for index: "+i,expected[i],actual[i]);
+        }
     }
 }

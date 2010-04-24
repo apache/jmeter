@@ -1478,7 +1478,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         w.flush();
         if (asMD5 && md != null) {
             byte[] md5Result = md.digest();
-            w.write(JOrphanUtils.baToHexString(md5Result).getBytes());
+            w.write(JOrphanUtils.baToHexBytes(md5Result)); 
             sampleResult.setBytes(totalBytes);
         }
         w.close();
