@@ -84,13 +84,16 @@ public class FixedQueueExecutor implements QueueExecutor {
             log.error("Correlation id is null. Set the JMSCorrelationID header");
             return null;
         }
-        producer.send(request);
 
-        if(useReqMsgIdAsCorrelId) {
-            id = request.getJMSMessageID();
+        if(useReqMsgIdAsCorrelId) {// msgId not available until after send() is called
+            producer.send(request); // TODO - fix timing bug see Bugzilla 49111
+            id=request.getJMSMessageID();
+            MessageAdmin.getAdmin().putRequest(id, request);            
+        } else {
+            MessageAdmin.getAdmin().putRequest(id, request);            
+            producer.send(request);
         }
 
-        MessageAdmin.getAdmin().putRequest(id, request);
         try {
             if (log.isDebugEnabled()) {
                 log.debug("wait for reply " + id + " started on " + System.currentTimeMillis());
