@@ -121,6 +121,8 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
     private transient Receiver receiverThread = null;
 
+    private transient Throwable thrown = null;
+
     /**
      * {@inheritDoc}
      */
@@ -146,21 +148,23 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
                 Message replyMsg = executor.sendAndReceive(msg);
                 if (replyMsg == null) {
                     res.setSuccessful(false);
-                    if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug("No reply message received");
-                    }
+                    res.setResponseMessage("No reply message received");
                 } else {
                     if (replyMsg instanceof TextMessage) {
                         res.setResponseData(((TextMessage) replyMsg).getText(), null);
                     } else {
                         res.setResponseData(replyMsg.toString(), null);
                     }
-                    res.setSuccessful(true);
+                    res.setResponseOK();
                 }
             }
         } catch (Exception e) {
             LOGGER.warn(e.getLocalizedMessage(), e);
-            res.setResponseData(new byte[0]);
+            if (thrown != null){
+                res.setResponseMessage(thrown.toString());
+            } else {                
+                res.setResponseMessage(e.getLocalizedMessage());
+            }
             res.setSuccessful(false);
         }
         res.sampleEnd();
@@ -290,6 +294,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         logThreadStart();
 
         Context context = null;
+        thrown = null;
         try {
             context = getInitialContext();
             Object obj = context.lookup(getQueueConnectionFactory());
@@ -352,10 +357,12 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Connection started");
             }
-        } catch (JMSException e) {
-            LOGGER.warn(e.getLocalizedMessage(), e);
-        } catch (NamingException e) {
-            LOGGER.warn(e.getLocalizedMessage(), e);
+        } catch (Exception e) {
+            thrown = e;
+            LOGGER.error(e.getLocalizedMessage(), e);
+        } catch (NoClassDefFoundError e) {
+            thrown = e;
+            LOGGER.error(e.getLocalizedMessage(), e);
         } finally {
             if (context != null) {
                 try {
