@@ -310,7 +310,8 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
             sendQueue = queue;
             if (!useTemporyQueue()) {
                 receiveQueue = (Queue) context.lookup(getReceiveQueue());
-                receiverThread = Receiver.createReceiver(factory, receiveQueue, getPrincipal(context), getCredentials(context));
+                receiverThread = Receiver.createReceiver(factory, receiveQueue, getPrincipal(context), getCredentials(context)
+                        , isUseReqMsgIdAsCorrelId());
             }
 
             String principal = null;
