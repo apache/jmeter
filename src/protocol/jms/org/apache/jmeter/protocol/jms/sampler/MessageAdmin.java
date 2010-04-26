@@ -81,10 +81,10 @@ public class MessageAdmin {
         if (log.isDebugEnabled()) {
             log.debug("GET_ID [" + id + "] for " + holder);
         }
-        if (!holder.hasReply()) {
-            log.info("Message with " + id + " not found.");
+        if (holder == null || !holder.hasReply()) {
+            log.debug("Message with " + id + " not found.");
         }
-        return (Message) holder.getReply();
+        return holder==null ? null : (Message) holder.getReply();
     }
 }
 
