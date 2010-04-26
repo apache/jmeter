@@ -52,20 +52,6 @@ public class FixedQueueExecutor implements QueueExecutor {
      *            the queue to send the message on
      * @param timeout
      *            timeout to use for the return message
-     */
-    public FixedQueueExecutor(QueueSender producer, int timeout) {
-        this.producer = producer;
-        this.timeout = timeout;
-        this.useReqMsgIdAsCorrelId = false;
-    }
-
-    /**
-     * Constructor.
-     *
-     * @param producer
-     *            the queue to send the message on
-     * @param timeout
-     *            timeout to use for the return message
      * @param useReqMsgIdAsCorrelId
      *            whether to use the request message id as the correlation id
      */
@@ -85,12 +71,16 @@ public class FixedQueueExecutor implements QueueExecutor {
             return null;
         }
 
+        final MessageAdmin admin = MessageAdmin.getAdmin();
         if(useReqMsgIdAsCorrelId) {// msgId not available until after send() is called
-            producer.send(request); // TODO - fix timing bug see Bugzilla 49111
-            id=request.getJMSMessageID();
-            MessageAdmin.getAdmin().putRequest(id, request);            
+            // Note: there is only one admin object which is shared between all threads
+            synchronized (admin) {// interlock with Receiver
+                producer.send(request);
+                id=request.getJMSMessageID();
+                admin.putRequest(id, request);
+            }
         } else {
-            MessageAdmin.getAdmin().putRequest(id, request);            
+            admin.putRequest(id, request);            
             producer.send(request);
         }
 
@@ -108,6 +98,6 @@ public class FixedQueueExecutor implements QueueExecutor {
         } catch (InterruptedException e) {
             log.warn("Interrupt exception caught", e);
         }
-        return MessageAdmin.getAdmin().get(id);
+        return admin.get(id);
     }
 }
