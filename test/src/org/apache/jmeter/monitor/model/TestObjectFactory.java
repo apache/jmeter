@@ -45,13 +45,13 @@ public class TestObjectFactory extends TestCase {
     }
 
     public void testFileData() throws Exception {
-        byte[] bytes= FileUtils.readFileToByteArray(new File("bin/testfiles/monitorStatus.xml"));
+        byte[] bytes= FileUtils.readFileToByteArray(new File("testfiles/monitorStatus.xml"));
         status = of.parseBytes(bytes);
         checkResult();
     }
     
     public void testStringData() throws Exception {
-        String content = FileUtils.readFileToString(new File("bin/testfiles/monitorStatus.xml"));
+        String content = FileUtils.readFileToString(new File("testfiles/monitorStatus.xml"));
         status = of.parseString(content);
         checkResult();
     }
