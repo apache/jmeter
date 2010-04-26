@@ -38,9 +38,9 @@ public class Receiver implements Runnable {
 
     private final QueueConnection conn;
 
-    // private static Receiver receiver;
+    private final boolean useReqMsgIdAsCorrelId;
 
-    private Receiver(QueueConnectionFactory factory, Queue receiveQueue, String principal, String credentials) throws JMSException {
+    private Receiver(QueueConnectionFactory factory, Queue receiveQueue, String principal, String credentials, boolean useReqMsgIdAsCorrelId) throws JMSException {
         if (null != principal && null != credentials) {
             log.info("creating receiver WITH authorisation credentials");
             conn = factory.createQueueConnection(principal, credentials);
@@ -50,15 +50,16 @@ public class Receiver implements Runnable {
         }
         session = conn.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
         consumer = session.createReceiver(receiveQueue);
+        this.useReqMsgIdAsCorrelId = useReqMsgIdAsCorrelId;
         log.debug("Receiver - ctor. Starting connection now");
         conn.start();
         log.info("Receiver - ctor. Connection to messaging system established");
     }
 
     public static Receiver createReceiver(QueueConnectionFactory factory, Queue receiveQueue,
-            String principal, String credentials)
+            String principal, String credentials, boolean useReqMsgIdAsCorrelId)
             throws JMSException {
-        Receiver receiver = new Receiver(factory, receiveQueue, principal, credentials);
+        Receiver receiver = new Receiver(factory, receiveQueue, principal, credentials, useReqMsgIdAsCorrelId);
         Thread thread = new Thread(receiver);
         thread.start();
         return receiver;
@@ -73,14 +74,20 @@ public class Receiver implements Runnable {
             try {
                 reply = consumer.receive(5000);
                 if (reply != null) {
-                    final String jmsCorrelationID = reply.getJMSCorrelationID();
-                    if (jmsCorrelationID == null) {
-                        log.warn("Received message with correlation id null. Discarding message ...");
-                    } else {
-                        if (log.isDebugEnabled()) {
-                            log.debug("Received message, correlation id:" + jmsCorrelationID);
+                    String messageKey;
+                    final MessageAdmin admin = MessageAdmin.getAdmin();
+                    if (useReqMsgIdAsCorrelId){
+                        messageKey = reply.getJMSMessageID();
+                        synchronized (admin) {// synchronize with FixedQueueExecutor
+                            admin.putReply(messageKey, reply);                            
                         }
-                        MessageAdmin.getAdmin().putReply(reply.getJMSCorrelationID(), reply);
+                    } else {
+                        messageKey = reply.getJMSCorrelationID();
+                        if (messageKey == null) {// JMSMessageID cannot be null
+                            log.warn("Received message with correlation id null. Discarding message ...");
+                        } else {
+                            admin.putReply(messageKey, reply);
+                        }
                     }
                 }
 
