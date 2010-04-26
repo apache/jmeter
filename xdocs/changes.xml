@@ -98,6 +98,7 @@ The XPath Assertion and XPath Extractor elements no longer fetch external DTDs b
 <li>Bug 48573 - LDAPExtSampler directory context handling</li>
 <li>Bug 48579 - Single Bind does not show config information when LdapExt Sampler is accessed</li>
 <li>Bug 48747 - TCP Sampler swallows exceptions</li>
+<li>Bug 49111 - "Message With ID Not Found" Error on JMS P2P sampler. Partial fix (can still fail if "Use Request Message Id As Correlation Id" is selected)</li>
 </ul>
 
 <h3>Controllers</h3>
