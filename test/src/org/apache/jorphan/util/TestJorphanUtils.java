@@ -22,8 +22,6 @@
      
 package org.apache.jorphan.util;
 
-import java.io.UnsupportedEncodingException;
-
 import junit.framework.TestCase;
 
 public class TestJorphanUtils extends TestCase {
