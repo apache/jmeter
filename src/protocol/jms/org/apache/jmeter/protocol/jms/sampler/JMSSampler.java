@@ -40,6 +40,7 @@ import javax.naming.NamingException;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
+import org.apache.jmeter.protocol.jms.Utils;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
@@ -130,15 +131,16 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         SampleResult res = new SampleResult();
         res.setSampleLabel(getName());
         res.setSamplerData(getContent());
+        res.setSuccessful(false); // Assume failure
         res.setDataType(SampleResult.TEXT);
         res.sampleStart();
 
         try {
             TextMessage msg = createMessage();
-
             if (isOneway()) {
                 producer.send(msg);
-                res.setSuccessful(true);
+                res.setRequestHeaders(Utils.messageProperties(msg));
+                res.setResponseOK();
                 res.setResponseData("Oneway request has no response data", null);
             } else {
                 if (!useTemporyQueue()) {
@@ -146,8 +148,8 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
                 }
 
                 Message replyMsg = executor.sendAndReceive(msg);
+                res.setRequestHeaders(Utils.messageProperties(msg));
                 if (replyMsg == null) {
-                    res.setSuccessful(false);
                     res.setResponseMessage("No reply message received");
                 } else {
                     if (replyMsg instanceof TextMessage) {
@@ -155,6 +157,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
                     } else {
                         res.setResponseData(replyMsg.toString(), null);
                     }
+                    res.setResponseHeaders(Utils.messageProperties(replyMsg));
                     res.setResponseOK();
                 }
             }
@@ -165,7 +168,6 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
             } else {                
                 res.setResponseMessage(e.getLocalizedMessage());
             }
-            res.setSuccessful(false);
         }
         res.sampleEnd();
         return res;
