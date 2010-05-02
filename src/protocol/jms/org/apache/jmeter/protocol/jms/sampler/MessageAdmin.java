@@ -65,7 +65,10 @@ public class MessageAdmin {
             synchronized (obj) {
                 obj.notify();
             }
-
+        } else {
+            if (log.isDebugEnabled()) {
+                log.debug("Failed to match reply: " + reply);
+            }
         }
     }
 
