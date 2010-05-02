@@ -281,6 +281,14 @@ public class JMeterUtils implements UnitTestManager {
         return ClassFinder.findClassesThatExtend(getSearchPaths(), new Class[]{superClass}, false);
     }
 
+    /**
+     * Generate a list of paths to search.
+     * The output array always starts with
+     * JMETER_HOME/lib/ext
+     * and is followed by any paths obtained from the "search_paths" JMeter property.
+     * 
+     * @return array of path strings
+     */
     public static String[] getSearchPaths() {
         String p = JMeterUtils.getPropDefault("search_paths", null); // $NON-NLS-1$
         String[] result = new String[1];
