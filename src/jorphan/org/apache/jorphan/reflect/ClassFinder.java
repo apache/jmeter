@@ -537,7 +537,7 @@ public final class ClassFinder {
                     }
                 }
             } catch (IOException e) {
-                log.warn("Can not open the jar " + strPath + " " + e.getLocalizedMessage());
+                log.warn("Can not open the jar " + strPath + " " + e.getLocalizedMessage(),e);
             }
             finally {
                 if(zipFile != null) {
