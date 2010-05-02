@@ -136,19 +136,24 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
         }
         StringBuilder buffer = new StringBuilder();
         int loop = getIterationCount();
-        if (publisher != null && publisher.isValid) {
-            result.sampleStart();
-            for (int idx = 0; idx < loop; idx++) {
-                String tmsg = getMessageContent();
-                publisher.publish(tmsg);
-                buffer.append(tmsg);
+        result.sampleStart();
+        try {
+            if (publisher != null && publisher.isValid) {
+                for (int idx = 0; idx < loop; idx++) {
+                    String tmsg = getMessageContent();
+                    publisher.publish(tmsg);
+                    buffer.append(tmsg);
+                }
+                result.sampleEnd();
+                result.setResponseCodeOK();
+                result.setResponseMessage(loop + " messages published");
+                result.setSuccessful(true);
+                result.setSamplerData(buffer.toString());
+                result.setSampleCount(loop);
             }
+        } catch (Exception e) {
             result.sampleEnd();
-            result.setResponseCodeOK();
-            result.setResponseMessage(loop + " messages published");
-            result.setSuccessful(true);
-            result.setSamplerData(buffer.toString());
-            result.setSampleCount(loop);
+            result.setResponseMessage(e.toString());
         }
         return result;
     }
