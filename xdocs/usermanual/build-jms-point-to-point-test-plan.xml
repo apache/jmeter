@@ -132,7 +132,7 @@ Then, select the JMS Point-to-Point sampler element in the tree.
                     </tr>
                     <tr>
                         <td>JNDI Name Request Queue</td>
-                        <td>Q.REQQ</td>
+                        <td>Q.REQ</td>
                         <td>This is equal to the JNDI name defined in the JNDI properties.</td>
                     </tr>
                     <tr>
@@ -176,13 +176,13 @@ Then, select the JMS Point-to-Point sampler element in the tree.
                     </tr>
                     <tr>
                         <td>queue.Q.REQ</td>
-                        <td>example.Q.REQ</td>
-                        <td>This defines a JNDI name Q.REQ for the request queue that points to the queue example.Q.REQ.</td>
+                        <td>example.A</td>
+                        <td>This defines a JNDI name Q.REQ for the request queue that points to the queue example.A</td>
                     </tr>
                     <tr>
                         <td>queue.Q.RPL</td>
-                        <td>example.Q.RPL</td>
-                        <td>This defines a JNDI name Q.RPL for the reply queue that points to the queue example.Q.RPL.</td>
+                        <td>example.B</td>
+                        <td>This defines a JNDI name Q.RPL for the reply queue that points to the queue example.B</td>
                     </tr>
                 </table>
             </p>
