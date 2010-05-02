@@ -67,8 +67,7 @@ public class FixedQueueExecutor implements QueueExecutor {
     public Message sendAndReceive(Message request) throws JMSException {
         String id = request.getJMSCorrelationID();
         if(id == null && !useReqMsgIdAsCorrelId){
-            log.error("Correlation id is null. Set the JMSCorrelationID header");
-            return null;
+            throw new IllegalArgumentException("Correlation id is null. Set the JMSCorrelationID header.");
         }
 
         final MessageAdmin admin = MessageAdmin.getAdmin();
