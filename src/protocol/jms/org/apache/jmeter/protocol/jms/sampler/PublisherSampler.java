@@ -144,16 +144,18 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
                     publisher.publish(tmsg);
                     buffer.append(tmsg);
                 }
-                result.sampleEnd();
                 result.setResponseCodeOK();
                 result.setResponseMessage(loop + " messages published");
                 result.setSuccessful(true);
                 result.setSamplerData(buffer.toString());
                 result.setSampleCount(loop);
+            } else {
+                result.setResponseMessage("Publisher not available - see log file");
             }
         } catch (Exception e) {
-            result.sampleEnd();
             result.setResponseMessage(e.toString());
+        } finally {
+            result.sampleEnd();            
         }
         return result;
     }
