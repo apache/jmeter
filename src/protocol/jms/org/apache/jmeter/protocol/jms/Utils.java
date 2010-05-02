@@ -34,6 +34,7 @@ public final class Utils {
     }
 
     public static final StringBuilder messageProperties(StringBuilder sb, Message msg){
+        requestHeaders(sb, msg);
         sb.append("Properties:\n");
         Enumeration<?> rme;
         try {
@@ -44,7 +45,6 @@ public final class Utils {
                 String value=msg.getStringProperty(name);
                 sb.append(value).append('\n');
             }
-            requestHeaders(sb, msg);
         } catch (JMSException e) {
             sb.append("\nError: "+e.toString());
         }
