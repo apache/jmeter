@@ -18,6 +18,8 @@
 
 package org.apache.jmeter.protocol.jms.client;
 
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.TextMessage;
@@ -29,7 +31,6 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import org.apache.jmeter.protocol.jms.sampler.BaseJMSSampler;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -61,9 +62,8 @@ public class ReceiveSubscriber implements Runnable {
 
     @SuppressWarnings("unused")
     private int loop = 1; // TODO never read
-
-    //@GuardedBy("this")
-    private final StringBuffer buffer = new StringBuffer();
+    
+    private final ConcurrentLinkedQueue<TextMessage> queue = new ConcurrentLinkedQueue<TextMessage>();
 
     //@GuardedBy("this")
     private volatile boolean RUN = true;
@@ -152,11 +152,13 @@ public class ReceiveSubscriber implements Runnable {
     }
 
     /**
-     * Get the message as a string
-     *
+     * Get the message
+     * @return the next message from the queue or null if none
      */
-    public synchronized String getMessage() {
-        return this.buffer.toString();
+    public synchronized TextMessage getMessage() {
+        TextMessage msg = queue.poll();
+        this.counter--;
+        return msg;
     }
 
     /**
@@ -172,20 +174,12 @@ public class ReceiveSubscriber implements Runnable {
             this.CONN.close();
             this.CLIENTTHREAD.interrupt();
             this.CLIENTTHREAD = null;
-            this.buffer.setLength(0);
+            queue.clear();
         } catch (JMSException e) {
             log.error(e.getMessage());
         } catch (Exception e) {
             log.error(e.getMessage());
         }
-    }
-
-    /**
-     * Reset the receiver ready for receiving any further messages
-     */
-    public synchronized void reset() {
-        counter = 0;
-        this.buffer.setLength(0);
     }
 
     /**
@@ -228,17 +222,8 @@ public class ReceiveSubscriber implements Runnable {
             try {
                 Message message = this.SUBSCRIBER.receive();
                 if (message != null && message instanceof TextMessage) {
-                    TextMessage msg = (TextMessage) message;
-                    String text = msg.getText();
-                    if (text.trim().length() > 0) {
-                        synchronized (this) {
-                            this.buffer.append(BaseJMSSampler
-                                .getMessageHeaders(message));
-                            this.buffer.append("JMS Message Text:\n\n");
-                            this.buffer.append(text);
-                            count(1);
-                        }
-                    }
+                    queue.add((TextMessage)message);
+                    count(1);
                 }
             } catch (JMSException e) {
                 log.error("Communication error: " + e.getMessage());
