@@ -17,6 +17,9 @@
 
 package org.apache.jmeter.protocol.jms.sampler;
 
+import java.util.Enumeration;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -48,12 +51,8 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     // No need to synch/ - only used by sampler and ClientPool (which does its own synch)
     private transient ReceiveSubscriber SUBSCRIBER = null;
 
-    //@GuardedBy("this")
-    private final StringBuffer BUFFER = new StringBuffer();
-
-    //@GuardedBy("this")
-    private transient int counter = 0;
-
+    private final ConcurrentLinkedQueue<TextMessage> queue = new ConcurrentLinkedQueue<TextMessage>();
+    
     private transient volatile boolean interrupted = false;
 
     // Don't change the string, as it is used in JMX files
@@ -103,6 +102,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
             sub = new OnMessageSubscriber(this.getUseJNDIPropertiesAsBoolean(), this.getJNDIInitialContextFactory(),
                     this.getProviderUrl(), this.getConnectionFactory(), this.getTopic(), this.isUseAuth(), this
                             .getUsername(), this.getPassword());
+            queue.clear();
             sub.setMessageListener(this);
             sub.resume();
             ClientPool.addClient(sub);
@@ -149,14 +149,18 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     private SampleResult sampleWithListener() {
         SampleResult result = new SampleResult();
         result.setDataType(SampleResult.TEXT);
+        StringBuffer buffer = new StringBuffer();
+        StringBuffer propBuffer = new StringBuffer();
+        int cnt;
+        
         result.setSampleLabel(getName());
         initListenerClient();
 
         int loop = this.getIterationCount();
 
         result.sampleStart();
-        int read;
-        while ((read=this.count(0)) < loop && interrupted == false) {
+        
+        while (queue.size() < loop && interrupted == false) {
             try {
                 Thread.sleep(0, 50);
             } catch (InterruptedException e) {
@@ -164,21 +168,39 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
             }
         }
         result.sampleEnd();
-        synchronized (this) {// Need to synch because buffer is shared with onMessageHandler
-            if (this.getReadResponseAsBoolean()) {
-                result.setResponseData(this.BUFFER.toString(), null);
-            } else {
-                result.setBytes(this.BUFFER.toString().length());
+       
+        for(cnt = 0; cnt < loop ; cnt++) {
+            TextMessage msg = queue.poll();
+            if (msg != null) {
+                try {
+                    buffer.append(msg.getText());
+                    Enumeration<?> props = msg.getPropertyNames();
+                    while(props.hasMoreElements()) {
+                        String name = (String) props.nextElement();
+                        propBuffer.append("PROPERTY: ");
+                        propBuffer.append(name);
+                        propBuffer.append("=");
+                        propBuffer.append(msg.getObjectProperty(name));
+                        propBuffer.append("\n");
+                    }
+                } catch (JMSException e) {
+                    log.error(e.getMessage());
+                }
             }
-            read=this.count(0);
         }
+        if (this.getReadResponseAsBoolean()) {
+            result.setResponseData(buffer.toString().getBytes());
+        } else {
+            result.setBytes(buffer.toString().getBytes().length);
+        }
+        result.setResponseHeaders(propBuffer.toString());
+        result.setDataType(SampleResult.TEXT);
         result.setSuccessful(true);
         result.setResponseCodeOK();
-        result.setResponseMessage(read + " messages received");
+        result.setResponseMessage(loop + " messages received"); // TODO fix
         result.setSamplerData(loop + " messages expected");
-        result.setSampleCount(read);
+        result.setSampleCount(loop);
 
-        this.resetCount();
         return result;
     }
 
@@ -191,6 +213,11 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     private SampleResult sampleWithReceive() {
         SampleResult result = new SampleResult();
         result.setDataType(SampleResult.TEXT);
+        StringBuffer buffer = new StringBuffer();
+        StringBuffer propBuffer = new StringBuffer();
+        int cnt;
+        
+        
         result.setSampleLabel(getName());
         if (this.SUBSCRIBER == null) {
             this.initReceiveClient();
@@ -208,19 +235,38 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
             }
         }
         result.sampleEnd();
-        int read = this.SUBSCRIBER.count(0);
-        if (this.getReadResponseAsBoolean()) {
-            result.setResponseData(this.SUBSCRIBER.getMessage(), null);
-        } else {
-            result.setBytes(this.SUBSCRIBER.getMessage().length());
+        result.setResponseMessage(loop + " samples messages received");
+        for(cnt = 0; cnt < loop ; cnt++) {
+            TextMessage msg = this.SUBSCRIBER.getMessage();
+            if (msg != null) {
+                try {
+                    buffer.append(msg.getText());
+                    Enumeration<?> props = msg.getPropertyNames();
+                    while(props.hasMoreElements()) {
+                        String name = (String) props.nextElement();
+                        propBuffer.append("PROPERTY: ");
+                        propBuffer.append(name);
+                        propBuffer.append("=");
+                        propBuffer.append(msg.getObjectProperty(name));
+                        propBuffer.append("\n");
+                    }
+                } catch (JMSException e) {
+                    log.error(e.getMessage());
+                }
+            }
         }
+        if (this.getReadResponseAsBoolean()) {
+            result.setResponseData(buffer.toString().getBytes());
+        } else {
+            result.setBytes(buffer.toString().getBytes().length);
+        }
+        result.setResponseHeaders(propBuffer.toString());
         result.setSuccessful(true);
         result.setResponseCodeOK();
-        result.setResponseMessage(read + " message(s) received successfully");
+        result.setResponseMessage(loop + " message(s) received successfully");
         result.setSamplerData(loop + " messages expected");
-        result.setSampleCount(read);
+        result.setSampleCount(loop);
 
-        this.SUBSCRIBER.reset();
         return result;
     }
 
@@ -229,40 +275,9 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
      * listener with the TopicSubscriber.
      */
     public synchronized void onMessage(Message message) {
-        try {
-            if (message instanceof TextMessage) {
-                TextMessage msg = (TextMessage) message;
-                String content = msg.getText();
-                if (content != null) {
-                    this.BUFFER.append(getMessageHeaders(message));
-                    this.BUFFER.append("JMS Message Text:\n\n");
-                    this.BUFFER.append(content);
-                    count(1);
-                }
-            }
-        } catch (JMSException e) {
-            log.error(e.getMessage());
+        if (message instanceof TextMessage) {
+            queue.add((TextMessage)message);
         }
-    }
-
-    /**
-     * increment the count and return the new value.
-     *
-     * @param increment
-     * @return the new value
-     */
-    private synchronized int count(int increment) {
-        this.counter += increment;
-        return this.counter;
-    }
-
-    /**
-     * resetCount will set the counter to zero and set the length of the
-     * StringBuffer to zero.
-     */
-    private synchronized void resetCount() {
-        this.counter = 0;
-        this.BUFFER.setLength(0);
     }
 
     // ----------- get/set methods ------------------- //
