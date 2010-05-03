@@ -98,8 +98,6 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     //
     // Member variables
     //
-    /** Factory for the connections to the queueing system. */
-    // NOTUSED private QueueConnectionFactory factory;
     /** Queue for receiving messages (if applicable). */
     private transient Queue receiveQueue;
 
@@ -109,11 +107,6 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     /** Connection to the queueing system. */
     private transient QueueConnection connection;
 
-    /** Queue for sending messages. */
-    private transient Queue sendQueue;
-
-    /** Is the communication oneway? */
-    // NOTUSED private boolean oneway;
     /** The executor for (pseudo) synchronous communication. */
     private transient QueueExecutor executor;
 
@@ -307,9 +300,8 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
                 throw new IllegalStateException(msg);
             }
             QueueConnectionFactory factory = (QueueConnectionFactory) obj;
-            Queue queue = (Queue) context.lookup(getSendQueue());
+            Queue sendQueue = (Queue) context.lookup(getSendQueue());
 
-            sendQueue = queue;
             if (!useTemporyQueue()) {
                 receiveQueue = (Queue) context.lookup(getReceiveQueue());
                 receiverThread = Receiver.createReceiver(factory, receiveQueue, getPrincipal(context), getCredentials(context)
