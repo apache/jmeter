@@ -174,7 +174,7 @@ public class TransactionController extends GenericController implements SampleLi
         {
             if (res != null) {
                 res.setIdleTime(pauseTime+res.getIdleTime());
- 			    res.sampleEnd();
+                 res.sampleEnd();
                 res.setResponseMessage("Number of samples in transaction : " + calls + ", number of failing samples : " + noFailingSamples);
                 if(res.isSuccessful()) {
                     res.setResponseCodeOK();
@@ -212,8 +212,8 @@ public class TransactionController extends GenericController implements SampleLi
                 res.setThreadName(sampleResult.getThreadName());
                 res.setBytes(res.getBytes() + sampleResult.getBytes());
                 if (!isIncludeTimers()) {// Accumulate waiting time for later
-                	pauseTime += sampleResult.getEndTime() - sampleResult.getTime() - prevEndTime;
-                	prevEndTime = sampleResult.getEndTime();
+                    pauseTime += sampleResult.getEndTime() - sampleResult.getTime() - prevEndTime;
+                    prevEndTime = sampleResult.getEndTime();
                 }
                 if(!sampleResult.isSuccessful()) {
                     res.setSuccessful(false);
@@ -246,7 +246,7 @@ public class TransactionController extends GenericController implements SampleLi
      * @return boolean (defaults to true for backwards compatibility)
      */
     public boolean isIncludeTimers() {
-    	return getPropertyAsBoolean(INCLUDE_TIMERS, true);
+        return getPropertyAsBoolean(INCLUDE_TIMERS, true);
     }
 
 }
