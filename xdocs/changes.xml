@@ -74,6 +74,11 @@ Any such files will need to be converted by reading them in JMeter 2.3.4 and res
 The XPath Assertion and XPath Extractor elements no longer fetch external DTDs by default; this can be changed in the GUI.
 </p>
 
+<p>
+JMSConfigGui has been renamed as JMSSamplerGui.
+This does not affect existing test plans.
+</p>
+
 <h2>Bug fixes</h2>
 
 <h3>HTTP Samplers and Proxy</h3>
