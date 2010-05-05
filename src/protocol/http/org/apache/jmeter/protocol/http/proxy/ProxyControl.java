@@ -563,7 +563,7 @@ public class ProxyControl extends GenericController {
      */
     private void addTransactionController(JMeterTreeModel model, JMeterTreeNode node, String name)
             throws IllegalUserActionException {
-    	TransactionController sc = new TransactionController();
+        TransactionController sc = new TransactionController();
         sc.setProperty(TestElement.GUI_CLASS, TRANSACTION_CONTROLLER_GUI);
         sc.setName(name);
         model.addComponent(sc, node);
@@ -780,7 +780,7 @@ public class ProxyControl extends GenericController {
             }
 
             if (groupingMode == GROUPING_IN_SIMPLE_CONTROLLERS ||
-            		groupingMode == GROUPING_IN_TRANSACTION_CONTROLLERS) {
+                groupingMode == GROUPING_IN_TRANSACTION_CONTROLLERS) {
                 // Find the last controller in the target to store the
                 // sampler there:
                 for (int i = myTarget.getChildCount() - 1; i >= 0; i--) {
