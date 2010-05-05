@@ -169,9 +169,11 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         }
         result.sampleEnd();
        
+        int read = 0;
         for(cnt = 0; cnt < loop ; cnt++) {
             TextMessage msg = queue.poll();
             if (msg != null) {
+                read++;
                 try {
                     buffer.append(msg.getText());
                     Enumeration<?> props = msg.getPropertyNames();
@@ -197,9 +199,9 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         result.setDataType(SampleResult.TEXT);
         result.setSuccessful(true);
         result.setResponseCodeOK();
-        result.setResponseMessage(loop + " messages received"); // TODO fix
+        result.setResponseMessage(read + " messages received");
         result.setSamplerData(loop + " messages expected");
-        result.setSampleCount(loop);
+        result.setSampleCount(read);
 
         return result;
     }
