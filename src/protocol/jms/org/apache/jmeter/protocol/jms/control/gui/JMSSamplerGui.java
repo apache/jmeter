@@ -42,7 +42,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
  * Created on: October 28, 2004
  *
  */
-public class JMSConfigGui extends AbstractSamplerGui {
+public class JMSSamplerGui extends AbstractSamplerGui {
 
     private static final long serialVersionUID = 240L;
 
@@ -75,7 +75,7 @@ public class JMSConfigGui extends AbstractSamplerGui {
 
     private JCheckBox useReqMsgIdAsCorrelId;
 
-    public JMSConfigGui() {
+    public JMSSamplerGui() {
         init();
     }
 
