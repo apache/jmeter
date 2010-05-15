@@ -1306,12 +1306,11 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             if (frameDepth > MAX_FRAME_DEPTH) {
                 res.addSubResult(errorResult(new Exception("Maximum frame/iframe nesting depth exceeded."), res));
             } else {
-                HTTPSampleResult container = (HTTPSampleResult) (areFollowingRedirect ? res.getParent() : res);
-
                 // Only download page resources if we were not redirected.
                 // If we were redirected, the page resources have already been
                 // downloaded for the sample made for the redirected url
                 if(!wasRedirected) {
+                    HTTPSampleResult container = (HTTPSampleResult) (areFollowingRedirect ? res.getParent() : res);
                     res = downloadPageResources(res, container, frameDepth);
                 }
             }
