@@ -62,15 +62,15 @@ results without impacting the performance of the application serer
 itself.
 </p>
 
-<p><b>Step 0: Configure the server nodes</b></p>
+<p><b>Step 0: Configure the nodes</b></p>
 <p>
-Make sure that all the servers are running exactly the same version of JMeter.
-As far as possible, use the same version of Java on all systems.
+Make sure that all the nodes (client and servers) are running exactly the same version of JMeter.
+As far as possible, also use the same version of Java on all systems.
 Using different versions of Java may work - but is best avoided.
 </p>
 <p>
 If the test uses any data files, note that these are not sent across by the client so
-make sure that these are available in the appropriate directory.
+make sure that these are available in the appropriate directory on each server.
 If necessary you can define different values for properties by editting the user.properties or system.properties
 files on each server. These properties will be picked up when the server is started and may be
 used in the test plan to affect its behaviour (e.g. connecting to a different remote server).
