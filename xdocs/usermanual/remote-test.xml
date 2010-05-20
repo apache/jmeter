@@ -39,10 +39,15 @@ all the data from them.  This offers the following features:
 
 
 <ul>
-<li>Saving of test samples to a local machine </li>
+<li>Saving of test samples to the local machine </li>
 <li>Managment of multiple JMeterEngines from a single machine </li>
+<li>No need to copy the test plan to each server - the client sends it to all the servers</li>
 </ul>
 </p>
+<note>
+Note: The same test plan is run by all the servers.
+JMeter does not distribute the load between servers, each runs the full test plan.
+</note>
 <p>
 However, remote mode does use more resources than running the same number of non-GUI tests independently.
 If many server instances are used, the client JMeter can become overloaded, as can the client network connection.
@@ -55,6 +60,22 @@ the same Ethernet segment as your application server that you configure to run
 the JMeter Engine.  This will minimize the impact of the network on the test 
 results without impacting the performance of the application serer 
 itself.
+</p>
+
+<p><b>Step 0: Configure the server nodes</b></p>
+<p>
+Make sure that all the servers are running exactly the same version of JMeter.
+As far as possible, use the same version of Java on all systems.
+Using different versions of Java may work - but is best avoided.
+</p>
+<p>
+If the test uses any data files, note that these are not sent across by the client so
+make sure that these are available in the appropriate directory.
+If necessary you can define different values for properties by editting the user.properties or system.properties
+files on each server. These properties will be picked up when the server is started and may be
+used in the test plan to affect its behaviour (e.g. connecting to a different remote server).
+Alternatively use different content in any datafiles used by the test 
+(e.g. if each server must use unique ids, divide these between the data files)
 </p>
 
 <p><b>Step 1: Start the servers </b></p>
