@@ -18,14 +18,17 @@
 
 package org.apache.jmeter.control;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
 import java.util.LinkedList;
 
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.save.SaveService;
+import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
@@ -116,8 +119,20 @@ public class IncludeController extends GenericController implements ReplaceableC
         HashTree tree = null;
         if (includePath != null && includePath.length() > 0) {
             try {
-                String file=prefix+includePath;
-                log.info("loadIncludedElements -- try to load included module: "+file);
+                String fileName=prefix+includePath;
+                File file = new File(fileName);
+                final String absolutePath = file.getAbsolutePath();
+                log.info("loadIncludedElements -- try to load included module: "+absolutePath);
+                if(!file.exists() && !file.isAbsolute()){
+                    log.info("loadIncludedElements -failed for: "+absolutePath);
+                    file = new File(FileServer.getFileServer().getBaseDir(), includePath);
+                    log.info("loadIncludedElements -Attempting to read it from: "+absolutePath);
+                    if(!file.exists()){
+                        log.error("loadIncludedElements -failed for: "+absolutePath);
+                        throw new IOException("loadIncludedElements -failed for: "+absolutePath);
+                    }
+                }
+                
                 reader = new FileInputStream(file);
                 tree = SaveService.loadTree(reader);
                 removeDisabledItems(tree);

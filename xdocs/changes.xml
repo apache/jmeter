@@ -176,6 +176,7 @@ This does not affect existing test plans.
 <li>Bug 47909 - TransactionController should sum the latency</li>
 <li>Bug 41418 - Exclude timer duration from Transaction Controller runtime in report</li>
 <li>Bug 48749 - Allowing custom Thread Groups</li>
+<li>Bug 43389 - Allow Include files to be found relative to the current JMX file</li>
 </ul>
 
 <h3>Listeners</h3>
