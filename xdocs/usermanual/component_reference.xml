@@ -1874,6 +1874,10 @@ This element does not support variables/functions in the filename field.<br></br
 However, if the property <b>includecontroller.prefix</b> is defined, 
 the contents are used to prefix the pathname.
 </note>
+<p>
+If the file cannot be found at the location given by prefix+filename, then the controller
+attempts to open the fileName relative to the JMX launch directory (versions of JMeter after 2.3.4).
+</p>
 </description>
 <properties>
 	<property name="Filename" required="Yes">The file to include.</property>
