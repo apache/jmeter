@@ -1110,16 +1110,16 @@ run JMeter unless all the JMeter jars are added.
     <!-- Convert eol:native source files to appropriate format if required -->
     <target name="_filter" unless="native.${eoltype}">
         <property name="workdir" value="${dist.dir}/${eoltype}"/>
-        <echo level="info">Copying files to work directory ${workdir}</echo>
+        <echo level="info">Converting work files to eol=${eoltype} in ${workdir}</echo>
         <mkdir dir="${workdir}"/>
         <copy includeemptydirs="false" todir="${workdir}">
             <fileset dir=".">
                 <patternset refid="${fileset}"/>
             </fileset>
+        	<filterchain>
+                <fixcrlf fixlast="false" eol="${eoltype}" srcdir="${workdir}"/>
+        	</filterchain>
         </copy>
-        <echo level="info">Converting work files to eol=${eoltype}</echo>
-        <fixcrlf fixlast="false" eol="${eoltype}" srcdir="${workdir}">
-        </fixcrlf>
     </target>
 
 	<!-- Files to be included in full source download -->
