@@ -731,7 +731,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @return a sampling result useful to inform the user about the exception.
      */
     protected HTTPSampleResult errorResult(Throwable e, HTTPSampleResult res) {
-        res.setSampleLabel("Error");
+        res.setSampleLabel("Error: " + res.getSampleLabel());
         res.setDataType(SampleResult.TEXT);
         ByteArrayOutputStream text = new ByteArrayOutputStream(200);
         e.printStackTrace(new PrintStream(text));
