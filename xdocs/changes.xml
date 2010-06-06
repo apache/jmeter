@@ -144,6 +144,7 @@ This does not affect existing test plans.
 <li>Bug 48350 - Deadlock on distributed testing with 2 clients</li>
 <li>Bug 48901 - Endless wait by adding Synchronizing Timer</li>
 <li>Bug 49149 - usermanual/index.html has typo in link to "Regular Expressions" page</li>
+<li>Bug 49394 - Classcast Exception in ActionRouter.postActionPerformed</li>
 </ul>
 
 <!-- ==================================================== -->
