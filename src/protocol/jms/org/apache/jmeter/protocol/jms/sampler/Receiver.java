@@ -38,28 +38,39 @@ public class Receiver implements Runnable {
 
     private final QueueConnection conn;
 
-    private final boolean useReqMsgIdAsCorrelId;
+    private final boolean useResMsgIdAsCorrelId;
 
-    private Receiver(QueueConnectionFactory factory, Queue receiveQueue, String principal, String credentials, boolean useReqMsgIdAsCorrelId) throws JMSException {
+    private Receiver(QueueConnectionFactory factory, Queue receiveQueue, String principal, String credentials, boolean useResMsgIdAsCorrelId) throws JMSException {
         if (null != principal && null != credentials) {
-            log.info("creating receiver WITH authorisation credentials");
+            log.info("creating receiver WITH authorisation credentials. UseResMsgId="+useResMsgIdAsCorrelId);
             conn = factory.createQueueConnection(principal, credentials);
         }else{
-            log.info("creating receiver without authorisation credentials");
+            log.info("creating receiver without authorisation credentials. UseResMsgId="+useResMsgIdAsCorrelId);
             conn = factory.createQueueConnection(); 
         }
         session = conn.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
         consumer = session.createReceiver(receiveQueue);
-        this.useReqMsgIdAsCorrelId = useReqMsgIdAsCorrelId;
+        this.useResMsgIdAsCorrelId = useResMsgIdAsCorrelId;
         log.debug("Receiver - ctor. Starting connection now");
         conn.start();
         log.info("Receiver - ctor. Connection to messaging system established");
     }
 
+    /**
+     * Create a receiver to process responses.
+     * 
+     * @param factory
+     * @param receiveQueue
+     * @param principal
+     * @param credentials
+     * @param useResMsgIdAsCorrelId true if should use JMSMessageId, false if should use JMSCorrelationId
+     * @return the Receiver which will process the responses
+     * @throws JMSException
+     */
     public static Receiver createReceiver(QueueConnectionFactory factory, Queue receiveQueue,
-            String principal, String credentials, boolean useReqMsgIdAsCorrelId)
+            String principal, String credentials, boolean useResMsgIdAsCorrelId)
             throws JMSException {
-        Receiver receiver = new Receiver(factory, receiveQueue, principal, credentials, useReqMsgIdAsCorrelId);
+        Receiver receiver = new Receiver(factory, receiveQueue, principal, credentials, useResMsgIdAsCorrelId);
         Thread thread = new Thread(receiver);
         thread.start();
         return receiver;
@@ -76,7 +87,7 @@ public class Receiver implements Runnable {
                 if (reply != null) {
                     String messageKey;
                     final MessageAdmin admin = MessageAdmin.getAdmin();
-                    if (useReqMsgIdAsCorrelId){
+                    if (useResMsgIdAsCorrelId){
                         messageKey = reply.getJMSMessageID();
                         synchronized (admin) {// synchronize with FixedQueueExecutor
                             admin.putReply(messageKey, reply);                            
