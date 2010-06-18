@@ -89,6 +89,11 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
     private static final String USE_REQ_MSGID_AS_CORRELID = "JMSSampler.useReqMsgIdAsCorrelId"; // $NON-NLS-1$
 
+    private static final String USE_RES_MSGID_AS_CORRELID = "JMSSampler.useResMsgIdAsCorrelId"; // $NON-NLS-1$
+
+    private static final boolean USE_RES_MSGID_AS_CORRELID_DEFAULT = false; // Default to be applied
+
+
     //--
 
     // Should we use java.naming.security.[principal|credentials] to create the QueueConnection?
@@ -252,8 +257,22 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         return getPropertyAsBoolean(IS_NON_PERSISTENT);
     }
 
+    /**
+     * Which request field to use for correlation?
+     * 
+     * @return true if correlation should use the request JMSMessageID rather than JMSCorrelationID
+     */
     public boolean isUseReqMsgIdAsCorrelId() {
         return getPropertyAsBoolean(USE_REQ_MSGID_AS_CORRELID);
+    }
+
+    /**
+     * Which response field to use for correlation?
+     * 
+     * @return true if correlation should use the response JMSMessageID rather than JMSCorrelationID
+     */
+    public boolean isUseResMsgIdAsCorrelId() {
+        return getPropertyAsBoolean(USE_RES_MSGID_AS_CORRELID, USE_RES_MSGID_AS_CORRELID_DEFAULT);
     }
 
     public String getInitialContextFactory() {
@@ -274,6 +293,10 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
     public void setUseReqMsgIdAsCorrelId(boolean value) {
         setProperty(new BooleanProperty(USE_REQ_MSGID_AS_CORRELID, value));
+    }
+
+    public void setUseResMsgIdAsCorrelId(boolean value) {
+        setProperty(USE_RES_MSGID_AS_CORRELID, value, USE_RES_MSGID_AS_CORRELID_DEFAULT);
     }
 
     @Override
@@ -305,7 +328,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
             if (!useTemporyQueue()) {
                 receiveQueue = (Queue) context.lookup(getReceiveQueue());
                 receiverThread = Receiver.createReceiver(factory, receiveQueue, getPrincipal(context), getCredentials(context)
-                        , isUseReqMsgIdAsCorrelId());
+                        , isUseResMsgIdAsCorrelId());
             }
 
             String principal = null;

@@ -1182,7 +1182,7 @@ For details, see <complink name="BSF Sampler"/>.
 </properties>
 </component>
 
-<component name="JMS Point-to-Point" index="&sect-num;.1.15"  width="635" height="733" screenshot="jms/JMS_Point-to-Point.png">
+<component name="JMS Point-to-Point" index="&sect-num;.1.15"  width="684" height="698" screenshot="jms/JMS_Point-to-Point.png">
 <note>ALPHA CODE</note>
 	<description>
 		<p>
@@ -1218,9 +1218,32 @@ For details, see <complink name="BSF Sampler"/>.
     temporary queues will be used for the communication between the requestor and the server. This is very different from
     the fixed reply queue. With temporary queues the diffent threads will block until the reply message has been received.
   </property>
-  <property name="Use Request Message Id As Correlation Id" required="Yes">
-    If this is selected, then the request message id is used as the correlation id.
-    Otherwise, the correlation id needs to be specified in the request.
+  <property name="Use alternate fields for message correlation" required="Yes">
+    These check-boxes select the fields which will be used for matching the response message with the original request.
+    <ul>
+    <li>Use Request Message Id - if selected, the request JMSMessageID will be used, 
+    otherwise the request JMSCorrelationID will be used. 
+    In the latter case the correlation id must be specified in the request.</li>
+    <li>Use Response Message Id - if selected, the response JMSMessageID will be used, 
+    otherwise the response JMSCorrelationID will be used.
+    </li>
+    </ul>
+    There are two frequently used JMS Correlation patterns:
+    <ul>
+    <li>JMS Correlation ID Pattern - 
+    i.e. match request and response on their correlation Ids
+    => deselect both checkboxes, and provide a correlation id.</li>
+    <li>JMS Message ID Pattern -
+    i.e. match request message id with response correlation id
+    => select "Use Request Message Id" only.
+    </li>
+    </ul>
+    In both cases the JMS application is responsible for populating the correlation ID as necessary.
+    <b>Note:</b> if the same queue is used to send and receive messages, 
+    then the response message will be the same as the request message.
+    In which case, either provide a correlation id and clear both checkboxes;
+    or select both checkboxes to use the message Id for correlation.
+    This can be useful for checking raw JMS throughput.
   </property>
   <property name="Timeout" required="Yes">
       The timeout in milliseconds for the reply-messages. If a reply has not been received within the specified
