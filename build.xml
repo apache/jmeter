@@ -304,6 +304,7 @@
 
   <!-- Jars for binary release -->
   <patternset id="external.jars">
+    <include name="${lib.dir}/${activation.jar}"/>
     <include name="${lib.dir}/${apache-bsf.jar}"/>
     <include name="${lib.dir}/${beanshell.jar}"/>
     <include name="${lib.dir}/${avalon-framework.jar}"/>
@@ -323,8 +324,10 @@
     <include name="${lib.dir}/${htmllexer.jar}"/>
     <include name="${lib.dir}/${htmlparser.jar}"/>
     <include name="${lib.dir}/${jakarta-oro.jar}"/>
+    <include name="${lib.dir}/${javamail.jar}"/>
     <include name="${lib.dir}/${jcharts.jar}"/>
     <include name="${lib.dir}/${jdom.jar}"/>
+    <include name="${lib.dir}/${jms.jar}"/>
     <include name="${lib.dir}/${js_rhino.jar}"/>
     <include name="${lib.dir}/${junit.jar}"/>
     <include name="${lib.dir}/${logkit.jar}"/>
@@ -380,6 +383,7 @@
     <pathelement location="${lib.dir}/${javamail.jar}"/>
     <pathelement location="${lib.dir}/${jcharts.jar}"/>
     <pathelement location="${lib.dir}/${jdom.jar}"/>
+    <pathelement location="${lib.dir}/${jms.jar}"/>
     <pathelement location="${lib.dir}/${js_rhino.jar}"/>
     <pathelement location="${lib.dir}/${junit.jar}"/>
     <pathelement location="${lib.dir}/${logkit.jar}"/>
