@@ -44,13 +44,13 @@ public class OnMessageSubscriber {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private TopicConnection CONN = null;
+    private final TopicConnection CONN;
 
-    private TopicSession SESSION = null;
+    private final TopicSession SESSION;
 
-    private Topic TOPIC = null;
+    private final Topic TOPIC;
 
-    private TopicSubscriber SUBSCRIBER = null;
+    private final TopicSubscriber SUBSCRIBER;
 
     /**
      * Constructor takes the necessary JNDI related parameters to create a
@@ -64,29 +64,35 @@ public class OnMessageSubscriber {
      * @param useAuth
      * @param user
      * @param pwd
+     * @throws JMSException if could not create context or other problem occurred.
      */
     public OnMessageSubscriber(boolean useProps, String jndi, String url, String connfactory, String topic,
-            boolean useAuth, String user, String pwd) {
+            boolean useAuth, String user, String pwd) throws JMSException {
         Context ctx = initJNDI(useProps, jndi, url, useAuth, user, pwd);
-        if (ctx != null) {
-            initConnection(ctx, connfactory, topic);
-        } else {
-            log.error("Could not initialize JNDI Initial Context Factory");
+        if (ctx == null){
+            throw new JMSException("Could not initialize JNDI Initial Context Factory");
         }
+        ConnectionFactory.getTopicConnectionFactory(ctx, connfactory);
+        CONN = ConnectionFactory.getTopicConnection();
+        TOPIC = InitialContextFactory.lookupTopic(ctx, topic);
+        SESSION = this.CONN.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
+        SUBSCRIBER = this.SESSION.createSubscriber(this.TOPIC);
+        log.info("created the topic connection successfully");
     }
 
     /**
      * initialize the JNDI intial context
      *
-     * @param useProps
-     * @param jndi
-     * @param url
+     * @param useProps - use jndi.properties file
+     * @param initialContextFactory
+     * @param providerUrl
      * @param useAuth
-     * @param user
-     * @param pwd
+     * @param securityPrincipal
+     * @param securityCredentials
      * @return the context or null
      */
-    private Context initJNDI(boolean useProps, String jndi, String url, boolean useAuth, String user, String pwd) {
+    private Context initJNDI(boolean useProps, 
+            String initialContextFactory, String providerUrl, boolean useAuth, String securityPrincipal, String securityCredentials) {
         if (useProps) {
             try {
                 return new InitialContext();
@@ -95,27 +101,7 @@ public class OnMessageSubscriber {
                 return null;
             }
         } else {
-            return InitialContextFactory.lookupContext(jndi, url, useAuth, user, pwd);
-        }
-    }
-
-    /**
-     * Initialize the connection, session and subscriber
-     *
-     * @param ctx
-     * @param connfactory
-     * @param topic
-     */
-    private void initConnection(Context ctx, String connfactory, String topic) {
-        try {
-            ConnectionFactory.getTopicConnectionFactory(ctx, connfactory);
-            this.CONN = ConnectionFactory.getTopicConnection();
-            this.TOPIC = InitialContextFactory.lookupTopic(ctx, topic);
-            this.SESSION = this.CONN.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
-            this.SUBSCRIBER = this.SESSION.createSubscriber(this.TOPIC);
-            log.info("created the topic connection successfully");
-        } catch (JMSException e) {
-            log.error("Connection error: " + e.getMessage());
+            return InitialContextFactory.lookupContext(initialContextFactory, providerUrl, useAuth, securityPrincipal, securityCredentials);
         }
     }
 
@@ -139,9 +125,6 @@ public class OnMessageSubscriber {
             this.SUBSCRIBER.close();
             this.SESSION.close();
             this.CONN.close();
-            this.SUBSCRIBER = null;
-            this.SESSION = null;
-            this.CONN = null;
         } catch (JMSException e) {
             log.error(e.getMessage());
         }
