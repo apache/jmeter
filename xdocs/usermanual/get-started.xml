@@ -36,13 +36,8 @@ e.g. Web (HTTP/HTTPS), FTP, JDBC, LDAP, Java, and JUnit.</p>
 then you will, of course, need the appropriate JDBC driver from your vendor.  JMeter does not come with
 any JDBC drivers.</p>
 <p>
-Other software that you may need to download:
-<ul>
-<li><a href="http://www.beanshell.org/">BeanShell</a> - needed for the BeanShell function and test elements</li>
-<li><a href="http://java.sun.com/products/javabeans/glasgow/jaf.html">Java Activation Framework</a> - needed for JavaMail</li>
-<li><a href="http://java.sun.com/products/javamail/index.jsp">Java Mail</a> - needed for Mail Visualiser, Mail Reader and WebService(SOAP) sampler</li>
-<li><a href="http://java.sun.com/products/jms/docs.html">JMS</a> - for JMS samplers</li>
-</ul>
+JMeter includes the JMS API jar, but does not include a JMS client implementation.
+If you want to run JMS tests, you will need to download the appropriate jars from the JMS provider.
 </p>
 <note>
 See the <a href="#classpath">JMeter Classpath</a> section for details on installing additional jars.
@@ -111,7 +106,7 @@ implementation.</p>
 <subsection name="&sect-num;.2.3 Email Support" anchor="opt_email">
 <p>JMeter has limited Email capabilities. It can send email based on test results, and has a POP3(S)/IMAP(S) sampler.
 It does not currently support SMTP sampling.
-To enable Email support, add Sun's JavaMail packages and the activation packages to JMeter's <a href="#classpath">classpath</a>.</p>
+</p>
 </subsection>
 
 <subsection name="&sect-num;.2.4 SSL Encryption" anchor="opt_ssl">
@@ -248,7 +243,7 @@ then define the property <b>search_paths</b> in jmeter.properties.
 Do not use lib/ext for utility jars; it is only intended for JMeter components.
 </p>
 <p>
-Other jars (such as JDBC, JavaMail and any other support libaries needed by the JMeter code)
+Other jars (such as JDBC, JMS implementations and any other support libaries needed by the JMeter code)
  should be placed in the <b>lib</b> directory - not the <b>lib/ext</b> directory</p>
 <p>Note: JMeter will only find .jar files, not .zip.</p>
 <p>You can also install utility Jar files in $JAVA_HOME/jre/lib/ext, or (since 2.1.1) you can set the property <b>user.classpath</b> in jmeter.properties</p>
