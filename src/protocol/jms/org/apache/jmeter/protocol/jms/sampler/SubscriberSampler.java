@@ -93,9 +93,10 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     /**
      * Create the OnMessageSubscriber client and set the sampler as the message
      * listener.
+     * @throws JMSException 
      *
      */
-    private OnMessageSubscriber initListenerClient() {
+    private OnMessageSubscriber initListenerClient() throws JMSException {
         interrupted = false;
         OnMessageSubscriber sub = (OnMessageSubscriber) ClientPool.get(this);
         if (sub == null) {
@@ -152,13 +153,21 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         StringBuffer buffer = new StringBuffer();
         StringBuffer propBuffer = new StringBuffer();
         int cnt;
-        
-        result.setSampleLabel(getName());
-        initListenerClient();
-
         int loop = this.getIterationCount();
 
+        
+        result.setSampleLabel(getName());
         result.sampleStart();
+        try {
+            initListenerClient();
+        } catch (JMSException ex) {
+            log.warn("",ex);
+            result.sampleEnd();
+            result.setResponseCode("000");
+            result.setResponseMessage(ex.getMessage());
+            return result;
+        }
+
         
         while (queue.size() < loop && interrupted == false) {
             try {
