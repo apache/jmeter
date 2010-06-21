@@ -22,6 +22,14 @@ import java.util.Enumeration;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
+import javax.jms.MessageConsumer;
+import javax.jms.QueueConnection;
+import javax.jms.QueueSession;
+import javax.jms.TopicConnection;
+import javax.jms.TopicPublisher;
+import javax.jms.TopicSession;
+
+import org.apache.log.Logger;
 
 /**
  * Utility methods for JMS protocol.
@@ -29,11 +37,71 @@ import javax.jms.Message;
  */
 public final class Utils {
 
-    public static final String messageProperties(Message msg){
+    public static void close(MessageConsumer closeable, Logger log){
+        if (closeable != null){
+            try {
+                closeable.close();
+            } catch (JMSException e) {
+                log.error("Error during close: ", e);
+            }
+        }
+    }
+
+    public static void close(TopicSession closeable, Logger log) {
+        if (closeable != null){
+            try {
+                closeable.close();
+            } catch (JMSException e) {
+                log.error("Error during close: ", e);
+            }
+        }
+    }
+
+    public static void close(TopicConnection closeable, Logger log) {
+        if (closeable != null){
+            try {
+                closeable.close();
+            } catch (JMSException e) {
+                log.error("Error during close: ", e);
+            }
+        }
+    }
+
+    public static void close(TopicPublisher closeable, Logger log) {
+        if (closeable != null){
+            try {
+                closeable.close();
+            } catch (JMSException e) {
+                log.error("Error during close: ", e);
+            }
+        }
+    }
+
+    public static void close(QueueSession closeable, Logger log) {
+        if (closeable != null){
+            try {
+                closeable.close();
+            } catch (JMSException e) {
+                log.error("Error during close: ", e);
+            }
+        }
+    }
+
+    public static void close(QueueConnection closeable, Logger log) {
+        if (closeable != null){
+            try {
+                closeable.close();
+            } catch (JMSException e) {
+                log.error("Error during close: ", e);
+            }
+        }
+    }
+
+    public static String messageProperties(Message msg){
         return messageProperties(new StringBuilder(), msg).toString();
     }
 
-    public static final StringBuilder messageProperties(StringBuilder sb, Message msg){
+    public static StringBuilder messageProperties(StringBuilder sb, Message msg){
         requestHeaders(sb, msg);
         sb.append("Properties:\n");
         Enumeration<?> rme;
@@ -51,7 +119,7 @@ public final class Utils {
         return sb;
     }
     
-    public static final StringBuilder requestHeaders(StringBuilder sb, Message msg){
+    public static StringBuilder requestHeaders(StringBuilder sb, Message msg){
         try {
             sb.append("JMSCorrelationId ").append(msg.getJMSCorrelationID()).append('\n');
             sb.append("JMSMessageId     ").append(msg.getJMSMessageID()).append('\n');
@@ -65,4 +133,5 @@ public final class Utils {
         }
         return sb;
     }
+
 }
