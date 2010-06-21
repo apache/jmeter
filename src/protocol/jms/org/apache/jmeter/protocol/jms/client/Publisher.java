@@ -30,6 +30,7 @@ import javax.jms.TopicConnection;
 import javax.jms.TopicPublisher;
 import javax.jms.TopicSession;
 
+import org.apache.jmeter.protocol.jms.Utils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -37,41 +38,41 @@ public class Publisher {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private TopicConnection connection = null;
+    private final TopicConnection connection;
 
-    private TopicSession session = null;
+    private final TopicSession session;
 
-    private Topic topic = null;
+    private final Topic topic;
 
-    private TopicPublisher publisher = null;
+    private final TopicPublisher publisher;
 
-    public final boolean isValid;
-    
     /**
      * Create a publisher using either the jndi.properties file or the provided parameters
      * @param useProps true if a jndi.properties file is to be used
      * @param initialContextFactory the (ignored if useProps is true)
      * @param providerUrl (ignored if useProps is true)
      * @param connfactory
-     * @param topic
+     * @param topicName
      * @param useAuth (ignored if useProps is true)
      * @param securityPrincipal (ignored if useProps is true)
      * @param securityCredentials (ignored if useProps is true)
+     * @throws JMSException if the context could not be initialised, or there was some other error
      */
-    // TODO - does it make sense to return a Publisher that has not been created successfully?
-    // Might be simpler just to return JMSException
     public Publisher(boolean useProps, String initialContextFactory, String providerUrl, 
-            String connfactory, String topic, boolean useAuth,
-            String securityPrincipal, String securityCredentials) {
+            String connfactory, String topicName, boolean useAuth,
+            String securityPrincipal, String securityCredentials) throws JMSException {
         super();
         Context ctx = initJNDI(useProps, initialContextFactory, 
                 providerUrl, useAuth, securityPrincipal, securityCredentials);
-        if (ctx != null) {
-            initConnection(ctx, connfactory, topic);
-        } else {
-            log.error("Could not initialize JNDI Initial Context Factory");
+        if (ctx == null){
+            throw new JMSException("Could not initialize JNDI Initial Context Factory");
         }
-        isValid = publisher != null; // This is the last item set up by initConnection
+        ConnectionFactory.getTopicConnectionFactory(ctx,connfactory);
+        connection = ConnectionFactory.getTopicConnection();
+        topic = InitialContextFactory.lookupTopic(ctx, topicName);
+        session = connection.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
+        publisher = session.createPublisher(topic);
+        log.info("created the topic connection successfully");
     }
 
     private Context initJNDI(boolean useProps, String initialContextFactory, 
@@ -86,19 +87,6 @@ public class Publisher {
         } else {
             return InitialContextFactory.lookupContext(initialContextFactory, 
                     providerUrl, useAuth, securityPrincipal, securityCredentials);
-        }
-    }
-
-    private void initConnection(Context ctx, String connfactory, String topicName) {
-        try {
-            ConnectionFactory.getTopicConnectionFactory(ctx,connfactory);
-            connection = ConnectionFactory.getTopicConnection();
-            topic = InitialContextFactory.lookupTopic(ctx, topicName);
-            session = connection.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
-            publisher = session.createPublisher(topic);
-            log.info("created the topic connection successfully");
-        } catch (JMSException e) {
-            log.error("Connection error: " + e.getMessage());
         }
     }
 
@@ -124,31 +112,8 @@ public class Publisher {
      * Close will close the session
      */
     public void close() {
-        try {
-            log.info("Publisher close()");
-            if (publisher != null){
-                publisher.close();
-            }
-            if (session != null){
-                session.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
-            publisher = null;
-            session = null;
-            connection = null;
-        } catch (JMSException e) {
-            log.error(e.getMessage());
-        } catch (Throwable e) {
-            log.error(e.getMessage());
-            if (e instanceof Error){
-                throw (Error) e;
-            }
-            if (e instanceof RuntimeException){
-                throw (RuntimeException) e;
-            }
-        }
+        Utils.close(publisher, log);
+        Utils.close(session, log);
+        Utils.close(connection, log);
     }
-
 }

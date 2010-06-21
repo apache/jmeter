@@ -17,6 +17,8 @@
 
 package org.apache.jmeter.protocol.jms.sampler;
 
+import javax.jms.JMSException;
+
 import org.apache.jorphan.io.TextFile;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
@@ -100,9 +102,10 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
 
     /**
      * initialize the Publisher client.
+     * @throws JMSException 
      *
      */
-    private void initClient() {
+    private void initClient() throws JMSException {
         publisher = new Publisher(getUseJNDIPropertiesAsBoolean(), getJNDIInitialContextFactory(), this
                 .getProviderUrl(), getConnectionFactory(), getTopic(), isUseAuth(), getUsername(),
                 getPassword());
@@ -132,13 +135,17 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
         result.setResponseCode("000"); // ditto $NON-NLS-1$
         result.setResponseMessage("See log file for details"); // ditto
         if (publisher == null) {
-            initClient();
+            try {
+                initClient();
+            } catch (JMSException e) {
+                log.warn("Could not create client", e);
+            }
         }
         StringBuilder buffer = new StringBuilder();
         int loop = getIterationCount();
         result.sampleStart();
         try {
-            if (publisher != null && publisher.isValid) {
+            if (publisher != null) {
                 for (int idx = 0; idx < loop; idx++) {
                     String tmsg = getMessageContent();
                     publisher.publish(tmsg);
