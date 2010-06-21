@@ -28,6 +28,7 @@ import javax.jms.TopicConnection;
 import javax.jms.TopicSession;
 import javax.jms.TopicSubscriber;
 
+import org.apache.jmeter.protocol.jms.Utils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -120,14 +121,10 @@ public class OnMessageSubscriber {
      * close will close all the objects and set them to null.
      */
     public void close() {
-        try {
-            log.info("Subscriber closed");
-            this.SUBSCRIBER.close();
-            this.SESSION.close();
-            this.CONN.close();
-        } catch (JMSException e) {
-            log.error(e.getMessage());
-        }
+        log.info("Subscriber closed");
+        Utils.close(SUBSCRIBER, log);
+        Utils.close(SESSION, log);
+        Utils.close(CONN, log);
     }
 
     /**
