@@ -36,12 +36,16 @@ You may want to also download the source so it can be used by the IDE.
 
 <h2>Building JMeter</h2>
 <h3>Acquiring the source</h3>
-<p>The source and bundled jars can be downloaded from SVN.</p>
-<p>Or you can download the binary and source archives for a release and unpack them in the same directory structure.</p>
-<h3>Other jars you may need</h3>
+<p>The source is distributed alongside the binary, or it can be downloaded from SVN.</p>
 <p>
-You may also need to download JAF/JavaMail, JMS and JDBC jars
- - see <a href="usermanual/get-started.html">Getting Started</a>
+The source archive and SVN do not contain any of the required library files. 
+You can download these by running the Ant command:
+<pre>
+ant download_jars
+</pre>
+</p>
+<p>Or you can download the binary archive for a release and unpack it into the same directory structure as the source.
+This will ensure that the lib/ directory contains all the required jar files.
 </p>
 <h3>Compiling and packaging JMeter using Ant</h3>
 <p>
@@ -52,7 +56,6 @@ JMeter can be built entirely using Ant; see build.xml for the targets that can b
 Once you have downloaded the source from SVN or the release archives, you can configure Eclipse.
 The easiest way to do this is to replace the Eclipse .classpath file with the eclipse.classpath file provided with JMeter.
 This will set up the source-paths and most of the libraries.
-If you have downloaded any of the optional jars (JavaMail etc) you will need to update the project classpath.
 <p>
 See also the file eclipse.readme.
 </p>
