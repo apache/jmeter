@@ -290,6 +290,7 @@
   <property name="target.java.version" value="1.5"/>
   <property name="src.java.version" value="1.5"/>
   <property name="encoding" value="UTF-8"/>
+  <property name="includeAntRuntime" value="false"/>
 
   <!-- 3rd party libraries to be included in the binary distribution -->
   <property file="build.properties"/> <!-- defines the library version numbers -->
@@ -356,6 +357,7 @@
   <!-- Build classpath (includes the optional jar directory) -->
   <path id="classpath">
     <!-- Externally produced jars -->
+    <pathelement location="${lib.dir}/${activation.jar}"/>
     <pathelement location="${lib.dir}/${apache-bsf.jar}"/>
     <pathelement location="${lib.dir}/${beanshell.jar}"/>
     <pathelement location="${lib.dir}/${avalon-framework.jar}"/>
@@ -375,6 +377,7 @@
     <pathelement location="${lib.dir}/${htmllexer.jar}"/>
     <pathelement location="${lib.dir}/${htmlparser.jar}"/>
     <pathelement location="${lib.dir}/${jakarta-oro.jar}"/>
+    <pathelement location="${lib.dir}/${javamail.jar}"/>
     <pathelement location="${lib.dir}/${jcharts.jar}"/>
     <pathelement location="${lib.dir}/${jdom.jar}"/>
     <pathelement location="${lib.dir}/${js_rhino.jar}"/>
@@ -469,7 +472,8 @@
 
   <target name="compile-core" depends="compile-jorphan,update-version" description="Compile JMeter core classes.">
     <mkdir dir="${build.core}"/>
-    <javac srcdir="${src.core}" destdir="${build.core}" optimize="${optimize}" source="${src.java.version}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+    <javac srcdir="${src.core}" destdir="${build.core}" optimize="${optimize}" source="${src.java.version}" debug="on" target="${target.java.version}" 
+           includeAntRuntime="${includeAntRuntime}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <pathelement location="${build.jorphan}"/>
@@ -487,7 +491,8 @@
 
   <target name="compile-components" depends="compile-jorphan,compile-core" description="Compile generic (protocol-independent) components.">
     <mkdir dir="${build.components}"/>
-    <javac srcdir="${src.components}" destdir="${build.components}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+    <javac srcdir="${src.components}" destdir="${build.components}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" 
+           includeAntRuntime="${includeAntRuntime}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <pathelement location="${build.jorphan}"/>
@@ -499,7 +504,8 @@
 
   <target name="compile-functions" depends="compile-jorphan,compile-core" description="Compile functions.">
     <mkdir dir="${build.functions}"/>
-    <javac srcdir="${src.functions}" destdir="${build.functions}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+    <javac srcdir="${src.functions}" destdir="${build.functions}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" 
+           includeAntRuntime="${includeAntRuntime}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <pathelement location="${build.jorphan}"/>
@@ -512,7 +518,8 @@
   <target name="compile-http" depends="compile-jorphan,compile-core,compile-components" description="Compile components specific to HTTP sampling.">
     <mkdir dir="${build.http}"/>
     <!-- Directory needs to exist, or jar will fail -->
-    <javac srcdir="${src.http}" destdir="${build.http}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+    <javac srcdir="${src.http}" destdir="${build.http}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" 
+           includeAntRuntime="${includeAntRuntime}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <pathelement location="${build.jorphan}"/>
@@ -525,7 +532,8 @@
 
   <target name="compile-tests" description="Compile test components only">
     <mkdir dir="${build.test}"/>
-    <javac srcdir="${src.test}" destdir="${build.test}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+    <javac srcdir="${src.test}" destdir="${build.test}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" 
+           includeAntRuntime="${includeAntRuntime}" deprecation="${deprecation}" encoding="${encoding}">
       <classpath>
         <pathelement location="${build.jorphan}"/>
         <pathelement location="${build.core}"/>
@@ -550,7 +558,8 @@
 
   <target name="compile-ftp" depends="compile-jorphan,compile-core" description="Compile components specific to FTP sampling.">
     <mkdir dir="${build.ftp}"/>
-    <javac srcdir="${src.ftp}" destdir="${build.ftp}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+    <javac srcdir="${src.ftp}" destdir="${build.ftp}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" 
+           includeAntRuntime="${includeAntRuntime}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <pathelement location="${build.jorphan}"/>
@@ -562,7 +571,8 @@
 
   <target name="compile-jdbc" depends="compile-jorphan,compile-core" description="Compile components specific to JDBC sampling.">
     <mkdir dir="${build.jdbc}"/>
-    <javac srcdir="${src.jdbc}" destdir="${build.jdbc}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+    <javac srcdir="${src.jdbc}" destdir="${build.jdbc}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" 
+           includeAntRuntime="${includeAntRuntime}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <pathelement location="${build.jorphan}"/>
@@ -575,7 +585,8 @@
   <target name="compile-ldap" depends="compile-jorphan,compile-core" 
     description="Compile components specific to LDAP sampling.">
     <mkdir dir="${build.ldap}"/>
-    <javac srcdir="${src.ldap}" destdir="${build.ldap}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+    <javac srcdir="${src.ldap}" destdir="${build.ldap}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" 
+           includeAntRuntime="${includeAntRuntime}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <pathelement location="${build.jorphan}"/>
@@ -591,7 +602,8 @@
 
   <target name="compile-mail" depends="compile-jorphan,compile-core,create-mail-dir"
     description="Compile components specific to IMAP and POP3 sampling.">
-    <javac srcdir="${src.mail}" destdir="${build.mail}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+    <javac srcdir="${src.mail}" destdir="${build.mail}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" 
+           includeAntRuntime="${includeAntRuntime}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <pathelement location="${build.jorphan}"/>
@@ -603,7 +615,8 @@
 
   <target name="compile-java" depends="compile-jorphan,compile-core" description="Compile components specific to Java sampling.">
     <mkdir dir="${build.java}"/>
-    <javac srcdir="${src.java}" destdir="${build.java}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+    <javac srcdir="${src.java}" destdir="${build.java}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" 
+           includeAntRuntime="${includeAntRuntime}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <pathelement location="${build.jorphan}"/>
@@ -615,7 +628,8 @@
 
   <target name="compile-junit" depends="compile-jorphan,compile-core" description="Compile components specific to JUnit sampling.">
     <mkdir dir="${build.junit}"/>
-    <javac srcdir="${src.junit}" destdir="${build.junit}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+    <javac srcdir="${src.junit}" destdir="${build.junit}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" 
+           includeAntRuntime="${includeAntRuntime}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <pathelement location="${build.jorphan}"/>
@@ -628,7 +642,8 @@
   <target name="compile-report" depends="compile-jorphan,compile-core,compile-components" 
     description="Compile report components.">
     <mkdir dir="${build.report}"/>
-    <javac srcdir="${src.report}" destdir="${build.report}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+    <javac srcdir="${src.report}" destdir="${build.report}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" 
+           includeAntRuntime="${includeAntRuntime}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <pathelement location="${build.jorphan}"/>
@@ -641,7 +656,8 @@
 
   <target name="compile-tcp" depends="compile-jorphan,compile-core" description="Compile components specific to TCP sampling.">
     <mkdir dir="${build.tcp}"/>
-    <javac srcdir="${src.tcp}" destdir="${build.tcp}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+    <javac srcdir="${src.tcp}" destdir="${build.tcp}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" 
+           includeAntRuntime="${includeAntRuntime}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <pathelement location="${build.jorphan}"/>
@@ -655,7 +671,8 @@
 
   <target name="compile-examples" depends="compile-jorphan,compile-core" description="Compile example components.">
     <mkdir dir="${build.examples}"/>
-    <javac srcdir="${src.examples}" destdir="${build.examples}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+    <javac srcdir="${src.examples}" destdir="${build.examples}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" 
+           includeAntRuntime="${includeAntRuntime}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <pathelement location="${build.jorphan}"/>
@@ -670,7 +687,8 @@
   <target name="compile-monitor-components"
     depends="compile-jorphan,compile-core,compile-components,compile-monitor-model">
     <mkdir dir="${build.monitor.components}"/>
-    <javac srcdir="${src.monitor.components}" source="${src.java.version}" destdir="${build.monitor.components}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+    <javac srcdir="${src.monitor.components}" source="${src.java.version}" destdir="${build.monitor.components}" optimize="${optimize}" debug="on" target="${target.java.version}" 
+           includeAntRuntime="${includeAntRuntime}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <pathelement location="${build.monitor.model}"/>
@@ -685,7 +703,8 @@
 
   <target name="compile-monitor-model" depends="compile-jorphan,compile-core">
     <mkdir dir="${build.monitor.model}"/>
-    <javac srcdir="${src.monitor.model}" destdir="${build.monitor.model}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+    <javac srcdir="${src.monitor.model}" destdir="${build.monitor.model}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" 
+           includeAntRuntime="${includeAntRuntime}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <pathelement location="${build.jorphan}"/>
@@ -697,7 +716,8 @@
 
   <target name="compile-jorphan" depends="init-version" description="Compile JOrphan utility classes.">
     <mkdir dir="${build.jorphan}"/>
-    <javac srcdir="${src.jorphan}" destdir="${build.jorphan}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+    <javac srcdir="${src.jorphan}" destdir="${build.jorphan}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" 
+           includeAntRuntime="${includeAntRuntime}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <path refid="classpath"/>
@@ -724,7 +744,8 @@
   <target name="compile-jms" depends="compile-jorphan,compile-core,compile-components" 
         description="Compile components specific to JMS sampling.">
     <mkdir dir="${build.jms}"/>
-    <javac srcdir="${src.jms}" destdir="${build.jms}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+    <javac srcdir="${src.jms}" destdir="${build.jms}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" 
+           includeAntRuntime="${includeAntRuntime}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <pathelement location="${build.jorphan}"/>
@@ -2036,9 +2057,9 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="xerces"/>
         <process_jarfile jarname="xml-apis"/>
         <process_jarfile jarname="xmlgraphics-commons"/>
-        <process_jarfile jarname="activation" dest.dir="${lib.api}"/>
-        <process_jarfile jarname="javamail"   dest.dir="${lib.api}"/>
-        <process_jarfile jarname="jms"        dest.dir="${lib.api}"/>
+        <process_jarfile jarname="activation"/>
+        <process_jarfile jarname="javamail"/>
+        <process_jarfile jarname="jms"/>
         <process_jarfile jarname="velocity"   dest.dir="${lib.doc}"/>
     </target>
 
