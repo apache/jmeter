@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.protocol.jms.sampler;
 
+import org.apache.jmeter.protocol.jms.Utils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -106,26 +107,9 @@ public class Receiver implements Runnable {
                 log.error("Error handling receive",e1);
             }
         }
-        // not active anymore
-        if (consumer != null) {
-            try {
-                consumer.close();
-            } catch (JMSException e) {
-                log.error("Error closing connection",e);
-            }
-        }
-
-        // session and conn cannot be null (or ctor would have caused NPE)
-        try {
-            session.close();
-        } catch (JMSException e) {
-            log.error("Error closing session",e);
-        }
-        try {
-            conn.close();
-        } catch (JMSException e) {
-            log.error("Error closing connection",e);
-        }
+        Utils.close(consumer, log);
+        Utils.close(session, log);
+        Utils.close(conn, log);
     }
 
     public void deactivate() {
