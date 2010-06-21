@@ -31,6 +31,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import org.apache.jmeter.protocol.jms.Utils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -166,12 +167,12 @@ public class ReceiveSubscriber implements Runnable {
      * session and connection.
      */
     public synchronized void close() { // called from testEnded() thread
+        this.RUN = false;
         try {
-            this.RUN = false;
             this.CONN.stop();
-            this.SUBSCRIBER.close();
-            this.SESSION.close();
-            this.CONN.close();
+            Utils.close(SUBSCRIBER, log);
+            Utils.close(SESSION, log);
+            Utils.close(CONN, log);
             this.CLIENTTHREAD.interrupt();
             this.CLIENTTHREAD = null;
             queue.clear();

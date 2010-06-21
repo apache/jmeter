@@ -467,20 +467,8 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     public void threadFinished() {
         LOGGER.debug("Thread ended " + new Date());
 
-        if (session != null) {
-            try {
-                session.close();
-            } catch (JMSException e) {
-                LOGGER.info(e.getLocalizedMessage());
-            }
-        }
-        if (connection != null) {
-            try {
-                connection.close();
-            } catch (JMSException e) {
-                LOGGER.info(e.getLocalizedMessage());
-            }
-        }
+        Utils.close(session, LOGGER);
+        Utils.close(connection, LOGGER);
         if (receiverThread != null) {
             receiverThread.deactivate();
         }
