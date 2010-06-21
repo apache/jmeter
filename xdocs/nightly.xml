@@ -56,17 +56,15 @@ Download the _bin and _lib files
 <br/>
 Unpack the archives into the same directory structure
 <br/>
-
 The other archives are not needed to run JMeter.
+
 <h2>Building JMeter</h2>
 Download the _src, _bin and _lib files
 <br/>
 Unpack all the archives into the same directory structure
 <br/>
-<h2>Other jars you may need</h2>
-You may also need to download JAF/JavaMail, JMS and JDBC jars
- - see <a href="usermanual/get-started.html">Getting Started</a>
 </p>
+
 <h2>Warning - please note!</h2>
 <p>
 	<span style="font-size : large">

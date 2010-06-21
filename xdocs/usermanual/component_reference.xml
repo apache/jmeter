@@ -1139,7 +1139,7 @@ For details, see <complink name="BSF Sampler"/>.
 		numerous JMS servers on the market and several open source options.
 		</p>
 		<br></br>
-<note>JMeter does not include the JMS jar; this must be downloaded and put in the lib directory</note>
+<note>JMeter does not include any JMS implementation jar; this must be downloaded from the JMS provider and put in the lib directory</note>
 	</description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
@@ -1165,7 +1165,7 @@ For details, see <complink name="BSF Sampler"/>.
 		numerous JMS servers on the market and several open source options.
 		</p>
 		<br></br>
-<note>JMeter does not include the JMS jar; this must be downloaded and put in the lib directory</note>
+<note>JMeter does not include any JMS implementation jar; this must be downloaded from the JMS provider and put in the lib directory</note>
 	</description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
@@ -1195,7 +1195,7 @@ For details, see <complink name="BSF Sampler"/>.
 		<b>JMSSampler.useSecurity.properties=false</b>
 		</p>
 		<br></br>
-<note>JMeter does not include the JMS jar; this must be downloaded and put in the lib directory</note>
+<note>JMeter does not include any JMS implementation jar; this must be downloaded from the JMS provider and put in the lib directory</note>
 	</description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
@@ -1356,10 +1356,6 @@ This is to allow the setUp/tearDown methods to be excluded from the sample time.
 <p>
 The Mail Reader Sampler can read (and optionally delete) mail messages using POP3(S) or IMAP(S) protocols.
 </p>
-<note>
-The sampler requires the JavaMail and JAF jars to be available on the classpath.
-To use POP3S or IMAPS requires a recent version of JavaMail (e.g. JavaMail 1.4.1 and JAF 1.1.1).
-</note>
 </description>
 <properties>
 <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
@@ -2356,10 +2352,6 @@ the graph as a PNG file. By default, the aggregate graph will generate a bar cha
 <component name="Mailer Visualizer" index="&sect-num;.3.13"  width="645" height="345" screenshot="mailervisualizer.png">
 <description><p>The mailer visualizer can be set up to send email if a test run receives too many
 failed responses from the server.</p></description>
-<note>
-The Mailer Visualizer requires the optional Javamail jars (activation.jar and mail.jar).
-If these are not present in the lib directory, the element will not appear in the menus.
-</note>
 <properties>
         <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
         <property name="From" required="Yes">Email address to send messages from.</property>
