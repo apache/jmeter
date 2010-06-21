@@ -30,9 +30,8 @@
       Some jars are not included with JMeter. 
       If required, these should be downloaded and placed in the lib directory
    
-      JavaMail (activation.jar, mail.jar) - java.sun.com
-      JMS (jms.jar) - java.sun.com
       JDBC - available from database supplier
+      JMS - available from the JMS provider
 
    o  Java Compiler [OPTIONAL]:
 
