@@ -56,10 +56,10 @@ public class RenderAsJSON extends SamplerResultTab implements ResultRenderer {
     // It might be useful also to make this available in the 'Request' tab, for
     // when posting JSON.
     private static String prettyJSON(String json) {
-        StringBuffer pretty = new StringBuffer(json.length() * 2); // Educated guess
+        StringBuilder pretty = new StringBuilder(json.length() * 2); // Educated guess
 
         final String tab = ":   "; // $NON-NLS-1$
-        StringBuffer index = new StringBuffer();
+        StringBuilder index = new StringBuilder();
         String nl = ""; // $NON-NLS-1$
 
         Matcher valueOrPair = VALUE_OR_PAIR_PATTERN.matcher(json);
