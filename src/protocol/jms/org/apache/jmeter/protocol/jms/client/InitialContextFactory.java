@@ -48,10 +48,11 @@ public class InitialContextFactory {
      * @param useAuth set true if security is to be used.
      * @param securityPrincipal used to set the property {@link Context#SECURITY_PRINCIPAL}
      * @param securityCredentials used to set the property {@link Context#SECURITY_CREDENTIALS}
-     * @return the context, may be null
+     * @return the context, never null
+     * @throws NamingException 
      */
     public static synchronized Context lookupContext(String initialContextFactory, 
-            String providerUrl, boolean useAuth, String securityPrincipal, String securityCredentials) {
+            String providerUrl, boolean useAuth, String securityPrincipal, String securityCredentials) throws NamingException {
         Context ctx = MAP.get(initialContextFactory + providerUrl);
         if (ctx == null) {
             Properties props = new Properties();
@@ -63,19 +64,34 @@ public class InitialContextFactory {
                 props.setProperty(Context.SECURITY_CREDENTIALS, securityCredentials);
                 log.info("authentication properties set");
             }
-            try {
-                ctx = new InitialContext(props);
-                log.info("created the JNDI initial context for the factory");
-            } catch (NamingException e) {
-                log.error("lookupContext:: " + e.getMessage());
-            }
-            if (ctx != null) {
-                MAP.put(initialContextFactory + providerUrl, ctx);
-            }
+            ctx = new InitialContext(props);
+            MAP.put(initialContextFactory + providerUrl, ctx);
         }
         return ctx;
     }
 
+    /**
+     * Initialize the JNDI initial context
+     *
+     * @param useProps if true, create a new InitialContext; otherwise use the other parameters to call
+     * {@link #lookupContext(String, String, boolean, String, String)} 
+     * @param initialContextFactory
+     * @param providerUrl
+     * @param useAuth
+     * @param securityPrincipal
+     * @param securityCredentials
+     * @return  the context, never null
+     * @throws NamingException 
+     */
+    public static Context getContext(boolean useProps, 
+            String initialContextFactory, String providerUrl, 
+            boolean useAuth, String securityPrincipal, String securityCredentials) throws NamingException {
+        if (useProps) {
+            return new InitialContext();
+        } else {
+            return lookupContext(initialContextFactory, providerUrl, useAuth, securityPrincipal, securityCredentials);
+        }
+    }
     /**
      * clear all the InitialContext objects.
      */
