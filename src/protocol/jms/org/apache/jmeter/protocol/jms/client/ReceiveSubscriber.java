@@ -28,7 +28,6 @@ import javax.jms.TopicConnection;
 import javax.jms.TopicSession;
 import javax.jms.TopicSubscriber;
 import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import org.apache.jmeter.protocol.jms.Utils;
@@ -75,7 +74,7 @@ public class ReceiveSubscriber implements Runnable {
 
     public ReceiveSubscriber(boolean useProps, String jndi, String url, String connfactory, String topic,
             boolean useAuth, String user, String pwd) throws NamingException {
-        Context ctx = initJNDI(useProps, jndi, url, useAuth, user, pwd);
+        Context ctx = InitialContextFactory.getContext(useProps, jndi, url, useAuth, user, pwd);
         TopicConnection _conn = null;
         Topic _topic = null;
         TopicSession _session = null;
@@ -85,9 +84,6 @@ public class ReceiveSubscriber implements Runnable {
                 ConnectionFactory.getTopicConnectionFactory(ctx,connfactory);
                 _conn = ConnectionFactory.getTopicConnection();
                 _topic = Utils.lookupTopic(ctx, topic);
-                if (_topic == null){
-                    log.warn("topic <"+topic+"> could not be found.");
-                }
                 _session = _conn.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
                 _subscriber = _session.createSubscriber(_topic);
                 log.info("created the topic connection successfully");
@@ -100,31 +96,6 @@ public class ReceiveSubscriber implements Runnable {
         this.CONN = _conn;
         this.SESSION = _session;
         this.SUBSCRIBER = _subscriber;
-    }
-
-    /**
-     * Initialize the JNDI initial context
-     *
-     * @param useProps
-     * @param jndi
-     * @param url
-     * @param useAuth
-     * @param user
-     * @param pwd
-     * @return  the JNDI initial context or null
-     */
-    // Called by ctor
-    private Context initJNDI(boolean useProps, String jndi, String url, boolean useAuth, String user, String pwd) {
-        if (useProps) {
-            try {
-                return new InitialContext();
-            } catch (NamingException e) {
-                log.error(e.getMessage());
-                return null;
-            }
-        } else {
-            return InitialContextFactory.lookupContext(jndi, url, useAuth, user, pwd);
-        }
     }
 
     /**

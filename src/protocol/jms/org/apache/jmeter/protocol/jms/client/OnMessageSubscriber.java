@@ -19,7 +19,6 @@
 package org.apache.jmeter.protocol.jms.client;
 
 import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.jms.JMSException;
 import javax.jms.MessageListener;
@@ -70,41 +69,13 @@ public class OnMessageSubscriber {
      */
     public OnMessageSubscriber(boolean useProps, String jndi, String url, String connfactory, String topic,
             boolean useAuth, String user, String pwd) throws JMSException, NamingException {
-        Context ctx = initJNDI(useProps, jndi, url, useAuth, user, pwd);
-        if (ctx == null){
-            throw new JMSException("Could not initialize JNDI Initial Context Factory");
-        }
+        Context ctx = InitialContextFactory.getContext(useProps, jndi, url, useAuth, user, pwd);
         ConnectionFactory.getTopicConnectionFactory(ctx, connfactory);
         CONN = ConnectionFactory.getTopicConnection();
         TOPIC = Utils.lookupTopic(ctx, topic);
         SESSION = this.CONN.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
         SUBSCRIBER = this.SESSION.createSubscriber(this.TOPIC);
         log.info("created the topic connection successfully");
-    }
-
-    /**
-     * initialize the JNDI intial context
-     *
-     * @param useProps - use jndi.properties file
-     * @param initialContextFactory
-     * @param providerUrl
-     * @param useAuth
-     * @param securityPrincipal
-     * @param securityCredentials
-     * @return the context or null
-     */
-    private Context initJNDI(boolean useProps, 
-            String initialContextFactory, String providerUrl, boolean useAuth, String securityPrincipal, String securityCredentials) {
-        if (useProps) {
-            try {
-                return new InitialContext();
-            } catch (NamingException e) {
-                log.error(e.getMessage());
-                return null;
-            }
-        } else {
-            return InitialContextFactory.lookupContext(initialContextFactory, providerUrl, useAuth, securityPrincipal, securityCredentials);
-        }
     }
 
     /**
