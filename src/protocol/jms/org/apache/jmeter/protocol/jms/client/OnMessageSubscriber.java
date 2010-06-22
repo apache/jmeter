@@ -58,19 +58,19 @@ public class OnMessageSubscriber {
      * @param jndi
      * @param url
      * @param connfactory
-     * @param topic
+     * @param destinationName
      * @param useAuth
      * @param user
      * @param pwd
      * @throws JMSException if could not create context or other problem occurred.
      * @throws NamingException 
      */
-    public OnMessageSubscriber(boolean useProps, String jndi, String url, String connfactory, String topic,
+    public OnMessageSubscriber(boolean useProps, String jndi, String url, String connfactory, String destinationName,
             boolean useAuth, String user, String pwd) throws JMSException, NamingException {
         Context ctx = InitialContextFactory.getContext(useProps, jndi, url, useAuth, user, pwd);
         CONN = Utils.getConnection(ctx, connfactory);
-        Destination dest = Utils.lookupDestination(ctx, topic);
         SESSION = CONN.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        Destination dest = Utils.lookupDestination(ctx, destinationName);
         SUBSCRIBER = SESSION.createConsumer(dest);
         log.info("created the topic connection successfully");
     }
