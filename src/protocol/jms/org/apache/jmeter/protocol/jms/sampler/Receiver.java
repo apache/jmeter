@@ -35,7 +35,7 @@ public class Receiver implements Runnable {
 
     private final QueueSession session;
 
-    private final QueueReceiver consumer;
+    private final MessageConsumer consumer;
 
     private final QueueConnection conn;
 
