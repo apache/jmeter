@@ -19,11 +19,15 @@
 package org.apache.jmeter.protocol.jms.client;
 
 import java.io.Serializable;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import javax.naming.Context;
 import javax.naming.NamingException;
 import javax.jms.Connection;
 import javax.jms.Destination;
 import javax.jms.JMSException;
+import javax.jms.MapMessage;
 import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
 import javax.jms.Session;
@@ -69,22 +73,25 @@ public class Publisher {
         log.info("created the topic connection successfully");
     }
 
-    public void publish(String text) {
-        try {
-            TextMessage msg = session.createTextMessage(text);
-            producer.send(msg);
-        } catch (JMSException e) {
-            log.error(e.getMessage());
-        }
+    public TextMessage publish(String text) throws JMSException {
+        TextMessage msg = session.createTextMessage(text);
+        producer.send(msg);
+        return msg;
     }
 
-    public void publish(Serializable contents) {
-        try {
-            ObjectMessage msg = session.createObjectMessage(contents);
-            producer.send(msg);
-        } catch (JMSException e) {
-            log.error(e.getMessage());
+    public ObjectMessage publish(Serializable contents) throws JMSException {
+        ObjectMessage msg = session.createObjectMessage(contents);
+        producer.send(msg);
+        return msg;
+    }
+
+    public MapMessage publish(Map<String, Object> map) throws JMSException {
+        MapMessage msg = session.createMapMessage();
+        for (Entry<String, Object> me : map.entrySet()){
+            msg.setObject(me.getKey(), me.getValue());                
         }
+        producer.send(msg);
+        return msg;
     }
 
     /**
