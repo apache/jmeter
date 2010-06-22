@@ -74,7 +74,7 @@ public class ReceiveSubscriber implements Runnable {
     private Thread CLIENTTHREAD;
 
     public ReceiveSubscriber(boolean useProps, String jndi, String url, String connfactory, String topic,
-            boolean useAuth, String user, String pwd) {
+            boolean useAuth, String user, String pwd) throws NamingException {
         Context ctx = initJNDI(useProps, jndi, url, useAuth, user, pwd);
         TopicConnection _conn = null;
         Topic _topic = null;
@@ -84,7 +84,7 @@ public class ReceiveSubscriber implements Runnable {
             try {
                 ConnectionFactory.getTopicConnectionFactory(ctx,connfactory);
                 _conn = ConnectionFactory.getTopicConnection();
-                _topic = InitialContextFactory.lookupTopic(ctx, topic);
+                _topic = Utils.lookupTopic(ctx, topic);
                 if (_topic == null){
                     log.warn("topic <"+topic+"> could not be found.");
                 }
