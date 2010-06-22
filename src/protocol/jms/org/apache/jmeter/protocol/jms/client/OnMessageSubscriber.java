@@ -66,16 +66,17 @@ public class OnMessageSubscriber {
      * @param user
      * @param pwd
      * @throws JMSException if could not create context or other problem occurred.
+     * @throws NamingException 
      */
     public OnMessageSubscriber(boolean useProps, String jndi, String url, String connfactory, String topic,
-            boolean useAuth, String user, String pwd) throws JMSException {
+            boolean useAuth, String user, String pwd) throws JMSException, NamingException {
         Context ctx = initJNDI(useProps, jndi, url, useAuth, user, pwd);
         if (ctx == null){
             throw new JMSException("Could not initialize JNDI Initial Context Factory");
         }
         ConnectionFactory.getTopicConnectionFactory(ctx, connfactory);
         CONN = ConnectionFactory.getTopicConnection();
-        TOPIC = InitialContextFactory.lookupTopic(ctx, topic);
+        TOPIC = Utils.lookupTopic(ctx, topic);
         SESSION = this.CONN.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
         SUBSCRIBER = this.SESSION.createSubscriber(this.TOPIC);
         log.info("created the topic connection successfully");

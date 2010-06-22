@@ -18,6 +18,7 @@
 package org.apache.jmeter.protocol.jms.sampler;
 
 import javax.jms.JMSException;
+import javax.naming.NamingException;
 
 import org.apache.jorphan.io.TextFile;
 import org.apache.jmeter.samplers.Entry;
@@ -103,9 +104,10 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
     /**
      * initialize the Publisher client.
      * @throws JMSException 
+     * @throws NamingException 
      *
      */
-    private void initClient() throws JMSException {
+    private void initClient() throws JMSException, NamingException {
         publisher = new Publisher(getUseJNDIPropertiesAsBoolean(), getJNDIInitialContextFactory(), this
                 .getProviderUrl(), getConnectionFactory(), getTopic(), isUseAuth(), getUsername(),
                 getPassword());
@@ -138,6 +140,8 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
             try {
                 initClient();
             } catch (JMSException e) {
+                log.warn("Could not create client", e);
+            } catch (NamingException e) {
                 log.warn("Could not create client", e);
             }
         }
