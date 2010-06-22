@@ -133,7 +133,7 @@ public final class Utils {
 
     /**
      * Obtain the queue connection from the context and factory name.
-     * Does not cache the factory.
+     * 
      * @param ctx
      * @param factoryName
      * @return the queue connection
