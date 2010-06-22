@@ -64,8 +64,7 @@ public class Publisher {
         super();
         Context ctx = InitialContextFactory.getContext(useProps, initialContextFactory, 
                 providerUrl, useAuth, securityPrincipal, securityCredentials);
-        ConnectionFactory.getTopicConnectionFactory(ctx,connfactory);
-        connection = ConnectionFactory.getTopicConnection();
+        connection = ConnectionFactory.getTopicConnection(ctx, connfactory);
         topic = Utils.lookupTopic(ctx, topicName);
         session = connection.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
         publisher = session.createPublisher(topic);

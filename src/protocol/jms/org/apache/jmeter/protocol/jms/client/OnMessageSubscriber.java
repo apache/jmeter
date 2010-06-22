@@ -70,8 +70,7 @@ public class OnMessageSubscriber {
     public OnMessageSubscriber(boolean useProps, String jndi, String url, String connfactory, String topic,
             boolean useAuth, String user, String pwd) throws JMSException, NamingException {
         Context ctx = InitialContextFactory.getContext(useProps, jndi, url, useAuth, user, pwd);
-        ConnectionFactory.getTopicConnectionFactory(ctx, connfactory);
-        CONN = ConnectionFactory.getTopicConnection();
+        CONN = ConnectionFactory.getTopicConnection(ctx, connfactory);
         TOPIC = Utils.lookupTopic(ctx, topic);
         SESSION = this.CONN.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
         SUBSCRIBER = this.SESSION.createSubscriber(this.TOPIC);
