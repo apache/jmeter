@@ -20,13 +20,13 @@ package org.apache.jmeter.protocol.jms.client;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
+import javax.jms.MessageConsumer;
 import javax.jms.TextMessage;
-import javax.jms.Topic;
 import javax.jms.TopicConnection;
 import javax.jms.TopicSession;
-import javax.jms.TopicSubscriber;
 import javax.naming.Context;
 import javax.naming.NamingException;
 
@@ -55,7 +55,7 @@ public class ReceiveSubscriber implements Runnable {
 
     private final TopicSession SESSION;
 
-    private final TopicSubscriber SUBSCRIBER;
+    private final MessageConsumer SUBSCRIBER;
 
     //@GuardedBy("this")
     private int counter;
@@ -73,29 +73,12 @@ public class ReceiveSubscriber implements Runnable {
     private Thread CLIENTTHREAD;
 
     public ReceiveSubscriber(boolean useProps, String jndi, String url, String connfactory, String topic,
-            boolean useAuth, String user, String pwd) throws NamingException {
+            boolean useAuth, String user, String pwd) throws NamingException, JMSException {
         Context ctx = InitialContextFactory.getContext(useProps, jndi, url, useAuth, user, pwd);
-        TopicConnection _conn = null;
-        Topic _topic = null;
-        TopicSession _session = null;
-        TopicSubscriber _subscriber = null;
-        if (ctx != null) {
-            try {
-                ConnectionFactory.getTopicConnectionFactory(ctx,connfactory);
-                _conn = ConnectionFactory.getTopicConnection();
-                _topic = Utils.lookupTopic(ctx, topic);
-                _session = _conn.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
-                _subscriber = _session.createSubscriber(_topic);
-                log.info("created the topic connection successfully");
-            } catch (JMSException e) {
-                log.error("Connection error: " + e.getMessage());
-            }
-        } else {
-            log.error("Could not initialize JNDI Initial Context Factory");
-        }
-        this.CONN = _conn;
-        this.SESSION = _session;
-        this.SUBSCRIBER = _subscriber;
+        CONN = ConnectionFactory.getTopicConnection(ctx, connfactory);
+        Destination _topic = Utils.lookupTopic(ctx, topic);
+        SESSION = CONN.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
+        SUBSCRIBER = SESSION.createConsumer(_topic);
     }
 
     /**

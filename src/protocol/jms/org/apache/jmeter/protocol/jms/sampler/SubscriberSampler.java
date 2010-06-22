@@ -119,8 +119,9 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     /**
      * Create the ReceiveSubscriber client for the sampler.
      * @throws NamingException 
+     * @throws JMSException 
      */
-    private void initReceiveClient() throws NamingException {
+    private void initReceiveClient() throws NamingException, JMSException {
         interrupted = false;
         this.SUBSCRIBER = new ReceiveSubscriber(this.getUseJNDIPropertiesAsBoolean(), this
                 .getJNDIInitialContextFactory(), this.getProviderUrl(), this.getConnectionFactory(), this.getTopic(),
@@ -241,6 +242,12 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
             try {
                 this.initReceiveClient();
             } catch (NamingException ex) {
+                result.sampleStart();
+                result.sampleEnd();
+                result.setResponseCode("000");
+                result.setResponseMessage(ex.toString());
+                return result;
+            } catch (JMSException ex) {
                 result.sampleStart();
                 result.sampleEnd();
                 result.setResponseCode("000");
