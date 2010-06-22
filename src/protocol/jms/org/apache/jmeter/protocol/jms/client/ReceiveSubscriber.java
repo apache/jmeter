@@ -23,6 +23,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import javax.jms.Connection;
 import javax.jms.Destination;
 import javax.jms.JMSException;
+import javax.jms.MapMessage;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.Session;
@@ -60,7 +61,8 @@ public class ReceiveSubscriber implements Runnable {
     //@GuardedBy("this")
     private int counter;
 
-    private final ConcurrentLinkedQueue<TextMessage> queue = new ConcurrentLinkedQueue<TextMessage>();
+    // Only MapMessage and TextMessage are currently supported
+    private final ConcurrentLinkedQueue<Message> queue = new ConcurrentLinkedQueue<Message>();
 
     private volatile boolean RUN = true;
     // Needs to be volatile to ensure value is picked up
@@ -97,9 +99,11 @@ public class ReceiveSubscriber implements Runnable {
      * Get the message
      * @return the next message from the queue or null if none
      */
-    public synchronized TextMessage getMessage() {
-        TextMessage msg = queue.poll();
-        this.counter--;
+    public synchronized Message getMessage() {
+        Message msg = queue.poll();
+        if (msg != null) {
+            counter--;
+        }
         return msg;
     }
 
@@ -154,11 +158,11 @@ public class ReceiveSubscriber implements Runnable {
         while (RUN) {
             try {
                 Message message = this.SUBSCRIBER.receive();
-                if (message instanceof TextMessage) {
-                    queue.add((TextMessage)message);
+                if (message instanceof TextMessage || message instanceof MapMessage) {
+                    queue.add(message);
                     count(1);
                 } else if (message != null){
-                	log.warn("Discarded non TextMessage " +  message);
+                	log.warn("Discarded non Map|TextMessage " +  message);
                 }
             } catch (JMSException e) {
                 log.error("Communication error: " + e.getMessage());
