@@ -60,34 +60,21 @@ public class ReceiveSubscriber implements Runnable {
     //@GuardedBy("this")
     private int counter;
 
-    @SuppressWarnings("unused")
-    private int loop = 1; // TODO never read
-    
     private final ConcurrentLinkedQueue<TextMessage> queue = new ConcurrentLinkedQueue<TextMessage>();
 
-    //@GuardedBy("this")
     private volatile boolean RUN = true;
     // Needs to be volatile to ensure value is picked up
 
     //@GuardedBy("this")
     private Thread CLIENTTHREAD;
 
-    public ReceiveSubscriber(boolean useProps, String jndi, String url, String connfactory, String topic,
+    public ReceiveSubscriber(boolean useProps, String jndi, String url, String connfactory, String destinationName,
             boolean useAuth, String user, String pwd) throws NamingException, JMSException {
         Context ctx = InitialContextFactory.getContext(useProps, jndi, url, useAuth, user, pwd);
         CONN = Utils.getConnection(ctx, connfactory);
-        Destination _topic = Utils.lookupDestination(ctx, topic);
         SESSION = CONN.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        SUBSCRIBER = SESSION.createConsumer(_topic);
-    }
-
-    /**
-     * Set the number of iterations for each call to sample()
-     *
-     * @param loop
-     */
-    public void setLoop(int loop) {
-        this.loop = loop;
+        Destination dest = Utils.lookupDestination(ctx, destinationName);
+        SUBSCRIBER = SESSION.createConsumer(dest);
     }
 
     /**
@@ -152,11 +139,6 @@ public class ReceiveSubscriber implements Runnable {
      * created, it calls Thread.start().
      */
     public void start() {
-        // No point starting thread unless subscriber exists
-        if (SUBSCRIBER == null) {
-            log.error("Subscriber has not been set up");
-            return;
-        }
         this.CLIENTTHREAD = new Thread(this, "Subscriber2");
         this.CLIENTTHREAD.start();
     }
@@ -169,16 +151,14 @@ public class ReceiveSubscriber implements Runnable {
      * 
      */
     public void run() {
-        if (SUBSCRIBER == null) { // just in case
-            log.error("Subscriber has not been set up");
-            return;
-        }
         while (RUN) {
             try {
                 Message message = this.SUBSCRIBER.receive();
-                if (message != null && message instanceof TextMessage) {
+                if (message instanceof TextMessage) {
                     queue.add((TextMessage)message);
                     count(1);
+                } else if (message != null){
+                	log.warn("Discarded non TextMessage " +  message);
                 }
             } catch (JMSException e) {
                 log.error("Communication error: " + e.getMessage());
