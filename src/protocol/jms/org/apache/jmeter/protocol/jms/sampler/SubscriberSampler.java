@@ -17,7 +17,6 @@
 
 package org.apache.jmeter.protocol.jms.sampler;
 
-import java.util.Enumeration;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.jms.JMSException;
@@ -32,6 +31,7 @@ import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 
+import org.apache.jmeter.protocol.jms.Utils;
 import org.apache.jmeter.protocol.jms.control.gui.JMSSubscriberGui;
 import org.apache.jmeter.protocol.jms.client.ClientPool;
 import org.apache.jmeter.protocol.jms.client.OnMessageSubscriber;
@@ -154,8 +154,8 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     private SampleResult sampleWithListener() {
         SampleResult result = new SampleResult();
         result.setDataType(SampleResult.TEXT);
-        StringBuffer buffer = new StringBuffer();
-        StringBuffer propBuffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
+        StringBuilder propBuffer = new StringBuilder();
         int cnt;
         int loop = this.getIterationCount();
 
@@ -193,15 +193,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
                 read++;
                 try {
                     buffer.append(msg.getText());
-                    Enumeration<?> props = msg.getPropertyNames();
-                    while(props.hasMoreElements()) {
-                        String name = (String) props.nextElement();
-                        propBuffer.append("PROPERTY: ");
-                        propBuffer.append(name);
-                        propBuffer.append("=");
-                        propBuffer.append(msg.getObjectProperty(name));
-                        propBuffer.append("\n");
-                    }
+                    Utils.messageProperties(propBuffer, msg);
                 } catch (JMSException e) {
                     log.error(e.getMessage());
                 }
@@ -215,7 +207,11 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         result.setResponseHeaders(propBuffer.toString());
         result.setDataType(SampleResult.TEXT);
         result.setSuccessful(true);
-        result.setResponseCodeOK();
+        if (read == 0) {
+            result.setResponseCode("404"); // Not found
+        } else {
+            result.setResponseCodeOK();
+        }
         result.setResponseMessage(read + " messages received");
         result.setSamplerData(loop + " messages expected");
         result.setSampleCount(read);
@@ -232,8 +228,8 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     private SampleResult sampleWithReceive() {
         SampleResult result = new SampleResult();
         result.setDataType(SampleResult.TEXT);
-        StringBuffer buffer = new StringBuffer();
-        StringBuffer propBuffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
+        StringBuilder propBuffer = new StringBuilder();
         int cnt;
         
         
@@ -268,21 +264,14 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
             }
         }
         result.sampleEnd();
-        result.setResponseMessage(loop + " samples messages received");
-        for(cnt = 0; cnt < loop ; cnt++) {
+        int read = SUBSCRIBER.count(0);
+        result.setResponseMessage(read + " samples messages received");
+        for(cnt = 0; cnt < read ; cnt++) {
             TextMessage msg = this.SUBSCRIBER.getMessage();
             if (msg != null) {
                 try {
                     buffer.append(msg.getText());
-                    Enumeration<?> props = msg.getPropertyNames();
-                    while(props.hasMoreElements()) {
-                        String name = (String) props.nextElement();
-                        propBuffer.append("PROPERTY: ");
-                        propBuffer.append(name);
-                        propBuffer.append("=");
-                        propBuffer.append(msg.getObjectProperty(name));
-                        propBuffer.append("\n");
-                    }
+                    Utils.messageProperties(propBuffer, msg);
                 } catch (JMSException e) {
                     log.error(e.getMessage());
                 }
@@ -295,17 +284,21 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         }
         result.setResponseHeaders(propBuffer.toString());
         result.setSuccessful(true);
-        result.setResponseCodeOK();
-        result.setResponseMessage(loop + " message(s) received successfully");
+        if (read == 0) {
+            result.setResponseCode("404"); // Not found
+        } else {
+            result.setResponseCodeOK();
+        }
+        result.setResponseMessage(read + " message(s) received successfully");
         result.setSamplerData(loop + " messages expected");
-        result.setSampleCount(loop);
+        result.setSampleCount(read);
 
         return result;
     }
 
     /**
      * The sampler implements MessageListener directly and sets itself as the
-     * listener with the TopicSubscriber.
+     * listener with the MessageConsumer.
      */
     public synchronized void onMessage(Message message) {
         if (message instanceof TextMessage) {
