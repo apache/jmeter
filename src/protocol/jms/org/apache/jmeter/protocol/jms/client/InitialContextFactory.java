@@ -25,7 +25,6 @@ import java.util.Properties;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.jms.Topic;
 
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -75,31 +74,6 @@ public class InitialContextFactory {
             }
         }
         return ctx;
-    }
-
-    /**
-     * Method will lookup a given topic using JNDI.
-     *
-     * @param ctx
-     * @param name
-     * @return the topic or null
-     */
-    // TODO this method probably belongs in a separate utility class.
-    // Also, why allow null input? Better to throw NPE or IAE
-    public static Topic lookupTopic(Context ctx, String name) {
-        Topic t = null;
-        if (name != null && ctx != null) {
-            try {
-                t = (Topic) ctx.lookup(name);
-            } catch (NamingException e) {
-                log.error("JNDI error: " + e.getMessage());
-            }
-        } else if (name == null) {
-            log.error("lookupTopic: name was null");
-        } else {
-            log.error("lookupTopic: Context was null");
-        }
-        return t;
     }
 
     /**
