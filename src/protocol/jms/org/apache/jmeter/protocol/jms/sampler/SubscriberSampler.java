@@ -17,9 +17,11 @@
 
 package org.apache.jmeter.protocol.jms.sampler;
 
+import java.util.Enumeration;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.jms.JMSException;
+import javax.jms.MapMessage;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
@@ -52,7 +54,8 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     // No need to synch/ - only used by sampler and ClientPool (which does its own synch)
     private transient ReceiveSubscriber SUBSCRIBER = null;
 
-    private final ConcurrentLinkedQueue<TextMessage> queue = new ConcurrentLinkedQueue<TextMessage>();
+    // Only MapMessage and TextMessage are currently supported
+    private final ConcurrentLinkedQueue<Message> queue = new ConcurrentLinkedQueue<Message>();
     
     private transient volatile boolean interrupted = false;
 
@@ -188,15 +191,10 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
        
         int read = 0;
         for(cnt = 0; cnt < loop ; cnt++) {
-            TextMessage msg = queue.poll();
+            Message msg = queue.poll();
             if (msg != null) {
                 read++;
-                try {
-                    buffer.append(msg.getText());
-                    Utils.messageProperties(propBuffer, msg);
-                } catch (JMSException e) {
-                    log.error(e.getMessage());
-                }
+                extractContent(buffer, propBuffer, msg);
             }
         }
         if (this.getReadResponseAsBoolean()) {
@@ -266,15 +264,8 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         int read = SUBSCRIBER.count(0);
         result.setResponseMessage(read + " samples messages received");
         for(cnt = 0; cnt < read ; cnt++) {
-            TextMessage msg = this.SUBSCRIBER.getMessage();
-            if (msg != null) {
-                try {
-                    buffer.append(msg.getText());
-                    Utils.messageProperties(propBuffer, msg);
-                } catch (JMSException e) {
-                    log.error(e.getMessage());
-                }
-            }
+            Message msg = this.SUBSCRIBER.getMessage();
+            extractContent(buffer, propBuffer, msg);
         }
         if (this.getReadResponseAsBoolean()) {
             result.setResponseData(buffer.toString().getBytes());
@@ -295,13 +286,41 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         return result;
     }
 
+    private void extractContent(StringBuilder buffer, StringBuilder propBuffer,
+            Message msg) {
+        if (msg != null) {
+            try {
+                if (msg instanceof TextMessage){
+                    buffer.append(((TextMessage) msg).getText());
+                } else if (msg instanceof MapMessage){
+                    MapMessage mapm = (MapMessage) msg;
+                    @SuppressWarnings("unchecked") // MapNames are Strings
+                    Enumeration<String> enumb = mapm.getMapNames();
+                    while(enumb.hasMoreElements()){
+                        String name = enumb.nextElement();
+                        Object obj = mapm.getObject(name);
+                        buffer.append(name);
+                        buffer.append("(");
+                        buffer.append(obj.getClass().getCanonicalName());
+                        buffer.append(")");
+                        buffer.append(obj);
+                        buffer.append("\n");
+                    }
+                }
+                Utils.messageProperties(propBuffer, msg);
+            } catch (JMSException e) {
+                log.error(e.getMessage());
+            }
+        }
+    }
+
     /**
      * The sampler implements MessageListener directly and sets itself as the
      * listener with the MessageConsumer.
      */
     public synchronized void onMessage(Message message) {
-        if (message instanceof TextMessage) {
-            queue.add((TextMessage)message);
+        if (message instanceof TextMessage || message instanceof MapMessage) {
+            queue.add(message);
         }
     }
 
