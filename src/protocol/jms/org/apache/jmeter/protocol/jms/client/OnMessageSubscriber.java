@@ -21,11 +21,11 @@ package org.apache.jmeter.protocol.jms.client;
 import javax.naming.Context;
 import javax.naming.NamingException;
 import javax.jms.JMSException;
+import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
 import javax.jms.Topic;
 import javax.jms.TopicConnection;
 import javax.jms.TopicSession;
-import javax.jms.TopicSubscriber;
 
 import org.apache.jmeter.protocol.jms.Utils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -50,7 +50,7 @@ public class OnMessageSubscriber {
 
     private final Topic TOPIC;
 
-    private final TopicSubscriber SUBSCRIBER;
+    private final MessageConsumer SUBSCRIBER;
 
     /**
      * Constructor takes the necessary JNDI related parameters to create a
