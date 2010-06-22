@@ -172,7 +172,7 @@ public class RenderAsXML extends SamplerResultTab
              * @return
              */
             private String getHTML(String str, String separator, int maxChar) {
-                StringBuffer strBuf = new StringBuffer("<html><body bgcolor=\"yellow\"><b>"); // $NON-NLS-1$
+                StringBuilder strBuf = new StringBuilder("<html><body bgcolor=\"yellow\"><b>"); // $NON-NLS-1$
                 char[] chars = str.toCharArray();
                 for (int i = 0; i < chars.length; i++) {
 
