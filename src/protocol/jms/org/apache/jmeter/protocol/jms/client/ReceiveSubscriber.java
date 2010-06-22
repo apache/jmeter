@@ -20,13 +20,13 @@ package org.apache.jmeter.protocol.jms.client;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import javax.jms.Connection;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
+import javax.jms.Session;
 import javax.jms.TextMessage;
-import javax.jms.TopicConnection;
-import javax.jms.TopicSession;
 import javax.naming.Context;
 import javax.naming.NamingException;
 
@@ -51,9 +51,9 @@ public class ReceiveSubscriber implements Runnable {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private final TopicConnection CONN;
+    private final Connection CONN;
 
-    private final TopicSession SESSION;
+    private final Session SESSION;
 
     private final MessageConsumer SUBSCRIBER;
 
@@ -75,9 +75,9 @@ public class ReceiveSubscriber implements Runnable {
     public ReceiveSubscriber(boolean useProps, String jndi, String url, String connfactory, String topic,
             boolean useAuth, String user, String pwd) throws NamingException, JMSException {
         Context ctx = InitialContextFactory.getContext(useProps, jndi, url, useAuth, user, pwd);
-        CONN = ConnectionFactory.getTopicConnection(ctx, connfactory);
-        Destination _topic = Utils.lookupTopic(ctx, topic);
-        SESSION = CONN.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
+        CONN = Utils.getConnection(ctx, connfactory);
+        Destination _topic = Utils.lookupDestination(ctx, topic);
+        SESSION = CONN.createSession(false, Session.AUTO_ACKNOWLEDGE);
         SUBSCRIBER = SESSION.createConsumer(_topic);
     }
 

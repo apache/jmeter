@@ -20,12 +20,12 @@ package org.apache.jmeter.protocol.jms.client;
 
 import javax.naming.Context;
 import javax.naming.NamingException;
+import javax.jms.Connection;
+import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
-import javax.jms.Topic;
-import javax.jms.TopicConnection;
-import javax.jms.TopicSession;
+import javax.jms.Session;
 
 import org.apache.jmeter.protocol.jms.Utils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -44,11 +44,9 @@ public class OnMessageSubscriber {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private final TopicConnection CONN;
+    private final Connection CONN;
 
-    private final TopicSession SESSION;
-
-    private final Topic TOPIC;
+    private final Session SESSION;
 
     private final MessageConsumer SUBSCRIBER;
 
@@ -70,10 +68,10 @@ public class OnMessageSubscriber {
     public OnMessageSubscriber(boolean useProps, String jndi, String url, String connfactory, String topic,
             boolean useAuth, String user, String pwd) throws JMSException, NamingException {
         Context ctx = InitialContextFactory.getContext(useProps, jndi, url, useAuth, user, pwd);
-        CONN = ConnectionFactory.getTopicConnection(ctx, connfactory);
-        TOPIC = Utils.lookupTopic(ctx, topic);
-        SESSION = this.CONN.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
-        SUBSCRIBER = this.SESSION.createSubscriber(this.TOPIC);
+        CONN = Utils.getConnection(ctx, connfactory);
+        Destination dest = Utils.lookupDestination(ctx, topic);
+        SESSION = CONN.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        SUBSCRIBER = SESSION.createConsumer(dest);
         log.info("created the topic connection successfully");
     }
 
@@ -89,7 +87,7 @@ public class OnMessageSubscriber {
     }
 
     /**
-     * close will close all the objects and set them to null.
+     * close will close all the objects
      */
     public void close() {
         log.info("Subscriber closed");
