@@ -164,16 +164,14 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         try {
             initListenerClient();
         } catch (JMSException ex) {
-            log.warn("",ex);
             result.sampleEnd();
             result.setResponseCode("000");
-            result.setResponseMessage(ex.getMessage());
+            result.setResponseMessage(ex.toString());
             return result;
         } catch (NamingException ex) {
-            log.warn("",ex);
             result.sampleEnd();
             result.setResponseCode("000");
-            result.setResponseMessage(ex.getMessage());
+            result.setResponseMessage(ex.toString());
             return result;
         }
 
@@ -243,11 +241,10 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
             try {
                 this.initReceiveClient();
             } catch (NamingException ex) {
-                log.warn("",ex);
                 result.sampleStart();
                 result.sampleEnd();
                 result.setResponseCode("000");
-                result.setResponseMessage(ex.getMessage());
+                result.setResponseMessage(ex.toString());
                 return result;
             }
             this.SUBSCRIBER.start();
