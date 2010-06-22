@@ -24,7 +24,6 @@ import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
 
-import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
@@ -35,7 +34,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * BaseJMSSampler is an abstract class which provides implementation for common
  * properties. Rather than duplicate the code, it's contained in the base class.
  */
-public abstract class BaseJMSSampler extends AbstractSampler implements TestListener {
+public abstract class BaseJMSSampler extends AbstractSampler {
 
     private static final long serialVersionUID = 240L;
 
