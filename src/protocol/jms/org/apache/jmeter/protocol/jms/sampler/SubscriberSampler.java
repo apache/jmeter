@@ -24,6 +24,7 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
+import javax.naming.NamingException;
 
 import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleResult;
@@ -94,9 +95,10 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
      * Create the OnMessageSubscriber client and set the sampler as the message
      * listener.
      * @throws JMSException 
+     * @throws NamingException 
      *
      */
-    private OnMessageSubscriber initListenerClient() throws JMSException {
+    private OnMessageSubscriber initListenerClient() throws JMSException, NamingException {
         interrupted = false;
         OnMessageSubscriber sub = (OnMessageSubscriber) ClientPool.get(this);
         if (sub == null) {
@@ -116,8 +118,9 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
 
     /**
      * Create the ReceiveSubscriber client for the sampler.
+     * @throws NamingException 
      */
-    private void initReceiveClient() {
+    private void initReceiveClient() throws NamingException {
         interrupted = false;
         this.SUBSCRIBER = new ReceiveSubscriber(this.getUseJNDIPropertiesAsBoolean(), this
                 .getJNDIInitialContextFactory(), this.getProviderUrl(), this.getConnectionFactory(), this.getTopic(),
@@ -161,6 +164,12 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         try {
             initListenerClient();
         } catch (JMSException ex) {
+            log.warn("",ex);
+            result.sampleEnd();
+            result.setResponseCode("000");
+            result.setResponseMessage(ex.getMessage());
+            return result;
+        } catch (NamingException ex) {
             log.warn("",ex);
             result.sampleEnd();
             result.setResponseCode("000");
@@ -230,8 +239,17 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         
         
         result.setSampleLabel(getName());
-        if (this.SUBSCRIBER == null) {
-            this.initReceiveClient();
+        if (this.SUBSCRIBER == null) { // TODO perhaps do this in test[Iteration]Start?
+            try {
+                this.initReceiveClient();
+            } catch (NamingException ex) {
+                log.warn("",ex);
+                result.sampleStart();
+                result.sampleEnd();
+                result.setResponseCode("000");
+                result.setResponseMessage(ex.getMessage());
+                return result;
+            }
             this.SUBSCRIBER.start();
         }
         int loop = this.getIterationCount();

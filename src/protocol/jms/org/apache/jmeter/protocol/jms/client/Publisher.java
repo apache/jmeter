@@ -57,10 +57,11 @@ public class Publisher {
      * @param securityPrincipal (ignored if useProps is true)
      * @param securityCredentials (ignored if useProps is true)
      * @throws JMSException if the context could not be initialised, or there was some other error
+     * @throws NamingException 
      */
     public Publisher(boolean useProps, String initialContextFactory, String providerUrl, 
             String connfactory, String topicName, boolean useAuth,
-            String securityPrincipal, String securityCredentials) throws JMSException {
+            String securityPrincipal, String securityCredentials) throws JMSException, NamingException {
         super();
         Context ctx = initJNDI(useProps, initialContextFactory, 
                 providerUrl, useAuth, securityPrincipal, securityCredentials);
@@ -69,7 +70,7 @@ public class Publisher {
         }
         ConnectionFactory.getTopicConnectionFactory(ctx,connfactory);
         connection = ConnectionFactory.getTopicConnection();
-        topic = InitialContextFactory.lookupTopic(ctx, topicName);
+        topic = Utils.lookupTopic(ctx, topicName);
         session = connection.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
         publisher = session.createPublisher(topic);
         log.info("created the topic connection successfully");
