@@ -125,7 +125,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 if (sd != null) {
                     String rh = sampleResult.getRequestHeaders();
                     if (rh != null) {
-                        StringBuffer sb = new StringBuffer(sd.length() + rh.length() + 20);
+                        StringBuilder sb = new StringBuilder(sd.length() + rh.length() + 20);
                         sb.append(sd);
                         sb.append("\n"); //$NON-NLS-1$
                         sb.append(JMeterUtils.getResString("view_results_request_headers")); //$NON-NLS-1$
@@ -136,7 +136,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
                     sampleDataField.setText(sd);
                 }
 
-                StringBuffer statsBuff = new StringBuffer(200);
+                StringBuilder statsBuff = new StringBuilder(200);
                 statsBuff.append(JMeterUtils.getResString("view_results_thread_name")).append(sampleResult.getThreadName()).append(NL); //$NON-NLS-1$
                 String startTime = dateFormat.format(new Date(sampleResult.getStartTime()));
                 statsBuff.append(JMeterUtils.getResString("view_results_sample_start")).append(startTime).append(NL); //$NON-NLS-1$
@@ -146,7 +146,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 statsBuff.append(JMeterUtils.getResString("view_results_sample_count")).append(sampleResult.getSampleCount()).append(NL); //$NON-NLS-1$
                 statsBuff.append(JMeterUtils.getResString("view_results_error_count")).append(sampleResult.getErrorCount()).append(NL); //$NON-NLS-1$
                 statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), null);
-                statsBuff = new StringBuffer(); // reset for reuse
+                statsBuff.setLength(0); // reset for reuse
 
                 String responseCode = sampleResult.getResponseCode();
 
@@ -174,7 +174,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
 
                 statsBuff.append(JMeterUtils.getResString("view_results_response_code")).append(responseCode).append(NL); //$NON-NLS-1$
                 statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), style);
-                statsBuff = new StringBuffer(100); // reset for reuse
+                statsBuff.setLength(0); // reset for reuse
 
                 // response message label
                 String responseMsgStr = sampleResult.getResponseMessage();
@@ -203,12 +203,11 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 // We are displaying an AssertionResult
                 setupTabPaneForAssertionResult();
 
-                StringBuffer statsBuff = new StringBuffer(100);
+                StringBuilder statsBuff = new StringBuilder(100);
                 statsBuff.append(JMeterUtils.getResString("view_results_assertion_error")).append(assertionResult.isError()).append(NL); //$NON-NLS-1$
                 statsBuff.append(JMeterUtils.getResString("view_results_assertion_failure")).append(assertionResult.isFailure()).append(NL); //$NON-NLS-1$
                 statsBuff.append(JMeterUtils.getResString("view_results_assertion_failure_message")).append(assertionResult.getFailureMessage()).append(NL); //$NON-NLS-1$
                 statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), null);
-                statsBuff = null;
             }
         } catch (BadLocationException exc) {
             stats.setText(exc.getLocalizedMessage());
