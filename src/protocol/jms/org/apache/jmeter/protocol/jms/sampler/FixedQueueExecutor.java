@@ -20,7 +20,7 @@ package org.apache.jmeter.protocol.jms.sampler;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
-import javax.jms.QueueSender;
+import javax.jms.MessageProducer;
 
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -38,7 +38,7 @@ public class FixedQueueExecutor implements QueueExecutor {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     /** Sender. */
-    private final QueueSender producer;
+    private final MessageProducer producer;
 
     /** Timeout used for waiting on message. */
     private final int timeout;
@@ -55,7 +55,7 @@ public class FixedQueueExecutor implements QueueExecutor {
      * @param useReqMsgIdAsCorrelId
      *            whether to use the request message id as the correlation id
      */
-    public FixedQueueExecutor(QueueSender producer, int timeout, boolean useReqMsgIdAsCorrelId) {
+    public FixedQueueExecutor(MessageProducer producer, int timeout, boolean useReqMsgIdAsCorrelId) {
         this.producer = producer;
         this.timeout = timeout;
         this.useReqMsgIdAsCorrelId = useReqMsgIdAsCorrelId;

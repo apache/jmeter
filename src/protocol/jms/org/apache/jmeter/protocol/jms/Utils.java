@@ -21,13 +21,12 @@ package org.apache.jmeter.protocol.jms;
 import java.util.Enumeration;
 
 import javax.jms.Connection;
+import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageProducer;
-import javax.jms.Queue;
 import javax.jms.Session;
-import javax.jms.Topic;
 import javax.naming.Context;
 import javax.naming.NamingException;
 
@@ -117,35 +116,36 @@ public final class Utils {
     }
 
     /**
-     * Method will lookup a given topic using JNDI.
+     * Method will lookup a given destination (topic/queue) using JNDI.
      *
      * @param context
-     * @param name the topic name
-     * @return the topic
-     * @throws NamingException if the name cannot be found as a Topic
+     * @param name the destination name
+     * @return the destination, never null
+     * @throws NamingException if the name cannot be found as a Destination
      */
-    public static Topic lookupTopic(Context context, String name) throws NamingException {
+    public static Destination lookupDestination(Context context, String name) throws NamingException {
         Object o = context.lookup(name);
-        if (o instanceof Topic){
-            return (Topic) o;
+        if (o instanceof Destination){
+            return (Destination) o;
         }
-        throw new NamingException("Found: "+name+"; expected Topic, but was: "+o.getClass().getName());
+        throw new NamingException("Found: "+name+"; expected Destination, but was: "+o.getClass().getName());
     }
 
     /**
-     * Method will lookup a given topic using JNDI.
-     *
-     * @param context
-     * @param name the Queue name
-     * @return the Queue
-     * @throws NamingException if the name cannot be found as a Queue
+     * Obtain the queue connection from the context and factory name.
+     * Does not cache the factory.
+     * @param ctx
+     * @param factoryName
+     * @return the queue connection
+     * @throws JMSException
+     * @throws NamingException
      */
-    public static Queue lookupQueue(Context context, String name) throws NamingException {
-        Object o = context.lookup(name);
-        if (o instanceof Queue){
-            return (Queue) o;
+    public static Connection getConnection(Context ctx, String factoryName) throws JMSException, NamingException {
+        Object objfac = ctx.lookup(factoryName);
+        if (objfac instanceof javax.jms.ConnectionFactory) {
+            return ((javax.jms.ConnectionFactory) objfac).createConnection();
         }
-        throw new NamingException("Found: "+name+"; expected Queue, but was: "+o.getClass().getName());
+        throw new NamingException("Expected javax.jms.ConnectionFactory, found "+objfac.getClass().getName());
     }
 
 }
