@@ -49,7 +49,7 @@ public class Publisher {
      * @param initialContextFactory the (ignored if useProps is true)
      * @param providerUrl (ignored if useProps is true)
      * @param connfactory
-     * @param topicName
+     * @param destinationName
      * @param useAuth (ignored if useProps is true)
      * @param securityPrincipal (ignored if useProps is true)
      * @param securityCredentials (ignored if useProps is true)
@@ -57,15 +57,15 @@ public class Publisher {
      * @throws NamingException 
      */
     public Publisher(boolean useProps, String initialContextFactory, String providerUrl, 
-            String connfactory, String topicName, boolean useAuth,
+            String connfactory, String destinationName, boolean useAuth,
             String securityPrincipal, String securityCredentials) throws JMSException, NamingException {
         super();
         Context ctx = InitialContextFactory.getContext(useProps, initialContextFactory, 
                 providerUrl, useAuth, securityPrincipal, securityCredentials);
         connection = Utils.getConnection(ctx, connfactory);
-        Destination topic = Utils.lookupDestination(ctx, topicName);
         session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        producer = session.createProducer(topic);
+        Destination dest = Utils.lookupDestination(ctx, destinationName);
+        producer = session.createProducer(dest);
         log.info("created the topic connection successfully");
     }
 
