@@ -20,16 +20,14 @@ package org.apache.jmeter.protocol.jms;
 
 import java.util.Enumeration;
 
+import javax.jms.Connection;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
+import javax.jms.MessageProducer;
 import javax.jms.Queue;
-import javax.jms.QueueConnection;
-import javax.jms.QueueSession;
+import javax.jms.Session;
 import javax.jms.Topic;
-import javax.jms.TopicConnection;
-import javax.jms.TopicPublisher;
-import javax.jms.TopicSession;
 import javax.naming.Context;
 import javax.naming.NamingException;
 
@@ -51,7 +49,7 @@ public final class Utils {
         }
     }
 
-    public static void close(TopicSession closeable, Logger log) {
+    public static void close(Session closeable, Logger log) {
         if (closeable != null){
             try {
                 closeable.close();
@@ -61,7 +59,7 @@ public final class Utils {
         }
     }
 
-    public static void close(TopicConnection closeable, Logger log) {
+    public static void close(Connection closeable, Logger log) {
         if (closeable != null){
             try {
                 closeable.close();
@@ -71,27 +69,7 @@ public final class Utils {
         }
     }
 
-    public static void close(TopicPublisher closeable, Logger log) {
-        if (closeable != null){
-            try {
-                closeable.close();
-            } catch (JMSException e) {
-                log.error("Error during close: ", e);
-            }
-        }
-    }
-
-    public static void close(QueueSession closeable, Logger log) {
-        if (closeable != null){
-            try {
-                closeable.close();
-            } catch (JMSException e) {
-                log.error("Error during close: ", e);
-            }
-        }
-    }
-
-    public static void close(QueueConnection closeable, Logger log) {
+    public static void close(MessageProducer closeable, Logger log) {
         if (closeable != null){
             try {
                 closeable.close();
