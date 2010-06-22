@@ -182,7 +182,7 @@ public class ConnectionFactory implements TestListener {
     }
 
     public static synchronized QueueConnection getQueueConnection(Context ctx, String queueConn) {
-        if (factory != null) {
+        if (qfactory != null) {
             try {
                 return qfactory.createQueueConnection();
             } catch (JMSException e) {
