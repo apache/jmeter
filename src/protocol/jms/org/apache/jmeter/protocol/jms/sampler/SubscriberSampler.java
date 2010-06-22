@@ -253,7 +253,6 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
             this.SUBSCRIBER.start();
         }
         int loop = this.getIterationCount();
-        this.SUBSCRIBER.setLoop(loop);
 
         result.sampleStart();
         while (this.SUBSCRIBER.count(0) < loop && interrupted == false) {
