@@ -33,24 +33,24 @@ public class Receiver implements Runnable {
 
     private volatile boolean active;
 
-    private final QueueSession session;
+    private final Session session;
 
     private final MessageConsumer consumer;
 
-    private final QueueConnection conn;
+    private final Connection conn;
 
     private final boolean useResMsgIdAsCorrelId;
 
-    private Receiver(QueueConnectionFactory factory, Queue receiveQueue, String principal, String credentials, boolean useResMsgIdAsCorrelId) throws JMSException {
+    private Receiver(ConnectionFactory factory, Destination receiveQueue, String principal, String credentials, boolean useResMsgIdAsCorrelId) throws JMSException {
         if (null != principal && null != credentials) {
             log.info("creating receiver WITH authorisation credentials. UseResMsgId="+useResMsgIdAsCorrelId);
-            conn = factory.createQueueConnection(principal, credentials);
+            conn = factory.createConnection(principal, credentials);
         }else{
             log.info("creating receiver without authorisation credentials. UseResMsgId="+useResMsgIdAsCorrelId);
-            conn = factory.createQueueConnection(); 
+            conn = factory.createConnection(); 
         }
-        session = conn.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
-        consumer = session.createReceiver(receiveQueue);
+        session = conn.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        consumer = session.createConsumer(receiveQueue);
         this.useResMsgIdAsCorrelId = useResMsgIdAsCorrelId;
         log.debug("Receiver - ctor. Starting connection now");
         conn.start();
@@ -68,7 +68,7 @@ public class Receiver implements Runnable {
      * @return the Receiver which will process the responses
      * @throws JMSException
      */
-    public static Receiver createReceiver(QueueConnectionFactory factory, Queue receiveQueue,
+    public static Receiver createReceiver(ConnectionFactory factory, Destination receiveQueue,
             String principal, String credentials, boolean useResMsgIdAsCorrelId)
             throws JMSException {
         Receiver receiver = new Receiver(factory, receiveQueue, principal, credentials, useResMsgIdAsCorrelId);
