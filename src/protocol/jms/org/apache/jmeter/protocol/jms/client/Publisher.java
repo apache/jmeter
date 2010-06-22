@@ -21,13 +21,13 @@ package org.apache.jmeter.protocol.jms.client;
 import java.io.Serializable;
 import javax.naming.Context;
 import javax.naming.NamingException;
+import javax.jms.Connection;
+import javax.jms.Destination;
 import javax.jms.JMSException;
+import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
+import javax.jms.Session;
 import javax.jms.TextMessage;
-import javax.jms.Topic;
-import javax.jms.TopicConnection;
-import javax.jms.TopicPublisher;
-import javax.jms.TopicSession;
 
 import org.apache.jmeter.protocol.jms.Utils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -37,13 +37,11 @@ public class Publisher {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private final TopicConnection connection;
+    private final Connection connection;
 
-    private final TopicSession session;
+    private final Session session;
 
-    private final Topic topic;
-
-    private final TopicPublisher publisher;
+    private final  MessageProducer producer;
 
     /**
      * Create a publisher using either the jndi.properties file or the provided parameters
@@ -64,17 +62,17 @@ public class Publisher {
         super();
         Context ctx = InitialContextFactory.getContext(useProps, initialContextFactory, 
                 providerUrl, useAuth, securityPrincipal, securityCredentials);
-        connection = ConnectionFactory.getTopicConnection(ctx, connfactory);
-        topic = Utils.lookupTopic(ctx, topicName);
-        session = connection.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
-        publisher = session.createPublisher(topic);
+        connection = Utils.getConnection(ctx, connfactory);
+        Destination topic = Utils.lookupDestination(ctx, topicName);
+        session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        producer = session.createProducer(topic);
         log.info("created the topic connection successfully");
     }
 
     public void publish(String text) {
         try {
             TextMessage msg = session.createTextMessage(text);
-            publisher.publish(msg);
+            producer.send(msg);
         } catch (JMSException e) {
             log.error(e.getMessage());
         }
@@ -83,7 +81,7 @@ public class Publisher {
     public void publish(Serializable contents) {
         try {
             ObjectMessage msg = session.createObjectMessage(contents);
-            publisher.publish(msg);
+            producer.send(msg);
         } catch (JMSException e) {
             log.error(e.getMessage());
         }
@@ -93,7 +91,7 @@ public class Publisher {
      * Close will close the session
      */
     public void close() {
-        Utils.close(publisher, log);
+        Utils.close(producer, log);
         Utils.close(session, log);
         Utils.close(connection, log);
     }
