@@ -296,7 +296,7 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
      * @return String with message header values.
      */
     public static String getMessageHeaders(Message message) {
-        final StringBuffer response = new StringBuffer(256);
+        final StringBuilder response = new StringBuilder(256);
         try {
             response.append("JMS Message Header Attributes:");
             response.append("\n   Correlation ID: ");
