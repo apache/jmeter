@@ -135,34 +135,31 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
         result.setSampleLabel(getName());
         result.setSuccessful(false); // Assume it will fail
         result.setResponseCode("000"); // ditto $NON-NLS-1$
-        result.setResponseMessage("See log file for details"); // ditto
         if (publisher == null) {
             try {
                 initClient();
             } catch (JMSException e) {
-                log.warn("Could not create client", e);
+                result.setResponseMessage(e.toString());
+                return result;
             } catch (NamingException e) {
-                log.warn("Could not create client", e);
+                result.setResponseMessage(e.toString());
+                return result;
             }
         }
         StringBuilder buffer = new StringBuilder();
         int loop = getIterationCount();
         result.sampleStart();
         try {
-            if (publisher != null) {
-                for (int idx = 0; idx < loop; idx++) {
-                    String tmsg = getMessageContent();
-                    publisher.publish(tmsg);
-                    buffer.append(tmsg);
-                }
-                result.setResponseCodeOK();
-                result.setResponseMessage(loop + " messages published");
-                result.setSuccessful(true);
-                result.setSamplerData(buffer.toString());
-                result.setSampleCount(loop);
-            } else {
-                result.setResponseMessage("Publisher not available - see log file");
+            for (int idx = 0; idx < loop; idx++) {
+                String tmsg = getMessageContent();
+                publisher.publish(tmsg);
+                buffer.append(tmsg);
             }
+            result.setResponseCodeOK();
+            result.setResponseMessage(loop + " messages published");
+            result.setSuccessful(true);
+            result.setSamplerData(buffer.toString());
+            result.setSampleCount(loop);
         } catch (Exception e) {
             result.setResponseMessage(e.toString());
         } finally {
