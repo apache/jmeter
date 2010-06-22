@@ -20,7 +20,6 @@ package org.apache.jmeter.protocol.jms.client;
 
 import java.io.Serializable;
 import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.jms.JMSException;
 import javax.jms.ObjectMessage;
@@ -63,32 +62,14 @@ public class Publisher {
             String connfactory, String topicName, boolean useAuth,
             String securityPrincipal, String securityCredentials) throws JMSException, NamingException {
         super();
-        Context ctx = initJNDI(useProps, initialContextFactory, 
+        Context ctx = InitialContextFactory.getContext(useProps, initialContextFactory, 
                 providerUrl, useAuth, securityPrincipal, securityCredentials);
-        if (ctx == null){
-            throw new JMSException("Could not initialize JNDI Initial Context Factory");
-        }
         ConnectionFactory.getTopicConnectionFactory(ctx,connfactory);
         connection = ConnectionFactory.getTopicConnection();
         topic = Utils.lookupTopic(ctx, topicName);
         session = connection.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
         publisher = session.createPublisher(topic);
         log.info("created the topic connection successfully");
-    }
-
-    private Context initJNDI(boolean useProps, String initialContextFactory, 
-            String providerUrl, boolean useAuth, String securityPrincipal, String securityCredentials) {
-        if (useProps) {
-            try {
-                return new InitialContext();
-            } catch (NamingException e) {
-                log.error(e.getMessage());
-                return null;
-            }
-        } else {
-            return InitialContextFactory.lookupContext(initialContextFactory, 
-                    providerUrl, useAuth, securityPrincipal, securityCredentials);
-        }
     }
 
     public void publish(String text) {
