@@ -18,17 +18,13 @@
 
 package org.apache.jmeter.protocol.jms.client;
 
-import javax.naming.Context;
-import javax.naming.NamingException;
-
 import javax.jms.JMSException;
 import javax.jms.QueueConnection;
 import javax.jms.QueueConnectionFactory;
-import javax.jms.TopicConnectionFactory;
 import javax.jms.TopicConnection;
-
-import org.apache.jmeter.testelement.TestListener;
-import org.apache.jmeter.engine.event.LoopIterationEvent;
+import javax.jms.TopicConnectionFactory;
+import javax.naming.Context;
+import javax.naming.NamingException;
 
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -40,11 +36,13 @@ import org.apache.log.Logger;
  * a pool of connections. The current implementation just does the basics. Once
  * the tires get kicked a bit, we can add connection pooling support.
  * 
+ * TODO - is there any point in caching the factories and in the retries?
+ * 
  * Note: the connection factory will retry to get the connection factory 5 times
  * before giving up. Thanks to Peter Johnson for catching the bug and providing
  * the patch.
  */
-public class ConnectionFactory implements TestListener {
+public class ConnectionFactory {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -67,35 +65,8 @@ public class ConnectionFactory implements TestListener {
     /**
      *
      */
-    protected ConnectionFactory() {
+    private ConnectionFactory() {
         super();
-    }
-
-    /** {@inheritDoc} */
-    public void testStarted(String test) {
-    }
-
-    /** {@inheritDoc} */
-    public void testEnded(String test) {
-        testEnded();
-    }
-
-    /** {@inheritDoc} */
-    public synchronized void testEnded() {
-        ConnectionFactory.factory = null;//N.B. static reference
-    }
-
-    /**
-     * startTest sets up the client and gets it ready for the test. Since async
-     * messaging is different than request/ response applications, the
-     * connection is created at the beginning of the test and closed at the end
-     * of the test.
-     */
-    public void testStarted() {
-    }
-
-    /** {@inheritDoc} */
-    public void testIterationStart(LoopIterationEvent event) {
     }
 
     /**
@@ -169,7 +140,7 @@ public class ConnectionFactory implements TestListener {
     }
 
     /**
-     * Use the factory to create a topic connection.
+     * Use the static factory to create a topic connection.
      * 
      * @return the connection
      * @throws JMSException if the factory is null or the create() method fails
@@ -178,17 +149,53 @@ public class ConnectionFactory implements TestListener {
         if (factory != null) {
             return factory.createTopicConnection();
         }
-        throw new JMSException("Factory has not been initialised");
+        throw new JMSException("Topic Factory has not been initialised");
     }
 
-    public static synchronized QueueConnection getQueueConnection(Context ctx, String queueConn) {
+    /**
+     * Use the static factory to create a queue connection.
+     * 
+     * @return the connection
+     * @throws JMSException if the factory is null or the create() method fails
+     */
+    public static synchronized QueueConnection getQueueConnection() throws JMSException {
         if (qfactory != null) {
-            try {
-                return qfactory.createQueueConnection();
-            } catch (JMSException e) {
-                log.error(e.getMessage());
-            }
+            return qfactory.createQueueConnection();
         }
-        return null;
+        throw new JMSException("Queue Factory has not been initialised");
+    }
+
+    /**
+     * Obtain the queue connection from the context and factory name.
+     * Does not cache the factory.
+     * @param ctx
+     * @param factoryName
+     * @return the queue connection
+     * @throws JMSException
+     * @throws NamingException
+     */
+    public static QueueConnection getQueueConnection(Context ctx, String factoryName) throws JMSException, NamingException {
+        Object objfac = ctx.lookup(factoryName);
+        if (objfac instanceof QueueConnectionFactory) {
+            return ((QueueConnectionFactory) objfac).createQueueConnection();
+        }
+        throw new NamingException("Expected QueueConnectionFactory, found "+objfac.getClass().getName());
+    }
+
+    /**
+     * Obtain the topic connection from the context and factory name.
+     * Does not cache the factory.
+     * @param ctx
+     * @param factoryName
+     * @return the topic connection
+     * @throws JMSException
+     * @throws NamingException
+     */
+    public static TopicConnection getTopicConnection(Context ctx, String factoryName) throws JMSException, NamingException {
+        Object objfac = ctx.lookup(factoryName);
+        if (objfac instanceof TopicConnectionFactory) {
+            return ((TopicConnectionFactory) objfac).createTopicConnection();
+        }
+        throw new NamingException("Expected TopicConnectionFactory, found "+objfac.getClass().getName());
     }
 }
