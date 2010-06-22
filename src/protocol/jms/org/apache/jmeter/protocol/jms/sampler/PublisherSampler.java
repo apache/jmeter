@@ -18,6 +18,7 @@
 package org.apache.jmeter.protocol.jms.sampler;
 
 import javax.jms.JMSException;
+import javax.jms.Message;
 import javax.naming.NamingException;
 
 import org.apache.jorphan.io.TextFile;
@@ -28,6 +29,7 @@ import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 
+import org.apache.jmeter.protocol.jms.Utils;
 import org.apache.jmeter.protocol.jms.control.gui.JMSPublisherGui;
 import org.apache.jmeter.protocol.jms.client.ClientPool;
 import org.apache.jmeter.protocol.jms.client.Publisher;
@@ -147,19 +149,22 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
             }
         }
         StringBuilder buffer = new StringBuilder();
+        StringBuilder propBuffer = new StringBuilder();
         int loop = getIterationCount();
         result.sampleStart();
         try {
             for (int idx = 0; idx < loop; idx++) {
                 String tmsg = getMessageContent();
-                publisher.publish(tmsg);
+                Message msg = publisher.publish(tmsg);
                 buffer.append(tmsg);
+                Utils.messageProperties(propBuffer, msg);
             }
             result.setResponseCodeOK();
             result.setResponseMessage(loop + " messages published");
             result.setSuccessful(true);
             result.setSamplerData(buffer.toString());
             result.setSampleCount(loop);
+            result.setRequestHeaders(propBuffer.toString());
         } catch (Exception e) {
             result.setResponseMessage(e.toString());
         } finally {
