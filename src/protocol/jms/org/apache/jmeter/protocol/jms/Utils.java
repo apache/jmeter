@@ -23,11 +23,15 @@ import java.util.Enumeration;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
+import javax.jms.Queue;
 import javax.jms.QueueConnection;
 import javax.jms.QueueSession;
+import javax.jms.Topic;
 import javax.jms.TopicConnection;
 import javax.jms.TopicPublisher;
 import javax.jms.TopicSession;
+import javax.naming.Context;
+import javax.naming.NamingException;
 
 import org.apache.log.Logger;
 
@@ -132,6 +136,38 @@ public final class Utils {
             sb.append("\nError: "+e.toString());
         }
         return sb;
+    }
+
+    /**
+     * Method will lookup a given topic using JNDI.
+     *
+     * @param context
+     * @param name the topic name
+     * @return the topic
+     * @throws NamingException if the name cannot be found as a Topic
+     */
+    public static Topic lookupTopic(Context context, String name) throws NamingException {
+        Object o = context.lookup(name);
+        if (o instanceof Topic){
+            return (Topic) o;
+        }
+        throw new NamingException("Found: "+name+"; expected Topic, but was: "+o.getClass().getName());
+    }
+
+    /**
+     * Method will lookup a given topic using JNDI.
+     *
+     * @param context
+     * @param name the Queue name
+     * @return the Queue
+     * @throws NamingException if the name cannot be found as a Queue
+     */
+    public static Queue lookupQueue(Context context, String name) throws NamingException {
+        Object o = context.lookup(name);
+        if (o instanceof Queue){
+            return (Queue) o;
+        }
+        throw new NamingException("Found: "+name+"; expected Queue, but was: "+o.getClass().getName());
     }
 
 }
