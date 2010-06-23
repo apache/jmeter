@@ -24,7 +24,7 @@ package org.apache.jmeter.testelement;
  */
 public interface ThreadListener {
     /**
-     * Called just before the start of the thread
+     * Called for each thread before starting sampling.
      *
      * @see org.apache.jmeter.threads.JMeterThread#threadStarted()
      *
@@ -32,7 +32,7 @@ public interface ThreadListener {
     public void threadStarted();
 
     /**
-     * Called once for each thread at the end of a test
+     * Called for each thread after all samples have been processed.
      *
      * @see org.apache.jmeter.threads.JMeterThread#threadFinished()
      *
