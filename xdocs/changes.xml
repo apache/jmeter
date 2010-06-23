@@ -167,10 +167,15 @@ This does not affect existing test plans.
 <li>JUnit sampler now supports JUnit4 tests (using annotations)</li>
 <li>Bug 47900 - Allow JMS SubscriberSampler to be interrupted</li>
 <li>Added JSR223 Sampler</li>
-<li>Bug 47556 - JMS-PoinToPoint-Sampler Timout field should use Strings</li>
+<li>Bug 47556 - JMS-PoinToPoint-Sampler Timeout field should use Strings</li>
 <li>Bug 47947 - Mail Reader Sampler should allow port to be overridden</li>
 <li>Bug 48155 - Multiple problems / enhancements with JMS protocol classes</li>
 <li>Allow MailReader sampler to use arbitrary protocols</li>
+<li>
+JMS Publisher and Subscriber now support both Topics and Queues.
+Added read Timeout to JMS Subscriber.
+General clean-up of JMS code.
+</li>
 </ul>
 
 <h3>Controllers</h3>
