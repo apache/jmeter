@@ -54,18 +54,25 @@ public class JMSPublisherGui extends AbstractSamplerGui implements java.awt.even
     private static final String ALL_FILES = "*.*"; //$NON-NLS-1$
 
     //++ These names are used in the JMX files, and must not be changed
+    /** Take source from the named file */
     public static final String USE_FILE_RSC   = "jms_use_file"; //$NON-NLS-1$
+    /** Take source from a random file */
     public static final String USE_RANDOM_RSC = "jms_use_random_file"; //$NON-NLS-1$
+    /** Take source from the text area */
     private static final String USE_TEXT_RSC   = "jms_use_text"; //$NON-NLS-1$
 
-    private static final String TEXT_MSG_RSC = "jms_text_message"; //$NON-NLS-1$
-    private static final String OBJECT_MSG_RSC = "jms_object_message"; //$NON-NLS-1$
+    /** Create a TextMessage */
+    public static final String TEXT_MSG_RSC = "jms_text_message"; //$NON-NLS-1$
+    /** Create a MapMessage */
+    public static final String MAP_MSG_RSC = "jms_map_message"; //$NON-NLS-1$
+    /** Create an ObjectMessage */
+    public static final String OBJECT_MSG_RSC = "jms_object_message"; //$NON-NLS-1$
     //--
 
     // Button group resources
     private static final String[] CONFIG_ITEMS = { USE_FILE_RSC, USE_RANDOM_RSC, USE_TEXT_RSC };
 
-    private static final String[] MSGTYPES_ITEMS = { TEXT_MSG_RSC, OBJECT_MSG_RSC };
+    private static final String[] MSGTYPES_ITEMS = { TEXT_MSG_RSC, MAP_MSG_RSC, OBJECT_MSG_RSC };
 
     private final JCheckBox useProperties = new JCheckBox(JMeterUtils.getResString("jms_use_properties_file"), false); //$NON-NLS-1$
 
@@ -91,7 +98,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements java.awt.even
 
     private final FilePanel randomFile = new FilePanel(JMeterUtils.getResString("jms_random_file"), ALL_FILES); //$NON-NLS-1$
 
-    private final JLabeledTextArea textMessage = new JLabeledTextArea(TEXT_MSG_RSC);
+    private final JLabeledTextArea textMessage = new JLabeledTextArea(JMeterUtils.getResString("jms_text_message"));
 
     private final JLabeledRadioI18N msgChoice = new JLabeledRadioI18N("jms_message_type", MSGTYPES_ITEMS, TEXT_MSG_RSC); //$NON-NLS-1$
 
