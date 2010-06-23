@@ -226,6 +226,11 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
         return getProperty(key).getLongValue();
     }
 
+    public long getPropertyAsLong(String key, long defaultValue) {
+        JMeterProperty jmp = getProperty(key);
+        return jmp instanceof NullProperty ? defaultValue : jmp.getLongValue();
+    }
+
     public double getPropertyAsDouble(String key) {
         return getProperty(key).getDoubleValue();
     }
