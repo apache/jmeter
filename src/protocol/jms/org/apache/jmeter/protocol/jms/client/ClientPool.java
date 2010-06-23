@@ -17,6 +17,8 @@
 
 package org.apache.jmeter.protocol.jms.client;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -34,8 +36,9 @@ import java.util.Map;
 public class ClientPool {
 
     //GuardedBy("this")
-    private static final ArrayList<Object> clients = new ArrayList<Object>();
+    private static final ArrayList<Closeable> clients = new ArrayList<Closeable>();
 
+    //GuardedBy("this")
     private static final Map<Object, Object> client_map = new HashMap<Object, Object>();
 
     /**
@@ -44,27 +47,7 @@ public class ClientPool {
      *
      * @param client
      */
-    public static synchronized void addClient(ReceiveSubscriber client) {
-        clients.add(client);
-    }
-
-    /**
-     * Add a OnMessageClient to the ClientPool. This is so that we can make sure
-     * to close all clients and make sure all threads are destroyed.
-     *
-     * @param client
-     */
-    public static synchronized void addClient(OnMessageSubscriber client) {
-        clients.add(client);
-    }
-
-    /**
-     * Add a Publisher to the ClientPool. This is so that we can make sure to
-     * close all clients and make sure all threads are destroyed.
-     *
-     * @param client
-     */
-    public static synchronized void addClient(Publisher client) {
+    public static synchronized void addClient(Closeable client) {
         clients.add(client);
     }
 
@@ -77,32 +60,21 @@ public class ClientPool {
      * bugs.
      */
     public static synchronized void clearClient() {
-        Iterator<Object> itr = clients.iterator();
+        Iterator<Closeable> itr = clients.iterator();
         while (itr.hasNext()) {
-            Object client = itr.next();
-            if (client instanceof ReceiveSubscriber) {
-                ReceiveSubscriber sub = (ReceiveSubscriber) client;
-                sub.close();
-                sub = null;
-            } else if (client instanceof Publisher) {
-                Publisher pub = (Publisher) client;
-                pub.close();
-                pub = null;
-            } else if (client instanceof OnMessageSubscriber) {
-                OnMessageSubscriber sub = (OnMessageSubscriber) client;
-                sub.close();
-                sub = null;
+            Closeable client = itr.next();
+            try {
+                client.close();
+            } catch (IOException e) {
+                // Ignored
             }
+            client = null;
         }
         clients.clear();
         client_map.clear();
     }
 
-    public static synchronized void put(Object key, OnMessageSubscriber client) {
-        client_map.put(key, client);
-    }
-
-    public static synchronized void put(Object key, Publisher client) {
+    public static synchronized void put(Object key, Object client) {
         client_map.put(key, client);
     }
 

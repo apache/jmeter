@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.protocol.jms.client;
 
+import java.io.Closeable;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.jms.Connection;
@@ -48,7 +49,7 @@ import org.apache.log.Logger;
  * Also, messages are received in wait mode, so the RUN flag won't be checked until
  * at least one more message has been received.
 */
-public class ReceiveSubscriber implements Runnable {
+public class ReceiveSubscriber implements Runnable, Closeable {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
