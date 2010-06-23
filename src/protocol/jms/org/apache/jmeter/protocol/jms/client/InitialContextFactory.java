@@ -30,8 +30,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * InitialContextFactory is responsible for getting and instance of the initial
- * context. It is also responsible for looking up JMS topics and queues.
+ * InitialContextFactory is responsible for getting an instance of the initial context.
  */
 public class InitialContextFactory {
 
