@@ -76,6 +76,9 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.eve
     private final JCheckBox readResponse =
         new JCheckBox(JMeterUtils.getResString("jms_read_response"), true); // $NON-NLS-1$
 
+    private JLabeledTextField timeout = 
+        new JLabeledTextField(JMeterUtils.getResString("jms_timeout")); //$NON-NLS-1$
+
     //++ Do not change these strings; they are used in JMX files to record the button settings
     public final static String RECEIVE_RSC = "jms_subscriber_receive"; // $NON-NLS-1$
 
@@ -103,18 +106,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.eve
      */
     public TestElement createTestElement() {
         SubscriberSampler sampler = new SubscriberSampler();
-        this.configureTestElement(sampler);
-        sampler.setUseJNDIProperties(String.valueOf(useProperties.isSelected()));
-        sampler.setJNDIIntialContextFactory(jndiICF.getText());
-        sampler.setProviderUrl(urlField.getText());
-        sampler.setConnectionFactory(jndiConnFac.getText());
-        sampler.setDestination(jmsDestination.getText());
-        sampler.setUsername(jmsUser.getText());
-        sampler.setPassword(jmsPwd.getText());
-        sampler.setUseAuth(useAuth.isSelected());
-        sampler.setIterations(iterations.getText());
-        sampler.setReadResponse(String.valueOf(readResponse.isSelected()));
-        sampler.setClientChoice(clientChoice.getText());
+        modifyTestElement(sampler);
         return sampler;
     }
 
@@ -137,6 +129,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.eve
         sampler.setIterations(iterations.getText());
         sampler.setReadResponse(String.valueOf(readResponse.isSelected()));
         sampler.setClientChoice(clientChoice.getText());
+        sampler.setTimeout(timeout.getText());
     }
 
     /**
@@ -181,6 +174,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.eve
         commonParams.add(jmsPwd);
         commonParams.add(iterations);
         commonParams.add(readResponse);
+        commonParams.add(timeout);
         commonParams.add(clientChoice);
 
         // we have to add the gui to the change listener
@@ -205,6 +199,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.eve
         useAuth.setSelected(sampler.isUseAuth());
         readResponse.setSelected(sampler.getReadResponseAsBoolean());
         clientChoice.setText(sampler.getClientChoice());
+        timeout.setText(sampler.getTimeout());
     }
 
     @Override
@@ -218,6 +213,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.eve
         jmsUser.setText(""); // $NON-NLS-1$
         jmsPwd.setText(""); // $NON-NLS-1$
         iterations.setText(""); // $NON-NLS-1$
+        timeout.setText("");
         useAuth.setSelected(false);
         readResponse.setSelected(true);
         clientChoice.setText(RECEIVE_RSC);
