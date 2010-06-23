@@ -47,7 +47,7 @@ import org.apache.log.Logger;
  */
 public class SubscriberSampler extends BaseJMSSampler implements Interruptible, TestListener, MessageListener {
 
-    private static final long serialVersionUID = 233L;
+    private static final long serialVersionUID = 240L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -59,8 +59,12 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     
     private transient volatile boolean interrupted = false;
 
+    private transient long timeout;
+
     // Don't change the string, as it is used in JMX files
     private static final String CLIENT_CHOICE = "jms.client_choice"; // $NON-NLS-1$
+    private static final String TIMEOUT = "jms.timeout"; // $NON-NLS-1$
+    private static final String TIMEOUT_DEFAULT = "";
 
     public SubscriberSampler() {
     }
@@ -102,6 +106,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
      *
      */
     private OnMessageSubscriber initListenerClient() throws JMSException, NamingException {
+        timeout = getTimeoutAsLong();
         interrupted = false;
         OnMessageSubscriber sub = (OnMessageSubscriber) ClientPool.get(this);
         if (sub == null) {
@@ -125,9 +130,10 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
      * @throws JMSException 
      */
     private void initReceiveClient() throws NamingException, JMSException {
+        timeout = getTimeoutAsLong();
         interrupted = false;
-        SUBSCRIBER = new ReceiveSubscriber(getUseJNDIPropertiesAsBoolean(), this
-                .getJNDIInitialContextFactory(), getProviderUrl(), getConnectionFactory(), getDestination(),
+        SUBSCRIBER = new ReceiveSubscriber(getUseJNDIPropertiesAsBoolean(),
+                getJNDIInitialContextFactory(), getProviderUrl(), getConnectionFactory(), getDestination(),
                 isUseAuth(), getUsername(), getPassword());
         SUBSCRIBER.resume();
         ClientPool.addClient(SUBSCRIBER);
@@ -164,23 +170,30 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
 
         
         result.setSampleLabel(getName());
-        result.sampleStart();
         try {
             initListenerClient();
         } catch (JMSException ex) {
+            result.sampleStart();
             result.sampleEnd();
             result.setResponseCode("000");
             result.setResponseMessage(ex.toString());
             return result;
         } catch (NamingException ex) {
+            result.sampleStart();
             result.sampleEnd();
             result.setResponseCode("000");
             result.setResponseMessage(ex.toString());
             return result;
         }
 
-        
-        while (queue.size() < loop && interrupted == false) {
+        long until = 0L;
+        if (timeout > 0) {
+            until = timeout + System.currentTimeMillis(); 
+        }
+        result.sampleStart();
+        while (!interrupted
+                && (until == 0 || System.currentTimeMillis() < until)
+                && queue.size() < loop) {// check this last as it is the most expensive
             try {
                 Thread.sleep(0, 50);
             } catch (InterruptedException e) {
@@ -252,8 +265,14 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         }
         int loop = getIterationCount();
 
+        long until = 0L;
+        if (timeout > 0) {
+            until = timeout + System.currentTimeMillis(); 
+        }
         result.sampleStart();
-        while (SUBSCRIBER.count(0) < loop && interrupted == false) {
+        while (!interrupted
+                && (until == 0 || System.currentTimeMillis() < until)
+                && SUBSCRIBER.count(0) < loop) { // check this last as it is most expensive
             try {
                 Thread.sleep(0, 50);
             } catch (InterruptedException e) {
@@ -347,6 +366,18 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
             choice = JMSSubscriberGui.ON_MESSAGE_RSC;
         }
         return choice;
+    }
+
+    public String getTimeout(){
+        return getPropertyAsString(TIMEOUT, TIMEOUT_DEFAULT);
+    }
+
+    public long getTimeoutAsLong(){
+        return getPropertyAsLong(TIMEOUT, 0L);
+    }
+
+    public void setTimeout(String timeout){
+        setProperty(TIMEOUT, timeout, TIMEOUT_DEFAULT);        
     }
 
     /**
