@@ -18,36 +18,31 @@
 
 package org.apache.jmeter.protocol.jms.control.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
 
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.apache.jmeter.gui.util.FilePanel;
+import org.apache.jmeter.gui.util.JLabeledRadioI18N;
+import org.apache.jmeter.gui.util.VerticalPanel;
+import org.apache.jmeter.protocol.jms.sampler.PublisherSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jmeter.gui.util.FilePanel;
-import org.apache.jmeter.gui.util.JLabeledRadioI18N;
-import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.gui.JLabeledTextArea;
-import org.apache.jorphan.gui.layout.VerticalLayout;
-
-import org.apache.jmeter.protocol.jms.sampler.PublisherSampler;
+import org.apache.jorphan.gui.JLabeledTextField;
 
 /**
  * This is the GUI for JMS Publisher <br>
  * Created on: October 13, 2003
  *
  */
-public class JMSPublisherGui extends AbstractSamplerGui implements java.awt.event.ActionListener, ChangeListener {
+public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListener {
 
     private static final long serialVersionUID = 240L;
 
@@ -101,10 +96,6 @@ public class JMSPublisherGui extends AbstractSamplerGui implements java.awt.even
     private final JLabeledTextArea textMessage = new JLabeledTextArea(JMeterUtils.getResString("jms_text_message"));
 
     private final JLabeledRadioI18N msgChoice = new JLabeledRadioI18N("jms_message_type", MSGTYPES_ITEMS, TEXT_MSG_RSC); //$NON-NLS-1$
-
-    private final JPanel lookup = new JPanel();
-
-    private final JPanel messagePanel = new JPanel();
 
     public JMSPublisherGui() {
         init();
@@ -169,59 +160,35 @@ public class JMSPublisherGui extends AbstractSamplerGui implements java.awt.even
      * SOAPSampler, since it is common.
      */
     private void init() {
-        this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+        setLayout(new BorderLayout());
+        setBorder(makeBorder());
+        add(makeTitlePanel(), BorderLayout.NORTH);
 
-        // MAIN PANEL
-        JPanel mainPanel = new JPanel();
-        Border margin = new EmptyBorder(10, 10, 5, 10);
-        mainPanel.setBorder(margin);
-        mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+        JPanel mainPanel = new VerticalPanel();
+        add(mainPanel, BorderLayout.CENTER);
+        
+        mainPanel.add(useProperties);
+        mainPanel.add(jndiICF);
+        mainPanel.add(urlField);
+        mainPanel.add(jndiConnFac);
+        mainPanel.add(jmsDestination);
+        mainPanel.add(useAuth);
+        mainPanel.add(jmsUser);
+        mainPanel.add(jmsPwd);
+        mainPanel.add(iterations);
 
-        // TITLE
-        JLabel panelTitleLabel = new JLabel(getStaticLabel());
-        Font curFont = panelTitleLabel.getFont();
-        int curFontSize = curFont.getSize();
-        curFontSize += 4;
-        panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-        mainPanel.add(panelTitleLabel);
-        // NAME
-        mainPanel.add(getNamePanel());
-
-        // Button for browsing webservice wsdl
-
-        lookup.setLayout(new VerticalLayout(6, VerticalLayout.LEFT));
-        mainPanel.add(lookup);
-        lookup.add(useProperties);
-        useProperties.addChangeListener(this);
-        lookup.add(jndiICF);
-        lookup.add(urlField);
-        lookup.add(jndiConnFac);
-
-        configChoice.addChangeListener(this);
-        msgChoice.addChangeListener(this);
-
-        JPanel commonParams = new JPanel();
-        commonParams.setLayout(new VerticalLayout(6, VerticalLayout.LEFT));
-        mainPanel.add(commonParams);
-        commonParams.add(jmsDestination);
-        commonParams.add(useAuth);
-        commonParams.add(jmsUser);
-        commonParams.add(jmsPwd);
-        commonParams.add(iterations);
-
-        messagePanel.setLayout(new VerticalLayout(3, VerticalLayout.LEFT));
-        messagePanel.add(configChoice);
-        messagePanel.add(msgChoice);
-        messagePanel.add(messageFile);
-        messagePanel.add(randomFile);
-        messagePanel.add(textMessage);
-        mainPanel.add(messagePanel);
-
-        Dimension pref = new Dimension(400, 200);
+        mainPanel.add(configChoice);
+        mainPanel.add(msgChoice);
+        mainPanel.add(messageFile);
+        mainPanel.add(randomFile);
+        mainPanel.add(textMessage);
+        Dimension pref = new Dimension(400, 150);
         textMessage.setPreferredSize(pref);
 
-        // we have to add the gui to the change listener
-        this.add(mainPanel);
+        useProperties.addChangeListener(this);
+        useAuth.addChangeListener(this);
+        configChoice.addChangeListener(this);
+        msgChoice.addChangeListener(this);
     }
 
     @Override
@@ -269,31 +236,20 @@ public class JMSPublisherGui extends AbstractSamplerGui implements java.awt.even
     }
 
     /**
-     * method from ActionListener
-     *
-     * @param event
-     *            that occurred
-     */
-    public void actionPerformed(ActionEvent event) {
-    }
-
-    /**
      * When a widget state changes, it will notify this class so we can
      * enable/disable the correct items.
      */
     public void stateChanged(ChangeEvent event) {
-        if (event.getSource() == this.configChoice) {
-            updateConfig(this.configChoice.getText());
-        } else if (event.getSource() == this.msgChoice) {
-            updateMessageType(this.msgChoice.getText());
+        if (event.getSource() == configChoice) {
+            updateConfig(configChoice.getText());
+        } else if (event.getSource() == msgChoice) {
+            updateMessageType(msgChoice.getText());
         } else if (event.getSource() == useProperties) {
-            if (useProperties.isSelected()) {
-                this.jndiICF.setEnabled(false);
-                this.urlField.setEnabled(false);
-            } else {
-                this.jndiICF.setEnabled(true);
-                this.urlField.setEnabled(true);
-            }
+            jndiICF.setEnabled(!useProperties.isSelected());
+            urlField.setEnabled(!useProperties.isSelected());
+        } else if (event.getSource() == useAuth) {
+            jmsUser.setEnabled(!useAuth.isSelected());
+            jmsPwd.setEnabled(!useAuth.isSelected());
         }
     }
 
