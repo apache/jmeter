@@ -27,7 +27,6 @@ import javax.jms.Message;
 import javax.naming.NamingException;
 
 import org.apache.jorphan.io.TextFile;
-import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestListener;
@@ -120,14 +119,6 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
                 getPassword());
         ClientPool.addClient(publisher);
         log.debug("PublisherSampler.initClient called");
-    }
-
-    /**
-     * The implementation calls sample() without any parameters
-     */
-    @Override
-    public SampleResult sample(Entry e) {
-        return sample();
     }
 
     /**
