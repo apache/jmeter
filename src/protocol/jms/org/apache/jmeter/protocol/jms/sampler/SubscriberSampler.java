@@ -300,9 +300,9 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
                         String name = enumb.nextElement();
                         Object obj = mapm.getObject(name);
                         buffer.append(name);
-                        buffer.append("(");
+                        buffer.append(",");
                         buffer.append(obj.getClass().getCanonicalName());
-                        buffer.append(")");
+                        buffer.append(",");
                         buffer.append(obj);
                         buffer.append("\n");
                     }
