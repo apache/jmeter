@@ -186,8 +186,6 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         setBorder(makeBorder());
         add(makeTitlePanel(), BorderLayout.NORTH);
 
-        Box mainPanel = Box.createVerticalBox();
-
         JPanel jmsQueueingPanel = new JPanel(new BorderLayout());
         jmsQueueingPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("jms_queueing"))); //$NON-NLS-1$
@@ -203,8 +201,6 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         JPanel receiveQueuePanel = new JPanel(new BorderLayout(5, 0));
         receiveQueuePanel.add(receiveQueue);
         jmsQueueingPanel.add(receiveQueuePanel, BorderLayout.SOUTH);
-
-        JPanel jndiPanel = createJNDIPanel();
 
         JPanel messagePanel = new JPanel(new BorderLayout());
         messagePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
@@ -243,11 +239,13 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         jmsPropertiesPanel = new ArgumentsPanel(JMeterUtils.getResString("jms_props")); //$NON-NLS-1$
         messagePanel.add(jmsPropertiesPanel, BorderLayout.SOUTH);
 
+        Box mainPanel = Box.createVerticalBox();
+        add(mainPanel, BorderLayout.CENTER);
         mainPanel.add(jmsQueueingPanel, BorderLayout.NORTH);
         mainPanel.add(messagePanel, BorderLayout.CENTER);
+        JPanel jndiPanel = createJNDIPanel();
         mainPanel.add(jndiPanel, BorderLayout.SOUTH);
 
-        add(mainPanel, BorderLayout.CENTER);
     }
 
     /**
