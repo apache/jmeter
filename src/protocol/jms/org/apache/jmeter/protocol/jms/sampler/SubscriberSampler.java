@@ -105,16 +105,16 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         interrupted = false;
         OnMessageSubscriber sub = (OnMessageSubscriber) ClientPool.get(this);
         if (sub == null) {
-            sub = new OnMessageSubscriber(this.getUseJNDIPropertiesAsBoolean(), this.getJNDIInitialContextFactory(),
-                    this.getProviderUrl(), this.getConnectionFactory(), this.getTopic(), this.isUseAuth(), this
-                            .getUsername(), this.getPassword());
+            sub = new OnMessageSubscriber(getUseJNDIPropertiesAsBoolean(), getJNDIInitialContextFactory(),
+                    getProviderUrl(), getConnectionFactory(), getDestination(), 
+                    isUseAuth(), getUsername(), getPassword());
             queue.clear();
             sub.setMessageListener(this);
             sub.resume();
             ClientPool.addClient(sub);
             ClientPool.put(this, sub);
             log.debug("SubscriberSampler.initListenerClient called");
-            log.debug("loop count " + this.getIterations());
+            log.debug("loop count " + getIterations());
         }
         return sub;
     }
@@ -126,11 +126,11 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
      */
     private void initReceiveClient() throws NamingException, JMSException {
         interrupted = false;
-        this.SUBSCRIBER = new ReceiveSubscriber(this.getUseJNDIPropertiesAsBoolean(), this
-                .getJNDIInitialContextFactory(), this.getProviderUrl(), this.getConnectionFactory(), this.getTopic(),
-                this.isUseAuth(), this.getUsername(), this.getPassword());
-        this.SUBSCRIBER.resume();
-        ClientPool.addClient(this.SUBSCRIBER);
+        SUBSCRIBER = new ReceiveSubscriber(getUseJNDIPropertiesAsBoolean(), this
+                .getJNDIInitialContextFactory(), getProviderUrl(), getConnectionFactory(), getDestination(),
+                isUseAuth(), getUsername(), getPassword());
+        SUBSCRIBER.resume();
+        ClientPool.addClient(SUBSCRIBER);
         log.debug("SubscriberSampler.initReceiveClient called");
     }
 
@@ -142,7 +142,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
      */
     @Override
     public SampleResult sample() {
-        if (this.getClientChoice().equals(JMSSubscriberGui.RECEIVE_RSC)) {
+        if (getClientChoice().equals(JMSSubscriberGui.RECEIVE_RSC)) {
             return sampleWithReceive();
         } else {
             return sampleWithListener();
@@ -160,7 +160,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         StringBuilder buffer = new StringBuilder();
         StringBuilder propBuffer = new StringBuilder();
         int cnt;
-        int loop = this.getIterationCount();
+        int loop = getIterationCount();
 
         
         result.setSampleLabel(getName());
@@ -197,7 +197,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
                 extractContent(buffer, propBuffer, msg);
             }
         }
-        if (this.getReadResponseAsBoolean()) {
+        if (getReadResponseAsBoolean()) {
             result.setResponseData(buffer.toString().getBytes());
         } else {
             result.setBytes(buffer.toString().getBytes().length);
@@ -232,9 +232,9 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         
         
         result.setSampleLabel(getName());
-        if (this.SUBSCRIBER == null) { // TODO perhaps do this in test[Iteration]Start?
+        if (SUBSCRIBER == null) { // TODO perhaps do this in test[Iteration]Start?
             try {
-                this.initReceiveClient();
+                initReceiveClient();
             } catch (NamingException ex) {
                 result.sampleStart();
                 result.sampleEnd();
@@ -248,12 +248,12 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
                 result.setResponseMessage(ex.toString());
                 return result;
             }
-            this.SUBSCRIBER.start();
+            SUBSCRIBER.start();
         }
-        int loop = this.getIterationCount();
+        int loop = getIterationCount();
 
         result.sampleStart();
-        while (this.SUBSCRIBER.count(0) < loop && interrupted == false) {
+        while (SUBSCRIBER.count(0) < loop && interrupted == false) {
             try {
                 Thread.sleep(0, 50);
             } catch (InterruptedException e) {
@@ -264,10 +264,10 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         int read = SUBSCRIBER.count(0);
         result.setResponseMessage(read + " samples messages received");
         for(cnt = 0; cnt < read ; cnt++) {
-            Message msg = this.SUBSCRIBER.getMessage();
+            Message msg = SUBSCRIBER.getMessage();
             extractContent(buffer, propBuffer, msg);
         }
-        if (this.getReadResponseAsBoolean()) {
+        if (getReadResponseAsBoolean()) {
             result.setResponseData(buffer.toString().getBytes());
         } else {
             result.setBytes(buffer.toString().getBytes().length);
