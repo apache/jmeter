@@ -1130,11 +1130,11 @@ For details, see <complink name="BSF Sampler"/>.
 </properties>
 </component>
 
-<component name="JMS Publisher" index="&sect-num;.1.13"  width="435" height="745" screenshot="jmspublisher.png">
-<note>ALPHA CODE</note>
+<component name="JMS Publisher" index="&sect-num;.1.13"  width="513" height="742" screenshot="jmspublisher.png">
+<note>BETA CODE - the code is still subject to change</note>
 	<description>
 		<p>
-		JMS Publisher will publish messages to a given pub/sub topic. For those not
+		JMS Publisher will publish messages to a given destination (topic/queue). For those not
 		familiar with JMS, it is the J2EE specification for messaging. There are
 		numerous JMS servers on the market and several open source options.
 		</p>
@@ -1143,24 +1143,47 @@ For details, see <complink name="BSF Sampler"/>.
 	</description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-  <property name="use JNDI properties file" required="Yes">use jndi.properties to create topic</property>
+  <property name="use JNDI properties file" required="Yes">use jndi.properties. 
+  Note that the file must be on the classpath - e.g. by updating the user.classpath JMeter property.
+  </property>
   <property name="JNDI Initial Context Factory" required="No">Name of the context factory</property>
-  <property name="Provider URL" required="No">The URL for the jms provider</property>
-  <property name="Topic" required="Yes">the message topic</property>
+  <property name="Provider URL" required="Yes, unless using jndi.properties">The URL for the jms provider</property>
+  <property name="Destination" required="Yes">the message destination (topic or queue name)</property>
   <property name="Authentication" required="Yes">Authentication requirement for the JMS provider</property>
   <property name="User" required="No">User Name</property>
   <property name="Password" required="No">Password</property>
   <property name="Number of samples to aggregate" required="Yes">number of samples to aggregate</property>
-  <property name="configuration" required="Yes">setting for the message</property>
-  <property name="Message type" required="Yes">text or object message</property>
+  <property name="Message source" required="Yes">where to obtain the message</property>
+  <property name="Message type" required="Yes">Text, Map or Object message</property>
 </properties>
+<p>
+For the MapMessage type, JMeter reads the source as lines of text.
+Each line must have 3 fields, delimited by commas.
+The fields are:
+<ul>
+<li>Name of entry</li>
+<li>Object class name, e.g. "String" (assumes java.lang package if not specified)</li>
+<li>Object string value</li>
+</ul>
+For each entry, JMeter adds an Object with the given name.
+The value is derived by creating an instance of the class, and using the valueOf(String) method to convert the value if necessary.
+For example:
+<pre>
+name,String,Example
+size,Integer,1234
+</pre>
+This is a very simple implementation; it is not intended to support all possible object types.
+</p>
+<p>
+<b>Note: </b> the Object message type is not implemented yet.
+</p>
 </component>
 
-<component name="JMS Subscriber" index="&sect-num;.1.14"  width="502" height="417" screenshot="jmssubscriber.png">
-<note>ALPHA CODE</note>
+<component name="JMS Subscriber" index="&sect-num;.1.14"  width="513" height="441" screenshot="jmssubscriber.png">
+<note>BETA CODE - the code is still subject to change</note>
 	<description>
 		<p>
-		JMS Publisher will subscribe to messages in a given pub/sub topic. For those not
+		JMS Publisher will subscribe to messages in a given destination (topic or queue). For those not
 		familiar with JMS, it is the J2EE specification for messaging. There are
 		numerous JMS servers on the market and several open source options.
 		</p>
@@ -1172,18 +1195,23 @@ For details, see <complink name="BSF Sampler"/>.
   <property name="use JNDI properties file" required="Yes">use jndi.properties to create topic</property>
   <property name="JNDI Initial Context Factory" required="No">Name of the context factory</property>
   <property name="Provider URL" required="No">The URL for the jms provider</property>
-  <property name="Topic" required="Yes">the message topic</property>
+  <property name="Destination" required="Yes">the message destination (topic or queue name)</property>
   <property name="Authentication" required="Yes">Authentication requirement for the JMS provider</property>
   <property name="User" required="No">User Name</property>
   <property name="Password" required="No">Password</property>
   <property name="Number of samples to aggregate" required="Yes">number of samples to aggregate</property>
-  <property name="Read response" required="Yes">should the sampler read the response</property>
+  <property name="Read response" required="Yes">should the sampler read the response. If not, only the response length is returned.</property>
+  <property name="Timeout" required="Yes">Specify the timeout to be applied, in milliseconds. 0=none. 
+  This is the overall aggregate timeout, not per sample.</property>
   <property name="Client" required="Yes">Which client to use</property>
 </properties>
+<p>
+TBA
+</p>
 </component>
 
 <component name="JMS Point-to-Point" index="&sect-num;.1.15"  width="684" height="698" screenshot="jms/JMS_Point-to-Point.png">
-<note>ALPHA CODE</note>
+<note>BETA CODE - the code is still subject to change</note>
 	<description>
 		<p>
 		This sampler sends and optionally receives JMS Messages through point-to-point connections (queues).
