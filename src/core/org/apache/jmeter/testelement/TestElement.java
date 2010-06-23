@@ -89,6 +89,8 @@ public interface TestElement extends Cloneable {
 
     public long getPropertyAsLong(String key);
 
+    public long getPropertyAsLong(String key, long defaultValue);
+
     public int getPropertyAsInt(String key);
 
     public int getPropertyAsInt(String key, int defaultValue);
