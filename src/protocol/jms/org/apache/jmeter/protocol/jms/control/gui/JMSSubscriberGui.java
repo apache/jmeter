@@ -58,7 +58,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.eve
     private final JLabeledTextField jndiConnFac =
         new JLabeledTextField(JMeterUtils.getResString("jms_connection_factory")); // $NON-NLS-1$
 
-    private final JLabeledTextField jmsTopic =
+    private final JLabeledTextField jmsDestination =
         new JLabeledTextField(JMeterUtils.getResString("jms_topic")); // $NON-NLS-1$
 
     private final JLabeledTextField jmsUser =
@@ -108,7 +108,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.eve
         sampler.setJNDIIntialContextFactory(jndiICF.getText());
         sampler.setProviderUrl(urlField.getText());
         sampler.setConnectionFactory(jndiConnFac.getText());
-        sampler.setTopic(jmsTopic.getText());
+        sampler.setDestination(jmsDestination.getText());
         sampler.setUsername(jmsUser.getText());
         sampler.setPassword(jmsPwd.getText());
         sampler.setUseAuth(useAuth.isSelected());
@@ -130,7 +130,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.eve
         sampler.setJNDIIntialContextFactory(jndiICF.getText());
         sampler.setProviderUrl(urlField.getText());
         sampler.setConnectionFactory(jndiConnFac.getText());
-        sampler.setTopic(jmsTopic.getText());
+        sampler.setDestination(jmsDestination.getText());
         sampler.setUsername(jmsUser.getText());
         sampler.setPassword(jmsPwd.getText());
         sampler.setUseAuth(useAuth.isSelected());
@@ -175,7 +175,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.eve
         JPanel commonParams = new JPanel();
         commonParams.setLayout(new VerticalLayout(6, VerticalLayout.LEFT));
         mainPanel.add(commonParams);
-        commonParams.add(jmsTopic);
+        commonParams.add(jmsDestination);
         commonParams.add(useAuth);
         commonParams.add(jmsUser);
         commonParams.add(jmsPwd);
@@ -198,7 +198,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.eve
         jndiICF.setText(sampler.getJNDIInitialContextFactory());
         urlField.setText(sampler.getProviderUrl());
         jndiConnFac.setText(sampler.getConnectionFactory());
-        jmsTopic.setText(sampler.getTopic());
+        jmsDestination.setText(sampler.getDestination());
         jmsUser.setText(sampler.getUsername());
         jmsPwd.setText(sampler.getPassword());
         iterations.setText(sampler.getIterations());
@@ -214,7 +214,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.eve
         jndiICF.setText(""); // $NON-NLS-1$
         urlField.setText(""); // $NON-NLS-1$
         jndiConnFac.setText(""); // $NON-NLS-1$
-        jmsTopic.setText(""); // $NON-NLS-1$
+        jmsDestination.setText(""); // $NON-NLS-1$
         jmsUser.setText(""); // $NON-NLS-1$
         jmsPwd.setText(""); // $NON-NLS-1$
         iterations.setText(""); // $NON-NLS-1$

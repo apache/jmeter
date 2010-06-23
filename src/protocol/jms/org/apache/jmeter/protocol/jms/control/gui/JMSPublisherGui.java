@@ -84,7 +84,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements java.awt.even
 
     private final JLabeledTextField jndiConnFac = new JLabeledTextField(JMeterUtils.getResString("jms_connection_factory")); //$NON-NLS-1$
 
-    private final JLabeledTextField jmsTopic = new JLabeledTextField(JMeterUtils.getResString("jms_topic")); //$NON-NLS-1$
+    private final JLabeledTextField jmsDestination = new JLabeledTextField(JMeterUtils.getResString("jms_topic")); //$NON-NLS-1$
 
     private final JCheckBox useAuth = new JCheckBox(JMeterUtils.getResString("jms_use_auth"), false); //$NON-NLS-1$
 
@@ -127,7 +127,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements java.awt.even
         sampler.setJNDIIntialContextFactory(jndiICF.getText());
         sampler.setProviderUrl(urlField.getText());
         sampler.setConnectionFactory(jndiConnFac.getText());
-        sampler.setTopic(jmsTopic.getText());
+        sampler.setDestination(jmsDestination.getText());
         sampler.setUsername(jmsUser.getText());
         sampler.setPassword(jmsPwd.getText());
         sampler.setTextMessage(textMessage.getText());
@@ -152,7 +152,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements java.awt.even
         sampler.setJNDIIntialContextFactory(jndiICF.getText());
         sampler.setProviderUrl(urlField.getText());
         sampler.setConnectionFactory(jndiConnFac.getText());
-        sampler.setTopic(jmsTopic.getText());
+        sampler.setDestination(jmsDestination.getText());
         sampler.setUsername(jmsUser.getText());
         sampler.setPassword(jmsPwd.getText());
         sampler.setTextMessage(textMessage.getText());
@@ -203,7 +203,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements java.awt.even
         JPanel commonParams = new JPanel();
         commonParams.setLayout(new VerticalLayout(6, VerticalLayout.LEFT));
         mainPanel.add(commonParams);
-        commonParams.add(jmsTopic);
+        commonParams.add(jmsDestination);
         commonParams.add(useAuth);
         commonParams.add(jmsUser);
         commonParams.add(jmsPwd);
@@ -231,7 +231,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements java.awt.even
         jndiICF.setText(""); // $NON-NLS-1$
         urlField.setText(""); // $NON-NLS-1$
         jndiConnFac.setText(""); // $NON-NLS-1$
-        jmsTopic.setText(""); // $NON-NLS-1$
+        jmsDestination.setText(""); // $NON-NLS-1$
         jmsUser.setText(""); // $NON-NLS-1$
         jmsPwd.setText(""); // $NON-NLS-1$
         textMessage.setText(""); // $NON-NLS-1$
@@ -255,7 +255,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements java.awt.even
         jndiICF.setText(sampler.getJNDIInitialContextFactory());
         urlField.setText(sampler.getProviderUrl());
         jndiConnFac.setText(sampler.getConnectionFactory());
-        jmsTopic.setText(sampler.getTopic());
+        jmsDestination.setText(sampler.getDestination());
         jmsUser.setText(sampler.getUsername());
         jmsPwd.setText(sampler.getPassword());
         textMessage.setText(sampler.getTextMessage());
