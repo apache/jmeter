@@ -18,6 +18,8 @@
 
 package org.apache.jmeter.protocol.jms.client;
 
+import java.io.Closeable;
+
 import javax.naming.Context;
 import javax.naming.NamingException;
 import javax.jms.Connection;
@@ -40,7 +42,7 @@ import org.apache.log.Logger;
  * end of a test. This is important to make sure there aren't any zombie threads
  * or odd memory leaks.
  */
-public class OnMessageSubscriber {
+public class OnMessageSubscriber implements Closeable {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -72,7 +74,6 @@ public class OnMessageSubscriber {
         SESSION = CONN.createSession(false, Session.AUTO_ACKNOWLEDGE);
         Destination dest = Utils.lookupDestination(ctx, destinationName);
         SUBSCRIBER = SESSION.createConsumer(dest);
-        log.info("created the topic connection successfully");
     }
 
     /**
