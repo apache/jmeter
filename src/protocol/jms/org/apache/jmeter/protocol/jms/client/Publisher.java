@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.protocol.jms.client;
 
+import java.io.Closeable;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -37,7 +38,7 @@ import org.apache.jmeter.protocol.jms.Utils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-public class Publisher {
+public class Publisher implements Closeable {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -70,7 +71,6 @@ public class Publisher {
         session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
         Destination dest = Utils.lookupDestination(ctx, destinationName);
         producer = session.createProducer(dest);
-        log.info("created the topic connection successfully");
     }
 
     public TextMessage publish(String text) throws JMSException {
