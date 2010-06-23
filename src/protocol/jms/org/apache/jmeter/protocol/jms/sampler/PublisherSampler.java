@@ -17,6 +17,11 @@
 
 package org.apache.jmeter.protocol.jms.sampler;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.naming.NamingException;
@@ -152,12 +157,23 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
         StringBuilder propBuffer = new StringBuilder();
         int loop = getIterationCount();
         result.sampleStart();
+        String type = getMessageChoice();
         try {
             for (int idx = 0; idx < loop; idx++) {
-                String tmsg = getMessageContent();
-                Message msg = publisher.publish(tmsg);
-                buffer.append(tmsg);
-                Utils.messageProperties(propBuffer, msg);
+                if (JMSPublisherGui.TEXT_MSG_RSC.equals(type)){
+                    String tmsg = getMessageContent();
+                    Message msg = publisher.publish(tmsg);
+                    buffer.append(tmsg);
+                    Utils.messageProperties(propBuffer, msg);
+                } else if (JMSPublisherGui.MAP_MSG_RSC.equals(type)){
+                    Map<String, Object> m = getMapContent();
+                    Message msg = publisher.publish(m);
+                    Utils.messageProperties(propBuffer, msg);
+                } else if (JMSPublisherGui.OBJECT_MSG_RSC.equals(type)){
+                    throw new JMSException(type+ " is not yet supported");
+                } else {
+                    throw new JMSException(type+ " is not recognised");                    
+                }
             }
             result.setResponseCodeOK();
             result.setResponseMessage(loop + " messages published");
@@ -171,6 +187,34 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
             result.sampleEnd();            
         }
         return result;
+    }
+
+    private Map<String, Object> getMapContent() throws ClassNotFoundException, SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+        Map<String,Object> m = new HashMap<String,Object>();
+        String text = getMessageContent();
+        String[] lines = text.split("\n");
+        for (String line : lines){
+            String[] parts = line.split(",",3);
+            if (parts.length != 3) {
+                throw new IllegalArgumentException("line must have 3 parts: "+line);
+            }
+            String name = parts[0];
+            String type = parts[1];
+            if (!type.contains(".")){// Allow shorthand names
+                type = "java.lang."+type;
+            }
+            String value = parts[2];
+            Object obj;
+            if (type.equals("java.lang.String")){
+                obj = value;
+            } else {
+                Class <?> clazz = Class.forName(type);
+                Method method = clazz.getMethod("valueOf", new Class<?>[]{String.class});
+                obj = method.invoke(clazz, value);                
+            }
+            m.put(name, obj);
+        }
+        return m;
     }
 
     /**
@@ -211,7 +255,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
 
     // ------------- get/set properties ----------------------//
     /**
-     * set the config choice
+     * set the source of the message
      *
      * @param choice
      */
@@ -224,7 +268,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
     private static final String USE_RANDOM_LOCALNAME = JMeterUtils.getResString(JMSPublisherGui.USE_RANDOM_RSC);
 
     /**
-     * return the config choice
+     * return the source of the message
      * Converts from old JMX files which used the local language string
      */
     public String getConfigChoice() {
@@ -242,7 +286,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
     }
 
     /**
-     * set the source of the message
+     * set the type of the message
      *
      * @param choice
      */
@@ -251,7 +295,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
     }
 
     /**
-     * return the source of the message
+     * return the type of the message (Text, Object, Map)
      *
      */
     public String getMessageChoice() {
