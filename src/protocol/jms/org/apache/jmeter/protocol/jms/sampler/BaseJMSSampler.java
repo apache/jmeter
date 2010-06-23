@@ -45,7 +45,8 @@ public abstract class BaseJMSSampler extends AbstractSampler {
 
     private static final String CONN_FACTORY = "jms.connection_factory"; // $NON-NLS-1$
 
-    private static final String TOPIC = "jms.topic"; // $NON-NLS-1$
+    // N.B. Cannot change value, as that is used in JMX files
+    private static final String DEST = "jms.topic"; // $NON-NLS-1$
 
     private static final String PRINCIPAL = "jms.security_principle"; // $NON-NLS-1$
 
@@ -133,21 +134,21 @@ public abstract class BaseJMSSampler extends AbstractSampler {
     }
 
     /**
-     * set the topic
+     * set the destination (topic or queue name)
      *
-     * @param topic
+     * @param dest the destination
      */
-    public void setTopic(String topic) {
-        setProperty(TOPIC, topic);
+    public void setDestination(String dest) {
+        setProperty(DEST, dest);
     }
 
     /**
-     * return the topic used for the benchmark
+     * return the destination (topic or queue name)
      *
-     * @return the topic
+     * @return the destination
      */
-    public String getTopic() {
-        return getPropertyAsString(TOPIC);
+    public String getDestination() {
+        return getPropertyAsString(DEST);
     }
 
     /**
