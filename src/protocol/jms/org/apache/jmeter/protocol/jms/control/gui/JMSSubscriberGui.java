@@ -18,31 +18,26 @@
 
 package org.apache.jmeter.protocol.jms.control.gui;
 
-import java.awt.Font;
-import java.awt.event.ActionEvent;
+import java.awt.BorderLayout;
 
 import javax.swing.JCheckBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.apache.jmeter.gui.util.JLabeledRadioI18N;
+import org.apache.jmeter.gui.util.VerticalPanel;
+import org.apache.jmeter.protocol.jms.sampler.SubscriberSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
-import org.apache.jorphan.gui.layout.VerticalLayout;
-
-import org.apache.jmeter.gui.util.JLabeledRadioI18N;
-import org.apache.jmeter.protocol.jms.sampler.SubscriberSampler;
 
 /**
  * This is the GUI for JMS Subscriber <br>
  *
  */
-public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.event.ActionListener, ChangeListener {
+public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListener {
 
     private static final long serialVersionUID = 240L;
 
@@ -76,7 +71,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.eve
     private final JCheckBox readResponse =
         new JCheckBox(JMeterUtils.getResString("jms_read_response"), true); // $NON-NLS-1$
 
-    private JLabeledTextField timeout = 
+    private final JLabeledTextField timeout = 
         new JLabeledTextField(JMeterUtils.getResString("jms_timeout")); //$NON-NLS-1$
 
     //++ Do not change these strings; they are used in JMX files to record the button settings
@@ -90,8 +85,6 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.eve
 
     private final JLabeledRadioI18N clientChoice =
         new JLabeledRadioI18N("jms_client_type", CLIENT_ITEMS, RECEIVE_RSC); // $NON-NLS-1$
-
-    private final JPanel lookup = new JPanel();
 
     public JMSSubscriberGui() {
         init();
@@ -137,48 +130,29 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.eve
      * SOAPSampler, since it is common.
      */
     private void init() {
-        this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+        setLayout(new BorderLayout());
+        setBorder(makeBorder());
+        add(makeTitlePanel(), BorderLayout.NORTH);
 
-        // MAIN PANEL
-        JPanel mainPanel = new JPanel();
-        Border margin = new EmptyBorder(10, 10, 5, 10);
-        mainPanel.setBorder(margin);
-        mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+        JPanel mainPanel = new VerticalPanel();
+        add(mainPanel, BorderLayout.CENTER);
+        
+        mainPanel.add(useProperties);
+        mainPanel.add(jndiICF);
+        mainPanel.add(urlField);
+        mainPanel.add(jndiConnFac);
+        mainPanel.add(jmsDestination);
+        mainPanel.add(useAuth);
+        mainPanel.add(jmsUser);
+        mainPanel.add(jmsPwd);
+        mainPanel.add(iterations);
 
-        // TITLE
-        JLabel panelTitleLabel = new JLabel(getStaticLabel());
-        Font curFont = panelTitleLabel.getFont();
-        int curFontSize = curFont.getSize();
-        curFontSize += 4;
-        panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-        mainPanel.add(panelTitleLabel);
-        // NAME
-        mainPanel.add(getNamePanel());
+        mainPanel.add(readResponse);
+        mainPanel.add(timeout);
+        mainPanel.add(clientChoice);
 
-        // Button for browsing webservice wsdl
-
-        lookup.setLayout(new VerticalLayout(6, VerticalLayout.LEFT));
-        mainPanel.add(lookup);
-        lookup.add(useProperties);
         useProperties.addChangeListener(this);
-        lookup.add(jndiICF);
-        lookup.add(urlField);
-        lookup.add(jndiConnFac);
-
-        JPanel commonParams = new JPanel();
-        commonParams.setLayout(new VerticalLayout(6, VerticalLayout.LEFT));
-        mainPanel.add(commonParams);
-        commonParams.add(jmsDestination);
-        commonParams.add(useAuth);
-        commonParams.add(jmsUser);
-        commonParams.add(jmsPwd);
-        commonParams.add(iterations);
-        commonParams.add(readResponse);
-        commonParams.add(timeout);
-        commonParams.add(clientChoice);
-
-        // we have to add the gui to the change listener
-        this.add(mainPanel);
+        useAuth.addChangeListener(this);
     }
 
     /**
@@ -220,29 +194,16 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.eve
     }
 
     /**
-     * method from ActionListener
-     *
-     * @param event
-     *            that occurred
-     */
-    public void actionPerformed(ActionEvent event) {
-        if (event.getSource() == useProperties) {
-        }
-    }
-
-    /**
      * When the state of a widget changes, it will notify the gui. the method
      * then enables or disables certain parameters.
      */
     public void stateChanged(ChangeEvent event) {
         if (event.getSource() == useProperties) {
-            if (useProperties.isSelected()) {
-                this.jndiICF.setEnabled(false);
-                this.urlField.setEnabled(false);
-            } else {
-                this.jndiICF.setEnabled(true);
-                this.urlField.setEnabled(true);
-            }
+            jndiICF.setEnabled(!useProperties.isSelected());
+            urlField.setEnabled(!useProperties.isSelected());
+        } else if (event.getSource() == useAuth) {
+            jmsUser.setEnabled(!useAuth.isSelected());
+            jmsPwd.setEnabled(!useAuth.isSelected());
         }
     }
 }
