@@ -1145,6 +1145,8 @@ For details, see <complink name="BSF Sampler"/>.
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
   <property name="use JNDI properties file" required="Yes">use jndi.properties. 
   Note that the file must be on the classpath - e.g. by updating the user.classpath JMeter property.
+  If this option is not selected, JMeter uses the "JNDI Initial Context Factory" and "Provider URL" fields
+  to create the connection.
   </property>
   <property name="JNDI Initial Context Factory" required="No">Name of the context factory</property>
   <property name="Provider URL" required="Yes, unless using jndi.properties">The URL for the jms provider</property>
@@ -1177,6 +1179,24 @@ This is a very simple implementation; it is not intended to support all possible
 <p>
 <b>Note: </b> the Object message type is not implemented yet.
 </p>
+<p>
+The following table shows some values which may be useful when configuring JMS:
+<table>
+<tr>
+<!-- Anakia does not like th cell without any text -->
+<th>Apache <a href="http://activemq.apache.org/">ActiveMQ</a></th>
+<th>Value(s)</th>
+<th>Comment</th>
+</tr>
+<tr><td>Context Factory</td><td>org.apache.activemq.jndi.ActiveMQInitialContextFactory</td><td>.</td></tr>
+<tr><td>Provider URL</td><td>vm://localhost</td><td></td></tr>
+<tr><td>Provider URL</td><td>vm:(broker:(vm://localhost)?persistent=false)</td><td>Disable persistence</td></tr>
+<tr><td>Queue Reference</td><td>dynamicQueues/QUEUENAME</td>
+<td><a href="http://activemq.apache.org/jndi-support.html#JNDISupport-Dynamicallycreatingdestinations">Dynamically define</a> the QUEUENAME to JNDI</td></tr>
+<tr><td>Topic Reference</td><td>dynamicTopics/TOPICNAME</td>
+<td><a href="http://activemq.apache.org/jndi-support.html#JNDISupport-Dynamicallycreatingdestinations">Dynamically define</a> the TOPICNAME to JNDI</td></tr>
+</table>
+</p>
 </component>
 
 <component name="JMS Subscriber" index="&sect-num;.1.14"  width="527" height="411" screenshot="jmssubscriber.png">
@@ -1192,7 +1212,11 @@ This is a very simple implementation; it is not intended to support all possible
 	</description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-  <property name="use JNDI properties file" required="Yes">use jndi.properties to create topic</property>
+  <property name="use JNDI properties file" required="Yes">use jndi.properties. 
+  Note that the file must be on the classpath - e.g. by updating the user.classpath JMeter property.
+  If this option is not selected, JMeter uses the "JNDI Initial Context Factory" and "Provider URL" fields
+  to create the connection.
+  </property>
   <property name="JNDI Initial Context Factory" required="No">Name of the context factory</property>
   <property name="Provider URL" required="No">The URL for the jms provider</property>
   <property name="Destination" required="Yes">the message destination (topic or queue name)</property>
@@ -1203,10 +1227,23 @@ This is a very simple implementation; it is not intended to support all possible
   <property name="Read response" required="Yes">should the sampler read the response. If not, only the response length is returned.</property>
   <property name="Timeout" required="Yes">Specify the timeout to be applied, in milliseconds. 0=none. 
   This is the overall aggregate timeout, not per sample.</property>
-  <property name="Client" required="Yes">Which client to use</property>
+  <property name="Client" required="Yes">Which client implementation to use.
+  Both of them create connections which can read messages. However they use a different strategy, as described below:
+  <ul>
+  <li>MessageConsumer.receive() - calls receive() for every requested message. 
+  Retains the connection between samples, but does not fetch messages unless the sampler is active.
+  This is best suited to Queue subscriptions. 
+  </li>
+  <li>MessageListener.onMessage() - establishes a Listener that stores all incoming messages on a queue. 
+  The listener remains active after the sampler completes.
+  This is best suited to Topic subscriptions.</li>
+  </ul>
+  </property>
 </properties>
 <p>
-TBA
+<b>NOTE:</b> JMeter 2.3.4 and earlier used a different strategy for the MessageConsumer.receive() client. 
+Previously this started a background thread which polled for messages. This thread continued when the sampler
+completed, so the net effect was similar to the MessageListener.onMessage() strategy.
 </p>
 </component>
 
