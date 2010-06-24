@@ -19,16 +19,13 @@
 package org.apache.jmeter.protocol.jms.client;
 
 import java.io.Closeable;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.jms.Connection;
 import javax.jms.Destination;
 import javax.jms.JMSException;
-import javax.jms.MapMessage;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.Session;
-import javax.jms.TextMessage;
 import javax.naming.Context;
 import javax.naming.NamingException;
 
@@ -37,19 +34,10 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * Receives messages in a separate thread until told to stop.
- * Run loop permanently receives messages; the sampler calls reset()
- * when it has taken enough messages.
- *
+ * Uses MessageConsumer.receive(timeout) to fetch messages.
+ * Does not cache any messages.
  */
-/*
- * TODO Needs rework - there is a window between receiving a message and calling reset()
- * which means that a message can be lost. It's not clear why a separate thread is needed,
- * given that the sampler loops until enough samples have been received.
- * Also, messages are received in wait mode, so the RUN flag won't be checked until
- * at least one more message has been received.
-*/
-public class ReceiveSubscriber implements Runnable, Closeable {
+public class ReceiveSubscriber implements Closeable {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -59,115 +47,87 @@ public class ReceiveSubscriber implements Runnable, Closeable {
 
     private final MessageConsumer SUBSCRIBER;
 
-    //@GuardedBy("this")
-    private int counter;
 
-    // Only MapMessage and TextMessage are currently supported
-    private final ConcurrentLinkedQueue<Message> queue = new ConcurrentLinkedQueue<Message>();
-
-    private volatile boolean RUN = true;
-    // Needs to be volatile to ensure value is picked up
-
-    //@GuardedBy("this")
-    private Thread CLIENTTHREAD;
-
-    public ReceiveSubscriber(boolean useProps, String jndi, String url, String connfactory, String destinationName,
-            boolean useAuth, String user, String pwd) throws NamingException, JMSException {
-        Context ctx = InitialContextFactory.getContext(useProps, jndi, url, useAuth, user, pwd);
+    /**
+     * Constructor takes the necessary JNDI related parameters to create a
+     * connection and prepare to begin receiving messages.
+     * <br/>
+     * The caller must then invoke {@link #start()} to enable message reception.
+     * 
+     * @param useProps if true, use jndi.properties instead of 
+     * initialContextFactory, providerUrl, securityPrincipal, securityCredentials
+     * @param initialContextFactory
+     * @param providerUrl
+     * @param connfactory
+     * @param destinationName
+     * @param useAuth
+     * @param securityPrincipal
+     * @param securityCredentials
+     * @throws JMSException if could not create context or other problem occurred.
+     * @throws NamingException 
+     */
+    public ReceiveSubscriber(boolean useProps, 
+            String initialContextFactory, String providerUrl, String connfactory, String destinationName,
+            boolean useAuth, 
+            String securityPrincipal, String securityCredentials) throws NamingException, JMSException {
+        Context ctx = InitialContextFactory.getContext(useProps, 
+                initialContextFactory, providerUrl, useAuth, securityPrincipal, securityCredentials);
         CONN = Utils.getConnection(ctx, connfactory);
         SESSION = CONN.createSession(false, Session.AUTO_ACKNOWLEDGE);
         Destination dest = Utils.lookupDestination(ctx, destinationName);
         SUBSCRIBER = SESSION.createConsumer(dest);
+        log.debug("<init> complete");
     }
 
     /**
-     * Resume will call Connection.start() and begin receiving messages from the
-     * JMS provider.
+     * Calls Connection.start() to begin receiving inbound messages.
+     * @throws JMSException 
      */
-    public void resume() {
-        if (this.CONN == null) {
-            log.error("Connection not set up");
-            return;
-        }
-        try {
-            this.CONN.start();
-        } catch (JMSException e) {
-            log.error("failed to start recieving");
-        }
+    public void start() throws JMSException {
+        log.debug("start()");
+        CONN.start();
     }
 
     /**
-     * Get the message
-     * @return the next message from the queue or null if none
+     * Calls Connection.stop() to stop receiving inbound messages.
+     * @throws JMSException 
      */
-    public synchronized Message getMessage() {
-        Message msg = queue.poll();
-        if (msg != null) {
-            counter--;
-        }
-        return msg;
+    public void stop() throws JMSException {
+        log.debug("stop()");
+        CONN.stop();
     }
 
+    /**
+     * Get the next message or null.
+     * Never blocks for longer than the specified timeout.
+     * 
+     * @param timeout in milliseconds
+     * @return the next message or null
+     * 
+     * @throws JMSException
+     */
+    public Message getMessage(long timeout) throws JMSException {
+        Message message = null;
+        if (timeout < 10) { // Allow for short/negative times
+            message = SUBSCRIBER.receiveNoWait();                
+        } else {
+            message = SUBSCRIBER.receive(timeout);
+        }
+        return message;
+    }
     /**
      * close() will stop the connection first. Then it closes the subscriber,
      * session and connection.
      */
     public synchronized void close() { // called from testEnded() thread
-        this.RUN = false;
+        log.debug("close()");
         try {
-            this.CONN.stop();
-            Utils.close(SUBSCRIBER, log);
-            Utils.close(SESSION, log);
-            Utils.close(CONN, log);
-            this.CLIENTTHREAD.interrupt();
-            this.CLIENTTHREAD = null;
-            queue.clear();
+            CONN.stop();
         } catch (JMSException e) {
             log.error(e.getMessage());
-        } catch (Exception e) {
-            log.error(e.getMessage());
         }
-    }
-
-    /**
-     * Increment the count and return the new value
-     *
-     * @param increment
-     */
-    public synchronized int count(int increment) {
-        counter += increment;
-        return counter;
-    }
-
-    /**
-     * start will create a new thread and pass this class. once the thread is
-     * created, it calls Thread.start().
-     */
-    public void start() {
-        this.CLIENTTHREAD = new Thread(this, "Subscriber2");
-        this.CLIENTTHREAD.start();
-    }
-
-    /**
-     * run calls listen to begin listening for inbound messages from the
-     * provider.
-     * 
-     * Updates the count field so the caller can check how many messages have been receieved.
-     * 
-     */
-    public void run() {
-        while (RUN) {
-            try {
-                Message message = this.SUBSCRIBER.receive();
-                if (message instanceof TextMessage || message instanceof MapMessage) {
-                    queue.add(message);
-                    count(1);
-                } else if (message != null){
-                	log.warn("Discarded non Map|TextMessage " +  message);
-                }
-            } catch (JMSException e) {
-                log.error("Communication error: " + e.getMessage());
-            }
-        }
+        Utils.close(SUBSCRIBER, log);
+        Utils.close(SESSION, log);
+        Utils.close(CONN, log);
     }
 }

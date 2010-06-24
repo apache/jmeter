@@ -18,7 +18,8 @@
 package org.apache.jmeter.protocol.jms.sampler;
 
 import java.util.Enumeration;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import javax.jms.JMSException;
 import javax.jms.MapMessage;
@@ -30,6 +31,7 @@ import javax.naming.NamingException;
 import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 
@@ -45,21 +47,33 @@ import org.apache.log.Logger;
 /**
  * This class implements the JMS Subcriber sampler
  */
-public class SubscriberSampler extends BaseJMSSampler implements Interruptible, TestListener, MessageListener {
+public class SubscriberSampler extends BaseJMSSampler implements Interruptible, TestListener, ThreadListener, MessageListener {
 
     private static final long serialVersionUID = 240L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    // Default wait (ms) for a message if timeouts are not enabled
+    // This is the maximimum time the sampler can be blocked.
+    private static final long DEFAULT_WAIT = 500L;
+
     // No need to synch/ - only used by sampler and ClientPool (which does its own synch)
     private transient ReceiveSubscriber SUBSCRIBER = null;
 
-    // Only MapMessage and TextMessage are currently supported
-    private final ConcurrentLinkedQueue<Message> queue = new ConcurrentLinkedQueue<Message>();
+    /*
+     * We use a LinkedBlockingQueue (rather than a ConcurrentLinkedQueue) because it has a
+     * poll-with-wait method that avoids the need to use a polling loop.
+     */
+    private transient LinkedBlockingQueue<Message> queue;
     
     private transient volatile boolean interrupted = false;
 
     private transient long timeout;
+
+    private boolean useReceive;
+
+    // This will be null iff initialisation succeeeds.
+    private transient Exception exceptionDuringInit;
 
     // Don't change the string, as it is used in JMX files
     private static final String CLIENT_CHOICE = "jms.client_choice"; // $NON-NLS-1$
@@ -105,23 +119,20 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
      * @throws NamingException 
      *
      */
-    private OnMessageSubscriber initListenerClient() throws JMSException, NamingException {
-        timeout = getTimeoutAsLong();
-        interrupted = false;
+    private void initListenerClient() throws JMSException, NamingException {
         OnMessageSubscriber sub = (OnMessageSubscriber) ClientPool.get(this);
         if (sub == null) {
             sub = new OnMessageSubscriber(getUseJNDIPropertiesAsBoolean(), getJNDIInitialContextFactory(),
                     getProviderUrl(), getConnectionFactory(), getDestination(), 
                     isUseAuth(), getUsername(), getPassword());
-            queue.clear();
+            queue = new LinkedBlockingQueue<Message>();
             sub.setMessageListener(this);
-            sub.resume();
+            sub.start();
             ClientPool.addClient(sub);
             ClientPool.put(this, sub);
             log.debug("SubscriberSampler.initListenerClient called");
             log.debug("loop count " + getIterations());
         }
-        return sub;
     }
 
     /**
@@ -130,12 +141,10 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
      * @throws JMSException 
      */
     private void initReceiveClient() throws NamingException, JMSException {
-        timeout = getTimeoutAsLong();
-        interrupted = false;
         SUBSCRIBER = new ReceiveSubscriber(getUseJNDIPropertiesAsBoolean(),
                 getJNDIInitialContextFactory(), getProviderUrl(), getConnectionFactory(), getDestination(),
                 isUseAuth(), getUsername(), getPassword());
-        SUBSCRIBER.resume();
+        SUBSCRIBER.start();
         ClientPool.addClient(SUBSCRIBER);
         log.debug("SubscriberSampler.initReceiveClient called");
     }
@@ -148,68 +157,58 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
      */
     @Override
     public SampleResult sample() {
-        if (getClientChoice().equals(JMSSubscriberGui.RECEIVE_RSC)) {
-            return sampleWithReceive();
+        SampleResult result = new SampleResult();
+        result.setDataType(SampleResult.TEXT);
+        result.setSampleLabel(getName());
+        result.sampleStart();
+        if (exceptionDuringInit != null) {
+            result.sampleEnd();
+            result.setSuccessful(false);
+            result.setResponseCode("000");
+            result.setResponseMessage(exceptionDuringInit.toString());
+            return result; 
+        }
+        if (useReceive) {
+            return sampleWithReceive(result);
         } else {
-            return sampleWithListener();
+            return sampleWithListener(result);
         }
     }
 
     /**
      * sample will block until messages are received
+     * @param result 
      *
      * @return the sample result
      */
-    private SampleResult sampleWithListener() {
-        SampleResult result = new SampleResult();
-        result.setDataType(SampleResult.TEXT);
+    private SampleResult sampleWithListener(SampleResult result) {
         StringBuilder buffer = new StringBuilder();
         StringBuilder propBuffer = new StringBuilder();
-        int cnt;
-        int loop = getIterationCount();
 
-        
-        result.setSampleLabel(getName());
-        try {
-            initListenerClient();
-        } catch (JMSException ex) {
-            result.sampleStart();
-            result.sampleEnd();
-            result.setResponseCode("000");
-            result.setResponseMessage(ex.toString());
-            return result;
-        } catch (NamingException ex) {
-            result.sampleStart();
-            result.sampleEnd();
-            result.setResponseCode("000");
-            result.setResponseMessage(ex.toString());
-            return result;
-        }
+        int loop = getIterationCount();
+        int read = 0;
 
         long until = 0L;
+        long now = System.currentTimeMillis();
         if (timeout > 0) {
-            until = timeout + System.currentTimeMillis(); 
+            until = timeout + now; 
         }
-        result.sampleStart();
         while (!interrupted
-                && (until == 0 || System.currentTimeMillis() < until)
-                && queue.size() < loop) {// check this last as it is the most expensive
+                && (until == 0 || now < until)
+                && read < loop) {
             try {
-                Thread.sleep(0, 50);
+                Message msg = queue.poll(calculateWait(until, now), TimeUnit.MILLISECONDS);
+                if (msg != null) {
+                    read++;
+                    extractContent(buffer, propBuffer, msg);
+                }
             } catch (InterruptedException e) {
-                log.debug(e.getMessage());
+                // Ignored
             }
+            now = System.currentTimeMillis();
         }
         result.sampleEnd();
        
-        int read = 0;
-        for(cnt = 0; cnt < loop ; cnt++) {
-            Message msg = queue.poll();
-            if (msg != null) {
-                read++;
-                extractContent(buffer, propBuffer, msg);
-            }
-        }
         if (getReadResponseAsBoolean()) {
             result.setResponseData(buffer.toString().getBytes());
         } else {
@@ -217,11 +216,12 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         }
         result.setResponseHeaders(propBuffer.toString());
         result.setDataType(SampleResult.TEXT);
-        result.setSuccessful(true);
         if (read == 0) {
             result.setResponseCode("404"); // Not found
-        } else {
+            result.setSuccessful(false);
+        } else { // TODO set different status if not enough messages found?
             result.setResponseCodeOK();
+            result.setSuccessful(true);
         }
         result.setResponseMessage(read + " messages received");
         result.setSamplerData(loop + " messages expected");
@@ -233,76 +233,70 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     /**
      * Sample method uses the ReceiveSubscriber client instead of onMessage
      * approach.
+     * @param result 
      *
      * @return the sample result
      */
-    private SampleResult sampleWithReceive() {
-        SampleResult result = new SampleResult();
-        result.setDataType(SampleResult.TEXT);
+    private SampleResult sampleWithReceive(SampleResult result) {
         StringBuilder buffer = new StringBuilder();
         StringBuilder propBuffer = new StringBuilder();
-        int cnt;
         
-        
-        result.setSampleLabel(getName());
-        if (SUBSCRIBER == null) { // TODO perhaps do this in test[Iteration]Start?
-            try {
-                initReceiveClient();
-            } catch (NamingException ex) {
-                result.sampleStart();
-                result.sampleEnd();
-                result.setResponseCode("000");
-                result.setResponseMessage(ex.toString());
-                return result;
-            } catch (JMSException ex) {
-                result.sampleStart();
-                result.sampleEnd();
-                result.setResponseCode("000");
-                result.setResponseMessage(ex.toString());
-                return result;
-            }
-            SUBSCRIBER.start();
-        }
         int loop = getIterationCount();
+        int read = 0;
 
         long until = 0L;
+        long now = System.currentTimeMillis();
         if (timeout > 0) {
-            until = timeout + System.currentTimeMillis(); 
+            until = timeout + now; 
         }
-        result.sampleStart();
         while (!interrupted
-                && (until == 0 || System.currentTimeMillis() < until)
-                && SUBSCRIBER.count(0) < loop) { // check this last as it is most expensive
+                && (until == 0 || now < until)
+                && read < loop) {
+            Message msg;
             try {
-                Thread.sleep(0, 50);
-            } catch (InterruptedException e) {
-                log.debug(e.getMessage());
+                msg = SUBSCRIBER.getMessage(calculateWait(until, now));
+                if (msg != null){
+                    read++;
+                    extractContent(buffer, propBuffer, msg);
+                }
+            } catch (JMSException e) {
+                log.warn("Error "+e.toString());
             }
+            now = System.currentTimeMillis();
         }
         result.sampleEnd();
-        int read = SUBSCRIBER.count(0);
         result.setResponseMessage(read + " samples messages received");
-        for(cnt = 0; cnt < read ; cnt++) {
-            Message msg = SUBSCRIBER.getMessage();
-            extractContent(buffer, propBuffer, msg);
-        }
         if (getReadResponseAsBoolean()) {
             result.setResponseData(buffer.toString().getBytes());
         } else {
             result.setBytes(buffer.toString().getBytes().length);
         }
         result.setResponseHeaders(propBuffer.toString());
-        result.setSuccessful(true);
         if (read == 0) {
             result.setResponseCode("404"); // Not found
-        } else {
+            result.setSuccessful(false);
+        } else { // TODO set different status if not enough messages found?
             result.setResponseCodeOK();
+            result.setSuccessful(true);
         }
         result.setResponseMessage(read + " message(s) received successfully");
         result.setSamplerData(loop + " messages expected");
         result.setSampleCount(read);
 
         return result;
+    }
+
+    /**
+     * Calculate the wait time, will never be more than DEFAULT_WAIT.
+     * 
+     * @param until target end time or 0 if timeouts not active
+     * @param now current time
+     * @return wait time
+     */
+    private long calculateWait(long until, long now) {
+        if (until == 0) return DEFAULT_WAIT; // Timeouts not active
+        long wait = until - now; // How much left
+        return wait > DEFAULT_WAIT ? DEFAULT_WAIT : wait;
     }
 
     private void extractContent(StringBuilder buffer, StringBuilder propBuffer,
@@ -337,9 +331,9 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
      * The sampler implements MessageListener directly and sets itself as the
      * listener with the MessageConsumer.
      */
-    public synchronized void onMessage(Message message) {
-        if (message instanceof TextMessage || message instanceof MapMessage) {
-            queue.add(message);
+    public void onMessage(Message message) {
+        if (!queue.offer(message)){
+            log.warn("Could not add message to queue");
         }
     }
 
@@ -391,4 +385,34 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
 
     // This was the old value that was checked for
     private final static String RECEIVE_STR = JMeterUtils.getResString(JMSSubscriberGui.RECEIVE_RSC); // $NON-NLS-1$
+
+    public void threadFinished() {
+    }
+
+    public void threadStarted() {
+        timeout = getTimeoutAsLong();
+        interrupted = false;
+        exceptionDuringInit = null;
+        useReceive = getClientChoice().equals(JMSSubscriberGui.RECEIVE_RSC);
+        if (useReceive) {
+            try {
+                initReceiveClient();
+            } catch (NamingException e) {
+                exceptionDuringInit = e;
+            } catch (JMSException e) {
+                exceptionDuringInit = e;
+            }
+        } else {
+            try {
+                initListenerClient();
+            } catch (JMSException e) {
+                exceptionDuringInit = e;
+            } catch (NamingException e) {
+                exceptionDuringInit = e;
+            }
+        }
+        if (exceptionDuringInit != null){
+            log.error("Could not initialise client",exceptionDuringInit);
+        }
+    }
 }
