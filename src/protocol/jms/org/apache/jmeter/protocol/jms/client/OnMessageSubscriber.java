@@ -35,8 +35,8 @@ import org.apache.log.Logger;
 
 /**
  * OnMessageSubscriber is designed to create the connection, session and
- * subscriber. The sampler is responsible for implementing
- * javax.jms.MessageListener interface and onMessage(Message msg) method.
+ * subscriber (MessageConsumer). The sampler is responsible for implementing
+ * javax.jms.MessageListener interface and the onMessage(Message msg) method.
  *
  * The implementation provides a close() method to clean up the client at the
  * end of a test. This is important to make sure there aren't any zombie threads
@@ -54,60 +54,70 @@ public class OnMessageSubscriber implements Closeable {
 
     /**
      * Constructor takes the necessary JNDI related parameters to create a
-     * connection and begin receiving messages.
-     *
-     * @param useProps
-     * @param jndi
-     * @param url
+     * connection and prepare to begin receiving messages.
+     * <br/>
+     * The caller must then invoke {@link #start()} to enable message reception.
+     * 
+     * @param useProps if true, use jndi.properties instead of 
+     * initialContextFactory, providerUrl, securityPrincipal, securityCredentials
+     * @param initialContextFactory
+     * @param providerUrl
      * @param connfactory
      * @param destinationName
      * @param useAuth
-     * @param user
-     * @param pwd
+     * @param securityPrincipal
+     * @param securityCredentials
      * @throws JMSException if could not create context or other problem occurred.
      * @throws NamingException 
      */
-    public OnMessageSubscriber(boolean useProps, String jndi, String url, String connfactory, String destinationName,
-            boolean useAuth, String user, String pwd) throws JMSException, NamingException {
-        Context ctx = InitialContextFactory.getContext(useProps, jndi, url, useAuth, user, pwd);
+    public OnMessageSubscriber(boolean useProps, 
+            String initialContextFactory, String providerUrl, String connfactory, String destinationName,
+            boolean useAuth, 
+            String securityPrincipal, String securityCredentials) throws JMSException, NamingException {
+        Context ctx = InitialContextFactory.getContext(useProps, 
+                initialContextFactory, providerUrl, useAuth, securityPrincipal, securityCredentials);
         CONN = Utils.getConnection(ctx, connfactory);
         SESSION = CONN.createSession(false, Session.AUTO_ACKNOWLEDGE);
         Destination dest = Utils.lookupDestination(ctx, destinationName);
         SUBSCRIBER = SESSION.createConsumer(dest);
+        log.debug("<init> complete");
     }
 
     /**
-     * resume will call Connection.start() to begin receiving inbound messages.
+     * Calls Connection.start() to begin receiving inbound messages.
+     * @throws JMSException 
      */
-    public void resume() {
-        try {
-            this.CONN.start();
-        } catch (JMSException e) {
-            log.error("failed to start recieving");
-        }
+    public void start() throws JMSException {
+        log.debug("start()");
+        CONN.start();
+    }
+
+    /**
+     * Calls Connection.stop() to stop receiving inbound messages.
+     * @throws JMSException 
+     */
+    public void stop() throws JMSException {
+        log.debug("stop()");
+        CONN.stop();
     }
 
     /**
      * close will close all the objects
      */
     public void close() {
-        log.info("Subscriber closed");
+        log.debug("close()");
         Utils.close(SUBSCRIBER, log);
         Utils.close(SESSION, log);
         Utils.close(CONN, log);
     }
 
     /**
-     * The sample uses this method to set itself as the listener. That means the
-     * sampler need to implement MessageListener interface.
+     * Set the MessageListener.
      *
      * @param listener
+     * @throws JMSException 
      */
-    public void setMessageListener(MessageListener listener) {
-        try {
-            this.SUBSCRIBER.setMessageListener(listener);
-        } catch (JMSException e) {
-            log.error(e.getMessage());
-        }
+    public void setMessageListener(MessageListener listener) throws JMSException {
+       SUBSCRIBER.setMessageListener(listener);
     }
 }
