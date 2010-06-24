@@ -133,12 +133,27 @@ Make sure the file is a jar file, not a zip.
 </p>
 </subsection>
 
-<subsection name="&sect-num;.2.6 Apache SOAP" anchor="opt_soap">
-<p>Apache SOAP requires mail.jar and activation.jar. You need to download and copy these two jar files to your <b>jmeter/lib</b> directory. Once the files are in there, JMeter will automatically pick them up.</p>
+<subsection name="&sect-num;.2.6 JMS client" anchor="opt_jms">
+<p>
+JMeter now includes the JMS API from Apache Geronimo, so you just need to add the appropriate JMS Client implementation
+jar(s) from the JMS provider. Please refer to their documentation for details. 
+There may also be some information on the <a href="http://wiki.apache.org/jakarta-jmeter/">JMeter Wiki</a>.
+</p>
 </subsection>
 
-<subsection name="&sect-num;.2.7 Libraries for ActiveMQ 3.0" anchor="libraries_activemq">
-<p>See <a href="http://activemq.apache.org/initial-configuration.html">http://activemq.apache.org/initial-configuration.html</a>
+<subsection name="&sect-num;.2.7 Libraries for ActiveMQ JMS" anchor="libraries_activemq">
+<p>
+At the time of writing, the current version of ActiveMQ is 5.3.2.
+You will need to add the jar activemq-all-5.3.2.jar to your classpath, e.g. by storing it in the lib/ directory.
+</p>
+<p>
+Alternatively, add the jar activemq-core-5.3.2.jar to the classpath; 
+this requires the javax/management/j2ee classes which can be found in the 
+Apache Geronimo jar geronimo-j2ee-management_1.0_spec-1.0.jar.
+The other required jars (such as commons-logging) are already included with JMeter. 
+</p>
+<p>
+See <a href="http://activemq.apache.org/initial-configuration.html">http://activemq.apache.org/initial-configuration.html</a>
 for details.
 </p>
 </subsection>
