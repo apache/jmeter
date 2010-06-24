@@ -63,7 +63,13 @@ public class InitialContextFactory {
                 props.setProperty(Context.SECURITY_CREDENTIALS, securityCredentials);
                 log.info("authentication properties set");
             }
-            ctx = new InitialContext(props);
+            try {
+                ctx = new InitialContext(props);
+            } catch (NoClassDefFoundError e){
+                throw new NamingException(e.toString());
+            } catch (Exception e) {
+                throw new NamingException(e.toString());
+            }
             MAP.put(initialContextFactory + providerUrl, ctx);
         }
         return ctx;
@@ -86,7 +92,13 @@ public class InitialContextFactory {
             String initialContextFactory, String providerUrl, 
             boolean useAuth, String securityPrincipal, String securityCredentials) throws NamingException {
         if (useProps) {
-            return new InitialContext();
+            try {
+                return new InitialContext();
+            } catch (NoClassDefFoundError e){
+                throw new NamingException(e.toString());
+            } catch (Exception e) {
+                throw new NamingException(e.toString());
+            }
         } else {
             return lookupContext(initialContextFactory, providerUrl, useAuth, securityPrincipal, securityCredentials);
         }
