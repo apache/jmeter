@@ -201,7 +201,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
         jmsDestination.setText(""); // $NON-NLS-1$
         jmsUser.setText(""); // $NON-NLS-1$
         jmsPwd.setText(""); // $NON-NLS-1$
-        iterations.setText(""); // $NON-NLS-1$
+        iterations.setText("1"); // $NON-NLS-1$
         timeout.setText("");
         useAuth.setSelected(false);
         readResponse.setSelected(true);
