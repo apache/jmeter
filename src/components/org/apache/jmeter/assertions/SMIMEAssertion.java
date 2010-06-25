@@ -123,12 +123,12 @@ public class SMIMEAssertion {
         try {
             CertStore certs = s.getCertificatesAndCRLs("Collection", "BC");
             SignerInformationStore signers = s.getSignerInfos();
-            Iterator signerIt = signers.getSigners().iterator();
+            Iterator<?> signerIt = signers.getSigners().iterator();
 
             if (signerIt.hasNext()) {
 
                 SignerInformation signer = (SignerInformation) signerIt.next();
-                Iterator certIt = certs.getCertificates(signer.getSID())
+                Iterator<?> certIt = certs.getCertificates(signer.getSID())
                         .iterator();
 
                 if (certIt.hasNext()) {
@@ -163,7 +163,7 @@ public class SMIMEAssertion {
 
                         String email = testElement.getSignerEmail();
                         if (email.trim().length() > 0) {
-                            List emailfromCert = getEmailFromCert(cert);
+                            List<String> emailfromCert = getEmailFromCert(cert);
                             if (!emailfromCert.contains(email)) {
                                 res.setFailure(true);
                                 failureMessage
@@ -287,22 +287,22 @@ public class SMIMEAssertion {
      * @return a List of all email addresses found
      * @throws CertificateException
      */
-    private static List getEmailFromCert(X509Certificate cert)
+    private static List<String> getEmailFromCert(X509Certificate cert)
             throws CertificateException {
         List<String> res = new ArrayList<String>();
 
         X509Principal subject = PrincipalUtil.getSubjectX509Principal(cert);
-        Iterator addressIt = subject.getValues(X509Principal.EmailAddress)
+        Iterator<?> addressIt = subject.getValues(X509Principal.EmailAddress)
                 .iterator();
         while (addressIt.hasNext()) {
             String address = (String) addressIt.next();
             res.add(address);
         }
 
-        Iterator subjectAltNamesIt = X509ExtensionUtil
+        Iterator<?> subjectAltNamesIt = X509ExtensionUtil
                 .getSubjectAlternativeNames(cert).iterator();
         while (subjectAltNamesIt.hasNext()) {
-            List altName = (List) subjectAltNamesIt.next();
+            List<?> altName = (List<?>) subjectAltNamesIt.next();
             int type = ((Integer) altName.get(0)).intValue();
             if (type == GeneralName.rfc822Name) {
                 String address = (String) altName.get(1);
