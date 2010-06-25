@@ -604,7 +604,22 @@ public class JMeterThread implements Runnable, Interruptible {
     }
 
     private void processAssertion(SampleResult result, Assertion assertion) {
-        AssertionResult assertionResult = assertion.getResult(result);
+        AssertionResult assertionResult;
+        try {
+            assertionResult = assertion.getResult(result);
+        } catch (ThreadDeath e) {
+            throw e;
+        } catch (Error e) {
+            log.error("Error processing Assertion ",e);
+            assertionResult = new AssertionResult("Assertion failed! See log file.");
+            assertionResult.setError(true);
+            assertionResult.setFailureMessage(e.toString());
+        } catch (Exception e) {
+            log.error("Exception processing Assertion ",e);
+            assertionResult = new AssertionResult("Assertion failed! See log file.");
+            assertionResult.setError(true);
+            assertionResult.setFailureMessage(e.toString());
+        }
         result.setSuccessful(result.isSuccessful() && !(assertionResult.isError() || assertionResult.isFailure()));
         result.addAssertionResult(assertionResult);
     }
