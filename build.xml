@@ -2031,6 +2031,8 @@ run JMeter unless all the JMeter jars are added.
         <available classpathref="classpath" classname="javax.script.ScriptEngine" property="javax.script.present"/>
         <antcall target="_process_javax_script"/>
         <process_jarfile jarname="avalon-framework"/>
+        <process_jarfile jarname="bcmail" dest.dir="${lib.api}"/>
+        <process_jarfile jarname="bcprov" dest.dir="${lib.api}"/>
         <process_jarfile jarname="beanshell"/>
         <process_jarfile jarname="commons-codec"/>
         <process_jarfile jarname="commons-collections"/>
