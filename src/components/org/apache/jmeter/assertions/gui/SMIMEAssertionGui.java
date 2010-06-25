@@ -182,6 +182,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
         return panel;
     }
  
+    @Override
     public void configure(TestElement el) {
         super.configure(el);
         SMIMEAssertionTestElement smimeAssertion = (SMIMEAssertionTestElement) el;
