@@ -56,271 +56,271 @@ import org.bouncycastle.x509.extension.X509ExtensionUtil;
 
 public class SMIMEAssertion {
 
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public SMIMEAssertion() {
-		super();
-	}
+    public SMIMEAssertion() {
+        super();
+    }
 
-	public static AssertionResult getResult(SMIMEAssertionTestElement testElement, SampleResult response, String name) {
-		checkForBouncycastle();
-		AssertionResult res = new AssertionResult(name);
+    public static AssertionResult getResult(SMIMEAssertionTestElement testElement, SampleResult response, String name) {
+        checkForBouncycastle();
+        AssertionResult res = new AssertionResult(name);
 
-		try {
-			MimeMessage msg = getMessageFromResponse(response, 0);
-			SMIMESignedParser s = null;
-			if (msg.isMimeType("multipart/signed")) {
-				MimeMultipart multipart = (MimeMultipart) msg.getContent();
-				s = new SMIMESignedParser(multipart);
-			} else if (msg.isMimeType("application/pkcs7-mime")
-					|| msg.isMimeType("application/x-pkcs7-mime")) {
-				s = new SMIMESignedParser(msg);
-			}
+        try {
+            MimeMessage msg = getMessageFromResponse(response, 0);
+            SMIMESignedParser s = null;
+            if (msg.isMimeType("multipart/signed")) {
+                MimeMultipart multipart = (MimeMultipart) msg.getContent();
+                s = new SMIMESignedParser(multipart);
+            } else if (msg.isMimeType("application/pkcs7-mime")
+                    || msg.isMimeType("application/x-pkcs7-mime")) {
+                s = new SMIMESignedParser(msg);
+            }
 
-			if (null != s) {
+            if (null != s) {
 
-				if (testElement.isNotSigned()) {
-					res.setFailure(true);
-					res.setFailureMessage("Mime message is signed");
-				} else if (testElement.isVerifySignature() || !testElement.isSignerNoCheck()) {
-					res = verifySignature(testElement, s, name);
-				}
+                if (testElement.isNotSigned()) {
+                    res.setFailure(true);
+                    res.setFailureMessage("Mime message is signed");
+                } else if (testElement.isVerifySignature() || !testElement.isSignerNoCheck()) {
+                    res = verifySignature(testElement, s, name);
+                }
 
-			} else {
-				if (!testElement.isNotSigned()) {
-					res.setFailure(true);
-					res.setFailureMessage("Mime message is not signed");
-				}
-			}
+            } else {
+                if (!testElement.isNotSigned()) {
+                    res.setFailure(true);
+                    res.setFailureMessage("Mime message is not signed");
+                }
+            }
 
-		} catch (MessagingException e) {
-			String msg = "Cannot parse mime msg: " + e.getMessage();
-			log.warn(msg, e);
-			res.setFailure(true);
-			res.setFailureMessage(msg);
-		} catch (CMSException e) {
-			res.setFailure(true);
-			res.setFailureMessage("Error reading the signature: "
-					+ e.getMessage());
-		} catch (SMIMEException e) {
-			res.setFailure(true);
-			res
-					.setFailureMessage("Cannot extract signed body part from signature: "
-							+ e.getMessage());
-		} catch (IOException e) { // should never happen
-			log.error("Cannot read mime message content: " + e.getMessage(), e);
-			res.setError(true);
-			res.setFailureMessage(e.getMessage());
-		}
+        } catch (MessagingException e) {
+            String msg = "Cannot parse mime msg: " + e.getMessage();
+            log.warn(msg, e);
+            res.setFailure(true);
+            res.setFailureMessage(msg);
+        } catch (CMSException e) {
+            res.setFailure(true);
+            res.setFailureMessage("Error reading the signature: "
+                    + e.getMessage());
+        } catch (SMIMEException e) {
+            res.setFailure(true);
+            res
+                    .setFailureMessage("Cannot extract signed body part from signature: "
+                            + e.getMessage());
+        } catch (IOException e) { // should never happen
+            log.error("Cannot read mime message content: " + e.getMessage(), e);
+            res.setError(true);
+            res.setFailureMessage(e.getMessage());
+        }
 
-		return res;
-	}
+        return res;
+    }
 
-	private static AssertionResult verifySignature(SMIMEAssertionTestElement testElement, SMIMESignedParser s, String name)
-			throws CMSException {
-		AssertionResult res = new AssertionResult(name);
+    private static AssertionResult verifySignature(SMIMEAssertionTestElement testElement, SMIMESignedParser s, String name)
+            throws CMSException {
+        AssertionResult res = new AssertionResult(name);
 
-		try {
-			CertStore certs = s.getCertificatesAndCRLs("Collection", "BC");
-			SignerInformationStore signers = s.getSignerInfos();
-			Iterator signerIt = signers.getSigners().iterator();
+        try {
+            CertStore certs = s.getCertificatesAndCRLs("Collection", "BC");
+            SignerInformationStore signers = s.getSignerInfos();
+            Iterator signerIt = signers.getSigners().iterator();
 
-			if (signerIt.hasNext()) {
+            if (signerIt.hasNext()) {
 
-				SignerInformation signer = (SignerInformation) signerIt.next();
-				Iterator certIt = certs.getCertificates(signer.getSID())
-						.iterator();
+                SignerInformation signer = (SignerInformation) signerIt.next();
+                Iterator certIt = certs.getCertificates(signer.getSID())
+                        .iterator();
 
-				if (certIt.hasNext()) {
-					// the signer certificate
-					X509Certificate cert = (X509Certificate) certIt.next();
+                if (certIt.hasNext()) {
+                    // the signer certificate
+                    X509Certificate cert = (X509Certificate) certIt.next();
 
-					if (testElement.isVerifySignature()) {
+                    if (testElement.isVerifySignature()) {
 
-						if (!signer.verify(cert.getPublicKey(), "BC")) {
-							res.setFailure(true);
-							res.setFailureMessage("Signature is invalid");
-						}
-					}
+                        if (!signer.verify(cert.getPublicKey(), "BC")) {
+                            res.setFailure(true);
+                            res.setFailureMessage("Signature is invalid");
+                        }
+                    }
 
-					if (testElement.isSignerCheckConstraints()) {
-						StringBuffer failureMessage = new StringBuffer();
+                    if (testElement.isSignerCheckConstraints()) {
+                        StringBuffer failureMessage = new StringBuffer();
 
-						String serial = testElement.getSignerSerial();
-						if (serial.trim().length() > 0) {
-							BigInteger serialNbr = readSerialNumber(serial);
-							if (!serialNbr.equals(cert.getSerialNumber())) {
-								res.setFailure(true);
-								failureMessage
-										.append("Serial number ")
-										.append(serialNbr)
-										.append(
-												" does not match serial from signer certificate: ")
-										.append(cert.getSerialNumber()).append(
-												"\n");
-							}
-						}
+                        String serial = testElement.getSignerSerial();
+                        if (serial.trim().length() > 0) {
+                            BigInteger serialNbr = readSerialNumber(serial);
+                            if (!serialNbr.equals(cert.getSerialNumber())) {
+                                res.setFailure(true);
+                                failureMessage
+                                        .append("Serial number ")
+                                        .append(serialNbr)
+                                        .append(
+                                                " does not match serial from signer certificate: ")
+                                        .append(cert.getSerialNumber()).append(
+                                                "\n");
+                            }
+                        }
 
-						String email = testElement.getSignerEmail();
-						if (email.trim().length() > 0) {
-							List emailfromCert = getEmailFromCert(cert);
-							if (!emailfromCert.contains(email)) {
-								res.setFailure(true);
-								failureMessage
-										.append("Email address \"")
-										.append(email)
-										.append(
-												"\" not present in signer certificate\n");
-							}
+                        String email = testElement.getSignerEmail();
+                        if (email.trim().length() > 0) {
+                            List emailfromCert = getEmailFromCert(cert);
+                            if (!emailfromCert.contains(email)) {
+                                res.setFailure(true);
+                                failureMessage
+                                        .append("Email address \"")
+                                        .append(email)
+                                        .append(
+                                                "\" not present in signer certificate\n");
+                            }
 
-						}
+                        }
 
-						String subject = testElement.getSignerDn();
-						if (subject.length() > 0) {
-							X500Principal principal = new X500Principal(subject);
-							if (!principal.equals(cert
-									.getSubjectX500Principal())) {
-								res.setFailure(true);
-								failureMessage
-										.append(
-												"Distinguished name of signer certificate does not match \"")
-										.append(subject).append("\"\n");
-							}
-						}
+                        String subject = testElement.getSignerDn();
+                        if (subject.length() > 0) {
+                            X500Principal principal = new X500Principal(subject);
+                            if (!principal.equals(cert
+                                    .getSubjectX500Principal())) {
+                                res.setFailure(true);
+                                failureMessage
+                                        .append(
+                                                "Distinguished name of signer certificate does not match \"")
+                                        .append(subject).append("\"\n");
+                            }
+                        }
 
-						String issuer = testElement.getIssuerDn();
-						if (issuer.length() > 0) {
-							X500Principal principal = new X500Principal(issuer);
-							if (!principal
-									.equals(cert.getIssuerX500Principal())) {
-								res.setFailure(true);
-								failureMessage
-										.append(
-												"Issuer distinguished name of signer certificate does not match \"")
-										.append(subject).append("\"\n");
-							}
-						}
+                        String issuer = testElement.getIssuerDn();
+                        if (issuer.length() > 0) {
+                            X500Principal principal = new X500Principal(issuer);
+                            if (!principal
+                                    .equals(cert.getIssuerX500Principal())) {
+                                res.setFailure(true);
+                                failureMessage
+                                        .append(
+                                                "Issuer distinguished name of signer certificate does not match \"")
+                                        .append(subject).append("\"\n");
+                            }
+                        }
 
-						if (failureMessage.length() > 0) {
-							res.setFailureMessage(failureMessage.toString());
-						}
-					}
+                        if (failureMessage.length() > 0) {
+                            res.setFailureMessage(failureMessage.toString());
+                        }
+                    }
 
-					if (testElement.isSignerCheckByFile()) {
-						CertificateFactory cf = CertificateFactory
-								.getInstance("X.509");
-						X509Certificate certFromFile = (X509Certificate) cf
-								.generateCertificate(new FileInputStream(
-										testElement.getSignerCertFile()));
+                    if (testElement.isSignerCheckByFile()) {
+                        CertificateFactory cf = CertificateFactory
+                                .getInstance("X.509");
+                        X509Certificate certFromFile = (X509Certificate) cf
+                                .generateCertificate(new FileInputStream(
+                                        testElement.getSignerCertFile()));
 
-						if (!certFromFile.equals(cert)) {
-							res.setFailure(true);
-							res
-									.setFailureMessage("Signer certificate does not match certificate "
-											+ testElement.getSignerCertFile());
-						}
-					}
+                        if (!certFromFile.equals(cert)) {
+                            res.setFailure(true);
+                            res
+                                    .setFailureMessage("Signer certificate does not match certificate "
+                                            + testElement.getSignerCertFile());
+                        }
+                    }
 
-				} else {
-					res.setFailure(true);
-					res
-							.setFailureMessage("No signer certificate found in signature");
-				}
+                } else {
+                    res.setFailure(true);
+                    res
+                            .setFailureMessage("No signer certificate found in signature");
+                }
 
-			}
+            }
 
-			// TODO support multiple signers
-			if (signerIt.hasNext()) {
-				log
-						.warn("SMIME message contains multiple signers! Checking multiple signers is not supported.");
-			}
+            // TODO support multiple signers
+            if (signerIt.hasNext()) {
+                log
+                        .warn("SMIME message contains multiple signers! Checking multiple signers is not supported.");
+            }
 
-		} catch (GeneralSecurityException e) {
-			log.error(e.getMessage(), e);
-			res.setError(true);
-			res.setFailureMessage(e.getMessage());
-		} catch (FileNotFoundException e) {
-			res.setFailure(true);
-			res.setFailureMessage("certificate file not found: "
-					+ e.getMessage());
-		}
+        } catch (GeneralSecurityException e) {
+            log.error(e.getMessage(), e);
+            res.setError(true);
+            res.setFailureMessage(e.getMessage());
+        } catch (FileNotFoundException e) {
+            res.setFailure(true);
+            res.setFailureMessage("certificate file not found: "
+                    + e.getMessage());
+        }
 
-		return res;
-	}
+        return res;
+    }
 
-	/**
-	 * extracts a MIME message from the SampleResult
-	 */
-	private static MimeMessage getMessageFromResponse(SampleResult response,
-			int messageNumber) throws MessagingException {
-		SampleResult subResults[] = response.getSubResults();
+    /**
+     * extracts a MIME message from the SampleResult
+     */
+    private static MimeMessage getMessageFromResponse(SampleResult response,
+            int messageNumber) throws MessagingException {
+        SampleResult subResults[] = response.getSubResults();
 
-		byte[] data = subResults[messageNumber].getResponseData();
-		Session session = Session.getDefaultInstance(new Properties());
-		MimeMessage msg = new MimeMessage(session, new ByteArrayInputStream(
-				data));
+        byte[] data = subResults[messageNumber].getResponseData();
+        Session session = Session.getDefaultInstance(new Properties());
+        MimeMessage msg = new MimeMessage(session, new ByteArrayInputStream(
+                data));
 
-		log.debug("msg.getSize() = " + msg.getSize());
-		return msg;
-	}
+        log.debug("msg.getSize() = " + msg.getSize());
+        return msg;
+    }
 
-	/**
-	 * Convert the value of <code>serialString</code> into a BigInteger. Strings
-	 * starting with 0x or 0X are parsed as hex numbers, otherwise as decimal
-	 * number.
-	 * 
-	 * @param serialString
-	 *            the String representation of the serial Number
-	 * @return
-	 */
-	private static BigInteger readSerialNumber(String serialString) {
-		if (serialString.startsWith("0x") || serialString.startsWith("0X")) {
-			return new BigInteger(serialString.substring(2), 16);
-		} 
-		return new BigInteger(serialString);
-	}
+    /**
+     * Convert the value of <code>serialString</code> into a BigInteger. Strings
+     * starting with 0x or 0X are parsed as hex numbers, otherwise as decimal
+     * number.
+     * 
+     * @param serialString
+     *            the String representation of the serial Number
+     * @return
+     */
+    private static BigInteger readSerialNumber(String serialString) {
+        if (serialString.startsWith("0x") || serialString.startsWith("0X")) {
+            return new BigInteger(serialString.substring(2), 16);
+        } 
+        return new BigInteger(serialString);
+    }
 
-	/**
-	 * Extract email addresses from a certificate
-	 * 
-	 * @param cert
-	 * @return a List of all email addresses found
-	 * @throws CertificateException
-	 */
-	private static List getEmailFromCert(X509Certificate cert)
-			throws CertificateException {
-		List<String> res = new ArrayList<String>();
+    /**
+     * Extract email addresses from a certificate
+     * 
+     * @param cert
+     * @return a List of all email addresses found
+     * @throws CertificateException
+     */
+    private static List getEmailFromCert(X509Certificate cert)
+            throws CertificateException {
+        List<String> res = new ArrayList<String>();
 
-		X509Principal subject = PrincipalUtil.getSubjectX509Principal(cert);
-		Iterator addressIt = subject.getValues(X509Principal.EmailAddress)
-				.iterator();
-		while (addressIt.hasNext()) {
-			String address = (String) addressIt.next();
-			res.add(address);
-		}
+        X509Principal subject = PrincipalUtil.getSubjectX509Principal(cert);
+        Iterator addressIt = subject.getValues(X509Principal.EmailAddress)
+                .iterator();
+        while (addressIt.hasNext()) {
+            String address = (String) addressIt.next();
+            res.add(address);
+        }
 
-		Iterator subjectAltNamesIt = X509ExtensionUtil
-				.getSubjectAlternativeNames(cert).iterator();
-		while (subjectAltNamesIt.hasNext()) {
-			List altName = (List) subjectAltNamesIt.next();
-			int type = ((Integer) altName.get(0)).intValue();
-			if (type == GeneralName.rfc822Name) {
-				String address = (String) altName.get(1);
-				res.add(address);
-			}
-		}
+        Iterator subjectAltNamesIt = X509ExtensionUtil
+                .getSubjectAlternativeNames(cert).iterator();
+        while (subjectAltNamesIt.hasNext()) {
+            List altName = (List) subjectAltNamesIt.next();
+            int type = ((Integer) altName.get(0)).intValue();
+            if (type == GeneralName.rfc822Name) {
+                String address = (String) altName.get(1);
+                res.add(address);
+            }
+        }
 
-		return res;
-	}
+        return res;
+    }
 
-	/**
-	 * Check if the Bouncycastle jce provider is installed and dynamically load
-	 * it, if needed;
-	 * 
-	 */
-	private static void checkForBouncycastle() {
-		if (null == Security.getProvider("BC")) {
-			Security.addProvider(new BouncyCastleProvider());
-		}
-	}
+    /**
+     * Check if the Bouncycastle jce provider is installed and dynamically load
+     * it, if needed;
+     * 
+     */
+    private static void checkForBouncycastle() {
+        if (null == Security.getProvider("BC")) {
+            Security.addProvider(new BouncyCastleProvider());
+        }
+    }
 }
