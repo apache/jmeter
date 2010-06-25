@@ -141,7 +141,12 @@ public final class Utils {
      * @throws NamingException
      */
     public static Connection getConnection(Context ctx, String factoryName) throws JMSException, NamingException {
-        Object objfac = ctx.lookup(factoryName);
+        Object objfac = null;
+        try {
+            objfac = ctx.lookup(factoryName);
+        } catch (NoClassDefFoundError e) {
+            throw new NamingException("Lookup failed: "+e.toString());
+        }
         if (objfac instanceof javax.jms.ConnectionFactory) {
             return ((javax.jms.ConnectionFactory) objfac).createConnection();
         }
