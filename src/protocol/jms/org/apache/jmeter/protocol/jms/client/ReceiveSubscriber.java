@@ -19,12 +19,15 @@
 package org.apache.jmeter.protocol.jms.client;
 
 import java.io.Closeable;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import javax.jms.Connection;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
+import javax.jms.MessageListener;
 import javax.jms.Session;
 import javax.naming.Context;
 import javax.naming.NamingException;
@@ -34,10 +37,15 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * Uses MessageConsumer.receive(timeout) to fetch messages.
- * Does not cache any messages.
+ * Generic MessageConsumer class, which has two possible strategies.
+ * <ul>
+ * <li>Use MessageConsumer.receive(timeout) to fetch messages.</li>
+ * <li>Use MessageListener.onMessage() to cache messages in a local queue.</li>
+ * </ul>
+ * In both cases, the {@link #getMessage(long)} method is used to return the next message,
+ * either directly using receive(timeout) or from the queue using poll(timeout).
  */
-public class ReceiveSubscriber implements Closeable {
+public class ReceiveSubscriber implements Closeable, MessageListener {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -47,6 +55,11 @@ public class ReceiveSubscriber implements Closeable {
 
     private final MessageConsumer SUBSCRIBER;
 
+    /*
+     * We use a LinkedBlockingQueue (rather than a ConcurrentLinkedQueue) because it has a
+     * poll-with-wait method that avoids the need to use a polling loop.
+     */
+    private final LinkedBlockingQueue<Message> queue;
 
     /**
      * Constructor takes the necessary JNDI related parameters to create a
@@ -76,6 +89,45 @@ public class ReceiveSubscriber implements Closeable {
         SESSION = CONN.createSession(false, Session.AUTO_ACKNOWLEDGE);
         Destination dest = Utils.lookupDestination(ctx, destinationName);
         SUBSCRIBER = SESSION.createConsumer(dest);
+        queue = null;
+        log.debug("<init> complete");
+    }
+
+    /**
+     * Constructor takes the necessary JNDI related parameters to create a
+     * connection and create an onMessageListener to prepare to begin receiving messages.
+     * <br/>
+     * The caller must then invoke {@link #start()} to enable message reception.
+     * 
+     * @param queueSize maximum queue size <=0 == no limit
+     * @param useProps if true, use jndi.properties instead of 
+     * initialContextFactory, providerUrl, securityPrincipal, securityCredentials
+     * @param initialContextFactory
+     * @param providerUrl
+     * @param connfactory
+     * @param destinationName
+     * @param useAuth
+     * @param securityPrincipal
+     * @param securityCredentials
+     * @throws JMSException if could not create context or other problem occurred.
+     * @throws NamingException 
+     */
+    public ReceiveSubscriber(int queueSize, boolean useProps, 
+            String initialContextFactory, String providerUrl, String connfactory, String destinationName,
+            boolean useAuth, 
+            String securityPrincipal, String securityCredentials) throws NamingException, JMSException {
+        Context ctx = InitialContextFactory.getContext(useProps, 
+                initialContextFactory, providerUrl, useAuth, securityPrincipal, securityCredentials);
+        CONN = Utils.getConnection(ctx, connfactory);
+        SESSION = CONN.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        Destination dest = Utils.lookupDestination(ctx, destinationName);
+        SUBSCRIBER = SESSION.createConsumer(dest);
+        if (queueSize <=0) {
+            queue = new LinkedBlockingQueue<Message>();
+        } else {
+            queue = new LinkedBlockingQueue<Message>(queueSize);            
+        }
+        SUBSCRIBER.setMessageListener(this);
         log.debug("<init> complete");
     }
 
@@ -108,6 +160,18 @@ public class ReceiveSubscriber implements Closeable {
      */
     public Message getMessage(long timeout) throws JMSException {
         Message message = null;
+        if (queue != null) { // Using onMessage Listener
+            try {
+                if (timeout < 10) { // Allow for short/negative times
+                    message = queue.poll();                    
+                } else {
+                    message = queue.poll(timeout, TimeUnit.MILLISECONDS);
+                }
+            } catch (InterruptedException e) {
+                // Ignored
+            }
+            return message;
+        }
         if (timeout < 10) { // Allow for short/negative times
             message = SUBSCRIBER.receiveNoWait();                
         } else {
@@ -116,10 +180,10 @@ public class ReceiveSubscriber implements Closeable {
         return message;
     }
     /**
-     * close() will stop the connection first. Then it closes the subscriber,
-     * session and connection.
+     * close() will stop the connection first. 
+     * Then it closes the subscriber, session and connection.
      */
-    public synchronized void close() { // called from testEnded() thread
+    public void close() { // called from threadFinished() thread
         log.debug("close()");
         try {
             CONN.stop();
@@ -129,5 +193,15 @@ public class ReceiveSubscriber implements Closeable {
         Utils.close(SUBSCRIBER, log);
         Utils.close(SESSION, log);
         Utils.close(CONN, log);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public void onMessage(Message message) {
+        if (!queue.offer(message)){
+            log.warn("Could not add message to queue");
+        }
     }
 }
