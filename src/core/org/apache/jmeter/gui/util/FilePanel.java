@@ -53,22 +53,26 @@ public class FilePanel extends HorizontalPanel implements ActionListener {
 
     private final String title;
 
-    private final String filetype;
+    private final String[] filetypes;
 
     /**
      * Constructor for the FilePanel object.
      */
     public FilePanel() {
-        this("", null);
+        this("", (String) null);
     }
 
     public FilePanel(String title) {
-        this(title, null);
+        this(title, (String) null);
     }
 
     public FilePanel(String title, String filetype) {
         this.title = title;
-        this.filetype = filetype;
+        if (filetype == null){
+            this.filetypes = null;
+        } else {
+            this.filetypes = new String[]{ filetype };
+        }
         init();
     }
 
@@ -76,8 +80,15 @@ public class FilePanel extends HorizontalPanel implements ActionListener {
      * Constructor for the FilePanel object.
      */
     public FilePanel(ChangeListener l, String title) {
-        this(title, null);
+        this(title, (String) null);
         listeners.add(l);
+    }
+
+    public FilePanel(String resString, String[] exts) {
+        title = resString;
+        this.filetypes = new String[exts.length];
+        System.arraycopy(exts, 0, this.filetypes, 0, exts.length);
+        init();
     }
 
     public void addChangeListener(ChangeListener l) {
@@ -140,10 +151,10 @@ public class FilePanel extends HorizontalPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals(ACTION_BROWSE)) {
             JFileChooser chooser;
-            if(filetype == null){
+            if(filetypes == null || filetypes.length == 0){
                 chooser = FileDialoger.promptToOpenFile();
             } else {
-                chooser = FileDialoger.promptToOpenFile(new String[] { filetype });
+                chooser = FileDialoger.promptToOpenFile(filetypes);
             }
             if (chooser != null && chooser.getSelectedFile() != null) {
                 filename.setText(chooser.getSelectedFile().getPath());

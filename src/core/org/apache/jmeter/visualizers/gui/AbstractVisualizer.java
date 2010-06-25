@@ -108,6 +108,9 @@ public abstract class AbstractVisualizer
 
     /** Logging. */
     private static final Logger log = LoggingManager.getLoggerForClass();
+    
+    /** File Extensions */
+    private static final String[] EXTS = { ".jtl", ".csv" }; // $NON-NLS-1$ $NON-NLS-2$
 
     /** A panel allowing results to be saved. */
     private FilePanel filePanel;
@@ -157,7 +160,7 @@ public abstract class AbstractVisualizer
             }
         });
 
-        filePanel = new FilePanel(JMeterUtils.getResString("file_visualizer_output_file"), ".jtl"); // $NON-NLS-1$ $NON-NLS-2$
+        filePanel = new FilePanel(JMeterUtils.getResString("file_visualizer_output_file"), EXTS); // $NON-NLS-1$
         filePanel.addChangeListener(this);
         filePanel.add(new JLabel(JMeterUtils.getResString("log_only"))); // $NON-NLS-1$
         filePanel.add(errorLogging);
