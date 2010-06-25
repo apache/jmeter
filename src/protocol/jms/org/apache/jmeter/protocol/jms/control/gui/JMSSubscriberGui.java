@@ -20,11 +20,13 @@ package org.apache.jmeter.protocol.jms.control.gui;
 
 import java.awt.BorderLayout;
 
+import javax.naming.Context;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.JLabeledRadioI18N;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.jms.sampler.SubscriberSampler;
@@ -86,6 +88,9 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
     private final JLabeledRadioI18N clientChoice =
         new JLabeledRadioI18N("jms_client_type", CLIENT_ITEMS, RECEIVE_RSC); // $NON-NLS-1$
 
+    private final JCheckBox stopBetweenSamples =
+        new JCheckBox(JMeterUtils.getResString("jms_stop_between_samples"), true); // $NON-NLS-1$
+    
     public JMSSubscriberGui() {
         init();
     }
@@ -122,6 +127,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
         sampler.setIterations(iterations.getText());
         sampler.setReadResponse(String.valueOf(readResponse.isSelected()));
         sampler.setClientChoice(clientChoice.getText());
+        sampler.setStopBetweenSamples(stopBetweenSamples.isSelected());
         sampler.setTimeout(timeout.getText());
     }
 
@@ -137,6 +143,10 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
         JPanel mainPanel = new VerticalPanel();
         add(mainPanel, BorderLayout.CENTER);
         
+        jndiICF.setToolTipText(Context.INITIAL_CONTEXT_FACTORY);
+        urlField.setToolTipText(Context.PROVIDER_URL);
+        jmsUser.setToolTipText(Context.SECURITY_PRINCIPAL);
+        jmsPwd.setToolTipText(Context.SECURITY_CREDENTIALS);
         mainPanel.add(useProperties);
         mainPanel.add(jndiICF);
         mainPanel.add(urlField);
@@ -149,7 +159,11 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
 
         mainPanel.add(readResponse);
         mainPanel.add(timeout);
-        mainPanel.add(clientChoice);
+        
+        JPanel choice = new HorizontalPanel();
+        choice.add(clientChoice);
+        choice.add(stopBetweenSamples);
+        mainPanel.add(choice);
 
         useProperties.addChangeListener(this);
         useAuth.addChangeListener(this);
@@ -173,6 +187,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
         useAuth.setSelected(sampler.isUseAuth());
         readResponse.setSelected(sampler.getReadResponseAsBoolean());
         clientChoice.setText(sampler.getClientChoice());
+        stopBetweenSamples.setSelected(sampler.isStopBetweenSamples());
         timeout.setText(sampler.getTimeout());
     }
 
@@ -191,6 +206,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
         useAuth.setSelected(false);
         readResponse.setSelected(true);
         clientChoice.setText(RECEIVE_RSC);
+        stopBetweenSamples.setSelected(false);
     }
 
     /**
