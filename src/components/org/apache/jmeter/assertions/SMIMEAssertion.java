@@ -255,6 +255,8 @@ public class SMIMEAssertion {
             int messageNumber) throws MessagingException {
         SampleResult subResults[] = response.getSubResults();
 
+        if (messageNumber >= subResults.length) throw new MessagingException("Message number not present in results: "+messageNumber);
+
         byte[] data = subResults[messageNumber].getResponseData();
         Session session = Session.getDefaultInstance(new Properties());
         MimeMessage msg = new MimeMessage(session, new ByteArrayInputStream(
