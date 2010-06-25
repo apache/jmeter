@@ -3665,7 +3665,7 @@ The assertion comparisons can be seen in the <complink name="Comparison Assertio
 </properties>
 </component>
 
-<component name="SMIME Assertion" index="&sect-num;.5.13"  width="292" height="296" screenshot="assertion/smime.png">
+<component name="SMIME Assertion" index="&sect-num;.5.13"  width="473" height="370" screenshot="assertion/smime.png">
 <description>
 The SMIME Assertion can be used to evaluate the sample results from the Mail Reader Sampler.
 This assertion verifies if the body of a mime message is signed or not. The signature can also be verified against a specific signer certificate.
