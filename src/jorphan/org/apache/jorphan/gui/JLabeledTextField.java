@@ -189,6 +189,7 @@ public class JLabeledTextField extends JPanel implements JLabeledField, FocusLis
      */
     @Override
     public void setToolTipText(String text) {
+        mLabel.setToolTipText(text);
         mTextField.setToolTipText(text);
     }
 
