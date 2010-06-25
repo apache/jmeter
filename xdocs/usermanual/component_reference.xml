@@ -1199,7 +1199,7 @@ The following table shows some values which may be useful when configuring JMS:
 </p>
 </component>
 
-<component name="JMS Subscriber" index="&sect-num;.1.14"  width="527" height="411" screenshot="jmssubscriber.png">
+<component name="JMS Subscriber" index="&sect-num;.1.14"  width="679" height="408" screenshot="jmssubscriber.png">
 <note>BETA CODE - the code is still subject to change</note>
 	<description>
 		<p>
@@ -1238,6 +1238,11 @@ The following table shows some values which may be useful when configuring JMS:
   The listener remains active after the sampler completes.
   This is best suited to Topic subscriptions.</li>
   </ul>
+  </property>
+  <property name="Stop between samples?" required="Yes">
+  If selected, then JMeter calls Connection.stop() at the end of each sample (and calls start() before each sample).
+  This may be useful in some cases where multiple samples/threads have connections to the same queue.
+  If not selected, JMeter calls Connection.start() at the start of the thread, and does not call stop() until the end of the thread.
   </property>
 </properties>
 <p>

@@ -65,15 +65,20 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
 
     private transient long timeout;
 
-    private boolean useReceive;
+    private transient boolean useReceive;
 
     // This will be null iff initialisation succeeeds.
     private transient Exception exceptionDuringInit;
+
+    // If true, start/stop subscriber for each sample
+    private transient boolean stopBetweenSamples;
 
     // Don't change the string, as it is used in JMX files
     private static final String CLIENT_CHOICE = "jms.client_choice"; // $NON-NLS-1$
     private static final String TIMEOUT = "jms.timeout"; // $NON-NLS-1$
     private static final String TIMEOUT_DEFAULT = "";
+    private static final String STOP_BETWEEN = "jms.stop_between_samples"; // $NON-NLS-1$
+
 
     public SubscriberSampler() {
     }
@@ -124,6 +129,13 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
             result.setResponseMessage(exceptionDuringInit.toString());
             return result; 
         }
+        if (stopBetweenSamples){ // If so, we need to start collection here
+            try {
+                SUBSCRIBER.start();
+            } catch (JMSException e) {
+                log.warn("Problem starting subscriber", e);
+            }
+        }
         StringBuilder buffer = new StringBuilder();
         StringBuilder propBuffer = new StringBuilder();
         
@@ -169,6 +181,13 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         result.setSamplerData(loop + " messages expected");
         result.setSampleCount(read);
         
+        if (stopBetweenSamples){
+            try {
+                SUBSCRIBER.stop();
+            } catch (JMSException e) {
+                log.warn("Problem stopping subscriber", e);
+            }
+        }
         return result;
     }
 
@@ -223,10 +242,13 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         interrupted = false;
         exceptionDuringInit = null;
         useReceive = getClientChoice().equals(JMSSubscriberGui.RECEIVE_RSC);
+        stopBetweenSamples = isStopBetweenSamples();
         if (useReceive) {
             try {
                 initReceiveClient();
-                SUBSCRIBER.start();
+                if (!stopBetweenSamples){ // Don't start yet if stop between samples
+                    SUBSCRIBER.start();
+                }
             } catch (NamingException e) {
                 exceptionDuringInit = e;
             } catch (JMSException e) {
@@ -235,7 +257,9 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         } else {
             try {
                 initListenerClient();
-                SUBSCRIBER.start();
+                if (!stopBetweenSamples){ // Don't start yet if stop between samples
+                    SUBSCRIBER.start();
+                }
             } catch (JMSException e) {
                 exceptionDuringInit = e;
             } catch (NamingException e) {
@@ -253,7 +277,9 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
      * {@inheritDoc}
      */
     public void threadFinished() {
-        SUBSCRIBER.close();
+        if (SUBSCRIBER != null){ // Can be null if init fails
+            SUBSCRIBER.close();
+        }
     }
 
     /**
@@ -304,5 +330,13 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
 
     // This was the old value that was checked for
     private final static String RECEIVE_STR = JMeterUtils.getResString(JMSSubscriberGui.RECEIVE_RSC); // $NON-NLS-1$
+
+    public boolean isStopBetweenSamples() {
+        return getPropertyAsBoolean(STOP_BETWEEN, false);
+    }
+
+    public void setStopBetweenSamples(boolean selected) {
+        setProperty(STOP_BETWEEN, selected, false);                
+    }
 
 }
