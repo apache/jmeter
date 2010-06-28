@@ -107,6 +107,7 @@ This does not affect existing test plans.
 <li>Bug 49111 - "Message With ID Not Found" Error on JMS P2P sampler.</li>
 <li>Bug 47949 - JMS Subscriber never receives all the messages</li>
 <li>Bug 46142 - JMS Point-to-Point correlation problems</li>
+<li>Bug 48709 - TCP Sampler Config setting "classname" has no effect</li>
 </ul>
 
 <h3>Controllers</h3>
