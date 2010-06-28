@@ -85,9 +85,9 @@ public class SaveService {
                 return super.realClass(fullName == null ? alias : fullName);
             }
             // Translate to alias and then delegate to wrapped class
-            @SuppressWarnings("unchecked") // superclass is not typed
             @Override
-            public String serializedClass(Class type) {
+            public String serializedClass(@SuppressWarnings("rawtypes") // superclass does not use types 
+                    Class type) {
                 if (type == null) {
                     return super.serializedClass(null); // was type, but that caused FindBugs warning
                 }
@@ -166,7 +166,7 @@ public class SaveService {
 
     // Internal information only
     private static String fileVersion = ""; // read from properties file// $NON-NLS-1$
-    private static final String FILEVERSION = "941298"; // Expected value $NON-NLS-1$
+    private static final String FILEVERSION = "958761"; // Expected value $NON-NLS-1$
     private static String fileEncoding = ""; // read from properties file// $NON-NLS-1$
 
     static {
