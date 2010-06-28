@@ -122,6 +122,8 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
     };
 
     private transient TCPClient protocolHandler;
+    
+    private transient boolean firstSample; // Are we processing the first sample?
 
     public TCPSampler() {
         log.debug("Created " + this); //$NON-NLS-1$
@@ -285,6 +287,10 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 
     public SampleResult sample(Entry e)// Entry tends to be ignored ...
     {
+        if (firstSample) { // Do stuff we cannot do as part of threadStarted()
+            initSampling();
+            firstSample=false;
+        }
         log.debug(getLabel() + " " + getFilename() + " " + getUsername() + " " + getPassword());
         SampleResult res = new SampleResult();
         boolean isSuccessful = false;
@@ -373,13 +379,18 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 
     public void threadStarted() {
         log.debug("Thread Started"); //$NON-NLS-1$
+        firstSample = true;
+    }
+
+    // Cannot do this as part of threadStarted() because the Config elements have not been processed.
+    private void initSampling(){
         protocolHandler = getProtocol();
         log.debug("Using Protocol Handler: " +  //$NON-NLS-1$
                 (protocolHandler == null ? "NONE" : protocolHandler.getClass().getName())); //$NON-NLS-1$
         if (protocolHandler != null){
             protocolHandler.setupTest();
         }
-}
+    }
 
     private void closeSocket() {
         Map<String, Object> cp = tp.get();
