@@ -24,10 +24,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.List;
 
+import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.junit.JMeterTestCase;
+import org.apache.jmeter.testbeans.TestBean;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
+import org.apache.jorphan.reflect.ClassFinder;
 
 public class TestSaveService extends JMeterTestCase {
     private static final String[] FILES = new String[] {
@@ -56,6 +61,25 @@ public class TestSaveService extends JMeterTestCase {
         assertTrue("Property File Version mismatch", SaveService.checkFileVersion());
     }
     
+    public void testPropFileEntries() throws Exception{
+        SaveService.loadProperties();
+        // N.B. This may not find any classes when run from Eclipse as the classpath may not be set correctly
+        List<String> testClasses = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(), 
+                new Class[] {
+            TestElement.class, JMeterGUIComponent.class, TestBean.class });        
+        boolean failed=false;
+        for(String className : testClasses){
+            String alias = SaveService.classToAlias(className);
+            if (alias.equals(className)){
+                System.out.println("Missing alias for "+alias);
+                failed=true;
+            }
+        }
+        if (failed){
+            fail("One or more classes don't have aliases");
+        }
+    }
+
     public void testVersions() throws Exception {
         assertTrue("Unexpected version found", SaveService.checkVersions());
     }
@@ -66,7 +90,7 @@ public class TestSaveService extends JMeterTestCase {
         boolean failed = false; // Did a test fail?
 
         for (int i = 0; i < FILES.length; i++) {
-            InputStream in = new FileInputStream(new File("testfiles/" + FILES[i]));
+            InputStream in = new FileInputStream(findTestFile("testfiles/" + FILES[i]));
             int len = in.read(original);
 
             in.close();
