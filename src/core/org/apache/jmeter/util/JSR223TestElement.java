@@ -45,8 +45,6 @@ public abstract class JSR223TestElement extends AbstractTestElement
 {
     private static final long serialVersionUID = 233L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
-
     //++ For TestBean implementations only
     private String parameters; // passed to file or script
 
@@ -123,8 +121,7 @@ public abstract class JSR223TestElement extends AbstractTestElement
         final String lang = getScriptLanguage();
         ScriptEngine scriptEngine = sem.getEngineByName(lang);
         if (scriptEngine == null) {
-            log.error("Unsupported scripting engine: "+lang);
-            return null;
+            throw new ScriptException("Cannot find engine named: "+lang);
         }
 
         File scriptFile = new File(getFilename());
