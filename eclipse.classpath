@@ -41,9 +41,9 @@
 	<classpathentry kind="src" output="build/protocol/tcp" path="src/protocol/tcp"/>
 	<classpathentry kind="src" output="build/reports" path="src/reports"/>
 	<classpathentry kind="src" output="build/test" path="test/src"/>
-    <classpathentry kind="lib" path="lib/api/bsf-api-3.0-beta3.jar"/>
 	<classpathentry kind="lib" path="lib/avalon-framework-4.1.4.jar"/>
 	<classpathentry kind="lib" path="lib/bsf-2.4.0.jar"/>
+    <classpathentry kind="lib" path="lib/bsf-api-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/bsh-2.0b5.jar"/>
 	<classpathentry kind="lib" path="lib/commons-codec-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/commons-collections-3.2.1.jar"/>
