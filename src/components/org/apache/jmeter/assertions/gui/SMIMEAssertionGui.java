@@ -40,25 +40,32 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  
     private static final long serialVersionUID = 1L;
 
-    private JCheckBox verifySignature = new JCheckBox();
+    private final JCheckBox verifySignature = 
+        new JCheckBox(JMeterUtils.getResString("smime_assertion_verify_signature")); // $NON-NLS-1$
  
-    private JCheckBox notSigned = new JCheckBox();
+    private final JCheckBox notSigned = 
+        new JCheckBox(JMeterUtils.getResString("smime_assertion_not_signed")); // $NON-NLS-1$
  
-    private JRadioButton signerNoCheck = new JRadioButton();
+    private final JRadioButton signerNoCheck = 
+        new JRadioButton(JMeterUtils.getResString("smime_assertion_signer_no_check")); // $NON-NLS-1$
  
-    private JRadioButton signerCheckConstraints = new JRadioButton();
+    private final JRadioButton signerCheckConstraints = 
+        new JRadioButton(JMeterUtils.getResString("smime_assertion_signer_constraints")); // $NON-NLS-1$
  
-    private JRadioButton signerCheckByFile = new JRadioButton();
+    private final JRadioButton signerCheckByFile = 
+        new JRadioButton(JMeterUtils.getResString("smime_assertion_signer_by_file")); // $NON-NLS-1$
  
-    private JTextField signerDnField = new JTextField();
+    private final JTextField signerDnField = new JTextField(25);
  
-    private JTextField signerSerialNumberField = new JTextField();
+    private final JTextField signerSerialNumberField = new JTextField(25);
  
-    private JTextField signerEmailField = new JTextField();
+    private final JTextField signerEmailField = new JTextField(25);
  
-    private JTextField issuerDnField = new JTextField();
+    private final JTextField issuerDnField = new JTextField(25);
  
-    private JTextField signerCertFile = new JTextField();
+    private final JTextField signerCertFile = new JTextField(25);
+    
+    private final JTextField messagePositionTf = new JTextField(25);
  
     public SMIMEAssertionGui() {
         init();
@@ -76,19 +83,14 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
         box.add(makeTitlePanel());
         box.add(createSignaturePanel());
         box.add(createSignerPanel());
+        box.add(createMessagePositionPanel());
         add(box, BorderLayout.NORTH);
     }
  
     private JPanel createSignaturePanel() {
         JPanel panel = new JPanel();
         panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils
-            .getResString("smime_assertion_signature")));
-  
-        verifySignature = new JCheckBox(JMeterUtils
-            .getResString("smime_assertion_verify_signature"));
- 
-        notSigned = new JCheckBox(JMeterUtils
-            .getResString("smime_assertion_not_signed"));
+            .getResString("smime_assertion_signature"))); // $NON-NLS-1$
         notSigned.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
                 verifySignature.setEnabled(!notSigned.isSelected());
@@ -104,18 +106,9 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
     private JPanel createSignerPanel() {
         JPanel panel = new JPanel();
         panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils
-            .getResString("smime_assertion_signer")));
+            .getResString("smime_assertion_signer"))); // $NON-NLS-1$
  
         panel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
- 
-        signerNoCheck = new JRadioButton(JMeterUtils
-            .getResString("smime_assertion_signer_no_check"));
-        signerCheckConstraints = new JRadioButton(JMeterUtils
-            .getResString("smime_assertion_signer_constraints"));
-        signerCheckByFile = new JRadioButton(JMeterUtils
-            .getResString("smime_assertion_signer_by_file"));
- 
-        signerCertFile = new JTextField(25);
  
         ButtonGroup buttonGroup = new ButtonGroup();
         buttonGroup.add(signerNoCheck);
@@ -128,42 +121,32 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
         signerCheckConstraints.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
                 signerDnField.setEnabled(signerCheckConstraints.isSelected());
-                signerSerialNumberField.setEnabled(signerCheckConstraints
-                    .isSelected());
-                signerEmailField
-                    .setEnabled(signerCheckConstraints.isSelected());
+                signerSerialNumberField.setEnabled(signerCheckConstraints.isSelected());
+                signerEmailField.setEnabled(signerCheckConstraints.isSelected());
                 issuerDnField.setEnabled(signerCheckConstraints.isSelected());
             }
         });
         Box box = Box.createHorizontalBox();
-        box.add(new JLabel(JMeterUtils
-            .getResString("smime_assertion_signer_dn")));
+        box.add(new JLabel(JMeterUtils.getResString("smime_assertion_signer_dn"))); // $NON-NLS-1$
         box.add(Box.createHorizontalStrut(5));
-        signerDnField = new JTextField(25);
         box.add(signerDnField);
         panel.add(box);
  
         box = Box.createHorizontalBox();
-        box.add(new JLabel(JMeterUtils
-            .getResString("smime_assertion_signer_email")));
+        box.add(new JLabel(JMeterUtils.getResString("smime_assertion_signer_email"))); // $NON-NLS-1$
         box.add(Box.createHorizontalStrut(5));
-        signerEmailField = new JTextField(25);
         box.add(signerEmailField);
         panel.add(box);
  
         box = Box.createHorizontalBox();
-        box.add(new JLabel(JMeterUtils
-            .getResString("smime_assertion_issuer_dn")));
+        box.add(new JLabel(JMeterUtils.getResString("smime_assertion_issuer_dn"))); // $NON-NLS-1$
         box.add(Box.createHorizontalStrut(5));
-        issuerDnField = new JTextField(25);
         box.add(issuerDnField);
         panel.add(box);
  
         box = Box.createHorizontalBox();
-        box.add(new JLabel(JMeterUtils
-            .getResString("smime_assertion_signer_serial")));
+        box.add(new JLabel(JMeterUtils.getResString("smime_assertion_signer_serial"))); // $NON-NLS-1$
         box.add(Box.createHorizontalStrut(5));
-        signerSerialNumberField = new JTextField(25);
         box.add(signerSerialNumberField);
         panel.add(box);
  
@@ -182,6 +165,13 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
         return panel;
     }
  
+    private JPanel createMessagePositionPanel(){
+        JPanel panel = new JPanel();
+        panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils
+            .getResString("smime_assertion_message_position"))); // $NON-NLS-1$
+        panel.add(messagePositionTf);
+        return panel;
+    }
     @Override
     public void configure(TestElement el) {
         super.configure(el);
@@ -189,12 +179,15 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
         verifySignature.setSelected(smimeAssertion.isVerifySignature());
         notSigned.setSelected(smimeAssertion.isNotSigned());
  
-        if (smimeAssertion.isSignerNoCheck())
+        if (smimeAssertion.isSignerNoCheck()) {
             signerNoCheck.setSelected(true);
-        if (smimeAssertion.isSignerCheckConstraints())
+        }
+        if (smimeAssertion.isSignerCheckConstraints()) {
             signerCheckConstraints.setSelected(true);
-        if (smimeAssertion.isSignerCheckByFile())
+        }
+        if (smimeAssertion.isSignerCheckByFile()) {
             signerCheckByFile.setSelected(true);
+        }
  
         issuerDnField.setText(smimeAssertion.getIssuerDn());
         signerDnField.setText(smimeAssertion.getSignerDn());
@@ -202,6 +195,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
         signerEmailField.setText(smimeAssertion.getSignerEmail());
  
         signerCertFile.setText(smimeAssertion.getSignerCertFile());
+        messagePositionTf.setText(smimeAssertion.getSpecificMessagePosition());
     }
  
     public void modifyTestElement(TestElement el) {
@@ -218,9 +212,9 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
         smimeAssertion.setSignerCertFile(signerCertFile.getText());
  
         smimeAssertion.setSignerNoCheck(signerNoCheck.isSelected());
-        smimeAssertion.setSignerCheckConstraints(signerCheckConstraints
-                .isSelected());
+        smimeAssertion.setSignerCheckConstraints(signerCheckConstraints.isSelected());
         smimeAssertion.setSignerCheckByFile(signerCheckByFile.isSelected());
+        smimeAssertion.setSpecificMessagePosition(messagePositionTf.getText());
     }
  
     public TestElement createTestElement() {
@@ -229,4 +223,4 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
         return smimeAssertion;
     }
  
- }
+}
