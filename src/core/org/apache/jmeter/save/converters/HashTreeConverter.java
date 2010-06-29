@@ -40,9 +40,8 @@ public class HashTreeConverter extends AbstractCollectionConverter {
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked") // superclass does not use types
     @Override
-    public boolean canConvert(Class arg0) {
+    public boolean canConvert(@SuppressWarnings("rawtypes") Class arg0) { // superclass does not use types
         return HashTree.class.isAssignableFrom(arg0);
     }
 
