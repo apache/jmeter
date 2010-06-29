@@ -103,8 +103,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 
     /** {@inheritDoc} */
     @Override
-    @SuppressWarnings("unchecked") // superclass does not use types
-    public boolean canConvert(Class arg0) {
+    public boolean canConvert(@SuppressWarnings("rawtypes") Class arg0) { // superclass does not use types
         return SampleResult.class.equals(arg0);
     }
 
