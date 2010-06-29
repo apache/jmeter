@@ -22,8 +22,6 @@ import java.io.Serializable;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.property.BooleanProperty;
-import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
 
 public class SMIMEAssertionTestElement extends AbstractTestElement implements
@@ -31,25 +29,19 @@ public class SMIMEAssertionTestElement extends AbstractTestElement implements
 
     private static final long serialVersionUID = 1L;
 
-    private static final String VERIFY_SIGNATURE_KEY = "SMIMEAssertionTestElement.verifySignature";
-
-    private static final String NOT_SIGNED_KEY = "SMIMEAssertionTestElement.notSigned";
-
-    private static final String SIGNER_NO_CHECK_KEY = "SMIMEAssertionTestElement.signerNoCheck";
-
-    private static final String SIGNER_CHECK_BY_FILE_KEY = "SMIMEAssertionTestElement.signerCheckByFile";
-
-    private static final String SIGNER_CERT_FILE_KEY = "SMIMEAssertionTestElement.signerCertFile";
-
-    private static final String SINGER_CHECK_CONSTRAINTS_KEY = "SMIMEAssertionTestElement.signerCheckConstraints";
-
-    private static final String SIGNER_SERIAL_KEY = "SMIMEAssertionTestElement.signerSerial";
-
-    private static final String SIGNER_EMAIL_KEY = "SMIMEAssertionTestElement.signerEmail";
-
-    private static final String SIGNER_DN_KEY = "SMIMEAssertionTestElement.signerDn";
-
-    private static final String ISSUER_DN_KEY = "SMIMEAssertionTestElement.issuerDn";
+    //+JMX file attributes - do not change values!
+    private static final String VERIFY_SIGNATURE_KEY         = "verifySignature"; // $NON-NLS-1$
+    private static final String NOT_SIGNED_KEY               = "notSigned"; // $NON-NLS-1$
+    private static final String SIGNER_NO_CHECK_KEY          = "signerNoCheck"; // $NON-NLS-1$
+    private static final String SIGNER_CHECK_BY_FILE_KEY     = "signerCheckByFile"; // $NON-NLS-1$
+    private static final String SIGNER_CERT_FILE_KEY         = "signerCertFile"; // $NON-NLS-1$
+    private static final String SINGER_CHECK_CONSTRAINTS_KEY = "signerCheckConstraints"; // $NON-NLS-1$
+    private static final String SIGNER_SERIAL_KEY            = "signerSerial"; // $NON-NLS-1$
+    private static final String SIGNER_EMAIL_KEY             = "signerEmail"; // $NON-NLS-1$
+    private static final String SIGNER_DN_KEY                = "signerDn"; // $NON-NLS-1$
+    private static final String ISSUER_DN_KEY                = "issuerDn"; // $NON-NLS-1$
+    private static final String MESSAGE_POSITION             = "messagePosition"; // $NON-NLS-1$
+    //-JMX file attributes
 
     public SMIMEAssertionTestElement() {
         super();
@@ -72,7 +64,7 @@ public class SMIMEAssertionTestElement extends AbstractTestElement implements
     }
 
     public void setVerifySignature(boolean verifySignature) {
-        setProperty(new BooleanProperty(VERIFY_SIGNATURE_KEY, verifySignature));
+        setProperty(VERIFY_SIGNATURE_KEY, verifySignature);
     }
 
     public String getIssuerDn() {
@@ -80,7 +72,7 @@ public class SMIMEAssertionTestElement extends AbstractTestElement implements
     }
 
     public void setIssuerDn(String issuertDn) {
-        setProperty(new StringProperty(ISSUER_DN_KEY, issuertDn));
+        setProperty(ISSUER_DN_KEY, issuertDn);
     }
 
     public boolean isSignerCheckByFile() {
@@ -88,8 +80,7 @@ public class SMIMEAssertionTestElement extends AbstractTestElement implements
     }
 
     public void setSignerCheckByFile(boolean signerCheckByFile) {
-        setProperty(new BooleanProperty(SIGNER_CHECK_BY_FILE_KEY,
-                signerCheckByFile));
+        setProperty(SIGNER_CHECK_BY_FILE_KEY, signerCheckByFile);
     }
 
     public boolean isSignerCheckConstraints() {
@@ -97,8 +88,7 @@ public class SMIMEAssertionTestElement extends AbstractTestElement implements
     }
 
     public void setSignerCheckConstraints(boolean signerCheckConstraints) {
-        setProperty(new BooleanProperty(SINGER_CHECK_CONSTRAINTS_KEY,
-                signerCheckConstraints));
+        setProperty(SINGER_CHECK_CONSTRAINTS_KEY, signerCheckConstraints);
     }
 
     public boolean isSignerNoCheck() {
@@ -106,7 +96,7 @@ public class SMIMEAssertionTestElement extends AbstractTestElement implements
     }
 
     public void setSignerNoCheck(boolean signerNoCheck) {
-        setProperty(new BooleanProperty(SIGNER_NO_CHECK_KEY, signerNoCheck));
+        setProperty(SIGNER_NO_CHECK_KEY, signerNoCheck);
     }
 
     public String getSignerCertFile() {
@@ -114,7 +104,7 @@ public class SMIMEAssertionTestElement extends AbstractTestElement implements
     }
 
     public void setSignerCertFile(String signerCertFile) {
-        setProperty(new StringProperty(SIGNER_CERT_FILE_KEY, signerCertFile));
+        setProperty(SIGNER_CERT_FILE_KEY, signerCertFile);
     }
 
     public String getSignerDn() {
@@ -122,7 +112,7 @@ public class SMIMEAssertionTestElement extends AbstractTestElement implements
     }
 
     public void setSignerDn(String signerDn) {
-        setProperty(new StringProperty(SIGNER_DN_KEY, signerDn));
+        setProperty(SIGNER_DN_KEY, signerDn);
     }
 
     public String getSignerSerial() {
@@ -130,7 +120,7 @@ public class SMIMEAssertionTestElement extends AbstractTestElement implements
     }
 
     public void setSignerSerial(String signerSerial) {
-        setProperty(new StringProperty(SIGNER_SERIAL_KEY, signerSerial));
+        setProperty(SIGNER_SERIAL_KEY, signerSerial);
     }
 
     public String getSignerEmail() {
@@ -138,7 +128,7 @@ public class SMIMEAssertionTestElement extends AbstractTestElement implements
     }
 
     public void setSignerEmail(String signerEmail) {
-        setProperty(new StringProperty(SIGNER_EMAIL_KEY, signerEmail));
+        setProperty(SIGNER_EMAIL_KEY, signerEmail);
     }
 
     public boolean isNotSigned() {
@@ -146,7 +136,18 @@ public class SMIMEAssertionTestElement extends AbstractTestElement implements
     }
 
     public void setNotSigned(boolean notSigned) {
-        setProperty(new BooleanProperty(NOT_SIGNED_KEY, notSigned));
+        setProperty(NOT_SIGNED_KEY, notSigned);
     }
 
+    public String getSpecificMessagePosition() {
+        return getPropertyAsString(MESSAGE_POSITION);
+    }
+    
+    public int getSpecificMessagePositionAsInt() {
+        return getPropertyAsInt(MESSAGE_POSITION, 0);
+    }
+    
+    public void setSpecificMessagePosition(String position) {
+        setProperty(MESSAGE_POSITION, position);
+    }
 }
