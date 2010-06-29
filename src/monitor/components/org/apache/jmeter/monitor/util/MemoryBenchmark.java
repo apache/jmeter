@@ -27,7 +27,7 @@ import org.apache.jmeter.visualizers.*;
  */
 public class MemoryBenchmark {
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public static void main(String[] args) {
         if (args.length == 1) {
             int objects = 10000;
