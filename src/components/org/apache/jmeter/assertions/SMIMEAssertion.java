@@ -65,9 +65,16 @@ public class SMIMEAssertion {
     public static AssertionResult getResult(SMIMEAssertionTestElement testElement, SampleResult response, String name) {
         checkForBouncycastle();
         AssertionResult res = new AssertionResult(name);
-
         try {
-            MimeMessage msg = getMessageFromResponse(response, 0);
+            MimeMessage msg = null;
+            final int msgPos = testElement.getSpecificMessagePositionAsInt();
+            if (msgPos < 0){ // means counting from end
+                SampleResult subResults[] = response.getSubResults();
+                msg = getMessageFromResponse(response,subResults.length + msgPos);
+            } else {
+                msg = getMessageFromResponse(response, msgPos);
+            }
+            
             SMIMESignedParser s = null;
             if (msg.isMimeType("multipart/signed")) {
                 MimeMultipart multipart = (MimeMultipart) msg.getContent();
