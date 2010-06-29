@@ -45,10 +45,10 @@ public class JexlEngine extends BSFEngineImpl {
     private JexlContext jc;
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked") // super-class does not use generics
     @Override
     public void initialize(BSFManager mgr, String lang,
-            Vector declaredBeans)
+            @SuppressWarnings("rawtypes") Vector declaredBeans) // super-class does not use generics
             throws BSFException {
         super.initialize(mgr, lang, declaredBeans);
         jc = JexlHelper.createContext();
