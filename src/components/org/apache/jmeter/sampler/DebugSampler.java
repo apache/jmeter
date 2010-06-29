@@ -81,8 +81,8 @@ public class DebugSampler extends AbstractSampler implements TestBean {
         return res;
     }
 
-    @SuppressWarnings("unchecked")
-    private void formatSet(StringBuilder sb, Set s) {
+    private void formatSet(StringBuilder sb, @SuppressWarnings("rawtypes") Set s) {
+        @SuppressWarnings("unchecked")
         ArrayList<Map.Entry<Object, Object>> al = new ArrayList<Map.Entry<Object, Object>>(s);
         Collections.sort(al, new Comparator<Map.Entry<Object, Object>>(){
             public int compare(Map.Entry<Object, Object> o1, Map.Entry<Object, Object> o2) {

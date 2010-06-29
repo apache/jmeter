@@ -76,7 +76,7 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
         /** {@inheritDoc} */
         @Override
         public boolean shouldSerializeMember(
-                @SuppressWarnings("unchecked") // superclass does not use types
+                @SuppressWarnings("rawtypes") // superclass does not use types
                 Class definedIn, 
                 String fieldName) {
             if (SampleSaveConfiguration.class != definedIn) { return true; }
@@ -109,9 +109,8 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked") // superclass does not use types
     @Override
-    public boolean canConvert(Class arg0) {
+    public boolean canConvert(@SuppressWarnings("rawtypes") Class arg0) {
         return arg0.equals(SampleSaveConfiguration.class);
     }
 

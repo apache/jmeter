@@ -39,8 +39,7 @@ public class SampleEventConverter implements Converter {
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked") // superclass does not use types
-    public boolean canConvert(Class arg0) {
+    public boolean canConvert(@SuppressWarnings("rawtypes") Class arg0) { // superclass does not use types
         return SampleEvent.class.equals(arg0);
     }
 
