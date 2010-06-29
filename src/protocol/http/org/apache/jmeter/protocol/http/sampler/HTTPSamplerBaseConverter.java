@@ -47,9 +47,8 @@ public class HTTPSamplerBaseConverter extends TestElementConverter {
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked") // superclass does not support types
     @Override
-    public boolean canConvert(Class arg0) {
+    public boolean canConvert(@SuppressWarnings("rawtypes") Class arg0) { // superclass does not support types
         return HTTPSamplerBase.class.isAssignableFrom(arg0);
     }
 

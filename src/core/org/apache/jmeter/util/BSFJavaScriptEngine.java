@@ -206,7 +206,7 @@ public class BSFJavaScriptEngine extends BSFEngineImpl {
      */
     @Override
     public void initialize(BSFManager mgr, String lang,
-            @SuppressWarnings("unchecked") // superclass does not support types
+            @SuppressWarnings("rawtypes") // superclass does not support types
             Vector declaredBeans)
         throws BSFException {
 
