@@ -55,8 +55,7 @@ public class ScriptWrapperConverter implements Converter {
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings("unchecked") // superclass is not typed
-    public boolean canConvert(Class arg0) {
+    public boolean canConvert(@SuppressWarnings("rawtypes") Class arg0) { // superclass is not typed
         return arg0.equals(ScriptWrapper.class);
     }
 
