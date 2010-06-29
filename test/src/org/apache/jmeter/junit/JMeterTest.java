@@ -419,7 +419,7 @@ public class JMeterTest extends JMeterTestCase {
         if (!name.endsWith("TestBeanGUI")) {
             try {
                 String label = guiItem.getLabelResource();
-                assertTrue(label.length() > 0);
+                assertTrue("Label should not be null or empty for "+name,label != null && label.length() > 0);
                 assertFalse("'" + label + "' should be in resource file for " + name, JMeterUtils.getResString(
                         label).startsWith(JMeterUtils.RES_KEY_PFX));
             } catch (UnsupportedOperationException uoe) {
