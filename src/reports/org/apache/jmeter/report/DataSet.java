@@ -103,8 +103,8 @@ public interface DataSet extends Visualizer {
      * a given URL.
      * @param urls
      */
-    @SuppressWarnings("unchecked") // Method is broken anyway
-    public List<SamplingStatCalculator> getStats(List urls);
+    public List<SamplingStatCalculator> getStats(@SuppressWarnings("rawtypes")  // Method is broken anyway
+            List urls);
     /**
      * Classes implementing the method should load the data from
      * the target location. It doesn't necessarily have to be a
