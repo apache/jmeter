@@ -3044,24 +3044,28 @@ instead. (see figures 9 and 10).</p>
 
 <component name="JDBC Connection Configuration" index="&sect-num;.4.8" 
                  width="369" height="443" screenshot="jdbc-config/jdbc-conn-config.png">
-	<description>Creates a database connection pool (used by <complink name="JDBC Request"/>Sampler)
-	 with JDBC Connection settings.
+	<description>Creates a database connection (used by <complink name="JDBC Request"/>Sampler)
+	 from the supplied JDBC Connection settings. The connection may be optionally pooled between threads.
+     Otherwise each thread gets its own connection.
+     The connection configuration name is used by the JDBC Sampler to select the appropriate
+     connection.
 	</description>
 	<properties>
-		<property name="Name" required="No">Descriptive name for the connection pool that is shown in the tree.</property>
-		<property name="Variable Name" required="Yes">The name of the variable the connection pool is tied to.  
-		Multiple connection pools can be used, each tied to a different variable, allowing JDBC Samplers
-		to select the pool to draw connections from.
-		<b>Each pool name must be different. If there are two configuration elements using the same pool name,
+		<property name="Name" required="No">Descriptive name for the connection configuration that is shown in the tree.</property>
+		<property name="Variable Name" required="Yes">The name of the variable the connection is tied to.  
+		Multiple connections can be used, each tied to a different variable, allowing JDBC Samplers
+		to select the appropriate connection.
+		<b>Each name must be different. If there are two configuration elements using the same name,
 		only one will be saved. JMeter versions after 2.3 log a message if a duplicate name is detected.</b>
 		</property>
-		<property name="Max Number of Connections" required="Yes">Maximum number of connections allowed in the pool.
-		To ensure that threads don't have to wait for connections, set the max count to the same as	the number of threads.
-		<b>In versions of JMeter after 2.3, the value "0" is treated specially.</b>
-		Instead of sharing the pool between all threads in the test plan, a pool containing a single connection
-		is created for each thread. This ensures that the same connection can be re-used for multiple samplers
-		in the same thread.
-		Multiple pools can be used - e.g. for connecting to different databases - just give them different names.
+		<property name="Max Number of Connections" required="Yes">
+        Maximum number of connections allowed in the pool.
+        In most cases, <b>set this to zero (0)</b>.
+        This means that each thread will get its own pool with a single connection in it, i.e.
+        the connections are not shared betweeen threads.
+        <br />
+		If you really want to use shared pooling (why?), then set the max count to the same as the number of threads
+        to ensure threads don't wait on each other.
 		</property>
 		<property name="Pool timeout" required="Yes">Pool throws an error if the timeout period is exceeded in the 
 		process of trying to retrieve a connection</property>
@@ -3680,6 +3684,12 @@ As this is a functionality that is not necessarily needed by most users, additio
     <property name="Message not signed" required="Yes">Whether or not to expect a signature in the message</property>
     <property name="Verify Signature" required="Yes">If selected, the asertion will verify if it is a valid signature according to the parameters defined in the Signer Certificate box.</property>
     <property name="Signer Cerificate" required="Yes">"No Check" means that it wil not perform signature verification. "Check values" is used to verify the signature against the inputs provided. And "Certificate file" will perform the verification against a specific certificate file.</property>
+    <property name="Message Position" required="Yes">
+    The Mail sampler can retrieve multiple messages in a single sample.
+    Use this field to specify which message will be checked.
+    Messages are numbered from 0, so 0 means the first message.
+    Negative numbers count from the LAST message; -1 means LAST, -2 means penultimate etc.
+    </property>
 </properties>
 </component>
 
