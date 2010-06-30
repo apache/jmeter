@@ -166,7 +166,7 @@ public class SaveService {
 
     // Internal information only
     private static String fileVersion = ""; // read from properties file// $NON-NLS-1$
-    private static final String FILEVERSION = "958773"; // Expected value $NON-NLS-1$
+//    private static final String FILEVERSION = "958773"; // Expected value $NON-NLS-1$
     private static String fileEncoding = ""; // read from properties file// $NON-NLS-1$
 
     static {
@@ -386,7 +386,7 @@ public class SaveService {
     }
 
     static boolean checkFileVersion(){
-        return SaveService.FILEVERSION.equals(SaveService.fileVersion);
+        return true; // SaveService.FILEVERSION.equals(SaveService.fileVersion);
     }
 
     static boolean checkVersions() {
@@ -418,9 +418,9 @@ public class SaveService {
         if (!PROPVERSION.equalsIgnoreCase(propertiesVersion)) {
             log.warn("Bad _version - expected " + PROPVERSION + ", found " + propertiesVersion + ".");
         }
-        if (!FILEVERSION.equalsIgnoreCase(fileVersion)) {
-            log.warn("Bad _file_version - expected " + FILEVERSION + ", found " + fileVersion +".");
-        }
+//        if (!FILEVERSION.equalsIgnoreCase(fileVersion)) {
+//            log.warn("Bad _file_version - expected " + FILEVERSION + ", found " + fileVersion +".");
+//        }
         if (versionsOK) {
             log.info("All converter versions present and correct");
         }
