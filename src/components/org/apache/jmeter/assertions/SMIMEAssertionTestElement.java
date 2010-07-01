@@ -30,17 +30,17 @@ public class SMIMEAssertionTestElement extends AbstractTestElement implements
     private static final long serialVersionUID = 1L;
 
     //+JMX file attributes - do not change values!
-    private static final String VERIFY_SIGNATURE_KEY         = "verifySignature"; // $NON-NLS-1$
-    private static final String NOT_SIGNED_KEY               = "notSigned"; // $NON-NLS-1$
-    private static final String SIGNER_NO_CHECK_KEY          = "signerNoCheck"; // $NON-NLS-1$
-    private static final String SIGNER_CHECK_BY_FILE_KEY     = "signerCheckByFile"; // $NON-NLS-1$
-    private static final String SIGNER_CERT_FILE_KEY         = "signerCertFile"; // $NON-NLS-1$
-    private static final String SINGER_CHECK_CONSTRAINTS_KEY = "signerCheckConstraints"; // $NON-NLS-1$
-    private static final String SIGNER_SERIAL_KEY            = "signerSerial"; // $NON-NLS-1$
-    private static final String SIGNER_EMAIL_KEY             = "signerEmail"; // $NON-NLS-1$
-    private static final String SIGNER_DN_KEY                = "signerDn"; // $NON-NLS-1$
-    private static final String ISSUER_DN_KEY                = "issuerDn"; // $NON-NLS-1$
-    private static final String MESSAGE_POSITION             = "messagePosition"; // $NON-NLS-1$
+    private static final String VERIFY_SIGNATURE_KEY         = "SMIMEAssert.verifySignature"; // $NON-NLS-1$
+    private static final String NOT_SIGNED_KEY               = "SMIMEAssert.notSigned"; // $NON-NLS-1$
+    private static final String SIGNER_NO_CHECK_KEY          = "SMIMEAssert.signerNoCheck"; // $NON-NLS-1$
+    private static final String SIGNER_CHECK_BY_FILE_KEY     = "SMIMEAssert.signerCheckByFile"; // $NON-NLS-1$
+    private static final String SIGNER_CERT_FILE_KEY         = "SMIMEAssert.signerCertFile"; // $NON-NLS-1$
+    private static final String SINGER_CHECK_CONSTRAINTS_KEY = "SMIMEAssert.signerCheckConstraints"; // $NON-NLS-1$
+    private static final String SIGNER_SERIAL_KEY            = "SMIMEAssert.signerSerial"; // $NON-NLS-1$
+    private static final String SIGNER_EMAIL_KEY             = "SMIMEAssert.signerEmail"; // $NON-NLS-1$
+    private static final String SIGNER_DN_KEY                = "SMIMEAssert.signerDn"; // $NON-NLS-1$
+    private static final String ISSUER_DN_KEY                = "SMIMEAssert.issuerDn"; // $NON-NLS-1$
+    private static final String MESSAGE_POSITION             = "SMIMEAssert.messagePosition"; // $NON-NLS-1$
     //-JMX file attributes
 
     public SMIMEAssertionTestElement() {
