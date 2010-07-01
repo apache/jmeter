@@ -212,6 +212,7 @@ public class SendMailCommand {
      */
     public void execute(Message message) throws MessagingException, IOException, InterruptedException {
 
+        // TODO change to use thread-safe method
         System.clearProperty("javax.net.ssl.trustStore");
 
         if (useLocalTrustStore) {
@@ -554,14 +555,6 @@ public class SendMailCommand {
      *            Should all certificates be trusted?
      */
     public void setTrustAllCerts(boolean trustAllCerts) {
-        if (useSSL) {
-            if (trustAllCerts) {
-                Security.setProperty("ssl.SocketFactory.provider",
-                        TRUST_ALL_SOCKET_FACTORY);
-            } else {
-                Security.setProperty("ssl.SocketFactory.provider", "");
-            }
-        }
         this.trustAllCerts = trustAllCerts;
     }
 
