@@ -1489,9 +1489,8 @@ In non-GUI mode, JMeter will exit if some threads fail to stop within the 5 seco
 
 <component name="SMTP Sampler"  index="&sect-num;.1.19"  width="644" height="801" screenshot="smtp_sampler.png">
 <note>
-BETA code. This sampler currently uses System properties to control some aspects of its behaviour.
-There are likely to be problems when using more than one thread with multiple samplers that have different settings;
-and the sampler may interfere with other samplers that use SSL.
+BETA code. This sampler currently uses System properties (javax.net.ssl.trustStore) if "Use local truststore" is selected.
+This may cause problems with other samplers and other threads.
 </note>
 <description>
 <p>
@@ -1521,7 +1520,8 @@ Two alternatives to handle this verification are available:<br></br>
 <property name="Enforce StartTLS" required="">If the server does not start the TLS protocol the connection will be terminated.</property>
 <property name="Trust All Certificates" required="">When selected it will accept all certificates independent of the CA.</property>
 <property name="Use local truststore" required="">When selected it will only accept certificates that are locally trusted.</property>
-<property name="Local truststore" required="">Local file containing the trusted certificates.</property>
+<property name="Local truststore" required="">Local file containing the trusted certificates.
+WARNING: selecting this may affect the behaviour of other threads and samplers with a different setting.</property>
 <property name="Subject" required="">The e-mail message subject.</property>
 <property name="Include timestamp in subject" required="">Includes the System.currentTimemilis() in the subject line.</property>
 <property name="Message" required="">The message body.</property>
