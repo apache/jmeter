@@ -194,7 +194,7 @@ No
 #set ($height = "")
 #set ($height = $figure.getAttributeValue('height') )
 #set ($dim= "")
-#if  ($width != "")
+#if  ("$!width" != "")
 #set ($dim = "width='$width' height='$height'")
 #end
 <p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img $dim src="$sshotdir/$figure.getAttributeValue("image")"><br>
@@ -289,7 +289,7 @@ $node.getText()
 #set ($height = "")
 #set ($height = $component.getAttributeValue('height') )
 #set ($dim= "")
-#if  ($width != "")
+#if  ("$!width" != "")
 #set ($dim = "width='$width' height='$height'")
 #end
 #set ($screenshot = "")
@@ -299,7 +299,7 @@ $node.getText()
 <font face="arial,helvetica,sanserif">
 #set ($tag = "")
 #set ($tag = $component.getAttributeValue("tag"))
-#if ($tag != "")
+#if ("$!tag" != "")
 <a name="$tag"></a>
 #end
 <h3><a name="$component.getAttributeValue("name").replace($space,$udsc)">$!component.getAttributeValue("index") $component.getAttributeValue("name")</h3></a>
@@ -349,18 +349,18 @@ $node.getText()
 #end
 
 #macro (pagelinks)
-#if (($next != "") || ($prev != ""))
+#if (("$!next" != "") || ("$!prev" != ""))
 <table>
 <tr>
 <td bgcolor="$bannerbg">
 <div align="right"><a href="index.html"><font size=-1 color="$bannerfg" face="arial,helvetica,sanserif">Index</font></a></div>
 </td>
-#if ($next != "")
+#if ("$!next" != "")
 <td bgcolor="$bannerbg">
 <div align="right"><a href="$next"><font size=-1 color="$bannerfg" face="arial,helvetica,sanserif">Next</font></a></div>
 </td>
 #end
-#if ($prev != "")
+#if ("$!prev" != "")
 <td bgcolor="$bannerbg">
 <div align="right"><a href="$prev"><font size=-1 color="$bannerfg" face="arial,helvetica,sanserif">Prev</font></a></div>
 </td>
@@ -516,7 +516,7 @@ $comp.getAttributeValue("index")
 <td>
 <table width=100%>
 <tr>
-#if ($updated != "")
+#if ("$!updated" != "")
 <td>
 #else
 <td align="center">
@@ -525,7 +525,7 @@ $comp.getAttributeValue("index")
 Copyright &copy; 1999-$year, Apache Software Foundation
 </em></font>
 </td>
-#if ($updated != "")
+#if ("$!updated" != "")
 <td align="right">
 <font color="$bodylink" size="-1"><em>
 Updated: $updated
