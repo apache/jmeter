@@ -213,7 +213,14 @@ public class SendMailCommand {
     public void execute(Message message) throws MessagingException, IOException, InterruptedException {
 
         // TODO change to use thread-safe method
-        System.clearProperty("javax.net.ssl.trustStore");
+/*
+ * Reduce impact on other threads - don't clear the setting each time.
+ * Won't work with samplers that use both settings of the option, but they won't work reliably anyway across threads.
+ * 
+ * With this change, the code should be thread-safe if the user does not select useLocalTrustStore.
+ * 
+ *         System.clearProperty("javax.net.ssl.trustStore");
+ */
 
         if (useLocalTrustStore) {
             File truststore = new File(trustStoreToUse);
@@ -227,6 +234,7 @@ public class SendMailCommand {
                     throw new IOException("Local truststore file not found. Also not available under : " + truststore.getAbsolutePath());
                 }
             }
+            logger.warn("Setting javax.net.ssl.trustStore - may affect the behaviour of other threads");
             System.setProperty("javax.net.ssl.trustStore", truststore.getAbsolutePath());
         }
 
