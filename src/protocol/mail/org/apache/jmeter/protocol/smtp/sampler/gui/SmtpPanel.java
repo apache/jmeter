@@ -1066,4 +1066,28 @@ public class SmtpPanel extends JPanel {
         }
     }
 
+    /**
+     * Reset all the Gui fields.
+     */
+    public void clear() {
+        cbIncludeTimestamp.setSelected(false);
+        cbMessageSizeStats.setSelected(false);
+        cbUseEmlMessage.setSelected(false);
+        cbUseAuth.setSelected(false);
+        taMessage.setText("");
+        tfAttachment.setText("");
+        tfAuthPassword.setText("");
+        tfAuthUsername.setText("");
+        tfEmlMessage.setText("");
+        tfMailFrom.setText("");
+        tfMailServer.setText("");
+        tfMailServerPort.setText("");
+        tfMailTo.setText("");
+        tfMailToBCC.setText("");
+        tfMailToCC.setText("");
+        tfSubject.setText("");
+        tfTrustStoreToUse.setText("");
+        rbUseNone.setSelected(true);
+    }
+
 }
