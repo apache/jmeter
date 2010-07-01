@@ -55,13 +55,13 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
     private final JRadioButton signerCheckByFile = 
         new JRadioButton(JMeterUtils.getResString("smime_assertion_signer_by_file")); // $NON-NLS-1$
  
-    private final JTextField signerDnField = new JTextField(25);
+    private final JTextField signerDnField = new JTextField(50);
  
     private final JTextField signerSerialNumberField = new JTextField(25);
  
     private final JTextField signerEmailField = new JTextField(25);
  
-    private final JTextField issuerDnField = new JTextField(25);
+    private final JTextField issuerDnField = new JTextField(50);
  
     private final JTextField signerCertFile = new JTextField(25);
     
@@ -75,6 +75,24 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
         return "smime_assertion_title";
     }
  
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void clearGui() {
+        super.clearGui();
+        issuerDnField.setText("");
+        messagePositionTf.setText("");
+        notSigned.setSelected(false);
+        signerCertFile.setText("");
+        signerCheckByFile.setSelected(false);
+        signerCheckConstraints.setSelected(false);
+        signerDnField.setText("");
+        signerEmailField.setText("");
+        signerNoCheck.setSelected(false);
+        signerSerialNumberField.setText("");
+    }
+
     private void init() {
         setLayout(new BorderLayout());
         setBorder(makeBorder());
