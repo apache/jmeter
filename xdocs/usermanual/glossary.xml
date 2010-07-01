@@ -17,9 +17,9 @@
 -->
 <!DOCTYPE document
 [
-<!ENTITY sect-num '21'>
+<!ENTITY sect-num '22'>
 ]>
-<document prev="regular_expressions.html" date="$Date$">
+<document prev="hints_and_tips.html" date="$Date$">
 
 <properties>
   <title>User's Manual: Glossary</title>
