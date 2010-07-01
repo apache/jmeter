@@ -27,9 +27,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.security.Security;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Vector;
+import java.util.Properties;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
@@ -56,17 +57,11 @@ import org.apache.log.Logger;
  */
 public class SendMailCommand {
 
-    /**
-     * Standard-Constructor
-     */
-    public SendMailCommand() {
-        headers = new HashMap<String, String>();
-        attachments = new Vector<File>();
-    }
-
     // local vars
     private static final Logger logger = LoggingManager.getLoggerForClass();
-    public static final String TRUST_ALL_SOCKET_FACTORY = "jmeter.smtpsampler.protocol.TrustAllSSLSocketFactory";
+    
+    // Use the actual class so the name must be correct.
+    private static final String TRUST_ALL_SOCKET_FACTORY = TrustAllSSLSocketFactory.class.getName();
 
     private boolean useSSL = false;
     private boolean useStartTLS = false;
@@ -93,7 +88,7 @@ public class SendMailCommand {
 
     private List<File> attachments;
 
-    private MailBodyProvider mbProvider;
+    private String mailBody;
 
     // needed to check starttls functionality
     private PrintStream debugOutStream;
@@ -108,6 +103,14 @@ public class SendMailCommand {
     private StringBuffer serverResponse = new StringBuffer();
 
     /**
+     * Standard-Constructor
+     */
+    public SendMailCommand() {
+        headers = new HashMap<String, String>();
+        attachments = new ArrayList<File>();
+    }
+
+    /**
      * Prepares message prior to be sent via execute()-method, i.e. sets
      * properties such as protocol, authentication, etc.
      *
@@ -117,7 +120,7 @@ public class SendMailCommand {
      */
     public Message prepareMessage() throws MessagingException, IOException {
 
-        java.util.Properties props = new java.util.Properties();
+        Properties props = new Properties();
 
         String protocol = getProtocol();
 
@@ -148,7 +151,7 @@ public class SendMailCommand {
             // handle body and attachments
             Multipart multipart = new MimeMultipart();
             BodyPart body = new MimeBodyPart();
-            body.setText(mbProvider.getMailBody());
+            body.setText(mailBody);
             multipart.addBodyPart(body);
 
             for (File f : attachments) {
@@ -203,9 +206,11 @@ public class SendMailCommand {
      *
      * @param message
      *            Message prior prepared by prepareMessage()
-     * @throws Exception
+     * @throws MessagingException 
+     * @throws IOException 
+     * @throws InterruptedException 
      */
-    public void execute(Message message) throws Exception {
+    public void execute(Message message) throws MessagingException, IOException, InterruptedException {
 
         System.clearProperty("javax.net.ssl.trustStore");
 
@@ -358,28 +363,6 @@ public class SendMailCommand {
     }
 
     /**
-     * Returns MailBodyProvider-Object for currend message
-     *
-     * @see MailBodyProvider
-     * @return Current MailBody-Provider-Object
-     */
-    public MailBodyProvider getMbProvider() {
-        return mbProvider;
-    }
-
-    /**
-     * Sets MailBodyProvider-Object for currend message - to be called by
-     * SmtpSampler-object
-     *
-     * @see MailBodyProvider
-     * @param mbProvider
-     *            MailBody-Provider to be used
-     */
-    public void setMbProvider(MailBodyProvider mbProvider) {
-        this.mbProvider = mbProvider;
-    }
-
-    /**
      * Returns username to authenticate at the mailserver - standard getter
      *
      * @return Username for mailserver
@@ -417,16 +400,6 @@ public class SendMailCommand {
      */
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    /**
-     * Returns receivers of current message <InternetAddress> ("to") - standard
-     * getter
-     *
-     * @return List of receivers
-     */
-    public List<InternetAddress> getReceiverTo() {
-        return receiverTo;
     }
 
     /**
@@ -759,6 +732,15 @@ public class SendMailCommand {
      */
     public void setEmlMessage(String emlMessage) {
         this.emlMessage = emlMessage;
+    }
+
+    /**
+     * Set the mail body.
+     * 
+     * @param body
+     */
+    public void setMailBody(String body){
+        mailBody = body;
     }
 
     public StringBuffer getServerResponse() {
