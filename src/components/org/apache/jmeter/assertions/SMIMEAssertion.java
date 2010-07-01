@@ -54,11 +54,15 @@ import org.bouncycastle.mail.smime.SMIMEException;
 import org.bouncycastle.mail.smime.SMIMESignedParser;
 import org.bouncycastle.x509.extension.X509ExtensionUtil;
 
-public class SMIMEAssertion {
+/**
+ * Helper class which isolates the BouncyCastle code.
+ */
+class SMIMEAssertion {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    // Use the name of the test element, otherwise cannot enable/disable debug from the GUI
+    private static final Logger log = LoggingManager.getLoggerForShortName(SMIMEAssertionTestElement.class.getName());
 
-    public SMIMEAssertion() {
+    SMIMEAssertion() {
         super();
     }
 
@@ -70,21 +74,28 @@ public class SMIMEAssertion {
             final int msgPos = testElement.getSpecificMessagePositionAsInt();
             if (msgPos < 0){ // means counting from end
                 SampleResult subResults[] = response.getSubResults();
-                msg = getMessageFromResponse(response,subResults.length + msgPos);
+                final int pos = subResults.length + msgPos;
+                log.debug("Getting message number: "+pos+" of "+subResults.length);
+                msg = getMessageFromResponse(response,pos);
             } else {
+                log.debug("Getting message number: "+msgPos);
                 msg = getMessageFromResponse(response, msgPos);
             }
             
             SMIMESignedParser s = null;
-            if (msg.isMimeType("multipart/signed")) {
+            if (log.isDebugEnabled()) {
+                log.debug("Content-type: "+msg.getContentType());
+            }
+            if (msg.isMimeType("multipart/signed")) { // $NON-NLS-1$
                 MimeMultipart multipart = (MimeMultipart) msg.getContent();
                 s = new SMIMESignedParser(multipart);
-            } else if (msg.isMimeType("application/pkcs7-mime")
-                    || msg.isMimeType("application/x-pkcs7-mime")) {
+            } else if (msg.isMimeType("application/pkcs7-mime") // $NON-NLS-1$
+                    || msg.isMimeType("application/x-pkcs7-mime")) { // $NON-NLS-1$
                 s = new SMIMESignedParser(msg);
             }
 
             if (null != s) {
+                log.debug("Found signature");
 
                 if (testElement.isNotSigned()) {
                     res.setFailure(true);
@@ -94,6 +105,7 @@ public class SMIMEAssertion {
                 }
 
             } else {
+                log.debug("Did not find signature");
                 if (!testElement.isNotSigned()) {
                     res.setFailure(true);
                     res.setFailureMessage("Mime message is not signed");
@@ -128,7 +140,7 @@ public class SMIMEAssertion {
         AssertionResult res = new AssertionResult(name);
 
         try {
-            CertStore certs = s.getCertificatesAndCRLs("Collection", "BC");
+            CertStore certs = s.getCertificatesAndCRLs("Collection", "BC"); // $NON-NLS-1$  // $NON-NLS-2$
             SignerInformationStore signers = s.getSignerInfos();
             Iterator<?> signerIt = signers.getSigners().iterator();
 
@@ -144,7 +156,7 @@ public class SMIMEAssertion {
 
                     if (testElement.isVerifySignature()) {
 
-                        if (!signer.verify(cert.getPublicKey(), "BC")) {
+                        if (!signer.verify(cert.getPublicKey(), "BC")) { // $NON-NLS-1$
                             res.setFailure(true);
                             res.setFailureMessage("Signature is invalid");
                         }
@@ -161,10 +173,8 @@ public class SMIMEAssertion {
                                 failureMessage
                                         .append("Serial number ")
                                         .append(serialNbr)
-                                        .append(
-                                                " does not match serial from signer certificate: ")
-                                        .append(cert.getSerialNumber()).append(
-                                                "\n");
+                                        .append(" does not match serial from signer certificate: ")
+                                        .append(cert.getSerialNumber()).append("\n");
                             }
                         }
 
@@ -176,8 +186,7 @@ public class SMIMEAssertion {
                                 failureMessage
                                         .append("Email address \"")
                                         .append(email)
-                                        .append(
-                                                "\" not present in signer certificate\n");
+                                        .append("\" not present in signer certificate\n");
                             }
 
                         }
@@ -189,8 +198,7 @@ public class SMIMEAssertion {
                                     .getSubjectX500Principal())) {
                                 res.setFailure(true);
                                 failureMessage
-                                        .append(
-                                                "Distinguished name of signer certificate does not match \"")
+                                        .append("Distinguished name of signer certificate does not match \"")
                                         .append(subject).append("\"\n");
                             }
                         }
@@ -202,8 +210,7 @@ public class SMIMEAssertion {
                                     .equals(cert.getIssuerX500Principal())) {
                                 res.setFailure(true);
                                 failureMessage
-                                        .append(
-                                                "Issuer distinguished name of signer certificate does not match \"")
+                                        .append("Issuer distinguished name of signer certificate does not match \"")
                                         .append(subject).append("\"\n");
                             }
                         }
@@ -222,24 +229,21 @@ public class SMIMEAssertion {
 
                         if (!certFromFile.equals(cert)) {
                             res.setFailure(true);
-                            res
-                                    .setFailureMessage("Signer certificate does not match certificate "
+                            res.setFailureMessage("Signer certificate does not match certificate "
                                             + testElement.getSignerCertFile());
                         }
                     }
 
                 } else {
                     res.setFailure(true);
-                    res
-                            .setFailureMessage("No signer certificate found in signature");
+                    res.setFailureMessage("No signer certificate found in signature");
                 }
 
             }
 
             // TODO support multiple signers
             if (signerIt.hasNext()) {
-                log
-                        .warn("SMIME message contains multiple signers! Checking multiple signers is not supported.");
+                log.warn("SMIME message contains multiple signers! Checking multiple signers is not supported.");
             }
 
         } catch (GeneralSecurityException e) {
@@ -248,8 +252,7 @@ public class SMIMEAssertion {
             res.setFailureMessage(e.getMessage());
         } catch (FileNotFoundException e) {
             res.setFailure(true);
-            res.setFailureMessage("certificate file not found: "
-                    + e.getMessage());
+            res.setFailureMessage("certificate file not found: " + e.getMessage());
         }
 
         return res;
@@ -262,12 +265,17 @@ public class SMIMEAssertion {
             int messageNumber) throws MessagingException {
         SampleResult subResults[] = response.getSubResults();
 
-        if (messageNumber >= subResults.length) throw new MessagingException("Message number not present in results: "+messageNumber);
+        if (messageNumber >= subResults.length || messageNumber < 0) {
+            throw new MessagingException("Message number not present in results: "+messageNumber);
+        }
 
-        byte[] data = subResults[messageNumber].getResponseData();
+        final SampleResult sampleResult = subResults[messageNumber];
+        if (log.isDebugEnabled()) {
+            log.debug("Bytes: "+sampleResult.getBytes()+" CT: "+sampleResult.getContentType());
+        }
+        byte[] data = sampleResult.getResponseData();
         Session session = Session.getDefaultInstance(new Properties());
-        MimeMessage msg = new MimeMessage(session, new ByteArrayInputStream(
-                data));
+        MimeMessage msg = new MimeMessage(session, new ByteArrayInputStream(data));
 
         log.debug("msg.getSize() = " + msg.getSize());
         return msg;
@@ -283,7 +291,7 @@ public class SMIMEAssertion {
      * @return
      */
     private static BigInteger readSerialNumber(String serialString) {
-        if (serialString.startsWith("0x") || serialString.startsWith("0X")) {
+        if (serialString.startsWith("0x") || serialString.startsWith("0X")) { // $NON-NLS-1$  // $NON-NLS-2$
             return new BigInteger(serialString.substring(2), 16);
         } 
         return new BigInteger(serialString);
@@ -301,15 +309,14 @@ public class SMIMEAssertion {
         List<String> res = new ArrayList<String>();
 
         X509Principal subject = PrincipalUtil.getSubjectX509Principal(cert);
-        Iterator<?> addressIt = subject.getValues(X509Principal.EmailAddress)
-                .iterator();
+        Iterator<?> addressIt = subject.getValues(X509Principal.EmailAddress).iterator();
         while (addressIt.hasNext()) {
             String address = (String) addressIt.next();
             res.add(address);
         }
 
-        Iterator<?> subjectAltNamesIt = X509ExtensionUtil
-                .getSubjectAlternativeNames(cert).iterator();
+        Iterator<?> subjectAltNamesIt = 
+            X509ExtensionUtil.getSubjectAlternativeNames(cert).iterator();
         while (subjectAltNamesIt.hasNext()) {
             List<?> altName = (List<?>) subjectAltNamesIt.next();
             int type = ((Integer) altName.get(0)).intValue();
@@ -328,7 +335,7 @@ public class SMIMEAssertion {
      * 
      */
     private static void checkForBouncycastle() {
-        if (null == Security.getProvider("BC")) {
+        if (null == Security.getProvider("BC")) { // $NON-NLS-1$
             Security.addProvider(new BouncyCastleProvider());
         }
     }
