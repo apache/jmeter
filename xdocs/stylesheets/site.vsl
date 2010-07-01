@@ -194,7 +194,7 @@ No
 #set ($height = "")
 #set ($height = $figure.getAttributeValue('height') )
 #set ($dim= "")
-#if  ($width != "")
+#if  ("$!width" != "")
 #set ($dim = "width='$width' height='$height'")
 #end
 <p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img $dim src="$sshotdir/$figure.getAttributeValue("image")"><br>
@@ -293,7 +293,7 @@ $rl_node.getText()
 #set ($height = "")
 #set ($height = $component.getAttributeValue('height') )
 #set ($dim= "")
-#if  ($width != "")
+#if  ("$!width" != "")
 #set ($dim = "width='$width' height='$height'")
 #end
 <table border="0" cellspacing="0" cellpadding="2">
@@ -346,18 +346,18 @@ $rl_node.getText()
 #end
 
 #macro (pagelinks)
-#if (($next != "") || ($prev != ""))
+#if (("$!next" != "") || ("$!prev" != ""))
 <table>
 <tr>
 <td bgcolor="$bannerbg">
 <div align="right"><a href="index.html"><font size=-1 color="$bannerfg" face="arial,helvetica,sanserif">Index</font></a></div>
 </td>
-#if ($next != "")
+#if ("$!next" != "")
 <td bgcolor="$bannerbg">
 <div align="right"><a href="$next"><font size=-1 color="$bannerfg" face="arial,helvetica,sanserif">Next</font></a></div>
 </td>
 #end
-#if ($prev != "")
+#if ("$!prev" != "")
 <td bgcolor="$bannerbg">
 <div align="right"><a href="$prev"><font size=-1 color="$bannerfg" face="arial,helvetica,sanserif">Prev</font></a></div>
 </td>
