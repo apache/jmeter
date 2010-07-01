@@ -21,6 +21,9 @@ package org.apache.jmeter.protocol.http.util;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,6 +38,11 @@ public class ConversionUtils {
 
     private static final String CHARSET_EQ = "charset="; // $NON-NLS-1$
     private static final int CHARSET_EQ_LEN = CHARSET_EQ.length();
+    
+	private static final String SLASHDOTDOT = "/..";
+	private static final String DOTDOT = "..";
+	private static final String SLASH = "/";
+	private static final String COLONSLASHSLASH = "://";
 
     /**
      * Extract the encoding (charset) from the Content-Type,
@@ -85,6 +93,7 @@ public class ConversionUtils {
      */
     public static URL makeRelativeURL(URL baseURL, String location) throws MalformedURLException{
         URL initial = new URL(baseURL,location);
+        
         // skip expensive processing if it cannot apply
         if (!location.startsWith("../")){// $NON-NLS-1$
             return initial;
@@ -100,5 +109,117 @@ public class ConversionUtils {
             }
         }
         return initial;
+    }
+
+	/**
+	 * collapses absolute or relative URLs containing '/..' converting
+	 * http://host/path1/../path2 to http://host/path2 or /one/two/../three to
+	 * /one/three
+	 * 
+	 * @param url
+	 * @return collapsed URL
+	 */
+    public static String removeSlashDotDot(String url)
+    {
+        if (url == null || (url = url.trim()).length() < 4 || !url.contains(SLASHDOTDOT))
+        {
+            return url;
+        }
+
+        /**
+         * http://auth@host:port/path1/path2/path3/?query#anchor
+         */
+
+        // get to 'path' part of the URL, preserving schema, auth, host if
+        // present
+
+        // find index of path start
+
+        int dotSlashSlashIndex = url.indexOf(COLONSLASHSLASH);
+        final int pathStartIndex;
+        if (dotSlashSlashIndex >= 0)
+        {
+            // absolute URL
+            pathStartIndex = url.indexOf(SLASH, dotSlashSlashIndex + COLONSLASHSLASH.length());
+        } else
+        {
+            // document or context-relative URL like:
+            // '/path/to'
+            // OR '../path/to'
+            // OR '/path/to/../path/'
+            pathStartIndex = 0;
+        }
+
+        // find path endIndex
+        int pathEndIndex = url.length();
+
+        int questionMarkIdx = url.indexOf('?');
+        if (questionMarkIdx > 0)
+        {
+            pathEndIndex = questionMarkIdx;
+        } else {
+            int anchorIdx = url.indexOf('#');
+            if (anchorIdx > 0)
+            {
+                pathEndIndex = anchorIdx;
+            }
+        }
+
+        // path is between idx='pathStartIndex' (inclusive) and
+        // idx='pathEndIndex' (exclusive)
+        String currentPath = url.substring(pathStartIndex, pathEndIndex);
+
+        final boolean startsWithSlash = currentPath.startsWith(SLASH);
+        final boolean endsWithSlash = currentPath.endsWith(SLASH);
+
+        StringTokenizer st = new StringTokenizer(currentPath, SLASH);
+        List<String> tokens = new ArrayList<String>();
+        while (st.hasMoreTokens())
+        {
+            tokens.add(st.nextToken());
+        }
+
+        for (int i = 0; i < tokens.size(); i++)
+        {
+            if (i < tokens.size() - 1)
+            {
+                final String thisToken = tokens.get(i);
+
+                // Verify for a ".." component at next iteration
+                if (thisToken.length() > 0 && !thisToken.equals(DOTDOT) && tokens.get(i + 1).equals(DOTDOT))
+                {
+                    tokens.remove(i);
+                    tokens.remove(i);
+                    i = i - 2;
+                    if (i < -1)
+                    {
+                        i = -1;
+                    }
+                }
+            }
+
+        }
+
+        StringBuilder newPath = new StringBuilder();
+        if (startsWithSlash) {
+            newPath.append(SLASH);
+        }
+        for (int i = 0; i < tokens.size(); i++)
+        {
+            newPath.append(tokens.get(i));
+
+            // append '/' if this isn't the last token or it is but the original
+            // path terminated w/ a '/'
+            boolean appendSlash = i < (tokens.size() - 1) ? true : endsWithSlash;
+            if (appendSlash)
+            {
+                newPath.append(SLASH);
+            }
+        }
+
+        // install new path
+        StringBuilder s = new StringBuilder(url);
+        s.replace(pathStartIndex, pathEndIndex, newPath.toString());
+        return s.toString();
     }
 }
