@@ -204,7 +204,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     private static final String RESPONSE_PARSERS= // list of parsers
         JMeterUtils.getProperty("HTTPResponse.parsers");//$NON-NLS-1$
 
-   static{
+    static{
         String []parsers = JOrphanUtils.split(RESPONSE_PARSERS, " " , true);// returns empty array for null
         for (int i=0;i<parsers.length;i++){
             final String parser = parsers[i];
@@ -230,6 +230,10 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             log.info("No response parsers defined: text/html only will be scanned for embedded resources");
         }
     }
+
+    // Bug 49083
+    /** Whether to remove '/pathsegment/..' from redirects; default true */
+    private static boolean REMOVESLASHDOTDOT = JMeterUtils.getPropDefault("httpsampler.redirect.removeslashdotdot", true);
 
     ////////////////////// Variables //////////////////////
 
@@ -1223,7 +1227,11 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             // Browsers seem to tolerate Location headers with spaces,
             // replacing them automatically with %20. We want to emulate
             // this behaviour.
-            String location = encodeSpaces(lastRes.getRedirectLocation());
+            String location = lastRes.getRedirectLocation(); 
+            if (REMOVESLASHDOTDOT) {
+                location = ConversionUtils.removeSlashDotDot(location);
+            }
+            location = encodeSpaces(location);
             try {
                 lastRes = sample(ConversionUtils.makeRelativeURL(lastRes.getURL(), location), GET, true, frameDepth);
             } catch (MalformedURLException e) {

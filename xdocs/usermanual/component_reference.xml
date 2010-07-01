@@ -197,6 +197,11 @@ https.default.protocol=SSLv3
 		Note that the HttpClient sampler may log the following message:<br/>
 		"Redirect requested but followRedirects is disabled"<br/>
 		This can be ignored.
+        <br/>
+        In versions after 2.3.4, JMeter will collapse paths of the form '/../segment' in
+        both absolute and relative URLs. For example http://host/one/../two => http://host/two.
+        If necessary, this behaviour can be suppressed by setting the JMeter property
+        <code>httpsampler.redirect.removeslashdotdot=false</code>
 		</property>
 		<property name="Use KeepAlive" required="Yes">JMeter sets the Connection: keep-alive header. This does not work properly with the default HTTP implementation, as connection re-use is not under user-control. 
                   It does work with the Jakarta httpClient implementation.</property>

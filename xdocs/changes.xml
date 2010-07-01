@@ -161,6 +161,7 @@ This does not affect existing test plans.
 <li>Bug 48153 - Support for Cache-Control and Expires headers</li>
 <li>Bug 47946 - Proxy should enable Grouping inside a Transaction Controller</li>
 <li>Bug 48300 - Allow override of IP source address for HTTP HttpClient requests</li>
+<li>Bug 49083 - collapse '/pathsegment/..' in redirect URLs</li>
 </ul>
 
 <h3>Other samplers</h3>
