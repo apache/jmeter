@@ -552,7 +552,7 @@ public class SampleResult implements Serializable {
             setDataEncoding(encodeUsing);
         } catch (UnsupportedEncodingException e) {
             log.warn("Could not convert string using '"+encodeUsing+
-                    "', using default encoding: "+DEFAULT_CHARSET+" "+e.getLocalizedMessage());
+                    "', using default encoding: "+DEFAULT_CHARSET,e);
             responseData = response.getBytes();
             setDataEncoding(DEFAULT_CHARSET);
         }
@@ -631,8 +631,12 @@ public class SampleResult implements Serializable {
             final String CS_PFX = "charset="; // $NON-NLS-1$
             int cset = ct.toLowerCase(java.util.Locale.ENGLISH).indexOf(CS_PFX);
             if (cset >= 0) {
-                // TODO - assumes charset is not followed by anything else
                 String charSet = ct.substring(cset + CS_PFX.length());
+                // handle: ContentType: text/plain; charset=ISO-8859-1; format=flowed
+                int semiColon = charSet.indexOf(';');
+                if (semiColon >= 0) {
+                    charSet=charSet.substring(0, semiColon);
+                }
                 // Check for quoted string
                 if (charSet.startsWith("\"")){ // $NON-NLS-1$
                     setDataEncoding(charSet.substring(1, charSet.length()-1)); // remove quotes
