@@ -158,6 +158,16 @@ public class SmtpSamplerGui extends AbstractSamplerGui {
 
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void clearGui() {
+        super.clearGui();
+        if (smtpPanel != null) {
+            smtpPanel.clear();
+        }
+    }
+    /**
      * Creates a sampler-gui-object, singleton-method
      * @return Panel for entering the data
      */
