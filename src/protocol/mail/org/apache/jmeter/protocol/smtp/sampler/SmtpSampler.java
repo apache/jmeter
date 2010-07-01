@@ -136,11 +136,9 @@ public class SmtpSampler extends AbstractSampler {
                     for (int i = 0; i < strReceivers.length; i++) {
                         receiversTo.add(new InternetAddress(strReceivers[i].trim()));
                     }
-                } else {
-                    receiversTo.add(new InternetAddress(getMailFrom()));
+                    instance.setReceiverTo(receiversTo);
                 }
 
-                instance.setReceiverTo(receiversTo);
 
                 // check if there are really mail-addresses in the fields and if
                 // there are multiple ones
