@@ -147,8 +147,7 @@ class SMIMEAssertion {
             if (signerIt.hasNext()) {
 
                 SignerInformation signer = (SignerInformation) signerIt.next();
-                Iterator<?> certIt = certs.getCertificates(signer.getSID())
-                        .iterator();
+                Iterator<?> certIt = certs.getCertificates(signer.getSID()).iterator();
 
                 if (certIt.hasNext()) {
                     // the signer certificate
@@ -193,9 +192,11 @@ class SMIMEAssertion {
 
                         String subject = testElement.getSignerDn();
                         if (subject.length() > 0) {
+                            final X500Principal certPrincipal = cert.getSubjectX500Principal();
+                            log.debug(certPrincipal.getName(X500Principal.CANONICAL));
                             X500Principal principal = new X500Principal(subject);
-                            if (!principal.equals(cert
-                                    .getSubjectX500Principal())) {
+                            log.debug(principal.getName(X500Principal.CANONICAL));
+                            if (!principal.equals(certPrincipal)) {
                                 res.setFailure(true);
                                 failureMessage
                                         .append("Distinguished name of signer certificate does not match \"")
@@ -205,9 +206,11 @@ class SMIMEAssertion {
 
                         String issuer = testElement.getIssuerDn();
                         if (issuer.length() > 0) {
+                            final X500Principal issuerX500Principal = cert.getIssuerX500Principal();
+                            log.debug(issuerX500Principal.getName(X500Principal.CANONICAL));
                             X500Principal principal = new X500Principal(issuer);
-                            if (!principal
-                                    .equals(cert.getIssuerX500Principal())) {
+                            log.debug(principal.getName(X500Principal.CANONICAL));
+                            if (!principal.equals(issuerX500Principal)) {
                                 res.setFailure(true);
                                 failureMessage
                                         .append("Issuer distinguished name of signer certificate does not match \"")
