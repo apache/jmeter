@@ -21,9 +21,9 @@ package org.apache.jmeter.protocol.smtp.sampler;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Vector;
 
 import javax.mail.AuthenticationFailedException;
 import javax.mail.Message;
@@ -31,10 +31,8 @@ import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
-import org.apache.jmeter.protocol.smtp.sampler.protocol.MailBodyProvider;
 import org.apache.jmeter.protocol.smtp.sampler.protocol.SendMailCommand;
 import org.apache.jmeter.protocol.smtp.sampler.tools.CounterOutputStream;
-
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
@@ -124,52 +122,21 @@ public class SmtpSampler extends AbstractSampler {
         }
 
         try {
+            
+            // Process address lists
+            instance.setReceiverTo(getPropNameAsAddresses(SmtpSampler.RECEIVER_TO));
+            instance.setReceiverCC(getPropNameAsAddresses(SmtpSampler.RECEIVER_CC));
+            instance.setReceiverBCC(getPropNameAsAddresses(SmtpSampler.RECEIVER_BCC));
+
+            instance.setSubject(getPropertyAsString(SUBJECT)
+                    + (getPropertyAsBoolean(INCLUDE_TIMESTAMP) ? 
+                            " <<< current timestamp: " + new Date().getTime() + " >>>"
+                            : ""
+                       ));
+
             if (!getPropertyAsBoolean(USE_EML)) { // part is only needed if we
                 // don't send an .eml-file
-
-                // check if there are really mail-addresses in the fields and if
-                // there are multiple ones
-                List<InternetAddress> receiversTo = new Vector<InternetAddress>();
-                if (getPropertyAsString(SmtpSampler.RECEIVER_TO).matches(".*@.*")) {
-                    String[] strReceivers = (getPropertyAsString(SmtpSampler.RECEIVER_TO))
-                            .split(";");
-                    for (int i = 0; i < strReceivers.length; i++) {
-                        receiversTo.add(new InternetAddress(strReceivers[i].trim()));
-                    }
-                    instance.setReceiverTo(receiversTo);
-                }
-
-
-                // check if there are really mail-addresses in the fields and if
-                // there are multiple ones
-                if (getPropertyAsString(SmtpSampler.RECEIVER_CC).matches(".*@.*")) {
-                    List<InternetAddress> receiversCC = new Vector<InternetAddress>();
-                    String[] strReceivers = (getPropertyAsString(SmtpSampler.RECEIVER_CC))
-                            .split(";");
-                    for (int i = 0; i < strReceivers.length; i++) {
-                        receiversCC.add(new InternetAddress(strReceivers[i].trim()));
-                    }
-                    instance.setReceiverCC(receiversCC);
-                }
-
-                // check if there are really mail-addresses in the fields and if
-                // there are multiple ones
-                if (getPropertyAsString(SmtpSampler.RECEIVER_BCC).matches(".*@.*")) {
-                    List<InternetAddress> receiversBCC = new Vector<InternetAddress>();
-                    String[] strReceivers = (getPropertyAsString(SmtpSampler.RECEIVER_BCC))
-                            .split(";");
-                    for (int i = 0; i < strReceivers.length; i++) {
-                        receiversBCC.add(new InternetAddress(strReceivers[i].trim()));
-                    }
-                    instance.setReceiverBCC(receiversBCC);
-                }
-
-                MailBodyProvider mb = new MailBodyProvider();
-                if (getPropertyAsString(MESSAGE) != null
-                        && !getPropertyAsString(MESSAGE).equals(""))
-                    mb.setBody(getPropertyAsString(MESSAGE));
-                instance.setMbProvider(mb);
-
+                instance.setMailBody(getPropertyAsString(MESSAGE));
                 if (!getAttachments().equals("")) {
                     String[] attachments = getAttachments().split(FILENAME_SEPARATOR);
                     for (String attachment : attachments) {
@@ -177,60 +144,8 @@ public class SmtpSampler extends AbstractSampler {
                     }
                 }
 
-                instance.setSubject(getPropertyAsString(SUBJECT)
-                                + (getPropertyAsBoolean(INCLUDE_TIMESTAMP) ? " <<< current timestamp: "
-                                        + new Date().getTime() + " >>>"
-                                        : ""));
-            } else {
-
-                // send an .eml-file
-
-                // check if there are really mail-addresses in the fields and if
-                // there are multiple ones
-                if (getPropertyAsString(SmtpSampler.RECEIVER_TO).matches(".*@.*")) {
-                    List<InternetAddress> receiversTo = new Vector<InternetAddress>();
-                    String[] strReceivers = (getPropertyAsString(SmtpSampler.RECEIVER_TO))
-                            .split(";");
-                    for (int i = 0; i < strReceivers.length; i++) {
-                        receiversTo.add(new InternetAddress(strReceivers[i].trim()));
-                    }
-                    instance.setReceiverTo(receiversTo);
-                }
-
-                // check if there are really mail-addresses in the fields and if
-                // there are multiple ones
-                if (getPropertyAsString(SmtpSampler.RECEIVER_CC).matches(".*@.*")) {
-                    List<InternetAddress> receiversCC = new Vector<InternetAddress>();
-                    String[] strReceivers = (getPropertyAsString(SmtpSampler.RECEIVER_CC))
-                            .split(";");
-                    for (int i = 0; i < strReceivers.length; i++) {
-                        receiversCC.add(new InternetAddress(strReceivers[i].trim()));
-                    }
-                    instance.setReceiverCC(receiversCC);
-                }
-
-                // check if there are really mail-addresses in the fields and if
-                // there are multiple ones
-                if (getPropertyAsString(SmtpSampler.RECEIVER_BCC).matches(
-                        ".*@.*")) {
-                    List<InternetAddress> receiversBCC = new Vector<InternetAddress>();
-                    String[] strReceivers = (getPropertyAsString(SmtpSampler.RECEIVER_BCC))
-                            .split(";");
-                    for (int i = 0; i < strReceivers.length; i++) {
-                        receiversBCC.add(new InternetAddress(strReceivers[i]
-                                .trim()));
-                    }
-                    instance.setReceiverBCC(receiversBCC);
-                }
-
-                String subj = getPropertyAsString(SUBJECT);
-                if (subj.trim().length() > 0) {
-                    instance.setSubject(subj
-                            + (getPropertyAsBoolean(INCLUDE_TIMESTAMP) ? " <<< current timestamp: "
-                                    + new Date().getTime() + " >>>"
-                                    : ""));
-                }
             }
+
             // needed for measuring sending time
             instance.setSynchronousMode(true);
 
@@ -247,13 +162,19 @@ public class SmtpSampler extends AbstractSampler {
 
         } catch (AddressException ex) {
             log.warn("Error while preparing message", ex);
+            res.setResponseCode("500");
+            res.setResponseMessage(ex.toString());
             return res;
         } catch (IOException ex) {
-            // TODO Auto-generated catch block
-            ex.printStackTrace();
+            log.warn("Error while preparing message", ex);
+            res.setResponseCode("500");
+            res.setResponseMessage(ex.toString());
+            return res;
         } catch (MessagingException ex) {
-            // TODO Auto-generated catch block
-            ex.printStackTrace();
+            log.warn("Error while preparing message", ex);
+            res.setResponseCode("500");
+            res.setResponseMessage(ex.toString());
+            return res;
         }
 
         // Perform the sampling
@@ -284,15 +205,12 @@ public class SmtpSampler extends AbstractSampler {
             res.setResponseCode("500");
             res.setResponseMessage("AuthenticationFailedException: authentication failed - wrong username / password!\n"
                             + afex);
-        }
         // SSL not supported, startTLS not supported, other messagingException
-        catch (MessagingException mex) {
+        } catch (MessagingException mex) {
             log.warn("",mex);
             res.setResponseCode("500");
-            if (mex.getMessage().matches(
-                    ".*Could not connect to SMTP host.*465.*")
-                    && mex.getCause().getMessage().matches(
-                            ".*Connection timed out.*")) {
+            if (mex.getMessage().matches(".*Could not connect to SMTP host.*465.*")
+                    && mex.getCause().getMessage().matches(".*Connection timed out.*")) {
                 res.setResponseMessage("MessagingException: Probably, SSL is not supported by the SMTP-Server!\n"
                                 + mex);
             } else if (mex.getMessage().matches(".*StartTLS failed.*")) {
@@ -304,12 +222,10 @@ public class SmtpSampler extends AbstractSampler {
                 res.setResponseMessage("MessagingException: Server certificate not trusted - perhaps you have to restart JMeter!\n"
                                 + mex);
             } else {
-                res.setResponseMessage("Other MessagingException: "
-                        + mex.toString());
+                res.setResponseMessage("Other MessagingException: " + mex.toString());
             }
-        }
-        // general exception
-        catch (Exception ex) {
+        }  catch (Exception ex) {   // general exception
+            log.warn("",ex);
             res.setResponseCode("500");
             if (null != ex.getMessage()
                     && ex.getMessage().matches("Failed to build truststore")) {
@@ -341,6 +257,26 @@ public class SmtpSampler extends AbstractSampler {
         res.setSuccessful(isOK);
 
         return res;
+    }
+
+    /**
+     * Get the list of addresses or null.
+     * Null is treated differently from an empty list.
+     * @param propName name of property containing addresses separated by ";"
+     * @return the list or null
+     * @throws AddressException 
+     */
+    private List<InternetAddress> getPropNameAsAddresses(String propName) throws AddressException{
+        final String propValue = getPropertyAsString(propName).trim();
+        if (propValue.length() > 0){ // we have at least one potential address
+            List<InternetAddress> addresses = new ArrayList<InternetAddress>();
+            for (String address : propValue.split(";")){
+                addresses.add(new InternetAddress(address.trim()));
+            }
+            return addresses;            
+        } else {
+            return null;            
+        }
     }
 
     /**
