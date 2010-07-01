@@ -35,7 +35,7 @@ import org.apache.log.Logger;
 
 public class CustomX509TrustManager implements X509TrustManager
 {
-    private X509TrustManager defaultTrustManager = null;
+    private final X509TrustManager defaultTrustManager;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -54,12 +54,14 @@ public class CustomX509TrustManager implements X509TrustManager
         if (log.isDebugEnabled() && certificates != null) {
             for (int c = 0; c < certificates.length; c++) {
                 X509Certificate cert = certificates[c];
-                log.debug(" Client certificate " + (c + 1) + ":");
-                log.debug("  Subject DN: " + cert.getSubjectDN());
-                log.debug("  Signature Algorithm: " + cert.getSigAlgName());
-                log.debug("  Valid from: " + cert.getNotBefore() );
-                log.debug("  Valid until: " + cert.getNotAfter());
-                log.debug("  Issuer: " + cert.getIssuerDN());
+                if (log.isDebugEnabled()){
+                    log.debug(" Client certificate " + (c + 1) + ":");
+                    log.debug("  Subject DN: " + cert.getSubjectDN());
+                    log.debug("  Signature Algorithm: " + cert.getSigAlgName());
+                    log.debug("  Valid from: " + cert.getNotBefore() );
+                    log.debug("  Valid until: " + cert.getNotAfter());
+                    log.debug("  Issuer: " + cert.getIssuerDN());
+                }
             }
         }
 //        try {
