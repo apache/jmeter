@@ -240,6 +240,7 @@ In particular, Aggregate Report can now handle large numbers of samples.
 <li>Bug 47943 - DisabledComponentRemover is not used in Start class</li>
 <li>HeapDumper class for runtime generation of dumps</li>
 <li>Basic read-only JavaMail provider implementation for reading raw mail files</li>
+<li>Bug 49540 - Sort "Add" menus alphabetically</li>
 </ul>
 
 <h2>Non-functional changes</h2>
