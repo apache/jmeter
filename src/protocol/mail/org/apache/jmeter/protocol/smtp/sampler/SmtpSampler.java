@@ -117,16 +117,20 @@ public class SmtpSampler extends AbstractSampler {
         instance.setEmlMessage(getPropertyAsString(EML_MESSAGE_TO_SEND));
         instance.setUseEmlMessage(getPropertyAsBoolean(USE_EML));
 
-        if (getMailFrom().matches(".*@.*")) {
-            instance.setSender(getMailFrom());
+        if (getPropertyAsString(MAIL_FROM).matches(".*@.*")) {
+            instance.setSender(getPropertyAsString(MAIL_FROM));
         }
+
+        final String receiverTo = getPropertyAsString(SmtpSampler.RECEIVER_TO).trim();
+        final String receiverCC = getPropertyAsString(SmtpSampler.RECEIVER_CC).trim();
+        final String receiverBcc = getPropertyAsString(SmtpSampler.RECEIVER_BCC).trim();
 
         try {
             
             // Process address lists
-            instance.setReceiverTo(getPropNameAsAddresses(SmtpSampler.RECEIVER_TO));
-            instance.setReceiverCC(getPropNameAsAddresses(SmtpSampler.RECEIVER_CC));
-            instance.setReceiverBCC(getPropNameAsAddresses(SmtpSampler.RECEIVER_BCC));
+            instance.setReceiverTo(getPropNameAsAddresses(receiverTo));
+            instance.setReceiverCC(getPropNameAsAddresses(receiverCC));
+            instance.setReceiverBCC(getPropNameAsAddresses(receiverBcc));
 
             instance.setSubject(getPropertyAsString(SUBJECT)
                     + (getPropertyAsBoolean(INCLUDE_TIMESTAMP) ? 
@@ -137,8 +141,9 @@ public class SmtpSampler extends AbstractSampler {
             if (!getPropertyAsBoolean(USE_EML)) { // part is only needed if we
                 // don't send an .eml-file
                 instance.setMailBody(getPropertyAsString(MESSAGE));
-                if (!getAttachments().equals("")) {
-                    String[] attachments = getAttachments().split(FILENAME_SEPARATOR);
+                final String filesToAttach = getPropertyAsString(ATTACH_FILE);
+                if (!filesToAttach.equals("")) {
+                    String[] attachments = filesToAttach.split(FILENAME_SEPARATOR);
                     for (String attachment : attachments) {
                         instance.addAttachment(new File(attachment));
                     }
@@ -184,10 +189,10 @@ public class SmtpSampler extends AbstractSampler {
             instance.execute(message);
 
             // Set up the sample result details
-            res.setSamplerData("To: "
-                    + getPropertyAsString(SmtpSampler.RECEIVER_TO) + "\nCC: "
-                    + getPropertyAsString(SmtpSampler.RECEIVER_CC) + "\nBCC: "
-                    + getPropertyAsString(SmtpSampler.RECEIVER_BCC));
+            res.setSamplerData(
+                    "To: " + receiverTo 
+                    + "\nCC: " + receiverCC 
+                    + "\nBCC: " + receiverBcc);
             res.setDataType(SampleResult.TEXT);
             res.setResponseCodeOK();
             /*
@@ -262,12 +267,11 @@ public class SmtpSampler extends AbstractSampler {
     /**
      * Get the list of addresses or null.
      * Null is treated differently from an empty list.
-     * @param propName name of property containing addresses separated by ";"
-     * @return the list or null
+     * @param propValue addresses separated by ";"
+     * @return the list or null if the input was the empty string
      * @throws AddressException 
      */
-    private List<InternetAddress> getPropNameAsAddresses(String propName) throws AddressException{
-        final String propValue = getPropertyAsString(propName).trim();
+    private List<InternetAddress> getPropNameAsAddresses(String propValue) throws AddressException{
         if (propValue.length() > 0){ // we have at least one potential address
             List<InternetAddress> addresses = new ArrayList<InternetAddress>();
             for (String address : propValue.split(";")){
@@ -277,89 +281,5 @@ public class SmtpSampler extends AbstractSampler {
         } else {
             return null;            
         }
-    }
-
-    /**
-     * @return FQDN or IP of mailserver
-     */
-    public String getServer() {
-        return getPropertyAsString(SERVER);
-    }
-
-    /**
-     * @return Mailserver-Port
-     */
-    public int getPort() {
-        return getPropertyAsInt(SERVER_PORT);
-    }
-
-    /**
-     * @return Sender's mail address
-     */
-    public String getMailFrom() {
-        return getPropertyAsString(MAIL_FROM);
-    }
-
-    /**
-     * @return Receiver in field "to"
-     */
-    public String getReceiverTo() {
-        return getPropertyAsString(RECEIVER_TO);
-    }
-
-    /**
-     * @return Receiver in field "cc"
-     */
-    public String getReceiverCC() {
-        return getPropertyAsString(RECEIVER_CC);
-    }
-
-    /**
-     * @return Receiver in field "bcc"
-     */
-    public String getReceiverBCC() {
-        return getPropertyAsString(RECEIVER_BCC);
-    }
-
-    /**
-     * @return Username for mailserver-login
-     */
-    public String getUsername() {
-        return getPropertyAsString(USERNAME);
-    }
-
-    /**
-     * @return Password for mailserver-login
-     */
-    public String getPassword() {
-        return getPropertyAsString(PASSWORD);
-    }
-
-    /**
-     * @return Mail-subject
-     */
-    public String getSubject() {
-        return this.getPropertyAsString(SUBJECT);
-    }
-
-    /**
-     * @return true if timestamp is included in subject
-     */
-    public boolean getIncludeTimestamp() {
-        return this.getPropertyAsBoolean(INCLUDE_TIMESTAMP);
-    }
-
-    /**
-     * @return Path to file(s) to attach
-     */
-    public String getAttachments() {
-        return this.getPropertyAsString(ATTACH_FILE);
-    }
-
-    /**
-     * @return true if authentication is used to access mailserver
-     */
-    public boolean getUseAuthentication() {
-        return this.getPropertyAsBoolean(USE_AUTH);
     }
 }
