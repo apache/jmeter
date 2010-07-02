@@ -39,10 +39,10 @@ public class ConversionUtils {
     private static final String CHARSET_EQ = "charset="; // $NON-NLS-1$
     private static final int CHARSET_EQ_LEN = CHARSET_EQ.length();
     
-	private static final String SLASHDOTDOT = "/..";
-	private static final String DOTDOT = "..";
-	private static final String SLASH = "/";
-	private static final String COLONSLASHSLASH = "://";
+    private static final String SLASHDOTDOT = "/..";
+    private static final String DOTDOT = "..";
+    private static final String SLASH = "/";
+    private static final String COLONSLASHSLASH = "://";
 
     /**
      * Extract the encoding (charset) from the Content-Type,
@@ -111,14 +111,14 @@ public class ConversionUtils {
         return initial;
     }
 
-	/**
-	 * collapses absolute or relative URLs containing '/..' converting
-	 * http://host/path1/../path2 to http://host/path2 or /one/two/../three to
-	 * /one/three
-	 * 
-	 * @param url
-	 * @return collapsed URL
-	 */
+    /**
+     * collapses absolute or relative URLs containing '/..' converting
+     * http://host/path1/../path2 to http://host/path2 or /one/two/../three to
+     * /one/three
+     * 
+     * @param url
+     * @return collapsed URL
+     */
     public static String removeSlashDotDot(String url)
     {
         if (url == null || (url = url.trim()).length() < 4 || !url.contains(SLASHDOTDOT))
