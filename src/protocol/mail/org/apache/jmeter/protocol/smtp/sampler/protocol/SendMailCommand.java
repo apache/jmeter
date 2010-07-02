@@ -26,7 +26,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
-import java.security.Security;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -76,7 +75,7 @@ public class SendMailCommand {
     private List<InternetAddress> receiverTo;
     private List<InternetAddress> receiverCC;
     private List<InternetAddress> receiverBCC;
-    private HashMap<String, String> headers;
+    private HashMap<String, String> headers; // Not currently set up
     private String subject = "";
 
     private boolean useAuthentication = false;
@@ -126,17 +125,16 @@ public class SendMailCommand {
 
         // set properties using JAF
         props.put("mail." + protocol + ".host", smtpServer);
-        props.put("mail." + protocol + ".port", smtpPort);
-        props.put("mail." + protocol + ".auth", Boolean
-                .toString(useAuthentication));
-        // props.put("mail.debug","true");
+        props.put("mail." + protocol + ".port", getPort());
+        props.put("mail." + protocol + ".auth", Boolean.toString(useAuthentication));
+//        props.put("mail.debug","true");
 
         if (useStartTLS) {
             props.put("mail.smtp.starttls.enable", "true");
             //props.put("mail.debug", "true");
         }
 
-        if (trustAllCerts && protocol.equalsIgnoreCase("smtps")) {
+        if (trustAllCerts && useSSL) {
             props.setProperty("mail.smtps.socketFactory.class",
                     TRUST_ALL_SOCKET_FACTORY);
             props.setProperty("mail.smtps.socketFactory.fallback", "false");
@@ -264,7 +262,7 @@ public class SendMailCommand {
         tr.sendMessage(message, message.getAllRecipients());
 
         if (synchronousMode) {
-            listener.attend();
+            listener.attend(); // listener cannot be null here
         }
 
         tr.close();
@@ -697,6 +695,26 @@ public class SendMailCommand {
      */
     private String getProtocol() {
         return (useSSL) ? "smtps" : "smtp";
+    }
+
+    /**
+     * Returns port to be used for SMTP-connection - returns the
+     * default port for the protocol if no port has been supplied.
+     * 
+     * @return Port to be used for SMTP-connection
+     */
+    private String getPort() {
+        String port = smtpPort.trim();
+        if (port.length() > 0) { // OK, it has been supplied
+            return port;
+        }
+        if (useSSL){
+            return "465";
+        }
+        if (useStartTLS) {
+            return "587";
+        }
+        return "25";
     }
 
     /**
