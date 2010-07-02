@@ -22,6 +22,7 @@ import java.awt.Component;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -151,6 +152,7 @@ public final class MenuFactory {
             }
 
             initializeMenus();
+            sortPluginMenus();
         } catch (Throwable e) {
             log.error("", e);
             if (e instanceof Error){
@@ -638,5 +640,25 @@ public final class MenuFactory {
     }
     static int elementsToSkip_size() {
         return elementsToSkip.size();
+    }
+
+    /**
+     * Menu sort helper class
+     */
+    private static class MenuInfoComparator implements Comparator<MenuInfo> {
+       public int compare(MenuInfo o1, MenuInfo o2) {
+          return o1.getLabel().compareTo(o2.getLabel());
+}
+    }
+
+    /**
+     * Sort loaded menus
+     */
+    private static void sortPluginMenus() {
+       Iterator<List<MenuInfo>> it = menuMap.values().iterator();
+       while (it.hasNext()) {
+          List<MenuInfo> menuToSort = it.next();
+          Collections.sort(menuToSort, new MenuInfoComparator());
+       }
     }
 }
