@@ -289,6 +289,8 @@ public class SmtpPanel extends JPanel {
      */
     public void setUseAuth(boolean selected){
         cbUseAuth.setSelected(selected);
+        tfAuthPassword.setEditable(selected);
+        tfAuthUsername.setEditable(selected);
     }
 
     /**
