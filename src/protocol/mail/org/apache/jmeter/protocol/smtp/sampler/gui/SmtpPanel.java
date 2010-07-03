@@ -772,6 +772,11 @@ public class SmtpPanel extends JPanel {
         cbTrustAllCerts.setMargin(new java.awt.Insets(0, 0, 0, 0));
         cbTrustAllCerts.setEnabled(false);
         cbTrustAllCerts.setToolTipText(JMeterUtils.getResString("smtp_trustall_tooltip")); // $NON-NLS-1$
+        cbTrustAllCerts.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                cbTrustAllCertsActionPerformed(evt);
+            }
+        });
 
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -926,7 +931,7 @@ public class SmtpPanel extends JPanel {
      * ActionPerformed-method for checkbox "useAuth"
      *
      * @param evt
-     *            ActionEvent to be handeled
+     *            ActionEvent to be handled
      */
     private void cbUseAuthActionPerformed(ActionEvent evt) {
         tfAuthUsername.setEditable(cbUseAuth.isSelected());
@@ -937,7 +942,7 @@ public class SmtpPanel extends JPanel {
      * ActionPerformed-method for checkbox "useLocalTrustStore"
      *
      * @param evt
-     *            ActionEvent to be handeled
+     *            ActionEvent to be handled
      */
     private void cbUseLocalTrustStoreActionPerformed(
             ActionEvent evt) {
@@ -945,6 +950,21 @@ public class SmtpPanel extends JPanel {
         tfTrustStoreToUse.setEditable(selected); // must follow the checkbox setting
         if (selected) {
             cbTrustAllCerts.setSelected(false); // not compatible
+        }
+    }
+
+    /**
+     * ActionPerformed-method for checkbox "cbTrustAllCerts"
+     *
+     * @param evt
+     *            ActionEvent to be handled
+     */
+    private void cbTrustAllCertsActionPerformed(
+            ActionEvent evt) {
+        final boolean selected = cbTrustAllCerts.isSelected();
+        if (selected) {
+            cbUseLocalTrustStore.setSelected(false); // not compatible
+            tfTrustStoreToUse.setEditable(false); // must follow the checkbox setting
         }
     }
 
@@ -973,7 +993,7 @@ public class SmtpPanel extends JPanel {
      * ActionPerformed-method for button "browseButton", opens FileDialog-Object
      *
      * @param evt
-     *            ActionEvent to be handeled
+     *            ActionEvent to be handled
      */
     private void browseButtonActionPerformed(ActionEvent evt) {
         attachmentFileChooser.showOpenDialog(this);
@@ -1012,7 +1032,7 @@ public class SmtpPanel extends JPanel {
      * FileChoser-Object
      *
      * @param evt
-     *            ActionEvent to be handeled
+     *            ActionEvent to be handled
      */
     private void emlFileChooserActionPerformed(ActionEvent evt) {
         tfEmlMessage.setText(emlFileChooser.getSelectedFile().getAbsolutePath());
@@ -1022,7 +1042,7 @@ public class SmtpPanel extends JPanel {
      * ActionPerformed-method for button "emlButton", opens FileDialog-Object
      *
      * @param evt
-     *            ActionEvent to be handeled
+     *            ActionEvent to be handled
      */
     private void emlBrowseButtonActionPerformed(ActionEvent evt) {
         emlFileChooser.showOpenDialog(this);
@@ -1033,7 +1053,7 @@ public class SmtpPanel extends JPanel {
      * header
      *
      * @param evt
-     *            ActionEvent to be handeled
+     *            ActionEvent to be handled
      */
     private void cbEnforceStartTLSActionPerformed(ActionEvent evt) {
     }
@@ -1042,7 +1062,7 @@ public class SmtpPanel extends JPanel {
      * ItemStateChanged-method for radiobutton "securitySettings"
      *
      * @param evt
-     *            ItemEvent to be handeled
+     *            ItemEvent to be handled
      */
     private void rbSecuritySettingsItemStateChanged(ItemEvent evt) {
         final Object source = evt.getSource();
