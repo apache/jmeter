@@ -289,8 +289,8 @@ public class SmtpPanel extends JPanel {
      */
     public void setUseAuth(boolean selected){
         cbUseAuth.setSelected(selected);
-        tfAuthPassword.setEditable(selected);
-        tfAuthUsername.setEditable(selected);
+        tfAuthPassword.setEditable(selected); // ensure correctly set on initial display
+        tfAuthUsername.setEditable(selected); // ensure correctly set on initial display
     }
 
     /**
@@ -394,6 +394,7 @@ public class SmtpPanel extends JPanel {
      */
     public void setUseLocalTrustStore(boolean useLocalTrustStore) {
         cbUseLocalTrustStore.setSelected(useLocalTrustStore);
+        tfTrustStoreToUse.setEditable(useLocalTrustStore); // ensure correctly set on initial display
     }
 
     /**
@@ -940,9 +941,10 @@ public class SmtpPanel extends JPanel {
      */
     private void cbUseLocalTrustStoreActionPerformed(
             ActionEvent evt) {
-        if (cbUseLocalTrustStore.isSelected()) {
-            tfTrustStoreToUse.setEditable(true);
-            cbTrustAllCerts.setSelected(false);
+        final boolean selected = cbUseLocalTrustStore.isSelected();
+        tfTrustStoreToUse.setEditable(selected); // must follow the checkbox setting
+        if (selected) {
+            cbTrustAllCerts.setSelected(false); // not compatible
         }
     }
 
