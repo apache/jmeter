@@ -594,6 +594,7 @@ public class SmtpPanel extends JPanel {
         gridBagConstraintsMain = new GridBagConstraints();
         gridBagConstraintsMain.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraintsMain.anchor = GridBagConstraints.WEST;
+        gridBagConstraintsMain.weightx = 0.5;
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
@@ -1081,7 +1082,7 @@ public class SmtpPanel extends JPanel {
             cbUseLocalTrustStore.setEnabled(true);
             tfTrustStoreToUse.setEditable(false);
         } else if (source == rbUseStartTLS) {
-            cbTrustAllCerts.setEnabled(false);
+            cbTrustAllCerts.setEnabled(true);
             cbTrustAllCerts.setSelected(false);
             cbEnforceStartTLS.setEnabled(true);
             cbUseLocalTrustStore.setEnabled(true);
