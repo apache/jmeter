@@ -25,6 +25,8 @@ import java.awt.Component;
 import org.apache.jmeter.protocol.smtp.sampler.SmtpSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.CollectionProperty;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 
 /**
  * Class to build superstructure-gui for SMTP-panel, sets/gets value for a JMeter's testElement-object (i.e. also for save/load-purposes).
@@ -61,9 +63,9 @@ public class SmtpSamplerGui extends AbstractSamplerGui {
      */
     @Override
     public void configure(TestElement element) {
-        if (smtpPanel == null)
+        if (smtpPanel == null){
             smtpPanel = new SmtpPanel();
-
+        }
         smtpPanel.setServer(element.getPropertyAsString(SmtpSampler.SERVER));
         smtpPanel.setPort(element.getPropertyAsString(SmtpSampler.SERVER_PORT));
         smtpPanel.setMailFrom(element.getPropertyAsString(SmtpSampler.MAIL_FROM));
@@ -74,6 +76,12 @@ public class SmtpSamplerGui extends AbstractSamplerGui {
         smtpPanel.setBody(element.getPropertyAsString(SmtpSampler.MESSAGE));
         smtpPanel.setSubject(element.getPropertyAsString(SmtpSampler.SUBJECT));
         smtpPanel.setIncludeTimestamp(element.getPropertyAsBoolean(SmtpSampler.INCLUDE_TIMESTAMP));
+        JMeterProperty headers = element.getProperty(SmtpSampler.HEADER_FIELDS);
+        if (headers instanceof CollectionProperty) { // Might be NullProperty
+            smtpPanel.setHeaderFields((CollectionProperty)headers);            
+        } else {
+            smtpPanel.setHeaderFields(new CollectionProperty());
+        }
         smtpPanel.setAttachments(element.getPropertyAsString(SmtpSampler.ATTACH_FILE));
 
         smtpPanel.setUseEmlMessage(element.getPropertyAsBoolean(SmtpSampler.USE_EML));
@@ -145,6 +153,8 @@ public class SmtpSamplerGui extends AbstractSamplerGui {
 
         te.setProperty(SmtpSampler.MESSAGE_SIZE_STATS, Boolean.toString(smtpPanel.isMessageSizeStatistics()));
         te.setProperty(SmtpSampler.ENABLE_DEBUG, Boolean.toString(smtpPanel.isEnableDebug()));
+
+        te.setProperty(smtpPanel.getHeaderFields());
     }
 
     /**
