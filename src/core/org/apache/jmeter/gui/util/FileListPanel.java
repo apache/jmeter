@@ -198,7 +198,7 @@ public class FileListPanel extends JPanel implements ActionListener {
             this.clearFiles();
         } else if (e.getActionCommand().equals(ACTION_BROWSE)) {
             JFileChooser chooser = new JFileChooser();
-            String start = JMeterUtils.getPropDefault("user.dir", ""); // $NON-NLS-1$ // $NON-NLS-2$
+            String start = System.getProperty("user.dir", ""); // $NON-NLS-1$ // $NON-NLS-2$
             chooser.setCurrentDirectory(new File(start));
             chooser.setFileFilter(new JMeterFileFilter(new String[] { filetype }));
             chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);

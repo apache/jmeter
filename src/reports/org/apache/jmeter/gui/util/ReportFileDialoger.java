@@ -56,7 +56,7 @@ public final class ReportFileDialoger {
         // JFileChooser jfc = null;
 
         if (lastJFCDirectory == null) {
-            String start = JMeterUtils.getPropDefault("user.dir", "");
+            String start = System.getProperty("user.dir", "");
 
             if (!start.equals("")) {
                 jfc.setCurrentDirectory(new File(start));
@@ -110,7 +110,7 @@ public final class ReportFileDialoger {
      */
     public static JFileChooser promptToSaveFile(String filename, String[] extensions) {
         if (lastJFCDirectory == null) {
-            String start = JMeterUtils.getPropDefault("user.dir", "");
+            String start = System.getProperty("user.dir", "");
             if (!start.equals("")) {
                 jfc = new JFileChooser(new File(start));
             }

@@ -25,7 +25,6 @@ package org.apache.jmeter.services;
 import java.io.IOException;
 
 import org.apache.jmeter.junit.JMeterTestCase;
-import org.apache.jmeter.util.JMeterUtils;
 
 public class TestFileServer extends JMeterTestCase {
 
@@ -98,6 +97,6 @@ public class TestFileServer extends JMeterTestCase {
         FS.closeFile(infile);
         FS.setBasedir("y");
         FS.closeFiles();
-        FS.setBasedir(JMeterUtils.getProperty("user.dir"));
+        FS.setBasedir(System.getProperty("user.dir"));
     }
 }
