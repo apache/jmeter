@@ -94,6 +94,7 @@ public class SmtpSamplerGui extends AbstractSamplerGui {
         smtpPanel.setPassword(element.getPropertyAsString(SmtpSampler.PASSWORD));
 
         smtpPanel.setMessageSizeStatistic(element.getPropertyAsBoolean(SmtpSampler.MESSAGE_SIZE_STATS));
+        smtpPanel.setEnableDebug(element.getPropertyAsBoolean(SmtpSampler.ENABLE_DEBUG));
 
         super.configure(element);
     }
@@ -143,6 +144,7 @@ public class SmtpSamplerGui extends AbstractSamplerGui {
         te.setProperty(SmtpSampler.USERNAME, smtpPanel.getUsername());
 
         te.setProperty(SmtpSampler.MESSAGE_SIZE_STATS, Boolean.toString(smtpPanel.isMessageSizeStatistics()));
+        te.setProperty(SmtpSampler.ENABLE_DEBUG, Boolean.toString(smtpPanel.isEnableDebug()));
     }
 
     /**
