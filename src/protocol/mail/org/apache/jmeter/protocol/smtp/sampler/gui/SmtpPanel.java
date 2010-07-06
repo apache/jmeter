@@ -91,6 +91,7 @@ public class SmtpPanel extends JPanel {
     private JTextField tfSubject;
     private JCheckBox cbIncludeTimestamp;
     private JCheckBox cbMessageSizeStats;
+    private JCheckBox cbEnableDebug;
     private JCheckBox cbUseEmlMessage;
 
     /**
@@ -284,7 +285,7 @@ public class SmtpPanel extends JPanel {
 
     /**
      * Set whether mail server needs auth.
-     * 
+     *
      * @param selected
      */
     public void setUseAuth(boolean selected){
@@ -351,6 +352,14 @@ public class SmtpPanel extends JPanel {
      */
     public void setEnforceStartTLS(boolean enforceStartTLS) {
         cbEnforceStartTLS.setSelected(enforceStartTLS);
+    }
+
+    public boolean isEnableDebug() {
+        return cbEnableDebug.isSelected();
+    }
+
+    public void setEnableDebug(boolean selected){
+        cbEnableDebug.setSelected(selected);
     }
 
     /**
@@ -499,10 +508,6 @@ public class SmtpPanel extends JPanel {
         cbMessageSizeStats.setSelected(val);
     }
 
-    public JRadioButton isUseNoSecurity() {
-        return rbUseNone;
-    }
-
     public void setUseNoSecurity(boolean selected) {
         rbUseNone.setSelected(selected);
     }
@@ -567,6 +572,7 @@ public class SmtpPanel extends JPanel {
         cbEnforceStartTLS = new JCheckBox(JMeterUtils.getResString("smtp_enforcestarttls")); // $NON-NLS-1$
         cbIncludeTimestamp = new JCheckBox(JMeterUtils.getResString("smtp_timestamp")); // $NON-NLS-1$
         cbMessageSizeStats = new JCheckBox(JMeterUtils.getResString("smtp_messagesize")); // $NON-NLS-1$
+        cbEnableDebug = new JCheckBox(JMeterUtils.getResString("smtp_enabledebug")); // $NON-NLS-1$
         cbUseLocalTrustStore = new JCheckBox(JMeterUtils.getResString("smtp_usetruststore")); // $NON-NLS-1$
         cbUseEmlMessage = new JCheckBox(JMeterUtils.getResString("smtp_eml")); // $NON-NLS-1$
 
@@ -606,7 +612,7 @@ public class SmtpPanel extends JPanel {
          */
         JPanel panelServerSettings = new JPanel(new GridBagLayout());
         panelServerSettings.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(), 
+                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("smtp_server_settings"))); // $NON-NLS-1$
 
         gridBagConstraints.gridx = 0;
@@ -643,7 +649,7 @@ public class SmtpPanel extends JPanel {
          */
         JPanel panelMailSettings = new JPanel(new GridBagLayout());
         panelMailSettings.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(), 
+                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("smtp_mail_settings"))); // $NON-NLS-1$
 
         gridBagConstraints.gridx = 0;
@@ -687,11 +693,10 @@ public class SmtpPanel extends JPanel {
          */
         JPanel panelAuthSettings = new JPanel(new GridBagLayout());
         panelAuthSettings.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(), 
+                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("smtp_auth_settings"))); // $NON-NLS-1$
 
-        cbUseAuth.setBorder(BorderFactory.createEmptyBorder(0, 0,
-                0, 0));
+        cbUseAuth.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         cbUseAuth.setMargin(new java.awt.Insets(0, 0, 0, 0));
         cbUseAuth.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -732,7 +737,7 @@ public class SmtpPanel extends JPanel {
          */
         JPanel panelSecuritySettings = new JPanel(new GridBagLayout());
         panelSecuritySettings.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(), 
+                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("smtp_security_settings"))); // $NON-NLS-1$
 
         rbUseNone.setSelected(true);
@@ -831,7 +836,7 @@ public class SmtpPanel extends JPanel {
          */
         JPanel panelMessageSettings = new JPanel(new GridBagLayout());
         panelMessageSettings.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(), 
+                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("smtp_message_settings"))); // $NON-NLS-1$
 
         gridBagConstraints.gridx = 0;
@@ -912,16 +917,19 @@ public class SmtpPanel extends JPanel {
          */
         JPanel panelAdditionalSettings = new JPanel(new GridBagLayout());
         panelAdditionalSettings.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(), 
+                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("smtp_additional_settings"))); // $NON-NLS-1$
 
-        cbMessageSizeStats.setBorder(BorderFactory
-                .createEmptyBorder(0, 0, 0, 0));
+        cbMessageSizeStats.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         cbMessageSizeStats.setMargin(new java.awt.Insets(0, 0, 0, 0));
 
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         panelAdditionalSettings.add(cbMessageSizeStats, gridBagConstraints);
+
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        panelAdditionalSettings.add(cbEnableDebug, gridBagConstraints);
 
         gridBagConstraintsMain.gridx = 0;
         gridBagConstraintsMain.gridy = 5;
@@ -1097,6 +1105,7 @@ public class SmtpPanel extends JPanel {
     public void clear() {
         cbIncludeTimestamp.setSelected(false);
         cbMessageSizeStats.setSelected(false);
+        cbEnableDebug.setSelected(false);
         cbUseEmlMessage.setSelected(false);
         cbUseAuth.setSelected(false);
         taMessage.setText("");

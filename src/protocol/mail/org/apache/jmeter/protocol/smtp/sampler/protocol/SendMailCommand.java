@@ -18,14 +18,9 @@
 
 package org.apache.jmeter.protocol.smtp.sampler.protocol;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,7 +53,7 @@ public class SendMailCommand {
 
     // local vars
     private static final Logger logger = LoggingManager.getLoggerForClass();
-    
+
     // Use the actual class so the name must be correct.
     private static final String TRUST_ALL_SOCKET_FACTORY = TrustAllSSLSocketFactory.class.getName();
 
@@ -66,8 +61,8 @@ public class SendMailCommand {
     private boolean useStartTLS = false;
     private boolean trustAllCerts = false;
     private boolean enforceStartTLS = false;
-    private boolean startTLSSuccessful = false;
     private boolean sendEmlMessage = false;
+    private boolean enableDebug;
     private String smtpServer;
     private String smtpPort;
     private String sender;
@@ -88,10 +83,6 @@ public class SendMailCommand {
     private List<File> attachments;
 
     private String mailBody;
-
-    // needed to check starttls functionality
-    private PrintStream debugOutStream;
-    private BufferedReader debugReader;
 
     // case we are measuring real time of spedition
     private boolean synchronousMode;
@@ -114,8 +105,8 @@ public class SendMailCommand {
      * properties such as protocol, authentication, etc.
      *
      * @return Message-object to be sent to execute()-method
-     * @throws MessagingException 
-     * @throws IOException 
+     * @throws MessagingException
+     * @throws IOException
      */
     public Message prepareMessage() throws MessagingException, IOException {
 
@@ -124,20 +115,51 @@ public class SendMailCommand {
         String protocol = getProtocol();
 
         // set properties using JAF
-        props.put("mail." + protocol + ".host", smtpServer);
-        props.put("mail." + protocol + ".port", getPort());
-        props.put("mail." + protocol + ".auth", Boolean.toString(useAuthentication));
-//        props.put("mail.debug","true");
+        props.setProperty("mail." + protocol + ".host", smtpServer);
+        props.setProperty("mail." + protocol + ".port", getPort());
+        props.setProperty("mail." + protocol + ".auth", Boolean.toString(useAuthentication));
 
-        if (useStartTLS) {
-            props.put("mail.smtp.starttls.enable", "true");
-            //props.put("mail.debug", "true");
+        if (enableDebug) {
+            props.setProperty("mail.debug","true");
         }
 
-        if (trustAllCerts && useSSL) {
-            props.setProperty("mail.smtps.socketFactory.class",
-                    TRUST_ALL_SOCKET_FACTORY);
-            props.setProperty("mail.smtps.socketFactory.fallback", "false");
+        if (useStartTLS) {
+            props.setProperty("mail.smtp.starttls.enable", "true");
+            if (enforceStartTLS){
+                // Requires JavaMail 1.4.2+
+                props.setProperty("mail.smtp.starttls.require", "true");
+            }
+        }
+
+        if (trustAllCerts) {
+            if (useSSL) {
+                props.setProperty("mail.smtps.ssl.socketFactory.class", TRUST_ALL_SOCKET_FACTORY);
+                props.setProperty("mail.smtps.ssl.socketFactory.fallback", "false");
+            } else if (useStartTLS) {
+                props.setProperty("mail.smtp.ssl.socketFactory.class", TRUST_ALL_SOCKET_FACTORY);
+                props.setProperty("mail.smtp.ssl.socketFactory.fallback", "false");
+            }
+        } else if (useLocalTrustStore){
+            File truststore = new File(trustStoreToUse);
+            logger.info("load local truststore - try to load truststore from: "+truststore.getAbsolutePath());
+            if(!truststore.exists()){
+                logger.info("load local truststore -Failed to load truststore from: "+truststore.getAbsolutePath());
+                truststore = new File(FileServer.getFileServer().getBaseDir(), trustStoreToUse);
+                logger.info("load local truststore -Attempting to read truststore from:  "+truststore.getAbsolutePath());
+                if(!truststore.exists()){
+                    logger.info("load local truststore -Failed to load truststore from: "+truststore.getAbsolutePath() + ". Local truststore not available, aborting execution.");
+                    throw new IOException("Local truststore file not found. Also not available under : " + truststore.getAbsolutePath());
+                }
+            }
+            if (useSSL) {
+                // Requires JavaMail 1.4.2+
+                props.put("mail.smtps.ssl.socketFactory", new LocalTrustStoreSSLSocketFactory(truststore));
+                props.put("mail.smtps.ssl.socketFactory.fallback", "false");
+            } else if (useStartTLS) {
+                // Requires JavaMail 1.4.2+
+                props.put("mail.smtp.ssl.socketFactory", new LocalTrustStoreSSLSocketFactory(truststore));
+                props.put("mail.smtp.ssl.socketFactory.fallback", "false");
+            }
         }
 
         session = Session.getInstance(props, null);
@@ -166,6 +188,7 @@ public class SendMailCommand {
         if (null != sender) {
             message.setFrom(new InternetAddress(sender));
         }
+
         if (null != subject) {
             message.setSubject(subject);
         }
@@ -177,7 +200,6 @@ public class SendMailCommand {
         }
 
         if (receiverCC != null) {
-
             InternetAddress[] cc = new InternetAddress[receiverCC.size()];
             receiverCC.toArray(cc);
             message.setRecipients(Message.RecipientType.CC, cc);
@@ -198,52 +220,15 @@ public class SendMailCommand {
     }
 
     /**
-     * Sends message to mailserver, including all necessary tasks. Contains 2
-     * ugly hacks to ensure the use of StartTLS if needed (see comments "UGLY
-     * HACK X") where logfiles are monitored
+     * Sends message to mailserver, waiting for delivery if using synchronous mode.
      *
      * @param message
      *            Message prior prepared by prepareMessage()
-     * @throws MessagingException 
-     * @throws IOException 
-     * @throws InterruptedException 
+     * @throws MessagingException
+     * @throws IOException
+     * @throws InterruptedException
      */
     public void execute(Message message) throws MessagingException, IOException, InterruptedException {
-
-        // TODO change to use thread-safe method
-/*
- * Reduce impact on other threads - don't clear the setting each time.
- * Won't work with samplers that use both settings of the option, but they won't work reliably anyway across threads.
- * 
- * With this change, the code should be thread-safe if the user does not select useLocalTrustStore.
- * 
- *         System.clearProperty("javax.net.ssl.trustStore");
- */
-
-        if (useLocalTrustStore) {
-            File truststore = new File(trustStoreToUse);
-            logger.info("load local truststore - try to load truststore from: "+truststore.getAbsolutePath());
-            if(!truststore.exists()){
-                logger.info("load local truststore -Failed to load truststore from: "+truststore.getAbsolutePath());
-                truststore = new File(FileServer.getFileServer().getBaseDir(), trustStoreToUse);
-                logger.info("load local truststore -Attempting to read truststore from:  "+truststore.getAbsolutePath());
-                if(!truststore.exists()){
-                    logger.info("load local truststore -Failed to load truststore from: "+truststore.getAbsolutePath() + ". Local truststore not available, aborting execution.");
-                    throw new IOException("Local truststore file not found. Also not available under : " + truststore.getAbsolutePath());
-                }
-            }
-            logger.warn("Setting javax.net.ssl.trustStore - may affect the behaviour of other threads");
-            System.setProperty("javax.net.ssl.trustStore", truststore.getAbsolutePath());
-        }
-
-        /*
-         * UGLY HACK 1: redirect session-DebugOutput to ensure
-         * StartTLS-Support
-         */
-        ByteArrayOutputStream debugOutputStream = new ByteArrayOutputStream();
-        debugOutStream = new PrintStream(debugOutputStream);
-        session.setDebugOut(debugOutStream);
-        session.setDebug(true);
 
         Transport tr = session.getTransport(getProtocol());
         SynchronousTransportListener listener = null;
@@ -267,34 +252,6 @@ public class SendMailCommand {
 
         tr.close();
         logger.debug("transport closed");
-
-        /*
-         * UGLY HACK 2: read from redirected debug-output
-         */
-        debugOutStream.flush();
-        debugReader = new BufferedReader(new InputStreamReader(
-                new ByteArrayInputStream(debugOutputStream.toByteArray())));
-        String line;
-        int i = 0;
-        while ((line = debugReader.readLine()) != null) {
-            logger.debug("server line " + i + ": " + line);
-            // unusable for the astf runs bom
-            //serverResponse.append(line);
-            //serverResponse.append("\n");
-            if (line.matches(".*Ready to start TLS.*")) {
-                if (useStartTLS && enforceStartTLS) {
-                    startTLSSuccessful = true;
-                }
-            }
-        }
-        debugReader.close();
-        debugOutStream.close();
-        session.setDebugOut(System.out);
-        if (useStartTLS && enforceStartTLS) {
-            if (!startTLSSuccessful) {
-                throw new MessagingException("StartTLS failed");
-            }
-        }
 
         logger.debug("message sent");
         return;
@@ -700,7 +657,7 @@ public class SendMailCommand {
     /**
      * Returns port to be used for SMTP-connection - returns the
      * default port for the protocol if no port has been supplied.
-     * 
+     *
      * @return Port to be used for SMTP-connection
      */
     private String getPort() {
@@ -755,7 +712,7 @@ public class SendMailCommand {
 
     /**
      * Set the mail body.
-     * 
+     *
      * @param body
      */
     public void setMailBody(String body){
@@ -764,5 +721,10 @@ public class SendMailCommand {
 
     public StringBuffer getServerResponse() {
         return this.serverResponse;
+    }
+
+    public void setEnableDebug(boolean selected) {
+        enableDebug = selected;
+
     }
 }
