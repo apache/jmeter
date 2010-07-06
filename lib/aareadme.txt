@@ -109,9 +109,15 @@ http://www.mozilla.org/rhino/download.html
 - javascript function
 - BSF (Javascript)
 
-junit 4.7
+jTidy-r938
+----
+- http: various modules for parsing html
+- org.xml.sax - various
+- XPathUtil (XPath assertion)
+
+junit 4.8.1
 -----------
-- unit tests
+- unit tests, JUnit sampler
 
 logkit-2.0
 ----------
@@ -131,12 +137,6 @@ http://www.apache.org/dyn/closer.cgi/xml/xalan-j
 soap-2.3.1
 ----------
 - WebServiceSampler ONLY
-
-jTidy-r938
-----
-- http: various modules for parsing html
-- org.xml.sax - various
-- XPathUtil (XPath assertion)
 
 velocity-1.6.2
 --------------
