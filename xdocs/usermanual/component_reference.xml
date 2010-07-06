@@ -1492,11 +1492,7 @@ In non-GUI mode, JMeter will exit if some threads fail to stop within the 5 seco
 </component>
 
 
-<component name="SMTP Sampler"  index="&sect-num;.1.19"  width="644" height="801" screenshot="smtp_sampler.png">
-<note>
-BETA code. This sampler currently uses System properties (javax.net.ssl.trustStore) if "Use local truststore" is selected.
-This may cause problems with other samplers and other threads.
-</note>
+<component name="SMTP Sampler"  index="&sect-num;.1.19"  width="644" height="810" screenshot="smtp_sampler.png">
 <description>
 <p>
 The SMTP Sampler can send mail messages using SMTP/SMTPS protocol. 
@@ -1527,14 +1523,14 @@ Defaults are: SMTP=25, SSL=465, StartTLS=587
 <property name="Enforce StartTLS" required="">If the server does not start the TLS protocol the connection will be terminated.</property>
 <property name="Trust All Certificates" required="">When selected it will accept all certificates independent of the CA.</property>
 <property name="Use local truststore" required="">When selected it will only accept certificates that are locally trusted.</property>
-<property name="Local truststore" required="">Local file containing the trusted certificates.
-WARNING: selecting this may affect the behaviour of other threads and samplers with a different setting.</property>
+<property name="Local truststore" required="">Local file containing the trusted certificates.</property>
 <property name="Subject" required="">The e-mail message subject.</property>
 <property name="Include timestamp in subject" required="">Includes the System.currentTimemilis() in the subject line.</property>
 <property name="Message" required="">The message body.</property>
 <property name="Attach files" required="">Files to be attached to the message.</property>
 <property name="Send .eml" required="">If set, the .eml file will be sent instead of the entries in the Subject, Message, and Attached files</property>
 <property name="Calculate message size" required="">Calculates the message size and stores it in the sample result.</property>
+<property name="Enable debug logging?" required="">If set, then the "mail.debug" property is set to "true"</property>
 </properties>
 </component>
 
