@@ -77,6 +77,7 @@ public class SmtpSampler extends AbstractSampler {
     public final static String TRUSTSTORE_TO_USE    = "SMTPSampler.trustStoreToUse"; // $NON-NLS-1$
     public final static String USE_EML              = "SMTPSampler.use_eml"; // $NON-NLS-1$
     public final static String EML_MESSAGE_TO_SEND  = "SMTPSampler.emlMessageToSend"; // $NON-NLS-1$
+    public static final String ENABLE_DEBUG         = "SMTPSampler.enableDebug"; // $NON-NLS-1$
 
     // Used to separate attachment file names in JMX fields - do not change!
     public static final String FILENAME_SEPARATOR = ";";
@@ -117,6 +118,8 @@ public class SmtpSampler extends AbstractSampler {
         instance.setEmlMessage(getPropertyAsString(EML_MESSAGE_TO_SEND));
         instance.setUseEmlMessage(getPropertyAsBoolean(USE_EML));
 
+        instance.setEnableDebug(getPropertyAsBoolean(ENABLE_DEBUG));
+
         if (getPropertyAsString(MAIL_FROM).matches(".*@.*")) {
             instance.setSender(getPropertyAsString(MAIL_FROM));
         }
@@ -126,14 +129,13 @@ public class SmtpSampler extends AbstractSampler {
         final String receiverBcc = getPropertyAsString(SmtpSampler.RECEIVER_BCC).trim();
 
         try {
-            
             // Process address lists
             instance.setReceiverTo(getPropNameAsAddresses(receiverTo));
             instance.setReceiverCC(getPropNameAsAddresses(receiverCC));
             instance.setReceiverBCC(getPropNameAsAddresses(receiverBcc));
 
             instance.setSubject(getPropertyAsString(SUBJECT)
-                    + (getPropertyAsBoolean(INCLUDE_TIMESTAMP) ? 
+                    + (getPropertyAsBoolean(INCLUDE_TIMESTAMP) ?
                             " <<< current timestamp: " + new Date().getTime() + " >>>"
                             : ""
                        ));
@@ -190,8 +192,8 @@ public class SmtpSampler extends AbstractSampler {
 
             // Set up the sample result details
             res.setSamplerData(
-                    "To: " + receiverTo 
-                    + "\nCC: " + receiverCC 
+                    "To: " + receiverTo
+                    + "\nCC: " + receiverCC
                     + "\nBCC: " + receiverBcc);
             res.setDataType(SampleResult.TEXT);
             res.setResponseCodeOK();
@@ -269,7 +271,7 @@ public class SmtpSampler extends AbstractSampler {
      * Null is treated differently from an empty list.
      * @param propValue addresses separated by ";"
      * @return the list or null if the input was the empty string
-     * @throws AddressException 
+     * @throws AddressException
      */
     private List<InternetAddress> getPropNameAsAddresses(String propValue) throws AddressException{
         if (propValue.length() > 0){ // we have at least one potential address
@@ -277,9 +279,9 @@ public class SmtpSampler extends AbstractSampler {
             for (String address : propValue.split(";")){
                 addresses.add(new InternetAddress(address.trim()));
             }
-            return addresses;            
+            return addresses;
         } else {
-            return null;            
+            return null;
         }
     }
 }
