@@ -37,7 +37,6 @@ import java.util.Map;
 import java.util.Random;
 
 import org.apache.jmeter.gui.JMeterFileFilter;
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -57,7 +56,7 @@ import org.apache.log.Logger;
 public class FileServer {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final String DEFAULT_BASE = JMeterUtils.getProperty("user.dir");
+    private static final String DEFAULT_BASE = System.getProperty("user.dir");
 
     //@GuardedBy("this")
     private File base;
