@@ -42,7 +42,7 @@ public final class DirectoryDialoger {
     public static JFileChooser promptToOpenFile() {
 
         if (lastJFCDirectory == null) {
-            String start = JMeterUtils.getPropDefault("user.dir", "");
+            String start = System.getProperty("user.dir", "");
 
             if (!start.equals("")) {
                 jfc.setCurrentDirectory(new File(start));
