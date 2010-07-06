@@ -30,10 +30,7 @@ import javax.net.ssl.X509TrustManager;
 
 /**
  * This class can be used as a SocketFactory with SSL-connections.
- * Its purpose is to ensure that all certificates - no matter from which CA -are accepted to secure the SSL-connection.
- * It has to be kept in mind that a SocketFactory must not be used with StartTLS, because the javaMail-api assumes
- * to use SSL when using the socketFactory.class- or socketFactory.fallback-property.
- *
+ * Its purpose is to ensure that all certificates - no matter from which CA - are accepted to secure the SSL-connection.
  */
 public class TrustAllSSLSocketFactory extends SSLSocketFactory  {
 
@@ -45,7 +42,7 @@ public class TrustAllSSLSocketFactory extends SSLSocketFactory  {
     public TrustAllSSLSocketFactory(){
         SSLContext sslcontext = null;
         try {
-            sslcontext = SSLContext.getInstance( "TLS");
+            sslcontext = SSLContext.getInstance("TLS"); // $NON-NLS-1$
             sslcontext.init( null, new TrustManager[]{
                     new X509TrustManager() {
                         public java.security.cert.X509Certificate[] getAcceptedIssuers() {
