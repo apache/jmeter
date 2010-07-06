@@ -22,7 +22,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
@@ -39,7 +38,10 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.services.FileServer;
+import org.apache.jmeter.testelement.property.CollectionProperty;
+import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -70,7 +72,7 @@ public class SendMailCommand {
     private List<InternetAddress> receiverTo;
     private List<InternetAddress> receiverCC;
     private List<InternetAddress> receiverBCC;
-    private HashMap<String, String> headers; // Not currently set up
+    private CollectionProperty headerFields;
     private String subject = "";
 
     private boolean useAuthentication = false;
@@ -96,7 +98,7 @@ public class SendMailCommand {
      * Standard-Constructor
      */
     public SendMailCommand() {
-        headers = new HashMap<String, String>();
+        headerFields = new CollectionProperty();
         attachments = new ArrayList<File>();
     }
 
@@ -211,8 +213,9 @@ public class SendMailCommand {
             message.setRecipients(Message.RecipientType.BCC, bcc);
         }
 
-        for (String key : headers.keySet()) {
-            message.setHeader(key, headers.get(key));
+        for (int i = 0; i < headerFields.size(); i++) {
+        	Argument argument = (Argument)((TestElementProperty)headerFields.get(i)).getObjectValue();
+            message.setHeader(argument.getName(), argument.getValue());
         }
 
         message.saveChanges();
@@ -545,20 +548,20 @@ public class SendMailCommand {
     /**
      * Returns headers for current message - standard getter
      *
-     * @return HashMap of headers for current message
+     * @return CollectionProperty of headers for current message
      */
-    public HashMap<String, String> getHeaders() {
-        return headers;
+    public CollectionProperty getHeaders() {
+        return headerFields;
     }
 
     /**
      * Sets headers for current message
      *
-     * @param headers
-     *            HashMap of headers for current message
+     * @param headerFields
+     *            CollectionProperty of headers for current message
      */
-    public void setHeaders(HashMap<String, String> headers) {
-        this.headers = headers;
+    public void setHeaderFields(CollectionProperty headerFields) {
+        this.headerFields = headerFields;
     }
 
     /**
@@ -571,19 +574,22 @@ public class SendMailCommand {
      *            Value for current header
      */
     public void addHeader(String headerName, String headerValue) {
-        if (this.headers == null)
-            this.headers = new HashMap<String, String>();
-        this.headers.put(headerName, headerValue);
+        if (this.headerFields == null){
+            this.headerFields = new CollectionProperty();
+        }
+        Argument argument = new Argument(headerName, headerValue);
+        this.headerFields.addItem(argument);
     }
 
     /**
      * Deletes all current headers in HashMap
      */
     public void clearHeaders() {
-        if (this.headers == null)
-            this.headers = new HashMap<String, String>();
-        else
-            this.headers.clear();
+        if (this.headerFields == null){
+            this.headerFields = new CollectionProperty();
+        }else{
+            this.headerFields.clear();
+        }
     }
 
     /**
