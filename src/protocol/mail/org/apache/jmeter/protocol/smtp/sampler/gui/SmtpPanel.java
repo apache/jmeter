@@ -24,6 +24,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -36,7 +39,10 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.protocol.smtp.sampler.SmtpSampler;
+import org.apache.jmeter.testelement.property.CollectionProperty;
+import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -93,6 +99,14 @@ public class SmtpPanel extends JPanel {
     private JCheckBox cbMessageSizeStats;
     private JCheckBox cbEnableDebug;
     private JCheckBox cbUseEmlMessage;
+    
+    private JPanel headerFieldsPanel;
+    private JButton addHeaderFieldButton;
+    private JLabel headerFieldName;
+    private JLabel headerFieldValue;
+    private Map<JTextField, JTextField> headerFields = new HashMap<JTextField, JTextField>();
+    private Map<JButton,JTextField> removeButtons = new HashMap<JButton, JTextField>();
+    private int headerGridY = 0;
 
     /**
      * Creates new form SmtpPanel, standard constructer. Calls
@@ -528,7 +542,33 @@ public class SmtpPanel extends JPanel {
         tfAuthUsername.setText(username);
     }
 
-    /**
+    public CollectionProperty getHeaderFields() {
+    	CollectionProperty result = new CollectionProperty();
+    	result.setName(SmtpSampler.HEADER_FIELDS);
+		for (Iterator<JTextField> iterator = headerFields.keySet().iterator(); iterator.hasNext();) {
+			JTextField headerName = iterator.next();
+			String name = headerName.getText();
+			String value = headerFields.get(headerName).getText();
+			Argument argument = new Argument(name, value);
+			result.addItem(argument);
+		}
+    	return result;
+	}
+
+    public void setHeaderFields(CollectionProperty fields) {
+    	clearHeaderFields();
+    	for (int i = 0; i < fields.size(); i++) {
+    		Argument argument = (Argument)((TestElementProperty)fields.get(i)).getObjectValue();
+			String name = argument.getName();
+			JButton removeButton = addHeaderActionPerformed(null);
+			JTextField nameTF = removeButtons.get(removeButton);
+			nameTF.setText(name);
+			JTextField valueTF = headerFields.get(nameTF);
+			valueTF.setText(argument.getValue());			
+		}
+    	validate();
+	}
+	/**
      * Main method of class, builds all gui-components for SMTP-sampler.
      */
     private void initComponents() {
@@ -606,6 +646,7 @@ public class SmtpPanel extends JPanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         gridBagConstraints.fill = GridBagConstraints.NONE;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 0.5;
 
         /*
          * Server Settings
@@ -707,24 +748,28 @@ public class SmtpPanel extends JPanel {
         gridBagConstraints.gridy = 0;
         panelAuthSettings.add(cbUseAuth, gridBagConstraints);
 
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 1;
+        gridBagConstraints.weightx = 0;
         panelAuthSettings.add(jlUsername, gridBagConstraints);
 
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.weightx = 0.5;
         panelAuthSettings.add(tfAuthUsername, gridBagConstraints);
         tfAuthUsername.setEditable(false);
 
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 1;
+        gridBagConstraints.weightx = 0;
         panelAuthSettings.add(jlPassword, gridBagConstraints);
 
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.weightx = 0.5;
         panelAuthSettings.add(tfAuthPassword, gridBagConstraints);
         tfAuthPassword.setEditable(false);
 
@@ -750,12 +795,12 @@ public class SmtpPanel extends JPanel {
         gridBagConstraints.gridy = 0;
         panelSecuritySettings.add(rbUseNone, gridBagConstraints);
 
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
         panelSecuritySettings.add(rbUseSSL, gridBagConstraints);
 
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
         panelSecuritySettings.add(rbUseStartTLS, gridBagConstraints);
 
         rbUseNone.addItemListener(new ItemListener() {
@@ -784,7 +829,7 @@ public class SmtpPanel extends JPanel {
             }
         });
 
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         panelSecuritySettings.add(cbTrustAllCerts, gridBagConstraints);
 
@@ -798,8 +843,8 @@ public class SmtpPanel extends JPanel {
                 });
         cbEnforceStartTLS.setToolTipText(JMeterUtils.getResString("smtp_enforcestarttls_tooltip")); // $NON-NLS-1$
 
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
         panelSecuritySettings.add(cbEnforceStartTLS, gridBagConstraints);
 
         cbUseLocalTrustStore.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
@@ -813,18 +858,18 @@ public class SmtpPanel extends JPanel {
 
         cbUseLocalTrustStore.setToolTipText(JMeterUtils.getResString("smtp_usetruststore_tooltip")); // $NON-NLS-1$
 
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         panelSecuritySettings.add(cbUseLocalTrustStore, gridBagConstraints);
 
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 1;
         panelSecuritySettings.add(jlTrustStoreToUse, gridBagConstraints);
 
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 2;
         panelSecuritySettings.add(tfTrustStoreToUse, gridBagConstraints);
 
         gridBagConstraintsMain.gridx = 0;
@@ -845,29 +890,68 @@ public class SmtpPanel extends JPanel {
 
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         panelMessageSettings.add(tfSubject, gridBagConstraints);
 
         cbIncludeTimestamp.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         cbIncludeTimestamp.setMargin(new java.awt.Insets(0, 0, 0, 0));
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.NONE;
         panelMessageSettings.add(cbIncludeTimestamp, gridBagConstraints);
 
+        /*
+         * Add the header panel
+         */
+
+        addHeaderFieldButton = new JButton(JMeterUtils.getResString("smtp_header_add"));
+        addHeaderFieldButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                addHeaderActionPerformed(evt);
+            }
+        });
+        headerFieldName = new JLabel(JMeterUtils.getResString("smtp_header_name"));
+        headerFieldValue = new JLabel(JMeterUtils.getResString("smtp_header_value"));
+        headerFieldsPanel = new JPanel(new GridBagLayout());
+        
+        headerFieldName.setVisible(false);
+        headerFieldValue.setVisible(false);        
+
+        headerGridY=0;
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = headerGridY++;
+        headerFieldsPanel.add(addHeaderFieldButton, gridBagConstraints);
+        
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = headerGridY;
+        headerFieldsPanel.add(headerFieldName, gridBagConstraints);
+
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = headerGridY++;
+        headerFieldsPanel.add(headerFieldValue, gridBagConstraints);
+        
+        gridBagConstraintsMain.gridx = 1;
+        gridBagConstraintsMain.gridy = 1;
+        panelMessageSettings.add(headerFieldsPanel, gridBagConstraintsMain);        
+
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
         panelMessageSettings.add(jlMessage, gridBagConstraints);
 
         taMessage.setBorder(BorderFactory.createBevelBorder(1));
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         panelMessageSettings.add(taMessage, gridBagConstraints);
 
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = GridBagConstraints.NONE;
         panelMessageSettings.add(jlAttachFile, gridBagConstraints);
 
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         panelMessageSettings.add(tfAttachment, gridBagConstraints);
         tfAttachment.setToolTipText(JMeterUtils.getResString("smtp_attach_file_tooltip")); // $NON-NLS-1$
 
@@ -878,7 +962,8 @@ public class SmtpPanel extends JPanel {
         });
 
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = GridBagConstraints.NONE;
         panelMessageSettings.add(browseButton, gridBagConstraints);
 
         cbUseEmlMessage.setSelected(false);
@@ -889,11 +974,13 @@ public class SmtpPanel extends JPanel {
         });
 
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = GridBagConstraints.NONE;
         panelMessageSettings.add(cbUseEmlMessage, gridBagConstraints);
 
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         tfEmlMessage.setEnabled(false);
         panelMessageSettings.add(tfEmlMessage, gridBagConstraints);
 
@@ -905,11 +992,12 @@ public class SmtpPanel extends JPanel {
         emlBrowseButton.setEnabled(false);
 
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = GridBagConstraints.NONE;
         panelMessageSettings.add(emlBrowseButton, gridBagConstraints);
 
         gridBagConstraintsMain.gridx = 0;
-        gridBagConstraintsMain.gridy = 4;
+        gridBagConstraintsMain.gridy = 5;
         add(panelMessageSettings, gridBagConstraintsMain);
 
         /*
@@ -932,7 +1020,7 @@ public class SmtpPanel extends JPanel {
         panelAdditionalSettings.add(cbEnableDebug, gridBagConstraints);
 
         gridBagConstraintsMain.gridx = 0;
-        gridBagConstraintsMain.gridy = 5;
+        gridBagConstraintsMain.gridy = 6;
         add(panelAdditionalSettings, gridBagConstraintsMain);
     }
 
@@ -1122,6 +1210,85 @@ public class SmtpPanel extends JPanel {
         tfSubject.setText("");
         tfTrustStoreToUse.setText("");
         rbUseNone.setSelected(true);
+   		clearHeaderFields();
+		validate();        
     }
 
+	private void clearHeaderFields() {
+		headerFieldName.setVisible(false);
+   		headerFieldValue.setVisible(false);
+
+		for (Iterator<JButton> iterator = removeButtons.keySet().iterator(); iterator.hasNext();) {
+			JButton removeButton = iterator.next();
+	   		JTextField headerName = removeButtons.get(removeButton);
+			JTextField headerValue = headerFields.get(headerName);
+			
+			headerFieldsPanel.remove(headerName);
+			if (headerValue != null){ // Can be null (not sure why)
+			    headerFieldsPanel.remove(headerValue);
+			}
+			headerFieldsPanel.remove(removeButton);	
+			headerFields.remove(headerName);
+			iterator.remove();
+		}
+	}
+    
+    private JButton addHeaderActionPerformed(ActionEvent evt){
+		if(headerFields.size() == 0){
+    		headerFieldName.setVisible(true);
+    		headerFieldValue.setVisible(true);
+        }
+    	JTextField nameTF = new JTextField();
+    	JTextField valueTF = new JTextField();    	
+    	JButton removeButton = new JButton(JMeterUtils.getResString("smtp_header_remove"));
+    	headerFields.put(nameTF, valueTF);
+    	removeButtons.put(removeButton, nameTF);
+    	
+    	removeButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+            	removeHeaderActionPerformed(evt);
+            }
+        });
+    	
+    	GridBagConstraints gridBagConstraints = new GridBagConstraints();
+    	gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    	gridBagConstraints.weightx = 0.5;
+    	gridBagConstraints.anchor = GridBagConstraints.WEST;
+    	
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = headerGridY;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        headerFieldsPanel.add(nameTF, gridBagConstraints);
+        
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = headerGridY;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        headerFieldsPanel.add(valueTF, gridBagConstraints);
+        
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = headerGridY++;
+        gridBagConstraints.fill = GridBagConstraints.NONE;
+        headerFieldsPanel.add(removeButton, gridBagConstraints);
+        
+        validate();
+        return removeButton;
+    }
+    
+    private void removeHeaderActionPerformed(ActionEvent evt){
+    	final Object source = evt.getSource();
+    	if(source != null && source instanceof JButton){
+			if(headerFields.size() == 1){
+	    		headerFieldName.setVisible(false);
+	    		headerFieldValue.setVisible(false);
+	        }
+			JTextField nameTF = removeButtons.get(source);
+			JTextField valueTF = headerFields.get(nameTF);
+			headerFields.remove(nameTF);
+			
+			headerFieldsPanel.remove(nameTF);
+			headerFieldsPanel.remove(valueTF);
+			headerFieldsPanel.remove((JButton)source);
+			validate();
+		}
+    }
 }

@@ -173,6 +173,8 @@ This does not affect existing test plans.
 <li>Bug 47947 - Mail Reader Sampler should allow port to be overridden</li>
 <li>Bug 48155 - Multiple problems / enhancements with JMS protocol classes</li>
 <li>Allow MailReader sampler to use arbitrary protocols</li>
+<li>Bug 45053 - SMTP-Sampler for JMeter</li>
+<li>Bug 49552 - Add Message Headers on SMTPSampler</li>
 <li>
 JMS Publisher and Subscriber now support both Topics and Queues.
 Added read Timeout to JMS Subscriber.
