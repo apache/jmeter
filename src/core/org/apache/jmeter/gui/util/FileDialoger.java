@@ -25,7 +25,6 @@ import javax.swing.filechooser.FileFilter;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterFileFilter;
-import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Class implementing a file open dialogue
@@ -59,7 +58,7 @@ public final class FileDialoger {
         // JFileChooser jfc = null;
 
         if (lastJFCDirectory == null) {
-            String start = JMeterUtils.getPropDefault("user.dir", ""); //$NON-NLS-1$//$NON-NLS-2$
+            String start = System.getProperty("user.dir", ""); //$NON-NLS-1$//$NON-NLS-2$
 
             if (start.length() > 0) {
                 jfc.setCurrentDirectory(new File(start));
@@ -117,7 +116,7 @@ public final class FileDialoger {
      */
     public static JFileChooser promptToSaveFile(String filename, String[] extensions) {
         if (lastJFCDirectory == null) {
-            String start = JMeterUtils.getPropDefault("user.dir", "");//$NON-NLS-1$//$NON-NLS-2$
+            String start = System.getProperty("user.dir", "");//$NON-NLS-1$//$NON-NLS-2$
             if (start.length() > 0) {
                 jfc = new JFileChooser(new File(start));
             }

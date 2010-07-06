@@ -77,7 +77,7 @@ public class HttpRequestHdr {
     /** Where to store the temporary binary files */
     private static final String binaryDirectory =
         JMeterUtils.getPropDefault("proxy.binary.directory",// $NON-NLS-1$
-                JMeterUtils.getProperty("user.dir")); // $NON-NLS-1$ proxy.binary.filetype=binary
+                System.getProperty("user.dir")); // $NON-NLS-1$ proxy.binary.filetype=binary
 
     static {
         String binaries = JMeterUtils.getPropDefault("proxy.binary.types", // $NON-NLS-1$

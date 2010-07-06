@@ -87,7 +87,7 @@ public class SSLManagerCommand implements Command {
     private void sslManager() {
         SSLManager.reset();
 
-        keyStoreChooser = new JFileChooser(JMeterUtils.getJMeterProperties().getProperty("user.dir")); //$NON-NLS-1$
+        keyStoreChooser = new JFileChooser(System.getProperty("user.dir")); //$NON-NLS-1$
         keyStoreChooser.addChoosableFileFilter(new AcceptPKCS12FileFilter());
         keyStoreChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         int retVal = keyStoreChooser.showOpenDialog(GuiPackage.getInstance().getMainFrame());
