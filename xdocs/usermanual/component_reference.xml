@@ -1523,7 +1523,10 @@ Defaults are: SMTP=25, SSL=465, StartTLS=587
 <property name="Enforce StartTLS" required="">If the server does not start the TLS protocol the connection will be terminated.</property>
 <property name="Trust All Certificates" required="">When selected it will accept all certificates independent of the CA.</property>
 <property name="Use local truststore" required="">When selected it will only accept certificates that are locally trusted.</property>
-<property name="Local truststore" required="">Local file containing the trusted certificates.</property>
+<property name="Local truststore" required="">Path to file containing the trusted certificates.
+Relative paths are resolved against the current directory.
+<br />Failing that, against the directory containing the test script (JMX file).
+</property>
 <property name="Subject" required="">The e-mail message subject.</property>
 <property name="Include timestamp in subject" required="">Includes the System.currentTimemilis() in the subject line.</property>
 <property name="Add Header" required="No">Additional headers can be defined using this button.</property>
