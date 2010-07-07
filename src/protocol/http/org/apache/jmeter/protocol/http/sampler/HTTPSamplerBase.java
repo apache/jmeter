@@ -1038,22 +1038,15 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     /**
      * Download the resources of an HTML page.
-     * <p>
-     * If createContainerResult is true, the returned result will contain one
-     * subsample for each request issued, including the original one that was
-     * passed in. It will otherwise look exactly like that original one.
-     * <p>
-     * If createContainerResult is false, one subsample will be added to the
-     * provided result for each requests issued.
-     *
+     * 
      * @param res
      *            result of the initial request - must contain an HTML response
      * @param container
-     *            for storing the results
+     *            for storing the results, if any
      * @param frameDepth
      *            Depth of this target in the frame structure. Used only to
      *            prevent infinite recursion.
-     * @return "Container" result with one subsample per request issued
+     * @return res if no resources exist, otherwise the "Container" result with one subsample per request issued
      */
     protected HTTPSampleResult downloadPageResources(HTTPSampleResult res, HTTPSampleResult container, int frameDepth) {
         Iterator<URL> urls = null;
@@ -1079,11 +1072,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
         // Iterate through the URLs and download each image:
         if (urls != null && urls.hasNext()) {
-            if (container == null) {
-                res = new HTTPSampleResult(res);
-            } else {
-                res = container;
-            }
+            res = container;
 
             // Get the URL matcher
             String re=getEmbeddedUrlRE();
@@ -1098,7 +1087,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 }
             }
             while (urls.hasNext()) {
-                Object binURL = urls.next();
+                Object binURL = urls.next(); // See catch clause below
                 try {
                     URL url = (URL) binURL;
                     if (url == null) {
@@ -1123,7 +1112,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                         res.addSubResult(binRes);
                         res.setSuccessful(res.isSuccessful() && binRes.isSuccessful());
                     }
-                } catch (ClassCastException e) {
+                } catch (ClassCastException e) { // TODO can this happen?
                     res.addSubResult(errorResult(new Exception(binURL + " is not a correct URI"), res));
                     res.setSuccessful(false);
                     continue;
@@ -1219,6 +1208,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      */
     protected HTTPSampleResult followRedirects(HTTPSampleResult res, int frameDepth) {
         HTTPSampleResult totalRes = new HTTPSampleResult(res);
+        totalRes.addRawSubResult(res);
         HTTPSampleResult lastRes = res;
 
         int redirect;

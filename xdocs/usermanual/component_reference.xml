@@ -193,13 +193,16 @@ https.default.protocol=SSLv3
 		<property name="Follow Redirects" required="Yes">
 		This only has any effect if "Redirect Automatically" is not enabled.
 		If set, the JMeter sampler will check if the response is a redirect and follow it if so.
-		The redirect response will appear as an additional sample.
+		The initial redirect and further responses will appear as additional samples.
+        The URL and data fields of the parent sample will be taken from the final (non-redirected)
+        sample, but the parent byte count and elapsed time include all samples.
+        The latency is taken from the initial response (versions of JMeter after 2.3.4 - previously it was zero).
 		Note that the HttpClient sampler may log the following message:<br/>
 		"Redirect requested but followRedirects is disabled"<br/>
 		This can be ignored.
         <br/>
         In versions after 2.3.4, JMeter will collapse paths of the form '/../segment' in
-        both absolute and relative URLs. For example http://host/one/../two => http://host/two.
+        both absolute and relative redirect URLs. For example http://host/one/../two => http://host/two.
         If necessary, this behaviour can be suppressed by setting the JMeter property
         <code>httpsampler.redirect.removeslashdotdot=false</code>
 		</property>
@@ -315,7 +318,7 @@ JMeter 2.1.2 introduces the a new property <b>HTTPResponse.parsers</b>, which is
  If the HTTPResponse.parser property is not set, JMeter reverts to the previous behaviour,
  i.e. only text/html responses will be scanned</p>
 <b>Emulating slow connections (HttpClient only):</b><br></br>
-The HttpClient version of the sampler supports emulation of slow connections; see the following entries in jmeter.proerties:
+The HttpClient version of the sampler supports emulation of slow connections; see the following entries in jmeter.properties:
 <pre>
 # Define characters per second > 0 to emulate slow connections
 #httpclient.socket.http.cps=0
