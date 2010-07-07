@@ -79,6 +79,11 @@ JMSConfigGui has been renamed as JMSSamplerGui.
 This does not affect existing test plans.
 </p>
 
+<p>
+The constructor public SampleResult(SampleResult res) has been changed to become a true "copy constructor".
+It no longer calls addSubResult(). This may possibly affect some 3rd party add-ons.
+</p>
+
 <h2>Bug fixes</h2>
 
 <h3>HTTP Samplers and Proxy</h3>
@@ -92,6 +97,7 @@ This does not affect existing test plans.
 <li>Bug 46901 - HTTP Sampler does not process var/func refs correctly in first file parameter</li>
 <li>Bug 43678 - Handle META tag http-equiv charset?</li>
 <li>Bug 49294 - Images not downloaded from redirected-to pages</li>
+<li>Bug 49560 - wrong "size in bytes" when following redirections</li>
 </ul>
 
 <h3>Other Samplers</h3>
