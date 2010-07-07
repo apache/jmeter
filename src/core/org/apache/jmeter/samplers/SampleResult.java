@@ -116,9 +116,11 @@ public class SampleResult implements Serializable {
 
     private String label = "";// Never return null
 
-    private String resultFileName = ""; // Filename used by ResultSaver
+    /** Filename used by ResultSaver */
+    private String resultFileName = "";
 
-    private String samplerData; // The data used by the sampler
+    /** The data used by the sampler */
+    private String samplerData;
 
     private String threadName = ""; // Never return null
 
@@ -131,7 +133,8 @@ public class SampleResult implements Serializable {
     private String requestHeaders = "";
 
     // TODO timeStamp == 0 means either not yet initialised or no stamp available (e.g. when loading a results file)
-    private long timeStamp = 0;// the time stamp - can be start or end
+    /** the time stamp - can be start or end */
+    private long timeStamp = 0;
 
     private long startTime = 0;
 
@@ -139,7 +142,8 @@ public class SampleResult implements Serializable {
 
     private long idleTime = 0;// Allow for non-sample time
 
-    private long pauseTime = 0;// Start of pause (if any)
+    /** Start of pause (if any) */
+    private long pauseTime = 0;
 
     private List<AssertionResult> assertionResults;
 
@@ -150,7 +154,8 @@ public class SampleResult implements Serializable {
     private boolean success;
 
     //@GuardedBy("this"")
-    private final Set<String> files = new HashSet<String>(); // files that this sample has been saved in
+    /** files that this sample has been saved in */
+    private final Set<String> files = new HashSet<String>();
 
     private String dataEncoding;// (is this really the character set?) e.g.
                                 // ISO-8895-1, UTF-8
@@ -161,16 +166,22 @@ public class SampleResult implements Serializable {
     // a reference time from the millisecond clock
     private static final long referenceTimeMsClock = System.currentTimeMillis();
 
-    private long time = 0; // elapsed time
+    /** elapsed time */
+    private long time = 0;
 
-    private long latency = 0; // time to first response
+    /** time to first response */
+    private long latency = 0;
 
-    private boolean stopThread = false; // Should thread terminate?
+    /** Should thread terminate? */
+    private boolean stopThread = false;
 
-    private boolean stopTest = false; // Should test terminate?
+    /** Should test terminate? */
+    private boolean stopTest = false;
 
-    private boolean stopTestNow = false; // Should test terminate abruptly?
+    /** Should test terminate abruptly? */
+    private boolean stopTestNow = false;
 
+    /** Is the sampler acting as a monitor? */
     private boolean isMonitor = false;
 
     private int sampleCount = 1;
@@ -202,37 +213,45 @@ public class SampleResult implements Serializable {
     }
 
     /**
-     * Construct a 'parent' result for an already-existing result, essentially
-     * cloning it
-     *
-     * @param res
-     *            existing sample result
+     * Copy constructor.
+     * 
+     * @param res existing sample result
      */
     public SampleResult(SampleResult res) {
-        //TODO - why not just copy all the fields? Do we need the calculations that some of the set() methods perform?
-        //TODO - why are the following not copied:
-        // assertionResults, bytes, idleTime, latency, parent,pauseTime,resultFileName,sampleCount,samplerData,saveConfig
-        // stopTest, stopThread, subResults,threadName
-        setStartTime(res.getStartTime());
-        setEndTime(res.getStartTime());
-        // was setElapsed(0) which is the same as setStartTime=setEndTime=now
-
-        setSampleLabel(res.getSampleLabel());
-        setRequestHeaders(res.getRequestHeaders());
-        setResponseData(res.getResponseData());
-        setResponseCode(res.getResponseCode());
-        setSuccessful(res.isSuccessful());
-        setResponseMessage(res.getResponseMessage());
-        setDataType(res.getDataType());
-        setResponseHeaders(res.getResponseHeaders());
-        setContentType(res.getContentType());
-        setDataEncoding(res.getDataEncodingNoDefault());
-        setURL(res.getURL());
-
-        setGroupThreads(res.getGroupThreads());
-        setAllThreads(res.getAllThreads());
-
-        addSubResult(res); // this will add res.getTime() to getTime().
+        allThreads = res.allThreads;//OK
+        assertionResults = res.assertionResults;// TODO ??
+        bytes = res.bytes;
+        contentType = res.contentType;//OK
+        dataEncoding = res.dataEncoding;//OK
+        dataType = res.dataType;//OK
+        endTime = res.endTime;//OK
+        // files is created automatically, and applies per instance
+        groupThreads = res.groupThreads;//OK
+        idleTime = res.idleTime;
+        isMonitor = res.isMonitor;
+        label = res.label;//OK
+        latency = res.latency;
+        location = res.location;//OK
+        parent = res.parent; // TODO ??
+        pauseTime = res.pauseTime;
+        requestHeaders = res.requestHeaders;//OK
+        responseCode = res.responseCode;//OK
+        responseData = res.responseData;//OK
+        responseHeaders = res.responseHeaders;//OK
+        responseMessage = res.responseMessage;//OK
+        // Don't copy this; it is per instance resultFileName = res.resultFileName;
+        sampleCount = res.sampleCount;
+        samplerData = res.samplerData;
+        saveConfig = res.saveConfig;
+        startTime = res.startTime;//OK
+        stopTest = res.stopTest;
+        stopTestNow = res.stopTestNow;
+        stopThread = res.stopThread;
+        subResults = res.subResults; // TODO ??
+        success = res.success;//OK
+        threadName = res.threadName;//OK
+        time = res.time;
+        timeStamp = res.timeStamp;
     }
 
     public boolean isStampedAtStart() {
@@ -460,21 +479,36 @@ public class SampleResult implements Serializable {
         return assertionResults.toArray(new AssertionResult[0]);
     }
 
+    /**
+     * Add a subresult and adjust the parent byte count and end-time.
+     * 
+     * @param subResult
+     */
     public void addSubResult(SampleResult subResult) {
         String tn = getThreadName();
         if (tn.length()==0) {
             tn=Thread.currentThread().getName();//TODO do this more efficiently
             this.setThreadName(tn);
         }
-        subResult.setThreadName(tn);
-        if (subResults == null) {
-            subResults = new ArrayList<SampleResult>();
-        }
-        subResults.add(subResult);
+        subResult.setThreadName(tn); // TODO is this really necessary?
+
         // Extend the time to the end of the added sample
         setEndTime(Math.max(getEndTime(), subResult.getEndTime()));
         // Include the byte count for the added sample
         setBytes(getBytes() + subResult.getBytes());
+        addRawSubResult(subResult);
+    }
+    
+    /**
+     * Add a subresult to the collection without updating any parent fields.
+     * 
+     * @param subResult
+     */
+    public void addRawSubResult(SampleResult subResult){
+        if (subResults == null) {
+            subResults = new ArrayList<SampleResult>();
+        }
+        subResults.add(subResult);
         subResult.setParent(this);
     }
 
