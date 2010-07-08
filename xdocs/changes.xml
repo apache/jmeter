@@ -103,16 +103,16 @@ It no longer calls addSubResult(). This may possibly affect some 3rd party add-o
 <h3>Other Samplers</h3>
 <ul>
 <li>Bug 47420 - LDAP extended request not closing connections during add request</li>
-<li>Bug 47870 - JMSSubscriber fails due to NPE</li>
-<li>Bug 47899 - NullPointerExceptions in ReceiveSubscriber constructor</li>
-<li>Bug 48144 - NPE in OnMessageSubscriber</li>
-<li>Bug 47992 - JMS Point-to-Point Request - Response option doesn't work</li>
 <li>Bug 48573 - LDAPExtSampler directory context handling</li>
+<li>Bug 47870 - JMSSubscriber fails due to NPE</li>
+<li>Bug 47899 - NullPointerExceptions in JMS ReceiveSubscriber constructor</li>
+<li>Bug 48144 - NPE in JMS OnMessageSubscriber</li>
+<li>Bug 47992 - JMS Point-to-Point Request - Response option doesn't work</li>
 <li>Bug 48579 - Single Bind does not show config information when LdapExt Sampler is accessed</li>
-<li>Bug 48747 - TCP Sampler swallows exceptions</li>
 <li>Bug 49111 - "Message With ID Not Found" Error on JMS P2P sampler.</li>
 <li>Bug 47949 - JMS Subscriber never receives all the messages</li>
 <li>Bug 46142 - JMS Point-to-Point correlation problems</li>
+<li>Bug 48747 - TCP Sampler swallows exceptions</li>
 <li>Bug 48709 - TCP Sampler Config setting "classname" has no effect</li>
 </ul>
 
@@ -130,6 +130,7 @@ It no longer calls addSubResult(). This may possibly affect some 3rd party add-o
 <li>Bug 48603 - Mailer Visualiser sends two emails for a single failed response</li>
 <li>Correct calculation of min/max/std.dev for aggregated samples (Summary Report)</li>
 <li>Bug 48889 - Wrong response time with mode=Statistical and num_sample_threshold > 1</li>
+<li>Bug 47398 - SampleEvents are sent twice over RMI in distributed testing and non gui mode</li>
 </ul>
 
 <h3>Assertions</h3>
@@ -153,6 +154,10 @@ It no longer calls addSubResult(). This may possibly affect some 3rd party add-o
 <li>Bug 48901 - Endless wait by adding Synchronizing Timer</li>
 <li>Bug 49149 - usermanual/index.html has typo in link to "Regular Expressions" page</li>
 <li>Bug 49394 - Classcast Exception in ActionRouter.postActionPerformed</li>
+<li>Bug 48136 - Essential files missing from source tarball.<br/>
+Source archives now contain all source files, including source files previously only provided in the binary archives.
+</li>
+<li>Bug 48331 - XpathExtractor does not return XML string representations for a Nodeset</li>
 </ul>
 
 <!-- ==================================================== -->
@@ -175,7 +180,7 @@ It no longer calls addSubResult(). This may possibly affect some 3rd party add-o
 <li>JUnit sampler now supports JUnit4 tests (using annotations)</li>
 <li>Bug 47900 - Allow JMS SubscriberSampler to be interrupted</li>
 <li>Added JSR223 Sampler</li>
-<li>Bug 47556 - JMS-PoinToPoint-Sampler Timeout field should use Strings</li>
+<li>Bug 47556 - JMS-PointToPoint-Sampler Timeout field should use Strings</li>
 <li>Bug 47947 - Mail Reader Sampler should allow port to be overridden</li>
 <li>Bug 48155 - Multiple problems / enhancements with JMS protocol classes</li>
 <li>Allow MailReader sampler to use arbitrary protocols</li>
@@ -198,7 +203,6 @@ General clean-up of JMS code.
 
 <h3>Listeners</h3>
 <ul>
-<li>Bug 47398 - SampleEvents are sent twice over RMI in distributed testing and non gui mode</li>
 <li>Added DataStrippingSample sender - supports "Stripped" and "StrippedBatch" modes.</li>
 <li>Added Comparison Assertion Visualizer</li>
 <li>Bug 47907 - Improvements (enhancements and I18N) Comparison Assertion and Comparison Visualizer</li>
@@ -224,7 +228,6 @@ In particular, Aggregate Report can now handle large numbers of samples.
 <li>Bug 47952 - Added JSR223 PreProcessor and PostProcessor</li>
 <li>Added JSR223 Assertion</li>
 <li>Added BSF Timer and JSR223 Timer</li>
-<li>Bug 48331 - XpathExtractor does not return XML string representations for a Nodeset</li>
 <li>Bug 48511 - add parent,child,all selection to regex extractor</li>
 <li>Add Sampler scope selection to XPathExtractor</li>
 <li>Regular Expression Extractor, Response Assertion and Size Assertion can now be applied to a JMeter variable</li>
@@ -254,10 +257,7 @@ In particular, Aggregate Report can now handle large numbers of samples.
 
 <h2>Non-functional changes</h2>
 <ul>
-<li>Bug 48136 - Essential files missing from source tarball.<br/>
-Source archives now contain all source files, including source files previously only provided in the binary archives.
-</li>
-<li>Beanshell, JavaMail (Apache Geronimo) and JMS API (Apache Geronimo) jars are now included in the binary archive.</li>
+<li>Beanshell, JavaMail and JMS API (Apache Geronimo) jars are now included in the binary archive.</li>
 <li>Add TestBean Table Editor support</li>
 <li>Removed all external libraries from SVN; added download_jars Ant target</li>
 <li>Updated various jar files:
