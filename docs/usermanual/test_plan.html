@@ -114,6 +114,15 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <li><a href="http://jakarta.apache.org/site/cvsindex.html">SVN Repositories</a>
 </li>
 </ul>
+<p><strong>Foundation</strong></p>
+<ul>
+<li><a href="http://www.apache.org/">ASF</a>
+</li>
+<li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
+</li>
+<li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a>
+</li>
+</ul>
 </td>
 <td width="80%" align="left" valign="top">
 <table>
@@ -612,7 +621,11 @@ The timer will cause JMeter to delay a certain amount of time
 before
 </b>
  each
-request that a thread makes.
+sampler which is in its 
+<a href="#scoping_rules">
+scope
+</a>
+.
 </p>
 <p>
 
@@ -658,6 +671,16 @@ will then check that the text is present in the HTTP response.  If JMeter cannot
 text, then it will mark this as a failed request.
 </p>
 <p>
+
+Note that assertions apply to all samplers which are in its 
+<a href="#scoping_rules">
+scope
+</a>
+.
+To restrict the assertion to a single sampler, add the assertion as a child of the sampler.
+
+</p>
+<p>
 To view the assertion results, add an Assertion Listener to the Thread Group.
 Failed Assertions will also show up in the Tree View and Table Listeners, 
 and will count towards the error %age for example in the Aggregate and Summary reports.
@@ -693,7 +716,7 @@ branch.  For example, we defined two HTTP Request Defaults elements, "Web Defaul
 Since we placed "Web Defaults 1" inside a Loop Controller, only "Web Page 2" can access it.  The other HTTP
 requests will use "Web Defaults 2", since we placed it in the Thread Group (the "parent" of all other branches).
 </p>
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='$width' height='$height' src="../images/screenshots/http-config/http-config-example.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/http-config/http-config-example.png"><br>
 <font size="-1">Figure 1 -
 	Test Plan Showing Accessability of Configuration Elements
 </font></td></tr></table></p>
@@ -919,7 +942,7 @@ Assertion 1
 
 The JMeter test tree contains elements that are both hierarchical and ordered.  Some elements in the test trees are strictly hierarchical (Listeners, Config Elements, Post-Procesors, Pre-Processors, Assertions, Timers), and some are primarily ordered (controllers, samplers).  When you create your test plan, you will create an ordered list of sample request (via Samplers) that represent a set of steps to be executed.  These requests are often organized within controllers that are also ordered.  Given the following test tree:
 </p>
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='$width' height='$height' src="../images/screenshots/scoping1.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/scoping1.png"><br>
 <font size="-1">Example test tree
 </font></td></tr></table></p>
 <p>
@@ -938,7 +961,7 @@ If its parent is a request, then it is applied to that request. If its
 parent is a Controller, then it affects all requests that are descendants of
 that Controller.  In the following test tree:
 </p>
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='$width' height='$height' src="../images/screenshots/scoping2.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/scoping2.png"><br>
 <font size="-1">Hierarchy example
 </font></td></tr></table></p>
 <p>
@@ -947,7 +970,7 @@ Assertion #1 is applied only to Request One, while Assertion #2 is applied to Re
 <p>
 Another example, this time using Timers:
 </p>
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='$width' height='$height' src="../images/screenshots/scoping3.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/scoping3.png"><br>
 <font size="-1">complex example
 </font></td></tr></table></p>
 <p>
@@ -1164,7 +1187,7 @@ jmeter ... -Jhost=www3.example.org -Jloops=13
 </td></tr>
 <tr><td colspan="2">
 <div align="center"><font color="#525D76" size="-1"><em>
-Copyright &copy; 1999-2009, Apache Software Foundation
+Copyright &copy; 1999-2010, Apache Software Foundation
 </em></font></div>
 </td></tr>
 <tr><td colspan="2">

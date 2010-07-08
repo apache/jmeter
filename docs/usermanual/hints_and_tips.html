@@ -30,7 +30,7 @@
 
 
 
-<title>JMeter - User's Manual: Introduction</title>
+<title>JMeter - User's Manual: Hints and Tips</title>
 </head>
 
 <body bgcolor="#ffffff" text="#000000" link="#525D76">
@@ -131,7 +131,10 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <div align="right"><a href="index.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Index</font></a></div>
 </td>
 <td bgcolor="#525D76">
-<div align="right"><a href="get-started.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Next</font></a></div>
+<div align="right"><a href="glossary.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Next</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="regular_expressions.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Prev</font></a></div>
 </td>
 </tr>
 </table>
@@ -139,64 +142,66 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="intro"><strong>1. Introduction</strong></a></font>
+<a name="hints"><strong>21. Hints and Tips</strong></a></font>
 </td></tr>
 <tr><td>
 <blockquote>
 <p>
 
+This section is a collection of various hints and tips that have been suggested by various questions on the JMeter User list.
+If you don't find what you are looking for here, please check the 
+<a href="http://wiki.apache.org/jakarta-jmeter">
+JMeter Wiki
+</a>
+.
+Also, try search the JMeter User list; someone may well have already provided a solution.
 
-<b>
-Apache JMeter
-</b>
- is a 100% pure Java desktop application designed
-to load test client/server software
-(such as a 
-<a href="build-web-test-plan.html">
-web application
-</a>
-).  It may be used
-to test performance both on static and dynamic
-resources such as static files, Java Servlets, CGI scripts, Java objects, 
-<a href="build-db-test-plan.html">
-databases
-</a>
-,
-
-<a href="build-ftp-test-plan.html">
-FTP servers
-</a>
-, and more. JMeter can be used to simulate a heavy
-load on a server, network or object to test its strength or to analyze
-overall performance under different load types.
-</p>
-<p>
-
-Additionally, JMeter can help you regression test your application by letting you create
-test scripts with 
-<a href="test_plan.html#assertions">
-assertions
-</a>
- to validate that your application is returning the
-results you expect.  For maximum flexibility, JMeter lets you create these assertions using
-regular expressions.
-</p>
-<p>
-But please note that JMeter is not a browser.
 </p>
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="history"><strong>1.1 History</strong></a>
+<a name="variable_and_threads"><strong>21.1 Passing variables between threads</strong></a>
 </font>
 </td></tr>
 <tr><td>
 <blockquote>
 <p>
-Stefano Mazzocchi of the Apache Software Foundation was the original developer of JMeter.
-He wrote it primarily to test the performance of Apache JServ (a project that has
-since been replaced by the Apache Tomcat project).  We redesigned JMeter to enhance the GUI
-and to add functional-testing capabilities.
+
+JMeter variables have thread scope. This is deliberate, so that threads can act indepently.
+However sometimes there is a need to pass variables between different threads, in the same or different Thread Groups.
+
+</p>
+<p>
+
+One way to do this is to use a property instead. 
+Properties are shared between all JMeter threads, so if one thread 
+<a href="functions.html#__setProperty">
+sets a property
+</a>
+,
+another thread can 
+<a href="functions.html#__P">
+read
+</a>
+ the updated value.
+
+</p>
+<p>
+
+If there is a lot of information that needs to be passed between threads, then consider using a file.
+For example you could use the 
+<a href="component_reference.html#Save_Responses_to_a_file">
+Save Responses to a file
+</a>
+
+listener or perhaps a BeanShell PostProcessor in one thread, and read the file using the HTTP Sampler "file:" protocol,
+and extract the information using a PostProcessor or BeanShell element.
+
+</p>
+<p>
+
+If you can derive the data before starting the test, then it may well be better to store it in a file,
+read it using CSV Dataset.
 
 </p>
 </blockquote>
@@ -206,16 +211,18 @@ and to add functional-testing capabilities.
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="future"><strong>1.2 The Future</strong></a>
+<a name="debug_logging"><strong>21.2 Enabling Debug logging</strong></a>
 </font>
 </td></tr>
 <tr><td>
 <blockquote>
 <p>
-We hope to see JMeter's capabilities rapidly expand as developers take advantage of its
-pluggable architecture.  The primary goal of further development is to make JMeter the most
-useful regression testing tool as possible, without compromising JMeter's load-testing
-capabilities.
+
+Most test elements include debug logging. If running a test plan from the GUI, 
+select the test element and use the Help Menu to enable or disable logging.
+The Help Menu also has an option to display the GUI and test element class names.
+You can use these to determine the correct property setting to change the logging level.
+
 </p>
 </blockquote>
 </td></tr>
@@ -232,7 +239,10 @@ capabilities.
 <div align="right"><a href="index.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Index</font></a></div>
 </td>
 <td bgcolor="#525D76">
-<div align="right"><a href="get-started.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Next</font></a></div>
+<div align="right"><a href="glossary.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Next</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="regular_expressions.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Prev</font></a></div>
 </td>
 </tr>
 </table>
