@@ -1072,7 +1072,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
         // Iterate through the URLs and download each image:
         if (urls != null && urls.hasNext()) {
-            res = container;
+            if (container != null) { // prevent NPE TODO incomplete solution
+                res = container;
+            }
 
             // Get the URL matcher
             String re=getEmbeddedUrlRE();
