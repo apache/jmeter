@@ -354,7 +354,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
         setProperty(JUNIT4, junit4, false);
     }
 
-    /** @{inheritDoc} */
+    /** {@inheritDoc} */
     public SampleResult sample(Entry entry) {
         SampleResult sresult = new SampleResult();
         sresult.setSampleLabel(getName());// Bug 41522 - don't use rlabel here
