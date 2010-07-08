@@ -117,15 +117,18 @@ If your version of Java does not include SSL support, then it is possible to add
 Include the necessary encryption packages in JMeter's <a href="#classpath">classpath</a>.  
 Also, update <a href="#configuring_jmeter">system.properties</a> to register the SSL Provider.</p>
 <p>
-JMeter defaults to protocol level TLS. This can be changed by editting the JMeter property 
+JMeter HTTP defaults to protocol level TLS. This can be changed by editting the JMeter property 
 "https.default.protocol" in jmeter.properties or user.properties.
 </p>
-<p><b>JMeter is configured to accept all certificates,
+<p><b>The JMeter HTTP samplers are configured to accept all certificates,
 whether trusted or not, regardless of validity periods etc.</b>
 This is to allow the maximum flexibility in testing servers.</p>
 <p>If the server requires a client certificate, this can be provided.</p>
 <p>There is also the <complink name="SSL Manager"/>, for greater control of certificates.</p>
 <note>The JMeter proxy server (see below) supports recording HTTPS (SSL) in versions after 2.3.4</note>
+<p>
+The SMTP sampler can optionally use a local trust store or trust all certificates.
+</p>
 </subsection>
 
 <subsection name="&sect-num;.2.5 JDBC Driver" anchor="opt_jdbc">
