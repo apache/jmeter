@@ -25,6 +25,8 @@ import java.awt.Component;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -33,18 +35,26 @@ import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 import org.apache.jmeter.assertions.AssertionResult;
+import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
+import org.apache.jorphan.gui.ObjectTableModel;
+import org.apache.jorphan.gui.RendererUtils;
+import org.apache.jorphan.reflect.Functor;
 
 public abstract class SamplerResultTab implements ResultRenderer {
 
@@ -96,6 +106,83 @@ public abstract class SamplerResultTab implements ResultRenderer {
     protected boolean activateSearchExtension = true; // most current subclasses can process text
 
     private Color backGround;
+    
+    private static final String[] COLUMNS_RESULT = new String[] {
+            " ", // one space for blank header // $NON-NLS-1$ 
+            " " }; // one space for blank header  // $NON-NLS-1$
+
+    private static final String[] COLUMNS_HEADERS = new String[] {
+            "view_results_table_headers_key", // $NON-NLS-1$
+            "view_results_table_headers_value" }; // $NON-NLS-1$
+
+    private static final String[] COLUMNS_FIELDS = new String[] {
+            "view_results_table_fields_key", // $NON-NLS-1$
+            "view_results_table_fields_value" }; // $NON-NLS-1$
+
+    private ObjectTableModel resultModel = null;
+
+    private ObjectTableModel resHeadersModel = null;
+
+    private ObjectTableModel resFieldsModel = null;
+
+    private JTable tableResult = null;
+
+    private JTable tableResHeaders = null;
+
+    private JTable tableResFields = null;
+
+    private JTabbedPane tabbedResult = null;
+
+    private JScrollPane paneRaw = null;
+    
+    private JSplitPane paneParsed = null;
+    
+    // to save last select tab (raw/parsed)
+    private int lastResultTabIndex= 0; 
+
+    // Result column renderers
+    private static final TableCellRenderer[] RENDERERS_RESULT = new TableCellRenderer[] {
+            null, // Key
+            null, // Value
+    };
+
+    // Response headers column renderers
+    private static final TableCellRenderer[] RENDERERS_HEADERS = new TableCellRenderer[] {
+            null, // Key
+            null, // Value
+    };
+
+    // Response fields column renderers
+    private static final TableCellRenderer[] RENDERERS_FIELDS = new TableCellRenderer[] {
+            null, // Key
+            null, // Value
+    };
+
+    public SamplerResultTab() {
+        // create tables
+        resultModel = new ObjectTableModel(COLUMNS_RESULT, RowResult.class, // The object used for each row
+                new Functor[] {
+                        new Functor("getKey"), // $NON-NLS-1$
+                        new Functor("getValue") }, // $NON-NLS-1$
+                new Functor[] {
+                        null, null }, new Class[] {
+                        String.class, String.class });
+        resHeadersModel = new ObjectTableModel(COLUMNS_HEADERS,
+                RowResult.class, // The object used for each row
+                new Functor[] {
+                        new Functor("getKey"), // $NON-NLS-1$
+                        new Functor("getValue") }, // $NON-NLS-1$
+                new Functor[] {
+                        null, null }, new Class[] {
+                        String.class, String.class });
+        resFieldsModel = new ObjectTableModel(COLUMNS_FIELDS, RowResult.class, // The object used for each row
+                new Functor[] {
+                        new Functor("getKey"), // $NON-NLS-1$
+                        new Functor("getValue") }, // $NON-NLS-1$
+                new Functor[] {
+                        null, null }, new Class[] {
+                        String.class, String.class });
+    }
 
     public void clearData() {
         results.setText("");// Response Data // $NON-NLS-1$
@@ -109,6 +196,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
         resultsPane = createResponseDataPanel();
     }
 
+    @SuppressWarnings("boxing")
     public void setupTabPane() {
         StyledDocument statsDoc = stats.getStyledDocument();
         try {
@@ -136,6 +224,9 @@ public abstract class SamplerResultTab implements ResultRenderer {
                     sampleDataField.setText(sd);
                 }
 
+                final String samplerClass = sampleResult.getClass().getName();
+                String typeResult = samplerClass.substring(1 + samplerClass.lastIndexOf('.'));
+                
                 StringBuilder statsBuff = new StringBuilder(200);
                 statsBuff.append(JMeterUtils.getResString("view_results_thread_name")).append(sampleResult.getThreadName()).append(NL); //$NON-NLS-1$
                 String startTime = dateFormat.format(new Date(sampleResult.getStartTime()));
@@ -180,18 +271,43 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 String responseMsgStr = sampleResult.getResponseMessage();
 
                 statsBuff.append(JMeterUtils.getResString("view_results_response_message")).append(responseMsgStr).append(NL); //$NON-NLS-1$
-
                 statsBuff.append(NL);
                 statsBuff.append(JMeterUtils.getResString("view_results_response_headers")).append(NL); //$NON-NLS-1$
                 statsBuff.append(sampleResult.getResponseHeaders()).append(NL);
                 statsBuff.append(NL);
-                final String samplerClass = sampleResult.getClass().getName();
-                statsBuff.append(samplerClass.substring(1 + samplerClass.lastIndexOf('.'))).append(" "+ JMeterUtils.getResString("view_results_fields")).append(NL); //$NON-NLS-1$
-                statsBuff.append("ContentType: ").append(sampleResult.getContentType()).append(NL);
-                statsBuff.append("DataEncoding: ").append(sampleResult.getDataEncodingNoDefault()).append(NL);
+                statsBuff.append(typeResult + " "+ JMeterUtils.getResString("view_results_fields")).append(NL); //$NON-NLS-1$ $NON-NLS-2$
+                statsBuff.append("ContentType: ").append(sampleResult.getContentType()).append(NL); //$NON-NLS-1$
+                statsBuff.append("DataEncoding: ").append(sampleResult.getDataEncodingNoDefault()).append(NL); //$NON-NLS-1$
                 statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), null);
                 statsBuff = null; // Done
-
+                
+                // Tabbed results      
+                resultModel.clearData(); // clear results table before filling
+                // fill table
+                resultModel.addRow(new RowResult(getParsedLabel("view_results_thread_name"), sampleResult.getThreadName())); //$NON-NLS-1$
+                resultModel.addRow(new RowResult(getParsedLabel("view_results_sample_start"), startTime)); //$NON-NLS-1$
+                resultModel.addRow(new RowResult(getParsedLabel("view_results_load_time"), sampleResult.getTime())); //$NON-NLS-1$
+                resultModel.addRow(new RowResult(getParsedLabel("view_results_latency"), sampleResult.getLatency())); //$NON-NLS-1$
+                resultModel.addRow(new RowResult(getParsedLabel("view_results_size_in_bytes"), sampleResult.getBytes())); //$NON-NLS-1$
+                resultModel.addRow(new RowResult(getParsedLabel("view_results_sample_count"), sampleResult.getSampleCount())); //$NON-NLS-1$
+                resultModel.addRow(new RowResult(getParsedLabel("view_results_error_count"), sampleResult.getErrorCount())); //$NON-NLS-1$
+                resultModel.addRow(new RowResult(getParsedLabel("view_results_response_code"), responseCode)); //$NON-NLS-1$
+                resultModel.addRow(new RowResult(getParsedLabel("view_results_response_message"), responseMsgStr)); //$NON-NLS-1$
+                
+                resHeadersModel.clearData(); // clear response table before filling
+                // Parsed response headers
+                LinkedHashMap<String, String> lhm = parseResponseHeaders(sampleResult.getResponseHeaders());
+                Set<String> keySet = lhm.keySet();
+                for (String key : keySet) {
+                    resHeadersModel.addRow(new RowResult(key, lhm.get(key)));
+                }
+                
+                resFieldsModel.clearData(); // clear fields table before filling
+                resFieldsModel.addRow(new RowResult("Type Result ", typeResult)); //$NON-NLS-1$
+                //not sure needs I18N?
+                resFieldsModel.addRow(new RowResult("ContentType", sampleResult.getContentType())); //$NON-NLS-1$
+                resFieldsModel.addRow(new RowResult("DataEncoding", sampleResult.getDataEncodingNoDefault())); //$NON-NLS-1$
+                
                 // Reset search
                 if (activateSearchExtension) {
                     searchTextExtension.resetTextToFind();
@@ -215,6 +331,11 @@ public abstract class SamplerResultTab implements ResultRenderer {
     }
 
     private void setupTabPaneForSampleResult() {
+        // restore tabbed pane parsed if needed
+        if (tabbedResult.getTabCount() < 2) { 
+            tabbedResult.insertTab(JMeterUtils.getResString("view_results_table_result_tab_parsed"), null, paneParsed, null, 1); //$NON-NLS-1$
+            tabbedResult.setSelectedIndex(lastResultTabIndex); // select last tab 
+        }
         // Set the title for the first tab
         rightSide.setTitleAt(0, JMeterUtils.getResString("view_results_tab_sampler")); //$NON-NLS-1$
         // Add the other tabs if not present
@@ -229,8 +350,16 @@ public abstract class SamplerResultTab implements ResultRenderer {
             rightSide.setSelectedIndex(lastSelectedTab);
         }
     }
-
+    
     private void setupTabPaneForAssertionResult() {
+        // Remove the other (parsed) tab if present
+        if (tabbedResult.getTabCount() >= 2) {
+            lastResultTabIndex = tabbedResult.getSelectedIndex();
+            int parsedTabIndex = tabbedResult.indexOfTab(JMeterUtils.getResString("view_results_table_result_tab_parsed")); // $NON-NLS-1$
+            if(parsedTabIndex >= 0) {
+                tabbedResult.removeTabAt(parsedTabIndex);
+            }
+        }
         // Set the title for the first tab
         rightSide.setTitleAt(0, JMeterUtils.getResString("view_results_tab_assertion")); //$NON-NLS-1$
         // Remove the other tabs if present
@@ -261,9 +390,51 @@ public abstract class SamplerResultTab implements ResultRenderer {
         style = doc.addStyle(STYLE_SERVER_ERROR, null);
         StyleConstants.setForeground(style, SERVER_ERROR_COLOR);
 
-        JScrollPane pane = GuiUtils.makeScrollPane(stats);
-        pane.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-        return pane;
+        paneRaw = GuiUtils.makeScrollPane(stats);
+        paneRaw.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+
+        // Set up the 1st table Result with empty headers
+        tableResult = new JTable(resultModel);     
+        setFirstColumnPreferredSize(tableResult);
+        RendererUtils.applyRenderers(tableResult, RENDERERS_RESULT);
+
+        // Set up the 2nd table 
+        tableResHeaders = new JTable(resHeadersModel);
+        setFirstColumnPreferredSize(tableResHeaders);
+        tableResHeaders.getTableHeader().setDefaultRenderer(
+                new HeaderAsPropertyRenderer());
+        RendererUtils.applyRenderers(tableResHeaders, RENDERERS_HEADERS);
+
+        // Set up the 3rd table 
+        tableResFields = new JTable(resFieldsModel);
+        setFirstColumnPreferredSize(tableResFields);
+        tableResFields.getTableHeader().setDefaultRenderer(
+                new HeaderAsPropertyRenderer());
+        RendererUtils.applyRenderers(tableResFields, RENDERERS_FIELDS);
+
+        // Prepare the Results tabbed pane
+        tabbedResult = new JTabbedPane(JTabbedPane.BOTTOM);
+
+        // Create the split pane
+        JSplitPane topSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
+                GuiUtils.makeScrollPane(tableResHeaders),
+                GuiUtils.makeScrollPane(tableResFields));
+        topSplit.setOneTouchExpandable(true);
+        topSplit.setResizeWeight(0.80); // set split ratio
+
+        paneParsed = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
+                GuiUtils.makeScrollPane(tableResult), topSplit);
+        paneParsed.setOneTouchExpandable(true);
+        paneParsed.setResizeWeight(0.40); // set split ratio
+
+        // setup bottom tabs, first Raw, second Parsed
+        tabbedResult.addTab(JMeterUtils.getResString("view_results_table_result_tab_raw"), paneRaw); //$NON-NLS-1$
+        tabbedResult.addTab(JMeterUtils.getResString("view_results_table_result_tab_parsed"), paneParsed); //$NON-NLS-1$
+
+        // Hint to background color on bottom tabs (grey, not blue)
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.add(tabbedResult);
+        return panel;
     }
 
     private JPanel createRequestPanel() {
@@ -326,5 +497,83 @@ public abstract class SamplerResultTab implements ResultRenderer {
 
     public void setBackgroundColor(Color backGround){
         this.backGround = backGround;
+    }
+    
+    /**
+     * To get I18N label from properties file
+     * @param key in messages.properties
+     * @return I18N label without (if exists) last colon ':' and spaces
+     */
+    private String getParsedLabel(String key) {
+        String value = JMeterUtils.getResString(key);
+        return value.replaceFirst("(?m)\\s*?:\\s*$", ""); // $NON-NLS-1$ $NON-NLS-2$
+    }
+    
+    private void setFirstColumnPreferredSize(JTable table) {
+        TableColumn column = table.getColumnModel().getColumn(0);
+        column.setMaxWidth(300);
+        column.setPreferredWidth(180);
+    }
+
+    /**
+     * Split line into name/value pairs and remove colon ':'
+     */
+    private LinkedHashMap<String, String> parseResponseHeaders(String responseHeaders) {
+        LinkedHashMap<String, String> linkedHeaders = new LinkedHashMap<String, String>();
+        String[] list = responseHeaders.split(NL);
+        for (String header : list) {
+            int colon = header.indexOf(':'); // $NON-NLS-1$
+            if (colon <= 0) {
+                linkedHeaders.put(header, ""); // Empty value // $NON-NLS-1$
+            } else {
+                linkedHeaders.put(header.substring(0, colon).trim(), header
+                        .substring(colon + 1).trim());
+            }
+        }
+        return linkedHeaders;
+    }
+    
+    /**
+     * For model table
+     */
+    public static class RowResult {
+        private String key;
+
+        private Object value;
+
+        public RowResult(String key, Object value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        /**
+         * @return the key
+         */
+        public synchronized String getKey() {
+            return key;
+        }
+
+        /**
+         * @param key
+         *            the key to set
+         */
+        public synchronized void setKey(String key) {
+            this.key = key;
+        }
+
+        /**
+         * @return the value
+         */
+        public synchronized Object getValue() {
+            return value;
+        }
+
+        /**
+         * @param value
+         *            the value to set
+         */
+        public synchronized void setValue(Object value) {
+            this.value = value;
+        }
     }
 }
