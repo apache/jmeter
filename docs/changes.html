@@ -30,7 +30,7 @@
 
 
 <meta name="author" value="JMeter developers">
-<meta name="email" value="jmeter-dev AT jakarta.apache.org">
+<meta name="email" value="dev AT jakarta.apache.org">
 
 <title>JMeter - Changes</title>
 </head>
@@ -116,21 +116,17 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <li><a href="http://jakarta.apache.org/site/cvsindex.html">SVN Repositories</a>
 </li>
 </ul>
+<p><strong>Foundation</strong></p>
+<ul>
+<li><a href="http://www.apache.org/">ASF</a>
+</li>
+<li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
+</li>
+<li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a>
+</li>
+</ul>
 </td>
 <td width="80%" align="left" valign="top">
-<table>
-<tr>
-<td bgcolor="#525D76">
-<div align="right"><a href="index.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Index</font></a></div>
-</td>
-<td bgcolor="#525D76">
-<div align="right"><a href="$next"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Next</font></a></div>
-</td>
-<td bgcolor="#525D76">
-<div align="right"><a href="$prev"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Prev</font></a></div>
-</td>
-</tr>
-</table>
 <br>
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
@@ -161,14 +157,78 @@ History of Previous Changes
 </table>
 </p>
 <h1>
-Version 2.3.4
+Version 2.4
 </h1>
 <h2>
 Summary of main changes
 </h2>
 <p>
 
-This is a minor bug-fix release, mainly to correct some bugs that were accidentally added in 2.3.3.
+
+<ul>
+
+
+<li>
+JMeter now requires at least Java 1.5.
+</li>
+
+
+<li>
+HTTP Proxy can now record HTTPS sessions.
+</li>
+
+
+<li>
+JUnit sampler now supports JUnit4 annotations.
+</li>
+
+
+<li>
+Added JSR223 (javax.script) test elements.
+</li>
+
+
+<li>
+MailReader Sampler can now use any protocol supported by the underlying implementation.
+</li>
+
+
+<li>
+An SMTP Sampler has been added.
+</li>
+
+
+<li>
+JMeter now allows users to provide their own Thread Group implementations.
+</li>
+
+
+<li>
+View Results Tree now supports more display options, including search and Regex Testing.
+</li>
+
+
+<li>
+StatCalculator performance is much improved; Aggregate Report etc. need far less memory.
+</li>
+
+
+<li>
+
+JMS samplers have been extensively reworked, and should no longer lose messages.
+Correlation processing is improved.
+JMS Publisher and Subscriber now support both Topics and Queues.
+
+</li>
+
+
+<li>
+Many other improvements have been made, please see below and in the manual.
+</li>
+
+
+</ul>
+
 
 </p>
 <h2>
@@ -196,6 +256,32 @@ Incompatible changes
 </h2>
 <p>
 
+HTTP Redirect now defaults to "Follow Redirects" rather than "Redirect Automatically".
+This is to enable JMeter to track cookies that may be sent during redirects.
+This does not affect existing test plans; it only affects the default for new HTTP Samplers.
+
+</p>
+<p>
+
+The Avalon file format for JMX and JTL files is no longer supported.
+Any such files will need to be converted by reading them in JMeter 2.3.4 and resaving them.
+
+</p>
+<p>
+
+The XPath Assertion and XPath Extractor elements no longer fetch external DTDs by default; this can be changed in the GUI.
+
+</p>
+<p>
+
+JMSConfigGui has been renamed as JMSSamplerGui.
+This does not affect existing test plans.
+
+</p>
+<p>
+
+The constructor public SampleResult(SampleResult res) has been changed to become a true "copy constructor".
+It no longer calls addSubResult(). This may possibly affect some 3rd party add-ons.
 
 </p>
 <h2>
@@ -208,7 +294,52 @@ HTTP Samplers and Proxy
 
 
 <li>
-Bug 47321 -  HTTPSampler2 response timeout not honored
+Bug 47445 - Using Proxy with https-spoofing secure cookies need to be unsecured
+</li>
+
+
+<li>
+Bug 47442 - Missing replacement of https by http for certain conditions using https-spoofing
+</li>
+
+
+<li>
+Bug 48451 - Error in: SoapSampler.setPostHeaders(PostMethod post) in the else branch
+</li>
+
+
+<li>
+Bug 48542 - SoapSampler uses wrong response header field to decide if response is gzip encoded
+</li>
+
+
+<li>
+Bug 48568 - CookieManager broken for AjpSampler
+</li>
+
+
+<li>
+Bug 48570 - AjpSampler doesn't support query parameters (GET/POST)
+</li>
+
+
+<li>
+Bug 46901 - HTTP Sampler does not process var/func refs correctly in first file parameter
+</li>
+
+
+<li>
+Bug 43678 - Handle META tag http-equiv charset?
+</li>
+
+
+<li>
+Bug 49294 - Images not downloaded from redirected-to pages
+</li>
+
+
+<li>
+Bug 49560 - wrong "size in bytes" when following redirections
 </li>
 
 
@@ -220,12 +351,62 @@ Other Samplers
 
 
 <li>
-Bug 47290 -  Infinite loop on connection factory lookup (JMS)
+Bug 47420 - LDAP extended request not closing connections during add request
 </li>
 
 
 <li>
-JDBC Sampler should not close Prepared or Callable statements as these are cached
+Bug 48573 - LDAPExtSampler directory context handling
+</li>
+
+
+<li>
+Bug 47870 - JMSSubscriber fails due to NPE
+</li>
+
+
+<li>
+Bug 47899 - NullPointerExceptions in JMS ReceiveSubscriber constructor
+</li>
+
+
+<li>
+Bug 48144 - NPE in JMS OnMessageSubscriber
+</li>
+
+
+<li>
+Bug 47992 - JMS Point-to-Point Request - Response option doesn't work
+</li>
+
+
+<li>
+Bug 48579 - Single Bind does not show config information when LdapExt Sampler is accessed
+</li>
+
+
+<li>
+Bug 49111 - "Message With ID Not Found" Error on JMS P2P sampler.
+</li>
+
+
+<li>
+Bug 47949 - JMS Subscriber never receives all the messages
+</li>
+
+
+<li>
+Bug 46142 - JMS Point-to-Point correlation problems
+</li>
+
+
+<li>
+Bug 48747 - TCP Sampler swallows exceptions
+</li>
+
+
+<li>
+Bug 48709 - TCP Sampler Config setting "classname" has no effect
 </li>
 
 
@@ -237,7 +418,27 @@ Controllers
 
 
 <li>
-Bug 39509 -  Once-only controller running twice
+Bug 47385 - TransactionController should set AllThreads and GroupThreads
+</li>
+
+
+<li>
+Bug 47940 - Module controller incorrectly creates the replacement Sub Tree
+</li>
+
+
+<li>
+Bug 47592 - Run Thread groups consecutively with "Stop test" on error, JMeter will not mark to finished
+</li>
+
+
+<li>
+Bug 48786 - Run Thread groups consecutively: with "Stop test now" on error or manual stop, JMeter leaves the green box active
+</li>
+
+
+<li>
+Bug 48727 - Cannot stop test if all thread groups are disabled
 </li>
 
 
@@ -249,12 +450,22 @@ Listeners
 
 
 <li>
-Change ResultCollector to only warn if the directory was not created
+Bug 48603 - Mailer Visualiser sends two emails for a single failed response
 </li>
 
 
 <li>
-Fix some synchronisation issues in ResultCollector and SampleResult (wrong locks were being used)
+Correct calculation of min/max/std.dev for aggregated samples (Summary Report)
+</li>
+
+
+<li>
+Bug 48889 - Wrong response time with mode=Statistical and num_sample_threshold > 1
+</li>
+
+
+<li>
+Bug 47398 - SampleEvents are sent twice over RMI in distributed testing and non gui mode
 </li>
 
 
@@ -278,7 +489,6 @@ I18N
 </h3>
 <ul>
 
-Fixed bug introduced in 2.3.3: JMeter does not start up if there is no messages.properties file for the default Locale.
 
 </ul>
 <h3>
@@ -288,17 +498,52 @@ General
 
 
 <li>
-Fix problems with remote clients - bug introduced in 2.3.3
+Bug 47646 -  NullPointerException in the "Random Variable" element
 </li>
 
 
 <li>
-Bug 47377 - Make ClassFinder more robust and close zipfile resources
+Disallow adding any child elements to JDBC Configuration
 </li>
 
 
 <li>
-Fix some errors in generating the documentation (latent bug revealed in 2.3.3 when Velocity was upgraded)
+BeanInfoSupport now caches getBeanDescriptor() - should avoid an NPE on non-Sun JVMs when using CSVDataSet (and some other TestBeans)
+</li>
+
+
+<li>
+Bug 48350 - Deadlock on distributed testing with 2 clients
+</li>
+
+
+<li>
+Bug 48901 - Endless wait by adding Synchronizing Timer
+</li>
+
+
+<li>
+Bug 49149 - usermanual/index.html has typo in link to "Regular Expressions" page
+</li>
+
+
+<li>
+Bug 49394 - Classcast Exception in ActionRouter.postActionPerformed
+</li>
+
+
+<li>
+Bug 48136 - Essential files missing from source tarball.
+<br>
+</br>
+
+Source archives now contain all source files, including source files previously only provided in the binary archives.
+
+</li>
+
+
+<li>
+Bug 48331 - XpathExtractor does not return XML string representations for a Nodeset
 </li>
 
 
@@ -312,6 +557,41 @@ HTTP Samplers
 <ul>
 
 
+<li>
+Bug 47622 - enable recording of HTTPS sessions
+</li>
+
+
+<li>
+Allow Proxy Server to be specified on HTTP Sampler GUI and HTTP Config GUI
+</li>
+
+
+<li>
+Bug 47461 - Update Cache Manager to handle Expires HTTP header
+</li>
+
+
+<li>
+Bug 48153 - Support for Cache-Control and Expires headers
+</li>
+
+
+<li>
+Bug 47946 - Proxy should enable Grouping inside a Transaction Controller
+</li>
+
+
+<li>
+Bug 48300 - Allow override of IP source address for HTTP HttpClient requests
+</li>
+
+
+<li>
+Bug 49083 - collapse '/pathsegment/..' in redirect URLs
+</li>
+
+
 </ul>
 <h3>
 Other samplers
@@ -320,7 +600,56 @@ Other samplers
 
 
 <li>
-Bug 47266 - FTP Request Sampler: allow specifying an FTP port, other than the default
+JUnit sampler now supports JUnit4 tests (using annotations)
+</li>
+
+
+<li>
+Bug 47900 - Allow JMS SubscriberSampler to be interrupted
+</li>
+
+
+<li>
+Added JSR223 Sampler
+</li>
+
+
+<li>
+Bug 47556 - JMS-PointToPoint-Sampler Timeout field should use Strings
+</li>
+
+
+<li>
+Bug 47947 - Mail Reader Sampler should allow port to be overridden
+</li>
+
+
+<li>
+Bug 48155 - Multiple problems / enhancements with JMS protocol classes
+</li>
+
+
+<li>
+Allow MailReader sampler to use arbitrary protocols
+</li>
+
+
+<li>
+Bug 45053 - SMTP-Sampler for JMeter
+</li>
+
+
+<li>
+Bug 49552 - Add Message Headers on SMTPSampler
+</li>
+
+
+<li>
+
+JMS Publisher and Subscriber now support both Topics and Queues.
+Added read Timeout to JMS Subscriber.
+General clean-up of JMS code.
+
 </li>
 
 
@@ -331,6 +660,26 @@ Controllers
 <ul>
 
 
+<li>
+Bug 47909 - TransactionController should sum the latency
+</li>
+
+
+<li>
+Bug 41418 - Exclude timer duration from Transaction Controller runtime in report
+</li>
+
+
+<li>
+Bug 48749 - Allowing custom Thread Groups
+</li>
+
+
+<li>
+Bug 43389 - Allow Include files to be found relative to the current JMX file
+</li>
+
+
 </ul>
 <h3>
 Listeners
@@ -338,11 +687,124 @@ Listeners
 <ul>
 
 
+<li>
+Added DataStrippingSample sender - supports "Stripped" and "StrippedBatch" modes.
+</li>
+
+
+<li>
+Added Comparison Assertion Visualizer
+</li>
+
+
+<li>
+Bug 47907 - Improvements (enhancements and I18N) Comparison Assertion and Comparison Visualizer
+</li>
+
+
+<li>
+Bug 36726 - add search function to Tree View Listener
+</li>
+
+
+<li>
+Bug 47869 - Ability to cleanup fields of SampleResult
+</li>
+
+
+<li>
+Bug 47952 - Added JSR223 Listener
+</li>
+
+
+<li>
+Bug 47474 - View Results Tree support for plugin renderers
+</li>
+
+
+<li>
+Allow Idle Time to be saved to sample log files
+</li>
+
+
+<li>
+Bug 48259 - Improve StatCalculator performance by using TreeMap
+</li>
+
+
+<li>
+Listeners using SamplingStatCalculator have much reduced memory needs 
+as the Sample cache has been moved to the new CachingStatCalculator class.
+In particular, Aggregate Report can now handle large numbers of samples.
+
+</li>
+
+
+<li>
+Aggregate Report and Summary Report now allow column headers to be optionally excluded
+</li>
+
+
+<li>
+Bug 49506 - Add .csv File Extension in open dialog box from "read from file" functionality of listeners
+</li>
+
+
+<li>
+Bug 49545 - Formatted (parsed) view of Sample Result in Results Tree
+</li>
+
+
 </ul>
 <h3>
-Assertions, Config, Pre- & Post-Processors
+Timers, Assertions, Config, Pre- & Post-Processors
 </h3>
 <ul>
+
+
+<li>
+Bug 47338 - XPath Extractor forces retrieval of document DTD
+</li>
+
+
+<li>
+Added Comparison Assertion
+</li>
+
+
+<li>
+Bug 47952 - Added JSR223 PreProcessor and PostProcessor
+</li>
+
+
+<li>
+Added JSR223 Assertion
+</li>
+
+
+<li>
+Added BSF Timer and JSR223 Timer
+</li>
+
+
+<li>
+Bug 48511 - add parent,child,all selection to regex extractor
+</li>
+
+
+<li>
+Add Sampler scope selection to XPathExtractor
+</li>
+
+
+<li>
+Regular Expression Extractor, Response Assertion and Size Assertion can now be applied to a JMeter variable
+</li>
+
+
+<li>
+Bug 46790 - CSV Data Set Config should be able to parse CSV headers
+</li>
 
 
 </ul>
@@ -352,11 +814,26 @@ Functions
 <ul>
 
 
+<li>
+Bug 47565 - [Function] FileToString
+</li>
+
+
 </ul>
 <h3>
 I18N
 </h3>
 <ul>
+
+
+<li>
+Bug 47938 -  Adding some French translations for new elements
+</li>
+
+
+<li>
+Bug 48714 -  add new French messages
+</li>
 
 
 </ul>
@@ -366,6 +843,36 @@ General
 <ul>
 
 
+<li>
+Bug 47223 - Slow Aggregate Report Performance (StatCalculator)
+</li>
+
+
+<li>
+Bug 47980 - hostname resolves to 127.0.0.1 - specifiying IP not possible
+</li>
+
+
+<li>
+Bug 47943 - DisabledComponentRemover is not used in Start class
+</li>
+
+
+<li>
+HeapDumper class for runtime generation of dumps
+</li>
+
+
+<li>
+Basic read-only JavaMail provider implementation for reading raw mail files
+</li>
+
+
+<li>
+Bug 49540 - Sort "Add" menus alphabetically
+</li>
+
+
 </ul>
 <h2>
 Non-functional changes
@@ -373,24 +880,83 @@ Non-functional changes
 <ul>
 
 
+<li>
+Beanshell, JavaMail and JMS API (Apache Geronimo) jars are now included in the binary archive.
+</li>
+
+
+<li>
+Add TestBean Table Editor support
+</li>
+
+
+<li>
+Removed all external libraries from SVN; added download_jars Ant target
+</li>
+
+
+<li>
+Updated various jar files:
+
+<ul>
+
+
+<li>
+BeanShell - 2.0b4 => 2.0b5
+</li>
+
+
+<li>
+Commons Codec - 1.3 => 1.4
+</li>
+
+
+<li>
+Commons-Collections - 3.2 => 3.2.1
+</li>
+
+
+<li>
+JTidy => r938
+</li>
+
+
+<li>
+JUnit - 3.8.2 => 4.8.1
+</li>
+
+
+<li>
+Logkit - 1.2 => 2.0
+</li>
+
+
+<li>
+Xalan Serializer = 2.7.1 (previously erroneously shown as 2.9.1)
+</li>
+
+
+<li>
+Xerces xml-apis = 1.3.04 (previously erroneously shown as 2.9.1)
+</li>
+
+
+<li>
+Some jar files were renamed.
+</li>
+
+
+</ul>
+
+
+</li>
+
+
 </ul>
 </blockquote>
 </p>
 </td></tr>
 <tr><td><br></td></tr>
-</table>
-<table>
-<tr>
-<td bgcolor="#525D76">
-<div align="right"><a href="index.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Index</font></a></div>
-</td>
-<td bgcolor="#525D76">
-<div align="right"><a href="$next"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Next</font></a></div>
-</td>
-<td bgcolor="#525D76">
-<div align="right"><a href="$prev"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Prev</font></a></div>
-</td>
-</tr>
 </table>
 <br>
 </td>
@@ -400,7 +966,7 @@ Non-functional changes
 </td></tr>
 <tr><td colspan="2">
 <div align="center"><font color="#525D76" size="-1"><em>
-Copyright &copy; 1999-2009, Apache Software Foundation
+Copyright &copy; 1999-2010, Apache Software Foundation
 </em></font></div>
 </td></tr>
 <tr><td colspan="2">

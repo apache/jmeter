@@ -114,6 +114,15 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <li><a href="http://jakarta.apache.org/site/cvsindex.html">SVN Repositories</a>
 </li>
 </ul>
+<p><strong>Foundation</strong></p>
+<ul>
+<li><a href="http://www.apache.org/">ASF</a>
+</li>
+<li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
+</li>
+<li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a>
+</li>
+</ul>
 </td>
 <td width="80%" align="left" valign="top">
 <table>
@@ -274,6 +283,12 @@ with "${server}".
 If JMeter does not record any samples, check that the brower really is using the proxy.
 If the browser works OK even if JMeter is not running, then the browser cannot be using the proxy.
 Some browsers ignore proxy settings for localhost or 127.0.0.1; try using the local hostname or IP instead.
+
+</p>
+<p>
+
+The error "unknown_ca" probably means that you are trying to record HTTPS, and the browser has not accepted the
+JMeter Proxy server certificate. 
 
 </p>
 </blockquote>
@@ -718,7 +733,7 @@ The appropriate property file can be passed in to JMeter using the -q command-li
 </td></tr>
 <tr><td colspan="2">
 <div align="center"><font color="#525D76" size="-1"><em>
-Copyright &copy; 1999-2009, Apache Software Foundation
+Copyright &copy; 1999-2010, Apache Software Foundation
 </em></font></div>
 </td></tr>
 <tr><td colspan="2">

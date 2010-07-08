@@ -114,21 +114,17 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <li><a href="http://jakarta.apache.org/site/cvsindex.html">SVN Repositories</a>
 </li>
 </ul>
+<p><strong>Foundation</strong></p>
+<ul>
+<li><a href="http://www.apache.org/">ASF</a>
+</li>
+<li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
+</li>
+<li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a>
+</li>
+</ul>
 </td>
 <td width="80%" align="left" valign="top">
-<table>
-<tr>
-<td bgcolor="#525D76">
-<div align="right"><a href="index.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Index</font></a></div>
-</td>
-<td bgcolor="#525D76">
-<div align="right"><a href="$next"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Next</font></a></div>
-</td>
-<td bgcolor="#525D76">
-<div align="right"><a href="$prev"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Prev</font></a></div>
-</td>
-</tr>
-</table>
 <br>
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
@@ -166,22 +162,24 @@ Building JMeter
 Acquiring the source
 </h3>
 <p>
-The source and bundled jars can be downloaded from SVN.
+The source is distributed alongside the binary, or it can be downloaded from SVN.
 </p>
 <p>
-Or you can download the binary and source archives for a release and unpack them in the same directory structure.
+
+The source archive and SVN do not contain any of the required library files. 
+You can download these by running the Ant command:
+
+<pre>
+
+ant download_jars
+
+</pre>
+
+
 </p>
-<h3>
-Other jars you may need
-</h3>
 <p>
-
-You may also need to download JAF/JavaMail, JMS and JDBC jars
- - see 
-<a href="usermanual/get-started.html">
-Getting Started
-</a>
-
+Or you can download the binary archive for a release and unpack it into the same directory structure as the source.
+This will ensure that the lib/ directory contains all the required jar files.
 
 </p>
 <h3>
@@ -200,7 +198,6 @@ Compiling and packaging JMeter using Eclipse
 Once you have downloaded the source from SVN or the release archives, you can configure Eclipse.
 The easiest way to do this is to replace the Eclipse .classpath file with the eclipse.classpath file provided with JMeter.
 This will set up the source-paths and most of the libraries.
-If you have downloaded any of the optional jars (JavaMail etc) you will need to update the project classpath.
 
 <p>
 
@@ -215,19 +212,6 @@ See also the file eclipse.readme.
 </td></tr>
 <tr><td><br></td></tr>
 </table>
-<table>
-<tr>
-<td bgcolor="#525D76">
-<div align="right"><a href="index.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Index</font></a></div>
-</td>
-<td bgcolor="#525D76">
-<div align="right"><a href="$next"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Next</font></a></div>
-</td>
-<td bgcolor="#525D76">
-<div align="right"><a href="$prev"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Prev</font></a></div>
-</td>
-</tr>
-</table>
 <br>
 </td>
 </tr>
@@ -236,7 +220,7 @@ See also the file eclipse.readme.
 </td></tr>
 <tr><td colspan="2">
 <div align="center"><font color="#525D76" size="-1"><em>
-Copyright &copy; 1999-2009, Apache Software Foundation
+Copyright &copy; 1999-2010, Apache Software Foundation
 </em></font></div>
 </td></tr>
 <tr><td colspan="2">

@@ -114,6 +114,15 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <li><a href="http://jakarta.apache.org/site/cvsindex.html">SVN Repositories</a>
 </li>
 </ul>
+<p><strong>Foundation</strong></p>
+<ul>
+<li><a href="http://www.apache.org/">ASF</a>
+</li>
+<li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
+</li>
+<li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a>
+</li>
+</ul>
 </td>
 <td width="80%" align="left" valign="top">
 <table>
@@ -144,6 +153,7 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <li><a href="#Access_Log_Sampler">Access Log Sampler</a></li>
 <li><a href="#BeanShell_Sampler">BeanShell Sampler</a></li>
 <li><a href="#BSF_Sampler">BSF Sampler</a></li>
+<li><a href="#JSR223_Sampler">JSR223 Sampler</a></li>
 <li><a href="#TCP_Sampler">TCP Sampler</a></li>
 <li><a href="#JMS_Publisher">JMS Publisher</a></li>
 <li><a href="#JMS_Subscriber">JMS Subscriber</a></li>
@@ -151,6 +161,7 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <li><a href="#JUnit_Request">JUnit Request</a></li>
 <li><a href="#Mail_Reader_Sampler">Mail Reader Sampler</a></li>
 <li><a href="#Test_Action">Test Action</a></li>
+<li><a href="#SMTP_Sampler">SMTP Sampler</a></li>
 </ul>
 <li><a href="#logic_controllers">18.2 Logic Controllers</a></li>
 <ul>
@@ -190,7 +201,9 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <li><a href="#Summary_Report">Summary Report</a></li>
 <li><a href="#Save_Responses_to_a_file">Save Responses to a file</a></li>
 <li><a href="#BSF_Listener">BSF Listener</a></li>
+<li><a href="#JSR223_Listener">JSR223 Listener</a></li>
 <li><a href="#Generate_Summary_Results">Generate Summary Results</a></li>
+<li><a href="#Comparison_Assertion_Visualizer">Comparison Assertion Visualizer</a></li>
 </ul>
 <li><a href="#config_elements">18.4 Configuration Elements</a></li>
 <ul>
@@ -224,6 +237,9 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <li><a href="#XPath_Assertion">XPath Assertion</a></li>
 <li><a href="#XML_Schema_Assertion">XML Schema Assertion</a></li>
 <li><a href="#BSF_Assertion">BSF Assertion</a></li>
+<li><a href="#JSR223_Assertion">JSR223 Assertion</a></li>
+<li><a href="#Compare_Assertion">Compare Assertion</a></li>
+<li><a href="#SMIME_Assertion">SMIME Assertion</a></li>
 </ul>
 <li><a href="#timers">18.6 Timers</a></li>
 <ul>
@@ -233,6 +249,8 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <li><a href="#Constant_Throughput_Timer">Constant Throughput Timer</a></li>
 <li><a href="#Synchronizing_Timer">Synchronizing Timer</a></li>
 <li><a href="#BeanShell_Timer">BeanShell Timer</a></li>
+<li><a href="#BSF_Timer">BSF Timer</a></li>
+<li><a href="#JSR223_Timer">JSR223 Timer</a></li>
 </ul>
 <li><a href="#preprocessors">18.7 Pre Processors</a></li>
 <ul>
@@ -243,6 +261,7 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <li><a href="#User_Parameters">User Parameters</a></li>
 <li><a href="#BeanShell_PreProcessor">BeanShell PreProcessor</a></li>
 <li><a href="#BSF_PreProcessor">BSF PreProcessor</a></li>
+<li><a href="#JSR223_PreProcessor">JSR223 PreProcessor</a></li>
 </ul>
 <li><a href="#postprocessors">18.8 Post-Processors</a></li>
 <ul>
@@ -251,6 +270,7 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <li><a href="#Result_Status_Action_Handler">Result Status Action Handler</a></li>
 <li><a href="#BeanShell_PostProcessor">BeanShell PostProcessor</a></li>
 <li><a href="#BSF_PostProcessor">BSF PostProcessor</a></li>
+<li><a href="#JSR223_PostProcessor">JSR223 PostProcessor</a></li>
 </ul>
 <li><a href="#Miscellaneous_Features">18.9 Miscellaneous Features</a></li>
 <ul>
@@ -666,7 +686,7 @@ If the request uses a technique called "URL Rewriting" to maintain sessions,
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='730' height='618' src="../images/screenshots/webtest/http-request.png"></div>
+<div align="center"><img width='687' height='661' src="../images/screenshots/http-request.png"></div>
 <p>
 <b>Parameters</b>
 <table border="1" cellspacing="0" cellpadding="2">
@@ -697,7 +717,7 @@ No
 </tr>
 <tr>
 <td>Connect Timeout</td>
-<td>Connection Timeout. Number of milliseconds to wait for a connection to open. Requires Java 1.5 or later when using the default Java HTTP implementation.
+<td>Connection Timeout. Number of milliseconds to wait for a connection to open.
 </td>
 <td>
 No
@@ -705,7 +725,39 @@ No
 </tr>
 <tr>
 <td>Response Timeout</td>
-<td>Response Timeout. Number of milliseconds to wait for a response. Requires Java 1.5 or later when using the default Java HTTP implementation.
+<td>Response Timeout. Number of milliseconds to wait for a response.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Server (proxy)</td>
+<td>Hostname or IP address of a proxy server to perform request. [Do not include the http:// prefix.]
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Port</td>
+<td>Port the proxy server is listening to.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Username</td>
+<td>(Optional) username for proxy server.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Password</td>
+<td>(Optional) password for proxy server.
 </td>
 <td>
 No
@@ -758,7 +810,10 @@ Yes
 <td>
 		This only has any effect if "Redirect Automatically" is not enabled.
 		If set, the JMeter sampler will check if the response is a redirect and follow it if so.
-		The redirect response will appear as an additional sample.
+		The initial redirect and further responses will appear as additional samples.
+        The URL and data fields of the parent sample will be taken from the final (non-redirected)
+        sample, but the parent byte count and elapsed time include all samples.
+        The latency is taken from the initial response (versions of JMeter after 2.3.4 - previously it was zero).
 		Note that the HttpClient sampler may log the following message:
 <br>
 </br>
@@ -768,6 +823,18 @@ Yes
 </br>
 
 		This can be ignored.
+        
+<br>
+</br>
+
+        In versions after 2.3.4, JMeter will collapse paths of the form '/../segment' in
+        both absolute and relative redirect URLs. For example http://host/one/../two => http://host/two.
+        If necessary, this behaviour can be suppressed by setting the JMeter property
+        
+<code>
+httpsampler.redirect.removeslashdotdot=false
+</code>
+
 		
 </td>
 <td>
@@ -938,6 +1005,23 @@ Yes
 No
 </td>
 </tr>
+<tr>
+<td>Source IP address:</td>
+<td>
+        [Only for HTTP Request HTTPClient] 
+        Override the default local IP address for this sample.
+        The JMeter host must have multiple IP addresses (i.e. IP aliases or network interfaces). 
+        If the property 
+<b>
+httpclient.localaddress
+</b>
+ is defined, that is used for all HttpClient requests.
+        
+</td>
+<td>
+No
+</td>
+</tr>
 </table>
 </p>
 <p>
@@ -1050,7 +1134,7 @@ See jmeter.properties file for the details of the settings.
  i.e. only text/html responses will be scanned
 </p>
 <b>
-Emulating slow connections:
+Emulating slow connections (HttpClient only):
 </b>
 <br>
 </br>
@@ -1309,7 +1393,7 @@ Yes, if a prepared or callable statement has parameters
         Comma-separated list of SQL parameter types (e.g. INTEGER, DATE, VARCHAR, DOUBLE).
         These are defined as fields in the class java.sql.Types, see for example:
         
-<a href="http://java.sun.com/j2se/1.4.2/docs/api/java/sql/Types.html">
+<a href="http://java.sun.com/j2se/1.5/docs/api/java/sql/Types.html">
 Javadoc for java.sql.Types
 </a>
 .
@@ -1371,7 +1455,14 @@ No
 <tr><td>
 <p>
 This sampler lets you control a java class that implements the
-JavaSamplerClient interface.  By writing your own implementation of this interface,
+
+<b>
+<code>
+org.apache.jmeter.protocol.java.sampler.JavaSamplerClient
+</code>
+</b>
+ interface.
+By writing your own implementation of this interface,
 you can use JMeter to harness multiple threads, input parameter control, and
 data collection.
 </p>
@@ -2007,7 +2098,7 @@ Usually
                                           
 </td>
 <td>
-yes
+Yes
 </td>
 </tr>
 <tr>
@@ -2015,7 +2106,7 @@ yes
 <td>the name of the context to Delete; may not be empty
 </td>
 <td>
-yes
+Yes
 </td>
 </tr>
 <tr>
@@ -2023,7 +2114,7 @@ yes
 <td>the name of the context or object to search
 </td>
 <td>
-yes
+Yes
 </td>
 </tr>
 <tr>
@@ -2031,7 +2122,7 @@ yes
 <td> the filter expression to use for the search; may not be null
 </td>
 <td>
-yes
+Yes
 </td>
 </tr>
 <tr>
@@ -2039,7 +2130,7 @@ yes
 <td> this name, value pair to added in the given context object
 </td>
 <td>
-yes
+Yes
 </td>
 </tr>
 <tr>
@@ -2047,7 +2138,7 @@ yes
 <td> this name, value pair to add or modify in the given context object
 </td>
 <td>
-yes
+Yes
 </td>
 </tr>
 </table>
@@ -3281,6 +3372,29 @@ SampleResult.setResponseMessage("message")
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
+<h3><a name="JSR223_Sampler">18.1.11.1 JSR223 Sampler</h3></a>
+</font>
+</td></tr>
+<tr><td>
+
+
+<p>
+
+The JSR223 Sampler allows JSR223 script code to be used to perform a sample.
+For details, see 
+<a href="../usermanual/component_reference.html#BSF_Sampler">BSF Sampler</a>
+.
+
+</p>
+
+
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<hr>
+<table border="0" cellspacing="0" cellpadding="2">
+<tr><td>
+<font face="arial,helvetica,sanserif">
 <h3><a name="TCP_Sampler">18.1.12 TCP Sampler</h3></a>
 </font>
 </td></tr>
@@ -3597,7 +3711,7 @@ No
 <tr><td>
 <p>
 <table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
-<tr><td>ALPHA CODE
+<tr><td>BETA CODE - the code is still subject to change
 </td></tr>
 </table>
 </p>
@@ -3605,7 +3719,7 @@ No
 		
 <p>
 
-		JMS Publisher will publish messages to a given pub/sub topic. For those not
+		JMS Publisher will publish messages to a given destination (topic/queue). For those not
 		familiar with JMS, it is the J2EE specification for messaging. There are
 		numerous JMS servers on the market and several open source options.
 		
@@ -3618,14 +3732,14 @@ No
 
 <p>
 <table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
-<tr><td>JMeter does not include the JMS jar; this must be downloaded and put in the lib directory
+<tr><td>JMeter does not include any JMS implementation jar; this must be downloaded from the JMS provider and put in the lib directory
 </td></tr>
 </table>
 </p>
 
 	
 <p><b>Control Panel</b></p>
-<div align="center"><img width='435' height='745' src="../images/screenshots/jmspublisher.png"></div>
+<div align="center"><img width='459' height='662' src="../images/screenshots/jmspublisher.png"></div>
 <p>
 <b>Parameters</b>
 <table border="1" cellspacing="0" cellpadding="2">
@@ -3640,7 +3754,11 @@ No
 </tr>
 <tr>
 <td>use JNDI properties file</td>
-<td>use jndi.properties to create topic
+<td>use jndi.properties. 
+  Note that the file must be on the classpath - e.g. by updating the user.classpath JMeter property.
+  If this option is not selected, JMeter uses the "JNDI Initial Context Factory" and "Provider URL" fields
+  to create the connection.
+  
 </td>
 <td>
 Yes
@@ -3659,12 +3777,12 @@ No
 <td>The URL for the jms provider
 </td>
 <td>
-No
+Yes, unless using jndi.properties
 </td>
 </tr>
 <tr>
-<td>Topic</td>
-<td>the message topic
+<td>Destination</td>
+<td>the message destination (topic or queue name)
 </td>
 <td>
 Yes
@@ -3703,8 +3821,8 @@ Yes
 </td>
 </tr>
 <tr>
-<td>configuration</td>
-<td>setting for the message
+<td>Message source</td>
+<td>where to obtain the message
 </td>
 <td>
 Yes
@@ -3712,13 +3830,173 @@ Yes
 </tr>
 <tr>
 <td>Message type</td>
-<td>text or object message
+<td>Text, Map or Object message
 </td>
 <td>
 Yes
 </td>
 </tr>
 </table>
+</p>
+<p>
+
+For the MapMessage type, JMeter reads the source as lines of text.
+Each line must have 3 fields, delimited by commas.
+The fields are:
+
+<ul>
+
+
+<li>
+Name of entry
+</li>
+
+
+<li>
+Object class name, e.g. "String" (assumes java.lang package if not specified)
+</li>
+
+
+<li>
+Object string value
+</li>
+
+
+</ul>
+
+For each entry, JMeter adds an Object with the given name.
+The value is derived by creating an instance of the class, and using the valueOf(String) method to convert the value if necessary.
+For example:
+
+<pre>
+
+name,String,Example
+size,Integer,1234
+
+</pre>
+
+This is a very simple implementation; it is not intended to support all possible object types.
+
+</p>
+<p>
+
+
+<b>
+Note: 
+</b>
+ the Object message type is not implemented yet.
+
+</p>
+<p>
+
+The following table shows some values which may be useful when configuring JMS:
+
+<table>
+<tr>
+<td bgcolor="#039acc"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+Apache <a href="http://activemq.apache.org/">ActiveMQ</a>
+</font>
+</td>
+<td bgcolor="#039acc"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+Value(s)
+</font>
+</td>
+<td bgcolor="#039acc"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+Comment
+</font>
+</td>
+</tr>
+<tr>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+Context Factory
+</font>
+</td>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+org.apache.activemq.jndi.ActiveMQInitialContextFactory
+</font>
+</td>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+.
+</font>
+</td>
+</tr>
+<tr>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+Provider URL
+</font>
+</td>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+vm://localhost
+</font>
+</td>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+&nbsp;
+</font>
+</td>
+</tr>
+<tr>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+Provider URL
+</font>
+</td>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+vm:(broker:(vm://localhost)?persistent=false)
+</font>
+</td>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+Disable persistence
+</font>
+</td>
+</tr>
+<tr>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+Queue Reference
+</font>
+</td>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+dynamicQueues/QUEUENAME
+</font>
+</td>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+<a href="http://activemq.apache.org/jndi-support.html#JNDISupport-Dynamicallycreatingdestinations">Dynamically define</a> the QUEUENAME to JNDI
+</font>
+</td>
+</tr>
+<tr>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+Topic Reference
+</font>
+</td>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+dynamicTopics/TOPICNAME
+</font>
+</td>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+<a href="http://activemq.apache.org/jndi-support.html#JNDISupport-Dynamicallycreatingdestinations">Dynamically define</a> the TOPICNAME to JNDI
+</font>
+</td>
+</tr>
+</table>
+
+
 </p>
 </td></tr>
 <tr><td><br></td></tr>
@@ -3733,7 +4011,7 @@ Yes
 <tr><td>
 <p>
 <table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
-<tr><td>ALPHA CODE
+<tr><td>BETA CODE - the code is still subject to change
 </td></tr>
 </table>
 </p>
@@ -3741,7 +4019,7 @@ Yes
 		
 <p>
 
-		JMS Publisher will subscribe to messages in a given pub/sub topic. For those not
+		JMS Publisher will subscribe to messages in a given destination (topic or queue). For those not
 		familiar with JMS, it is the J2EE specification for messaging. There are
 		numerous JMS servers on the market and several open source options.
 		
@@ -3754,14 +4032,14 @@ Yes
 
 <p>
 <table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
-<tr><td>JMeter does not include the JMS jar; this must be downloaded and put in the lib directory
+<tr><td>JMeter does not include any JMS implementation jar; this must be downloaded from the JMS provider and put in the lib directory
 </td></tr>
 </table>
 </p>
 
 	
 <p><b>Control Panel</b></p>
-<div align="center"><img width='502' height='417' src="../images/screenshots/jmssubscriber.png"></div>
+<div align="center"><img width='679' height='408' src="../images/screenshots/jmssubscriber.png"></div>
 <p>
 <b>Parameters</b>
 <table border="1" cellspacing="0" cellpadding="2">
@@ -3776,7 +4054,11 @@ No
 </tr>
 <tr>
 <td>use JNDI properties file</td>
-<td>use jndi.properties to create topic
+<td>use jndi.properties. 
+  Note that the file must be on the classpath - e.g. by updating the user.classpath JMeter property.
+  If this option is not selected, JMeter uses the "JNDI Initial Context Factory" and "Provider URL" fields
+  to create the connection.
+  
 </td>
 <td>
 Yes
@@ -3799,8 +4081,8 @@ No
 </td>
 </tr>
 <tr>
-<td>Topic</td>
-<td>the message topic
+<td>Destination</td>
+<td>the message destination (topic or queue name)
 </td>
 <td>
 Yes
@@ -3840,7 +4122,16 @@ Yes
 </tr>
 <tr>
 <td>Read response</td>
-<td>should the sampler read the response
+<td>should the sampler read the response. If not, only the response length is returned.
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>Timeout</td>
+<td>Specify the timeout to be applied, in milliseconds. 0=none. 
+  This is the overall aggregate timeout, not per sample.
 </td>
 <td>
 Yes
@@ -3848,13 +4139,59 @@ Yes
 </tr>
 <tr>
 <td>Client</td>
-<td>Which client to use
+<td>Which client implementation to use.
+  Both of them create connections which can read messages. However they use a different strategy, as described below:
+  
+<ul>
+
+  
+<li>
+MessageConsumer.receive() - calls receive() for every requested message. 
+  Retains the connection between samples, but does not fetch messages unless the sampler is active.
+  This is best suited to Queue subscriptions. 
+  
+</li>
+
+  
+<li>
+MessageListener.onMessage() - establishes a Listener that stores all incoming messages on a queue. 
+  The listener remains active after the sampler completes.
+  This is best suited to Topic subscriptions.
+</li>
+
+  
+</ul>
+
+  
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>Stop between samples?</td>
+<td>
+  If selected, then JMeter calls Connection.stop() at the end of each sample (and calls start() before each sample).
+  This may be useful in some cases where multiple samples/threads have connections to the same queue.
+  If not selected, JMeter calls Connection.start() at the start of the thread, and does not call stop() until the end of the thread.
+  
 </td>
 <td>
 Yes
 </td>
 </tr>
 </table>
+</p>
+<p>
+
+
+<b>
+NOTE:
+</b>
+ JMeter 2.3.4 and earlier used a different strategy for the MessageConsumer.receive() client. 
+Previously this started a background thread which polled for messages. This thread continued when the sampler
+completed, so the net effect was similar to the MessageListener.onMessage() strategy.
+
 </p>
 </td></tr>
 <tr><td><br></td></tr>
@@ -3869,7 +4206,7 @@ Yes
 <tr><td>
 <p>
 <table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
-<tr><td>ALPHA CODE
+<tr><td>BETA CODE - the code is still subject to change
 </td></tr>
 </table>
 </p>
@@ -3902,14 +4239,14 @@ JMSSampler.useSecurity.properties=false
 
 <p>
 <table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
-<tr><td>JMeter does not include the JMS jar; this must be downloaded and put in the lib directory
+<tr><td>JMeter does not include any JMS implementation jar; this must be downloaded from the JMS provider and put in the lib directory
 </td></tr>
 </table>
 </p>
 
 	
 <p><b>Control Panel</b></p>
-<div align="center"><img width='635' height='733' src="../images/screenshots/jms/JMS_Point-to-Point.png"></div>
+<div align="center"><img width='684' height='698' src="../images/screenshots/jms/JMS_Point-to-Point.png"></div>
 <p>
 <b>Parameters</b>
 <table border="1" cellspacing="0" cellpadding="2">
@@ -3970,10 +4307,61 @@ Yes
 </td>
 </tr>
 <tr>
-<td>Use Request Message Id As Correlation Id</td>
+<td>Use alternate fields for message correlation</td>
 <td>
-    If this is selected, then the request message id is used as the correlation id.
-    Otherwise, the correlation id needs to be specified in the request.
+    These check-boxes select the fields which will be used for matching the response message with the original request.
+    
+<ul>
+
+    
+<li>
+Use Request Message Id - if selected, the request JMSMessageID will be used, 
+    otherwise the request JMSCorrelationID will be used. 
+    In the latter case the correlation id must be specified in the request.
+</li>
+
+    
+<li>
+Use Response Message Id - if selected, the response JMSMessageID will be used, 
+    otherwise the response JMSCorrelationID will be used.
+    
+</li>
+
+    
+</ul>
+
+    There are two frequently used JMS Correlation patterns:
+    
+<ul>
+
+    
+<li>
+JMS Correlation ID Pattern - 
+    i.e. match request and response on their correlation Ids
+    => deselect both checkboxes, and provide a correlation id.
+</li>
+
+    
+<li>
+JMS Message ID Pattern -
+    i.e. match request message id with response correlation id
+    => select "Use Request Message Id" only.
+    
+</li>
+
+    
+</ul>
+
+    In both cases the JMS application is responsible for populating the correlation ID as necessary.
+    
+<b>
+Note:
+</b>
+ if the same queue is used to send and receive messages, 
+    then the response message will be the same as the request message.
+    In which case, either provide a correlation id and clear both checkboxes;
+    or select both checkboxes to use the message Id for correlation.
+    This can be useful for checking raw JMS throughput.
   
 </td>
 <td>
@@ -4137,7 +4525,7 @@ Here are some general guidelines for writing Junit tests so they work well with 
 5. Each sampler creates an instance of the test class, so write your test so the setup happens in oneTimeSetUp and oneTimeTearDown.
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='525' height='479' src="../images/screenshots/junit_sampler.png"></div>
+<div align="center"><img width='457' height='507' src="../images/screenshots/junit_sampler.png"></div>
 <p>
 <b>Parameters</b>
 <table border="1" cellspacing="0" cellpadding="2">
@@ -4148,6 +4536,14 @@ Here are some general guidelines for writing Junit tests so they work well with 
 </td>
 <td>
 No
+</td>
+</tr>
+<tr>
+<td>Search for JUnit4 annotations</td>
+<td>Select this to search for JUnit 4 tests (@Test annotations)
+</td>
+<td>
+Yes
 </td>
 </tr>
 <tr>
@@ -4260,6 +4656,43 @@ Yes
 </tr>
 </table>
 </p>
+<p>
+
+The following JUnit4 annotations are recognised:
+
+<ul>
+
+
+<li>
+@Test - used to find test methods and classes. The "expected" and "timeout" attributes are supported.
+</li>
+
+
+<li>
+@Before - treated the same as setUp() in JUnit3
+</li>
+
+
+<li>
+@After - treated the same as tearDown() in JUnit3
+</li>
+
+
+<li>
+@BeforeClass, @AfterClass - treated as test methods so they can be run independently as required
+</li>
+
+
+</ul>
+
+
+</p>
+<p>
+
+Note that JMeter currently runs the test methods directly, rather than leaving it to JUnit.
+This is to allow the setUp/tearDown methods to be excluded from the sample time. 
+
+</p>
 </td></tr>
 <tr><td><br></td></tr>
 </table>
@@ -4280,19 +4713,8 @@ The Mail Reader Sampler can read (and optionally delete) mail messages using POP
 </p>
 
 
-<p>
-<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
-<tr><td>
-The sampler requires the JavaMail and JAF jars to be available on the classpath.
-To use POP3S or IMAPS requires a recent version of JavaMail (e.g. JavaMail 1.4.1 and JAF 1.1.1).
-
-</td></tr>
-</table>
-</p>
-
-
 <p><b>Control Panel</b></p>
-<div align="center"><img width='340' height='365' src="../images/screenshots/mailreader_sampler.png"></div>
+<div align="center"><img width='399' height='306' src="../images/screenshots/mailreader_sampler.png"></div>
 <p>
 <b>Parameters</b>
 <table border="1" cellspacing="0" cellpadding="2">
@@ -4307,7 +4729,23 @@ No
 </tr>
 <tr>
 <td>Server Type</td>
-<td>The protocol used by the server: POP3, POP3S, IMAP, IMAPS
+<td>The protocol used by the provider: e.g. pop3, pop3s, imap, imaps.
+or another string representing the server protocol.
+For example 
+<code>
+file
+</code>
+ for use with the read-only mail file provider.
+The actual provider names for POP3 and IMAP are 
+<code>
+pop3
+</code>
+ and 
+<code>
+imap
+</code>
+
+
 </td>
 <td>
 Yes
@@ -4315,10 +4753,22 @@ Yes
 </tr>
 <tr>
 <td>Server</td>
-<td>Hostname or IP address of the server
+<td>Hostname or IP address of the server. See below for use with 
+<code>
+file
+</code>
+ protocol.
 </td>
 <td>
 Yes
+</td>
+</tr>
+<tr>
+<td>Port</td>
+<td>Port to be used to connect to the server (optional)
+</td>
+<td>
+No
 </td>
 </tr>
 <tr>
@@ -4339,7 +4789,11 @@ No
 </tr>
 <tr>
 <td>Folder</td>
-<td>The IMAP(S) folder to use
+<td>The IMAP(S) folder to use. See below for use with 
+<code>
+file
+</code>
+ protocol.
 </td>
 <td>
 Yes, if using IMAP(S)
@@ -4363,13 +4817,64 @@ Yes
 </tr>
 <tr>
 <td>Store the message using MIME</td>
-<td>Whether to store the message as MIME. If not, fewer headers are stored (Date, To, From, Subject).
+<td>Whether to store the message as MIME. 
+If so, then the entire raw message is stored in the Response Data; the headers are not stored as they are available in the data. 
+If not, the message headers are stored as Response Headers. 
+A few headers are stored (Date, To, From, Subject) in the body.
+
 </td>
 <td>
 Yes
 </td>
 </tr>
 </table>
+</p>
+<p>
+
+Messages are stored as subsamples of the main sampler.
+In versions of JMeter after 2.3.4, multipart message parts are stored as subsamples of the message.
+
+</p>
+<p>
+
+
+<b>
+Special handling for "file" protocol:
+</b>
+<br>
+</br>
+
+The 
+<code>
+file
+</code>
+ JavaMail provider can be used to read raw messages from files.
+The 
+<code>
+server
+</code>
+ field is used to specify the path to the parent of the 
+<code>
+folder
+</code>
+.
+Individual message files should be stored with the name 
+<code>
+n.msg
+</code>
+,
+where 
+<code>
+n
+</code>
+ is the message number.
+Alternatively, the 
+<code>
+server
+</code>
+ field can be the name of a file which contains a single message.
+The current implementation is quite basic, and is mainly intended for debugging purposes. 
+
 </p>
 </td></tr>
 <tr><td><br></td></tr>
@@ -4445,6 +4950,263 @@ Yes
 </td>
 <td>
 Yes, if Pause is selected
+</td>
+</tr>
+</table>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<hr>
+<table border="0" cellspacing="0" cellpadding="2">
+<tr><td>
+<font face="arial,helvetica,sanserif">
+<h3><a name="SMTP_Sampler">18.1.19 SMTP Sampler</h3></a>
+</font>
+</td></tr>
+<tr><td>
+
+
+<p>
+
+The SMTP Sampler can send mail messages using SMTP/SMTPS protocol. 
+It is possible to set security propocols for the connection (SSL and TLS), as well as user authentication. 
+If a security protocol is used a verification on the server certificate will occur. 
+<br>
+</br>
+
+Two alternatives to handle this verification are available:
+<br>
+</br>
+
+
+<ul>
+
+
+<li>
+Trust all certificates. This will ignore certificate chain verification
+</li>
+
+
+<li>
+Use a local truststore. With this option the certificate chain will be validated against the local truststore file.
+</li>
+
+
+</ul>
+
+
+</p>
+
+
+<p><b>Control Panel</b></p>
+<div align="center"><img width='644' height='759' src="../images/screenshots/smtp_sampler.png"></div>
+<p>
+<b>Parameters</b>
+<table border="1" cellspacing="0" cellpadding="2">
+<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+<tr>
+<td>Server</td>
+<td>Hostname or IP address of the server. See below for use with 
+<code>
+file
+</code>
+ protocol.
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>Port</td>
+<td>Port to be used to connect to the server.
+Defaults are: SMTP=25, SSL=465, StartTLS=587
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Address From</td>
+<td>The from address that will appear in the e-mail
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>Address To</td>
+<td>The destination e-mail address
+</td>
+<td>
+Yes, unless CC or BCC is specified
+</td>
+</tr>
+<tr>
+<td>Address To BCC</td>
+<td>Blind carbon copy destinations e-mail address
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Address To CC</td>
+<td>Carbon copy destinations e-mail address
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Use Auth</td>
+<td>Indicates if the SMTP server requires user authentication
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Username</td>
+<td>User login name
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Password</td>
+<td>User login password (N.B. this is stored unencrypted in the test plan)
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Use no security features</td>
+<td>Indicates that the connection to the SMTP server does not use any security protocol.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Use SSL</td>
+<td>Indicates that the connection to the SMTP server must use the SSL protocol.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Use StartTLS</td>
+<td>Indicates that the connection to the SMTP server should attempt to start the TLS protocol.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Enforce StartTLS</td>
+<td>If the server does not start the TLS protocol the connection will be terminated.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Trust All Certificates</td>
+<td>When selected it will accept all certificates independent of the CA.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Use local truststore</td>
+<td>When selected it will only accept certificates that are locally trusted.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Local truststore</td>
+<td>Path to file containing the trusted certificates.
+Relative paths are resolved against the current directory.
+
+<br>
+</br>
+Failing that, against the directory containing the test script (JMX file).
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Subject</td>
+<td>The e-mail message subject.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Include timestamp in subject</td>
+<td>Includes the System.currentTimemilis() in the subject line.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Add Header</td>
+<td>Additional headers can be defined using this button.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Message</td>
+<td>The message body.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Attach files</td>
+<td>Files to be attached to the message.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Send .eml</td>
+<td>If set, the .eml file will be sent instead of the entries in the Subject, Message, and Attached files
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Calculate message size</td>
+<td>Calculates the message size and stores it in the sample result.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Enable debug logging?</td>
+<td>If set, then the "mail.debug" property is set to "true"
+</td>
+<td>
+No
 </td>
 </tr>
 </table>
@@ -5880,6 +6642,14 @@ the contents are used to prefix the pathname.
 </p>
 
 
+<p>
+
+If the file cannot be found at the location given by prefix+filename, then the controller
+attempts to open the fileName relative to the JMX launch directory (versions of JMeter after 2.3.4).
+
+</p>
+
+
 <p><b>Control Panel</b></p>
 <div align="center"><img width='419' height='118' src="../images/screenshots/includecontroller.png"></div>
 <p>
@@ -5985,7 +6755,7 @@ The generated sample is only regarded as successful if all its sub-samples are s
 
 	
 <p><b>Control Panel</b></p>
-<div align="center"><img width='258' height='125' src="../images/screenshots/transactioncontroller.png"></div>
+<div align="center"><img width='288' height='155' src="../images/screenshots/transactioncontroller.png"></div>
 <p>
 <b>Parameters</b>
 <table border="1" cellspacing="0" cellpadding="2">
@@ -6003,6 +6773,17 @@ Yes
 <td>
 	If checked, then the sample is generated as a parent of the other samples,
 	otherwise the sample is generated as an independent sample.
+	
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>Include timer duration in generated sample</td>
+<td>
+	Whether to include timer, pre- and post-processing delays in the generated sample.
+	Default is true to be compatible with the behaviour in previous versions of JMeter.
 	
 </td>
 <td>
@@ -6188,12 +6969,7 @@ Simple Data Writer
 
 
 <li>
-BeanShell Listener
-</li>
-
-
-<li>
-Assertion Results
+BeanShell/BSF Listener
 </li>
 
 
@@ -6209,6 +6985,36 @@ Monitor Results
 
 <li>
 Summary Report
+</li>
+
+
+</ul>
+
+
+<p>
+
+The following Listeners no longer need to keep copies of every single sample.
+Instead, samples with the same elapsed time are aggregated.
+Less memory is now needed, especially if most samples only take a second or two at most.
+
+</p>
+
+
+<ul>
+
+
+<li>
+Aggregate Report
+</li>
+
+
+<li>
+Aggregate Graph
+</li>
+
+
+<li>
+Distribution Graph
 </li>
 
 
@@ -6536,7 +7342,7 @@ It does not show any headers (such as Host) that may be added by the HTTP protoc
 
 <p>
 
-There are several ways to view the response, selectable by a radio button.
+There are several ways to view the response, selectable by a drop-down box at the bottom of the left hand panel.
 </p>
 
 
@@ -6544,22 +7350,32 @@ There are several ways to view the response, selectable by a radio button.
 
 
 <li>
-Show text
+HTML
 </li>
 
 
 <li>
-Render HTML
+HTML (download embedded resources)
 </li>
 
 
 <li>
-Render XML
+JSON
 </li>
 
 
 <li>
-Render JSON
+Regexp Tester
+</li>
+
+
+<li>
+Text
+</li>
+
+
+<li>
+XML
 </li>
 
 
@@ -6568,8 +7384,25 @@ Render JSON
 
 <p>
 
-The default "Show text" view shows all of the text contained in the
-response. 
+Additional renderers can be created.
+The class must implement the interface 
+<code>
+org.apache.jmeter.visualizers.ResultRenderer
+</code>
+
+and/or extend the abstract class 
+<code>
+org.apache.jmeter.visualizers.SamplerResultTab
+</code>
+, and the
+compiled code must be available to JMeter (e.g. by adding it to the lib/ext directory).
+
+</p>
+
+
+<p>
+
+The default "Text" view shows all of the text contained in the response. 
 Note that this will only work if the response content-type is considered to be text.
 If the content-type begins with any of the following, it is considered as binary,
 otherwise it is considered to be text.
@@ -6612,28 +7445,75 @@ You can also use save the entire response to a file using
 The HTML view attempts to render the response as
 HTML.  The rendered HTML is likely to compare poorly to the view one
 would get in any web browser; however, it does provide a quick
-approximation that is helpful for initial result evaluation. 
-If the "Download embedded resources" check-box is selected, the renderer
+approximation that is helpful for initial result evaluation.
+No images etc are downloaded. 
+If the HTML (download embedded resources) option is selected, the renderer
 may download images and style-sheets etc referenced by the HTML. 
-If the checkbox is not selected, the renderer will not download images etc.
 
 </p>
 
 
 <p>
-The Render XML view will show response in tree style. 
+The XML view will show response in tree style. 
 Any DTD nodes or Prolog nodes will not show up in tree; however, response may contain those nodes.
 
 </p>
 
 
 <p>
-The Render JSON view will show the response in tree style (also handles JSON embedded in JavaScript).
+The JSON view will show the response in tree style (also handles JSON embedded in JavaScript).
+</p>
+
+
+<p>
+
+Most of the views also allow the displayed data to be searched; the result of the search will be high-lighted
+in the display above. For example the Control panel screenshot below shows one result of searching for "Java".
+Note that the search operates on the visible text, so you may get different results when searching
+the Text and HTML views.
+
+</p>
+
+
+<p>
+The "Regexp Tester" view only works for text responses. It shows the plain text in the upper panel.
+The "Test" button allows the user to apply the Regular Expression to the upper panel and the results
+will be displayed in the lower panel.
+For example, the RE 
+<b>
+(JMeter\w*).*
+</b>
+ applied to the current JMeter home page gives the following output:
+
+</p>
+
+
+<pre>
+
+Match count: 26
+Match[1][0]=JMeter - Apache JMeter&lt;/title>
+Match[1][1]=JMeter
+Match[2][0]=JMeter" title="JMeter" border="0"/>&lt;/a>
+Match[2][1]=JMeter
+Match[3][0]=JMeterCommitters">Contributors&lt;/a>
+Match[3][1]=JMeterCommitters
+... and so on ...
+
+</pre>
+
+
+<p>
+
+The first number in [] is the match number; the second number is the group. 
+Group [0] is whatever matched the whole RE.
+Group [1] is whatever matched the 1st group, i.e. (JMeter\w*) in this case.
+See Figure 9b (below).
+
 </p>
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='791' height='506' src="../images/screenshots/view_results_tree.png"></div>
+<div align="center"><img width='778' height='642' src="../images/screenshots/view_results_tree.png"></div>
 <p>
 
 	The Control Panel (above) shows an example of an HTML display.
@@ -6641,6 +7521,11 @@ The Render JSON view will show the response in tree style (also handles JSON emb
 
 <p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='751' height='461' src="../images/screenshots/view_results_tree_xml.png"><br>
 <font size="-1">Figure 9 Sample XML display
+</font></td></tr></table></p>
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='824' height='637' src="../images/screenshots/view_results_tree_regex.png"><br>
+<font size="-1">Figure 9a Sample Regexp Test display
 </font></td></tr></table></p>
 
 
@@ -6676,8 +7561,7 @@ the Aggregate Report.
 
 
 <p>
-<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
-<tr><td>
+
 Calculation of the 
 <a href="glossary.html#Median">
 Median
@@ -6690,13 +7574,15 @@ th
 <a href="glossary.html#Percentile">
 percentile
 </a>
-) values requires a lot of memory as details of every Sample have to be saved.
+) values requires additional memory.
+For JMeter 2.3.4 and earlier, details of each sample were saved separately, which meant a lot of memory was needed.
+JMeter now combines samples with the same elapsed time, so far less memory is used.
+However, for samples that take more than a few seconds, the probability is that fewer samples will have identical times,
+in which case more memory will be needed.
 See the 
 <a href="../usermanual/component_reference.html#Summary_Report">Summary Report</a>
- for a similar Listener that does not need so much memory.
+ for a similar Listener that does not store individual samples and so needs constant memory.
 
-</td></tr>
-</table>
 </p>
 
 
@@ -6976,15 +7862,6 @@ failed responses from the server.
 </p>
 <p><b>Control Panel</b></p>
 <div align="center"><img width='645' height='345' src="../images/screenshots/mailervisualizer.png"></div>
-<p>
-<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
-<tr><td>
-The Mailer Visualizer requires the optional Javamail jars (activation.jar and mail.jar).
-If these are not present in the lib directory, the element will not appear in the menus.
-
-</td></tr>
-</table>
-</p>
 <p>
 <b>Parameters</b>
 <table border="1" cellspacing="0" cellpadding="2">
@@ -7643,6 +8520,29 @@ For details of all the methods available on each of the above variables, please 
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
+<h3><a name="JSR223_Listener">18.3.18.1 JSR223 Listener</h3></a>
+</font>
+</td></tr>
+<tr><td>
+
+
+<p>
+
+The JSR223 Listener allows JSR223 script code to be applied to sample results.
+For details, see 
+<a href="../usermanual/component_reference.html#BSF_Listener">BSF Listener</a>
+.
+
+</p>
+
+
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<hr>
+<table border="0" cellspacing="0" cellpadding="2">
+<tr><td>
+<font face="arial,helvetica,sanserif">
 <h3><a name="Generate_Summary_Results">18.3.18 Generate Summary Results</h3></a>
 </font>
 </td></tr>
@@ -7716,6 +8616,39 @@ Yes
 <tr><td><br></td></tr>
 </table>
 <hr>
+<table border="0" cellspacing="0" cellpadding="2">
+<tr><td>
+<font face="arial,helvetica,sanserif">
+<h3><a name="Comparison_Assertion_Visualizer">18.3.19 Comparison Assertion Visualizer</h3></a>
+</font>
+</td></tr>
+<tr><td>
+
+The Comparison Assertion Visualizer shows the results of any 
+<a href="../usermanual/component_reference.html#Compare_Assertion">Compare Assertion</a>
+ elements.
+
+<p><b>Control Panel</b></p>
+<div align="center"><img width='777' height='266' src="../images/screenshots/comparison_assertion_visualizer.png"></div>
+<p>
+<b>Parameters</b>
+<table border="1" cellspacing="0" cellpadding="2">
+<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+<tr>
+<td>Name</td>
+<td>Descriptive name for this element that is shown in the tree.
+ 
+</td>
+<td>
+Yes
+</td>
+</tr>
+</table>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<hr>
 <a href="#">
 ^
 </a>
@@ -7773,6 +8706,14 @@ Yes
 
 	Versions of JMeter after 2.3.1 allow variables to be quoted; this allows the value to contain a delimiter.
 	Previously it was necessary to choose a delimiter that was not used in any values.
+	
+</p>
+
+	
+<p>
+
+	Versions of JMeter after 2.3.4 support CSV files which have a header line defining the column names.
+	To enable this, leave the "Variable Names" field empty. The correct delimiter must be provided.
 	
 </p>
 
@@ -7899,7 +8840,11 @@ No
 </tr>
 <tr>
 <td>Variable Names</td>
-<td>List of variable names (comma-delimited)
+<td>List of variable names (comma-delimited).
+  Versions of JMeter after 2.3.4 support CSV header lines:
+  if the variable name field empty, then the first line of the file is read and interpreted as the list of column names.
+  The names must be separated by the delimiter character. They can be quoted using double-quotes.
+  
 </td>
 <td>
 Yes
@@ -8248,7 +9193,7 @@ The HTTP Cache Manager is used to add caching functionality to HTTP requests wit
 
 <p>
 
-If a sample is successful (i.e. has response code 2xx) then the Last-Modified and Etag values are saved for the URL.
+If a sample is successful (i.e. has response code 2xx) then the Last-Modified and Etag (and Expired if relevant) values are saved for the URL.
 Before executing the next sample, the sampler checks to see if there is an entry in the cache, 
 and if so, the If-Last-Modified and If-None-Match conditional headers are set for the request.
 
@@ -8257,7 +9202,18 @@ and if so, the If-Last-Modified and If-None-Match conditional headers are set fo
 
 <p>
 
+Additionally, if the "Use Cache-Control/Expires header" option is selected, then the Cache-Control/Expires value is checked against the current time.
+If the request is a GET request, and the timestamp is in the future, then the sampler returns immediately,
+without requesting the URL from the remote server. This is intended to emulate browser behaviour.
+Note that the Cache-Control header must be "public" and only the "max-age" expiry option is processed.
+
+</p>
+
+
+<p>
+
 If the requested document has not changed since it was cached, then the response body will be empty.
+Likewise if the Expires date is in the future.
 This may cause problems for Assertions.
 
 </p>
@@ -8728,10 +9684,13 @@ The Java Request Defaults component lets you set default values for Java testing
 </font>
 </td></tr>
 <tr><td>
-Creates a database connection pool (used by 
+Creates a database connection (used by 
 <a href="../usermanual/component_reference.html#JDBC_Request">JDBC Request</a>
 Sampler)
-	 with JDBC Connection settings.
+	 from the supplied JDBC Connection settings. The connection may be optionally pooled between threads.
+     Otherwise each thread gets its own connection.
+     The connection configuration name is used by the JDBC Sampler to select the appropriate
+     connection.
 	
 <p><b>Control Panel</b></p>
 <div align="center"><img width='369' height='443' src="../images/screenshots/jdbc-config/jdbc-conn-config.png"></div>
@@ -8741,7 +9700,7 @@ Sampler)
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
-<td>Descriptive name for the connection pool that is shown in the tree.
+<td>Descriptive name for the connection configuration that is shown in the tree.
 </td>
 <td>
 No
@@ -8749,12 +9708,12 @@ No
 </tr>
 <tr>
 <td>Variable Name</td>
-<td>The name of the variable the connection pool is tied to.  
-		Multiple connection pools can be used, each tied to a different variable, allowing JDBC Samplers
-		to select the pool to draw connections from.
+<td>The name of the variable the connection is tied to.  
+		Multiple connections can be used, each tied to a different variable, allowing JDBC Samplers
+		to select the appropriate connection.
 		
 <b>
-Each pool name must be different. If there are two configuration elements using the same pool name,
+Each name must be different. If there are two configuration elements using the same name,
 		only one will be saved. JMeter versions after 2.3 log a message if a duplicate name is detected.
 </b>
 
@@ -8766,17 +9725,21 @@ Yes
 </tr>
 <tr>
 <td>Max Number of Connections</td>
-<td>Maximum number of connections allowed in the pool.
-		To ensure that threads don't have to wait for connections, set the max count to the same as	the number of threads.
-		
+<td>
+        Maximum number of connections allowed in the pool.
+        In most cases, 
 <b>
-In versions of JMeter after 2.3, the value "0" is treated specially.
+set this to zero (0)
 </b>
+.
+        This means that each thread will get its own pool with a single connection in it, i.e.
+        the connections are not shared betweeen threads.
+        
+<br>
+</br>
 
-		Instead of sharing the pool between all threads in the test plan, a pool containing a single connection
-		is created for each thread. This ensures that the same connection can be re-used for multiple samplers
-		in the same thread.
-		Multiple pools can be used - e.g. for connecting to different databases - just give them different names.
+		If you really want to use shared pooling (why?), then set the max count to the same as the number of threads
+        to ensure threads don't wait on each other.
 		
 </td>
 <td>
@@ -9668,8 +10631,16 @@ prev.getSubResults()
 <font size="-1">Assertion Scope
 </font></td></tr></table></p>
 
+    or the following
+    
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='765' height='55' src="../images/screenshots/assertion/assertionscopevar.png"><br>
+<font size="-1">Assertion Scope
+</font></td></tr></table></p>
+
     If a sub-sampler fails and the main sample is successful,
     then the main sample will be set to failed status and an Assertion Result will be added.
+    If the JMeter variable option is used, it is assumed to relate to the main sample, and
+    any failure will be applied to the main sample only.
     
 </p>
 
@@ -9792,7 +10763,7 @@ extended regular expression
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='761' height='422' src="../images/screenshots/assertion/assertion.png"></div>
+<div align="center"><img width='762' height='417' src="../images/screenshots/assertion/assertion.png"></div>
 <p>
 <b>Parameters</b>
 <table border="1" cellspacing="0" cellpadding="2">
@@ -9806,7 +10777,7 @@ No
 </td>
 </tr>
 <tr>
-<td>Which samples to test</td>
+<td>Apply to:</td>
 <td>
         This is for use with samplers that can generate sub-samples, 
         e.g. HTTP Sampler with embedded resources, Mail Reader or samples generated by the Transaction Controller.
@@ -9826,6 +10797,11 @@ Sub-samples only - assertion only applies to the sub-samples
         
 <li>
 Main sample and sub-samples - assertion applies to both.
+</li>
+
+        
+<li>
+JMeter Variable - assertion is to be applied to the contents of the named variable
 </li>
 
         
@@ -10058,7 +11034,7 @@ the size be equal to, greater than, less than, or not equal to a given number of
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='331' height='346' src="../images/screenshots/size_assertion.png"></div>
+<div align="center"><img width='732' height='358' src="../images/screenshots/size_assertion.png"></div>
 <p>
 <b>Parameters</b>
 <table border="1" cellspacing="0" cellpadding="2">
@@ -10072,8 +11048,45 @@ No
 </td>
 </tr>
 <tr>
+<td>Apply to:</td>
+<td>
+        This is for use with samplers that can generate sub-samples, 
+        e.g. HTTP Sampler with embedded resources, Mail Reader or samples generated by the Transaction Controller.
+        
+<ul>
+
+        
+<li>
+Main sample only - assertion only applies to the main sample
+</li>
+
+        
+<li>
+Sub-samples only - assertion only applies to the sub-samples
+</li>
+
+        
+<li>
+Main sample and sub-samples - assertion applies to both.
+</li>
+
+        
+<li>
+JMeter Variable - assertion is to be applied to the contents of the named variable
+</li>
+
+        
+</ul>
+
+        
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
 <td>Size in bytes</td>
-<td>The number of bytes to use in testing the size of the response.
+<td>The number of bytes to use in testing the size of the response (or value of the JMeter variable).
 </td>
 <td>
 Yes
@@ -10517,7 +11530,7 @@ on XPath.
 
 </p>
 <p><b>Control Panel</b></p>
-<div align="center"><img width='872' height='266' src="../images/screenshots/xpath_assertion.png"></div>
+<div align="center"><img width='692' height='293' src="../images/screenshots/xpath_assertion.png"></div>
 <p>
 <b>Parameters</b>
 <table border="1" cellspacing="0" cellpadding="2">
@@ -10531,8 +11544,8 @@ No
 </td>
 </tr>
 <tr>
-<td>Tolerant Parser</td>
-<td>Be tolerant of XML/HTML errors (i.e. use Tidy)
+<td>Use Tidy (tolerant parser)</td>
+<td>Use Tidy, i.e. be tolerant of XML/HTML errors
 </td>
 <td>
 Yes
@@ -10543,7 +11556,7 @@ Yes
 <td>Sets the Tidy Quiet flag
 </td>
 <td>
-If tolerant is selected
+If Tidy is selected
 </td>
 </tr>
 <tr>
@@ -10551,7 +11564,7 @@ If tolerant is selected
 <td>If a Tidy error occurs, then set the Assertion accordingly
 </td>
 <td>
-If tolerant is selected
+If Tidy is selected
 </td>
 </tr>
 <tr>
@@ -10559,7 +11572,7 @@ If tolerant is selected
 <td>Sets the Tidy showWarnings option
 </td>
 <td>
-If tolerant is selected
+If Tidy is selected
 </td>
 </tr>
 <tr>
@@ -10567,7 +11580,7 @@ If tolerant is selected
 <td>Should namespaces be honoured?
 </td>
 <td>
-No
+If Tidy is not selected
 </td>
 </tr>
 <tr>
@@ -10575,7 +11588,23 @@ No
 <td>Check the document against its schema.
 </td>
 <td>
-No
+If Tidy is not selected
+</td>
+</tr>
+<tr>
+<td>Ignore Whitespace</td>
+<td>Ignore Element Whitespace.
+</td>
+<td>
+If Tidy is not selected
+</td>
+</tr>
+<tr>
+<td>Fetch External DTDs</td>
+<td>If selected, external DTDs are fetched.
+</td>
+<td>
+If Tidy is not selected
 </td>
 </tr>
 <tr>
@@ -10584,14 +11613,6 @@ No
 </td>
 <td>
 Yes
-</td>
-</tr>
-<tr>
-<td>Ignore Whitespace</td>
-<td>Ignore Element Whitespace.
-</td>
-<td>
-No
 </td>
 </tr>
 <tr>
@@ -10819,6 +11840,193 @@ If an error is detected, the script should use AssertionResult.setFailureMessage
 </p>
 <p>
 For futher details of all the methods available on each of the above variables, please check the Javadoc
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<hr>
+<table border="0" cellspacing="0" cellpadding="2">
+<tr><td>
+<font face="arial,helvetica,sanserif">
+<h3><a name="JSR223_Assertion">18.5.11 JSR223 Assertion</h3></a>
+</font>
+</td></tr>
+<tr><td>
+
+
+<p>
+
+The JSR223 Assertion allows JSR223 script code to be used to check the status of the previous sample.
+For details, see 
+<a href="../usermanual/component_reference.html#BSF_Assertion">BSF Assertion</a>
+.
+
+</p>
+
+
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<hr>
+<table border="0" cellspacing="0" cellpadding="2">
+<tr><td>
+<font face="arial,helvetica,sanserif">
+<h3><a name="Compare_Assertion">18.5.12 Compare Assertion</h3></a>
+</font>
+</td></tr>
+<tr><td>
+
+The Compare Assertion can be used to compare sample results within its scope.
+Either the contents or the elapsed time can be compared, and the contents can be filtered before comparison.
+The assertion comparisons can be seen in the 
+<a href="../usermanual/component_reference.html#Comparison_Assertion_Visualizer">Comparison Assertion Visualizer</a>
+.
+
+<p><b>Control Panel</b></p>
+<div align="center"><img width='292' height='296' src="../images/screenshots/assertion/compare.png"></div>
+<p>
+<b>Parameters</b>
+<table border="1" cellspacing="0" cellpadding="2">
+<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+<tr>
+<td>Name</td>
+<td>Descriptive name for this element that is shown in the tree.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Compare Content</td>
+<td>Whether or not to compare the content (response data)
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>Compare Time</td>
+<td>If the value is >=0, then check if the response time difference is no greater than the value. 
+    I.e. if the value is 0, then the response times must be exactly equal.
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>Comparison Filters</td>
+<td>Filters can be used to remove strings from the content comparison.
+    For example, if the page has a time-stamp, it might be matched with: "Time: \d\d:\d\d:\d\d" and replaced with a dummy fixed time "Time: HH:MM:SS".
+    
+</td>
+<td>
+No
+</td>
+</tr>
+</table>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<hr>
+<table border="0" cellspacing="0" cellpadding="2">
+<tr><td>
+<font face="arial,helvetica,sanserif">
+<h3><a name="SMIME_Assertion">18.5.13 SMIME Assertion</h3></a>
+</font>
+</td></tr>
+<tr><td>
+
+The SMIME Assertion can be used to evaluate the sample results from the Mail Reader Sampler.
+This assertion verifies if the body of a mime message is signed or not. The signature can also be verified against a specific signer certificate.
+As this is a functionality that is not necessarily needed by most users, additional jars need to be downloaded and added to JMETER_HOME/lib :
+<br>
+</br>
+ 
+
+<ul>
+
+
+<li>
+bcmail-xxx.jar (BouncyCastle SMIME/CMS)
+</li>
+
+
+<li>
+bcprov-xxx.jar (BouncyCastle Provider)
+</li>
+
+
+</ul>
+
+These need to be 
+<a href="http://www.bouncycastle.org/latest_releases.html">
+downloaded from BouncyCastle.
+</a>
+
+
+<p>
+
+If using the 
+<a href="../usermanual/component_reference.html#Mail_Reader_Sampler">Mail Reader Sampler</a>
+, 
+please ensure that you select "Store the message using MIME (raw)" otherwise the Assertion won't be able to process the message correctly.
+
+</p>
+
+
+<p><b>Control Panel</b></p>
+<div align="center"><img width='471' height='428' src="../images/screenshots/assertion/smime.png"></div>
+<p>
+<b>Parameters</b>
+<table border="1" cellspacing="0" cellpadding="2">
+<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+<tr>
+<td>Name</td>
+<td>Descriptive name for this element that is shown in the tree.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Verify Signature</td>
+<td>If selected, the asertion will verify if it is a valid signature according to the parameters defined in the Signer Certificate box.
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>Message not signed</td>
+<td>Whether or not to expect a signature in the message
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>Signer Cerificate</td>
+<td>"No Check" means that it wil not perform signature verification. "Check values" is used to verify the signature against the inputs provided. And "Certificate file" will perform the verification against a specific certificate file.
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>Message Position</td>
+<td>
+    The Mail sampler can retrieve multiple messages in a single sample.
+    Use this field to specify which message will be checked.
+    Messages are numbered from 0, so 0 means the first message.
+    Negative numbers count from the LAST message; -1 means LAST, -2 means penultimate etc.
+    
+</td>
+<td>
+Yes
+</td>
+</tr>
+</table>
 </p>
 </td></tr>
 <tr><td><br></td></tr>
@@ -11233,7 +12441,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='516' height='286' src="../images/screenshots/timers/beanshell_timer.png"></div>
+<div align="center"><img width='597' height='303' src="../images/screenshots/timers/beanshell_timer.png"></div>
 <p>
 <b>Parameters</b>
 <table border="1" cellspacing="0" cellpadding="2">
@@ -11348,6 +12556,177 @@ beanshell.timer.init
 </b>
  is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.
 </p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<hr>
+<table border="0" cellspacing="0" cellpadding="2">
+<tr><td>
+<font face="arial,helvetica,sanserif">
+<h3><a name="BSF_Timer">18.6.7 BSF Timer</h3></a>
+</font>
+</td></tr>
+<tr><td>
+
+
+<p>
+
+The BSF Timer can be used to generate a delay using a BSF scripting language.
+
+</p>
+
+
+<p><b>Control Panel</b></p>
+<div align="center"><img width='548' height='350' src="../images/screenshots/timers/bsf_timer.png"></div>
+<p>
+<b>Parameters</b>
+<table border="1" cellspacing="0" cellpadding="2">
+<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+<tr>
+<td>Name</td>
+<td>Descriptive name for this element that is shown in the tree.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>ScriptLanguage</td>
+<td>
+        The scripting language to be used.
+    
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>Parameters</td>
+<td>Parameters to pass to the script.
+    The parameters are stored in the following variables:
+    
+<ul>
+
+        
+<li>
+Parameters - string containing the parameters as a single variable
+</li>
+
+        
+<li>
+args - String array containing parameters, split on white-space
+</li>
+
+    
+</ul>
+
+    
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Script file</td>
+<td>
+    A file containing the script to run.
+     The return value is converted to a long integer and used as the number of milliseconds to wait.
+     
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Script</td>
+<td>
+        The script. The return value is used as the number of milliseconds to wait.
+    
+</td>
+<td>
+Yes (unless script file is provided)
+</td>
+</tr>
+</table>
+</p>
+<p>
+Before invoking the script, some variables are set up in the script interpreter:
+</p>
+<ul>
+
+
+<li>
+log - (Logger) - can be used to write to the log file
+</li>
+
+
+<li>
+ctx - (JMeterContext) - gives access to the context
+</li>
+
+
+<li>
+vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());
+</li>
+
+
+<li>
+props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");
+</li>
+
+
+<li>
+prev - the previous SampleResult (if any)
+</li>
+
+
+<li>
+sampler - the current Sampler
+</li>
+
+
+<li>
+Label - the name of the Timer
+</li>
+
+
+<li>
+Filename - the file name (if any)
+</li>
+
+
+<li>
+OUT - System.out
+</li>
+
+
+</ul>
+<p>
+For details of all the methods available on each of the above variables, please check the Javadoc
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<hr>
+<table border="0" cellspacing="0" cellpadding="2">
+<tr><td>
+<font face="arial,helvetica,sanserif">
+<h3><a name="JSR223_Timer">18.6.8 JSR223 Timer</h3></a>
+</font>
+</td></tr>
+<tr><td>
+
+
+<p>
+
+The JSR223 Timer can be used to generate a delay using a JSR223 scripting language,
+For details, see 
+<a href="../usermanual/component_reference.html#BSF_Timer">BSF Timer</a>
+.
+
+</p>
+
+
 </td></tr>
 <tr><td><br></td></tr>
 </table>
@@ -12137,6 +13516,29 @@ For details of all the methods available on each of the above variables, please 
 <tr><td><br></td></tr>
 </table>
 <hr>
+<table border="0" cellspacing="0" cellpadding="2">
+<tr><td>
+<font face="arial,helvetica,sanserif">
+<h3><a name="JSR223_PreProcessor">18.7.8 JSR223 PreProcessor</h3></a>
+</font>
+</td></tr>
+<tr><td>
+
+
+<p>
+
+The JSR223 PreProcessor allows JSR223 script code to be applied before taking a sample.
+For details, see 
+<a href="../usermanual/component_reference.html#BSF_PreProcessor">BSF PreProcessor</a>
+.
+
+</p>
+
+
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<hr>
 <a href="#">
 ^
 </a>
@@ -12207,7 +13609,7 @@ this element will execute after each Sample request in its scope, applying the r
 generate the template string, and store the result into the given variable name.
 </p>
 <p><b>Control Panel</b></p>
-<div align="center"><img width='618' height='256' src="../images/screenshots/regex_extractor.png"></div>
+<div align="center"><img width='728' height='301' src="../images/screenshots/regex_extractor.png"></div>
 <p>
 <b>Parameters</b>
 <table border="1" cellspacing="0" cellpadding="2">
@@ -12218,6 +13620,50 @@ generate the template string, and store the result into the given variable name.
 </td>
 <td>
 No
+</td>
+</tr>
+<tr>
+<td>Apply to:</td>
+<td>
+        This is for use with samplers that can generate sub-samples, 
+        e.g. HTTP Sampler with embedded resources, Mail Reader or samples generated by the Transaction Controller.
+        
+<ul>
+
+        
+<li>
+Main sample only - only applies to the main sample
+</li>
+
+        
+<li>
+Sub-samples only - only applies to the sub-samples
+</li>
+
+        
+<li>
+Main sample and sub-samples - applies to both.
+</li>
+
+        
+<li>
+JMeter Variable - assertion is to be applied to the contents of the named variable
+</li>
+
+        
+</ul>
+
+        Matching is applied to all qualifying samples in turn.
+        For example if there is a main sample and 3 sub-samples, each of which contains a single match for the regex,
+        (i.e. 4 matches in total).
+        For match number = 3, Sub-samples only, the extractor will match the 3rd sub-sample.
+        For match number = 3, Main sample and sub-samples, the extractor will match the 2nd sub-sample (1st match is main sample).
+        For match number = 0 or negative, all qualifying samples will be processed.
+        For match number > 0, matching will stop as soon as enough matches have been found.
+        
+</td>
+<td>
+Yes
 </td>
 </tr>
 <tr>
@@ -12266,7 +13712,7 @@ Response Message - e.g. OK
         Headers can be useful for HTTP samples; it may not be present for other sample types.
 </td>
 <td>
-yes
+Yes
 </td>
 </tr>
 <tr>
@@ -12462,12 +13908,12 @@ See also
 </font>
 </td></tr>
 <tr><td>
-This test element allows the user to extract value from 
+This test element allows the user to extract value(s) from 
 		structured response - XML or (X)HTML - using XPath
 		query language.
    
 <p><b>Control Panel</b></p>
-<div align="center"><img width='535' height='176' src="../images/screenshots/xpath_extractor.png"></div>
+<div align="center"><img width='612' height='318' src="../images/screenshots/xpath_extractor.png"></div>
 <p>
 <b>Parameters</b>
 <table border="1" cellspacing="0" cellpadding="2">
@@ -12481,7 +13927,40 @@ No
 </td>
 </tr>
 <tr>
-<td>Use Tidy</td>
+<td>Apply to:</td>
+<td>
+        This is for use with samplers that can generate sub-samples, 
+        e.g. HTTP Sampler with embedded resources, Mail Reader or samples generated by the Transaction Controller.
+        
+<ul>
+
+        
+<li>
+Main sample only - only applies to the main sample
+</li>
+
+        
+<li>
+Sub-samples only - only applies to the sub-samples
+</li>
+
+        
+<li>
+Main sample and sub-samples - applies to both.
+</li>
+
+        
+</ul>
+
+        XPath matching is applied to all qualifying samples in turn, and all the matching results will be returned.
+       
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>Use Tidy (tolerant parser)</td>
 <td>If checked use Tidy to parse HTML response into XHTML.
 	   
 <ul>
@@ -12515,7 +13994,7 @@ If Tidy is selected
 </tr>
 <tr>
 <td>Report Errors</td>
-<td>If a Tidy error occurs, then add an Assertion showing the details
+<td>If a Tidy error occurs, then set the Assertion accordingly
 </td>
 <td>
 If Tidy is selected
@@ -12530,7 +14009,7 @@ If Tidy is selected
 </td>
 </tr>
 <tr>
-<td>Use Namespace?</td>
+<td>Use Namespaces</td>
 <td>
         If checked, then the XML parser will use namespace resolution.
         Note that currently only namespaces declared on the root element will be recognised.
@@ -12558,7 +14037,49 @@ If Tidy is selected
         where "uri-for-namespace" is the uri for the "mynamespace" namespace.
         
         (not applicable if Tidy is selected)
-        
+
+</td>
+<td>
+If Tidy is not selected
+</td>
+</tr>
+<tr>
+<td>Validate XML</td>
+<td>Check the document against its schema.
+</td>
+<td>
+If Tidy is not selected
+</td>
+</tr>
+<tr>
+<td>Ignore Whitespace</td>
+<td>Ignore Element Whitespace.
+</td>
+<td>
+If Tidy is not selected
+</td>
+</tr>
+<tr>
+<td>Fetch External DTDs</td>
+<td>If selected, external DTDs are fetched.
+</td>
+<td>
+If Tidy is not selected
+</td>
+</tr>
+<tr>
+<td>Return entire XPath fragment instead of text content?</td>
+<td>
+    If selected, the fragment will be returned rather than the text content.
+<br>
+</br>
+
+    For example //title would return "&lt;title>Apache JMeter&lt;/title>" rather than "Apache JMeter".
+<br>
+</br>
+
+    In this case, //title/text() would return "Apache JMeter".
+    
 </td>
 <td>
 Yes
@@ -12574,7 +14095,7 @@ Yes
 </tr>
 <tr>
 <td>XPath Query</td>
-<td>Element query in XPath language. Can return more than one match. 
+<td>Element query in XPath language. Can return more than one match.
 </td>
 <td>
 Yes
@@ -12582,7 +14103,8 @@ Yes
 </tr>
 <tr>
 <td>Default Value</td>
-<td>Default value returned when no match found
+<td>Default value returned when no match found. 
+	It is also returned if the node has no value and the fragment option is not selected.
 </td>
 <td>
 No
@@ -13103,6 +14625,29 @@ For details of all the methods available on each of the above variables, please 
 <tr><td><br></td></tr>
 </table>
 <hr>
+<table border="0" cellspacing="0" cellpadding="2">
+<tr><td>
+<font face="arial,helvetica,sanserif">
+<h3><a name="JSR223_PostProcessor">18.8.6 JSR223 PostProcessor</h3></a>
+</font>
+</td></tr>
+<tr><td>
+
+
+<p>
+
+The JSR223 PostProcessor allows JSR223 script code to be applied after taking a sample.
+For details, see the 
+<a href="../usermanual/component_reference.html#BSF_PostProcessor">BSF PostProcessor</a>
+.
+
+</p>
+
+
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<hr>
 <a href="#">
 ^
 </a>
@@ -13198,13 +14743,23 @@ Also, an option exists here to instruct JMeter to run the
 
 
 <p>
-Test plan now provides an easy way to add classpath setting to a specific test plan. The feature is additive, meaning that you can add jar files or directories, but removing an entry requires restarting JMeter. In the past, users had to copy all the jar files to jmeter/lib/ directory. Now that is not necessary. JMeter properties also provides an entry for loading additional classpaths.
+
+Test plan now provides an easy way to add classpath setting to a specific test plan. 
+The feature is additive, meaning that you can add jar files or directories, but removing an entry requires restarting JMeter.
+Note that this cannot be used to add JMeter GUI plugins, because they are processed earlier.
+However it can be useful for utility jars such as JDBC drivers. 
+
 </p>
 
 
 <p>
+
+JMeter properties also provides an entry for loading additional classpaths.
 In jmeter.properties, edit "user.classpath" to include additional libraries.
+
 </p>
+
+
 <p><b>Control Panel</b></p>
 <div align="center"><img width='491' height='439' src="../images/screenshots/testplan.png"></div>
 </td></tr>
@@ -13484,13 +15039,6 @@ Things to Look Out For
 </td></tr>
 <tr><td>
 <p>
-<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
-<tr><td>The Proxy Server can only record HTTP traffic. 
-It is not possible to record HTTPS (SSL) sessions; however there is an HTTPS spoofing mode - see below.
-</td></tr>
-</table>
-</p>
-<p>
 The Proxy Server allows JMeter to watch and record your actions while you browse your web application
 with your normal browser.  JMeter will create test sample objects and store them
 directly into your test plan as you go (so you can view samples interactively while you make them).
@@ -13511,8 +15059,77 @@ Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).
 
 <p>
 
-You also need to set up your browser to use the JMeter proxy port as the proxy for HTTP requests.
-Do not use JMeter as the proxy for any other request types - HTTPS, FTP, etc. - as the JMeter proxy cannot handle them.
+You also need to set up your browser to use the JMeter proxy port as the proxy for HTTP and HTTPS requests.
+Do not use JMeter as the proxy for any other request types - FTP, etc. - as the JMeter proxy cannot handle them.
+
+</p>
+
+
+<p>
+
+When recording HTTPS, the JMeter proxy server uses a dummy certificate to enable it to accept the SSL connection from
+the browser. This certificate is not one of the certificates that browsers normally trust, and will not be for the
+correct host, so the browser should display a dialogue asking if you want to accept the certificate or not. For example:
+
+<code>
+
+1) The server's name "www.example.com" does not match the certificate's name
+   "JMeter Proxy". Somebody may be trying to eavesdrop on you.
+2) The certificate for "JMeter Proxy" is signed by the unknown Certificate Authority
+   "JMeter Proxy". It is not possible to verify that this is a valid certificate.
+
+</code>
+ 
+You will need to accept the certificate in order to allow the JMeter Proxy to intercept the SSL traffic in order to
+record it. You should only accept the certificate temporarily.
+
+</p>
+
+
+<p>
+
+The following properties can be used to change the certificate that is used:
+
+<ul>
+
+
+<li>
+proxy.cert.directory - the directory in which to find the certificate (default = JMeter bin/)
+</li>
+
+
+<li>
+proxy.cert.file - name of the keystore file (default "proxyserver.jks")
+</li>
+
+
+<li>
+proxy.cert.keystorepass - keystore password (default "password")
+</li>
+
+
+<li>
+proxy.cert.keypassword - certificate key password (default "password")
+</li>
+
+
+<li>
+proxy.cert.type - the certificate type (default "JKS")
+</li>
+
+
+<li>
+proxy.cert.factory - the factory (default "SunX509")
+</li>
+
+
+<li>
+proxy.ssl.protocol - the protocol to be used (default "SSLv3")
+</li>
+
+
+</ul>
+
 
 </p>
 
@@ -13539,7 +15156,7 @@ This setting will also be needed when running the generated test plan.
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='951' height='611' src="../images/screenshots/proxy_control.png"></div>
+<div align="center"><img width='954' height='615' src="../images/screenshots/proxy_control.png"></div>
 <p>
 <b>Parameters</b>
 <table border="1" cellspacing="0" cellpadding="2">
@@ -13563,6 +15180,7 @@ Yes
 <tr>
 <td>Attempt HTTPS Spoofing</td>
 <td>
+          [Note: HTTPS spoofing should no longer be required]
           When you enable HTTPS spoofing, the following  happens:
           
 <ul>
@@ -13643,6 +15261,13 @@ Put each group in a new controller: create a new
              
 <li>
 Store 1st sampler of each group only: only the first request in each group will be recorded. The "Follow Redirects" and "Retrieve All Embedded Resources..." flags will be turned on in those samplers.
+</li>
+
+             
+<li>
+Put each group in a new transaction controller: create a new 
+<a href="../usermanual/component_reference.html#Transaction_Controller">Transaction Controller</a>
+ for each group, and store all samplers for that group in it.
 </li>
 
            
@@ -14397,7 +16022,7 @@ No
 </td></tr>
 <tr><td colspan="2">
 <div align="center"><font color="#525D76" size="-1"><em>
-Copyright &copy; 1999-2009, Apache Software Foundation
+Copyright &copy; 1999-2010, Apache Software Foundation
 </em></font></div>
 </td></tr>
 <tr><td colspan="2">
