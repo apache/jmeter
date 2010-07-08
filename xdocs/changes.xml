@@ -36,6 +36,22 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 <h2>Summary of main changes</h2>
 
 <p>
+<ul>
+<li>JMeter now requires at least Java 1.5.</li>
+<li>HTTP Proxy can now record HTTPS sessions.</li>
+<li>JUnit sampler now supports JUnit4 annotations.</li>
+<li>Added JSR223 (javax.script) test elements.</li>
+<li>MailReader Sampler can now use any protocol supported by the underlying implementation.</li>
+<li>JMeter now allows users to provide their own Thread Group implementations.</li>
+<li>View Results Tree now supports more display options, including search and Regex Testing.</li>
+<li>StatCalculator performance is much improved; Aggregate Report etc. need far less memory.</li>
+<li>
+JMS samplers have been extensively reworked, and should no longer lose messages.
+Correlation processing is improved.
+JMS Publisher and Subscriber now support both Topics and Queues.
+</li>
+<li>Many other improvements have been made, please see below and in the manual.</li>
+</ul>
 </p>
 
 
