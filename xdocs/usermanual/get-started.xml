@@ -104,8 +104,9 @@ implementation.</p>
 </subsection>
 
 <subsection name="&sect-num;.2.3 Email Support" anchor="opt_email">
-<p>JMeter has limited Email capabilities. It can send email based on test results, and has a POP3(S)/IMAP(S) sampler.
-It does not currently support SMTP sampling.
+<p>JMeter has extensive Email capabilities. 
+It can send email based on test results, and has a POP3(S)/IMAP(S) sampler.
+It also has an SMTP sampler.
 </p>
 </subsection>
 
