@@ -300,7 +300,6 @@
         <include name="LICENSE*.txt"/>
         <include name="NOTICE"/>
         <include name="README"/>
-        <include name="THANKS"/>
   </patternset>
 
   <!-- Jars for binary release -->
@@ -1030,7 +1029,6 @@ run JMeter unless all the JMeter jars are added.
     <include name="LICENSE"/>
     <include name="NOTICE"/>
     <include name="README"/>
-    <include name="THANKS"/>
   	<patternset refid="dist.common.native"/>
   	<!-- Help documentation -->
     <include name="${dest.printable_docs}/**"/>
@@ -1089,7 +1087,6 @@ run JMeter unless all the JMeter jars are added.
     <include name="LICENSE"/>
     <include name="NOTICE"/>
     <include name="README"/>
-    <include name="THANKS"/>
     <include name="${src.dir}/**"/>
   	<!-- Exclude binary types -->
     <exclude name="${src.dir}/**/*.gif"/>
