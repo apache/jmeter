@@ -37,7 +37,7 @@ controllers, listeners, timers, assertions, and configuration elements.
 <subsection name="&sect-num;.1 Adding and Removing Elements" anchor="add_remove">
 <p>Adding <a href="test_plan.html">elements to a test plan</a> can be done by right-clicking on an element in the
 tree, and choosing a new element from the "add" list.  Alternatively, elements can
-be loaded from file and added by choosing the "open" option.  </p>
+be loaded from file and added by choosing the "merge" or "open" option.</p>
 
 <p>To remove an element, make sure the element is selected, right-click on the element,
 and choose the "remove" option.</p>
@@ -45,12 +45,12 @@ and choose the "remove" option.</p>
 
 <subsection name="&sect-num;.2 Loading and Saving Elements" anchor="load_save">
 <p>To load an element from file, right click on the existing tree element to which
-you want to add the loaded element, and select the "open" option.  Choose the file where
-your elements are saved.  JMeter will load the elements into the tree.</p>
+you want to add the loaded element, and select the "merge" option.  Choose the file where
+your elements are saved.  JMeter will merge the elements into the tree.</p>
 
-<p>To save tree elements, right click on an element and choose the "save" option.
+<p>To save tree elements, right click on an element and choose the "Save Selection As ..." option.
 JMeter will save the element selected, plus all child elements beneath it.  In this way,
-you can save test tree fragments, individual elements, or the entire test plan.</p>
+you can save test tree fragments and individual elements for later use.</p>
 
 <note>The workbench is not automatically saved with the test plan, but it can be saved separately as above.</note>
 </subsection>
@@ -65,15 +65,15 @@ configured for an element depends on what type of element it is.</p>
 
 <subsection name="&sect-num;.4 Saving the Test Plan" anchor="saving">
 <p>Although it is not required, we recommend that you save the Test Plan to a
-file before running it.  To save the Test Plan, select Save Test Plan from the
+file before running it.  To save the Test Plan, select "Save" or "Save Test Plan As ..." from the
 File menu (with the latest release, it is no longer necessary to select the
 Test Plan element first).</p>
 
 <note>JMeter allows you to save the entire Test Plan tree or
 only a portion of it.  To save only the elements located in a particular "branch"
 of the Test Plan tree, select the Test Plan element in the tree from which to start
-the "branch", and then click your right mouse button to access the Save As menu item.
-Alternatively, select the appropriate Test Plan element  and then select Save As from
+the "branch", and then click your right mouse button to access the "Save Selection As ..." menu item.
+Alternatively, select the appropriate Test Plan element  and then select "Save Selection As ..." from
 the Edit menu.
 </note>
 </subsection>
@@ -86,6 +86,7 @@ If "Start" is disabled, and "Stop" is enabled,
 then JMeter is running your test plan (or, at least, it thinks it is).</p>
 <p>
 The numbers to the left of the green box are the number of active threads / total number of threads.
+These only apply to a locally run test; they do not include any threads started on remote systems when using client-server mode.
 </p>
 </subsection>
 
