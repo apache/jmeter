@@ -446,13 +446,13 @@ system.properties
 </p>
 <p>
 
-JMeter defaults to protocol level TLS. This can be changed by editting the JMeter property 
+JMeter HTTP defaults to protocol level TLS. This can be changed by editting the JMeter property 
 "https.default.protocol" in jmeter.properties or user.properties.
 
 </p>
 <p>
 <b>
-JMeter is configured to accept all certificates,
+The JMeter HTTP samplers are configured to accept all certificates,
 whether trusted or not, regardless of validity periods etc.
 </b>
 
@@ -471,6 +471,11 @@ There is also the
 <tr><td>The JMeter proxy server (see below) supports recording HTTPS (SSL) in versions after 2.3.4
 </td></tr>
 </table>
+</p>
+<p>
+
+The SMTP sampler can optionally use a local trust store or trust all certificates.
+
 </p>
 </blockquote>
 </td></tr>
