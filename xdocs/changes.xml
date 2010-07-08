@@ -42,6 +42,7 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 <li>JUnit sampler now supports JUnit4 annotations.</li>
 <li>Added JSR223 (javax.script) test elements.</li>
 <li>MailReader Sampler can now use any protocol supported by the underlying implementation.</li>
+<li>An SMTP Sampler has been added.</li>
 <li>JMeter now allows users to provide their own Thread Group implementations.</li>
 <li>View Results Tree now supports more display options, including search and Regex Testing.</li>
 <li>StatCalculator performance is much improved; Aggregate Report etc. need far less memory.</li>
