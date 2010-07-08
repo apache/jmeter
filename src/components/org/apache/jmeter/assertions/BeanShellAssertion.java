@@ -29,7 +29,7 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
- * A sampler which understands BeanShell
+ * An Assertion which understands BeanShell
  *
  */
 public class BeanShellAssertion extends BeanShellTestElement implements Assertion {
