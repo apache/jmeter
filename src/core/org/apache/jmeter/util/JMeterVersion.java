@@ -46,7 +46,7 @@ public class JMeterVersion {
      */
     private static final String VERSION = "2.4";
 
-    static final String COPYRIGHT = "Copyright (c) 1998-2009 The Apache Software Foundation";
+    static final String COPYRIGHT = "Copyright (c) 1998-2010 The Apache Software Foundation";
 
     private JMeterVersion() // Not instantiable
     {
