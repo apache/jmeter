@@ -36,7 +36,6 @@ public class UndoVariableReplacement extends AbstractTransformer {
         setVariables(variables);
     }
 
-    /** {@inheritDoc} */
     public JMeterProperty transformValue(JMeterProperty prop) throws InvalidVariableException {
         Iterator<String> iter = getVariables().keySet().iterator();
         String input = prop.getStringValue();
