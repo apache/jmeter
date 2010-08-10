@@ -18,11 +18,17 @@
 
 package org.apache.jmeter.protocol.jms.sampler;
 
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.MessageConsumer;
+import javax.jms.Session;
+
 import org.apache.jmeter.protocol.jms.Utils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
-
-import javax.jms.*;
 
 /**
  * Receiver of pseudo-synchronous reply messages.
