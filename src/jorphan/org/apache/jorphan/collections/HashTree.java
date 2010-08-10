@@ -51,11 +51,8 @@ public class HashTree implements Serializable, Map, Cloneable {
 
     private static final long serialVersionUID = 240L;
 
-    // GetLoggerForClass() uses ClassContext, which
-    // causes a Security violation in RemoteJMeterImpl
-    // so we use getLoggerFor() instead
-//    private static final Logger log = LoggingManager.getLoggerFor(HashTree.class.getName());
-
+//    private static final Logger log = LoggingManager.getLoggerForClass();
+    
     // Used for the RuntimeException to short-circuit the traversal
     private static final String FOUND = "found"; // $NON-NLS-1$
 
