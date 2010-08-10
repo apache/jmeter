@@ -543,32 +543,32 @@ public class SmtpPanel extends JPanel {
     }
 
     public CollectionProperty getHeaderFields() {
-    	CollectionProperty result = new CollectionProperty();
-    	result.setName(SmtpSampler.HEADER_FIELDS);
-		for (Iterator<JTextField> iterator = headerFields.keySet().iterator(); iterator.hasNext();) {
-			JTextField headerName = iterator.next();
-			String name = headerName.getText();
-			String value = headerFields.get(headerName).getText();
-			Argument argument = new Argument(name, value);
-			result.addItem(argument);
-		}
-    	return result;
-	}
+        CollectionProperty result = new CollectionProperty();
+        result.setName(SmtpSampler.HEADER_FIELDS);
+        for (Iterator<JTextField> iterator = headerFields.keySet().iterator(); iterator.hasNext();) {
+            JTextField headerName = iterator.next();
+            String name = headerName.getText();
+            String value = headerFields.get(headerName).getText();
+            Argument argument = new Argument(name, value);
+            result.addItem(argument);
+        }
+        return result;
+    }
 
     public void setHeaderFields(CollectionProperty fields) {
-    	clearHeaderFields();
-    	for (int i = 0; i < fields.size(); i++) {
-    		Argument argument = (Argument)((TestElementProperty)fields.get(i)).getObjectValue();
-			String name = argument.getName();
-			JButton removeButton = addHeaderActionPerformed(null);
-			JTextField nameTF = removeButtons.get(removeButton);
-			nameTF.setText(name);
-			JTextField valueTF = headerFields.get(nameTF);
-			valueTF.setText(argument.getValue());			
-		}
-    	validate();
-	}
-	/**
+        clearHeaderFields();
+        for (int i = 0; i < fields.size(); i++) {
+            Argument argument = (Argument)((TestElementProperty)fields.get(i)).getObjectValue();
+            String name = argument.getName();
+            JButton removeButton = addHeaderActionPerformed(null);
+            JTextField nameTF = removeButtons.get(removeButton);
+            nameTF.setText(name);
+            JTextField valueTF = headerFields.get(nameTF);
+            valueTF.setText(argument.getValue());            
+        }
+        validate();
+    }
+    /**
      * Main method of class, builds all gui-components for SMTP-sampler.
      */
     private void initComponents() {
@@ -1212,51 +1212,51 @@ public class SmtpPanel extends JPanel {
         tfSubject.setText("");
         tfTrustStoreToUse.setText("");
         rbUseNone.setSelected(true);
-   		clearHeaderFields();
-		validate();        
+           clearHeaderFields();
+        validate();        
     }
 
-	private void clearHeaderFields() {
-		headerFieldName.setVisible(false);
-   		headerFieldValue.setVisible(false);
+    private void clearHeaderFields() {
+        headerFieldName.setVisible(false);
+           headerFieldValue.setVisible(false);
 
-		for (Iterator<JButton> iterator = removeButtons.keySet().iterator(); iterator.hasNext();) {
-			JButton removeButton = iterator.next();
-	   		JTextField headerName = removeButtons.get(removeButton);
-			JTextField headerValue = headerFields.get(headerName);
-			
-			headerFieldsPanel.remove(headerName);
-			if (headerValue != null){ // Can be null (not sure why)
-			    headerFieldsPanel.remove(headerValue);
-			}
-			headerFieldsPanel.remove(removeButton);	
-			headerFields.remove(headerName);
-			iterator.remove();
-		}
-	}
+        for (Iterator<JButton> iterator = removeButtons.keySet().iterator(); iterator.hasNext();) {
+            JButton removeButton = iterator.next();
+               JTextField headerName = removeButtons.get(removeButton);
+            JTextField headerValue = headerFields.get(headerName);
+            
+            headerFieldsPanel.remove(headerName);
+            if (headerValue != null){ // Can be null (not sure why)
+                headerFieldsPanel.remove(headerValue);
+            }
+            headerFieldsPanel.remove(removeButton);    
+            headerFields.remove(headerName);
+            iterator.remove();
+        }
+    }
     
     private JButton addHeaderActionPerformed(ActionEvent evt){
-		if(headerFields.size() == 0){
-    		headerFieldName.setVisible(true);
-    		headerFieldValue.setVisible(true);
+        if(headerFields.size() == 0){
+            headerFieldName.setVisible(true);
+            headerFieldValue.setVisible(true);
         }
-    	JTextField nameTF = new JTextField();
-    	JTextField valueTF = new JTextField();    	
-    	JButton removeButton = new JButton(JMeterUtils.getResString("smtp_header_remove"));
-    	headerFields.put(nameTF, valueTF);
-    	removeButtons.put(removeButton, nameTF);
-    	
-    	removeButton.addActionListener(new ActionListener() {
+        JTextField nameTF = new JTextField();
+        JTextField valueTF = new JTextField();        
+        JButton removeButton = new JButton(JMeterUtils.getResString("smtp_header_remove"));
+        headerFields.put(nameTF, valueTF);
+        removeButtons.put(removeButton, nameTF);
+        
+        removeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-            	removeHeaderActionPerformed(evt);
+                removeHeaderActionPerformed(evt);
             }
         });
-    	
-    	GridBagConstraints gridBagConstraints = new GridBagConstraints();
-    	gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-    	gridBagConstraints.weightx = 0.5;
-    	gridBagConstraints.anchor = GridBagConstraints.WEST;
-    	
+        
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = headerGridY;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
@@ -1277,20 +1277,20 @@ public class SmtpPanel extends JPanel {
     }
     
     private void removeHeaderActionPerformed(ActionEvent evt){
-    	final Object source = evt.getSource();
-    	if(source != null && source instanceof JButton){
-			if(headerFields.size() == 1){
-	    		headerFieldName.setVisible(false);
-	    		headerFieldValue.setVisible(false);
-	        }
-			JTextField nameTF = removeButtons.get(source);
-			JTextField valueTF = headerFields.get(nameTF);
-			headerFields.remove(nameTF);
-			
-			headerFieldsPanel.remove(nameTF);
-			headerFieldsPanel.remove(valueTF);
-			headerFieldsPanel.remove((JButton)source);
-			validate();
-		}
+        final Object source = evt.getSource();
+        if(source != null && source instanceof JButton){
+            if(headerFields.size() == 1){
+                headerFieldName.setVisible(false);
+                headerFieldValue.setVisible(false);
+            }
+            JTextField nameTF = removeButtons.get(source);
+            JTextField valueTF = headerFields.get(nameTF);
+            headerFields.remove(nameTF);
+            
+            headerFieldsPanel.remove(nameTF);
+            headerFieldsPanel.remove(valueTF);
+            headerFieldsPanel.remove((JButton)source);
+            validate();
+        }
     }
 }
