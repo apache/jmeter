@@ -18,8 +18,18 @@ package org.apache.jmeter.monitor.util;
 
 import java.util.List;
 import java.util.LinkedList;
-import org.apache.jmeter.monitor.model.*;
-import org.apache.jmeter.visualizers.*;
+
+import org.apache.jmeter.monitor.model.Connector;
+import org.apache.jmeter.monitor.model.Jvm;
+import org.apache.jmeter.monitor.model.Memory;
+import org.apache.jmeter.monitor.model.ObjectFactory;
+import org.apache.jmeter.monitor.model.RequestInfo;
+import org.apache.jmeter.monitor.model.Status;
+import org.apache.jmeter.monitor.model.ThreadInfo;
+import org.apache.jmeter.monitor.model.Worker;
+import org.apache.jmeter.monitor.model.Workers;
+import org.apache.jmeter.visualizers.MonitorModel;
+import org.apache.jmeter.visualizers.MonitorStats;
 
 /**
  *
