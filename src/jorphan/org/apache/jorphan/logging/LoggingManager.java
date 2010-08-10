@@ -34,7 +34,6 @@ import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
 import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.ContextException;
 import org.apache.avalon.framework.context.DefaultContext;
-import org.apache.jorphan.util.ClassContext;
 import org.apache.log.Hierarchy;
 import org.apache.log.LogTarget;
 import org.apache.log.Logger;
@@ -234,18 +233,6 @@ public final class LoggingManager {
 
     private static final String PACKAGE_PREFIX = "org.apache."; //$NON_NLS-1$
 
-    /*
-     * Stack contains the follow when the context is obtained:
-     * 0 - getCallerClassNameAt()
-     * 1 - this method
-     * 2 - getLoggerForClass()
-     *
-     */
-    private static String getCallerClassName() {
-        String name = ClassContext.getCallerClassNameAt(3);
-        return name;
-    }
-
     /**
      * Removes the standard prefix, i.e. "org.apache.".
      * 
@@ -265,7 +252,7 @@ public final class LoggingManager {
      * @return Logger
      */
     public static Logger getLoggerForClass() {
-        String className = getCallerClassName();
+        String className = (new Exception()).getStackTrace()[1].getClassName();
         return Hierarchy.getDefaultHierarchy().getLoggerFor(removePrefix(className));
     }
 
