@@ -214,7 +214,7 @@ public class SendMailCommand {
         }
 
         for (int i = 0; i < headerFields.size(); i++) {
-        	Argument argument = (Argument)((TestElementProperty)headerFields.get(i)).getObjectValue();
+            Argument argument = (Argument)((TestElementProperty)headerFields.get(i)).getObjectValue();
             message.setHeader(argument.getName(), argument.getValue());
         }
 
