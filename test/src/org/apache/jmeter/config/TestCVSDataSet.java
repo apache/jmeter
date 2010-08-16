@@ -112,7 +112,26 @@ public class TestCVSDataSet extends JMeterTestCase {
         assertEquals("c2",threadVars.get("C"));
         assertEquals("d2",threadVars.get("D|1"));
     }
-
+    
+    // Test CSV file with a header line and recycle is true
+    public void testHeaderOpenAndRecycle(){
+        CSVDataSet csv = new CSVDataSet();
+        csv.setFilename("testfiles/testheader.csv");
+        csv.setDelimiter("|");
+        csv.setRecycle(true);
+        assertNull(csv.getVariableNames()); // read 1st line
+        // read 5 lines + restart to file begin
+        csv.iterationStart(null); // line 2
+        csv.iterationStart(null); // line 3
+        csv.iterationStart(null); // line 4
+        csv.iterationStart(null); // line 5
+        csv.iterationStart(null); // return to 2nd line (first line is names)
+        assertEquals("a1",threadVars.get("A"));
+        assertEquals("b1",threadVars.get("B"));
+        assertEquals("c1",threadVars.get("C"));
+        assertEquals("d1",threadVars.get("D|1"));
+    }
+    
     private CSVDataSet initCSV(){
         CSVDataSet csv = new CSVDataSet();
         csv.setFilename("testfiles/test.csv");
