@@ -1429,7 +1429,7 @@ This is to allow the setUp/tearDown methods to be excluded from the sample time.
 </p>
 </component>
 
-<component name="Mail Reader Sampler"  index="&sect-num;.1.17"  width="399" height="306" screenshot="mailreader_sampler.png">
+<component name="Mail Reader Sampler"  index="&sect-num;.1.17"  width="547" height="409" screenshot="mailreader_sampler.png">
 <description>
 <p>
 The Mail Reader Sampler can read (and optionally delete) mail messages using POP3(S) or IMAP(S) protocols.
@@ -1453,6 +1453,16 @@ The actual provider names for POP3 and IMAP are <code>pop3</code> and <code>imap
 If so, then the entire raw message is stored in the Response Data; the headers are not stored as they are available in the data. 
 If not, the message headers are stored as Response Headers. 
 A few headers are stored (Date, To, From, Subject) in the body.
+</property>
+<property name="Use no security features" required="">Indicates that the connection to the server does not use any security protocol.</property>
+<property name="Use SSL" required="">Indicates that the connection to the server must use the SSL protocol.</property>
+<property name="Use StartTLS" required="">Indicates that the connection to the server should attempt to start the TLS protocol.</property>
+<property name="Enforce StartTLS" required="">If the server does not start the TLS protocol the connection will be terminated.</property>
+<property name="Trust All Certificates" required="">When selected it will accept all certificates independent of the CA.</property>
+<property name="Use local truststore" required="">When selected it will only accept certificates that are locally trusted.</property>
+<property name="Local truststore" required="">Path to file containing the trusted certificates.
+Relative paths are resolved against the current directory.
+<br />Failing that, against the directory containing the test script (JMX file).
 </property>
 </properties>
 <p>
@@ -1495,7 +1505,7 @@ In non-GUI mode, JMeter will exit if some threads fail to stop within the 5 seco
 </component>
 
 
-<component name="SMTP Sampler"  index="&sect-num;.1.19"  width="644" height="759" screenshot="smtp_sampler.png">
+<component name="SMTP Sampler"  index="&sect-num;.1.19"  width="625" height="777" screenshot="smtp_sampler.png">
 <description>
 <p>
 The SMTP Sampler can send mail messages using SMTP/SMTPS protocol. 
