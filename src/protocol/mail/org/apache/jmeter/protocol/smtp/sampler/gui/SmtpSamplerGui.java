@@ -75,6 +75,7 @@ public class SmtpSamplerGui extends AbstractSamplerGui {
 
         smtpPanel.setBody(element.getPropertyAsString(SmtpSampler.MESSAGE));
         smtpPanel.setSubject(element.getPropertyAsString(SmtpSampler.SUBJECT));
+        smtpPanel.setSuppressSubject(element.getPropertyAsBoolean(SmtpSampler.SUPPRESS_SUBJECT));
         smtpPanel.setIncludeTimestamp(element.getPropertyAsBoolean(SmtpSampler.INCLUDE_TIMESTAMP));
         JMeterProperty headers = element.getProperty(SmtpSampler.HEADER_FIELDS);
         if (headers instanceof CollectionProperty) { // Might be NullProperty
@@ -133,6 +134,7 @@ public class SmtpSamplerGui extends AbstractSamplerGui {
         te.setProperty(SmtpSampler.RECEIVER_CC, smtpPanel.getReceiverCC());
         te.setProperty(SmtpSampler.RECEIVER_BCC, smtpPanel.getReceiverBCC());
         te.setProperty(SmtpSampler.SUBJECT, smtpPanel.getSubject());
+        te.setProperty(SmtpSampler.SUPPRESS_SUBJECT, Boolean.toString(smtpPanel.isSuppressSubject()));
         te.setProperty(SmtpSampler.INCLUDE_TIMESTAMP, Boolean.toString(smtpPanel.isIncludeTimestamp()));
         te.setProperty(SmtpSampler.MESSAGE, smtpPanel.getBody());
         te.setProperty(SmtpSampler.ATTACH_FILE, smtpPanel.getAttachments());
