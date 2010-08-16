@@ -539,7 +539,9 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
                 item.stop(); // set stop flag
                 item.interrupt(); // interrupt sampler if possible
                 Thread t = allThreads.get(item);
-                t.interrupt(); // also interrupt JVM thread
+                if (t != null ) { // Bug 49734
+                    t.interrupt(); // also interrupt JVM thread
+                }
             }
         }
     }
