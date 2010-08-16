@@ -65,6 +65,7 @@ public class SmtpSampler extends AbstractSampler {
     public final static String RECEIVER_BCC         = "SMTPSampler.receiverBCC"; // $NON-NLS-1$
 
     public final static String SUBJECT              = "SMTPSampler.subject"; // $NON-NLS-1$
+    public final static String SUPPRESS_SUBJECT     = "SMTPSampler.suppressSubject"; // $NON-NLS-1$
     public final static String MESSAGE              = "SMTPSampler.message"; // $NON-NLS-1$
     public final static String INCLUDE_TIMESTAMP    = "SMTPSampler.include_timestamp"; // $NON-NLS-1$
     public final static String ATTACH_FILE          = "SMTPSampler.attachFile"; // $NON-NLS-1$
@@ -135,12 +136,20 @@ public class SmtpSampler extends AbstractSampler {
             instance.setReceiverTo(getPropNameAsAddresses(receiverTo));
             instance.setReceiverCC(getPropNameAsAddresses(receiverCC));
             instance.setReceiverBCC(getPropNameAsAddresses(receiverBcc));
-
-            instance.setSubject(getPropertyAsString(SUBJECT)
-                    + (getPropertyAsBoolean(INCLUDE_TIMESTAMP) ?
-                            " <<< current timestamp: " + new Date().getTime() + " >>>"
-                            : ""
-                       ));
+            
+            if(getPropertyAsBoolean(SUPPRESS_SUBJECT)){
+            	instance.setSubject(null);
+            }else{
+            	String subject = getPropertyAsString(SUBJECT);
+            	if (getPropertyAsBoolean(INCLUDE_TIMESTAMP)){
+            		StringBuffer sb = new StringBuffer(subject);
+            		sb.append(" <<< current timestamp: ");
+            		sb.append(new Date().getTime());
+            		sb.append(" >>>");
+            		subject = sb.toString();
+            	}
+            	instance.setSubject(subject);
+            }
 
             if (!getPropertyAsBoolean(USE_EML)) { // part is only needed if we
                 // don't send an .eml-file

@@ -95,6 +95,7 @@ public class SmtpPanel extends JPanel {
     private JTextField tfAuthPassword;
     private JTextField tfAuthUsername;
     private JTextField tfSubject;
+    private JCheckBox cbSuppressSubject;
     private JCheckBox cbIncludeTimestamp;
     private JCheckBox cbMessageSizeStats;
     private JCheckBox cbEnableDebug;
@@ -288,6 +289,25 @@ public class SmtpPanel extends JPanel {
         tfSubject.setText(subject);
     }
 
+    /**
+     * Returns true if subject header should be suppressed
+     *
+     * @return true if subject header should be suppressed
+     */
+    public boolean isSuppressSubject() {
+        return cbSuppressSubject.isSelected();
+    }
+
+    /**
+     * Sets the property that defines if the subject header should be suppressed
+     *
+     * @param emptySubject
+     *            
+     */
+    public void setSuppressSubject(boolean emptySubject) {
+        cbSuppressSubject.setSelected(emptySubject);
+    }
+    
     /**
      * Returns if mail-server needs authentication (checkbox)
      *
@@ -602,6 +622,13 @@ public class SmtpPanel extends JPanel {
         tfEmlMessage = new JTextField(30);
 
         taMessage = new JTextArea(5, 20);
+        
+        cbSuppressSubject = new JCheckBox(JMeterUtils.getResString("smtp_suppresssubj")); // $NON-NLS-1$
+        cbSuppressSubject.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                emptySubjectActionPerformed(evt);
+            }
+        });
 
         cbUseAuth = new JCheckBox(JMeterUtils.getResString("smtp_useauth")); // $NON-NLS-1$
         rbUseNone = new JRadioButton(JMeterUtils.getResString("smtp_usenone")); // $NON-NLS-1$
@@ -894,11 +921,18 @@ public class SmtpPanel extends JPanel {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         panelMessageSettings.add(tfSubject, gridBagConstraints);
+        
+        cbSuppressSubject.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        cbSuppressSubject.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = GridBagConstraints.NONE;
+        panelMessageSettings.add(cbSuppressSubject, gridBagConstraints);
 
         cbIncludeTimestamp.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         cbIncludeTimestamp.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.NONE;
         panelMessageSettings.add(cbIncludeTimestamp, gridBagConstraints);
 
@@ -933,26 +967,26 @@ public class SmtpPanel extends JPanel {
         headerFieldsPanel.add(headerFieldValue, gridBagConstraints);
         
         gridBagConstraintsMain.gridx = 1;
-        gridBagConstraintsMain.gridy = 1;
+        gridBagConstraintsMain.gridy = 2;
         panelMessageSettings.add(headerFieldsPanel, gridBagConstraintsMain);        
 
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         panelMessageSettings.add(jlMessage, gridBagConstraints);
 
         taMessage.setBorder(BorderFactory.createBevelBorder(1));
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         panelMessageSettings.add(taMessage, gridBagConstraints);
 
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = GridBagConstraints.NONE;
         panelMessageSettings.add(jlAttachFile, gridBagConstraints);
 
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         panelMessageSettings.add(tfAttachment, gridBagConstraints);
         tfAttachment.setToolTipText(JMeterUtils.getResString("smtp_attach_file_tooltip")); // $NON-NLS-1$
@@ -964,7 +998,7 @@ public class SmtpPanel extends JPanel {
         });
 
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = GridBagConstraints.NONE;
         panelMessageSettings.add(browseButton, gridBagConstraints);
 
@@ -976,12 +1010,12 @@ public class SmtpPanel extends JPanel {
         });
 
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = GridBagConstraints.NONE;
         panelMessageSettings.add(cbUseEmlMessage, gridBagConstraints);
 
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         tfEmlMessage.setEnabled(false);
         panelMessageSettings.add(tfEmlMessage, gridBagConstraints);
@@ -994,12 +1028,12 @@ public class SmtpPanel extends JPanel {
         emlBrowseButton.setEnabled(false);
 
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = GridBagConstraints.NONE;
         panelMessageSettings.add(emlBrowseButton, gridBagConstraints);
 
         gridBagConstraintsMain.gridx = 0;
-        gridBagConstraintsMain.gridy = 5;
+        gridBagConstraintsMain.gridy = 6;
         add(panelMessageSettings, gridBagConstraintsMain);
 
         /*
@@ -1022,7 +1056,7 @@ public class SmtpPanel extends JPanel {
         panelAdditionalSettings.add(cbEnableDebug, gridBagConstraints);
 
         gridBagConstraintsMain.gridx = 0;
-        gridBagConstraintsMain.gridy = 6;
+        gridBagConstraintsMain.gridy = 7;
         add(panelAdditionalSettings, gridBagConstraintsMain);
     }
 
@@ -1212,7 +1246,8 @@ public class SmtpPanel extends JPanel {
         tfSubject.setText("");
         tfTrustStoreToUse.setText("");
         rbUseNone.setSelected(true);
-           clearHeaderFields();
+        cbSuppressSubject.setSelected(false);
+        clearHeaderFields();
         validate();        
     }
 
@@ -1293,4 +1328,16 @@ public class SmtpPanel extends JPanel {
             validate();
         }
     }
+    private void emptySubjectActionPerformed(ActionEvent evt) {
+		final Object source = evt.getSource();
+    	if(source != null && source instanceof JCheckBox){
+    		if(cbSuppressSubject.isSelected()){
+    			tfSubject.setEnabled(false);
+    			cbIncludeTimestamp.setEnabled(false);
+    		}else{
+    			tfSubject.setEnabled(true);
+    			cbIncludeTimestamp.setEnabled(true);
+    		}
+    	}		
+	}
 }
