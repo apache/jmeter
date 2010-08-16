@@ -31,6 +31,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
+import org.apache.jmeter.protocol.smtp.sampler.gui.SecuritySettingsPanel;
 import org.apache.jmeter.protocol.smtp.sampler.protocol.SendMailCommand;
 import org.apache.jmeter.protocol.smtp.sampler.tools.CounterOutputStream;
 import org.apache.jmeter.samplers.AbstractSampler;
@@ -72,12 +73,6 @@ public class SmtpSampler extends AbstractSampler {
     public final static String MESSAGE_SIZE_STATS   = "SMTPSampler.messageSizeStatistics"; // $NON-NLS-1$
     public static final String HEADER_FIELDS        = "SMTPSampler.headerFields"; // $NON-NLS-1$
 
-    public final static String USE_SSL              = "SMTPSampler.useSSL"; // $NON-NLS-1$
-    public final static String USE_STARTTLS         = "SMTPSampler.useStartTLS"; // $NON-NLS-1$
-    public final static String SSL_TRUST_ALL_CERTS  = "SMTPSampler.trustAllCerts"; // $NON-NLS-1$
-    public final static String ENFORCE_STARTTLS     = "SMTPSampler.enforceStartTLS"; // $NON-NLS-1$
-    public final static String USE_LOCAL_TRUSTSTORE = "SMTPSampler.useLocalTrustStore"; // $NON-NLS-1$
-    public final static String TRUSTSTORE_TO_USE    = "SMTPSampler.trustStoreToUse"; // $NON-NLS-1$
     public final static String USE_EML              = "SMTPSampler.use_eml"; // $NON-NLS-1$
     public final static String EML_MESSAGE_TO_SEND  = "SMTPSampler.emlMessageToSend"; // $NON-NLS-1$
     public static final String ENABLE_DEBUG         = "SMTPSampler.enableDebug"; // $NON-NLS-1$
@@ -107,17 +102,17 @@ public class SmtpSampler extends AbstractSampler {
         instance.setSmtpServer(getPropertyAsString(SmtpSampler.SERVER));
         instance.setSmtpPort(getPropertyAsString(SmtpSampler.SERVER_PORT));
 
-        instance.setUseSSL(getPropertyAsBoolean(USE_SSL));
-        instance.setUseStartTLS(getPropertyAsBoolean(USE_STARTTLS));
-        instance.setTrustAllCerts(getPropertyAsBoolean(SSL_TRUST_ALL_CERTS));
-        instance.setEnforceStartTLS(getPropertyAsBoolean(ENFORCE_STARTTLS));
+        instance.setUseSSL(getPropertyAsBoolean(SecuritySettingsPanel.USE_SSL));
+        instance.setUseStartTLS(getPropertyAsBoolean(SecuritySettingsPanel.USE_STARTTLS));
+        instance.setTrustAllCerts(getPropertyAsBoolean(SecuritySettingsPanel.SSL_TRUST_ALL_CERTS));
+        instance.setEnforceStartTLS(getPropertyAsBoolean(SecuritySettingsPanel.ENFORCE_STARTTLS));
 
         instance.setUseAuthentication(getPropertyAsBoolean(USE_AUTH));
         instance.setUsername(getPropertyAsString(USERNAME));
         instance.setPassword(getPropertyAsString(PASSWORD));
 
-        instance.setUseLocalTrustStore(getPropertyAsBoolean(USE_LOCAL_TRUSTSTORE));
-        instance.setTrustStoreToUse(getPropertyAsString(TRUSTSTORE_TO_USE));
+        instance.setUseLocalTrustStore(getPropertyAsBoolean(SecuritySettingsPanel.USE_LOCAL_TRUSTSTORE));
+        instance.setTrustStoreToUse(getPropertyAsString(SecuritySettingsPanel.TRUSTSTORE_TO_USE));
         instance.setEmlMessage(getPropertyAsString(EML_MESSAGE_TO_SEND));
         instance.setUseEmlMessage(getPropertyAsBoolean(USE_EML));
 

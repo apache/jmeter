@@ -88,15 +88,8 @@ public class SmtpSamplerGui extends AbstractSamplerGui {
         smtpPanel.setUseEmlMessage(element.getPropertyAsBoolean(SmtpSampler.USE_EML));
         smtpPanel.setEmlMessage(element.getPropertyAsString(SmtpSampler.EML_MESSAGE_TO_SEND));
 
-        smtpPanel.setUseSSL(element.getPropertyAsBoolean(SmtpSampler.USE_SSL));
-        smtpPanel.setUseStartTLS(element.getPropertyAsBoolean(SmtpSampler.USE_STARTTLS));
-        if(!element.getPropertyAsBoolean(SmtpSampler.USE_STARTTLS) && !element.getPropertyAsBoolean(SmtpSampler.USE_SSL)){
-            smtpPanel.setUseNoSecurity(true);
-        }
-        smtpPanel.setTrustAllCerts(element.getPropertyAsBoolean(SmtpSampler.SSL_TRUST_ALL_CERTS));
-        smtpPanel.setEnforceStartTLS(element.getPropertyAsBoolean(SmtpSampler.ENFORCE_STARTTLS));
-        smtpPanel.setUseLocalTrustStore(element.getPropertyAsBoolean(SmtpSampler.USE_LOCAL_TRUSTSTORE));
-        smtpPanel.setTrustStoreToUse(element.getPropertyAsString(SmtpSampler.TRUSTSTORE_TO_USE));
+        SecuritySettingsPanel secPanel = smtpPanel.getSecuritySettingsPanel();
+        secPanel.configure(element);
 
         smtpPanel.setUseAuth(element.getPropertyAsBoolean(SmtpSampler.USE_AUTH));
         smtpPanel.setUsername(element.getPropertyAsString(SmtpSampler.USERNAME));
@@ -138,13 +131,9 @@ public class SmtpSamplerGui extends AbstractSamplerGui {
         te.setProperty(SmtpSampler.INCLUDE_TIMESTAMP, Boolean.toString(smtpPanel.isIncludeTimestamp()));
         te.setProperty(SmtpSampler.MESSAGE, smtpPanel.getBody());
         te.setProperty(SmtpSampler.ATTACH_FILE, smtpPanel.getAttachments());
-
-        te.setProperty(SmtpSampler.USE_SSL, Boolean.toString(smtpPanel.isUseSSL()));
-        te.setProperty(SmtpSampler.USE_STARTTLS, Boolean.toString(smtpPanel.isUseStartTLS()));
-        te.setProperty(SmtpSampler.SSL_TRUST_ALL_CERTS, Boolean.toString(smtpPanel.isTrustAllCerts()));
-        te.setProperty(SmtpSampler.ENFORCE_STARTTLS, Boolean.toString(smtpPanel.isEnforceStartTLS()));
-        te.setProperty(SmtpSampler.USE_LOCAL_TRUSTSTORE, Boolean.toString(smtpPanel.isUseLocalTrustStore()));
-        te.setProperty(SmtpSampler.TRUSTSTORE_TO_USE, smtpPanel.getTrustStoreToUse());
+        
+        SecuritySettingsPanel secPanel = smtpPanel.getSecuritySettingsPanel();
+        secPanel.modifyTestElement(te);
 
         te.setProperty(SmtpSampler.USE_EML, smtpPanel.isUseEmlMessage());
         te.setProperty(SmtpSampler.EML_MESSAGE_TO_SEND, smtpPanel.getEmlMessage());
