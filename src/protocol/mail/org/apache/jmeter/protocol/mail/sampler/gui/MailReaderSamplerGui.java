@@ -39,6 +39,7 @@ import javax.swing.event.ChangeListener;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.mail.sampler.MailReaderSampler;
+import org.apache.jmeter.protocol.smtp.sampler.gui.SecuritySettingsPanel;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -95,6 +96,8 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
     private final String STOREMIME = JMeterUtils.getResString("mail_reader_storemime");// $NON-NLS-1$
 
     private static final String INBOX = "INBOX"; // $NON-NLS-1$
+    
+    private SecuritySettingsPanel securitySettingsPanel;
 
     public MailReaderSamplerGui() {
         init();
@@ -126,6 +129,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
         }
         deleteBox.setSelected(mrs.getDeleteMessages());
         storeMimeMessageBox.setSelected(mrs.isStoreMimeMessage());
+        securitySettingsPanel.configure(element);
         super.configure(element);
     }
 
@@ -160,6 +164,8 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
         }
         mrs.setDeleteMessages(deleteBox.isSelected());
         mrs.setStoreMimeMessage(storeMimeMessageBox.isSelected());
+        
+        securitySettingsPanel.modifyTestElement(te);
     }
 
     /*
@@ -224,18 +230,21 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
 
         storeMimeMessageBox = new JCheckBox(STOREMIME);
         
+        securitySettingsPanel = new SecuritySettingsPanel();
+        
         JPanel settings = new VerticalPanel();
         settings.add(Box.createVerticalStrut(5));
         settings.add(settingsPanel);
         settings.add(numMessagesPanel);
         settings.add(deleteBox);
         settings.add(storeMimeMessageBox);
+        settings.add(securitySettingsPanel);
 
         add(makeTitlePanel(), BorderLayout.NORTH);
         add(settings, BorderLayout.CENTER);
     }
 
-    private void addField(JPanel panel, JLabel label, JComponent field, GridBagConstraints gbc) {
+	private void addField(JPanel panel, JLabel label, JComponent field, GridBagConstraints gbc) {
         gbc.fill=GridBagConstraints.NONE;
         gbc.anchor = GridBagConstraints.LINE_END;
         panel.add(label, gbc);
