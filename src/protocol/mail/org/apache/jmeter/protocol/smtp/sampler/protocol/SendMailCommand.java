@@ -191,9 +191,7 @@ public class SendMailCommand {
             message.setFrom(new InternetAddress(sender));
         }
 
-        if (null != subject) {
-            message.setSubject(subject);
-        }
+        message.setSubject(subject);
 
         if (receiverTo != null) {
             InternetAddress[] to = new InternetAddress[receiverTo.size()];
@@ -323,7 +321,7 @@ public class SendMailCommand {
      * Sets subject for current message - called by SmtpSampler-object
      *
      * @param subject
-     *            Subject for message of current message
+     *            Subject for message of current message - may be null
      */
     public void setSubject(String subject) {
         this.subject = subject;
