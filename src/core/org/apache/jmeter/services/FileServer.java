@@ -181,15 +181,28 @@ public class FileServer {
       return readLine(filename, true);
     }
 
-   /**
-     * Get the next line of the named file.
+    /**
+     * Get the next line of the named file, first line is name to false
      *
      * @param filename
      * @param recycle - should file be restarted at EOF?
      * @return String containing the next line in the file (null if EOF reached and not recycle)
      * @throws IOException
      */
-    public synchronized String readLine(String filename, boolean recycle) throws IOException {
+    public String readLine(String filename, boolean recycle) throws IOException {
+        return readLine(filename, recycle, false);
+    }
+   /**
+     * Get the next line of the named file.
+     *
+     * @param filename
+     * @param recycle - should file be restarted at EOF?
+     * @param firstLineIsNames - 1st line is fields names
+     * @return String containing the next line in the file (null if EOF reached and not recycle)
+     * @throws IOException
+     */
+    public synchronized String readLine(String filename, boolean recycle, 
+            boolean firstLineIsNames) throws IOException {
         FileEntry fileEntry = files.get(filename);
         if (fileEntry != null) {
             if (fileEntry.inputOutputObject == null) {
@@ -203,6 +216,10 @@ public class FileServer {
                 reader.close();
                 reader = createBufferedReader(fileEntry, filename);
                 fileEntry.inputOutputObject = reader;
+                if (firstLineIsNames) {
+                    // read first line and forget
+                    reader.readLine();
+                }
                 line = reader.readLine();
             }
             if (log.isDebugEnabled()) { log.debug("Read:"+line); }

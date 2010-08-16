@@ -86,6 +86,8 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
     private transient String alias;
 
     private transient String shareMode;
+    
+    private boolean firstLineIsNames = false;
 
     private Object readResolve(){
         recycle = true;
@@ -121,6 +123,7 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
                 String header = server.reserveFile(_fileName, getFileEncoding(), alias, true);
                 try {
                     vars = CSVSaveService.csvSplitString(header, getDelimiter().charAt(0));
+                    firstLineIsNames = true;
                 } catch (IOException e) {
                     log.warn("Could not split CSV header line",e);
                 }
@@ -139,7 +142,7 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
             }
             // TODO: fetch this once as per vars above?
             JMeterVariables threadVars = context.getVariables();
-            String line = server.readLine(alias,getRecycle());
+            String line = server.readLine(alias, getRecycle(), firstLineIsNames);
             if (line!=null) {// i.e. not EOF
                 String[] lineValues = getQuotedData() ?
                         CSVSaveService.csvSplitString(line, delim.charAt(0))
