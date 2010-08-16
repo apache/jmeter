@@ -97,6 +97,7 @@ To override the default local language fully, set the JMeter property "language"
 <h3>General</h3>
 <ul>
 <li>Bug 49734 - Null pointer exception on stop Threads command (Run>Stop)</li>
+<li>Bug 49666 - CSV Header read as data after EOF</li>
 </ul>
 
 <!-- ==================================================== -->
