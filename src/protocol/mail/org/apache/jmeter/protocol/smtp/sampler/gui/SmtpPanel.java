@@ -22,20 +22,16 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -58,17 +54,9 @@ public class SmtpPanel extends JPanel {
     private JTextField tfMailFrom;
     private JButton browseButton;
     private JButton emlBrowseButton;
-    private JCheckBox cbTrustAllCerts;
-    private JCheckBox cbEnforceStartTLS;
     private JCheckBox cbUseAuth;
-    private JCheckBox cbUseLocalTrustStore;
-    private JRadioButton rbUseNone;
-    private JRadioButton rbUseSSL;
-    private JRadioButton rbUseStartTLS;
-    private ButtonGroup bgSecuritySettings;
     private JTextField tfMailServer;
     private JTextField tfMailServerPort;
-    private JTextField tfTrustStoreToUse;
     private JTextField tfMailTo;
     private JTextField tfMailToCC;
     private JTextField tfMailToBCC;
@@ -84,7 +72,6 @@ public class SmtpPanel extends JPanel {
     private JLabel jlMailServer;
     private JLabel jlAttachFile;
     private JLabel jlDutPortStandard;
-    private JLabel jlTrustStoreToUse;
     private JLabel jlPassword;
     private JLabel jlSubject;
     private JLabel jlUsername;
@@ -108,6 +95,8 @@ public class SmtpPanel extends JPanel {
     private Map<JTextField, JTextField> headerFields = new HashMap<JTextField, JTextField>();
     private Map<JButton,JTextField> removeButtons = new HashMap<JButton, JTextField>();
     private int headerGridY = 0;
+    
+    private SecuritySettingsPanel securitySettingsPanel;
 
     /**
      * Creates new form SmtpPanel, standard constructer. Calls
@@ -328,65 +317,6 @@ public class SmtpPanel extends JPanel {
         tfAuthUsername.setEditable(selected); // ensure correctly set on initial display
     }
 
-    /**
-     * Returns if SSL is used to secure the SMTP-connection (checkbox)
-     *
-     * @return true if SSL is used to secure the SMTP-connection
-     */
-    public boolean isUseSSL() {
-        return rbUseSSL.isSelected();
-    }
-
-    /**
-     * Sets SSL to be used to secure the SMTP-connection (checkbox)
-     *
-     * @param useSSL
-     *            Use SSL to secure the connection
-     */
-    public void setUseSSL(boolean useSSL) {
-        rbUseSSL.setSelected(useSSL);
-    }
-
-    /**
-     * Returns if StartTLS is used to secure the connection (checkbox)
-     *
-     * @return true if StartTLS is used to secure the connection
-     */
-    public boolean isUseStartTLS() {
-        return rbUseStartTLS.isSelected();
-    }
-
-    /**
-     * Sets StartTLS to be used to secure the SMTP-connection (checkbox)
-     *
-     * @param useStartTLS
-     *            Use StartTLS to secure the connection
-     */
-    public void setUseStartTLS(boolean useStartTLS) {
-        rbUseStartTLS.setSelected(useStartTLS);
-    }
-
-    /**
-     * Returns if StartTLS is enforced (normally, SMTP uses plain
-     * SMTP-connection as fallback if "250-STARTTLS" isn't sent from the
-     * mailserver) (checkbox)
-     *
-     * @return true if StartTLS is enforced
-     */
-    public boolean isEnforceStartTLS() {
-        return cbEnforceStartTLS.isSelected();
-    }
-
-    /**
-     * Enforces StartTLS to secure the SMTP-connection (checkbox)
-     *
-     * @param enforceStartTLS
-     *            Enforce the use of StartTLS to secure the connection
-     * @see #isEnforceStartTLS()
-     */
-    public void setEnforceStartTLS(boolean enforceStartTLS) {
-        cbEnforceStartTLS.setSelected(enforceStartTLS);
-    }
 
     public boolean isEnableDebug() {
         return cbEnableDebug.isSelected();
@@ -396,70 +326,7 @@ public class SmtpPanel extends JPanel {
         cbEnableDebug.setSelected(selected);
     }
 
-    /**
-     * Returns if all certificates are blindly trusted (using according
-     * SocketFactory) (checkbox)
-     *
-     * @return true if all certificates are blindly trusted
-     */
-    public boolean isTrustAllCerts() {
-        return cbTrustAllCerts.isSelected();
-    }
-
-    /**
-     * Enforces JMeter to trust all certificates, no matter what CA is issuer
-     * (checkbox)
-     *
-     * @param trustAllCerts
-     *            Trust all certificates
-     * @see #isTrustAllCerts()
-     */
-    public void setTrustAllCerts(boolean trustAllCerts) {
-        cbTrustAllCerts.setSelected(trustAllCerts);
-    }
-
-    /**
-     * Returns if local (pre-installed) truststore is used to avoid
-     * SSL-connection-exceptions (checkbox)
-     *
-     * @return true if a local truststore is used
-     */
-    public boolean isUseLocalTrustStore() {
-        return cbUseLocalTrustStore.isSelected();
-    }
-
-    /**
-     * Set the use of a local (pre-installed) truststore to avoid
-     * SSL-connection-exceptions (checkbox)
-     *
-     * @param useLocalTrustStore
-     *            Use local keystore
-     */
-    public void setUseLocalTrustStore(boolean useLocalTrustStore) {
-        cbUseLocalTrustStore.setSelected(useLocalTrustStore);
-        tfTrustStoreToUse.setEditable(useLocalTrustStore); // ensure correctly set on initial display
-    }
-
-    /**
-     * Returns the path to the local (pre-installed) truststore to be used to
-     * avoid SSL-connection-exceptions
-     *
-     * @return Path to local truststore
-     */
-    public String getTrustStoreToUse() {
-        return tfTrustStoreToUse.getText();
-    }
-
-    /**
-     * Set the path to local (pre-installed) truststore to be used to avoid
-     * SSL-connection-exceptions
-     *
-     * @param trustStoreToUse
-     *            Path to local truststore
-     */
-    public void setTrustStoreToUse(String trustStoreToUse) {
-        tfTrustStoreToUse.setText(trustStoreToUse);
-    }
+ 
 
     /**
      * Returns if an .eml-message is sent instead of the content of message-text
@@ -542,10 +409,6 @@ public class SmtpPanel extends JPanel {
         cbMessageSizeStats.setSelected(val);
     }
 
-    public void setUseNoSecurity(boolean selected) {
-        rbUseNone.setSelected(selected);
-    }
-
     public String getPassword() {
         return tfAuthPassword.getText();
     }
@@ -604,13 +467,11 @@ public class SmtpPanel extends JPanel {
         jlDutPortStandard = new JLabel(JMeterUtils.getResString("smtp_default_port")); // $NON-NLS-1$
         jlUsername = new JLabel(JMeterUtils.getResString("smtp_username")); // $NON-NLS-1$
         jlPassword = new JLabel(JMeterUtils.getResString("smtp_password")); // $NON-NLS-1$
-        jlTrustStoreToUse = new JLabel(JMeterUtils.getResString("smtp_truststore")); // $NON-NLS-1$
         jlSubject = new JLabel(JMeterUtils.getResString("smtp_subject")); // $NON-NLS-1$
         jlMessage = new JLabel(JMeterUtils.getResString("smtp_message")); // $NON-NLS-1$
 
         tfMailServer = new JTextField(30);
         tfMailServerPort = new JTextField(6);
-        tfTrustStoreToUse = new JTextField(20);
         tfMailFrom = new JTextField(25);
         tfMailTo = new JTextField(25);
         tfMailToCC = new JTextField(25);
@@ -631,16 +492,10 @@ public class SmtpPanel extends JPanel {
         });
 
         cbUseAuth = new JCheckBox(JMeterUtils.getResString("smtp_useauth")); // $NON-NLS-1$
-        rbUseNone = new JRadioButton(JMeterUtils.getResString("smtp_usenone")); // $NON-NLS-1$
-        rbUseSSL = new JRadioButton(JMeterUtils.getResString("smtp_usessl")); // $NON-NLS-1$
-        rbUseStartTLS = new JRadioButton(JMeterUtils.getResString("smtp_usestarttls")); // $NON-NLS-1$
 
-        cbTrustAllCerts = new JCheckBox(JMeterUtils.getResString("smtp_trustall")); // $NON-NLS-1$
-        cbEnforceStartTLS = new JCheckBox(JMeterUtils.getResString("smtp_enforcestarttls")); // $NON-NLS-1$
         cbIncludeTimestamp = new JCheckBox(JMeterUtils.getResString("smtp_timestamp")); // $NON-NLS-1$
         cbMessageSizeStats = new JCheckBox(JMeterUtils.getResString("smtp_messagesize")); // $NON-NLS-1$
         cbEnableDebug = new JCheckBox(JMeterUtils.getResString("smtp_enabledebug")); // $NON-NLS-1$
-        cbUseLocalTrustStore = new JCheckBox(JMeterUtils.getResString("smtp_usetruststore")); // $NON-NLS-1$
         cbUseEmlMessage = new JCheckBox(JMeterUtils.getResString("smtp_eml")); // $NON-NLS-1$
 
         attachmentFileChooser = new JFileChooser();
@@ -807,103 +662,11 @@ public class SmtpPanel extends JPanel {
         /*
          * Security Settings
          */
-        JPanel panelSecuritySettings = new JPanel(new GridBagLayout());
-        panelSecuritySettings.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
-                JMeterUtils.getResString("smtp_security_settings"))); // $NON-NLS-1$
-
-        rbUseNone.setSelected(true);
-        bgSecuritySettings = new ButtonGroup();
-        bgSecuritySettings.add(rbUseNone);
-        bgSecuritySettings.add(rbUseSSL);
-        bgSecuritySettings.add(rbUseStartTLS);
-
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        panelSecuritySettings.add(rbUseNone, gridBagConstraints);
-
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        panelSecuritySettings.add(rbUseSSL, gridBagConstraints);
-
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        panelSecuritySettings.add(rbUseStartTLS, gridBagConstraints);
-
-        rbUseNone.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent evt) {
-                rbSecuritySettingsItemStateChanged(evt);
-            }
-        });
-        rbUseSSL.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent evt) {
-                rbSecuritySettingsItemStateChanged(evt);
-            }
-        });
-        rbUseStartTLS.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent evt) {
-                rbSecuritySettingsItemStateChanged(evt);
-            }
-        });
-
-        cbTrustAllCerts.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        cbTrustAllCerts.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        cbTrustAllCerts.setEnabled(false);
-        cbTrustAllCerts.setToolTipText(JMeterUtils.getResString("smtp_trustall_tooltip")); // $NON-NLS-1$
-        cbTrustAllCerts.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                cbTrustAllCertsActionPerformed(evt);
-            }
-        });
-
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        panelSecuritySettings.add(cbTrustAllCerts, gridBagConstraints);
-
-        cbEnforceStartTLS.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        cbEnforceStartTLS.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        cbEnforceStartTLS.setEnabled(false);
-        cbEnforceStartTLS.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent evt) {
-                        cbEnforceStartTLSActionPerformed(evt);
-                    }
-                });
-        cbEnforceStartTLS.setToolTipText(JMeterUtils.getResString("smtp_enforcestarttls_tooltip")); // $NON-NLS-1$
-
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        panelSecuritySettings.add(cbEnforceStartTLS, gridBagConstraints);
-
-        cbUseLocalTrustStore.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        cbUseLocalTrustStore.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        cbUseLocalTrustStore.setEnabled(false);
-        cbUseLocalTrustStore.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent evt) {
-                        cbUseLocalTrustStoreActionPerformed(evt);
-                    }
-                });
-
-        cbUseLocalTrustStore.setToolTipText(JMeterUtils.getResString("smtp_usetruststore_tooltip")); // $NON-NLS-1$
-
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        panelSecuritySettings.add(cbUseLocalTrustStore, gridBagConstraints);
-
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 1;
-        jlTrustStoreToUse.setToolTipText(JMeterUtils.getResString("smtp_truststore_tooltip"));
-        panelSecuritySettings.add(jlTrustStoreToUse, gridBagConstraints);
-
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        tfTrustStoreToUse.setToolTipText(JMeterUtils.getResString("smtp_truststore_tooltip"));
-        panelSecuritySettings.add(tfTrustStoreToUse, gridBagConstraints);
+        securitySettingsPanel = new SecuritySettingsPanel();
 
         gridBagConstraintsMain.gridx = 0;
         gridBagConstraintsMain.gridy = 3;
-        add(panelSecuritySettings, gridBagConstraintsMain);
+        add(securitySettingsPanel, gridBagConstraintsMain);
 
         /*
          * (non-Javadoc) Message Settings
@@ -1071,35 +834,7 @@ public class SmtpPanel extends JPanel {
         tfAuthPassword.setEditable(cbUseAuth.isSelected());
     }
 
-    /**
-     * ActionPerformed-method for checkbox "useLocalTrustStore"
-     *
-     * @param evt
-     *            ActionEvent to be handled
-     */
-    private void cbUseLocalTrustStoreActionPerformed(
-            ActionEvent evt) {
-        final boolean selected = cbUseLocalTrustStore.isSelected();
-        tfTrustStoreToUse.setEditable(selected); // must follow the checkbox setting
-        if (selected) {
-            cbTrustAllCerts.setSelected(false); // not compatible
-        }
-    }
 
-    /**
-     * ActionPerformed-method for checkbox "cbTrustAllCerts"
-     *
-     * @param evt
-     *            ActionEvent to be handled
-     */
-    private void cbTrustAllCertsActionPerformed(
-            ActionEvent evt) {
-        final boolean selected = cbTrustAllCerts.isSelected();
-        if (selected) {
-            cbUseLocalTrustStore.setSelected(false); // not compatible
-            tfTrustStoreToUse.setEditable(false); // must follow the checkbox setting
-        }
-    }
 
     /**
      * ActionPerformed-method for filechoser "attachmentFileChoser", creates
@@ -1181,47 +916,7 @@ public class SmtpPanel extends JPanel {
         emlFileChooser.showOpenDialog(this);
     }
 
-    /**
-     * ActionPerformed-method for checkbox "enforceStartTLS", empty method
-     * header
-     *
-     * @param evt
-     *            ActionEvent to be handled
-     */
-    private void cbEnforceStartTLSActionPerformed(ActionEvent evt) {
-    }
 
-    /**
-     * ItemStateChanged-method for radiobutton "securitySettings"
-     *
-     * @param evt
-     *            ItemEvent to be handled
-     */
-    private void rbSecuritySettingsItemStateChanged(ItemEvent evt) {
-        final Object source = evt.getSource();
-        if (source == rbUseNone) {
-            cbTrustAllCerts.setEnabled(false);
-            cbTrustAllCerts.setSelected(false);
-            cbEnforceStartTLS.setEnabled(false);
-            cbEnforceStartTLS.setSelected(false);
-            cbUseLocalTrustStore.setSelected(false);
-            cbUseLocalTrustStore.setEnabled(false);
-            tfTrustStoreToUse.setEditable(false);
-        } else if (source == rbUseSSL) {
-            cbTrustAllCerts.setEnabled(true);
-            cbEnforceStartTLS.setEnabled(false);
-            cbEnforceStartTLS.setSelected(false);
-            cbUseLocalTrustStore.setEnabled(true);
-            tfTrustStoreToUse.setEditable(false);
-        } else if (source == rbUseStartTLS) {
-            cbTrustAllCerts.setEnabled(true);
-            cbTrustAllCerts.setSelected(false);
-            cbEnforceStartTLS.setEnabled(true);
-            cbUseLocalTrustStore.setEnabled(true);
-            cbUseLocalTrustStore.setSelected(false);
-            tfTrustStoreToUse.setEditable(false);
-        }
-    }
 
     /**
      * Reset all the Gui fields.
@@ -1244,9 +939,8 @@ public class SmtpPanel extends JPanel {
         tfMailToBCC.setText("");
         tfMailToCC.setText("");
         tfSubject.setText("");
-        tfTrustStoreToUse.setText("");
-        rbUseNone.setSelected(true);
         cbSuppressSubject.setSelected(false);
+        securitySettingsPanel.clear();
         clearHeaderFields();
         validate();        
     }
@@ -1310,6 +1004,13 @@ public class SmtpPanel extends JPanel {
         validate();
         return removeButton;
     }
+	public SecuritySettingsPanel getSecuritySettingsPanel() {
+		return securitySettingsPanel;
+	}
+
+	public void setSecuritySettingsPanel(SecuritySettingsPanel securitySettingsPanel) {
+		this.securitySettingsPanel = securitySettingsPanel;
+	}
     
     private void removeHeaderActionPerformed(ActionEvent evt){
         final Object source = evt.getSource();
