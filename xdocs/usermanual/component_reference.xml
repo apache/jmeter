@@ -1531,6 +1531,8 @@ Relative paths are resolved against the current directory.
 <br />Failing that, against the directory containing the test script (JMX file).
 </property>
 <property name="Subject" required="">The e-mail message subject.</property>
+<property name="Suppress Subject Header" required="">If selected, the "Subject:" header is omitted from the mail that is sent. 
+This is different from sending an empty "Subject:" header, though some e-mail clients may display it identically.</property>
 <property name="Include timestamp in subject" required="">Includes the System.currentTimemilis() in the subject line.</property>
 <property name="Add Header" required="No">Additional headers can be defined using this button.</property>
 <property name="Message" required="">The message body.</property>
