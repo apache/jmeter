@@ -244,7 +244,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
         add(settings, BorderLayout.CENTER);
     }
 
-	private void addField(JPanel panel, JLabel label, JComponent field, GridBagConstraints gbc) {
+    private void addField(JPanel panel, JLabel label, JComponent field, GridBagConstraints gbc) {
         gbc.fill=GridBagConstraints.NONE;
         gbc.anchor = GridBagConstraints.LINE_END;
         panel.add(label, gbc);
