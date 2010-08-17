@@ -76,40 +76,40 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
     private static final String RFC_822_DEFAULT_ENCODING = "iso-8859-1"; // RFC 822 uses ascii per default
 
     public static final String DEFAULT_PROTOCOL = "pop3";  // $NON-NLS-1$
-    
+
     // Use the actual class so the name must be correct.
     private static final String TRUST_ALL_SOCKET_FACTORY = TrustAllSSLSocketFactory.class.getName();
 
-    public boolean isUseLocalTrustStore() {    	
-    	return getPropertyAsBoolean(SecuritySettingsPanel.USE_LOCAL_TRUSTSTORE);
-	}
+    public boolean isUseLocalTrustStore() {
+        return getPropertyAsBoolean(SecuritySettingsPanel.USE_LOCAL_TRUSTSTORE);
+    }
 
-	public String getTrustStoreToUse() {
-		return getPropertyAsString(SecuritySettingsPanel.TRUSTSTORE_TO_USE);
-	}
-
-
-	public boolean isUseSSL() {
-    	return getPropertyAsBoolean(SecuritySettingsPanel.USE_SSL);
-	}
+    public String getTrustStoreToUse() {
+        return getPropertyAsString(SecuritySettingsPanel.TRUSTSTORE_TO_USE);
+    }
 
 
-	public boolean isUseStartTLS() {
-		return getPropertyAsBoolean(SecuritySettingsPanel.USE_STARTTLS);
-	}
+    public boolean isUseSSL() {
+        return getPropertyAsBoolean(SecuritySettingsPanel.USE_SSL);
+    }
 
 
-	public boolean isTrustAllCerts() {
-		return getPropertyAsBoolean(SecuritySettingsPanel.SSL_TRUST_ALL_CERTS);
-	}
+    public boolean isUseStartTLS() {
+        return getPropertyAsBoolean(SecuritySettingsPanel.USE_STARTTLS);
+    }
 
 
-	public boolean isEnforceStartTLS() {
+    public boolean isTrustAllCerts() {
+        return getPropertyAsBoolean(SecuritySettingsPanel.SSL_TRUST_ALL_CERTS);
+    }
+
+
+    public boolean isEnforceStartTLS() {
         return getPropertyAsBoolean(SecuritySettingsPanel.ENFORCE_STARTTLS);
 
-	}
+    }
 
-	public static final int ALL_MESSAGES = -1; // special value
+    public static final int ALL_MESSAGES = -1; // special value
 
     private volatile boolean busy;
 
@@ -140,7 +140,7 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
         try {
             // Create empty properties
             Properties props = new Properties();
-            
+
             if (isUseStartTLS()) {
                 props.setProperty("mail.pop3s.starttls.enable", "true");
                 if (isEnforceStartTLS()){
@@ -161,11 +161,11 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
                 File truststore = new File(getTrustStoreToUse());
                 log.info("load local truststore - try to load truststore from: "+truststore.getAbsolutePath());
                 if(!truststore.exists()){
-                	log.info("load local truststore -Failed to load truststore from: "+truststore.getAbsolutePath());
+                    log.info("load local truststore -Failed to load truststore from: "+truststore.getAbsolutePath());
                     truststore = new File(FileServer.getFileServer().getBaseDir(), getTrustStoreToUse());
                     log.info("load local truststore -Attempting to read truststore from:  "+truststore.getAbsolutePath());
                     if(!truststore.exists()){
-                    	log.info("load local truststore -Failed to load truststore from: "+truststore.getAbsolutePath() + ". Local truststore not available, aborting execution.");
+                        log.info("load local truststore -Failed to load truststore from: "+truststore.getAbsolutePath() + ". Local truststore not available, aborting execution.");
                         throw new IOException("Local truststore file not found. Also not available under : " + truststore.getAbsolutePath());
                     }
                 }
@@ -178,7 +178,7 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
                     props.put("mail.pop3s.ssl.socketFactory", new LocalTrustStoreSSLSocketFactory(truststore));
                     props.put("mail.pop3s.ssl.socketFactory.fallback", "false");
                 }
-            }            
+            }
 
             // Get session
             Session session = Session.getInstance(props, null);

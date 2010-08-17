@@ -37,11 +37,11 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
 public class SecuritySettingsPanel extends JPanel{
-	
-	private static final long serialVersionUID = 1L;
 
-	//++JMX attribute names - do not change the values!
-	// These were moved from SMTPSampler, which is why the prefix is still SMTSampler
+    private static final long serialVersionUID = 1L;
+
+    //++JMX attribute names - do not change the values!
+    // These were moved from SMTPSampler, which is why the prefix is still SMTSampler
     public final static String USE_SSL              = "SMTPSampler.useSSL"; // $NON-NLS-1$
     public final static String USE_STARTTLS         = "SMTPSampler.useStartTLS"; // $NON-NLS-1$
     public final static String SSL_TRUST_ALL_CERTS  = "SMTPSampler.trustAllCerts"; // $NON-NLS-1$
@@ -49,43 +49,43 @@ public class SecuritySettingsPanel extends JPanel{
     public final static String USE_LOCAL_TRUSTSTORE = "SMTPSampler.useLocalTrustStore"; // $NON-NLS-1$
     public final static String TRUSTSTORE_TO_USE    = "SMTPSampler.trustStoreToUse"; // $NON-NLS-1$
     //--JMX attribute names
-    
+
     private ButtonGroup bgSecuritySettings;
 
-	private JRadioButton rbUseNone;
+    private JRadioButton rbUseNone;
 
-	private JRadioButton rbUseSSL;
+    private JRadioButton rbUseSSL;
 
-	private JRadioButton rbUseStartTLS;
+    private JRadioButton rbUseStartTLS;
 
-	private JCheckBox cbTrustAllCerts;
+    private JCheckBox cbTrustAllCerts;
 
-	private JCheckBox cbEnforceStartTLS;
+    private JCheckBox cbEnforceStartTLS;
 
-	private JCheckBox cbUseLocalTrustStore;
+    private JCheckBox cbUseLocalTrustStore;
 
-	private JLabel jlTrustStoreToUse;
+    private JLabel jlTrustStoreToUse;
 
-	private JTextField tfTrustStoreToUse;
-	
-	
-	public SecuritySettingsPanel() {
-		super();
-		init();
-	}
+    private JTextField tfTrustStoreToUse;
 
-	public void init(){
-		this.setLayout(new GridBagLayout());
+
+    public SecuritySettingsPanel() {
+        super();
+        init();
+    }
+
+    public void init(){
+        this.setLayout(new GridBagLayout());
         this.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("smtp_security_settings"))); // $NON-NLS-1$
-        
+
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         gridBagConstraints.fill = GridBagConstraints.NONE;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 0.5;
-        
+
         rbUseNone = new JRadioButton(JMeterUtils.getResString("smtp_usenone")); // $NON-NLS-1$
         rbUseSSL = new JRadioButton(JMeterUtils.getResString("smtp_usessl")); // $NON-NLS-1$
         rbUseStartTLS = new JRadioButton(JMeterUtils.getResString("smtp_usestarttls")); // $NON-NLS-1$
@@ -93,11 +93,11 @@ public class SecuritySettingsPanel extends JPanel{
         cbTrustAllCerts = new JCheckBox(JMeterUtils.getResString("smtp_trustall")); // $NON-NLS-1$
         cbEnforceStartTLS = new JCheckBox(JMeterUtils.getResString("smtp_enforcestarttls")); // $NON-NLS-1$
         cbUseLocalTrustStore = new JCheckBox(JMeterUtils.getResString("smtp_usetruststore")); // $NON-NLS-1$
-        
+
         jlTrustStoreToUse = new JLabel(JMeterUtils.getResString("smtp_truststore")); // $NON-NLS-1$
-        
+
         tfTrustStoreToUse = new JTextField(20);
-        
+
         rbUseNone.setSelected(true);
         bgSecuritySettings = new ButtonGroup();
         bgSecuritySettings.add(rbUseNone);
@@ -186,7 +186,7 @@ public class SecuritySettingsPanel extends JPanel{
         gridBagConstraints.gridy = 2;
         tfTrustStoreToUse.setToolTipText(JMeterUtils.getResString("smtp_truststore_tooltip"));
         this.add(tfTrustStoreToUse, gridBagConstraints);
-	}
+    }
 
     /**
      * ActionPerformed-method for checkbox "useLocalTrustStore"
@@ -216,7 +216,7 @@ public class SecuritySettingsPanel extends JPanel{
             tfTrustStoreToUse.setEditable(false); // must follow the checkbox setting
         }
     }
-    
+
     /**
      * ActionPerformed-method for checkbox "enforceStartTLS", empty method
      * header
@@ -384,30 +384,30 @@ public class SecuritySettingsPanel extends JPanel{
         cbTrustAllCerts.setSelected(trustAllCerts);
     }
 
-	public void clear() {
-		tfTrustStoreToUse.setText("");
-		rbUseNone.setSelected(true);
-	}
+    public void clear() {
+        tfTrustStoreToUse.setText("");
+        rbUseNone.setSelected(true);
+    }
 
-	public void configure(TestElement element) {
+    public void configure(TestElement element) {
         setUseSSL(element.getPropertyAsBoolean(USE_SSL));
         setUseStartTLS(element.getPropertyAsBoolean(USE_STARTTLS));
         if(!element.getPropertyAsBoolean(USE_STARTTLS) && !element.getPropertyAsBoolean(USE_SSL)){
-        	setUseNoSecurity(true);
+            setUseNoSecurity(true);
         }
         setTrustAllCerts(element.getPropertyAsBoolean(SSL_TRUST_ALL_CERTS));
         setEnforceStartTLS(element.getPropertyAsBoolean(ENFORCE_STARTTLS));
         setUseLocalTrustStore(element.getPropertyAsBoolean(USE_LOCAL_TRUSTSTORE));
         setTrustStoreToUse(element.getPropertyAsString(TRUSTSTORE_TO_USE));
-	}
+    }
 
-	public void modifyTestElement(TestElement te) {
+    public void modifyTestElement(TestElement te) {
         te.setProperty(USE_SSL, Boolean.toString(isUseSSL()));
         te.setProperty(USE_STARTTLS, Boolean.toString(isUseStartTLS()));
         te.setProperty(SSL_TRUST_ALL_CERTS, Boolean.toString(isTrustAllCerts()));
         te.setProperty(ENFORCE_STARTTLS, Boolean.toString(isEnforceStartTLS()));
         te.setProperty(USE_LOCAL_TRUSTSTORE, Boolean.toString(isUseLocalTrustStore()));
         te.setProperty(TRUSTSTORE_TO_USE, getTrustStoreToUse());
-	}
+    }
 
 }
