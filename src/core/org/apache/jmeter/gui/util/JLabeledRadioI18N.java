@@ -39,8 +39,8 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledField;
 
 /**
- * JLabeledRadio will create a set of Radio buttons with a label.
- * This is a version of the original JLabelledRadio class, but modified
+ * JLabeledRadioI18N creates a set of Radio buttons with a label.
+ * This is a version of the original JLabelledRadio class (now removed), but modified
  * to accept resource names rather than language strings.
  *
  */
