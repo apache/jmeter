@@ -131,19 +131,19 @@ public class SmtpSampler extends AbstractSampler {
             instance.setReceiverTo(getPropNameAsAddresses(receiverTo));
             instance.setReceiverCC(getPropNameAsAddresses(receiverCC));
             instance.setReceiverBCC(getPropNameAsAddresses(receiverBcc));
-            
+
             if(getPropertyAsBoolean(SUPPRESS_SUBJECT)){
-            	instance.setSubject(null);
+                instance.setSubject(null);
             }else{
-            	String subject = getPropertyAsString(SUBJECT);
-            	if (getPropertyAsBoolean(INCLUDE_TIMESTAMP)){
-            		StringBuffer sb = new StringBuffer(subject);
-            		sb.append(" <<< current timestamp: ");
-            		sb.append(new Date().getTime());
-            		sb.append(" >>>");
-            		subject = sb.toString();
-            	}
-            	instance.setSubject(subject);
+                String subject = getPropertyAsString(SUBJECT);
+                if (getPropertyAsBoolean(INCLUDE_TIMESTAMP)){
+                    StringBuffer sb = new StringBuffer(subject);
+                    sb.append(" <<< current timestamp: ");
+                    sb.append(new Date().getTime());
+                    sb.append(" >>>");
+                    subject = sb.toString();
+                }
+                instance.setSubject(subject);
             }
 
             if (!getPropertyAsBoolean(USE_EML)) { // part is only needed if we
