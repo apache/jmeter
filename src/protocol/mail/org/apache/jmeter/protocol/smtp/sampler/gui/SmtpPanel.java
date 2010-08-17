@@ -87,7 +87,7 @@ public class SmtpPanel extends JPanel {
     private JCheckBox cbMessageSizeStats;
     private JCheckBox cbEnableDebug;
     private JCheckBox cbUseEmlMessage;
-    
+
     private JPanel headerFieldsPanel;
     private JButton addHeaderFieldButton;
     private JLabel headerFieldName;
@@ -95,7 +95,7 @@ public class SmtpPanel extends JPanel {
     private Map<JTextField, JTextField> headerFields = new HashMap<JTextField, JTextField>();
     private Map<JButton,JTextField> removeButtons = new HashMap<JButton, JTextField>();
     private int headerGridY = 0;
-    
+
     private SecuritySettingsPanel securitySettingsPanel;
 
     /**
@@ -291,12 +291,12 @@ public class SmtpPanel extends JPanel {
      * Sets the property that defines if the subject header should be suppressed
      *
      * @param emptySubject
-     *            
+     *
      */
     public void setSuppressSubject(boolean emptySubject) {
         cbSuppressSubject.setSelected(emptySubject);
     }
-    
+
     /**
      * Returns if mail-server needs authentication (checkbox)
      *
@@ -326,7 +326,7 @@ public class SmtpPanel extends JPanel {
         cbEnableDebug.setSelected(selected);
     }
 
- 
+
 
     /**
      * Returns if an .eml-message is sent instead of the content of message-text
@@ -447,7 +447,7 @@ public class SmtpPanel extends JPanel {
             JTextField nameTF = removeButtons.get(removeButton);
             nameTF.setText(name);
             JTextField valueTF = headerFields.get(nameTF);
-            valueTF.setText(argument.getValue());            
+            valueTF.setText(argument.getValue());
         }
         validate();
     }
@@ -483,7 +483,7 @@ public class SmtpPanel extends JPanel {
         tfEmlMessage = new JTextField(30);
 
         taMessage = new JTextArea(5, 20);
-        
+
         cbSuppressSubject = new JCheckBox(JMeterUtils.getResString("smtp_suppresssubj")); // $NON-NLS-1$
         cbSuppressSubject.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -684,7 +684,7 @@ public class SmtpPanel extends JPanel {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         panelMessageSettings.add(tfSubject, gridBagConstraints);
-        
+
         cbSuppressSubject.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         cbSuppressSubject.setMargin(new java.awt.Insets(0, 0, 0, 0));
         gridBagConstraints.gridx = 2;
@@ -712,15 +712,15 @@ public class SmtpPanel extends JPanel {
         headerFieldName = new JLabel(JMeterUtils.getResString("smtp_header_name"));
         headerFieldValue = new JLabel(JMeterUtils.getResString("smtp_header_value"));
         headerFieldsPanel = new JPanel(new GridBagLayout());
-        
+
         headerFieldName.setVisible(false);
-        headerFieldValue.setVisible(false);        
+        headerFieldValue.setVisible(false);
 
         headerGridY=0;
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = headerGridY++;
         headerFieldsPanel.add(addHeaderFieldButton, gridBagConstraints);
-        
+
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = headerGridY;
         headerFieldsPanel.add(headerFieldName, gridBagConstraints);
@@ -728,10 +728,10 @@ public class SmtpPanel extends JPanel {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = headerGridY++;
         headerFieldsPanel.add(headerFieldValue, gridBagConstraints);
-        
+
         gridBagConstraintsMain.gridx = 1;
         gridBagConstraintsMain.gridy = 2;
-        panelMessageSettings.add(headerFieldsPanel, gridBagConstraintsMain);        
+        panelMessageSettings.add(headerFieldsPanel, gridBagConstraintsMain);
 
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -942,7 +942,7 @@ public class SmtpPanel extends JPanel {
         cbSuppressSubject.setSelected(false);
         securitySettingsPanel.clear();
         clearHeaderFields();
-        validate();        
+        validate();
     }
 
     private void clearHeaderFields() {
@@ -953,65 +953,65 @@ public class SmtpPanel extends JPanel {
             JButton removeButton = iterator.next();
                JTextField headerName = removeButtons.get(removeButton);
             JTextField headerValue = headerFields.get(headerName);
-            
+
             headerFieldsPanel.remove(headerName);
             if (headerValue != null){ // Can be null (not sure why)
                 headerFieldsPanel.remove(headerValue);
             }
-            headerFieldsPanel.remove(removeButton);    
+            headerFieldsPanel.remove(removeButton);
             headerFields.remove(headerName);
             iterator.remove();
         }
     }
-    
+
     private JButton addHeaderActionPerformed(ActionEvent evt){
         if(headerFields.size() == 0){
             headerFieldName.setVisible(true);
             headerFieldValue.setVisible(true);
         }
         JTextField nameTF = new JTextField();
-        JTextField valueTF = new JTextField();        
+        JTextField valueTF = new JTextField();
         JButton removeButton = new JButton(JMeterUtils.getResString("smtp_header_remove"));
         headerFields.put(nameTF, valueTF);
         removeButtons.put(removeButton, nameTF);
-        
+
         removeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 removeHeaderActionPerformed(evt);
             }
         });
-        
+
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        
+
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = headerGridY;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         headerFieldsPanel.add(nameTF, gridBagConstraints);
-        
+
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = headerGridY;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         headerFieldsPanel.add(valueTF, gridBagConstraints);
-        
+
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = headerGridY++;
         gridBagConstraints.fill = GridBagConstraints.NONE;
         headerFieldsPanel.add(removeButton, gridBagConstraints);
-        
+
         validate();
         return removeButton;
     }
-	public SecuritySettingsPanel getSecuritySettingsPanel() {
-		return securitySettingsPanel;
-	}
+    public SecuritySettingsPanel getSecuritySettingsPanel() {
+        return securitySettingsPanel;
+    }
 
-	public void setSecuritySettingsPanel(SecuritySettingsPanel securitySettingsPanel) {
-		this.securitySettingsPanel = securitySettingsPanel;
-	}
-    
+    public void setSecuritySettingsPanel(SecuritySettingsPanel securitySettingsPanel) {
+        this.securitySettingsPanel = securitySettingsPanel;
+    }
+
     private void removeHeaderActionPerformed(ActionEvent evt){
         final Object source = evt.getSource();
         if(source != null && source instanceof JButton){
@@ -1022,7 +1022,7 @@ public class SmtpPanel extends JPanel {
             JTextField nameTF = removeButtons.get(source);
             JTextField valueTF = headerFields.get(nameTF);
             headerFields.remove(nameTF);
-            
+
             headerFieldsPanel.remove(nameTF);
             headerFieldsPanel.remove(valueTF);
             headerFieldsPanel.remove((JButton)source);
@@ -1030,15 +1030,15 @@ public class SmtpPanel extends JPanel {
         }
     }
     private void emptySubjectActionPerformed(ActionEvent evt) {
-		final Object source = evt.getSource();
-    	if(source != null && source instanceof JCheckBox){
-    		if(cbSuppressSubject.isSelected()){
-    			tfSubject.setEnabled(false);
-    			cbIncludeTimestamp.setEnabled(false);
-    		}else{
-    			tfSubject.setEnabled(true);
-    			cbIncludeTimestamp.setEnabled(true);
-    		}
-    	}		
-	}
+        final Object source = evt.getSource();
+        if(source != null && source instanceof JCheckBox){
+            if(cbSuppressSubject.isSelected()){
+                tfSubject.setEnabled(false);
+                cbIncludeTimestamp.setEnabled(false);
+            }else{
+                tfSubject.setEnabled(true);
+                cbIncludeTimestamp.setEnabled(true);
+            }
+        }
+    }
 }
