@@ -136,6 +136,7 @@ To override the default local language fully, set the JMeter property "language"
 
 <h3>General</h3>
 <ul>
+<li>Bug 30563 - Thread Group should have a start next loop option on Sample Error</li>
 </ul>
 
 <h2>Non-functional changes</h2>

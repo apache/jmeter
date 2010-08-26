@@ -45,6 +45,9 @@ public abstract class AbstractThreadGroup extends AbstractTestElement implements
     /** Continue, i.e. ignore sampler errors */
     public final static String ON_SAMPLE_ERROR_CONTINUE = "continue";
 
+    /** Start next loop for current thread if sampler error occurs */
+    public final static String ON_SAMPLE_ERROR_START_NEXT_LOOP = "startnextloop";
+
     /** Stop current thread if sampler error occurs */
     public final static String ON_SAMPLE_ERROR_STOPTHREAD = "stopthread";
 
@@ -156,6 +159,15 @@ public abstract class AbstractThreadGroup extends AbstractTestElement implements
      */
     public int getNumThreads() {
         return this.getPropertyAsInt(AbstractThreadGroup.NUM_THREADS);
+    }
+
+    /**
+     * Check if a sampler error should cause thread to start next loop.
+     *
+     * @return true if thread should start next loop
+     */
+    public boolean getOnErrorStartNextLoop() {
+        return getPropertyAsString(ThreadGroup.ON_SAMPLE_ERROR).equalsIgnoreCase(ON_SAMPLE_ERROR_START_NEXT_LOOP);
     }
 
     /**
