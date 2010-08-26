@@ -4611,7 +4611,7 @@ In jmeter.properties, edit "user.classpath" to include additional libraries.
 </description>
 </component>
 
-<component name="Thread Group" index="&sect-num;.9.2"  width="411" height="419" screenshot="threadgroup.png">
+<component name="Thread Group" index="&sect-num;.9.2"  width="609" height="387" screenshot="threadgroup.png">
 <description>
 <p>A Thread Group defines a pool of users that will execute a particular test case against your server.  In the Thread Group GUI, you can control the number of users simulated (num of threads), the ramp up time (how long it takes to start all the threads), the number of times to perform the test, and optionally, a start and stop time for the test.</p>
 <p>
@@ -4628,6 +4628,7 @@ JMeter does not interrupt samplers which are waiting for a response, so the end 
         The possible choices are:
         <ul>
         <li>Continue - ignore the error and continue with the test</li>
+        <li>Start Next Loop - ignore the error, start next loop and continue with the test</li>
         <li>Stop Thread - current thread exits</li>
         <li>Stop Test - the entire test is stopped at the end of any current samples.</li>
         <li>Stop Test Now - the entire test is stopped abruptly. Any current samplers are interrupted if possible.</li>
