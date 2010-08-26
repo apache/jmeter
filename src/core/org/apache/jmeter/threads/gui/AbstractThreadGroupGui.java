@@ -44,6 +44,8 @@ public abstract class AbstractThreadGroupGui extends AbstractJMeterGuiComponent 
     // Sampler error action buttons
     private JRadioButton continueBox;
 
+    private JRadioButton startNextLoop;
+
     private JRadioButton stopThrdBox;
 
     private JRadioButton stopTestBox;
@@ -114,6 +116,10 @@ public abstract class AbstractThreadGroupGui extends AbstractJMeterGuiComponent 
         group.add(continueBox);
         panel.add(continueBox);
 
+        startNextLoop = new JRadioButton(JMeterUtils.getResString("sampler_on_error_start_next_loop")); // $NON-NLS-1$
+        group.add(startNextLoop);
+        panel.add(startNextLoop);
+
         stopThrdBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_stop_thread")); // $NON-NLS-1$
         group.add(stopThrdBox);
         panel.add(stopThrdBox);
@@ -136,6 +142,8 @@ public abstract class AbstractThreadGroupGui extends AbstractJMeterGuiComponent 
             stopTestNowBox.setSelected(true);
         } else if (te.getOnErrorStopThread()) {
             stopThrdBox.setSelected(true);
+        } else if (te.getOnErrorStartNextLoop()) {
+            startNextLoop.setSelected(true);
         } else {
             continueBox.setSelected(true);
         }
@@ -150,6 +158,9 @@ public abstract class AbstractThreadGroupGui extends AbstractJMeterGuiComponent 
         }
         if (stopThrdBox.isSelected()) {
             return AbstractThreadGroup.ON_SAMPLE_ERROR_STOPTHREAD;
+        }
+        if (startNextLoop.isSelected()) {
+            return AbstractThreadGroup.ON_SAMPLE_ERROR_START_NEXT_LOOP;
         }
 
         // Defaults to continue

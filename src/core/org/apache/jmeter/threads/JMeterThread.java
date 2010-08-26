@@ -117,6 +117,8 @@ public class JMeterThread implements Runnable, Interruptible {
 
     private volatile boolean onErrorStopThread;
 
+    private volatile boolean onErrorStartNextLoop;
+
     private volatile Sampler currentSampler;
 
     public JMeterThread(HashTree test, JMeterThreadMonitor monitor, ListenerNotifier note) {
@@ -238,9 +240,26 @@ public class JMeterThread implements Runnable, Interruptible {
         try {
             initRun(threadContext);
             while (running) {
-                Sampler sam;
-                while (running && (sam = controller.next()) != null) {
-                    process_sampler(sam, null, threadContext);
+                Sampler firstSampler = controller.next();
+                Sampler sam = firstSampler;
+                while (running && sam != null) {
+                    if (onErrorStartNextLoop) { // if the threadGroup option is to start next loop when it fails
+
+                        if (sam.equals(firstSampler)) { // if it's the start of an iteration
+                            threadContext.getVariables().put(LAST_SAMPLE_OK, "true");
+                        }
+                        if (threadContext.getVariables().get(LAST_SAMPLE_OK) == "true") {
+                            process_sampler(sam, null, threadContext);
+                            sam = controller.next();
+                        } else {
+                            while (!sam.equals(firstSampler)) { // while the thread is NOT on the begining of the tree
+                                sam = controller.next();
+                            }
+                        }
+                    } else {
+                        process_sampler(sam, null, threadContext);
+                        sam = controller.next();
+                    }
                 }
                 if (controller.isDone()) {
                     running = false;
@@ -777,6 +796,16 @@ public class JMeterThread implements Runnable, Interruptible {
      */
     public void setOnErrorStopThread(boolean b) {
         onErrorStopThread = b;
+    }
+
+    /**
+     * Should Thread start next loop on Sampler error?
+     *
+     * @param b -
+     *            true or false
+     */
+    public void setOnErrorStartNextLoop(boolean b) {
+        onErrorStartNextLoop = b;
     }
 
     public void setThreadGroup(AbstractThreadGroup group) {
