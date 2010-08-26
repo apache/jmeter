@@ -450,6 +450,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
             boolean onErrorStopTest = group.getOnErrorStopTest();
             boolean onErrorStopTestNow = group.getOnErrorStopTestNow();
             boolean onErrorStopThread = group.getOnErrorStopThread();
+            boolean onErrorStartNextLoop = group.getOnErrorStartNextLoop();
             String groupName = group.getName();
             log.info("Starting " + numThreads + " threads for group " + groupName + ".");
 
@@ -459,6 +460,8 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
                 log.info("Test will stop abruptly on error");
             } else if (onErrorStopThread) {
                 log.info("Thread will stop on error");
+            } else if (onErrorStartNextLoop) {
+                log.info("Thread will start next loop on error");
             } else {
                 log.info("Thread will continue on error");
             }
@@ -475,6 +478,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
                 jmeterThread.setOnErrorStopTest(onErrorStopTest);
                 jmeterThread.setOnErrorStopTestNow(onErrorStopTestNow);
                 jmeterThread.setOnErrorStopThread(onErrorStopThread);
+                jmeterThread.setOnErrorStartNextLoop(onErrorStartNextLoop);
 
                 group.scheduleThread(jmeterThread);
 
