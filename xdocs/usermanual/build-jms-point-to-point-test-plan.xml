@@ -163,26 +163,29 @@ Then, select the JMS Point-to-Point sampler element in the tree.
                      </tr>
                      <tr>
                         <td colspan="1">InitialContextFactory</td>
-                        <td>org.activemq.jndi.ActiveMQInitialContextFactory</td>
+                        <td>org.apache.activemq.jndi.ActiveMQInitialContextFactory</td>
                         <td>The standard InitialContextFactory for Active MQ</td>
                     </tr>
                     <tr>
                         <th colspan="3"> Properties</th>
                     </tr>
                     <tr>
-                        <td colspan="1">providerURL</td>
-                        <td>tcp://localhost:61616</td>
-                        <td>This defines the URL of the active mq messaging system.</td>
-                    </tr>
-                    <tr>
-                        <td>queue.Q.REQ</td>
+                        <td colspan="1">queue.Q.REQ</td>
                         <td>example.A</td>
                         <td>This defines a JNDI name Q.REQ for the request queue that points to the queue example.A</td>
                     </tr>
                     <tr>
-                        <td>queue.Q.RPL</td>
+                        <td colspan="1">queue.Q.RPL</td>
                         <td>example.B</td>
                         <td>This defines a JNDI name Q.RPL for the reply queue that points to the queue example.B</td>
+                    </tr>
+                    <tr>
+                        <th colspan="3">Provider URL</th>
+                    </tr>
+                    <tr>
+                        <td colspan="1">Provider URL</td>
+                        <td>tcp://localhost:61616</td>
+                        <td>This defines the URL of the active mq messaging system.</td>
                     </tr>
                 </table>
             </p>
