@@ -112,6 +112,7 @@ To override the default local language fully, set the JMeter property "language"
 <ul>
 <li>Bug 49622 - Allow sending messages without a subject (SMTP Sampler)</li>
 <li>Bug 49603 - Allow accepting expired certificates on Mail Reader Sampler</li>
+<li>Bug 49775 - Allow sending messages without a body</li>
 </ul>
 
 <h3>Controllers</h3>
