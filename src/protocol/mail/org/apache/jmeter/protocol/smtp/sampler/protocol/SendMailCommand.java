@@ -21,6 +21,7 @@ package org.apache.jmeter.protocol.smtp.sampler.protocol;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -38,6 +39,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.property.CollectionProperty;
@@ -90,9 +92,11 @@ public class SendMailCommand {
     private boolean synchronousMode;
 
     private Session session;
-    private Message message;
 
-    private StringBuffer serverResponse = new StringBuffer();
+    private StringBuffer serverResponse = new StringBuffer(); // TODO this is not populated currently
+
+    /** send plain body, i.e. not multipart/mixed */
+	private boolean plainBody;
 
     /**
      * Standard-Constructor
@@ -165,6 +169,8 @@ public class SendMailCommand {
         }
 
         session = Session.getInstance(props, null);
+        
+        Message message;
 
         if (sendEmlMessage) {
             message = new MimeMessage(session, new FileInputStream(emlMessage));
@@ -172,18 +178,33 @@ public class SendMailCommand {
             message = new MimeMessage(session);
             // handle body and attachments
             Multipart multipart = new MimeMultipart();
-            BodyPart body = new MimeBodyPart();
-            body.setText(mailBody);
-            multipart.addBodyPart(body);
-
-            for (File f : attachments) {
-                BodyPart attach = new MimeBodyPart();
-                attach.setFileName(f.getName());
-                attach.setDataHandler(new DataHandler(new FileDataSource(f)));
-                multipart.addBodyPart(attach);
+            final int attachmentCount = attachments.size();
+            if (plainBody && 
+               (attachmentCount == 0 ||  (mailBody.length() == 0 && attachmentCount == 1))) {
+                if (attachmentCount == 1) { // i.e. mailBody is empty
+                    File first = attachments.get(0);
+                    InputStream is = null;
+                    try {
+                        is = new FileInputStream(first);
+                        message.setText(IOUtils.toString(is));
+                    } finally {
+                        IOUtils.closeQuietly(is);
+                    }
+                } else {
+                    message.setText(mailBody);
+                }
+            } else {
+                BodyPart body = new MimeBodyPart();
+                body.setText(mailBody);
+                multipart.addBodyPart(body);
+                for (File f : attachments) {
+                    BodyPart attach = new MimeBodyPart();
+                    attach.setFileName(f.getName());
+                    attach.setDataHandler(new DataHandler(new FileDataSource(f.getAbsolutePath())));
+                    multipart.addBodyPart(attach);
+                }
+                message.setContent(multipart);
             }
-
-            message.setContent(multipart);
         }
 
         // set from field and subject
@@ -721,6 +742,15 @@ public class SendMailCommand {
      */
     public void setMailBody(String body){
         mailBody = body;
+    }
+    
+    /**
+     * Set whether to send a plain body (i.e. not multipart/mixed)
+     *
+     * @param plainBody <code>true</code> if sending a plain body (i.e. not multipart/mixed)
+     */
+    public void setPlainBody(boolean plainBody){
+    	this.plainBody = plainBody;
     }
 
     public StringBuffer getServerResponse() {
