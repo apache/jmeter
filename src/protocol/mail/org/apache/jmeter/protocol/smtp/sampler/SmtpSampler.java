@@ -37,6 +37,7 @@ import org.apache.jmeter.protocol.smtp.sampler.tools.CounterOutputStream;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -68,6 +69,7 @@ public class SmtpSampler extends AbstractSampler {
     public final static String SUBJECT              = "SMTPSampler.subject"; // $NON-NLS-1$
     public final static String SUPPRESS_SUBJECT     = "SMTPSampler.suppressSubject"; // $NON-NLS-1$
     public final static String MESSAGE              = "SMTPSampler.message"; // $NON-NLS-1$
+    public final static String PLAIN_BODY           = "SMTPSampler.plainBody"; // $NON-NLS-1$
     public final static String INCLUDE_TIMESTAMP    = "SMTPSampler.include_timestamp"; // $NON-NLS-1$
     public final static String ATTACH_FILE          = "SMTPSampler.attachFile"; // $NON-NLS-1$
     public final static String MESSAGE_SIZE_STATS   = "SMTPSampler.messageSizeStatistics"; // $NON-NLS-1$
@@ -149,11 +151,18 @@ public class SmtpSampler extends AbstractSampler {
             if (!getPropertyAsBoolean(USE_EML)) { // part is only needed if we
                 // don't send an .eml-file
                 instance.setMailBody(getPropertyAsString(MESSAGE));
+                instance.setPlainBody(getPropertyAsBoolean(PLAIN_BODY));
                 final String filesToAttach = getPropertyAsString(ATTACH_FILE);
                 if (!filesToAttach.equals("")) {
                     String[] attachments = filesToAttach.split(FILENAME_SEPARATOR);
                     for (String attachment : attachments) {
-                        instance.addAttachment(new File(attachment));
+                    	File file = new File(attachment);
+                    	if(!file.isAbsolute() && !file.exists()){
+                            log.debug("loading file with relative path: " +attachment);
+                            file = new File(FileServer.getFileServer().getBaseDir(), attachment);
+                            log.debug("file path set to: "+attachment);
+                        }
+                        instance.addAttachment(file);
                     }
                 }
 

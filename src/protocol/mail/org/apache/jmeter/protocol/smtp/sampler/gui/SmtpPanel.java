@@ -22,6 +22,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -63,6 +64,7 @@ public class SmtpPanel extends JPanel {
     private JTextField tfAttachment;
     private JTextField tfEmlMessage;
     private JTextArea taMessage;
+    private JCheckBox cbPlainBody;
 
     private JLabel jlAddressFrom;
     private JLabel jlAddressTo;
@@ -298,6 +300,24 @@ public class SmtpPanel extends JPanel {
     }
 
     /**
+     * Returns true if message body should be plain (i.e. not multipart/mixed)
+     *
+     * @return true if using plain message body (i.e. not multipart/mixed)
+     */
+    public boolean isPlainBody() {
+        return cbPlainBody.isSelected();
+    }
+
+    /**
+     * Sets the property that defines if the body should be plain (i.e. not multipart/mixed)
+     *
+     * @param plainBody whether to use a plain body (i.e. not multipart/mixed)
+     */
+    public void setPlainBody(boolean plainBody) {
+    	cbPlainBody.setSelected(plainBody);
+    }
+
+    /**
      * Returns if mail-server needs authentication (checkbox)
      *
      * @return true if authentication is used
@@ -484,6 +504,8 @@ public class SmtpPanel extends JPanel {
 
         taMessage = new JTextArea(5, 20);
 
+        cbPlainBody = new JCheckBox(JMeterUtils.getResString("smtp_plainbody")); // $NON-NLS-1$
+        
         cbSuppressSubject = new JCheckBox(JMeterUtils.getResString("smtp_suppresssubj")); // $NON-NLS-1$
         cbSuppressSubject.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -742,6 +764,13 @@ public class SmtpPanel extends JPanel {
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         panelMessageSettings.add(taMessage, gridBagConstraints);
+        
+        cbPlainBody.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        cbPlainBody.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = GridBagConstraints.NONE;
+        panelMessageSettings.add(cbPlainBody, gridBagConstraints);
 
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -844,15 +873,17 @@ public class SmtpPanel extends JPanel {
      *            ActionEvent to be handled
      */
     private void attachmentFolderFileChooserActionPerformed(ActionEvent evt) {
+        File chosen = attachmentFileChooser.getSelectedFile();
+        if (chosen == null){
+            return;
+        }
         final String attachments = tfAttachment.getText().trim();
         if (null != attachments && attachments.length() > 0) {
             tfAttachment.setText(attachments
                             + SmtpSampler.FILENAME_SEPARATOR
-                            + attachmentFileChooser.getSelectedFile()
-                                    .getAbsolutePath());
+                            + chosen.getAbsolutePath());
         } else {
-            tfAttachment.setText(attachmentFileChooser.getSelectedFile()
-                    .getAbsolutePath());
+            tfAttachment.setText(chosen.getAbsolutePath());
         }
 
     }
@@ -939,6 +970,7 @@ public class SmtpPanel extends JPanel {
         tfMailToBCC.setText("");
         tfMailToCC.setText("");
         tfSubject.setText("");
+        cbPlainBody.setSelected(false);
         cbSuppressSubject.setSelected(false);
         securitySettingsPanel.clear();
         clearHeaderFields();
@@ -1041,4 +1073,5 @@ public class SmtpPanel extends JPanel {
             }
         }
     }
+	
 }

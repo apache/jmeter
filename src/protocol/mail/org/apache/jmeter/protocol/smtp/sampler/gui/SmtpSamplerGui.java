@@ -74,6 +74,7 @@ public class SmtpSamplerGui extends AbstractSamplerGui {
         smtpPanel.setReceiverBCC(element.getPropertyAsString(SmtpSampler.RECEIVER_BCC));
 
         smtpPanel.setBody(element.getPropertyAsString(SmtpSampler.MESSAGE));
+        smtpPanel.setPlainBody(element.getPropertyAsBoolean(SmtpSampler.PLAIN_BODY));
         smtpPanel.setSubject(element.getPropertyAsString(SmtpSampler.SUBJECT));
         smtpPanel.setSuppressSubject(element.getPropertyAsBoolean(SmtpSampler.SUPPRESS_SUBJECT));
         smtpPanel.setIncludeTimestamp(element.getPropertyAsBoolean(SmtpSampler.INCLUDE_TIMESTAMP));
@@ -130,6 +131,7 @@ public class SmtpSamplerGui extends AbstractSamplerGui {
         te.setProperty(SmtpSampler.SUPPRESS_SUBJECT, Boolean.toString(smtpPanel.isSuppressSubject()));
         te.setProperty(SmtpSampler.INCLUDE_TIMESTAMP, Boolean.toString(smtpPanel.isIncludeTimestamp()));
         te.setProperty(SmtpSampler.MESSAGE, smtpPanel.getBody());
+        te.setProperty(SmtpSampler.PLAIN_BODY, Boolean.toString(smtpPanel.isPlainBody()));
         te.setProperty(SmtpSampler.ATTACH_FILE, smtpPanel.getAttachments());
         
         SecuritySettingsPanel secPanel = smtpPanel.getSecuritySettingsPanel();
