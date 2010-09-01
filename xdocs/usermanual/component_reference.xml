@@ -1505,7 +1505,7 @@ In non-GUI mode, JMeter will exit if some threads fail to stop within the 5 seco
 </component>
 
 
-<component name="SMTP Sampler"  index="&sect-num;.1.19"  width="625" height="777" screenshot="smtp_sampler.png">
+<component name="SMTP Sampler"  index="&sect-num;.1.19"  width="710" height="779" screenshot="smtp_sampler.png">
 <description>
 <p>
 The SMTP Sampler can send mail messages using SMTP/SMTPS protocol. 
@@ -1546,6 +1546,11 @@ This is different from sending an empty "Subject:" header, though some e-mail cl
 <property name="Include timestamp in subject" required="">Includes the System.currentTimemilis() in the subject line.</property>
 <property name="Add Header" required="No">Additional headers can be defined using this button.</property>
 <property name="Message" required="">The message body.</property>
+<property name="Send plain body (i.e. not multipart/mixed)">
+If selected, then send the body as a plain message, i.e. not multipart/mixed, if possible.
+If the message body is empty and there is a single file, then send the file contents as the message body.
+Note: If the message body is not empty, and there is at least one attached file, then the body is sent as multipart/mixed.
+</property>
 <property name="Attach files" required="">Files to be attached to the message.</property>
 <property name="Send .eml" required="">If set, the .eml file will be sent instead of the entries in the Subject, Message, and Attached files</property>
 <property name="Calculate message size" required="">Calculates the message size and stores it in the sample result.</property>
