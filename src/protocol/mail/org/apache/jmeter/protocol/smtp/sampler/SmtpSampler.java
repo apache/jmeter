@@ -23,12 +23,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.mail.AuthenticationFailedException;
+import javax.mail.BodyPart;
+import javax.mail.Header;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import javax.mail.internet.AddressException;
+import javax.mail.internet.ContentType;
 import javax.mail.internet.InternetAddress;
 
 import org.apache.jmeter.protocol.smtp.sampler.gui.SecuritySettingsPanel;
@@ -139,7 +144,7 @@ public class SmtpSampler extends AbstractSampler {
             }else{
                 String subject = getPropertyAsString(SUBJECT);
                 if (getPropertyAsBoolean(INCLUDE_TIMESTAMP)){
-                    StringBuffer sb = new StringBuffer(subject);
+                    StringBuilder sb = new StringBuilder(subject);
                     sb.append(" <<< current timestamp: ");
                     sb.append(new Date().getTime());
                     sb.append(" >>>");
@@ -156,8 +161,8 @@ public class SmtpSampler extends AbstractSampler {
                 if (!filesToAttach.equals("")) {
                     String[] attachments = filesToAttach.split(FILENAME_SEPARATOR);
                     for (String attachment : attachments) {
-                    	File file = new File(attachment);
-                    	if(!file.isAbsolute() && !file.exists()){
+                        File file = new File(attachment);
+                        if(!file.isAbsolute() && !file.exists()){
                             log.debug("loading file with relative path: " +attachment);
                             file = new File(FileServer.getFileServer().getBaseDir(), attachment);
                             log.debug("file path set to: "+attachment);
@@ -200,18 +205,25 @@ public class SmtpSampler extends AbstractSampler {
             return res;
         }
 
+        // Set up the sample result details
+        res.setDataType(SampleResult.TEXT);
+        try {
+            res.setRequestHeaders(getRequestHeaders(message));
+            res.setSamplerData(getSamplerData(message));
+        } catch (MessagingException e1) {
+            res.setSamplerData("Error occurred trying to save request info: "+e1);
+            log.warn("Error occurred trying to save request info",e1);
+        } catch (IOException e1) {
+            res.setSamplerData("Error occurred trying to save request info: "+e1);
+            log.warn("Error occurred trying to save request info",e1);
+        }
+
         // Perform the sampling
         res.sampleStart();
 
         try {
             instance.execute(message);
 
-            // Set up the sample result details
-            res.setSamplerData(
-                    "To: " + receiverTo
-                    + "\nCC: " + receiverCC
-                    + "\nBCC: " + receiverBcc);
-            res.setDataType(SampleResult.TEXT);
             res.setResponseCodeOK();
             /*
              * TODO if(instance.getSMTPStatusCode == 250)
@@ -263,7 +275,7 @@ public class SmtpSampler extends AbstractSampler {
         try {
             // process the sampler result
             InputStream is = message.getInputStream();
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             byte[] buf = new byte[1024];
             int read = is.read(buf);
             while (read > 0) {
@@ -280,6 +292,65 @@ public class SmtpSampler extends AbstractSampler {
         res.setSuccessful(isOK);
 
         return res;
+    }
+
+    private String getRequestHeaders(Message message) throws MessagingException {
+        StringBuilder sb = new StringBuilder();
+        @SuppressWarnings("unchecked") // getAllHeaders() is not yet genericised
+        Enumeration<Header> headers = message.getAllHeaders(); // throws ME
+        writeHeaders(headers, sb);
+        return sb.toString();
+    }
+
+    private String getSamplerData(Message message) throws MessagingException, IOException {
+        StringBuilder sb = new StringBuilder();
+        Object content = message.getContent(); // throws ME
+        if (content instanceof Multipart) {
+            Multipart multipart = (Multipart) content;
+            String contentType = multipart.getContentType();
+            ContentType ct = new ContentType(contentType);
+            String boundary=ct.getParameter("boundary");
+            for (int i = 0; i < multipart.getCount(); i++) { // throws ME
+                sb.append("--");
+                sb.append(boundary);
+                sb.append("\n");
+                BodyPart bodyPart = multipart.getBodyPart(i); // throws ME
+                writeBodyPart(sb, bodyPart); // throws IOE, ME
+            }
+            sb.append("--");
+            sb.append(boundary);
+            sb.append("--");
+            sb.append("\n");
+        } else if(content instanceof BodyPart){
+            BodyPart bodyPart = (BodyPart) content;
+            writeBodyPart(sb, bodyPart); // throws IOE, ME
+        }
+        return sb.toString();
+    }
+
+    private void writeHeaders(Enumeration<Header> headers, StringBuilder sb) {
+        while (headers.hasMoreElements()) {
+            Header header = headers.nextElement();
+            sb.append(header.getName());
+            sb.append(": ");
+            sb.append(header.getValue());
+            sb.append("\n");
+        }
+    }
+
+    private void writeBodyPart(StringBuilder sb, BodyPart bodyPart)
+            throws MessagingException, IOException {
+        @SuppressWarnings("unchecked") // API not yet generic
+        Enumeration<Header> allHeaders = bodyPart.getAllHeaders(); // throws ME
+        writeHeaders(allHeaders, sb);
+        String disposition = bodyPart.getDisposition(); // throws ME
+        sb.append("\n");
+        if (BodyPart.ATTACHMENT.equals(disposition)) {
+            sb.append("<attachment content not shown>");
+        } else {
+            sb.append(bodyPart.getContent()); // throws IOE, ME
+        }
+        sb.append("\n");
     }
 
     /**
