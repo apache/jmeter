@@ -70,6 +70,7 @@ public class SendMailCommand {
     private String smtpServer;
     private String smtpPort;
     private String sender;
+    private List<InternetAddress> replyTo;
     private String emlMessage;
     private List<InternetAddress> receiverTo;
     private List<InternetAddress> receiverCC;
@@ -210,6 +211,11 @@ public class SendMailCommand {
         // set from field and subject
         if (null != sender) {
             message.setFrom(new InternetAddress(sender));
+        }
+
+        if (null != replyTo) {
+            InternetAddress[] to = new InternetAddress[replyTo.size()];
+            message.setReplyTo(replyTo.toArray(to));
         }
 
         message.setSubject(subject);
@@ -760,5 +766,9 @@ public class SendMailCommand {
     public void setEnableDebug(boolean selected) {
         enableDebug = selected;
 
+    }
+
+    public void setReplyTo(List<InternetAddress> replyTo) {
+        this.replyTo = replyTo;
     }
 }
