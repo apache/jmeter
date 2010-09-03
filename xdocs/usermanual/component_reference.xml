@@ -1505,7 +1505,7 @@ In non-GUI mode, JMeter will exit if some threads fail to stop within the 5 seco
 </component>
 
 
-<component name="SMTP Sampler"  index="&sect-num;.1.19"  width="710" height="779" screenshot="smtp_sampler.png">
+<component name="SMTP Sampler"  index="&sect-num;.1.19"  width="713" height="802" screenshot="smtp_sampler.png">
 <description>
 <p>
 The SMTP Sampler can send mail messages using SMTP/SMTPS protocol. 
@@ -1524,9 +1524,10 @@ Two alternatives to handle this verification are available:<br></br>
 Defaults are: SMTP=25, SSL=465, StartTLS=587
 </property>
 <property name="Address From" required="Yes">The from address that will appear in the e-mail</property>
-<property name="Address To" required="Yes, unless CC or BCC is specified">The destination e-mail address</property>
-<property name="Address To BCC" required="No">Blind carbon copy destinations e-mail address</property>
-<property name="Address To CC" required="No">Carbon copy destinations e-mail address</property>
+<property name="Address To" required="Yes, unless CC or BCC is specified">The destination e-mail address (multiple values separated by ";")</property>
+<property name="Address To CC" required="No">Carbon copy destinations e-mail address (multiple values separated by ";")</property>
+<property name="Address To BCC" required="No">Blind carbon copy destinations e-mail address (multiple values separated by ";")</property>
+<property name="Address Reply-To" required="No">Alternate Reply-To address (multiple values separated by ";")</property>
 <property name="Use Auth" required="">Indicates if the SMTP server requires user authentication</property>
 <property name="Username" required="">User login name</property>
 <property name="Password" required="">User login password (N.B. this is stored unencrypted in the test plan)</property>

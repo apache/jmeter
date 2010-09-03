@@ -67,6 +67,7 @@ public class SmtpSampler extends AbstractSampler {
     public final static String USERNAME             = "SMTPSampler.username"; // $NON-NLS-1$
     public final static String PASSWORD             = "SMTPSampler.password"; // $NON-NLS-1$
     public final static String MAIL_FROM            = "SMTPSampler.mailFrom"; // $NON-NLS-1$
+    public static final String MAIL_REPLYTO         = "SMTPSampler.replyTo"; // $NON-NLS-1$
     public final static String RECEIVER_TO          = "SMTPSampler.receiverTo"; // $NON-NLS-1$
     public final static String RECEIVER_CC          = "SMTPSampler.receiverCC"; // $NON-NLS-1$
     public final static String RECEIVER_BCC         = "SMTPSampler.receiverBCC"; // $NON-NLS-1$
@@ -132,12 +133,14 @@ public class SmtpSampler extends AbstractSampler {
         final String receiverTo = getPropertyAsString(SmtpSampler.RECEIVER_TO).trim();
         final String receiverCC = getPropertyAsString(SmtpSampler.RECEIVER_CC).trim();
         final String receiverBcc = getPropertyAsString(SmtpSampler.RECEIVER_BCC).trim();
+        final String replyTo = getPropertyAsString(SmtpSampler.MAIL_REPLYTO).trim();
 
         try {
             // Process address lists
             instance.setReceiverTo(getPropNameAsAddresses(receiverTo));
             instance.setReceiverCC(getPropNameAsAddresses(receiverCC));
             instance.setReceiverBCC(getPropNameAsAddresses(receiverBcc));
+            instance.setReplyTo(getPropNameAsAddresses(replyTo));
 
             if(getPropertyAsBoolean(SUPPRESS_SUBJECT)){
                 instance.setSubject(null);

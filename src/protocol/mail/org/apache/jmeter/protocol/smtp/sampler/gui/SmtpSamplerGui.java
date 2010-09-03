@@ -69,6 +69,7 @@ public class SmtpSamplerGui extends AbstractSamplerGui {
         smtpPanel.setServer(element.getPropertyAsString(SmtpSampler.SERVER));
         smtpPanel.setPort(element.getPropertyAsString(SmtpSampler.SERVER_PORT));
         smtpPanel.setMailFrom(element.getPropertyAsString(SmtpSampler.MAIL_FROM));
+        smtpPanel.setMailReplyTo(element.getPropertyAsString(SmtpSampler.MAIL_REPLYTO));
         smtpPanel.setReceiverTo(element.getPropertyAsString(SmtpSampler.RECEIVER_TO));
         smtpPanel.setReceiverCC(element.getPropertyAsString(SmtpSampler.RECEIVER_CC));
         smtpPanel.setReceiverBCC(element.getPropertyAsString(SmtpSampler.RECEIVER_BCC));
@@ -124,6 +125,7 @@ public class SmtpSamplerGui extends AbstractSamplerGui {
         te.setProperty(SmtpSampler.SERVER, smtpPanel.getServer());
         te.setProperty(SmtpSampler.SERVER_PORT, smtpPanel.getPort());
         te.setProperty(SmtpSampler.MAIL_FROM, smtpPanel.getMailFrom());
+        te.setProperty(SmtpSampler.MAIL_REPLYTO, smtpPanel.getMailReplyTo());
         te.setProperty(SmtpSampler.RECEIVER_TO, smtpPanel.getReceiverTo());
         te.setProperty(SmtpSampler.RECEIVER_CC, smtpPanel.getReceiverCC());
         te.setProperty(SmtpSampler.RECEIVER_BCC, smtpPanel.getReceiverBCC());

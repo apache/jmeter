@@ -53,6 +53,7 @@ public class SmtpPanel extends JPanel {
 
     // local vars
     private JTextField tfMailFrom;
+    private JTextField tfMailReplyTo;
     private JButton browseButton;
     private JButton emlBrowseButton;
     private JCheckBox cbUseAuth;
@@ -67,6 +68,7 @@ public class SmtpPanel extends JPanel {
     private JCheckBox cbPlainBody;
 
     private JLabel jlAddressFrom;
+    private JLabel jlAddressReplyTo;
     private JLabel jlAddressTo;
     private JLabel jlAddressToCC;
     private JLabel jlAddressToBCC;
@@ -471,12 +473,23 @@ public class SmtpPanel extends JPanel {
         }
         validate();
     }
+
+    public String getMailReplyTo() {
+        return tfMailReplyTo.getText();
+    }
+
+    public void setMailReplyTo(String replyTo) {
+        tfMailReplyTo.setText(replyTo);        
+    }
+    
+
     /**
      * Main method of class, builds all gui-components for SMTP-sampler.
      */
     private void initComponents() {
         GridBagConstraints gridBagConstraints, gridBagConstraintsMain;
 
+        jlAddressReplyTo = new JLabel(JMeterUtils.getResString("smtp_replyto")); // $NON-NLS-1$
         jlAddressFrom = new JLabel(JMeterUtils.getResString("smtp_from")); // $NON-NLS-1$
         jlAddressTo = new JLabel(JMeterUtils.getResString("smtp_to")); // $NON-NLS-1$
         jlAddressToCC = new JLabel(JMeterUtils.getResString("smtp_cc")); // $NON-NLS-1$
@@ -493,6 +506,7 @@ public class SmtpPanel extends JPanel {
         tfMailServer = new JTextField(30);
         tfMailServerPort = new JTextField(6);
         tfMailFrom = new JTextField(25);
+        tfMailReplyTo = new JTextField(25);
         tfMailTo = new JTextField(25);
         tfMailToCC = new JTextField(25);
         tfMailToBCC = new JTextField(25);
@@ -628,6 +642,14 @@ public class SmtpPanel extends JPanel {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
         panelMailSettings.add(tfMailToBCC, gridBagConstraints);
+
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        panelMailSettings.add(jlAddressReplyTo, gridBagConstraints);
+
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        panelMailSettings.add(tfMailReplyTo, gridBagConstraints);
 
         gridBagConstraintsMain.gridx = 0;
         gridBagConstraintsMain.gridy = 1;
@@ -964,6 +986,7 @@ public class SmtpPanel extends JPanel {
         tfAuthUsername.setText("");
         tfEmlMessage.setText("");
         tfMailFrom.setText("");
+        tfMailReplyTo.setText("");
         tfMailServer.setText("");
         tfMailServerPort.setText("");
         tfMailTo.setText("");
@@ -1073,5 +1096,5 @@ public class SmtpPanel extends JPanel {
             }
         }
     }
-	
+
 }
