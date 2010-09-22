@@ -18,6 +18,8 @@
 
 package org.apache.jmeter.examples.testbeans.example1;
 
+import java.util.Locale;
+
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
@@ -39,7 +41,7 @@ public class Example1 extends AbstractSampler implements TestBean {
         res.setSamplerData(myStringProperty);
         res.sampleStart();
         // Do something ...
-        res.setResponseData(myStringProperty.toUpperCase(), null);
+        res.setResponseData(myStringProperty.toUpperCase(Locale.ENGLISH), null);
         res.setDataType(SampleResult.TEXT);
         res.sampleEnd();
         res.setSuccessful(true);
