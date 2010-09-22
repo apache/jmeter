@@ -820,9 +820,9 @@ public class PostWriterTest extends TestCase {
             else {
                 for(int i = 0; i < expected.length; i++) {
                     if(expected[i] != actual[i]) {
-                        System.out.println(new String(expected,0,i+1));
+                        System.out.println(new String(expected,0,i+1, UTF_8));
                         System.out.println("--------------------");
-                        System.out.println(new String(actual,0,i+1));
+                        System.out.println(new String(actual,0,i+1, UTF_8));
                         System.out.println("====================");
                         fail("byte at position " + i + " is different, expected is " + expected[i] + ", actual is " + actual[i]);
                     }
