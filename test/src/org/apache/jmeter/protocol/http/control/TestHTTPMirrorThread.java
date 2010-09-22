@@ -355,9 +355,9 @@ public class TestHTTPMirrorThread extends TestCase {
                 for(int i = 0; i < expected.length; i++) {
                     if(expected[i] != actual[i]) {
                         System.out.println(">>>>>>>>>>>>>>>>>>>> (expected) : length " + expected.length);
-                        System.out.println(new String(expected,0,i+1));
+                        System.out.println(new String(expected,0,i+1, ISO_8859_1));
                         System.out.println("==================== (actual) : length " + actual.length);
-                        System.out.println(new String(actual,0,i+1));
+                        System.out.println(new String(actual,0,i+1, ISO_8859_1));
                         System.out.println("<<<<<<<<<<<<<<<<<<<<");
 /*
                         // Useful to when debugging
