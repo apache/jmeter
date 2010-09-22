@@ -439,7 +439,7 @@ public final class JOrphanUtils {
         return true;
     }
 
-    private static final byte[] XML_PFX = "<?xml ".getBytes(); // $NON-NLS-1$
+    private static final byte[] XML_PFX = {'<','?','x','m','l'};// "<?xml "
 
     /**
      * Detects if some content starts with the standard XML prefix.

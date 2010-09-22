@@ -30,6 +30,7 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.swing.CellEditor;
 import javax.swing.JButton;
@@ -169,7 +170,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
             int count = 0;
             for(String propName : props)
             {
-                propName = propName.substring(0,1).toUpperCase() + propName.substring(1);
+                propName = propName.substring(0,1).toUpperCase(Locale.ENGLISH) + propName.substring(1);
                 writers[count] = createWriter(clazz,propName);
                 readers[count] = createReader(clazz,propName);
                 editors[count] = getArgForWriter(clazz,propName);
