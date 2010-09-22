@@ -1131,9 +1131,9 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
                 for(int i = 0; i < expected.length; i++) {
                     if(expected[i] != actual[i]) {
                         System.out.println(">>>>>>>>>>>>>>>>>>>>");
-                        System.out.println(new String(expected,0,i+1));
+                        System.out.println(new String(expected,0,i+1,"UTF-8"));
                         System.out.println("====================");
-                        System.out.println(new String(actual,0,i+1));
+                        System.out.println(new String(actual,0,i+1,"UTF-8"));
                         System.out.println("<<<<<<<<<<<<<<<<<<<<");
 /*                        
                         // Useful to when debugging
