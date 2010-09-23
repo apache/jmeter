@@ -197,7 +197,7 @@ public class Proxy extends Thread {
             if ((request.getMethod().startsWith(HTTPConstants.CONNECT)) && (outStreamClient != null)) {
                 log.debug("Method CONNECT => SSL");
                 // write a OK reponse to browser, to engage SSL exchange
-                outStreamClient.write(("HTTP/1.0 200 OK\r\n\r\n").getBytes()); // $NON-NLS-1$
+                outStreamClient.write(("HTTP/1.0 200 OK\r\n\r\n").getBytes()); // $NON-NLS-1$ // TODO charset?
                 outStreamClient.flush();
                // With ssl request, url is host:port (without https:// or path)
                 String[] param = request.getUrl().split(":");  // $NON-NLS-1$
