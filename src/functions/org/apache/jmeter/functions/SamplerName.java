@@ -23,21 +23,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
-import org.apache.jmeter.functions.AbstractFunction;
-import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 /**
  * Function to return the name of the current sampler.
  */
 public class SamplerName extends AbstractFunction {
-
-    private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final String KEY = "__samplerName"; //$NON-NLS-1$
 
@@ -59,13 +53,11 @@ public class SamplerName extends AbstractFunction {
 		if (currentSampler != null) { // will be null if function is used on TestPlan
 		    name = currentSampler.getName();
 		}
-		log.info("execute: ***********************************************");
 		if (values.length > 0){
             JMeterVariables vars = getVariables();
             if (vars != null) {// May be null if function is used on TestPlan
                 String varName = ((CompoundVariable) values[0]).execute().trim();
                 if (varName.length() > 0) {
-                    log.info("name="+name+", varName="+varName+".");
                     vars.put(varName, name);
                 }
             }
