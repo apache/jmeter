@@ -282,9 +282,10 @@ public class SmtpSampler extends AbstractSampler {
             byte[] buf = new byte[1024];
             int read = is.read(buf);
             while (read > 0) {
-                sb.append(new String(buf, 0, read));
+                sb.append(new String(buf, 0, read));  // TODO - charset?
                 read = is.read(buf);
             }
+            // TODO - charset?
             res.setResponseData(sb.toString().getBytes()); // TODO this should really be request data, but there is none
         } catch (IOException ex) {
             log.warn("",ex);
