@@ -88,6 +88,7 @@ and need to be referenced using the __P or __property function.
         <tr><th>Type of function</th><th>Name</th><th>Comment</th></tr>
         <!-- N.B. the leading space is needed to ensure the content is processed -->
         <tr><td>Information</td><td> <a href="#__threadNum">threadNum</a></td><td>get thread number</td></tr>
+        <tr><td>Information</td><td> <a href="#__samplerName">samplerName</a></td><td>get the sampler name (label)</td></tr>
         <tr><td>Information</td><td> <a href="#__machineName">machineName</a></td><td>get the local machine name</td></tr>
         <tr><td>Information</td><td> <a href="#__time">time</a></td><td>return current time in various formats</td></tr>
         <tr><td>Information</td><td> <a href="#__log">log</a></td><td>log (or display) a message (and return the value)</td></tr>
@@ -1113,6 +1114,25 @@ A reference name - refName - for reusing the value created by this function. Sto
         </property>
 </properties>
 <p>The file name, encoding and reference name parameters are resolved every time the function is executed.</p>
+</component>
+
+<component index="&sect-num;.5.27" name="__samplerName">
+
+<description>
+    <p>
+    The samplerName function returns the name (i.e. label) of the current sampler.
+    </p>
+    <note>
+    The function does not work on the Test Plan or in Configuration elements
+    as these don't have an associated sampler. 
+    </note>
+</description>
+
+<properties>
+        <property name="Variable Name" required="No">
+A reference name - refName - for reusing the value created by this function. Stored values are of the form ${refName}.
+        </property>
+</properties>
 </component>
 
 </subsection>
