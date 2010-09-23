@@ -1122,10 +1122,14 @@ A reference name - refName - for reusing the value created by this function. Sto
     <p>
     The samplerName function returns the name (i.e. label) of the current sampler.
     </p>
-    <note>
-    The function does not work on the Test Plan or in Configuration elements
-    as these don't have an associated sampler. 
-    </note>
+    <p>
+    The function does not work in Test elements that don't have an associated sampler.
+    For example the Test Plan. 
+    Configuration elements also don't have an associated sampler.
+    However some Configuration elements are referenced directly by samplers, such as the HTTP Header Manager
+    and Http Cookie Manager, and in this case the functions are resolved in the context of the Http Sampler.
+    Pre-Processors, Post-Processors and Assertions always have an associated Sampler.
+    </p>
 </description>
 
 <properties>
