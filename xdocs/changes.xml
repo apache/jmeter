@@ -131,6 +131,7 @@ To override the default local language fully, set the JMeter property "language"
 
 <h3>Functions</h3>
 <ul>
+<li>Bug 49975 - New function returning the name of the current sampler</li>
 </ul>
 
 <h3>I18N</h3>
