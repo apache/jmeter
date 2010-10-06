@@ -35,6 +35,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.protocol.smtp.sampler.SmtpSampler;
@@ -521,8 +523,8 @@ public class SmtpPanel extends JPanel {
         cbPlainBody = new JCheckBox(JMeterUtils.getResString("smtp_plainbody")); // $NON-NLS-1$
         
         cbSuppressSubject = new JCheckBox(JMeterUtils.getResString("smtp_suppresssubj")); // $NON-NLS-1$
-        cbSuppressSubject.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
+        cbSuppressSubject.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent evt) {
                 emptySubjectActionPerformed(evt);
             }
         });
@@ -1084,7 +1086,7 @@ public class SmtpPanel extends JPanel {
             validate();
         }
     }
-    private void emptySubjectActionPerformed(ActionEvent evt) {
+    private void emptySubjectActionPerformed(ChangeEvent evt) {
         final Object source = evt.getSource();
         if(source != null && source instanceof JCheckBox){
             if(cbSuppressSubject.isSelected()){
