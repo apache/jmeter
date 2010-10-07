@@ -328,6 +328,10 @@ public class SmtpSampler extends AbstractSampler {
         } else if(content instanceof BodyPart){
             BodyPart bodyPart = (BodyPart) content;
             writeBodyPart(sb, bodyPart); // throws IOE, ME
+        } else if (content instanceof String){
+            sb.append(content);
+        } else {
+            sb.append("Content has class: "+content.getClass().getCanonicalName());
         }
         return sb.toString();
     }
