@@ -33,6 +33,7 @@ import java.net.UnknownHostException;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -46,7 +47,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
-// import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.gui.GuiPackage;
@@ -463,6 +463,18 @@ public class JMeterUtils implements UnitTestManager {
         return resString;
     }
 
+    /**
+     * To get I18N label from properties file
+     * 
+     * @param key
+     *            in messages.properties
+     * @return I18N label without (if exists) last colon ':' and spaces
+     */
+    public static String getParsedLabel(String key) {
+        String value = JMeterUtils.getResString(key);
+        return value.replaceFirst("(?m)\\s*?:\\s*$", ""); // $NON-NLS-1$ $NON-NLS-2$
+    }
+    
     /**
      * Get the locale name as a resource.
      * Does not log an error if the resource does not exist.
@@ -1202,4 +1214,27 @@ public class JMeterUtils implements UnitTestManager {
         localHostName=localHost.getHostName();
         localHostFullName=localHost.getCanonicalHostName();
     }
+    
+    /**
+     * Split line into name/value pairs and remove colon ':'
+     * 
+     * @param headers
+     *            multi-line string headers
+     * @return a map name/value for each header
+     */
+    public static LinkedHashMap<String, String> parseHeaders(String headers) {
+        LinkedHashMap<String, String> linkedHeaders = new LinkedHashMap<String, String>();
+        String[] list = headers.split("\n"); // $NON-NLS-1$
+        for (String header : list) {
+            int colon = header.indexOf(':'); // $NON-NLS-1$
+            if (colon <= 0) {
+                linkedHeaders.put(header, ""); // Empty value // $NON-NLS-1$
+            } else {
+                linkedHeaders.put(header.substring(0, colon).trim(), header
+                        .substring(colon + 1).trim());
+            }
+        }
+        return linkedHeaders;
+    }
+    
 }
