@@ -38,7 +38,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -57,6 +56,10 @@ import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.gui.RendererUtils;
 import org.apache.jorphan.reflect.Functor;
 
+/**
+ * Right side in View Results Tree
+ *
+ */
 public abstract class SamplerResultTab implements ResultRenderer {
 
     // N.B. these are not multi-threaded, so don't make it static
@@ -71,6 +74,8 @@ public abstract class SamplerResultTab implements ResultRenderer {
     public static final Color REDIRECT_COLOR = Color.green;
 
     protected static final String TEXT_COMMAND = "text"; // $NON-NLS-1$
+    
+    protected static final String REQUEST_VIEW_COMMAND = "change_request_view"; // $NON-NLS-1$
 
     private static final String STYLE_SERVER_ERROR = "ServerError"; // $NON-NLS-1$
 
@@ -86,9 +91,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
 
     private JLabel imageLabel;
 
-    private JPanel requestPane;
-
-    private JTextArea sampleDataField; /** request pane content */
+    private RequestPanel requestPanel; /** request pane content */
 
     protected JTabbedPane rightSide; /** holds the tabbed panes */
 
@@ -187,13 +190,13 @@ public abstract class SamplerResultTab implements ResultRenderer {
 
     public void clearData() {
         results.setText("");// Response Data // $NON-NLS-1$
-        sampleDataField.setText("");// Request Data // $NON-NLS-1$
+        requestPanel.clearData();// Request Data // $NON-NLS-1$
     }
 
     public void init() {
         rightSide.addTab(JMeterUtils.getResString("view_results_tab_sampler"), createResponseMetadataPanel()); // $NON-NLS-1$
         // Create the panels for the other tabs
-        requestPane = createRequestPanel();
+        requestPanel = new RequestPanel();
         resultsPane = createResponseDataPanel();
     }
 
@@ -201,29 +204,15 @@ public abstract class SamplerResultTab implements ResultRenderer {
     public void setupTabPane() {
         StyledDocument statsDoc = stats.getStyledDocument();
         try {
+            // Clear data before display a new
             statsDoc.remove(0, statsDoc.getLength());
-            sampleDataField.setText(""); // $NON-NLS-1$
+            requestPanel.clearData();
             results.setText(""); // $NON-NLS-1$
             if (userObject instanceof SampleResult) {
                 sampleResult = (SampleResult) userObject;
                 // We are displaying a SampleResult
                 setupTabPaneForSampleResult();
-
-                // load time label
-                String sd = sampleResult.getSamplerData();
-                if (sd != null) {
-                    String rh = sampleResult.getRequestHeaders();
-                    if (rh != null) {
-                        StringBuilder sb = new StringBuilder(sd.length() + rh.length() + 20);
-                        sb.append(sd);
-                        sb.append("\n"); //$NON-NLS-1$
-                        sb.append(JMeterUtils.getResString("view_results_request_headers")); //$NON-NLS-1$
-                        sb.append("\n"); //$NON-NLS-1$
-                        sb.append(rh);
-                        sd = sb.toString();
-                    }
-                    sampleDataField.setText(sd);
-                }
+                requestPanel.setSamplerResult(sampleResult);                
 
                 final String samplerClass = sampleResult.getClass().getName();
                 String typeResult = samplerClass.substring(1 + samplerClass.lastIndexOf('.'));
@@ -285,19 +274,19 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 // Tabbed results      
                 resultModel.clearData(); // clear results table before filling
                 // fill table
-                resultModel.addRow(new RowResult(getParsedLabel("view_results_thread_name"), sampleResult.getThreadName())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(getParsedLabel("view_results_sample_start"), startTime)); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(getParsedLabel("view_results_load_time"), sampleResult.getTime())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(getParsedLabel("view_results_latency"), sampleResult.getLatency())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(getParsedLabel("view_results_size_in_bytes"), sampleResult.getBytes())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(getParsedLabel("view_results_sample_count"), sampleResult.getSampleCount())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(getParsedLabel("view_results_error_count"), sampleResult.getErrorCount())); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(getParsedLabel("view_results_response_code"), responseCode)); //$NON-NLS-1$
-                resultModel.addRow(new RowResult(getParsedLabel("view_results_response_message"), responseMsgStr)); //$NON-NLS-1$
+                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_thread_name"), sampleResult.getThreadName())); //$NON-NLS-1$
+                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_sample_start"), startTime)); //$NON-NLS-1$
+                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_load_time"), sampleResult.getTime())); //$NON-NLS-1$
+                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_latency"), sampleResult.getLatency())); //$NON-NLS-1$
+                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_size_in_bytes"), sampleResult.getBytes())); //$NON-NLS-1$
+                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_sample_count"), sampleResult.getSampleCount())); //$NON-NLS-1$
+                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_error_count"), sampleResult.getErrorCount())); //$NON-NLS-1$
+                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_response_code"), responseCode)); //$NON-NLS-1$
+                resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_response_message"), responseMsgStr)); //$NON-NLS-1$
                 
                 resHeadersModel.clearData(); // clear response table before filling
                 // Parsed response headers
-                LinkedHashMap<String, String> lhm = parseResponseHeaders(sampleResult.getResponseHeaders());
+                LinkedHashMap<String, String> lhm = JMeterUtils.parseHeaders(sampleResult.getResponseHeaders());
                 Set<String> keySet = lhm.keySet();
                 for (String key : keySet) {
                     resHeadersModel.addRow(new RowResult(key, lhm.get(key)));
@@ -341,7 +330,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
         rightSide.setTitleAt(0, JMeterUtils.getResString("view_results_tab_sampler")); //$NON-NLS-1$
         // Add the other tabs if not present
         if(rightSide.indexOfTab(JMeterUtils.getResString("view_results_tab_request")) < 0) { // $NON-NLS-1$
-            rightSide.addTab(JMeterUtils.getResString("view_results_tab_request"), requestPane); // $NON-NLS-1$
+            rightSide.addTab(JMeterUtils.getResString("view_results_tab_request"), requestPanel.getPanel()); // $NON-NLS-1$
         }
         if(rightSide.indexOfTab(JMeterUtils.getResString("view_results_tab_response")) < 0) { // $NON-NLS-1$
             rightSide.addTab(JMeterUtils.getResString("view_results_tab_response"), resultsPane); // $NON-NLS-1$
@@ -444,17 +433,6 @@ public abstract class SamplerResultTab implements ResultRenderer {
         return panel;
     }
 
-    private JPanel createRequestPanel() {
-        sampleDataField = new JTextArea();
-        sampleDataField.setEditable(false);
-        sampleDataField.setLineWrap(true);
-        sampleDataField.setWrapStyleWord(true);
-
-        JPanel pane = new JPanel(new BorderLayout(0, 5));
-        pane.add(GuiUtils.makeScrollPane(sampleDataField));
-        return pane;
-    }
-
     private JPanel createResponseDataPanel() {
         results = new JEditorPane();
         results.setEditable(false);
@@ -506,38 +484,10 @@ public abstract class SamplerResultTab implements ResultRenderer {
         this.backGround = backGround;
     }
     
-    /**
-     * To get I18N label from properties file
-     * @param key in messages.properties
-     * @return I18N label without (if exists) last colon ':' and spaces
-     */
-    private String getParsedLabel(String key) {
-        String value = JMeterUtils.getResString(key);
-        return value.replaceFirst("(?m)\\s*?:\\s*$", ""); // $NON-NLS-1$ $NON-NLS-2$
-    }
-    
     private void setFirstColumnPreferredSize(JTable table) {
         TableColumn column = table.getColumnModel().getColumn(0);
         column.setMaxWidth(300);
         column.setPreferredWidth(180);
-    }
-
-    /**
-     * Split line into name/value pairs and remove colon ':'
-     */
-    private LinkedHashMap<String, String> parseResponseHeaders(String responseHeaders) {
-        LinkedHashMap<String, String> linkedHeaders = new LinkedHashMap<String, String>();
-        String[] list = responseHeaders.split(NL);
-        for (String header : list) {
-            int colon = header.indexOf(':'); // $NON-NLS-1$
-            if (colon <= 0) {
-                linkedHeaders.put(header, ""); // Empty value // $NON-NLS-1$
-            } else {
-                linkedHeaders.put(header.substring(0, colon).trim(), header
-                        .substring(colon + 1).trim());
-            }
-        }
-        return linkedHeaders;
     }
     
     /**
