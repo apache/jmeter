@@ -49,6 +49,7 @@ import javax.swing.text.StyledDocument;
 
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
+import org.apache.jmeter.gui.util.TextBoxDialoger.TextBoxDoubleClick;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
@@ -166,7 +167,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
                         new Functor("getValue") }, // $NON-NLS-1$
                 new Functor[] {
                         null, null }, new Class[] {
-                        String.class, String.class });
+                        String.class, String.class }, false);
         resHeadersModel = new ObjectTableModel(COLUMNS_HEADERS,
                 RowResult.class, // The object used for each row
                 new Functor[] {
@@ -174,14 +175,14 @@ public abstract class SamplerResultTab implements ResultRenderer {
                         new Functor("getValue") }, // $NON-NLS-1$
                 new Functor[] {
                         null, null }, new Class[] {
-                        String.class, String.class });
+                        String.class, String.class }, false);
         resFieldsModel = new ObjectTableModel(COLUMNS_FIELDS, RowResult.class, // The object used for each row
                 new Functor[] {
                         new Functor("getKey"), // $NON-NLS-1$
                         new Functor("getValue") }, // $NON-NLS-1$
                 new Functor[] {
                         null, null }, new Class[] {
-                        String.class, String.class });
+                        String.class, String.class }, false);
     }
 
     public void clearData() {
@@ -395,11 +396,15 @@ public abstract class SamplerResultTab implements ResultRenderer {
 
         // Set up the 1st table Result with empty headers
         tableResult = new JTable(resultModel);     
+        tableResult.setToolTipText(JMeterUtils.getResString("textbox_tooltip_cell")); // $NON-NLS-1$
+        tableResult.addMouseListener(new TextBoxDoubleClick(tableResult));
         setFirstColumnPreferredSize(tableResult);
         RendererUtils.applyRenderers(tableResult, RENDERERS_RESULT);
 
         // Set up the 2nd table 
         tableResHeaders = new JTable(resHeadersModel);
+        tableResHeaders.setToolTipText(JMeterUtils.getResString("textbox_tooltip_cell")); // $NON-NLS-1$
+        tableResHeaders.addMouseListener(new TextBoxDoubleClick(tableResHeaders));
         setFirstColumnPreferredSize(tableResHeaders);
         tableResHeaders.getTableHeader().setDefaultRenderer(
                 new HeaderAsPropertyRenderer());
@@ -407,6 +412,8 @@ public abstract class SamplerResultTab implements ResultRenderer {
 
         // Set up the 3rd table 
         tableResFields = new JTable(resFieldsModel);
+        tableResFields.setToolTipText(JMeterUtils.getResString("textbox_tooltip_cell")); // $NON-NLS-1$
+        tableResFields.addMouseListener(new TextBoxDoubleClick(tableResFields));
         setFirstColumnPreferredSize(tableResFields);
         tableResFields.getTableHeader().setDefaultRenderer(
                 new HeaderAsPropertyRenderer());
