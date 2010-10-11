@@ -69,7 +69,6 @@ public class GenericController extends AbstractTestElement implements Controller
     public GenericController() {
     }
 
-    @Override
     public void initialize() {
         resetCurrent();
         resetIterCount();
@@ -157,7 +156,6 @@ public class GenericController extends AbstractTestElement implements Controller
     /**
      * @see org.apache.jmeter.control.Controller#isDone()
      */
-    @Override
     public boolean isDone() {
         return done;
     }
@@ -321,7 +319,6 @@ public class GenericController extends AbstractTestElement implements Controller
         }
     }
 
-    @Override
     public void addIterationListener(LoopIterationListener lis) {
         /*
          * A little hack - add each listener to the start of the list - this
