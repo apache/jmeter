@@ -50,6 +50,8 @@ public class ObjectTableModel extends DefaultTableModel {
     private transient ArrayList<Functor> writeFunctors = new ArrayList<Functor>();
 
     private transient Class<?> objectClass = null; // if provided
+    
+    private transient boolean cellEditable = true;
 
     /**
      * The ObjectTableModel is a TableModel whose rows are objects;
@@ -64,6 +66,24 @@ public class ObjectTableModel extends DefaultTableModel {
     public ObjectTableModel(String[] headers, Class<?> _objClass, Functor[] readFunctors, Functor[] writeFunctors, Class<?>[] editorClasses) {
         this(headers, readFunctors, writeFunctors, editorClasses);
         this.objectClass=_objClass;
+    }
+    
+    /**
+     * The ObjectTableModel is a TableModel whose rows are objects;
+     * columns are defined as Functors on the object.
+     *
+     * @param headers - Column names
+     * @param _objClass - Object class that will be used
+     * @param readFunctors - used to get the values
+     * @param writeFunctors - used to set the values
+     * @param editorClasses - class for each column
+     * @param cellEditable - if cell must editable (false to allow double click on cell)
+     */
+    public ObjectTableModel(String[] headers, Class<?> _objClass, Functor[] readFunctors, 
+            Functor[] writeFunctors, Class<?>[] editorClasses, boolean cellEditable) {
+        this(headers, readFunctors, writeFunctors, editorClasses);
+        this.objectClass=_objClass;
+        this.cellEditable = cellEditable;
     }
 
     /**
@@ -176,7 +196,7 @@ public class ObjectTableModel extends DefaultTableModel {
     /** {@inheritDoc} */
     @Override
     public boolean isCellEditable(int arg0, int arg1) {
-        return true;
+        return cellEditable;
     }
 
     /** {@inheritDoc} */
