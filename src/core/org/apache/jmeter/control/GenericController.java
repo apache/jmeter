@@ -216,6 +216,28 @@ public class GenericController extends AbstractTestElement implements Controller
     }
 
     /**
+     * Called to re-initialize a index of controller's elements (Bug 50032)
+     * 
+     * @return Sampler
+     */
+    protected Sampler reInitializeSubController() {
+        Sampler returnValue = null;
+        try {
+            TestElement currentElement = getCurrentElement();
+            if (currentElement != null) {
+                if (currentElement instanceof Sampler) {
+                    returnValue = nextIsASampler((Sampler) currentElement);
+                } else { // must be a controller
+                    returnValue = nextIsAController((Controller) currentElement);
+                    reInitializeSubController();
+                }
+            }
+        } catch (NextIsNullException e) {
+        }
+        return returnValue;
+    }
+    
+    /**
      * If the controller is done, remove it from the list,
      * otherwise increment to next entry in list.
      *

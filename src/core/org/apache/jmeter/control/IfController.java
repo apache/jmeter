@@ -169,6 +169,7 @@ public class IfController extends GenericController implements Serializable {
             return super.next();
         }
         try {
+            super.reInitializeSubController(); // Bug 50032 - reinitialize current index element for all sub controller
             return nextIsNull();
         } catch (NextIsNullException e1) {
             return null;

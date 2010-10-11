@@ -19,7 +19,8 @@
 package org.apache.jmeter.control;
 
 import org.apache.jmeter.junit.JMeterTestCase;
-//import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.junit.stubs.TestSampler;
+import org.apache.jmeter.samplers.Sampler;
 
 public class TestIfController extends JMeterTestCase {
         public TestIfController(String name) {
@@ -70,5 +71,106 @@ public class TestIfController extends JMeterTestCase {
 //              logger.debug("    ->>>  Gonna assertTrue :" + sampler.getClass().getName() + " Property is   ---->>>"
 //                      + sampler.getName());
 //          }
+        }
+   
+        public void testProcessingTrue() throws Exception {
+            LoopController controller = new LoopController();
+            controller.setLoops(2);
+            controller.addTestElement(new TestSampler("Sample1"));
+            IfController ifCont = new IfController("true==true");
+            ifCont.setEvaluateAll(true);
+            ifCont.addTestElement(new TestSampler("Sample2"));
+            TestSampler sample3 = new TestSampler("Sample3");            
+            ifCont.addTestElement(sample3);
+            controller.addTestElement(ifCont);
+                        
+            String[] order = new String[] { "Sample1", "Sample2", "Sample3", 
+                    "Sample1", "Sample2", "Sample3" };
+            int counter = 0;
+            controller.setRunningVersion(true);
+            ifCont.setRunningVersion(true);
+            
+            Sampler sampler = null;
+            while ((sampler = controller.next()) != null) {
+                sampler.sample(null);
+                assertEquals(order[counter], sampler.getName());
+                counter++;
+            }
+            assertEquals(counter, 6);
+        }
+        
+        /**
+         * Test false return on sample3 (sample4 doesn't execute)
+         * @throws Exception
+         */
+        public void testEvaluateAllChildrenWithoutSubController() throws Exception {
+            LoopController controller = new LoopController();
+            controller.setLoops(2);
+            controller.addTestElement(new TestSampler("Sample1"));
+            IfController ifCont = new IfController("true==true");
+            ifCont.setEvaluateAll(true);
+            controller.addTestElement(ifCont);
+            
+            ifCont.addTestElement(new TestSampler("Sample2"));
+            TestSampler sample3 = new TestSampler("Sample3");            
+            ifCont.addTestElement(sample3);
+            TestSampler sample4 = new TestSampler("Sample4");
+            ifCont.addTestElement(sample4);
+            
+            String[] order = new String[] { "Sample1", "Sample2", "Sample3", 
+                    "Sample1", "Sample2", "Sample3" };
+            int counter = 0;
+            controller.setRunningVersion(true);
+            ifCont.setRunningVersion(true);
+            
+            Sampler sampler = null;
+            while ((sampler = controller.next()) != null) {
+                sampler.sample(null);
+                if (sampler.getName().equals("Sample3")) {
+                    ifCont.setCondition("true==false");
+                }
+                assertEquals(order[counter], sampler.getName());
+                counter++;
+            }
+            assertEquals(counter, 6);
+        }
+        
+        /**
+         * test 2 loops with a sub generic controller (sample4 doesn't execute)
+         * @throws Exception
+         */
+        public void testEvaluateAllChildrenWithSubController() throws Exception {
+            LoopController controller = new LoopController();
+            controller.setLoops(2);
+            controller.addTestElement(new TestSampler("Sample1"));
+            IfController ifCont = new IfController("true==true");
+            ifCont.setEvaluateAll(true);
+            controller.addTestElement(ifCont);
+            ifCont.addTestElement(new TestSampler("Sample2"));
+            
+            GenericController genericCont = new GenericController();
+            TestSampler sample3 = new TestSampler("Sample3");            
+            genericCont.addTestElement(sample3);
+            TestSampler sample4 = new TestSampler("Sample4");
+            genericCont.addTestElement(sample4);
+            ifCont.addTestElement(genericCont);
+            
+            String[] order = new String[] { "Sample1", "Sample2", "Sample3", 
+                    "Sample1", "Sample2", "Sample3" };
+            int counter = 0;
+            controller.setRunningVersion(true);
+            ifCont.setRunningVersion(true);
+            genericCont.setRunningVersion(true);
+
+            Sampler sampler = null;
+            while ((sampler = controller.next()) != null) {
+                sampler.sample(null);
+                if (sampler.getName().equals("Sample3")) {
+                    ifCont.setCondition("true==false");
+                }
+                assertEquals(order[counter], sampler.getName());
+                counter++;
+            }
+            assertEquals(counter, 6); 
         }
 }
