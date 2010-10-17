@@ -86,8 +86,8 @@ public class TextBoxDialoger implements ActionListener {
      * @param editable - allow to modify text
      */
     public TextBoxDialoger(String text, boolean editable) {
-        init(text);
         this.editable = editable;
+        init(text);
     }
     
     private void init(String text) {
@@ -189,6 +189,37 @@ public class TextBoxDialoger implements ActionListener {
                 new TextBoxDialoger(value.toString(), false); // view only
             }
         }
+    }
+
+    /**
+     * Class to edit in a dialog box the cell's content
+     * when double (pressed) click on a table's cell which is editable
+     *
+     */
+    public static class TextBoxDoubleClickPressed extends MouseAdapter {
+        
+        private JTable table = null;
+        
+        public TextBoxDoubleClickPressed(JTable table) {
+            super();
+            this.table = table;
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            if (e.getClickCount() == 2) { // double (pressed) click
+                TableModel tm = table.getModel();
+                Object value = tm.getValueAt(table.getSelectedRow(), table.getSelectedColumn());
+                if (value instanceof String) {
+                    if (table.getCellEditor() != null) {
+                        table.getCellEditor().cancelCellEditing(); // in main table (evt mousePressed because cell is editable) 
+                    }
+                    TextBoxDialoger tbd = new TextBoxDialoger(value.toString(), true);
+                    tm.setValueAt(tbd.getTextBox(), table.getSelectedRow(), table.getSelectedColumn());
+                } // else do nothing (cell isn't a string to edit)
+            }
+        }
+
     }
 
 
