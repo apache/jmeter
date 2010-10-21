@@ -149,6 +149,7 @@ To override the default local language fully, set the JMeter property "language"
 
 <h2>Non-functional changes</h2>
 <ul>
+<li>Bug 50008 - Allow BatchSampleSender to be subclassed</li>
 </ul>
 
 </section> 
