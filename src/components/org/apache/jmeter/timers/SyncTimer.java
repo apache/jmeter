@@ -74,11 +74,13 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
             final int groupSz = getGroupSize();
             final int count = timerCounter[0];
             if (
-                (groupSz == 0 && count >= JMeterContextService.getNumberOfThreads())
+                (groupSz == 0 && count >= // count of threads in the thread group
+                    JMeterContextService.getContext().getThreadGroup().getNumThreads())
                 ||
                 (groupSz > 0 && count >= groupSz)
                 ) {
                 sync.notifyAll();
+                timerCounter[0]=0; // reset counter once we have reached the limit
             } else {
                 try {
                     sync.wait();
