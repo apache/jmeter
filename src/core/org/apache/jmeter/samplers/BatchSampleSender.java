@@ -66,12 +66,26 @@ public class BatchSampleSender implements SampleSender, Serializable {
      * @param listener
      *            that the List of sample events will be sent to.
      */
-    BatchSampleSender(RemoteSampleListener listener) {
+    protected BatchSampleSender(RemoteSampleListener listener) {
         this.listener = listener;
         log.info("Using batching for this run."
                 + " Thresholds: num=" + NUM_SAMPLES_THRESHOLD
                 + ", time=" + TIME_THRESHOLD_MS);
     }
+
+   /**
+    * @return the listener
+    */
+   protected RemoteSampleListener getListener() {
+       return listener;
+   }
+
+   /**
+    * @return the sampleStore
+    */
+   protected List<SampleEvent> getSampleStore() {
+       return sampleStore;
+   }
 
     /**
      * Checks if any sample events are still present in the sampleStore and
