@@ -100,6 +100,7 @@ To override the default local language fully, set the JMeter property "language"
 <li>Bug 49734 - Null pointer exception on stop Threads command (Run>Stop)</li>
 <li>Bug 49666 - CSV Header read as data after EOF</li>
 <li>Bug 45703 - Synchronizing Timer</li>
+<li>Bug 50088 - fix getAvgPageBytes in SamplingStatCalculator so it returns what it should</li>
 </ul>
 
 <!-- ==================================================== -->

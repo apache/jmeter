@@ -124,17 +124,14 @@ public class SamplingStatCalculator {
      * calculates the average page size, which means divide the bytes by number
      * of samples.
      *
-     * @return average page size in bytes
+     * @return average page size in bytes (0 if sample count is zero)
      */
     public double getAvgPageBytes() {
-        double rate = 0;
-        if (this.getElapsed() > 0 && calculator.getTotalBytes() > 0) {
-            rate = calculator.getTotalBytes() / ((double) this.getElapsed() / 1000);
+        int count = calculator.getCount();
+        if (count == 0) {
+            return 0;
         }
-        if (rate < 0) {
-            rate = 0;
-        }
-        return rate;
+        return calculator.getTotalBytes() / count;
     }
 
     public String getLabel() {
