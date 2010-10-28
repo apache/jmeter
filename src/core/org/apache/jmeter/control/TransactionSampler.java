@@ -47,6 +47,8 @@ public class TransactionSampler extends AbstractSampler {
 
     private int noFailingSamples = 0;
 
+    private int totalTime = 0;
+
     /**
      * @deprecated only for use by test code
      */
@@ -99,6 +101,8 @@ public class TransactionSampler extends AbstractSampler {
         }
         // Add the sub result to the transaction result
         transactionSampleResult.addSubResult(res);
+        // Add current time to total for later use (exclude pause time)
+        totalTime += res.getTime();
     }
 
     protected void setTransactionDone() {
@@ -110,6 +114,13 @@ public class TransactionSampler extends AbstractSampler {
                         + noFailingSamples);
         if (transactionSampleResult.isSuccessful()) {
             transactionSampleResult.setResponseCodeOK();
+        }
+        // Bug 50080 (not include pause time when generate parent)
+        if (!transactionController.isIncludeTimers()) {
+            long end = SampleResult.currentTimeInMs();
+            transactionSampleResult.setIdleTime(end
+                    - transactionSampleResult.getStartTime() - totalTime);
+            transactionSampleResult.setEndTime(end);
         }
     }
 
