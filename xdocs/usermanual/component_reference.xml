@@ -177,7 +177,7 @@ https.default.protocol=SSLv3
         <property name="Connect Timeout" required="No">Connection Timeout. Number of milliseconds to wait for a connection to open.</property>
         <property name="Response Timeout" required="No">Response Timeout. Number of milliseconds to wait for a response.</property>
         <property name="Server (proxy)" required="No">Hostname or IP address of a proxy server to perform request. [Do not include the http:// prefix.]</property>
-        <property name="Port" required="No">Port the proxy server is listening to.</property>
+        <property name="Port" required="No, unless proxy hostname is specified">Port the proxy server is listening to.</property>
         <property name="Username" required="No">(Optional) username for proxy server.</property>
         <property name="Password" required="No">(Optional) password for proxy server.</property>
         <property name="Protocol" required="No">HTTP, HTTPS or FILE. Default: HTTP</property>
@@ -3036,7 +3036,7 @@ cookie table entries.</property>
 </component>
 
 <component name="HTTP Request Defaults" index="&sect-num;.4.5" 
-         width="727" height="396" screenshot="http-config/http-request-defaults.png">
+         width="728" height="426" screenshot="http-config/http-request-defaults.png">
 <description><p>This element lets you set default values that your HTTP Request controllers use.  For example, if you are
 creating a Test Plan with 25 HTTP Request controllers and all of the requests are being sent to the same server,
 you could add a single HTTP Request Defaults element with the "Server Name or IP" field filled in.  Then, when
@@ -3068,6 +3068,13 @@ JMeter 2.3 and later treat all port values equally; a sampler that does not spec
         appended to the URL, if POST, then it will be sent separately).  Also, if you are
         sending a file using a multipart form, the query string will be created using the
         multipart form specifications.</property>
+        <property name="Server (proxy)" required="No">Hostname or IP address of a proxy server to perform request. [Do not include the http:// prefix.]</property>
+        <property name="Port" required="No, unless proxy hostname is specified">Port the proxy server is listening to.</property>
+        <property name="Username" required="No">(Optional) username for proxy server.</property>
+        <property name="Password" required="No">(Optional) password for proxy server.</property>
+        <property name="Retrieve All Embedded Resources from HTML Files" required="No">Tell JMeter to parse the HTML file
+and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSSs, etc. referenced in the file.
+        </property>
 </properties>
 </component>
 
