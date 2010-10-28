@@ -48,7 +48,11 @@ write it as CSV or XML.
 CSV files are much smaller than XML files, so use CSV if you are generating lots of samples.
 </p>
 <p>
-
+The file name can be specified using either a relative or an absolute path name.
+Relative paths are resolved relative to the current working directory (which defaults to the bin/ directory).
+Versions of JMeter after 2.4 also support paths relative to the directory containing the current test plan (JMX file).
+If the path name begins with "~/" (or whatever is in the jmeter.save.saveservice.base_prefix JMeter property),
+then the path is assumed to be relative to the JMX file location. 
 </p>
 <p>
 If you only wish to record certain samples, add the Listener as a child of the sampler.
@@ -176,6 +180,9 @@ sampleresult.timestamp.start=true
 
 # Optional xml processing instruction for line 2 of the file:
 #jmeter.save.saveservice.xml_pi=&amp;lt;?xml-stylesheet type="text/xsl" href="sample.xsl"?>
+
+# Prefix used to identify filenames that are relative to the current base
+#jmeter.save.saveservice.base_prefix=~/
 </pre>
 </code></p>
 <p>
