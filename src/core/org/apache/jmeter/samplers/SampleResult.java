@@ -890,7 +890,7 @@ public class SampleResult implements Serializable {
         }
     }
 
-    protected void setEndTime(long end) {
+    public void setEndTime(long end) {
         endTime = end;
         if (!startTimeStamp) {
             timeStamp = endTime;
