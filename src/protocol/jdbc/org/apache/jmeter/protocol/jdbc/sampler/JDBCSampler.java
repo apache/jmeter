@@ -204,8 +204,8 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
             } else if (PREPARED_SELECT.equals(_queryType)) {
                 PreparedStatement pstmt = getPreparedStatement(conn);
                 setArguments(pstmt);
-                pstmt.executeQuery();
-                String sb = resultSetsToString(pstmt,true,null);
+                boolean hasResultSet = pstmt.execute();
+                String sb = resultSetsToString(pstmt,hasResultSet,null);
                 res.setResponseData(sb.getBytes(ENCODING));
             } else if (PREPARED_UPDATE.equals(_queryType)) {
                 PreparedStatement pstmt = getPreparedStatement(conn);

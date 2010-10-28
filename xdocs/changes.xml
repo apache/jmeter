@@ -72,6 +72,7 @@ To override the default local language fully, set the JMeter property "language"
 
 <h3>Other Samplers</h3>
 <ul>
+<li>Bug 50173 - JDBCSampler discards ResultSet from a PreparedStatement</li>
 </ul>
 
 <h3>Controllers</h3>
