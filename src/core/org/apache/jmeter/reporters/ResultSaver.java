@@ -28,6 +28,7 @@ import org.apache.commons.lang.text.StrBuilder;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.logging.LoggingManager;
@@ -173,7 +174,7 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
      *         text/html;charset=ISO-8859-1
      */
     private String makeFileName(String contentType, boolean skipAutoNumber, boolean skipSuffix) {
-        StrBuilder sb = new StrBuilder(getFilename());
+        StrBuilder sb = new StrBuilder(FileServer.resolveBaseRelativeName(getFilename()));
         if (!skipAutoNumber){
             sb.append(nextNumber());
         }

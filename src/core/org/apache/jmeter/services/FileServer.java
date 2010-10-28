@@ -37,6 +37,7 @@ import java.util.Map;
 import java.util.Random;
 
 import org.apache.jmeter.gui.JMeterFileFilter;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -54,9 +55,17 @@ import org.apache.log.Logger;
  * test plans to execute on unknown boxes that only have Java installed.
  */
 public class FileServer {
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final String DEFAULT_BASE = System.getProperty("user.dir");
+    private static final String DEFAULT_BASE = System.getProperty("user.dir");// $NON-NLS-1$
+
+    /** Default base prefix */
+    private static final String BASE_PREFIX_DEFAULT = "~/"; // $NON-NLS-1$
+
+    private static final String BASE_PREFIX = 
+        JMeterUtils.getPropDefault("jmeter.save.saveservice.base_prefix", // $NON-NLS-1$
+                BASE_PREFIX_DEFAULT);
 
     //@GuardedBy("this")
     private File base;
@@ -344,5 +353,22 @@ public class FileServer {
             inputOutputObject=o;
             charSetEncoding=e;
         }
+    }
+    
+    /**
+     * Resolve a file name that may be relative to the base directory.
+     * If the name begins with the value of the JMeter property
+     * "jmeter.save.saveservice.base_prefix" 
+     * - default "~/" - then the name is assumed to be relative to the basename.
+     * 
+     * @param relativeName
+     * @return the updated file
+     */
+    public static String resolveBaseRelativeName(String relativeName) {
+        if (relativeName.startsWith(BASE_PREFIX)){
+            String newName = relativeName.substring(BASE_PREFIX.length());
+            return new File(getFileServer().getBaseDir(),newName).getAbsolutePath();
+        }
+        return relativeName;
     }
 }

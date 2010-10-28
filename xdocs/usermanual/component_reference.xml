@@ -2197,7 +2197,13 @@ by using the -l command-line flag.
 <figure width="786" height="145" image="simpledatawriter.png">Result file configuration panel</figure>
 </p>
 <properties>
-        <property name="File Name" required="No">Name of the file containing sample results</property>
+        <property name="Filename" required="No">Name of the file containing sample results.
+        The file name can be specified using either a relative or an absolute path name.
+        Relative paths are resolved relative to the current working directory (which defaults to the bin/ directory).
+        Versions of JMeter after 2.4 also support paths relative to the directory containing the current test plan (JMX file).
+        If the path name begins with "~/" (or whatever is in the jmeter.save.saveservice.base_prefix JMeter property),
+        then the path is assumed to be relative to the JMX file location. 
+        </property>
         <property name="Browse..." required="No">File Browse Button</property>
         <property name="Errors" required="No">Select this to write/read only results with errors</property>
         <property name="Successes" required="No">Select this to write/read only results without errors.
@@ -2625,7 +2631,12 @@ i.e. 30.0 requests/minute is saved as 0.5.
     </description>
  <properties>
  <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
- <property name="Filename Prefix" required="Yes">Prefix for the generated file names; this can include a directory name.</property>
+ <property name="Filename Prefix" required="Yes">Prefix for the generated file names; this can include a directory name.
+        Relative paths are resolved relative to the current working directory (which defaults to the bin/ directory).
+        Versions of JMeter after 2.4 also support paths relative to the directory containing the current test plan (JMX file).
+        If the path name begins with "~/" (or whatever is in the jmeter.save.saveservice.base_prefix JMeter property),
+        then the path is assumed to be relative to the JMX file location. 
+ </property>
  <property name="Variable Name" required="No">
  Name of a variable in which to save the generated file name (so it can be used later in the test plan).
  If there are sub-samples then a numeric suffix is added to the variable name.
