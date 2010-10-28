@@ -28,123 +28,116 @@ import org.apache.jmeter.junit.JMeterTestCase;
  * 
  * @version $Revision$
  */
-public class TestFileRowColContainer {
+public class TestFileRowColContainer extends JMeterTestCase {
 
-    public static class Test extends JMeterTestCase {
-
-        public Test(String a) {
-            super(a);
+    public void testNull() throws Exception {
+        try {
+            new FileRowColContainer("testfiles/xyzxyz");
+            fail("Should not find the file");
+        } catch (FileNotFoundException e) {
         }
+    }
 
-        public void testNull() throws Exception {
-            try {
-                new FileRowColContainer("testfiles/xyzxyz");
-                fail("Should not find the file");
-            } catch (FileNotFoundException e) {
-            }
+    public void testrowNum() throws Exception {
+        FileRowColContainer f = new FileRowColContainer("testfiles/test.csv");
+        assertNotNull(f);
+        assertEquals("Expected 4 lines", 4, f.getSize());
+
+        assertEquals(0, f.nextRow());
+        assertEquals(1, f.nextRow());
+        assertEquals(2, f.nextRow());
+        assertEquals(3, f.nextRow());
+        assertEquals(0, f.nextRow());
+
+    }
+
+    public void testColumns() throws Exception {
+        FileRowColContainer f = new FileRowColContainer("testfiles/test.csv");
+        assertNotNull(f);
+        assertTrue("Not empty", f.getSize() > 0);
+
+        int myRow = f.nextRow();
+        assertEquals(0, myRow);
+        assertEquals("a1", f.getColumn(myRow, 0));
+        assertEquals("d1", f.getColumn(myRow, 3));
+
+        try {
+            f.getColumn(myRow, 4);
+            fail("Expected out of bounds");
+        } catch (IndexOutOfBoundsException e) {
         }
+        myRow = f.nextRow();
+        assertEquals(1, myRow);
+        assertEquals("b2", f.getColumn(myRow, 1));
+        assertEquals("c2", f.getColumn(myRow, 2));
+    }
 
-        public void testrowNum() throws Exception {
-            FileRowColContainer f = new FileRowColContainer("testfiles/test.csv");
-            assertNotNull(f);
-            assertEquals("Expected 4 lines", 4, f.getSize());
+    public void testColumnsComma() throws Exception {
+        FileRowColContainer f = new FileRowColContainer("testfiles/test.csv", ",");
+        assertNotNull(f);
+        assertTrue("Not empty", f.getSize() > 0);
 
-            assertEquals(0, f.nextRow());
-            assertEquals(1, f.nextRow());
-            assertEquals(2, f.nextRow());
-            assertEquals(3, f.nextRow());
-            assertEquals(0, f.nextRow());
+        int myRow = f.nextRow();
+        assertEquals(0, myRow);
+        assertEquals("a1", f.getColumn(myRow, 0));
+        assertEquals("d1", f.getColumn(myRow, 3));
 
+        try {
+            f.getColumn(myRow, 4);
+            fail("Expected out of bounds");
+        } catch (IndexOutOfBoundsException e) {
         }
+        myRow = f.nextRow();
+        assertEquals(1, myRow);
+        assertEquals("b2", f.getColumn(myRow, 1));
+        assertEquals("c2", f.getColumn(myRow, 2));
+    }
 
-        public void testColumns() throws Exception {
-            FileRowColContainer f = new FileRowColContainer("testfiles/test.csv");
-            assertNotNull(f);
-            assertTrue("Not empty", f.getSize() > 0);
+    public void testColumnsTab() throws Exception {
+        FileRowColContainer f = new FileRowColContainer("testfiles/test.tsv", "\t");
+        assertNotNull(f);
+        assertTrue("Not empty", f.getSize() > 0);
 
-            int myRow = f.nextRow();
-            assertEquals(0, myRow);
-            assertEquals("a1", f.getColumn(myRow, 0));
-            assertEquals("d1", f.getColumn(myRow, 3));
+        int myRow = f.nextRow();
+        assertEquals(0, myRow);
+        assertEquals("a1", f.getColumn(myRow, 0));
+        assertEquals("d1", f.getColumn(myRow, 3));
 
-            try {
-                f.getColumn(myRow, 4);
-                fail("Expected out of bounds");
-            } catch (IndexOutOfBoundsException e) {
-            }
-            myRow = f.nextRow();
-            assertEquals(1, myRow);
-            assertEquals("b2", f.getColumn(myRow, 1));
-            assertEquals("c2", f.getColumn(myRow, 2));
+        try {
+            f.getColumn(myRow, 4);
+            fail("Expected out of bounds");
+        } catch (IndexOutOfBoundsException e) {
         }
+        myRow = f.nextRow();
+        assertEquals(1, myRow);
+        assertEquals("b2", f.getColumn(myRow, 1));
+        assertEquals("c2", f.getColumn(myRow, 2));
+    }
 
-        public void testColumnsComma() throws Exception {
-            FileRowColContainer f = new FileRowColContainer("testfiles/test.csv", ",");
-            assertNotNull(f);
-            assertTrue("Not empty", f.getSize() > 0);
+    public void testEmptyCols() throws Exception {
+        FileRowColContainer f = new FileRowColContainer("testfiles/testempty.csv");
+        assertNotNull(f);
+        assertEquals("Expected 4 lines", 4, f.getSize());
 
-            int myRow = f.nextRow();
-            assertEquals(0, myRow);
-            assertEquals("a1", f.getColumn(myRow, 0));
-            assertEquals("d1", f.getColumn(myRow, 3));
+        int myRow = f.nextRow();
+        assertEquals(0, myRow);
+        assertEquals("", f.getColumn(myRow, 0));
+        assertEquals("d1", f.getColumn(myRow, 3));
 
-            try {
-                f.getColumn(myRow, 4);
-                fail("Expected out of bounds");
-            } catch (IndexOutOfBoundsException e) {
-            }
-            myRow = f.nextRow();
-            assertEquals(1, myRow);
-            assertEquals("b2", f.getColumn(myRow, 1));
-            assertEquals("c2", f.getColumn(myRow, 2));
-        }
+        myRow = f.nextRow();
+        assertEquals(1, myRow);
+        assertEquals("", f.getColumn(myRow, 1));
+        assertEquals("c2", f.getColumn(myRow, 2));
 
-        public void testColumnsTab() throws Exception {
-            FileRowColContainer f = new FileRowColContainer("testfiles/test.tsv", "\t");
-            assertNotNull(f);
-            assertTrue("Not empty", f.getSize() > 0);
+        myRow = f.nextRow();
+        assertEquals(2, myRow);
+        assertEquals("b3", f.getColumn(myRow, 1));
+        assertEquals("", f.getColumn(myRow, 2));
 
-            int myRow = f.nextRow();
-            assertEquals(0, myRow);
-            assertEquals("a1", f.getColumn(myRow, 0));
-            assertEquals("d1", f.getColumn(myRow, 3));
-
-            try {
-                f.getColumn(myRow, 4);
-                fail("Expected out of bounds");
-            } catch (IndexOutOfBoundsException e) {
-            }
-            myRow = f.nextRow();
-            assertEquals(1, myRow);
-            assertEquals("b2", f.getColumn(myRow, 1));
-            assertEquals("c2", f.getColumn(myRow, 2));
-        }
-
-        public void testEmptyCols() throws Exception {
-            FileRowColContainer f = new FileRowColContainer("testfiles/testempty.csv");
-            assertNotNull(f);
-            assertEquals("Expected 4 lines", 4, f.getSize());
-
-            int myRow = f.nextRow();
-            assertEquals(0, myRow);
-            assertEquals("", f.getColumn(myRow, 0));
-            assertEquals("d1", f.getColumn(myRow, 3));
-
-            myRow = f.nextRow();
-            assertEquals(1, myRow);
-            assertEquals("", f.getColumn(myRow, 1));
-            assertEquals("c2", f.getColumn(myRow, 2));
-
-            myRow = f.nextRow();
-            assertEquals(2, myRow);
-            assertEquals("b3", f.getColumn(myRow, 1));
-            assertEquals("", f.getColumn(myRow, 2));
-
-            myRow = f.nextRow();
-            assertEquals(3, myRow);
-            assertEquals("b4", f.getColumn(myRow, 1));
-            assertEquals("c4", f.getColumn(myRow, 2));
-            assertEquals("", f.getColumn(myRow, 3));
-        }
+        myRow = f.nextRow();
+        assertEquals(3, myRow);
+        assertEquals("b4", f.getColumn(myRow, 1));
+        assertEquals("c4", f.getColumn(myRow, 2));
+        assertEquals("", f.getColumn(myRow, 3));
     }
 }
