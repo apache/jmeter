@@ -68,6 +68,7 @@ To override the default local language fully, set the JMeter property "language"
 
 <h3>HTTP Samplers and Proxy</h3>
 <ul>
+<li>Bug 50178 - HeaderManager added as child of Thread Group can create concatenated HeaderManager names and OutOfMemoryException</li>
 </ul>
 
 <h3>Other Samplers</h3>
