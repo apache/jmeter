@@ -17,6 +17,8 @@
  */
 package org.apache.jmeter.testelement;
 
+import java.io.File;
+
 import javax.swing.JComponent;
 
 import org.apache.jmeter.report.DataSet;
@@ -40,9 +42,9 @@ public class LineGraphTest extends JMeterTestCase {
     public void testGenerateLineChart() {
         log.info("jtl version=" + JMeterUtils.getProperty("file_format.testlog"));
         // String sampleLog = "C:/eclipse3/workspace/jmeter-21/bin/testfiles/sample_log1.jtl";
-        String sampleLog = "testfiles/sample_log1.jtl";
-        String sampleLog2 = "testfiles/sample_log1b.jtl";
-        String sampleLog3 = "testfiles/sample_log1c.jtl";
+        String sampleLog = findTestPath("testfiles/sample_log1.jtl");
+        String sampleLog2 = findTestPath("testfiles/sample_log1b.jtl");
+        String sampleLog3 = findTestPath("testfiles/sample_log1c.jtl");
         JTLData input = new JTLData();
         JTLData input2 = new JTLData();
         JTLData input3 = new JTLData();
@@ -77,7 +79,9 @@ public class LineGraphTest extends JMeterTestCase {
         String filename = lgraph.getTitle();
         filename = filename.replace(' ','_');
         if (!"true".equalsIgnoreCase(System.getProperty("java.awt.headless"))){
-            serv.saveJComponent("./testfiles/" + filename,SaveGraphicsService.PNG,gr);
+            String outPfx = findTestPath("./testfiles/" + filename);
+            serv.saveJComponent(outPfx,SaveGraphicsService.PNG,gr);
+            assertTrue("Should have created file",new File(outPfx+".png").exists());
         }
     }
 }
