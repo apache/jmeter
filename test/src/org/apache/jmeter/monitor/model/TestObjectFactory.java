@@ -16,7 +16,6 @@
  */
 package org.apache.jmeter.monitor.model;
 
-import java.io.File;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
