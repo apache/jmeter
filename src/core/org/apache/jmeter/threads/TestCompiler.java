@@ -240,7 +240,8 @@ public class TestCompiler implements HashTreeTraverser {
 
     private static class ObjectPair
     {
-        private TestElement child, parent;
+        private final TestElement child;
+        private final TestElement parent;
 
         public ObjectPair(TestElement one, TestElement two) {
             this.child = one;
@@ -270,6 +271,7 @@ public class TestCompiler implements HashTreeTraverser {
     }
 
     private void configureWithConfigElements(Sampler sam, List<ConfigTestElement> configs) {
+        sam.clearTestElementChildren();
         Iterator<ConfigTestElement> iter = configs.iterator();
         while (iter.hasNext()) {
             ConfigTestElement config = iter.next();
