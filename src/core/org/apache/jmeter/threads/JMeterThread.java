@@ -68,6 +68,8 @@ public class JMeterThread implements Runnable, Interruptible {
 
     public static final String LAST_SAMPLE_OK = "JMeterThread.last_sample_ok"; // $NON-NLS-1$
 
+    private static final String TRUE = Boolean.toString(true); // i.e. "true"
+
     private final Controller controller;
 
     private final HashTree testTree;
@@ -246,9 +248,9 @@ public class JMeterThread implements Runnable, Interruptible {
                     if (onErrorStartNextLoop) { // if the threadGroup option is to start next loop when it fails
 
                         if (sam.equals(firstSampler)) { // if it's the start of an iteration
-                            threadContext.getVariables().put(LAST_SAMPLE_OK, "true");
+                            threadContext.getVariables().put(LAST_SAMPLE_OK, TRUE);
                         }
-                        if (threadContext.getVariables().get(LAST_SAMPLE_OK) == "true") {
+                        if (TRUE.equals(threadContext.getVariables().get(LAST_SAMPLE_OK))) {
                             process_sampler(sam, null, threadContext);
                             sam = controller.next();
                         } else {
@@ -461,7 +463,7 @@ public class JMeterThread implements Runnable, Interruptible {
     private void initRun(JMeterContext threadContext) {
         threadContext.setVariables(threadVars);
         threadContext.setThreadNum(getThreadNum());
-        threadContext.getVariables().put(LAST_SAMPLE_OK, "true");
+        threadContext.getVariables().put(LAST_SAMPLE_OK, TRUE);
         threadContext.setThread(this);
         threadContext.setThreadGroup(threadGroup);
         threadContext.setEngine(engine);
