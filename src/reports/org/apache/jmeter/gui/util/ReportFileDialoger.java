@@ -25,7 +25,6 @@ import javax.swing.filechooser.FileFilter;
 
 import org.apache.jmeter.gui.ReportGuiPackage;
 import org.apache.jmeter.gui.JMeterFileFilter;
-import org.apache.jmeter.util.JMeterUtils;
 
 public final class ReportFileDialoger {
     /**
