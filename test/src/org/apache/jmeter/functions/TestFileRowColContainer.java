@@ -39,7 +39,7 @@ public class TestFileRowColContainer extends JMeterTestCase {
     }
 
     public void testrowNum() throws Exception {
-        FileRowColContainer f = new FileRowColContainer("testfiles/test.csv");
+        FileRowColContainer f = new FileRowColContainer(findTestPath("testfiles/test.csv"));
         assertNotNull(f);
         assertEquals("Expected 4 lines", 4, f.getSize());
 
@@ -52,7 +52,7 @@ public class TestFileRowColContainer extends JMeterTestCase {
     }
 
     public void testColumns() throws Exception {
-        FileRowColContainer f = new FileRowColContainer("testfiles/test.csv");
+        FileRowColContainer f = new FileRowColContainer(findTestPath("testfiles/test.csv"));
         assertNotNull(f);
         assertTrue("Not empty", f.getSize() > 0);
 
@@ -73,7 +73,7 @@ public class TestFileRowColContainer extends JMeterTestCase {
     }
 
     public void testColumnsComma() throws Exception {
-        FileRowColContainer f = new FileRowColContainer("testfiles/test.csv", ",");
+        FileRowColContainer f = new FileRowColContainer(findTestPath("testfiles/test.csv"), ",");
         assertNotNull(f);
         assertTrue("Not empty", f.getSize() > 0);
 
@@ -94,7 +94,7 @@ public class TestFileRowColContainer extends JMeterTestCase {
     }
 
     public void testColumnsTab() throws Exception {
-        FileRowColContainer f = new FileRowColContainer("testfiles/test.tsv", "\t");
+        FileRowColContainer f = new FileRowColContainer(findTestPath("testfiles/test.tsv"), "\t");
         assertNotNull(f);
         assertTrue("Not empty", f.getSize() > 0);
 
@@ -115,7 +115,7 @@ public class TestFileRowColContainer extends JMeterTestCase {
     }
 
     public void testEmptyCols() throws Exception {
-        FileRowColContainer f = new FileRowColContainer("testfiles/testempty.csv");
+        FileRowColContainer f = new FileRowColContainer(findTestPath("testfiles/testempty.csv"));
         assertNotNull(f);
         assertEquals("Expected 4 lines", 4, f.getSize());
 
