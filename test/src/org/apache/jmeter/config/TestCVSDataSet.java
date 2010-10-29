@@ -62,7 +62,7 @@ public class TestCVSDataSet extends JMeterTestCase {
         assertNull(threadVars.get("c"));
 
         csv = new CSVDataSet();
-        csv.setFilename("testfiles/testempty.csv");
+        csv.setFilename(findTestPath("testfiles/testempty.csv"));
         csv.setVariableNames("a,b,c");
         csv.setDelimiter(",");
         
@@ -96,7 +96,7 @@ public class TestCVSDataSet extends JMeterTestCase {
     // Test CSV file with a header line
     public void testHeaderOpen(){
         CSVDataSet csv = new CSVDataSet();
-        csv.setFilename("testfiles/testheader.csv");
+        csv.setFilename(findTestPath("testfiles/testheader.csv"));
         csv.setDelimiter("|");
         assertNull(csv.getVariableNames());
         csv.iterationStart(null);
@@ -116,7 +116,7 @@ public class TestCVSDataSet extends JMeterTestCase {
     // Test CSV file with a header line and recycle is true
     public void testHeaderOpenAndRecycle(){
         CSVDataSet csv = new CSVDataSet();
-        csv.setFilename("testfiles/testheader.csv");
+        csv.setFilename(findTestPath("testfiles/testheader.csv"));
         csv.setDelimiter("|");
         csv.setRecycle(true);
         assertNull(csv.getVariableNames()); // read 1st line
@@ -134,7 +134,7 @@ public class TestCVSDataSet extends JMeterTestCase {
     
     private CSVDataSet initCSV(){
         CSVDataSet csv = new CSVDataSet();
-        csv.setFilename("testfiles/test.csv");
+        csv.setFilename(findTestPath("testfiles/test.csv"));
         csv.setVariableNames("a,b,c");
         csv.setDelimiter(",");
         return csv;

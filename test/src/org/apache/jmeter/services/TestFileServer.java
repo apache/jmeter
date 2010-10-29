@@ -58,7 +58,7 @@ public class TestFileServer extends JMeterTestCase {
         assertFalse("Should not have any files open",FS.filesOpen());
         FS.closeFile("xxx"); // Unrecognised files are ignored
         assertFalse("Should not have any files open",FS.filesOpen());
-        String infile="testfiles/test.csv";
+        String infile=findTestPath("testfiles/test.csv");
         FS.reserveFile(infile); // Does not open file
         assertFalse("Should not have any files open",FS.filesOpen());
         assertEquals("a1,b1,c1,d1",FS.readLine(infile));
@@ -84,8 +84,7 @@ public class TestFileServer extends JMeterTestCase {
             fail("Expected IOException");
         } catch (IOException ignored){
         }
-        String base=FS.getBaseDir();
-        infile=base+"/testfiles/test.csv";
+        infile=findTestPath("/testfiles/test.csv");
         FS.reserveFile(infile); // Does not open file
         assertFalse("Should not have any files open",FS.filesOpen());
         assertEquals("a1,b1,c1,d1",FS.readLine(infile));
