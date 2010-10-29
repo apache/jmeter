@@ -40,7 +40,7 @@ public class TestAuthManager extends JMeterTestCase {
             AuthManager am = new AuthManager();
             CollectionProperty ao = am.getAuthObjects();
             assertEquals(0, ao.size());
-            am.addFile("testfiles/TestAuth.txt");
+            am.addFile(findTestPath("testfiles/TestAuth.txt"));
             assertEquals(9, ao.size());
             Authorization at;
             at = am.getAuthForURL(new URL("http://a.b.c/"));

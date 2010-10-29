@@ -20,10 +20,9 @@ import java.io.File;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.jmeter.junit.JMeterTestCase;
 
-import junit.framework.TestCase;
-
-public class TestObjectFactory extends TestCase {
+public class TestObjectFactory extends JMeterTestCase {
 
     private ObjectFactory of;
     
@@ -45,13 +44,13 @@ public class TestObjectFactory extends TestCase {
     }
 
     public void testFileData() throws Exception {
-        byte[] bytes= FileUtils.readFileToByteArray(new File("testfiles/monitorStatus.xml"));
+        byte[] bytes= FileUtils.readFileToByteArray(findTestFile("testfiles/monitorStatus.xml"));
         status = of.parseBytes(bytes);
         checkResult();
     }
     
     public void testStringData() throws Exception {
-        String content = FileUtils.readFileToString(new File("testfiles/monitorStatus.xml"));
+        String content = FileUtils.readFileToString(findTestFile("testfiles/monitorStatus.xml"));
         status = of.parseString(content);
         checkResult();
     }
