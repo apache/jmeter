@@ -82,7 +82,7 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
 
     public void testAssertionOK() throws Exception {
         result.setResponseData(readFile("testfiles/XMLSchematest.xml"));
-        assertion.setXsdFileName("testfiles/XMLSchema-pass.xsd");
+        assertion.setXsdFileName(findTestPath("testfiles/XMLSchema-pass.xsd"));
         AssertionResult res = assertion.getResult(jmctx.getPreviousResult());
         testLog.debug("isError() " + res.isError() + " isFailure() " + res.isFailure());
         testLog.debug("failure " + res.getFailureMessage());
@@ -159,7 +159,7 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
         ByteArrayOutputStream baos = readBA("testfiles/XMLSchematest.xml");
         baos.write("extra".getBytes()); // TODO - charset?
         result.setResponseData(baos.toByteArray());
-        assertion.setXsdFileName("testfiles/XMLSchema-pass.xsd");
+        assertion.setXsdFileName(findTestPath("testfiles/XMLSchema-pass.xsd"));
         AssertionResult res = assertion.getResult(jmctx.getPreviousResult());
         testLog.debug("isError() " + res.isError() + " isFailure() " + res.isFailure());
         testLog.debug("failure " + res.getFailureMessage());
@@ -172,7 +172,7 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
         ByteArrayOutputStream baos = readBA("testfiles/XMLSchematest.xml");
         baos.write(" \t\n".getBytes()); // TODO - charset?
         result.setResponseData(baos.toByteArray());
-        assertion.setXsdFileName("testfiles/XMLSchema-pass.xsd");
+        assertion.setXsdFileName(findTestPath("testfiles/XMLSchema-pass.xsd"));
         AssertionResult res = assertion.getResult(jmctx.getPreviousResult());
         testLog.debug("xisError() " + res.isError() + " isFailure() " + res.isFailure());
         testLog.debug("failure " + res.getFailureMessage());

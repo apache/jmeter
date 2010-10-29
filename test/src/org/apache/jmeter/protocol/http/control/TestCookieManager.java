@@ -366,7 +366,7 @@ public class TestCookieManager extends JMeterTestCase {
 
         public void testLoad() throws Exception{
             assertEquals(0,man.getCookieCount());
-            man.addFile("testfiles/cookies.txt");
+            man.addFile(findTestPath("testfiles/cookies.txt"));
             assertEquals(3,man.getCookieCount());
 
             int num = 0;

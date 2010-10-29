@@ -32,7 +32,7 @@ public class TestFileRowColContainer extends JMeterTestCase {
 
     public void testNull() throws Exception {
         try {
-            new FileRowColContainer("testfiles/xyzxyz");
+            new FileRowColContainer(findTestPath("testfiles/xyzxyz"));
             fail("Should not find the file");
         } catch (FileNotFoundException e) {
         }
