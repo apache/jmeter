@@ -88,6 +88,15 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
 
     /**
      * {@inheritDoc}
+     * <p>
+     * Default implementation - does nothing
+     */
+    public void clearTestElementChildren(){
+        // NOOP
+    }
+
+    /**
+     * {@inheritDoc}
      */
     public void removeProperty(String key) {
         propMap.remove(key);
