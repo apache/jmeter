@@ -37,6 +37,12 @@ public interface TestElement extends Cloneable {
     // N.B. Comments originally only applied to Test Plans, hence the name - which can now not be easily changed
 
     public void addTestElement(TestElement child);
+    
+    /**
+     * This method should clear any test element properties that are merged
+     * by {@link #addTestElement(TestElement)}.
+     */
+    public void clearTestElementChildren();
 
     public void setProperty(String key, String value);
 
