@@ -63,17 +63,13 @@ public abstract class JMeterTestCase extends TestCase {
             File f = new File(file);
             if (!f.canRead()) {
                 System.out.println("Can't find " + file + " - trying bin directory");
-                file = "bin/" + file;// JMeterUtils assumes Unix-style
-                                        // separators
-                // Also need to set working directory so test files can be found
-                System.setProperty("user.dir", System.getProperty("user.dir") + File.separatorChar + "bin");
-                System.out.println("Setting user.dir=" + System.getProperty("user.dir"));
+                file = "bin/" + file;// JMeterUtils assumes Unix-style separators
                 filePrefix = "bin/";
             } else {
                 filePrefix = "";
             }
             // Used to be done in initializeProperties
-            String home=new File(System.getProperty("user.dir")).getParent();
+            String home=new File(System.getProperty("user.dir"),filePrefix).getParent();
             System.out.println("Setting JMeterHome: "+home);
             JMeterUtils.setJMeterHome(home);
             JMeterUtils jmu = new JMeterUtils();
@@ -117,9 +113,18 @@ public abstract class JMeterTestCase extends TestCase {
     protected static File findTestFile(String file) {
         File f = new File(file);
         if (filePrefix.length() > 0 && !f.isAbsolute()) {
-            f = new File(filePrefix + file);// Add the offset
+            f = new File(filePrefix, file);// Add the offset
         }
         return f;
+    }
+
+    // Helper method to find a test path
+    protected static String findTestPath(String file) {
+        File f = new File(file);
+        if (filePrefix.length() > 0 && !f.isAbsolute()) {
+            return filePrefix + file;// Add the offset
+        }
+        return file;
     }
 
     protected static final Logger testLog = LoggingManager.getLoggerForClass();
