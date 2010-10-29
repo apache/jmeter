@@ -171,7 +171,7 @@ public class RequestViewHTTP implements RequestView {
             int port = hUrl.getPort() == -1 ? hUrl.getDefaultPort() : hUrl.getPort();
             requestModel.addRow(new RowResult(
                     JMeterUtils.getResString("view_results_table_request_http_port"), //$NON-NLS-1$
-                    port));
+                    Integer.valueOf(port)));
             requestModel.addRow(new RowResult(
                     JMeterUtils.getResString("view_results_table_request_http_path"), //$NON-NLS-1$
                     hUrl.getPath()));
