@@ -69,9 +69,9 @@ public class IncludeController extends GenericController implements ReplaceableC
         clone.setIncludePath(this.getIncludePath());
         if (this.SUBTREE != null) {
             if (this.SUBTREE.keySet().size() == 1) {
-                Iterator<TestElement> itr = this.SUBTREE.keySet().iterator();
+                Iterator<Object> itr = this.SUBTREE.keySet().iterator();
                 while (itr.hasNext()) {
-                    this.SUB = itr.next();
+                    this.SUB = (TestElement) itr.next();
                 }
             }
             clone.SUBTREE = (HashTree)this.SUBTREE.clone();
@@ -165,9 +165,9 @@ public class IncludeController extends GenericController implements ReplaceableC
     }
 
     private void removeDisabledItems(HashTree tree) {
-        Iterator<TestElement> iter = new LinkedList<TestElement>(tree.list()).iterator();
+        Iterator<Object> iter = new LinkedList<Object>(tree.list()).iterator();
         while (iter.hasNext()) {
-            TestElement item = iter.next();
+            TestElement item = (TestElement) iter.next();
             if (!item.isEnabled()) {
                 //log.info("Removing "+item.toString());
                 tree.remove(item);
