@@ -91,10 +91,9 @@ public class JMeterTreeModel extends DefaultTreeModel {
      * the added sub tree was a full test plan.
      */
     public HashTree addSubTree(HashTree subTree, JMeterTreeNode current) throws IllegalUserActionException {
-        @SuppressWarnings("unchecked") // OK
-        Iterator<TestElement> iter = subTree.list().iterator();
+        Iterator<Object> iter = subTree.list().iterator();
         while (iter.hasNext()) {
-            TestElement item = iter.next();
+            TestElement item = (TestElement) iter.next();
             if (item instanceof TestPlan) {
                 TestPlan tp = (TestPlan) item;
                 current = (JMeterTreeNode) ((JMeterTreeNode) getRoot()).getChildAt(0);
