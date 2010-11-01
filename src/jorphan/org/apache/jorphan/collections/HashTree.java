@@ -47,7 +47,7 @@ import java.util.Set;
  * @see HashTreeTraverser
  * @see SearchByClass
  */
-public class HashTree implements Serializable, Map, Cloneable {
+public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable {
 
     private static final long serialVersionUID = 240L;
 
@@ -56,6 +56,7 @@ public class HashTree implements Serializable, Map, Cloneable {
     // Used for the RuntimeException to short-circuit the traversal
     private static final String FOUND = "found"; // $NON-NLS-1$
 
+    // N.B. The keys can be either JMeterTreeNode or TestElement
     protected final Map<Object, HashTree> data;
 
     /**
@@ -90,7 +91,7 @@ public class HashTree implements Serializable, Map, Cloneable {
      * @see #add(HashTree)
      * @see java.util.Map#putAll(Map)
      */
-    public void putAll(Map map) {
+    public void putAll(Map<? extends Object, ? extends HashTree> map) {
         if (map instanceof HashTree) {
             this.add((HashTree) map);
         } else {
@@ -103,7 +104,7 @@ public class HashTree implements Serializable, Map, Cloneable {
      *
      * @see java.util.Map#entrySet()
      */
-    public Set<?> entrySet() {
+    public Set<Entry<Object, HashTree>> entrySet() {
         return data.entrySet();
     }
 
@@ -129,8 +130,8 @@ public class HashTree implements Serializable, Map, Cloneable {
      *            to store against key
      * @see java.util.Map#put(Object, Object)
      */
-    public Object put(Object key, Object value) {
-        Object previous = data.get(key);
+    public HashTree put(Object key, HashTree value) {
+        HashTree previous = data.get(key);
         add(key, value);
         return previous;
     }
@@ -580,7 +581,7 @@ public class HashTree implements Serializable, Map, Cloneable {
      *
      * @see java.util.Map#get(Object)
      */
-    public Object get(Object key) {
+    public HashTree get(Object key) {
         return getTree(key);
     }
 
@@ -680,7 +681,7 @@ public class HashTree implements Serializable, Map, Cloneable {
      *
      * @return Set of all keys in this HashTree
      */
-    public Collection list() {
+    public Collection<Object> list() {
         return data.keySet();
     }
 
@@ -694,7 +695,7 @@ public class HashTree implements Serializable, Map, Cloneable {
      *            key used to find HashTree to get list of
      * @return Set of all keys in found HashTree.
      */
-    public Collection list(Object key) {
+    public Collection<?> list(Object key) {
         HashTree temp = data.get(key);
         if (temp != null) {
             return temp.list();
@@ -707,7 +708,7 @@ public class HashTree implements Serializable, Map, Cloneable {
      *
      * @see java.util.Map#remove(Object)
      */
-    public Object remove(Object key) {
+    public HashTree remove(Object key) {
         return data.remove(key);
     }
 
@@ -722,7 +723,7 @@ public class HashTree implements Serializable, Map, Cloneable {
      *            Array of keys used to recurse into HashTree structure
      * @return Set of all keys found in end HashTree
      */
-    public Collection list(Object[] treePath) {
+    public Collection<?> list(Object[] treePath) { // TODO not used?
         if (treePath != null) {
             return list(Arrays.asList(treePath));
         }
@@ -740,7 +741,7 @@ public class HashTree implements Serializable, Map, Cloneable {
      *            List of keys used to recurse into HashTree structure
      * @return Set of all keys found in end HashTree
      */
-    public Collection list(Collection<?> treePath) {
+    public Collection<?> list(Collection<?> treePath) {
         HashTree tree = getTreePath(treePath);
         if (tree != null) {
             return tree.list();
@@ -903,7 +904,7 @@ public class HashTree implements Serializable, Map, Cloneable {
      *
      * @see java.util.Map#keySet()
      */
-    public Set keySet() {
+    public Set<Object> keySet() {
         return data.keySet();
     }
 
