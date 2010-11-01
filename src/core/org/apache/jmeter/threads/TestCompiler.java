@@ -161,11 +161,11 @@ public class TestCompiler implements HashTreeTraverser {
         LinkedList<PreProcessor> pres = new LinkedList<PreProcessor>();
         for (int i = stack.size(); i > 0; i--) {
             addDirectParentControllers(controllers, stack.get(i - 1));
-            Iterator<TestElement> iter = testTree.list(stack.subList(0, i)).iterator();
+            Iterator<?> iter = testTree.list(stack.subList(0, i)).iterator();
             List<PreProcessor>  tempPre = new LinkedList<PreProcessor> ();
             List<PostProcessor> tempPost = new LinkedList<PostProcessor>();
             while (iter.hasNext()) {
-                TestElement item = iter.next();
+                Object item = iter.next();
                 if ((item instanceof ConfigTestElement)) {
                     configs.add((ConfigTestElement) item);
                 }
@@ -208,9 +208,9 @@ public class TestCompiler implements HashTreeTraverser {
         LinkedList<PreProcessor> pres = new LinkedList<PreProcessor>();
         for (int i = stack.size(); i > 0; i--) {
             addDirectParentControllers(controllers, stack.get(i - 1));
-            Iterator<TestElement> iter = testTree.list(stack.subList(0, i)).iterator();
+            Iterator<?> iter = testTree.list(stack.subList(0, i)).iterator();
             while (iter.hasNext()) {
-                TestElement item = iter.next();
+                Object item = iter.next();
                 if (item instanceof SampleListener) {
                     listeners.add((SampleListener) item);
                 }
