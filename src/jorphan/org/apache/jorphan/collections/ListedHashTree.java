@@ -163,7 +163,7 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
 
     /** {@inheritDoc} */
     @Override
-    public Object remove(Object key) {
+    public HashTree remove(Object key) {
         order.remove(key);
         return data.remove(key);
     }
