@@ -188,7 +188,7 @@ public class TransactionController extends GenericController implements SampleLi
                 if (pack == null) {
                     log.warn("Could not fetch SamplePackage");
                 } else {
-                    SampleEvent event = new SampleEvent(res, threadContext.getThreadGroup().getName(),threadVars);
+                    SampleEvent event = new SampleEvent(res, threadContext.getThreadGroup().getName(),threadVars, true);
                     // We must set res to null now, before sending the event for the transaction,
                     // so that we can ignore that event in our sampleOccured method
                     res = null;
@@ -207,8 +207,8 @@ public class TransactionController extends GenericController implements SampleLi
     public void sampleOccurred(SampleEvent se) {
         if (!isParent()) {
             // Check if we are still sampling our children
-            if(res != null) {
-                SampleResult sampleResult = se.getResult();
+            if(res != null && !se.isTransactionSampleEvent()) {
+               	SampleResult sampleResult = se.getResult();
                 res.setThreadName(sampleResult.getThreadName());
                 res.setBytes(res.getBytes() + sampleResult.getBytes());
                 if (!isIncludeTimers()) {// Accumulate waiting time for later

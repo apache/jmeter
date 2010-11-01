@@ -73,6 +73,7 @@ public class SampleEvent implements Serializable {
 
     private final String hostname;
 
+    private final boolean isTransactionSampleEvent;
 
     /*
      * Only for Unit tests
@@ -90,10 +91,7 @@ public class SampleEvent implements Serializable {
      * @param threadGroup name
      */
     public SampleEvent(SampleResult result, String threadGroup) {
-        this.result = result;
-        this.threadGroup = threadGroup;
-        this.hostname = HOSTNAME;
-        values = new String[variableNames.length];
+        this(result, threadGroup, HOSTNAME, false);
     }
 
     /**
@@ -104,11 +102,7 @@ public class SampleEvent implements Serializable {
      * @param jmvars Jmeter variables
      */
     public SampleEvent(SampleResult result, String threadGroup, JMeterVariables jmvars) {
-        this.result = result;
-        this.threadGroup = threadGroup;
-        this.hostname = HOSTNAME;
-        values = new String[variableNames.length];
-        saveVars(jmvars);
+        this(result, threadGroup, jmvars, false);
     }
 
     /**
@@ -119,10 +113,26 @@ public class SampleEvent implements Serializable {
      * @param hostname
      */
     public SampleEvent(SampleResult result, String threadGroup, String hostname) {
+       this(result, threadGroup, hostname, false);
+    }
+    
+    private SampleEvent(SampleResult result, String threadGroup, String hostname, boolean isTransactionSampleEvent) {
         this.result = result;
         this.threadGroup = threadGroup;
         this.hostname = hostname;
         values = new String[variableNames.length];
+        this.isTransactionSampleEvent = isTransactionSampleEvent;
+    }
+
+    /**
+     * @param result
+     * @param threadGroup
+     * @param jmvars
+     * @param isTransactionSampleEvent
+     */
+    public SampleEvent(SampleResult result, String threadGroup, JMeterVariables jmvars, boolean isTransactionSampleEvent) {
+        this(result, threadGroup, HOSTNAME, isTransactionSampleEvent);
+        saveVars(jmvars);
     }
 
     private void saveVars(JMeterVariables vars){
@@ -161,4 +171,12 @@ public class SampleEvent implements Serializable {
     public String getHostname() {
         return hostname;
     }
+
+    /**
+     * @return the isTransactionSampleEvent
+     */
+    public boolean isTransactionSampleEvent() {
+        return isTransactionSampleEvent;
+    }
+
 }
