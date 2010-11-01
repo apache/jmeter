@@ -70,10 +70,9 @@ public class ReportTreeModel extends DefaultTreeModel {
      */
     public HashTree addSubTree(HashTree subTree, ReportTreeNode current)
             throws IllegalUserActionException {
-        @SuppressWarnings("unchecked") // OK
-        Iterator<TestElement> iter = subTree.list().iterator();
+        Iterator<Object> iter = subTree.list().iterator();
         while (iter.hasNext()) {
-            TestElement item = iter.next();
+            TestElement item = (TestElement) iter.next();
             if (item instanceof ReportPlan) {
                 current = (ReportTreeNode) ((ReportTreeNode) getRoot())
                         .getChildAt(0);
