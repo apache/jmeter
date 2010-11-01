@@ -80,6 +80,7 @@ To override the default local language fully, set the JMeter property "language"
 <ul>
 <li>Bug 50032 - Last_Sample_Ok along with other controllers doesnt work correctly when the threadgroup has multiple loops</li>
 <li>Bug 50080 - Transaction controller incorrectly creates samples including timer duration</li>
+<li>Bug 50134 - TransactionController : Reports bad response time when it contains other TransactionControllers</li>
 </ul>
 
 <h3>Listeners</h3>
