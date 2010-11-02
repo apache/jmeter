@@ -93,8 +93,8 @@ do not multi-thread past 50-60 connections, and you probably anticipate
 more users than that).
 </p>
 <p>Good free platforms include the linuxes, the BSDs, and Solaris Intel. If
-you have a little more money, there are commercial linuxes. If you can justify
-it, a commercial Unix (Solaris, etc) is probably the best choice.
+you have a little more money, there are commercial linuxes.
+This may be worth it if you need the support.
 </p>
 <p>
 For non-Windows platforms, investigate "ulimit -n unlimited" with a view to
