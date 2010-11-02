@@ -2952,7 +2952,7 @@ be able to run it.  However, you can use it as a reference in constructing your 
 
 </component>
 
-<component name="HTTP Cache Manager" index="&sect-num;.4.4"  width="267" height="132" screenshot="http-config/http-cache-manager.png">
+<component name="HTTP Cache Manager" index="&sect-num;.4.4"  width="424" height="159" screenshot="http-config/http-cache-manager.png">
 
 <note>This is a new element, and is liable to change</note>
 
@@ -2978,6 +2978,13 @@ This may cause problems for Assertions.
 </p>
 
 </description>
+<properties>
+  <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
+  <property name="Clear cache each iteration" required="Yes">
+  If selected, then the cache is cleared at the start of the thread.
+  </property>
+  <property name="Use Cache Control/Expires header when processing GET requests" required="Yes">See description above.</property>
+</properties>
 </component>
 
 <component name="HTTP Cookie Manager" index="&sect-num;.4.4"  width="445" height="328" screenshot="http-config/http-cookie-manager.png">
