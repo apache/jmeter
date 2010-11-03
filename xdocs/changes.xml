@@ -105,6 +105,7 @@ To override the default local language fully, set the JMeter property "language"
 <li>Bug 49666 - CSV Header read as data after EOF</li>
 <li>Bug 45703 - Synchronizing Timer</li>
 <li>Bug 50088 - fix getAvgPageBytes in SamplingStatCalculator so it returns what it should</li>
+<li>Bug 50203 Cannot set property "jmeter.save.saveservice.default_delimiter=\t"</li>
 </ul>
 
 <!-- ==================================================== -->
