@@ -317,7 +317,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
             throw new JMeterError("Delimiter '"+ch+"' must not be alphanumeric or "+CSVSaveService.QUOTING_CHAR+".");
         }
 
-        if (!CharUtils.isAsciiPrintable(ch)){
+        if (ch != '\t' && !CharUtils.isAsciiPrintable(ch)){
             throw new JMeterError("Delimiter (code "+(int)ch+") must be printable.");
         }
 
