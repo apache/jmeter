@@ -84,7 +84,7 @@ public class TestFileServer extends JMeterTestCase {
             fail("Expected IOException");
         } catch (IOException ignored){
         }
-        infile=findTestPath("/testfiles/test.csv");
+        infile=findTestPath("testfiles/test.csv");
         FS.reserveFile(infile); // Does not open file
         assertFalse("Should not have any files open",FS.filesOpen());
         assertEquals("a1,b1,c1,d1",FS.readLine(infile));
