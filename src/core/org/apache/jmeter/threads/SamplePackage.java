@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.config.ConfigTestElement;
+import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.samplers.SampleListener;
@@ -47,7 +48,7 @@ public class SamplePackage {
 
     private final List<ConfigTestElement> configs;
 
-    private final List<TestElement> controllers;
+    private final List<Controller> controllers;
 
     private Sampler sampler;
 
@@ -58,7 +59,7 @@ public class SamplePackage {
             List<Assertion> assertions, 
             List<PostProcessor> postProcessors, 
             List<PreProcessor> preProcessors,
-            List<TestElement> controllers) {
+            List<Controller> controllers) {
         this.configs = configs;
         this.sampleListeners = listeners;
         this.timers = timers;
@@ -68,40 +69,40 @@ public class SamplePackage {
         this.controllers = controllers;
     }
 
-    @SuppressWarnings("unchecked") // All implementations extend TestElement
     public void setRunningVersion(boolean running) {
         setRunningVersion(configs, running);
-        setRunningVersion((List<? extends TestElement>) sampleListeners, running);
-        setRunningVersion((List<? extends TestElement>) assertions, running);
-        setRunningVersion((List<? extends TestElement>) timers, running);
-        setRunningVersion((List<? extends TestElement>) postProcessors, running);
-        setRunningVersion((List<? extends TestElement>) preProcessors, running);
+        setRunningVersion(sampleListeners, running);
+        setRunningVersion(assertions, running);
+        setRunningVersion(timers, running);
+        setRunningVersion(postProcessors, running);
+        setRunningVersion(preProcessors, running);
         setRunningVersion(controllers, running);
         sampler.setRunningVersion(running);
     }
 
-    private void setRunningVersion(List<? extends TestElement> list, boolean running) {
-        Iterator<? extends TestElement> iter = list.iterator();
+    private void setRunningVersion(List<?> list, boolean running) {
+        @SuppressWarnings("unchecked") // All implementations extend TestElement
+        Iterator<? extends TestElement> iter = (Iterator<? extends TestElement>) list.iterator();
         while (iter.hasNext()) {
             iter.next().setRunningVersion(running);
         }
     }
 
-    private void recoverRunningVersion(List<? extends TestElement> list) {
-        Iterator<? extends TestElement> iter = list.iterator();
+    private void recoverRunningVersion(List<?> list) {
+        @SuppressWarnings("unchecked") // All implementations extend TestElement
+        Iterator<? extends TestElement> iter = (Iterator<? extends TestElement>) list.iterator();
         while (iter.hasNext()) {
             iter.next().recoverRunningVersion();
         }
     }
 
-    @SuppressWarnings("unchecked") // All implementations extend TestElement
     public void recoverRunningVersion() {
         recoverRunningVersion(configs);
-        recoverRunningVersion((List<? extends TestElement>) sampleListeners);
-        recoverRunningVersion((List<? extends TestElement>) assertions);
-        recoverRunningVersion((List<? extends TestElement>) timers);
-        recoverRunningVersion((List<? extends TestElement>) postProcessors);
-        recoverRunningVersion((List<? extends TestElement>) preProcessors);
+        recoverRunningVersion(sampleListeners);
+        recoverRunningVersion(assertions);
+        recoverRunningVersion(timers);
+        recoverRunningVersion(postProcessors);
+        recoverRunningVersion(preProcessors);
         recoverRunningVersion(controllers);
         sampler.recoverRunningVersion();
     }
