@@ -522,9 +522,6 @@ Or set Content-Length to -1 to force chunked encoding.
  paste the message in to text area, it will not retain the encoding and will result
  in errors. Save your message to a file with the proper encoding, and the sampler
  will read it as java.io.FileInputStream.</p>
- <note>The sampler requires mail.jar and activation.jar. This is because Apache SOAP
- requires the libs. Because mail.jar and activation.jar are distributed by Sun,
- you have to download them separately.</note>
  <p>An important note on the sampler is it will automatically use the proxy host
  and port passed to JMeter from command line, if those fields in the sampler are
  left blank. If a sampler has values in the proxy host and port text field, it
