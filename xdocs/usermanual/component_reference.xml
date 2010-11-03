@@ -508,7 +508,7 @@ Or set Content-Length to -1 to force chunked encoding.
 
 </component>
 
-<component name="WebService(SOAP) Request" index="&sect-num;.1.6"  width="536" height="934" screenshot="webservice_sampler.png">
+<component name="WebService(SOAP) Request" index="&sect-num;.1.6"  width="460" height="781" screenshot="webservice_sampler.png">
 <description><p>This sampler has been tested with IIS Webservice running .NET 1.0 and .NET 1.1.
  It has been tested with SUN JWSDP, IBM webservices, Axis and gSoap toolkit for C/C++.
  The sampler uses Apache SOAP driver to serialize the message and set the header
