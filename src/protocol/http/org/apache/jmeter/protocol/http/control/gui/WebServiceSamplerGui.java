@@ -20,7 +20,6 @@ package org.apache.jmeter.protocol.http.control.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JButton;
@@ -86,26 +85,6 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
     private final JLabeledTextField connectTimeout = new JLabeledTextField(JMeterUtils.getResString("webservice_timeout")); // $NON-NLS-1$
 
     /**
-     * We create several JLabel objects to display usage instructions in the
-     * GUI. The reason there are multiple labels is to make sure it displays
-     * correctly.
-     */
-    private JLabel wsdlMessage = new JLabel(JMeterUtils.getResString("get_xml_message")); // $NON-NLS-1$
-
-    private JLabel wsdlMessage2 = new JLabel(JMeterUtils.getResString("get_xml_message2")); // $NON-NLS-1$
-
-    private JLabel wsdlMessage3 = new JLabel(JMeterUtils.getResString("get_xml_message3")); // $NON-NLS-1$
-
-    private JLabel wsdlMessage4 = new JLabel(JMeterUtils.getResString("get_xml_message4")); // $NON-NLS-1$
-
-    private JLabel wsdlMessage5 = new JLabel(JMeterUtils.getResString("get_xml_message5")); // $NON-NLS-1$
-
-    /**
-     * This is the font for the note.
-     */
-    private Font plainText = new Font("plain", Font.PLAIN, 10); // $NON-NLS-1$
-
-    /**
      * checkbox for memory cache.
      */
     private JCheckBox memCache = new JCheckBox(JMeterUtils.getResString("memory_cache"), true); // $NON-NLS-1$
@@ -133,21 +112,20 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
     /**
      * Text note about read response and its usage.
      */
-    private JLabel readMessage = new JLabel(JMeterUtils.getResString("read_response_note")); // $NON-NLS-1$
-
-    private JLabel readMessage2 = new JLabel(JMeterUtils.getResString("read_response_note2")); // $NON-NLS-1$
-
-    private JLabel readMessage3 = new JLabel(JMeterUtils.getResString("read_response_note3")); // $NON-NLS-1$
+    private String readToolTip = JMeterUtils.getResString("read_response_note") // $NON-NLS-1$
+                                  + " " // $NON-NLS-1$
+                                  + JMeterUtils.getResString("read_response_note2") // $NON-NLS-1$
+                                  + " " // $NON-NLS-1$
+                                  + JMeterUtils.getResString("read_response_note3"); // $NON-NLS-1$
 
     /**
      * Text note for proxy
      */
-    private JLabel proxyMessage = new JLabel(JMeterUtils.getResString("webservice_proxy_note")); // $NON-NLS-1$
-
-    private JLabel proxyMessage2 = new JLabel(JMeterUtils.getResString("webservice_proxy_note2")); // $NON-NLS-1$
-
-    private JLabel proxyMessage3 = new JLabel(JMeterUtils.getResString("webservice_proxy_note3")); // $NON-NLS-1$
-
+    private String proxyToolTip = JMeterUtils.getResString("webservice_proxy_note") // $NON-NLS-1$
+                                  + " " // $NON-NLS-1$
+                                  + JMeterUtils.getResString("webservice_proxy_note2") // $NON-NLS-1$
+                                  + " " // $NON-NLS-1$
+                                  + JMeterUtils.getResString("webservice_proxy_note3"); // $NON-NLS-1$
     public WebServiceSamplerGui() {
         init();
     }
@@ -225,15 +203,6 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
         setBorder(makeBorder());
         add(makeTitlePanel(), BorderLayout.NORTH);
 
-        wsdlMessage.setFont(plainText);
-        wsdlMessage2.setFont(plainText);
-        wsdlMessage3.setFont(plainText);
-        wsdlMessage4.setFont(plainText);
-        wsdlMessage5.setFont(plainText);
-        readMessage.setFont(plainText);
-        readMessage2.setFont(plainText);
-        readMessage3.setFont(plainText);
-
         // MAIN PANEL
         JPanel mainPanel = new JPanel();
         Border margin = new EmptyBorder(10, 10, 5, 10);
@@ -270,30 +239,17 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
         soapXml.setPreferredSize(pref);
         mainPanel.add(soapXml);
         mainPanel.add(soapXmlFile);
-        mainPanel.add(wsdlMessage);
-        mainPanel.add(wsdlMessage2);
-        mainPanel.add(wsdlMessage3);
-        mainPanel.add(wsdlMessage4);
-        mainPanel.add(wsdlMessage5);
         mainPanel.add(randomXmlFile);
         mainPanel.add(memCache);
         mainPanel.add(readResponse);
-        mainPanel.add(readMessage);
-        mainPanel.add(readMessage2);
-        mainPanel.add(readMessage3);
+        readResponse.setToolTipText(readToolTip);
 
         // add the proxy elements
         mainPanel.add(useProxy);
         useProxy.addActionListener(this);
+        useProxy.setToolTipText(proxyToolTip);
         mainPanel.add(proxyHost);
         mainPanel.add(proxyPort);
-        // add the proxy notes
-        proxyMessage.setFont(plainText);
-        proxyMessage2.setFont(plainText);
-        proxyMessage3.setFont(plainText);
-        mainPanel.add(proxyMessage);
-        mainPanel.add(proxyMessage2);
-        mainPanel.add(proxyMessage3);
 
         this.add(mainPanel);
     }
