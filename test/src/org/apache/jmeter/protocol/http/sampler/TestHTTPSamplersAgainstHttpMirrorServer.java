@@ -88,6 +88,9 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
                     output.write(TEST_FILE_CONTENT);
                     output.flush();
                     output.close();
+                    // Temporary hack to allow tests to complete on Sun Java 1.6.0_22
+                    // See: http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6996110
+                    System.setProperty("sun.net.http.allowRestrictedHeaders", "true");
             }
             
             @Override
@@ -97,6 +100,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
                     httpServer = null;
                     // delete temporay file
                     temporaryFile.delete();
+                    System.setProperty("sun.net.http.allowRestrictedHeaders", "false");
             }
         };
         return setup;
@@ -1008,8 +1012,11 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
     private void checkHeaderTypeLength(String requestHeaders, String contentType, int contentLen) {
         boolean typeOK = isInRequestHeaders(requestHeaders, HTTPSamplerBase.HEADER_CONTENT_TYPE, contentType);
         boolean lengOK = isInRequestHeaders(requestHeaders, HTTPSamplerBase.HEADER_CONTENT_LENGTH, Integer.toString(contentLen));
-        if (!typeOK || !lengOK){
-            fail("Expected type:" + contentType + " & length: " +contentLen + " in:\n"+ requestHeaders);
+        if (!typeOK){
+            fail("Expected type:" + contentType + " in:\n"+ requestHeaders);
+        }
+        if (!lengOK){
+            fail("Expected & length: " +contentLen + " +");
         }
     }
    
