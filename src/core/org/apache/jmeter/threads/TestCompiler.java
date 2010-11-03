@@ -151,7 +151,7 @@ public class TestCompiler implements HashTreeTraverser {
 
     private void saveSamplerConfigs(Sampler sam) {
         List<ConfigTestElement> configs = new LinkedList<ConfigTestElement>();
-        List<TestElement> controllers = new LinkedList<TestElement>();
+        List<Controller> controllers = new LinkedList<Controller>();
         List<SampleListener> listeners = new LinkedList<SampleListener>();
         List<Timer> timers = new LinkedList<Timer>();
         List<Assertion> assertions = new LinkedList<Assertion>();
@@ -196,7 +196,7 @@ public class TestCompiler implements HashTreeTraverser {
 
     private void saveTransactionControllerConfigs(TransactionController tc) {
         List<ConfigTestElement> configs = new LinkedList<ConfigTestElement>();
-        List<TestElement> controllers = new LinkedList<TestElement>();
+        List<Controller> controllers = new LinkedList<Controller>();
         List<SampleListener> listeners = new LinkedList<SampleListener>();
         List<Timer> timers = new LinkedList<Timer>();
         List<Assertion> assertions = new LinkedList<Assertion>();
@@ -227,10 +227,10 @@ public class TestCompiler implements HashTreeTraverser {
      * @param controllers
      * @param i
      */
-    private void addDirectParentControllers(List<TestElement> controllers, TestElement maybeController) {
+    private void addDirectParentControllers(List<Controller> controllers, TestElement maybeController) {
         if (maybeController instanceof Controller) {
             log.debug("adding controller: " + maybeController + " to sampler config");
-            controllers.add(maybeController);
+            controllers.add((Controller) maybeController);
         }
     }
 
