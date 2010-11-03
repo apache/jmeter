@@ -30,6 +30,7 @@ import java.util.Properties;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
+import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
@@ -221,7 +222,7 @@ public final class AllTests {
         // the code to not attempt to write to a file, so it will continue
         // behaving as it did before. It would be simple to make it write
         // to a file instead if that is the desired behavior.
-        TestRunner.run(suite);
+        TestResult result = TestRunner.run(suite);
         // ++
         // Recheck settings:
         //System.out.println("+++++++++++");
@@ -241,7 +242,7 @@ public final class AllTests {
         // }
         //System.out.println("------------");
         // --
-        System.exit(0); // this is needed because the test may start the AWT EventQueue thread which is not a daemon.
+        System.exit(result.wasSuccessful() ? 0 : 1); // this is needed because the test may start the AWT EventQueue thread which is not a daemon.
     }
 
     /**
