@@ -26,16 +26,19 @@ import java.awt.FlowLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.KeyStroke;
 import javax.swing.table.TableModel;
 
 import org.apache.jmeter.gui.GuiPackage;
@@ -101,7 +104,13 @@ public class TextBoxDialoger implements ActionListener {
         String title = editable ? JMeterUtils.getResString("textbox_title_edit") //$NON-NLS-1$
                 : JMeterUtils.getResString("textbox_title_view"); //$NON-NLS-1$
         dialog = new JDialog(mainFrame, title, true);  // modal dialog box
-        
+
+        // Close action dialog box when tapping Escape key
+        JPanel content = (JPanel) dialog.getContentPane();
+        KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
+        content.registerKeyboardAction(this, stroke,
+                JComponent.WHEN_IN_FOCUSED_WINDOW);
+
         textBox = new JEditorPane();
         textBox.setEditable(editable);
         
