@@ -38,7 +38,7 @@ public abstract class BaseJMSSampler extends AbstractSampler {
 
     private static final long serialVersionUID = 240L;
 
-    //++ These are JMX file names and must not be changed
+    //++ These are JMX file attribute names and must not be changed
     private static final String JNDI_INITIAL_CONTEXT_FAC = "jms.initial_context_factory"; // $NON-NLS-1$
 
     private static final String PROVIDER_URL = "jms.provider_url"; // $NON-NLS-1$
@@ -59,10 +59,11 @@ public abstract class BaseJMSSampler extends AbstractSampler {
     private static final String USE_PROPERTIES_FILE = "jms.jndi_properties"; // $NON-NLS-1$
 
     private static final String READ_RESPONSE = "jms.read_response"; // $NON-NLS-1$
-    //--
 
     // Destination setup (static or dynamic)
     private static final String DESTINATION_SETUP = "jms.destination_setup"; // $NON-NLS-1$
+
+    //-- End of JMX file attribute names
 
     // See BUG 45460. We need to keep the resource in order to interpret existing files
     private static final String REQUIRED = JMeterUtils.getResString("jms_auth_required"); // $NON-NLS-1$
