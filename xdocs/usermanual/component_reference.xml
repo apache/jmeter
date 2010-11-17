@@ -1135,7 +1135,7 @@ For details, see <complink name="BSF Sampler"/>.
 </properties>
 </component>
 
-<component name="JMS Publisher" index="&sect-num;.1.13"  width="459" height="662" screenshot="jmspublisher.png">
+<component name="JMS Publisher" index="&sect-num;.1.13" screenshot="jmspublisher.png">
 <note>BETA CODE - the code is still subject to change</note>
 	<description>
 		<p>
@@ -1155,12 +1155,13 @@ For details, see <complink name="BSF Sampler"/>.
   </property>
   <property name="JNDI Initial Context Factory" required="No">Name of the context factory</property>
   <property name="Provider URL" required="Yes, unless using jndi.properties">The URL for the jms provider</property>
-  <property name="Destination" required="Yes">the message destination (topic or queue name)</property>
+  <property name="Destination" required="Yes">The message destination (topic or queue name)</property>
+  <property name="Setup" required="Yes">The destination setup type. With At startup, the destination name is static (i.e. always same name during the test), with Each sample, the destination name is dynamic and is evaluate at each sample (i.e. the destination name may be a variable)</property>
   <property name="Authentication" required="Yes">Authentication requirement for the JMS provider</property>
   <property name="User" required="No">User Name</property>
   <property name="Password" required="No">Password</property>
-  <property name="Number of samples to aggregate" required="Yes">number of samples to aggregate</property>
-  <property name="Message source" required="Yes">where to obtain the message</property>
+  <property name="Number of samples to aggregate" required="Yes">Number of samples to aggregate</property>
+  <property name="Message source" required="Yes">Where to obtain the message</property>
   <property name="Message type" required="Yes">Text, Map or Object message</property>
 </properties>
 <p>
