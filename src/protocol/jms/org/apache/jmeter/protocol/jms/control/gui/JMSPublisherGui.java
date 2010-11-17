@@ -63,7 +63,11 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
     public static final String MAP_MSG_RSC = "jms_map_message"; //$NON-NLS-1$
     /** Create an ObjectMessage */
     public static final String OBJECT_MSG_RSC = "jms_object_message"; //$NON-NLS-1$
-    //--
+
+    public final static String DEST_SETUP_STATIC = "jms_dest_setup_static"; // $NON-NLS-1$
+
+    public final static String DEST_SETUP_DYNAMIC = "jms_dest_setup_dynamic"; // $NON-NLS-1$
+    //-- End of names used in JMX files
 
     // Button group resources
     private static final String[] CONFIG_ITEMS = { USE_FILE_RSC, USE_RANDOM_RSC, USE_TEXT_RSC };
@@ -98,12 +102,6 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
 
     private final JLabeledRadioI18N msgChoice = new JLabeledRadioI18N("jms_message_type", MSGTYPES_ITEMS, TEXT_MSG_RSC); //$NON-NLS-1$
     
-    //++ Do not change these strings; they are used in JMX files to record the button settings
-    public final static String DEST_SETUP_STATIC = "jms_dest_setup_static"; // $NON-NLS-1$
-
-    public final static String DEST_SETUP_DYNAMIC = "jms_dest_setup_dynamic"; // $NON-NLS-1$
-    //--
-
     // Button group resources
     private final static String[] DEST_SETUP_ITEMS = { DEST_SETUP_STATIC, DEST_SETUP_DYNAMIC };
 
