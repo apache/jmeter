@@ -116,7 +116,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
     private void initClient() throws JMSException, NamingException {
         publisher = new Publisher(getUseJNDIPropertiesAsBoolean(), getJNDIInitialContextFactory(), 
                 getProviderUrl(), getConnectionFactory(), getDestination(), isUseAuth(), getUsername(),
-                getPassword());
+                getPassword(), getDestinationSetup());
         ClientPool.addClient(publisher);
         log.debug("PublisherSampler.initClient called");
     }
@@ -153,12 +153,12 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
             for (int idx = 0; idx < loop; idx++) {
                 if (JMSPublisherGui.TEXT_MSG_RSC.equals(type)){
                     String tmsg = getMessageContent();
-                    Message msg = publisher.publish(tmsg);
+                    Message msg = publisher.publish(tmsg, getDestination());
                     buffer.append(tmsg);
                     Utils.messageProperties(propBuffer, msg);
                 } else if (JMSPublisherGui.MAP_MSG_RSC.equals(type)){
                     Map<String, Object> m = getMapContent();
-                    Message msg = publisher.publish(m);
+                    Message msg = publisher.publish(m, getDestination());
                     Utils.messageProperties(propBuffer, msg);
                 } else if (JMSPublisherGui.OBJECT_MSG_RSC.equals(type)){
                     throw new JMSException(type+ " is not yet supported");

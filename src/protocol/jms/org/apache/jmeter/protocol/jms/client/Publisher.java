@@ -23,8 +23,6 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.naming.Context;
-import javax.naming.NamingException;
 import javax.jms.Connection;
 import javax.jms.Destination;
 import javax.jms.JMSException;
@@ -33,8 +31,11 @@ import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
 import javax.jms.Session;
 import javax.jms.TextMessage;
+import javax.naming.Context;
+import javax.naming.NamingException;
 
 import org.apache.jmeter.protocol.jms.Utils;
+import org.apache.jmeter.protocol.jms.control.gui.JMSPublisherGui;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -47,6 +48,10 @@ public class Publisher implements Closeable {
     private final Session session;
 
     private final  MessageProducer producer;
+    
+    private final Context ctx;
+    
+    private final boolean staticDest;
 
     /**
      * Create a publisher using either the jndi.properties file or the provided parameters
@@ -64,33 +69,94 @@ public class Publisher implements Closeable {
     public Publisher(boolean useProps, String initialContextFactory, String providerUrl, 
             String connfactory, String destinationName, boolean useAuth,
             String securityPrincipal, String securityCredentials) throws JMSException, NamingException {
+        this(useProps, initialContextFactory, providerUrl, connfactory,
+                destinationName, useAuth, securityPrincipal,
+                securityCredentials, JMSPublisherGui.DEST_SETUP_STATIC);
+    }
+    
+    /**
+     * Create a publisher using either the jndi.properties file or the provided parameters
+     * @param useProps true if a jndi.properties file is to be used
+     * @param initialContextFactory the (ignored if useProps is true)
+     * @param providerUrl (ignored if useProps is true)
+     * @param connfactory
+     * @param destinationName
+     * @param useAuth (ignored if useProps is true)
+     * @param securityPrincipal (ignored if useProps is true)
+     * @param securityCredentials (ignored if useProps is true)
+     * @param destinationSetup true is the destination is not to change between loops
+     * @throws JMSException if the context could not be initialised, or there was some other error
+     * @throws NamingException 
+     */
+    public Publisher(boolean useProps, String initialContextFactory, String providerUrl, 
+            String connfactory, String destinationName, boolean useAuth,
+            String securityPrincipal, String securityCredentials,
+            String destinationSetup) throws JMSException, NamingException {
         super();
-        Context ctx = InitialContextFactory.getContext(useProps, initialContextFactory, 
+        ctx = InitialContextFactory.getContext(useProps, initialContextFactory, 
                 providerUrl, useAuth, securityPrincipal, securityCredentials);
         connection = Utils.getConnection(ctx, connfactory);
         session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        Destination dest = Utils.lookupDestination(ctx, destinationName);
-        producer = session.createProducer(dest);
-    }
-
-    public TextMessage publish(String text) throws JMSException {
-        TextMessage msg = session.createTextMessage(text);
-        producer.send(msg);
-        return msg;
-    }
-
-    public ObjectMessage publish(Serializable contents) throws JMSException {
-        ObjectMessage msg = session.createObjectMessage(contents);
-        producer.send(msg);
-        return msg;
-    }
-
-    public MapMessage publish(Map<String, Object> map) throws JMSException {
-        MapMessage msg = session.createMapMessage();
-        for (Entry<String, Object> me : map.entrySet()){
-            msg.setObject(me.getKey(), me.getValue());                
+        staticDest = destinationSetup.equals(JMSPublisherGui.DEST_SETUP_STATIC) ? true : false;
+        if (staticDest) {
+            Destination dest = Utils.lookupDestination(ctx, destinationName);
+            producer = session.createProducer(dest);
+        } else {
+            producer = session.createProducer(null);
         }
-        producer.send(msg);
+    }
+
+    public TextMessage publish(String text) throws JMSException,
+            NamingException {
+        return publish(text, null);
+    }
+    
+    public TextMessage publish(String text, String destinationName)
+            throws JMSException, NamingException {
+        TextMessage msg = session.createTextMessage(text);
+        if (staticDest || destinationName == null) {
+            producer.send(msg);
+        } else {
+            Destination dest = Utils.lookupDestination(ctx, destinationName);
+            producer.send(dest, msg);
+        }
+        return msg;
+    }
+
+    public ObjectMessage publish(Serializable contents) throws JMSException,
+            NamingException {
+        return publish(contents, null);
+    }
+    
+    public ObjectMessage publish(Serializable contents, String destinationName)
+            throws JMSException, NamingException {
+        ObjectMessage msg = session.createObjectMessage(contents);
+        if (staticDest || destinationName == null) {
+            producer.send(msg);
+        } else {
+            Destination dest = Utils.lookupDestination(ctx, destinationName);
+            producer.send(dest, msg);
+        }
+        return msg;
+    }
+
+    public MapMessage publish(Map<String, Object> map) throws JMSException,
+            NamingException {
+        return publish(map, null);
+    }
+    
+    public MapMessage publish(Map<String, Object> map, String destinationName)
+            throws JMSException, NamingException {
+        MapMessage msg = session.createMapMessage();
+        for (Entry<String, Object> me : map.entrySet()) {
+            msg.setObject(me.getKey(), me.getValue());
+        }
+        if (staticDest || destinationName == null) {
+            producer.send(msg);
+        } else {
+            Destination dest = Utils.lookupDestination(ctx, destinationName);
+            producer.send(dest, msg);
+        }
         return msg;
     }
 
