@@ -60,8 +60,9 @@ public abstract class BaseJMSSampler extends AbstractSampler {
 
     private static final String READ_RESPONSE = "jms.read_response"; // $NON-NLS-1$
 
-    // Destination setup (static or dynamic)
-    private static final String DESTINATION_SETUP = "jms.destination_setup"; // $NON-NLS-1$
+    // Is Destination setup static? else dynamic
+    private static final String DESTINATION_STATIC = "jms.destination_static"; // $NON-NLS-1$
+    private static final boolean DESTINATION_STATIC_DEFAULT = true; // default to maintain compatibility
 
     //-- End of JMX file attribute names
 
@@ -295,10 +296,10 @@ public abstract class BaseJMSSampler extends AbstractSampler {
     /**
      * if the sampler should use a static destination, call the method with true
      *
-     * @param properties
+     * @param isStatic
      */
-    public void setDestinationSetup(String properties) {
-	    setProperty(DESTINATION_SETUP, properties);
+    public void setDestinationStatic(boolean isStatic) {
+	    setProperty(DESTINATION_STATIC, isStatic, DESTINATION_STATIC_DEFAULT);
     }
 
     /**
@@ -306,8 +307,8 @@ public abstract class BaseJMSSampler extends AbstractSampler {
      *
      * @return  whether the sampler should use a static destination.
      */
-    public String getDestinationSetup() {
-	    return getPropertyAsString(DESTINATION_SETUP);
+    public boolean isDestinationStatic(){
+        return getPropertyAsBoolean(DESTINATION_STATIC, DESTINATION_STATIC_DEFAULT);
     }
 
     /**
