@@ -63,10 +63,6 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
     public static final String MAP_MSG_RSC = "jms_map_message"; //$NON-NLS-1$
     /** Create an ObjectMessage */
     public static final String OBJECT_MSG_RSC = "jms_object_message"; //$NON-NLS-1$
-
-    public final static String DEST_SETUP_STATIC = "jms_dest_setup_static"; // $NON-NLS-1$
-
-    public final static String DEST_SETUP_DYNAMIC = "jms_dest_setup_dynamic"; // $NON-NLS-1$
     //-- End of names used in JMX files
 
     // Button group resources
@@ -102,6 +98,11 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
 
     private final JLabeledRadioI18N msgChoice = new JLabeledRadioI18N("jms_message_type", MSGTYPES_ITEMS, TEXT_MSG_RSC); //$NON-NLS-1$
     
+
+    // These are the names of properties used to define the labels
+    private final static String DEST_SETUP_STATIC = "jms_dest_setup_static"; // $NON-NLS-1$
+
+    private final static String DEST_SETUP_DYNAMIC = "jms_dest_setup_dynamic"; // $NON-NLS-1$
     // Button group resources
     private final static String[] DEST_SETUP_ITEMS = { DEST_SETUP_STATIC, DEST_SETUP_DYNAMIC };
 
@@ -164,7 +165,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         sampler.setMessageChoice(msgChoice.getText());
         sampler.setIterations(iterations.getText());
         sampler.setUseAuth(useAuth.isSelected());
-        sampler.setDestinationSetup(destSetup.getText());
+        sampler.setDestinationStatic(destSetup.getText().equals(DEST_SETUP_STATIC));
     }
 
     /**
@@ -248,7 +249,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         updateConfig(sampler.getConfigChoice());
         iterations.setText(sampler.getIterations());
         useAuth.setSelected(sampler.isUseAuth());
-        destSetup.setText(sampler.getDestinationSetup());
+        destSetup.setText(sampler.isDestinationStatic() ? DEST_SETUP_STATIC : DEST_SETUP_DYNAMIC);
     }
 
     /**
