@@ -36,20 +36,30 @@ You may want to also download the source so it can be used by the IDE.
 
 <h2>Building JMeter</h2>
 <h3>Acquiring the source</h3>
-<p>The source is distributed alongside the binary, or it can be downloaded from SVN.</p>
+<p>The full source is distributed alongside the binary, or it can be downloaded from SVN.</p>
 <p>
 The source archive and SVN do not contain any of the required library files. 
-You can download these by running the Ant command:
+These need to be downloaded by running the Ant command:
 <pre>
 ant download_jars
 </pre>
 </p>
-<p>Or you can download the binary archive for a release and unpack it into the same directory structure as the source.
-This will ensure that the lib/ directory contains all the required jar files.
+<p>Or you can download the binary distribution archive for a release and unpack it into the same directory structure as the source.
+This will ensure that the lib/ directory contains the jar files needed for running JMeter.
+There are a few additional jars that are needed to build JMeter, download these using:
+<pre>
+ant download_jars
+</pre>
+This will retrieve any missing jars.
 </p>
 <h3>Compiling and packaging JMeter using Ant</h3>
 <p>
-JMeter can be built entirely using Ant; see build.xml for the targets that can be used.
+JMeter can be built entirely using Ant.
+The basic command is:
+<pre>
+ant [install]
+</pre>
+See build.xml for the other targets that can be used.
 </p>
 <h3>Compiling and packaging JMeter using Eclipse</h3>
 <p>
