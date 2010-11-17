@@ -21,6 +21,7 @@ package org.apache.jmeter.protocol.jms.control.gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
+import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -96,6 +97,18 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
     private final JLabeledTextArea textMessage = new JLabeledTextArea(JMeterUtils.getResString("jms_text_message"));
 
     private final JLabeledRadioI18N msgChoice = new JLabeledRadioI18N("jms_message_type", MSGTYPES_ITEMS, TEXT_MSG_RSC); //$NON-NLS-1$
+    
+    //++ Do not change these strings; they are used in JMX files to record the button settings
+    public final static String DEST_SETUP_STATIC = "jms_dest_setup_static"; // $NON-NLS-1$
+
+    public final static String DEST_SETUP_DYNAMIC = "jms_dest_setup_dynamic"; // $NON-NLS-1$
+    //--
+
+    // Button group resources
+    private final static String[] DEST_SETUP_ITEMS = { DEST_SETUP_STATIC, DEST_SETUP_DYNAMIC };
+
+    private final JLabeledRadioI18N destSetup =
+        new JLabeledRadioI18N("jms_dest_setup", DEST_SETUP_ITEMS, DEST_SETUP_STATIC); // $NON-NLS-1$
 
     public JMSPublisherGui() {
         init();
@@ -153,6 +166,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         sampler.setMessageChoice(msgChoice.getText());
         sampler.setIterations(iterations.getText());
         sampler.setUseAuth(useAuth.isSelected());
+        sampler.setDestinationSetup(destSetup.getText());
     }
 
     /**
@@ -171,13 +185,15 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         mainPanel.add(jndiICF);
         mainPanel.add(urlField);
         mainPanel.add(jndiConnFac);
-        mainPanel.add(jmsDestination);
+        mainPanel.add(createDestinationPane());
         mainPanel.add(useAuth);
         mainPanel.add(jmsUser);
         mainPanel.add(jmsPwd);
         mainPanel.add(iterations);
 
+        configChoice.setLayout(new BoxLayout(configChoice, BoxLayout.X_AXIS));
         mainPanel.add(configChoice);
+        msgChoice.setLayout(new BoxLayout(msgChoice, BoxLayout.X_AXIS));
         mainPanel.add(msgChoice);
         mainPanel.add(messageFile);
         mainPanel.add(randomFile);
@@ -209,6 +225,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         updateConfig(USE_TEXT_RSC);
         iterations.setText("1"); // $NON-NLS-1$
         useAuth.setSelected(false);
+        destSetup.setText(DEST_SETUP_STATIC);
     }
 
     /**
@@ -233,6 +250,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         updateConfig(sampler.getConfigChoice());
         iterations.setText(sampler.getIterations());
         useAuth.setSelected(sampler.isUseAuth());
+        destSetup.setText(sampler.getDestinationSetup());
     }
 
     /**
@@ -288,5 +306,13 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
                         JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
             }
         }
+    }
+    
+    private JPanel createDestinationPane() {
+        JPanel pane = new JPanel(new BorderLayout(3, 0));
+        pane.add(jmsDestination, BorderLayout.CENTER);
+        destSetup.setLayout(new BoxLayout(destSetup, BoxLayout.X_AXIS));
+        pane.add(destSetup, BorderLayout.EAST);
+        return pane;
     }
 }
