@@ -20,7 +20,11 @@
 
   N.B. To build JMeter from a release you need both the binary and source archives,
   and these must be unpacked into the same directory structure.
-  [The required external jars are only included in the binary release]
+
+  To download additional jars needed for building the code and documentation:
+
+      ant download_jars
+
 
     To build JMeter from source:
       ant [install]
