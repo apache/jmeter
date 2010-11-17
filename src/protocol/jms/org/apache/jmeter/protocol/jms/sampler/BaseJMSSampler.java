@@ -61,6 +61,9 @@ public abstract class BaseJMSSampler extends AbstractSampler {
     private static final String READ_RESPONSE = "jms.read_response"; // $NON-NLS-1$
     //--
 
+    // Destination setup (static or dynamic)
+    private static final String DESTINATION_SETUP = "jms.destination_setup"; // $NON-NLS-1$
+
     // See BUG 45460. We need to keep the resource in order to interpret existing files
     private static final String REQUIRED = JMeterUtils.getResString("jms_auth_required"); // $NON-NLS-1$
 
@@ -288,6 +291,23 @@ public abstract class BaseJMSSampler extends AbstractSampler {
         return getPropertyAsBoolean(USE_PROPERTIES_FILE);
     }
 
+    /**
+     * if the sampler should use a static destination, call the method with true
+     *
+     * @param properties
+     */
+    public void setDestinationSetup(String properties) {
+	    setProperty(DESTINATION_SETUP, properties);
+    }
+
+    /**
+     * return whether the sampler should use a static destination.
+     *
+     * @return  whether the sampler should use a static destination.
+     */
+    public String getDestinationSetup() {
+	    return getPropertyAsString(DESTINATION_SETUP);
+    }
 
     /**
      * Returns a String with the JMS Message Header values.
