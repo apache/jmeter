@@ -120,7 +120,7 @@ public class HTTPSampleResult extends SampleResult {
             sb.append("\n");
             // Include request body if it is a post or put
             if (HTTPConstants.POST.equals(method) || HTTPConstants.PUT.equals(method)) {
-                sb.append("\nPOST data:\n");
+                sb.append("\n"+method+" data:\n");
                 sb.append(queryString);
                 sb.append("\n");
             }
