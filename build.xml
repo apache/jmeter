@@ -1568,7 +1568,7 @@ run JMeter unless all the JMeter jars are added.
       packagenames="org.apache.jmeter.*,org.apache.jorphan.*"
       excludepackagenames="org.apache.jorphan.timer">
       <classpath refid="classpath"/>
-      <link href="http://java.sun.com/j2se/1.5.0/docs/api/"/>
+      <link href="http://download.oracle.com/javase/1.5.0/docs/api/"/>
     </javadoc>
   </target>
 
