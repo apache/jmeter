@@ -107,6 +107,7 @@ To override the default local language fully, set the JMeter property "language"
 <li>Bug 50088 - fix getAvgPageBytes in SamplingStatCalculator so it returns what it should</li>
 <li>Bug 50203 Cannot set property "jmeter.save.saveservice.default_delimiter=\t"</li>
 <li>mirror-server.sh - fix classpath to use : separator (not ;)</li>
+<li>Bug 50286 - URL Re-writing Modifier: extracted jsessionid value is incorrect when is between XML tags</li>
 </ul>
 
 <!-- ==================================================== -->
