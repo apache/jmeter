@@ -438,11 +438,9 @@ public class HttpRequestHdr {
                 sampler.setArguments(urlConfig.getArguments());
                 // Set the file uploads
                 sampler.setHTTPFiles(urlConfig.getHTTPFileArgs().asArray());
-            } else if (postData.trim().startsWith("<?")) {
-                // Not sure if this is needed anymore. I assume these requests
-                // do not have HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED as content type,
-                // and they would therefore be catched by the last else if of these if else if tests
-                sampler.addNonEncodedArgument("", postData, ""); //used when postData is pure xml (ex. an xml-rpc call)
+            // used when postData is pure xml (eg. an xml-rpc call) or for PUT
+            } else if (postData.trim().startsWith("<?") || "PUT".equals(sampler.getMethod()) {
+                sampler.addNonEncodedArgument("", postData, "");
             } else if (contentType == null || contentType.startsWith(HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED) ){
                 // It is the most common post request, with parameter name and values
                 // We also assume this if no content type is present, to be most backwards compatible,
