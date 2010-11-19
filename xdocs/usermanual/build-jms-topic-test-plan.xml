@@ -119,13 +119,13 @@ to the Subscribers element (Add --&gt; Sampler --&gt; JMS Subscriber).
 Then, select the JMS Subscriber element in the tree and edit the following properties:
 
 <ol>
-<li>Change the Name field to "sample subscriber"</li>
+<li>Change the Name field to "Sample Subscriber"</li>
 <li>If the JMS provider uses the jndi.properties file, check the box</li>
-<li>Enter the name of the InitialContextFactory class</li>
-<li>Enter the provider URL. This is the URL for the JNDI server, if there is one</li>
+<li>Enter the name of the InitialContextFactory class. For example, with ActiveMQ 5.4, the value is "org.apache.activemq.jndi.ActiveMQInitialContextFactory"</li>
+<li>Enter the provider URL. This is the URL for the JNDI server, if there is one. For example, with ActiveMQ 5.4 on local machine with default port, the value is "tcp://localhost:61616"</li>
 <li>Enter the name of the connection factory. Please refer to the documentation
-of the JMS provider for the information</li>
-<li>Enter the name of the message topic</li>
+of the JMS provider for the information. For ActiveMQ, the default is "ConnectionFactory"</li>
+<li>Enter the name of the message topic. For ActiveMQ Dynamic Topics (create topics dynamically), example value is "dynamicTopics/MyStaticTopic1"</li>
 <li>If the JMS provider requires authentication, check "required" and enter the 
 username and password. For example, Orion JMS requires authentication, while ActiveMQ
 and MQSeries does not</li>
@@ -147,13 +147,16 @@ Then, select the JMS Publisher element in the tree and edit the following proper
 </p>
 
 <ol>
-<li>Change the Name field to "sample publisher".</li>
+<li>Change the Name field to "Sample Publisher".</li>
 <li>If the JMS provider uses the jndi.properties file, check the box</li>
-<li>Enter the name of the InitialContextFactory class.</li>
-<li>Enter the provider URL. This is the URL for the JNDI server, if there is one</li>
+<li>Enter the name of the InitialContextFactory class. For example, with ActiveMQ 5.4, the value is "org.apache.activemq.jndi.ActiveMQInitialContextFactory"</li>
+<li>Enter the provider URL. This is the URL for the JNDI server, if there is one. For example, with ActiveMQ 5.4 on local machine with default port, the value is "tcp://localhost:61616"</li>
 <li>Enter the name of the connection factory. Please refer to the documentation
-of the JMS provider for the information</li>
-<li>Enter the name of the message topic</li>
+of the JMS provider for the information. For ActiveMQ, the default is "ConnectionFactory"</li>
+<li>Enter the name of the message topic. For ActiveMQ Dynamic Topics (create topics dynamically), example value is "dynamicTopics/MyStaticTopic1". 
+Note: Setup at startup mean that JMeter starting connection with the Destination at begin's test without name change possibility. 
+Setup on Each sample mean that JMeter (re)starting the connection before execute each JMS Publisher sample, 
+this last option permit to have Destination name with some JMeter variables</li>
 <li>If the JMS provider requires authentication, check "required" and enter the 
 username and password. For example, Orion JMS requires authentication, while ActiveMQ
 and MQSeries does not</li>
@@ -163,7 +166,7 @@ didn't aggregate the messages, JMeter wouldn't be able to keep up.</li>
 <li>Select the appropriate configuration for getting the message to publish. If you
 want the sampler to randomly select the message, place the messages in a directory
 and select the directory using browse.</li>
-<li>Select the message type. If the message is in object format, make sure the
+<li>Select the message type. If the message is in object format or map message, make sure the
 message is generated correctly.</li>
 </ol>
 <p></p>
