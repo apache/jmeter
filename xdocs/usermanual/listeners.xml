@@ -187,7 +187,7 @@ sampleresult.timestamp.start=true
 </code></p>
 <p>
 The date format to be used for the timestamp_format is described in <a
-HREF="http://java.sun.com/j2se/1.5/docs/api/java/text/SimpleDateFormat.html">
+HREF="http://download.oracle.com/javase/1.5.0/docs/api/java/text/SimpleDateFormat.html">
 <b>SimpleDateFormat</b></a>.
 Bear in mind that choosing a date format other than "ms" is likely to
 make it impossible for JMeter to interpret the value when it is read
