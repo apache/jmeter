@@ -85,22 +85,19 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
                 MatchResult result = matcher.getMatch();
                 value = result.group(1);
             }
-        } else if (isPathExtension() && isPathExtensionNoEquals()) // && !
-                                                                    // isPathExtensionNoQuestionmark
+        } else if (isPathExtension() && isPathExtensionNoEquals()) // && !isPathExtensionNoQuestionmark()
         {
             if (matcher.contains(text, pathExtensionNoEqualsQuestionmarkRegexp)) {
                 MatchResult result = matcher.getMatch();
                 value = result.group(1);
             }
-        } else if (isPathExtension() && isPathExtensionNoQuestionmark()) // && !
-                                                                            // isPathExtensionNoEquals
+        } else if (isPathExtension() && isPathExtensionNoQuestionmark()) // && !isPathExtensionNoEquals()
         {
             if (matcher.contains(text, pathExtensionEqualsNoQuestionmarkRegexp)) {
                 MatchResult result = matcher.getMatch();
                 value = result.group(1);
             }
-        } else if (isPathExtension()) // && ! isPathExtensionNoEquals && !
-                                        // isPathExtensionNoQuestionmark
+        } else if (isPathExtension()) // && !isPathExtensionNoEquals() && !isPathExtensionNoQuestionmark()
         {
             if (matcher.contains(text, pathExtensionEqualsQuestionmarkRegexp)) {
                 MatchResult result = matcher.getMatch();
