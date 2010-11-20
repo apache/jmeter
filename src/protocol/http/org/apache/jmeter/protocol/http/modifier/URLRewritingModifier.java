@@ -164,7 +164,7 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
 
         parameterRegexp = JMeterUtils.getPatternCache().getPattern(
                 // ;sessionid=value
-                "[;\\?&]" + quotedArg + "=([^\"'>&\\s;\\\\]*)" +  // $NON-NLS-1$
+                "[;\\?&]" + quotedArg + "=([^\"'<>&\\s;\\\\]*)" +  // $NON-NLS-1$
 
                 // name="sessionid" value="value"
                 "|\\s[Nn][Aa][Mm][Ee]\\s*=\\s*[\"']" + quotedArg
