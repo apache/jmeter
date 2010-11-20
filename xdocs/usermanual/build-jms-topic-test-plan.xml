@@ -125,7 +125,10 @@ Then, select the JMS Subscriber element in the tree and edit the following prope
 <li>Enter the provider URL. This is the URL for the JNDI server, if there is one. For example, with ActiveMQ 5.4 on local machine with default port, the value is "tcp://localhost:61616"</li>
 <li>Enter the name of the connection factory. Please refer to the documentation
 of the JMS provider for the information. For ActiveMQ, the default is "ConnectionFactory"</li>
-<li>Enter the name of the message topic. For ActiveMQ Dynamic Topics (create topics dynamically), example value is "dynamicTopics/MyStaticTopic1"</li>
+<li>Enter the name of the message topic. For ActiveMQ Dynamic Topics (create topics dynamically), example value is "dynamicTopics/MyStaticTopic1"
+Note: Setup at startup mean that JMeter starting to listen on the Destination at beginning of test without name change possibility. 
+Setup on Each sample mean that JMeter (re)starting to listen before run each JMS Subscriber sample, 
+this last option permit to have Destination name with some JMeter variables</li>
 <li>If the JMS provider requires authentication, check "required" and enter the 
 username and password. For example, Orion JMS requires authentication, while ActiveMQ
 and MQSeries does not</li>
@@ -154,8 +157,8 @@ Then, select the JMS Publisher element in the tree and edit the following proper
 <li>Enter the name of the connection factory. Please refer to the documentation
 of the JMS provider for the information. For ActiveMQ, the default is "ConnectionFactory"</li>
 <li>Enter the name of the message topic. For ActiveMQ Dynamic Topics (create topics dynamically), example value is "dynamicTopics/MyStaticTopic1". 
-Note: Setup at startup mean that JMeter starting connection with the Destination at begin's test without name change possibility. 
-Setup on Each sample mean that JMeter (re)starting the connection before execute each JMS Publisher sample, 
+Note: Setup at startup mean that JMeter starting connection with the Destination at beginning of test without name change possibility. 
+Setup on Each sample mean that JMeter (re)starting the connection before run each JMS Publisher sample, 
 this last option permit to have Destination name with some JMeter variables</li>
 <li>If the JMS provider requires authentication, check "required" and enter the 
 username and password. For example, Orion JMS requires authentication, while ActiveMQ
