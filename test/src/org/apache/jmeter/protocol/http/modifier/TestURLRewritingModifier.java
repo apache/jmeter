@@ -106,6 +106,32 @@ public class TestURLRewritingModifier extends JMeterTestCase {
             assertEquals("jfdkjdkfjddkfdfjkdjfdf", ((Argument) args.getArguments().get(0).getObjectValue()).getValue());
         }
 
+        public void testGrabSessionIdFromXMLNonPatExtension() throws Exception { // Bug 50286
+            String html = "<url>/some/path;jsessionid=123456789</url>";
+            response = new SampleResult();
+            response.setResponseData(html, null);
+            mod.setArgumentName("jsessionid");
+            HTTPSamplerBase sampler = createSampler();
+            context.setCurrentSampler(sampler);
+            context.setPreviousResult(response);
+            mod.process();
+            Arguments args = sampler.getArguments();
+            assertEquals("123456789", ((Argument) args.getArguments().get(0).getObjectValue()).getValue());
+        }
+
+        public void testGrabSessionIdFromXMLPatExtension() throws Exception { // Bug 50286
+            String html = "<url>/some/path;jsessionid=123456789</url>";
+            response = new SampleResult();
+            response.setResponseData(html, null);
+            mod.setArgumentName("jsessionid");
+            mod.setPathExtension(true);
+            HTTPSamplerBase sampler = createSampler();
+            context.setCurrentSampler(sampler);
+            context.setPreviousResult(response);
+            mod.process();
+            assertEquals("index.html;jsessionid=123456789",sampler.getPath());
+        }
+
         public void testGrabSessionIdEndedInTab() throws Exception {
             String html = "href='index.html?session_id=jfdkjdkfjddkfdfjkdjfdf\t";
             response = new SampleResult();
@@ -123,7 +149,7 @@ public class TestURLRewritingModifier extends JMeterTestCase {
             String html = "href='index.html;%24sid%24KQNq3AAADQZoEQAxlkX8uQV5bjqVBPbT'";
             response = new SampleResult();
             response.setResponseData(html, null);
-            mod.setArgumentName("%24sid%24");
+            mod.setArgumentName("%24sid%24"); // $sid$
             mod.setPathExtension(true);
             mod.setPathExtensionNoEquals(true);
             HTTPSamplerBase sampler = createSampler();
