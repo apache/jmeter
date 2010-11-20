@@ -21,6 +21,7 @@ package org.apache.jmeter.protocol.jms.control.gui;
 import java.awt.BorderLayout;
 
 import javax.naming.Context;
+import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
@@ -91,6 +92,16 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
     private final JCheckBox stopBetweenSamples =
         new JCheckBox(JMeterUtils.getResString("jms_stop_between_samples"), true); // $NON-NLS-1$
     
+    // These are the names of properties used to define the labels
+    private final static String DEST_SETUP_STATIC = "jms_dest_setup_static"; // $NON-NLS-1$
+
+    private final static String DEST_SETUP_DYNAMIC = "jms_dest_setup_dynamic"; // $NON-NLS-1$
+    // Button group resources
+    private final static String[] DEST_SETUP_ITEMS = { DEST_SETUP_STATIC, DEST_SETUP_DYNAMIC };
+
+    private final JLabeledRadioI18N destSetup =
+        new JLabeledRadioI18N("jms_dest_setup", DEST_SETUP_ITEMS, DEST_SETUP_STATIC); // $NON-NLS-1$
+    
     public JMSSubscriberGui() {
         init();
     }
@@ -129,6 +140,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
         sampler.setClientChoice(clientChoice.getText());
         sampler.setStopBetweenSamples(stopBetweenSamples.isSelected());
         sampler.setTimeout(timeout.getText());
+        sampler.setDestinationStatic(destSetup.getText().equals(DEST_SETUP_STATIC));
     }
 
     /**
@@ -151,7 +163,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
         mainPanel.add(jndiICF);
         mainPanel.add(urlField);
         mainPanel.add(jndiConnFac);
-        mainPanel.add(jmsDestination);
+        mainPanel.add(createDestinationPane());
         mainPanel.add(useAuth);
         mainPanel.add(jmsUser);
         mainPanel.add(jmsPwd);
@@ -189,6 +201,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
         clientChoice.setText(sampler.getClientChoice());
         stopBetweenSamples.setSelected(sampler.isStopBetweenSamples());
         timeout.setText(sampler.getTimeout());
+        destSetup.setText(sampler.isDestinationStatic() ? DEST_SETUP_STATIC : DEST_SETUP_DYNAMIC);
     }
 
     @Override
@@ -207,6 +220,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
         readResponse.setSelected(true);
         clientChoice.setText(RECEIVE_RSC);
         stopBetweenSamples.setSelected(false);
+        destSetup.setText(DEST_SETUP_STATIC);
     }
 
     /**
@@ -221,5 +235,13 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
             jmsUser.setEnabled(!useAuth.isSelected());
             jmsPwd.setEnabled(!useAuth.isSelected());
         }
+    }
+    
+    private JPanel createDestinationPane() {
+        JPanel pane = new JPanel(new BorderLayout(3, 0));
+        pane.add(jmsDestination, BorderLayout.CENTER);
+        destSetup.setLayout(new BoxLayout(destSetup, BoxLayout.X_AXIS));
+        pane.add(destSetup, BorderLayout.EAST);
+        return pane;
     }
 }

@@ -1205,7 +1205,7 @@ The following table shows some values which may be useful when configuring JMS:
 </p>
 </component>
 
-<component name="JMS Subscriber" index="&sect-num;.1.14"  width="679" height="408" screenshot="jmssubscriber.png">
+<component name="JMS Subscriber" index="&sect-num;.1.14"  screenshot="jmssubscriber.png">
 <note>BETA CODE - the code is still subject to change</note>
 	<description>
 		<p>
@@ -1226,6 +1226,7 @@ The following table shows some values which may be useful when configuring JMS:
   <property name="JNDI Initial Context Factory" required="No">Name of the context factory</property>
   <property name="Provider URL" required="No">The URL for the jms provider</property>
   <property name="Destination" required="Yes">the message destination (topic or queue name)</property>
+  <property name="Setup" required="Yes">The destination setup type. With At startup, the destination name is static (i.e. always same name during the test), with Each sample, the destination name is dynamic and is evaluate at each sample (i.e. the destination name may be a variable)</property>
   <property name="Authentication" required="Yes">Authentication requirement for the JMS provider</property>
   <property name="User" required="No">User Name</property>
   <property name="Password" required="No">Password</property>

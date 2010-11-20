@@ -78,7 +78,8 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     private static final String TIMEOUT = "jms.timeout"; // $NON-NLS-1$
     private static final String TIMEOUT_DEFAULT = "";
     private static final String STOP_BETWEEN = "jms.stop_between_samples"; // $NON-NLS-1$
-
+    
+    private transient boolean START_ON_SAMPLE = false;
 
     public SubscriberSampler() {
     }
@@ -118,6 +119,10 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     // TODO - should we call start() and stop()?
     @Override
     public SampleResult sample() {
+        // run threadStarted only if Destination setup on each sample
+        if (!isDestinationStatic()) {
+            threadStarted(true);
+        }
         SampleResult result = new SampleResult();
         result.setDataType(SampleResult.TEXT);
         result.setSampleLabel(getName());
@@ -188,6 +193,10 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
                 log.warn("Problem stopping subscriber", e);
             }
         }
+        // run threadFinished only if Destination setup on each sample (stop Listen queue)
+        if (!isDestinationStatic()) {
+            threadFinished(true);
+        }
         return result;
     }
 
@@ -238,37 +247,47 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
      * {@inheritDoc}
      */
     public void threadStarted() {
-        timeout = getTimeoutAsLong();
-        interrupted = false;
-        exceptionDuringInit = null;
-        useReceive = getClientChoice().equals(JMSSubscriberGui.RECEIVE_RSC);
-        stopBetweenSamples = isStopBetweenSamples();
-        if (useReceive) {
-            try {
-                initReceiveClient();
-                if (!stopBetweenSamples){ // Don't start yet if stop between samples
-                    SUBSCRIBER.start();
+        // Disabled thread start if listen on sample choice
+        if (isDestinationStatic() || START_ON_SAMPLE) {
+            timeout = getTimeoutAsLong();
+            interrupted = false;
+            exceptionDuringInit = null;
+            useReceive = getClientChoice().equals(JMSSubscriberGui.RECEIVE_RSC);
+            stopBetweenSamples = isStopBetweenSamples();
+            if (useReceive) {
+                try {
+                    initReceiveClient();
+                    if (!stopBetweenSamples){ // Don't start yet if stop between samples
+                        SUBSCRIBER.start();
+                    }
+                } catch (NamingException e) {
+                    exceptionDuringInit = e;
+                } catch (JMSException e) {
+                    exceptionDuringInit = e;
                 }
-            } catch (NamingException e) {
-                exceptionDuringInit = e;
-            } catch (JMSException e) {
-                exceptionDuringInit = e;
+            } else {
+                try {
+                    initListenerClient();
+                    if (!stopBetweenSamples){ // Don't start yet if stop between samples
+                        SUBSCRIBER.start();
+                    }
+                } catch (JMSException e) {
+                    exceptionDuringInit = e;
+                } catch (NamingException e) {
+                    exceptionDuringInit = e;
+                }
             }
-        } else {
-            try {
-                initListenerClient();
-                if (!stopBetweenSamples){ // Don't start yet if stop between samples
-                    SUBSCRIBER.start();
-                }
-            } catch (JMSException e) {
-                exceptionDuringInit = e;
-            } catch (NamingException e) {
-                exceptionDuringInit = e;
+            if (exceptionDuringInit != null){
+                log.error("Could not initialise client",exceptionDuringInit);
             }
         }
-        if (exceptionDuringInit != null){
-            log.error("Could not initialise client",exceptionDuringInit);
+    }
+    
+    public void threadStarted(boolean wts) {
+        if (wts) {
+            START_ON_SAMPLE = true; // listen on sample 
         }
+        threadStarted();
     }
 
     /**
@@ -280,6 +299,13 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         if (SUBSCRIBER != null){ // Can be null if init fails
             SUBSCRIBER.close();
         }
+    }
+    
+    public void threadFinished(boolean wts) {
+        if (wts) {
+            START_ON_SAMPLE = false; // listen on sample
+        }
+        threadFinished();
     }
 
     /**
