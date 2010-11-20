@@ -48,7 +48,7 @@ public class HeapDumper {
     }
 
     // This is the name of the HotSpot Diagnostic platform MBean (Sun Java 1.6)
-    // See: http://java.sun.com/javase/6/docs/jre/api/management/extension/com/sun/management/HotSpotDiagnosticMXBean.html
+    // See: http://download.oracle.com/javase/6/docs/jre/api/management/extension/com/sun/management/HotSpotDiagnosticMXBean.html
     private static final String HOTSPOT_BEAN_NAME =
          "com.sun.management:type=HotSpotDiagnostic";
 
@@ -98,7 +98,7 @@ public class HeapDumper {
      * Calls the dumpHeap() method of the HotSpotDiagnostic MXBean, if available.
      * <p>
      * See
-     * <a href="http://java.sun.com/javase/6/docs/jre/api/management/extension/com/sun/management/HotSpotDiagnosticMXBean.html">
+     * <a href="http://download.oracle.com/javase/6/docs/jre/api/management/extension/com/sun/management/HotSpotDiagnosticMXBean.html">
      * HotSpotDiagnosticMXBean
      * </a>
      * @param fileName name of the heap dump file. Must be creatable, i.e. must not exist.
