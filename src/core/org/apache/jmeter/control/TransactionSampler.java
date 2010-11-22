@@ -117,7 +117,7 @@ public class TransactionSampler extends AbstractSampler {
         }
         // Bug 50080 (not include pause time when generate parent)
         if (!transactionController.isIncludeTimers()) {
-            long end = SampleResult.currentTimeInMs();
+            long end = transactionSampleResult.currentTimeInMillis();
             transactionSampleResult.setIdleTime(end
                     - transactionSampleResult.getStartTime() - totalTime);
             transactionSampleResult.setEndTime(end);
