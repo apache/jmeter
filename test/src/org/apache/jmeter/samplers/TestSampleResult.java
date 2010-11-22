@@ -99,7 +99,7 @@ public class TestSampleResult extends TestCase {
         }
 
         private static long sampleClock() {
-            return SampleResult.currentTimeInMs();
+            return System.currentTimeMillis();
         }
 
         public void testSubResults() throws Exception {
