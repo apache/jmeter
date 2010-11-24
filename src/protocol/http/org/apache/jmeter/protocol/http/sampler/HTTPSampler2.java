@@ -122,8 +122,6 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
     private static final String PROXY_DOMAIN =
         JMeterUtils.getPropDefault("http.proxyDomain",""); // $NON-NLS-1$ $NON-NLS-2$
 
-    public static final String IP_SOURCE = "HTTPSampler.ipSource"; // $NON-NLS-1$
-
     static final InetAddress localAddress;
 
     private static final String localHost;
@@ -1171,14 +1169,5 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
             }
         }
         return client != null;
-    }
-
-
-    public void setIpSource(String value) {
-        setProperty(IP_SOURCE, value, "");
-    }
-
-    public String getIpSource() {
-        return getPropertyAsString(IP_SOURCE,"");
     }
 }
