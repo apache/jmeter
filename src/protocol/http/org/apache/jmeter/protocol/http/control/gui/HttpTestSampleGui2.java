@@ -21,7 +21,6 @@ package org.apache.jmeter.protocol.http.control.gui;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
 
-import org.apache.jmeter.protocol.http.sampler.HTTPSampler2;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.testelement.TestElement;
@@ -98,7 +97,7 @@ public class HttpTestSampleGui2 extends HttpTestSampleGui {
     @Override
     public void configure(TestElement element) {
         super.configure(element);
-        final HTTPSampler2 samplerBase = (HTTPSampler2) element;
+        final HTTPSamplerBase samplerBase = (HTTPSamplerBase) element;
         sourceIpAddr.setText(samplerBase.getIpSource());
     }
 
@@ -109,7 +108,7 @@ public class HttpTestSampleGui2 extends HttpTestSampleGui {
     public void modifyTestElement(TestElement sampler) {
         // TODO Auto-generated method stub
         super.modifyTestElement(sampler);
-        final HTTPSampler2 samplerBase = (HTTPSampler2) sampler;
+        final HTTPSamplerBase samplerBase = (HTTPSamplerBase) sampler;
         samplerBase.setIpSource(sourceIpAddr.getText());
     }
 }
