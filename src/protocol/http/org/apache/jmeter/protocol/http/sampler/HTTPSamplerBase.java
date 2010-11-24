@@ -82,6 +82,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    //+ JMX names - do not change
     public static final String ARGUMENTS = "HTTPsampler.Arguments"; // $NON-NLS-1$
 
     public static final String AUTH_MANAGER = "HTTPSampler.auth_manager"; // $NON-NLS-1$
@@ -128,8 +129,13 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     public static final String URL = "HTTPSampler.URL"; // $NON-NLS-1$
 
-    public static final String CLIENT = "HTTPSampler.client"; // $NON-NLS-1$
-
+    /**
+     * IP source to use - does not apply to Java HTTP implementation currently
+     */
+    public static final String IP_SOURCE = "HTTPSampler.ipSource"; // $NON-NLS-1$
+    //- JMX names
+    
+    
     public static final String DEFAULT_METHOD = GET; // $NON-NLS-1$
     // Supported methods:
     private static final String [] METHODS = {
@@ -313,17 +319,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             return DEFAULT_PROTOCOL;
         }
         return protocol;
-    }
-
-
-    // Not used?
-    public String getClient() {
-        return getPropertyAsString(CLIENT);
-    }
-
-    // Not used?
-    public void setClient(String client){
-        setProperty(CLIENT,client);
     }
 
     /**
@@ -1428,6 +1423,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     // (previously these were implemented in all TestElements)
     public void threadStarted(){
     }
+
     public void threadFinished(){
     }
 
@@ -1540,6 +1536,20 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         removeProperty(FILE_FIELD);
         removeProperty(FILE_NAME);
         removeProperty(MIMETYPE);
+    }
+
+    /**
+     * set IP source to use - does not apply to Java HTTP implementation currently
+     */
+    public void setIpSource(String value) {
+        setProperty(IP_SOURCE, value, "");
+    }
+
+    /**
+     * get IP source to use - does not apply to Java HTTP implementation currently
+     */
+    public String getIpSource() {
+        return getPropertyAsString(IP_SOURCE,"");
     }
 }
 
