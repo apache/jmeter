@@ -42,7 +42,7 @@ public class PutWriter extends PostWriter {
     }
 
     @Override
-    public void setHeaders(URLConnection connection, HTTPSampler sampler) throws IOException {
+    public void setHeaders(URLConnection connection, HTTPSamplerBase sampler) throws IOException {
         // Get the encoding to use for the request
         String contentEncoding = sampler.getContentEncoding();
         if(contentEncoding == null || contentEncoding.length() == 0) {
