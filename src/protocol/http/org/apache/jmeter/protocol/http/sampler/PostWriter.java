@@ -80,7 +80,7 @@ public class PostWriter {
      * @return the post body sent. Actual file content is not returned, it
      * is just shown as a placeholder text "actual file content"
      */
-    public String sendPostData(URLConnection connection, HTTPSampler sampler) throws IOException {
+    public String sendPostData(URLConnection connection, HTTPSamplerBase sampler) throws IOException {
         // Buffer to hold the post body, except file content
         StringBuilder postedBody = new StringBuilder(1000);
 
@@ -161,7 +161,7 @@ public class PostWriter {
         return postedBody.toString();
     }
 
-    public void setHeaders(URLConnection connection, HTTPSampler sampler) throws IOException {
+    public void setHeaders(URLConnection connection, HTTPSamplerBase sampler) throws IOException {
         // Get the encoding to use for the request
         String contentEncoding = sampler.getContentEncoding();
         if(contentEncoding == null || contentEncoding.length() == 0) {
