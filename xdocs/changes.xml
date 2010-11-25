@@ -123,6 +123,7 @@ Also enable reversion to using System.currentTimeMillis() only.
 
 <h3>HTTP Samplers</h3>
 <ul>
+<li>AJP Sampler now implements Interruptible</li>
 </ul>
 
 <h3>Other samplers</h3>

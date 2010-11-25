@@ -32,6 +32,7 @@ import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
+import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
@@ -46,7 +47,7 @@ import org.apache.log.Logger;
  * actually having Apache installed and configured
  *
  */
-public class AjpSampler extends HTTPSamplerBase {
+public class AjpSampler extends HTTPSamplerBase implements Interruptible {
 
     private static final long serialVersionUID = 233L;
 
@@ -83,6 +84,7 @@ public class AjpSampler extends HTTPSamplerBase {
     static final int MAX_SEND_SIZE = 8*1024 - 4 - 4;
 
     private transient Socket channel = null;
+    private transient Socket activeChannel = null;
     private int lastPort = -1;
     private String lastHost = null;
     private String localName = null;
@@ -109,6 +111,7 @@ public class AjpSampler extends HTTPSamplerBase {
         res.sampleStart();
         try {
             setupConnection(url, method, res);
+            activeChannel = channel;
             execute(method, res);
             res.sampleEnd();
             res.setResponseData(responseData.toByteArray());
@@ -119,6 +122,8 @@ public class AjpSampler extends HTTPSamplerBase {
             lastPort = -1; // force reopen on next sample
             channel = null;
             return err;
+        } finally {
+            activeChannel = null;
         }
     }
 
@@ -499,5 +504,18 @@ public class AjpSampler extends HTTPSamplerBase {
         String s = new String(inbuf, inpos, len, "iso-8859-1");//$NON-NLS-1$
         inpos+= len+1;
         return s;
+    }
+
+    public boolean interrupt() {
+        Socket chan = activeChannel;
+        if (chan != null) {
+            activeChannel = null;
+            try {
+                chan.close();
+            } catch (Exception e) {
+                // Ignored
+            }
+        }
+        return chan != null;
     }
 }
