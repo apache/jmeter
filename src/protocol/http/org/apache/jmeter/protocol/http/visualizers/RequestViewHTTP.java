@@ -156,44 +156,46 @@ public class RequestViewHTTP implements RequestView {
 
         if (objectResult instanceof HTTPSampleResult) {
             HTTPSampleResult sampleResult = (HTTPSampleResult) objectResult;
-            URL hUrl = sampleResult.getURL();
 
             // Display with same order HTTP protocol
             requestModel.addRow(new RowResult(
                     JMeterUtils.getResString("view_results_table_request_http_method"), //$NON-NLS-1$
                     sampleResult.getHTTPMethod()));
-            requestModel.addRow(new RowResult(JMeterUtils
-                    .getResString("view_results_table_request_http_protocol"), //$NON-NLS-1$
-                    hUrl.getProtocol()));
-            requestModel.addRow(new RowResult(
-                    JMeterUtils.getResString("view_results_table_request_http_host"), //$NON-NLS-1$
-                    hUrl.getHost()));
-            int port = hUrl.getPort() == -1 ? hUrl.getDefaultPort() : hUrl.getPort();
-            requestModel.addRow(new RowResult(
-                    JMeterUtils.getResString("view_results_table_request_http_port"), //$NON-NLS-1$
-                    Integer.valueOf(port)));
-            requestModel.addRow(new RowResult(
-                    JMeterUtils.getResString("view_results_table_request_http_path"), //$NON-NLS-1$
-                    hUrl.getPath()));
 
-            String queryGet = hUrl.getQuery() == null ? "" : hUrl.getQuery(); //$NON-NLS-1$
-            // Concatenate query post if exists
-            String queryPost = sampleResult.getQueryString();
-            if (queryPost != null && queryPost.length() > 0) {
-                if (queryGet.length() > 0) {
-                    queryGet += PARAM_CONCATENATE; 
+            URL hUrl = sampleResult.getURL();
+            if (hUrl != null){ // can be null - e.g. if URL was invalid
+                requestModel.addRow(new RowResult(JMeterUtils
+                        .getResString("view_results_table_request_http_protocol"), //$NON-NLS-1$
+                        hUrl.getProtocol()));
+                requestModel.addRow(new RowResult(
+                        JMeterUtils.getResString("view_results_table_request_http_host"), //$NON-NLS-1$
+                        hUrl.getHost()));
+                int port = hUrl.getPort() == -1 ? hUrl.getDefaultPort() : hUrl.getPort();
+                requestModel.addRow(new RowResult(
+                        JMeterUtils.getResString("view_results_table_request_http_port"), //$NON-NLS-1$
+                        Integer.valueOf(port)));
+                requestModel.addRow(new RowResult(
+                        JMeterUtils.getResString("view_results_table_request_http_path"), //$NON-NLS-1$
+                        hUrl.getPath()));
+    
+                String queryGet = hUrl.getQuery() == null ? "" : hUrl.getQuery(); //$NON-NLS-1$
+                // Concatenate query post if exists
+                String queryPost = sampleResult.getQueryString();
+                if (queryPost != null && queryPost.length() > 0) {
+                    if (queryGet.length() > 0) {
+                        queryGet += PARAM_CONCATENATE; 
+                    }
+                    queryGet += queryPost;
                 }
-                queryGet += queryPost;
-            }
-            queryGet = RequestViewHTTP.decodeQuery(queryGet);
-            if (queryGet != null) {
-                Map<String, String> mapQuery = RequestViewHTTP.getQueryMap(queryGet);
-                Set<String> keys = mapQuery.keySet();
-                for (String key : keys) {
-                    paramsModel.addRow(new RowResult(key, mapQuery.get(key)));
+                queryGet = RequestViewHTTP.decodeQuery(queryGet);
+                if (queryGet != null) {
+                    Map<String, String> mapQuery = RequestViewHTTP.getQueryMap(queryGet);
+                    Set<String> keys = mapQuery.keySet();
+                    for (String key : keys) {
+                        paramsModel.addRow(new RowResult(key, mapQuery.get(key)));
+                    }
                 }
             }
-
             // Display cookie in headers table (same location on http protocol)
             String cookie = sampleResult.getCookies();
             if (cookie != null && cookie.length() > 0) {
