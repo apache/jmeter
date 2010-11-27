@@ -11,7 +11,7 @@ Eclipse.classpath
 
 The file eclipse.classpath is intended as a starter .classpath file 
 for building JMeter using Eclipse version 3.  Make sure to execute
-the ant download_jars task to downlaad and install the jars referred
+the ant download_jars task to download and install the jars referred
 to in the classpath before creating the Eclipse project.  
 
 Note that Eclipse does not handle RMI compilations, 
