@@ -63,9 +63,9 @@ See build.xml for the other targets that can be used.
 </p>
 <h3>Compiling and packaging JMeter using Eclipse</h3>
 <p>
-Once you have downloaded the source from SVN or the release archives, you can configure Eclipse.
-The easiest way to do this is to replace the Eclipse .classpath file with the eclipse.classpath file provided with JMeter.
-This will set up the source-paths and most of the libraries.
+Once you have downloaded the source from SVN or the release archives and run the ant download_jars target to
+install the dependent jars, you can configure Eclipse. The easiest way to do this is to replace the Eclipse .classpath
+file with the eclipse.classpath file provided with JMeter. This will set up the source-paths and most of the libraries.
 <p>
 See also the file eclipse.readme.
 </p>
