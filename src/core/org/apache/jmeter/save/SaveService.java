@@ -176,8 +176,15 @@ public class SaveService {
     }
 
     // Helper method to simplify alias creation from properties
-    private static void makeAlias(String alias, String clazz) {
-        aliasToClass.setProperty(alias,clazz);
+    private static void makeAlias(String aliasList, String clazz) {
+        String aliases[]=aliasList.split(","); // Can have multiple aliases for same target classname
+        String alias=aliases[0];
+        for (String a : aliases){
+            Object old = aliasToClass.setProperty(a,clazz);
+            if (old != null){
+                log.error("Duplicate class detected for "+alias+": "+clazz+" & "+old);                
+            }
+        }
         Object oldval=classToAlias.setProperty(clazz,alias);
         if (oldval != null) {
             log.error("Duplicate alias detected for "+clazz+": "+alias+" & "+oldval);
