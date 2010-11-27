@@ -396,6 +396,24 @@ public class SaveService {
         return true; // SaveService.FILEVERSION.equals(SaveService.fileVersion);
     }
 
+    // Allow test code to check for spurious class references
+    static boolean checkClasses(){
+        boolean OK = true;
+        for (Object clazz : classToAlias.keySet()) {
+            String name = (String) clazz;
+            if (name.endsWith("JMSConfigGui")) { // deliberately kept
+                continue;
+            }
+            try {
+                Class.forName(name, false, SaveService.class.getClassLoader());
+            } catch (ClassNotFoundException e) {
+                log.error(e.toString());
+                OK = false;
+            }
+        }
+        return OK;
+    }
+
     static boolean checkVersions() {
         versionsOK = true;
         // Disable converter version checks as they are more of a nuisance than helpful
