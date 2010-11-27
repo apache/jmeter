@@ -164,6 +164,7 @@ Also enable reversion to using System.currentTimeMillis() only.
 <h3>General</h3>
 <ul>
 <li>Bug 30563 - Thread Group should have a start next loop option on Sample Error</li>
+<li>Bug 50347 - Eclipse setup instructions should remind user to download dependent jars</li>
 </ul>
 
 <h2>Non-functional changes</h2>
