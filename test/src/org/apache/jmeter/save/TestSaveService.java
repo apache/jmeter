@@ -121,4 +121,8 @@ public class TestSaveService extends JMeterTestCase {
             fail("One or more failures detected");
         }
     }
+    
+    public void testClasses(){
+        assertTrue("One or more classes not found - see log file",SaveService.checkClasses());
+    }
 }
