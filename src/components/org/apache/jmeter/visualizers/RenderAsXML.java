@@ -89,6 +89,15 @@ public class RenderAsXML extends SamplerResultTab
         resultsScrollPane.setViewportView(domTreePanel);
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.visualizers.SamplerResultTab#clearData()
+     */
+    @Override
+    public void clearData() {
+        super.clearData();
+        resultsScrollPane.setViewportView(null); // clear result tab on Ctrl-E
+    }
+
     /*
      *
      * A Dom tree panel for to display response as tree view author <a

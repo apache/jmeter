@@ -191,6 +191,10 @@ public abstract class SamplerResultTab implements ResultRenderer {
     public void clearData() {
         results.setText("");// Response Data // $NON-NLS-1$
         requestPanel.clearData();// Request Data // $NON-NLS-1$
+        stats.setText(""); // Sampler result // $NON-NLS-1$
+        resultModel.clearData();
+        resHeadersModel.clearData();
+        resFieldsModel.clearData();
     }
 
     public void init() {
@@ -202,12 +206,10 @@ public abstract class SamplerResultTab implements ResultRenderer {
 
     @SuppressWarnings("boxing")
     public void setupTabPane() {
+        // Clear all data before display a new
+        this.clearData();
         StyledDocument statsDoc = stats.getStyledDocument();
         try {
-            // Clear data before display a new
-            statsDoc.remove(0, statsDoc.getLength());
-            requestPanel.clearData();
-            results.setText(""); // $NON-NLS-1$
             if (userObject instanceof SampleResult) {
                 sampleResult = (SampleResult) userObject;
                 // We are displaying a SampleResult
@@ -271,9 +273,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), null);
                 statsBuff = null; // Done
                 
-                // Tabbed results      
-                resultModel.clearData(); // clear results table before filling
-                // fill table
+                // Tabbed results: fill table
                 resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_thread_name"), sampleResult.getThreadName())); //$NON-NLS-1$
                 resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_sample_start"), startTime)); //$NON-NLS-1$
                 resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_load_time"), sampleResult.getTime())); //$NON-NLS-1$
@@ -284,7 +284,6 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_response_code"), responseCode)); //$NON-NLS-1$
                 resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_response_message"), responseMsgStr)); //$NON-NLS-1$
                 
-                resHeadersModel.clearData(); // clear response table before filling
                 // Parsed response headers
                 LinkedHashMap<String, String> lhm = JMeterUtils.parseHeaders(sampleResult.getResponseHeaders());
                 Set<String> keySet = lhm.keySet();
@@ -292,7 +291,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
                     resHeadersModel.addRow(new RowResult(key, lhm.get(key)));
                 }
                 
-                resFieldsModel.clearData(); // clear fields table before filling
+                // Fields table
                 resFieldsModel.addRow(new RowResult("Type Result ", typeResult)); //$NON-NLS-1$
                 //not sure needs I18N?
                 resFieldsModel.addRow(new RowResult("ContentType", sampleResult.getContentType())); //$NON-NLS-1$
