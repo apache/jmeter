@@ -1907,6 +1907,7 @@ run JMeter unless all the JMeter jars are added.
 
   <target name="svnCheck" description="Use SVN to get the current revision">
     <exec executable="svn"  resultproperty="svn.exec.result" errorproperty="svn.exec.error" failifexecutionfails="false">
+      <env key="PATH" path="${env.PATH}:${env.SVNPATH}"/>
       <arg line="info"/>
       <redirector outputproperty="svn.revision">
         <outputfilterchain>
