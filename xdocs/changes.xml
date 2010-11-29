@@ -87,6 +87,7 @@ This has been replaced by the instance method public long currentTimeInMillis().
 
 <h3>Listeners</h3>
 <ul>
+<li>Bug 50367 - Clear / Clear all in View results tree does not clear selected element</li>
 </ul>
 
 <h3>Assertions</h3>
