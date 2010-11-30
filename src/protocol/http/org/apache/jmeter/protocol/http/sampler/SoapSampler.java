@@ -250,7 +250,7 @@ public class SoapSampler extends HTTPSampler2 implements Interruptible { // Impl
         try {
             int content_len = setPostHeaders(httpMethod);
             client = setupConnection(url, httpMethod, res);
-            savedClient = client;
+            setSavedClient(client);
 
             res.setQueryString(sendPostData(httpMethod,content_len));
             int statusCode = client.executeMethod(httpMethod);
@@ -351,7 +351,7 @@ public class SoapSampler extends HTTPSampler2 implements Interruptible { // Impl
             return err;
         } finally {
             JOrphanUtils.closeQuietly(instream);
-            savedClient = null;
+            setSavedClient(null);
             httpMethod.releaseConnection();
         }
     }
