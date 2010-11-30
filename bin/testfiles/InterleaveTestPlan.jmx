@@ -40,7 +40,7 @@
             </elementProp>
           </ConfigTestElement>
           <hashTree/>
-          <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="News Page" enabled="true">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="News Page" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
               <collectionProp name="Arguments.arguments"/>
             </elementProp>
@@ -54,9 +54,10 @@
             <stringProp name="HTTPSampler.monitor">false</stringProp>
             <stringProp name="HTTPSampler.domain"></stringProp>
             <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-          </HTTPSampler>
+            <stringProp name="HTTPSampler.implementation">Java</stringProp>
+          </HTTPSamplerProxy>
           <hashTree/>
-          <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="FAQ Page" enabled="true">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="FAQ Page" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
               <collectionProp name="Arguments.arguments"/>
             </elementProp>
@@ -70,9 +71,10 @@
             <stringProp name="HTTPSampler.monitor">false</stringProp>
             <stringProp name="HTTPSampler.domain"></stringProp>
             <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-          </HTTPSampler>
+            <stringProp name="HTTPSampler.implementation">Java</stringProp>
+          </HTTPSamplerProxy>
           <hashTree/>
-          <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Gump Page" enabled="true">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Gump Page" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
               <collectionProp name="Arguments.arguments"/>
             </elementProp>
@@ -86,7 +88,8 @@
             <stringProp name="HTTPSampler.monitor">false</stringProp>
             <stringProp name="HTTPSampler.domain"></stringProp>
             <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-          </HTTPSampler>
+            <stringProp name="HTTPSampler.implementation">Java</stringProp>
+          </HTTPSamplerProxy>
           <hashTree/>
         </hashTree>
         <ResultCollector guiclass="GraphVisualizer" testclass="ResultCollector" testname="File Reporter" enabled="true">

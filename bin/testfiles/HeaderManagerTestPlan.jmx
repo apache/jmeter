@@ -35,7 +35,7 @@
           </collectionProp>
         </HeaderManager>
         <hashTree/>
-        <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="HTTP Request" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request" enabled="true">
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
             <collectionProp name="Arguments.arguments"/>
           </elementProp>
@@ -49,7 +49,8 @@
           <stringProp name="HTTPSampler.domain">jakarta.apache.org</stringProp>
           <stringProp name="HTTPSampler.monitor">false</stringProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-        </HTTPSampler>
+          <stringProp name="HTTPSampler.implementation">Java</stringProp>
+        </HTTPSamplerProxy>
         <hashTree/>
         <ResultCollector guiclass="GraphVisualizer" testclass="ResultCollector" testname="File Reporter" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
