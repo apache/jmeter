@@ -38,6 +38,7 @@ import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
@@ -89,17 +90,25 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
     private JCheckBox useMultipartForPost;
 
     private JLabeledChoice method;
+    
+    private JLabeledChoice httpImplementation;
 
     private final boolean notConfigOnly;
-    // set this true to suppress some items for use in HTTP Request defaults
+    // set this false to suppress some items for use in HTTP Request defaults
+    
+    private final boolean showImplementation; // Set false for AJP
 
     public UrlConfigGui() {
-        notConfigOnly=true;
-        init();
+        this(true);
     }
 
     public UrlConfigGui(boolean value) {
-        notConfigOnly=value;
+        this(value, true);
+    }
+
+    public UrlConfigGui(boolean showSamplerFields, boolean showImplementation) {
+        notConfigOnly=showSamplerFields;
+        this.showImplementation = showImplementation;
         init();
     }
 
@@ -111,6 +120,9 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
             method.setText(HTTPSamplerBase.DEFAULT_METHOD);
             useKeepAlive.setSelected(true);
             useMultipartForPost.setSelected(false);
+        }
+        if (showImplementation) {
+            httpImplementation.setText(""); // $NON-NLS-1$
         }
         path.setText(""); // $NON-NLS-1$
         port.setText(""); // $NON-NLS-1$
@@ -163,6 +175,9 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
             element.setProperty(new BooleanProperty(HTTPSamplerBase.USE_KEEPALIVE, useKeepAlive.isSelected()));
             element.setProperty(new BooleanProperty(HTTPSamplerBase.DO_MULTIPART_POST, useMultipartForPost.isSelected()));
         }
+        if (showImplementation) {
+            element.setProperty(HTTPSamplerBase.IMPLEMENTATION, httpImplementation.getText(),"");
+        }
     }
 
     /**
@@ -199,6 +214,9 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
             autoRedirects.setSelected(((AbstractTestElement) el).getPropertyAsBoolean(HTTPSamplerBase.AUTO_REDIRECTS));
             useKeepAlive.setSelected(((AbstractTestElement) el).getPropertyAsBoolean(HTTPSamplerBase.USE_KEEPALIVE));
             useMultipartForPost.setSelected(((AbstractTestElement) el).getPropertyAsBoolean(HTTPSamplerBase.DO_MULTIPART_POST));
+        }
+        if (showImplementation) {
+            httpImplementation.setText(el.getPropertyAsString(HTTPSamplerBase.IMPLEMENTATION));
         }
     }
 
@@ -430,8 +448,16 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
     }
 
     protected JPanel getProtocolAndMethodPanel() {
+
+        // Implementation
+        
+        if (showImplementation) {
+            httpImplementation = new JLabeledChoice(JMeterUtils.getResString("http_implementation"), // $NON-NLS-1$
+                    HTTPSamplerFactory.getImplementations());
+            httpImplementation.addValue("");
+        }
         // PROTOCOL
-        protocol = new JTextField(10);
+        protocol = new JTextField(4);
         // CONTENT_ENCODING
         contentEncoding = new JTextField(10);
 
@@ -446,6 +472,9 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
 
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
+        if (showImplementation) {
+            panel.add(httpImplementation);
+        }
         panel.add(protocolLabel);
         panel.add(protocol);
         panel.add(Box.createHorizontalStrut(5));
