@@ -585,7 +585,7 @@
         </hashTree>
         <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Samplers" enabled="true"/>
         <hashTree>
-          <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="HTTP Test Sampler" enabled="true">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Test Sampler" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="Argument List" enabled="true">
               <collectionProp name="Arguments.arguments"/>
             </elementProp>
@@ -599,7 +599,8 @@
             <stringProp name="HTTPSampler.monitor">false</stringProp>
             <stringProp name="HTTPSampler.domain"></stringProp>
             <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-          </HTTPSampler>
+            <stringProp name="HTTPSampler.implementation">Java</stringProp>
+          </HTTPSamplerProxy>
           <hashTree/>
           <SoapSampler guiclass="SoapSamplerGui" testclass="SoapSampler" testname="SOAP Sampler" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
