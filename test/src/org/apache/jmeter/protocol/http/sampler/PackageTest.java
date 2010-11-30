@@ -27,7 +27,6 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.protocol.http.config.gui.HttpDefaultsGui;
 import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui;
-import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui2;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 
 public class PackageTest extends TestCase {
@@ -37,11 +36,6 @@ public class PackageTest extends TestCase {
 
     public void testConfiguring() throws Exception {
         HTTPSamplerBase sampler = (HTTPSamplerBase) new HttpTestSampleGui().createTestElement();
-        configure(sampler);
-    }
-
-    public void testConfiguring2() throws Exception {
-        HTTPSamplerBase sampler = (HTTPSamplerBase) new HttpTestSampleGui2().createTestElement();
         configure(sampler);
     }
 

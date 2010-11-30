@@ -28,8 +28,8 @@ import javax.swing.JPanel;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.http.config.gui.MultipartUrlConfigGui;
-import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -54,7 +54,18 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 
     private JLabeledTextField embeddedRE; // regular expression used to match against embedded resource URLs
 
+    private JLabeledTextField sourceIpAddr; // does not apply to Java implementation
+
+    private final boolean isAJP;
+    
     public HttpTestSampleGui() {
+        isAJP = false;
+        init();
+    }
+
+    // For use by AJP
+    protected HttpTestSampleGui(boolean ajp) {
+        isAJP = ajp;
         init();
     }
 
@@ -70,13 +81,16 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         isMon.setSelected(samplerBase.isMonitor());
         useMD5.setSelected(samplerBase.useMD5());
         embeddedRE.setText(samplerBase.getEmbeddedUrlRE());
+        if (!isAJP) {
+            sourceIpAddr.setText(samplerBase.getIpSource());
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     public TestElement createTestElement() {
-        HTTPSamplerBase sampler = HTTPSamplerFactory.newInstance();// create default sampler
+        HTTPSamplerBase sampler = new HTTPSamplerProxy();
         modifyTestElement(sampler);
         return sampler;
     }
@@ -100,6 +114,9 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         samplerBase.setMonitor(isMon.isSelected());
         samplerBase.setMD5(useMD5.isSelected());
         samplerBase.setEmbeddedUrlRE(embeddedRE.getText());
+        if (!isAJP) {
+            samplerBase.setIpSource(sourceIpAddr.getText());
+        }
         this.configureTestElement(sampler);
     }
 
@@ -117,7 +134,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         add(makeTitlePanel(), BorderLayout.NORTH);
 
         // URL CONFIG
-        urlConfigGui = new MultipartUrlConfigGui();
+        urlConfigGui = new MultipartUrlConfigGui(true, !isAJP);
         add(urlConfigGui, BorderLayout.CENTER);
 
         // OPTIONAL TASKS
@@ -146,6 +163,13 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         // Embedded URL match regex
         embeddedRE = new JLabeledTextField(JMeterUtils.getResString("web_testing_embedded_url_pattern"),30); // $NON-NLS-1$
         optionalTasksPanel.add(embeddedRE, BorderLayout.CENTER);
+
+        if (!isAJP) {
+            // Add a new field source ip address (for HC implementations only)
+            sourceIpAddr = new JLabeledTextField(JMeterUtils.getResString("web_testing2_source_ip")); // $NON-NLS-1$
+            optionalTasksPanel.add(sourceIpAddr, BorderLayout.EAST);
+        }
+
         return optionalTasksPanel;
     }
 
@@ -168,5 +192,8 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         useMD5.setSelected(false);
         urlConfigGui.clear();
         embeddedRE.setText(""); // $NON-NLS-1$
+        if (!isAJP) {
+            sourceIpAddr.setText(""); // $NON-NLS-1$
+        }
     }
 }
