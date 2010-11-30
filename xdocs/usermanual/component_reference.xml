@@ -81,7 +81,7 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
 
 </component>
 
-<component name="HTTP Request" index="&sect-num;.1.2"  width="687" height="661" screenshot="http-request.png">
+<component name="HTTP Request" index="&sect-num;.1.2"  width="826" height="677" screenshot="http-request.png">
 
 <description>
         <p>This sampler lets you send an HTTP/HTTPS request to a web server.  It
@@ -180,6 +180,9 @@ https.default.protocol=SSLv3
         <property name="Port" required="No, unless proxy hostname is specified">Port the proxy server is listening to.</property>
         <property name="Username" required="No">(Optional) username for proxy server.</property>
         <property name="Password" required="No">(Optional) password for proxy server.</property>
+        <property name="Implementation" required="No">Java, HttpClient3.1, HttpClient4. 
+        If not specified (and not defined by HTTP Request Defaults), the default depends on the value of the JMeter property
+        <code>jmeter.httpsampler</code>, failing that, the Java implementation is used.</property>
         <property name="Protocol" required="No">HTTP, HTTPS or FILE. Default: HTTP</property>
         <property name="Method" required="Yes">GET, POST, HEAD, TRACE, OPTIONS, PUT, DELETE</property>
         <property name="Content Encoding" required="No">Content encoding to be used (for POST and FILE)</property>
@@ -3053,7 +3056,7 @@ cookie table entries.</property>
 </component>
 
 <component name="HTTP Request Defaults" index="&sect-num;.4.5" 
-         width="728" height="426" screenshot="http-config/http-request-defaults.png">
+         width="678" height="447" screenshot="http-config/http-request-defaults.png">
 <description><p>This element lets you set default values that your HTTP Request controllers use.  For example, if you are
 creating a Test Plan with 25 HTTP Request controllers and all of the requests are being sent to the same server,
 you could add a single HTTP Request Defaults element with the "Server Name or IP" field filled in.  Then, when
@@ -3071,6 +3074,9 @@ JMeter 2.3 and later treat all port values equally; a sampler that does not spec
         <property name="Port" required="No">Port the web server is listening to.</property>
         <property name="Connect Timeout" required="No">Connection Timeout. Number of milliseconds to wait for a connection to open. Requires Java 1.5 or later when using the default Java HTTP implementation.</property>
         <property name="Response Timeout" required="No">Response Timeout. Number of milliseconds to wait for a response. Requires Java 1.5 or later when using the default Java HTTP implementation.</property>
+        <property name="Implementation" required="No">Java, HttpClient3.1, HttpClient4. 
+        If not specified the default depends on the value of the JMeter property
+        <code>jmeter.httpsampler</code>, failing that, the Java implementation is used.</property>
         <property name="Protocol" required="Yes">HTTP or HTTPS.</property>
         <property name="Method" required="No">HTTP GET or HTTP POST.</property>
         <property name="Path" required="No">The path to resource (for example, /servlets/myServlet). If the
