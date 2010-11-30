@@ -27,7 +27,7 @@ public class AjpSamplerGui extends HttpTestSampleGui {
     private static final long serialVersionUID = 240L;
 
     public AjpSamplerGui() {
-        super();
+        super(true);
     }
 
     @Override

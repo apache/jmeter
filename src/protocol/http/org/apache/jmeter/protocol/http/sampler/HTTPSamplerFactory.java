@@ -22,16 +22,26 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Factory to return the appropriate HTTPSampler for use with classes that need
- * an HTTPSampler
+ * an HTTPSampler; also creates the implementations for use with HTTPSamplerProxy.
  *
  */
 public class HTTPSamplerFactory {
 
+    // N.B. These values are used in jmeter.properties (jmeter.httpsampler) - do not change
+    // They can alse be used as the implementation name
     /** Use the the default Java HTTP implementation */
     public static final String HTTP_SAMPLER_JAVA = "HTTPSampler"; //$NON-NLS-1$
 
     /** Use Apache HTTPClient HTTP implementation */
     public static final String HTTP_SAMPLER_APACHE = "HTTPSampler2"; //$NON-NLS-1$
+
+    //+ JMX implementation attribute values (also displayed in GUI) - do not change
+    public static final String IMPL_HTTP_CLIENT4 = "HttpClient4";  // $NON-NLS-1$
+
+    public static final String IMPL_HTTP_CLIENT3_1 = "HttpClient3.1"; // $NON-NLS-1$
+    
+    public static final String IMPL_JAVA = "Java"; // $NON-NLS-1$
+    //- JMX
 
     public static final String DEFAULT_CLASSNAME =
         JMeterUtils.getPropDefault("jmeter.httpsampler", HTTP_SAMPLER_JAVA); //$NON-NLS-1$
@@ -52,7 +62,7 @@ public class HTTPSamplerFactory {
     /**
      * Create a new instance of the required sampler type
      *
-     * @param alias HTTP_SAMPLER or HTTP_SAMPLER_APACHE
+     * @param alias HTTP_SAMPLER or HTTP_SAMPLER_APACHE or IMPL_HTTP_CLIENT3_1 or IMPL_HTTP_CLIENT4
      * @return the appropriate sampler
      * @throws UnsupportedOperationException if alias is not recognised
      */
@@ -60,12 +70,35 @@ public class HTTPSamplerFactory {
         if (alias.length() == 0) {
             alias = DEFAULT_CLASSNAME;
         }
-        if (alias.equals(HTTP_SAMPLER_JAVA)) {
-            return new HTTPSampler();
+        if (alias.equals(HTTP_SAMPLER_JAVA) || alias.equals(IMPL_JAVA)) {
+            return new HTTPSamplerProxy(IMPL_JAVA);
         }
-        if (alias.equals(HTTP_SAMPLER_APACHE)) {
-            return new HTTPSampler2();
+        if (alias.equals(HTTP_SAMPLER_APACHE) || alias.equals(IMPL_HTTP_CLIENT3_1)) {
+            return new HTTPSamplerProxy(IMPL_HTTP_CLIENT3_1);
         }
-        throw new UnsupportedOperationException("Cannot create class: " + alias);
+        if (alias.equals(IMPL_HTTP_CLIENT4)) {
+            return new HTTPSamplerProxy(IMPL_HTTP_CLIENT3_1);
+        }
+        throw new IllegalArgumentException("Unknown sampler type: '" + alias+"'");
     }
+
+    public static String[] getImplementations(){
+        return new String[]{IMPL_JAVA, IMPL_HTTP_CLIENT3_1, IMPL_HTTP_CLIENT4};
+    }
+
+    public static HTTPAbstractImpl getImplementation(String impl, HTTPSamplerBase base){
+        if (impl.trim().length() == 0){
+            impl = DEFAULT_CLASSNAME;
+        }
+        if (IMPL_JAVA.equals(impl) || HTTP_SAMPLER_JAVA.equals(impl)) {
+            return new HTTPJavaImpl(base);
+        } else if (IMPL_HTTP_CLIENT3_1.equals(impl) || HTTP_SAMPLER_APACHE.equals(impl)) {
+            return new HTTPHC3Impl(base);                
+        } else if (IMPL_HTTP_CLIENT4.equals(impl)) {
+            return new HTTPHC4Impl(base);                
+        } else {
+            throw new IllegalArgumentException("Unknown implementation type: '"+impl+"'");
+        }
+    }
+
 }
