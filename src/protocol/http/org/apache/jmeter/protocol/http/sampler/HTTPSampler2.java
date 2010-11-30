@@ -31,7 +31,7 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
     private final transient HTTPAbstractImpl hc;
     
     public HTTPSampler2(){
-        hc = new HTTPJavaImpl(this);
+        hc = new HTTPHC3Impl(this);
     }
 
     public boolean interrupt() {
