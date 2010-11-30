@@ -45,8 +45,13 @@ public class MultipartUrlConfigGui extends UrlConfigGui {
     }
 
     // not currently used
-    public MultipartUrlConfigGui(boolean value) {
-        super(value);
+    public MultipartUrlConfigGui(boolean showSamplerFields) {
+        super(showSamplerFields);
+        init();
+    }
+
+    public MultipartUrlConfigGui(boolean showSamplerFields, boolean showImplementation) {
+        super(showSamplerFields, showImplementation);
         init();
     }
 

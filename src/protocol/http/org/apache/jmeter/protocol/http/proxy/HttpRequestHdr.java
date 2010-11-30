@@ -38,9 +38,7 @@ import org.apache.jmeter.protocol.http.config.MultipartUrlConfig;
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui;
-import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui2;
 import org.apache.jmeter.protocol.http.gui.HeaderPanel;
-import org.apache.jmeter.protocol.http.sampler.HTTPSampler2;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
@@ -260,14 +258,8 @@ public class HttpRequestHdr {
             throws MalformedURLException, IOException {
         // Damn! A whole new GUI just to instantiate a test element?
         // Isn't there a beter way?
-        HttpTestSampleGui tempGui = null;
-        // Create the corresponding gui for the sampler class
-        if(sampler instanceof HTTPSampler2) {
-            tempGui = new HttpTestSampleGui2();
-        }
-        else {
-            tempGui = new HttpTestSampleGui();
-        }
+        HttpTestSampleGui tempGui = new HttpTestSampleGui();
+
         sampler.setProperty(TestElement.GUI_CLASS, tempGui.getClass().getName());
 
         // Populate the sampler
