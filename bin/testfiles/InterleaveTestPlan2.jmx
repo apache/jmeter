@@ -44,7 +44,7 @@
             <intProp name="InterleaveControl.style">0</intProp>
           </InterleaveControl>
           <hashTree>
-            <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Home Page" enabled="true">
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Home Page" enabled="true">
               <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
                 <collectionProp name="Arguments.arguments"/>
               </elementProp>
@@ -58,9 +58,10 @@
               <stringProp name="HTTPSampler.monitor">false</stringProp>
               <stringProp name="HTTPSampler.domain"></stringProp>
               <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-            </HTTPSampler>
+              <stringProp name="HTTPSampler.implementation">Java</stringProp>
+            </HTTPSamplerProxy>
             <hashTree/>
-            <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="CVS Page" enabled="true">
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="CVS Page" enabled="true">
               <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
                 <collectionProp name="Arguments.arguments"/>
               </elementProp>
@@ -74,14 +75,15 @@
               <stringProp name="HTTPSampler.monitor">false</stringProp>
               <stringProp name="HTTPSampler.domain"></stringProp>
               <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-            </HTTPSampler>
+              <stringProp name="HTTPSampler.implementation">Java</stringProp>
+            </HTTPSamplerProxy>
             <hashTree/>
           </hashTree>
           <InterleaveControl guiclass="InterleaveControlGui" testclass="InterleaveControl" testname="Interleave Controller" enabled="true">
             <intProp name="InterleaveControl.style">0</intProp>
           </InterleaveControl>
           <hashTree>
-            <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Bug Page" enabled="true">
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Bug Page" enabled="true">
               <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
                 <collectionProp name="Arguments.arguments"/>
               </elementProp>
@@ -95,9 +97,10 @@
               <stringProp name="HTTPSampler.monitor">false</stringProp>
               <stringProp name="HTTPSampler.domain"></stringProp>
               <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-            </HTTPSampler>
+              <stringProp name="HTTPSampler.implementation">Java</stringProp>
+            </HTTPSamplerProxy>
             <hashTree/>
-            <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="FAQ Page" enabled="true">
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="FAQ Page" enabled="true">
               <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
                 <collectionProp name="Arguments.arguments"/>
               </elementProp>
@@ -111,7 +114,8 @@
               <stringProp name="HTTPSampler.monitor">false</stringProp>
               <stringProp name="HTTPSampler.domain"></stringProp>
               <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-            </HTTPSampler>
+              <stringProp name="HTTPSampler.implementation">Java</stringProp>
+            </HTTPSamplerProxy>
             <hashTree/>
           </hashTree>
         </hashTree>
