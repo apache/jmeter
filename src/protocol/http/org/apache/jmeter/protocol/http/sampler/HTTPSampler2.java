@@ -16,6 +16,13 @@
  */
 package org.apache.jmeter.protocol.http.sampler;
 
+
+import java.io.IOException;
+import java.net.URL;
+
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.samplers.Interruptible;
 
 /**
@@ -28,7 +35,7 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
 
     private static final long serialVersionUID = 240L;
 
-    private final transient HTTPAbstractImpl hc;
+    private final transient HTTPHC3Impl hc;
     
     public HTTPSampler2(){
         hc = new HTTPHC3Impl(this);
@@ -39,9 +46,31 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
     }
 
     @Override
-    protected HTTPSampleResult sample(java.net.URL u, String method,
+    protected HTTPSampleResult sample(URL u, String method,
             boolean areFollowingRedirect, int depth) {
         return hc.sample(u, method, areFollowingRedirect, depth);
     }
 
+    // Methods needed by subclasses to get access to the implementation
+    protected HttpClient setupConnection(URL url, PostMethod httpMethod, HTTPSampleResult res) 
+        throws IOException {
+        return hc.setupConnection(url, httpMethod, res);
+    }
+
+    protected void saveConnectionCookies(PostMethod httpMethod, URL url,
+            CookieManager cookieManager) {
+        hc.saveConnectionCookies(httpMethod, url, cookieManager);
+   }
+
+    protected String getResponseHeaders(PostMethod httpMethod) {
+        return hc.getResponseHeaders(httpMethod);
+    }
+
+    protected String getConnectionHeaders(PostMethod httpMethod) {
+        return hc.getConnectionHeaders(httpMethod);
+    }
+
+    protected void setSavedClient(HttpClient savedClient) {
+        hc.savedClient = savedClient;
+    }
 }
