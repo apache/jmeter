@@ -187,6 +187,25 @@ Here is a list of the meta characters and their meaning (please check the ORO do
 </ul>
 <p>Please note that ORO does not support the \Q and \E meta-characters.
 [In other RE engines, these can be used to quote a portion of an RE so that the meta-characters stand for themselves.]</p>
+
+<p>
+The following Perl5 extended regular expressions are supported by ORO.
+
+<dl>
+<dt>(?#text)</dt>
+<dd>An embedded comment causing text to be ignored.</dd>
+<dt>(?:regexp)</dt>
+<dd>Groups things like "()" but doesn't cause the group match to be saved.</dd>
+<dt>(?=regexp)</dt>
+<dd>A zero-width positive lookahead assertion. For example, \w+(?=\s) matches a word followed by whitespace, without including whitespace in the MatchResult.</dd>
+<dt>(?!regexp)</dt>
+<dd>A zero-width negative lookahead assertion. For example foo(?!bar) matches any occurrence of "foo" that isn't followed by "bar". Remember that this is a zero-width assertion, which means that a(?!b)d will match ad because a is followed by a character that is not b (the d) and a d follows the zero-width assertion.</dd>
+<dt>(?imsx)</dt>
+<dd>One or more embedded pattern-match modifiers. i enables case insensitivity, m enables multiline treatment of the input, s enables single line treatment of the input, and x enables extended whitespace comments.</dd>
+</dl>
+<b>Note that <code>(?&lt;=regexp)</code> - lookbehind - is not supported.</b>
+</p>
+
 </subsection>
 
 <subsection name="&sect-num;.5 Placement of modifiers" anchor="placement">
