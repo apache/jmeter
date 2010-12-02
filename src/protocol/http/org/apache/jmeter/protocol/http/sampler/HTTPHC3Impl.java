@@ -25,15 +25,10 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.httpclient.Header;
@@ -66,7 +61,6 @@ import org.apache.commons.httpclient.params.DefaultHttpParams;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.httpclient.params.HttpParams;
 import org.apache.commons.httpclient.protocol.Protocol;
-import org.apache.jmeter.JMeter;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.CacheManager;
@@ -86,92 +80,27 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
- * A sampler which understands all the parts necessary to read statistics about
- * HTTP requests, including cookies and authentication.
- *
+ * HTTP sampler using Apache (Jakarta) Commons HttpClient 3.1.
  */
-public class HTTPHC3Impl extends HTTPAbstractImpl {
+public class HTTPHC3Impl extends HTTPHCAbstractImpl {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final long serialVersionUID = 240L;
 
-    private static final String HTTP_AUTHENTICATION_PREEMPTIVE = "http.authentication.preemptive"; // $NON-NLS-1$
-
     private static final boolean canSetPreEmptive; // OK to set pre-emptive auth?
 
-    private static final String PROXY_HOST =
-        System.getProperty("http.proxyHost",""); // $NON-NLS-1$
-
-    private static final String NONPROXY_HOSTS =
-        System.getProperty("http.nonProxyHosts",""); // $NON-NLS-1$
-
-    private static final int PROXY_PORT =
-        Integer.parseInt(System.getProperty("http.proxyPort","0")); // $NON-NLS-1$
-
-    // Have proxy details been provided?
-    private static final boolean PROXY_DEFINED = PROXY_HOST.length() > 0 && PROXY_PORT > 0;
-
-    private static final String PROXY_USER =
-        JMeterUtils.getPropDefault(JMeter.HTTP_PROXY_USER,""); // $NON-NLS-1$
-
-    private static final String PROXY_PASS =
-        JMeterUtils.getPropDefault(JMeter.HTTP_PROXY_PASS,""); // $NON-NLS-1$
-
-    private static final String PROXY_DOMAIN =
-        JMeterUtils.getPropDefault("http.proxyDomain",""); // $NON-NLS-1$ $NON-NLS-2$
-
-    public static final String IP_SOURCE = "HTTPSampler.ipSource"; // $NON-NLS-1$ // TODO not here
-
-    static final InetAddress localAddress;
-
-    private static final String localHost;
-
-    /*
-     * Connection is re-used within the thread if possible
-     */
-    static final ThreadLocal<Map<HostConfiguration, HttpClient>> httpClients =
+    private static final ThreadLocal<Map<HostConfiguration, HttpClient>> httpClients = 
         new ThreadLocal<Map<HostConfiguration, HttpClient>>(){
-            @Override
-            protected Map<HostConfiguration, HttpClient> initialValue() {
-                return new HashMap<HostConfiguration, HttpClient>();
-            }
-        };
-
-    private static final Set<String> nonProxyHostFull   = new HashSet<String>();// www.apache.org
-    private static final List<String> nonProxyHostSuffix = new ArrayList<String>();// .apache.org
-
-    private static final int nonProxyHostSuffixSize;
-
-    protected volatile HttpClient savedClient;
-
-    private static boolean isNonProxy(String host){
-        return nonProxyHostFull.contains(host) || isPartialMatch(host);
-    }
-
-    private static boolean isPartialMatch(String host) {
-        for (int i=0;i<nonProxyHostSuffixSize;i++){
-            if (host.endsWith(nonProxyHostSuffix.get(i))) {
-                return true;
-            }
+        @Override
+        protected Map<HostConfiguration, HttpClient> initialValue() {
+            return new HashMap<HostConfiguration, HttpClient>();
         }
-        return false;
-    }
+    };
+
+    private volatile HttpClient savedClient;
 
     static {
-        if (NONPROXY_HOSTS.length() > 0){
-            StringTokenizer s = new StringTokenizer(NONPROXY_HOSTS,"|");// $NON-NLS-1$
-            while (s.hasMoreTokens()){
-                String t = s.nextToken();
-                if (t.indexOf("*") ==0){// e.g. *.apache.org // $NON-NLS-1$
-                    nonProxyHostSuffix.add(t.substring(1));
-                } else {
-                    nonProxyHostFull.add(t);// e.g. www.apache.org
-                }
-            }
-        }
-        nonProxyHostSuffixSize=nonProxyHostSuffix.size();
-
         int cps =
             JMeterUtils.getPropDefault("httpclient.socket.http.cps", 0); // $NON-NLS-1$
 
@@ -191,31 +120,8 @@ public class HTTPHC3Impl extends HTTPAbstractImpl {
 //                    new Protocol(PROTOCOL_HTTPS,new SlowHttpClientSocketFactory(cps),DEFAULT_HTTPS_PORT));
 //        }
 
-        InetAddress inet=null;
-        String localHostOrIP =
-            JMeterUtils.getPropDefault("httpclient.localaddress",""); // $NON-NLS-1$
-        if (localHostOrIP.length() > 0){
-            try {
-                inet = InetAddress.getByName(localHostOrIP);
-                log.info("Using localAddress "+inet.getHostAddress());
-            } catch (UnknownHostException e) {
-                log.warn(e.getLocalizedMessage());
-            }
-        } else {
-            try {
-                InetAddress addr = InetAddress.getLocalHost();
-                // Get hostname
-                localHostOrIP = addr.getHostName();
-            } catch (UnknownHostException e) {
-                log.warn("Cannot determine localhost name, and httpclient.localaddress was not specified");
-            }
-        }
-        localAddress = inet;
-        localHost = localHostOrIP;
-        log.info("Local host = "+localHost);
-
         // Set default parameters as needed
-       HttpParams params = DefaultHttpParams.getDefaultParams();
+        HttpParams params = DefaultHttpParams.getDefaultParams();
 
         // Process httpclient parameters file
         String file=JMeterUtils.getProperty("httpclient.parameters.file"); // $NON-NLS-1$
