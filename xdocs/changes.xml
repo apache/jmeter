@@ -68,7 +68,7 @@ This has been replaced by the instance method public long currentTimeInMillis().
 
 <p>
 ProxyControl.getSamplerTypeName() now returns a String rather than an int.
-This is internal to the workings of the JMeter Proxy & its GUI, so should not affect any user code.
+This is internal to the workings of the JMeter Proxy &amp; its GUI, so should not affect any user code.
 </p>
 
 <h2>Bug fixes</h2>
