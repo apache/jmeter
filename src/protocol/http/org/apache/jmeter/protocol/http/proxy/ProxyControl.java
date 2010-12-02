@@ -46,6 +46,7 @@ import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.control.RecordingController;
 import org.apache.jmeter.protocol.http.gui.HeaderPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
@@ -138,10 +139,9 @@ public class ProxyControl extends GenericController {
     private static final int GROUPING_STORE_FIRST_ONLY = 3;
     private static final int GROUPING_IN_TRANSACTION_CONTROLLERS = 4;
 
-    // Must agree with the order of entries in the drop-down
-    // created in ProxyControlGui.createHTTPSamplerPanel()
-    public static final int SAMPLER_TYPE_HTTP_SAMPLER = 0;
-    public static final int SAMPLER_TYPE_HTTP_SAMPLER2 = 1;
+    // Original numeric order (we now use strings)
+    private static final String SAMPLER_TYPE_HTTP_SAMPLER = "0";
+    private static final String SAMPLER_TYPE_HTTP_SAMPLER2 = "1";
 
     private long lastTime = 0;// When was the last sample seen?
 
@@ -282,8 +282,15 @@ public class ProxyControl extends GenericController {
         return getPropertyAsBoolean(CAPTURE_HTTP_HEADERS);
     }
 
-    public int getSamplerTypeName() {
-        return getPropertyAsInt(SAMPLER_TYPE_NAME);
+    public String getSamplerTypeName() {
+        // Convert the old numeric types - just in case someone wants to reload the workbench
+        String type = getPropertyAsString(SAMPLER_TYPE_NAME);
+        if (SAMPLER_TYPE_HTTP_SAMPLER.equals(type)){
+            type = HTTPSamplerFactory.IMPL_JAVA;
+        } else if (SAMPLER_TYPE_HTTP_SAMPLER2.equals(type)){
+            type = HTTPSamplerFactory.IMPL_HTTP_CLIENT3_1;            
+        }
+        return type;
     }
 
     public boolean getSamplerRedirectAutomatically() {
