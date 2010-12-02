@@ -52,119 +52,204 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
 
     // Provide access to HTTPSamplerBase methods
     
-    protected HeaderManager getHeaderManager() {
-        return testElement.getHeaderManager();
-    }
-
-    protected HTTPFileArg[] getHTTPFiles() {
-        return testElement.getHTTPFiles();
-    }
-
-    protected AuthManager getAuthManager() {
-        return testElement.getAuthManager();
-    }
-
-    protected Arguments getArguments() {
-        return testElement.getArguments();
-    }
-
-    protected CookieManager getCookieManager() {
-        return testElement.getCookieManager();
-    }
-
-    protected HTTPSampleResult errorResult(IOException iex, HTTPSampleResult res) {
-        return testElement.errorResult(iex, res);
-    }
-
-    protected byte[] readResponse(SampleResult res, BufferedInputStream in,
-            int contentLength) throws IOException {
-        return testElement.readResponse(res, in, contentLength);
-    }
-
-    protected CacheManager getCacheManager() {
-        return testElement.getCacheManager();
-    }
-
-    protected boolean getUseKeepAlive() {
-        return testElement.getUseKeepAlive();
-    }
-
-    protected int getResponseTimeout() {
-        return testElement.getResponseTimeout();
-    }
-
-    protected int getConnectTimeout() {
-        return testElement.getConnectTimeout();
-    }
-
-    protected boolean getAutoRedirects() {
-        return testElement.getAutoRedirects();
-    }
-
-    protected int getProxyPortInt() {
-        return testElement.getProxyPortInt();
-    }
-
-    protected String getProxyHost() {
-        return testElement.getProxyHost();
-    }
-
-    protected HTTPSampleResult resultProcessing(boolean areFollowingRedirect,
-            int frameDepth, HTTPSampleResult res) {
-        return testElement.resultProcessing(areFollowingRedirect, frameDepth, res);
-    }
-
-    protected boolean isSuccessCode(int errorLevel) {
-        return testElement.isSuccessCode(errorLevel);
-    }
-
-    protected void setUseKeepAlive(boolean b) {
-        testElement.setUseKeepAlive(b);
-    }
-
-    protected boolean isMonitor() {
-        return testElement.isMonitor();
-    }
-    protected boolean getSendParameterValuesAsPostBody() {
-        return testElement.getSendParameterValuesAsPostBody();
-    }
-
-    protected boolean getSendFileAsPostBody() {
-        return testElement.getSendFileAsPostBody();
-    }
-
-    protected boolean hasArguments() {
-        return testElement.hasArguments();
-    }
-
-    protected String getContentEncoding() {
-        return testElement.getContentEncoding();
-    }
-
-    protected boolean getUseMultipartForPost() {
-        return testElement.getUseMultipartForPost();
-    }
-
-    protected String getProxyPass() {
-        return testElement.getProxyPass();
-    }
-
-    protected String getProxyUser() {
-        return testElement.getProxyUser();
-    }
-
-    protected String getIpSource() {
-        return testElement.getIpSource();
-    }
-
+    /**
+     * Invokes {@link HTTPSamplerBase#errorResult(Throwable, HTTPSampleResult)}
+     */
     protected HTTPSampleResult errorResult(IllegalArgumentException e,
             HTTPSampleResult res) {
         return testElement.errorResult(e, res);
     }
 
+    /**
+     * Invokes {@link HTTPSamplerBase#errorResult(Throwable, HTTPSampleResult)}
+     */
+    protected HTTPSampleResult errorResult(IOException iex, HTTPSampleResult res) {
+        return testElement.errorResult(iex, res);
+    }
+
+    /**
+     * Invokes {@link HTTPSamplerBase#getArguments()}
+     */
+    protected Arguments getArguments() {
+        return testElement.getArguments();
+    }
+
+    /**
+     * Invokes {@link HTTPSamplerBase#getAuthManager()}
+     */
+    protected AuthManager getAuthManager() {
+        return testElement.getAuthManager();
+    }
+
+    /**
+     * Invokes {@link HTTPSamplerBase#getAutoRedirects()}
+     */
+    protected boolean getAutoRedirects() {
+        return testElement.getAutoRedirects();
+    }
+
+    /**
+     * Invokes {@link HTTPSamplerBase#getCacheManager()}
+     */
+    protected CacheManager getCacheManager() {
+        return testElement.getCacheManager();
+    }
+
+    /**
+     * Invokes {@link HTTPSamplerBase#getConnectTimeout()}
+     */
+    protected int getConnectTimeout() {
+        return testElement.getConnectTimeout();
+    }
+
+    /**
+     * Invokes {@link HTTPSamplerBase#getContentEncoding()}
+     */
+    protected String getContentEncoding() {
+        return testElement.getContentEncoding();
+    }
+
+    /**
+     * Invokes {@link HTTPSamplerBase#getCookieManager()}
+     */
+    protected CookieManager getCookieManager() {
+        return testElement.getCookieManager();
+    }
+
+    /**
+     * Invokes {@link HTTPSamplerBase#getHeaderManager()}
+     */
+    protected HeaderManager getHeaderManager() {
+        return testElement.getHeaderManager();
+    }
+
+    /**
+     * Invokes {@link HTTPSamplerBase#getHTTPFiles()}
+     */
+    protected HTTPFileArg[] getHTTPFiles() {
+        return testElement.getHTTPFiles();
+    }
+
+    /**
+     * Invokes {@link HTTPSamplerBase#getIpSource()}
+     */
+    protected String getIpSource() {
+        return testElement.getIpSource();
+    }
+
+    /**
+     * Invokes {@link HTTPSamplerBase#getProxyHost()}
+     */
+    protected String getProxyHost() {
+        return testElement.getProxyHost();
+    }
+
+    /**
+     * Invokes {@link HTTPSamplerBase#getProxyPass()}
+     */
+    protected String getProxyPass() {
+        return testElement.getProxyPass();
+    }
+
+    /**
+     * Invokes {@link HTTPSamplerBase#getProxyPortInt()}
+     */
+    protected int getProxyPortInt() {
+        return testElement.getProxyPortInt();
+    }
+
+    /**
+     * Invokes {@link HTTPSamplerBase#getProxyUser()}
+     */
+    protected String getProxyUser() {
+        return testElement.getProxyUser();
+    }
+
+    /**
+     * Invokes {@link HTTPSamplerBase#getResponseTimeout()}
+     */
+    protected int getResponseTimeout() {
+        return testElement.getResponseTimeout();
+    }
+
+    /**
+     * Invokes {@link HTTPSamplerBase#getSendFileAsPostBody()}
+     */
+    protected boolean getSendFileAsPostBody() {
+        return testElement.getSendFileAsPostBody();
+    }
+
+    /**
+     * Invokes {@link HTTPSamplerBase#getSendParameterValuesAsPostBody()}
+     */
+    protected boolean getSendParameterValuesAsPostBody() {
+        return testElement.getSendParameterValuesAsPostBody();
+    }
+
+    /**
+     * Invokes {@link HTTPSamplerBase#getUseKeepAlive()}
+     */
+    protected boolean getUseKeepAlive() {
+        return testElement.getUseKeepAlive();
+    }
+
+    /**
+     * Invokes {@link HTTPSamplerBase#getUseMultipartForPost()}
+     */
+    protected boolean getUseMultipartForPost() {
+        return testElement.getUseMultipartForPost();
+    }
+
+    /**
+     * Invokes {@link HTTPSamplerBase#hasArguments()}
+     */
+    protected boolean hasArguments() {
+        return testElement.hasArguments();
+    }
+
+    /**
+     * Invokes {@link HTTPSamplerBase#isMonitor()}
+     */
+    protected boolean isMonitor() {
+        return testElement.isMonitor();
+    }
+
+    /**
+     * Invokes {@link HTTPSamplerBase#isSuccessCode(int)}
+     */
+    protected boolean isSuccessCode(int errorLevel) {
+        return testElement.isSuccessCode(errorLevel);
+    }
+
+    /**
+     * Invokes {@link HTTPSamplerBase#readResponse(SampleResult, InputStream, int)}
+     */
     protected byte[] readResponse(HTTPSampleResult res, InputStream instream,
             int responseContentLength) throws IOException {
         return testElement.readResponse(res, instream, responseContentLength);
+    }
+
+    /**
+     * Invokes {@link HTTPSamplerBase#readResponse(SampleResult, InputStream, int)}
+     */
+    protected byte[] readResponse(SampleResult res, BufferedInputStream in,
+            int contentLength) throws IOException {
+        return testElement.readResponse(res, in, contentLength);
+    }
+
+    /**
+     * Invokes {@link HTTPSamplerBase#resultProcessing(boolean, int, HTTPSampleResult)}
+     */
+    protected HTTPSampleResult resultProcessing(boolean areFollowingRedirect,
+            int frameDepth, HTTPSampleResult res) {
+        return testElement.resultProcessing(areFollowingRedirect, frameDepth, res);
+    }
+
+    /**
+     * Invokes {@link HTTPSamplerBase#setUseKeepAlive(boolean)}
+     */
+    protected void setUseKeepAlive(boolean b) {
+        testElement.setUseKeepAlive(b);
     }
 
 }
