@@ -458,13 +458,14 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         }
         // PROTOCOL
         protocol = new JTextField(4);
+        JLabel protocolLabel = new JLabel(JMeterUtils.getResString("protocol")); // $NON-NLS-1$
+        protocolLabel.setLabelFor(protocol);        
+        
         // CONTENT_ENCODING
         contentEncoding = new JTextField(10);
-
-        JLabel protocolLabel = new JLabel(JMeterUtils.getResString("protocol")); // $NON-NLS-1$
-        protocolLabel.setLabelFor(protocol);
         JLabel contentEncodingLabel = new JLabel(JMeterUtils.getResString("content_encoding")); // $NON-NLS-1$
-        protocolLabel.setLabelFor(contentEncoding);
+        contentEncodingLabel.setLabelFor(contentEncoding);
+
         if (notConfigOnly){
             method = new JLabeledChoice(JMeterUtils.getResString("method"), // $NON-NLS-1$
                     HTTPSamplerBase.getValidMethodsAsArray());
@@ -487,6 +488,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
 
         panel.add(contentEncodingLabel);
         panel.add(contentEncoding);
+        panel.setMinimumSize(panel.getPreferredSize());
         return panel;
     }
 
