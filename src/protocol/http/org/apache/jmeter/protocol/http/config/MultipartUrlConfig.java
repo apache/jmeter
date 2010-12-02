@@ -143,14 +143,19 @@ public class MultipartUrlConfig implements Serializable {
                 }
                 else {
                     // Find the first empty line of the multipart, it signals end of headers for multipart
-                    int indexEmptyLfCrLfLinePos = parts[i].indexOf("\n\r\n"); //$NON-NLS-1$
-                    int indexEmptyLfLfLinePos = parts[i].indexOf("\n\n"); //$NON-NLS-1$
+                    // Agents are supposed to terminate lines in CRLF:
+                    final String CRLF = "\r\n";
+                    final String CRLFCRLF = "\r\n\r\n";
+                    // Code also allows for LF only (not sure why - perhaps because the test code uses it?)
+                    final String LF = "\n";
+                    final String LFLF = "\n\n";
+                    int indexEmptyCrLfCrLfLinePos = parts[i].indexOf(CRLFCRLF); //$NON-NLS-1$
+                    int indexEmptyLfLfLinePos = parts[i].indexOf(LFLF); //$NON-NLS-1$
                     String value = null;
-                    if(indexEmptyLfCrLfLinePos > -1) {
-                        value = parts[i].substring(indexEmptyLfCrLfLinePos).trim();
-                    }
-                    else if(indexEmptyLfLfLinePos > -1) {
-                        value = parts[i].substring(indexEmptyLfLfLinePos).trim();
+                    if(indexEmptyCrLfCrLfLinePos > -1) {// CRLF blank line found
+                        value = parts[i].substring(indexEmptyCrLfCrLfLinePos+CRLFCRLF.length(),parts[i].lastIndexOf(CRLF));
+                    } else if(indexEmptyLfLfLinePos > -1) { // LF blank line found
+                        value = parts[i].substring(indexEmptyLfLfLinePos+LFLF.length(),parts[i].lastIndexOf(LF));
                     }
                     this.addNonEncodedArgument(name, value);
                 }
