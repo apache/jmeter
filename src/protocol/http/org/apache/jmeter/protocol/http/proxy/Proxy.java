@@ -175,13 +175,7 @@ public class Proxy extends Thread {
     @Override
     public void run() {
         // Check which HTTPSampler class we should use
-        String httpSamplerName = HTTPSamplerFactory.DEFAULT_CLASSNAME;
-        if(target.getSamplerTypeName() == ProxyControl.SAMPLER_TYPE_HTTP_SAMPLER) {
-            httpSamplerName = HTTPSamplerFactory.HTTP_SAMPLER_JAVA;
-        }
-        else if(target.getSamplerTypeName() == ProxyControl.SAMPLER_TYPE_HTTP_SAMPLER2) {
-            httpSamplerName = HTTPSamplerFactory.HTTP_SAMPLER_APACHE;
-        }
+        String httpSamplerName = target.getSamplerTypeName();
         // Instantiate the sampler
         HTTPSamplerBase sampler = HTTPSamplerFactory.newInstance(httpSamplerName);
 

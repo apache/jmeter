@@ -60,6 +60,7 @@ import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.gui.util.PowerTableModel;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.http.proxy.ProxyControl;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.WorkBench;
@@ -291,7 +292,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         httpHeaders.setSelected(model.getCaptureHttpHeaders());
         groupingMode.setSelectedIndex(model.getGroupingMode());
         addAssertions.setSelected(model.getAssertions());
-        samplerTypeName.setSelectedIndex(model.getSamplerTypeName());
+        samplerTypeName.setSelectedItem(model.getSamplerTypeName());
         samplerRedirectAutomatically.setSelected(model.getSamplerRedirectAutomatically());
         samplerFollowRedirects.setSelected(model.getSamplerFollowRedirects());
         useKeepAlive.setSelected(model.getUseKeepalive());
@@ -561,10 +562,9 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 
     private JPanel createHTTPSamplerPanel() {
         DefaultComboBoxModel m = new DefaultComboBoxModel();
-        // Note: position of these elements in the menu *must* match the
-        // corresponding ProxyControl.SAMPLER_TYPE_* values.
-        m.addElement(JMeterUtils.getResString("web_testing_title")); // $NON-NLS-1$
-        m.addElement(JMeterUtils.getResString("web_testing2_title")); // $NON-NLS-1$
+        for (String s : HTTPSamplerFactory.getImplementations()){
+            m.addElement(s);
+        }
         samplerTypeName = new JComboBox(m);
         samplerTypeName.setSelectedIndex(0);
         samplerTypeName.addItemListener(this);
