@@ -42,19 +42,27 @@ public class MultipartUrlConfigTest extends TestCase {
         assertEquals("boundary", muc.getBoundary());
     }
 
-    public void testParseArguments() {
+    // TODO - should LF-only EOL be allowed? 
+    public void testParseArgumentsLF() {
         String queryString
             = "Content-Disposition: form-data; name=\"aa\"\n"
             + "Content-Type: text/plain; charset=ISO-8859-1\n"
             + "Content-Transfer-Encoding: 8bit\n"
             + "\n"
-            + "aa\n"
+            + "bb\n"
             + "--7d159c1302d0y0\n"
             + "Content-Disposition: form-data; name=\"xx\"\n"
             + "Content-Type: text/plain; charset=ISO-8859-1\n"
             + "Content-Transfer-Encoding: 8bit\n"
             + "\n"
-            + "xx\n"
+            + "yy\n"
+            + "--7d159c1302d0y0\n"
+            + "Content-Disposition: form-data; name=\"abc\"\n"
+            + "Content-Type: text/plain; charset=ISO-8859-1\n"
+            + "Content-Transfer-Encoding: 8bit\n"
+            + "\n"
+            + "xyz  \n"
+            + "xyz  \n"
             + "--7d159c1302d0y0\n"
             + "Content-Disposition: form-data; name=\"param1\"; filename=\"file1\"\n"
             + "Content-Type: text/plain\n"
@@ -71,12 +79,63 @@ public class MultipartUrlConfigTest extends TestCase {
         assertEquals("param1", file.getParamName());
         assertEquals("text/plain", file.getMimeType());
         Arguments args = muc.getArguments();
-        assertEquals(2, args.getArgumentCount());
+        assertEquals(3, args.getArgumentCount());
         Argument arg = args.getArgument(0);
         assertEquals("aa", arg.getName());
-        assertEquals("aa", arg.getValue());
+        assertEquals("bb", arg.getValue());
         arg = args.getArgument(1);
         assertEquals("xx", arg.getName());
-        assertEquals("xx", arg.getValue());
+        assertEquals("yy", arg.getValue());
+        arg = args.getArgument(2);
+        assertEquals("abc", arg.getName());
+        assertEquals("xyz  \nxyz  ", arg.getValue());
+    }
+
+    public void testParseArgumentsCRLF() {
+        String queryString
+            = "Content-Disposition: form-data; name=\"aa\"\r\n"
+            + "Content-Type: text/plain; charset=ISO-8859-1\r\n"
+            + "Content-Transfer-Encoding: 8bit\r\n"
+            + "\r\n"
+            + "bb\r\n"
+            + "--7d159c1302d0y0\r\n"
+            + "Content-Disposition: form-data; name=\"xx\"\r\n"
+            + "Content-Type: text/plain; charset=ISO-8859-1\r\n"
+            + "Content-Transfer-Encoding: 8bit\r\n"
+            + "\r\n"
+            + "yy\r\n"
+            + "--7d159c1302d0y0\r\n"
+            + "Content-Disposition: form-data; name=\"abc\"\r\n"
+            + "Content-Type: text/plain; charset=ISO-8859-1\r\n"
+            + "Content-Transfer-Encoding: 8bit\r\n"
+            + "\r\n"
+            + "xyz  \r\n"
+            + "xyz  \r\n"
+            + "--7d159c1302d0y0\r\n"
+            + "Content-Disposition: form-data; name=\"param1\"; filename=\"file1\"\r\n"
+            + "Content-Type: text/plain\r\n"
+            + "Content-Transfer-Encoding: binary\r\n"
+            + "\r\n"
+            + "file content\r\n"
+            + "\r\n";
+        MultipartUrlConfig muc = new MultipartUrlConfig("7d159c1302d0y0");
+        muc.parseArguments(queryString);
+        HTTPFileArgs files = muc.getHTTPFileArgs();
+        assertEquals(1, files.getHTTPFileArgCount());
+        HTTPFileArg file = (HTTPFileArg) files.iterator().next().getObjectValue();
+        assertEquals("file1", file.getPath());
+        assertEquals("param1", file.getParamName());
+        assertEquals("text/plain", file.getMimeType());
+        Arguments args = muc.getArguments();
+        assertEquals(3, args.getArgumentCount());
+        Argument arg = args.getArgument(0);
+        assertEquals("aa", arg.getName());
+        assertEquals("bb", arg.getValue());
+        arg = args.getArgument(1);
+        assertEquals("xx", arg.getName());
+        assertEquals("yy", arg.getValue());
+        arg = args.getArgument(2);
+        assertEquals("abc", arg.getName());
+        assertEquals("xyz  \r\nxyz  ", arg.getValue());
     }
 }
