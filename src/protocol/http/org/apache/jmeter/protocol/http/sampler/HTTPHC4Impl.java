@@ -22,7 +22,10 @@ import java.net.URL;
 
 import org.apache.commons.lang.NotImplementedException;
 
-public class HTTPHC4Impl extends HTTPAbstractImpl {
+/**
+ * HTTP Sampler using Apache HttpClient 4.x.
+ */
+public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     protected HTTPHC4Impl(HTTPSamplerBase testElement) {
         super(testElement);
