@@ -98,7 +98,8 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
         }
     };
 
-    private volatile HttpClient savedClient;
+    // Needs to be accessible by HTTPSampler2
+    volatile HttpClient savedClient;
 
     static {
         int cps =
