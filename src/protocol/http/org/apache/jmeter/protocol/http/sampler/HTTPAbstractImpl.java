@@ -55,16 +55,8 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
     /**
      * Invokes {@link HTTPSamplerBase#errorResult(Throwable, HTTPSampleResult)}
      */
-    protected HTTPSampleResult errorResult(IllegalArgumentException e,
-            HTTPSampleResult res) {
-        return testElement.errorResult(e, res);
-    }
-
-    /**
-     * Invokes {@link HTTPSamplerBase#errorResult(Throwable, HTTPSampleResult)}
-     */
-    protected HTTPSampleResult errorResult(IOException iex, HTTPSampleResult res) {
-        return testElement.errorResult(iex, res);
+    protected HTTPSampleResult errorResult(Throwable t, HTTPSampleResult res) {
+        return testElement.errorResult(t, res);
     }
 
     /**
@@ -224,7 +216,7 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
     /**
      * Invokes {@link HTTPSamplerBase#readResponse(SampleResult, InputStream, int)}
      */
-    protected byte[] readResponse(HTTPSampleResult res, InputStream instream,
+    protected byte[] readResponse(SampleResult res, InputStream instream,
             int responseContentLength) throws IOException {
         return testElement.readResponse(res, instream, responseContentLength);
     }
