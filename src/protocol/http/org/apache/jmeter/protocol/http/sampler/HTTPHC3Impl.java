@@ -562,8 +562,7 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
     /**
      * Gets the ResponseHeaders
      *
-     * @param method
-     *            connection from which the headers are read
+     * @param method the method used to perform the request
      * @return string containing the headers, one per line
      */
     protected String getResponseHeaders(HttpMethod method) {
