@@ -34,7 +34,6 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableCellEditor;
 
-import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
@@ -107,7 +106,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
      *
      * These are used both for the display, and for setting the policy
     */
-    private final String[] policies = CookiePolicy.getRegisteredCookieSpecs();
+    private final String[] policies = CookieManager.getCookieSpecs();
 
     private JLabeledChoice policy;
 
