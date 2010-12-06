@@ -85,6 +85,16 @@ public class SlowSocket extends Socket {
         CPS=cps;
     }
 
+    /**
+     * Added for use by SlowHC4SocketFactory.
+     * 
+     * @param cps
+     */
+    public SlowSocket(int cps) {
+        super();
+        CPS = cps;
+    }
+
     // Override so we can intercept the stream
     @Override
     public OutputStream getOutputStream() throws IOException {
