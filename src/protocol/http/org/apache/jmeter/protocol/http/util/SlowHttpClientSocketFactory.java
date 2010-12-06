@@ -29,7 +29,7 @@ import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 import org.apache.jmeter.util.SlowSocket;
 
 /**
- * HttpClient protocol factory to generate "slow" sockets for emulating dial-up modems
+ * Commons HttpClient protocol factory to generate "slow" sockets for emulating dial-up modems
  */
 
 public class SlowHttpClientSocketFactory implements ProtocolSocketFactory {
