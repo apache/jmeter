@@ -385,6 +385,9 @@
     <pathelement location="${lib.dir}/${excalibur-pool.jar}"/>
     <pathelement location="${lib.dir}/${htmllexer.jar}"/>
     <pathelement location="${lib.dir}/${htmlparser.jar}"/>
+    <pathelement location="${lib.dir}/${httpclient.jar}"/>
+    <pathelement location="${lib.dir}/${httpmime.jar}"/>
+    <pathelement location="${lib.dir}/${httpcore.jar}"/>
     <pathelement location="${lib.dir}/${jakarta-oro.jar}"/>
     <pathelement location="${lib.dir}/${javamail.jar}"/>
     <pathelement location="${lib.dir}/${jcharts.jar}"/>
@@ -2048,7 +2051,6 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="htmllexer"/>
         <process_jarfile jarname="htmlparser"/>
         <process_jarfile jarname="httpclient"/>
-        <process_jarfile jarname="httpclient-cache"/>
         <process_jarfile jarname="httpmime"/>
         <process_jarfile jarname="httpcore"/>
         <process_jarfile jarname="jakarta-oro"/>
