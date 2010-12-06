@@ -33,7 +33,7 @@ import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 
 /**
- * HttpClient protocol factory to generate Loopback HTTP sockets
+ * Commons HttpClient protocol factory to generate Loopback HTTP sockets
  */
 
 public class LoopbackHttpClientSocketFactory implements ProtocolSocketFactory {
