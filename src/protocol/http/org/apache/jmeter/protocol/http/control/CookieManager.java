@@ -498,4 +498,10 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
             setProperty((CollectionProperty)initialCookies.clone());
         }
     }
+
+    public static String[] getCookieSpecs(){
+        return CookiePolicy.getRegisteredCookieSpecs(); // Commons HttpClient
+        //return new DefaultHttpClient().getCookieSpecs().getSpecNames().toArray(new String[]{}); // Apache HttpClient
+    }
+
 }
