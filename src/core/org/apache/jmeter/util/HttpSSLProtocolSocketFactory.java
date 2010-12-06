@@ -38,12 +38,12 @@ import org.apache.log.Logger;
 /**
  * Derived from EasySSLProtocolFactory
  *
- * Used by JsseSSLManager to set up the HttpClient and Java https socket handling
+ * Used by JsseSSLManager to set up the Commons HttpClient and Java https socket handling
  */
 
 public class HttpSSLProtocolSocketFactory
     extends SSLSocketFactory // for java sockets
-    implements SecureProtocolSocketFactory { // for httpclient sockets
+    implements SecureProtocolSocketFactory { // for Commons Httpclient sockets
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
