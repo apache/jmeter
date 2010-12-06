@@ -182,7 +182,7 @@ public class CollectionProperty extends MultiProperty {
      * @see AbstractProperty#getPropertyType()
      */
     @Override
-    protected Class getPropertyType() {
+    protected Class<? extends JMeterProperty> getPropertyType() {
         if (value.size() > 0) {
             return value.iterator().next().getClass();
         }
