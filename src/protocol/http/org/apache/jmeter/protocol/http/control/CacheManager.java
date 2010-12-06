@@ -28,11 +28,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Date;
 
-import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.URIException;
 import org.apache.commons.httpclient.util.DateParseException;
 import org.apache.commons.httpclient.util.DateUtil;
+import org.apache.http.HttpResponse;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.protocol.http.util.HTTPConstantsInterface;
@@ -98,7 +98,7 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
 
     /**
      * Save the Last-Modified, Etag, and Expires headers if the result is cacheable.
-     *
+     * Version for Java implementation.
      * @param conn connection
      * @param res result
      */
@@ -115,7 +115,7 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
 
     /**
      * Save the Last-Modified, Etag, and Expires headers if the result is cacheable.
-     *
+     * Version for Commons HttpClient implementation.
      * @param method
      * @param res result
      */
@@ -127,6 +127,23 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
             String url = method.getURI().toString();
             String cacheControl = getHeader(method, HTTPConstantsInterface.CACHE_CONTROL);
             setCache(lastModified, cacheControl, expires, etag, url);
+        }
+    }
+
+    /**
+     * Save the Last-Modified, Etag, and Expires headers if the result is cacheable.
+     * Version for Apache HttpClient implementation.
+     * @param method
+     * @param res result
+     */
+    public void saveDetails(HttpResponse method, SampleResult res) {
+        if (isCacheable(res)){
+            method.getLastHeader(USE_EXPIRES);
+            String lastModified = getHeader(method ,HTTPConstantsInterface.LAST_MODIFIED);
+            String expires = getHeader(method ,HTTPConstantsInterface.EXPIRES);
+            String etag = getHeader(method ,HTTPConstantsInterface.ETAG);
+            String cacheControl = getHeader(method, HTTPConstantsInterface.CACHE_CONTROL);
+            setCache(lastModified, cacheControl, expires, etag, res.getUrlAsString()); // TODO correct URL?
         }
     }
 
@@ -156,9 +173,15 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
         getCache().put(url, new CacheEntry(lastModified, expiresDate, etag));
     }
 
-    // Helper method to deal with missing headers
+    // Helper method to deal with missing headers - Commons HttpClient
     private String getHeader(HttpMethod method, String name){
-        Header hdr = method.getResponseHeader(name);
+        org.apache.commons.httpclient.Header hdr = method.getResponseHeader(name);
+        return hdr != null ? hdr.getValue() : null;
+    }
+
+    // Apache HttpClient
+    private String getHeader(HttpResponse method, String name) {
+        org.apache.http.Header hdr = method.getLastHeader(name);
         return hdr != null ? hdr.getValue() : null;
     }
 
