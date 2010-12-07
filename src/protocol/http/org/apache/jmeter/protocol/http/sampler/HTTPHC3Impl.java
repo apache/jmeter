@@ -162,6 +162,178 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
 
 
     /**
+     * Samples the URL passed in and stores the result in
+     * <code>HTTPSampleResult</code>, following redirects and downloading
+     * page resources as appropriate.
+     * <p>
+     * When getting a redirect target, redirects are not followed and resources
+     * are not downloaded. The caller will take care of this.
+     *
+     * @param url
+     *            URL to sample
+     * @param method
+     *            HTTP method: GET, POST,...
+     * @param areFollowingRedirect
+     *            whether we're getting a redirect target
+     * @param frameDepth
+     *            Depth of this target in the frame structure. Used only to
+     *            prevent infinite recursion.
+     * @return results of the sampling
+     */
+    @Override
+    protected HTTPSampleResult sample(URL url, String method, boolean areFollowingRedirect, int frameDepth) {
+
+        String urlStr = url.toString();
+
+        log.debug("Start : sample " + urlStr);
+        log.debug("method " + method);
+
+        HttpMethodBase httpMethod = null;
+
+        HTTPSampleResult res = new HTTPSampleResult();
+        res.setMonitor(isMonitor());
+
+        res.setSampleLabel(urlStr); // May be replaced later
+        res.setHTTPMethod(method);
+        res.setURL(url);
+
+        res.sampleStart(); // Count the retries as well in the time
+        HttpClient client = null;
+        InputStream instream = null;
+        try {
+            // May generate IllegalArgumentException
+            if (method.equals(POST)) {
+                httpMethod = new PostMethod(urlStr);
+            } else if (method.equals(PUT)){
+                httpMethod = new PutMethod(urlStr);
+            } else if (method.equals(HEAD)){
+                httpMethod = new HeadMethod(urlStr);
+            } else if (method.equals(TRACE)){
+                httpMethod = new TraceMethod(urlStr);
+            } else if (method.equals(OPTIONS)){
+                httpMethod = new OptionsMethod(urlStr);
+            } else if (method.equals(DELETE)){
+                httpMethod = new DeleteMethod(urlStr);
+            } else if (method.equals(GET)){
+                httpMethod = new GetMethod(urlStr);
+                final CacheManager cacheManager = getCacheManager();
+                if (cacheManager != null && GET.equalsIgnoreCase(method)) {
+                   if (cacheManager.inCache(url)) {
+                       res.sampleEnd();
+                       res.setResponseNoContent();
+                       res.setSuccessful(true);
+                       return res;
+                   }
+                }
+            } else {
+                log.error("Unexpected method (converted to GET): "+method);
+                httpMethod = new GetMethod(urlStr);
+            }
+
+            // Set any default request headers
+            setDefaultRequestHeaders(httpMethod);
+            // Setup connection
+            client = setupConnection(url, httpMethod, res);
+            savedClient = client;
+
+            // Handle the various methods
+            if (method.equals(POST)) {
+                String postBody = sendPostData((PostMethod)httpMethod);
+                res.setQueryString(postBody);
+            } else if (method.equals(PUT)) {
+                String putBody = sendPutData((PutMethod)httpMethod);
+                res.setQueryString(putBody);
+            }
+
+            int statusCode = client.executeMethod(httpMethod);
+
+            // Needs to be done after execute to pick up all the headers
+            res.setRequestHeaders(getConnectionHeaders(httpMethod));
+
+            // Request sent. Now get the response:
+            instream = httpMethod.getResponseBodyAsStream();
+
+            if (instream != null) {// will be null for HEAD
+
+                Header responseHeader = httpMethod.getResponseHeader(HEADER_CONTENT_ENCODING);
+                if (responseHeader!= null && ENCODING_GZIP.equals(responseHeader.getValue())) {
+                    instream = new GZIPInputStream(instream);
+                }
+                res.setResponseData(readResponse(res, instream, (int) httpMethod.getResponseContentLength()));
+            }
+
+            res.sampleEnd();
+            // Done with the sampling proper.
+
+            // Now collect the results into the HTTPSampleResult:
+
+            res.setSampleLabel(httpMethod.getURI().toString());
+            // Pick up Actual path (after redirects)
+
+            res.setResponseCode(Integer.toString(statusCode));
+            res.setSuccessful(isSuccessCode(statusCode));
+
+            res.setResponseMessage(httpMethod.getStatusText());
+
+            String ct = null;
+            Header h = httpMethod.getResponseHeader(HEADER_CONTENT_TYPE);
+            if (h != null)// Can be missing, e.g. on redirect
+            {
+                ct = h.getValue();
+                res.setContentType(ct);// e.g. text/html; charset=ISO-8859-1
+                res.setEncodingAndType(ct);
+            }
+
+            res.setResponseHeaders(getResponseHeaders(httpMethod));
+            if (res.isRedirect()) {
+                final Header headerLocation = httpMethod.getResponseHeader(HEADER_LOCATION);
+                if (headerLocation == null) { // HTTP protocol violation, but avoids NPE
+                    throw new IllegalArgumentException("Missing location header");
+                }
+                res.setRedirectLocation(headerLocation.getValue());
+            }
+
+            // If we redirected automatically, the URL may have changed
+            if (getAutoRedirects()){
+                res.setURL(new URL(httpMethod.getURI().toString()));
+            }
+
+            // Store any cookies received in the cookie manager:
+            saveConnectionCookies(httpMethod, res.getURL(), getCookieManager());
+
+            // Save cache information
+            final CacheManager cacheManager = getCacheManager();
+            if (cacheManager != null){
+                cacheManager.saveDetails(httpMethod, res);
+            }
+
+            // Follow redirects and download page resources if appropriate:
+            res = resultProcessing(areFollowingRedirect, frameDepth, res);
+
+            log.debug("End : sample");
+            httpMethod.releaseConnection();
+            return res;
+        } catch (IllegalArgumentException e)// e.g. some kinds of invalid URL
+        {
+            res.sampleEnd();
+            HTTPSampleResult err = errorResult(e, res);
+            err.setSampleLabel("Error: " + url.toString());
+            return err;
+        } catch (IOException e) {
+            res.sampleEnd();
+            HTTPSampleResult err = errorResult(e, res);
+            err.setSampleLabel("Error: " + url.toString());
+            return err;
+        } finally {
+            savedClient = null;
+            JOrphanUtils.closeQuietly(instream);
+            if (httpMethod != null) {
+                httpMethod.releaseConnection();
+            }
+        }
+    }
+
+    /**
      * Returns an <code>HttpConnection</code> fully ready to attempt
      * connection. This means it sets the request method (GET or POST), headers,
      * cookies, and authorization for the URL request.
@@ -486,177 +658,6 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
         }
     }
 
-    /**
-     * Samples the URL passed in and stores the result in
-     * <code>HTTPSampleResult</code>, following redirects and downloading
-     * page resources as appropriate.
-     * <p>
-     * When getting a redirect target, redirects are not followed and resources
-     * are not downloaded. The caller will take care of this.
-     *
-     * @param url
-     *            URL to sample
-     * @param method
-     *            HTTP method: GET, POST,...
-     * @param areFollowingRedirect
-     *            whether we're getting a redirect target
-     * @param frameDepth
-     *            Depth of this target in the frame structure. Used only to
-     *            prevent infinite recursion.
-     * @return results of the sampling
-     */
-    @Override
-    protected HTTPSampleResult sample(URL url, String method, boolean areFollowingRedirect, int frameDepth) {
-
-        String urlStr = url.toString();
-
-        log.debug("Start : sample " + urlStr);
-        log.debug("method " + method);
-
-        HttpMethodBase httpMethod = null;
-
-        HTTPSampleResult res = new HTTPSampleResult();
-        res.setMonitor(isMonitor());
-
-        res.setSampleLabel(urlStr); // May be replaced later
-        res.setHTTPMethod(method);
-        res.setURL(url);
-
-        res.sampleStart(); // Count the retries as well in the time
-        HttpClient client = null;
-        InputStream instream = null;
-        try {
-            // May generate IllegalArgumentException
-            if (method.equals(POST)) {
-                httpMethod = new PostMethod(urlStr);
-            } else if (method.equals(PUT)){
-                httpMethod = new PutMethod(urlStr);
-            } else if (method.equals(HEAD)){
-                httpMethod = new HeadMethod(urlStr);
-            } else if (method.equals(TRACE)){
-                httpMethod = new TraceMethod(urlStr);
-            } else if (method.equals(OPTIONS)){
-                httpMethod = new OptionsMethod(urlStr);
-            } else if (method.equals(DELETE)){
-                httpMethod = new DeleteMethod(urlStr);
-            } else if (method.equals(GET)){
-                httpMethod = new GetMethod(urlStr);
-                final CacheManager cacheManager = getCacheManager();
-                if (cacheManager != null && GET.equalsIgnoreCase(method)) {
-                   if (cacheManager.inCache(url)) {
-                       res.sampleEnd();
-                       res.setResponseNoContent();
-                       res.setSuccessful(true);
-                       return res;
-                   }
-                }
-            } else {
-                log.error("Unexpected method (converted to GET): "+method);
-                httpMethod = new GetMethod(urlStr);
-            }
-
-            // Set any default request headers
-            setDefaultRequestHeaders(httpMethod);
-            // Setup connection
-            client = setupConnection(url, httpMethod, res);
-            savedClient = client;
-
-            // Handle the various methods
-            if (method.equals(POST)) {
-                String postBody = sendPostData((PostMethod)httpMethod);
-                res.setQueryString(postBody);
-            } else if (method.equals(PUT)) {
-                String putBody = sendPutData((PutMethod)httpMethod);
-                res.setQueryString(putBody);
-            }
-
-            int statusCode = client.executeMethod(httpMethod);
-
-            // Needs to be done after execute to pick up all the headers
-            res.setRequestHeaders(getConnectionHeaders(httpMethod));
-
-            // Request sent. Now get the response:
-            instream = httpMethod.getResponseBodyAsStream();
-
-            if (instream != null) {// will be null for HEAD
-
-                Header responseHeader = httpMethod.getResponseHeader(HEADER_CONTENT_ENCODING);
-                if (responseHeader!= null && ENCODING_GZIP.equals(responseHeader.getValue())) {
-                    instream = new GZIPInputStream(instream);
-                }
-                res.setResponseData(readResponse(res, instream, (int) httpMethod.getResponseContentLength()));
-            }
-
-            res.sampleEnd();
-            // Done with the sampling proper.
-
-            // Now collect the results into the HTTPSampleResult:
-
-            res.setSampleLabel(httpMethod.getURI().toString());
-            // Pick up Actual path (after redirects)
-
-            res.setResponseCode(Integer.toString(statusCode));
-            res.setSuccessful(isSuccessCode(statusCode));
-
-            res.setResponseMessage(httpMethod.getStatusText());
-
-            String ct = null;
-            Header h = httpMethod.getResponseHeader(HEADER_CONTENT_TYPE);
-            if (h != null)// Can be missing, e.g. on redirect
-            {
-                ct = h.getValue();
-                res.setContentType(ct);// e.g. text/html; charset=ISO-8859-1
-                res.setEncodingAndType(ct);
-            }
-
-            res.setResponseHeaders(getResponseHeaders(httpMethod));
-            if (res.isRedirect()) {
-                final Header headerLocation = httpMethod.getResponseHeader(HEADER_LOCATION);
-                if (headerLocation == null) { // HTTP protocol violation, but avoids NPE
-                    throw new IllegalArgumentException("Missing location header");
-                }
-                res.setRedirectLocation(headerLocation.getValue());
-            }
-
-            // If we redirected automatically, the URL may have changed
-            if (getAutoRedirects()){
-                res.setURL(new URL(httpMethod.getURI().toString()));
-            }
-
-            // Store any cookies received in the cookie manager:
-            saveConnectionCookies(httpMethod, res.getURL(), getCookieManager());
-
-            // Save cache information
-            final CacheManager cacheManager = getCacheManager();
-            if (cacheManager != null){
-                cacheManager.saveDetails(httpMethod, res);
-            }
-
-            // Follow redirects and download page resources if appropriate:
-            res = resultProcessing(areFollowingRedirect, frameDepth, res);
-
-            log.debug("End : sample");
-            httpMethod.releaseConnection();
-            return res;
-        } catch (IllegalArgumentException e)// e.g. some kinds of invalid URL
-        {
-            res.sampleEnd();
-            HTTPSampleResult err = errorResult(e, res);
-            err.setSampleLabel("Error: " + url.toString());
-            return err;
-        } catch (IOException e) {
-            res.sampleEnd();
-            HTTPSampleResult err = errorResult(e, res);
-            err.setSampleLabel("Error: " + url.toString());
-            return err;
-        } finally {
-            savedClient = null;
-            JOrphanUtils.closeQuietly(instream);
-            if (httpMethod != null) {
-                httpMethod.releaseConnection();
-            }
-        }
-    }
 
     /*
      * Send POST data from <code>Entry</code> to the open connection.
