@@ -125,5 +125,25 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
         return false;
     }
 
+    /**
+     * Is a dynamic proxy defined?
+     *
+     * @param proxyHost the host to check
+     * @param proxyPort the port to check
+     * @return {@code true} iff both ProxyPort and ProxyHost are defined.
+     */
+    protected boolean isDynamicProxy(String proxyHost, int proxyPort){
+        return (proxyHost.trim().length() > 0 && proxyPort > 0);        
+    }
+
+    /**
+     * Is a static proxy defined?
+     * 
+     * @param host to check against non-proxy hosts
+     * @return {@code true} iff a static proxy has been defined.
+     */
+    protected static boolean isStaticProxy(String host){
+        return PROXY_DEFINED && !isNonProxy(host);
+    }
 
 }
