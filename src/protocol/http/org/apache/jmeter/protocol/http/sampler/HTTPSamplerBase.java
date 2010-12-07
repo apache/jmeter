@@ -1431,7 +1431,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * Read response from the input stream, converting to MD5 digest if the useMD5 property is set.
      *
      * For the MD5 case, the result byte count is set to the size of the original response.
-     *
+     * 
+     * Closes the inputStream (unless there was an error)
+     * 
      * @param sampleResult
      * @param in input stream
      * @param length expected input length or zero
