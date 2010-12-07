@@ -122,6 +122,7 @@ System.nanoTime() tends to drift relative to System.currentTimeMillis().
 Change SampleResult to recalculate offset each time.
 Also enable reversion to using System.currentTimeMillis() only.
 </li>
+<li>Bug 50425 - Remove thread groups from Controller add menu</li>
 </ul>
 
 <!-- ==================================================== -->
