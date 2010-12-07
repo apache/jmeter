@@ -392,22 +392,20 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
             }
         }
 
-        boolean useStaticProxy = PROXY_DEFINED && !isNonProxy(host);
-        boolean useDynamicProxy = false;
-
         final String proxyHost = getProxyHost();
         final int proxyPort = getProxyPortInt();
-        if (proxyHost.length() > 0 && proxyPort > 0){
+
+        boolean useStaticProxy = isStaticProxy(host);
+        boolean useDynamicProxy = isDynamicProxy(proxyHost, proxyPort);
+
+        if (useDynamicProxy){
             hc.setProxy(proxyHost, proxyPort);
             useStaticProxy = false; // Dynamic proxy overrules static proxy
-            useDynamicProxy = true;
-        } else {
-            if (useStaticProxy) {
-                if (log.isDebugEnabled()){
-                    log.debug("Setting proxy: "+PROXY_HOST+":"+PROXY_PORT);
-                }
-                hc.setProxy(PROXY_HOST, PROXY_PORT);
+        } else if (useStaticProxy) {
+            if (log.isDebugEnabled()){
+                log.debug("Setting proxy: "+PROXY_HOST+":"+PROXY_PORT);
             }
+            hc.setProxy(PROXY_HOST, PROXY_PORT);
         }
 
         Map<HostConfiguration, HttpClient> map = httpClients.get();
