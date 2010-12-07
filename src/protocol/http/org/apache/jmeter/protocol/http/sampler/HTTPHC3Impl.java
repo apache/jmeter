@@ -198,8 +198,6 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
         res.setURL(url);
 
         res.sampleStart(); // Count the retries as well in the time
-        HttpClient client = null;
-        InputStream instream = null;
         try {
             // May generate IllegalArgumentException
             if (method.equals(POST)) {
@@ -232,8 +230,9 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
 
             // Set any default request headers
             setDefaultRequestHeaders(httpMethod);
+
             // Setup connection
-            client = setupConnection(url, httpMethod, res);
+            HttpClient client = setupConnection(url, httpMethod, res);
             savedClient = client;
 
             // Handle the various methods
@@ -251,15 +250,18 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
             res.setRequestHeaders(getConnectionHeaders(httpMethod));
 
             // Request sent. Now get the response:
-            instream = httpMethod.getResponseBodyAsStream();
+            InputStream instream = httpMethod.getResponseBodyAsStream();
 
             if (instream != null) {// will be null for HEAD
-
-                Header responseHeader = httpMethod.getResponseHeader(HEADER_CONTENT_ENCODING);
-                if (responseHeader!= null && ENCODING_GZIP.equals(responseHeader.getValue())) {
-                    instream = new GZIPInputStream(instream);
+                try {
+                    Header responseHeader = httpMethod.getResponseHeader(HEADER_CONTENT_ENCODING);
+                    if (responseHeader!= null && ENCODING_GZIP.equals(responseHeader.getValue())) {
+                        instream = new GZIPInputStream(instream);
+                    }
+                    res.setResponseData(readResponse(res, instream, (int) httpMethod.getResponseContentLength()));
+                } finally {
+                    JOrphanUtils.closeQuietly(instream);
                 }
-                res.setResponseData(readResponse(res, instream, (int) httpMethod.getResponseContentLength()));
             }
 
             res.sampleEnd();
@@ -326,7 +328,6 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
             return err;
         } finally {
             savedClient = null;
-            JOrphanUtils.closeQuietly(instream);
             if (httpMethod != null) {
                 httpMethod.releaseConnection();
             }
