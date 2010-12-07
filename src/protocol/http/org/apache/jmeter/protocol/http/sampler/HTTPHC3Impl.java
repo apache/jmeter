@@ -214,18 +214,18 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
                 httpMethod = new DeleteMethod(urlStr);
             } else if (method.equals(GET)){
                 httpMethod = new GetMethod(urlStr);
-                final CacheManager cacheManager = getCacheManager();
-                if (cacheManager != null && GET.equalsIgnoreCase(method)) {
-                   if (cacheManager.inCache(url)) {
-                       res.sampleEnd();
-                       res.setResponseNoContent();
-                       res.setSuccessful(true);
-                       return res;
-                   }
-                }
             } else {
-                log.error("Unexpected method (converted to GET): "+method);
-                httpMethod = new GetMethod(urlStr);
+                throw new IllegalArgumentException("Unexpected method: "+method);
+            }
+
+            final CacheManager cacheManager = getCacheManager();
+            if (cacheManager != null && GET.equalsIgnoreCase(method)) {
+               if (cacheManager.inCache(url)) {
+                   res.sampleEnd();
+                   res.setResponseNoContent();
+                   res.setSuccessful(true);
+                   return res;
+               }
             }
 
             // Set any default request headers
@@ -304,7 +304,6 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
             saveConnectionCookies(httpMethod, res.getURL(), getCookieManager());
 
             // Save cache information
-            final CacheManager cacheManager = getCacheManager();
             if (cacheManager != null){
                 cacheManager.saveDetails(httpMethod, res);
             }
