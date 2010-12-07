@@ -836,8 +836,7 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
             res.setResponseMessage(httpMethod.getStatusText());
 
             String ct = null;
-            org.apache.commons.httpclient.Header h
-                = httpMethod.getResponseHeader(HEADER_CONTENT_TYPE);
+            Header h = httpMethod.getResponseHeader(HEADER_CONTENT_TYPE);
             if (h != null)// Can be missing, e.g. on redirect
             {
                 ct = h.getValue();
