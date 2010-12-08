@@ -1042,10 +1042,8 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
         Map<HostConfiguration, HttpClient> map = httpClients.get();
 
         if ( map != null ) {
-            for ( Iterator<Map.Entry<HostConfiguration, HttpClient> > it = map.entrySet().iterator(); it.hasNext(); )
+            for (HttpClient cl : map.values())
             {
-                Map.Entry<HostConfiguration, HttpClient> entry = it.next();
-                HttpClient cl = entry.getValue();
                 // Can cause NPE in HttpClient 3.1
                 //((SimpleHttpConnectionManager)cl.getHttpConnectionManager()).shutdown();// Closes the connection
                 // Revert to original method:
