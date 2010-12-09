@@ -28,15 +28,15 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.commons.httpclient.HttpVersion;
-import org.apache.commons.httpclient.ProtocolException;
-import org.apache.commons.httpclient.params.HttpParams;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /*
- * Utility class to set up default HttpClient parameters from a file
+ * Utility class to set up default HttpClient parameters from a file.
+ * 
+ * Supports both Commons HttpClient and Apache HttpClient.
+ * 
  */
 public class HttpClientDefaultParameters {
 
@@ -46,7 +46,48 @@ public class HttpClientDefaultParameters {
     private HttpClientDefaultParameters(){
     }
 
-    public static void load(String file, HttpParams params){
+    // Helper class (callback) for applying parameter definitions
+    private static abstract class GenericHttpParams {
+        public abstract void setParameter(String name, Object value);
+    }
+
+    /**
+     * Loads a property file and converts parameters as necessary.
+     * 
+     * @param file the file to load
+     * @param params Commons HttpClient parameter instance
+     */
+    public static void load(String file, 
+            final org.apache.commons.httpclient.params.HttpParams params){
+        load(file, 
+                new GenericHttpParams (){
+                    @Override
+                    public void setParameter(String name, Object value) {
+                        params.setParameter(name, value);
+                    }            
+                }
+            );
+    }
+
+    /**
+     * Loads a property file and converts parameters as necessary.
+     * 
+     * @param file the file to load
+     * @param params Apache HttpClient parameter instance
+     */
+    public static void load(String file, 
+            final org.apache.http.params.HttpParams params){
+        load(file, 
+                new GenericHttpParams (){
+                    @Override
+                    public void setParameter(String name, Object value) {
+                        params.setParameter(name, value);
+                    }            
+                }
+            );
+    }
+
+    private static void load(String file, GenericHttpParams params){
         log.info("Reading httpclient parameters from "+file);
         File f = new File(file);
         InputStream is = null;
@@ -71,18 +112,17 @@ public class HttpClientDefaultParameters {
                             params.setParameter(name, Long.valueOf(value));
                         } else if (type.equals("Boolean")){
                             params.setParameter(name, Boolean.valueOf(value));
-                        } else if (type.equals("HttpVersion")){
-                            params.setParameter(name, HttpVersion.parse("HTTP/"+value));
+                        } else if (type.equals("HttpVersion")){ // Commons HttpClient only
+                            params.setParameter(name, 
+                                    org.apache.commons.httpclient.HttpVersion.parse("HTTP/"+value));
                         } else {
-                            log.warn("Unexpected type: "+type);
+                            log.warn("Unexpected type: "+type+" for name "+name);
                         }
                     } else {
                             log.info("Defining "+key+ " as "+value);
                             params.setParameter(key, value);
                     }
-                } catch (NumberFormatException e) {
-                    log.error("Error in property: "+key+"="+value+" "+e.toString());
-                } catch (ProtocolException e) {
+                } catch (Exception e) {
                     log.error("Error in property: "+key+"="+value+" "+e.toString());
                 }
             }
@@ -94,8 +134,5 @@ public class HttpClientDefaultParameters {
             JOrphanUtils.closeQuietly(is);
         }
     }
-//    public static void main(String args[]){
-//        load("bin/httpclient.parameters",
-//            org.apache.commons.httpclient.params.DefaultHttpParams.getDefaultParams());
-//    }
+
 }
