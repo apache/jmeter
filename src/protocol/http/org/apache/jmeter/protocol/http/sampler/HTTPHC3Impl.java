@@ -36,6 +36,7 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpConnectionManager;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpMethodBase;
+import org.apache.commons.httpclient.HttpState;
 import org.apache.commons.httpclient.HttpVersion;
 import org.apache.commons.httpclient.NTCredentials;
 import org.apache.commons.httpclient.ProtocolException;
@@ -57,6 +58,7 @@ import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.multipart.PartBase;
 import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.apache.commons.httpclient.params.DefaultHttpParams;
+import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.httpclient.params.HttpParams;
 import org.apache.commons.httpclient.protocol.Protocol;
@@ -86,6 +88,8 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final long serialVersionUID = 240L;
+
+    private static final String HTTP_AUTHENTICATION_PREEMPTIVE = "http.authentication.preemptive"; // $NON-NLS-1$
 
     private static final boolean canSetPreEmptive; // OK to set pre-emptive auth?
 
@@ -613,8 +617,9 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
      *            this <code>UrlConfig</code>
      */
     private void setConnectionAuthorization(HttpClient client, URL u, AuthManager authManager) {
-        HttpParams params = client.getParams();
+        HttpState state = client.getState();
         if (authManager != null) {
+            HttpClientParams params = client.getParams();
             Authorization auth = authManager.getAuthForURL(u);
             if (auth != null) {
                     String username = auth.getUser();
@@ -623,7 +628,7 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
                     if (log.isDebugEnabled()){
                         log.debug(username + " >  D="+ username + " D="+domain+" R="+realm);
                     }
-                    client.getState().setCredentials(
+                    state.setCredentials(
                             new AuthScope(u.getHost(),u.getPort(),
                                     realm.length()==0 ? null : realm //"" is not the same as no realm
                                     ,AuthScope.ANY_SCHEME),
@@ -637,20 +642,16 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
                     // We have credentials - should we set pre-emptive authentication?
                     if (canSetPreEmptive){
                         log.debug("Setting Pre-emptive authentication");
-                        params.setBooleanParameter(HTTP_AUTHENTICATION_PREEMPTIVE, true);
+                        params.setAuthenticationPreemptive(true);
                     }
-            }
-            else
-            {
-                client.getState().clearCredentials();
+            } else {
+                state.clearCredentials();
                 if (canSetPreEmptive){
-                    params.setBooleanParameter(HTTP_AUTHENTICATION_PREEMPTIVE, false);
+                    params.setAuthenticationPreemptive(false);
                 }
             }
-        }
-        else
-        {
-            client.getState().clearCredentials();
+        } else {
+            state.clearCredentials();
         }
     }
 
