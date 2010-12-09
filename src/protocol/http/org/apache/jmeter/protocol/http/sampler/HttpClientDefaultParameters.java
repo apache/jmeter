@@ -95,9 +95,7 @@ public class HttpClientDefaultParameters {
         try {
             is = new FileInputStream(f);
             props.load(is);
-            Iterator<Map.Entry<Object, Object>> pi = props.entrySet().iterator();
-            while(pi.hasNext()){
-                Map.Entry<Object, Object> me = pi.next();
+            for (Map.Entry<Object, Object> me : props.entrySet()){
                 String key = (String) me.getKey();
                 String value = (String)me.getValue();
                 int typeSep = key.indexOf("$"); // $NON-NLS-1$
