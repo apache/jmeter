@@ -57,10 +57,8 @@ import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.multipart.PartBase;
 import org.apache.commons.httpclient.methods.multipart.StringPart;
-import org.apache.commons.httpclient.params.DefaultHttpParams;
 import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.commons.httpclient.params.HttpMethodParams;
-import org.apache.commons.httpclient.params.HttpParams;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.Authorization;
@@ -88,8 +86,6 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final long serialVersionUID = 240L;
-
-    private static final String HTTP_AUTHENTICATION_PREEMPTIVE = "http.authentication.preemptive"; // $NON-NLS-1$
 
     private static final boolean canSetPreEmptive; // OK to set pre-emptive auth?
 
@@ -125,7 +121,7 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
 //        }
 
         // Set default parameters as needed
-        HttpParams params = DefaultHttpParams.getDefaultParams();
+        HttpClientParams params = new HttpClientParams();
 
         // Process httpclient parameters file
         String file=JMeterUtils.getProperty("httpclient.parameters.file"); // $NON-NLS-1$
@@ -133,9 +129,9 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
             HttpClientDefaultParameters.load(file,params);
         }
 
-        // If the pre-emptive parameter is undefined, then we cans set it as needed
+        // If the pre-emptive parameter is undefined, then we can set it as needed
         // otherwise we should do what the user requested.
-        canSetPreEmptive =  params.getParameter(HTTP_AUTHENTICATION_PREEMPTIVE) == null;
+        canSetPreEmptive =  params.isAuthenticationPreemptive();
 
         // Handle old-style JMeter properties
         // Default to HTTP version 1.1
