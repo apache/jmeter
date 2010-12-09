@@ -62,6 +62,10 @@ To override the default local language fully, set the JMeter property "language"
 <h2>Incompatible changes</h2>
 
 <p>
+Unsupported methods are no longer converted to GET by the Commons HttpClient sampler.
+</p>
+
+<p>
 Removed method public static long currentTimeInMs().
 This has been replaced by the instance method public long currentTimeInMillis().
 </p>
