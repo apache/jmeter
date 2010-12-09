@@ -3202,7 +3202,7 @@ If the database server is not running or is not accessible, then JMeter will rep
 <tr><th>Database</th><th>Driver class</th><th>Database URL</th></tr>
 <tr><td>MySQL</td><td>com.mysql.jdbc.Driver</td><td>jdbc:mysql://host[:port]/dbname</td></tr>
 <tr><td>PostgreSQL</td><td>org.postgresql.Driver</td><td>jdbc:postgresql:{dbname}</td></tr>
-<tr><td>Oracle</td><td>oracle.jdbc.driver.OracleDriver</td><td>jdbc:oracle:thin:@//host:port/service
+<tr><td>Oracle</td><td>oracle.jdbc.OracleDriver</td><td>jdbc:oracle:thin:@//host:port/service
 OR<br/>jdbc:oracle:thin:@(description=(address=(host={mc-name})(protocol=tcp)(port={port-no}))(connect_data=(sid={sid})))</td></tr>
 <tr><td>Ingres (2006)</td><td>ingres.jdbc.IngresDriver</td><td>jdbc:ingres://host:port/db[;attr=value]</td></tr>
 <tr><td>SQL Server (MS JDBC driver)</td><td>com.microsoft.sqlserver.jdbc.SQLServerDriver</td><td>jdbc:sqlserver://host:port;DatabaseName=dbname</td></tr>
