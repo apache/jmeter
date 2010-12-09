@@ -19,6 +19,7 @@
 package org.apache.jmeter.protocol.http.sampler;
 
 import java.net.InetAddress;
+import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -40,8 +41,6 @@ import org.apache.log.Logger;
 public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
-
-    protected static final String HTTP_AUTHENTICATION_PREEMPTIVE = "http.authentication.preemptive"; // $NON-NLS-1$
 
     protected static final String PROXY_HOST = System.getProperty("http.proxyHost","");
 
@@ -146,4 +145,80 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
         return PROXY_DEFINED && !isNonProxy(host);
     }
 
+    /**
+     * Holder class for all fields that define an HttpClient instance;
+     * used as the key to the ThreadLocal map of HttpClient instances.
+     */
+    protected static final class HttpClientKey {
+//        protected final String host;
+
+        private final URL url;
+        private final boolean hasProxy;
+        private final String proxyHost;
+        private final int proxyPort;
+        private final String proxyUser;
+        private final String proxyPass;
+        
+        private final int hashCode; // Always create hash because we will always need it
+
+        public HttpClientKey(URL url, boolean b, String proxyHost,
+                int proxyPort, String proxyUser, String proxyPass) {
+            this.url = url;
+            this.hasProxy = b;
+            this.proxyHost = proxyHost;
+            this.proxyPort = proxyPort;
+            this.proxyUser = proxyUser;
+            this.proxyPass = proxyPass;
+            this.hashCode = getHash();
+        }
+        
+        private int getHash() {
+            int hash = 17;
+            hash = hash*31 + (hasProxy ? 1 : 0);
+            if (hasProxy) {
+                hash = hash*31 + getHash(proxyHost);
+                hash = hash*31 + proxyPort;
+                hash = hash*31 + getHash(proxyUser);
+                hash = hash*31 + getHash(proxyPass);
+            }
+            hash = hash*31 + url.toString().hashCode();
+            return hash;
+        }
+
+        // Allow for null strings
+        private int getHash(String s) {
+            return s == null ? 0 : s.hashCode(); 
+        }
+        
+        @Override
+        public boolean equals (Object obj){
+            if (this == obj) {
+                return true;
+            }
+            if (obj instanceof HttpClientKey) {
+                return false;
+            }
+            HttpClientKey other = (HttpClientKey) obj;
+            if (this.hasProxy) { // otherwise proxy String fields may be null
+                return 
+                this.hasProxy == other.hasProxy &&
+                this.proxyPort == other.proxyPort &&
+                this.proxyHost.equals(other.proxyHost) &&
+                this.proxyUser.equals(other.proxyUser) &&
+                this.proxyPass.equals(other.proxyPass) &&
+                this.url.toString().equals(other.url.toString());                
+            }
+            // No proxy, so don't check proxy fields
+            return 
+                this.hasProxy == other.hasProxy &&
+                this.url.toString().equals(other.url.toString())
+            ;
+            
+        }
+
+        @Override
+        public int hashCode(){
+            return hashCode;
+        }
+    }
 }
