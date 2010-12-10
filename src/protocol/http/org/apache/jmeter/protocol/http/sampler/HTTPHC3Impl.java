@@ -101,13 +101,10 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
     volatile HttpClient savedClient;
 
     static {
-        int cps =
-            JMeterUtils.getPropDefault("httpclient.socket.http.cps", 0); // $NON-NLS-1$
-
-        if (cps > 0) {
-            log.info("Setting up HTTP SlowProtocol, cps="+cps);
+        if (CPS_HTTP > 0) {
+            log.info("Setting up HTTP SlowProtocol, cps="+CPS_HTTP);
             Protocol.registerProtocol(PROTOCOL_HTTP,
-                    new Protocol(PROTOCOL_HTTP,new SlowHttpClientSocketFactory(cps),DEFAULT_HTTP_PORT));
+                    new Protocol(PROTOCOL_HTTP,new SlowHttpClientSocketFactory(CPS_HTTP),DEFAULT_HTTP_PORT));
         }
 
         // Now done in JsseSSLManager (which needs to register the protocol)
@@ -123,10 +120,10 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
         // Set default parameters as needed
         HttpClientParams params = new HttpClientParams();
 
-        // Process httpclient parameters file
+        // Process Commons HttpClient parameters file
         String file=JMeterUtils.getProperty("httpclient.parameters.file"); // $NON-NLS-1$
         if (file != null) {
-            HttpClientDefaultParameters.load(file,params);
+            HttpClientDefaultParameters.load(file, params);
         }
 
         // If the pre-emptive parameter is undefined, then we can set it as needed
@@ -134,23 +131,21 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
         canSetPreEmptive =  params.isAuthenticationPreemptive();
 
         // Handle old-style JMeter properties
-        // Default to HTTP version 1.1
-        String ver=JMeterUtils.getPropDefault("httpclient.version","1.1"); // $NON-NLS-1$ $NON-NLS-2$
         try {
-            params.setParameter(HttpMethodParams.PROTOCOL_VERSION, HttpVersion.parse("HTTP/"+ver));
+            params.setParameter(HttpMethodParams.PROTOCOL_VERSION, HttpVersion.parse("HTTP/"+HTTP_VERSION));
         } catch (ProtocolException e) {
             log.warn("Problem setting protocol version "+e.getLocalizedMessage());
         }
-        String to= JMeterUtils.getProperty("httpclient.timeout"); // $NON-NLS-1$
-        if (to != null){
-            params.setIntParameter(HttpMethodParams.SO_TIMEOUT, Integer.parseInt(to));
+
+        if (SO_TIMEOUT >= 0){
+            params.setIntParameter(HttpMethodParams.SO_TIMEOUT, SO_TIMEOUT);
         }
 
         // This must be done last, as must not be overridden
         params.setParameter(HttpMethodParams.COOKIE_POLICY,CookiePolicy.IGNORE_COOKIES);
         // We do our own cookie handling
 
-        if (JMeterUtils.getPropDefault("httpclient.loopback",false)){// $NON-NLS-1$
+        if (USE_LOOPBACK){
             LoopbackHttpClientSocketFactory.setup();
         }
     }
