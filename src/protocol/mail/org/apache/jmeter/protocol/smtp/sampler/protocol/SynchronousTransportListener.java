@@ -37,6 +37,8 @@ public class SynchronousTransportListener extends TransportAdapter {
 
     private boolean finished = false;
 
+    private final Object LOCK = new Object();
+    
     /**
      * Creates a new instance of SynchronousTransportListener
      */
@@ -75,17 +77,22 @@ public class SynchronousTransportListener extends TransportAdapter {
      *
      * @throws InterruptedException
      */
-    public synchronized void attend() throws InterruptedException {
-        if (!finished)
-            wait();
+    public void attend() throws InterruptedException {
+        synchronized(LOCK) {
+            while (!finished) {
+                LOCK.wait();            
+            }
+        }
     }
 
     /**
      * Synchronized-method
      */
-    public synchronized void finish() {
+    public void finish() {
         finished = true;
-        notify();
+        synchronized(LOCK) {
+            LOCK.notify();
+        }
     }
 
 }
