@@ -51,7 +51,7 @@ public class Converter {
         } else if (toType.equals(int.class) || toType.equals(Integer.class)) {
             return Integer.valueOf(getInt(value));
         } else if (toType.equals(char.class) || toType.equals(Character.class)) {
-            return new Character(getChar(value));
+            return Character.valueOf(getChar(value));
         } else if (toType.equals(long.class) || toType.equals(Long.class)) {
             return Long.valueOf(getLong(value));
         } else if (toType.equals(boolean.class) || toType.equals(Boolean.class)) {
