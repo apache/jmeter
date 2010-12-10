@@ -19,7 +19,6 @@
 package org.apache.jmeter.protocol.http.sampler;
 
 import java.net.InetAddress;
-import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashSet;
