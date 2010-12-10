@@ -26,6 +26,7 @@ import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.swing.JPanel;
@@ -189,10 +190,9 @@ public class RequestViewHTTP implements RequestView {
                 }
                 queryGet = RequestViewHTTP.decodeQuery(queryGet);
                 if (queryGet != null) {
-                    Map<String, String> mapQuery = RequestViewHTTP.getQueryMap(queryGet);
-                    Set<String> keys = mapQuery.keySet();
-                    for (String key : keys) {
-                        paramsModel.addRow(new RowResult(key, mapQuery.get(key)));
+                    Set<Entry<String, String>> keys = RequestViewHTTP.getQueryMap(queryGet).entrySet();
+                    for (Entry<String, String> entry : keys) {
+                        paramsModel.addRow(new RowResult(entry.getKey(),entry.getValue()));
                     }
                 }
             }

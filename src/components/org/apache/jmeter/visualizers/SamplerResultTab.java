@@ -26,6 +26,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
@@ -286,9 +287,9 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 
                 // Parsed response headers
                 LinkedHashMap<String, String> lhm = JMeterUtils.parseHeaders(sampleResult.getResponseHeaders());
-                Set<String> keySet = lhm.keySet();
-                for (String key : keySet) {
-                    resHeadersModel.addRow(new RowResult(key, lhm.get(key)));
+                Set<Entry<String, String>> keySet = lhm.entrySet();
+                for (Entry<String, String> entry : keySet) {
+                    resHeadersModel.addRow(new RowResult(entry.getKey(), entry.getValue()));
                 }
                 
                 // Fields table
