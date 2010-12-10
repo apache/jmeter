@@ -75,7 +75,7 @@ public class BeanShellServer implements Runnable {
             Method source = Interpreter.getMethod("source", new Class[] { string });//$NON-NLS-1$
 
             setObj.invoke(instance, new Object[] { "t", this });//$NON-NLS-1$
-            setInt.invoke(instance, new Object[] { "portnum", new Integer(serverport) });//$NON-NLS-1$
+            setInt.invoke(instance, new Object[] { "portnum", Integer.valueOf(serverport) });//$NON-NLS-1$
 
             if (serverfile.length() > 0) {
                 try {

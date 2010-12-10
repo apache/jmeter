@@ -121,7 +121,7 @@ public class Calculator {
     }
 
     public Number getMeanAsNumber() {
-        return new Long((long) mean);
+        return Long.valueOf((long) mean);
     }
 
     public double getStandardDeviation() {

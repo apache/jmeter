@@ -81,9 +81,9 @@ public class FileReporter extends JPanel {
                     Integer value = null;
 
                     if (line.charAt(len) == ',') {
-                        value = new Integer(line.substring(splitter + 1, len));
+                        value = Integer.valueOf(line.substring(splitter + 1, len));
                     } else {
-                        value = new Integer(line.substring(splitter + 1));
+                        value = Integer.valueOf(line.substring(splitter + 1));
                     }
                     Vector<Integer> v = getData(key);
 
@@ -333,12 +333,12 @@ private static class GraphPanel extends JPanel {
          */
         // draw axis
         for (int t = 1; t < dataWidth; t += (dataWidth / 25 + 1)) {
-            g.drawString((new Integer(t)).toString(), t * increment + 2, height - 2);
+            g.drawString((Integer.valueOf(t)).toString(), t * increment + 2, height - 2);
         }
         float incrementValue = (maxValue - minValue) / (10 - 1);
 
         for (int t = 0; t < 10; t++) {
-            g.drawString(new Integer(Math.round(minValue + (t * incrementValue))).toString(), 2, height - t
+            g.drawString(Integer.valueOf(Math.round(minValue + (t * incrementValue))).toString(), 2, height - t
                     * yIncrement - 2 - base);
         }
         // draw data lines
