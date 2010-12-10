@@ -33,7 +33,8 @@ import org.apache.jorphan.gui.GuiUtils;
  */
 public class RequestViewRaw implements RequestView {
     
-    public static String KEY_LABEL = "view_results_table_request_tab_raw"; //$NON-NLS-1$
+    // Used by Request Panel
+    static final String KEY_LABEL = "view_results_table_request_tab_raw"; //$NON-NLS-1$
 
     private JTextArea sampleDataField;
 

@@ -55,11 +55,11 @@ public class RequestViewHTTP implements RequestView {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    public static String KEY_LABEL = "view_results_table_request_tab_http"; //$NON-NLS-1$
+    private static final String KEY_LABEL = "view_results_table_request_tab_http"; //$NON-NLS-1$
     
-    private static String CHARSET_DECODE = "ISO-8859-1"; //$NON-NLS-1$
+    private static final String CHARSET_DECODE = "ISO-8859-1"; //$NON-NLS-1$
     
-    private static String PARAM_CONCATENATE = "&"; //$NON-NLS-1$
+    private static final String PARAM_CONCATENATE = "&"; //$NON-NLS-1$
 
     private JPanel paneParsed;
 
