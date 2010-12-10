@@ -40,6 +40,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.security.auth.x500.X500Principal;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -226,9 +227,14 @@ class SMIMEAssertion {
                     if (testElement.isSignerCheckByFile()) {
                         CertificateFactory cf = CertificateFactory
                                 .getInstance("X.509");
-                        X509Certificate certFromFile = (X509Certificate) cf
-                                .generateCertificate(new FileInputStream(
-                                        testElement.getSignerCertFile()));
+                        X509Certificate certFromFile;
+                        FileInputStream inStream = null;
+                        try {
+                            inStream = new FileInputStream(testElement.getSignerCertFile());
+                            certFromFile = (X509Certificate) cf.generateCertificate(inStream);
+                        } finally {
+                            IOUtils.closeQuietly(inStream);
+                        }
 
                         if (!certFromFile.equals(cert)) {
                             res.setFailure(true);

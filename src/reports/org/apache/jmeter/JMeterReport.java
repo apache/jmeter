@@ -30,6 +30,7 @@ import org.apache.commons.cli.avalon.CLArgsParser;
 import org.apache.commons.cli.avalon.CLOption;
 import org.apache.commons.cli.avalon.CLOptionDescriptor;
 import org.apache.commons.cli.avalon.CLUtil;
+import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.control.gui.ReportGui;
 import org.apache.jmeter.gui.ReportGuiPackage;
@@ -354,12 +355,16 @@ public class JMeterReport implements JMeterPlugin {
             switch (option.getDescriptor().getId()) {
             case PROPFILE2_OPT: // Bug 33920 - allow multiple props
                 File f = new File(name);
+                FileInputStream inStream = null;
                 try {
-                    jmeterProps.load(new FileInputStream(f));
+                    inStream = new FileInputStream(f);
+                    jmeterProps.load(inStream);
                 } catch (FileNotFoundException e) {
                     log.warn("Can't find additional property file: " + name, e);
                 } catch (IOException e) {
                     log.warn("Error loading additional property file: " + name, e);
+                } finally {
+                    IOUtils.closeQuietly(inStream);
                 }
                 break;
             case SYSTEM_PROPERTY:
