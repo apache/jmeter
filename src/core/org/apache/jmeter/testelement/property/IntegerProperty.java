@@ -90,7 +90,7 @@ public class IntegerProperty extends NumberProperty {
      * @see JMeterProperty#getObjectValue()
      */
     public Object getObjectValue() {
-        return new Integer(value);
+        return Integer.valueOf(value);
     }
 
     /**

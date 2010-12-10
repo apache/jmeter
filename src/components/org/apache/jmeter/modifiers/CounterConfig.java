@@ -60,7 +60,7 @@ public class CounterConfig extends AbstractTestElement
         perTheadNumber = new ThreadLocal<Long>() {
             @Override
             protected Long initialValue() {
-                return new Long(getStart());
+                return Long.valueOf(getStart());
             }
         };
     }
@@ -95,7 +95,7 @@ public class CounterConfig extends AbstractTestElement
             if (current > end) {
                 current = start;
             }
-            perTheadNumber.set(new Long(current));
+            perTheadNumber.set(Long.valueOf(current));
         }
     }
 

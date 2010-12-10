@@ -80,7 +80,7 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
         final String msg = compareSize(resultSize);
         if (msg.length() > 0) {
             result.setFailure(true);
-            Object[] arguments = { new Long(resultSize), msg, new Long(getAllowedSize()) };
+            Object[] arguments = { Long.valueOf(resultSize), msg, Long.valueOf(getAllowedSize()) };
             String message = MessageFormat.format(JMeterUtils.getResString("size_assertion_failure"), arguments); //$NON-NLS-1$
             result.setFailureMessage(message);
         }

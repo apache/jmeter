@@ -198,7 +198,7 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
                         st[_path] = "/"; //$NON-NLS-1$
                     }
                     boolean secure = Boolean.valueOf(st[_secure]).booleanValue();
-                    long expires = new Long(st[_expires]).longValue();
+                    long expires = Long.valueOf(st[_expires]).longValue();
                     if (expires==Long.MAX_VALUE) {
                         expires=0;
                     }

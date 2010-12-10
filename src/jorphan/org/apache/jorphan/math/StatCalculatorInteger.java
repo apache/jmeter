@@ -24,19 +24,19 @@ package org.apache.jorphan.math;
 public class StatCalculatorInteger extends StatCalculator<Integer> {
 
     public StatCalculatorInteger() {
-        super(new Integer(0), new Integer(Integer.MIN_VALUE), new Integer(Integer.MAX_VALUE));
+        super(Integer.valueOf(0), Integer.valueOf(Integer.MIN_VALUE), Integer.valueOf(Integer.MAX_VALUE));
     }
 
     public void addValue(int val){
-        super.addValue(new Integer(val));
+        super.addValue(Integer.valueOf(val));
     }
 
     public void addValue(int val, int sampleCount){
-        super.addValue(new Integer(val), sampleCount);
+        super.addValue(Integer.valueOf(val), sampleCount);
     }
 
     @Override
     protected Integer divide(Integer val, int n) {
-        return new Integer(val.intValue() / n);
+        return Integer.valueOf(val.intValue() / n);
     }
 }
