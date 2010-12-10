@@ -265,7 +265,7 @@ public class SamplingStatCalculator {
     }
 
     public Number getMeanAsNumber() {
-        return new Long((long) calculator.getMean());
+        return Long.valueOf((long) calculator.getMean());
     }
 
     public Number getMedian() {
@@ -274,7 +274,7 @@ public class SamplingStatCalculator {
 
     public Number getMin() {
         if (calculator.getMin().longValue() < 0) {
-            return new Long(0);
+            return Long.valueOf(0);
         }
         return calculator.getMin();
     }

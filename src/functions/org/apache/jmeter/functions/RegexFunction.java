@@ -261,18 +261,18 @@ public class RegexFunction extends AbstractFunction {
             boolean matchExists = matcher.contains(input, templatePattern);
             if (startsWith) {
                 if (matchExists) {
-                    combined.add(new Integer(matcher.getMatch().group(1)));
+                    combined.add(Integer.valueOf(matcher.getMatch().group(1)));
                 }
                 combined.add(iter.next());
             } else {
                 combined.add(iter.next());
                 if (matchExists) {
-                    combined.add(new Integer(matcher.getMatch().group(1)));
+                    combined.add(Integer.valueOf(matcher.getMatch().group(1)));
                 }
             }
         }
         if (matcher.contains(input, templatePattern)) {
-            combined.add(new Integer(matcher.getMatch().group(1)));
+            combined.add(Integer.valueOf(matcher.getMatch().group(1)));
         }
         return combined.toArray();
     }

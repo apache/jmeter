@@ -321,7 +321,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
             if (beginMatch > beginOffset) { // string is not empty
                 combined.add(rawTemplate.substring(beginOffset, beginMatch));
             }
-            combined.add(new Integer(currentResult.group(1)));// add match as Integer
+            combined.add(Integer.valueOf(currentResult.group(1)));// add match as Integer
             beginOffset = currentResult.endOffset(0);
         }
 

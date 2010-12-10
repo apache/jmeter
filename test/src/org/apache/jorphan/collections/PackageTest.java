@@ -165,7 +165,7 @@ public class PackageTest extends TestCase {
             SearchByClass<Integer> searcher = new SearchByClass<Integer>(Integer.class);
             String one = "one";
             String two = "two";
-            Integer o = new Integer(1);
+            Integer o = Integer.valueOf(1);
             tree.add(one, o);
             tree.getTree(one).add(o, two);
             tree.traverse(searcher);

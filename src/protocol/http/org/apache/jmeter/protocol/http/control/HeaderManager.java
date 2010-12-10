@@ -223,7 +223,7 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
      * Vector removeIndices = new Vector(); for (int i = headers.size() - 1; i >=
      * 0; i--) { Header header = (Header) headers.get(i); if (header == null) {
      * continue; } if (header.getName().equals(newHeader.getName())) {
-     * removeIndices.addElement(new Integer(i)); } }
+     * removeIndices.addElement(Integer.valueOf(i)); } }
      *
      * for (Enumeration e = removeIndices.elements(); e.hasMoreElements(); ) {
      * index = ((Integer) e.nextElement()).intValue(); headers.remove(index); }
@@ -237,7 +237,7 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
                 continue;
             }
             if (header.getName().equalsIgnoreCase(name)) {
-                removeIndices.addElement(new Integer(i));
+                removeIndices.addElement(Integer.valueOf(i));
             }
         }
 

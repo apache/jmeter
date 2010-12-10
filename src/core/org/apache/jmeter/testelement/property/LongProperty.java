@@ -86,7 +86,7 @@ public class LongProperty extends NumberProperty {
      * @see JMeterProperty#getObjectValue()
      */
     public Object getObjectValue() {
-        return new Long(value);
+        return Long.valueOf(value);
     }
 
     /**
