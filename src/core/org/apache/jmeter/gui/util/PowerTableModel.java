@@ -188,7 +188,7 @@ public class PowerTableModel extends DefaultTableModel {
             }
             try {
                 Constructor<?> constr = colClass.getConstructor(new Class[] { Character.TYPE });
-                return constr.newInstance(new Object[] { new Character(' ') });
+                return constr.newInstance(new Object[] { Character.valueOf(' ') });
             } catch (NoSuchMethodException err) {
             } catch (InstantiationException err) {
             } catch (IllegalAccessException err) {
@@ -196,7 +196,7 @@ public class PowerTableModel extends DefaultTableModel {
             }
             try {
                 Constructor<?> constr = colClass.getConstructor(new Class[] { Byte.TYPE });
-                return constr.newInstance(new Object[] { new Byte(Byte.MIN_VALUE) });
+                return constr.newInstance(new Object[] { Byte.valueOf(Byte.MIN_VALUE) });
             } catch (NoSuchMethodException err) {
             } catch (InstantiationException err) {
             } catch (IllegalAccessException err) {
@@ -204,7 +204,7 @@ public class PowerTableModel extends DefaultTableModel {
             }
             try {
                 Constructor<?> constr = colClass.getConstructor(new Class[] { Short.TYPE });
-                return constr.newInstance(new Object[] { new Short(Short.MIN_VALUE) });
+                return constr.newInstance(new Object[] { Short.valueOf(Short.MIN_VALUE) });
             } catch (NoSuchMethodException err) {
             } catch (InstantiationException err) {
             } catch (IllegalAccessException err) {
