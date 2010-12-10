@@ -131,7 +131,7 @@ public class SamplingStatCalculator {
         if (count == 0) {
             return 0;
         }
-        return calculator.getTotalBytes() / count;
+        return calculator.getTotalBytes() / (double) count;
     }
 
     public String getLabel() {
