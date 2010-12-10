@@ -21,9 +21,12 @@
  */
 package org.apache.jorphan.math;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
-public class NumberComparator implements Comparator<Number[]> {
+public class NumberComparator implements Comparator<Number[]>, Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     public NumberComparator() {
         super();
