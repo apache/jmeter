@@ -177,6 +177,13 @@ public class Sample implements Serializable, Comparable<Sample> {
         return ((count - oo.count) < 0 ? -1 : (count == oo.count ? 0 : 1));
     }
 
+    @Override
+    public boolean equals(Object o){
+        return (
+                (o instanceof Sample) &&
+                (this.compareTo((Sample) o) == 0)
+                );
+    }
     /**
      * @return Returns the endTime.
      */
