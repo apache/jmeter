@@ -533,7 +533,7 @@ public class PostWriterTest extends TestCase {
         postWriter.sendPostData(connection, sampler);
         
         checkContentTypeUrlEncoded(connection);
-        expectedUrl = new String("title=" + titleValue.replaceAll("%20", "+") + "&description=" + descriptionValue).getBytes("US-ASCII");
+        expectedUrl = ("title=" + titleValue.replaceAll("%20", "+") + "&description=" + descriptionValue).getBytes("US-ASCII");
         checkContentLength(connection, expectedUrl.length);
         checkArraysHaveSameContent(expectedUrl, connection.getOutputStreamContent());
         assertEquals(
