@@ -31,7 +31,7 @@ public class SyncTimerBeanInfo extends BeanInfoSupport {
 
         PropertyDescriptor p = property("groupSize");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, new Integer(0));
+        p.setValue(DEFAULT, Integer.valueOf(0));
     }
 
 }

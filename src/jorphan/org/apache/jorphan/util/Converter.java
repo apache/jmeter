@@ -49,11 +49,11 @@ public class Converter {
         } else if (toType.equals(String.class)) {
             return getString(value);
         } else if (toType.equals(int.class) || toType.equals(Integer.class)) {
-            return new Integer(getInt(value));
+            return Integer.valueOf(getInt(value));
         } else if (toType.equals(char.class) || toType.equals(Character.class)) {
             return new Character(getChar(value));
         } else if (toType.equals(long.class) || toType.equals(Long.class)) {
-            return new Long(getLong(value));
+            return Long.valueOf(getLong(value));
         } else if (toType.equals(boolean.class) || toType.equals(Boolean.class)) {
             return  Boolean.valueOf(getBoolean(value));
         } else if (toType.equals(java.util.Date.class)) {

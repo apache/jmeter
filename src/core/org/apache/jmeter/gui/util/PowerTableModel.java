@@ -148,7 +148,7 @@ public class PowerTableModel extends DefaultTableModel {
             }
             try {
                 Constructor<?> constr = colClass.getConstructor(new Class[] { Integer.TYPE });
-                return constr.newInstance(new Object[] { new Integer(0) });
+                return constr.newInstance(new Object[] { Integer.valueOf(0) });
             } catch (NoSuchMethodException err) {
             } catch (InstantiationException err) {
             } catch (IllegalAccessException err) {
@@ -156,7 +156,7 @@ public class PowerTableModel extends DefaultTableModel {
             }
             try {
                 Constructor<?> constr = colClass.getConstructor(new Class[] { Long.TYPE });
-                return constr.newInstance(new Object[] { new Long(0L) });
+                return constr.newInstance(new Object[] { Long.valueOf(0L) });
             } catch (NoSuchMethodException err) {
             } catch (InstantiationException err) {
             } catch (IllegalAccessException err) {

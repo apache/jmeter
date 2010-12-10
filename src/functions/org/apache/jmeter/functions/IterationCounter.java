@@ -47,7 +47,7 @@ public class IterationCounter extends AbstractFunction {
        perThreadInt = new ThreadLocal<Integer>(){
             @Override
             protected Integer initialValue() {
-                return new Integer(0);
+                return Integer.valueOf(0);
             }
         };
     }
@@ -66,7 +66,7 @@ public class IterationCounter extends AbstractFunction {
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
 
-        new Integer(1);
+        Integer.valueOf(1);
         globalCounter++;
 
         JMeterVariables vars = getVariables();
@@ -83,7 +83,7 @@ public class IterationCounter extends AbstractFunction {
         if (perThread) {
             int threadCounter;
             threadCounter = perThreadInt.get().intValue() + 1;
-            perThreadInt.set(new Integer(threadCounter));
+            perThreadInt.set(Integer.valueOf(threadCounter));
             counterString = String.valueOf(threadCounter);
         } else {
             counterString = String.valueOf(globalCounter);
