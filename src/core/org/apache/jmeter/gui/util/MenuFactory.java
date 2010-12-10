@@ -20,6 +20,7 @@ package org.apache.jmeter.gui.util;
 
 import java.awt.Component;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -644,10 +645,11 @@ public final class MenuFactory {
     /**
      * Menu sort helper class
      */
-    private static class MenuInfoComparator implements Comparator<MenuInfo> {
-       public int compare(MenuInfo o1, MenuInfo o2) {
-          return o1.getLabel().compareTo(o2.getLabel());
-}
+    private static class MenuInfoComparator implements Comparator<MenuInfo>, Serializable {
+        private static final long serialVersionUID = 1L;
+        public int compare(MenuInfo o1, MenuInfo o2) {
+              return o1.getLabel().compareTo(o2.getLabel());
+        }
     }
 
     /**
