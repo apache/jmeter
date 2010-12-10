@@ -13,11 +13,10 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-# Properties file used to define additional default Commons HttpClient parameters
+# Properties file used to define additional default Apache HttpClient parameters
 #
-# See: http://hc.apache.org/httpclient-3.x/preference-api.html
 #
-# This file is enabled by setting the JMeter property: httpclient.parameters.file
+# This file is enabled by setting the JMeter property: hc.parameters.file
 # entries are of the form:
 #
 # property=value (for strings)
@@ -28,8 +27,8 @@
 # Long
 # Boolean
 # HttpVersion
-# 
-# N.B. Other types are not yet implemented, so not all parameters are supported
+#
+# N.B. Other types are not yet implemented
 #
 
 # Examples:
@@ -41,5 +40,3 @@
 #http.socket.timeout$Integer=10000
 
 #http.protocol.reject-relative-redirect$Boolean=true
-
-#http.authentication.preemptive$Boolean=true

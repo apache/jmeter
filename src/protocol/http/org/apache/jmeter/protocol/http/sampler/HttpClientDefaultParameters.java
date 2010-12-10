@@ -24,7 +24,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 
@@ -49,6 +48,7 @@ public class HttpClientDefaultParameters {
     // Helper class (callback) for applying parameter definitions
     private static abstract class GenericHttpParams {
         public abstract void setParameter(String name, Object value);
+        public abstract void setVersion(String name, String value) throws Exception;
     }
 
     /**
@@ -64,6 +64,11 @@ public class HttpClientDefaultParameters {
                     @Override
                     public void setParameter(String name, Object value) {
                         params.setParameter(name, value);
+                    }
+                    @Override
+                    public void setVersion(String name, String value) throws Exception {
+                        params.setParameter(name,
+                        org.apache.commons.httpclient.HttpVersion.parse("HTTP/"+value));
                     }            
                 }
             );
@@ -82,6 +87,17 @@ public class HttpClientDefaultParameters {
                     @Override
                     public void setParameter(String name, Object value) {
                         params.setParameter(name, value);
+                    }
+
+                    @Override
+                    public void setVersion(String name, String value) {
+                        String parts[] = value.split("\\.");
+                        if (parts.length != 2){
+                            throw new IllegalArgumentException("Version must have form m.n");
+                        }
+                        params.setParameter(name,
+                                new org.apache.http.HttpVersion(
+                                        Integer.parseInt(parts[0]), Integer.parseInt(parts[1])));
                     }            
                 }
             );
