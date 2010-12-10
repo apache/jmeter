@@ -42,9 +42,7 @@ import org.apache.log.Logger;
 public final class ActionRouter implements ActionListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    static class SingletonHolder {
-        static final ActionRouter INSTANCE = new ActionRouter();    
-      }
+    private static ActionRouter router;
 
     private Map<String, Set<Command>> commands = new HashMap<String, Set<Command>>();
 
@@ -55,7 +53,6 @@ public final class ActionRouter implements ActionListener {
         new HashMap<String, HashSet<ActionListener>>();
 
     private ActionRouter() {
-        populateCommandMap();
     }
 
     public void actionPerformed(final ActionEvent e) {
@@ -308,6 +305,10 @@ public final class ActionRouter implements ActionListener {
      * @return The Instance value
      */
     public static ActionRouter getInstance() {
-        return SingletonHolder.INSTANCE;
+        if (router == null) {
+            router = new ActionRouter();
+            router.populateCommandMap();
+        }
+        return router;
     }
 }
