@@ -33,6 +33,7 @@ import org.apache.commons.httpclient.URIException;
 import org.apache.commons.httpclient.util.DateParseException;
 import org.apache.commons.httpclient.util.DateUtil;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.protocol.http.util.HTTPConstantsInterface;
@@ -199,13 +200,14 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
      * Check the cache, and if there is a match, set the headers:<br/>
      * If-Modified-Since<br/>
      * If-None-Match<br/>
+     * Commons HttpClient version
      * @param url URL to look up in cache
      * @param method where to set the headers
      */
     public void setHeaders(URL url, HttpMethod method) {
         CacheEntry entry = getCache().get(url.toString());
         if (log.isDebugEnabled()){
-            log.debug(method.getName()+"(OAHC) "+url.toString()+" "+entry);
+            log.debug(method.getName()+"(OACH) "+url.toString()+" "+entry);
         }
         if (entry != null){
             final String lastModified = entry.getLastModified();
@@ -215,6 +217,31 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
             final String etag = entry.getEtag();
             if (etag != null){
                 method.setRequestHeader(HTTPConstantsInterface.IF_NONE_MATCH, etag);
+            }
+        }
+    }
+
+    /**
+     * Check the cache, and if there is a match, set the headers:<br/>
+     * If-Modified-Since<br/>
+     * If-None-Match<br/>
+     * Apache HttpClient version.
+     * @param url URL to look up in cache
+     * @param request where to set the headers
+     */
+    public void setHeaders(URL url, HttpRequestBase request) {
+        CacheEntry entry = getCache().get(url.toString());
+        if (log.isDebugEnabled()){
+            log.debug(request.getMethod()+"(OAH) "+url.toString()+" "+entry);
+        }
+        if (entry != null){
+            final String lastModified = entry.getLastModified();
+            if (lastModified != null){
+                request.setHeader(HTTPConstantsInterface.IF_MODIFIED_SINCE, lastModified);
+            }
+            final String etag = entry.getEtag();
+            if (etag != null){
+                request.setHeader(HTTPConstantsInterface.IF_NONE_MATCH, etag);
             }
         }
     }
@@ -324,4 +351,5 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
         }
         useExpires=getUseExpires(); // cache the value
     }
+
 }
