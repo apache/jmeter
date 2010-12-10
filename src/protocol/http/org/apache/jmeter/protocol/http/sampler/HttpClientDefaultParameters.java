@@ -127,8 +127,7 @@ public class HttpClientDefaultParameters {
                         } else if (type.equals("Boolean")){
                             params.setParameter(name, Boolean.valueOf(value));
                         } else if (type.equals("HttpVersion")){ // Commons HttpClient only
-                            params.setParameter(name, 
-                                    org.apache.commons.httpclient.HttpVersion.parse("HTTP/"+value));
+                            params.setVersion(name, value);
                         } else {
                             log.warn("Unexpected type: "+type+" for name "+name);
                         }
