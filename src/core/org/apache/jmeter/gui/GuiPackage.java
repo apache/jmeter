@@ -92,10 +92,10 @@ public final class GuiPackage implements LocaleChangeListener {
     private boolean currentNodeUpdated = false;
 
     /** The model for JMeter's test tree. */
-    private JMeterTreeModel treeModel;
+    private final JMeterTreeModel treeModel;
 
     /** The listener for JMeter's test tree. */
-    private JMeterTreeListener treeListener;
+    private final JMeterTreeListener treeListener;
 
     /** The main JMeter frame. */
     private MainFrame mainFrame;
@@ -104,7 +104,9 @@ public final class GuiPackage implements LocaleChangeListener {
      * Private constructor to permit instantiation only from within this class.
      * Use {@link #getInstance()} to retrieve a singleton instance.
      */
-    private GuiPackage() {
+    private GuiPackage(JMeterTreeModel treeModel, JMeterTreeListener treeListener) {
+        this.treeModel = treeModel;
+        this.treeListener = treeListener;
         JMeterUtils.addLocaleChangeListener(this);
     }
 
@@ -130,9 +132,7 @@ public final class GuiPackage implements LocaleChangeListener {
      */
     public static GuiPackage getInstance(JMeterTreeListener listener, JMeterTreeModel treeModel) {
         if (guiPack == null) {
-            guiPack = new GuiPackage();
-            guiPack.setTreeListener(listener);
-            guiPack.setTreeModel(treeModel);
+            guiPack = new GuiPackage(treeModel, listener);
         }
         return guiPack;
     }
@@ -472,16 +472,6 @@ public final class GuiPackage implements LocaleChangeListener {
     }
 
     /**
-     * Set the model for JMeter's test tree.
-     *
-     * @param newTreeModel
-     *            the new JMeter tree model
-     */
-    public void setTreeModel(JMeterTreeModel newTreeModel) {
-        treeModel = newTreeModel;
-    }
-
-    /**
      * Get a ValueReplacer for the test tree.
      *
      * @return a ValueReplacer configured for the test tree
@@ -508,16 +498,6 @@ public final class GuiPackage implements LocaleChangeListener {
      */
     public MainFrame getMainFrame() {
         return mainFrame;
-    }
-
-    /**
-     * Set the listener for JMeter's test tree.
-     *
-     * @param newTreeListener
-     *            the new JMeter test tree listener
-     */
-    public void setTreeListener(JMeterTreeListener newTreeListener) {
-        treeListener = newTreeListener;
     }
 
     /**
