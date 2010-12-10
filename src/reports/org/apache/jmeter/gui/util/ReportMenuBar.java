@@ -491,11 +491,7 @@ public class ReportMenuBar extends JMenuBar implements LocaleChangeListener {
         Component component = menu.getComponent();
 
         if (component.getName() != null) {
-            if (component instanceof JMenu) {
-                ((JMenu) component).setText(JMeterUtils.getResString(component.getName()));
-            } else {
-                ((JMenuItem) component).setText(JMeterUtils.getResString(component.getName()));
-            }
+            ((JMenuItem) component).setText(JMeterUtils.getResString(component.getName()));
         }
 
         MenuElement[] subelements = menu.getSubElements();
