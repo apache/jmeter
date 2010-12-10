@@ -13,7 +13,7 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-# Properties file used to define additional httpclient parameters
+# Properties file used to define additional default Commons HttpClient parameters
 #
 # See: http://hc.apache.org/httpclient-3.x/preference-api.html
 #
