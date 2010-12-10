@@ -79,7 +79,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
             protected void setUp() throws Exception {
                     httpServer = TestHTTPMirrorThread.startHttpMirror(MIRROR_PORT);
                     // Create the test file content
-                    TEST_FILE_CONTENT = new String("some foo content &?=01234+56789-\u007c\u2aa1\u266a\u0153\u20a1\u0115\u0364\u00c5\u2052\uc385%C3%85").getBytes("UTF-8");
+                    TEST_FILE_CONTENT = "some foo content &?=01234+56789-\u007c\u2aa1\u266a\u0153\u20a1\u0115\u0364\u00c5\u2052\uc385%C3%85".getBytes("UTF-8");
 
                     // create a temporary file to make sure we always have a file to give to the PostWriter 
                     // Whereever we are or Whatever the current path is.
@@ -1179,7 +1179,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
             boolean firstMultipart,
             boolean lastMultipart) throws IOException {
         // The encoding used for http headers and control information
-        final byte[] DASH_DASH = new String("--").getBytes(ISO_8859_1);
+        final byte[] DASH_DASH = "--".getBytes(ISO_8859_1);
 
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
         if(firstMultipart) {
@@ -1256,7 +1256,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
             byte[] fileContent,
             boolean firstMultipart,
             boolean lastMultipart) throws IOException {
-        final byte[] DASH_DASH = new String("--").getBytes(ISO_8859_1);
+        final byte[] DASH_DASH = "--".getBytes(ISO_8859_1);
         
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
         if(firstMultipart) {
