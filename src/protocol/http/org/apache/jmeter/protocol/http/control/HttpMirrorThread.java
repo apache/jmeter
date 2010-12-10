@@ -92,7 +92,7 @@ public class HttpMirrorThread extends Thread {
             final String headerString = headers.toString();
             String contentLengthHeaderValue = getRequestHeaderValue(headerString, "Content-Length"); //$NON-NLS-1$
             if(contentLengthHeaderValue != null) {
-                contentLength = new Integer(contentLengthHeaderValue).intValue();
+                contentLength = Integer.valueOf(contentLengthHeaderValue).intValue();
             }
             String sleepHeaderValue = getRequestHeaderValue(headerString, "X-Sleep"); //$NON-NLS-1$
             if(sleepHeaderValue != null) {

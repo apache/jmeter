@@ -128,7 +128,7 @@ public final class CLArgsParser {
      * @see CLOption
      */
     public final CLOption getArgumentById(final int id) {
-        return m_optionIndex.get(new Integer(id));
+        return m_optionIndex.get(Integer.valueOf(id));
     }
 
     /**
@@ -672,7 +672,7 @@ public final class CLArgsParser {
             final CLOption option = m_options.get(i);
             final CLOptionDescriptor optionDescriptor = getDescriptorFor(option.getDescriptor().getId());
 
-            m_optionIndex.put(new Integer(option.getDescriptor().getId()), option);
+            m_optionIndex.put(Integer.valueOf(option.getDescriptor().getId()), option);
 
             if (null != optionDescriptor && null != optionDescriptor.getName()) {
                 m_optionIndex.put(optionDescriptor.getName(), option);

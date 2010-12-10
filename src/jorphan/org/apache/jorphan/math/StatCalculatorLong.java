@@ -24,19 +24,19 @@ package org.apache.jorphan.math;
 public class StatCalculatorLong extends StatCalculator<Long> {
 
     public StatCalculatorLong() {
-        super(new Long(0L), new Long(Long.MIN_VALUE), new Long(Long.MAX_VALUE));
+        super(Long.valueOf(0L), Long.valueOf(Long.MIN_VALUE), Long.valueOf(Long.MAX_VALUE));
     }
 
     public void addValue(long val){
-        super.addValue(new Long(val));
+        super.addValue(Long.valueOf(val));
     }
 
     public void addValue(long val, int sampleCount){
-        super.addValue(new Long(val), sampleCount);
+        super.addValue(Long.valueOf(val), sampleCount);
     }
 
     @Override
     protected Long divide(Long val, int n) {
-        return new Long(val.longValue() / n);
+        return Long.valueOf(val.longValue() / n);
     }
 }
