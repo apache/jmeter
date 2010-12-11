@@ -40,7 +40,7 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
 
     static final String JMETER_ENGINE_RMI_NAME = "JMeterEngine"; // $NON-NLS-1$
 
-    private JMeterEngine backingEngine;
+    private transient JMeterEngine backingEngine;
 
     public static final int DEFAULT_RMI_PORT =
         JMeterUtils.getPropDefault("server.rmi.port", 1099); // $NON-NLS-1$
