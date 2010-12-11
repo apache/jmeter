@@ -18,8 +18,8 @@
 
 package org.apache.jmeter.timers;
 
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.testbeans.TestBean;
@@ -71,7 +71,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
     private final static ThroughputInfo allThreadsInfo = new ThroughputInfo();
 
     //For holding the ThrougputInfo objects for all ThreadGroups. Keyed by AbstractThreadGroup objects
-    private final static Map<AbstractThreadGroup, ThroughputInfo> threadGroupsInfoMap =
+    private final static ConcurrentMap<AbstractThreadGroup, ThroughputInfo> threadGroupsInfoMap =
         new ConcurrentHashMap<AbstractThreadGroup, ThroughputInfo>();
 
 
@@ -168,11 +168,12 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
             final org.apache.jmeter.threads.AbstractThreadGroup group =
                 JMeterContextService.getContext().getThreadGroup();
             ThroughputInfo groupInfo;
-            synchronized (threadGroupsInfoMap) {
-                groupInfo = threadGroupsInfoMap.get(group);
-                if (groupInfo == null) {
-                    groupInfo = new ThroughputInfo();
-                    threadGroupsInfoMap.put(group, groupInfo);
+            groupInfo = threadGroupsInfoMap.get(group);
+            if (groupInfo == null) {
+                groupInfo = new ThroughputInfo();
+                ThroughputInfo previous = threadGroupsInfoMap.putIfAbsent(group, groupInfo);
+                if (previous != null) { // We did not replace the entry
+                    groupInfo = previous; // so use the existing one
                 }
             }
             delay = calculateSharedDelay(groupInfo,(long) msPerRequest);
