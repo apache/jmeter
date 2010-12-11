@@ -30,6 +30,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -137,26 +138,20 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         if (engine == null) {
             return false;// e.g. not yet started
         }
-        JMeterThread thrd=null;
-        synchronized (engine.allThreads) { // Protect iterator
-            Iterator<JMeterThread> iter = engine.allThreads.keySet().iterator();
-            while(iter.hasNext()){
-                thrd = iter.next();
-                if (thrd.getThreadName().equals(threadName)){
-                    break; // Found matching thread
+        // ConcurrentHashMap does not need synch. here
+        for(Entry<JMeterThread, Thread> entry : engine.allThreads.entrySet()){
+            JMeterThread thrd = entry.getKey();
+            if (thrd.getThreadName().equals(threadName)){
+                thrd.stop();
+                thrd.interrupt();
+                if (now) {
+                    Thread t = entry.getValue();
+                    if (t != null) {
+                        t.interrupt();
+                    }
                 }
+                return true;
             }
-        }
-        if (thrd != null) {
-            thrd.stop();
-            thrd.interrupt();
-            if (now) {
-                Thread t = engine.allThreads.get(thrd);
-                if (t != null) {
-                    t.interrupt();
-                }
-            }
-            return true;
         }
         return false;
     }
@@ -255,7 +250,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
     private void removeThreadGroups(List<?> elements) {
         Iterator<?> iter = elements.iterator();
-        while (iter.hasNext()) {
+        while (iter.hasNext()) { // Can't use for loop here because we remove elements
             Object item = iter.next();
             if (item instanceof AbstractThreadGroup) {
                 iter.remove();
@@ -267,9 +262,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
     @SuppressWarnings("deprecation") // Deliberate use of deprecated method
     private void notifyTestListenersOfStart(SearchByClass<TestListener> testListeners) {
-        Iterator<TestListener> iter = testListeners.getSearchResults().iterator();
-        while (iter.hasNext()) {
-            TestListener tl = iter.next();
+        for (TestListener tl : testListeners.getSearchResults()) {
             if (tl instanceof TestBean) {
                 TestBeanHelper.prepare((TestElement) tl);
             }
@@ -283,9 +276,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
     private void notifyTestListenersOfEnd(SearchByClass<TestListener> testListeners) {
         log.info("Notifying test listeners of end of test");
-        Iterator<TestListener> iter = testListeners.getSearchResults().iterator();
-        while (iter.hasNext()) {
-            TestListener tl = iter.next();
+        for (TestListener tl : testListeners.getSearchResults()) {
             try {
                 if (host == null) {
                     tl.testEnded();
@@ -509,26 +500,18 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
     private boolean verifyThreadsStopped() {
         boolean stoppedAll = true;
-        List<Thread> threadsToCheck = new ArrayList<Thread>(allThreads.size());
-        synchronized (allThreads) { // Protect iterator
-            Iterator<JMeterThread> iter = allThreads.keySet().iterator();
-            while (iter.hasNext()) {
-                Thread t = allThreads.get(iter.next());
-                if (t != null) {
-                    threadsToCheck.add(t); // Do work later to reduce time in synch block.
-                }
-            }
-        }
-        for(int i=0; i < threadsToCheck.size(); i++) {
-            Thread t = threadsToCheck.get(i);
-            if (t.isAlive()) {
-                try {
-                    t.join(WAIT_TO_DIE);
-                } catch (InterruptedException e) {
-                }
+        // ConcurrentHashMap does not need synch. here
+        for (Thread t : allThreads.values()) {
+            if (t != null) {
                 if (t.isAlive()) {
-                    stoppedAll = false;
-                    log.warn("Thread won't exit: " + t.getName());
+                    try {
+                        t.join(WAIT_TO_DIE);
+                    } catch (InterruptedException e) {
+                    }
+                    if (t.isAlive()) {
+                        stoppedAll = false;
+                        log.warn("Thread won't exit: " + t.getName());
+                    }
                 }
             }
         }
@@ -536,16 +519,14 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
     }
 
     private void tellThreadsToStop() {
-        synchronized (allThreads) { // Protect iterator
-            Iterator<JMeterThread> iter = new HashSet<JMeterThread>(allThreads.keySet()).iterator();
-            while (iter.hasNext()) {
-                JMeterThread item = iter.next();
-                item.stop(); // set stop flag
-                item.interrupt(); // interrupt sampler if possible
-                Thread t = allThreads.get(item);
-                if (t != null ) { // Bug 49734
-                    t.interrupt(); // also interrupt JVM thread
-                }
+        // ConcurrentHashMap does not need protecting
+        for (Entry<JMeterThread, Thread> entry : allThreads.entrySet()) {
+            JMeterThread item = entry.getKey();
+            item.stop(); // set stop flag
+            item.interrupt(); // interrupt sampler if possible
+            Thread t = entry.getValue();
+            if (t != null ) { // Bug 49734
+                t.interrupt(); // also interrupt JVM thread
             }
         }
     }
@@ -557,12 +538,9 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
     }
 
     private void stopAllThreads() {
-        synchronized (allThreads) {// Protect iterator
-            Iterator<JMeterThread> iter = new HashSet<JMeterThread>(allThreads.keySet()).iterator();
-            while (iter.hasNext()) {
-                JMeterThread item = iter.next();
-                item.stop(); // This is quick
-            }
+        // ConcurrentHashMap does not need synch. here
+        for (JMeterThread item : allThreads.keySet()) {
+            item.stop();
         }
     }
 
