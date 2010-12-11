@@ -74,7 +74,7 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
     // Should the file data be saved in the response?
     public final static String SAVE_RESPONSE = "FTPSampler.saveresponse"; // $NON-NLS-1$
 
-    private volatile FTPClient savedClient;
+    private transient volatile FTPClient savedClient; // used for interrupting the sampler
 
     public FTPSampler() {
     }
