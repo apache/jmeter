@@ -224,9 +224,7 @@ public class Spline3 {
         }
         // main iteration
         while ((this.precision(oldX, newX) > this._minPrecision) && (iterations < this._maxIterations)) {
-            for (i = 0; i < _n; i++) {
-                oldX[i] = newX[i];
-            }
+            System.arraycopy(oldX, 0, newX, 0, _n);
             for (i = 0; i < _n; i++) {
                 newX[i] = _B[i];
                 for (j = 0; j < i; j++) {
@@ -254,9 +252,7 @@ public class Spline3 {
                 log.debug(", divergence is possible");
             }
         }
-        for (i = 0; i < _n; i++) {
-            _rS[i + 1] = newX[i];
-        }
+        System.arraycopy(newX, 0, _rS, 1, _n);
     }
 
     /**
