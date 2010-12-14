@@ -183,6 +183,7 @@ Also enable reversion to using System.currentTimeMillis() only.
 <h2>Non-functional changes</h2>
 <ul>
 <li>Bug 50008 - Allow BatchSampleSender to be subclassed</li>
+<li>Bug 50450 - use System.array copy in jacobi solver as, being native, is more performant.</li>
 </ul>
 
 </section> 
