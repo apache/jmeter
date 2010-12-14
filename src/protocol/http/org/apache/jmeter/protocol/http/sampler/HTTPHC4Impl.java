@@ -92,14 +92,29 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     // Scheme used for slow sockets. Cannot be set as a default, because must be set on an HttpClient instance.
     private static final Scheme SLOW_HTTP;
     private static final Scheme SLOW_HTTPS;
-    
+
+    // get access to the copyParams method
+    // TODO replace with direct access once available
+    private static class CopyableParams extends BasicHttpParams{
+        private static final long serialVersionUID = 1L;
+        @Override
+        public void copyParams(HttpParams target) {
+            super.copyParams(target);
+        }
+    }
     /*
      * Create a set of default parameters from the ones initially created.
      * This allows the defaults to be overridden if necessary from the properties file.
      */
-    private static final HttpParams DEFAULT_HTTP_PARAMS = new DefaultHttpClient().getParams();
+    private static final HttpParams DEFAULT_HTTP_PARAMS = new CopyableParams();
     
     static {
+        
+        final DefaultHttpClient dhc = new DefaultHttpClient();
+        HttpParams dflt = dhc.getParams(); // Get the default params
+        ((CopyableParams) DEFAULT_HTTP_PARAMS).copyParams(dflt); // Convert to BasicHttpParams
+        dhc.getConnectionManager().shutdown(); // Tidy up
+        
         if (CPS_HTTP > 0) {
             log.info("Setting up HTTP SlowProtocol, cps="+CPS_HTTP);
             SLOW_HTTP = new Scheme(PROTOCOL_HTTP, DEFAULT_HTTP_PORT, new SlowHC4SocketFactory(CPS_HTTP));
