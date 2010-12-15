@@ -18,14 +18,21 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
@@ -50,10 +57,14 @@ import org.apache.http.client.params.ClientPNames;
 import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.entity.FileEntity;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.AbstractHttpParams;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreConnectionPNames;
+import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.DefaultedHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.BasicHttpContext;
@@ -64,7 +75,10 @@ import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
+import org.apache.jmeter.protocol.http.util.HTTPArgument;
+import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.protocol.http.util.SlowHC4SocketFactory;
+import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -93,28 +107,25 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private static final Scheme SLOW_HTTP;
     private static final Scheme SLOW_HTTPS;
 
-    // get access to the copyParams method
-    // TODO replace with direct access once available
-    private static class CopyableParams extends BasicHttpParams{
-        private static final long serialVersionUID = 1L;
-        @Override
-        public void copyParams(HttpParams target) {
-            super.copyParams(target);
-        }
-    }
     /*
      * Create a set of default parameters from the ones initially created.
      * This allows the defaults to be overridden if necessary from the properties file.
      */
-    private static final HttpParams DEFAULT_HTTP_PARAMS = new CopyableParams();
+    private static final HttpParams DEFAULT_HTTP_PARAMS;
     
     static {
         
+        // TODO use new setDefaultHttpParams(HttpParams params) static method when 4.1 is available
         final DefaultHttpClient dhc = new DefaultHttpClient();
-        HttpParams dflt = dhc.getParams(); // Get the default params
-        ((CopyableParams) DEFAULT_HTTP_PARAMS).copyParams(dflt); // Convert to BasicHttpParams
+        DEFAULT_HTTP_PARAMS = dhc.getParams(); // Get the default params
         dhc.getConnectionManager().shutdown(); // Tidy up
         
+        // Process Apache HttpClient parameters file
+        String file=JMeterUtils.getProperty("hc.parameters.file"); // $NON-NLS-1$
+        if (file != null) {
+            HttpClientDefaultParameters.load(file, DEFAULT_HTTP_PARAMS);
+        }
+
         if (CPS_HTTP > 0) {
             log.info("Setting up HTTP SlowProtocol, cps="+CPS_HTTP);
             SLOW_HTTP = new Scheme(PROTOCOL_HTTP, DEFAULT_HTTP_PORT, new SlowHC4SocketFactory(CPS_HTTP));
@@ -129,11 +140,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         if (localAddress != null){
             DEFAULT_HTTP_PARAMS.setParameter(ConnRoutePNames.LOCAL_ADDRESS, localAddress);
         }
-        // Process Apache HttpClient parameters file
-        String file=JMeterUtils.getProperty("hc.parameters.file"); // $NON-NLS-1$
-        if (file != null) {
-            HttpClientDefaultParameters.load(file, DEFAULT_HTTP_PARAMS);
-        }
+        
     }
 
     private volatile HttpUriRequest currentRequest; // Accessed from multiple threads
@@ -202,6 +209,14 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
         try {
             currentRequest = httpRequest;
+            // Handle the various methods
+            if (method.equals(POST)) {
+                String postBody = sendPostData((HttpPost)httpRequest);
+                res.setQueryString(postBody);
+            } else if (method.equals(PUT)) {
+                String putBody = sendPutData((HttpPut)httpRequest);
+                res.setQueryString(putBody);
+            }
             HttpResponse httpResponse = httpClient.execute(httpRequest, localContext); // perform the sample
 
             // Needs to be done after execute to pick up all the headers
@@ -589,11 +604,100 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
     }
 
-    private String sendPostData(){
+    private String sendPostData(HttpPost httpRequest)  throws IOException {
         return null;
     }
 
-    private String sendPutData(){
+    // TODO - implementation not fully tested
+    private String sendPutData(HttpPut put) throws IOException {
+        // Buffer to hold the put body, except file content
+        StringBuilder putBody = new StringBuilder(1000);
+        boolean hasPutBody = false;
+
+        // Check if the header manager had a content type header
+        // This allows the user to specify his own content-type for a POST request
+        Header contentTypeHeader = put.getFirstHeader(HEADER_CONTENT_TYPE);
+        boolean hasContentTypeHeader = contentTypeHeader != null && contentTypeHeader.getValue() != null && contentTypeHeader.getValue().length() > 0;
+
+        // Check for local contentEncoding override
+        final String contentEncoding = getContentEncoding();
+        boolean haveContentEncoding = (contentEncoding != null && contentEncoding.trim().length() > 0);
+        
+        HttpParams putParams = put.getParams();
+        HTTPFileArg files[] = getHTTPFiles();
+
+        // If there are no arguments, we can send a file as the body of the request
+
+        if(!hasArguments() && getSendFileAsPostBody()) {
+            hasPutBody = true;
+
+            // If getSendFileAsPostBody returned true, it's sure that file is not null
+            FileEntity fileRequestEntity = new FileEntity(new File(files[0].getPath()),null);
+            put.setEntity(fileRequestEntity);
+
+            // We just add placeholder text for file content
+            putBody.append("<actual file content, not shown here>");
+        }
+        // If none of the arguments have a name specified, we
+        // just send all the values as the put body
+        else if(getSendParameterValuesAsPostBody()) {
+            hasPutBody = true;
+
+            // If a content encoding is specified, we set it as http parameter, so that
+            // the post body will be encoded in the specified content encoding
+            if(haveContentEncoding) {
+                putParams.setParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET,contentEncoding);
+            }
+
+            // Just append all the parameter values, and use that as the post body
+            StringBuilder putBodyContent = new StringBuilder();
+            PropertyIterator args = getArguments().iterator();
+            while (args.hasNext()) {
+                HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
+                String value = null;
+                if (haveContentEncoding){
+                    value = arg.getEncodedValue(contentEncoding);
+                } else {
+                    value = arg.getEncodedValue();
+                }
+                putBodyContent.append(value);
+            }
+            String contentTypeValue = null;
+            if(hasContentTypeHeader) {
+                contentTypeValue = put.getFirstHeader(HEADER_CONTENT_TYPE).getValue();
+            }
+            StringEntity requestEntity = new StringEntity(putBodyContent.toString(), contentTypeValue, 
+                    (String) putParams.getParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET));
+            put.setEntity(requestEntity);
+        }
+        // Check if we have any content to send for body
+        if(hasPutBody) {
+            // If the request entity is repeatable, we can send it first to
+            // our own stream, so we can return it
+            if(put.getEntity().isRepeatable()) {
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                put.getEntity().writeTo(bos);
+                bos.flush();
+                // We get the posted bytes using the charset that was used to create them
+                putBody.append(new String(bos.toByteArray(),
+                        (String) putParams.getParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET)));
+                bos.close();
+            }
+            else {
+                putBody.append("<RequestEntity was not repeatable, cannot view what was sent>");
+            }
+            if(!hasContentTypeHeader) {
+                // Allow the mimetype of the file to control the content type
+                // This is not obvious in GUI if you are not uploading any files,
+                // but just sending the content of nameless parameters
+                // TODO: needs a multiple file upload scenerio
+                HTTPFileArg file = files.length > 0? files[0] : null;
+                if(file != null && file.getMimeType() != null && file.getMimeType().length() > 0) {
+                    put.setHeader(HEADER_CONTENT_TYPE, file.getMimeType());
+                }
+            }
+            return putBody.toString();
+        }
         return null;
     }
 
