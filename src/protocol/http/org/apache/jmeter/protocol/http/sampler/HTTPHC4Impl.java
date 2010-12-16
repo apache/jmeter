@@ -25,7 +25,11 @@ import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.http.Header;
@@ -33,12 +37,14 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.NTCredentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpHead;
@@ -54,8 +60,13 @@ import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.FormBodyPart;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.CoreProtocolPNames;
@@ -70,6 +81,7 @@ import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
+import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.protocol.http.util.SlowHC4SocketFactory;
@@ -599,8 +611,215 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
     }
 
-    private String sendPostData(HttpPost httpRequest)  throws IOException {
-        return null;
+    // TODO needs cleaning up
+    private String sendPostData(HttpPost post)  throws IOException {
+        // Buffer to hold the post body, except file content
+        StringBuilder postedBody = new StringBuilder(1000);
+        HTTPFileArg files[] = getHTTPFiles();
+        // Check if we should do a multipart/form-data or an
+        // application/x-www-form-urlencoded post request
+        if(getUseMultipartForPost()) {
+            // If a content encoding is specified, we use that as the
+            // encoding of any parameter values
+            String contentEncoding = getContentEncoding();
+            if(contentEncoding != null && contentEncoding.length() == 0) {
+                contentEncoding = null;
+            }
+
+            // Write the request to our own stream
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            MultipartEntity multiPart = new MultipartEntity();
+            // Create the parts
+            // Add any parameters
+            PropertyIterator args = getArguments().iterator();
+            while (args.hasNext()) {
+               HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
+               String parameterName = arg.getName();
+               if (arg.isSkippable(parameterName)){
+                   continue;
+               }
+               FormBodyPart formPart;
+               if (contentEncoding != null) {
+                   formPart = new FormBodyPart(arg.getName(), new StringBody(arg.getValue(), Charset.forName(contentEncoding)));                   
+               } else {
+                   formPart = new FormBodyPart(arg.getName(), new StringBody(arg.getValue(), Charset.forName("US-ASCII")));
+               }
+               multiPart.addPart(formPart);
+            }
+
+            if (multiPart.isRepeatable()){
+                multiPart.writeTo(bos);
+            }
+
+            // Add any files
+            for (int i=0; i < files.length; i++) {
+                HTTPFileArg file = files[i];
+                FileBody fileBody = new FileBody(new File(file.getPath()), file.getMimeType());
+                multiPart.addPart(file.getParamName(),fileBody);
+                bos.write("<actual file content, not shown here>".getBytes());
+            }
+
+            bos.flush();
+            // We get the posted bytes using the encoding used to create it
+            postedBody.append(new String(bos.toByteArray(),
+                    contentEncoding == null ? "US-ASCII" // $NON-NLS-1$ this is the default used by HttpClient
+                    : contentEncoding));
+            bos.close();
+
+            post.setEntity(multiPart);
+
+//            // Set the content type TODO - needed?
+//            String multiPartContentType = multiPart.getContentType().getValue();
+//            post.setHeader(HEADER_CONTENT_TYPE, multiPartContentType);
+
+        } else { // not multipart
+            // Check if the header manager had a content type header
+            // This allows the user to specify his own content-type for a POST request
+            Header contentTypeHeader = post.getFirstHeader(HEADER_CONTENT_TYPE);
+            boolean hasContentTypeHeader = contentTypeHeader != null && contentTypeHeader.getValue() != null && contentTypeHeader.getValue().length() > 0;
+            // If there are no arguments, we can send a file as the body of the request
+            // TODO: needs a multiple file upload scenerio
+            if(!hasArguments() && getSendFileAsPostBody()) {
+                // If getSendFileAsPostBody returned true, it's sure that file is not null
+                HTTPFileArg file = files[0];
+                if(!hasContentTypeHeader) {
+                    // Allow the mimetype of the file to control the content type
+                    if(file.getMimeType() != null && file.getMimeType().length() > 0) {
+                        post.setHeader(HEADER_CONTENT_TYPE, file.getMimeType());
+                    }
+                    else {
+                        post.setHeader(HEADER_CONTENT_TYPE, APPLICATION_X_WWW_FORM_URLENCODED);
+                    }
+                }
+
+                FileEntity fileRequestEntity = new FileEntity(new File(file.getPath()),null);
+                post.setEntity(fileRequestEntity);
+
+                // We just add placeholder text for file content
+                postedBody.append("<actual file content, not shown here>");
+            } else {
+                // In a post request which is not multipart, we only support
+                // parameters, no file upload is allowed
+
+                // If a content encoding is specified, we set it as http parameter, so that
+                // the post body will be encoded in the specified content encoding
+                String contentEncoding = getContentEncoding();
+                boolean haveContentEncoding = false;
+                if(contentEncoding != null && contentEncoding.trim().length() > 0) {
+                    post.getParams().setParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET, contentEncoding);
+                    haveContentEncoding = true;
+                } else if (contentEncoding != null && contentEncoding.trim().length() == 0){
+                    contentEncoding=null;
+                }
+
+                // If none of the arguments have a name specified, we
+                // just send all the values as the post body
+                if(getSendParameterValuesAsPostBody()) {
+                    // Allow the mimetype of the file to control the content type
+                    // This is not obvious in GUI if you are not uploading any files,
+                    // but just sending the content of nameless parameters
+                    // TODO: needs a multiple file upload scenerio
+                    if(!hasContentTypeHeader) {
+                        HTTPFileArg file = files.length > 0? files[0] : null;
+                        if(file != null && file.getMimeType() != null && file.getMimeType().length() > 0) {
+                            post.setHeader(HEADER_CONTENT_TYPE, file.getMimeType());
+                        }
+                        else {
+                             // TODO - is this the correct default?
+                            post.setHeader(HEADER_CONTENT_TYPE, APPLICATION_X_WWW_FORM_URLENCODED);
+                        }
+                    }
+
+                    // Just append all the parameter values, and use that as the post body
+                    StringBuilder postBody = new StringBuilder();
+                    PropertyIterator args = getArguments().iterator();
+                    while (args.hasNext()) {
+                        HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
+                        String value;
+                        if (haveContentEncoding){
+                            value = arg.getEncodedValue(contentEncoding);
+                        } else {
+                            value = arg.getEncodedValue();
+                        }
+                        postBody.append(value);
+                    }
+                    StringEntity requestEntity = new StringEntity(postBody.toString(), post.getFirstHeader(HEADER_CONTENT_TYPE).getValue(), contentEncoding);
+                    post.setEntity(requestEntity);
+                    postedBody.append(postBody.toString()); // TODO OK?
+                } else {
+                    // It is a normal post request, with parameter names and values
+
+                    // Set the content type
+                    if(!hasContentTypeHeader) {
+                        post.setHeader(HEADER_CONTENT_TYPE, APPLICATION_X_WWW_FORM_URLENCODED);
+                    }
+                    // Add the parameters
+                    PropertyIterator args = getArguments().iterator();
+                    List <NameValuePair> nvps = new ArrayList <NameValuePair>();
+                    String urlContentEncoding = contentEncoding;
+                    if(urlContentEncoding == null || urlContentEncoding.length() == 0) {
+                        // Use the default encoding for urls
+                        urlContentEncoding = EncoderCache.URL_ARGUMENT_ENCODING;
+                    }
+                    while (args.hasNext()) {
+                        HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
+                        // The HTTPClient always urlencodes both name and value,
+                        // so if the argument is already encoded, we have to decode
+                        // it before adding it to the post request
+                        String parameterName = arg.getName();
+                        if (arg.isSkippable(parameterName)){
+                            continue;
+                        }
+                        String parameterValue = arg.getValue();
+                        if(!arg.isAlwaysEncoded()) {
+                            // The value is already encoded by the user
+                            // Must decode the value now, so that when the
+                            // httpclient encodes it, we end up with the same value
+                            // as the user had entered.
+                            parameterName = URLDecoder.decode(parameterName, urlContentEncoding);
+                            parameterValue = URLDecoder.decode(parameterValue, urlContentEncoding);
+                        }
+                        // Add the parameter, httpclient will urlencode it
+                        nvps.add(new BasicNameValuePair(parameterName, parameterValue));
+                    }
+                    UrlEncodedFormEntity entity = new UrlEncodedFormEntity(nvps, urlContentEncoding);
+                    post.setEntity(entity);
+                    if (entity.isRepeatable()){
+                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                        post.getEntity().writeTo(bos);
+                        bos.flush();
+                        // We get the posted bytes using the encoding used to create it
+                        if (contentEncoding != null) {
+                            postedBody.append(new String(bos.toByteArray(), contentEncoding));
+                        } else {
+                            postedBody.append(new String(bos.toByteArray()));
+                        }
+                        bos.close();
+                    }  else {
+                        postedBody.append("<RequestEntity was not repeatable, cannot view what was sent>");
+                    }
+                }
+
+//                // If the request entity is repeatable, we can send it first to
+//                // our own stream, so we can return it
+//                if(post.getEntity().isRepeatable()) {
+//                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+//                    post.getEntity().writeTo(bos);
+//                    bos.flush();
+//                    // We get the posted bytes using the encoding used to create it
+//                    if (contentEncoding != null) {
+//                        postedBody.append(new String(bos.toByteArray(), contentEncoding));
+//                    } else {
+//                        postedBody.append(new String(bos.toByteArray()));
+//                    }
+//                    bos.close();
+//                }
+//                else {
+//                    postedBody.append("<RequestEntity was not repeatable, cannot view what was sent>");
+//                }
+            }
+        }
+        return postedBody.toString();
     }
 
     // TODO - implementation not fully tested
@@ -610,7 +829,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         boolean hasPutBody = false;
 
         // Check if the header manager had a content type header
-        // This allows the user to specify his own content-type for a POST request
+        // This allows the user to specify his own content-type
         Header contentTypeHeader = put.getFirstHeader(HEADER_CONTENT_TYPE);
         boolean hasContentTypeHeader = contentTypeHeader != null && contentTypeHeader.getValue() != null && contentTypeHeader.getValue().length() > 0;
 
