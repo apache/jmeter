@@ -67,6 +67,8 @@ public final class MenuFactory {
      *  and also for resource lookup in messages.properties
     */
     public static final String THREADS = "menu_threads"; //$NON-NLS-1$
+    
+    public static final String FRAGMENTS = "menu_fragments"; //$NON-NLS-1$
 
     public static final String TIMERS = "menu_timer"; //$NON-NLS-1$
 
@@ -119,12 +121,13 @@ public final class MenuFactory {
     private static final String[] MENU_PARENT_SAMPLER = new String[] {
         MenuFactory.CONTROLLERS };
 
-    private static final List<MenuInfo> timers, controllers, samplers, threads,
-        configElements, assertions, listeners, nonTestElements,
+    private static final List<MenuInfo> timers, controllers, samplers, threads, 
+        fragments,configElements, assertions, listeners, nonTestElements,
         postProcessors, preProcessors;
 
     static {
         threads = new LinkedList<MenuInfo>();
+        fragments = new LinkedList<MenuInfo>();
         timers = new LinkedList<MenuInfo>();
         controllers = new LinkedList<MenuInfo>();
         samplers = new LinkedList<MenuInfo>();
@@ -135,6 +138,7 @@ public final class MenuFactory {
         preProcessors = new LinkedList<MenuInfo>();
         nonTestElements = new LinkedList<MenuInfo>();
         menuMap.put(THREADS, threads);
+        menuMap.put(FRAGMENTS, fragments);
         menuMap.put(TIMERS, timers);
         menuMap.put(ASSERTIONS, assertions);
         menuMap.put(CONFIG_ELEMENTS, configElements);
@@ -465,6 +469,9 @@ public final class MenuFactory {
                 if (categories.contains(THREADS)) {
                     threads.add(new MenuInfo(item, name));
                 }
+                if (categories.contains(FRAGMENTS)) {
+                    fragments.add(new MenuInfo(item, name));
+                }
                 if (categories.contains(TIMERS)) {
                     timers.add(new MenuInfo(item, name));
                 }
@@ -549,6 +556,14 @@ public final class MenuFactory {
             return false;
         }
         TestElement parent = parentNode.getTestElement();
+
+        // Force TestFragment to only be pastable under a Test Plan
+        if (foundClass(nodes, new Class[]{org.apache.jmeter.control.TestFragmentController.class})){
+            if (parent instanceof TestPlan)
+                return true;
+            return false;
+        }
+
         if (parent instanceof WorkBench) {// allow everything else
             return true;
         }
