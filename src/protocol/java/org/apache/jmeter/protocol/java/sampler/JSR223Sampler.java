@@ -56,6 +56,7 @@ public class JSR223Sampler extends JSR223TestElement implements Cloneable, Sampl
                 result.setResponseMessage("Could not instantiate ScriptManager");
                 return result;
             }
+            mgr.put("SampleResult",result);
             Object ret = processFileOrScript(mgr);
             result.setSuccessful(true);
             result.setResponseCodeOK();
