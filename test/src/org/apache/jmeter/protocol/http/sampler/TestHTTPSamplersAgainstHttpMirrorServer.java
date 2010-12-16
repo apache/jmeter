@@ -57,6 +57,7 @@ import junit.extensions.TestSetup;
 public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
     private final static int HTTP_SAMPLER = 0;
     private final static int HTTP_SAMPLER2 = 1;
+    private final static int HTTP_SAMPLER3 = 2;
     
     /** The encodings used for http headers and control information */
     private final static String ISO_8859_1 = "ISO-8859-1"; // $NON-NLS-1$
@@ -110,12 +111,20 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         testPostRequest_UrlEncoded(HTTP_SAMPLER2, US_ASCII);
     }
 
+    public void testPostRequest_UrlEncoded3() throws Exception {
+        testPostRequest_UrlEncoded(HTTP_SAMPLER3, US_ASCII);
+    }
+
     public void testPostRequest_FormMultipart() throws Exception {
         testPostRequest_FormMultipart(HTTP_SAMPLER, ISO_8859_1);
     }
 
     public void testPostRequest_FormMultipart2() throws Exception {
         testPostRequest_FormMultipart(HTTP_SAMPLER2, US_ASCII);
+    }
+
+    public void testPostRequest_FormMultipart3() throws Exception {
+        testPostRequest_FormMultipart(HTTP_SAMPLER3, US_ASCII);
     }
 
     public void testPostRequest_FileUpload() throws Exception {
@@ -126,12 +135,20 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         testPostRequest_FileUpload(HTTP_SAMPLER2, US_ASCII);
     }
 
+    public void testPostRequest_FileUpload3() throws Exception {        
+        testPostRequest_FileUpload(HTTP_SAMPLER3, US_ASCII);
+    }
+
     public void testPostRequest_BodyFromParameterValues() throws Exception {
         testPostRequest_BodyFromParameterValues(HTTP_SAMPLER, ISO_8859_1);
     }
 
     public void testPostRequest_BodyFromParameterValues2() throws Exception {
         testPostRequest_BodyFromParameterValues(HTTP_SAMPLER2, US_ASCII);
+    }
+
+    public void testPostRequest_BodyFromParameterValues3() throws Exception {
+        testPostRequest_BodyFromParameterValues(HTTP_SAMPLER3, US_ASCII);
     }
 
     public void testGetRequest() throws Exception {
@@ -142,12 +159,20 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         testGetRequest(HTTP_SAMPLER2);
     }
     
+    public void testGetRequest3() throws Exception {
+        testGetRequest(HTTP_SAMPLER3);
+    }
+    
     public void testGetRequest_Parameters() throws Exception {
         testGetRequest_Parameters(HTTP_SAMPLER);
     }
     
     public void testGetRequest_Parameters2() throws Exception {
         testGetRequest_Parameters(HTTP_SAMPLER2);
+    }   
+
+    public void testGetRequest_Parameters3() throws Exception {
+        testGetRequest_Parameters(HTTP_SAMPLER3);
     }   
 
     private void testPostRequest_UrlEncoded(int samplerType, String samplerDefaultEncoding) throws Exception {
@@ -1322,11 +1347,14 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
     }
     
     private HTTPSamplerBase createHttpSampler(int samplerType) {
-        if(samplerType == HTTP_SAMPLER2) {
-            return new HTTPSampler2();
+        switch(samplerType) {
+            case HTTP_SAMPLER:
+                return new HTTPSampler();
+            case HTTP_SAMPLER2:
+                return new HTTPSampler2();
+            case HTTP_SAMPLER3:
+                return new HTTPSampler3();
         }
-        else {
-            return new HTTPSampler();
-        }
+        throw new IllegalArgumentException("Unexpected type: "+samplerType);
     }
 }
