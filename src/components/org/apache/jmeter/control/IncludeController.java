@@ -26,6 +26,9 @@ import java.io.InputStream;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import org.apache.jmeter.testelement.TestPlan;
+import org.apache.jmeter.control.TestFragmentController;
+
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.services.FileServer;
@@ -105,6 +108,10 @@ public class IncludeController extends GenericController implements ReplaceableC
         return SUBTREE;
     }
 
+    public TestElement getReplacementElement() {
+        return SUB;
+    }
+
     public void resolveReplacementSubTree(JMeterTreeNode context) {
         this.SUBTREE = this.loadIncludedElements();
     }
@@ -135,6 +142,8 @@ public class IncludeController extends GenericController implements ReplaceableC
                 
                 reader = new FileInputStream(file);
                 tree = SaveService.loadTree(reader);
+                // filter the tree for a TestFragment.
+                tree = getProperBranch(tree);
                 removeDisabledItems(tree);
                 return tree;
             } catch (NoClassDefFoundError ex) // Allow for missing optional jars
@@ -163,6 +172,28 @@ public class IncludeController extends GenericController implements ReplaceableC
         }
         return tree;
     }
+
+    private HashTree getProperBranch(HashTree tree) {
+        Iterator<Object> iter = new LinkedList<Object>(tree.list()).iterator();
+        while (iter.hasNext()) {
+            TestElement item = (TestElement) iter.next();
+
+            //if we found a TestPlan, then we are on our way to the TestFragment
+            if (item instanceof TestPlan)
+            {
+                return getProperBranch(tree.getTree(item));
+            }
+
+            if (item instanceof TestFragmentController)
+            {
+                return tree.getTree(item);
+            }
+        }
+        //return the tree since we didn't find a TestFragment.  This will mimic the 
+        //old behavior to import an exact node.
+        return tree;
+    }
+
 
     private void removeDisabledItems(HashTree tree) {
         Iterator<Object> iter = new LinkedList<Object>(tree.list()).iterator();

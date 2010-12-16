@@ -151,6 +151,7 @@ Also enable reversion to using System.currentTimeMillis() only.
 
 <h3>Controllers</h3>
 <ul>
+<li>Bug 50475 - Introduction of a Test Fragment Test Element for a better Include flow</li>
 </ul>
 
 <h3>Listeners</h3>

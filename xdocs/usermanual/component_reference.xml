@@ -2025,11 +2025,14 @@ otherwise a duplicate may be accidentally created when new elements are added to
 <component name="Include Controller" index="&sect-num;.2.14"  width="419" height="118" screenshot="includecontroller.png">
 	<description>
 <p>
-The include controller is designed to use an external jmx file. To use it, add
-samples to a simple controller, then save the simple controller as a jmx file.
-The file can then be used in a test plan.
-The included test plan must not include a Thread Group.
-It should only contain the Simple Controller and any samplers, controllers etc below it.
+The include controller is designed to use an external jmx file. To use it, create a Test Fragment 
+underneath the Test Plan and add any desired samplers, controllers etc. below it.
+Then save the Test Plan.  The file is now ready to be included as part of other Test Plans.
+</p>
+<p>
+For convenience, a Thread Group can also be added in the external JMX file for debugging purposes.
+A Module Controller can be used to reference the Test Fragment.  The Thread Group will be ignored during the 
+include process.
 </p>
 <p>
 If the test uses a Cookie Manager or User Defined Variables, these should be placed in the top-level
@@ -5050,6 +5053,17 @@ This is intended for developer use only.
 </description>
 <properties>
         <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
+</properties>
+</component>
+
+<component name="Test Fragment" index="&sect-num;.9.9"  width="236" height="94" screenshot="test_fragment.png">
+<description>
+<p>
+The Test Fragment is used in conjunction with the <complink name="Include Controller"/> and <complink name="Module Controller"/>.
+</p>
+</description>
+<properties>
+        <property name="Name" required="Yes">Descriptive name for this element that is shown in the tree.</property>
 </properties>
 </component>
 
