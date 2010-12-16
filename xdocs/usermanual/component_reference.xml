@@ -973,7 +973,7 @@ Beware however that misuse of any methods can cause subtle faults that may be di
 </component>
 
 
-<component name="BSF Sampler" index="&sect-num;.1.11"  width="598" height="259" screenshot="bsfsampler.png">
+<component name="BSF Sampler" index="&sect-num;.1.11"  width="622" height="267" screenshot="bsfsampler.png">
 	<description><p>This sampler allows you to write a sampler using a BSF scripting language.<br></br>
 		See the <a href="http://jakarta.apache.org/bsf/index.html">Apache Bean Scripting Framework</a>
 		website for details of the languages supported.
@@ -1010,6 +1010,7 @@ Note that these are BSF variables - i.e. they can be used directly in the script
 <li>Parameters - text from the Parameters field</li>
 <li>args - the parameters, split as described above</li>
 <li>SampleResult - pointer to the current SampleResult</li>
+<li>sampler - pointer to current Sampler</li>
 <li>ctx - JMeterContext</li>
 <li>vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.remove("VAR3"); vars.putObject("OBJ1",new Object());</li>
 <li>props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
@@ -3707,7 +3708,7 @@ The non-tolerant parser can be quite slow, as it may need to download the DTD et
 </properties>
 </component>
 
-<component name="BSF Assertion" index="&sect-num;.5.10"  width="529" height="382" screenshot="bsf_assertion.png">
+<component name="BSF Assertion" index="&sect-num;.5.10"  width="805" height="382" screenshot="bsf_assertion.png">
 <description>
 <p>
 The BSF Assertion allows BSF script code to be used to check the status of the previous sample.
@@ -3738,10 +3739,9 @@ The script (or file) is processed using the BSFEngine.exec() method, which does 
 <li>ctx - (JMeterContext) - gives access to the context</li>
 <li>vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");</li>
 <li>props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
-<li>prev - (SampleResult) - gives access to the previous SampleResult (if any)</li>
+<li>SampleResult, prev - (SampleResult) - gives access to the previous SampleResult (if any)</li>
 <li>sampler - (Sampler)- gives access to the current sampler</li>
 <li>OUT - System.out - e.g. OUT.println("message")</li>
-<li>SampleResult - the current sample result (same as prev)</li>
 <li>AssertionResult - the assertion result</li>
 </ul>
 <p>
@@ -4007,7 +4007,6 @@ The BSF Timer can be used to generate a delay using a BSF scripting language.
 <li>ctx - (JMeterContext) - gives access to the context</li>
 <li>vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());</li>
 <li>props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
-<li>prev - the previous SampleResult (if any)</li>
 <li>sampler - the current Sampler</li>
 <li>Label - the name of the Timer</li>
 <li>Filename - the file name (if any)</li>
@@ -4229,7 +4228,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 <p>If the property <b>beanshell.preprocessor.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
 </component>
 
-<component name="BSF PreProcessor" index="&sect-num;.7.8"  width="529" height="382" screenshot="bsf_preprocessor.png">
+<component name="BSF PreProcessor" index="&sect-num;.7.8"  width="634" height="357" screenshot="bsf_preprocessor.png">
 <description>
 <p>
 The BSF PreProcessor allows BSF script code to be applied before taking a sample.
@@ -4260,7 +4259,6 @@ The script (or file) is processed using the BSFEngine.exec() method, which does 
 <li>ctx - (JMeterContext) - gives access to the context</li>
 <li>vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");</li>
 <li>props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
-<li>prev - (SampleResult) - gives access to the previous SampleResult (if any)</li>
 <li>sampler - (Sampler)- gives access to the current sampler</li>
 <li>OUT - System.out - e.g. OUT.println("message")</li>
 </ul>
@@ -4549,7 +4547,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 <p>If the property <b>beanshell.postprocessor.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
 </component>
 
-<component name="BSF PostProcessor" index="&sect-num;.8.5"  width="529" height="382" screenshot="bsf_postprocessor.png">
+<component name="BSF PostProcessor" index="&sect-num;.8.5"  width="634" height="357" screenshot="bsf_postprocessor.png">
 <description>
 <p>
 The BSF PostProcessor allows BSF script code to be applied after taking a sample.

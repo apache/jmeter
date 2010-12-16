@@ -86,6 +86,7 @@ This is internal to the workings of the JMeter Proxy &amp; its GUI, so should no
 <h3>Other Samplers</h3>
 <ul>
 <li>Bug 50173 - JDBCSampler discards ResultSet from a PreparedStatement</li>
+<li>Ensure JSR223 Sampler has access to the current SampleResult</li>
 </ul>
 
 <h3>Controllers</h3>
