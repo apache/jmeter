@@ -226,6 +226,15 @@ will share the same cookies.</p>
 Logic Controllers</a>.</p>
 </subsection>
 
+<subsection name="&sect-num;.2.3 Test Fragments" anchor="test_fragments">
+<p>The Test Fragment element is a special type of <a href="#controllers">controller</a> that
+exists on the Test Plan tree at the same level as the Thread Group element.  It is distinguished
+from a Thread Group in that it is not executed unless it is 
+referenced by either a <complink name="Module Controller"/> or an <complink name="Include_Controller"/>.
+</p>
+<p>This element is purely for code re-use within Test Plans and was introduced in Version 2.5</p>
+</subsection>
+
 <subsection name="&sect-num;.3 Listeners" anchor="listeners">
 <p>Listeners provide access to the information JMeter gathers about the test cases while
 JMeter runs.  The  <complink name="Graph
