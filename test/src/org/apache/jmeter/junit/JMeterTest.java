@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.junit;
 
+import java.awt.Component;
 import java.awt.HeadlessException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -34,8 +35,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-
-import javax.swing.JComponent;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -486,7 +485,7 @@ public class JMeterTest extends JMeterTestCase {
      * Test serializable elements - test the object
      */
     public void runSerialTest() throws Exception {
-        if (!(serObj instanceof JComponent)) {
+        if (!(serObj instanceof Component)) {// 
             try {
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 ObjectOutputStream out = new ObjectOutputStream(bytes);
