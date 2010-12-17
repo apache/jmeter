@@ -180,13 +180,14 @@ Also enable reversion to using System.currentTimeMillis() only.
 <ul>
 <li>Bug 30563 - Thread Group should have a start next loop option on Sample Error</li>
 <li>Bug 50347 - Eclipse setup instructions should remind user to download dependent jars</li>
-<li>Bug 50487 - runSerialTest verifies objects that never need persisting</li>
+<li>Bug 50490 - Setup and Post Thread Group enhancements for better test flow.</li>
 </ul>
 
 <h2>Non-functional changes</h2>
 <ul>
 <li>Bug 50008 - Allow BatchSampleSender to be subclassed</li>
 <li>Bug 50450 - use System.array copy in jacobi solver as, being native, is more performant.</li>
+<li>Bug 50487 - runSerialTest verifies objects that never need persisting</li>
 </ul>
 
 </section> 
