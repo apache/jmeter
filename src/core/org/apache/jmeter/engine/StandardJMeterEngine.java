@@ -45,6 +45,8 @@ import org.apache.jmeter.threads.JMeterThreadMonitor;
 import org.apache.jmeter.threads.ListenerNotifier;
 import org.apache.jmeter.threads.TestCompiler;
 import org.apache.jmeter.threads.AbstractThreadGroup;
+import org.apache.jmeter.threads.SetupThreadGroup;
+import org.apache.jmeter.threads.PostThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
@@ -93,9 +95,6 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
     /** JMeterThread => its JVM thread */
     private final Map<JMeterThread, Thread> allThreads;
-
-    /** flag to show that groups are still being created, i.e test plan is not complete */
-    private volatile boolean startingGroups;
 
     /** Flag to show whether test is running. Set to false to stop creating more threads. */
     private volatile boolean running = false;
@@ -312,15 +311,6 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
     public synchronized void threadFinished(JMeterThread thread) {
         log.info("Ending thread " + thread.getThreadName());
         allThreads.remove(thread);
-        if (!startingGroups && allThreads.size() == 0 ) {// All threads have exitted
-            new Thread(){// Ensure that the current sampler thread can exit cleanly
-                @Override
-                public void run() {
-                    log.info("Stopping test");
-                    notifyTestListenersOfEnd(testListenersSave);
-                }
-            }.start();
-        }
     }
 
     public synchronized void stopTest() {
@@ -411,13 +401,49 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
         List<?> testLevelElements = new LinkedList<Object>(test.list(test.getArray()[0]));
         removeThreadGroups(testLevelElements);
+
+        SearchByClass<SetupThreadGroup> setupSearcher = new SearchByClass<SetupThreadGroup>(SetupThreadGroup.class);
         SearchByClass<AbstractThreadGroup> searcher = new SearchByClass<AbstractThreadGroup>(AbstractThreadGroup.class);
+        SearchByClass<PostThreadGroup> postSearcher = new SearchByClass<PostThreadGroup>(PostThreadGroup.class);
+
+        test.traverse(setupSearcher);
         test.traverse(searcher);
+        test.traverse(postSearcher);
+        
         TestCompiler.initialize();
         // for each thread group, generate threads
         // hand each thread the sampler controller
         // and the listeners, and the timer
+        Iterator<SetupThreadGroup> setupIter = setupSearcher.getSearchResults().iterator();
         Iterator<AbstractThreadGroup> iter = searcher.getSearchResults().iterator();
+        Iterator<PostThreadGroup> postIter = postSearcher.getSearchResults().iterator();
+
+        ListenerNotifier notifier = new ListenerNotifier();
+
+        int groupCount = 0;
+        JMeterContextService.clearTotalThreads();
+        
+        if (setupIter.hasNext()) {
+            log.info("Starting setup thread groups");
+            while (running && setupIter.hasNext()) {//for each setup thread group
+                AbstractThreadGroup group = setupIter.next();
+                groupCount++;
+                log.info("Starting Setup Thread: " + groupCount);
+                String groupName = startThreadGroup(group, groupCount, setupSearcher, testLevelElements, notifier);
+                if (serialized && setupIter.hasNext()) {
+                    log.info("Waiting for setup thread group: "+groupName+" to finish before starting next setup group");
+                    while (running && allThreads.size() > 0) {
+                        pause(1000);
+                    }
+                }
+            }    
+            log.info("Waiting for all setup thread groups To Exit");
+            //wait for all Setup Threads To Exit
+            waitThreadsStopped();
+            log.info("All Setup Threads have ended");
+            groupCount=0;
+            JMeterContextService.clearTotalThreads();
+        }
 
         /*
          * Here's where the test really starts. Run a Full GC now: it's no harm
@@ -426,15 +452,61 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
          */
         System.gc();
 
-        ListenerNotifier notifier = new ListenerNotifier();
-
         JMeterContextService.getContext().setSamplingStarted(true);
-        int groupCount = 0;
-        JMeterContextService.clearTotalThreads();
-        startingGroups = true;
         while (running && iter.hasNext()) {// for each thread group
-            groupCount++;
             AbstractThreadGroup group = iter.next();
+            //ignore Setup and Post here.  We could have filtered the searcher. but then
+            //future Thread Group objects wouldn't execute.
+            if (group instanceof SetupThreadGroup)
+                continue;
+            if (group instanceof PostThreadGroup)
+                continue;
+            groupCount++;
+            String groupName=startThreadGroup(group, groupCount, searcher, testLevelElements, notifier);
+            if (serialized && iter.hasNext()) {
+                log.info("Waiting for thread group: "+groupName+" to finish before starting next group");
+                while (running && allThreads.size() > 0) {
+                    pause(1000);
+                }
+            }
+        } // end of thread groups
+        if (groupCount == 0){ // No TGs found
+            log.info("No enabled thread groups found");
+        } else {
+            if (running) {
+                log.info("All threads have been started");
+            } else {
+                log.info("Test stopped - no more threads will be started");
+            }
+        }
+
+        //wait for all Test Threads To Exit
+        waitThreadsStopped();
+
+        if (postIter.hasNext()){
+            groupCount = 0;
+            JMeterContextService.clearTotalThreads();
+            log.info("Starting post thread groups");
+            while (running && postIter.hasNext()) {//for each setup thread group
+                AbstractThreadGroup group = postIter.next();
+                groupCount++;
+                log.info("Starting Post Thread: " + groupCount);
+                String groupName = startThreadGroup(group, groupCount, postSearcher, testLevelElements, notifier);
+                if (serialized && postIter.hasNext()) {
+                    log.info("Waiting for post thread group: "+groupName+" to finish before starting next post group");
+                    while (running && allThreads.size() > 0) {
+                        pause(1000);
+                    }
+                }
+            }
+            waitThreadsStopped(); // wait for Post threads to stop
+        }
+
+        notifyTestListenersOfEnd(testListenersSave);
+    }
+
+    private String startThreadGroup(AbstractThreadGroup group, int groupCount, SearchByClass<?> searcher, List<?> testLevelElements, ListenerNotifier notifier)
+    {
             int numThreads = group.getNumThreads();
             JMeterContextService.addTotalThreads(numThreads);
             boolean onErrorStopTest = group.getOnErrorStopTest();
@@ -477,24 +549,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
                 allThreads.put(jmeterThread, newThread);
                 newThread.start();
             } // end of thread startup for this thread group
-            if (serialized && iter.hasNext()) {
-                log.info("Waiting for thread group: "+groupName+" to finish before starting next group");
-                while (running && allThreads.size() > 0) {
-                    pause(1000);
-                }
-            }
-        } // end of thread groups
-        startingGroups = false;
-        if (groupCount == 0){ // No TGs found
-            log.info("No enabled thread groups found");
-            notifyTestListenersOfEnd(testListenersSave);
-        } else {
-            if (running) {
-                log.info("All threads have been started");
-            } else {
-                log.info("Test stopped - no more threads will be started");
-            }
-        }
+            return groupName;
     }
 
     private boolean verifyThreadsStopped() {
@@ -515,6 +570,20 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
             }
         }
         return stoppedAll;
+    }
+
+    private void waitThreadsStopped() {
+        // ConcurrentHashMap does not need synch. here
+        for (Thread t : allThreads.values()) {
+            if (t != null) {
+                while (t.isAlive()) {
+                    try {
+                        t.join(WAIT_TO_DIE);
+                    } catch (InterruptedException e) {
+                    }
+                }
+            }
+        }
     }
 
     private void tellThreadsToStop() {
