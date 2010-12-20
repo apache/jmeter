@@ -85,6 +85,7 @@ import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.protocol.http.util.SlowHC4SocketFactory;
+import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -93,8 +94,7 @@ import org.apache.log.Logger;
 /**
  * HTTP Sampler using Apache HttpClient 4.x.
  * 
- *                                    WARNING NOT YET COMPLETE (e.g. does not support PUT/POST yet) 
- *                                                     MAY CHANGE
+ *                        INITIAL IMPLEMENTATION - SUBJECT TO CHANGE 
  */
 public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
@@ -559,6 +559,24 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @param cacheManager the CacheManager (may be null)
      */
     private void setConnectionHeaders(HttpRequestBase request, URL url, HeaderManager headerManager, CacheManager cacheManager) {
+        if (headerManager != null) {
+            CollectionProperty headers = headerManager.getHeaders();
+            if (headers != null) {
+                PropertyIterator i = headers.iterator();
+                while (i.hasNext()) {
+                    org.apache.jmeter.protocol.http.control.Header header
+                    = (org.apache.jmeter.protocol.http.control.Header)
+                       i.next().getObjectValue();
+                    String n = header.getName();
+                    // Don't allow override of Content-Length
+                    // TODO - what other headers are not allowed?
+                    if (! HEADER_CONTENT_LENGTH.equalsIgnoreCase(n)){
+                        String v = header.getValue();
+                        request.addHeader(n, v);
+                    }
+                }
+            }
+        }
         if (cacheManager != null){
             cacheManager.setHeaders(url, request);
         }
