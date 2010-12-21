@@ -62,6 +62,7 @@ public class HttpMirrorThread extends Thread {
         try {
             in = new BufferedInputStream(clientSocket.getInputStream());
             out = new BufferedOutputStream(clientSocket.getOutputStream());
+            log.debug("Write headers");
             // The headers are written using ISO_8859_1 encoding
             out.write("HTTP/1.0 200 OK".getBytes(ISO_8859_1)); //$NON-NLS-1$
             out.write(CRLF);
@@ -82,6 +83,7 @@ public class HttpMirrorThread extends Thread {
             int length = 0;
             int positionOfBody = 0;
             while(positionOfBody <= 0 && ((length = in.read(buffer)) != -1)) {
+                log.debug("Write body");
                 out.write(buffer, 0, length); // echo back
                 headers.append(new String(buffer, 0, length, ISO_8859_1));
                 // Check if we have read all the headers
@@ -120,10 +122,13 @@ public class HttpMirrorThread extends Thread {
                 int totalReadBytes = headerString.length() - positionOfBody - 2;
 
                 // We know when to stop reading, so we can allow the read method to block
+                log.debug("Reading, "+totalReadBytes+" < " +contentLength);
                 while((totalReadBytes < contentLength) && ((length = in.read(buffer)) != -1)) {
+                    log.debug("Read bytes: "+length);
                     out.write(buffer, 0, length);
 
                     totalReadBytes += length;
+                    log.debug("totalReadBytes: "+totalReadBytes);
                 }
             }
             else if (isChunked) {
@@ -133,6 +138,7 @@ public class HttpMirrorThread extends Thread {
                 // TODO propery implement support for chunked transfer, i.e. to
                 // know when we have read the whole request, and therefore allow
                 // the reading to block
+                log.debug("Chunked");
                 while(in.available() > 0 && ((length = in.read(buffer)) != -1)) {
                     out.write(buffer, 0, length);
                 }
@@ -140,10 +146,13 @@ public class HttpMirrorThread extends Thread {
             else {
                 // The reqest has no body, or it has a transfer encoding we do not support.
                 // In either case, we read any data available
+                log.debug("Other");
                 while(in.available() > 0 && ((length = in.read(buffer)) != -1)) {
+                    log.debug("Read bytes: "+length);
                     out.write(buffer, 0, length);
                 }
             }
+            log.debug("Flush");
             out.flush();
         } catch (IOException e) {
             log.error("", e);
