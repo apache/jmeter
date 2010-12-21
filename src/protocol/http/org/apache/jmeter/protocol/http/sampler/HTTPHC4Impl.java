@@ -22,6 +22,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.URL;
@@ -629,6 +630,25 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
     }
 
+    // Helper class so we can generate request data without dumping entire file contents
+    private static class ViewableFileBody extends FileBody {
+        private boolean hideFileData;
+        
+        public ViewableFileBody(File file, String mimeType) {
+            super(file, mimeType);
+            hideFileData = false;
+        }
+
+        @Override
+        public void writeTo(final OutputStream out) throws IOException {
+            if (hideFileData) {
+                out.write("<actual file content, not shown here>".getBytes());// encoding does not really matter here
+            } else {
+                super.writeTo(out);
+            }
+        }
+    }
+
     // TODO needs cleaning up
     private String sendPostData(HttpPost post)  throws IOException {
         // Buffer to hold the post body, except file content
@@ -645,7 +665,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             }
 
             // Write the request to our own stream
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
             MultipartEntity multiPart = new MultipartEntity();
             // Create the parts
             // Add any parameters
@@ -657,34 +676,41 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                    continue;
                }
                FormBodyPart formPart;
-               if (contentEncoding != null) {
-                   formPart = new FormBodyPart(arg.getName(), new StringBody(arg.getValue(), Charset.forName(contentEncoding)));                   
-               } else {
-                   formPart = new FormBodyPart(arg.getName(), new StringBody(arg.getValue(), Charset.forName("US-ASCII")));
-               }
+               StringBody stringBody = new StringBody(arg.getValue(),
+                       Charset.forName(contentEncoding == null ? "US-ASCII" : contentEncoding));
+               formPart = new FormBodyPart(arg.getName(), stringBody);                   
                multiPart.addPart(formPart);
             }
 
-            if (multiPart.isRepeatable()){
-                multiPart.writeTo(bos);
-            }
-
             // Add any files
+            // Cannot retrieve parts once added to the MultiPartEntity, so have to save them here.
+            ViewableFileBody[] fileBodies = new ViewableFileBody[files.length];
             for (int i=0; i < files.length; i++) {
                 HTTPFileArg file = files[i];
-                FileBody fileBody = new FileBody(new File(file.getPath()), file.getMimeType());
-                multiPart.addPart(file.getParamName(),fileBody);
-                bos.write("<actual file content, not shown here>".getBytes());
+                fileBodies[i] = new ViewableFileBody(new File(file.getPath()), file.getMimeType());
+                multiPart.addPart(file.getParamName(),fileBodies[i]);
             }
 
-            bos.flush();
-            // We get the posted bytes using the encoding used to create it
-            postedBody.append(new String(bos.toByteArray(),
-                    contentEncoding == null ? "US-ASCII" // $NON-NLS-1$ this is the default used by HttpClient
-                    : contentEncoding));
-            bos.close();
-
             post.setEntity(multiPart);
+
+            if (multiPart.isRepeatable()){
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                for(ViewableFileBody fileBody : fileBodies){
+                    fileBody.hideFileData = true;
+                }
+                multiPart.writeTo(bos);
+                for(ViewableFileBody fileBody : fileBodies){
+                    fileBody.hideFileData = false;
+                }
+                bos.flush();
+                // We get the posted bytes using the encoding used to create it
+                postedBody.append(new String(bos.toByteArray(),
+                        contentEncoding == null ? "US-ASCII" // $NON-NLS-1$ this is the default used by HttpClient
+                        : contentEncoding));
+                bos.close();
+            } else {
+                postedBody.append("<Multipart was not repeatable, cannot view what was sent>"); // $NON-NLS-1$
+            }
 
 //            // Set the content type TODO - needed?
 //            String multiPartContentType = multiPart.getContentType().getValue();
