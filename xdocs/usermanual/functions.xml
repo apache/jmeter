@@ -775,7 +775,7 @@ Remember to include any necessary quotes for text strings and JMeter variables t
 	<br></br>
 	Define VAR="a||c|" in the test plan.
 	<br></br>
-	${__split(${VAR},VAR),|}
+	${__split(${VAR},VAR,|)}
 	<br></br>
 	This will return the contents of VAR, i.e. "a||c|" and set the following variables:
 	<br></br>
