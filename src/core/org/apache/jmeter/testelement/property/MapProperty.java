@@ -52,6 +52,15 @@ public class MapProperty extends MultiProperty {
         return false;
     }
 
+    @Override
+    public int hashCode(){
+        int hash = super.hashCode();
+        if (value != null) {
+            hash = hash*37 + value.hashCode();
+        }
+        return hash;
+    }
+
     /** {@inheritDoc} */
     public void setObjectValue(Object v) {
         if (v instanceof Map<?, ?>) {
