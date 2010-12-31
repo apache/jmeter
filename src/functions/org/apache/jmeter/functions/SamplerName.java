@@ -35,7 +35,7 @@ public class SamplerName extends AbstractFunction {
 
     private static final String KEY = "__samplerName"; //$NON-NLS-1$
 
-	private static final List<String> desc = new LinkedList<String>();
+    private static final List<String> desc = new LinkedList<String>();
 
     static {
         // desc.add("Use fully qualified host name: TRUE/FALSE (Default FALSE)");
@@ -44,16 +44,16 @@ public class SamplerName extends AbstractFunction {
 
     private Object[] values;
 
-	/** {@inheritDoc} */
-	@Override
-	public String execute(SampleResult previousResult, Sampler currentSampler)
-			throws InvalidVariableException {
-		// return JMeterContextService.getContext().getCurrentSampler().getName();
-		String name = "";
-		if (currentSampler != null) { // will be null if function is used on TestPlan
-		    name = currentSampler.getName();
-		}
-		if (values.length > 0){
+    /** {@inheritDoc} */
+    @Override
+    public String execute(SampleResult previousResult, Sampler currentSampler)
+            throws InvalidVariableException {
+        // return JMeterContextService.getContext().getCurrentSampler().getName();
+        String name = "";
+        if (currentSampler != null) { // will be null if function is used on TestPlan
+            name = currentSampler.getName();
+        }
+        if (values.length > 0){
             JMeterVariables vars = getVariables();
             if (vars != null) {// May be null if function is used on TestPlan
                 String varName = ((CompoundVariable) values[0]).execute().trim();
@@ -61,26 +61,26 @@ public class SamplerName extends AbstractFunction {
                     vars.put(varName, name);
                 }
             }
-		}
+        }
         return name;
-	}
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public synchronized void setParameters(Collection<CompoundVariable> parameters)
-			throws InvalidVariableException {
+    /** {@inheritDoc} */
+    @Override
+    public synchronized void setParameters(Collection<CompoundVariable> parameters)
+            throws InvalidVariableException {
         checkParameterCount(parameters, 0, 1);
         values = parameters.toArray();
-	}
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String getReferenceKey() {
-		return KEY;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public String getReferenceKey() {
+        return KEY;
+    }
 
-	/** {@inheritDoc} */
-	public List<String> getArgumentDesc() {
-		return desc;
-	}
+    /** {@inheritDoc} */
+    public List<String> getArgumentDesc() {
+        return desc;
+    }
 }

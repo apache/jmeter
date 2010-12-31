@@ -97,7 +97,7 @@ public class SendMailCommand {
     private StringBuffer serverResponse = new StringBuffer(); // TODO this is not populated currently
 
     /** send plain body, i.e. not multipart/mixed */
-	private boolean plainBody;
+    private boolean plainBody;
 
     /**
      * Standard-Constructor
@@ -756,7 +756,7 @@ public class SendMailCommand {
      * @param plainBody <code>true</code> if sending a plain body (i.e. not multipart/mixed)
      */
     public void setPlainBody(boolean plainBody){
-    	this.plainBody = plainBody;
+        this.plainBody = plainBody;
     }
 
     public StringBuffer getServerResponse() {
