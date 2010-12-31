@@ -62,6 +62,15 @@ public class FunctionProperty extends AbstractProperty {
         return false;
     }
 
+    @Override
+    public int hashCode(){
+        int hash = super.hashCode();
+        if (function != null) {
+            hash = hash*37 + function.hashCode();
+        }
+        return hash;
+    }
+
     /**
      * Executes the function (and caches the value for the duration of the test
      * iteration) if the property is a running version. Otherwise, the raw
