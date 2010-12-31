@@ -299,7 +299,7 @@ public abstract class BaseJMSSampler extends AbstractSampler {
      * @param isStatic
      */
     public void setDestinationStatic(boolean isStatic) {
-	    setProperty(DESTINATION_STATIC, isStatic, DESTINATION_STATIC_DEFAULT);
+        setProperty(DESTINATION_STATIC, isStatic, DESTINATION_STATIC_DEFAULT);
     }
 
     /**
