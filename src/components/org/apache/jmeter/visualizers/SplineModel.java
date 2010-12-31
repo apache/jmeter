@@ -22,9 +22,9 @@ import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 
 public class SplineModel implements Clearable {
-    public final int DEFAULT_NUMBER_OF_NODES = 10;
+    public static final int DEFAULT_NUMBER_OF_NODES = 10;
 
-    public final int DEFAULT_REFRESH_PERIOD = 1;
+    public static final int DEFAULT_REFRESH_PERIOD = 1;
 
     protected final boolean SHOW_INCOMING_SAMPLES = true;
 
