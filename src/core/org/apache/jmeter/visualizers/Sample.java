@@ -177,6 +177,8 @@ public class Sample implements Serializable, Comparable<Sample> {
         return ((count - oo.count) < 0 ? -1 : (count == oo.count ? 0 : 1));
     }
 
+    // TODO should equals and hashCode depend on field other than count?
+    
     @Override
     public boolean equals(Object o){
         return (
@@ -184,6 +186,12 @@ public class Sample implements Serializable, Comparable<Sample> {
                 (this.compareTo((Sample) o) == 0)
                 );
     }
+
+    @Override
+    public int hashCode(){
+        return (int)(count ^ (count >>> 32));
+    }
+
     /**
      * @return Returns the endTime.
      */
