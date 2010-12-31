@@ -86,8 +86,10 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
                     appendResultDetails(buf, sResult);
                     buf.append(JMeterUtils.getResString("comparison_response_time")).append(currentTime);
                     result.addToSecondaryResult(buf.toString());
-                   result.setFailureMessage(JMeterUtils.getResString("comparison_differ_time") //$NON-NLS-1$
-                           +compareTime+JMeterUtils.getResString("comparison_unit")); //$NON-NLS-1$
+                   result.setFailureMessage(
+                           JMeterUtils.getResString("comparison_differ_time")+ //$NON-NLS-1$
+                           compareTime+
+                           JMeterUtils.getResString("comparison_unit")); //$NON-NLS-1$
                     break;
                 }
                 prevResult = sResult;
