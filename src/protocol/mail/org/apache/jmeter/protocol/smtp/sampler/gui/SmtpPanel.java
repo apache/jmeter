@@ -318,7 +318,7 @@ public class SmtpPanel extends JPanel {
      * @param plainBody whether to use a plain body (i.e. not multipart/mixed)
      */
     public void setPlainBody(boolean plainBody) {
-    	cbPlainBody.setSelected(plainBody);
+        cbPlainBody.setSelected(plainBody);
     }
 
     /**
