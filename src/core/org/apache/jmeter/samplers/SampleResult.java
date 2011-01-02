@@ -193,7 +193,8 @@ public class SampleResult implements Serializable {
     private static final boolean startTimeStamp
         = JMeterUtils.getPropDefault("sampleresult.timestamp.start", false);  // $NON-NLS-1$
 
-    private static final boolean useNanoTime
+    // Allow read-only access from test code
+    static final boolean USENANOTIME
     = JMeterUtils.getPropDefault("sampleresult.useNanoTime", true);  // $NON-NLS-1$
 
     static {
@@ -203,21 +204,36 @@ public class SampleResult implements Serializable {
             log.info("Note: Sample TimeStamps are END times");
         }
         log.info("sampleresult.default.encoding is set to " + DEFAULT_ENCODING);
-        log.info("sampleresult.useNanoTime="+useNanoTime);
+        log.info("sampleresult.useNanoTime="+USENANOTIME);
     }
 
     private transient final long nanoTimeOffset;
 
-    private long initOffset(){
-        if (useNanoTime){
+    private final boolean useNanoTime; // Allow test code to change the default
+    
+    private static long initOffset(){
+        if (USENANOTIME){
             return System.currentTimeMillis() - sampleNsClockInMs();
         } else {
             return Long.MIN_VALUE;
         }
     }
+
     public SampleResult() {
         time = 0;
+        useNanoTime = USENANOTIME;
         nanoTimeOffset = initOffset();
+    }
+
+    // Allow test code to change the default useNanoTime setting
+    SampleResult(boolean nanoTime) {
+        time = 0;
+        useNanoTime = nanoTime;
+        nanoTimeOffset = initOffset();
+    }
+
+    boolean isUseNanoTime() {
+        return useNanoTime;
     }
 
     /**
@@ -226,6 +242,7 @@ public class SampleResult implements Serializable {
      * @param res existing sample result
      */
     public SampleResult(SampleResult res) {
+        useNanoTime = USENANOTIME;
         nanoTimeOffset = initOffset();
         allThreads = res.allThreads;//OK
         assertionResults = res.assertionResults;// TODO ??
@@ -279,6 +296,7 @@ public class SampleResult implements Serializable {
      *            create the sample finishing now, else starting now
      */
     protected SampleResult(long elapsed, boolean atend) {
+        useNanoTime = USENANOTIME;
         nanoTimeOffset = initOffset();
         long now = currentTimeInMillis();
         if (atend) {
@@ -329,6 +347,7 @@ public class SampleResult implements Serializable {
      * @param elapsed
      */
     public SampleResult(long stamp, long elapsed) {
+        useNanoTime = USENANOTIME;
         nanoTimeOffset = initOffset();
         stampAndTime(stamp, elapsed);
     }
