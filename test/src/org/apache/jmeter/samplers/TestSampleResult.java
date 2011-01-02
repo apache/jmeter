@@ -35,8 +35,8 @@ public class TestSampleResult extends TestCase {
             super(name);
         }
 
-        public void testElapsed() throws Exception {
-            SampleResult res = new SampleResult();
+        public void testElapsedTrue() throws Exception {
+            SampleResult res = new SampleResult(true);
 
             // Check sample increments OK
             res.sampleStart();
@@ -48,8 +48,21 @@ public class TestSampleResult extends TestCase {
             }
         }
 
-        public void testPause() throws Exception {
-            SampleResult res = new SampleResult();
+        public void testElapsedFalse() throws Exception {
+            SampleResult res = new SampleResult(false);
+
+            // Check sample increments OK
+            res.sampleStart();
+            Thread.sleep(110); // Needs to be greater than the minimum to allow for boundary errors
+            res.sampleEnd();
+            long time = res.getTime();
+            if(time < 100){
+                fail("Sample time should be >=100, actual "+time);
+            }
+        }
+
+        public void testPauseFalse() throws Exception {
+            SampleResult res = new SampleResult(false);
             // Check sample increments OK
             res.sampleStart();
             Thread.sleep(100);
@@ -62,8 +75,27 @@ public class TestSampleResult extends TestCase {
             Thread.sleep(100);
             res.sampleEnd();
             long sampleTime = res.getTime();
-            if ((sampleTime < 198) || (sampleTime > 290)) {
-                fail("Accumulated time (" + sampleTime + ") was not between 198 and 290 ms");
+            if ((sampleTime < 180) || (sampleTime > 290)) {
+                fail("Accumulated time (" + sampleTime + ") was not between 180 and 290 ms");
+            }
+        }
+
+        public void testPauseTrue() throws Exception {
+            SampleResult res = new SampleResult(true);
+            // Check sample increments OK
+            res.sampleStart();
+            Thread.sleep(100);
+            res.samplePause();
+
+            Thread.sleep(200);
+
+            // Re-increment
+            res.sampleResume();
+            Thread.sleep(100);
+            res.sampleEnd();
+            long sampleTime = res.getTime();
+            if ((sampleTime < 180) || (sampleTime > 290)) {
+                fail("Accumulated time (" + sampleTime + ") was not between 180 and 290 ms");
             }
         }
 
@@ -77,9 +109,19 @@ public class TestSampleResult extends TestCase {
             SampleResult.log.setLogTargets(lt);
         }
 
-        public void testPause2() throws Exception {
+        public void testPause2True() throws Exception {
             divertLog();
-            SampleResult res = new SampleResult();
+            SampleResult res = new SampleResult(true);
+            res.sampleStart();
+            res.samplePause();
+            assertEquals(0, wr.toString().length());
+            res.samplePause();
+            assertFalse(wr.toString().length() == 0);
+        }
+
+        public void testPause2False() throws Exception {
+            divertLog();
+            SampleResult res = new SampleResult(false);
             res.sampleStart();
             res.samplePause();
             assertEquals(0, wr.toString().length());
@@ -98,19 +140,23 @@ public class TestSampleResult extends TestCase {
             assertEquals("sample of size 100 bytes", res.getSampleLabel());
         }
 
-        private static long sampleClock() {
-            return System.currentTimeMillis();
+        public void testSubResultsTrue() throws Exception {
+            testSubResults(true);
         }
 
-        public void testSubResults() throws Exception {
+        public void testSubResultsFalse() throws Exception {
+            testSubResults(false);
+        }
+
+        private void testSubResults(boolean nanoTime) throws Exception {
             // This test tries to emulate a http sample, with two
             // subsamples, representing images that are downloaded for the
             // page representing the first sample.
-            
-            // Sample that will get two sub results, simulates a web page load 
-            SampleResult resWithSubResults = new SampleResult();            
 
-            long beginTest = sampleClock();
+            // Sample that will get two sub results, simulates a web page load 
+            SampleResult resWithSubResults = new SampleResult(nanoTime);            
+
+            long beginTest = resWithSubResults.currentTimeInMillis();
 
             resWithSubResults.sampleStart();
             Thread.sleep(100);
@@ -119,9 +165,9 @@ public class TestSampleResult extends TestCase {
             resWithSubResults.setSuccessful(true);
             resWithSubResults.sampleEnd();
             long sampleWithSubResultsTime = resWithSubResults.getTime();
-            
+
             // Sample with no sub results, simulates an image download
-            SampleResult resNoSubResults1 = new SampleResult();            
+            SampleResult resNoSubResults1 = new SampleResult(nanoTime);            
             resNoSubResults1.sampleStart();
             Thread.sleep(100);
             resNoSubResults1.setBytes(100);
@@ -137,7 +183,7 @@ public class TestSampleResult extends TestCase {
             assertEquals(0, resNoSubResults1.getSubResults().length);
             
             // Sample with no sub results, simulates an image download 
-            SampleResult resNoSubResults2 = new SampleResult();            
+            SampleResult resNoSubResults2 = new SampleResult(nanoTime);            
             resNoSubResults2.sampleStart();
             Thread.sleep(100);
             resNoSubResults2.setBytes(200);
@@ -145,8 +191,6 @@ public class TestSampleResult extends TestCase {
             resNoSubResults2.setSuccessful(true);
             resNoSubResults2.sampleEnd();
             long sample2Time = resNoSubResults2.getTime();
-
-            long overallTime = sampleClock() - beginTest;
 
             assertTrue(resNoSubResults2.isSuccessful());
             assertEquals(200, resNoSubResults2.getBytes());
@@ -164,6 +208,8 @@ public class TestSampleResult extends TestCase {
             assertEquals(2, resWithSubResults.getSubResults().length);
             long totalTime = resWithSubResults.getTime();
             
+            long overallTime = resWithSubResults.currentTimeInMillis() - beginTest;
+
             // Check the sample times
             long allsamplesTime = sampleWithSubResultsTime + sample1Time + sample2Time;
             if (totalTime < allsamplesTime) {
