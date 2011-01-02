@@ -207,9 +207,10 @@ public class SampleResult implements Serializable {
         log.info("sampleresult.useNanoTime="+USENANOTIME);
     }
 
-    private transient final long nanoTimeOffset;
+    // Allow read access by test code
+    transient final long nanoTimeOffset;
 
-    private final boolean useNanoTime; // Allow test code to change the default
+    transient final boolean useNanoTime; // Allow test code to change the default
     
     private static long initOffset(){
         if (USENANOTIME){
@@ -230,10 +231,6 @@ public class SampleResult implements Serializable {
         time = 0;
         useNanoTime = nanoTime;
         nanoTimeOffset = initOffset();
-    }
-
-    boolean isUseNanoTime() {
-        return useNanoTime;
     }
 
     /**
