@@ -215,8 +215,15 @@ public class TestSampleResult extends TestCase {
             if (totalTime < allsamplesTime) {
                 fail("Total: "+totalTime+" < sum(samples): "+ allsamplesTime);
             }
-            if (totalTime > overallTime) {
-                fail("Total: "+totalTime+" > overall time: "+ overallTime);
+            /*
+             * The granularity of System.currentTimeMillis() - plus the fact that the nanoTime()
+             * offset is now calculated for each sampleResult - means that there can be some
+             * minor variation in the value returned by SampleResult#currentTimeInMillis().
+             * 
+             * Allow for this by adding a fudge factor - 3ms seems to be sufficient.
+            */
+            if (totalTime > overallTime+3) {
+                fail("Total: "+totalTime+" > 3 + overall time: "+ overallTime);
             }
             
             // Check that calculator gets the correct statistics from the sample
