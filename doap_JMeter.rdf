@@ -20,7 +20,7 @@
          xmlns="http://usefulinc.com/ns/doap#" 
          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
          xmlns:asfext="http://projects.apache.org/ns/asfext#">
-  <Project rdf:about="http://httpd.apache.org/">
+  <Project rdf:about="http://jakarta.apache.org/jmeter/">
     <created>2006-02-17</created>
     <license rdf:resource="http://usefulinc.com/doap/licenses/asl20" />
     <name>Apache Jakarta JMeter</name>
