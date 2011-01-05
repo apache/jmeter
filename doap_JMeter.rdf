@@ -25,7 +25,7 @@
     <license rdf:resource="http://usefulinc.com/doap/licenses/asl20" />
     <name>Apache Jakarta JMeter</name>
     <homepage rdf:resource="http://jakarta.apache.org/jmeter/index.html" />
-    <asfext:pmc rdf:resource="http://jakarta.apache.org/" />
+    <asfext:pmc rdf:resource="http://svn.apache.org/repos/asf/jakarta/site/jakarta.rdf" />
     <shortdesc>Pure Java application for load and functional testing</shortdesc>
     <description>Apache Jakarta JMeter may be used to test performance both on static and dynamic resources (files, Servlets, Perl scripts, Java Objects, Data Bases and Queries, FTP Servers and more). It can be used to simulate a heavy load on a server, network or object to test its strength or to analyze overall performance under different load types. You can use it to make a graphical analysis of performance or to test your server/script/object behavior under heavy concurrent load. </description>
     <bug-database rdf:resource="http://issues.apache.org/bugzilla/" />
