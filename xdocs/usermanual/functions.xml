@@ -1148,7 +1148,7 @@ in which case the user has full control over the variable name that is used.
 However some variables are defined internally by JMeter. These are listed below.
 </p>
 <ul>
-<li>cookiename - contains the cookie value</li>
+<li>COOKIE_cookiename - contains the cookie value (see <complink name="HTTP Cookie Manager" />)</li>
 <li>JMeterThread.last_sample_ok - whether or not the last sample was OK - true/false</li>
 <li>START variables (see next section)</li>
 </ul>
