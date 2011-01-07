@@ -883,7 +883,8 @@ See the file BeanShellListeners.bshrc for example definitions.
 </p>
 	</description>
 <properties>
-	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.
+    The name is stored in the script variable Label</property>
     <property name="Reset bsh.Interpreter before each call" required="Yes">
     If this option is selected, then the interpreter will be recreated for each sample.
     This may be necessary for some long running scripts. 
@@ -897,7 +898,8 @@ See the file BeanShellListeners.bshrc for example definitions.
 		<li>Parameters - string containing the parameters as a single variable</li>
 	    <li>bsh.args - String array containing parameters, split on white-space</li>
 	</ul></property>
-    <property name="Script file" required="No">A file containing the BeanShell script to run.</property>
+    <property name="Script file" required="No">A file containing the BeanShell script to run.
+    The file name is stored in the script variable FileName</property>
     <property name="Script" required="Yes (unless script file is provided)">The BeanShell script to run. 
     The return value (if not null) is stored as the sampler result.</property>
 </properties>
@@ -929,7 +931,7 @@ If a script file is supplied, that will be used, otherwise the script will be us
 			<li>IsSuccess = true</li>
 			<li>ctx - JMeterContext</li>
 			<li>vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.remove("VAR3"); vars.putObject("OBJ1",new Object());</li>
-            <li>props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
+            <li>props - JMeterProperties - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
 		</ul>
 		<p>When the script completes, control is returned to the Sampler, and it copies the contents
 			of the following script variables into the corresponding variables in the SampleResult:</p>
@@ -1013,7 +1015,7 @@ Note that these are BSF variables - i.e. they can be used directly in the script
 <li>sampler - pointer to current Sampler</li>
 <li>ctx - JMeterContext</li>
 <li>vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.remove("VAR3"); vars.putObject("OBJ1",new Object());</li>
-<li>props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
+<li>props - JMeterProperties - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
 <li>OUT - System.out - e.g. OUT.println("message")</li>
 </ul>
 <p>
@@ -2528,7 +2530,7 @@ failed responses from the server.</p></description>
 </properties>
 </component>
 
-<component name="BeanShell Listener"  index="&sect-num;.3.14"  width="597" height="303" screenshot="beanshell_listener.png">
+<component name="BeanShell Listener"  index="&sect-num;.3.14"  width="553" height="382" screenshot="beanshell_listener.png">
 <description>
 <p>
 The BeanShell Listener allows the use of BeanShell for processing samples for saving etc.
@@ -2543,7 +2545,8 @@ See the file BeanShellListeners.bshrc for example definitions.
 </p>
 </description>
 <properties>
-    <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+    <property name="Name" required="">Descriptive name for this element that is shown in the tree.
+    The name is stored in the script variable Label</property>
     <property name="Reset bsh.Interpreter before each call" required="Yes">
     If this option is selected, then the interpreter will be recreated for each sample.
     This may be necessary for some long running scripts. 
@@ -2555,7 +2558,8 @@ See the file BeanShellListeners.bshrc for example definitions.
 		<li>Parameters - string containing the parameters as a single variable</li>
 	    <li>bsh.args - String array containing parameters, split on white-space</li>
 	</ul></property>
-    <property name="Script file" required="No">A file containing the BeanShell script to run</property>
+    <property name="Script file" required="No">A file containing the BeanShell script to run.
+    The file name is stored in the script variable FileName</property>
     <property name="Script" required="Yes (unless script file is provided)">The BeanShell script to run. The return value is ignored.</property>
 </properties>
 <p>Before invoking the script, some variables are set up in the BeanShell interpreter:</p>
@@ -2563,8 +2567,8 @@ See the file BeanShellListeners.bshrc for example definitions.
 <li>log - (Logger) - can be used to write to the log file</li>
 <li>ctx - (JMeterContext) - gives access to the context</li>
 <li>vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());</li>
-<li>props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
-<li>sampleResult - (SampleResult) - gives access to the previous SampleResult</li>
+<li>props - (JMeterProperties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
+<li>sampleResult, prev - (SampleResult) - gives access to the previous SampleResult</li>
 <li>sampleEvent (SampleEvent) gives access to the current sample event</li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
@@ -2689,7 +2693,7 @@ Note that these are BSF variables - i.e. they can be used directly in the script
 <li>args[] - the parameters as a String array (split on whitespace)</li>
 <li>ctx - (JMeterContext) - gives access to the context</li>
 <li>vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");</li>
-<li>props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
+<li>props - (JMeterProperties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
 <li>sampleResult, prev - (SampleResult) - gives access to the SampleResult</li>
 <li>sampleEvent - (SampleEvent) - gives access to the SampleEvent</li>
 <li>sampler - (Sampler)- gives access to the last sampler</li>
@@ -3602,7 +3606,8 @@ See the file BeanShellListeners.bshrc for example definitions.
 </description>
 
 <properties>
-    <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+    <property name="Name" required="">Descriptive name for this element that is shown in the tree.
+    The name is stored in the script variable Label</property>
     <property name="Reset bsh.Interpreter before each call" required="Yes">
     If this option is selected, then the interpreter will be recreated for each sample.
     This may be necessary for some long running scripts. 
@@ -3614,7 +3619,8 @@ See the file BeanShellListeners.bshrc for example definitions.
 		<li>Parameters - string containing the parameters as a single variable</li>
 	    <li>bsh.args - String array containing parameters, split on white-space</li>
 	</ul></property>
-    <property name="Script file" required="No">A file containing the BeanShell script to run. This overrides the script.</property>
+    <property name="Script file" required="No">A file containing the BeanShell script to run. This overrides the script.
+    The file name is stored in the script variable FileName</property>
     <property name="Script" required="Yes (unless script file is provided)">The BeanShell script to run. The return value is ignored.</property>
 </properties>
 <p>There's a <a href="../demos/BeanShellAssertion.bsh">sample script</a> you can try.</p>
@@ -3636,7 +3642,7 @@ These are strings unless otherwise noted:
 	<li>SamplerData - data that was sent to the server</li>
 	<li>ctx - JMeterContext</li>
 	<li>vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.putObject("OBJ1",new Object());</li>
-    <li>props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
+    <li>props - JMeterProperties - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
 </ul>
 </p>
 <p>The following methods of the Response object may be useful:
@@ -3738,7 +3744,7 @@ The script (or file) is processed using the BSFEngine.exec() method, which does 
 <li>args[] - the parameters as a String array (split on whitespace)</li>
 <li>ctx - (JMeterContext) - gives access to the context</li>
 <li>vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");</li>
-<li>props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
+<li>props - (JMeterProperties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
 <li>SampleResult, prev - (SampleResult) - gives access to the previous SampleResult (if any)</li>
 <li>sampler - (Sampler)- gives access to the current sampler</li>
 <li>OUT - System.out - e.g. OUT.println("message")</li>
@@ -3927,7 +3933,7 @@ points of the test plan.
 
 </component>
 
-<component name="BeanShell Timer" index="&sect-num;.6.6"  width="597" height="303" screenshot="timers/beanshell_timer.png">
+<component name="BeanShell Timer" index="&sect-num;.6.6"  width="553" height="382" screenshot="timers/beanshell_timer.png">
 <description>
 <p>
 The BeanShell Timer can be used to generate a delay.
@@ -3942,7 +3948,8 @@ See the file BeanShellListeners.bshrc for example definitions.
 </p>
 </description>
 <properties>
-    <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
+    <property name="Name" required="No">Descriptive name for this element that is shown in the tree.
+    The name is stored in the script variable Label</property>
     <property name="Reset bsh.Interpreter before each call" required="Yes">
     If this option is selected, then the interpreter will be recreated for each sample.
     This may be necessary for some long running scripts. 
@@ -3957,6 +3964,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 	</property>
     <property name="Script file" required="No">
     A file containing the BeanShell script to run.
+    The file name is stored in the script variable FileName
      The return value is used as the number of milliseconds to wait.
      </property>
     <property name="Script" required="Yes (unless script file is provided)">
@@ -3968,7 +3976,8 @@ See the file BeanShellListeners.bshrc for example definitions.
 <li>log - (Logger) - can be used to write to the log file</li>
 <li>ctx - (JMeterContext) - gives access to the context</li>
 <li>vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());</li>
-<li>props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
+<li>props - (JMeterProperties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
+<li>prev - (SampleResult) - gives access to the previous SampleResult (if any)</li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
 <p>If the property <b>beanshell.timer.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
@@ -4006,7 +4015,7 @@ The BSF Timer can be used to generate a delay using a BSF scripting language.
 <li>log - (Logger) - can be used to write to the log file</li>
 <li>ctx - (JMeterContext) - gives access to the context</li>
 <li>vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());</li>
-<li>props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
+<li>props - (JMeterProperties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
 <li>sampler - the current Sampler</li>
 <li>Label - the name of the Timer</li>
 <li>Filename - the file name (if any)</li>
@@ -4200,7 +4209,8 @@ See the file BeanShellListeners.bshrc for example definitions.
 </p>
 </description>
 <properties>
-    <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
+    <property name="Name" required="No">Descriptive name for this element that is shown in the tree.
+    The name is stored in the script variable Label</property>
     <property name="Reset bsh.Interpreter before each call" required="Yes">
     If this option is selected, then the interpreter will be recreated for each sample.
     This may be necessary for some long running scripts. 
@@ -4212,7 +4222,8 @@ See the file BeanShellListeners.bshrc for example definitions.
 		<li>Parameters - string containing the parameters as a single variable</li>
 	    <li>bsh.args - String array containing parameters, split on white-space</li>
 	</ul></property>
-    <property name="Script file" required="No">A file containing the BeanShell script to run.</property>
+    <property name="Script file" required="No">A file containing the BeanShell script to run.
+    The file name is stored in the script variable FileName</property>
     <property name="Script" required="Yes (unless script file is provided)">The BeanShell script. The return value is ignored.</property>
 </properties>
 <p>Before invoking the script, some variables are set up in the BeanShell interpreter:</p>
@@ -4220,7 +4231,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 <li>log - (Logger) - can be used to write to the log file</li>
 <li>ctx - (JMeterContext) - gives access to the context</li>
 <li>vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());</li>
-<li>props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
+<li>props - (JMeterProperties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
 <li>prev - (SampleResult) - gives access to the previous SampleResult (if any)</li>
 <li>sampler - (Sampler)- gives access to the current sampler</li>
 </ul>
@@ -4258,7 +4269,7 @@ The script (or file) is processed using the BSFEngine.exec() method, which does 
 <li>args[] - the parameters as a String array (split on whitespace)</li>
 <li>ctx - (JMeterContext) - gives access to the context</li>
 <li>vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");</li>
-<li>props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
+<li>props - (JMeterProperties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
 <li>sampler - (Sampler)- gives access to the current sampler</li>
 <li>OUT - System.out - e.g. OUT.println("message")</li>
 </ul>
@@ -4519,7 +4530,8 @@ See the file BeanShellListeners.bshrc for example definitions.
 </p>
 </description>
 <properties>
-    <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
+    <property name="Name" required="No">Descriptive name for this element that is shown in the tree.
+    The name is stored in the script variable Label</property>
     <property name="Reset bsh.Interpreter before each call" required="Yes">
     If this option is selected, then the interpreter will be recreated for each sample.
     This may be necessary for some long running scripts. 
@@ -4531,7 +4543,8 @@ See the file BeanShellListeners.bshrc for example definitions.
 		<li>Parameters - string containing the parameters as a single variable</li>
 	    <li>bsh.args - String array containing parameters, split on white-space</li>
 	</ul></property>
-    <property name="Script file" required="No">A file containing the BeanShell script to run.</property>
+    <property name="Script file" required="No">A file containing the BeanShell script to run.
+    The file name is stored in the script variable FileName</property>
     <property name="Script" required="Yes (unless script file is provided)">The BeanShell script. The return value is ignored.</property>
 </properties>
 <p>The following BeanShell variables are set up for use by the script:</p>
@@ -4539,7 +4552,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 <li>log - (Logger) - can be used to write to the log file</li>
 <li>ctx - (JMeterContext) - gives access to the context</li>
 <li>vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());</li>
-<li>props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
+<li>props - (JMeterProperties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
 <li>prev - (SampleResult) - gives access to the previous SampleResult</li>
 <li>data - (byte [])- gives access to the current sample data</li>
 </ul>
@@ -4580,7 +4593,7 @@ Note that these are BSF variables - i.e. they can be used directly in the script
 <li>args[] - the parameters as a String array (split on whitespace)</li>
 <li>ctx - (JMeterContext) - gives access to the context</li>
 <li>vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object()); vars.getObject("OBJ2");</li>
-<li>props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
+<li>props - (JMeterProperties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");</li>
 <li>prev - (SampleResult) - gives access to the previous SampleResult (if any)</li>
 <li>sampler - (Sampler)- gives access to the current sampler</li>
 <li>OUT - System.out - e.g. OUT.println("message")</li>

@@ -21,13 +21,9 @@ package org.apache.jmeter.protocol.java.sampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
-import org.apache.jmeter.threads.JMeterContext;
-import org.apache.jmeter.threads.JMeterContextService;
-import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.BeanShellInterpreter;
 import org.apache.jmeter.util.BeanShellTestElement;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -55,16 +51,6 @@ public class BeanShellSampler extends BeanShellTestElement implements Sampler
         return INIT_FILE;
     }
 
-    /**
-     * Returns a formatted string label describing this sampler
-     *
-     * @return a formatted string label describing this sampler
-     */
-
-    public String getLabel() {
-        return getName();
-    }
-
     @Override
     public String getScript() {
         return this.getPropertyAsString(SCRIPT);
@@ -90,7 +76,7 @@ public class BeanShellSampler extends BeanShellTestElement implements Sampler
         // log.info(getLabel()+" "+getFilename());
         SampleResult res = new SampleResult();
         boolean isSuccessful = false;
-        res.setSampleLabel(getLabel());
+        res.setSampleLabel(getName());
         res.sampleStart();
         final BeanShellInterpreter bshInterpreter = getBeanShellInterpreter();
         if (bshInterpreter == null) {
@@ -109,35 +95,16 @@ public class BeanShellSampler extends BeanShellTestElement implements Sampler
                 res.setSamplerData(fileName);
             }
 
-            bshInterpreter.set("Label", getLabel()); //$NON-NLS-1$
-            bshInterpreter.set("FileName", getFilename()); //$NON-NLS-1$
             bshInterpreter.set("SampleResult", res); //$NON-NLS-1$
-
-            // Save parameters as single line and as string array
-            bshInterpreter.set("Parameters", getParameters());//$NON-NLS-1$
-            bshInterpreter.set("bsh.args", //$NON-NLS-1$
-                    JOrphanUtils.split(getParameters(), " "));//$NON-NLS-1$
 
             // Set default values
             bshInterpreter.set("ResponseCode", "200"); //$NON-NLS-1$
             bshInterpreter.set("ResponseMessage", "OK");//$NON-NLS-1$
             bshInterpreter.set("IsSuccess", true);//$NON-NLS-1$
 
-            // Add variables for access to context and variables
-            JMeterContext jmctx = JMeterContextService.getContext();
-            JMeterVariables vars = jmctx.getVariables();
-            bshInterpreter.set("ctx", jmctx);//$NON-NLS-1$
-            bshInterpreter.set("vars", vars);//$NON-NLS-1$
-
             res.setDataType(SampleResult.TEXT); // assume text output - script can override if necessary
 
-            Object bshOut;
-
-            if (fileName.length() == 0) {
-                bshOut = bshInterpreter.eval(request);
-            } else {
-                bshOut = bshInterpreter.source(fileName);
-            }
+            Object bshOut = processFileOrScript(bshInterpreter);
 
             if (bshOut != null) {// Set response data
                 String out = bshOut.toString();
