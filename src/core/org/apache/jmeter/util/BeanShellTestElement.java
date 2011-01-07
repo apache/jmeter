@@ -24,6 +24,9 @@ import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.ThreadListener;
+import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.BeanShellInterpreter;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -60,6 +63,19 @@ public abstract class BeanShellTestElement extends AbstractTestElement
 
     protected abstract String getInitFileProperty();
 
+    /**
+     * Get the interpreter and set up standard script variables.
+     * <p>
+     * Sets the following script variables:
+     * <ul>
+     * <li>ctx</li>
+     * <li>Label</li>
+     * <li>prev</li>
+     * <li>props</li>
+     * <li>vars</li>
+     * </ul>
+     * @return the interpreter
+     */
     protected BeanShellInterpreter getBeanShellInterpreter() {
         if (isResetInterpreter()) {
             try {
@@ -69,10 +85,17 @@ public abstract class BeanShellTestElement extends AbstractTestElement
             }
         }
 
+        JMeterContext jmctx = JMeterContextService.getContext();
+        JMeterVariables vars = jmctx.getVariables();
+
         try {
+            bshInterpreter.set("ctx", jmctx);//$NON-NLS-1$
+            bshInterpreter.set("Label", getName()); //$NON-NLS-1$
+            bshInterpreter.set("prev", jmctx.getPreviousResult());//$NON-NLS-1$
             bshInterpreter.set("props", JMeterUtils.getJMeterProperties());
+            bshInterpreter.set("vars", vars);//$NON-NLS-1$
         } catch (JMeterException e) {
-            log.error("Cannot set 'props' object: "+e.toString());
+            log.warn("Problem setting one or more BeanShell variables "+e);
         }
         return bshInterpreter;
     }
@@ -102,15 +125,30 @@ public abstract class BeanShellTestElement extends AbstractTestElement
        return o;
     }
 
+    /**
+     * Process the file or script from the test element.
+     * <p>
+     * Sets the following script variables:
+     * <ul>
+     * <li>FileName</li>
+     * <li>Parameters</li>
+     * <li>bsh.args</li>
+     * </ul>
+     * @param bsh the interpreter, not {@code null}
+     * @return the result of the script, may be {@code null}
+     * 
+     * @throws JMeterException
+     */
     protected Object processFileOrScript(BeanShellInterpreter bsh) throws JMeterException{
         String fileName = getFilename();
+        String params = getParameters();
 
-        bsh.set("FileName", getFilename());//$NON-NLS-1$
+        bsh.set("FileName", fileName);//$NON-NLS-1$
         // Set params as a single line
-        bsh.set("Parameters", getParameters()); // $NON-NLS-1$
+        bsh.set("Parameters", params); // $NON-NLS-1$
         // and set as an array
         bsh.set("bsh.args",//$NON-NLS-1$
-                JOrphanUtils.split(getParameters(), " "));//$NON-NLS-1$
+                JOrphanUtils.split(params, " "));//$NON-NLS-1$
 
         if (fileName.length() == 0) {
             return bsh.eval(getScript());
@@ -216,6 +254,7 @@ public abstract class BeanShellTestElement extends AbstractTestElement
         }
     }
 
+    // Overridden by non-TestBean implementations to return the property value instead
     public String getParameters() {
         return parameters;
     }
@@ -224,6 +263,7 @@ public abstract class BeanShellTestElement extends AbstractTestElement
         parameters = s;
     }
 
+    // Overridden by non-TestBean implementations to return the property value instead
     public String getFilename() {
         return filename;
     }

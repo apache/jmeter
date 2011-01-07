@@ -19,9 +19,6 @@
 package org.apache.jmeter.timers;
 
 import org.apache.jmeter.testbeans.TestBean;
-import org.apache.jmeter.threads.JMeterContext;
-import org.apache.jmeter.threads.JMeterContextService;
-import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.BeanShellInterpreter;
 import org.apache.jmeter.util.BeanShellTestElement;
 import org.apache.jorphan.logging.LoggingManager;
@@ -51,12 +48,7 @@ public class BeanShellTimer extends BeanShellTestElement implements Cloneable, T
             log.error("BeanShell not found");
             return 0;
         }
-        JMeterContext jmctx = JMeterContextService.getContext();
-        JMeterVariables vars = jmctx.getVariables();
         try {
-            // Add variables for access to context and variables
-            bshInterpreter.set("ctx", jmctx);//$NON-NLS-1$
-            bshInterpreter.set("vars", vars);//$NON-NLS-1$
             Object o = processFileOrScript(bshInterpreter);
             if (o != null) { ret=o.toString(); }
         } catch (JMeterException e) {
