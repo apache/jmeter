@@ -23,9 +23,6 @@ import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
-import org.apache.jmeter.threads.JMeterContext;
-import org.apache.jmeter.threads.JMeterContextService;
-import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.BeanShellInterpreter;
 import org.apache.jmeter.util.BeanShellTestElement;
 import org.apache.jorphan.logging.LoggingManager;
@@ -56,13 +53,8 @@ public class BeanShellListener extends BeanShellTestElement
             return;
         }
 
-        JMeterContext jmctx = JMeterContextService.getContext();
-        JMeterVariables vars = jmctx.getVariables();
         SampleResult samp=se.getResult();
         try {
-            // Add variables for access to context and variables
-            bshInterpreter.set("ctx", jmctx);//$NON-NLS-1$
-            bshInterpreter.set("vars", vars);//$NON-NLS-1$
             bshInterpreter.set("sampleEvent", se);//$NON-NLS-1$
             bshInterpreter.set("sampleResult", samp);//$NON-NLS-1$
             processFileOrScript(bshInterpreter);

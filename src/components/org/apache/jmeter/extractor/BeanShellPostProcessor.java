@@ -23,7 +23,6 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
-import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.BeanShellInterpreter;
 import org.apache.jmeter.util.BeanShellTestElement;
 import org.apache.jorphan.logging.LoggingManager;
@@ -50,7 +49,7 @@ public class BeanShellPostProcessor extends BeanShellTestElement
 
         SampleResult prev = jmctx.getPreviousResult();
         if (prev == null) {
-            return;
+            return; // TODO - should we skip processing here?
         }
         final BeanShellInterpreter bshInterpreter = getBeanShellInterpreter();
         if (bshInterpreter == null) {
@@ -58,12 +57,8 @@ public class BeanShellPostProcessor extends BeanShellTestElement
             return;
         }
 
-        JMeterVariables vars = jmctx.getVariables();
         try {
             // Add variables for access to context and variables
-            bshInterpreter.set("ctx", jmctx);//$NON-NLS-1$
-            bshInterpreter.set("vars", vars);//$NON-NLS-1$
-            bshInterpreter.set("prev", prev);//$NON-NLS-1$
             bshInterpreter.set("data", prev.getResponseData());//$NON-NLS-1$
             processFileOrScript(bshInterpreter);
         } catch (JMeterException e) {

@@ -19,12 +19,10 @@
 package org.apache.jmeter.modifiers;
 
 import org.apache.jmeter.processor.PreProcessor;
-import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
-import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.BeanShellInterpreter;
 import org.apache.jmeter.util.BeanShellTestElement;
 import org.apache.jorphan.logging.LoggingManager;
@@ -53,16 +51,10 @@ public class BeanShellPreProcessor extends BeanShellTestElement
             return;
         }
         JMeterContext jmctx = JMeterContextService.getContext();
-        JMeterVariables vars = jmctx.getVariables();
         Sampler sam = jmctx.getCurrentSampler();
-        SampleResult prev = jmctx.getPreviousResult();
         try {
             // Add variables for access to context and variables
-            bshInterpreter.set("ctx", jmctx);//$NON-NLS-1$
-            bshInterpreter.set("vars", vars);//$NON-NLS-1$
             bshInterpreter.set("sampler", sam);//$NON-NLS-1$
-            bshInterpreter.set("prev", prev);//$NON-NLS-1$
-
             processFileOrScript(bshInterpreter);
         } catch (JMeterException e) {
             log.warn("Problem in BeanShell script "+e);
