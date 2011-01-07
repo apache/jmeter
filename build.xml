@@ -2113,4 +2113,15 @@ run JMeter unless all the JMeter jars are added.
             <param name="_check_exists" value="true"/>
         </antcall>
     </target>
+    
+    <target name="checkstyle">
+        <taskdef resource="checkstyletask.properties"
+                 classpath="${lib.opt}/checkstyle-5.3-all.jar"/>
+        <checkstyle config="checkstyle.xml">
+          <fileset dir="src" includes="**/*.java"/>
+          <formatter type="plain"/>
+          <formatter type="xml" toFile="build/checkstyle_errors.xml"/>
+        </checkstyle>
+
+    </target>
 </project>
