@@ -181,6 +181,7 @@ Also enable reversion to using System.currentTimeMillis() only.
 <li>Bug 30563 - Thread Group should have a start next loop option on Sample Error</li>
 <li>Bug 50347 - Eclipse setup instructions should remind user to download dependent jars</li>
 <li>Bug 50490 - Setup and Post Thread Group enhancements for better test flow.</li>
+<li>All BeansShell test elements now have the script variables "prev" and "Label" defined.</li>
 </ul>
 
 <h2>Non-functional changes</h2>
