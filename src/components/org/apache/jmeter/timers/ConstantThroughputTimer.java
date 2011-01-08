@@ -167,8 +167,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
         case 4: //All threads in this group - alternate calculation
             final org.apache.jmeter.threads.AbstractThreadGroup group =
                 JMeterContextService.getContext().getThreadGroup();
-            ThroughputInfo groupInfo;
-            groupInfo = threadGroupsInfoMap.get(group);
+            ThroughputInfo groupInfo = threadGroupsInfoMap.get(group);
             if (groupInfo == null) {
                 groupInfo = new ThroughputInfo();
                 ThroughputInfo previous = threadGroupsInfoMap.putIfAbsent(group, groupInfo);
