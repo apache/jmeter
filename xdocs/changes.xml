@@ -107,6 +107,7 @@ This is internal to the workings of the JMeter Proxy &amp; its GUI, so should no
 
 <h3>Functions</h3>
 <ul>
+<li>Bug 50568 - Function __FileToString(): Could not read file when encoding option is blank/empty</li>
 </ul>
 
 <h3>I18N</h3>
