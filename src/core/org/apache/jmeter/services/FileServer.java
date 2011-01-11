@@ -70,7 +70,7 @@ public class FileServer {
     //@GuardedBy("this")
     private File base;
 
-    //@GuardedBy("this")
+    //@GuardedBy("this") TODO perhaps use ConcurrentHashMap
     private final Map<String, FileEntry> files = new HashMap<String, FileEntry>();
 
     private static final FileServer server = new FileServer();
