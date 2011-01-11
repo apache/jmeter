@@ -55,6 +55,7 @@ public class StatisticalSampleSender implements SampleSender, Serializable {
 
     private final List<SampleEvent> sampleStore = new ArrayList<SampleEvent>();
 
+    //@GuardedBy("sampleStore") TODO perhaps use ConcurrentHashMap ?
     private final Map<String, StatisticalSampleResult> sampleTable = new HashMap<String, StatisticalSampleResult>();
 
     private int sampleCount; // maintain separate count of samples for speed
