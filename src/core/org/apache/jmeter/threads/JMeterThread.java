@@ -246,17 +246,29 @@ public class JMeterThread implements Runnable, Interruptible {
                 Sampler sam = firstSampler;
                 while (running && sam != null) {
                     if (onErrorStartNextLoop) { // if the threadGroup option is to start next loop when it fails
-
-                        if (sam.equals(firstSampler)) { // if it's the start of an iteration
-                            threadContext.getVariables().put(LAST_SAMPLE_OK, TRUE);
+                        // special case: TC as parent and last subsampler is not Ok
+                        if (!TRUE.equals(threadContext.getVariables().get(LAST_SAMPLE_OK)) && sam instanceof TransactionSampler) {
+                            TransactionSampler ts = (TransactionSampler) sam;
+                            while (!ts.isTransactionDone()) { // go to last subsampler
+                                sam = controller.next();
+                                ts = (TransactionSampler) sam;
+                            }
+                            // process now for close transaction (not sampling)
+                            process_sampler(sam, null, threadContext);
                         }
+                        
+                        // normal case: process sampler and get next
                         if (TRUE.equals(threadContext.getVariables().get(LAST_SAMPLE_OK))) {
                             process_sampler(sam, null, threadContext);
                             sam = controller.next();
                         } else {
-                            while (!sam.equals(firstSampler)) { // while the thread is NOT on the begining of the tree
+                            // Last not ok. start get the begining of the tree
+                            sam = controller.next(); // need perfom a until loop for special case (tc as parent)
+                            while (sam != null && !sam.equals(firstSampler)) { // while the thread is NOT on the begining of the tree
                                 sam = controller.next();
                             }
+                            // At this point: begining tree, thus Last must Ok
+                            threadContext.getVariables().put(LAST_SAMPLE_OK, TRUE);
                         }
                     } else {
                         process_sampler(sam, null, threadContext);
