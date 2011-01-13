@@ -1859,8 +1859,8 @@ run JMeter unless all the JMeter jars are added.
    <delete quiet="true">
       <fileset dir="${basedir}/bin/testfiles" includes="*.jmx.out"/>
    </delete>
-   <!-- fork="yes" causes problems for Gump builds. -->
-   <java classname="org.apache.jorphan.test.AllTests" fork="no" failonerror="true" dir="${basedir}/bin">
+   <!-- fork="yes" is required or dir attribute is ignored -->
+   <java classname="org.apache.jorphan.test.AllTests" fork="yes" failonerror="true" dir="${basedir}/bin">
       <classpath>
         <fileset dir="${dest.jar}" includes="*.jar"/>
         <pathelement location="${build.test}"/>
