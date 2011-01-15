@@ -127,7 +127,7 @@ public class SamplingStatCalculator {
      * @return average page size in bytes (0 if sample count is zero)
      */
     public double getAvgPageBytes() {
-        int count = calculator.getCount();
+        long count = calculator.getCount();
         if (count == 0) {
             return 0;
         }
@@ -170,7 +170,7 @@ public class SamplingStatCalculator {
             rbool = res.isSuccessful();
         }
 
-        int count = calculator.getCount();
+        long count = calculator.getCount();
         Sample s =
             new Sample( null, rtime, cmean, cstdv, cmedian, cpercent, throughput, eCount, rbool, count, endTime );
         currentSample = s;
@@ -252,7 +252,7 @@ public class SamplingStatCalculator {
         return calculator.getPercentPoint(percent);
     }
 
-    public int getCount() {
+    public long getCount() {
         return calculator.getCount();
     }
 
