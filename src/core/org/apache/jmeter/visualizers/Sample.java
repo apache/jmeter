@@ -137,7 +137,7 @@ public class Sample implements Serializable, Comparable<Sample> {
     }
 
     /**
-     * @return Returns the errorRate.
+     * @return Returns the errorCount.
      */
     public long getErrorCount() {
         return errorCount;
