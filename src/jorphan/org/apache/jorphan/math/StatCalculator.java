@@ -46,7 +46,7 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
 
     private double deviation = 0;
 
-    private int count = 0;
+    private long count = 0;
 
     private T min;
 
@@ -187,7 +187,7 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
         return max;
     }
 
-    public int getCount() {
+    public long getCount() {
         return count;
     }
 

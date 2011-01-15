@@ -169,7 +169,7 @@ public class Graph extends JComponent implements Scrollable, Clearable {
             repaint();
             return;
         }
-        final int xPos = model.getCount();
+        final long xPos = model.getCount();
 
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
@@ -199,10 +199,11 @@ public class Graph extends JComponent implements Scrollable, Clearable {
         }
     }
 
-    private void drawSample(int x, Sample oneSample, Graphics g) {
+    private void drawSample(long x, Sample oneSample, Graphics g) {
         // int width = getWidth();
         int height = getHeight();
         log.debug("Drawing a sample at " + x);
+        int adjustedWidth = (int)(x % width); // will always be within range of an int: as must be < width
         if (wantData) {
             int data = (int) (oneSample.getData() * height / graphMax);
 
@@ -211,9 +212,9 @@ public class Graph extends JComponent implements Scrollable, Clearable {
             } else {
                 g.setColor(JMeterColor.YELLOW);
             }
-            g.drawLine(x % width, height - data, x % width, height - data - 1);
+            g.drawLine(adjustedWidth, height - data, adjustedWidth, height - data - 1);
             if (log.isDebugEnabled()) {
-                log.debug("Drawing coords = " + (x % width) + "," + (height - data));
+                log.debug("Drawing coords = " + adjustedWidth + "," + (height - data));
             }
         }
 
@@ -221,27 +222,27 @@ public class Graph extends JComponent implements Scrollable, Clearable {
             int average = (int) (oneSample.getAverage() * height / graphMax);
 
             g.setColor(Color.blue);
-            g.drawLine(x % width, height - average, x % width, (height - average - 1));
+            g.drawLine(adjustedWidth, height - average, adjustedWidth, (height - average - 1));
         }
 
         if (wantMedian) {
             int median = (int) (oneSample.getMedian() * height / graphMax);
 
             g.setColor(JMeterColor.purple);
-            g.drawLine(x % width, height - median, x % width, (height - median - 1));
+            g.drawLine(adjustedWidth, height - median, adjustedWidth, (height - median - 1));
         }
 
         if (wantDeviation) {
             int deviation = (int) (oneSample.getDeviation() * height / graphMax);
 
             g.setColor(Color.red);
-            g.drawLine(x % width, height - deviation, x % width, (height - deviation - 1));
+            g.drawLine(adjustedWidth, height - deviation, adjustedWidth, (height - deviation - 1));
         }
         if (wantThroughput) {
             int throughput = (int) (oneSample.getThroughput() * height / throughputMax);
 
             g.setColor(JMeterColor.dark_green);
-            g.drawLine(x % width, height - throughput, x % width, (height - throughput - 1));
+            g.drawLine(adjustedWidth, height - throughput, adjustedWidth, (height - throughput - 1));
         }
     }
 
