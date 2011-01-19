@@ -2075,19 +2075,6 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="velocity"   dest.dir="${lib.doc}"/>
     </target>
 
-    <!-- Download jars only needed by Gump (unless already done) -->
-    <target name="_process_gump_jars" unless="velocity.present">
-        <process_jarfile jarname="excalibur-datasource"/>
-        <process_jarfile jarname="excalibur-instrument"/>
-        <process_jarfile jarname="excalibur-logger"/>
-        <process_jarfile jarname="excalibur-pool"/>
-        <process_jarfile jarname="htmllexer"/>
-        <process_jarfile jarname="htmlparser"/>
-        <process_jarfile jarname="jakarta-oro"/>
-        <process_jarfile jarname="jcharts"/>
-        <process_jarfile jarname="soap"/>
-    </target>
-
     <!-- Download all missing jars.-->
     <target name="download_jars" description="Download any missing jar files">
         <!-- build.dir may be needed as a temporary work area -->
