@@ -128,8 +128,13 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
     }
 
     public void reset() throws RemoteException {
-        log.info("Reset");
-        backingEngine.reset();
+        // Mail on userlist reported NPE here - looks like only happens if there are network errors, but check anyway
+        if (backingEngine != null) {
+            log.info("Reset");
+            backingEngine.reset();
+        } else {
+            log.warn("Backing engine is null, ignoring reset");
+        }
     }
 
     public void stopTest() throws RemoteException {
