@@ -168,8 +168,9 @@ public class IfController extends GenericController implements Serializable {
         if (result) {
             return super.next();
         }
+        // If-test is false, need to re-initialize indexes
         try {
-            super.reInitializeSubController(); // Bug 50032 - reinitialize current index element for all sub controller
+            reInitializeSubController(); // Bug 50032 - reinitialize current index element for all sub controller
             return nextIsNull();
         } catch (NextIsNullException e1) {
             return null;
