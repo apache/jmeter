@@ -1364,6 +1364,7 @@ run JMeter unless all the JMeter jars are added.
   <echoproperties prefix="ant"/>
   <echoproperties prefix="gump"/>
   <echoproperties prefix="os"/>
+  <echoproperties prefix="java"/>
 
   </target>
 
