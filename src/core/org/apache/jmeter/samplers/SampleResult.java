@@ -1037,6 +1037,8 @@ public class SampleResult implements Serializable {
      * Returns the count of errors.
      *
      * @return 0 - or 1 if the sample failed
+     * 
+     * TODO do we need allow for nested samples?
      */
     public int getErrorCount(){
         return success ? 0 : 1;
