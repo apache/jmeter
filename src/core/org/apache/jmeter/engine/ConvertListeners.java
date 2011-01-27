@@ -54,7 +54,7 @@ public class ConvertListeners implements HashTreeTraverser {
         while (iter.hasNext()) {
             Object item = iter.next();
             if (item instanceof AbstractThreadGroup) {
-                log.info("num threads = " + ((AbstractThreadGroup) item).getNumThreads());
+                log.debug("num threads = " + ((AbstractThreadGroup) item).getNumThreads());
             }
             if (item instanceof Remoteable) {
                 if (item instanceof ThreadListener){
