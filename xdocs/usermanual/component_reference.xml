@@ -3423,7 +3423,7 @@ GUI that they can use while developing new JMeter components.</p>
     any failure will be applied to the main sample only.
     </p>
 	<note>
-	The variable <b>JMeterThread.last_sample_ok</b> is set to
+	The variable <b>JMeterThread.last_sample_ok</b> is updated to
 	"true" or "false" after all assertions for a sampler have been run.
 	 </note>
 </description>
