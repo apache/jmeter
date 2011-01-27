@@ -1149,7 +1149,9 @@ However some variables are defined internally by JMeter. These are listed below.
 </p>
 <ul>
 <li>COOKIE_cookiename - contains the cookie value (see <complink name="HTTP Cookie Manager" />)</li>
-<li>JMeterThread.last_sample_ok - whether or not the last sample was OK - true/false</li>
+<li>JMeterThread.last_sample_ok - whether or not the last sample was OK - true/false.
+Note: this is updated after PostProcessors and Assertions have been run.
+</li>
 <li>START variables (see next section)</li>
 </ul>
 </subsection>
