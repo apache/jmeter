@@ -36,6 +36,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 
+import org.apache.commons.collections.ArrayStack;
 import org.apache.jmeter.gui.JMeterFileFilter;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -58,9 +59,13 @@ public class FileServer {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    /**
+     * The default base used for resolving relative files, i.e.<br/>
+     * {@code System.getProperty("user.dir")}
+     */
     private static final String DEFAULT_BASE = System.getProperty("user.dir");// $NON-NLS-1$
 
-    /** Default base prefix */
+    /** Default base prefix: {@value} */
     private static final String BASE_PREFIX_DEFAULT = "~/"; // $NON-NLS-1$
 
     private static final String BASE_PREFIX = 
@@ -77,19 +82,35 @@ public class FileServer {
 
     private final Random random = new Random();
 
+    // Cannot be instantiated
     private FileServer() {
         base = new File(DEFAULT_BASE);
-        log.info("Default base="+DEFAULT_BASE);
+        log.info("Default base='"+DEFAULT_BASE+"'");
     }
 
+    /**
+     * @return the singleton instance of the server.
+     */
     public static FileServer getFileServer() {
         return server;
     }
 
-    public void resetBase() throws IOException{
-        setBasedir(DEFAULT_BASE);
+    /**
+     * Resets the current base to {@link #DEFAULT_BASE}.
+     */
+    public void resetBase() {
+        base = new File(DEFAULT_BASE);
+        log.info("Reset base to'"+base+"'");
     }
 
+    /**
+     * Sets the current base directory for relative file names from the provided path.
+     * If the path does not refer to an existing directory, then its parent is used.
+     * Normally the provided path is a file, so using the parent directory is appropriate.
+     * 
+     * @param basedir the path to set, or {@code null} if the GUI is being cleared
+     * @throws IOException if there is a problem resolving the file name
+     */
     public synchronized void setBasedir(String basedir) throws IOException {
         if (filesOpen()) {
             throw new IOException("Files are still open, cannot change base directory");
@@ -100,12 +121,83 @@ public class FileServer {
             if (!base.isDirectory()) {
                 base = base.getParentFile();
             }
-            log.info("Set new base="+base);
+            log.info("Set new base='"+base+"'");
         }
     }
 
+    /**
+     * Sets the current base directory for relative file names from the provided script file.
+     * The parameter is assumed to be the path to  a JMX file, so the base directory is derived
+     * from its parent.
+     * 
+     * @param scriptPath the path of the script file; may be {@code null}
+     * @throws IllegalStateException if files are still open
+     */
+    public synchronized void setBaseForScript(File scriptPath) {
+        if (filesOpen()) {
+            throw new IllegalStateException("Files are still open, cannot change base directory");
+        }
+        files.clear();
+        if (scriptPath != null) {
+            // getParentFile() may not work on relative paths
+            base = scriptPath.getAbsoluteFile().getParentFile();
+            log.info("Set new base '"+base+"'");
+        }
+    }
+
+    /**
+     * Sets the current base directory for relative file names.
+     * 
+     * @param jmxBase the path of the script file base directory
+     * @throws IllegalStateException if files are still open
+     * @throws IllegalArgumentException if {@code basepath} is null
+     */
+    public synchronized void setBase(File jmxBase) {
+        if (jmxBase == null) {
+            throw new IllegalArgumentException("jmxBase must not be null");
+        }
+        if (filesOpen()) {
+            throw new IllegalStateException("Files are still open, cannot change base directory");
+        }
+        files.clear();
+        // getParentFile() may not work on relative paths
+        base = jmxBase;
+        log.info("Set new base='"+base+"'");
+    }
     public synchronized String getBaseDir() {
         return base.getAbsolutePath();
+    }
+
+    public static String getDefaultBase(){
+        return DEFAULT_BASE;
+    }
+
+    /**
+     * Calculates the relative path from {@link #DEFAULT_BASE} to the current base,
+     * which must be the same as or a child of the default.
+     * 
+     * @return the relative path, or {@code "."} if the path cannot be determined
+     */
+    public synchronized File getBaseDirRelative() {
+        // Must first convert to absolute path names to ensure parents are available
+        File parent = new File(DEFAULT_BASE).getAbsoluteFile();
+        File f = base.getAbsoluteFile();
+        ArrayStack l = new ArrayStack();
+        while (f != null) { 
+            if (f.equals(parent)){
+                if (l.isEmpty()){
+                    break;
+                }
+                File rel = new File((String) l.pop());
+                while(!l.isEmpty()) {
+                    rel = new File(rel, (String) l.pop());
+                }
+                return rel;
+            }
+            l.push(f.getName());
+            f = f.getParentFile(); 
+        }
+        return new File(".");
     }
 
     /**
