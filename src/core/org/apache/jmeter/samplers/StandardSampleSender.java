@@ -36,6 +36,10 @@ public class StandardSampleSender implements SampleSender, Serializable {
 
     private RemoteSampleListener listener;
 
+    static {
+        log.info("Using Standard Remote Sampler for this test run");        
+    }
+
     /**
      * @deprecated only for use by test code
      */
@@ -45,7 +49,6 @@ public class StandardSampleSender implements SampleSender, Serializable {
     }
 
     StandardSampleSender(RemoteSampleListener listener) {
-        log.info("Using Standard Remote Sampler for this test run");
         this.listener = listener;
     }
 
@@ -69,7 +72,6 @@ public class StandardSampleSender implements SampleSender, Serializable {
     }
 
     public void sampleOccurred(SampleEvent e) {
-        log.debug("Sample occurred");
         try {
             listener.sampleOccurred(e);
         } catch (RemoteException err) {

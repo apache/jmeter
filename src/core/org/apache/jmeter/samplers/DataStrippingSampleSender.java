@@ -38,6 +38,9 @@ public class DataStrippingSampleSender implements SampleSender, Serializable {
     private final RemoteSampleListener listener;
     private final SampleSender decoratedSender;
 
+    static {
+        log.info("Using DataStrippingSampleSender for this run");
+    }
     /**
      * @deprecated only for use by test code
      */
