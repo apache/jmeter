@@ -58,7 +58,7 @@ public class RemoteListenerWrapper extends AbstractTestElement implements Sample
     }
 
     public void testStarted() {
-        log.info("Test Started()");
+        log.debug("Test Started()");
         try {
             listener.testStarted();
         } catch (Throwable ex) {
@@ -78,7 +78,7 @@ public class RemoteListenerWrapper extends AbstractTestElement implements Sample
     }
 
     public void testStarted(String host) {
-        log.info("Test Started on " + host); // should this be debug?
+        log.debug("Test Started on " + host);
         try {
             listener.testStarted(host);
         } catch (Throwable ex) {
