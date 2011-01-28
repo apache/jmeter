@@ -40,6 +40,10 @@ public class HoldSampleSender implements SampleSender, Serializable {
 
     private final RemoteSampleListener listener;
 
+    static {
+        log.info("Using Sample store for this test run");        
+    }
+
     /**
      * @deprecated only for use by test code
      */
@@ -50,13 +54,12 @@ public class HoldSampleSender implements SampleSender, Serializable {
     }
 
     HoldSampleSender(RemoteSampleListener listener) {
-        log.info("Using Sample store for this test run");
         this.listener = listener;
     }
 
     /** {@inheritDoc} */
     public void testEnded() {
-        log.info("Test ended()");
+        log.debug("Test ended()");
         try {
             synchronized (sampleStore) {
                 Iterator<SampleEvent> i = sampleStore.iterator();
@@ -81,7 +84,7 @@ public class HoldSampleSender implements SampleSender, Serializable {
 
     /** {@inheritDoc} */
     public void testEnded(String host) {
-        log.info("Test Ended on " + host); // should this be debug?
+        log.debug("Test Ended on " + host);
         try {
             Iterator<SampleEvent> i = sampleStore.iterator();
             while (i.hasNext()) {
@@ -104,7 +107,6 @@ public class HoldSampleSender implements SampleSender, Serializable {
 
     /** {@inheritDoc} */
     public void sampleOccurred(SampleEvent e) {
-        log.debug("Sample occurred");
         synchronized (sampleStore) {
             sampleStore.add(e);
         }
