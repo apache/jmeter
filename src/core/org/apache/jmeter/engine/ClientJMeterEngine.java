@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.engine;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -26,6 +27,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.RemoteObject;
 import java.util.Properties;
 
+import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.collections.HashTree;
@@ -126,11 +128,12 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
              * 
              * See https://issues.apache.org/bugzilla/show_bug.cgi?id=48350
             */
+            File baseDirRelative = FileServer.getFileServer().getBaseDirRelative();
             synchronized(LOCK)
             {
-                remote.configure(testTree, host);
+                remote.configure(testTree, host, baseDirRelative);
             }
-            log.info("sent test to " + host);
+            log.info("sent test to " + host + " basedir='"+baseDirRelative+"'");
             if (savep != null){
                 log.info("Sending properties "+savep);
                 try {

@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.engine;
 
+import java.io.File;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Properties;
@@ -25,7 +26,7 @@ import java.util.Properties;
 import org.apache.jorphan.collections.HashTree;
 
 public interface RemoteJMeterEngine extends Remote {
-    void configure(HashTree testTree, String host) throws RemoteException;
+    void configure(HashTree testTree, String host, File jmxBase) throws RemoteException;
 
     void runTest() throws RemoteException, JMeterEngineException;
 
