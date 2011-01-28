@@ -22,6 +22,7 @@
      
 package org.apache.jmeter.services;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -39,9 +40,13 @@ public class TestFileServer extends JMeterTestCase {
     }
 
     @Override
+    public void setUp() throws IOException {
+        FS.resetBase();        
+    }
+
+    @Override
     public void tearDown() throws IOException{
         FS.closeFiles();
-        FS.resetBase();
     }
     
     public void testopen() throws Exception {
@@ -96,6 +101,19 @@ public class TestFileServer extends JMeterTestCase {
         FS.closeFile(infile);
         FS.setBasedir("y");
         FS.closeFiles();
-        FS.setBasedir(System.getProperty("user.dir"));
+    }
+    
+    public void testRelative() throws Exception {
+        final String base = FileServer.getDefaultBase();
+        final File basefile = new File(base);
+        FS.setBaseForScript(basefile);
+        assertEquals(".",FS.getBaseDirRelative().toString());
+        FS.setBaseForScript(basefile.getParentFile());
+        assertEquals(".",FS.getBaseDirRelative().toString());
+        FS.setBaseForScript(new File(basefile.getParentFile(),"abcd/defg.jmx"));
+        assertEquals(".",FS.getBaseDirRelative().toString());
+        File file = new File(basefile,"abcd/defg.jmx");
+        FS.setBaseForScript(file);
+        assertEquals("abcd",FS.getBaseDirRelative().toString());
     }
 }
