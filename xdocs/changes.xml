@@ -129,6 +129,10 @@ Change SampleResult to recalculate offset each time.
 Also enable reversion to using System.currentTimeMillis() only.
 </li>
 <li>Bug 50425 - Remove thread groups from Controller add menu</li>
+<li>
+Bug 50675 - CVS Data Set Config incompatible with Remote Start
+Fixed RMI startup to provide location of JMX file relative to user.dir.
+</li>
 </ul>
 
 <!-- ==================================================== -->

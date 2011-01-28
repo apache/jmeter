@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.engine;
 
+import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.rmi.RemoteException;
@@ -25,6 +26,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Properties;
 
+import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
@@ -116,10 +118,11 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
      * @param testTree
      *            the feature to be added to the ThreadGroup attribute
      */
-    public void configure(HashTree testTree, String host) throws RemoteException {
-        log.info("Creating JMeter engine on host "+host);
+    public void configure(HashTree testTree, String host, File jmxBase) throws RemoteException {
+        log.info("Creating JMeter engine on host "+host+" base '"+jmxBase+"'");
         backingEngine = new StandardJMeterEngine(host);
         backingEngine.configure(testTree);
+        FileServer.getFileServer().setBase(jmxBase);
     }
 
     public void runTest() throws RemoteException, JMeterEngineException {
