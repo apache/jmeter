@@ -52,6 +52,12 @@ public class BatchSampleSender implements SampleSender, Serializable {
 
     private long batchSendTime = -1;
 
+    static {
+        log.info("Using batching for this run."
+                + " Thresholds: num=" + NUM_SAMPLES_THRESHOLD
+                + ", time=" + TIME_THRESHOLD_MS);        
+    }
+
     /**
      * @deprecated only for use by test code
      */
@@ -68,9 +74,6 @@ public class BatchSampleSender implements SampleSender, Serializable {
      */
     protected BatchSampleSender(RemoteSampleListener listener) {
         this.listener = listener;
-        log.info("Using batching for this run."
-                + " Thresholds: num=" + NUM_SAMPLES_THRESHOLD
-                + ", time=" + TIME_THRESHOLD_MS);
     }
 
    /**
