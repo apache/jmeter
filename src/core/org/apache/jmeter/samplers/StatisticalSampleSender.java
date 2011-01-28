@@ -62,6 +62,12 @@ public class StatisticalSampleSender implements SampleSender, Serializable {
 
     private long batchSendTime = -1;
 
+    static {
+        log.info("Using statistical sampling for this run." + " Thresholds: num="
+                + NUM_SAMPLES_THRESHOLD + ", time=" + TIME_THRESHOLD_MS
+                + ". Key uses ThreadName: " + KEY_ON_THREADNAME);        
+    }
+
     /**
      * @deprecated only for use by test code
      */
@@ -71,7 +77,6 @@ public class StatisticalSampleSender implements SampleSender, Serializable {
         listener = null;
     }
 
-
     /**
      * Constructor
      *
@@ -79,9 +84,6 @@ public class StatisticalSampleSender implements SampleSender, Serializable {
      */
     StatisticalSampleSender(RemoteSampleListener listener) {
         this.listener = listener;
-        log.info("Using statistical sampling for this run." + " Thresholds: num="
-                + NUM_SAMPLES_THRESHOLD + ", time=" + TIME_THRESHOLD_MS
-                + ". Key uses ThreadName: " + KEY_ON_THREADNAME);
     }
 
     /**
