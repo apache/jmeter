@@ -127,22 +127,24 @@ public class FileServer {
 
     /**
      * Sets the current base directory for relative file names from the provided script file.
-     * The parameter is assumed to be the path to  a JMX file, so the base directory is derived
+     * The parameter is assumed to be the path to a JMX file, so the base directory is derived
      * from its parent.
      * 
-     * @param scriptPath the path of the script file; may be {@code null}
+     * @param scriptPath the path of the script file; must be not be {@code null}
      * @throws IllegalStateException if files are still open
+     * @throws IllegalArgumentException if scriptPath parameter is null
      */
     public synchronized void setBaseForScript(File scriptPath) {
+        if (scriptPath == null){
+            throw new IllegalArgumentException("scriptPath must not be null");
+        }
         if (filesOpen()) {
             throw new IllegalStateException("Files are still open, cannot change base directory");
         }
         files.clear();
-        if (scriptPath != null) {
-            // getParentFile() may not work on relative paths
-            base = scriptPath.getAbsoluteFile().getParentFile();
-            log.info("Set new base '"+base+"'");
-        }
+        // getParentFile() may not work on relative paths
+        base = scriptPath.getAbsoluteFile().getParentFile();
+        log.info("Set new base '"+base+"'");
     }
 
     /**
