@@ -712,7 +712,7 @@ public class JMeter implements JMeterPlugin {
                 println("Could not open " + testFile);
                 return;
             }
-            FileServer.getFileServer().setBasedir(f.getAbsolutePath());
+            FileServer.getFileServer().setBaseForScript(f);
 
             reader = new FileInputStream(f);
             log.info("Loading file: " + f);

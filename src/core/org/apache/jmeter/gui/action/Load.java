@@ -101,7 +101,7 @@ public class Load implements Command {
                     log.info("Merging file: " + f);
                 } else {
                     log.info("Loading file: " + f);
-                    FileServer.getFileServer().setBasedir(f.getAbsolutePath());
+                    FileServer.getFileServer().setBaseForScript(f);
                 }
                 reader = new FileInputStream(f);
                 HashTree tree = SaveService.loadTree(reader);
