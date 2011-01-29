@@ -62,6 +62,7 @@ import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.FormBodyPart;
+import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
@@ -665,7 +666,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             }
 
             // Write the request to our own stream
-            MultipartEntity multiPart = new MultipartEntity();
+            MultipartEntity multiPart = new MultipartEntity(
+                    getDoBrowserCompatibleMultipart() ? HttpMultipartMode.BROWSER_COMPATIBLE : HttpMultipartMode.STRICT);
             // Create the parts
             // Add any parameters
             PropertyIterator args = getArguments().iterator();

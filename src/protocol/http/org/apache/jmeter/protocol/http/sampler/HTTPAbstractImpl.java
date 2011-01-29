@@ -193,6 +193,13 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
     }
 
     /**
+     * Invokes {@link HTTPSamplerBase#getDoBrowserCompatibleMultipart()}
+     */
+    protected boolean getDoBrowserCompatibleMultipart() {
+        return testElement.getDoBrowserCompatibleMultipart();
+    }
+
+    /**
      * Invokes {@link HTTPSamplerBase#hasArguments()}
      */
     protected boolean hasArguments() {
