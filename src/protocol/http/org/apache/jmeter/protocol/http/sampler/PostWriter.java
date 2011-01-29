@@ -194,7 +194,7 @@ public class PostWriter {
                 // End the previous multipart
                 bos.write(CRLF);
                 // Write multipart for parameter
-                writeFormMultipart(bos, parameterName, arg.getValue(), contentEncoding);
+                writeFormMultipart(bos, parameterName, arg.getValue(), contentEncoding, sampler.getDoBrowserCompatibleMultipart());
             }
             // If there are any files, we need to end the previous multipart
             if(files.length > 0) {
@@ -418,12 +418,14 @@ public class PostWriter {
     /**
      * Writes form data in multipart format.
      */
-    private void writeFormMultipart(OutputStream out, String name, String value, String charSet)
+    private void writeFormMultipart(OutputStream out, String name, String value, String charSet, 
+            boolean browserCompatibleMultipart)
         throws IOException {
         writeln(out, "Content-Disposition: form-data; name=\"" + name + "\""); // $NON-NLS-1$ // $NON-NLS-2$
-        writeln(out, "Content-Type: text/plain; charset=" + charSet); // $NON-NLS-1$
-        writeln(out, "Content-Transfer-Encoding: 8bit"); // $NON-NLS-1$
-
+        if (!browserCompatibleMultipart){
+            writeln(out, "Content-Type: text/plain; charset=" + charSet); // $NON-NLS-1$
+            writeln(out, "Content-Transfer-Encoding: 8bit"); // $NON-NLS-1$
+        }
         out.write(CRLF);
         out.write(value.getBytes(charSet));
         out.write(CRLF);
