@@ -81,7 +81,7 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
 
 </component>
 
-<component name="HTTP Request" index="&sect-num;.1.2"  width="826" height="677" screenshot="http-request.png">
+<component name="HTTP Request" index="&sect-num;.1.2"  width="851" height="661" screenshot="http-request.png">
 
 <description>
         <p>This sampler lets you send an HTTP/HTTPS request to a web server.  It
@@ -213,6 +213,10 @@ https.default.protocol=SSLv3
                   It does work with the Jakarta httpClient implementation.</property>
         <property name="Use multipart/form-data for HTTP POST" required="Yes">
         Use a multipart/form-data or application/x-www-form-urlencoded post request
+        </property>
+        <property name="Browser-compatible headers" required="Yes">
+        When using multipart/form-data, this suppresses the Content-Type and 
+        Content-Transfer-Encoding headers; only the Content-Disposition header is sent.
         </property>
         <property name="Path" required="Yes">The path to resource (for example, /servlets/myServlet). If the
 resource requires query string parameters, add them below in the
