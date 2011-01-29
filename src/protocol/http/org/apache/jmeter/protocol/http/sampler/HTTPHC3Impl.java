@@ -670,18 +670,24 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
                 contentEncoding = null;
             }
 
+            final boolean browserCompatible = getDoBrowserCompatibleMultipart();
             // We don't know how many entries will be skipped
             ArrayList<PartBase> partlist = new ArrayList<PartBase>();
             // Create the parts
             // Add any parameters
             PropertyIterator args = getArguments().iterator();
             while (args.hasNext()) {
-               HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
-               String parameterName = arg.getName();
-               if (arg.isSkippable(parameterName)){
-                   continue;
-               }
-               partlist.add(new StringPart(arg.getName(), arg.getValue(), contentEncoding));
+                HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
+                String parameterName = arg.getName();
+                if (arg.isSkippable(parameterName)){
+                    continue;
+                }
+                StringPart part = new StringPart(arg.getName(), arg.getValue(), contentEncoding);
+                if (browserCompatible) {
+                    part.setTransferEncoding(null);
+                    part.setContentType(null);
+                }
+                partlist.add(part);
             }
 
             // Add any files
