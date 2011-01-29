@@ -133,7 +133,16 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * IP source to use - does not apply to Java HTTP implementation currently
      */
     public static final String IP_SOURCE = "HTTPSampler.ipSource"; // $NON-NLS-1$
+
+    public static final String USE_KEEPALIVE = "HTTPSampler.use_keepalive"; // $NON-NLS-1$
+
+    public static final String DO_MULTIPART_POST = "HTTPSampler.DO_MULTIPART_POST"; // $NON-NLS-1$
+
+    public static final String BROWSER_COMPATIBLE_MULTIPART  = "HTTPSampler.BROWSER_COMPATIBLE_MULTIPART"; // $NON-NLS-1$
+
     //- JMX names
+
+    public static final boolean BROWSER_COMPATIBLE_MULTIPART_MODE_DEFAULT = false; // The default setting to be used (i.e. historic)
     
     
     public static final String DEFAULT_METHOD = GET; // $NON-NLS-1$
@@ -149,11 +158,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         };
 
     private static final List<String> METHODLIST = Collections.unmodifiableList(Arrays.asList(METHODS));
-
-
-    public static final String USE_KEEPALIVE = "HTTPSampler.use_keepalive"; // $NON-NLS-1$
-
-    public static final String DO_MULTIPART_POST = "HTTPSampler.DO_MULTIPART_POST"; // $NON-NLS-1$
 
     // @see mergeFileProperties
     // Must be private, as the file list needs special handling
@@ -244,6 +248,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     ////////////////////// Variables //////////////////////
 
     private boolean dynamicPath = false;// Set false if spaces are already encoded
+
 
 
     ////////////////////// Code ///////////////////////////
@@ -411,6 +416,14 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     public boolean getDoMultipartPost() {
         return getPropertyAsBoolean(DO_MULTIPART_POST, false);
+    }
+
+    public void setDoBrowserCompatibleMultipart(boolean value) {
+        setProperty(BROWSER_COMPATIBLE_MULTIPART, value, BROWSER_COMPATIBLE_MULTIPART_MODE_DEFAULT);
+    }
+
+    public boolean getDoBrowserCompatibleMultipart() {
+        return getPropertyAsBoolean(BROWSER_COMPATIBLE_MULTIPART, BROWSER_COMPATIBLE_MULTIPART_MODE_DEFAULT);
     }
 
     public void setMonitor(String value) {
