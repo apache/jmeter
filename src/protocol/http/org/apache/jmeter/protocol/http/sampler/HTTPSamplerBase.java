@@ -681,7 +681,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public void setHeaderManager(HeaderManager value) {
         HeaderManager mgr = getHeaderManager();
         if (mgr != null) {
-            log.warn("Existing HeaderManager '" + mgr.getName() + "' merged with '" + value.getName() + "'");
+            log.debug("Existing HeaderManager '" + mgr.getName() + "' merged with '" + value.getName() + "'");
             value = mgr.merge(value, true);
             if (log.isDebugEnabled()) {
                 log.debug("HeaderManager merged: " + value.getName());
