@@ -4669,7 +4669,7 @@ In jmeter.properties, edit "user.classpath" to include additional libraries.
 <description>
 <p>A Thread Group defines a pool of users that will execute a particular test case against your server.  In the Thread Group GUI, you can control the number of users simulated (num of threads), the ramp up time (how long it takes to start all the threads), the number of times to perform the test, and optionally, a start and stop time for the test.</p>
 <p>
-See also <complink name="Post Thread Group"/> and <complink name="Setup Thread Group"/>.
+See also <complink name="tearDown Thread Group"/> and <complink name="setUp Thread Group"/>.
 </p>
 <p>
 When using the scheduler, JMeter runs the thread group until either the number of loops is reached or the duration/end-time is reached - whichever occurs first.
@@ -5085,22 +5085,22 @@ The Test Fragment is used in conjunction with the <complink name="Include Contro
 </properties>
 </component>
 
-<component name="Setup Thread Group" index="&sect-num;.9.10" width="598" height="300" screenshot="setup_thread_group.png">
+<component name="setUp Thread Group" index="&sect-num;.9.10" width="537" height="289" screenshot="setup_thread_group.png">
 <description>
     <p>
     A special type of ThreadGroup that can be utilized to perform Pre-Test Actions.  The behavior of these threads
-    is exactly like a normal <complink name="Thread Group"/> element.  The difference is that these type of threads are batched 
-    together and execute before the test proceeds to the executing of regular Thread Groups.
+    is exactly like a normal <complink name="Thread Group"/> element.  The difference is that these type of threads 
+    execute before the test proceeds to the executing of regular Thread Groups.
     </p>
 </description>
 </component>
 
-<component name="Post Thread Group" index="&sect-num;.9.11" width="595" height="303" screenshot="post_thread_group.png">
+<component name="tearDown Thread Group" index="&sect-num;.9.11" width="537" height="289" screenshot="teardown_thread_group.png">
 <description>
     <p>
     A special type of ThreadGroup that can be utilized to perform Post-Test Actions.  The behavior of these threads
-    is exactly like a normal <complink name="Thread Group"/> element.  The difference is that these type of threads are batched 
-    together and execute after the test has finished executing its regular Thread Groups.
+    is exactly like a normal <complink name="Thread Group"/> element.  The difference is that these type of threads 
+    execute after the test has finished executing its regular Thread Groups.
     </p>
 </description>
 </component>
