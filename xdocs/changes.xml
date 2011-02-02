@@ -191,6 +191,7 @@ Fixed RMI startup to provide location of JMX file relative to user.dir.
 <li>Bug 50347 - Eclipse setup instructions should remind user to download dependent jars</li>
 <li>Bug 50490 - Setup and Post Thread Group enhancements for better test flow.</li>
 <li>All BeansShell test elements now have the script variables "prev" and "Label" defined.</li>
+<li>Bug 50708 - Classpath jar order in NewDriver not alphabetically</li>
 </ul>
 
 <h2>Non-functional changes</h2>
