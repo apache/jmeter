@@ -24,6 +24,7 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.rmi.ServerException;
 import java.rmi.server.RemoteObject;
 import java.util.Properties;
 
@@ -144,8 +145,13 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
             }
             remote.runTest();
             log.info("sent run command to "+ host);
+        } catch (ServerException ex) {
+            log.error("Error in run() method", ex); // $NON-NLS-1$
+            log.fatalError("Exitting JVM"); // Necessary otherwise hangs on Timer Thread.
+            System.out.println("Fatal error, exitting: "+ex.getLocalizedMessage());
+            System.exit(1);
         } catch (Exception ex) {
-            log.error("", ex); // $NON-NLS-1$
+            log.error("Error in run() method", ex); // $NON-NLS-1$
         }
     }
 
@@ -164,5 +170,9 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
     public void setProperties(Properties p) {
         savep = p;
         // Sent later
+    }
+
+    public boolean isActive() {
+        return true;
     }
 }

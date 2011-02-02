@@ -99,6 +99,9 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
     /** Flag to show whether test is running. Set to false to stop creating more threads. */
     private volatile boolean running = false;
 
+    /** Flag to show whether engine is active. Set to false at end of test. */
+    private volatile boolean active = false;
+
     /** Thread Groups run sequentially */
     private volatile boolean serialized = false;
 
@@ -168,6 +171,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
     }
 
     public void configure(HashTree testTree) {
+        active = true;
         test = testTree;
     }
 
@@ -293,6 +297,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
                 exit();
             }
         }
+        active=false;
     }
 
     private ListedHashTree cloneTree(ListedHashTree tree) {
@@ -638,5 +643,9 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
     public void setProperties(Properties p) {
         log.info("Applying properties "+p);
         JMeterUtils.getJMeterProperties().putAll(p);
+    }
+    
+    public boolean isActive() {
+        return active;
     }
 }
