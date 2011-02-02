@@ -43,6 +43,8 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
     static final String JMETER_ENGINE_RMI_NAME = "JMeterEngine"; // $NON-NLS-1$
 
     private transient JMeterEngine backingEngine;
+    
+    private transient Thread ownerThread;
 
     public static final int DEFAULT_RMI_PORT =
         JMeterUtils.getPropDefault("server.rmi.port", 1099); // $NON-NLS-1$
@@ -120,13 +122,19 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
      */
     public void configure(HashTree testTree, String host, File jmxBase) throws RemoteException {
         log.info("Creating JMeter engine on host "+host+" base '"+jmxBase+"'");
+        if (backingEngine != null && backingEngine.isActive()) {
+            log.warn("Engine is busy - cannot create JMeter engine");
+            throw new RemoteException("Engine is busy - please try later");
+        }
+        ownerThread = Thread.currentThread();
         backingEngine = new StandardJMeterEngine(host);
         backingEngine.configure(testTree);
         FileServer.getFileServer().setBase(jmxBase);
     }
 
     public void runTest() throws RemoteException, JMeterEngineException {
-        log.info("running test");
+        log.info("Running test");
+        checkOwner("runTest");
         backingEngine.runTest();
     }
 
@@ -151,6 +159,15 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
     }
 
     public void setProperties(Properties p) throws RemoteException {
+        checkOwner("setProperties");
         backingEngine.setProperties(p);
+    }
+
+    private void checkOwner(String methodName) throws RemoteException {
+        if (ownerThread != Thread.currentThread()){
+            String msg = "The engine is not owned by this thread - cannot call "+methodName;
+            log.warn(msg);
+            throw new RemoteException(msg);            
+        }
     }
 }
