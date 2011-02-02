@@ -30,7 +30,7 @@ public class RunTime extends GenericController implements Serializable {
 
     private final static String SECONDS = "RunTime.seconds"; //$NON-NLS-1$
 
-    private volatile long startTime = 0;
+    private long startTime = 0;
 
     private int loopCount = 0; // for getIterCount
 
