@@ -391,6 +391,7 @@ public final class GuiPackage implements LocaleChangeListener {
                 JMeterGUIComponent comp = getGui(currentNode.getTestElement());
                 TestElement el = currentNode.getTestElement();
                 comp.modifyTestElement(el);
+                currentNode.nameChanged(); // Bug 50221 - ensure label is updated
             }
             // The current node is now updated
             currentNodeUpdated = true;
