@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -96,6 +97,7 @@ public final class NewDriver {
                 new Throwable("Could not access " + libDirs[a]).printStackTrace();
                 continue;
             }
+            Arrays.sort(libJars); // Bug 50708 Ensure predictable order of jars
             for (int i = 0; i < libJars.length; i++) {
                 try {
                     String s = libJars[i].getPath();
