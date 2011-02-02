@@ -776,6 +776,7 @@ public class JMeter implements JMeterPlugin {
                     engines.add(doRemoteInit(el.trim(), tree));
                 }
                 println("Starting remote engines");
+                log.info("Starting remote engines");
                 long now=System.currentTimeMillis();
                 println("Starting the test @ "+new Date(now)+" ("+now+")");
                 Iterator<JMeterEngine> iter = engines.iterator();
@@ -786,10 +787,11 @@ public class JMeter implements JMeterPlugin {
                     }
                 }
                 println("Remote engines have been started");
+                log.info("Remote engines have been started");
             }
         } catch (Exception e) {
             System.out.println("Error in NonGUIDriver " + e.toString());
-            log.error("", e);
+            log.error("Error in NonGUIDriver", e);
         } finally {
             JOrphanUtils.closeQuietly(reader);
         }
