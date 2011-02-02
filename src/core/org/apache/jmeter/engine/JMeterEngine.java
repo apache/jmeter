@@ -34,4 +34,6 @@ public interface JMeterEngine {
     void setProperties(Properties p);
 
     void exit();
+    
+    boolean isActive();
 }
