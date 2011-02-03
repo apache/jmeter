@@ -142,7 +142,9 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
 
     /** {@inheritDoc} */
     public void nameChanged() {
-        treeModel.nodeChanged(this);
+        if (treeModel != null) { // may be null during startup
+            treeModel.nodeChanged(this);
+        }
     }
 
     // Override in order to provide type safety
