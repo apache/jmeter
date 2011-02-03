@@ -213,7 +213,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
             StringWriter string = new StringWriter();
             PrintWriter writer = new PrintWriter(string);
             err.printStackTrace(writer);
-            throw new JMeterEngineException(string.toString());
+            throw new JMeterEngineException(err);
         }
     }
 
