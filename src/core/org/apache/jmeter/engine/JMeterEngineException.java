@@ -20,6 +20,9 @@ package org.apache.jmeter.engine;
 
 import java.io.Serializable;
 
+/**
+ * Exception class for use by {@link JMeterEngine#runTest()}
+ */
 public class JMeterEngineException extends Exception implements Serializable {
     private static final long serialVersionUID = 240L;
 
@@ -29,5 +32,13 @@ public class JMeterEngineException extends Exception implements Serializable {
 
     public JMeterEngineException(String msg) {
         super(msg);
+    }
+
+    public JMeterEngineException(Throwable t) {
+        super(t);
+    }
+
+    public JMeterEngineException(String msg, Throwable t) {
+        super(msg, t);
     }
 }
