@@ -39,7 +39,7 @@ public class BeanShellClient {
             System.out.println("serverhost serverport filename [arg1 arg2 ...]");
             System.out.println("e.g. ");
             System.out.println("localhost 9000 extras/remote.bsh apple blake 7");
-            System.exit(1);
+            return;
         }
         String host=args[0];
         String portString = args[1];
