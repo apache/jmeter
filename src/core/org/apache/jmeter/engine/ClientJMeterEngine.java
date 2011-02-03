@@ -24,13 +24,13 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.rmi.ServerException;
 import java.rmi.server.RemoteObject;
 import java.util.Properties;
 
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.SearchByClass;
 import org.apache.jorphan.logging.LoggingManager;
@@ -39,7 +39,7 @@ import org.apache.log.Logger;
 /**
  * Class to run remote tests from the client JMeter and collect remote samples
  */
-public class ClientJMeterEngine implements JMeterEngine, Runnable {
+public class ClientJMeterEngine implements JMeterEngine {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final Object LOCK = new Object();
@@ -78,13 +78,6 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
     }
 
     /** {@inheritDoc} */
-    public void runTest() {
-        log.info("about to run remote test on "+host);
-        new Thread(this).start();
-        log.info("done initiating run command");
-    }
-
-    /** {@inheritDoc} */
     public void stopTest() {
         log.info("about to stop remote test on "+host);
         try {
@@ -100,16 +93,16 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
             try {
                 remote.reset();
             } catch (java.rmi.ConnectException e) {
+                log.info("Retry reset after: "+e);
                 remote = getEngine(host);
                 remote.reset();
             }
         } catch (Exception ex) {
-            log.error("", ex); // $NON-NLS-1$
+            log.error("Failed to reset remote engine", ex); // $NON-NLS-1$
         }
     }
 
-    /** {@inheritDoc} */
-    public void run() {
+    public void runTest() throws JMeterEngineException {
         log.info("running clientengine run method");
         SearchByClass<TestListener> testListeners = new SearchByClass<TestListener>(TestListener.class);
         ConvertListeners sampleListeners = new ConvertListeners();
@@ -134,7 +127,7 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
             {
                 remote.configure(testTree, host, baseDirRelative);
             }
-            log.info("sent test to " + host + " basedir='"+baseDirRelative+"'");
+            log.info("sent test to " + host + " basedir='"+baseDirRelative+"'"); // $NON-NLS-1$
             if (savep != null){
                 log.info("Sending properties "+savep);
                 try {
@@ -145,13 +138,30 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
             }
             remote.runTest();
             log.info("sent run command to "+ host);
-        } catch (ServerException ex) {
-            log.error("Error in run() method", ex); // $NON-NLS-1$
-            log.fatalError("Exitting JVM"); // Necessary otherwise hangs on Timer Thread.
-            System.out.println("Fatal error, exitting: "+ex.getLocalizedMessage());
-            System.exit(1);
+        } catch (IllegalStateException ex) {
+            log.error("Error in run() method "+ex); // $NON-NLS-1$
+            tidyRMI(log);
+            throw ex; // Don't wrap this error - display it as is
         } catch (Exception ex) {
-            log.error("Error in run() method", ex); // $NON-NLS-1$
+            log.error("Error in run() method "+ex); // $NON-NLS-1$
+            tidyRMI(log);
+            throw new JMeterEngineException("Error in run() method "+ex, ex); // $NON-NLS-1$
+        }
+    }
+
+    /**
+     * Tidy up RMI access to allow JMeter client to exit.
+     * Currently just interrups the "RMI Reaper" thread.
+     * @param logger where to log the information
+     */
+    public static void tidyRMI(Logger logger) {
+        for(Thread t : Thread.getAllStackTraces().keySet()){
+            String reaperRE = JMeterUtils.getPropDefault("rmi.thread.name", "^RMI Reaper$");
+            String name = t.getName();
+            if (name.matches(reaperRE)) {
+                logger.info("Interrupting "+name);
+                t.interrupt();
+            }
         }
     }
 
