@@ -130,7 +130,7 @@ public final class AllTests {
     public static void main(String[] args) {
         if (args.length < 1) {
             System.out.println("You must specify a comma-delimited list of paths to search " + "for unit tests");
-            System.exit(1);
+            return;
         }
         String home=new File(System.getProperty("user.dir")).getParent();
         System.out.println("Setting JMeterHome: "+home);
