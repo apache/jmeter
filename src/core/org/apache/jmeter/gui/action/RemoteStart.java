@@ -147,6 +147,8 @@ public class RemoteStart extends AbstractAction {
         if (engine != null) {
             try {
                 engine.runTest();
+            } catch (IllegalStateException e) {
+                JMeterUtils.reportErrorToUser(e.getMessage(),JMeterUtils.getResString("remote_error_starting")); // $NON-NLS-1$
             } catch (JMeterEngineException e) {
                 JMeterUtils.reportErrorToUser(e.getMessage(),JMeterUtils.getResString("remote_error_starting")); // $NON-NLS-1$
             }
