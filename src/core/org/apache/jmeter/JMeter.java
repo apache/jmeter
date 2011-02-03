@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.StringTokenizer;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.cli.avalon.CLArgsParser;
 import org.apache.commons.cli.avalon.CLOption;
@@ -250,6 +251,8 @@ public class JMeter implements JMeterPlugin {
     /**
      * Takes the command line arguments and uses them to determine how to
      * startup JMeter.
+     * 
+     * Called reflectively by {@link NewDriver#main(String[])}
      */
     public void start(String[] args) {
 
@@ -365,7 +368,7 @@ public class JMeter implements JMeterPlugin {
                 e.printStackTrace();
             }
             System.out.println("An error occurred: " + e.getMessage());
-            System.exit(1);
+            System.exit(1); // TODO - could this be return?
         }
     }
 
@@ -696,11 +699,7 @@ public class JMeter implements JMeterPlugin {
         if (testFile == null) {
             throw new IllegalUserActionException("Non-GUI runs require a test plan");
         }
-        if (logFile == null) {
-            driver.runNonGui(testFile, null, remoteStart != null,remote_hosts_string);
-        } else {
-            driver.runNonGui(testFile, logFile, remoteStart != null,remote_hosts_string);
-        }
+        driver.runNonGui(testFile, logFile, remoteStart != null, remote_hosts_string);
     }
 
     // run test in batch mode
@@ -890,22 +889,21 @@ public class JMeter implements JMeterPlugin {
      * it calls System.exit to deal with the Naming Timer Thread.
      */
     private static class ListenToTest implements TestListener, Runnable, Remoteable {
-        private int started = 0; // keep track of remote tests
+        private AtomicInteger started = new AtomicInteger(0); // keep track of remote tests
 
         //NOT YET USED private JMeter _parent;
 
-        private List<JMeterEngine> engines;
+        private final List<JMeterEngine> engines;
 
         public ListenToTest(JMeter parent, List<JMeterEngine> engines) {
             //_parent = parent;
             this.engines=engines;
         }
 
-        public synchronized void testEnded(String host) {
-            started--;
+        public void testEnded(String host) {
             long now=System.currentTimeMillis();
             log.info("Finished remote host: " + host + " ("+now+")");
-            if (started <= 0) {
+            if (started.decrementAndGet() <= 0) {
                 Thread stopSoon = new Thread(this);
                 stopSoon.start();
             }
@@ -917,8 +915,8 @@ public class JMeter implements JMeterPlugin {
             println("... end of run");
         }
 
-        public synchronized void testStarted(String host) {
-            started++;
+        public void testStarted(String host) {
+            started.incrementAndGet();
             long now=System.currentTimeMillis();
             log.info("Started remote host:  " + host + " ("+now+")");
         }
@@ -944,7 +942,7 @@ public class JMeter implements JMeterPlugin {
              * method, and it does not die.
              */
             if (engines!=null){ // it will be null unless remoteStop = true
-                System.out.println("Exitting remote servers");
+                println("Exitting remote servers");
                 Iterator<JMeterEngine> it = engines.iterator();
                 while(it.hasNext()){
                     JMeterEngine e = it.next();
@@ -956,7 +954,6 @@ public class JMeter implements JMeterPlugin {
             } catch (InterruptedException ignored) {
             }
             println("... end of run");
-            System.exit(0);
         }
 
         /**
