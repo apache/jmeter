@@ -132,13 +132,13 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
         FileServer.getFileServer().setBase(jmxBase);
     }
 
-    public void runTest() throws RemoteException, JMeterEngineException {
+    public void runTest() throws RemoteException, JMeterEngineException, IllegalStateException {
         log.info("Running test");
         checkOwner("runTest");
         backingEngine.runTest();
     }
 
-    public void reset() throws RemoteException {
+    public void reset() throws RemoteException, IllegalStateException {
         // Mail on userlist reported NPE here - looks like only happens if there are network errors, but check anyway
         if (backingEngine != null) {
             log.info("Reset");
@@ -150,8 +150,9 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
     }
 
     public void stopTest() throws RemoteException {
-        log.info("Stopping test");
+        log.info("Stopping test ...");
         backingEngine.stopTest();// TODO: askThreadsToStop() instead?
+        log.info("... stopped");
     }
 
     public void exit() throws RemoteException {
@@ -159,13 +160,18 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
         backingEngine.exit();
     }
 
-    public void setProperties(Properties p) throws RemoteException {
+    public void setProperties(Properties p) throws RemoteException, IllegalStateException {
         checkOwner("setProperties");
         backingEngine.setProperties(p);
     }
 
-    private void checkOwner(String methodName) {
-        if (ownerThread != Thread.currentThread()){
+    /**
+     * Check if the caller owns the engine.
+     * @param methodName the name of the method for the log message
+     * @throws IllegalStateException if the caller is not the owner.
+     */
+    private void checkOwner(String methodName) throws IllegalStateException {
+        if (ownerThread != null && ownerThread != Thread.currentThread()){
             String msg = "The engine is not owned by this thread - cannot call "+methodName;
             log.warn(msg);
             throw new IllegalStateException(msg);            
