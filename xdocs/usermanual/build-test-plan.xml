@@ -112,6 +112,15 @@ Close the Shutdown dialog box and select Run/Stop, or just press Control + '.'.
 When running JMeter in non-GUI mode, there is no Menu, and JMeter does not react to keystrokes such as Control + '.'.
 So in versions after 2.3.2, JMeter non-GUI mode will listen for commands on a specific port
 (default 4445, see the JMeter property <code>jmeterengine.nongui.port</code>).
+In versions after 2.4, JMeter supports automatic choice of an alternate port if the default port is being used 
+(for example by another JMeter instance). In this case, JMeter will try the next higher port, continuing until
+it reaches the JMeter property <code>jmeterengine.nongui.maxport</code>) which defaults to 4455.
+If <code>maxport</code> is less than or equal to <code>port</code>, port scanning will not take place.
+Note that JMeter 2.4 and earlier did not set up the listener for non-GUI clients, only non-GUI standalone tests;
+this has been fixed. 
+<br></br>
+The chosen port is displayed in the console window.
+<br/>
 The commands currently supported are:
 <ul>
 <li>Shutdown - graceful shutdown</li>
@@ -119,6 +128,7 @@ The commands currently supported are:
 </ul>
 These commands can be sent by using the <code>shutdown[.cmd|.sh]</code> or <code>stoptest[.cmd|.sh]</code> script
 respectively. The scripts are to be found in the JMeter <code>bin</code> directory.
+The commands will only be accepted if the script is run from the same host.
 </p>
 </subsection>
 
