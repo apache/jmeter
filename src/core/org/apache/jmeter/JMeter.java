@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.net.Authenticator;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -294,6 +295,15 @@ public class JMeter implements JMeterPlugin {
                 System.setProperty("org.apache.commons.logging.Log" // $NON-NLS-1$
                         , "org.apache.commons.logging.impl.LogKitLogger"); // $NON-NLS-1$
             }
+
+            Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {                
+                public void uncaughtException(Thread t, Throwable e) {
+                    if (!(e instanceof ThreadDeath)) {
+                        log.error("Uncaught exception: ", e);
+                        System.err.println("Uncaught Exception " + e + ". See log file for details.");
+                    }
+                }
+            });
 
             log.info(JMeterUtils.getJMeterCopyright());
             log.info("Version " + JMeterUtils.getJMeterVersion());

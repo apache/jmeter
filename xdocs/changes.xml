@@ -202,6 +202,7 @@ Fixed RMI startup to provide location of JMX file relative to user.dir.
 <li>Bug 50008 - Allow BatchSampleSender to be subclassed</li>
 <li>Bug 50450 - use System.array copy in jacobi solver as, being native, is more performant.</li>
 <li>Bug 50487 - runSerialTest verifies objects that never need persisting</li>
+<li>Use Thread.setDefaultUncaughtExceptionHandler() instead of private ThreadGroup</li>
 </ul>
 
 </section> 
