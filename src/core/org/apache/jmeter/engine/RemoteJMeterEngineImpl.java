@@ -57,9 +57,12 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
             System.out.println("Using local port: "+DEFAULT_LOCAL_PORT);
         }
     }
+
     // Should we create our own copy of the RMI registry?
     private static final boolean createServer =
         JMeterUtils.getPropDefault("server.rmi.create", true); // $NON-NLS-1$
+
+    private final Object LOCK = new Object();
 
     private RemoteJMeterEngineImpl(int port) throws RemoteException {
         super(port); // Create this object using the specified port (0 means anonymous)
@@ -122,13 +125,15 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
      */
     public void configure(HashTree testTree, String host, File jmxBase) throws RemoteException {
         log.info("Creating JMeter engine on host "+host+" base '"+jmxBase+"'");
-        if (backingEngine != null && backingEngine.isActive()) {
-            log.warn("Engine is busy - cannot create JMeter engine");
-            throw new IllegalStateException("Engine is busy - please try later");
+        synchronized(LOCK) { // close window where another remote client might jump in
+            if (backingEngine != null && backingEngine.isActive()) {
+                log.warn("Engine is busy - cannot create JMeter engine");
+                throw new IllegalStateException("Engine is busy - please try later");
+            }
+            ownerThread = Thread.currentThread();
+            backingEngine = new StandardJMeterEngine(host);
+            backingEngine.configure(testTree); // sets active = true
         }
-        ownerThread = Thread.currentThread();
-        backingEngine = new StandardJMeterEngine(host);
-        backingEngine.configure(testTree);
         FileServer.getFileServer().setBase(jmxBase);
     }
 
