@@ -20,9 +20,6 @@ package org.apache.jmeter.engine;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -62,9 +59,6 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
     private static final long serialVersionUID = 233L; // Remember to change this when the class changes ...
 
     private static final long WAIT_TO_DIE = JMeterUtils.getPropDefault("jmeterengine.threadstop.wait", 5 * 1000); // 5 seconds
-
-    /** UDP port used in non-GUI runs. Disabled if <=1000. */
-    private static final int UDP_PORT = JMeterUtils.getPropDefault("jmeterengine.nongui.port", 4445);
 
     // Should we exit at end of the test? (only applies to server, because host is non-null)
     private static final boolean exitAfterTest =
@@ -175,7 +169,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         test = testTree;
     }
 
-    // TODO: in Java1.5, perhaps we can use Thread.setUncaughtExceptionHandler() instead
+    // TODO: in Java1.5, perhaps we can use Thread.setDefaultUncaughtExceptionHandler() instead
     private static class MyThreadGroup extends java.lang.ThreadGroup{
         public MyThreadGroup(String s) {
             super(s);
@@ -198,16 +192,6 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         try {
             Thread runningThread = new Thread(new MyThreadGroup("JMeterThreadGroup"),this);
             runningThread.start();
-            if (JMeter.isNonGUI() && UDP_PORT > 1000){
-                Thread waiter = new Thread(){
-                    @Override
-                    public void run() {
-                        waitForSignals();
-                    }
-                };
-                waiter.setDaemon(true);
-                waiter.start();
-            }
         } catch (Exception err) {
             stopTest();
             StringWriter string = new StringWriter();
@@ -215,39 +199,6 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
             err.printStackTrace(writer);
             throw new JMeterEngineException(err);
         }
-    }
-
-    private void waitForSignals() {
-        byte[] buf = new byte[80];
-        DatagramSocket socket = null;
-        System.out.println("Waiting for possible shutdown message on port "+UDP_PORT);
-        try {
-            socket = new DatagramSocket(UDP_PORT);
-            DatagramPacket request = new DatagramPacket(buf, buf.length);
-            while(true) {
-                socket.receive(request);
-                InetAddress address = request.getAddress();
-                // Only accept commands from the local host
-                if (address.isLoopbackAddress()){
-                    String command = new String(request.getData(), request.getOffset(), request.getLength(),"ASCII");
-                    System.out.println("Command: "+command+" received from "+address);
-                    log.info("Command: "+command+" received from "+address);
-                    if (command.equals("StopTestNow")){
-                        stopTest();
-                    } else if (command.equals("Shutdown")) {
-                        askThreadsToStop();
-                    } else {
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (socket != null) {
-                socket.close();
-            }
-        }
-
     }
 
     private void removeThreadGroups(List<?> elements) {

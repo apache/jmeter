@@ -24,6 +24,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.Authenticator;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -128,6 +131,8 @@ public class JMeter implements JMeterPlugin {
 
 
 
+    /** UDP port used in non-GUI runs. Disabled if <=1000. */
+    private static final int UDP_PORT = JMeterUtils.getPropDefault("jmeterengine.nongui.port", 4445);
 
 
 
@@ -784,6 +789,7 @@ public class JMeter implements JMeterPlugin {
                 println("Remote engines have been started");
                 log.info("Remote engines have been started");
             }
+            startUdpDdaemon(engine);
         } catch (Exception e) {
             System.out.println("Error in NonGUIDriver " + e.toString());
             log.error("Error in NonGUIDriver", e);
@@ -1022,5 +1028,51 @@ public class JMeter implements JMeterPlugin {
     }
     private void logProperty(String prop,String separator){
         log.info(prop+separator+System.getProperty(prop));//$NON-NLS-1$
+    }
+
+    private void startUdpDdaemon(final JMeterEngine engine) {
+        if (UDP_PORT > 1000){
+            Thread waiter = new Thread(){
+                @Override
+                public void run() {
+                    waitForSignals(engine);
+                }
+            };
+            waiter.setDaemon(true);
+            waiter.start();
+        }
+    }
+
+    private void waitForSignals(final JMeterEngine engine) {
+        byte[] buf = new byte[80];
+        DatagramSocket socket = null;
+        System.out.println("Waiting for possible shutdown message on port "+UDP_PORT);
+        try {
+            socket = new DatagramSocket(UDP_PORT);
+            DatagramPacket request = new DatagramPacket(buf, buf.length);
+            while(true) {
+                socket.receive(request);
+                InetAddress address = request.getAddress();
+                // Only accept commands from the local host
+                if (address.isLoopbackAddress()){
+                    String command = new String(request.getData(), request.getOffset(), request.getLength(),"ASCII");
+                    System.out.println("Command: "+command+" received from "+address);
+                    log.info("Command: "+command+" received from "+address);
+                    if (command.equals("StopTestNow")){
+                        engine.stopTest(true);
+                    } else if (command.equals("Shutdown")) {
+                        engine.stopTest(false);
+                    } else {
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (socket != null) {
+                socket.close();
+            }
+        }
+
     }
 }
