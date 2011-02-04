@@ -28,6 +28,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
+import java.net.SocketException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
@@ -132,7 +133,10 @@ public class JMeter implements JMeterPlugin {
 
 
     /** UDP port used in non-GUI runs. Disabled if <=1000. */
-    private static final int UDP_PORT = JMeterUtils.getPropDefault("jmeterengine.nongui.port", 4445);
+    private static final int UDP_PORT = JMeterUtils.getPropDefault("jmeterengine.nongui.port", 4445); // $NON-NLS-1$
+
+    /** Maximum UDP port used in non-GUI runs. Disabled if <= UDP_PORT */
+    private static final int UDP_PORT_MAX = JMeterUtils.getPropDefault("jmeterengine.nongui.maxport", 4455); // $NON-NLS-1$
 
 
 
@@ -1030,26 +1034,29 @@ public class JMeter implements JMeterPlugin {
         log.info(prop+separator+System.getProperty(prop));//$NON-NLS-1$
     }
 
-    private void startUdpDdaemon(final JMeterEngine engine) {
+    private static void startUdpDdaemon(final JMeterEngine engine) {
         if (UDP_PORT > 1000){
-            Thread waiter = new Thread(){
-                @Override
-                public void run() {
-                    waitForSignals(engine);
-                }
-            };
-            waiter.setDaemon(true);
-            waiter.start();
+            final DatagramSocket socket = getSocket(UDP_PORT, UDP_PORT_MAX);
+            if (socket != null) {
+                Thread waiter = new Thread(){
+                    @Override
+                    public void run() {
+                        waitForSignals(engine, socket);
+                    }
+                };
+                waiter.setDaemon(true);
+                waiter.start();
+            } else {
+                System.out.println("Failed to create UDP port");
+            }
         }
     }
 
-    private void waitForSignals(final JMeterEngine engine) {
+    private static void waitForSignals(final JMeterEngine engine, DatagramSocket socket) {
         byte[] buf = new byte[80];
-        DatagramSocket socket = null;
-        System.out.println("Waiting for possible shutdown message on port "+UDP_PORT);
+        System.out.println("Waiting for possible shutdown message on port "+socket.getLocalPort());
+        DatagramPacket request = new DatagramPacket(buf, buf.length);
         try {
-            socket = new DatagramSocket(UDP_PORT);
-            DatagramPacket request = new DatagramPacket(buf, buf.length);
             while(true) {
                 socket.receive(request);
                 InetAddress address = request.getAddress();
@@ -1067,12 +1074,24 @@ public class JMeter implements JMeterPlugin {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         } finally {
-            if (socket != null) {
-                socket.close();
-            }
+            socket.close();
         }
+    }
 
+    private static DatagramSocket getSocket(int udpPort, int udpPortMax) {
+        DatagramSocket socket = null;
+        int i = udpPort;
+        do {
+            try {
+                socket = new DatagramSocket(i);
+                break;
+            } catch (SocketException e) {
+                // ignored
+            }            
+        } while (++i <= udpPortMax);
+
+        return socket;
     }
 }
