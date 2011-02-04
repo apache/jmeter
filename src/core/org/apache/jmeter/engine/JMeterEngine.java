@@ -27,7 +27,7 @@ public interface JMeterEngine {
 
     void runTest() throws JMeterEngineException;
 
-    void stopTest();
+    void stopTest(boolean now);
 
     void reset();
 
