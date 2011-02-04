@@ -149,9 +149,13 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
         }
     }
 
-    public void stopTest() throws RemoteException {
-        log.info("Stopping test ...");
-        backingEngine.stopTest();// TODO: askThreadsToStop() instead?
+    public void stopTest(boolean now) throws RemoteException {
+        if (now) {
+            log.info("Stopping test ...");
+        } else {
+            log.info("Shutting test ...");
+        }
+        backingEngine.stopTest(now);
         log.info("... stopped");
     }
 

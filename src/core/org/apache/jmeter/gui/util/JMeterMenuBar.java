@@ -93,9 +93,15 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
     private JMenu remote_stop;
 
+    private JMenu remote_shut;
+
     private JMenuItem remote_stop_all;
 
+    private JMenuItem remote_shut_all;
+
     private Collection<JMenuItem> remote_engine_stop;
+
+    private Collection<JMenuItem> remote_engine_shut;
 
     private JMenuItem run_clear;
 
@@ -127,6 +133,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         // Lists for remote engines menu items
         remote_engine_start = new LinkedList<JMenuItem>();
         remote_engine_stop = new LinkedList<JMenuItem>();
+        remote_engine_shut = new LinkedList<JMenuItem>();
         remote_engine_exit = new LinkedList<JMenuItem>();
         remoteHosts = JOrphanUtils.split(JMeterUtils.getPropDefault("remote_hosts", ""), ","); //$NON-NLS-1$
         if (remoteHosts.length == 1 && remoteHosts[0].equals("")) {
@@ -408,6 +415,12 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         remote_stop_all = makeMenuItemRes("remote_stop_all", 'X', ActionNames.REMOTE_STOP_ALL, KeyStrokes.REMOTE_STOP_ALL); //$NON-NLS-1$
         runMenu.add(remote_stop_all);
 
+        if (remote_shut != null) {
+            runMenu.add(remote_shut);
+        }
+        remote_shut_all = makeMenuItemRes("remote_shut_all", 'X', ActionNames.REMOTE_SHUT_ALL, KeyStrokes.REMOTE_SHUT_ALL); //$NON-NLS-1$
+        runMenu.add(remote_shut_all);
+
         if (remote_exit != null) {
             runMenu.add(remote_exit);
         }
@@ -484,10 +497,12 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         Iterator<JMenuItem> iter = remote_engine_start.iterator();
         Iterator<JMenuItem> iter2 = remote_engine_stop.iterator();
         Iterator<JMenuItem> iter3 = remote_engine_exit.iterator();
-        while (iter.hasNext() && iter2.hasNext() && iter3.hasNext()) {
+        Iterator<JMenuItem> iter4 = remote_engine_shut.iterator();
+        while (iter.hasNext() && iter2.hasNext() && iter3.hasNext() &&iter4.hasNext()) {
             JMenuItem start = iter.next();
             JMenuItem stop = iter2.next();
             JMenuItem exit = iter3.next();
+            JMenuItem shut = iter4.next();
             if (start.getText().equals(host)) {
                 log.debug("Found start host: " + start.getText());
                 start.setEnabled(!running);
@@ -497,6 +512,10 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
                 stop.setEnabled(running);
             }
             if (exit.getText().equals(host)) {
+                log.debug("Found exit  host: " + exit.getText());
+                exit.setEnabled(true);
+            }
+            if (shut.getText().equals(host)) {
                 log.debug("Found exit  host: " + exit.getText());
                 exit.setEnabled(true);
             }
@@ -515,6 +534,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         if (remoteHosts.length > 0) {
             remote_start = makeMenuRes("remote_start"); //$NON-NLS-1$
             remote_stop = makeMenuRes("remote_stop"); //$NON-NLS-1$
+            remote_shut = makeMenuRes("remote_shut"); //$NON-NLS-1$
             remote_exit = makeMenuRes("remote_exit"); //$NON-NLS-1$
 
             for (int i = 0; i < remoteHosts.length; i++) {
@@ -528,6 +548,11 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
                 item.setEnabled(false);
                 remote_engine_stop.add(item);
                 remote_stop.add(item);
+
+                item = makeMenuItemNoRes(remoteHosts[i], ActionNames.REMOTE_SHUT);
+                item.setEnabled(false);
+                remote_engine_shut.add(item);
+                remote_shut.add(item);
 
                 item = makeMenuItemNoRes(remoteHosts[i],ActionNames.REMOTE_EXIT);
                 item.setEnabled(false);
@@ -607,6 +632,9 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
             return false;
         }
         if (ActionNames.REMOTE_STOP.equals(actionCommand)){//
+            return false;
+        }
+        if (ActionNames.REMOTE_SHUT.equals(actionCommand)){//
             return false;
         }
         if (ActionNames.REMOTE_EXIT.equals(actionCommand)){//
