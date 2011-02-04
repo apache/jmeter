@@ -193,6 +193,7 @@ Fixed RMI startup to provide location of JMX file relative to user.dir.
 <li>All BeansShell test elements now have the script variables "prev" and "Label" defined.</li>
 <li>Bug 50708 - Classpath jar order in NewDriver not alphabetically</li>
 <li>Bug 50659 - JMeter server does not support concurrent tests - prevent client from starting another</li>
+<li>Added remote shutdown functionality</li>
 </ul>
 
 <h2>Non-functional changes</h2>
