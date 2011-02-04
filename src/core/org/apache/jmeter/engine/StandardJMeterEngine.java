@@ -169,28 +169,13 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         test = testTree;
     }
 
-    // TODO: in Java1.5, perhaps we can use Thread.setDefaultUncaughtExceptionHandler() instead
-    private static class MyThreadGroup extends java.lang.ThreadGroup{
-        public MyThreadGroup(String s) {
-            super(s);
-          }
-
-          @Override
-        public void uncaughtException(Thread t, Throwable e) {
-            if (!(e instanceof ThreadDeath)) {
-                log.error("Uncaught exception: ", e);
-                System.err.println("Uncaught Exception " + e + ". See log file for details.");
-            }
-          }
-    }
-
     public void runTest() throws JMeterEngineException {
         if (host != null){
             long now=System.currentTimeMillis();
             System.out.println("Starting the test on host " + host + " @ "+new Date(now)+" ("+now+")");
         }
         try {
-            Thread runningThread = new Thread(new MyThreadGroup("JMeterThreadGroup"),this);
+            Thread runningThread = new Thread(this, "StandardJMeterEngine");
             runningThread.start();
         } catch (Exception err) {
             stopTest();
