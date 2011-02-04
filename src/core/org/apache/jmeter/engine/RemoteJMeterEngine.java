@@ -30,7 +30,7 @@ public interface RemoteJMeterEngine extends Remote {
 
     void runTest() throws RemoteException, JMeterEngineException;
 
-    void stopTest() throws RemoteException;
+    void stopTest(boolean now) throws RemoteException;
 
     void reset() throws RemoteException;
 
