@@ -1048,7 +1048,7 @@ public class JMeter implements JMeterPlugin {
         if (UDP_PORT > 1000){
             final DatagramSocket socket = getSocket(UDP_PORT, UDP_PORT_MAX);
             if (socket != null) {
-                Thread waiter = new Thread(){
+                Thread waiter = new Thread("UDP Listener"){
                     @Override
                     public void run() {
                         waitForSignals(engine, socket);
