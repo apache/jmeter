@@ -50,8 +50,10 @@ public class RemoteStart extends AbstractAction {
     static {
         commands.add(ActionNames.REMOTE_START);
         commands.add(ActionNames.REMOTE_STOP);
+        commands.add(ActionNames.REMOTE_SHUT);
         commands.add(ActionNames.REMOTE_START_ALL);
         commands.add(ActionNames.REMOTE_STOP_ALL);
+        commands.add(ActionNames.REMOTE_SHUT_ALL);
         commands.add(ActionNames.REMOTE_EXIT);
         commands.add(ActionNames.REMOTE_EXIT_ALL);
     }
@@ -69,7 +71,9 @@ public class RemoteStart extends AbstractAction {
         }
         String action = e.getActionCommand();
         if (action.equals(ActionNames.REMOTE_STOP)) {
-            doRemoteStop(name);
+            doRemoteStop(name, true);
+        } else if (action.equals(ActionNames.REMOTE_SHUT)) {
+            doRemoteStop(name, false);
         } else if (action.equals(ActionNames.REMOTE_START)) {
             popupShouldSave(e);
             doRemoteInit(name);
@@ -88,12 +92,9 @@ public class RemoteStart extends AbstractAction {
                 doRemoteStart(el.trim());
             }
         } else if (action.equals(ActionNames.REMOTE_STOP_ALL)) {
-            String remote_hosts_string = JMeterUtils.getPropDefault(REMOTE_HOSTS, LOCAL_HOST);
-            java.util.StringTokenizer st = new java.util.StringTokenizer(remote_hosts_string, REMOTE_HOSTS_SEPARATOR);
-            while (st.hasMoreElements()) {
-                String el = (String) st.nextElement();
-                doRemoteStop(el.trim());
-            }
+            doRemoteStopAll(true);
+        } else if (action.equals(ActionNames.REMOTE_SHUT_ALL)) {
+            doRemoteStopAll(false);
         } else if (action.equals(ActionNames.REMOTE_EXIT)) {
             doRemoteExit(name);
         } else if (action.equals(ActionNames.REMOTE_EXIT_ALL)) {
@@ -106,6 +107,15 @@ public class RemoteStart extends AbstractAction {
         }
     }
 
+    private void doRemoteStopAll(boolean now) {
+        String remote_hosts_string = JMeterUtils.getPropDefault(REMOTE_HOSTS, LOCAL_HOST);
+        java.util.StringTokenizer st = new java.util.StringTokenizer(remote_hosts_string, REMOTE_HOSTS_SEPARATOR);
+        while (st.hasMoreElements()) {
+            String el = (String) st.nextElement();
+            doRemoteStop(el.trim(), now);
+        }
+    }
+
     /**
      * Stops a remote testing engine
      *
@@ -113,10 +123,10 @@ public class RemoteStart extends AbstractAction {
      *            the DNS name or IP address of the remote testing engine
      *
      */
-    private void doRemoteStop(String name) {
+    private void doRemoteStop(String name, boolean now) {
         GuiPackage.getInstance().getMainFrame().showStoppingMessage(name);
         JMeterEngine engine = remoteEngines.get(name);
-        engine.stopTest();
+        engine.stopTest(now);
     }
 
     /**

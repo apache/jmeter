@@ -78,10 +78,10 @@ public class ClientJMeterEngine implements JMeterEngine {
     }
 
     /** {@inheritDoc} */
-    public void stopTest() {
-        log.info("about to stop remote test on "+host);
+    public void stopTest(boolean now) {
+        log.info("about to "+(now ? "stop" : "shutdown")+" remote test on "+host);
         try {
-            remote.stopTest();
+            remote.stopTest(now);
         } catch (Exception ex) {
             log.error("", ex); // $NON-NLS-1$
         }
