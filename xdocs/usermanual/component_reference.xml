@@ -588,7 +588,7 @@ If this is zero, then the request is marked as failed.
 
 </component>
 
-<component name="LDAP Request" index="&sect-num;.1.7"  width="505" height="476" screenshot="ldap_request.png">
+<component name="LDAP Request" index="&sect-num;.1.7" screenshot="ldap_request.png">
   <description>This Sampler lets you send a different Ldap request(Add, Modify, Delete and Search) to an LDAP server.
     <p>If you are going to send multiple requests to the same LDAP server, consider
       using an <complink name="LDAP Request Defaults"/>
@@ -669,7 +669,7 @@ If this is zero, then the request is marked as failed.
 
 </component>
 
-<component name="LDAP Extended Request" index="&sect-num;.1.8"  width="595" height="542" screenshot="ldapext_request.png">
+<component name="LDAP Extended Request" index="&sect-num;.1.8" screenshot="ldapext_request.png">
   <description>This Sampler can send all 8 different LDAP request to an LDAP server. It is an extended version of the LDAP sampler,
   therefore it is harder to configure, but can be made much closer resembling a real LDAP session.
     <p>If you are going to send multiple requests to the same LDAP server, consider
@@ -878,7 +878,7 @@ to configure this via the GUI, so it cannot really be used.
 <component name="BeanShell Sampler" index="&sect-num;.1.10"  width="592" height="303" screenshot="beanshellsampler.png">
 	<description><p>This sampler allows you to write a sampler using the BeanShell scripting language.		
 </p><p>
-<b>For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
+<b>For full details on using BeanShell, please see the <a href="http://www.beanshell.org/">BeanShell website.</a></b>
 </p>
 <p>
 The test element supports the ThreadListener and TestListener methods.
@@ -1489,7 +1489,7 @@ The current implementation is quite basic, and is mainly intended for debugging 
 </p>
 </component>
 
-<component name="Test Action" index="&sect-num;.1.18"  width="344" height="181" screenshot="test_action.png">
+<component name="Test Action" index="&sect-num;.1.18" screenshot="test_action.png">
 <description>
 The Test Action sampler is a sampler that is intended for use in a conditional controller.
 Rather than generate a sample, the test element eithers pauses or stops the selected target.
@@ -1577,7 +1577,7 @@ Note: If the message body is not empty, and there is at least one attached file,
 	<br>Logic Controllers determine the order in which Samplers are processed.</br>
 </description>
 
-<component name="Simple Controller" index="&sect-num;.2.1" anchor="simple_controller"  width="390" height="62" screenshot="logic-controller/simple-controller.gif">
+<component name="Simple Controller" index="&sect-num;.2.1" anchor="simple_controller" screenshot="logic-controller/simple-controller.png">
 <description>
 <p>The Simple Logic Controller lets  you organize your Samplers and other
 Logic Controllers.  Unlike other Logic Controllers, this controller provides no functionality beyond that of a
@@ -1601,7 +1601,7 @@ is configured to store the results in a file named "simple-test.dat" in the curr
 </example>
 </component>
 
-<component name="Loop Controller" index="&sect-num;.2.2" anchor="loop"  width="397" height="111" screenshot="logic-controller/loop-controller.gif">
+<component name="Loop Controller" index="&sect-num;.2.2" anchor="loop" screenshot="logic-controller/loop-controller.png">
 <description><p>If you add Generative or Logic Controllers to a Loop Controller, JMeter will
 loop through them a certain number of times, in addition to the loop value you
 specified for the Thread Group.  For example, if you add one HTTP Request to a
@@ -1640,7 +1640,7 @@ is configured to store the results in a file named "loop-test.dat" in the curren
 
 </component>
 
-<component name="Once Only Controller" index="&sect-num;.2.3" anchor="once_only_controller"  width="390" height="62" screenshot="logic-controller/once-only-controller.gif">
+<component name="Once Only Controller" index="&sect-num;.2.3" anchor="once_only_controller" screenshot="logic-controller/once-only-controller.png">
 <description>
 <p>The Once Only Logic Controller tells JMeter to process the controller(s) inside it only once, and pass over any requests under it
 during further iterations through the test plan.</p>
@@ -1669,7 +1669,7 @@ Bug Page, Bug Page. Note, the File Reporter is configured to store the results i
 Thread Group or a Loop Controller is not currently defined. Odd things may happen.</note>
 </component>
 
-<component name="Interleave Controller" index="&sect-num;.2.4"  width="219" height="90" screenshot="logic-controller/interleave-controller.png">
+<component name="Interleave Controller" index="&sect-num;.2.4"  screenshot="logic-controller/interleave-controller.png">
 <description><p>If you add Generative or Logic Controllers to an Interleave Controller, JMeter will alternate among each of the
 other controllers for each loop iteration. </p>
 </description>
@@ -1741,7 +1741,7 @@ Note, the File Reporter is configured to store the results in a file named "inte
 </example>
 </component>
 
-<component name="Random Controller" index="&sect-num;.2.5"  width="238" height="84" screenshot="logic-controller/random-controller.gif">
+<component name="Random Controller" index="&sect-num;.2.5" screenshot="logic-controller/random-controller.png">
 <description>
 <p>The Random Logic Controller acts similarly to the Interleave Controller, except that
 instead of going in order through its sub-controllers and samplers, it picks one
@@ -1758,7 +1758,7 @@ what results any given interaction will give</note>
 
 
 
-<component name="Random Order Controller" index="&sect-num;.2.6"  width="358" height="131" screenshot="randomordercontroller.png">
+<component name="Random Order Controller" index="&sect-num;.2.6" screenshot="randomordercontroller.png">
 	<description>
 		<p>The Random Order Controller is much like a Simple Controller in that it will execute each child
 		 element at most once, but the order of execution of the nodes will be random.</p>
@@ -1768,7 +1768,7 @@ what results any given interaction will give</note>
 </properties>
 </component>
 
-<component name="Throughput Controller" index="&sect-num;.2.7"  width="223" height="148" screenshot="throughput_controller.png">
+<component name="Throughput Controller" index="&sect-num;.2.7" screenshot="throughput_controller.png">
 <description>
 <p>
 <b>This controller is badly named, as it does not control throughput.</b>
@@ -1789,7 +1789,7 @@ setting is reset when a parent Loop Controller restarts.
 
 </component>
 
-<component name="Runtime Controller" index="&sect-num;.2.8"  width="358" height="131" screenshot="runtimecontroller.png">
+<component name="Runtime Controller" index="&sect-num;.2.8" screenshot="runtimecontroller.png">
 	<description>
 		<p>The Runtime Controller controls how long its children are allowed to run.
 		</p>
@@ -1800,7 +1800,7 @@ setting is reset when a parent Loop Controller restarts.
 </properties>
 </component>
 
-<component name="If Controller" index="&sect-num;.2.9"  width="489" height="145" screenshot="ifcontroller.png">
+<component name="If Controller" index="&sect-num;.2.9" screenshot="ifcontroller.png">
 	<description>
 		<p>The If Controller allows the user to control whether the test elements below it (its children) are run or not.</p>
 		<p>
@@ -1861,7 +1861,7 @@ setting is reset when a parent Loop Controller restarts.
 
 
 
-<component name="While Controller" index="&sect-num;.2.10"  width="358" height="131" screenshot="whilecontroller.png">
+<component name="While Controller" index="&sect-num;.2.10" screenshot="whilecontroller.png">
 	<description>
 <p>
 The While Controller runs its children until the condition is "false".
@@ -1893,7 +1893,7 @@ For example:
 </properties>
 </component>
 
-<component name="Switch Controller" index="&sect-num;.2.11"  width="358" height="131" screenshot="switchcontroller.png">
+<component name="Switch Controller" index="&sect-num;.2.11" screenshot="switchcontroller.png">
 	<description>
 <p>
 The Switch Controller acts like the <complink name="Interleave Controller"/> 
@@ -1919,7 +1919,7 @@ If there is no default, then no element is selected, and the controller will not
 </properties>
 </component>
 
-<component name="ForEach Controller" index="&sect-num;.2.12" anchor="loop"  width="399" height="176" screenshot="logic-controller/foreach-controller.png">
+<component name="ForEach Controller" index="&sect-num;.2.12" anchor="loop" screenshot="logic-controller/foreach-controller.png">
 <description><p>A ForEach controller loops through the values of a set of related variables. 
 When you add samplers (or controllers) to a ForEach controller, every sample sample (or controller)
 is executed one or more times, where during every loop the variable has a new value.
@@ -1991,7 +1991,7 @@ which clearly won't match. Thus the For 2 Sampler will not be run.
 </example>
 </component>
 
-<component name="Module Controller" index="&sect-num;.2.13"  width="409" height="255" screenshot="module_controller.png">
+<component name="Module Controller" index="&sect-num;.2.13" screenshot="module_controller.png">
 <description>
 <p>
 The Module Controller provides a mechanism for substituting test plan fragments into the current test plan at run-time.
@@ -2029,7 +2029,7 @@ otherwise a duplicate may be accidentally created when new elements are added to
 </properties>
 </component>
 
-<component name="Include Controller" index="&sect-num;.2.14"  width="419" height="118" screenshot="includecontroller.png">
+<component name="Include Controller" index="&sect-num;.2.14" screenshot="includecontroller.png">
 	<description>
 <p>
 The include controller is designed to use an external jmx file. To use it, create a Test Fragment 
@@ -2060,7 +2060,7 @@ attempts to open the fileName relative to the JMX launch directory (versions of 
 </properties>
 </component>
 
-<component name="Transaction Controller" index="&sect-num;.2.15"  width="288" height="155" screenshot="transactioncontroller.png">
+<component name="Transaction Controller" index="&sect-num;.2.15" screenshot="transactioncontroller.png">
 	<description>
 	    <p>
 	    The Transaction Controller generates an additional
@@ -2108,7 +2108,7 @@ attempts to open the fileName relative to the JMX launch directory (versions of 
 </properties>
 </component>
 
-<component name="Recording Controller" index="&sect-num;.2.16"  width="417" height="70" screenshot="logic-controller/recording-controller.gif">
+<component name="Recording Controller" index="&sect-num;.2.16" screenshot="logic-controller/recording-controller.png">
 <description>
 <p>The Recording Controller is a place holder indicating where the proxy server should
 record samples to.  During test run, it has no effect, similar to the Simple Controller.  But during
@@ -2540,7 +2540,7 @@ failed responses from the server.</p></description>
 The BeanShell Listener allows the use of BeanShell for processing samples for saving etc.
 </p>
 <p>
-<b>For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
+<b>For full details on using BeanShell, please see the <a href="http://www.beanshell.org/">BeanShell website.</a></b>
 </p>
 <p>
 The test element supports the ThreadListener and TestListener methods.
@@ -3148,7 +3148,7 @@ that tells JMeter to override the default "User-Agent" request header and use a 
 instead. (see figures 9 and 10).</p>
 
 <figure width="203" height="141" image="http-config/header-manager-example1a.gif">Figure 12 - Test Plan</figure>
-<figure width="573" height="334" image="http-config/header-manager-example1b.gif">Figure 13 - Header Manager Control Panel</figure>
+<figure image="http-config/header-manager-example1b.png">Figure 13 - Header Manager Control Panel</figure>
 </example>
 
 </component>
@@ -3528,10 +3528,10 @@ pattern. You can attach multiple assertions to any controller for additional fle
 	The pattern is a Perl5-style regular expression, but without the enclosing brackets.
 </p>
 <example title="Assertion Examples" anchor="assertion_examples">
-<figure width="187" height="94" image="assertion/example1a.png">Figure 14 - Test Plan</figure>
-<figure width="629" height="333" image="assertion/example1b.png">Figure 15 - Assertion Control Panel with Pattern</figure>
-<figure width="474" height="265" image="assertion/example1c-pass.gif">Figure 16 - Assertion Listener Results (Pass)</figure>
-<figure width="474" height="265" image="assertion/example1c-fail.gif">Figure 17 - Assertion Listener Results (Fail)</figure>
+<figure image="assertion/example1a.png">Figure 14 - Test Plan</figure>
+<figure image="assertion/example1b.png">Figure 15 - Assertion Control Panel with Pattern</figure>
+<figure image="assertion/example1c-pass.png">Figure 16 - Assertion Listener Results (Pass)</figure>
+<figure image="assertion/example1c-fail.png">Figure 17 - Assertion Listener Results (Fail)</figure>
 </example>
 
 
@@ -3588,7 +3588,7 @@ validate the XML based on a DTD or schema or do any further validation.</p></des
 <description><p>The BeanShell Assertion allows the user to perform assertion checking using a BeanShell script.
 </p>
 <p>
-<b>For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
+<b>For full details on using BeanShell, please see the <a href="http://www.beanshell.org/">BeanShell website.</a></b>
 </p><p>
 Note that a different Interpreter is used for each independent occurence of the assertion
 in each thread in a test script, but the same Interpreter is used for subsequent invocations.
@@ -3837,7 +3837,7 @@ please ensure that you select "Store the message using MIME (raw)" otherwise the
 	child of a <complink name="Test Action"/> Sampler.
 	</p>
 </description>
-<component name="Constant Timer" index="&sect-num;.6.1" anchor="constant"  width="390" height="100" screenshot="timers/constant_timer.gif">
+<component name="Constant Timer" index="&sect-num;.6.1" anchor="constant" screenshot="timers/constant_timer.png">
 <description>
 <p>If you want to have each thread pause for the same amount of time between
 requests, use this timer.</p></description>
@@ -3848,7 +3848,7 @@ requests, use this timer.</p></description>
 </properties>
 </component>
 
-<component name="Gaussian Random Timer" index="&sect-num;.6.2"  width="390" height="182" screenshot="timers/gauss_random_timer.gif">
+<component name="Gaussian Random Timer" index="&sect-num;.6.2" screenshot="timers/gauss_random_timer.png">
 
 <description><p>This timer pauses each thread request for a random amount of time, with most
 of the time intervals ocurring near a particular value.  The total delay is the
@@ -3865,7 +3865,7 @@ to the random delay.</property>
 
 </component>
 
-<component name="Uniform Random Timer" index="&sect-num;.6.3"  width="390" height="182" screenshot="timers/uniform_random_timer.gif">
+<component name="Uniform Random Timer" index="&sect-num;.6.3" screenshot="timers/uniform_random_timer.png">
 
 <description><p>This timer pauses each thread request for a random amount of time, with
 each time interval having the same probability of occurring. The total delay
@@ -3881,7 +3881,7 @@ to the random delay.</property>
 
 </component>
 
-<component name="Constant Throughput Timer" index="&sect-num;.6.4"  width="542" height="155" screenshot="timers/constant_throughput_timer.png">
+<component name="Constant Throughput Timer" index="&sect-num;.6.4" screenshot="timers/constant_throughput_timer.png">
 
 <description><p>This timer introduces variable pauses, calculated to keep the total throughput (in terms of samples per minute) as close as possible to a give figure. Of course the throughput will be lower if the server is not capable of handling it, or if other timers or time-consuming test elements prevent it.</p>
 <p>
@@ -3920,7 +3920,7 @@ Note that the throughput value should not be changed too often during a test
 </properties>
 </component>
 
-<component name="Synchronizing Timer" index="&sect-num;.6.5"  width="335" height="146" screenshot="timers/sync_timer.png">
+<component name="Synchronizing Timer" index="&sect-num;.6.5" screenshot="timers/sync_timer.png">
 
 <description>
 <p>
@@ -3943,7 +3943,7 @@ points of the test plan.
 The BeanShell Timer can be used to generate a delay.
 </p>
 <p>
-<b>For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
+<b>For full details on using BeanShell, please see the <a href="http://www.beanshell.org/">BeanShell website.</a></b>
 </p>
 <p>
 The test element supports the ThreadListener and TestListener methods.
@@ -4204,7 +4204,7 @@ To add a new value to the series, click the 'Add User' button and fill in the de
 The BeanShell PreProcessor allows arbitrary code to be applied before taking a sample.
 </p>
 <p>
-<b>For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
+<b>For full details on using BeanShell, please see the <a href="http://www.beanshell.org/">BeanShell website.</a></b>
 </p>
 <p>
 The test element supports the ThreadListener and TestListener methods.
@@ -4525,7 +4525,7 @@ The BeanShell PreProcessor allows arbitrary code to be applied after taking a sa
 </p>
 <p>For JMeter versions after 2.2 the BeanShell Post-Processor no longer ignores samples with zero-length result data</p>
 <p>
-<b>For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
+<b>For full details on using BeanShell, please see the <a href="http://www.beanshell.org/">BeanShell website.</a></b>
 </p>
 <p>
 The test element supports the ThreadListener and TestListener methods.
