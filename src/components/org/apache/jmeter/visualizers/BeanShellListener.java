@@ -70,8 +70,6 @@ public class BeanShellListener extends BeanShellTestElement
     }
 
     public void add(SampleResult sample) {
-        // TODO Auto-generated method stub
-
     }
 
     public boolean isStats() { // Needed by Visualizer interface
