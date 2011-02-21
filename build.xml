@@ -1517,6 +1517,13 @@ run JMeter unless all the JMeter jars are added.
     </delete>
   </target>
 
+  <!-- Use this before running docs-print to ensure image files are synchronised -->
+  <target name="clean-docs-images">
+      <delete>
+          <fileset dir="${dest.docs}/images" excludes=".svn/**"/>
+      </delete>
+  </target>
+
   <target name="clean-apidocs">
     <delete>
         <fileset dir="${dest.docs.api}" excludes=".svn/**"/>
