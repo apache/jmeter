@@ -113,6 +113,7 @@ This is internal to the workings of the JMeter Proxy &amp; its GUI, so should no
 
 <h3>I18N</h3>
 <ul>
+<li>Bug 50811 - Incomplete spanish translation</li>
 </ul>
 
 <h3>General</h3>
