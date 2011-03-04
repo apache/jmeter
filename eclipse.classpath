@@ -22,7 +22,6 @@
  -->
 <classpath>
     <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-    <classpathentry kind="output" path="build"/>
 	<classpathentry kind="src" output="build/components" path="src/components"/>
 	<classpathentry kind="src" output="build/core" path="src/core"/>
 	<classpathentry kind="src" output="build/examples" path="src/examples"/>
@@ -41,6 +40,7 @@
 	<classpathentry kind="src" output="build/protocol/tcp" path="src/protocol/tcp"/>
 	<classpathentry kind="src" output="build/reports" path="src/reports"/>
 	<classpathentry kind="src" output="build/test" path="test/src"/>
+    <classpathentry kind="lib" path="lib/activation-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/avalon-framework-4.1.4.jar"/>
 	<classpathentry kind="lib" path="lib/bsf-2.4.0.jar"/>
     <classpathentry kind="lib" path="lib/bsf-api-3.1.jar"/>
@@ -57,17 +57,19 @@
 	<classpathentry kind="lib" path="lib/excalibur-instrument-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/excalibur-logger-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/excalibur-pool-1.2.jar"/>
-    <classpathentry kind="lib" path="lib/geronimo-activation_1.1_spec-1.1.jar"/>
-    <classpathentry kind="lib" path="lib/geronimo-javamail_1.4_mail-1.8.1.jar"/>
     <classpathentry kind="lib" path="lib/geronimo-jms_1.1_spec-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/htmllexer-2.0-20060923.jar"/>
 	<classpathentry kind="lib" path="lib/htmlparser-2.0-20060923.jar"/>
+    <classpathentry kind="lib" path="lib/httpclient-4.1.jar"/>
+    <classpathentry kind="lib" path="lib/httpcore-4.1.jar"/>
+    <classpathentry kind="lib" path="lib/httpmime-4.1.jar"/>
 	<classpathentry kind="lib" path="lib/jCharts-0.7.5.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/js-1.6R5.jar"/>
     <classpathentry kind="lib" path="lib/jtidy-r938.jar"/>
     <classpathentry kind="lib" path="lib/junit-4.8.1.jar"/>
 	<classpathentry kind="lib" path="lib/logkit-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/mail-1.4.3.jar"/>
 	<classpathentry kind="lib" path="lib/oro-2.0.8.jar"/>
 	<classpathentry kind="lib" path="lib/serializer-2.7.1.jar"/>
 	<classpathentry kind="lib" path="lib/soap-2.3.1.jar"/>
@@ -77,4 +79,5 @@
 	<classpathentry kind="lib" path="lib/xmlgraphics-commons-1.3.1.jar"/>
 	<classpathentry kind="lib" path="lib/xpp3_min-1.1.4c.jar"/>
 	<classpathentry kind="lib" path="lib/xstream-1.3.1.jar"/>
+    <classpathentry kind="output" path="build"/>
 </classpath>
