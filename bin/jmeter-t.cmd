@@ -51,7 +51,7 @@ pushd %~dp1
 
 rem Prepend the directory in which this script resides in case not on path
 
-call "%~dp0"jmeter -j "%~n1.log" -t "%~nx1"
+call "%~dp0"jmeter -j "%~n1.log" -t "%~nx1" %2 %3 %4 %5 %6 %7 %8 %9
 
 popd
 
