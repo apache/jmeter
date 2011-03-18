@@ -36,7 +36,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * This class implements the JMS Subcriber sampler.
+ * This class implements the JMS Subscriber sampler.
  * It supports both receive and onMessage strategies via the ReceiveSubscriber class.
  * 
  */
@@ -55,7 +55,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     // Default wait (ms) for a message if timeouts are not enabled
-    // This is the maximimum time the sampler can be blocked.
+    // This is the maximum time the sampler can be blocked.
     private static final long DEFAULT_WAIT = 500L;
 
     // No need to synch/ - only used by sampler and ClientPool (which does its own synch)
@@ -64,10 +64,10 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     private transient volatile boolean interrupted = false;
 
     private transient long timeout;
-
+    
     private transient boolean useReceive;
 
-    // This will be null iff initialisation succeeeds.
+    // This will be null if initialization succeeds.
     private transient Exception exceptionDuringInit;
 
     // If true, start/stop subscriber for each sample
@@ -77,6 +77,8 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     private static final String CLIENT_CHOICE = "jms.client_choice"; // $NON-NLS-1$
     private static final String TIMEOUT = "jms.timeout"; // $NON-NLS-1$
     private static final String TIMEOUT_DEFAULT = "";
+    private static final String DURABLE_SUBSCRIPTION_ID = "jms.durableSubscriptionId"; // $NON-NLS-1$
+    private static final String DURABLE_SUBSCRIPTION_ID_DEFAULT = "";
     private static final String STOP_BETWEEN = "jms.stop_between_samples"; // $NON-NLS-1$
     
     private transient boolean START_ON_SAMPLE = false;
@@ -93,7 +95,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
      */
     private void initListenerClient() throws JMSException, NamingException {
         SUBSCRIBER = new ReceiveSubscriber(0, getUseJNDIPropertiesAsBoolean(), getJNDIInitialContextFactory(),
-                    getProviderUrl(), getConnectionFactory(), getDestination(), 
+                    getProviderUrl(), getConnectionFactory(), getDestination(), getDurableSubscriptionId(),
                     isUseAuth(), getUsername(), getPassword());
         log.debug("SubscriberSampler.initListenerClient called");
     }
@@ -106,7 +108,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     private void initReceiveClient() throws NamingException, JMSException {
         SUBSCRIBER = new ReceiveSubscriber(getUseJNDIPropertiesAsBoolean(),
                 getJNDIInitialContextFactory(), getProviderUrl(), getConnectionFactory(), getDestination(),
-                isUseAuth(), getUsername(), getPassword());
+                getDurableSubscriptionId(), isUseAuth(), getUsername(), getPassword());
         log.debug("SubscriberSampler.initReceiveClient called");
     }
 
@@ -352,6 +354,14 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
 
     public void setTimeout(String timeout){
         setProperty(TIMEOUT, timeout, TIMEOUT_DEFAULT);        
+    }
+    
+    public String getDurableSubscriptionId(){
+        return getPropertyAsString(DURABLE_SUBSCRIPTION_ID);
+    }
+
+    public void setDurableSubscriptionId(String durableSubscriptionId){
+        setProperty(DURABLE_SUBSCRIPTION_ID, durableSubscriptionId, DURABLE_SUBSCRIPTION_ID_DEFAULT);        
     }
 
     // This was the old value that was checked for
