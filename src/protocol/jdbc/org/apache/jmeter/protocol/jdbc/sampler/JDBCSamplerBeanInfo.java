@@ -45,6 +45,7 @@ public class JDBCSamplerBeanInfo extends BeanInfoSupport {
                 "queryArguments", // $NON-NLS-1$
                 "queryArgumentsTypes", // $NON-NLS-1$
                 "variableNames", // $NON-NLS-1$
+                "resultVariable", // $NON-NLS-1$
                 });
 
         PropertyDescriptor p = property("dataSource"); // $NON-NLS-1$
@@ -60,6 +61,10 @@ public class JDBCSamplerBeanInfo extends BeanInfoSupport {
         p.setValue(DEFAULT, "");
 
         p = property("variableNames"); // $NON-NLS-1$
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, "");
+
+        p = property("resultVariable"); // $NON-NLS-1$
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
 
