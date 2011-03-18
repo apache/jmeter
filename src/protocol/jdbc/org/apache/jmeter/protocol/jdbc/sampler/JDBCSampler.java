@@ -28,10 +28,12 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.text.StrBuilder;
@@ -118,6 +120,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
     private String queryArguments = ""; // $NON-NLS-1$
     private String queryArgumentsTypes = ""; // $NON-NLS-1$
     private String variableNames = ""; // $NON-NLS-1$
+    private String resultVariable = "";
 
     /**
      *  Cache of PreparedStatements stored in a per-connection basis. Each entry of this
@@ -425,17 +428,29 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
                 sb.append('\t');
             }
         }
+        
 
-        JMeterVariables jmvars = null;
+        JMeterVariables jmvars = getThreadContext().getVariables();
         String varnames[] = getVariableNames().split(COMMA);
-        if (varnames.length > 0){
-            jmvars = getThreadContext().getVariables();
+        String resultVariable = getResultVariable().trim();
+        List<Map<String, Object> > results = null;
+        if(resultVariable.length() > 0) {
+            results = new ArrayList<Map<String,Object> >();
+            jmvars.putObject(resultVariable, results);
         }
         int j = 0;
         while (rs.next()) {
+        	Map<String, Object> row = null;
             j++;
             for (int i = 1; i <= numColumns; i++) {
                 Object o = rs.getObject(i);
+                if(results != null) {
+                	if(row == null) {
+                		row = new HashMap<String, Object>(numColumns);
+                		results.add(row);
+                	}
+                	row.put(meta.getColumnName(i), o);
+                }
                 if (o instanceof byte[]) {
                     o = new String((byte[]) o, ENCODING);
                 }
@@ -445,7 +460,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
                 } else {
                     sb.append('\t');
                 }
-                if (jmvars != null && i <= varnames.length) {
+                if (i <= varnames.length) { // i starts at 1
                     String name = varnames[i - 1].trim();
                     if (name.length()>0){ // Save the value in the variable if present
                         jmvars.put(name+UNDERSCORE+j, o == null ? null : o.toString());
@@ -587,4 +602,19 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
     public void setVariableNames(String variableNames) {
         this.variableNames = variableNames;
     }
+
+    /**
+     * @return the resultVariable
+     */
+	public String getResultVariable() {
+		return resultVariable ;
+	}
+
+    /**
+     * @param resultVariable the variable name in which results will be stored
+     */
+	public void setResultVariable(String resultVariable) {
+		this.resultVariable = resultVariable;
+	}
+    
 }
