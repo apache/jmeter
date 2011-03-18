@@ -28,6 +28,8 @@ import javax.swing.JTextField;
 
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
+import org.apache.jmeter.gui.ServerPanel;
+import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.tcp.sampler.TCPSampler;
 import org.apache.jmeter.testelement.TestElement;
@@ -38,16 +40,13 @@ public class TCPConfigGui extends AbstractConfigGui {
 
     private static final long serialVersionUID = 240L;
 
+    private ServerPanel serverPanel;
+    
     private JLabeledTextField classname;
-
-    private JTextField server;
 
     private JCheckBox reUseConnection;
 
-    private JTextField port;
-
     // NOTUSED yet private JTextField filename;
-    private JTextField timeout;
 
     private JCheckBox setNoDelay;
 
@@ -73,12 +72,13 @@ public class TCPConfigGui extends AbstractConfigGui {
         super.configure(element);
         // N.B. this will be a config element, so we cannot use the getXXX() methods
         classname.setText(element.getPropertyAsString(TCPSampler.CLASSNAME));
-        server.setText(element.getPropertyAsString(TCPSampler.SERVER));
+        serverPanel.setServer(element.getPropertyAsString(TCPSampler.SERVER));
         // Default to original behaviour, i.e. re-use connection
         reUseConnection.setSelected(element.getPropertyAsBoolean(TCPSampler.RE_USE_CONNECTION,true));
-        port.setText(element.getPropertyAsString(TCPSampler.PORT));
+        serverPanel.setPort(element.getPropertyAsString(TCPSampler.PORT));
         // filename.setText(element.getPropertyAsString(TCPSampler.FILENAME));
-        timeout.setText(element.getPropertyAsString(TCPSampler.TIMEOUT));
+        serverPanel.setResponseTimeout(element.getPropertyAsString(TCPSampler.TIMEOUT));
+        serverPanel.setConnectTimeout(element.getPropertyAsString(TCPSampler.TIMEOUT_CONNECT));
         setNoDelay.setSelected(element.getPropertyAsBoolean(TCPSampler.NODELAY));
         requestData.setText(element.getPropertyAsString(TCPSampler.REQUEST));
     }
@@ -98,12 +98,13 @@ public class TCPConfigGui extends AbstractConfigGui {
         configureTestElement(element);
         // N.B. this will be a config element, so we cannot use the setXXX() methods
         element.setProperty(TCPSampler.CLASSNAME, classname.getText(), "");
-        element.setProperty(TCPSampler.SERVER, server.getText());
+        element.setProperty(TCPSampler.SERVER, serverPanel.getServer());
         element.setProperty(TCPSampler.RE_USE_CONNECTION, reUseConnection.isSelected());
-        element.setProperty(TCPSampler.PORT, port.getText());
+        element.setProperty(TCPSampler.PORT, serverPanel.getPort());
         // element.setProperty(TCPSampler.FILENAME, filename.getText());
         element.setProperty(TCPSampler.NODELAY, setNoDelay.isSelected());
-        element.setProperty(TCPSampler.TIMEOUT, timeout.getText());
+        element.setProperty(TCPSampler.TIMEOUT, serverPanel.getResponseTimeout());
+        element.setProperty(TCPSampler.TIMEOUT_CONNECT, serverPanel.getConnectTimeout(),"");
         element.setProperty(TCPSampler.REQUEST, requestData.getText());
     }
 
@@ -114,26 +115,13 @@ public class TCPConfigGui extends AbstractConfigGui {
     public void clearGui() {
         super.clearGui();
 
+        serverPanel.clear();
         classname.setText(""); //$NON-NLS-1$
-        server.setText(""); //$NON-NLS-1$
-        port.setText(""); //$NON-NLS-1$
-        timeout.setText(""); //$NON-NLS-1$
         requestData.setText(""); //$NON-NLS-1$
         reUseConnection.setSelected(true);
         setNoDelay.setSelected(false);
     }
 
-    private JPanel createTimeoutPanel() {
-        JLabel label = new JLabel(JMeterUtils.getResString("tcp_timeout")); // $NON-NLS-1$
-
-        timeout = new JTextField(10);
-        label.setLabelFor(timeout);
-
-        JPanel timeoutPanel = new JPanel(new BorderLayout(5, 0));
-        timeoutPanel.add(label, BorderLayout.WEST);
-        timeoutPanel.add(timeout, BorderLayout.CENTER);
-        return timeoutPanel;
-    }
 
     private JPanel createNoDelayPanel() {
         JLabel label = new JLabel(JMeterUtils.getResString("tcp_nodelay")); // $NON-NLS-1$
@@ -145,18 +133,6 @@ public class TCPConfigGui extends AbstractConfigGui {
         nodelayPanel.add(label, BorderLayout.WEST);
         nodelayPanel.add(setNoDelay, BorderLayout.CENTER);
         return nodelayPanel;
-    }
-
-    private JPanel createServerPanel() {
-        JLabel label = new JLabel(JMeterUtils.getResString("server")); // $NON-NLS-1$
-
-        server = new JTextField(10);
-        label.setLabelFor(server);
-
-        JPanel serverPanel = new JPanel(new BorderLayout(5, 0));
-        serverPanel.add(label, BorderLayout.WEST);
-        serverPanel.add(server, BorderLayout.CENTER);
-        return serverPanel;
     }
 
     private JPanel createClosePortPanel() {
@@ -171,18 +147,6 @@ public class TCPConfigGui extends AbstractConfigGui {
         return closePortPanel;
     }
 
-    private JPanel createPortPanel() {
-        JLabel label = new JLabel(JMeterUtils.getResString("tcp_port")); //$NON-NLS-1$
-
-        port = new JTextField(10);
-        label.setLabelFor(port);
-
-        JPanel PortPanel = new JPanel(new BorderLayout(5, 0));
-        PortPanel.add(label, BorderLayout.WEST);
-        PortPanel.add(port, BorderLayout.CENTER);
-        return PortPanel;
-    }
-
     private JPanel createRequestPanel() {
         JLabel reqLabel = new JLabel(JMeterUtils.getResString("tcp_request_data")); // $NON-NLS-1$
         requestData = new JTextArea(3, 0);
@@ -193,7 +157,6 @@ public class TCPConfigGui extends AbstractConfigGui {
         reqDataPanel.add(reqLabel, BorderLayout.WEST);
         reqDataPanel.add(requestData, BorderLayout.CENTER);
         return reqDataPanel;
-
     }
 
     // private JPanel createFilenamePanel()//Not used yet
@@ -214,6 +177,8 @@ public class TCPConfigGui extends AbstractConfigGui {
     private void init() {
         setLayout(new BorderLayout(0, 5));
 
+        serverPanel = new ServerPanel();
+        
         if (displayName) {
             setBorder(makeBorder());
             add(makeTitlePanel(), BorderLayout.NORTH);
@@ -222,12 +187,12 @@ public class TCPConfigGui extends AbstractConfigGui {
         VerticalPanel mainPanel = new VerticalPanel();
         classname = new JLabeledTextField(JMeterUtils.getResString("tcp_classname"));
         mainPanel.add(classname);
-        final JPanel serverPanel = createServerPanel();
-        serverPanel.add(createPortPanel(), BorderLayout.EAST);
         mainPanel.add(serverPanel);
-        mainPanel.add(createClosePortPanel());
-        mainPanel.add(createTimeoutPanel());
-        mainPanel.add(createNoDelayPanel());
+        
+        HorizontalPanel optionsPanel = new HorizontalPanel();
+        optionsPanel.add(createClosePortPanel());
+        optionsPanel.add(createNoDelayPanel());
+        mainPanel.add(optionsPanel);
         mainPanel.add(createRequestPanel());
 
         // mainPanel.add(createFilenamePanel());
