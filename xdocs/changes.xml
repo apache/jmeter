@@ -157,6 +157,7 @@ Fixed RMI startup to provide location of JMX file relative to user.dir.
 <li>Bug 49862 - Improve SMTPSampler Request output.</li>
 <li>Bug 50268 - Adds static and dynamic destinations to JMS Publisher</li>
 <li>JMS Subscriber - Add dynamic destination</li>
+<li>Bug 50666 - JMSSubscriber: support for durable subscriptions</li>
 </ul>
 
 <h3>Controllers</h3>

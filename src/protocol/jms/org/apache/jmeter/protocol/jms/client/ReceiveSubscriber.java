@@ -29,6 +29,7 @@ import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
 import javax.jms.Session;
+import javax.jms.Topic;
 import javax.naming.Context;
 import javax.naming.NamingException;
 
@@ -81,14 +82,14 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
      */
     public ReceiveSubscriber(boolean useProps, 
             String initialContextFactory, String providerUrl, String connfactory, String destinationName,
-            boolean useAuth, 
+            String durableSubscriptionId, boolean useAuth, 
             String securityPrincipal, String securityCredentials) throws NamingException, JMSException {
         Context ctx = InitialContextFactory.getContext(useProps, 
                 initialContextFactory, providerUrl, useAuth, securityPrincipal, securityCredentials);
         CONN = Utils.getConnection(ctx, connfactory);
         SESSION = CONN.createSession(false, Session.AUTO_ACKNOWLEDGE);
         Destination dest = Utils.lookupDestination(ctx, destinationName);
-        SUBSCRIBER = SESSION.createConsumer(dest);
+       	SUBSCRIBER = createSubscriber(SESSION, dest, durableSubscriptionId);
         queue = null;
         log.debug("<init> complete");
     }
@@ -114,14 +115,14 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
      */
     public ReceiveSubscriber(int queueSize, boolean useProps, 
             String initialContextFactory, String providerUrl, String connfactory, String destinationName,
-            boolean useAuth, 
+            String durableSubscriptionId, boolean useAuth, 
             String securityPrincipal, String securityCredentials) throws NamingException, JMSException {
         Context ctx = InitialContextFactory.getContext(useProps, 
                 initialContextFactory, providerUrl, useAuth, securityPrincipal, securityCredentials);
         CONN = Utils.getConnection(ctx, connfactory);
         SESSION = CONN.createSession(false, Session.AUTO_ACKNOWLEDGE);
         Destination dest = Utils.lookupDestination(ctx, destinationName);
-        SUBSCRIBER = SESSION.createConsumer(dest);
+        SUBSCRIBER = createSubscriber(SESSION, dest, durableSubscriptionId);
         if (queueSize <=0) {
             queue = new LinkedBlockingQueue<Message>();
         } else {
@@ -129,6 +130,27 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
         }
         SUBSCRIBER.setMessageListener(this);
         log.debug("<init> complete");
+    }
+    
+    /**
+     * Return a simple MessageConsumer or a TopicSubscriber (as a durable subscription)
+     * @param session
+     * 				JMS session	
+     * @param destination
+     * 				JMS destination, can be either topic or queue
+     * @param durableSubscriptionId 
+     * 				If neither empty nor null, this means that a durable 
+     * 				subscription will be used
+     * @return
+     * @throws JMSException
+     */
+    private MessageConsumer createSubscriber(Session session, 
+    		Destination destination, String durableSubscriptionId) throws JMSException {
+    	if (isEmpty(durableSubscriptionId)) {
+        	return  session.createConsumer(destination);
+        } else {
+        	return session.createDurableSubscriber((Topic) destination, durableSubscriptionId); 
+        }	
     }
 
     /**
@@ -203,5 +225,17 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
         if (!queue.offer(message)){
             log.warn("Could not add message to queue");
         }
+    }
+    
+    
+    /**
+     * Checks whether string is empty
+     * 
+     * @param s1
+     * @return True if input is null, an empty string, 
+     * 				or a white space-only string
+     */
+    private boolean isEmpty(String s1) {
+    	return (s1 == null || s1.trim().equals(""));
     }
 }
