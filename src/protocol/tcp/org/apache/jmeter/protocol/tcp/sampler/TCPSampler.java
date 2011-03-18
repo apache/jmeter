@@ -24,7 +24,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
@@ -61,6 +63,8 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
     public static final String NODELAY = "TCPSampler.nodelay"; //$NON-NLS-1$
 
     public static final String TIMEOUT = "TCPSampler.timeout"; //$NON-NLS-1$
+
+    public static final String TIMEOUT_CONNECT = "TCPSampler.ctimeout"; //$NON-NLS-1$
 
     public static final String REQUEST = "TCPSampler.request"; //$NON-NLS-1$
 
@@ -148,7 +152,9 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
         // Not in cache, so create new one and cache it
         try {
             closeSocket(); // Bug 44910 - close previous socket (if any)
-            con = new Socket(getServer(), getPort());
+            SocketAddress sockaddr = new InetSocketAddress(getServer(), getPort());
+            con = new Socket();
+            con.connect(sockaddr, getConnectTimeout());
             con.setSoTimeout(getTimeout());
             con.setTcpNoDelay(getNoDelay());
 
@@ -219,6 +225,14 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 
     public int getTimeout() {
         return getPropertyAsInt(TIMEOUT);
+    }
+
+    public void setConnectTimeout(String newTimeout) {
+        this.setProperty(TIMEOUT_CONNECT, newTimeout, "");
+    }
+
+    public int getConnectTimeout() {
+        return getPropertyAsInt(TIMEOUT_CONNECT, 0);
     }
 
     public void setNoDelay(String newNoDelay) {
