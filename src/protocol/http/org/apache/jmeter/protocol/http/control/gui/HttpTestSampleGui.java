@@ -20,10 +20,13 @@ package org.apache.jmeter.protocol.http.control.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
@@ -41,12 +44,17 @@ import org.apache.jorphan.gui.JLabeledTextField;
  * HTTP Sampler GUI
  *
  */
-public class HttpTestSampleGui extends AbstractSamplerGui {
+public class HttpTestSampleGui extends AbstractSamplerGui 
+    implements ItemListener {
     private static final long serialVersionUID = 240L;
 
     private MultipartUrlConfigGui urlConfigGui;
 
     private JCheckBox getImages;
+    
+    private JCheckBox concurrentDwn;
+    
+    private JTextField concurrentPool; 
 
     private JCheckBox isMon;
 
@@ -78,6 +86,8 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         final HTTPSamplerBase samplerBase = (HTTPSamplerBase) element;
         urlConfigGui.configure(element);
         getImages.setSelected(samplerBase.isImageParser());
+        concurrentDwn.setSelected(samplerBase.isConcurrentDwn());
+        concurrentPool.setText(samplerBase.getConcurrentPool());
         isMon.setSelected(samplerBase.isMonitor());
         useMD5.setSelected(samplerBase.useMD5());
         embeddedRE.setText(samplerBase.getEmbeddedUrlRE());
@@ -106,11 +116,21 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         final HTTPSamplerBase samplerBase = (HTTPSamplerBase) sampler;
         if (getImages.isSelected()) {
             samplerBase.setImageParser(true);
+            enableConcurrentDwn(true);
         } else {
             // The default is false, so we can remove the property to simplify JMX files
             // This also allows HTTPDefaults to work for this checkbox
             sampler.removeProperty(HTTPSamplerBase.IMAGE_PARSER);
+            enableConcurrentDwn(false);
         }
+        if (concurrentDwn.isSelected()) {
+            samplerBase.setConcurrentDwn(true);
+        } else {
+            // The default is false, so we can remove the property to simplify JMX files
+            // This also allows HTTPDefaults to work for this checkbox
+            sampler.removeProperty(HTTPSamplerBase.CONCURRENT_DWN);
+        }
+        samplerBase.setConcurrentPool(concurrentPool.getText());
         samplerBase.setMonitor(isMon.isSelected());
         samplerBase.setMD5(useMD5.isSelected());
         samplerBase.setEmbeddedUrlRE(embeddedRE.getText());
@@ -143,19 +163,38 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 
     protected JPanel createOptionalTasksPanel() {
         // OPTIONAL TASKS
-        JPanel optionalTasksPanel = new VerticalPanel();
+        final JPanel optionalTasksPanel = new VerticalPanel();
         optionalTasksPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
                 .getResString("optional_tasks"))); // $NON-NLS-1$
 
-        JPanel checkBoxPanel = new HorizontalPanel();
+        final JPanel checkBoxPanel = new HorizontalPanel();
         // RETRIEVE IMAGES
         getImages = new JCheckBox(JMeterUtils.getResString("web_testing_retrieve_images")); // $NON-NLS-1$
+        // add a listener to activate or not concurrent dwn.
+        getImages.addItemListener(new ItemListener() {
+            public void itemStateChanged(final ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) { enableConcurrentDwn(true); }
+                else { enableConcurrentDwn(false); }
+            }
+        });
+        // Download concurrent resources
+        concurrentDwn = new JCheckBox(JMeterUtils.getResString("web_testing_concurrent_download")); // $NON-NLS-1$
+        concurrentDwn.addItemListener(new ItemListener() {
+            public void itemStateChanged(final ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) { concurrentPool.setEnabled(true); }
+                else { concurrentPool.setEnabled(false); }
+            }
+        });
+        concurrentPool = new JTextField(2); // 2 column size
+        concurrentPool.setMaximumSize(new Dimension(30,20));
         // Is monitor
         isMon = new JCheckBox(JMeterUtils.getResString("monitor_is_title")); // $NON-NLS-1$
         // Use MD5
         useMD5 = new JCheckBox(JMeterUtils.getResString("response_save_as_md5")); // $NON-NLS-1$
 
         checkBoxPanel.add(getImages);
+        checkBoxPanel.add(concurrentDwn);
+        checkBoxPanel.add(concurrentPool);
         checkBoxPanel.add(isMon);
         checkBoxPanel.add(useMD5);
         optionalTasksPanel.add(checkBoxPanel);
@@ -188,6 +227,9 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
     public void clearGui() {
         super.clearGui();
         getImages.setSelected(false);
+        concurrentDwn.setSelected(false);
+        concurrentPool.setText(String.valueOf(HTTPSamplerBase.CONCURRENT_POOL_SIZE));
+        enableConcurrentDwn(false);
         isMon.setSelected(false);
         useMD5.setSelected(false);
         urlConfigGui.clear();
@@ -196,4 +238,25 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
             sourceIpAddr.setText(""); // $NON-NLS-1$
         }
     }
+    
+    private void enableConcurrentDwn(boolean enable) {
+        if (enable) {
+            concurrentDwn.setEnabled(true);
+            if (concurrentDwn.isSelected()) {
+                concurrentPool.setEnabled(true);
+            }
+        } else {
+            concurrentDwn.setEnabled(false);
+            concurrentPool.setEnabled(false);
+        }
+    }
+
+    public void itemStateChanged(ItemEvent event) {
+        if (event.getStateChange() == ItemEvent.SELECTED) {
+            enableConcurrentDwn(true);
+        } else {
+            enableConcurrentDwn(false);
+        }
+    }
+
 }

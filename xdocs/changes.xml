@@ -147,6 +147,7 @@ Fixed RMI startup to provide location of JMX file relative to user.dir.
 <li>AJP Sampler now implements Interruptible</li>
 <li>Allow HTTP implementation to be selected at run-time</li>
 <li>Bug 50684 - Optionally disable Content-Type and Transfer-Encoding in Multipart POST</li>
+<li>Bug 50943 - Allowing concurrent downloads of embedded resources in html page</li>
 </ul>
 
 <h3>Other samplers</h3>
