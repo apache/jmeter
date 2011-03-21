@@ -188,6 +188,7 @@ Fixed RMI startup to provide location of JMX file relative to user.dir.
 
 <h3>I18N</h3>
 <ul>
+<li>Add French translation for the new labels and reduce size for some labels (by abbreviation) on HTTP Sample</li>
 </ul>
 
 <h3>General</h3>
