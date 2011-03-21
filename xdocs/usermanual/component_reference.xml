@@ -186,14 +186,14 @@ https.default.protocol=SSLv3
         <property name="Protocol" required="No">HTTP, HTTPS or FILE. Default: HTTP</property>
         <property name="Method" required="Yes">GET, POST, HEAD, TRACE, OPTIONS, PUT, DELETE</property>
         <property name="Content Encoding" required="No">Content encoding to be used (for POST and FILE)</property>
-		<property name="Redirect Automatically" required="Yes">
+		<property name="Redirect Automatically" required="No">
 		Sets the underlying http protocol handler to automatically follow redirects,
 		so they are not seen by JMeter, and thus will not appear as samples.
 		Should only be used for GET and HEAD requests.
 		The HttpClient sampler will reject attempts to use it for POST or PUT.
 		<b>Warning: see below for information on cookie and header handling.</b>
         </property>
-		<property name="Follow Redirects" required="Yes">
+		<property name="Follow Redirects" required="No">
 		This only has any effect if "Redirect Automatically" is not enabled.
 		If set, the JMeter sampler will check if the response is a redirect and follow it if so.
 		The initial redirect and further responses will appear as additional samples.
@@ -209,12 +209,12 @@ https.default.protocol=SSLv3
         If necessary, this behaviour can be suppressed by setting the JMeter property
         <code>httpsampler.redirect.removeslashdotdot=false</code>
 		</property>
-		<property name="Use KeepAlive" required="Yes">JMeter sets the Connection: keep-alive header. This does not work properly with the default HTTP implementation, as connection re-use is not under user-control. 
+		<property name="Use KeepAlive" required="No">JMeter sets the Connection: keep-alive header. This does not work properly with the default HTTP implementation, as connection re-use is not under user-control. 
                   It does work with the Jakarta httpClient implementation.</property>
-        <property name="Use multipart/form-data for HTTP POST" required="Yes">
+        <property name="Use multipart/form-data for HTTP POST" required="No">
         Use a multipart/form-data or application/x-www-form-urlencoded post request
         </property>
-        <property name="Browser-compatible headers" required="Yes">
+        <property name="Browser-compatible headers" required="No">
         When using multipart/form-data, this suppresses the Content-Type and 
         Content-Transfer-Encoding headers; only the Content-Disposition header is sent.
         </property>
@@ -260,8 +260,8 @@ In this case, the server, port and protocol are ignored; parameters are also ign
 and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSSs, etc. referenced in the file.
         See below for more details.
         </property>
-        <property name="Use as monitor" required="Yes">For use with the <complink name="Monitor Results"/> listener.</property>
-       <property name="Save response as MD5 hash?" required="Yes">
+        <property name="Use as monitor" required="No">For use with the <complink name="Monitor Results"/> listener.</property>
+       <property name="Save response as MD5 hash?" required="No">
        If this is selected, then the response is not stored in the sample result.
        Instead, the 32 character MD5 hash of the data is calculated and stored instead.
        This is intended for testing large amounts of data.
@@ -3099,7 +3099,7 @@ JMeter 2.3 and later treat all port values equally; a sampler that does not spec
         <property name="Implementation" required="No">Java, HttpClient3.1, HttpClient4. 
         If not specified the default depends on the value of the JMeter property
         <code>jmeter.httpsampler</code>, failing that, the Java implementation is used.</property>
-        <property name="Protocol" required="Yes">HTTP or HTTPS.</property>
+        <property name="Protocol" required="No">HTTP or HTTPS.</property>
         <property name="Method" required="No">HTTP GET or HTTP POST.</property>
         <property name="Path" required="No">The path to resource (for example, /servlets/myServlet). If the
         resource requires query string parameters, add them below in the "Send Parameters With the Request" section.
