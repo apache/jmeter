@@ -81,7 +81,7 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
 
 </component>
 
-<component name="HTTP Request" index="&sect-num;.1.2"  width="851" height="661" screenshot="http-request.png">
+<component name="HTTP Request" index="&sect-num;.1.2" screenshot="http-request.png">
 
 <description>
         <p>This sampler lets you send an HTTP/HTTPS request to a web server.  It
@@ -271,6 +271,8 @@ and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSS
         So if you only want to download embedded resources from http://example.com/, use the expression:
         http://example\.com/.*
         </property>
+        <property name="Use concurrent pool" required="No">Use a pool of concurrent connections to get embedded resources.</property>
+        <property name="Size" required="No">Pool size for concurrent connections used to get embedded resources.</property>
         <property name="Source IP address:" required="No">
         [Only for HTTP Request HTTPClient] 
         Override the default local IP address for this sample.
@@ -3076,7 +3078,7 @@ cookie table entries.</property>
 </component>
 
 <component name="HTTP Request Defaults" index="&sect-num;.4.5" 
-         width="678" height="447" screenshot="http-config/http-request-defaults.png">
+         screenshot="http-config/http-request-defaults.png">
 <description><p>This element lets you set default values that your HTTP Request controllers use.  For example, if you are
 creating a Test Plan with 25 HTTP Request controllers and all of the requests are being sent to the same server,
 you could add a single HTTP Request Defaults element with the "Server Name or IP" field filled in.  Then, when
@@ -3118,6 +3120,8 @@ JMeter 2.3 and later treat all port values equally; a sampler that does not spec
         <property name="Retrieve All Embedded Resources from HTML Files" required="No">Tell JMeter to parse the HTML file
 and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSSs, etc. referenced in the file.
         </property>
+        <property name="Use concurrent pool" required="No">Use a pool of concurrent connections to get embedded resources.</property>
+        <property name="Size" required="No">Pool size for concurrent connections used to get embedded resources.</property>
 </properties>
 </component>
 
