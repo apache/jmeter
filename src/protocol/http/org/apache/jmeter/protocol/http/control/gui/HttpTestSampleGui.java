@@ -114,22 +114,9 @@ public class HttpTestSampleGui extends AbstractSamplerGui
         sampler.clear();
         urlConfigGui.modifyTestElement(sampler);
         final HTTPSamplerBase samplerBase = (HTTPSamplerBase) sampler;
-        if (getImages.isSelected()) {
-            samplerBase.setImageParser(true);
-            enableConcurrentDwn(true);
-        } else {
-            // The default is false, so we can remove the property to simplify JMX files
-            // This also allows HTTPDefaults to work for this checkbox
-            sampler.removeProperty(HTTPSamplerBase.IMAGE_PARSER);
-            enableConcurrentDwn(false);
-        }
-        if (concurrentDwn.isSelected()) {
-            samplerBase.setConcurrentDwn(true);
-        } else {
-            // The default is false, so we can remove the property to simplify JMX files
-            // This also allows HTTPDefaults to work for this checkbox
-            sampler.removeProperty(HTTPSamplerBase.CONCURRENT_DWN);
-        }
+        samplerBase.setImageParser(getImages.isSelected());
+        enableConcurrentDwn(getImages.isSelected());
+        samplerBase.setConcurrentDwn(concurrentDwn.isSelected());
         samplerBase.setConcurrentPool(concurrentPool.getText());
         samplerBase.setMonitor(isMon.isSelected());
         samplerBase.setMD5(useMD5.isSelected());
