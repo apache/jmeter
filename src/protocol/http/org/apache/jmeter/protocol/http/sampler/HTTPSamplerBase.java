@@ -1638,11 +1638,11 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @return true if used
      */
     public boolean isConcurrentDwn() {
-        return getPropertyAsBoolean(CONCURRENT_DWN);
+        return getPropertyAsBoolean(CONCURRENT_DWN, false);
     }
 
     public void setConcurrentDwn(boolean concurrentDwn) {
-        setProperty(new BooleanProperty(CONCURRENT_DWN, concurrentDwn));
+        setProperty(CONCURRENT_DWN, concurrentDwn, false);
     }
     /**
      * Get the pool size for concurrent thread pool to get embedded resources.
