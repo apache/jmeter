@@ -28,12 +28,19 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.config.Argument;
@@ -48,9 +55,9 @@ import org.apache.jmeter.protocol.http.parser.HTMLParser;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
+import org.apache.jmeter.protocol.http.util.HTTPConstantsInterface;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.protocol.http.util.HTTPFileArgs;
-import org.apache.jmeter.protocol.http.util.HTTPConstantsInterface;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
@@ -139,10 +146,21 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public static final String DO_MULTIPART_POST = "HTTPSampler.DO_MULTIPART_POST"; // $NON-NLS-1$
 
     public static final String BROWSER_COMPATIBLE_MULTIPART  = "HTTPSampler.BROWSER_COMPATIBLE_MULTIPART"; // $NON-NLS-1$
+    
+    public static final String CONCURRENT_DWN = "HTTPSampler.concurrentDwn"; // $NON-NLS-1$
+    
+    public static final String CONCURRENT_POOL = "HTTPSampler.concurrentPool"; // $NON-NLS-1$
 
     //- JMX names
 
     public static final boolean BROWSER_COMPATIBLE_MULTIPART_MODE_DEFAULT = false; // The default setting to be used (i.e. historic)
+    
+    private static final long KEEPALIVETIME = 0; // for Thread Pool for resources but no need to use a special value?
+    
+    private static final long AWAIT_TERMINATION_TIMEOUT = 
+        JMeterUtils.getPropDefault("httpsampler.await_termination_timeout", 60); // $NON-NLS-1$ // default value: 60 secs 
+    
+    public static final int CONCURRENT_POOL_SIZE = 4; // Default concurrent pool size for download embedded resources
     
     
     public static final String DEFAULT_METHOD = GET; // $NON-NLS-1$
@@ -1107,6 +1125,10 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                     log.warn("Ignoring embedded URL match string: "+e.getMessage());
                 }
             }
+            
+            // For concurrent get resources
+            final ArrayList<ASyncSample> liste = new ArrayList<ASyncSample>();
+            
             while (urls.hasNext()) {
                 Object binURL = urls.next(); // See catch clause below
                 try {
@@ -1129,14 +1151,58 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                         if (pattern != null && localMatcher != null && !localMatcher.matches(urlStrEnc, pattern)) {
                             continue; // we have a pattern and the URL does not match, so skip it
                         }
-                        HTTPSampleResult binRes = sample(url, GET, false, frameDepth + 1);
-                        res.addSubResult(binRes);
-                        res.setSuccessful(res.isSuccessful() && binRes.isSuccessful());
+                        
+                        if (isConcurrentDwn()) {
+                            // if concurrent download emb. resources, add to a list for async gets later
+                            liste.add(new ASyncSample(url, GET, false, frameDepth + 1));
+                        } else {
+                            // default: serial download embedded resources
+                            HTTPSampleResult binRes = sample(url, GET, false, frameDepth + 1);
+                            res.addSubResult(binRes);
+                            res.setSuccessful(res.isSuccessful() && binRes.isSuccessful());
+                        }
+
                     }
                 } catch (ClassCastException e) { // TODO can this happen?
                     res.addSubResult(errorResult(new Exception(binURL + " is not a correct URI"), res));
                     res.setSuccessful(false);
                     continue;
+                }
+            }
+            
+            // IF for download concurrent embedded resources
+            if (isConcurrentDwn()) {
+                int poolSize = CONCURRENT_POOL_SIZE; // init with default value
+                try {
+                    poolSize = Integer.parseInt(getConcurrentPool());
+                } catch (NumberFormatException nfe) {
+                    log.warn("Concurrent download resources selected, "// $NON-NLS-1$
+                            + "but pool size value is bad. Use default value");// $NON-NLS-1$
+                }
+                // Thread pool Executor to get resources 
+                // use a LinkedBlockingQueue, note: max pool size doesn't effect
+                final ThreadPoolExecutor exec = new ThreadPoolExecutor(
+                        poolSize, poolSize, KEEPALIVETIME, TimeUnit.SECONDS,
+                        new LinkedBlockingQueue<Runnable>());
+
+                try {
+                    // sample all resources with threadpool
+                    final List<Future<HTTPSampleResult>> retExec = exec.invokeAll(liste);
+                    // call normal shutdown (wait ending all tasks)
+                    exec.shutdown();
+                    // put a timeout if tasks couldn't terminate
+                    exec.awaitTermination(AWAIT_TERMINATION_TIMEOUT, TimeUnit.SECONDS);
+
+                    // add result to main sampleResult
+                    for (Future<HTTPSampleResult> future : retExec) {
+                        final HTTPSampleResult binRes = future.get();
+                        res.addSubResult(binRes);
+                        res.setSuccessful(res.isSuccessful() && binRes.isSuccessful());
+                    }
+                } catch (InterruptedException ie) {
+                    log.warn("Interruped fetching embedded resources", ie); // $NON-NLS-1$
+                } catch (ExecutionException ee) {
+                    log.warn("Execution issue when fetching embedded resources", ee); // $NON-NLS-1$
                 }
             }
         }
@@ -1564,6 +1630,54 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      */
     public String getIpSource() {
         return getPropertyAsString(IP_SOURCE,"");
+    }
+    
+    /**
+     * Return if used a concurrent thread pool to get embedded resources.
+     *
+     * @return true if used
+     */
+    public boolean isConcurrentDwn() {
+        return getPropertyAsBoolean(CONCURRENT_DWN);
+    }
+
+    public void setConcurrentDwn(boolean concurrentDwn) {
+        setProperty(new BooleanProperty(CONCURRENT_DWN, concurrentDwn));
+    }
+    /**
+     * Get the pool size for concurrent thread pool to get embedded resources.
+     *
+     * @return the pool size
+     */
+    public String getConcurrentPool() {
+        return getPropertyAsString(CONCURRENT_POOL,"4");
+    }
+
+    public void setConcurrentPool(String poolSize) {
+        setProperty(new StringProperty(CONCURRENT_POOL, poolSize));
+    }
+
+    /**
+     * Callable class to sample asynchronously resources embedded
+     *
+     */
+    public class ASyncSample implements Callable<HTTPSampleResult> {
+        final private URL url;
+        final private String method;
+        final private boolean areFollowingRedirect;
+        final private int depth;
+
+        public ASyncSample(URL url, String method,
+                boolean areFollowingRedirect, int depth){
+            this.url = url;
+            this.method = method;
+            this.areFollowingRedirect = areFollowingRedirect;
+            this.depth = depth;
+        }
+
+        public HTTPSampleResult call() {
+            return sample(url, method, areFollowingRedirect, depth);
+        }
     }
 }
 
