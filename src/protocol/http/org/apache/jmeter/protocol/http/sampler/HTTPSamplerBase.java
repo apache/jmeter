@@ -1127,7 +1127,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             }
             
             // For concurrent get resources
-            final ArrayList<ASyncSample> liste = new ArrayList<ASyncSample>();
+            final List<Callable<HTTPSampleResult>> liste = new ArrayList<Callable<HTTPSampleResult>>();
             
             while (urls.hasNext()) {
                 Object binURL = urls.next(); // See catch clause below
