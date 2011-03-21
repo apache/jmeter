@@ -739,11 +739,11 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
 
     public boolean isImageParser() {
-        return getPropertyAsBoolean(IMAGE_PARSER);
+        return getPropertyAsBoolean(IMAGE_PARSER, false);
     }
 
     public void setImageParser(boolean parseImages) {
-        setProperty(new BooleanProperty(IMAGE_PARSER, parseImages));
+        setProperty(IMAGE_PARSER, parseImages, false);
     }
 
     /**
