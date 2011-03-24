@@ -442,6 +442,7 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
             int thn = peekInt();
             if((thn & 0xff00) == AJP_HEADER_BASE) {
                 name = headerTransArray[(thn&0xff)-1];
+                getInt(); // we need to use up the int now
             } else {
                 name = getString();
             }
