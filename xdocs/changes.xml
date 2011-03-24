@@ -82,6 +82,7 @@ This is internal to the workings of the JMeter Proxy &amp; its GUI, so should no
 <li>Bug 50178 - HeaderManager added as child of Thread Group can create concatenated HeaderManager names and OutOfMemoryException</li>
 <li>Bug 50392 - value is trimmed when sending the request in Multipart</li>
 <li>Bug 50686 - HeaderManager logging to verbose when merging instances</li>
+<li>Bug 50963 - AjpSampler throws java.lang.StringIndexOutOfBoundsException</li>
 </ul>
 
 <h3>Other Samplers</h3>
