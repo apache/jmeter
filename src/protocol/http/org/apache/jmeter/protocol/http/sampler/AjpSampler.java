@@ -437,7 +437,6 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
         StringBuilder sb = new StringBuilder();
         sb.append(HTTP_1_1 ).append(status).append(" ").append(msg).append(NEWLINE);//$NON-NLS-1$//$NON-NLS-2$
         for(int i=0; i < nh; i++) {
-            // Currently, no Tomcat version sends translated headers
             String name;
             int thn = peekInt();
             if((thn & 0xff00) == AJP_HEADER_BASE) {
