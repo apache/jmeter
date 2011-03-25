@@ -24,7 +24,6 @@ import java.text.MessageFormat;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractScopedAssertion;
 import org.apache.jmeter.testelement.property.IntegerProperty;
-import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jmeter.util.JMeterUtils;
 
 //@see org.apache.jmeter.assertions.SizeAssertionTest for unit tests
@@ -90,8 +89,8 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
     /**
      * Returns the size in bytes to be asserted.
      */
-    public long getAllowedSize() {
-        return getPropertyAsLong(SIZE_KEY);
+    public String getAllowedSize() {
+        return getPropertyAsString(SIZE_KEY);
     }
 
     /***************************************************************************
@@ -114,23 +113,14 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
     /**
      * Set the size that shall be asserted.
      * 
-     * @param size -
-     *            a number of bytes. Is not allowed to be negative. Use
-     *            Long.MAX_VALUE to indicate illegal or empty inputs. This will
-     *            result in not checking the assertion.
-     * 
-     * @throws IllegalArgumentException
-     *             If <code>size</code> is negative.
+     * @param size a number of bytes. 
      */
-    public void setAllowedSize(long size) throws IllegalArgumentException {
-        if (size < 0L) {
-            throw new IllegalArgumentException(JMeterUtils.getResString("argument_must_not_be_negative")); //$NON-NLS-1$
-        }
-        if (size == Long.MAX_VALUE) {
-            setProperty(new LongProperty(SIZE_KEY, 0));
-        } else {
-            setProperty(new LongProperty(SIZE_KEY, size));
-        }
+    public void setAllowedSize(String size) {
+            setProperty(SIZE_KEY, size);
+    }
+
+    public void setAllowedSize(long size) {
+        setProperty(SIZE_KEY, Long.toString(size));
     }
 
     /**
@@ -143,31 +133,32 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
      */
     private String compareSize(long resultSize) {
         String comparatorErrorMessage;
+        long allowedSize = Long.parseLong(getAllowedSize());
         boolean result = false;
         int comp = getCompOper();
         switch (comp) {
         case EQUAL:
-            result = (resultSize == getAllowedSize());
+            result = (resultSize == allowedSize);
             comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_equal"); //$NON-NLS-1$
             break;
         case NOTEQUAL:
-            result = (resultSize != getAllowedSize());
+            result = (resultSize != allowedSize);
             comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_notequal"); //$NON-NLS-1$
             break;
         case GREATERTHAN:
-            result = (resultSize > getAllowedSize());
+            result = (resultSize > allowedSize);
             comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_greater"); //$NON-NLS-1$
             break;
         case LESSTHAN:
-            result = (resultSize < getAllowedSize());
+            result = (resultSize < allowedSize);
             comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_less"); //$NON-NLS-1$
             break;
         case GREATERTHANEQUAL:
-            result = (resultSize >= getAllowedSize());
+            result = (resultSize >= allowedSize);
             comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_greaterequal"); //$NON-NLS-1$
             break;
         case LESSTHANEQUAL:
-            result = (resultSize <= getAllowedSize());
+            result = (resultSize <= allowedSize);
             comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_lessequal"); //$NON-NLS-1$
             break;
         default:
