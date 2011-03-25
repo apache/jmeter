@@ -180,6 +180,7 @@ Fixed RMI startup to provide location of JMX file relative to user.dir.
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
 <li>Bug 48015 - Proposal new icons for pre-processor, post-processor and assertion elements</li>
+<li>Bug 50962 - SizeAssertionGui validation prevents the use of variables for the size</li>
 </ul>
 
 <h3>Functions</h3>

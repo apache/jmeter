@@ -20,14 +20,10 @@ package org.apache.jmeter.assertions.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
@@ -40,7 +36,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 /**
  * GUI for {@link SizeAssertion}
  */
-public class SizeAssertionGui extends AbstractAssertionGui implements FocusListener, ActionListener {
+public class SizeAssertionGui extends AbstractAssertionGui implements ActionListener {
 
     private static final long serialVersionUID = 240L;
 
@@ -72,15 +68,8 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
      */
     public void modifyTestElement(TestElement el) {
         configureTestElement(el);
-        String sizeString = size.getText();
-        long assertionSize = 0;
-        try {
-            assertionSize = Long.parseLong(sizeString);
-        } catch (NumberFormatException e) {
-            assertionSize = Long.MAX_VALUE;
-        }
         SizeAssertion assertion = (SizeAssertion) el;
-        assertion.setAllowedSize(assertionSize);
+        assertion.setAllowedSize(size.getText());
         assertion.setCompOper(getState());
         saveScopeSettings(assertion);
     }
@@ -106,7 +95,7 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
     public void configure(TestElement el) {
         super.configure(el);
         SizeAssertion assertion = (SizeAssertion) el;
-        size.setText(String.valueOf(assertion.getAllowedSize()));
+        size.setText(assertion.getAllowedSize());
         setState(assertion.getCompOper());
         showScopeSettings(assertion);
     }
@@ -157,8 +146,7 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
                 JMeterUtils.getResString("size_assertion_size_test"))); //$NON-NLS-1$
 
         sizePanel.add(new JLabel(JMeterUtils.getResString("size_assertion_label"))); //$NON-NLS-1$
-        size = new JTextField(5);
-        size.addFocusListener(this);
+        size = new JTextField(12);
         sizePanel.add(size);
 
         sizePanel.add(createComparatorButtonPanel());
@@ -198,30 +186,6 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
         button.addActionListener(this);
         group.add(button);
         return button;
-    }
-
-    public void focusLost(FocusEvent e) {
-        boolean isInvalid = false;
-        String sizeString = size.getText();
-        if (sizeString != null) {
-            try {
-                long assertionSize = Long.parseLong(sizeString);
-                if (assertionSize < 0) {
-                    isInvalid = true;
-                }
-            } catch (NumberFormatException ex) {
-                isInvalid = true;
-            }
-            if (isInvalid) {
-                JOptionPane.showMessageDialog(null,
-                        JMeterUtils.getResString("size_assertion_input_error"), //$NON-NLS-1$
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    }
-
-    public void focusGained(FocusEvent e) {
     }
 
     public void actionPerformed(ActionEvent e) {
