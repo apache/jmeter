@@ -27,6 +27,7 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
@@ -145,28 +146,33 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
             con = (Socket) cp.get(TCPKEY);
             if (con != null) {
                 log.debug(this + " Reusing connection " + con); //$NON-NLS-1$
-                return con;
             }
         }
-
-        // Not in cache, so create new one and cache it
+        if (con == null) {
+            // Not in cache, so create new one and cache it
+            try {
+                closeSocket(); // Bug 44910 - close previous socket (if any)
+                SocketAddress sockaddr = new InetSocketAddress(getServer(), getPort());
+                con = new Socket();
+                con.connect(sockaddr, getConnectTimeout());
+                log.debug("Created new connection " + con); //$NON-NLS-1$
+                cp.put(TCPKEY, con);
+            } catch (UnknownHostException e) {
+                log.warn("Unknown host for " + getLabel(), e);//$NON-NLS-1$
+                cp.put(ERRKEY, e.toString());
+            } catch (IOException e) {
+                log.warn("Could not create socket for " + getLabel(), e); //$NON-NLS-1$
+                cp.put(ERRKEY, e.toString());
+            }     
+        }
+        // (re-)Define connection params - Bug 50977 
         try {
-            closeSocket(); // Bug 44910 - close previous socket (if any)
-            SocketAddress sockaddr = new InetSocketAddress(getServer(), getPort());
-            con = new Socket();
-            con.connect(sockaddr, getConnectTimeout());
             con.setSoTimeout(getTimeout());
             con.setTcpNoDelay(getNoDelay());
-
             log.debug(this + "  Timeout " + getTimeout() + " NoDelay " + getNoDelay()); //$NON-NLS-1$
-            log.debug("Created new connection " + con); //$NON-NLS-1$
-            cp.put(TCPKEY, con);
-        } catch (UnknownHostException e) {
-            log.warn("Unknown host for " + getLabel(), e);//$NON-NLS-1$
-            cp.put(ERRKEY, e.toString());
-        } catch (IOException e) {
-            log.warn("Could not create socket for " + getLabel(), e); //$NON-NLS-1$
-            cp.put(ERRKEY, e.toString());
+        } catch (SocketException se) {
+            log.warn("Could not set timeout or nodelay for " + getLabel(), se); //$NON-NLS-1$
+            cp.put(ERRKEY, se.toString());
         }
         return con;
     }
