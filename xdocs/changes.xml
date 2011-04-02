@@ -163,6 +163,7 @@ Fixed RMI startup to provide location of JMX file relative to user.dir.
 <li>Bug 50666 - JMSSubscriber: support for durable subscriptions</li>
 <li>Bug 50937 - TCP Sampler does not provide for / honor connect timeout</li>
 <li>Bug 50569 - Jdbc Request Sampler to optionally store result set object data</li>
+<li>Bug 51011 - Mail Reader: upon authentication failure, tell what you tried</li>
 </ul>
 
 <h3>Controllers</h3>
