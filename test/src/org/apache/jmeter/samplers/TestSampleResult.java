@@ -212,8 +212,8 @@ public class TestSampleResult extends TestCase {
 
             // Check the sample times
             long allsamplesTime = sampleWithSubResultsTime + sample1Time + sample2Time;
-            if (totalTime < allsamplesTime) {
-                fail("Total: "+totalTime+" < sum(samples): "+ allsamplesTime);
+            if (totalTime+3 < allsamplesTime) { // Add fudge factor
+                fail("Total+3: "+totalTime+" < sum(samples): "+ allsamplesTime);
             }
             /*
              * The granularity of System.currentTimeMillis() - plus the fact that the nanoTime()
