@@ -328,6 +328,9 @@
     <include name="${lib.dir}/${excalibur-pool.jar}"/>
     <include name="${lib.dir}/${htmllexer.jar}"/>
     <include name="${lib.dir}/${htmlparser.jar}"/>
+    <include name="${lib.dir}/${httpclient.jar}"/>
+    <include name="${lib.dir}/${httpmime.jar}"/>
+    <include name="${lib.dir}/${httpcore.jar}"/>
     <include name="${lib.dir}/${jakarta-oro.jar}"/>
     <include name="${lib.dir}/${javamail.jar}"/>
     <include name="${lib.dir}/${jcharts.jar}"/>
