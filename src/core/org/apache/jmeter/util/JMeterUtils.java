@@ -36,10 +36,12 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map.Entry;
 import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.Random;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -73,6 +75,8 @@ public class JMeterUtils implements UnitTestManager {
             new Perl5Compiler());
 
     private static final String EXPERT_MODE_PROPERTY = "jmeter.expertMode"; // $NON-NLS-1$
+    
+    private static final String HEADER_CONTENT_LENGTH = "Content-Length"; // $NON-NLS-1$
 
     private static final String ENGLISH_LANGUAGE = Locale.ENGLISH.getLanguage();
 
@@ -1237,4 +1241,19 @@ public class JMeterUtils implements UnitTestManager {
         return linkedHeaders;
     }
     
+    /**
+     * Get Content-Length value from headers
+     * @param headers
+     * @return Content-Length value
+     */
+    public static int getHeaderContentLength(String headers) {
+        LinkedHashMap<String, String> lhm = JMeterUtils.parseHeaders(headers);
+        Set<Entry<String, String>> keySet = lhm.entrySet();
+        for (Entry<String, String> entry : keySet) {
+            if (entry.getKey().equals(HEADER_CONTENT_LENGTH)) {
+                return Integer.parseInt(entry.getValue());
+            }
+        }
+        return 0; // Content-Length not found
+    }
 }

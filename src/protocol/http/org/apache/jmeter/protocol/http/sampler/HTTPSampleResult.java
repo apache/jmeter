@@ -23,6 +23,7 @@ import java.net.URL;
 
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * This is a specialisation of the SampleResult class for the HTTP protocol.
@@ -31,6 +32,15 @@ import org.apache.jmeter.samplers.SampleResult;
 public class HTTPSampleResult extends SampleResult {
 
     private static final long serialVersionUID = 240L;
+    
+    private static final String GETBYTES_TYPE_DEFAULT = "default";
+    
+    private static final String GETBYTES_TYPE_HEAD_CONTENTLENGTH = "calculate_headers_size+content-length_value";
+    
+    private static final String GETBYTES_TYPE_HEAD_DEFAULT = "calculate_headers_size+default";
+
+    private static final String GETBYTES_TYPE = 
+        JMeterUtils.getPropDefault("http.getbytes.type", GETBYTES_TYPE_DEFAULT); // $NON-NLS-1$
 
     private String cookies = ""; // never null
 
@@ -215,4 +225,36 @@ public class HTTPSampleResult extends SampleResult {
         setResponseCode(HTTP_NO_CONTENT_CODE);
         setResponseMessage(HTTP_NO_CONTENT_MSG);
     }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.jmeter.samplers.SampleResult#getBytes()
+     */
+    @Override
+    public int getBytes() {
+        if (GETBYTES_TYPE.equals(GETBYTES_TYPE_HEAD_CONTENTLENGTH)) {
+            return calculateHeadersSize()
+                    + JMeterUtils.getHeaderContentLength(this.getResponseHeaders());
+        }
+        if (GETBYTES_TYPE.equals(GETBYTES_TYPE_HEAD_DEFAULT)) {
+            return calculateHeadersSize() + super.getBytes();
+        }
+        return super.getBytes(); // Default
+    }
+
+    /**
+     * Calculate response headers size
+     * 
+     * @return the size response headers (in bytes)
+     */
+    private int calculateHeadersSize() {
+        int headersSize = 0;
+        headersSize += 9 // Http proto length + 1 space (i.e.: "HTTP/1.x ")
+                + String.valueOf(this.getResponseCode()).length()
+                + this.getResponseMessage().length();
+        headersSize += this.getResponseHeaders().length();
+        return headersSize;
+    }
+    
 }
