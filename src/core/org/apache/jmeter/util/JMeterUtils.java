@@ -1241,19 +1241,4 @@ public class JMeterUtils implements UnitTestManager {
         return linkedHeaders;
     }
     
-    /**
-     * Get Content-Length value from headers
-     * @param headers
-     * @return Content-Length value
-     */
-    public static int getHeaderContentLength(String headers) {
-        LinkedHashMap<String, String> lhm = JMeterUtils.parseHeaders(headers);
-        Set<Entry<String, String>> keySet = lhm.entrySet();
-        for (Entry<String, String> entry : keySet) {
-            if (entry.getKey().equals(HEADER_CONTENT_LENGTH)) {
-                return Integer.parseInt(entry.getValue());
-            }
-        }
-        return 0; // Content-Length not found
-    }
 }
