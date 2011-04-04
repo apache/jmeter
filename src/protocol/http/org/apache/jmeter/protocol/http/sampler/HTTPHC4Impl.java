@@ -262,6 +262,15 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 res.setRedirectLocation(headerLocation.getValue());
             }
 
+            // record some sizes to allow HTTPSampleResult.getBytes() with different options
+            res.setContentLength((int) entity.getContentLength());
+            res.setHeadersSize(res.getResponseHeaders().replaceAll("\n", "\r\n") // $NON-NLS-1$ $NON-NLS-2$
+                    .length() + 2); // add 2 for a '\r\n' at end of headers (before data)
+            if (log.isDebugEnabled()) {
+                log.debug("ResponseHeadersSize=" + res.getHeadersSize() + " Content-Length=" + res.getContentLength()
+                        + " Total=" + (res.getHeadersSize() + res.getContentLength()));
+            }
+            
             // If we redirected automatically, the URL may have changed
             if (getAutoRedirects()){
                 HttpUriRequest req = (HttpUriRequest) localContext.getAttribute(ExecutionContext.HTTP_REQUEST);
