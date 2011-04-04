@@ -556,11 +556,22 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                 res.setEncodingAndType(ct);
             }
 
-            res.setResponseHeaders(getResponseHeaders(conn));
+            String responseHeaders = getResponseHeaders(conn);
+            res.setResponseHeaders(responseHeaders);
             if (res.isRedirect()) {
                 res.setRedirectLocation(conn.getHeaderField(HEADER_LOCATION));
             }
-
+            
+            // record some sizes to allow HTTPSampleResult.getBytes() with different options
+            String contentLength = conn.getHeaderField(HEADER_CONTENT_LENGTH);
+            res.setContentLength(contentLength != null ? Integer.parseInt(contentLength) : 0); // 0 to getBytes with responseData length
+            res.setHeadersSize(responseHeaders.replaceAll("\n", "\r\n") // $NON-NLS-1$ $NON-NLS-2$
+                    .length() + 2); // add 2 for a '\r\n' at end of headers (before data) 
+            if (log.isDebugEnabled()) {
+                log.debug("ResponseHeadersSize=" + res.getHeadersSize() + " Content-Length=" + res.getContentLength()
+                        + " Total=" + (res.getHeadersSize() + res.getContentLength()));
+            }
+            
             // If we redirected automatically, the URL may have changed
             if (getAutoRedirects()){
                 res.setURL(conn.getURL());

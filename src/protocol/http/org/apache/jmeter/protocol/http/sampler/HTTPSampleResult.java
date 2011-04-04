@@ -33,18 +33,22 @@ public class HTTPSampleResult extends SampleResult {
 
     private static final long serialVersionUID = 240L;
     
-    private static final String GETBYTES_TYPE_DEFAULT = "default";
+    private static final boolean GETBYTES_INCLUDE_HEADERS = 
+        JMeterUtils.getPropDefault("http.getbytes.include.headers", false); // $NON-NLS-1$
     
-    private static final String GETBYTES_TYPE_HEAD_CONTENTLENGTH = "calculate_headers_size+content-length_value";
-    
-    private static final String GETBYTES_TYPE_HEAD_DEFAULT = "calculate_headers_size+default";
+    private static final boolean GETBYTES_USE_CONTENTLENGTH = 
+        JMeterUtils.getPropDefault("http.getbytes.use.contentlength", false); // $NON-NLS-1$
 
-    private static final String GETBYTES_TYPE = 
-        JMeterUtils.getPropDefault("http.getbytes.type", GETBYTES_TYPE_DEFAULT); // $NON-NLS-1$
+    private static final boolean GETBYTES_HEADERS_CONTENTLENGTH = 
+        GETBYTES_INCLUDE_HEADERS && GETBYTES_USE_CONTENTLENGTH ? true : false;
 
     private String cookies = ""; // never null
 
     private String method;
+    
+    private int headersSize = 0;
+    
+    private int contentLength = 0;
 
     /**
      * The raw value of the Location: header; may be null.
@@ -225,6 +229,38 @@ public class HTTPSampleResult extends SampleResult {
         setResponseCode(HTTP_NO_CONTENT_CODE);
         setResponseMessage(HTTP_NO_CONTENT_MSG);
     }
+    
+    /**
+     * Set the headers size in bytes
+     * 
+     * @param size
+     */
+    public void setHeadersSize(int size) {
+        this.headersSize = size;
+    }
+    
+    /**
+     * Get the headers size in bytes
+     * 
+     * @return the headers size
+     */
+    public int getHeadersSize() {
+        return headersSize;
+    }
+
+    /**
+     * @return the contentLength
+     */
+    public int getContentLength() {
+        return contentLength == 0 ? super.getBytes() : contentLength;
+    }
+
+    /**
+     * @param contentLength the contentLength to set
+     */
+    public void setContentLength(int contentLength) {
+        this.contentLength = contentLength;
+    }
 
     /*
      * (non-Javadoc)
@@ -233,28 +269,14 @@ public class HTTPSampleResult extends SampleResult {
      */
     @Override
     public int getBytes() {
-        if (GETBYTES_TYPE.equals(GETBYTES_TYPE_HEAD_CONTENTLENGTH)) {
-            return calculateHeadersSize()
-                    + JMeterUtils.getHeaderContentLength(this.getResponseHeaders());
-        }
-        if (GETBYTES_TYPE.equals(GETBYTES_TYPE_HEAD_DEFAULT)) {
-            return calculateHeadersSize() + super.getBytes();
+        if (GETBYTES_HEADERS_CONTENTLENGTH) {
+            return headersSize + contentLength;
+        } else if (GETBYTES_INCLUDE_HEADERS) {
+            return headersSize + super.getBytes();
+        } else if (GETBYTES_USE_CONTENTLENGTH) {
+            return contentLength;
         }
         return super.getBytes(); // Default
-    }
-
-    /**
-     * Calculate response headers size
-     * 
-     * @return the size response headers (in bytes)
-     */
-    private int calculateHeadersSize() {
-        int headersSize = 0;
-        headersSize += 9 // Http proto length + 1 space (i.e.: "HTTP/1.x ")
-                + String.valueOf(this.getResponseCode()).length()
-                + this.getResponseMessage().length();
-        headersSize += this.getResponseHeaders().length();
-        return headersSize;
     }
     
 }
