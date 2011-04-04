@@ -334,14 +334,12 @@ The HttpClient version of the sampler supports emulation of slow connections; se
 #httpclient.socket.https.cps=0
 </pre>
 <p><b>Method to calculate Response size</b><br></br>
-An optional property to allow change the method to get response size:<br></br>
-<ul><li>Default behavior: Size in bytes is the response data length (without response headers)
-<pre>http.getbytes.type=default</pre></li>
-<li>Response headers length and default (response data length)
-<pre>http.getbytes.type=calculate_headers_size+default</pre></li>
-<li>Response headers length and value of "Content-length" header (generally provide by web server)<br></br>
+Optional properties to allow change the method to get response size:<br></br>
+<ul><li>Include the headers length with the response data length
+<pre>http.getbytes.include.headers=false</pre></li>
+<li>Uses value of "Content-length" header (generally provide by web server), rather than decompressed response data length<br></br>
 Useful when web server uses a deflate/gzip method to compress response data
-<pre>http.getbytes.type=calculate_headers_size+content-length_value</pre></li></ul>
+<pre>http.getbytes.use.contentlength=false</pre></li></ul>
 </p>
 <links>
         <link href="test_plan.html#assertions">Assertion</link>
