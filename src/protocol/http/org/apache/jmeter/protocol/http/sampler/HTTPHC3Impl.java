@@ -289,6 +289,14 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
                 res.setRedirectLocation(headerLocation.getValue());
             }
 
+            // record some sizes to allow HTTPSampleResult.getBytes() with different options
+            res.setContentLength((int) httpMethod.getResponseContentLength());
+            res.setHeadersSize(calculateHeadersSize(httpMethod));
+            if (log.isDebugEnabled()) {
+                log.debug("ResponseHeadersSize=" + res.getHeadersSize() + " Content-Length=" + res.getContentLength()
+                        + " Total=" + (res.getHeadersSize() + res.getContentLength()));
+            }
+            
             // If we redirected automatically, the URL may have changed
             if (getAutoRedirects()){
                 res.setURL(new URL(httpMethod.getURI().toString()));
@@ -324,6 +332,25 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
                 httpMethod.releaseConnection();
             }
         }
+    }
+    
+    /**
+     * Calculate response headers size
+     * 
+     * @return the size response headers (in bytes)
+     */
+    private static int calculateHeadersSize(HttpMethodBase httpMethod) {
+        int headerSize = 0;
+        headerSize += 9 // Http proto length + 1 space (i.e.: "HTTP/1.x ")
+                + String.valueOf(httpMethod.getStatusCode()).length() + 1 // add one space
+                + httpMethod.getStatusText().length() + 2; // add a \r\n
+        Header[] rh = httpMethod.getResponseHeaders();
+        for (int i = 0; i < rh.length; i++) {
+            headerSize += (rh[i]).toString().length(); // already include the \r\n
+        }
+        headerSize += 2; // last \r\n before response data
+        // add response data length to headerSize
+        return headerSize;
     }
 
     /**
