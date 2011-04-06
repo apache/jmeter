@@ -264,8 +264,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
             // record some sizes to allow HTTPSampleResult.getBytes() with different options
             res.setContentLength((int) entity.getContentLength());
-            res.setHeadersSize(res.getResponseHeaders().replaceAll("\n", "\r\n") // $NON-NLS-1$ $NON-NLS-2$
-                    .length() + 2); // add 2 for a '\r\n' at end of headers (before data)
+            res.setHeadersSize(res.getResponseHeaders().length() // condensed length
+                    +httpResponse.getAllHeaders().length+1 // Add \r for each header and initial header
+                    +2); // final \r\n before data
             if (log.isDebugEnabled()) {
                 log.debug("ResponseHeadersSize=" + res.getHeadersSize() + " Content-Length=" + res.getContentLength()
                         + " Total=" + (res.getHeadersSize() + res.getContentLength()));
