@@ -340,16 +340,12 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
      * @return the size response headers (in bytes)
      */
     private static int calculateHeadersSize(HttpMethodBase httpMethod) {
-        int headerSize = 0;
-        headerSize += 9 // Http proto length + 1 space (i.e.: "HTTP/1.x ")
-                + String.valueOf(httpMethod.getStatusCode()).length() + 1 // add one space
-                + httpMethod.getStatusText().length() + 2; // add a \r\n
+        int headerSize = httpMethod.getStatusLine().toString().length()+2; // add a \r\n
         Header[] rh = httpMethod.getResponseHeaders();
         for (int i = 0; i < rh.length; i++) {
             headerSize += (rh[i]).toString().length(); // already include the \r\n
         }
         headerSize += 2; // last \r\n before response data
-        // add response data length to headerSize
         return headerSize;
     }
 
