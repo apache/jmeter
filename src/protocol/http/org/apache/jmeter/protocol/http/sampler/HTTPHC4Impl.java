@@ -412,15 +412,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
             HttpParams clientParams = new DefaultedHttpParams(new BasicHttpParams(), DEFAULT_HTTP_PARAMS);
             
-            httpClient = new DefaultHttpClient(clientParams) {
-                @Override
-                protected BasicHttpProcessor createHttpProcessor() {
-                    BasicHttpProcessor result = super.createHttpProcessor();
-                    // ensure auto-decompressing of Gzip etc
-                    result.addResponseInterceptor(new ResponseContentEncoding());
-                    return result;
-                }
-            };
+            httpClient = new DefaultHttpClient(clientParams);
+            ((AbstractHttpClient) httpClient).addResponseInterceptor(new ResponseContentEncoding());
             
             SchemeRegistry schemeRegistry = httpClient.getConnectionManager().getSchemeRegistry();
 
