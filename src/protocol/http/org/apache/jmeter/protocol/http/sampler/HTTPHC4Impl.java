@@ -28,6 +28,8 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
+import java.security.GeneralSecurityException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,6 +62,9 @@ import org.apache.http.client.protocol.ResponseContentEncoding;
 import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
+import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.FormBodyPart;
@@ -97,8 +102,7 @@ import org.apache.log.Logger;
 
 /**
  * HTTP Sampler using Apache HttpClient 4.x.
- * 
- *                        INITIAL IMPLEMENTATION - SUBJECT TO CHANGE 
+ *
  */
 public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
@@ -418,12 +422,26 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 }
             };
             
+            SchemeRegistry schemeRegistry = httpClient.getConnectionManager().getSchemeRegistry();
+
+            // Allow all hostnames and all certificates
+            try {
+                TrustStrategy trustAll = new TrustStrategy(){
+                    public boolean isTrusted(X509Certificate[] chain, String authType) {
+                        return true;
+                    }
+                };
+                SSLSocketFactory socketFactory = new SSLSocketFactory(trustAll, new AllowAllHostnameVerifier());
+                Scheme sch = new Scheme(PROTOCOL_HTTPS, 443, socketFactory);
+                schemeRegistry.register(sch);
+            } catch (GeneralSecurityException e) {
+                log.warn("Failed to register trust-all socket factory", e);
+            }
+            
             if (SLOW_HTTP != null){
-                SchemeRegistry schemeRegistry = httpClient.getConnectionManager().getSchemeRegistry();
                 schemeRegistry.register(SLOW_HTTP);
             }
             if (SLOW_HTTPS != null){
-                SchemeRegistry schemeRegistry = httpClient.getConnectionManager().getSchemeRegistry();
                 schemeRegistry.register(SLOW_HTTPS);
             }
 
@@ -445,8 +463,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                             new AuthScope(PROXY_HOST, PROXY_PORT),
                             new UsernamePasswordCredentials(PROXY_USER, PROXY_PASS));
             }
-            
-            // TODO set up SSL manager etc.
             
             if (log.isDebugEnabled()) {
                 log.debug("Created new HttpClient: @"+System.identityHashCode(httpClient));
