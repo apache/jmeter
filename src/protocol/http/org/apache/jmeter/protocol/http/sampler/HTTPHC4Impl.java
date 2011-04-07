@@ -81,7 +81,6 @@ import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.DefaultedHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.BasicHttpContext;
-import org.apache.http.protocol.BasicHttpProcessor;
 import org.apache.http.protocol.ExecutionContext;
 import org.apache.http.protocol.HttpContext;
 
@@ -185,8 +184,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     protected HTTPSampleResult sample(URL url, String method,
             boolean areFollowingRedirect, int frameDepth) {
 
-        // TODO cookie handling
-        
         HTTPSampleResult res = new HTTPSampleResult();
         res.setMonitor(isMonitor());
 
