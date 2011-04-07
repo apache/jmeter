@@ -56,6 +56,7 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpTrace;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.params.ClientPNames;
+import org.apache.http.client.protocol.ResponseContentEncoding;
 import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
@@ -75,6 +76,7 @@ import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.DefaultedHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.BasicHttpProcessor;
 import org.apache.http.protocol.ExecutionContext;
 import org.apache.http.protocol.HttpContext;
 
@@ -406,7 +408,15 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
             HttpParams clientParams = new DefaultedHttpParams(new BasicHttpParams(), DEFAULT_HTTP_PARAMS);
             
-            httpClient = new DefaultHttpClient(clientParams);
+            httpClient = new DefaultHttpClient(clientParams) {
+                @Override
+                protected BasicHttpProcessor createHttpProcessor() {
+                    BasicHttpProcessor result = super.createHttpProcessor();
+                    // ensure auto-decompressing of Gzip etc
+                    result.addResponseInterceptor(new ResponseContentEncoding());
+                    return result;
+                }
+            };
             
             if (SLOW_HTTP != null){
                 SchemeRegistry schemeRegistry = httpClient.getConnectionManager().getSchemeRegistry();
