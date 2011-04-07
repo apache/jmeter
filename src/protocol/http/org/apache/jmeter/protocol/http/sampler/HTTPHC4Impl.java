@@ -93,6 +93,7 @@ import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
+import org.apache.jmeter.protocol.http.util.SlowHC4SSLSocketFactory;
 import org.apache.jmeter.protocol.http.util.SlowHC4SocketFactory;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
@@ -117,6 +118,16 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             return new HashMap<HttpClientKey, HttpClient>();
         }
     };
+
+    // Trust all certificates
+    private static final TrustStrategy TRUSTALL = new TrustStrategy(){
+        public boolean isTrusted(X509Certificate[] chain, String authType) {
+            return true;
+        }
+    };
+
+    // Allow all host names
+    private static final AllowAllHostnameVerifier ALLOW_ALL_HOSTNAMES = new AllowAllHostnameVerifier();
 
     // Scheme used for slow sockets. Cannot be set as a default, because must be set on an HttpClient instance.
     private static final Scheme SLOW_HTTP;
@@ -148,7 +159,13 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             SLOW_HTTP = null;
         }
         if (CPS_HTTPS > 0) {
-            SLOW_HTTPS = new Scheme(PROTOCOL_HTTPS, DEFAULT_HTTPS_PORT, new SlowHC4SocketFactory(CPS_HTTPS));
+            Scheme s = null;
+            try {
+                s = new Scheme(PROTOCOL_HTTPS, DEFAULT_HTTPS_PORT, new SlowHC4SSLSocketFactory(CPS_HTTPS));
+            } catch (GeneralSecurityException e) {
+                log.warn("Failed to initialise SLOW_HTTPS scheme", e);
+            }
+            SLOW_HTTPS = s;
         } else {
             SLOW_HTTPS = null;
         }
@@ -419,13 +436,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
             // Allow all hostnames and all certificates
             try {
-                TrustStrategy trustAll = new TrustStrategy(){
-                    public boolean isTrusted(X509Certificate[] chain, String authType) {
-                        return true;
-                    }
-                };
-                SSLSocketFactory socketFactory = new SSLSocketFactory(trustAll, new AllowAllHostnameVerifier());
-                Scheme sch = new Scheme(PROTOCOL_HTTPS, 443, socketFactory);
+                SSLSocketFactory socketFactory = new SSLSocketFactory(TRUSTALL, ALLOW_ALL_HOSTNAMES);
+                Scheme sch = new Scheme(PROTOCOL_HTTPS, DEFAULT_HTTPS_PORT, socketFactory);
                 schemeRegistry.register(sch);
             } catch (GeneralSecurityException e) {
                 log.warn("Failed to register trust-all socket factory", e);
