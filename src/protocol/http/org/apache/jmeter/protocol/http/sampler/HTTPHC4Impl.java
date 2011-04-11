@@ -36,10 +36,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.http.Header;
+import org.apache.http.HttpConnection;
+import org.apache.http.HttpConnectionMetrics;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpException;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpResponseInterceptor;
 import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
 import org.apache.http.auth.AuthScope;
@@ -109,6 +113,17 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final long serialVersionUID = 240L;
+
+    private static final String CONTEXT_METRICS = "jmeter_metrics"; // TODO hack, to be removed later
+
+    private static final HttpResponseInterceptor METRICS_SAVER = new HttpResponseInterceptor(){
+        public void process(HttpResponse response, HttpContext context)
+                throws HttpException, IOException {
+            HttpConnection conn = (HttpConnection) context.getAttribute(ExecutionContext.HTTP_CONNECTION);
+            HttpConnectionMetrics metrics = conn.getMetrics();
+            context.setAttribute(CONTEXT_METRICS, metrics);
+        }
+    };
 
     private static final ThreadLocal<Map<HttpClientKey, HttpClient>> HTTPCLIENTS = 
         new ThreadLocal<Map<HttpClientKey, HttpClient>>(){
@@ -251,6 +266,14 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             // Needs to be done after execute to pick up all the headers
             res.setRequestHeaders(getConnectionHeaders((HttpRequest) localContext.getAttribute(ExecutionContext.HTTP_REQUEST)));
 
+            // Fetch the metrics now, so we can get the header count
+            
+//            HttpConnection conn = (HttpConnection) localContext.getAttribute(ExecutionContext.HTTP_REQUEST); // this works
+//            HttpConnectionMetrics metrics = conn.getMetrics(); // this fails on http core 4.1 with a HEAD request
+            // alternate hack to be removed when httpcore fixed
+            HttpConnectionMetrics  metrics = (HttpConnectionMetrics) localContext.getAttribute(CONTEXT_METRICS);
+            long headerBytes = metrics.getReceivedBytesCount();
+
             HttpEntity entity = httpResponse.getEntity();
             if (entity != null) {
                 InputStream instream = entity.getContent();
@@ -283,15 +306,14 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             }
 
             // record some sizes to allow HTTPSampleResult.getBytes() with different options
-            res.setContentLength((int) entity.getContentLength());
-            res.setHeadersSize(res.getResponseHeaders().length() // condensed length
-                    +httpResponse.getAllHeaders().length+1 // Add \r for each header and initial header
-                    +2); // final \r\n before data
+            long totalBytes = metrics.getReceivedBytesCount();
+            res.setHeadersSize((int) headerBytes);
+            res.setContentLength((int)(totalBytes - headerBytes));
             if (log.isDebugEnabled()) {
                 log.debug("ResponseHeadersSize=" + res.getHeadersSize() + " Content-Length=" + res.getContentLength()
                         + " Total=" + (res.getHeadersSize() + res.getContentLength()));
             }
-            
+
             // If we redirected automatically, the URL may have changed
             if (getAutoRedirects()){
                 HttpUriRequest req = (HttpUriRequest) localContext.getAttribute(ExecutionContext.HTTP_REQUEST);
@@ -316,6 +338,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             res = resultProcessing(areFollowingRedirect, frameDepth, res);
 
         } catch (IOException e) {
+            res.sampleEnd();
+            HTTPSampleResult err = errorResult(e, res);
+            err.setSampleLabel("Error: " + url.toString());
+            return err;
+        } catch (RuntimeException e) {
             res.sampleEnd();
             HTTPSampleResult err = errorResult(e, res);
             err.setSampleLabel("Error: " + url.toString());
@@ -428,6 +455,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             
             httpClient = new DefaultHttpClient(clientParams);
             ((AbstractHttpClient) httpClient).addResponseInterceptor(new ResponseContentEncoding());
+            ((AbstractHttpClient) httpClient).addResponseInterceptor(METRICS_SAVER); // HACK
             
             SchemeRegistry schemeRegistry = httpClient.getConnectionManager().getSchemeRegistry();
 
