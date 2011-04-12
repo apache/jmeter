@@ -132,7 +132,6 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
                 vars = JOrphanUtils.split(names, ","); // $NON-NLS-1$
             }
         }
-        try {
             String delim = getDelimiter();
             if (delim.equals("\\t")) { // $NON-NLS-1$
                 delim = "\t";// Make it easier to enter a Tab // $NON-NLS-1$
@@ -142,13 +141,22 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
             }
             // TODO: fetch this once as per vars above?
             JMeterVariables threadVars = context.getVariables();
-            String line = server.readLine(alias, getRecycle(), firstLineIsNames);
+            String line = null;
+            try {
+                line = server.readLine(alias, getRecycle(), firstLineIsNames);
+            } catch (IOException e) { // treat the same as EOF
+                log.error(e.toString());
+            }
             if (line!=null) {// i.e. not EOF
-                String[] lineValues = getQuotedData() ?
-                        CSVSaveService.csvSplitString(line, delim.charAt(0))
-                        : JOrphanUtils.split(line, delim, false);
-                for (int a = 0; a < vars.length && a < lineValues.length; a++) {
-                    threadVars.put(vars[a], lineValues[a]);
+                try {
+                    String[] lineValues = getQuotedData() ?
+                            CSVSaveService.csvSplitString(line, delim.charAt(0))
+                            : JOrphanUtils.split(line, delim, false);
+                            for (int a = 0; a < vars.length && a < lineValues.length; a++) {
+                                threadVars.put(vars[a], lineValues[a]);
+                            }
+                } catch (IOException e) { // Should only happen for quoting errors
+                   log.error("Unexpected error splitting '"+line+"' on '"+delim.charAt(0)+"'");
                 }
                 // TODO - report unused columns?
                 // TODO - provide option to set unused variables ?
@@ -160,9 +168,6 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
                     threadVars.put(vars[a], EOFVALUE);
                 }
             }
-        } catch (IOException e) {// TODO - should the error be indicated in the variables?
-            log.error(e.toString());
-        }
     }
 
     /**
