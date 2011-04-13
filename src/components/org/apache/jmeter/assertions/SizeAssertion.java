@@ -34,7 +34,7 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class SizeAssertion extends AbstractScopedAssertion implements Serializable, Assertion {
 
-    private static final long serialVersionUID = 233L;
+    private static final long serialVersionUID = 241L;
 
     // * Static int to signify the type of logical comparitor to assert
     public final static int EQUAL = 1;
@@ -53,6 +53,18 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
     private static final String SIZE_KEY = "SizeAssertion.size"; // $NON-NLS-1$
 
     private static final String OPERATOR_KEY = "SizeAssertion.operator"; // $NON-NLS-1$
+    
+    private final static String TEST_FIELD = "Assertion.test_field";  // $NON-NLS-1$
+
+    private final static String RESPONSE_NETWORK_SIZE = "SizeAssertion.response_network_size"; // $NON-NLS-1$
+
+    private final static String RESPONSE_HEADERS = "SizeAssertion.response_headers"; // $NON-NLS-1$
+
+    private final static String RESPONSE_BODY = "SizeAssertion.response_data"; // $NON-NLS-1$
+
+    private final static String RESPONSE_CODE = "SizeAssertion.response_code"; // $NON-NLS-1$
+
+    private final static String RESPONSE_MESSAGE = "SizeAssertion.response_message"; // $NON-NLS-1$
 
     /**
      * Returns the result of the Assertion. 
@@ -72,6 +84,14 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
                 result.setFailureMessage("Error parsing variable name: "+variableName+" value: "+value);
                 return result;
             }
+        } else if (isTestFieldResponseHeaders()) {
+            resultSize = response.getHeadersSize();
+        }  else if (isTestFieldResponseBody()) {
+            resultSize = response.getBodySize();
+        } else if (isTestFieldResponseCode()) {
+            resultSize = response.getResponseCode().length();
+        } else if (isTestFieldResponseMessage()) {
+            resultSize = response.getResponseMessage().length();
         } else {
             resultSize = response.getBytes();
         }
@@ -168,4 +188,53 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
         }
         return result ? "" : comparatorErrorMessage;
     }
+    
+    private void setTestField(String testField) {
+        setProperty(TEST_FIELD, testField);
+    }
+
+    public void setTestFieldNetworkSize(){
+        setTestField(RESPONSE_NETWORK_SIZE);
+    }
+    
+    public void setTestFieldResponseHeaders(){
+        setTestField(RESPONSE_HEADERS);
+    }
+    
+    public void setTestFieldResponseBody(){
+        setTestField(RESPONSE_BODY);
+    }
+    
+    public void setTestFieldResponseCode(){
+        setTestField(RESPONSE_CODE);
+    }
+    
+    public void setTestFieldResponseMessage(){
+        setTestField(RESPONSE_MESSAGE);
+    }
+
+    public String getTestField() {
+        return getPropertyAsString(TEST_FIELD);
+    }
+
+    public boolean isTestFieldNetworkSize(){
+        return RESPONSE_NETWORK_SIZE.equals(getTestField());
+    }
+
+    public boolean isTestFieldResponseHeaders(){
+        return RESPONSE_HEADERS.equals(getTestField());
+    }
+    
+    public boolean isTestFieldResponseBody(){
+        return RESPONSE_BODY.equals(getTestField());
+    }
+
+    public boolean isTestFieldResponseCode(){
+        return RESPONSE_CODE.equals(getTestField());
+    }
+
+    public boolean isTestFieldResponseMessage(){
+        return RESPONSE_MESSAGE.equals(getTestField());
+    }
+
 }

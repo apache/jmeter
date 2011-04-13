@@ -23,7 +23,6 @@ import java.net.URL;
 
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * This is a specialisation of the SampleResult class for the HTTP protocol.
@@ -32,23 +31,10 @@ import org.apache.jmeter.util.JMeterUtils;
 public class HTTPSampleResult extends SampleResult {
 
     private static final long serialVersionUID = 240L;
-    
-    private static final boolean GETBYTES_INCLUDE_HEADERS = 
-        JMeterUtils.getPropDefault("http.getbytes.include.headers", false); // $NON-NLS-1$
-    
-    private static final boolean GETBYTES_USE_CONTENTLENGTH = 
-        JMeterUtils.getPropDefault("http.getbytes.use.contentlength", false); // $NON-NLS-1$
-
-    private static final boolean GETBYTES_HEADERS_CONTENTLENGTH = 
-        GETBYTES_INCLUDE_HEADERS && GETBYTES_USE_CONTENTLENGTH ? true : false;
 
     private String cookies = ""; // never null
 
     private String method;
-    
-    private int headersSize = 0;
-    
-    private int contentLength = 0;
 
     /**
      * The raw value of the Location: header; may be null.
@@ -228,55 +214,6 @@ public class HTTPSampleResult extends SampleResult {
     public void setResponseNoContent(){
         setResponseCode(HTTP_NO_CONTENT_CODE);
         setResponseMessage(HTTP_NO_CONTENT_MSG);
-    }
-    
-    /**
-     * Set the headers size in bytes
-     * 
-     * @param size
-     */
-    public void setHeadersSize(int size) {
-        this.headersSize = size;
-    }
-    
-    /**
-     * Get the headers size in bytes
-     * 
-     * @return the headers size
-     */
-    public int getHeadersSize() {
-        return headersSize;
-    }
-
-    /**
-     * @return the contentLength
-     */
-    public int getContentLength() {
-        return contentLength == 0 ? super.getBytes() : contentLength;
-    }
-
-    /**
-     * @param contentLength the contentLength to set
-     */
-    public void setContentLength(int contentLength) {
-        this.contentLength = contentLength;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.jmeter.samplers.SampleResult#getBytes()
-     */
-    @Override
-    public int getBytes() {
-        if (GETBYTES_HEADERS_CONTENTLENGTH) {
-            return headersSize + contentLength;
-        } else if (GETBYTES_INCLUDE_HEADERS) {
-            return headersSize + super.getBytes();
-        } else if (GETBYTES_USE_CONTENTLENGTH) {
-            return contentLength;
-        }
-        return super.getBytes(); // Default
     }
     
 }
