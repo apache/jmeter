@@ -60,6 +60,7 @@ import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.httpclient.protocol.Protocol;
+import org.apache.commons.io.input.CountingInputStream;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.CacheManager;
@@ -85,7 +86,7 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     private static final boolean canSetPreEmptive; // OK to set pre-emptive auth?
 
@@ -244,15 +245,17 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
             res.setRequestHeaders(getConnectionHeaders(httpMethod));
 
             // Request sent. Now get the response:
-            InputStream instream = httpMethod.getResponseBodyAsStream();
+            InputStream instream = new CountingInputStream(httpMethod.getResponseBodyAsStream());
 
             if (instream != null) {// will be null for HEAD
                 try {
                     Header responseHeader = httpMethod.getResponseHeader(HEADER_CONTENT_ENCODING);
                     if (responseHeader!= null && ENCODING_GZIP.equals(responseHeader.getValue())) {
-                        instream = new GZIPInputStream(instream);
+                        InputStream tmpInput = new GZIPInputStream(instream); // tmp inputstream needs to have a good counting
+                        res.setResponseData(readResponse(res, tmpInput, (int) httpMethod.getResponseContentLength()));                        
+                    } else {
+                        res.setResponseData(readResponse(res, instream, (int) httpMethod.getResponseContentLength()));
                     }
-                    res.setResponseData(readResponse(res, instream, (int) httpMethod.getResponseContentLength()));
                 } finally {
                     JOrphanUtils.closeQuietly(instream);
                 }
@@ -290,11 +293,11 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
             }
 
             // record some sizes to allow HTTPSampleResult.getBytes() with different options
-            res.setContentLength((int) httpMethod.getResponseContentLength());
+            res.setBodySize(((CountingInputStream) instream).getCount());
             res.setHeadersSize(calculateHeadersSize(httpMethod));
             if (log.isDebugEnabled()) {
-                log.debug("ResponseHeadersSize=" + res.getHeadersSize() + " Content-Length=" + res.getContentLength()
-                        + " Total=" + (res.getHeadersSize() + res.getContentLength()));
+                log.debug("Response headersSize=" + res.getHeadersSize() + " bodySize=" + res.getBodySize()
+                        + " Total=" + (res.getHeadersSize() + res.getBodySize()));
             }
             
             // If we redirected automatically, the URL may have changed

@@ -43,7 +43,7 @@ import org.apache.log.Logger;
  */
 public class SampleResult implements Serializable {
 
-    private static final long serialVersionUID = 233L;
+    private static final long serialVersionUID = 241L;
 
     // Needs to be accessible from Test code
     static final Logger log = LoggingManager.getLoggerForClass();
@@ -93,6 +93,15 @@ public class SampleResult implements Serializable {
     private static final SampleResult[] EMPTY_SR = new SampleResult[0];
 
     private static final AssertionResult[] EMPTY_AR = new AssertionResult[0];
+    
+    private static final boolean GETBYTES_BODY_REALSIZE = 
+        JMeterUtils.getPropDefault("sampleresult.getbytes.body_real_size", true); // $NON-NLS-1$
+
+    private static final boolean GETBYTES_HEADERS_SIZE = 
+        JMeterUtils.getPropDefault("sampleresult.getbytes.headers_size", true); // $NON-NLS-1$
+    
+    private static final boolean GETBYTES_NETWORK_SIZE = 
+        GETBYTES_HEADERS_SIZE && GETBYTES_BODY_REALSIZE ? true : false;
 
     private SampleSaveConfiguration saveConfig;
 
@@ -181,6 +190,10 @@ public class SampleResult implements Serializable {
     private int sampleCount = 1;
 
     private int bytes = 0; // Allows override of sample size in case sampler does not want to store all the data
+    
+    private int headersSize = 0;
+    
+    private int bodySize = 0;
 
     /** Currently active threads in this thread group */
     private volatile int groupThreads = 0;
@@ -1082,6 +1095,14 @@ public class SampleResult implements Serializable {
      * @return byte count
      */
     public int getBytes() {
+        if (GETBYTES_NETWORK_SIZE) {
+            int tmpSum = this.getHeadersSize() + this.getBodySize();
+            return tmpSum == 0 ? bytes : tmpSum;
+        } else if (GETBYTES_HEADERS_SIZE) {
+            return this.getHeadersSize();
+        } else if (GETBYTES_BODY_REALSIZE) {
+            return this.getBodySize();
+        }
         return bytes == 0 ? responseData.length : bytes;
     }
 
@@ -1192,4 +1213,37 @@ public class SampleResult implements Serializable {
     public void removeSubResults() {
         this.subResults = null;
     }
+    
+    /**
+     * Set the headers size in bytes
+     * 
+     * @param size
+     */
+    public void setHeadersSize(int size) {
+        this.headersSize = size;
+    }
+    
+    /**
+     * Get the headers size in bytes
+     * 
+     * @return the headers size
+     */
+    public int getHeadersSize() {
+        return headersSize;
+    }
+
+    /**
+     * @return the body size in bytes
+     */
+    public int getBodySize() {
+        return bodySize == 0 ? responseData.length : bodySize;
+    }
+
+    /**
+     * @param bodySize the body size to set
+     */
+    public void setBodySize(int bodySize) {
+        this.bodySize = bodySize;
+    }
+
 }
