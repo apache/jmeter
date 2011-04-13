@@ -20,6 +20,7 @@ package org.apache.jmeter.assertions.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
@@ -38,7 +39,22 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  */
 public class SizeAssertionGui extends AbstractAssertionGui implements ActionListener {
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
+    
+    /** Radio button indicating that the body response should be tested. */
+    private JRadioButton responseBodyButton;
+
+    /** Radio button indicating that the network response size should be tested. */
+    private JRadioButton responseNetworkButton;
+
+    /** Radio button indicating that the responseMessage should be tested. */
+    private JRadioButton responseMessageButton;
+
+    /** Radio button indicating that the responseCode should be tested. */
+    private JRadioButton responseCodeButton;
+
+    /** Radio button indicating that the headers should be tested. */
+    private JRadioButton responseHeadersButton;
 
     private JTextField size;
 
@@ -69,6 +85,18 @@ public class SizeAssertionGui extends AbstractAssertionGui implements ActionList
     public void modifyTestElement(TestElement el) {
         configureTestElement(el);
         SizeAssertion assertion = (SizeAssertion) el;
+        
+        if (responseHeadersButton.isSelected()) {
+            assertion.setTestFieldResponseHeaders();
+        } else if (responseBodyButton.isSelected()) {
+            assertion.setTestFieldResponseBody();
+        } else if (responseCodeButton.isSelected()) {
+            assertion.setTestFieldResponseCode();
+        } else if (responseMessageButton.isSelected()) {
+            assertion.setTestFieldResponseMessage();
+        } else {
+            assertion.setTestFieldNetworkSize();
+        }
         assertion.setAllowedSize(size.getText());
         assertion.setCompOper(getState());
         saveScopeSettings(assertion);
@@ -81,6 +109,12 @@ public class SizeAssertionGui extends AbstractAssertionGui implements ActionList
     public void clearGui() {
         super.clearGui();
 
+        responseNetworkButton.setSelected(true); // default
+        responseHeadersButton.setSelected(false);
+        responseBodyButton.setSelected(false);
+        responseCodeButton.setSelected(false);
+        responseMessageButton.setSelected(false);
+        
         size.setText(""); //$NON-NLS-1$
         equalButton.setSelected(true);
         notequalButton.setSelected(false);
@@ -98,6 +132,18 @@ public class SizeAssertionGui extends AbstractAssertionGui implements ActionList
         size.setText(assertion.getAllowedSize());
         setState(assertion.getCompOper());
         showScopeSettings(assertion);
+        
+        if (assertion.isTestFieldResponseHeaders()) {
+        responseHeadersButton.setSelected(true);
+        } else if (assertion.isTestFieldResponseBody()) {
+            responseBodyButton.setSelected(true);
+        } else if (assertion.isTestFieldResponseCode()) {
+            responseCodeButton.setSelected(true);
+        } else if (assertion.isTestFieldResponseMessage()) {
+            responseMessageButton.setSelected(true);
+        } else {
+            responseNetworkButton.setSelected(true);
+        }
     }
 
     /**
@@ -139,6 +185,7 @@ public class SizeAssertionGui extends AbstractAssertionGui implements ActionList
         add(makeTitlePanel());
 
         add(createScopePanel(true));
+        add(createFieldPanel());
 
         // USER_INPUT
         JPanel sizePanel = new JPanel();
@@ -152,6 +199,40 @@ public class SizeAssertionGui extends AbstractAssertionGui implements ActionList
         sizePanel.add(createComparatorButtonPanel());
 
         add(sizePanel);
+    }
+    
+    /**
+     * Create a panel allowing the user to choose which response field should be
+     * tested.
+     *
+     * @return a new panel for selecting the response field
+     */
+    private JPanel createFieldPanel() {
+        JPanel panel = new JPanel();
+        panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("assertion_resp_size_field"))); //$NON-NLS-1$
+
+        responseNetworkButton = new JRadioButton(JMeterUtils.getResString("assertion_network_size")); //$NON-NLS-1$
+        responseHeadersButton = new JRadioButton(JMeterUtils.getResString("assertion_headers")); //$NON-NLS-1$
+        responseBodyButton = new JRadioButton(JMeterUtils.getResString("assertion_body_resp")); //$NON-NLS-1$
+        responseCodeButton = new JRadioButton(JMeterUtils.getResString("assertion_code_resp")); //$NON-NLS-1$
+        responseMessageButton = new JRadioButton(JMeterUtils.getResString("assertion_message_resp")); //$NON-NLS-1$
+
+        ButtonGroup group = new ButtonGroup();
+        group.add(responseNetworkButton);
+        group.add(responseHeadersButton);
+        group.add(responseBodyButton);
+        group.add(responseCodeButton);
+        group.add(responseMessageButton);
+
+        panel.add(responseNetworkButton);
+        panel.add(responseHeadersButton);
+        panel.add(responseBodyButton);
+        panel.add(responseCodeButton);
+        panel.add(responseMessageButton);
+
+        responseNetworkButton.setSelected(true);
+
+        return panel;
     }
 
     private Box createComparatorButtonPanel() {

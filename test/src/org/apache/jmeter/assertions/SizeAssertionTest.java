@@ -39,6 +39,7 @@ public class SizeAssertionTest extends JMeterTestCase{
           jmctx = JMeterContextService.getContext();
           assertion = new SizeAssertion();
           assertion.setThreadContext(jmctx);
+          assertion.setTestFieldResponseBody();
           vars = new JMeterVariables();
           jmctx.setVariables(vars);
           sample0 = new SampleResult();
