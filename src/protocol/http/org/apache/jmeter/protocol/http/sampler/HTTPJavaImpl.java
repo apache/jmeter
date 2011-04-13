@@ -34,6 +34,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.zip.GZIPInputStream;
 
+import org.apache.commons.io.input.CountingInputStream;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.CacheManager;
@@ -62,7 +63,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
     private static final boolean OBEY_CONTENT_LENGTH =
         JMeterUtils.getPropDefault("httpsampler.obey_contentlength", false); // $NON-NLS-1$
 
-    private static final long serialVersionUID = 233L;
+    private static final long serialVersionUID = 241L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -241,12 +242,13 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
 
         // works OK even if ContentEncoding is null
         boolean gzipped = ENCODING_GZIP.equals(conn.getContentEncoding());
-
+        InputStream instream = null;
         try {
+            instream = new CountingInputStream(conn.getInputStream());
             if (gzipped) {
-                in = new BufferedInputStream(new GZIPInputStream(conn.getInputStream()));
+                in = new BufferedInputStream(new GZIPInputStream(instream));
             } else {
-                in = new BufferedInputStream(conn.getInputStream());
+                in = new BufferedInputStream(instream);
             }
         } catch (IOException e) {
             if (! (e.getCause() instanceof FileNotFoundException))
@@ -281,7 +283,9 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             }
             in = new BufferedInputStream(conn.getErrorStream());
         }
-        return readResponse(res, in, contentLength);
+        byte[] responseData = readResponse(res, in, contentLength);
+        res.setBodySize(((CountingInputStream) instream).getCount());
+        return responseData;
     }
 
     /**
@@ -562,14 +566,12 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                 res.setRedirectLocation(conn.getHeaderField(HEADER_LOCATION));
             }
             
-            // record some sizes to allow HTTPSampleResult.getBytes() with different options
-            String contentLength = conn.getHeaderField(HEADER_CONTENT_LENGTH);
-            res.setContentLength(contentLength != null ? Integer.parseInt(contentLength) : 0); // 0 to getBytes with responseData length
+            // record headers size to allow HTTPSampleResult.getBytes() with different options
             res.setHeadersSize(responseHeaders.replaceAll("\n", "\r\n") // $NON-NLS-1$ $NON-NLS-2$
                     .length() + 2); // add 2 for a '\r\n' at end of headers (before data) 
             if (log.isDebugEnabled()) {
-                log.debug("ResponseHeadersSize=" + res.getHeadersSize() + " Content-Length=" + res.getContentLength()
-                        + " Total=" + (res.getHeadersSize() + res.getContentLength()));
+                log.debug("Response headersSize=" + res.getHeadersSize() + " bodySize=" + res.getBodySize()
+                        + " Total=" + (res.getHeadersSize() + res.getBodySize()));
             }
             
             // If we redirected automatically, the URL may have changed

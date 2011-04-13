@@ -112,7 +112,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     private static final String CONTEXT_METRICS = "jmeter_metrics"; // TODO hack, to be removed later
 
@@ -308,10 +308,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             // record some sizes to allow HTTPSampleResult.getBytes() with different options
             long totalBytes = metrics.getReceivedBytesCount();
             res.setHeadersSize((int) headerBytes);
-            res.setContentLength((int)(totalBytes - headerBytes));
+            res.setBodySize((int)(totalBytes - headerBytes));
             if (log.isDebugEnabled()) {
-                log.debug("ResponseHeadersSize=" + res.getHeadersSize() + " Content-Length=" + res.getContentLength()
-                        + " Total=" + (res.getHeadersSize() + res.getContentLength()));
+                log.debug("ResponseHeadersSize=" + res.getHeadersSize() + " Content-Length=" + res.getBodySize()
+                        + " Total=" + (res.getHeadersSize() + res.getBodySize()));
             }
 
             // If we redirected automatically, the URL may have changed

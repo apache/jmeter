@@ -179,12 +179,14 @@ Fixed RMI startup to provide location of JMX file relative to user.dir.
 <li>Bug 37156 - Formatted view of Request in Results Tree</li>
 <li>Bug 49365 - Allow result set to be written to file in a path relative to the loaded script</li>
 <li>Bug 50579 - Error count is long, sample count is int. Changed sample count to long.</li>
+<li>View Results Tree - Add new size fields: response headers and response body (in bytes) - derived from Bug 43363</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
 <li>Bug 48015 - Proposal new icons for pre-processor, post-processor and assertion elements</li>
 <li>Bug 50962 - SizeAssertionGui validation prevents the use of variables for the size</li>
+<li>Size Assertion - Add response size scope (full, headers, body, code, message) - derived from Bug 43363</li>
 </ul>
 
 <h3>Functions</h3>
