@@ -57,9 +57,9 @@ public class TestCVSDataSet extends JMeterTestCase {
         csv.setVariableNames("a,b,c");
         csv.setDelimiter(",");
         csv.iterationStart(null);
-        assertNull(threadVars.get("a"));
-        assertEquals("value",threadVars.get("b"));
-        assertNull(threadVars.get("c"));
+        assertEquals("<EOF>",threadVars.get("a"));
+        assertEquals("<EOF>",threadVars.get("b"));
+        assertEquals("<EOF>",threadVars.get("c"));
 
         csv = new CSVDataSet();
         csv.setFilename(findTestPath("testfiles/testempty.csv"));
