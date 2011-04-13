@@ -43,8 +43,7 @@ public class PackageTest extends JMeterTestCase {
         long delay = timer.delay(); // Initialise
         assertEquals(0,delay);
         Thread.sleep(500);
-        long diff=Math.abs(timer.delay()-500);
-        assertTrue("Delay is approximately 500",diff<=50);
+        assertEquals("Expected delay of approx 500",500, timer.delay(), 50);
     }
 
     public void testTimer2() throws Exception {
