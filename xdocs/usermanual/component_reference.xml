@@ -333,13 +333,14 @@ The HttpClient version of the sampler supports emulation of slow connections; se
 #httpclient.socket.http.cps=0
 #httpclient.socket.https.cps=0
 </pre>
-<p><b>Method to calculate Response size</b><br></br>
+<p><b>Response size calculation</b><br></br>
 Optional properties to allow change the method to get response size:<br></br>
-<ul><li>Include the headers length with the response data length
-<pre>http.getbytes.include.headers=false</pre></li>
-<li>Uses value of "Content-length" header (generally provide by web server), rather than decompressed response data length<br></br>
-Useful when web server uses a deflate/gzip method to compress response data
-<pre>http.getbytes.use.contentlength=false</pre></li></ul>
+<ul><li>Gets the real network size in bytes for the body response
+<pre>sampleresult.getbytes.body_real_size=true</pre></li>
+<li>Add HTTP headers to full response size
+<pre>sampleresult.getbytes.headers_size=true</pre></li></ul>
+<note>Versions of JMeter before 2.4.1 returns only data response size (uncompressed if request uses gzip/defate mode).
+<br></br>To return to settings before version 2.4.1, set the two properties to false.</note>
 </p>
 <links>
         <link href="test_plan.html#assertions">Assertion</link>
