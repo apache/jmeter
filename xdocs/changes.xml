@@ -152,6 +152,7 @@ Fixed RMI startup to provide location of JMX file relative to user.dir.
 <li>Bug 50684 - Optionally disable Content-Type and Transfer-Encoding in Multipart POST</li>
 <li>Bug 50943 - Allowing concurrent downloads of embedded resources in html page</li>
 <li>Bug 50170 - Bytes reported by http sampler is after GUnZip<br></br>Add optional properties to allow change the method to get response size</li>
+<li>Hiding the proxy password on HTTP Sampler (just on GUI, not in JMX file)</li>
 </ul>
 
 <h3>Other samplers</h3>
