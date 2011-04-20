@@ -28,6 +28,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -69,7 +70,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
 
     private JTextField proxyUser;
 
-    private JTextField proxyPass;
+    private JPasswordField proxyPass;
 
     private JTextField connectTimeOut;
 
@@ -165,7 +166,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         element.setProperty(HTTPSamplerBase.PROXYHOST, proxyHost.getText(),"");
         element.setProperty(HTTPSamplerBase.PROXYPORT, proxyPort.getText(),"");
         element.setProperty(HTTPSamplerBase.PROXYUSER, proxyUser.getText(),"");
-        element.setProperty(HTTPSamplerBase.PROXYPASS, proxyPass.getText(),"");
+        element.setProperty(HTTPSamplerBase.PROXYPASS, String.valueOf(proxyPass.getPassword()),"");
         element.setProperty(HTTPSamplerBase.CONNECT_TIMEOUT, connectTimeOut.getText());
         element.setProperty(HTTPSamplerBase.RESPONSE_TIMEOUT, responseTimeOut.getText());
         element.setProperty(HTTPSamplerBase.PROTOCOL, protocol.getText());
@@ -392,7 +393,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
     }
 
     private JPanel getProxyPassPanel() {
-        proxyPass = new JTextField(5);
+        proxyPass = new JPasswordField(5);
 
         JLabel label = new JLabel(JMeterUtils.getResString("password")); // $NON-NLS-1$
         label.setLabelFor(proxyPass);
