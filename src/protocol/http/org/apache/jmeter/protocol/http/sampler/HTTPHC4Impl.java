@@ -266,14 +266,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             // Needs to be done after execute to pick up all the headers
             res.setRequestHeaders(getConnectionHeaders((HttpRequest) localContext.getAttribute(ExecutionContext.HTTP_REQUEST)));
 
-            // Fetch the metrics now, so we can get the header count
-            
-//            HttpConnection conn = (HttpConnection) localContext.getAttribute(ExecutionContext.HTTP_REQUEST); // this works
-//            HttpConnectionMetrics metrics = conn.getMetrics(); // this fails on http core 4.1 with a HEAD request
-            // alternate hack to be removed when httpcore fixed
-            HttpConnectionMetrics  metrics = (HttpConnectionMetrics) localContext.getAttribute(CONTEXT_METRICS);
-            long headerBytes = metrics.getReceivedBytesCount();
-
             HttpEntity entity = httpResponse.getEntity();
             if (entity != null) {
                 InputStream instream = entity.getContent();
@@ -306,6 +298,12 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             }
 
             // record some sizes to allow HTTPSampleResult.getBytes() with different options
+            HttpConnectionMetrics  metrics = (HttpConnectionMetrics) localContext.getAttribute(CONTEXT_METRICS);
+            long headerBytes = 
+                res.getResponseHeaders().length()   // condensed length (without \r)
+              + httpResponse.getAllHeaders().length // Add \r for each header
+              + 1 // Add \r for initial header
+              + 2; // final \r\n before data
             long totalBytes = metrics.getReceivedBytesCount();
             res.setHeadersSize((int) headerBytes);
             res.setBodySize((int)(totalBytes - headerBytes));
