@@ -57,8 +57,10 @@ import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.multipart.PartBase;
 import org.apache.commons.httpclient.methods.multipart.StringPart;
+import org.apache.commons.httpclient.params.DefaultHttpParams;
 import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.commons.httpclient.params.HttpParams;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.commons.io.input.CountingInputStream;
 import org.apache.jmeter.protocol.http.control.AuthManager;
@@ -87,6 +89,8 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final long serialVersionUID = 241L;
+
+    private static final String HTTP_AUTHENTICATION_PREEMPTIVE = "http.authentication.preemptive"; // $NON-NLS-1$
 
     private static final boolean canSetPreEmptive; // OK to set pre-emptive auth?
 
@@ -119,7 +123,7 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
 //        }
 
         // Set default parameters as needed
-        HttpClientParams params = new HttpClientParams();
+        HttpParams params = DefaultHttpParams.getDefaultParams();
 
         // Process Commons HttpClient parameters file
         String file=JMeterUtils.getProperty("httpclient.parameters.file"); // $NON-NLS-1$
@@ -129,7 +133,7 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
 
         // If the pre-emptive parameter is undefined, then we can set it as needed
         // otherwise we should do what the user requested.
-        canSetPreEmptive =  params.isAuthenticationPreemptive();
+        canSetPreEmptive =  params.getParameter(HTTP_AUTHENTICATION_PREEMPTIVE) == null;
 
         // Handle old-style JMeter properties
         try {
