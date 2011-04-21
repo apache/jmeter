@@ -249,9 +249,10 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
             res.setRequestHeaders(getConnectionHeaders(httpMethod));
 
             // Request sent. Now get the response:
-            InputStream instream = new CountingInputStream(httpMethod.getResponseBodyAsStream());
+            InputStream instream = httpMethod.getResponseBodyAsStream();
 
             if (instream != null) {// will be null for HEAD
+                instream = new CountingInputStream(instream);
                 try {
                     Header responseHeader = httpMethod.getResponseHeader(HEADER_CONTENT_ENCODING);
                     if (responseHeader!= null && ENCODING_GZIP.equals(responseHeader.getValue())) {
@@ -297,7 +298,9 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
             }
 
             // record some sizes to allow HTTPSampleResult.getBytes() with different options
-            res.setBodySize(((CountingInputStream) instream).getCount());
+            if (instream != null) {
+                res.setBodySize(((CountingInputStream) instream).getCount());
+            }
             res.setHeadersSize(calculateHeadersSize(httpMethod));
             if (log.isDebugEnabled()) {
                 log.debug("Response headersSize=" + res.getHeadersSize() + " bodySize=" + res.getBodySize()
