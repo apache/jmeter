@@ -266,16 +266,16 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             // Needs to be done after execute to pick up all the headers
             res.setRequestHeaders(getConnectionHeaders((HttpRequest) localContext.getAttribute(ExecutionContext.HTTP_REQUEST)));
 
+            Header contentType = httpResponse.getLastHeader(HEADER_CONTENT_TYPE);
+            if (contentType != null){
+                String ct = contentType.getValue();
+                res.setContentType(ct);
+                res.setEncodingAndType(ct);                    
+            }
             HttpEntity entity = httpResponse.getEntity();
             if (entity != null) {
                 InputStream instream = entity.getContent();
                 res.setResponseData(readResponse(res, instream, (int) entity.getContentLength()));
-                Header contentType = entity.getContentType();
-                if (contentType != null){
-                    String ct = contentType.getValue();
-                    res.setContentType(ct);
-                    res.setEncodingAndType(ct);                    
-                }
             }
             
             res.sampleEnd(); // Done with the sampling proper.
