@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/components"/>
+	<classpathentry kind="src" path="src/core"/>
+	<classpathentry kind="src" path="src/examples"/>
+	<classpathentry kind="src" path="src/functions"/>
+	<classpathentry kind="src" path="src/jorphan"/>
+	<classpathentry kind="src" path="src/junit"/>
+	<classpathentry kind="src" path="src/monitor/components"/>
+	<classpathentry kind="src" path="src/monitor/model"/>
+	<classpathentry kind="src" path="src/protocol/ftp"/>
+	<classpathentry kind="src" path="src/protocol/http"/>
+	<classpathentry kind="src" path="src/protocol/java"/>
+	<classpathentry kind="src" path="src/protocol/jdbc"/>
+	<classpathentry kind="src" path="src/protocol/jms"/>
+	<classpathentry kind="src" path="src/protocol/ldap"/>
+	<classpathentry kind="src" path="src/protocol/mail"/>
+	<classpathentry kind="src" path="src/protocol/tcp"/>
+	<classpathentry kind="src" path="src/reports"/>
+	<classpathentry kind="src" path="test/src"/>
+	<classpathentry kind="lib" path="extras/ant-jmeter-1.0.9.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
