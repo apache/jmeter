@@ -1,2 +1,4 @@
 /bin
-/.metadata
+/lib
+.metadata
+build
