@@ -61,5 +61,5 @@
 	<classpathentry kind="lib" path="lib/api/bcmail-jdk15-1.45.jar"/>
 	<classpathentry kind="lib" path="lib/api/bcprov-jdk15-1.45.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="output" path="build"/>
 </classpath>
