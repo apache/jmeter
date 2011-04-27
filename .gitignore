@@ -1,4 +1,7 @@
-/bin
 /lib
+/bin/ApacheJMeter.jar
+/bin/jmeter.log
+jmeter.log
+/reports/TEST-*
 .metadata
 build
