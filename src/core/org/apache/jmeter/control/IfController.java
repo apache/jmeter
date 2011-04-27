@@ -27,24 +27,29 @@ import org.apache.log.Logger;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 
-/*******************************************************************************
+/**
  *
  *
  * This is a Conditional Controller; it will execute the set of statements
  * (samplers/controllers, etc) while the 'condition' is true.
+ * <p>
  * In a programming world - this is equivalant of :
+ * <pre>
  * if (condition) {
  *          statements ....
  *          }
- * In JMeter you may have : Thread-Group (set to loop a number of times or indefinitely,
+ * </pre>
+ * In JMeter you may have :
+ * <pre> 
+ * Thread-Group (set to loop a number of times or indefinitely,
  *    ... Samplers ... (e.g. Counter )
  *    ... Other Controllers ....
  *    ... IfController ( condition set to something like - ${counter}<10)
  *       ... statements to perform if condition is true
  *       ...
  *    ... Other Controllers /Samplers }
- *
- ******************************************************************************/
+ * </pre>
+ */
 
 // for unit test code @see TestIfController
 
