@@ -26,6 +26,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -38,18 +40,22 @@ import javax.swing.tree.TreePath;
 
 import org.apache.jmeter.control.gui.TestPlanGui;
 import org.apache.jmeter.control.gui.WorkBenchGui;
+import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.MainFrame;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
+import org.apache.jmeter.gui.action.Command;
 import org.apache.jmeter.gui.action.KeyStrokes;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-public class JMeterTreeListener implements TreeSelectionListener, MouseListener, KeyListener, MouseMotionListener {
+public class JMeterTreeListener implements TreeSelectionListener, MouseListener, KeyListener, MouseMotionListener, ActionListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
+    
+    private Map<String, Command> commandMap = new HashMap<String, Command>();
 
     // Container endWindow;
     // JPopupMenu pop;
@@ -319,4 +325,20 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
             popup.requestFocus();
         }
     }
+    
+    @Override
+	public void actionPerformed(ActionEvent e) {
+		Command command = this.commandMap.get(e.getActionCommand());
+		try {
+			command.doAction(e);
+		} catch (IllegalUserActionException e1) {
+			log.equals(e);
+		}		
+	}
+    
+	public void addCommand(Command command) {
+		for (String name: command.getActionNames()) {
+			this.commandMap.put(name, command);
+		}
+	}
 }

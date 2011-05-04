@@ -34,6 +34,7 @@ import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -57,6 +58,8 @@ import javax.swing.tree.TreePath;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
+import org.apache.jmeter.gui.action.CollapseExpand;
+import org.apache.jmeter.gui.action.Command;
 import org.apache.jmeter.gui.tree.JMeterCellRenderer;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.util.JMeterMenuBar;
@@ -95,6 +98,8 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 
     /** The test tree. */
     private JTree tree;
+    
+    private JPanel treeButtons;
 
     /** An image which is displayed when a test is running. */
     private ImageIcon runningIcon = JMeterUtils.getImage("thread.enabled.gif");// $NON-NLS-1$
@@ -381,31 +386,66 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
      * Create the GUI components and layout.
      */
     private void init() {
-        menuBar = new JMeterMenuBar();
-        setJMenuBar(menuBar);
+    	  menuBar = new JMeterMenuBar();
+          setJMenuBar(menuBar);
 
-        JPanel all = new JPanel(new BorderLayout());
-        all.add(createToolBar(), BorderLayout.NORTH);
+          JPanel all = new JPanel(new BorderLayout());
+          all.add(createToolBar(), BorderLayout.NORTH);
 
-        JSplitPane treeAndMain = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+          JSplitPane treeAndMain = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+                  
+          JSplitPane treeAndButtons = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+          
+          treeButtons = new JPanel();        
+          
+                    
+          JButton expandAll = this.createButton(ActionNames.EXPAND_ALL);
+          JButton minimizeAll = this.createButton(ActionNames.COLLAPSE_ALL);
+                    
+          treeButtons.add(expandAll);
+          treeButtons.add(minimizeAll);
+                  
+          treePanel = createTreePanel();
+          treeAndButtons.setTopComponent(treeButtons);
+          treeAndButtons.setBottomComponent(treePanel);       
+          
+          
+          treeAndMain.setLeftComponent(treeAndButtons);
+                  
+          mainPanel = createMainPanel();
+          treeAndMain.setRightComponent(mainPanel);
 
-        treePanel = createTreePanel();
-        treeAndMain.setLeftComponent(treePanel);
+          treeAndMain.setResizeWeight(.2);
+          treeAndMain.setContinuousLayout(true);
+          all.add(treeAndMain, BorderLayout.CENTER);
 
-        mainPanel = createMainPanel();
-        treeAndMain.setRightComponent(mainPanel);
+          getContentPane().add(all);
 
-        treeAndMain.setResizeWeight(.2);
-        treeAndMain.setContinuousLayout(true);
-        all.add(treeAndMain, BorderLayout.CENTER);
+          tree.setSelectionRow(1);
+          addWindowListener(new WindowHappenings());
 
-        getContentPane().add(all);
-
-        tree.setSelectionRow(1);
-        addWindowListener(new WindowHappenings());
-
-        setTitle(DEFAULT_TITLE);
-        setIconImage(JMeterUtils.getImage("jmeter.jpg").getImage());// $NON-NLS-1$
+          setTitle(DEFAULT_TITLE);
+          setIconImage(JMeterUtils.getImage("jmeter.jpg").getImage());// $NON-NLS-1$
+    }
+    
+    private JButton createButton(String actionName) {
+    	JButton button = null;
+    	if (ActionNames.EXPAND_ALL.equals(actionName)) {
+    		button = new JButton(
+    				new ImageIcon(JMeterUtils.getImage("expandall.gif").getImage()));
+    	} else if (ActionNames.COLLAPSE_ALL.equals(actionName)) {
+    		button = new JButton(
+    				new ImageIcon(JMeterUtils.getImage("collapseall.gif").getImage()));
+    	} else {
+    		throw new IllegalArgumentException(actionName + " is not a valid option for this factory method.");
+    	}
+    	 
+    	button.setActionCommand(actionName);
+    	button.setAlignmentX(Component.LEFT_ALIGNMENT);
+    	button.addActionListener(GuiPackage.getInstance().getTreeListener());
+    	button.setPreferredSize(new Dimension(20, 20));
+    	button.setSize(new Dimension(20, 20));
+    	return button;
     }
 
     public void setExtendedFrameTitle(String fname) {
@@ -501,6 +541,9 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
         treevar.addMouseListener(treeListener);
         treevar.addMouseMotionListener(treeListener);
         treevar.addKeyListener(treeListener);
+        
+        Command collapseExpand = new CollapseExpand();
+        treeListener.addCommand(collapseExpand);
 
         return treevar;
     }
