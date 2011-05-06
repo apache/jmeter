@@ -21,6 +21,7 @@ package org.apache.jmeter.gui;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -34,7 +35,6 @@ import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -49,6 +49,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTree;
 import javax.swing.MenuElement;
 import javax.swing.SwingUtilities;
+import javax.swing.plaf.basic.BasicOptionPaneUI.ButtonAreaLayout;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
@@ -395,8 +396,12 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
           JSplitPane treeAndMain = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
                   
           JSplitPane treeAndButtons = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+          treeAndButtons.setDividerLocation(30);
+          treeAndButtons.setDividerSize(0);
           
-          treeButtons = new JPanel();        
+          treeButtons = new JPanel(new FlowLayout(FlowLayout.RIGHT));       
+          treeButtons.setAlignmentX(RIGHT_ALIGNMENT);
+          
           
                     
           JButton expandAll = this.createButton(ActionNames.EXPAND_ALL);

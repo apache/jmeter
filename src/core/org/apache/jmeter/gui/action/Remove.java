@@ -24,6 +24,9 @@ import java.util.Set;
 
 import javax.swing.JOptionPane;
 import javax.swing.tree.TreePath;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.UndoableEdit;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
@@ -32,7 +35,7 @@ import org.apache.jmeter.testelement.TestElement;
 /**
  * Implements the Remove menu item.
  */
-public class Remove implements Command {
+public class Remove implements Command, UndoableEdit {
 
     private static final Set<String> commands = new HashSet<String>();
 
@@ -79,4 +82,61 @@ public class Remove implements Command {
             JOptionPane.showMessageDialog(null, message, "Cannot remove item", JOptionPane.ERROR_MESSAGE);
         }
     }
+
+	@Override
+	public void undo() throws CannotUndoException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean canUndo() {
+		return true;
+	}
+
+	@Override
+	public void redo() throws CannotRedoException {
+		
+		
+	}
+
+	@Override
+	public boolean canRedo() {
+		return true;
+	}
+
+	@Override
+	public void die() {}
+
+	@Override
+	public boolean addEdit(UndoableEdit anEdit) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean replaceEdit(UndoableEdit anEdit) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isSignificant() {
+		return true;
+	}
+
+	@Override
+	public String getPresentationName() {
+		return "Remove";
+	}
+
+	@Override
+	public String getUndoPresentationName() {
+		return "Remove";
+	}
+
+	@Override
+	public String getRedoPresentationName() {
+		return "Remove";
+	}
 }

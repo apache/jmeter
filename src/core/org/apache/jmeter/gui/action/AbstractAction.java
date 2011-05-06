@@ -19,6 +19,7 @@
 package org.apache.jmeter.gui.action;
 
 import java.awt.event.ActionEvent;
+
 import java.util.Set;
 
 import javax.swing.JOptionPane;
