@@ -35,6 +35,21 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 
 <h2>Summary of main changes</h2>
 
+<ul>
+<li>The HTTP implementation can now be selected at run-time, and JMeter now also supports Apache HttpComponents HttpClient 4.x.
+Note that Commons HttpClient 3.1 is no longer actively developed, and support may be removed from JMeter in a future release.
+</li>
+<li>The HTTP sampler now allows concurrent downloads of embedded resources in an HTML page</li>
+<li>The HTTP Sampler can now report the size of a request before decompression.</li>
+<li>The JMS and Mail samplers have been improved.</li>
+<li>The new Test Fragment Test Element makes using Include Controllers easier</li>
+<li>There are various improvements to the View Results Tree Listener</li>
+<li>Bug 30563 - Thread Group should have a start next loop option on Sample Error</li>
+<li>There are two new Thread Group types - setUp and tearDown - which are run before and after the main Thread groups.</li>
+<li>Client-Server mode now supports external stop/shutdown via UDP<br></br> 
+multiple JMeter server instances can be started on the same host without needing to change the port property.</li>
+</ul>
+
 <p>
 <ul>
 </ul>
@@ -81,7 +96,7 @@ This is internal to the workings of the JMeter Proxy &amp; its GUI, so should no
 <ul>
 <li>Bug 50178 - HeaderManager added as child of Thread Group can create concatenated HeaderManager names and OutOfMemoryException</li>
 <li>Bug 50392 - value is trimmed when sending the request in Multipart</li>
-<li>Bug 50686 - HeaderManager logging to verbose when merging instances</li>
+<li>Bug 50686 - HeaderManager logging too verbose when merging instances</li>
 <li>Bug 50963 - AjpSampler throws java.lang.StringIndexOutOfBoundsException</li>
 </ul>
 
@@ -115,7 +130,7 @@ This is internal to the workings of the JMeter Proxy &amp; its GUI, so should no
 
 <h3>I18N</h3>
 <ul>
-<li>Bug 50811 - Incomplete spanish translation</li>
+<li>Bug 50811 - Incomplete Spanish translation</li>
 </ul>
 
 <h3>General</h3>
@@ -212,6 +227,7 @@ Fixed RMI startup to provide location of JMX file relative to user.dir.
 <li>Client JMeter engine now supports external stop/shutdown via UDP</li>
 <li>UDP shutdown can now use a range of ports, from jmeterengine.nongui.port=4445 to jmeterengine.nongui.maxport=4455,
 allowing multiple JMeter instances on the same host without needing to change the port property.</li>
+<li>Updated to httpcore 4.1.1 and httpclient 4.1.1</li>
 </ul>
 
 <h2>Non-functional changes</h2>
