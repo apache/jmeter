@@ -26,7 +26,7 @@
 	 <menu name="About">
 	   <item name="Overview"            href="/index.html"/>
 	   <item name="Changes"             href="/changes.html"/>
-	   <item name="Known Bugs"          href="/known_bugs.html"/>
+	   <item name="Issues"              href="/issues.html"/>
 	   <item name="License"             href="http://www.apache.org/licenses/"/>
 	   <item name="Contributors"		href="http://wiki.apache.org/jakarta-jmeter/JMeterCommitters"/>
 	 </menu>

@@ -97,7 +97,7 @@ Nor does it render the HTML pages as a browser does
 <h2>Further Information About JMeter</h2>
 <ul>
 <li><a href="changes.html">Change List</a></li>
-<li><a href="known_bugs.html">Known Bugs</a></li>
+<li><a href="issues.html">Issues</a></li>
 <li><a href="http://www.apache.org/licenses/">License</a></li>
 <li><a href="http://wiki.apache.org/jakarta-jmeter/JMeterCommitters">Contributors</a></li>
 </ul>
