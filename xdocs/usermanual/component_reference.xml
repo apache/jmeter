@@ -111,16 +111,22 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
         them.  This can save you time if you have a lot of HTTP requests or requests with many
         parameters.</p>
 
-        <p><b>There are three versions of the sampler:</b>
+        <p><b>There are two different screens for defining the samplers:</b>
         <ul>
-        <li>HTTP Request - uses the default Java HTTP implementation</li>
-        <li>HTTP Request HTTPClient - uses Apache Commons HttpClient</li>
         <li>AJP/1.3 Sampler - uses the Tomcat mod_jk protocol (allows testing of Tomcat in AJP mode without needing Apache httpd)
         The AJP Sampler does not support multiple file upload; only the first file will be used.
         </li>
+        <li>HTTP Request - this has an implementation drop-down box, which selects the HTTP protocol implementation to be used:</li>
+        <ul>
+        <li>Java - uses the HTTP implementation provided by the JVM. 
+        This has some limitations in comparison with the HttpClient implementations - see below.</li>
+        <li>HTTPClient3.1 - uses Apache Commons HttpClient 3.1. 
+        This is no longer being developed, and support for this may be dropped in a future JMeter release.</li>
+        <li>HTTPClient4 - uses Apache HttpComponents HttpClient 4.x.</li>
+        </ul>
         </ul>
          </p>
-         <p>The default (Java) implementation has some limitations:</p>
+         <p>The Java implementation has some limitations:</p>
          <ul>
          <li>There is no control over how connections are re-used. 
          When a connection is released by JMeter, it may or may not be re-used by the same thread.</li>
