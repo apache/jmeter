@@ -75,10 +75,12 @@ public class CompoundVariable implements Function {
             while (iter.hasNext()) {
                 Function tempFunc = (Function) Class.forName(iter.next()).newInstance();
                 String referenceKey = tempFunc.getReferenceKey();
-                functions.put(referenceKey, tempFunc.getClass());
-                // Add alias for original StringFromFile name (had only one underscore)
-                if (referenceKey.equals("__StringFromFile")){//$NON-NLS-1$
-                    functions.put("_StringFromFile", tempFunc.getClass());//$NON-NLS-1$
+                if (referenceKey.length() > 0) { // ignore self
+                    functions.put(referenceKey, tempFunc.getClass());
+                    // Add alias for original StringFromFile name (had only one underscore)
+                    if (referenceKey.equals("__StringFromFile")){//$NON-NLS-1$
+                        functions.put("_StringFromFile", tempFunc.getClass());//$NON-NLS-1$
+                    }
                 }
             }
             final int functionCount = functions.size();
