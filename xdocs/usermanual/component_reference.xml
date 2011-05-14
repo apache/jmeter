@@ -3138,6 +3138,14 @@ and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSS
         <property name="Use concurrent pool" required="No">Use a pool of concurrent connections to get embedded resources.</property>
         <property name="Size" required="No">Pool size for concurrent connections used to get embedded resources.</property>
 </properties>
+<note>
+Note: radio buttons only have two states - on or off.
+This makes it impossible to override settings consistently
+- does off mean off, or does it mean use the current default?
+JMeter uses the latter (otherwise defaults would not work at all).
+So if the button is off, then a later element can set it on,
+but if the button is on, a later element cannot set it off.
+</note>
 </component>
 
 <component name="HTTP Header Manager" index="&sect-num;.4.6"  width="" height="" screenshot="http-config/http-header-manager.gif">
