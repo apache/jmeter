@@ -236,6 +236,7 @@ allowing multiple JMeter instances on the same host without needing to change th
 <li>Bug 50450 - use System.array copy in jacobi solver as, being native, is more performant.</li>
 <li>Bug 50487 - runSerialTest verifies objects that never need persisting</li>
 <li>Use Thread.setDefaultUncaughtExceptionHandler() instead of private ThreadGroup</li>
+<li>Update to Commons Net 3.0</li>
 </ul>
 
 </section> 
