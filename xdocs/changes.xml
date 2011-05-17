@@ -48,6 +48,7 @@ Note that Commons HttpClient 3.1 is no longer actively developed, and support ma
 <li>There are two new Thread Group types - setUp and tearDown - which are run before and after the main Thread groups.</li>
 <li>Client-Server mode now supports external stop/shutdown via UDP<br></br> 
 multiple JMeter server instances can be started on the same host without needing to change the port property.</li>
+<li>Bug 50516 - "Host" header in HTTP Header Manager is not included in generated HTTP request</li>
 </ul>
 
 <p>
@@ -98,6 +99,7 @@ This is internal to the workings of the JMeter Proxy &amp; its GUI, so should no
 <li>Bug 50392 - value is trimmed when sending the request in Multipart</li>
 <li>Bug 50686 - HeaderManager logging too verbose when merging instances</li>
 <li>Bug 50963 - AjpSampler throws java.lang.StringIndexOutOfBoundsException</li>
+<li>Bug 50516 - "Host" header in HTTP Header Manager is not included in generated HTTP request</li>
 </ul>
 
 <h3>Other Samplers</h3>
