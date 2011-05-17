@@ -82,6 +82,8 @@ public class TCLogParser implements LogParser {
 
     public static final String POST = "POST";
 
+    public static final String HEAD = "HEAD";
+
     /** protected members * */
     protected String RMETHOD = null;
 
@@ -213,7 +215,7 @@ public class TCLogParser implements LogParser {
     /**
      * parse a set number of lines from the access log. Keep in mind the number
      * of lines parsed will depend the filter and number of lines in the log.
-     * The method returns the actual lines parsed.
+     * The method returns the actual number of lines parsed.
      *
      * @param count
      * @return lines parsed
@@ -361,6 +363,8 @@ public class TCLogParser implements LogParser {
                             RMETHOD = GET;
                         } else if (t.equalsIgnoreCase(POST)) {
                             RMETHOD = POST;
+                        } else if (t.equalsIgnoreCase(HEAD)) {
+                            RMETHOD = HEAD;
                         }
                         // there should only be one token
                         // that starts with slash character
@@ -391,6 +395,9 @@ public class TCLogParser implements LogParser {
             return true;
         } else if (text.indexOf("POST") > -1) {
             this.RMETHOD = POST;
+            return true;
+        } else if (text.indexOf("HEAD") > -1) {
+            this.RMETHOD = HEAD;
             return true;
         } else {
             return false;
