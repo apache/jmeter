@@ -593,7 +593,11 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
                     // TODO - what other headers are not allowed?
                     if (! HEADER_CONTENT_LENGTH.equalsIgnoreCase(n)){
                         String v = header.getValue();
-                        method.addRequestHeader(n, v);
+                        if (HEADER_HOST.equalsIgnoreCase(n)) {
+                            method.getParams().setVirtualHost(v);
+                        } else {
+                            method.addRequestHeader(n, v);
+                        }
                     }
                 }
             }
