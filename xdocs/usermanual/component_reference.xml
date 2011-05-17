@@ -126,7 +126,7 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
         </ul>
         </ul>
          </p>
-         <p>The Java implementation has some limitations:</p>
+         <p>The Java HTTP implementation has some limitations:</p>
          <ul>
          <li>There is no control over how connections are re-used. 
          When a connection is released by JMeter, it may or may not be re-used by the same thread.</li>
@@ -135,6 +135,7 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
          <li>There is a bug in the handling of HTTPS via a Proxy (the CONNECT is not handled correctly).
          See Java bugs 6226610 and 6208335.
          </li>
+         <li>It does not support virtual hosts.</li>
          </ul>
          <p>Note: the FILE protocol is intended for testing puposes only. 
          It is handled by the same code regardless of which HTTP Sampler is used.</p>
@@ -178,7 +179,11 @@ https.default.protocol=SSLv3
 </description>
 <properties>
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
-        <property name="Server" required="Yes, unless provided by HTTP Request Defaults">Domain name or IP address of the web server. e.g. www.example.com. [Do not include the http:// prefix.]</property>
+        <property name="Server" required="Yes, unless provided by HTTP Request Defaults">
+            Domain name or IP address of the web server. e.g. www.example.com. [Do not include the http:// prefix.]
+            Note: in JMeter 2.4.1 (and later) if the "Host" header is defined in a Header Manager, then this will be used
+            as the virtual host name.
+        </property>
         <property name="Port" required="No">Port the web server is listening to. Default: 80</property>
         <property name="Connect Timeout" required="No">Connection Timeout. Number of milliseconds to wait for a connection to open.</property>
         <property name="Response Timeout" required="No">Response Timeout. Number of milliseconds to wait for a response.</property>
