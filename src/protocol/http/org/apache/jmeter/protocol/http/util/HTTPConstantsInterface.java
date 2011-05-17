@@ -53,6 +53,7 @@ public interface HTTPConstantsInterface {
     public static final String HEADER_CONTENT_DISPOSITION = "Content-Disposition"; // $NON-NLS-1$
     public static final String HEADER_CONTENT_TYPE = "Content-Type"; // $NON-NLS-1$
     public static final String HEADER_CONTENT_LENGTH = "Content-Length"; // $NON-NLS-1$
+    public static final String HEADER_HOST = "Host"; // $NON-NLS-1$
     public static final String HEADER_LOCATION = "Location"; // $NON-NLS-1$
     public static final String APPLICATION_X_WWW_FORM_URLENCODED = "application/x-www-form-urlencoded"; // $NON-NLS-1$
     public static final String MULTIPART_FORM_DATA = "multipart/form-data"; // $NON-NLS-1$
