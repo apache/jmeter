@@ -100,6 +100,7 @@ This is internal to the workings of the JMeter Proxy &amp; its GUI, so should no
 <li>Bug 50686 - HeaderManager logging too verbose when merging instances</li>
 <li>Bug 50963 - AjpSampler throws java.lang.StringIndexOutOfBoundsException</li>
 <li>Bug 50516 - "Host" header in HTTP Header Manager is not included in generated HTTP request</li>
+<li>Bug 50544 - In Apache Common Log the HEAD requests cause problems.</li>
 </ul>
 
 <h3>Other Samplers</h3>
