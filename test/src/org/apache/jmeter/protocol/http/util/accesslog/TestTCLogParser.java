@@ -30,6 +30,8 @@ public class TestTCLogParser  extends JMeterTestCase {
 
         private static final String URL2 = "127.0.0.1 - - [08/Jan/2003:07:03:54 -0500] \"GET /addrbook?x=y HTTP/1.1\" 200 1981";
 
+        private static final String TEST3 = "127.0.0.1 - - [08/Jan/2003:07:03:54 -0500] \"HEAD /addrbook/ HTTP/1.1\" 200 1981";
+
         public void testConstruct() throws Exception {
             TCLogParser tcp;
             tcp = new TCLogParser();
@@ -47,7 +49,14 @@ public class TestTCLogParser  extends JMeterTestCase {
         }
 
         public void testcheckURL() throws Exception {
-            assertFalse("URL is not have a query", tclp.checkURL(URL1));
+            assertFalse("URL does not have a query", tclp.checkURL(URL1));
             assertTrue("URL is a query", tclp.checkURL(URL2));
         }
+
+        public void testHEAD() throws Exception {
+            String res = tclp.cleanURL(TEST3);
+            assertEquals("/addrbook/", res);
+            assertNull(tclp.stripFile(res, new HTTPNullSampler()));
+        }
+
 }
