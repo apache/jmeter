@@ -62,8 +62,9 @@ rem This label provides a place for the argument list loop to break out
 rem and for NT handling to skip to.
 
 rem The following link describes the -XX options:
-rem http://java.sun.com/javase/technologies/hotspot/vmoptions.jsp
+rem http://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html
 rem http://java.sun.com/developer/TechTips/2000/tt1222.html has some more descriptions
+rem Unfortunately TechTips no longer seem to be available
 
 rem See the unix startup file for the rationale of the following parameters,
 rem including some tuning recommendations
