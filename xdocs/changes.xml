@@ -101,6 +101,9 @@ This is internal to the workings of the JMeter Proxy &amp; its GUI, so should no
 <li>Bug 50963 - AjpSampler throws java.lang.StringIndexOutOfBoundsException</li>
 <li>Bug 50516 - "Host" header in HTTP Header Manager is not included in generated HTTP request</li>
 <li>Bug 50544 - In Apache Common Log the HEAD requests cause problems.</li>
+<li>Bug 51268 - HTTPS request through an invalid proxy causes NullPointerException and does not show in result tree.
+Rather than delegating to the JMeter thread handler for "unexpected" failures, ensure all Exceptions generate a sample error.
+</li>
 </ul>
 
 <h3>Other Samplers</h3>
