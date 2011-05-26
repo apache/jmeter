@@ -24,7 +24,6 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -1001,11 +1000,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             }
             res.setSampleLabel(getName());
             return res;
-        } catch (MalformedURLException e) {
-            return errorResult(e, new HTTPSampleResult());
-        } catch (IOException e) {
-            return errorResult(e, new HTTPSampleResult());
-        } catch (URISyntaxException e) {
+        } catch (Exception e) {
             return errorResult(e, new HTTPSampleResult());
         }
     }
