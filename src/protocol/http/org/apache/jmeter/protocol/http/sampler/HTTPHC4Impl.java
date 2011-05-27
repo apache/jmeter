@@ -29,7 +29,6 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
-import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -66,9 +65,6 @@ import org.apache.http.client.protocol.ResponseContentEncoding;
 import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
-import org.apache.http.conn.ssl.SSLSocketFactory;
-import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.FormBodyPart;
@@ -94,6 +90,7 @@ import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
+import org.apache.jmeter.protocol.http.util.HC4TrustAllSSLSocketFactory;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.protocol.http.util.SlowHC4SSLSocketFactory;
@@ -133,19 +130,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
     };
 
-    // Trust all certificates
-    private static final TrustStrategy TRUSTALL = new TrustStrategy(){
-        public boolean isTrusted(X509Certificate[] chain, String authType) {
-            return true;
-        }
-    };
-
-    // Allow all host names
-    private static final AllowAllHostnameVerifier ALLOW_ALL_HOSTNAMES = new AllowAllHostnameVerifier();
-
-    // Scheme used for slow sockets. Cannot be set as a default, because must be set on an HttpClient instance.
+    // Scheme used for slow HTTP sockets. Cannot be set as a default, because must be set on an HttpClient instance.
     private static final Scheme SLOW_HTTP;
-    private static final Scheme SLOW_HTTPS;
+    
+    // We always want to override the HTTPS scheme, because we want to trust all certificates and hosts
+    private static final Scheme HTTPS_SCHEME;
 
     /*
      * Create a set of default parameters from the ones initially created.
@@ -166,24 +155,32 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             HttpClientDefaultParameters.load(file, DEFAULT_HTTP_PARAMS);
         }
 
+        // Set up HTTP scheme override if necessary
         if (CPS_HTTP > 0) {
             log.info("Setting up HTTP SlowProtocol, cps="+CPS_HTTP);
             SLOW_HTTP = new Scheme(PROTOCOL_HTTP, DEFAULT_HTTP_PORT, new SlowHC4SocketFactory(CPS_HTTP));
         } else {
             SLOW_HTTP = null;
         }
+        
+        // We always want to override the HTTPS scheme
+        Scheme https = null;
         if (CPS_HTTPS > 0) {
             log.info("Setting up HTTPS SlowProtocol, cps="+CPS_HTTPS);
-            Scheme s = null;
             try {
-                s = new Scheme(PROTOCOL_HTTPS, DEFAULT_HTTPS_PORT, new SlowHC4SSLSocketFactory(CPS_HTTPS));
+                https = new Scheme(PROTOCOL_HTTPS, DEFAULT_HTTPS_PORT, new SlowHC4SSLSocketFactory(CPS_HTTPS));
             } catch (GeneralSecurityException e) {
-                log.warn("Failed to initialise SLOW_HTTPS scheme", e);
+                log.warn("Failed to initialise SLOW_HTTPS scheme, cps="+CPS_HTTPS, e);
             }
-            SLOW_HTTPS = s;
         } else {
-            SLOW_HTTPS = null;
+            log.info("Setting up HTTPS TrustAll scheme");
+            try {
+                https = new Scheme(PROTOCOL_HTTPS, DEFAULT_HTTPS_PORT, new HC4TrustAllSSLSocketFactory());
+            } catch (GeneralSecurityException e) {
+                log.warn("Failed to initialise HTTPS TrustAll scheme", e);
+            }
         }
+        HTTPS_SCHEME = https;
         if (localAddress != null){
             DEFAULT_HTTP_PARAMS.setParameter(ConnRoutePNames.LOCAL_ADDRESS, localAddress);
         }
@@ -448,7 +445,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         
         HttpClient httpClient = map.get(key);
 
-        if (httpClient == null){
+        if (httpClient == null){ // One-time init for this client
 
             HttpParams clientParams = new DefaultedHttpParams(new BasicHttpParams(), DEFAULT_HTTP_PARAMS);
             
@@ -456,22 +453,15 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             ((AbstractHttpClient) httpClient).addResponseInterceptor(new ResponseContentEncoding());
             ((AbstractHttpClient) httpClient).addResponseInterceptor(METRICS_SAVER); // HACK
             
+            // Override the defualt schemes as necessary
             SchemeRegistry schemeRegistry = httpClient.getConnectionManager().getSchemeRegistry();
 
-            // Allow all hostnames and all certificates
-            try {
-                SSLSocketFactory socketFactory = new SSLSocketFactory(TRUSTALL, ALLOW_ALL_HOSTNAMES);
-                Scheme sch = new Scheme(PROTOCOL_HTTPS, DEFAULT_HTTPS_PORT, socketFactory);
-                schemeRegistry.register(sch);
-            } catch (GeneralSecurityException e) {
-                log.warn("Failed to register trust-all socket factory", e);
-            }
-            
             if (SLOW_HTTP != null){
                 schemeRegistry.register(SLOW_HTTP);
             }
-            if (SLOW_HTTPS != null){
-                schemeRegistry.register(SLOW_HTTPS);
+
+            if (HTTPS_SCHEME != null){
+                schemeRegistry.register(HTTPS_SCHEME);
             }
 
             // Set up proxy details

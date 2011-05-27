@@ -18,43 +18,30 @@
 
 package org.apache.jmeter.protocol.http.util;
 
-import java.net.Socket;
 import java.security.GeneralSecurityException;
+import java.security.cert.X509Certificate;
 
-import org.apache.http.params.HttpParams;
-import org.apache.jmeter.util.SlowSocket;
+import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.conn.ssl.TrustStrategy;
 
 /**
- * Apache HttpClient protocol factory to generate "slow" SSL sockets for emulating dial-up modems
+ * Apache HttpClient protocol factory to generate SSL sockets
  */
 
-public class SlowHC4SSLSocketFactory extends HC4TrustAllSSLSocketFactory {
+public class HC4TrustAllSSLSocketFactory extends SSLSocketFactory {
 
-    private final int CPS; // Characters per second to emulate
+    private static final TrustStrategy TRUSTALL = new TrustStrategy(){
+        public boolean isTrusted(X509Certificate[] chain, String authType) {
+            return true;
+        }
+    };
 
     /**
-     * Create a factory 
-     * @param cps - characters per second, must be &gt; 0
+     * Create an SSL factory which trusts all certificates and hosts.
+     * {@link SSLSocketFactory#SSLSocketFactory(TrustStrategy, org.apache.http.conn.ssl.X509HostnameVerifier)} 
      * @throws GeneralSecurityException if there's a problem setting up the security
-     * @throws IllegalArgumentException if cps &le; 0
      */
-    public SlowHC4SSLSocketFactory(final int cps) throws GeneralSecurityException {
-        super();
-        if (cps <= 0) {
-            throw new IllegalArgumentException("CPS must be > 0, but is "+cps);
-        }
-        CPS = cps;
+    public HC4TrustAllSSLSocketFactory() throws GeneralSecurityException {
+        super(TRUSTALL, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
     }
-
-    // Override all the socket creation methods in SSLSocketFactory
-    @Override
-    public Socket createSocket(final HttpParams params) {
-        return new SlowSocket(CPS);
-    }
-
-    @Override
-    public Socket createSocket() { // probably not used
-        return new SlowSocket(CPS);
-    }
-    
 }
