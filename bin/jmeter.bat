@@ -72,7 +72,6 @@ set HEAP=-Xms512m -Xmx512m
 set NEW=-XX:NewSize=128m -XX:MaxNewSize=128m
 set SURVIVOR=-XX:SurvivorRatio=8 -XX:TargetSurvivorRatio=50%
 set TENURING=-XX:MaxTenuringThreshold=2
-set EVACUATION=-XX:MaxLiveObjectEvacuationRatio=20%
 set RMIGC=-Dsun.rmi.dgc.client.gcInterval=600000 -Dsun.rmi.dgc.server.gcInterval=600000
 set PERM=-XX:PermSize=64m -XX:MaxPermSize=64m
 rem set DEBUG=-verbose:gc -XX:+PrintTenuringDistribution
@@ -95,7 +94,7 @@ rem set DDRAW=%DDRAW% -Dsun.java2d.ddscale=true
 
 rem Server mode
 rem Collect the settings defined above
-set ARGS=%DUMP% %HEAP% %NEW% %SURVIVOR% %TENURING% %EVACUATION% %RMIGC% %PERM% %DDRAW%
+set ARGS=%DUMP% %HEAP% %NEW% %SURVIVOR% %TENURING% %RMIGC% %PERM% %DDRAW%
 
 %JM_START% %JM_LAUNCH% %ARGS% %JVM_ARGS% -jar "%JMETER_BIN%ApacheJMeter.jar" %JMETER_CMD_LINE_ARGS%
 
