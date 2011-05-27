@@ -252,7 +252,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
 
         tableModel.clearData();
         clearEachIteration.setSelected(false);
-        policy.setSelectedIndex(policies.length - 1);
+        policy.setText(CookieManager.DEFAULT_POLICY);
         deleteButton.setEnabled(false);
         saveButton.setEnabled(false);
     }
