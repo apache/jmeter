@@ -41,6 +41,8 @@ public class SlowHC4SocketFactory extends PlainSocketFactory {
         CPS = cps;
     }
 
+    // Override all the super-class Socket methods.
+    
     @Override
     public Socket createSocket(final HttpParams params) {
         return new SlowSocket(CPS);
@@ -48,7 +50,7 @@ public class SlowHC4SocketFactory extends PlainSocketFactory {
 
     @Override
     public Socket createSocket() {
-        return new Socket();
+        return new SlowSocket(CPS);
     }
     
 }
