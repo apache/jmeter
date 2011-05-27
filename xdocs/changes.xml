@@ -104,6 +104,7 @@ This is internal to the workings of the JMeter Proxy &amp; its GUI, so should no
 <li>Bug 51268 - HTTPS request through an invalid proxy causes NullPointerException and does not show in result tree.
 Rather than delegating to the JMeter thread handler for "unexpected" failures, ensure all Exceptions generate a sample error.
 </li>
+<li>Bug 51275 - Cookie Panel clearGui() sets incorrect default policy in Java 1.6</li>
 </ul>
 
 <h3>Other Samplers</h3>
