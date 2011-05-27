@@ -54,11 +54,10 @@ set HEAP=-Xms256m -Xmx256m
 set NEW=-XX:NewSize=128m -XX:MaxNewSize=128m
 set SURVIVOR=-XX:SurvivorRatio=8 -XX:TargetSurvivorRatio=50%
 set TENURING=-XX:MaxTenuringThreshold=2
-set EVACUATION=-XX:MaxLiveObjectEvacuationRatio=20%
 set RMIGC=-Dsun.rmi.dgc.client.gcInterval=600000 -Dsun.rmi.dgc.server.gcInterval=600000
 set PERM=-XX:PermSize=64m -XX:MaxPermSize=64m
 set DEBUG=-verbose:gc -XX:+PrintTenuringDistribution
-rem set ARGS=%HEAP% %NEW% %SURVIVOR% %TENURING% %EVACUATION% %RMIGC% %PERM% %DEBUG%
+rem set ARGS=%HEAP% %NEW% %SURVIVOR% %TENURING% %RMIGC% %PERM% %DEBUG%
 set ARGS=-server -Xms128m -Xmx512m
 
 %JAVA_HOME%/bin/java %JVM_ARGS% %ARGS% -jar ApacheJMeter.jar report %JMETER_CMD_LINE_ARGS%
