@@ -60,8 +60,8 @@ public class SlowHC4SSLSocketFactory extends SSLSocketFactory {
     }
 
     @Override
-    public Socket createSocket() {
-        return new Socket();
+    public Socket createSocket() { // probably not used
+        return new SlowSocket(CPS);
     }
     
 }
