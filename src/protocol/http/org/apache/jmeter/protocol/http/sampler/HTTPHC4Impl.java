@@ -173,6 +173,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             SLOW_HTTP = null;
         }
         if (CPS_HTTPS > 0) {
+            log.info("Setting up HTTPS SlowProtocol, cps="+CPS_HTTPS);
             Scheme s = null;
             try {
                 s = new Scheme(PROTOCOL_HTTPS, DEFAULT_HTTPS_PORT, new SlowHC4SSLSocketFactory(CPS_HTTPS));
