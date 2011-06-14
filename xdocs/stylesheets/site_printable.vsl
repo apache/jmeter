@@ -302,7 +302,7 @@ $node.getText()
 #if ("$!tag" != "")
 <a name="$tag"></a>
 #end
-<h3><a name="$component.getAttributeValue("name").replace($space,$udsc)">$!component.getAttributeValue("index") $component.getAttributeValue("name")</h3></a>
+<h3><a name="$component.getAttributeValue("name").replace($space,$udsc)">$!component.getAttributeValue("index") $component.getAttributeValue("name")</a></h3>
 </font>
 </td></tr>
 #if($component.getAttribute("useinstead"))
