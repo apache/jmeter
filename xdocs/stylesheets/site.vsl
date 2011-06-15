@@ -44,6 +44,10 @@
 
 ## This is where the macros live
 
+#macro ( sectionlink $anchor)
+#if($anchor)<a class="sectionlink" href="#$anchor.replace($space,$udsc)" title="Link to here">&para;</a>#end
+#end
+
 #macro ( table $table)
 <table>
 #foreach ( $items in $table.getChildren() )
@@ -155,6 +159,12 @@ $xmlout.outputString($value, true)
 #macro (properties $properties)
 <p>
 <b>Parameters</b>
+#if ($properties.getParent().getName() == 'component')
+#set ($name = $properties.getParent().getAttributeValue("name").replace($space,$udsc))
+#set ($suff = "_parms")
+<a name="$name$suff"/>
+#sectionlink ("$name$suff")
+#end
 <table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 #foreach ($items in $properties.getChildren("property"))
@@ -203,6 +213,7 @@ No
 
 #macro (example $example)
 <a name="$example.getAttributeValue("anchor")"/>
+#sectionlink ($example.getAttributeValue("anchor"))
 <p><b>$example.getAttributeValue("title")</b></p>
 #runloop($example)
 #end
@@ -299,7 +310,10 @@ $rl_node.getText()
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="$component.getAttributeValue("name").replace($space,$udsc)">$!component.getAttributeValue("index") $component.getAttributeValue("name")</h3></a>
+<h3>
+<a name="$component.getAttributeValue("name").replace($space,$udsc)">$!component.getAttributeValue("index") $component.getAttributeValue("name")</a>
+#sectionlink ($component.getAttributeValue("name"))
+</h3>
 </font>
 </td></tr>
 #if($component.getAttribute("useinstead"))
@@ -328,6 +342,7 @@ $rl_node.getText()
 <tr><td bgcolor="$subbannerbg">
 <font color="$subbannerfg" face="arial,helvetica,sanserif">
 <a name="$subsection.getAttributeValue("anchor")"><strong>$subsection.getAttributeValue("name")</strong></a>
+#sectionlink ($subsection.getAttributeValue("anchor"))
 </font>
 </td></tr>
 <tr><td>
@@ -372,7 +387,7 @@ $rl_node.getText()
 <tr><td bgcolor="$bannerbg">
 <font color="$bannerfg" face="arial,helvetica,sanserif">
 #set ($anchor = $section.getAttributeValue("anchor")) 
-#if($anchor)<a name="$anchor">#end<strong>$section.getAttributeValue("name")</strong>#if($anchor)</a>#end
+#if($anchor)<a name="$anchor">#end<strong>$section.getAttributeValue("name")</strong>#if($anchor)</a>#sectionlink ($anchor)#end
 </font>
 </td></tr>
 <tr><td>
