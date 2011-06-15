@@ -15,9 +15,25 @@
    limitations under the License.
 */
 
-a[name]:hover:after{
 /*Shows the value of the name attribute when hovered*/
+/* Disabled
+a[name]:hover:after{
     content: " #" attr(name);
     font-size: 90%;
     text-decoration: none;
+}
+*/
+
+/*
+ * Hide class="sectionlink", except when an enclosing heading
+ * has the :hover property.
+ * Used to hide the &para; marker for generating internal links
+ */
+.sectionlink {
+  display: none;
+}
+:hover > .sectionlink {
+  display: inline;
+  /* Green so shows up on section headings too */
+  color: rgb(0,255,0);
 }
