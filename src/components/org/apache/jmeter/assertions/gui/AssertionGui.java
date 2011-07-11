@@ -211,7 +211,7 @@ public class AssertionGui extends AbstractAssertionGui {
         super.configure(el);
         ResponseAssertion model = (ResponseAssertion) el;
 
-        showScopeSettings(model);
+        showScopeSettings(model, true);
 
         if (model.isContainsType()) {
             containsBox.setSelected(true);

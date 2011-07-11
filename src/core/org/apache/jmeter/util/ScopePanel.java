@@ -102,15 +102,36 @@ public class ScopePanel extends JPanel implements ActionListener {
     }
 
     public void setScopeAll() {
+        setScopeAll(false);
+    }
+    
+    public void setScopeAll(boolean enableVariableButton) {
         allButton.setSelected(true);
+        if (enableVariableButton) {
+            variableName.setText(""); //$NON-NLS-1$
+        }
     }
 
     public void setScopeChildren() {
+        setScopeChildren(false);
+    }
+
+    public void setScopeChildren(boolean enableVariableButton) {
         childButton.setSelected(true);
+        if (enableVariableButton) {
+            variableName.setText(""); //$NON-NLS-1$
+        }
     }
 
     public void setScopeParent() {
+        setScopeParent(false);
+    }
+
+    public void setScopeParent(boolean enableVariableButton) {
         parentButton.setSelected(true);
+        if (enableVariableButton) {
+            variableName.setText(""); //$NON-NLS-1$
+        }
     }
 
     public void setScopeVariable(String value){
