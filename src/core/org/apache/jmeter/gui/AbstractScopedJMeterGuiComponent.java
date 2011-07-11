@@ -98,13 +98,24 @@ public abstract class AbstractScopedJMeterGuiComponent extends AbstractJMeterGui
      * @param testElement
      */
     protected void showScopeSettings(AbstractScopedTestElement testElement) {
+        showScopeSettings(testElement, false);
+    }
+    
+    /**
+     * Show the scope settings from the test element with variable scope
+     *
+     * @param testElement
+     * @param enableVariableButton
+     */
+    protected void showScopeSettings(AbstractScopedTestElement testElement,
+            boolean enableVariableButton) {
         String scope = testElement.fetchScope();
         if (testElement.isScopeParent(scope)) {
-                scopePanel.setScopeParent();
+                scopePanel.setScopeParent(enableVariableButton);
         } else if (testElement.isScopeChildren(scope)){
-            scopePanel.setScopeChildren();
+            scopePanel.setScopeChildren(enableVariableButton);
         } else if (testElement.isScopeAll(scope)){
-            scopePanel.setScopeAll();
+            scopePanel.setScopeAll(enableVariableButton);
         } else if (testElement.isScopeVariable(scope)){
             scopePanel.setScopeVariable(testElement.getVariableName());
         } else {
