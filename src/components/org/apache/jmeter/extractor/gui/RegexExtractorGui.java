@@ -81,7 +81,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
         super.configure(el);
         if (el instanceof RegexExtractor){
             RegexExtractor re = (RegexExtractor) el;
-            showScopeSettings(re);
+            showScopeSettings(re, true);
             useHeaders.setSelected(re.useHeaders());
             useBody.setSelected(re.useBody());
             useUnescapedBody.setSelected(re.useUnescapedBody());
