@@ -52,7 +52,7 @@
 	<classpathentry kind="lib" path="lib/commons-jexl-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang-2.6.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
-	<classpathentry kind="lib" path="lib/commons-net-3.0.jar"/>
+	<classpathentry kind="lib" path="lib/commons-net-3.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/excalibur-datasource-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/excalibur-instrument-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/excalibur-logger-1.1.jar"/>
