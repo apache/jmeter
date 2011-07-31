@@ -63,9 +63,9 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </li>
 <li><a href="../changes.html">Changes</a>
 </li>
-<li><a href="../known_bugs.html">Known Bugs</a>
+<li><a href="../issues.html">Issues</a>
 </li>
-<li><a href="../license.html">License</a>
+<li><a href="http://www.apache.org/licenses/">License</a>
 </li>
 <li><a href="http://wiki.apache.org/jakarta-jmeter/JMeterCommitters">Contributors</a>
 </li>
@@ -283,6 +283,9 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <li><a href="#Property_Display">Property Display</a></li>
 <li><a href="#Debug_Sampler">Debug Sampler</a></li>
 <li><a href="#Debug_PostProcessor">Debug PostProcessor</a></li>
+<li><a href="#Test_Fragment">Test Fragment</a></li>
+<li><a href="#setUp_Thread_Group">setUp Thread Group</a></li>
+<li><a href="#tearDown_Thread_Group">tearDown Thread Group</a></li>
 </ul>
 <li><a href="#Reports">18.10 Reports</a></li>
 <ul>
@@ -297,7 +300,7 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="samplers"><strong>18.1 Samplers</strong></a></font>
+<a name="samplers"><strong>18.1 Samplers</strong></a><a class="sectionlink" href="#samplers" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -317,7 +320,9 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="FTP_Request">18.1.1 FTP Request</h3></a>
+<h3>
+<a name="FTP_Request">18.1.1 FTP Request</a>
+<a class="sectionlink" href="#FTP_Request" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -341,7 +346,8 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
 <div align="center"><img width='499' height='292' src="../images/screenshots/ftptest/ftp-request.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="FTP_Request_parms"/>
+<a class="sectionlink" href="#FTP_Request_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -451,7 +457,9 @@ Usually
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="HTTP_Request">18.1.2 HTTP Request</h3></a>
+<h3>
+<a name="HTTP_Request">18.1.2 HTTP Request</a>
+<a class="sectionlink" href="#HTTP_Request" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -538,21 +546,11 @@ Or, instead of manually adding HTTP Requests, you may want to use
         
 <p>
 <b>
-There are three versions of the sampler:
+There are two different screens for defining the samplers:
 </b>
 
         
 <ul>
-
-        
-<li>
-HTTP Request - uses the default Java HTTP implementation
-</li>
-
-        
-<li>
-HTTP Request HTTPClient - uses Apache Commons HttpClient
-</li>
 
         
 <li>
@@ -562,6 +560,34 @@ AJP/1.3 Sampler - uses the Tomcat mod_jk protocol (allows testing of Tomcat in A
 </li>
 
         
+<li>
+HTTP Request - this has an implementation drop-down box, which selects the HTTP protocol implementation to be used:
+</li>
+
+        
+<ul>
+
+        
+<li>
+Java - uses the HTTP implementation provided by the JVM. 
+        This has some limitations in comparison with the HttpClient implementations - see below.
+</li>
+
+        
+<li>
+HTTPClient3.1 - uses Apache Commons HttpClient 3.1. 
+        This is no longer being developed, and support for this may be dropped in a future JMeter release.
+</li>
+
+        
+<li>
+HTTPClient4 - uses Apache HttpComponents HttpClient 4.x.
+</li>
+
+        
+</ul>
+
+        
 </ul>
 
          
@@ -569,7 +595,7 @@ AJP/1.3 Sampler - uses the Tomcat mod_jk protocol (allows testing of Tomcat in A
 
          
 <p>
-The default (Java) implementation has some limitations:
+The Java HTTP implementation has some limitations:
 </p>
 
          
@@ -592,6 +618,11 @@ The API is best suited to single-threaded usage - various settings (e.g. proxy)
 There is a bug in the handling of HTTPS via a Proxy (the CONNECT is not handled correctly).
          See Java bugs 6226610 and 6208335.
          
+</li>
+
+         
+<li>
+It does not support virtual hosts.
 </li>
 
          
@@ -686,10 +717,11 @@ If the request uses a technique called "URL Rewriting" to maintain sessions,
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='687' height='661' src="../images/screenshots/http-request.png"></div>
+<div align="center"><img  src="../images/screenshots/http-request.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="HTTP_Request_parms"/>
+<a class="sectionlink" href="#HTTP_Request_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -701,7 +733,11 @@ No
 </tr>
 <tr>
 <td>Server</td>
-<td>Domain name or IP address of the web server. e.g. www.example.com. [Do not include the http:// prefix.]
+<td>
+            Domain name or IP address of the web server. e.g. www.example.com. [Do not include the http:// prefix.]
+            Note: in JMeter 2.5 (and later) if the "Host" header is defined in a Header Manager, then this will be used
+            as the virtual host name.
+        
 </td>
 <td>
 Yes, unless provided by HTTP Request Defaults
@@ -744,7 +780,7 @@ No
 <td>Port the proxy server is listening to.
 </td>
 <td>
-No
+No, unless proxy hostname is specified
 </td>
 </tr>
 <tr>
@@ -758,6 +794,20 @@ No
 <tr>
 <td>Password</td>
 <td>(Optional) password for proxy server.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Implementation</td>
+<td>Java, HttpClient3.1, HttpClient4. 
+        If not specified (and not defined by HTTP Request Defaults), the default depends on the value of the JMeter property
+        
+<code>
+jmeter.httpsampler
+</code>
+, failing that, the Java implementation is used.
 </td>
 <td>
 No
@@ -802,7 +852,7 @@ Warning: see below for information on cookie and header handling.
         
 </td>
 <td>
-Yes
+No
 </td>
 </tr>
 <tr>
@@ -838,7 +888,7 @@ httpsampler.redirect.removeslashdotdot=false
 		
 </td>
 <td>
-Yes
+No
 </td>
 </tr>
 <tr>
@@ -847,7 +897,7 @@ Yes
                   It does work with the Jakarta httpClient implementation.
 </td>
 <td>
-Yes
+No
 </td>
 </tr>
 <tr>
@@ -857,7 +907,18 @@ Yes
         
 </td>
 <td>
-Yes
+No
+</td>
+</tr>
+<tr>
+<td>Browser-compatible headers</td>
+<td>
+        When using multipart/form-data, this suppresses the Content-Type and 
+        Content-Transfer-Encoding headers; only the Content-Disposition header is sent.
+        
+</td>
+<td>
+No
 </td>
 </tr>
 <tr>
@@ -978,7 +1039,7 @@ No
  listener.
 </td>
 <td>
-Yes
+No
 </td>
 </tr>
 <tr>
@@ -990,7 +1051,7 @@ Yes
        
 </td>
 <td>
-Yes
+No
 </td>
 </tr>
 <tr>
@@ -1000,6 +1061,22 @@ Yes
         So if you only want to download embedded resources from http://example.com/, use the expression:
         http://example\.com/.*
         
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Use concurrent pool</td>
+<td>Use a pool of concurrent connections to get embedded resources.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Size</td>
+<td>Pool size for concurrent connections used to get embedded resources.
 </td>
 <td>
 No
@@ -1145,6 +1222,51 @@ Emulating slow connections (HttpClient only):
 #httpclient.socket.https.cps=0
 
 </pre>
+<p>
+<b>
+Response size calculation
+</b>
+<br>
+</br>
+
+Optional properties to allow change the method to get response size:
+<br>
+</br>
+
+
+<ul>
+<li>
+Gets the real network size in bytes for the body response
+
+<pre>
+sampleresult.getbytes.body_real_size=true
+</pre>
+</li>
+
+
+<li>
+Add HTTP headers to full response size
+
+<pre>
+sampleresult.getbytes.headers_size=true
+</pre>
+</li>
+</ul>
+
+
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>Versions of JMeter before 2.5 returns only data response size (uncompressed if request uses gzip/defate mode).
+
+<br>
+</br>
+To return to settings before version 2.5, set the two properties to false.
+</td></tr>
+</table>
+</p>
+
+
+</p>
 <p><b>See Also:</b>
 <ul>
 <li><a href="test_plan.html#assertions">Assertion</a></li>
@@ -1172,7 +1294,9 @@ Emulating slow connections (HttpClient only):
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="JDBC_Request">18.1.3 JDBC Request</h3></a>
+<h3>
+<a name="JDBC_Request">18.1.3 JDBC Request</a>
+<a class="sectionlink" href="#JDBC_Request" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -1226,10 +1350,11 @@ the additional variables for rows 4, 5 and 6 will be removed.
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='427' height='334' src="../images/screenshots/jdbctest/jdbc-request.png"></div>
+<div align="center"><img width='466' height='334' src="../images/screenshots/jdbctest/jdbc-request.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="JDBC_Request_parms"/>
+<a class="sectionlink" href="#JDBC_Request_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -1393,7 +1518,7 @@ Yes, if a prepared or callable statement has parameters
         Comma-separated list of SQL parameter types (e.g. INTEGER, DATE, VARCHAR, DOUBLE).
         These are defined as fields in the class java.sql.Types, see for example:
         
-<a href="http://java.sun.com/j2se/1.5/docs/api/java/sql/Types.html">
+<a href="http://download.oracle.com/javase/1.5.0/docs/api/java/sql/Types.html">
 Javadoc for java.sql.Types
 </a>
 .
@@ -1427,6 +1552,25 @@ Yes, if a prepared or callable statement has parameters
 No
 </td>
 </tr>
+<tr>
+<td>Result Variable Name</td>
+<td>
+        If specified, this will create an Object variable containing a list of row maps.
+        Each map contains the column name as the key and the column data as the value. Usage:
+<br>
+</br>
+
+        
+<code>
+columnValue = vars.getObject("resultObject").get(0).get("Column Name");
+</code>
+
+        
+</td>
+<td>
+No
+</td>
+</tr>
 </table>
 </p>
 <p><b>See Also:</b>
@@ -1449,7 +1593,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Java_Request">18.1.4 Java Request</h3></a>
+<h3>
+<a name="Java_Request">18.1.4 Java Request</a>
+<a class="sectionlink" href="#Java_Request" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -1495,7 +1641,8 @@ The fields allow variables to be used, so the values of these can readily be see
 </p>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Java_Request_parms"/>
+<a class="sectionlink" href="#Java_Request_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -1544,7 +1691,9 @@ totalSleepTime = SleepTime + (System.currentTimeMillis() % SleepMask)
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="SOAP/XML-RPC_Request">18.1.5 SOAP/XML-RPC Request</h3></a>
+<h3>
+<a name="SOAP/XML-RPC_Request">18.1.5 SOAP/XML-RPC Request</a>
+<a class="sectionlink" href="#SOAP/XML-RPC_Request" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -1591,7 +1740,8 @@ Or set Content-Length to -1 to force chunked encoding.
 <div align="center"><img width='474' height='236' src="../images/screenshots/soap_sampler.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="SOAP/XML-RPC_Request_parms"/>
+<a class="sectionlink" href="#SOAP/XML-RPC_Request_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -1645,7 +1795,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="WebService(SOAP)_Request">18.1.6 WebService(SOAP) Request</h3></a>
+<h3>
+<a name="WebService(SOAP)_Request">18.1.6 WebService(SOAP) Request</a>
+<a class="sectionlink" href="#WebService(SOAP)_Request" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -1663,16 +1815,6 @@ This sampler has been tested with IIS Webservice running .NET 1.0 and .NET 1.1.
  paste the message in to text area, it will not retain the encoding and will result
  in errors. Save your message to a file with the proper encoding, and the sampler
  will read it as java.io.FileInputStream.
-</p>
-
- 
-<p>
-<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
-<tr><td>The sampler requires mail.jar and activation.jar. This is because Apache SOAP
- requires the libs. Because mail.jar and activation.jar are distributed by Sun,
- you have to download them separately.
-</td></tr>
-</table>
 </p>
 
  
@@ -1736,10 +1878,11 @@ If this is zero, then the request is marked as failed.
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='536' height='934' src="../images/screenshots/webservice_sampler.png"></div>
+<div align="center"><img width='460' height='781' src="../images/screenshots/webservice_sampler.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="WebService(SOAP)_Request_parms"/>
+<a class="sectionlink" href="#WebService(SOAP)_Request_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -1878,7 +2021,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="LDAP_Request">18.1.7 LDAP Request</h3></a>
+<h3>
+<a name="LDAP_Request">18.1.7 LDAP Request</a>
+<a class="sectionlink" href="#LDAP_Request" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -1897,7 +2042,7 @@ If you are going to send multiple requests to the same LDAP server, consider
  also using for Login and password.
   
 <p><b>Control Panel</b></p>
-<div align="center"><img width='505' height='476' src="../images/screenshots/ldap_request.png"></div>
+<div align="center"><img  src="../images/screenshots/ldap_request.png"></div>
 <p>
 There are two ways to create test cases for testing an LDAP Server.
 </p>
@@ -2040,7 +2185,8 @@ This will delete the user-defined entry in the LDAP Server. The entries
 </ol>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="LDAP_Request_parms"/>
+<a class="sectionlink" href="#LDAP_Request_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -2157,7 +2303,9 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="LDAP_Extended_Request">18.1.8 LDAP Extended Request</h3></a>
+<h3>
+<a name="LDAP_Extended_Request">18.1.8 LDAP Extended Request</a>
+<a class="sectionlink" href="#LDAP_Extended_Request" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -2174,7 +2322,7 @@ If you are going to send multiple requests to the same LDAP server, consider
 </p>
  
 <p><b>Control Panel</b></p>
-<div align="center"><img width='595' height='542' src="../images/screenshots/ldapext_request.png"></div>
+<div align="center"><img  src="../images/screenshots/ldapext_request.png"></div>
 <p>
 There are nine test operations defined. These operations are given below:
 </p>
@@ -2711,7 +2859,9 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Access_Log_Sampler">18.1.9 Access Log Sampler</h3></a>
+<h3>
+<a name="Access_Log_Sampler">18.1.9 Access Log Sampler</a>
+<a class="sectionlink" href="#Access_Log_Sampler" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -2798,7 +2948,8 @@ StandardGenerator and TCLogParser.
 <div align="center"><img width='582' height='301' src="../images/screenshots/accesslogsampler.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Access_Log_Sampler_parms"/>
+<a class="sectionlink" href="#Access_Log_Sampler_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -2879,7 +3030,9 @@ to configure this via the GUI, so it cannot really be used.
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="BeanShell_Sampler">18.1.10 BeanShell Sampler</h3></a>
+<h3>
+<a name="BeanShell_Sampler">18.1.10 BeanShell Sampler</a>
+<a class="sectionlink" href="#BeanShell_Sampler" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -2891,7 +3044,10 @@ This sampler allows you to write a sampler using the BeanShell scripting languag
 
 
 <b>
-For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.
+For full details on using BeanShell, please see the 
+<a href="http://www.beanshell.org/">
+BeanShell website.
+</a>
 </b>
 
 
@@ -2911,11 +3067,13 @@ See the file BeanShellListeners.bshrc for example definitions.
 <div align="center"><img width='592' height='303' src="../images/screenshots/beanshellsampler.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="BeanShell_Sampler_parms"/>
+<a class="sectionlink" href="#BeanShell_Sampler_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
 <td>Descriptive name for this controller that is shown in the tree.
+    The name is stored in the script variable Label
 </td>
 <td>
 No
@@ -2966,6 +3124,7 @@ No
 <tr>
 <td>Script file</td>
 <td>A file containing the BeanShell script to run.
+    The file name is stored in the script variable FileName
 </td>
 <td>
 No
@@ -3071,7 +3230,7 @@ vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.
 
             
 <li>
-props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");
+props - JMeterProperties - e.g. props.get("START.HMS"); props.put("PROP1","1234");
 </li>
 
 		
@@ -3156,7 +3315,9 @@ Beware however that misuse of any methods can cause subtle faults that may be di
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="BSF_Sampler">18.1.11 BSF Sampler</h3></a>
+<h3>
+<a name="BSF_Sampler">18.1.11 BSF Sampler</a>
+<a class="sectionlink" href="#BSF_Sampler" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -3207,10 +3368,11 @@ xslt
 
 	
 <p><b>Control Panel</b></p>
-<div align="center"><img width='598' height='259' src="../images/screenshots/bsfsampler.png"></div>
+<div align="center"><img width='622' height='267' src="../images/screenshots/bsfsampler.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="BSF_Sampler_parms"/>
+<a class="sectionlink" href="#BSF_Sampler_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -3302,6 +3464,11 @@ SampleResult - pointer to the current SampleResult
 
 
 <li>
+sampler - pointer to current Sampler
+</li>
+
+
+<li>
 ctx - JMeterContext
 </li>
 
@@ -3312,7 +3479,7 @@ vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.
 
 
 <li>
-props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");
+props - JMeterProperties - e.g. props.get("START.HMS"); props.put("PROP1","1234");
 </li>
 
 
@@ -3372,7 +3539,9 @@ SampleResult.setResponseMessage("message")
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="JSR223_Sampler">18.1.11.1 JSR223 Sampler</h3></a>
+<h3>
+<a name="JSR223_Sampler">18.1.11.1 JSR223 Sampler</a>
+<a class="sectionlink" href="#JSR223_Sampler" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -3395,7 +3564,9 @@ For details, see
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="TCP_Sampler">18.1.12 TCP Sampler</h3></a>
+<h3>
+<a name="TCP_Sampler">18.1.12 TCP Sampler</a>
+<a class="sectionlink" href="#TCP_Sampler" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -3610,10 +3781,11 @@ Response handling
 		Sockets are disconnected at the end of a test run.
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='477' height='343' src="../images/screenshots/tcpsampler.png"></div>
+<div align="center"><img width='743' height='357' src="../images/screenshots/tcpsampler.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="TCP_Sampler_parms"/>
+<a class="sectionlink" href="#TCP_Sampler_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -3656,8 +3828,16 @@ Yes
 </td>
 </tr>
 <tr>
-<td>Timeout (milliseconds)</td>
-<td>Timeout for replies.
+<td>Connect Timeout</td>
+<td>Connect Timeout (milliseconds, 0 disables).
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Response Timeout</td>
+<td>Response Timeout (milliseconds, 0 disables).
 </td>
 <td>
 No
@@ -3705,7 +3885,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="JMS_Publisher">18.1.13 JMS Publisher</h3></a>
+<h3>
+<a name="JMS_Publisher">18.1.13 JMS Publisher</a>
+<a class="sectionlink" href="#JMS_Publisher" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -3739,10 +3921,11 @@ No
 
 	
 <p><b>Control Panel</b></p>
-<div align="center"><img width='459' height='662' src="../images/screenshots/jmspublisher.png"></div>
+<div align="center"><img  src="../images/screenshots/jmspublisher.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="JMS_Publisher_parms"/>
+<a class="sectionlink" href="#JMS_Publisher_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -3782,7 +3965,15 @@ Yes, unless using jndi.properties
 </tr>
 <tr>
 <td>Destination</td>
-<td>the message destination (topic or queue name)
+<td>The message destination (topic or queue name)
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>Setup</td>
+<td>The destination setup type. With At startup, the destination name is static (i.e. always same name during the test), with Each sample, the destination name is dynamic and is evaluate at each sample (i.e. the destination name may be a variable)
 </td>
 <td>
 Yes
@@ -3814,7 +4005,7 @@ No
 </tr>
 <tr>
 <td>Number of samples to aggregate</td>
-<td>number of samples to aggregate
+<td>Number of samples to aggregate
 </td>
 <td>
 Yes
@@ -3822,7 +4013,7 @@ Yes
 </tr>
 <tr>
 <td>Message source</td>
-<td>where to obtain the message
+<td>Where to obtain the message
 </td>
 <td>
 Yes
@@ -4005,7 +4196,9 @@ dynamicTopics/TOPICNAME
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="JMS_Subscriber">18.1.14 JMS Subscriber</h3></a>
+<h3>
+<a name="JMS_Subscriber">18.1.14 JMS Subscriber</a>
+<a class="sectionlink" href="#JMS_Subscriber" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -4039,10 +4232,11 @@ dynamicTopics/TOPICNAME
 
 	
 <p><b>Control Panel</b></p>
-<div align="center"><img width='679' height='408' src="../images/screenshots/jmssubscriber.png"></div>
+<div align="center"><img  src="../images/screenshots/jmssubscriber.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="JMS_Subscriber_parms"/>
+<a class="sectionlink" href="#JMS_Subscriber_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -4083,6 +4277,23 @@ No
 <tr>
 <td>Destination</td>
 <td>the message destination (topic or queue name)
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>Durable Subscription ID</td>
+<td>The ID to use for a durable subscription. On first 
+  use the respective queue will automatically be generated by the JMS provider if it does not exist yet.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Setup</td>
+<td>The destination setup type. With At startup, the destination name is static (i.e. always same name during the test), with Each sample, the destination name is dynamic and is evaluate at each sample (i.e. the destination name may be a variable)
 </td>
 <td>
 Yes
@@ -4200,7 +4411,9 @@ completed, so the net effect was similar to the MessageListener.onMessage() stra
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="JMS_Point-to-Point">18.1.15 JMS Point-to-Point</h3></a>
+<h3>
+<a name="JMS_Point-to-Point">18.1.15 JMS Point-to-Point</a>
+<a class="sectionlink" href="#JMS_Point-to-Point" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -4249,7 +4462,8 @@ JMSSampler.useSecurity.properties=false
 <div align="center"><img width='684' height='698' src="../images/screenshots/jms/JMS_Point-to-Point.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="JMS_Point-to-Point_parms"/>
+<a class="sectionlink" href="#JMS_Point-to-Point_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -4450,7 +4664,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="JUnit_Request">18.1.16 JUnit Request</h3></a>
+<h3>
+<a name="JUnit_Request">18.1.16 JUnit Request</a>
+<a class="sectionlink" href="#JUnit_Request" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -4528,7 +4744,8 @@ Here are some general guidelines for writing Junit tests so they work well with 
 <div align="center"><img width='457' height='507' src="../images/screenshots/junit_sampler.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="JUnit_Request_parms"/>
+<a class="sectionlink" href="#JUnit_Request_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -4700,7 +4917,9 @@ This is to allow the setUp/tearDown methods to be excluded from the sample time.
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Mail_Reader_Sampler">18.1.17 Mail Reader Sampler</h3></a>
+<h3>
+<a name="Mail_Reader_Sampler">18.1.17 Mail Reader Sampler</a>
+<a class="sectionlink" href="#Mail_Reader_Sampler" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -4714,10 +4933,11 @@ The Mail Reader Sampler can read (and optionally delete) mail messages using POP
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='399' height='306' src="../images/screenshots/mailreader_sampler.png"></div>
+<div align="center"><img width='547' height='409' src="../images/screenshots/mailreader_sampler.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Mail_Reader_Sampler_parms"/>
+<a class="sectionlink" href="#Mail_Reader_Sampler_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -4827,6 +5047,68 @@ A few headers are stored (Date, To, From, Subject) in the body.
 Yes
 </td>
 </tr>
+<tr>
+<td>Use no security features</td>
+<td>Indicates that the connection to the server does not use any security protocol.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Use SSL</td>
+<td>Indicates that the connection to the server must use the SSL protocol.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Use StartTLS</td>
+<td>Indicates that the connection to the server should attempt to start the TLS protocol.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Enforce StartTLS</td>
+<td>If the server does not start the TLS protocol the connection will be terminated.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Trust All Certificates</td>
+<td>When selected it will accept all certificates independent of the CA.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Use local truststore</td>
+<td>When selected it will only accept certificates that are locally trusted.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Local truststore</td>
+<td>Path to file containing the trusted certificates.
+Relative paths are resolved against the current directory.
+
+<br>
+</br>
+Failing that, against the directory containing the test script (JMX file).
+
+</td>
+<td>
+No
+</td>
+</tr>
 </table>
 </p>
 <p>
@@ -4883,7 +5165,9 @@ The current implementation is quite basic, and is mainly intended for debugging 
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Test_Action">18.1.18 Test Action</h3></a>
+<h3>
+<a name="Test_Action">18.1.18 Test Action</a>
+<a class="sectionlink" href="#Test_Action" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -4915,10 +5199,11 @@ jmeterengine.threadstop.wait
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='344' height='181' src="../images/screenshots/test_action.png"></div>
+<div align="center"><img  src="../images/screenshots/test_action.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Test_Action_parms"/>
+<a class="sectionlink" href="#Test_Action_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -4961,7 +5246,9 @@ Yes, if Pause is selected
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="SMTP_Sampler">18.1.19 SMTP Sampler</h3></a>
+<h3>
+<a name="SMTP_Sampler">18.1.19 SMTP Sampler</a>
+<a class="sectionlink" href="#SMTP_Sampler" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -5000,10 +5287,11 @@ Use a local truststore. With this option the certificate chain will be validated
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='644' height='759' src="../images/screenshots/smtp_sampler.png"></div>
+<div align="center"><img width='713' height='802' src="../images/screenshots/smtp_sampler.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="SMTP_Sampler_parms"/>
+<a class="sectionlink" href="#SMTP_Sampler_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Server</td>
@@ -5037,23 +5325,31 @@ Yes
 </tr>
 <tr>
 <td>Address To</td>
-<td>The destination e-mail address
+<td>The destination e-mail address (multiple values separated by ";")
 </td>
 <td>
 Yes, unless CC or BCC is specified
 </td>
 </tr>
 <tr>
-<td>Address To BCC</td>
-<td>Blind carbon copy destinations e-mail address
+<td>Address To CC</td>
+<td>Carbon copy destinations e-mail address (multiple values separated by ";")
 </td>
 <td>
 No
 </td>
 </tr>
 <tr>
-<td>Address To CC</td>
-<td>Carbon copy destinations e-mail address
+<td>Address To BCC</td>
+<td>Blind carbon copy destinations e-mail address (multiple values separated by ";")
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Address Reply-To</td>
+<td>Alternate Reply-To address (multiple values separated by ";")
 </td>
 <td>
 No
@@ -5154,6 +5450,15 @@ No
 </td>
 </tr>
 <tr>
+<td>Suppress Subject Header</td>
+<td>If selected, the "Subject:" header is omitted from the mail that is sent. 
+This is different from sending an empty "Subject:" header, though some e-mail clients may display it identically.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
 <td>Include timestamp in subject</td>
 <td>Includes the System.currentTimemilis() in the subject line.
 </td>
@@ -5172,6 +5477,18 @@ No
 <tr>
 <td>Message</td>
 <td>The message body.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Send plain body (i.e. not multipart/mixed)</td>
+<td>
+If selected, then send the body as a plain message, i.e. not multipart/mixed, if possible.
+If the message body is empty and there is a single file, then send the file contents as the message body.
+Note: If the message body is not empty, and there is at least one attached file, then the body is sent as multipart/mixed.
+
 </td>
 <td>
 No
@@ -5226,7 +5543,7 @@ No
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="logic_controllers"><strong>18.2 Logic Controllers</strong></a></font>
+<a name="logic_controllers"><strong>18.2 Logic Controllers</strong></a><a class="sectionlink" href="#logic_controllers" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -5242,7 +5559,9 @@ Logic Controllers determine the order in which Samplers are processed.
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Simple_Controller">18.2.1 Simple Controller</h3></a>
+<h3>
+<a name="Simple_Controller">18.2.1 Simple Controller</a>
+<a class="sectionlink" href="#Simple_Controller" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -5256,10 +5575,11 @@ storage device.
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='390' height='62' src="../images/screenshots/logic-controller/simple-controller.gif"></div>
+<div align="center"><img  src="../images/screenshots/logic-controller/simple-controller.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Simple_Controller_parms"/>
+<a class="sectionlink" href="#Simple_Controller_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -5272,7 +5592,7 @@ No
 </table>
 </p>
 <a name="simple_controller_example"/>
-<p><b>Using the Simple Controller</b></p>
+<a class="sectionlink" href="#simple_controller_example" title="Link to here">&para;</a><p><b>Using the Simple Controller</b></p>
 
 
 <p>
@@ -5303,7 +5623,9 @@ is configured to store the results in a file named "simple-test.dat" in the curr
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Loop_Controller">18.2.2 Loop Controller</h3></a>
+<h3>
+<a name="Loop_Controller">18.2.2 Loop Controller</a>
+<a class="sectionlink" href="#Loop_Controller" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -5316,10 +5638,11 @@ count to three, JMeter will send a total of 2 * 3 = 6 HTTP Requests.
 
 </p>
 <p><b>Control Panel</b></p>
-<div align="center"><img width='397' height='111' src="../images/screenshots/logic-controller/loop-controller.gif"></div>
+<div align="center"><img  src="../images/screenshots/logic-controller/loop-controller.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Loop_Controller_parms"/>
+<a class="sectionlink" href="#Loop_Controller_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -5355,7 +5678,7 @@ Yes, unless "Forever" is checked
 </table>
 </p>
 <a name="loop_example"/>
-<p><b>Looping Example</b></p>
+<a class="sectionlink" href="#loop_example" title="Link to here">&para;</a><p><b>Looping Example</b></p>
 
 
 
@@ -5400,7 +5723,9 @@ is configured to store the results in a file named "loop-test.dat" in the curren
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Once_Only_Controller">18.2.3 Once Only Controller</h3></a>
+<h3>
+<a name="Once_Only_Controller">18.2.3 Once Only Controller</a>
+<a class="sectionlink" href="#Once_Only_Controller" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -5426,10 +5751,11 @@ to login once to establish a session.
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='390' height='62' src="../images/screenshots/logic-controller/once-only-controller.gif"></div>
+<div align="center"><img  src="../images/screenshots/logic-controller/once-only-controller.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Once_Only_Controller_parms"/>
+<a class="sectionlink" href="#Once_Only_Controller_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -5442,7 +5768,7 @@ No
 </table>
 </p>
 <a name="once_only_example"/>
-<p><b>Once Only Example</b></p>
+<a class="sectionlink" href="#once_only_example" title="Link to here">&para;</a><p><b>Once Only Example</b></p>
 
 
 <p>
@@ -5483,7 +5809,9 @@ Thread Group or a Loop Controller is not currently defined. Odd things may happe
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Interleave_Controller">18.2.4 Interleave Controller</h3></a>
+<h3>
+<a name="Interleave_Controller">18.2.4 Interleave Controller</a>
+<a class="sectionlink" href="#Interleave_Controller" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -5494,10 +5822,11 @@ other controllers for each loop iteration.
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='219' height='90' src="../images/screenshots/logic-controller/interleave-controller.png"></div>
+<div align="center"><img  src="../images/screenshots/logic-controller/interleave-controller.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Interleave_Controller_parms"/>
+<a class="sectionlink" href="#Interleave_Controller_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>name</td>
@@ -5518,7 +5847,7 @@ No
 </table>
 </p>
 <a name="simple_interleave_example"/>
-<p><b>Simple Interleave Example</b></p>
+<a class="sectionlink" href="#simple_interleave_example" title="Link to here">&para;</a><p><b>Simple Interleave Example</b></p>
 
 
 
@@ -5678,7 +6007,7 @@ Log Page
 
 
 <a name="useful_interleave_example"/>
-<p><b>Useful Interleave Example</b></p>
+<a class="sectionlink" href="#useful_interleave_example" title="Link to here">&para;</a><p><b>Useful Interleave Example</b></p>
 
 
 
@@ -5730,7 +6059,9 @@ If the two interleave controllers under the main interleave controller were inst
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Random_Controller">18.2.5 Random Controller</h3></a>
+<h3>
+<a name="Random_Controller">18.2.5 Random Controller</a>
+<a class="sectionlink" href="#Random_Controller" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -5754,10 +6085,11 @@ what results any given interaction will give
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='238' height='84' src="../images/screenshots/logic-controller/random-controller.gif"></div>
+<div align="center"><img  src="../images/screenshots/logic-controller/random-controller.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Random_Controller_parms"/>
+<a class="sectionlink" href="#Random_Controller_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -5776,7 +6108,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Random_Order_Controller">18.2.6 Random Order Controller</h3></a>
+<h3>
+<a name="Random_Order_Controller">18.2.6 Random Order Controller</a>
+<a class="sectionlink" href="#Random_Order_Controller" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -5789,10 +6123,11 @@ The Random Order Controller is much like a Simple Controller in that it will exe
 
 	
 <p><b>Control Panel</b></p>
-<div align="center"><img width='358' height='131' src="../images/screenshots/randomordercontroller.png"></div>
+<div align="center"><img  src="../images/screenshots/randomordercontroller.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Random_Order_Controller_parms"/>
+<a class="sectionlink" href="#Random_Order_Controller_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -5811,7 +6146,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Throughput_Controller">18.2.7 Throughput Controller</h3></a>
+<h3>
+<a name="Throughput_Controller">18.2.7 Throughput Controller</a>
+<a class="sectionlink" href="#Throughput_Controller" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -5840,7 +6177,7 @@ setting is reset when a parent Loop Controller restarts.
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='223' height='148' src="../images/screenshots/throughput_controller.png"></div>
+<div align="center"><img  src="../images/screenshots/throughput_controller.png"></div>
 <p>
 <table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
 <tr><td>The Throughput Controller can yield very complex behavior when combined with other controllers - in particular with interleave or random controllers as parents (also very useful).
@@ -5849,7 +6186,8 @@ setting is reset when a parent Loop Controller restarts.
 </p>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Throughput_Controller_parms"/>
+<a class="sectionlink" href="#Throughput_Controller_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -5892,7 +6230,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Runtime_Controller">18.2.8 Runtime Controller</h3></a>
+<h3>
+<a name="Runtime_Controller">18.2.8 Runtime Controller</a>
+<a class="sectionlink" href="#Runtime_Controller" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -5905,10 +6245,11 @@ The Runtime Controller controls how long its children are allowed to run.
 
 	
 <p><b>Control Panel</b></p>
-<div align="center"><img width='358' height='131' src="../images/screenshots/runtimecontroller.png"></div>
+<div align="center"><img  src="../images/screenshots/runtimecontroller.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Runtime_Controller_parms"/>
+<a class="sectionlink" href="#Runtime_Controller_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -5935,7 +6276,9 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="If_Controller">18.2.9 If Controller</h3></a>
+<h3>
+<a name="If_Controller">18.2.9 If Controller</a>
+<a class="sectionlink" href="#If_Controller" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -5987,10 +6330,11 @@ ${__jexl(${VAR} == 23)}
 
 	
 <p><b>Control Panel</b></p>
-<div align="center"><img width='489' height='145' src="../images/screenshots/ifcontroller.png"></div>
+<div align="center"><img  src="../images/screenshots/ifcontroller.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="If_Controller_parms"/>
+<a class="sectionlink" href="#If_Controller_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -6104,7 +6448,9 @@ ${RESULT}
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="While_Controller">18.2.10 While Controller</h3></a>
+<h3>
+<a name="While_Controller">18.2.10 While Controller</a>
+<a class="sectionlink" href="#While_Controller" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -6188,10 +6534,11 @@ ${_P(property)} - where property is set to "false" somewhere else
 
 	
 <p><b>Control Panel</b></p>
-<div align="center"><img width='358' height='131' src="../images/screenshots/whilecontroller.png"></div>
+<div align="center"><img  src="../images/screenshots/whilecontroller.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="While_Controller_parms"/>
+<a class="sectionlink" href="#While_Controller_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -6218,7 +6565,9 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Switch_Controller">18.2.11 Switch Controller</h3></a>
+<h3>
+<a name="Switch_Controller">18.2.11 Switch Controller</a>
+<a class="sectionlink" href="#Switch_Controller" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -6260,10 +6609,11 @@ If there is no default, then no element is selected, and the controller will not
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='358' height='131' src="../images/screenshots/switchcontroller.png"></div>
+<div align="center"><img  src="../images/screenshots/switchcontroller.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Switch_Controller_parms"/>
+<a class="sectionlink" href="#Switch_Controller_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -6290,7 +6640,9 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="ForEach_Controller">18.2.12 ForEach Controller</h3></a>
+<h3>
+<a name="ForEach_Controller">18.2.12 ForEach Controller</a>
+<a class="sectionlink" href="#ForEach_Controller" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -6359,10 +6711,11 @@ This would be the case if the Regular Expression returned no matches.
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='399' height='176' src="../images/screenshots/logic-controller/foreach-controller.png"></div>
+<div align="center"><img  src="../images/screenshots/logic-controller/foreach-controller.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="ForEach_Controller_parms"/>
+<a class="sectionlink" href="#ForEach_Controller_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -6400,7 +6753,7 @@ Yes
 </table>
 </p>
 <a name="foreach_example"/>
-<p><b>ForEach Example</b></p>
+<a class="sectionlink" href="#foreach_example" title="Link to here">&para;</a><p><b>ForEach Example</b></p>
 
 
 
@@ -6439,7 +6792,7 @@ In the ForEach loop, a HTTP sampler is added which requests all the links that w
 
 </p>
 <a name="foreach_example2"/>
-<p><b>ForEach Example</b></p>
+<a class="sectionlink" href="#foreach_example2" title="Link to here">&para;</a><p><b>ForEach Example</b></p>
 
 
 <p>
@@ -6501,7 +6854,9 @@ which clearly won't match. Thus the For 2 Sampler will not be run.
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Module_Controller">18.2.13 Module Controller</h3></a>
+<h3>
+<a name="Module_Controller">18.2.13 Module Controller</a>
+<a class="sectionlink" href="#Module_Controller" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -6561,7 +6916,7 @@ otherwise a duplicate may be accidentally created when new elements are added to
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='409' height='255' src="../images/screenshots/module_controller.png"></div>
+<div align="center"><img  src="../images/screenshots/module_controller.png"></div>
 <p>
 <table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
 <tr><td>The Module Controller should not be used with remote testing or non-gui testing in conjunction with Workbench components since the Workbench test elements are not part of test plan .jmx files.  Any such test will fail.
@@ -6570,7 +6925,8 @@ otherwise a duplicate may be accidentally created when new elements are added to
 </p>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Module_Controller_parms"/>
+<a class="sectionlink" href="#Module_Controller_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -6598,7 +6954,9 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Include_Controller">18.2.14 Include Controller</h3></a>
+<h3>
+<a name="Include_Controller">18.2.14 Include Controller</a>
+<a class="sectionlink" href="#Include_Controller" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -6606,11 +6964,18 @@ Yes
 
 <p>
 
-The include controller is designed to use an external jmx file. To use it, add
-samples to a simple controller, then save the simple controller as a jmx file.
-The file can then be used in a test plan.
-The included test plan must not include a Thread Group.
-It should only contain the Simple Controller and any samplers, controllers etc below it.
+The include controller is designed to use an external jmx file. To use it, create a Test Fragment 
+underneath the Test Plan and add any desired samplers, controllers etc. below it.
+Then save the Test Plan.  The file is now ready to be included as part of other Test Plans.
+
+</p>
+
+
+<p>
+
+For convenience, a Thread Group can also be added in the external JMX file for debugging purposes.
+A Module Controller can be used to reference the Test Fragment.  The Thread Group will be ignored during the 
+include process.
 
 </p>
 
@@ -6651,10 +7016,11 @@ attempts to open the fileName relative to the JMX launch directory (versions of 
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='419' height='118' src="../images/screenshots/includecontroller.png"></div>
+<div align="center"><img  src="../images/screenshots/includecontroller.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Include_Controller_parms"/>
+<a class="sectionlink" href="#Include_Controller_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Filename</td>
@@ -6673,7 +7039,9 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Transaction_Controller">18.2.15 Transaction Controller</h3></a>
+<h3>
+<a name="Transaction_Controller">18.2.15 Transaction Controller</a>
+<a class="sectionlink" href="#Transaction_Controller" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -6755,10 +7123,11 @@ The generated sample is only regarded as successful if all its sub-samples are s
 
 	
 <p><b>Control Panel</b></p>
-<div align="center"><img width='288' height='155' src="../images/screenshots/transactioncontroller.png"></div>
+<div align="center"><img  src="../images/screenshots/transactioncontroller.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Transaction_Controller_parms"/>
+<a class="sectionlink" href="#Transaction_Controller_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -6799,7 +7168,9 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Recording_Controller">18.2.16 Recording Controller</h3></a>
+<h3>
+<a name="Recording_Controller">18.2.16 Recording Controller</a>
+<a class="sectionlink" href="#Recording_Controller" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -6817,10 +7188,11 @@ be saved under the Recording Controller.
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='417' height='70' src="../images/screenshots/logic-controller/recording-controller.gif"></div>
+<div align="center"><img  src="../images/screenshots/logic-controller/recording-controller.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Recording_Controller_parms"/>
+<a class="sectionlink" href="#Recording_Controller_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -6847,7 +7219,7 @@ No
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="listeners"><strong>18.3 Listeners</strong></a></font>
+<a name="listeners"><strong>18.3 Listeners</strong></a><a class="sectionlink" href="#listeners" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -7095,8 +7467,14 @@ by using the -l command-line flag.
 <table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
-<td>File Name</td>
-<td>Name of the file containing sample results
+<td>Filename</td>
+<td>Name of the file containing sample results.
+        The file name can be specified using either a relative or an absolute path name.
+        Relative paths are resolved relative to the current working directory (which defaults to the bin/ directory).
+        Versions of JMeter after 2.4 also support paths relative to the directory containing the current test plan (JMX file).
+        If the path name begins with "~/" (or whatever is in the jmeter.save.saveservice.base_prefix JMeter property),
+        then the path is assumed to be relative to the JMX file location. 
+        
 </td>
 <td>
 No
@@ -7143,7 +7521,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Sample_Result_Save_Configuration">18.3.1 Sample Result Save Configuration</h3></a>
+<h3>
+<a name="Sample_Result_Save_Configuration">18.3.1 Sample Result Save Configuration</a>
+<a class="sectionlink" href="#Sample_Result_Save_Configuration" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -7179,7 +7559,9 @@ Note that cookies, method and the query string are saved as part of the "Sampler
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Graph_Full_Results">18.3.2 Graph Full Results</h3></a>
+<h3>
+<a name="Graph_Full_Results">18.3.2 Graph Full Results</a>
+<a class="sectionlink" href="#Graph_Full_Results" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -7193,7 +7575,9 @@ No Description
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Graph_Results">18.3.3 Graph Results</h3></a>
+<h3>
+<a name="Graph_Results">18.3.3 Graph Results</a>
+<a class="sectionlink" href="#Graph_Results" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -7269,7 +7653,9 @@ The individual figures at the bottom of the display are the current values.
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Spline_Visualizer">18.3.4 Spline Visualizer</h3></a>
+<h3>
+<a name="Spline_Visualizer">18.3.4 Spline Visualizer</a>
+<a class="sectionlink" href="#Spline_Visualizer" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -7302,7 +7688,9 @@ This needs to be borne in mind when comparing graphs.
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Assertion_Results">18.3.5 Assertion Results</h3></a>
+<h3>
+<a name="Assertion_Results">18.3.5 Assertion Results</a>
+<a class="sectionlink" href="#Assertion_Results" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -7330,7 +7718,9 @@ are part of the test plan.
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="View_Results_Tree">18.3.6 View Results Tree</h3></a>
+<h3>
+<a name="View_Results_Tree">18.3.6 View Results Tree</a>
+<a class="sectionlink" href="#View_Results_Tree" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -7537,7 +7927,9 @@ See Figure 9b (below).
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Aggregate_Report">18.3.7 Aggregate Report</h3></a>
+<h3>
+<a name="Aggregate_Report">18.3.7 Aggregate Report</a>
+<a class="sectionlink" href="#Aggregate_Report" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -7697,7 +8089,9 @@ Times are in milliseconds.
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="View_Results_in_Table">18.3.8 View Results in Table</h3></a>
+<h3>
+<a name="View_Results_in_Table">18.3.8 View Results in Table</a>
+<a class="sectionlink" href="#View_Results_in_Table" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -7715,7 +8109,9 @@ Like the
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Simple_Data_Writer">18.3.9 Simple Data Writer</h3></a>
+<h3>
+<a name="Simple_Data_Writer">18.3.9 Simple Data Writer</a>
+<a class="sectionlink" href="#Simple_Data_Writer" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -7735,7 +8131,9 @@ See the jmeter.properties file for details.
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Monitor_Results">18.3.10 Monitor Results</h3></a>
+<h3>
+<a name="Monitor_Results">18.3.10 Monitor Results</a>
+<a class="sectionlink" href="#Monitor_Results" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -7803,7 +8201,9 @@ Building a Monitor Test Plan
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Distribution_Graph_(alpha)">18.3.11 Distribution Graph (alpha)</h3></a>
+<h3>
+<a name="Distribution_Graph_(alpha)">18.3.11 Distribution Graph (alpha)</a>
+<a class="sectionlink" href="#Distribution_Graph_(alpha)" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -7835,7 +8235,9 @@ know for sure is to use a profiling tool.
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Aggregate_Graph">18.3.12 Aggregate Graph</h3></a>
+<h3>
+<a name="Aggregate_Graph">18.3.12 Aggregate Graph</a>
+<a class="sectionlink" href="#Aggregate_Graph" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -7852,7 +8254,9 @@ the graph as a PNG file. By default, the aggregate graph will generate a bar cha
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Mailer_Visualizer">18.3.13 Mailer Visualizer</h3></a>
+<h3>
+<a name="Mailer_Visualizer">18.3.13 Mailer Visualizer</a>
+<a class="sectionlink" href="#Mailer_Visualizer" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -7864,7 +8268,8 @@ failed responses from the server.
 <div align="center"><img width='645' height='345' src="../images/screenshots/mailervisualizer.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Mailer_Visualizer_parms"/>
+<a class="sectionlink" href="#Mailer_Visualizer_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -7964,7 +8369,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="BeanShell_Listener">18.3.14 BeanShell Listener</h3></a>
+<h3>
+<a name="BeanShell_Listener">18.3.14 BeanShell Listener</a>
+<a class="sectionlink" href="#BeanShell_Listener" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -7981,7 +8388,10 @@ The BeanShell Listener allows the use of BeanShell for processing samples for sa
 
 
 <b>
-For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.
+For full details on using BeanShell, please see the 
+<a href="http://www.beanshell.org/">
+BeanShell website.
+</a>
 </b>
 
 
@@ -7998,14 +8408,16 @@ See the file BeanShellListeners.bshrc for example definitions.
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='597' height='303' src="../images/screenshots/beanshell_listener.png"></div>
+<div align="center"><img width='553' height='382' src="../images/screenshots/beanshell_listener.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="BeanShell_Listener_parms"/>
+<a class="sectionlink" href="#BeanShell_Listener_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
 <td>Descriptive name for this element that is shown in the tree.
+    The name is stored in the script variable Label
 </td>
 <td>
 No
@@ -8053,7 +8465,8 @@ No
 </tr>
 <tr>
 <td>Script file</td>
-<td>A file containing the BeanShell script to run
+<td>A file containing the BeanShell script to run.
+    The file name is stored in the script variable FileName
 </td>
 <td>
 No
@@ -8091,12 +8504,12 @@ vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); 
 
 
 <li>
-props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");
+props - (JMeterProperties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");
 </li>
 
 
 <li>
-sampleResult - (SampleResult) - gives access to the previous SampleResult
+sampleResult, prev - (SampleResult) - gives access to the previous SampleResult
 </li>
 
 
@@ -8123,7 +8536,9 @@ beanshell.listener.init
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Summary_Report">18.3.15 Summary Report</h3></a>
+<h3>
+<a name="Summary_Report">18.3.15 Summary Report</a>
+<a class="sectionlink" href="#Summary_Report" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -8247,7 +8662,9 @@ Times are in milliseconds.
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Save_Responses_to_a_file">18.3.16 Save Responses to a file</h3></a>
+<h3>
+<a name="Save_Responses_to_a_file">18.3.16 Save Responses to a file</a>
+<a class="sectionlink" href="#Save_Responses_to_a_file" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -8286,7 +8703,8 @@ Times are in milliseconds.
 <div align="center"><img width='358' height='225' src="../images/screenshots/savetofile.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Save_Responses_to_a_file_parms"/>
+<a class="sectionlink" href="#Save_Responses_to_a_file_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -8299,6 +8717,11 @@ No
 <tr>
 <td>Filename Prefix</td>
 <td>Prefix for the generated file names; this can include a directory name.
+        Relative paths are resolved relative to the current working directory (which defaults to the bin/ directory).
+        Versions of JMeter after 2.4 also support paths relative to the directory containing the current test plan (JMX file).
+        If the path name begins with "~/" (or whatever is in the jmeter.save.saveservice.base_prefix JMeter property),
+        then the path is assumed to be relative to the JMX file location. 
+ 
 </td>
 <td>
 Yes
@@ -8358,7 +8781,9 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="BSF_Listener">18.3.17 BSF Listener</h3></a>
+<h3>
+<a name="BSF_Listener">18.3.17 BSF Listener</a>
+<a class="sectionlink" href="#BSF_Listener" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -8375,7 +8800,8 @@ The BSF Listener allows BSF script code to be applied to sample results.
 <div align="center"><img width='736' height='369' src="../images/screenshots/bsf_listener.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="BSF_Listener_parms"/>
+<a class="sectionlink" href="#BSF_Listener_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -8485,7 +8911,7 @@ vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); 
 
 
 <li>
-props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");
+props - (JMeterProperties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");
 </li>
 
 
@@ -8520,7 +8946,9 @@ For details of all the methods available on each of the above variables, please 
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="JSR223_Listener">18.3.18.1 JSR223 Listener</h3></a>
+<h3>
+<a name="JSR223_Listener">18.3.18.1 JSR223 Listener</a>
+<a class="sectionlink" href="#JSR223_Listener" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -8543,7 +8971,9 @@ For details, see
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Generate_Summary_Results">18.3.18 Generate Summary Results</h3></a>
+<h3>
+<a name="Generate_Summary_Results">18.3.18 Generate Summary Results</a>
+<a class="sectionlink" href="#Generate_Summary_Results" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -8598,7 +9028,8 @@ by using suitable labels and adding the summarisers to appropriate parts of the 
 <div align="center"><img width='358' height='131' src="../images/screenshots/summary.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Generate_Summary_Results_parms"/>
+<a class="sectionlink" href="#Generate_Summary_Results_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -8619,7 +9050,9 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Comparison_Assertion_Visualizer">18.3.19 Comparison Assertion Visualizer</h3></a>
+<h3>
+<a name="Comparison_Assertion_Visualizer">18.3.19 Comparison Assertion Visualizer</a>
+<a class="sectionlink" href="#Comparison_Assertion_Visualizer" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -8632,7 +9065,8 @@ The Comparison Assertion Visualizer shows the results of any
 <div align="center"><img width='777' height='266' src="../images/screenshots/comparison_assertion_visualizer.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Comparison_Assertion_Visualizer_parms"/>
+<a class="sectionlink" href="#Comparison_Assertion_Visualizer_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -8660,7 +9094,7 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="config_elements"><strong>18.4 Configuration Elements</strong></a></font>
+<a name="config_elements"><strong>18.4 Configuration Elements</strong></a><a class="sectionlink" href="#config_elements" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -8682,7 +9116,9 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="CSV_Data_Set_Config">18.4.1 CSV Data Set Config</h3></a>
+<h3>
+<a name="CSV_Data_Set_Config">18.4.1 CSV Data Set Config</a>
+<a class="sectionlink" href="#CSV_Data_Set_Config" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -8801,7 +9237,8 @@ csvdataset.eofstring
 <div align="center"><img width='396' height='301' src="../images/screenshots/csvdatasetconfig.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="CSV_Data_Set_Config_parms"/>
+<a class="sectionlink" href="#CSV_Data_Set_Config_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -8932,7 +9369,9 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="FTP_Request_Defaults">18.4.2 FTP Request Defaults</h3></a>
+<h3>
+<a name="FTP_Request_Defaults">18.4.2 FTP Request Defaults</a>
+<a class="sectionlink" href="#FTP_Request_Defaults" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -8945,7 +9384,9 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="HTTP_Authorization_Manager">18.4.3 HTTP Authorization Manager</h3></a>
+<h3>
+<a name="HTTP_Authorization_Manager">18.4.3 HTTP Authorization Manager</a>
+<a class="sectionlink" href="#HTTP_Authorization_Manager" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -9014,7 +9455,8 @@ These can be set up using a
 <div align="center"><img width='490' height='253' src="../images/screenshots/http-config/http-auth-manager.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="HTTP_Authorization_Manager_parms"/>
+<a class="sectionlink" href="#HTTP_Authorization_Manager_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -9119,7 +9561,7 @@ table entries - including any passwords, which are not encrypted.
 </table>
 </p>
 <a name="authorization_example"/>
-<p><b>Authorization Example</b></p>
+<a class="sectionlink" href="#authorization_example" title="Link to here">&para;</a><p><b>Authorization Example</b></p>
 
 
 
@@ -9172,7 +9614,9 @@ be able to run it.  However, you can use it as a reference in constructing your 
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="HTTP_Cache_Manager">18.4.4 HTTP Cache Manager</h3></a>
+<h3>
+<a name="HTTP_Cache_Manager">18.4.4 HTTP Cache Manager</a>
+<a class="sectionlink" href="#HTTP_Cache_Manager" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -9221,7 +9665,40 @@ This may cause problems for Assertions.
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='267' height='132' src="../images/screenshots/http-config/http-cache-manager.png"></div>
+<div align="center"><img width='424' height='159' src="../images/screenshots/http-config/http-cache-manager.png"></div>
+<p>
+<b>Parameters</b>
+<a name="HTTP_Cache_Manager_parms"/>
+<a class="sectionlink" href="#HTTP_Cache_Manager_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
+<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+<tr>
+<td>Name</td>
+<td>Descriptive name for this element that is shown in the tree. 
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Clear cache each iteration</td>
+<td>
+  If selected, then the cache is cleared at the start of the thread.
+  
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>Use Cache Control/Expires header when processing GET requests</td>
+<td>See description above.
+</td>
+<td>
+Yes
+</td>
+</tr>
+</table>
+</p>
 </td></tr>
 <tr><td><br></td></tr>
 </table>
@@ -9229,7 +9706,9 @@ This may cause problems for Assertions.
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="HTTP_Cookie_Manager">18.4.4 HTTP Cookie Manager</h3></a>
+<h3>
+<a name="HTTP_Cookie_Manager">18.4.4 HTTP Cookie Manager</a>
+<a class="sectionlink" href="#HTTP_Cookie_Manager" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -9307,7 +9786,8 @@ Note also that the cookie name must be unique - if a second cookie is defined wi
 <div align="center"><img width='445' height='328' src="../images/screenshots/http-config/http-cookie-manager.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="HTTP_Cookie_Manager_parms"/>
+<a class="sectionlink" href="#HTTP_Cookie_Manager_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -9398,7 +9878,9 @@ N/A
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="HTTP_Request_Defaults">18.4.5 HTTP Request Defaults</h3></a>
+<h3>
+<a name="HTTP_Request_Defaults">18.4.5 HTTP Request Defaults</a>
+<a class="sectionlink" href="#HTTP_Request_Defaults" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -9423,10 +9905,11 @@ JMeter 2.3 and later treat all port values equally; a sampler that does not spec
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='727' height='396' src="../images/screenshots/http-config/http-request-defaults.png"></div>
+<div align="center"><img  src="../images/screenshots/http-config/http-request-defaults.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="HTTP_Request_Defaults_parms"/>
+<a class="sectionlink" href="#HTTP_Request_Defaults_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -9469,11 +9952,25 @@ No
 </td>
 </tr>
 <tr>
+<td>Implementation</td>
+<td>Java, HttpClient3.1, HttpClient4. 
+        If not specified the default depends on the value of the JMeter property
+        
+<code>
+jmeter.httpsampler
+</code>
+, failing that, the Java implementation is used.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
 <td>Protocol</td>
 <td>HTTP or HTTPS.
 </td>
 <td>
-Yes
+No
 </td>
 </tr>
 <tr>
@@ -9518,6 +10015,77 @@ value
 No
 </td>
 </tr>
+<tr>
+<td>Server (proxy)</td>
+<td>Hostname or IP address of a proxy server to perform request. [Do not include the http:// prefix.]
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Port</td>
+<td>Port the proxy server is listening to.
+</td>
+<td>
+No, unless proxy hostname is specified
+</td>
+</tr>
+<tr>
+<td>Username</td>
+<td>(Optional) username for proxy server.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Password</td>
+<td>(Optional) password for proxy server.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Retrieve All Embedded Resources from HTML Files</td>
+<td>Tell JMeter to parse the HTML file
+and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSSs, etc. referenced in the file.
+        
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Use concurrent pool</td>
+<td>Use a pool of concurrent connections to get embedded resources.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Size</td>
+<td>Pool size for concurrent connections used to get embedded resources.
+</td>
+<td>
+No
+</td>
+</tr>
+</table>
+</p>
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>
+Note: radio buttons only have two states - on or off.
+This makes it impossible to override settings consistently
+- does off mean off, or does it mean use the current default?
+JMeter uses the latter (otherwise defaults would not work at all).
+So if the button is off, then a later element can set it on,
+but if the button is on, a later element cannot set it off.
+
+</td></tr>
 </table>
 </p>
 </td></tr>
@@ -9527,7 +10095,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="HTTP_Header_Manager">18.4.6 HTTP Header Manager</h3></a>
+<h3>
+<a name="HTTP_Header_Manager">18.4.6 HTTP Header Manager</a>
+<a class="sectionlink" href="#HTTP_Header_Manager" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -9564,7 +10134,8 @@ This allows one to set up a default set of headers, and apply adjustments to par
 <div align="center"><img  src="../images/screenshots/http-config/http-header-manager.gif"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="HTTP_Header_Manager_parms"/>
+<a class="sectionlink" href="#HTTP_Header_Manager_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -9628,7 +10199,7 @@ N/A
 </table>
 </p>
 <a name="header_manager_example"/>
-<p><b>Header Manager example</b></p>
+<a class="sectionlink" href="#header_manager_example" title="Link to here">&para;</a><p><b>Header Manager example</b></p>
 
 
 
@@ -9648,7 +10219,7 @@ instead. (see figures 9 and 10).
 </font></td></tr></table></p>
 
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='573' height='334' src="../images/screenshots/http-config/header-manager-example1b.gif"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/http-config/header-manager-example1b.png"><br>
 <font size="-1">Figure 13 - Header Manager Control Panel
 </font></td></tr></table></p>
 
@@ -9660,7 +10231,9 @@ instead. (see figures 9 and 10).
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Java_Request_Defaults">18.4.7 Java Request Defaults</h3></a>
+<h3>
+<a name="Java_Request_Defaults">18.4.7 Java Request Defaults</a>
+<a class="sectionlink" href="#Java_Request_Defaults" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -9680,7 +10253,9 @@ The Java Request Defaults component lets you set default values for Java testing
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="JDBC_Connection_Configuration">18.4.8 JDBC Connection Configuration</h3></a>
+<h3>
+<a name="JDBC_Connection_Configuration">18.4.8 JDBC Connection Configuration</a>
+<a class="sectionlink" href="#JDBC_Connection_Configuration" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -9696,7 +10271,8 @@ Sampler)
 <div align="center"><img width='369' height='443' src="../images/screenshots/jdbc-config/jdbc-conn-config.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="JDBC_Connection_Configuration_parms"/>
+<a class="sectionlink" href="#JDBC_Connection_Configuration_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -9931,7 +10507,7 @@ Oracle
 </td>
 <td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-oracle.jdbc.driver.OracleDriver
+oracle.jdbc.OracleDriver
 </font>
 </td>
 <td bgcolor="#a0ddf0"   valign="top" align="left">
@@ -10006,7 +10582,9 @@ jdbc:derby://server[:port]/databaseName[;URLAttributes=value[;...]]
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Login_Config_Element">18.4.9 Login Config Element</h3></a>
+<h3>
+<a name="Login_Config_Element">18.4.9 Login Config Element</a>
+<a class="sectionlink" href="#Login_Config_Element" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -10019,7 +10597,8 @@ The Login Config Element lets you add or override username and password settings
 <div align="center"><img width='352' height='112' src="../images/screenshots/login-config.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Login_Config_Element_parms"/>
+<a class="sectionlink" href="#Login_Config_Element_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -10054,7 +10633,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="LDAP_Request_Defaults">18.4.10 LDAP Request Defaults</h3></a>
+<h3>
+<a name="LDAP_Request_Defaults">18.4.10 LDAP Request Defaults</a>
+<a class="sectionlink" href="#LDAP_Request_Defaults" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -10074,7 +10655,9 @@ The LDAP Request Defaults component lets you set default values for LDAP testing
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="LDAP_Extended_Request_Defaults">18.4.11 LDAP Extended Request Defaults</h3></a>
+<h3>
+<a name="LDAP_Extended_Request_Defaults">18.4.11 LDAP Extended Request Defaults</a>
+<a class="sectionlink" href="#LDAP_Extended_Request_Defaults" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -10094,7 +10677,9 @@ The LDAP Extended Request Defaults component lets you set default values for ext
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="TCP_Sampler_Config">18.4.12 TCP Sampler Config</h3></a>
+<h3>
+<a name="TCP_Sampler_Config">18.4.12 TCP Sampler Config</a>
+<a class="sectionlink" href="#TCP_Sampler_Config" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -10108,10 +10693,11 @@ The LDAP Extended Request Defaults component lets you set default values for ext
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='476' height='272' src="../images/screenshots/tcpsamplerconfig.png"></div>
+<div align="center"><img width='747' height='251' src="../images/screenshots/tcpsamplerconfig.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="TCP_Sampler_Config_parms"/>
+<a class="sectionlink" href="#TCP_Sampler_Config_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -10154,8 +10740,16 @@ Yes
 </td>
 </tr>
 <tr>
-<td>Timeout (milliseconds)</td>
-<td>Timeout for replies
+<td>Connect Timeout</td>
+<td>Connect Timeout (milliseconds, 0 disables).
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Response Timeout</td>
+<td>Response Timeout (milliseconds, 0 disables).
 </td>
 <td>
 No
@@ -10186,7 +10780,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="User_Defined_Variables">18.4.13 User Defined Variables</h3></a>
+<h3>
+<a name="User_Defined_Variables">18.4.13 User Defined Variables</a>
+<a class="sectionlink" href="#User_Defined_Variables" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -10283,7 +10879,8 @@ You can reference variables defined in earlier UDVs or on the Test Plan.
 </p>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="User_Defined_Variables_parms"/>
+<a class="sectionlink" href="#User_Defined_Variables_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -10312,7 +10909,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Random_Variable">18.4.14 Random Variable</h3></a>
+<h3>
+<a name="Random_Variable">18.4.14 Random Variable</a>
+<a class="sectionlink" href="#Random_Variable" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -10348,7 +10947,8 @@ however the minimum and maximum values can be any long values so long as the ran
 <div align="center"><img width='411' height='306' src="../images/screenshots/random_variable.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Random_Variable_parms"/>
+<a class="sectionlink" href="#Random_Variable_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -10419,7 +11019,9 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Counter">18.4.15 Counter</h3></a>
+<h3>
+<a name="Counter">18.4.15 Counter</a>
+<a class="sectionlink" href="#Counter" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -10440,7 +11042,8 @@ From version 2.1.2, the counter now uses a long to store the value, so the range
 <div align="center"><img width='399' height='244' src="../images/screenshots/counter.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Counter_parms"/>
+<a class="sectionlink" href="#Counter_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -10526,7 +11129,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Simple_Config_Element">18.4.16 Simple Config Element</h3></a>
+<h3>
+<a name="Simple_Config_Element">18.4.16 Simple Config Element</a>
+<a class="sectionlink" href="#Simple_Config_Element" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -10541,7 +11146,8 @@ GUI that they can use while developing new JMeter components.
 <div align="center"><img width='393' height='245' src="../images/screenshots/simple_config_element.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Simple_Config_Element_parms"/>
+<a class="sectionlink" href="#Simple_Config_Element_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -10585,7 +11191,7 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="assertions"><strong>18.5 Assertions</strong></a></font>
+<a name="assertions"><strong>18.5 Assertions</strong></a><a class="sectionlink" href="#assertions" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -10652,7 +11258,7 @@ prev.getSubResults()
 <b>
 JMeterThread.last_sample_ok
 </b>
- is set to
+ is updated to
 	"true" or "false" after all assertions for a sampler have been run.
 	 
 </td></tr>
@@ -10664,7 +11270,9 @@ JMeterThread.last_sample_ok
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Response_Assertion">18.5.1 Response Assertion</h3></a>
+<h3>
+<a name="Response_Assertion">18.5.1 Response Assertion</a>
+<a class="sectionlink" href="#Response_Assertion" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -10766,7 +11374,8 @@ extended regular expression
 <div align="center"><img width='762' height='417' src="../images/screenshots/assertion/assertion.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Response_Assertion_parms"/>
+<a class="sectionlink" href="#Response_Assertion_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -10944,25 +11553,25 @@ Yes
 
 </p>
 <a name="assertion_examples"/>
-<p><b>Assertion Examples</b></p>
+<a class="sectionlink" href="#assertion_examples" title="Link to here">&para;</a><p><b>Assertion Examples</b></p>
 
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='187' height='94' src="../images/screenshots/assertion/example1a.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/assertion/example1a.png"><br>
 <font size="-1">Figure 14 - Test Plan
 </font></td></tr></table></p>
 
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='629' height='333' src="../images/screenshots/assertion/example1b.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/assertion/example1b.png"><br>
 <font size="-1">Figure 15 - Assertion Control Panel with Pattern
 </font></td></tr></table></p>
 
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='474' height='265' src="../images/screenshots/assertion/example1c-pass.gif"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/assertion/example1c-pass.png"><br>
 <font size="-1">Figure 16 - Assertion Listener Results (Pass)
 </font></td></tr></table></p>
 
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='474' height='265' src="../images/screenshots/assertion/example1c-fail.gif"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/assertion/example1c-fail.png"><br>
 <font size="-1">Figure 17 - Assertion Listener Results (Fail)
 </font></td></tr></table></p>
 
@@ -10974,7 +11583,9 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Duration_Assertion">18.5.2 Duration Assertion</h3></a>
+<h3>
+<a name="Duration_Assertion">18.5.2 Duration Assertion</a>
+<a class="sectionlink" href="#Duration_Assertion" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -10987,7 +11598,8 @@ user) is marked as a failed response.
 <div align="center"><img width='535' height='200' src="../images/screenshots/duration_assertion.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Duration_Assertion_parms"/>
+<a class="sectionlink" href="#Duration_Assertion_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -11015,7 +11627,9 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Size_Assertion">18.5.3 Size Assertion</h3></a>
+<h3>
+<a name="Size_Assertion">18.5.3 Size Assertion</a>
+<a class="sectionlink" href="#Size_Assertion" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -11037,7 +11651,8 @@ the size be equal to, greater than, less than, or not equal to a given number of
 <div align="center"><img width='732' height='358' src="../images/screenshots/size_assertion.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Size_Assertion_parms"/>
+<a class="sectionlink" href="#Size_Assertion_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -11110,7 +11725,9 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="XML_Assertion">18.5.4 XML Assertion</h3></a>
+<h3>
+<a name="XML_Assertion">18.5.4 XML Assertion</a>
+<a class="sectionlink" href="#XML_Assertion" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -11122,7 +11739,8 @@ validate the XML based on a DTD or schema or do any further validation.
 <div align="center"><img width='303' height='196' src="../images/screenshots/xml_assertion.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="XML_Assertion_parms"/>
+<a class="sectionlink" href="#XML_Assertion_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -11141,7 +11759,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="BeanShell_Assertion">18.5.5 BeanShell Assertion</h3></a>
+<h3>
+<a name="BeanShell_Assertion">18.5.5 BeanShell Assertion</a>
+<a class="sectionlink" href="#BeanShell_Assertion" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -11155,7 +11775,10 @@ The BeanShell Assertion allows the user to perform assertion checking using a Be
 
 
 <b>
-For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.
+For full details on using BeanShell, please see the 
+<a href="http://www.beanshell.org/">
+BeanShell website.
+</a>
 </b>
 
 
@@ -11198,11 +11821,13 @@ See the file BeanShellListeners.bshrc for example definitions.
 <div align="center"><img width='597' height='303' src="../images/screenshots/bsh_assertion.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="BeanShell_Assertion_parms"/>
+<a class="sectionlink" href="#BeanShell_Assertion_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
 <td>Descriptive name for this element that is shown in the tree.
+    The name is stored in the script variable Label
 </td>
 <td>
 No
@@ -11251,6 +11876,7 @@ No
 <tr>
 <td>Script file</td>
 <td>A file containing the BeanShell script to run. This overrides the script.
+    The file name is stored in the script variable FileName
 </td>
 <td>
 No
@@ -11352,7 +11978,7 @@ vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.
 
     
 <li>
-props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");
+props - JMeterProperties - e.g. props.get("START.HMS"); props.put("PROP1","1234");
 </li>
 
 
@@ -11395,7 +12021,9 @@ setSampleLabel(String)
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="MD5Hex_Assertion">18.5.6 MD5Hex Assertion</h3></a>
+<h3>
+<a name="MD5Hex_Assertion">18.5.6 MD5Hex Assertion</a>
+<a class="sectionlink" href="#MD5Hex_Assertion" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -11406,7 +12034,8 @@ The MD5Hex Assertion allows the user to check the MD5 hash of the response data.
 <div align="center"><img width='411' height='149' src="../images/screenshots/assertion/MD5HexAssertion.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="MD5Hex_Assertion_parms"/>
+<a class="sectionlink" href="#MD5Hex_Assertion_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -11433,7 +12062,9 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="HTML_Assertion">18.5.7 HTML Assertion</h3></a>
+<h3>
+<a name="HTML_Assertion">18.5.7 HTML Assertion</a>
+<a class="sectionlink" href="#HTML_Assertion" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -11444,7 +12075,8 @@ The HTML Assertion allows the user to check the HTML syntax of the response data
 <div align="center"><img width='464' height='384' src="../images/screenshots/assertion/HTMLAssertion.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="HTML_Assertion_parms"/>
+<a class="sectionlink" href="#HTML_Assertion_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -11511,7 +12143,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="XPath_Assertion">18.5.8 XPath Assertion</h3></a>
+<h3>
+<a name="XPath_Assertion">18.5.8 XPath Assertion</a>
+<a class="sectionlink" href="#XPath_Assertion" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -11533,7 +12167,8 @@ on XPath.
 <div align="center"><img width='692' height='293' src="../images/screenshots/xpath_assertion.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="XPath_Assertion_parms"/>
+<a class="sectionlink" href="#XPath_Assertion_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -11640,7 +12275,9 @@ The non-tolerant parser can be quite slow, as it may need to download the DTD et
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="XML_Schema_Assertion">18.5.9 XML Schema Assertion</h3></a>
+<h3>
+<a name="XML_Schema_Assertion">18.5.9 XML Schema Assertion</a>
+<a class="sectionlink" href="#XML_Schema_Assertion" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -11651,7 +12288,8 @@ The XML Schema Assertion allows the user to validate a response against an XML S
 <div align="center"><img width='771' height='171' src="../images/screenshots/assertion/XMLSchemaAssertion.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="XML_Schema_Assertion_parms"/>
+<a class="sectionlink" href="#XML_Schema_Assertion_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -11678,7 +12316,9 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="BSF_Assertion">18.5.10 BSF Assertion</h3></a>
+<h3>
+<a name="BSF_Assertion">18.5.10 BSF Assertion</a>
+<a class="sectionlink" href="#BSF_Assertion" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -11692,10 +12332,11 @@ The BSF Assertion allows BSF script code to be used to check the status of the p
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='529' height='382' src="../images/screenshots/bsf_assertion.png"></div>
+<div align="center"><img width='805' height='382' src="../images/screenshots/bsf_assertion.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="BSF_Assertion_parms"/>
+<a class="sectionlink" href="#BSF_Assertion_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -11802,12 +12443,12 @@ vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); 
 
 
 <li>
-props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");
+props - (JMeterProperties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");
 </li>
 
 
 <li>
-prev - (SampleResult) - gives access to the previous SampleResult (if any)
+SampleResult, prev - (SampleResult) - gives access to the previous SampleResult (if any)
 </li>
 
 
@@ -11818,11 +12459,6 @@ sampler - (Sampler)- gives access to the current sampler
 
 <li>
 OUT - System.out - e.g. OUT.println("message")
-</li>
-
-
-<li>
-SampleResult - the current sample result (same as prev)
 </li>
 
 
@@ -11848,7 +12484,9 @@ For futher details of all the methods available on each of the above variables, 
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="JSR223_Assertion">18.5.11 JSR223 Assertion</h3></a>
+<h3>
+<a name="JSR223_Assertion">18.5.11 JSR223 Assertion</a>
+<a class="sectionlink" href="#JSR223_Assertion" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -11871,7 +12509,9 @@ For details, see
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Compare_Assertion">18.5.12 Compare Assertion</h3></a>
+<h3>
+<a name="Compare_Assertion">18.5.12 Compare Assertion</a>
+<a class="sectionlink" href="#Compare_Assertion" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -11886,7 +12526,8 @@ The assertion comparisons can be seen in the
 <div align="center"><img width='292' height='296' src="../images/screenshots/assertion/compare.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Compare_Assertion_parms"/>
+<a class="sectionlink" href="#Compare_Assertion_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -11932,7 +12573,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="SMIME_Assertion">18.5.13 SMIME Assertion</h3></a>
+<h3>
+<a name="SMIME_Assertion">18.5.13 SMIME Assertion</a>
+<a class="sectionlink" href="#SMIME_Assertion" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -11979,7 +12622,8 @@ please ensure that you select "Store the message using MIME (raw)" otherwise the
 <div align="center"><img width='471' height='428' src="../images/screenshots/assertion/smime.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="SMIME_Assertion_parms"/>
+<a class="sectionlink" href="#SMIME_Assertion_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -12043,7 +12687,7 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="timers"><strong>18.6 Timers</strong></a></font>
+<a name="timers"><strong>18.6 Timers</strong></a><a class="sectionlink" href="#timers" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -12095,7 +12739,9 @@ before
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Constant_Timer">18.6.1 Constant Timer</h3></a>
+<h3>
+<a name="Constant_Timer">18.6.1 Constant Timer</a>
+<a class="sectionlink" href="#Constant_Timer" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -12106,10 +12752,11 @@ If you want to have each thread pause for the same amount of time between
 requests, use this timer.
 </p>
 <p><b>Control Panel</b></p>
-<div align="center"><img width='390' height='100' src="../images/screenshots/timers/constant_timer.gif"></div>
+<div align="center"><img  src="../images/screenshots/timers/constant_timer.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Constant_Timer_parms"/>
+<a class="sectionlink" href="#Constant_Timer_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -12136,7 +12783,9 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Gaussian_Random_Timer">18.6.2 Gaussian Random Timer</h3></a>
+<h3>
+<a name="Gaussian_Random_Timer">18.6.2 Gaussian Random Timer</a>
+<a class="sectionlink" href="#Gaussian_Random_Timer" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -12147,10 +12796,11 @@ sum of the Gaussian distributed value (with mean 0.0 and standard deviation 1.0)
 the deviation value you specify, and the offset value.
 </p>
 <p><b>Control Panel</b></p>
-<div align="center"><img width='390' height='182' src="../images/screenshots/timers/gauss_random_timer.gif"></div>
+<div align="center"><img  src="../images/screenshots/timers/gauss_random_timer.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Gaussian_Random_Timer_parms"/>
+<a class="sectionlink" href="#Gaussian_Random_Timer_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -12186,7 +12836,9 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Uniform_Random_Timer">18.6.3 Uniform Random Timer</h3></a>
+<h3>
+<a name="Uniform_Random_Timer">18.6.3 Uniform Random Timer</a>
+<a class="sectionlink" href="#Uniform_Random_Timer" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -12196,10 +12848,11 @@ each time interval having the same probability of occurring. The total delay
 is the sum of the random value and the offset value.
 </p>
 <p><b>Control Panel</b></p>
-<div align="center"><img width='390' height='182' src="../images/screenshots/timers/uniform_random_timer.gif"></div>
+<div align="center"><img  src="../images/screenshots/timers/uniform_random_timer.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Uniform_Random_Timer_parms"/>
+<a class="sectionlink" href="#Uniform_Random_Timer_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -12236,7 +12889,9 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Constant_Throughput_Timer">18.6.4 Constant Throughput Timer</h3></a>
+<h3>
+<a name="Constant_Throughput_Timer">18.6.4 Constant Throughput Timer</a>
+<a class="sectionlink" href="#Constant_Throughput_Timer" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -12288,10 +12943,11 @@ Note that the throughput value should not be changed too often during a test
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='542' height='155' src="../images/screenshots/timers/constant_throughput_timer.png"></div>
+<div align="center"><img  src="../images/screenshots/timers/constant_throughput_timer.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Constant_Throughput_Timer_parms"/>
+<a class="sectionlink" href="#Constant_Throughput_Timer_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -12361,7 +13017,9 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Synchronizing_Timer">18.6.5 Synchronizing Timer</h3></a>
+<h3>
+<a name="Synchronizing_Timer">18.6.5 Synchronizing Timer</a>
+<a class="sectionlink" href="#Synchronizing_Timer" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -12377,10 +13035,11 @@ points of the test plan.
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='335' height='146' src="../images/screenshots/timers/sync_timer.png"></div>
+<div align="center"><img  src="../images/screenshots/timers/sync_timer.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Synchronizing_Timer_parms"/>
+<a class="sectionlink" href="#Synchronizing_Timer_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -12407,7 +13066,9 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="BeanShell_Timer">18.6.6 BeanShell Timer</h3></a>
+<h3>
+<a name="BeanShell_Timer">18.6.6 BeanShell Timer</a>
+<a class="sectionlink" href="#BeanShell_Timer" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -12424,7 +13085,10 @@ The BeanShell Timer can be used to generate a delay.
 
 
 <b>
-For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.
+For full details on using BeanShell, please see the 
+<a href="http://www.beanshell.org/">
+BeanShell website.
+</a>
 </b>
 
 
@@ -12441,14 +13105,16 @@ See the file BeanShellListeners.bshrc for example definitions.
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='597' height='303' src="../images/screenshots/timers/beanshell_timer.png"></div>
+<div align="center"><img width='553' height='382' src="../images/screenshots/timers/beanshell_timer.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="BeanShell_Timer_parms"/>
+<a class="sectionlink" href="#BeanShell_Timer_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
 <td>Descriptive name for this element that is shown in the tree.
+    The name is stored in the script variable Label
 </td>
 <td>
 No
@@ -12500,6 +13166,7 @@ No
 <td>Script file</td>
 <td>
     A file containing the BeanShell script to run.
+    The file name is stored in the script variable FileName
      The return value is used as the number of milliseconds to wait.
      
 </td>
@@ -12541,7 +13208,12 @@ vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); 
 
 
 <li>
-props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");
+props - (JMeterProperties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");
+</li>
+
+
+<li>
+prev - (SampleResult) - gives access to the previous SampleResult (if any)
 </li>
 
 
@@ -12563,7 +13235,9 @@ beanshell.timer.init
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="BSF_Timer">18.6.7 BSF Timer</h3></a>
+<h3>
+<a name="BSF_Timer">18.6.7 BSF Timer</a>
+<a class="sectionlink" href="#BSF_Timer" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -12580,7 +13254,8 @@ The BSF Timer can be used to generate a delay using a BSF scripting language.
 <div align="center"><img width='548' height='350' src="../images/screenshots/timers/bsf_timer.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="BSF_Timer_parms"/>
+<a class="sectionlink" href="#BSF_Timer_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -12671,12 +13346,7 @@ vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); 
 
 
 <li>
-props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");
-</li>
-
-
-<li>
-prev - the previous SampleResult (if any)
+props - (JMeterProperties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");
 </li>
 
 
@@ -12711,7 +13381,9 @@ For details of all the methods available on each of the above variables, please 
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="JSR223_Timer">18.6.8 JSR223 Timer</h3></a>
+<h3>
+<a name="JSR223_Timer">18.6.8 JSR223 Timer</a>
+<a class="sectionlink" href="#JSR223_Timer" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -12742,7 +13414,7 @@ For details, see
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="preprocessors"><strong>18.7 Pre Processors</strong></a></font>
+<a name="preprocessors"><strong>18.7 Pre Processors</strong></a><a class="sectionlink" href="#preprocessors" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -12762,7 +13434,9 @@ For details, see
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="HTML_Link_Parser">18.7.1 HTML Link Parser</h3></a>
+<h3>
+<a name="HTML_Link_Parser">18.7.1 HTML Link Parser</a>
+<a class="sectionlink" href="#HTML_Link_Parser" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -12790,7 +13464,7 @@ The target sampler cannot contain parameters that are not in the response links.
 </table>
 </p>
 <a name="spider_example"/>
-<p><b>Spidering Example</b></p>
+<a class="sectionlink" href="#spider_example" title="Link to here">&para;</a><p><b>Spidering Example</b></p>
 
 
 <p>
@@ -12809,7 +13483,7 @@ to the one you want.  Then, only links to that domain will be followed.
 
 
 <a name="poll_example"/>
-<p><b>Poll Example</b></p>
+<a class="sectionlink" href="#poll_example" title="Link to here">&para;</a><p><b>Poll Example</b></p>
 
 
 <p>
@@ -12857,7 +13531,9 @@ your dynamic test sample.
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="HTTP_URL_Re-writing_Modifier">18.7.2 HTTP URL Re-writing Modifier</h3></a>
+<h3>
+<a name="HTTP_URL_Re-writing_Modifier">18.7.2 HTTP URL Re-writing Modifier</a>
+<a class="sectionlink" href="#HTTP_URL_Re-writing_Modifier" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -12886,7 +13562,8 @@ Clever users will even determine that this modifier can be used to grab values t
 <div align="center"><img width='485' height='247' src="../images/screenshots/url_rewriter.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="HTTP_URL_Re-writing_Modifier_parms"/>
+<a class="sectionlink" href="#HTTP_URL_Re-writing_Modifier_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -12950,7 +13627,9 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="HTML_Parameter_Mask">18.7.3 HTML Parameter Mask</h3></a>
+<h3>
+<a name="HTML_Parameter_Mask">18.7.3 HTML Parameter Mask</a>
+<a class="sectionlink" href="#HTML_Parameter_Mask" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td bgcolor="#bbbb00"><div align="center"><b>*** This element is deprecated.  Use <a href="../usermanual/component_reference.html#Counter">Counter</a> instead ***</b></div></td></tr>
@@ -13001,7 +13680,8 @@ user_4, etc.
 <div align="center"><img width='624' height='209' src="../images/screenshots/parameter_mask.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="HTML_Parameter_Mask_parms"/>
+<a class="sectionlink" href="#HTML_Parameter_Mask_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -13070,7 +13750,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="HTTP_User_Parameter_Modifier">18.7.4 HTTP User Parameter Modifier</h3></a>
+<h3>
+<a name="HTTP_User_Parameter_Modifier">18.7.4 HTTP User Parameter Modifier</a>
+<a class="sectionlink" href="#HTTP_User_Parameter_Modifier" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td bgcolor="#bbbb00"><div align="center"><b>*** This element is deprecated.  Use <a href="../usermanual/component_reference.html#User_Parameters">User Parameters</a> instead ***</b></div></td></tr>
@@ -13098,7 +13780,8 @@ until the last set of values is reached, at which point it will begin again at t
 <div align="center"><img width='514' height='251' src="../images/screenshots/user_param_modifier.gif"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="HTTP_User_Parameter_Modifier_parms"/>
+<a class="sectionlink" href="#HTTP_User_Parameter_Modifier_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -13126,7 +13809,9 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="User_Parameters">18.7.5 User Parameters</h3></a>
+<h3>
+<a name="User_Parameters">18.7.5 User Parameters</a>
+<a class="sectionlink" href="#User_Parameters" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -13171,7 +13856,8 @@ See also the
 <div align="center"><img width='638' height='274' src="../images/screenshots/user_params.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="User_Parameters_parms"/>
+<a class="sectionlink" href="#User_Parameters_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -13206,7 +13892,9 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="BeanShell_PreProcessor">18.7.7 BeanShell PreProcessor</h3></a>
+<h3>
+<a name="BeanShell_PreProcessor">18.7.7 BeanShell PreProcessor</a>
+<a class="sectionlink" href="#BeanShell_PreProcessor" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -13223,7 +13911,10 @@ The BeanShell PreProcessor allows arbitrary code to be applied before taking a s
 
 
 <b>
-For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.
+For full details on using BeanShell, please see the 
+<a href="http://www.beanshell.org/">
+BeanShell website.
+</a>
 </b>
 
 
@@ -13243,11 +13934,13 @@ See the file BeanShellListeners.bshrc for example definitions.
 <div align="center"><img width='597' height='303' src="../images/screenshots/beanshell_preprocessor.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="BeanShell_PreProcessor_parms"/>
+<a class="sectionlink" href="#BeanShell_PreProcessor_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
 <td>Descriptive name for this element that is shown in the tree.
+    The name is stored in the script variable Label
 </td>
 <td>
 No
@@ -13296,6 +13989,7 @@ No
 <tr>
 <td>Script file</td>
 <td>A file containing the BeanShell script to run.
+    The file name is stored in the script variable FileName
 </td>
 <td>
 No
@@ -13333,7 +14027,7 @@ vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); 
 
 
 <li>
-props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");
+props - (JMeterProperties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");
 </li>
 
 
@@ -13365,7 +14059,9 @@ beanshell.preprocessor.init
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="BSF_PreProcessor">18.7.8 BSF PreProcessor</h3></a>
+<h3>
+<a name="BSF_PreProcessor">18.7.8 BSF PreProcessor</a>
+<a class="sectionlink" href="#BSF_PreProcessor" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -13379,10 +14075,11 @@ The BSF PreProcessor allows BSF script code to be applied before taking a sample
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='529' height='382' src="../images/screenshots/bsf_preprocessor.png"></div>
+<div align="center"><img width='634' height='357' src="../images/screenshots/bsf_preprocessor.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="BSF_PreProcessor_parms"/>
+<a class="sectionlink" href="#BSF_PreProcessor_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -13489,12 +14186,7 @@ vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); 
 
 
 <li>
-props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");
-</li>
-
-
-<li>
-prev - (SampleResult) - gives access to the previous SampleResult (if any)
+props - (JMeterProperties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");
 </li>
 
 
@@ -13519,7 +14211,9 @@ For details of all the methods available on each of the above variables, please 
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="JSR223_PreProcessor">18.7.8 JSR223 PreProcessor</h3></a>
+<h3>
+<a name="JSR223_PreProcessor">18.7.8 JSR223 PreProcessor</a>
+<a class="sectionlink" href="#JSR223_PreProcessor" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -13550,7 +14244,7 @@ For details, see
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="postprocessors"><strong>18.8 Post-Processors</strong></a></font>
+<a name="postprocessors"><strong>18.8 Post-Processors</strong></a><a class="sectionlink" href="#postprocessors" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -13599,7 +14293,9 @@ prev.getSubResults()
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Regular_Expression_Extractor">18.8.1 Regular Expression Extractor</h3></a>
+<h3>
+<a name="Regular_Expression_Extractor">18.8.1 Regular Expression Extractor</a>
+<a class="sectionlink" href="#Regular_Expression_Extractor" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -13612,7 +14308,8 @@ generate the template string, and store the result into the given variable name.
 <div align="center"><img width='728' height='301' src="../images/screenshots/regex_extractor.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Regular_Expression_Extractor_parms"/>
+<a class="sectionlink" href="#Regular_Expression_Extractor_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -13904,7 +14601,9 @@ See also
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="XPath_Extractor">18.8.2 XPath Extractor</h3></a>
+<h3>
+<a name="XPath_Extractor">18.8.2 XPath Extractor</a>
+<a class="sectionlink" href="#XPath_Extractor" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -13916,7 +14615,8 @@ This test element allows the user to extract value(s) from
 <div align="center"><img width='612' height='318' src="../images/screenshots/xpath_extractor.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="XPath_Extractor_parms"/>
+<a class="sectionlink" href="#XPath_Extractor_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -14241,7 +14941,9 @@ Tidy homepage
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Result_Status_Action_Handler">18.8.3 Result Status Action Handler</h3></a>
+<h3>
+<a name="Result_Status_Action_Handler">18.8.3 Result Status Action Handler</a>
+<a class="sectionlink" href="#Result_Status_Action_Handler" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -14251,7 +14953,8 @@ This test element allows the user to stop the thread or the whole test if the re
 <div align="center"><img width='435' height='146' src="../images/screenshots/resultstatusactionhandler.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Result_Status_Action_Handler_parms"/>
+<a class="sectionlink" href="#Result_Status_Action_Handler_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -14307,7 +15010,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="BeanShell_PostProcessor">18.8.4 BeanShell PostProcessor</h3></a>
+<h3>
+<a name="BeanShell_PostProcessor">18.8.4 BeanShell PostProcessor</a>
+<a class="sectionlink" href="#BeanShell_PostProcessor" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -14329,7 +15034,10 @@ For JMeter versions after 2.2 the BeanShell Post-Processor no longer ignores sam
 
 
 <b>
-For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.
+For full details on using BeanShell, please see the 
+<a href="http://www.beanshell.org/">
+BeanShell website.
+</a>
 </b>
 
 
@@ -14349,11 +15057,13 @@ See the file BeanShellListeners.bshrc for example definitions.
 <div align="center"><img width='597' height='303' src="../images/screenshots/beanshell_postprocessor.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="BeanShell_PostProcessor_parms"/>
+<a class="sectionlink" href="#BeanShell_PostProcessor_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
 <td>Descriptive name for this element that is shown in the tree.
+    The name is stored in the script variable Label
 </td>
 <td>
 No
@@ -14402,6 +15112,7 @@ No
 <tr>
 <td>Script file</td>
 <td>A file containing the BeanShell script to run.
+    The file name is stored in the script variable FileName
 </td>
 <td>
 No
@@ -14439,7 +15150,7 @@ vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); 
 
 
 <li>
-props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");
+props - (JMeterProperties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");
 </li>
 
 
@@ -14471,7 +15182,9 @@ beanshell.postprocessor.init
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="BSF_PostProcessor">18.8.5 BSF PostProcessor</h3></a>
+<h3>
+<a name="BSF_PostProcessor">18.8.5 BSF PostProcessor</a>
+<a class="sectionlink" href="#BSF_PostProcessor" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -14485,10 +15198,11 @@ The BSF PostProcessor allows BSF script code to be applied after taking a sample
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='529' height='382' src="../images/screenshots/bsf_postprocessor.png"></div>
+<div align="center"><img width='634' height='357' src="../images/screenshots/bsf_postprocessor.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="BSF_PostProcessor_parms"/>
+<a class="sectionlink" href="#BSF_PostProcessor_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -14598,7 +15312,7 @@ vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); 
 
 
 <li>
-props - JMeter Properties - e.g. props.get("START.HMS"); props.put("PROP1","1234");
+props - (JMeterProperties) - e.g. props.get("START.HMS"); props.put("PROP1","1234");
 </li>
 
 
@@ -14628,7 +15342,9 @@ For details of all the methods available on each of the above variables, please 
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="JSR223_PostProcessor">18.8.6 JSR223 PostProcessor</h3></a>
+<h3>
+<a name="JSR223_PostProcessor">18.8.6 JSR223 PostProcessor</a>
+<a class="sectionlink" href="#JSR223_PostProcessor" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -14659,7 +15375,7 @@ For details, see the
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="Miscellaneous_Features"><strong>18.9 Miscellaneous Features</strong></a></font>
+<a name="Miscellaneous_Features"><strong>18.9 Miscellaneous Features</strong></a><a class="sectionlink" href="#Miscellaneous_Features" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -14674,7 +15390,9 @@ For details, see the
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Test_Plan">18.9.1 Test Plan</h3></a>
+<h3>
+<a name="Test_Plan">18.9.1 Test Plan</a>
+<a class="sectionlink" href="#Test_Plan" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -14769,7 +15487,9 @@ In jmeter.properties, edit "user.classpath" to include additional libraries.
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Thread_Group">18.9.2 Thread Group</h3></a>
+<h3>
+<a name="Thread_Group">18.9.2 Thread Group</a>
+<a class="sectionlink" href="#Thread_Group" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -14777,6 +15497,17 @@ In jmeter.properties, edit "user.classpath" to include additional libraries.
 
 <p>
 A Thread Group defines a pool of users that will execute a particular test case against your server.  In the Thread Group GUI, you can control the number of users simulated (num of threads), the ramp up time (how long it takes to start all the threads), the number of times to perform the test, and optionally, a start and stop time for the test.
+</p>
+
+
+<p>
+
+See also 
+<a href="../usermanual/component_reference.html#tearDown_Thread_Group">tearDown Thread Group</a>
+ and 
+<a href="../usermanual/component_reference.html#setUp_Thread_Group">setUp Thread Group</a>
+.
+
 </p>
 
 
@@ -14790,10 +15521,11 @@ JMeter does not interrupt samplers which are waiting for a response, so the end 
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='411' height='419' src="../images/screenshots/threadgroup.png"></div>
+<div align="center"><img width='609' height='387' src="../images/screenshots/threadgroup.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Thread_Group_parms"/>
+<a class="sectionlink" href="#Thread_Group_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -14814,6 +15546,11 @@ No
         
 <li>
 Continue - ignore the error and continue with the test
+</li>
+
+        
+<li>
+Start Next Loop - ignore the error, start next loop and continue with the test
 </li>
 
         
@@ -14915,7 +15652,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="WorkBench">18.9.3 WorkBench</h3></a>
+<h3>
+<a name="WorkBench">18.9.3 WorkBench</a>
+<a class="sectionlink" href="#WorkBench" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -14963,7 +15702,9 @@ Certain test elements are only available on the WorkBench:
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="SSL_Manager">18.9.4 SSL Manager</h3></a>
+<h3>
+<a name="SSL_Manager">18.9.4 SSL Manager</a>
+<a class="sectionlink" href="#SSL_Manager" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -15034,7 +15775,9 @@ Things to Look Out For
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="HTTP_Proxy_Server">18.9.5 HTTP Proxy Server</h3></a>
+<h3>
+<a name="HTTP_Proxy_Server">18.9.5 HTTP Proxy Server</a>
+<a class="sectionlink" href="#HTTP_Proxy_Server" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -15159,7 +15902,8 @@ This setting will also be needed when running the generated test plan.
 <div align="center"><img width='954' height='615' src="../images/screenshots/proxy_control.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="HTTP_Proxy_Server_parms"/>
+<a class="sectionlink" href="#HTTP_Proxy_Server_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -15728,7 +16472,9 @@ either by copying the files there or by starting JMeter in the directory contain
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="HTTP_Mirror_Server">18.9.6 HTTP Mirror Server</h3></a>
+<h3>
+<a name="HTTP_Mirror_Server">18.9.6 HTTP Mirror Server</a>
+<a class="sectionlink" href="#HTTP_Mirror_Server" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -15751,7 +16497,9 @@ This is useful for checking the content of HTTP requests.
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Property_Display">18.9.7 Property Display</h3></a>
+<h3>
+<a name="Property_Display">18.9.7 Property Display</a>
+<a class="sectionlink" href="#Property_Display" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -15770,7 +16518,8 @@ It is available only on the WorkBench.
 <div align="center"><img width='776' height='502' src="../images/screenshots/property_display.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Property_Display_parms"/>
+<a class="sectionlink" href="#Property_Display_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -15789,7 +16538,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Debug_Sampler">18.9.8 Debug Sampler</h3></a>
+<h3>
+<a name="Debug_Sampler">18.9.8 Debug Sampler</a>
+<a class="sectionlink" href="#Debug_Sampler" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -15815,7 +16566,8 @@ The values can be seen in the
 <div align="center"><img width='355' height='172' src="../images/screenshots/debug_sampler.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Debug_Sampler_parms"/>
+<a class="sectionlink" href="#Debug_Sampler_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -15858,7 +16610,9 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Debug_PostProcessor">18.9.8 Debug PostProcessor</h3></a>
+<h3>
+<a name="Debug_PostProcessor">18.9.8 Debug PostProcessor</a>
+<a class="sectionlink" href="#Debug_PostProcessor" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -15876,7 +16630,8 @@ This is intended for developer use only.
 <div align="center"><img width='341' height='134' src="../images/screenshots/debug_postprocessor.png"></div>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="Debug_PostProcessor_parms"/>
+<a class="sectionlink" href="#Debug_PostProcessor_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Name</td>
@@ -15892,6 +16647,105 @@ No
 <tr><td><br></td></tr>
 </table>
 <hr>
+<table border="0" cellspacing="0" cellpadding="2">
+<tr><td>
+<font face="arial,helvetica,sanserif">
+<h3>
+<a name="Test_Fragment">18.9.9 Test Fragment</a>
+<a class="sectionlink" href="#Test_Fragment" title="Link to here">&para;</a></h3>
+</font>
+</td></tr>
+<tr><td>
+
+
+<p>
+
+The Test Fragment is used in conjunction with the 
+<a href="../usermanual/component_reference.html#Include_Controller">Include Controller</a>
+ and 
+<a href="../usermanual/component_reference.html#Module_Controller">Module Controller</a>
+.
+
+</p>
+
+
+<p><b>Control Panel</b></p>
+<div align="center"><img width='236' height='94' src="../images/screenshots/test_fragment.png"></div>
+<p>
+<b>Parameters</b>
+<a name="Test_Fragment_parms"/>
+<a class="sectionlink" href="#Test_Fragment_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
+<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+<tr>
+<td>Name</td>
+<td>Descriptive name for this element that is shown in the tree.
+</td>
+<td>
+Yes
+</td>
+</tr>
+</table>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<hr>
+<table border="0" cellspacing="0" cellpadding="2">
+<tr><td>
+<font face="arial,helvetica,sanserif">
+<h3>
+<a name="setUp_Thread_Group">18.9.10 setUp Thread Group</a>
+<a class="sectionlink" href="#setUp_Thread_Group" title="Link to here">&para;</a></h3>
+</font>
+</td></tr>
+<tr><td>
+
+    
+<p>
+
+    A special type of ThreadGroup that can be utilized to perform Pre-Test Actions.  The behavior of these threads
+    is exactly like a normal 
+<a href="../usermanual/component_reference.html#Thread_Group">Thread Group</a>
+ element.  The difference is that these type of threads 
+    execute before the test proceeds to the executing of regular Thread Groups.
+    
+</p>
+
+
+<p><b>Control Panel</b></p>
+<div align="center"><img width='537' height='289' src="../images/screenshots/setup_thread_group.png"></div>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<hr>
+<table border="0" cellspacing="0" cellpadding="2">
+<tr><td>
+<font face="arial,helvetica,sanserif">
+<h3>
+<a name="tearDown_Thread_Group">18.9.11 tearDown Thread Group</a>
+<a class="sectionlink" href="#tearDown_Thread_Group" title="Link to here">&para;</a></h3>
+</font>
+</td></tr>
+<tr><td>
+
+    
+<p>
+
+    A special type of ThreadGroup that can be utilized to perform Post-Test Actions.  The behavior of these threads
+    is exactly like a normal 
+<a href="../usermanual/component_reference.html#Thread_Group">Thread Group</a>
+ element.  The difference is that these type of threads 
+    execute after the test has finished executing its regular Thread Groups.
+    
+</p>
+
+
+<p><b>Control Panel</b></p>
+<div align="center"><img width='537' height='289' src="../images/screenshots/teardown_thread_group.png"></div>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<hr>
 <a href="#">
 ^
 </a>
@@ -15903,7 +16757,7 @@ No
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="Reports"><strong>18.10 Reports</strong></a></font>
+<a name="Reports"><strong>18.10 Reports</strong></a><a class="sectionlink" href="#Reports" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -15918,7 +16772,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Report_Plan">18.10.1 Report Plan</h3></a>
+<h3>
+<a name="Report_Plan">18.10.1 Report Plan</a>
+<a class="sectionlink" href="#Report_Plan" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -15931,7 +16787,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Report_Table">18.10.2 Report Table</h3></a>
+<h3>
+<a name="Report_Table">18.10.2 Report Table</a>
+<a class="sectionlink" href="#Report_Table" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -15944,7 +16802,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="HTML_Report_Writer">18.10.3 HTML Report Writer</h3></a>
+<h3>
+<a name="HTML_Report_Writer">18.10.3 HTML Report Writer</a>
+<a class="sectionlink" href="#HTML_Report_Writer" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -15957,7 +16817,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Report_Page">18.10.4 Report Page</h3></a>
+<h3>
+<a name="Report_Page">18.10.4 Report Page</a>
+<a class="sectionlink" href="#Report_Page" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -15970,7 +16832,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Line_Graph">18.10.5 Line Graph</h3></a>
+<h3>
+<a name="Line_Graph">18.10.5 Line Graph</a>
+<a class="sectionlink" href="#Line_Graph" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -15983,7 +16847,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="Bar_Chart">18.10.6 Bar Chart</h3></a>
+<h3>
+<a name="Bar_Chart">18.10.6 Bar Chart</a>
+<a class="sectionlink" href="#Bar_Chart" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -16022,7 +16888,7 @@ No
 </td></tr>
 <tr><td colspan="2">
 <div align="center"><font color="#525D76" size="-1"><em>
-Copyright &copy; 1999-2010, Apache Software Foundation
+Copyright &copy; 1999-2011, Apache Software Foundation
 </em></font></div>
 </td></tr>
 <tr><td colspan="2">
@@ -16036,6 +16902,7 @@ trademarks of the Apache Software Foundation for our open source software.
 </body>
 </html>
 <!-- end the processing -->
+
 
 
 

@@ -63,9 +63,9 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </li>
 <li><a href="../changes.html">Changes</a>
 </li>
-<li><a href="../known_bugs.html">Known Bugs</a>
+<li><a href="../issues.html">Issues</a>
 </li>
-<li><a href="../license.html">License</a>
+<li><a href="http://www.apache.org/licenses/">License</a>
 </li>
 <li><a href="http://wiki.apache.org/jakarta-jmeter/JMeterCommitters">Contributors</a>
 </li>
@@ -156,7 +156,7 @@ controllers, listeners, timers, assertions, and configuration elements.
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="add_remove"><strong>3.1 Adding and Removing Elements</strong></a>
-</font>
+<a class="sectionlink" href="#add_remove" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -181,7 +181,7 @@ and choose the "remove" option.
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="load_save"><strong>3.2 Loading and Saving Elements</strong></a>
-</font>
+<a class="sectionlink" href="#load_save" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -209,7 +209,7 @@ you can save test tree fragments and individual elements for later use.
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="config_element"><strong>3.3 Configuring Tree Elements</strong></a>
-</font>
+<a class="sectionlink" href="#config_element" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -232,7 +232,7 @@ configured for an element depends on what type of element it is.
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="saving"><strong>3.4 Saving the Test Plan</strong></a>
-</font>
+<a class="sectionlink" href="#saving" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -262,7 +262,7 @@ the Edit menu.
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="run"><strong>3.5 Running a Test Plan</strong></a>
-</font>
+<a class="sectionlink" href="#run" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -287,7 +287,7 @@ These only apply to a locally run test; they do not include any threads started 
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="stop"><strong>3.6 Stopping a Test</strong></a>
-</font>
+<a class="sectionlink" href="#stop" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -335,6 +335,33 @@ So in versions after 2.3.2, JMeter non-GUI mode will listen for commands on a sp
 jmeterengine.nongui.port
 </code>
 ).
+In versions after 2.4, JMeter supports automatic choice of an alternate port if the default port is being used 
+(for example by another JMeter instance). In this case, JMeter will try the next higher port, continuing until
+it reaches the JMeter property 
+<code>
+jmeterengine.nongui.maxport
+</code>
+) which defaults to 4455.
+If 
+<code>
+maxport
+</code>
+ is less than or equal to 
+<code>
+port
+</code>
+, port scanning will not take place.
+Note that JMeter 2.4 and earlier did not set up the listener for non-GUI clients, only non-GUI standalone tests;
+this has been fixed. 
+
+<br>
+</br>
+
+The chosen port is displayed in the console window.
+
+<br>
+</br>
+
 The commands currently supported are:
 
 <ul>
@@ -366,6 +393,7 @@ respectively. The scripts are to be found in the JMeter
 bin
 </code>
  directory.
+The commands will only be accepted if the script is run from the same host.
 
 </p>
 </blockquote>
@@ -376,7 +404,7 @@ bin
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="error_reporting"><strong>3.7 Error reporting</strong></a>
-</font>
+<a class="sectionlink" href="#error_reporting" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -424,7 +452,7 @@ The status of a sample result can be seen in the various different Listeners.
 </td></tr>
 <tr><td colspan="2">
 <div align="center"><font color="#525D76" size="-1"><em>
-Copyright &copy; 1999-2010, Apache Software Foundation
+Copyright &copy; 1999-2011, Apache Software Foundation
 </em></font></div>
 </td></tr>
 <tr><td colspan="2">
@@ -438,6 +466,7 @@ trademarks of the Apache Software Foundation for our open source software.
 </body>
 </html>
 <!-- end the processing -->
+
 
 
 

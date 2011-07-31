@@ -65,9 +65,9 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </li>
 <li><a href="./changes.html">Changes</a>
 </li>
-<li><a href="./known_bugs.html">Known Bugs</a>
+<li><a href="./issues.html">Issues</a>
 </li>
-<li><a href="./license.html">License</a>
+<li><a href="http://www.apache.org/licenses/">License</a>
 </li>
 <li><a href="http://wiki.apache.org/jakarta-jmeter/JMeterCommitters">Contributors</a>
 </li>
@@ -162,6 +162,803 @@ Changes sections are chronologically ordered from top (most recent) to bottom
 (least recent)
 </b>
 </p>
+<h1>
+Version 2.4
+</h1>
+<h2>
+Summary of main changes
+</h2>
+<p>
+
+
+<ul>
+
+
+<li>
+JMeter now requires at least Java 1.5.
+</li>
+
+
+<li>
+HTTP Proxy can now record HTTPS sessions.
+</li>
+
+
+<li>
+JUnit sampler now supports JUnit4 annotations.
+</li>
+
+
+<li>
+Added JSR223 (javax.script) test elements.
+</li>
+
+
+<li>
+MailReader Sampler can now use any protocol supported by the underlying implementation.
+</li>
+
+
+<li>
+An SMTP Sampler has been added.
+</li>
+
+
+<li>
+JMeter now allows users to provide their own Thread Group implementations.
+</li>
+
+
+<li>
+View Results Tree now supports more display options, including search and Regex Testing.
+</li>
+
+
+<li>
+StatCalculator performance is much improved; Aggregate Report etc. need far less memory.
+</li>
+
+
+<li>
+
+JMS samplers have been extensively reworked, and should no longer lose messages.
+Correlation processing is improved.
+JMS Publisher and Subscriber now support both Topics and Queues.
+
+</li>
+
+
+<li>
+Many other improvements have been made, please see below and in the manual.
+</li>
+
+
+</ul>
+
+
+</p>
+<h2>
+Known bugs
+</h2>
+<p>
+
+The Include Controller has some problems in non-GUI mode. 
+In particular, it can cause a NullPointerException if there are two include controllers with the same name.
+
+</p>
+<p>
+Once Only controller behaves correctly under a Thread Group or Loop Controller,
+but otherwise its behaviour is not consistent (or clearly specified).
+</p>
+<p>
+
+The menu item Options / Choose Language does not change all the displayed text to the new language.
+[The behaviour has improved, but language change is still not fully working]
+To override the default local language fully, set the JMeter property "language" before starting JMeter. 
+
+</p>
+<h2>
+Incompatible changes
+</h2>
+<p>
+
+HTTP Redirect now defaults to "Follow Redirects" rather than "Redirect Automatically".
+This is to enable JMeter to track cookies that may be sent during redirects.
+This does not affect existing test plans; it only affects the default for new HTTP Samplers.
+
+</p>
+<p>
+
+The Avalon file format for JMX and JTL files is no longer supported.
+Any such files will need to be converted by reading them in JMeter 2.3.4 and resaving them.
+
+</p>
+<p>
+
+The XPath Assertion and XPath Extractor elements no longer fetch external DTDs by default; this can be changed in the GUI.
+
+</p>
+<p>
+
+JMSConfigGui has been renamed as JMSSamplerGui.
+This does not affect existing test plans.
+
+</p>
+<p>
+
+The constructor public SampleResult(SampleResult res) has been changed to become a true "copy constructor".
+It no longer calls addSubResult(). This may possibly affect some 3rd party add-ons.
+
+</p>
+<h2>
+Bug fixes
+</h2>
+<h3>
+HTTP Samplers and Proxy
+</h3>
+<ul>
+
+
+<li>
+Bug 47445 - Using Proxy with https-spoofing secure cookies need to be unsecured
+</li>
+
+
+<li>
+Bug 47442 - Missing replacement of https by http for certain conditions using https-spoofing
+</li>
+
+
+<li>
+Bug 48451 - Error in: SoapSampler.setPostHeaders(PostMethod post) in the else branch
+</li>
+
+
+<li>
+Bug 48542 - SoapSampler uses wrong response header field to decide if response is gzip encoded
+</li>
+
+
+<li>
+Bug 48568 - CookieManager broken for AjpSampler
+</li>
+
+
+<li>
+Bug 48570 - AjpSampler doesn't support query parameters (GET/POST)
+</li>
+
+
+<li>
+Bug 46901 - HTTP Sampler does not process var/func refs correctly in first file parameter
+</li>
+
+
+<li>
+Bug 43678 - Handle META tag http-equiv charset?
+</li>
+
+
+<li>
+Bug 49294 - Images not downloaded from redirected-to pages
+</li>
+
+
+<li>
+Bug 49560 - wrong "size in bytes" when following redirections
+</li>
+
+
+</ul>
+<h3>
+Other Samplers
+</h3>
+<ul>
+
+
+<li>
+Bug 47420 - LDAP extended request not closing connections during add request
+</li>
+
+
+<li>
+Bug 48573 - LDAPExtSampler directory context handling
+</li>
+
+
+<li>
+Bug 47870 - JMSSubscriber fails due to NPE
+</li>
+
+
+<li>
+Bug 47899 - NullPointerExceptions in JMS ReceiveSubscriber constructor
+</li>
+
+
+<li>
+Bug 48144 - NPE in JMS OnMessageSubscriber
+</li>
+
+
+<li>
+Bug 47992 - JMS Point-to-Point Request - Response option doesn't work
+</li>
+
+
+<li>
+Bug 48579 - Single Bind does not show config information when LdapExt Sampler is accessed
+</li>
+
+
+<li>
+Bug 49111 - "Message With ID Not Found" Error on JMS P2P sampler.
+</li>
+
+
+<li>
+Bug 47949 - JMS Subscriber never receives all the messages
+</li>
+
+
+<li>
+Bug 46142 - JMS Point-to-Point correlation problems
+</li>
+
+
+<li>
+Bug 48747 - TCP Sampler swallows exceptions
+</li>
+
+
+<li>
+Bug 48709 - TCP Sampler Config setting "classname" has no effect
+</li>
+
+
+</ul>
+<h3>
+Controllers
+</h3>
+<ul>
+
+
+<li>
+Bug 47385 - TransactionController should set AllThreads and GroupThreads
+</li>
+
+
+<li>
+Bug 47940 - Module controller incorrectly creates the replacement Sub Tree
+</li>
+
+
+<li>
+Bug 47592 - Run Thread groups consecutively with "Stop test" on error, JMeter will not mark to finished
+</li>
+
+
+<li>
+Bug 48786 - Run Thread groups consecutively: with "Stop test now" on error or manual stop, JMeter leaves the green box active
+</li>
+
+
+<li>
+Bug 48727 - Cannot stop test if all thread groups are disabled
+</li>
+
+
+</ul>
+<h3>
+Listeners
+</h3>
+<ul>
+
+
+<li>
+Bug 48603 - Mailer Visualiser sends two emails for a single failed response
+</li>
+
+
+<li>
+Correct calculation of min/max/std.dev for aggregated samples (Summary Report)
+</li>
+
+
+<li>
+Bug 48889 - Wrong response time with mode=Statistical and num_sample_threshold > 1
+</li>
+
+
+<li>
+Bug 47398 - SampleEvents are sent twice over RMI in distributed testing and non gui mode
+</li>
+
+
+</ul>
+<h3>
+Assertions
+</h3>
+<ul>
+
+
+</ul>
+<h3>
+Functions
+</h3>
+<ul>
+
+
+</ul>
+<h3>
+I18N
+</h3>
+<ul>
+
+
+</ul>
+<h3>
+General
+</h3>
+<ul>
+
+
+<li>
+Bug 47646 -  NullPointerException in the "Random Variable" element
+</li>
+
+
+<li>
+Disallow adding any child elements to JDBC Configuration
+</li>
+
+
+<li>
+BeanInfoSupport now caches getBeanDescriptor() - should avoid an NPE on non-Sun JVMs when using CSVDataSet (and some other TestBeans)
+</li>
+
+
+<li>
+Bug 48350 - Deadlock on distributed testing with 2 clients
+</li>
+
+
+<li>
+Bug 48901 - Endless wait by adding Synchronizing Timer
+</li>
+
+
+<li>
+Bug 49149 - usermanual/index.html has typo in link to "Regular Expressions" page
+</li>
+
+
+<li>
+Bug 49394 - Classcast Exception in ActionRouter.postActionPerformed
+</li>
+
+
+<li>
+Bug 48136 - Essential files missing from source tarball.
+<br>
+</br>
+
+Source archives now contain all source files, including source files previously only provided in the binary archives.
+
+</li>
+
+
+<li>
+Bug 48331 - XpathExtractor does not return XML string representations for a Nodeset
+</li>
+
+
+</ul>
+<h2>
+Improvements
+</h2>
+<h3>
+HTTP Samplers
+</h3>
+<ul>
+
+
+<li>
+Bug 47622 - enable recording of HTTPS sessions
+</li>
+
+
+<li>
+Allow Proxy Server to be specified on HTTP Sampler GUI and HTTP Config GUI
+</li>
+
+
+<li>
+Bug 47461 - Update Cache Manager to handle Expires HTTP header
+</li>
+
+
+<li>
+Bug 48153 - Support for Cache-Control and Expires headers
+</li>
+
+
+<li>
+Bug 47946 - Proxy should enable Grouping inside a Transaction Controller
+</li>
+
+
+<li>
+Bug 48300 - Allow override of IP source address for HTTP HttpClient requests
+</li>
+
+
+<li>
+Bug 49083 - collapse '/pathsegment/..' in redirect URLs
+</li>
+
+
+</ul>
+<h3>
+Other samplers
+</h3>
+<ul>
+
+
+<li>
+JUnit sampler now supports JUnit4 tests (using annotations)
+</li>
+
+
+<li>
+Bug 47900 - Allow JMS SubscriberSampler to be interrupted
+</li>
+
+
+<li>
+Added JSR223 Sampler
+</li>
+
+
+<li>
+Bug 47556 - JMS-PointToPoint-Sampler Timeout field should use Strings
+</li>
+
+
+<li>
+Bug 47947 - Mail Reader Sampler should allow port to be overridden
+</li>
+
+
+<li>
+Bug 48155 - Multiple problems / enhancements with JMS protocol classes
+</li>
+
+
+<li>
+Allow MailReader sampler to use arbitrary protocols
+</li>
+
+
+<li>
+Bug 45053 - SMTP-Sampler for JMeter
+</li>
+
+
+<li>
+Bug 49552 - Add Message Headers on SMTPSampler
+</li>
+
+
+<li>
+
+JMS Publisher and Subscriber now support both Topics and Queues.
+Added read Timeout to JMS Subscriber.
+General clean-up of JMS code.
+
+</li>
+
+
+</ul>
+<h3>
+Controllers
+</h3>
+<ul>
+
+
+<li>
+Bug 47909 - TransactionController should sum the latency
+</li>
+
+
+<li>
+Bug 41418 - Exclude timer duration from Transaction Controller runtime in report
+</li>
+
+
+<li>
+Bug 48749 - Allowing custom Thread Groups
+</li>
+
+
+<li>
+Bug 43389 - Allow Include files to be found relative to the current JMX file
+</li>
+
+
+</ul>
+<h3>
+Listeners
+</h3>
+<ul>
+
+
+<li>
+Added DataStrippingSample sender - supports "Stripped" and "StrippedBatch" modes.
+</li>
+
+
+<li>
+Added Comparison Assertion Visualizer
+</li>
+
+
+<li>
+Bug 47907 - Improvements (enhancements and I18N) Comparison Assertion and Comparison Visualizer
+</li>
+
+
+<li>
+Bug 36726 - add search function to Tree View Listener
+</li>
+
+
+<li>
+Bug 47869 - Ability to cleanup fields of SampleResult
+</li>
+
+
+<li>
+Bug 47952 - Added JSR223 Listener
+</li>
+
+
+<li>
+Bug 47474 - View Results Tree support for plugin renderers
+</li>
+
+
+<li>
+Allow Idle Time to be saved to sample log files
+</li>
+
+
+<li>
+Bug 48259 - Improve StatCalculator performance by using TreeMap
+</li>
+
+
+<li>
+Listeners using SamplingStatCalculator have much reduced memory needs 
+as the Sample cache has been moved to the new CachingStatCalculator class.
+In particular, Aggregate Report can now handle large numbers of samples.
+
+</li>
+
+
+<li>
+Aggregate Report and Summary Report now allow column headers to be optionally excluded
+</li>
+
+
+<li>
+Bug 49506 - Add .csv File Extension in open dialog box from "read from file" functionality of listeners
+</li>
+
+
+<li>
+Bug 49545 - Formatted (parsed) view of Sample Result in Results Tree
+</li>
+
+
+</ul>
+<h3>
+Timers, Assertions, Config, Pre- & Post-Processors
+</h3>
+<ul>
+
+
+<li>
+Bug 47338 - XPath Extractor forces retrieval of document DTD
+</li>
+
+
+<li>
+Added Comparison Assertion
+</li>
+
+
+<li>
+Bug 47952 - Added JSR223 PreProcessor and PostProcessor
+</li>
+
+
+<li>
+Added JSR223 Assertion
+</li>
+
+
+<li>
+Added BSF Timer and JSR223 Timer
+</li>
+
+
+<li>
+Bug 48511 - add parent,child,all selection to regex extractor
+</li>
+
+
+<li>
+Add Sampler scope selection to XPathExtractor
+</li>
+
+
+<li>
+Regular Expression Extractor, Response Assertion and Size Assertion can now be applied to a JMeter variable
+</li>
+
+
+<li>
+Bug 46790 - CSV Data Set Config should be able to parse CSV headers
+</li>
+
+
+</ul>
+<h3>
+Functions
+</h3>
+<ul>
+
+
+<li>
+Bug 47565 - [Function] FileToString
+</li>
+
+
+</ul>
+<h3>
+I18N
+</h3>
+<ul>
+
+
+<li>
+Bug 47938 -  Adding some French translations for new elements
+</li>
+
+
+<li>
+Bug 48714 -  add new French messages
+</li>
+
+
+</ul>
+<h3>
+General
+</h3>
+<ul>
+
+
+<li>
+Bug 47223 - Slow Aggregate Report Performance (StatCalculator)
+</li>
+
+
+<li>
+Bug 47980 - hostname resolves to 127.0.0.1 - specifiying IP not possible
+</li>
+
+
+<li>
+Bug 47943 - DisabledComponentRemover is not used in Start class
+</li>
+
+
+<li>
+HeapDumper class for runtime generation of dumps
+</li>
+
+
+<li>
+Basic read-only JavaMail provider implementation for reading raw mail files
+</li>
+
+
+<li>
+Bug 49540 - Sort "Add" menus alphabetically
+</li>
+
+
+</ul>
+<h2>
+Non-functional changes
+</h2>
+<ul>
+
+
+<li>
+Beanshell, JavaMail and JMS API (Apache Geronimo) jars are now included in the binary archive.
+</li>
+
+
+<li>
+Add TestBean Table Editor support
+</li>
+
+
+<li>
+Removed all external libraries from SVN; added download_jars Ant target
+</li>
+
+
+<li>
+Updated various jar files:
+
+<ul>
+
+
+<li>
+BeanShell - 2.0b4 => 2.0b5
+</li>
+
+
+<li>
+Commons Codec - 1.3 => 1.4
+</li>
+
+
+<li>
+Commons-Collections - 3.2 => 3.2.1
+</li>
+
+
+<li>
+JTidy => r938
+</li>
+
+
+<li>
+JUnit - 3.8.2 => 4.8.1
+</li>
+
+
+<li>
+Logkit - 1.2 => 2.0
+</li>
+
+
+<li>
+Xalan Serializer = 2.7.1 (previously erroneously shown as 2.9.1)
+</li>
+
+
+<li>
+Xerces xml-apis = 1.3.04 (previously erroneously shown as 2.9.1)
+</li>
+
+
+<li>
+Some jar files were renamed.
+</li>
+
+
+</ul>
+
+
+</li>
+
+
+</ul>
 <h1>
 Version 2.3.4
 </h1>
@@ -6669,7 +7466,7 @@ Initial version. (SM)
 </td></tr>
 <tr><td colspan="2">
 <div align="center"><font color="#525D76" size="-1"><em>
-Copyright &copy; 1999-2010, Apache Software Foundation
+Copyright &copy; 1999-2011, Apache Software Foundation
 </em></font></div>
 </td></tr>
 <tr><td colspan="2">
@@ -6683,6 +7480,7 @@ trademarks of the Apache Software Foundation for our open source software.
 </body>
 </html>
 <!-- end the processing -->
+
 
 
 

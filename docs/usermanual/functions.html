@@ -63,9 +63,9 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </li>
 <li><a href="../changes.html">Changes</a>
 </li>
-<li><a href="../known_bugs.html">Known Bugs</a>
+<li><a href="../issues.html">Issues</a>
 </li>
-<li><a href="../license.html">License</a>
+<li><a href="http://www.apache.org/licenses/">License</a>
 </li>
 <li><a href="http://wiki.apache.org/jakarta-jmeter/JMeterCommitters">Contributors</a>
 </li>
@@ -142,7 +142,7 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="functions"><strong>19. Functions and Variables</strong></a></font>
+<a name="functions"><strong>19. Functions and Variables</strong></a><a class="sectionlink" href="#functions" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -258,6 +258,23 @@ Information
 <td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 get thread number
+</font>
+</td>
+</tr>
+<tr>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+Information
+</font>
+</td>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+ <a href="#__samplerName">samplerName</a>
+</font>
+</td>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+get the sampler name (label)
 </font>
 </td>
 </tr>
@@ -727,7 +744,7 @@ Encode strings using HTML encoding
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="what_can_do"><strong>19.1 What can functions do</strong></a>
-</font>
+<a class="sectionlink" href="#what_can_do" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -775,7 +792,7 @@ Each occurrence of a function call in a test plan is handled by a separate funct
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="where"><strong>19.2 Where can functions and variables be used?</strong></a>
-</font>
+<a class="sectionlink" href="#where" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -897,7 +914,7 @@ SELECT item from table where name=${VAR}
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="how"><strong>19.3 How to reference variables and functions</strong></a>
-</font>
+<a class="sectionlink" href="#how" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -1015,7 +1032,7 @@ variable will override the built-in function.
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="function_helper"><strong>19.4 The Function Helper Dialog</strong></a>
-</font>
+<a class="sectionlink" href="#function_helper" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -1043,14 +1060,16 @@ for you to copy-paste into your test plan wherever you like.
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="functions"><strong>19.5 Functions</strong></a>
-</font>
+<a class="sectionlink" href="#functions" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="__regexFunction">19.5.1 __regexFunction</h3></a>
+<h3>
+<a name="__regexFunction">19.5.1 __regexFunction</a>
+<a class="sectionlink" href="#__regexFunction" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -1108,7 +1127,8 @@ ${refName_matchNr} to refer to the number of groups found by this function.
 
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="__regexFunction_parms"/>
+<a class="sectionlink" href="#__regexFunction_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>First argument</td>
@@ -1218,7 +1238,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="__counter">19.5.2 __counter</h3></a>
+<h3>
+<a name="__counter">19.5.2 __counter</a>
+<a class="sectionlink" href="#__counter" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -1248,7 +1270,8 @@ The global counter - "FALSE" - is separately maintained by each counter instance
 
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="__counter_parms"/>
+<a class="sectionlink" href="#__counter_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>First argument</td>
@@ -1281,7 +1304,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="__threadNum">19.5.3 __threadNum</h3></a>
+<h3>
+<a name="__threadNum">19.5.3 __threadNum</a>
+<a class="sectionlink" href="#__threadNum" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -1314,7 +1339,9 @@ Nor does it make sense to use it on the Test Plan.
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="__intSum">19.5.4a __intSum</h3></a>
+<h3>
+<a name="__intSum">19.5.4a __intSum</a>
+<a class="sectionlink" href="#__intSum" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -1340,7 +1367,8 @@ The reference name is now optional, but it must not be a valid integer.
 
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="__intSum_parms"/>
+<a class="sectionlink" href="#__intSum_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>First argument</td>
@@ -1386,7 +1414,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="__longSum">19.5.4b __longSum</h3></a>
+<h3>
+<a name="__longSum">19.5.4b __longSum</a>
+<a class="sectionlink" href="#__longSum" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -1396,7 +1426,8 @@ The longSum function can be used to compute the sum of two or more long values.
 </p>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="__longSum_parms"/>
+<a class="sectionlink" href="#__longSum_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>First argument</td>
@@ -1444,7 +1475,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="__StringFromFile">19.5.5 __StringFromFile</h3></a>
+<h3>
+<a name="__StringFromFile">19.5.5 __StringFromFile</a>
+<a class="sectionlink" href="#__StringFromFile" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -1492,7 +1525,8 @@ If an error occurs opening or reading the file, then the function returns the st
 
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="__StringFromFile_parms"/>
+<a class="sectionlink" href="#__StringFromFile_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>File Name</td>
@@ -1653,7 +1687,9 @@ not
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="__machineName">19.5.6 __machineName</h3></a>
+<h3>
+<a name="__machineName">19.5.6 __machineName</a>
+<a class="sectionlink" href="#__machineName" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -1662,7 +1698,8 @@ The machineName function returns the local host name
 </p>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="__machineName_parms"/>
+<a class="sectionlink" href="#__machineName_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Variable Name</td>
@@ -1682,7 +1719,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="__javaScript">19.5.7 __javaScript</h3></a>
+<h3>
+<a name="__javaScript">19.5.7 __javaScript</a>
+<a class="sectionlink" href="#__javaScript" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -1791,7 +1830,8 @@ JMeter is not a browser, and does not interpret the JavaScript in downloaded pag
 
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="__javaScript_parms"/>
+<a class="sectionlink" href="#__javaScript_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Expression</td>
@@ -1865,7 +1905,9 @@ the comma after 7 is escaped.
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="__Random">19.5.8 __Random</h3></a>
+<h3>
+<a name="__Random">19.5.8 __Random</a>
+<a class="sectionlink" href="#__Random" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -1874,7 +1916,8 @@ The random function returns a random number that lies between the given min and 
 </p>
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="__Random_parms"/>
+<a class="sectionlink" href="#__Random_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Minimum value</td>
@@ -1910,7 +1953,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="__CSVRead">19.5.8 __CSVRead</h3></a>
+<h3>
+<a name="__CSVRead">19.5.8 __CSVRead</a>
+<a class="sectionlink" href="#__CSVRead" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -1990,7 +2035,8 @@ All subsequent references to the same file name use the same internal array.
 
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="__CSVRead_parms"/>
+<a class="sectionlink" href="#__CSVRead_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>File Name</td>
@@ -2073,7 +2119,9 @@ StringFromFile
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="__property">19.5.9 __property</h3></a>
+<h3>
+<a name="__property">19.5.9 __property</a>
+<a class="sectionlink" href="#__property" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -2118,7 +2166,8 @@ ${__property(abcd,,atod)} - return value of property abcd (or "atod" if not defi
 	
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="__property_parms"/>
+<a class="sectionlink" href="#__property_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Property Name</td>
@@ -2154,7 +2203,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="__P">19.5.10 __P</h3></a>
+<h3>
+<a name="__P">19.5.10 __P</a>
+<a class="sectionlink" href="#__P" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -2216,7 +2267,8 @@ the second would return 1 and the last would return www.dummy.org
 	
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="__P_parms"/>
+<a class="sectionlink" href="#__P_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Property Name</td>
@@ -2244,7 +2296,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="__log">19.5.11 __log</h3></a>
+<h3>
+<a name="__log">19.5.11 __log</a>
+<a class="sectionlink" href="#__log" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -2259,7 +2313,8 @@ No
 
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="__log_parms"/>
+<a class="sectionlink" href="#__log_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>String to be logged</td>
@@ -2316,7 +2371,9 @@ For example:
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="__logn">19.5.12 __logn</h3></a>
+<h3>
+<a name="__logn">19.5.12 __logn</a>
+<a class="sectionlink" href="#__logn" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -2331,7 +2388,8 @@ For example:
 
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="__logn_parms"/>
+<a class="sectionlink" href="#__logn_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>String to be logged</td>
@@ -2377,7 +2435,9 @@ For example:
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="__BeanShell">19.5.13 __BeanShell</h3></a>
+<h3>
+<a name="__BeanShell">19.5.13 __BeanShell</a>
+<a class="sectionlink" href="#__BeanShell" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -2484,7 +2544,8 @@ Other variables vary from invocation to invocation.
 
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="__BeanShell_parms"/>
+<a class="sectionlink" href="#__BeanShell_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>BeanShell script</td>
@@ -2533,7 +2594,9 @@ Remember to include any necessary quotes for text strings and JMeter variables t
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="__split">19.5.14 __split</h3></a>
+<h3>
+<a name="__split">19.5.14 __split</a>
+<a class="sectionlink" href="#__split" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -2568,7 +2631,7 @@ Remember to include any necessary quotes for text strings and JMeter variables t
 <br>
 </br>
 
-	${__split(${VAR},VAR),|}
+	${__split(${VAR},VAR,|)}
 	
 <br>
 </br>
@@ -2610,7 +2673,8 @@ Remember to include any necessary quotes for text strings and JMeter variables t
 
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="__split_parms"/>
+<a class="sectionlink" href="#__split_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>String to split</td>
@@ -2664,7 +2728,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="__XPath">19.5.15 __XPath</h3></a>
+<h3>
+<a name="__XPath">19.5.15 __XPath</a>
+<a class="sectionlink" href="#__XPath" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -2717,7 +2783,8 @@ No
 
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="__XPath_parms"/>
+<a class="sectionlink" href="#__XPath_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>XML file to parse</td>
@@ -2744,7 +2811,9 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="__setProperty">19.5.16 __setProperty</h3></a>
+<h3>
+<a name="__setProperty">19.5.16 __setProperty</a>
+<a class="sectionlink" href="#__setProperty" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -2770,7 +2839,8 @@ Properties are global to JMeter,
 	
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="__setProperty_parms"/>
+<a class="sectionlink" href="#__setProperty_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Property Name</td>
@@ -2805,7 +2875,9 @@ No
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="__time">19.5.17 __time</h3></a>
+<h3>
+<a name="__time">19.5.17 __time</a>
+<a class="sectionlink" href="#__time" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -2818,7 +2890,8 @@ The time function returns the current time in various formats.
 	
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="__time_parms"/>
+<a class="sectionlink" href="#__time_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Format</td>
@@ -2888,7 +2961,9 @@ time.YMD=yyMMdd
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="__jexl">19.5.18 __jexl</h3></a>
+<h3>
+<a name="__jexl">19.5.18 __jexl</a>
+<a class="sectionlink" href="#__jexl" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -2928,7 +3003,8 @@ JEXL examples
 	
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="__jexl_parms"/>
+<a class="sectionlink" href="#__jexl_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Expression</td>
@@ -3045,7 +3121,9 @@ OUT - System.out - e.g. OUT.println("message")
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="__V">19.5.19 __V</h3></a>
+<h3>
+<a name="__V">19.5.19 __V</a>
+<a class="sectionlink" href="#__V" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -3086,7 +3164,8 @@ ${__V(A${N})} - works OK. A${N} becomes A1, and the __V function returns the val
 	
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="__V_parms"/>
+<a class="sectionlink" href="#__V_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Variable name</td>
@@ -3107,7 +3186,9 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="__evalVar">19.5.20 __evalVar</h3></a>
+<h3>
+<a name="__evalVar">19.5.20 __evalVar</a>
+<a class="sectionlink" href="#__evalVar" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -3131,7 +3212,8 @@ The eval function returns the result of evaluating an expression stored in a var
 	
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="__evalVar_parms"/>
+<a class="sectionlink" href="#__evalVar_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Variable name</td>
@@ -3152,7 +3234,9 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="__eval">19.5.21 __eval</h3></a>
+<h3>
+<a name="__eval">19.5.21 __eval</a>
+<a class="sectionlink" href="#__eval" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -3209,7 +3293,8 @@ SQL=select ${column} from ${table} where name='${name}'
 	
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="__eval_parms"/>
+<a class="sectionlink" href="#__eval_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Variable name</td>
@@ -3230,7 +3315,9 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="__char">19.5.22 __char</h3></a>
+<h3>
+<a name="__char">19.5.22 __char</a>
+<a class="sectionlink" href="#__char" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -3253,7 +3340,8 @@ Yes
     
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="__char_parms"/>
+<a class="sectionlink" href="#__char_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>Unicode character number (decimal or 0xhex)</td>
@@ -3288,7 +3376,9 @@ ${__char(165)} = � (yen)
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="__unescape">19.5.23 __unescape</h3></a>
+<h3>
+<a name="__unescape">19.5.23 __unescape</a>
+<a class="sectionlink" href="#__unescape" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -3310,7 +3400,8 @@ ${__char(165)} = � (yen)
     
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="__unescape_parms"/>
+<a class="sectionlink" href="#__unescape_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>String to unescape</td>
@@ -3345,7 +3436,9 @@ ${__unescape(1\t2)} = 1[tab]2
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="__unescapeHtml">19.5.24 __unescapeHtml</h3></a>
+<h3>
+<a name="__unescapeHtml">19.5.24 __unescapeHtml</a>
+<a class="sectionlink" href="#__unescapeHtml" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -3401,7 +3494,8 @@ e.g.
     
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="__unescapeHtml_parms"/>
+<a class="sectionlink" href="#__unescapeHtml_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>String to unescape</td>
@@ -3422,7 +3516,9 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="__escapeHtml">19.5.25 __escapeHtml</h3></a>
+<h3>
+<a name="__escapeHtml">19.5.25 __escapeHtml</a>
+<a class="sectionlink" href="#__escapeHtml" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -3462,7 +3558,8 @@ becomes:
     
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="__escapeHtml_parms"/>
+<a class="sectionlink" href="#__escapeHtml_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>String to escape</td>
@@ -3483,7 +3580,9 @@ Yes
 <table border="0" cellspacing="0" cellpadding="2">
 <tr><td>
 <font face="arial,helvetica,sanserif">
-<h3><a name="__FileToString">19.5.26 __FileToString</h3></a>
+<h3>
+<a name="__FileToString">19.5.26 __FileToString</a>
+<a class="sectionlink" href="#__FileToString" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
 <tr><td>
@@ -3504,7 +3603,8 @@ If an error occurs opening or reading the file, then the function returns the st
 
 <p>
 <b>Parameters</b>
-<table border="1" cellspacing="0" cellpadding="2">
+<a name="__FileToString_parms"/>
+<a class="sectionlink" href="#__FileToString_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 <tr>
 <td>File Name</td>
@@ -3545,6 +3645,57 @@ The file name, encoding and reference name parameters are resolved every time th
 <tr><td><br></td></tr>
 </table>
 <hr>
+<table border="0" cellspacing="0" cellpadding="2">
+<tr><td>
+<font face="arial,helvetica,sanserif">
+<h3>
+<a name="__samplerName">19.5.27 __samplerName</a>
+<a class="sectionlink" href="#__samplerName" title="Link to here">&para;</a></h3>
+</font>
+</td></tr>
+<tr><td>
+
+    
+<p>
+
+    The samplerName function returns the name (i.e. label) of the current sampler.
+    
+</p>
+
+    
+<p>
+
+    The function does not work in Test elements that don't have an associated sampler.
+    For example the Test Plan. 
+    Configuration elements also don't have an associated sampler.
+    However some Configuration elements are referenced directly by samplers, such as the HTTP Header Manager
+    and Http Cookie Manager, and in this case the functions are resolved in the context of the Http Sampler.
+    Pre-Processors, Post-Processors and Assertions always have an associated Sampler.
+    
+</p>
+
+
+<p>
+<b>Parameters</b>
+<a name="__samplerName_parms"/>
+<a class="sectionlink" href="#__samplerName_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
+<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+<tr>
+<td>Variable Name</td>
+<td>
+A reference name - refName - for reusing the value created by this function. Stored values are of the form ${refName}.
+        
+</td>
+<td>
+No
+</td>
+</tr>
+</table>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<hr>
 </blockquote>
 </td></tr>
 <tr><td><br></td></tr>
@@ -3553,7 +3704,7 @@ The file name, encoding and reference name parameters are resolved every time th
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="predefinedvars"><strong>19.6 Pre-defined Variables</strong></a>
-</font>
+<a class="sectionlink" href="#predefinedvars" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -3568,12 +3719,16 @@ However some variables are defined internally by JMeter. These are listed below.
 
 
 <li>
-cookiename - contains the cookie value
+COOKIE_cookiename - contains the cookie value (see 
+<a href="../usermanual/component_reference.html#HTTP_Cookie_Manager">HTTP Cookie Manager</a>
+)
 </li>
 
 
 <li>
-JMeterThread.last_sample_ok - whether or not the last sample was OK - true/false
+JMeterThread.last_sample_ok - whether or not the last sample was OK - true/false.
+Note: this is updated after PostProcessors and Assertions have been run.
+
 </li>
 
 
@@ -3591,7 +3746,7 @@ START variables (see next section)
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="predefinedprops"><strong>19.6 Pre-defined Properties</strong></a>
-</font>
+<a class="sectionlink" href="#predefinedprops" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -3667,7 +3822,7 @@ They are mainly intended for use in file names etc.
 </td></tr>
 <tr><td colspan="2">
 <div align="center"><font color="#525D76" size="-1"><em>
-Copyright &copy; 1999-2010, Apache Software Foundation
+Copyright &copy; 1999-2011, Apache Software Foundation
 </em></font></div>
 </td></tr>
 <tr><td colspan="2">
@@ -3681,6 +3836,7 @@ trademarks of the Apache Software Foundation for our open source software.
 </body>
 </html>
 <!-- end the processing -->
+
 
 
 

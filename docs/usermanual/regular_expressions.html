@@ -63,9 +63,9 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </li>
 <li><a href="../changes.html">Changes</a>
 </li>
-<li><a href="../known_bugs.html">Known Bugs</a>
+<li><a href="../issues.html">Issues</a>
 </li>
-<li><a href="../license.html">License</a>
+<li><a href="http://www.apache.org/licenses/">License</a>
 </li>
 <li><a href="http://wiki.apache.org/jakarta-jmeter/JMeterCommitters">Contributors</a>
 </li>
@@ -142,7 +142,7 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="regex"><strong>20. Regular Expressions</strong></a></font>
+<a name="regex"><strong>20. Regular Expressions</strong></a><a class="sectionlink" href="#regex" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -150,7 +150,7 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="overview"><strong>20.1 Overview</strong></a>
-</font>
+<a class="sectionlink" href="#overview" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -256,7 +256,7 @@ Placement of modifiers
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="examples"><strong>20.2 Examples</strong></a>
-</font>
+<a class="sectionlink" href="#examples" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -520,7 +520,7 @@ These variables can be referred to later on in the JMeter test plan, as ${MYREF}
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="line_mode"><strong>20.3 Line mode</strong></a>
-</font>
+<a class="sectionlink" href="#line_mode" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -567,7 +567,7 @@ and the '$' metacharacter matches at the end of every line.
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="meta_chars"><strong>20.4 Meta characters</strong></a>
-</font>
+<a class="sectionlink" href="#meta_chars" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -626,6 +626,77 @@ Here is a list of the meta characters and their meaning (please check the ORO do
 Please note that ORO does not support the \Q and \E meta-characters.
 [In other RE engines, these can be used to quote a portion of an RE so that the meta-characters stand for themselves.]
 </p>
+<p>
+
+The following Perl5 extended regular expressions are supported by ORO.
+
+
+<dl>
+
+
+<dt>
+(?#text)
+</dt>
+
+
+<dd>
+An embedded comment causing text to be ignored.
+</dd>
+
+
+<dt>
+(?:regexp)
+</dt>
+
+
+<dd>
+Groups things like "()" but doesn't cause the group match to be saved.
+</dd>
+
+
+<dt>
+(?=regexp)
+</dt>
+
+
+<dd>
+A zero-width positive lookahead assertion. For example, \w+(?=\s) matches a word followed by whitespace, without including whitespace in the MatchResult.
+</dd>
+
+
+<dt>
+(?!regexp)
+</dt>
+
+
+<dd>
+A zero-width negative lookahead assertion. For example foo(?!bar) matches any occurrence of "foo" that isn't followed by "bar". Remember that this is a zero-width assertion, which means that a(?!b)d will match ad because a is followed by a character that is not b (the d) and a d follows the zero-width assertion.
+</dd>
+
+
+<dt>
+(?imsx)
+</dt>
+
+
+<dd>
+One or more embedded pattern-match modifiers. i enables case insensitivity, m enables multiline treatment of the input, s enables single line treatment of the input, and x enables extended whitespace comments.
+</dd>
+
+
+</dl>
+
+
+<b>
+Note that 
+<code>
+(?<=regexp)
+</code>
+ - lookbehind - is not supported.
+</b>
+
+
+</p>
 </blockquote>
 </td></tr>
 <tr><td><br></td></tr>
@@ -634,7 +705,7 @@ Please note that ORO does not support the \Q and \E meta-characters.
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="placement"><strong>20.5 Placement of modifiers</strong></a>
-</font>
+<a class="sectionlink" href="#placement" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -675,7 +746,7 @@ Match ExAct case or (?i)ArBiTrARY(?-i) case
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="testing_expressions"><strong>20.6 Testing Regular Expressions</strong></a></font>
+<a name="testing_expressions"><strong>20.6 Testing Regular Expressions</strong></a><a class="sectionlink" href="#testing_expressions" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -722,7 +793,7 @@ without needing to access any external servers.
 </td></tr>
 <tr><td colspan="2">
 <div align="center"><font color="#525D76" size="-1"><em>
-Copyright &copy; 1999-2010, Apache Software Foundation
+Copyright &copy; 1999-2011, Apache Software Foundation
 </em></font></div>
 </td></tr>
 <tr><td colspan="2">
@@ -736,6 +807,7 @@ trademarks of the Apache Software Foundation for our open source software.
 </body>
 </html>
 <!-- end the processing -->
+
 
 
 
