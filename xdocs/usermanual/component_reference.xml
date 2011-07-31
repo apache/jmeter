@@ -181,7 +181,7 @@ https.default.protocol=SSLv3
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
         <property name="Server" required="Yes, unless provided by HTTP Request Defaults">
             Domain name or IP address of the web server. e.g. www.example.com. [Do not include the http:// prefix.]
-            Note: in JMeter 2.4.1 (and later) if the "Host" header is defined in a Header Manager, then this will be used
+            Note: in JMeter 2.5 (and later) if the "Host" header is defined in a Header Manager, then this will be used
             as the virtual host name.
         </property>
         <property name="Port" required="No">Port the web server is listening to. Default: 80</property>
@@ -350,8 +350,8 @@ Optional properties to allow change the method to get response size:<br></br>
 <pre>sampleresult.getbytes.body_real_size=true</pre></li>
 <li>Add HTTP headers to full response size
 <pre>sampleresult.getbytes.headers_size=true</pre></li></ul>
-<note>Versions of JMeter before 2.4.1 returns only data response size (uncompressed if request uses gzip/defate mode).
-<br></br>To return to settings before version 2.4.1, set the two properties to false.</note>
+<note>Versions of JMeter before 2.5 returns only data response size (uncompressed if request uses gzip/defate mode).
+<br></br>To return to settings before version 2.5, set the two properties to false.</note>
 </p>
 <links>
         <link href="test_plan.html#assertions">Assertion</link>
