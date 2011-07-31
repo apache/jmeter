@@ -63,9 +63,9 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </li>
 <li><a href="../changes.html">Changes</a>
 </li>
-<li><a href="../known_bugs.html">Known Bugs</a>
+<li><a href="../issues.html">Issues</a>
 </li>
-<li><a href="../license.html">License</a>
+<li><a href="http://www.apache.org/licenses/">License</a>
 </li>
 <li><a href="http://wiki.apache.org/jakarta-jmeter/JMeterCommitters">Contributors</a>
 </li>
@@ -165,7 +165,7 @@ You can also use the Configuration button on a listener to decide what fields to
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="thread_group"><strong>4.1 ThreadGroup</strong></a>
-</font>
+<a class="sectionlink" href="#thread_group" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -246,7 +246,7 @@ Alternatively, one can use the relative delay and duration fields.
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="controllers"><strong>4.2 Controllers</strong></a>
-</font>
+<a class="sectionlink" href="#controllers" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -286,7 +286,7 @@ Logical Controllers
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="samplers"><strong>4.2.1 Samplers</strong></a>
-</font>
+<a class="sectionlink" href="#samplers" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -380,7 +380,7 @@ JMeter's built-in samplers
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="logic_controller"><strong>4.2.2 Logic Controllers</strong></a>
-</font>
+<a class="sectionlink" href="#logic_controller" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -557,8 +557,38 @@ Logic Controllers
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="test_fragments"><strong>4.2.3 Test Fragments</strong></a>
+<a class="sectionlink" href="#test_fragments" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+The Test Fragment element is a special type of 
+<a href="#controllers">
+controller
+</a>
+ that
+exists on the Test Plan tree at the same level as the Thread Group element.  It is distinguished
+from a Thread Group in that it is not executed unless it is 
+referenced by either a 
+<a href="../usermanual/component_reference.html#Module_Controller">Module Controller</a>
+ or an 
+<a href="../usermanual/component_reference.html#Include_Controller">Include_Controller</a>
+.
+
+</p>
+<p>
+This element is purely for code re-use within Test Plans and was introduced in Version 2.5
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="listeners"><strong>4.3 Listeners</strong></a>
-</font>
+<a class="sectionlink" href="#listeners" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -605,7 +635,7 @@ that come with JMeter.
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="timers"><strong>4.4 Timers</strong></a>
-</font>
+<a class="sectionlink" href="#timers" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -649,7 +679,7 @@ To provide a pause at a single place in a test plan, one can use the
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="assertions"><strong>4.5 Assertions</strong></a>
-</font>
+<a class="sectionlink" href="#assertions" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -694,7 +724,7 @@ and will count towards the error %age for example in the Aggregate and Summary r
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="config_elements"><strong>4.6 Configuration Elements</strong></a>
-</font>
+<a class="sectionlink" href="#config_elements" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -740,7 +770,7 @@ For simplicity, it is suggested that the element is placed only at the start of 
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="preprocessors"><strong>4.7 Pre-Processor Elements</strong></a>
-</font>
+<a class="sectionlink" href="#preprocessors" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -764,7 +794,7 @@ scoping rules
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="postprocessors"><strong>4.8 Post-Processor Elements</strong></a>
-</font>
+<a class="sectionlink" href="#postprocessors" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -788,7 +818,7 @@ scoping rules
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="executionorder"><strong>4.9 Execution order</strong></a>
-</font>
+<a class="sectionlink" href="#executionorder" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -934,7 +964,7 @@ Assertion 1
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="scoping_rules"><strong>4.10 Scoping Rules</strong></a>
-</font>
+<a class="sectionlink" href="#scoping_rules" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -1001,7 +1031,7 @@ which
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="properties"><strong>4.11 Properties and Variables</strong></a>
-</font>
+<a class="sectionlink" href="#properties" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -1098,7 +1128,7 @@ These are global to the test plan, so can be used to pass information between th
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="using_variables"><strong>4.12 Using Variables to parameterise tests</strong></a>
-</font>
+<a class="sectionlink" href="#using_variables" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -1187,7 +1217,7 @@ jmeter ... -Jhost=www3.example.org -Jloops=13
 </td></tr>
 <tr><td colspan="2">
 <div align="center"><font color="#525D76" size="-1"><em>
-Copyright &copy; 1999-2010, Apache Software Foundation
+Copyright &copy; 1999-2011, Apache Software Foundation
 </em></font></div>
 </td></tr>
 <tr><td colspan="2">
@@ -1201,6 +1231,7 @@ trademarks of the Apache Software Foundation for our open source software.
 </body>
 </html>
 <!-- end the processing -->
+
 
 
 

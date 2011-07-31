@@ -63,9 +63,9 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </li>
 <li><a href="../changes.html">Changes</a>
 </li>
-<li><a href="../known_bugs.html">Known Bugs</a>
+<li><a href="../issues.html">Issues</a>
 </li>
-<li><a href="../license.html">License</a>
+<li><a href="http://www.apache.org/licenses/">License</a>
 </li>
 <li><a href="http://wiki.apache.org/jakarta-jmeter/JMeterCommitters">Contributors</a>
 </li>
@@ -142,7 +142,7 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="building"><strong>12. Building a JMS Topic Test Plan</strong></a></font>
+<a name="building"><strong>12. Building a JMS Topic Test Plan</strong></a><a class="sectionlink" href="#building" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -207,7 +207,7 @@ here
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="adding_users"><strong>12.1 Adding Users</strong></a></font>
+<a name="adding_users"><strong>12.1 Adding Users</strong></a><a class="sectionlink" href="#adding_users" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -288,7 +288,7 @@ leave the Control Panel (for example, when selecting another tree element).
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="adding_subscriber_publisher"><strong>12.2 Adding JMS Subscriber and Publisher</strong></a></font>
+<a name="adding_subscriber_publisher"><strong>12.2 Adding JMS Subscriber and Publisher</strong></a><a class="sectionlink" href="#adding_subscriber_publisher" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -308,7 +308,7 @@ Then, select the JMS Subscriber element in the tree and edit the following prope
 
 
 <li>
-Change the Name field to "sample subscriber"
+Change the Name field to "Sample Subscriber"
 </li>
 
 
@@ -318,23 +318,26 @@ If the JMS provider uses the jndi.properties file, check the box
 
 
 <li>
-Enter the name of the InitialContextFactory class
+Enter the name of the InitialContextFactory class. For example, with ActiveMQ 5.4, the value is "org.apache.activemq.jndi.ActiveMQInitialContextFactory"
 </li>
 
 
 <li>
-Enter the provider URL. This is the URL for the JNDI server, if there is one
+Enter the provider URL. This is the URL for the JNDI server, if there is one. For example, with ActiveMQ 5.4 on local machine with default port, the value is "tcp://localhost:61616"
 </li>
 
 
 <li>
 Enter the name of the connection factory. Please refer to the documentation
-of the JMS provider for the information
+of the JMS provider for the information. For ActiveMQ, the default is "ConnectionFactory"
 </li>
 
 
 <li>
-Enter the name of the message topic
+Enter the name of the message topic. For ActiveMQ Dynamic Topics (create topics dynamically), example value is "dynamicTopics/MyStaticTopic1"
+Note: Setup at startup mean that JMeter starting to listen on the Destination at beginning of test without name change possibility. 
+Setup on Each sample mean that JMeter (re)starting to listen before run each JMS Subscriber sample, 
+this last option permit to have Destination name with some JMeter variables
 </li>
 
 
@@ -383,7 +386,7 @@ Then, select the JMS Publisher element in the tree and edit the following proper
 
 
 <li>
-Change the Name field to "sample publisher".
+Change the Name field to "Sample Publisher".
 </li>
 
 
@@ -393,23 +396,26 @@ If the JMS provider uses the jndi.properties file, check the box
 
 
 <li>
-Enter the name of the InitialContextFactory class.
+Enter the name of the InitialContextFactory class. For example, with ActiveMQ 5.4, the value is "org.apache.activemq.jndi.ActiveMQInitialContextFactory"
 </li>
 
 
 <li>
-Enter the provider URL. This is the URL for the JNDI server, if there is one
+Enter the provider URL. This is the URL for the JNDI server, if there is one. For example, with ActiveMQ 5.4 on local machine with default port, the value is "tcp://localhost:61616"
 </li>
 
 
 <li>
 Enter the name of the connection factory. Please refer to the documentation
-of the JMS provider for the information
+of the JMS provider for the information. For ActiveMQ, the default is "ConnectionFactory"
 </li>
 
 
 <li>
-Enter the name of the message topic
+Enter the name of the message topic. For ActiveMQ Dynamic Topics (create topics dynamically), example value is "dynamicTopics/MyStaticTopic1". 
+Note: Setup at startup mean that JMeter starting connection with the Destination at beginning of test without name change possibility. 
+Setup on Each sample mean that JMeter (re)starting the connection before run each JMS Publisher sample, 
+this last option permit to have Destination name with some JMeter variables
 </li>
 
 
@@ -435,7 +441,7 @@ and select the directory using browse.
 
 
 <li>
-Select the message type. If the message is in object format, make sure the
+Select the message type. If the message is in object format or map message, make sure the
 message is generated correctly.
 </li>
 
@@ -455,7 +461,7 @@ Figure 12.3. JMS Publisher
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="adding_listener"><strong>12.3 Adding a Listener to View Store the Test Results</strong></a></font>
+<a name="adding_listener"><strong>12.3 Adding a Listener to View Store the Test Results</strong></a><a class="sectionlink" href="#adding_listener" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -507,7 +513,7 @@ Figure 12.4. Graph Results Listener
 </td></tr>
 <tr><td colspan="2">
 <div align="center"><font color="#525D76" size="-1"><em>
-Copyright &copy; 1999-2010, Apache Software Foundation
+Copyright &copy; 1999-2011, Apache Software Foundation
 </em></font></div>
 </td></tr>
 <tr><td colspan="2">
@@ -521,6 +527,7 @@ trademarks of the Apache Software Foundation for our open source software.
 </body>
 </html>
 <!-- end the processing -->
+
 
 
 

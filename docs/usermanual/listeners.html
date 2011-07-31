@@ -63,9 +63,9 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </li>
 <li><a href="../changes.html">Changes</a>
 </li>
-<li><a href="../known_bugs.html">Known Bugs</a>
+<li><a href="../issues.html">Issues</a>
 </li>
-<li><a href="../license.html">License</a>
+<li><a href="http://www.apache.org/licenses/">License</a>
 </li>
 <li><a href="http://wiki.apache.org/jakarta-jmeter/JMeterCommitters">Contributors</a>
 </li>
@@ -142,7 +142,7 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="intro"><strong>14. Introduction to listeners</strong></a></font>
+<a name="intro"><strong>14. Introduction to listeners</strong></a><a class="sectionlink" href="#intro" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -175,7 +175,11 @@ CSV files are much smaller than XML files, so use CSV if you are generating lots
 </p>
 <p>
 
-
+The file name can be specified using either a relative or an absolute path name.
+Relative paths are resolved relative to the current working directory (which defaults to the bin/ directory).
+Versions of JMeter after 2.4 also support paths relative to the directory containing the current test plan (JMX file).
+If the path name begins with "~/" (or whatever is in the jmeter.save.saveservice.base_prefix JMeter property),
+then the path is assumed to be relative to the JMX file location. 
 
 </p>
 <p>
@@ -193,7 +197,7 @@ The same filename can be used by multiple samplers - but make sure they all use 
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="defaults"><strong>14.1 Default Configuration</strong></a></font>
+<a name="defaults"><strong>14.1 Default Configuration</strong></a><a class="sectionlink" href="#defaults" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -354,6 +358,9 @@ sampleresult.timestamp.start=true
 # Optional xml processing instruction for line 2 of the file:
 #jmeter.save.saveservice.xml_pi=&lt;?xml-stylesheet type="text/xsl" href="sample.xsl"?>
 
+# Prefix used to identify filenames that are relative to the current base
+#jmeter.save.saveservice.base_prefix=~/
+
 </pre>
 
 
@@ -362,7 +369,7 @@ sampleresult.timestamp.start=true
 <p>
 
 The date format to be used for the timestamp_format is described in 
-<a HREF="http://java.sun.com/j2se/1.5/docs/api/java/text/SimpleDateFormat.html">
+<a HREF="http://download.oracle.com/javase/1.5.0/docs/api/java/text/SimpleDateFormat.html">
 
 
 <b>
@@ -378,7 +385,7 @@ in later for viewing purposes.
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="sample_variables"><strong>14.1.1 Sample Variables</strong></a>
-</font>
+<a class="sectionlink" href="#sample_variables" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -402,7 +409,7 @@ and as additional attributes in XML files. See above for an example.
 <tr><td bgcolor="#828DA6">
 <font color="#ffffff" face="arial,helvetica,sanserif">
 <a name="sample_configuration"><strong>14.1.2 Sample Result Save Configuration</strong></a>
-</font>
+<a class="sectionlink" href="#sample_configuration" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -442,7 +449,7 @@ Note that cookies, method and the query string are saved as part of the "Sampler
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="batch"><strong>14.2 non-GUI (batch) test runs</strong></a></font>
+<a name="batch"><strong>14.2 non-GUI (batch) test runs</strong></a><a class="sectionlink" href="#batch" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -498,7 +505,7 @@ This can be used to generate a unique name for each test run.
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="resources"><strong>14.3 Resource usage</strong></a></font>
+<a name="resources"><strong>14.3 Resource usage</strong></a><a class="sectionlink" href="#resources" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -576,7 +583,7 @@ To minimise the amount of memory needed, use the Simple Data Writer, and use the
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="csvlogformat"><strong>14.4 CSV Log format</strong></a></font>
+<a name="csvlogformat"><strong>14.4 CSV Log format</strong></a><a class="sectionlink" href="#csvlogformat" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -704,7 +711,7 @@ Variables, if specified
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="xmlformat2.1"><strong>14.5 XML Log format 2.1</strong></a></font>
+<a name="xmlformat2.1"><strong>14.5 XML Log format 2.1</strong></a><a class="sectionlink" href="#xmlformat2.1" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -812,7 +819,7 @@ Note that the sample node name may be either "sample" or "httpSample".
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="xmlformat2.2"><strong>14.6 XML Log format 2.2</strong></a></font>
+<a name="xmlformat2.2"><strong>14.6 XML Log format 2.2</strong></a><a class="sectionlink" href="#xmlformat2.2" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -829,7 +836,7 @@ The format of the JTL files is identical for 2.2 and 2.1. Format 2.2 only affect
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="attributes"><strong>14.7 Sample Attributes</strong></a></font>
+<a name="attributes"><strong>14.7 Sample Attributes</strong></a><a class="sectionlink" href="#attributes" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -1097,7 +1104,7 @@ Sample variables
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="saving"><strong>14.8 Saving response data</strong></a></font>
+<a name="saving"><strong>14.8 Saving response data</strong></a><a class="sectionlink" href="#saving" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -1126,7 +1133,7 @@ The data will be retrieved from the file if necessary when the sample log file i
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="loading"><strong>14.9 Loading (reading) response data</strong></a></font>
+<a name="loading"><strong>14.9 Loading (reading) response data</strong></a><a class="sectionlink" href="#loading" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -1164,7 +1171,7 @@ use the menu item Run/Clear (Ctrl+Shift+E) or Run/Clear All (Ctrl+E) before load
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<a name="screencap"><strong>14.10 Saving Listener GUI data</strong></a></font>
+<a name="screencap"><strong>14.10 Saving Listener GUI data</strong></a><a class="sectionlink" href="#screencap" title="Link to here">&para;</a></font>
 </td></tr>
 <tr><td>
 <blockquote>
@@ -1211,7 +1218,7 @@ e.g. a spreadsheet or text editor.
 </td></tr>
 <tr><td colspan="2">
 <div align="center"><font color="#525D76" size="-1"><em>
-Copyright &copy; 1999-2010, Apache Software Foundation
+Copyright &copy; 1999-2011, Apache Software Foundation
 </em></font></div>
 </td></tr>
 <tr><td colspan="2">
@@ -1225,6 +1232,7 @@ trademarks of the Apache Software Foundation for our open source software.
 </body>
 </html>
 <!-- end the processing -->
+
 
 
 
