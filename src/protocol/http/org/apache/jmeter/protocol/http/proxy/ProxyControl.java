@@ -140,8 +140,9 @@ public class ProxyControl extends GenericController {
     private static final int GROUPING_IN_TRANSACTION_CONTROLLERS = 4;
 
     // Original numeric order (we now use strings)
-    private static final String SAMPLER_TYPE_HTTP_SAMPLER = "0";
-    private static final String SAMPLER_TYPE_HTTP_SAMPLER2 = "1";
+    private static final String SAMPLER_TYPE_HTTP_SAMPLER_JAVA = "0";
+    private static final String SAMPLER_TYPE_HTTP_SAMPLER_HC3_1 = "1";
+    private static final String SAMPLER_TYPE_HTTP_SAMPLER_HC4 = "2";
 
     private long lastTime = 0;// When was the last sample seen?
 
@@ -285,10 +286,12 @@ public class ProxyControl extends GenericController {
     public String getSamplerTypeName() {
         // Convert the old numeric types - just in case someone wants to reload the workbench
         String type = getPropertyAsString(SAMPLER_TYPE_NAME);
-        if (SAMPLER_TYPE_HTTP_SAMPLER.equals(type)){
+        if (SAMPLER_TYPE_HTTP_SAMPLER_JAVA.equals(type)){
             type = HTTPSamplerFactory.IMPL_JAVA;
-        } else if (SAMPLER_TYPE_HTTP_SAMPLER2.equals(type)){
+        } else if (SAMPLER_TYPE_HTTP_SAMPLER_HC3_1.equals(type)){
             type = HTTPSamplerFactory.IMPL_HTTP_CLIENT3_1;            
+        } else if (SAMPLER_TYPE_HTTP_SAMPLER_HC4.equals(type)){
+            type = HTTPSamplerFactory.IMPL_HTTP_CLIENT4;       
         }
         return type;
     }
