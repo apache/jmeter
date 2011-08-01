@@ -1122,6 +1122,7 @@ run JMeter unless all the JMeter jars are added.
     <exclude name="${dest.jar.jmeter}/testfiles/Sample_*.png"/>
     <include name="eclipse.classpath"/>
     <include name="eclipse.readme"/>
+  	<include name="checkstyle.xml"/>
     <include name="${lib.dir}/aareadme.txt"/>
     <include name="fb-*.x*"/>
     <!-- Make sure that the lib/opt directory is included in the archives -->
