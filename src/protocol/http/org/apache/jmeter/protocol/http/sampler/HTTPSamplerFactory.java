@@ -77,7 +77,7 @@ public class HTTPSamplerFactory {
             return new HTTPSamplerProxy(IMPL_HTTP_CLIENT3_1);
         }
         if (alias.equals(IMPL_HTTP_CLIENT4)) {
-            return new HTTPSamplerProxy(IMPL_HTTP_CLIENT3_1);
+            return new HTTPSamplerProxy(IMPL_HTTP_CLIENT4);
         }
         throw new IllegalArgumentException("Unknown sampler type: '" + alias+"'");
     }
