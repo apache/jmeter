@@ -35,8 +35,22 @@ package org.apache.jmeter.util;
 public class JMeterVersion {
 
     /*
-     * The VERSION string is updated by the Ant build file, which looks for the
-     * pattern: VERSION = <quote>.*<quote>
+     * Updated: 2011-08-02
+     * The previous line is set to the current date, to ensure that the file is modified
+     * when the SVN tag is created so it has the same revision as the tag.
+     *
+     * The REVISION string is checked by the Ant build file to ensure that the value
+     * agrees with the tag revision
+     */
+    private static final String REVISION = "$Revision$"; // will be updated by SVN
+
+    private static final String REVID;
+
+    static {
+        REVID = REVISION.split("\\s+")[1]; // extract the id
+    }
+
+    /*
      *
      * The string is made private so the compiler can't propagate it into
      * JMeterUtils. (Java compilers may make copies of final variables)
@@ -54,6 +68,6 @@ public class JMeterVersion {
     }
 
     static final String getVERSION() {
-        return VERSION;
+        return VERSION+" r"+REVID;
     }
 }
