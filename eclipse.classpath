@@ -67,7 +67,7 @@
 	<classpathentry kind="lib" path="lib/jdom-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/js-1.6R5.jar"/>
     <classpathentry kind="lib" path="lib/jtidy-r938.jar"/>
-    <classpathentry kind="lib" path="lib/junit-4.8.1.jar"/>
+    <classpathentry kind="lib" path="lib/junit-4.8.2.jar"/>
 	<classpathentry kind="lib" path="lib/logkit-2.0.jar"/>
 	<classpathentry kind="lib" path="lib/mail-1.4.3.jar"/>
 	<classpathentry kind="lib" path="lib/oro-2.0.8.jar"/>
