@@ -35,7 +35,7 @@ package org.apache.jmeter.util;
 public class JMeterVersion {
 
     /*
-     * Updated: 2011-08-02
+     * Updated: 20110803 1828
      * The previous line is set to the current date, to ensure that the file is modified
      * when the SVN tag is created so it has the same revision as the tag.
      *
