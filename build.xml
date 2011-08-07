@@ -499,7 +499,7 @@
     </echo>
   </target>
 
-  <target name="compile-core" depends="compile-jorphan,update-version" description="Compile JMeter core classes.">
+  <target name="compile-core" depends="compile-jorphan" description="Compile JMeter core classes.">
     <mkdir dir="${build.core}"/>
     <javac srcdir="${src.core}" destdir="${build.core}" optimize="${optimize}" source="${src.java.version}" debug="on" target="${target.java.version}"
            includeAntRuntime="${includeAntRuntime}" deprecation="${deprecation}" encoding="${encoding}">
@@ -511,6 +511,7 @@
     </javac>
   </target>
 
+  <!-- deprecated -->
   <target name="update-version" unless="version.noupdate">
     <echo level="info">Updating version string to "${display.version}"</echo>
     <replaceregexp file="${src.core}/org/apache/jmeter/util/JMeterVersion.java"
