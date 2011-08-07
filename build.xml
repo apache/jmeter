@@ -1293,7 +1293,7 @@ run JMeter unless all the JMeter jars are added.
         <fail message="jmeter.version must be same as JMeterVersion.VERSION" unless="version.match"/>
         <condition property="svn.match">
             <resourcecontains resource="${src.core}/org/apache/jmeter/util/JMeterVersion.java"
-            	substring='REVISION = "$Revision${svn.revision} '/>
+            	substring='Revision: ${svn.revision} $";'/>
         </condition>
     	<fail message="svn.revision must be same as JMeterVersion.REVISION" unless="svn.match"/>
     </target>
