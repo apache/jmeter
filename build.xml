@@ -41,7 +41,11 @@
       ant docs-all
 
     To build all and package up the files for distribution
-      ant distribution -Djmeter.version=vvvv [-Dsvn.revision=nnnnn]
+      ant distribution -Djmeter.version=vvvv [-Dsvn.revision=nnnnn] 
+  	
+    Add -Ddisable-svnCheck=true to disable svn check, if you build from src archive or offline
+  	Add -Ddisable-check-versions=true to disable matching current svn revision and JMeterVersion.java,
+  	  if you want build your own custom JMeter package.
 
     To create a nightly build (separate bin/src/lib jars):
       ant nightly [-Dsvn.revision=nnnnn]
@@ -1283,7 +1287,7 @@ run JMeter unless all the JMeter jars are added.
         depends="svnCheck,check-versions,clean,install,docs-printable,docs-api,test,_distribution"
         description="Build JMeter for end-user distribution"/>
 
-    <target name="check-versions">
+    <target name="check-versions" unless="disable-check-versions">
         <fail message="jmeter.version must be defined" unless="jmeter.version"/>
         <fail message="svn.revision must be defined" unless="svn.revision"/>
         <condition property="version.match">
@@ -2018,7 +2022,7 @@ run JMeter unless all the JMeter jars are added.
     </junitreport>
   </target>
 
-  <target name="svnCheck" description="Use SVN to get the current revision">
+  <target name="svnCheck" description="Use SVN to get the current revision" unless="disable-svnCheck">
     <exec executable="svn" resultproperty="svn.exec.result" errorproperty="svn.exec.error" failifexecutionfails="false">
       <arg line="info"/>
       <redirector outputproperty="svn.revision">
