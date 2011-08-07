@@ -35,9 +35,15 @@ package org.apache.jmeter.util;
 public class JMeterVersion {
 
     /*
-     * Updated: 20110803 1828
-     * The previous line is set to the current date, to ensure that the file is modified
+     * Updated: 20110807 1823
+     * The previous line is set to ${DSTAMP} ${TSTAMP}, to ensure that the file is modified
      * when the SVN tag is created so it has the same revision as the tag.
+     * The SVN tag can be created as follows:
+     * - ensure workspace is up-to-date with SVN
+     * - touch this file by running "ant touch-version"
+     * - create the tag from workspace: 
+     *   "svn cp . https://svn.apache.org/repos/asf/jakarta/jmeter/tags/TAGNAME"
+     * - Checkout the tag
      *
      * The REVISION string is checked by the Ant build file to ensure that the value
      * agrees with the tag revision
