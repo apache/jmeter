@@ -511,12 +511,11 @@
     </javac>
   </target>
 
-  <!-- deprecated -->
-  <target name="update-version" unless="version.noupdate">
-    <echo level="info">Updating version string to "${display.version}"</echo>
+  <target name="touch-version" depends="init-version" description="Touch version file to ensure it is marked as updated">
+    <echo level="info">Updating version file to "${DSTAMP} ${TSTAMP}"</echo>
     <replaceregexp file="${src.core}/org/apache/jmeter/util/JMeterVersion.java"
-        match="VERSION = &quot;.*?&quot;"
-    replace="VERSION = &quot;${display.version}&quot;"/>
+      match=" Updated: \d+ \d+"
+    replace=" Updated: ${DSTAMP} ${TSTAMP}"/>
   </target>
 
   <target name="compile-components" depends="compile-jorphan,compile-core" description="Compile generic (protocol-independent) components.">
@@ -1287,6 +1286,16 @@ run JMeter unless all the JMeter jars are added.
     <target name="check-versions">
         <fail message="jmeter.version must be defined" unless="jmeter.version"/>
         <fail message="svn.revision must be defined" unless="svn.revision"/>
+        <condition property="version.match">
+            <resourcecontains resource="${src.core}/org/apache/jmeter/util/JMeterVersion.java" 
+            	substring='VERSION = "${jmeter.version}";'/>
+        </condition>
+        <fail message="jmeter.version must be same as JMeterVersion.VERSION" unless="version.match"/>
+        <condition property="svn.match">
+            <resourcecontains resource="${src.core}/org/apache/jmeter/util/JMeterVersion.java"
+            	substring='REVISION = "$Revision${svn.revision} $";'/>
+        </condition>
+    	<fail message="svn.revision must be same as JMeterVersion.REVISION" unless="svn.match"/>
     </target>
 
     <target
