@@ -236,7 +236,7 @@ Fixed RMI startup to provide location of JMX file relative to user.dir.
 <li>Client JMeter engine now supports external stop/shutdown via UDP</li>
 <li>UDP shutdown can now use a range of ports, from jmeterengine.nongui.port=4445 to jmeterengine.nongui.maxport=4455,
 allowing multiple JMeter instances on the same host without needing to change the port property.</li>
-<li>Updated to httpcore 4.1.3 and httpclient 4.1.1</li>
+<li>Updated to httpcore 4.1.3 and httpclient 4.1.2</li>
 </ul>
 
 <h2>Non-functional changes</h2>
