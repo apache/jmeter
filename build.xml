@@ -1204,6 +1204,7 @@ run JMeter unless all the JMeter jars are added.
     <!-- Exclude binary types (and JMX/JTL, which are not OS-dependent) -->
     <exclude name="${src.docs}/images/**"/>
     <exclude name="${src.docs}/**/*.jmx"/>
+    <exclude name="${src.docs}/**/*.odt"/>
     <exclude name="${src.docs}/**/*.pdf"/>
     <exclude name="${src.docs}/**/*.sxi"/>
     <exclude name="${src.docs}/**/*.sxw"/>
@@ -1234,6 +1235,7 @@ run JMeter unless all the JMeter jars are added.
     <include name="${src.dir}/**/*.png"/>
     <include name="${src.docs}/images/**"/>
     <include name="${src.docs}/**/*.jmx"/>
+    <include name="${src.docs}/**/*.odt"/>
     <include name="${src.docs}/**/*.pdf"/>
     <include name="${src.docs}/**/*.sxi"/>
     <include name="${src.docs}/**/*.sxw"/>
