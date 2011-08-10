@@ -1122,6 +1122,9 @@ run JMeter unless all the JMeter jars are added.
     <exclude name="${extras.dir}/*.jar"/>
     <exclude name="${extras.dir}/*.jpg"/>
     <exclude name="${extras.dir}/*.jmx"/>
+    <!-- File types that need to retain their EOL setting -->
+    <exclude name="${extras.dir}/*.cmd"/>
+    <exclude name="${extras.dir}/*.sh"/>
   </patternset>
 
   <patternset id="dist.binaries.native">
@@ -1153,6 +1156,9 @@ run JMeter unless all the JMeter jars are added.
     <include name="${extras.dir}/*.jar"/>
     <include name="${extras.dir}/*.jpg"/>
     <include name="${extras.dir}/*.jmx"/>
+    <!-- File types that need to retain their EOL setting -->
+    <include name="${extras.dir}/*.cmd"/>
+    <include name="${extras.dir}/*.sh"/>
   </patternset>
 
   <patternset id="dist.binaries.non.native">
