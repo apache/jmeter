@@ -1101,6 +1101,7 @@ run JMeter unless all the JMeter jars are added.
   <!-- Source files also needed at runtime -->
   <patternset id="dist.common.native">
     <include name="${dest.jar.jmeter}/BeanShell*.bshrc"/>
+    <include name="${dest.jar.jmeter}/hc.parameters"/>
     <include name="${dest.jar.jmeter}/log4j.conf"/>
     <include name="${dest.jar.jmeter}/logkit.xml"/>
     <include name="${dest.jar.jmeter}/jmeter.properties"/>
