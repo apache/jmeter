@@ -311,7 +311,6 @@
 	
   <patternset id="external.jars.notices">
         <include name="LICENSE"/>
-        <include name="LICENSE*.txt"/>
         <include name="NOTICE"/>
         <include name="README"/>
   </patternset>
