@@ -22,6 +22,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -60,6 +62,13 @@ public class PackageTest extends TestCase {
     private static final String MESSAGES = "messages";
 
     private static PropertyResourceBundle defaultPRB;
+
+    private static final CharsetEncoder ASCII_ENCODER = 
+        Charset.forName("US-ASCII").newEncoder(); // Ensure properties files don't use special characters
+    
+    private static boolean isPureAscii(String v) {
+      return ASCII_ENCODER.canEncode(v);
+    }
 
     // Read resource into ResourceBundle and store in List
     private PropertyResourceBundle getRAS(String res) throws Exception {
@@ -117,6 +126,10 @@ public class PackageTest extends TestCase {
                     }
                 }
 
+                if (!isPureAscii(val)) {
+                    fails++;
+                    System.out.println("Incorrect char value in: "+s);                    
+                }
             }
         }
         return fails;
