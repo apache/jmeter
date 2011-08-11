@@ -82,6 +82,7 @@ public abstract class JMeterTestCase extends TestCase {
             logprop("java.vm.name");
             logprop("java.vendor");
             logprop("java.home");
+            logprop("file.encoding");
             logprop("user.home");
             logprop("user.dir");
             logprop("user.language");
