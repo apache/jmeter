@@ -92,6 +92,40 @@ public class TestCVSDataSet extends JMeterTestCase {
         assertEquals("b1",threadVars.get("b"));
         assertEquals("c1",threadVars.get("c"));
     }
+    
+    public void testutf8() throws Exception {
+    	
+        CSVDataSet csv = new CSVDataSet();
+        csv.setFilename(findTestPath("testfiles/testutf8.csv"));
+        csv.setVariableNames("a,b,c,d");
+        csv.setDelimiter(",");
+        csv.setQuotedData( true );
+        csv.setFileEncoding( "UTF-8" );
+        
+        csv.iterationStart(null);
+        assertEquals("a1",threadVars.get("a"));
+        assertEquals("b1",threadVars.get("b"));
+        assertEquals("\u00e71",threadVars.get("c"));
+        assertEquals("d1",threadVars.get("d"));
+
+        csv.iterationStart(null);
+        assertEquals("a2",threadVars.get("a"));
+        assertEquals("b2",threadVars.get("b"));
+        assertEquals("\u00e72",threadVars.get("c"));
+        assertEquals("d2",threadVars.get("d"));
+
+        csv.iterationStart(null);
+        assertEquals("a3",threadVars.get("a"));
+        assertEquals("b3",threadVars.get("b"));
+        assertEquals("\u00e73",threadVars.get("c"));
+        assertEquals("d3",threadVars.get("d"));
+
+        csv.iterationStart(null);
+        assertEquals("a4",threadVars.get("a"));
+        assertEquals("b4",threadVars.get("b"));
+        assertEquals("\u00e74",threadVars.get("c"));
+        assertEquals("d4",threadVars.get("d"));
+    }
 
     // Test CSV file with a header line
     public void testHeaderOpen(){

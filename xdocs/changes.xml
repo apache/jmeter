@@ -163,6 +163,7 @@ Fixed RMI startup to provide location of JMX file relative to user.dir.
 <li>Bug 50221 - Renaming elements in the tree does not resize label</li>
 <li>Bug 51002 - Stop Thread if CSV file is not available. JMeter now treats IOError as EOF.</li>
 <li>Define sun.net.http.allowRestrictedHeaders=true by default. This fixes Bug 51238.</li>
+<li>Bug 51645 - CSVDataSet does not read UTF-8 files when file.encoding is UTF-8</li>
 </ul>
 
 <!-- ==================================================== -->
