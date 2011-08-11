@@ -143,6 +143,7 @@ public final class AllTests {
         logprop("java.vm.name");
         logprop("java.vendor");
         logprop("java.home", true);
+        logprop("file.encoding", true);
         logprop("user.home");
         logprop("user.dir", true);
         logprop("user.language");
