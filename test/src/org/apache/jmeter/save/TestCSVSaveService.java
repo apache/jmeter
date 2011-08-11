@@ -60,6 +60,10 @@ public class TestCSVSaveService extends JMeterTestCase {
         checkSplitString("a,bc,,",   ',', new String[]{"a","bc","",""});
         checkSplitString("a,,,",     ',', new String[]{"a","","",""});
         checkSplitString("a,bc,d,\n",',', new String[]{"a","bc","d",""});
+        
+        // \u00e7 = LATIN SMALL LETTER C WITH CEDILLA
+        // \u00e9 = LATIN SMALL LETTER E WITH ACUTE
+        checkSplitString("a,b\u00e7,d,\u00e9", ',', new String[]{"a","b\u00e7","d","\u00e9"}); 
     }
 
     public void testSplitQuoted() throws Exception {
@@ -75,6 +79,10 @@ public class TestCSVSaveService extends JMeterTestCase {
         checkSplitString("a,bc,d,",      ',', new String[]{"a","bc","d",""});
         checkSplitString("a,bc,d,\"\"",  ',', new String[]{"a","bc","d",""});
         checkSplitString("a,bc,d,\"\"\n",',', new String[]{"a","bc","d",""});
+
+        // \u00e7 = LATIN SMALL LETTER C WITH CEDILLA
+        // \u00e9 = LATIN SMALL LETTER E WITH ACUTE
+        checkSplitString("\"a\",\"b\u00e7\",\"d\",\"\u00e9\"", ',', new String[]{"a","b\u00e7","d","\u00e9"}); 
     }
 
     public void testSplitBadQuote() throws Exception {
