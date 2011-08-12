@@ -517,6 +517,7 @@
   <target name="touch-version" depends="init-version" description="Touch version file to ensure it is marked as updated">
     <echo level="info">Updating version file to "${DSTAMP} ${TSTAMP}"</echo>
     <replaceregexp file="${src.core}/org/apache/jmeter/util/JMeterVersion.java"
+      encoding="${encoding}"
       match=" Updated: \d+ \d+"
     replace=" Updated: ${DSTAMP} ${TSTAMP}"/>
   </target>
@@ -809,7 +810,7 @@
     <mkdir dir="${build.res}" />
   	<mkdir dir="${resources.meta-inf}" />
     <copy todir="${resources.meta-inf}" overwrite="yes" filtering="yes"
-      encoding="UTF-8">
+        encoding="${encoding}">
       <filterset refid="version.filters"/>
       <fileset dir="${res.dir}/META-INF" >
         <include name="*.license" />
@@ -1254,7 +1255,7 @@ run JMeter unless all the JMeter jars are added.
                 <patternset refid="${fileset}"/>
             </fileset>
             <filterchain>
-                <fixcrlf fixlast="false" eol="${eoltype}" srcdir="${workdir}"/>
+                <fixcrlf encoding="${encoding}" fixlast="false" eol="${eoltype}" srcdir="${workdir}"/>
             </filterchain>
         </copy>
     </target>
@@ -1673,6 +1674,7 @@ run JMeter unless all the JMeter jars are added.
     </delete>
     <echo level="info">Updating overview to ${docversion}</echo>
     <replaceregexp match="version [\d.]+"
+                 encoding="${encoding}"
                  replace="version ${docversion}"
                  flags="g" byline="true">
        <fileset dir="${src.docs}" includes="overview.html" />
@@ -2012,7 +2014,7 @@ run JMeter unless all the JMeter jars are added.
   <formatter type="xml"/>
       <classpath>
         <fileset dir="${dest.jar}" includes="*.jar"/>
-        <fileset dir="${lib.opt}" includes="*.jar"/>
+        <pathelement location="${build.test}"/>
         <path refid="classpath"/>
       </classpath>
   <test name="${test.case}" todir="reports"/>
@@ -2040,7 +2042,7 @@ run JMeter unless all the JMeter jars are added.
           </linecontains>
           <tokenfilter>
             <!-- Remove all but the revision number -->
-            <replaceregex pattern=".*: " replace=""/>
+            <replaceregex pattern=".*: " replace="" encoding="${encoding}"/>
           </tokenfilter>
         </outputfilterchain>
       </redirector>
