@@ -19,6 +19,7 @@
 package org.apache.jmeter.junit;
 
 import java.io.File;
+import java.io.OutputStreamWriter;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Locale;
@@ -83,6 +84,8 @@ public abstract class JMeterTestCase extends TestCase {
             logprop("java.vendor");
             logprop("java.home");
             logprop("file.encoding");
+            // Display actual encoding used (will differ if file.encoding is not recognised)
+            System.out.println("default encoding="+new OutputStreamWriter( System.out ).getEncoding());
             logprop("user.home");
             logprop("user.dir");
             logprop("user.language");
