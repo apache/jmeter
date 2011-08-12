@@ -53,7 +53,12 @@ public class JMeterVersion {
     private static final String REVID;
 
     static {
-        REVID = REVISION.split("\\s+")[1]; // extract the id
+        String[] parts = REVISION.split("\\s+");
+        if (parts.length == 3) { // Assume SVN $Revision is presemt
+            REVID = " r" + parts[1]; // extract the id
+        } else { // assume DSTAMP is present
+            REVID = "." + REVISION;
+        }
     }
 
     /*
@@ -74,6 +79,6 @@ public class JMeterVersion {
     }
 
     static final String getVERSION() {
-        return VERSION+" r"+REVID;
+        return VERSION+REVID;
     }
 }
