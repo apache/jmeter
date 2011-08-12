@@ -302,6 +302,8 @@
   <property name="target.java.version" value="1.5"/>
   <property name="src.java.version" value="1.5"/>
   <property name="encoding" value="UTF-8"/>
+  <!-- Set test encoding to the same default, but allow override -->
+  <property name="test.encoding" value="${encoding}"/>  
   <property name="includeAntRuntime" value="false"/>
 
   <!-- 3rd party libraries to be included in the binary distribution -->
@@ -1978,6 +1980,7 @@ run JMeter unless all the JMeter jars are added.
    test dir = ${build.test}
    test dir gump = ${build.test.gump}
    testsaveservice.saveout = ${testsaveservice.saveout}
+   test.encoding = ${test.encoding}
    </echo>
    <delete quiet="true">
       <fileset dir="${basedir}/bin/testfiles" includes="*.jmx.out"/>
@@ -1990,6 +1993,7 @@ run JMeter unless all the JMeter jars are added.
         <path refid="classpath"/>
       </classpath>
       <jvmarg value="-server"/>
+      <jvmarg value="-Dfile.encoding=${test.encoding}"/>
       <sysproperty key="java.awt.headless" value="${test.headless}"/>
       <sysproperty key="testsaveservice.saveout" value="${testsaveservice.saveout}" />
       <arg value="${build.test}"/>
@@ -2012,6 +2016,7 @@ run JMeter unless all the JMeter jars are added.
    printsummary="withOutAndErr">
   <formatter type="${test.format}" usefile="no"/>
   <formatter type="xml"/>
+  <jvmarg value="-Dfile.encoding=${test.encoding}"/>
       <classpath>
         <fileset dir="${dest.jar}" includes="*.jar"/>
         <pathelement location="${build.test}"/>
