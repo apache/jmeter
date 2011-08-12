@@ -2008,13 +2008,13 @@ run JMeter unless all the JMeter jars are added.
 -->
   <target name="junit"  description="Run individual JUnit test">
   <mkdir dir="reports"/>
-  <property name="test.format" value="brief"/>
+  <property name="test.format" value="plain"/>
   <property name="test.case" value="org.apache.jorphan.test.AllTests"/>
   <junit fork="true"
    dir="${basedir}/bin"
-   showoutput="true"
-   printsummary="withOutAndErr">
-  <formatter type="${test.format}" usefile="no"/>
+   showoutput="false"
+   printsummary="on">
+  <formatter type="${test.format}" usefile="yes"/>
   <formatter type="xml"/>
   <jvmarg value="-Dfile.encoding=${test.encoding}"/>
       <classpath>
