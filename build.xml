@@ -2047,7 +2047,7 @@ run JMeter unless all the JMeter jars are added.
           </linecontains>
           <tokenfilter>
             <!-- Remove all but the revision number -->
-            <replaceregex pattern=".*: " replace="" encoding="${encoding}"/>
+            <replaceregex pattern=".*: " replace=""/>
           </tokenfilter>
         </outputfilterchain>
       </redirector>
