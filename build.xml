@@ -2025,21 +2025,23 @@ run JMeter unless all the JMeter jars are added.
   </target>
 
   <target name="svnCheck" description="Use SVN to get the current revision" unless="disable-svnCheck">
-    <exec executable="svn" resultproperty="svn.exec.result" errorproperty="svn.exec.error" failifexecutionfails="false">
+    <exec executable="svn" logerror="true" outputproperty="svn.exec.result" failonerror="true" failifexecutionfails="true">
       <arg line="info"/>
-      <redirector outputproperty="svn.revision">
-        <outputfilterchain>
-          <linecontains>
-            <contains value="Last Changed Rev: "/>
-          </linecontains>
-          <tokenfilter>
+    </exec>
+    <loadresource property="svn.revision">
+      <string value="${svn.exec.result}"/>
+      <filterchain>
+        <linecontains>
+          <contains value="Last Changed Rev: "/>
+        </linecontains>
+        <tokenfilter>
             <!-- Remove all but the revision number -->
             <replaceregex pattern=".*: " replace=""/>
-          </tokenfilter>
-        </outputfilterchain>
-      </redirector>
-    </exec>
-    <echoproperties prefix="svn"/>
+        </tokenfilter>
+        <striplinebreaks/>
+      </filterchain>
+    </loadresource>
+    <echo level="info" message="svn.revision=${svn.revision}"/>
   </target>
 
     <!-- Macro is needed to be able to perform indirect evaluation of property names -->
