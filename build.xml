@@ -884,6 +884,10 @@ run JMeter unless all the JMeter jars are added.
     <!-- core -->
     <jar jarfile="${dest.jar}/ApacheJMeter_core.jar"
         manifest="${build.dir}/MANIFEST_BIN.MF">
+      <zipfileset file="${resources.meta-inf}/default.notice"
+        fullpath="META-INF/NOTICE" />
+      <zipfileset file="${resources.meta-inf}/default.license"
+        fullpath="META-INF/LICENSE" />
       <!-- Only include class files from build tree - see above -->
       <fileset dir="${build.core}" includes="**/*.class"
         excludes="**/BeanShellClient*.class,**/NewDriver*,**/DynamicClassLoader*"/>
@@ -894,75 +898,70 @@ run JMeter unless all the JMeter jars are added.
       </fileset>
       <!-- This file is used by the jmeter -h option -->
       <fileset dir="${src.core}" includes="org/apache/jmeter/help.txt"/>
-      <zipfileset file="${resources.meta-inf}/default.notice"
-        fullpath="META-INF/NOTICE" />
-      <zipfileset file="${resources.meta-inf}/default.license"
-        fullpath="META-INF/LICENSE" />
     </jar>
 
     <!-- components -->
     <jar jarfile="${dest.jar}/ApacheJMeter_components.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
-      <fileset dir="${build.components}" includes="**/*.class" />
-      <fileset dir="${src.components}" includes="**/*.properties" />
       <zipfileset file="${resources.meta-inf}/default.notice"
         fullpath="META-INF/NOTICE" />
       <zipfileset file="${resources.meta-inf}/default.license"
         fullpath="META-INF/LICENSE" />
+      <fileset dir="${build.components}" includes="**/*.class" />
+      <fileset dir="${src.components}" includes="**/*.properties" />
     </jar>
 
     <!-- functions -->
     <jar jarfile="${dest.jar}/ApacheJMeter_functions.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
-      <fileset dir="${build.functions}" includes="**/*.class" />
-      <fileset dir="${src.functions}" includes="**/*.properties" />
       <zipfileset file="${resources.meta-inf}/default.notice"
         fullpath="META-INF/NOTICE" />
       <zipfileset file="${resources.meta-inf}/default.license"
         fullpath="META-INF/LICENSE" />
+      <fileset dir="${build.functions}" includes="**/*.class" />
+      <fileset dir="${src.functions}" includes="**/*.properties" />
     </jar>
 
     <!-- http -->
     <jar jarfile="${dest.jar}/ApacheJMeter_http.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
-      <fileset dir="${build.http}" includes="**/*.class"/>
-      <fileset dir="${src.http}" includes="**/*.properties" />
       <zipfileset file="${resources.meta-inf}/default.notice"
         fullpath="META-INF/NOTICE" />
       <zipfileset file="${resources.meta-inf}/default.license"
         fullpath="META-INF/LICENSE" />
+      <fileset dir="${build.http}" includes="**/*.class"/>
+      <fileset dir="${src.http}" includes="**/*.properties" />
     </jar>
 
     <!-- ftp -->
     <jar jarfile="${dest.jar}/ApacheJMeter_ftp.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
-      <fileset dir="${build.ftp}" includes="**/*.class" />
-      <fileset dir="${src.ftp}" includes="**/*.properties" />
       <zipfileset file="${resources.meta-inf}/default.notice"
         fullpath="META-INF/NOTICE" />
       <zipfileset file="${resources.meta-inf}/default.license"
         fullpath="META-INF/LICENSE" />
+      <fileset dir="${build.ftp}" includes="**/*.class" />
+      <fileset dir="${src.ftp}" includes="**/*.properties" />
     </jar>
 
     <!-- jdbc -->
     <jar jarfile="${dest.jar}/ApacheJMeter_jdbc.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
-      <fileset dir="${build.jdbc}" includes="**/*.class" />
-      <fileset dir="${src.jdbc}" includes="**/*.properties" />
       <zipfileset file="${resources.meta-inf}/default.notice"
         fullpath="META-INF/NOTICE" />
       <zipfileset file="${resources.meta-inf}/default.license"
         fullpath="META-INF/LICENSE" />
+      <fileset dir="${build.jdbc}" includes="**/*.class" />
+      <fileset dir="${src.jdbc}" includes="**/*.properties" />
     </jar>
 
     <!-- java -->
     <jar jarfile="${dest.jar}/ApacheJMeter_java.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
-      <fileset dir="${build.java}" includes="**/*.class" />
-      <fileset dir="${src.java}" includes="**/*.properties" />
       <zipfileset file="${resources.meta-inf}/default.notice"
         fullpath="META-INF/NOTICE" />
       <zipfileset file="${resources.meta-inf}/default.license"
         fullpath="META-INF/LICENSE" />
+      <fileset dir="${build.java}" includes="**/*.class" />
+      <fileset dir="${src.java}" includes="**/*.properties" />
     </jar>
 
     <!-- BeanShell Client -->
     <jar jarfile="${lib.dir}/bshclient.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
-      <fileset dir="${build.core}" includes="**/BeanShellClient*.class" />
       <manifest>
          <attribute name="Main-Class" value="org.apache.jmeter.util.BeanShellClient"/>
       </manifest>
@@ -970,98 +969,99 @@ run JMeter unless all the JMeter jars are added.
         fullpath="META-INF/NOTICE" />
       <zipfileset file="${resources.meta-inf}/default.license"
         fullpath="META-INF/LICENSE" />
+      <fileset dir="${build.core}" includes="**/BeanShellClient*.class" />
     </jar>
 
     <!-- junit -->
     <jar jarfile="${dest.jar}/ApacheJMeter_junit.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
+      <zipfileset file="${resources.meta-inf}/default.notice"
+        fullpath="META-INF/NOTICE" />
+      <zipfileset file="${resources.meta-inf}/default.license"
+        fullpath="META-INF/LICENSE" />
       <fileset dir="${build.junit}" includes="org/**/*.class" />
       <fileset dir="${src.junit}" includes="**/*.properties" />
-      <zipfileset file="${resources.meta-inf}/default.notice"
-        fullpath="META-INF/NOTICE" />
-      <zipfileset file="${resources.meta-inf}/default.license"
-        fullpath="META-INF/LICENSE" />
-    </jar>
-    <!-- Build junit/test.jar sample -->
-    <jar jarfile="${lib.dir}/junit/test.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
-      <fileset dir="${build.junit}" excludes="org/**/*" />
-      <fileset dir="${src.junit}"   excludes="org/**/*" />
-      <zipfileset file="${resources.meta-inf}/default.notice"
-        fullpath="META-INF/NOTICE" />
-      <zipfileset file="${resources.meta-inf}/default.license"
-        fullpath="META-INF/LICENSE" />
     </jar>
 
+    <!-- Build junit/test.jar sample -->
+    <jar jarfile="${lib.dir}/junit/test.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
+      <zipfileset file="${resources.meta-inf}/default.notice"
+        fullpath="META-INF/NOTICE" />
+      <zipfileset file="${resources.meta-inf}/default.license"
+        fullpath="META-INF/LICENSE" />
+      <fileset dir="${build.junit}" excludes="org/**/*" />
+      <fileset dir="${src.junit}"   excludes="org/**/*" />
+    </jar>
 
     <!-- report -->
     <jar jarfile="${dest.jar}/ApacheJMeter_report.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
-      <fileset dir="${build.report}" includes="**/*.class" />
-      <fileset dir="${src.report}" includes="**/*.properties" />
       <zipfileset file="${resources.meta-inf}/default.notice"
         fullpath="META-INF/NOTICE" />
       <zipfileset file="${resources.meta-inf}/default.license"
         fullpath="META-INF/LICENSE" />
+      <fileset dir="${build.report}" includes="**/*.class" />
+      <fileset dir="${src.report}" includes="**/*.properties" />
     </jar>
 
     <!-- ldap -->
     <jar jarfile="${dest.jar}/ApacheJMeter_ldap.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
-      <fileset dir="${build.ldap}" includes="**/*.class" />
-      <fileset dir="${src.ldap}" includes="**/*.properties" />
       <zipfileset file="${resources.meta-inf}/default.notice"
         fullpath="META-INF/NOTICE" />
       <zipfileset file="${resources.meta-inf}/default.license"
         fullpath="META-INF/LICENSE" />
+      <fileset dir="${build.ldap}" includes="**/*.class" />
+      <fileset dir="${src.ldap}" includes="**/*.properties" />
     </jar>
 
     <!-- mail -->
     <jar jarfile="${dest.jar}/ApacheJMeter_mail.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
-      <fileset dir="${build.mail}" includes="**/*.class"  />
-      <fileset dir="${src.mail}" includes="**/*.properties" />
-      <fileset dir="${src.mail}" includes="**/*.providers" />
       <zipfileset file="${resources.meta-inf}/default.notice"
         fullpath="META-INF/NOTICE" />
       <zipfileset file="${resources.meta-inf}/default.license"
         fullpath="META-INF/LICENSE" />
+      <fileset dir="${build.mail}" includes="**/*.class"  />
+      <fileset dir="${src.mail}" includes="**/*.properties" />
+      <fileset dir="${src.mail}" includes="**/*.providers" />
     </jar>
 
     <!-- tcp -->
     <jar jarfile="${dest.jar}/ApacheJMeter_tcp.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
-      <fileset dir="${build.tcp}" includes="**/*.class" />
-      <fileset dir="${src.tcp}" includes="**/*.properties" />
       <zipfileset file="${resources.meta-inf}/default.notice"
         fullpath="META-INF/NOTICE" />
       <zipfileset file="${resources.meta-inf}/default.license"
         fullpath="META-INF/LICENSE" />
+      <fileset dir="${build.tcp}" includes="**/*.class" />
+      <fileset dir="${src.tcp}" includes="**/*.properties" />
     </jar>
 
     <!-- monitor -->
     <jar jarfile="${dest.jar}/ApacheJMeter_monitors.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
-      <fileset dir="${build.monitor.model}" includes="**/*.class" />
-      <fileset dir="${build.monitor.components}" includes="**/*.class" />
       <zipfileset file="${resources.meta-inf}/default.notice"
         fullpath="META-INF/NOTICE" />
       <zipfileset file="${resources.meta-inf}/default.license"
         fullpath="META-INF/LICENSE" />
+      <fileset dir="${build.monitor.model}" includes="**/*.class" />
+      <fileset dir="${build.monitor.components}" includes="**/*.class" />
     </jar>
 
     <!-- jms -->
     <!-- Ensure that build dir exists, even if JMS has not been built -->
     <mkdir dir="${build.jms}"/>
     <jar jarfile="${dest.jar}/ApacheJMeter_jms.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
-      <fileset dir="${build.jms}" includes="**/*.class" />
-      <fileset dir="${src.jms}" includes="**/*.properties" />
       <zipfileset file="${resources.meta-inf}/default.notice"
         fullpath="META-INF/NOTICE" />
       <zipfileset file="${resources.meta-inf}/default.license"
         fullpath="META-INF/LICENSE" />
+      <fileset dir="${build.jms}" includes="**/*.class" />
+      <fileset dir="${src.jms}" includes="**/*.properties" />
     </jar>
 
     <jar jarfile="${lib.dir}/jorphan.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
-        <fileset dir="${build.jorphan}" includes="**/*.class"/>
-        <fileset dir="${src.jorphan}" includes="**/*.properties"/>
         <zipfileset file="${resources.meta-inf}/default.notice"
           fullpath="META-INF/NOTICE" />
         <zipfileset file="${resources.meta-inf}/default.license"
           fullpath="META-INF/LICENSE" />
+      <fileset dir="${build.jorphan}" includes="**/*.class"/>
+      <fileset dir="${src.jorphan}" includes="**/*.properties"/>
     </jar>
   </target>
 
@@ -1090,12 +1090,12 @@ run JMeter unless all the JMeter jars are added.
 
   <target name="install-examples" depends="compile-examples" description="Build and installs the example components.">
     <jar jarfile="${dest.jar}/ApacheJMeter_examples.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
-      <fileset dir="${build.examples}" includes="**/*.class" />
-      <fileset dir="${src.examples}" includes="**/*.properties" />
       <zipfileset file="${resources.meta-inf}/default.notice"
         fullpath="META-INF/NOTICE" />
       <zipfileset file="${resources.meta-inf}/default.license"
         fullpath="META-INF/LICENSE" />
+      <fileset dir="${build.examples}" includes="**/*.class" />
+      <fileset dir="${src.examples}" includes="**/*.properties" />
     </jar>
   </target>
 
