@@ -28,38 +28,18 @@
  */
 package org.apache.jmeter.util;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Properties;
+
+import org.apache.commons.io.IOUtils;
+
 /**
  * Utility class to define the JMeter Version string
  *
  */
 public class JMeterVersion {
-
-    /*
-     * Updated: 20110807 2358
-     * The previous line is set to ${DSTAMP} ${TSTAMP}, to ensure that the file is modified
-     * when the SVN tag is created so it has the same revision as the tag.
-     * The SVN tag can be created as follows:
-     * - ensure workspace is up-to-date with SVN
-     * - touch this file by running "ant touch-version"
-     * - create the tag from workspace: 
-     *   "svn cp . https://svn.apache.org/repos/asf/jakarta/jmeter/tags/TAGNAME"
-     * - Checkout the tag
-     *
-     * The REVISION string is checked by the Ant build file to ensure that the value
-     * agrees with the tag revision
-     */
-    private static final String REVISION = "$Revision$"; // will be updated by SVN
-
-    private static final String REVID;
-
-    static {
-        String[] parts = REVISION.split("\\s+");
-        if (parts.length == 3) { // Assume SVN $Revision is presemt
-            REVID = " r" + parts[1]; // extract the id
-        } else { // assume DSTAMP is present
-            REVID = "." + REVISION;
-        }
-    }
 
     /*
      *
@@ -71,7 +51,44 @@ public class JMeterVersion {
      */
     private static final String VERSION = "2.5";
 
+    private static final String IMPLEMENTATION;
+    
     static final String COPYRIGHT = "Copyright (c) 1998-2011 The Apache Software Foundation";
+
+    static {
+        String impl=null;
+        final Class<?> myClass = JMeterVersion.class;
+        // This assumes that the JMV treats a class file as a resource (not all do).
+        URL resource = myClass.getResource("JMeterVersion.class");
+        // For example:
+        // jar:file:/JMeter/lib/ext/ApacheJMeter_core.jar!/org/apache/jmeter/util/JMeterVersion.class
+        // or if using an IDE        
+        // file:/workspaces/JMeter/build/core/org/apache/jmeter/util/JMeterVersion.class
+
+
+        try {
+            // Convert to URL for manifest
+            String url = resource.toString().replaceFirst("!/.+", "!/META-INF/MANIFEST.MF");
+            resource=new URL(url);
+            InputStream inputStream = resource.openStream();
+            if (inputStream != null) {
+                Properties props = new Properties();
+                try {
+                    props.load(inputStream);
+                    impl = props.getProperty("Implementation-Version");
+                } finally {
+                    IOUtils.closeQuietly(inputStream);
+                }
+            }
+        } catch (IOException ioe) {
+            // Ignored
+        }
+        if (impl == null) {
+            IMPLEMENTATION = VERSION; // default to plain version
+        } else {
+            IMPLEMENTATION = impl;
+        }
+    }
 
     private JMeterVersion() // Not instantiable
     {
@@ -79,6 +96,6 @@ public class JMeterVersion {
     }
 
     static final String getVERSION() {
-        return VERSION+REVID;
+        return IMPLEMENTATION;
     }
 }
