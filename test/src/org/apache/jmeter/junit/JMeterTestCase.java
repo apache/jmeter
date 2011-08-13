@@ -79,6 +79,7 @@ public abstract class JMeterTestCase extends TestCase {
             } catch (MissingResourceException e) {
                 System.out.println("** Can't find resources - continuing anyway **");
             }
+            System.out.println("JMeterVersion="+JMeterUtils.getJMeterVersion());
             logprop("java.version");
             logprop("java.vm.name");
             logprop("java.vendor");
