@@ -139,7 +139,9 @@ public final class AllTests {
         initializeLogging(args);
         initializeManager(args);
 
-        log.info("JMeterVersion="+JMeterUtils.getJMeterVersion());
+        String version = "JMeterVersion="+JMeterUtils.getJMeterVersion();
+        log.info(version);
+        System.out.println(version);
         logprop("java.version", true);
         logprop("java.vm.name");
         logprop("java.vendor");
