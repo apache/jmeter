@@ -22,8 +22,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.lang.reflect.Method;
+import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -146,7 +146,7 @@ public final class AllTests {
         logprop("java.home", true);
         logprop("file.encoding", true);
         // Display actual encoding used (will differ if file.encoding is not recognised)
-        String msg = "default encoding="+new OutputStreamWriter( System.out ).getEncoding();
+        String msg = "default encoding="+Charset.defaultCharset();
         System.out.println(msg);
         log.info(msg);
         logprop("user.home");
