@@ -516,14 +516,6 @@
     </javac>
   </target>
 
-  <target name="touch-version" depends="init-version" description="Touch version file to ensure it is marked as updated">
-    <echo level="info">Updating version file to "${DSTAMP} ${TSTAMP}"</echo>
-    <replaceregexp file="${src.core}/org/apache/jmeter/util/JMeterVersion.java"
-      encoding="${encoding}"
-      match=" Updated: \d+ \d+"
-    replace=" Updated: ${DSTAMP} ${TSTAMP}"/>
-  </target>
-
   <target name="compile-components" depends="compile-jorphan,compile-core" description="Compile generic (protocol-independent) components.">
     <mkdir dir="${build.components}"/>
     <javac srcdir="${src.components}" destdir="${build.components}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}"
@@ -1306,11 +1298,6 @@ run JMeter unless all the JMeter jars are added.
             	substring='VERSION = "${jmeter.version}";'/>
         </condition>
         <fail message="jmeter.version must be same as JMeterVersion.VERSION" unless="version.match"/>
-        <condition property="svn.match">
-            <resourcecontains resource="${src.core}/org/apache/jmeter/util/JMeterVersion.java"
-            	substring='Revision: ${svn.revision} $";'/>
-        </condition>
-    	<fail message="svn.revision must be same as JMeterVersion.REVISION" unless="svn.match"/>
     </target>
 
     <target
