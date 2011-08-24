@@ -398,7 +398,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (this == obj) {
                 return true;
             }
-            if (obj instanceof HttpClientKey) {
+            if (!(obj instanceof HttpClientKey)) {
                 return false;
             }
             HttpClientKey other = (HttpClientKey) obj;
