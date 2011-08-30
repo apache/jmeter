@@ -109,8 +109,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final long serialVersionUID = 241L;
-
     private static final String CONTEXT_METRICS = "jmeter_metrics"; // TODO hack, to be removed later
 
     private static final HttpResponseInterceptor METRICS_SAVER = new HttpResponseInterceptor(){
