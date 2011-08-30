@@ -56,8 +56,6 @@ import org.apache.log.Logger;
 public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, Runnable {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final long serialVersionUID = 233L; // Remember to change this when the class changes ...
-
     private static final long WAIT_TO_DIE = JMeterUtils.getPropDefault("jmeterengine.threadstop.wait", 5 * 1000); // 5 seconds
 
     // Should we exit at end of the test? (only applies to server, because host is non-null)
