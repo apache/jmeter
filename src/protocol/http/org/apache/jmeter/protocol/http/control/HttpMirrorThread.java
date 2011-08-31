@@ -55,7 +55,7 @@ public class HttpMirrorThread extends Thread {
      */
     @Override
     public void run() {
-        log.info("Starting thread");
+        log.debug("Starting thread");
         BufferedInputStream in = null;
         BufferedOutputStream out = null;
 
@@ -163,7 +163,7 @@ public class HttpMirrorThread extends Thread {
             JOrphanUtils.closeQuietly(in);
             JOrphanUtils.closeQuietly(clientSocket);
         }
-        log.info("End of Thread");
+        log.debug("End of Thread");
     }
 
     private static String getRequestHeaderValue(String requestHeaders, String headerName) {
