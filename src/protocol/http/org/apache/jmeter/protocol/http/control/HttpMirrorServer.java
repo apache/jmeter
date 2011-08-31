@@ -86,7 +86,7 @@ public class HttpMirrorServer extends Thread {
                     if (running) {
                         // Pass request to new thread
                         HttpMirrorThread thd = new HttpMirrorThread(clientSocket);
-                        log.info("Starting new Mirror thread");
+                        log.debug("Starting new Mirror thread");
                         thd.start();
                     } else {
                         log.warn("Server not running");
@@ -119,6 +119,8 @@ public class HttpMirrorServer extends Thread {
         if (args.length > 0){
             port = Integer.parseInt(args[0]);
         }
+        LoggingManager.setPriority("INFO"); // default level
+        LoggingManager.setLoggingLevels(System.getProperties() ); // allow override by system properties
         HttpMirrorServer serv = new HttpMirrorServer(port);
         serv.start();
     }
