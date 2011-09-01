@@ -99,7 +99,7 @@ class RegexpHTMLParser extends HTMLParser {
     private static final String REGEXP =
               "<(?:" + "!--.*?-->"
             + "|BASE" + SEP + "HREF" + VALUE
-            + "|(?:IMG|SCRIPT|FRAME|IFRAME|BGSOUND|FRAME)" + SEP + "SRC" + VALUE
+            + "|(?:IMG|SCRIPT|FRAME|IFRAME|BGSOUND)" + SEP + "SRC" + VALUE
             + "|APPLET" + SEP + "CODE(?:BASE)?" + VALUE
             + "|(?:EMBED|OBJECT)" + SEP + "(?:SRC|CODEBASE)" + VALUE
             + "|(?:BODY|TABLE|TR|TD)" + SEP + "BACKGROUND" + VALUE
