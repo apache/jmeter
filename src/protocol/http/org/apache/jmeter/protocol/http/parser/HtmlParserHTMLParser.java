@@ -161,7 +161,8 @@ class HtmlParserHTMLParser extends HTMLParser {
                 }
             } else if (tag instanceof ScriptTag) {
                 binUrlStr = tag.getAttribute(ATT_SRC);
-            } else if (tag instanceof FrameTag) {
+                // Bug 51750
+            } else if (tag instanceof FrameTag || tagname.equalsIgnoreCase(TAG_IFRAME)) {
                 binUrlStr = tag.getAttribute(ATT_SRC);
             } else if (tagname.equalsIgnoreCase(TAG_EMBED)
                 || tagname.equalsIgnoreCase(TAG_BGSOUND)){
