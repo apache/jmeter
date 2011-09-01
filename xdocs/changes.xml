@@ -66,6 +66,7 @@ To override the default local language fully, set the JMeter property "language"
 
 <h3>HTTP Samplers and Proxy</h3>
 <ul>
+<li>Bug 51750 - Retrieve all embedded resources doesn't follow IFRAME</li>
 </ul>
 
 <h3>Other Samplers</h3>
