@@ -139,6 +139,10 @@ class JTidyHTMLParser extends HTMLParser {
                 urls.addURL(getValue(attrs, ATT_SRC), baseUrl);
                 break;
             }
+            if (name.equalsIgnoreCase(TAG_IFRAME)) {
+                urls.addURL(getValue(attrs, ATT_SRC), baseUrl);
+                break;
+            }
             String back = getValue(attrs, ATT_BACKGROUND);
             if (back != null) {
                 urls.addURL(back, baseUrl);
