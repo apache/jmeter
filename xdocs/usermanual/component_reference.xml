@@ -93,7 +93,7 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
         <li>applets</li>
         <li>stylesheets</li>
         <li>external scripts</li>
-        <li>frames</li>
+        <li>frames, iframes</li>
         <li>background images (body, table, TD, TR)</li>
         <li>background sound</li>
         </ul>
@@ -352,6 +352,12 @@ Optional properties to allow change the method to get response size:<br></br>
 <pre>sampleresult.getbytes.headers_size=true</pre></li></ul>
 <note>Versions of JMeter before 2.5 returns only data response size (uncompressed if request uses gzip/defate mode).
 <br></br>To return to settings before version 2.5, set the two properties to false.</note>
+</p>
+<p>
+<b>Retry handling</b><br></br>
+In version 2.5 of JMeter, the HttpClient4 sampler used the default retry count, which was 3.
+As this can hide server errors, JMeter now sets the retry count to 0 to prevent any automatic retries.
+This can be overridden by setting the JMeter property <b>httpclient4.retrycount</b>.
 </p>
 <links>
         <link href="test_plan.html#assertions">Assertion</link>
