@@ -99,6 +99,7 @@ This can be overridden by setting the JMeter property <b>httpclient4.retrycount<
 
 <h3>General</h3>
 <ul>
+<li>Bug 51752 - HTTP Cache is broken when using "Retrieve all embedded resources" with concurrent pool</li>
 </ul>
 
 <!-- ==================================================== -->
