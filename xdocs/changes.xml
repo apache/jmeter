@@ -76,6 +76,7 @@ This can be overridden by setting the JMeter property <b>httpclient4.retrycount<
 <h3>Other Samplers</h3>
 <ul>
 <li>Bug 50424 - Web Methods drop down list box inconsistent</li>
+<li>Bug 43293 - Java Request fields not cleared when creating new sampler</li>
 </ul>
 
 <h3>Controllers</h3>
