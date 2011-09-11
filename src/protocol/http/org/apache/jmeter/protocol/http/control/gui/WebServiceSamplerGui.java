@@ -176,7 +176,7 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
     @Override
     public void clearGui() {
         super.clearGui();
-
+        wsdlMethods.setValues(new String[0]);
         domain.setText(""); //$NON-NLS-1$
         protocol.setText(""); //$NON-NLS-1$
         port.setText(""); //$NON-NLS-1$
@@ -262,6 +262,10 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
         super.configure(el);
         WebServiceSampler sampler = (WebServiceSampler) el;
         wsdlField.setText(sampler.getWsdlURL());
+        final String wsdlText = wsdlField.getText();
+        if (wsdlText != null && wsdlText.length() > 0) {
+            fillWsdlMethods(wsdlField.getText());
+        }
         protocol.setText(sampler.getProtocol());
         domain.setText(sampler.getDomain());
         port.setText(sampler.getPropertyAsString(HTTPSamplerBase.PORT));
@@ -361,17 +365,24 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
         } else if (eventSource == wsdlButton){
             final String wsdlText = wsdlField.getText();
             if (wsdlText != null && wsdlText.length() > 0) {
-                String[] wsdlData = browseWSDL(wsdlText);
-                if (wsdlData != null) {
-                    wsdlMethods.setValues(wsdlData);
-                    wsdlMethods.repaint();
-                }
+                fillWsdlMethods(wsdlText);
             } else {
                 JOptionPane.showConfirmDialog(this,
                         JMeterUtils.getResString("wsdl_url_error"), // $NON-NLS-1$
                         "Warning",
                         JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
             }
+        }
+    }
+
+    /**
+     * @param wsdlText
+     */
+    private void fillWsdlMethods(final String wsdlText) {
+        String[] wsdlData = browseWSDL(wsdlText);
+        if (wsdlData != null) {
+            wsdlMethods.setValues(wsdlData);
+            wsdlMethods.repaint();
         }
     }
 
