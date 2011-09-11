@@ -239,4 +239,15 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
         ((JavaConfig) config).setArguments((Arguments) argsPanel.createTestElement());
         ((JavaConfig) config).setClassname(String.valueOf(classnameCombo.getSelectedItem()));
     }
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.gui.AbstractJMeterGuiComponent#clearGui()
+     */
+    @Override
+    public void clearGui() {
+        super.clearGui();
+        this.displayName = true;
+        argsPanel.clearGui();
+        classnameCombo.setSelectedIndex(0);
+    }
 }
