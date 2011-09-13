@@ -226,8 +226,9 @@ public class GenericController extends AbstractTestElement implements Controller
                 if (currentElement instanceof Sampler) {
                     nextIsASampler((Sampler) currentElement);
                 } else { // must be a controller
-                    nextIsAController((Controller) currentElement);
-                    reInitializeSubController();
+                    if (nextIsAController((Controller) currentElement) != null) {
+                        reInitializeSubController();
+                    }
                 }
             }
         } catch (NextIsNullException e) {
