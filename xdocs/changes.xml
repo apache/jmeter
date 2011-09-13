@@ -81,6 +81,7 @@ This can be overridden by setting the JMeter property <b>httpclient4.retrycount<
 
 <h3>Controllers</h3>
 <ul>
+<li>If Controller - Fixed a regression introduce by bug 50032 (see bug 50618 too)</li>
 </ul>
 
 <h3>Listeners</h3>
