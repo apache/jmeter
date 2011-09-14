@@ -197,9 +197,9 @@ public abstract class AbstractProperty implements JMeterProperty {
         if (!name.equals(jpo.getName())) {
             return false;
         }
-        String s1 = getStringValue();
-        String s2 = jpo.getStringValue();
-        return s1 == null ? s2 == null : s1.equals(s2);
+        Object o1 = getObjectValue();
+        Object o2 = jpo.getObjectValue();
+        return o1 == null ? o2 == null : o1.equals(o2);
     }
 
     /** {@inheritDoc} */
@@ -207,8 +207,8 @@ public abstract class AbstractProperty implements JMeterProperty {
     public int hashCode() {
         int result = 17;
         result = result * 37 + name.hashCode();// name cannot be null
-        String s = getStringValue();
-        result = result * 37 + (s == null ? 0 : s.hashCode());
+        Object o = getObjectValue();
+        result = result * 37 + (o == null ? 0 : o.hashCode());
         return result;
     }
 
