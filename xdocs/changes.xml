@@ -51,6 +51,11 @@ In particular, it can cause a NullPointerException if there are two include cont
 <p>Once Only controller behaves correctly under a Thread Group or Loop Controller,
 but otherwise its behaviour is not consistent (or clearly specified).</p>
 
+<p>If Controller generates additional samples for children Transaction Controller inside when condition is false.</p>
+
+<p>If Controller may make that JMeter starts a infinite running when the If condition is always
+false from the first iteration.</p>
+
 <p>
 The menu item Options / Choose Language does not change all the displayed text to the new language.
 [The behaviour has improved, but language change is still not fully working]
