@@ -653,7 +653,7 @@
   <responseData class="java.lang.String"/>
   <responseFile class="java.lang.String"></responseFile>
 </sample>
-<httpSample s="true" lb="HTTP &quot;Request," rc="200" rm="OK" tn="Thread Group 2-1" dt="text" by="122764" sc="1" ec="0" ng="1" na="1">
+<httpSample s="true" lb="HTTP &quot;Request," rc="200" rm="OK" tn="Thread Group 2-1" dt="text" by="127746" sc="1" ec="0" ng="1" na="1">
   <responseHeader class="java.lang.String"></responseHeader>
   <requestHeader class="java.lang.String"></requestHeader>
   <responseFile class="java.lang.String"></responseFile>
@@ -751,6 +751,24 @@
   <responseHeader class="java.lang.String"></responseHeader>
   <requestHeader class="java.lang.String"></requestHeader>
   <responseFile class="java.lang.String"></responseFile>
+</sample>
+<sample s="true" lb="BSH Counter: 1" rc="200" rm="OK" tn="Bug 48943 7-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1">
+  <responseHeader class="java.lang.String"></responseHeader>
+  <requestHeader class="java.lang.String"></requestHeader>
+  <responseFile class="java.lang.String"></responseFile>
+  <samplerData class="java.lang.String">SampleResult.setSampleLabel(&quot;BSH Counter: 1&quot;);</samplerData>
+</sample>
+<sample s="true" lb="BSH Counter: 2" rc="200" rm="OK" tn="Bug 48943 7-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1">
+  <responseHeader class="java.lang.String"></responseHeader>
+  <requestHeader class="java.lang.String"></requestHeader>
+  <responseFile class="java.lang.String"></responseFile>
+  <samplerData class="java.lang.String">SampleResult.setSampleLabel(&quot;BSH Counter: 2&quot;);</samplerData>
+</sample>
+<sample s="true" lb="BSH Counter: 3" rc="200" rm="OK" tn="Bug 48943 7-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1">
+  <responseHeader class="java.lang.String"></responseHeader>
+  <requestHeader class="java.lang.String"></requestHeader>
+  <responseFile class="java.lang.String"></responseFile>
+  <samplerData class="java.lang.String">SampleResult.setSampleLabel(&quot;BSH Counter: 3&quot;);</samplerData>
 </sample>
 <sample s="true" lb="Post 3" rc="200" rm="OK" tn="Post Thread Group 1-1" dt="" by="0" sc="1" ec="0" ng="1" na="1">
   <responseHeader class="java.lang.String"></responseHeader>
