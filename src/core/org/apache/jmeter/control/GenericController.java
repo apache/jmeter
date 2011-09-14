@@ -181,7 +181,15 @@ public class GenericController extends AbstractTestElement implements Controller
      * @throws NextIsNullException
      */
     protected Sampler nextIsAController(Controller controller) throws NextIsNullException {
-        Sampler sampler = controller.next();
+        Sampler sampler = null;
+        try {
+            sampler = controller.next();
+        } catch (StackOverflowError soe) {
+            // See bug 50618  Catches a StackOverflowError when a condition returns 
+            // always false (after at least one iteration with return true)
+            log.warn("StackOverflowError detected"); // $NON-NLS-1$
+            throw new NextIsNullException();
+        }
         if (sampler == null) {
             currentReturnedNull(controller);
             sampler = next();
