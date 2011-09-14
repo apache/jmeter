@@ -73,6 +73,7 @@ This can be overridden by setting the JMeter property <b>httpclient4.retrycount<
 <li>Bug 51750 - Retrieve all embedded resources doesn't follow IFRAME</li>
 <li>Change the default so the HttpClient 4 sampler does not retry</li>
 <li>Bug 51752 - HTTP Cache is broken when using "Retrieve all embedded resources" with concurrent pool</li>
+<li>Bug 39219 - HTTP Server: You can't stop it after File->Open</li>
 </ul>
 
 <h3>Other Samplers</h3>

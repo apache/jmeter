@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.jmeter.gui.Stoppable;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
@@ -36,7 +37,7 @@ import org.apache.log.Logger;
  * request.
  *
  */
-public class Daemon extends Thread {
+public class Daemon extends Thread implements Stoppable {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
