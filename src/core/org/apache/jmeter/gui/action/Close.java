@@ -87,7 +87,7 @@ public class Close implements Command {
                 return false; // Don't clear the plan
             }
         }
-
+        ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.STOP_THREAD));
         closeProject(e);
         return true;
     }

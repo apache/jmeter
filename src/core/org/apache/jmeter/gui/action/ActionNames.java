@@ -81,6 +81,7 @@ public class ActionNames {
     public static final String SUB_TREE_MERGED  = "sub_tree_merged"; // $NON-NLS-1$
     public static final String SUB_TREE_SAVED   = "sub_tree_saved"; // $NON-NLS-1$
     public static final String WHAT_CLASS       = "what_class"; // $NON-NLS-1$
+    public static final String STOP_THREAD       = "stop_thread"; // $NON-NLS-1$
 
     // Prevent instantiation
     private ActionNames(){

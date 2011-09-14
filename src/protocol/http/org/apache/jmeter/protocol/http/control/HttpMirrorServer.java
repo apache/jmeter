@@ -22,6 +22,7 @@ import java.io.InterruptedIOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import org.apache.jmeter.gui.Stoppable;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
@@ -32,7 +33,7 @@ import org.apache.log.Logger;
  * For each client request, creates a thread to handle the request.
  *
  */
-public class HttpMirrorServer extends Thread {
+public class HttpMirrorServer extends Thread implements Stoppable {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     /**
