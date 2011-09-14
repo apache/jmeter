@@ -639,7 +639,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                         String v = header.getValue();
                         if (HEADER_HOST.equalsIgnoreCase(n)) {
                             int port = url.getPort();
-                            v = removePortInHostHeader(v, port);
+                            v = v.replaceFirst(":\\d+$",""); // remove any port specification // $NON-NLS-1$ $NON-NLS-2$
                             if (port != -1) {
                                 if (port == url.getDefaultPort()) {
                                     port = -1; // no need to specify the port if it is the default
