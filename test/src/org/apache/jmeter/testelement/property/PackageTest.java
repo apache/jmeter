@@ -85,12 +85,7 @@ public class PackageTest extends TestCase {
         assertEquals(jp2, jp2);
         assertFalse(jp1.equals(jp2));
         assertFalse(jp2.equals(jp1));
-        // Not an absolute requirement:
-        if (jp1.hashCode() == jp2.hashCode()) {
-            System.out.println("Expected different hashCodes for " + jp1.getClass().getName());
-
-        }
-
+        // do not check hashcodes; unequal objects may have equal hashcodes
     }
 
     public void testBooleanEquality() throws Exception {
