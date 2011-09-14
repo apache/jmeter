@@ -91,6 +91,8 @@ public class Load implements Command {
     }
 
     static void loadProjectFile(ActionEvent e, File f, boolean merging) {
+        ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.STOP_THREAD));
+
         GuiPackage guiPackage = GuiPackage.getInstance();
         InputStream reader = null;
         try {
