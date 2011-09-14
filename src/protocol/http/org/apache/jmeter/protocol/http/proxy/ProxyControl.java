@@ -340,6 +340,7 @@ public class ProxyControl extends GenericController {
         try {
             server = new Daemon(getPort(), this);
             server.start();
+            GuiPackage.getInstance().register(server);
         } catch (IOException e) {
             log.error("Could not create Proxy daemon", e);
             throw e;
@@ -420,6 +421,7 @@ public class ProxyControl extends GenericController {
     public void stopProxy() {
         if (server != null) {
             server.stopServer();
+            GuiPackage.getInstance().unregister(server);
             try {
                 server.join(1000); // wait for server to stop
             } catch (InterruptedException e) {

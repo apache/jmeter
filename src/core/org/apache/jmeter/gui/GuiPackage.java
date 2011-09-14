@@ -22,7 +22,11 @@ import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.beans.Introspector;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JOptionPane;
@@ -113,7 +117,7 @@ public final class GuiPackage implements LocaleChangeListener {
     /**
      * Retrieve the singleton GuiPackage instance.
      *
-     * @return the GuiPackage instance
+     * @return the GuiPackage instance (may be null, e.g in non-Gui mode)
      */
     public static GuiPackage getInstance() {
         return guiPack;
@@ -579,6 +583,8 @@ public final class GuiPackage implements LocaleChangeListener {
 
     private String testPlanFile;
 
+    private final List<Stoppable> stoppables = Collections.synchronizedList(new ArrayList<Stoppable>());
+
     /**
      * Sets the filepath of the current test plan. It's shown in the main frame
      * title and used on saving.
@@ -645,5 +651,37 @@ public final class GuiPackage implements LocaleChangeListener {
             }
         });
 
+    }
+
+    /**
+     * Unregister stoppable
+     * @param stoppable Stoppable
+     */
+    public void unregister(Stoppable stoppable) {
+        for (Iterator<Stoppable> iterator = stoppables .iterator(); iterator.hasNext();) {
+            Stoppable stopable = iterator.next();
+            if(stopable == stoppable)
+            {
+                iterator.remove();
+            }
+        }
+    }
+    
+    /**
+     * Register process to stop on reload
+     * @param stoppable
+     */
+    public void register(Stoppable stoppable) {
+        stoppables.add(stoppable);
+    }
+
+    /**
+     * 
+     * @return List<IStoppable> Copy of IStoppable
+     */
+    public List<Stoppable> getStoppables() {
+        ArrayList<Stoppable> list = new ArrayList<Stoppable>();
+        list.addAll(stoppables);
+        return list;
     }
 }
