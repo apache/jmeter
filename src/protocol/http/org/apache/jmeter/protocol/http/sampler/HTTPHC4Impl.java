@@ -638,8 +638,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     if (! HEADER_CONTENT_LENGTH.equalsIgnoreCase(n)){
                         String v = header.getValue();
                         if (HEADER_HOST.equalsIgnoreCase(n)) {
-                            // TODO is it a bug that HC 4.x does not add the correct port to the generated Host header?
                             int port = url.getPort();
+                            v = removePortInHostHeader(v, port);
                             if (port != -1) {
                                 if (port == url.getDefaultPort()) {
                                     port = -1; // no need to specify the port if it is the default
