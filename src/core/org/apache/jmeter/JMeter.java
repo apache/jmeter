@@ -218,7 +218,7 @@ public class JMeter implements JMeterPlugin {
 
     private Properties remoteProps; // Properties to be sent to remote servers
 
-    private boolean remoteStop; // should remote engines be stopped at end of GUI test?
+    private boolean remoteStop; // should remote engines be stopped at end of non-GUI test?
 
     /**
      * Starts up JMeter in GUI mode
@@ -270,10 +270,11 @@ public class JMeter implements JMeterPlugin {
         String error = parser.getErrorString();
         if (error == null){// Check option combinations
             boolean gui = parser.getArgumentById(NONGUI_OPT)==null;
-            boolean remoteStart = parser.getArgumentById(REMOTE_OPT)!=null
-                               || parser.getArgumentById(REMOTE_OPT_PARAM)!=null;
-            if (gui && remoteStart) {
-                error = "-r and -R are only valid in non-GUI mode";
+            boolean nonGuiOnly = parser.getArgumentById(REMOTE_OPT)!=null
+                               || parser.getArgumentById(REMOTE_OPT_PARAM)!=null
+                               || parser.getArgumentById(REMOTE_STOP)!=null;
+            if (gui && nonGuiOnly) {
+                error = "-r and -R and -X are only valid in non-GUI mode";
             }
         }
         if (null != error) {
