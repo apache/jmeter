@@ -82,6 +82,7 @@ This can be overridden by setting the JMeter property <b>httpclient4.retrycount<
 <h3>Controllers</h3>
 <ul>
 <li>If Controller - Fixed a regression introduce by bug 50032 (see bug 50618 too)</li>
+<li>If Controller - Catches a StackOverflowError when a condition returns always false (after at least one iteration with return true) See bug 50618</li>
 </ul>
 
 <h3>Listeners</h3>
