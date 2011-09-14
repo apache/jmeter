@@ -150,6 +150,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     
     public static final String CONCURRENT_POOL = "HTTPSampler.concurrentPool"; // $NON-NLS-1$
 
+    private static final String CONCURRENT_POOL_DEFAULT = "4"; // default for concurrent pool (do not change)
+
     //- JMX names
 
     public static final boolean BROWSER_COMPATIBLE_MULTIPART_MODE_DEFAULT = false; // The default setting to be used (i.e. historic)
@@ -1639,17 +1641,18 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public void setConcurrentDwn(boolean concurrentDwn) {
         setProperty(CONCURRENT_DWN, concurrentDwn, false);
     }
+
     /**
      * Get the pool size for concurrent thread pool to get embedded resources.
      *
      * @return the pool size
      */
     public String getConcurrentPool() {
-        return getPropertyAsString(CONCURRENT_POOL,"4");
+        return getPropertyAsString(CONCURRENT_POOL,CONCURRENT_POOL_DEFAULT);
     }
 
     public void setConcurrentPool(String poolSize) {
-        setProperty(new StringProperty(CONCURRENT_POOL, poolSize));
+        setProperty(CONCURRENT_POOL, poolSize, CONCURRENT_POOL_DEFAULT);
     }
 
     /**
