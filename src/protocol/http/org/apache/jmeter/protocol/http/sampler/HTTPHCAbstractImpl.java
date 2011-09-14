@@ -152,19 +152,4 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
     protected static boolean isStaticProxy(String host){
         return PROXY_DEFINED && !isNonProxy(host);
     }
-    
-    /**
-     * In proxy record mode, remove port to host header value
-     * 
-     * @param hostHeader
-     * @param port to remove
-     * @return host value without ":port"
-     */
-    protected static String removePortInHostHeader(String hostHeader, int port) {
-        String rePort = ":" + String.valueOf(port); // $NON-NLS-1$
-        if (hostHeader.trim().endsWith(rePort)) {
-            return hostHeader.replaceFirst(rePort + "$", ""); // $NON-NLS-1$ $NON-NLS-2$
-        }
-        return hostHeader;
-    }
 }
