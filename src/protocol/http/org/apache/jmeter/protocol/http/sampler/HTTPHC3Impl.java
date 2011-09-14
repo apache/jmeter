@@ -592,7 +592,7 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
                     if (! HEADER_CONTENT_LENGTH.equalsIgnoreCase(n)){
                         String v = header.getValue();
                         if (HEADER_HOST.equalsIgnoreCase(n)) {
-                            v = removePortInHostHeader(v, u.getPort());
+                            v = v.replaceFirst(":\\d+$",""); // remove any port specification // $NON-NLS-1$ $NON-NLS-2$
                             method.getParams().setVirtualHost(v);
                         } else {
                             method.addRequestHeader(n, v);
