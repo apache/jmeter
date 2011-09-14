@@ -74,6 +74,7 @@ This can be overridden by setting the JMeter property <b>httpclient4.retrycount<
 <li>Change the default so the HttpClient 4 sampler does not retry</li>
 <li>Bug 51752 - HTTP Cache is broken when using "Retrieve all embedded resources" with concurrent pool</li>
 <li>Bug 39219 - HTTP Server: You can't stop it after File->Open</li>
+<li>Bug 51775 - Port number duplicates in Host header when capturing by HttpClient (3.1 and 4.x)</li>
 </ul>
 
 <h3>Other Samplers</h3>
