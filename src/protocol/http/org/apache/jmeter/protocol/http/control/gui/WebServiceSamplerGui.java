@@ -264,7 +264,7 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
         wsdlField.setText(sampler.getWsdlURL());
         final String wsdlText = wsdlField.getText();
         if (wsdlText != null && wsdlText.length() > 0) {
-            fillWsdlMethods(wsdlField.getText());
+            fillWsdlMethods(wsdlField.getText(), true);
         }
         protocol.setText(sampler.getProtocol());
         domain.setText(sampler.getDomain());
@@ -318,9 +318,10 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
      * easily replace it with a different WSDL driver later on.
      *
      * @param url
+     * @param silent 
      * @return array of web methods
      */
-    public String[] browseWSDL(String url) {
+    public String[] browseWSDL(String url, boolean silent) {
         try {
             // We get the AuthManager and pass it to the WSDLHelper
             // once the sampler is updated to Axis, all of this stuff
@@ -332,11 +333,13 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
             HELPER.parse();
             return HELPER.getWebMethods();
         } catch (Exception exception) {
-            JOptionPane.showConfirmDialog(this,
-                    JMeterUtils.getResString("wsdl_helper_error") // $NON-NLS-1$
-                    +"\n"+exception, // $NON-NLS-1$
-                    "Warning",
-                    JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+            if (!silent) {
+                JOptionPane.showConfirmDialog(this,
+                        JMeterUtils.getResString("wsdl_helper_error") // $NON-NLS-1$
+                        +"\n"+exception, // $NON-NLS-1$
+                        "Warning",
+                        JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+            }
             return ArrayUtils.EMPTY_STRING_ARRAY;
         }
     }
@@ -365,7 +368,7 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
         } else if (eventSource == wsdlButton){
             final String wsdlText = wsdlField.getText();
             if (wsdlText != null && wsdlText.length() > 0) {
-                fillWsdlMethods(wsdlText);
+                fillWsdlMethods(wsdlText, false);
             } else {
                 JOptionPane.showConfirmDialog(this,
                         JMeterUtils.getResString("wsdl_url_error"), // $NON-NLS-1$
@@ -378,8 +381,8 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
     /**
      * @param wsdlText
      */
-    private void fillWsdlMethods(final String wsdlText) {
-        String[] wsdlData = browseWSDL(wsdlText);
+    private void fillWsdlMethods(final String wsdlText, boolean silent) {
+        String[] wsdlData = browseWSDL(wsdlText, silent);
         if (wsdlData != null) {
             wsdlMethods.setValues(wsdlData);
             wsdlMethods.repaint();
