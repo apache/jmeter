@@ -133,15 +133,6 @@ public class JMeter implements JMeterPlugin {
 
 
 
-    /** UDP port used in non-GUI runs. Disabled if <=1000. */
-    private static final int UDP_PORT = JMeterUtils.getPropDefault("jmeterengine.nongui.port", 4445); // $NON-NLS-1$
-
-    /** Maximum UDP port used in non-GUI runs. Disabled if <= UDP_PORT */
-    private static final int UDP_PORT_MAX = JMeterUtils.getPropDefault("jmeterengine.nongui.maxport", 4455); // $NON-NLS-1$
-
-
-
-
     /**
      * Define the understood options. Each CLOptionDescriptor contains:
      * <ul>
@@ -1046,8 +1037,10 @@ public class JMeter implements JMeterPlugin {
     }
 
     private static void startUdpDdaemon(final JMeterEngine engine) {
-        if (UDP_PORT > 1000){
-            final DatagramSocket socket = getSocket(UDP_PORT, UDP_PORT_MAX);
+        int port = JMeterUtils.getPropDefault("jmeterengine.nongui.port", 4445); // $NON-NLS-1$
+        int maxPort = JMeterUtils.getPropDefault("jmeterengine.nongui.maxport", 4455); // $NON-NLS-1$
+        if (port > 1000){
+            final DatagramSocket socket = getSocket(port, maxPort);
             if (socket != null) {
                 Thread waiter = new Thread("UDP Listener"){
                     @Override
@@ -1094,14 +1087,14 @@ public class JMeter implements JMeterPlugin {
     private static DatagramSocket getSocket(int udpPort, int udpPortMax) {
         DatagramSocket socket = null;
         int i = udpPort;
-        do {
+        while (i<= udpPortMax) {
             try {
                 socket = new DatagramSocket(i);
                 break;
             } catch (SocketException e) {
-                // ignored
+                i++;
             }            
-        } while (++i <= udpPortMax);
+        }
 
         return socket;
     }
