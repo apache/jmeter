@@ -86,6 +86,7 @@ This can be overridden by setting the JMeter property <b>httpclient4.retrycount<
 <ul>
 <li>Bug 50424 - Web Methods drop down list box inconsistent</li>
 <li>Bug 43293 - Java Request fields not cleared when creating new sampler</li>
+<li>Bug 51830 - Webservice Soap Request triggers too many popups when Webservice WSDL URL is down</li>
 </ul>
 
 <h3>Controllers</h3>
