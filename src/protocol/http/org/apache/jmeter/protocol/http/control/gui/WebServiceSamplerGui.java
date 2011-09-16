@@ -218,7 +218,7 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
 
         // Web Methods
         JPanel listPanel = new JPanel();
-        JLabel selectLabel = new JLabel("Web Methods");
+        JLabel selectLabel = new JLabel(JMeterUtils.getResString("webservice_methods")); // $NON-NLS-1$
         wsdlMethods = new JLabeledChoice();
         mainPanel.add(listPanel);
         listPanel.add(selectLabel);
@@ -337,7 +337,7 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
                 JOptionPane.showConfirmDialog(this,
                         JMeterUtils.getResString("wsdl_helper_error") // $NON-NLS-1$
                         +"\n"+exception, // $NON-NLS-1$
-                        "Warning",
+                        JMeterUtils.getResString("warning"), // $NON-NLS-1$
                         JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
             }
             return ArrayUtils.EMPTY_STRING_ARRAY;
@@ -372,7 +372,7 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
             } else {
                 JOptionPane.showConfirmDialog(this,
                         JMeterUtils.getResString("wsdl_url_error"), // $NON-NLS-1$
-                        "Warning",
+                        JMeterUtils.getResString("warning"), // $NON-NLS-1$
                         JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
             }
         }
