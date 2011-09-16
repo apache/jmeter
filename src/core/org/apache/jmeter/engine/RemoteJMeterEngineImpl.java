@@ -127,7 +127,7 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
      * @param testTree
      *            the feature to be added to the ThreadGroup attribute
      */
-    public void configure(HashTree testTree, String host, File jmxBase) throws RemoteException {
+    public void rconfigure(HashTree testTree, String host, File jmxBase) throws RemoteException {
         log.info("Creating JMeter engine on host "+host+" base '"+jmxBase+"'");
         synchronized(LOCK) { // close window where another remote client might jump in
             if (backingEngine != null && backingEngine.isActive()) {
@@ -141,13 +141,13 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
         FileServer.getFileServer().setBase(jmxBase);
     }
 
-    public void runTest() throws RemoteException, JMeterEngineException, IllegalStateException {
+    public void rrunTest() throws RemoteException, JMeterEngineException, IllegalStateException {
         log.info("Running test");
         checkOwner("runTest");
         backingEngine.runTest();
     }
 
-    public void reset() throws RemoteException, IllegalStateException {
+    public void rreset() throws RemoteException, IllegalStateException {
         // Mail on userlist reported NPE here - looks like only happens if there are network errors, but check anyway
         if (backingEngine != null) {
             log.info("Reset");
@@ -158,7 +158,7 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
         }
     }
 
-    public void stopTest(boolean now) throws RemoteException {
+    public void rstopTest(boolean now) throws RemoteException {
         if (now) {
             log.info("Stopping test ...");
         } else {
@@ -168,7 +168,11 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
         log.info("... stopped");
     }
 
-    public void exit() throws RemoteException {
+    /*
+     * Called by:
+     * - ClientJMeterEngine.exe() which is called on remoteStop 
+     */
+    public void rexit() throws RemoteException {
         log.info("Exitting");
         backingEngine.exit();
         // Tidy up any objects we created
@@ -184,7 +188,7 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
         System.runFinalization();
     }
 
-    public void setProperties(Properties p) throws RemoteException, IllegalStateException {
+    public void rsetProperties(Properties p) throws RemoteException, IllegalStateException {
         checkOwner("setProperties");
         backingEngine.setProperties(p);
     }

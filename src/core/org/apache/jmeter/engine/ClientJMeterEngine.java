@@ -81,7 +81,7 @@ public class ClientJMeterEngine implements JMeterEngine {
     public void stopTest(boolean now) {
         log.info("about to "+(now ? "stop" : "shutdown")+" remote test on "+host);
         try {
-            remote.stopTest(now);
+            remote.rstopTest(now);
         } catch (Exception ex) {
             log.error("", ex); // $NON-NLS-1$
         }
@@ -91,11 +91,11 @@ public class ClientJMeterEngine implements JMeterEngine {
     public void reset() {
         try {
             try {
-                remote.reset();
+                remote.rreset();
             } catch (java.rmi.ConnectException e) {
                 log.info("Retry reset after: "+e);
                 remote = getEngine(host);
-                remote.reset();
+                remote.rreset();
             }
         } catch (Exception ex) {
             log.error("Failed to reset remote engine", ex); // $NON-NLS-1$
@@ -125,18 +125,18 @@ public class ClientJMeterEngine implements JMeterEngine {
             File baseDirRelative = FileServer.getFileServer().getBaseDirRelative();
             synchronized(LOCK)
             {
-                remote.configure(testTree, host, baseDirRelative);
+                remote.rconfigure(testTree, host, baseDirRelative);
             }
             log.info("sent test to " + host + " basedir='"+baseDirRelative+"'"); // $NON-NLS-1$
             if (savep != null){
                 log.info("Sending properties "+savep);
                 try {
-                    remote.setProperties(savep);
+                    remote.rsetProperties(savep);
                 } catch (RemoteException e) {
                     log.warn("Could not set properties: " + e.toString());
                 }
             }
-            remote.runTest();
+            remote.rrunTest();
             log.info("sent run command to "+ host);
         } catch (IllegalStateException ex) {
             log.error("Error in run() method "+ex); // $NON-NLS-1$
@@ -166,10 +166,11 @@ public class ClientJMeterEngine implements JMeterEngine {
     }
 
     /** {@inheritDoc} */
+    // Called by JMeter ListenToTest if remoteStop is true
     public void exit() {
         log.info("about to exit remote server on "+host);
         try {
-            remote.exit();
+            remote.rexit();
         } catch (RemoteException e) {
             log.warn("Could not perform remote exit: " + e.toString());
         }
