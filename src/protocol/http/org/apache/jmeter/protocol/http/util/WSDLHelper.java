@@ -49,6 +49,9 @@ import org.apache.jmeter.protocol.http.control.AuthManager;
  *
  */
 public class WSDLHelper {
+    
+    private static int GET_WDSL_TIMEOUT = 5000; // timeout to retrieve wsdl when server not response
+    
     /**
      * -------------------------------------------- The members used by the
      * class to do its work --------------------------------------------
@@ -173,6 +176,8 @@ public class WSDLHelper {
     protected void connect() throws IOException {
         try {
             CONN = WSDLURL.openConnection();
+            CONN.setConnectTimeout(GET_WDSL_TIMEOUT);
+            CONN.setReadTimeout(GET_WDSL_TIMEOUT);
             // in the rare case the WSDL is protected and requires
             // authentication, use the AuthManager to set the
             // authorization. Basic and Digest authorization are
