@@ -894,7 +894,7 @@ public class JMeter implements JMeterPlugin {
     /*
      * Listen to test and handle tidyup after non-GUI test completes.
      * If running a remote test, then after waiting a few seconds for listeners to finish files,
-     * it calls System.exit to deal with the Naming Timer Thread.
+     * it calls ClientJMeterEngine.tidyRMI() to deal with the Naming Timer Thread.
      */
     private static class ListenToTest implements TestListener, Runnable, Remoteable {
         private AtomicInteger started = new AtomicInteger(0); // keep track of remote tests
@@ -1073,7 +1073,6 @@ public class JMeter implements JMeterPlugin {
                         engine.stopTest(true);
                     } else if (command.equals("Shutdown")) {
                         engine.stopTest(false);
-                    } else {
                     }
                 }
             }
