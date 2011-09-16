@@ -22,11 +22,9 @@ import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.rmi.NotBoundException;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.Properties;
 
 import org.apache.jmeter.services.FileServer;
@@ -176,8 +174,6 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
         // Tidy up any objects we created
         Registry reg = LocateRegistry.getRegistry(this.rmiPort);        
         try {
-            Remote lRemoteObj = reg.lookup(JMETER_ENGINE_RMI_NAME);
-            UnicastRemoteObject.unexportObject(lRemoteObj, true);
             reg.unbind(JMETER_ENGINE_RMI_NAME);
         } catch (NotBoundException e) {
             log.warn(JMETER_ENGINE_RMI_NAME+" is not bound",e);
