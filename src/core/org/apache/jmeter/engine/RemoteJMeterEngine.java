@@ -26,15 +26,15 @@ import java.util.Properties;
 import org.apache.jorphan.collections.HashTree;
 
 public interface RemoteJMeterEngine extends Remote {
-    void configure(HashTree testTree, String host, File jmxBase) throws RemoteException;
+    void rconfigure(HashTree testTree, String host, File jmxBase) throws RemoteException;
 
-    void runTest() throws RemoteException, JMeterEngineException;
+    void rrunTest() throws RemoteException, JMeterEngineException;
 
-    void stopTest(boolean now) throws RemoteException;
+    void rstopTest(boolean now) throws RemoteException;
 
-    void reset() throws RemoteException;
+    void rreset() throws RemoteException;
 
-    void setProperties(Properties p) throws RemoteException;
+    void rsetProperties(Properties p) throws RemoteException;
 
-    void exit() throws RemoteException;
+    void rexit() throws RemoteException;
 }
