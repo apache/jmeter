@@ -56,6 +56,7 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
         sb.append("\n"); // $NON-NLS-1$
         synchronized (textArea) {
             textArea.append(sb.toString());
+            textArea.setCaretPosition(textArea.getText().length());
         }
     }
 
