@@ -21,9 +21,12 @@ package org.apache.jmeter.engine;
 import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.rmi.NotBoundException;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Properties;
 
 import org.apache.jmeter.services.FileServer;
@@ -64,18 +67,21 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
 
     private final Object LOCK = new Object();
 
-    private RemoteJMeterEngineImpl(int port) throws RemoteException {
-        super(port); // Create this object using the specified port (0 means anonymous)
+    private final int rmiPort;
+    
+    private RemoteJMeterEngineImpl(int localPort, int rmiPort) throws RemoteException {
+        super(localPort); // Create this object using the specified port (0 means anonymous)
+        this.rmiPort = rmiPort;
         System.out.println("Created remote object: "+this.getRef().remoteToString());
     }
 
-    public static void startServer(int port) throws RemoteException {
-        RemoteJMeterEngineImpl engine = new RemoteJMeterEngineImpl(DEFAULT_LOCAL_PORT);
-        engine.init(port == 0 ? DEFAULT_RMI_PORT : port);
+    public static void startServer(int rmiPort) throws RemoteException {
+        RemoteJMeterEngineImpl engine = new RemoteJMeterEngineImpl(DEFAULT_LOCAL_PORT, rmiPort == 0 ? DEFAULT_RMI_PORT : rmiPort);
+        engine.init();
     }
 
-    private void init(int port) throws RemoteException {
-        log.info("Starting backing engine on " + port);
+    private void init() throws RemoteException {
+        log.info("Starting backing engine on " + this.rmiPort);
         InetAddress localHost=null;
         try {
             // Bug 47980
@@ -97,7 +103,7 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
         if (createServer){
             log.info("Creating RMI registry (server.rmi.create=true)");
             try {
-                LocateRegistry.createRegistry(port);
+                LocateRegistry.createRegistry(this.rmiPort);
             } catch (RemoteException e){
                 String msg="Problem creating registry: "+e;
                 log.warn(msg);
@@ -106,9 +112,9 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
             }
         }
         try {
-            Registry reg = LocateRegistry.getRegistry(port);
+            Registry reg = LocateRegistry.getRegistry(this.rmiPort);
             reg.rebind(JMETER_ENGINE_RMI_NAME, this);
-            log.info("Bound to registry on port " + port);
+            log.info("Bound to registry on port " + this.rmiPort);
         } catch (Exception ex) {
             log.error("rmiregistry needs to be running to start JMeter in server " + "mode\n\t" + ex.toString());
             // Throw an Exception to ensure caller knows ...
@@ -167,6 +173,19 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
     public void exit() throws RemoteException {
         log.info("Exitting");
         backingEngine.exit();
+        // Tidy up any objects we created
+        Registry reg = LocateRegistry.getRegistry(this.rmiPort);        
+        try {
+            Remote lRemoteObj = reg.lookup(JMETER_ENGINE_RMI_NAME);
+            UnicastRemoteObject.unexportObject(lRemoteObj, true);
+            reg.unbind(JMETER_ENGINE_RMI_NAME);
+        } catch (NotBoundException e) {
+            log.warn(JMETER_ENGINE_RMI_NAME+" is not bound",e);
+        }
+        log.info("Unbound from registry");
+        // Help with garbage control
+        System.gc();
+        System.runFinalization();
     }
 
     public void setProperties(Properties p) throws RemoteException, IllegalStateException {
