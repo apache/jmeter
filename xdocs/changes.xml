@@ -117,6 +117,7 @@ This can be overridden by setting the JMeter property <b>httpclient4.retrycount<
 <h3>General</h3>
 <ul>
 <li>Bug 51831 - Cannot disable UDP server or change the maximum UDP port</li>
+<li>Bug 51821 - Add short-cut for Enabling / Disabling (sub)tree or branches in test plan.</li>
 </ul>
 
 <!-- ==================================================== -->
