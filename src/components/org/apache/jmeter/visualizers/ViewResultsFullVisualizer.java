@@ -28,6 +28,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -35,6 +37,7 @@ import java.util.List;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -62,7 +65,7 @@ import org.apache.log.Logger;
  *
  */
 public class ViewResultsFullVisualizer extends AbstractVisualizer
-implements ActionListener, TreeSelectionListener, Clearable {
+implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
 
     private static final long serialVersionUID = 7338676747296593842L;
 
@@ -108,6 +111,8 @@ implements ActionListener, TreeSelectionListener, Clearable {
 
     private TreeSelectionEvent lastSelectionEvent;
 
+    private JCheckBox autoScrollCB;
+
     /**
      * Constructor
      */
@@ -143,6 +148,9 @@ implements ActionListener, TreeSelectionListener, Clearable {
 
         if (root.getChildCount() == 1) {
             jTree.expandPath(new TreePath(root));
+        }
+        if (autoScrollCB.isSelected() && root.getChildCount() > 1) {
+            jTree.scrollRowToVisible(root.getChildCount() - 1);
         }
     }
 
@@ -252,15 +260,33 @@ implements ActionListener, TreeSelectionListener, Clearable {
         jTree.addTreeSelectionListener(this);
         jTree.setRootVisible(false);
         jTree.setShowsRootHandles(true);
-
         JScrollPane treePane = new JScrollPane(jTree);
         treePane.setPreferredSize(new Dimension(200, 300));
 
         VerticalPanel leftPane = new VerticalPanel();
         leftPane.add(treePane, BorderLayout.CENTER);
-        leftPane.add(createComboRender(), BorderLayout.SOUTH);
-
+        VerticalPanel leftDownPane = new VerticalPanel();
+        leftDownPane.add(createComboRender(), BorderLayout.NORTH);
+        autoScrollCB = createASCheckBox("view_results_autoscroll", Color.BLACK);
+        leftDownPane.add(autoScrollCB, BorderLayout.SOUTH);
+        leftPane.add(leftDownPane, BorderLayout.SOUTH);
         return leftPane;
+    }
+
+    /**
+     * Create auto scroll checkbox
+     * 
+     * @param labelResourceName
+     * @param color
+     * @return {@link JCheckBox}
+     */
+    private JCheckBox createASCheckBox(String labelResourceName, Color color) {
+        JCheckBox checkBox = new JCheckBox(
+                JMeterUtils.getResString(labelResourceName));
+        checkBox.setSelected(false);
+        checkBox.addItemListener(this);
+        checkBox.setForeground(color);
+        return checkBox;
     }
 
     /**
@@ -352,7 +378,6 @@ implements ActionListener, TreeSelectionListener, Clearable {
     }
 
     private static class ResultsNodeRenderer extends DefaultTreeCellRenderer {
-
         private static final long serialVersionUID = 4159626601097711565L;
 
         @Override
@@ -379,4 +404,10 @@ implements ActionListener, TreeSelectionListener, Clearable {
         }
     }
 
+    /**
+     * Handler for Checkbox
+     */
+    public void itemStateChanged(ItemEvent e) {
+        // NOOP state is held by component
+    }
 }
