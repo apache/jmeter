@@ -93,6 +93,8 @@ public class JMeter implements JMeterPlugin {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    public static final int UDP_PORT_DEFAULT = 4445; // needed for ShutdownClient
+
     public static final String HTTP_PROXY_PASS = "http.proxyPass"; // $NON-NLS-1$
 
     public static final String HTTP_PROXY_USER = "http.proxyUser"; // $NON-NLS-1$
@@ -1037,7 +1039,7 @@ public class JMeter implements JMeterPlugin {
     }
 
     private static void startUdpDdaemon(final JMeterEngine engine) {
-        int port = JMeterUtils.getPropDefault("jmeterengine.nongui.port", 4445); // $NON-NLS-1$
+        int port = JMeterUtils.getPropDefault("jmeterengine.nongui.port", UDP_PORT_DEFAULT); // $NON-NLS-1$
         int maxPort = JMeterUtils.getPropDefault("jmeterengine.nongui.maxport", 4455); // $NON-NLS-1$
         if (port > 1000){
             final DatagramSocket socket = getSocket(port, maxPort);
