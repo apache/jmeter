@@ -85,6 +85,12 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
      */
     private static final List<TestListener> testList = new ArrayList<TestListener>();
 
+    /** Whether to call System.exit(0) in exit after stopping RMI */
+    private static final boolean REMOTE_SYSTEM_EXIT = JMeterUtils.getPropDefault("jmeterengine.remote.system.exit", false);
+
+    /** Whether to call System.exit(1) if threads won't stop */
+    private static final boolean SYSTEM_EXIT_ON_STOP_FAIL = JMeterUtils.getPropDefault("jmeterengine.stopfail.system.exit", true);
+
     /** JMeterThread => its JVM thread */
     private final Map<JMeterThread, Thread> allThreads;
 
@@ -223,10 +229,11 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
                 log.warn("Error encountered during shutdown of "+tl.toString(),e);
             }
         }
-        log.info("Test has ended");
+        log.info("Test has ended on host "+host);
         if (host != null) {
             long now=System.currentTimeMillis();
-            System.out.println("Finished the test on host " + host + " @ "+new Date(now)+" ("+now+")");
+            System.out.println("Finished the test on host " + host + " @ "+new Date(now)+" ("+now+")"
+            +(exitAfterTest ? " - exit requested." : ""));
             if (exitAfterTest){
                 exit();
             }
@@ -276,14 +283,21 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
                 tellThreadsToStop();
                 pause(10 * allThreads.size());
                 stopped = verifyThreadsStopped();
-                if (!stopped) {
+                if (!stopped) {  // we totally failed to stop the test
                     if (JMeter.isNonGUI()) {
-                        exit();
+                        // TODO should we call test listeners? That might hang too ...
+                        log.fatalError(JMeterUtils.getResString("stopping_test_failed"));
+                        if (SYSTEM_EXIT_ON_STOP_FAIL) { // default is true
+                            log.fatalError("Exitting");
+                            System.out.println("Fatal error, could not stop test, exitting");
+                            System.exit(1);
+                        } else {
+                            System.out.println("Fatal error, could not stop test");                            
+                        }
                     } else {
                         JMeterUtils.reportErrorToUser(
                                 JMeterUtils.getResString("stopping_test_failed"),
                                 JMeterUtils.getResString("stopping_test_title"));
-                        // TODO - perhaps allow option to stop them?
                     }
                 } // else will be done by threadFinished()
             } else {
@@ -525,6 +539,14 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         }
     }
 
+    /**
+     * For each thread, invoke:
+     * <ul> 
+     * <li>{@link JMeterThread#stop()} - set stop flag</li>
+     * <li>{@link JMeterThread#interrupt()} - interrupt sampler</li>
+     * <li>{@link Thread#interrupt()} - interrupt JVM thread</li>
+     * </ul> 
+     */
     private void tellThreadsToStop() {
         // ConcurrentHashMap does not need protecting
         for (Entry<JMeterThread, Thread> entry : allThreads.entrySet()) {
@@ -544,6 +566,12 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         }
     }
 
+    /**
+     * For each thread, invoke:
+     * <ul> 
+     * <li>{@link JMeterThread#stop()} - set stop flag</li>
+     * </ul> 
+     */
     private void stopAllThreads() {
         // ConcurrentHashMap does not need synch. here
         for (JMeterThread item : allThreads.keySet()) {
@@ -552,19 +580,26 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
     }
 
     // Remote exit
+    // Called by RemoteJMeterEngineImpl.rexit()
+    // and by notifyTestListenersOfEnd() iff exitAfterTest is true;
+    // in turn that is called by the run() method and the StopTest class
+    // also called
     public void exit() {
-        // Needs to be run in a separate thread to allow RMI call to return OK
-        Thread t = new Thread() {
-            @Override
-            public void run() {
-                // log.info("Pausing");
-                pause(1000); // Allow RMI to complete
-                log.info("Bye");
-                System.exit(0);
-            }
-        };
-        log.info("Starting Closedown");
-        t.start();
+        ClientJMeterEngine.tidyRMI(log); // This should be enough to allow server to exit.
+        if (REMOTE_SYSTEM_EXIT) { // default is false
+            log.warn("About to run System.exit(0) on "+host);
+            // Needs to be run in a separate thread to allow RMI call to return OK
+            Thread t = new Thread() {
+                @Override
+                public void run() {
+                    pause(1000); // Allow RMI to complete
+                    log.info("Bye from "+host);
+                    System.out.println("Bye from "+host);
+                    System.exit(0);
+                }
+            };
+            t.start();
+        }
     }
 
     private void pause(long ms){
