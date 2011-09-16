@@ -38,6 +38,7 @@ public class EnableComponent implements Command {
     static {
         commands.add(ActionNames.ENABLE);
         commands.add(ActionNames.DISABLE);
+        commands.add(ActionNames.TOGGLE);
     }
 
     /**
@@ -52,12 +53,24 @@ public class EnableComponent implements Command {
         } else if (e.getActionCommand().equals(ActionNames.DISABLE)) {
             log.debug("disabling currently selected gui objects");
             enableComponents(nodes, false);
+        } else if (e.getActionCommand().equals(ActionNames.TOGGLE)) {
+            log.debug("toggling currently selected gui objects");
+            toggleComponents(nodes);
         }
     }
 
     private void enableComponents(JMeterTreeNode[] nodes, boolean enable) {
         GuiPackage pack = GuiPackage.getInstance();
         for (int i = 0; i < nodes.length; i++) {
+            nodes[i].setEnabled(enable);
+            pack.getGui(nodes[i].getTestElement()).setEnabled(enable);
+        }
+    }
+
+    private void toggleComponents(JMeterTreeNode[] nodes) {
+        GuiPackage pack = GuiPackage.getInstance();
+        for (int i = 0; i < nodes.length; i++) {
+            boolean enable = !nodes[i].isEnabled();
             nodes[i].setEnabled(enable);
             pack.getGui(nodes[i].getTestElement()).setEnabled(enable);
         }

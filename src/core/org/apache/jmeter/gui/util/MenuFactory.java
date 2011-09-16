@@ -227,6 +227,8 @@ public final class MenuFactory {
         }
         menu.add(enabled);
         menu.add(disabled);
+        JMenuItem toggle = makeMenuItemRes("toggle", ActionNames.TOGGLE, KeyStrokes.TOGGLE);// $NON-NLS-1$
+        menu.add(toggle);
         addSeparator(menu);
         menu.add(makeMenuItemRes("help", ActionNames.HELP));// $NON-NLS-1$
     }
