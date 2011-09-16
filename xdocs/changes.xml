@@ -111,6 +111,7 @@ This can be overridden by setting the JMeter property <b>httpclient4.retrycount<
 
 <h3>I18N</h3>
 <ul>
+<li>WebService(SOAP) request - add I18N for some labels</li>
 </ul>
 
 <h3>General</h3>
