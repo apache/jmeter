@@ -26,6 +26,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -52,7 +53,8 @@ public class InitialContextFactory {
      */
     public static synchronized Context lookupContext(String initialContextFactory, 
             String providerUrl, boolean useAuth, String securityPrincipal, String securityCredentials) throws NamingException {
-        Context ctx = MAP.get(initialContextFactory + providerUrl);
+        String cacheKey = createKey(initialContextFactory ,providerUrl, securityPrincipal, securityCredentials);
+        Context ctx = MAP.get(cacheKey);
         if (ctx == null) {
             Properties props = new Properties();
             props.setProperty(Context.INITIAL_CONTEXT_FACTORY, initialContextFactory);
@@ -70,9 +72,35 @@ public class InitialContextFactory {
             } catch (Exception e) {
                 throw new NamingException(e.toString());
             }
-            MAP.put(initialContextFactory + providerUrl, ctx);
+            MAP.put(cacheKey, ctx);
         }
         return ctx;
+    }
+
+    /**
+     * Create cache key
+     * @param initialContextFactory
+     * @param providerUrl
+     * @param securityPrincipal
+     * @param securityCredentials
+     * @return
+     */
+    private static String createKey(String initialContextFactory,
+            String providerUrl, String securityPrincipal,
+            String securityCredentials) {
+       StringBuilder builder = new StringBuilder();
+       builder.append(initialContextFactory);
+       builder.append("#");
+       builder.append(providerUrl);
+       builder.append("#");
+       if(!StringUtils.isEmpty(securityPrincipal)) {
+           builder.append(securityPrincipal);
+           builder.append("#");
+       }
+       if(!StringUtils.isEmpty(securityCredentials)) {
+           builder.append(securityCredentials);
+       }
+       return builder.toString();
     }
 
     /**
