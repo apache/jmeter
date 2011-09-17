@@ -49,6 +49,8 @@ public class JMeterContext {
 
     private byte[] readBuffer = null;
 
+    private boolean isReinitSubControllers = false;
+
     JMeterContext() {
         clear0();
     }
@@ -66,6 +68,7 @@ public class JMeterContext {
         threadNum = 0;
         readBuffer = null;
         thread = null;
+        isReinitSubControllers = false;
     }
 
     /**
@@ -168,5 +171,35 @@ public class JMeterContext {
 
     public void setSamplingStarted(boolean b) {
         samplingStarted = b;
+    }
+
+    /**
+     * Reset flag indicating listeners should not be notified since reinit of sub 
+     * controllers is being done. See bug 50032 
+     */
+    public void unsetIsReinitializingSubControllers() {
+        if (isReinitSubControllers) {
+            isReinitSubControllers = false;
+        }
+    }
+
+    /**
+     * Set flag indicating listeners should not be notified since reinit of sub 
+     * controllers is being done. See bug 50032 
+     * @return true if it is the first one to set
+     */
+    public boolean setIsReinitializingSubControllers() {
+        if (!isReinitSubControllers) {
+            isReinitSubControllers = true;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @return true if within reinit of Sub Controllers
+     */
+    public boolean isReinitializingSubControllers() {
+        return isReinitSubControllers;
     }
 }
