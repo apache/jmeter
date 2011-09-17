@@ -376,6 +376,20 @@ public class WSDLHelper {
     }
 
     /**
+     * return the "wsdl method name" from a soap action
+     * @param soapAction the soap action
+     * @return the associated "wsdl method name" or null if not found
+     */
+    public String getSoapActionName(String soapAction) {
+        for (Map.Entry<String, String> entry : ACTIONS.entrySet()) {
+            if (entry.getValue().equals(soapAction)) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+    
+    /**
      * Simple test for the class uses bidbuy.wsdl from Apache's soap driver
      * examples.
      *
@@ -403,4 +417,5 @@ public class WSDLHelper {
             exception.printStackTrace();
         }
     }
+
 }
