@@ -914,9 +914,13 @@ to configure this via the GUI, so it cannot really be used.
 <b>For full details on using BeanShell, please see the <a href="http://www.beanshell.org/">BeanShell website.</a></b>
 </p>
 <p>
-The test element supports the ThreadListener and TestListener methods.
-These should be defined in the initialisation file.
+The test element supports the ThreadListener and TestListener interface methods.
+These must be defined in the initialisation file.
 See the file BeanShellListeners.bshrc for example definitions.
+</p>
+<p>
+From JMeter version 2.5.1, the BeanShell sampler also supports the Interruptible interface.
+The interrupt() method can be defined in the script or the init file.
 </p>
 	</description>
 <properties>

@@ -19,18 +19,20 @@
 package org.apache.jmeter.protocol.java.sampler;
 
 import org.apache.jmeter.samplers.Entry;
+import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.util.BeanShellInterpreter;
 import org.apache.jmeter.util.BeanShellTestElement;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JMeterException;
 import org.apache.log.Logger;
 
 /**
  * A sampler which understands BeanShell
  *
  */
-public class BeanShellSampler extends BeanShellTestElement implements Sampler
+public class BeanShellSampler extends BeanShellTestElement implements Sampler, Interruptible
 {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -46,6 +48,8 @@ public class BeanShellSampler extends BeanShellTestElement implements Sampler
 
     public static final String RESET_INTERPRETER = "BeanShellSampler.resetInterpreter"; //$NON-NLS-1$
 
+    private volatile BeanShellInterpreter savedBsh = null;
+    
     @Override
     protected String getInitFileProperty() {
         return INIT_FILE;
@@ -104,7 +108,9 @@ public class BeanShellSampler extends BeanShellTestElement implements Sampler
 
             res.setDataType(SampleResult.TEXT); // assume text output - script can override if necessary
 
+            savedBsh = bshInterpreter;
             Object bshOut = processFileOrScript(bshInterpreter);
+            savedBsh = null;
 
             if (bshOut != null) {// Set response data
                 String out = bshOut.toString();
@@ -134,6 +140,8 @@ public class BeanShellSampler extends BeanShellTestElement implements Sampler
             log.warn(ex.toString());
             res.setResponseCode("500");//$NON-NLS-1$
             res.setResponseMessage(ex.toString());
+        } finally {
+            savedBsh = null;
         }
 
         res.sampleEnd();
@@ -142,5 +150,17 @@ public class BeanShellSampler extends BeanShellTestElement implements Sampler
         res.setSuccessful(isSuccessful);
 
         return res;
+    }
+
+    public boolean interrupt() {
+        if (savedBsh != null) {
+            try {
+                savedBsh.evalNoLog("interrupt()"); // $NON-NLS-1$
+            } catch (JMeterException ignored) {
+                log.debug(getClass().getName() + " : " + ignored.getLocalizedMessage()); // $NON-NLS-1$
+            }
+            return true;
+        }
+        return false;
     }
 }
