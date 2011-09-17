@@ -1,4 +1,6 @@
 // Sample BeanShell Sampler initialisation file
+// To enable, define the JMeter property: 
+// beanshell.sampler.init=BeanShellSampler.bshrc
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -56,6 +58,12 @@ String getVariables(){ // Create a listing of the thread variables
        }
     }
     return sb.toString();
+}
+
+// Interruptible interface
+
+interrupt() {
+    print("Interrupt detected");
 }
 
 //print("Initialisation complete");

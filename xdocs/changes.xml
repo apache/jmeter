@@ -130,6 +130,7 @@ This can be overridden by setting the JMeter property <b>httpclient4.retrycount<
 
 <h3>Other samplers</h3>
 <ul>
+<li>Beanshell Sampler now supports Interruptible interface</li>
 </ul>
 
 <h3>Controllers</h3>
