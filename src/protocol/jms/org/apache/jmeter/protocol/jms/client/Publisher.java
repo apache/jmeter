@@ -94,16 +94,24 @@ public class Publisher implements Closeable {
             String securityPrincipal, String securityCredentials,
             boolean staticDestination) throws JMSException, NamingException {
         super();
-        ctx = InitialContextFactory.getContext(useProps, initialContextFactory, 
-                providerUrl, useAuth, securityPrincipal, securityCredentials);
-        connection = Utils.getConnection(ctx, connfactory);
-        session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        staticDest = staticDestination;
-        if (staticDest) {
-            Destination dest = Utils.lookupDestination(ctx, destinationName);
-            producer = session.createProducer(dest);
-        } else {
-            producer = session.createProducer(null);
+        boolean initSuccess = false;
+        try{
+            ctx = InitialContextFactory.getContext(useProps, initialContextFactory, 
+                    providerUrl, useAuth, securityPrincipal, securityCredentials);
+            connection = Utils.getConnection(ctx, connfactory);
+            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            staticDest = staticDestination;
+            if (staticDest) {
+                Destination dest = Utils.lookupDestination(ctx, destinationName);
+                producer = session.createProducer(dest);
+            } else {
+                producer = session.createProducer(null);
+            }
+            initSuccess = true;
+        } finally {
+            if(!initSuccess) {
+                close();
+            }
         }
     }
 
