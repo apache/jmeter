@@ -239,8 +239,10 @@ public class JMeterThread implements Runnable, Interruptible {
     public void run() {
         // threadContext is not thread-safe, so keep within thread
         JMeterContext threadContext = JMeterContextService.getContext();
+        LoopIterationListener iterationListener=null;
+
         try {
-            initRun(threadContext);
+            iterationListener = initRun(threadContext);
             while (running) {
                 Sampler firstSampler = controller.next();
                 Sampler sam = firstSampler;
@@ -299,7 +301,7 @@ public class JMeterThread implements Runnable, Interruptible {
         } finally {
             threadContext.clear();
             log.info("Thread finished: " + threadName);
-            threadFinished();
+            threadFinished(iterationListener);
             monitor.threadFinished(this); // Tell the engine we are done
             JMeterContextService.removeContext(); // Remove the ThreadLocal entry
         }
@@ -470,9 +472,10 @@ public class JMeterThread implements Runnable, Interruptible {
 
     /**
      * @param threadContext
+     * @return 
      *
      */
-    private void initRun(JMeterContext threadContext) {
+    private IterationListener initRun(JMeterContext threadContext) {
         threadContext.setVariables(threadVars);
         threadContext.setThreadNum(getThreadNum());
         threadContext.getVariables().put(LAST_SAMPLE_OK, TRUE);
@@ -496,11 +499,13 @@ public class JMeterThread implements Runnable, Interruptible {
             threadContext.setSamplingStarted(true);
         }
         controller.initialize();
-        controller.addIterationListener(new IterationListener());
+        IterationListener iterationListener = new IterationListener();
+        controller.addIterationListener(iterationListener);
         if (!startEarlier) {
             threadContext.setSamplingStarted(true);
         }
         threadStarted();
+        return iterationListener;
     }
 
     private void threadStarted() {
@@ -514,7 +519,7 @@ public class JMeterThread implements Runnable, Interruptible {
         testTree.traverse(startup); // call ThreadListener.threadStarted()
     }
 
-    private void threadFinished() {
+    private void threadFinished(LoopIterationListener iterationListener) {
         ThreadListenerTraverser shut = new ThreadListenerTraverser(false);
         testTree.traverse(shut); // call ThreadListener.threadFinished()
         JMeterContextService.decrNumberOfThreads();
@@ -522,6 +527,9 @@ public class JMeterThread implements Runnable, Interruptible {
         GuiPackage gp = GuiPackage.getInstance();
         if (gp != null){// check there is a GUI
             gp.getMainFrame().updateCounts();
+        }
+        if (iterationListener != null) { // probably not possible, but check anyway
+            controller.removeIterationListener(iterationListener);
         }
     }
 
@@ -708,7 +716,7 @@ public class JMeterThread implements Runnable, Interruptible {
         }
     }
 
-    private void notifyTestListeners() {
+    void notifyTestListeners() {
         threadVars.incIteration();
         Iterator<TestListener> iter = testListeners.iterator();
         while (iter.hasNext()) {
