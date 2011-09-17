@@ -264,7 +264,7 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
         wsdlField.setText(sampler.getWsdlURL());
         final String wsdlText = wsdlField.getText();
         if (wsdlText != null && wsdlText.length() > 0) {
-            fillWsdlMethods(wsdlField.getText(), true);
+            fillWsdlMethods(wsdlField.getText(), true, sampler.getSoapAction());
         }
         protocol.setText(sampler.getProtocol());
         domain.setText(sampler.getDomain());
@@ -368,7 +368,7 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
         } else if (eventSource == wsdlButton){
             final String wsdlText = wsdlField.getText();
             if (wsdlText != null && wsdlText.length() > 0) {
-                fillWsdlMethods(wsdlText, false);
+                fillWsdlMethods(wsdlText, false, null);
             } else {
                 JOptionPane.showConfirmDialog(this,
                         JMeterUtils.getResString("wsdl_url_error"), // $NON-NLS-1$
@@ -380,11 +380,19 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
 
     /**
      * @param wsdlText
+     * @param silent
+     * @param soapAction 
      */
-    private void fillWsdlMethods(final String wsdlText, boolean silent) {
+    private void fillWsdlMethods(final String wsdlText, boolean silent, String soapAction) {
         String[] wsdlData = browseWSDL(wsdlText, silent);
         if (wsdlData != null) {
             wsdlMethods.setValues(wsdlData);
+            if (HELPER != null && soapAction != null) {
+                String selected = HELPER.getSoapActionName(soapAction);
+                if (selected != null) {
+                    wsdlMethods.setText(selected);
+                }
+            }
             wsdlMethods.repaint();
         }
     }
