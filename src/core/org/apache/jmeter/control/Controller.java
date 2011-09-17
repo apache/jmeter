@@ -56,4 +56,10 @@ public interface Controller extends TestElement {
      * Called to initialize a controller at the beginning of a test iteration.
      */
     public void initialize();
+
+    /**
+     * Unregister IterationListener
+     * @param iterationListener {@link LoopIterationListener}
+     */
+    public void removeIterationListener(LoopIterationListener iterationListener);
 }
