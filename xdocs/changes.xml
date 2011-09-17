@@ -155,6 +155,7 @@ This can be overridden by setting the JMeter property <b>httpclient4.retrycount<
 
 <h3>General</h3>
 <ul>
+<li>Bug 51822 - (part 1) save 1 invocation of GuiPackage#getCurrentGui</li>
 </ul>
 
 <h2>Non-functional changes</h2>
