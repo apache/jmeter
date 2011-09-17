@@ -65,6 +65,7 @@ public class JMeterContext {
         samplingStarted = false;
         threadNum = 0;
         readBuffer = null;
+        thread = null;
     }
 
     /**

@@ -111,6 +111,11 @@ public abstract class AbstractThreadGroup extends AbstractTestElement implements
     public void addIterationListener(LoopIterationListener lis) {
         getSamplerController().addIterationListener(lis);
     }
+    
+    /** {@inheritDoc} */
+    public void removeIterationListener(LoopIterationListener iterationListener) {
+        getSamplerController().removeIterationListener(iterationListener);
+    }
 
     /** {@inheritDoc} */
     public void initialize() {
