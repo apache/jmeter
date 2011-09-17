@@ -63,8 +63,6 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
     private static final boolean OBEY_CONTENT_LENGTH =
         JMeterUtils.getPropDefault("httpsampler.obey_contentlength", false); // $NON-NLS-1$
 
-    private static final long serialVersionUID = 241L;
-
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final int MAX_CONN_RETRIES =
