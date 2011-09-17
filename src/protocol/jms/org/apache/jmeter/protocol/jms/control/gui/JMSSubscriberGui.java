@@ -203,6 +203,8 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
         jmsPwd.setText(sampler.getPassword());
         iterations.setText(sampler.getIterations());
         useAuth.setSelected(sampler.isUseAuth());
+        jmsUser.setEnabled(useAuth.isSelected());
+        jmsPwd.setEnabled(useAuth.isSelected());
         readResponse.setSelected(sampler.getReadResponseAsBoolean());
         clientChoice.setText(sampler.getClientChoice());
         stopBetweenSamples.setSelected(sampler.isStopBetweenSamples());
@@ -224,6 +226,8 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
         iterations.setText("1"); // $NON-NLS-1$
         timeout.setText("");
         useAuth.setSelected(false);
+        jmsUser.setEnabled(false);
+        jmsPwd.setEnabled(false);
         readResponse.setSelected(true);
         clientChoice.setText(RECEIVE_RSC);
         stopBetweenSamples.setSelected(false);
@@ -239,8 +243,8 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
             jndiICF.setEnabled(!useProperties.isSelected());
             urlField.setEnabled(!useProperties.isSelected());
         } else if (event.getSource() == useAuth) {
-            jmsUser.setEnabled(!useAuth.isSelected());
-            jmsPwd.setEnabled(!useAuth.isSelected());
+            jmsUser.setEnabled(useAuth.isSelected());
+            jmsPwd.setEnabled(useAuth.isSelected());
         }
     }
     
