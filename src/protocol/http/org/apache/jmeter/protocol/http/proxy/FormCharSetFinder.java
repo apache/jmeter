@@ -35,7 +35,8 @@ import org.htmlparser.util.ParserException;
 /**
  * A parser for html, to find the form tags, and their accept-charset value
  */
-class FormCharSetFinder {
+// made public see Bug 49976
+public class FormCharSetFinder {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     static {
