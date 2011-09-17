@@ -228,6 +228,7 @@ public class GenericController extends AbstractTestElement implements Controller
      * 
      */
     protected void reInitializeSubController() {
+        boolean wasFlagSet = getThreadContext().setIsReinitializingSubControllers();
         try {
             TestElement currentElement = getCurrentElement();
             if (currentElement != null) {
@@ -240,6 +241,10 @@ public class GenericController extends AbstractTestElement implements Controller
                 }
             }
         } catch (NextIsNullException e) {
+        } finally {
+            if (wasFlagSet) {
+                getThreadContext().unsetIsReinitializingSubControllers();
+            }
         }
     }
     

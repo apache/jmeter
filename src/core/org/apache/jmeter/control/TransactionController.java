@@ -192,7 +192,10 @@ public class TransactionController extends GenericController implements SampleLi
                     // We must set res to null now, before sending the event for the transaction,
                     // so that we can ignore that event in our sampleOccured method
                     res = null;
-                    lnf.notifyListeners(event, pack.getSampleListeners());
+                    // bug 50032 
+                    if (!getThreadContext().isReinitializingSubControllers()) {
+                        lnf.notifyListeners(event, pack.getSampleListeners());
+                    }
                 }
             }
         }
