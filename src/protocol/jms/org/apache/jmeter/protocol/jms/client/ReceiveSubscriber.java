@@ -84,14 +84,22 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
             String initialContextFactory, String providerUrl, String connfactory, String destinationName,
             String durableSubscriptionId, boolean useAuth, 
             String securityPrincipal, String securityCredentials) throws NamingException, JMSException {
-        Context ctx = InitialContextFactory.getContext(useProps, 
-                initialContextFactory, providerUrl, useAuth, securityPrincipal, securityCredentials);
-        CONN = Utils.getConnection(ctx, connfactory);
-        SESSION = CONN.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        Destination dest = Utils.lookupDestination(ctx, destinationName);
-       	SUBSCRIBER = createSubscriber(SESSION, dest, durableSubscriptionId);
-        queue = null;
-        log.debug("<init> complete");
+        boolean initSuccess = false;
+        try{
+            Context ctx = InitialContextFactory.getContext(useProps, 
+                    initialContextFactory, providerUrl, useAuth, securityPrincipal, securityCredentials);
+            CONN = Utils.getConnection(ctx, connfactory);
+            SESSION = CONN.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            Destination dest = Utils.lookupDestination(ctx, destinationName);
+           	SUBSCRIBER = createSubscriber(SESSION, dest, durableSubscriptionId);
+            queue = null;
+            log.debug("<init> complete");
+            initSuccess = true;
+        } finally {
+            if(!initSuccess) {
+                close();
+            }
+        }
     }
 
     /**
@@ -117,19 +125,28 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
             String initialContextFactory, String providerUrl, String connfactory, String destinationName,
             String durableSubscriptionId, boolean useAuth, 
             String securityPrincipal, String securityCredentials) throws NamingException, JMSException {
-        Context ctx = InitialContextFactory.getContext(useProps, 
-                initialContextFactory, providerUrl, useAuth, securityPrincipal, securityCredentials);
-        CONN = Utils.getConnection(ctx, connfactory);
-        SESSION = CONN.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        Destination dest = Utils.lookupDestination(ctx, destinationName);
-        SUBSCRIBER = createSubscriber(SESSION, dest, durableSubscriptionId);
-        if (queueSize <=0) {
-            queue = new LinkedBlockingQueue<Message>();
-        } else {
-            queue = new LinkedBlockingQueue<Message>(queueSize);            
+        boolean initSuccess = false;
+        try{
+            Context ctx = InitialContextFactory.getContext(useProps, 
+                    initialContextFactory, providerUrl, useAuth, securityPrincipal, securityCredentials);
+            CONN = Utils.getConnection(ctx, connfactory);
+            SESSION = CONN.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            Destination dest = Utils.lookupDestination(ctx, destinationName);
+            SUBSCRIBER = createSubscriber(SESSION, dest, durableSubscriptionId);
+            if (queueSize <=0) {
+                queue = new LinkedBlockingQueue<Message>();
+            } else {
+                queue = new LinkedBlockingQueue<Message>(queueSize);            
+            }
+            SUBSCRIBER.setMessageListener(this);
+            log.debug("<init> complete");
+            initSuccess = true;
         }
-        SUBSCRIBER.setMessageListener(this);
-        log.debug("<init> complete");
+        finally {
+            if(!initSuccess) {
+                close();
+            }
+        }
     }
     
     /**
@@ -208,7 +225,9 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
     public void close() { // called from threadFinished() thread
         log.debug("close()");
         try {
-            CONN.stop();
+            if(CONN != null) {
+                CONN.stop();
+            }
         } catch (JMSException e) {
             log.error(e.getMessage());
         }

@@ -86,6 +86,7 @@ This can be overridden by setting the JMeter property <b>httpclient4.retrycount<
 <li>Bug 43293 - Java Request fields not cleared when creating new sampler</li>
 <li>Bug 51830 - Webservice Soap Request triggers too many popups when Webservice WSDL URL is down</li>
 <li>WebService(SOAP) request - add a connect timeout to get the wsdl used to populate Web Methods when server doesn't response</li>
+<li>Bug 51841 - JMS : If an error occurs in ReceiveSubscriber constructor or Publisher, then Connections will stay open</li>
 </ul>
 
 <h3>Controllers</h3>
