@@ -63,6 +63,9 @@ public class Copy extends AbstractAction {
     }
 
     public static JMeterTreeNode[] getCopiedNodes() {
+        if (copiedNodes == null) { // can be null if Copy has yet to be used
+            return null;
+        }
         for (int i = 0; i < copiedNodes.length; i++) {
             if (copiedNodes[i] == null) {
                 return null;
