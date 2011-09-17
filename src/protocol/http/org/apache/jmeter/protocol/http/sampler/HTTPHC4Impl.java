@@ -1047,6 +1047,13 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     @Override
     public void threadFinished() {
         log.debug("Thread Finished");
+        closeThreadLocalConnections();
+    }
+
+    /**
+     * 
+     */
+    private void closeThreadLocalConnections() {
         // Does not need to be synchronised, as all access is from same thread
         Map<HttpClientKey, HttpClient> map = HTTPCLIENTS.get();
         if ( map != null ) {
@@ -1069,5 +1076,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
         return request != null;
     }
-
+    
+    /** {@inheritDoc} */
+    @Override
+    protected void notifySSLContextWasReset() {
+        log.debug("closeThreadLocalConnections called");
+        closeThreadLocalConnections();
+    }
 }

@@ -154,6 +154,13 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
 <pre>
 https.sessioncontext.shared=true
 </pre>
+        By default, the SSL context is retained for the duration of the test.
+        In versions of JMeter from 2.5.1, the SSL session can be optionally reset for each test iteration.
+        To enable this, set the JMeter property:
+<pre>
+https.use.cached.ssl.context=false
+</pre>
+        Note: this does not apply to the Java HTTP implementation.
         </p>
         <p>
         JMeter defaults to the SSL protocol level TLS.
