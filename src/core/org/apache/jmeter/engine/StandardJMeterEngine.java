@@ -278,11 +278,10 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         public void run() {
             running = false;
             engine = null;
-            boolean stopped = false;
             if (now) {
                 tellThreadsToStop();
                 pause(10 * allThreads.size());
-                stopped = verifyThreadsStopped();
+                boolean stopped = verifyThreadsStopped();
                 if (!stopped) {  // we totally failed to stop the test
                     if (JMeter.isNonGUI()) {
                         // TODO should we call test listeners? That might hang too ...
@@ -302,10 +301,6 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
                 } // else will be done by threadFinished()
             } else {
                 stopAllThreads();
-            }
-            //  for TGs which run consecutively or when thread don't stop 
-            if (serialized || !stopped) {
-                notifyTestListenersOfEnd(testListenersSave);
             }
         }
     }
