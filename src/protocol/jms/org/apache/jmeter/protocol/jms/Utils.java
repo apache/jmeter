@@ -19,6 +19,7 @@
 package org.apache.jmeter.protocol.jms;
 
 import java.util.Enumeration;
+import java.util.Map;
 
 import javax.jms.Connection;
 import javax.jms.Destination;
@@ -148,7 +149,16 @@ public final class Utils {
             throw new NamingException("Lookup failed: "+e.toString());
         }
         if (objfac instanceof javax.jms.ConnectionFactory) {
-            return ((javax.jms.ConnectionFactory) objfac).createConnection();
+            @SuppressWarnings("unchecked") // The environment is supposed to use String keys only
+            Map<String, Object> env = (Map<String, Object>)ctx.getEnvironment();
+            if(env.containsKey(Context.SECURITY_PRINCIPAL)) {
+                String username = (String)env.get(Context.SECURITY_PRINCIPAL);
+                String password = (String)env.get(Context.SECURITY_CREDENTIALS);
+                return ((javax.jms.ConnectionFactory) objfac).createConnection(username, password);                
+            }
+            else {
+                return ((javax.jms.ConnectionFactory) objfac).createConnection();
+            }
         }
         throw new NamingException("Expected javax.jms.ConnectionFactory, found "+objfac.getClass().getName());
     }

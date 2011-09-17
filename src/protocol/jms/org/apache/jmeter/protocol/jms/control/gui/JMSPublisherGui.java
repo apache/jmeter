@@ -224,6 +224,8 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         updateConfig(USE_TEXT_RSC);
         iterations.setText("1"); // $NON-NLS-1$
         useAuth.setSelected(false);
+        jmsUser.setEnabled(false);
+        jmsPwd.setEnabled(false);
         destSetup.setText(DEST_SETUP_STATIC);
     }
 
@@ -249,6 +251,8 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         updateConfig(sampler.getConfigChoice());
         iterations.setText(sampler.getIterations());
         useAuth.setSelected(sampler.isUseAuth());
+        jmsUser.setEnabled(useAuth.isSelected());
+        jmsPwd.setEnabled(useAuth.isSelected());
         destSetup.setText(sampler.isDestinationStatic() ? DEST_SETUP_STATIC : DEST_SETUP_DYNAMIC);
     }
 
@@ -265,8 +269,8 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
             jndiICF.setEnabled(!useProperties.isSelected());
             urlField.setEnabled(!useProperties.isSelected());
         } else if (event.getSource() == useAuth) {
-            jmsUser.setEnabled(!useAuth.isSelected());
-            jmsPwd.setEnabled(!useAuth.isSelected());
+            jmsUser.setEnabled(useAuth.isSelected());
+            jmsPwd.setEnabled(useAuth.isSelected());
         }
     }
 
