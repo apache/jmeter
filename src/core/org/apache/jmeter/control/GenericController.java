@@ -333,6 +333,20 @@ public class GenericController extends AbstractTestElement implements Controller
          */
         iterationListeners.addFirst(lis);
     }
+    
+    /**
+     * Remove listener
+     */
+    public void removeIterationListener(LoopIterationListener iterationListener) {
+        for (Iterator<LoopIterationListener> iterator = iterationListeners.iterator(); iterator.hasNext();) {
+            LoopIterationListener listener = iterator.next();
+            if(listener == iterationListener)
+            {
+                iterator.remove();
+                break; // can only match once
+            }
+        }
+    }
 
     protected void fireIterEvents() {
         if (isFirst()) {
