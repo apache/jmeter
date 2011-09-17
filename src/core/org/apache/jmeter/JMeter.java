@@ -1082,6 +1082,8 @@ public class JMeter implements JMeterPlugin {
                         engine.stopTest(true);
                     } else if (command.equals("Shutdown")) {
                         engine.stopTest(false);
+                    } else {
+                        System.out.println("Command: "+command+" not recognised ");
                     }
                 }
             }
