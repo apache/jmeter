@@ -71,22 +71,20 @@ public class SaveGraphics implements Command {
     }
 
     public void doAction(ActionEvent e) throws IllegalUserActionException {
-        JMeterGUIComponent component = null;
-        JComponent comp = null;
         if (!commands.contains(e.getActionCommand())) {
             throw new IllegalUserActionException("Invalid user command:" + e.getActionCommand());
         }
         if (e.getActionCommand().equals(ActionNames.SAVE_GRAPHICS)) {
-            component = GuiPackage.getInstance().getCurrentGui();
+            JMeterGUIComponent component = GuiPackage.getInstance().getCurrentGui();
             // get the JComponent from the visualizer
             if (component instanceof Printable) {
-                comp = ((Printable) component).getPrintableComponent();
+                JComponent comp = ((Printable) component).getPrintableComponent();
                 saveImage(comp);
             }
         }
         if (e.getActionCommand().equals(ActionNames.SAVE_GRAPHICS_ALL)) {
-            component = GuiPackage.getInstance().getCurrentGui();
-            comp=((JComponent) component).getRootPane();
+            JMeterGUIComponent component = GuiPackage.getInstance().getCurrentGui();
+            JComponent comp=((JComponent) component).getRootPane();
             saveImage(comp);
         }
     }
