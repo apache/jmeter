@@ -267,26 +267,12 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         leftPane.add(treePane, BorderLayout.CENTER);
         VerticalPanel leftDownPane = new VerticalPanel();
         leftDownPane.add(createComboRender(), BorderLayout.NORTH);
-        autoScrollCB = createASCheckBox("view_results_autoscroll", Color.BLACK);
+        autoScrollCB = new JCheckBox(JMeterUtils.getResString("view_results_autoscroll"));
+        autoScrollCB.setSelected(false);
+        autoScrollCB.addItemListener(this);
         leftDownPane.add(autoScrollCB, BorderLayout.SOUTH);
         leftPane.add(leftDownPane, BorderLayout.SOUTH);
         return leftPane;
-    }
-
-    /**
-     * Create auto scroll checkbox
-     * 
-     * @param labelResourceName
-     * @param color
-     * @return {@link JCheckBox}
-     */
-    private JCheckBox createASCheckBox(String labelResourceName, Color color) {
-        JCheckBox checkBox = new JCheckBox(
-                JMeterUtils.getResString(labelResourceName));
-        checkBox.setSelected(false);
-        checkBox.addItemListener(this);
-        checkBox.setForeground(color);
-        return checkBox;
     }
 
     /**
