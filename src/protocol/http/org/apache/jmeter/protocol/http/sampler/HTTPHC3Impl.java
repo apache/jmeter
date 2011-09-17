@@ -1071,6 +1071,14 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
     public void threadFinished() {
         log.debug("Thread Finished");
 
+        closeThreadLocalConnections();
+    }
+
+
+    /**
+     * 
+     */
+    private void closeThreadLocalConnections() {
         // Does not need to be synchronised, as all access is from same thread
         Map<HostConfiguration, HttpClient> map = httpClients.get();
 
@@ -1100,4 +1108,13 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
         return client != null;
     }
 
+    /** 
+     * {@inheritDoc}
+     * This implementation closes all local connections.
+     */
+    @Override
+    protected void notifySSLContextWasReset() {
+        log.debug("freeThreadConnections called");
+        closeThreadLocalConnections();
+    }
 }
