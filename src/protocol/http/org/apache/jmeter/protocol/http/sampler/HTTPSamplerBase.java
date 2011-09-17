@@ -70,6 +70,8 @@ import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.util.JsseSSLManager;
+import org.apache.jmeter.util.SSLManager;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
@@ -233,6 +235,10 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     private static final String RESPONSE_PARSERS= // list of parsers
         JMeterUtils.getProperty("HTTPResponse.parsers");//$NON-NLS-1$
 
+	// Control reuse of cached SSL Context in subsequent iterations
+	private static final boolean USE_CACHED_SSL_CONTEXT = 
+	        JMeterUtils.getPropDefault("https.use.cached.ssl.context", true);//$NON-NLS-1$
+    
     static{
         String []parsers = JOrphanUtils.split(RESPONSE_PARSERS, " " , true);// returns empty array for null
         for (int i=0;i<parsers.length;i++){
@@ -258,6 +264,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             parsersForType.put("text/html", ""); //$NON-NLS-1$ //$NON-NLS-2$
             log.info("No response parsers defined: text/html only will be scanned for embedded resources");
         }
+        
+		log.info("Reuse SSL session context on subsequent iterations: "
+				+ USE_CACHED_SSL_CONTEXT);
     }
 
     // Bug 49083
@@ -1234,11 +1243,25 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         testEnded();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void testIterationStart(LoopIterationEvent event) {
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	public void testIterationStart(LoopIterationEvent event) {
+		if (!USE_CACHED_SSL_CONTEXT) {
+			JsseSSLManager sslMgr = (JsseSSLManager) SSLManager.getInstance();
+			sslMgr.resetContext();
+			notifySSLContextWasReset();
+		}
+	}
+
+	/**
+	 * Called by testIterationStart if the SSL Context was reset.
+	 * 
+	 * This implementation does nothing.
+	 */
+	protected void notifySSLContextWasReset() {
+		// NOOP
+	}
 
     /**
      * {@inheritDoc}
