@@ -86,6 +86,15 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
     private static final boolean CHECK_COOKIES =
         JMeterUtils.getPropDefault("CookieManager.check.cookies", true);// $NON-NLS-1$
 
+    static {
+        log.info("Settings:"
+                + " Delete null: " + DELETE_NULL_COOKIES
+                + " Check: " + CHECK_COOKIES
+                + " Allow variable: " + ALLOW_VARIABLE_COOKIES
+                + " Save: " + SAVE_COOKIES
+                + " Prefix: " + COOKIE_NAME_PREFIX
+                );
+    }
     private transient CookieSpec cookieSpec;
 
     private transient CollectionProperty initialCookies;
