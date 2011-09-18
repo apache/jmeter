@@ -69,7 +69,7 @@ in the tree, if you have not already selected it. You should now see the Thread
 Group Control Panel in the right section of the JMeter window (see Figure &sect-num;.1
 below)</p>
 
-<figure image="webtest/threadgroup.png">
+<figure width="609" height="387" image="webtest/threadgroup.png">
 Figure &sect-num;.1. Thread Group with Default Values</figure>
 
 <p>Start by providing a more descriptive name for our Thread Group. In the name
@@ -99,7 +99,7 @@ leave the Control Panel (for example, when selecting another tree element).</not
 
 <p>See Figure &sect-num;.2 for the completed Jakarta Users Thread Group.</p>
 
-<figure image="webtest/threadgroup2.png">
+<figure width="791" height="321" image="webtest/threadgroup2.png">
 Figure &sect-num;.2. Jakarta Users Thread Group</figure>
 
 </section>
@@ -115,7 +115,7 @@ to get the Add menu, and then select Add --&gt; Config Element --&gt; HTTP Reque
 Defaults. Then, select this new element to view its Control Panel (see Figure &sect-num;.3).
 </p>
 
-<figure image="webtest/http-defaults1.png">
+<figure width="851" height="494" image="webtest/http-defaults1.png">
 Figure &sect-num;.3. HTTP Request Defaults</figure>
 
 <p>
@@ -135,7 +135,7 @@ HTTP Request elements use.</note>
 
 <p>See Figure &sect-num;.4 for the completed HTTP Request Defaults element</p>
 
-<figure image="webtest/http-defaults2.png">
+<figure width="851" height="494" image="webtest/http-defaults2.png">
 Figure &sect-num;.4. HTTP Defaults for our Test Plan</figure>
 
 </section>
@@ -174,7 +174,7 @@ element.</li>
 </ol>
 </p>
 
-<figure image="webtest/http-request1.png">
+<figure width="902" height="705" image="webtest/http-request1.png">
 Figure &sect-num;.5. HTTP Request for Jakarta Home Page</figure>
 
 <p>Next, add the second HTTP Request and edit the following properties (see
@@ -185,7 +185,7 @@ Figure &sect-num;.6:
 </ol>
 </p>
 
-<figure image="webtest/http-request2.png">
+<figure width="902" height="705" image="webtest/http-request2.png">
 Figure &sect-num;.6. HTTP Request for Jakarta Project Guidelines Page</figure>
 
 </section>
@@ -201,7 +201,7 @@ a visual model of the data.</p>
 output file.  You can either type it into the filename field, or select the
 Browse button and browse to a directory and then enter a filename.</p>
 
-<figure image="graph_results.png">
+<figure width="853" height="453" image="graph_results.png">
 Figure &sect-num;.7. Graph Results Listener</figure>
 
 </section>
@@ -223,7 +223,7 @@ Click the Add button twice and enter the username and password details.
 Sometimes the login form contains additional hidden fields.
 These will need to be added as well.
 </p>
-<figure image="webtest/http_login.png">
+<figure width="687" height="661" image="webtest/http_login.png">
 Figure &sect-num;.8. Sample HTTP login request</figure>
 
 </section>
