@@ -30,12 +30,15 @@ import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
@@ -103,6 +106,7 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
         if (textToParse != null && textToParse.length() > 0
                 && this.regexpField.getText().length() > 0) {
             this.regexpResultField.setText(process(textToParse));
+            this.regexpResultField.setCaretPosition(0); // go to first line
         }
     }
 
@@ -176,6 +180,9 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
      */
     private JPanel createRegexpTasksPanel() {
         JPanel regexpActionPanel = new JPanel();
+        regexpActionPanel.setLayout(new BoxLayout(regexpActionPanel, BoxLayout.X_AXIS));
+        Border margin = new EmptyBorder(5, 5, 0, 5);
+        regexpActionPanel.setBorder(margin);
         regexpField = new JLabeledTextField(JMeterUtils.getResString("regexp_tester_field")); // $NON-NLS-1$
         regexpActionPanel.add(regexpField, BorderLayout.WEST);
 
