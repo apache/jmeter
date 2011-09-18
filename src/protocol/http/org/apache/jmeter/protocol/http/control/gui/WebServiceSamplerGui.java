@@ -20,29 +20,36 @@ package org.apache.jmeter.protocol.http.control.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JOptionPane;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.jmeter.gui.util.FilePanel;
+import org.apache.jmeter.gui.util.HorizontalPanel;
+import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.WebServiceSampler;
+import org.apache.jmeter.protocol.http.util.WSDLHelper;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jmeter.gui.util.FilePanel;
 import org.apache.jorphan.gui.JLabeledChoice;
-import org.apache.jorphan.gui.JLabeledTextArea;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.gui.layout.VerticalLayout;
-import org.apache.jmeter.protocol.http.util.WSDLHelper;
-import org.apache.jmeter.protocol.http.control.AuthManager;
 
 /**
  * This is the GUI for the webservice samplers. It extends AbstractSamplerGui
@@ -58,15 +65,15 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
 
     private final JLabeledTextField domain = new JLabeledTextField(JMeterUtils.getResString("web_server_domain")); // $NON-NLS-1$
 
-    private final JLabeledTextField protocol = new JLabeledTextField(JMeterUtils.getResString("protocol")); // $NON-NLS-1$
+    private final JLabeledTextField protocol = new JLabeledTextField(JMeterUtils.getResString("protocol"), 4); // $NON-NLS-1$
 
-    private final JLabeledTextField port = new JLabeledTextField(JMeterUtils.getResString("web_server_port")); // $NON-NLS-1$
+    private final JLabeledTextField port = new JLabeledTextField(JMeterUtils.getResString("web_server_port"), 4); // $NON-NLS-1$
 
     private final JLabeledTextField path = new JLabeledTextField(JMeterUtils.getResString("path")); // $NON-NLS-1$
 
     private final JLabeledTextField soapAction = new JLabeledTextField(JMeterUtils.getResString("webservice_soap_action")); // $NON-NLS-1$
 
-    private final JLabeledTextArea soapXml = new JLabeledTextArea(JMeterUtils.getResString("soap_data_title")); // $NON-NLS-1$
+    private JTextArea soapXml;
 
     private final JLabeledTextField wsdlField = new JLabeledTextField(JMeterUtils.getResString("wsdl_url")); // $NON-NLS-1$
 
@@ -82,7 +89,7 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
 
     private final JLabeledTextField randomXmlFile = new JLabeledTextField(JMeterUtils.getResString("get_xml_from_random")); // $NON-NLS-1$
 
-    private final JLabeledTextField connectTimeout = new JLabeledTextField(JMeterUtils.getResString("webservice_timeout")); // $NON-NLS-1$
+    private final JLabeledTextField connectTimeout = new JLabeledTextField(JMeterUtils.getResString("webservice_timeout"), 4); // $NON-NLS-1$
 
     /**
      * checkbox for memory cache.
@@ -102,12 +109,12 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
     /**
      * text field for the proxy host
      */
-    private JLabeledTextField proxyHost = new JLabeledTextField(JMeterUtils.getResString("webservice_proxy_host")); // $NON-NLS-1$
+    private JTextField proxyHost;
 
     /**
      * text field for the proxy port
      */
-    private JLabeledTextField proxyPort = new JLabeledTextField(JMeterUtils.getResString("webservice_proxy_port")); // $NON-NLS-1$
+    private JTextField proxyPort;
 
     /**
      * Text note about read response and its usage.
@@ -205,53 +212,150 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
 
         // MAIN PANEL
         JPanel mainPanel = new JPanel();
-        Border margin = new EmptyBorder(10, 10, 5, 10);
-        mainPanel.setBorder(margin);
-        mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.BOTH));
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        
+        mainPanel.add(createTopPanel(), BorderLayout.NORTH);
+        mainPanel.add(createMessagePanel(), BorderLayout.CENTER);
+        mainPanel.add(createBottomPanel(), BorderLayout.SOUTH);
+        this.add(mainPanel);
+    }
+
+    private final JPanel createTopPanel() {
+        JPanel topPanel = new JPanel();
+        topPanel.setLayout(new VerticalLayout(5, VerticalLayout.BOTH));
+        
+        JPanel wsdlHelper = new JPanel();
+        wsdlHelper.setLayout(new BoxLayout(wsdlHelper, BoxLayout.Y_AXIS));
+        wsdlHelper.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+                JMeterUtils.getResString("webservice_configuration_wizard"))); // $NON-NLS-1$
 
         // Button for browsing webservice wsdl
         JPanel wsdlEntry = new JPanel();
-        mainPanel.add(wsdlEntry);
+        wsdlEntry.setLayout(new BoxLayout(wsdlEntry, BoxLayout.X_AXIS));
+        Border margin = new EmptyBorder(0, 5, 0, 5);
+        wsdlEntry.setBorder(margin);
+        wsdlHelper.add(wsdlEntry);
         wsdlEntry.add(wsdlField);
         wsdlEntry.add(wsdlButton);
         wsdlButton.addActionListener(this);
 
         // Web Methods
         JPanel listPanel = new JPanel();
+        listPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         JLabel selectLabel = new JLabel(JMeterUtils.getResString("webservice_methods")); // $NON-NLS-1$
         wsdlMethods = new JLabeledChoice();
-        mainPanel.add(listPanel);
+        wsdlHelper.add(listPanel);
         listPanel.add(selectLabel);
         listPanel.add(wsdlMethods);
         listPanel.add(selectButton);
         selectButton.addActionListener(this);
 
-        mainPanel.add(protocol);
-        mainPanel.add(domain);
-        mainPanel.add(port);
-        mainPanel.add(path);
-        mainPanel.add(connectTimeout);
-        mainPanel.add(soapAction);
-        // OPTIONAL TASKS
-        // we create a preferred size for the soap text area
-        // the width is the same as the soap file browser
-        Dimension pref = new Dimension(400, 200);
-        soapXml.setPreferredSize(pref);
-        mainPanel.add(soapXml);
-        mainPanel.add(soapXmlFile);
-        mainPanel.add(randomXmlFile);
-        mainPanel.add(memCache);
-        mainPanel.add(readResponse);
+        topPanel.add(wsdlHelper);
+        
+        JPanel urlPane = new JPanel();
+        urlPane.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        urlPane.add(protocol);
+        urlPane.add(Box.createRigidArea(new Dimension(5,0)));
+        urlPane.add(domain);
+        urlPane.add(Box.createRigidArea(new Dimension(5,0)));
+        urlPane.add(port);
+        urlPane.add(Box.createRigidArea(new Dimension(5,0)));
+        urlPane.add(connectTimeout);
+        topPanel.add(urlPane);
+        
+        topPanel.add(path);
+        topPanel.add(soapAction);
+        return topPanel;
+    }
+
+    private final JPanel createMessagePanel() {
+        JPanel msgPanel = new JPanel();
+        msgPanel.setLayout(new BorderLayout(5, 0));
+        msgPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+                JMeterUtils.getResString("webservice_message_soap"))); // $NON-NLS-1$
+
+        JPanel soapXmlPane = new JPanel();
+        soapXmlPane.setLayout(new BorderLayout(5, 0));
+        soapXmlPane.setBorder(BorderFactory.createTitledBorder(
+                JMeterUtils.getResString("soap_data_title"))); // $NON-NLS-1$
+        soapXmlPane.setPreferredSize(new Dimension(4, 4)); // Permit dynamic resize of TextArea
+        soapXml = new JTextArea();
+        soapXml.setLineWrap(true);
+        soapXml.setWrapStyleWord(true);
+        soapXml.setTabSize(4); // improve xml display
+        soapXmlPane.add(new JScrollPane(soapXml), BorderLayout.CENTER);
+        msgPanel.add(soapXmlPane, BorderLayout.CENTER);
+        
+        JPanel southPane = new JPanel();
+        southPane.setLayout(new BoxLayout(southPane, BoxLayout.Y_AXIS));
+        southPane.add(soapXmlFile);
+        JPanel randomXmlPane = new JPanel();
+        randomXmlPane.setLayout(new BorderLayout(5, 0));
+        randomXmlPane.setBorder(BorderFactory.createTitledBorder(
+                JMeterUtils.getResString("webservice_get_xml_from_random_title"))); // $NON-NLS-1$
+        randomXmlPane.add(randomXmlFile, BorderLayout.CENTER);
+        southPane.add(randomXmlPane);
+        msgPanel.add(southPane, BorderLayout.SOUTH);
+        return msgPanel;
+    }
+    
+    private final JPanel createBottomPanel() {
+        JPanel optionPane = new JPanel();
+        optionPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+                JMeterUtils.getResString("option"))); // $NON-NLS-1$
+        optionPane.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        JPanel ckboxPane = new HorizontalPanel();
+        ckboxPane.add(memCache, BorderLayout.WEST);
+        ckboxPane.add(readResponse, BorderLayout.CENTER);
         readResponse.setToolTipText(readToolTip);
+        optionPane.add(ckboxPane);
 
         // add the proxy elements
-        mainPanel.add(useProxy);
+        optionPane.add(getProxyServerPanel());
+        return optionPane;
+        
+    }
+    /**
+     * Create a panel containing the proxy server details
+     *
+     * @return the panel
+     */
+    private final JPanel getProxyServerPanel(){
+        JPanel proxyServer = new JPanel();
+        proxyServer.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        proxyServer.add(useProxy);
         useProxy.addActionListener(this);
         useProxy.setToolTipText(proxyToolTip);
-        mainPanel.add(proxyHost);
-        mainPanel.add(proxyPort);
+        proxyServer.add(Box.createRigidArea(new Dimension(5,0)));
+        proxyServer.add(getProxyHostPanel());
+        proxyServer.add(Box.createRigidArea(new Dimension(5,0)));
+        proxyServer.add(getProxyPortPanel());
+        return proxyServer;
+    }
+    
+    private JPanel getProxyHostPanel() {
+        proxyHost = new JTextField(12);
 
-        this.add(mainPanel);
+        JLabel label = new JLabel(JMeterUtils.getResString("web_server_domain")); // $NON-NLS-1$
+        label.setLabelFor(proxyHost);
+
+        JPanel panel = new JPanel(new BorderLayout(5, 0));
+        panel.add(label, BorderLayout.WEST);
+        panel.add(proxyHost, BorderLayout.CENTER);
+        return panel;
+    }
+    
+    private JPanel getProxyPortPanel() {
+        proxyPort = new JTextField(4);
+
+        JLabel label = new JLabel(JMeterUtils.getResString("web_server_port")); // $NON-NLS-1$
+        label.setLabelFor(proxyPort);
+
+        JPanel panel = new JPanel(new BorderLayout(5, 0));
+        panel.add(label, BorderLayout.WEST);
+        panel.add(proxyPort, BorderLayout.CENTER);
+
+        return panel;
     }
 
     /**
@@ -272,6 +376,7 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
         path.setText(sampler.getPath());
         soapAction.setText(sampler.getSoapAction());
         soapXml.setText(sampler.getXmlData());
+        soapXml.setCaretPosition(0); // go to 1st line
         soapXmlFile.setFilename(sampler.getXmlFile());
         randomXmlFile.setText(sampler.getXmlPathLoc());
         connectTimeout.setText(sampler.getTimeout());

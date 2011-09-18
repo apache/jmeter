@@ -555,7 +555,7 @@ Or set Content-Length to -1 to force chunked encoding.
 
 </component>
 
-<component name="WebService(SOAP) Request" index="&sect-num;.1.6"  width="460" height="781" screenshot="webservice_sampler.png">
+<component name="WebService(SOAP) Request" index="&sect-num;.1.6" screenshot="webservice_sampler.png">
 <description><p>This sampler has been tested with IIS Webservice running .NET 1.0 and .NET 1.1.
  It has been tested with SUN JWSDP, IBM webservices, Axis and gSoap toolkit for C/C++.
  The sampler uses Apache SOAP driver to serialize the message and set the header
@@ -612,18 +612,20 @@ If this is zero, then the request is marked as failed.
         <property name="Protocol" required="Yes">HTTP or HTTPS are acceptable protocol.</property>
         <property name="Server Name or IP" required="Yes">The hostname or IP address.</property>
         <property name="Port Number" required="Yes">Port Number.</property>
+        <property name="Timeout" required="No">Connection timeout.</property>
         <property name="Path" required="Yes">Path for the webservice.</property>
         <property name="SOAPAction" required="Yes">The SOAPAction defined in the webservice description or WSDL.</property>
         <property name="Soap/XML-RPC Data" required="Yes">The Soap XML message</property>
         <property name="Soap file" required="No">File containing soap message</property>
-        <property name="Message Folder" required="No">Folder containing soap files</property>
+        <property name="Message(s) Folder" required="No">Folder containing soap files. Files are choose randomly during test.</property>
         <property name="Memory cache" required="Yes">
         When using external files, setting this causes the file to be processed once and caches the result.
         This may use a lot of memory if there are many different large files.
         </property>
+        <property name="Read SOAP Response" required="No">Read the SOAP reponse (consumes performance). Permit to have assertions or post-processors</property>
         <property name="Use HTTP Proxy" required="No">Check box if http proxy should be used</property>
-        <property name="Proxy Host" required="No">Proxy hostname</property>
-        <property name="Proxy Port" required="No">Proxy host port</property>
+        <property name="Server Name or IP" required="No">Proxy hostname</property>
+        <property name="Port Number" required="No">Proxy host port</property>
         </properties>
 
 </component>
