@@ -81,7 +81,7 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
 
 </component>
 
-<component name="HTTP Request" index="&sect-num;.1.2" width="853" height="463" screenshot="http-request.png">
+<component name="HTTP Request" index="&sect-num;.1.2" width="911" height="642" screenshot="http-request.png">
 
 <description>
         <p>This sampler lets you send an HTTP/HTTPS request to a web server.  It
@@ -2537,7 +2537,7 @@ For a detailed description of how to use the monitor, please refer to
 </description>
 </component>
 
-<component name="Distribution Graph (alpha)" index="&sect-num;.3.11"  width="655" height="501" screenshot="distribution_graph.png">
+<component name="Distribution Graph (alpha)" index="&sect-num;.3.11"  width="819" height="626" screenshot="distribution_graph.png">
 <description>
 <p>The distribution graph will display a bar for every unique response time. Since the
 granularity of System.currentTimeMillis() is 10 milliseconds, the 90% threshold should be
@@ -3005,7 +3005,7 @@ to "/secret/index.html" and "/secret/index2.html".  The other HTTP request, name
 "/index.html".</p>
 
 <figure width="289" height="201" image="http-config/auth-manager-example1a.gif">Figure 10 - Test Plan</figure>
-<figure width="553" height="243" image="http-config/auth-manager-example1b.png">Figure 11 - Authorization Manager Control Panel</figure>
+<figure width="553" height="253" image="http-config/auth-manager-example1b.png">Figure 11 - Authorization Manager Control Panel</figure>
 
 <p>When we run the Test Plan, JMeter looks in the Authorization table for the URL it is requesting.  If the Base URL matches
 the URL, then JMeter passes this information along with the request.</p>
@@ -3481,7 +3481,7 @@ GUI that they can use while developing new JMeter components.</p>
     If the Assertion supports this option, then there will be an entry on the GUI which looks like the following:
     <figure width="533" height="55" image="assertion/assertionscope.png">Assertion Scope</figure>
     or the following
-    <figure width="765" height="55" image="assertion/assertionscopevar.png">Assertion Scope</figure>
+    <figure width="756" height="55" image="assertion/assertionscopevar.png">Assertion Scope</figure>
     If a sub-sampler fails and the main sample is successful,
     then the main sample will be set to failed status and an Assertion Result will be added.
     If the JMeter variable option is used, it is assumed to relate to the main sample, and
