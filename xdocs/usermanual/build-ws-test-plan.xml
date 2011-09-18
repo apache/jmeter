@@ -36,7 +36,7 @@ Also, you will tell the users to run their tests twice. So, the total number of
 requests is (5 users) x (1 requests) x (repeat 2 times) = 10 HTTP requests. To
 construct the Test Plan, you will use the following elements:
 <a href="test_plan.html#thread_group">Thread Group</a>,
-<complink name="WebService(SOAP) Request (Beta Code)"/>, and
+<complink name="WebService(SOAP) Request"/>, and
 <complink name="Graph Results"/>.</p>
 
 <p>If the sampler appears to be getting an error from the webservice, double check the
@@ -115,13 +115,12 @@ get a better idea of the differences.</p>
 
 <note>JMeter sends requests in the order that they appear in the tree.</note>
 
-<p>Start by adding the sampler <complink name="WebService(SOAP) Request (Beta Code)"/>
-to the Jakarta Users element (Add --&gt; Sampler --&gt; WebService(SOAP) Request
- (Beta Code) ).
+<p>Start by adding the sampler <complink name="WebService(SOAP) Request"/>
+to the Jakarta Users element (Add --&gt; Sampler --&gt; WebService(SOAP) Request).
 Then, select the webservice Request element in the tree and edit the following properties
 (see Figure &sect-num;.5):
 <ol>
-<li>Change the Name field to "WebService(SOAP) Request (Beta Code)".</li>
+<li>Change the Name field to "WebService(SOAP) Request".</li>
 <li>Enter the WSDL URL and click "Load WSDL".</li>
 </ol>
 </p>
