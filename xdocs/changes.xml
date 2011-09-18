@@ -56,10 +56,10 @@ In particular, it can cause a NullPointerException if there are two include cont
 but otherwise its behaviour is not consistent (or clearly specified).</p>
 
 <p>The If Controller may cause an infinte loop if the condition is always false from the first iteration. 
-A workaround is to add a sampler at the same level as (or superior to) the If Controller<.
+A workaround is to add a sampler at the same level as (or superior to) the If Controller.
 For example a Test Action sampler with 0 wait time (which doesn't generate a sample),
 or a Debug Sampler with all fields set to False (to reduce the sample size).
-/p>
+</p>
 
 <p>
 The menu item Options / Choose Language does not change all the displayed text to the new language.
