@@ -81,7 +81,7 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
 
 </component>
 
-<component name="HTTP Request" index="&sect-num;.1.2" screenshot="http-request.png">
+<component name="HTTP Request" index="&sect-num;.1.2" width="853" height="463" screenshot="http-request.png">
 
 <description>
         <p>This sampler lets you send an HTTP/HTTPS request to a web server.  It
@@ -555,7 +555,7 @@ Or set Content-Length to -1 to force chunked encoding.
 
 </component>
 
-<component name="WebService(SOAP) Request" index="&sect-num;.1.6" screenshot="webservice_sampler.png">
+<component name="WebService(SOAP) Request" index="&sect-num;.1.6" width="943" height="648" screenshot="webservice_sampler.png">
 <description><p>This sampler has been tested with IIS Webservice running .NET 1.0 and .NET 1.1.
  It has been tested with SUN JWSDP, IBM webservices, Axis and gSoap toolkit for C/C++.
  The sampler uses Apache SOAP driver to serialize the message and set the header
@@ -630,7 +630,7 @@ If this is zero, then the request is marked as failed.
 
 </component>
 
-<component name="LDAP Request" index="&sect-num;.1.7" screenshot="ldap_request.png">
+<component name="LDAP Request" index="&sect-num;.1.7" width="621" height="462" screenshot="ldap_request.png">
   <description>This Sampler lets you send a different Ldap request(Add, Modify, Delete and Search) to an LDAP server.
     <p>If you are going to send multiple requests to the same LDAP server, consider
       using an <complink name="LDAP Request Defaults"/>
@@ -711,7 +711,7 @@ If this is zero, then the request is marked as failed.
 
 </component>
 
-<component name="LDAP Extended Request" index="&sect-num;.1.8" screenshot="ldapext_request.png">
+<component name="LDAP Extended Request" index="&sect-num;.1.8" width="619" height="371" screenshot="ldapext_request.png">
   <description>This Sampler can send all 8 different LDAP request to an LDAP server. It is an extended version of the LDAP sampler,
   therefore it is harder to configure, but can be made much closer resembling a real LDAP session.
     <p>If you are going to send multiple requests to the same LDAP server, consider
@@ -1192,7 +1192,7 @@ For details, see <complink name="BSF Sampler"/>.
 </properties>
 </component>
 
-<component name="JMS Publisher" index="&sect-num;.1.13" screenshot="jmspublisher.png">
+<component name="JMS Publisher" index="&sect-num;.1.13" width="636" height="628" screenshot="jmspublisher.png">
 <note>BETA CODE - the code is still subject to change</note>
 	<description>
 		<p>
@@ -1262,7 +1262,7 @@ The following table shows some values which may be useful when configuring JMS:
 </p>
 </component>
 
-<component name="JMS Subscriber" index="&sect-num;.1.14"  screenshot="jmssubscriber.png">
+<component name="JMS Subscriber" index="&sect-num;.1.14"  width="682" height="439" screenshot="jmssubscriber.png">
 <note>BETA CODE - the code is still subject to change</note>
 	<description>
 		<p>
@@ -1538,7 +1538,7 @@ The current implementation is quite basic, and is mainly intended for debugging 
 </p>
 </component>
 
-<component name="Test Action" index="&sect-num;.1.18" screenshot="test_action.png">
+<component name="Test Action" index="&sect-num;.1.18" width="330" height="158" screenshot="test_action.png">
 <description>
 The Test Action sampler is a sampler that is intended for use in a conditional controller.
 Rather than generate a sample, the test element eithers pauses or stops the selected target.
@@ -1626,7 +1626,7 @@ Note: If the message body is not empty, and there is at least one attached file,
 	<br>Logic Controllers determine the order in which Samplers are processed.</br>
 </description>
 
-<component name="Simple Controller" index="&sect-num;.2.1" anchor="simple_controller" screenshot="logic-controller/simple-controller.png">
+<component name="Simple Controller" index="&sect-num;.2.1" anchor="simple_controller" width="330" height="77" screenshot="logic-controller/simple-controller.png">
 <description>
 <p>The Simple Logic Controller lets  you organize your Samplers and other
 Logic Controllers.  Unlike other Logic Controllers, this controller provides no functionality beyond that of a
@@ -1650,7 +1650,7 @@ is configured to store the results in a file named "simple-test.dat" in the curr
 </example>
 </component>
 
-<component name="Loop Controller" index="&sect-num;.2.2" anchor="loop" screenshot="logic-controller/loop-controller.png">
+<component name="Loop Controller" index="&sect-num;.2.2" anchor="loop" width="326" height="114" screenshot="logic-controller/loop-controller.png">
 <description><p>If you add Generative or Logic Controllers to a Loop Controller, JMeter will
 loop through them a certain number of times, in addition to the loop value you
 specified for the Thread Group.  For example, if you add one HTTP Request to a
@@ -1689,7 +1689,7 @@ is configured to store the results in a file named "loop-test.dat" in the curren
 
 </component>
 
-<component name="Once Only Controller" index="&sect-num;.2.3" anchor="once_only_controller" screenshot="logic-controller/once-only-controller.png">
+<component name="Once Only Controller" index="&sect-num;.2.3" anchor="once_only_controller" width="330" height="78" screenshot="logic-controller/once-only-controller.png">
 <description>
 <p>The Once Only Logic Controller tells JMeter to process the controller(s) inside it only once, and pass over any requests under it
 during further iterations through the test plan.</p>
@@ -1718,7 +1718,7 @@ Bug Page, Bug Page. Note, the File Reporter is configured to store the results i
 Thread Group or a Loop Controller is not currently defined. Odd things may happen.</note>
 </component>
 
-<component name="Interleave Controller" index="&sect-num;.2.4"  screenshot="logic-controller/interleave-controller.png">
+<component name="Interleave Controller" index="&sect-num;.2.4"  width="329" height="104" screenshot="logic-controller/interleave-controller.png">
 <description><p>If you add Generative or Logic Controllers to an Interleave Controller, JMeter will alternate among each of the
 other controllers for each loop iteration. </p>
 </description>
@@ -1790,7 +1790,7 @@ Note, the File Reporter is configured to store the results in a file named "inte
 </example>
 </component>
 
-<component name="Random Controller" index="&sect-num;.2.5" screenshot="logic-controller/random-controller.png">
+<component name="Random Controller" index="&sect-num;.2.5" width="328" height="100" screenshot="logic-controller/random-controller.png">
 <description>
 <p>The Random Logic Controller acts similarly to the Interleave Controller, except that
 instead of going in order through its sub-controllers and samplers, it picks one
@@ -1807,7 +1807,7 @@ what results any given interaction will give</note>
 
 
 
-<component name="Random Order Controller" index="&sect-num;.2.6" screenshot="randomordercontroller.png">
+<component name="Random Order Controller" index="&sect-num;.2.6" width="328" height="76" screenshot="randomordercontroller.png">
 	<description>
 		<p>The Random Order Controller is much like a Simple Controller in that it will execute each child
 		 element at most once, but the order of execution of the nodes will be random.</p>
@@ -1817,7 +1817,7 @@ what results any given interaction will give</note>
 </properties>
 </component>
 
-<component name="Throughput Controller" index="&sect-num;.2.7" screenshot="throughput_controller.png">
+<component name="Throughput Controller" index="&sect-num;.2.7" width="329" height="167" screenshot="throughput_controller.png">
 <description>
 <p>
 <b>This controller is badly named, as it does not control throughput.</b>
@@ -1838,7 +1838,7 @@ setting is reset when a parent Loop Controller restarts.
 
 </component>
 
-<component name="Runtime Controller" index="&sect-num;.2.8" screenshot="runtimecontroller.png">
+<component name="Runtime Controller" index="&sect-num;.2.8" width="328" height="100" screenshot="runtimecontroller.png">
 	<description>
 		<p>The Runtime Controller controls how long its children are allowed to run.
 		</p>
@@ -1849,7 +1849,7 @@ setting is reset when a parent Loop Controller restarts.
 </properties>
 </component>
 
-<component name="If Controller" index="&sect-num;.2.9" screenshot="ifcontroller.png">
+<component name="If Controller" index="&sect-num;.2.9" width="497" height="131" screenshot="ifcontroller.png">
 	<description>
 		<p>The If Controller allows the user to control whether the test elements below it (its children) are run or not.</p>
 		<p>
@@ -1910,7 +1910,7 @@ setting is reset when a parent Loop Controller restarts.
 
 
 
-<component name="While Controller" index="&sect-num;.2.10" screenshot="whilecontroller.png">
+<component name="While Controller" index="&sect-num;.2.10" width="362" height="102" screenshot="whilecontroller.png">
 	<description>
 <p>
 The While Controller runs its children until the condition is "false".
@@ -1942,7 +1942,7 @@ For example:
 </properties>
 </component>
 
-<component name="Switch Controller" index="&sect-num;.2.11" screenshot="switchcontroller.png">
+<component name="Switch Controller" index="&sect-num;.2.11" width="361" height="106" screenshot="switchcontroller.png">
 	<description>
 <p>
 The Switch Controller acts like the <complink name="Interleave Controller"/> 
@@ -1968,7 +1968,7 @@ If there is no default, then no element is selected, and the controller will not
 </properties>
 </component>
 
-<component name="ForEach Controller" index="&sect-num;.2.12" anchor="loop" screenshot="logic-controller/foreach-controller.png">
+<component name="ForEach Controller" index="&sect-num;.2.12" anchor="loop" width="380" height="152" screenshot="logic-controller/foreach-controller.png">
 <description><p>A ForEach controller loops through the values of a set of related variables. 
 When you add samplers (or controllers) to a ForEach controller, every sample sample (or controller)
 is executed one or more times, where during every loop the variable has a new value.
@@ -2040,7 +2040,7 @@ which clearly won't match. Thus the For 2 Sampler will not be run.
 </example>
 </component>
 
-<component name="Module Controller" index="&sect-num;.2.13" screenshot="module_controller.png">
+<component name="Module Controller" index="&sect-num;.2.13" width="504" height="217" screenshot="module_controller.png">
 <description>
 <p>
 The Module Controller provides a mechanism for substituting test plan fragments into the current test plan at run-time.
@@ -2078,7 +2078,7 @@ otherwise a duplicate may be accidentally created when new elements are added to
 </properties>
 </component>
 
-<component name="Include Controller" index="&sect-num;.2.14" screenshot="includecontroller.png">
+<component name="Include Controller" index="&sect-num;.2.14" width="417" height="130" screenshot="includecontroller.png">
 	<description>
 <p>
 The include controller is designed to use an external jmx file. To use it, create a Test Fragment 
@@ -2109,7 +2109,7 @@ attempts to open the fileName relative to the JMX launch directory (versions of 
 </properties>
 </component>
 
-<component name="Transaction Controller" index="&sect-num;.2.15" screenshot="transactioncontroller.png">
+<component name="Transaction Controller" index="&sect-num;.2.15" width="378" height="129" screenshot="transactioncontroller.png">
 	<description>
 	    <p>
 	    The Transaction Controller generates an additional
@@ -2157,7 +2157,7 @@ attempts to open the fileName relative to the JMX launch directory (versions of 
 </properties>
 </component>
 
-<component name="Recording Controller" index="&sect-num;.2.16" screenshot="logic-controller/recording-controller.png">
+<component name="Recording Controller" index="&sect-num;.2.16" width="420" height="79" screenshot="logic-controller/recording-controller.png">
 <description>
 <p>The Recording Controller is a place holder indicating where the proxy server should
 record samples to.  During test run, it has no effect, similar to the Simple Controller.  But during
@@ -2293,7 +2293,7 @@ Note that cookies, method and the query string are saved as part of the "Sampler
 <description>No Description</description>
 </component>
 
-<component name="Graph Results" index="&sect-num;.3.3"  screenshot="graph_results.png">
+<component name="Graph Results" index="&sect-num;.3.3" width="853" height="453" screenshot="graph_results.png">
 <description><p>The Graph Results listener generates a simple graph that plots all sample times.  Along
 the bottom of the graph, the current sample (black), the current average of all samples(blue), the
 current standard deviation (red), and the current throughput rate (green) are displayed in milliseconds.</p>
@@ -2344,7 +2344,7 @@ are part of the test plan.</p></description>
 </links>
 </component>
 
-<component name="View Results Tree" index="&sect-num;.3.6" screenshot="view_results_tree.png">
+<component name="View Results Tree" index="&sect-num;.3.6" width="869" height="654" screenshot="view_results_tree.png">
 <description>The View Results Tree shows a tree of all sample responses, allowing you to view the
 response for any sample.  In addition to showing the response, you can see the time it took to get
 this response, and some response codes.
@@ -2431,8 +2431,8 @@ See Figure 9b (below).
 <p>
 	The Control Panel (above) shows an example of an HTML display.
 	Figure 9 (below) shows an example of an XML display.
-<figure image="view_results_tree_xml.png">Figure 9 Sample XML display</figure>
-<figure image="view_results_tree_regex.png">Figure 9a Sample Regexp Test display</figure>
+<figure width="873" height="653" image="view_results_tree_xml.png">Figure 9 Sample XML display</figure>
+<figure width="858" height="643" image="view_results_tree_regex.png">Figure 9a Sample Regexp Test display</figure>
 </p>
 </component>
 
@@ -3117,7 +3117,7 @@ cookie table entries.</property>
 
 </component>
 
-<component name="HTTP Request Defaults" index="&sect-num;.4.5" 
+<component name="HTTP Request Defaults" index="&sect-num;.4.5" width="853" height="463" 
          screenshot="http-config/http-request-defaults.png">
 <description><p>This element lets you set default values that your HTTP Request controllers use.  For example, if you are
 creating a Test Plan with 25 HTTP Request controllers and all of the requests are being sent to the same server,
