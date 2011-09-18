@@ -2293,7 +2293,7 @@ Note that cookies, method and the query string are saved as part of the "Sampler
 <description>No Description</description>
 </component>
 
-<component name="Graph Results" index="&sect-num;.3.3"  width="605" height="435" screenshot="graph_results.png">
+<component name="Graph Results" index="&sect-num;.3.3"  screenshot="graph_results.png">
 <description><p>The Graph Results listener generates a simple graph that plots all sample times.  Along
 the bottom of the graph, the current sample (black), the current average of all samples(blue), the
 current standard deviation (red), and the current throughput rate (green) are displayed in milliseconds.</p>
@@ -2344,7 +2344,7 @@ are part of the test plan.</p></description>
 </links>
 </component>
 
-<component name="View Results Tree" index="&sect-num;.3.6"  width="778" height="642" screenshot="view_results_tree.png">
+<component name="View Results Tree" index="&sect-num;.3.6" screenshot="view_results_tree.png">
 <description>The View Results Tree shows a tree of all sample responses, allowing you to view the
 response for any sample.  In addition to showing the response, you can see the time it took to get
 this response, and some response codes.
@@ -2354,12 +2354,13 @@ It does not show any headers (such as Host) that may be added by the HTTP protoc
 There are several ways to view the response, selectable by a drop-down box at the bottom of the left hand panel.</p>
 <ul>
 <li>HTML</li>
-<li>HTML (download embedded resources)</li>
+<li>HTML (download resources)</li>
 <li>JSON</li>
 <li>Regexp Tester</li>
 <li>Text</li>
 <li>XML</li>
 </ul>
+<p>Scroll automatically? option permit to have last node display in tree selection</p>
 <p>
 Additional renderers can be created.
 The class must implement the interface <code>org.apache.jmeter.visualizers.ResultRenderer</code>
@@ -2430,8 +2431,8 @@ See Figure 9b (below).
 <p>
 	The Control Panel (above) shows an example of an HTML display.
 	Figure 9 (below) shows an example of an XML display.
-<figure width="751" height="461" image="view_results_tree_xml.png">Figure 9 Sample XML display</figure>
-<figure width="824" height="637" image="view_results_tree_regex.png">Figure 9a Sample Regexp Test display</figure>
+<figure image="view_results_tree_xml.png">Figure 9 Sample XML display</figure>
+<figure image="view_results_tree_regex.png">Figure 9a Sample Regexp Test display</figure>
 </p>
 </component>
 
