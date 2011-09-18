@@ -229,6 +229,10 @@ Match ExAct case or (?i)ArBiTrARY(?-i) case
 
 <section name="&sect-num;.6 Testing Regular Expressions" anchor="testing_expressions">
 <p>
+Since JMeter 2.4, the listener <a href="component_reference.html#View_Results_Tree">View Results Tree</a>
+include a RegExp Tester to test regular expressions directly on sampler response data. 
+</p>
+<p>
 There is a <a href="http://jakarta.apache.org/oro/demo.html">demo</a> applet for Apache JMeter ORO.
 </p>
 <p>
