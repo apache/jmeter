@@ -69,7 +69,7 @@ in the tree, if you have not already selected it. You should now see the Thread
 Group Control Panel in the right section of the JMeter window (see Figure &sect-num;.1
 below)</p>
 
-<figure width="609" height="387" image="webtest/threadgroup.png">
+<figure width="612" height="266" image="webtest/threadgroup.png">
 Figure &sect-num;.1. Thread Group with Default Values</figure>
 
 <p>Start by providing a more descriptive name for our Thread Group. In the name
