@@ -225,8 +225,8 @@ public class SampleResult implements Serializable {
 
     transient final boolean useNanoTime; // Allow test code to change the default
     
-    private static long initOffset(){
-        if (USENANOTIME){
+    private long initOffset(){
+        if (useNanoTime){
             return System.currentTimeMillis() - sampleNsClockInMs();
         } else {
             return Long.MIN_VALUE;
