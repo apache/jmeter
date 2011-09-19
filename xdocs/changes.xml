@@ -177,6 +177,7 @@ This can be overridden by setting the JMeter property <b>httpclient4.retrycount<
 <h2>Non-functional changes</h2>
 <ul>
 <li>Bug 49976 - FormCharSetFinder visibility is default instead of public. </li>
+<li>Bug 50917 - Property CookieManager.save.cookies not honored when set from test plan</li>
 </ul>
 
 </section> 
