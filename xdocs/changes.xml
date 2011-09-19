@@ -39,7 +39,7 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 <li>HttpClient4 sampler now re-uses connections properly (previously it would use one per sample, which could quickly cause resource exhaustion).</li>
 <li>Various fixes to JMS samplers</li>
 <li>Functions are no longer spuriously invoked when used with a Configuration element</li>
-<li>WebService sampler GUI has been re-organize for better design and user-friendly. Some improments on WSDL configuration assistant</li>
+<li>WebService sampler GUI has been re-organized for better design and more user-friendliness. Some improments on WSDL configuration assistant</li>
 </ul>
 
 
