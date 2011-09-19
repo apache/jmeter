@@ -18,9 +18,10 @@
 
 package org.apache.jmeter.protocol.jms.client;
 
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -35,8 +36,7 @@ import org.apache.log.Logger;
  */
 public class InitialContextFactory {
 
-    //GuardedBy("this")
-    private static final HashMap<String, Context> MAP = new HashMap<String, Context>();
+    private static final ConcurrentHashMap<String, Context> MAP = new ConcurrentHashMap<String, Context>();
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -51,7 +51,7 @@ public class InitialContextFactory {
      * @return the context, never null
      * @throws NamingException 
      */
-    public static synchronized Context lookupContext(String initialContextFactory, 
+    public static Context lookupContext(String initialContextFactory, 
             String providerUrl, boolean useAuth, String securityPrincipal, String securityCredentials) throws NamingException {
         String cacheKey = createKey(initialContextFactory ,providerUrl, securityPrincipal, securityCredentials);
         Context ctx = MAP.get(cacheKey);
@@ -72,7 +72,8 @@ public class InitialContextFactory {
             } catch (Exception e) {
                 throw new NamingException(e.toString());
             }
-            MAP.put(cacheKey, ctx);
+            // we want to return the context that is actually in the map
+            ctx = MAP.putIfAbsent(cacheKey, ctx);
         }
         return ctx;
     }
@@ -131,13 +132,12 @@ public class InitialContextFactory {
             return lookupContext(initialContextFactory, providerUrl, useAuth, securityPrincipal, securityCredentials);
         }
     }
+    
     /**
      * clear all the InitialContext objects.
      */
-    public synchronized static void close() { // TODO - why is this not used?
-        Iterator<?> itr = MAP.keySet().iterator();
-        while (itr.hasNext()) {
-            Context ctx = MAP.get(itr.next());
+    public static void close() {
+        for (Context ctx : MAP.values()) {
             try {
                 ctx.close();
             } catch (NamingException e) {
