@@ -2786,7 +2786,21 @@ Generates a summary of the test run so far to the log file and/or
 standard output. Both running and differential totals are shown.
 Output is generated every n seconds (default 3 minutes) on the appropriate
 time boundary, so that multiple test runs on the same time will be synchronised.
-The interval is defined by the property "summariser.interval" - see jmeter.properties.
+See jmeter.properties file for the summariser configuration items:
+<pre>
+# Define the following property to automatically start a summariser with that name
+# (applies to non-GUI mode only)
+#summariser.name=summary
+#
+# interval between summaries (in seconds) default 3 minutes
+#summariser.interval=180
+#
+# Write messages to log file
+#summariser.log=true
+#
+# Write messages to System.out
+#summariser.out=true
+</pre>
 This element is mainly intended for batch (non-GUI) runs.
 The output looks like the following:
 <pre>
