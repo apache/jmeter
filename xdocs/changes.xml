@@ -96,6 +96,7 @@ This can be overridden by setting the JMeter property <b>httpclient4.retrycount<
 <li>WebService(SOAP) request - add a connect timeout to get the wsdl used to populate Web Methods when server doesn't response</li>
 <li>Bug 51841 - JMS : If an error occurs in ReceiveSubscriber constructor or Publisher, then Connections will stay open</li>
 <li>Bug 51691 - Authorization does not work for JMS Publisher and JMS Subscriber</li>
+<li>Bug 51840 - JMS : Cache of InitialContext has some issues</li>
 </ul>
 
 <h3>Controllers</h3>
