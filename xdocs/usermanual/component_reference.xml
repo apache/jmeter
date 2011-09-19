@@ -38,6 +38,21 @@
 	To avoid these artefacts, use the form <br></br>, which Java does seem to handle OK.
 
  -->
+<section name="&sect-num;.0 Introduction" anchor="introduction">
+<description>
+<p>
+
+</p>
+ <note>
+ Several test elements use JMeter properties to control their behaviour.
+ These properties are normally resolved when the class is loaded.
+ This generally occurs before the test plan starts, so it's not possible to change the settings by using the __setProperty() function.
+</note>
+<p>
+</p>
+</description>
+</section>
+ 
 <section name="&sect-num;.1 Samplers" anchor="samplers">
 <description>
 	<p>
