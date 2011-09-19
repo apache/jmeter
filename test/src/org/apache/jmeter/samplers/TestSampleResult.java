@@ -211,19 +211,21 @@ public class TestSampleResult extends TestCase {
             long overallTime = resWithSubResults.currentTimeInMillis() - beginTest;
 
             // Check the sample times
+            final long fudge1 = 15;
             long allsamplesTime = sampleWithSubResultsTime + sample1Time + sample2Time;
-            if (totalTime+3 < allsamplesTime) { // Add fudge factor
-                fail("Total+3: "+totalTime+" < sum(samples): "+ allsamplesTime);
+            if (totalTime + fudge1 < allsamplesTime) { // Add fudge factor
+                fail("Total: " + totalTime + " " + fudge1 + " < sum(samples): "+ allsamplesTime);
             }
             /*
              * The granularity of System.currentTimeMillis() - plus the fact that the nanoTime()
              * offset is now calculated for each sampleResult - means that there can be some
              * minor variation in the value returned by SampleResult#currentTimeInMillis().
              * 
-             * Allow for this by adding a fudge factor - 3ms seems to be sufficient.
+             * Allow for this by adding a fudge factor
             */
-            if (totalTime > overallTime+3) {
-                fail("Total: "+totalTime+" > 3 + overall time: "+ overallTime);
+            long fudge2 = 13;
+            if (totalTime > overallTime + fudge2) {
+                fail("Total: "+totalTime+" > overall time: "+ overallTime + " + " + fudge2);
             }
             
             // Check that calculator gets the correct statistics from the sample
