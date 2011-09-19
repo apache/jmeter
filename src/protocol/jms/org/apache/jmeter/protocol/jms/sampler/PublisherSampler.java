@@ -36,6 +36,7 @@ import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.protocol.jms.Utils;
 import org.apache.jmeter.protocol.jms.control.gui.JMSPublisherGui;
 import org.apache.jmeter.protocol.jms.client.ClientPool;
+import org.apache.jmeter.protocol.jms.client.InitialContextFactory;
 import org.apache.jmeter.protocol.jms.client.Publisher;
 
 import org.apache.jorphan.logging.LoggingManager;
@@ -84,7 +85,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
     /**
      * the implementation calls testEnded() without any parameters.
      */
-    public void testEnded(String test) {
+    public void testEnded(String host) {
         testEnded();
     }
 
@@ -96,6 +97,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
     public void testEnded() {
         log.debug("PublisherSampler.testEnded called");
         ClientPool.clearClient();
+        InitialContextFactory.close();
     }
 
     public void testStarted() {

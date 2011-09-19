@@ -25,11 +25,14 @@ import javax.jms.Message;
 import javax.jms.TextMessage;
 import javax.naming.NamingException;
 
+import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.protocol.jms.Utils;
+import org.apache.jmeter.protocol.jms.client.InitialContextFactory;
 import org.apache.jmeter.protocol.jms.client.ReceiveSubscriber;
 import org.apache.jmeter.protocol.jms.control.gui.JMSSubscriberGui;
 import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -48,7 +51,7 @@ import org.apache.log.Logger;
 // Note: originally the code did use the ClientPool to "share" subscribers, however since the
 // key was "this" and each sampler is unique - nothing was actually shared.
 
-public class SubscriberSampler extends BaseJMSSampler implements Interruptible, ThreadListener {
+public class SubscriberSampler extends BaseJMSSampler implements Interruptible, ThreadListener, TestListener {
 
     private static final long serialVersionUID = 240L;
 
@@ -375,4 +378,38 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         setProperty(STOP_BETWEEN, selected, false);                
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void testEnded() {
+        InitialContextFactory.close();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void testEnded(String host) {
+        testEnded();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void testIterationStart(LoopIterationEvent event) {
+        //NOOP
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void testStarted() {
+        //NOOP
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void testStarted(String host) {
+        // NOOP        
+    }
 }
