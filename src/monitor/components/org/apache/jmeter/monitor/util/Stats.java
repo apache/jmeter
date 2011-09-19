@@ -118,7 +118,7 @@ public class Stats {
                 return WARNING;
             } else if (per >= ACTIVE_PER && per <= WARNING_PER) {
                 return ACTIVE;
-            } else if (per < ACTIVE_PER && per > HEALTHY_PER) {
+            } else if (per < ACTIVE_PER && per >= HEALTHY_PER) {
                 return HEALTHY;
             } else {
                 return DEAD;
