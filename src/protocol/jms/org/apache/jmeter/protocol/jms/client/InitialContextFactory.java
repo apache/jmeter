@@ -18,8 +18,6 @@
 
 package org.apache.jmeter.protocol.jms.client;
 
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
