@@ -51,8 +51,6 @@ import org.apache.jorphan.gui.GuiUtils;
  */
 public class TextBoxDialoger implements ActionListener {
     
-    private static final long serialVersionUID = 241L;
-    
     private static final String CANCEL_COMMAND = "cancel_dialog"; // $NON-NLS-1$
     
     private static final String SAVE_CLOSE_COMMAND = "save_close_dialog"; // $NON-NLS-1$
