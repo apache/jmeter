@@ -27,8 +27,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-import java.util.SimpleTimeZone;
+import java.util.TimeZone;
 
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpMethod;
@@ -134,6 +135,7 @@ public class TestCacheManager extends JMeterTestCase {
     
     private static final String LOCAL_HOST = "http://localhost/";
     private static final String EXPECTED_ETAG = "0xCAFEBABEDEADBEEF";
+    private static final TimeZone GMT = TimeZone.getTimeZone("GMT");
     private CacheManager cacheManager;
     private String currentTimeInGMT;
     private URL url;
@@ -148,9 +150,8 @@ public class TestCacheManager extends JMeterTestCase {
     }
 
     private String makeDate(Date d){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
-        simpleDateFormat.setTimeZone(new SimpleTimeZone(0, "GMT"));
-        simpleDateFormat.applyPattern("EEE, dd MMM yyyy HH:mm:ss z");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
+        simpleDateFormat.setTimeZone(GMT);
         return simpleDateFormat.format(d);
     }
 
