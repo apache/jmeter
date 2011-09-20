@@ -154,67 +154,67 @@ public class TestSampleResult extends TestCase {
             // page representing the first sample.
 
             // Sample that will get two sub results, simulates a web page load 
-            SampleResult resWithSubResults = new SampleResult(nanoTime);            
+            SampleResult parent = new SampleResult(nanoTime);            
 
-            long beginTest = resWithSubResults.currentTimeInMillis();
+            long beginTest = parent.currentTimeInMillis();
 
-            resWithSubResults.sampleStart();
+            parent.sampleStart();
             Thread.sleep(100);
-            resWithSubResults.setBytes(300);
-            resWithSubResults.setSampleLabel("sample with two subresults");
-            resWithSubResults.setSuccessful(true);
-            resWithSubResults.sampleEnd();
-            long sampleWithSubResultsTime = resWithSubResults.getTime();
+            parent.setBytes(300);
+            parent.setSampleLabel("Parent Sample");
+            parent.setSuccessful(true);
+            parent.sampleEnd();
+            long parentElapsed = parent.getTime();
 
             // Sample with no sub results, simulates an image download
-            SampleResult resNoSubResults1 = new SampleResult(nanoTime);            
-            resNoSubResults1.sampleStart();
+            SampleResult child1 = new SampleResult(nanoTime);            
+            child1.sampleStart();
             Thread.sleep(100);
-            resNoSubResults1.setBytes(100);
-            resNoSubResults1.setSampleLabel("sample with no subresults");
-            resNoSubResults1.setSuccessful(true);
-            resNoSubResults1.sampleEnd();
-            long sample1Time = resNoSubResults1.getTime();
+            child1.setBytes(100);
+            child1.setSampleLabel("Child1 Sample");
+            child1.setSuccessful(true);
+            child1.sampleEnd();
+            long child1Elapsed = child1.getTime();
 
-            assertTrue(resNoSubResults1.isSuccessful());
-            assertEquals(100, resNoSubResults1.getBytes());
-            assertEquals("sample with no subresults", resNoSubResults1.getSampleLabel());
-            assertEquals(1, resNoSubResults1.getSampleCount());
-            assertEquals(0, resNoSubResults1.getSubResults().length);
+            assertTrue(child1.isSuccessful());
+            assertEquals(100, child1.getBytes());
+            assertEquals("Child1 Sample", child1.getSampleLabel());
+            assertEquals(1, child1.getSampleCount());
+            assertEquals(0, child1.getSubResults().length);
             
             // Sample with no sub results, simulates an image download 
-            SampleResult resNoSubResults2 = new SampleResult(nanoTime);            
-            resNoSubResults2.sampleStart();
+            SampleResult child2 = new SampleResult(nanoTime);            
+            child2.sampleStart();
             Thread.sleep(100);
-            resNoSubResults2.setBytes(200);
-            resNoSubResults2.setSampleLabel("sample with no subresults");
-            resNoSubResults2.setSuccessful(true);
-            resNoSubResults2.sampleEnd();
-            long sample2Time = resNoSubResults2.getTime();
+            child2.setBytes(200);
+            child2.setSampleLabel("Child2 Sample");
+            child2.setSuccessful(true);
+            child2.sampleEnd();
+            long child2Elapsed = child2.getTime();
 
-            assertTrue(resNoSubResults2.isSuccessful());
-            assertEquals(200, resNoSubResults2.getBytes());
-            assertEquals("sample with no subresults", resNoSubResults2.getSampleLabel());
-            assertEquals(1, resNoSubResults2.getSampleCount());
-            assertEquals(0, resNoSubResults2.getSubResults().length);
+            assertTrue(child2.isSuccessful());
+            assertEquals(200, child2.getBytes());
+            assertEquals("Child2 Sample", child2.getSampleLabel());
+            assertEquals(1, child2.getSampleCount());
+            assertEquals(0, child2.getSubResults().length);
             
             // Now add the subsamples to the sample
-            resWithSubResults.addSubResult(resNoSubResults1);
-            resWithSubResults.addSubResult(resNoSubResults2);
-            assertTrue(resWithSubResults.isSuccessful());
-            assertEquals(600, resWithSubResults.getBytes());
-            assertEquals("sample with two subresults", resWithSubResults.getSampleLabel());
-            assertEquals(1, resWithSubResults.getSampleCount());
-            assertEquals(2, resWithSubResults.getSubResults().length);
-            long totalTime = resWithSubResults.getTime();
+            parent.addSubResult(child1);
+            parent.addSubResult(child2);
+            assertTrue(parent.isSuccessful());
+            assertEquals(600, parent.getBytes());
+            assertEquals("Parent Sample", parent.getSampleLabel());
+            assertEquals(1, parent.getSampleCount());
+            assertEquals(2, parent.getSubResults().length);
+            long parentElapsedTotal = parent.getTime();
             
-            long overallTime = resWithSubResults.currentTimeInMillis() - beginTest;
+            long overallTime = parent.currentTimeInMillis() - beginTest;
 
             // Check the sample times
             final long fudge1 = 15;
-            long allsamplesTime = sampleWithSubResultsTime + sample1Time + sample2Time;
-            if (totalTime + fudge1 < allsamplesTime) { // Add fudge factor
-                fail("Total: " + totalTime + " " + fudge1 + " < sum(samples): "+ allsamplesTime);
+            long sumSamplesTimes = parentElapsed + child1Elapsed + child2Elapsed;
+            if (parentElapsedTotal + fudge1 < sumSamplesTimes) { // Add fudge factor
+                fail("Total: " + parentElapsedTotal + " " + fudge1 + " < sum(samples): "+ sumSamplesTimes);
             }
             /*
              * The granularity of System.currentTimeMillis() - plus the fact that the nanoTime()
@@ -224,18 +224,18 @@ public class TestSampleResult extends TestCase {
              * Allow for this by adding a fudge factor
             */
             long fudge2 = 13;
-            if (totalTime > overallTime + fudge2) {
-                fail("Total: "+totalTime+" > overall time: "+ overallTime + " + " + fudge2);
+            if (parentElapsedTotal > overallTime + fudge2) {
+                fail("Total: "+parentElapsedTotal+" > overall time: "+ overallTime + " + " + fudge2);
             }
             
             // Check that calculator gets the correct statistics from the sample
             Calculator calculator = new Calculator();
-            calculator.addSample(resWithSubResults);
+            calculator.addSample(parent);
             assertEquals(600, calculator.getTotalBytes());
             assertEquals(1, calculator.getCount());
-            assertEquals(1d / (totalTime / 1000d), calculator.getRate(),0.0001d); // Allow for some margin of error
+            assertEquals(1d / (parentElapsedTotal / 1000d), calculator.getRate(),0.0001d); // Allow for some margin of error
             // Check that the throughput uses the time elapsed for the sub results
-            assertFalse(1d / (sampleWithSubResultsTime / 1000d) <= calculator.getRate());
+            assertFalse(1d / (parentElapsed / 1000d) <= calculator.getRate());
         }
 
         // TODO some more invalid sequence tests needed
