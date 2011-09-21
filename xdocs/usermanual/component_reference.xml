@@ -1425,7 +1425,7 @@ completed, so the net effect was similar to the MessageListener.onMessage() stra
 
 
 
-<component name="JUnit Request" index="&sect-num;.1.16"  width="457" height="507" screenshot="junit_sampler.png">
+<component name="JUnit Request" index="&sect-num;.1.16"  width="397" height="536" screenshot="junit_sampler.png">
 <description>
 The current implementation supports standard Junit convention and extensions. It also
 includes extensions like oneTimeSetUp and oneTimeTearDown. The sampler works like the
@@ -1440,7 +1440,8 @@ In versions of JMeter after 2.3.1, you can also use the "user.classpath" propert
 <br></br>7. The sampler reports unexpected exceptions as errors.
 There are some important differences between standard JUnit test runners and JMeter's
 implementation. Rather than make a new instance of the class for each test, JMeter
-creates 1 instance per sampler and reuses it.<br></br>
+creates 1 instance per sampler and reuses it.
+This can be changed with checkbox "Create a new instance per sample".<br></br>
 The current implementation of the sampler will try to create an instance using the string constructor first. If the test class does not declare a string constructor, the sampler will look for an empty constructor. Example below:&lt;br>
 &lt;br>
 Empty Constructor:&lt;br>
@@ -1486,6 +1487,7 @@ Here are some general guidelines for writing Junit tests so they work well with 
      this option should be checked.</property>
   <property name="Append assertion errors" required="Yes">Whether or not to append assertion errors to the response message.</property>
   <property name="Append runtime exceptions" required="Yes">Whether or not to append runtime exceptions to the response message. Only applies if "Append assertion errors" is not selected.</property>
+  <property name="Create a new Instance per sample" required="Yes">Whether or not to create a new JUnit instance for each sample. Defaults to false, meaning JUnit TestCase is created one and reused.</property>
 </properties>
 <p>
 The following JUnit4 annotations are recognised:
