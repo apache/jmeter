@@ -141,14 +141,30 @@ public class TestSampleResult extends TestCase {
         }
 
         public void testSubResultsTrue() throws Exception {
-            testSubResults(true);
+            testSubResults(true, 0);
         }
 
         public void testSubResultsFalse() throws Exception {
-            testSubResults(false);
+            testSubResults(false, 0);
         }
 
-        private void testSubResults(boolean nanoTime) throws Exception {
+        public void testSubResultsTruePause() throws Exception {
+            testSubResults(true, 100);
+        }
+
+        public void testSubResultsFalsePause() throws Exception {
+            testSubResults(false, 100);
+        }
+
+        // temp test case for exploring settings
+        public void xtestUntilFail() throws Exception {
+            while(true) {
+                testSubResultsTruePause();
+                testSubResultsFalsePause();
+            }
+        }
+
+        private void testSubResults(boolean nanoTime, long pause) throws Exception {
             // This test tries to emulate a http sample, with two
             // subsamples, representing images that are downloaded for the
             // page representing the first sample.
@@ -181,7 +197,14 @@ public class TestSampleResult extends TestCase {
             assertEquals("Child1 Sample", child1.getSampleLabel());
             assertEquals(1, child1.getSampleCount());
             assertEquals(0, child1.getSubResults().length);
-            
+
+            long actualPause = 0;
+            if (pause > 0) {
+                long t1 = parent.currentTimeInMillis();
+                Thread.sleep(pause);
+                actualPause = parent.currentTimeInMillis() - t1;
+            }
+
             // Sample with no sub results, simulates an image download 
             SampleResult child2 = new SampleResult(nanoTime);            
             child2.sampleStart();
@@ -210,7 +233,7 @@ public class TestSampleResult extends TestCase {
             
             long overallTime = parent.currentTimeInMillis() - beginTest;
 
-            long sumSamplesTimes = parentElapsed + child1Elapsed + child2Elapsed;
+            long sumSamplesTimes = parentElapsed + child1Elapsed + actualPause + child2Elapsed;
             
             /*
              * Parent elapsed total should be no smaller than the sum of the individual samples.
@@ -218,7 +241,7 @@ public class TestSampleResult extends TestCase {
              */
             
             long diff = parentElapsedTotal - sumSamplesTimes;
-            long maxDiff = nanoTime ? 1 : 16; // TimeMillis has granularity of 10-20
+            long maxDiff = nanoTime ? 2 : 16; // TimeMillis has granularity of 10-20
             if (diff < 0 || diff > maxDiff) {
                 fail("ParentElapsed: " + parentElapsedTotal + " - " + " sum(samples): " + sumSamplesTimes
                         + " = " + diff + " not in [0," + maxDiff + "]; nanotime=" + nanoTime);
@@ -243,7 +266,6 @@ public class TestSampleResult extends TestCase {
             assertEquals(1d / (parentElapsedTotal / 1000d), calculator.getRate(),0.0001d); // Allow for some margin of error
             // Check that the throughput uses the time elapsed for the sub results
             assertFalse(1d / (parentElapsed / 1000d) <= calculator.getRate());
-            System.out.print(nanoTime? 'T' : 'F');
         }
 
         // TODO some more invalid sequence tests needed
