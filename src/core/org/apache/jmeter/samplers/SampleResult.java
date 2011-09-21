@@ -538,7 +538,7 @@ public class SampleResult implements Serializable {
         subResult.setThreadName(tn); // TODO is this really necessary?
 
         // Extend the time to the end of the added sample
-        setEndTime(Math.max(getEndTime(), subResult.getEndTime()));
+        setEndTime(Math.max(getEndTime(), subResult.getEndTime() + nanoTimeOffset - subResult.nanoTimeOffset)); // Bug 51855
         // Include the byte count for the added sample
         setBytes(getBytes() + subResult.getBytes());
         addRawSubResult(subResult);
