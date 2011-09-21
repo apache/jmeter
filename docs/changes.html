@@ -157,7 +157,7 @@ History of Previous Changes
 </table>
 </p>
 <h1>
-Version 2.5
+Version 2.5.1
 </h1>
 <h2>
 Summary of main changes
@@ -166,72 +166,31 @@ Summary of main changes
 
 
 <li>
-The HTTP implementation can now be selected at run-time, and JMeter now also supports Apache HttpComponents HttpClient 4.x.
-Note that Commons HttpClient 3.1 is no longer actively developed, and support may be removed from JMeter in a future release.
-
+HttpClient4 sampler now re-uses connections properly (previously it would use one per sample, which could quickly cause resource exhaustion).
 </li>
 
 
 <li>
-The HTTP sampler now allows concurrent downloads of embedded resources in an HTML page
+Various fixes to JMS samplers
 </li>
 
 
 <li>
-The HTTP Sampler can now report the size of a request before decompression.
+Functions are no longer spuriously invoked when used with a Configuration element
 </li>
 
 
 <li>
-The JMS and Mail samplers have been improved.
+WebService sampler GUI has been re-organized for better design and more user-friendliness. Some improments on WSDL configuration assistant
 </li>
 
 
 <li>
-The new Test Fragment Test Element makes using Include Controllers easier
-</li>
-
-
-<li>
-There are various improvements to the View Results Tree Listener
-</li>
-
-
-<li>
-Bug 30563 - Thread Group should have a start next loop option on Sample Error
-</li>
-
-
-<li>
-There are two new Thread Group types - setUp and tearDown - which are run before and after the main Thread groups.
-</li>
-
-
-<li>
-Client-Server mode now supports external stop/shutdown via UDP
-<br>
-</br>
- 
-multiple JMeter server instances can be started on the same host without needing to change the port property.
-</li>
-
-
-<li>
-Bug 50516 - "Host" header in HTTP Header Manager is not included in generated HTTP request
+Better handling of test shutdown. System.exit now only called if there is no other option; even this can be disabled.
 </li>
 
 
 </ul>
-<p>
-
-
-<ul>
-
-
-</ul>
-
-
-</p>
 <h2>
 Known bugs
 </h2>
@@ -242,8 +201,15 @@ In particular, it can cause a NullPointerException if there are two include cont
 
 </p>
 <p>
-Once Only controller behaves correctly under a Thread Group or Loop Controller,
+The Once Only controller behaves correctly under a Thread Group or Loop Controller,
 but otherwise its behaviour is not consistent (or clearly specified).
+</p>
+<p>
+The If Controller may cause an infinite loop if the condition is always false from the first iteration. 
+A workaround is to add a sampler at the same level as (or superior to) the If Controller.
+For example a Test Action sampler with 0 wait time (which doesn't generate a sample),
+or a Debug Sampler with all fields set to False (to reduce the sample size).
+
 </p>
 <p>
 
@@ -257,19 +223,13 @@ Incompatible changes
 </h2>
 <p>
 
-Unsupported methods are no longer converted to GET by the Commons HttpClient sampler.
-
-</p>
-<p>
-
-Removed method public static long currentTimeInMs().
-This has been replaced by the instance method public long currentTimeInMillis().
-
-</p>
-<p>
-
-ProxyControl.getSamplerTypeName() now returns a String rather than an int.
-This is internal to the workings of the JMeter Proxy & its GUI, so should not affect any user code.
+The HttpClient4 sampler as implemented in version 2.5 used a retry count of 3.
+As this can hide server errors, JMeter now sets the retry count to 0 to prevent any automatic retries.
+This can be overridden by setting the JMeter property 
+<b>
+httpclient4.retrycount
+</b>
+.
 
 </p>
 <h2>
@@ -282,44 +242,37 @@ HTTP Samplers and Proxy
 
 
 <li>
-Bug 50178 - HeaderManager added as child of Thread Group can create concatenated HeaderManager names and OutOfMemoryException
+Fix HttpClient 4 sampler so it reuses HttpClient instances and connections where possible.
 </li>
 
 
 <li>
-Bug 50392 - value is trimmed when sending the request in Multipart
+Bug 51750 - Retrieve all embedded resources doesn't follow IFRAME
 </li>
 
 
 <li>
-Bug 50686 - HeaderManager logging too verbose when merging instances
+Change the default so the HttpClient 4 sampler does not retry
 </li>
 
 
 <li>
-Bug 50963 - AjpSampler throws java.lang.StringIndexOutOfBoundsException
+Bug 51752 - HTTP Cache is broken when using "Retrieve all embedded resources" with concurrent pool
 </li>
 
 
 <li>
-Bug 50516 - "Host" header in HTTP Header Manager is not included in generated HTTP request
+Bug 39219 - HTTP Server: You can't stop it after File->Open
 </li>
 
 
 <li>
-Bug 50544 - In Apache Common Log the HEAD requests cause problems.
+Bug 51775 - Port number duplicates in Host header when capturing by HttpClient (3.1 and 4.x)
 </li>
 
 
 <li>
-Bug 51268 - HTTPS request through an invalid proxy causes NullPointerException and does not show in result tree.
-Rather than delegating to the JMeter thread handler for "unexpected" failures, ensure all Exceptions generate a sample error.
-
-</li>
-
-
-<li>
-Bug 51275 - Cookie Panel clearGui() sets incorrect default policy in Java 1.6
+Bug 50617 - Monitor Results legend show "dead" server although values from the server are retrieved
 </li>
 
 
@@ -331,17 +284,42 @@ Other Samplers
 
 
 <li>
-Bug 50173 - JDBCSampler discards ResultSet from a PreparedStatement
+Bug 50424 - Web Methods drop down list box inconsistent
 </li>
 
 
 <li>
-Ensure JSR223 Sampler has access to the current SampleResult
+Bug 43293 - Java Request fields not cleared when creating new sampler
 </li>
 
 
 <li>
-Bug 50977 - Unable to set TCP Sampler for individual samples
+Bug 51830 - Webservice Soap Request triggers too many popups when Webservice WSDL URL is down
+</li>
+
+
+<li>
+WebService(SOAP) request - add a connect timeout to get the wsdl used to populate Web Methods when server doesn't response
+</li>
+
+
+<li>
+Bug 51841 - JMS : If an error occurs in ReceiveSubscriber constructor or Publisher, then Connections will stay open
+</li>
+
+
+<li>
+Bug 51691 - Authorization does not work for JMS Publisher and JMS Subscriber
+</li>
+
+
+<li>
+Bug 51840 - JMS : Cache of InitialContext has some issues
+</li>
+
+
+<li>
+Bug 47888 - JUnit Sampler re-uses test object
 </li>
 
 
@@ -353,17 +331,12 @@ Controllers
 
 
 <li>
-Bug 50032 - Last_Sample_Ok along with other controllers doesnt work correctly when the threadgroup has multiple loops
+If Controller - Fixed two regressions introduced by bug 50032 (see bug 50618 too)
 </li>
 
 
 <li>
-Bug 50080 - Transaction controller incorrectly creates samples including timer duration
-</li>
-
-
-<li>
-Bug 50134 - TransactionController : Reports bad response time when it contains other TransactionControllers
+If Controller - Catches a StackOverflowError when a condition returns always false (after at least one iteration with return true) See bug 50618
 </li>
 
 
@@ -374,21 +347,11 @@ Listeners
 <ul>
 
 
-<li>
-Bug 50367 - Clear / Clear all in View results tree does not clear selected element
-</li>
-
-
 </ul>
 <h3>
 Assertions
 </h3>
 <ul>
-
-
-<li>
-Bug 51488 - Assertion: Variable name scope is shared among all assertions (and Bug 51255)
-</li>
 
 
 </ul>
@@ -399,7 +362,7 @@ Functions
 
 
 <li>
-Bug 50568 - Function __FileToString(): Could not read file when encoding option is blank/empty
+Bug 48943 - Functions are invoked additional times when used in combination with a Config Element
 </li>
 
 
@@ -411,7 +374,7 @@ I18N
 
 
 <li>
-Bug 50811 - Incomplete Spanish translation
+WebService(SOAP) request - add I18N for some labels
 </li>
 
 
@@ -423,79 +386,32 @@ General
 
 
 <li>
-Bug 49734 - Null pointer exception on stop Threads command (Run>Stop)
+Bug 51831 - Cannot disable UDP server or change the maximum UDP port
 </li>
 
 
 <li>
-Bug 49666 - CSV Header read as data after EOF
+Bug 51821 - Add short-cut for Enabling / Disabling (sub)tree or branches in test plan.
 </li>
 
 
 <li>
-Bug 45703 - Synchronizing Timer
+Bug 47921 - Variables not released for GC after JMeterThread exits.
 </li>
 
 
 <li>
-Bug 50088 - fix getAvgPageBytes in SamplingStatCalculator so it returns what it should
+Bug 51839 - "... end of run" printed prematurely
 </li>
 
 
 <li>
-Bug 50203 Cannot set property "jmeter.save.saveservice.default_delimiter=\t"
+Bug 51847 - Some Junit tests are Locale sensitive and fail if Locale is different from US
 </li>
 
 
 <li>
-mirror-server.sh - fix classpath to use : separator (not ;)
-</li>
-
-
-<li>
-Bug 50286 - URL Re-writing Modifier: extracted jsessionid value is incorrect when is between XML tags
-</li>
-
-
-<li>
-
-System.nanoTime() tends to drift relative to System.currentTimeMillis().
-Change SampleResult to recalculate offset each time.
-Also enable reversion to using System.currentTimeMillis() only.
-
-</li>
-
-
-<li>
-Bug 50425 - Remove thread groups from Controller add menu
-</li>
-
-
-<li>
-
-Bug 50675 - CVS Data Set Config incompatible with Remote Start
-Fixed RMI startup to provide location of JMX file relative to user.dir.
-
-</li>
-
-
-<li>
-Bug 50221 - Renaming elements in the tree does not resize label
-</li>
-
-
-<li>
-Bug 51002 - Stop Thread if CSV file is not available. JMeter now treats IOError as EOF.
-</li>
-
-
-<li>
-Define sun.net.http.allowRestrictedHeaders=true by default. This fixes Bug 51238.
-</li>
-
-
-<li>
-Bug 51645 - CSVDataSet does not read UTF-8 files when file.encoding is UTF-8
+Bug 51855 - Parent samples may have slightly inaccurate elapsed times
 </li>
 
 
@@ -510,35 +426,7 @@ HTTP Samplers
 
 
 <li>
-AJP Sampler now implements Interruptible
-</li>
-
-
-<li>
-Allow HTTP implementation to be selected at run-time
-</li>
-
-
-<li>
-Bug 50684 - Optionally disable Content-Type and Transfer-Encoding in Multipart POST
-</li>
-
-
-<li>
-Bug 50943 - Allowing concurrent downloads of embedded resources in html page
-</li>
-
-
-<li>
-Bug 50170 - Bytes reported by http sampler is after GUnZip
-<br>
-</br>
-Add optional properties to allow change the method to get response size
-</li>
-
-
-<li>
-Hiding the proxy password on HTTP Sampler (just on GUI, not in JMX file)
+Bug 51380 - Control reuse of cached SSL Context from iteration to iteration
 </li>
 
 
@@ -550,52 +438,17 @@ Other samplers
 
 
 <li>
-Bug 49622 - Allow sending messages without a subject (SMTP Sampler)
+Beanshell Sampler now supports Interruptible interface
 </li>
 
 
 <li>
-Bug 49603 - Allow accepting expired certificates on Mail Reader Sampler
+Bug 51605 - WebService(SOAP) Request - WebMethod field value changes surreptitiously for all the requests when a value is selected in a request
 </li>
 
 
 <li>
-Bug 49775 - Allow sending messages without a body
-</li>
-
-
-<li>
-Bug 49862 - Improve SMTPSampler Request output.
-</li>
-
-
-<li>
-Bug 50268 - Adds static and dynamic destinations to JMS Publisher
-</li>
-
-
-<li>
-JMS Subscriber - Add dynamic destination
-</li>
-
-
-<li>
-Bug 50666 - JMSSubscriber: support for durable subscriptions
-</li>
-
-
-<li>
-Bug 50937 - TCP Sampler does not provide for / honor connect timeout
-</li>
-
-
-<li>
-Bug 50569 - Jdbc Request Sampler to optionally store result set object data
-</li>
-
-
-<li>
-Bug 51011 - Mail Reader: upon authentication failure, tell what you tried
+WebService(SOAP) Request - Reorganized GUI for better design and more user-friendliness
 </li>
 
 
@@ -606,11 +459,6 @@ Controllers
 <ul>
 
 
-<li>
-Bug 50475 - Introduction of a Test Fragment Test Element for a better Include flow
-</li>
-
-
 </ul>
 <h3>
 Listeners
@@ -619,27 +467,12 @@ Listeners
 
 
 <li>
-View Results Tree - Add a dialog's text box on "Sampler result tab > Parsed" to display the long value with a double click on cell
+Bug 42246 - Need for a 'auto-scroll' option in "View Results Tree" and "Assertion Results"
 </li>
 
 
 <li>
-Bug 37156 - Formatted view of Request in Results Tree
-</li>
-
-
-<li>
-Bug 49365 - Allow result set to be written to file in a path relative to the loaded script
-</li>
-
-
-<li>
-Bug 50579 - Error count is long, sample count is int. Changed sample count to long.
-</li>
-
-
-<li>
-View Results Tree - Add new size fields: response headers and response body (in bytes) - derived from Bug 43363
+View Results Tree: Regexp Tester - little improvements on user interface
 </li>
 
 
@@ -650,21 +483,6 @@ Timers, Assertions, Config, Pre- & Post-Processors
 <ul>
 
 
-<li>
-Bug 48015 - Proposal new icons for pre-processor, post-processor and assertion elements
-</li>
-
-
-<li>
-Bug 50962 - SizeAssertionGui validation prevents the use of variables for the size
-</li>
-
-
-<li>
-Size Assertion - Add response size scope (full, headers, body, code, message) - derived from Bug 43363
-</li>
-
-
 </ul>
 <h3>
 Functions
@@ -672,21 +490,11 @@ Functions
 <ul>
 
 
-<li>
-Bug 49975 - New function returning the name of the current sampler
-</li>
-
-
 </ul>
 <h3>
 I18N
 </h3>
 <ul>
-
-
-<li>
-Add French translation for the new labels and reduce size for some labels (by abbreviation) on HTTP Sample
-</li>
 
 
 </ul>
@@ -697,53 +505,7 @@ General
 
 
 <li>
-Bug 30563 - Thread Group should have a start next loop option on Sample Error
-</li>
-
-
-<li>
-Bug 50347 - Eclipse setup instructions should remind user to download dependent jars
-</li>
-
-
-<li>
-Bug 50490 - Setup and Post Thread Group enhancements for better test flow.
-</li>
-
-
-<li>
-All BeansShell test elements now have the script variables "prev" and "Label" defined.
-</li>
-
-
-<li>
-Bug 50708 - Classpath jar order in NewDriver not alphabetically
-</li>
-
-
-<li>
-Bug 50659 - JMeter server does not support concurrent tests - prevent client from starting another
-</li>
-
-
-<li>
-Added remote shutdown functionality
-</li>
-
-
-<li>
-Client JMeter engine now supports external stop/shutdown via UDP
-</li>
-
-
-<li>
-UDP shutdown can now use a range of ports, from jmeterengine.nongui.port=4445 to jmeterengine.nongui.maxport=4455,
-allowing multiple JMeter instances on the same host without needing to change the port property.
-</li>
-
-
-<li>
-Updated to httpcore 4.1.3 and httpclient 4.1.2
+Bug 51822 - (part 1) save 1 invocation of GuiPackage#getCurrentGui
 </li>
 
 
@@ -755,27 +517,12 @@ Non-functional changes
 
 
 <li>
-Bug 50008 - Allow BatchSampleSender to be subclassed
+Bug 49976 - FormCharSetFinder visibility is default instead of public. 
 </li>
 
 
 <li>
-Bug 50450 - use System.array copy in jacobi solver as, being native, is more performant.
-</li>
-
-
-<li>
-Bug 50487 - runSerialTest verifies objects that never need persisting
-</li>
-
-
-<li>
-Use Thread.setDefaultUncaughtExceptionHandler() instead of private ThreadGroup
-</li>
-
-
-<li>
-Update to Commons Net 3.0
+Bug 50917 - Property CookieManager.save.cookies not honored when set from test plan
 </li>
 
 

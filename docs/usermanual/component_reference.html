@@ -140,6 +140,9 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </table>
 <br>
 <ul>
+<li><a href="#introduction">18.0 Introduction</a></li>
+<ul>
+</ul>
 <li><a href="#samplers">18.1 Samplers</a></li>
 <ul>
 <li><a href="#FTP_Request">FTP Request</a></li>
@@ -297,6 +300,47 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <li><a href="#Bar_Chart">Bar Chart</a></li>
 </ul>
 </ul>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#525D76">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="introduction"><strong>18.0 Introduction</strong></a><a class="sectionlink" href="#introduction" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<description>
+
+
+<p>
+
+
+
+</p>
+
+ 
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>
+ Several test elements use JMeter properties to control their behaviour.
+ These properties are normally resolved when the class is loaded.
+ This generally occurs before the test plan starts, so it's not possible to change the settings by using the __setProperty() function.
+
+</td></tr>
+</table>
+</p>
+
+
+<p>
+
+
+</p>
+
+
+</description>
+</blockquote>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
@@ -497,7 +541,7 @@ external scripts
 
         
 <li>
-frames
+frames, iframes
 </li>
 
         
@@ -661,6 +705,17 @@ https.sessioncontext.shared=true
 
 </pre>
 
+        By default, the SSL context is retained for the duration of the test.
+        In versions of JMeter from 2.5.1, the SSL session can be optionally reset for each test iteration.
+        To enable this, set the JMeter property:
+
+<pre>
+
+https.use.cached.ssl.context=false
+
+</pre>
+
+        Note: this does not apply to the Java HTTP implementation.
         
 </p>
 
@@ -717,7 +772,7 @@ If the request uses a technique called "URL Rewriting" to maintain sessions,
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img  src="../images/screenshots/http-request.png"></div>
+<div align="center"><img width='911' height='642' src="../images/screenshots/http-request.png"></div>
 <p>
 <b>Parameters</b>
 <a name="HTTP_Request_parms"/>
@@ -1265,6 +1320,24 @@ To return to settings before version 2.5, set the two properties to false.
 </table>
 </p>
 
+
+</p>
+<p>
+
+
+<b>
+Retry handling
+</b>
+<br>
+</br>
+
+In version 2.5 of JMeter, the HttpClient4 sampler used the default retry count, which was 3.
+As this can hide server errors, JMeter now sets the retry count to 0 to prevent any automatic retries.
+This can be overridden by setting the JMeter property 
+<b>
+httpclient4.retrycount
+</b>
+.
 
 </p>
 <p><b>See Also:</b>
@@ -1878,7 +1951,7 @@ If this is zero, then the request is marked as failed.
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='460' height='781' src="../images/screenshots/webservice_sampler.png"></div>
+<div align="center"><img width='943' height='648' src="../images/screenshots/webservice_sampler.png"></div>
 <p>
 <b>Parameters</b>
 <a name="WebService(SOAP)_Request_parms"/>
@@ -1938,6 +2011,14 @@ Yes
 </td>
 </tr>
 <tr>
+<td>Timeout</td>
+<td>Connection timeout.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
 <td>Path</td>
 <td>Path for the webservice.
 </td>
@@ -1970,8 +2051,8 @@ No
 </td>
 </tr>
 <tr>
-<td>Message Folder</td>
-<td>Folder containing soap files
+<td>Message(s) Folder</td>
+<td>Folder containing soap files. Files are choose randomly during test.
 </td>
 <td>
 No
@@ -1989,6 +2070,14 @@ Yes
 </td>
 </tr>
 <tr>
+<td>Read SOAP Response</td>
+<td>Read the SOAP reponse (consumes performance). Permit to have assertions or post-processors
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
 <td>Use HTTP Proxy</td>
 <td>Check box if http proxy should be used
 </td>
@@ -1997,7 +2086,7 @@ No
 </td>
 </tr>
 <tr>
-<td>Proxy Host</td>
+<td>Server Name or IP</td>
 <td>Proxy hostname
 </td>
 <td>
@@ -2005,7 +2094,7 @@ No
 </td>
 </tr>
 <tr>
-<td>Proxy Port</td>
+<td>Port Number</td>
 <td>Proxy host port
 </td>
 <td>
@@ -2042,7 +2131,7 @@ If you are going to send multiple requests to the same LDAP server, consider
  also using for Login and password.
   
 <p><b>Control Panel</b></p>
-<div align="center"><img  src="../images/screenshots/ldap_request.png"></div>
+<div align="center"><img width='621' height='462' src="../images/screenshots/ldap_request.png"></div>
 <p>
 There are two ways to create test cases for testing an LDAP Server.
 </p>
@@ -2322,7 +2411,7 @@ If you are going to send multiple requests to the same LDAP server, consider
 </p>
  
 <p><b>Control Panel</b></p>
-<div align="center"><img  src="../images/screenshots/ldapext_request.png"></div>
+<div align="center"><img width='619' height='371' src="../images/screenshots/ldapext_request.png"></div>
 <p>
 There are nine test operations defined. These operations are given below:
 </p>
@@ -3056,9 +3145,17 @@ BeanShell website.
 
 <p>
 
-The test element supports the ThreadListener and TestListener methods.
-These should be defined in the initialisation file.
+The test element supports the ThreadListener and TestListener interface methods.
+These must be defined in the initialisation file.
 See the file BeanShellListeners.bshrc for example definitions.
+
+</p>
+
+
+<p>
+
+From JMeter version 2.5.1, the BeanShell sampler also supports the Interruptible interface.
+The interrupt() method can be defined in the script or the init file.
 
 </p>
 
@@ -3921,7 +4018,7 @@ No
 
 	
 <p><b>Control Panel</b></p>
-<div align="center"><img  src="../images/screenshots/jmspublisher.png"></div>
+<div align="center"><img width='636' height='628' src="../images/screenshots/jmspublisher.png"></div>
 <p>
 <b>Parameters</b>
 <a name="JMS_Publisher_parms"/>
@@ -4232,7 +4329,7 @@ dynamicTopics/TOPICNAME
 
 	
 <p><b>Control Panel</b></p>
-<div align="center"><img  src="../images/screenshots/jmssubscriber.png"></div>
+<div align="center"><img width='682' height='439' src="../images/screenshots/jmssubscriber.png"></div>
 <p>
 <b>Parameters</b>
 <a name="JMS_Subscriber_parms"/>
@@ -4706,6 +4803,7 @@ In versions of JMeter after 2.3.1, you can also use the "user.classpath" propert
 There are some important differences between standard JUnit test runners and JMeter's
 implementation. Rather than make a new instance of the class for each test, JMeter
 creates 1 instance per sampler and reuses it.
+This can be changed with checkbox "Create a new instance per sample".
 <br>
 </br>
 
@@ -4741,7 +4839,7 @@ Here are some general guidelines for writing Junit tests so they work well with 
 5. Each sampler creates an instance of the test class, so write your test so the setup happens in oneTimeSetUp and oneTimeTearDown.
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='457' height='507' src="../images/screenshots/junit_sampler.png"></div>
+<div align="center"><img width='397' height='536' src="../images/screenshots/junit_sampler.png"></div>
 <p>
 <b>Parameters</b>
 <a name="JUnit_Request_parms"/>
@@ -4866,6 +4964,14 @@ Yes
 <tr>
 <td>Append runtime exceptions</td>
 <td>Whether or not to append runtime exceptions to the response message. Only applies if "Append assertion errors" is not selected.
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>Create a new Instance per sample</td>
+<td>Whether or not to create a new JUnit instance for each sample. Defaults to false, meaning JUnit TestCase is created one and reused.
 </td>
 <td>
 Yes
@@ -5199,7 +5305,7 @@ jmeterengine.threadstop.wait
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img  src="../images/screenshots/test_action.png"></div>
+<div align="center"><img width='330' height='158' src="../images/screenshots/test_action.png"></div>
 <p>
 <b>Parameters</b>
 <a name="Test_Action_parms"/>
@@ -5575,7 +5681,7 @@ storage device.
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img  src="../images/screenshots/logic-controller/simple-controller.png"></div>
+<div align="center"><img width='330' height='77' src="../images/screenshots/logic-controller/simple-controller.png"></div>
 <p>
 <b>Parameters</b>
 <a name="Simple_Controller_parms"/>
@@ -5638,7 +5744,7 @@ count to three, JMeter will send a total of 2 * 3 = 6 HTTP Requests.
 
 </p>
 <p><b>Control Panel</b></p>
-<div align="center"><img  src="../images/screenshots/logic-controller/loop-controller.png"></div>
+<div align="center"><img width='326' height='114' src="../images/screenshots/logic-controller/loop-controller.png"></div>
 <p>
 <b>Parameters</b>
 <a name="Loop_Controller_parms"/>
@@ -5751,7 +5857,7 @@ to login once to establish a session.
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img  src="../images/screenshots/logic-controller/once-only-controller.png"></div>
+<div align="center"><img width='330' height='78' src="../images/screenshots/logic-controller/once-only-controller.png"></div>
 <p>
 <b>Parameters</b>
 <a name="Once_Only_Controller_parms"/>
@@ -5822,7 +5928,7 @@ other controllers for each loop iteration.
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img  src="../images/screenshots/logic-controller/interleave-controller.png"></div>
+<div align="center"><img width='329' height='104' src="../images/screenshots/logic-controller/interleave-controller.png"></div>
 <p>
 <b>Parameters</b>
 <a name="Interleave_Controller_parms"/>
@@ -6085,7 +6191,7 @@ what results any given interaction will give
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img  src="../images/screenshots/logic-controller/random-controller.png"></div>
+<div align="center"><img width='328' height='100' src="../images/screenshots/logic-controller/random-controller.png"></div>
 <p>
 <b>Parameters</b>
 <a name="Random_Controller_parms"/>
@@ -6123,7 +6229,7 @@ The Random Order Controller is much like a Simple Controller in that it will exe
 
 	
 <p><b>Control Panel</b></p>
-<div align="center"><img  src="../images/screenshots/randomordercontroller.png"></div>
+<div align="center"><img width='328' height='76' src="../images/screenshots/randomordercontroller.png"></div>
 <p>
 <b>Parameters</b>
 <a name="Random_Order_Controller_parms"/>
@@ -6177,7 +6283,7 @@ setting is reset when a parent Loop Controller restarts.
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img  src="../images/screenshots/throughput_controller.png"></div>
+<div align="center"><img width='329' height='167' src="../images/screenshots/throughput_controller.png"></div>
 <p>
 <table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
 <tr><td>The Throughput Controller can yield very complex behavior when combined with other controllers - in particular with interleave or random controllers as parents (also very useful).
@@ -6245,7 +6351,7 @@ The Runtime Controller controls how long its children are allowed to run.
 
 	
 <p><b>Control Panel</b></p>
-<div align="center"><img  src="../images/screenshots/runtimecontroller.png"></div>
+<div align="center"><img width='328' height='100' src="../images/screenshots/runtimecontroller.png"></div>
 <p>
 <b>Parameters</b>
 <a name="Runtime_Controller_parms"/>
@@ -6330,7 +6436,7 @@ ${__jexl(${VAR} == 23)}
 
 	
 <p><b>Control Panel</b></p>
-<div align="center"><img  src="../images/screenshots/ifcontroller.png"></div>
+<div align="center"><img width='497' height='131' src="../images/screenshots/ifcontroller.png"></div>
 <p>
 <b>Parameters</b>
 <a name="If_Controller_parms"/>
@@ -6534,7 +6640,7 @@ ${_P(property)} - where property is set to "false" somewhere else
 
 	
 <p><b>Control Panel</b></p>
-<div align="center"><img  src="../images/screenshots/whilecontroller.png"></div>
+<div align="center"><img width='362' height='102' src="../images/screenshots/whilecontroller.png"></div>
 <p>
 <b>Parameters</b>
 <a name="While_Controller_parms"/>
@@ -6609,7 +6715,7 @@ If there is no default, then no element is selected, and the controller will not
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img  src="../images/screenshots/switchcontroller.png"></div>
+<div align="center"><img width='361' height='106' src="../images/screenshots/switchcontroller.png"></div>
 <p>
 <b>Parameters</b>
 <a name="Switch_Controller_parms"/>
@@ -6711,7 +6817,7 @@ This would be the case if the Regular Expression returned no matches.
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img  src="../images/screenshots/logic-controller/foreach-controller.png"></div>
+<div align="center"><img width='380' height='152' src="../images/screenshots/logic-controller/foreach-controller.png"></div>
 <p>
 <b>Parameters</b>
 <a name="ForEach_Controller_parms"/>
@@ -6916,7 +7022,7 @@ otherwise a duplicate may be accidentally created when new elements are added to
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img  src="../images/screenshots/module_controller.png"></div>
+<div align="center"><img width='504' height='217' src="../images/screenshots/module_controller.png"></div>
 <p>
 <table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
 <tr><td>The Module Controller should not be used with remote testing or non-gui testing in conjunction with Workbench components since the Workbench test elements are not part of test plan .jmx files.  Any such test will fail.
@@ -7016,7 +7122,7 @@ attempts to open the fileName relative to the JMX launch directory (versions of 
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img  src="../images/screenshots/includecontroller.png"></div>
+<div align="center"><img width='417' height='130' src="../images/screenshots/includecontroller.png"></div>
 <p>
 <b>Parameters</b>
 <a name="Include_Controller_parms"/>
@@ -7123,7 +7229,7 @@ The generated sample is only regarded as successful if all its sub-samples are s
 
 	
 <p><b>Control Panel</b></p>
-<div align="center"><img  src="../images/screenshots/transactioncontroller.png"></div>
+<div align="center"><img width='378' height='129' src="../images/screenshots/transactioncontroller.png"></div>
 <p>
 <b>Parameters</b>
 <a name="Transaction_Controller_parms"/>
@@ -7188,7 +7294,7 @@ be saved under the Recording Controller.
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img  src="../images/screenshots/logic-controller/recording-controller.png"></div>
+<div align="center"><img width='420' height='79' src="../images/screenshots/logic-controller/recording-controller.png"></div>
 <p>
 <b>Parameters</b>
 <a name="Recording_Controller_parms"/>
@@ -7598,7 +7704,7 @@ that factored out delays and JMeter's processing, it would be unclear what you c
 number.
 </p>
 <p><b>Control Panel</b></p>
-<div align="center"><img width='605' height='435' src="../images/screenshots/graph_results.png"></div>
+<div align="center"><img width='853' height='453' src="../images/screenshots/graph_results.png"></div>
 <p>
 The following table briefly describes the items on the graph. 
 Further details on the precise meaning of the statistical terms can be found on the web
@@ -7745,7 +7851,7 @@ HTML
 
 
 <li>
-HTML (download embedded resources)
+HTML (download resources)
 </li>
 
 
@@ -7770,6 +7876,11 @@ XML
 
 
 </ul>
+
+
+<p>
+Scroll automatically? option permit to have last node display in tree selection
+</p>
 
 
 <p>
@@ -7903,18 +8014,18 @@ See Figure 9b (below).
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='778' height='642' src="../images/screenshots/view_results_tree.png"></div>
+<div align="center"><img width='869' height='654' src="../images/screenshots/view_results_tree.png"></div>
 <p>
 
 	The Control Panel (above) shows an example of an HTML display.
 	Figure 9 (below) shows an example of an XML display.
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='751' height='461' src="../images/screenshots/view_results_tree_xml.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='873' height='653' src="../images/screenshots/view_results_tree_xml.png"><br>
 <font size="-1">Figure 9 Sample XML display
 </font></td></tr></table></p>
 
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='824' height='637' src="../images/screenshots/view_results_tree_regex.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='858' height='643' src="../images/screenshots/view_results_tree_regex.png"><br>
 <font size="-1">Figure 9a Sample Regexp Test display
 </font></td></tr></table></p>
 
@@ -8227,7 +8338,7 @@ know for sure is to use a profiling tool.
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='655' height='501' src="../images/screenshots/distribution_graph.png"></div>
+<div align="center"><img width='819' height='626' src="../images/screenshots/distribution_graph.png"></div>
 </td></tr>
 <tr><td><br></td></tr>
 </table>
@@ -8982,7 +9093,25 @@ Generates a summary of the test run so far to the log file and/or
 standard output. Both running and differential totals are shown.
 Output is generated every n seconds (default 3 minutes) on the appropriate
 time boundary, so that multiple test runs on the same time will be synchronised.
-The interval is defined by the property "summariser.interval" - see jmeter.properties.
+See jmeter.properties file for the summariser configuration items:
+
+<pre>
+
+# Define the following property to automatically start a summariser with that name
+# (applies to non-GUI mode only)
+#summariser.name=summary
+#
+# interval between summaries (in seconds) default 3 minutes
+#summariser.interval=180
+#
+# Write messages to log file
+#summariser.log=true
+#
+# Write messages to System.out
+#summariser.out=true
+
+</pre>
+
 This element is mainly intended for batch (non-GUI) runs.
 The output looks like the following:
 
@@ -9585,7 +9714,7 @@ to "/secret/index.html" and "/secret/index2.html".  The other HTTP request, name
 </font></td></tr></table></p>
 
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='553' height='243' src="../images/screenshots/http-config/auth-manager-example1b.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='553' height='253' src="../images/screenshots/http-config/auth-manager-example1b.png"><br>
 <font size="-1">Figure 11 - Authorization Manager Control Panel
 </font></td></tr></table></p>
 
@@ -9905,7 +10034,7 @@ JMeter 2.3 and later treat all port values equally; a sampler that does not spec
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img  src="../images/screenshots/http-config/http-request-defaults.png"></div>
+<div align="center"><img width='853' height='463' src="../images/screenshots/http-config/http-request-defaults.png"></div>
 <p>
 <b>Parameters</b>
 <a name="HTTP_Request_Defaults_parms"/>
@@ -11239,7 +11368,7 @@ prev.getSubResults()
 
     or the following
     
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='765' height='55' src="../images/screenshots/assertion/assertionscopevar.png"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='756' height='55' src="../images/screenshots/assertion/assertionscopevar.png"><br>
 <font size="-1">Assertion Scope
 </font></td></tr></table></p>
 
