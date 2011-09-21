@@ -131,6 +131,7 @@ implements ChangeListener, ActionListener, ItemListener
     private JCheckBox appendError = new JCheckBox(JMeterUtils.getResString("junit_append_error")); //$NON-NLS-1$
     private JCheckBox appendExc = new JCheckBox(JMeterUtils.getResString("junit_append_exception")); //$NON-NLS-1$
     private JCheckBox junit4 = new JCheckBox(JMeterUtils.getResString("junit_junit4")); //$NON-NLS-1$
+    private JCheckBox createInstancePerSample = new JCheckBox(JMeterUtils.getResString("junit_create_instance_per_sample")); //$NON-NLS-1$
 
     /** A combo box allowing the user to choose a test class. */
     private JComboBox classnameCombo;
@@ -234,12 +235,14 @@ implements ChangeListener, ActionListener, ItemListener
         panel.add(doSetup);
         panel.add(appendError);
         panel.add(appendExc);
+        panel.add(createInstancePerSample);
         return panel;
     }
 
     private void initGui(){
         appendError.setSelected(false);
         appendExc.setSelected(false);
+        createInstancePerSample.setSelected(false);
         doSetup.setSelected(false);
         junit4.setSelected(false);
         filterpkg.setText(""); //$NON-NLS-1$
@@ -295,6 +298,7 @@ implements ChangeListener, ActionListener, ItemListener
         sampler.setDoNotSetUpTearDown(doSetup.isSelected());
         sampler.setAppendError(appendError.isSelected());
         sampler.setAppendException(appendExc.isSelected());
+        sampler.setCreateOneInstancePerSample(createInstancePerSample.isSelected());
         sampler.setJunit4(junit4.isSelected());
     }
 
@@ -343,6 +347,7 @@ implements ChangeListener, ActionListener, ItemListener
         doSetup.setSelected(sampler.getDoNotSetUpTearDown());
         appendError.setSelected(sampler.getAppendError());
         appendExc.setSelected(sampler.getAppendException());
+        createInstancePerSample.setSelected(sampler.getCreateOneInstancePerSample());
     }
 
     private void setupMethods(){
