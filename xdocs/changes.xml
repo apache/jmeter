@@ -40,6 +40,7 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 <li>Various fixes to JMS samplers</li>
 <li>Functions are no longer spuriously invoked when used with a Configuration element</li>
 <li>WebService sampler GUI has been re-organized for better design and more user-friendliness. Some improments on WSDL configuration assistant</li>
+<li>Better handling of test shutdown. System.exit now only called if there is no other option; even this can be disabled.</li>
 </ul>
 
 
