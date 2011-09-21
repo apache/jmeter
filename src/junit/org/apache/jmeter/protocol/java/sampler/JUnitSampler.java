@@ -69,6 +69,8 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
     private static final String APPEND_ERROR = "junitsampler.append.error";
     private static final String APPEND_EXCEPTION = "junitsampler.append.exception";
     private static final String JUNIT4 = "junitsampler.junit4";
+    private static final String CREATE_INSTANCE_PER_SAMPLE="junitsampler.createinstancepersample";
+    private static final boolean CREATE_INSTANCE_PER_SAMPLE_DEFAULT = false;
     //-- JMX file attributes - do not change
 
     private static final String SETUP = "setUp";
@@ -94,6 +96,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
     private transient Protectable protectable;
 
     public JUnitSampler(){
+        super();
     }
 
     /**
@@ -356,6 +359,9 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
 
     /** {@inheritDoc} */
     public SampleResult sample(Entry entry) {
+        if(getCreateOneInstancePerSample()) {
+            initializeTestObject();
+        }
         SampleResult sresult = new SampleResult();
         sresult.setSampleLabel(getName());// Bug 41522 - don't use rlabel here
         sresult.setSamplerData(className + "." + methodName);
@@ -621,16 +627,26 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
         testCase = null;
         methodName = getMethod();
         className = getClassname();
-        final Method m;
         protectable = null;
+        if(!getCreateOneInstancePerSample()) {
+            // NO NEED TO INITIALIZE WHEN getCreateOneInstancePerSample 
+            // is true cause it will be done in sample
+            initializeTestObject();            
+        }
+    }
+
+    /**
+     * Initialize test object
+     */
+    private void initializeTestObject() {
         String rlabel = getConstructorString();
         if (rlabel.length()== 0) {
             rlabel = JUnitSampler.class.getName();
         }
-        this.testObject = getClassInstance(className,rlabel);
+        this.testObject = getClassInstance(className, rlabel);
         if (this.testObject != null){
             initMethodObjects(this.testObject);
-            m = getMethod(this.testObject,methodName);
+            final Method m = getMethod(this.testObject,methodName);
             if (getJunit4()){
                 Class<? extends Throwable> expectedException = None.class;
                 long timeout = 0;
@@ -672,5 +688,21 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
                 this.testCase.setName(methodName);
             }
         }
+    }
+
+    /**
+     * 
+     * @param createOneInstancePerSample
+     */
+    public void setCreateOneInstancePerSample(boolean createOneInstancePerSample) {
+        this.setProperty(CREATE_INSTANCE_PER_SAMPLE, createOneInstancePerSample, CREATE_INSTANCE_PER_SAMPLE_DEFAULT);
+    }
+
+    /**
+     * 
+     * @return boolean create New Instance For Each Call
+     */
+    public boolean getCreateOneInstancePerSample() {
+        return getPropertyAsBoolean(CREATE_INSTANCE_PER_SAMPLE, CREATE_INSTANCE_PER_SAMPLE_DEFAULT);
     }
 }
