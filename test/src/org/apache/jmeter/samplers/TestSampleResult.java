@@ -210,22 +210,29 @@ public class TestSampleResult extends TestCase {
             
             long overallTime = parent.currentTimeInMillis() - beginTest;
 
-            // Check the sample times
-            final long fudge1 = 15;
             long sumSamplesTimes = parentElapsed + child1Elapsed + child2Elapsed;
-            if (parentElapsedTotal + fudge1 < sumSamplesTimes) { // Add fudge factor
-                fail("Total: " + parentElapsedTotal + " " + fudge1 + " < sum(samples): "+ sumSamplesTimes);
-            }
+            
             /*
-             * The granularity of System.currentTimeMillis() - plus the fact that the nanoTime()
-             * offset is now calculated for each sampleResult - means that there can be some
-             * minor variation in the value returned by SampleResult#currentTimeInMillis().
-             * 
-             * Allow for this by adding a fudge factor
-            */
-            long fudge2 = 13;
-            if (parentElapsedTotal > overallTime + fudge2) {
-                fail("Total: "+parentElapsedTotal+" > overall time: "+ overallTime + " + " + fudge2);
+             * Parent elapsed total should be no smaller than the sum of the individual samples.
+             * It may be greater by the timer granularity.
+             */
+            
+            long diff = parentElapsedTotal - sumSamplesTimes;
+            long maxDiff = nanoTime ? 1 : 16; // TimeMillis has granularity of 10-20
+            if (diff < 0 || diff > maxDiff) {
+                fail("ParentElapsed: " + parentElapsedTotal + " - " + " sum(samples): " + sumSamplesTimes
+                        + " = " + diff + " not in [0," + maxDiff + "]; nanotime=" + nanoTime);
+            }
+
+            /**
+             * The overall time to run the test must be no less than, 
+             * and may be greater (but not much greater) than the parent elapsed time
+             */
+            
+            diff = overallTime - parentElapsedTotal;
+            if (diff < 0 || diff > maxDiff) {
+                fail("TestElapsed: " + overallTime + " - " + " ParentElapsed: " + parentElapsedTotal
+                        + " = " + diff + " not in [0," + maxDiff + "]; nanotime="+nanoTime);
             }
             
             // Check that calculator gets the correct statistics from the sample
@@ -236,6 +243,7 @@ public class TestSampleResult extends TestCase {
             assertEquals(1d / (parentElapsedTotal / 1000d), calculator.getRate(),0.0001d); // Allow for some margin of error
             // Check that the throughput uses the time elapsed for the sub results
             assertFalse(1d / (parentElapsed / 1000d) <= calculator.getRate());
+            System.out.print(nanoTime? 'T' : 'F');
         }
 
         // TODO some more invalid sequence tests needed
