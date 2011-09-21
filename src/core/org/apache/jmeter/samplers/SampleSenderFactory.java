@@ -80,7 +80,7 @@ public class SampleSenderFactory {
             } catch (Exception e) {
                 // houston we have a problem !!
                 log.error("Unable to create a sample sender from class "+type);
-                throw new IllegalArgumentException(e.getMessage());
+                throw new IllegalArgumentException(e.getMessage(), e);
             }
 
             return s;
