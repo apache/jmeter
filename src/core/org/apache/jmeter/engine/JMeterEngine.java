@@ -22,6 +22,9 @@ import java.util.Properties;
 
 import org.apache.jorphan.collections.HashTree;
 
+/**
+ * This interface is implemented by classes that can run JMeter tests.
+ */
 public interface JMeterEngine {
     void configure(HashTree testPlan);
 
