@@ -19,7 +19,6 @@
 package org.apache.jmeter.samplers;
 
 import java.rmi.RemoteException;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
@@ -90,11 +89,9 @@ public class RemoteSampleListenerImpl extends java.rmi.server.UnicastRemoteObjec
      *            the list of sample events to be fired locally
      */
     public void processBatch(List<SampleEvent> samples) {
-        if (samples != null) {
-            Iterator<SampleEvent> iter = samples.iterator();
-            while (iter.hasNext()) {
-                SampleEvent e = iter.next();
-                sampleOccurred(e);
+        if (samples != null && sampleListener != null) {
+            for (SampleEvent e : samples) {
+                sampleListener.sampleOccurred(e);                
             }
         }
     }
