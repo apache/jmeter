@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -89,6 +88,7 @@ public class JLabeledTextField extends JPanel implements JLabeledField, FocusLis
         this.setBackground(bk);
         init();
     }
+
     /**
      * Get the label {@link JLabel} followed by the text field @link {@link JTextField}.
      */
