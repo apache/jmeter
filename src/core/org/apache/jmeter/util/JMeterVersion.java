@@ -49,7 +49,7 @@ public class JMeterVersion {
      * This ensures that JMeterUtils always gets the correct
      * version, even if JMeterUtils is not re-compiled during the build.
      */
-    private static final String VERSION = "2.5";
+    private static final String VERSION = "2.5.1";
 
     private static final String IMPLEMENTATION;
     
