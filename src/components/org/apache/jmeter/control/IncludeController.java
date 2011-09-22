@@ -78,7 +78,7 @@ public class IncludeController extends GenericController implements ReplaceableC
                 }
             }
             clone.SUBTREE = (HashTree)this.SUBTREE.clone();
-            clone.SUB = (TestElement)this.SUB.clone();
+            clone.SUB = this.SUB==null ? null : (TestElement) this.SUB.clone();
         }
         return clone;
     }
