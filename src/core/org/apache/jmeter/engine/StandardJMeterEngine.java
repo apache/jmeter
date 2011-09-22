@@ -52,6 +52,8 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
+ * Runs JMeter tests, either directly for local GUI and non-GUI invocations, 
+ * or started by {@link RemoteJMeterEngineImpl} when running in server mode.
  */
 public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, Runnable {
     private static final Logger log = LoggingManager.getLoggerForClass();

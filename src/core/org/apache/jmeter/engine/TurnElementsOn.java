@@ -23,6 +23,9 @@ import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.HashTreeTraverser;
 
+/**
+ * Invokes {@link TestElement#setRunningVersion(boolean) setRunningVersion(true)} for all matched nodes
+ */
 public class TurnElementsOn implements HashTreeTraverser {
 
     /**
