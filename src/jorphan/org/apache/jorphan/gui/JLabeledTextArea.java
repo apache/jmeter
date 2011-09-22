@@ -30,6 +30,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.text.Document;
@@ -87,7 +88,9 @@ public class JLabeledTextArea extends JPanel implements JLabeledField, FocusList
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * Get the label {@link JLabel} followed by the text field @link {@link JTextArea}.
+     */
     public List<JComponent> getComponentList() {
         List<JComponent> comps = new LinkedList<JComponent>();
         comps.add(mLabel);
