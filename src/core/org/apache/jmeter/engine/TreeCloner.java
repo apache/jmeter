@@ -26,6 +26,9 @@ import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.HashTreeTraverser;
 import org.apache.jorphan.collections.ListedHashTree;
 
+/**
+ * Clones the test tree,  skipping test elements that implement {@link NoThreadClone} by default.
+ */
 public class TreeCloner implements HashTreeTraverser {
 
     private final ListedHashTree newTree;
