@@ -97,7 +97,7 @@ public class IfController extends GenericController implements Serializable {
     /**
      * evaluate the condition clause log error if bad condition
      */
-    private static boolean evaluateCondition(String cond) {
+    private boolean evaluateCondition(String cond) {
         logger.debug("    getCondition() : [" + cond + "]");
 
         String resultStr = "";
@@ -122,7 +122,7 @@ public class IfController extends GenericController implements Serializable {
 
             logger.debug("    >> evaluate Condition -  [ " + cond + "] results is  [" + result + "]");
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            logger.error(getName()+": error while processing "+ "[" + cond + "]\n", e);
         } finally {
             Context.exit();
         }
