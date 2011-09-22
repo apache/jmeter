@@ -93,6 +93,9 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
         init();
     }
 
+    /**
+     * Get the label {@link JLabel} followed by the combo-box @link {@link JComboBox}.
+     */
     public List<JComponent> getComponentList() {
         List<JComponent> comps = new LinkedList<JComponent>();
         comps.add(mLabel);
