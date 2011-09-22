@@ -81,6 +81,7 @@ This can be overridden by setting the JMeter property <b>httpclient4.retrycount<
 <h3>HTTP Samplers and Proxy</h3>
 <ul>
 <li>Fix HttpClient 4 sampler so it reuses HttpClient instances and connections where possible.</li>
+<li>Bug 51863 - Lots of ESTABLISHED connections with HttpClient 4 implementation (ws HttpClient 3.1 impl)</li>
 <li>Bug 51750 - Retrieve all embedded resources doesn't follow IFRAME</li>
 <li>Change the default so the HttpClient 4 sampler does not retry</li>
 <li>Bug 51752 - HTTP Cache is broken when using "Retrieve all embedded resources" with concurrent pool</li>
