@@ -18,6 +18,8 @@
 
 package org.apache.jmeter.testelement;
 
+import org.apache.jmeter.engine.event.LoopIterationListener;
+
 /**
  * Allow threads to perform startup and closedown if necessary
  *
@@ -36,7 +38,7 @@ public interface ThreadListener {
     /**
      * Called for each thread after all samples have been processed.
      *
-     * @see org.apache.jmeter.threads.JMeterThread#threadFinished()
+     * @see org.apache.jmeter.threads.JMeterThread#threadFinished(LoopIterationListener)
      *
      */
     public void threadFinished();
