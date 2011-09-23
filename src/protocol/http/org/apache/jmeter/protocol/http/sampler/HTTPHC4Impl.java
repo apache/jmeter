@@ -111,8 +111,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    /** retry count to be used; defaults to 0 = disable retries */
-    private static final int RETRY_COUNT = JMeterUtils.getPropDefault("httpclient4.retrycount", 0);
+    /** retry count to be used (default 1); 0 = disable retries */
+    private static final int RETRY_COUNT = JMeterUtils.getPropDefault("httpclient4.retrycount", 1);
 
     private static final String CONTEXT_METRICS = "jmeter_metrics"; // TODO hack, to be removed later
 

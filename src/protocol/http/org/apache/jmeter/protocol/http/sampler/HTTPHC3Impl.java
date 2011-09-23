@@ -89,8 +89,8 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    /** retry count to be used (default 3); 0 = disable retries */
-    private static final int RETRY_COUNT = JMeterUtils.getPropDefault("httpclient3.retrycount", 3);
+    /** retry count to be used (default 1); 0 = disable retries */
+    private static final int RETRY_COUNT = JMeterUtils.getPropDefault("httpclient3.retrycount", 1);
 
     private static final String HTTP_AUTHENTICATION_PREEMPTIVE = "http.authentication.preemptive"; // $NON-NLS-1$
 
