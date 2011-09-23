@@ -108,6 +108,7 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
     volatile HttpClient savedClient;
 
     static {
+        log.info("HTTP request retry count = "+RETRY_COUNT);
         if (CPS_HTTP > 0) {
             log.info("Setting up HTTP SlowProtocol, cps="+CPS_HTTP);
             Protocol.registerProtocol(PROTOCOL_HTTP,
