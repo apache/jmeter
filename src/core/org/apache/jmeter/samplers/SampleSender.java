@@ -24,12 +24,14 @@ package org.apache.jmeter.samplers;
  */
 public interface SampleSender {
     /**
-     * The test ended
+     * The test ended (probably not used; client-server mode needs a host)
      */
     public void testEnded();
 
     /**
-     * The test ended
+     * The test ended.
+     * 
+     * This will be called from the engine thread.
      *
      * @param host
      *            the host that the test ended on.
@@ -37,7 +39,9 @@ public interface SampleSender {
     public void testEnded(String host);
 
     /**
-     * A sample occurred
+     * A sample occurred.
+     * 
+     * This method will be called from the sampler thread.
      *
      * @param e
      *            a Sample Event
