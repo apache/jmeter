@@ -456,7 +456,17 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             httpClient = new DefaultHttpClient(clientParams){
                 @Override
                 protected HttpRequestRetryHandler createHttpRequestRetryHandler() {
-                    return new DefaultHttpRequestRetryHandler(RETRY_COUNT, false); // set retry count
+                    return new DefaultHttpRequestRetryHandler(RETRY_COUNT, false) {
+                        // TODO HACK to fix https://issues.apache.org/jira/browse/HTTPCLIENT-1120
+                        // can hopefully be removed when 4.1.3 or 4.2 are released
+                        @Override
+                        public boolean retryRequest(IOException ex, int count, HttpContext ctx) {
+                            if (interrupted) {
+                                return false;
+                            }
+                            return super.retryRequest(ex, count, ctx);
+                        }
+                    }; // set retry count
                 }
             };
             ((AbstractHttpClient) httpClient).addResponseInterceptor(new ResponseContentEncoding());
@@ -1065,7 +1075,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
     }
 
+    // TODO HACK to fix https://issues.apache.org/jira/browse/HTTPCLIENT-1120
+    private volatile boolean interrupted = false;
+
     public boolean interrupt() {
+        interrupted = true;
         HttpUriRequest request = currentRequest;
         if (request != null) {
             currentRequest = null;
