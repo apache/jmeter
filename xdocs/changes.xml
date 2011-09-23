@@ -71,9 +71,13 @@ To override the default local language fully, set the JMeter property "language"
 <h2>Incompatible changes</h2>
 
 <p>
-The HttpClient4 sampler as implemented in version 2.5 used a retry count of 3.
-As this can hide server errors, JMeter now sets the retry count to 0 to prevent any automatic retries.
-This can be overridden by setting the JMeter property <b>httpclient4.retrycount</b>.
+The HttpClient4 and Commons HttpClient 3.1 samplers previously used a retry count of 3.
+This has been changed to default to 1, to be compatible with the Java implementation.
+The retry count can be overridden by setting the relevant JMeter property, for example:
+<pre>
+httpclient4.retrycount=3
+httpclient3.retrycount=3
+</pre>
 </p>
 
 <h2>Bug fixes</h2>
@@ -83,7 +87,6 @@ This can be overridden by setting the JMeter property <b>httpclient4.retrycount<
 <li>Fix HttpClient 4 sampler so it reuses HttpClient instances and connections where possible.</li>
 <li>Bug 51863 - Lots of ESTABLISHED connections with HttpClient 4 implementation (ws HttpClient 3.1 impl)</li>
 <li>Bug 51750 - Retrieve all embedded resources doesn't follow IFRAME</li>
-<li>Change the default so the HttpClient 4 sampler does not retry</li>
 <li>Bug 51752 - HTTP Cache is broken when using "Retrieve all embedded resources" with concurrent pool</li>
 <li>Bug 39219 - HTTP Server: You can't stop it after File->Open</li>
 <li>Bug 51775 - Port number duplicates in Host header when capturing by HttpClient (3.1 and 4.x)</li>
@@ -145,7 +148,8 @@ This can be overridden by setting the JMeter property <b>httpclient4.retrycount<
 <h3>HTTP Samplers</h3>
 <ul>
 <li>Bug 51380 - Control reuse of cached SSL Context from iteration to iteration</li>
-<li>Bug 51882 - HTTPHC3Client uses a default retry count of 3, make it configurable</li>
+<li>Bug 51882 - HTTPHC3Client uses a default retry count of 3, make it configurable; default is now 1</li>
+<li>Change the default HttpClient 4 sampler retry count to 1</li>
 </ul>
 
 <h3>Other samplers</h3>
