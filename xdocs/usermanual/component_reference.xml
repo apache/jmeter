@@ -4502,7 +4502,7 @@ generate the template string, and store the result into the given variable name.
 </p>
 </component>
 
-<component name="XPath Extractor" index="&sect-num;.8.2"  width="612" height="318" screenshot="xpath_extractor.png">
+<component name="XPath Extractor" index="&sect-num;.8.2"  width="729" height="317" screenshot="xpath_extractor.png">
 	<description>This test element allows the user to extract value(s) from 
 		structured response - XML or (X)HTML - using XPath
 		query language.
@@ -4516,6 +4516,7 @@ generate the template string, and store the result into the given variable name.
         <li>Main sample only - only applies to the main sample</li>
         <li>Sub-samples only - only applies to the sub-samples</li>
         <li>Main sample and sub-samples - applies to both.</li>
+        <li>JMeter Variable - assertion is to be applied to the contents of the named variable</li>
         </ul>
         XPath matching is applied to all qualifying samples in turn, and all the matching results will be returned.
        </property>
