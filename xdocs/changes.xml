@@ -135,6 +135,7 @@ This can be overridden by setting the JMeter property <b>httpclient4.retrycount<
 <li>Bug 51839 - "... end of run" printed prematurely</li>
 <li>Bug 51847 - Some Junit tests are Locale sensitive and fail if Locale is different from US</li>
 <li>Bug 51855 - Parent samples may have slightly inaccurate elapsed times</li>
+<li>Bug 51880 - The shutdown command is not working if I invoke it before all the thread are started</li>
 </ul>
 
 <!-- ==================================================== -->
