@@ -70,6 +70,10 @@ public class JMeterThread implements Runnable, Interruptible {
 
     private static final String TRUE = Boolean.toString(true); // i.e. "true"
 
+    /** How often to check for shutdown during ramp-up, default 1000ms */
+    private static final int RAMPUP_GRANULARITY =
+            JMeterUtils.getPropDefault("jmeterthread.rampup.granularity", 1000); // $NON-NLS-1$
+
     private final Controller controller;
 
     private final HashTree testTree;
@@ -746,11 +750,22 @@ public class JMeterThread implements Runnable, Interruptible {
     private void rampUpDelay() {
         if (initialDelay > 0) {
             long start = System.currentTimeMillis();
-            try {
-                Thread.sleep(initialDelay);
-            } catch (InterruptedException e) {
-                long actual = System.currentTimeMillis() - start;
-                log.warn("RampUp delay for "+threadName+" was interrupted. Waited "+actual+" milli-seconds out of "+initialDelay);
+            long end = start + initialDelay;
+            long now=0;
+            long pause = RAMPUP_GRANULARITY;
+            while(running && (now = System.currentTimeMillis()) < end) {
+                long togo = end - now;
+                if (togo < pause) {
+                    pause = togo;
+                }
+                try {
+                    Thread.sleep(pause); // delay between checks
+                } catch (InterruptedException e) {
+                    if (running) { // Don't bother reporting stop test interruptions
+                        log.warn("RampUp delay for "+threadName+" was interrupted. Waited "+(now - start)+" milli-seconds out of "+initialDelay);
+                    }
+                    break;
+                }
             }
         }
     }
