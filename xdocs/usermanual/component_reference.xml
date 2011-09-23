@@ -377,9 +377,13 @@ Optional properties to allow change the method to get response size:<br></br>
 </p>
 <p>
 <b>Retry handling</b><br></br>
-In version 2.5 of JMeter, the HttpClient4 sampler used the default retry count, which was 3.
-As this can hide server errors, JMeter now sets the retry count to 0 to prevent any automatic retries.
-This can be overridden by setting the JMeter property <b>httpclient4.retrycount</b>.
+In version 2.5 of JMeter, the HttpClient4 and Commons HttpClient 3.1 samplers used the default retry count, which was 3.
+In later versions, the retry count has been set to 1, which is what the Java implementation appears to do.
+The retry count can be overridden by setting the relevant JMeter property, for example:
+<pre>
+httpclient4.retrycount=3
+httpclient3.retrycount=3
+</pre>
 </p>
 <links>
         <link href="test_plan.html#assertions">Assertion</link>
