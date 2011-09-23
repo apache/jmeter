@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
+import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.HttpClient;
@@ -87,6 +88,9 @@ import org.apache.log.Logger;
 public class HTTPHC3Impl extends HTTPHCAbstractImpl {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
+
+    /** retry count to be used (default 3); 0 = disable retries */
+    private static final int RETRY_COUNT = JMeterUtils.getPropDefault("httpclient3.retrycount", 3);
 
     private static final String HTTP_AUTHENTICATION_PREEMPTIVE = "http.authentication.preemptive"; // $NON-NLS-1$
 
@@ -439,6 +443,8 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
         if ( httpClient == null )
         {
             httpClient = new HttpClient(new SimpleHttpConnectionManager());
+            httpClient.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, 
+                    new DefaultHttpMethodRetryHandler(RETRY_COUNT, false));
             if (log.isDebugEnabled()) {
                 log.debug("Created new HttpClient: @"+System.identityHashCode(httpClient));
             }
