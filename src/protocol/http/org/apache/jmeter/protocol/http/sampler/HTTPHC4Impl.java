@@ -146,6 +146,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private static final HttpParams DEFAULT_HTTP_PARAMS;
     
     static {
+        log.info("HTTP request retry count = "+RETRY_COUNT);
         
         // TODO use new setDefaultHttpParams(HttpParams params) static method when 4.1 is available
         final DefaultHttpClient dhc = new DefaultHttpClient();
