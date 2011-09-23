@@ -185,6 +185,7 @@ httpclient3.retrycount=3
 <h3>General</h3>
 <ul>
 <li>Bug 51822 - (part 1) save 1 invocation of GuiPackage#getCurrentGui</li>
+<li>Added AsynchSampleSender which sends samples from server to client asynchronously.</li>
 </ul>
 
 <h2>Non-functional changes</h2>
