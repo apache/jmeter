@@ -213,18 +213,21 @@ The chosen port will be logged in the server jmeter.log file (rmiregistry does n
 </p>
 </subsection>
 
-<subsection name="&sect-num;.4 Using sample batching" anchor="batchmode">
+<subsection name="&sect-num;.4 Using a different sample sender" anchor="sendermode">
 <p>
 Listeners in the test plan send their results back to the client JMeter which writes the results to the specified files
-By default, samples are sent back as they are generated. This can place a large load on the network and the JMeter client.
+By default, samples are sent back synchronously as they are generated.
+This can affect the maximum throughput of the server test; the sample result has to be sent back before the thread can
+continue.  
 There are some JMeter properties that can be set to alter this behaviour.
 </p>
 <ul>
-<li>mode - sample sending mode - default is Standard</li>
+<li>mode - sample sending mode - default is Standard. This should be set on the client node.</li>
     <ul>
-    <li>Standard - send samples as soon as they are generated</li>
+    <li>Standard - send samples synchronously as soon as they are generated</li>
     <li>Hold - hold samples in an array until the end of a run. This may use a lot of memory on the server.</li>
-    <li>Batch - send saved samples when either the count or time exceeds a threshold</li>
+    <li>Batch - send saved samples when either the count or time exceeds a threshold,
+    at which point the samples are sent synchronously. See also the Asynch mode, described below.</li>
     <li>Statistical - send a summary sample when either the count or time exceeds a threshold. 
     The samples are summarised by thread group name and sample label.
     The following fields are accumulated:
@@ -239,6 +242,14 @@ There are some JMeter properties that can be set to alter this behaviour.
     </li>
     <li>Stripped - remove responseData from succesful samples</li>
     <li>StrippedBatch - remove responseData from succesful samples, and send as batches</li>
+    <li>Asynch - samples are temporarily stored in a local queue. A separate worker thread sends the samples.
+        This allows the test thread to continue without waiting for the result to be sent back to the client.
+        However, if samples are being created faster than they can be sent, the queue will eventually fill up,
+        and the sampler thread will block until some samples can be drained from the queue.
+        This mode is useful for smoothing out peaks in sample generation.
+        The queue size can be adjusted by setting the JMeter property
+        <b><code>asynch.batch.queue.size</code></b> (default 20) on the client node.
+    </li>
     <li>Custom implementation : set the mode parameter to your custom sample sender class name.
     This must implement the interface SampleSender and have a constructor which takes a single
     parameter of type RemoteSampleListener. 
