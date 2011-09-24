@@ -517,7 +517,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
             }
             if (shut.getText().equals(host)) {
                 log.debug("Found exit  host: " + exit.getText());
-                exit.setEnabled(true);
+                shut.setEnabled(running);
             }
         }
     }
