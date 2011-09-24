@@ -40,7 +40,7 @@ public class AsynchSampleSender implements SampleSender, Serializable {
     // Create unique object as marker for end of queue
     private transient static final SampleEvent FINAL_EVENT = new SampleEvent();
     
-    private static final int capacity = JMeterUtils.getPropDefault("asynch.batch.queue.size", 20); // $NON-NLS-1$
+    private static final int capacity = JMeterUtils.getPropDefault("asynch.batch.queue.size", 100); // $NON-NLS-1$
 
     // created by client 
     private final RemoteSampleListener listener;
