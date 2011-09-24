@@ -577,9 +577,28 @@ Hold - hold samples in an array until the end of a run. This may use a lot of me
     
 <li>
 Batch - send saved samples when either the count or time exceeds a threshold,
-    at which point the samples are sent synchronously. See also the Asynch mode, described below.
+    at which point the samples are sent synchronously.
+    The thresholds can be configured on the server using the following properties:
+    
+<ul>
+
+    
+<li>
+num_sample_threshold - number of samples to accumulate, default 100
 </li>
 
+    
+<li>
+time_threshold - time threshold, default 60000 ms = 60 seconds
+</li>
+
+    
+</ul>
+
+    
+</li>
+
+     See also the Asynch mode, described below.
     
 <li>
 Statistical - send a summary sample when either the count or time exceeds a threshold. 
@@ -627,7 +646,7 @@ Stripped - remove responseData from succesful samples
 
     
 <li>
-StrippedBatch - remove responseData from succesful samples, and send as batches
+StrippedBatch - remove responseData from succesful samples, and use Batch sender to send them.
 </li>
 
     
@@ -644,7 +663,7 @@ Asynch - samples are temporarily stored in a local queue. A separate worker thre
 asynch.batch.queue.size
 </code>
 </b>
- (default 20) on the client node.
+ (default 20) on the server node.
     
 </li>
 
