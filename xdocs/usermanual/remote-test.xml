@@ -255,7 +255,7 @@ There are some JMeter properties that can be set to alter this behaviour.
         and the sampler thread will block until some samples can be drained from the queue.
         This mode is useful for smoothing out peaks in sample generation.
         The queue size can be adjusted by setting the JMeter property
-        <b><code>asynch.batch.queue.size</code></b> (default 20) on the server node.
+        <b><code>asynch.batch.queue.size</code></b> (default 100) on the server node.
     </li>
     <li>Custom implementation : set the mode parameter to your custom sample sender class name.
     This must implement the interface SampleSender and have a constructor which takes a single
