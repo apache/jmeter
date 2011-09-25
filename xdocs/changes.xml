@@ -68,6 +68,10 @@ The menu item Options / Choose Language does not change all the displayed text t
 To override the default local language fully, set the JMeter property "language" before starting JMeter. 
 </p>
 
+<p>When a test plan uses HttpClient 4 requests and you try to stop it before end of ramp up period,
+a possible deadlock may happen.
+</p>
+
 <h2>Incompatible changes</h2>
 
 <p>
