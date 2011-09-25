@@ -20,7 +20,7 @@
 <!ENTITY sect-num '15'>
 ]>
 
-<document prev="listeners.html" next="best-practices.html" date="$Date$">
+<document prev="listeners.html" next="best-practices.html" id="$Id$">
 
 <properties>
   <title>User's Manual: Remote (Distributed) Testing</title>

@@ -21,7 +21,7 @@
 <!ENTITY sect-num '9a'>
 ]>
 
-<document prev="build-ftp-test-plan.html" next="build-ldapext-test-plan.html" date="$Date$">
+<document prev="build-ftp-test-plan.html" next="build-ldapext-test-plan.html" id="$Id$">
 
 
 <properties>
