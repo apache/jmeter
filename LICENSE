@@ -683,12 +683,12 @@ Exhibit A -Sun Public License Notice.
 
 ################################################################################
 
-HtmlParser & HtmlLexer v2.0-20060923
+HtmlParser & HtmlLexer v2.1
 ======================
 
 also
 
-JUnit v3.8.2
+JUnit v4.9
 =====
 
 http://opensource.org/licenses/cpl1.0.txt
@@ -1648,7 +1648,7 @@ DAMAGE.
 activation v1.1.1
 ==========
 and
-mail v1.4.3
+mail v1.4.4
 ====
 
 JMeter includes the activation and mail jars under the CDDL license V1.0
