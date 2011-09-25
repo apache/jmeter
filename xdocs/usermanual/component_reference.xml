@@ -21,7 +21,7 @@
 <!ENTITY sect-num '18'>
 ]>
 <document index="yes" index-level-2="yes" index-numbers="no" colbreak="&sect-num;.4"
-  prev="boss.html" next="functions.html" date="$Date$">
+  prev="boss.html" next="functions.html" id="$Id$">
 
 <properties>
   <title>User's Manual: Component Reference</title>

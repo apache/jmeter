@@ -20,7 +20,7 @@
 <!ENTITY sect-num '9b'>
 ]>
 
-<document prev="build-ldap-test-plan.html" next="build-ws-test-plan.html" date="$Date$">
+<document prev="build-ldap-test-plan.html" next="build-ws-test-plan.html" id="$Id$">
 
 
 <properties>

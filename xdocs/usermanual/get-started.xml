@@ -20,7 +20,7 @@
 <!ENTITY sect-num '2'>
 ]>
 
-<document prev="intro.html" next="build-test-plan.html" date="$Date$">
+<document prev="intro.html" next="build-test-plan.html" id="$Id$">
 
 <properties>
   <title>User's Manual: Getting Started</title>
