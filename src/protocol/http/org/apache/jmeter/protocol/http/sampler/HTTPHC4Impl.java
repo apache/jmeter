@@ -823,7 +823,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     }
                 }
 
-                FileEntity fileRequestEntity = new FileEntity(new File(file.getPath()),null);
+                FileEntity fileRequestEntity = new FileEntity(new File(file.getPath()),(String) null);// TODO is null correct?
                 post.setEntity(fileRequestEntity);
 
                 // We just add placeholder text for file content
@@ -977,7 +977,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             hasPutBody = true;
 
             // If getSendFileAsPostBody returned true, it's sure that file is not null
-            FileEntity fileRequestEntity = new FileEntity(new File(files[0].getPath()),null);
+            FileEntity fileRequestEntity = new FileEntity(new File(files[0].getPath()), (String) null); // TODO is null correct?
             put.setEntity(fileRequestEntity);
 
             // We just add placeholder text for file content
