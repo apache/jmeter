@@ -19,7 +19,7 @@
 [
 <!ENTITY sect-num '20'>
 ]>
-<document prev="functions.html" next="hints_and_tips.html" date="$Date$">
+<document prev="functions.html" next="hints_and_tips.html" id="$Id$">
 
 <properties>
   <title>User's Manual: Regular Expressions</title>

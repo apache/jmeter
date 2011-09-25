@@ -20,7 +20,7 @@
 <!ENTITY sect-num '10'>
 ]>
 
-<document prev="build-ldapext-test-plan.html" next="build-jms-point-to-point-test-plan.html" date="$Date$">
+<document prev="build-ldapext-test-plan.html" next="build-jms-point-to-point-test-plan.html" id="$Id$">
 
 <properties>
   <title>User's Manual: Building a WebService Test Plan</title>

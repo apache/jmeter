@@ -20,7 +20,7 @@
 <!ENTITY sect-num '7'>
 ]>
 
-<document prev="build-adv-web-test-plan.html" next="build-ftp-test-plan.html" date="$Date$">
+<document prev="build-adv-web-test-plan.html" next="build-ftp-test-plan.html" id="$Id$">
 
 <properties>
   <author email="mramshaw@alumni.concordia.ca">Martin Ramshaw</author>
