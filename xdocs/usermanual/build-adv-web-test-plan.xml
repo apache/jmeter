@@ -20,7 +20,7 @@
 <!ENTITY sect-num '6'>
 ]>
 
-<document prev="build-web-test-plan.html" next="build-db-test-plan.html" date="$Date$">
+<document prev="build-web-test-plan.html" next="build-db-test-plan.html" id="$Id$">
 
 <properties>
   <title>User's Manual: Building an Advanced Web Test Plan</title>

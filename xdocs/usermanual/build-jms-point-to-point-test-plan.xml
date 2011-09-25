@@ -18,7 +18,7 @@
 
 <!DOCTYPE document[<!ENTITY sect-num '11'>]>
 
-<document prev="build-ws-test-plan.html" next="build-jms-topic-test-plan.html" date="$Date$">
+<document prev="build-ws-test-plan.html" next="build-jms-topic-test-plan.html" id="$Id$">
 
     <properties>
         <title>User's Manual: Building a JMS (Java Messaging Service) Point-to-Point Test Plan</title>

@@ -20,7 +20,7 @@
 <!ENTITY sect-num '17'>
 ]>
 	
-<document prev="best-practices.html" next="component_reference.html" date="$Date$">
+<document prev="best-practices.html" next="component_reference.html" id="$Id$">
 
 <properties>
   <author email="mramshaw@alumni.concordia.ca">Martin Ramshaw</author>

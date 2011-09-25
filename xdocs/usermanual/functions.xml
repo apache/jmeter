@@ -21,7 +21,7 @@
 <!ENTITY sect-num '19'>
 ]>
 
-<document prev="component_reference.html" next="regular_expressions.html" date="$Date$">
+<document prev="component_reference.html" next="regular_expressions.html" id="$Id$">
 
 <properties>
   <title>User's Manual: Functions and Variables</title>

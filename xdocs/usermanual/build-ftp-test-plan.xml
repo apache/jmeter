@@ -21,7 +21,7 @@
 <!ENTITY sect-num '8'>
 ]>
 
-<document prev="build-db-test-plan.html" next="build-ldap-test-plan.html" date="$Date$">
+<document prev="build-db-test-plan.html" next="build-ldap-test-plan.html" id="$Id$">
 
 <properties>
   <author email="mramshaw@alumni.concordia.ca">Martin Ramshaw</author>

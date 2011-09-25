@@ -19,7 +19,7 @@
 [
 <!ENTITY sect-num '21'>
 ]>
-<document prev="regular_expressions.html" next="glossary.html" date="$Date: 2009-05-19 16:50:20 +0100 (Tue, 19 May 2009) $">
+<document prev="regular_expressions.html" next="glossary.html" id="$Id: $">
 
 <properties>
   <title>User's Manual: Hints and Tips</title>
