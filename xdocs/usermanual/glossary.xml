@@ -19,7 +19,7 @@
 [
 <!ENTITY sect-num '22'>
 ]>
-<document prev="hints_and_tips.html" date="$Date$">
+<document prev="hints_and_tips.html" id="$Id$">
 
 <properties>
   <title>User's Manual: Glossary</title>

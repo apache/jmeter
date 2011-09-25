@@ -21,7 +21,7 @@
 <!ENTITY sect-num '14'>
 ]>
 
-<document prev="build-monitor-test-plan.html" next="remote-test.html" date="$Date$">
+<document prev="build-monitor-test-plan.html" next="remote-test.html" id="$Id$">
 
 <properties>
   <title>User's Manual: Listeners</title>
