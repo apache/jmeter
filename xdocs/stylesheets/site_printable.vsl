@@ -479,8 +479,8 @@ $comp.getAttributeValue("index")
 #set ($next = $root.getAttributeValue("next"))
 #set ($prev = "")
 #set ($prev = $root.getAttributeValue("prev"))
-#set ($updated = "")
-#set ($updated = $root.getAttributeValue("date"))
+#set ($id = "")
+#set ($id = $root.getAttributeValue("id"))
 <title>$project.getChild("title").getText() - $root.getChild("properties").getChild("title").getText()</title>
 </head>
 <body bgcolor="$bodybg" text="$bodyfg" link="$bodylink">
@@ -525,18 +525,18 @@ $comp.getAttributeValue("index")
 Copyright &copy; 1999-$year, Apache Software Foundation
 </em></font>
 </td>
-#if ("$!updated" != "")
+#if ("$!id" != "")
 <td align="right">
 <font color="$bodylink" size="-1"><em>
-Updated: $updated
+$id
 </em></font>
 </td>
 #end
 </tr>
 <tr><td colspan="2">
 <div align="center"><font color="$bodylink" size="-1">
-"Apache", the Apache feather, and the Apache JMeter logo are
-trademarks of the Apache Software Foundation for our open source software.
+Apache, Apache JMeter, JMeter, the Apache feather, and the Apache JMeter logo are
+trademarks of the Apache Software Foundation.
 </font>
 </div>
 </td></tr>
