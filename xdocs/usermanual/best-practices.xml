@@ -21,7 +21,7 @@
 <!ENTITY sect-num '16'>
 ]>
 	
-<document prev="remote-test.html" next="boss.html" date="$Date$">
+<document prev="remote-test.html" next="boss.html" date="$Date::            $">
 
 <properties>
   <title>User's Manual: Best Practices</title>
