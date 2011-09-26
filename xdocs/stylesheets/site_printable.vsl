@@ -516,7 +516,7 @@ $comp.getAttributeValue("index")
 <td>
 <table width=100%>
 <tr>
-#if ("$!updated" != "")
+#if ("$!id" != "")
 <td>
 #else
 <td align="center">
