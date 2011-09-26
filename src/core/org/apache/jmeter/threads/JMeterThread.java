@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.assertions.AssertionResult;
@@ -126,6 +127,8 @@ public class JMeterThread implements Runnable, Interruptible {
     private volatile boolean onErrorStartNextLoop;
 
     private volatile Sampler currentSampler;
+
+    private final ReentrantLock interruptLock = new ReentrantLock(); // ensure that interrupt cannot overlap with shutdown
 
     public JMeterThread(HashTree test, JMeterThreadMonitor monitor, ListenerNotifier note) {
         this.monitor = monitor;
@@ -303,6 +306,8 @@ public class JMeterThread implements Runnable, Interruptible {
         } catch (Error e) {// Make sure errors are output to the log file
             log.error("Test failed!", e);
         } finally {
+            currentSampler = null; // prevent any further interrupts
+            interruptLock.lock();  // make sure current interrupt is finished
             threadContext.clear();
             log.info("Thread finished: " + threadName);
             threadFinished(iterationListener);
@@ -577,6 +582,8 @@ public class JMeterThread implements Runnable, Interruptible {
         if (samp instanceof Interruptible){
             log.warn("Interrupting: " + threadName + " sampler: " +samp.getName());
             try {
+                interruptLock.lock();
+                samp = currentSampler; // fetch again, to avoid possible lost overlap at shutdown
                 boolean found = ((Interruptible)samp).interrupt();
                 if (!found) {
                     log.warn("No operation pending");
@@ -584,6 +591,8 @@ public class JMeterThread implements Runnable, Interruptible {
                 return found;
             } catch (Exception e) {
                 log.warn("Caught Exception interrupting sampler: "+e.toString());
+            } finally {
+                interruptLock.unlock();
             }
         } else if (samp != null){
             log.warn("Sampler is not Interruptible: "+samp.getName());
