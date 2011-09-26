@@ -20,13 +20,18 @@ package org.apache.jmeter.extractor;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.processor.PostProcessor;
@@ -48,12 +53,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 //@see org.apache.jmeter.extractor.TestXPathExtractor for unit tests
 
@@ -135,12 +134,18 @@ public class XPathExtractor extends AbstractScopedTestElement implements
         vars.put(matchNR, "0"); // In case parse fails // $NON-NLS-1$
         vars.remove(concat(refName,"1")); // In case parse fails // $NON-NLS-1$
 
-        List<SampleResult> samples = getSampleList(previousResult);
+        List<String> matches = new ArrayList<String>();
         try{
-            List<String> matches = new ArrayList<String>();
-            for (SampleResult res : samples) {
-                Document d = parseResponse(res);
+            if (isScopeVariable()){
+                String inputString=vars.get(getVariableName());
+                Document d =  parseResponse(inputString);
                 getValuesForXPath(d,getXPathQuery(),matches);
+            } else {
+                List<SampleResult> samples = getSampleList(previousResult);
+                for (SampleResult res : samples) {
+                    Document d = parseResponse(res.getResponseDataAsString());
+                    getValuesForXPath(d,getXPathQuery(),matches);
+                }
             }
             final int matchCount = matches.size();
             vars.put(matchNR, String.valueOf(matchCount));
@@ -280,11 +285,11 @@ public class XPathExtractor extends AbstractScopedTestElement implements
     /**
      * Converts (X)HTML response to DOM object Tree.
      * This version cares of charset of response.
-     * @param result
+     * @param unicodeData
      * @return
      *
      */
-    private Document parseResponse(SampleResult result)
+    private Document parseResponse(String unicodeData)
       throws UnsupportedEncodingException, IOException, ParserConfigurationException,SAXException,TidyException
     {
       //TODO: validate contentType for reasonable types?
@@ -292,7 +297,6 @@ public class XPathExtractor extends AbstractScopedTestElement implements
       // NOTE: responseData encoding is server specific
       //       Therefore we do byte -> unicode -> byte conversion
       //       to ensure UTF-8 encoding as required by XPathUtil
-      String unicodeData = result.getResponseDataAsString();
       // convert unicode String -> UTF-8 bytes
       byte[] utf8data = unicodeData.getBytes("UTF-8"); // $NON-NLS-1$
       ByteArrayInputStream in = new ByteArrayInputStream(utf8data);
