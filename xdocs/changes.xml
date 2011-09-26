@@ -68,10 +68,6 @@ The menu item Options / Choose Language does not change all the displayed text t
 To override the default local language fully, set the JMeter property "language" before starting JMeter. 
 </p>
 
-<p>When a test plan uses HttpClient 4 requests and you try to stop it before end of ramp up period,
-a possible deadlock may happen.
-</p>
-
 <h2>Incompatible changes</h2>
 
 <p>
@@ -89,6 +85,7 @@ httpclient3.retrycount=3
 <h3>HTTP Samplers and Proxy</h3>
 <ul>
 <li>Fix HttpClient 4 sampler so it reuses HttpClient instances and connections where possible.</li>
+<li>Temporary fix to HC4 sampler to work round HTTPCLIENT-1120.</li>
 <li>Bug 51863 - Lots of ESTABLISHED connections with HttpClient 4 implementation (ws HttpClient 3.1 impl)</li>
 <li>Bug 51750 - Retrieve all embedded resources doesn't follow IFRAME</li>
 <li>Bug 51752 - HTTP Cache is broken when using "Retrieve all embedded resources" with concurrent pool</li>
@@ -144,6 +141,7 @@ httpclient3.retrycount=3
 <li>Bug 51855 - Parent samples may have slightly inaccurate elapsed times</li>
 <li>Bug 51880 - The shutdown command is not working if I invoke it before all the thread are started</li>
 <li>Remote Shut host menu item was not being enabled.</li>
+<li>Bug 51888 - Occasional deadlock when stopping a testplan</li>
 </ul>
 
 <!-- ==================================================== -->
@@ -191,6 +189,7 @@ httpclient3.retrycount=3
 <ul>
 <li>Bug 51822 - (part 1) save 1 invocation of GuiPackage#getCurrentGui</li>
 <li>Added AsynchSampleSender which sends samples from server to client asynchronously.</li>
+<li>Upgraded to htmlparser 2.1; JavaMail 1.4.4; JUnit 4.9</li>
 </ul>
 
 <h2>Non-functional changes</h2>
@@ -198,6 +197,7 @@ httpclient3.retrycount=3
 <li>Bug 49976 - FormCharSetFinder visibility is default instead of public. </li>
 <li>Bug 50917 - Property CookieManager.save.cookies not honored when set from test plan</li>
 <li>Improve error logging when Javascript errors are detected.</li>
+<li>Updated documentation footer</li>
 </ul>
 
 </section> 
