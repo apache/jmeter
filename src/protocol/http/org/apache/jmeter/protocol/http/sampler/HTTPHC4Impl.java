@@ -76,6 +76,7 @@ import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
+import org.apache.http.impl.client.RequestWrapper;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreConnectionPNames;
@@ -461,11 +462,17 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                         // can hopefully be removed when 4.1.3 or 4.2 are released
                         @Override
                         public boolean retryRequest(IOException ex, int count, HttpContext ctx) {
-                            if (interrupted) {
-                                return false;
+                            HttpRequest request = (HttpRequest) ctx.getAttribute(ExecutionContext.HTTP_REQUEST);
+                            if(request instanceof HttpUriRequest){
+                                if (request instanceof RequestWrapper) {
+                                    request = ((RequestWrapper) request).getOriginal();
+                                }
+                                if(((HttpUriRequest)request).isAborted()){
+                                    return false;
+                                }
                             }
                             return super.retryRequest(ex, count, ctx);
-                        }
+                        } // end of hack
                     }; // set retry count
                 }
             };
@@ -1075,11 +1082,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
     }
 
-    // TODO HACK to fix https://issues.apache.org/jira/browse/HTTPCLIENT-1120
-    private volatile boolean interrupted = false;
-
     public boolean interrupt() {
-        interrupted = true;
         HttpUriRequest request = currentRequest;
         if (request != null) {
             currentRequest = null;
