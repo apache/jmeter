@@ -367,8 +367,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
 
     /**
-     * Sets the Path attribute of the UrlConfig object Also calls parseArguments
-     * to extract and store any query arguments
+     * Sets the PATH property; also calls {@link #parseArguments(String, String)}
+     * to extract and store any query arguments if the request is a GET or DELETE.
      *
      * @param path
      *            The new Path value
@@ -493,6 +493,14 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         this.addEncodedArgument(name, value, ARG_VAL_SEP);
     }
 
+    /**
+     * Creates an HTTPArgument and adds it to the current set {@link #getArguments()} of arguments.
+     * 
+     * @param name - the parameter name
+     * @param value - the parameter value
+     * @param metaData - normally just '='
+     * @param contentEncoding - the encoding, may be null
+     */
     public void addEncodedArgument(String name, String value, String metaData, String contentEncoding) {
         if (log.isDebugEnabled()){
             log.debug("adding argument: name: " + name + " value: " + value + " metaData: " + metaData + " contentEncoding: " + contentEncoding);
@@ -920,10 +928,10 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * For each name found, addArgument() is called
      *
      * @param queryString -
-     *            the query string
+     *            the query string, might be the post body of a http post request.
      * @param contentEncoding -
-     *            the content encoding of the query string. The query string might
-     *            actually be the post body of a http post request.
+     *            the content encoding of the query string; 
+     *            if non-null then it is used to decode the 
      */
     public void parseArguments(String queryString, String contentEncoding) {
         String[] args = JOrphanUtils.split(queryString, QRY_SEP);
