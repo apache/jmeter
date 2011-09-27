@@ -43,7 +43,7 @@ public class FormCharSetFinder {
         log.info("Using htmlparser version: "+Parser.getVersion());
     }
 
-    protected FormCharSetFinder() {
+    public FormCharSetFinder() {
         super();
     }
 
