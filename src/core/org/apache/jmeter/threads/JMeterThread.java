@@ -209,9 +209,23 @@ public class JMeterThread implements Runnable, Interruptible {
     private void startScheduler() {
         long delay = (startTime - System.currentTimeMillis());
         if (delay > 0) {
-            try {
-                Thread.sleep(delay);
-            } catch (Exception e) {
+            long start = System.currentTimeMillis();
+            long end = start + delay;
+            long now=0;
+            long pause = RAMPUP_GRANULARITY;
+            while(running && (now = System.currentTimeMillis()) < end) {
+                long togo = end - now;
+                if (togo < pause) {
+                    pause = togo;
+                }
+                try {
+                    Thread.sleep(pause); // delay between checks
+                } catch (InterruptedException e) {
+                    if (running) { // Don't bother reporting stop test interruptions
+                        log.warn("startScheduler delay for "+threadName+" was interrupted. Waited "+(now - start)+" milli-seconds out of "+delay);
+                    }
+                    break;
+                }
             }
         }
     }
