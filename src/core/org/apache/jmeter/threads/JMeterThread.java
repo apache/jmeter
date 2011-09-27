@@ -321,13 +321,17 @@ public class JMeterThread implements Runnable, Interruptible {
             log.error("Test failed!", e);
         } finally {
             currentSampler = null; // prevent any further interrupts
-            interruptLock.lock();  // make sure current interrupt is finished, prevent another starting yet
-            threadContext.clear();
-            log.info("Thread finished: " + threadName);
-            threadFinished(iterationListener);
-            monitor.threadFinished(this); // Tell the engine we are done
-            JMeterContextService.removeContext(); // Remove the ThreadLocal entry
-            interruptLock.unlock(); // Allow any pending interrupt to complete (OK because currentSampler == null)
+            try {
+                interruptLock.lock();  // make sure current interrupt is finished, prevent another starting yet
+                threadContext.clear();
+                log.info("Thread finished: " + threadName);
+                threadFinished(iterationListener);
+                monitor.threadFinished(this); // Tell the engine we are done
+                JMeterContextService.removeContext(); // Remove the ThreadLocal entry
+            }
+            finally {
+                interruptLock.unlock(); // Allow any pending interrupt to complete (OK because currentSampler == null)
+            }
         }
     }
 
