@@ -593,24 +593,25 @@ public class JMeterThread implements Runnable, Interruptible {
 
     /** {@inheritDoc} */
     public boolean interrupt(){
-        Sampler samp = currentSampler; // fetch once
-        if (samp instanceof Interruptible){
-            log.warn("Interrupting: " + threadName + " sampler: " +samp.getName());
-            try {
-                interruptLock.lock();
-                samp = currentSampler; // fetch again, to avoid possible lost overlap at shutdown
-                boolean found = ((Interruptible)samp).interrupt();
-                if (!found) {
-                    log.warn("No operation pending");
+        try {
+            interruptLock.lock();
+            Sampler samp = currentSampler; // fetch once; must be done under lock
+            if (samp instanceof Interruptible){ // (also protects against null)
+                log.warn("Interrupting: " + threadName + " sampler: " +samp.getName());
+                try {
+                    boolean found = ((Interruptible)samp).interrupt();
+                    if (!found) {
+                        log.warn("No operation pending");
+                    }
+                    return found;
+                } catch (Exception e) {
+                    log.warn("Caught Exception interrupting sampler: "+e.toString());
                 }
-                return found;
-            } catch (Exception e) {
-                log.warn("Caught Exception interrupting sampler: "+e.toString());
-            } finally {
-                interruptLock.unlock();
+            } else if (samp != null){
+                log.warn("Sampler is not Interruptible: "+samp.getName());
             }
-        } else if (samp != null){
-            log.warn("Sampler is not Interruptible: "+samp.getName());
+        } finally {
+            interruptLock.unlock();            
         }
         return false;
     }
