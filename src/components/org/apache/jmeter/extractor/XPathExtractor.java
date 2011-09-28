@@ -185,6 +185,7 @@ public class XPathExtractor extends AbstractScopedTestElement implements
             log.warn("TransformerException while processing ("+getXPathQuery()+") "+e.getLocalizedMessage());
             addAssertionFailure(previousResult, e, false);
         } catch (TidyException e) {
+            // Will already have been logged by XPathUtil
             addAssertionFailure(previousResult, e, true); // fail the sample
         }
     }
@@ -193,7 +194,7 @@ public class XPathExtractor extends AbstractScopedTestElement implements
             final Throwable thrown, final boolean setFailed) {
         AssertionResult ass = new AssertionResult(thrown.getClass().getSimpleName()); // $NON-NLS-1$
         ass.setFailure(true);
-        ass.setFailureMessage(getXPathQuery()+" => "+thrown.getLocalizedMessage());
+        ass.setFailureMessage(thrown.getLocalizedMessage()+"\nSee log file for further details.");
         previousResult.addAssertionResult(ass);
         if (setFailed){
             previousResult.setSuccessful(false);
