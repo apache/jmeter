@@ -21,6 +21,7 @@ package org.apache.jmeter.util;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -123,9 +124,37 @@ public class XPathUtil {
     public static Document makeDocument(InputStream stream, boolean validate, boolean whitespace, boolean namespace,
             boolean tolerant, boolean quiet, boolean showWarnings, boolean report_errors, boolean isXml, boolean downloadDTDs)
             throws ParserConfigurationException, SAXException, IOException, TidyException {
+        return makeDocument(stream, validate, whitespace, namespace,
+                tolerant, quiet, showWarnings, report_errors, isXml, downloadDTDs, null);
+    }
+
+    /**
+     * Utility function to get new Document
+     *
+     * @param stream - Document Input stream
+     * @param validate - Validate Document (not Tidy)
+     * @param whitespace - Element Whitespace (not Tidy)
+     * @param namespace - Is Namespace aware. (not Tidy)
+     * @param tolerant - Is tolerant - i.e. use the Tidy parser
+     * @param quiet - set Tidy quiet
+     * @param showWarnings - set Tidy warnings
+     * @param report_errors - throw TidyException if Tidy detects an error
+     * @param isXml - is document already XML (Tidy only)
+     * @param downloadDTDs - if true, try to download external DTDs
+     * @param tidyOut OutputStream for Tidy pretty-printing
+     * @return document
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     * @throws IOException
+     * @throws TidyException
+     */
+    public static Document makeDocument(InputStream stream, boolean validate, boolean whitespace, boolean namespace,
+            boolean tolerant, boolean quiet, boolean showWarnings, boolean report_errors, boolean isXml, boolean downloadDTDs, 
+            OutputStream tidyOut)
+            throws ParserConfigurationException, SAXException, IOException, TidyException {
         Document doc;
         if (tolerant) {
-            doc = tidyDoc(stream, quiet, showWarnings, report_errors, isXml);
+            doc = tidyDoc(stream, quiet, showWarnings, report_errors, isXml, tidyOut);
         } else {
             doc = makeDocumentBuilder(validate, whitespace, namespace, downloadDTDs).parse(stream);
         }
@@ -140,15 +169,16 @@ public class XPathUtil {
      * @param showWarnings - show Tidy warnings?
      * @param report_errors - log errors and throw TidyException?
      * @param isXML - treat document as XML?
+     * @param out OutputStream, null if no output required
      * @return the document
      *
      * @throws TidyException if a ParseError is detected and report_errors is true
      */
     private static Document tidyDoc(InputStream stream, boolean quiet, boolean showWarnings, boolean report_errors,
-            boolean isXML) throws TidyException {
+            boolean isXML, OutputStream out) throws TidyException {
         StringWriter sw = new StringWriter();
         Tidy tidy = makeTidyParser(quiet, showWarnings, isXML, sw);
-        Document doc = tidy.parseDOM(stream, null);
+        Document doc = tidy.parseDOM(stream, out);
         doc.normalize();
         if (tidy.getParseErrors() > 0) {
             if (report_errors) {
