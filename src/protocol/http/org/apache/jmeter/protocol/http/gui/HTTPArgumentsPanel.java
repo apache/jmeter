@@ -89,6 +89,22 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
 
     @Override
     public TestElement createTestElement() {
+        Arguments args = getUnclonedParameters();
+        this.configureTestElement(args);
+        return (TestElement) args.clone();
+    }
+
+    /**
+     * Convert the argument panel contents to an {@link Arguments} collection.
+     * 
+     * @return a collection of {@link HTTPArgument} entries
+     */
+    public Arguments getParameters() {
+        Arguments args = getUnclonedParameters();
+        return (Arguments) args.clone();
+    }
+
+    private Arguments getUnclonedParameters() {
         stopTableEditing();
         @SuppressWarnings("unchecked") // only contains Argument (or HTTPArgument)
         Iterator<HTTPArgument> modelData = (Iterator<HTTPArgument>) tableModel.iterator();
@@ -97,8 +113,7 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
             HTTPArgument arg = modelData.next();
             args.addArgument(arg);
         }
-        this.configureTestElement(args);
-        return (TestElement) args.clone();
+        return args;
     }
 
     @Override
