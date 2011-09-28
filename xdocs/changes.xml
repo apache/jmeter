@@ -86,7 +86,7 @@ httpclient3.retrycount=3
 <ul>
 <li>Fix HttpClient 4 sampler so it reuses HttpClient instances and connections where possible.</li>
 <li>Temporary fix to HC4 sampler to work round HTTPCLIENT-1120.</li>
-<li>Bug 51863 - Lots of ESTABLISHED connections with HttpClient 4 implementation (ws HttpClient 3.1 impl)</li>
+<li>Bug 51863 - Lots of ESTABLISHED connections with HttpClient 4 implementation (vs HttpClient 3.1 impl)</li>
 <li>Bug 51750 - Retrieve all embedded resources doesn't follow IFRAME</li>
 <li>Bug 51752 - HTTP Cache is broken when using "Retrieve all embedded resources" with concurrent pool</li>
 <li>Bug 39219 - HTTP Server: You can't stop it after File->Open</li>
