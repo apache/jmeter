@@ -203,6 +203,11 @@ public class HTTPArgument extends Argument implements Serializable {
 
     }
 
+    /**
+     * Converts all {@link Argument} entries in the collection to {@link HTTPArgument} entries.
+     * 
+     * @param args collection of {@link Argument} and/or {@link HTTPArgument} entries
+     */
     public static void convertArgumentsToHTTP(Arguments args) {
         List<Argument> newArguments = new LinkedList<Argument>();
         PropertyIterator iter = args.getArguments().iterator();
