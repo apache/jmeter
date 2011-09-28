@@ -218,11 +218,6 @@ The menu item Options / Choose Language does not change all the displayed text t
 To override the default local language fully, set the JMeter property "language" before starting JMeter. 
 
 </p>
-<p>
-When a test plan uses HttpClient 4 requests and you try to stop it before end of ramp up period,
-a possible deadlock may happen.
-
-</p>
 <h2>
 Incompatible changes
 </h2>
@@ -252,6 +247,11 @@ HTTP Samplers and Proxy
 
 <li>
 Fix HttpClient 4 sampler so it reuses HttpClient instances and connections where possible.
+</li>
+
+
+<li>
+Temporary fix to HC4 sampler to work round HTTPCLIENT-1120.
 </li>
 
 
@@ -439,6 +439,11 @@ Remote Shut host menu item was not being enabled.
 </li>
 
 
+<li>
+Bug 51888 - Occasional deadlock when stopping a testplan
+</li>
+
+
 </ul>
 <h2>
 Improvements
@@ -553,6 +558,11 @@ Added AsynchSampleSender which sends samples from server to client asynchronousl
 </li>
 
 
+<li>
+Upgraded to htmlparser 2.1; JavaMail 1.4.4; JUnit 4.9
+</li>
+
+
 </ul>
 <h2>
 Non-functional changes
@@ -575,6 +585,11 @@ Improve error logging when Javascript errors are detected.
 </li>
 
 
+<li>
+Updated documentation footer
+</li>
+
+
 </ul>
 </blockquote>
 </p>
@@ -594,8 +609,8 @@ Copyright &copy; 1999-2011, Apache Software Foundation
 </td></tr>
 <tr><td colspan="2">
 <div align="center"><font color="#525D76" size="-1">
-"Apache", the Apache feather, and the Apache JMeter logo are
-trademarks of the Apache Software Foundation for our open source software.
+Apache, Apache JMeter, JMeter, the Apache feather, and the Apache JMeter logo are
+trademarks of the Apache Software Foundation.
 </font>
 </div>
 </td></tr>
