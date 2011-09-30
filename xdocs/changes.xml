@@ -29,6 +29,13 @@
 Earlier changes are detailed in the <a href="changes_history.html">History of Previous Changes</a>.
 </note>
 
+<h1>Version 2.5.2?</h1>
+<p>temporary section to collect changes while release vote is in progress</p>
+<ul>
+<li>Bug 51932 - CacheManager does not handle cache-control header with any attributes after max-age</li>
+</ul>
+
+
 <!--  ===================  -->
 
 <h1>Version 2.5.1</h1>
