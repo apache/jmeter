@@ -47,8 +47,6 @@ public class JMeterContext {
 
     private int threadNum;
 
-    private byte[] readBuffer = null;
-
     private boolean isReinitSubControllers = false;
 
     JMeterContext() {
@@ -66,7 +64,6 @@ public class JMeterContext {
         previousSampler = null;
         samplingStarted = false;
         threadNum = 0;
-        readBuffer = null;
         thread = null;
         isReinitSubControllers = false;
     }
@@ -78,18 +75,6 @@ public class JMeterContext {
      */
     public JMeterVariables getVariables() {
         return variables;
-    }
-
-    /**
-     * A temporary buffer that can be shared between samplers in a thread.
-     * 
-     * @return the shared read buffer
-     */
-    public byte[] getReadBuffer() {
-        if (readBuffer == null) {
-            readBuffer = new byte[8192];
-        }
-        return readBuffer;
     }
 
     public void setVariables(JMeterVariables vars) {

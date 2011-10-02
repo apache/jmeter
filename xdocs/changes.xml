@@ -33,6 +33,7 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 <p>temporary section to collect changes while release vote is in progress</p>
 <ul>
 <li>Bug 51932 - CacheManager does not handle cache-control header with any attributes after max-age</li>
+<li>Bug 51918 - GZIP compressed traffic produces errors, when multiple connections allowed</li>
 </ul>
 
 
