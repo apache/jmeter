@@ -35,6 +35,7 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 <li>Bug 51932 - CacheManager does not handle cache-control header with any attributes after max-age</li>
 <li>Bug 51918 - GZIP compressed traffic produces errors, when multiple connections allowed</li>
 <li>[Non-func] fixes to build.xml: support scripts; localise re-usable property names</li>
+<li>Bug 51937 - JMeter does not handle missing TestPlan entry well</li>
 </ul>
 
 
