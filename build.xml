@@ -1985,6 +1985,7 @@ run JMeter unless all the JMeter jars are added.
    <!-- fork="yes" is required or dir attribute is ignored -->
    <java classname="org.apache.jorphan.test.AllTests" fork="yes" failonerror="true" dir="${basedir}/bin">
       <classpath>
+        <fileset dir="${dest.jar.jmeter}" includes="ApacheJMeter.jar"/>
         <fileset dir="${dest.jar}" includes="*.jar"/>
         <pathelement location="${build.test}"/>
         <path refid="classpath"/>
