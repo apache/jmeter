@@ -1300,6 +1300,7 @@ run JMeter unless all the JMeter jars are added.
     <target name="check-versions" unless="disable-check-versions">
         <fail message="jmeter.version must be defined" unless="jmeter.version"/>
         <fail message="svn.revision must be defined" unless="svn.revision"/>
+        <local         name="version.match"/>
         <condition property="version.match">
             <resourcecontains resource="${src.core}/org/apache/jmeter/util/JMeterVersion.java" 
             	substring='VERSION = "${jmeter.version}";'/>
@@ -1825,6 +1826,7 @@ run JMeter unless all the JMeter jars are added.
       <filelist dir="${batchtestserver.out}" files="${batchtestserver.log}" />
     </concat>
 
+    <local         name="BatchTestLocalServer.len"/>
     <condition property="BatchTestLocalServer.len">
         <length file="${batchtestserver.out}/${batchtestserver.log}" when="equal" length="0" />
     </condition>
@@ -1870,14 +1872,15 @@ run JMeter unless all the JMeter jars are added.
        <attribute name="type" default=""/>
        <attribute name="file"/>
        <sequential>
+          <local name="found"/>
           <!--echo>Looking for @{file}</echo-->
          <available property="found" file="@{file}"/>
          <fail message="Cannot find @{type} file @{file}" unless="found"/>
        </sequential>
     </macrodef>
 
-    <checkfile type="input" file="${batchtest.inp}/${batchtest.name}.csv"/>
-    <checkfile type="input" file="${batchtest.inp}/${batchtest.name}.xml"/>
+    <checkfile type="input" file="${batchtest.inp}${file.separator}${batchtest.name}.csv"/>
+    <checkfile type="input" file="${batchtest.inp}${file.separator}${batchtest.name}.xml"/>
 
     <deleteworkfiles/>
 
@@ -1904,25 +1907,28 @@ run JMeter unless all the JMeter jars are added.
         <arg value="-JCSVFILE=${batchtest.name}.csv"/>
      </java>
 
-    <checkfile type="output" file="${batchtest.out}/${batchtest.name}.csv"/>
-    <checkfile type="output" file="${batchtest.out}/${batchtest.name}.xml"/>
-    <checkfile type="output" file="${batchtest.out}/${batchtest.name}.jtl"/>
+    <checkfile type="output" file="${batchtest.out}${file.separator}${batchtest.name}.csv"/>
+    <checkfile type="output" file="${batchtest.out}${file.separator}${batchtest.name}.xml"/>
+    <checkfile type="output" file="${batchtest.out}${file.separator}${batchtest.name}.jtl"/>
 
+    <local         name="BatchTestLocal.csv.OK"/>
     <condition property="BatchTestLocal.csv.OK">
         <filesmatch file1="${batchtest.inp}/${batchtest.name}.csv" file2="${batchtest.out}/${batchtest.name}.csv"/>
     </condition>
     <fail unless="BatchTestLocal.csv.OK">
         CSV Files are not identical.
-        ${batchtest.inp}/${batchtest.name}.csv
-        ${batchtest.out}/${batchtest.name}.csv
+        ${batchtest.inp}${file.separator}${batchtest.name}.csv
+        ${batchtest.out}${file.separator}${batchtest.name}.csv
     </fail>
+
+    <local         name="BatchTestLocal.xml.OK"/>
     <condition property="BatchTestLocal.xml.OK">
        <filesmatch file1="${batchtest.inp}/${batchtest.name}.xml" file2="${batchtest.out}/${batchtest.name}.xml"/>
     </condition>
     <fail unless="BatchTestLocal.xml.OK">
         XML Files are not identical.
-        ${batchtest.inp}/${batchtest.name}.xml
-        ${batchtest.out}/${batchtest.name}.xml
+        ${batchtest.inp}${file.separator}${batchtest.name}.xml
+        ${batchtest.out}${file.separator}${batchtest.name}.xml
     </fail>
 
     <echo level="info">${batchtest.name} output files compared OK</echo>
@@ -1932,6 +1938,7 @@ run JMeter unless all the JMeter jars are added.
       <filelist dir="${batchtest.out}" files="${batchtest.name}.log" />
     </concat>
 
+    <local         name="BatchTestLocal.len"/>
     <condition property="BatchTestLocal.len">
         <length file="${batchtest.out}/${batchtest.name}.log" when="equal" length="0" />
     </condition>
