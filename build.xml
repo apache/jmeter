@@ -1775,7 +1775,7 @@ run JMeter unless all the JMeter jars are added.
     </copy>
   </target>
 
-  <target name="test" depends="compile-tests,_test,batchtest,batchtestserver"
+  <target name="test" depends="compile-tests,_test,_allbatchtests"
     description="Run tests (use -Djava.awt.headless=true on systems without graphic displays)"/>
 
   <target name="test-both" depends="test-headless,test-headed"/>
@@ -1948,6 +1948,19 @@ run JMeter unless all the JMeter jars are added.
 
     <deleteworkfiles/>
 
+  </target>
+
+  <!-- Additional test scripts -->
+  <target name="batch_scripts">
+  <!-- TODO fix bug so test passes
+      <antcall target="batchtest">
+          <param name="batchtest.name" value="Bug50898"/>
+      </antcall>
+  -->
+  </target>
+
+  <!-- Run all batch tests; used by test target -->
+  <target name="_allbatchtests" depends="batchtest,batchtestserver,batch_scripts">
   </target>
 
    <!-- Generic test target, not intended to be called directly -->
