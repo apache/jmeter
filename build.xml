@@ -1058,13 +1058,10 @@ run JMeter unless all the JMeter jars are added.
   </target>
 
   <!-- Check the Ant version -->
-  <available property="Ant-1.7.0-or-later" classname="org.apache.tools.ant.types.ResourceCollection"/>
+  <available property="Ant-1.8.0-or-later" classname="org.apache.tools.ant.taskdefs.Local"/>
+  <fail message="This build requires Ant 1.8.0 or later" unless="Ant-1.8.0-or-later"/>
 
-  <target name="_message_Ant" unless="Ant-1.7.0-or-later">
-      <fail message="This build requires Ant 1.7.0 or later"/>
-  </target>
-  
-    <!-- Check that the 3rd party libraries are present -->
+  <!-- Check that the 3rd party libraries are present -->
   <target name="_check_3rdparty">
     <condition property="3rdparty.present">
       <and>
@@ -2225,7 +2222,7 @@ run JMeter unless all the JMeter jars are added.
     </target>
 
     <!-- Download all missing jars.-->
-    <target name="download_jars" description="Download any missing jar files" depends="_message_Ant">
+    <target name="download_jars" description="Download any missing jar files">
         <!-- build.dir may be needed as a temporary work area -->
         <mkdir dir="${build.dir}" />
         <antcall target="_process_all_jars">
