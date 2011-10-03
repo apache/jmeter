@@ -171,6 +171,16 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
     }
 
     public void configure(HashTree testTree) {
+        // Is testplan serialised?
+        SearchByClass<TestPlan> testPlan = new SearchByClass<TestPlan>(TestPlan.class);
+        testTree.traverse(testPlan);
+        Object[] plan = testPlan.getSearchResults().toArray();
+        if (plan.length == 0) {
+            throw new RuntimeException("Could not find the TestPlan class!");
+        }
+        if (((TestPlan) plan[0]).isSerialized()) {
+            serialized = true;
+        }
         active = true;
         test = testTree;
     }
@@ -311,17 +321,6 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         log.info("Running the test!");
         running = true;
 
-        SearchByClass<TestPlan> testPlan = new SearchByClass<TestPlan>(TestPlan.class);
-        test.traverse(testPlan);
-        Object[] plan = testPlan.getSearchResults().toArray();
-        if (plan.length == 0) {
-            System.err.println("Could not find the TestPlan!");
-            log.error("Could not find the TestPlan!");
-            System.exit(1);
-        }
-        if (((TestPlan) plan[0]).isSerialized()) {
-            serialized = true;
-        }
         JMeterContextService.startTest();
         try {
             PreCompiler compiler = new PreCompiler();
