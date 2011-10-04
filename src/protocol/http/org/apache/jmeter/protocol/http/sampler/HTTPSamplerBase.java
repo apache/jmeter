@@ -803,6 +803,10 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     private static final String HTTP_PREFIX = PROTOCOL_HTTP+"://"; // $NON-NLS-1$
     private static final String HTTPS_PREFIX = PROTOCOL_HTTPS+"://"; // $NON-NLS-1$
 
+    // Bug 51939
+    private static final boolean SEPARATE_CONTAINER = 
+            JMeterUtils.getPropDefault("httpsampler.separate.container", true); // $NON-NLS-1$
+
     /**
      * Get the URL, built from its component parts.
      *
@@ -1422,8 +1426,12 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 // Only download page resources if we were not redirected.
                 // If we were redirected, the page resources have already been
                 // downloaded for the sample made for the redirected url
+                // otherwise, use null so the container is created if necessary unless
+                // the flag is false, in which case revert to broken 2.1 behaviour 
+                // Bug 51939 -  https://issues.apache.org/bugzilla/show_bug.cgi?id=51939
                 if(!wasRedirected) {
-                    HTTPSampleResult container = (HTTPSampleResult) (areFollowingRedirect ? res.getParent() : res);
+                    HTTPSampleResult container = (HTTPSampleResult) (
+                            areFollowingRedirect ? res.getParent() : SEPARATE_CONTAINER ? null : res);
                     res = downloadPageResources(res, container, frameDepth);
                 }
             }
