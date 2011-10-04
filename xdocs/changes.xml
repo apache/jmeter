@@ -154,6 +154,7 @@ This has been corrected; can still revert to the Bug 51939 behaviour by setting 
 <h2>Non-functional changes</h2>
 <ul>
 <li>fixes to build.xml: support scripts; localise re-usable property names</li>
+<li>Bug 51923 - Counter function bug or documentation issue ? (fixed docs)</li>
 </ul>
 
 </section> 
