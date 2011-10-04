@@ -68,6 +68,12 @@ To override the default local language fully, set the JMeter property "language"
 
 <h2>Incompatible changes</h2>
 
+<p>
+JMeter versions since 2.1 failed to create a container sample when loading embedded resources.
+This has been corrected; can still revert to the Bug 51939 behaviour by setting the following property:
+<code>httpsampler.separate.container=false</code>
+</p>
+
 <!-- =================== Bug fixes =================== -->
 
 <h2>Bug fixes</h2>
@@ -76,6 +82,7 @@ To override the default local language fully, set the JMeter property "language"
 <ul>
 <li>Bug 51932 - CacheManager does not handle cache-control header with any attributes after max-age</li>
 <li>Bug 51918 - GZIP compressed traffic produces errors, when multiple connections allowed</li>
+<li>Bug 51939 - Should generate new parent sample if necessary when retrieving embedded resources</li>
 </ul>
 
 <h3>Other Samplers</h3>
