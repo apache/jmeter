@@ -24,9 +24,9 @@ import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Date;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.URIException;
@@ -331,7 +331,8 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
         threadCache = new InheritableThreadLocal<Map<String, CacheEntry>>(){
             @Override
             protected Map<String, CacheEntry> initialValue(){
-                return new HashMap<String, CacheEntry>();
+                // Bug 51942 - this map may be used from multiple threads
+                return new ConcurrentHashMap<String, CacheEntry>();
             }
         };
     }
