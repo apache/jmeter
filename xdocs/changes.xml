@@ -156,6 +156,7 @@ This has been corrected; can still revert to the Bug 51939 behaviour by setting 
 <li>fixes to build.xml: support scripts; localise re-usable property names</li>
 <li>Bug 51923 - Counter function bug or documentation issue ? (fixed docs)</li>
 <li>Update velocity.jar to 1.7 (from 1.6.2)</li>
+<li>Bug 51954 - Generated documents include </br> entries which cause extra blank lines </li>
 </ul>
 
 </section> 
