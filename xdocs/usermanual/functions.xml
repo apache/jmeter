@@ -314,6 +314,13 @@ counting how many times that request was run.
 so multiple counter functions operated on the same value.] 
 The global counter - "FALSE" - is separately maintained by each counter instance.
 </p>
+<p>
+<b>
+Multiple __counter function calls in the same iteration won't increment the value further.
+</b>
+<br/>
+If you want to have a count that increments for each sample, use the function in a Pre-Processor such as <complink name="User Parameters"/>.
+</p>
 </description>
 <properties>
         <property name="First argument" required="Yes">TRUE if you wish each simulated user's counter
