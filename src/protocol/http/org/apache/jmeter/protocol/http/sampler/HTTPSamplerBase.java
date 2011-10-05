@@ -1204,6 +1204,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                         poolSize, poolSize, KEEPALIVETIME, TimeUnit.SECONDS,
                         new LinkedBlockingQueue<Runnable>());
 
+                boolean tasksCompleted = false;
                 try {
                     // sample all resources with threadpool
                     final List<Future<HTTPSampleResult>> retExec = exec.invokeAll(liste);
@@ -1223,10 +1224,15 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                             errorResult(e, res);
                         }
                     }
+                    tasksCompleted = exec.awaitTermination(1, TimeUnit.MILLISECONDS); // did all the tasks finish?
                 } catch (InterruptedException ie) {
                     log.warn("Interruped fetching embedded resources", ie); // $NON-NLS-1$
                 } catch (ExecutionException ee) {
                     log.warn("Execution issue when fetching embedded resources", ee); // $NON-NLS-1$
+                } finally {
+                    if (!tasksCompleted) {
+                        exec.shutdownNow(); // kill any remaining tasks
+                    }
                 }
             }
         }
