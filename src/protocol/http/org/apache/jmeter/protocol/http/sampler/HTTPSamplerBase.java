@@ -40,6 +40,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.config.Argument;
@@ -1213,9 +1214,14 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
                     // add result to main sampleResult
                     for (Future<HTTPSampleResult> future : retExec) {
-                        final HTTPSampleResult binRes = future.get();
-                        res.addSubResult(binRes);
-                        res.setSuccessful(res.isSuccessful() && binRes.isSuccessful());
+                        HTTPSampleResult binRes;
+                        try {
+                            binRes = future.get(1, TimeUnit.MILLISECONDS);
+                            res.addSubResult(binRes);
+                            res.setSuccessful(res.isSuccessful() && binRes.isSuccessful());
+                        } catch (TimeoutException e) {
+                            errorResult(e, res);
+                        }
                     }
                 } catch (InterruptedException ie) {
                     log.warn("Interruped fetching embedded resources", ie); // $NON-NLS-1$
