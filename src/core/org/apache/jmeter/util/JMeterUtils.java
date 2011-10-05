@@ -354,7 +354,7 @@ public class JMeterUtils implements UnitTestManager {
             if (isDefault || resBundLocale.equals(loc)) {// language change worked
             // Check if we at least found the correct language:
             } else if (resBundLocale.getLanguage().equals(loc.getLanguage())) {
-                log.warn("Could not find resources for '"+loc.toString()+"', using '"+resBundLocale.toString()+"'");
+                log.info("Could not find resources for '"+loc.toString()+"', using '"+resBundLocale.toString()+"'");
             } else {
                 log.error("Could not find resources for '"+loc.toString()+"'");
             }
