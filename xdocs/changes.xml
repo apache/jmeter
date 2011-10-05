@@ -84,6 +84,7 @@ This has been corrected; can still revert to the Bug 51939 behaviour by setting 
 <li>Bug 51918 - GZIP compressed traffic produces errors, when multiple connections allowed</li>
 <li>Bug 51939 - Should generate new parent sample if necessary when retrieving embedded resources</li>
 <li>Bug 51942 - Synchronisation issue on CacheManager when Concurrent Download is used</li>
+<li>Bug 51957 - Concurrent get can hang if a task does not complete</li>
 </ul>
 
 <h3>Other Samplers</h3>
