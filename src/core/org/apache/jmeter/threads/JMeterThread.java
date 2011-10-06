@@ -403,6 +403,8 @@ public class JMeterThread implements Runnable, Interruptible {
                 delay(pack.getTimers());
                 Sampler sampler = pack.getSampler();
                 sampler.setThreadContext(threadContext);
+                // TODO should this set the thread names for all the subsamples?
+                // might be more efficient than fetching the name elsewehere
                 sampler.setThreadName(threadName);
                 TestBeanHelper.prepare(sampler);
 
