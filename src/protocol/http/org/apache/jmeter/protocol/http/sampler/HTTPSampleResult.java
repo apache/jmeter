@@ -194,7 +194,7 @@ public class HTTPSampleResult extends SampleResult {
             byte[] bytes=getResponseData();
             // get the start of the file
             // TODO - charset?
-            String prefix = new String(bytes,0,Math.min(bytes.length, 1000)).toLowerCase(java.util.Locale.ENGLISH);
+            String prefix = new String(bytes,0,Math.min(bytes.length, 2000)).toLowerCase(java.util.Locale.ENGLISH);
             // Extract the content-type if present
             final String METATAG = "<meta http-equiv=\"content-type\" content=\""; // $NON-NLS-1$
             int tagstart=prefix.indexOf(METATAG);
