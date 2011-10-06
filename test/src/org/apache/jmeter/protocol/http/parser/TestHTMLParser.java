@@ -133,6 +133,11 @@ public class TestHTMLParser extends JMeterTestCase {
                         "http://localhost/",
                         "testfiles/HTMLParserTestFrames.all",
                         "testfiles/HTMLParserTestFrames.all"), 
+                // Relative filenames
+                new TestData("testfiles/HTMLParserTestFile_2.html",
+                        "file:testfiles/HTMLParserTestFile_2.html",
+                        "testfiles/HTMLParserTestFile_2.all",
+                        "testfiles/HTMLParserTestFile_2.all"), 
                          };
 
         public static junit.framework.Test suite() {
