@@ -17,13 +17,11 @@
 package org.apache.jmeter.protocol.http.sampler;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -42,7 +40,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
@@ -132,7 +129,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     public static final String PROTOCOL = "HTTPSampler.protocol"; // $NON-NLS-1$
 
-    private static final String PROTOCOL_FILE = "file"; // $NON-NLS-1$
+    static final String PROTOCOL_FILE = "file"; // $NON-NLS-1$
 
     private static final String DEFAULT_PROTOCOL = PROTOCOL_HTTP;
 
@@ -827,8 +824,15 @@ public abstract class HTTPSamplerBase extends AbstractSampler
          || path.startsWith(HTTPS_PREFIX)){
             return new URL(path);
         }
-        if (!path.startsWith("/")){ // $NON-NLS-1$
-            pathAndQuery.append("/"); // $NON-NLS-1$
+        String domain = getDomain();
+        String protocol = getProtocol();
+        if (PROTOCOL_FILE.equalsIgnoreCase(protocol)) {
+            domain=null; // allow use of relative file URLs
+        } else {
+            // HTTP URLs must be absolute, allow file to be relative
+            if (!path.startsWith("/")){ // $NON-NLS-1$
+                pathAndQuery.append("/"); // $NON-NLS-1$
+            }
         }
         pathAndQuery.append(path);
 
@@ -849,9 +853,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         }
         // If default port for protocol is used, we do not include port in URL
         if(isProtocolDefaultPort()) {
-            return new URL(getProtocol(), getDomain(), pathAndQuery.toString());
+            return new URL(protocol, domain, pathAndQuery.toString());
         }
-        return new URL(getProtocol(), getDomain(), getPort(), pathAndQuery.toString());
+        return new URL(protocol, domain, getPort(), pathAndQuery.toString());
     }
 
     /**
@@ -1017,55 +1021,12 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public SampleResult sample() {
         SampleResult res = null;
         try {
-            if (PROTOCOL_FILE.equalsIgnoreCase(getProtocol())){
-                res = fileSample(new URI(PROTOCOL_FILE,getPath(),null));
-            } else {
-                res = sample(getUrl(), getMethod(), false, 0);
-            }
+            res = sample(getUrl(), getMethod(), false, 0);
             res.setSampleLabel(getName());
             return res;
         } catch (Exception e) {
             return errorResult(e, new HTTPSampleResult());
         }
-    }
-
-    private HTTPSampleResult fileSample(URI uri) throws IOException {
-
-        //String urlStr = uri.toString();
-
-
-        HTTPSampleResult res = new HTTPSampleResult();
-        res.setMonitor(isMonitor());
-        res.setHTTPMethod(GET); // Dummy
-        res.setURL(uri.toURL());
-        res.setSampleLabel(uri.toString());
-        FileInputStream fis = null;
-        res.sampleStart();
-        try {
-            byte[] responseData;
-            StringBuilder ctb=new StringBuilder("text/html"); // $NON-NLS-1$
-            fis = new FileInputStream(getPath());
-            String contentEncoding = getContentEncoding();
-            if (contentEncoding.length() > 0) {
-                ctb.append("; charset="); // $NON-NLS-1$
-                ctb.append(contentEncoding);
-            }
-            responseData = IOUtils.toByteArray(fis);
-            res.sampleEnd();
-            res.setResponseData(responseData);
-            res.setResponseCodeOK();
-            res.setResponseMessageOK();
-            res.setSuccessful(true);
-            String ct = ctb.toString();
-            res.setContentType(ct);
-            res.setEncodingAndType(ct);
-        } finally {
-            IOUtils.closeQuietly(fis);
-        }
-
-        //res.setResponseHeaders("");
-
-        return res;
     }
 
     /**
@@ -1127,6 +1088,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         // Iterate through the URLs and download each image:
         if (urls != null && urls.hasNext()) {
             if (container == null) {
+                // TODO needed here because currently done on sample completion in JMeterThread,
+                // but that only catches top-level samples.
+                res.setThreadName(Thread.currentThread().getName());
                 container = new HTTPSampleResult(res);
                 container.addRawSubResult(res);
             }

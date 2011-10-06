@@ -87,6 +87,9 @@ public class HTTPSamplerFactory {
     }
 
     public static HTTPAbstractImpl getImplementation(String impl, HTTPSamplerBase base){
+        if (HTTPSamplerBase.PROTOCOL_FILE.equals(base.getProtocol())) {
+            return new HTTPFileImpl(base);
+        }
         if (impl.trim().length() == 0){
             impl = DEFAULT_CLASSNAME;
         }
@@ -95,7 +98,7 @@ public class HTTPSamplerFactory {
         } else if (IMPL_HTTP_CLIENT3_1.equals(impl) || HTTP_SAMPLER_APACHE.equals(impl)) {
             return new HTTPHC3Impl(base);                
         } else if (IMPL_HTTP_CLIENT4.equals(impl)) {
-            return new HTTPHC4Impl(base);                
+            return new HTTPHC4Impl(base);
         } else {
             throw new IllegalArgumentException("Unknown implementation type: '"+impl+"'");
         }
