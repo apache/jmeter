@@ -86,6 +86,7 @@ This has been corrected; can still revert to the Bug 51939 behaviour by setting 
 <li>Bug 51942 - Synchronisation issue on CacheManager when Concurrent Download is used</li>
 <li>Bug 51957 - Concurrent get can hang if a task does not complete</li>
 <li>Bug 51925 - Calling Stop on Test leaks executor threads when concurrent download of resources is on</li>
+<li>Bug 51980 - HtmlParserHTMLParser double-counts images used in links</li>
 </ul>
 
 <h3>Other Samplers</h3>
