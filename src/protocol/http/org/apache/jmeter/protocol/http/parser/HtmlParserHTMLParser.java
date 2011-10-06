@@ -35,7 +35,6 @@ import org.htmlparser.tags.CompositeTag;
 import org.htmlparser.tags.FrameTag;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.InputTag;
-import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.ScriptTag;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
@@ -152,12 +151,6 @@ class HtmlParserHTMLParser extends HTMLParser {
                 if (ATT_IS_IMAGE.equalsIgnoreCase(tag.getAttribute(ATT_TYPE))) {
                     // then we need to download the binary
                     binUrlStr = tag.getAttribute(ATT_SRC);
-                }
-            } else if (tag instanceof LinkTag) {
-                LinkTag link = (LinkTag) tag;
-                if (link.getChild(0) instanceof ImageTag) {
-                    ImageTag img = (ImageTag) link.getChild(0);
-                    binUrlStr = img.getImageURL();
                 }
             } else if (tag instanceof ScriptTag) {
                 binUrlStr = tag.getAttribute(ATT_SRC);
