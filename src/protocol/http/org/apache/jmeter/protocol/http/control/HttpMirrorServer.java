@@ -116,7 +116,7 @@ public class HttpMirrorServer extends Thread implements Stoppable {
     }
 
     public static void main(String args[]){
-        int port = 8081;
+        int port = HttpMirrorControl.DEFAULT_PORT;
         if (args.length > 0){
             port = Integer.parseInt(args[0]);
         }
