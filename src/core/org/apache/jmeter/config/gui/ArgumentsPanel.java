@@ -81,11 +81,23 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      */
     private boolean standalone = true;
 
+    /** Button to move a argument up*/
+    private JButton up;
+
+    /** Button to move a argument down*/
+    private JButton down;
+
     /** Command for adding a row to the table. */
     private static final String ADD = "add"; // $NON-NLS-1$
 
     /** Command for removing a row from the table. */
     private static final String DELETE = "delete"; // $NON-NLS-1$
+
+    /** Command for moving a row up in the table. */
+    private static final String UP = "up"; // $NON-NLS-1$
+
+    /** Command for moving a row down in the table. */
+    private static final String DOWN = "down"; // $NON-NLS-1$
 
     public static final String COLUMN_RESOURCE_NAMES_0 = "name"; // $NON-NLS-1$
 
@@ -239,6 +251,11 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         } else {
             delete.setEnabled(true);
         }
+        
+        if(tableModel.getRowCount()>1) {
+            up.setEnabled(true);
+            down.setEnabled(true);
+        }
     }
 
     @Override
@@ -268,19 +285,56 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
             deleteArgument();
         } else if (action.equals(ADD)) {
             addArgument();
+        } else if (action.equals(UP)) {
+            moveUp();
+        } else if (action.equals(DOWN)) {
+            moveDown();
         }
     }
 
     /**
-     * Remove the currently selected argument from the table.
+     * Cancel cell editing if it is being edited
      */
-    protected void deleteArgument() {
+    private void cancelEditing() {
         // If a table cell is being edited, we must cancel the editing before
         // deleting the row
         if (table.isEditing()) {
             TableCellEditor cellEditor = table.getCellEditor(table.getEditingRow(), table.getEditingColumn());
             cellEditor.cancelCellEditing();
         }
+    }
+    
+    /**
+     * Move a row down
+     */
+    private void moveDown() {
+        cancelEditing();
+
+        int rowSelected = table.getSelectedRow();
+        if (rowSelected < table.getRowCount()-1) {
+            tableModel.moveRow(rowSelected, rowSelected+1, rowSelected+1);
+            table.setRowSelectionInterval(rowSelected+1, rowSelected+1);
+        }
+    }
+
+    /**
+     *  Move a row down
+     */
+    private void moveUp() {
+        cancelEditing();
+
+        int rowSelected = table.getSelectedRow();
+        if (rowSelected > 0) {
+            tableModel.moveRow(rowSelected, rowSelected+1, rowSelected-1);
+            table.setRowSelectionInterval(rowSelected-1, rowSelected-1);
+        } 
+    }
+
+    /**
+     * Remove the currently selected argument from the table.
+     */
+    protected void deleteArgument() {
+        cancelEditing();
 
         int rowSelected = table.getSelectedRow();
         if (rowSelected >= 0) {
@@ -290,6 +344,11 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
             // Disable DELETE if there are no rows in the table to delete.
             if (tableModel.getRowCount() == 0) {
                 delete.setEnabled(false);
+            }
+            
+            if(tableModel.getRowCount()>1) {
+                up.setEnabled(true);
+                down.setEnabled(true);
             }
 
             // Table still contains one or more rows, so highlight (select)
@@ -318,7 +377,10 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 
         // Enable DELETE (which may already be enabled, but it won't hurt)
         delete.setEnabled(true);
-
+        if(tableModel.getRowCount()>1) {
+            up.setEnabled(true);
+            down.setEnabled(true);
+        }
         // Highlight (select) the appropriate row.
         int rowToSelect = tableModel.getRowCount() - 1;
         table.setRowSelectionInterval(rowToSelect, rowToSelect);
@@ -417,6 +479,12 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         delete = new JButton(JMeterUtils.getResString("delete")); // $NON-NLS-1$
         delete.setActionCommand(DELETE);
 
+        up = new JButton(JMeterUtils.getResString("up")); // $NON-NLS-1$
+        up.setActionCommand(UP);
+
+        down = new JButton(JMeterUtils.getResString("down")); // $NON-NLS-1$
+        down.setActionCommand(DOWN);
+        
         checkDeleteStatus();
 
         JPanel buttonPanel = new JPanel();
@@ -426,8 +494,12 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         }
         add.addActionListener(this);
         delete.addActionListener(this);
+        up.addActionListener(this);
+        down.addActionListener(this);
         buttonPanel.add(add);
         buttonPanel.add(delete);
+        buttonPanel.add(up);
+        buttonPanel.add(down);
         return buttonPanel;
     }
 
