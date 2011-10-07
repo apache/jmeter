@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testResults version="1.2">
 <httpSample s="true" lb="Download embedded" rc="200" rm="OK" tn="Thread Group 1-1" dt="text" de="" by="40174" sc="1" ec="0" ng="1" na="1">
-  <httpSample s="true" lb="file:testfiles/HTMLParserTestFile_2.htm" rc="200" rm="OK" tn="Thread Group 1-1" dt="text" de="" by="40174" sc="1" ec="0" ng="0" na="0">
+  <httpSample s="true" lb="file:testfiles/HTMLParserTestFile_2.html" rc="200" rm="OK" tn="Thread Group 1-1" dt="text" de="" by="40174" sc="1" ec="0" ng="0" na="0">
     <responseHeader class="java.lang.String"></responseHeader>
     <requestHeader class="java.lang.String"></requestHeader>
     <responseFile class="java.lang.String"></responseFile>
     <cookies class="java.lang.String"></cookies>
     <method class="java.lang.String">GET</method>
     <queryString class="java.lang.String"></queryString>
-    <java.net.URL>file:testfiles/HTMLParserTestFile_2.htm</java.net.URL>
+    <java.net.URL>file:testfiles/HTMLParserTestFile_2.html</java.net.URL>
   </httpSample>
-  <httpSample s="true" lb="file:testfiles/HTMLParserTestFile_2_files/style.css" rc="200" rm="OK" tn="Thread Group 1-1" dt="text" de="" by="1321" sc="1" ec="0" ng="0" na="0">
+  <httpSample s="true" lb="file:testfiles/HTMLParserTestFile_2_files/style.css" rc="200" rm="OK" tn="Thread Group 1-1" dt="text" de="" by="1282" sc="1" ec="0" ng="0" na="0">
     <responseHeader class="java.lang.String"></responseHeader>
     <requestHeader class="java.lang.String"></requestHeader>
     <responseFile class="java.lang.String"></responseFile>
@@ -106,7 +106,7 @@
   <cookies class="java.lang.String"></cookies>
   <method class="java.lang.String">GET</method>
   <queryString class="java.lang.String"></queryString>
-  <java.net.URL>file:testfiles/HTMLParserTestFile_2.htm</java.net.URL>
+  <java.net.URL>file:testfiles/HTMLParserTestFile_2.html</java.net.URL>
 </httpSample>
 
 </testResults>
