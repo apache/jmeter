@@ -22,6 +22,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,12 +33,14 @@ import java.util.Properties;
 import java.util.TreeSet;
 import java.util.Vector;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 import junit.framework.TestSuite;
+import junit.textui.TestRunner;
 
 public class TestHTMLParser extends JMeterTestCase {
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -135,7 +138,7 @@ public class TestHTMLParser extends JMeterTestCase {
                         "testfiles/HTMLParserTestFrames.all"), 
                 // Relative filenames
                 new TestData("testfiles/HTMLParserTestFile_2.html",
-                        "file:testfiles/HTMLParserTestFile_2.html",
+                        "file:HTMLParserTestFile_2.html",
                         "testfiles/HTMLParserTestFile_2.all",
                         "testfiles/HTMLParserTestFile_2.all"), 
                          };
@@ -252,8 +255,14 @@ public class TestHTMLParser extends JMeterTestCase {
             log.debug("file   " + file);
             File f = findTestFile(file);
             byte[] buffer = new byte[(int) f.length()];
-            int len = new FileInputStream(f).read(buffer);
-            assertEquals(len, buffer.length);
+            InputStream is = null;
+            try {
+                is = new FileInputStream(f);
+                int len = is.read(buffer);
+                assertEquals(len, buffer.length);
+            } finally {
+                IOUtils.closeQuietly(is);
+            }
             Iterator<URL> result;
             if (c == null) {
                 result = p.getEmbeddedResourceURLs(buffer, new URL(url));
