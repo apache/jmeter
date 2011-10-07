@@ -73,6 +73,9 @@ JMeter versions since 2.1 failed to create a container sample when loading embed
 This has been corrected; can still revert to the Bug 51939 behaviour by setting the following property:
 <code>httpsampler.separate.container=false</code>
 </p>
+<p>
+Mirror server now uses default port 8081, was 8080 before 2.5.1.
+</p>
 
 <!-- =================== Bug fixes =================== -->
 
@@ -153,6 +156,7 @@ This has been corrected; can still revert to the Bug 51939 behaviour by setting 
 
 <h3>General</h3>
 <ul>
+<li>Bug 51892 - Default mirror port should be different from default proxy port</li>
 </ul>
 
 <h2>Non-functional changes</h2>
