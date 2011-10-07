@@ -100,74 +100,74 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
     public void iterationStart(LoopIterationEvent iterEvent) {
         FileServer server = FileServer.getFileServer();
         final JMeterContext context = getThreadContext();
+        String delim = getDelimiter();
+        if (delim.startsWith("\\t")) { // $NON-NLS-1$
+            delim = "\t";// Make it easier to enter a Tab // $NON-NLS-1$
+        } else if (delim.length() == 0) {
+            log.warn("Empty delimiter converted to ','");
+            delim = ",";
+        }
         if (vars == null) {
             String _fileName = getFilename();
             String mode = getShareMode();
             int modeInt = CSVDataSetBeanInfo.getShareModeAsInt(mode);
-            switch(modeInt){
-                case CSVDataSetBeanInfo.SHARE_ALL:
-                    alias = _fileName;
-                    break;
-                case CSVDataSetBeanInfo.SHARE_GROUP:
-                    alias = _fileName+"@"+System.identityHashCode(context.getThreadGroup());
-                    break;
-                case CSVDataSetBeanInfo.SHARE_THREAD:
-                    alias = _fileName+"@"+System.identityHashCode(context.getThread());
-                    break;
-                default:
-                    alias = _fileName+"@"+mode; // user-specified key
-                    break;
+            switch (modeInt) {
+            case CSVDataSetBeanInfo.SHARE_ALL:
+                alias = _fileName;
+                break;
+            case CSVDataSetBeanInfo.SHARE_GROUP:
+                alias = _fileName + "@" + System.identityHashCode(context.getThreadGroup());
+                break;
+            case CSVDataSetBeanInfo.SHARE_THREAD:
+                alias = _fileName + "@" + System.identityHashCode(context.getThread());
+                break;
+            default:
+                alias = _fileName + "@" + mode; // user-specified key
+                break;
             }
             final String names = getVariableNames();
-            if (names == null || names.length()==0) {
+            if (names == null || names.length() == 0) {
                 String header = server.reserveFile(_fileName, getFileEncoding(), alias, true);
                 try {
-                    vars = CSVSaveService.csvSplitString(header, getDelimiter().charAt(0));
+                    vars = CSVSaveService.csvSplitString(header, delim.charAt(0));
                     firstLineIsNames = true;
                 } catch (IOException e) {
-                    log.warn("Could not split CSV header line",e);
+                    log.warn("Could not split CSV header line", e);
                 }
             } else {
                 server.reserveFile(_fileName, getFileEncoding(), alias);
                 vars = JOrphanUtils.split(names, ","); // $NON-NLS-1$
             }
         }
-            String delim = getDelimiter();
-            if (delim.equals("\\t")) { // $NON-NLS-1$
-                delim = "\t";// Make it easier to enter a Tab // $NON-NLS-1$
-            } else if (delim.length()==0){
-                log.warn("Empty delimiter converted to ','");
-                delim=",";
-            }
-            // TODO: fetch this once as per vars above?
-            JMeterVariables threadVars = context.getVariables();
-            String line = null;
+        // TODO: fetch this once as per vars above?
+        JMeterVariables threadVars = context.getVariables();
+        String line = null;
+        try {
+            line = server.readLine(alias, getRecycle(), firstLineIsNames);
+        } catch (IOException e) { // treat the same as EOF
+            log.error(e.toString());
+        }
+        if (line != null) {// i.e. not EOF
             try {
-                line = server.readLine(alias, getRecycle(), firstLineIsNames);
-            } catch (IOException e) { // treat the same as EOF
-                log.error(e.toString());
+                String[] lineValues = getQuotedData() ?
+                        CSVSaveService.csvSplitString(line, delim.charAt(0))
+                        : JOrphanUtils.split(line, delim, false);
+                for (int a = 0; a < vars.length && a < lineValues.length; a++) {
+                    threadVars.put(vars[a], lineValues[a]);
+                }
+            } catch (IOException e) { // Should only happen for quoting errors
+                log.error("Unexpected error splitting '" + line + "' on '" + delim.charAt(0) + "'");
             }
-            if (line!=null) {// i.e. not EOF
-                try {
-                    String[] lineValues = getQuotedData() ?
-                            CSVSaveService.csvSplitString(line, delim.charAt(0))
-                            : JOrphanUtils.split(line, delim, false);
-                            for (int a = 0; a < vars.length && a < lineValues.length; a++) {
-                                threadVars.put(vars[a], lineValues[a]);
-                            }
-                } catch (IOException e) { // Should only happen for quoting errors
-                   log.error("Unexpected error splitting '"+line+"' on '"+delim.charAt(0)+"'");
-                }
-                // TODO - report unused columns?
-                // TODO - provide option to set unused variables ?
-            } else {
-                if (getStopThread()) {
-                    throw new JMeterStopThreadException("End of file detected");
-                }
-                for (int a = 0; a < vars.length ; a++) {
-                    threadVars.put(vars[a], EOFVALUE);
-                }
+            // TODO - report unused columns?
+            // TODO - provide option to set unused variables ?
+        } else {
+            if (getStopThread()) {
+                throw new JMeterStopThreadException("End of file detected");
             }
+            for (int a = 0; a < vars.length ; a++) {
+                threadVars.put(vars[a], EOFVALUE);
+            }
+        }
     }
 
     /**
