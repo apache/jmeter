@@ -10,7 +10,7 @@
     <queryString class="java.lang.String"></queryString>
     <java.net.URL>file:testfiles/HTMLParserTestFile_2.html</java.net.URL>
   </httpSample>
-  <httpSample s="true" lb="file:testfiles/HTMLParserTestFile_2_files/style.css" rc="200" rm="OK" tn="Thread Group 1-1" dt="text" de="" by="1282" sc="1" ec="0" ng="0" na="0">
+  <httpSample s="true" lb="file:testfiles/HTMLParserTestFile_2_files/style.css" rc="200" rm="OK" tn="Thread Group 1-1" dt="text" de="" by="1231" sc="1" ec="0" ng="0" na="0">
     <responseHeader class="java.lang.String"></responseHeader>
     <requestHeader class="java.lang.String"></requestHeader>
     <responseFile class="java.lang.String"></responseFile>
