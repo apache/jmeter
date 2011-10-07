@@ -33,7 +33,8 @@ public class HttpMirrorControl extends AbstractTestElement {
 
     private transient HttpMirrorServer server;
 
-    private static final int DEFAULT_PORT = 8081;
+    // Used by HttpMirrorServer
+    static final int DEFAULT_PORT = 8081;
 
     // and as a string
     public static final String DEFAULT_PORT_S =
