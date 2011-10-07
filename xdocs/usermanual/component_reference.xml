@@ -5126,6 +5126,9 @@ either by copying the files there or by starting JMeter in the directory contain
 The HTTP Mirrror Server is a very simple HTTP server - it simply mirrors the data sent to it.
 This is useful for checking the content of HTTP requests.
 </p>
+<p>
+It uses default port 8081 since 2.5.2. 
+</p>
 </description>
 </component>
 
