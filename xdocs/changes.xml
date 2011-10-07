@@ -119,6 +119,7 @@ Mirror server now uses default port 8081, was 8080 before 2.5.1.
 <h3>General</h3>
 <ul>
 <li>Bug 51937 - JMeter does not handle missing TestPlan entry well</li>
+<li>Bug 51988 - CSV Data Set Configuration does not resolve default delimiter for header parsing when variables field is empty</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
