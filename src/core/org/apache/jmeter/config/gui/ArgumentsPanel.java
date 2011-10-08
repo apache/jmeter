@@ -311,7 +311,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         cancelEditing();
 
         int rowSelected = table.getSelectedRow();
-        if (rowSelected < table.getRowCount()-1) {
+        if (rowSelected >=0 && rowSelected < table.getRowCount()-1) {
             tableModel.moveRow(rowSelected, rowSelected+1, rowSelected+1);
             table.setRowSelectionInterval(rowSelected+1, rowSelected+1);
         }
