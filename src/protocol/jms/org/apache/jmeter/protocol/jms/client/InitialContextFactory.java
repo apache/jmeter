@@ -71,7 +71,15 @@ public class InitialContextFactory {
                 throw new NamingException(e.toString());
             }
             // we want to return the context that is actually in the map
-            ctx = MAP.putIfAbsent(cacheKey, ctx);
+            Context oldCtx = MAP.putIfAbsent(cacheKey, ctx);
+            if(oldCtx != null) {
+                try {
+                    ctx.close();
+                } catch (Exception e) {
+                    // NOOP
+                }
+                ctx = oldCtx;
+            }
         }
         return ctx;
     }
