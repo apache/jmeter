@@ -71,8 +71,10 @@ public class InitialContextFactory {
                 throw new NamingException(e.toString());
             }
             // we want to return the context that is actually in the map
+            // if it's the first put we will have a null result
             Context oldCtx = MAP.putIfAbsent(cacheKey, ctx);
             if(oldCtx != null) {
+                // There was an object in map, destroy the temporary and return one in map (oldCtx)
                 try {
                     ctx.close();
                 } catch (Exception e) {
@@ -80,6 +82,7 @@ public class InitialContextFactory {
                 }
                 ctx = oldCtx;
             }
+            // else No object in Map, ctx is the one
         }
         return ctx;
     }
