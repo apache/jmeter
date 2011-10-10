@@ -101,6 +101,7 @@ and need to be referenced using the __P or __property function.
         <tr><td>Calculation</td><td> <a href="#__intSum">intSum</a></td><td>add int numbers</td></tr>
         <tr><td>Calculation</td><td> <a href="#__longSum">longSum</a></td><td>add long numbers</td></tr>
         <tr><td>Calculation</td><td> <a href="#__Random">Random</a></td><td>generate a random number</td></tr>
+        <tr><td>Calculation</td><td> <a href="#__RandomString">RandomString</a></td><td>generate a random string</td></tr>
         <tr><td>Scripting</td><td> <a href="#__BeanShell">BeanShell</a></td><td>run a BeanShell script</td></tr>
         <tr><td>Scripting</td><td> <a href="#__javaScript">javaScript</a></td><td>process JavaScript (Mozilla Rhino)</td></tr>
         <tr><td>Scripting</td><td> <a href="#__jexl">jexl</a></td><td>evaluate a Commons Jexl expression</td></tr>
@@ -537,6 +538,17 @@ the comma after 7 is escaped.</note>
 <properties>
         <property name="Minimum value" required="Yes">A number</property>
         <property name="Maximum value" required="Yes">A bigger number</property>
+        <property name="Variable Name" required="No">A reference name for reusing the value
+                computed by this function.</property>
+</properties>
+</component>
+
+<component index="&sect-num;.5.8" name="__RandomString">
+<description><p>The RandomString function returns a random String of length using characters in chars to use.</p></description>
+
+<properties>
+        <property name="Length" required="Yes">A number length of generated String</property>
+        <property name="Characters to use" required="No">Chars used to generate String</property>
         <property name="Variable Name" required="No">A reference name for reusing the value
                 computed by this function.</property>
 </properties>
