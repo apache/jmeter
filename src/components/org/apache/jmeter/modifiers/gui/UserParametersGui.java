@@ -96,6 +96,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
             tableModel.setColumnData(count, (List<?>) iter.next().getObjectValue());
             count++;
         }
+        setColumnWidths();
         perIterationCheck.setSelected(params.isPerIteration());
         super.configure(el);
     }
@@ -191,6 +192,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
         // paramTable.setRowSelectionAllowed(true);
         // paramTable.setColumnSelectionAllowed(true);
         paramTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        paramTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         // paramTable.setCellSelectionEnabled(true);
         // paramTable.setPreferredScrollableViewportSize(new Dimension(100,
         // 70));
@@ -259,6 +261,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
             tableModel.addNewColumn(getUserColName(tableModel.getColumnCount()), String.class);
             tableModel.fireTableDataChanged();
 
+            setColumnWidths();
             // Enable DELETE (which may already be enabled, but it won't hurt)
             deleteColumnButton.setEnabled(true);
 
@@ -268,6 +271,15 @@ public class UserParametersGui extends AbstractPreProcessorGui {
         }
     }
 
+    /**
+     * Set Column size
+     */
+    private void setColumnWidths() {
+        for (int i = 0; i < tableModel.getColumnCount(); i++) {
+            paramTable.getColumnModel().getColumn(i).setPreferredWidth(200);
+        }
+    }
+    
     private class DeleteRowAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if (paramTable.isEditing()) {
@@ -336,6 +348,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
 
                     paramTable.setColumnSelectionInterval(colSelected, colSelected);
                 }
+                setColumnWidths();
             }
         }
     }
