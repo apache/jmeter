@@ -150,7 +150,8 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
             jTree.expandPath(new TreePath(root));
         }
         if (autoScrollCB.isSelected() && root.getChildCount() > 1) {
-            jTree.scrollRowToVisible(root.getChildCount() - 1);
+            jTree.scrollPathToVisible(new TreePath(new Object[] { root,
+                    treeModel.getChild(root, root.getChildCount() - 1) }));
         }
     }
 
