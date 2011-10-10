@@ -485,6 +485,23 @@ generate a random number
 <tr>
 <td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+Calculation
+</font>
+</td>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+ <a href="#__Random">RandomString</a>
+</font>
+</td>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+generate a random string
+</font>
+</td>
+</tr>
+<tr>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
 Scripting
 </font>
 </td>
@@ -1954,7 +1971,56 @@ No
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="__CSVRead">19.5.8 __CSVRead</a>
+<a name="__RandomString">19.5.9 __RandomString</a>
+<a class="sectionlink" href="#__RandomString" title="Link to here">&para;</a></h3>
+</font>
+</td></tr>
+<tr><td>
+<p>
+The RandomString function returns a random String of length using characters in chars to use.
+</p>
+<p>
+<b>Parameters</b>
+<a name="__RandomString_parms"/>
+<a class="sectionlink" href="#__RandomString_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
+<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+<tr>
+<td>Length</td>
+<td>A number
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>Characters to use</td>
+<td>A String contains chars used in generated chars
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Variable Name</td>
+<td>A reference name for reusing the value
+                computed by this function.
+</td>
+<td>
+No
+</td>
+</tr>
+</table>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<hr>
+
+<table border="0" cellspacing="0" cellpadding="2">
+<tr><td>
+<font face="arial,helvetica,sanserif">
+<h3>
+<a name="__CSVRead">19.5.10 __CSVRead</a>
 <a class="sectionlink" href="#__CSVRead" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
@@ -2120,7 +2186,7 @@ StringFromFile
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="__property">19.5.9 __property</a>
+<a name="__property">19.5.11 __property</a>
 <a class="sectionlink" href="#__property" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
@@ -2204,7 +2270,7 @@ No
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="__P">19.5.10 __P</a>
+<a name="__P">19.5.12 __P</a>
 <a class="sectionlink" href="#__P" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
@@ -2297,7 +2363,7 @@ No
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="__log">19.5.11 __log</a>
+<a name="__log">19.5.13 __log</a>
 <a class="sectionlink" href="#__log" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
@@ -2372,7 +2438,7 @@ For example:
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="__logn">19.5.12 __logn</a>
+<a name="__logn">19.5.14 __logn</a>
 <a class="sectionlink" href="#__logn" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
@@ -2436,7 +2502,7 @@ For example:
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="__BeanShell">19.5.13 __BeanShell</a>
+<a name="__BeanShell">19.5.15 __BeanShell</a>
 <a class="sectionlink" href="#__BeanShell" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
@@ -2595,7 +2661,7 @@ Remember to include any necessary quotes for text strings and JMeter variables t
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="__split">19.5.14 __split</a>
+<a name="__split">19.5.16 __split</a>
 <a class="sectionlink" href="#__split" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
@@ -2729,7 +2795,7 @@ No
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="__XPath">19.5.15 __XPath</a>
+<a name="__XPath">19.5.17 __XPath</a>
 <a class="sectionlink" href="#__XPath" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
@@ -2812,7 +2878,7 @@ Yes
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="__setProperty">19.5.16 __setProperty</a>
+<a name="__setProperty">19.5.18 __setProperty</a>
 <a class="sectionlink" href="#__setProperty" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
@@ -2876,7 +2942,7 @@ No
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="__time">19.5.17 __time</a>
+<a name="__time">19.5.19 __time</a>
 <a class="sectionlink" href="#__time" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
@@ -2962,7 +3028,7 @@ time.YMD=yyMMdd
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="__jexl">19.5.18 __jexl</a>
+<a name="__jexl">19.5.20 __jexl</a>
 <a class="sectionlink" href="#__jexl" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
@@ -3122,7 +3188,7 @@ OUT - System.out - e.g. OUT.println("message")
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="__V">19.5.19 __V</a>
+<a name="__V">19.5.21 __V</a>
 <a class="sectionlink" href="#__V" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
@@ -3187,7 +3253,7 @@ Yes
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="__evalVar">19.5.20 __evalVar</a>
+<a name="__evalVar">19.5.22 __evalVar</a>
 <a class="sectionlink" href="#__evalVar" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
@@ -3235,7 +3301,7 @@ Yes
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="__eval">19.5.21 __eval</a>
+<a name="__eval">19.5.23 __eval</a>
 <a class="sectionlink" href="#__eval" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
@@ -3316,7 +3382,7 @@ Yes
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="__char">19.5.22 __char</a>
+<a name="__char">19.5.24 __char</a>
 <a class="sectionlink" href="#__char" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
@@ -3377,7 +3443,7 @@ ${__char(165)} = � (yen)
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="__unescape">19.5.23 __unescape</a>
+<a name="__unescape">19.5.25 __unescape</a>
 <a class="sectionlink" href="#__unescape" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
@@ -3437,7 +3503,7 @@ ${__unescape(1\t2)} = 1[tab]2
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="__unescapeHtml">19.5.24 __unescapeHtml</a>
+<a name="__unescapeHtml">19.5.26 __unescapeHtml</a>
 <a class="sectionlink" href="#__unescapeHtml" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
@@ -3517,7 +3583,7 @@ Yes
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="__escapeHtml">19.5.25 __escapeHtml</a>
+<a name="__escapeHtml">19.5.27 __escapeHtml</a>
 <a class="sectionlink" href="#__escapeHtml" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
@@ -3581,7 +3647,7 @@ Yes
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="__FileToString">19.5.26 __FileToString</a>
+<a name="__FileToString">19.5.28 __FileToString</a>
 <a class="sectionlink" href="#__FileToString" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
@@ -3649,7 +3715,7 @@ The file name, encoding and reference name parameters are resolved every time th
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="__samplerName">19.5.27 __samplerName</a>
+<a name="__samplerName">19.5.29 __samplerName</a>
 <a class="sectionlink" href="#__samplerName" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
