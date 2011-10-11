@@ -64,6 +64,13 @@ You can use these to determine the correct property setting to change the loggin
 </p>
 </subsection>
 
+<subsection name="&sect-num;.3 Searching" anchor="searching">
+<p>
+It is sometimes hard to find in a Test Plan tree and elements using a variable or containing a certain URL or parameter.
+A new feature is now available since 2.5.2, you can access it in Menu Search.
+For now this feature only searches HTTP Samplers. If you find it useful log a Bugzilla enhancement request.
+</p>
+</subsection>
 </section>
 
 </body>

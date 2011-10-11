@@ -45,6 +45,8 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
 
     private final JMeterTreeModel treeModel;
 
+    private boolean markedBySearch;
+
     public JMeterTreeNode() {// Allow serializable test to work
         // TODO: is the serializable test necessary now that JMeterTreeNode is
         // no longer a GUI component?
@@ -63,6 +65,23 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
     public void setEnabled(boolean enabled) {
         getTestElement().setProperty(new BooleanProperty(TestElement.ENABLED, enabled));
         treeModel.nodeChanged(this);
+    }
+    
+    /**
+     * Tag Node as result of a search
+     * @return
+     */
+    public void setMarkedBySearch(boolean tagged) {
+        this.markedBySearch = tagged;
+        treeModel.nodeChanged(this);
+    }
+    
+    /**
+     * Node is markedBySearch by a search
+     * @return
+     */
+    public boolean isMarkedBySearch() {
+        return this.markedBySearch;
     }
 
     public ImageIcon getIcon() {
