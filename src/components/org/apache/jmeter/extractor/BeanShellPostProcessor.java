@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.extractor;
 
+import org.apache.jmeter.gui.Searchable;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
@@ -30,7 +31,7 @@ import org.apache.jorphan.util.JMeterException;
 import org.apache.log.Logger;
 
 public class BeanShellPostProcessor extends BeanShellTestElement
-    implements Cloneable, PostProcessor, TestBean
+    implements Cloneable, PostProcessor, TestBean, Searchable
 {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -65,4 +66,18 @@ public class BeanShellPostProcessor extends BeanShellTestElement
             log.warn("Problem in BeanShell script "+e);
         }
     }
+     
+     /**
+      * {@inheritDoc}
+      */
+     public boolean searchContent(String textToSearch) throws Exception {
+         String searchedTextLowerCase = textToSearch.toLowerCase();
+         if(testField(getComment(), searchedTextLowerCase)) {
+             return true;
+         }
+         if(testField(getScript(), searchedTextLowerCase)) {
+             return true;
+         }
+         return false;
+     }
 }

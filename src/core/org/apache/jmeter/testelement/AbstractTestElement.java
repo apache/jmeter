@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
@@ -520,5 +521,18 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
     // Moved from JMeter class
     public boolean isEnabled() {
         return getProperty(TestElement.ENABLED) instanceof NullProperty || getPropertyAsBoolean(TestElement.ENABLED);
+    }
+    
+    /**
+     * Returns true if searchedTextLowerCase is in value
+     * @param value
+     * @param searchedTextLowerCase
+     * @return
+     */
+    protected boolean testField(String value, String searchedTextLowerCase) {
+        if(!StringUtils.isEmpty(value)) {
+            return value.toLowerCase().indexOf(searchedTextLowerCase)>=0;
+        }
+        return false;
     }
 }
