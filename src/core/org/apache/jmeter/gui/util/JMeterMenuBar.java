@@ -127,6 +127,8 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
     private Collection<JMenuItem> remote_engine_exit;
 
+    private JMenu searchMenu;
+
     public JMeterMenuBar() {
         // List for recent files menu items
         file_load_recent_files = new LinkedList<JComponent>();
@@ -253,8 +255,10 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         makeRunMenu();
         makeOptionsMenu();
         makeHelpMenu();
+        makeSearchMenu();
         this.add(fileMenu);
         this.add(editMenu);
+        this.add(searchMenu);
         this.add(runMenu);
         this.add(optionsMenu);
         this.add(helpMenu);
@@ -491,6 +495,15 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         fileMenu.add(file_exit);
     }
 
+    private void makeSearchMenu() {
+        // Search MENU
+        searchMenu = makeMenuRes("menu_search"); //$NON-NLS-1$
+
+        JMenuItem search = makeMenuItemRes("menu_search", ActionNames.SEARCH_TREE); //$NON-NLS-1$
+        searchMenu.add(search);
+        searchMenu.setEnabled(true);
+    }
+    
     public void setRunning(boolean running, String host) {
         log.info("setRunning(" + running + "," + host + ")");
 

@@ -40,9 +40,11 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
+import org.apache.jmeter.gui.Searchable;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
@@ -82,7 +84,7 @@ import org.apache.oro.text.regex.Perl5Matcher;
  *
  */
 public abstract class HTTPSamplerBase extends AbstractSampler
-    implements TestListener, ThreadListener, HTTPConstantsInterface {
+    implements TestListener, ThreadListener, HTTPConstantsInterface, Searchable {
 
     private static final long serialVersionUID = 240L;
 
@@ -1692,5 +1694,46 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             return sample(url, method, areFollowingRedirect, depth);
         }
     }
-}
+
+    /**
+     * We search in URL and arguments
+     * TODO Can be enhanced
+     * {@inheritDoc}
+     */
+    public boolean searchContent(String textToSearch) throws Exception {
+        String searchedTextLowerCase = textToSearch.toLowerCase();
+        if(testField(getUrl().toString(), searchedTextLowerCase)) {
+            return true;
+        }
+        Arguments arguments = getArguments();
+        if(arguments != null) {
+            for (int i = 0; i < arguments.getArgumentCount(); i++) {
+                Argument argument = arguments.getArgument(i);
+                if(testField(argument.getName(), searchedTextLowerCase)) {
+                    return true;
+                }
+                if(testField(argument.getValue(), searchedTextLowerCase)) {
+                    return true;
+                }
+            }
+        }
+        if(testField(getComment(), searchedTextLowerCase)) {
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Returns true if searchedTextLowerCase is in value
+     * @param value
+     * @param searchedTextLowerCase
+     * @return
+     */
+    private boolean testField(String value, String searchedTextLowerCase) {
+        if(!StringUtils.isEmpty(value)) {
+            return value.toLowerCase().indexOf(searchedTextLowerCase)>=0;
+        }
+        return false;
+    }
+ }
 

@@ -18,8 +18,10 @@
 
 package org.apache.jmeter.gui.tree;
 
+import java.awt.Color;
 import java.awt.Component;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -36,10 +38,11 @@ public class JMeterCellRenderer extends DefaultTreeCellRenderer {
     @Override
     public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded,
             boolean leaf, int row, boolean p_hasFocus) {
-        super.getTreeCellRendererComponent(tree, ((JMeterTreeNode) value).getName(), sel, expanded, leaf, row,
+        JMeterTreeNode node = (JMeterTreeNode) value;
+        super.getTreeCellRendererComponent(tree, node.getName(), sel, expanded, leaf, row,
                 p_hasFocus);
-        boolean enabled = ((JMeterTreeNode) value).isEnabled();
-        ImageIcon ic = ((JMeterTreeNode) value).getIcon(enabled);
+        boolean enabled = node.isEnabled();
+        ImageIcon ic = node.getIcon(enabled);
         if (ic != null) {
             if (enabled) {
                 setIcon(ic);
@@ -51,13 +54,19 @@ public class JMeterCellRenderer extends DefaultTreeCellRenderer {
             {
                 // Must therefore set the enabled icon so there is at least some
                 // icon
-                ic = ((JMeterTreeNode) value).getIcon();
+                ic = node.getIcon();
                 if (ic != null) {
                     setIcon(ic);
                 }
             }
         }
         this.setEnabled(enabled);
+        if(node.isMarkedBySearch()) {
+            setBorder(BorderFactory.createLineBorder(Color.red));
+        }
+        else {
+            setBorder(null);
+        }
         return this;
     }
 }
