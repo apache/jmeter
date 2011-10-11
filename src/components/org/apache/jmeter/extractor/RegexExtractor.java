@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.jmeter.gui.Searchable;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractScopedTestElement;
@@ -42,7 +43,7 @@ import org.apache.oro.text.regex.Perl5Matcher;
 
 // @see org.apache.jmeter.extractor.TestRegexExtractor for unit tests
 
-public class RegexExtractor extends AbstractScopedTestElement implements PostProcessor, Serializable {
+public class RegexExtractor extends AbstractScopedTestElement implements PostProcessor, Serializable, Searchable {
 
     private static final long serialVersionUID = 240L;
 
@@ -452,5 +453,28 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
 
     public void setUseField(String actionCommand) {
         setProperty(MATCH_AGAINST,actionCommand);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean searchContent(String textToSearch) throws Exception {
+        String searchedTextLowerCase = textToSearch.toLowerCase();
+        if(testField(getComment(), searchedTextLowerCase)) {
+            return true;
+        }
+        if(testField(getVariableName(), searchedTextLowerCase)) {
+            return true;
+        }
+        if(testField(getRefName(), searchedTextLowerCase)) {
+            return true;
+        }
+        if(testField(getDefaultValue(), searchedTextLowerCase)) {
+            return true;
+        }
+        if(testField(getRegex(), searchedTextLowerCase)) {
+            return true;
+        }
+        return false;
     }
 }
