@@ -83,6 +83,7 @@ public class ActionNames {
     public static final String SUB_TREE_SAVED   = "sub_tree_saved"; // $NON-NLS-1$
     public static final String TOGGLE           = "toggle"; // $NON-NLS-1$ enable/disable
     public static final String WHAT_CLASS       = "what_class"; // $NON-NLS-1$
+    public static final String SEARCH_TREE      = "search_tree"; // $NON-NLS-1$
 
     // Prevent instantiation
     private ActionNames(){
