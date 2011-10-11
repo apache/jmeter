@@ -95,7 +95,6 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
     
     /**
      * Tag Node as result of a search
-     * @return
      */
     public void setMarkedBySearch(boolean tagged) {
         this.markedBySearch = tagged;
@@ -104,7 +103,7 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
     
     /**
      * Node is markedBySearch by a search
-     * @return
+     * @return true if marked by search
      */
     public boolean isMarkedBySearch() {
         return this.markedBySearch;
