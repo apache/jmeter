@@ -21,6 +21,7 @@ package org.apache.jmeter.gui.action;
 import java.awt.event.ActionEvent;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.JOptionPane;
@@ -39,6 +40,7 @@ import org.apache.log.Logger;
  */
 public class SearchTreeCommand extends AbstractAction {
     private Logger logger = LoggingManager.getLoggerForClass();
+
     private static final Set<String> commands = new HashSet<String>();
 
     static {
@@ -58,6 +60,7 @@ public class SearchTreeCommand extends AbstractAction {
         GuiPackage guiPackage = GuiPackage.getInstance();
         JMeterTreeModel jMeterTreeModel = guiPackage.getTreeModel();
         Iterator<?> iter = jMeterTreeModel.getNodesOfType(Searchable.class).iterator();
+        Set<JMeterTreeNode> nodes = new HashSet<JMeterTreeNode>();
         while (iter.hasNext()) {
             try {
                 JMeterTreeNode jMeterTreeNode = (JMeterTreeNode) iter.next();
@@ -65,16 +68,19 @@ public class SearchTreeCommand extends AbstractAction {
                     Searchable searchable = (Searchable) jMeterTreeNode.getUserObject();
                     
                     boolean result = searchable.searchContent(wordToSearch);
+                    jMeterTreeNode.setMarkedBySearch(false);   
                     if(result) {
-                        jMeterTreeNode.setMarkedBySearch(true);
-                    }
-                    else {
-                        jMeterTreeNode.setMarkedBySearch(false);   
+                        List<JMeterTreeNode> matchingNodes = jMeterTreeNode.getPathToThreadGroup();
+                        nodes.addAll(matchingNodes);
                     }
                 }
             } catch (Exception ex) {
                 logger.error("Error occured searching for word:"+ wordToSearch, ex);
             }
+        }
+        for (Iterator<JMeterTreeNode> iterator = nodes.iterator(); iterator.hasNext();) {
+            JMeterTreeNode jMeterTreeNode = iterator.next();
+            jMeterTreeNode.setMarkedBySearch(true);
         }
         GuiPackage.getInstance().getMainFrame().repaint();
     }
