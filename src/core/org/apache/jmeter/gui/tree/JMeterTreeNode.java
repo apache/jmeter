@@ -22,12 +22,15 @@ import java.awt.Image;
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPopupMenu;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
 
 import org.apache.jmeter.gui.GUIFactory;
 import org.apache.jmeter.gui.GuiPackage;
@@ -42,6 +45,8 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
     private static final long serialVersionUID = 240L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private static final int TEST_PLAN_LEVEL = 2;
 
     private final JMeterTreeModel treeModel;
 
@@ -65,6 +70,27 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
     public void setEnabled(boolean enabled) {
         getTestElement().setProperty(new BooleanProperty(TestElement.ENABLED, enabled));
         treeModel.nodeChanged(this);
+    }
+    
+    /**
+     * Return nodes to level 2
+     * @return {@link List}<JMeterTreeNode>
+     */
+    public List<JMeterTreeNode> getPathToThreadGroup() {
+        List<JMeterTreeNode> nodes = new ArrayList<JMeterTreeNode>();
+        if(treeModel != null) {
+            TreeNode[] nodesToRoot = treeModel.getPathToRoot(this);
+            for (int i = 0; i < nodesToRoot.length; i++) {
+                JMeterTreeNode jMeterTreeNode = (JMeterTreeNode) nodesToRoot[i];
+                int level = jMeterTreeNode.getLevel();
+                if(level<TEST_PLAN_LEVEL) {
+                    continue;
+                } else {
+                    nodes.add(jMeterTreeNode);
+                }
+            }
+        }
+        return nodes;
     }
     
     /**
