@@ -40,7 +40,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
@@ -1719,19 +1718,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         }
         if(testField(getComment(), searchedTextLowerCase)) {
             return true;
-        }
-        return false;
-    }
-    
-    /**
-     * Returns true if searchedTextLowerCase is in value
-     * @param value
-     * @param searchedTextLowerCase
-     * @return
-     */
-    private boolean testField(String value, String searchedTextLowerCase) {
-        if(!StringUtils.isEmpty(value)) {
-            return value.toLowerCase().indexOf(searchedTextLowerCase)>=0;
         }
         return false;
     }
