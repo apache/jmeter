@@ -33,8 +33,8 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * Provides a Random function which returns a random long integer between a min
- * (first argument) and a max (second argument).
+ * Provides a RandomString function which returns a random String of length (first argument) 
+ * using characters (second argument)
  *
  */
 public class RandomString extends AbstractFunction {
