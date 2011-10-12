@@ -26,6 +26,7 @@ import java.util.Set;
 
 import javax.swing.JOptionPane;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.Searchable;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
@@ -66,12 +67,18 @@ public class SearchTreeCommand extends AbstractAction {
                 JMeterTreeNode jMeterTreeNode = (JMeterTreeNode) iter.next();
                 if (jMeterTreeNode.getUserObject() instanceof Searchable){
                     Searchable searchable = (Searchable) jMeterTreeNode.getUserObject();
-                    
-                    boolean result = searchable.searchContent(wordToSearch);
-                    jMeterTreeNode.setMarkedBySearch(false);   
-                    if(result) {
-                        List<JMeterTreeNode> matchingNodes = jMeterTreeNode.getPathToThreadGroup();
-                        nodes.addAll(matchingNodes);
+                    List<JMeterTreeNode> matchingNodes = jMeterTreeNode.getPathToThreadGroup();
+                    for (Iterator<JMeterTreeNode> iterator = matchingNodes.iterator(); iterator
+                            .hasNext();) {
+                        JMeterTreeNode jMeterTreeNode2 = iterator
+                                .next();
+                        jMeterTreeNode2.setMarkedBySearch(false); 
+                    }
+                    if(!StringUtils.isEmpty(wordToSearch)) {
+                        boolean result = searchable.searchContent(wordToSearch);
+                        if(result) {
+                            nodes.addAll(matchingNodes);
+                        }
                     }
                 }
             } catch (Exception ex) {
