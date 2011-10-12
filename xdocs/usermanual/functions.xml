@@ -104,7 +104,7 @@ and need to be referenced using the __P or __property function.
         <tr><td>Calculation</td><td> <a href="#__RandomString">RandomString</a></td><td>generate a random string</td></tr>
         <tr><td>Scripting</td><td> <a href="#__BeanShell">BeanShell</a></td><td>run a BeanShell script</td></tr>
         <tr><td>Scripting</td><td> <a href="#__javaScript">javaScript</a></td><td>process JavaScript (Mozilla Rhino)</td></tr>
-        <tr><td>Scripting</td><td> <a href="#__jexl">jexl</a></td><td>evaluate a Commons Jexl expression</td></tr>
+        <tr><td>Scripting</td><td> <a href="#__jexl">jexl, jexl2</a></td><td>evaluate a Commons Jexl expression</td></tr>
         <tr><td>Properties</td><td> <a href="#__property">property</a> </td><td>read a property</td></tr>
         <tr><td>Properties</td><td> <a href="#__P">P</a></td><td>read a property (shorthand method)</td></tr>
         <tr><td>Properties</td><td> <a href="#__setProperty">setProperty</a></td><td>set a JMeter property</td></tr>
@@ -896,12 +896,13 @@ time.YMD=yyMMdd
 </p>
 </component>
 
-<component index="&sect-num;.5.18" name="__jexl">
+<component index="&sect-num;.5.18" name="__jexl" tag="__jexl2">
 <description>
 	<p>The jexl function returns the result of evaluating a 
 	<a href="http://jakarta.apache.org/commons/jexl">Commons JEXL expression</a>. 
 	See links below for more information on JEXL expressions.
 	</p>
+    <p>The __jexl function uses Commons JEXL 1, and the __jexl2 function uses Commons JEXL 2</p>
 	<ul>
 	<li><a href="http://commons.apache.org/jexl/reference/syntax.html">JEXL syntax description</a></li>
 	<li><a href="http://commons.apache.org/jexl/reference/examples.html#Example_Expressions">JEXL examples</a></li>
