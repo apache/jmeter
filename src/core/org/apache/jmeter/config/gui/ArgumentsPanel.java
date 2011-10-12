@@ -87,6 +87,8 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     /** Button to move a argument down*/
     private JButton down;
 
+    private Boolean enableUpDown= Boolean.TRUE;
+
     /** Command for adding a row to the table. */
     private static final String ADD = "add"; // $NON-NLS-1$
 
@@ -107,9 +109,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      * Create a new ArgumentsPanel as a standalone component.
      */
     public ArgumentsPanel() {
-        tableLabel = new JLabel(JMeterUtils.getResString("user_defined_variables")); // $NON-NLS-1$
-        standalone = true;
-        init();
+        this(JMeterUtils.getResString("user_defined_variables"),null, Boolean.TRUE, true);// $NON-NLS-1$
     }
 
     /**
@@ -120,9 +120,19 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      *            the title for the component.
      */
     public ArgumentsPanel(String label) {
-        tableLabel = new JLabel(label);
-        standalone = false;
-        init();
+        this(label, null, true, false);
+    }
+    
+    /**
+     * Create a new ArgumentsPanel as an embedded component, using the specified
+     * title.
+     *
+     * @param label
+     *            the title for the component.
+     * @param enableUpDown Add up/down buttons
+     */
+    public ArgumentsPanel(String label, Boolean enableUpDown) {
+        this(label, null, enableUpDown, false);
     }
 
     /**
@@ -131,9 +141,21 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      * @param bkg background colour
      */
     public ArgumentsPanel(String label, Color bkg) {
+        this(label, bkg, true, false);
+    }
+    
+    /**
+     * Create a new ArgumentsPanel with a border and color background
+     * @param label text for label
+     * @param bkg background colour
+     * @param enableUpDown Add up/down buttons
+     * @param standalone is standalone
+     */
+    public ArgumentsPanel(String label, Color bkg, Boolean enableUpDown, boolean standalone) {
         tableLabel = new JLabel(label);
+        this.enableUpDown = enableUpDown;
         this.background = bkg;
-        standalone = false;
+        this.standalone = standalone;
         init();
     }
 
@@ -252,7 +274,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
             delete.setEnabled(true);
         }
         
-        if(tableModel.getRowCount()>1) {
+        if(enableUpDown && tableModel.getRowCount()>1) {
             up.setEnabled(true);
             down.setEnabled(true);
         }
@@ -346,7 +368,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
                 delete.setEnabled(false);
             }
             
-            if(tableModel.getRowCount()>1) {
+            if(enableUpDown && tableModel.getRowCount()>1) {
                 up.setEnabled(true);
                 down.setEnabled(true);
             }
@@ -377,7 +399,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 
         // Enable DELETE (which may already be enabled, but it won't hurt)
         delete.setEnabled(true);
-        if(tableModel.getRowCount()>1) {
+        if(enableUpDown && tableModel.getRowCount()>1) {
             up.setEnabled(true);
             down.setEnabled(true);
         }
@@ -479,12 +501,13 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         delete = new JButton(JMeterUtils.getResString("delete")); // $NON-NLS-1$
         delete.setActionCommand(DELETE);
 
-        up = new JButton(JMeterUtils.getResString("up")); // $NON-NLS-1$
-        up.setActionCommand(UP);
-
-        down = new JButton(JMeterUtils.getResString("down")); // $NON-NLS-1$
-        down.setActionCommand(DOWN);
-        
+        if(enableUpDown) {
+            up = new JButton(JMeterUtils.getResString("up")); // $NON-NLS-1$
+            up.setActionCommand(UP);
+    
+            down = new JButton(JMeterUtils.getResString("down")); // $NON-NLS-1$
+            down.setActionCommand(DOWN);
+        }
         checkDeleteStatus();
 
         JPanel buttonPanel = new JPanel();
@@ -494,12 +517,14 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         }
         add.addActionListener(this);
         delete.addActionListener(this);
-        up.addActionListener(this);
-        down.addActionListener(this);
         buttonPanel.add(add);
         buttonPanel.add(delete);
-        buttonPanel.add(up);
-        buttonPanel.add(down);
+        if(enableUpDown) {
+            up.addActionListener(this);
+            down.addActionListener(this);
+            buttonPanel.add(up);
+            buttonPanel.add(down);
+        }
         return buttonPanel;
     }
 
