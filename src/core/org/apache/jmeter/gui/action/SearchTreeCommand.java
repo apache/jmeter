@@ -58,6 +58,10 @@ public class SearchTreeCommand extends AbstractAction {
                 JMeterUtils.getResString("search_word"),  // $NON-NLS-1$
                 JMeterUtils.getResString("search_tree_title"),  // $NON-NLS-1$
                 JOptionPane.QUESTION_MESSAGE);
+        if(wordToSearch==null) {
+            return;
+        }
+        ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.SEARCH_RESET));
         GuiPackage guiPackage = GuiPackage.getInstance();
         JMeterTreeModel jMeterTreeModel = guiPackage.getTreeModel();
         Iterator<?> iter = jMeterTreeModel.getNodesOfType(Searchable.class).iterator();
@@ -68,12 +72,6 @@ public class SearchTreeCommand extends AbstractAction {
                 if (jMeterTreeNode.getUserObject() instanceof Searchable){
                     Searchable searchable = (Searchable) jMeterTreeNode.getUserObject();
                     List<JMeterTreeNode> matchingNodes = jMeterTreeNode.getPathToThreadGroup();
-                    for (Iterator<JMeterTreeNode> iterator = matchingNodes.iterator(); iterator
-                            .hasNext();) {
-                        JMeterTreeNode jMeterTreeNode2 = iterator
-                                .next();
-                        jMeterTreeNode2.setMarkedBySearch(false); 
-                    }
                     if(!StringUtils.isEmpty(wordToSearch)) {
                         boolean result = searchable.searchContent(wordToSearch);
                         if(result) {
