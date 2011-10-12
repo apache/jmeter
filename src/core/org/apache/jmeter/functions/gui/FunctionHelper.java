@@ -68,7 +68,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
     }
 
     private void init() {
-        parameterPanel = new ArgumentsPanel(JMeterUtils.getResString("function_params")); //$NON-NLS-1$
+        parameterPanel = new ArgumentsPanel(JMeterUtils.getResString("function_params"), false); //$NON-NLS-1$
         initializeFunctionList();
         this.getContentPane().setLayout(new BorderLayout(10, 10));
         JPanel comboPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
