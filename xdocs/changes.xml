@@ -154,6 +154,7 @@ Mirror server now uses default port 8081, was 8080 before 2.5.1.
 <h3>Functions</h3>
 <ul>
 <li>Bug 52006 - Create a function RandomString to generate random Strings</li>
+<li>Bug 52016 - It would be useful to support Jexl2</li>
 </ul>
 
 <h3>I18N</h3>
