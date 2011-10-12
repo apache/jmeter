@@ -502,6 +502,10 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         JMenuItem search = makeMenuItemRes("menu_search", ActionNames.SEARCH_TREE); //$NON-NLS-1$
         searchMenu.add(search);
         searchMenu.setEnabled(true);
+
+        JMenuItem searchReset = makeMenuItemRes("menu_search_reset", ActionNames.SEARCH_RESET); //$NON-NLS-1$
+        searchMenu.add(searchReset);
+        searchMenu.setEnabled(true);
     }
     
     public void setRunning(boolean running, String host) {
