@@ -232,6 +232,10 @@ public class JMeterTest extends JMeterTestCase {
             for (int j = 0; j < components.size(); j++) {
                 Element comp = components.get(j);
                 funcTitles.put(comp.getAttributeValue("name"), Boolean.FALSE);
+                String tag = comp.getAttributeValue("tag");
+                if (tag != null){
+                    funcTitles.put(tag, Boolean.FALSE);                    
+                }
             }
         }
     }
