@@ -28,16 +28,10 @@ import org.apache.log.Logger;
 public class TreeClonerNoTimer extends TreeCloner{
     private Logger logger = LoggingManager.getLoggerForClass();
     
-    /**
-     * {@inheritDoc}
-     */
     public TreeClonerNoTimer() {
         super();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public TreeClonerNoTimer(boolean honourNoThreadClone) {
         super(honourNoThreadClone);
     }
