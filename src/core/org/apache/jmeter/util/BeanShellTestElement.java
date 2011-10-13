@@ -279,4 +279,18 @@ public abstract class BeanShellTestElement extends AbstractTestElement
     public void setResetInterpreter(boolean b) {
         resetInterpreter = b;
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public boolean searchContent(String textToSearch) throws Exception {
+        if(super.searchContent(textToSearch)) {
+            return true;
+        }
+        String searchedTextLowerCase = textToSearch.toLowerCase();
+        if(testField(getScript(), searchedTextLowerCase)) {
+            return true;
+        }
+        return false;
+    }
 }

@@ -46,7 +46,7 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final int TEST_PLAN_LEVEL = 2;
+    private static final int TEST_PLAN_LEVEL = 1;
 
     private final JMeterTreeModel treeModel;
 
