@@ -28,8 +28,10 @@ import org.apache.jmeter.JMeter;
 import org.apache.jmeter.engine.JMeterEngineException;
 import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.engine.TreeCloner;
+import org.apache.jmeter.engine.TreeClonerNoTimer;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.testelement.TestPlan;
+import org.apache.jmeter.timers.Timer;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
@@ -42,6 +44,7 @@ public class Start extends AbstractAction {
 
     static {
         commands.add(ActionNames.ACTION_START);
+        commands.add(ActionNames.ACTION_START_NO_TIMERS);
         commands.add(ActionNames.ACTION_STOP);
         commands.add(ActionNames.ACTION_SHUTDOWN);
     }
@@ -68,7 +71,10 @@ public class Start extends AbstractAction {
     public void doAction(ActionEvent e) {
         if (e.getActionCommand().equals(ActionNames.ACTION_START)) {
             popupShouldSave(e);
-            startEngine();
+            startEngine(false);
+        } else if (e.getActionCommand().equals(ActionNames.ACTION_START_NO_TIMERS)) {
+            popupShouldSave(e);
+            startEngine(true);
         } else if (e.getActionCommand().equals(ActionNames.ACTION_STOP)) {
             if (engine != null) {
                 log.info("Stopping test");
@@ -84,15 +90,18 @@ public class Start extends AbstractAction {
         }
     }
 
-    private void startEngine() {
+    /**
+     * Start JMeter engine
+     * @param noTimer ignore timers 
+     */
+    private void startEngine(boolean ignoreTimer) {
         GuiPackage gui = GuiPackage.getInstance();
         HashTree testTree = gui.getTreeModel().getTestPlan();
         JMeter.convertSubTree(testTree);
         testTree.add(testTree.getArray()[0], gui.getMainFrame());
         log.debug("test plan before cloning is running version: "
                 + ((TestPlan) testTree.getArray()[0]).isRunningVersion());
-        TreeCloner cloner = new TreeCloner(false);
-        testTree.traverse(cloner);
+        TreeCloner cloner = cloneTree(testTree, ignoreTimer);
         engine = new StandardJMeterEngine();
         engine.configure(cloner.getClonedTree());
         try {
@@ -103,5 +112,22 @@ public class Start extends AbstractAction {
         }
         log.debug("test plan after cloning and running test is running version: "
                 + ((TestPlan) testTree.getArray()[0]).isRunningVersion());
+    }
+    
+    /**
+     * Create a Cloner that ignores {@link Timer} if removeTimers is true
+     * @param testTree {@link HashTree}
+     * @param removeTimers boolean remove timers 
+     * @return {@link TreeCloner}
+     */
+    private TreeCloner cloneTree(HashTree testTree, boolean removeTimers) {
+        TreeCloner cloner = null;
+        if(!removeTimers) {
+            cloner = new TreeCloner(false);     
+        } else {
+            cloner = new TreeClonerNoTimer(false);
+        }
+        testTree.traverse(cloner);
+        return cloner;
     }
 }
