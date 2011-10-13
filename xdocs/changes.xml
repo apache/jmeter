@@ -145,6 +145,7 @@ Mirror server now uses default port 8081, was 8080 before 2.5.1.
 
 <h3>Listeners</h3>
 <ul>
+<li>Bug 52022 - In View Results Tree rather than showing just a message if the results are to big, show as much of the result as are configured</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
