@@ -541,7 +541,7 @@ SleepTime is in milliseconds
 SleepMask is used to add a "random" element to the time:
 totalSleepTime = SleepTime + (System.currentTimeMillis() % SleepMask)
 </pre>
-<component name="SOAP/XML-RPC Request" index="&sect-num;.1.5"  width="474" height="236" screenshot="soap_sampler.png">
+<component name="SOAP/XML-RPC Request" index="&sect-num;.1.5"  width="426" height="276" screenshot="soap_sampler.png">
 
 <description><p>This sampler lets you send a SOAP request to a webservice.  It can also be
 used to send XML-RPC over HTTP.  It creates an HTTP POST request, with the specified XML as the
@@ -566,6 +566,7 @@ Or set Content-Length to -1 to force chunked encoding.
          that is shown in the tree.</property>
         <property name="URL" required="Yes">The URL to direct the SOAP request to.</property>
         <property name="Send SOAP action" required="No">Send a SOAP action header? (overrides the Header Manager)</property>
+        <property name="Use KeepAlive" required="No">If set, sends Connection: keep-alive, else sends Connection: close</property>
         <property name="Soap/XML-RPC Data" required="No">The Soap XML message, or XML-RPC instructions.
         Not used if the filename is provided.
         </property>
