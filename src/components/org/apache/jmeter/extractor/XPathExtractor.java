@@ -34,7 +34,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.jmeter.assertions.AssertionResult;
-import org.apache.jmeter.gui.Searchable;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractScopedTestElement;
@@ -80,7 +79,7 @@ import org.xml.sax.SAXException;
  * See Bugzilla: 37183
  */
 public class XPathExtractor extends AbstractScopedTestElement implements
-        PostProcessor, Serializable, Searchable {
+        PostProcessor, Serializable {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final long serialVersionUID = 240L;
@@ -393,13 +392,10 @@ public class XPathExtractor extends AbstractScopedTestElement implements
      * {@inheritDoc}
      */
     public boolean searchContent(String textToSearch) throws Exception {
+        if(super.searchContent(textToSearch)) {
+            return true;
+        }
         String searchedTextLowerCase = textToSearch.toLowerCase();
-        if(testField(getComment(), searchedTextLowerCase)) {
-            return true;
-        }
-        if(testField(getVariableName(), searchedTextLowerCase)) {
-            return true;
-        }
         if(testField(getRefName(), searchedTextLowerCase)) {
             return true;
         }

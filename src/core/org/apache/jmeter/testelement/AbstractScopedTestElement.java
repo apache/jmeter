@@ -156,4 +156,18 @@ public abstract class AbstractScopedTestElement extends AbstractTestElement {
         }
         return sampleList;
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public boolean searchContent(String textToSearch) throws Exception {
+        if(super.searchContent(textToSearch)) {
+            return true;
+        }
+        String searchedTextLowerCase = textToSearch.toLowerCase();
+        if(testField(getVariableName(), searchedTextLowerCase)) {
+            return true;
+        }
+        return false;
+    }
 }
