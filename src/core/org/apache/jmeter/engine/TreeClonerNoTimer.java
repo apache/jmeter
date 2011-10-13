@@ -19,7 +19,6 @@
 package org.apache.jmeter.engine;
 
 import org.apache.jmeter.timers.Timer;
-import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -44,16 +43,18 @@ public class TreeClonerNoTimer extends TreeCloner{
     }
 
     /**
-     * {@inheritDoc}
+     * Doesn't add Timer to tree
+     * @see org.apache.jmeter.engine.TreeCloner#addNodeToTree(java.lang.Object)
      */
-    public void addNode(Object node, HashTree subTree) {
+    @Override
+    protected Object addNodeToTree(Object node) {
         if(!(node instanceof Timer)) {
-            super.addNode(node, subTree);
+            return super.addNodeToTree(node);
         } else {
             if(logger.isDebugEnabled()) {
                 logger.debug("Ignoring timer node:"+ node);
             }
-            addLast(node);
+            return node;
         }
     }
 }
