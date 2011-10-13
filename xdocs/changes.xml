@@ -167,6 +167,7 @@ Mirror server now uses default port 8081, was 8080 before 2.5.1.
 <li>Bug 51892 - Default mirror port should be different from default proxy port</li>
 <li>Bug 51817 - Moving variables up and down in User Defined Variables control</li>
 <li>Bug 51876 - Functionnality to search in Samplers TreeView</li>
+<li>Bug 52019 - Add menu option to Start a test ignoring Pause Timers</li>
 </ul>
 
 <h2>Non-functional changes</h2>
