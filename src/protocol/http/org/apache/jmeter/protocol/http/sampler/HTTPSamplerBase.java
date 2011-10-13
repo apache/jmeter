@@ -43,7 +43,6 @@ import java.util.concurrent.TimeoutException;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
-import org.apache.jmeter.gui.Searchable;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
@@ -83,7 +82,7 @@ import org.apache.oro.text.regex.Perl5Matcher;
  *
  */
 public abstract class HTTPSamplerBase extends AbstractSampler
-    implements TestListener, ThreadListener, HTTPConstantsInterface, Searchable {
+    implements TestListener, ThreadListener, HTTPConstantsInterface {
 
     private static final long serialVersionUID = 240L;
 
@@ -1700,6 +1699,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * {@inheritDoc}
      */
     public boolean searchContent(String textToSearch) throws Exception {
+        if(super.searchContent(textToSearch)) {
+            return true;
+        }
         String searchedTextLowerCase = textToSearch.toLowerCase();
         if(testField(getUrl().toString(), searchedTextLowerCase)) {
             return true;
@@ -1715,9 +1717,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                     return true;
                 }
             }
-        }
-        if(testField(getComment(), searchedTextLowerCase)) {
-            return true;
         }
         return false;
     }

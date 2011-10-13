@@ -256,4 +256,17 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
         this.shareMode = value;
     }
 
+    /** 
+     * {@inheritDoc}}
+     */
+    public boolean searchContent(String textToSearch) throws Exception {
+        if(super.searchContent(textToSearch)) {
+            return true;
+        }
+        String searchedTextLowerCase = textToSearch.toLowerCase();
+        if(testField(getPropertyAsString("variableNames"), searchedTextLowerCase)) {
+            return true;
+        }
+        return false;
+    }
 }

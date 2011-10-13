@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.jmeter.gui.Searchable;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
@@ -45,7 +46,7 @@ import org.apache.log.Logger;
 
 /**
  */
-public abstract class AbstractTestElement implements TestElement, Serializable {
+public abstract class AbstractTestElement implements TestElement, Serializable, Searchable {
     private static final long serialVersionUID = 240L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -524,10 +525,24 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
     }
     
     /**
+     * {@inheritDoc}
+     */
+    public boolean searchContent(String textToSearch) throws Exception {
+        String searchedTextLowerCase = textToSearch.toLowerCase();
+        if(testField(getComment(), searchedTextLowerCase)) {
+            return true;
+        }
+        if(testField(getName(), searchedTextLowerCase)) {
+            return true;
+        }
+        return false;
+    }
+    
+    /**
      * Returns true if searchedTextLowerCase is in value
      * @param value
      * @param searchedTextLowerCase
-     * @return true if searchedTextLowerCase is in value
+     * @return
      */
     protected boolean testField(String value, String searchedTextLowerCase) {
         if(!StringUtils.isEmpty(value)) {
