@@ -81,6 +81,8 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
     private JMenuItem run_start;
 
+    private JMenuItem run_start_no_timers;
+
     private JMenu remote_start;
 
     private JMenuItem remote_start_all;
@@ -394,6 +396,8 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
         run_start = makeMenuItemRes("start", 'S', ActionNames.ACTION_START, KeyStrokes.ACTION_START); //$NON-NLS-1$
 
+        run_start_no_timers = makeMenuItemRes("start_no_timers", ActionNames.ACTION_START_NO_TIMERS); //$NON-NLS-1$
+        
         run_stop = makeMenuItemRes("stop", 'T', ActionNames.ACTION_STOP, KeyStrokes.ACTION_STOP); //$NON-NLS-1$
         run_stop.setEnabled(false);
 
@@ -405,6 +409,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         run_clearAll = makeMenuItemRes("clear_all", 'a', ActionNames.CLEAR_ALL, KeyStrokes.CLEAR_ALL); //$NON-NLS-1$
 
         runMenu.add(run_start);
+        runMenu.add(run_start_no_timers);
         if (remote_start != null) {
             runMenu.add(remote_start);
         }
@@ -543,6 +548,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     @Override
     public void setEnabled(boolean enable) {
         run_start.setEnabled(!enable);
+        run_start_no_timers.setEnabled(!enable);
         run_stop.setEnabled(enable);
         run_shut.setEnabled(enable);
     }
