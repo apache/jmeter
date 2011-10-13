@@ -55,7 +55,20 @@ public class TreeCloner implements HashTreeTraverser {
         this.honourNoThreadClone = honourNoThreadClone;
     }
 
-    public void addNode(Object node, HashTree subTree) {
+    /**
+     * @param node
+     * @param subTree {@link HashTree}
+     */
+    public final void addNode(Object node, HashTree subTree) {
+        node = addNodeToTree(node);
+        addLast(node);
+    }
+
+    /**
+     * @param node Node to add to tree or not
+     * @return Object node (clone or not)
+     */
+    protected Object addNodeToTree(Object node) {
         if ( (node instanceof TestElement) // Check can cast for clone
            // Don't clone NoThreadClone unless honourNoThreadClone == false
           && (!honourNoThreadClone || !(node instanceof NoThreadClone))
@@ -65,14 +78,14 @@ public class TreeCloner implements HashTreeTraverser {
         } else {
             newTree.add(objects, node);
         }
-        addLast(node);
+        return node;
     }
     
     /**
      * add node to objects LinkedList
      * @param node Object
      */
-    protected final void addLast(Object node) {
+    private final void addLast(Object node) {
         objects.addLast(node);
     }
 
