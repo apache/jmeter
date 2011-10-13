@@ -20,7 +20,6 @@ package org.apache.jmeter.control;
 
 import java.io.Serializable;
 
-import org.apache.jmeter.gui.Searchable;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
@@ -42,7 +41,7 @@ import org.apache.log.Logger;
  * - generate parent sampler containing the nested samples
  *
  */
-public class TransactionController extends GenericController implements SampleListener, Controller, Serializable, Searchable {
+public class TransactionController extends GenericController implements SampleListener, Controller, Serializable {
     private static final long serialVersionUID = 233L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -251,19 +250,5 @@ public class TransactionController extends GenericController implements SampleLi
      */
     public boolean isIncludeTimers() {
         return getPropertyAsBoolean(INCLUDE_TIMERS, true);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean searchContent(String textToSearch) throws Exception {
-        String searchedTextLowerCase = textToSearch.toLowerCase();
-        if(testField(getComment(), searchedTextLowerCase)) {
-            return true;
-        }
-        if(testField(getName(), searchedTextLowerCase)) {
-            return true;
-        }
-        return false;
     }
 }
