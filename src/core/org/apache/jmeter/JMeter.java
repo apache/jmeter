@@ -768,13 +768,13 @@ public class JMeter implements JMeterPlugin {
             List<JMeterEngine> engines = new LinkedList<JMeterEngine>();
             tree.add(tree.getArray()[0], new ListenToTest(parent, (remoteStart && remoteStop) ? engines : null));
             println("Created the tree successfully using "+testFile);
-            JMeterEngine engine = null;
             if (!remoteStart) {
-                engine = new StandardJMeterEngine();
+                JMeterEngine engine = new StandardJMeterEngine();
                 engine.configure(tree);
                 long now=System.currentTimeMillis();
                 println("Starting the test @ "+new Date(now)+" ("+now+")");
                 engine.runTest();
+                engines.add(engine);
             } else {
                 java.util.StringTokenizer st = new java.util.StringTokenizer(remote_hosts_string, ",");//$NON-NLS-1$
                 while (st.hasMoreElements()) {
@@ -796,15 +796,13 @@ public class JMeter implements JMeterPlugin {
                 log.info("Starting remote engines");
                 long now=System.currentTimeMillis();
                 println("Starting the test @ "+new Date(now)+" ("+now+")");
-                Iterator<JMeterEngine> iter = engines.iterator();
-                while (iter.hasNext()) {
-                    engine = iter.next();
+                for (JMeterEngine engine : engines) {
                     engine.runTest();
                 }
                 println("Remote engines have been started");
                 log.info("Remote engines have been started");
             }
-            startUdpDdaemon(engine);
+            startUdpDdaemon(engines);
         } catch (Exception e) {
             System.out.println("Error in NonGUIDriver " + e.toString());
             log.error("Error in NonGUIDriver", e);
@@ -1045,7 +1043,7 @@ public class JMeter implements JMeterPlugin {
         log.info(prop+separator+System.getProperty(prop));//$NON-NLS-1$
     }
 
-    private static void startUdpDdaemon(final JMeterEngine engine) {
+    private static void startUdpDdaemon(final List<JMeterEngine> engines) {
         int port = JMeterUtils.getPropDefault("jmeterengine.nongui.port", UDP_PORT_DEFAULT); // $NON-NLS-1$
         int maxPort = JMeterUtils.getPropDefault("jmeterengine.nongui.maxport", 4455); // $NON-NLS-1$
         if (port > 1000){
@@ -1054,7 +1052,7 @@ public class JMeter implements JMeterPlugin {
                 Thread waiter = new Thread("UDP Listener"){
                     @Override
                     public void run() {
-                        waitForSignals(engine, socket);
+                        waitForSignals(engines, socket);
                     }
                 };
                 waiter.setDaemon(true);
@@ -1065,7 +1063,7 @@ public class JMeter implements JMeterPlugin {
         }
     }
 
-    private static void waitForSignals(final JMeterEngine engine, DatagramSocket socket) {
+    private static void waitForSignals(final List<JMeterEngine> engines, DatagramSocket socket) {
         byte[] buf = new byte[80];
         System.out.println("Waiting for possible shutdown message on port "+socket.getLocalPort());
         DatagramPacket request = new DatagramPacket(buf, buf.length);
@@ -1079,9 +1077,13 @@ public class JMeter implements JMeterPlugin {
                     System.out.println("Command: "+command+" received from "+address);
                     log.info("Command: "+command+" received from "+address);
                     if (command.equals("StopTestNow")){
-                        engine.stopTest(true);
+                        for(JMeterEngine engine : engines) {
+                            engine.stopTest(true);
+                        }
                     } else if (command.equals("Shutdown")) {
-                        engine.stopTest(false);
+                        for(JMeterEngine engine : engines) {
+                            engine.stopTest(false);
+                        }
                     } else {
                         System.out.println("Command: "+command+" not recognised ");
                     }
