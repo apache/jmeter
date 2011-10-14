@@ -122,10 +122,10 @@ public class Start extends AbstractAction {
      */
     private TreeCloner cloneTree(HashTree testTree, boolean removeTimers) {
         TreeCloner cloner = null;
-        if(!removeTimers) {
-            cloner = new TreeCloner(false);     
-        } else {
+        if(removeTimers) {
             cloner = new TreeClonerNoTimer(false);
+        } else {
+            cloner = new TreeCloner(false);     
         }
         testTree.traverse(cloner);
         return cloner;
