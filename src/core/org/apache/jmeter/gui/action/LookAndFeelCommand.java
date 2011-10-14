@@ -19,6 +19,7 @@
 package org.apache.jmeter.gui.action;
 
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -30,11 +31,15 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.util.JMeterMenuBar;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * Implements the Look and Feel menu item.
  */
 public class LookAndFeelCommand implements Command {
+
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final String JMETER_LAF = "jmeter.laf"; // $NON-NLS-1$
 
@@ -47,7 +52,21 @@ public class LookAndFeelCommand implements Command {
         }
 
         try {
-            UIManager.setLookAndFeel(getJMeterLaf());
+            String jMeterLaf = getJMeterLaf();
+            UIManager.setLookAndFeel(jMeterLaf);
+            if (log.isInfoEnabled()) {
+                ArrayList<String> names=new ArrayList<String>();
+                for(UIManager.LookAndFeelInfo laf : lfs) {
+                    if (laf.getClassName().equals(jMeterLaf)) {
+                        names.add(laf.getName());
+                    }
+                }
+                if (names.size() > 0) {
+                    log.info("Using look and feel: "+jMeterLaf+ " " +names.toString());
+                } else {
+                    log.info("Using look and feel: "+jMeterLaf);
+                }
+            }
         } catch (IllegalAccessException e) {
         } catch (ClassNotFoundException e) {
         } catch (InstantiationException e) {
