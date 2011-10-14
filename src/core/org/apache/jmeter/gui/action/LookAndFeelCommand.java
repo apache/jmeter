@@ -28,6 +28,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.gui.util.JMeterMenuBar;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -40,7 +41,7 @@ public class LookAndFeelCommand implements Command {
     private static final Set<String> commands = new HashSet<String>();
 
     static {
-        UIManager.LookAndFeelInfo[] lfs = UIManager.getInstalledLookAndFeels();
+        UIManager.LookAndFeelInfo[] lfs = JMeterMenuBar.getAllLAFs();
         for (int i = 0; i < lfs.length; i++) {
             commands.add(ActionNames.LAF_PREFIX + lfs[i].getClassName());
         }
@@ -87,10 +88,10 @@ public class LookAndFeelCommand implements Command {
 
     // Check if LAF is a built-in one
     private static String checkLafName(String laf){
-        if ("system".equalsIgnoreCase(laf)){ // $NON-NLS-1$
+        if (JMeterMenuBar.SYSTEM_LAF.equalsIgnoreCase(laf)){
             return UIManager.getSystemLookAndFeelClassName();
         }
-        if ("crossplatform".equalsIgnoreCase(laf)){ // $NON-NLS-1$
+        if (JMeterMenuBar.CROSS_PLATFORM_LAF.equalsIgnoreCase(laf)){
             return UIManager.getCrossPlatformLookAndFeelClassName();
         }
         return laf;

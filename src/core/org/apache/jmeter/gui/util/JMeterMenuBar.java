@@ -34,6 +34,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 import javax.swing.MenuElement;
 import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
@@ -130,6 +131,10 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     private Collection<JMenuItem> remote_engine_exit;
 
     private JMenu searchMenu;
+
+    public static final String SYSTEM_LAF = "System"; // $NON-NLS-1$
+
+    public static final String CROSS_PLATFORM_LAF = "CrossPlatform"; // $NON-NLS-1$
 
     public JMeterMenuBar() {
         // List for recent files menu items
@@ -295,7 +300,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         JMenuItem functionHelper = makeMenuItemRes("function_dialog_menu_item", 'F', ActionNames.FUNCTIONS, KeyStrokes.FUNCTIONS); //$NON-NLS-1$
 
         lafMenu = makeMenuRes("appearance",'L'); //$NON-NLS-1$
-        UIManager.LookAndFeelInfo lafs[] = UIManager.getInstalledLookAndFeels();
+        UIManager.LookAndFeelInfo lafs[] = getAllLAFs();
         for (int i = 0; i < lafs.length; ++i) {
             JMenuItem laf = new JMenuItem(lafs[i].getName());
             laf.addActionListener(ActionRouter.getInstance());
@@ -594,6 +599,19 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         updateMenuElement(helpMenu);
     }
 
+    /**
+     * Get a list of all installed LAFs plus CrossPlatform and System.
+     */
+    // This is also used by LookAndFeelCommand
+    public static LookAndFeelInfo[] getAllLAFs() {
+        UIManager.LookAndFeelInfo lafs[] = UIManager.getInstalledLookAndFeels();
+        int i = lafs.length;
+        UIManager.LookAndFeelInfo lafsAll[] = new UIManager.LookAndFeelInfo[i+2];
+        System.arraycopy(lafs, 0, lafsAll, 0, i);
+        lafsAll[i++]=new UIManager.LookAndFeelInfo(CROSS_PLATFORM_LAF,UIManager.getCrossPlatformLookAndFeelClassName());
+        lafsAll[i++]=new UIManager.LookAndFeelInfo(SYSTEM_LAF,UIManager.getSystemLookAndFeelClassName());
+        return lafsAll;
+    }
     /**
      * <p>Refreshes all texts in the menu and all submenus to a new locale.</p>
      *
