@@ -1137,7 +1137,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                         
                         if (isConcurrentDwn()) {
                             // if concurrent download emb. resources, add to a list for async gets later
-                            liste.add(new ASyncSample(url, GET, false, frameDepth + 1));
+                            liste.add(new ASyncSample(url, GET, false, frameDepth + 1, this));
                         } else {
                             // default: serial download embedded resources
                             HTTPSampleResult binRes = sample(url, GET, false, frameDepth + 1);
@@ -1674,22 +1674,24 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * Callable class to sample asynchronously resources embedded
      *
      */
-    public class ASyncSample implements Callable<HTTPSampleResult> {
+    private static class ASyncSample implements Callable<HTTPSampleResult> {
         final private URL url;
         final private String method;
         final private boolean areFollowingRedirect;
         final private int depth;
+        private final HTTPSamplerBase base;
 
-        public ASyncSample(URL url, String method,
-                boolean areFollowingRedirect, int depth){
+        ASyncSample(URL url, String method,
+                boolean areFollowingRedirect, int depth,  HTTPSamplerBase base){
             this.url = url;
             this.method = method;
             this.areFollowingRedirect = areFollowingRedirect;
             this.depth = depth;
+            this.base = base;
         }
 
         public HTTPSampleResult call() {
-            return sample(url, method, areFollowingRedirect, depth);
+            return base.sample(url, method, areFollowingRedirect, depth);
         }
     }
 
