@@ -42,13 +42,13 @@ public class TreeClonerNoTimer extends TreeCloner{
      */
     @Override
     protected Object addNodeToTree(Object node) {
-        if(!(node instanceof Timer)) {
-            return super.addNodeToTree(node);
-        } else {
+        if(node instanceof Timer) {
             if(logger.isDebugEnabled()) {
                 logger.debug("Ignoring timer node:"+ node);
             }
-            return node;
+            return node; // don't add the timer
+        } else {
+            return super.addNodeToTree(node);
         }
     }
 }
