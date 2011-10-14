@@ -1057,6 +1057,7 @@ Beware however that misuse of any methods can cause subtle faults that may be di
         <li>jexl (JMeter version 2.3.2 and later)</li>
         <li>xslt</li>
 		</ul>
+        <note>Unlike the BeanShell sampler, the interpreter is not saved between invocations.</note>
 	</description>
 <properties>
 	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
@@ -1117,6 +1118,7 @@ Currently the only way to changes these is via the SampleResult methods:
 The JSR223 Sampler allows JSR223 script code to be used to perform a sample.
 For details, see <complink name="BSF Sampler"/>.
 </p>
+<note>Unlike the BeanShell sampler, the interpreter is not saved between invocations.</note>
 </description>
 </component>
 
