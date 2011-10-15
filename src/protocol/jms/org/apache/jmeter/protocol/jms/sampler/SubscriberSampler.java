@@ -79,16 +79,19 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     // Don't change the string, as it is used in JMX files
     private static final String CLIENT_CHOICE = "jms.client_choice"; // $NON-NLS-1$
     private static final String TIMEOUT = "jms.timeout"; // $NON-NLS-1$
-    private static final String TIMEOUT_DEFAULT = "";
+    private static final String TIMEOUT_DEFAULT = ""; // $NON-NLS-1$
     private static final String DURABLE_SUBSCRIPTION_ID = "jms.durableSubscriptionId"; // $NON-NLS-1$
     private static final String CLIENT_ID = "jms.clientId"; // $NON-NLS-1$
+    private static final String JMS_SELECTOR = "jms.selector"; // $NON-NLS-1$
     private static final String DURABLE_SUBSCRIPTION_ID_DEFAULT = "";
     private static final String CLIENT_ID_DEFAULT = ""; // $NON-NLS-1$
+    private static final String JMS_SELECTOR_DEFAULT = ""; // $NON-NLS-1$
     private static final String STOP_BETWEEN = "jms.stop_between_samples"; // $NON-NLS-1$
     
     private transient boolean START_ON_SAMPLE = false;
 
     public SubscriberSampler() {
+        super();
     }
 
     /**
@@ -101,7 +104,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     private void initListenerClient() throws JMSException, NamingException {
         SUBSCRIBER = new ReceiveSubscriber(0, getUseJNDIPropertiesAsBoolean(), getJNDIInitialContextFactory(),
                     getProviderUrl(), getConnectionFactory(), getDestination(), getDurableSubscriptionId(),
-                    getClientId(), isUseAuth(), getUsername(), getPassword());
+                    getClientId(), getJmsSelector(), isUseAuth(), getUsername(), getPassword());
         log.debug("SubscriberSampler.initListenerClient called");
     }
 
@@ -113,7 +116,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     private void initReceiveClient() throws NamingException, JMSException {
         SUBSCRIBER = new ReceiveSubscriber(getUseJNDIPropertiesAsBoolean(),
                 getJNDIInitialContextFactory(), getProviderUrl(), getConnectionFactory(), getDestination(),
-                getDurableSubscriptionId(), getClientId(), isUseAuth(), getUsername(), getPassword());
+                getDurableSubscriptionId(), getClientId(), getJmsSelector(), isUseAuth(), getUsername(), getPassword());
         log.debug("SubscriberSampler.initReceiveClient called");
     }
 
@@ -371,6 +374,13 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     public String getClientId() {
         return getPropertyAsString(CLIENT_ID, CLIENT_ID_DEFAULT);
     }
+    
+    /**
+     * @return JMS selector
+     */
+    public String getJmsSelector() {
+        return getPropertyAsString(JMS_SELECTOR, JMS_SELECTOR_DEFAULT);
+    }
 
     public void setDurableSubscriptionId(String durableSubscriptionId){
         setProperty(DURABLE_SUBSCRIPTION_ID, durableSubscriptionId, DURABLE_SUBSCRIPTION_ID_DEFAULT);        
@@ -381,6 +391,13 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
      */
     public void setClientID(String clientId) {
         setProperty(CLIENT_ID, clientId, CLIENT_ID_DEFAULT);
+    }
+   
+    /**
+     * @param jmsSelector JMS Selector
+     */
+    public void setJmsSelector(String jmsSelector) {
+        setProperty(JMS_SELECTOR, jmsSelector, JMS_SELECTOR_DEFAULT);
     }
     
     // This was the old value that was checked for

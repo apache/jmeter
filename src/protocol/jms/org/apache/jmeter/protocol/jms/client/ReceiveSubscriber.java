@@ -74,6 +74,9 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
      * @param providerUrl
      * @param connfactory
      * @param destinationName
+     * @param durableSubscriptionId
+     * @param clientId
+     * @param jmsSelector Message Selector
      * @param useAuth
      * @param securityPrincipal
      * @param securityCredentials
@@ -82,11 +85,11 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
      */
     public ReceiveSubscriber(boolean useProps, 
             String initialContextFactory, String providerUrl, String connfactory, String destinationName,
-            String durableSubscriptionId, String clientId, boolean useAuth, 
+            String durableSubscriptionId, String clientId, String jmsSelector, boolean useAuth, 
             String securityPrincipal, String securityCredentials) throws NamingException, JMSException {
         this(0, useProps, 
                 initialContextFactory, providerUrl, connfactory, destinationName,
-                durableSubscriptionId, clientId, useAuth, 
+                durableSubscriptionId, clientId, jmsSelector, useAuth, 
                 securityPrincipal, securityCredentials, false);
     }
 
@@ -103,6 +106,9 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
      * @param providerUrl
      * @param connfactory
      * @param destinationName
+     * @param durableSubscriptionId
+     * @param clientId
+     * @param jmsSelector Message Selector
      * @param useAuth
      * @param securityPrincipal
      * @param securityCredentials
@@ -111,11 +117,11 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
      */
     public ReceiveSubscriber(int queueSize, boolean useProps, 
             String initialContextFactory, String providerUrl, String connfactory, String destinationName,
-            String durableSubscriptionId, String clientId, boolean useAuth, 
+            String durableSubscriptionId, String clientId, String jmsSelector, boolean useAuth, 
             String securityPrincipal, String securityCredentials) throws NamingException, JMSException {
         this(queueSize,  useProps, 
              initialContextFactory, providerUrl, connfactory, destinationName,
-             durableSubscriptionId, clientId, useAuth, 
+             durableSubscriptionId, clientId, jmsSelector, useAuth, 
              securityPrincipal,  securityCredentials, true);
     }
     
@@ -133,6 +139,9 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
      * @param providerUrl
      * @param connfactory
      * @param destinationName
+     * @param durableSubscriptionId
+     * @param clientId
+     * @param jmsSelector Message Selector
      * @param useAuth
      * @param securityPrincipal
      * @param securityCredentials
@@ -142,7 +151,7 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
      */
     private ReceiveSubscriber(int queueSize, boolean useProps, 
             String initialContextFactory, String providerUrl, String connfactory, String destinationName,
-            String durableSubscriptionId, String clientId, boolean useAuth, 
+            String durableSubscriptionId, String clientId, String jmsSelector, boolean useAuth, 
             String securityPrincipal, String securityCredentials, boolean useMessageListener) throws NamingException, JMSException {
         boolean initSuccess = false;
         try{
@@ -154,7 +163,7 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
             }
             SESSION = CONN.createSession(false, Session.AUTO_ACKNOWLEDGE);
             Destination dest = Utils.lookupDestination(ctx, destinationName);
-            SUBSCRIBER = createSubscriber(SESSION, dest, durableSubscriptionId);
+            SUBSCRIBER = createSubscriber(SESSION, dest, durableSubscriptionId, jmsSelector);
             if(useMessageListener) {
                 if (queueSize <=0) {
                     queue = new LinkedBlockingQueue<Message>();
@@ -184,15 +193,25 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
      * @param durableSubscriptionId 
      * 				If neither empty nor null, this means that a durable 
      * 				subscription will be used
+     * @param jmsSelector JMS Selector
      * @return
      * @throws JMSException
      */
     private MessageConsumer createSubscriber(Session session, 
-    		Destination destination, String durableSubscriptionId) throws JMSException {
+    		Destination destination, String durableSubscriptionId, 
+    		String jmsSelector) throws JMSException {
     	if (isEmpty(durableSubscriptionId)) {
-        	return  session.createConsumer(destination);
+    	    if(isEmpty(jmsSelector)) {
+    	        return session.createConsumer(destination);
+    	    } else {
+    	        return session.createConsumer(destination, jmsSelector);
+    	    }
         } else {
-        	return session.createDurableSubscriber((Topic) destination, durableSubscriptionId); 
+            if(isEmpty(jmsSelector)) {
+                return session.createDurableSubscriber((Topic) destination, durableSubscriptionId); 
+            } else {
+                return session.createDurableSubscriber((Topic) destination, durableSubscriptionId, jmsSelector, false);                 
+            }
         }	
     }
 
