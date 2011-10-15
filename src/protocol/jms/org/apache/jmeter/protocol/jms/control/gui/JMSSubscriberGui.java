@@ -65,6 +65,9 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
     private final JLabeledTextField jmsClientId =
         new JLabeledTextField(JMeterUtils.getResString("jms_client_id")); // $NON-NLS-1$
 
+    private final JLabeledTextField jmsSelector =
+        new JLabeledTextField(JMeterUtils.getResString("jms_selector")); // $NON-NLS-1$
+
     private final JLabeledTextField jmsUser =
         new JLabeledTextField(JMeterUtils.getResString("jms_user")); // $NON-NLS-1$
 
@@ -140,6 +143,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
         sampler.setDestination(jmsDestination.getText());
         sampler.setDurableSubscriptionId(jmsDurableSubscriptionId.getText());
         sampler.setClientID(jmsClientId.getText());
+        sampler.setJmsSelector(jmsSelector.getText());
         sampler.setUsername(jmsUser.getText());
         sampler.setPassword(jmsPwd.getText());
         sampler.setUseAuth(useAuth.isSelected());
@@ -174,6 +178,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
         mainPanel.add(createDestinationPane());
         mainPanel.add(jmsDurableSubscriptionId);
         mainPanel.add(jmsClientId);
+        mainPanel.add(jmsSelector);
         mainPanel.add(useAuth);
         mainPanel.add(jmsUser);
         mainPanel.add(jmsPwd);
@@ -205,6 +210,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
         jmsDestination.setText(sampler.getDestination());
         jmsDurableSubscriptionId.setText(sampler.getDurableSubscriptionId());
         jmsClientId.setText(sampler.getClientId());
+        jmsSelector.setText(sampler.getJmsSelector());
         jmsUser.setText(sampler.getUsername());
         jmsPwd.setText(sampler.getPassword());
         iterations.setText(sampler.getIterations());
@@ -228,6 +234,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
         jmsDestination.setText(""); // $NON-NLS-1$
         jmsDurableSubscriptionId.setText(""); // $NON-NLS-1$
         jmsClientId.setText(""); // $NON-NLS-1$
+        jmsSelector.setText(""); // $NON-NLS-1$
         jmsUser.setText(""); // $NON-NLS-1$
         jmsPwd.setText(""); // $NON-NLS-1$
         iterations.setText("1"); // $NON-NLS-1$
