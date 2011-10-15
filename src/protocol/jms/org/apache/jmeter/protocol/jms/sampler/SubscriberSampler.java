@@ -369,7 +369,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
      * @return JMS Client ID
      */
     public String getClientId() {
-        return getPropertyAsString(CLIENT_ID);
+        return getPropertyAsString(CLIENT_ID, CLIENT_ID_DEFAULT);
     }
 
     public void setDurableSubscriptionId(String durableSubscriptionId){
