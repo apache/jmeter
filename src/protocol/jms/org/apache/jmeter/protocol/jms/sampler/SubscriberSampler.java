@@ -81,7 +81,9 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     private static final String TIMEOUT = "jms.timeout"; // $NON-NLS-1$
     private static final String TIMEOUT_DEFAULT = "";
     private static final String DURABLE_SUBSCRIPTION_ID = "jms.durableSubscriptionId"; // $NON-NLS-1$
+    private static final String CLIENT_ID = "jms.clientId"; // $NON-NLS-1$
     private static final String DURABLE_SUBSCRIPTION_ID_DEFAULT = "";
+    private static final String CLIENT_ID_DEFAULT = ""; // $NON-NLS-1$
     private static final String STOP_BETWEEN = "jms.stop_between_samples"; // $NON-NLS-1$
     
     private transient boolean START_ON_SAMPLE = false;
@@ -99,7 +101,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     private void initListenerClient() throws JMSException, NamingException {
         SUBSCRIBER = new ReceiveSubscriber(0, getUseJNDIPropertiesAsBoolean(), getJNDIInitialContextFactory(),
                     getProviderUrl(), getConnectionFactory(), getDestination(), getDurableSubscriptionId(),
-                    isUseAuth(), getUsername(), getPassword());
+                    getClientId(), isUseAuth(), getUsername(), getPassword());
         log.debug("SubscriberSampler.initListenerClient called");
     }
 
@@ -111,7 +113,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     private void initReceiveClient() throws NamingException, JMSException {
         SUBSCRIBER = new ReceiveSubscriber(getUseJNDIPropertiesAsBoolean(),
                 getJNDIInitialContextFactory(), getProviderUrl(), getConnectionFactory(), getDestination(),
-                getDurableSubscriptionId(), isUseAuth(), getUsername(), getPassword());
+                getDurableSubscriptionId(), getClientId(), isUseAuth(), getUsername(), getPassword());
         log.debug("SubscriberSampler.initReceiveClient called");
     }
 
@@ -362,11 +364,25 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     public String getDurableSubscriptionId(){
         return getPropertyAsString(DURABLE_SUBSCRIPTION_ID);
     }
+    
+    /**
+     * @return JMS Client ID
+     */
+    public String getClientId() {
+        return getPropertyAsString(CLIENT_ID);
+    }
 
     public void setDurableSubscriptionId(String durableSubscriptionId){
         setProperty(DURABLE_SUBSCRIPTION_ID, durableSubscriptionId, DURABLE_SUBSCRIPTION_ID_DEFAULT);        
     }
 
+    /**
+     * @param clientId JMS CLient id
+     */
+    public void setClientID(String clientId) {
+        setProperty(CLIENT_ID, clientId, CLIENT_ID_DEFAULT);
+    }
+    
     // This was the old value that was checked for
     private final static String RECEIVE_STR = JMeterUtils.getResString(JMSSubscriberGui.RECEIVE_RSC); // $NON-NLS-1$
 
