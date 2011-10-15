@@ -121,7 +121,7 @@ public class LookAndFeelCommand implements Command {
 
     public void doAction(ActionEvent ev) {
         try {
-            String className = ev.getActionCommand().substring(4).replace('/', '.');
+            String className = ev.getActionCommand().substring(ActionNames.LAF_PREFIX.length()).replace('/', '.');
             UIManager.setLookAndFeel(className);
             SwingUtilities.updateComponentTreeUI(GuiPackage.getInstance().getMainFrame());
         } catch (javax.swing.UnsupportedLookAndFeelException e) {
