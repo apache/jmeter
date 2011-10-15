@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+import java.util.prefs.Preferences;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -44,6 +45,12 @@ public class LookAndFeelCommand implements Command {
     private static final String JMETER_LAF = "jmeter.laf"; // $NON-NLS-1$
 
     private static final Set<String> commands = new HashSet<String>();
+
+    private static final Preferences PREFS = Preferences.userNodeForPackage(LookAndFeelCommand.class);
+    // Note: Windows user preferences are stored relative to: HKEY_CURRENT_USER\Software\JavaSoft\Prefs
+
+    /** Prefix for the user preference key */
+    private static final String USER_PREFS_KEY = "laf"; //$NON-NLS-1$
 
     static {
         UIManager.LookAndFeelInfo[] lfs = JMeterMenuBar.getAllLAFs();
@@ -85,9 +92,15 @@ public class LookAndFeelCommand implements Command {
      * @return LAF classname
      */
     private static String getJMeterLaf(){
+        String laf;
+
+        laf = PREFS.get(USER_PREFS_KEY, null);
+        if (laf != null) {
+            return checkLafName(laf);            
+        }
+
         String osName = System.getProperty("os.name") // $NON-NLS-1$
                         .toLowerCase(Locale.ENGLISH);
-        String laf;
         // Spaces are not allowed in property names read from files
         laf = JMeterUtils.getProperty(JMETER_LAF+"."+osName.replace(' ', '_'));
         if (laf != null) {
@@ -124,6 +137,7 @@ public class LookAndFeelCommand implements Command {
             String className = ev.getActionCommand().substring(ActionNames.LAF_PREFIX.length()).replace('/', '.');
             UIManager.setLookAndFeel(className);
             SwingUtilities.updateComponentTreeUI(GuiPackage.getInstance().getMainFrame());
+            PREFS.put(USER_PREFS_KEY, className);
         } catch (javax.swing.UnsupportedLookAndFeelException e) {
             JMeterUtils.reportErrorToUser("Look and Feel unavailable:" + e.toString());
         } catch (InstantiationException e) {
