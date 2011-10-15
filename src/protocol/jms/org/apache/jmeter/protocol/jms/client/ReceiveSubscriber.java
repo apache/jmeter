@@ -82,24 +82,12 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
      */
     public ReceiveSubscriber(boolean useProps, 
             String initialContextFactory, String providerUrl, String connfactory, String destinationName,
-            String durableSubscriptionId, boolean useAuth, 
+            String durableSubscriptionId, String clientId, boolean useAuth, 
             String securityPrincipal, String securityCredentials) throws NamingException, JMSException {
-        boolean initSuccess = false;
-        try{
-            Context ctx = InitialContextFactory.getContext(useProps, 
-                    initialContextFactory, providerUrl, useAuth, securityPrincipal, securityCredentials);
-            CONN = Utils.getConnection(ctx, connfactory);
-            SESSION = CONN.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            Destination dest = Utils.lookupDestination(ctx, destinationName);
-           	SUBSCRIBER = createSubscriber(SESSION, dest, durableSubscriptionId);
-            queue = null;
-            log.debug("<init> complete");
-            initSuccess = true;
-        } finally {
-            if(!initSuccess) {
-                close();
-            }
-        }
+        this(0, useProps, 
+                initialContextFactory, providerUrl, connfactory, destinationName,
+                durableSubscriptionId, clientId, useAuth, 
+                securityPrincipal, securityCredentials, false);
     }
 
     /**
@@ -123,22 +111,60 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
      */
     public ReceiveSubscriber(int queueSize, boolean useProps, 
             String initialContextFactory, String providerUrl, String connfactory, String destinationName,
-            String durableSubscriptionId, boolean useAuth, 
+            String durableSubscriptionId, String clientId, boolean useAuth, 
             String securityPrincipal, String securityCredentials) throws NamingException, JMSException {
+        this(queueSize,  useProps, 
+             initialContextFactory, providerUrl, connfactory, destinationName,
+             durableSubscriptionId, clientId, useAuth, 
+             securityPrincipal,  securityCredentials, true);
+    }
+    
+    
+    /**
+     * Constructor takes the necessary JNDI related parameters to create a
+     * connection and create an onMessageListener to prepare to begin receiving messages.
+     * <br/>
+     * The caller must then invoke {@link #start()} to enable message reception.
+     * 
+     * @param queueSize maximum queue size <=0 == no limit
+     * @param useProps if true, use jndi.properties instead of 
+     * initialContextFactory, providerUrl, securityPrincipal, securityCredentials
+     * @param initialContextFactory
+     * @param providerUrl
+     * @param connfactory
+     * @param destinationName
+     * @param useAuth
+     * @param securityPrincipal
+     * @param securityCredentials
+     * @param useMessageListener if true create an onMessageListener to prepare to begin receiving messages, otherwise queue will be null
+     * @throws JMSException if could not create context or other problem occurred.
+     * @throws NamingException 
+     */
+    private ReceiveSubscriber(int queueSize, boolean useProps, 
+            String initialContextFactory, String providerUrl, String connfactory, String destinationName,
+            String durableSubscriptionId, String clientId, boolean useAuth, 
+            String securityPrincipal, String securityCredentials, boolean useMessageListener) throws NamingException, JMSException {
         boolean initSuccess = false;
         try{
             Context ctx = InitialContextFactory.getContext(useProps, 
                     initialContextFactory, providerUrl, useAuth, securityPrincipal, securityCredentials);
             CONN = Utils.getConnection(ctx, connfactory);
+            if(!isEmpty(clientId)) {
+                CONN.setClientID(clientId);
+            }
             SESSION = CONN.createSession(false, Session.AUTO_ACKNOWLEDGE);
             Destination dest = Utils.lookupDestination(ctx, destinationName);
             SUBSCRIBER = createSubscriber(SESSION, dest, durableSubscriptionId);
-            if (queueSize <=0) {
-                queue = new LinkedBlockingQueue<Message>();
+            if(useMessageListener) {
+                if (queueSize <=0) {
+                    queue = new LinkedBlockingQueue<Message>();
+                } else {
+                    queue = new LinkedBlockingQueue<Message>(queueSize);            
+                }
+                SUBSCRIBER.setMessageListener(this);
             } else {
-                queue = new LinkedBlockingQueue<Message>(queueSize);            
+                queue = null;
             }
-            SUBSCRIBER.setMessageListener(this);
             log.debug("<init> complete");
             initSuccess = true;
         }
