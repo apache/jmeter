@@ -26,19 +26,16 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.naming.NamingException;
 
-import org.apache.jorphan.io.TextFile;
+import org.apache.jmeter.engine.event.LoopIterationEvent;
+import org.apache.jmeter.protocol.jms.Utils;
+import org.apache.jmeter.protocol.jms.client.ClientPool;
+import org.apache.jmeter.protocol.jms.client.Publisher;
+import org.apache.jmeter.protocol.jms.control.gui.JMSPublisherGui;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jmeter.engine.event.LoopIterationEvent;
-
-import org.apache.jmeter.protocol.jms.Utils;
-import org.apache.jmeter.protocol.jms.control.gui.JMSPublisherGui;
-import org.apache.jmeter.protocol.jms.client.ClientPool;
-import org.apache.jmeter.protocol.jms.client.InitialContextFactory;
-import org.apache.jmeter.protocol.jms.client.Publisher;
-
+import org.apache.jorphan.io.TextFile;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -97,7 +94,6 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
     public void testEnded() {
         log.debug("PublisherSampler.testEnded called");
         ClientPool.clearClient();
-        InitialContextFactory.close();
     }
 
     public void testStarted() {

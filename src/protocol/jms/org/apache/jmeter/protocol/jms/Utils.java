@@ -39,6 +39,21 @@ import org.apache.log.Logger;
  */
 public final class Utils {
 
+    /**
+     * Close context
+     * @param closeable {@link Context}
+     * @param log {@link Logger}
+     */
+    public static void close(Context closeable, Logger log) {
+        if (closeable != null){
+            try {
+                closeable.close();
+            } catch (Exception e) {
+                log.error("Error during close: ", e);
+            }
+        }
+    }
+    
     public static void close(MessageConsumer closeable, Logger log){
         if (closeable != null){
             try {
@@ -162,5 +177,4 @@ public final class Utils {
         }
         throw new NamingException("Expected javax.jms.ConnectionFactory, found "+objfac.getClass().getName());
     }
-
 }
