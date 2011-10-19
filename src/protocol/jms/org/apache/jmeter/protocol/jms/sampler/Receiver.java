@@ -78,7 +78,7 @@ public class Receiver implements Runnable {
             String principal, String credentials, boolean useResMsgIdAsCorrelId)
             throws JMSException {
         Receiver receiver = new Receiver(factory, receiveQueue, principal, credentials, useResMsgIdAsCorrelId);
-        Thread thread = new Thread(receiver, "JMS Receiever");
+        Thread thread = new Thread(receiver, Thread.currentThread().getName()+"-JMS-Receiver");
         thread.start();
         return receiver;
     }
