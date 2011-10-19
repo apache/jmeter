@@ -51,7 +51,7 @@ public class InitialContextFactory {
      */
     public static Context lookupContext(String initialContextFactory, 
             String providerUrl, boolean useAuth, String securityPrincipal, String securityCredentials) throws NamingException {
-        String cacheKey = createKey(initialContextFactory ,providerUrl, securityPrincipal, securityCredentials);
+        String cacheKey = createKey(Thread.currentThread().getId(),initialContextFactory ,providerUrl, securityPrincipal, securityCredentials);
         Context ctx = MAP.get(cacheKey);
         if (ctx == null) {
             Properties props = new Properties();
@@ -89,16 +89,21 @@ public class InitialContextFactory {
 
     /**
      * Create cache key
+     * @param threadId Thread Id
      * @param initialContextFactory
      * @param providerUrl
      * @param securityPrincipal
      * @param securityCredentials
      * @return
      */
-    private static String createKey(String initialContextFactory,
+    private static String createKey(
+            long threadId,
+            String initialContextFactory,
             String providerUrl, String securityPrincipal,
             String securityCredentials) {
        StringBuilder builder = new StringBuilder();
+       builder.append(threadId);
+       builder.append("#");
        builder.append(initialContextFactory);
        builder.append("#");
        builder.append(providerUrl);
