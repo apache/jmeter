@@ -176,6 +176,5 @@ public class Publisher implements Closeable {
         Utils.close(producer, log);
         Utils.close(session, log);
         Utils.close(connection, log);
-        Utils.close(ctx, log);
     }
 }
