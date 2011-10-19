@@ -27,6 +27,7 @@ import javax.naming.NamingException;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.protocol.jms.Utils;
+import org.apache.jmeter.protocol.jms.client.InitialContextFactory;
 import org.apache.jmeter.protocol.jms.client.ReceiveSubscriber;
 import org.apache.jmeter.protocol.jms.control.gui.JMSSubscriberGui;
 import org.apache.jmeter.samplers.Interruptible;
@@ -414,7 +415,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
      * {@inheritDoc}
      */
     public void testEnded() {
-        // NOOP
+        InitialContextFactory.close();
     }
 
     /**
