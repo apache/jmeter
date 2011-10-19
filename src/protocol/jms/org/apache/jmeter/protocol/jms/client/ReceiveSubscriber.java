@@ -154,9 +154,8 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
             String durableSubscriptionId, String clientId, String jmsSelector, boolean useAuth, 
             String securityPrincipal, String securityCredentials, boolean useMessageListener) throws NamingException, JMSException {
         boolean initSuccess = false;
-        Context ctx = null;
         try{
-            ctx = InitialContextFactory.getContext(useProps, 
+            Context ctx = InitialContextFactory.getContext(useProps, 
                     initialContextFactory, providerUrl, useAuth, securityPrincipal, securityCredentials);
             CONN = Utils.getConnection(ctx, connfactory);
             if(!isEmpty(clientId)) {
@@ -182,7 +181,6 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
             if(!initSuccess) {
                 close();
             }
-            Utils.close(ctx, log);
         }
     }
     
