@@ -51,7 +51,7 @@ public class MultipartUrlConfigGui extends UrlConfigGui {
     }
 
     public MultipartUrlConfigGui(boolean showSamplerFields, boolean showImplementation) {
-        super(showSamplerFields, showImplementation);
+        super(showSamplerFields, showImplementation, true);
         init();
     }
 

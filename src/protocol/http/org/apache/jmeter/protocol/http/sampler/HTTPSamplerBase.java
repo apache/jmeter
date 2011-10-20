@@ -215,6 +215,10 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     protected static final String NON_HTTP_RESPONSE_MESSAGE = "Non HTTP response message";
 
+    public static final String POST_BODY_RAW = "HTTPSampler.postBodyRaw"; // TODO - belongs elsewhere 
+
+    public static final boolean POST_BODY_RAW_DEFAULT = false;
+
     private static final String ARG_VAL_SEP = "="; // $NON-NLS-1$
 
     private static final String QRY_SEP = "&"; // $NON-NLS-1$
@@ -307,16 +311,20 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @return true if none of the parameters have a name specified
      */
     public boolean getSendParameterValuesAsPostBody() {
-        boolean noArgumentsHasName = true;
-        PropertyIterator args = getArguments().iterator();
-        while (args.hasNext()) {
-            HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
-            if(arg.getName() != null && arg.getName().length() > 0) {
-                noArgumentsHasName = false;
-                break;
+        if(getPostBodyRaw()) {
+            return true;
+        } else {
+            boolean noArgumentsHasName = true;
+            PropertyIterator args = getArguments().iterator();
+            while (args.hasNext()) {
+                HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
+                if(arg.getName() != null && arg.getName().length() > 0) {
+                    noArgumentsHasName = false;
+                    break;
+                }
             }
+            return noArgumentsHasName;
         }
-        return noArgumentsHasName;
     }
 
     /**
@@ -698,6 +706,20 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     public Arguments getArguments() {
         return (Arguments) getProperty(ARGUMENTS).getObjectValue();
+    }
+
+    /**
+     * @param value Boolean that indicates body will be sent as is
+     */
+    public void setPostBodyRaw(boolean value) {
+        setProperty(POST_BODY_RAW, value, POST_BODY_RAW_DEFAULT);
+    }
+
+    /**
+     * @return boolean that indicates body will be sent as is
+     */
+    public boolean getPostBodyRaw() {
+        return getPropertyAsBoolean(POST_BODY_RAW, POST_BODY_RAW_DEFAULT);
     }
 
     public void setAuthManager(AuthManager value) {
@@ -1694,7 +1716,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             return base.sample(url, method, areFollowingRedirect, depth);
         }
     }
-
+    
     /**
      * We search in URL and arguments
      * TODO Can be enhanced
