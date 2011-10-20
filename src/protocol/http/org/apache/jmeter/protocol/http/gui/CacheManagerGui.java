@@ -21,7 +21,9 @@ package org.apache.jmeter.protocol.http.gui;
 import java.awt.BorderLayout;
 
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.protocol.http.control.CacheManager;
@@ -40,6 +42,8 @@ public class CacheManagerGui extends AbstractConfigGui {
     private JCheckBox clearEachIteration;
 
     private JCheckBox useExpires;
+
+    private JTextField maxCacheSize;
 
     /**
      * Create a new LoginConfigGui as a standalone component.
@@ -67,6 +71,7 @@ public class CacheManagerGui extends AbstractConfigGui {
         final CacheManager cacheManager = (CacheManager)element;
         clearEachIteration.setSelected(cacheManager.getClearEachIteration());
         useExpires.setSelected(cacheManager.getUseExpires());
+        maxCacheSize.setText(Integer.toString(cacheManager.getMaxSize()));
     }
 
     /* Implements JMeterGUIComponent.createTestElement() */
@@ -82,6 +87,11 @@ public class CacheManagerGui extends AbstractConfigGui {
         final CacheManager cacheManager = (CacheManager)element;
         cacheManager.setClearEachIteration(clearEachIteration.isSelected());
         cacheManager.setUseExpires(useExpires.isSelected());
+        try {
+            cacheManager.setMaxSize(Integer.parseInt(maxCacheSize.getText()));
+        } catch (NumberFormatException e) {
+            // NOOP
+        }
     }
 
     /**
@@ -92,6 +102,7 @@ public class CacheManagerGui extends AbstractConfigGui {
         super.clearGui();
         clearEachIteration.setSelected(false);
         useExpires.setSelected(false);
+        maxCacheSize.setText(""); //$NON-NLS-1$
     }
 
     /**
@@ -109,6 +120,16 @@ public class CacheManagerGui extends AbstractConfigGui {
         northPanel.add(makeTitlePanel());
         northPanel.add(clearEachIteration);
         northPanel.add(useExpires);
+        
+        JLabel label = new JLabel(JMeterUtils.getResString("cache_manager_size")); //$NON-NLS-1$
+
+        maxCacheSize = new JTextField(20);
+        maxCacheSize.setName(CacheManager.MAX_SIZE);
+        label.setLabelFor(maxCacheSize);
+        JPanel maxCacheSizePanel = new JPanel(new BorderLayout(5, 0));
+        maxCacheSizePanel.add(label, BorderLayout.WEST);
+        maxCacheSizePanel.add(maxCacheSize, BorderLayout.CENTER);
+        northPanel.add(maxCacheSizePanel);
         add(northPanel, BorderLayout.NORTH);
     }
 

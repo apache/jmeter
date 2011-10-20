@@ -24,10 +24,11 @@ import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.collections.map.LRUMap;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.URIException;
 import org.apache.commons.httpclient.util.DateParseException;
@@ -55,11 +56,14 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
     //+ JMX attributes, do not change values
     public static final String CLEAR = "clearEachIteration"; // $NON-NLS-1$
     public static final String USE_EXPIRES = "useExpires"; // $NON-NLS-1$
+    public static final String MAX_SIZE = "maxSize";  // $NON-NLS-1$
     //-
 
     private transient InheritableThreadLocal<Map<String, CacheEntry>> threadCache;
 
     private transient boolean useExpires; // Cached value
+
+    private static final int DEFAULT_MAX_SIZE = 5000;
 
     public CacheManager() {
         setProperty(new BooleanProperty(CLEAR, false));
@@ -319,6 +323,21 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
     public void setUseExpires(boolean expires) {
         setProperty(new BooleanProperty(USE_EXPIRES, expires));
     }
+    
+    /**
+     * @return int cache max size
+     */
+    public int getMaxSize() {
+        return getPropertyAsInt(MAX_SIZE, DEFAULT_MAX_SIZE);
+    }
+
+    /**
+     * @param size int cache max size
+     */
+    public void setMaxSize(int size) {
+        setProperty(MAX_SIZE, size, DEFAULT_MAX_SIZE);
+    }
+    
 
     @Override
     public void clear(){
@@ -332,7 +351,7 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
             @Override
             protected Map<String, CacheEntry> initialValue(){
                 // Bug 51942 - this map may be used from multiple threads
-                return new ConcurrentHashMap<String, CacheEntry>();
+                return Collections.<String, CacheEntry>synchronizedMap(new LRUMap(getMaxSize()));
             }
         };
     }

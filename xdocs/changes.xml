@@ -90,6 +90,7 @@ Mirror server now uses default port 8081, was 8080 before 2.5.1.
 <li>Bug 51957 - Concurrent get can hang if a task does not complete</li>
 <li>Bug 51925 - Calling Stop on Test leaks executor threads when concurrent download of resources is on</li>
 <li>Bug 51980 - HtmlParserHTMLParser double-counts images used in links</li>
+<li>Bug 52064 - OutOfMemory Risk in CacheManager</li>
 </ul>
 
 <h3>Other Samplers</h3>
