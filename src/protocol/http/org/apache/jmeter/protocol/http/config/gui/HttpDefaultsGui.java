@@ -124,7 +124,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
 
         add(makeTitlePanel(), BorderLayout.NORTH);
 
-        urlConfig = new UrlConfigGui(false);
+        urlConfig = new UrlConfigGui(false, true, false);
         add(urlConfig, BorderLayout.CENTER);
 
         // OPTIONAL TASKS
