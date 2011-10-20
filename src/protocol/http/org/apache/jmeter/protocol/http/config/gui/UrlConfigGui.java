@@ -27,12 +27,15 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.gui.util.HorizontalPanel;
@@ -43,9 +46,11 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
+import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledChoice;
+import org.apache.jorphan.gui.JLabeledTextArea;
 
 /**
  * Basic URL / HTTP Request configuration:
@@ -57,6 +62,10 @@ import org.apache.jorphan.gui.JLabeledChoice;
 public class UrlConfigGui extends JPanel implements ChangeListener {
 
     private static final long serialVersionUID = 240L;
+
+    private static final int TAB_PARAMETERS = 0;
+    
+    private static final int TAB_RAW_BODY = 1;
 
     private HTTPArgumentsPanel argsPanel;
 
@@ -101,17 +110,34 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
     
     private final boolean showImplementation; // Set false for AJP
 
+    // Raw POST Body 
+    private JLabeledTextArea postBodyContent;
+
+    // Tabbed pane that contains parameters and raw body
+    private ValidationTabbedPane postContentTabbedPane;
+
+    private boolean showRawBodyPane;
+
     public UrlConfigGui() {
         this(true);
     }
 
-    public UrlConfigGui(boolean value) {
-        this(value, true);
+    /**
+     * @param showSamplerFields
+     */
+    public UrlConfigGui(boolean showSamplerFields) {
+        this(showSamplerFields, true, true);
     }
 
-    public UrlConfigGui(boolean showSamplerFields, boolean showImplementation) {
+    /**
+     * @param showSamplerFields
+     * @param showImplementation Show HTTP Implementation
+     * @param showRawBodyPane 
+     */
+    public UrlConfigGui(boolean showSamplerFields, boolean showImplementation, boolean showRawBodyPane) {
         notConfigOnly=showSamplerFields;
         this.showImplementation = showImplementation;
+        this.showRawBodyPane = showRawBodyPane;
         init();
     }
 
@@ -139,6 +165,10 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         protocol.setText(""); // $NON-NLS-1$
         contentEncoding.setText(""); // $NON-NLS-1$
         argsPanel.clear();
+        if(showRawBodyPane) {
+            postBodyContent.setText("");// $NON-NLS-1$
+        }
+        postContentTabbedPane.setSelectedIndex(TAB_PARAMETERS, false);
     }
 
     public TestElement createTestElement() {
@@ -157,9 +187,18 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
      * @param element
      */
     public void modifyTestElement(TestElement element) {
-        Arguments args = (Arguments) argsPanel.createTestElement();
-
-        HTTPArgument.convertArgumentsToHTTP(args);
+        boolean useRaw = postContentTabbedPane.getSelectedIndex()==TAB_RAW_BODY;
+        Arguments args;
+        if(useRaw) {
+            args = new Arguments();
+            HTTPArgument arg = new HTTPArgument("", postBodyContent.getText(), true);
+            arg.setAlwaysEncoded(false);
+            args.addArgument(arg);
+        } else {
+            args = (Arguments) argsPanel.createTestElement();
+            HTTPArgument.convertArgumentsToHTTP(args);
+        }
+        element.setProperty(HTTPSamplerBase.POST_BODY_RAW, useRaw, HTTPSamplerBase.POST_BODY_RAW_DEFAULT);
         element.setProperty(new TestElementProperty(HTTPSamplerBase.ARGUMENTS, args));
         element.setProperty(HTTPSamplerBase.DOMAIN, domain.getText());
         element.setProperty(HTTPSamplerBase.PORT, port.getText());
@@ -185,6 +224,24 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         }
     }
 
+    // FIXME FACTOR WITH HTTPHC4Impl, HTTPHC3Impl
+    // Just append all the parameter values, and use that as the post body
+    /**
+     * Compute Post body from arguments
+     * @param arguments {@link Arguments}
+     * @return {@link String}
+     */
+    private static final String computePostBody(Arguments arguments) {
+        StringBuilder postBody = new StringBuilder();
+        PropertyIterator args = arguments.iterator();
+        while (args.hasNext()) {
+            HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
+            String value = arg.getValue();
+            postBody.append(value);
+        }
+        return postBody.toString();
+    }
+
     /**
      * Set the text, etc. in the UI.
      *
@@ -193,7 +250,18 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
      */
     public void configure(TestElement el) {
         setName(el.getName());
-        argsPanel.configure((TestElement) el.getProperty(HTTPSamplerBase.ARGUMENTS).getObjectValue());
+        Arguments arguments = (Arguments) el.getProperty(HTTPSamplerBase.ARGUMENTS).getObjectValue();
+
+        boolean useRaw = el.getPropertyAsBoolean(HTTPSamplerBase.POST_BODY_RAW, HTTPSamplerBase.POST_BODY_RAW_DEFAULT);
+        if(useRaw) {
+            String postBody = computePostBody(arguments);
+            postBodyContent.setText(postBody);   
+            postContentTabbedPane.setSelectedIndex(TAB_RAW_BODY, false);
+        } else {
+            argsPanel.configure(arguments);
+            postContentTabbedPane.setSelectedIndex(TAB_PARAMETERS, false);
+        }
+
         domain.setText(el.getPropertyAsString(HTTPSamplerBase.DOMAIN));
 
         String portString = el.getPropertyAsString(HTTPSamplerBase.PORT);
@@ -504,12 +572,106 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         return panel;
     }
 
-    protected JPanel getParameterPanel() {
+    protected JTabbedPane getParameterPanel() {
+        postContentTabbedPane = new ValidationTabbedPane();
         argsPanel = new HTTPArgumentsPanel();
-
-        return argsPanel;
+        postContentTabbedPane.add(JMeterUtils.getResString("post_as_parameters"), argsPanel);// $NON-NLS-1$
+        if(showRawBodyPane) {
+            postBodyContent = new JLabeledTextArea(JMeterUtils.getResString("post_body_raw"));// $NON-NLS-1$
+            postContentTabbedPane.add(JMeterUtils.getResString("post_body"), postBodyContent);// $NON-NLS-1$
+        }
+        return postContentTabbedPane;
     }
 
+    /**
+     * 
+     */
+    class ValidationTabbedPane extends JTabbedPane{
+
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 7014311238367882880L;
+
+        /* (non-Javadoc)
+         * @see javax.swing.JTabbedPane#setSelectedIndex(int)
+         */
+        @Override
+        public void setSelectedIndex(int index) {
+            setSelectedIndex(index, true);
+        }
+        /**
+         * Apply some check rules if check is true
+         */
+        public void setSelectedIndex(int index, boolean check) {
+            int oldSelectedIndex = getSelectedIndex();
+            if(!check || oldSelectedIndex==-1) {
+                super.setSelectedIndex(index);
+            }
+            else if(index != this.getSelectedIndex())
+            {
+                if(noData(getSelectedIndex())) {
+                    // If there is no data, then switching between Parameters and Raw should be
+                    // allowed with no further user interaction.
+                    argsPanel.clear();
+                    postBodyContent.setText("");
+                    super.setSelectedIndex(index);
+                }
+                else { 
+                    if(oldSelectedIndex == TAB_RAW_BODY) {
+                        // If RAW data and Parameters match we allow switching
+                        if(postBodyContent.getText().equals(computePostBody((Arguments)argsPanel.createTestElement()).trim())) {
+                            super.setSelectedIndex(index);
+                        }
+                        else {
+                            // If there is data in the Raw panel, then the user should be 
+                            // prevented from switching (that would be easy to track).
+                            JOptionPane.showConfirmDialog(this,
+                                    JMeterUtils.getResString("web_cannot_switch_tab"), // $NON-NLS-1$
+                                    JMeterUtils.getResString("warning"), // $NON-NLS-1$
+                                    JOptionPane.DEFAULT_OPTION, 
+                                    JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+                    }
+                    else {
+                        // If the Parameter data can be converted (i.e. no names), we 
+                        // warn the user that the Parameter data will be lost.
+                        if(canConvertParameters()) {
+                            Object[] options = {
+                                    JMeterUtils.getResString("confirm"),
+                                    JMeterUtils.getResString("cancel")};
+                            int n = JOptionPane.showOptionDialog(this,
+                                JMeterUtils.getResString("web_parameters_lost_message"),
+                                JMeterUtils.getResString("warning"),
+                                JOptionPane.YES_NO_CANCEL_OPTION,
+                                JOptionPane.QUESTION_MESSAGE,
+                                null,
+                                options,
+                                options[1]);
+                            if(n == JOptionPane.YES_OPTION) {
+                                convertParametersToRaw();
+                                super.setSelectedIndex(index);
+                            }
+                            else{
+                                return;
+                            }
+                        }
+                        else {
+                            // If the Parameter data cannot be converted to Raw, then the user should be
+                            // prevented from doing so raise an error dialog
+                            JOptionPane.showConfirmDialog(this,
+                                    JMeterUtils.getResString("web_cannot_convert_parameters_to_raw"), // $NON-NLS-1$
+                                    JMeterUtils.getResString("warning"), // $NON-NLS-1$
+                                    JOptionPane.DEFAULT_OPTION, 
+                                    JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+                    }
+                }
+            }
+        }   
+    }
     // autoRedirects and followRedirects cannot both be selected
     public void stateChanged(ChangeEvent e) {
         if (e.getSource() == autoRedirects){
@@ -521,6 +683,41 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
             if (followRedirects.isSelected()) {
                 autoRedirects.setSelected(false);
             }
+        }
+    }
+
+
+    /**
+     * Convert Parameters to Raw Body
+     */
+    void convertParametersToRaw() {
+        postBodyContent.setText(computePostBody((Arguments)argsPanel.createTestElement()));
+    }
+
+    /**
+     * 
+     * @return true if no argument has a name
+     */
+    boolean canConvertParameters() {
+        Arguments arguments = (Arguments)argsPanel.createTestElement();
+        for (int i = 0; i < arguments.getArgumentCount(); i++) {
+            if(!StringUtils.isEmpty(arguments.getArgument(i).getName())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @return true if neither Parameters tab nor Raw Body tab contain data
+     */
+    boolean noData(int oldSelectedIndex) {
+        if(oldSelectedIndex == TAB_RAW_BODY) {
+            return StringUtils.isEmpty(postBodyContent.getText().trim());
+        }
+        else {
+            Arguments element = (Arguments)argsPanel.createTestElement();
+            return StringUtils.isEmpty(computePostBody(element));
         }
     }
 }
