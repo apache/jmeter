@@ -82,7 +82,7 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
         log.info("Starting backing engine on " + this.rmiPort);
         InetAddress localHost=null;
         try {
-            // Bug 47980
+            // Bug 47980 - allow override of local hostname
             String host = System.getProperties().getProperty("java.rmi.server.hostname"); // $NON-NLS-1$
             if( host==null ) {
                 localHost = InetAddress.getLocalHost();
@@ -96,6 +96,11 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
         String hostName = localHost.getHostName();
         if (localHost.isLoopbackAddress()){
             throw new RemoteException("Cannot start. "+hostName+" is a loopback address.");
+        }
+        if (localHost.isSiteLocalAddress()){
+            // should perhaps be log.warn, but this causes the client-server test to fail
+            log.info("IP address is a site-local address; this may cause problems with remote access.\n"
+                    + "\tCan be overridden by defining the system property 'java.rmi.server.hostname' - see jmeter-server script file");
         }
         log.debug("This = " + this);
         if (createServer){
