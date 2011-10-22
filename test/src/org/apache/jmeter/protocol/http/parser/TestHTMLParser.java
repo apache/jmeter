@@ -40,7 +40,6 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 import junit.framework.TestSuite;
-import junit.textui.TestRunner;
 
 public class TestHTMLParser extends JMeterTestCase {
     private static final Logger log = LoggingManager.getLoggerForClass();
