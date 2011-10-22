@@ -391,6 +391,7 @@ public class XPathExtractor extends AbstractScopedTestElement implements
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean searchContent(String textToSearch) throws Exception {
         if(super.searchContent(textToSearch)) {
             return true;
