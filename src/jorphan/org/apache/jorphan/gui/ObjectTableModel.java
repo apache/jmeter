@@ -202,7 +202,7 @@ public class ObjectTableModel extends DefaultTableModel {
     /** {@inheritDoc} */
     @Override
     public void moveRow(int start, int end, int to) {
-        List<Object> subList = new ArrayList(objects.subList(start, end));
+        List<Object> subList = new ArrayList<Object>(objects.subList(start, end));
         for (int x = end - 1; x >= start; x--) {
             objects.remove(x);
         }
