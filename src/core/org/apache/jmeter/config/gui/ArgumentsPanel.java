@@ -79,7 +79,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      * Boolean indicating whether this component is a standalong component or it
      * is intended to be used as a subpanel for another component.
      */
-    private boolean standalone = true;
+    private final boolean standalone;
 
     /** Button to move a argument up*/
     private JButton up;
@@ -87,7 +87,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     /** Button to move a argument down*/
     private JButton down;
 
-    private Boolean enableUpDown= Boolean.TRUE;
+    private final boolean enableUpDown;
 
     /** Command for adding a row to the table. */
     private static final String ADD = "add"; // $NON-NLS-1$
@@ -109,7 +109,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      * Create a new ArgumentsPanel as a standalone component.
      */
     public ArgumentsPanel() {
-        this(JMeterUtils.getResString("user_defined_variables"),null, Boolean.TRUE, true);// $NON-NLS-1$
+        this(JMeterUtils.getResString("user_defined_variables"),null, true, true);// $NON-NLS-1$
     }
 
     /**
@@ -131,7 +131,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      *            the title for the component.
      * @param enableUpDown Add up/down buttons
      */
-    public ArgumentsPanel(String label, Boolean enableUpDown) {
+    public ArgumentsPanel(String label, boolean enableUpDown) {
         this(label, null, enableUpDown, false);
     }
 
@@ -151,7 +151,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      * @param enableUpDown Add up/down buttons
      * @param standalone is standalone
      */
-    public ArgumentsPanel(String label, Color bkg, Boolean enableUpDown, boolean standalone) {
+    public ArgumentsPanel(String label, Color bkg, boolean enableUpDown, boolean standalone) {
         tableLabel = new JLabel(label);
         this.enableUpDown = enableUpDown;
         this.background = bkg;
