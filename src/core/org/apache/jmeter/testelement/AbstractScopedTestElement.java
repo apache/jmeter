@@ -160,6 +160,7 @@ public abstract class AbstractScopedTestElement extends AbstractTestElement {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean searchContent(String textToSearch) throws Exception {
         if(super.searchContent(textToSearch)) {
             return true;
