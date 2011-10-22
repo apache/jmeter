@@ -457,6 +457,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean searchContent(String textToSearch) throws Exception {
         if(super.searchContent(textToSearch)) {
             return true;
