@@ -70,6 +70,9 @@ public class JsseSSLManager extends SSLManager {
 
     private static final int cps;
 
+    //@GuardedBy("this")
+    private static int  last_user;
+
     static {
         log.info("Using default SSL protocol: "+DEFAULT_SSL_PROTOCOL);
         log.info("SSL session context: "+(SHARED_SESSION_CONTEXT ? "shared" : "per-thread"));
@@ -314,8 +317,12 @@ public class JsseSSLManager extends SSLManager {
          */
         public String[] getClientAliases(String keyType, Principal[] issuers) {
             log.debug("WrappedX509Manager: getClientAliases: ");
-            log.debug(this.store.getAlias());
-            return new String[] { this.store.getAlias() };
+            int count = this.store.getAliasCount();
+            String[] aliases = new String[count];
+            for(int i = 0; i < aliases.length; i++) {
+                aliases[i] = this.store.getAlias(i);
+            }
+             return aliases;
         }
 
         /**
@@ -343,7 +350,7 @@ public class JsseSSLManager extends SSLManager {
          */
         public X509Certificate[] getCertificateChain(String alias) {
             log.debug("WrappedX509Manager: getCertificateChain(" + alias + ")");
-            return this.store.getCertificateChain();
+            return this.store.getCertificateChain(alias);
         }
 
         /**
@@ -354,8 +361,9 @@ public class JsseSSLManager extends SSLManager {
          * @return The PrivateKey value
          */
         public PrivateKey getPrivateKey(String alias) {
-            log.debug("WrappedX509Manager: getPrivateKey: " + this.store.getPrivateKey());
-            return this.store.getPrivateKey();
+            PrivateKey privateKey = this.store.getPrivateKey(alias);
+            log.debug("WrappedX509Manager: getPrivateKey: " + privateKey);
+            return privateKey;
         }
 
         /**
@@ -372,12 +380,26 @@ public class JsseSSLManager extends SSLManager {
          * @see javax.net.ssl.X509KeyManager#chooseClientAlias(String[], Principal[], Socket)
          */
         public String chooseClientAlias(String[] keyType, Principal[] issuers, Socket socket) {
-            String alias = this.store.getAlias();
-            log.debug("ClientAlias: " + alias);
+            log.debug("keyType: " + keyType[0]);
+            int aliasCount = this.store.getAliasCount();
+            String alias = this.store.getAlias(getNextIndex(aliasCount));
             if (alias == null || alias.length() == 0) {
                 log.debug("ClientAlias not found.");
             }
             return alias;
+        }
+
+        private int getNextIndex(int aliasCount) {
+            if (aliasCount == 1) {
+                return 0;
+            }
+            synchronized(this) {
+                last_user ++;
+                if (last_user >= aliasCount) {
+                    last_user = 0;
+                }
+                return last_user;
+            }
         }
 
         /**

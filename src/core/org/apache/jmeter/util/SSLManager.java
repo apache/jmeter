@@ -64,7 +64,7 @@ public abstract class SSLManager {
     private static final Provider sslProvider = null;
 
     /** Cache the KeyStore instance */
-    private JmeterKeyStore keyStore;
+    private volatile JmeterKeyStore keyStore;
 
     /** Cache the TrustStore instance - null if no truststore name was provided */
     private KeyStore trustStore = null;
@@ -126,7 +126,9 @@ public abstract class SSLManager {
                 if (initStore.exists()) {
                     fileInputStream = new FileInputStream(initStore);
                     this.keyStore.load(fileInputStream, getPassword());
-                    log.info("Keystore loaded OK from file, found alias: "+keyStore.getAlias());
+                    if (log.isInfoEnabled()) {
+                        log.info("Total of " + keyStore.getAliasCount() + " aliases loaded OK from keystore");
+                    }
                 } else {
                     log.warn("Keystore file not found, loading empty keystore");
                     this.defaultpw = ""; // Ensure not null
