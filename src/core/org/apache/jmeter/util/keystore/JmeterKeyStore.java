@@ -34,16 +34,18 @@ public abstract class JmeterKeyStore {
     public abstract void load(InputStream is, String password) throws Exception;
 
     /**
-     * Get the ordered certificate chain.
+     * Get the ordered certificate chain for a specific alias.
      */
-    public abstract X509Certificate[] getCertificateChain();
+    public abstract X509Certificate[] getCertificateChain(String alias);
 
-    public abstract String getAlias();
+    public abstract int getAliasCount();
+
+    public abstract String getAlias(int index);
 
     /**
-     * Return the private Key
+     * Return the private Key for a specific alias
      */
-    public abstract PrivateKey getPrivateKey();
+    public abstract PrivateKey getPrivateKey(String alias);
 
     public static final JmeterKeyStore getInstance(String type) throws Exception {
         // JAVA 1.4 now handles all keystore types, so just use default
