@@ -38,6 +38,12 @@ public abstract class JmeterKeyStore {
      */
     public abstract X509Certificate[] getCertificateChain(String alias);
 
+    /**
+     * Get the next or only alias.
+     * @return the next or only alias.
+     */
+    public abstract String getAlias();
+
     public abstract int getAliasCount();
 
     public abstract String getAlias(int index);
