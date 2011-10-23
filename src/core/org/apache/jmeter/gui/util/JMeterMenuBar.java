@@ -26,6 +26,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -36,6 +38,7 @@ import javax.swing.MenuElement;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
+import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.KeyStrokes;
@@ -44,8 +47,8 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.LocaleChangeEvent;
 import org.apache.jmeter.util.LocaleChangeListener;
 import org.apache.jmeter.util.SSLManager;
-import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
@@ -310,6 +313,14 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         }
         optionsMenu.add(functionHelper);
         optionsMenu.add(lafMenu);
+
+        JCheckBoxMenuItem menuToolBar = makeCheckBoxMenuItemRes("menu_toolbar", ActionNames.TOOLBAR); //$NON-NLS-1$
+        GuiPackage guiInstance = GuiPackage.getInstance();
+        if (guiInstance != null) { //avoid error in ant task tests (good way?)
+            guiInstance.setMenuItemToolbar(menuToolBar);
+        }
+        optionsMenu.add(menuToolBar);
+        
         if (SSLManager.isSSLSupported()) {
             sslManager = makeMenuItemRes("sslmanager", 'S', ActionNames.SSL_MANAGER, KeyStrokes.SSL_MANAGER); //$NON-NLS-1$
             optionsMenu.add(sslManager);
@@ -749,5 +760,19 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         menuItem.setAccelerator(keyStroke);
         menuItem.addActionListener(ActionRouter.getInstance());
         return menuItem;
+    }
+    
+    private static JCheckBoxMenuItem makeCheckBoxMenuItemRes(String resource, String actionCommand) {
+        return makeCheckBoxMenuItemRes(resource, actionCommand, null);
+    }
+
+    private static JCheckBoxMenuItem makeCheckBoxMenuItemRes(String resource, 
+            String actionCommand, KeyStroke keyStroke){
+        JCheckBoxMenuItem cbkMenuItem = new JCheckBoxMenuItem(JMeterUtils.getResString(resource));
+        cbkMenuItem.setName(resource);
+        cbkMenuItem.setActionCommand(actionCommand);
+        cbkMenuItem.setAccelerator(keyStroke);
+        cbkMenuItem.addActionListener(ActionRouter.getInstance());
+        return cbkMenuItem;
     }
 }

@@ -178,6 +178,7 @@ Mirror server now uses default port 8081, was 8080 before 2.5.1.
 <li>Bug 52027 - Allow System or CrossPlatform LAF to be set from options menu</li>
 <li>Bug 52037 - Remember user-set LaF over restarts.</li>
 <li>Bug 51861 - Improve HTTP Request GUI to better show parameters without name (GWT RPC requests for example) (UNDER DEVELOPMENT)</li>
+<li>Bug 52040 - Add a toolbar in JMeter main window</li>
 </ul>
 
 <h2>Non-functional changes</h2>
