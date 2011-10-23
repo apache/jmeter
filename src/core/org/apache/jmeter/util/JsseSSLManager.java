@@ -70,9 +70,6 @@ public class JsseSSLManager extends SSLManager {
 
     private static final int cps;
 
-    //@GuardedBy("this")
-    private static int  last_user;
-
     static {
         log.info("Using default SSL protocol: "+DEFAULT_SSL_PROTOCOL);
         log.info("SSL session context: "+(SHARED_SESSION_CONTEXT ? "shared" : "per-thread"));
@@ -281,6 +278,10 @@ public class JsseSSLManager extends SSLManager {
      *
      */
     private static class WrappedX509KeyManager implements X509KeyManager {
+
+        //@GuardedBy("this")
+        private int last_user;
+
         /**
          * The parent X509KeyManager
          */
