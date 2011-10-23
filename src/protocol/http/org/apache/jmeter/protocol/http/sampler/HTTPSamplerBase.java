@@ -36,6 +36,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -45,6 +46,7 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.CacheManager;
+import org.apache.jmeter.protocol.http.control.Cookie;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.parser.HTMLParseException;
@@ -62,6 +64,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
+import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
@@ -1132,8 +1135,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             }
             
             // For concurrent get resources
-            final List<Callable<HTTPSampleResult>> liste = new ArrayList<Callable<HTTPSampleResult>>();
-            
+            final List<Callable<AsynSamplerResultHolder>> liste = new ArrayList<Callable<AsynSamplerResultHolder>>();
+
             while (urls.hasNext()) {
                 Object binURL = urls.next(); // See catch clause below
                 try {
@@ -1159,7 +1162,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                         
                         if (isConcurrentDwn()) {
                             // if concurrent download emb. resources, add to a list for async gets later
-                            liste.add(new ASyncSample(url, GET, false, frameDepth + 1, this));
+                            liste.add(new ASyncSample(url, GET, false, frameDepth + 1, getCookieManager(), this));
                         } else {
                             // default: serial download embedded resources
                             HTTPSampleResult binRes = sample(url, GET, false, frameDepth + 1);
@@ -1174,7 +1177,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                     continue;
                 }
             }
-            
             // IF for download concurrent embedded resources
             if (isConcurrentDwn()) {
                 int poolSize = CONCURRENT_POOL_SIZE; // init with default value
@@ -1188,24 +1190,46 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 // use a LinkedBlockingQueue, note: max pool size doesn't effect
                 final ThreadPoolExecutor exec = new ThreadPoolExecutor(
                         poolSize, poolSize, KEEPALIVETIME, TimeUnit.SECONDS,
-                        new LinkedBlockingQueue<Runnable>());
+                        new LinkedBlockingQueue<Runnable>(),
+                        new ThreadFactory() {
+                            public Thread newThread(final Runnable r) {
+                                Thread t = new CleanerThread(new Runnable() {
+                                    public void run() {
+                                        try {
+                                            r.run();
+                                        } finally {
+                                            ((CleanerThread)Thread.currentThread()).notifyThreadEnd();
+                                        }
+                                    }
+                                });
+                                return t;
+                            }
+                        });
 
                 boolean tasksCompleted = false;
                 try {
                     // sample all resources with threadpool
-                    final List<Future<HTTPSampleResult>> retExec = exec.invokeAll(liste);
+                    final List<Future<AsynSamplerResultHolder>> retExec = exec.invokeAll(liste);
                     // call normal shutdown (wait ending all tasks)
                     exec.shutdown();
                     // put a timeout if tasks couldn't terminate
                     exec.awaitTermination(AWAIT_TERMINATION_TIMEOUT, TimeUnit.SECONDS);
-
+                    CookieManager cookieManager = getCookieManager();
                     // add result to main sampleResult
-                    for (Future<HTTPSampleResult> future : retExec) {
-                        HTTPSampleResult binRes;
+                    for (Future<AsynSamplerResultHolder> future : retExec) {
+                        AsynSamplerResultHolder binRes;
                         try {
                             binRes = future.get(1, TimeUnit.MILLISECONDS);
-                            res.addSubResult(binRes);
-                            res.setSuccessful(res.isSuccessful() && binRes.isSuccessful());
+                            if(cookieManager != null) {
+                                CollectionProperty cookies = binRes.getCookies();
+                                PropertyIterator iter = cookies.iterator();
+                                while (iter.hasNext()) {
+                                    Cookie cookie = (Cookie) iter.next().getObjectValue();
+                                    cookieManager.add(cookie) ;
+                                }
+                            }
+                            res.addSubResult(binRes.getResult());
+                            res.setSuccessful(res.isSuccessful() && binRes.getResult().isSuccessful());
                         } catch (TimeoutException e) {
                             errorResult(e, res);
                         }
@@ -1224,7 +1248,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         }
         return res;
     }
-
+    
     /*
      * @param res HTTPSampleResult to check
      * @return parser class name (may be "") or null if entry does not exist
@@ -1692,28 +1716,102 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         setProperty(CONCURRENT_POOL, poolSize, CONCURRENT_POOL_DEFAULT);
     }
 
+    
     /**
      * Callable class to sample asynchronously resources embedded
      *
      */
-    private static class ASyncSample implements Callable<HTTPSampleResult> {
+    private static class ASyncSample implements Callable<AsynSamplerResultHolder> {
         final private URL url;
         final private String method;
         final private boolean areFollowingRedirect;
         final private int depth;
-        private final HTTPSamplerBase base;
+        private final HTTPSamplerBase sampler;
 
         ASyncSample(URL url, String method,
-                boolean areFollowingRedirect, int depth,  HTTPSamplerBase base){
+                boolean areFollowingRedirect, int depth,  CookieManager cookieManager, HTTPSamplerBase base){
             this.url = url;
             this.method = method;
             this.areFollowingRedirect = areFollowingRedirect;
             this.depth = depth;
-            this.base = base;
+            this.sampler = (HTTPSamplerBase) base.clone();
+            
+            if(cookieManager != null) {
+                CookieManager clonedCookieManager = (CookieManager) cookieManager.clone();
+                this.sampler.setCookieManager(clonedCookieManager);
+            } 
         }
 
-        public HTTPSampleResult call() {
-            return base.sample(url, method, areFollowingRedirect, depth);
+        public AsynSamplerResultHolder call() {
+            ((CleanerThread) Thread.currentThread()).registerSamplerForEndNotification(sampler);
+            HTTPSampleResult httpSampleResult = sampler.sample(url, method, areFollowingRedirect, depth);
+            if(sampler.getCookieManager() != null) {
+                CollectionProperty cookies = sampler.getCookieManager().getCookies();
+                return new AsynSamplerResultHolder(httpSampleResult, cookies);
+            } else {
+                return new AsynSamplerResultHolder(httpSampleResult, new CollectionProperty());
+            }
+        }
+    }
+    
+    /**
+     * Custom thread implementation that 
+     *
+     */
+    private static class CleanerThread extends Thread {
+        private List<HTTPSamplerBase> samplersToNotify = new ArrayList<HTTPSamplerBase>();
+        /**
+         * @param runnable Runnable
+         */
+        public CleanerThread(Runnable runnable) {
+           super(runnable);
+        }
+        
+        /**
+         * Notify of thread end
+         */
+        public void notifyThreadEnd() {
+            for (HTTPSamplerBase samplerBase : samplersToNotify) {
+                samplerBase.threadFinished();
+            }
+            samplersToNotify.clear();
+        }
+
+        /**
+         * Register sampler to be notify at end of thread
+         * @param sampler {@link HTTPSamplerBase}
+         */
+        public void registerSamplerForEndNotification(HTTPSamplerBase sampler) {
+            this.samplersToNotify.add(sampler);
+        }
+    }
+    
+    /**
+     * Holder of AsynSampler result
+     */
+    private static class AsynSamplerResultHolder {
+        private HTTPSampleResult result;
+        private CollectionProperty cookies;
+        /**
+         * @param result
+         * @param cookies
+         */
+        public AsynSamplerResultHolder(HTTPSampleResult result, CollectionProperty cookies) {
+            super();
+            this.result = result;
+            this.cookies = cookies;
+        }
+        /**
+         * @return the result
+         */
+        public HTTPSampleResult getResult() {
+            return result;
+        }
+        /**
+         * @return the cookies
+         */
+        public CollectionProperty getCookies() {
+            return cookies;
         }
     }
     
