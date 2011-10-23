@@ -41,6 +41,9 @@ public class DefaultKeyStore extends JmeterKeyStore {
 
     private final KeyStore store;
 
+    //@GuardedBy("this")
+    private int last_user;
+
     private static final String KEY_STORE_START_INDEX = "https.keyStoreStartIndex"; // $NON-NLS-1$
     private static final String KEY_STORE_END_INDEX   = "https.keyStoreEndIndex"; // $NON-NLS-1$
 
@@ -128,6 +131,15 @@ public class DefaultKeyStore extends JmeterKeyStore {
     }
 
     @Override
+    public final String getAlias() {
+        int length = this.names.length;
+        if (length == 0) { // i.e. is == null
+            return null;
+        }
+        return this.names[getNextIndex(length)];
+    }
+
+    @Override
     public final String getAlias(int index) {
         int length = this.names.length;
         if (length == 0 && index == 0) { // i.e. is == null
@@ -152,4 +164,15 @@ public class DefaultKeyStore extends JmeterKeyStore {
         }
         return -1;
     }
+
+    private int getNextIndex(int length) {
+        synchronized(this) {
+            last_user ++;
+            if (last_user >= length) {
+                last_user = 0;
+            }
+            return last_user;
+        }
+    }
+
 }
