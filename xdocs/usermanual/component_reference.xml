@@ -3078,6 +3078,10 @@ without requesting the URL from the remote server. This is intended to emulate b
 Note that the Cache-Control header must be "public" and only the "max-age" expiry option is processed.
 </p>
 <p>
+By default, Cache Manager will store up to 5000 items in cache using LRU algorithm. Use property to modify this value.
+Note that the more you increase this value the more HTTP Cache Manager will consume memory, so be sure to adapt -Xmx option.
+</p>
+<p>
 If the requested document has not changed since it was cached, then the response body will be empty.
 Likewise if the Expires date is in the future.
 This may cause problems for Assertions.
@@ -3090,6 +3094,7 @@ This may cause problems for Assertions.
   If selected, then the cache is cleared at the start of the thread.
   </property>
   <property name="Use Cache Control/Expires header when processing GET requests" required="Yes">See description above.</property>
+  <property name="Max Number of elements in cache" required="Yes">See description above.</property>
 </properties>
 </component>
 
