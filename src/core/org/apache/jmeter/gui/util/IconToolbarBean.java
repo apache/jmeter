@@ -61,7 +61,7 @@ public final class IconToolbarBean {
      * Resolve action name ID declared in icon set file to ActionNames value
      * @return the resolve actionName
      */
-    public synchronized String getActionNameResolve() {
+    public String getActionNameResolve() {
         final String aName;
         try {
             aName = (String) (ActionNames.class.getField(this.actionName).get(null));
@@ -75,28 +75,28 @@ public final class IconToolbarBean {
     /**
      * @return the i18nKey
      */
-    public synchronized String getI18nKey() {
+    public String getI18nKey() {
         return i18nKey;
     }
 
     /**
      * @return the actionName
      */
-    public synchronized String getActionName() {
+    public String getActionName() {
         return actionName;
     }
 
     /**
      * @return the iconPath
      */
-    public synchronized String getIconPath() {
+    public String getIconPath() {
         return iconPath;
     }
 
     /**
      * @return the iconPathPressed
      */
-    public synchronized String getIconPathPressed() {
+    public String getIconPathPressed() {
         return iconPathPressed;
     }
 
