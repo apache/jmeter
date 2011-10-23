@@ -23,20 +23,34 @@ import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.Enumeration;
+
+import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Use this Keystore to wrap the normal KeyStore implementation.
  *
  */
 public class DefaultKeyStore extends JmeterKeyStore {
-    private X509Certificate[] certChain;
+    private X509Certificate[][] certChains;
 
-    private PrivateKey key;
+    private PrivateKey[] keys;
 
-    private String alias;
+    private String[] names;
 
     private final KeyStore store;
+
+    private static final String KEY_STORE_START_INDEX = "https.keyStoreStartIndex"; // $NON-NLS-1$
+    private static final String KEY_STORE_END_INDEX   = "https.keyStoreEndIndex"; // $NON-NLS-1$
+
+    private static final int startIndex;
+    private static final int endIndex;
+
+    static {
+        startIndex = JMeterUtils.getPropDefault(KEY_STORE_START_INDEX, 0);
+        endIndex = JMeterUtils.getPropDefault(KEY_STORE_END_INDEX, 0);
+    }
 
     public DefaultKeyStore(String type) throws Exception {
         this.store = KeyStore.getInstance(type);
@@ -46,54 +60,96 @@ public class DefaultKeyStore extends JmeterKeyStore {
     @Override
     public void load(InputStream is, String pword) throws Exception {
         store.load(is, pword.toCharArray());
-        PrivateKey _key = null;
-        X509Certificate[] _certChain = null;
+
+        ArrayList<String> v_names = new ArrayList<String>();
+        ArrayList<PrivateKey> v_keys = new ArrayList<PrivateKey>();
+        ArrayList<X509Certificate[]> v_certChains = new ArrayList<X509Certificate[]>();
 
         if (null != is){ // No point checking an empty keystore
-
+            PrivateKey _key = null;
+            int index = 0;
             Enumeration<String> aliases = store.aliases();
             while (aliases.hasMoreElements()) {
-                this.alias = aliases.nextElement();
+                String alias = aliases.nextElement();
                 if (store.isKeyEntry(alias)) {
-                    _key = (PrivateKey) store.getKey(alias, pword.toCharArray());
-                    Certificate[] chain = store.getCertificateChain(alias);
-                    _certChain = new X509Certificate[chain.length];
-
-                    for (int i = 0; i < chain.length; i++) {
-                        _certChain[i] = (X509Certificate) chain[i];
+                    if ((index >= startIndex && index <= endIndex)) {
+                        _key = (PrivateKey) store.getKey(alias, pword.toCharArray());
+                        if (null == _key) {
+                            throw new Exception("No key found for alias: " + alias); // Should not happen
+                        }
+                        Certificate[] chain = store.getCertificateChain(alias);
+                        if (null == chain) {
+                            throw new Exception("No certificate chain found for alias: " + alias);
+                        }
+                        v_names.add(alias);
+                        v_keys.add(_key);
+                        v_certChains.add((X509Certificate[]) chain);
                     }
-
-                    break;
                 }
+                index++;
             }
 
             if (null == _key) {
-                throw new Exception("No key found");
-            }
-            if (null == _certChain) {
-                throw new Exception("No certificate chain found");
+                throw new Exception("No key(s) found");
             }
         }
 
-        this.key = _key;
-        this.certChain = _certChain;
+        /*
+         * Note: if is == null, the arrays will be empty
+         */
+        int v_size = v_names.size();
+
+        this.names = new String[v_size];
+        this.names = v_names.toArray(names);
+
+        this.keys = new PrivateKey[v_size];
+        this.keys = v_keys.toArray(keys);
+
+        this.certChains = new X509Certificate[v_size][];
+        this.certChains = v_certChains.toArray(certChains);
     }
 
-    /** {@inheritDoc} */
     @Override
-    public final X509Certificate[] getCertificateChain() {
-        return this.certChain;
+    public final X509Certificate[] getCertificateChain(String alias) {
+        int entry = findAlias(alias);
+        if (entry >=0) {
+            return this.certChains[entry];
+        }
+        return null;
     }
 
-    /** {@inheritDoc} */
     @Override
-    public final PrivateKey getPrivateKey() {
-        return this.key;
+    public final PrivateKey getPrivateKey(String alias) {
+        int entry = findAlias(alias);
+        if (entry >=0) {
+            return this.keys[entry];
+        }
+        return null;
     }
 
-    /** {@inheritDoc} */
     @Override
-    public final String getAlias() {
-        return this.alias;
+    public final String getAlias(int index) {
+        int length = this.names.length;
+        if (length == 0 && index == 0) { // i.e. is == null
+            return null;
+        }
+        if (index >= length || index < 0) {
+            throw new ArrayIndexOutOfBoundsException(index);
+        }
+        return this.names[index];
+    }
+
+    @Override
+    public int getAliasCount() {
+        return this.names.length;
+    }
+
+    private int findAlias(String alias) {
+        for(int i = 0; i < names.length; i++) {
+            if (alias.equals(names[i])){
+                return i;
+            }
+        }
+        return -1;
     }
 }
