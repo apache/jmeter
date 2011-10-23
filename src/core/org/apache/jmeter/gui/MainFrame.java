@@ -45,6 +45,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.MenuElement;
 import javax.swing.SwingUtilities;
@@ -60,6 +61,7 @@ import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.tree.JMeterCellRenderer;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.util.JMeterMenuBar;
+import org.apache.jmeter.gui.util.JMeterToolBar;
 import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
@@ -83,6 +85,10 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
     // The default title for the Menu bar
     private static final String DEFAULT_TITLE =
         "Apache JMeter ("+JMeterUtils.getJMeterVersion()+")"; // $NON-NLS-1$ $NON-NLS-2$
+    
+    // Allow display/hide toolbar
+    private static final boolean DISPLAY_TOOLBAR =
+            JMeterUtils.getPropDefault("jmeter.toolbar.display", true); // $NON-NLS-1$
 
     /** The menu bar. */
     private JMeterMenuBar menuBar;
@@ -428,6 +434,13 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
      */
     private Component createToolBar() {
         Box toolPanel = new Box(BoxLayout.X_AXIS);
+        // add the toolbar
+        JToolBar toolbar = JMeterToolBar.createToolbar(DISPLAY_TOOLBAR);
+        GuiPackage guiInstance = GuiPackage.getInstance();
+        guiInstance.setMainToolbar(toolbar);
+        guiInstance.getMenuItemToolbar().getModel().setSelected(DISPLAY_TOOLBAR);
+        toolPanel.add(toolbar);
+
         toolPanel.add(Box.createRigidArea(new Dimension(10, 15)));
         toolPanel.add(Box.createGlue());
         toolPanel.add(activeThreads);

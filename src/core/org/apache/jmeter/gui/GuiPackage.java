@@ -29,8 +29,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 
 import org.apache.jmeter.engine.util.ValueReplacer;
@@ -103,7 +105,13 @@ public final class GuiPackage implements LocaleChangeListener {
 
     /** The main JMeter frame. */
     private MainFrame mainFrame;
+    
+    /** The main JMeter toolbar. */
+    private JToolBar toolbar;
 
+    /** The menu item toolbar. */
+    private JCheckBoxMenuItem menuToolBar;
+    
     /**
      * Private constructor to permit instantiation only from within this class.
      * Use {@link #getInstance()} to retrieve a singleton instance.
@@ -512,6 +520,44 @@ public final class GuiPackage implements LocaleChangeListener {
      */
     public JMeterTreeListener getTreeListener() {
         return treeListener;
+    }
+    
+    /**
+     * Set the main JMeter toolbar.
+     *
+     * @param newToolbar
+     *            the new JMeter main toolbar
+     */
+    public void setMainToolbar(JToolBar newToolbar) {
+        toolbar = newToolbar;
+    }
+
+    /**
+     * Get the main JMeter toolbar.
+     *
+     * @return the main JMeter toolbar
+     */
+    public JToolBar getMainToolbar() {
+        return toolbar;
+    }
+    
+    /**
+     * Set the menu item toolbar.
+     *
+     * @param newMenuToolBar
+     *            the new menu item toolbar
+     */
+    public void setMenuItemToolbar(JCheckBoxMenuItem newMenuToolBar) {
+        menuToolBar = newMenuToolBar;
+    }
+
+    /**
+     * Get the menu item  toolbar.
+     *
+     * @return the menu item toolbar
+     */
+    public JCheckBoxMenuItem getMenuItemToolbar() {
+        return menuToolBar;
     }
 
     /**
