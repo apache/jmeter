@@ -86,7 +86,7 @@ public class JsseSSLManager extends SSLManager {
      */
     private SecureRandom rand;
 
-    private Provider pro = null;
+    private Provider pro = null; // TODO why not use the super class value?
 
     private SSLContext defaultContext; // If we are using a single session
     private ThreadLocal<SSLContext> threadlocal; // Otherwise
@@ -279,9 +279,6 @@ public class JsseSSLManager extends SSLManager {
      */
     private static class WrappedX509KeyManager implements X509KeyManager {
 
-        //@GuardedBy("this")
-        private int last_user;
-
         /**
          * The parent X509KeyManager
          */
@@ -382,25 +379,11 @@ public class JsseSSLManager extends SSLManager {
          */
         public String chooseClientAlias(String[] keyType, Principal[] issuers, Socket socket) {
             log.debug("keyType: " + keyType[0]);
-            int aliasCount = this.store.getAliasCount();
-            String alias = this.store.getAlias(getNextIndex(aliasCount));
+            String alias = this.store.getAlias();
             if (alias == null || alias.length() == 0) {
                 log.debug("ClientAlias not found.");
             }
             return alias;
-        }
-
-        private int getNextIndex(int aliasCount) {
-            if (aliasCount == 1) {
-                return 0;
-            }
-            synchronized(this) {
-                last_user ++;
-                if (last_user >= aliasCount) {
-                    last_user = 0;
-                }
-                return last_user;
-            }
         }
 
         /**
