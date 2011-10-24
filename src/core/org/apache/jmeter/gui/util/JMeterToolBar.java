@@ -20,8 +20,8 @@
 package org.apache.jmeter.gui.util;
 
 import java.net.URL;
-import java.util.Collection;
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import javax.swing.ImageIcon;
@@ -43,6 +43,10 @@ public class JMeterToolBar {
     
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final String TOOLBAR_ENTRY_SEP = ",";  //$NON-NLS-1$
+
+    private static final String TOOLBAR_PROP_NAME = "toolbar"; //$NON-NLS-1$
+
     // protected fields: JMeterToolBar class can be use to create another toolbar (plugin, etc.)    
     protected static final String defaultIconProp = "org/apache/jmeter/images/toolbar/icons-toolbar.properties"; //$NON-NLS-1$
     
@@ -57,10 +61,9 @@ public class JMeterToolBar {
         toolBar.setFloatable(false);
         toolBar.setVisible(visible);
 
-        LinkedHashMap<String, IconToolbarBean> icons = getIconMappings();
+        List<IconToolbarBean> icons = getIconMappings();
         if (icons != null) {
-            Collection<IconToolbarBean> enumIcons = icons.values();
-            for (IconToolbarBean iconToolbarBean : enumIcons) {
+            for (IconToolbarBean iconToolbarBean : icons) {
                 if (iconToolbarBean == null) {
                     toolBar.addSeparator();
                 } else {
@@ -92,7 +95,7 @@ public class JMeterToolBar {
      * Parse icon set file.
      * @return List of icons/action definition
      */
-    private static LinkedHashMap<String, IconToolbarBean> getIconMappings() {
+    private static List<IconToolbarBean> getIconMappings() {
         String iconProp = JMeterUtils.getPropDefault(keyIconProp, defaultIconProp); //$NON-NLS-1$
         Properties p = JMeterUtils.loadProperties(iconProp);
         if (p == null && !iconProp.equals(defaultIconProp)) {
@@ -101,28 +104,27 @@ public class JMeterToolBar {
             p = JMeterUtils.loadProperties(defaultIconProp);
         }
         if (p == null) {
-            JOptionPane.showMessageDialog(null, JMeterUtils
-                    .getResString("toolbar_icon_set_not_found"), // $NON-NLS-1$
+            JOptionPane.showMessageDialog(null, 
+                    JMeterUtils.getResString("toolbar_icon_set_not_found"), // $NON-NLS-1$
                     JMeterUtils.getResString("toolbar_icon_set_not_found"), // $NON-NLS-1$
                     JOptionPane.WARNING_MESSAGE);
             return null;
         }
         log.info("Loading toolbar icons properties from " + iconProp); //$NON-NLS-1$
         
-        String order = p.getProperty("toolbar"); //$NON-NLS-1$
-        p.remove("toolbar"); //$NON-NLS-1$
-        String[] oList = order.split(","); //$NON-NLS-1$
+        String order = p.getProperty(TOOLBAR_PROP_NAME);
+        p.remove(TOOLBAR_PROP_NAME);
+        String[] oList = order.split(TOOLBAR_ENTRY_SEP);
         
-        LinkedHashMap<String, IconToolbarBean> listIcons = new LinkedHashMap<String, IconToolbarBean>();
-        int ctr = 1;
+        List<IconToolbarBean> listIcons = new ArrayList<IconToolbarBean>();
         for (String key : oList) {
             log.debug("Toolbar icon key: " + key); //$NON-NLS-1$
             if (key.trim().equals("|")) { //$NON-NLS-1$
-                listIcons.put("space" + ctr++, null); //$NON-NLS-1$
+                listIcons.add(null);
             } else {
                 try {
                     IconToolbarBean itb = new IconToolbarBean(p.getProperty(key));
-                    listIcons.put(key, itb);
+                    listIcons.add(itb);
                 } catch (JMeterException je) {
                     log.error("Toolbar icon loading error - key: " + key); //$NON-NLS-1$
                 }
