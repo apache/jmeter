@@ -1820,6 +1820,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * TODO Can be enhanced
      * {@inheritDoc}
      */
+    @Override
     public boolean searchContent(String textToSearch) throws Exception {
         if(super.searchContent(textToSearch)) {
             return true;
