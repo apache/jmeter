@@ -20,7 +20,6 @@ package org.apache.jmeter.assertions;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -65,12 +64,10 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
 
     private void compareTime(CompareAssertionResult result) {
         if (compareTime >= 0) {
-            Iterator<SampleResult> iter = responses.iterator();
             long prevTime = -1;
             SampleResult prevResult = null;
             boolean success = true;
-            while (iter.hasNext()) {
-                SampleResult sResult = iter.next();
+            for(SampleResult sResult : responses) {
                 long currentTime = sResult.getTime();
                 if (prevTime != -1) {
                     success = Math.abs(prevTime - currentTime) <= compareTime;
@@ -100,12 +97,10 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
 
     private void compareContent(CompareAssertionResult result) {
         if (compareContent) {
-            Iterator<SampleResult> iter = responses.iterator();
             String prevContent = null;
             SampleResult prevResult = null;
             boolean success = true;
-            while (iter.hasNext()) {
-                SampleResult sResult = iter.next();
+            for (SampleResult sResult : responses) {
                 String currentContent = sResult.getResponseDataAsString();
                 currentContent = filterString(currentContent);
                 if (prevContent != null) {
