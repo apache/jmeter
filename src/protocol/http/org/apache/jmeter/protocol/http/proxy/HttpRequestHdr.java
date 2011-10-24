@@ -27,7 +27,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -232,9 +231,7 @@ public class HttpRequestHdr {
 
     private HeaderManager createHeaderManager() {
         HeaderManager manager = new HeaderManager();
-        Iterator<String> keys = headers.keySet().iterator();
-        while (keys.hasNext()) {
-            String key = keys.next();
+        for (String key : headers.keySet()) {
             if (!key.equals(PROXY_CONNECTION)
              && !key.equals(CONTENT_LENGTH)
              && !key.equalsIgnoreCase(HTTPConstants.HEADER_CONNECTION)) {

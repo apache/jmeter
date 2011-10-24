@@ -21,7 +21,6 @@ package org.apache.jmeter.protocol.jms.sampler;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.jms.DeliveryMode;
@@ -183,9 +182,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
     private void addJMSProperties(TextMessage msg) throws JMSException {
         Map<String, String> map = getArguments(JMSSampler.JMS_PROPERTIES).getArgumentsAsMap();
-        Iterator<Map.Entry<String, String>>  argIt = map.entrySet().iterator();
-        while (argIt.hasNext()) {
-            Map.Entry<String, String> me = argIt.next();
+        for (Map.Entry<String, String> me : map.entrySet()) {
             String name = me.getKey();
             String value = me.getValue();
             if (LOGGER.isDebugEnabled()) {
@@ -415,9 +412,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
                 LOGGER.debug("Number of JNDI properties: " + map.size());
             }
         }
-        Iterator<Map.Entry<String, String>> it = map.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<String, String> me = it.next();
+        for (Map.Entry<String, String> me : map.entrySet()) {
             table.put(me.getKey(), me.getValue());
         }
 

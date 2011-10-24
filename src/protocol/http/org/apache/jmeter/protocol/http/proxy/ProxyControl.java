@@ -635,9 +635,7 @@ public class ProxyControl extends GenericController {
     private JMeterTreeNode findFirstNodeOfType(Class<?> type) {
         JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
         List<JMeterTreeNode> nodes = treeModel.getNodesOfType(type);
-        Iterator<JMeterTreeNode> iter = nodes.iterator();
-        while (iter.hasNext()) {
-            JMeterTreeNode node = iter.next();
+        for (JMeterTreeNode node : nodes) {
             if (node.isEnabled()) {
                 return node;
             }
