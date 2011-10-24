@@ -199,7 +199,20 @@ public class JMeterUtils implements UnitTestManager {
      * @return the Properties from the file, may be null (e.g. file not found)
      */
     public static Properties loadProperties(String file) {
-        Properties p = new Properties();
+        return loadProperties(file, null);
+    }
+
+    /**
+     * This method loads a property file that may reside in the user space, or
+     * in the classpath
+     *
+     * @param file
+     *            the file to load
+     * @param defaultProps a set of default properties
+     * @return the Properties from the file; if it could not be processed, the defaultProps are returned.
+     */
+    public static Properties loadProperties(String file, Properties defaultProps) {
+        Properties p = new Properties(defaultProps);
         InputStream is = null;
         try {
             File f = new File(file);
@@ -210,17 +223,17 @@ public class JMeterUtils implements UnitTestManager {
                 final URL resource = JMeterUtils.class.getClassLoader().getResource(file);
                 if (resource == null) {
                     log.warn("Cannot find " + file);
-                    return null;
+                    return defaultProps;
                 }
                 is = resource.openStream();
                 if (is == null) {
                     log.warn("Cannot open " + file);
-                    return null;
+                    return defaultProps;
                 }
                 p.load(is);
             } catch (IOException ex) {
                 log.warn("Error reading " + file + " " + ex.toString());
-                return null;
+                return defaultProps;
             }
         } finally {
             JOrphanUtils.closeQuietly(is);
