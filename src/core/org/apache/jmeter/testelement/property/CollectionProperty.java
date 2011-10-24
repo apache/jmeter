@@ -137,9 +137,10 @@ public class CollectionProperty extends MultiProperty {
         return prop;
     }
 
-    private Collection cloneCollection() {
+    private Collection<JMeterProperty> cloneCollection() {
         try {
-            Collection newCol = value.getClass().newInstance();
+            @SuppressWarnings("unchecked") // value is of type Collection<JMeterProperty>
+            Collection<JMeterProperty> newCol = value.getClass().newInstance();
             PropertyIterator iter = iterator();
             while (iter.hasNext()) {
                 newCol.add(iter.next().clone());
