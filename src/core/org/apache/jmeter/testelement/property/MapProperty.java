@@ -30,7 +30,7 @@ public class MapProperty extends MultiProperty {
 
     private transient Map<String, JMeterProperty> savedValue = null;
 
-    public MapProperty(String name, Map value) {
+    public MapProperty(String name, Map<?,?> value) {
         super(name);
         log.info("map = " + value);
         this.value = normalizeMap(value);
