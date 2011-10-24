@@ -143,7 +143,7 @@ public class CollectionProperty extends MultiProperty {
             Collection<JMeterProperty> newCol = value.getClass().newInstance();
             PropertyIterator iter = iterator();
             while (iter.hasNext()) {
-                newCol.add(iter.next().clone());
+                newCol.add((JMeterProperty) iter.next().clone());
             }
             return newCol;
         } catch (Exception e) {
