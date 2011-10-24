@@ -183,10 +183,8 @@ public class PackageTest extends TestCase {
             }
             final ArrayList<String> list = Collections.list(prb.getKeys());
             Collections.sort(list);
-            Iterator<String> enumr = list.iterator();
             final boolean mainResourceFile = resname.startsWith("messages");
-            while (enumr.hasNext()) {
-                String key = enumr.next();
+            for (String key : list) {
                 try {
                     String val = defaultPRB.getString(key); // Also Check key is in default
                     if (mainResourceFile && val.equals(prb.getString(key))){
