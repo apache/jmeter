@@ -21,7 +21,6 @@
  */
 package org.apache.jmeter.engine.util;
 
-import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.jmeter.functions.InvalidVariableException;
@@ -37,11 +36,10 @@ public class UndoVariableReplacement extends AbstractTransformer {
     }
 
     public JMeterProperty transformValue(JMeterProperty prop) throws InvalidVariableException {
-        Iterator<String> iter = getVariables().keySet().iterator();
         String input = prop.getStringValue();
-        while (iter.hasNext()) {
-            String key = iter.next();
-            String value = getVariables().get(key);
+        for (Map.Entry<String, String> entry : getVariables().entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
             input = StringUtilities.substitute(input, "${" + key + "}", value);
         }
         StringProperty newProp = new StringProperty(prop.getName(), input);

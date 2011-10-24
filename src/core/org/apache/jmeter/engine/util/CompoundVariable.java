@@ -134,9 +134,7 @@ public class CompoundVariable implements Function {
         }
         boolean testDynamic = false;
         StringBuilder results = new StringBuilder();
-        Iterator<Object> iter = compiledComponents.iterator();
-        while (iter.hasNext()) {
-            Object item = iter.next();
+        for (Object item : compiledComponents) {
             if (item instanceof Function) {
                 testDynamic = true;
                 try {
