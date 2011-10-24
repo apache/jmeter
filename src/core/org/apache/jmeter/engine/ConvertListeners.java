@@ -19,7 +19,6 @@
 package org.apache.jmeter.engine;
 
 import java.rmi.RemoteException;
-import java.util.Iterator;
 
 import org.apache.jmeter.samplers.RemoteListenerWrapper;
 import org.apache.jmeter.samplers.RemoteSampleListener;
@@ -50,9 +49,7 @@ public class ConvertListeners implements HashTreeTraverser {
      * {@inheritDoc}
      */
     public void addNode(Object node, HashTree subTree) {
-        Iterator<?> iter = subTree.list().iterator();
-        while (iter.hasNext()) {
-            Object item = iter.next();
+        for (Object item : subTree.list()) {
             if (item instanceof AbstractThreadGroup) {
                 log.debug("num threads = " + ((AbstractThreadGroup) item).getNumThreads());
             }
