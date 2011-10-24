@@ -351,7 +351,9 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
             @Override
             protected Map<String, CacheEntry> initialValue(){
                 // Bug 51942 - this map may be used from multiple threads
-                return Collections.<String, CacheEntry>synchronizedMap(new LRUMap(getMaxSize()));
+                @SuppressWarnings("unchecked") // LRUMap is not generic currently
+                Map<String, CacheEntry> map = new LRUMap(getMaxSize());
+                return Collections.<String, CacheEntry>synchronizedMap(map);
             }
         };
     }
