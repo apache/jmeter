@@ -72,7 +72,7 @@ public class RandomString extends AbstractFunction {
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
 
-        int length = Integer.valueOf(values[0].execute());
+        int length = Integer.parseInt(values[0].execute());
 
         String charsToUse = null;//means no restriction
         if (values.length >= CHARS) {
