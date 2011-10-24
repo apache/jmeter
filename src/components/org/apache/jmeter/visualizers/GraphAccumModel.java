@@ -20,7 +20,6 @@ package org.apache.jmeter.visualizers;
 
 import java.io.Serializable;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -165,11 +164,10 @@ public class GraphAccumModel implements Clearable, Serializable {
      */
     protected void fireDataChanged() {
         log.debug("Start : fireDataChanged1");
-        Iterator<GraphAccumListener> iter = listeners.iterator();
 
         if (bigChange) {
-            while (iter.hasNext()) {
-                iter.next().updateGui();
+            for (GraphAccumListener gal : listeners) {
+                gal.updateGui();
             }
             bigChange = false;
         } else {
@@ -183,11 +181,8 @@ public class GraphAccumModel implements Clearable, Serializable {
      * not need to rescale graph.
      */
     protected void quickUpdate(SampleResult s) {
-        Iterator<GraphAccumListener> iter = listeners.iterator();
-        {
-            while (iter.hasNext()) {
-                iter.next().updateGui(s);
-            }
-        }
+        for (GraphAccumListener gal : listeners) {
+            gal.updateGui(s);
+        }    
     }
 }
