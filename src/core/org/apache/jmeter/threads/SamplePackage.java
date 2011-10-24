@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.threads;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.jmeter.assertions.Assertion;
@@ -81,18 +80,18 @@ public class SamplePackage {
     }
 
     private void setRunningVersion(List<?> list, boolean running) {
-        @SuppressWarnings("unchecked") // All implementations extend TestElement
-        Iterator<? extends TestElement> iter = (Iterator<? extends TestElement>) list.iterator();
-        while (iter.hasNext()) {
-            iter.next().setRunningVersion(running);
+        @SuppressWarnings("unchecked") // all implementations extend TestElement
+        List<TestElement> telist = (List<TestElement>)list;
+        for (TestElement te : telist) {
+            te.setRunningVersion(running);
         }
     }
 
     private void recoverRunningVersion(List<?> list) {
         @SuppressWarnings("unchecked") // All implementations extend TestElement
-        Iterator<? extends TestElement> iter = (Iterator<? extends TestElement>) list.iterator();
-        while (iter.hasNext()) {
-            iter.next().recoverRunningVersion();
+        List<TestElement> telist = (List<TestElement>)list;
+        for (TestElement te : telist) {
+            te.recoverRunningVersion();
         }
     }
 

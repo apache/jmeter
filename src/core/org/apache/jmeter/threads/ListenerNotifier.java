@@ -29,7 +29,6 @@
 
 package org.apache.jmeter.threads;
 
-import java.util.Iterator;
 import java.util.List;
 
 //import org.apache.commons.collections.Buffer;
@@ -79,10 +78,8 @@ public class ListenerNotifier {
      */
     @SuppressWarnings("deprecation") // TestBeanHelper.prepare() is OK
     public void notifyListeners(SampleEvent res, List<SampleListener> listeners) {
-        Iterator<SampleListener> iter = listeners.iterator();
-        while (iter.hasNext()) {
+        for (SampleListener sampleListener : listeners) {
             try {
-                SampleListener sampleListener = iter.next();
                 TestBeanHelper.prepare((TestElement) sampleListener);
                 sampleListener.sampleOccurred(res);
             } catch (RuntimeException e) {
