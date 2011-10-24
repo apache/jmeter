@@ -196,7 +196,7 @@ public class JMeterUtils implements UnitTestManager {
      *
      * @param file
      *            the file to load
-     * @return the Properties from the file
+     * @return the Properties from the file, may be null (e.g. file not found)
      */
     public static Properties loadProperties(String file) {
         Properties p = new Properties();
