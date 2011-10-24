@@ -31,7 +31,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -134,10 +133,8 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
         @Override
         protected boolean removeEldestEntry(Map.Entry<Connection, Map<String, PreparedStatement>> arg0) {
             if (size() > MAX_ENTRIES) {
-                final Object value = arg0.getValue();
-                if (value instanceof Map<?,?>) {
-                    closeAllStatements(((Map<?,?>)value).values());
-                }
+                final  Map<String, PreparedStatement> value = arg0.getValue();
+                closeAllStatements(value.values());
                 return true;
             }
             return false;
@@ -397,10 +394,8 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
         return pstmt;
     }
 
-    private static void closeAllStatements(Collection<?> collection) {
-        Iterator<?> iterator = collection.iterator();
-        while (iterator.hasNext()) {
-            PreparedStatement pstmt = (PreparedStatement) iterator.next();
+    private static void closeAllStatements(Collection<PreparedStatement> collection) {
+        for (PreparedStatement pstmt : collection) {
             close(pstmt);
         }
     }

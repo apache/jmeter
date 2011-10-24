@@ -21,7 +21,6 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -75,9 +74,7 @@ public class DataSourceElement extends AbstractTestElement
             excaliburSource = null;
         }
         if (perThreadPoolSet != null) {// in case
-            Iterator<ResourceLimitingJdbcDataSource> it = perThreadPoolSet.iterator();
-            while(it.hasNext()){
-                ResourceLimitingJdbcDataSource dsc = it.next();
+            for(ResourceLimitingJdbcDataSource dsc : perThreadPoolSet){
                 log.debug("Disposing pool: "+dsc.getInstrumentableName()+" @"+System.identityHashCode(dsc));
                 dsc.dispose();
             }

@@ -21,7 +21,6 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -60,9 +59,7 @@ public class ClientPool {
      * bugs.
      */
     public static synchronized void clearClient() {
-        Iterator<Closeable> itr = clients.iterator();
-        while (itr.hasNext()) {
-            Closeable client = itr.next();
+        for (Closeable client : clients) {
             try {
                 client.close();
             } catch (IOException e) {
