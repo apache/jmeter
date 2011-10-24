@@ -1060,20 +1060,16 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 
     // Ensure any remaining contexts are closed
     public void testEnded(String host) {
-        Iterator<Map.Entry<String, DirContext>> it = ldapContexts.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<String, DirContext> entry = it.next();
-            String key = entry.getKey();
+        for (Map.Entry<String, DirContext> entry : ldapContexts.entrySet()) {
             DirContext dc = entry.getValue();
             try {
-                log.warn("Tidying old Context for thread: " + key);
+                log.warn("Tidying old Context for thread: " + entry.getKey());
                 dc.close();
             } catch (NamingException ignored) {
                 // ignored
             }
-            it.remove();// Make sure the entry is not left around for the next run
         }
-
+        ldapContexts.clear();
     }
 
     public void testIterationStart(LoopIterationEvent event) {
