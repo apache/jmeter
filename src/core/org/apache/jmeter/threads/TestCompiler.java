@@ -20,7 +20,6 @@ package org.apache.jmeter.threads;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -159,11 +158,9 @@ public class TestCompiler implements HashTreeTraverser {
         LinkedList<PreProcessor> pres = new LinkedList<PreProcessor>();
         for (int i = stack.size(); i > 0; i--) {
             addDirectParentControllers(controllers, stack.get(i - 1));
-            Iterator<?> iter = testTree.list(stack.subList(0, i)).iterator();
             List<PreProcessor>  tempPre = new LinkedList<PreProcessor> ();
             List<PostProcessor> tempPost = new LinkedList<PostProcessor>();
-            while (iter.hasNext()) {
-                Object item = iter.next();
+            for (Object item : testTree.list(stack.subList(0, i))) {
                 if ((item instanceof ConfigTestElement)) {
                     configs.add((ConfigTestElement) item);
                 }
@@ -204,9 +201,7 @@ public class TestCompiler implements HashTreeTraverser {
         LinkedList<PreProcessor> pres = new LinkedList<PreProcessor>();
         for (int i = stack.size(); i > 0; i--) {
             addDirectParentControllers(controllers, stack.get(i - 1));
-            Iterator<?> iter = testTree.list(stack.subList(0, i)).iterator();
-            while (iter.hasNext()) {
-                Object item = iter.next();
+            for (Object item : testTree.list(stack.subList(0, i))) {
                 if (item instanceof SampleListener) {
                     listeners.add((SampleListener) item);
                 }
@@ -268,9 +263,7 @@ public class TestCompiler implements HashTreeTraverser {
 
     private void configureWithConfigElements(Sampler sam, List<ConfigTestElement> configs) {
         sam.clearTestElementChildren();
-        Iterator<ConfigTestElement> iter = configs.iterator();
-        while (iter.hasNext()) {
-            ConfigTestElement config = iter.next();
+        for (ConfigTestElement config  : configs) {
             sam.addTestElement(config);
         }
     }
