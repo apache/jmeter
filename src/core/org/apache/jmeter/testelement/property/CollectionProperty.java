@@ -32,7 +32,7 @@ public class CollectionProperty extends MultiProperty {
 
     private transient Collection<JMeterProperty> savedValue;
 
-    public CollectionProperty(String name, Collection value) {
+    public CollectionProperty(String name, Collection<?> value) {
         super(name);
         this.value = normalizeList(value);
     }
@@ -152,7 +152,7 @@ public class CollectionProperty extends MultiProperty {
         }
     }
 
-    public void setCollection(Collection coll) {
+    public void setCollection(Collection<?> coll) {
         value = normalizeList(coll);
     }
 
