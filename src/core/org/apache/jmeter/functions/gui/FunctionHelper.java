@@ -24,7 +24,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -93,11 +92,10 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
         try {
             List<String> functionClasses = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(),
                     new Class[] { Function.class }, true);
-            Iterator<String> iter = functionClasses.iterator();
             String[] functionNames = new String[functionClasses.size()];
             int count = 0;
-            while (iter.hasNext()) {
-                Class<?> cl = Class.forName(iter.next());
+            for (String clazz : functionClasses) {
+                Class<?> cl = Class.forName(clazz);
                 functionNames[count] = ((Function) cl.newInstance()).getReferenceKey();
                 functionMap.put(functionNames[count], cl);
                 count++;
@@ -116,9 +114,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
             Arguments args = new Arguments();
             Function function = (Function) ((Class<?>) functionMap.get(functionList.getText())).newInstance();
             List<String> argumentDesc = function.getArgumentDesc();
-            Iterator<String> iter = argumentDesc.iterator();
-            while (iter.hasNext()) {
-                String help = iter.next();
+            for (String help : argumentDesc) {
                 args.addArgument(help, ""); //$NON-NLS-1$
             }
             parameterPanel.configure(args);

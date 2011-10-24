@@ -361,10 +361,8 @@ public class GenericController extends AbstractTestElement implements Controller
     }
 
     protected void fireIterationStart() {
-        Iterator<LoopIterationListener> iter = iterationListeners.iterator();
         LoopIterationEvent event = new LoopIterationEvent(this, getIterCount());
-        while (iter.hasNext()) {
-            LoopIterationListener item = iter.next();
+        for (LoopIterationListener item : iterationListeners) {
             item.iterationStart(event);
         }
     }

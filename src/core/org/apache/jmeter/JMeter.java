@@ -817,9 +817,8 @@ public class JMeter implements JMeterPlugin {
      * @param tree
      */
     public static void convertSubTree(HashTree tree) {
-        Iterator<Object> iter = new LinkedList<Object>(tree.list()).iterator();
-        while (iter.hasNext()) {
-            Object o = iter.next();
+        LinkedList<Object> copyList = new LinkedList<Object>(tree.list());
+        for (Object o  : copyList) {
             if (o instanceof TestElement) {
                 TestElement item = (TestElement) o;
                 if (item.isEnabled()) {
@@ -953,9 +952,7 @@ public class JMeter implements JMeterPlugin {
             println("Tidying up remote @ "+new Date(now)+" ("+now+")");
             if (engines!=null){ // it will be null unless remoteStop = true
                 println("Exitting remote servers");
-                Iterator<JMeterEngine> it = engines.iterator();
-                while(it.hasNext()){
-                    JMeterEngine e = it.next();
+                for (JMeterEngine e : engines){
                     e.exit();
                 }
             }
