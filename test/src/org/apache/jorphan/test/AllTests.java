@@ -330,9 +330,7 @@ public final class AllTests {
             int sz=classList.size();
             log.info("ClassFinder(TestCase) found: "+sz+ " TestCase classes");
             System.out.println("ClassFinder found: "+sz+ " TestCase classes");
-            Iterator<String> classes = classList.iterator();
-            while (classes.hasNext()) {
-                String name = classes.next();
+            for (String name : classList) {
                 try {
                     /*
                      * TestSuite only finds testXXX() methods, and does not look
