@@ -77,7 +77,7 @@ public class StringProperty extends AbstractProperty {
      * {@inheritDoc}
      */
     @Override
-    public Object clone() {
+    public StringProperty clone() {
         StringProperty prop = (StringProperty) super.clone();
         prop.value = value;
         return prop;

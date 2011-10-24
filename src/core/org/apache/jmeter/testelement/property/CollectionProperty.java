@@ -131,7 +131,7 @@ public class CollectionProperty extends MultiProperty {
      * {@inheritDoc}
      */
     @Override
-    public Object clone() {
+    public CollectionProperty clone() {
         CollectionProperty prop = (CollectionProperty) super.clone();
         prop.value = cloneCollection();
         return prop;
@@ -143,7 +143,7 @@ public class CollectionProperty extends MultiProperty {
             Collection<JMeterProperty> newCol = value.getClass().newInstance();
             PropertyIterator iter = iterator();
             while (iter.hasNext()) {
-                newCol.add((JMeterProperty) iter.next().clone());
+                newCol.add(iter.next().clone());
             }
             return newCol;
         } catch (Exception e) {

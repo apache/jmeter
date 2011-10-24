@@ -86,7 +86,7 @@ public class HTTPFileArg extends AbstractTestElement implements Serializable {
     }
 
     private void setProperty(String name, JMeterProperty prop) {
-        JMeterProperty jmp = (JMeterProperty) prop.clone();
+        JMeterProperty jmp = prop.clone();
         jmp.setName(name);
         setProperty(jmp);
     }

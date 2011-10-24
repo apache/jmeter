@@ -90,5 +90,5 @@ public interface JMeterProperty extends Serializable, Cloneable, Comparable<JMet
 
     public void setObjectValue(Object value);
 
-    public Object clone();
+    public JMeterProperty clone();
 }
