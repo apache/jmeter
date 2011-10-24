@@ -20,7 +20,6 @@ package org.apache.jmeter.gui.action;
 
 import java.awt.event.ActionEvent;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.jmeter.gui.GuiPackage;
@@ -66,19 +65,15 @@ public class Clear implements Command {
             JMeterGUIComponent guiComp = guiPackage.getCurrentGui();
             guiComp.clearGui();
         } else {
-            Iterator<?> iter = guiPackage.getTreeModel().getNodesOfType(Clearable.class).iterator();
-            while (iter.hasNext()) {
-                JMeterTreeNode node = null;
-                JMeterGUIComponent guiComp = null;
-                try {
-                    node = (JMeterTreeNode) iter.next();
-                    guiComp = guiPackage.getGui(node.getTestElement());
-                    if (guiComp instanceof Clearable){
-                        Clearable item = (Clearable) guiComp;
+            for (JMeterTreeNode node : guiPackage.getTreeModel().getNodesOfType(Clearable.class)) {
+                JMeterGUIComponent guiComp = guiPackage.getGui(node.getTestElement());
+                if (guiComp instanceof Clearable){
+                    Clearable item = (Clearable) guiComp;
+                    try {
                         item.clearData();
+                    } catch (Exception ex) {
+                        log.error("Can't clear: "+node+" "+guiComp, ex);
                     }
-                } catch (Exception ex) {
-                    log.error("Can't clear: "+node+" "+guiComp, ex);
                 }
             }
         }

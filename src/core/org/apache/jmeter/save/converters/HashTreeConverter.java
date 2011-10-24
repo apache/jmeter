@@ -18,8 +18,6 @@
 
 package org.apache.jmeter.save.converters;
 
-import java.util.Iterator;
-
 import org.apache.jorphan.collections.HashTree;
 
 import com.thoughtworks.xstream.mapper.Mapper;
@@ -49,9 +47,7 @@ public class HashTreeConverter extends AbstractCollectionConverter {
     @Override
     public void marshal(Object arg0, HierarchicalStreamWriter writer, MarshallingContext context) {
         HashTree tree = (HashTree) arg0;
-        Iterator<?> iter = tree.list().iterator();
-        while (iter.hasNext()) {
-            Object item = iter.next();
+        for (Object item : tree.list()) {
             writeItem(item, context, writer);
             writeItem(tree.getTree(item), context, writer);
         }
