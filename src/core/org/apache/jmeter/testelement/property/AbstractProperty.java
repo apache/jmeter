@@ -311,25 +311,24 @@ public abstract class AbstractProperty implements JMeterProperty {
      * Given a Map, it converts the Map into a collection of JMeterProperty
      * objects, appropriate for a MapProperty object.
      */
-    protected Map normalizeMap(Map coll) {
-        Map<Object, JMeterProperty> newColl = null;
-        for (Map.Entry<?,?> entry : ((Map<?,?>)coll).entrySet()) {
-            Object item = entry.getKey();
-            Object prop = entry.getValue();
-            if (newColl == null) {
-                try {
-                    newColl = coll.getClass().newInstance();
-                } catch (Exception e) {
-                    log.error("Bad collection", e);
-                    return coll;
-                }
-            }
-            newColl.put(item, convertObject(prop));
+    protected Map<String, JMeterProperty> normalizeMap(Map<String,?> coll) {
+        if (coll.isEmpty()) {
+            @SuppressWarnings("unchecked") // empty collection ok to cast
+            Map<String, JMeterProperty> emptyColl = (Map<String, JMeterProperty>) coll;
+            return emptyColl;
         }
-        if (newColl != null) {
+        try {
+            @SuppressWarnings("unchecked") // empty collection
+            Map<String, JMeterProperty> newColl = coll.getClass().newInstance();
+            for (Map.Entry<String,?> entry : ((Map<String,?>)coll).entrySet()) {
+                String item = entry.getKey();
+                Object prop = entry.getValue();
+                newColl.put(item, convertObject(prop));
+            }
             return newColl;
-        } else {
-            return coll;
+        } catch (Exception e) {// should not happen
+            log.error("Cannot create copy of "+coll.getClass().getName(),e);
+            return null;
         }
     }
 
