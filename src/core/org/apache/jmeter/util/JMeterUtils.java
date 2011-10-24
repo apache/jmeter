@@ -32,7 +32,6 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -392,10 +391,9 @@ public class JMeterUtils implements UnitTestManager {
     private static void notifyLocaleChangeListeners() {
         LocaleChangeEvent event = new LocaleChangeEvent(JMeterUtils.class, locale);
         @SuppressWarnings("unchecked") // clone will produce correct type
-        Iterator<LocaleChangeListener> iterator = ((Vector<LocaleChangeListener>) localeChangeListeners.clone()).iterator();
-
-        while (iterator.hasNext()) {
-            LocaleChangeListener listener = iterator.next();
+        // TODO but why do we need to clone the list?
+        Vector<LocaleChangeListener> listeners = (Vector<LocaleChangeListener>) localeChangeListeners.clone();
+        for (LocaleChangeListener listener : listeners) {
             listener.localeChanged(event);
         }
     }
