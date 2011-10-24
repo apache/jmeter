@@ -81,7 +81,7 @@ public final class NullProperty extends AbstractProperty {
     }
 
     @Override
-    public final Object clone() {
+    public final NullProperty clone() {
         return this;
     }
 

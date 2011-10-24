@@ -92,7 +92,7 @@ public class FloatProperty extends NumberProperty {
      * {@inheritDoc}
      */
     @Override
-    public Object clone() {
+    public FloatProperty clone() {
         FloatProperty prop = (FloatProperty) super.clone();
         prop.value = value;
         return prop;
