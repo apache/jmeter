@@ -21,8 +21,8 @@
  */
 package org.apache.jmeter.engine.util;
 
-import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.testelement.property.JMeterProperty;
@@ -69,11 +69,10 @@ public class ReplaceFunctionsWithStrings extends AbstractTransformer {
         PatternMatcher pm = JMeterUtils.getMatcher();
         Pattern pattern = null;
         PatternCompiler compiler = new Perl5Compiler();
-        Iterator<String> iter = getVariables().keySet().iterator();
         String input = prop.getStringValue();
-        while (iter.hasNext()) {
-            String key = iter.next();
-            String value = getVariables().get(key);
+        for(Entry<String, String> entry : getVariables().entrySet()){
+            String key = entry.getKey();
+            String value = entry.getValue();
             if (regexMatch) {
                 try {
                     pattern = compiler.compile(value);

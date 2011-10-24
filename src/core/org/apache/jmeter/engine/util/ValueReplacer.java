@@ -20,7 +20,6 @@ package org.apache.jmeter.engine.util;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -68,9 +67,8 @@ public class ValueReplacer {
 
     private void setProperties(TestElement el, Collection<JMeterProperty> newProps) {
         el.clear();
-        Iterator<JMeterProperty> iter = newProps.iterator();
-        while (iter.hasNext()) {
-            el.setProperty(iter.next());
+        for (JMeterProperty jmp : newProps) {
+            el.setProperty(jmp);
         }
     }
 
@@ -126,9 +124,8 @@ public class ValueReplacer {
                 MultiProperty multiVal = (MultiProperty) val;
                 Collection<JMeterProperty> newValues = replaceValues(multiVal.iterator(), transform);
                 multiVal.clear();
-                Iterator<JMeterProperty> propIter = newValues.iterator();
-                while (propIter.hasNext()) {
-                    multiVal.addProperty(propIter.next());
+                for (JMeterProperty jmp : newValues) {
+                    multiVal.addProperty(jmp);
                 }
                 if (log.isDebugEnabled()) {
                     log.debug("Replacement result: " + multiVal);
