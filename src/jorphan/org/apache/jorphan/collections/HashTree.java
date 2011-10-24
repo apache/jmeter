@@ -175,9 +175,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      * @param newTree
      */
     public void add(HashTree newTree) {
-        Iterator<?> iter = newTree.list().iterator();
-        while (iter.hasNext()) {
-            Object item = iter.next();
+        for (Object item : newTree.list()) {
             add(item);
             getTree(item).add(newTree.getTree(item));
         }
@@ -192,9 +190,8 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      */
     public HashTree(Collection<?> keys) {
         data = new HashMap<Object, HashTree>();
-        Iterator<?> it = keys.iterator();
-        while (it.hasNext()) {
-            data.put(it.next(), new HashTree());
+        for (Object o : keys) {
+            data.put(o, new HashTree());
         }
     }
 
@@ -413,9 +410,8 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      *            Collection of Keys to be added to HashTree.
      */
     public void add(Collection<?> keys) {
-        Iterator<?> it = keys.iterator();
-        while (it.hasNext()) {
-            add(it.next());
+        for (Object o : keys) {
+            add(o);
         }
     }
 
@@ -556,9 +552,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
 
     protected HashTree addTreePath(Collection<?> treePath) {
         HashTree tree = this;
-        Iterator<?> iter = treePath.iterator();
-        while (iter.hasNext()) {
-            Object temp = iter.next();
+        for (Object temp : treePath) {
             tree.add(temp);
             tree = tree.getTree(temp);
         }
@@ -613,9 +607,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
     }
 
     protected void cloneTree(HashTree newTree) {
-        Iterator<?> iter = list().iterator();
-        while (iter.hasNext()) {
-            Object key = iter.next();
+        for (Object key : list()) {
             newTree.set(key, (HashTree) getTree(key).clone());
         }
     }
@@ -962,9 +954,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      * @see HashTreeTraverser
      */
     public void traverse(HashTreeTraverser visitor) {
-        Iterator<?> iter = list().iterator();
-        while (iter.hasNext()) {
-            Object item = iter.next();
+        for (Object item : list()) {
             visitor.addNode(item, getTree(item));
             getTree(item).traverseInto(visitor);
         }
@@ -979,9 +969,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
         if (list().size() == 0) {
             visitor.processPath();
         } else {
-            Iterator<?> iter = list().iterator();
-            while (iter.hasNext()) {
-                Object item = iter.next();
+            for (Object item : list()) {
                 final HashTree treeItem = getTree(item);
                 visitor.addNode(item, treeItem);
                 treeItem.traverseInto(visitor);
