@@ -26,7 +26,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -332,9 +331,7 @@ public final class MenuFactory {
      */
     public static JMenu makeMenu(Collection<MenuInfo> menuInfo, String actionCommand, String menuName) {
         JMenu menu = new JMenu(menuName);
-        Iterator<MenuInfo> iter = menuInfo.iterator();
-        while (iter.hasNext()) {
-            MenuInfo info = iter.next();
+        for (MenuInfo info : menuInfo) {
             menu.add(makeMenuItem(info, actionCommand));
         }
         return menu;
@@ -421,9 +418,7 @@ public final class MenuFactory {
             List<String> guiClasses = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] {
                     JMeterGUIComponent.class, TestBean.class });
             Collections.sort(guiClasses);
-            Iterator<String> iter = guiClasses.iterator();
-            while (iter.hasNext()) {
-                String name = iter.next();
+            for (String name : guiClasses) {
 
                 /*
                  * JMeterTreeNode and TestBeanGUI are special GUI classes, and
@@ -673,9 +668,7 @@ public final class MenuFactory {
      * Sort loaded menus
      */
     private static void sortPluginMenus() {
-       Iterator<List<MenuInfo>> it = menuMap.values().iterator();
-       while (it.hasNext()) {
-          List<MenuInfo> menuToSort = it.next();
+       for (List<MenuInfo> menuToSort : menuMap.values()) {
           Collections.sort(menuToSort, new MenuInfoComparator());
        }
     }

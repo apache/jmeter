@@ -32,7 +32,6 @@ import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
@@ -538,9 +537,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     }
 
     private void finalizeFileOutput() {
-        Iterator<Map.Entry<String,ResultCollector.FileEntry>> it = files.entrySet().iterator();
-        while(it.hasNext()){
-            Map.Entry<String,ResultCollector.FileEntry> me = it.next();
+        for(Map.Entry<String,ResultCollector.FileEntry> me : files.entrySet()){
             log.debug("Closing: "+me.getKey());
             FileEntry fe = me.getValue();
             writeFileEnd(fe.pw, fe.config);

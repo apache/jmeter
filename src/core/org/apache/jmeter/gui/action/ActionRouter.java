@@ -24,7 +24,6 @@ import java.awt.event.ActionListener;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -73,11 +72,8 @@ public final class ActionRouter implements ActionListener {
                 log.error("performAction(" + actionCommand + ") updateCurrentGui() on" + e.toString() + " caused", err);
                 JMeterUtils.reportErrorToUser("Problem updating GUI - see log file for details");
             }
-            Set<Command> commandObjects = commands.get(actionCommand);
-            Iterator<Command> iter = commandObjects.iterator();
-            while (iter.hasNext()) {
+            for (Command c : commands.get(actionCommand)) {
                 try {
-                    Command c = iter.next();
                     preActionPerformed(c.getClass(), e);
                     c.doAction(e);
                     postActionPerformed(c.getClass(), e);
@@ -105,45 +101,29 @@ public final class ActionRouter implements ActionListener {
 
     public Set<Command> getAction(String actionName) {
         Set<Command> set = new HashSet<Command>();
-        Set<Command> commandObjects = commands.get(actionName);
-        Iterator<Command> iter = commandObjects.iterator();
-        while (iter.hasNext()) {
+        for (Command c : commands.get(actionName)) {
             try {
-                set.add(iter.next());
+                set.add(c);
             } catch (Exception err) {
-                log.error("", err);
+                log.error("Could not add Command", err);
             }
         }
         return set;
     }
 
     public Command getAction(String actionName, Class<?> actionClass) {
-        Set<Command> commandObjects = commands.get(actionName);
-        Iterator<Command> iter = commandObjects.iterator();
-        while (iter.hasNext()) {
-            try {
-                Command com = iter.next();
-                if (com.getClass().equals(actionClass)) {
-                    return com;
-                }
-            } catch (Exception err) {
-                log.error("", err);
+        for (Command com : commands.get(actionName)) {
+            if (com.getClass().equals(actionClass)) {
+                return com;
             }
         }
         return null;
     }
 
     public Command getAction(String actionName, String className) {
-        Set<Command> commandObjects = commands.get(actionName);
-        Iterator<Command> iter = commandObjects.iterator();
-        while (iter.hasNext()) {
-            try {
-                Command com = iter.next();
-                if (com.getClass().getName().equals(className)) {
-                    return com;
-                }
-            } catch (Exception err) {
-                log.error("", err);
+        for (Command com : commands.get(actionName)) {
+            if (com.getClass().getName().equals(className)) {
+                return com;
             }
         }
         return null;
@@ -258,28 +238,21 @@ public final class ActionRouter implements ActionListener {
     }
 
     private void populateCommandMap() {
-        List<String> listClasses;
-        Command command;
-        Class<?> commandClass;
         try {
-            listClasses = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] { Class
-                    .forName("org.apache.jmeter.gui.action.Command") });
+            List<String> listClasses = ClassFinder.findClassesThatExtend(
+                    JMeterUtils.getSearchPaths(), 
+                    new Class[] {Class.forName("org.apache.jmeter.gui.action.Command") }); // $NON-NLS-1$
             commands = new HashMap<String, Set<Command>>(listClasses.size());
             if (listClasses.size() == 0) {
                 log.fatalError("!!!!!Uh-oh, didn't find any action handlers!!!!!");
                 throw new JMeterError("No action handlers found - check JMeterHome and libraries");
             }
-            Iterator<String> iterClasses;
-            iterClasses = listClasses.iterator();
-            while (iterClasses.hasNext()) {
-                String strClassName = iterClasses.next();
-                if (strClassName.startsWith("org.apache.jmeter.gui")) {
-                    commandClass = Class.forName(strClassName);
+            for (String strClassName : listClasses) {
+                if (strClassName.startsWith("org.apache.jmeter.gui")) { // $NON-NLS-1$
+                    Class<?> commandClass = Class.forName(strClassName);
                     if (!Modifier.isAbstract(commandClass.getModifiers())) {
-                        command = (Command) commandClass.newInstance();
-                        Iterator<String> iter = command.getActionNames().iterator();
-                        while (iter.hasNext()) {
-                            String commandName = iter.next();
+                        Command command = (Command) commandClass.newInstance();
+                        for (String commandName : command.getActionNames()) {
                             Set<Command> commandObjects = commands.get(commandName);
                             if (commandObjects == null) {
                                 commandObjects = new HashSet<Command>();

@@ -20,7 +20,6 @@ package org.apache.jmeter.gui.action;
 
 import java.awt.event.ActionEvent;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -47,15 +46,10 @@ public class ResetSearchCommand extends AbstractAction {
     public void doAction(ActionEvent e) {
         GuiPackage guiPackage = GuiPackage.getInstance();
         JMeterTreeModel jMeterTreeModel = guiPackage.getTreeModel();
-        Iterator<?> iter = jMeterTreeModel.getNodesOfType(Searchable.class).iterator();
-        while (iter.hasNext()) {
-            JMeterTreeNode jMeterTreeNode = (JMeterTreeNode) iter.next();
+        for (JMeterTreeNode jMeterTreeNode : jMeterTreeModel.getNodesOfType(Searchable.class)) {
             if (jMeterTreeNode.getUserObject() instanceof Searchable){
                 List<JMeterTreeNode> matchingNodes = jMeterTreeNode.getPathToThreadGroup();
-                for (Iterator<JMeterTreeNode> iterator = matchingNodes.iterator(); iterator
-                        .hasNext();) {
-                    JMeterTreeNode jMeterTreeNode2 = iterator
-                            .next();
+                for (JMeterTreeNode jMeterTreeNode2 : matchingNodes) {
                     jMeterTreeNode2.setMarkedBySearch(false); 
                 }
             }

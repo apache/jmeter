@@ -21,7 +21,6 @@ package org.apache.jmeter.samplers;
 import org.apache.log.Logger;
 import org.apache.jorphan.logging.LoggingManager;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.Serializable;
@@ -62,9 +61,7 @@ public class HoldSampleSender implements SampleSender, Serializable {
         log.debug("Test ended()");
         try {
             synchronized (sampleStore) {
-                Iterator<SampleEvent> i = sampleStore.iterator();
-                while (i.hasNext()) {
-                    SampleEvent se = i.next();
+                for (SampleEvent se : sampleStore) {
                     listener.sampleOccurred(se);
                 }
             }
@@ -86,9 +83,7 @@ public class HoldSampleSender implements SampleSender, Serializable {
     public void testEnded(String host) {
         log.debug("Test Ended on " + host);
         try {
-            Iterator<SampleEvent> i = sampleStore.iterator();
-            while (i.hasNext()) {
-                SampleEvent se = i.next();
+            for (SampleEvent se : sampleStore) {
                 listener.sampleOccurred(se);
             }
             listener.testEnded(host);

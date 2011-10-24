@@ -64,11 +64,9 @@ public class SearchTreeCommand extends AbstractAction {
         ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.SEARCH_RESET));
         GuiPackage guiPackage = GuiPackage.getInstance();
         JMeterTreeModel jMeterTreeModel = guiPackage.getTreeModel();
-        Iterator<?> iter = jMeterTreeModel.getNodesOfType(Searchable.class).iterator();
         Set<JMeterTreeNode> nodes = new HashSet<JMeterTreeNode>();
-        while (iter.hasNext()) {
+        for (JMeterTreeNode jMeterTreeNode : jMeterTreeModel.getNodesOfType(Searchable.class)) {
             try {
-                JMeterTreeNode jMeterTreeNode = (JMeterTreeNode) iter.next();
                 if (jMeterTreeNode.getUserObject() instanceof Searchable){
                     Searchable searchable = (Searchable) jMeterTreeNode.getUserObject();
                     List<JMeterTreeNode> matchingNodes = jMeterTreeNode.getPathToThreadGroup();
