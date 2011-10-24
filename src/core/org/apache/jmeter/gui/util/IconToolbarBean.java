@@ -28,6 +28,8 @@ public final class IconToolbarBean {
     
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final String ICON_FIELD_SEP = ";";  //$NON-NLS-1$
+
     private final String i18nKey;
     
     private final String actionName;
@@ -43,9 +45,9 @@ public final class IconToolbarBean {
      */
     public IconToolbarBean(final String strToSplit) throws JMeterException {
         if (strToSplit == null) {
-            throw new JMeterException("No icon definition"); //$NON-NLS-1$
+            throw new NullPointerException("Icon definition must not be null"); //$NON-NLS-1$
         }
-        final String tmp[] = strToSplit.split(";"); //$NON-NLS-1$
+        final String tmp[] = strToSplit.split(ICON_FIELD_SEP);
         if (tmp.length > 2) {
             this.i18nKey = tmp[0];
             this.actionName = tmp[1];
@@ -53,7 +55,7 @@ public final class IconToolbarBean {
             this.iconPath = icons[0];
             this.iconPathPressed = (icons.length > 1) ? icons[1] : icons[0];
         } else {
-            throw new JMeterException();
+            throw new IllegalArgumentException("Incorrect argument format - expected at least 2 fields separated by " + ICON_FIELD_SEP);
         }
     }
 
