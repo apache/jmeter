@@ -20,7 +20,6 @@ import java.io.Serializable;
 import java.net.URL;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -207,9 +206,8 @@ public class MonitorAccumModel implements Clearable, Serializable {
      * changes.
      */
     public void clearData() {
-        Iterator<String> itr = this.serverListMap.keySet().iterator();
-        while (itr.hasNext()) {
-            this.serverListMap.get(itr.next()).clear();
+        for (List<MonitorModel> modelList : this.serverListMap.values()) {
+            modelList.clear();
         }
         this.serverListMap.clear();
     }
