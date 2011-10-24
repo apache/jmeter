@@ -19,7 +19,6 @@
 package org.apache.jmeter.testelement.property;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.jmeter.testelement.TestElement;
@@ -283,27 +282,28 @@ public abstract class AbstractProperty implements JMeterProperty {
         }
     }
 
-    protected Collection<JMeterProperty> normalizeList(Collection<JMeterProperty> coll) {
-        Iterator<?> iter = coll.iterator();
-        Collection<JMeterProperty> newColl = null;
-        while (iter.hasNext()) {
-            Object item = iter.next();
-            if (newColl == null) {
-                try {
-                    @SuppressWarnings("unchecked") // coll is of the correct type
-                    final Class<Collection<JMeterProperty>> class1 = (Class<Collection<JMeterProperty>>) coll.getClass();
-                    newColl = class1.newInstance();
-                } catch (Exception e) {
-                    log.error("Bad collection", e);
-                    return coll;
-                }
-            }
-            newColl.add(convertObject(item));
+    /**
+     * Convert a collection of objects into JMeterProperty objects.
+     * 
+     * @param coll Collection of any type of object
+     * @return Collection of JMeterProperty objects
+     */
+    protected Collection<JMeterProperty> normalizeList(Collection<?> coll) {
+        if (coll.isEmpty()) {
+            @SuppressWarnings("unchecked") // empty collection
+            Collection<JMeterProperty> okColl = (Collection<JMeterProperty>) coll;
+            return okColl;
         }
-        if (newColl != null) {
+        try {
+            @SuppressWarnings("unchecked") // empty collection
+            Collection<JMeterProperty> newColl = coll.getClass().newInstance();
+            for (Object item : coll) {
+                newColl.add(convertObject(item));
+            }
             return newColl;
-        } else {
-            return coll;
+        } catch (Exception e) {// should not happen
+            log.error("Cannot create copy of "+coll.getClass().getName(),e);
+            return null;
         }
     }
 
