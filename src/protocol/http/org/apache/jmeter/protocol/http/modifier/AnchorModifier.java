@@ -21,7 +21,6 @@ package org.apache.jmeter.protocol.http.modifier;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -154,9 +153,7 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
         for (int x = 0; x < rootList.getLength(); x++) {
             urls.addAll(HtmlParsingUtils.createURLFromForm(rootList.item(x), result.getURL()));
         }
-        Iterator<HTTPSamplerBase> iter = urls.iterator();
-        while (iter.hasNext()) {
-            HTTPSamplerBase newUrl = iter.next();
+        for (HTTPSamplerBase newUrl : urls) {
             newUrl.setMethod(HTTPConstants.POST);
             if (log.isDebugEnabled()) {
                 log.debug("Potential Form match: " + newUrl.toString());
