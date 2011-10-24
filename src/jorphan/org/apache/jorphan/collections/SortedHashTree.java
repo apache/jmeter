@@ -21,7 +21,6 @@ package org.apache.jorphan.collections;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.TreeMap;
 
 /**
@@ -59,17 +58,15 @@ public class SortedHashTree extends HashTree implements Serializable {
 
     public SortedHashTree(Collection<?> keys) {
         this();
-        Iterator<?> it = keys.iterator();
-        while (it.hasNext()) {
-            data.put(it.next(), new SortedHashTree());
+        for (Object key  : keys) {
+            data.put(key, new SortedHashTree());
         }
     }
 
     public SortedHashTree(Collection<?> keys, Comparator<? super Object> comper) {
         this(comper);
-        Iterator<?> it = keys.iterator();
-        while (it.hasNext()) {
-            data.put(it.next(), new SortedHashTree(comper));
+        for (Object key  : keys) {
+            data.put(key, new SortedHashTree(comper));
         }
     }
 

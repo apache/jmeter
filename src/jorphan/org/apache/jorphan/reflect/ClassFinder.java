@@ -27,7 +27,6 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -276,9 +275,8 @@ public final class ClassFinder {
         // Now eliminate any classpath entries that do not "match" the search
         List<String> listPaths = getClasspathMatches(strPathsOrJars);
         if (log.isDebugEnabled()) {
-            Iterator<String> tIter = listPaths.iterator();
-            while (tIter.hasNext()) {
-                log.debug("listPaths : " + tIter.next());
+            for (String path : listPaths) {
+                log.debug("listPaths : " + path);
             }
         }
 
@@ -293,9 +291,8 @@ public final class ClassFinder {
         findClassesInPaths(listPaths, listClasses);
         if (log.isDebugEnabled()) {
             log.debug("listClasses.size()="+listClasses.size());
-            Iterator<String> tIter = listClasses.iterator();
-            while (tIter.hasNext()) {
-                log.debug("listClasses : " + tIter.next());
+            for (String clazz : listClasses) {
+                log.debug("listClasses : " + clazz);
             }
         }
 
@@ -548,9 +545,8 @@ public final class ClassFinder {
     }
 
     private static void findClassesInPaths(List<String> listPaths, Set<String> listClasses) throws IOException {
-        Iterator<String> iterPaths = listPaths.iterator();
-        while (iterPaths.hasNext()) {
-            findClassesInOnePath(iterPaths.next(), listClasses);
+        for (String path : listPaths) {
+            findClassesInOnePath(path, listClasses);
         }
     }
 
