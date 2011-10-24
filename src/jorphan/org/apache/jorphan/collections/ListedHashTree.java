@@ -23,7 +23,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -56,9 +55,7 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
 
     public ListedHashTree(Collection<?> keys) {
         this();
-        Iterator<?> it = keys.iterator();
-        while (it.hasNext()) {
-            Object temp = it.next();
+        for (Object temp : keys) {
             data.put(temp, new ListedHashTree());
             order.add(temp);
         }

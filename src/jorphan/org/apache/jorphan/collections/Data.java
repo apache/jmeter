@@ -514,14 +514,11 @@ public class Data implements Serializable {
      */
     public String[] getColumn(String columnName) {
         String[] returnValue;
-        Object o;
         List<?> temp = data.get(columnName);
         if (temp != null) {
             returnValue = new String[temp.size()];
-            Iterator<?> it = temp.iterator();
             int index = 0;
-            while (it.hasNext()) {
-                o = it.next();
+            for (Object o : temp) {
                 if (o != null) {
                     if (o instanceof String) {
                         returnValue[index++] = (String) o;
