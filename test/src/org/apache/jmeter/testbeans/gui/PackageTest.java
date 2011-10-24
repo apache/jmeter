@@ -22,6 +22,7 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -167,13 +168,11 @@ public class PackageTest extends JMeterTestCase {
     public static Test suite() throws Exception {
         TestSuite suite = new TestSuite("Bean Resource Test Suite");
 
-        Iterator<String> iter = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] { TestBean.class })
-                .iterator();
+        List<String> testBaeanclassNames = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] { TestBean.class });
 
         boolean errorDetected = false;
         JMeterUtils.setLocale(defaultLocale);
-        while (iter.hasNext()) {
-            String className = iter.next();
+        for (String className : testBaeanclassNames) {
             Class<?> testBeanClass = Class.forName(className);
             ResourceBundle defaultBundle = null;
             try {
