@@ -97,7 +97,7 @@ public class IntegerProperty extends NumberProperty {
      * {@inheritDoc}
      */
     @Override
-    public Object clone() {
+    public IntegerProperty clone() {
         IntegerProperty prop = (IntegerProperty) super.clone();
         prop.value = value;
         return prop;

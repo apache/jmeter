@@ -104,7 +104,7 @@ public class MapProperty extends MultiProperty {
 
     /** {@inheritDoc} */
     @Override
-    public Object clone() {
+    public MapProperty clone() {
         MapProperty prop = (MapProperty) super.clone();
         prop.value = cloneMap();
         return prop;
@@ -117,7 +117,7 @@ public class MapProperty extends MultiProperty {
             PropertyIterator iter = valueIterator();
             while (iter.hasNext()) {
                 JMeterProperty item = iter.next();
-                newCol.put(item.getName(), (JMeterProperty) item.clone());
+                newCol.put(item.getName(), item.clone());
             }
             return newCol;
         } catch (Exception e) {

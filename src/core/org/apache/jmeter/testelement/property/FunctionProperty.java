@@ -110,7 +110,7 @@ public class FunctionProperty extends AbstractProperty {
     }
 
     @Override
-    public Object clone() {
+    public FunctionProperty clone() {
         FunctionProperty prop = (FunctionProperty) super.clone();
         prop.cacheValue = cacheValue;
         prop.testIteration = testIteration;

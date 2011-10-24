@@ -95,7 +95,7 @@ public class TestElementProperty extends MultiProperty {
      * {@inheritDoc}
      */
     @Override
-    public Object clone() {
+    public TestElementProperty clone() {
         TestElementProperty prop = (TestElementProperty) super.clone();
         prop.value = (TestElement) value.clone();
         return prop;

@@ -93,7 +93,7 @@ public class LongProperty extends NumberProperty {
      * {@inheritDoc}
      */
     @Override
-    public Object clone() {
+    public LongProperty clone() {
         LongProperty prop = (LongProperty) super.clone();
         prop.value = value;
         return prop;

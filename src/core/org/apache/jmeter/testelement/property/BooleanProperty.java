@@ -62,7 +62,7 @@ public class BooleanProperty extends AbstractProperty {
     }
 
     @Override
-    public Object clone() {
+    public BooleanProperty clone() {
         BooleanProperty prop = (BooleanProperty) super.clone();
         prop.value = value;
         return prop;
