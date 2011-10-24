@@ -18,7 +18,6 @@
 package org.apache.jmeter.protocol.java.control.gui;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 class ClassFilter {
@@ -46,10 +45,8 @@ class ClassFilter {
     }
 
     Object[] filterArray(List<String> items) {
-        Iterator<String> itr = items.iterator();
         ArrayList<Object> newlist = new ArrayList<Object>();
-        while (itr.hasNext()) {
-            String item = itr.next();
+        for (String item : items) {
             if (include(item)) {
                 newlist.add(item);
             }
