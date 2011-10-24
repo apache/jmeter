@@ -23,7 +23,6 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -181,9 +180,8 @@ public class FileListPanel extends JPanel implements ActionListener {
     }
 
     private void fireFileChanged() {
-        Iterator<ChangeListener> iter = listeners.iterator();
-        while (iter.hasNext()) {
-            iter.next().stateChanged(new ChangeEvent(this));
+        for (ChangeListener cl : listeners) {
+            cl.stateChanged(new ChangeEvent(this));
         }
     }
 

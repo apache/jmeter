@@ -19,7 +19,6 @@
 package org.apache.jmeter.testelement.property;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.jmeter.testelement.TestElement;
@@ -284,10 +283,8 @@ public abstract class AbstractProperty implements JMeterProperty {
     }
 
     protected Collection<JMeterProperty> normalizeList(Collection<JMeterProperty> coll) {
-        Iterator<?> iter = coll.iterator();
         Collection<JMeterProperty> newColl = null;
-        while (iter.hasNext()) {
-            Object item = iter.next();
+        for (Object item : coll) {
             if (newColl == null) {
                 try {
                     @SuppressWarnings("unchecked") // coll is of the correct type
@@ -312,10 +309,8 @@ public abstract class AbstractProperty implements JMeterProperty {
      * objects, appropriate for a MapProperty object.
      */
     protected Map normalizeMap(Map coll) {
-        Iterator<Map.Entry<?,?>> iter = coll.entrySet().iterator();
         Map<Object, JMeterProperty> newColl = null;
-        while (iter.hasNext()) {
-            Map.Entry<?,?> entry = iter.next();
+        for (Map.Entry<?,?> entry : ((Map<?,?>)coll).entrySet()) {
             Object item = entry.getKey();
             Object prop = entry.getValue();
             if (newColl == null) {

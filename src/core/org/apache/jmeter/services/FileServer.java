@@ -32,7 +32,6 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 
@@ -374,9 +373,7 @@ public class FileServer {
     }
 
     public synchronized void closeFiles() throws IOException {
-        Iterator<Map.Entry<String, FileEntry>>  iter = files.entrySet().iterator();
-        while (iter.hasNext()) {
-            Map.Entry<String, FileEntry> me = iter.next();
+        for (Map.Entry<String, FileEntry> me : files.entrySet()) {
             closeFile(me.getKey(),me.getValue() );
         }
         files.clear();
@@ -406,9 +403,7 @@ public class FileServer {
     }
 
     boolean filesOpen() { // package access for test code only
-        Iterator<FileEntry> iter = files.values().iterator();
-        while (iter.hasNext()) {
-            FileEntry fileEntry = iter.next();
+        for (FileEntry fileEntry : files.values()) {
             if (fileEntry.inputOutputObject != null) {
                 return true;
             }

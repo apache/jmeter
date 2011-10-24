@@ -27,11 +27,8 @@ import java.io.OutputStreamWriter;
 import java.io.OutputStream;
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Map.Entry;
-
 import java.nio.charset.Charset;
 
 import org.apache.jmeter.reporters.ResultCollectorHelper;
@@ -208,12 +205,10 @@ public class SaveService {
         try {
             Properties nameMap = loadProperties();
             // now create the aliases
-            Iterator<Entry<Object, Object>> it = nameMap.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry<Object, Object> me = it.next();
+            for (Map.Entry<Object, Object> me : nameMap.entrySet()) {
                 String key = (String) me.getKey();
                 String val = (String) me.getValue();
-                if (!key.startsWith("_")) {
+                if (!key.startsWith("_")) { // $NON-NLS-1$
                     makeAlias(key, val);
                 } else {
                     // process special keys
