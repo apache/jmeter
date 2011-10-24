@@ -19,8 +19,6 @@
 package org.apache.jmeter.control;
 
 import java.io.Serializable;
-import java.util.Iterator;
-
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.StringProperty;
@@ -107,11 +105,9 @@ public class SwitchController extends GenericController implements Serializable 
     }
 
     private int scanControllerNames(String sel){
-        Iterator<TestElement> iter = getSubControllers().iterator();
         int i = 0;
         int default_pos = Integer.MAX_VALUE;
-        while(iter.hasNext()) {
-            TestElement el = iter.next();
+        for(TestElement el : getSubControllers()) {
             String name=el.getName();
             if (name.equals(sel)) {
                 return i;

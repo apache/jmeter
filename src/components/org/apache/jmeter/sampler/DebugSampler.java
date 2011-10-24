@@ -21,7 +21,6 @@ package org.apache.jmeter.sampler;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -92,9 +91,7 @@ public class DebugSampler extends AbstractSampler implements TestBean {
                 return m1.compareTo(m2);
             }
         });
-        Iterator<Map.Entry<Object, Object>> i = al.iterator();
-        while(i.hasNext()){
-            Map.Entry<Object, Object> me = i.next();
+        for(Map.Entry<Object, Object> me : al){
             sb.append(me.getKey());
             sb.append("=");
             sb.append(me.getValue());
