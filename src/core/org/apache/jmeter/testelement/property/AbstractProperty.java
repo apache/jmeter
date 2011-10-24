@@ -86,7 +86,7 @@ public abstract class AbstractProperty implements JMeterProperty {
 
     /** {@inheritDoc} */
     @Override
-    public Object clone() {
+    public AbstractProperty clone() {
         try {
             AbstractProperty prop = (AbstractProperty) super.clone();
             prop.name = name;

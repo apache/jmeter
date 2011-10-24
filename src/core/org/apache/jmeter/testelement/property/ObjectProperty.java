@@ -56,7 +56,7 @@ public class ObjectProperty extends AbstractProperty {
      * {@inheritDoc}
      */
     @Override
-    public Object clone() {
+    public ObjectProperty clone() {
         ObjectProperty p = (ObjectProperty) super.clone();
         p.value = value;
         return p;

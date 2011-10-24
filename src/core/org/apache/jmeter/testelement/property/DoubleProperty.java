@@ -76,7 +76,7 @@ public class DoubleProperty extends NumberProperty {
      * {@inheritDoc}
      */
     @Override
-    public Object clone() {
+    public DoubleProperty clone() {
         DoubleProperty prop = (DoubleProperty) super.clone();
         prop.value = value;
         return prop;
