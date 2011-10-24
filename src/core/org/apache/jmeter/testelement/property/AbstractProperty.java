@@ -19,6 +19,7 @@
 package org.apache.jmeter.testelement.property;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.jmeter.testelement.TestElement;
@@ -283,8 +284,10 @@ public abstract class AbstractProperty implements JMeterProperty {
     }
 
     protected Collection<JMeterProperty> normalizeList(Collection<JMeterProperty> coll) {
+        Iterator<?> iter = coll.iterator();
         Collection<JMeterProperty> newColl = null;
-        for (Object item : coll) {
+        while (iter.hasNext()) {
+            Object item = iter.next();
             if (newColl == null) {
                 try {
                     @SuppressWarnings("unchecked") // coll is of the correct type
