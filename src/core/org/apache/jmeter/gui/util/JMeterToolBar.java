@@ -32,7 +32,6 @@ import javax.swing.JToolBar;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.util.JMeterException;
 import org.apache.log.Logger;
 
 /**
@@ -48,9 +47,11 @@ public class JMeterToolBar {
     private static final String TOOLBAR_PROP_NAME = "toolbar"; //$NON-NLS-1$
 
     // protected fields: JMeterToolBar class can be use to create another toolbar (plugin, etc.)    
-    protected static final String defaultIconProp = "org/apache/jmeter/images/toolbar/icons-toolbar.properties"; //$NON-NLS-1$
+    protected static final String DEFAULT_TOOLBAR_PROPERTY_FILE = "org/apache/jmeter/images/toolbar/icons-toolbar.properties"; //$NON-NLS-1$
+
+    protected static final String USER_DEFINED_TOOLBAR_PROPERTY_FILE = "jmeter.toolbar.icons"; //$NON-NLS-1$
     
-    protected static final String keyIconProp = "jmeter.toolbar.icons"; //$NON-NLS-1$
+    private static final String TOOLBAR_LIST = "jmeter.toolbar";
     
     /**
      * Create the default JMeter toolbar
@@ -96,37 +97,53 @@ public class JMeterToolBar {
      * @return List of icons/action definition
      */
     private static List<IconToolbarBean> getIconMappings() {
-        String iconProp = JMeterUtils.getPropDefault(keyIconProp, defaultIconProp); //$NON-NLS-1$
-        Properties p = JMeterUtils.loadProperties(iconProp);
-        if (p == null && !iconProp.equals(defaultIconProp)) {
-            log.info(iconProp + " not found - using " + defaultIconProp);
-            iconProp = defaultIconProp;
-            p = JMeterUtils.loadProperties(defaultIconProp);
-        }
-        if (p == null) {
+        // Get the standard toolbar properties
+        Properties defaultProps = JMeterUtils.loadProperties(DEFAULT_TOOLBAR_PROPERTY_FILE);
+        if (defaultProps == null) {
             JOptionPane.showMessageDialog(null, 
                     JMeterUtils.getResString("toolbar_icon_set_not_found"), // $NON-NLS-1$
                     JMeterUtils.getResString("toolbar_icon_set_not_found"), // $NON-NLS-1$
                     JOptionPane.WARNING_MESSAGE);
             return null;
         }
-        log.info("Loading toolbar icons properties from " + iconProp); //$NON-NLS-1$
-        
-        String order = p.getProperty(TOOLBAR_PROP_NAME);
-        p.remove(TOOLBAR_PROP_NAME);
+        Properties p;
+        String userProp = JMeterUtils.getProperty(USER_DEFINED_TOOLBAR_PROPERTY_FILE); 
+        if (userProp != null){
+            p = JMeterUtils.loadProperties(userProp, defaultProps);
+        } else {
+            p=defaultProps;
+        }
+
+        String order = JMeterUtils.getPropDefault(TOOLBAR_LIST, p.getProperty(TOOLBAR_PROP_NAME));
+
+        if (order == null) {
+            log.warn("Could not find toolbar definition list");
+            JOptionPane.showMessageDialog(null, 
+                    JMeterUtils.getResString("toolbar_icon_set_not_found"), // $NON-NLS-1$
+                    JMeterUtils.getResString("toolbar_icon_set_not_found"), // $NON-NLS-1$
+                    JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+
         String[] oList = order.split(TOOLBAR_ENTRY_SEP);
-        
+
         List<IconToolbarBean> listIcons = new ArrayList<IconToolbarBean>();
         for (String key : oList) {
             log.debug("Toolbar icon key: " + key); //$NON-NLS-1$
-            if (key.trim().equals("|")) { //$NON-NLS-1$
+            String trimmed = key.trim();
+            if (trimmed.equals("|")) { //$NON-NLS-1$
                 listIcons.add(null);
             } else {
-                try {
-                    IconToolbarBean itb = new IconToolbarBean(p.getProperty(key));
-                    listIcons.add(itb);
-                } catch (JMeterException je) {
-                    log.error("Toolbar icon loading error - key: " + key); //$NON-NLS-1$
+                String property = p.getProperty(trimmed);
+                if (property == null) {
+                    log.warn("No definition for toolbar entry: " + key);
+                } else {
+                    try {
+                        IconToolbarBean itb = new IconToolbarBean(property);
+                        listIcons.add(itb);
+                    } catch (IllegalArgumentException e) {
+                        // already reported by IconToolbarBean
+                    }
                 }
             }
         }
