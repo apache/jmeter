@@ -28,7 +28,7 @@ public final class IconToolbarBean {
     
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final String ICON_FIELD_SEP = ";";  //$NON-NLS-1$
+    private static final String ICON_FIELD_SEP = ",";  //$NON-NLS-1$
 
     private final String i18nKey;
     
@@ -43,7 +43,7 @@ public final class IconToolbarBean {
      * @param strToSplit - the line value (i18n key, ActionNames ID, icon path, optional icon pressed path)
      * @throws JMeterException if error in parsing.
      */
-    public IconToolbarBean(final String strToSplit) throws JMeterException {
+    IconToolbarBean(final String strToSplit) throws JMeterException {
         if (strToSplit == null) {
             throw new NullPointerException("Icon definition must not be null"); //$NON-NLS-1$
         }
@@ -51,9 +51,8 @@ public final class IconToolbarBean {
         if (tmp.length > 2) {
             this.i18nKey = tmp[0];
             this.actionName = tmp[1];
-            final String icons[] = tmp[2].split(" "); //$NON-NLS-1$
-            this.iconPath = icons[0];
-            this.iconPathPressed = (icons.length > 1) ? icons[1] : icons[0];
+            this.iconPath = tmp[2];
+            this.iconPathPressed = (tmp.length > 3) ? tmp[3] : tmp[2];
         } else {
             throw new IllegalArgumentException("Incorrect argument format - expected at least 2 fields separated by " + ICON_FIELD_SEP);
         }
