@@ -311,7 +311,7 @@ public abstract class AbstractProperty implements JMeterProperty {
      * Given a Map, it converts the Map into a collection of JMeterProperty
      * objects, appropriate for a MapProperty object.
      */
-    protected Map<String, JMeterProperty> normalizeMap(Map<String,?> coll) {
+    protected Map<String, JMeterProperty> normalizeMap(Map<?,?> coll) {
         if (coll.isEmpty()) {
             @SuppressWarnings("unchecked") // empty collection ok to cast
             Map<String, JMeterProperty> emptyColl = (Map<String, JMeterProperty>) coll;
@@ -320,9 +320,18 @@ public abstract class AbstractProperty implements JMeterProperty {
         try {
             @SuppressWarnings("unchecked") // empty collection
             Map<String, JMeterProperty> newColl = coll.getClass().newInstance();
-            for (Map.Entry<String,?> entry : ((Map<String,?>)coll).entrySet()) {
-                String item = entry.getKey();
+            for (Map.Entry<?,?> entry : ((Map<?,?>)coll).entrySet()) {
+                Object key = entry.getKey();
                 Object prop = entry.getValue();
+                String item=null;
+                if (key instanceof String) {
+                    item = (String) key;
+                } else {
+                    if (key != null) {
+                        log.error("Expected key type String, found: "+key.getClass().getName());
+                        item = key.toString();
+                    }
+                }
                 newColl.put(item, convertObject(prop));
             }
             return newColl;
