@@ -645,9 +645,7 @@ public class JMeterThread implements Runnable, Interruptible {
 
     @SuppressWarnings("deprecation") // OK to call TestBeanHelper.prepare()
     private void checkAssertions(List<Assertion> assertions, SampleResult parent, JMeterContext threadContext) {
-        Iterator<Assertion> iter = assertions.iterator();
-        while (iter.hasNext()) {
-            Assertion assertion = iter.next();
+        for (Assertion assertion : assertions) {
             TestBeanHelper.prepare((TestElement) assertion);
             if (assertion instanceof AbstractScopedAssertion){
                 AbstractScopedAssertion scopedAssertion = (AbstractScopedAssertion) assertion;
@@ -711,9 +709,7 @@ public class JMeterThread implements Runnable, Interruptible {
                 ex.process();
             }
         } else {
-            iter = extractors.listIterator(); // start at the beginning
-            while (iter.hasNext()) {
-                PostProcessor ex = iter.next();
+            for (PostProcessor ex : extractors) {
                 TestBeanHelper.prepare((TestElement) ex);
                 ex.process();
             }
@@ -722,9 +718,7 @@ public class JMeterThread implements Runnable, Interruptible {
 
     @SuppressWarnings("deprecation") // OK to call TestBeanHelper.prepare()
     private void runPreProcessors(List<PreProcessor> preProcessors) {
-        Iterator<PreProcessor> iter = preProcessors.iterator();
-        while (iter.hasNext()) {
-            PreProcessor ex = iter.next();
+        for (PreProcessor ex : preProcessors) {
             if (log.isDebugEnabled()) {
                 log.debug("Running preprocessor: " + ((AbstractTestElement) ex).getName());
             }
@@ -736,9 +730,7 @@ public class JMeterThread implements Runnable, Interruptible {
     @SuppressWarnings("deprecation") // OK to call TestBeanHelper.prepare()
     private void delay(List<Timer> timers) {
         long sum = 0;
-        Iterator<Timer> iter = timers.iterator();
-        while (iter.hasNext()) {
-            Timer timer = iter.next();
+        for (Timer timer : timers) {
             TestBeanHelper.prepare((TestElement) timer);
             sum += timer.delay();
         }
@@ -753,9 +745,7 @@ public class JMeterThread implements Runnable, Interruptible {
 
     void notifyTestListeners() {
         threadVars.incIteration();
-        Iterator<TestListener> iter = testListeners.iterator();
-        while (iter.hasNext()) {
-            TestListener listener = iter.next();
+        for (TestListener listener : testListeners) {
             if (listener instanceof TestElement) {
                 listener.testIterationStart(new LoopIterationEvent(controller, threadVars.getIteration()));
                 ((TestElement) listener).recoverRunningVersion();
