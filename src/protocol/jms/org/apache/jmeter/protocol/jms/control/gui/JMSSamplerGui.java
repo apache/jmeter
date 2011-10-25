@@ -55,6 +55,8 @@ public class JMSSamplerGui extends AbstractSamplerGui {
 
     private JLabeledTextField timeout = new JLabeledTextField(JMeterUtils.getResString("jms_timeout")); //$NON-NLS-1$
 
+    private JLabeledTextField jmsSelector = new JLabeledTextField(JMeterUtils.getResString("jms_selector")); //$NON-NLS-1$
+
     private JLabeledTextArea soapXml = new JLabeledTextArea(JMeterUtils.getResString("jms_msg_content")); //$NON-NLS-1$
 
     private JLabeledTextField initialContextFactory = new JLabeledTextField(
@@ -92,6 +94,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         receiveQueue.setText(""); // $NON-NLS-1$
         ((JComboBox) oneWay.getComponentList().get(1)).setSelectedItem(JMeterUtils.getResString("jms_request")); //$NON-NLS-1$
         timeout.setText("");  // $NON-NLS-1$
+        jmsSelector.setText(""); // $NON-NLS-1$
         soapXml.setText(""); // $NON-NLS-1$
         initialContextFactory.setText(""); // $NON-NLS-1$
         providerUrl.setText(""); // $NON-NLS-1$
@@ -118,6 +121,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         element.setUseReqMsgIdAsCorrelId(useReqMsgIdAsCorrelId.isSelected());
         element.setUseResMsgIdAsCorrelId(useResMsgIdAsCorrelId.isSelected());
         element.setTimeout(timeout.getText());
+        element.setJMSSelector(jmsSelector.getText());
         element.setContent(soapXml.getText());
 
         element.setInitialContextFactory(initialContextFactory.getText());
@@ -164,6 +168,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         useResMsgIdAsCorrelId.setSelected(sampler.isUseResMsgIdAsCorrelId());
 
         timeout.setText(sampler.getTimeout());
+        jmsSelector.setText(sampler.getJMSSelector());
         soapXml.setText(sampler.getContent());
         initialContextFactory.setText(sampler.getInitialContextFactory());
         providerUrl.setText(sampler.getContextProvider());
@@ -199,7 +204,8 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         jmsQueueingPanel.add(sendQueuePanel, BorderLayout.CENTER);
 
         JPanel receiveQueuePanel = new JPanel(new BorderLayout(5, 0));
-        receiveQueuePanel.add(receiveQueue);
+        receiveQueuePanel.add(jmsSelector,BorderLayout.EAST);
+        receiveQueuePanel.add(receiveQueue,BorderLayout.WEST);
         jmsQueueingPanel.add(receiveQueuePanel, BorderLayout.SOUTH);
 
         JPanel messagePanel = new JPanel(new BorderLayout());
