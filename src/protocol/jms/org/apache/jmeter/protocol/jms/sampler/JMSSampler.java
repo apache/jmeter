@@ -72,6 +72,10 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
     private static final String TIMEOUT = "JMSSampler.timeout"; // $NON-NLS-1$
 
+    private static final String JMS_SELECTOR = "JMSSampler.jmsSelector"; // $NON-NLS-1$
+
+    private static final String JMS_SELECTOR_DEFAULT = ""; // $NON-NLS-1$
+
     private static final String IS_ONE_WAY = "JMSSampler.isFireAndForget"; // $NON-NLS-1$
 
     private static final String JMS_PROPERTIES = "arguments"; // $NON-NLS-1$
@@ -325,7 +329,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
             if (!useTemporyQueue()) {
                 receiveQueue = (Queue) context.lookup(getReceiveQueue());
                 receiverThread = Receiver.createReceiver(factory, receiveQueue, getPrincipal(context), getCredentials(context)
-                        , isUseResMsgIdAsCorrelId());
+                        , isUseResMsgIdAsCorrelId(), getJMSSelector());
             }
 
             String principal = null;
@@ -487,6 +491,20 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     }
 
     /**
+     * @return String JMS Selector
+     */
+    public String getJMSSelector() {
+        return getPropertyAsString(JMSSampler.JMS_SELECTOR, JMS_SELECTOR_DEFAULT);
+    }
+
+    /**
+     * @param selector String selector
+     */
+    public void setJMSSelector(String selector) {
+        setProperty(JMSSampler.JMS_SELECTOR, selector, JMS_SELECTOR_DEFAULT);
+    }
+    
+    /**
      * @param string
      */
     public void setInitialContextFactory(String string) {
@@ -525,5 +543,4 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
             Hashtable<?,?> env = context.getEnvironment();
             return (String) env.get("java.naming.security.credentials"); // $NON-NLS-1$
     }
-
 }
