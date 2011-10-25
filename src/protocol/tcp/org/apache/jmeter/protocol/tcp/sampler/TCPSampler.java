@@ -360,6 +360,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
             }
         } catch (IOException ex) {
             log.debug("", ex);
+            isSuccessful=false;
             res.setResponseCode("500"); //$NON-NLS-1$
             res.setResponseMessage(ex.toString());
             closeSocket();
@@ -368,6 +369,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
             isSuccessful=false;
             res.setResponseCode("500");
             res.setResponseMessage(ex.toString());
+            closeSocket();
         } finally {
             // Calculate response time
             res.sampleEnd();
