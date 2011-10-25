@@ -147,6 +147,7 @@ Mirror server now uses default port 8081, was 8080 before 2.5.1.
 <h3>Other samplers</h3>
 <ul>
 <li>Bug 51419 - JMS Subscriber: ability to use Selectors</li>
+<li>Bug 52088 - JMS Sampler : Add a selector when REQUEST / RESPONSE is chosen</li>
 </ul>
 
 <h3>Controllers</h3>

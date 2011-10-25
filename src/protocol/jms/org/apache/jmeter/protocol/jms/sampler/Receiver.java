@@ -26,6 +26,7 @@ import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.Session;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.jmeter.protocol.jms.Utils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -47,7 +48,18 @@ public class Receiver implements Runnable {
 
     private final boolean useResMsgIdAsCorrelId;
 
-    private Receiver(ConnectionFactory factory, Destination receiveQueue, String principal, String credentials, boolean useResMsgIdAsCorrelId) throws JMSException {
+
+    /**
+     * Constructor
+     * @param factory
+     * @param receiveQueue Receive Queue
+     * @param principal Username
+     * @param credentials Password
+     * @param useResMsgIdAsCorrelId
+     * @param jmsSelector JMS Selector
+     * @throws JMSException
+     */
+    private Receiver(ConnectionFactory factory, Destination receiveQueue, String principal, String credentials, boolean useResMsgIdAsCorrelId, String jmsSelector) throws JMSException {
         if (null != principal && null != credentials) {
             log.info("creating receiver WITH authorisation credentials. UseResMsgId="+useResMsgIdAsCorrelId);
             conn = factory.createConnection(principal, credentials);
@@ -56,7 +68,14 @@ public class Receiver implements Runnable {
             conn = factory.createConnection(); 
         }
         session = conn.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        consumer = session.createConsumer(receiveQueue);
+        if(log.isDebugEnabled()) {
+            log.debug("Receiver - ctor. Creating consumer with JMS Selector:"+jmsSelector);
+        }
+        if(StringUtils.isEmpty(jmsSelector)) {
+            consumer = session.createConsumer(receiveQueue);
+        } else {
+            consumer = session.createConsumer(receiveQueue, jmsSelector);
+        }
         this.useResMsgIdAsCorrelId = useResMsgIdAsCorrelId;
         log.debug("Receiver - ctor. Starting connection now");
         conn.start();
@@ -71,13 +90,14 @@ public class Receiver implements Runnable {
      * @param principal
      * @param credentials
      * @param useResMsgIdAsCorrelId true if should use JMSMessageId, false if should use JMSCorrelationId
+     * @param jmsSelector JMS selector
      * @return the Receiver which will process the responses
      * @throws JMSException
      */
     public static Receiver createReceiver(ConnectionFactory factory, Destination receiveQueue,
-            String principal, String credentials, boolean useResMsgIdAsCorrelId)
+            String principal, String credentials, boolean useResMsgIdAsCorrelId, String jmsSelector)
             throws JMSException {
-        Receiver receiver = new Receiver(factory, receiveQueue, principal, credentials, useResMsgIdAsCorrelId);
+        Receiver receiver = new Receiver(factory, receiveQueue, principal, credentials, useResMsgIdAsCorrelId, jmsSelector);
         Thread thread = new Thread(receiver, Thread.currentThread().getName()+"-JMS-Receiver");
         thread.start();
         return receiver;
