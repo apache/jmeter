@@ -31,17 +31,19 @@ import org.apache.jmeter.testelement.property.StringProperty;
 public class Argument extends AbstractTestElement implements Serializable {
     private static final long serialVersionUID = 240L;
 
-/** Name used to store the argument's name. */
-    public static final String ARG_NAME = "Argument.name";
+    /** Name used to store the argument's name. */
+    public static final String ARG_NAME = "Argument.name"; // $NON-NLS-1$
 
     /** Name used to store the argument's value. */
-    public static final String VALUE = "Argument.value";
+    public static final String VALUE = "Argument.value"; // $NON-NLS-1$
 
     /** Name used to store the argument's description. */
-    public static final String DESCRIPTION = "Argument.desc";
+    public static final String DESCRIPTION = "Argument.desc"; // $NON-NLS-1$
+
+    private static final String DFLT_DESCRIPTION = ""; // $NON-NLS-1$
 
     /** Name used to store the argument's metadata. */
-    public static final String METADATA = "Argument.metadata";
+    public static final String METADATA = "Argument.metadata"; // $NON-NLS-1$
 
     /**
      * Create a new Argument without a name, value, or metadata.
@@ -94,7 +96,7 @@ public class Argument extends AbstractTestElement implements Serializable {
         setProperty(new StringProperty(ARG_NAME, name));
         setProperty(new StringProperty(VALUE, value));
         setProperty(new StringProperty(METADATA, metadata));
-        setProperty(new StringProperty(DESCRIPTION, description));
+        setProperty(DESCRIPTION, description, DFLT_DESCRIPTION);
     }
     
     /**
@@ -144,7 +146,7 @@ public class Argument extends AbstractTestElement implements Serializable {
      *            the new description
      */
     public void setDescription(String description) {
-        setProperty(new StringProperty(DESCRIPTION, description));
+        setProperty(DESCRIPTION, description, DFLT_DESCRIPTION);
     }
 
     /**
@@ -153,7 +155,7 @@ public class Argument extends AbstractTestElement implements Serializable {
      * @return the MetaData value
      */
     public String getDescription() {
-        return getPropertyAsString(DESCRIPTION);
+        return getPropertyAsString(DESCRIPTION, DFLT_DESCRIPTION);
     }
     
     /**
