@@ -86,8 +86,8 @@ public class LengthPrefixedBinaryTCPClientImpl extends TCPClientDecorator {
             if (is.read(lengthBuffer, 0, lengthPrefixLen) == lengthPrefixLen) {
                 msgLen = byteArrayToInt(lengthBuffer);
                 msg = new byte[msgLen];
-                int bytes = is.read(msg);
-                if (bytes < msgLen){
+                int bytes = JOrphanUtils.read(is, msg, 0, msgLen);
+                if (bytes < msgLen) {
                     log.warn("Incomplete message read, expected: "+msgLen+" got: "+bytes);
                 }
             }
