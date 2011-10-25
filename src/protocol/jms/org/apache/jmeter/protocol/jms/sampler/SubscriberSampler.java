@@ -87,6 +87,9 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     private static final String CLIENT_ID_DEFAULT = ""; // $NON-NLS-1$
     private static final String JMS_SELECTOR_DEFAULT = ""; // $NON-NLS-1$
     private static final String STOP_BETWEEN = "jms.stop_between_samples"; // $NON-NLS-1$
+    private static final String SEPARATOR = "jms.separator"; // $NON-NLS-1$
+    private static final String SEPARATOR_DEFAULT = ""; // $NON-NLS-1$
+
     
     private transient boolean START_ON_SAMPLE = false;
 
@@ -245,6 +248,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
                     }
                 }
                 Utils.messageProperties(propBuffer, msg);
+                propBuffer.append(getSeparator());
             } catch (JMSException e) {
                 log.error(e.getMessage());
             }
@@ -399,6 +403,21 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     public void setJmsSelector(String jmsSelector) {
         setProperty(JMS_SELECTOR, jmsSelector, JMS_SELECTOR_DEFAULT);
     }
+
+    /**
+     * @return Separator for sampler results
+     */
+    public String getSeparator() {
+        return getPropertyAsString(SEPARATOR, SEPARATOR_DEFAULT);
+    }
+    
+    /**
+     * Separator for sampler results
+     * @param text
+     */
+    public void setSeparator(String text) {
+        setProperty(SEPARATOR, text, SEPARATOR_DEFAULT);
+    }
     
     // This was the old value that was checked for
     private final static String RECEIVE_STR = JMeterUtils.getResString(JMSSubscriberGui.RECEIVE_RSC); // $NON-NLS-1$
@@ -445,4 +464,5 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     public void testStarted(String host) {
         // NOOP        
     }
+
 }
