@@ -490,4 +490,28 @@ public final class JOrphanUtils {
         if (in < 10) return (byte) (in+'0');
         return (byte) ((in-10)+'a');
     }
+
+    /**
+     * Read as much as possible into buffer.
+     * 
+     * @param is the stream to read from
+     * @param buffer output buffer
+     * @param offset offset into buffer
+     * @param length number of bytes to read
+     * 
+     * @return the number of bytes actually read
+     * @throws IOException 
+     */
+    public static int read(InputStream is, byte[] buffer, int offset, int length) throws IOException {
+        int remaining = length;
+        while ( remaining > 0 ) {
+            int location = ( length - remaining );
+            int count = is.read( buffer, location, remaining );
+            if ( -1 == count ) { // EOF
+                break;
+            }
+            remaining -= count;
+        }
+        return length - remaining;
+    }
 }
