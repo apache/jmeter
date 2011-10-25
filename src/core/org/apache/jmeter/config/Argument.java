@@ -37,6 +37,9 @@ public class Argument extends AbstractTestElement implements Serializable {
     /** Name used to store the argument's value. */
     public static final String VALUE = "Argument.value";
 
+    /** Name used to store the argument's description. */
+    public static final String DESCRIPTION = "Argument.desc";
+
     /** Name used to store the argument's metadata. */
     public static final String METADATA = "Argument.metadata";
 
@@ -75,6 +78,25 @@ public class Argument extends AbstractTestElement implements Serializable {
         setProperty(new StringProperty(METADATA, metadata));
     }
 
+    /**
+     * Create a new Argument with the specified name, value, and metadata.
+     *
+     * @param name
+     *            the argument name
+     * @param value
+     *            the argument value
+     * @param metadata
+     *            the argument metadata
+     * @param description 
+     *            the argument description
+     */
+    public Argument(String name, String value, String metadata, String description) {
+        setProperty(new StringProperty(ARG_NAME, name));
+        setProperty(new StringProperty(VALUE, value));
+        setProperty(new StringProperty(METADATA, metadata));
+        setProperty(new StringProperty(DESCRIPTION, description));
+    }
+    
     /**
      * Set the name of the Argument.
      *
@@ -115,6 +137,25 @@ public class Argument extends AbstractTestElement implements Serializable {
         return getPropertyAsString(VALUE);
     }
 
+    /**
+     * Sets the Description attribute of the Argument.
+     *
+     * @param description
+     *            the new description
+     */
+    public void setDescription(String description) {
+        setProperty(new StringProperty(DESCRIPTION, description));
+    }
+
+    /**
+     * Gets the Meta Data attribute of the Argument.
+     *
+     * @return the MetaData value
+     */
+    public String getDescription() {
+        return getPropertyAsString(DESCRIPTION);
+    }
+    
     /**
      * Sets the Meta Data attribute of the Argument.
      *

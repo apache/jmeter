@@ -105,6 +105,8 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 
     public static final String COLUMN_RESOURCE_NAMES_1 = "value"; // $NON-NLS-1$
 
+    public static final String COLUMN_RESOURCE_NAMES_2 = "description"; // $NON-NLS-1$
+
     /**
      * Create a new ArgumentsPanel as a standalone component.
      */
@@ -432,6 +434,19 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      * Initialize the table model used for the arguments table.
      */
     protected void initializeTableModel() {
+        if(standalone) {
+            tableModel = new ObjectTableModel(new String[] { COLUMN_RESOURCE_NAMES_0, COLUMN_RESOURCE_NAMES_1, COLUMN_RESOURCE_NAMES_2 },
+                    Argument.class,
+                    new Functor[] {
+                    new Functor("getName"), // $NON-NLS-1$
+                    new Functor("getValue"),  // $NON-NLS-1$
+                    new Functor("getDescription") },  // $NON-NLS-1$
+                    new Functor[] {
+                    new Functor("setName"), // $NON-NLS-1$
+                    new Functor("setValue"), // $NON-NLS-1$
+                    new Functor("setDescription") },  // $NON-NLS-1$
+                    new Class[] { String.class, String.class, String.class });
+        } else {
         tableModel = new ObjectTableModel(new String[] { COLUMN_RESOURCE_NAMES_0, COLUMN_RESOURCE_NAMES_1 },
                 Argument.class,
                 new Functor[] {
@@ -441,6 +456,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
                 new Functor("setName"), // $NON-NLS-1$
                 new Functor("setValue") }, // $NON-NLS-1$
                 new Class[] { String.class, String.class });
+    	}
     }
 
     public static boolean testFunctors(){
