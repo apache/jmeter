@@ -86,6 +86,9 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
     private final JLabeledTextField timeout = 
         new JLabeledTextField(JMeterUtils.getResString("jms_timeout")); //$NON-NLS-1$
 
+    private final JLabeledTextField separator = 
+        new JLabeledTextField(JMeterUtils.getResString("jms_separator")); //$NON-NLS-1$
+
     //++ Do not change these strings; they are used in JMX files to record the button settings
     public final static String RECEIVE_RSC = "jms_subscriber_receive"; // $NON-NLS-1$
 
@@ -153,6 +156,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
         sampler.setStopBetweenSamples(stopBetweenSamples.isSelected());
         sampler.setTimeout(timeout.getText());
         sampler.setDestinationStatic(destSetup.getText().equals(DEST_SETUP_STATIC));
+        sampler.setSeparator(separator.getText());
     }
 
     /**
@@ -191,7 +195,8 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
         choice.add(clientChoice);
         choice.add(stopBetweenSamples);
         mainPanel.add(choice);
-
+        mainPanel.add(separator);
+        
         useProperties.addChangeListener(this);
         useAuth.addChangeListener(this);
     }
@@ -221,6 +226,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
         clientChoice.setText(sampler.getClientChoice());
         stopBetweenSamples.setSelected(sampler.isStopBetweenSamples());
         timeout.setText(sampler.getTimeout());
+        separator.setText(sampler.getSeparator());
         destSetup.setText(sampler.isDestinationStatic() ? DEST_SETUP_STATIC : DEST_SETUP_DYNAMIC);
     }
 
@@ -238,7 +244,8 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
         jmsUser.setText(""); // $NON-NLS-1$
         jmsPwd.setText(""); // $NON-NLS-1$
         iterations.setText("1"); // $NON-NLS-1$
-        timeout.setText("");
+        timeout.setText(""); // $NON-NLS-1$
+        separator.setText(""); // $NON-NLS-1$
         useAuth.setSelected(false);
         jmsUser.setEnabled(false);
         jmsPwd.setEnabled(false);
