@@ -58,6 +58,8 @@ For example a Test Action sampler with 0 wait time (which doesn't generate a sam
 or a Debug Sampler with all fields set to False (to reduce the sample size).
 </p>
 
+<p>Start next Loop option in Thread Group is broken, see Bugs (51868, 51866, 51865).</p>
+
 <p>
 The menu item Options / Choose Language does not change all the displayed text to the new language.
 [The behaviour has improved, but language change is still not fully working]
@@ -179,6 +181,7 @@ Mirror server now uses default port 8081, was 8080 before 2.5.1.
 <li>Bug 52037 - Remember user-set LaF over restarts.</li>
 <li>Bug 51861 - Improve HTTP Request GUI to better show parameters without name (GWT RPC requests for example) (UNDER DEVELOPMENT)</li>
 <li>Bug 52040 - Add a toolbar in JMeter main window</li>
+<li>Bug 51816 - Comment Field in User Defined Variables control.</li>
 </ul>
 
 <h2>Non-functional changes</h2>
