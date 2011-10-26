@@ -31,6 +31,8 @@ import javax.swing.JToolBar;
 
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.util.LocaleChangeEvent;
+import org.apache.jmeter.util.LocaleChangeListener;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -38,8 +40,13 @@ import org.apache.log.Logger;
  * The JMeter main toolbar class
  *
  */
-public class JMeterToolBar {
+public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
     
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -4591210341986068907L;
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final String TOOLBAR_ENTRY_SEP = ",";  //$NON-NLS-1$
@@ -58,10 +65,21 @@ public class JMeterToolBar {
      * @return the JMeter toolbar
      */
     public static JToolBar createToolbar(boolean visible) {
-        JToolBar toolBar = new JToolBar();
+        JMeterToolBar toolBar = new JMeterToolBar();
         toolBar.setFloatable(false);
         toolBar.setVisible(visible);
 
+        setupToolbarContent(toolBar);
+        JMeterUtils.addLocaleChangeListener(toolBar);
+        // implicit return empty toolbar if icons == null
+        return toolBar;
+    }
+
+    /**
+     * Setup toolbar content
+     * @param toolBar {@link JMeterToolBar}
+     */
+    private static void setupToolbarContent(JMeterToolBar toolBar) {
         List<IconToolbarBean> icons = getIconMappings();
         if (icons != null) {
             for (IconToolbarBean iconToolbarBean : icons) {
@@ -72,8 +90,6 @@ public class JMeterToolBar {
                 }
             }
         }
-        // implicit return empty toolbar if icons == null
-        return toolBar;
     }
     
     /**
@@ -150,4 +166,11 @@ public class JMeterToolBar {
         return listIcons;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void localeChanged(LocaleChangeEvent event) {
+        this.removeAll();
+        setupToolbarContent(this);
+    }
 }
