@@ -22,15 +22,33 @@
 package org.apache.jmeter.protocol.jdbc.config;
 
 import java.beans.PropertyDescriptor;
+import java.sql.Connection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.jmeter.testbeans.BeanInfoSupport;
 
 public class DataSourceElementBeanInfo extends BeanInfoSupport {
+    private static Map<String,Integer> TRANSACTION_ISOLATION_MAP = new HashMap<String, Integer>(5);
+    static {
+        // Will use default isolation
+        TRANSACTION_ISOLATION_MAP.put("DEFAULT", Integer.valueOf(-1));
+        TRANSACTION_ISOLATION_MAP.put("TRANSACTION_NONE", Integer.valueOf(Connection.TRANSACTION_NONE));
+        TRANSACTION_ISOLATION_MAP.put("TRANSACTION_READ_COMMITTED", Integer.valueOf(Connection.TRANSACTION_READ_COMMITTED));
+        TRANSACTION_ISOLATION_MAP.put("TRANSACTION_READ_UNCOMMITTED", Integer.valueOf(Connection.TRANSACTION_READ_UNCOMMITTED));
+        TRANSACTION_ISOLATION_MAP.put("TRANSACTION_REPEATABLE_READ", Integer.valueOf(Connection.TRANSACTION_REPEATABLE_READ));
+        TRANSACTION_ISOLATION_MAP.put("TRANSACTION_SERIALIZABLE", Integer.valueOf(Connection.TRANSACTION_SERIALIZABLE));
+    }
+    
     public DataSourceElementBeanInfo() {
         super(DataSourceElement.class);
+    
         createPropertyGroup("varName", new String[] { "dataSource" });
 
-        createPropertyGroup("pool", new String[] { "poolMax", "timeout", "trimInterval", "autocommit" });
+        createPropertyGroup("pool", new String[] { "poolMax", "timeout", 
+                "trimInterval", "autocommit", "transactionIsolation"  });
 
         createPropertyGroup("keep-alive", new String[] { "keepAlive", "connectionAge", "checkQuery" });
 
@@ -51,6 +69,14 @@ public class DataSourceElementBeanInfo extends BeanInfoSupport {
         p = property("autocommit");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, Boolean.TRUE);
+        p = property("transactionIsolation");
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, "DEFAULT");
+        p.setValue(NOT_EXPRESSION, true);
+        p.setValue(NOT_OTHER, true);
+        Set<String> modesSet = TRANSACTION_ISOLATION_MAP.keySet();
+        String[] modes = modesSet.toArray(new String[modesSet.size()]);
+        p.setValue(TAGS, modes);
         p = property("keepAlive");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, Boolean.TRUE);
@@ -72,5 +98,16 @@ public class DataSourceElementBeanInfo extends BeanInfoSupport {
         p = property("password");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
+    }
+
+    /**
+     * @param tag 
+     * @return int value for String
+     */
+    public static int getTransactionIsolationMode(String tag) {
+        if (!StringUtils.isEmpty(tag)) {
+            return TRANSACTION_ISOLATION_MAP.get(tag);
+        }
+        return -1;
     }
 }
