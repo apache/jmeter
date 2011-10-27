@@ -49,7 +49,7 @@ public class DataSourceElement extends AbstractTestElement
     private static final long serialVersionUID = 233L;
 
     private transient String dataSource, driver, dbUrl, username, password, checkQuery, poolMax, connectionAge, timeout,
-            trimInterval;
+            trimInterval,transactionIsolation;
 
     private transient boolean keepAlive, autocommit;
 
@@ -269,6 +269,18 @@ public class DataSourceElement extends AbstractTestElement
             }
             if (dsc != null) {
                 conn=dsc.getConnection();
+                int transactionIsolation = DataSourceElementBeanInfo.getTransactionIsolationMode(getTransactionIsolation());
+                if (transactionIsolation >= 0 && conn.getTransactionIsolation() != transactionIsolation) {
+                    try {
+                        // make sure setting the new isolation mode is done in an auto committed transaction
+                        conn.setTransactionIsolation(transactionIsolation);
+                        log.debug("Setting transaction isolation: " + transactionIsolation + " @"
+                                + System.identityHashCode(dsc));
+                    } catch (SQLException ex) {
+                        log.error("Could not set transaction isolation: " + transactionIsolation + " @"
+                                + System.identityHashCode(dsc));
+                    }   
+                }
             }
             return conn;
         }
@@ -463,5 +475,20 @@ public class DataSourceElement extends AbstractTestElement
      */
     public void setKeepAlive(boolean keepAlive) {
         this.keepAlive = keepAlive;
+    }
+
+    /**
+     * @return the transaction isolation level
+     */
+    public String getTransactionIsolation() {
+        return transactionIsolation;
+    }
+
+    /**
+     * @param transactionIsolation The transaction isolation level to set. <code>NULL</code> to
+     * use the default of the driver.
+     */
+    public void setTransactionIsolation(String transactionIsolation) {
+        this.transactionIsolation = transactionIsolation;
     }
 }
