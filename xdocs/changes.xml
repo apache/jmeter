@@ -78,7 +78,10 @@ This has been corrected; can still revert to the Bug 51939 behaviour by setting 
 <p>
 Mirror server now uses default port 8081, was 8080 before 2.5.1.
 </p>
-
+<p>
+TCP Sampler handles SocketTimeoutException, SocketException and InterruptedIOException differently since 2.5.2, when
+these occurs, Sampler is marked as failed.
+</p>
 <!-- =================== Bug fixes =================== -->
 
 <h2>Bug fixes</h2>
