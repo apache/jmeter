@@ -188,6 +188,7 @@ Mirror server now uses default port 8081, was 8080 before 2.5.1.
 <li>Bug 52052 - Using a delimiter to separate result-messages for JMS Subscriber</li>
 <li>Bug 52103 - Add automatic scrolling option to table visualizer</li>
 <li>Bug 52097 - Save As should point to same folder that was used to open a file if MRU list is used</li>
+<li>Bug 52085 - Allow multiple selection in arguments panel</li>
 </ul>
 
 <h2>Non-functional changes</h2>
