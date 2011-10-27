@@ -124,7 +124,9 @@ public final class FileDialoger {
         }
         String ext = ".jmx";//$NON-NLS-1$
         if (filename != null) {
-            jfc.setSelectedFile(new File(lastJFCDirectory, filename));
+            jfc.setSelectedFile(filename.lastIndexOf(System.getProperty("file.separator")) > 0 ?
+                    new File(filename) :
+                    new File(lastJFCDirectory, filename));
             int i = -1;
             if ((i = filename.lastIndexOf(".")) > -1) {//$NON-NLS-1$
                 ext = filename.substring(i);
