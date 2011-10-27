@@ -24,6 +24,7 @@
  */
 package org.apache.jmeter.protocol.tcp.sampler;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -49,7 +50,7 @@ public interface TCPClient {
      * @param is -
      *            InputStream to be written to Socket
      */
-    void write(OutputStream os, InputStream is);
+    void write(OutputStream os, InputStream is) throws IOException;
 
     /**
      *
@@ -58,7 +59,7 @@ public interface TCPClient {
      * @param s -
      *            String to write
      */
-    void write(OutputStream os, String s);
+    void write(OutputStream os, String s) throws IOException;
 
     /**
      *
@@ -66,7 +67,7 @@ public interface TCPClient {
      *            InputStream for socket
      * @return String read from socket
      */
-    String read(InputStream is);
+    String read(InputStream is) throws IOException;
 
     /**
      * Get the end-of-line/end-of-message byte.
