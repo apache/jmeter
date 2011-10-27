@@ -155,21 +155,27 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
                 SocketAddress sockaddr = new InetSocketAddress(getServer(), getPort());
                 con = new Socket();
                 con.connect(sockaddr, getConnectTimeout());
-                log.debug("Created new connection " + con); //$NON-NLS-1$
+                if(log.isDebugEnabled()) {
+                    log.debug("Created new connection " + con); //$NON-NLS-1$
+                }
                 cp.put(TCPKEY, con);
             } catch (UnknownHostException e) {
                 log.warn("Unknown host for " + getLabel(), e);//$NON-NLS-1$
                 cp.put(ERRKEY, e.toString());
+                return null;
             } catch (IOException e) {
                 log.warn("Could not create socket for " + getLabel(), e); //$NON-NLS-1$
                 cp.put(ERRKEY, e.toString());
+                return null;
             }     
         }
         // (re-)Define connection params - Bug 50977 
         try {
             con.setSoTimeout(getTimeout());
             con.setTcpNoDelay(getNoDelay());
-            log.debug(this + "  Timeout " + getTimeout() + " NoDelay " + getNoDelay()); //$NON-NLS-1$
+            if(log.isDebugEnabled()) {
+                log.debug(this + "  Timeout " + getTimeout() + " NoDelay " + getNoDelay()); //$NON-NLS-1$
+            }
         } catch (SocketException se) {
             log.warn("Could not set timeout or nodelay for " + getLabel(), se); //$NON-NLS-1$
             cp.put(ERRKEY, se.toString());

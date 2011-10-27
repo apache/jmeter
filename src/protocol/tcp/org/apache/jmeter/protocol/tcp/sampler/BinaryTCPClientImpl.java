@@ -27,9 +27,7 @@ package org.apache.jmeter.protocol.tcp.sampler;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InterruptedIOException;
 import java.io.OutputStream;
-import java.net.SocketTimeoutException;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.util.JMeterUtils;
@@ -93,15 +91,12 @@ public class BinaryTCPClientImpl extends AbstractTCPClient {
      * @param os output stream
      * @param hexEncodedBinary hex-encoded binary
      */
-    public void write(OutputStream os, String hexEncodedBinary) {
-        try {
-            os.write(hexStringToByteArray(hexEncodedBinary));
-            os.flush();
-        } catch (IOException e) {
-            log.warn("Write error", e);
+    public void write(OutputStream os, String hexEncodedBinary) throws IOException{
+        os.write(hexStringToByteArray(hexEncodedBinary));
+        os.flush();
+        if(log.isDebugEnabled()) {
+            log.debug("Wrote: " + hexEncodedBinary);
         }
-        log.debug("Wrote: " + hexEncodedBinary);
-        return;
     }
 
     /**
@@ -118,30 +113,24 @@ public class BinaryTCPClientImpl extends AbstractTCPClient {
      * the end of the stream is reached.
      * Response data is converted to hex-encoded binary
      * @return hex-encoded binary string
+     * @throws IOException 
      */
-    public String read(InputStream is) {
+    public String read(InputStream is) throws IOException {
         byte[] buffer = new byte[4096];
         ByteArrayOutputStream w = new ByteArrayOutputStream();
         int x = 0;
-        try {
-            while ((x = is.read(buffer)) > -1) {
-                w.write(buffer, 0, x);
-                if (useEolByte && (buffer[x - 1] == eolByte)) {
-                    break;
-                }
+        while ((x = is.read(buffer)) > -1) {
+            w.write(buffer, 0, x);
+            if (useEolByte && (buffer[x - 1] == eolByte)) {
+                break;
             }
-        } catch (SocketTimeoutException e) {
-            // drop out to handle buffer
-        } catch (InterruptedIOException e) {
-            // drop out to handle buffer
-        } catch (IOException e) {
-            log.warn("Read error:" + e);
-            return "";
         }
 
         IOUtils.closeQuietly(w); // For completeness
         final String hexString = JOrphanUtils.baToHexString(w.toByteArray());
-        log.debug("Read: " + w.size() + "\n" + hexString);
+        if(log.isDebugEnabled()) {
+            log.debug("Read: " + w.size() + "\n" + hexString);
+        }
         return hexString;
     }
 
