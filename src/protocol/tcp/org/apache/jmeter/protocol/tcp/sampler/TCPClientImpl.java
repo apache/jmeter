@@ -29,9 +29,7 @@ package org.apache.jmeter.protocol.tcp.sampler;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InterruptedIOException;
 import java.io.OutputStream;
-import java.net.SocketTimeoutException;
 
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -61,29 +59,22 @@ public class TCPClientImpl extends AbstractTCPClient {
     /**
      * {@inheritDoc}
      */
-    public void write(OutputStream os, String s) {
-        try {
-            os.write(s.getBytes()); // TODO - charset?
-            os.flush();
-        } catch (IOException e) {
-            log.warn("Write error", e);
+    public void write(OutputStream os, String s)  throws IOException{
+        os.write(s.getBytes()); // TODO - charset?
+        os.flush();
+        if(log.isDebugEnabled()) {
+            log.debug("Wrote: " + s);
         }
-        log.debug("Wrote: " + s);
-        return;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void write(OutputStream os, InputStream is) {
+    public void write(OutputStream os, InputStream is) throws IOException{
         byte buff[]=new byte[512];
-        try {
-            while(is.read(buff) > 0){
-                os.write(buff);
-                os.flush();
-            }
-        } catch (IOException e) {
-            log.warn("Write error", e);
+        while(is.read(buff) > 0){
+            os.write(buff);
+            os.flush();
         }
     }
 
@@ -92,28 +83,21 @@ public class TCPClientImpl extends AbstractTCPClient {
      * If there is no EOL byte defined, then reads until
      * the end of the stream is reached.
      */
-    public String read(InputStream is) {
+    public String read(InputStream is) throws IOException{
         byte[] buffer = new byte[4096];
         ByteArrayOutputStream w = new ByteArrayOutputStream();
         int x = 0;
-        try {
-            while ((x = is.read(buffer)) > -1) {
-                w.write(buffer, 0, x);
-                if (useEolByte && (buffer[x - 1] == eolByte)) {
-                    break;
-                }
+        while ((x = is.read(buffer)) > -1) {
+            w.write(buffer, 0, x);
+            if (useEolByte && (buffer[x - 1] == eolByte)) {
+                break;
             }
-        } catch (SocketTimeoutException e) {
-            // drop out to handle buffer
-        } catch (InterruptedIOException e) {
-            // drop out to handle buffer
-        } catch (IOException e) {
-            log.warn("Read error:" + e);
-            return "";
         }
 
         // do we need to close byte array (or flush it?)
-        log.debug("Read: " + w.size() + "\n" + w.toString());
+        if(log.isDebugEnabled()) {
+            log.debug("Read: " + w.size() + "\n" + w.toString());
+        }
         return w.toString();
     }
 }
