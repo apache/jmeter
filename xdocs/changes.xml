@@ -186,6 +186,7 @@ Mirror server now uses default port 8081, was 8080 before 2.5.1.
 <li>Bug 52040 - Add a toolbar in JMeter main window</li>
 <li>Bug 51816 - Comment Field in User Defined Variables control.</li>
 <li>Bug 52052 - Using a delimiter to separate result-messages for JMS Subscriber</li>
+<li>Bug 52103 - Add automatic scrolling option to table visualizer</li>
 </ul>
 
 <h2>Non-functional changes</h2>
