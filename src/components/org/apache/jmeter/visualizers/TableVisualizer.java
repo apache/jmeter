@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -93,6 +94,8 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
     private JTextField noSamplesField = null;
 
     private JScrollPane tableScrollPanel = null;
+
+    private JCheckBox autoscroll = null;
 
     private transient Calculator calc = new Calculator();
 
@@ -162,6 +165,9 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
             model.addRow(newS);
         }
         updateTextFields();
+        if (autoscroll.isSelected()) {
+            table.scrollRectToVisible(table.getCellRect(table.getRowCount() - 1, 0, true));
+        }
     }
 
     public synchronized void clearData() {
@@ -201,6 +207,8 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
         tableScrollPanel = new JScrollPane(table);
         tableScrollPanel.setViewportBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+
+        autoscroll = new JCheckBox(JMeterUtils.getResString("view_results_autoscroll")); //$NON-NLS-1$
 
         // Set up footer of table which displays numerics of the graphs
         JPanel dataPanel = new JPanel();
@@ -256,12 +264,17 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
         tableInfoPanel.add(averagePanel);
         tableInfoPanel.add(deviationPanel);
 
+        JPanel tableControlsPanel = new JPanel(new BorderLayout());
+        tableControlsPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        tableControlsPanel.add(autoscroll, BorderLayout.WEST);
+        tableControlsPanel.add(tableInfoPanel, BorderLayout.CENTER);
+
         // Set up the table with footer
         JPanel tablePanel = new JPanel();
 
         tablePanel.setLayout(new BorderLayout());
         tablePanel.add(tableScrollPanel, BorderLayout.CENTER);
-        tablePanel.add(tableInfoPanel, BorderLayout.SOUTH);
+        tablePanel.add(tableControlsPanel, BorderLayout.SOUTH);
 
         // Add the main panel and the graph
         this.add(mainPanel, BorderLayout.NORTH);
