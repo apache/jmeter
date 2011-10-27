@@ -30,9 +30,7 @@ package org.apache.jmeter.protocol.tcp.sampler;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InterruptedIOException;
 import java.io.OutputStream;
-import java.net.SocketTimeoutException;
 
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -57,50 +55,41 @@ public class LengthPrefixedBinaryTCPClientImpl extends TCPClientDecorator {
     /**
      * {@inheritDoc}
      */
-    public void write(OutputStream os, String s) {
-        try {
-            os.write(intToByteArray(s.length()/2,lengthPrefixLen));
+    public void write(OutputStream os, String s)  throws IOException{
+        os.write(intToByteArray(s.length()/2,lengthPrefixLen));
+        if(log.isDebugEnabled()) {
             log.debug("Wrote: " + s.length()/2 + " bytes");
-            this.tcpClient.write(os, s);
-        } catch (IOException e) {
-            log.warn("Write error", e);
         }
-        return;
+        this.tcpClient.write(os, s);        
     }
 
     /**
      * {@inheritDoc}
      */
-    public void write(OutputStream os, InputStream is) {
+    public void write(OutputStream os, InputStream is) throws IOException {
         this.tcpClient.write(os, is);
     }
 
     /**
      * {@inheritDoc}
      */
-    public String read(InputStream is) {
+    public String read(InputStream is) throws IOException{
         byte[] msg = new byte[0];
         int msgLen = 0;
-        try {
-            byte[] lengthBuffer = new byte[lengthPrefixLen];
-            if (is.read(lengthBuffer, 0, lengthPrefixLen) == lengthPrefixLen) {
-                msgLen = byteArrayToInt(lengthBuffer);
-                msg = new byte[msgLen];
-                int bytes = JOrphanUtils.read(is, msg, 0, msgLen);
-                if (bytes < msgLen) {
-                    log.warn("Incomplete message read, expected: "+msgLen+" got: "+bytes);
-                }
+        byte[] lengthBuffer = new byte[lengthPrefixLen];
+        if (is.read(lengthBuffer, 0, lengthPrefixLen) == lengthPrefixLen) {
+            msgLen = byteArrayToInt(lengthBuffer);
+            msg = new byte[msgLen];
+            int bytes = JOrphanUtils.read(is, msg, 0, msgLen);
+            if (bytes < msgLen) {
+                log.warn("Incomplete message read, expected: "+msgLen+" got: "+bytes);
             }
-        } catch (SocketTimeoutException e) {
-            // drop out to handle buffer
-        } catch (InterruptedIOException e) {
-            // drop out to handle buffer
-        } catch (IOException e) {
-            log.warn("Read error:" + e);
         }
 
         String buffer = JOrphanUtils.baToHexString(msg);
-        log.debug("Read: " + msgLen + "\n" + buffer);
+        if(log.isDebugEnabled()) {
+            log.debug("Read: " + msgLen + "\n" + buffer);
+        }
         return buffer;
     }
 
