@@ -96,9 +96,9 @@ public class Save implements Command {
 
         String updateFile = GuiPackage.getInstance().getTestPlanFile();
         if (!ActionNames.SAVE.equals(e.getActionCommand()) || updateFile == null) {
-            JFileChooser chooser = FileDialoger.promptToSaveFile(GuiPackage.getInstance().getTreeListener()
+            JFileChooser chooser = FileDialoger.promptToSaveFile(updateFile == null ? GuiPackage.getInstance().getTreeListener()
                     .getCurrentNode().getName()
-                    + JMX_FILE_EXTENSION);
+                    + JMX_FILE_EXTENSION : updateFile);
             if (chooser == null) {
                 return;
             }
