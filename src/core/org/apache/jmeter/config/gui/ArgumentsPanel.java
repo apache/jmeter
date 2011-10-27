@@ -334,10 +334,16 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     private void moveDown() {
         cancelEditing();
 
-        int rowSelected = table.getSelectedRow();
-        if (rowSelected >=0 && rowSelected < table.getRowCount()-1) {
-            tableModel.moveRow(rowSelected, rowSelected+1, rowSelected+1);
-            table.setRowSelectionInterval(rowSelected+1, rowSelected+1);
+        int[] rowsSelected = table.getSelectedRows();
+        if (rowsSelected.length > 0 && rowsSelected[rowsSelected.length - 1] < table.getRowCount() - 1) {
+            table.clearSelection();
+            for (int i = rowsSelected.length - 1; i >= 0; i--) {
+                int rowSelected = rowsSelected[i];
+                tableModel.moveRow(rowSelected, rowSelected + 1, rowSelected + 1);
+            }
+            for (int rowSelected : rowsSelected) {
+                table.addRowSelectionInterval(rowSelected + 1, rowSelected + 1);
+            }
         }
     }
 
@@ -347,11 +353,16 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     private void moveUp() {
         cancelEditing();
 
-        int rowSelected = table.getSelectedRow();
-        if (rowSelected > 0) {
-            tableModel.moveRow(rowSelected, rowSelected+1, rowSelected-1);
-            table.setRowSelectionInterval(rowSelected-1, rowSelected-1);
-        } 
+        int[] rowsSelected = table.getSelectedRows();
+        if (rowsSelected.length > 0 && rowsSelected[0] > 0) {
+            table.clearSelection();
+            for (int rowSelected : rowsSelected) {
+                tableModel.moveRow(rowSelected, rowSelected + 1, rowSelected - 1);
+            }
+            for (int rowSelected : rowsSelected) {
+                table.addRowSelectionInterval(rowSelected - 1, rowSelected - 1);
+            }
+        }
     }
 
     /**
@@ -360,31 +371,30 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     protected void deleteArgument() {
         cancelEditing();
 
-        int rowSelected = table.getSelectedRow();
-        if (rowSelected >= 0) {
-            tableModel.removeRow(rowSelected);
-            tableModel.fireTableDataChanged();
+        int[] rowsSelected = table.getSelectedRows();
+        int anchorSelection = table.getSelectionModel().getAnchorSelectionIndex();
+        table.clearSelection();
+        if (rowsSelected.length > 0) {
+            for (int i = rowsSelected.length - 1; i >= 0; i--) {
+                tableModel.removeRow(rowsSelected[i]);
+            }
 
             // Disable DELETE if there are no rows in the table to delete.
             if (tableModel.getRowCount() == 0) {
                 delete.setEnabled(false);
             }
+            // Table still contains one or more rows, so highlight (select)
+            // the appropriate one.
+            else if (tableModel.getRowCount() > 0) {
+                if (anchorSelection >= tableModel.getRowCount()) {
+                    anchorSelection = tableModel.getRowCount() - 1;
+                }
+                table.setRowSelectionInterval(anchorSelection, anchorSelection);
+            }
             
             if(enableUpDown && tableModel.getRowCount()>1) {
                 up.setEnabled(true);
                 down.setEnabled(true);
-            }
-
-            // Table still contains one or more rows, so highlight (select)
-            // the appropriate one.
-            else {
-                int rowToSelect = rowSelected;
-
-                if (rowSelected >= tableModel.getRowCount()) {
-                    rowToSelect = rowSelected - 1;
-                }
-
-                table.setRowSelectionInterval(rowToSelect, rowToSelect);
             }
         }
     }
@@ -456,7 +466,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
                 new Functor("setName"), // $NON-NLS-1$
                 new Functor("setValue") }, // $NON-NLS-1$
                 new Class[] { String.class, String.class });
-    	}
+    }
     }
 
     public static boolean testFunctors(){
@@ -483,7 +493,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         initializeTableModel();
         table = new JTable(tableModel);
         table.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         if (this.background != null) {
             table.setBackground(this.background);
         }
