@@ -29,8 +29,11 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.jmeter.testbeans.BeanInfoSupport;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 public class DataSourceElementBeanInfo extends BeanInfoSupport {
+    private static final Logger log = LoggingManager.getLoggerForClass();
     private static Map<String,Integer> TRANSACTION_ISOLATION_MAP = new HashMap<String, Integer>(5);
     static {
         // Will use default isolation
@@ -73,7 +76,6 @@ public class DataSourceElementBeanInfo extends BeanInfoSupport {
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "DEFAULT");
         p.setValue(NOT_EXPRESSION, true);
-        p.setValue(NOT_OTHER, true);
         Set<String> modesSet = TRANSACTION_ISOLATION_MAP.keySet();
         String[] modes = modesSet.toArray(new String[modesSet.size()]);
         p.setValue(TAGS, modes);
@@ -106,7 +108,14 @@ public class DataSourceElementBeanInfo extends BeanInfoSupport {
      */
     public static int getTransactionIsolationMode(String tag) {
         if (!StringUtils.isEmpty(tag)) {
-            return TRANSACTION_ISOLATION_MAP.get(tag);
+            Integer isolationMode = TRANSACTION_ISOLATION_MAP.get(tag);
+            if (isolationMode == null) {
+                try {
+                    return Integer.parseInt(tag);
+                } catch (NumberFormatException e) {
+                    log.warn("Illegal transaction isolation configuration '" + tag + "'");
+                }
+            }
         }
         return -1;
     }
