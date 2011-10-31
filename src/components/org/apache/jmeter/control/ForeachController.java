@@ -182,4 +182,13 @@ public class ForeachController extends GenericController implements Serializable
         incrementLoopCount();
         recoverRunningVersion();
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void triggerEndOfLoop() {
+        super.triggerEndOfLoop();
+        resetLoopCount();
+    }
 }

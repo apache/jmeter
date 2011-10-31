@@ -129,7 +129,16 @@ public class LoopController extends GenericController implements Serializable {
         }
         return next();
     }
-
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void triggerEndOfLoop() {
+        super.triggerEndOfLoop();
+        resetLoopCount();
+    }
+    
     protected void incrementLoopCount() {
         loopCount++;
     }
@@ -155,5 +164,12 @@ public class LoopController extends GenericController implements Serializable {
         resetCurrent();
         incrementLoopCount();
         recoverRunningVersion();
+    }
+    
+    /**
+     * Start next iteration
+     */
+    public void startNextLoop() {
+        reInitialize();
     }
 }

@@ -81,6 +81,15 @@ public class WhileController extends GenericController implements Serializable {
         }
         return next();
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void triggerEndOfLoop() {
+        super.triggerEndOfLoop();
+        endOfLoop(true);
+    }
 
     /**
      * This skips controller entirely if the condition is false on first entry.

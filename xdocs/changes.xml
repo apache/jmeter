@@ -110,6 +110,9 @@ these occurs, Sampler is marked as failed.
 
 <h3>Controllers</h3>
 <ul>
+<li>Bug 51865 - Infinite loop inside thread group does not work properly if "Start next loop after a Sample error" option set</li>
+<li>Bug 51868 - A lot of exceptions in jmeter.log while using option "Start next loop" for thread</li>
+<li>Bug 51866 - Counter under loop doesn't work properly if "Start next loop on error" option set for thread group</li>
 </ul>
 
 <h3>Listeners</h3>

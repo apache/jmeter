@@ -127,6 +127,20 @@ public abstract class AbstractThreadGroup extends AbstractTestElement implements
     }
 
     /**
+     * Start next iteration after an error
+     */
+    public void startNextLoop() {
+       ((LoopController) getSamplerController()).startNextLoop();
+    }
+    
+    /**
+     * NOOP
+     */
+    public void triggerEndOfLoop() {
+        // NOOP
+    }
+    
+    /**
      * Set the total number of threads to start
      *
      * @param numThreads
