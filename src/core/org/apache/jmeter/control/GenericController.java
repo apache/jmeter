@@ -222,6 +222,13 @@ public class GenericController extends AbstractTestElement implements Controller
         reInitialize();
         return null;
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void triggerEndOfLoop() {
+        reInitialize();
+    }
 
     /**
      * Called to re-initialize a index of controller's elements (Bug 50032)
