@@ -62,4 +62,9 @@ public interface Controller extends TestElement {
      * @param iterationListener {@link LoopIterationListener}
      */
     public void removeIterationListener(LoopIterationListener iterationListener);
+
+    /**
+     * Trigger end of loop condition on controller (used by Start Next Loop feature)
+     */
+    public void triggerEndOfLoop();
 }
