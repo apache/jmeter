@@ -21,7 +21,6 @@ package org.apache.jmeter.functions;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-
 import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -96,8 +95,6 @@ public class StringFromFile extends AbstractFunction implements TestListener {
 
     private BufferedReader myBread = null; // Buffered reader
 
-    private FileReader fis; // keep this round to close it
-
     private boolean firstTime = false; // should we try to open the
                                                     // file?
 
@@ -128,7 +125,6 @@ public class StringFromFile extends AbstractFunction implements TestListener {
         log.info(tn + " closing file " + fileName);//$NON-NLS-1$
         try {
             myBread.close();
-            fis.close();
         } catch (IOException e) {
             log.error("closeFile() error: " + e.toString());//$NON-NLS-1$
         }
@@ -203,8 +199,7 @@ public class StringFromFile extends AbstractFunction implements TestListener {
 
         log.info(tn + " opening file " + fileName);//$NON-NLS-1$
         try {
-            fis = new FileReader(fileName);
-            myBread = new BufferedReader(fis);
+            myBread = new BufferedReader(new FileReader(fileName));
         } catch (Exception e) {
             log.error("openFile() error: " + e.toString());//$NON-NLS-1$
             myBread = null;
