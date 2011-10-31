@@ -24,10 +24,11 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
@@ -205,9 +206,9 @@ public class RequestViewHTTP implements RequestView {
             }
             // Parsed request headers
             LinkedHashMap<String, String> lhm = JMeterUtils.parseHeaders(sampleResult.getRequestHeaders());
-            Set<String> keySet = lhm.keySet();
-            for (String key : keySet) {
-                headersModel.addRow(new RowResult(key, lhm.get(key)));
+            for (Iterator<Map.Entry<String, String>> iterator = lhm.entrySet().iterator(); iterator.hasNext();) {
+                Map.Entry<String, String> entry = iterator.next();
+                headersModel.addRow(new RowResult(entry.getKey(), entry.getValue()));   
             }
 
         } else {
