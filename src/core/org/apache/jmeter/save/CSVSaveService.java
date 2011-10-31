@@ -103,8 +103,6 @@ public final class CSVSaveService {
     // Date format to try if the time format does not parse as milliseconds
     // (this is the suggested value in jmeter.properties)
     private static final String DEFAULT_DATE_FORMAT_STRING = "MM/dd/yy HH:mm:ss"; // $NON-NLS-1$
-    private static final DateFormat DEFAULT_DATE_FORMAT = new SimpleDateFormat(
-            DEFAULT_DATE_FORMAT_STRING);
 
     private static final String LINE_SEP = System.getProperty("line.separator"); // $NON-NLS-1$
 
@@ -198,7 +196,8 @@ public final class CSVSaveService {
         String text = null;
         String field = null; // Save the name for error reporting
         int i = 0;
-
+        final DateFormat DEFAULT_DATE_FORMAT = new SimpleDateFormat(
+                DEFAULT_DATE_FORMAT_STRING);
         try {
             if (saveConfig.saveTimestamp()) {
                 field = TIME_STAMP;
