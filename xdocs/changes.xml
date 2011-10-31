@@ -136,6 +136,7 @@ these occurs, Sampler is marked as failed.
 <li>Bug 27112 - User Parameters should use scrollbars</li>
 <li>Bug 52029 - Command-line shutdown only gets sent to last engine that was started</li>
 <li>Bug 52093 - Toolbar ToolTips don't switch language</li>
+<li>Bug 51733 - SyncTimer is messed up if you a interrupt a test plan</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
