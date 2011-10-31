@@ -285,12 +285,23 @@ public class JMeterThread implements Runnable, Interruptible {
                             process_sampler(sam, null, threadContext);
                             sam = controller.next();
                         } else {
-                            // Last not ok. start get the begining of the tree
-                            sam = controller.next(); // need perfom a until loop for special case (tc as parent)
-                            while (sam != null && !sam.equals(firstSampler)) { // while the thread is NOT on the begining of the tree
-                                sam = controller.next();
+                            // Find parent controllers of current sampler
+                            FindTestElementsUpToRootTraverser pathToRootTraverser = new FindTestElementsUpToRootTraverser(sam);
+                            testTree.traverse(pathToRootTraverser);
+                            List<Controller> controllersToReinit = pathToRootTraverser.getControllersToRoot();
+
+                            // Trigger end of loop condition on all parent controllers of current sampler
+                            for (Iterator<Controller> iterator = controllersToReinit
+                                    .iterator(); iterator.hasNext();) {
+                                Controller parentController =  iterator.next();
+                                if(parentController instanceof ThreadGroup) {
+                                    ThreadGroup tg = (ThreadGroup) parentController;
+                                    tg.startNextLoop();
+                                } else {
+                                    parentController.triggerEndOfLoop();
+                                }
                             }
-                            // At this point: begining tree, thus Last must Ok
+                            sam = null;
                             threadContext.getVariables().put(LAST_SAMPLE_OK, TRUE);
                         }
                     } else {

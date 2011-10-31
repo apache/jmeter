@@ -181,6 +181,15 @@ public class IfController extends GenericController implements Serializable {
             return null;
         }
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void triggerEndOfLoop() {
+        reInitializeSubController();
+        super.triggerEndOfLoop();
+    }
 
     public boolean isEvaluateAll() {
         return getPropertyAsBoolean(EVALUATE_ALL,false);

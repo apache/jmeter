@@ -122,4 +122,13 @@ public class RunTime extends GenericController implements Serializable {
         incrementLoopCount();
         recoverRunningVersion();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void triggerEndOfLoop() {
+        super.triggerEndOfLoop();
+        resetLoopCount();
+    }
 }
