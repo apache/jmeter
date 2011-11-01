@@ -27,6 +27,7 @@ import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.samplers.Interruptible;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
@@ -163,6 +164,11 @@ public class SoapSampler extends HTTPSampler2 implements Interruptible { // Impl
         StringBuilder postedBody = new StringBuilder(1000);
         final String xmlFile = getXmlFile();
         if (xmlFile != null && xmlFile.length() > 0) {
+            File xmlFileAsFile = new File(xmlFile);
+            if(!(xmlFileAsFile.exists() && xmlFileAsFile.canRead())) {
+                throw new IllegalArgumentException(JMeterUtils.getResString("soap_sampler_file_invalid") // $NON-NLS-1$
+                        + xmlFileAsFile.getAbsolutePath());
+            }
             // We just add placeholder text for file content
             postedBody.append("Filename: ").append(xmlFile).append("\n");
             postedBody.append("<actual file content, not shown here>");
