@@ -47,16 +47,13 @@ public class DefaultKeyStore extends JmeterKeyStore {
     private static final String KEY_STORE_START_INDEX = "https.keyStoreStartIndex"; // $NON-NLS-1$
     private static final String KEY_STORE_END_INDEX   = "https.keyStoreEndIndex"; // $NON-NLS-1$
 
-    private static final int startIndex;
-    private static final int endIndex;
-
-    static {
-        startIndex = JMeterUtils.getPropDefault(KEY_STORE_START_INDEX, 0);
-        endIndex = JMeterUtils.getPropDefault(KEY_STORE_END_INDEX, 0);
-    }
+    private int startIndex;
+    private int endIndex;
 
     public DefaultKeyStore(String type) throws Exception {
         this.store = KeyStore.getInstance(type);
+        startIndex = JMeterUtils.getPropDefault(KEY_STORE_START_INDEX, 0);
+        endIndex = JMeterUtils.getPropDefault(KEY_STORE_END_INDEX, 0);
     }
 
     /** {@inheritDoc} */
@@ -177,6 +174,34 @@ public class DefaultKeyStore extends JmeterKeyStore {
             }
             return last_user;
         }
+    }
+
+    /**
+     * @return the startIndex
+     */
+    public int getAliasStartIndex() {
+        return startIndex;
+    }
+
+    /**
+     * @param startIndex the startIndex to set
+     */
+    public void setAliasStartIndex(int startIndex) {
+        this.startIndex = startIndex;
+    }
+
+    /**
+     * @return the endIndex
+     */
+    public int getAliasEndIndex() {
+        return endIndex;
+    }
+
+    /**
+     * @param endIndex the endIndex to set
+     */
+    public void setAliasEndIndex(int endIndex) {
+        this.endIndex = endIndex;
     }
 
 }

@@ -57,4 +57,24 @@ public abstract class JmeterKeyStore {
         // JAVA 1.4 now handles all keystore types, so just use default
         return new DefaultKeyStore(type);
     }
+    
+    /**
+     * @param startIndex the startIndex to set
+     */
+    public abstract void setAliasStartIndex(int startIndex);
+
+    /**
+     * @return the endIndex
+     */
+    public abstract int getAliasEndIndex();
+
+    /**
+     * @param endIndex the endIndex to set
+     */
+    public abstract void setAliasEndIndex(int endIndex);
+    
+    /**
+     * @return int index of start alias in keystore
+     */
+    public abstract int getAliasStartIndex();
 }
