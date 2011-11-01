@@ -74,6 +74,10 @@ public abstract class SSLManager {
     /** Have the password available */
     protected String defaultpw = System.getProperty(KEY_STORE_PASSWORD);
 
+    private int keystoreAliasStartIndex;
+
+    private int keystoreAliasEndIndex;
+
     /**
      * Resets the SSLManager so that we can create a new one with a new keystore
      */
@@ -91,7 +95,7 @@ public abstract class SSLManager {
             Security.addProvider(provider);
         }
     }
-
+    
     /**
      * Opens and initializes the KeyStore. If the password for the KeyStore is
      * not set, this method will prompt you to enter it. Unfortunately, there is
@@ -118,7 +122,8 @@ public abstract class SSLManager {
                 this.keyStore = null;
                 throw new RuntimeException("Could not create keystore: "+e.getMessage());
             }
-
+            this.keyStore.setAliasStartIndex(keystoreAliasStartIndex);
+            this.keyStore.setAliasEndIndex(keystoreAliasEndIndex);
             FileInputStream fileInputStream = null;
             try {
                 File initStore = new File(fileName);
@@ -135,7 +140,7 @@ public abstract class SSLManager {
                     this.keyStore.load(null, "");
                 }
             } catch (Exception e) {
-                log.error("Problem loading keystore: " +e.getMessage());
+                log.error("Problem loading keystore: " +e.getMessage(), e);
             } finally {
                 JOrphanUtils.closeQuietly(fileInputStream);
             }
@@ -271,5 +276,26 @@ public abstract class SSLManager {
      */
     public static final boolean isSSLSupported() {
         return SSLManager.isSSLSupported;
+    }
+
+    /**
+     * Configure Keystore
+     * @param preload 
+     * @param startIndex 
+     * @param endIndex 
+     */
+    public void configureKeystore(boolean preload, int startIndex, int endIndex) {
+        this.keystoreAliasStartIndex = startIndex;
+        this.keystoreAliasEndIndex = endIndex;
+        if(preload) {
+            keyStore = getKeyStore();
+        }
+    }
+
+    /**
+     * Destroy Keystore
+     */
+    public void destroyKeystore() {
+        keyStore=null;
     }
 }
