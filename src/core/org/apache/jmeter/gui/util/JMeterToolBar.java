@@ -19,9 +19,12 @@
 
 package org.apache.jmeter.gui.util;
 
+import java.awt.Component;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.swing.ImageIcon;
@@ -29,6 +32,7 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JToolBar;
 
+import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.LocaleChangeEvent;
@@ -64,7 +68,7 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
      * Create the default JMeter toolbar
      * @return the JMeter toolbar
      */
-    public static JToolBar createToolbar(boolean visible) {
+    public static JMeterToolBar createToolbar(boolean visible) {
         JMeterToolBar toolBar = new JMeterToolBar();
         toolBar.setFloatable(false);
         toolBar.setVisible(visible);
@@ -89,6 +93,7 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
                     toolBar.add(makeButtonItemRes(iconToolbarBean));
                 }
             }
+            toolBar.setTestStarted(false);
         }
     }
     
@@ -172,5 +177,29 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
     public void localeChanged(LocaleChangeEvent event) {
         this.removeAll();
         setupToolbarContent(this);
+    }
+
+    /**
+     * Change state of buttons
+     * @param started
+     */
+    public void setTestStarted(boolean started) {
+        Map<String, Boolean> buttonStates = new HashMap<String, Boolean>();
+        buttonStates.put(ActionNames.ACTION_START,Boolean.valueOf(!started));
+        buttonStates.put(ActionNames.ACTION_STOP,Boolean.valueOf(started));
+        buttonStates.put(ActionNames.ACTION_SHUTDOWN,Boolean.valueOf(started));
+        buttonStates.put(ActionNames.REMOTE_START_ALL,Boolean.valueOf(!started));
+        buttonStates.put(ActionNames.REMOTE_STOP_ALL,Boolean.valueOf(started));
+        buttonStates.put(ActionNames.REMOTE_SHUT_ALL,Boolean.valueOf(started));
+        Component[] components = getComponents();
+        for (int i = 0; i < components.length; i++) {
+            if(components[i]instanceof JButton) {
+                JButton button = (JButton) components[i];
+                Boolean enabled = buttonStates.get(button.getActionCommand());
+                if(enabled != null) {
+                    button.setEnabled(enabled.booleanValue());
+                }
+            }
+        }
     }
 }

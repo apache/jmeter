@@ -45,7 +45,6 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.MenuElement;
 import javax.swing.SwingUtilities;
@@ -125,6 +124,8 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 
     private JLabel totalThreads;
     private JLabel activeThreads;
+
+    private JMeterToolBar toolbar;
 
     /**
      * Create a new JMeter frame.
@@ -331,6 +332,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
     public void testStarted() {
         testStarted(LOCAL);
         menuBar.setEnabled(true);
+        toolbar.setTestStarted(true);
     }
 
     /**
@@ -357,6 +359,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
     public void testEnded() {
         testEnded(LOCAL);
         menuBar.setEnabled(false);
+        toolbar.setTestStarted(false);
     }
 
     /**
@@ -389,7 +392,6 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
     private void init() {
         menuBar = new JMeterMenuBar();
         setJMenuBar(menuBar);
-
         JPanel all = new JPanel(new BorderLayout());
         all.add(createToolBar(), BorderLayout.NORTH);
 
@@ -435,7 +437,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
     private Component createToolBar() {
         Box toolPanel = new Box(BoxLayout.X_AXIS);
         // add the toolbar
-        JToolBar toolbar = JMeterToolBar.createToolbar(DISPLAY_TOOLBAR);
+        this.toolbar = JMeterToolBar.createToolbar(DISPLAY_TOOLBAR);
         GuiPackage guiInstance = GuiPackage.getInstance();
         guiInstance.setMainToolbar(toolbar);
         guiInstance.getMenuItemToolbar().getModel().setSelected(DISPLAY_TOOLBAR);
