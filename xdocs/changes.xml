@@ -200,6 +200,7 @@ these occurs, Sampler is marked as failed.
 <li>Bug 52097 - Save As should point to same folder that was used to open a file if MRU list is used</li>
 <li>Bug 52085 - Allow multiple selection in arguments panel</li>
 <li>Bug 52099 - Allow to set the transaction isolation in the JDBC Connection Configuration</li>
+<li>Bug 52116 - Allow to add (paste) entries from the clipboard to an arguments list</li>
 </ul>
 
 <h2>Non-functional changes</h2>
