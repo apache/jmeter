@@ -3331,7 +3331,21 @@ OR<br/>jdbc:oracle:thin:@(description=(address=(host={mc-name})(protocol=tcp)(po
 </component>
 
 
-<component name="Login Config Element" index="&sect-num;.4.9"  width="352" height="112" screenshot="login-config.png">
+<component name="Keystore Config Element" index="&sect-num;.4.9"  width="352" height="112" screenshot="keystore_config.png">
+<description><p>The Keystore Config Element lets you configure how Keystore will be loaded and which keys it will use.
+This component is typically used in HTTPs scenarios where you don't want to take into account keystore initialization into account in response time.</p>
+</description>
+
+<properties>
+  <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
+  <property name="Preload" required="Yes">Wether or not to preload Keystore.</property>
+  <property name="Alias Start Index" required="Yes">The index of the first key to use in Keystore.</property>
+  <property name="Alias End Index" required="Yes">The index of the last key to use in Keystore.</property>
+</properties>
+
+</component>
+
+<component name="Login Config Element" index="&sect-num;.4.10"  width="352" height="112" screenshot="login-config.png">
 <description><p>The Login Config Element lets you add or override username and password settings in samplers that use username and password as part of their setup.</p>
 </description>
 
@@ -3343,21 +3357,19 @@ OR<br/>jdbc:oracle:thin:@(description=(address=(host={mc-name})(protocol=tcp)(po
 
 </component>
 
-
-
-<component name="LDAP Request Defaults" index="&sect-num;.4.10"  width="465" height="375" screenshot="ldap_defaults.png">
+<component name="LDAP Request Defaults" index="&sect-num;.4.11"  width="465" height="375" screenshot="ldap_defaults.png">
 <description><p>The LDAP Request Defaults component lets you set default values for LDAP testing.  See the <complink name="LDAP Request"/>.</p>
 </description>
 
 </component>
 
-<component name="LDAP Extended Request Defaults" index="&sect-num;.4.11"  width="597" height="545" screenshot="ldapext_defaults.png">
+<component name="LDAP Extended Request Defaults" index="&sect-num;.4.12"  width="597" height="545" screenshot="ldapext_defaults.png">
 <description><p>The LDAP Extended Request Defaults component lets you set default values for extended LDAP testing.  See the <complink name="LDAP Extended Request"/>.</p>
 </description>
 
 </component>
 
-<component name="TCP Sampler Config" index="&sect-num;.4.12"  width="747" height="251" screenshot="tcpsamplerconfig.png">
+<component name="TCP Sampler Config" index="&sect-num;.4.13"  width="747" height="251" screenshot="tcpsamplerconfig.png">
 <description>
         <p>
 	The TCP Sampler Config provides default data for the TCP Sampler
@@ -3376,7 +3388,7 @@ OR<br/>jdbc:oracle:thin:@(description=(address=(host={mc-name})(protocol=tcp)(po
 </properties>
 </component>
 
-<component name="User Defined Variables" index="&sect-num;.4.13"  width="690" height="394" screenshot="user_defined_variables.png">
+<component name="User Defined Variables" index="&sect-num;.4.14"  width="690" height="394" screenshot="user_defined_variables.png">
 <description><p>The User Defined Variables element lets you define an <b>initial set of variables</b>, just as in the <complink name="Test Plan" />.
 <b>
 Note that all the UDV elements in a test plan - no matter where they are - are processed at the start.
@@ -3426,7 +3438,7 @@ You can reference variables defined in earlier UDVs or on the Test Plan.
 </properties>
 </component>
 
-<component name="Random Variable" index="&sect-num;.4.14"  width="411" height="306" screenshot="random_variable.png">
+<component name="Random Variable" index="&sect-num;.4.15"  width="411" height="306" screenshot="random_variable.png">
 <description>
 <p>
 The Random Variable Config Element is used to generate random numeric strings and store them in variable for use later.
@@ -3458,7 +3470,7 @@ however the minimum and maximum values can be any long values so long as the ran
 
 </component>
 
-<component name="Counter" index="&sect-num;.4.15"  width="399" height="244" screenshot="counter.png">
+<component name="Counter" index="&sect-num;.4.16"  width="399" height="244" screenshot="counter.png">
 <description><p>Allows the user to create a counter that can be referenced anywhere
 in the Thread Group.  The counter config lets the user configure a starting point, a maximum,
 and the increment.  The counter will loop from the start to the max, and then start over
@@ -3487,7 +3499,7 @@ with the start, continuing on like that until the test is ended.  </p>
 </properties>
 </component>
 
-<component name="Simple Config Element" index="&sect-num;.4.16"  width="393" height="245" screenshot="simple_config_element.png">
+<component name="Simple Config Element" index="&sect-num;.4.17"  width="393" height="245" screenshot="simple_config_element.png">
 <description><p>The Simple Config Element lets you add or override arbitrary values in samplers.  You can choose the name of the value
 and the value itself.  Although some adventurous users might find a use for this element, it's here primarily for developers as a basic
 GUI that they can use while developing new JMeter components.</p>
