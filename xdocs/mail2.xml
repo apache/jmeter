@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<document>
+
+  <properties>
+    <author email="dev.AT.jmeter.DOT.apache.DOT.org">Apache JMeter Project</author>
+    <title>Mailing Lists</title>
+  </properties>
+
+<body>
+
+<section name="Mailing Lists - Guidelines">
+<p>
+<strong>Before subscribing to any of the mailing lists, please make sure that you have
+read and understand the <a href="mail.html">guidelines</a></strong>.
+</p>
+
+<p>
+Please note that usage of these mailing lists is subject to the
+<a href="http://www.apache.org/foundation/public-archives.html">Public Forum Archive Policy</a>.
+</p>
+
+<p>
+For details of how to subscribe/unsubscribe please read
+<a href="http://www.apache.org/foundation/mailinglists.html#subscribing">Subscribing and Unsubscribing</a>
+</p>
+
+</section>
+
+<section name="Archives and Searching">
+<p>
+There are several sites that archive and provide searching for our mailing lists:
+</p>
+<p>
+<ul>
+<li><a href="http://mail-archives.apache.org/mod_mbox/">mail-archives.apache.org</a></li>
+<li><a href="http://jmeter.markmail.org/">Mark Mail</a> </li>
+<li><a href="http://www.mail-archive.com/">mail-archive.com</a> </li>
+<li><a href="http://marc.theaimsgroup.com/">marc.theaimsgroup.com</a></li>
+</ul>
+</p>
+</section>
+
+<section name="Development">
+<p>
+<b>The JMeter Development List</b><br/>
+<a href="mailto:dev-subscribe@jmeter.apache.org">Subscribe</a> 
+<a href="mailto:dev-unsubscribe@jmeter.apache.org">Unsubscribe</a> 
+<a href="mail.html">Guidelines</a>
+<a href="http://mail-archives.apache.org/mod_mbox/jmeter-dev/">Archive</a>
+</p>
+<p>
+<strong>Please do not send usage questions to this list, see user list below.</strong>
+</p>
+<p>
+This is the list where participating developers meet and discuss issues, code changes/additions etc.
+</p>
+</section>
+
+
+<section name="JMeter">
+<p>
+<b><i>Note: Load test and performance measurement application</i></b>
+</p>
+<p>
+<b>The JMeter User List</b><br/>
+<a href="mailto:user-subscribe@jmeter.apache.org">Subscribe</a> 
+<a href="mailto:user-unsubscribe@jmeter.apache.org">Unsubscribe</a> 
+<a href="mail.html">Guidelines</a>
+<a href="http://mail-archives.apache.org/mod_mbox/jmeter-user/">Archive</a>
+</p>
+<p>
+This is the list where users of JMeter meet and discuss
+issues. Developers are also expected to be lurking on this list to
+offer support to users of JMeter.
+</p>
+<p>
+<b>Old JMeter Developer List</b><br/>
+<a href="http://mail-archives.apache.org/mod_mbox/jakarta-jmeter-dev/">Archive</a><br/>
+Replaced by <a href="#Development">Jakarta-wide developer list</a>.
+</p>
+</section>
+
+<section name="Documentation">
+<p>
+<b>Old Jakarta Website Change Commit List</b><br />
+<a href="http://mail-archives.apache.org/mod_mbox/jakarta-site-cvs/">Archive</a><br/>
+Replaced by <a href="#Development">Jakarta-wide developer list</a>.
+</p>
+</section>
+
+</body>
+</document>
