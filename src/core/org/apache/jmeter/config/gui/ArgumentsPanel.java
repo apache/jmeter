@@ -22,15 +22,24 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -67,6 +76,9 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     /** A button for adding new arguments to the table. */
     private JButton add;
 
+    /** A button for adding new arguments to the table from the clipboard. */
+    private JButton addFromClipboard;
+
     /** A button for removing arguments from the table. */
     private JButton delete;
 
@@ -91,6 +103,9 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 
     /** Command for adding a row to the table. */
     private static final String ADD = "add"; // $NON-NLS-1$
+
+    /** Command for adding rows from the clipboard */
+    private static final String ADD_FROM_CLIPBOARD = "addFromClipboard"; // $NON-NLS-1$
 
     /** Command for removing a row from the table. */
     private static final String DELETE = "delete"; // $NON-NLS-1$
@@ -309,6 +324,8 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
             deleteArgument();
         } else if (action.equals(ADD)) {
             addArgument();
+        } else if (action.equals(ADD_FROM_CLIPBOARD)) {
+            addFromClipboard();
         } else if (action.equals(UP)) {
             moveUp();
         } else if (action.equals(DOWN)) {
@@ -421,6 +438,54 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     }
 
     /**
+     * Add values from the clipboard
+     */
+    protected void addFromClipboard() {
+        stopTableEditing();
+        int rowCount = table.getRowCount();
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        Transferable trans = clipboard.getContents(null);
+        DataFlavor[] flavourList = trans.getTransferDataFlavors();
+        Collection<DataFlavor> flavours = new ArrayList<DataFlavor>(flavourList.length);
+        if (Collections.addAll(flavours, flavourList) && flavours.contains(DataFlavor.stringFlavor)) {
+            try {
+                String clipboardContent = (String) trans.getTransferData(DataFlavor.stringFlavor);
+                String[] clipboardLines = clipboardContent.split("\n");
+                for (String clipboardLine : clipboardLines) {
+                    String[] clipboardCols = clipboardLine.split("\t");
+                    if (clipboardCols.length > 0) {
+                        Argument argument = makeNewArgument();
+                        argument.setName(clipboardCols[0]);
+                        if (clipboardCols.length > 1) {
+                            argument.setValue(clipboardCols[1]);
+                            if (clipboardCols.length > 2) {
+                                argument.setDescription(clipboardCols[2]);
+                            }
+                        }
+                        tableModel.addRow(argument);
+                    }
+                }
+            } catch (IOException ioe) {
+                JOptionPane.showMessageDialog(this,
+                        "Could not add read arguments from clipboard:\n" + ioe.getLocalizedMessage(), "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            } catch (UnsupportedFlavorException ufe) {
+                JOptionPane.showMessageDialog(this,
+                        "Could not add retrieve " + DataFlavor.stringFlavor.getHumanPresentableName()
+                                + " from clipboard" + ufe.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            if (table.getRowCount() > rowCount) {
+                // Enable DELETE (which may already be enabled, but it won't hurt)
+                delete.setEnabled(true);
+
+                // Highlight (select) the appropriate rows.
+                int rowToSelect = tableModel.getRowCount() - 1;
+                table.setRowSelectionInterval(rowCount, rowToSelect);
+            }
+        }
+    }
+
+    /**
      * Create a new Argument object.
      *
      * @return a new Argument object
@@ -524,6 +589,10 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         add.setActionCommand(ADD);
         add.setEnabled(true);
 
+        addFromClipboard = new JButton(JMeterUtils.getResString("add_from_clipboard")); // $NON-NLS-1$
+        addFromClipboard.setActionCommand(ADD_FROM_CLIPBOARD);
+        addFromClipboard.setEnabled(true);
+
         delete = new JButton(JMeterUtils.getResString("delete")); // $NON-NLS-1$
         delete.setActionCommand(DELETE);
 
@@ -542,8 +611,10 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
             buttonPanel.setBackground(this.background);
         }
         add.addActionListener(this);
+        addFromClipboard.addActionListener(this);
         delete.addActionListener(this);
         buttonPanel.add(add);
+        buttonPanel.add(addFromClipboard);
         buttonPanel.add(delete);
         if(enableUpDown) {
             up.addActionListener(this);
