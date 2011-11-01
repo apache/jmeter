@@ -86,7 +86,11 @@ public class DefaultKeyStore extends JmeterKeyStore {
                         }
                         v_names.add(alias);
                         v_keys.add(_key);
-                        v_certChains.add((X509Certificate[]) chain);
+                        X509Certificate[] x509certs = new X509Certificate[chain.length];
+                        for (int i = 0; i < x509certs.length; i++) {
+                            x509certs[i] = (X509Certificate)chain[i];
+                        }
+                        v_certChains.add(x509certs);
                     }
                 }
                 index++;
