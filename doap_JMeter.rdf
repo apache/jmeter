@@ -20,14 +20,14 @@
          xmlns="http://usefulinc.com/ns/doap#" 
          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
          xmlns:asfext="http://projects.apache.org/ns/asfext#">
-  <Project rdf:about="http://jakarta.apache.org/jmeter/">
+  <Project rdf:about="http://jmeter.apache.org/">
     <created>2006-02-17</created>
     <license rdf:resource="http://usefulinc.com/doap/licenses/asl20" />
-    <name>Apache Jakarta JMeter</name>
+    <name>Apache JMeter</name>
     <homepage rdf:resource="http://jakarta.apache.org/jmeter/index.html" />
-    <asfext:pmc rdf:resource="http://svn.apache.org/repos/asf/jakarta/site/jakarta.rdf" />
+    <asfext:pmc rdf:resource="http://jmeter.apache.org/" />
     <shortdesc>Pure Java application for load and functional testing</shortdesc>
-    <description>Apache Jakarta JMeter may be used to test performance both on static and dynamic resources (files, Servlets, Perl scripts, Java Objects, Data Bases and Queries, FTP Servers and more). It can be used to simulate a heavy load on a server, network or object to test its strength or to analyze overall performance under different load types. You can use it to make a graphical analysis of performance or to test your server/script/object behavior under heavy concurrent load. </description>
+    <description>Apache JMeter may be used to test performance both on static and dynamic resources (files, Servlets, Perl scripts, Java Objects, Data Bases and Queries, FTP Servers and more). It can be used to simulate a heavy load on a server, network or object to test its strength or to analyze overall performance under different load types. You can use it to make a graphical analysis of performance or to test your server/script/object behavior under heavy concurrent load. </description>
     <bug-database rdf:resource="http://issues.apache.org/bugzilla/" />
     <mailing-list rdf:resource="http://jakarta.apache.org/site/mail2.html#JMeter" />
     <download-page rdf:resource="http://jakarta.apache.org/site/downloads/downloads_jmeter.cgi" />
@@ -105,8 +105,8 @@
     </release>
     <repository>
       <SVNRepository>
-        <location rdf:resource="http://svn.apache.org/repos/asf/jakarta/jmeter/"/>
-        <browse rdf:resource="http://svn.apache.org/viewcvs.cgi/jakarta/jmeter/"/>
+        <location rdf:resource="http://svn.apache.org/repos/asf/jmeter/"/>
+        <browse rdf:resource="http://svn.apache.org/viewcvs.cgi/jmeter/"/>
       </SVNRepository>
     </repository>
   </Project>
