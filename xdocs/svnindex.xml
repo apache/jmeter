@@ -29,7 +29,7 @@ limitations under the License.
 <p>Most users of the source code probably don't need to have day to
 day access to the source code as it changes. For these users we
 provide easy to unpack source code downloads via our <a
-href="downloads/index.html">download pages</a>.  </p>
+href="download_jmeter.cgi">download page</a>.  </p>
 
 </section>
 
@@ -42,33 +42,30 @@ page</a>. </p>
 
 <p>Modules available for access are listed below.</p>
 
-<subsection name="Subversion">
+<subsection name="Subversion" anchor="subversion">
 
-<p>Subversion is an open-source version control system. The root url of the
+<p><a href="http://subversion.apache.org">Subversion</a> is an open-source version control system. The root url of the
 ASF Subversion repository is <a href="http://svn.apache.org/repos/asf/">http://svn.apache.org/repos/asf/</a> for non-committers and <a href="https://svn.apache.org/repos/asf/">https://svn.apache.org/repos/asf/</a> for committers. </p>
 
-<p><b>NOTE</b>: When checking out a subproject using subversion, ensure that you are checking out a tag, a branch or trunk (the main-line) and not all tags and branches to avoid filling up your hard-disk and wasting bandwidth. </p>
+<p><b>NOTE</b>: 
+When checking out a subproject using Subversion, ensure that you are checking out a tag, a branch or trunk (the main-line) and not all tags and branches to avoid filling up your hard-disk and wasting bandwidth. </p>
 
 <table>
  <tr>
-  <td><b>Subproject</b></td>
-  <td><b>http (read-only)</b></td>
-  <td><b>https (committers)</b></td>
-  <td><b>View-SVN</b></td>
+  <th>Project</th>
+  <th>http (read-only)</th>
+  <th>https (committers)</th>
+  <th>View-SVN</th>
  </tr>
  <tr>
-  <td>JMeter</td>
-  <td>[<a href="http://svn.apache.org/repos/asf/jmeter/trunk">svn-url</a>]</td>
-  <td>[<a href="https://svn.apache.org/repos/asf/jmeter/trunk">svn-url</a>]</td>
-  <td>[<a href="http://svn.apache.org/viewcvs.cgi/jmeter/">view-svn</a>]</td>
+  <td>Apache JMeter</td>
+  <td><a href="http://svn.apache.org/repos/asf/jmeter/trunk">http://svn.apache.org/repos/asf/jmeter/trunk</a></td>
+  <td><a href="https://svn.apache.org/repos/asf/jmeter/trunk">https://svn.apache.org/repos/asf/jmeter/trunk</a></td>
+  <td><a href="http://svn.apache.org/viewcvs.cgi/jmeter/">http://svn.apache.org/viewcvs.cgi/jmeter/</a></td>
  </tr>
 </table>
 
 </subsection>
-
-<p>If you are not a <em>Committer</em>, but you want to submit patches
-or even request commit privileges, please see our <a
-href="guidelines.html">Guidelines</a> for more information.</p>
 
 </section>
 
