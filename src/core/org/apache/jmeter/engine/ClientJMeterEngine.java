@@ -115,7 +115,6 @@ public class ClientJMeterEngine implements JMeterEngine {
             testTree.traverse(sampleListeners);
         }
 
-        String methodName="unknown";
         try {
             JMeterContextService.startTest();
             /*
@@ -126,30 +125,27 @@ public class ClientJMeterEngine implements JMeterEngine {
             File baseDirRelative = FileServer.getFileServer().getBaseDirRelative();
             synchronized(LOCK)
             {
-                methodName="rconfigure()";
                 remote.rconfigure(testTree, host, baseDirRelative);
             }
             log.info("sent test to " + host + " basedir='"+baseDirRelative+"'"); // $NON-NLS-1$
             if (savep != null){
                 log.info("Sending properties "+savep);
                 try {
-                    methodName="rsetProperties()";
                     remote.rsetProperties(savep);
                 } catch (RemoteException e) {
                     log.warn("Could not set properties: " + e.toString());
                 }
             }
-            methodName="rrunTest()";
             remote.rrunTest();
             log.info("sent run command to "+ host);
         } catch (IllegalStateException ex) {
-            log.error("Error in "+methodName+" method "+ex); // $NON-NLS-1$ $NON-NLS-2$
+            log.error("Error in run() method "+ex); // $NON-NLS-1$
             tidyRMI(log);
             throw ex; // Don't wrap this error - display it as is
         } catch (Exception ex) {
-            log.error("Error in "+methodName+" method "+ex); // $NON-NLS-1$ $NON-NLS-2$
+            log.error("Error in run() method "+ex); // $NON-NLS-1$
             tidyRMI(log);
-            throw new JMeterEngineException("Error in "+methodName+" method "+ex, ex); // $NON-NLS-1$ $NON-NLS-2$
+            throw new JMeterEngineException("Error in run() method "+ex, ex); // $NON-NLS-1$
         }
     }
 

@@ -158,11 +158,8 @@ public class CacheManager extends ConfigTestElement implements TestListener, Ser
             final String MAX_AGE = "max-age=";
             // TODO - check for other CacheControl attributes?
             if (cacheControl != null && cacheControl.contains("public") && cacheControl.contains(MAX_AGE)) {
-                long maxAgeInSecs = Long.parseLong(
-                        cacheControl.substring(cacheControl.indexOf(MAX_AGE)+MAX_AGE.length())
-                            .split("[, ]")[0] // Bug 51932 - allow for optional trailing attributes
-                        );
-                expiresDate=new Date(System.currentTimeMillis()+maxAgeInSecs*1000);
+                long maxAge = Long.parseLong(cacheControl.substring(cacheControl.indexOf(MAX_AGE)+MAX_AGE.length()))*1000;
+                expiresDate=new Date(System.currentTimeMillis()+maxAge);
             } else if (expires != null) {
                 try {
                     expiresDate = DateUtil.parseDate(expires);

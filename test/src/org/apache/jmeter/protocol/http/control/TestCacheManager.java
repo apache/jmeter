@@ -226,18 +226,6 @@ public class TestCacheManager extends JMeterTestCase {
         assertTrue("Should find valid entry",this.cacheManager.inCache(url));
     }
 
-    public void testCacheHttpClientBug51932() throws Exception{
-        this.cacheManager.setUseExpires(true);
-        this.cacheManager.testIterationStart(null);
-        assertNull("Should not find entry",getThreadCacheEntry(LOCAL_HOST));
-        assertFalse("Should not find valid entry",this.cacheManager.inCache(url));
-        ((HttpMethodStub)httpMethod).expires=makeDate(new Date(System.currentTimeMillis()));
-        ((HttpMethodStub)httpMethod).cacheControl="public, max-age=10, no-transform";
-        this.cacheManager.saveDetails(httpMethod, sampleResultOK);
-        assertNotNull("Should find entry",getThreadCacheEntry(LOCAL_HOST));
-        assertTrue("Should find valid entry",this.cacheManager.inCache(url));
-    }
-
     public void testGetClearEachIteration() throws Exception {
         assertFalse("Should default not to clear after each iteration.", this.cacheManager.getClearEachIteration());
         this.cacheManager.setClearEachIteration(true);

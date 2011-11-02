@@ -73,7 +73,6 @@ public abstract class JMeterTestCase extends TestCase {
             String home=new File(System.getProperty("user.dir"),filePrefix).getParent();
             System.out.println("Setting JMeterHome: "+home);
             JMeterUtils.setJMeterHome(home);
-            System.setProperty("jmeter.home", home); // needed for scripts
             JMeterUtils jmu = new JMeterUtils();
             try {
                 jmu.initializeProperties(file);

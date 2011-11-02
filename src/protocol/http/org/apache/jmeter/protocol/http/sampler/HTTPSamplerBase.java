@@ -1548,7 +1548,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      */
     public byte[] readResponse(SampleResult sampleResult, InputStream in, int length) throws IOException {
 
-        byte[] readBuffer = new byte[8192]; // 8kB is the (max) size to have the latency ('the first packet')
+        byte[] readBuffer = getThreadContext().getReadBuffer();
         int bufferSize=32;// Enough for MD5
 
         MessageDigest md=null;

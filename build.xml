@@ -1058,10 +1058,13 @@ run JMeter unless all the JMeter jars are added.
   </target>
 
   <!-- Check the Ant version -->
-  <available property="Ant-1.8.0-or-later" classname="org.apache.tools.ant.taskdefs.Local"/>
-  <fail message="This build requires Ant 1.8.0 or later" unless="Ant-1.8.0-or-later"/>
+  <available property="Ant-1.7.0-or-later" classname="org.apache.tools.ant.types.ResourceCollection"/>
 
-  <!-- Check that the 3rd party libraries are present -->
+  <target name="_message_Ant" unless="Ant-1.7.0-or-later">
+      <fail message="This build requires Ant 1.7.0 or later"/>
+  </target>
+  
+    <!-- Check that the 3rd party libraries are present -->
   <target name="_check_3rdparty">
     <condition property="3rdparty.present">
       <and>
@@ -1297,7 +1300,6 @@ run JMeter unless all the JMeter jars are added.
     <target name="check-versions" unless="disable-check-versions">
         <fail message="jmeter.version must be defined" unless="jmeter.version"/>
         <fail message="svn.revision must be defined" unless="svn.revision"/>
-        <local         name="version.match"/>
         <condition property="version.match">
             <resourcecontains resource="${src.core}/org/apache/jmeter/util/JMeterVersion.java" 
             	substring='VERSION = "${jmeter.version}";'/>
@@ -1772,7 +1774,7 @@ run JMeter unless all the JMeter jars are added.
     </copy>
   </target>
 
-  <target name="test" depends="compile-tests,_test,_allbatchtests"
+  <target name="test" depends="compile-tests,_test,batchtest,batchtestserver"
     description="Run tests (use -Djava.awt.headless=true on systems without graphic displays)"/>
 
   <target name="test-both" depends="test-headless,test-headed"/>
@@ -1823,7 +1825,6 @@ run JMeter unless all the JMeter jars are added.
       <filelist dir="${batchtestserver.out}" files="${batchtestserver.log}" />
     </concat>
 
-    <local         name="BatchTestLocalServer.len"/>
     <condition property="BatchTestLocalServer.len">
         <length file="${batchtestserver.out}/${batchtestserver.log}" when="equal" length="0" />
     </condition>
@@ -1869,15 +1870,14 @@ run JMeter unless all the JMeter jars are added.
        <attribute name="type" default=""/>
        <attribute name="file"/>
        <sequential>
-          <local name="found"/>
           <!--echo>Looking for @{file}</echo-->
          <available property="found" file="@{file}"/>
          <fail message="Cannot find @{type} file @{file}" unless="found"/>
        </sequential>
     </macrodef>
 
-    <checkfile type="input" file="${batchtest.inp}${file.separator}${batchtest.name}.csv"/>
-    <checkfile type="input" file="${batchtest.inp}${file.separator}${batchtest.name}.xml"/>
+    <checkfile type="input" file="${batchtest.inp}/${batchtest.name}.csv"/>
+    <checkfile type="input" file="${batchtest.inp}/${batchtest.name}.xml"/>
 
     <deleteworkfiles/>
 
@@ -1904,28 +1904,25 @@ run JMeter unless all the JMeter jars are added.
         <arg value="-JCSVFILE=${batchtest.name}.csv"/>
      </java>
 
-    <checkfile type="output" file="${batchtest.out}${file.separator}${batchtest.name}.csv"/>
-    <checkfile type="output" file="${batchtest.out}${file.separator}${batchtest.name}.xml"/>
-    <checkfile type="output" file="${batchtest.out}${file.separator}${batchtest.name}.jtl"/>
+    <checkfile type="output" file="${batchtest.out}/${batchtest.name}.csv"/>
+    <checkfile type="output" file="${batchtest.out}/${batchtest.name}.xml"/>
+    <checkfile type="output" file="${batchtest.out}/${batchtest.name}.jtl"/>
 
-    <local         name="BatchTestLocal.csv.OK"/>
     <condition property="BatchTestLocal.csv.OK">
         <filesmatch file1="${batchtest.inp}/${batchtest.name}.csv" file2="${batchtest.out}/${batchtest.name}.csv"/>
     </condition>
     <fail unless="BatchTestLocal.csv.OK">
         CSV Files are not identical.
-        ${batchtest.inp}${file.separator}${batchtest.name}.csv
-        ${batchtest.out}${file.separator}${batchtest.name}.csv
+        ${batchtest.inp}/${batchtest.name}.csv
+        ${batchtest.out}/${batchtest.name}.csv
     </fail>
-
-    <local         name="BatchTestLocal.xml.OK"/>
     <condition property="BatchTestLocal.xml.OK">
        <filesmatch file1="${batchtest.inp}/${batchtest.name}.xml" file2="${batchtest.out}/${batchtest.name}.xml"/>
     </condition>
     <fail unless="BatchTestLocal.xml.OK">
         XML Files are not identical.
-        ${batchtest.inp}${file.separator}${batchtest.name}.xml
-        ${batchtest.out}${file.separator}${batchtest.name}.xml
+        ${batchtest.inp}/${batchtest.name}.xml
+        ${batchtest.out}/${batchtest.name}.xml
     </fail>
 
     <echo level="info">${batchtest.name} output files compared OK</echo>
@@ -1935,7 +1932,6 @@ run JMeter unless all the JMeter jars are added.
       <filelist dir="${batchtest.out}" files="${batchtest.name}.log" />
     </concat>
 
-    <local         name="BatchTestLocal.len"/>
     <condition property="BatchTestLocal.len">
         <length file="${batchtest.out}/${batchtest.name}.log" when="equal" length="0" />
     </condition>
@@ -1945,19 +1941,6 @@ run JMeter unless all the JMeter jars are added.
 
     <deleteworkfiles/>
 
-  </target>
-
-  <!-- Additional test scripts -->
-  <target name="batch_scripts">
-  <!-- TODO fix bug so test passes
-      <antcall target="batchtest">
-          <param name="batchtest.name" value="Bug50898"/>
-      </antcall>
-  -->
-  </target>
-
-  <!-- Run all batch tests; used by test target -->
-  <target name="_allbatchtests" depends="batchtest,batchtestserver,batch_scripts">
   </target>
 
    <!-- Generic test target, not intended to be called directly -->
@@ -2002,7 +1985,6 @@ run JMeter unless all the JMeter jars are added.
    <!-- fork="yes" is required or dir attribute is ignored -->
    <java classname="org.apache.jorphan.test.AllTests" fork="yes" failonerror="true" dir="${basedir}/bin">
       <classpath>
-        <fileset dir="${dest.jar.jmeter}" includes="ApacheJMeter.jar"/>
         <fileset dir="${dest.jar}" includes="*.jar"/>
         <pathelement location="${build.test}"/>
         <path refid="classpath"/>
@@ -2222,7 +2204,7 @@ run JMeter unless all the JMeter jars are added.
     </target>
 
     <!-- Download all missing jars.-->
-    <target name="download_jars" description="Download any missing jar files">
+    <target name="download_jars" description="Download any missing jar files" depends="_message_Ant">
         <!-- build.dir may be needed as a temporary work area -->
         <mkdir dir="${build.dir}" />
         <antcall target="_process_all_jars">
