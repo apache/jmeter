@@ -79,29 +79,28 @@
       <subsection name="Binaries" anchor="binaries">
         <table>
           <tr>
-             <!-- N.B. due to a bug in the VSL scripts, TD elements must contain sonme text -->
-              <td> <a href="[preferred]/jmeter/binaries/apache-jmeter-&release;.tar.gz">apache-jmeter-&release;.tar.gz</a></td>
-              <td> <a href="http://www.apache.org/dist/jmeter/binaries/apache-jmeter-&release;.tar.gz.md5">md5</a></td>
-              <td> <a href="http://www.apache.org/dist/jmeter/binaries/apache-jmeter-&release;.tar.gz.asc">pgp</a></td>
+              <td><a href="[preferred]/jmeter/binaries/apache-jmeter-&release;.tar.gz">apache-jmeter-&release;.tar.gz</a></td>
+              <td><a href="http://www.apache.org/dist/jmeter/binaries/apache-jmeter-&release;.tar.gz.md5">md5</a></td>
+              <td><a href="http://www.apache.org/dist/jmeter/binaries/apache-jmeter-&release;.tar.gz.asc">pgp</a></td>
           </tr>
           <tr>
-              <td> <a href="[preferred]/jmeter/binaries/apache-jmeter-&release;.zip">apache-jmeter-&release;.zip</a></td>
-              <td> <a href="http://www.apache.org/dist/jmeter/binaries/apache-jmeter-&release;.zip.md5">md5</a></td>
-              <td> <a href="http://www.apache.org/dist/jmeter/binaries/apache-jmeter-&release;.zip.asc">pgp</a></td>
+              <td><a href="[preferred]/jmeter/binaries/apache-jmeter-&release;.zip">apache-jmeter-&release;.zip</a></td>
+              <td><a href="http://www.apache.org/dist/jmeter/binaries/apache-jmeter-&release;.zip.md5">md5</a></td>
+              <td><a href="http://www.apache.org/dist/jmeter/binaries/apache-jmeter-&release;.zip.asc">pgp</a></td>
           </tr>
         </table>
       </subsection>
       <subsection name="Source" anchor="source">
         <table>
           <tr>
-              <td> <a href="[preferred]/jmeter/source/apache-jmeter-&release;_src.tar.gz">apache-jmeter-&release;_src.tar.gz</a></td>
-              <td> <a href="http://www.apache.org/dist/jmeter/source/apache-jmeter-&release;_src.tar.gz.md5">md5</a></td>
-              <td> <a href="http://www.apache.org/dist/jmeter/source/apache-jmeter-&release;_src.tar.gz.asc">pgp</a></td>
+              <td><a href="[preferred]/jmeter/source/apache-jmeter-&release;_src.tar.gz">apache-jmeter-&release;_src.tar.gz</a></td>
+              <td><a href="http://www.apache.org/dist/jmeter/source/apache-jmeter-&release;_src.tar.gz.md5">md5</a></td>
+              <td><a href="http://www.apache.org/dist/jmeter/source/apache-jmeter-&release;_src.tar.gz.asc">pgp</a></td>
           </tr>
           <tr>
-              <td> <a href="[preferred]/jmeter/source/apache-jmeter-&release;_src.zip">apache-jmeter-&release;_src.zip</a></td>
-              <td> <a href="http://www.apache.org/dist/jmeter/source/apache-jmeter-&release;_src.zip.md5">md5</a></td>
-              <td> <a href="http://www.apache.org/dist/jmeter/source/apache-jmeter-&release;_src.zip.asc">pgp</a></td>
+              <td><a href="[preferred]/jmeter/source/apache-jmeter-&release;_src.zip">apache-jmeter-&release;_src.zip</a></td>
+              <td><a href="http://www.apache.org/dist/jmeter/source/apache-jmeter-&release;_src.zip.md5">md5</a></td>
+              <td><a href="http://www.apache.org/dist/jmeter/source/apache-jmeter-&release;_src.zip.asc">pgp</a></td>
           </tr>
         </table>
       </subsection>
