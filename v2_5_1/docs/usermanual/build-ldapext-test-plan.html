@@ -1,0 +1,1249 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+ 
+       http://www.apache.org/licenses/LICENSE-2.0
+ 
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<!-- Content Stylesheet for Site -->
+
+
+<!-- start the processing -->
+<!-- ====================================================================== -->
+<!-- Main Page Section -->
+<!-- ====================================================================== -->
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../css/style.css"/>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+
+
+
+<title>JMeter - User's Manual: Building an Extended LDAP Test Plan</title>
+</head>
+
+<body bgcolor="#ffffff" text="#000000" link="#525D76">
+<table border="0" cellspacing="0">
+<!-- TOP IMAGE -->
+<tr>
+<td>
+<!-- Need to specify height otherwise iframe seems to grab extra -->
+<iframe src="http://www.apache.org/ads/halfbanner.html" height="102"
+style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
+</td>
+<td align="left">
+<a href="http://jakarta.apache.org"><img width="505" height="48" src="../images/jakarta-logo.gif" alt="Jakarta" title="Jakarta" border="0"/></a>
+</td>
+<td align="right">
+<a href="http://jakarta.apache.org/jmeter/"><img width="221" height="102" src="../images/logo.jpg" alt="JMeter" title="JMeter" border="0"/></a>
+</td>
+</tr>
+</table>
+<table border="0" width="100%" cellspacing="4">
+<tr><td colspan="2">
+<hr noshade size="1"/>
+</td></tr>
+<tr>
+<!-- LEFT SIDE NAVIGATION -->
+<td width="20%" valign="top" nowrap="true">
+<p><strong>About</strong></p>
+<ul>
+<li><a href="../index.html">Overview</a>
+</li>
+<li><a href="../changes.html">Changes</a>
+</li>
+<li><a href="../issues.html">Issues</a>
+</li>
+<li><a href="http://www.apache.org/licenses/">License</a>
+</li>
+<li><a href="http://wiki.apache.org/jakarta-jmeter/JMeterCommitters">Contributors</a>
+</li>
+</ul>
+<p><strong>Download</strong></p>
+<ul>
+<li><a href="http://jakarta.apache.org/site/downloads/downloads_jmeter.cgi">Download Releases</a>
+</li>
+<li><a href="../nightly.html">Developer (Nightly) Builds</a>
+</li>
+</ul>
+<p><strong>Documentation</strong></p>
+<ul>
+<li><a href="../usermanual/index.html">User Manual</a>
+</li>
+<li><a href="../api/index.html">Javadocs</a>
+</li>
+<li><a href="../localising/index.html">Localisation (Translator's Guide)</a>
+</li>
+<li><a href="../building.html">Building JMeter and Add-Ons</a>
+</li>
+<li><a href="http://wiki.apache.org/jakarta-jmeter">JMeter Wiki</a>
+</li>
+<li><a href="http://wiki.apache.org/jakarta-jmeter/JMeterFAQ">FAQ (Wiki)</a>
+</li>
+</ul>
+<p><strong>Tutorials (PDF format)</strong></p>
+<ul>
+<li><a href="../usermanual/jmeter_distributed_testing_step_by_step.pdf">Distributed Testing</a>
+</li>
+<li><a href="../usermanual/jmeter_proxy_step_by_step.pdf">Recording Tests</a>
+</li>
+<li><a href="../usermanual/junitsampler_tutorial.pdf">JUnit Sampler</a>
+</li>
+<li><a href="../usermanual/jmeter_accesslog_sampler_step_by_step.pdf">Access Log Sampler</a>
+</li>
+<li><a href="../extending/jmeter_tutorial.pdf">Extending JMeter</a>
+</li>
+</ul>
+<p><strong>Community</strong></p>
+<ul>
+<li><a href="http://jakarta.apache.org/site/getinvolved.html">Get Involved</a>
+</li>
+<li><a href="http://jakarta.apache.org/site/mail.html">Mailing Lists</a>
+</li>
+<li><a href="http://jakarta.apache.org/site/cvsindex.html">SVN Repositories</a>
+</li>
+</ul>
+<p><strong>Foundation</strong></p>
+<ul>
+<li><a href="http://www.apache.org/">ASF</a>
+</li>
+<li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
+</li>
+<li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a>
+</li>
+</ul>
+</td>
+<td width="80%" align="left" valign="top">
+<table>
+<tr>
+<td bgcolor="#525D76">
+<div align="right"><a href="index.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Index</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="build-ws-test-plan.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Next</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="build-ldap-test-plan.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Prev</font></a></div>
+</td>
+</tr>
+</table>
+<br>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#525D76">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="ldapexttest"><strong>9b. Building an Extended LDAP Test Plan</strong></a><a class="sectionlink" href="#ldapexttest" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+
+In this section, you will learn how to create a basic Test Plan to test an LDAP 
+server.
+</p>
+<p>
+
+As the Extended LDAP Sampler is highly configurable, this also means that it takes 
+some time to build a correct testplan. You can however tune it exactly up to your 
+needs.
+
+</p>
+<p>
+
+You will create four users that send requests for four tests on the LDAP server.Also, you will tell
+the users to run their tests twice. So,  the total number of requests is (4 users) x (4 requests) x
+repeat 2 times) = 32 LDAP requests. To construct the Test Plan, you will use the following elements:
+<br>
+</br>
+
+
+<a href="test_plan.html#thread_group">
+Thread Group
+</a>
+,
+<br>
+</br>
+
+
+<a href="../usermanual/component_reference.html#Adding_LDAP_Extended_Request_Defaults">Adding LDAP Extended Request Defaults</a>
+,
+<br>
+</br>
+
+
+<a href="../usermanual/component_reference.html#Adding_LDAP_Requests">Adding LDAP Requests</a>
+, and
+<br>
+</br>
+
+
+<a href="../usermanual/component_reference.html#Adding_a_Listener_to_View/Store_the_Test_Results">Adding a Listener to View/Store the Test Results</a>
+
+
+</p>
+<p>
+
+This example assumes that the LDAP Server is installed in your Local machine.
+
+</p>
+<p>
+
+For the less experienced LDAP users, I build a 
+<a href="ldapops_tutor.html">
+small 
+LDAP tutorial
+</a>
+ which shortly explains 
+the several LDAP operations that can be used in building a complex testplan.
+
+</p>
+<p>
+
+Take care when using LDAP special characters in the distinghuished name, in that case (eg, you want to use a + sign in a 
+distinghuished name) you need to escape the character by adding an "\" sign before that character.
+extra exeption: if you want to add a \ character in a distinguished name (in an add or rename operation), you need to use 4 backslashes. 
+examples:
+cn=dolf\+smits to add/search an entry with the name like cn=dolf+smits
+cn=dolf \\ smits to search an entry with the name cn=dolf \ smits
+cn=c:\\\\log.txt to add an entry with a name like cn=c:\log.txt
+
+</p>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="ext_adding_users"><strong>9b.1 Adding Users</strong></a>
+<a class="sectionlink" href="#ext_adding_users" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+
+The first step you want to do with every JMeter Test Plan is to add a Thread Group element.
+The Thread Group tells JMeter the number of users you want to simulate, how often the users should send
+requests, and the how many requests  they should send.
+
+</p>
+<p>
+
+Go ahead and add the ThreadGroup element by first selecting the Test Plan, clicking your
+right mouse button to get the Add menu, and then select Add-->ThreadGroup. You should now see the
+Thread Group element under Test Plan. If you do not see the element, then "expand" the Test Plan tree by
+clicking on the Test Plan element.
+
+</p>
+<p>
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/extthreadgroup.png"><br>
+<font size="-1">
+Figure 9b.1. Thread Group with Default Values
+</font></td></tr></table></p>
+
+
+
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="add_ldapext_defaults"><strong>9b.2 Adding LDAP Extended Request Defaults</strong></a>
+<a class="sectionlink" href="#add_ldapext_defaults" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+
+Begin by selecting the Thread Group element. Click your right mouse button
+to get the Add menu, and then select Add --> Config Element -->LDAP Extended Request Defaults. Then,
+select this new element to view its Control Panel.
+
+</p>
+<p>
+
+Like most JMeter elements, the LDAP Extended Request Defaults Control Panel has a name
+field that you can modify. In this example, leave this field with the default value.
+
+</p>
+<p>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/extrequestdefaults.png"><br>
+<font size="-1"><br>
+</br>
+						
+  Figure 9b.2 LDAP Defaults for our Test Plan
+</font></td></tr></table></p>
+
+
+</p>
+<p>
+
+			For each of the different operations, some default values can be filled in.
+			In All cases, when a default is filled in, this is used for the LDAP extended requests.
+			For each requst, you can override the defaults by filling in the values in the LDAP extended request sampler.
+			When no valueis entered which is necesarry for a test, the test will fail in an unpredictable way!
+			
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="add_extrequests"><strong>9b.3 Adding LDAP Requests</strong></a>
+<a class="sectionlink" href="#add_extrequests" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+
+In our Test Plan, we want to use all 8 LDAP requests.
+
+</p>
+<ol>
+
+
+<li>
+
+Thread bind
+
+</li>
+
+
+<li>
+
+Search Test
+
+</li>
+
+
+<li>
+
+Compare Test
+
+</li>
+
+
+<li>
+
+Single bind/unbind Test
+
+</li>
+
+
+<li>
+
+Add Test
+
+</li>
+
+
+<li>
+
+Modify Test
+
+</li>
+
+
+<li>
+
+Delete Test
+
+</li>
+
+
+<li>
+
+Rename entry (moddn)
+
+</li>
+
+
+<li>
+
+Thread unbind
+
+</li>
+
+
+</ol>
+<p>
+
+JMeter sends requests in the order that you add them to the tree.
+
+</p>
+<p>
+
+Adding a requests always start by:
+<br>
+</br>
+
+Adding the LDAP Extended Request to the Thread Group element (Add -->
+Sampler --> LDAP Ext Request). Then, select the LDAP Ext Request element in the tree
+and edit the following properties.
+</p>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="add_threadbind"><strong>9b.3.1 Adding a Thread bind Request</strong></a>
+<a class="sectionlink" href="#add_threadbind" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+
+   
+<ol>
+
+
+<li>
+
+Select the "Thread bind" button.
+
+</li>
+
+
+<li>
+
+enter the hostname value from the LDAP server in the Servername field
+
+</li>
+
+
+<li>
+
+Enter the portnumber from the LDAP server (389) in the port field
+
+</li>
+
+
+<li>
+
+(optional) enter the baseDN in the DN field, this baseDN will be used as thestarting point for searches, add, deletes etc.
+<br>
+</br>
+
+take care that this must be the uppermost shared level for all your request, eg When all information is stored under ou=people, dc=siemens, dc=com, you can use this value in the basedn.
+<br>
+</br>
+
+You cannot search or rename anymore in the subtree ou=users,dc=siemens,dc=com!
+<br>
+</br>
+
+If you need to search or rename objects in both subtrees, use the common denominator (dc=siemens,dc=com) as the baseDN.
+
+</li>
+
+
+<li>
+
+(Optional) enter the distinghuised name from the user you want to use for authentication.
+When this field is kept empty, an anonymous bind will be established.
+
+</li>
+
+
+<li>
+
+(optional) Enter the password for the user you want to authenticate with, an empty password will also lead to an anonymous bind.
+
+</li>
+
+
+</ol>
+
+
+</p>
+<p>
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/extthreadbind.png"><br>
+<font size="-1">
+Figure 9b.3.1. Thread Bind example
+</font></td></tr></table></p>
+
+
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="add_searchreq"><strong>9b.3.2 Adding a search Request</strong></a>
+<a class="sectionlink" href="#add_searchreq" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+
+   
+<ol>
+
+
+<li>
+
+Select the "Search Test" button.
+
+</li>
+
+
+<li>
+
+(Optional) enter the searchbase under which you want to perform the search, relative to the basedn, used in the thread bind request.
+<br>
+</br>
+
+When left empty, the basedn is used as a search base, this files is important if you want to use a "base-entry" or "one-level" search (see below)
+
+</li>
+
+
+<li>
+
+Enter the searchfilter, any decent LDAP serach filter will do, but for now, use something simple, like cn=john doe
+
+</li>
+
+
+<li>
+
+(optional) enter the scope in the scope field, it has three options:
+     
+<ol>
+
+     
+<li>
+Base level, Enter the value 0
+<br>
+</br>
+only the given searchbase is used, only for checking attributes or existence.
+     
+</li>
+
+     
+<li>
+One level, Enter the value 1
+<br>
+</br>
+Only search in one level below given searchbase is used
+     
+</li>
+
+     
+<li>
+Subtree, Enter the value 2
+<br>
+</br>
+ Searches for object at any point below the given basedn
+     
+</li>
+</ol>
+
+
+</li>
+
+
+<li>
+
+(Optional) Sizelimit, specifies the maximun number of returned entries, 
+
+</li>
+
+
+<li>
+
+(optional) Timelimit, psecifies the maximum number of miliseconds, the SERVER can use for performing the search. it is NOT the maximun time the application will wait!
+<br>
+</br>
+
+When a very large returnset is returned, from a very fast server, over a very slow line, you may have to wait for ages for the completion of the search request, but this parameter will not influence this.
+
+</li>
+
+
+<li>
+(Optional) Attributes you want in the search answer. This can be used to limit the size of the answer, especially when an onject has very large attributes (like jpegPhoto). There are three possibilities:
+
+<ol>
+<li>
+Leave empty (the default setting must also be empty) This will return all attributes.
+
+</li>
+
+
+<li>
+Put in one empty value (""), it will request a non-existent attributes, so in reality it returns no attributes
+
+</li>
+
+
+<li>
+Put in the attributes, seperated by a semi-colon. It will return only the requested attributes
+
+</li>
+</ol>
+</li>
+
+
+<li>
+
+(Optional) Return object, possible values are "true" and "false". True will return all java-object attributes, it will add these to the requested attributes, as specified above.
+<br>
+</br>
+
+false will mean no java-object attributes will be returned.
+
+</li>
+
+
+<li>
+
+(Optional) Dereference aliases. possible values "true" and "false". True will mean it will follow references, false says it will not.
+
+</li>
+
+
+</ol>
+
+
+</p>
+<p>
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/extsearch.png"><br>
+<font size="-1">
+Figure 9b.3.2. search request example
+</font></td></tr></table></p>
+
+
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="add_comparereq"><strong>9b.3.3 Adding a Compare Request</strong></a>
+<a class="sectionlink" href="#add_comparereq" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+
+   
+<ol>
+
+
+<li>
+
+Select the "Compare" button.
+
+</li>
+
+
+<li>
+
+enter the entryname form the object on which you want the compare operation to work, relative to the basedn, eg "cn=john doe,ou=people"
+
+</li>
+
+
+<li>
+
+Enter the compare filter, this must be in the form "attribute=value", eg "mail=John.doe@siemens.com"
+
+</li>
+
+
+</ol>
+
+
+</p>
+<p>
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/extcompare.png"><br>
+<font size="-1">
+Figure 9b.3.3. Compare example
+</font></td></tr></table></p>
+
+
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="add_sbind"><strong>9b.3.4 Adding a Single bind/unbind</strong></a>
+<a class="sectionlink" href="#add_sbind" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+
+   
+<ol>
+
+
+<li>
+
+Select the "Single bind/unbind" button.
+
+</li>
+
+
+<li>
+
+Enter the FULL distinghuised name from the user you want to use for authentication.
+<br>
+</br>
+
+eg. cn=john doe,ou=people,dc=siemens,dc=com
+When this field is kept empty, an anonymous bind will be established.
+
+</li>
+
+
+<li>
+
+Enter the password for the user you want to authenticate with, an empty password will also lead to an anonymous bind.
+
+</li>
+
+
+<li>
+
+Take care: This single bind/unbind is in reality two seperate operations but cannot easily be split!
+
+</li>
+
+
+</ol>
+
+
+</p>
+<p>
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/extsbind.png"><br>
+<font size="-1">
+Figure 9b.3.4. Single bind/unbind example
+</font></td></tr></table></p>
+
+
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="add_addreq"><strong>9b.3.5 Adding an Add Request</strong></a>
+<a class="sectionlink" href="#add_addreq" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+
+   
+<ol>
+
+
+<li>
+
+Select the "Add" button.
+
+</li>
+
+
+<li>
+
+Enter the distinghuised name for the object to add, relative to the basedn.
+
+</li>
+
+
+<li>
+
+Add a line in the "add test" table, fill in the attribute and value.
+<br>
+</br>
+
+When you need the same attribute more than once, just add a new line, add the attribute again, and a different value.
+<br>
+</br>
+
+All necessary attributes and values must be specified to pass the test, see picture!
+<br>
+</br>
+
+(sometimes the server adds the attribute "objectClass=top", this might give a problem.
+
+</li>
+
+
+</ol>
+
+
+</p>
+<p>
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/extadd.png"><br>
+<font size="-1">
+Figure 9b.3.5. Add request example
+</font></td></tr></table></p>
+
+
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="add_modreq"><strong>9b.3.6 Adding a Modify Request</strong></a>
+<a class="sectionlink" href="#add_modreq" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+
+   
+<ol>
+
+
+<li>
+
+Select the "Modify test" button.
+
+</li>
+
+
+<li>
+
+Enter the distinghuised name for the object to modify, relative to the basedn.
+
+</li>
+
+
+<li>
+
+Add a line in the "modify test" table, with the "add" button.
+
+</li>
+
+
+<li>
+
+You need to enter the attribute you want to modify, (optional) a value, and the opcode. The meaning of this opcode:
+
+<ol>
+<li>
+add
+<br>
+</br>
+ this will mean that the attribute value (not optional in this case) willbe added to the attribute.
+<br>
+</br>
+
+When the attribute is not existing, it will be created and the value added
+<br>
+</br>
+
+When it is existing, and defined multi-valued, the new value is added.
+<br>
+</br>
+
+when it is existing, but single valued, it will fail.
+</li>
+
+
+<li>
+replace
+<br>
+</br>
+
+This will overwrite the attribute with the given new value (not optional here)
+<br>
+</br>
+
+When the attribute is not existing, it will be created and the value added
+<br>
+</br>
+
+When it is existing, old values are removed, the new value is added.
+</li>
+
+
+<li>
+delete
+<br>
+</br>
+
+When no value is given, all values will be removed
+<br>
+</br>
+
+When a value is given, only that value will be removed
+<br>
+</br>
+
+ when the given value is not existing, the test will fail
+
+</li>
+</ol>
+
+
+</li>
+
+
+<li>
+
+(Optional) Add more modifications in the "modify test" table.
+<br>
+</br>
+
+All modifications which are specified must succeed, to let the modification test pass. When one modification fails, NO modifications at all will be made and the entry will remain unchanged.
+
+</li>
+
+
+</ol>
+
+
+</p>
+<p>
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/extmod.png"><br>
+<font size="-1">
+Figure 9b.3.6. Modify example
+</font></td></tr></table></p>
+
+
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="add_delreq"><strong>9b.3.7 Adding a Delete Request</strong></a>
+<a class="sectionlink" href="#add_delreq" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+
+   
+<ol>
+
+
+<li>
+
+Select the "Delete" button.
+
+</li>
+
+
+<li>
+
+enter the name of the entry, relative to the baseDN, in the Delete-Field.
+<br>
+</br>
+
+that is, if you want to remove "cn=john doe,ou=people,dc=siemens,dc=com", and you set the baseDN to "dc=siemens,dc=com",
+you need to enter "cn=john doe,ou=people" in the Delete-field.
+
+</li>
+
+
+</ol>
+
+
+</p>
+<p>
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/extdel.png"><br>
+<font size="-1">
+Figure 9b.3.7. Delete example
+</font></td></tr></table></p>
+
+
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="add_moddn"><strong>9b.3.8 Adding a Rename Request (moddn)</strong></a>
+<a class="sectionlink" href="#add_moddn" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+
+   
+<ol>
+
+
+<li>
+
+Select the "Rename Entry" button.
+
+</li>
+
+
+<li>
+
+enter the name of the entry, relative to the baseDN, in the "old entry name-Field".
+<br>
+</br>
+
+that is, if you want to rename "cn=john doe,ou=people,dc=siemens,dc=com", and you set the baseDN to "dc=siemens,dc=com",
+you need to enter "cn=john doe,ou=people" in the old entry name-field.
+
+</li>
+
+
+<li>
+
+enter the new name of the entry, relative to the baseDN, in the "new distinghuised name-Field".
+<br>
+</br>
+
+whne you only change the RDN, it will simply rename the entry
+<br>
+</br>
+
+when you also add a differten subtree, eg you change from cn=john doe,ou=people to cn=john doe,ou=users, it will move the entry.
+You can also move a complete subtree (If your LDAP server supports this!!!!), eg ou=people,ou=retired, to ou=oldusers,ou=users, this will move the complete subtee, plus all retired people in the subtree to the new place in the tree.
+
+</li>
+
+
+</ol>
+
+
+</p>
+<p>
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/extmoddn.png"><br>
+<font size="-1">
+Figure 9b.3.8. Rename example
+</font></td></tr></table></p>
+
+
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="add_unbind"><strong>9b.3.9 Adding an unbind Request</strong></a>
+<a class="sectionlink" href="#add_unbind" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+
+   
+<ol>
+
+
+<li>
+
+Select the "Thread unbind" button.
+This will be enough as it just closes the current connection.
+The information which is needed is already known by the system
+
+</li>
+</ol>
+
+
+</p>
+<p>
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/extthreadunbind.png"><br>
+<font size="-1">
+Figure 9b.3.9. Unbind example
+</font></td></tr></table></p>
+
+
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="add_ldapext_listener"><strong>9b.4 Adding a Listener to View/Store the Test Results</strong></a>
+<a class="sectionlink" href="#add_ldapext_listener" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+
+The final element you need to add to your Test Plan is a Listener.
+ This element is responsible for storing all of the results of your LDAP
+requests in a file  and presenting a visual model of the data.Select the Thread group
+element and add a View Results Tree (Add --> Listener -->View Results Tree)
+
+</p>
+<p>
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/extviewtree.png"><br>
+<font size="-1">
+Figure 9b.4. View result Tree Listener
+</font></td></tr></table></p>
+
+
+</p>
+<p>
+
+In this listener you have three tabs to view, the sampler result, the request and the response data.
+
+<ol>
+
+
+<li>
+
+The sampler result just contains the response time, the returncode and return message
+
+</li>
+
+
+<li>
+
+The request gives a short description of the request that was made, in practice no relevant information
+is contained here.
+
+</li>
+
+
+<li>
+
+The response data contains the full details of the sent request, as well the full details of the received answer, 
+this is given in a (self defined) xml-style.
+
+<a href="ldapanswer_xml.html">
+The full description can be found here.
+</a>
+
+
+</li>
+
+
+</ol>
+
+
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+</blockquote>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table>
+<tr>
+<td bgcolor="#525D76">
+<div align="right"><a href="index.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Index</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="build-ws-test-plan.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Next</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="build-ldap-test-plan.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Prev</font></a></div>
+</td>
+</tr>
+</table>
+<br>
+</td>
+</tr>
+<tr><td colspan="2">
+<hr noshade size="1"/>
+</td></tr>
+<tr><td colspan="2">
+<div align="center"><font color="#525D76" size="-1"><em>
+Copyright &copy; 1999-2011, Apache Software Foundation
+</em></font></div>
+</td></tr>
+<tr><td colspan="2">
+<div align="center"><font color="#525D76" size="-1">
+Apache, Apache JMeter, JMeter, the Apache feather, and the Apache JMeter logo are
+trademarks of the Apache Software Foundation.
+</font>
+</div>
+</td></tr>
+</table>
+</body>
+</html>
+<!-- end the processing -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

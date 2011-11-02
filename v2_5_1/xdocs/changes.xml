@@ -1,0 +1,205 @@
+<?xml version="1.0"?> 
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+ 
+       http://www.apache.org/licenses/LICENSE-2.0
+ 
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<document>   
+<properties>     
+	<author email="dev AT jakarta.apache.org">JMeter developers</author>     
+	<title>Changes</title>   
+</properties> 
+<body> 
+<section name="Changes"> 
+
+<note>
+<b>This page details the changes made in the current version only.</b>
+<br></br>
+Earlier changes are detailed in the <a href="changes_history.html">History of Previous Changes</a>.
+</note>
+
+<!--  ===================  -->
+
+<h1>Version 2.5.1</h1>
+
+<h2>Summary of main changes</h2>
+
+<ul>
+<li>HttpClient4 sampler now re-uses connections properly (previously it would use one per sample, which could quickly cause resource exhaustion).</li>
+<li>Various fixes to JMS samplers</li>
+<li>Functions are no longer spuriously invoked when used with a Configuration element</li>
+<li>WebService sampler GUI has been re-organized for better design and more user-friendliness. Some improments on WSDL configuration assistant</li>
+<li>Better handling of test shutdown. System.exit now only called if there is no other option; even this can be disabled.</li>
+</ul>
+
+
+<!--  ========================= End of summary ===================================== -->
+
+<h2>Known bugs</h2>
+
+<p>
+The Include Controller has some problems in non-GUI mode. 
+In particular, it can cause a NullPointerException if there are two include controllers with the same name.
+</p>
+
+<p>The Once Only controller behaves correctly under a Thread Group or Loop Controller,
+but otherwise its behaviour is not consistent (or clearly specified).</p>
+
+<p>The If Controller may cause an infinite loop if the condition is always false from the first iteration. 
+A workaround is to add a sampler at the same level as (or superior to) the If Controller.
+For example a Test Action sampler with 0 wait time (which doesn't generate a sample),
+or a Debug Sampler with all fields set to False (to reduce the sample size).
+</p>
+
+<p>
+The menu item Options / Choose Language does not change all the displayed text to the new language.
+[The behaviour has improved, but language change is still not fully working]
+To override the default local language fully, set the JMeter property "language" before starting JMeter. 
+</p>
+
+<h2>Incompatible changes</h2>
+
+<p>
+The HttpClient4 and Commons HttpClient 3.1 samplers previously used a retry count of 3.
+This has been changed to default to 1, to be compatible with the Java implementation.
+The retry count can be overridden by setting the relevant JMeter property, for example:
+<pre>
+httpclient4.retrycount=3
+httpclient3.retrycount=3
+</pre>
+</p>
+
+<h2>Bug fixes</h2>
+
+<h3>HTTP Samplers and Proxy</h3>
+<ul>
+<li>Fix HttpClient 4 sampler so it reuses HttpClient instances and connections where possible.</li>
+<li>Temporary fix to HC4 sampler to work round HTTPCLIENT-1120.</li>
+<li>Bug 51863 - Lots of ESTABLISHED connections with HttpClient 4 implementation (vs HttpClient 3.1 impl)</li>
+<li>Bug 51750 - Retrieve all embedded resources doesn't follow IFRAME</li>
+<li>Bug 51752 - HTTP Cache is broken when using "Retrieve all embedded resources" with concurrent pool</li>
+<li>Bug 39219 - HTTP Server: You can't stop it after File->Open</li>
+<li>Bug 51775 - Port number duplicates in Host header when capturing by HttpClient (3.1 and 4.x)</li>
+<li>Bug 50617 - Monitor Results legend show "dead" server although values from the server are retrieved</li>
+</ul>
+
+<h3>Other Samplers</h3>
+<ul>
+<li>Bug 50424 - Web Methods drop down list box inconsistent</li>
+<li>Bug 43293 - Java Request fields not cleared when creating new sampler</li>
+<li>Bug 51830 - Webservice Soap Request triggers too many popups when Webservice WSDL URL is down</li>
+<li>WebService(SOAP) request - add a connect timeout to get the wsdl used to populate Web Methods when server doesn't response</li>
+<li>Bug 51841 - JMS : If an error occurs in ReceiveSubscriber constructor or Publisher, then Connections will stay open</li>
+<li>Bug 51691 - Authorization does not work for JMS Publisher and JMS Subscriber</li>
+<li>Bug 51840 - JMS : Cache of InitialContext has some issues</li>
+<li>Bug 47888 - JUnit Sampler re-uses test object</li>
+</ul>
+
+<h3>Controllers</h3>
+<ul>
+<li>If Controller - Fixed two regressions introduced by bug 50032 (see bug 50618 too)</li>
+<li>If Controller - Catches a StackOverflowError when a condition returns always false (after at least one iteration with return true) See bug 50618</li>
+<li>Bug 51869 - NullPointer Exception when using Include Controller</li>
+</ul>
+
+<h3>Listeners</h3>
+<ul>
+</ul>
+
+<h3>Assertions</h3>
+<ul>
+</ul>
+
+<h3>Functions</h3>
+<ul>
+<li>Bug 48943 - Functions are invoked additional times when used in combination with a Config Element</li>
+</ul>
+
+<h3>I18N</h3>
+<ul>
+<li>WebService(SOAP) request - add I18N for some labels</li>
+</ul>
+
+<h3>General</h3>
+<ul>
+<li>Bug 51831 - Cannot disable UDP server or change the maximum UDP port</li>
+<li>Bug 51821 - Add short-cut for Enabling / Disabling (sub)tree or branches in test plan.</li>
+<li>Bug 47921 - Variables not released for GC after JMeterThread exits.</li>
+<li>Bug 51839 - "... end of run" printed prematurely</li>
+<li>Bug 51847 - Some Junit tests are Locale sensitive and fail if Locale is different from US</li>
+<li>Bug 51855 - Parent samples may have slightly inaccurate elapsed times</li>
+<li>Bug 51880 - The shutdown command is not working if I invoke it before all the thread are started</li>
+<li>Remote Shut host menu item was not being enabled.</li>
+<li>Bug 51888 - Occasional deadlock when stopping a testplan</li>
+</ul>
+
+<!-- ==================================================== -->
+
+<h2>Improvements</h2>
+
+<h3>HTTP Samplers</h3>
+<ul>
+<li>Bug 51380 - Control reuse of cached SSL Context from iteration to iteration</li>
+<li>Bug 51882 - HTTPHC3Client uses a default retry count of 3, make it configurable; default is now 1</li>
+<li>Change the default HttpClient 4 sampler retry count to 1</li>
+</ul>
+
+<h3>Other samplers</h3>
+<ul>
+<li>Beanshell Sampler now supports Interruptible interface</li>
+<li>Bug 51605 - WebService(SOAP) Request - WebMethod field value changes surreptitiously for all the requests when a value is selected in a request</li>
+<li>WebService(SOAP) Request - Reorganized GUI for better design and more user-friendliness</li>
+</ul>
+
+<h3>Controllers</h3>
+<ul>
+</ul>
+
+<h3>Listeners</h3>
+<ul>
+<li>Bug 42246 - Need for a 'auto-scroll' option in "View Results Tree" and "Assertion Results"</li>
+<li>View Results Tree: Regexp Tester - little improvements on user interface</li>
+</ul>
+
+<h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
+<ul>
+<li>Bug 51885 - Allow a JMeter Variable as input to XPathExtractor</li>
+</ul>
+
+<h3>Functions</h3>
+<ul>
+</ul>
+
+<h3>I18N</h3>
+<ul>
+</ul>
+
+<h3>General</h3>
+<ul>
+<li>Bug 51822 - (part 1) save 1 invocation of GuiPackage#getCurrentGui</li>
+<li>Added AsynchSampleSender which sends samples from server to client asynchronously.</li>
+<li>Upgraded to htmlparser 2.1; JavaMail 1.4.4; JUnit 4.9</li>
+</ul>
+
+<h2>Non-functional changes</h2>
+<ul>
+<li>Bug 49976 - FormCharSetFinder visibility is default instead of public. </li>
+<li>Bug 50917 - Property CookieManager.save.cookies not honored when set from test plan</li>
+<li>Improve error logging when Javascript errors are detected.</li>
+<li>Updated documentation footer</li>
+</ul>
+
+</section> 
+</body> 
+</document>

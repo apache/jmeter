@@ -1,0 +1,99 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+
+//
+// Sample BeanShell Server Startup file
+//
+// Use as follows:
+// -Jbeanshell.server.port=nnnn
+// -Jbeanshell.server.file=../extras/startup.bsh
+//
+// Defines various utility routines for properties and logging
+//
+//
+
+// Stop exit() from calling System.exit();
+bsh.system.shutdownOnExit = false;
+
+print("Startup script running");
+
+import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
+
+getprop(p){// get a JMeter property
+return JMeterUtils.getPropDefault(p,"");
+}
+
+setprop(p,v){// set a JMeter property
+print("Setting property '"+p+"' to '"+v+"'.");
+JMeterUtils.getJMeterProperties().setProperty(p, v);
+}
+
+printprop(p){// print a JMeter property
+print(p + " = " + getprop(p));
+}
+
+loglevel(String priority, String category){
+LoggingManager.setPriority(priority, category);
+}
+
+logdebug(String text){
+loglevel("DEBUG",text);
+}
+
+loginfo(String text){
+loglevel("INFO",text);
+}
+
+// Define routines to stop the test or a thread
+stopEngine(){// Stop the JMeter test
+print("Stop Engine called");
+org.apache.jmeter.engine.StandardJMeterEngine.stopEngine();
+}
+
+stopEngineNow(){// Stop the JMeter test now
+print("Stop Engine NOW called");
+org.apache.jmeter.engine.StandardJMeterEngine.stopEngineNow();
+}
+
+stopThread(t){// Stop a JMeter thread
+print("Stop Thread "+t+" called");
+ok=org.apache.jmeter.engine.StandardJMeterEngine.stopThread(t);
+if (ok){print("Thread requested to stop");} else { print("Thread not found");}
+}
+
+stopThreadNow(t){// Stop a JMeter thread
+print("Stop Thread Now "+t+" called");
+ok=org.apache.jmeter.engine.StandardJMeterEngine.stopThreadNow(t);
+if (ok){print("Thread stopped");} else { print("Thread not found");}
+}
+
+getsysprop(p){// get a system property
+return System.getProperty(p,"");
+}
+
+setsysprop(p,v){// set a system property
+print("Setting property '"+p+"' to '"+v+"'.");
+System.setProperty(p, v);
+}
+
+printsysprop(p){// print a system property
+print(p + " = " + getsysprop(p));
+}
+
+print("Startup script completed");

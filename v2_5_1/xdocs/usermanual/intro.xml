@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+ 
+       http://www.apache.org/licenses/LICENSE-2.0
+ 
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<document next="get-started.html" id="$Id$">
+
+<properties>
+  <title>User's Manual: Introduction</title>
+</properties>
+
+<body>
+
+<section name="1. Introduction" anchor="intro">
+<p>
+<b>Apache JMeter</b> is a 100% pure Java desktop application designed
+to load test client/server software
+(such as a <a href="build-web-test-plan.html">web application</a>).  It may be used
+to test performance both on static and dynamic
+resources such as static files, Java Servlets, CGI scripts, Java objects, <a href="build-db-test-plan.html">databases</a>,
+<a href="build-ftp-test-plan.html">FTP servers</a>, and more. JMeter can be used to simulate a heavy
+load on a server, network or object to test its strength or to analyze
+overall performance under different load types.</p>
+<p>
+Additionally, JMeter can help you regression test your application by letting you create
+test scripts with <a href="test_plan.html#assertions">assertions</a> to validate that your application is returning the
+results you expect.  For maximum flexibility, JMeter lets you create these assertions using
+regular expressions.</p>
+
+<p>But please note that JMeter is not a browser.</p>
+<subsection name="1.1 History" anchor="history">
+<p>Stefano Mazzocchi of the Apache Software Foundation was the original developer of JMeter.
+He wrote it primarily to test the performance of Apache JServ (a project that has
+since been replaced by the Apache Tomcat project).  We redesigned JMeter to enhance the GUI
+and to add functional-testing capabilities.
+</p>
+</subsection>
+
+<subsection name="1.2 The Future" anchor="future">
+<p>We hope to see JMeter's capabilities rapidly expand as developers take advantage of its
+pluggable architecture.  The primary goal of further development is to make JMeter the most
+useful regression testing tool as possible, without compromising JMeter's load-testing
+capabilities.</p>
+</subsection>
+</section>
+
+</body>
+</document>

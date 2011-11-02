@@ -1,0 +1,456 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+package org.apache.jmeter.extractor;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.jmeter.processor.PostProcessor;
+import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.testelement.AbstractScopedTestElement;
+import org.apache.jmeter.testelement.property.IntegerProperty;
+import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
+import org.apache.oro.text.MalformedCachePatternException;
+import org.apache.oro.text.regex.MatchResult;
+import org.apache.oro.text.regex.Pattern;
+import org.apache.oro.text.regex.PatternMatcher;
+import org.apache.oro.text.regex.PatternMatcherInput;
+import org.apache.oro.text.regex.Perl5Compiler;
+import org.apache.oro.text.regex.Perl5Matcher;
+
+// @see org.apache.jmeter.extractor.TestRegexExtractor for unit tests
+
+public class RegexExtractor extends AbstractScopedTestElement implements PostProcessor, Serializable {
+
+    private static final long serialVersionUID = 240L;
+
+    private static final Logger log = LoggingManager.getLoggerForClass();
+
+    // What to match against. N.B. do not change the string value or test plans will break!
+    private static final String MATCH_AGAINST = "RegexExtractor.useHeaders"; // $NON-NLS-1$
+    /*
+     * Permissible values:
+     *  true - match against headers
+     *  false or absent - match against body (this was the original default)
+     *  URL - match against URL
+     *  These are passed to the setUseField() method
+     *
+     *  Do not change these values!
+    */
+    public static final String USE_HDRS = "true"; // $NON-NLS-1$
+    public static final String USE_BODY = "false"; // $NON-NLS-1$
+    public static final String USE_BODY_UNESCAPED = "unescaped"; // $NON-NLS-1$
+    public static final String USE_URL = "URL"; // $NON-NLS-1$
+    public static final String USE_CODE = "code"; // $NON-NLS-1$
+    public static final String USE_MESSAGE = "message"; // $NON-NLS-1$
+
+
+    private static final String REGEX = "RegexExtractor.regex"; // $NON-NLS-1$
+
+    private static final String REFNAME = "RegexExtractor.refname"; // $NON-NLS-1$
+
+    private static final String MATCH_NUMBER = "RegexExtractor.match_number"; // $NON-NLS-1$
+
+    private static final String DEFAULT = "RegexExtractor.default"; // $NON-NLS-1$
+
+    private static final String TEMPLATE = "RegexExtractor.template"; // $NON-NLS-1$
+
+    private static final String REF_MATCH_NR = "_matchNr"; // $NON-NLS-1$
+
+    private static final String UNDERSCORE = "_";  // $NON-NLS-1$
+
+    private transient List<Object> template;
+
+    /**
+     * Parses the response data using regular expressions and saving the results
+     * into variables for use later in the test.
+     *
+     * @see org.apache.jmeter.processor.PostProcessor#process()
+     */
+    public void process() {
+        initTemplate();
+        JMeterContext context = getThreadContext();
+        SampleResult previousResult = context.getPreviousResult();
+        if (previousResult == null) {
+            return;
+        }
+        log.debug("RegexExtractor processing result");
+
+        // Fetch some variables
+        JMeterVariables vars = context.getVariables();
+        String refName = getRefName();
+        int matchNumber = getMatchNumber();
+
+        final String defaultValue = getDefaultValue();
+        if (defaultValue.length() > 0){// Only replace default if it is provided
+            vars.put(refName, defaultValue);
+        }
+
+
+        String regex = getRegex();
+        try {
+            List<MatchResult> matches = processMatches(regex, previousResult, matchNumber, vars);
+            int prevCount = 0;
+            String prevString = vars.get(refName + REF_MATCH_NR);
+            if (prevString != null) {
+                vars.remove(refName + REF_MATCH_NR);// ensure old value is not left defined
+                try {
+                    prevCount = Integer.parseInt(prevString);
+                } catch (NumberFormatException e1) {
+                    log.warn("Could not parse "+prevString+" "+e1);
+                }
+            }
+            int matchCount=0;// Number of refName_n variable sets to keep
+            try {
+                MatchResult match;
+                if (matchNumber >= 0) {// Original match behaviour
+                    match = getCorrectMatch(matches, matchNumber);
+                    if (match != null) {
+                        vars.put(refName, generateResult(match));
+                        saveGroups(vars, refName, match);
+                    } else {
+                        // refname has already been set to the default (if present)
+                        removeGroups(vars, refName);
+                    }
+                } else // < 0 means we save all the matches
+                {
+                    removeGroups(vars, refName); // remove any single matches
+                    matchCount = matches.size();
+                    vars.put(refName + REF_MATCH_NR, Integer.toString(matchCount));// Save the count
+                    for (int i = 1; i <= matchCount; i++) {
+                        match = getCorrectMatch(matches, i);
+                        if (match != null) {
+                            final String refName_n = new StringBuilder(refName).append(UNDERSCORE).append(i).toString();
+                            vars.put(refName_n, generateResult(match));
+                            saveGroups(vars, refName_n, match);
+                        }
+                    }
+                }
+                // Remove any left-over variables
+                for (int i = matchCount + 1; i <= prevCount; i++) {
+                    final String refName_n = new StringBuilder(refName).append(UNDERSCORE).append(i).toString();
+                    vars.remove(refName_n);
+                    removeGroups(vars, refName_n);
+                }
+            } catch (RuntimeException e) {
+                log.warn("Error while generating result");
+            }
+        } catch (MalformedCachePatternException e) {
+            log.warn("Error in pattern: " + regex);
+        }
+    }
+
+    private String getInputString(SampleResult result) {
+        String inputString = useUrl() ? result.getUrlAsString() // Bug 39707
+                : useHeaders() ? result.getResponseHeaders()
+                : useCode() ? result.getResponseCode() // Bug 43451
+                : useMessage() ? result.getResponseMessage() // Bug 43451
+                : useUnescapedBody() ? StringEscapeUtils.unescapeHtml(result.getResponseDataAsString())
+                : result.getResponseDataAsString() // Bug 36898
+                ;
+       if (log.isDebugEnabled()) {
+           log.debug("Input = " + inputString);
+       }
+       return inputString;
+    }
+
+    private List<MatchResult> processMatches(String regex, SampleResult result, int matchNumber, JMeterVariables vars) {
+        if (log.isDebugEnabled()) {
+            log.debug("Regex = " + regex);
+        }
+
+        Perl5Matcher matcher = JMeterUtils.getMatcher();
+        Pattern pattern = JMeterUtils.getPatternCache().getPattern(regex, Perl5Compiler.READ_ONLY_MASK);
+        List<MatchResult> matches = new ArrayList<MatchResult>();
+        int found = 0;
+
+        if (isScopeVariable()){
+            String inputString=vars.get(getVariableName());
+            matchStrings(matchNumber, matcher, pattern, matches, found,
+                    inputString);
+        } else {
+            List<SampleResult> sampleList = getSampleList(result);
+            for (SampleResult sr : sampleList) {
+                String inputString = getInputString(sr);
+                found = matchStrings(matchNumber, matcher, pattern, matches, found,
+                        inputString);
+                if (matchNumber > 0 && found == matchNumber){// no need to process further
+                    break;
+                }
+            }
+        }
+        return matches;
+    }
+
+    private int matchStrings(int matchNumber, Perl5Matcher matcher,
+            Pattern pattern, List<MatchResult> matches, int found,
+            String inputString) {
+        PatternMatcherInput input = new PatternMatcherInput(inputString);
+        while (matchNumber <=0 || found != matchNumber) {
+            if (matcher.contains(input, pattern)) {
+                log.debug("RegexExtractor: Match found!");
+                matches.add(matcher.getMatch());
+                found++;
+            } else {
+                break;
+            }
+        }
+        return found;
+    }
+
+    /**
+     * Creates the variables:<br/>
+     * basename_gn, where n=0...# of groups<br/>
+     * basename_g = number of groups (apart from g0)
+     */
+    private void saveGroups(JMeterVariables vars, String basename, MatchResult match) {
+        StringBuilder buf = new StringBuilder();
+        buf.append(basename);
+        buf.append("_g"); // $NON-NLS-1$
+        int pfxlen=buf.length();
+        String prevString=vars.get(buf.toString());
+        int previous=0;
+        if (prevString!=null){
+            try {
+                previous=Integer.parseInt(prevString);
+            } catch (NumberFormatException e) {
+                log.warn("Could not parse "+prevString+" "+e);
+            }
+        }
+        //Note: match.groups() includes group 0
+        final int groups = match.groups();
+        for (int x = 0; x < groups; x++) {
+            buf.append(x);
+            vars.put(buf.toString(), match.group(x));
+            buf.setLength(pfxlen);
+        }
+        vars.put(buf.toString(), Integer.toString(groups-1));
+        for (int i = groups; i <= previous; i++){
+            buf.append(i);
+            vars.remove(buf.toString());// remove the remaining _gn vars
+            buf.setLength(pfxlen);
+        }
+    }
+
+    /**
+     * Removes the variables:<br/>
+     * basename_gn, where n=0...# of groups<br/>
+     * basename_g = number of groups (apart from g0)
+     */
+    private void removeGroups(JMeterVariables vars, String basename) {
+        StringBuilder buf = new StringBuilder();
+        buf.append(basename);
+        buf.append("_g"); // $NON-NLS-1$
+        int pfxlen=buf.length();
+        // How many groups are there?
+        int groups;
+        try {
+            groups=Integer.parseInt(vars.get(buf.toString()));
+        } catch (NumberFormatException e) {
+            groups=0;
+        }
+        vars.remove(buf.toString());// Remove the group count
+        for (int i = 0; i <= groups; i++) {
+            buf.append(i);
+            vars.remove(buf.toString());// remove the g0,g1...gn vars
+            buf.setLength(pfxlen);
+        }
+    }
+
+    private String generateResult(MatchResult match) {
+        StringBuilder result = new StringBuilder();
+        for (Object obj : template) {
+            if (log.isDebugEnabled()) {
+                log.debug("RegexExtractor: Template piece " + obj + " (" + obj.getClass().getSimpleName() + ")");
+            }
+            if (obj instanceof Integer) {
+                result.append(match.group(((Integer) obj).intValue()));
+            } else {
+                result.append(obj);
+            }
+        }
+        if (log.isDebugEnabled()) {
+            log.debug("Regex Extractor result = " + result.toString());
+        }
+        return result.toString();
+    }
+
+    private void initTemplate() {
+        if (template != null) {
+            return;
+        }
+        // Contains Strings and Integers
+        List<Object> combined = new ArrayList<Object>();
+        String rawTemplate = getTemplate();
+        PatternMatcher matcher = JMeterUtils.getMatcher();
+        Pattern templatePattern = JMeterUtils.getPatternCache().getPattern("\\$(\\d+)\\$"  // $NON-NLS-1$
+                , Perl5Compiler.READ_ONLY_MASK
+                & Perl5Compiler.SINGLELINE_MASK);
+        if (log.isDebugEnabled()) {
+            log.debug("Pattern = " + templatePattern.getPattern());
+            log.debug("template = " + rawTemplate);
+        }
+        int beginOffset = 0;
+        MatchResult currentResult;
+        PatternMatcherInput pinput = new PatternMatcherInput(rawTemplate);
+        while(matcher.contains(pinput, templatePattern)) {
+            currentResult = matcher.getMatch();
+            final int beginMatch = currentResult.beginOffset(0);
+            if (beginMatch > beginOffset) { // string is not empty
+                combined.add(rawTemplate.substring(beginOffset, beginMatch));
+            }
+            combined.add(Integer.valueOf(currentResult.group(1)));// add match as Integer
+            beginOffset = currentResult.endOffset(0);
+        }
+
+        if (beginOffset < rawTemplate.length()) { // trailing string is not empty
+            combined.add(rawTemplate.substring(beginOffset, rawTemplate.length()));
+        }
+        if (log.isDebugEnabled()){
+            log.debug("Template item count: "+combined.size());
+            for(Object o : combined){
+                log.debug(o.getClass().getSimpleName()+" '"+o.toString()+"'");
+            }
+        }
+        template = combined;
+    }
+
+    /**
+     * Grab the appropriate result from the list.
+     *
+     * @param matches
+     *            list of matches
+     * @param entry
+     *            the entry number in the list
+     * @return MatchResult
+     */
+    private MatchResult getCorrectMatch(List<MatchResult> matches, int entry) {
+        int matchSize = matches.size();
+
+        if (matchSize <= 0 || entry > matchSize){
+            return null;
+        }
+
+        if (entry == 0) // Random match
+        {
+            return matches.get(JMeterUtils.getRandomInt(matchSize));
+        }
+
+        return matches.get(entry - 1);
+    }
+
+    public void setRegex(String regex) {
+        setProperty(REGEX, regex);
+    }
+
+    public String getRegex() {
+        return getPropertyAsString(REGEX);
+    }
+
+    public void setRefName(String refName) {
+        setProperty(REFNAME, refName);
+    }
+
+    public String getRefName() {
+        return getPropertyAsString(REFNAME);
+    }
+
+    /**
+     * Set which Match to use. This can be any positive number, indicating the
+     * exact match to use, or 0, which is interpreted as meaning random.
+     *
+     * @param matchNumber
+     */
+    public void setMatchNumber(int matchNumber) {
+        setProperty(new IntegerProperty(MATCH_NUMBER, matchNumber));
+    }
+
+    public void setMatchNumber(String matchNumber) {
+        setProperty(MATCH_NUMBER, matchNumber);
+    }
+
+    public int getMatchNumber() {
+        return getPropertyAsInt(MATCH_NUMBER);
+    }
+
+    public String getMatchNumberAsString() {
+        return getPropertyAsString(MATCH_NUMBER);
+    }
+
+    /**
+     * Sets the value of the variable if no matches are found
+     *
+     * @param defaultValue
+     */
+    public void setDefaultValue(String defaultValue) {
+        setProperty(DEFAULT, defaultValue);
+    }
+
+    public String getDefaultValue() {
+        return getPropertyAsString(DEFAULT);
+    }
+
+    public void setTemplate(String template) {
+        setProperty(TEMPLATE, template);
+    }
+
+    public String getTemplate() {
+        return getPropertyAsString(TEMPLATE);
+    }
+
+    public boolean useHeaders() {
+        return USE_HDRS.equalsIgnoreCase( getPropertyAsString(MATCH_AGAINST));
+    }
+
+    // Allow for property not yet being set (probably only applies to Test cases)
+    public boolean useBody() {
+        String prop = getPropertyAsString(MATCH_AGAINST);
+        return prop.length()==0 || USE_BODY.equalsIgnoreCase(prop);// $NON-NLS-1$
+    }
+
+    public boolean useUnescapedBody() {
+        String prop = getPropertyAsString(MATCH_AGAINST);
+        return USE_BODY_UNESCAPED.equalsIgnoreCase(prop);// $NON-NLS-1$
+    }
+
+    public boolean useUrl() {
+        String prop = getPropertyAsString(MATCH_AGAINST);
+        return USE_URL.equalsIgnoreCase(prop);
+    }
+
+    public boolean useCode() {
+        String prop = getPropertyAsString(MATCH_AGAINST);
+        return USE_CODE.equalsIgnoreCase(prop);
+    }
+
+    public boolean useMessage() {
+        String prop = getPropertyAsString(MATCH_AGAINST);
+        return USE_MESSAGE.equalsIgnoreCase(prop);
+    }
+
+    public void setUseField(String actionCommand) {
+        setProperty(MATCH_AGAINST,actionCommand);
+    }
+}

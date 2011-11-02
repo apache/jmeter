@@ -1,0 +1,1491 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+ 
+       http://www.apache.org/licenses/LICENSE-2.0
+ 
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<!-- Content Stylesheet for Site -->
+
+
+<!-- start the processing -->
+<!-- ====================================================================== -->
+<!-- Main Page Section -->
+<!-- ====================================================================== -->
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../css/style.css"/>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+
+
+
+<title>JMeter - User's Manual: Getting Started</title>
+</head>
+
+<body bgcolor="#ffffff" text="#000000" link="#525D76">
+<table border="0" cellspacing="0">
+<!-- TOP IMAGE -->
+<tr>
+<td>
+<!-- Need to specify height otherwise iframe seems to grab extra -->
+<iframe src="http://www.apache.org/ads/halfbanner.html" height="102"
+style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
+</td>
+<td align="left">
+<a href="http://jakarta.apache.org"><img width="505" height="48" src="../images/jakarta-logo.gif" alt="Jakarta" title="Jakarta" border="0"/></a>
+</td>
+<td align="right">
+<a href="http://jakarta.apache.org/jmeter/"><img width="221" height="102" src="../images/logo.jpg" alt="JMeter" title="JMeter" border="0"/></a>
+</td>
+</tr>
+</table>
+<table border="0" width="100%" cellspacing="4">
+<tr><td colspan="2">
+<hr noshade size="1"/>
+</td></tr>
+<tr>
+<!-- LEFT SIDE NAVIGATION -->
+<td width="20%" valign="top" nowrap="true">
+<p><strong>About</strong></p>
+<ul>
+<li><a href="../index.html">Overview</a>
+</li>
+<li><a href="../changes.html">Changes</a>
+</li>
+<li><a href="../issues.html">Issues</a>
+</li>
+<li><a href="http://www.apache.org/licenses/">License</a>
+</li>
+<li><a href="http://wiki.apache.org/jakarta-jmeter/JMeterCommitters">Contributors</a>
+</li>
+</ul>
+<p><strong>Download</strong></p>
+<ul>
+<li><a href="http://jakarta.apache.org/site/downloads/downloads_jmeter.cgi">Download Releases</a>
+</li>
+<li><a href="../nightly.html">Developer (Nightly) Builds</a>
+</li>
+</ul>
+<p><strong>Documentation</strong></p>
+<ul>
+<li><a href="../usermanual/index.html">User Manual</a>
+</li>
+<li><a href="../api/index.html">Javadocs</a>
+</li>
+<li><a href="../localising/index.html">Localisation (Translator's Guide)</a>
+</li>
+<li><a href="../building.html">Building JMeter and Add-Ons</a>
+</li>
+<li><a href="http://wiki.apache.org/jakarta-jmeter">JMeter Wiki</a>
+</li>
+<li><a href="http://wiki.apache.org/jakarta-jmeter/JMeterFAQ">FAQ (Wiki)</a>
+</li>
+</ul>
+<p><strong>Tutorials (PDF format)</strong></p>
+<ul>
+<li><a href="../usermanual/jmeter_distributed_testing_step_by_step.pdf">Distributed Testing</a>
+</li>
+<li><a href="../usermanual/jmeter_proxy_step_by_step.pdf">Recording Tests</a>
+</li>
+<li><a href="../usermanual/junitsampler_tutorial.pdf">JUnit Sampler</a>
+</li>
+<li><a href="../usermanual/jmeter_accesslog_sampler_step_by_step.pdf">Access Log Sampler</a>
+</li>
+<li><a href="../extending/jmeter_tutorial.pdf">Extending JMeter</a>
+</li>
+</ul>
+<p><strong>Community</strong></p>
+<ul>
+<li><a href="http://jakarta.apache.org/site/getinvolved.html">Get Involved</a>
+</li>
+<li><a href="http://jakarta.apache.org/site/mail.html">Mailing Lists</a>
+</li>
+<li><a href="http://jakarta.apache.org/site/cvsindex.html">SVN Repositories</a>
+</li>
+</ul>
+<p><strong>Foundation</strong></p>
+<ul>
+<li><a href="http://www.apache.org/">ASF</a>
+</li>
+<li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
+</li>
+<li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a>
+</li>
+</ul>
+</td>
+<td width="80%" align="left" valign="top">
+<table>
+<tr>
+<td bgcolor="#525D76">
+<div align="right"><a href="index.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Index</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="build-test-plan.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Next</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="intro.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Prev</font></a></div>
+</td>
+</tr>
+</table>
+<br>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#525D76">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="get_started"><strong>2. Getting Started</strong></a><a class="sectionlink" href="#get_started" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+The easiest way to begin using JMeter is to first
+
+<a href="http://jakarta.apache.org/site/downloads/index.html">
+download the latest production release
+</a>
+ and install it.
+The release contains all of the files you need to build and run most types of tests,
+e.g. Web (HTTP/HTTPS), FTP, JDBC, LDAP, Java, and JUnit.
+</p>
+<p>
+If you want to perform JDBC testing,
+then you will, of course, need the appropriate JDBC driver from your vendor.  JMeter does not come with
+any JDBC drivers.
+</p>
+<p>
+
+JMeter includes the JMS API jar, but does not include a JMS client implementation.
+If you want to run JMS tests, you will need to download the appropriate jars from the JMS provider.
+
+</p>
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>
+See the 
+<a href="#classpath">
+JMeter Classpath
+</a>
+ section for details on installing additional jars.
+
+</td></tr>
+</table>
+</p>
+<p>
+Next, start JMeter and go through the 
+<a href="build-test-plan.html">
+Building a Test Plan
+</a>
+ section
+of the User Guide to familiarize yourself with JMeter basics (for example, adding and removing elements).
+</p>
+<p>
+Finally, go through the appropriate section on how to build a specific type of Test Plan.
+For example, if you are interested in testing a Web application, then see the section
+
+<a href="build-web-test-plan.html">
+Building a Web Test Plan
+</a>
+.
+The other specific Test Plan sections are:
+
+<ul>
+
+
+<li>
+<a href="build-adv-web-test-plan.html">
+Advanced Web Test Plan
+</a>
+</li>
+
+
+<li>
+<a href="build-db-test-plan.html">
+JDBC
+</a>
+</li>
+
+
+<li>
+<a href="build-ftp-test-plan.html">
+FTP
+</a>
+</li>
+
+
+<li>
+<a href="build-jms-point-to-point-test-plan.html">
+JMS Point-to-Point
+</a>
+</li>
+
+
+<li>
+<a href="build-jms-topic-test-plan.html">
+JMS Topic
+</a>
+</li>
+
+
+<li>
+<a href="build-ldap-test-plan.html">
+LDAP
+</a>
+</li>
+
+
+<li>
+<a href="build-ldapext-test-plan.html">
+LDAP Extended
+</a>
+</li>
+
+
+<li>
+<a href="build-ws-test-plan.html">
+WebServices (SOAP)
+</a>
+</li>
+
+
+</ul>
+
+
+</p>
+<p>
+Once you are comfortable with building and running JMeter Test Plans, you can look into the
+various configuration elements (timers, listeners, assertions, and others) which give you more control
+over your Test Plans.
+</p>
+</blockquote>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#525D76">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="requirements"><strong>2.1 Requirements</strong></a><a class="sectionlink" href="#requirements" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+JMeter requires your computing environment meets some minimum requirements.
+</p>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="java_versions"><strong>2.1.1 Java Version</strong></a>
+<a class="sectionlink" href="#java_versions" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>JMeter requires a fully compliant JVM 1.5 or higher.  
+
+</td></tr>
+</table>
+</p>
+<p>
+Because JMeter uses only standard Java APIs, please do not file bug reports if your JRE fails to run
+JMeter because of JRE implementation issues.
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="os"><strong>2.1.2 Operating Systems</strong></a>
+<a class="sectionlink" href="#os" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+JMeter is a 100% Java application and should run correctly on any system
+that has a compliant Java implementation.
+</p>
+<p>
+Operating systems tested with JMeter can be view on  
+
+<a href="http://wiki.apache.org/jakarta-jmeter/JMeterAndOperatingSystemsTested">
+this page
+</a>
+
+on JMeter wiki.
+</p>
+<p>
+Even if your OS is not listed on the wiki page, JMeter should run on it provided that the JVM is compliant.
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+</blockquote>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#525D76">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="optional"><strong>2.2 Optional</strong></a><a class="sectionlink" href="#optional" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+If you plan on doing JMeter development, then you will need one or more optional packages listed below.
+</p>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="opt_compiler"><strong>2.2.1 Java Compiler</strong></a>
+<a class="sectionlink" href="#opt_compiler" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+If you want to build the JMeter source or develop JMeter plugins, then you will need a fully compliant JDK 1.5 or higher.
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="opt_sax"><strong>2.2.2 SAX XML Parser</strong></a>
+<a class="sectionlink" href="#opt_sax" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+JMeter comes with Apache's 
+<a href="http://xml.apache.org/">
+Xerces XML parser
+</a>
+. You have the option of telling JMeter
+to use a different XML parser. To do so, include the classes for the third-party parser in JMeter's 
+<a href="#classpath">
+classpath
+</a>
+,
+and update the 
+<a href="#configuring_jmeter">
+jmeter.properties
+</a>
+ file with the full classname of the parser
+implementation.
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="opt_email"><strong>2.2.3 Email Support</strong></a>
+<a class="sectionlink" href="#opt_email" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+JMeter has extensive Email capabilities. 
+It can send email based on test results, and has a POP3(S)/IMAP(S) sampler.
+It also has an SMTP sampler.
+
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="opt_ssl"><strong>2.2.4 SSL Encryption</strong></a>
+<a class="sectionlink" href="#opt_ssl" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+To test a web server using SSL encryption (HTTPS), JMeter requires that an
+implementation of SSL be provided, as is the case with Sun Java 1.4 and above.
+If your version of Java does not include SSL support, then it is possible to add an external implementation.
+Include the necessary encryption packages in JMeter's 
+<a href="#classpath">
+classpath
+</a>
+.  
+Also, update 
+<a href="#configuring_jmeter">
+system.properties
+</a>
+ to register the SSL Provider.
+</p>
+<p>
+
+JMeter HTTP defaults to protocol level TLS. This can be changed by editting the JMeter property 
+"https.default.protocol" in jmeter.properties or user.properties.
+
+</p>
+<p>
+<b>
+The JMeter HTTP samplers are configured to accept all certificates,
+whether trusted or not, regardless of validity periods etc.
+</b>
+
+This is to allow the maximum flexibility in testing servers.
+</p>
+<p>
+If the server requires a client certificate, this can be provided.
+</p>
+<p>
+There is also the 
+<a href="../usermanual/component_reference.html#SSL_Manager">SSL Manager</a>
+, for greater control of certificates.
+</p>
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>The JMeter proxy server (see below) supports recording HTTPS (SSL) in versions after 2.3.4
+</td></tr>
+</table>
+</p>
+<p>
+
+The SMTP sampler can optionally use a local trust store or trust all certificates.
+
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="opt_jdbc"><strong>2.2.5 JDBC Driver</strong></a>
+<a class="sectionlink" href="#opt_jdbc" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+You will need to add your database vendor's JDBC driver to the 
+<a href="#classpath">
+classpath
+</a>
+ if you want to do JDBC testing.
+Make sure the file is a jar file, not a zip.
+
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="opt_jms"><strong>2.2.6 JMS client</strong></a>
+<a class="sectionlink" href="#opt_jms" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+
+JMeter now includes the JMS API from Apache Geronimo, so you just need to add the appropriate JMS Client implementation
+jar(s) from the JMS provider. Please refer to their documentation for details. 
+There may also be some information on the 
+<a href="http://wiki.apache.org/jakarta-jmeter/">
+JMeter Wiki
+</a>
+.
+
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="libraries_activemq"><strong>2.2.7 Libraries for ActiveMQ JMS</strong></a>
+<a class="sectionlink" href="#libraries_activemq" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+
+At the time of writing, the current version of ActiveMQ is 5.3.2.
+You will need to add the jar activemq-all-5.3.2.jar to your classpath, e.g. by storing it in the lib/ directory.
+
+</p>
+<p>
+
+Alternatively, add the jar activemq-core-5.3.2.jar to the classpath; 
+this requires the javax/management/j2ee classes which can be found in the 
+Apache Geronimo jar geronimo-j2ee-management_1.0_spec-1.0.jar.
+The other required jars (such as commons-logging) are already included with JMeter. 
+
+</p>
+<p>
+
+See 
+<a href="http://activemq.apache.org/initial-configuration.html">
+http://activemq.apache.org/initial-configuration.html
+</a>
+
+for details.
+
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>
+See the 
+<a href="#classpath">
+JMeter Classpath
+</a>
+ section for more details on installing additional jars.
+
+</td></tr>
+</table>
+</p>
+</blockquote>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#525D76">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="install"><strong>2.3 Installation</strong></a><a class="sectionlink" href="#install" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+We recommend that most users run the 
+<a href="http://jakarta.apache.org/site/downloads/index.html">
+latest release
+</a>
+.
+</p>
+<p>
+To install a release build, simply unzip the zip/tar file into the directory
+where you want JMeter to be installed.  Provided that you have a JRE/JDK correctly installed
+and the JAVA_HOME environment variable set, there is nothing more for you to do.
+</p>
+<p>
+
+Note: there can be problems (especially with client-server mode) if the directory path contains any spaces.
+
+</p>
+<p>
+
+The installation directory structure should look something like this (for version 2.3.1):
+
+<pre>
+
+jakarta-jmeter-2.3.1
+jakarta-jmeter-2.3.1/bin
+jakarta-jmeter-2.3.1/docs
+jakarta-jmeter-2.3.1/extras
+jakarta-jmeter-2.3.1/lib/
+jakarta-jmeter-2.3.1/lib/ext
+jakarta-jmeter-2.3.1/lib/junit
+jakarta-jmeter-2.3.1/printable_docs
+
+</pre>
+
+You can rename the parent directory (i.e. jakarta-jmeter-2.3.1) if you want, but do not change any of the sub-directory names.
+
+</p>
+</blockquote>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#525D76">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="running"><strong>2.4 Running JMeter</strong></a><a class="sectionlink" href="#running" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<br>
+</br>
+<p>
+To run JMeter, run the jmeter.bat (for Windows) or jmeter (for Unix) file.
+These files are found in the bin directory.
+After a short pause, the JMeter GUI should appear. 
+
+</p>
+<p>
+
+There are some additional scripts in the bin directory that you may find useful.
+Windows script files (the .CMD files require Win2K or later):
+
+<ul>
+
+
+<li>
+jmeter.bat - run JMeter (in GUI mode by default)
+</li>
+
+
+<li>
+jmeter-n.cmd - drop a JMX file on this to run a non-GUI test
+</li>
+
+
+<li>
+jmeter-n-r.cmd - drop a JMX file on this to run a non-GUI test remotely
+</li>
+
+
+<li>
+jmeter-t.cmd - drop a JMX file on this to load it in GUI mode
+</li>
+
+
+<li>
+jmeter-server.bat - start JMeter in server mode
+</li>
+
+
+<li>
+mirror-server.cmd - runs the JMeter Mirror Server in non-GUI mode
+</li>
+
+
+<li>
+shutdown.cmd - Run the Shutdown client to stop a non-GUI instance gracefully
+</li>
+
+
+<li>
+stoptest.cmd - Run the Shutdown client to stop a non-GUI instance abruptly
+</li>
+
+
+</ul>
+
+Note: the special name LAST can be used with jmeter-n.cmd, jmeter-t.cmd and jmeter-n-r.cmd
+and means the last test plan that was run interactively.
+
+</p>
+<p>
+
+The environment variable JVM_ARGS can be used to override JVM settings in the jmeter.bat script.
+For example:
+
+<pre>
+
+set JVM_ARGS="-Xms1024m -Xmx1024m -Dpropname=propvalue"
+jmeter -t test.jmx ...
+
+</pre>
+
+
+</p>
+<p>
+
+Un*x script files; should work on most Linux/Unix systems:
+
+<ul>
+
+
+<li>
+jmeter - run JMeter (in GUI mode by default). Defines some JVM settings which may not work for all JVMs.
+</li>
+
+
+<li>
+jmeter-server - start JMeter in server mode (calls jmeter script with appropriate parameters)
+</li>
+
+
+<li>
+jmeter.sh - very basic JMeter script with no JVM options specified.
+</li>
+
+
+<li>
+mirror-server.sh - runs the JMeter Mirror Server in non-GUI mode
+</li>
+
+
+<li>
+shutdown.sh - Run the Shutdown client to stop a non-GUI instance gracefully
+</li>
+
+
+<li>
+stoptest.sh - Run the Shutdown client to stop a non-GUI instance abruptly
+</li>
+
+
+</ul>
+
+
+</p>
+<p>
+
+It may be necessary to edit the jmeter shell script if some of the JVM options are not supported
+by the JVM you are using.
+The JVM_ARGS environment variable can be used to override or set additional JVM options, for example:
+
+<pre>
+
+JVM_ARGS="-Xms1024m -Xmx1024m" jmeter -t test.jmx [etc.]
+
+</pre>
+
+will override the HEAP settings in the script.
+
+</p>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="classpath"><strong>2.4.1 JMeter's Classpath</strong></a>
+<a class="sectionlink" href="#classpath" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+JMeter automatically finds classes from jars in the following directories:
+</p>
+<ul>
+
+
+<li>
+JMETER_HOME/lib - used for utility jars
+</li>
+
+
+<li>
+JMETER_HOME/lib/ext - used for JMeter components and add-ons
+</li>
+
+
+</ul>
+<p>
+If you have developed new JMeter components,
+then you should jar them and copy the jar into JMeter's 
+<b>
+lib/ext
+</b>
+ directory.
+JMeter will automatically find JMeter components in any jars found here.
+
+</p>
+<p>
+Support jars (libraries etc) should be placed in the 
+<b>
+lib
+</b>
+ directory.
+</p>
+<p>
+If you don't want to put JMeter extension jars in the 
+<b>
+lib/ext
+</b>
+ directory,
+then define the property 
+<b>
+search_paths
+</b>
+ in jmeter.properties.
+Do not use lib/ext for utility jars; it is only intended for JMeter components.
+
+</p>
+<p>
+
+Other jars (such as JDBC, JMS implementations and any other support libaries needed by the JMeter code)
+ should be placed in the 
+<b>
+lib
+</b>
+ directory - not the 
+<b>
+lib/ext
+</b>
+ directory
+</p>
+<p>
+Note: JMeter will only find .jar files, not .zip.
+</p>
+<p>
+You can also install utility Jar files in $JAVA_HOME/jre/lib/ext, or (since 2.1.1) you can set the property 
+<b>
+user.classpath
+</b>
+ in jmeter.properties
+</p>
+<p>
+Note that setting the CLASSPATH environment variable will have no effect.
+This is because JMeter is started with "java -jar", 
+and the java command silently ignores the CLASSPATH variable, and the -classpath/-cp options when -jar is used. 
+[This occurs with all Java programs, not just JMeter.]
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="proxy_server"><strong>2.4.2 Using a Proxy Server</strong></a>
+<a class="sectionlink" href="#proxy_server" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+If you are testing from behind a firewall/proxy server, you may need to provide JMeter with
+the firewall/proxy server hostname and port number.  To do so, run the jmeter.bat/jmeter file
+from a command line with the following parameters:
+</p>
+<p>
+
+-H [proxy server hostname or ip address]
+<br>
+</br>
+
+-P [proxy server port]
+<br>
+</br>
+
+-N [nonproxy hosts] (e.g. *.apache.org|localhost)
+<br>
+</br>
+
+-u [username for proxy authentication - if required]
+<br>
+</br>
+
+-a [password for proxy authentication - if required]
+<br>
+</br>
+
+
+</p>
+<p>
+<b>
+Example
+</b>
+: jmeter -H my.proxy.server -P 8000 -u username -a password -N localhost
+</p>
+<p>
+Alternatively, you can use --proxyHost, --proxyPort, --username, and --password
+</p>
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>JMeter also has its own in-built 
+<a href="../usermanual/component_reference.html#HTTP_Proxy_Server">HTTP Proxy Server</a>
+,
+which can be used for recording HTTP or HTTPS browser sessions.
+This is not to be confused with the proxy settings described above, which are used when JMeter makes HTTP or HTTPS requests itself.
+</td></tr>
+</table>
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="non_gui"><strong>2.4.3 Non-GUI Mode (Command Line mode)</strong></a>
+<a class="sectionlink" href="#non_gui" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+For non-interactive testing, you may choose to run JMeter without the GUI. To do so, use
+the following command options
+</p>
+<p>
+-n This specifies JMeter is to run in non-gui mode
+</p>
+<p>
+-t [name of JMX file that contains the Test Plan].
+</p>
+<p>
+-l [name of JTL file to log sample results to].
+</p>
+<p>
+-j [name of JMeter run log file].
+</p>
+<p>
+-r Run the test in the servers specified by the JMeter property "remote_hosts"
+</p>
+<p>
+-R [list of remote servers] Run the test in the specified remote servers
+</p>
+<p>
+The script also lets you specify the optional firewall/proxy server information:
+</p>
+<p>
+-H [proxy server hostname or ip address]
+<br>
+</br>
+
+-P [proxy server port]
+</p>
+<p>
+<b>
+Example
+</b>
+: jmeter -n -t my_test.jmx -l log.jtl -H my.proxy.server -P 8000
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="server"><strong>2.4.4 Server Mode</strong></a>
+<a class="sectionlink" href="#server" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+For 
+<a href="remote-test.html">
+distributed testing
+</a>
+, run JMeter in server mode on the remote node(s), and then control the server(s) from the GUI.
+You can also use non-GUI mode to run remote tests.
+To start the server(s), run jmeter-server/jmeter-server.bat on each server host.
+</p>
+<p>
+The script also lets you specify the optional firewall/proxy server information:
+</p>
+<p>
+-H [proxy server hostname or ip address]
+<br>
+</br>
+
+-P [proxy server port]
+</p>
+<p>
+<b>
+Example
+</b>
+: jmeter-server -H my.proxy.server -P 8000
+</p>
+<p>
+If you want the server to exit after a single test has been run, then define the JMeter property server.exitaftertest=true.
+
+</p>
+<p>
+To run the test from the client in non-GUI mode, use the following command:
+</p>
+<pre>
+
+jmeter -n -t testplan.jmx -r [-Gprop=val] [-Gglobal.properties] [-Z]
+where:
+-G is used to define JMeter properties to be set in the servers
+-X means exit the servers at the end of the test
+-Rserver1,server2 - can be used instead of -r to provide a list of servers to start
+  Overrides remote_hosts, but does not define the property.
+
+</pre>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="override"><strong>2.4.5 Overriding Properties Via The Command Line</strong></a>
+<a class="sectionlink" href="#override" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+Java system properties, JMeter properties, and logging properties can be overriden directly on the command line (instead of modifying jmeter.properties).
+To do so, use the following options:
+</p>
+<p>
+-D[prop_name]=[value] - defines a java system property value.
+</p>
+<p>
+-J[prop name]=[value] - defines a local JMeter property.
+</p>
+<p>
+-G[prop name]=[value] - defines a JMeter property to be sent to all remote servers.
+</p>
+<p>
+-G[propertyfile] - defines a file containing JMeter properties to be sent to all remote servers.
+</p>
+<p>
+-L[category]=[priority] - overrides a logging setting, setting a particular category to the given priority level.
+</p>
+<p>
+The -L flag can also be used without the category name to set the root logging level.
+</p>
+<p>
+<b>
+Examples
+</b>
+:
+
+<pre>
+
+jmeter -Duser.dir=/home/mstover/jmeter_stuff \
+    -Jremote_hosts=127.0.0.1 -Ljmeter.engine=DEBUG
+
+jmeter -LDEBUG
+</pre>
+
+
+</p>
+<p>
+
+
+<b>
+N.B.
+<br>
+</br>
+
+	The command line properties are processed early in startup, but after the logging system has been set up.
+	Attempts to use the -J flag to update log_level or log_file properties will have no effect.
+</b>
+
+	
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="logging"><strong>2.4.6 Logging and error messages</strong></a>
+<a class="sectionlink" href="#logging" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>
+    JMeter does not generally use pop-up dialog boxes for errors, as these would interfere with
+    running tests. Nor does it report any error for a mis-spelt variable or function; instead the
+    reference is just used as is. See 
+<a href="functions.html">
+Functions and Variables for more information
+</a>
+.
+    
+</td></tr>
+</table>
+</p>
+<p>
+If JMeter detects an error during a test, a message will be written to the log file. 
+		The log file name is defined in the jmeter.properties file (or using the -j option, see below).
+		It defaults to 
+<b>
+jmeter.log
+</b>
+, and will be found in the directory from which JMeter was launched.
+		
+</p>
+<p>
+
+		JMeter versions after 2.2 added a new command-line option, -j jmeterlogfile. 
+		This is processed after the initial properties file is read,
+		and before any further properties are processed. 
+		It therefore allows the default of jmeter.log to be overridden.
+		The jmeter scripts that take a test plan name as a parameter (e.g. jmeter-n.cmd) have been updated
+		to define the log file using the test plan name,
+		e.g. for the test plan Test27.jmx the log file is set to Test27.log.
+		
+</p>
+<p>
+When running on Windows, the file may appear as just 
+<b>
+jmeter
+</b>
+ unless you have set Windows to show file extensions.
+		[Which you should do anyway, to make it easier to detect viruses and other nasties that pretend to be text files...]
+		
+</p>
+<p>
+As well as recording errors, the jmeter.log file records some information about the test run. For example:
+</p>
+<div overflow="scroll">
+
+
+<pre>
+
+10/17/2003 12:19:20 PM INFO  - jmeter.JMeter: Version 1.9.20031002 
+10/17/2003 12:19:45 PM INFO  - jmeter.gui.action.Load: Loading file: c:\mytestfiles\BSH.jmx 
+10/17/2003 12:19:52 PM INFO  - jmeter.engine.StandardJMeterEngine: Running the test! 
+10/17/2003 12:19:52 PM INFO  - jmeter.engine.StandardJMeterEngine: Starting 1 threads for group BSH. Ramp up = 1. 
+10/17/2003 12:19:52 PM INFO  - jmeter.engine.StandardJMeterEngine: Continue on error 
+10/17/2003 12:19:52 PM INFO  - jmeter.threads.JMeterThread: Thread BSH1-1 started 
+10/17/2003 12:19:52 PM INFO  - jmeter.threads.JMeterThread: Thread BSH1-1 is done 
+10/17/2003 12:19:52 PM INFO  - jmeter.engine.StandardJMeterEngine: Test has ended 	
+
+</pre>
+
+
+</div>
+<p>
+The log file can be helpful in determining the cause of an error,
+	as JMeter does not interrupt a test to display an error dialogue.
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="options"><strong>2.4.7 Full list of command-line options</strong></a>
+<a class="sectionlink" href="#options" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+Invoking JMeter as "jmeter -?" will print a list of all the command-line options. 
+These are shown below.
+</p>
+<pre>
+
+        -h, --help
+                print usage information and exit
+        -v, --version
+                print the version information and exit
+        -p, --propfile {argument}
+                the jmeter property file to use
+        -q, --addprop {argument}
+                additional property file(s)
+        -t, --testfile {argument}
+                the jmeter test(.jmx) file to run
+        -j, --jmeterlogfile {argument}
+                the jmeter log file
+        -l, --logfile {argument}
+                the file to log samples to
+        -n, --nongui
+                run JMeter in nongui mode
+        -s, --server
+                run the JMeter server
+        -H, --proxyHost {argument}
+                Set a proxy server for JMeter to use
+        -P, --proxyPort {argument}
+                Set proxy server port for JMeter to use
+        -u, --username {argument}
+                Set username for proxy server that JMeter is to use
+        -a, --password {argument}
+                Set password for proxy server that JMeter is to use
+        -J, --jmeterproperty {argument}={value}
+                Define additional JMeter properties
+        -G, --globalproperty (argument)[=(value)]
+                Define Global properties (sent to servers)
+                e.g. -Gport=123
+                 or -Gglobal.properties
+        -D, --systemproperty {argument}={value}
+                Define additional System properties
+        -S, --systemPropertyFile {filename}
+                a property file to be added as System properties
+        -L, --loglevel {argument}={value}
+                Define loglevel: [category=]level 
+                e.g. jorphan=INFO or jmeter.util=DEBUG
+        -r, --runremote (non-GUI only)
+                Start remote servers (as defined by the jmeter property remote_hosts)
+        -R, --remotestart  server1,... (non-GUI only)
+                Start these remote servers (overrides remote_hosts)
+        -d, --homedir {argument}
+                the jmeter home directory to use
+        -X, --remoteexit
+                Exit the remote servers at end of test (non-GUI)
+
+</pre>
+<p>
+
+Note: the JMeter log file name is formatted as a SimpleDateFormat (applied to the current date) 
+if it contains paired single-quotes,  .e.g. 'jmeter_'yyyyMMddHHmmss'.log'
+
+</p>
+<p>
+
+If the special name LAST is used for the -t, -j or -l flags, then JMeter takes that to mean the last test plan
+that was run in interactive mode.
+
+</p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+</blockquote>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#525D76">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="configuring_jmeter"><strong>2.5 Configuring JMeter</strong></a><a class="sectionlink" href="#configuring_jmeter" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+If you wish to modify the properties with which JMeter runs you need to
+  either modify the jmeter.properties in the /bin directory or create
+  your own copy of the jmeter.properties and specify it in the command line.
+  
+</p>
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>
+  Note: since 2.2, you can define additional JMeter properties in the file defined by the
+  JMeter property 
+<b>
+user.properties
+</b>
+ which has the default value 
+<b>
+user.properties
+</b>
+.
+  The file will be automatically loaded if it is found in the current directory
+  or if it is found in the JMeter bin directory.
+  Similarly, 
+<b>
+system.properties
+</b>
+ is used to update system properties.
+  
+</td></tr>
+</table>
+</p>
+<p>
+<b>Parameters</b>
+<table border="1" cellspacing="0" cellpadding="2">
+<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+<tr>
+<td>ssl.provider</td>
+<td>You can specify the class for your SSL
+	implementation if you don't want to use the built-in Java implementation.
+	
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>xml.parser</td>
+<td>You can specify an implementation as your XML
+	parser.  The default value is: org.apache.xerces.parsers.SAXParser
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>remote_hosts</td>
+<td>Comma-delimited list of remote JMeter hosts (or host:port if required).
+	If you are running JMeter in a distributed environment, list the machines where
+  you have JMeter remote servers running.  This will allow you to control those
+	servers from this machine's GUI
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>not_in_menu</td>
+<td>A list of components you do not want to see in
+	JMeter's menus.  As JMeter has more and more components added, you may wish to
+  customize your JMeter to show only those components you are interested in.
+  You may list their classname or their class label (the string that appears
+  in JMeter's UI) here, and they will no longer appear in the menus.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>search_paths</td>
+<td>
+  List of paths (separated by ;) that JMeter will search for JMeter add-on classes;
+  for example additional samplers.
+  This is in addition to any jars found in the lib/ext directory.
+  
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>user.classpath</td>
+<td>
+  List of paths that JMeter will search for utility classes.
+  This is in addition to any jars found in the lib directory.
+  
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>user.properties</td>
+<td>
+  Name of file containing additional JMeter properties. 
+  These are added after the initial property file, but before the -q and -J options are processed.
+  
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>system.properties</td>
+<td>
+  Name of file containing additional system properties.
+  These are added before the -S and -D options are processed.
+  
+</td>
+<td>
+No
+</td>
+</tr>
+</table>
+</p>
+<p>
+
+  The command line options and properties files are processed in the following order:
+  
+<ul>
+
+  
+<li>
+-p propfile
+</li>
+
+  
+<li>
+jmeter.properties (or the file from the -p option) is then loaded
+</li>
+
+  
+<li>
+-j logfile
+</li>
+
+  
+<li>
+Logging is initialised
+</li>
+
+  
+<li>
+user.properties is loaded
+</li>
+
+  
+<li>
+system.properties is loaded
+</li>
+
+  
+<li>
+all other command-line options are processed
+</li>
+
+  
+</ul>
+
+  
+</p>
+<p>
+<b>
+
+See also the comments in the jmeter.properties, user.properties and system.properties files for further information on other settings you can change.
+
+</b>
+</p>
+</blockquote>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table>
+<tr>
+<td bgcolor="#525D76">
+<div align="right"><a href="index.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Index</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="build-test-plan.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Next</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="intro.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Prev</font></a></div>
+</td>
+</tr>
+</table>
+<br>
+</td>
+</tr>
+<tr><td colspan="2">
+<hr noshade size="1"/>
+</td></tr>
+<tr><td colspan="2">
+<div align="center"><font color="#525D76" size="-1"><em>
+Copyright &copy; 1999-2011, Apache Software Foundation
+</em></font></div>
+</td></tr>
+<tr><td colspan="2">
+<div align="center"><font color="#525D76" size="-1">
+Apache, Apache JMeter, JMeter, the Apache feather, and the Apache JMeter logo are
+trademarks of the Apache Software Foundation.
+</font>
+</div>
+</td></tr>
+</table>
+</body>
+</html>
+<!-- end the processing -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

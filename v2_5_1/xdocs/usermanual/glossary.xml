@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+ 
+       http://www.apache.org/licenses/LICENSE-2.0
+ 
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<!DOCTYPE document
+[
+<!ENTITY sect-num '22'>
+]>
+<document prev="hints_and_tips.html" id="$Id$">
+
+<properties>
+  <title>User's Manual: Glossary</title>
+</properties>
+
+<body>
+
+<section name="&sect-num;. Glossary" anchor="glossary">
+
+<p>
+<a name="Elapsed"><b>Elapsed time</b></a>. JMeter measures the elapsed time from just before sending the request to
+just after the last response has been received.
+JMeter does not include the time needed to render the response, nor does JMeter process any client code, for example
+Javascript.
+</p>
+
+<p>
+<a name="Latency"><b>Latency</b></a>. JMeter measures the latency from just before sending the request to
+just after the first response has been received. Thus the time
+includes all the processing needed to assemble the request as well as
+assembling the first part of the response, which in general will be longer than one
+byte.
+Protocol analysers (such as Wireshark) measure the time when bytes are actually sent/received over the interface.
+The JMeter time should be closer to that which is experienced by a
+browser or other application client.
+</p>
+
+<p>
+<a name="Median"><b>Median</b></a> is a number which divides the samples into two equal halves.
+Half of the samples are smaller than the median, and half are larger.
+[Some samples may equal the median.]
+This is a standard statistical measure.
+See, for example: <a href="http://en.wikipedia.org/wiki/Median">Median</a> entry at Wikipedia.
+The Median is the same as the 50<sup>th</sup> Percentile
+</p>
+
+<p>
+<a name="Percentile"><b>90% Line (90<sup>th</sup> Percentile)</b></a> is the value below which 90% of the samples fall.
+The remaining samples too at least as long as the value.
+This is a standard statistical measure.
+See, for example: <a href="http://en.wikipedia.org/wiki/Percentile">Percentile</a> entry at Wikipedia.
+</p>
+
+<p>
+<a name="StandardDeviation"><b>Standard Deviation</b></a> is a measure of the variability
+of a data set. This is a standard statistical measure.
+See, for example: <a href="http://en.wikipedia.org/wiki/Standard_deviation">Standard Deviation</a> entry at Wikipedia.
+JMeter calculates the population standard deviation (e.g. STDEVP function in spreadheets), not the sample standard deviation (e.g. STDEV).
+</p>
+
+<p>
+<a name="ThreadName">The <b>Thread Name</b></a> as it appears in Listeners and logfiles
+is derived from the Thread Group name and the thread within the group.<br/>
+The name has the format
+<code>groupName + " " + groupIndex + "-" + threadIndex</code>
+where:
+<ul>
+<li>groupName - name of the Thread Group element</li>
+<li>groupIndex - number of the Thread Group in the Test Plan, starting from 1</li>
+<li>threadIndex - number of the thread within the Thread Group, starting from 1</li>
+</ul>
+A test plan with two Thread Groups each with two threads would use the names:
+<pre>
+Thread Group 1-1
+Thread Group 1-2
+Thread Group 2-1
+Thread Group 2-2
+</pre>
+</p>
+
+<p>
+<a name="Throughput"><b>Throughput</b></a> is calculated as requests/unit of time.
+The time is calculated from the start of the first sample to the end of the last sample.
+This includes any intervals between samples, as it is supposed to represent the load on the server.<br/> 
+The formula is: Throughput = (number of requests) / (total time).
+</p>
+
+
+</section>
+
+</body>
+</document>

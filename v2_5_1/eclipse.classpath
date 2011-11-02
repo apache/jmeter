@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<!-- 
+   This is a sample Eclipse .classpath file, which can be used to help set up the proper .classpath.
+   Note that the "con" entry may be different on individual systems, but the other entries
+   should generally be the same, unless you attach sources or javadoc to the jars.    
+ -->
+<classpath>
+    <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" output="build/components" path="src/components"/>
+	<classpathentry kind="src" output="build/core" path="src/core"/>
+	<classpathentry kind="src" output="build/examples" path="src/examples"/>
+	<classpathentry kind="src" output="build/functions" path="src/functions"/>
+	<classpathentry kind="src" output="build/jorphan" path="src/jorphan"/>
+	<classpathentry kind="src" output="build/junit" path="src/junit"/>
+	<classpathentry kind="src" output="build/monitor/components" path="src/monitor/components"/>
+	<classpathentry kind="src" output="build/monitor/model" path="src/monitor/model"/>
+	<classpathentry kind="src" output="build/protocol/ftp" path="src/protocol/ftp"/>
+	<classpathentry kind="src" output="build/protocol/http" path="src/protocol/http"/>
+	<classpathentry kind="src" output="build/protocol/java" path="src/protocol/java"/>
+	<classpathentry kind="src" output="build/protocol/jdbc" path="src/protocol/jdbc"/>
+	<classpathentry kind="src" output="build/protocol/jms" path="src/protocol/jms"/>
+	<classpathentry kind="src" output="build/protocol/ldap" path="src/protocol/ldap"/>
+	<classpathentry kind="src" output="build/protocol/mail" path="src/protocol/mail"/>
+	<classpathentry kind="src" output="build/protocol/tcp" path="src/protocol/tcp"/>
+	<classpathentry kind="src" output="build/reports" path="src/reports"/>
+	<classpathentry kind="src" output="build/test" path="test/src"/>
+    <classpathentry kind="lib" path="lib/activation-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/avalon-framework-4.1.4.jar"/>
+	<classpathentry kind="lib" path="lib/bsf-2.4.0.jar"/>
+    <classpathentry kind="lib" path="lib/bsf-api-3.1.jar"/>
+	<classpathentry kind="lib" path="lib/bsh-2.0b5.jar"/>
+	<classpathentry kind="lib" path="lib/commons-codec-1.5.jar"/>
+	<classpathentry kind="lib" path="lib/commons-collections-3.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-httpclient-3.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-io-2.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-jexl-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang-2.6.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-net-3.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/excalibur-datasource-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/excalibur-instrument-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/excalibur-logger-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/excalibur-pool-1.2.jar"/>
+    <classpathentry kind="lib" path="lib/geronimo-jms_1.1_spec-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/htmllexer-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/htmlparser-2.1.jar"/>
+    <classpathentry kind="lib" path="lib/httpclient-4.1.2.jar"/>
+    <classpathentry kind="lib" path="lib/httpcore-4.1.3.jar"/>
+    <classpathentry kind="lib" path="lib/httpmime-4.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/jCharts-0.7.5.jar"/>
+	<classpathentry kind="lib" path="lib/jdom-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/js-1.6R5.jar"/>
+    <classpathentry kind="lib" path="lib/jtidy-r938.jar"/>
+    <classpathentry kind="lib" path="lib/junit-4.9.jar"/>
+	<classpathentry kind="lib" path="lib/logkit-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/mail-1.4.4.jar"/>
+	<classpathentry kind="lib" path="lib/oro-2.0.8.jar"/>
+	<classpathentry kind="lib" path="lib/serializer-2.7.1.jar"/>
+	<classpathentry kind="lib" path="lib/soap-2.3.1.jar"/>
+	<classpathentry kind="lib" path="lib/xalan-2.7.1.jar"/>
+	<classpathentry kind="lib" path="lib/xercesImpl-2.9.1.jar"/>
+	<classpathentry kind="lib" path="lib/xml-apis-1.3.04.jar"/>
+	<classpathentry kind="lib" path="lib/xmlgraphics-commons-1.3.1.jar"/>
+	<classpathentry kind="lib" path="lib/xpp3_min-1.1.4c.jar"/>
+	<classpathentry kind="lib" path="lib/xstream-1.3.1.jar"/>
+    <!-- Needed for build and test -->
+    <classpathentry kind="lib" path="lib/api/bcmail-jdk15-1.45.jar"/>
+    <classpathentry kind="lib" path="lib/api/bcprov-jdk15-1.45.jar"/>
+    <classpathentry kind="output" path="build"/>
+</classpath>

@@ -1,0 +1,8 @@
+<!-- Test file for XPath function -->
+<users>
+<user username="u1" password="p1"/>
+<user username="u2" password="p2"/>
+<user username="u3" password="p3"/>
+<user username="u4" password="p4"/>
+<user username="u5" password="p5"/>
+</users>

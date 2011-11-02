@@ -1,0 +1,92 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+
+package org.apache.jmeter.protocol.http.sampler;
+
+import java.net.URL;
+
+import org.apache.jmeter.samplers.Interruptible;
+
+/**
+ * Proxy class that dispatches to the appropriate HTTP sampler.
+ * <p>
+ * This class is stored in the test plan, and holds all the configuration settings.
+ * The actual implementation is created at run-time, and is passed a reference to this class
+ * so it can get access to all the settings stored by HTTPSamplerProxy.
+ */
+public final class HTTPSamplerProxy extends HTTPSamplerBase implements Interruptible {
+
+    private static final long serialVersionUID = 1L;
+
+    private transient HTTPAbstractImpl impl;
+    
+    public HTTPSamplerProxy(){
+        super();
+    }
+    
+    /**
+     * Convenience method used to initialise the implementation.
+     * 
+     * @param impl the implementation to use.
+     */
+    public HTTPSamplerProxy(String impl){
+        super();
+        setImplementation(impl);
+    }
+        
+    /** {@inheritDoc} */
+    @Override
+    protected HTTPSampleResult sample(URL u, String method, boolean areFollowingRedirect, int depth) {
+        if (impl == null) { // Not called from multiple threads, so this is OK
+            try {
+                impl = HTTPSamplerFactory.getImplementation(getImplementation(), this);
+            } catch (Exception ex) {
+                return errorResult(ex, new HTTPSampleResult());
+            }
+        }
+        return impl.sample(u, method, areFollowingRedirect, depth);
+    }
+
+    // N.B. It's not possible to forward threadStarted() to the implementation class.
+    // This is because Config items are not processed until later, and HTTPDefaults may define the implementation
+
+    @Override
+    public void threadFinished(){
+        if (impl != null){
+            impl.threadFinished(); // Forward to sampler
+        }
+    }
+
+    public boolean interrupt() {
+        if (impl != null) {
+            return impl.interrupt(); // Forward to sampler
+        }
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     * This implementation forwards to the implementation class.
+     */
+    @Override
+    protected void notifySSLContextWasReset() {
+        if (impl != null) {
+            impl.notifySSLContextWasReset();
+        }
+    }
+}

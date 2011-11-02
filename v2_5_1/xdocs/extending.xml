@@ -1,0 +1,152 @@
+<?xml version="1.0"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+ 
+       http://www.apache.org/licenses/LICENSE-2.0
+ 
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<document>
+  <properties>
+    <title>Extending JMeter</title>
+  </properties>
+<body>
+<section name="Extending JMeter">
+<font color="red"><strong>Note to developers: JMeter is undergoing large changes.  The following
+description of JMeter's architecture will likely change in the near future.  If you
+would like your changes to work with an upcoming JMeter 1.6, please join our mailing
+list, and we will work with you and your modifications.</strong></font>
+<p><b>Customizing JMeter to suit your needs.</b></p>
+<h3>Extensible Interfaces</h3>
+<p>
+There are five basic objects in JMeter which provide extensibility:
+
+<ul>
+<li><a href="#visualizers">Visualizers</a> represent the sampling data which is recorded.</li>
+<li><a href="#timers">Timers</a> specify the delay between samples.</li>
+<li><a href="#samplercontrollers">SamplerControllers</a> hold information about all the test cases to be sampled, 
+and overall information about how the test is conducted.</li>
+<li><a href="#samplers">Samplers</a> are the classes that actually do the sampling of a particular protocol.</li>
+<li><a href="#testsamples">TestSamples</a> hold information about a particular test case to be sampled.</li>
+</ul>
+</p>
+<p>
+<a name="visualizers"></a>
+<h3>Visualizers</h3>
+The <code>Visualizer</code> interface exists in the <code>org.apache.jmeter.visualizers</code> package.
+JMeter maintains an instance of each visualizer it is aware of for each thread group currently available to the user.
+A visualizer provides a method of recording the data which JMeter generates.
+A visualizer may represent the data graphically (GraphVisualizer),
+persistently (FileVisualizer) or both (TBD).
+The visualizer contains three methods:
+<dl>
+<dt><code>add(SampleResult result)</code> adds data to the visualization.</dt>
+<dd>
+JMeter calls the <code>add</code> method to include new data in the visualizer.
+The visualizer should add the data into its data representation.
+</dd>
+<dt><code>clear()</code> clears all data in the visualizer currently</dt>
+<dd>
+JMeter calls <code>clear</code> when the user requests that all visualizers be cleared. When the <code>clear</code> method is called the visualizer should clear all data from its representation and re-initialize itself.
+</dd>
+<dt><code>getControlPanel()</code> obtains the GUI for the visualizer</dt>
+<dd>
+JMeter calls <code>getControlPanel</code> at start up time to prepare the
+visualizer for display.
+</dd>
+</dl>
+<a name="timers"></a>
+</p>
+<p>
+<h3>Timers</h3>
+Timers provide a framework for delaying in between samples.  This is important in order to obtain a true balanced load on a function rather than a calm-STORM-calm-STORM-calm... pattern.  Timers contain two methods:
+<dl>
+<dt><code>delay()</code> wait for a Timer specific amount of time</dt>
+<dd>JMeter calls this function prior to every sample.  The Timer should wait for a period of time and then return.</dd>
+<dt><code>set()</code> prepare for sampling</dt>
+<dd>JMeter calls this function prior to the begining of a test session.  The timer should initialize itself, read any values from its UI and prepare for operation.
+</dd>
+</dl>
+</p>
+<p>
+<a name="samplercontrollers"></a>
+<h3>SamplerControllers</h3>
+The sampler controller is by far the most complicated, but also the most powerful, interface in JMeter.  It allows a user to customize what, where and when JMeter tests.  It provides six methods:
+<dl>
+<dt><code>start()</code></dt>
+<dd>
+JMeter calls this immediatly prior to starting a test.  It is most often use to disable the SamplerController's GUI.
+</dd>
+<dt><code>stop()</code></dt>
+<dd>
+JMeter calls this when a user requests a stop to a test.  It is most often used to re-enable the SamplerController's GUI.
+</dd>
+<dt><code>getControlPanel()</code> Get the GUI for the SamplerController</dt>
+<dd>
+JMeter calls this at start up to create the its GUI.  This is how a user enters
+information into the SamplerController.
+</dd>
+<dt><code>getName()</code> Get the SamplerController's display name.</dt>
+<dd>
+JMeter uses this name in the list of SamplerControllers that it displays.
+</dd>
+<dt><code>getDefaultThreadGroups()</code></dt>
+<dd>Gets the default list of threadgroups.</dd>
+<dt><code>getSampleThreads(String threadGroup,int numThreads)</code></dt>
+<dd>When the user hits start, use this method to get all the JMeterThread objects you want for a threadgroup.  Each JMeterThread
+object implements Runnable and it is used to sample the test entries.
+</dd>
+</dl>
+</p>
+<p>
+<a name="samplers"></a>
+<h3>Samplers</h3>
+  Samplers are simple - they are the objects that know the protocol of that which
+  you wish to sample.  The HTTPSampler knows how to request a URL from a web server, for
+  instance.
+
+  The interface for Sampler is as follows:
+  <dl>
+  <dt><code>public SampleResult sample(Entry e)</code></dt>
+  <dd>JMeterThread implementations will loop through all the test samples given
+  to them, and call the sample method on the Sampler (also given to them) for each
+  test entry.  SampleResult is essentially a Map containing information about
+  the sampling (timing data is included, as well as the test response from the url).
+</dd>
+</dl>
+</p>
+<p>
+<a name="testsamples"></a>
+<h3>TestSample</h3>
+  TestSamples are objects that collect information from users about each test sample
+  the user wants to test.  The TestSample object is also responsible for serving
+  up its test entries.  The interface:
+  <dl>
+  <dt><code>public java.awt.Container getGUI()</code></dt>
+  <dd>Returns the GUI used to collect information from the user.</dd>
+  <dt><code>public Entry[] getEntries()</code></dt>
+  <dd>Gets a list of entries to be sampled from the TestSample object</dd>
+  <dt><code>public String[] getThreadGroups()</code></dt>
+  <dd>Get all the thread groups the user selected for this TestSample</dd>
+  <dt><code>public void setThreadGroups(String[] threadGroups)</code></dt>
+  <dd>Set the thread groups the user may choose from</dd>
+  <dt><code>public String getName()</code></dt>
+  <dd>Get a name for this TestSample</dd>
+  <dt><code>public void setName(String name)</code></dt>
+  <dd>Set the name for this TestSample</dd>
+  <dt><code>public void reset()</code></dt>
+  <dd>inform the test sample that a sampling run is starting</dd>
+  </dl>
+</p>
+</section>
+</body>
+</document>

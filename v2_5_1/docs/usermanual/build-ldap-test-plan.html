@@ -1,0 +1,507 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+ 
+       http://www.apache.org/licenses/LICENSE-2.0
+ 
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<!-- Content Stylesheet for Site -->
+
+
+<!-- start the processing -->
+<!-- ====================================================================== -->
+<!-- Main Page Section -->
+<!-- ====================================================================== -->
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../css/style.css"/>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+
+
+
+<title>JMeter - User's Manual: Building an LDAP Test Plan</title>
+</head>
+
+<body bgcolor="#ffffff" text="#000000" link="#525D76">
+<table border="0" cellspacing="0">
+<!-- TOP IMAGE -->
+<tr>
+<td>
+<!-- Need to specify height otherwise iframe seems to grab extra -->
+<iframe src="http://www.apache.org/ads/halfbanner.html" height="102"
+style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
+</td>
+<td align="left">
+<a href="http://jakarta.apache.org"><img width="505" height="48" src="../images/jakarta-logo.gif" alt="Jakarta" title="Jakarta" border="0"/></a>
+</td>
+<td align="right">
+<a href="http://jakarta.apache.org/jmeter/"><img width="221" height="102" src="../images/logo.jpg" alt="JMeter" title="JMeter" border="0"/></a>
+</td>
+</tr>
+</table>
+<table border="0" width="100%" cellspacing="4">
+<tr><td colspan="2">
+<hr noshade size="1"/>
+</td></tr>
+<tr>
+<!-- LEFT SIDE NAVIGATION -->
+<td width="20%" valign="top" nowrap="true">
+<p><strong>About</strong></p>
+<ul>
+<li><a href="../index.html">Overview</a>
+</li>
+<li><a href="../changes.html">Changes</a>
+</li>
+<li><a href="../issues.html">Issues</a>
+</li>
+<li><a href="http://www.apache.org/licenses/">License</a>
+</li>
+<li><a href="http://wiki.apache.org/jakarta-jmeter/JMeterCommitters">Contributors</a>
+</li>
+</ul>
+<p><strong>Download</strong></p>
+<ul>
+<li><a href="http://jakarta.apache.org/site/downloads/downloads_jmeter.cgi">Download Releases</a>
+</li>
+<li><a href="../nightly.html">Developer (Nightly) Builds</a>
+</li>
+</ul>
+<p><strong>Documentation</strong></p>
+<ul>
+<li><a href="../usermanual/index.html">User Manual</a>
+</li>
+<li><a href="../api/index.html">Javadocs</a>
+</li>
+<li><a href="../localising/index.html">Localisation (Translator's Guide)</a>
+</li>
+<li><a href="../building.html">Building JMeter and Add-Ons</a>
+</li>
+<li><a href="http://wiki.apache.org/jakarta-jmeter">JMeter Wiki</a>
+</li>
+<li><a href="http://wiki.apache.org/jakarta-jmeter/JMeterFAQ">FAQ (Wiki)</a>
+</li>
+</ul>
+<p><strong>Tutorials (PDF format)</strong></p>
+<ul>
+<li><a href="../usermanual/jmeter_distributed_testing_step_by_step.pdf">Distributed Testing</a>
+</li>
+<li><a href="../usermanual/jmeter_proxy_step_by_step.pdf">Recording Tests</a>
+</li>
+<li><a href="../usermanual/junitsampler_tutorial.pdf">JUnit Sampler</a>
+</li>
+<li><a href="../usermanual/jmeter_accesslog_sampler_step_by_step.pdf">Access Log Sampler</a>
+</li>
+<li><a href="../extending/jmeter_tutorial.pdf">Extending JMeter</a>
+</li>
+</ul>
+<p><strong>Community</strong></p>
+<ul>
+<li><a href="http://jakarta.apache.org/site/getinvolved.html">Get Involved</a>
+</li>
+<li><a href="http://jakarta.apache.org/site/mail.html">Mailing Lists</a>
+</li>
+<li><a href="http://jakarta.apache.org/site/cvsindex.html">SVN Repositories</a>
+</li>
+</ul>
+<p><strong>Foundation</strong></p>
+<ul>
+<li><a href="http://www.apache.org/">ASF</a>
+</li>
+<li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
+</li>
+<li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a>
+</li>
+</ul>
+</td>
+<td width="80%" align="left" valign="top">
+<table>
+<tr>
+<td bgcolor="#525D76">
+<div align="right"><a href="index.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Index</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="build-ldapext-test-plan.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Next</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="build-ftp-test-plan.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Prev</font></a></div>
+</td>
+</tr>
+</table>
+<br>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#525D76">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="building"><strong>9a. Building an LDAP Test Plan</strong></a><a class="sectionlink" href="#building" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+In this section, you will learn how to create a basic Test Plan to test an LDAP server.
+You will create four users that send requests for four tests on the LDAP server.Also, you will tell
+the users to run their tests twice. So,  the total number of requests is (4 users) x (4 requests) x
+repeat 2 times) = 32 LDAP requests. To construct the Test Plan, you will use the following elements:
+
+<a href="test_plan.html#thread_group">
+Thread Group
+</a>
+,
+
+<a href="../usermanual/component_reference.html#LDAP_Request">LDAP Request</a>
+,
+
+<a href="../usermanual/component_reference.html#LDAP_Request_Defaults">LDAP Request Defaults</a>
+, and
+
+<a href="../usermanual/component_reference.html#View_Results_in_Table">View Results in Table</a>
+
+.
+</p>
+<p>
+This example assumes that the LDAP Server is installed in your Local machine.
+</p>
+</blockquote>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#525D76">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="adding_users"><strong>9a.1 Adding Users</strong></a><a class="sectionlink" href="#adding_users" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+The first step you want to do with every JMeter Test Plan is to add a Thread Group element.
+The Thread Group tells JMeter the number of users you want to simulate, how often the users should send
+requests, and the how many requests  they should send.
+</p>
+<p>
+Go ahead and add the ThreadGroup element by first selecting the Test Plan, clicking your
+right mouse button to get the Add menu, and then select Add-->ThreadGroup. You should now see the
+Thread Group element under Test Plan. If you do not see the element, then "expand" the Test Plan tree by
+clicking on the Test Plan element.
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/threadgroup.png"><br>
+<font size="-1">
+Figure 9a.1. Thread Group with Default Values
+</font></td></tr></table></p>
+
+
+
+</p>
+</blockquote>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#525D76">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="add_login"><strong>9a.2 Adding Login Config Element</strong></a><a class="sectionlink" href="#add_login" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+Begin by selecting the Siptech Users element. Click your right mouse
+button to get the Add menu, and then select Add --> Config Element --> Login Config Element.
+Then,  select this new element to view its Control Panel.
+</p>
+<p>
+Like most JMeter elements, the Login  Config Element  Control Panel has a name
+field that you can modify. In this example, leave this field with the default value.
+</p>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/login-config-element.png"><br>
+<font size="-1">
+  Figure 9a.2 Login Config Element for our Test Plan
+</font></td></tr></table></p>
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td><p>
+Enter Username field to "your Server Username",
+<br>
+</br>
+
+		The password field to "your Server Passowrd"
+</p>
+
+
+		
+<p>
+These values are default for the LDAP Requests.
+</p>
+</td></tr>
+</table>
+</p>
+</blockquote>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#525D76">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="add_defaults"><strong>9a.3 Adding LDAP Request Defaults</strong></a><a class="sectionlink" href="#add_defaults" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+Begin by selecting the Siptech Users element. Click your right mouse button
+to get the Add menu, and then select Add --> Config Element -->LDAP Request Defaults. Then,
+select this new element to view its Control Panel.
+</p>
+<p>
+Like most JMeter elements, the LDAP Request Defaults Control Panel has a name
+field that you can modify. In this example, leave this field with the default value.
+</p>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/requestdefaults.png"><br>
+<font size="-1">
+  Figure 9a.3 LDAP Defaults for our Test Plan
+</font></td></tr></table></p>
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>Enter DN field to "your Server Root Dn".
+<br>
+</br>
+
+                Enter LDAP Server's Servername field to "localhost".
+<br>
+</br>
+
+		The port to  389.
+<br>
+</br>
+
+		These values are default for the LDAP Requests.
+</td></tr>
+</table>
+</p>
+</blockquote>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#525D76">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="add_requests"><strong>9a.4 Adding LDAP Requests</strong></a><a class="sectionlink" href="#add_requests" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+In our Test Plan, we need to make four LDAP requests.
+</p>
+<ol>
+
+			
+<li>
+Inbuilt Add Test
+</li>
+
+			
+<li>
+Inbuilt Modify Test
+</li>
+
+			
+<li>
+Inbuilt Delete Test
+</li>
+
+			
+<li>
+Inbuilt Search Test
+</li>
+
+		
+</ol>
+<p>
+JMeter sends requests in the order that you add them to the tree.
+Start by adding the first LDAP Request to the Siptech Users element (Add -->
+Sampler --> LDAP Request). Then, select the LDAP Request  element in the tree
+and edit the following properties
+</p>
+<ol>
+
+			
+<li>
+Change the Name to "Inbuilt-Add Test".
+</li>
+
+			
+<li>
+Select the Add test Radio button
+</li>
+
+		
+</ol>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/add.png"><br>
+<font size="-1">
+                  Figure 9a.4.1 LDAP Request for Inbuilt Add test
+</font></td></tr></table></p>
+<p>
+You do not have to set the Server Name field, port field, Username, Password
+and DN because you already specified this value in the Login Config Element and
+LDAP Request Defaults.
+</p>
+<p>
+Next, add the second LDAP Request and edit the following
+properties
+</p>
+<ol>
+
+			
+<li>
+Change the Name to "Inbuilt-Modify Test".
+</li>
+
+			
+<li>
+Select the Modify test Radio button
+</li>
+
+		
+</ol>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/modify.png"><br>
+<font size="-1">
+                  Figure 9a.4.2 LDAP Request for Inbuilt Modify test
+</font></td></tr></table></p>
+<ol>
+
+			
+<li>
+Change the Name to "Inbuilt-Delete Test".
+</li>
+
+			
+<li>
+Select the Delete test Radio button
+</li>
+
+		
+</ol>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/delete.png"><br>
+<font size="-1">
+                  Figure 9a.4.3 LDAP Request for Inbuilt Delete test
+</font></td></tr></table></p>
+<ol>
+
+			
+<li>
+Change the Name to "Inbuilt-Search Test".
+</li>
+
+			
+<li>
+Select the Search test Radio button
+</li>
+
+		
+</ol>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/search.png"><br>
+<font size="-1">
+                  Figure 9a.4.4 LDAP Request for Inbuilt Search test
+</font></td></tr></table></p>
+</blockquote>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#525D76">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="add_listener"><strong>9a.5 Adding a Listener to View/Store the Test Results</strong></a><a class="sectionlink" href="#add_listener" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+The final element you need to add to your Test Plan is a Listener.
+ This element is responsible for storing all of the results of your LDAP
+requests in a file  and presenting a visual model of the data.Select the Siptech
+Users element and add a View Results in Table (Add --> Listener -->View Results in Table)
+</p>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/viewtable.png"><br>
+<font size="-1">
+  Figure 9a.5 View result in Table Listener
+</font></td></tr></table></p>
+</blockquote>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table>
+<tr>
+<td bgcolor="#525D76">
+<div align="right"><a href="index.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Index</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="build-ldapext-test-plan.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Next</font></a></div>
+</td>
+<td bgcolor="#525D76">
+<div align="right"><a href="build-ftp-test-plan.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Prev</font></a></div>
+</td>
+</tr>
+</table>
+<br>
+</td>
+</tr>
+<tr><td colspan="2">
+<hr noshade size="1"/>
+</td></tr>
+<tr><td colspan="2">
+<div align="center"><font color="#525D76" size="-1"><em>
+Copyright &copy; 1999-2011, Apache Software Foundation
+</em></font></div>
+</td></tr>
+<tr><td colspan="2">
+<div align="center"><font color="#525D76" size="-1">
+Apache, Apache JMeter, JMeter, the Apache feather, and the Apache JMeter logo are
+trademarks of the Apache Software Foundation.
+</font>
+</div>
+</td></tr>
+</table>
+</body>
+</html>
+<!-- end the processing -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

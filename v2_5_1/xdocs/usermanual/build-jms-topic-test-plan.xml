@@ -1,0 +1,199 @@
+<?xml version="1.0"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+ 
+       http://www.apache.org/licenses/LICENSE-2.0
+ 
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<!DOCTYPE document
+[
+<!ENTITY sect-num '12'>
+]>
+<document prev="build-jms-point-to-point-test-plan.html" next="build-monitor-test-plan.html" id="$Id$">
+
+<properties>
+  <title>User's Manual: Building a JMS (Java Messaging Service) Test Plan</title>
+</properties>
+
+<body>
+
+<section name="&sect-num;. Building a JMS Topic Test Plan" anchor="building">
+<note>
+JMS requires some optional jars to be downloaded. Please refer to <a href="get-started.html">Getting Started</a> for full details.
+</note>
+<p>In this section, you will learn how to create a 
+<a href="build-test-plan.html">Test Plan</a> to test JMS Providers. You will
+create five subscribers and one publisher. You will create 2 thread groups and set
+each one to 10 iterations. The total messages is (6 threads) x (1 message) x 
+(repeat 10 times) = 60 messages. To construct the Test Plan, you will use the 
+following elements:
+<a href="test_plan.html#thread_group">Thread Group</a>,
+<complink name="JMS Publisher"/>,
+<complink name="JMS Subscriber"/>, and
+<complink name="Graph Results"/>.</p>
+
+<p>General notes on JMS: There are currently two JMS samplers. One uses JMS topics
+and the other uses queues. Topic messages are commonly known as pub/sub messaging.
+Topic messaging is generally used in cases where a message is published by a producer and
+consumed by multiple subscribers.  Queue messaging is generally used for transactions
+where the sender expects a response.  Messaging systems are quite different from
+normal HTTP requests. In HTTP, a single user sends a request and gets a response.
+Messaging system can work in sychronous and asynchronous mode.  A JMS sampler needs 
+the JMS implementation jar files; for example, from Apache ActiveMQ.  
+See <a href="#libraries_activemq">here</a> for the list of jars provided by ActiveMQ 3.0.</p>
+
+</section>
+
+<section name="&sect-num;.1 Adding Users" anchor="adding_users">
+<p>The first step is add a <a href="test_plan.html#thread_group">Thread Group</a>
+ element.  The Thread Group tells JMeter the number of users you want to simulate,
+ how often the users should send requests, and how many requests they should 
+send.</p>
+
+<p>Go ahead and add the ThreadGroup element by first selecting the Test Plan,
+clicking your right mouse button to get the Add menu, and then select
+Add --&gt; ThreadGroup.</p>
+
+<p>You should now see the Thread Group element under Test Plan.  If you do not
+see the element, then "expand" the Test Plan tree by clicking on the
+Test Plan element.</p>
+
+<p>Next, you need to modify the default properties.  Select the Thread Group element
+in the tree, if you have not already selected it. You should now see the Thread
+Group Control Panel in the right section of the JMeter window (see Figure &sect-num;.1
+below)</p>
+
+<figure image="webtest/threadgroup.png">
+Figure &sect-num;.1. Thread Group with Default Values</figure>
+
+<p>Start by providing a more descriptive name for our Thread Group. In the name
+field, enter Subscribers.</p>
+
+<p>Next, increase the number of users (called threads) to 5.</p>
+
+<p>In the next field, the Ramp-Up Period, set the value to 0
+seconds.  This property tells JMeter how long to delay between starting each
+user. For example, if you enter a Ramp-Up Period of 5 seconds, JMeter will
+finish starting all of your users by the end of the 5 seconds.  So, if we have
+5 users and a 5 second Ramp-Up Period, then the delay between starting users
+would be 1 second (5 users / 5 seconds = 1 user per second).  If you set the
+value to 0, JMeter will immediately start all users.</p>
+
+<p>Clear the checkbox labeled "Forever", and enter a value of 10 in the Loop
+Count field.  This property tells JMeter how many times to repeat your test.
+If you enter a loop count value of 0, then JMeter will run your test only
+once. To have JMeter repeatedly run your Test Plan, select the Forever
+checkbox.</p>
+
+<p>Repeat the process and add another thread group. For the second thread
+group, enter "Publisher" in the name field, set the number of threads to 1,
+and set the iteration to 10.
+</p>
+
+<note>In most applications, you have to manually accept
+changes you make in a Control Panel.  However, in JMeter, the Control Panel
+automatically accepts your changes as you make them.  If you change the
+name of an element, the tree will be updated with the new text after you
+leave the Control Panel (for example, when selecting another tree element).</note>
+
+
+</section>
+
+<section name="&sect-num;.2 Adding JMS Subscriber and Publisher" anchor="adding_subscriber_publisher">
+
+<p>Make sure the required jar files are in JMeter's lib directory. If they are
+not, shutdown JMeter, copy the jar files over and restart JMeter.</p>
+
+<p>Start by adding the sampler <complink name="JMS Subscriber"/>
+to the Subscribers element (Add --&gt; Sampler --&gt; JMS Subscriber).
+Then, select the JMS Subscriber element in the tree and edit the following properties:
+
+<ol>
+<li>Change the Name field to "Sample Subscriber"</li>
+<li>If the JMS provider uses the jndi.properties file, check the box</li>
+<li>Enter the name of the InitialContextFactory class. For example, with ActiveMQ 5.4, the value is "org.apache.activemq.jndi.ActiveMQInitialContextFactory"</li>
+<li>Enter the provider URL. This is the URL for the JNDI server, if there is one. For example, with ActiveMQ 5.4 on local machine with default port, the value is "tcp://localhost:61616"</li>
+<li>Enter the name of the connection factory. Please refer to the documentation
+of the JMS provider for the information. For ActiveMQ, the default is "ConnectionFactory"</li>
+<li>Enter the name of the message topic. For ActiveMQ Dynamic Topics (create topics dynamically), example value is "dynamicTopics/MyStaticTopic1"
+Note: Setup at startup mean that JMeter starting to listen on the Destination at beginning of test without name change possibility. 
+Setup on Each sample mean that JMeter (re)starting to listen before run each JMS Subscriber sample, 
+this last option permit to have Destination name with some JMeter variables</li>
+<li>If the JMS provider requires authentication, check "required" and enter the 
+username and password. For example, Orion JMS requires authentication, while ActiveMQ
+and MQSeries does not</li>
+<li>Enter 10 in "Number of samples to aggregate". For performance reasons, the sampler
+will aggregate messages, since small messages will arrive very quickly. If the sampler
+didn't aggregate the messages, JMeter wouldn't be able to keep up.</li>
+<li>If you want to read the response, check the box</li>
+<li>There are two client implementations for subscribers. If the JMS provider 
+exhibits zombie threads with one client, try the other.</li>
+</ol>
+</p>
+
+<figure image="jms/jms_sub.png">
+Figure &sect-num;.2. JMS Subscriber</figure>
+
+<p>Next add the sampler <complink name="JMS Publisher"/>
+to the Publisher element (Add --&gt; Sampler --&gt; JMS Subscriber).
+Then, select the JMS Publisher element in the tree and edit the following properties:
+</p>
+
+<ol>
+<li>Change the Name field to "Sample Publisher".</li>
+<li>If the JMS provider uses the jndi.properties file, check the box</li>
+<li>Enter the name of the InitialContextFactory class. For example, with ActiveMQ 5.4, the value is "org.apache.activemq.jndi.ActiveMQInitialContextFactory"</li>
+<li>Enter the provider URL. This is the URL for the JNDI server, if there is one. For example, with ActiveMQ 5.4 on local machine with default port, the value is "tcp://localhost:61616"</li>
+<li>Enter the name of the connection factory. Please refer to the documentation
+of the JMS provider for the information. For ActiveMQ, the default is "ConnectionFactory"</li>
+<li>Enter the name of the message topic. For ActiveMQ Dynamic Topics (create topics dynamically), example value is "dynamicTopics/MyStaticTopic1". 
+Note: Setup at startup mean that JMeter starting connection with the Destination at beginning of test without name change possibility. 
+Setup on Each sample mean that JMeter (re)starting the connection before run each JMS Publisher sample, 
+this last option permit to have Destination name with some JMeter variables</li>
+<li>If the JMS provider requires authentication, check "required" and enter the 
+username and password. For example, Orion JMS requires authentication, while ActiveMQ
+and MQSeries does not</li>
+<li>Enter 10 in "Number of samples to aggregate". For performance reasons, the sampler
+will aggregate messages, since small messages will arrive very quickly. If the sampler
+didn't aggregate the messages, JMeter wouldn't be able to keep up.</li>
+<li>Select the appropriate configuration for getting the message to publish. If you
+want the sampler to randomly select the message, place the messages in a directory
+and select the directory using browse.</li>
+<li>Select the message type. If the message is in object format or map message, make sure the
+message is generated correctly.</li>
+</ol>
+<p></p>
+<figure image="jms/jms_pub.png">
+Figure &sect-num;.3. JMS Publisher</figure>
+
+
+</section>
+
+<section name="&sect-num;.3 Adding a Listener to View Store the Test Results" anchor="adding_listener">
+<p>The final element you need to add to your Test Plan is a
+ <a href="component_reference.html#listeners">Listener</a>. This element is
+responsible for storing all of the results of your HTTP requests in a file and presenting
+a visual model of the data.</p>
+
+<p>Select the Test Plan element and add a <complink name="Graph Results"/> listener (Add --&gt; Listener
+--&gt; Graph Results).  Next, you need to specify a directory and filename of the
+output file.  You can either type it into the filename field, or select the
+Browse button and browse to a directory and then enter a filename.</p>
+
+<figure image="graph_results.png">
+Figure &sect-num;.4. Graph Results Listener</figure>
+
+</section>
+
+</body>
+</document>

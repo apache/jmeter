@@ -1,0 +1,80 @@
+<?xml version="1.0"?> 
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+ 
+       http://www.apache.org/licenses/LICENSE-2.0
+ 
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<document>   
+<properties>     
+	<title>Nightly builds for developers</title>   
+</properties> 
+<body> 
+<section name="Nightly builds for developers">
+	<p></p>
+	<h2>What are the nightly builds?</h2>
+	<p>
+	The nightly builds are interim builds that are <b>untested and unsupported</b>.
+	<i>Use at your own risk!</i>
+	<br/>
+	These unreleased builds may not even load, may have undocumented features, 
+	known defects, and any number of other issues.
+	<br/>
+	They are intended for use by developers and others wishing to help with resolving JMeter bugs.
+	</p>
+	<p>
+	<span style="font-size : x-large"><b>These builds should not be used in production.</b></span>
+	</p>
+	<h2>Where are the nightly builds?</h2>
+	<p>There are currently no regular nightly builds - sorry.</p>
+    <p>However, occasional builds are made available from 
+    <a href="http://people.apache.org/builds/jakarta-jmeter/nightly/">Nightly builds (use at your own risk)</a> 
+    </p>
+	<h2>What do they consist of?</h2>
+<p>
+JMeter is distributed as a set of zip (or tar-gz) archive files.
+
+The files are called:
+<ul>
+<li>jakarta-jmeter-{version}_bin.zip - JMeter binaries</li>
+<li>jakarta-jmeter-{version}_lib.zip - 3rd party jar files (rarely changes)</li>
+<li>jakarta-jmeter-{version}_src.zip - JMeter source</li>
+<li>jakarta-jmeter-{version}_api.zip - JMeter Javadoc (if available)</li>
+</ul>
+<h2>Installing JMeter runtime</h2>
+Download the _bin and _lib files
+<br/>
+Unpack the archives into the same directory structure
+<br/>
+The other archives are not needed to run JMeter.
+
+<h2>Building JMeter</h2>
+Download the _src, _bin and _lib files
+<br/>
+Unpack all the archives into the same directory structure
+<br/>
+</p>
+
+<h2>Warning - please note!</h2>
+<p>
+	<span style="font-size : large">
+	<b>The nightly builds may or may not work properly - or at all.</b>
+	</span>
+</p>
+<p>
+	If there is a problem with a particular version, 
+    it may be worth reporting this on the JMeter-dev mailing list and/or trying again in a day or two.
+</p>
+</section> 
+</body> 
+</document>

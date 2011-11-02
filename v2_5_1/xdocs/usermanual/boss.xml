@@ -1,0 +1,217 @@
+<?xml version="1.0"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+ 
+       http://www.apache.org/licenses/LICENSE-2.0
+ 
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<!DOCTYPE document[
+<!ENTITY sect-num '17'>
+]>
+	
+<document prev="best-practices.html" next="component_reference.html" id="$Id$">
+
+<properties>
+  <author email="mramshaw@alumni.concordia.ca">Martin Ramshaw</author>
+  <title>User's Manual: My boss wants me to...</title>
+</properties>
+
+<body>
+
+<section name="&sect-num;. Help! My boss wants me to load test our web app!" anchor="boss">
+<p>This is a fairly open-ended proposition. There are a number of questions to
+be asked first, and additionally a number of resources that will be needed. You
+will need some hardware to run the benchmarks/load-tests from. A number of
+tools will prove useful. There are a number of products to consider.  And finally,
+why is Java a good choice to implement a load-testing/Benchmarking product.
+</p>
+<subsection name="&sect-num;.1 Questions to ask" anchor="questions">
+<p>What is our anticipated average number of users (normal load) ?
+</p>
+<p>What is our anticipated peak number of users ?
+</p>
+<p>When is a good time to load-test our application (i.e. off-hours or week-ends),
+bearing in mind that this may very well crash one or more of our servers ?
+</p>
+<p>Does our application have state ? If so, how does our application manage it
+(cookies, session-rewriting, or some other method) ?
+</p>
+<p>What is the testing intended to achieve?</p>
+</subsection>
+<subsection name="&sect-num;.2 Resources" anchor="resources">
+<p>The following resources will prove very helpful. Bear in mind that if you
+cannot locate these resources, <b>you</b> will become these resources. As you
+already have your work cut out for you, it is worth knowing who the following
+people are, so that you can ask them for help if you need it.
+</p>
+	<subsection name="&sect-num;.2.1 Network" anchor="network">
+	<p>Who knows our network topology ? If you run into any firewall or
+	proxy issues, this will become very important. As well, a private
+	testing network (which will therefore have very low network latency)
+	would be a very nice thing. Knowing who can set one up for you
+	(if you feel that this is necessary) will be very useful. If the
+	application doesn't scale as expected, who can add additional
+	hardware ?
+	</p>
+	</subsection>
+	<subsection name="&sect-num;.2.2 Application" anchor="application">
+	<p>Who knows how our application functions ? The normal sequence is
+	<ul>
+		<li>test (low-volume - can we benchmark our application?)</li>
+		<li>benchmark (the average number of users)</li>
+		<li>load-test (the maximum number of users)</li>
+		<li>test destructively (what is our hard limit?)</li>
+	</ul>
+	The <b>test</b> process may progress from black-box testing to
+	white-box testing (the difference is that the first requires
+	no knowledge of the application [it is treated as a "black box"]
+	while the second requires some knowledge of the application).
+	It is not uncommon to discover problems with the application
+	during this process, so be prepared to defend your work.
+	</p>
+	</subsection>
+</subsection>
+<subsection name="&sect-num;.3 What platform should I use to run the benchmarks/load-tests ?" anchor="platform">
+<p>This should be a widely-used piece of hardware, with a standard
+(i.e. vanilla) software installation. Remember, if you publish your results,
+the first thing your clients will do is hire a graduate student to verify them.
+You might as well make it as easy for this person as you possibly can.
+</p>
+<p>For Windows, Windows XP Professional should be a minimum (the others
+do not multi-thread past 50-60 connections, and you probably anticipate
+more users than that).
+</p>
+<p>Good free platforms include the linuxes, the BSDs, and Solaris Intel. If
+you have a little more money, there are commercial linuxes.
+This may be worth it if you need the support.
+</p>
+<p>
+For non-Windows platforms, investigate "ulimit -n unlimited" with a view to
+including it in your user account startup scripts (.bashrc or .cshrc scripts
+for the testing account).
+</p>
+<p>As you progress to larger-scale benchmarks/load-tests, this platform
+will become the limiting factor. So it's worth using the best hardware and
+software that you have available. Remember to include the hardware/software
+configuration in your published benchmarks.
+</p>
+<p>Don't forget JMeter batch mode. This can be useful if you have a powerful server 
+that supports Java but perhaps does not have a fast graphics implementation,
+or where you need to login remotely.
+Batch (non-GUI) mode can reduce the network traffic compared with using a remote display or client-server mode.
+The batch log file can then be loaded into JMeter on a workstation for analysis, or you can
+use CSV output and import the data into a spreadsheet.</p>
+</subsection>
+<subsection name="&sect-num;.4 Tools" anchor="tools">
+<p>The following tools will all prove useful. It is definitely worthwhile to
+become familiar with them. This should include trying them out, and reading the
+appropriate documentation (man-pages, info-files, application --help messages,
+and any supplied documentation).
+</p>
+	<subsection name="&sect-num;.4.1 ping" anchor="ping">
+	<p>
+	This can be used to establish whether or not you can reach your
+	target site. Options can be specified so that 'ping' provides the
+	same type of route reporting as 'traceroute'.
+	</p>
+	</subsection>
+	<subsection name="&sect-num;.4.2 nslookup/dig" anchor="dig">
+	<p>
+	While the <u>user</u> will normally use a human-readable internet
+	address, <u>you</u> may wish to avoid the overhead of DNS lookups when
+	performing benchmarking/load-testing. These can be used to determine
+	the unique address (dotted quad) of your target site.
+	</p>
+	</subsection>
+	<subsection name="&sect-num;.4.3 traceroute" anchor="traceroute">
+	<p>
+	If you cannot "ping" your target site, this may be used to determine 
+	the problem (possibly a firewall or a proxy). It can also be used
+	to estimate the overall network latency (running locally should give
+	the lowest possible network latency - remember that your users will
+	be running over a possibly busy internet). Generally, the fewer hops
+	the better.
+	</p>
+	</subsection>
+</subsection>
+<subsection name="&sect-num;.5 What other products are there ?" anchor="products">
+<p>There are a number of commercial products, which generally have fairly
+hefty pricetags. If you can justify it, these are probably the way to go.
+If, however, these products do not do exactly what you want, or you are on a
+limited budget, the following are worth a look. In fact, you should probably
+start by trying the Apache <b>ab</b> tool, as it may very well do the job
+if your requirements are not particularly complicated.
+</p>
+	<subsection name="&sect-num;.5.1 Apache 'ab' tool" anchor="ab">
+	<p>
+	You should definitely start with this one. It handles HTTP 'get' requests
+	very well, and can be made to handle HTTP 'post' requests with a little
+	effort. Written in 'C', it performs very well, and offers good (if basic)
+	performance reporting.
+	</p>
+	</subsection>
+	<subsection name="&sect-num;.5.2 HttpUnit" anchor="httpunit">
+	<p>
+	This is worth a look. It is a library (and therefore of more interest to
+	developers) that can be used to perform HTTP tests/benchmarks. It is
+	intended to be used instead of a web browser (therefore no GUI) in
+	conjunction with <b>JUnit</b>.
+	</p>
+	</subsection>
+	<subsection name="&sect-num;.5.3 Microsoft WAS" anchor="WAS">
+	<p>
+	This is definitely worth a look. It has an excellent user interface
+	but it may not do exactly what you want. If this is the case, be aware
+	that the functionality of this product is not likely to change.
+	</p>
+	</subsection>
+	<subsection name="&sect-num;.5.4 JMeter" anchor="JMeter">
+	<p>
+	If you have non-standard requirements, then this solution offers an
+	open-source community to provide them (of course, if you are reading
+	<u>this</u>, you are probably already committed to this one). This
+	product is free to evolve along with your requirements.
+	</p>
+	</subsection>
+</subsection>
+<subsection name="&sect-num;.6 Why Java ?" anchor="java">
+<p>Why not Perl or C ?
+</p>
+<p>Well, Perl might be a very good choice except that the Benchmark package
+seems to give fairly fuzzy results. Also, simulating multiple users with
+Perl is a tricky proposition (multiple connections can be simulated by forking
+many processes from a shell script, but these will not be threads, they will
+be processes). However, the Perl community is very large. If you find that
+someone has already written something that seems useful, this could be a very
+good solution.
+</p>
+<p>C, of course, is a very good choice (check out the Apache <b>ab</b> tool).
+But be prepared to write all of the custom networking, threading, and state
+management code that you will need to benchmark your application.
+</p>
+<p>Java gives you (for free) the custom networking, threading, and state
+management code that you will need to benchmark your application. Java is
+aware of HTTP, FTP, and HTTPS - as well as RMI, IIOP, and JDBC (not to mention
+cookies, URL-encoding, and URL-rewriting). In addition Java gives you automatic
+garbage-collection, and byte-code level security.
+</p>
+<p>And once Microsoft moves to a CLR (common language run-time) a Windows Java
+solution will not be any slower than any other type of solution on the Windows
+platform.
+</p>
+</subsection>
+</section>
+
+</body>
+</document>
