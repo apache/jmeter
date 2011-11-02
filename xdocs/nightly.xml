@@ -38,7 +38,7 @@
 	<h2>Where are the nightly builds?</h2>
 	<p>There are currently no regular nightly builds - sorry.</p>
     <p>However, occasional builds are made available from 
-    <a href="http://people.apache.org/builds/jakarta-jmeter/nightly/">Nightly builds (use at your own risk)</a> 
+    <a href="http://people.apache.org/builds/jmeter/nightly/">Nightly builds (use at your own risk)</a> 
     </p>
 	<h2>What do they consist of?</h2>
 <p>
@@ -46,10 +46,10 @@ JMeter is distributed as a set of zip (or tar-gz) archive files.
 
 The files are called:
 <ul>
-<li>jakarta-jmeter-{version}_bin.zip - JMeter binaries</li>
-<li>jakarta-jmeter-{version}_lib.zip - 3rd party jar files (rarely changes)</li>
-<li>jakarta-jmeter-{version}_src.zip - JMeter source</li>
-<li>jakarta-jmeter-{version}_api.zip - JMeter Javadoc (if available)</li>
+<li>apache-jmeter-{version}_bin.zip - JMeter binaries</li>
+<li>apache-jmeter-{version}_lib.zip - 3rd party jar files (rarely changes)</li>
+<li>apache-jmeter-{version}_src.zip - JMeter source</li>
+<li>apache-jmeter-{version}_api.zip - JMeter Javadoc (if available)</li>
 </ul>
 <h2>Installing JMeter runtime</h2>
 Download the _bin and _lib files
