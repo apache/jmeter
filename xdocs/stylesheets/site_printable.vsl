@@ -79,7 +79,7 @@
 #end
 <td bgcolor="$tabletdbg" #if ($colspan)colspan="$colspan"#end #if ($rowspan)rowspan="$rowspan"#end valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-#if ($value.getText().length() != 0)
+#if ($value.getText().length() != 0 || $value.getChildren().size() > 0)
 $xmlout.outputString($value, true)
 #else
 &nbsp;
@@ -93,7 +93,7 @@ $xmlout.outputString($value, true)
 #set ($rowspan = $value.getAttributeValue("rowspan"))
 <td bgcolor="$tablethbg" #if ($colspan)colspan="$colspan"#end #if ($rowspan)rowspan="$rowspan"#end valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-#if ($value.getText().length() != 0 || $value.hasChildren())
+#if ($value.getText().length() != 0 || $value.getChildren().size() > 0)
 $xmlout.outputString($value, true)
 #else
 &nbsp;
