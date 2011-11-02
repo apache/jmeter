@@ -542,7 +542,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      * Returns true if searchedTextLowerCase is in value
      * @param value
      * @param searchedTextLowerCase
-     * @return
+     * @return true if searchedTextLowerCase is in value
      */
     protected boolean testField(String value, String searchedTextLowerCase) {
         if(!StringUtils.isEmpty(value)) {
