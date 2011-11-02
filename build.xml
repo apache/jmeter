@@ -65,10 +65,10 @@
 
   Note
   ====
-  As with most other Jakarta projects, Gump (http://jakarta.apache.org/gump/) is used to
+  As with most other Apache projects, Gump (http://gump.apache.org/) is used to
   perform automated builds and tests on JMeter.
 
-  Gump uses its project/jakarta-jmeter.xml file to determine which target to use.
+  Gump uses its project/jmeter.xml file to determine which target to use.
   The current setting is: <ant target="dist">
 
   Any changes to the dependency list for dist may affect Gump.
@@ -836,7 +836,7 @@ run JMeter unless all the JMeter jars are added.
     <manifest file="${build.dir}/MANIFEST_BIN.MF">
         <attribute name="Built-By" value="${user.name}"/>
         <attribute name="Extension-Name" value=" JMeter"/>
-        <attribute name="Specification-Title" value=" Apache Jakarta JMeter"/>
+        <attribute name="Specification-Title" value=" Apache JMeter"/>
         <attribute name="Specification-Vendor" value=" Apache Software Foundation"/>
         <attribute name="Implementation-Vendor" value=" Apache Software Foundation"/>
         <attribute name="Implementation-Vendor-Id" value=" org.apache"/>
@@ -848,7 +848,7 @@ run JMeter unless all the JMeter jars are added.
     <manifest file="${build.dir}/MANIFEST_SRC.MF">
        <attribute name="Built-By" value="${user.name}"/>
        <attribute name="Extension-Name" value=" JMeter"/>
-       <attribute name="Specification-Title" value=" Apache Jakarta JMeter"/>
+       <attribute name="Specification-Title" value=" Apache JMeter"/>
        <attribute name="Specification-Vendor" value=" Apache Software Foundation"/>
        <attribute name="Implementation-Vendor" value=" Apache Software Foundation"/>
        <attribute name="Implementation-Vendor-Id" value=" org.apache"/>
@@ -1332,7 +1332,7 @@ run JMeter unless all the JMeter jars are added.
 
     <!-- Internal target -->
     <target name="_distribution" depends="check-versions,_eolcheck,check_jars">
-    <property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
+    <property name="dist.name" value="apache-jmeter-${jmeter.version}"/>
     <property name="pack.name" value="${dist.name}"/>
     <echo level="info">Creating JMeter distribution ${dist.name} ${svn.revision}</echo>
     <mkdir dir="${dist.dir}"/>
@@ -1431,11 +1431,11 @@ run JMeter unless all the JMeter jars are added.
   Gump targets.
   There are separate build and test projects for the jmeter module.
   -->
-  <!-- Used by project jakarta-jmeter-cvs -->
+  <!-- Used by project jmeter-cvs -->
   <target name="gump-build"
       depends="_gump_properties,clean,install"
       description="Build JMeter">
-    <property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
+    <property name="dist.name" value="apache-jmeter-${jmeter.version}"/>
     <available file="${velocity.jar}" property="velocity.present"/>
     <!-- No need to create the archives for Gump
     <antcall target="_pack-binaries"/>
@@ -1444,7 +1444,7 @@ run JMeter unless all the JMeter jars are added.
     -->
   </target>
 
-  <!-- Used by project jakarta-jmeter-test -->
+  <!-- Used by project jmeter-test -->
   <target name="gump-test"
       depends="_gump_properties,compile-tests,_test"
       description="Test JMeter in Gump">
@@ -1479,12 +1479,12 @@ run JMeter unless all the JMeter jars are added.
   </target>
 
   <target name="pack-src" depends="init-version">
-    <property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
+    <property name="dist.name" value="apache-jmeter-${jmeter.version}"/>
     <antcall target="_pack-source"/>
   </target>
 
   <target name="pack-dist" depends="init-version">
-    <property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
+    <property name="dist.name" value="apache-jmeter-${jmeter.version}"/>
     <antcall target="_pack-binaries"/>
     <antcall target="_pack-libraries"/>
     <antcall target="_pack-javadoc"/>
@@ -1493,7 +1493,7 @@ run JMeter unless all the JMeter jars are added.
 
   <!-- As pack-dist but without javadoc -->
   <target name="pack-nightly" depends="init-version">
-    <property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
+    <property name="dist.name" value="apache-jmeter-${jmeter.version}"/>
     <antcall target="_pack-binaries"/>
     <antcall target="_pack-libraries"/>
     <antcall target="_pack-source"/>
