@@ -41,6 +41,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpException;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
+import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpResponseInterceptor;
 import org.apache.http.NameValuePair;
@@ -126,6 +127,16 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             context.setAttribute(CONTEXT_METRICS, metrics);
         }
     };
+    private static final HttpRequestInterceptor METRICS_RESETTER = new HttpRequestInterceptor() {
+		
+		@Override
+		public void process(HttpRequest request, HttpContext context)
+				throws HttpException, IOException {
+            HttpConnection conn = (HttpConnection) context.getAttribute(ExecutionContext.HTTP_CONNECTION);
+			HttpConnectionMetrics metrics = conn.getMetrics();
+			metrics.reset();
+		}
+	};
 
     private static final ThreadLocal<Map<HttpClientKey, HttpClient>> HTTPCLIENTS = 
         new ThreadLocal<Map<HttpClientKey, HttpClient>>(){
@@ -500,6 +511,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             };
             ((AbstractHttpClient) httpClient).addResponseInterceptor(new ResponseContentEncoding());
             ((AbstractHttpClient) httpClient).addResponseInterceptor(METRICS_SAVER); // HACK
+            ((AbstractHttpClient) httpClient).addRequestInterceptor(METRICS_RESETTER); 
             
             // Override the defualt schemes as necessary
             SchemeRegistry schemeRegistry = httpClient.getConnectionManager().getSchemeRegistry();
