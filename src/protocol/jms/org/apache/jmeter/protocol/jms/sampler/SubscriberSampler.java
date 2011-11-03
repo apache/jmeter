@@ -93,6 +93,8 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     
     private transient boolean START_ON_SAMPLE = false;
 
+	private volatile String separator;
+
     public SubscriberSampler() {
         super();
     }
@@ -248,7 +250,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
                     }
                 }
                 Utils.messageProperties(propBuffer, msg);
-                propBuffer.append(getSeparator());
+                propBuffer.append(separator);
             } catch (JMSException e) {
                 log.error(e.getMessage());
             }
@@ -455,7 +457,10 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
      * {@inheritDoc}
      */
     public void testStarted() {
-        //NOOP
+    	separator = getSeparator();
+    	separator = separator.replace("\\t", "\t");
+    	separator = separator.replace("\\n", "\n");
+    	separator = separator.replace("\\r", "\r");
     }
 
     /**
