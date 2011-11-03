@@ -20,6 +20,7 @@ package org.apache.jmeter.protocol.http.control;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
@@ -61,15 +62,6 @@ public class HttpMirrorThread extends Thread {
 
         try {
             in = new BufferedInputStream(clientSocket.getInputStream());
-            out = new BufferedOutputStream(clientSocket.getOutputStream());
-            log.debug("Write headers");
-            // The headers are written using ISO_8859_1 encoding
-            out.write("HTTP/1.0 200 OK".getBytes(ISO_8859_1)); //$NON-NLS-1$
-            out.write(CRLF);
-            out.write("Content-Type: text/plain".getBytes(ISO_8859_1)); //$NON-NLS-1$
-            out.write(CRLF);
-            out.write(CRLF);
-            out.flush();
 
             // Read the header part, we will be looking for a content-length
             // header, so we know how much we should read.
@@ -82,20 +74,43 @@ public class HttpMirrorThread extends Thread {
             StringBuilder headers = new StringBuilder();
             int length = 0;
             int positionOfBody = 0;
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
             while(positionOfBody <= 0 && ((length = in.read(buffer)) != -1)) {
                 log.debug("Write body");
-                out.write(buffer, 0, length); // echo back
+                baos.write(buffer, 0, length); // echo back
                 headers.append(new String(buffer, 0, length, ISO_8859_1));
                 // Check if we have read all the headers
                 positionOfBody = getPositionOfBody(headers.toString());
             }
 
-            // Check if we have found a content-length header
+            baos.close();
             final String headerString = headers.toString();
+
+            log.debug("Write headers");
+            out = new BufferedOutputStream(clientSocket.getOutputStream());
+            // The headers are written using ISO_8859_1 encoding
+            out.write("HTTP/1.0 200 OK".getBytes(ISO_8859_1)); //$NON-NLS-1$
+            out.write(CRLF);
+            out.write("Content-Type: text/plain".getBytes(ISO_8859_1)); //$NON-NLS-1$
+            out.write(CRLF);
+            // Look for special Cookie request
+            String cookieHeaderValue = getRequestHeaderValue(headerString, "X-SetCookie"); //$NON-NLS-1$
+            if (cookieHeaderValue != null) {
+                out.write("Set-Cookie: ".getBytes(ISO_8859_1));
+                out.write(cookieHeaderValue.getBytes(ISO_8859_1));
+                out.write(CRLF);
+            }
+            out.write(CRLF);
+            out.flush();
+
+            out.write(baos.toByteArray());
+
+            // Check if we have found a content-length header
             String contentLengthHeaderValue = getRequestHeaderValue(headerString, "Content-Length"); //$NON-NLS-1$
             if(contentLengthHeaderValue != null) {
                 contentLength = Integer.valueOf(contentLengthHeaderValue).intValue();
             }
+            // Look for special Sleep request
             String sleepHeaderValue = getRequestHeaderValue(headerString, "X-Sleep"); //$NON-NLS-1$
             if(sleepHeaderValue != null) {
                 Thread.sleep(Integer.parseInt(sleepHeaderValue));
@@ -169,12 +184,12 @@ public class HttpMirrorThread extends Thread {
     private static String getRequestHeaderValue(String requestHeaders, String headerName) {
         Perl5Matcher localMatcher = JMeterUtils.getMatcher();
         // We use multi-line mask so can prefix the line with ^
-        // also match \w+ to catch Transfer-Encoding: chunked
-        // TODO: may need to be extended to allow for other header values with non-word contents
-        String expression = "^" + headerName + ":\\s+(\\w+)"; // $NON-NLS-1$ $NON-NLS-2$
+        String expression = "^" + headerName + ":\\s+([^\\r\\n]+)"; // $NON-NLS-1$ $NON-NLS-2$
         Pattern pattern = JMeterUtils.getPattern(expression, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.CASE_INSENSITIVE_MASK | Perl5Compiler.MULTILINE_MASK);
         if(localMatcher.contains(requestHeaders, pattern)) {
             // The value is in the first group, group 0 is the whole match
+//            System.out.println("Found:'"+localMatcher.getMatch().group(1)+"'");
+//            System.out.println("in: '"+localMatcher.getMatch().group(0)+"'");
             return localMatcher.getMatch().group(1);
         }
         else {
