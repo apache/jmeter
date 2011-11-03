@@ -179,6 +179,7 @@ public class DefaultKeyStore extends JmeterKeyStore {
     /**
      * @return the startIndex
      */
+    @Override
     public int getAliasStartIndex() {
         return startIndex;
     }
@@ -186,6 +187,7 @@ public class DefaultKeyStore extends JmeterKeyStore {
     /**
      * @param startIndex the startIndex to set
      */
+    @Override
     public void setAliasStartIndex(int startIndex) {
         this.startIndex = startIndex;
     }
@@ -193,6 +195,7 @@ public class DefaultKeyStore extends JmeterKeyStore {
     /**
      * @return the endIndex
      */
+    @Override
     public int getAliasEndIndex() {
         return endIndex;
     }
@@ -200,6 +203,7 @@ public class DefaultKeyStore extends JmeterKeyStore {
     /**
      * @param endIndex the endIndex to set
      */
+    @Override
     public void setAliasEndIndex(int endIndex) {
         this.endIndex = endIndex;
     }
