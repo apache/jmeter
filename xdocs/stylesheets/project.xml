@@ -18,9 +18,9 @@
 <project name="Apache JMeter"
 		  href="http://jakarta.apache.org/jmeter/">
 
-	 <title>JMeter</title>
+	 <title>Apache JMeter</title>
 	 <!---->
-	 <logo width="221" height="102" href="/images/logo.jpg">JMeter</logo>
+	 <logo width="221" height="102" href="/images/logo.jpg">Apache JMeter</logo>
 	 <!---->
 	 <body>
 	 <menu name="About">
@@ -28,10 +28,10 @@
 	   <item name="Changes"             href="/changes.html"/>
 	   <item name="Issues"              href="/issues.html"/>
 	   <item name="License"             href="http://www.apache.org/licenses/"/>
-	   <item name="Contributors"		href="http://wiki.apache.org/jakarta-jmeter/JMeterCommitters"/>
+	   <item name="Contributors"		href="http://wiki.apache.org/jmeter/JMeterCommitters"/>
 	 </menu>
 	 <menu name="Download">
-	 	<item name="Download Releases"    href="http://jakarta.apache.org/site/downloads/downloads_jmeter.cgi"/>
+	 	<item name="Download Releases"    href="/download_jmeter.cgi"/>
 		<item name="Developer (Nightly) Builds"  	href="/nightly.html"/>
 	 </menu>
 	 <menu name="Documentation">
@@ -39,8 +39,8 @@
 		<item name="Javadocs"		     href="/api/index.html"/>
         <item name="Localisation (Translator's Guide)" href="/localising/index.html"></item>
 		<item name="Building JMeter and Add-Ons"     href="/building.html"/>
-		<item name="JMeter Wiki"		 href="http://wiki.apache.org/jakarta-jmeter"/>
- 	    <item name="FAQ (Wiki)"			 href="http://wiki.apache.org/jakarta-jmeter/JMeterFAQ"/>
+		<item name="JMeter Wiki"		 href="http://wiki.apache.org/jmeter"/>
+ 	    <item name="FAQ (Wiki)"			 href="http://wiki.apache.org/jmeter/JMeterFAQ"/>
 	 </menu>
 	 <menu name="Tutorials (PDF format)">
 		<item name="Distributed Testing" href="/usermanual/jmeter_distributed_testing_step_by_step.pdf"/>
@@ -50,9 +50,9 @@
 		<item name="Extending JMeter"	 href="/extending/jmeter_tutorial.pdf"/>
 	 </menu>
 	 <menu name="Community">
-		<item name="Get Involved"        href="/site/getinvolved.html"/>
-		<item name="Mailing Lists"       href="/site/mail.html"/>
-		<item name="SVN Repositories"    href="/site/cvsindex.html"/>
+		<item name="Get Involved"        href="http://www.apache.org/foundation/getinvolved.html"/>
+		<item name="Mailing Lists"       href="/mail.html"/>
+		<item name="SVN Repositories"    href="/svnindex.html"/>
 	 </menu>
      <menu name="Foundation">
         <item name="ASF"                 href="http://www.apache.org/"/>

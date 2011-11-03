@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<document>
+
+  <properties>
+    <author email="dev.AT.jmeter.DOT.apache.DOT.org">Apache JMeter Project</author>
+    <title>Source Repositories</title>
+  </properties>
+
+<body>
+
+<section name="Download the Source">
+
+<p>Most users of the source code probably don't need to have day to
+day access to the source code as it changes. For these users we
+provide easy to unpack source code downloads via our <a
+href="download_jmeter.cgi">download page</a>.  </p>
+
+</section>
+
+<section name="Access the Version Controlled Source Code">
+
+<p>For information on connecting to the ASF Subversion repositories, see the <a
+href="http://www.apache.org/dev/version-control.html">version control
+page</a>. </p>
+
+
+<p>Modules available for access are listed below.</p>
+
+<subsection name="Subversion" anchor="subversion">
+
+<p><a href="http://subversion.apache.org">Subversion</a> is an open-source version control system. The root url of the
+ASF Subversion repository is <a href="http://svn.apache.org/repos/asf/">http://svn.apache.org/repos/asf/</a> for non-committers and <a href="https://svn.apache.org/repos/asf/">https://svn.apache.org/repos/asf/</a> for committers. </p>
+
+<p><b>NOTE</b>: 
+When checking out a subproject using Subversion, ensure that you are checking out a tag, a branch or trunk (the main-line) and not all tags and branches to avoid filling up your hard-disk and wasting bandwidth. </p>
+
+<table>
+ <tr>
+  <th>Project</th>
+  <th>http (read-only)</th>
+  <th>https (committers)</th>
+  <th>View-SVN</th>
+ </tr>
+ <tr>
+  <td>Apache JMeter</td>
+  <td><a href="http://svn.apache.org/repos/asf/jmeter/trunk">http://svn.apache.org/repos/asf/jmeter/trunk</a></td>
+  <td><a href="https://svn.apache.org/repos/asf/jmeter/trunk">https://svn.apache.org/repos/asf/jmeter/trunk</a></td>
+  <td><a href="http://svn.apache.org/viewcvs.cgi/jmeter/">http://svn.apache.org/viewcvs.cgi/jmeter/</a></td>
+ </tr>
+</table>
+
+</subsection>
+
+</section>
+
+</body>
+</document>

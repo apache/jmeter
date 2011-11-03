@@ -18,10 +18,8 @@
 <project name="Apache JMeter"
 		  href="http://jakarta.apache.org/jmeter/">
 
-	 <title>JMeter</title>
-	 <!--
-	 <logo href="/images/logo.gif">JMeter</logo>
-	 -->
+	 <title>Apache JMeter</title>
+	 <logo width="221" height="102" href="../docs/images/logo.jpg">Apache JMeter</logo>
 	 <body>
 
 	 </body>

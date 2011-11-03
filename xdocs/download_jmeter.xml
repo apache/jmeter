@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+ 
+       http://www.apache.org/licenses/LICENSE-2.0
+ 
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<!DOCTYPE document
+[
+<!ENTITY release '2.5.2'>
+]>
+    
+<document>   
+<properties>     
+    <title>Downloads</title>   
+</properties> 
+<body>
+    <section name="Download Apache JMeter">
+      <p>
+        We recommend you use a mirror to download our release
+        builds, but you <strong>must</strong> verify the integrity of
+        the downloaded files using signatures downloaded from our main 
+        distribution directories. Recent releases (48 hours) may not yet
+        be available from the mirrors.
+      </p>
+
+      <p>
+        You are currently using <b>[preferred]</b>.  If you
+        encounter a problem with this mirror, please select another
+        mirror.  If all mirrors are failing, there are <i>backup</i>
+        mirrors (at the end of the mirrors list) that should be
+        available.
+        <br></br>
+        [if-any logo]<a href="[link]"><img align="right" src="[logo]" border="0"></img></a>[end]
+      </p>
+
+      <form action="[location]" method="get" id="SelectMirror">
+        <p>
+          Other mirrors: 
+          <select name="Preferred">
+          [if-any http]
+            [for http]<option value="[http]">[http]</option>[end]
+          [end]
+          [if-any ftp]
+            [for ftp]<option value="[ftp]">[ftp]</option>[end]
+          [end]
+          [if-any backup]
+            [for backup]<option value="[backup]">[backup] (backup)</option>[end]
+          [end]
+          </select>
+          <input type="submit" value="Change"></input>
+        </p>
+      </form>
+
+      <p>
+        The <code>KEYS</code> link links to the code signing keys used to sign the product.
+        The <code>PGP</code> link downloads the OpenPGP compatible signature from our main site. 
+        The <code>MD5</code> link downloads the checksum from the main site.
+      </p>
+      <p>
+      For more information concerning Apache JMeter, see the <a href="http://jmeter.apache.org/">Apache JMeter</a> site. 
+      </p>
+      <p>
+      <a href="http://www.apache.org/dist/jmeter/KEYS">KEYS</a>
+      </p>
+    </section>
+    <section name="Apache JMeter &release; (Requires Java 1.5 or later)">
+      <subsection name="Binaries" anchor="binaries">
+        <table>
+          <tr>
+              <td><a href="[preferred]/jmeter/binaries/apache-jmeter-&release;.tar.gz">apache-jmeter-&release;.tar.gz</a></td>
+              <td><a href="http://www.apache.org/dist/jmeter/binaries/apache-jmeter-&release;.tar.gz.md5">md5</a></td>
+              <td><a href="http://www.apache.org/dist/jmeter/binaries/apache-jmeter-&release;.tar.gz.asc">pgp</a></td>
+          </tr>
+          <tr>
+              <td><a href="[preferred]/jmeter/binaries/apache-jmeter-&release;.zip">apache-jmeter-&release;.zip</a></td>
+              <td><a href="http://www.apache.org/dist/jmeter/binaries/apache-jmeter-&release;.zip.md5">md5</a></td>
+              <td><a href="http://www.apache.org/dist/jmeter/binaries/apache-jmeter-&release;.zip.asc">pgp</a></td>
+          </tr>
+        </table>
+      </subsection>
+      <subsection name="Source" anchor="source">
+        <table>
+          <tr>
+              <td><a href="[preferred]/jmeter/source/apache-jmeter-&release;_src.tar.gz">apache-jmeter-&release;_src.tar.gz</a></td>
+              <td><a href="http://www.apache.org/dist/jmeter/source/apache-jmeter-&release;_src.tar.gz.md5">md5</a></td>
+              <td><a href="http://www.apache.org/dist/jmeter/source/apache-jmeter-&release;_src.tar.gz.asc">pgp</a></td>
+          </tr>
+          <tr>
+              <td><a href="[preferred]/jmeter/source/apache-jmeter-&release;_src.zip">apache-jmeter-&release;_src.zip</a></td>
+              <td><a href="http://www.apache.org/dist/jmeter/source/apache-jmeter-&release;_src.zip.md5">md5</a></td>
+              <td><a href="http://www.apache.org/dist/jmeter/source/apache-jmeter-&release;_src.zip.asc">pgp</a></td>
+          </tr>
+        </table>
+      </subsection>
+    </section>
+    <section name="Archives">
+        <p>
+          Older releases can be obtained from the archives.
+        </p>
+        <ul>
+          <li class="download"><a href="[preferred]/jmeter/">browse download area</a></li>
+          <li><a href="http://archive.apache.org/dist/jmeter/">Apache JMeter archives...</a></li>
+          <li><a href="http://archive.apache.org/dist/jakarta/jmeter/">Apache Jakarta JMeter archives...</a></li>
+        </ul>
+    </section>
+    <section name="Verification of downloads">
+    <p>
+    It is essential that you verify the integrity of the downloaded files using the PGP or MD5 signatures. 
+    Please read Verifying Apache Software Foundation Releases for more information on why you should verify our releases.
+    </p>
+    <p>
+    The PGP signatures can be verified using PGP or GPG. First download the KEYS as well as the asc signature file for the relevant distribution. 
+    Make sure you get these files from the main distribution site, rather than from a mirror. 
+    Then verify the signatures using
+    </p>
+<pre>
+% pgpk -a KEYS
+% pgpv downloaded_file.asc
+or
+% pgp -ka KEYS
+% pgp downloaded_file.asc
+or
+% gpg --import KEYS
+% gpg --verify downloaded_file.asc
+</pre>
+    <p>
+    Alternatively, you can verify the MD5 signature on the files.
+    This is not very secure, and should only be used to check that the file has been downloaded successfully.
+    <br/>
+    A unix program called md5 or md5sum is included in many unix distributions. 
+    It is also available as part of <a href="http://www.gnu.org/software/textutils/textutils.html">GNU Textutils</a>. 
+    <br/>
+    Windows users can get binary md5 programs from 
+    <a href="http://www.fourmilab.ch/md5/">here</a>, 
+    <a href="http://www.pc-tools.net/win32/freeware/console/">here</a>, or 
+    <a href="http://www.slavasoft.com/fsum/">here</a>.
+    </p>
+    </section>
+</body>
+</document>
