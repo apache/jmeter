@@ -444,7 +444,7 @@ $comp.getAttributeValue("index")
 #macro (getProjectImage)
 #if ($project.getChild("logo"))
 <td align="left">
-<a href="http://jakarta.apache.org"><img alt="Jakarta" title="Jakarta" width="505" height="48" src="$imgdir/jakarta-logo.gif" border="0"></a>
+<a href="http://www.apache.org"><img title="Apache Software Foundation" width="387" height="100" src="$imgdir/asf-logo.gif" border="0"/></a>
 </td>
 <td align="right">
 #set ( $logoHeight = $project.getChild("logo").getAttributeValue("height") )
@@ -458,7 +458,7 @@ $comp.getAttributeValue("index")
 </td>
 #else
 <td colspan="2">
-<a href="http://jakarta.apache.org"><img width="505" height="48" src="$imgdir/jakarta-logo.gif" align="left" border="0"></a>
+<a href="http://www.apache.org"><img title="Apache Software Foundation" width="387" height="100" src="$imgdir/asf-logo.gif" border="0"/></a>
 </td>
 #end
 #end
