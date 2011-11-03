@@ -128,8 +128,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
     };
     private static final HttpRequestInterceptor METRICS_RESETTER = new HttpRequestInterceptor() {
-		
-		@Override
 		public void process(HttpRequest request, HttpContext context)
 				throws HttpException, IOException {
             HttpConnection conn = (HttpConnection) context.getAttribute(ExecutionContext.HTTP_CONNECTION);
