@@ -1113,6 +1113,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         Map<HttpClientKey, HttpClient> map = HTTPCLIENTS.get();
         if ( map != null ) {
             for ( HttpClient cl : map.values() ) {
+            	((AbstractHttpClient) cl).clearRequestInterceptors(); 
+            	((AbstractHttpClient) cl).clearResponseInterceptors(); 
                 cl.getConnectionManager().shutdown();
             }
             map.clear();
