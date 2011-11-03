@@ -443,7 +443,7 @@ $rl_node.getText()
 style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </td>
 <td align="left">
-<a href="http://jakarta.apache.org"><img width="505" height="48" src="$relativePath/images/jakarta-logo.gif" alt="Jakarta" title="Jakarta" border="0"/></a>
+<a href="http://www.apache.org"><img title="Apache Software Foundation" width="387" height="100" src="$imgdir/asf-logo.gif" border="0"/></a>
 </td>
 <td align="right">
 #set ( $logoString = $project.getChild("logo").getAttributeValue("href") )
@@ -457,7 +457,7 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </td>
 #else
 <td colspan="2">
-<a href="http://jakarta.apache.org"><img width="505" height="48" src="$relativePath/images/jakarta-logo.gif" align="left" border="0"/></a>
+<a href="http://www.apache.org"><img title="Apache Software Foundation" width="387" height="100" src="$imgdir/asf-logo.gif" border="0"/></a>
 </td>
 #end
 #end
