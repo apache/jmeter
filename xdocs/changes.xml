@@ -97,6 +97,7 @@ these occurs, Sampler is marked as failed.
 <li>Bug 51980 - HtmlParserHTMLParser double-counts images used in links</li>
 <li>Bug 52064 - OutOfMemory Risk in CacheManager</li>
 <li>Bug 51919 - Random ConcurrentModificationException or NoSuchElementException in CookieManager#removeMatchingCookies when using Concurrent Download</li>
+<li>Bug 52126 - HttpClient4 does not clear cookies between iterations</li>
 </ul>
 
 <h3>Other Samplers</h3>
