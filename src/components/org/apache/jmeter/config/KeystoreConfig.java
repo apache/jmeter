@@ -109,7 +109,7 @@ public class KeystoreConfig extends ConfigTestElement implements TestBean, TestL
         log.info("Configuring Keystore with (preload:"+preload+", startIndex:"+
                 startIndexAsInt+", endIndex:"+endIndexAsInt+")");
 
-        SSLManager.getInstance().configureKeystore(Boolean.valueOf(preload),
+        SSLManager.getInstance().configureKeystore(Boolean.parseBoolean(preload),
         		startIndexAsInt, 
                 endIndexAsInt);
     }
