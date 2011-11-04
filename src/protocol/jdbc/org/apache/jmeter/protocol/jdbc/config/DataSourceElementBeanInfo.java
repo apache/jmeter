@@ -75,7 +75,7 @@ public class DataSourceElementBeanInfo extends BeanInfoSupport {
         p = property("transactionIsolation");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "DEFAULT");
-        p.setValue(NOT_EXPRESSION, true);
+        p.setValue(NOT_EXPRESSION, Boolean.TRUE);
         Set<String> modesSet = TRANSACTION_ISOLATION_MAP.keySet();
         String[] modes = modesSet.toArray(new String[modesSet.size()]);
         p.setValue(TAGS, modes);
