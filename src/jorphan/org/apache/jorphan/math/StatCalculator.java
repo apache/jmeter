@@ -191,6 +191,10 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
         return count;
     }
 
+    public double getSum() {
+        return sum;
+    }
+
     protected abstract T divide(T val, int n);
 
     public void addValue(T val, int sampleCount) {
