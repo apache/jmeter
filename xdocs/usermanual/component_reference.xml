@@ -1336,6 +1336,10 @@ The following table shows some values which may be useful when configuring JMS:
   This may be useful in some cases where multiple samples/threads have connections to the same queue.
   If not selected, JMeter calls Connection.start() at the start of the thread, and does not call stop() until the end of the thread.
   </property>
+  <property name="Separator" required="No">
+  Separator used to separate messages when there is more than one (related to setting Number of samples to aggregate).
+  Note that \n, \r, \t are accepted.
+  </property>
 </properties>
 <p>
 <b>NOTE:</b> JMeter 2.3.4 and earlier used a different strategy for the MessageConsumer.receive() client. 
