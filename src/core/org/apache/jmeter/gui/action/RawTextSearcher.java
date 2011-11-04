@@ -23,7 +23,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * 
+ * Searcher implementation that searches text as is
  */
 public class RawTextSearcher implements Searcher {
 	private boolean caseSensitive;
@@ -31,9 +31,9 @@ public class RawTextSearcher implements Searcher {
 	
 
 	/**
-	 * 
-	 * @param caseSensitive
-	 * @param textToSearch
+	 * Constructor
+	 * @param caseSensitive is search case sensitive
+	 * @param textToSearch Text to search
 	 */
 	public RawTextSearcher(boolean caseSensitive, String textToSearch) {
 		super();
@@ -45,12 +45,9 @@ public class RawTextSearcher implements Searcher {
 		}
 	}
 
-
-
-	/* (non-Javadoc)
-	 * @see org.apache.jmeter.gui.action.ISearcher#search(java.util.List)
+	/**
+	 * {@inheritDoc}
 	 */
-	@Override
 	public boolean search(List<String> textTokens) {
 		boolean result = false;
 		for (String searchableToken : textTokens) {

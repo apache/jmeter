@@ -33,8 +33,9 @@ public class RegexpSearcher implements Searcher {
 	
 
 	/**
-	 * @param caseSensitive
-	 * @param regexp
+	 * Constructor
+	 * @param caseSensitive is search case sensitive
+	 * @param regexp Regexp to search
 	 */
 	public RegexpSearcher(boolean caseSensitive, String regexp) {
 		super();
@@ -48,8 +49,8 @@ public class RegexpSearcher implements Searcher {
 	}
 
 
-	/* (non-Javadoc)
-	 * @see org.apache.jmeter.gui.action.ISearcher#search(java.util.List)
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean search(List<String> textTokens) {
