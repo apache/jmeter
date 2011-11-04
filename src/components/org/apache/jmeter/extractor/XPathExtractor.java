@@ -387,25 +387,16 @@ public class XPathExtractor extends AbstractScopedTestElement implements
         }
         return sw.toString();
     }
-
-    /**
-     * {@inheritDoc}
+    
+    /** 
+     * {@inheritDoc}}
      */
     @Override
-    public boolean searchContent(String textToSearch) throws Exception {
-        if(super.searchContent(textToSearch)) {
-            return true;
-        }
-        String searchedTextLowerCase = textToSearch.toLowerCase();
-        if(testField(getRefName(), searchedTextLowerCase)) {
-            return true;
-        }
-        if(testField(getDefaultValue(), searchedTextLowerCase)) {
-            return true;
-        }
-        if(testField(getXPathQuery(), searchedTextLowerCase)) {
-            return true;
-        }
-        return false;
+    public List<String> getSearchableTokens() throws Exception {
+        List<String> result = super.getSearchableTokens();
+        result.add(getRefName());
+        result.add(getDefaultValue());
+        result.add(getXPathQuery());
+        return result;
     }
 }

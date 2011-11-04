@@ -453,25 +453,16 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
     public void setUseField(String actionCommand) {
         setProperty(MATCH_AGAINST,actionCommand);
     }
-
-    /**
-     * {@inheritDoc}
+    
+    /** 
+     * {@inheritDoc}}
      */
     @Override
-    public boolean searchContent(String textToSearch) throws Exception {
-        if(super.searchContent(textToSearch)) {
-            return true;
-        }
-        String searchedTextLowerCase = textToSearch.toLowerCase();
-        if(testField(getRefName(), searchedTextLowerCase)) {
-            return true;
-        }
-        if(testField(getDefaultValue(), searchedTextLowerCase)) {
-            return true;
-        }
-        if(testField(getRegex(), searchedTextLowerCase)) {
-            return true;
-        }
-        return false;
+    public List<String> getSearchableTokens() throws Exception {
+        List<String> result = super.getSearchableTokens();
+        result.add(getRefName());
+        result.add(getDefaultValue());
+        result.add(getRegex());
+        return result;
     }
 }
