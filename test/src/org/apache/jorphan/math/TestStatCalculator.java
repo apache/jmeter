@@ -102,6 +102,7 @@ public class TestStatCalculator extends TestCase {
         assertTrue(map.containsKey(Integer.valueOf(2)));
     }
     
+    @SuppressWarnings("boxing")
     public void testBug52125_1(){ // No duplicates when adding
         calc.addValue(1L);
         calc.addValue(2L);
@@ -114,6 +115,7 @@ public class TestStatCalculator extends TestCase {
         assertEquals(0.5773502691896255, calc.getStandardDeviation());
     }
 
+    @SuppressWarnings("boxing")
     public void testBug52125_2(){ // add duplicates
         calc.addValue(1L);
         calc.addValue(2L);
@@ -124,6 +126,7 @@ public class TestStatCalculator extends TestCase {
         assertEquals(0.5773502691896255, calc.getStandardDeviation());
     }
 
+    @SuppressWarnings("boxing")
     public void testBug52125_3(){ // add duplicates as per bug
         calc.addValue(1L);
         calc.addValue(2L);
