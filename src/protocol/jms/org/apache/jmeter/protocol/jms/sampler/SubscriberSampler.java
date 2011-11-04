@@ -93,7 +93,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     
     private transient boolean START_ON_SAMPLE = false;
 
-	private volatile String separator;
+	private transient String separator;
 
     public SubscriberSampler() {
         super();
