@@ -101,4 +101,40 @@ public class TestStatCalculator extends TestCase {
         assertTrue(map.containsKey(Integer.valueOf(0)));
         assertTrue(map.containsKey(Integer.valueOf(2)));
     }
+    
+    public void testBug52125_1(){ // No duplicates when adding
+        calc.addValue(1L);
+        calc.addValue(2L);
+        calc.addValue(3L);
+        calc.addValue(2L);
+        calc.addValue(2L);
+        calc.addValue(2L);
+        assertEquals(6, calc.getCount());
+        assertEquals(12.0, calc.getSum());
+        assertEquals(0.5773502691896255, calc.getStandardDeviation());
+    }
+
+    public void testBug52125_2(){ // add duplicates
+        calc.addValue(1L);
+        calc.addValue(2L);
+        calc.addValue(3L);
+        calc.addValue(2L, 3);
+        assertEquals(6, calc.getCount());
+        assertEquals(12.0, calc.getSum());
+        assertEquals(0.5773502691896255, calc.getStandardDeviation());
+    }
+
+    public void testBug52125_3(){ // add duplicates as per bug
+        calc.addValue(1L);
+        calc.addValue(2L);
+        calc.addValue(3L);
+        StatCalculatorLong calc2 = new StatCalculatorLong();
+        calc2.addValue(2L);
+        calc2.addValue(2L);
+        calc2.addValue(2L);
+        calc.addAll(calc2);
+        assertEquals(6, calc.getCount());
+        assertEquals(12.0, calc.getSum());
+        assertEquals(0.5773502691896255, calc.getStandardDeviation());
+    }
 }
