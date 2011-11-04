@@ -19,8 +19,8 @@
 package org.apache.jmeter.config;
 
 import java.io.IOException;
+import java.util.List;
 
-import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.save.CSVSaveService;
@@ -255,19 +255,14 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
     public void setShareMode(String value) {
         this.shareMode = value;
     }
-
+    
     /** 
      * {@inheritDoc}}
      */
     @Override
-    public boolean searchContent(String textToSearch) throws Exception {
-        if(super.searchContent(textToSearch)) {
-            return true;
-        }
-        String searchedTextLowerCase = textToSearch.toLowerCase();
-        if(testField(getPropertyAsString("variableNames"), searchedTextLowerCase)) {
-            return true;
-        }
-        return false;
+    public List<String> getSearchableTokens() throws Exception {
+        List<String> result = super.getSearchableTokens();
+        result.add(getPropertyAsString("variableNames"));
+        return result;
     }
 }

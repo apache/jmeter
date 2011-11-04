@@ -19,6 +19,7 @@
 package org.apache.jmeter.util;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -27,8 +28,6 @@ import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.apache.jmeter.util.BeanShellInterpreter;
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterException;
 import org.apache.jorphan.util.JOrphanUtils;
@@ -280,18 +279,13 @@ public abstract class BeanShellTestElement extends AbstractTestElement
         resetInterpreter = b;
     }
     
-    /**
-     * {@inheritDoc}
+    /** 
+     * {@inheritDoc}}
      */
     @Override
-    public boolean searchContent(String textToSearch) throws Exception {
-        if(super.searchContent(textToSearch)) {
-            return true;
-        }
-        String searchedTextLowerCase = textToSearch.toLowerCase();
-        if(testField(getScript(), searchedTextLowerCase)) {
-            return true;
-        }
-        return false;
+    public List<String> getSearchableTokens() throws Exception {
+        List<String> result = super.getSearchableTokens();
+        result.add(getScript());
+        return result;
     }
 }

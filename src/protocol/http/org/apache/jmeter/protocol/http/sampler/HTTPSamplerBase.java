@@ -1815,33 +1815,23 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         }
     }
     
-    /**
+    
+    /** 
      * We search in URL and arguments
-     * TODO Can be enhanced
-     * {@inheritDoc}
+     * {@inheritDoc}}
      */
     @Override
-    public boolean searchContent(String textToSearch) throws Exception {
-        if(super.searchContent(textToSearch)) {
-            return true;
-        }
-        String searchedTextLowerCase = textToSearch.toLowerCase();
-        if(testField(getUrl().toString(), searchedTextLowerCase)) {
-            return true;
-        }
+    public List<String> getSearchableTokens() throws Exception {
+        List<String> result = super.getSearchableTokens();
+        result.add(getUrl().toExternalForm());
         Arguments arguments = getArguments();
         if(arguments != null) {
             for (int i = 0; i < arguments.getArgumentCount(); i++) {
                 Argument argument = arguments.getArgument(i);
-                if(testField(argument.getName(), searchedTextLowerCase)) {
-                    return true;
-                }
-                if(testField(argument.getValue(), searchedTextLowerCase)) {
-                    return true;
-                }
+                result.add(argument.getName());
+                result.add(argument.getValue());
             }
         }
-        return false;
+        return result;
     }
- }
-
+}
