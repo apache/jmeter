@@ -19,14 +19,15 @@
 package org.apache.jmeter.testelement;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.jmeter.gui.Searchable;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
@@ -524,30 +525,13 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
         return getProperty(TestElement.ENABLED) instanceof NullProperty || getPropertyAsBoolean(TestElement.ENABLED);
     }
     
-    /**
-     * {@inheritDoc}
+    /** 
+     * {@inheritDoc}}
      */
-    public boolean searchContent(String textToSearch) throws Exception {
-        String searchedTextLowerCase = textToSearch.toLowerCase();
-        if(testField(getComment(), searchedTextLowerCase)) {
-            return true;
-        }
-        if(testField(getName(), searchedTextLowerCase)) {
-            return true;
-        }
-        return false;
-    }
-    
-    /**
-     * Returns true if searchedTextLowerCase is in value
-     * @param value
-     * @param searchedTextLowerCase
-     * @return true if searchedTextLowerCase is in value
-     */
-    protected boolean testField(String value, String searchedTextLowerCase) {
-        if(!StringUtils.isEmpty(value)) {
-            return value.toLowerCase().indexOf(searchedTextLowerCase)>=0;
-        }
-        return false;
+    public List<String> getSearchableTokens() throws Exception {
+        List<String> result = new ArrayList<String>(2);
+        result.add(getComment());
+        result.add(getName());
+        return result;
     }
 }

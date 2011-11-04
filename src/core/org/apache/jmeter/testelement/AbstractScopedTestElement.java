@@ -157,18 +157,13 @@ public abstract class AbstractScopedTestElement extends AbstractTestElement {
         return sampleList;
     }
     
-    /**
-     * {@inheritDoc}
+    /** 
+     * {@inheritDoc}}
      */
     @Override
-    public boolean searchContent(String textToSearch) throws Exception {
-        if(super.searchContent(textToSearch)) {
-            return true;
-        }
-        String searchedTextLowerCase = textToSearch.toLowerCase();
-        if(testField(getVariableName(), searchedTextLowerCase)) {
-            return true;
-        }
-        return false;
+    public List<String> getSearchableTokens() throws Exception {
+        List<String> result = super.getSearchableTokens();
+        result.add(getVariableName());
+        return result;
     }
 }

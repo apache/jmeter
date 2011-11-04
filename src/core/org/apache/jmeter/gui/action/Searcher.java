@@ -16,18 +16,19 @@
  *
  */
 
-package org.apache.jmeter.gui;
+package org.apache.jmeter.gui.action;
 
 import java.util.List;
 
 /**
- * Interface for nodes that are searchable
+ * Search algorithm
  */
-public interface Searchable {
-    /**
-     * @return List<String> of searchable tokens
-     * @throws Exception
-     */
-    List<String> getSearchableTokens() 
-    	throws Exception;
+public interface Searcher {
+
+	/**
+	 * Implements the search
+	 * @param textTokens List<String> content to be searched
+	 * @return true if search on textTokens is successful
+	 */
+	boolean search(List<String> textTokens);
 }
