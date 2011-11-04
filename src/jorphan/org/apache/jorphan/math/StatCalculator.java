@@ -94,8 +94,8 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
     }
 
     public void addAll(StatCalculator<T> calc) {
-        for (T val : calc.valuesMap.keySet()) {
-            addValue(val);
+        for(Entry<T, MutableLong> ent : calc.valuesMap.entrySet()) {
+            addValue(ent.getKey(), ent.getValue().intValue());
         }
     }
 
@@ -200,25 +200,17 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
     public void addValue(T val, int sampleCount) {
         count += sampleCount;
         double currentVal = val.doubleValue();
-        sum += currentVal;
-        T actualValue = val;
-        if (sampleCount > 1){
-            // For n values in an aggregate sample the average value = (val/n)
-            // So need to add n * (val/n) * (val/n) = val * val / n
-            sumOfSquares += currentVal * currentVal / sampleCount;
-            actualValue = divide(val, sampleCount);
-        } else {
-            sumOfSquares += currentVal * currentVal;
-            actualValue = val;
-        }
-        updateValueCount(actualValue, sampleCount);
+        sum += currentVal * sampleCount; 
+        // For n same values in sum of square is equal to n*val^2
+        sumOfSquares += currentVal * currentVal * sampleCount;
+        updateValueCount(val, sampleCount);
         mean = sum / count;
         deviation = Math.sqrt((sumOfSquares / count) - (mean * mean));
-        if (actualValue.compareTo(max) > 0){
-            max=actualValue;
+        if (val.compareTo(max) > 0){
+            max=val;
         }
-        if (actualValue.compareTo(min) < 0){
-            min=actualValue;
+        if (val.compareTo(min) < 0){
+            min=val;
         }
     }
 
