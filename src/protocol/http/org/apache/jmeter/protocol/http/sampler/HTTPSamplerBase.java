@@ -1735,6 +1735,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             this.areFollowingRedirect = areFollowingRedirect;
             this.depth = depth;
             this.sampler = (HTTPSamplerBase) base.clone();
+            // We don't want to use CacheManager clone but the parent one, and CacheManager is Thread Safe
+            this.sampler.setCacheManager(base.getCacheManager());
             
             if(cookieManager != null) {
                 CookieManager clonedCookieManager = (CookieManager) cookieManager.clone();

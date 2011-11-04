@@ -28,6 +28,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.util.HorizontalPanel;
@@ -93,8 +94,13 @@ public class HttpDefaultsGui extends AbstractConfigGui {
             // This also allows HTTPDefaults to work for this checkbox
             config.removeProperty(HTTPSamplerBase.CONCURRENT_DWN);
         }
-        config.setProperty(new StringProperty(HTTPSamplerBase.CONCURRENT_POOL, 
-                String.valueOf(HTTPSamplerBase.CONCURRENT_POOL_SIZE)));
+        if(!StringUtils.isEmpty(concurrentPool.getText())) {
+        	config.setProperty(new StringProperty(HTTPSamplerBase.CONCURRENT_POOL,
+        			concurrentPool.getText()));
+        } else {
+        	config.setProperty(new StringProperty(HTTPSamplerBase.CONCURRENT_POOL,
+        			String.valueOf(HTTPSamplerBase.CONCURRENT_POOL_SIZE)));
+        }
     }
 
     /**
