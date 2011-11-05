@@ -3335,7 +3335,7 @@ OR<br/>jdbc:oracle:thin:@(description=(address=(host={mc-name})(protocol=tcp)(po
 </component>
 
 
-<component name="Keystore Config Element" index="&sect-num;.4.9"  width="352" height="112" screenshot="keystore_config.png">
+<component name="Keystore Configuration" index="&sect-num;.4.9"  width="352" height="112" screenshot="keystore_config.png">
 <description><p>The Keystore Config Element lets you configure how Keystore will be loaded and which keys it will use.
 This component is typically used in HTTPs scenarios where you don't want to take into account keystore initialization into account in response time.</p>
 </description>
