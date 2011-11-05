@@ -20,13 +20,15 @@ package org.apache.jmeter.util.keystore;
 
 import java.io.InputStream;
 import java.security.KeyStore;
+import java.security.Principal;
 import java.security.PrivateKey;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
-import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * Use this Keystore for JMeter specific KeyStores.
@@ -34,20 +36,26 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class JmeterKeyStore {
 
+    private static final Logger LOG = LoggingManager.getLoggerForClass();
+
+    private final KeyStore store;
+    private final int startIndex;
+    private final int endIndex;
+
     private X509Certificate[][] certChains;
     private PrivateKey[] keys;
     private String[] names;
-    protected final KeyStore store;
-    private int last_user;
-    protected static final String KEY_STORE_START_INDEX = "https.keyStoreStartIndex";
-    protected static final String KEY_STORE_END_INDEX = "https.keyStoreEndIndex";
-    protected int startIndex;
-    protected int endIndex;
 
-    public JmeterKeyStore(String type) throws Exception {
+    //@GuardedBy("this")
+    private int last_user;
+
+    private JmeterKeyStore(String type, int startIndex, int endIndex) throws Exception {
+        if (startIndex < 0 || endIndex < 0 || endIndex < startIndex) {
+            throw new IllegalArgumentException("Invalid index(es). Start="+startIndex+", end="+endIndex);
+        }
         this.store = KeyStore.getInstance(type);
-        startIndex = JMeterUtils.getPropDefault(KEY_STORE_START_INDEX, 0);
-        endIndex = JMeterUtils.getPropDefault(KEY_STORE_END_INDEX, 0);
+        this.startIndex = startIndex;
+        this.endIndex = endIndex;
     }
 
     /**
@@ -91,6 +99,9 @@ public class JmeterKeyStore {
             if (null == _key) {
                 throw new Exception("No key(s) found");
             }
+            if (index <= endIndex-startIndex) {
+                LOG.warn("Did not find all requested aliases. Start="+startIndex+", end="+endIndex+", found="+index);
+            }
         }
     
         /*
@@ -112,7 +123,7 @@ public class JmeterKeyStore {
     /**
      * Get the ordered certificate chain for a specific alias.
      */
-    public final X509Certificate[] getCertificateChain(String alias) {
+    public X509Certificate[] getCertificateChain(String alias) {
         int entry = findAlias(alias);
         if (entry >=0) {
             return this.certChains[entry];
@@ -124,7 +135,7 @@ public class JmeterKeyStore {
      * Get the next or only alias.
      * @return the next or only alias.
      */
-    public final String getAlias() {
+    public String getAlias() {
         int length = this.names.length;
         if (length == 0) { // i.e. is == null
             return null;
@@ -136,7 +147,7 @@ public class JmeterKeyStore {
         return this.names.length;
     }
 
-    public final String getAlias(int index) {
+    public String getAlias(int index) {
         int length = this.names.length;
         if (length == 0 && index == 0) { // i.e. is == null
             return null;
@@ -150,7 +161,7 @@ public class JmeterKeyStore {
     /**
      * Return the private Key for a specific alias
      */
-    public final PrivateKey getPrivateKey(String alias) {
+    public PrivateKey getPrivateKey(String alias) {
         int entry = findAlias(alias);
         if (entry >=0) {
             return this.keys[entry];
@@ -158,38 +169,28 @@ public class JmeterKeyStore {
         return null;
     }
 
-    public static final JmeterKeyStore getInstance(String type) throws Exception {
-        // JAVA 1.4 now handles all keystore types, so just use default
-        return new JmeterKeyStore(type);
+    /**
+     * Create a keystore which returns a range of aliases (if available)
+     * @param type store type (e.g. JKS)
+     * @param startIndex first index (from 0)
+     * @param endIndex last index (to count -1)
+     * @return the keystore
+     * @throws Exception
+     */
+    public static JmeterKeyStore getInstance(String type, int startIndex, int endIndex) throws Exception {
+        return new JmeterKeyStore(type, startIndex, endIndex);
+    }
+
+    /**
+     * Create a keystore which returns the first alias only.
+     * @param type e.g. JKS
+     * @return the keystore
+     * @throws Exception
+     */
+    public static JmeterKeyStore getInstance(String type) throws Exception {
+        return new JmeterKeyStore(type, 0, 0);
     }
     
-    /**
-     * @param startIndex the startIndex to set
-     */
-    public void setAliasStartIndex(int startIndex) {
-        this.startIndex = startIndex;
-    }
-
-    /**
-     * @return the endIndex
-     */
-    public int getAliasEndIndex() {
-        return endIndex;
-    }
-
-    /**
-     * @param endIndex the endIndex to set
-     */
-    public void setAliasEndIndex(int endIndex) {
-        this.endIndex = endIndex;
-    }
-    /**
-     * @return the startIndex
-     */
-    public int getAliasStartIndex() {
-        return startIndex;
-    }
-
     private int findAlias(String alias) {
         for(int i = 0; i < names.length; i++) {
             if (alias.equals(names[i])){
@@ -207,6 +208,27 @@ public class JmeterKeyStore {
             }
             return last_user;
         }
+    }
+
+    /**
+     * Compiles the list of all client aliases with a private key.
+     * TODO Currently, keyType and issuers are both ignored.
+     *
+     * @param keyType the key algorithm type name (RSA, DSA, etc.)
+     * @param issuers  the CA certificates we are narrowing our selection on.
+     * 
+     * @return the array of aliases; may be empty
+     */
+    public String[] getClientAliases(String keyType, Principal[] issuers) {
+        int count = getAliasCount();
+        String[] aliases = new String[count];
+        for(int i = 0; i < aliases.length; i++) {
+//            if (keys[i].getAlgorithm().equals(keyType)){
+//                
+//            }
+            aliases[i] = this.names[i];
+        }
+        return aliases;
     }
 
 }
