@@ -4413,6 +4413,14 @@ For details, see <complink name="BSF PreProcessor"/>.
 </description>
 </component>
 
+<component name="JDBC PreProcessor" index="&sect-num;.7.9">
+<description>
+<p>
+TBA
+</p>
+</description>
+</component>
+
 <a href="#">^</a>
 
 </section>
@@ -4735,6 +4743,14 @@ Note that these are BSF variables - i.e. they can be used directly in the script
 <p>
 The JSR223 PostProcessor allows JSR223 script code to be applied after taking a sample.
 For details, see the <complink name="BSF PostProcessor"/>.
+</p>
+</description>
+</component>
+
+<component name="JDBC PostProcessor" index="&sect-num;.8.7">
+<description>
+<p>
+TBA
 </p>
 </description>
 </component>
