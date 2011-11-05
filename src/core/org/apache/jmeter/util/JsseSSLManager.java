@@ -304,23 +304,16 @@ public class JsseSSLManager extends SSLManager {
 
         /**
          * Compiles the list of all client aliases with a private key.
-         * Currently, keyType and issuers are both ignored.
          *
-         * @param keyType
-         *            the type of private key the server expects (RSA, DSA,
-         *            etc.)
-         * @param issuers
-         *            the CA certificates we are narrowing our selection on.
-         * @return the ClientAliases value
+         * @param keyType the key algorithm type name (RSA, DSA, etc.)
+         * @param issuers  the CA certificates we are narrowing our selection on.
+         * 
+         * @return the array of aliases; may be empty
          */
         public String[] getClientAliases(String keyType, Principal[] issuers) {
             log.debug("WrappedX509Manager: getClientAliases: ");
-            int count = this.store.getAliasCount();
-            String[] aliases = new String[count];
-            for(int i = 0; i < aliases.length; i++) {
-                aliases[i] = this.store.getAlias(i);
-            }
-             return aliases;
+            // implementation moved to JmeterKeystore as only that has the keyType info
+            return this.store.getClientAliases(keyType, issuers);
         }
 
         /**
@@ -374,7 +367,12 @@ public class JsseSSLManager extends SSLManager {
          * have to match one in the keystore.
          *
          * TODO? - does not actually allow the user to choose an alias at present
-         *
+         * 
+         * @param keyType the key algorithm type name(s), ordered with the most-preferred key type first.
+         * @param issuers the list of acceptable CA issuer subject names or null if it does not matter which issuers are used.
+         * @param socket the socket to be used for this connection. 
+         *     This parameter can be null, which indicates that implementations are free to select an alias applicable to any socket.
+         * 
          * @see javax.net.ssl.X509KeyManager#chooseClientAlias(String[], Principal[], Socket)
          */
         public String chooseClientAlias(String[] keyType, Principal[] issuers, Socket socket) {
