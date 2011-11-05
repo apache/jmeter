@@ -16,21 +16,21 @@
  *
  */
 
-/*
- * Created on May 16, 2004
- *
+package org.apache.jmeter.protocol.jdbc.processor;
+
+import org.apache.jmeter.processor.PostProcessor;
+import org.apache.jmeter.testbeans.TestBean;
+
+/**
+ * Post processor handling JDBC Requests
  */
-package org.apache.jmeter.protocol.jdbc.sampler;
+public class JDBCPostProcessor extends AbstractJDBCProcessor implements TestBean, PostProcessor {
 
-import org.apache.jmeter.protocol.jdbc.JDBCTestElementBeanInfoSupport;
+    private static final long serialVersionUID = 1L;
 
-
-public class JDBCSamplerBeanInfo extends JDBCTestElementBeanInfoSupport {
-
-    /**
-     *
-     */
-    public JDBCSamplerBeanInfo() {
-        super(JDBCSampler.class);
+    @Override
+    public void process() {
+        super.process();
     }
+    
 }
