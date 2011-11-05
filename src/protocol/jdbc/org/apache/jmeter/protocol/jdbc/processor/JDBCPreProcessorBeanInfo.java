@@ -20,17 +20,17 @@
  * Created on May 16, 2004
  *
  */
-package org.apache.jmeter.protocol.jdbc.sampler;
+package org.apache.jmeter.protocol.jdbc.processor;
 
 import org.apache.jmeter.protocol.jdbc.JDBCTestElementBeanInfoSupport;
 
 
-public class JDBCSamplerBeanInfo extends JDBCTestElementBeanInfoSupport {
+public class JDBCPreProcessorBeanInfo extends JDBCTestElementBeanInfoSupport {
 
     /**
      *
      */
-    public JDBCSamplerBeanInfo() {
-        super(JDBCSampler.class);
+    public JDBCPreProcessorBeanInfo() {
+        super(JDBCPreProcessor.class);
     }
 }
