@@ -24,6 +24,7 @@ import java.net.HttpURLConnection;
 import java.security.KeyStore;
 import java.security.Provider;
 import java.security.Security;
+import java.util.Locale;
 
 import javax.swing.JOptionPane;
 
@@ -52,6 +53,8 @@ public abstract class SSLManager {
     private static final String KEY_STORE_PASSWORD = "javax.net.ssl.keyStorePassword"; // $NON-NLS-1$
 
     public static final String JAVAX_NET_SSL_KEY_STORE = "javax.net.ssl.keyStore"; // $NON-NLS-1$
+
+    private static final String JAVAX_NET_SSL_KEY_STORE_TYPE = "javax.net.ssl.keyStoreType"; // $NON-NLS-1$
 
     private static final String PKCS12 = "pkcs12"; // $NON-NLS-1$
 
@@ -103,27 +106,17 @@ public abstract class SSLManager {
      */
     protected JmeterKeyStore getKeyStore() {
         if (null == this.keyStore) {
-            String defaultName = JMeterUtils.getJMeterProperties()
-                .getProperty("user.home")  // $NON-NLS-1$
-                + File.separator
-                + ".keystore"; // $NON-NLS-1$
-            String fileName = System.getProperty(JAVAX_NET_SSL_KEY_STORE, defaultName);
-            log.info("JmeterKeyStore Location: " + fileName);
+            String fileName = System.getProperty(JAVAX_NET_SSL_KEY_STORE);
+            String fileType = System.getProperty(JAVAX_NET_SSL_KEY_STORE_TYPE, // use the system property to determine the type
+                    fileName.toLowerCase(Locale.UK).endsWith(".p12") ? PKCS12 : "JKS"); // otherwise use the name
+            log.info("JmeterKeyStore Location: " + fileName + " type " + fileType);
             try {
-                if (fileName.endsWith(".p12") || fileName.endsWith(".P12")) { // $NON-NLS-1$ // $NON-NLS-2$
-                    this.keyStore = JmeterKeyStore.getInstance(PKCS12);
-                    log.info("KeyStore created OK, Type: PKCS 12");
-                    System.setProperty("javax.net.ssl.keyStoreType", PKCS12); // $NON-NLS-1$
-                } else {
-                    this.keyStore = JmeterKeyStore.getInstance("JKS"); // $NON-NLS-1$
-                    log.info("KeyStore created OK, Type: JKS");
-                }
+                this.keyStore = JmeterKeyStore.getInstance(fileType, keystoreAliasStartIndex, keystoreAliasEndIndex);
+                log.info("KeyStore created OK");
             } catch (Exception e) {
                 this.keyStore = null;
                 throw new RuntimeException("Could not create keystore: "+e.getMessage());
             }
-            this.keyStore.setAliasStartIndex(keystoreAliasStartIndex);
-            this.keyStore.setAliasEndIndex(keystoreAliasEndIndex);
             FileInputStream fileInputStream = null;
             try {
                 File initStore = new File(fileName);
