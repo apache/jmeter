@@ -32,11 +32,9 @@ import org.apache.log.Logger;
  * Configure Keystore
  */
 public class KeystoreConfig extends ConfigTestElement implements TestBean, TestListener {
-    /**
-     * 
-     */
+
     private static final long serialVersionUID = -5781402012242794890L;
-    private Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final String KEY_STORE_START_INDEX = "https.keyStoreStartIndex"; // $NON-NLS-1$
     private static final String KEY_STORE_END_INDEX   = "https.keyStoreEndIndex"; // $NON-NLS-1$
@@ -45,45 +43,27 @@ public class KeystoreConfig extends ConfigTestElement implements TestBean, TestL
     private String endIndex;
     private String preload;
     
-    /**
-     * 
-     */
     public KeystoreConfig() {
         super();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public void testEnded() {
         testEnded(null);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public void testEnded(String host) {
         log.info("Destroying Keystore");         
         SSLManager.getInstance().destroyKeystore();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public void testIterationStart(LoopIterationEvent event) {
         // NOOP        
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public void testStarted() {
         testStarted(null);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public void testStarted(String host) {
         int startIndexAsInt = JMeterUtils.getPropDefault(KEY_STORE_START_INDEX, 0);
         int endIndexAsInt = JMeterUtils.getPropDefault(KEY_STORE_END_INDEX, 0);
