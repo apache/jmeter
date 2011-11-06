@@ -183,6 +183,7 @@ these occurs, Sampler is marked as failed.
 <ul>
 <li>Bug 52006 - Create a function RandomString to generate random Strings</li>
 <li>Bug 52016 - It would be useful to support Jexl2</li>
+<li>Bug 51091 - New function returning the name of the current "Test Plan"</li>
 </ul>
 
 <h3>I18N</h3>
