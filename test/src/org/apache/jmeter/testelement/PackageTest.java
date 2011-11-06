@@ -27,6 +27,10 @@ import junit.framework.TestCase;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.LoginConfig;
+import org.apache.jmeter.protocol.http.control.Header;
+import org.apache.jmeter.protocol.http.control.HeaderManager;
+import org.apache.jmeter.sampler.DebugSampler;
+import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
@@ -34,6 +38,35 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
 public class PackageTest extends TestCase {
     public PackageTest(String arg0) {
         super(arg0);
+    }
+    
+    public void testBug50799() throws Exception {
+        HeaderManager headerManager = new HeaderManager();
+        headerManager.add(new Header("1stLevelTestHeader", "testValue1"));
+        HeaderManager headerManager2 = new HeaderManager();
+        headerManager2.add(new Header("2ndLevelTestHeader", "testValue2"));
+
+        DebugSampler debugSampler = new DebugSampler();
+        debugSampler.addProperty(new StringProperty("name", "DebugSampler_50799"));
+        debugSampler.setRunningVersion(true);
+        assertTrue(debugSampler.getProperty("HeaderManager.headers") instanceof NullProperty);
+        debugSampler.addTestElement(headerManager);
+        assertFalse(debugSampler.getProperty("HeaderManager.headers") instanceof NullProperty);
+        assertEquals(debugSampler.getProperty("HeaderManager.headers").getStringValue() ,"[1stLevelTestHeader	testValue1]");
+
+        debugSampler.addTestElement(headerManager2);
+        assertEquals(debugSampler.getProperty("HeaderManager.headers").getStringValue() ,"[1stLevelTestHeader	testValue1, 2ndLevelTestHeader	testValue2]");
+        assertEquals(2, ((CollectionProperty)debugSampler.getProperty("HeaderManager.headers")).size());
+        
+        headerManager.recoverRunningVersion();
+        headerManager2.recoverRunningVersion();
+        debugSampler.recoverRunningVersion();
+
+        assertEquals(1, headerManager.size());
+        assertEquals(1, headerManager2.size());
+        assertEquals(0, ((CollectionProperty)debugSampler.getProperty("HeaderManager.headers")).size());
+        assertEquals(new Header("1stLevelTestHeader", "testValue1"), headerManager.get(0));
+        assertEquals(new Header("2ndLevelTestHeader", "testValue2"), headerManager2.get(0));
     }
 
     public void testRecovery() throws Exception {
@@ -74,5 +107,4 @@ public class PackageTest extends TestCase {
         assertEquals("config1=configValue", args.getArgument(1).toString());
 
     }
-
 }
