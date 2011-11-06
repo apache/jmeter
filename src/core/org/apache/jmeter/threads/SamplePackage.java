@@ -31,7 +31,17 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.timers.Timer;
 
 /**
- * Packages methods related to sample handling.
+ * Packages methods related to sample handling.<br/>
+ * A SamplePackage contains all elements associated to a Sampler:
+ * <ul>
+ * 	<li>SampleListener(s)</li>
+ * 	<li>Timer(s)</li>
+ * 	<li>Assertion(s)</li>
+ * 	<li>PreProcessor(s)</li>
+ * 	<li>PostProcessor(s)</li>
+ * 	<li>ConfigTestElement(s)</li>
+ * 	<li>Controller(s)</li>
+ * </ul>
  */
 public class SamplePackage {
 
@@ -68,6 +78,13 @@ public class SamplePackage {
         this.controllers = controllers;
     }
 
+    /**
+     * Make the SamplePackage the running version, or make it no longer the
+     * running version. This tells to each element of the SamplePackage that it's current state must
+     * be retrievable by a call to recoverRunningVersion(). 
+     * @param running boolean
+     * @see TestElement#setRunningVersion(boolean)
+     */
     public void setRunningVersion(boolean running) {
         setRunningVersion(configs, running);
         setRunningVersion(sampleListeners, running);
@@ -95,6 +112,10 @@ public class SamplePackage {
         }
     }
 
+    /**
+     * Recover each member of SamplePackage to the state before the call of setRunningVersion(true)
+ 	 * @see TestElement#recoverRunningVersion()
+     */
     public void recoverRunningVersion() {
         recoverRunningVersion(configs);
         recoverRunningVersion(sampleListeners);
@@ -106,52 +127,92 @@ public class SamplePackage {
         sampler.recoverRunningVersion();
     }
 
+    /**
+     * @return List<SampleListener>
+     */
     public List<SampleListener> getSampleListeners() {
         return sampleListeners;
     }
 
+    /**
+     * Add Sample Listener
+     * @param listener {@link SampleListener}
+     */
     public void addSampleListener(SampleListener listener) {
         sampleListeners.add(listener);
     }
 
+    /**
+     * @return List<Timer>
+     */
     public List<Timer> getTimers() {
         return timers;
     }
 
+    
+    /**
+     * Add Post processor
+     * @param ex {@link PostProcessor}
+     */
     public void addPostProcessor(PostProcessor ex) {
         postProcessors.add(ex);
     }
 
+    /**
+     * Add Pre processor
+     * @param pre {@link PreProcessor}
+     */
     public void addPreProcessor(PreProcessor pre) {
         preProcessors.add(pre);
     }
 
+    /**
+     * Add Timer
+     * @param timer {@link Timer}
+     */
     public void addTimer(Timer timer) {
         timers.add(timer);
     }
 
+    /**
+     * Add Assertion
+     * @param asser {@link Assertion}
+     */
     public void addAssertion(Assertion asser) {
         assertions.add(asser);
     }
 
+    /**
+     * @return List<Assertion>
+     */
     public List<Assertion> getAssertions() {
         return assertions;
     }
 
+    /**
+     * @return List<PostProcessor>
+     */
     public List<PostProcessor> getPostProcessors() {
         return postProcessors;
     }
 
+    /**
+     * @return {@link Sampler}
+     */
     public Sampler getSampler() {
         return sampler;
     }
 
+    /**
+     * @param s {@link Sampler}
+     */
     public void setSampler(Sampler s) {
         sampler = s;
     }
 
     /**
      * Returns the preProcessors.
+     * @return List<PreProcessor>
      */
     public List<PreProcessor> getPreProcessors() {
         return preProcessors;
