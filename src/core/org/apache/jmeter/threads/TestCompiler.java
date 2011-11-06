@@ -44,6 +44,13 @@ import org.apache.jorphan.collections.HashTreeTraverser;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
+/**
+ * HashTreeTraverser implementation that traverses the Test Tree to build:
+ * <ul>
+ * 	<li>A map with key Sampler and as value the associated SamplePackage</li>
+ * 	<li>A map with key TransactionController and as value the associated SamplePackage</li>
+ * </ul>
+ */
 public class TestCompiler implements HashTreeTraverser {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -79,6 +86,11 @@ public class TestCompiler implements HashTreeTraverser {
         }
     }
 
+    /**
+     * Configures sampler from SamplePackage extracted from Test plan and returns it
+     * @param sampler {@link Sampler}
+     * @return {@link SamplePackage}
+     */
     public SamplePackage configureSampler(Sampler sampler) {
         SamplePackage pack = samplerConfigMap.get(sampler);
         pack.setSampler(sampler);
@@ -86,6 +98,11 @@ public class TestCompiler implements HashTreeTraverser {
         return pack;
     }
 
+    /**
+     * Configures Transaction Sampler from SamplePackage extracted from Test plan and returns it
+     * @param transactionSampler {@link TransactionSampler}
+     * @return {@link SamplePackage}
+     */
     public SamplePackage configureTransactionSampler(TransactionSampler transactionSampler) {
         TransactionController controller = transactionSampler.getTransactionController();
         SamplePackage pack = transactionControllerConfigMap.get(controller);
@@ -93,6 +110,10 @@ public class TestCompiler implements HashTreeTraverser {
         return pack;
     }
 
+    /**
+     * Reset pack to it's initial state
+     * @param pack
+     */
     public void done(SamplePackage pack) {
         pack.recoverRunningVersion();
     }
