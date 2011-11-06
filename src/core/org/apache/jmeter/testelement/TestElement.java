@@ -117,7 +117,7 @@ public interface TestElement extends Cloneable {
 
     /**
      * Tells the test element to return to the state it was in when
-     * makeRunningVersion() was called.
+     * setRunningVersion(true) was called.
      */
     public void recoverRunningVersion();
 
