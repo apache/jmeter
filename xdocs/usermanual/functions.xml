@@ -117,6 +117,7 @@ and need to be referenced using the __P or __property function.
         <tr><td>String</td><td> <a href="#__unescape">unescape</a></td><td>Process strings containing Java escapes (e.g. \n &amp; \t)</td></tr>
         <tr><td>String</td><td> <a href="#__unescapeHtml">unescapeHtml</a></td><td>Decode HTML-encoded strings</td></tr>
         <tr><td>String</td><td> <a href="#__escapeHtml">escapeHtml</a></td><td>Encode strings using HTML encoding</td></tr>
+        <tr><td>String</td><td> <a href="#__TestPlanName">TestPlanName</a></td><td>Return name of current test plan</td></tr>
 </table>
 <p></p>
 <subsection name="&sect-num;.1 What can functions do" anchor="what_can_do">
@@ -1159,6 +1160,14 @@ A reference name - refName - for reusing the value created by this function. Sto
 </properties>
 </component>
 
+<component index="&sect-num;.5.28" name="__TestPlanName">
+
+<description>
+    <p>
+    The TestPlanName function returns the name of the current test plan (can be used in Including Plans to know the name of the calling test plan).
+    </p>
+</description>
+</component>
 </subsection>
 
 <subsection name="&sect-num;.6 Pre-defined Variables" anchor="predefinedvars">
