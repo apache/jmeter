@@ -29,7 +29,7 @@ import org.apache.jmeter.samplers.Sampler;
 
 /**
  * Returns Test Plan name
- *
+ * FIXME : Implementation need to handle remote run and non gui mode
  */
 public class TestPlanName extends AbstractFunction {
 

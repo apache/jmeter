@@ -58,8 +58,6 @@ For example a Test Action sampler with 0 wait time (which doesn't generate a sam
 or a Debug Sampler with all fields set to False (to reduce the sample size).
 </p>
 
-<p>Start next Loop option in Thread Group is broken, see Bugs (51868, 51866, 51865).</p>
-
 <p>
 The menu item Options / Choose Language does not change all the displayed text to the new language.
 [The behaviour has improved, but language change is still not fully working]
@@ -184,7 +182,6 @@ these occurs, Sampler is marked as failed.
 <ul>
 <li>Bug 52006 - Create a function RandomString to generate random Strings</li>
 <li>Bug 52016 - It would be useful to support Jexl2</li>
-<li>Bug 51091 - New function returning the name of the current "Test Plan"</li>
 </ul>
 
 <h3>I18N</h3>
