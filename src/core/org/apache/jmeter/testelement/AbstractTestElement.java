@@ -256,19 +256,36 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
         return jmp instanceof NullProperty ? defaultValue : jmp.getStringValue();
     }
 
-    protected void addProperty(JMeterProperty property) {
+    /**
+     * Add property to test element
+     * @param property {@link JMeterProperty} to add to current Test Element
+     * @param clone clone property
+     */
+    protected void addProperty(JMeterProperty property, boolean clone) {
+    	JMeterProperty propertyToPut = property;
+    	if(clone) {
+    		propertyToPut = property.clone();
+    	}
         if (isRunningVersion()) {
-            setTemporary(property);
+        	setTemporary(propertyToPut);
         } else {
             clearTemporary(property);
         }
         JMeterProperty prop = getProperty(property.getName());
 
         if (prop instanceof NullProperty || (prop instanceof StringProperty && prop.getStringValue().equals(""))) {
-            propMap.put(property.getName(), property);
+        	propMap.put(property.getName(), propertyToPut);
         } else {
-            prop.mergeIn(property);
+            prop.mergeIn(propertyToPut);
         }
+    }
+
+    /**
+     * Add property to test element without cloning it
+     * @param property {@link JMeterProperty}
+     */
+    protected void addProperty(JMeterProperty property) {
+        addProperty(property, false);
     }
 
     protected void clearTemporary(JMeterProperty property) {
@@ -382,7 +399,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
         PropertyIterator iter = element.propertyIterator();
         while (iter.hasNext()) {
             JMeterProperty prop = iter.next();
-            addProperty(prop);
+            addProperty(prop, false);
         }
     }
 
