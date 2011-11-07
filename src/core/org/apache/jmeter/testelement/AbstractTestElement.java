@@ -399,7 +399,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
         PropertyIterator iter = element.propertyIterator();
         while (iter.hasNext()) {
             JMeterProperty prop = iter.next();
-            addProperty(prop, false);
+            addProperty(prop, true);
         }
     }
 
