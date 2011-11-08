@@ -29,7 +29,7 @@ import org.apache.jorphan.collections.HashTree;
  * This is the interface for the RMI server engine, i.e. {@link RemoteJMeterEngineImpl}
  */
 public interface RemoteJMeterEngine extends Remote {
-    void rconfigure(HashTree testTree, String host, File jmxBase) throws RemoteException;
+    void rconfigure(HashTree testTree, String host, File jmxBase, String scriptName) throws RemoteException;
 
     void rrunTest() throws RemoteException, JMeterEngineException;
 
