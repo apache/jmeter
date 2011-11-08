@@ -161,10 +161,10 @@ public class FileServer {
             throw new IllegalStateException("Files are still open, cannot change base directory");
         }
         files.clear();
-        // getParentFile() may not work on relative paths
         base = jmxBase;
         log.info("Set new base='"+base+"'");
     }
+
     public synchronized String getBaseDir() {
         return base.getAbsolutePath();
     }
