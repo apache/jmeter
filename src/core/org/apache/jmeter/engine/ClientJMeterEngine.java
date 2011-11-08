@@ -124,10 +124,11 @@ public class ClientJMeterEngine implements JMeterEngine {
              * See https://issues.apache.org/bugzilla/show_bug.cgi?id=48350
             */
             File baseDirRelative = FileServer.getFileServer().getBaseDirRelative();
+            String scriptName = FileServer.getFileServer().getScriptName();
             synchronized(LOCK)
             {
                 methodName="rconfigure()";
-                remote.rconfigure(testTree, host, baseDirRelative);
+                remote.rconfigure(testTree, host, baseDirRelative, scriptName);
             }
             log.info("sent test to " + host + " basedir='"+baseDirRelative+"'"); // $NON-NLS-1$
             if (savep != null){

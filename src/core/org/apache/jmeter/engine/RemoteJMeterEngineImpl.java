@@ -132,7 +132,7 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
      * @param testTree
      *            the feature to be added to the ThreadGroup attribute
      */
-    public void rconfigure(HashTree testTree, String host, File jmxBase) throws RemoteException {
+    public void rconfigure(HashTree testTree, String host, File jmxBase, String scriptName) throws RemoteException {
         log.info("Creating JMeter engine on host "+host+" base '"+jmxBase+"'");
         synchronized(LOCK) { // close window where another remote client might jump in
             if (backingEngine != null && backingEngine.isActive()) {
@@ -143,6 +143,7 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
             backingEngine = new StandardJMeterEngine(host);
             backingEngine.configure(testTree); // sets active = true
         }
+        FileServer.getFileServer().setScriptName(scriptName);
         FileServer.getFileServer().setBase(jmxBase);
     }
 

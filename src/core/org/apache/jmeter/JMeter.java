@@ -233,6 +233,8 @@ public class JMeter implements JMeterPlugin {
             try {
                 File f = new File(testFile);
                 log.info("Loading file: " + f);
+                FileServer.getFileServer().setBaseForScript(f);
+
                 reader = new FileInputStream(f);
                 HashTree tree = SaveService.loadTree(reader);
 
