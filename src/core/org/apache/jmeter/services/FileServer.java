@@ -81,6 +81,8 @@ public class FileServer {
 
     private final Random random = new Random();
 
+	private String scriptName;
+
     // Cannot be instantiated
     private FileServer() {
         base = new File(DEFAULT_BASE);
@@ -142,6 +144,7 @@ public class FileServer {
         }
         files.clear();
         // getParentFile() may not work on relative paths
+        setScriptName(scriptPath.getName());
         base = scriptPath.getAbsoluteFile().getParentFile();
         log.info("Set new base '"+base+"'");
     }
@@ -460,4 +463,18 @@ public class FileServer {
         }
         return relativeName;
     }
+
+    /**
+     * @return JMX Script name
+     */
+	public String getScriptName() {
+		return scriptName;
+	}
+
+	/**
+	 * @param scriptName Script name
+	 */
+	public void setScriptName(String scriptName) {
+		this.scriptName = scriptName;
+	}
 }

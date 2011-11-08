@@ -23,13 +23,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
-import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.services.FileServer;
 
 /**
  * Returns Test Plan name
- * FIXME : Implementation need to handle remote run and non gui mode
  */
 public class TestPlanName extends AbstractFunction {
 
@@ -48,7 +47,7 @@ public class TestPlanName extends AbstractFunction {
     @Override
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
-    	String testPlanFile = GuiPackage.getInstance().getTestPlanFile();
+    	String testPlanFile = FileServer.getFileServer().getScriptName();
         return testPlanFile;
     }
 
