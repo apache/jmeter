@@ -27,8 +27,6 @@ import java.beans.PropertyEditor;
 public enum GuiEditor {
     FileEditor     {@Override PropertyEditor getInstance(PropertyDescriptor descriptor) { return new FileEditor(descriptor); }},
     PasswordEditor {@Override PropertyEditor getInstance(PropertyDescriptor descriptor) { return new PasswordEditor(); }},
-    /** @deprecated TableEditor does not work currently */
-    @Deprecated
     TableEditor    {@Override PropertyEditor getInstance(PropertyDescriptor descriptor) { return new TableEditor(); }},
     TextAreaEditor {@Override PropertyEditor getInstance(PropertyDescriptor descriptor) { return new TextAreaEditor(); }},
     ;
