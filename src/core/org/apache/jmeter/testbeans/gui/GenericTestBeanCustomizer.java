@@ -179,20 +179,20 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 
         // Obtain the propertyEditors:
         editors = new PropertyEditor[descriptors.length];
-        for (int i = 0; i < descriptors.length; i++) {
-            String name = descriptors[i].getName();
+        for (int i = 0; i < descriptors.length; i++) { // Index is also used for accessing editors array
+            PropertyDescriptor descriptor = descriptors[i];
+            String name = descriptor.getName();
 
             // Don't get editors for hidden or non-read-write properties:
-            if (descriptors[i].isHidden() || (descriptors[i].isExpert() && !JMeterUtils.isExpertMode())
-                    || descriptors[i].getReadMethod() == null || descriptors[i].getWriteMethod() == null) {
-                log.debug("No editor for property " + name);
+            if (descriptor.isHidden() || (descriptor.isExpert() && !JMeterUtils.isExpertMode())
+                    || descriptor.getReadMethod() == null || descriptor.getWriteMethod() == null) {
+                log.debug("Skipping editor for property " + name);
                 editors[i] = null;
                 continue;
             }
 
             PropertyEditor propertyEditor;
-            Class<?> editorClass = descriptors[i].getPropertyEditorClass();
-
+            Class<?> editorClass = descriptor.getPropertyEditorClass();
             if (log.isDebugEnabled()) {
                 log.debug("Property " + name + " has editor class " + editorClass);
             }
@@ -208,7 +208,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
                     throw new Error(e.toString());
                 }
             } else {
-                Class<?> c = descriptors[i].getPropertyType();
+                Class<?> c = descriptor.getPropertyType();
                 propertyEditor = PropertyEditorManager.findEditor(c);
             }
 
@@ -217,13 +217,16 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
             }
 
             if (propertyEditor == null) {
-                log.warn("No editor for property " + name);
+                log.warn("No editor for property: " + name 
+                        + " type: " + descriptor.getPropertyType()
+                        + " in bean: " + beanInfo.getBeanDescriptor().getDisplayName()
+                        );
                 editors[i] = null;
                 continue;
             }
 
             if (!propertyEditor.supportsCustomEditor()) {
-                propertyEditor = createWrapperEditor(propertyEditor, descriptors[i]);
+                propertyEditor = createWrapperEditor(propertyEditor, descriptor);
 
                 if (log.isDebugEnabled()) {
                     log.debug("Editor for property " + name + " is wrapped in " + propertyEditor);
@@ -231,7 +234,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
             }
             if(propertyEditor instanceof TestBeanPropertyEditor)
             {
-                ((TestBeanPropertyEditor)propertyEditor).setDescriptor(descriptors[i]);
+                ((TestBeanPropertyEditor)propertyEditor).setDescriptor(descriptor);
             }
             if (propertyEditor.getCustomEditor() instanceof JScrollPane) {
                 scrollerCount++;
@@ -240,7 +243,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
             editors[i] = propertyEditor;
 
             // Initialize the editor with the provided default value or null:
-            setEditorValue(i, descriptors[i].getValue(DEFAULT));
+            setEditorValue(i, descriptor.getValue(DEFAULT));
 
         }
 
