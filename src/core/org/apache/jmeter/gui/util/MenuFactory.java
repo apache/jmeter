@@ -436,11 +436,15 @@ public final class MenuFactory {
                     continue;
                 }
 
+                boolean hideBean = false; // Should the TestBean be hidden?
+
                 JMeterGUIComponent item;
                 try {
                     Class<?> c = Class.forName(name);
                     if (TestBean.class.isAssignableFrom(c)) {
-                        item = new TestBeanGUI(c);
+                        TestBeanGUI tbgui = new TestBeanGUI(c);
+                        hideBean = tbgui.isHidden() || (tbgui.isExpert() && !JMeterUtils.isExpertMode());
+                        item = tbgui;
                     } else {
                         item = (JMeterGUIComponent) c.newInstance();
                     }
@@ -457,7 +461,7 @@ public final class MenuFactory {
                     }
                     continue;
                 }
-                if (elementsToSkip.contains(item.getStaticLabel())) {
+                if (hideBean || elementsToSkip.contains(item.getStaticLabel())) {
                     log.info("Skipping " + name);
                     continue;
                 } else {
