@@ -431,6 +431,11 @@ public final class MenuFactory {
                     continue;// Don't try to instantiate these
                 }
 
+                if (elementsToSkip.contains(name)) { // No point instantiating class
+                    log.info("Skipping " + name);
+                    continue;
+                }
+
                 JMeterGUIComponent item;
                 try {
                     Class<?> c = Class.forName(name);
@@ -452,11 +457,11 @@ public final class MenuFactory {
                     }
                     continue;
                 }
-                if (elementsToSkip.contains(name) || elementsToSkip.contains(item.getStaticLabel())) {
+                if (elementsToSkip.contains(item.getStaticLabel())) {
                     log.info("Skipping " + name);
                     continue;
                 } else {
-                    elementsToSkip.add(name);
+                    elementsToSkip.add(name); // Don't add it again
                 }
                 Collection<String> categories = item.getMenuCategories();
                 if (categories == null) {
