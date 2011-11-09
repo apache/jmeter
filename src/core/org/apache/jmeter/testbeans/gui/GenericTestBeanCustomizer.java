@@ -112,12 +112,15 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 
     public static final String RESOURCE_BUNDLE = "resourceBundle"; //$NON-NLS-1$
 
+    public static final String GUITYPE = "guiType"; // $NON-NLS-$
+
     public static final String ORDER(String group) {
         return "group." + group + ".order";
     }
 
     public static final String DEFAULT_GROUP = "";
 
+    @SuppressWarnings("unused") // TODO - use or remove
     private int scrollerCount = 0;
 
     /**
@@ -214,7 +217,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
             }
 
             if (propertyEditor == null) {
-                log.debug("No editor for property " + name);
+                log.warn("No editor for property " + name);
                 editors[i] = null;
                 continue;
             }
@@ -276,28 +279,49 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
             }
         }
 
-        boolean notNull = Boolean.TRUE.equals(descriptor.getValue(NOT_UNDEFINED));
-        boolean notExpression = Boolean.TRUE.equals(descriptor.getValue(NOT_EXPRESSION));
-        boolean notOther = Boolean.TRUE.equals(descriptor.getValue(NOT_OTHER));
+        boolean notNull = notNull(descriptor);
+        boolean notExpression = notExpression(descriptor);
+        boolean notOther = notOther(descriptor);
 
         PropertyEditor guiEditor;
-        if (notNull && tags == null) {
-            guiEditor = new FieldStringEditor();
+        Object guiType = descriptor.getValue(GUITYPE);
+        if (guiType instanceof GuiEditor) {
+            guiEditor = ((GuiEditor) guiType).getInstance(descriptor);            
         } else {
-            ComboStringEditor e = new ComboStringEditor();
-            e.setNoUndefined(notNull);
-            e.setNoEdit(notExpression && notOther);
-            e.setTags(tags);
-
-            guiEditor = e;
+            if (notNull && tags == null) {
+                guiEditor = new FieldStringEditor();
+            } else {
+                ComboStringEditor e = new ComboStringEditor();
+                e.setNoUndefined(notNull);
+                e.setNoEdit(notExpression && notOther);
+                e.setTags(tags);
+    
+                guiEditor = e;
+            }
         }
 
-        WrapperEditor wrapper = new WrapperEditor(typeEditor, guiEditor, !notNull, // acceptsNull
+        WrapperEditor wrapper = new WrapperEditor(typeEditor, guiEditor,
+                !notNull, // acceptsNull
                 !notExpression, // acceptsExpressions
                 !notOther, // acceptsOther
                 descriptor.getValue(DEFAULT));
 
         return wrapper;
+    }
+
+    static boolean notOther(PropertyDescriptor descriptor) {
+        boolean notOther = Boolean.TRUE.equals(descriptor.getValue(NOT_OTHER));
+        return notOther;
+    }
+
+    static boolean notExpression(PropertyDescriptor descriptor) {
+        boolean notExpression = Boolean.TRUE.equals(descriptor.getValue(NOT_EXPRESSION));
+        return notExpression;
+    }
+
+    static boolean notNull(PropertyDescriptor descriptor) {
+        boolean notNull = Boolean.TRUE.equals(descriptor.getValue(NOT_UNDEFINED));
+        return notNull;
     }
 
     /**
