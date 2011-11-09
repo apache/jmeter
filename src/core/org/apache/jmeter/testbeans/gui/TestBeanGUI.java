@@ -435,4 +435,12 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
             gtbc.clearGuiFields();
         }
     }
+
+    public boolean isHidden() {
+        return beanInfo.getBeanDescriptor().isHidden();
+    }
+
+    public boolean isExpert() {
+        return beanInfo.getBeanDescriptor().isExpert();
+    }
 }
