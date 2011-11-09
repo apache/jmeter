@@ -192,30 +192,31 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
             }
 
             PropertyEditor propertyEditor;
-            Class<?> editorClass = descriptor.getPropertyEditorClass();
-            if (log.isDebugEnabled()) {
-                log.debug("Property " + name + " has editor class " + editorClass);
-            }
-
-            if (editorClass != null) {
-                try {
-                    propertyEditor = (PropertyEditor) editorClass.newInstance();
-                } catch (InstantiationException e) {
-                    log.error("Can't create property editor.", e);
-                    throw new Error(e.toString());
-                } catch (IllegalAccessException e) {
-                    log.error("Can't create property editor.", e);
-                    throw new Error(e.toString());
-                }
+            Object guiType = descriptor.getValue(GUITYPE);
+            if (guiType instanceof GuiEditor) {
+                propertyEditor = ((GuiEditor) guiType).getInstance(descriptor);            
             } else {
-                Class<?> c = descriptor.getPropertyType();
-                propertyEditor = PropertyEditorManager.findEditor(c);
+                Class<?> editorClass = descriptor.getPropertyEditorClass();
+                if (log.isDebugEnabled()) {
+                    log.debug("Property " + name + " has editor class " + editorClass);
+                }
+    
+                if (editorClass != null) {
+                    try {
+                        propertyEditor = (PropertyEditor) editorClass.newInstance();
+                    } catch (InstantiationException e) {
+                        log.error("Can't create property editor.", e);
+                        throw new Error(e.toString());
+                    } catch (IllegalAccessException e) {
+                        log.error("Can't create property editor.", e);
+                        throw new Error(e.toString());
+                    }
+                } else {
+                    Class<?> c = descriptor.getPropertyType();
+                    propertyEditor = PropertyEditorManager.findEditor(c);
+                }
             }
-
-            if (log.isDebugEnabled()) {
-                log.debug("Property " + name + " has property editor " + propertyEditor);
-            }
-
+            
             if (propertyEditor == null) {
                 log.warn("No editor for property: " + name 
                         + " type: " + descriptor.getPropertyType()
@@ -223,6 +224,10 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
                         );
                 editors[i] = null;
                 continue;
+            }
+
+            if (log.isDebugEnabled()) {
+                log.debug("Property " + name + " has property editor " + propertyEditor);
             }
 
             if (!propertyEditor.supportsCustomEditor()) {
@@ -287,20 +292,15 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
         boolean notOther = notOther(descriptor);
 
         PropertyEditor guiEditor;
-        Object guiType = descriptor.getValue(GUITYPE);
-        if (guiType instanceof GuiEditor) {
-            guiEditor = ((GuiEditor) guiType).getInstance(descriptor);            
+        if (notNull && tags == null) {
+            guiEditor = new FieldStringEditor();
         } else {
-            if (notNull && tags == null) {
-                guiEditor = new FieldStringEditor();
-            } else {
-                ComboStringEditor e = new ComboStringEditor();
-                e.setNoUndefined(notNull);
-                e.setNoEdit(notExpression && notOther);
-                e.setTags(tags);
-    
-                guiEditor = e;
-            }
+            ComboStringEditor e = new ComboStringEditor();
+            e.setNoUndefined(notNull);
+            e.setNoEdit(notExpression && notOther);
+            e.setTags(tags);
+
+            guiEditor = e;
         }
 
         WrapperEditor wrapper = new WrapperEditor(typeEditor, guiEditor,
