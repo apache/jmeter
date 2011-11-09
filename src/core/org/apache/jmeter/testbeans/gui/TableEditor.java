@@ -51,6 +51,8 @@ import org.apache.log.Logger;
 
 /**
  * Table editor for TestBean GUI properties.
+ * Currently only works for:
+ * - property type Collection<String>, where there is a single header entry
  */
 public class TableEditor extends PropertyEditorSupport implements FocusListener,TestBeanPropertyEditor,TableModelListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
