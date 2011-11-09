@@ -56,6 +56,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
 
     public FileEditor() {
         this(null);
+        // Only seems to be needed for testing
     }
 
     public FileEditor(PropertyDescriptor descriptor) {
