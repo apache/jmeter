@@ -52,8 +52,13 @@ import org.apache.log.Logger;
 public class TableEditor extends PropertyEditorSupport implements FocusListener,TestBeanPropertyEditor,TableModelListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    /** attribute name for class name of a table row, value must be a class which supports set and get methods for the property name */
     public static final String CLASSNAME = "tableObject.classname"; // $NON-NLS-1$
+
+    /** attribute name for table headers, value must be a String array */
     public static final String HEADERS = "table.headers"; // $NON-NLS-1$
+
+    /** attribute name for property names within the {@link #CLASSNAME}, value must be String array */
     public static final String OBJECT_PROPERTIES = "tableObject.properties"; // $NON-NLS-1$
 
     private JTable table;
@@ -141,16 +146,20 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
     }
 
     /**
-     * For the table editor, the tag must simply be the name of the class of object it will hold
+     * For the table editor, the CLASSNAME attribute must simply be the name of the class of object it will hold
      * where each row holds one object.
      */
     public void setDescriptor(PropertyDescriptor descriptor) {
+        this.descriptor = descriptor;
+        String value = (String)descriptor.getValue(CLASSNAME);
+        if (value == null) {
+            throw new RuntimeException("The Table Editor requires the CLASSNAME atttribute be set - the name of the object to represent a row");
+        }
         try {
-            this.descriptor = descriptor;
-            clazz = Class.forName((String)descriptor.getValue(CLASSNAME));
+            clazz = Class.forName(value);
             initializeModel();
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("The Table Editor requires one TAG be set - the name of the object to represent a row",e);
+            throw new RuntimeException("Could not find the CLASSNAME class "+ value, e);
         }
     }
 
@@ -159,7 +168,6 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
         if(clazz == String.class)
         {
             model = new ObjectTableModel((String[])descriptor.getValue(HEADERS),new Functor[0],new Functor[0],new Class[]{String.class});
-            model.addTableModelListener(this);
         }
         else
         {
@@ -177,8 +185,8 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
                 count++;
             }
             model = new ObjectTableModel((String[])descriptor.getValue(HEADERS),readers,writers,editors);
-            model.addTableModelListener(this);
         }
+        model.addTableModelListener(this);
         table = new JTable(model);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.addFocusListener(this);
