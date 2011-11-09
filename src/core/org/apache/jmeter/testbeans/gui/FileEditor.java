@@ -23,6 +23,7 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyDescriptor;
 import java.beans.PropertyEditor;
 import java.beans.PropertyEditorSupport;
 import java.io.File;
@@ -54,13 +55,28 @@ public class FileEditor implements PropertyEditor, ActionListener {
     private PropertyEditor editor;
 
     public FileEditor() {
+        this(null);
+    }
+
+    public FileEditor(PropertyDescriptor descriptor) {
         // Create a button to trigger the file chooser:
         JButton button = new JButton("Browse...");
         button.addActionListener(this);
 
         // Get a WrapperEditor to provide the field or combo -- we'll delegate
         // most methods to it:
-        editor = new WrapperEditor(this, new SimpleFileEditor(), new ComboStringEditor(), true, true, true, null);
+        boolean notNull = descriptor == null ? false : GenericTestBeanCustomizer.notNull(descriptor);
+        boolean notExpression = descriptor == null ? false : GenericTestBeanCustomizer.notExpression(descriptor);
+        boolean notOther = descriptor == null ? false : GenericTestBeanCustomizer.notOther(descriptor);
+        Object defaultValue = descriptor == null ? null : descriptor.getValue(GenericTestBeanCustomizer.DEFAULT);
+        ComboStringEditor cse = new ComboStringEditor();
+        cse.setNoUndefined(notNull);
+        cse.setNoEdit(notExpression && notOther);
+        editor = new WrapperEditor(this, new SimpleFileEditor(), cse,
+                !notNull, // acceptsNull
+                !notExpression, // acceptsExpressions
+                !notOther, // acceptsOther
+                defaultValue); // default
 
         // Create a panel containing the combo and the button:
         panel = new JPanel(new BorderLayout(5, 0));
