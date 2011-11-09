@@ -29,6 +29,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import org.apache.jmeter.testbeans.gui.GenericTestBeanCustomizer;
+import org.apache.jmeter.testbeans.gui.GuiEditor;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -158,6 +159,21 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
         }
         log.warn("Cannot find property: "+name);
         return null;
+    }
+
+    /**
+     * Get the property descriptor for the property of the given name.
+     *
+     * @param name
+     *            property name
+     * @return descriptor for a property of that name, or null if there's none
+     */
+    protected PropertyDescriptor property(String name, GuiEditor editor) {
+        PropertyDescriptor property = property(name);
+        if (property != null) {
+            property.setValue(GenericTestBeanCustomizer.GUITYPE, editor);
+        }
+        return property;
     }
 
     /**
