@@ -57,7 +57,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
 
     /** 
      * attribute name for class name of a table row;
-     * value must be java.lang.String, or a class which supports set and get methods for the property name.
+     * value must be java.lang.String, or a class which supports set and get/is methods for the property name.
      */
     public static final String CLASSNAME = "tableObject.classname"; // $NON-NLS-1$
 
@@ -174,13 +174,21 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
 
     void initializeModel()
     {
+        Object hdrs = descriptor.getValue(HEADERS);
+        if (!(hdrs instanceof String[])){
+            throw new RuntimeException("attribute HEADERS must be a String array");            
+        }
         if(clazz == String.class)
         {
-            model = new ObjectTableModel((String[])descriptor.getValue(HEADERS),new Functor[0],new Functor[0],new Class[]{String.class});
+            model = new ObjectTableModel((String[])hdrs,new Functor[0],new Functor[0],new Class[]{String.class});
         }
         else
         {
-            String[] props = (String[])descriptor.getValue(OBJECT_PROPERTIES);
+            Object value = descriptor.getValue(OBJECT_PROPERTIES);
+            if (!(value instanceof String[])) {
+                throw new RuntimeException("attribute OBJECT_PROPERTIES must be a String array");
+            }
+            String[] props = (String[])value;
             Functor[] writers = new Functor[props.length];
             Functor[] readers = new Functor[props.length];
             Class<?>[] editors = new Class[props.length];
@@ -193,7 +201,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
                 editors[count] = getArgForWriter(clazz,propName);
                 count++;
             }
-            model = new ObjectTableModel((String[])descriptor.getValue(HEADERS),readers,writers,editors);
+            model = new ObjectTableModel((String[])hdrs,readers,writers,editors);
         }
         model.addTableModelListener(this);
         table = new JTable(model);
