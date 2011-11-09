@@ -267,7 +267,10 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
     {
         public void actionPerformed(ActionEvent e)
         {
-            model.removeRow(table.getSelectedRow());
+            int row = table.getSelectedRow();
+            if (row >= 0) {
+                model.removeRow(row);
+            }
         }
     }
 
