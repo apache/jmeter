@@ -49,13 +49,22 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.Functor;
 import org.apache.log.Logger;
 
+/**
+ * Table editor for TestBean GUI properties.
+ */
 public class TableEditor extends PropertyEditorSupport implements FocusListener,TestBeanPropertyEditor,TableModelListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    /** attribute name for class name of a table row, value must be a class which supports set and get methods for the property name */
+    /** 
+     * attribute name for class name of a table row;
+     * value must be java.lang.String, or a class which supports set and get methods for the property name.
+     */
     public static final String CLASSNAME = "tableObject.classname"; // $NON-NLS-1$
 
-    /** attribute name for table headers, value must be a String array */
+    /** 
+     * attribute name for table headers, value must be a String array.
+     * If {@link #CLASSNAME} is java.lang.String, there must be only a single entry.
+     */
     public static final String HEADERS = "table.headers"; // $NON-NLS-1$
 
     /** attribute name for property names within the {@link #CLASSNAME}, value must be String array */
