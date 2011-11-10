@@ -23,7 +23,7 @@ package org.apache.jmeter.protocol.tcp.sampler;
 public class ReadException extends Exception {
 
 	private static final long serialVersionUID = -2770054697780959330L;
-	private String partialResponse;
+	private final String partialResponse;
 
 
 	/**
