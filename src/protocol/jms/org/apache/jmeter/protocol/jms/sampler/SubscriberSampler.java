@@ -25,6 +25,7 @@ import javax.jms.Message;
 import javax.jms.TextMessage;
 import javax.naming.NamingException;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.protocol.jms.Utils;
 import org.apache.jmeter.protocol.jms.client.InitialContextFactory;
@@ -110,6 +111,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         SUBSCRIBER = new ReceiveSubscriber(0, getUseJNDIPropertiesAsBoolean(), getJNDIInitialContextFactory(),
                     getProviderUrl(), getConnectionFactory(), getDestination(), getDurableSubscriptionId(),
                     getClientId(), getJmsSelector(), isUseAuth(), getUsername(), getPassword());
+        setupSeparator();
         log.debug("SubscriberSampler.initListenerClient called");
     }
 
@@ -122,6 +124,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         SUBSCRIBER = new ReceiveSubscriber(getUseJNDIPropertiesAsBoolean(),
                 getJNDIInitialContextFactory(), getProviderUrl(), getConnectionFactory(), getDestination(),
                 getDurableSubscriptionId(), getClientId(), getJmsSelector(), isUseAuth(), getUsername(), getPassword());
+        setupSeparator();
         log.debug("SubscriberSampler.initReceiveClient called");
     }
 
@@ -250,7 +253,10 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
                     }
                 }
                 Utils.messageProperties(propBuffer, msg);
-                propBuffer.append(separator);
+                if(!StringUtils.isEmpty(separator)) {
+                	propBuffer.append(separator);
+                	buffer.append(separator);
+                }
             } catch (JMSException e) {
                 log.error(e.getMessage());
             }
@@ -450,24 +456,30 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
      * {@inheritDoc}
      */
     public void testIterationStart(LoopIterationEvent event) {
-        //NOOP
+    	// NOOP
     }
 
     /**
      * {@inheritDoc}
      */
     public void testStarted() {
-    	separator = getSeparator();
-    	separator = separator.replace("\\t", "\t");
-    	separator = separator.replace("\\n", "\n");
-    	separator = separator.replace("\\r", "\r");
+    	testStarted("");
     }
 
     /**
      * {@inheritDoc}
      */
     public void testStarted(String host) {
-        // NOOP        
+    	// NOOP
     }
 
+	/**
+	 * 
+	 */
+	private void setupSeparator() {
+		separator = getSeparator();
+		separator = separator.replace("\\t", "\t");
+		separator = separator.replace("\\n", "\n");
+		separator = separator.replace("\\r", "\r");
+	}
 }
