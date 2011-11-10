@@ -83,21 +83,25 @@ public class TCPClientImpl extends AbstractTCPClient {
      * If there is no EOL byte defined, then reads until
      * the end of the stream is reached.
      */
-    public String read(InputStream is) throws IOException{
-        byte[] buffer = new byte[4096];
-        ByteArrayOutputStream w = new ByteArrayOutputStream();
-        int x = 0;
-        while ((x = is.read(buffer)) > -1) {
-            w.write(buffer, 0, x);
-            if (useEolByte && (buffer[x - 1] == eolByte)) {
-                break;
-            }
-        }
+    public String read(InputStream is) throws ReadException{
+    	ByteArrayOutputStream w = new ByteArrayOutputStream();
+        try {
+			byte[] buffer = new byte[4096];
+			int x = 0;
+			while ((x = is.read(buffer)) > -1) {
+			    w.write(buffer, 0, x);
+			    if (useEolByte && (buffer[x - 1] == eolByte)) {
+			        break;
+			    }
+			}
 
-        // do we need to close byte array (or flush it?)
-        if(log.isDebugEnabled()) {
-            log.debug("Read: " + w.size() + "\n" + w.toString());
-        }
-        return w.toString();
+			// do we need to close byte array (or flush it?)
+			if(log.isDebugEnabled()) {
+			    log.debug("Read: " + w.size() + "\n" + w.toString());
+			}
+			return w.toString();
+		} catch (IOException e) {
+			throw new ReadException("", e, w.toString());
+		}
     }
 }

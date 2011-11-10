@@ -73,24 +73,29 @@ public class LengthPrefixedBinaryTCPClientImpl extends TCPClientDecorator {
     /**
      * {@inheritDoc}
      */
-    public String read(InputStream is) throws IOException{
+    public String read(InputStream is) throws ReadException{
         byte[] msg = new byte[0];
         int msgLen = 0;
         byte[] lengthBuffer = new byte[lengthPrefixLen];
-        if (is.read(lengthBuffer, 0, lengthPrefixLen) == lengthPrefixLen) {
-            msgLen = byteArrayToInt(lengthBuffer);
-            msg = new byte[msgLen];
-            int bytes = JOrphanUtils.read(is, msg, 0, msgLen);
-            if (bytes < msgLen) {
-                log.warn("Incomplete message read, expected: "+msgLen+" got: "+bytes);
-            }
+        try {
+	        if (is.read(lengthBuffer, 0, lengthPrefixLen) == lengthPrefixLen) {
+	            msgLen = byteArrayToInt(lengthBuffer);
+	            msg = new byte[msgLen];
+	            int bytes = JOrphanUtils.read(is, msg, 0, msgLen);
+	            if (bytes < msgLen) {
+	                log.warn("Incomplete message read, expected: "+msgLen+" got: "+bytes);
+	            }
+	        }
+	
+	        String buffer = JOrphanUtils.baToHexString(msg);
+	        if(log.isDebugEnabled()) {
+	            log.debug("Read: " + msgLen + "\n" + buffer);
+	        }
+	        return buffer;
+        } 
+        catch(IOException e) {
+        	throw new ReadException("", e, JOrphanUtils.baToHexString(msg));
         }
-
-        String buffer = JOrphanUtils.baToHexString(msg);
-        if(log.isDebugEnabled()) {
-            log.debug("Read: " + msgLen + "\n" + buffer);
-        }
-        return buffer;
     }
 
     /**

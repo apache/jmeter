@@ -33,12 +33,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.jmeter.config.ConfigTestElement;
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.ThreadListener;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
@@ -339,42 +340,15 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
                 res.setSamplerData(req);
                 protocolHandler.write(os, req);
                 String in = protocolHandler.read(is);
-                res.setResponseData(in, null);
-                res.setDataType(SampleResult.TEXT);
-                res.setResponseCodeOK();
-                res.setResponseMessage("OK"); //$NON-NLS-1$
-                isSuccessful = true;
-                // Reset the status code if the message contains one
-                if (STATUS_PREFIX.length() > 0) {
-                    int i = in.indexOf(STATUS_PREFIX);
-                    int j = in.indexOf(STATUS_SUFFIX, i + STATUS_PREFIX.length());
-                    if (i != -1 && j > i) {
-                        String rc = in.substring(i + STATUS_PREFIX.length(), j);
-                        res.setResponseCode(rc);
-                        isSuccessful = checkResponseCode(rc);
-                        if (haveStatusProps) {
-                            res.setResponseMessage(statusProps.getProperty(rc, "Status code not found in properties")); //$NON-NLS-1$
-                        } else {
-                            res.setResponseMessage("No status property file");
-                        }
-                    } else {
-                        res.setResponseCode("999"); //$NON-NLS-1$
-                        res.setResponseMessage("Status value not found");
-                        isSuccessful = false;
-                    }
-                }
+                isSuccessful = setupSampleResult(res, in, null);
             }
-        } catch (IOException ex) {
-            log.debug("", ex);
-            isSuccessful=false;
-            res.setResponseCode("500"); //$NON-NLS-1$
-            res.setResponseMessage(ex.toString());
+        } catch (ReadException ex) {
+            log.error("", ex);
+            isSuccessful=setupSampleResult(res, ex.getPartialResponse(), ex);
             closeSocket();
         } catch (Exception ex) {
             log.error("", ex);
-            isSuccessful=false;
-            res.setResponseCode("500");
-            res.setResponseMessage(ex.toString());
+            isSuccessful=setupSampleResult(res, "", ex);
             closeSocket();
         } finally {
             // Calculate response time
@@ -387,9 +361,50 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
                 closeSocket();
             }
         }
-
         return res;
     }
+
+	/**
+	 * Fills SampleResult object
+	 * @param sampleResult {@link SampleResult}
+	 * @param readResponse Response read until error occured
+	 * @param exception Source exception
+	 * @return boolean if sample is considered as successful
+	 */
+	private boolean setupSampleResult(SampleResult sampleResult,
+			String readResponse, 
+			Exception exception) {
+		sampleResult.setResponseData(readResponse, null);
+		sampleResult.setDataType(SampleResult.TEXT);
+		if(exception==null) {
+			sampleResult.setResponseCodeOK();
+			sampleResult.setResponseMessage("OK"); //$NON-NLS-1$
+		} else {
+			sampleResult.setResponseCode("500"); //$NON-NLS-1$
+			sampleResult.setResponseMessage(exception.toString()); //$NON-NLS-1$
+		}
+		boolean isSuccessful = exception == null;
+		// Reset the status code if the message contains one
+		if (!StringUtils.isEmpty(readResponse) && STATUS_PREFIX.length() > 0) {
+		    int i = readResponse.indexOf(STATUS_PREFIX);
+		    int j = readResponse.indexOf(STATUS_SUFFIX, i + STATUS_PREFIX.length());
+		    if (i != -1 && j > i) {
+		        String rc = readResponse.substring(i + STATUS_PREFIX.length(), j);
+		        sampleResult.setResponseCode(rc);
+		        isSuccessful = isSuccessful && checkResponseCode(rc);
+		        if (haveStatusProps) {
+		            sampleResult.setResponseMessage(statusProps.getProperty(rc, "Status code not found in properties")); //$NON-NLS-1$
+		        } else {
+		            sampleResult.setResponseMessage("No status property file");
+		        }
+		    } else {
+		        sampleResult.setResponseCode("999"); //$NON-NLS-1$
+		        sampleResult.setResponseMessage("Status value not found");
+		        isSuccessful = false;
+		    }
+		}
+		return isSuccessful;
+	}
 
     /**
      * @param rc response code

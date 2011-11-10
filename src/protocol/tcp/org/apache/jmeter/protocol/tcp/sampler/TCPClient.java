@@ -66,8 +66,9 @@ public interface TCPClient {
      * @param is -
      *            InputStream for socket
      * @return String read from socket
+     * @throws ReadException exception that can contain partial response (Response until error occured)
      */
-    String read(InputStream is) throws IOException;
+    String read(InputStream is) throws ReadException;
 
     /**
      * Get the end-of-line/end-of-message byte.
@@ -83,5 +84,4 @@ public interface TCPClient {
      *            The value to set
      */
     public void setEolByte(int eolInt);
-
 }
