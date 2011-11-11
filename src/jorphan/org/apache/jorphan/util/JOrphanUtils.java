@@ -18,11 +18,9 @@
 
 package org.apache.jorphan.util;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Reader;
-import java.io.Writer;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -338,52 +336,13 @@ public final class JOrphanUtils {
     // N.B. Commons IO IOUtils has equivalent methods; these were added before IO was included
     // TODO - perhaps deprecate these in favour of Commons IO?
     /**
-     * close a stream with no error thrown
-     * @param is - InputStream (may be null)
+     * Close a Closeable with no error thrown
+     * @param cl - Closeable (may be null)
      */
-    public static void closeQuietly(InputStream is){
+    public static void closeQuietly(Closeable cl){
         try {
-            if (is != null) {
-                is.close();
-            }
-        } catch (IOException ignored) {
-        }
-    }
-
-    /**
-     * close a stream with no error thrown
-     * @param os - OutputStream (may be null)
-     */
-    public static void closeQuietly(OutputStream os){
-        try {
-            if (os != null) {
-                os.close();
-            }
-        } catch (IOException ignored) {
-        }
-    }
-
-    /**
-     * close a Writer with no error thrown
-     * @param wr - Writer (may be null)
-     */
-    public static void closeQuietly(Writer wr){
-        try {
-            if (wr != null) {
-                wr.close();
-            }
-        } catch (IOException ignored) {
-        }
-    }
-
-    /**
-     * close a Reader with no error thrown
-     * @param rd - Reader (may be null)
-     */
-    public static void closeQuietly(Reader rd){
-        try {
-            if (rd != null) {
-                rd.close();
+            if (cl != null) {
+                cl.close();
             }
         } catch (IOException ignored) {
         }
