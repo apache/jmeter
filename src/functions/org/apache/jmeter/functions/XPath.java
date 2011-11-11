@@ -72,8 +72,8 @@ public class XPath extends AbstractFunction {
             throws InvalidVariableException {
         String myValue = ""; //$NON-NLS-1$
 
-        String fileName = ((org.apache.jmeter.engine.util.CompoundVariable) values[0]).execute();
-        String xpathString = ((org.apache.jmeter.engine.util.CompoundVariable) values[1]).execute();
+        String fileName = ((CompoundVariable) values[0]).execute();
+        String xpathString = ((CompoundVariable) values[1]).execute();
 
         if (log.isDebugEnabled()){
             log.debug("execute (" + fileName + " " + xpathString + ")   ");
