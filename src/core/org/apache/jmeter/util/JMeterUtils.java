@@ -124,6 +124,10 @@ public class JMeterUtils implements UnitTestManager {
      * @param file
      *            the file to load
      * @return the Properties from the file
+     * @see #getJMeterProperties()
+     * @see #loadJMeterProperties(String)
+     * @see #initLogging()
+     * @see #initLocale()
      */
     public static Properties getProperties(String file) {
         loadJMeterProperties(file);
@@ -505,9 +509,13 @@ public class JMeterUtils implements UnitTestManager {
     }
     /**
      * This gets the currently defined appProperties. It can only be called
-     * after the {@link #getProperties(String)} method is called.
+     * after the {@link #getProperties(String)} or {@link #loadJMeterProperties(String)} 
+     * method has been called.
      *
-     * @return The JMeterProperties value
+     * @return The JMeterProperties value, 
+     *         may be null if {@link #loadJMeterProperties(String)} has not been called
+     * @see #getProperties(String)
+     * @see #loadJMeterProperties(String)
      */
     public static Properties getJMeterProperties() {
         return appProperties;
