@@ -110,11 +110,11 @@ public class FileServer {
      * Normally the provided path is a file, so using the parent directory is appropriate.
      * 
      * @param basedir the path to set, or {@code null} if the GUI is being cleared
-     * @throws IOException if there is a problem resolving the file name
+     * @throws IllegalStateException if files are still open
      */
-    public synchronized void setBasedir(String basedir) throws IOException {
+    public synchronized void setBasedir(String basedir) {
         if (filesOpen()) {
-            throw new IOException("Files are still open, cannot change base directory");
+            throw new IllegalStateException("Files are still open, cannot change base directory");
         }
         files.clear();
         if (basedir != null) {

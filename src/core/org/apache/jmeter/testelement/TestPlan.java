@@ -303,7 +303,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
         if (getBasedir() != null && getBasedir().length() > 0) {
             try {
                 FileServer.getFileServer().setBasedir(FileServer.getFileServer().getBaseDir() + getBasedir());
-            } catch (IOException e) {
+            } catch (IllegalStateException e) {
                 log.error("Failed to set file server base dir with " + getBasedir(), e);
             }
         }
