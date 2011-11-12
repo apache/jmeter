@@ -95,8 +95,8 @@ public class TestFileServer extends JMeterTestCase {
         assertEquals("a1,b1,c1,d1",FS.readLine(infile));
         try {
             FS.setBasedir("x");
-            fail("Expected IOException");
-        } catch (IOException ignored){
+            fail("Expected IllegalStateException");
+        } catch (IllegalStateException ignored){
         }
         FS.closeFile(infile);
         FS.setBasedir("y");

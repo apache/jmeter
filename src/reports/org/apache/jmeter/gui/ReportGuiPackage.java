@@ -601,7 +601,7 @@ public final class ReportGuiPackage implements LocaleChangeListener {
         ReportGuiPackage.getInstance().getMainFrame().setExtendedFrameTitle(reportPlanFile);
         try {
             FileServer.getFileServer().setBasedir(reportPlanFile);
-        } catch (IOException e1) {
+        } catch (IllegalStateException e1) {
             log.error("Failure setting file server's base dir", e1);
         }
     }
