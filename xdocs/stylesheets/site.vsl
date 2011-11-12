@@ -80,7 +80,7 @@
 <td bgcolor="$tabletdbg" #if ($colspan)colspan="$colspan"#end #if ($rowspan)rowspan="$rowspan"#end valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 #if ($value.getText().length() != 0 || $value.getChildren().size() > 0)
-$xmlout.outputString($value, true)
+$value.content
 #else
 &nbsp;
 #end
@@ -98,7 +98,7 @@ $xmlout.outputString($value, true)
 <td bgcolor="$tablethbg" #if ($colspan)colspan="$colspan"#end #if ($rowspan)rowspan="$rowspan"#end valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 #if ($value.getText().length() != 0 || $value.getChildren().size() > 0)
-$xmlout.outputString($value, true)
+$value.content
 #else
 &nbsp;
 #end
