@@ -68,8 +68,18 @@ You can use these to determine the correct property setting to change the loggin
 <p>
 It is sometimes hard to find in a Test Plan tree and elements using a variable or containing a certain URL or parameter.
 A new feature is now available since 2.5.2, you can access it in Menu Search.
-For now this feature only searches HTTP Samplers. If you find it useful log a Bugzilla enhancement request.
+It provides search with following options:
+<ul>
+<li>Case Sensitive : Makes search case sensitive</li>
+<li>Regexp : Is text to search a regexp, if so Regexp will be searched in Tree of components, example "\btest\b" will match any component that contains test in searchable elements of the component</li>
+</ul>
 </p>
+
+<figure width="950" height="802" image="searching/raw-search.png">Figure 1 - Search raw text in TreeView</figure>
+<figure width="336" height="153" image="searching/raw-search-result.png">Figure 2 - Result in TreeView</figure>
+<figure width="336" height="153" image="searching/regexp-search.png">Figure 3 - Search Regexp in TreeView (in this example we search whole word)</figure>
+<figure width="336" height="153" image="searching/regexp-search-result.png">Figure 4 - Result in TreeView</figure>
+
 </subsection>
 </section>
 
