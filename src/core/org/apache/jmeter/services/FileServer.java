@@ -113,10 +113,7 @@ public class FileServer {
      * @throws IllegalStateException if files are still open
      */
     public synchronized void setBasedir(String basedir) {
-        if (filesOpen()) {
-            throw new IllegalStateException("Files are still open, cannot change base directory");
-        }
-        files.clear();
+        checkForOpenFiles();
         if (basedir != null) {
             base = new File(basedir);
             if (!base.isDirectory()) {
@@ -139,10 +136,7 @@ public class FileServer {
         if (scriptPath == null){
             throw new IllegalArgumentException("scriptPath must not be null");
         }
-        if (filesOpen()) {
-            throw new IllegalStateException("Files are still open, cannot change base directory");
-        }
-        files.clear();
+        checkForOpenFiles();
         // getParentFile() may not work on relative paths
         setScriptName(scriptPath.getName());
         base = scriptPath.getAbsoluteFile().getParentFile();
@@ -160,13 +154,20 @@ public class FileServer {
         if (jmxBase == null) {
             throw new IllegalArgumentException("jmxBase must not be null");
         }
-        if (filesOpen()) {
-            throw new IllegalStateException("Files are still open, cannot change base directory");
-        }
-        files.clear();
+        checkForOpenFiles();
         base = jmxBase;
         log.info("Set new base='"+base+"'");
     }
+
+	/**
+	 * @throws IllegalStateException
+	 */
+	private void checkForOpenFiles() throws IllegalStateException {
+		if (filesOpen()) {
+            throw new IllegalStateException("Files are still open, cannot change base directory");
+        }
+        files.clear();
+	}
 
     public synchronized String getBaseDir() {
         return base.getAbsolutePath();
