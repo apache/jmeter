@@ -72,35 +72,35 @@
       For more information concerning Apache JMeter, see the <a href="http://jmeter.apache.org/">Apache JMeter</a> site. 
       </p>
       <p>
-      <a href="http://www.apache.org/dist/jakarta/jmeter/KEYS">KEYS</a>
+      <a href="http://www.apache.org/dist/jmeter/KEYS">KEYS</a>
       </p>
     </section>
     <section name="Apache JMeter &release; (Requires Java 1.5 or later)">
       <subsection name="Binaries" anchor="binaries">
         <table>
           <tr>
-              <td><a href="[preferred]/jakarta/jmeter/binaries/jakarta-jmeter-&release;.tgz">jakarta-jmeter-&release;.tgz</a></td>
-              <td><a href="http://www.apache.org/dist/jakarta/jmeter/binaries/jakarta-jmeter-&release;.tgz.md5">md5</a></td>
-              <td><a href="http://www.apache.org/dist/jakarta/jmeter/binaries/jakarta-jmeter-&release;.tgz.asc">pgp</a></td>
+              <td><a href="[preferred]/jmeter/binaries/jakarta-jmeter-&release;.tgz">jakarta-jmeter-&release;.tgz</a></td>
+              <td><a href="http://www.apache.org/dist/jmeter/binaries/jakarta-jmeter-&release;.tgz.md5">md5</a></td>
+              <td><a href="http://www.apache.org/dist/jmeter/binaries/jakarta-jmeter-&release;.tgz.asc">pgp</a></td>
           </tr>
           <tr>
-              <td><a href="[preferred]/jakarta/jmeter/binaries/jakarta-jmeter-&release;.zip">jakarta-jmeter-&release;.zip</a></td>
-              <td><a href="http://www.apache.org/dist/jakarta/jmeter/binaries/jakarta-jmeter-&release;.zip.md5">md5</a></td>
-              <td><a href="http://www.apache.org/dist/jakarta/jmeter/binaries/jakarta-jmeter-&release;.zip.asc">pgp</a></td>
+              <td><a href="[preferred]/jmeter/binaries/jakarta-jmeter-&release;.zip">jakarta-jmeter-&release;.zip</a></td>
+              <td><a href="http://www.apache.org/dist/jmeter/binaries/jakarta-jmeter-&release;.zip.md5">md5</a></td>
+              <td><a href="http://www.apache.org/dist/jmeter/binaries/jakarta-jmeter-&release;.zip.asc">pgp</a></td>
           </tr>
         </table>
       </subsection>
       <subsection name="Source" anchor="source">
         <table>
           <tr>
-              <td><a href="[preferred]/jakarta/jmeter/source/jakarta-jmeter-&release;_src.tgz">jakarta-jmeter-&release;_src.tgz</a></td>
-              <td><a href="http://www.apache.org/dist/jakarta/jmeter/source/jakarta-jmeter-&release;_src.tgz.md5">md5</a></td>
-              <td><a href="http://www.apache.org/dist/jakarta/jmeter/source/jakarta-jmeter-&release;_src.tgz.asc">pgp</a></td>
+              <td><a href="[preferred]/jmeter/source/jakarta-jmeter-&release;_src.tgz">jakarta-jmeter-&release;_src.tgz</a></td>
+              <td><a href="http://www.apache.org/dist/jmeter/source/jakarta-jmeter-&release;_src.tgz.md5">md5</a></td>
+              <td><a href="http://www.apache.org/dist/jmeter/source/jakarta-jmeter-&release;_src.tgz.asc">pgp</a></td>
           </tr>
           <tr>
-              <td><a href="[preferred]/jakarta/jmeter/source/jakarta-jmeter-&release;_src.zip">jakarta-jmeter-&release;_src.zip</a></td>
-              <td><a href="http://www.apache.org/dist/jakarta/jmeter/source/jakarta-jmeter-&release;_src.zip.md5">md5</a></td>
-              <td><a href="http://www.apache.org/dist/jakarta/jmeter/source/jakarta-jmeter-&release;_src.zip.asc">pgp</a></td>
+              <td><a href="[preferred]/jmeter/source/jakarta-jmeter-&release;_src.zip">jakarta-jmeter-&release;_src.zip</a></td>
+              <td><a href="http://www.apache.org/dist/jmeter/source/jakarta-jmeter-&release;_src.zip.md5">md5</a></td>
+              <td><a href="http://www.apache.org/dist/jmeter/source/jakarta-jmeter-&release;_src.zip.asc">pgp</a></td>
           </tr>
         </table>
       </subsection>
@@ -109,8 +109,10 @@
         <p>
           Older releases can be obtained from the archives.
         </p>
+<!-- COMMENT1 -->
         <ul>
-          <li class="download"><a href="[preferred]/jakarta/jmeter/">browse download area</a></li>
+          <li class="download"><a href="[preferred]/jmeter/">browse download area</a></li>
+          <li><a href="http://archive.apache.org/dist/jmeter/">Apache JMeter archives...</a></li>
           <li><a href="http://archive.apache.org/dist/jakarta/jmeter/">Apache Jakarta JMeter archives...</a></li>
         </ul>
     </section>
