@@ -136,17 +136,15 @@ public class FileServer {
         if (scriptPath == null){
             throw new IllegalArgumentException("scriptPath must not be null");
         }
-        checkForOpenFiles();
-        // getParentFile() may not work on relative paths
         setScriptName(scriptPath.getName());
-        base = scriptPath.getAbsoluteFile().getParentFile();
-        log.info("Set new base '"+base+"'");
+        // getParentFile() may not work on relative paths
+        setBase(scriptPath.getAbsoluteFile().getParentFile());
     }
 
     /**
      * Sets the current base directory for relative file names.
      * 
-     * @param jmxBase the path of the script file base directory
+     * @param jmxBase the path of the script file base directory, cannot be null
      * @throws IllegalStateException if files are still open
      * @throws IllegalArgumentException if {@code basepath} is null
      */
