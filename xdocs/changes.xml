@@ -208,7 +208,6 @@ these occurs, Sampler is marked as failed.
 <li>Bug 52116 - Allow to add (paste) entries from the clipboard to an arguments list</li>
 <li>Bug 51091 - New function returning the name of the current "Test Plan"</li>
 <li>Bug 52160 - Don't display TestBeanGui items which are flagged as hidden</li>
-<li>Bug 52150 - FileServer has 3 confusingly similar methods to set the file base</li>
 </ul>
 
 <h2>Non-functional changes</h2>
