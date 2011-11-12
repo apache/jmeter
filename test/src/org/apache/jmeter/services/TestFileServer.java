@@ -94,21 +94,13 @@ public class TestFileServer extends JMeterTestCase {
         assertFalse("Should not have any files open",FS.filesOpen());
         assertEquals("a1,b1,c1,d1",FS.readLine(infile));
         try {
-            FS.setBasedir(System.getProperty("java.io.tmpdir"));
-            fail("Expected IllegalStateException");
-        } catch (IllegalStateException ignored){
-        	assertEquals("Files are still open, cannot change base directory", ignored.getMessage());
+            FS.setBasedir("x");
+            fail("Expected IOException");
+        } catch (IOException ignored){
         }
         FS.closeFile(infile);
-        FS.setBasedir(System.getProperty("java.io.temp"));
+        FS.setBasedir("y");
         FS.closeFiles();
-        
-        try {
-        	FS.setBasedir("x");
-            fail("Expected IllegalArgumentException");
-        } catch (IllegalArgumentException ignored){
-        	assertEquals("jmxBase must not be null", ignored.getMessage());
-        }
     }
     
     public void testRelative() throws Exception {

@@ -113,12 +113,16 @@ public class FileServer {
      * @throws IOException if there is a problem resolving the file name
      */
     public synchronized void setBasedir(String basedir) throws IOException {
+        if (filesOpen()) {
+            throw new IOException("Files are still open, cannot change base directory");
+        }
+        files.clear();
         if (basedir != null) {
-            File base = new File(basedir);
+            base = new File(basedir);
             if (!base.isDirectory()) {
                 base = base.getParentFile();
             }
-            setBase(base);
+            log.info("Set new base='"+base+"'");
         }
     }
 
@@ -135,9 +139,14 @@ public class FileServer {
         if (scriptPath == null){
             throw new IllegalArgumentException("scriptPath must not be null");
         }
-        File parentFolder = scriptPath.getAbsoluteFile().getParentFile();
-        setBase(parentFolder);
+        if (filesOpen()) {
+            throw new IllegalStateException("Files are still open, cannot change base directory");
+        }
+        files.clear();
+        // getParentFile() may not work on relative paths
         setScriptName(scriptPath.getName());
+        base = scriptPath.getAbsoluteFile().getParentFile();
+        log.info("Set new base '"+base+"'");
     }
 
     /**
