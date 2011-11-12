@@ -646,7 +646,7 @@ public final class GuiPackage implements LocaleChangeListener {
 
         try {
             FileServer.getFileServer().setBasedir(testPlanFile);
-        } catch (IOException e1) {
+        } catch (IllegalStateException e1) {
             log.error("Failure setting file server's base dir", e1);
         }
     }

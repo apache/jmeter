@@ -208,7 +208,7 @@ public class ReportPlan extends AbstractTestElement implements Serializable, Tes
         if (getBasedir() != null && getBasedir().length() > 0) {
             try {
                 FileServer.getFileServer().setBasedir(FileServer.getFileServer().getBaseDir() + getBasedir());
-            } catch (IOException e) {
+            } catch (IllegalStateException e) {
                 log.error("Failed to set file server base dir with " + getBasedir(), e);
             }
         }
