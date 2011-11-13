@@ -31,7 +31,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterError;
 import org.apache.log.Logger;
 
-public class AsynchSampleSender implements SampleSender, Serializable {
+public class AsynchSampleSender extends AbstractSampleSender implements Serializable {
 
     private static final long serialVersionUID = 251L;
 
@@ -39,15 +39,13 @@ public class AsynchSampleSender implements SampleSender, Serializable {
 
     // Create unique object as marker for end of queue
     private transient static final SampleEvent FINAL_EVENT = new SampleEvent();
+
+    private static final int serverConfiguredCapacity = JMeterUtils.getPropDefault("asynch.batch.queue.size", 100); // $NON-NLS-1$
     
-    private static final int capacity = JMeterUtils.getPropDefault("asynch.batch.queue.size", 100); // $NON-NLS-1$
+    private final int clientConfiguredCapacity = JMeterUtils.getPropDefault("asynch.batch.queue.size", 100); // $NON-NLS-1$
 
     // created by client 
     private final RemoteSampleListener listener;
-
-    static {
-        log.info("Using Asynch Remote Sampler for this test run, queue size "+capacity);        
-    }
 
     private transient BlockingQueue<SampleEvent> queue; // created by server in readResolve method
     
@@ -60,6 +58,7 @@ public class AsynchSampleSender implements SampleSender, Serializable {
      * @throws ObjectStreamException  
      */
     private Object readResolve() throws ObjectStreamException{
+    	int capacity = getCapacity();
         log.debug("Using batch queue size (asynch.batch.queue.size): " + capacity);
         queue = new ArrayBlockingQueue<SampleEvent>(capacity);        
         Worker worker = new Worker(queue, listener);
@@ -73,15 +72,24 @@ public class AsynchSampleSender implements SampleSender, Serializable {
      */
     @Deprecated
     public AsynchSampleSender(){
+    	this(null);
         log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
-        listener = null;
     }
 
     // Created by SampleSenderFactory
     protected AsynchSampleSender(RemoteSampleListener listener) {
         this.listener = listener;
+        log.info("Using Asynch Remote Sampler for this test run, queue size "+getCapacity());  
     }
 
+    /**
+     * @return capacity
+     */
+    private int getCapacity() {
+    	return isClientConfigured() ? 
+    			clientConfiguredCapacity : serverConfiguredCapacity;
+    }
+    
     public void testEnded() { // probably not used in server mode
         log.debug("Test ended()");
         try {

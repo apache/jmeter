@@ -33,7 +33,7 @@ import java.util.Map;
  * Implements batch reporting for remote testing.
  *
  */
-public class StatisticalSampleSender implements SampleSender, Serializable {
+public class StatisticalSampleSender extends AbstractSampleSender implements Serializable {
     private static final long serialVersionUID = 240L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -42,15 +42,24 @@ public class StatisticalSampleSender implements SampleSender, Serializable {
 
     private static final long DEFAULT_TIME_THRESHOLD = 60000L;
 
-    private static final int NUM_SAMPLES_THRESHOLD = JMeterUtils.getPropDefault(
+    private final int clientConfiguredNumSamplesThreshold = JMeterUtils.getPropDefault(
             "num_sample_threshold", DEFAULT_NUM_SAMPLE_THRESHOLD);
 
-    private static final long TIME_THRESHOLD_MS = JMeterUtils.getPropDefault("time_threshold",
+    private final long clientConfiguredTimeThresholdMs = JMeterUtils.getPropDefault("time_threshold",
             DEFAULT_TIME_THRESHOLD);
 
     // should the samples be aggregated on thread name or thread group (default) ?
-    private static boolean KEY_ON_THREADNAME = JMeterUtils.getPropDefault("key_on_threadname", false);
+    private boolean clientConfiguredKeyOnThreadName = JMeterUtils.getPropDefault("key_on_threadname", false);
+
+    private static final int serverConfiguredNumSamplesThreshold = JMeterUtils.getPropDefault(
+            "num_sample_threshold", DEFAULT_NUM_SAMPLE_THRESHOLD);
+
+    private static final long serverConfiguredTimeThresholdMs = JMeterUtils.getPropDefault("time_threshold",
+            DEFAULT_TIME_THRESHOLD);
     
+    // should the samples be aggregated on thread name or thread group (default) ?
+    private static boolean serverConfiguredKeyOnThreadName = JMeterUtils.getPropDefault("key_on_threadname", false);
+
     private final RemoteSampleListener listener;
 
     private final List<SampleEvent> sampleStore = new ArrayList<SampleEvent>();
@@ -62,19 +71,13 @@ public class StatisticalSampleSender implements SampleSender, Serializable {
 
     private long batchSendTime = -1;
 
-    static {
-        log.info("Using statistical sampling for this run." + " Thresholds: num="
-                + NUM_SAMPLES_THRESHOLD + ", time=" + TIME_THRESHOLD_MS
-                + ". Key uses ThreadName: " + KEY_ON_THREADNAME);        
-    }
-
     /**
      * @deprecated only for use by test code
      */
     @Deprecated
     public StatisticalSampleSender(){
+    	this(null);
         log.warn("Constructor only intended for use in testing");
-        listener = null;
     }
 
     /**
@@ -84,6 +87,10 @@ public class StatisticalSampleSender implements SampleSender, Serializable {
      */
     StatisticalSampleSender(RemoteSampleListener listener) {
         this.listener = listener;
+        log.info("Using statistical sampling for this run." + " Thresholds: num="
+                + getNumSamplesThreshold() + ", time=" + getTimeThresholdMs()
+                + ". Key uses ThreadName: " + getKeyOnThreadName());        
+
     }
 
     /**
@@ -128,12 +135,15 @@ public class StatisticalSampleSender implements SampleSender, Serializable {
      * @param e a Sample Event
      */
     public void sampleOccurred(SampleEvent e) {
-        synchronized (sampleStore) {
+    	int numSamplesThreshold = getNumSamplesThreshold();
+    	long timeThresholdMs = getTimeThresholdMs();
+    	boolean keyOnThreadName = getKeyOnThreadName();
+    	synchronized (sampleStore) {
             // Locate the statistical sample colector
-            String key = StatisticalSampleResult.getKey(e, KEY_ON_THREADNAME);
+            String key = StatisticalSampleResult.getKey(e, keyOnThreadName);
             StatisticalSampleResult statResult = sampleTable.get(key);
             if (statResult == null) {
-                statResult = new StatisticalSampleResult(e.getResult(), KEY_ON_THREADNAME);
+                statResult = new StatisticalSampleResult(e.getResult(), keyOnThreadName);
                 // store the new statistical result collector
                 sampleTable.put(key, statResult);
                 // add a new wrapper samplevent
@@ -143,18 +153,18 @@ public class StatisticalSampleSender implements SampleSender, Serializable {
             statResult.add(e.getResult());
             sampleCount++;
             boolean sendNow = false;
-            if (NUM_SAMPLES_THRESHOLD != -1) {
-                if (sampleCount >= NUM_SAMPLES_THRESHOLD) {
+            if (numSamplesThreshold != -1) {
+                if (sampleCount >= numSamplesThreshold) {
                     sendNow = true;
                 }
             }
 
             long now = 0;
-            if (TIME_THRESHOLD_MS != -1) {
+            if (timeThresholdMs != -1) {
                 now = System.currentTimeMillis();
                 // Checking for and creating initial timestamp to check against
                 if (batchSendTime == -1) {
-                    this.batchSendTime = now + TIME_THRESHOLD_MS;
+                    this.batchSendTime = now + timeThresholdMs;
                 }
                 if (batchSendTime < now) {
                     sendNow = true;
@@ -166,8 +176,8 @@ public class StatisticalSampleSender implements SampleSender, Serializable {
                         log.debug("Firing sample");
                     }
                     sendBatch();
-                    if (TIME_THRESHOLD_MS != -1) {
-                        this.batchSendTime = now + TIME_THRESHOLD_MS;
+                    if (timeThresholdMs != -1) {
+                        this.batchSendTime = now + timeThresholdMs;
                     }
                 } catch (RemoteException err) {
                     log.warn("sampleOccurred", err);
@@ -183,5 +193,29 @@ public class StatisticalSampleSender implements SampleSender, Serializable {
             sampleTable.clear();
             sampleCount = 0;
         }
+    }
+    
+    /**
+     * @return time in ms when a send will occur if limit is breached
+     */
+    private long getTimeThresholdMs() {
+    	return isClientConfigured() ?
+    			clientConfiguredTimeThresholdMs : serverConfiguredTimeThresholdMs;
+    }
+    
+    /**
+     * @return number of samples threshold over which results will be sent
+     */
+    private int getNumSamplesThreshold() {
+    	return isClientConfigured() ?
+    			clientConfiguredNumSamplesThreshold: serverConfiguredNumSamplesThreshold;
+    }
+    
+    /**
+     * @return boolean indicating wether samples should be aggregated on thread name or thread group (default) ?
+     */
+    private boolean getKeyOnThreadName() {
+    	return isClientConfigured() ?
+    			clientConfiguredKeyOnThreadName: serverConfiguredKeyOnThreadName;
     }
 }
