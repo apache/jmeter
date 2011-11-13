@@ -30,7 +30,7 @@ import java.io.Serializable;
  * caching functionality (sampleStore).
  */
 
-public class HoldSampleSender implements SampleSender, Serializable {
+public class HoldSampleSender extends AbstractSampleSender implements Serializable {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final long serialVersionUID = 240L;

@@ -29,7 +29,7 @@ import java.io.Serializable;
  * Default behaviour for remote testing.
  */
 
-public class StandardSampleSender implements SampleSender, Serializable {
+public class StandardSampleSender extends AbstractSampleSender implements Serializable {
     private static final long serialVersionUID = 240L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
