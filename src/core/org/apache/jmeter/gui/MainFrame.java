@@ -332,7 +332,6 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
     public void testStarted() {
         testStarted(LOCAL);
         menuBar.setEnabled(true);
-        toolbar.setTestStarted(true);
     }
 
     /**
@@ -349,6 +348,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
         activeThreads.setText("0"); // $NON-NLS-1$
         totalThreads.setText("0"); // $NON-NLS-1$
         menuBar.setRunning(true, host);
+        toolbar.setTestStarted(true);
     }
 
     /**
@@ -359,7 +359,6 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
     public void testEnded() {
         testEnded(LOCAL);
         menuBar.setEnabled(false);
-        toolbar.setTestStarted(false);
     }
 
     /**
@@ -376,6 +375,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
             JMeterContextService.endTest();
         }
         menuBar.setRunning(false, host);
+        toolbar.setTestStarted(false);
         if (stoppingMessage != null) {
             stoppingMessage.dispose();
             stoppingMessage = null;
