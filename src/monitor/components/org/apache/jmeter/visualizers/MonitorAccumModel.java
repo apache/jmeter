@@ -167,9 +167,13 @@ public class MonitorAccumModel implements Clearable, Serializable {
                     MonitorModel mo = new MonitorModel(stat);
                     this.addSample(mo);
                     notifyListeners(mo);
-                } else {
-                    noResponse(surl);
-                }
+                } 
+                // This part of code throws NullPointerException
+                // Don't think Monitor results can be loaded from files
+                // see https://issues.apache.org/bugzilla/show_bug.cgi?id=51810
+//                else {
+//                    noResponse(surl);
+//                }
             } else if (((HTTPSampleResult) sample).isMonitor()) {
                 noResponse(surl);
             }
