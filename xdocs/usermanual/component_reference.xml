@@ -4056,7 +4056,7 @@ points of the test plan.
 
 <properties>
   <property name="Name" required="No">Descriptive name for this timer that is shown in the tree. </property>
-  <property name="Number of Simultaneous Users to Group by" required="Yes">Number of threads to release at once.</property>
+  <property name="Number of Simultaneous Users to Group by" required="Yes">Number of threads to release at once. Setting it to 0 is equivalent to setting it to Number of threads in Thread Group.</property>
 </properties>
 
 </component>
