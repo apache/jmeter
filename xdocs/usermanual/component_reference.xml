@@ -1375,6 +1375,10 @@ completed, so the net effect was similar to the MessageListener.onMessage() stra
     The JNDI name of the receiving queue. If a value is provided here and the communication style is Request Response
     this queue will be monitored for responses to the requests sent.
   </property>
+  <property name="JMS Selector" required="No">
+    Message Selector as defined by JMS specification to extract only 
+    messages that respect the Selector condition. Syntax uses subpart of SQL 92.
+  </property>
   <property name="Communication style" required="Yes">
     The Communication style can be Request Only (also known as Fire and Forget) or Request Reply.
     Request Only will only sent messages and will not monitor replies. As such it can be used to put load on a system.
