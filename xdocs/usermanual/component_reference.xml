@@ -336,6 +336,21 @@ For other methods, if the name of the parameter is missing,
 then the parameter is ignored. This allows the use of optional parameters defined by variables.
 (versions of JMeter after 2.3)
 </p>
+<br/>
+<p>Since JMeter 2.5.2, you have the option to switch to Post Body when a request has only one unnamed parameter.
+This option is useful in the following cases:
+<ul>
+<li>GWT RPC HTTP Request</li>
+<li>JSON REST HTTP Request</li>
+<li>XML REST HTTP Request</li>
+<li>...</li>
+</ul>
+Note that once you leave Tree node, you cannot switch anymore to parameters tab.
+</p>
+<figure width="960" height="830" image="http-request-raw-single-parameter.png">Figure 1 - HTTP Request with one unnamed parameter</figure>
+<figure width="960" height="830" image="http-request-confirm-raw-body.png">Figure 2 - Confirm dialog to switch</figure>
+<figure width="960" height="830" image="http-request-raw-body.png">Figure 3 - HTTP Request using RAW Post body</figure>
+
 <p>
 <b>Method Handling:</b><br></br>
 The POST and PUT request methods work similarly, except that the PUT method does not support multipart requests.
