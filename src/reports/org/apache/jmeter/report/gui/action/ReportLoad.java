@@ -42,12 +42,8 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
-import com.thoughtworks.xstream.XStream;
-
 public class ReportLoad implements Command {
     private static final Logger log = LoggingManager.getLoggerForClass();
-
-    XStream loadService = new XStream();
 
     private static final Set<String> commands = new HashSet<String>();
     static {
