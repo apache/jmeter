@@ -18,12 +18,13 @@
 
 <document>
   <properties>
-	 <title>Apache JMeter</title>
+	 <title>Apache JMeter&amp;trade;</title>
   </properties>
   <body>
-	<section name="Apache JMeter">
+	<section name="Apache JMeter&amp;trade;">
 	<p>
-	  <b>Apache JMeter</b> is open source software, a 100% pure Java desktop application designed
+	  The <b>Apache JMeter&amp;trade;</b> desktop application is open source software,
+      a 100% pure Java application designed
 	  to load test functional behavior and measure performance.  It was
 	  originally designed for testing Web Applications but has
 	  since expanded to other test functions.
