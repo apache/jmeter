@@ -31,6 +31,7 @@ import java.util.MissingResourceException;
 import java.util.PropertyResourceBundle;
 
 import org.apache.jmeter.gui.util.JMeterMenuBar;
+import org.apache.jorphan.util.JOrphanUtils;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -91,47 +92,53 @@ public class PackageTest extends TestCase {
                 return 0;
             }
         }
-        BufferedReader fileReader = new BufferedReader(new InputStreamReader(ras));
-        String s;
-        while ((s = fileReader.readLine()) != null) {
-            if (s.length() > 0 && !s.startsWith("#") && !s.startsWith("!")) {
-                int equ = s.indexOf('=');
-                String key = s.substring(0, equ);
-                if (resourcePrefix.equals(MESSAGES)){// Only relevant for messages
-                    /*
-                     * JMeterUtils.getResString() converts space to _ and lowercases
-                     * the key, so make sure all keys pass the test
-                     */
-                    if ((key.indexOf(' ') >= 0) || !key.toLowerCase(java.util.Locale.ENGLISH).equals(key)) {
-                        System.out.println("Invalid key for JMeterUtils " + key);
-                        fails++;
-                    }
-                }
-                String val = s.substring(equ + 1);
-                l.add(key); // Store the key
-                /*
-                 * Now check for invalid message format: if string contains {0}
-                 * and ' there may be a problem, so do a format with dummy
-                 * parameters and check if there is a { in the output. A bit
-                 * crude, but should be enough for now.
-                 */
-                if (val.indexOf("{0}") > 0 && val.indexOf("'") > 0) {
-                    String m = java.text.MessageFormat.format(val, DUMMY_PARAMS);
-                    if (m.indexOf("{") > 0) {
-                        fails++;
-                        System.out.println("Incorrect message format ? (input/output) for: "+key);
-                        System.out.println(val);
-                        System.out.println(m);
-                    }
-                }
-
-                if (!isPureAscii(val)) {
-                    fails++;
-                    System.out.println("Incorrect char value in: "+s);                    
-                }
-            }
+        BufferedReader fileReader = null;
+        try {
+        	fileReader = new BufferedReader(new InputStreamReader(ras));
+	        String s;
+	        while ((s = fileReader.readLine()) != null) {
+	            if (s.length() > 0 && !s.startsWith("#") && !s.startsWith("!")) {
+	                int equ = s.indexOf('=');
+	                String key = s.substring(0, equ);
+	                if (resourcePrefix.equals(MESSAGES)){// Only relevant for messages
+	                    /*
+	                     * JMeterUtils.getResString() converts space to _ and lowercases
+	                     * the key, so make sure all keys pass the test
+	                     */
+	                    if ((key.indexOf(' ') >= 0) || !key.toLowerCase(java.util.Locale.ENGLISH).equals(key)) {
+	                        System.out.println("Invalid key for JMeterUtils " + key);
+	                        fails++;
+	                    }
+	                }
+	                String val = s.substring(equ + 1);
+	                l.add(key); // Store the key
+	                /*
+	                 * Now check for invalid message format: if string contains {0}
+	                 * and ' there may be a problem, so do a format with dummy
+	                 * parameters and check if there is a { in the output. A bit
+	                 * crude, but should be enough for now.
+	                 */
+	                if (val.indexOf("{0}") > 0 && val.indexOf("'") > 0) {
+	                    String m = java.text.MessageFormat.format(val, DUMMY_PARAMS);
+	                    if (m.indexOf("{") > 0) {
+	                        fails++;
+	                        System.out.println("Incorrect message format ? (input/output) for: "+key);
+	                        System.out.println(val);
+	                        System.out.println(m);
+	                    }
+	                }
+	
+	                if (!isPureAscii(val)) {
+	                    fails++;
+	                    System.out.println("Incorrect char value in: "+s);                    
+	                }
+	            }
+	        }
+	        return fails;
         }
-        return fails;
+        finally {
+        	JOrphanUtils.closeQuietly(fileReader);
+        }
     }
 
     // Helper method to construct resource name
