@@ -49,7 +49,7 @@ public class DistributionGraph extends JComponent implements Scrollable, Clearab
 
     private SamplingStatCalculator model;
 
-    private final int xborder = 30;
+    private static final int xborder = 30;
 
     /**
      * Constructor for the Graph object.
