@@ -441,7 +441,8 @@
   <tstamp>
     <format property="year" pattern="yyyy" locale="en"/>
   </tstamp>
-    <filterset id="version.filters">
+
+  <filterset id="version.filters">
     <filter token="YEAR" value="${year}"/>
   </filterset>
 	
