@@ -41,7 +41,7 @@ public class PackageTest extends TestCase {
     }
 
     // Test needs to run in this package in order to give access to AbstractTestElement.addProperty() 
-    public void testBug50799() throws Exception {
+    public void DISABLEDtestBug50799() throws Exception {
         HeaderManager headerManager = new HeaderManager();
         headerManager.add(new Header("1stLevelTestHeader", "testValue1"));
         HeaderManager headerManager2 = new HeaderManager();
