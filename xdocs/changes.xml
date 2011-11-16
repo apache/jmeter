@@ -212,6 +212,8 @@ This behaviour can be changed with property sample_sender_client_configured (set
 <li>Bug 51091 - New function returning the name of the current "Test Plan"</li>
 <li>Bug 52160 - Don't display TestBeanGui items which are flagged as hidden</li>
 <li>Bug 51886 - SampleSender configuration resolved partly on client and partly on server</li>
+<li>Bug 52161 - Enable plugins to add own translation rules in addition to upgrade.properties.
+Loads any additional properties found in META-INF/resources/org.apache.jmeter.nameupdater.properties files</li>
 </ul>
 
 <h2>Non-functional changes</h2>
