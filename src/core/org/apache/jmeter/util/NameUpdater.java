@@ -25,6 +25,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Enumeration;
 import java.util.Properties;
 
 import org.apache.jorphan.logging.LoggingManager;
@@ -36,6 +39,9 @@ public final class NameUpdater {
     // Read-only access after class has been initialised
 
     private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private static final String NAME_UPDATER_PROPERTIES = 
+            "META-INF/resources/org.apache.jmeter.nameupdater.properties"; // $NON-NLS-1$
 
     static {
         nameMap = new Properties();
@@ -52,6 +58,44 @@ public final class NameUpdater {
             log.error("Error processing upgrade file: "+f.getPath(), e);
         } finally {
             JOrphanUtils.closeQuietly(fis);
+        }
+
+        //load additionnal name conversion rules from plugins
+        Enumeration<URL> enu = null;
+
+        try {
+           enu = JMeterUtils.class.getClassLoader().getResources(NAME_UPDATER_PROPERTIES);
+        } catch (IOException e) {
+           log.error("Error in finding additional nameupdater.properties files: ", e);
+        }
+
+        if(enu != null) {
+            while(enu.hasMoreElements()) {
+                URL ressourceUrl = enu.nextElement();
+                log.info("Processing "+ressourceUrl.toString());
+                Properties prop = new Properties();
+                InputStream is = null;
+                try {
+                    is = ressourceUrl.openStream();
+                    prop.load(is);
+                } catch (IOException e) {
+                    log.error("Error processing upgrade file: " + ressourceUrl.getPath(), e);
+                } finally {
+                    JOrphanUtils.closeQuietly(is);
+                }
+
+                @SuppressWarnings("unchecked") // names are Strings
+                Enumeration<String> propertyNames = (Enumeration<String>) prop.propertyNames();
+                while (propertyNames.hasMoreElements()) {
+                    String key = propertyNames.nextElement();
+                    if (!nameMap.contains(key)) {
+                       nameMap.put(key, prop.get(key));
+                       log.info("Added additional nameMap entry: " + key);
+                    } else {
+                       log.warn("Additional nameMap entry: '" + key + "' rejected as already defined.");
+                    }
+                }
+            }
         }
     }
 
