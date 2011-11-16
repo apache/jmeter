@@ -28,8 +28,6 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import org.apache.commons.lang.text.StrBuilder;
-
 /**
  * This class contains frequently-used static utility methods.
  *
@@ -417,7 +415,7 @@ public final class JOrphanUtils {
      * @return hex representation of binary input
      */
     public static String baToHexString(byte ba[]) {
-        StrBuilder sb = new StrBuilder(ba.length*2);
+        StringBuilder sb = new StringBuilder(ba.length*2);
         for (int i = 0; i < ba.length; i++) {
             int j = ba[i] & 0xff;
             if (j < 16) {

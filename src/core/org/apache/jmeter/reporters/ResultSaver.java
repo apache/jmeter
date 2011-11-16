@@ -24,7 +24,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 
-import org.apache.commons.lang.text.StrBuilder;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
@@ -148,7 +147,7 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
         String variable = getVariableName();
         if (variable.length()>0){
             if (num > 0) {
-                StrBuilder sb = new StrBuilder(variable);
+                StringBuilder sb = new StringBuilder(variable);
                 sb.append(num);
                 variable=sb.toString();
             }
@@ -174,7 +173,7 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
      *         text/html;charset=ISO-8859-1
      */
     private String makeFileName(String contentType, boolean skipAutoNumber, boolean skipSuffix) {
-        StrBuilder sb = new StrBuilder(FileServer.resolveBaseRelativeName(getFilename()));
+        StringBuilder sb = new StringBuilder(FileServer.resolveBaseRelativeName(getFilename()));
         if (!skipAutoNumber){
             sb.append(nextNumber());
         }
