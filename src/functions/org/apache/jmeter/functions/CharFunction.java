@@ -22,7 +22,6 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.commons.lang.text.StrBuilder;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -55,7 +54,7 @@ public class CharFunction extends AbstractFunction {
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
 
-        StrBuilder sb = new StrBuilder(values.length);
+        StringBuilder sb = new StringBuilder(values.length);
         for (int i=0; i < values.length; i++){
             String numberString = ((CompoundVariable) values[i]).execute().trim();
             long value = 0;
