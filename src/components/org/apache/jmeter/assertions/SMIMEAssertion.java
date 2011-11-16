@@ -163,7 +163,7 @@ class SMIMEAssertion {
                     }
 
                     if (testElement.isSignerCheckConstraints()) {
-                        StringBuffer failureMessage = new StringBuffer();
+                        StringBuilder failureMessage = new StringBuilder();
 
                         String serial = testElement.getSignerSerial();
                         if (serial.trim().length() > 0) {
