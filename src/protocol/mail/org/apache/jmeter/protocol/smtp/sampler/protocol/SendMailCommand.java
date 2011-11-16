@@ -94,7 +94,7 @@ public class SendMailCommand {
 
     private Session session;
 
-    private StringBuffer serverResponse = new StringBuffer(); // TODO this is not populated currently
+    private StringBuilder serverResponse = new StringBuilder(); // TODO this is not populated currently
 
     /** send plain body, i.e. not multipart/mixed */
     private boolean plainBody;
@@ -759,8 +759,8 @@ public class SendMailCommand {
         this.plainBody = plainBody;
     }
 
-    public StringBuffer getServerResponse() {
-        return this.serverResponse;
+    public String getServerResponse() {
+        return this.serverResponse.toString();
     }
 
     public void setEnableDebug(boolean selected) {
