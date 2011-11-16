@@ -280,7 +280,7 @@ public class JMeterTest extends JMeterTestCase {
         while (iter.hasNext()) {
             JMeterGUIComponent item = (JMeterGUIComponent) iter.next();
             if (item instanceof JMeterTreeNode) {
-                System.out.println("INFO: JMeterGUIComponent: skipping all tests  " + item.getClass().getName());
+                System.out.println("o.a.j.junit.JMeterTest INFO: JMeterGUIComponent: skipping all tests  " + item.getClass().getName());
                 continue;
             }
             if (item instanceof ObsoleteGui){
@@ -289,7 +289,7 @@ public class JMeterTest extends JMeterTestCase {
             TestSuite ts = new TestSuite(item.getClass().getName());
             ts.addTest(new JMeterTest("GUIComponents1", item));
             if (item instanceof TestBeanGUI) {
-                System.out.println("INFO: JMeterGUIComponent: skipping some tests " + item.getClass().getName());
+                System.out.println("o.a.j.junit.JMeterTest INFO: JMeterGUIComponent: skipping some tests " + item.getClass().getName());
             } else {
                 ts.addTest(new JMeterTest("GUIComponents2", item));
                 ts.addTest(new JMeterTest("runGUITitle", item));
@@ -334,7 +334,7 @@ public class JMeterTest extends JMeterTestCase {
                 ts.addTest(new JMeterTest("runGUITitle", item));
                 suite.addTest(ts);
             } catch (IllegalArgumentException e) {
-                System.out.println("Cannot create test for " + c.getName() + " " + e);
+                System.out.println("o.a.j.junit.JMeterTest Cannot create test for " + c.getName() + " " + e);
                 e.printStackTrace(System.out);
             }
         }
@@ -583,23 +583,23 @@ public class JMeterTest extends JMeterTestCase {
                                     new Object[] { myThis }));
                         } catch (NoSuchMethodException f) {
                             // no luck. Ignore this class
-                            System.out.println("WARN: " + exName + ": NoSuchMethodException  " + n);
+                            System.out.println("o.a.j.junit.JMeterTest WARN: " + exName + ": NoSuchMethodException  " + n);
                         }
                     }
                 } catch (NoClassDefFoundError e) {
                     // no luck. Ignore this class
-                    System.out.println("WARN: " + exName + ": NoClassDefFoundError " + n);
+                    System.out.println("o.a.j.junit.JMeterTest WARN: " + exName + ": NoClassDefFoundError " + n);
                 } catch (IllegalAccessException e) {
                     caught = e;
-                    System.out.println("WARN: " + exName + ": IllegalAccessException " + n);
+                    System.out.println("o.a.j.junit.JMeterTest WARN: " + exName + ": IllegalAccessException " + n);
                     // We won't test restricted-access classes.
                 } catch (HeadlessException e) {
                     caught = e;
-                    System.out.println("Error creating "+n+" "+e.toString());
+                    System.out.println("o.a.j.junit.JMeterTest Error creating "+n+" "+e.toString());
                 } catch (Exception e) {
                     caught = e;
                     if (e instanceof RemoteException) { // not thrown, so need to check here
-                        System.out.println("WARN: " + "Error creating " + n + " " + e.toString());
+                        System.out.println("o.a.j.junit.JMeterTest WARN: " + "Error creating " + n + " " + e.toString());
                     } else {
                         throw new Exception("Error creating " + n, e);
                     }
