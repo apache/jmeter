@@ -35,7 +35,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.text.StrBuilder;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -213,7 +212,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
     }
 
     private String resultSetsToString(PreparedStatement pstmt, boolean result, int[] out) throws SQLException, UnsupportedEncodingException {
-        StrBuilder sb = new StrBuilder();
+        StringBuilder sb = new StringBuilder();
         int updateCount = 0;
         if (!result) {
             updateCount = pstmt.getUpdateCount();
@@ -370,7 +369,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
     private String getStringFromResultSet(ResultSet rs) throws SQLException, UnsupportedEncodingException {
         ResultSetMetaData meta = rs.getMetaData();
 
-        StrBuilder sb = new StrBuilder();
+        StringBuilder sb = new StringBuilder();
 
         int numColumns = meta.getColumnCount();
         for (int i = 1; i <= numColumns; i++) {
@@ -477,7 +476,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
 
     @Override
     public String toString() {
-        StrBuilder sb = new StrBuilder(80);
+        StringBuilder sb = new StringBuilder(80);
         sb.append("["); // $NON-NLS-1$
         sb.append(getQueryType());
         sb.append("] "); // $NON-NLS-1$
