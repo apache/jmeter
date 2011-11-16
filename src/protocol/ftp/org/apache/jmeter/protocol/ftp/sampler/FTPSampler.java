@@ -32,7 +32,6 @@ import java.net.URL;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.io.output.TeeOutputStream;
-import org.apache.commons.lang.text.StrBuilder;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
@@ -139,8 +138,7 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
      * @return a formatted string label describing this sampler
      */
     public String getLabel() {
-        StrBuilder sb = new StrBuilder();
-        sb.setNullText("null");// $NON-NLS-1$
+        StringBuilder sb = new StringBuilder();
         sb.append("ftp://");// $NON-NLS-1$
         sb.append(getServer());
         String port = getPort();
