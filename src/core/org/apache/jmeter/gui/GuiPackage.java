@@ -21,7 +21,6 @@ package org.apache.jmeter.gui;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.beans.Introspector;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
