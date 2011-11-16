@@ -25,6 +25,13 @@ public class ReadException extends Exception {
 	private static final long serialVersionUID = -2770054697780959330L;
 	private final String partialResponse;
 
+	/**
+	 * @deprecated For use by test code only (serialisation tests)
+	 */
+	@Deprecated
+	public ReadException() {
+	    this(null, null, null);
+	}
 
 	/**
 	 * Constructor
