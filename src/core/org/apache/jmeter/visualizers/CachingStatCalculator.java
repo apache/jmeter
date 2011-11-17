@@ -18,8 +18,9 @@
 
 package org.apache.jmeter.visualizers;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Vector;
 
 import org.apache.jmeter.samplers.SampleResult;
 
@@ -28,7 +29,7 @@ import org.apache.jmeter.samplers.SampleResult;
  */
 public class CachingStatCalculator extends SamplingStatCalculator {
 
-    private final List<Sample> storedValues = new Vector<Sample>();
+    private final List<Sample> storedValues = Collections.synchronizedList(new ArrayList<Sample>());
 
     public CachingStatCalculator(String string) {
         super(string);
