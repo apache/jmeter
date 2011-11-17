@@ -39,7 +39,6 @@ import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.Random;
 import java.util.ResourceBundle;
-import java.util.StringTokenizer;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
@@ -929,25 +928,6 @@ public class JMeterUtils implements UnitTestManager {
             log.error("Error loading class " + className + ": class is not found");
         }
         return i;
-    }
-
-    /**
-     * Tokenize a string into a vector of tokens
-     *
-     * @param string
-     *            Description of Parameter
-     * @param separator
-     *            Description of Parameter
-     * @return Description of the Returned Value
-     */
-    //TODO move to JOrphanUtils ?
-    public static Vector<String> tokenize(String string, String separator) {
-        Vector<String> v = new Vector<String>();
-        StringTokenizer s = new StringTokenizer(string, separator);
-        while (s.hasMoreTokens()) {
-            v.addElement(s.nextToken());
-        }
-        return v;
     }
 
     /**
