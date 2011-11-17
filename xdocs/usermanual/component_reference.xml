@@ -2544,6 +2544,11 @@ i.e. 30.0 requests/minute is saved as 0.5.
 <component name="View Results in Table" index="&sect-num;.3.8"  width="658" height="700" screenshot="table_results.png">
 <description>This visualizer creates a row for every sample result.  
 Like the <complink name="View Results Tree"/>, this visualizer uses a lot of memory.
+<p>
+By default, it only displays the main (parent) samples; it does not display the sub-samples (child samples).
+Versions of JMeter after 2.5.1 have a "Child Samples?" check-box.
+If this is selected, then the sub-samples are displayed instead of the main samples.  
+</p>
 </description>
 </component>
 

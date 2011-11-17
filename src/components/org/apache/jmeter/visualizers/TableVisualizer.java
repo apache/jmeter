@@ -37,6 +37,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
+import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.Calculator;
@@ -97,6 +98,8 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
     private JCheckBox autoscroll = null;
 
+    private JCheckBox childSamples = null;
+
     private transient Calculator calc = new Calculator();
 
     private long currentData = 0;
@@ -155,6 +158,15 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
     }
 
     public void add(SampleResult res) {
+        if (childSamples.isSelected()) {
+            SampleResult[] subResults = res.getSubResults();
+            if (subResults.length > 0) {
+                for (SampleResult sr : subResults) {
+                    add(sr);
+                }
+                return;
+            }
+        }
         currentData = res.getTime();
         synchronized (calc) {
             calc.addValue(currentData);
@@ -210,6 +222,8 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
         autoscroll = new JCheckBox(JMeterUtils.getResString("view_results_autoscroll")); //$NON-NLS-1$
 
+        childSamples = new JCheckBox(JMeterUtils.getResString("view_results_childsamples")); //$NON-NLS-1$
+
         // Set up footer of table which displays numerics of the graphs
         JPanel dataPanel = new JPanel();
         JLabel dataLabel = new JLabel(JMeterUtils.getResString("graph_results_latest_sample")); // $NON-NLS-1$
@@ -247,7 +261,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
         JPanel noSamplesPanel = new JPanel();
         JLabel noSamplesLabel = new JLabel(JMeterUtils.getResString("graph_results_no_samples")); // $NON-NLS-1$
 
-        noSamplesField = new JTextField(10);
+        noSamplesField = new JTextField(8);
         noSamplesField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         noSamplesField.setEditable(false);
         noSamplesField.setForeground(Color.black);
@@ -266,7 +280,10 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
         JPanel tableControlsPanel = new JPanel(new BorderLayout());
         tableControlsPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        tableControlsPanel.add(autoscroll, BorderLayout.WEST);
+        JPanel jp = new HorizontalPanel();
+        jp.add(autoscroll);
+        jp.add(childSamples);
+        tableControlsPanel.add(jp, BorderLayout.WEST);
         tableControlsPanel.add(tableInfoPanel, BorderLayout.CENTER);
 
         // Set up the table with footer
