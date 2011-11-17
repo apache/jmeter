@@ -660,7 +660,7 @@ public final class CSVSaveService {
      *            header names (if non-null)
      * @throws IOException
      */
-    public static void saveCSVStats(Vector<?> data, FileWriter writer,
+    public static void saveCSVStats(List<?> data, FileWriter writer,
             String headers[]) throws IOException {
         final char DELIM = ',';
         final char SPECIALS[] = new char[] { DELIM, QUOTING_CHAR };
@@ -674,12 +674,12 @@ public final class CSVSaveService {
             writer.write(LINE_SEP);
         }
         for (int idx = 0; idx < data.size(); idx++) {
-            Vector<?> row = (Vector<?>) data.elementAt(idx);
+            List<?> row = (List<?>) data.get(idx);
             for (int idy = 0; idy < row.size(); idy++) {
                 if (idy > 0) {
                     writer.write(DELIM);
                 }
-                Object item = row.elementAt(idy);
+                Object item = row.get(idy);
                 writer.write(quoteDelimiters(String.valueOf(item), SPECIALS));
             }
             writer.write(LINE_SEP);
