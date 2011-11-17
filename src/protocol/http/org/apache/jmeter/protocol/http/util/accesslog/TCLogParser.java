@@ -26,8 +26,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
-import java.util.Vector;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
@@ -468,7 +469,7 @@ public class TCLogParser implements LogParser {
      * @param stringparams
      */
     public NVPair[] convertStringtoNVPair(String stringparams) {
-        Vector<String> vparams = this.parseParameters(stringparams);
+        List<String> vparams = this.parseParameters(stringparams);
         NVPair[] nvparams = new NVPair[vparams.size()];
         // convert the Parameters
         for (int idx = 0; idx < nvparams.length; idx++) {
@@ -522,10 +523,10 @@ public class TCLogParser implements LogParser {
      * purpose of this utility.
      *
      * @param parameters
-     * @return Vector
+     * @return List<String>
      */
-    protected Vector<String> parseParameters(String parameters) {
-        Vector<String> parsedParams = new Vector<String>();
+    protected List<String> parseParameters(String parameters) {
+    	List<String> parsedParams = new ArrayList<String>();
         StringTokenizer paramtokens = this.tokenize(parameters, "&");
         while (paramtokens.hasMoreElements()) {
             parsedParams.add(paramtokens.nextToken());
