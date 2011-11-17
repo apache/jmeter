@@ -96,7 +96,7 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
 
 </component>
 
-<component name="HTTP Request" index="&sect-num;.1.2" width="911" height="642" screenshot="http-request.png">
+<component name="HTTP Request" index="&sect-num;.1.2" width="959" height="828" screenshot="http-request.png">
 
 <description>
         <p>This sampler lets you send an HTTP/HTTPS request to a web server.  It
@@ -347,9 +347,9 @@ This option is useful in the following cases:
 </ul>
 Note that once you leave Tree node, you cannot switch anymore to parameters tab.
 </p>
-<figure width="960" height="830" image="http-request-raw-single-parameter.png">Figure 1 - HTTP Request with one unnamed parameter</figure>
-<figure width="960" height="830" image="http-request-confirm-raw-body.png">Figure 2 - Confirm dialog to switch</figure>
-<figure width="960" height="830" image="http-request-raw-body.png">Figure 3 - HTTP Request using RAW Post body</figure>
+<figure width="956" height="830" image="http-request-raw-single-parameter.png">Figure 1 - HTTP Request with one unnamed parameter</figure>
+<figure width="958" height="833" image="http-request-confirm-raw-body.png">Figure 2 - Confirm dialog to switch</figure>
+<figure width="957" height="831" image="http-request-raw-body.png">Figure 3 - HTTP Request using RAW Post body</figure>
 
 <p>
 <b>Method Handling:</b><br></br>
@@ -1299,7 +1299,7 @@ The following table shows some values which may be useful when configuring JMS:
 </p>
 </component>
 
-<component name="JMS Subscriber" index="&sect-num;.1.14"  width="745" height="634" screenshot="jmssubscriber.png">
+<component name="JMS Subscriber" index="&sect-num;.1.14"  width="746" height="634" screenshot="jmssubscriber.png">
 <note>BETA CODE - the code is still subject to change</note>
 	<description>
 		<p>
@@ -1363,7 +1363,7 @@ completed, so the net effect was similar to the MessageListener.onMessage() stra
 </p>
 </component>
 
-<component name="JMS Point-to-Point" index="&sect-num;.1.15"  width="684" height="698" screenshot="jms/JMS_Point-to-Point.png">
+<component name="JMS Point-to-Point" index="&sect-num;.1.15"  width="799" height="789" screenshot="jms/JMS_Point-to-Point.png">
 <note>BETA CODE - the code is still subject to change</note>
 	<description>
 		<p>
@@ -3086,7 +3086,7 @@ be able to run it.  However, you can use it as a reference in constructing your 
 
 </component>
 
-<component name="HTTP Cache Manager" index="&sect-num;.4.4"  width="424" height="159" screenshot="http-config/http-cache-manager.png">
+<component name="HTTP Cache Manager" index="&sect-num;.4.4"  width="511" height="196" screenshot="http-config/http-cache-manager.png">
 
 <note>This is a new element, and is liable to change</note>
 
@@ -3359,7 +3359,7 @@ OR<br/>jdbc:oracle:thin:@(description=(address=(host={mc-name})(protocol=tcp)(po
 </component>
 
 
-<component name="Keystore Configuration" index="&sect-num;.4.9"  width="352" height="112" screenshot="keystore_config.png">
+<component name="Keystore Configuration" index="&sect-num;.4.9"  width="611" height="244" screenshot="keystore_config.png">
 <description><p>The Keystore Config Element lets you configure how Keystore will be loaded and which keys it will use.
 This component is typically used in HTTPs scenarios where you don't want to take into account keystore initialization into account in response time.</p>
 </description>
@@ -3416,7 +3416,7 @@ This component is typically used in HTTPs scenarios where you don't want to take
 </properties>
 </component>
 
-<component name="User Defined Variables" index="&sect-num;.4.14"  width="690" height="394" screenshot="user_defined_variables.png">
+<component name="User Defined Variables" index="&sect-num;.4.14"  width="700" height="351" screenshot="user_defined_variables.png">
 <description><p>The User Defined Variables element lets you define an <b>initial set of variables</b>, just as in the <complink name="Test Plan" />.
 <b>
 Note that all the UDV elements in a test plan - no matter where they are - are processed at the start.
@@ -4787,7 +4787,7 @@ TBA
 <description>
 		<br></br>
 </description>
-<component name="Test Plan" index="&sect-num;.9.1"  width="491" height="439" screenshot="testplan.png">
+<component name="Test Plan" index="&sect-num;.9.1"  width="558" height="465" screenshot="testplan.png">
 <description>
 <p>
 The Test Plan is where the overall settings for a test are specified.
