@@ -26,7 +26,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 /**
  * This class contains frequently-used static utility methods.
@@ -87,28 +86,26 @@ public final class JOrphanUtils {
                 splittee = splittee.substring(0,splittee.length()-splitLength);
             }
         }
-        Vector<String> returns = new Vector<String>();
+        List<String> returns = new ArrayList<String>();
         final int length = splittee.length(); // This is the new length
         int start = 0;
         spot = 0;
         while (start < length && (spot = splittee.indexOf(splitChar, start)) > -1) {
             if (spot > 0) {
-                returns.addElement(splittee.substring(start, spot));
+                returns.add(splittee.substring(start, spot));
             }
             else
             {
-                returns.addElement(EMPTY_ELEMENT);
+                returns.add(EMPTY_ELEMENT);
             }
             start = spot + splitLength;
         }
         if (start < length) {
             returns.add(splittee.substring(start));
         } else if (spot == length - splitLength){// Found splitChar at end of line
-            returns.addElement(EMPTY_ELEMENT);
+            returns.add(EMPTY_ELEMENT);
         }
-        String[] values = new String[returns.size()];
-        returns.copyInto(values);
-        return values;
+        return returns.toArray(new String[returns.size()]);
     }
 
     public static String[] split(String splittee,String splitChar)
