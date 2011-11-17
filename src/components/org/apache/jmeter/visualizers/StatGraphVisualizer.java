@@ -25,8 +25,9 @@ import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.BoxLayout;
@@ -348,12 +349,12 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
      * work as expected.
      * @return the data from the model
      */
-    public Vector<Vector<Object>> getAllTableData() {
-        Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+    public List<List<Object>> getAllTableData() {
+        List<List<Object>> data = new ArrayList<List<Object>>();
         if (model.getRowCount() > 0) {
             for (int rw=0; rw < model.getRowCount(); rw++) {
                 int cols = model.getColumnCount();
-                Vector<Object> column = new Vector<Object>();
+                List<Object> column = new ArrayList<Object>();
                 data.add(column);
                 for (int idx=0; idx < cols; idx++) {
                     Object val = model.getValueAt(rw,idx);
