@@ -26,8 +26,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Vector;
+import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.config.ConfigTestElement;
@@ -191,59 +190,24 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
         return (Header) getHeaders().get(i).getObjectValue();
     }
 
-    /*
-     * public String getHeaderHeaderForURL(URL url) { if
-     * (!url.getProtocol().toUpperCase().trim().equals("HTTP") &&
-     * !url.getProtocol().toUpperCase().trim().equals("HTTPS")) { return null; }
-     *
-     * StringBuilder sbHeader = new StringBuilder(); for (Iterator enum =
-     * headers.iterator(); enum.hasNext();) { Header header = (Header)
-     * enum.next(); if (url.getHost().endsWith(header.getDomain()) &&
-     * url.getFile().startsWith(header.getPath()) && (System.currentTimeMillis() /
-     * 1000) <= header.getExpires()) { if (sbHeader.length() > 0) {
-     * sbHeader.append("; "); }
-     * sbHeader.append(header.getName()).append("=").append( header.getValue()); } }
-     *
-     * if (sbHeader.length() != 0) { return sbHeader.toString(); } else { return
-     * null; } }
-     */
-
-    /*
-     * public void addHeaderFromHeader(String headerHeader, URL url) {
-     * StringTokenizer st = new StringTokenizer(headerHeader, ";"); String nvp;
-     *  // first n=v is name=value nvp = st.nextToken(); int index =
-     * nvp.indexOf("="); String name = nvp.substring(0, index); String value =
-     * nvp.substring(index + 1); String domain = url.getHost();
-     *
-     * Header newHeader = new Header(name, value); // check the rest of the
-     * headers while (st.hasMoreTokens()) { nvp = st.nextToken(); nvp =
-     * nvp.trim(); index = nvp.indexOf("="); if (index == -1) { index =
-     * nvp.length(); } String key = nvp.substring(0, index);
-     *
-     * Vector removeIndices = new Vector(); for (int i = headers.size() - 1; i >=
-     * 0; i--) { Header header = (Header) headers.get(i); if (header == null) {
-     * continue; } if (header.getName().equals(newHeader.getName())) {
-     * removeIndices.addElement(Integer.valueOf(i)); } }
-     *
-     * for (Enumeration e = removeIndices.elements(); e.hasMoreElements(); ) {
-     * index = ((Integer) e.nextElement()).intValue(); headers.remove(index); }
-     *  }
+    /**
+     * Remove from Headers the header named name
+     * @param name header name
      */
     public void removeHeaderNamed(String name) {
-        Vector<Integer> removeIndices = new Vector<Integer>();
+        List<Integer> removeIndices = new ArrayList<Integer>();
         for (int i = getHeaders().size() - 1; i >= 0; i--) {
             Header header = (Header) getHeaders().get(i).getObjectValue();
             if (header == null) {
                 continue;
             }
             if (header.getName().equalsIgnoreCase(name)) {
-                removeIndices.addElement(Integer.valueOf(i));
+                removeIndices.add(Integer.valueOf(i));
             }
         }
-
-        for (Enumeration<Integer> e = removeIndices.elements(); e.hasMoreElements();) {
-            getHeaders().remove(e.nextElement().intValue());
-        }
+        for (Integer indice : removeIndices) {
+        	getHeaders().remove(indice.intValue());
+		}
     }
 
     /**
