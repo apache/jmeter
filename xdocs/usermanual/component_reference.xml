@@ -1299,7 +1299,7 @@ The following table shows some values which may be useful when configuring JMS:
 </p>
 </component>
 
-<component name="JMS Subscriber" index="&sect-num;.1.14"  width="682" height="439" screenshot="jmssubscriber.png">
+<component name="JMS Subscriber" index="&sect-num;.1.14"  width="745" height="634" screenshot="jmssubscriber.png">
 <note>BETA CODE - the code is still subject to change</note>
 	<description>
 		<p>
