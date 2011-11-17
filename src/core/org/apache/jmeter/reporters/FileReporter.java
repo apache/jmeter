@@ -29,8 +29,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.JFrame;
@@ -39,6 +41,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -52,7 +55,7 @@ public class FileReporter extends JPanel {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private final Map<String, Vector<Integer>> data = new ConcurrentHashMap<String, Vector<Integer>>();
+    private final Map<String, List<Integer>> data = new ConcurrentHashMap<String, List<Integer>>();
 
     /** initalize a file reporter from a file */
     public void init(String file) throws IOException {
@@ -85,13 +88,13 @@ public class FileReporter extends JPanel {
                     } else {
                         value = Integer.valueOf(line.substring(splitter + 1));
                     }
-                    Vector<Integer> v = getData(key);
+                    List<Integer> v = getData(key);
 
                     if (v == null) {
-                        v = new Vector<Integer>();
+                        v = Collections.synchronizedList(new ArrayList<Integer>());
                         this.data.put(key, v);
                     }
-                    v.addElement(value);
+                    v.add(value);
                 } catch (NumberFormatException nfe) {
                     log.error("This line could not be parsed: " + line, nfe);
                 } catch (Exception e) {
@@ -99,13 +102,12 @@ public class FileReporter extends JPanel {
                 }
             }
         } finally {
-            if (reader != null)
-                reader.close();
+        	JOrphanUtils.closeQuietly(reader);
         }
         showPanel();
     }
 
-    public Vector<Integer> getData(String key) {
+    public List<Integer> getData(String key) {
         return data.get(key);
     }
 
@@ -135,21 +137,21 @@ private static class GraphPanel extends JPanel {
     private static final long serialVersionUID = 240L;
 
     // boolean autoScale = true;
-    private final Map<String, Vector<Integer>> data;
+    private final Map<String, List<Integer>> data;
 
-    private final Vector<String> keys = new Vector<String>();
+    private final List<String> keys = Collections.synchronizedList(new ArrayList<String>());
 
-    private final Vector<Color> colorList = new Vector<Color>();
+    private final List<Color> colorList = Collections.synchronizedList(new ArrayList<Color>());
 
-    public GraphPanel(Map<String, Vector<Integer>> data) {
+    public GraphPanel(Map<String, List<Integer>> data) {
         this.data = data;
         for (String key : data.keySet()) {
-            keys.addElement(key);
+            keys.add(key);
         }
         for (int a = 0x33; a < 0xFF; a += 0x66) {
             for (int b = 0x33; b < 0xFF; b += 0x66) {
                 for (int c = 0x33; c < 0xFF; c += 0x66) {
-                    colorList.addElement(new Color(a, b, c));
+                    colorList.add(new Color(a, b, c));
                 }
             }
         }
@@ -162,11 +164,11 @@ private static class GraphPanel extends JPanel {
         float maxValue = 0;
 
         for (int t = 0; t < keys.size(); t++) {
-            String key = keys.elementAt(t);
-            Vector<Integer> temp = data.get(key);
+            String key = keys.get(t);
+            List<Integer> temp = data.get(key);
 
             for (int j = 0; j < temp.size(); j++) {
-                float f = temp.elementAt(j).intValue();
+                float f = temp.get(j).intValue();
 
                 maxValue = Math.max(f, maxValue);
             }
@@ -181,11 +183,11 @@ private static class GraphPanel extends JPanel {
         float minValue = 9999999;
 
         for (int t = 0; t < keys.size(); t++) {
-            String key = keys.elementAt(t);
-            Vector<Integer> temp = data.get(key);
+            String key = keys.get(t);
+            List<Integer> temp = data.get(key);
 
             for (int j = 0; j < temp.size(); j++) {
-                float f = temp.elementAt(j).intValue();
+                float f = temp.get(j).intValue();
 
                 minValue = Math.min(f, minValue);
             }
@@ -208,10 +210,10 @@ private static class GraphPanel extends JPanel {
         c.gridwidth = 1;
         c.gridheight = 1;
         for (int t = 0; t < keys.size(); t++) {
-            String key = keys.elementAt(t);
+            String key = keys.get(t);
             JLabel colorSwatch = new JLabel("  ");
 
-            colorSwatch.setBackground(colorList.elementAt(t % colorList.size()));
+            colorSwatch.setBackground(colorList.get(t % colorList.size()));
             colorSwatch.setOpaque(true);
             c.gridx = 1;
             c.gridy = t;
@@ -237,11 +239,11 @@ private static class GraphPanel extends JPanel {
         float minValue = 999999;
 
         for (int t = 0; t < keys.size(); t++) {
-            String key = keys.elementAt(t);
-            Vector<Integer> temp = data.get(key);
+            String key = keys.get(t);
+            List<Integer> temp = data.get(key);
 
             for (int j = 0; j < temp.size(); j++) {
-                float f = temp.elementAt(j).intValue();
+                float f = temp.get(j).intValue();
 
                 minValue = Math.min(f, minValue);
                 maxValue = Math.max(f, maxValue);
@@ -295,7 +297,7 @@ private static class GraphPanel extends JPanel {
         int size = 0;
 
         for (int t = 0; t < keys.size(); t++) {
-            String key = keys.elementAt(t);
+            String key = keys.get(t);
             size = Math.max(size, data.get(key).size());
         }
         return size;
@@ -345,14 +347,14 @@ private static class GraphPanel extends JPanel {
         int start = 0;
 
         for (int t = 0; t < keys.size(); t++) {
-            String key = keys.elementAt(t);
-            Vector<Integer> v = data.get(key);
+            String key = keys.get(t);
+            List<Integer> v = data.get(key);
 
             start = 0;
-            g.setColor(colorList.elementAt(t % colorList.size()));
+            g.setColor(colorList.get(t % colorList.size()));
             for (int i = 0; i < v.size() - 1; i++) {
-                float y1 = v.elementAt(i).intValue();
-                float y2 = v.elementAt(i + 1).intValue();
+                float y1 = v.get(i).intValue();
+                float y2 = v.get(i + 1).intValue();
 
                 y1 = y1 - minValue;
                 y2 = y2 - minValue;

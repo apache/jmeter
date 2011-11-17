@@ -30,7 +30,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
 
@@ -636,12 +635,12 @@ public final class CSVSaveService {
      * new save service.
      * 
      * @param data
-     *            vector of data rows
+     *            List of data rows
      * @param writer
      *            output file
      * @throws IOException
      */
-    public static void saveCSVStats(Vector<?> data, FileWriter writer)
+    public static void saveCSVStats(List<?> data, FileWriter writer)
             throws IOException {
         saveCSVStats(data, writer, null);
     }
@@ -653,7 +652,7 @@ public final class CSVSaveService {
      * new save service.
      * 
      * @param data
-     *            vector of data rows
+     *            List of data rows
      * @param writer
      *            output file
      * @param headers
@@ -688,8 +687,8 @@ public final class CSVSaveService {
 
     /**
      * Method saves aggregate statistics (with header names) as CSV from a table
-     * model. Same as {@link #saveCSVStats(Vector, FileWriter, String[])} except
-     * that there is no need to create a Vector containing the data.
+     * model. Same as {@link #saveCSVStats(List, FileWriter, String[])} except
+     * that there is no need to create a List containing the data.
      * 
      * @param model
      *            table model containing the data
@@ -704,8 +703,8 @@ public final class CSVSaveService {
 
     /**
      * Method saves aggregate statistics as CSV from a table model. Same as
-     * {@link #saveCSVStats(Vector, FileWriter, String[])} except that there is
-     * no need to create a Vector containing the data.
+     * {@link #saveCSVStats(List, FileWriter, String[])} except that there is
+     * no need to create a List containing the data.
      * 
      * @param model
      *            table model containing the data
