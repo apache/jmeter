@@ -19,9 +19,10 @@
 package org.apache.jmeter.reporters;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -109,17 +110,17 @@ public class MailerModel extends AbstractTestElement implements Serializable {
     }
 
     /**
-     * Gets a Vector of String-objects. Each String is one mail-address of the
+     * Gets a List of String-objects. Each String is one mail-address of the
      * addresses-String set by <code>setToAddress(str)</code>. The addresses
      * must be seperated by commas. Only String-objects containing a "@" are
-     * added to the returned Vector.
+     * added to the returned List.
      *
-     * @return a Vector of String-objects wherein each String represents a
+     * @return a List of String-objects wherein each String represents a
      *         mail-address.
      */
-    public Vector<String> getAddressVector() {
+    public List<String> getAddressList() {
         String addressees = getToAddress();
-        Vector<String> addressVector = new Vector<String>();
+        List<String> addressList = new ArrayList<String>();
 
         if (addressees != null) {
 
@@ -129,14 +130,14 @@ public class MailerModel extends AbstractTestElement implements Serializable {
                 String theToken = next.nextToken().trim();
 
                 if (theToken.indexOf("@") > 0) { //$NON-NLS-1$
-                    addressVector.addElement(theToken);
+                	addressList.add(theToken);
                 } else {
                     log.warn("Ignored unexpected e-mail address: "+theToken);
                 }
             }
         }
 
-        return addressVector;
+        return addressList;
     }
 
     /**
@@ -174,11 +175,11 @@ public class MailerModel extends AbstractTestElement implements Serializable {
 
         if (sendMails && (failureCount > getFailureLimit()) && !siteDown && !failureMsgSent) {
             // Send the mail ...
-            Vector<String> addressVector = getAddressVector();
+            List<String> addressList = getAddressList();
 
-            if (addressVector.size() != 0) {
+            if (addressList.size() != 0) {
                 try {
-                    sendMail(getFromAddress(), addressVector, getFailureSubject(), "URL Failed: "
+                    sendMail(getFromAddress(), addressList, getFailureSubject(), "URL Failed: "
                             + sample.getSampleLabel(), getSmtpHost());
                 } catch (Exception e) {
                     log.error("Problem sending mail: "+e);
@@ -193,10 +194,10 @@ public class MailerModel extends AbstractTestElement implements Serializable {
         if (sendMails && siteDown && (sample.getTime() != -1) && !successMsgSent) {
             // Send the mail ...
             if (successCount > getSuccessLimit()) {
-                Vector<String> addressVector = getAddressVector();
+                List<String> addressList = getAddressList();
 
                 try {
-                    sendMail(getFromAddress(), addressVector, getSuccessSubject(), "URL Restarted: "
+                    sendMail(getFromAddress(), addressList, getSuccessSubject(), "URL Restarted: "
                             + sample.getSampleLabel(), getSmtpHost());
                 } catch (Exception e) {
                     log.error("Problem sending mail", e);
@@ -257,7 +258,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
      * @param smtpHost
      *            the smtp-server used to send the mail.
      */
-    public synchronized void sendMail(String from, Vector<String> vEmails, String subject, String attText, String smtpHost)
+    public synchronized void sendMail(String from, List<String> vEmails, String subject, String attText, String smtpHost)
             throws AddressException, MessagingException {
         String host = smtpHost;
         boolean debug = Boolean.valueOf(host).booleanValue();
@@ -266,7 +267,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
         InternetAddress[] address = new InternetAddress[vEmails.size()];
 
         for (int k = 0; k < vEmails.size(); k++) {
-            address[k] = new InternetAddress(vEmails.elementAt(k).toString());
+            address[k] = new InternetAddress(vEmails.get(k).toString());
         }
 
         // create some properties and get the default Session
@@ -304,7 +305,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
 
         log.info(attText);
 
-        sendMail(from, getAddressVector(), subject, attText, smtpHost);
+        sendMail(from, getAddressList(), subject, attText, smtpHost);
         log.info("Test mail sent successfully!!");
     }
 
