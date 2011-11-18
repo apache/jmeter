@@ -48,6 +48,8 @@ public class ActionNames {
     public static final String DEBUG_OFF        = "debug_off"; // $NON-NLS-1$
     public static final String DISABLE          = "disable"; // $NON-NLS-1$
     public static final String DRAG_ADD         = "drag_n_drop.add";//$NON-NLS-1$
+    /** Copy, then paste afterwards */
+    public static final String DUPLICATE        = "duplicate"; // $NON-NLS-1$
     public static final String EDIT             = "edit"; // $NON-NLS-1$
     public static final String ENABLE           = "enable"; // $NON-NLS-1$
     public static final String EXIT             = "exit"; // $NON-NLS-1$
