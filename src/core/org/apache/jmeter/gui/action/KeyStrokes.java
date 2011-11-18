@@ -36,6 +36,7 @@ public final class KeyStrokes {
     private static final int CONTROL_MASK =Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
     public static final KeyStroke COPY              = KeyStroke.getKeyStroke(KeyEvent.VK_C, CONTROL_MASK);
+    public static final KeyStroke DUPLICATE         = KeyStroke.getKeyStroke(KeyEvent.VK_C, CONTROL_MASK | KeyEvent.SHIFT_DOWN_MASK);
     public static final KeyStroke DEBUG_OFF         = KeyStroke.getKeyStroke(KeyEvent.VK_D, CONTROL_MASK);
     public static final KeyStroke DEBUG_ON          = KeyStroke.getKeyStroke(KeyEvent.VK_D, CONTROL_MASK | KeyEvent.SHIFT_DOWN_MASK);
     public static final KeyStroke CLEAR_ALL         = KeyStroke.getKeyStroke(KeyEvent.VK_E, CONTROL_MASK);

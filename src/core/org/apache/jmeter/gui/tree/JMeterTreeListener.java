@@ -283,14 +283,15 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
         if (KeyStrokes.matches(e,KeyStrokes.COPY)) {
             ActionRouter actionRouter = ActionRouter.getInstance();
             actionRouter.doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.COPY));
-        }
-        if (KeyStrokes.matches(e,KeyStrokes.PASTE)) {
+        } else if (KeyStrokes.matches(e,KeyStrokes.PASTE)) {
             ActionRouter actionRouter = ActionRouter.getInstance();
             actionRouter.doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.PASTE));
-        }
-        if (KeyStrokes.matches(e,KeyStrokes.CUT)) {
+        } else if (KeyStrokes.matches(e,KeyStrokes.CUT)) {
             ActionRouter actionRouter = ActionRouter.getInstance();
             actionRouter.doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.CUT));
+        } else if (KeyStrokes.matches(e,KeyStrokes.DUPLICATE)) {
+            ActionRouter actionRouter = ActionRouter.getInstance();
+            actionRouter.doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.DUPLICATE));
         }
     }
 

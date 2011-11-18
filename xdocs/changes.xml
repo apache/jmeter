@@ -215,6 +215,7 @@ This behaviour can be changed with property sample_sender_client_configured (set
 <li>Bug 51886 - SampleSender configuration resolved partly on client and partly on server</li>
 <li>Bug 52161 - Enable plugins to add own translation rules in addition to upgrade.properties.
 Loads any additional properties found in META-INF/resources/org.apache.jmeter.nameupdater.properties files</li>
+<li>Bug 42538 - Add "duplicate node" in context menu</li>
 </ul>
 
 <h2>Non-functional changes</h2>
