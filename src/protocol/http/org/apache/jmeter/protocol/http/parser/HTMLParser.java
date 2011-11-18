@@ -140,7 +140,7 @@ public abstract class HTMLParser {
         // Whether this can be a problem in practical situations I can't tell,
         // but
         // thought I'd keep a note just in case...
-        // BTW, note that using a Vector and removing duplicates via scan
+        // BTW, note that using a List and removing duplicates via scan
         // would not help, since URL.equals requires name resolution too.
         // The above problem has now been addressed with the URLString and
         // URLCollection classes.
