@@ -258,7 +258,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
      * @param smtpHost
      *            the smtp-server used to send the mail.
      */
-    public synchronized void sendMail(String from, List<String> vEmails, String subject, String attText, String smtpHost)
+    public void sendMail(String from, List<String> vEmails, String subject, String attText, String smtpHost)
             throws AddressException, MessagingException {
         String host = smtpHost;
         boolean debug = Boolean.valueOf(host).booleanValue();
