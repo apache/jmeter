@@ -50,7 +50,7 @@ public class Data implements Serializable {
 
     private ArrayList<String> header;
 
-    // saves current position in data Vector
+    // saves current position in data List
     private int currentPos, size;
 
     /**
