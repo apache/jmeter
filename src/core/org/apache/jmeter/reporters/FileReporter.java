@@ -130,7 +130,7 @@ public class FileReporter extends JPanel {
 
 /**
  * Graph panel generates all the panels for this reporter. Data is organized
- * based on thread name in a hashtable. The data itself is a Vector of Integer
+ * based on thread name in a hashtable. The data itself is a List of Integer
  * objects
  */
 private static class GraphPanel extends JPanel {
@@ -291,7 +291,7 @@ private static class GraphPanel extends JPanel {
     }
 
     /**
-     * Gets the size of the biggest Vector.
+     * Gets the size of the biggest List.
      */
     public int getDataWidth() {
         int size = 0;
