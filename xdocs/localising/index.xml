@@ -59,17 +59,17 @@ another tool, such as or <b>vi</b> or <b>Emacs</b>.
 <section name="Obtaining the current texts" anchor="obtain">
 
 <p>If you want to help with JMeter's translation process, start by reading this document. Then
-send a message to <a href="mailto:jmeter-dev@jakarta.apache.org">jmeter-dev@jakarta.apache.org</a>
+send a message to <a href="mailto:dev@jmeter.apache.org">dev@jmeter.apache.org</a>
 stating your intention. The files you need (*.properties and *.metaprop) are included in the source archive.
 But if you are having any difficulty, one of the project contributors will be able to grab the current texts
 from SVN and send them to you. You'll receive a jar, zip, tar or tgz file that you'll need to unpack in your
 local disk.</p>
-<p>If you are familiar with SVN or you're brave, feel free to anonymously connect to the Jakarta SVN server
+<p>If you are familiar with SVN or you're brave, feel free to anonymously connect to the Apache SVN server
 and obtain the JMeter source yourself, as described in
-<a href="http://jakarta.apache.org/site/cvsindex.html">http://jakarta.apache.org/site/cvsindex.html</a>
--- the files necessary to the translation process are all under the jakarta-jmeter/src directory.
+<a href="http://jmeter.apache.org/svnindex.html">http://jmeter.apache.org/svnindex.html</a>
+-- the files necessary to the translation process are all under the jmeter/src directory.
 </p>
-<p>Once you've unpacked or checked out the files, make sure to find file jakarta-jmeter/src/i18nedit.properties in there:
+<p>Once you've unpacked or checked out the files, make sure to find file src/i18nedit.properties in there:
 you'll need to know where it is to start working with i18nEdit.</p>
 
 </section>
@@ -79,9 +79,9 @@ you'll need to know where it is to start working with i18nEdit.</p>
 <p>If you have access to JMeter's SVN repository and you want to pack the files necessary for localisation
 for sending to a translator, just go to the directory above the project root and issue the following command:<br/>
 <code>
-tar czf jakarta-jmeter-localisation.tgz `find jakarta-jmeter/src -name "*.properties" -o -name "*.metaprops"`
+tar czf jmeter-localisation.tgz `find jmeter/src -name "*.properties" -o -name "*.metaprops"`
 </code>
-Of course you could also send the translator the whole jakarta-jmeter directory, but this will make his life easier.
+Of course you could also send the translator the whole jmeter directory, but this will make his life easier.
 </p>
 
 </section>
@@ -101,7 +101,7 @@ java -jar i18nedit-1.0.0.jar
 <ol>
 <li>If you've never run i18nEdit before, choose a language. The rest of this document assumes you chose UK English.</li>
 <li>Select the "Projects" menu, then "Open project...".</li>
-<li>Navigate to jakarta-jmeter/src/, select i18nedit.properties, and press the "Open" button.</li>
+<li>Navigate to jmeter/src/, select i18nedit.properties, and press the "Open" button.</li>
 <li>In the window that opens, select the "Project" menu, then "Project settings". Check that your target language
 appears in the list in field "Additional locales (ISO codes)". Otherwise, add it now. Press "Save".</li>
 </ol>
@@ -127,9 +127,9 @@ necessary, then press F2 again to repeat the process.</p>
 
 <section name="Submitting your translations to the project" anchor="submitting">
 
-<p>Once you're done translating, just pack up the whole set of files in jakarta-jmeter/src in a jar, zip, tar,
+<p>Once you're done translating, just pack up the whole set of files in jmeter/src in a jar, zip, tar,
 tgz, or alike and attach them to a JMeter bug report
-(follow link to "Known bugs" in <a href="http://jakarta.apache.org/jmeter">JMeter's home page</a> for that).</p>
+(follow link to "Known bugs" in <a href="http://jmeter.apache.org/">JMeter's home page</a> for that).</p>
 
 </section>
 

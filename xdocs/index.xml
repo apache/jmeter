@@ -81,8 +81,8 @@ Nor does it render the HTML pages as a browser does
 <h2>How do I do it?</h2>
 <ul>
 <li><a href="usermanual/index.html">Using JMeter</a></li>
-<li><a href="http://wiki.apache.org/jakarta-jmeter/">JMeter Wiki</a></li>
-<li><a href="http://wiki.apache.org/jakarta-jmeter/JMeterFAQ">JMeter FAQ (Wiki)</a></li>
+<li><a href="http://wiki.apache.org/jmeter/">JMeter Wiki</a></li>
+<li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">JMeter FAQ (Wiki)</a></li>
 <li><a href="api/index.html">Javadoc API documentation</a></li>
 <li><a href="localising/index.html">JMeter Localisation (Translator's Guide)</a></li>
 <li><a href="building.html">Building JMeter and Add-Ons</a></li>
@@ -100,7 +100,7 @@ Nor does it render the HTML pages as a browser does
 <li><a href="changes.html">Change List</a></li>
 <li><a href="issues.html">Issues</a></li>
 <li><a href="http://www.apache.org/licenses/">License</a></li>
-<li><a href="http://wiki.apache.org/jakarta-jmeter/JMeterCommitters">Contributors</a></li>
+<li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a></li>
 </ul>
 </section>
 </body>
