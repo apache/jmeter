@@ -29,7 +29,7 @@
 
 <section name="&sect-num;. Getting Started" anchor="get_started">
 <p>The easiest way to begin using JMeter is to first
-<a href="http://jakarta.apache.org/site/downloads/index.html">download the latest production release</a> and install it.
+<a href="http://jmeter.apache.org/download_jmeter.cgi">download the latest production release</a> and install it.
 The release contains all of the files you need to build and run most types of tests,
 e.g. Web (HTTP/HTTPS), FTP, JDBC, LDAP, Java, and JUnit.</p>
 <p>If you want to perform JDBC testing,
@@ -78,7 +78,7 @@ JMeter because of JRE implementation issues.</p>
 <p>JMeter is a 100% Java application and should run correctly on any system
 that has a compliant Java implementation.</p>
 <p>Operating systems tested with JMeter can be view on  
-<a href="http://wiki.apache.org/jakarta-jmeter/JMeterAndOperatingSystemsTested">this page</a>
+<a href="http://wiki.apache.org/jmeter/JMeterAndOperatingSystemsTested">this page</a>
 on JMeter wiki.</p>
 <p>Even if your OS is not listed on the wiki page, JMeter should run on it provided that the JVM is compliant.</p>
 </subsection>
@@ -137,7 +137,7 @@ Make sure the file is a jar file, not a zip.
 <p>
 JMeter now includes the JMS API from Apache Geronimo, so you just need to add the appropriate JMS Client implementation
 jar(s) from the JMS provider. Please refer to their documentation for details. 
-There may also be some information on the <a href="http://wiki.apache.org/jakarta-jmeter/">JMeter Wiki</a>.
+There may also be some information on the <a href="http://wiki.apache.org/jmeter/">JMeter Wiki</a>.
 </p>
 </subsection>
 
@@ -165,7 +165,7 @@ See the <a href="#classpath">JMeter Classpath</a> section for more details on in
 
 <section name="&sect-num;.3 Installation" anchor="install">
 
-<p>We recommend that most users run the <a href="http://jakarta.apache.org/site/downloads/index.html">latest release</a>.</p>
+<p>We recommend that most users run the <a href="http://jmeter.apache.org/download_jmeter.cgi">latest release</a>.</p>
 <p>To install a release build, simply unzip the zip/tar file into the directory
 where you want JMeter to be installed.  Provided that you have a JRE/JDK correctly installed
 and the JAVA_HOME environment variable set, there is nothing more for you to do.</p>

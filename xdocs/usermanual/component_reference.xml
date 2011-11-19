@@ -243,7 +243,7 @@ https.default.protocol=SSLv3
         <code>httpsampler.redirect.removeslashdotdot=false</code>
 		</property>
 		<property name="Use KeepAlive" required="No">JMeter sets the Connection: keep-alive header. This does not work properly with the default HTTP implementation, as connection re-use is not under user-control. 
-                  It does work with the Jakarta httpClient implementation.</property>
+                  It does work with the Apache HttpComponents HttpClient implementations.</property>
         <property name="Use multipart/form-data for HTTP POST" required="No">
         Use a multipart/form-data or application/x-www-form-urlencoded post request
         </property>
@@ -1062,7 +1062,7 @@ Beware however that misuse of any methods can cause subtle faults that may be di
 
 <component name="BSF Sampler" index="&sect-num;.1.11"  width="622" height="267" screenshot="bsfsampler.png">
 	<description><p>This sampler allows you to write a sampler using a BSF scripting language.<br></br>
-		See the <a href="http://jakarta.apache.org/bsf/index.html">Apache Bean Scripting Framework</a>
+		See the <a href="http://commons.apache.org/bsf/index.html">Apache Bean Scripting Framework</a>
 		website for details of the languages supported.
 		You may need to download the appropriate jars for the language; they should be put in the JMeter <b>lib</b> directory.
 		</p>
@@ -3036,9 +3036,9 @@ These can be set up using a <complink name="CSV Data Set Config"/> Element (for 
 <properties>
         <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
   <property name="Base URL" required="Yes">A partial or complete URL that matches one or more HTTP Request URLs.  As an example,
-say you specify a Base URL of "http://jakarta.apache.org/restricted/" with a username of "jmeter" and
+say you specify a Base URL of "http://jmeter.apache.org/restricted/" with a username of "jmeter" and
 a password of "jmeter".  If you send an HTTP request to the URL
-"http://jakarta.apache.org/restricted/ant/myPage.html", the Authorization Manager sends the login
+"http://jmeter.apache.org/restricted/ant/myPage.html", the Authorization Manager sends the login
 information for the user named, "jmeter".</property>
   <property name="Username" required="Yes">The username to authorize.</property>
   <property name="Password" required="Yes">The password for the user.</property>
@@ -3172,8 +3172,8 @@ Note also that the cookie name must be unique - if a second cookie is defined wi
   In JMeter versions after 2.3, any cookies defined in the GUI are not cleared.</property>
   <property name="Cookie Policy" required="Yes">The cookie policy that will be used to manage the cookies. 
   "compatibility" is the default, and should work in most cases.
-  See http://jakarta.apache.org/httpcomponents/httpclient-3.x/cookies.html and 
-  http://jakarta.apache.org/httpcomponents/httpclient-3.x/apidocs/org/apache/commons/httpclient/cookie/CookiePolicy.html
+  See http://hc.apache.org/httpclient-3.x/cookies.html and 
+  http://hc.apache.org/httpclient-3.x/apidocs/org/apache/commons/httpclient/cookie/CookiePolicy.html
   [Note: "ignoreCookies" is equivalent to omitting the CookieManager.]
     </property>
   <property name="User-Defined Cookies" required="No (discouraged, unless you know what you're doing)">This
@@ -5059,9 +5059,9 @@ This setting will also be needed when running the generated test plan.
 <p>The <b>include and exclude patterns</b> are treated as regular expressions (using Jakarta ORO).
 They will be matched against the host name, port (actual or implied) path and query (if any) of each browser request.
 If the URL you are browsing is <br></br> 
-<b>&quot;http://jakarta.apache.org/jmeter/index.html?username=xxxx&quot;</b>,<br></br> 
+<b>&quot;http://jmeter.apache.org/jmeter/index.html?username=xxxx&quot;</b>,<br></br> 
 then the regular expression will be tested against the string:<br></br> 
-<b>&quot;jakarta.apache.org:80/jmeter/index.html?username=xxxx&quot;</b>.<br></br>   
+<b>&quot;jmeter.apache.org:80/jmeter/index.html?username=xxxx&quot;</b>.<br></br>   
 Thus, if you want to include all .html files, your regular expression might look like: <br></br> 
 <b>&quot;.*\.html(\?.*)?&quot;</b> - or <b>&quot;.*\.html&quot;</b> 
 if you know that there is no query string or you only want html pages without query strings.
