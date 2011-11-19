@@ -48,7 +48,7 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <a href="http://www.apache.org"><img title="Apache Software Foundation" width="387" height="100" src="../images/asf-logo.gif" border="0"/></a>
 </td>
 <td align="right">
-<a href="http://jakarta.apache.org/jmeter/"><img width="221" height="102" src="../images/logo.jpg" alt="Apache JMeter" title="Apache JMeter" border="0"/></a>
+<a href="http://jmeter.apache.org/"><img width="221" height="102" src="../images/logo.jpg" alt="Apache JMeter" title="Apache JMeter" border="0"/></a>
 </td>
 </tr>
 </table>
@@ -217,8 +217,8 @@ Merging in new translations [committers].
 <p>
 If you want to help with JMeter's translation process, start by reading this document. Then
 send a message to 
-<a href="mailto:jmeter-dev@jakarta.apache.org">
-jmeter-dev@jakarta.apache.org
+<a href="mailto:dev@jmeter.apache.org">
+dev@jmeter.apache.org
 </a>
 
 stating your intention. The files you need (*.properties and *.metaprop) are included in the source archive.
@@ -227,18 +227,18 @@ from SVN and send them to you. You'll receive a jar, zip, tar or tgz file that y
 local disk.
 </p>
 <p>
-If you are familiar with SVN or you're brave, feel free to anonymously connect to the Jakarta SVN server
+If you are familiar with SVN or you're brave, feel free to anonymously connect to the Apache SVN server
 and obtain the JMeter source yourself, as described in
 
-<a href="http://jakarta.apache.org/site/cvsindex.html">
-http://jakarta.apache.org/site/cvsindex.html
+<a href="http://jmeter.apache.org/svnindex.html">
+http://jmeter.apache.org/svnindex.html
 </a>
 
--- the files necessary to the translation process are all under the jakarta-jmeter/src directory.
+-- the files necessary to the translation process are all under the jmeter/src directory.
 
 </p>
 <p>
-Once you've unpacked or checked out the files, make sure to find file jakarta-jmeter/src/i18nedit.properties in there:
+Once you've unpacked or checked out the files, make sure to find file src/i18nedit.properties in there:
 you'll need to know where it is to start working with i18nEdit.
 </p>
 </blockquote>
@@ -262,11 +262,11 @@ for sending to a translator, just go to the directory above the project root and
 
 <code>
 
-tar czf jakarta-jmeter-localisation.tgz `find jakarta-jmeter/src -name "*.properties" -o -name "*.metaprops"`
+tar czf jmeter-localisation.tgz `find jmeter/src -name "*.properties" -o -name "*.metaprops"`
 
 </code>
 
-Of course you could also send the translator the whole jakarta-jmeter directory, but this will make his life easier.
+Of course you could also send the translator the whole jmeter directory, but this will make his life easier.
 
 </p>
 </blockquote>
@@ -322,7 +322,7 @@ Select the "Projects" menu, then "Open project...".
 
 
 <li>
-Navigate to jakarta-jmeter/src/, select i18nedit.properties, and press the "Open" button.
+Navigate to jmeter/src/, select i18nedit.properties, and press the "Open" button.
 </li>
 
 
@@ -376,10 +376,10 @@ i18nEdit's on-line help is excellent: read through it for more information and t
 <tr><td>
 <blockquote>
 <p>
-Once you're done translating, just pack up the whole set of files in jakarta-jmeter/src in a jar, zip, tar,
+Once you're done translating, just pack up the whole set of files in jmeter/src in a jar, zip, tar,
 tgz, or alike and attach them to a JMeter bug report
 (follow link to "Known bugs" in 
-<a href="http://jakarta.apache.org/jmeter">
+<a href="http://jmeter.apache.org/">
 JMeter's home page
 </a>
  for that).
