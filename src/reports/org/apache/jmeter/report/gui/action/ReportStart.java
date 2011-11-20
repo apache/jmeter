@@ -37,7 +37,7 @@ public class ReportStart extends AbstractAction {
         commands.add(ActionNames.ACTION_STOP);
         commands.add(ActionNames.ACTION_SHUTDOWN);
     }
-
+    // FIXME Due to startEngine being commented engine will always be null
     private StandardJMeterEngine engine;
 
     /**
