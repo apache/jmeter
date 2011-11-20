@@ -49,7 +49,7 @@ public abstract class TCPClientDecorator extends AbstractTCPClient {
                 byte[] b = new byte[len];
                 for (int i = 0; i < len; i++) {
                     int offset = (b.length - 1 - i) * 8;
-                    b[i] = (byte) (value >>> offset);
+                    b[i] = (byte) ((value >>> offset) & 0xFF);
                 }
                 return b;
             }
