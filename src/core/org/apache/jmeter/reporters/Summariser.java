@@ -89,7 +89,7 @@ public class Summariser extends AbstractTestElement
     /**
      * Lock used to protect accumulators update + instanceCount update
      */
-    private transient Object lock = new Object();
+    private static final Object lock = new Object();
 
     /*
      * This map allows summarisers with the same name to contribute to the same totals.
