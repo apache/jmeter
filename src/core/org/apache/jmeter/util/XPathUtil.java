@@ -24,14 +24,27 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
+import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
+import org.apache.xpath.XPathAPI;
+import org.apache.xpath.objects.XObject;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.w3c.tidy.Tidy;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
@@ -245,4 +258,153 @@ public class XPathUtil {
             }
         }
     }
+
+    /**
+     * Extract NodeList using expression
+     * @param document {@link Document}
+     * @param xPathExpression XPath expression
+     * @return {@link NodeList}
+     * @throws TransformerException 
+     */
+	public static NodeList selectNodeList(Document document, String xPathExpression) throws TransformerException {
+		return XPathAPI.selectNodeList(document, xPathExpression);
+	}
+
+	/**
+	 * Put in matchStrings results of evaluation
+	 * @param document XML document
+	 * @param xPathQuery XPath Query
+	 * @param matchStrings List<String> that will be filled
+	 * @param fragment return fragment
+	 * @throws TransformerException
+	 */
+	public static void putValuesForXPathInList(Document document, 
+			String xPathQuery,
+			List<String> matchStrings, boolean fragment) throws TransformerException {
+		String val = null;
+        XObject xObject = XPathAPI.eval(document, xPathQuery);
+        final int objectType = xObject.getType();
+        if (objectType == XObject.CLASS_NODESET) {
+            NodeList matches = xObject.nodelist();
+            int length = matches.getLength();
+            for (int i = 0 ; i < length; i++) {
+                Node match = matches.item(i);
+                if ( match instanceof Element){
+                    if (fragment){
+                        val = getValueForNode(match);
+                    } else {
+                        // elements have empty nodeValue, but we are usually interested in their content
+                        final Node firstChild = match.getFirstChild();
+                        if (firstChild != null) {
+                            val = firstChild.getNodeValue();
+                        } else {
+                            val = match.getNodeValue(); // TODO is this correct?
+                        }
+                    }
+                } else {
+                   val = match.getNodeValue();
+                }
+                matchStrings.add(val);
+            }
+        } else if (objectType == XObject.CLASS_NULL
+                || objectType == XObject.CLASS_UNKNOWN
+                || objectType == XObject.CLASS_UNRESOLVEDVARIABLE) {
+            log.warn("Unexpected object type: "+xObject.getTypeString()+" returned for: "+xPathQuery);
+        } else {
+            val = xObject.toString();
+            matchStrings.add(val);
+      }
+	}
+	
+	/**
+	 * Return value for node
+	 * @param node Node
+	 * @return String
+	 */
+	private static String getValueForNode(Node node) {
+        StringWriter sw = new StringWriter();
+        try {
+            Transformer t = TransformerFactory.newInstance().newTransformer();
+            t.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+            t.transform(new DOMSource(node), new StreamResult(sw));
+        } catch (TransformerException e) {
+            sw.write(e.getMessageAndLocation());
+        }
+        return sw.toString();
+    }
+
+	/**
+	 * Validate xpathString is a valid XPath expression
+	 * @param document XML Document
+	 * @param xpathString XPATH String
+	 * @throws TransformerException if expression fails to evaluate
+	 */
+	public static void validateXPath(Document document, String xpathString) throws TransformerException {
+		if (XPathAPI.eval(document, xpathString) == null) {
+            // We really should never get here
+            // because eval will throw an exception
+            // if xpath is invalid, but whatever, better
+            // safe
+			throw new IllegalArgumentException("xpath eval of '" + xpathString + "' was null");
+        }
+	}
+	
+	/**
+	 * Fills result
+	 * @param result {@link AssertionResult}
+	 * @param doc XML Document
+	 * @param xPathExpression XPath expression
+	 * @param isNegated
+	 */
+	public static void computeAssertionResult(AssertionResult result,
+			Document doc, 
+			String xPathExpression,
+			boolean isNegated) {
+        try {
+            XObject xObject = XPathAPI.eval(doc, xPathExpression);
+            switch (xObject.getType()) {
+                case XObject.CLASS_NODESET:
+                	NodeList nodeList = xObject.nodelist();
+                    if (nodeList == null || nodeList.getLength() == 0) {
+                        if (log.isDebugEnabled()) {
+                            log.debug(new StringBuilder("nodeList null no match  ").append(xPathExpression).toString());
+                        }
+                        result.setFailure(!isNegated);
+                        result.setFailureMessage("No Nodes Matched " + xPathExpression);
+                        return;
+                    }
+                    if (log.isDebugEnabled()) {
+                        log.debug("nodeList length " + nodeList.getLength());
+                        if (!isNegated) {
+                            for (int i = 0; i < nodeList.getLength(); i++){
+                                log.debug(new StringBuilder("nodeList[").append(i).append("] ").append(nodeList.item(i)).toString());
+                            }
+                        }
+                    }
+                    result.setFailure(isNegated);
+                    if (isNegated) {
+                        result.setFailureMessage("Specified XPath was found... Turn off negate if this is not desired");
+                    }
+                    return;
+                case XObject.CLASS_BOOLEAN:
+                    if (!xObject.bool()){
+                        result.setFailure(!isNegated);
+                        result.setFailureMessage("No Nodes Matched " + xPathExpression);
+                    }
+                    return;
+                default:
+                    result.setFailure(true);
+                    result.setFailureMessage("Cannot understand: " + xPathExpression);
+                    return;
+            }
+        } catch (TransformerException e) {
+            result.setError(true);
+            result.setFailureMessage(
+                    new StringBuilder("TransformerException: ")
+                    .append(e.getMessage())
+                    .append(" for:")
+                    .append(xPathExpression)
+                    .toString());
+        }
+	}
 }

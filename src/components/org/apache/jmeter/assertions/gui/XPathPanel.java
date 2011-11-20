@@ -34,7 +34,6 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.XPathUtil;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
-import org.apache.xpath.XPathAPI;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -190,16 +189,11 @@ public class XPathPanel extends JPanel {
                 testDoc.appendChild(el);
 
             }
-            if (XPathAPI.eval(testDoc, xpathString) == null) {
-                // We really should never get here
-                // because eval will throw an exception
-                // if xpath is invalid, but whatever, better
-                // safe
-                ret = "xpath eval was null";
-                log.warn(ret+" "+xpathString);
-                success = false;
-            }
-
+            XPathUtil.validateXPath(testDoc, xpathString);
+        } catch (IllegalArgumentException e) {
+        	log.warn(e.getLocalizedMessage());
+            success = false;
+            ret = e.getLocalizedMessage();
         } catch (ParserConfigurationException e) {
             success = false;
             ret = e.getLocalizedMessage();
