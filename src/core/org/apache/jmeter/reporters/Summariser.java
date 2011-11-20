@@ -21,8 +21,8 @@ package org.apache.jmeter.reporters;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
@@ -86,6 +86,11 @@ public class Summariser extends AbstractTestElement
      */
     private static final int INTERVAL_WINDOW = 5; // in seconds
 
+    /**
+     * Lock used to protect accumulators update + instanceCount update
+     */
+    private transient Object lock = new Object();
+
     /*
      * This map allows summarisers with the same name to contribute to the same totals.
      */
@@ -116,7 +121,7 @@ public class Summariser extends AbstractTestElement
      */
     public Summariser() {
         super();
-        synchronized (accumulators) {
+        synchronized (lock) {
             accumulators.clear();
             instanceCount=0;
         }
@@ -308,7 +313,7 @@ public class Summariser extends AbstractTestElement
      * {@inheritDoc}
      */
     public void testStarted(String host) {
-        synchronized (accumulators) {
+        synchronized (lock) {
             myName = getName();
             myTotals = accumulators.get(myName);
             if (myTotals == null){
@@ -327,7 +332,7 @@ public class Summariser extends AbstractTestElement
      */
     public void testEnded(String host) {
         Set<Entry<String, Totals>> totals = null;
-        synchronized (accumulators) {
+        synchronized (lock) {
             instanceCount--;
             if (instanceCount <= 0){
                 totals = accumulators.entrySet();
