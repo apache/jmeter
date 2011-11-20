@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.util.List;
@@ -261,14 +262,18 @@ public final class AllTests {
     protected static void initializeLogging(String[] args) {
         if (args.length >= 2) {
             Properties props = new Properties();
+            InputStream inputStream = null;
             try {
                 System.out.println("Setting up logging props using file: " + args[1]);
-                props.load(new FileInputStream(args[1]));
+            	inputStream = new FileInputStream(args[1]);
+                props.load(inputStream);
                 LoggingManager.initializeLogging(props);
             } catch (FileNotFoundException e) {
                 System.out.println(e.getLocalizedMessage());
             } catch (IOException e) {
                 System.out.println(e.getLocalizedMessage());
+            } finally {
+            	JOrphanUtils.closeQuietly(inputStream);
             }
         }
     }
