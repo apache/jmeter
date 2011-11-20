@@ -185,7 +185,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     }
 
     /** {@inheritDoc} */
-    public void clearData() {
+    public synchronized void clearData() {
         while (root.getChildCount() > 0) {
             // the child to be removed will always be 0 'cos as the nodes are
             // removed the nth node will become (n-1)th
@@ -248,7 +248,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         }
     }
 
-    private Component createLeftPanel() {
+    private synchronized Component createLeftPanel() {
         SampleResult rootSampleResult = new SampleResult();
         rootSampleResult.setSampleLabel("Root");
         rootSampleResult.setSuccessful(true);
