@@ -102,6 +102,11 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
 
     private transient ObjectTableModel model;
 
+    /**
+     * Lock used to protect tableRows update + model update
+     */
+    private transient Object lock = new Object();
+
     private final Map<String, Calculator> tableRows =
         new ConcurrentHashMap<String, Calculator>();
 
@@ -157,7 +162,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
     public void add(SampleResult res) {
         Calculator row = null;
         final String sampleLabel = res.getSampleLabel(useGroupName.isSelected());
-        synchronized (tableRows) {
+        synchronized (lock) {
             row = tableRows.get(sampleLabel);
             if (row == null) {
                 row = new Calculator(sampleLabel);
@@ -182,7 +187,8 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
      * Clears this visualizer and its model, and forces a repaint of the table.
      */
     public void clearData() {
-        synchronized (tableRows) {
+        //Synch is needed because a clear can occur while add occurs
+        synchronized (lock) {
             model.clearData();
             tableRows.clear();
             tableRows.put(TOTAL_ROW_LABEL, new Calculator(TOTAL_ROW_LABEL));
