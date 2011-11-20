@@ -112,10 +112,8 @@ public class StringFromFile extends AbstractFunction implements TestListener {
         myName = "StringFromFile_";//$NON-NLS-1$
     }
 
-    /*
-     * Warning: the file will generally be left open at the end of a test run.
-     * This is because functions don't (yet) have any way to find out when a
-     * test has ended ...
+    /**
+     * Close file and log
      */
     private void closeFile() {
         if (myBread == null) {
@@ -126,7 +124,7 @@ public class StringFromFile extends AbstractFunction implements TestListener {
         try {
             myBread.close();
         } catch (IOException e) {
-            log.error("closeFile() error: " + e.toString());//$NON-NLS-1$
+            log.error("closeFile() error: " + e.toString(), e);//$NON-NLS-1$
         }
     }
 
