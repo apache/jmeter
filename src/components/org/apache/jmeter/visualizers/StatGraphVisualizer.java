@@ -104,6 +104,11 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
 
     private transient ObjectTableModel model;
 
+    /**
+     * Lock used to protect tableRows update + model update
+     */
+    private transient Object lock = new Object();
+    
     private final Map<String, SamplingStatCalculator> tableRows =
         new ConcurrentHashMap<String, SamplingStatCalculator>();
 
@@ -203,7 +208,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
     public void add(SampleResult res) {
         SamplingStatCalculator row = null;
         final String sampleLabel = res.getSampleLabel();
-        synchronized (tableRows) {
+        synchronized (lock) {
             row = tableRows.get(sampleLabel);
             if (row == null) {
                 row = new SamplingStatCalculator(sampleLabel);
@@ -220,10 +225,12 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
      * Clears this visualizer and its model, and forces a repaint of the table.
      */
     public void clearData() {
-        model.clearData();
-        tableRows.clear();
-        tableRows.put(TOTAL_ROW_LABEL, new SamplingStatCalculator(TOTAL_ROW_LABEL));
-        model.addRow(tableRows.get(TOTAL_ROW_LABEL));
+        synchronized (lock) {
+	        model.clearData();
+	        tableRows.clear();
+	        tableRows.put(TOTAL_ROW_LABEL, new SamplingStatCalculator(TOTAL_ROW_LABEL));
+	        model.addRow(tableRows.get(TOTAL_ROW_LABEL));
+        }
     }
 
     /**
