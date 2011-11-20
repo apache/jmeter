@@ -30,15 +30,15 @@ import javax.swing.JPopupMenu;
 import javax.swing.MenuElement;
 import javax.swing.UIManager;
 
-import org.apache.jmeter.report.gui.action.ReportActionRouter;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.KeyStrokes;
+import org.apache.jmeter.report.gui.action.ReportActionRouter;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.LocaleChangeEvent;
 import org.apache.jmeter.util.LocaleChangeListener;
 import org.apache.jmeter.util.SSLManager;
-import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -65,9 +65,6 @@ public class ReportMenuBar extends JMenuBar implements LocaleChangeListener {
     private JMenu editMenu;
 
     private JMenu edit_add;
-
-    // JMenu edit_add_submenu;
-    private JMenuItem edit_remove; // TODO - should this be created?
 
     private JMenu runMenu;
 
@@ -175,22 +172,10 @@ public class ReportMenuBar extends JMenuBar implements LocaleChangeListener {
         // If we are enabling the Edit-->Add menu item, then we also need to
         // enable the Edit menu. The Edit menu may already be enabled, but
         // there's no harm it trying to enable it again.
-        if (enabled) {
-            setEditEnabled(true);
-        } else {
-            // If we are disabling the Edit-->Add menu item and the
-            // Edit-->Remove menu item is disabled, then we also need to
-            // disable the Edit menu.
-            // The Java Look and Feel Guidelines say to disable a menu if all
-            // menu items are disabled.
-            if (!edit_remove.isEnabled()) {
-                editMenu.setEnabled(false);
-            }
-        }
+        setEditEnabled(enabled);
     }
 
     public void setEditRemoveEnabled(boolean enabled) {
-        edit_remove.setEnabled(enabled);
         // If we are enabling the Edit-->Remove menu item, then we also need to
         // enable the Edit menu. The Edit menu may already be enabled, but
         // there's no harm it trying to enable it again.
