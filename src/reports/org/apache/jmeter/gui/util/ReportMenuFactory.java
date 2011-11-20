@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.gui.util;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -327,7 +328,7 @@ public final class ReportMenuFactory {
                     reportPage.add(new MenuInfo(item.getStaticLabel(), name));
                 }
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             log.error("", e);
         }
     }
