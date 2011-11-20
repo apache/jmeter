@@ -28,10 +28,10 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import org.apache.jmeter.util.XPathUtil;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
-import org.apache.xpath.XPathAPI;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -74,7 +74,7 @@ public class XPathFileContainer {
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 
             fis = new FileInputStream(fileName);
-            nl = XPathAPI.selectNodeList(builder.parse(fis), xpath);
+            nl = XPathUtil.selectNodeList(builder.parse(fis), xpath);
             log.debug("found " + nl.getLength());
 
         } catch (FileNotFoundException e) {

@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -34,10 +33,7 @@ import org.apache.jmeter.util.XPathUtil;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
-import org.apache.xpath.XPathAPI;
-import org.apache.xpath.objects.XObject;
 import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 /**
@@ -49,8 +45,6 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final long serialVersionUID = 240L;
-
-    // private static XPathAPI xpath = null;
 
     //+ JMX file attributes
     private static final String XPATH_KEY         = "XPath.xpath"; // $NON-NLS-1$
@@ -123,58 +117,7 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
             result.setFailureMessage("Document is null, probably not parsable");
             return result;
         }
-
-        NodeList nodeList = null;
-
-        final String pathString = getXPathString();
-        try {
-            XObject xObject = XPathAPI.eval(doc, pathString);
-            switch (xObject.getType()) {
-                case XObject.CLASS_NODESET:
-                    nodeList = xObject.nodelist();
-                    break;
-                case XObject.CLASS_BOOLEAN:
-                    if (!xObject.bool()){
-                        result.setFailure(!isNegated());
-                        result.setFailureMessage("No Nodes Matched " + pathString);
-                    }
-                    return result;
-                default:
-                    result.setFailure(true);
-                    result.setFailureMessage("Cannot understand: " + pathString);
-                    return result;
-            }
-        } catch (TransformerException e) {
-            result.setError(true);
-            result.setFailureMessage(
-                    new StringBuilder("TransformerException: ")
-                    .append(e.getMessage())
-                    .append(" for:")
-                    .append(pathString)
-                    .toString());
-            return result;
-        }
-
-        if (nodeList == null || nodeList.getLength() == 0) {
-            if (log.isDebugEnabled()) {
-                log.debug(new StringBuilder("nodeList null no match  ").append(pathString).toString());
-            }
-            result.setFailure(!isNegated());
-            result.setFailureMessage("No Nodes Matched " + pathString);
-            return result;
-        }
-        if (log.isDebugEnabled()) {
-            log.debug("nodeList length " + nodeList.getLength());
-            if (!isNegated()) {
-                for (int i = 0; i < nodeList.getLength(); i++){
-                    log.debug(new StringBuilder("nodeList[").append(i).append("] ").append(nodeList.item(i)).toString());
-                }
-            }
-        }
-        result.setFailure(isNegated());
-        if (isNegated()) {
-            result.setFailureMessage("Specified XPath was found... Turn off negate if this is not desired");
-        }
+        XPathUtil.computeAssertionResult(result, doc, getXPathString(), isNegated());
         return result;
     }
 

@@ -20,18 +20,12 @@ package org.apache.jmeter.extractor;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.Serializable;
-import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.processor.PostProcessor;
@@ -46,12 +40,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterError;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
-import org.apache.xpath.XPathAPI;
-import org.apache.xpath.objects.XObject;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 //@see org.apache.jmeter.extractor.TestXPathExtractor for unit tests
@@ -317,39 +306,7 @@ public class XPathExtractor extends AbstractScopedTestElement implements
      */
     private void getValuesForXPath(Document d,String query, List<String> matchStrings)
         throws TransformerException {
-        String val = null;
-        XObject xObject = XPathAPI.eval(d, query);
-        final int objectType = xObject.getType();
-        if (objectType == XObject.CLASS_NODESET) {
-            NodeList matches = xObject.nodelist();
-            int length = matches.getLength();
-            for (int i = 0 ; i < length; i++) {
-                Node match = matches.item(i);
-                if ( match instanceof Element){
-                    if (getFragment()){
-                        val = getValueForNode(match);
-                    } else {
-                        // elements have empty nodeValue, but we are usually interested in their content
-                        final Node firstChild = match.getFirstChild();
-                        if (firstChild != null) {
-                            val = firstChild.getNodeValue();
-                        } else {
-                            val = match.getNodeValue(); // TODO is this correct?
-                        }
-                    }
-                } else {
-                   val = match.getNodeValue();
-                }
-                matchStrings.add(val);
-            }
-        } else if (objectType == XObject.CLASS_NULL
-                || objectType == XObject.CLASS_UNKNOWN
-                || objectType == XObject.CLASS_UNRESOLVEDVARIABLE) {
-            log.warn("Unexpected object type: "+xObject.getTypeString()+" returned for: "+getXPathQuery());
-        } else {
-            val = xObject.toString();
-            matchStrings.add(val);
-      }
+    	XPathUtil.putValuesForXPathInList(d, query, matchStrings, getFragment());
     }
 
     public void setWhitespace(boolean selected) {
@@ -374,18 +331,6 @@ public class XPathExtractor extends AbstractScopedTestElement implements
 
     public boolean isDownloadDTDs() {
         return getPropertyAsBoolean(DOWNLOAD_DTDS, false);
-    }
-
-    private String getValueForNode(Node node) {
-        StringWriter sw = new StringWriter();
-        try {
-            Transformer t = TransformerFactory.newInstance().newTransformer();
-            t.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-            t.transform(new DOMSource(node), new StreamResult(sw));
-        } catch (TransformerException e) {
-            sw.write(e.getMessageAndLocation());
-        }
-        return sw.toString();
     }
     
     /** 
