@@ -78,9 +78,6 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
     private JMenu edit_add;
 
-    // JMenu edit_add_submenu;
-    private JMenuItem edit_remove; // TODO - should this be created?
-
     private JMenu runMenu;
 
     private JMenuItem run_start;
@@ -222,37 +219,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         // If we are enabling the Edit-->Add menu item, then we also need to
         // enable the Edit menu. The Edit menu may already be enabled, but
         // there's no harm it trying to enable it again.
-        if (enabled) {
-            setEditEnabled(true);
-        } else {
-            // If we are disabling the Edit-->Add menu item and the
-            // Edit-->Remove menu item is disabled, then we also need to
-            // disable the Edit menu.
-            // The Java Look and Feel Guidelines say to disable a menu if all
-            // menu items are disabled.
-            if (!edit_remove.isEnabled()) {
-                editMenu.setEnabled(false);
-            }
-        }
-    }
-
-    public void setEditRemoveEnabled(boolean enabled) {
-        edit_remove.setEnabled(enabled);
-        // If we are enabling the Edit-->Remove menu item, then we also need to
-        // enable the Edit menu. The Edit menu may already be enabled, but
-        // there's no harm it trying to enable it again.
-        if (enabled) {
-            setEditEnabled(true);
-        } else {
-            // If we are disabling the Edit-->Remove menu item and the
-            // Edit-->Add menu item is disabled, then we also need to disable
-            // the Edit menu.
-            // The Java Look and Feel Guidelines say to disable a menu if all
-            // menu items are disabled.
-            if (!edit_add.isEnabled()) {
-                editMenu.setEnabled(false);
-            }
-        }
+        setEditEnabled(enabled);
     }
 
     /**
