@@ -39,6 +39,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
+import org.apache.xml.utils.PrefixResolver;
 import org.apache.xpath.XPathAPI;
 import org.apache.xpath.objects.XObject;
 import org.w3c.dom.Document;
@@ -258,6 +259,23 @@ public class XPathUtil {
             }
         }
     }
+    
+	/**
+	 * Return value for node
+	 * @param node Node
+	 * @return String
+	 */
+	private static String getValueForNode(Node node) {
+        StringWriter sw = new StringWriter();
+        try {
+            Transformer t = TransformerFactory.newInstance().newTransformer();
+            t.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+            t.transform(new DOMSource(node), new StreamResult(sw));
+        } catch (TransformerException e) {
+            sw.write(e.getMessageAndLocation());
+        }
+        return sw.toString();
+    }
 
     /**
      * Extract NodeList using expression
@@ -267,7 +285,8 @@ public class XPathUtil {
      * @throws TransformerException 
      */
 	public static NodeList selectNodeList(Document document, String xPathExpression) throws TransformerException {
-		return XPathAPI.selectNodeList(document, xPathExpression);
+		XObject xObject = XPathAPI.eval(document, xPathExpression, getPrefixResolver(document));
+		return xObject.nodelist();
 	}
 
 	/**
@@ -282,7 +301,7 @@ public class XPathUtil {
 			String xPathQuery,
 			List<String> matchStrings, boolean fragment) throws TransformerException {
 		String val = null;
-        XObject xObject = XPathAPI.eval(document, xPathQuery);
+        XObject xObject = XPathAPI.eval(document, xPathQuery, getPrefixResolver(document));
         final int objectType = xObject.getType();
         if (objectType == XObject.CLASS_NODESET) {
             NodeList matches = xObject.nodelist();
@@ -315,23 +334,17 @@ public class XPathUtil {
             matchStrings.add(val);
       }
 	}
-	
+
 	/**
-	 * Return value for node
-	 * @param node Node
-	 * @return String
+	 * 
+	 * @param document XML Document
+	 * @return {@link PrefixResolver}
 	 */
-	private static String getValueForNode(Node node) {
-        StringWriter sw = new StringWriter();
-        try {
-            Transformer t = TransformerFactory.newInstance().newTransformer();
-            t.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-            t.transform(new DOMSource(node), new StreamResult(sw));
-        } catch (TransformerException e) {
-            sw.write(e.getMessageAndLocation());
-        }
-        return sw.toString();
-    }
+	private static PrefixResolver getPrefixResolver(Document document) {
+		PropertiesBasedPrefixResolver propertiesBasedPrefixResolver =
+				new PropertiesBasedPrefixResolver(document.getDocumentElement());
+		return propertiesBasedPrefixResolver;
+	}
 
 	/**
 	 * Validate xpathString is a valid XPath expression
@@ -340,7 +353,7 @@ public class XPathUtil {
 	 * @throws TransformerException if expression fails to evaluate
 	 */
 	public static void validateXPath(Document document, String xpathString) throws TransformerException {
-		if (XPathAPI.eval(document, xpathString) == null) {
+		if (XPathAPI.eval(document, xpathString, getPrefixResolver(document)) == null) {
             // We really should never get here
             // because eval will throw an exception
             // if xpath is invalid, but whatever, better
@@ -361,7 +374,7 @@ public class XPathUtil {
 			String xPathExpression,
 			boolean isNegated) {
         try {
-            XObject xObject = XPathAPI.eval(doc, xPathExpression);
+            XObject xObject = XPathAPI.eval(doc, xPathExpression, getPrefixResolver(doc));
             switch (xObject.getType()) {
                 case XObject.CLASS_NODESET:
                 	NodeList nodeList = xObject.nodelist();

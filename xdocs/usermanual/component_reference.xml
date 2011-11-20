@@ -3856,6 +3856,20 @@ on XPath.
 <note>
 The non-tolerant parser can be quite slow, as it may need to download the DTD etc.
 </note>
+<note>
+To overcome Xalan XPath parser implementation on which JMeter is based, you can help the parsing by 
+providing a Properties file which will contain:
+<ul>
+<li>prefix1=Full Namespace 1</li>
+<li>prefix2=Full Namespace 2</li>
+<li>...</li>
+</ul>
+
+You reference this file in jmeter.properties file using the property:
+<ul>
+    <li>xpath.namespace.config</li>
+</ul>
+</note>
 </component>
 <component name="XML Schema Assertion" index="&sect-num;.5.9"  width="771" height="171" screenshot="assertion/XMLSchemaAssertion.png">
 <description><p>The XML Schema Assertion allows the user to validate a response against an XML Schema.</p></description>
