@@ -102,8 +102,6 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
     private transient Calculator calc = new Calculator();
 
-    private long currentData = 0;
-
     private Format format = new SimpleDateFormat("HH:mm:ss.SSS"); //$NON-NLS-1$
 
     // Column renderers
@@ -150,9 +148,9 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
         return "view_results_in_table"; // $NON-NLS-1$
     }
 
-    protected synchronized void updateTextFields() {
+    protected synchronized void updateTextFields(SampleResult res) {
         noSamplesField.setText(Long.toString(calc.getCount()));
-        dataField.setText(Long.toString(currentData));
+        dataField.setText(Long.toString(res.getTime()));
         averageField.setText(Long.toString((long) calc.getMean()));
         deviationField.setText(Long.toString((long) calc.getStandardDeviation()));
     }
@@ -167,16 +165,15 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
                 return;
             }
         }
-        currentData = res.getTime();
         synchronized (calc) {
-            calc.addValue(currentData);
+            calc.addValue(res.getTime());
             int count = calc.getCount();
             Sample newS = new Sample(res.getSampleLabel(), res.getTime(), 0, 0, 0, 0, 0, 0,
                     res.isSuccessful(), count, res.getEndTime(),res.getBytes(),
                     res.getThreadName());
             model.addRow(newS);
         }
-        updateTextFields();
+        updateTextFields(res);
         if (autoscroll.isSelected()) {
             table.scrollRectToVisible(table.getCellRect(table.getRowCount() - 1, 0, true));
         }
@@ -184,7 +181,6 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
     public synchronized void clearData() {
         model.clearData();
-        currentData = 0;
         calc.clear();
         noSamplesField.setText("0"); // $NON-NLS-1$
         dataField.setText("0"); // $NON-NLS-1$
