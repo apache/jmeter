@@ -44,7 +44,7 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
         firePropertyChange();
     }
 
-    private void init() {// called from ctor, so must not be overridable
+    private final void init() {// called from ctor, so must not be overridable
         textUI = new JTextArea();
         textUI.addFocusListener(this);
         textUI.setWrapStyleWord(true);
