@@ -108,7 +108,7 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
     /**
      * Lock used to protect tableRows update + model update
      */
-    private transient Object lock = new Object();
+    private final transient Object lock = new Object();
 
     private final Map<String, SamplingStatCalculator> tableRows =
         new ConcurrentHashMap<String, SamplingStatCalculator>();
