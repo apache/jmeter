@@ -249,6 +249,9 @@ public final class MenuFactory {
         pop.add(makeMenus(MENU_PARENT_CONTROLLER,
                 JMeterUtils.getResString("insert_parent"),// $NON-NLS-1$
                 ActionNames.ADD_PARENT));
+        pop.add(makeMenus(MENU_PARENT_CONTROLLER,
+                JMeterUtils.getResString("change_parent"),// $NON-NLS-1$
+                ActionNames.CHANGE_PARENT));
         MenuFactory.addEditMenu(pop, true);
         MenuFactory.addFileMenu(pop);
         return pop;
