@@ -32,6 +32,7 @@ import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractListenerGui;
+import org.apache.jorphan.gui.JLabeledTextField;
 
 /**
  * Create a ResultSaver test element, which saves the sample information in set
@@ -53,6 +54,10 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable {
     private JCheckBox skipAutoNumber;
 
     private JCheckBox skipSuffix;
+
+    private JCheckBox addTimestamp;
+
+    private JLabeledTextField numberPadLength;
 
     public ResultSaverGui() {
         super();
@@ -78,6 +83,8 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable {
         skipAutoNumber.setSelected(el.getPropertyAsBoolean(ResultSaver.SKIP_AUTO_NUMBER));
         skipSuffix.setSelected(el.getPropertyAsBoolean(ResultSaver.SKIP_SUFFIX));
         variableName.setText(el.getPropertyAsString(ResultSaver.VARIABLE_NAME,""));
+        addTimestamp.setSelected(el.getPropertyAsBoolean(ResultSaver.ADD_TIMESTAMP));
+        numberPadLength.setText(el.getPropertyAsString(ResultSaver.NUMBER_PAD_LENGTH,""));
     }
 
     /**
@@ -101,8 +108,10 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable {
         te.setProperty(ResultSaver.SKIP_AUTO_NUMBER, skipAutoNumber.isSelected());
         te.setProperty(ResultSaver.SKIP_SUFFIX, skipSuffix.isSelected());
         te.setProperty(ResultSaver.SUCCESS_ONLY, successOnly.isSelected());
+        te.setProperty(ResultSaver.ADD_TIMESTAMP, addTimestamp.isSelected(), false);
         AbstractTestElement at = (AbstractTestElement) te;
         at.setProperty(ResultSaver.VARIABLE_NAME, variableName.getText(),""); //$NON-NLS-1$
+        at.setProperty(ResultSaver.NUMBER_PAD_LENGTH, numberPadLength.getText(),""); //$NON-NLS-1$
     }
 
     /**
@@ -117,7 +126,9 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable {
         filename.setText(""); //$NON-NLS-1$
         errorsOnly.setSelected(false);
         successOnly.setSelected(false);
+        addTimestamp.setSelected(false);
         variableName.setText(""); //$NON-NLS-1$
+        numberPadLength.setText(""); //$NON-NLS-1$
     }
 
     private void init() {
@@ -135,6 +146,10 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable {
         box.add(skipAutoNumber);
         skipSuffix = new JCheckBox(JMeterUtils.getResString("resultsaver_skipsuffix")); // $NON-NLS-1$
         box.add(skipSuffix);
+        addTimestamp = new JCheckBox(JMeterUtils.getResString("resultsaver_addtimestamp")); // $NON-NLS-1$
+        box.add(addTimestamp);
+        numberPadLength = new JLabeledTextField(JMeterUtils.getResString("resultsaver_numberpadlen"));// $NON-NLS-1$
+        box.add(numberPadLength);
         add(box, BorderLayout.NORTH);
     }
 
@@ -166,7 +181,6 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable {
         filenamePanel.add(variableName, BorderLayout.CENTER);
         return filenamePanel;
     }
-
 
     // Needed to avoid Class cast error in Clear.java
     public void clearData() {
