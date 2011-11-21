@@ -58,27 +58,27 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
     /**
      * The type's property editor.
      */
-    private PropertyEditor typeEditor;
+    private final PropertyEditor typeEditor;
 
     /**
      * The gui property editor
      */
-    private PropertyEditor guiEditor;
+    private final PropertyEditor guiEditor;
 
     /**
      * Whether to allow <b>null</b> as a property value.
      */
-    private boolean acceptsNull;
+    private final boolean acceptsNull;
 
     /**
      * Whether to allow JMeter 'expressions' as property values.
      */
-    private boolean acceptsExpressions;
+    private final boolean acceptsExpressions;
 
     /**
      * Whether to allow any constant values different from the provided tags.
      */
-    private boolean acceptsOther;
+    private final boolean acceptsOther;
 
     /**
      * Keep track of the last valid value in the editor, so that we can revert
@@ -92,7 +92,12 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
     WrapperEditor(Object source, PropertyEditor typeEditor, PropertyEditor guiEditor, boolean acceptsNull,
             boolean acceptsExpressions, boolean acceptsOther, Object defaultValue) {
         super(source);
-        initialize(typeEditor, guiEditor, acceptsNull, acceptsExpressions, acceptsOther, defaultValue);
+        this.typeEditor = typeEditor;
+        this.guiEditor = guiEditor;
+        this.acceptsNull = acceptsNull;
+        this.acceptsExpressions = acceptsExpressions;
+        this.acceptsOther = acceptsOther;
+        initialize(defaultValue);
     }
 
     /**
@@ -101,33 +106,32 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
     WrapperEditor(PropertyEditor typeEditor, PropertyEditor guiEditor, boolean acceptsNull, boolean acceptsExpressions,
             boolean acceptsOther, Object defaultValue) {
         super();
-        initialize(typeEditor, guiEditor, acceptsNull, acceptsExpressions, acceptsOther, defaultValue);
+        this.typeEditor = typeEditor;
+        this.guiEditor = guiEditor;
+        this.acceptsNull = acceptsNull;
+        this.acceptsExpressions = acceptsExpressions;
+        this.acceptsOther = acceptsOther;
+        initialize(defaultValue);
     }
 
-    private void initialize(PropertyEditor _typeEditor, PropertyEditor _guiEditor, boolean _acceptsNull,
-            boolean _acceptsExpressions, boolean _acceptsOther, Object defaultValue) {
-        this.typeEditor = _typeEditor;
-        this.guiEditor = _guiEditor;
-        this.acceptsNull = _acceptsNull;
-        this.acceptsExpressions = _acceptsExpressions;
-        this.acceptsOther = _acceptsOther;
+    private void initialize(Object defaultValue) {
 
         setValue(defaultValue);
         lastValidValue = getAsText();
 
-        if (_guiEditor instanceof ComboStringEditor) {
-            String[] tags = ((ComboStringEditor) _guiEditor).getTags();
+        if (guiEditor instanceof ComboStringEditor) {
+            String[] tags = ((ComboStringEditor) guiEditor).getTags();
 
             // Provide an initial edit value if necessary -- this is an
             // heuristic that tries to provide the most convenient
             // initial edit value:
 
             String v;
-            if (!_acceptsOther) {
+            if (!acceptsOther) {
                 v = "${}"; //$NON-NLS-1$
             } else if (isValidValue("")) { //$NON-NLS-1$
                 v = ""; //$NON-NLS-1$
-            } else if (_acceptsExpressions) {
+            } else if (acceptsExpressions) {
                 v = "${}"; //$NON-NLS-1$
             } else if (tags != null && tags.length > 0) {
                 v = tags[0];
@@ -135,10 +139,10 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
                 v = getAsText();
             }
 
-            ((ComboStringEditor) _guiEditor).setInitialEditValue(v);
+            ((ComboStringEditor) guiEditor).setInitialEditValue(v);
         }
 
-        _guiEditor.addPropertyChangeListener(this);
+        guiEditor.addPropertyChangeListener(this);
     }
 
     @Override
@@ -311,7 +315,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
     }
 
     @Override
-    public void setValue(Object value) {
+    public final void setValue(Object value) { /// final because called from ctor
         String text;
 
         if (log.isDebugEnabled()) {
