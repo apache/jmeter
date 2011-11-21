@@ -23,6 +23,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
@@ -47,9 +50,21 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
 
     private static final long serialVersionUID = 240L;
 
+    private static final Object LOCK = new Object();
+
     // File name sequence number
-    //@GuardedBy("this")
+    //@GuardedBy("LOCK")
     private static long sequenceNumber = 0;
+
+    //@GuardedBy("LOCK")
+    private static String timeStamp;
+
+    private static final String TIMESTAMP_FORMAT = "yyyyMMdd-HHmm_"; // $NON-NLS-1$
+
+    //@GuardedBy("LOCK")
+    private static int numberPadLength;
+
+    //+ JMX property names; do not change
 
     public static final String FILENAME = "FileSaver.filename"; // $NON-NLS-1$
 
@@ -62,6 +77,12 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
     public static final String SKIP_AUTO_NUMBER = "FileSaver.skipautonumber"; // $NON-NLS-1$
 
     public static final String SKIP_SUFFIX = "FileSaver.skipsuffix"; // $NON-NLS-1$
+
+    public static final String ADD_TIMESTAMP = "FileSaver.addTimstamp"; // $NON-NLS-1$
+
+    public static final String NUMBER_PAD_LENGTH = "FileSaver.numberPadLen"; // $NON-NLS-1$
+
+    //- JMX property names
 
     private synchronized long nextNumber() {
         return ++sequenceNumber;
@@ -96,10 +117,17 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
      */
     @Override
     public void clear() {
-        super.clear();
-        synchronized(this){
+        synchronized(LOCK){
             sequenceNumber = 0; // TODO is this the right thing to do?
+            if (getAddTimeStamp()) {
+                DateFormat format = new SimpleDateFormat(TIMESTAMP_FORMAT);
+                timeStamp = format.format(new Date());
+            } else {
+                timeStamp = "";
+            }
+            numberPadLength=getNumberPadLen();
         }
+        super.clear();
     }
 
     /**
@@ -174,8 +202,13 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
      */
     private String makeFileName(String contentType, boolean skipAutoNumber, boolean skipSuffix) {
         StringBuilder sb = new StringBuilder(FileServer.resolveBaseRelativeName(getFilename()));
+        sb.append(timeStamp); // may be the empty string
         if (!skipAutoNumber){
-            sb.append(nextNumber());
+            String number = Long.toString(nextNumber());
+            for(int i=number.length(); i < numberPadLength; i++) {
+                sb.append('0');
+            }
+            sb.append(number);
         }
         if (!skipSuffix){
             sb.append('.');
@@ -234,6 +267,14 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
 
     private boolean getSuccessOnly() {
         return getPropertyAsBoolean(SUCCESS_ONLY);
+    }
+
+    private boolean getAddTimeStamp() {
+        return getPropertyAsBoolean(ADD_TIMESTAMP);
+    }
+
+    private int getNumberPadLen() {
+        return getPropertyAsInt(NUMBER_PAD_LENGTH, 0);
     }
 
     // Mutable int to keep track of sample count
