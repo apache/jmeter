@@ -36,6 +36,7 @@ public class ActionNames {
     public static final String ADD_PARENT       = "Add Parent"; // $NON-NLS-1$
     public static final String ANALYZE_FILE     = "Analyze File"; // $NON-NLS-1$
     public static final String CHANGE_LANGUAGE  = "change_language"; // $NON-NLS-1$
+    public static final String CHANGE_PARENT    = "Change Parent"; // $NON-NLS-1$
     public static final String CHECK_DIRTY      = "check_dirty"; // $NON-NLS-1$
     public static final String CHECK_REMOVE     = "check_remove"; // $NON-NLS-1$
     public static final String CLEAR            = "action.clear"; // $NON-NLS-1$
