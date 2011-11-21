@@ -105,7 +105,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
     /**
      * Lock used to protect tableRows update + model update
      */
-    private transient Object lock = new Object();
+    private final transient Object lock = new Object();
 
     private final Map<String, Calculator> tableRows =
         new ConcurrentHashMap<String, Calculator>();
