@@ -152,6 +152,7 @@ This behaviour can be changed with property sample_sender_client_configured (set
 <li>Bug 52216 - TableVisualizer : currentData field is badly synchronized</li>
 <li>Bug 52217 - ViewResultsFullVisualizer : Synchronization issues on root and treeModel</li>
 <li>Bug 43294 - XPath Extractor namespace problems</li>
+<li>Bug 52224 - TestBeanHelper does not support NOT_UNDEFINED == Boolean.FALSE</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
