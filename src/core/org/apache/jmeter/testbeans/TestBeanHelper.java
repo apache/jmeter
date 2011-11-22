@@ -25,11 +25,13 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import org.apache.jmeter.testbeans.gui.GenericTestBeanCustomizer;
 import org.apache.jmeter.testbeans.gui.TableEditor;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.MultiProperty;
+import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jorphan.logging.LoggingManager;
@@ -117,6 +119,10 @@ public class TestBeanHelper {
         else if(jprop instanceof MultiProperty)
         {
             value = unwrapCollection((MultiProperty)jprop,(String)desc.getValue(TableEditor.CLASSNAME));
+        }
+        else if (jprop instanceof NullProperty && Boolean.FALSE.equals(desc.getValue(GenericTestBeanCustomizer.NOT_UNDEFINED)))  // value was not provided, and this is allowed
+        {    
+            value=null;
         }
         else value = Converter.convert(jprop.getStringValue(), type);
         return value;
