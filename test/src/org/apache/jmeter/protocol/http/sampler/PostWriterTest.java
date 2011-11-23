@@ -38,6 +38,7 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 public class PostWriterTest extends TestCase {
@@ -66,16 +67,22 @@ public class PostWriterTest extends TestCase {
         // create a temporary file to make sure we always have a file to give to the PostWriter 
         // Whereever we are or Whatever the current path is.
         temporaryFile = File.createTempFile("foo", "txt");
-        OutputStream output = new FileOutputStream(temporaryFile);
-        output.write(TEST_FILE_CONTENT);
-        output.flush();
-        output.close();
+        OutputStream output = null;
+        try {
+	        output = new FileOutputStream(temporaryFile);
+	        output.write(TEST_FILE_CONTENT);
+	        output.flush();
+        } finally {
+        	JOrphanUtils.closeQuietly(output);
+        }
     }
 
     @Override
     protected void tearDown() throws Exception {
         // delete temporay file
-        temporaryFile.delete();
+        if(!temporaryFile.delete()) {
+        	fail("Could not delete file:"+temporaryFile.getAbsolutePath());
+        }
     }
 
     /*
@@ -411,7 +418,8 @@ public class PostWriterTest extends TestCase {
         postWriter.sendPostData(connection, sampler);
         
         checkContentTypeUrlEncoded(connection);
-        expectedUrl = new String("title=" + titleValue + "&description=" + descriptionValue).getBytes("US-ASCII");
+        expectedUrl = new StringBuilder("title=").append(titleValue).append("&description=")
+        		.append(descriptionValue).toString().getBytes("US-ASCII");
         checkContentLength(connection, expectedUrl.length);
         checkArraysHaveSameContent(expectedUrl, connection.getOutputStreamContent());
         assertEquals(
@@ -501,7 +509,9 @@ public class PostWriterTest extends TestCase {
         postWriter.sendPostData(connection, sampler);
         
         checkContentTypeUrlEncoded(connection);
-        expectedUrl = new String("title=" + titleValue.replaceAll("%20", "+").replaceAll("%C3%85", "%C5") + "&description=" + descriptionValue.replaceAll("%C3%85", "%C5")).getBytes("US-ASCII");
+        StringBuilder sb = new StringBuilder();
+        expectedUrl = (sb.append("title=").append(titleValue.replaceAll("%20", "+").replaceAll("%C3%85", "%C5"))
+        		.append("&description=").append(descriptionValue.replaceAll("%C3%85", "%C5"))).toString().getBytes("US-ASCII");
         checkContentLength(connection, expectedUrl.length);
         checkArraysHaveSameContent(expectedUrl, connection.getOutputStreamContent());
         assertEquals(
@@ -517,7 +527,7 @@ public class PostWriterTest extends TestCase {
         postWriter.sendPostData(connection, sampler);
         
         checkContentTypeUrlEncoded(connection);
-        StringBuilder sb = new StringBuilder();
+        sb = new StringBuilder();
         expectedUrl = (sb.append("title=").append(titleValue.replaceAll("%20", "+").replaceAll("%C3%85", "%C5"))
         		.append("&description=").append(descriptionValue.replaceAll("%C3%85", "%C5"))).toString().getBytes("US-ASCII");
         checkContentLength(connection, expectedUrl.length);
@@ -535,7 +545,8 @@ public class PostWriterTest extends TestCase {
         postWriter.sendPostData(connection, sampler);
         
         checkContentTypeUrlEncoded(connection);
-        expectedUrl = ("title=" + titleValue.replaceAll("%20", "+") + "&description=" + descriptionValue).getBytes("US-ASCII");
+        sb = new StringBuilder();
+        expectedUrl = (sb.append("title=").append(titleValue.replaceAll("%20", "+")).append("&description=").append(descriptionValue)).toString().getBytes("US-ASCII");
         checkContentLength(connection, expectedUrl.length);
         checkArraysHaveSameContent(expectedUrl, connection.getOutputStreamContent());
         assertEquals(
