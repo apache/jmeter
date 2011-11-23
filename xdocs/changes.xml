@@ -188,6 +188,7 @@ This behaviour can be changed with property sample_sender_client_configured (set
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
 <li>Bug 52128 - Add JDBC pre- and post-processor</li>
+<li>Bug 52183 - SyncTimer could be improved (performance+reliability)</li>
 </ul>
 
 <h3>Functions</h3>
