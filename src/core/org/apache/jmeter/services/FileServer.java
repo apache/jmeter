@@ -23,6 +23,7 @@ package org.apache.jmeter.services;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -39,6 +40,7 @@ import org.apache.commons.collections.ArrayStack;
 import org.apache.jmeter.gui.JMeterFileFilter;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -393,13 +395,7 @@ public class FileServer {
     private void closeFile(String name, FileEntry fileEntry) throws IOException {
         if (fileEntry != null && fileEntry.inputOutputObject != null) {
             log.info("Close: "+name);
-            if (fileEntry.inputOutputObject instanceof Reader) {
-                ((Reader) fileEntry.inputOutputObject).close();
-            } else if (fileEntry.inputOutputObject instanceof Writer) {
-                ((Writer) fileEntry.inputOutputObject).close();
-            } else {
-                log.error("Unknown inputOutputObject type : " + fileEntry.inputOutputObject.getClass());
-            }
+            JOrphanUtils.closeQuietly(fileEntry.inputOutputObject);
             fileEntry.inputOutputObject = null;
         }
     }
@@ -437,9 +433,9 @@ public class FileServer {
     private static class FileEntry{
         private String headerLine;
         private final File file;
-        private Object inputOutputObject; // Reader/Writer
+        private Closeable inputOutputObject; 
         private final String charSetEncoding;
-        FileEntry(File f, Object o, String e){
+        FileEntry(File f, Closeable o, String e){
             file=f;
             inputOutputObject=o;
             charSetEncoding=e;
