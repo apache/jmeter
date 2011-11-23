@@ -19,14 +19,14 @@
 package org.apache.jmeter.timers;
 
 import java.io.Serializable;
+import java.util.concurrent.BrokenBarrierException;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.threads.JMeterContextService;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 /**
  * The purpose of the SyncTimer is to block threads until X number of threads
@@ -34,21 +34,16 @@ import org.apache.log.Logger;
  * thus create large instant loads at various points of the test plan.
  *
  */
-public class SyncTimer extends AbstractTestElement implements Timer, Serializable, TestBean,TestListener {
+public class SyncTimer extends AbstractTestElement implements Timer, Serializable, TestBean, TestListener, ThreadListener {
     private static final long serialVersionUID = 2;
-
-    private static final Logger log = LoggingManager.getLoggerForClass();
-
-    // Must be an Object so it will be shared between threads
-    private int[] timerCounter = new int[] { 0 };
-
-    private transient Object sync = new Object();
+    
+    private BarrierWrapper barrier;
 
     private int groupSize;
 
     // Ensure transient object is created by the server
     private Object readResolve(){
-        sync = new Object();
+    	createBarrier();
         return this;
     }
 
@@ -71,26 +66,20 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
      * {@inheritDoc}
      */
     public long delay() {
-        synchronized (sync) {
-            timerCounter[0]++;
-            final int groupSz = getGroupSize();
-            final int count = timerCounter[0];
-            if (
-                (groupSz == 0 && count >= // count of threads in the thread group
-                    JMeterContextService.getContext().getThreadGroup().getNumThreads())
-                ||
-                (groupSz > 0 && count >= groupSz)
-                ) {
-                sync.notifyAll();
-                timerCounter[0]=0; // reset counter once we have reached the limit
-            } else {
-                try {
-                    sync.wait();
-                } catch (InterruptedException e) {
-                    log.warn(e.getLocalizedMessage());
-                }
-            }
-        }
+    	if(getGroupSize()>=0) {
+    		int arrival = 0;
+    		try {
+				arrival = this.barrier.await();
+			} catch (InterruptedException e) {
+				return 0;
+			} catch (BrokenBarrierException e) {
+				return 0;
+			} finally {
+				if(arrival == 0) {
+					barrier.reset();
+				}
+			}
+    	}
         return 0;
     }
 
@@ -102,8 +91,7 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
     @Override
     public Object clone() {
         SyncTimer newTimer = (SyncTimer) super.clone();
-        newTimer.timerCounter = timerCounter;
-        newTimer.sync = sync;
+        newTimer.barrier = barrier;
         return newTimer;
     }
 
@@ -118,14 +106,7 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
      * Reset timerCounter
      */
     public void testEnded(String host) {
-        this.timerCounter[0] = 0;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void testIterationStart(LoopIterationEvent event) {
-        // NOOP
+    	createBarrier();
     }
 
     /**
@@ -139,6 +120,37 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
      * Reset timerCounter
      */
     public void testStarted(String host) {
-        this.timerCounter[0] = 0;
+        createBarrier();
     }
+
+	@Override
+	public void testIterationStart(LoopIterationEvent event) {
+		// NOOP
+	}
+	
+	/**
+	 * 
+	 */
+	private void createBarrier() {
+		if(getGroupSize() == 0) {
+			// Lazy init 
+			this.barrier = new BarrierWrapper();
+        } else {
+        	this.barrier = new BarrierWrapper(getGroupSize());
+        }
+	}
+
+	@Override
+	public void threadStarted() {
+		int numThreadsInGroup = JMeterContextService.getContext().getThreadGroup().getNumThreads();
+		if(getGroupSize() == 0) {
+			// Unique Barrier creation ensured by synchronized setup
+			this.barrier.setup(numThreadsInGroup);
+        }
+	}
+
+	@Override
+	public void threadFinished() {
+		// NOOP
+	}
 }
