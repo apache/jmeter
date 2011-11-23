@@ -113,7 +113,7 @@ public class BinaryTCPClientImpl extends AbstractTCPClient {
      * the end of the stream is reached.
      * Response data is converted to hex-encoded binary
      * @return hex-encoded binary string
-     * @throws IOException 
+     * @throws ReadException 
      */
     public String read(InputStream is) throws ReadException {
     	ByteArrayOutputStream w = new ByteArrayOutputStream();
