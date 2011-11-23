@@ -40,7 +40,6 @@ import org.apache.commons.collections.ArrayStack;
 import org.apache.jmeter.gui.JMeterFileFilter;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -395,7 +394,7 @@ public class FileServer {
     private void closeFile(String name, FileEntry fileEntry) throws IOException {
         if (fileEntry != null && fileEntry.inputOutputObject != null) {
             log.info("Close: "+name);
-            JOrphanUtils.closeQuietly(fileEntry.inputOutputObject);
+            fileEntry.inputOutputObject.close();
             fileEntry.inputOutputObject = null;
         }
     }
