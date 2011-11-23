@@ -97,7 +97,9 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
                     httpServer.stopServer();
                     httpServer = null;
                     // delete temporay file
-                    temporaryFile.delete();
+                    if(!temporaryFile.delete()) {
+                    	fail("Could not delete file:"+temporaryFile.getAbsolutePath());
+                    }
             }
         };
         return setup;
