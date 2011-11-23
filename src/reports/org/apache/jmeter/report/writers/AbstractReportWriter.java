@@ -22,6 +22,8 @@ import java.util.Calendar;
 
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * The abstract report writer provides the common implementation for subclasses
@@ -30,7 +32,6 @@ import org.apache.jmeter.testelement.TestElement;
 public abstract class AbstractReportWriter extends AbstractTestElement implements ReportWriter {
 
     private static final long serialVersionUID = 240L;
-
     public static final String TARGET_DIRECTORY = "ReportWriter.target.directory";
 
     /**
@@ -65,7 +66,9 @@ public abstract class AbstractReportWriter extends AbstractTestElement implement
     public void makeDirectory() {
         File output = new File(getTargetDirectory());
         if (!output.exists() || !output.isDirectory()) {
-            output.mkdir();
+            if(!output.mkdir()) {
+            	throw new IllegalStateException("Could not create directory:"+output.getAbsolutePath());
+            }
         }
     }
 
@@ -77,7 +80,10 @@ public abstract class AbstractReportWriter extends AbstractTestElement implement
         if (output.exists() && output.isDirectory()) {
             // if the directory already exists and is a directory,
             // we just renamed to "archive.date"
-            output.renameTo(new File("archive." + getDayString()));
+            if(!output.renameTo(new File("archive." + getDayString()))) {
+            	throw new IllegalStateException("Could not rename directory:"+output.getAbsolutePath()+
+            			" to archive." + getDayString());
+            }
         }
     }
 
