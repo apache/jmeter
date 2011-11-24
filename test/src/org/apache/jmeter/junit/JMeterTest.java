@@ -356,8 +356,7 @@ public class JMeterTest extends JMeterTestCase {
                 (title != null && title.length() > 0) // Will be "" for internal components
                 && (title.toUpperCase(java.util.Locale.ENGLISH).indexOf("(ALPHA") == -1) 
                 && (title.toUpperCase(java.util.Locale.ENGLISH).indexOf("(BETA") == -1)
-                && (!title.equals("Example1")) // Skip the example samplers ...
-                && (!title.equals("Example2"))
+                && (!title.matches("Example\\d+")) // Skip the example samplers ...
                 && (!name.startsWith("org.apache.jmeter.examples."))
                 )
             {// No, not a work in progress ...
