@@ -206,8 +206,8 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
 	}
 
 	public void threadStarted() {
-		int numThreadsInGroup = JMeterContextService.getContext().getThreadGroup().getNumThreads();
 		if(getGroupSize() == 0) {
+	        int numThreadsInGroup = JMeterContextService.getContext().getThreadGroup().getNumThreads();
 			// Unique Barrier creation ensured by synchronized setup
 			this.barrier.setup(numThreadsInGroup);
         }
