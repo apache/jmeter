@@ -232,16 +232,15 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
         configureTestElement(element);
 
         // Copy all property values from the map into the element:
-        PropertyDescriptor[] props = beanInfo.getPropertyDescriptors();
-        for (int i = 0; i < props.length; i++) {
-            String name = props[i].getName();
+        for (PropertyDescriptor desc : beanInfo.getPropertyDescriptors()) {
+            String name = desc.getName();
             Object value = propertyMap.get(name);
             log.debug("Modify " + name + " to " + value);
             if (value == null) {
-                Object valueNotUnDefined = props[i].getValue(GenericTestBeanCustomizer.NOT_UNDEFINED);
-                if (valueNotUnDefined != null && ((Boolean) valueNotUnDefined).booleanValue()) {
-                    setPropertyInElement(element, name, props[i].getValue(BeanInfoSupport.DEFAULT));
-                } else {
+                Object valueNotUnDefined = desc.getValue(GenericTestBeanCustomizer.NOT_UNDEFINED);
+                if (Boolean.TRUE.equals(valueNotUnDefined)) { // null => false
+                    setPropertyInElement(element, name, desc.getValue(BeanInfoSupport.DEFAULT));
+                } else { // valueNotUnDefined is null or FALSE
                     element.removeProperty(name);
                 }
             } else {
