@@ -38,6 +38,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -102,16 +103,24 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 
     public static final String TAGS = "tags"; //$NON-NLS-1$
 
+    /** 
+     * Whether the field must be defined (i.e. is required); 
+     * Boolean, defaults to FALSE - see {@link TestBeanGUI#modifyTestElement(TestElement)}
+     */
     public static final String NOT_UNDEFINED = "notUndefined"; //$NON-NLS-1$
 
+    /** Whether the field disallows JMeter expressions; Boolean */
     public static final String NOT_EXPRESSION = "notExpression"; //$NON-NLS-1$
 
+    /** Whether the field disallows constant values different from the provided tags; Boolean */
     public static final String NOT_OTHER = "notOther"; //$NON-NLS-1$
 
+    /** Default value, must be provided if {@link #NOT_UNDEFINED} is TRUE */
     public static final String DEFAULT = "default"; //$NON-NLS-1$
 
     public static final String RESOURCE_BUNDLE = "resourceBundle"; //$NON-NLS-1$
 
+    /** Property editor override; must be an enum of type {@link GuiEditor} */
     public static final String GUITYPE = "guiType"; // $NON-NLS-$
 
     public static final String ORDER(String group) {
