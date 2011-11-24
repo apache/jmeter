@@ -245,7 +245,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
                     element.removeProperty(name);
                 }
             } else {
-                setPropertyInElement(element, name, propertyMap.get(name));
+                setPropertyInElement(element, name, value);
             }
         }
     }
