@@ -189,7 +189,6 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
         createBarrier();
     }
 
-	@Override
 	public void testIterationStart(LoopIterationEvent event) {
 		// NOOP
 	}
@@ -206,7 +205,6 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
         }
 	}
 
-	@Override
 	public void threadStarted() {
 		int numThreadsInGroup = JMeterContextService.getContext().getThreadGroup().getNumThreads();
 		if(getGroupSize() == 0) {
@@ -215,7 +213,6 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
         }
 	}
 
-	@Override
 	public void threadFinished() {
 		// NOOP
 	}
