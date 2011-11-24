@@ -50,7 +50,6 @@ import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.processor.gui.AbstractPreProcessorGui;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
-import org.apache.jmeter.testbeans.BeanInfoSupport;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.AbstractProperty;
@@ -239,7 +238,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
             if (value == null) {
                 Object valueNotUnDefined = desc.getValue(GenericTestBeanCustomizer.NOT_UNDEFINED);
                 if (Boolean.TRUE.equals(valueNotUnDefined)) { // null => false
-                    setPropertyInElement(element, name, desc.getValue(BeanInfoSupport.DEFAULT));
+                    setPropertyInElement(element, name, desc.getValue(GenericTestBeanCustomizer.DEFAULT));
                 } else { // valueNotUnDefined is null or FALSE
                     element.removeProperty(name);
                 }
