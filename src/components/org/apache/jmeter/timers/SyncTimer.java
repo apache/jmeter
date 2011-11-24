@@ -20,8 +20,10 @@ package org.apache.jmeter.timers;
 
 import java.io.Serializable;
 
+import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -32,7 +34,7 @@ import org.apache.log.Logger;
  * thus create large instant loads at various points of the test plan.
  *
  */
-public class SyncTimer extends AbstractTestElement implements Timer, Serializable, TestBean {
+public class SyncTimer extends AbstractTestElement implements Timer, Serializable, TestBean, TestListener {
     private static final long serialVersionUID = 2;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -105,4 +107,38 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
         return newTimer;
     }
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public void testStarted() {
+		testStarted(null);
+	}
+
+	/**
+	 * Reset timerCounter
+	 */
+	public void testStarted(String host) {
+		this.timerCounter[0] = 0;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void testEnded() {
+		this.testEnded(null); 
+	}
+
+	/**
+	 * Reset timerCounter
+	 */
+	public void testEnded(String host) {
+		 this.timerCounter[0] = 0;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void testIterationStart(LoopIterationEvent event) {
+		// NOOP
+	}
 }
