@@ -90,17 +90,18 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
     /** The icons for this bean. */
     private final Image[] icons = new Image[5];
 
+    private final Class<?> beanClass;
+
     /**
      * Construct a BeanInfo for the given class.
      */
     protected BeanInfoSupport(Class<?> beanClass) {
-        // NOTREAD this.beanClass= beanClass;
+        this.beanClass= beanClass;
 
         try {
             rootBeanInfo = Introspector.getBeanInfo(beanClass, Introspector.IGNORE_IMMEDIATE_BEANINFO);
         } catch (IntrospectionException e) {
-            log.error("Can't introspect.", e);
-            throw new Error(e.toString()); // Programming error: bail out.
+            throw new Error("Can't introspect "+beanClass, e); // Programming error: bail out.
         }
 
         // N.B. JVMs other than Sun may return different instances each time
@@ -118,7 +119,7 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
             try {
                 getBeanDescriptor().setDisplayName(resourceBundle.getString("displayName")); // $NON-NLS-1$
             } catch (MissingResourceException e) {
-                log.debug("Localized display name not available for bean " + beanClass.getName());
+                log.debug("Localized display name not available for bean " + beanClass);
             }
             // Localize the property names and descriptions:
             PropertyDescriptor[] properties = getPropertyDescriptors();
@@ -127,19 +128,19 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
                 try {
                     properties[i].setDisplayName(resourceBundle.getString(name + ".displayName")); // $NON-NLS-1$
                 } catch (MissingResourceException e) {
-                    log.debug("Localized display name not available for property " + name);
+                    log.debug("Localized display name not available for property " + name + " in " + beanClass);
                 }
 
                 try {
                     properties[i].setShortDescription(resourceBundle.getString(name + ".shortDescription"));
                 } catch (MissingResourceException e) {
-                    log.debug("Localized short description not available for property " + name);
+                    log.debug("Localized short description not available for property " + name + " in " + beanClass);
                 }
             }
         } catch (MissingResourceException e) {
             log.warn("Localized strings not available for bean " + beanClass, e);
         } catch (Exception e) {
-            log.warn("Something bad happened when loading bean info", e);
+            log.warn("Something bad happened when loading bean info for bean " + beanClass, e);
         }
     }
 
@@ -151,13 +152,12 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
      * @return descriptor for a property of that name, or null if there's none
      */
     protected PropertyDescriptor property(String name) {
-        PropertyDescriptor[] properties = getPropertyDescriptors();
-        for (int i = 0; i < properties.length; i++) {
-            if (properties[i].getName().equals(name)) {
-                return properties[i];
+        for (PropertyDescriptor propdesc : getPropertyDescriptors()) {
+            if (propdesc.getName().equals(name)) {
+                return propdesc;
             }
         }
-        log.warn("Cannot find property: "+name);
+        log.error("Cannot find property: " + name + " in class " + beanClass);
         return null;
     }
 
@@ -205,7 +205,7 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
      *            property names in the desired order
      */
     protected void createPropertyGroup(String group, String[] names) {
-        for (int i = 0; i < names.length; i++) {
+        for (int i = 0; i < names.length; i++) { // i is used below
             log.debug("Getting property for: " + names[i]);
             PropertyDescriptor p = property(names[i]);
             p.setValue(GenericTestBeanCustomizer.GROUP, group);
