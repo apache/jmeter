@@ -20,6 +20,7 @@ package org.apache.jmeter.timers;
 
 import java.io.Serializable;
 import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.testbeans.TestBean;
@@ -35,6 +36,71 @@ import org.apache.jmeter.threads.JMeterContextService;
  *
  */
 public class SyncTimer extends AbstractTestElement implements Timer, Serializable, TestBean, TestListener, ThreadListener {
+	
+	/**
+	 * Wrapper to {@link CyclicBarrier} to allow lazy init of CyclicBarrier when SyncTimer is configured with 0
+	 */
+	private static final class BarrierWrapper implements Cloneable {
+		private CyclicBarrier barrier;
+
+		/**
+		 * 
+		 */
+		public BarrierWrapper() {
+			this.barrier = null;
+		}
+		
+		/**
+		 * @param parties Number of parties
+		 */
+		public BarrierWrapper(int parties) {
+			this.barrier = new CyclicBarrier(parties);
+		}
+		
+		/**
+		 * Synchronized is required to ensure CyclicBarrier is initialized only once per Thread Group
+		 * @param parties Number of parties
+		 */
+		public synchronized void setup(int parties) {
+			if(this.barrier== null) {
+				this.barrier = new CyclicBarrier(parties);
+			}
+		}
+		
+		/**
+		 * @see CyclicBarrier#await()
+		 * @return int 
+		 * @throws InterruptedException
+		 * @throws BrokenBarrierException
+		 * @see java.util.concurrent.CyclicBarrier#await()
+		 */
+		public int await() throws InterruptedException, BrokenBarrierException {
+			return barrier.await();
+		}
+
+		/**
+		 * @see java.util.concurrent.CyclicBarrier#reset()
+		 */
+		public void reset() {
+			barrier.reset();
+		}
+
+		/**
+		 * @see java.lang.Object#clone()
+		 */
+		@Override
+		protected Object clone()  {
+			BarrierWrapper barrierWrapper=  null;
+			try {
+				barrierWrapper = (BarrierWrapper) super.clone();
+				barrierWrapper.barrier = this.barrier;
+			} catch (CloneNotSupportedException e) {
+				//Cannot happen
+			}
+			return barrierWrapper;
+		}	
+	}
+	
     private static final long serialVersionUID = 2;
     
     private BarrierWrapper barrier;
