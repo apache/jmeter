@@ -22,6 +22,7 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.IntrospectionException;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyDescriptor;
 import java.beans.PropertyEditor;
@@ -55,24 +56,29 @@ public class FileEditor implements PropertyEditor, ActionListener {
     private final PropertyEditor editor;
 
     /**
+     * @throws IntrospectionException 
      * @deprecated Only for use by test cases
      */
     @Deprecated
-    public FileEditor() {
-        this(null);
+    public FileEditor() throws IntrospectionException {
+        this(new PropertyDescriptor("dummy", null, null));
     }
 
     public FileEditor(PropertyDescriptor descriptor) {
+        if (descriptor == null) {
+            throw new NullPointerException("Descriptor must not be null");
+        }
+
         // Create a button to trigger the file chooser:
         JButton button = new JButton("Browse...");
         button.addActionListener(this);
 
         // Get a WrapperEditor to provide the field or combo -- we'll delegate
         // most methods to it:
-        boolean notNull = descriptor == null ? false : GenericTestBeanCustomizer.notNull(descriptor);
-        boolean notExpression = descriptor == null ? false : GenericTestBeanCustomizer.notExpression(descriptor);
-        boolean notOther = descriptor == null ? false : GenericTestBeanCustomizer.notOther(descriptor);
-        Object defaultValue = descriptor == null ? null : descriptor.getValue(GenericTestBeanCustomizer.DEFAULT);
+        boolean notNull = GenericTestBeanCustomizer.notNull(descriptor);
+        boolean notExpression = GenericTestBeanCustomizer.notExpression(descriptor);
+        boolean notOther = GenericTestBeanCustomizer.notOther(descriptor);
+        Object defaultValue = descriptor.getValue(GenericTestBeanCustomizer.DEFAULT);
         ComboStringEditor cse = new ComboStringEditor();
         cse.setNoUndefined(notNull);
         cse.setNoEdit(notExpression && notOther);
