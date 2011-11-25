@@ -38,7 +38,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -112,7 +111,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 
     /** 
      * Whether the field must be defined (i.e. is required); 
-     * Boolean, defaults to FALSE - see {@link TestBeanGUI#modifyTestElement(TestElement)}
+     * Boolean, defaults to FALSE
      */
     public static final String NOT_UNDEFINED = "notUndefined"; //$NON-NLS-1$
 
@@ -328,16 +327,37 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
         return wrapper;
     }
 
+    /**
+     * Returns true if the property disallows constant values different from the provided tags.
+     * 
+     * @param descriptor the property descriptor
+     * @return true if the attribute {@link #NOT_OTHER} is defined and equal to Boolean.TRUE;
+     *  otherwise the default is false
+     */
     static boolean notOther(PropertyDescriptor descriptor) {
         boolean notOther = Boolean.TRUE.equals(descriptor.getValue(NOT_OTHER));
         return notOther;
     }
 
+    /**
+     * Returns true if the property does not allow JMeter expressions.
+     * 
+     * @param descriptor the property descriptor
+     * @return true if the attribute {@link #NOT_EXPRESSION} is defined and equal to Boolean.TRUE;
+     *  otherwise the default is false
+     */
     static boolean notExpression(PropertyDescriptor descriptor) {
         boolean notExpression = Boolean.TRUE.equals(descriptor.getValue(NOT_EXPRESSION));
         return notExpression;
     }
 
+    /**
+     * Returns true if the property must be defined (i.e. is required); 
+     * 
+     * @param descriptor the property descriptor
+     * @return true if the attribute {@link #NOT_UNDEFINED} is defined and equal to Boolean.TRUE;
+     *  otherwise the default is false
+     */
     static boolean notNull(PropertyDescriptor descriptor) {
         boolean notNull = Boolean.TRUE.equals(descriptor.getValue(NOT_UNDEFINED));
         return notNull;
