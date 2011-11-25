@@ -93,6 +93,8 @@ class FieldStringEditor extends PropertyEditorSupport implements ActionListener,
         return textField;
     }
 
+    // TODO should this implement supportsCustomEditor() ?
+
     /**
      * {@inheritDoc}
      */
