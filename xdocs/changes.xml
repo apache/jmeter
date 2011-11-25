@@ -226,6 +226,7 @@ This behaviour can be changed with property sample_sender_client_configured (set
 Loads any additional properties found in META-INF/resources/org.apache.jmeter.nameupdater.properties files</li>
 <li>Bug 42538 - Add "duplicate node" in context menu</li>
 <li>Bug 46921 - Add Ability to Change Controller elements</li>
+<li>Bug 52240 - TestBeans should support Boolean, Integer and Long</li>
 </ul>
 
 <h2>Non-functional changes</h2>
