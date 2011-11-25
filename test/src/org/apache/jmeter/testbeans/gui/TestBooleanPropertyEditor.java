@@ -25,30 +25,31 @@ import java.beans.PropertyEditorManager;
  * 
  */
 public class TestBooleanPropertyEditor extends junit.framework.TestCase {
-        public TestBooleanPropertyEditor(String name) {
-            super(name);
-        }
+ 
+    public TestBooleanPropertyEditor(String name) {
+        super(name);
+    }
 
-        public void testBooleanEditor(){
-            PropertyEditor propertyEditor = PropertyEditorManager.findEditor(boolean.class);
-            assertNotNull(propertyEditor);
-            String tags[] = propertyEditor.getTags();
-            assertEquals(2,tags.length);
-            assertEquals("True",tags[0]);
-            assertEquals("False",tags[1]);
-            
-            propertyEditor.setValue(Boolean.FALSE);
-            assertEquals("False",propertyEditor.getAsText());
-            propertyEditor.setAsText("False");
-            assertEquals("False",propertyEditor.getAsText());
-            propertyEditor.setAsText("false");
-            assertEquals("False",propertyEditor.getAsText());
-            
-            propertyEditor.setValue(Boolean.TRUE);
-            assertEquals("True",propertyEditor.getAsText());
-            propertyEditor.setAsText("True");
-            assertEquals("True",propertyEditor.getAsText());
-            propertyEditor.setAsText("true");
-            assertEquals("True",propertyEditor.getAsText());
+    public void testBooleanEditor(){
+        PropertyEditor propertyEditor = PropertyEditorManager.findEditor(boolean.class);
+        assertNotNull(propertyEditor);
+        String tags[] = propertyEditor.getTags();
+        assertEquals(2,tags.length);
+        assertEquals("True",tags[0]);
+        assertEquals("False",tags[1]);
+        
+        propertyEditor.setValue(Boolean.FALSE);
+        assertEquals("False",propertyEditor.getAsText());
+        propertyEditor.setAsText("False");
+        assertEquals("False",propertyEditor.getAsText());
+        propertyEditor.setAsText("false");
+        assertEquals("False",propertyEditor.getAsText());
+        
+        propertyEditor.setValue(Boolean.TRUE);
+        assertEquals("True",propertyEditor.getAsText());
+        propertyEditor.setAsText("True");
+        assertEquals("True",propertyEditor.getAsText());
+        propertyEditor.setAsText("true");
+        assertEquals("True",propertyEditor.getAsText());
         }
 }
