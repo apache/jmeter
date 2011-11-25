@@ -79,8 +79,6 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
 
     public static final String RESOURCE_BUNDLE = GenericTestBeanCustomizer.RESOURCE_BUNDLE;
 
-    /** The class for which we're providing the bean info. */
-    // NOTREAD private Class beanClass;
     /** The BeanInfo for our class as obtained by the introspector. */
     private final BeanInfo rootBeanInfo;
 
@@ -90,6 +88,7 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
     /** The icons for this bean. */
     private final Image[] icons = new Image[5];
 
+    /** The class for which we're providing the bean info. */
     private final Class<?> beanClass;
 
     /**
