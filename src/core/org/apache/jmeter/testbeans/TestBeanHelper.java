@@ -165,14 +165,28 @@ public class TestBeanHelper {
         try {
             return method.invoke(invokee, params);
         } catch (IllegalArgumentException e) {
-            log.error("This should never happen. "+invokee.getClass().getName()+" "+method.getName()+" "+params.length+" "+params[0].getClass().getName(), e);
-            throw new Error(e.toString()); // Programming error: bail out.
+            throw new Error(createMessage(invokee, method, params), e);
         } catch (IllegalAccessException e) {
-            log.error("This should never happen.", e);
-            throw new Error(e.toString()); // Programming error: bail out.
+            throw new Error(createMessage(invokee, method, params), e);
         } catch (InvocationTargetException e) {
-            log.error("This should never happen.", e);
-            throw new Error(e.toString()); // Programming error: bail out.
+            throw new Error(createMessage(invokee, method, params), e);
         }
+    }
+
+    private static String createMessage(Object invokee, Method method, Object[] params){
+        StringBuilder sb = new StringBuilder();
+        sb.append("This should never happen. Tried to invoke:\n");
+        sb.append(invokee.getClass().getName());
+        sb.append("#");
+        sb.append(method.getName());
+        sb.append("(");
+        for(Object o : params) {
+            sb.append(o.getClass().getSimpleName());
+            sb.append(' ');
+            sb.append(o);
+            sb.append(' ');
+        }
+        sb.append(")");
+        return sb.toString();
     }
 }
