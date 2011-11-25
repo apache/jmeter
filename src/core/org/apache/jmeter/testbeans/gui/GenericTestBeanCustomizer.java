@@ -107,6 +107,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 
     public static final String ORDER = "order"; //$NON-NLS-1$
 
+    /** Array of permissible values. Must be provided if {@link #NOT_OTHER} is TRUE */
     public static final String TAGS = "tags"; //$NON-NLS-1$
 
     /** 
@@ -115,10 +116,10 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
      */
     public static final String NOT_UNDEFINED = "notUndefined"; //$NON-NLS-1$
 
-    /** Whether the field disallows JMeter expressions; Boolean */
+    /** Whether the field disallows JMeter expressions; Boolean, default FALSE */
     public static final String NOT_EXPRESSION = "notExpression"; //$NON-NLS-1$
 
-    /** Whether the field disallows constant values different from the provided tags; Boolean */
+    /** Whether the field disallows constant values different from the provided tags; Boolean, default FALSE */
     public static final String NOT_OTHER = "notOther"; //$NON-NLS-1$
 
     /** Default value, must be provided if {@link #NOT_UNDEFINED} is TRUE */
