@@ -80,6 +80,9 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
      */
     private final boolean acceptsOther;
 
+    /** Default value to be used to (re-)initialiase the field */
+    private final Object defaultValue;
+
     /**
      * Keep track of the last valid value in the editor, so that we can revert
      * to it if the user enters an invalid value.
@@ -97,7 +100,8 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
         this.acceptsNull = acceptsNull;
         this.acceptsExpressions = acceptsExpressions;
         this.acceptsOther = acceptsOther;
-        initialize(defaultValue);
+        this.defaultValue = defaultValue;
+        initialize();
     }
 
     /**
@@ -111,13 +115,18 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
         this.acceptsNull = acceptsNull;
         this.acceptsExpressions = acceptsExpressions;
         this.acceptsOther = acceptsOther;
-        initialize(defaultValue);
+        this.defaultValue = defaultValue;
+        initialize();
     }
 
-    private void initialize(Object defaultValue) {
-
+    final void resetValue(){
         setValue(defaultValue);
-        lastValidValue = getAsText();
+        lastValidValue = getAsText();        
+    }
+
+    private void initialize() {
+
+        resetValue();
 
         if (guiEditor instanceof ComboStringEditor) {
             String[] tags = ((ComboStringEditor) guiEditor).getTags();
