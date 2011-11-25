@@ -195,41 +195,28 @@ public class FileEditor implements PropertyEditor, ActionListener {
 
     private static class SimpleFileEditor extends PropertyEditorSupport {
 
-        /**
-         * {@inheritDoc}
-         */
         @Override
         public String getAsText() {
-            return ((File) super.getValue()).getPath();
+            Object value = super.getValue();
+            if (value instanceof File) {
+                return ((File) value).getPath();
+            }
+            return (String) value; // assume it's string
         }
 
-        /**
-         * {@inheritDoc}
-         */
         @Override
         public void setAsText(String text) throws IllegalArgumentException {
             super.setValue(new File(text));
         }
 
-        /**
-         * JMeter doesn't support File properties yet. Need to
-         * work on this as a String :-(
-         * <p>
-         * {@inheritDoc}
-         */
         @Override
         public Object getValue() {
-            return getAsText(); // should be super.getValue();
+            return super.getValue();
         }
 
-        /**
-         * I need to handle Strings when setting too.
-         * <p>
-         * {@inheritDoc}
-         */
         @Override
         public void setValue(Object file) {
-            setAsText((String) file);
+            super.setValue(file);
         }
     }
 }
