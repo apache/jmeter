@@ -294,11 +294,11 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
         } else {
             tags = new String[editorTags.length + additionalTags.length];
             int j = 0;
-            for (int i = 0; i < editorTags.length; i++) {
-                tags[j++] = editorTags[i];
+            for (String editorTag : editorTags) {
+                tags[j++] = editorTag;
             }
-            for (int i = 0; i < additionalTags.length; i++) {
-                tags[j++] = additionalTags[i];
+            for (String additionalTag : additionalTags) {
+                tags[j++] = additionalTag;
             }
         }
 
@@ -391,9 +391,9 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 
         if (propertyMap.size() == 0) {
             // Uninitialized -- set it to the defaults:
-            for (int i = 0; i < editors.length; i++) {
-                Object value = descriptors[i].getValue(DEFAULT);
-                String name = descriptors[i].getName();
+            for (PropertyDescriptor descriptor : descriptors) {
+                Object value = descriptor.getValue(DEFAULT);
+                String name = descriptor.getName();
                 if (value != null) {
                     propertyMap.put(name, value);
                     log.debug("Set " + name + "= " + value);
