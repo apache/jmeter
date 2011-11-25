@@ -47,16 +47,19 @@ public class FileEditor implements PropertyEditor, ActionListener {
     /**
      * The editor's panel.
      */
-    private JPanel panel;
+    private final JPanel panel;
 
     /**
      * The editor handling the text field inside:
      */
-    private PropertyEditor editor;
+    private final PropertyEditor editor;
 
+    /**
+     * @deprecated Only for use by test cases
+     */
+    @Deprecated
     public FileEditor() {
         this(null);
-        // Only seems to be needed for testing
     }
 
     public FileEditor(PropertyDescriptor descriptor) {
