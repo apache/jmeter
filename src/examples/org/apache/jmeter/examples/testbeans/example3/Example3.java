@@ -55,7 +55,9 @@ public class Example3 extends AbstractSampler implements TestBean {
                     Object value = field.get(this);
                     bld.append(name).append('=');
                     bld.append(value);
-                    bld.append("\n");
+                    bld.append(" (");
+                    bld.append(field.getType().getCanonicalName());
+                    bld.append(")\n");
                 }
             } catch (IllegalAccessException e) {
                 bld.append(e.toString());
