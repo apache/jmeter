@@ -94,7 +94,10 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
      */
     WrapperEditor(Object source, PropertyEditor typeEditor, PropertyEditor guiEditor, boolean acceptsNull,
             boolean acceptsExpressions, boolean acceptsOther, Object defaultValue) {
-        super(source);
+        super();
+        if (source != null) {
+            super.setSource(source);
+        }
         this.typeEditor = typeEditor;
         this.guiEditor = guiEditor;
         this.acceptsNull = acceptsNull;
@@ -109,14 +112,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
      */
     WrapperEditor(PropertyEditor typeEditor, PropertyEditor guiEditor, boolean acceptsNull, boolean acceptsExpressions,
             boolean acceptsOther, Object defaultValue) {
-        super();
-        this.typeEditor = typeEditor;
-        this.guiEditor = guiEditor;
-        this.acceptsNull = acceptsNull;
-        this.acceptsExpressions = acceptsExpressions;
-        this.acceptsOther = acceptsOther;
-        this.defaultValue = defaultValue;
-        initialize();
+        this(null, typeEditor, guiEditor, acceptsNull, acceptsExpressions,  acceptsOther, defaultValue);
     }
 
     final void resetValue(){
