@@ -97,6 +97,12 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    static {
+        PropertyEditorManager.registerEditor(Long.class,    LongPropertyEditor.class);
+        PropertyEditorManager.registerEditor(Integer.class, IntegerPropertyEditor.class);
+        PropertyEditorManager.registerEditor(Boolean.class, BooleanPropertyEditor.class);
+    }
+
     public static final String GROUP = "group"; //$NON-NLS-1$
 
     public static final String ORDER = "order"; //$NON-NLS-1$
