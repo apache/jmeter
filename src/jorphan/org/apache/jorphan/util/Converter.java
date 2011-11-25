@@ -17,6 +17,7 @@
  */
 package org.apache.jorphan.util;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -39,7 +40,7 @@ public class Converter {
      */
     public static Object convert(Object value, Class<?> toType) {
         if (value == null) {
-            value = "";
+            value = ""; // TODO should we allow null for non-primitive types?
         } else if (toType.isAssignableFrom(value.getClass())) {
             return value;
         } else if (toType.equals(float.class) || toType.equals(Float.class)) {
@@ -60,6 +61,8 @@ public class Converter {
             return getDate(value);
         } else if (toType.equals(Calendar.class)) {
             return getCalendar(value);
+        } else if (toType.equals(File.class)) {
+            return getFile(value);
         } else if (toType.equals(Class.class)) {
             try {
                 return Class.forName(value.toString());
@@ -366,5 +369,15 @@ public class Converter {
      */
     public static String getString(Object o) {
         return getString(o, "");
+    }
+    
+    public static File getFile(Object o){
+        if (o instanceof File) {
+            return (File) o;
+        }
+        if (o instanceof String) {
+            return new File((String) o);
+        }
+        throw new IllegalArgumentException("Expected String or file, actual "+o.getClass().getName());
     }
 }
