@@ -227,6 +227,7 @@ Loads any additional properties found in META-INF/resources/org.apache.jmeter.na
 <li>Bug 42538 - Add "duplicate node" in context menu</li>
 <li>Bug 46921 - Add Ability to Change Controller elements</li>
 <li>Bug 52240 - TestBeans should support Boolean, Integer and Long</li>
+<li>Bug 52241 - GenericTestBeanCustomizer assumes that the default value is the empty string</li>
 </ul>
 
 <h2>Non-functional changes</h2>
