@@ -381,7 +381,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
         } else if (!acceptsExpressions || !isExpression(text)) {
             // not an expression (can't be or isn't), not null.
             try {
-                typeEditor.setAsText(text);
+                typeEditor.setAsText(text); // ensure value is propagated to editor
             } catch (IllegalArgumentException e) {
                 shouldNeverHappen(e);
             }
@@ -437,7 +437,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
             firePropertyChange();
         } else {
             if (GuiPackage.getInstance() == null){
-                log.warn("Invalid value: "+text+" "+guiEditor);
+                log.warn("Invalid value: "+text+" "+typeEditor);
             } else {
                 JOptionPane.showMessageDialog(guiEditor.getCustomEditor().getParent(),
                    JMeterUtils.getResString("property_editor.value_is_invalid_message"),//$NON-NLS-1$
