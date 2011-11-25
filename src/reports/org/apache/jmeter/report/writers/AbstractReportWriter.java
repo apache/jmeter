@@ -22,8 +22,6 @@ import java.util.Calendar;
 
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 /**
  * The abstract report writer provides the common implementation for subclasses
