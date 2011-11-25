@@ -21,6 +21,7 @@ package org.apache.jmeter.examples.testbeans.example3;
 import java.beans.PropertyDescriptor;
 
 import org.apache.jmeter.testbeans.BeanInfoSupport;
+import org.apache.jmeter.testbeans.gui.GuiEditor;
 
 public class Example3BeanInfo extends BeanInfoSupport {
 
@@ -49,5 +50,6 @@ public class Example3BeanInfo extends BeanInfoSupport {
         getprop("myLong2", Long.valueOf(456));
         getprop("myString1");
         getprop("myString2","abcd");
+        property("myFile2", GuiEditor.FileEditor);
     }
 }
