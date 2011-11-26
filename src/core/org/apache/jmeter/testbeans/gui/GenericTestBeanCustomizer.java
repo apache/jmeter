@@ -96,6 +96,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    // should be quicker to find the editors if they are registered.
     static {
         PropertyEditorManager.registerEditor(Long.class,    LongPropertyEditor.class);
         PropertyEditorManager.registerEditor(Integer.class, IntegerPropertyEditor.class);
@@ -206,6 +207,8 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
                 continue;
             }
 
+            validateAttributes(descriptor);
+
             PropertyEditor propertyEditor;
             Object guiType = descriptor.getValue(GUITYPE);
             if (guiType instanceof GuiEditor) {
@@ -273,6 +276,40 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 
         // Initialize the GUI:
         init();
+    }
+
+    /**
+     * Validate the descriptor attributes.
+     * 
+     * @param pd
+     */
+    private static void validateAttributes(PropertyDescriptor pd) {
+        if (notNull(pd) && pd.getValue(DEFAULT) == null) {
+            log.warn(getDetails(pd) + " requires a value but does not provide a default.");
+        }
+        if (notOther(pd) && pd.getValue(TAGS) == null) {
+            log.warn(getDetails(pd) + " does not have tags but other values are not allowed.");
+        }
+        if (!notNull(pd)) {
+            Class<?> propertyType = pd.getPropertyType();
+            if (propertyType.isPrimitive()) {
+                log.warn(getDetails(pd) + " allows null but is a primitive type");
+            }
+        }
+    }
+
+    /**
+     * Identify the property from the descriptor.
+     * 
+     * @param pd
+     * @return
+     */
+    private static String getDetails(PropertyDescriptor pd) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(pd.getReadMethod().getDeclaringClass().getName());
+        sb.append('#');
+        sb.append(pd.getName());
+        return sb.toString();
     }
 
     /**
