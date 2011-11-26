@@ -90,7 +90,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 
     private final Class<?> testBeanClass;
 
-    private transient BeanInfo beanInfo;
+    private transient final BeanInfo beanInfo;
 
     private final Class<?> customizerClass;
 
@@ -135,11 +135,15 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
         PropertyEditorManager.setEditorSearchPath(paths.toArray(new String[0]));
     }
 
-    // Dummy for JUnit test
+    /**
+     * @deprecated Dummy for JUnit test purposes only
+     */
+    @Deprecated
     public TestBeanGUI() {
         log.warn("Constructor only for use in testing");// $NON-NLS-1$
         testBeanClass = null;
         customizerClass = null;
+        beanInfo = null;
     }
 
     public TestBeanGUI(Class<?> testBeanClass) {
