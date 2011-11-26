@@ -135,7 +135,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 
     public static final String RESOURCE_BUNDLE = "resourceBundle"; //$NON-NLS-1$
 
-    /** Property editor override; must be an enum of type {@link GuiEditor} */
+    /** Property editor override; must be an enum of type {@link TypeEditor} */
     public static final String GUITYPE = "guiType"; // $NON-NLS-$
 
     public static final String ORDER(String group) {
@@ -217,8 +217,8 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 
             PropertyEditor propertyEditor;
             Object guiType = descriptor.getValue(GUITYPE);
-            if (guiType instanceof GuiEditor) {
-                propertyEditor = ((GuiEditor) guiType).getInstance(descriptor);            
+            if (guiType instanceof TypeEditor) {
+                propertyEditor = ((TypeEditor) guiType).getInstance(descriptor);            
             } else {
                 Class<?> editorClass = descriptor.getPropertyEditorClass();
                 if (log.isDebugEnabled()) {
