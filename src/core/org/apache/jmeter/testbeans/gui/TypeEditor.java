@@ -24,7 +24,7 @@ import java.beans.PropertyEditor;
 /**
  * Allow direct specification of property editors.
  */
-public enum GuiEditor {
+public enum TypeEditor {
     FileEditor     {@Override PropertyEditor getInstance(PropertyDescriptor descriptor) { return new FileEditor(descriptor); }},
     PasswordEditor {@Override PropertyEditor getInstance(PropertyDescriptor descriptor) { return new PasswordEditor(); }},
     TableEditor    {@Override PropertyEditor getInstance(PropertyDescriptor descriptor) { return new TableEditor(); }},
