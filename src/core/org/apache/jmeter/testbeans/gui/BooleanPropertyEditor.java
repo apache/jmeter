@@ -25,6 +25,8 @@ import java.beans.PropertyEditorSupport;
  */
 public class BooleanPropertyEditor extends PropertyEditorSupport {
 
+    private static final String[] TAGS = {"True", "False"}; // $NON-NLS-1$
+
     @Override
     public void setAsText(String text) {
         this.setValue(text);
@@ -41,4 +43,8 @@ public class BooleanPropertyEditor extends PropertyEditorSupport {
         }
     }
 
+    @Override
+    public String[] getTags() {
+        return TAGS;
+    }
 }
