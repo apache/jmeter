@@ -41,6 +41,7 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
 	 * Wrapper to {@link CyclicBarrier} to allow lazy init of CyclicBarrier when SyncTimer is configured with 0
 	 */
 	private static final class BarrierWrapper implements Cloneable {
+
 		private CyclicBarrier barrier;
 
 		/**
@@ -103,7 +104,7 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
 	
     private static final long serialVersionUID = 2;
     
-    private BarrierWrapper barrier;
+    private transient BarrierWrapper barrier;
 
     private int groupSize;
 
