@@ -107,7 +107,15 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 
     public static final String ORDER = "order"; //$NON-NLS-1$
 
-    /** Array of permissible values. Must be provided if {@link #NOT_OTHER} is TRUE */
+    /**
+     * Array of permissible values.
+     * <p>
+     * Must be provided if:
+     * <ul>
+     * <li>{@link #NOT_OTHER} is TRUE, and</li>
+     * <li>{@link PropertyEditor#getTags()} is null</li>
+     * </ul>
+     */
     public static final String TAGS = "tags"; //$NON-NLS-1$
 
     /** 
@@ -207,8 +215,6 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
                 continue;
             }
 
-            validateAttributes(descriptor);
-
             PropertyEditor propertyEditor;
             Object guiType = descriptor.getValue(GUITYPE);
             if (guiType instanceof GuiEditor) {
@@ -248,6 +254,8 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
                 log.debug("Property " + name + " has property editor " + propertyEditor);
             }
 
+            validateAttributes(descriptor, propertyEditor);
+
             if (!propertyEditor.supportsCustomEditor()) {
                 propertyEditor = createWrapperEditor(propertyEditor, descriptor);
 
@@ -281,13 +289,14 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
     /**
      * Validate the descriptor attributes.
      * 
-     * @param pd
+     * @param pd the descriptor
+     * @param pe the propertyEditor
      */
-    private static void validateAttributes(PropertyDescriptor pd) {
+    private static void validateAttributes(PropertyDescriptor pd, PropertyEditor pe) {
         if (notNull(pd) && pd.getValue(DEFAULT) == null) {
             log.warn(getDetails(pd) + " requires a value but does not provide a default.");
         }
-        if (notOther(pd) && pd.getValue(TAGS) == null) {
+        if (notOther(pd) && pd.getValue(TAGS) == null && pe.getTags() == null) {
             log.warn(getDetails(pd) + " does not have tags but other values are not allowed.");
         }
         if (!notNull(pd)) {
@@ -295,6 +304,9 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
             if (propertyType.isPrimitive()) {
                 log.warn(getDetails(pd) + " allows null but is a primitive type");
             }
+        }
+        if (!pd.attributeNames().hasMoreElements()) {
+            log.warn(getDetails(pd) + " does not appear to have been configured");            
         }
     }
 
