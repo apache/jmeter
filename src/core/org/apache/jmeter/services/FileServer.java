@@ -75,7 +75,7 @@ public class FileServer {
     //@GuardedBy("this")
     private File base;
 
-    //@GuardedBy("this") TODO perhaps use ConcurrentHashMap
+    //@GuardedBy("this") NOTE this also guards against possible window in checkForOpenFiles()
     private final Map<String, FileEntry> files = new HashMap<String, FileEntry>();
 
     private static final FileServer server = new FileServer();
@@ -159,13 +159,16 @@ public class FileServer {
     }
 
 	/**
-	 * @throws IllegalStateException
+	 * Check if there are entries in use.
+	 * <p>
+	 * 
+	 * @throws IllegalStateException if there are any entries still in use
 	 */
 	private void checkForOpenFiles() throws IllegalStateException {
-		if (filesOpen()) {
+		if (filesOpen()) { // checks for entries in use
             throw new IllegalStateException("Files are still open, cannot change base directory");
         }
-        files.clear();
+        files.clear(); // tidy up any unused entries
 	}
 
     public synchronized String getBaseDir() {
