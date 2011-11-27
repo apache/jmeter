@@ -486,8 +486,7 @@ public final class ClassFinder {
         try{
             Class<?> c = Class.forName(classInQuestion, false, contextClassLoader);
             for(Method method : c.getMethods()) {
-                for(int i = 0;i<annotations.length;i++) {
-                    Class<? extends Annotation> annotation = annotations[i];
+                for(Class<? extends Annotation> annotation : annotations) {
                     if(method.isAnnotationPresent(annotation)) {
                         return true;
                     }

@@ -402,8 +402,7 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
         if (cookies == null) {
             return;
         }
-        for(int i=0;i<cookies.length;i++){
-            org.apache.commons.httpclient.Cookie cookie = cookies[i];
+        for(org.apache.commons.httpclient.Cookie cookie : cookies){
             try {
                 if (CHECK_COOKIES) {
                     cookieSpec.validate(host, port, path, isSecure, cookie);
