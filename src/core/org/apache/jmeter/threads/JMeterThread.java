@@ -491,13 +491,12 @@ public class JMeterThread implements Runnable, Interruptible {
         if(transactionSampler != null) {
             ArrayList<SampleListener> onlySubSamplerListeners = new ArrayList<SampleListener>();
             List<SampleListener> transListeners = transactionPack.getSampleListeners();
-            for(Iterator<SampleListener> i = sampleListeners.iterator(); i.hasNext();) {
-                SampleListener listener = i.next();
+            for(SampleListener listener : sampleListeners) {
                 // Check if this instance is present in transaction listener list
                 boolean found = false;
-                for(Iterator<SampleListener> j = transListeners.iterator(); j.hasNext();) {
+                for(SampleListener trans : transListeners) {
                     // Check for the same instance
-                    if(j.next() == listener) {
+                    if(trans == listener) {
                         found = true;
                         break;
                     }

@@ -28,10 +28,8 @@ import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.io.input.CountingInputStream;
@@ -384,17 +382,15 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         // Get all the request properties, which are the headers set on the connection
         StringBuilder hdrs = new StringBuilder(100);
         Map<String, List<String>> requestHeaders = conn.getRequestProperties();
-        Set<Map.Entry<String, List<String>>> headerFields = requestHeaders.entrySet();
-        for(Iterator<Map.Entry<String, List<String>>> i = headerFields.iterator(); i.hasNext();) {
-            Map.Entry<String, List<String>> entry = i.next();
+        for(Map.Entry<String, List<String>> entry : requestHeaders.entrySet()) {
             String headerKey=entry.getKey();
             // Exclude the COOKIE header, since cookie is reported separately in the sample
             if(!HEADER_COOKIE.equalsIgnoreCase(headerKey)) {
-                List<String> values = entry.getValue();// value is a List of Strings
-                for (int j=0;j<values.size();j++){
+                // value is a List of Strings
+                for (String value : entry.getValue()){
                     hdrs.append(headerKey);
                     hdrs.append(": "); // $NON-NLS-1$
-                    hdrs.append(values.get(j));
+                    hdrs.append(value);
                     hdrs.append("\n"); // $NON-NLS-1$
                 }
             }
