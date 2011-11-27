@@ -180,9 +180,8 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
         if (testElement instanceof HTTPSamplerBase) {
             HTTPSamplerBase base = (HTTPSamplerBase) testElement;
             tableModel.clearData();
-            HTTPFileArg[] files = base.getHTTPFiles();
-            for(int i=0; i< files.length; i++){
-                tableModel.addRow(files[i]);
+            for(HTTPFileArg file : base.getHTTPFiles()){
+                tableModel.addRow(file);
             }
             checkDeleteAndBrowseStatus();
         }

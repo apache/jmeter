@@ -257,8 +257,7 @@ public final class JOrphanUtils {
     public static String replaceAllChars(String source, char search, String replace) {
         char[] chars = source.toCharArray();
         StringBuilder sb = new StringBuilder(source.length()+20);
-        for(int i = 0; i < chars.length; i++){
-            char c = chars[i];
+        for(char c : chars){
             if (c == search){
                 sb.append(replace);
             } else {

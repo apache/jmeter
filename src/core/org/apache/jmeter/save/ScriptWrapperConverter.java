@@ -97,8 +97,7 @@ public class ScriptWrapperConverter implements Converter {
         final ConversionException conversionException = new ConversionException(e);
         StackTraceElement[] ste = e.getStackTrace();
         if (ste!=null){
-            for(int i=0; i<ste.length; i++){
-                StackTraceElement top=ste[i];
+            for(StackTraceElement top : ste){
                 String className=top.getClassName();
                 if (className.startsWith("org.apache.jmeter.")){
                     conversionException.add("first-jmeter-class", top.toString());

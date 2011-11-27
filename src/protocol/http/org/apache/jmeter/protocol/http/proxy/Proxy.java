@@ -289,8 +289,8 @@ public class Proxy extends Thread {
                 headers.removeHeaderNamed(HTTPConstants.HEADER_COOKIE);// Always remove cookies
                 headers.removeHeaderNamed(HTTPConstants.HEADER_AUTHORIZATION);// Always remove authorization
                 // Remove additional headers
-                for(int i=0; i < headersToRemove.length; i++){
-                    headers.removeHeaderNamed(headersToRemove[i]);
+                for(String hdr : headersToRemove){
+                    headers.removeHeaderNamed(hdr);
                 }
             }
             target.deliverSampler(sampler, new TestElement[] { captureHttpHeaders ? headers : null }, result);
