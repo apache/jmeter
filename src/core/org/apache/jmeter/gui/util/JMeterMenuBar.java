@@ -347,9 +347,9 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         final String addedLocales = JMeterUtils.getProperty("locales.add");
         if (addedLocales != null){
             String [] addLanguages =addedLocales.split(","); // $NON-NLS-1$
-            for(int i=0; i < addLanguages.length; i++){
-                log.info("Adding locale "+addLanguages[i]);
-                lang.add(addLanguages[i]);
+            for(String newLang : addLanguages){
+                log.info("Adding locale "+newLang);
+                lang.add(newLang);
             }
         }
         return lang.toArray(new String[lang.size()]);
@@ -367,9 +367,8 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
          * Also, need to ensure that the names are valid resource entries too.
          */
 
-        String lang[] = getLanguages();
-        for(int i=0; i < lang.length; i++ ){
-            langMenu.addLang(lang[i]);
+        for(String lang : getLanguages()){
+            langMenu.addLang(lang);
         }
         return languageMenu;
     }
