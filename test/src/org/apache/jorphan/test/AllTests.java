@@ -366,7 +366,7 @@ public final class AllTests {
                     tests++;
                     suite.addTest(t);
                 } catch (Exception ex) {
-                    System.out.println("Error adding test for class " + name + " " + ex.toString());
+                    System.out.println("ERROR: (see logfile) could not add test for class " + name + " " + ex.toString());
                     log.error("error adding test :", ex);
                 }
             }
