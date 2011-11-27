@@ -229,6 +229,7 @@ Loads any additional properties found in META-INF/resources/org.apache.jmeter.na
 <li>Bug 52240 - TestBeans should support Boolean, Integer and Long</li>
 <li>Bug 52241 - GenericTestBeanCustomizer assumes that the default value is the empty string</li>
 <li>Bug 52242 - FileEditor does not allow output to be saved in a File </li>
+<li>Bug 51093 - when loading a selection previously stored by "Save Selection As", show the file name in the blue window bar</li>
 </ul>
 
 <h2>Non-functional changes</h2>
