@@ -48,7 +48,7 @@ public class BeanShellSampler extends BeanShellTestElement implements Sampler, I
 
     public static final String RESET_INTERPRETER = "BeanShellSampler.resetInterpreter"; //$NON-NLS-1$
 
-    private volatile BeanShellInterpreter savedBsh = null;
+    private transient volatile BeanShellInterpreter savedBsh = null;
     
     @Override
     protected String getInitFileProperty() {
