@@ -589,12 +589,11 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             return res;
         } catch (IOException e) {
             res.sampleEnd();
+            savedConn = null; // we don't want interrupt to try disconnection again
             // We don't want to continue using this connection, even if KeepAlive is set
             if (conn != null) { // May not exist
-                savedConn = null; // we don't want interrupt to try disconnection again
                 conn.disconnect();
             }
-            savedConn = null; // we don't want interrupt to try disconnection again
             conn=null; // Don't process again
             return errorResult(e, res);
         } finally {
