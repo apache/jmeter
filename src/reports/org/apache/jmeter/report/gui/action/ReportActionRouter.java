@@ -42,7 +42,7 @@ import org.apache.log.Logger;
 public final class ReportActionRouter implements ActionListener {
     private Map<String, Set<Command>> commands = new HashMap<String, Set<Command>>();
 
-    private static ReportActionRouter router;
+    private static volatile ReportActionRouter router;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 

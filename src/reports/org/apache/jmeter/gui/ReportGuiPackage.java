@@ -57,7 +57,7 @@ public final class ReportGuiPackage implements LocaleChangeListener {
 	private static final Object LOCK = new Object();
 
     /** Singleton instance. */
-    private static ReportGuiPackage guiPack;
+    private static volatile ReportGuiPackage guiPack;
 
     /**
      * Flag indicating whether or not parts of the tree have changed since they
