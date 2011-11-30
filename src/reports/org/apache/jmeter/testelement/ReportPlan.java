@@ -56,7 +56,7 @@ public class ReportPlan extends AbstractTestElement implements Serializable, Tes
 
     private static final List<String> itemsCanAdd = new LinkedList<String>();
 
-    private static ReportPlan plan;
+    //private static ReportPlan plan;
 
     // There's only 1 test plan, so can cache the mode here
     private static volatile boolean functionalMode = false;
@@ -113,17 +113,18 @@ public class ReportPlan extends AbstractTestElement implements Serializable, Tes
         getVariables().addArgument(name, value);
     }
 
-    public static ReportPlan createReportPlan(String name) {
-        if (plan == null) {
-            if (name == null) {
-                plan = new ReportPlan();
-            } else {
-                plan = new ReportPlan(name);
-            }
-            plan.setProperty(new StringProperty(TestElement.GUI_CLASS, "org.apache.jmeter.control.gui.ReportGui"));
-        }
-        return plan;
-    }
+    // FIXME Wrong code that create different constructor for static field depending on caller
+//    public static ReportPlan createReportPlan(String name) {
+//        if (plan == null) {
+//            if (name == null) {
+//                plan = new ReportPlan();
+//            } else {
+//                plan = new ReportPlan(name);
+//            }
+//            plan.setProperty(new StringProperty(TestElement.GUI_CLASS, "org.apache.jmeter.control.gui.ReportGui"));
+//        }
+//        return plan;
+//    }
 
     @Override
     public void addTestElement(TestElement tg) {
