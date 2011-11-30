@@ -54,6 +54,8 @@ public final class ReportGuiPackage implements LocaleChangeListener {
     /** Logging. */
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+	private static final Object LOCK = new Object();
+
     /** Singleton instance. */
     private static ReportGuiPackage guiPack;
 
@@ -128,9 +130,13 @@ public final class ReportGuiPackage implements LocaleChangeListener {
      */
     public static ReportGuiPackage getInstance(ReportTreeListener listener, ReportTreeModel treeModel) {
         if (guiPack == null) {
-            guiPack = new ReportGuiPackage();
-            guiPack.setTreeListener(listener);
-            guiPack.setTreeModel(treeModel);
+        	synchronized (LOCK) {
+        		if(guiPack== null) {
+	                guiPack = new ReportGuiPackage();
+	                guiPack.setTreeListener(listener);
+	                guiPack.setTreeModel(treeModel);				
+        		}
+			}
         }
         return guiPack;
     }
