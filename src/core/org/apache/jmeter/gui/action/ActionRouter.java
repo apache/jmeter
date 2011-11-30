@@ -43,7 +43,7 @@ public final class ActionRouter implements ActionListener {
 
 	private static final Object LOCK = new Object();
 
-    private static ActionRouter router;
+    private static volatile ActionRouter router;
 
     private Map<String, Set<Command>> commands = new HashMap<String, Set<Command>>();
 
