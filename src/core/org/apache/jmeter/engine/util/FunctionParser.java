@@ -134,9 +134,9 @@ class FunctionParser {
                         if (reader.read(current) == 0 || current[0] != '}') {
                             reader.reset();// set to start of string
                             char []cb = new char[100];
-                            reader.read(cb);// return deliberately ignored
+                            int nbRead = reader.read(cb);
                             throw new InvalidVariableException
-                            ("Expected } after "+funcName+" function call in "+new String(cb));
+                            ("Expected } after "+funcName+" function call in "+new String(cb, 0, nbRead));
                         }
                         if (function instanceof TestListener) {
                             StandardJMeterEngine.register((TestListener) function);
