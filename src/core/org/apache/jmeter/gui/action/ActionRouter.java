@@ -41,6 +41,8 @@ import org.apache.log.Logger;
 public final class ActionRouter implements ActionListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+	private static final Object LOCK = new Object();
+
     private static ActionRouter router;
 
     private Map<String, Set<Command>> commands = new HashMap<String, Set<Command>>();
@@ -279,8 +281,12 @@ public final class ActionRouter implements ActionListener {
      */
     public static ActionRouter getInstance() {
         if (router == null) {
-            router = new ActionRouter();
-            router.populateCommandMap();
+        	synchronized (LOCK) {
+        		if(router == null) {
+	                router = new ActionRouter();
+	                router.populateCommandMap();
+        		}				
+			}
         }
         return router;
     }
