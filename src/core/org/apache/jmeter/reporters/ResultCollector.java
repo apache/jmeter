@@ -389,10 +389,10 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             // Find the name of the directory containing the file
             // and create it - if there is one
             File pdir = new File(filename).getParentFile();
-            if (pdir != null && !pdir.exists()) {
-                boolean mkdirResult = pdir.mkdirs();
-                if (!mkdirResult){
-                    log.warn("Error creating directories for "+pdir.getAbsolutePath());
+            if (pdir != null) {
+                pdir.mkdirs();// returns false if directory already exists, so need to check again
+                if (!pdir.exists()){
+                    log.warn("Error creating directories for "+pdir.toString());
                 }
             }
             writer = new PrintWriter(new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(filename,
