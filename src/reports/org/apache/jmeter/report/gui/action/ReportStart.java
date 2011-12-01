@@ -22,12 +22,11 @@ import java.awt.event.ActionEvent;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.jmeter.engine.StandardJMeterEngine;
-import org.apache.jmeter.gui.ReportGuiPackage;
 import org.apache.jmeter.gui.action.ActionNames;
-//import org.apache.jorphan.logging.LoggingManager;
-//import org.apache.log.Logger;
 
+/**
+ * FIXME BROKEN CODE
+ */
 public class ReportStart extends AbstractAction {
     //private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -38,7 +37,7 @@ public class ReportStart extends AbstractAction {
         commands.add(ActionNames.ACTION_SHUTDOWN);
     }
     // FIXME Due to startEngine being commented engine will always be null
-    private StandardJMeterEngine engine;
+    //private StandardJMeterEngine engine;
 
     /**
      * Constructor for the Start object.
@@ -62,17 +61,19 @@ public class ReportStart extends AbstractAction {
             popupShouldSave(e);
             startEngine();
         } else if (e.getActionCommand().equals(ActionNames.ACTION_STOP)) {
-            if (engine != null) {
-                ReportGuiPackage.getInstance().getMainFrame().showStoppingMessage("");
-                engine.stopTest();
-                engine = null;
-            }
+        	// FIXME engine is always null
+//            if (engine != null) {
+//                ReportGuiPackage.getInstance().getMainFrame().showStoppingMessage("");
+//                engine.stopTest();
+//                engine = null;
+//            }
         } else if (e.getActionCommand().equals(ActionNames.ACTION_SHUTDOWN)) {
-            if (engine != null) {
-                ReportGuiPackage.getInstance().getMainFrame().showStoppingMessage("");
-                engine.askThreadsToStop();
-                engine = null;
-            }
+        	// FIXME engine is always null
+//            if (engine != null) {
+//                ReportGuiPackage.getInstance().getMainFrame().showStoppingMessage("");
+//                engine.askThreadsToStop();
+//                engine = null;
+//            }
         }
     }
 
