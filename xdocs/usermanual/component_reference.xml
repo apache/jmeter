@@ -4454,8 +4454,10 @@ For details, see <complink name="BSF PreProcessor"/>.
 <component name="JDBC PreProcessor" index="&sect-num;.7.9">
 <description>
 <p>
-TBA
+The JDBC PostProcessor enables you to run some SQL statement just before a sample runs.
+This can be useful if your JDBC Sample changes some data and you want to reset state to what it was before the JDBC sample run.
 </p>
+
 </description>
 </component>
 
@@ -4788,7 +4790,8 @@ For details, see the <complink name="BSF PostProcessor"/>.
 <component name="JDBC PostProcessor" index="&sect-num;.8.7">
 <description>
 <p>
-TBA
+The JDBC PostProcessor enables you to run some SQL statement just after a sample has run.
+This can be useful if your JDBC Sample requires some data to be in DataBase and you cannot compute this in a setup Thread group.
 </p>
 </description>
 </component>
