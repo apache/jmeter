@@ -4454,7 +4454,7 @@ For details, see <complink name="BSF PreProcessor"/>.
 <component name="JDBC PreProcessor" index="&sect-num;.7.9">
 <description>
 <p>
-The JDBC PostProcessor enables you to run some SQL statement just before a sample runs.
+The JDBC PreProcessor enables you to run some SQL statement just before a sample runs.
 This can be useful if your JDBC Sample changes some data and you want to reset state to what it was before the JDBC sample run.
 </p>
 
