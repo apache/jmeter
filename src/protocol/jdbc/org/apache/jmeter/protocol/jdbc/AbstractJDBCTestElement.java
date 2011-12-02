@@ -29,11 +29,14 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.CSVSaveService;
@@ -567,6 +570,25 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
      */
     public void setResultVariable(String resultVariable) {
         this.resultVariable = resultVariable;
-    }
-    
+    }    
+
+    /** 
+     * {@inheritDoc}}
+	 */
+	@Override
+	public List<String> getSearchableTokens() throws Exception {
+		List<String> result = super.getSearchableTokens();
+		Set<String> properties = new HashSet<String>();
+		properties.addAll(Arrays.asList(new String[]{
+			"dataSource",
+			"query",
+			"queryArguments",
+			"queryArgumentsTypes",
+			"queryType",
+			"resultVariable",
+			"variableNames"
+		}));
+		addPropertiesValues(result, properties);
+        return result;
+	}  
 }
