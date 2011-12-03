@@ -362,6 +362,10 @@ public final class GuiPackage implements LocaleChangeListener {
             comp = testBeanGUIs.get(testClass);
             if (comp == null) {
                 comp = new TestBeanGUI(testClass);
+                // When Switching to another language occurs, Introspector clears its internal caches
+                // and GUI classes information gets lost, so we initialize the GUI classes here
+                // TODO Find a better place for this
+                ((TestBeanGUI)comp).setupGuiClasses();
                 testBeanGUIs.put(testClass, comp);
             }
         } else {
