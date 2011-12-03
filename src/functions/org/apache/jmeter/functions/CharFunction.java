@@ -57,18 +57,13 @@ public class CharFunction extends AbstractFunction {
         StringBuilder sb = new StringBuilder(values.length);
         for (int i=0; i < values.length; i++){
             String numberString = ((CompoundVariable) values[i]).execute().trim();
-            long value = 0;
             try {
-                if (numberString.startsWith("0x")) {// $NON-NLS-1$
-                    value=Long.parseLong(numberString.substring(2),16);
-                } else {
-                    value=Long.parseLong(numberString);
-                }
+                long value=Long.decode(numberString).longValue();
+                char ch = (char) value;
+                sb.append(ch);
             } catch (NumberFormatException e){
                 log.warn("Could not parse "+numberString+" : "+e);
             }
-            char ch = (char) value;
-            sb.append(ch);
         }
         return sb.toString();
 
