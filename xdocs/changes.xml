@@ -58,6 +58,12 @@ For example a Test Action sampler with 0 wait time (which doesn't generate a sam
 or a Debug Sampler with all fields set to False (to reduce the sample size).
 </p>
 
+<p>
+The menu item Options / Choose Language does not change all the displayed text to the new language.
+[The behaviour has improved, but language change is still not fully working, see BUG 52280]
+To override the default local language fully, set the JMeter property "language" before starting JMeter. 
+</p>
+
 <!-- =================== Incompatible changes =================== -->
 
 <h2>Incompatible changes</h2>
@@ -228,6 +234,7 @@ Loads any additional properties found in META-INF/resources/org.apache.jmeter.na
 <li>Bug 52241 - GenericTestBeanCustomizer assumes that the default value is the empty string</li>
 <li>Bug 52242 - FileEditor does not allow output to be saved in a File </li>
 <li>Bug 51093 - when loading a selection previously stored by "Save Selection As", show the file name in the blue window bar</li>
+<li>Bug 50086 - Password fields not Hidden in JMS Publisher, JMS Subscriber, Mail Reader sampler, SMTP sampler and Database Configuration</li>
 </ul>
 
 <h2>Non-functional changes</h2>

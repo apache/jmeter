@@ -33,6 +33,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
@@ -513,7 +514,7 @@ public class SmtpPanel extends JPanel {
         tfMailToCC = new JTextField(25);
         tfMailToBCC = new JTextField(25);
         tfAuthUsername = new JTextField(20);
-        tfAuthPassword = new JTextField(20);
+        tfAuthPassword = new JPasswordField(20);
         tfSubject = new JTextField(20);
         tfAttachment = new JTextField(30);
         tfEmlMessage = new JTextField(30);
