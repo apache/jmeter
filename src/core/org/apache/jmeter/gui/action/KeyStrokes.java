@@ -41,6 +41,8 @@ public final class KeyStrokes {
     public static final KeyStroke DEBUG_ON          = KeyStroke.getKeyStroke(KeyEvent.VK_D, CONTROL_MASK | KeyEvent.SHIFT_DOWN_MASK);
     public static final KeyStroke CLEAR_ALL         = KeyStroke.getKeyStroke(KeyEvent.VK_E, CONTROL_MASK);
     public static final KeyStroke CLEAR             = KeyStroke.getKeyStroke(KeyEvent.VK_E, CONTROL_MASK | KeyEvent.SHIFT_DOWN_MASK);
+    public static final KeyStroke ESC               = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
+    public static final KeyStroke ENTER             = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
     public static final KeyStroke FUNCTIONS         = KeyStroke.getKeyStroke(KeyEvent.VK_F, CONTROL_MASK);
     public static final KeyStroke SAVE_GRAPHICS     = KeyStroke.getKeyStroke(KeyEvent.VK_G, CONTROL_MASK);
     public static final KeyStroke SAVE_GRAPHICS_ALL = KeyStroke.getKeyStroke(KeyEvent.VK_G, CONTROL_MASK | KeyEvent.SHIFT_DOWN_MASK);
