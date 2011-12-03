@@ -4811,7 +4811,7 @@ This can be useful if your JDBC Sample changes some data and you want to reset s
         <link href="JDBC-Pre-Post-Processor.jmx">Test Plan using JDBC Pre/Post Processor</link>
 </links>
 <p>
-In the linked test plan,"JDBC PostProcessor" JDBC PostProcessor calls a stored procedure to delete the Price Cut-Off that was created by PreProcessor from Database.
+In the linked test plan,"JDBC PostProcessor" JDBC PostProcessor calls a stored procedure to delete from Database the Price Cut-Off that was created by PreProcessor.
 <figure width="1346" height="636" image="jdbc-post-processor.png">JDBC PostProcessor</figure>
 </p>
 </section>
