@@ -32,6 +32,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 
 /**
@@ -238,5 +239,23 @@ public class JLabeledTextArea extends JPanel implements JLabeledField, FocusList
         for (int index = 0; index < mChangeListeners.size(); index++) {
             mChangeListeners.get(index).stateChanged(ce);
         }
+    }
+    
+    public String[] getTextLines() {
+        int numLines = mTextArea.getLineCount();
+        String[] lines = new String[numLines];
+        for(int i = 0; i < numLines; i++) {
+            try {
+                int start = mTextArea.getLineStartOffset(i);
+                int end = mTextArea.getLineEndOffset(i); // treats last line specially
+                if (i == numLines-1) { // Last line
+                    end++; // Allow for missing terminator
+                }
+                lines[i]=mTextArea.getText(start, end-start-1);
+            } catch (BadLocationException e) { // should not happen
+                throw new IllegalStateException("Could not read line "+i,e);
+            }
+        }
+        return lines;
     }
 }
