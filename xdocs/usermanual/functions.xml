@@ -1029,12 +1029,12 @@ The following variables are made available to the script:
 
 <properties>
         <property name="Unicode character number (decimal or 0xhex)" required="Yes">
-        The decimal number (or hex number, if prefixed by 0x) to be converted to a Unicode character.
+        The decimal number (or hex number, if prefixed by 0x, or octal, if prefixed by 0) to be converted to a Unicode character.
         </property>
 </properties>
 <p>Examples:
 <br/>
-${__char(0xC,0xA)} = CRLF
+${__char(13,10)} = ${__char(0xD,0xA)} = ${__char(015,012)} = CRLF
 <br/>
 ${__char(165)} = &#165; (yen)
  </p>
