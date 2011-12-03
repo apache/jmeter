@@ -131,6 +131,7 @@ This behaviour can be changed with property sample_sender_client_configured (set
 
 <h3>Functions</h3>
 <ul>
+<li>The CRLF example for the char function was wrong; CRLF=(0xD,0xA), not (0xC,0xA)</li>
 </ul>
 
 <h3>I18N</h3>
@@ -196,6 +197,7 @@ This behaviour can be changed with property sample_sender_client_configured (set
 <ul>
 <li>Bug 52006 - Create a function RandomString to generate random Strings</li>
 <li>Bug 52016 - It would be useful to support Jexl2</li>
+<li>__char() function now supports octal values</li>
 </ul>
 
 <h3>I18N</h3>
