@@ -20,6 +20,7 @@ package org.apache.jmeter.gui.action;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashSet;
@@ -27,6 +28,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
@@ -77,13 +80,19 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
         searchTF = new JLabeledTextField(JMeterUtils.getResString("search_text_field"), 20); //$NON-NLS-1$
         isRegexpCB = new JCheckBox(JMeterUtils.getResString("search_text_chkbox_regexp"), false); //$NON-NLS-1$
         isCaseSensitiveCB = new JCheckBox(JMeterUtils.getResString("search_text_chkbox_case"), false); //$NON-NLS-1$
+        Font font = new Font("SansSerif", Font.PLAIN, 10); // reduce font
+        isRegexpCB.setFont(font);
+        isCaseSensitiveCB.setFont(font);
 
         JPanel searchCriterionPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         searchCriterionPanel.add(isCaseSensitiveCB);
         searchCriterionPanel.add(isRegexpCB);
         
-        this.getContentPane().add(searchTF, BorderLayout.NORTH);
-        this.getContentPane().add(searchCriterionPanel, BorderLayout.CENTER);
+        JPanel searchPanel = new JPanel();
+        searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.Y_AXIS));
+        searchPanel.setBorder(BorderFactory.createEmptyBorder(7, 3, 3, 3));
+        searchPanel.add(searchTF, BorderLayout.NORTH);
+        searchPanel.add(searchCriterionPanel, BorderLayout.CENTER);
         JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         
         searchButton = new JButton(JMeterUtils.getResString("search")); //$NON-NLS-1$
@@ -92,7 +101,8 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
         cancelButton.addActionListener(this);
         buttonsPanel.add(searchButton);
         buttonsPanel.add(cancelButton);
-        this.getContentPane().add(buttonsPanel, BorderLayout.SOUTH);
+        searchPanel.add(buttonsPanel, BorderLayout.SOUTH);
+        this.getContentPane().add(searchPanel);
         this.pack();
         ComponentUtil.centerComponentInWindow(this);
     }
