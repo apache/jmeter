@@ -4455,9 +4455,21 @@ For details, see <complink name="BSF PreProcessor"/>.
 <description>
 <p>
 The JDBC PreProcessor enables you to run some SQL statement just before a sample runs.
-This can be useful if your JDBC Sample changes some data and you want to reset state to what it was before the JDBC sample run.
+This can be useful if your JDBC Sample requires some data to be in DataBase and you cannot compute this in a setup Thread group.
 </p>
+<p>
+See the following Test plan:
+</p>
+<links>
+        <link href="JDBC-Pre-Post-Processor.jmx">Test Plan using JDBC Pre/Post Processor</link>
+</links>
+<p>
+In the linked test plan,"Create Price Cut-Off" JDBC PreProcessor calls a stored procedure to create a Price Cut-Off in Database,
+this one will be used by "Calculate Price cut off".
 
+<figure width="1346" height="636" image="jdbc-pre-processor.png">Create Price Cut-Off Preprocessor</figure>
+
+</p>
 </description>
 </component>
 
@@ -4791,13 +4803,17 @@ For details, see the <complink name="BSF PostProcessor"/>.
 <description>
 <p>
 The JDBC PostProcessor enables you to run some SQL statement just after a sample has run.
-This can be useful if your JDBC Sample requires some data to be in DataBase and you cannot compute this in a setup Thread group.
+This can be useful if your JDBC Sample changes some data and you want to reset state to what it was before the JDBC sample run.
 </p>
 </description>
 </component>
-
-<a href="#">^</a>
-
+<links>
+        <link href="JDBC-Pre-Post-Processor.jmx">Test Plan using JDBC Pre/Post Processor</link>
+</links>
+<p>
+In the linked test plan,"JDBC PostProcessor" JDBC PostProcessor calls a stored procedure to delete the Price Cut-Off that was created by PreProcessor from Database.
+<figure width="1343" height="631" image="jdbc-post-processor.png">JDBC PostProcessor</figure>
+</p>
 </section>
 
 <section name="&sect-num;.9 Miscellaneous Features" anchor="Miscellaneous_Features">
