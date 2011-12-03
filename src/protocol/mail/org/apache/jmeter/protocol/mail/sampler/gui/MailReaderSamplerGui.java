@@ -31,6 +31,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
@@ -192,7 +193,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
         usernameBox = new JTextField(20);
         addField(settingsPanel, AccountLabel, usernameBox, gbc);
 
-        passwordBox = new JTextField(20);
+        passwordBox = new JPasswordField(20);
         addField(settingsPanel, PasswordLabel, passwordBox, gbc);
 
         folderLabel = new JLabel(FolderLabel);
