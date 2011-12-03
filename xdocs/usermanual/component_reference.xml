@@ -4467,7 +4467,7 @@ See the following Test plan:
 In the linked test plan,"Create Price Cut-Off" JDBC PreProcessor calls a stored procedure to create a Price Cut-Off in Database,
 this one will be used by "Calculate Price cut off".
 
-<figure width="1346" height="636" image="jdbc-pre-processor.png">Create Price Cut-Off Preprocessor</figure>
+<figure width="1343" height="631" image="jdbc-pre-processor.png">Create Price Cut-Off Preprocessor</figure>
 
 </p>
 </description>
@@ -4812,7 +4812,7 @@ This can be useful if your JDBC Sample changes some data and you want to reset s
 </links>
 <p>
 In the linked test plan,"JDBC PostProcessor" JDBC PostProcessor calls a stored procedure to delete the Price Cut-Off that was created by PreProcessor from Database.
-<figure width="1343" height="631" image="jdbc-post-processor.png">JDBC PostProcessor</figure>
+<figure width="1346" height="636" image="jdbc-post-processor.png">JDBC PostProcessor</figure>
 </p>
 </section>
 
