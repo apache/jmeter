@@ -34,12 +34,13 @@ public class SearchTreeCommand extends AbstractAction {
         commands.add(ActionNames.SEARCH_TREE);
     }
 
+    private SearchTreeDialog dialog = new SearchTreeDialog();
     /**
      * @see Command#doAction(ActionEvent)
      */
     @Override
     public void doAction(ActionEvent e) {
-    	new SearchTreeDialog().setVisible(true);
+    	dialog.setVisible(true);
     }
 
 

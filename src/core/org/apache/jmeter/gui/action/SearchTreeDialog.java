@@ -32,6 +32,7 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -68,7 +69,29 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
 
 	private JButton cancelButton;
 
+	/**
+	 * Store last search
+	 */
+	private transient String lastSearch = null;
 
+	/**
+	 * Hide Window on ESC
+	 */
+	private ActionListener enterActionListener = new ActionListener() {
+		public void actionPerformed(ActionEvent actionEvent) {
+			doSearch(actionEvent);
+		}	
+	};
+	
+	/**
+	 * Do search on Enter
+	 */
+	private ActionListener escapeActionListener = new ActionListener() {
+		public void actionPerformed(ActionEvent actionEvent) {
+			setVisible(false);
+		}	
+	};
+	
 	public SearchTreeDialog() {
         super((JFrame) null, JMeterUtils.getResString("search_tree_title"), true); //$NON-NLS-1$
         init();
@@ -78,6 +101,9 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
         this.getContentPane().setLayout(new BorderLayout(10,10));
 
         searchTF = new JLabeledTextField(JMeterUtils.getResString("search_text_field"), 20); //$NON-NLS-1$
+        if(!StringUtils.isEmpty(lastSearch)) {
+        	searchTF.setText(lastSearch);
+        }
         isRegexpCB = new JCheckBox(JMeterUtils.getResString("search_text_chkbox_regexp"), false); //$NON-NLS-1$
         isCaseSensitiveCB = new JCheckBox(JMeterUtils.getResString("search_text_chkbox_case"), false); //$NON-NLS-1$
         Font font = new Font("SansSerif", Font.PLAIN, 10); // reduce font
@@ -103,20 +129,35 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
         buttonsPanel.add(cancelButton);
         searchPanel.add(buttonsPanel, BorderLayout.SOUTH);
         this.getContentPane().add(searchPanel);
+        searchPanel.registerKeyboardAction(enterActionListener, KeyStrokes.ENTER, JComponent.WHEN_IN_FOCUSED_WINDOW);
+        searchPanel.registerKeyboardAction(escapeActionListener, KeyStrokes.ESC, JComponent.WHEN_IN_FOCUSED_WINDOW);
+    	searchTF.requestFocusInWindow();
+
         this.pack();
         ComponentUtil.centerComponentInWindow(this);
     }
 
-
+    /**
+     * Do search
+     * @param e {@link ActionEvent}
+     */
     public void actionPerformed(ActionEvent e) {
     	if(e.getSource()==cancelButton) {
     		this.setVisible(false);
     		return;
     	} 
-    	
-    	String wordToSearch = searchTF.getText();
+    	doSearch(e);
+    }
+
+	/**
+	 * @param e {@link ActionEvent}
+	 */
+	private void doSearch(ActionEvent e) {
+		String wordToSearch = searchTF.getText();
     	if(StringUtils.isEmpty(wordToSearch)) {
             return;
+        } else {
+        	this.lastSearch = wordToSearch;
         }
     	
     	// reset previous result
@@ -152,5 +193,5 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
         }
         GuiPackage.getInstance().getMainFrame().repaint();
         this.setVisible(false);
-    }
+	}
 }
