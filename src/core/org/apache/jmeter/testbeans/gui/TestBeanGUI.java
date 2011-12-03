@@ -25,6 +25,7 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.beans.PropertyEditorManager;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -347,9 +348,34 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
             return null;
         }
 
-        int matches = 0; // How many classes can we assign from?
+        int matches = setupGuiClasses(menuCategories);
+        if (matches == 0) {
+            log.error("Could not assign GUI class to " + testBeanClass.getName());
+        } else if (matches > 1) {// may be impossible, but no harm in
+                                    // checking ...
+            log.error("More than 1 GUI class found for " + testBeanClass.getName());
+        }
+        return menuCategories;
+    }
+    
+    /**
+     * Setup GUI class
+     * @return number of matches
+     */
+    public int setupGuiClasses() {
+    	return setupGuiClasses(new ArrayList<String>());
+    }
+    
+    /**
+     * Setup GUI class
+     * @param menuCategories List<String> menu categories
+     * @return number of matches
+     */
+    private int setupGuiClasses(List<String> menuCategories ) {
+    	int matches = 0;// How many classes can we assign from?
         // TODO: there must be a nicer way...
-        if (Assertion.class.isAssignableFrom(testBeanClass)) {
+        BeanDescriptor bd = beanInfo.getBeanDescriptor();
+    	if (Assertion.class.isAssignableFrom(testBeanClass)) {
             menuCategories.add(MenuFactory.ASSERTIONS);
             bd.setValue(TestElement.GUI_CLASS, AbstractAssertionGui.class.getName());
             matches++;
@@ -375,27 +401,21 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
             matches++;
         }
         if (PreProcessor.class.isAssignableFrom(testBeanClass)) {
-            matches++;
             menuCategories.add(MenuFactory.PRE_PROCESSORS);
             bd.setValue(TestElement.GUI_CLASS, AbstractPreProcessorGui.class.getName());
+            matches++;
         }
         if (Sampler.class.isAssignableFrom(testBeanClass)) {
-            matches++;
             menuCategories.add(MenuFactory.SAMPLERS);
             bd.setValue(TestElement.GUI_CLASS, AbstractSamplerGui.class.getName());
+            matches++;
         }
         if (Timer.class.isAssignableFrom(testBeanClass)) {
-            matches++;
             menuCategories.add(MenuFactory.TIMERS);
             bd.setValue(TestElement.GUI_CLASS, AbstractTimerGui.class.getName());
+            matches++;
         }
-        if (matches == 0) {
-            log.error("Could not assign GUI class to " + testBeanClass.getName());
-        } else if (matches > 1) {// may be impossible, but no harm in
-                                    // checking ...
-            log.error("More than 1 GUI class found for " + testBeanClass.getName());
-        }
-        return menuCategories;
+        return matches;
     }
 
     private void init() {
