@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.AccessController;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -51,7 +52,7 @@ public final class NewDriver {
     private static final String jmDir;
 
     static {
-        List<URL> jars = new LinkedList<URL>();
+    	final List<URL> jars = new LinkedList<URL>();
         final String initial_classpath = System.getProperty(JAVA_CLASS_PATH);
 
         // Find JMeter home dir from the initial classpath
@@ -122,7 +123,13 @@ public final class NewDriver {
 
         // ClassFinder needs the classpath
         System.setProperty(JAVA_CLASS_PATH, initial_classpath + classpath.toString());
-        loader = new DynamicClassLoader(jars.toArray(new URL[0]));
+        loader = AccessController.doPrivileged(
+        		new java.security.PrivilegedAction<DynamicClassLoader>() {
+        	        public DynamicClassLoader run() {
+        	        	return new DynamicClassLoader(jars.toArray(new URL[0]));
+        	        }
+        	    }
+        );
     }
 
     /**
