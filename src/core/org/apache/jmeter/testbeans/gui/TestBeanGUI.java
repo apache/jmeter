@@ -59,6 +59,8 @@ import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.timers.Timer;
 import org.apache.jmeter.timers.gui.AbstractTimerGui;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.util.LocaleChangeEvent;
+import org.apache.jmeter.util.LocaleChangeListener;
 import org.apache.jmeter.visualizers.Visualizer;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.logging.LoggingManager;
@@ -84,14 +86,14 @@ import org.apache.log.Logger;
  * customizers should implement SharedCustomizer.
  *
  */
-public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUIComponent {
+public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUIComponent, LocaleChangeListener{
     private static final long serialVersionUID = 240L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private final Class<?> testBeanClass;
 
-    private transient final BeanInfo beanInfo;
+    private transient BeanInfo beanInfo;
 
     private final Class<?> customizerClass;
 
@@ -177,6 +179,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
         // label, menu
         // categories, etc!
         initialized = false;
+        JMeterUtils.addLocaleChangeListener(this);
     }
 
     private Customizer createCustomizer() {
@@ -199,13 +202,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
         if (beanInfo == null){
             return "null";// $NON-NLS-1$
         }
-        try {
-        	// We get new BeanInfo instead of cached one
-        	// TODO Find a better way to reinitialize the beanInfo instance
-			return Introspector.getBeanInfo(testBeanClass).getBeanDescriptor().getDisplayName();
-		} catch (IntrospectionException e) {
-			return beanInfo.getBeanDescriptor().getDisplayName();
-		}
+        return beanInfo.getBeanDescriptor().getDisplayName();
     }
 
     /**
@@ -470,4 +467,18 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
     public boolean isExpert() {
         return beanInfo.getBeanDescriptor().isExpert();
     }
+
+	/**
+	 * Handle Locale Change by reloading BeanInfo
+	 * @param event {@link LocaleChangeEvent}
+	 */
+	public void localeChanged(LocaleChangeEvent event) {
+		try {
+            beanInfo = Introspector.getBeanInfo(testBeanClass);
+        } catch (IntrospectionException e) {
+            log.error("Can't get beanInfo for " + testBeanClass.getName(), e);
+            throw new Error(e.toString()); // Programming error. Don't
+                                            // continue.
+        }
+	}
 }
