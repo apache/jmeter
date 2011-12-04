@@ -202,6 +202,18 @@ public class TestCacheManager extends JMeterTestCase {
         assertNotNull("Should find entry",getThreadCacheEntry(LOCAL_HOST));
         assertFalse("Should not find valid entry",this.cacheManager.inCache(url));
     }
+    
+    public void testCacheJava() throws Exception{
+        this.cacheManager.setUseExpires(true);
+        this.cacheManager.testIterationStart(null);
+        assertNull("Should not find entry",getThreadCacheEntry(LOCAL_HOST));
+        assertFalse("Should not find valid entry",this.cacheManager.inCache(url));
+        ((URLConnectionStub)urlConnection).expires=makeDate(new Date(System.currentTimeMillis()));
+        ((URLConnectionStub)urlConnection).cacheControl="public, max-age=10";
+        this.cacheManager.saveDetails(this.urlConnection, sampleResultOK);
+        assertNotNull("Should find entry",getThreadCacheEntry(LOCAL_HOST));
+        assertTrue("Should find valid entry",this.cacheManager.inCache(url));
+    }
 
     public void testExpiresHttpClient() throws Exception{
         this.cacheManager.setUseExpires(true);
@@ -213,6 +225,7 @@ public class TestCacheManager extends JMeterTestCase {
         assertNotNull("Should find entry",getThreadCacheEntry(LOCAL_HOST));
         assertTrue("Should find valid entry",this.cacheManager.inCache(url));
     }
+    
 
     public void testCacheHttpClient() throws Exception{
         this.cacheManager.setUseExpires(true);
