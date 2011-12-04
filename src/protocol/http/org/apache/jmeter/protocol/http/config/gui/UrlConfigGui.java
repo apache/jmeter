@@ -191,7 +191,15 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         Arguments args;
         if(useRaw) {
             args = new Arguments();
-            HTTPArgument arg = new HTTPArgument("", postBodyContent.getText(), true);
+            String text = postBodyContent.getText();
+            /*
+             * Textfield uses \n (LF) to delimit lines; we need to send CRLF.
+             * Rather than change the way that arguments are processed by the
+             * samplers for raw data, it is easier to fix the data.
+             * On retrival, CRLF is converted back to LF for storage in the text field.
+             * See
+             */
+            HTTPArgument arg = new HTTPArgument("", text.replaceAll("\n","\r\n"), true);
             arg.setAlwaysEncoded(false);
             args.addArgument(arg);
         } else {
@@ -232,11 +240,24 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
      * @return {@link String}
      */
     private static final String computePostBody(Arguments arguments) {
+        return computePostBody(arguments, false);
+    }
+
+    /**
+     * Compute Post body from arguments
+     * @param arguments {@link Arguments}
+     * @param crlfToLF whether to convert CRLF to LF
+     * @return {@link String}
+     */
+    private static final String computePostBody(Arguments arguments, boolean crlfToLF) {
         StringBuilder postBody = new StringBuilder();
         PropertyIterator args = arguments.iterator();
         while (args.hasNext()) {
             HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
             String value = arg.getValue();
+            if (crlfToLF) {
+                value=value.replaceAll("\r\n", "\n"); // See modifyTestElement
+            }
             postBody.append(value);
         }
         return postBody.toString();
@@ -254,7 +275,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
 
         boolean useRaw = el.getPropertyAsBoolean(HTTPSamplerBase.POST_BODY_RAW, HTTPSamplerBase.POST_BODY_RAW_DEFAULT);
         if(useRaw) {
-            String postBody = computePostBody(arguments);
+            String postBody = computePostBody(arguments, true); // Convert CRLF to CR, see modifyTestElement
             postBodyContent.setText(postBody);   
             postContentTabbedPane.setSelectedIndex(TAB_RAW_BODY, false);
         } else {

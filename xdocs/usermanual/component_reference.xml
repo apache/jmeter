@@ -328,6 +328,8 @@ as a test plan created using a recorder would continue from the redirected URL.
 <b>Parameter Handling:</b><br></br>
 For the POST and PUT method, if there is no file to send, and the name(s) of the parameter(s) are omitted,
 then the body is created by concatenating all the value(s) of the parameters.
+Note that the values are concatenated without adding any end-of-line characters.
+These can be added by using the __char() function in the value fields.
 This allows arbitrary bodies to be sent.
 The values are encoded if the encoding flag is set (versions of JMeter after 2.3).
 See also the MIME Type above how you can control the content-type request header that is sent.
@@ -337,15 +339,20 @@ then the parameter is ignored. This allows the use of optional parameters define
 (versions of JMeter after 2.3)
 </p>
 <br/>
-<p>Since JMeter 2.5.2, you have the option to switch to Post Body when a request has only one unnamed parameter.
-This option is useful in the following cases:
+<p>Since JMeter 2.5.2, you have the option to switch to Post Body when a request has only unnamed parameters
+(or no parameters at all).
+This option is useful in the following cases (amongst others):
 <ul>
 <li>GWT RPC HTTP Request</li>
 <li>JSON REST HTTP Request</li>
 <li>XML REST HTTP Request</li>
-<li>...</li>
 </ul>
-Note that once you leave Tree node, you cannot switch anymore to parameters tab.
+Note that once you leave the Tree node, you cannot switch back to the parameter tab unless you clear the Post Body tab of data.
+</p>
+<p>
+In Post Body mode, each line will be sent with CRLF appended, apart from the last line.
+To send a CRLF after the last line of data, just ensure that there is an empty line following it.
+(This cannot be seen, except by noting whether the cursor can be placed on the subsequent line.)
 </p>
 <figure width="956" height="830" image="http-request-raw-single-parameter.png">Figure 1 - HTTP Request with one unnamed parameter</figure>
 <figure width="958" height="833" image="http-request-confirm-raw-body.png">Figure 2 - Confirm dialog to switch</figure>
