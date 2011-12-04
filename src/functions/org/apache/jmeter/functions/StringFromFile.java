@@ -62,11 +62,10 @@ import org.apache.log.Logger;
 public class StringFromFile extends AbstractFunction implements TestListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    // Only modified by static block so no need to synchronize subsequent read-only access
     private static final List<String> desc = new LinkedList<String>();
 
     private static final String KEY = "__StringFromFile";//$NON-NLS-1$
-
-    // Function name (only 1 _)
 
     static final String ERR_IND = "**ERR**";//$NON-NLS-1$
 
@@ -87,28 +86,32 @@ public class StringFromFile extends AbstractFunction implements TestListener {
 
     private static final int MAX_PARAM_COUNT = 4;
 
+    private static final int COUNT_UNUSED = -2;
+
+    // @GuardedBy("this")
     private Object[] values;
 
     private BufferedReader myBread = null; // Buffered reader
 
-    private boolean firstTime = false; // should we try to open the
-                                                    // file?
+    // @GuardedBy("this")
+    private boolean firstTime = false; // should we try to open the file?
 
     private String fileName; // needed for error messages
+
+    // @GuardedBy("this")
+    private int myStart = COUNT_UNUSED;
+
+    // @GuardedBy("this")
+    private int myCurrent = COUNT_UNUSED;
+
+    // @GuardedBy("this")
+    private int myEnd = COUNT_UNUSED;
 
     public StringFromFile() {
         if (log.isDebugEnabled()) {
             log.debug("++++++++ Construct " + this);
         }
     }
-
-    private static final int COUNT_UNUSED = -2;
-
-    private int myStart = COUNT_UNUSED;
-
-    private int myCurrent = COUNT_UNUSED;
-
-    private int myEnd = COUNT_UNUSED;
 
     /**
      * Close file and log
