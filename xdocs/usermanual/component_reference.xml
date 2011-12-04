@@ -2345,7 +2345,7 @@ Note that cookies, method and the query string are saved as part of the "Sampler
 <description>No Description</description>
 </component>
 
-<component name="Graph Results" index="&sect-num;.3.3" width="853" height="453" screenshot="graph_results.png">
+<component name="Graph Results" index="&sect-num;.3.3" width="905" height="489" screenshot="graph_results.png">
 <description><p>The Graph Results listener generates a simple graph that plots all sample times.  Along
 the bottom of the graph, the current sample (black), the current average of all samples(blue), the
 current standard deviation (red), and the current throughput rate (green) are displayed in milliseconds.</p>

@@ -206,7 +206,7 @@ output file.  You can either type it into the filename field, or select the
 Browse button and browse to a directory and then enter a filename.
             </p>
 
-            <figure image="graph_results.png">
+            <figure width="905" height="489" image="graph_results.png">
 Figure &sect-num;.2. Graph Results Listener</figure>
 
         </section>
