@@ -475,6 +475,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 	public void localeChanged(LocaleChangeEvent event) {
 		try {
             beanInfo = Introspector.getBeanInfo(testBeanClass);
+            setupGuiClasses();
         } catch (IntrospectionException e) {
             log.error("Can't get beanInfo for " + testBeanClass.getName(), e);
             throw new Error(e.toString()); // Programming error. Don't
