@@ -77,7 +77,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
 	/**
 	 * Hide Window on ESC
 	 */
-	private ActionListener enterActionListener = new ActionListener() {
+	private transient ActionListener enterActionListener = new ActionListener() {
 		public void actionPerformed(ActionEvent actionEvent) {
 			doSearch(actionEvent);
 		}	
@@ -86,7 +86,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
 	/**
 	 * Do search on Enter
 	 */
-	private ActionListener escapeActionListener = new ActionListener() {
+	private transient ActionListener escapeActionListener = new ActionListener() {
 		public void actionPerformed(ActionEvent actionEvent) {
 			setVisible(false);
 		}	
