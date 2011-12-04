@@ -88,10 +88,6 @@ public class StringFromFile extends AbstractFunction implements TestListener {
 
     private static final int MAX_PARAM_COUNT = 4;
 
-    private String myValue;
-
-    private String myName;
-
     private Object[] values;
 
     private BufferedReader myBread = null; // Buffered reader
@@ -102,8 +98,6 @@ public class StringFromFile extends AbstractFunction implements TestListener {
     private String fileName; // needed for error messages
 
     public StringFromFile() {
-    	myValue = ERR_IND;
-    	myName = "StringFromFile_";//$NON-NLS-1$
         if (log.isDebugEnabled()) {
             log.debug("++++++++ Construct " + this);
         }
@@ -189,13 +183,11 @@ public class StringFromFile extends AbstractFunction implements TestListener {
     @Override
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
-
-
+        String myValue = ERR_IND;
+    	String myName = "StringFromFile_";//$NON-NLS-1$
         if (values.length >= PARAM_NAME) {
             myName = ((CompoundVariable) values[PARAM_NAME - 1]).execute().trim();
         }
-
-        myValue = ERR_IND;
 
         /*
          * To avoid re-opening the file repeatedly after an error, only try to
