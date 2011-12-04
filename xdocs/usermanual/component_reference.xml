@@ -2201,9 +2201,10 @@ attempts to open the fileName relative to the JMX launch directory (versions of 
 	If checked, then the sample is generated as a parent of the other samples,
 	otherwise the sample is generated as an independent sample.
 	</property>
-	<property name="Include timer duration in generated sample" required="Yes">
+	<property name="Include duration of timer and pre-post processors in generated sample" required="Yes">
 	Whether to include timer, pre- and post-processing delays in the generated sample.
 	Default is true to be compatible with the behaviour in previous versions of JMeter.
+	Setting it to false is a better option to get only response time of the sample.
 	</property>
 </properties>
 </component>
@@ -4461,7 +4462,7 @@ This can be useful if your JDBC Sample requires some data to be in DataBase and 
 See the following Test plan:
 </p>
 <links>
-        <link href="JDBC-Pre-Post-Processor.jmx">Test Plan using JDBC Pre/Post Processor</link>
+        <link href="../demos/JDBC-Pre-Post-Processor.jmx">Test Plan using JDBC Pre/Post Processor</link>
 </links>
 <p>
 In the linked test plan,"Create Price Cut-Off" JDBC PreProcessor calls a stored procedure to create a Price Cut-Off in Database,
@@ -4808,7 +4809,7 @@ This can be useful if your JDBC Sample changes some data and you want to reset s
 </description>
 </component>
 <links>
-        <link href="JDBC-Pre-Post-Processor.jmx">Test Plan using JDBC Pre/Post Processor</link>
+        <link href="../demos/JDBC-Pre-Post-Processor.jmx">Test Plan using JDBC Pre/Post Processor</link>
 </links>
 <p>
 In the linked test plan,"JDBC PostProcessor" JDBC PostProcessor calls a stored procedure to delete from Database the Price Cut-Off that was created by PreProcessor.
