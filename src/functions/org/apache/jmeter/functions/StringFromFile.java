@@ -35,6 +35,7 @@ import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterStopThreadException;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -101,30 +102,10 @@ public class StringFromFile extends AbstractFunction implements TestListener {
     private String fileName; // needed for error messages
 
     public StringFromFile() {
-        init();
+    	myValue = ERR_IND;
+    	myName = "StringFromFile_";//$NON-NLS-1$
         if (log.isDebugEnabled()) {
             log.debug("++++++++ Construct " + this);
-        }
-    }
-
-    private void init(){
-        myValue = ERR_IND;
-        myName = "StringFromFile_";//$NON-NLS-1$
-    }
-
-    /**
-     * Close file and log
-     */
-    private void closeFile() {
-        if (myBread == null) {
-            return;
-        }
-        String tn = Thread.currentThread().getName();
-        log.info(tn + " closing file " + fileName);//$NON-NLS-1$
-        try {
-            myBread.close();
-        } catch (IOException e) {
-            log.error("closeFile() error: " + e.toString(), e);//$NON-NLS-1$
         }
     }
 
@@ -232,7 +213,7 @@ public class StringFromFile extends AbstractFunction implements TestListener {
                 if (line == null) { // EOF, re-open file
                     String tn = Thread.currentThread().getName();
                     log.info(tn + " EOF on  file " + fileName);//$NON-NLS-1$
-                    closeFile();
+                    JOrphanUtils.closeQuietly(myBread);
                     openFile();
                     if (myBread != null) {
                         line = myBread.readLine();
@@ -329,7 +310,7 @@ public class StringFromFile extends AbstractFunction implements TestListener {
 
     /** {@inheritDoc} */
     public void testEnded(String host) {
-        closeFile();
+        JOrphanUtils.closeQuietly(myBread);
     }
 
     /** {@inheritDoc} */
