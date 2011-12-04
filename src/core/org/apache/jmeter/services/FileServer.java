@@ -100,7 +100,7 @@ public class FileServer {
     /**
      * Resets the current base to {@link #DEFAULT_BASE}.
      */
-    public void resetBase() {
+    public synchronized void resetBase() {
         base = new File(DEFAULT_BASE);
         log.info("Reset base to'"+base+"'");
     }
