@@ -58,12 +58,6 @@ For example a Test Action sampler with 0 wait time (which doesn't generate a sam
 or a Debug Sampler with all fields set to False (to reduce the sample size).
 </p>
 
-<p>
-The menu item Options / Choose Language does not change all the displayed text to the new language.
-[The behaviour has improved, but language change is still not fully working, see BUG 52280]
-To override the default local language fully, set the JMeter property "language" before starting JMeter. 
-</p>
-
 <!-- =================== Incompatible changes =================== -->
 
 <h2>Incompatible changes</h2>

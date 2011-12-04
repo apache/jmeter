@@ -199,7 +199,13 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
         if (beanInfo == null){
             return "null";// $NON-NLS-1$
         }
-        return beanInfo.getBeanDescriptor().getDisplayName();
+        try {
+        	// We get new BeanInfo instead of cached one
+        	// TODO Find a better way to reinitialize the beanInfo instance
+			return Introspector.getBeanInfo(testBeanClass).getBeanDescriptor().getDisplayName();
+		} catch (IntrospectionException e) {
+			return beanInfo.getBeanDescriptor().getDisplayName();
+		}
     }
 
     /**
@@ -357,7 +363,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
         }
         return menuCategories;
     }
-    
+
     /**
      * Setup GUI class
      * @return number of matches
