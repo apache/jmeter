@@ -91,11 +91,13 @@ public class StringFromFile extends AbstractFunction implements TestListener {
     // @GuardedBy("this")
     private Object[] values;
 
+    // @GuardedBy("this")
     private BufferedReader myBread = null; // Buffered reader
 
     // @GuardedBy("this")
     private boolean firstTime = false; // should we try to open the file?
 
+    // @GuardedBy("this")
     private String fileName; // needed for error messages
 
     // @GuardedBy("this")
@@ -116,7 +118,7 @@ public class StringFromFile extends AbstractFunction implements TestListener {
     /**
      * Close file and log
      */
-    private void closeFile() {
+    private synchronized void closeFile() {
         if (myBread == null) {
             return;
         }
