@@ -212,7 +212,7 @@ https.default.protocol=SSLv3
         <property name="Server (proxy)" required="No">Hostname or IP address of a proxy server to perform request. [Do not include the http:// prefix.]</property>
         <property name="Port" required="No, unless proxy hostname is specified">Port the proxy server is listening to.</property>
         <property name="Username" required="No">(Optional) username for proxy server.</property>
-        <property name="Password" required="No">(Optional) password for proxy server.</property>
+        <property name="Password" required="No">(Optional) password for proxy server. (N.B. this is stored unencrypted in the test plan)</property>
         <property name="Implementation" required="No">Java, HttpClient3.1, HttpClient4. 
         If not specified (and not defined by HTTP Request Defaults), the default depends on the value of the JMeter property
         <code>jmeter.httpsampler</code>, failing that, the Java implementation is used.</property>
@@ -735,7 +735,7 @@ If this is zero, then the request is marked as failed.
                                           <property name="Port" required="Yes">default port(389).</property>
                                           <property name="root DN" required="Yes">DN for the server to communicate</property>
                                           <property name="Username" required="Usually">LDAP server username.</property>
-                                          <property name="Password" required="Usually">LDAP server password.</property>
+                                          <property name="Password" required="Usually">LDAP server password. (N.B. this is stored unencrypted in the test plan)</property>
                                           <property name="Entry DN" required="Yes">the name of the context to create or Modify; may not be empty Example: do you want to add cn=apache,ou=test
                                             you have to add in table name=cn, value=apache
                                           </property>
@@ -769,7 +769,8 @@ If this is zero, then the request is marked as failed.
        The user is requested to give a username (Distinguished name) and password, 
        which will be used to initiate a session.
        When no password, or the wrong password is specified, an anonymous session is started. Take care,
-       omitting the password will not fail this test, a wrong password will. </p>
+       omitting the password will not fail this test, a wrong password will. 
+       (N.B. this is stored unencrypted in the test plan)</p>
      <properties>
      <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
      <property name="Servername" required="Yes">The name (or IP-address) of the LDAP server.</property>
@@ -779,7 +780,7 @@ If this is zero, then the request is marked as failed.
      It can be used as a starting point for all operations. You cannot start any operation on a higher level than this DN!</property>
      <property name="Username" required="No">Full distinguished name of the user as which you want to bind.</property>
      <property name="Password" required="No">Password for the above user. If omitted it will result in an anonymous bind. 
-     If is is incorrect, the sampler will return an error and revert to an anonymous bind.</property>
+     If is is incorrect, the sampler will return an error and revert to an anonymous bind. (N.B. this is stored unencrypted in the test plan)</property>
     </properties>
  <br />       
       <li><b>Thread unbind</b></li>
@@ -798,7 +799,7 @@ If this is zero, then the request is marked as failed.
      <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
       <property name="Username" required="Yes">Full distinguished name of the user as which you want to bind.</property>
      <property name="Password" required="No">Password for the above user. If omitted it will result in an anonymous bind. 
-     If is is incorrect, the sampler will return an error.</property>
+     If is is incorrect, the sampler will return an error. (N.B. this is stored unencrypted in the test plan)</property>
      </properties>
 		
  <br />       
@@ -1232,7 +1233,7 @@ For details, see <complink name="BSF Sampler"/>.
   If selected, this will disable Nagle's algorithm, otherwise Nagle's algorithm will be used.</property>
   <property name="Text to Send" required="Yes">Text to be sent</property>
   <property name="Login User" required="No">User Name - not used by default implementation</property>
-  <property name="Password" required="No">Password - not used by default implementation</property>
+  <property name="Password" required="No">Password - not used by default implementation (N.B. this is stored unencrypted in the test plan)</property>
 </properties>
 </component>
 
@@ -1260,7 +1261,7 @@ For details, see <complink name="BSF Sampler"/>.
   <property name="Setup" required="Yes">The destination setup type. With At startup, the destination name is static (i.e. always same name during the test), with Each sample, the destination name is dynamic and is evaluate at each sample (i.e. the destination name may be a variable)</property>
   <property name="Authentication" required="Yes">Authentication requirement for the JMS provider</property>
   <property name="User" required="No">User Name</property>
-  <property name="Password" required="No">Password</property>
+  <property name="Password" required="No">Password (N.B. this is stored unencrypted in the test plan)</property>
   <property name="Number of samples to aggregate" required="Yes">Number of samples to aggregate</property>
   <property name="Message source" required="Yes">Where to obtain the message</property>
   <property name="Message type" required="Yes">Text, Map or Object message</property>
@@ -1336,7 +1337,7 @@ The following table shows some values which may be useful when configuring JMS:
   <property name="Setup" required="Yes">The destination setup type. With At startup, the destination name is static (i.e. always same name during the test), with Each sample, the destination name is dynamic and is evaluate at each sample (i.e. the destination name may be a variable)</property>
   <property name="Authentication" required="Yes">Authentication requirement for the JMS provider</property>
   <property name="User" required="No">User Name</property>
-  <property name="Password" required="No">Password</property>
+  <property name="Password" required="No">Password (N.B. this is stored unencrypted in the test plan)</property>
   <property name="Number of samples to aggregate" required="Yes">number of samples to aggregate</property>
   <property name="Read response" required="Yes">should the sampler read the response. If not, only the response length is returned.</property>
   <property name="Timeout" required="Yes">Specify the timeout to be applied, in milliseconds. 0=none. 
@@ -3049,7 +3050,7 @@ a password of "jmeter".  If you send an HTTP request to the URL
 "http://jmeter.apache.org/restricted/ant/myPage.html", the Authorization Manager sends the login
 information for the user named, "jmeter".</property>
   <property name="Username" required="Yes">The username to authorize.</property>
-  <property name="Password" required="Yes">The password for the user.</property>
+  <property name="Password" required="Yes">The password for the user. (N.B. this is stored unencrypted in the test plan)</property>
   <property name="Domain" required="No">The domain to use for NTLM.</property>
   <property name="Realm" required="No">The realm to use for NTLM.</property>
 </properties>
@@ -3239,7 +3240,7 @@ JMeter 2.3 and later treat all port values equally; a sampler that does not spec
         <property name="Server (proxy)" required="No">Hostname or IP address of a proxy server to perform request. [Do not include the http:// prefix.]</property>
         <property name="Port" required="No, unless proxy hostname is specified">Port the proxy server is listening to.</property>
         <property name="Username" required="No">(Optional) username for proxy server.</property>
-        <property name="Password" required="No">(Optional) password for proxy server.</property>
+        <property name="Password" required="No">(Optional) password for proxy server. (N.B. this is stored unencrypted in the test plan)</property>
         <property name="Retrieve All Embedded Resources from HTML Files" required="No">Tell JMeter to parse the HTML file
 and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSSs, etc. referenced in the file.
         </property>
@@ -3339,7 +3340,7 @@ instead. (see figures 9 and 10).</p>
 		<property name="JDBC Driver class" required="Yes">Fully qualified name of driver class. (Must be in
 		JMeter's classpath - easiest to copy .jar file into JMeter's /lib directory).</property>
 		<property name="Username" required="No">Name of user to connect as.</property>
-		<property name="Password" required="No">Password to connect with.</property>
+		<property name="Password" required="No">Password to connect with. (N.B. this is stored unencrypted in the test plan)</property>
 	</properties>
 <p>Different databases and JDBC drivers require different JDBC settings. 
 The Database URL and JDBC Driver class are defined by the provider of the JDBC implementation.</p>
@@ -3388,7 +3389,7 @@ This component is typically used in HTTPs scenarios where you don't want to take
 <properties>
         <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
   <property name="Username" required="No">The default username to use.</property>
-  <property name="Password" required="No">The default password to use.</property>
+  <property name="Password" required="No">The default password to use. (N.B. this is stored unencrypted in the test plan)</property>
 </properties>
 
 </component>
