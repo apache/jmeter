@@ -478,8 +478,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
             setupGuiClasses();
         } catch (IntrospectionException e) {
             log.error("Can't get beanInfo for " + testBeanClass.getName(), e);
-            throw new Error(e.toString()); // Programming error. Don't
-                                            // continue.
+            JMeterUtils.reportErrorToUser("Can't get beanInfo for " + testBeanClass.getName());
         }
 	}
 }
