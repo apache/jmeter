@@ -113,6 +113,7 @@ This behaviour can be changed with property sample_sender_client_configured (set
 <li>Bug 51865 - Infinite loop inside thread group does not work properly if "Start next loop after a Sample error" option set</li>
 <li>Bug 51868 - A lot of exceptions in jmeter.log while using option "Start next loop" for thread</li>
 <li>Bug 51866 - Counter under loop doesn't work properly if "Start next loop on error" option set for thread group</li>
+<li>Bug 52296 - Getting ERROR sampleEnd called twice java.lang.Throwable: Invalid call sequence</li>
 </ul>
 
 <h3>Listeners</h3>
