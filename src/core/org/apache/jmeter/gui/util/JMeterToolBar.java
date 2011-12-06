@@ -186,6 +186,7 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
     public void setTestStarted(boolean started) {
         Map<String, Boolean> buttonStates = new HashMap<String, Boolean>();
         buttonStates.put(ActionNames.ACTION_START,Boolean.valueOf(!started));
+        buttonStates.put(ActionNames.ACTION_START_NO_TIMERS,Boolean.valueOf(!started));
         buttonStates.put(ActionNames.ACTION_STOP,Boolean.valueOf(started));
         buttonStates.put(ActionNames.ACTION_SHUTDOWN,Boolean.valueOf(started));
         buttonStates.put(ActionNames.REMOTE_START_ALL,Boolean.valueOf(!started));
