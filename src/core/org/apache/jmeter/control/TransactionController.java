@@ -170,7 +170,7 @@ public class TransactionController extends GenericController implements SampleLi
 
         Sampler returnValue = super.next();
 
-        if (returnValue == null) // Must be the end of the controller
+        if (returnValue == null && !(calls == 0)) // Must be the end of the controller
         {
             if (res != null) {
                 res.setIdleTime(pauseTime+res.getIdleTime());
@@ -186,6 +186,9 @@ public class TransactionController extends GenericController implements SampleLi
 
                 SamplePackage pack = (SamplePackage) threadVars.getObject(JMeterThread.PACKAGE_OBJECT);
                 if (pack == null) {
+                	// If child of TransactionController is a ThroughputController and TPC does
+                	// not sample its children, then we will have this
+                	// TODO Should this be at warn level ?
                     log.warn("Could not fetch SamplePackage");
                 } else {
                     SampleEvent event = new SampleEvent(res, threadContext.getThreadGroup().getName(),threadVars, true);
