@@ -167,10 +167,9 @@ public class TransactionController extends GenericController implements SampleLi
             prevEndTime = res.getStartTime();//???
             pauseTime = 0;
         }
-
+        boolean isLast = current==super.subControllersAndSamplers.size();
         Sampler returnValue = super.next();
-        // FIXME Broken code in case of subController that may return null (Interleave, ThroughputController, testing nullity is not enough
-        if (returnValue == null) // Must be the end of the controller
+        if (returnValue == null && isLast) // Must be the end of the controller
         {
             if (res != null) {
                 res.setIdleTime(pauseTime+res.getIdleTime());
