@@ -169,8 +169,8 @@ public class TransactionController extends GenericController implements SampleLi
         }
 
         Sampler returnValue = super.next();
-
-        if (returnValue == null && !(calls == 0)) // Must be the end of the controller
+        // FIXME Broken code in case of subController that may return null (Interleave, ThroughputController, testing nullity is not enough
+        if (returnValue == null) // Must be the end of the controller
         {
             if (res != null) {
                 res.setIdleTime(pauseTime+res.getIdleTime());
