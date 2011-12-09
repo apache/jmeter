@@ -22,6 +22,7 @@ import java.awt.Component;
 import java.awt.HeadlessException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -35,6 +36,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.TreeMap;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -138,6 +140,7 @@ public class JMeterTest extends JMeterTestCase {
         suite.addTest(new JMeterTest("readAliases"));
         suite.addTest(new JMeterTest("createTitleSet"));
         suite.addTest(new JMeterTest("createTagSet"));
+        suite.addTest(new JMeterTest("checkI18n"));
         suite.addTest(suiteGUIComponents());
         suite.addTest(suiteSerializableElements());
         suite.addTest(suiteTestElements());
@@ -395,8 +398,52 @@ public class JMeterTest extends JMeterTestCase {
             }
         }
     }
+    
+    /**
+     * Check all messages are available in one language
+     * @throws Exception
+     */
+    public void checkI18n() throws Exception {
+    	// TODO Also add other bundles of TestBeans
+    	Properties messages = new Properties();
+    	messages.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("org/apache/jmeter/resources/messages.properties"));
+    	
+    	checkMessagesForLanguage(messages, "fr");
+    }
 
-    /*
+	/**
+	 * Check messages are available in language
+	 * @param messages Properties messages in english
+	 * @param language Language 
+	 * @throws IOException
+	 */
+	private void checkMessagesForLanguage(Properties messages, String language)
+			throws IOException {
+		Properties messagesFr = new Properties();
+    	messagesFr.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("org/apache/jmeter/resources/messages_"+language+".properties"));
+    
+    	Map<String, String> missingLabels = new TreeMap<String,String>();
+    	for (Iterator<Map.Entry<Object,Object>> iterator =  messages.entrySet().iterator(); iterator.hasNext();) {
+    		Map.Entry<Object,Object> entry = iterator.next();
+			String key = (String)entry.getKey();
+			if(!messagesFr.containsKey(key)) {
+				missingLabels.put(key,(String) entry.getValue());
+			}
+		}
+    	assertEquals(missingLabels.size()+" missing labels in language :"+language+", labels missing:"+printLabels(missingLabels), 0, missingLabels.size());
+	}
+
+   
+    private String printLabels(Map<String, String> missingLabels) {
+    	StringBuilder builder = new StringBuilder();
+    	for (Iterator<Map.Entry<String,String>> iterator =  missingLabels.entrySet().iterator(); iterator.hasNext();) {
+    		Map.Entry<String,String> entry = iterator.next();
+			builder.append(entry.getKey()+"="+entry.getValue()+"\r\n");
+		}
+    	return builder.toString();
+	}
+
+	/*
      * Check that function descriptions are OK
      */
     public void runFunction2() throws Exception {
