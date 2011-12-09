@@ -31,7 +31,7 @@
 <section name="&sect-num;. Building a Web Test Plan" anchor="building">
 <p>In this section, you will learn how to create a basic
 <a href="build-test-plan.html">Test Plan</a> to test a Web site.  You will
-create five users that send requests to two pages on the Jakarta Web site.
+create five users that send requests to two pages on the JMeter Web site.
 Also, you will tell the users to run their tests twice. So, the total number of
 requests is (5 users) x (2 requests) x (repeat 2 times) = 20 HTTP requests. To
 construct the Test Plan, you will use the following elements:
@@ -73,7 +73,7 @@ below)</p>
 Figure &sect-num;.1. Thread Group with Default Values</figure>
 
 <p>Start by providing a more descriptive name for our Thread Group. In the name
-field, enter Jakarta Users.</p>
+field, enter JMeter Users.</p>
 
 <p>Next, increase the number of users (called threads) to 5.</p>
 
@@ -97,10 +97,10 @@ automatically accepts your changes as you make them.  If you change the
 name of an element, the tree will be updated with the new text after you
 leave the Control Panel (for example, when selecting another tree element).</note>
 
-<p>See Figure &sect-num;.2 for the completed Jakarta Users Thread Group.</p>
+<p>See Figure &sect-num;.2 for the completed JMeter Users Thread Group.</p>
 
-<figure width="791" height="321" image="webtest/threadgroup2.png">
-Figure &sect-num;.2. Jakarta Users Thread Group</figure>
+<figure width="791" height="358" image="webtest/threadgroup2.png">
+Figure &sect-num;.2. JMeter Users Thread Group</figure>
 
 </section>
 
@@ -110,12 +110,12 @@ will be performing.  In this section, you will specify the default settings
 for your HTTP requests.  And then, in section &sect-num;.3, you will add HTTP Request
 elements which use some of the default settings you specified here.</p>
 
-<p>Begin by selecting the Jakarta Users (Thread Group) element. Click your right mouse button
+<p>Begin by selecting the JMeter Users (Thread Group) element. Click your right mouse button
 to get the Add menu, and then select Add --&gt; Config Element --&gt; HTTP Request
 Defaults. Then, select this new element to view its Control Panel (see Figure &sect-num;.3).
 </p>
 
-<figure width="950" height="612" image="webtest/http-defaults1.png">
+<figure width="1077" height="767" image="webtest/http-defaults1.png">
 Figure &sect-num;.3. HTTP Request Defaults</figure>
 
 <p>
@@ -125,7 +125,7 @@ the default value.</p>
 
 <p>Skip to the next field, which is the Web Server's Server Name/IP. For the
 Test Plan that you are building, all HTTP requests will be sent to the same
-Web server, jakarta.apache.org.  Enter this domain name into the field.
+Web server, jmeter.apache.org.  Enter this domain name into the field.
 This is the only field that we will specify a default, so leave the remaining
 fields with their default values.</p>
 
@@ -135,7 +135,7 @@ HTTP Request elements use.</note>
 
 <p>See Figure &sect-num;.4 for the completed HTTP Request Defaults element</p>
 
-<figure width="950" height="610" image="webtest/http-defaults2.png">
+<figure width="1077" height="767" image="webtest/http-defaults2.png">
 Figure &sect-num;.4. HTTP Defaults for our Test Plan</figure>
 
 </section>
@@ -157,13 +157,13 @@ Cookie Manager, either from the Edit Menu, or from the right-click pop-up menu.<
 <section name="&sect-num;.4 Adding HTTP Requests" anchor="adding_requests">
 
 <p>In our Test Plan, we need to make two HTTP requests. The first one is for the
-Jakarta home page (http://jakarta.apache.org/), and the second one is for the
-Project Guidelines page (http://jakarta.apache.org/site/guidelines.html).</p>
+JMeter home page (http://jmeter.apache.org/), and the second one is for the
+Changes page (http://jmeter.apache.org/changes.html).</p>
 
 <note>JMeter sends requests in the order that they appear in the tree.</note>
 
 <p>Start by adding the first <complink name="HTTP Request"/>
-to the Jakarta Users element (Add --&gt; Sampler --&gt; HTTP Request).
+to the JMeter Users element (Add --&gt; Sampler --&gt; HTTP Request).
 Then, select the HTTP Request element in the tree and edit the following properties
 (see Figure &sect-num;.5):
 <ol>
@@ -174,19 +174,19 @@ element.</li>
 </ol>
 </p>
 
-<figure width="1153" height="746" image="webtest/http-request1.png">
-Figure &sect-num;.5. HTTP Request for Jakarta Home Page</figure>
+<figure width="1077" height="767" image="webtest/http-request1.png">
+Figure &sect-num;.5. HTTP Request for JMeter Home Page</figure>
 
 <p>Next, add the second HTTP Request and edit the following properties (see
 Figure &sect-num;.6:
 <ol>
-<li>Change the Name field to "Project Guidelines".</li>
-<li>Set the Path field to "/site/guidelines.html".</li>
+<li>Change the Name field to "Changes".</li>
+<li>Set the Path field to "/changes.html".</li>
 </ol>
 </p>
 
-<figure width="1154" height="746" image="webtest/http-request2.png">
-Figure &sect-num;.6. HTTP Request for Jakarta Project Guidelines Page</figure>
+<figure width="1077" height="767" image="webtest/http-request2.png">
+Figure &sect-num;.6. HTTP Request for JMeter Changes Page</figure>
 
 </section>
 
@@ -196,7 +196,7 @@ Figure &sect-num;.6. HTTP Request for Jakarta Project Guidelines Page</figure>
 responsible for storing all of the results of your HTTP requests in a file and presenting
 a visual model of the data.</p>
 
-<p>Select the Jakarta Users element and add a <complink name="Graph Results"/> listener (Add --&gt; Listener
+<p>Select the JMeter Users element and add a <complink name="Graph Results"/> listener (Add --&gt; Listener
 --&gt; Graph Results).  Next, you need to specify a directory and filename of the
 output file.  You can either type it into the filename field, or select the
 Browse button and browse to a directory and then enter a filename.</p>
