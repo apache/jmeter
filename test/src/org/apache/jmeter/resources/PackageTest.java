@@ -255,9 +255,10 @@ public class PackageTest extends TestCase {
 			if(file2.isDirectory()) {
 				findFile(file2, set, filenameFilter);
 			} else {
-				int indexOfOrg = file2.getAbsolutePath().indexOf("/org");
-				int lastIndex = file2.getAbsolutePath().lastIndexOf(".");
-				set.add(file2.getAbsolutePath().substring(indexOfOrg, lastIndex));
+				String absPath2 = file2.getAbsolutePath().replace('\\', '/'); // Fix up Windows paths
+                int indexOfOrg = absPath2.indexOf("/org");
+				int lastIndex = absPath2.lastIndexOf(".");
+				set.add(absPath2.substring(indexOfOrg, lastIndex));
 			}
 		}
     	
