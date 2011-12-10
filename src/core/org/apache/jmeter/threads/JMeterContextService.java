@@ -25,7 +25,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * Keeps track of active and total thread counts.
  */
 public final class JMeterContextService {
-    private static final ThreadLocal<JMeterContext> threadContext = new InheritableThreadLocal<JMeterContext>() {
+    private static final ThreadLocal<JMeterContext> threadContext = new ThreadLocal<JMeterContext>() {
         @Override
         public JMeterContext initialValue() {
             return new JMeterContext();
@@ -47,6 +47,14 @@ public final class JMeterContextService {
     private JMeterContextService() {
     }
 
+    /**
+     * Replace Thread Context by the parameter
+     * @param context {@link JMeterContext}
+     */
+    public static void replaceContext(JMeterContext context) {
+    	threadContext.remove();
+    	threadContext.set(context);
+    }
     /**
      * Gives access to the current thread context.
      * 
