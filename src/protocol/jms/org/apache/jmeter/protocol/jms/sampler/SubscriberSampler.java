@@ -178,7 +178,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
                 msg = SUBSCRIBER.getMessage(calculateWait(until, now));
                 if (msg != null){
                     read++;
-                    extractContent(buffer, propBuffer, msg);
+                    extractContent(buffer, propBuffer, msg, (read == loop));
                 }
             } catch (JMSException e) {
                 log.warn("Error "+e.toString());
@@ -232,7 +232,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     }
 
     private void extractContent(StringBuilder buffer, StringBuilder propBuffer,
-            Message msg) {
+            Message msg, boolean isLast) {
         if (msg != null) {
             try {
                 if (msg instanceof TextMessage){
@@ -253,7 +253,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
                     }
                 }
                 Utils.messageProperties(propBuffer, msg);
-                if(!StringUtils.isEmpty(separator)) {
+                if(!isLast && !StringUtils.isEmpty(separator)) {
                 	propBuffer.append(separator);
                 	buffer.append(separator);
                 }
