@@ -19,6 +19,8 @@
 package org.apache.jmeter.resources;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -26,16 +28,23 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.Properties;
 import java.util.PropertyResourceBundle;
-
-import org.apache.jmeter.gui.util.JMeterMenuBar;
-import org.apache.jorphan.util.JOrphanUtils;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+
+import org.apache.jmeter.gui.util.JMeterMenuBar;
+import org.apache.jorphan.util.JOrphanUtils;
 
 /*
  * Created on Nov 29, 2003
@@ -58,6 +67,9 @@ import junit.framework.TestSuite;
  */
 
 public class PackageTest extends TestCase {
+    private static final String basedir = new File(System.getProperty("user.dir")).getParent();
+
+	private static final File srcFiledir = new File(basedir,"src");
 
     private static final String MESSAGES = "messages";
 
@@ -209,29 +221,48 @@ public class PackageTest extends TestCase {
         }
     }
 
-    // TODO generate list by scanning for *Resources.properties
-    private static final String[] prefixList={
-        MESSAGES, // This is in the same package, so no need for full path name
-        "/org/apache/jmeter/assertions/BSFAssertionResources",
-        "/org/apache/jmeter/config/CSVDataSetResources",
-        "/org/apache/jmeter/config/RandomVariableConfigResources",
-        "/org/apache/jmeter/extractor/BeanShellPostProcessorResources",
-        "/org/apache/jmeter/extractor/BSFPostProcessorResources",
-        "/org/apache/jmeter/extractor/DebugPostProcessorResources",
-        "/org/apache/jmeter/modifiers/BeanShellPreProcessorResources",
-        "/org/apache/jmeter/modifiers/BSFPreProcessorResources",
-        "/org/apache/jmeter/sampler/DebugSamplerResources",
-        "/org/apache/jmeter/timers/BeanShellTimerResources",
-        "/org/apache/jmeter/timers/ConstantThroughputTimerResources",
-        "/org/apache/jmeter/timers/SyncTimerResources",
-        "/org/apache/jmeter/visualizers/BeanShellListenerResources",
-        "/org/apache/jmeter/visualizers/BSFListenerResources",
-//        "/org/apache/jmeter/examples/testbeans/example2/Example2Resources", // examples are not built by default
-        "/org/apache/jmeter/protocol/http/sampler/AccessLogSamplerResources",
-        "/org/apache/jmeter/protocol/jdbc/config/DataSourceElementResources",
-        "/org/apache/jmeter/protocol/jdbc/sampler/JDBCSamplerResources",
-    };
+    private static final String[] prefixList= getResources(srcFiledir);
 
+    /**
+     * Find I18N resources in classpath
+     * @param srcFiledir
+     * @return
+     */
+    public static final String[] getResources(File srcFiledir) {
+    	Set<String> set = new TreeSet<String>();
+		findFile(srcFiledir,set, new FilenameFilter() {
+			public boolean accept(File dir, String name) {
+				return new File(dir, name).isDirectory() 
+						|| (
+								name.equals("messages.properties") ||
+								(name.endsWith("Resources.properties")
+								&& !name.matches("Example\\d+Resources\\.properties")));
+			}
+		});
+		return (String[]) set.toArray(new String[set.size()]);
+	}
+    
+    /**
+     * Find resources matching filenamefiler and adds them to set removing everything before "/org"
+     * @param file
+     * @param set
+     * @param filenameFilter
+     */
+    private static void findFile(File file, Set<String> set,
+			FilenameFilter filenameFilter) {
+    	File[] foundFIles = file.listFiles(filenameFilter);
+    	for (File file2 : foundFIles) {
+			if(file2.isDirectory()) {
+				findFile(file2, set, filenameFilter);
+			} else {
+				int indexOfOrg = file2.getAbsolutePath().indexOf("/org");
+				int lastIndex = file2.getAbsolutePath().lastIndexOf(".");
+				set.add(file2.getAbsolutePath().substring(indexOfOrg, lastIndex));
+			}
+		}
+    	
+	}
+    
     /*
      * Use a suite to ensure that the default is done first
     */
@@ -249,6 +280,7 @@ public class PackageTest extends TestCase {
             }
             ts.addTest(pfx);
         }
+        ts.addTest(new PackageTest("checkI18n", "fr"));
 
         return ts;
     }
@@ -274,4 +306,64 @@ public class PackageTest extends TestCase {
         check(lang);
     }
 
+    /**
+     * Check all messages are available in one language
+     * @throws Exception
+     */
+    public void checkI18n() throws Exception {
+    	Map<String, Map<String,String>> missingLabelsPerBundle = new HashMap<String, Map<String,String>>();
+    	for (int i = 0; i < prefixList.length; i++) {
+        	Properties messages = new Properties();
+        	messages.load(Thread.currentThread().getContextClassLoader().getResourceAsStream(prefixList[i].substring(1)+".properties"));
+        	checkMessagesForLanguage( missingLabelsPerBundle , missingLabelsPerBundle, messages,prefixList[i].substring(1), "fr");
+		}
+    	
+    	assertEquals(missingLabelsPerBundle.size()+" missing labels, labels missing:"+printLabels(missingLabelsPerBundle), 0, missingLabelsPerBundle.size());
+    }
+
+	/**
+	 * Check messages are available in language
+	 * @param missingLabelsPerBundle2 
+	 * @param missingLabelsPerBundle 
+	 * @param messages Properties messages in english
+	 * @param language Language 
+	 * @throws IOException
+	 */
+	private void checkMessagesForLanguage(Map<String, Map<String, String>> missingLabelsPerBundle, Map<String, Map<String, String>> missingLabelsPerBundle2, Properties messages, String bundlePath,String language)
+			throws IOException {
+		Properties messagesFr = new Properties();
+		String languageBundle = bundlePath+"_"+language+ ".properties";
+    	messagesFr.load(Thread.currentThread().getContextClassLoader().getResourceAsStream(languageBundle));
+    
+    	Map<String, String> missingLabels = new TreeMap<String,String>();
+    	for (Iterator<Map.Entry<Object,Object>> iterator =  messages.entrySet().iterator(); iterator.hasNext();) {
+    		Map.Entry<Object,Object> entry = iterator.next();
+			String key = (String)entry.getKey();
+			if(!messagesFr.containsKey(key)) {
+				missingLabels.put(key,(String) entry.getValue());
+			}
+		}
+    	if(!missingLabels.isEmpty()) {
+    		missingLabelsPerBundle.put(languageBundle, missingLabels);
+    	}
+	}
+
+	/**
+	 * Build message with misssing labels per bundle
+	 * @param missingLabelsPerBundle
+	 * @return String
+	 */
+    private String printLabels(Map<String, Map<String, String>> missingLabelsPerBundle) {
+    	StringBuilder builder = new StringBuilder();
+    	for (Iterator<Map.Entry<String,Map<String, String>>> iterator =  missingLabelsPerBundle.entrySet().iterator(); iterator.hasNext();) {
+    		Map.Entry<String,Map<String, String>> entry = iterator.next();
+    		builder.append("Missing labels in bundle:"+entry.getKey()+"\r\n");
+        	for (Iterator<Map.Entry<String,String>> it2 =  entry.getValue().entrySet().iterator(); it2.hasNext();) {
+        		Map.Entry<String,String> entry2 = it2.next();
+    			builder.append(entry2.getKey()+"="+entry2.getValue()+"\r\n");
+    		}
+    		builder.append("======================================================\r\n");
+		}
+    	return builder.toString();
+	}
 }

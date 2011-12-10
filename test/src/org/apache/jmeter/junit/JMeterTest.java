@@ -22,7 +22,6 @@ import java.awt.Component;
 import java.awt.HeadlessException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -36,7 +35,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.TreeMap;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -76,37 +74,6 @@ public class JMeterTest extends JMeterTestCase {
     private static final Locale TEST_LOCALE = Locale.ENGLISH; 
     
     private static final Locale DEFAULT_LOCALE = Locale.getDefault(); 
-    
-    private static final String[] RESOURCE_BUNDLE_PATHS = new String[] {
-    	"org/apache/jmeter/assertions/BSFAssertionResources.properties",
-    	"org/apache/jmeter/assertions/CompareAssertionResources.properties",
-    	"org/apache/jmeter/assertions/JSR223AssertionResources.properties",
-    	"org/apache/jmeter/config/CSVDataSetResources.properties",
-    	"org/apache/jmeter/config/KeystoreConfigResources.properties",
-    	"org/apache/jmeter/config/RandomVariableConfigResources.properties",
-    	"org/apache/jmeter/extractor/BSFPostProcessorResources.properties",
-    	"org/apache/jmeter/extractor/BeanShellPostProcessorResources.properties",
-    	"org/apache/jmeter/extractor/DebugPostProcessorResources.properties",
-    	"org/apache/jmeter/extractor/JSR223PostProcessorResources.properties",
-    	"org/apache/jmeter/modifiers/BSFPreProcessorResources.properties",
-    	"org/apache/jmeter/modifiers/BeanShellPreProcessorResources.properties",
-    	"org/apache/jmeter/modifiers/JSR223PreProcessorResources.properties",
-    	"org/apache/jmeter/sampler/DebugSamplerResources.properties",
-    	"org/apache/jmeter/timers/BSFTimerResources.properties",
-    	"org/apache/jmeter/timers/BeanShellTimerResources.properties",
-    	"org/apache/jmeter/timers/ConstantThroughputTimerResources.properties",
-    	"org/apache/jmeter/timers/JSR223TimerResources.properties",
-    	"org/apache/jmeter/timers/SyncTimerResources.properties",
-    	"org/apache/jmeter/visualizers/BSFListenerResources.properties",
-    	"org/apache/jmeter/visualizers/BeanShellListenerResources.properties",
-    	"org/apache/jmeter/visualizers/JSR223ListenerResources.properties",
-    	"org/apache/jmeter/resources/messages.properties",
-    	"org/apache/jmeter/protocol/http/sampler/AccessLogSamplerResources.properties",
-    	"org/apache/jmeter/protocol/java/sampler/JSR223SamplerResources.properties",
-    	"org/apache/jmeter/protocol/jdbc/config/DataSourceElementResources.properties",
-    	"org/apache/jmeter/protocol/jdbc/processor/JDBCPostProcessorResources.properties",
-    	"org/apache/jmeter/protocol/jdbc/sampler/JDBCSamplerResources.properties"
-    };
     
     public JMeterTest(String name) {
         super(name);
@@ -171,7 +138,6 @@ public class JMeterTest extends JMeterTestCase {
         suite.addTest(new JMeterTest("readAliases"));
         suite.addTest(new JMeterTest("createTitleSet"));
         suite.addTest(new JMeterTest("createTagSet"));
-        suite.addTest(new JMeterTest("checkI18n"));
         suite.addTest(suiteGUIComponents());
         suite.addTest(suiteSerializableElements());
         suite.addTest(suiteTestElements());
@@ -430,68 +396,6 @@ public class JMeterTest extends JMeterTestCase {
         }
     }
     
-    /**
-     * Check all messages are available in one language
-     * @throws Exception
-     */
-    public void checkI18n() throws Exception {
-    	Map<String, Map<String,String>> missingLabelsPerBundle = new HashMap<String, Map<String,String>>();
-    	for (int i = 0; i < RESOURCE_BUNDLE_PATHS.length; i++) {
-        	Properties messages = new Properties();
-        	log.info("Checking bundle:"+RESOURCE_BUNDLE_PATHS[i]);
-        	messages.load(Thread.currentThread().getContextClassLoader().getResourceAsStream(RESOURCE_BUNDLE_PATHS[i]));
-        	checkMessagesForLanguage( missingLabelsPerBundle , missingLabelsPerBundle, messages,RESOURCE_BUNDLE_PATHS[i], "fr");
-		}
-    	
-    	assertEquals(missingLabelsPerBundle.size()+" missing labels, labels missing:"+printLabels(missingLabelsPerBundle), 0, missingLabelsPerBundle.size());
-    }
-
-	/**
-	 * Check messages are available in language
-	 * @param missingLabelsPerBundle2 
-	 * @param missingLabelsPerBundle 
-	 * @param messages Properties messages in english
-	 * @param language Language 
-	 * @throws IOException
-	 */
-	private void checkMessagesForLanguage(Map<String, Map<String, String>> missingLabelsPerBundle, Map<String, Map<String, String>> missingLabelsPerBundle2, Properties messages, String bundlePath,String language)
-			throws IOException {
-		Properties messagesFr = new Properties();
-		int index = bundlePath.lastIndexOf(".");
-		String languageBundle = bundlePath.substring(0, index)+"_"+language+ ".properties";
-    	messagesFr.load(Thread.currentThread().getContextClassLoader().getResourceAsStream(languageBundle));
-    
-    	Map<String, String> missingLabels = new TreeMap<String,String>();
-    	for (Iterator<Map.Entry<Object,Object>> iterator =  messages.entrySet().iterator(); iterator.hasNext();) {
-    		Map.Entry<Object,Object> entry = iterator.next();
-			String key = (String)entry.getKey();
-			if(!messagesFr.containsKey(key)) {
-				missingLabels.put(key,(String) entry.getValue());
-			}
-		}
-    	if(!missingLabels.isEmpty()) {
-    		missingLabelsPerBundle.put(languageBundle, missingLabels);
-    	}
-	}
-
-	/**
-	 * Build message with misssing labels per bundle
-	 * @param missingLabelsPerBundle
-	 * @return String
-	 */
-    private String printLabels(Map<String, Map<String, String>> missingLabelsPerBundle) {
-    	StringBuilder builder = new StringBuilder();
-    	for (Iterator<Map.Entry<String,Map<String, String>>> iterator =  missingLabelsPerBundle.entrySet().iterator(); iterator.hasNext();) {
-    		Map.Entry<String,Map<String, String>> entry = iterator.next();
-    		builder.append("Missing labels in bundle:"+entry.getKey()+"\r\n");
-        	for (Iterator<Map.Entry<String,String>> it2 =  entry.getValue().entrySet().iterator(); it2.hasNext();) {
-        		Map.Entry<String,String> entry2 = it2.next();
-    			builder.append(entry2.getKey()+"="+entry2.getValue()+"\r\n");
-    		}
-    		builder.append("======================================================\r\n");
-		}
-    	return builder.toString();
-	}
 
 	/*
      * Check that function descriptions are OK
