@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testResults version="1.2">
+<sample s="true" lb="ComputeIPAddr" rc="200" rm="OK" dt="text"/>
+<httpSample s="true" lb="HTTP-Request-HC31" rc="200" rm="OK" dt="text">
+  <httpSample s="true" lb="http://jmeter.apache.org/" rc="200" rm="OK" dt="text"/>
+  <httpSample s="true" lb="http://jmeter.apache.org/css/style.css" rc="200" rm="OK" dt="text"/>
+  <httpSample s="true" lb="http://www.apache.org/ads/halfbanner.html" rc="200" rm="OK" dt="text">
+    <httpSample s="true" lb="http://www.apache.org/ads/halfbanner.html" rc="200" rm="OK" dt="text"/>
+    <httpSample s="true" lb="http://www.apache.org/ads/ApacheCon/2011-na-234x60.png" rc="200" rm="OK" dt="bin"/>
+  </httpSample>
+  <httpSample s="true" lb="http://jmeter.apache.org/images/asf-logo.gif" rc="200" rm="OK" dt="bin"/>
+  <httpSample s="true" lb="http://jmeter.apache.org/images/logo.jpg" rc="200" rm="OK" dt="bin"/>
+</httpSample>
+<httpSample s="true" lb="HTTP-Request-HC4" rc="200" rm="OK" dt="text">
+  <httpSample s="true" lb="http://jmeter.apache.org/" rc="200" rm="OK" dt="text"/>
+  <httpSample s="true" lb="http://jmeter.apache.org/css/style.css" rc="200" rm="OK" dt="text"/>
+  <httpSample s="true" lb="http://www.apache.org/ads/halfbanner.html" rc="200" rm="OK" dt="text">
+    <httpSample s="true" lb="http://www.apache.org/ads/halfbanner.html" rc="200" rm="OK" dt="text"/>
+    <httpSample s="true" lb="http://www.apache.org/ads/ApacheCon/2011-na-234x60.png" rc="200" rm="OK" dt="bin"/>
+  </httpSample>
+  <httpSample s="true" lb="http://jmeter.apache.org/images/asf-logo.gif" rc="200" rm="OK" dt="bin"/>
+  <httpSample s="true" lb="http://jmeter.apache.org/images/logo.jpg" rc="200" rm="OK" dt="bin"/>
+</httpSample>
+
+</testResults>

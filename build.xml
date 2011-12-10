@@ -1959,6 +1959,10 @@ run JMeter unless all the JMeter jars are added.
       <antcall target="batchtest">
           <param name="batchtest.name" value="HTMLParserTestFile_2"/>
       </antcall>
+      <antcall target="batchtest">
+          <param name="batchtest.name" value="Bug52310"/>
+      </antcall>
+  	
   <!-- TODO fix bug so test passes
       <antcall target="batchtest">
           <param name="batchtest.name" value="Bug50898"/>
