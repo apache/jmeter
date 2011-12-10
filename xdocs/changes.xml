@@ -196,6 +196,7 @@ This behaviour can be changed with property sample_sender_client_configured (set
 <li>Bug 52006 - Create a function RandomString to generate random Strings</li>
 <li>Bug 52016 - It would be useful to support Jexl2</li>
 <li>__char() function now supports octal values</li>
+<li>New function __machineIP returning IP address</li>
 </ul>
 
 <h3>I18N</h3>

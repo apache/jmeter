@@ -21,18 +21,18 @@ package org.apache.jmeter.functions;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * Return Machine Host
+ * Return Machine IP
  */
-public class MachineName extends AbstractHostIPName {
+public class MachineIP extends AbstractHostIPName {
 
-    private static final String KEY = "__machineName"; //$NON-NLS-1$
+    private static final String KEY = "__machineIP"; //$NON-NLS-1$
 
-    public MachineName() {
+    public MachineIP() {
     }
 
 	@Override
 	protected String compute() {
-		return JMeterUtils.getLocalHostName();
+		return JMeterUtils.getLocalHostIP();
 	}
 	
     /** {@inheritDoc} */
