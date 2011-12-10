@@ -1729,7 +1729,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         final private boolean areFollowingRedirect;
         final private int depth;
         private final HTTPSamplerBase sampler;
-		private JMeterContext jmeterContextOfParentThread;
+		private final JMeterContext jmeterContextOfParentThread;
 
         ASyncSample(URL url, String method,
                 boolean areFollowingRedirect, int depth,  CookieManager cookieManager, HTTPSamplerBase base){
