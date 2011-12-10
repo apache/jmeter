@@ -70,6 +70,8 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.JsseSSLManager;
 import org.apache.jmeter.util.SSLManager;
@@ -1727,6 +1729,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         final private boolean areFollowingRedirect;
         final private int depth;
         private final HTTPSamplerBase sampler;
+		private JMeterContext jmeterContextOfParentThread;
 
         ASyncSample(URL url, String method,
                 boolean areFollowingRedirect, int depth,  CookieManager cookieManager, HTTPSamplerBase base){
@@ -1745,9 +1748,11 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 CookieManager clonedCookieManager = (CookieManager) cookieManager.clone();
                 this.sampler.setCookieManager(clonedCookieManager);
             } 
+            this.jmeterContextOfParentThread = JMeterContextService.getContext();
         }
 
         public AsynSamplerResultHolder call() {
+        	JMeterContextService.replaceContext(jmeterContextOfParentThread);
             ((CleanerThread) Thread.currentThread()).registerSamplerForEndNotification(sampler);
             HTTPSampleResult httpSampleResult = sampler.sample(url, method, areFollowingRedirect, depth);
             if(sampler.getCookieManager() != null) {
