@@ -67,6 +67,11 @@ public abstract class AbstractFunction implements Function {
      */
     abstract public String getReferenceKey();
 
+    /**
+     * Gives access to the JMeter variables for the current thread.
+     * 
+     * @return a pointer to the JMeter variables.
+     */
     protected JMeterVariables getVariables() {
         return JMeterContextService.getContext().getVariables();
     }
