@@ -48,14 +48,6 @@ public final class JMeterContextService {
     }
 
     /**
-     * Replace Thread Context by the parameter
-     * @param context {@link JMeterContext}
-     */
-    public static void replaceContext(JMeterContext context) {
-    	threadContext.remove();
-    	threadContext.set(context);
-    }
-    /**
      * Gives access to the current thread context.
      * 
      * @return the current thread Context
