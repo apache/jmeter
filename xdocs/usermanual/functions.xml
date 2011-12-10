@@ -89,6 +89,7 @@ and need to be referenced using the __P or __property function.
         <!-- N.B. the leading space is needed to ensure the content is processed -->
         <tr><td>Information</td><td> <a href="#__threadNum">threadNum</a></td><td>get thread number</td></tr>
         <tr><td>Information</td><td> <a href="#__samplerName">samplerName</a></td><td>get the sampler name (label)</td></tr>
+        <tr><td>Information</td><td> <a href="#__machineIP">machineIP</a></td><td>get the local machine IP address</td></tr>
         <tr><td>Information</td><td> <a href="#__machineName">machineName</a></td><td>get the local machine name</td></tr>
         <tr><td>Information</td><td> <a href="#__time">time</a></td><td>return current time in various formats</td></tr>
         <tr><td>Information</td><td> <a href="#__log">log</a></td><td>log (or display) a message (and return the value)</td></tr>
@@ -468,8 +469,17 @@ Examples:<br></br>
 	</p>
 </component>
 
-<component index="&sect-num;.5.6" name="__machineName">
+<component index="&sect-num;.5.6a" name="__machineName">
 <description><p>The machineName function returns the local host name</p></description>
+
+<properties>
+        <property name="Variable Name" required="No">A reference name for reusing the value
+                computed by this function.</property>
+</properties>
+</component>
+
+<component index="&sect-num;.5.6b" name="__machineIP">
+<description><p>The machineIP function returns the local IP address</p></description>
 
 <properties>
         <property name="Variable Name" required="No">A reference name for reusing the value
