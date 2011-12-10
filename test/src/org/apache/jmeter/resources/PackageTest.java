@@ -221,7 +221,7 @@ public class PackageTest extends TestCase {
         }
     }
 
-    private static final String[] prefixList= getResources(srcFiledir);
+    private static final String[] prefixList = getResources(srcFiledir);
 
     /**
      * Find I18N resources in classpath
@@ -230,7 +230,7 @@ public class PackageTest extends TestCase {
      */
     public static final String[] getResources(File srcFiledir) {
     	Set<String> set = new TreeSet<String>();
-		findFile(srcFiledir,set, new FilenameFilter() {
+		findFile(srcFiledir, set, new FilenameFilter() {
 			public boolean accept(File dir, String name) {
 				return new File(dir, name).isDirectory() 
 						|| (
@@ -250,8 +250,8 @@ public class PackageTest extends TestCase {
      */
     private static void findFile(File file, Set<String> set,
 			FilenameFilter filenameFilter) {
-    	File[] foundFIles = file.listFiles(filenameFilter);
-    	for (File file2 : foundFIles) {
+    	File[] foundFiles = file.listFiles(filenameFilter);
+    	for (File file2 : foundFiles) {
 			if(file2.isDirectory()) {
 				findFile(file2, set, filenameFilter);
 			} else {
@@ -269,14 +269,13 @@ public class PackageTest extends TestCase {
     */
     public static Test suite() {
         TestSuite ts = new TestSuite("Resources PackageTest");
-        for(int j=0; j < prefixList.length; j++){
-            String prefix = prefixList[j];
+        String languages[] = JMeterMenuBar.getLanguages();
+        for(String prefix : prefixList){
             TestSuite pfx = new TestSuite(prefix) ;
             pfx.addTest(new PackageTest("testLang","", prefix)); // load the default resource
-            String lang[] = JMeterMenuBar.getLanguages();
-            for(int i=0; i < lang.length; i++ ){
-                if (!"en".equals(lang[i])){ // Don't try to check the default language
-                    pfx.addTest(new PackageTest("testLang", lang[i], prefix));
+            for(String language : languages){
+                if (!"en".equals(language)){ // Don't try to check the default language
+                    pfx.addTest(new PackageTest("testLang", language, prefix));
                 }
             }
             ts.addTest(pfx);
@@ -313,10 +312,10 @@ public class PackageTest extends TestCase {
      */
     public void checkI18n() throws Exception {
     	Map<String, Map<String,String>> missingLabelsPerBundle = new HashMap<String, Map<String,String>>();
-    	for (int i = 0; i < prefixList.length; i++) {
+    	for (String prefix : prefixList) {
         	Properties messages = new Properties();
-        	messages.load(Thread.currentThread().getContextClassLoader().getResourceAsStream(prefixList[i].substring(1)+".properties"));
-        	checkMessagesForLanguage( missingLabelsPerBundle , missingLabelsPerBundle, messages,prefixList[i].substring(1), "fr");
+        	messages.load(Thread.currentThread().getContextClassLoader().getResourceAsStream(prefix.substring(1)+".properties"));
+        	checkMessagesForLanguage( missingLabelsPerBundle , missingLabelsPerBundle, messages,prefix.substring(1), "fr");
 		}
     	
     	assertEquals(missingLabelsPerBundle.size()+" missing labels, labels missing:"+printLabels(missingLabelsPerBundle), 0, missingLabelsPerBundle.size());
