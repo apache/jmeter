@@ -66,6 +66,14 @@ public final class JMeterContextService {
     }
 
     /**
+     * Replace Thread Context by the parameter
+     * @param context {@link JMeterContext}
+     */
+    public static void replaceContext(JMeterContext context) {
+    	threadContext.remove();
+    	threadContext.set(context);
+    }
+    /**
      * Method is called by the JMeterEngine class when a test run is started.
      * Zeroes numberOfActiveThreads.
      * Saves current time in a field and in the JMeter property "TESTSTART.MS"
