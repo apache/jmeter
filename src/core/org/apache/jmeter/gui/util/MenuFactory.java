@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -673,7 +674,8 @@ public final class MenuFactory {
     private static class MenuInfoComparator implements Comparator<MenuInfo>, Serializable {
         private static final long serialVersionUID = 1L;
         public int compare(MenuInfo o1, MenuInfo o2) {
-              return o1.getLabel().compareTo(o2.getLabel());
+              return o1.getLabel().toLowerCase(Locale.ENGLISH)
+          .compareTo(o2.getLabel().toLowerCase(Locale.ENGLISH));
         }
     }
 
