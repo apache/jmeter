@@ -66,7 +66,7 @@
     <classpathentry kind="lib" path="lib/httpmime-4.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/jCharts-0.7.5.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/js-1.7R3.jar"/>
+	<classpathentry kind="lib" path="lib/js-1.7R2.jar"/>
     <classpathentry kind="lib" path="lib/jtidy-r938.jar"/>
     <classpathentry kind="lib" path="lib/junit-4.9.jar"/>
 	<classpathentry kind="lib" path="lib/logkit-2.0.jar"/>
