@@ -226,7 +226,7 @@ public class PackageTest extends TestCase {
     /**
      * Find I18N resources in classpath
      * @param srcFiledir
-     * @return
+     * @return list of properties files subject to I18N
      */
     public static final String[] getResources(File srcFiledir) {
     	Set<String> set = new TreeSet<String>();
@@ -239,7 +239,7 @@ public class PackageTest extends TestCase {
 								&& !name.matches("Example\\d+Resources\\.properties")));
 			}
 		});
-		return (String[]) set.toArray(new String[set.size()]);
+		return set.toArray(new String[set.size()]);
 	}
     
     /**
