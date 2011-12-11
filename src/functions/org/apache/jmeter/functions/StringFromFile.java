@@ -53,11 +53,15 @@ import org.apache.log.Logger;
  *
  *
  * Notes:
- * - JMeter instantiates a copy of each function for every reference in a
- * Sampler or elsewhere; each instance will open its own copy of the the file
- * - the file name is resolved at file (re-)open time
- * - the output variable name is resolved every time the function is invoked
- *
+ * <ul>
+ * <li>JMeter instantiates a single copy of each function for every reference in the test plan</li>
+ * <li>Function instances are shared between threads.</li>
+ * <li>Each StringFromFile instance reads the file independently. The output variable can be used to save the
+ * value for later use in the same thread.</li>
+ * <li>The file name is resolved at file (re-)open time; the file is initially opened on first execution (which could be any thread)</li>
+ * <li>the output variable name is resolved every time the function is invoked</li>
+ * </ul>
+ * Because function instances are shared, it does not make sense to use the thread number as part of the file name.
  */
 public class StringFromFile extends AbstractFunction implements TestListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
