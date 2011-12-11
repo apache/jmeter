@@ -30,6 +30,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.swing.JMenu;
@@ -673,18 +674,27 @@ public final class MenuFactory {
      */
     private static class MenuInfoComparator implements Comparator<MenuInfo>, Serializable {
         private static final long serialVersionUID = 1L;
+        private final boolean caseBlind;
+        MenuInfoComparator(boolean caseBlind){
+            this.caseBlind = caseBlind;
+        }
         public int compare(MenuInfo o1, MenuInfo o2) {
-              return o1.getLabel().toLowerCase(Locale.ENGLISH)
-          .compareTo(o2.getLabel().toLowerCase(Locale.ENGLISH));
+            String lab1 = o1.getLabel();
+            String lab2 = o2.getLabel();
+            if (caseBlind) {
+                return lab1.toLowerCase(Locale.ENGLISH).compareTo(lab2.toLowerCase(Locale.ENGLISH));                
+            }
+            return lab1.compareTo(lab2);                
         }
     }
 
     /**
-     * Sort loaded menus
+     * Sort loaded menus; all but THREADS are sorted case-blind.
+     * [This is so Thread Group appears before setUp and tearDown]
      */
     private static void sortPluginMenus() {
-       for (List<MenuInfo> menuToSort : menuMap.values()) {
-          Collections.sort(menuToSort, new MenuInfoComparator());
-       }
+        for(Entry<String, List<MenuInfo>> me : menuMap.entrySet()){
+            Collections.sort(me.getValue(), new MenuInfoComparator(!me.getKey().equals(THREADS)));
+        }
     }
 }
