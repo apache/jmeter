@@ -281,10 +281,18 @@ public class PackageTest extends TestCase {
             ts.addTest(pfx);
         }
         ts.addTest(new PackageTest("checkI18n", "fr"));
-
+        // TODO Add these some day
+//        ts.addTest(new PackageTest("checkI18n", "es"));
+//        ts.addTest(new PackageTest("checkI18n", "pl"));
+//        ts.addTest(new PackageTest("checkI18n", "pt_BR"));
+//        ts.addTest(new PackageTest("checkI18n", "tr"));
+//        ts.addTest(new PackageTest("checkI18n", Locale.JAPANESE.toString()));
+//        ts.addTest(new PackageTest("checkI18n", Locale.SIMPLIFIED_CHINESE.toString()));
+//        ts.addTest(new PackageTest("checkI18n", Locale.TRADITIONAL_CHINESE.toString()));
         return ts;
     }
-
+   
+    
     private int subTestFailures;
 
     private final String lang;
@@ -315,7 +323,7 @@ public class PackageTest extends TestCase {
     	for (String prefix : prefixList) {
         	Properties messages = new Properties();
         	messages.load(Thread.currentThread().getContextClassLoader().getResourceAsStream(prefix.substring(1)+".properties"));
-        	checkMessagesForLanguage( missingLabelsPerBundle , missingLabelsPerBundle, messages,prefix.substring(1), "fr");
+        	checkMessagesForLanguage( missingLabelsPerBundle , missingLabelsPerBundle, messages,prefix.substring(1), lang);
 		}
     	
     	assertEquals(missingLabelsPerBundle.size()+" missing labels, labels missing:"+printLabels(missingLabelsPerBundle), 0, missingLabelsPerBundle.size());
@@ -333,7 +341,17 @@ public class PackageTest extends TestCase {
 			throws IOException {
 		Properties messagesFr = new Properties();
 		String languageBundle = bundlePath+"_"+language+ ".properties";
-    	messagesFr.load(Thread.currentThread().getContextClassLoader().getResourceAsStream(languageBundle));
+		InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(languageBundle);
+		if(inputStream == null) {
+			Map<String, String> messagesAsProperties = new HashMap<String, String>();
+			for (Iterator iterator = messages.entrySet().iterator(); iterator.hasNext();) {
+				Map.Entry<Object, Object> entry = (Map.Entry<Object, Object>) iterator.next();
+				messagesAsProperties.put((String) entry.getKey(), (String) entry.getValue()); 
+			}
+			missingLabelsPerBundle.put(languageBundle, messagesAsProperties);
+			return;
+		}
+    	messagesFr.load(inputStream);
     
     	Map<String, String> missingLabels = new TreeMap<String,String>();
     	for (Iterator<Map.Entry<Object,Object>> iterator =  messages.entrySet().iterator(); iterator.hasNext();) {
