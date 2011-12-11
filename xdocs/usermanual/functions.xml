@@ -403,12 +403,18 @@ The reference name is now optional, but it must not be a valid integer.
 
 	<p>
 	Each time it is called it reads the next line from the file.
+    All threads share the same instance, so different threads will get different lines.
 	When the end of the file is reached, it will start reading again from the beginning,
 	unless the maximum loop count has been reached.
 	If there are multiple references to the function in a test script, each will open the file independently,
 	even if the file names are the same.
 	[If the value is to be used again elsewhere, use different variable names for each function call.]
 	</p>
+    <note>
+    Function instances are shared between threads, and the file is (re-)opened by whatever thread
+    happens to need the next line of input, so using the threadNumber as part of the file name
+    will result in unpredictable behaviour.
+    </note>
 	<p>If an error occurs opening or reading the file, then the function returns the string "**ERR**"</p>
 </description>
 
