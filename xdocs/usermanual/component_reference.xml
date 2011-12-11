@@ -3533,6 +3533,8 @@ with the start, continuing on like that until the test is ended.  </p>
         <property name="Track Counter Independently for each User" required="No">In other words, is this a global counter, or does each user get their
         own counter?  If unchecked, the counter is global (ie, user #1 will get value "1", and user #2 will get value "2" on
         the first iteration).  If checked, each user has an independent counter.</property>
+        <property name="Reset counter on each Thread Group Iteration" required="No">This option is only available when counter is tracked per User, if checked, 
+        counter will be reset to Start value on each Thread Group iteration. This can be useful when Counter is inside a Loop Controller.</property>
 </properties>
 </component>
 
