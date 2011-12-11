@@ -57,11 +57,25 @@ public class GenericController extends AbstractTestElement implements Controller
     protected transient List<TestElement> subControllersAndSamplers =
         new ArrayList<TestElement>();
 
+    /**
+     * Index of current sub controller or sampler
+     */
     protected transient int current;
 
+    /**
+     * TODO document this
+     */
     private transient int iterCount;
-
-    private transient boolean done, first;
+    
+    /**
+     * Controller has ended
+     */
+    private transient boolean done;
+    
+    /**
+     * First sampler or sub-controller
+     */
+    private transient boolean first;
 
     /**
      * Creates a Generic Controller
