@@ -189,6 +189,7 @@ This behaviour can be changed with property sample_sender_client_configured (set
 <ul>
 <li>Bug 52128 - Add JDBC pre- and post-processor</li>
 <li>Bug 52183 - SyncTimer could be improved (performance+reliability)</li>
+<li>Bug 52317 - Counter : Add option to reset counter on each Thread Group iteration</li>
 </ul>
 
 <h3>Functions</h3>

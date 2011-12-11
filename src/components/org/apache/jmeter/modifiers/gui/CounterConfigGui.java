@@ -18,6 +18,9 @@
 
 package org.apache.jmeter.modifiers.gui;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JCheckBox;
 
 import org.apache.jmeter.config.gui.AbstractConfigGui;
@@ -27,10 +30,15 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
-public class CounterConfigGui extends AbstractConfigGui {
+public class CounterConfigGui extends AbstractConfigGui implements ActionListener {
     private static final long serialVersionUID = 240L;
 
-    private JLabeledTextField startField, incrField, endField, varNameField, formatField;
+    private JLabeledTextField startField;
+    private JLabeledTextField incrField;
+    private JLabeledTextField endField;
+    private JLabeledTextField varNameField;
+    private JLabeledTextField formatField;
+    private JCheckBox resetCounterOnEachThreadGroupIteration;
 
     private JCheckBox perUserField;
 
@@ -69,6 +77,8 @@ public class CounterConfigGui extends AbstractConfigGui {
             config.setVarName(varNameField.getText());
             config.setFormat(formatField.getText());
             config.setIsPerUser(perUserField.isSelected());
+            config.setResetOnThreadGroupIteration(resetCounterOnEachThreadGroupIteration.isEnabled() 
+            		&& resetCounterOnEachThreadGroupIteration.isSelected());
         }
         super.configureTestElement(c);
     }
@@ -86,6 +96,7 @@ public class CounterConfigGui extends AbstractConfigGui {
         varNameField.setText(""); //$NON-NLS-1$
         formatField.setText(""); //$NON-NLS-1$
         perUserField.setSelected(false);
+        resetCounterOnEachThreadGroupIteration.setEnabled(false);
     }
 
     @Override
@@ -98,6 +109,12 @@ public class CounterConfigGui extends AbstractConfigGui {
         formatField.setText(config.getFormat());
         varNameField.setText(config.getVarName());
         perUserField.setSelected(config.isPerUser());
+        if(config.isPerUser()) {
+        	resetCounterOnEachThreadGroupIteration.setEnabled(true);
+        	resetCounterOnEachThreadGroupIteration.setSelected(config.isResetOnThreadGroupIteration());
+        } else {
+        	resetCounterOnEachThreadGroupIteration.setEnabled(false);
+        }
     }
 
     private void init() {
@@ -110,7 +127,7 @@ public class CounterConfigGui extends AbstractConfigGui {
         varNameField = new JLabeledTextField(JMeterUtils.getResString("var_name"));//$NON-NLS-1$
         formatField = new JLabeledTextField(JMeterUtils.getResString("format"));//$NON-NLS-1$
         perUserField = new JCheckBox(JMeterUtils.getResString("counter_per_user"));//$NON-NLS-1$
-
+        resetCounterOnEachThreadGroupIteration = new JCheckBox(JMeterUtils.getResString("counter_reset_per_tg_iteration"));//$NON-NLS-1$
         add(makeTitlePanel());
         add(startField);
         add(incrField);
@@ -118,5 +135,17 @@ public class CounterConfigGui extends AbstractConfigGui {
         add(formatField);
         add(varNameField);
         add(perUserField);
+        add(resetCounterOnEachThreadGroupIteration);
+        
+        perUserField.addActionListener(this);
     }
+
+    /**
+     * Disable/Enable resetCounterOnEachThreadGroupIteration when perUserField is disabled / enabled
+     */
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == perUserField) {
+			resetCounterOnEachThreadGroupIteration.setEnabled(perUserField.isSelected());
+		}
+	}
 }

@@ -50,17 +50,30 @@ public class CounterConfig extends AbstractTestElement
 
     public final static String VAR_NAME = "CounterConfig.name"; // $NON-NLS-1$
 
+    public final static String RESET_ON_THREAD_GROUP_ITERATION = "CounterConfig.reset_on_tg_iteration"; // $NON-NLS-1$
+
+	private static final boolean RESET_ON_THREAD_GROUP_ITERATION_DEFAULT = false;
+
     // This class is not cloned per thread, so this is shared
     private long globalCounter = Long.MIN_VALUE;
 
     // Used for per-thread/user numbers
     private transient ThreadLocal<Long> perTheadNumber;
 
+    // Used for per-thread/user storage of increment in Thread Group Main loop
+    private transient ThreadLocal<Long> perTheadLastIterationNumber;
+
     private void init() {
         perTheadNumber = new ThreadLocal<Long>() {
             @Override
             protected Long initialValue() {
                 return Long.valueOf(getStart());
+            }
+        };
+        perTheadLastIterationNumber = new ThreadLocal<Long>() {
+            @Override
+            protected Long initialValue() {
+                return Long.valueOf(1);
             }
         };
     }
@@ -89,7 +102,16 @@ public class CounterConfig extends AbstractTestElement
             variables.put(getVarName(), formatNumber(globalCounter));
             globalCounter += increment;
         } else {
-            long current = perTheadNumber.get().longValue();
+        	long current = perTheadNumber.get().longValue();
+        	if(isResetOnThreadGroupIteration()) {
+            	int iteration = JMeterContextService.getContext().getVariables().getIteration();
+	        	Long lastIterationNumber = perTheadLastIterationNumber.get();
+	        	if(iteration != lastIterationNumber.longValue()) {
+	        		// reset 
+	        		current = getStart();
+	        	} 
+	        	perTheadLastIterationNumber.set(Long.valueOf(iteration));
+        	}
             variables.put(getVarName(), formatNumber(current));
             current += increment;
             if (current > end) {
@@ -135,6 +157,20 @@ public class CounterConfig extends AbstractTestElement
 
     public void setEnd(String end) {
         setProperty(END, end);
+    }
+    
+    /**
+     * @param value boolean indicating if counter must be reset on Thread Group Iteration
+     */
+    public void setResetOnThreadGroupIteration(boolean value) {
+    	setProperty(RESET_ON_THREAD_GROUP_ITERATION, value, RESET_ON_THREAD_GROUP_ITERATION_DEFAULT);
+    }
+    
+    /**
+     * @return true if counter must be reset on Thread Group Iteration
+     */
+    public boolean isResetOnThreadGroupIteration() {
+    	return getPropertyAsBoolean(RESET_ON_THREAD_GROUP_ITERATION, RESET_ON_THREAD_GROUP_ITERATION_DEFAULT);
     }
 
     /**
