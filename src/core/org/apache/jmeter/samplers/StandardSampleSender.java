@@ -23,6 +23,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterError;
 
 import java.rmi.RemoteException;
+import java.io.ObjectStreamException;
 import java.io.Serializable;
 
 /**
@@ -36,10 +37,6 @@ public class StandardSampleSender extends AbstractSampleSender implements Serial
 
     private RemoteSampleListener listener;
 
-    static {
-        log.info("Using Standard Remote Sampler for this test run");        
-    }
-
     /**
      * @deprecated only for use by test code
      */
@@ -50,20 +47,11 @@ public class StandardSampleSender extends AbstractSampleSender implements Serial
 
     StandardSampleSender(RemoteSampleListener listener) {
         this.listener = listener;
-    }
-
-    public void testEnded() {
-        log.info("Test ended()");
-        try {
-            listener.testEnded();
-        } catch (RemoteException ex) {
-            log.warn("testEnded()"+ex);
-        }
-
+        log.info("Using StandardSampleSender for this test run");        
     }
 
     public void testEnded(String host) {
-        log.info("Test Ended on " + host); // should this be debug?
+        log.info("Test Ended on " + host);
         try {
             listener.testEnded(host);
         } catch (RemoteException ex) {
@@ -80,5 +68,14 @@ public class StandardSampleSender extends AbstractSampleSender implements Serial
             }
             log.error("sampleOccurred", err);
         }
+    }
+
+    /**
+     * Processed by the RMI server code; acts as testStarted().
+     * @throws ObjectStreamException  
+     */
+    private Object readResolve() throws ObjectStreamException{
+        log.info("Using StandardSampleSender for this test run");        
+        return this;
     }
 }

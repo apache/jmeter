@@ -23,6 +23,7 @@ import org.apache.jorphan.logging.LoggingManager;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.io.ObjectStreamException;
 import java.io.Serializable;
 
 /**
@@ -39,10 +40,6 @@ public class HoldSampleSender extends AbstractSampleSender implements Serializab
 
     private final RemoteSampleListener listener;
 
-    static {
-        log.info("Using Sample store for this test run");        
-    }
-
     /**
      * @deprecated only for use by test code
      */
@@ -54,34 +51,11 @@ public class HoldSampleSender extends AbstractSampleSender implements Serializab
 
     HoldSampleSender(RemoteSampleListener listener) {
         this.listener = listener;
+        log.info("Using HoldSampleSender for this test run"); // client        
     }
 
-    /** {@inheritDoc} */
-    public void testEnded() {
-        log.debug("Test ended()");
-        try {
-            synchronized (sampleStore) {
-                for (SampleEvent se : sampleStore) {
-                    listener.sampleOccurred(se);
-                }
-            }
-            listener.testEnded();
-            sampleStore.clear();
-        } catch (Throwable ex) {
-            log.warn("testEnded()", ex);
-            if (ex instanceof Error){
-                throw (Error) ex;
-            }
-            if (ex instanceof RuntimeException){
-                throw (RuntimeException) ex;
-            }
-        }
-
-    }
-
-    /** {@inheritDoc} */
     public void testEnded(String host) {
-        log.debug("Test Ended on " + host);
+        log.info("Test Ended on " + host);
         try {
             for (SampleEvent se : sampleStore) {
                 listener.sampleOccurred(se);
@@ -100,10 +74,18 @@ public class HoldSampleSender extends AbstractSampleSender implements Serializab
 
     }
 
-    /** {@inheritDoc} */
     public void sampleOccurred(SampleEvent e) {
         synchronized (sampleStore) {
             sampleStore.add(e);
         }
+    }
+
+    /**
+     * Processed by the RMI server code; acts as testStarted().
+     * @throws ObjectStreamException  
+     */
+    private Object readResolve() throws ObjectStreamException{
+        log.info("Using HoldSampleSender for this test run"); // server        
+        return this;
     }
 }

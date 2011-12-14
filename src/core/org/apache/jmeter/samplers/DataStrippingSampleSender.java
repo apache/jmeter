@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.samplers;
 
+import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 
@@ -38,9 +39,6 @@ public class DataStrippingSampleSender extends AbstractSampleSender implements S
     private final RemoteSampleListener listener;
     private final SampleSender decoratedSender;
 
-    static {
-        log.info("Using DataStrippingSampleSender for this run");
-    }
     /**
      * @deprecated only for use by test code
      */
@@ -54,19 +52,18 @@ public class DataStrippingSampleSender extends AbstractSampleSender implements S
     DataStrippingSampleSender(RemoteSampleListener listener) {
         this.listener = listener;
         decoratedSender = null;
+        log.info("Using DataStrippingSampleSender for this run");
     }
 
     DataStrippingSampleSender(SampleSender decorate)
     {
         this.decoratedSender = decorate;
         this.listener = null;
-    }
-
-    public void testEnded() {
-        if(decoratedSender != null) decoratedSender.testEnded();
+        log.info("Using DataStrippingSampleSender for this run");
     }
 
     public void testEnded(String host) {
+        log.info("Test Ended on " + host);
         if(decoratedSender != null) decoratedSender.testEnded(host);
     }
 
@@ -90,4 +87,12 @@ public class DataStrippingSampleSender extends AbstractSampleSender implements S
         }
     }
 
+    /**
+     * Processed by the RMI server code; acts as testStarted().
+     * @throws ObjectStreamException  
+     */
+    private Object readResolve() throws ObjectStreamException{
+        log.info("Using DataStrippingSampleSender for this run");
+        return this;
+    }
 }

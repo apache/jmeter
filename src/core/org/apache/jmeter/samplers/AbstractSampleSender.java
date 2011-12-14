@@ -39,4 +39,9 @@ public abstract class AbstractSampleSender implements SampleSender {
 	public AbstractSampleSender() {
 		super();
 	}
+
+	public void testEnded() {
+        // Not used
+    }
+
 }
