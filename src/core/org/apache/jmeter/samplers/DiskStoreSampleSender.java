@@ -67,11 +67,6 @@ public class DiskStoreSampleSender extends AbstractSampleSender implements Seria
         log.info("Using DiskStoreSampleSender for this test run"); // client log file
     }
 
-    /** {@inheritDoc} */
-    public void testEnded() {
-        // Not needed
-    }
-
     public void testEnded(String host) {
         log.info("Test Ended on " + host);
         singleExecutor.submit(new Runnable(){

@@ -25,6 +25,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import java.util.List;
 import java.util.ArrayList;
 import java.rmi.RemoteException;
+import java.io.ObjectStreamException;
 import java.io.Serializable;
 
 /**
@@ -74,6 +75,7 @@ public class BatchSampleSender extends AbstractSampleSender implements Serializa
      * @param listener
      *            that the List of sample events will be sent to.
      */
+    // protected added: Bug 50008 - allow BatchSampleSender to be subclassed
     protected BatchSampleSender(RemoteSampleListener listener) {
         this.listener = listener;
         log.info("Using batching for this run."
@@ -84,6 +86,7 @@ public class BatchSampleSender extends AbstractSampleSender implements Serializa
    /**
     * @return the listener
     */
+    // added: Bug 50008 - allow BatchSampleSender to be subclassed
    protected RemoteSampleListener getListener() {
        return listener;
    }
@@ -91,25 +94,10 @@ public class BatchSampleSender extends AbstractSampleSender implements Serializa
    /**
     * @return the sampleStore
     */
+   // added: Bug 50008 - allow BatchSampleSender to be subclassed
    protected List<SampleEvent> getSampleStore() {
        return sampleStore;
    }
-
-    /**
-     * Checks if any sample events are still present in the sampleStore and
-     * sends them to the listener. Informs the listener of the testended.
-     */
-    public void testEnded() {
-        try {
-            if (sampleStore.size() != 0) {
-                listener.processBatch(sampleStore);
-                sampleStore.clear();
-            }
-            listener.testEnded();
-        } catch (RemoteException err) {
-            log.error("testEnded()", err);
-        }
-    }
 
     /**
      * Checks if any sample events are still present in the sampleStore and
@@ -119,6 +107,7 @@ public class BatchSampleSender extends AbstractSampleSender implements Serializa
      *            the host that the test has ended on.
      */
     public void testEnded(String host) {
+        log.info("Test Ended on " + host);
         try {
             if (sampleStore.size() != 0) {
                 listener.processBatch(sampleStore);
@@ -195,5 +184,16 @@ public class BatchSampleSender extends AbstractSampleSender implements Serializa
     private int getNumSamplesThreshold() {
     	return isClientConfigured() ?
     			clientConfiguredNumSamplesThreshold: serverConfiguredNumSamplesThreshold;
+    }
+
+    /**
+     * Processed by the RMI server code; acts as testStarted().
+     * @throws ObjectStreamException  
+     */
+    private Object readResolve() throws ObjectStreamException{
+        log.info("Using batching for this run."
+                + " Thresholds: num=" + getNumSamplesThreshold()
+                + ", time=" + getTimeThresholdMs()); 
+        return this;
     }
 }
