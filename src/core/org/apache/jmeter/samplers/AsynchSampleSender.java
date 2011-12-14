@@ -59,7 +59,7 @@ public class AsynchSampleSender extends AbstractSampleSender implements Serializ
      */
     private Object readResolve() throws ObjectStreamException{
     	int capacity = getCapacity();
-        log.debug("Using batch queue size (asynch.batch.queue.size): " + capacity);
+        log.info("Using batch queue size (asynch.batch.queue.size): " + capacity); // server log file
         queue = new ArrayBlockingQueue<SampleEvent>(capacity);        
         Worker worker = new Worker(queue, listener);
         worker.setDaemon(true);
@@ -79,7 +79,7 @@ public class AsynchSampleSender extends AbstractSampleSender implements Serializ
     // Created by SampleSenderFactory
     protected AsynchSampleSender(RemoteSampleListener listener) {
         this.listener = listener;
-        log.info("Using Asynch Remote Sampler for this test run, queue size "+getCapacity());  
+        log.info("Using Asynch Remote Sampler for this test run, queue size "+getCapacity());  // client log file
     }
 
     /**
