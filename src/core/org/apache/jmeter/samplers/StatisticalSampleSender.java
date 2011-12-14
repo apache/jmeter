@@ -22,6 +22,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
+import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -87,25 +88,9 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
      */
     StatisticalSampleSender(RemoteSampleListener listener) {
         this.listener = listener;
-        log.info("Using statistical sampling for this run." + " Thresholds: num="
+        log.info("Using StatisticalSampleSender for this run." + " Thresholds: num="
                 + getNumSamplesThreshold() + ", time=" + getTimeThresholdMs()
                 + ". Key uses ThreadName: " + getKeyOnThreadName());        
-
-    }
-
-    /**
-     * Checks if any sample events are still present in the sampleStore and
-     * sends them to the listener. Informs the listener of the testended.
-     */
-    public void testEnded() {
-        try {
-            if (sampleStore.size() != 0) {
-                sendBatch();
-            }
-            listener.testEnded();
-        } catch (RemoteException err) {
-            log.warn("testEnded()", err);
-        }
     }
 
     /**
@@ -115,6 +100,7 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
      * @param host the hostname that the test has ended on.
      */
     public void testEnded(String host) {
+        log.info("Test Ended on " + host);
         try {
             if (sampleStore.size() != 0) {
                 sendBatch();
@@ -217,5 +203,16 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
     private boolean getKeyOnThreadName() {
     	return isClientConfigured() ?
     			clientConfiguredKeyOnThreadName: serverConfiguredKeyOnThreadName;
+    }
+
+    /**
+     * Processed by the RMI server code; acts as testStarted().
+     * @throws ObjectStreamException  
+     */
+    private Object readResolve() throws ObjectStreamException{
+        log.info("Using StatisticalSampleSender for this run." + " Thresholds: num="
+                + getNumSamplesThreshold() + ", time=" + getTimeThresholdMs()
+                + ". Key uses ThreadName: " + getKeyOnThreadName());        
+        return this;
     }
 }

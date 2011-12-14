@@ -90,15 +90,6 @@ public class AsynchSampleSender extends AbstractSampleSender implements Serializ
     			clientConfiguredCapacity : serverConfiguredCapacity;
     }
     
-    public void testEnded() { // probably not used in server mode
-        log.debug("Test ended()");
-        try {
-            listener.testEnded();
-        } catch (RemoteException ex) {
-            log.warn("testEnded()"+ex);
-        }
-    }
-
     public void testEnded(String host) {
         log.debug("Test Ended on " + host);
         try {
