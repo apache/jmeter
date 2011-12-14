@@ -226,6 +226,8 @@ There are some JMeter properties that can be set to alter this behaviour.
     <ul>
     <li>Standard - send samples synchronously as soon as they are generated</li>
     <li>Hold - hold samples in an array until the end of a run. This may use a lot of memory on the server.</li>
+    <li>DiskStore - store samples in a disk file (under java.io.temp) until the end of a run. 
+    The serialised data file is deleted on JVM exit. </li>
     <li>Batch - send saved samples when either the count or time exceeds a threshold,
     at which point the samples are sent synchronously.
     The thresholds can be configured on the server using the following properties:
