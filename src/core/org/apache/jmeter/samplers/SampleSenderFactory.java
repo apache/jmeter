@@ -42,6 +42,8 @@ public class SampleSenderFactory {
 
     private static final String MODE_ASYNCH = "Asynch"; // $NON-NLS-1$
 
+    private static final String MODE_DISKSTORE = "DiskStore"; // $NON-NLS-1$
+
     // Support original property name
     private static final boolean holdSamples = JMeterUtils.getPropDefault("hold_samples", false); // $NON-NLS-1$
 
@@ -74,6 +76,8 @@ public class SampleSenderFactory {
             return new DataStrippingSampleSender(listener);
         } else if(type.equalsIgnoreCase(MODE_ASYNCH)){
             return new AsynchSampleSender(listener);
+        } else if(type.equalsIgnoreCase(MODE_DISKSTORE)){
+            return new DiskStoreSampleSender(listener);
         } else {
             // should be a user provided class name
             SampleSender s = null;
