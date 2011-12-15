@@ -44,12 +44,6 @@ public class SampleSenderFactory {
 
     private static final String MODE_DISKSTORE = "DiskStore"; // $NON-NLS-1$
 
-    // Support original property name
-    private static final boolean holdSamples = JMeterUtils.getPropDefault("hold_samples", false); // $NON-NLS-1$
-
-    // Extended property name
-    private static final String type = JMeterUtils.getPropDefault("mode", MODE_STANDARD); // $NON-NLS-1$
-
     /**
      * Checks for the Jmeter property mode and returns the required class.
      *
@@ -58,6 +52,12 @@ public class SampleSenderFactory {
      *         hold_samples until end of test or batch samples.
      */
     static SampleSender getInstance(RemoteSampleListener listener) {
+        // Support original property name
+        final boolean holdSamples = JMeterUtils.getPropDefault("hold_samples", false); // $NON-NLS-1$
+
+        // Extended property name
+         final String type = JMeterUtils.getPropDefault("mode", MODE_STANDARD); // $NON-NLS-1$
+
         if (holdSamples || type.equalsIgnoreCase(MODE_HOLD)) {
             HoldSampleSender h = new HoldSampleSender(listener);
             return h;
