@@ -64,7 +64,7 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
             DEFAULT_TIME_THRESHOLD);
 
     // should the samples be aggregated on thread name or thread group (default) ?
-    private boolean clientConfiguredKeyOnThreadName = JMeterUtils.getPropDefault("key_on_threadname", false);
+    private final boolean clientConfiguredKeyOnThreadName = JMeterUtils.getPropDefault("key_on_threadname", false);
 
     private final RemoteSampleListener listener;
 
@@ -73,9 +73,20 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
     //@GuardedBy("sampleStore") TODO perhaps use ConcurrentHashMap ?
     private final Map<String, StatisticalSampleResult> sampleTable = new HashMap<String, StatisticalSampleResult>();
 
-    private int sampleCount; // maintain separate count of samples for speed
+    // Settings; readResolve sets these from the server/client values as appropriate
+    // TODO would be nice to make these final; not 100% sure volatile is needed as not changed after creation
+    private transient volatile int numSamplesThreshold;
 
-    private long batchSendTime = -1;
+    private transient volatile long timeThresholdMs;
+
+    private transient volatile boolean keyOnThreadName;
+
+
+    // variables maintained by server code
+    // @GuardedBy("sampleStore")
+    private transient int sampleCount; // maintain separate count of samples for speed
+
+    private transient long batchSendTime = -1; // @GuardedBy("sampleStore")
 
     /**
      * @deprecated only for use by test code
@@ -87,15 +98,20 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
     }
 
     /**
-     * Constructor
+     * Constructor, only called by client code.
      *
      * @param listener that the List of sample events will be sent to.
      */
     StatisticalSampleSender(RemoteSampleListener listener) {
         this.listener = listener;
-        log.info("Using StatisticalSampleSender for this run." + " Thresholds: num="
-                + getNumSamplesThreshold() + ", time=" + getTimeThresholdMs()
-                + ". Key uses ThreadName: " + getKeyOnThreadName());        
+        if (isClientConfigured()) {
+            log.info("Using StatisticalSampleSender (client settings) for this run."
+                    + " Thresholds: num=" + clientConfiguredNumSamplesThreshold
+                    + ", time=" + clientConfiguredTimeThresholdMs
+                    + ". Key uses ThreadName: " + clientConfiguredKeyOnThreadName);
+        } else {
+            log.info("Using StatisticalSampleSender (server settings) for this run.");
+        }
     }
 
     /**
@@ -126,9 +142,6 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
      * @param e a Sample Event
      */
     public void sampleOccurred(SampleEvent e) {
-    	int numSamplesThreshold = getNumSamplesThreshold();
-    	long timeThresholdMs = getTimeThresholdMs();
-    	boolean keyOnThreadName = getKeyOnThreadName();
     	synchronized (sampleStore) {
             // Locate the statistical sample colector
             String key = StatisticalSampleResult.getKey(e, keyOnThreadName);
@@ -185,39 +198,26 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
             sampleCount = 0;
         }
     }
-    
-    /**
-     * @return time in ms when a send will occur if limit is breached
-     */
-    private long getTimeThresholdMs() {
-    	return isClientConfigured() ?
-    			clientConfiguredTimeThresholdMs : TIME_THRESHOLD_MS;
-    }
-    
-    /**
-     * @return number of samples threshold over which results will be sent
-     */
-    private int getNumSamplesThreshold() {
-    	return isClientConfigured() ?
-    			clientConfiguredNumSamplesThreshold: NUM_SAMPLES_THRESHOLD;
-    }
-    
-    /**
-     * @return boolean indicating wether samples should be aggregated on thread name or thread group (default) ?
-     */
-    private boolean getKeyOnThreadName() {
-    	return isClientConfigured() ?
-    			clientConfiguredKeyOnThreadName: KEY_ON_THREADNAME;
-    }
 
     /**
      * Processed by the RMI server code; acts as testStarted().
-     * @throws ObjectStreamException  
+     * @throws ObjectStreamException
      */
     private Object readResolve() throws ObjectStreamException{
-        log.info("Using StatisticalSampleSender for this run." + " Thresholds: num="
-                + getNumSamplesThreshold() + ", time=" + getTimeThresholdMs()
-                + ". Key uses ThreadName: " + getKeyOnThreadName());        
+        if (isClientConfigured()) {
+            numSamplesThreshold = clientConfiguredNumSamplesThreshold;
+            timeThresholdMs = clientConfiguredTimeThresholdMs;
+            keyOnThreadName = clientConfiguredKeyOnThreadName;
+        } else {
+            numSamplesThreshold = NUM_SAMPLES_THRESHOLD;
+            timeThresholdMs = TIME_THRESHOLD_MS;
+            keyOnThreadName = KEY_ON_THREADNAME;
+        }
+        log.info("Using StatisticalSampleSender for this run."
+                + (isClientConfigured() ? " Client config: " : " Server config: ")
+                + " Thresholds: num=" + numSamplesThreshold
+                + ", time=" + timeThresholdMs
+                + ". Key uses ThreadName: " + keyOnThreadName);
         return this;
     }
 }
