@@ -43,6 +43,20 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
 
     private static final long DEFAULT_TIME_THRESHOLD = 60000L;
 
+    // Static fields are set by the server when the class is constructed
+
+    private static final int NUM_SAMPLES_THRESHOLD = JMeterUtils.getPropDefault(
+            "num_sample_threshold", DEFAULT_NUM_SAMPLE_THRESHOLD);
+
+    private static final long TIME_THRESHOLD_MS = JMeterUtils.getPropDefault("time_threshold",
+            DEFAULT_TIME_THRESHOLD);
+
+    // should the samples be aggregated on thread name or thread group (default) ?
+    private static boolean KEY_ON_THREADNAME = JMeterUtils.getPropDefault("key_on_threadname", false);
+
+    // Instance fields are constructed by the client when the instance is create in the test plan
+    // and the field values are then transferred to the server copy by RMI serialisation/deserialisation
+
     private final int clientConfiguredNumSamplesThreshold = JMeterUtils.getPropDefault(
             "num_sample_threshold", DEFAULT_NUM_SAMPLE_THRESHOLD);
 
@@ -51,15 +65,6 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
 
     // should the samples be aggregated on thread name or thread group (default) ?
     private boolean clientConfiguredKeyOnThreadName = JMeterUtils.getPropDefault("key_on_threadname", false);
-
-    private static final int serverConfiguredNumSamplesThreshold = JMeterUtils.getPropDefault(
-            "num_sample_threshold", DEFAULT_NUM_SAMPLE_THRESHOLD);
-
-    private static final long serverConfiguredTimeThresholdMs = JMeterUtils.getPropDefault("time_threshold",
-            DEFAULT_TIME_THRESHOLD);
-    
-    // should the samples be aggregated on thread name or thread group (default) ?
-    private static boolean serverConfiguredKeyOnThreadName = JMeterUtils.getPropDefault("key_on_threadname", false);
 
     private final RemoteSampleListener listener;
 
@@ -186,7 +191,7 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
      */
     private long getTimeThresholdMs() {
     	return isClientConfigured() ?
-    			clientConfiguredTimeThresholdMs : serverConfiguredTimeThresholdMs;
+    			clientConfiguredTimeThresholdMs : TIME_THRESHOLD_MS;
     }
     
     /**
@@ -194,7 +199,7 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
      */
     private int getNumSamplesThreshold() {
     	return isClientConfigured() ?
-    			clientConfiguredNumSamplesThreshold: serverConfiguredNumSamplesThreshold;
+    			clientConfiguredNumSamplesThreshold: NUM_SAMPLES_THRESHOLD;
     }
     
     /**
@@ -202,7 +207,7 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
      */
     private boolean getKeyOnThreadName() {
     	return isClientConfigured() ?
-    			clientConfiguredKeyOnThreadName: serverConfiguredKeyOnThreadName;
+    			clientConfiguredKeyOnThreadName: KEY_ON_THREADNAME;
     }
 
     /**
