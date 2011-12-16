@@ -35,13 +35,14 @@ public class StandardSampleSender extends AbstractSampleSender implements Serial
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private RemoteSampleListener listener;
+    private final RemoteSampleListener listener;
 
     /**
      * @deprecated only for use by test code
      */
     @Deprecated
     public StandardSampleSender(){
+        this.listener = null;
         log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
     }
 
