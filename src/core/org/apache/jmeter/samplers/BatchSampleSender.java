@@ -41,24 +41,31 @@ public class BatchSampleSender extends AbstractSampleSender implements Serializa
 
     private static final long DEFAULT_TIME_THRESHOLD = 60000L;
 
+    // Static fields are resolved on the server
+    private static final int NUM_SAMPLES_THRESHOLD = 
+        JMeterUtils.getPropDefault("num_sample_threshold", DEFAULT_NUM_SAMPLE_THRESHOLD); // $NON-NLS-1$
+
+    private static final long TIME_THRESHOLD_MS =
+        JMeterUtils.getPropDefault("time_threshold", DEFAULT_TIME_THRESHOLD); // $NON-NLS-1$
+
+    // instance fields are copied from the client instance
     private final int clientConfiguredNumSamplesThreshold = 
             JMeterUtils.getPropDefault("num_sample_threshold", DEFAULT_NUM_SAMPLE_THRESHOLD); // $NON-NLS-1$
 
     private final long clientConfiguredTimeThresholdMs =
             JMeterUtils.getPropDefault("time_threshold", DEFAULT_TIME_THRESHOLD); // $NON-NLS-1$
 
-    private static final int serverConfiguredNumSamplesThreshold = 
-            JMeterUtils.getPropDefault("num_sample_threshold", DEFAULT_NUM_SAMPLE_THRESHOLD); // $NON-NLS-1$
-    
-    private static final long serverConfiguredTimeThresholdMs =
-        JMeterUtils.getPropDefault("time_threshold", DEFAULT_TIME_THRESHOLD); // $NON-NLS-1$
-
-
     private final RemoteSampleListener listener;
 
     private final List<SampleEvent> sampleStore = new ArrayList<SampleEvent>();
 
-    private long batchSendTime = -1;
+    // Server-only work item
+    private transient long batchSendTime = -1;
+
+    // Configuration items, set up by readResolve
+    private transient volatile int numSamplesThreshold;
+
+    private transient volatile long timeThresholdMs;
 
 
     /**
@@ -78,9 +85,13 @@ public class BatchSampleSender extends AbstractSampleSender implements Serializa
     // protected added: Bug 50008 - allow BatchSampleSender to be subclassed
     protected BatchSampleSender(RemoteSampleListener listener) {
         this.listener = listener;
-        log.info("Using batching for this run."
-                + " Thresholds: num=" + getNumSamplesThreshold()
-                + ", time=" + getTimeThresholdMs()); 
+        if (isClientConfigured()) {
+            log.info("Using batching (client settings) for this run."
+                    + " Thresholds: num=" + clientConfiguredNumSamplesThreshold
+                    + ", time=" + clientConfiguredTimeThresholdMs);
+        } else {
+            log.info("Using batching (server settings) for this run.");
+        }
     }
 
    /**
@@ -130,8 +141,6 @@ public class BatchSampleSender extends AbstractSampleSender implements Serializa
      *            a Sample Event
      */
     public void sampleOccurred(SampleEvent e) {
-    	int numSamplesThreshold = getNumSamplesThreshold();
-    	long timeThresholdMs = getTimeThresholdMs();
         synchronized (sampleStore) {
             sampleStore.add(e);
             final int sampleCount = sampleStore.size();
@@ -171,29 +180,20 @@ public class BatchSampleSender extends AbstractSampleSender implements Serializa
     }
     
     /**
-     * @return time in ms when a send will occur if limit is breached
-     */
-    private long getTimeThresholdMs() {
-    	return isClientConfigured() ?
-    			clientConfiguredTimeThresholdMs : serverConfiguredTimeThresholdMs;
-    }
-    
-    /**
-     * @return number of samples threshold over which results will be sent
-     */
-    private int getNumSamplesThreshold() {
-    	return isClientConfigured() ?
-    			clientConfiguredNumSamplesThreshold: serverConfiguredNumSamplesThreshold;
-    }
-
-    /**
      * Processed by the RMI server code; acts as testStarted().
      * @throws ObjectStreamException  
      */
     private Object readResolve() throws ObjectStreamException{
+        if (isClientConfigured()) {
+            numSamplesThreshold = clientConfiguredNumSamplesThreshold;
+            timeThresholdMs = clientConfiguredTimeThresholdMs;
+        } else {
+            numSamplesThreshold =  NUM_SAMPLES_THRESHOLD;
+            timeThresholdMs = TIME_THRESHOLD_MS;
+        }
         log.info("Using batching for this run."
-                + " Thresholds: num=" + getNumSamplesThreshold()
-                + ", time=" + getTimeThresholdMs()); 
+                + " Thresholds: num=" + numSamplesThreshold
+                + ", time=" + timeThresholdMs); 
         return this;
     }
 }
