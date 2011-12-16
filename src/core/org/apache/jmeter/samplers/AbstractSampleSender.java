@@ -24,6 +24,10 @@ import org.apache.jmeter.util.JMeterUtils;
  * Base class for SampleSender implementations
  */
 public abstract class AbstractSampleSender implements SampleSender {
+    
+    // Note: this is an instance field (and is not transient), so is created by the JMeter client
+    // and propagated to the server instance by RMI.
+    // [a static field would be recreated on the server, and would pick up the server properties]
     private final boolean isClientConfigured = JMeterUtils.getPropDefault("sample_sender_client_configured", true); // $NON-NLS-1$
 
 	/**
