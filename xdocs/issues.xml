@@ -36,7 +36,7 @@ It's also worth checking first on the JMeter user mailing list; others may alrea
 Bugzilla - All open bugs</a>
 </li>
 <li>
-<a href="http://issues.apache.org/bugzilla/buglist.cgi?bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_status=NEEDINFO&amp;bug_severity=Blocker&amp;bug_severity=Critical&amp;bug_severity=Major&amp;bug_severity=Normal&amp;bug_severity=Minor&amp;bug_severity=Trivial&amp;product=JMeter&amp;cmdtype=doit&amp;order=Bug+Number">
+<a href="http://issues.apache.org/bugzilla/buglist.cgi?bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_status=NEEDINFO&amp;bug_severity=Blocker&amp;bug_severity=Critical&amp;bug_severity=Major&amp;bug_severity=Normal&amp;bug_severity=Regression&amp;bug_severity=Minor&amp;bug_severity=Trivial&amp;product=JMeter&amp;cmdtype=doit&amp;order=Bug+Number">
 Bugzilla - Open bugs (excluding enhancements)</a></li>
 <li>
 <a href="http://issues.apache.org/bugzilla/buglist.cgi?bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_status=NEEDINFO&amp;bug_severity=Enhancement&amp;product=JMeter&amp;cmdtype=doit&amp;order=Bug+Number">
