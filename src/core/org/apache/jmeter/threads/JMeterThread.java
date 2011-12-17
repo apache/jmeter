@@ -268,46 +268,38 @@ public class JMeterThread implements Runnable, Interruptible {
                 Sampler firstSampler = controller.next();
                 Sampler sam = firstSampler;
                 while (running && sam != null) {
-                    if (onErrorStartNextLoop) { // if the threadGroup option is to start next loop when it fails
-                        // special case: TC as parent and last subsampler is not Ok
-                        if (!TRUE.equals(threadContext.getVariables().get(LAST_SAMPLE_OK)) && sam instanceof TransactionSampler) {
-                            TransactionSampler ts = (TransactionSampler) sam;
-                            while (!ts.isTransactionDone()) { // go to last subsampler
-                                sam = controller.next();
-                                ts = (TransactionSampler) sam;
-                            }
-                            // process now for close transaction (not sampling)
-                            process_sampler(sam, null, threadContext);
-                        }
-                        
-                        // normal case: process sampler and get next
-                        if (TRUE.equals(threadContext.getVariables().get(LAST_SAMPLE_OK))) {
-                            process_sampler(sam, null, threadContext);
-                            sam = controller.next();
-                        } else {
-                            // Find parent controllers of current sampler
-                            FindTestElementsUpToRootTraverser pathToRootTraverser = new FindTestElementsUpToRootTraverser(sam);
-                            testTree.traverse(pathToRootTraverser);
-                            List<Controller> controllersToReinit = pathToRootTraverser.getControllersToRoot();
-
-                            // Trigger end of loop condition on all parent controllers of current sampler
-                            for (Iterator<Controller> iterator = controllersToReinit
-                                    .iterator(); iterator.hasNext();) {
-                                Controller parentController =  iterator.next();
-                                if(parentController instanceof ThreadGroup) {
-                                    ThreadGroup tg = (ThreadGroup) parentController;
-                                    tg.startNextLoop();
-                                } else {
-                                    parentController.triggerEndOfLoop();
-                                }
-                            }
-                            sam = null;
-                            threadContext.getVariables().put(LAST_SAMPLE_OK, TRUE);
-                        }
-                    } else {
-                        process_sampler(sam, null, threadContext);
-                        sam = controller.next();
-                    }
+                	process_sampler(sam, null, threadContext);
+                	if(onErrorStartNextLoop) {
+                		boolean lastSampleFailed = !TRUE.equals(threadContext.getVariables().get(LAST_SAMPLE_OK));
+                		if(lastSampleFailed) {
+	                		if(log.isDebugEnabled()) {
+	                    		log.debug("StartNextLoop option is on, Last sample failed, starting next loop");
+	                    	}
+	                    	// Find parent controllers of current sampler
+	                        FindTestElementsUpToRootTraverser pathToRootTraverser = new FindTestElementsUpToRootTraverser(sam);
+	                        testTree.traverse(pathToRootTraverser);
+	                        List<Controller> controllersToReinit = pathToRootTraverser.getControllersToRoot();
+	
+	                        // Trigger end of loop condition on all parent controllers of current sampler
+	                        for (Iterator<Controller> iterator = controllersToReinit
+	                                .iterator(); iterator.hasNext();) {
+	                            Controller parentController =  iterator.next();
+	                            if(parentController instanceof ThreadGroup) {
+	                                ThreadGroup tg = (ThreadGroup) parentController;
+	                                tg.startNextLoop();
+	                            } else {
+	                                parentController.triggerEndOfLoop();
+	                            }
+	                        }
+	                        sam = null;
+	                        threadContext.getVariables().put(LAST_SAMPLE_OK, TRUE);
+                		} else {
+                			sam = controller.next();
+                		}
+                	} 
+                	else {
+                		sam = controller.next();
+                	}
                 }
                 if (controller.isDone()) {
                     running = false;
