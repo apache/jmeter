@@ -478,12 +478,45 @@ public final class JOrphanUtils {
      */
     public static void displayThreads(boolean includeDaemons) {
         Map<Thread, StackTraceElement[]> m = Thread.getAllStackTraces();
-        for(Thread t : m.keySet()) {
-            boolean daemon = t.isDaemon();
+        String lineSeparator = System.getProperty("line.separator");
+        for(Map.Entry<Thread, StackTraceElement[]> e : m.entrySet()) {
+            boolean daemon = e.getKey().isDaemon();
             if (includeDaemons || !daemon){
-                System.out.println(t.toString()+((daemon ? " (deamon)" : "")));
+            	StringBuilder builder = new StringBuilder();
+            	StackTraceElement[] ste = e.getValue();
+            	for (StackTraceElement stackTraceElement : ste) {
+            		int lineNumber = stackTraceElement.getLineNumber();
+					builder.append(stackTraceElement.getClassName()+"#"+stackTraceElement.getMethodName()+
+							(lineNumber >=0 ? " at line:"+ stackTraceElement.getLineNumber() : "")+lineSeparator);
+				}
+                System.out.println(e.getKey().toString()+((daemon ? " (daemon)" : ""))+", stackTrace:"+ builder.toString());
             }
         }
     }
+    
+    public static void main(String[] args) {
+		for (int i = 0; i <10; i++) {
+			new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					try {
+						Thread.sleep(10000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}).start();
+		}
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		displayThreads(true);
+	}
 
 }
