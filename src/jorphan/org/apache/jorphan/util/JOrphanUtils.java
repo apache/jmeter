@@ -25,6 +25,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 /**
@@ -467,4 +468,22 @@ public final class JOrphanUtils {
         }
         return length - remaining;
     }
+
+    /**
+     * Display currently running threads on system.out
+     * This may be expensive to run.
+     * Mainly designed for use at the end of a non-GUI test to check for threads that might prevent the JVM from exitting.
+     * 
+     * @param includeDaemons whether to include daemon threads or not.
+     */
+    public static void displayThreads(boolean includeDaemons) {
+        Map<Thread, StackTraceElement[]> m = Thread.getAllStackTraces();
+        for(Thread t : m.keySet()) {
+            boolean daemon = t.isDaemon();
+            if (includeDaemons || !daemon){
+                System.out.println(t.toString()+((daemon ? " (deamon)" : "")));
+            }
+        }
+    }
+
 }
