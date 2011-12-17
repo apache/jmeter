@@ -235,6 +235,7 @@ Loads any additional properties found in META-INF/resources/org.apache.jmeter.na
 <li>Bug 51093 - when loading a selection previously stored by "Save Selection As", show the file name in the blue window bar</li>
 <li>Bug 50086 - Password fields not Hidden in JMS Publisher, JMS Subscriber, Mail Reader sampler, SMTP sampler and Database Configuration</li>
 <li>Added DiskStore remote sample sender: like Hold, but saves samples to disk until end of test.</li>
+<li>Bug 52333 - Reduce overhead in calculating SampleResult#nanoTimeOffset</li>
 </ul>
 
 <h2>Non-functional changes</h2>
