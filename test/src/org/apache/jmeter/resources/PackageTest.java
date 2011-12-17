@@ -344,7 +344,7 @@ public class PackageTest extends TestCase {
 		InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(languageBundle);
 		if(inputStream == null) {
 			Map<String, String> messagesAsProperties = new HashMap<String, String>();
-			for (Iterator iterator = messages.entrySet().iterator(); iterator.hasNext();) {
+			for (Iterator<Map.Entry<Object, Object>> iterator = messages.entrySet().iterator(); iterator.hasNext();) {
 				Map.Entry<Object, Object> entry = (Map.Entry<Object, Object>) iterator.next();
 				messagesAsProperties.put((String) entry.getKey(), (String) entry.getValue()); 
 			}
