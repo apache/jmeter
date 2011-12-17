@@ -929,6 +929,7 @@ public class JMeter implements JMeterPlugin {
             long now = System.currentTimeMillis();
             println("Tidying up ...    @ "+new Date(now)+" ("+now+")");
             println("... end of run");
+            checkForRemainingThreads();
         }
 
         public void testStarted(String host) {
@@ -964,6 +965,7 @@ public class JMeter implements JMeterPlugin {
             }
             ClientJMeterEngine.tidyRMI(log);
             println("... end of run");
+            checkForRemainingThreads();
         }
 
         /**
@@ -972,6 +974,30 @@ public class JMeter implements JMeterPlugin {
         public void testIterationStart(LoopIterationEvent event) {
             // ignored
         }
+
+        /**
+         * Runs daemon thread which waits a short while; 
+         * if JVM does not exit, lists remaining non-daemon threads on stdout.
+         */
+        private void checkForRemainingThreads() {
+            Thread daemon = new Thread(){
+                @Override
+                public void run(){
+                    try {
+                        Thread.sleep(2000); // Allow enough time for JVM to exit
+                    } catch (InterruptedException ignored) {
+                    }
+                    // This is a daemon thread, which should only reach here if there are other
+                    // no-daemon threads still active
+                    System.out.println("JVM did not exit; following threads are still running (DestroyJavaVM is OK):");
+                    JOrphanUtils.displayThreads(false);
+                }
+
+            };
+            daemon.setDaemon(true);
+            daemon.start();
+        }
+
     }
 
     private static void println(String str) {
