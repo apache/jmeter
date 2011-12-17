@@ -493,30 +493,4 @@ public final class JOrphanUtils {
             }
         }
     }
-    
-    public static void main(String[] args) {
-		for (int i = 0; i <10; i++) {
-			new Thread(new Runnable() {
-				
-				@Override
-				public void run() {
-					try {
-						Thread.sleep(10000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			}).start();
-		}
-		
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		displayThreads(true);
-	}
-
 }
