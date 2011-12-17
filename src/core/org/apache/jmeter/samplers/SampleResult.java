@@ -210,6 +210,10 @@ public class SampleResult implements Serializable {
     static final boolean USENANOTIME
     = JMeterUtils.getPropDefault("sampleresult.useNanoTime", true);  // $NON-NLS-1$
 
+    // How long between checks of nanotime; default 5000ms; set to <=0 to disable the thread
+    private static final long NANOTHREAD_SLEEP = 
+            JMeterUtils.getPropDefault("sampleresult.nanoThreadSleep", 5000);  // $NON-NLS-1$;
+
     static {
         if (startTimeStamp) {
             log.info("Note: Sample TimeStamps are START times");
@@ -218,32 +222,47 @@ public class SampleResult implements Serializable {
         }
         log.info("sampleresult.default.encoding is set to " + DEFAULT_ENCODING);
         log.info("sampleresult.useNanoTime="+USENANOTIME);
+        log.info("sampleresult.nanoThreadSleep="+NANOTHREAD_SLEEP);
+
+        if (USENANOTIME && NANOTHREAD_SLEEP > 0) {
+            NanoOffset nanoOffset = new NanoOffset();
+            nanoOffset.setDaemon(true);
+            nanoOffset.setName("NanoOffset");
+            nanoOffset.start();
+        }
     }
 
-    // Allow read access by test code
-    transient final long nanoTimeOffset;
 
-    transient final boolean useNanoTime; // Allow test code to change the default
+    private transient final long nanoTimeOffset;
+
+    // Allow testcode access to the settings
+    transient final boolean useNanoTime;
+    
+    transient final long nanoThreadSleep;
     
     private long initOffset(){
         if (useNanoTime){
-            return System.currentTimeMillis() - sampleNsClockInMs();
+            return nanoThreadSleep > 0 ? NanoOffset.getNanoOffset() : System.currentTimeMillis() - sampleNsClockInMs();
         } else {
             return Long.MIN_VALUE;
         }
     }
 
     public SampleResult() {
-        time = 0;
-        useNanoTime = USENANOTIME;
-        nanoTimeOffset = initOffset();
+        this(USENANOTIME, NANOTHREAD_SLEEP);
     }
 
     // Allow test code to change the default useNanoTime setting
     SampleResult(boolean nanoTime) {
-        time = 0;
-        useNanoTime = nanoTime;
-        nanoTimeOffset = initOffset();
+        this(nanoTime, NANOTHREAD_SLEEP);
+    }
+
+    // Allow test code to change the default useNanoTime and nanoThreadSleep settings
+    SampleResult(boolean nanoTime, long nanoThreadSleep) {
+        this.time = 0;
+        this.useNanoTime = nanoTime;
+        this.nanoThreadSleep = nanoThreadSleep;
+        this.nanoTimeOffset = initOffset();
     }
 
     /**
@@ -252,8 +271,7 @@ public class SampleResult implements Serializable {
      * @param res existing sample result
      */
     public SampleResult(SampleResult res) {
-        useNanoTime = USENANOTIME;
-        nanoTimeOffset = initOffset();
+        this();
         allThreads = res.allThreads;//OK
         assertionResults = res.assertionResults;// TODO ??
         bytes = res.bytes;
@@ -306,8 +324,7 @@ public class SampleResult implements Serializable {
      *            create the sample finishing now, else starting now
      */
     protected SampleResult(long elapsed, boolean atend) {
-        useNanoTime = USENANOTIME;
-        nanoTimeOffset = initOffset();
+        this();
         long now = currentTimeInMillis();
         if (atend) {
             setTimes(now - elapsed, now);
@@ -357,8 +374,7 @@ public class SampleResult implements Serializable {
      * @param elapsed
      */
     public SampleResult(long stamp, long elapsed) {
-        useNanoTime = USENANOTIME;
-        nanoTimeOffset = initOffset();
+        this();
         stampAndTime(stamp, elapsed);
     }
 
@@ -1246,4 +1262,36 @@ public class SampleResult implements Serializable {
         this.bodySize = bodySize;
     }
 
+    private static class NanoOffset extends Thread {
+
+        private static volatile long nanoOffset = 
+                // Make sure we start with a reasonable value
+                System.currentTimeMillis() - SampleResult.sampleNsClockInMs();
+        
+        static long getNanoOffset() {
+            return nanoOffset;
+        }
+
+        @Override
+        public void run() {
+            // Wait longer than a clock pulse (generally 10-15ms)
+            getOffset(30L); // Catch an early clock pulse to reduce slop.
+            while(true) {
+                getOffset(NANOTHREAD_SLEEP); // Can now afford to wait a bit longer between checks
+            }
+            
+        }
+
+        private void getOffset(long wait) {
+            try {
+                Thread.sleep(wait);
+                long clock = System.currentTimeMillis();
+                long nano = SampleResult.sampleNsClockInMs();
+                nanoOffset = clock - nano;
+            } catch (InterruptedException ignore) {
+                // ignored
+            }
+        }
+        
+    }
 }

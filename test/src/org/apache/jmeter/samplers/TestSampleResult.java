@@ -144,16 +144,32 @@ public class TestSampleResult extends TestCase {
             testSubResults(true, 0);
         }
 
+        public void testSubResultsTrueThread() throws Exception {
+            testSubResults(true, 500L, 0);
+        }
+
         public void testSubResultsFalse() throws Exception {
             testSubResults(false, 0);
+        }
+
+        public void testSubResultsFalseThread() throws Exception {
+            testSubResults(false, 500L, 0);
         }
 
         public void testSubResultsTruePause() throws Exception {
             testSubResults(true, 100);
         }
 
+        public void testSubResultsTruePauseThread() throws Exception {
+            testSubResults(true, 500L, 100);
+        }
+
         public void testSubResultsFalsePause() throws Exception {
             testSubResults(false, 100);
+        }
+
+        public void testSubResultsFalsePauseThread() throws Exception {
+            testSubResults(false, 500L, 100);
         }
 
         // temp test case for exploring settings
@@ -165,12 +181,19 @@ public class TestSampleResult extends TestCase {
         }
 
         private void testSubResults(boolean nanoTime, long pause) throws Exception {
+            testSubResults(nanoTime, 0L, pause); // Don't use nanoThread
+        }
+
+        private void testSubResults(boolean nanoTime, long nanoThreadSleep, long pause) throws Exception {
             // This test tries to emulate a http sample, with two
             // subsamples, representing images that are downloaded for the
             // page representing the first sample.
 
             // Sample that will get two sub results, simulates a web page load 
-            SampleResult parent = new SampleResult(nanoTime);            
+            SampleResult parent = new SampleResult(nanoTime, nanoThreadSleep);            
+
+            assertEquals(nanoTime, parent.useNanoTime);
+            assertEquals(nanoThreadSleep, parent.nanoThreadSleep);
 
             long beginTest = parent.currentTimeInMillis();
 

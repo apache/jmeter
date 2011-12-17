@@ -157,6 +157,12 @@ The full set of properties that affect result file output is shown below.
 # Put the start time stamp in logs instead of the end
 sampleresult.timestamp.start=true
 
+# Whether to use System.nanoTime() - otherwise only use System.currentTimeMillis()
+#sampleresult.useNanoTime=true
+
+# Use a background thread to calculate the nanoTime offset
+# Set this to <= 0 to disable the background thread
+#sampleresult.nanoThreadSleep=5000
 
 # legitimate values: none, first, all
 #jmeter.save.saveservice.assertion_results=none
