@@ -331,7 +331,7 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
      * @return array of HttpClient cookies
      *
      */
-    public org.apache.commons.httpclient.Cookie[] getCookiesForUrl(URL url){
+    org.apache.commons.httpclient.Cookie[] getCookiesForUrl(URL url){
         CollectionProperty jar=getCookies();
         org.apache.commons.httpclient.Cookie cookies[]=
             new org.apache.commons.httpclient.Cookie[jar.size()];
