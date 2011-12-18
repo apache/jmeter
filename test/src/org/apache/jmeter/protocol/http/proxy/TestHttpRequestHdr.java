@@ -139,6 +139,16 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
 
     public void testEncodedArguments() throws Exception {
         String url = "http://localhost/matrix.html";
+        testEncodedArguments(url);
+    }
+     
+    
+    public void testEncodedArgumentsIPv6() throws Exception {
+        String url = "http://[::1]:8080/matrix.html";
+        testEncodedArguments(url);
+    }
+        	
+    public void testEncodedArguments(String url) throws Exception {
         // A HTTP GET request, with encoding not known 
         String contentEncoding = "";
         String queryString = "abc%3FSPACE=a+b&space=a%20b&query=What%3F"; 
@@ -229,7 +239,14 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
     }
     
     public void testGetRequestEncodings() throws Exception {
-        String url = "http://localhost/matrix.html";
+    	testGetRequestEncodings("http://localhost/matrix.html");
+    }
+    
+    public void testGetRequestEncodingsIPv6() throws Exception {
+    	testGetRequestEncodings("http://[::1]:8080/matrix.html");
+    }
+    
+    public void testGetRequestEncodings(String url) throws Exception {
         // A HTTP GET request, with encoding not known
         String contentEncoding = "";
         String param1Value = "yes";
@@ -459,6 +476,7 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
         assertEquals("name",header.getName());
         assertEquals("value",header.getValue());
     }
+    
 
     public void testParse2() throws Exception {// spaces after :
         HttpRequestHdr req = new HttpRequestHdr();
