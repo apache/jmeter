@@ -484,9 +484,13 @@ public class HttpRequestHdr {
             str = str.substring(0, i);
         }
         // chop to server.name
-        i = str.indexOf(":"); // $NON-NLS-1$
+        i = str.lastIndexOf(":"); // $NON-NLS-1$
         if (0 < i) {
             str = str.substring(0, i);
+        }
+        // Handle IPv6 urls
+        if(str.startsWith("[")&& str.endsWith("]")) {
+        	return str.substring(1, str.length()-1);
         }
         return str;
     }
@@ -510,8 +514,8 @@ public class HttpRequestHdr {
         if (0 < i) {
             str = str.substring(0, i);
         }
-        // chop XX
-        i = str.indexOf(":");
+        // chop to server.name
+        i = str.lastIndexOf(":");
         if (0 < i) {
             return Integer.parseInt(str.substring(i + 1).trim());
         }
