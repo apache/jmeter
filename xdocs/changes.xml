@@ -120,6 +120,7 @@ This behaviour can be changed with property sample_sender_client_configured (set
 
 <h3>Listeners</h3>
 <ul>
+<li>Bug 52357 - View results in Table does not allow for multiple result samples</li>
 </ul>
 
 <h3>Assertions</h3>

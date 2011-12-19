@@ -107,7 +107,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
     // Column renderers
     private static final TableCellRenderer[] RENDERERS =
         new TableCellRenderer[]{
-            null, // Count
+            new RightAlignRenderer(), // Sample number (string)
             new RightAlignRenderer(), // Start Time
             null, // Thread Name
             null, // Label
@@ -122,19 +122,19 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
     public TableVisualizer() {
         super();
         model = new ObjectTableModel(COLUMNS,
-                Sample.class,         // The object used for each row
+                TableSample.class,         // The object used for each row
                 new Functor[] {
-                new Functor("getCount"), // $NON-NLS-1$
+                new Functor("getSampleNumberString"), // $NON-NLS-1$
                 new Functor("getStartTimeFormatted",  // $NON-NLS-1$
                         new Object[]{format}),
                 new Functor("getThreadName"), // $NON-NLS-1$
                 new Functor("getLabel"), // $NON-NLS-1$
-                new Functor("getData"), // $NON-NLS-1$
+                new Functor("getElapsed"), // $NON-NLS-1$
                 new SampleSuccessFunctor("isSuccess"), // $NON-NLS-1$
                 new Functor("getBytes") }, // $NON-NLS-1$
                 new Functor[] { null, null, null, null, null, null, null },
                 new Class[] {
-                Long.class, String.class, String.class, String.class, Long.class, ImageIcon.class, Integer.class });
+                String.class, String.class, String.class, String.class, Long.class, ImageIcon.class, Integer.class });
         init();
     }
 
@@ -150,7 +150,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
     protected synchronized void updateTextFields(SampleResult res) {
         noSamplesField.setText(Long.toString(calc.getCount()));
-        dataField.setText(Long.toString(res.getTime()));
+        dataField.setText(Long.toString(res.getTime()/res.getSampleCount()));
         averageField.setText(Long.toString((long) calc.getMean()));
         deviationField.setText(Long.toString((long) calc.getStandardDeviation()));
     }
@@ -168,9 +168,15 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
         synchronized (calc) {
             calc.addSample(res);
             int count = calc.getCount();
-            Sample newS = new Sample(res.getSampleLabel(), res.getTime(), 0, 0, 0, 0, 0, 0,
-                    res.isSuccessful(), count, res.getEndTime(),res.getBytes(),
-                    res.getThreadName());
+            TableSample newS = new TableSample(
+                    count, 
+                    res.getSampleCount(), 
+                    res.getStartTime(), 
+                    res.getThreadName(), 
+                    res.getSampleLabel(),
+                    res.getTime(),
+                    res.isSuccessful(),
+                    res.getBytes());
             model.addRow(newS);
         }
         updateTextFields(res);
