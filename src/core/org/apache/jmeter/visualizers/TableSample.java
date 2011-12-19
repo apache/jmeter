@@ -44,6 +44,14 @@ public class TableSample implements Serializable, Comparable<TableSample> {
 
     private final long bytes;
 
+    /**
+     * @deprecated for unit test code only
+     */
+    @Deprecated
+    public TableSample() {
+        this(0, 0, 0, "", "", 0, true, 0);
+    }
+
     public TableSample(long totalSamples, int sampleCount, long startTime, String threadName,
             String label,
             long elapsed, boolean success, long bytes) {
