@@ -67,10 +67,24 @@ public class Calculator {
         count = 0;
     }
 
+    /**
+     * Add the value for a single sample.
+     * 
+     * @param newValue
+     * 
+     * @see #addValue(long, int)
+     */
     public void addValue(long newValue) {
-        addValue(newValue,1);
+        addValue(newValue, 1);
     }
 
+    /**
+     * Add the value for (possibly multiple) samples.
+     * Updates the count, sum, min, max, sumOfSqaures, mean and deviation.
+     * 
+     * @param newValue the total value for all the samples.
+     * @param sampleCount number of samples included in the value
+     */
     private void addValue(long newValue, int sampleCount) {
         count += sampleCount;
         double currentVal = newValue;
@@ -81,7 +95,7 @@ public class Calculator {
             // For n values in an aggregate sample the average value = (val/n)
             // So need to add n * (val/n) * (val/n) = val * val / n
             sumOfSquares += (currentVal * currentVal) / (sampleCount);
-        } else {
+        } else { // no point dividing by 1
             minimum=Math.min(newValue, minimum);
             maximum=Math.max(newValue, maximum);
             sumOfSquares += currentVal * currentVal;
@@ -99,13 +113,19 @@ public class Calculator {
     private long startTime = 0;
     private long elapsedTime = 0;
 
+    /**
+     * Add details for a sample result, which may consist of multiple samples.
+     * Updates the number of bytes read, error count, startTime and elapsedTime
+     * @param res the sample result; might represent multiple values
+     * @see #addValue(long, int)
+     */
     public void addSample(SampleResult res) {
         addBytes(res.getBytes());
         addValue(res.getTime(),res.getSampleCount());
         errors+=res.getErrorCount(); // account for multiple samples
-        if (startTime == 0){
+        if (startTime == 0){ // not yet intialised
             startTime=res.getStartTime();
-        }
+        } 
         startTime = Math.min(startTime, res.getStartTime());
         elapsedTime = Math.max(elapsedTime, res.getEndTime()-startTime);
     }
