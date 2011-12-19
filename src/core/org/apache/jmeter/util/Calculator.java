@@ -73,7 +73,9 @@ public class Calculator {
      * @param newValue
      * 
      * @see #addValue(long, int)
+     * @deprecated Use {@link #addSample(SampleResult)} instead
      */
+    @Deprecated
     public void addValue(long newValue) {
         addValue(newValue, 1);
     }

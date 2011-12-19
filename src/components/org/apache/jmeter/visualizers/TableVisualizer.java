@@ -166,7 +166,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
             }
         }
         synchronized (calc) {
-            calc.addValue(res.getTime());
+            calc.addSample(res);
             int count = calc.getCount();
             Sample newS = new Sample(res.getSampleLabel(), res.getTime(), 0, 0, 0, 0, 0, 0,
                     res.isSuccessful(), count, res.getEndTime(),res.getBytes(),
