@@ -49,7 +49,7 @@ public class TableSample implements Serializable, Comparable<TableSample> {
      */
     @Deprecated
     public TableSample() {
-        this(0, 0, 0, "", "", 0, true, 0);
+        this(0, 1, 0, "", "", 0, true, 0);
     }
 
     public TableSample(long totalSamples, int sampleCount, long startTime, String threadName,
