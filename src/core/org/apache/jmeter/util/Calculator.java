@@ -125,8 +125,9 @@ public class Calculator {
         errors+=res.getErrorCount(); // account for multiple samples
         if (startTime == 0){ // not yet intialised
             startTime=res.getStartTime();
-        } 
-        startTime = Math.min(startTime, res.getStartTime());
+        } else {
+            startTime = Math.min(startTime, res.getStartTime());
+        }
         elapsedTime = Math.max(elapsedTime, res.getEndTime()-startTime);
     }
 
