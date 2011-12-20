@@ -31,6 +31,12 @@ public class StatCalculatorInteger extends StatCalculator<Integer> {
         super.addValue(Integer.valueOf(val));
     }
 
+    /**
+     * Update the calculator with the value for an aggregated sample.
+     * 
+     * @param val the aggregate value
+     * @param sampleCount the number of samples contributing to the aggregate value
+     */
     public void addValue(int val, int sampleCount){
         super.addValue(Integer.valueOf(val), sampleCount);
     }
@@ -38,5 +44,10 @@ public class StatCalculatorInteger extends StatCalculator<Integer> {
     @Override
     protected Integer divide(Integer val, int n) {
         return Integer.valueOf(val.intValue() / n);
+    }
+
+    @Override
+    protected Integer divide(Integer val, long n) {
+        return Integer.valueOf((int) (val.intValue() / n));
     }
 }
