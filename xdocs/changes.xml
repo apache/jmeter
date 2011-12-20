@@ -155,6 +155,7 @@ This behaviour can be changed with property sample_sender_client_configured (set
 <li>Bug 52224 - TestBeanHelper does not support NOT_UNDEFINED == Boolean.FALSE</li>
 <li>Bug 52279 - Switching to another language loses icons in Tree and logs error Can't obtain GUI class from ...</li>
 <li>Bug 52280 - The menu item Options / Choose Language does not change all the displayed text to the new language</li>
+<li>Bug 52376 - StatCalculator#addValue(T val, int sampleCount) should use long, not int</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
