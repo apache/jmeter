@@ -21,7 +21,8 @@ import java.io.IOException;
 import java.net.URL;
 
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.samplers.Interruptible;
 
@@ -52,21 +53,21 @@ public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
     }
 
     // Methods needed by subclasses to get access to the implementation
-    protected HttpClient setupConnection(URL url, PostMethod httpMethod, HTTPSampleResult res) 
+    protected HttpClient setupConnection(URL url, HttpMethodBase httpMethod, HTTPSampleResult res) 
         throws IOException {
         return hc.setupConnection(url, httpMethod, res);
     }
 
-    protected void saveConnectionCookies(PostMethod httpMethod, URL url,
+    protected void saveConnectionCookies(HttpMethod httpMethod, URL url,
             CookieManager cookieManager) {
         hc.saveConnectionCookies(httpMethod, url, cookieManager);
    }
 
-    protected String getResponseHeaders(PostMethod httpMethod) {
+    protected String getResponseHeaders(HttpMethod httpMethod) {
         return hc.getResponseHeaders(httpMethod);
     }
 
-    protected String getConnectionHeaders(PostMethod httpMethod) {
+    protected String getConnectionHeaders(HttpMethod httpMethod) {
         return hc.getConnectionHeaders(httpMethod);
     }
 

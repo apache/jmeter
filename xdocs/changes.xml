@@ -98,6 +98,7 @@ This behaviour can be changed with property sample_sender_client_configured (set
 <li>Bug 52137 - Problems with HTTP Cache Manager</li>
 <li>Bug 52221 - Nullpointer Exception with use Retrieve Embedded Resource without HTTP Cache Manager</li>
 <li>Bug 52310 - variable in IPSource failed HTTP request if "Concurrent Pool Size" is enabled</li>
+<li>Bug 52371 - API Incompatibility - Methods in HTTPSampler2 now require PostMethod instead of HttpMethod[Base]. Reverted to original types.</li>
 </ul>
 
 <h3>Other Samplers</h3>
