@@ -120,7 +120,18 @@ public class TestStatCalculator extends TestCase {
         calc.addValue(1L);
         calc.addValue(2L);
         calc.addValue(3L);
-        calc.addValue(2L, 3);
+        calc.addEachValue(2L, 3);
+        assertEquals(6, calc.getCount());
+        assertEquals(12.0, calc.getSum());
+        assertEquals(0.5773502691896255, calc.getStandardDeviation());
+    }
+
+    @SuppressWarnings("boxing")
+    public void testBug52125_2A(){ // as above, but with aggregate sample instead
+        calc.addValue(1L);
+        calc.addValue(2L);
+        calc.addValue(3L);
+        calc.addValue(6L, 3);
         assertEquals(6, calc.getCount());
         assertEquals(12.0, calc.getSum());
         assertEquals(0.5773502691896255, calc.getStandardDeviation());

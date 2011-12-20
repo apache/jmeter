@@ -95,7 +95,7 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
 
     public void addAll(StatCalculator<T> calc) {
         for(Entry<T, MutableLong> ent : calc.valuesMap.entrySet()) {
-            addValue(ent.getKey(), ent.getValue().longValue());
+            addEachValue(ent.getKey(), ent.getValue().longValue());
         }
     }
 
@@ -197,23 +197,64 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
 
     protected abstract T divide(T val, int n);
 
-    public void addValue(T val, long sampleCount) {
+    protected abstract T divide(T val, long n);
+
+    /**
+     * Update the calculator with the values for a set of samples.
+     * 
+     * @param val the common value, normally the elapsed time
+     * @param sampleCount the number of samples with the same value
+     */
+    void addEachValue(T val, long sampleCount) {
         count += sampleCount;
         double currentVal = val.doubleValue();
-        sum += currentVal * sampleCount; 
+        sum += currentVal * sampleCount;
         // For n same values in sum of square is equal to n*val^2
         sumOfSquares += currentVal * currentVal * sampleCount;
         updateValueCount(val, sampleCount);
+        calculateDerivedValues(val);
+    }
+
+    /**
+     * Update the calculator with the value for an aggregated sample.
+     * 
+     * @param val the aggregate value, normally the elapsed time
+     * @param sampleCount the number of samples contributing to the aggregate value
+     */
+    public void addValue(T val, long sampleCount) {
+        count += sampleCount;
+        double currentVal = val.doubleValue();
+        sum += currentVal;
+        T actualValue = val;
+        if (sampleCount > 1){
+            // For n values in an aggregate sample the average value = (val/n)
+            // So need to add n * (val/n) * (val/n) = val * val / n
+            sumOfSquares += currentVal * currentVal / sampleCount;
+            actualValue = divide(val, sampleCount);
+        } else { // no need to divide by 1
+            sumOfSquares += currentVal * currentVal;
+        }
+        updateValueCount(actualValue, sampleCount);
+        calculateDerivedValues(actualValue);
+    }
+
+    private void calculateDerivedValues(T actualValue) {
         mean = sum / count;
         deviation = Math.sqrt((sumOfSquares / count) - (mean * mean));
-        if (val.compareTo(max) > 0){
-            max=val;
+        if (actualValue.compareTo(max) > 0){
+            max=actualValue;
         }
-        if (val.compareTo(min) < 0){
-            min=val;
+        if (actualValue.compareTo(min) < 0){
+            min=actualValue;
         }
     }
 
+    /**
+     * Add a single value (normally elapsed time)
+     * 
+     * @param val the value to add, which should correspond with a single sample
+     * @ss {@link #addValue(Number, long)}
+     */
     public void addValue(T val) {
         addValue(val, 1L);
     }
