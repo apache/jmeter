@@ -595,34 +595,34 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
         return result;
 	}
 
-	/* (non-Javadoc)
+	/** 
+	 * {@inheritDoc}
 	 * @see org.apache.jmeter.testelement.TestListener#testStarted()
 	 */
-	@Override
 	public void testStarted() {
 		testStarted("");
 	}
 
-	/* (non-Javadoc)
+	/**
+	 * {@inheritDoc}
 	 * @see org.apache.jmeter.testelement.TestListener#testStarted(java.lang.String)
 	 */
-	@Override
 	public void testStarted(String host) {
 		cleanCache();
 	}
 
-	/* (non-Javadoc)
+	/**
+	 * {@inheritDoc}
 	 * @see org.apache.jmeter.testelement.TestListener#testEnded()
 	 */
-	@Override
 	public void testEnded() {
 		testEnded("");
 	}
 
-	/* (non-Javadoc)
+	/**
+	 * {@inheritDoc}
 	 * @see org.apache.jmeter.testelement.TestListener#testEnded(java.lang.String)
 	 */
-	@Override
 	public void testEnded(String host) {
 		cleanCache();		
 	}
@@ -637,10 +637,10 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
 		perConnCache.clear();
 	}
 
-	/* (non-Javadoc)
+	/**
+	 * {@inheritDoc}
 	 * @see org.apache.jmeter.testelement.TestListener#testIterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)
 	 */
-	@Override
 	public void testIterationStart(LoopIterationEvent event) {
 		// NOOP
 	}  
