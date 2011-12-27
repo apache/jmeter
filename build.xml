@@ -113,8 +113,6 @@
               excludeFilter="fb-excludes.xml"
               jvmargs="-Xms512m -Xmx512m"
               outputFile="${findbugs.outName}.xml" >
-      <class location="${dest.jar}/*.jar" />
-      <class location="${dest.jar.jmeter}/*.jar" />
       <sourcePath path="${src.core}" />
       <sourcePath path="${src.http}" />
       <sourcePath path="${src.ftp}" />
@@ -126,11 +124,26 @@
       <sourcePath path="${src.components}" />
       <sourcePath path="${src.functions}" />
       <class location="${lib.dir}/jorphan.jar" />
+      <class location="${dest.jar}/ApacheJMeter_components.jar"/>
+      <class location="${dest.jar}/ApacheJMeter_components.jar"/>
+      <class location="${dest.jar}/ApacheJMeter_core.jar"/>
+      <class location="${dest.jar}/ApacheJMeter_ftp.jar"/>
+      <class location="${dest.jar}/ApacheJMeter_functions.jar"/>
+      <class location="${dest.jar}/ApacheJMeter_http.jar"/>
+      <class location="${dest.jar}/ApacheJMeter_java.jar"/>
+      <class location="${dest.jar}/ApacheJMeter_jdbc.jar"/>
+      <class location="${dest.jar}/ApacheJMeter_jms.jar"/>
+      <class location="${dest.jar}/ApacheJMeter_junit.jar"/>
+      <class location="${dest.jar}/ApacheJMeter_ldap.jar"/>
+      <class location="${dest.jar}/ApacheJMeter_mail.jar"/>
+      <class location="${dest.jar}/ApacheJMeter_monitors.jar"/>
+      <class location="${dest.jar}/ApacheJMeter_report.jar"/>
+      <class location="${dest.jar}/ApacheJMeter_tcp.jar"/>
       <sourcePath path="${src.jorphan}" />
       <sourcePath path="${src.tcp}" />
       <sourcePath path="${src.jms}" />
       <sourcePath path="${src.report}" />
-
+      		
       <auxClasspath>
           <fileset dir="${lib.dir}">
               <include name="*.jar"/>
