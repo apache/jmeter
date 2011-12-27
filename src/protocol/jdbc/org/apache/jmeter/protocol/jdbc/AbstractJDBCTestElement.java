@@ -31,6 +31,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -38,9 +39,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -50,7 +53,7 @@ import org.apache.log.Logger;
  * A base class for all JDBC test elements handling the basics of a SQL request.
  * 
  */
-public abstract class AbstractJDBCTestElement extends AbstractTestElement {
+public abstract class AbstractJDBCTestElement extends AbstractTestElement implements TestListener{
     private static final long serialVersionUID = 235L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -127,7 +130,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
      *  from the least recently used connections.
      */
     private static final Map<Connection, Map<String, PreparedStatement>> perConnCache =
-        new LinkedHashMap<Connection, Map<String, PreparedStatement>>(MAX_ENTRIES){
+        Collections.synchronizedMap(new LinkedHashMap<Connection, Map<String, PreparedStatement>>(MAX_ENTRIES){
         private static final long serialVersionUID = 1L;
         @Override
         protected boolean removeEldestEntry(Map.Entry<Connection, Map<String, PreparedStatement>> arg0) {
@@ -138,7 +141,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
             }
             return false;
         }
-    };
+    });
 
     /**
      * Creates a JDBCSampler.
@@ -322,7 +325,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
         Map<String, PreparedStatement> preparedStatementMap = perConnCache.get(conn);
         if (null == preparedStatementMap ) {
             // MRU PreparedStatements cache.
-            preparedStatementMap = new LinkedHashMap<String, PreparedStatement>(MAX_ENTRIES) {
+            preparedStatementMap = Collections.synchronizedMap(new LinkedHashMap<String, PreparedStatement>(MAX_ENTRIES) {
                 private static final long serialVersionUID = 240L;
 
                 @Override
@@ -338,7 +341,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
                     }
                     return false;
                 }
-            };
+            });
             perConnCache.put(conn, preparedStatementMap);
         }
         PreparedStatement pstmt = preparedStatementMap.get(getQuery());
@@ -590,5 +593,55 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
 		}));
 		addPropertiesValues(result, properties);
         return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.apache.jmeter.testelement.TestListener#testStarted()
+	 */
+	@Override
+	public void testStarted() {
+		testStarted("");
+	}
+
+	/* (non-Javadoc)
+	 * @see org.apache.jmeter.testelement.TestListener#testStarted(java.lang.String)
+	 */
+	@Override
+	public void testStarted(String host) {
+		cleanCache();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.apache.jmeter.testelement.TestListener#testEnded()
+	 */
+	@Override
+	public void testEnded() {
+		testEnded("");
+	}
+
+	/* (non-Javadoc)
+	 * @see org.apache.jmeter.testelement.TestListener#testEnded(java.lang.String)
+	 */
+	@Override
+	public void testEnded(String host) {
+		cleanCache();		
+	}
+	
+	/**
+	 * Clean cache of PreparedStatements
+	 */
+	private static final void cleanCache() {
+		for (Map.Entry<Connection, Map<String, PreparedStatement>> element : perConnCache.entrySet()) {
+			closeAllStatements(element.getValue().values());
+		}
+		perConnCache.clear();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.apache.jmeter.testelement.TestListener#testIterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)
+	 */
+	@Override
+	public void testIterationStart(LoopIterationEvent event) {
+		// NOOP
 	}  
 }

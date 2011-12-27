@@ -108,6 +108,7 @@ This behaviour can be changed with property sample_sender_client_configured (set
 <li>Bug 52036 - Durable Subscription fails with ActiveMQ due to missing clientId field</li>
 <li>Bug 52044 - JMS Subscriber used with many threads leads to javax.naming.NamingException: Something already bound with ActiveMQ</li>
 <li>Bug 52072 - LengthPrefixedBinaryTcpClientImpl may end a sample prematurely</li>
+<li>Bug 52390 - AbstractJDBCTestElement:Memory leak and synchronization issue in perConnCache</li>
 </ul>
 
 <h3>Controllers</h3>
