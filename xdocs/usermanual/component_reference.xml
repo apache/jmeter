@@ -1987,6 +1987,11 @@ The condition can be any variable or function that eventually evaluates to the s
 This allows the use of JavaScript, BeanShell, properties or variables as needed.
 </note>
 <br></br>
+<note>
+Note that the is evaluated twice, once before starting sampling children and once at end of children sampling, so putting
+non idempotent functions in Condition (like __counter) can introduce issues.
+</note>
+<br></br>
 For example:
 <ul>
 	<li>${VAR} - where VAR is set to false by some other test element</li>
