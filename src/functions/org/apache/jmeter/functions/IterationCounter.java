@@ -66,7 +66,6 @@ public class IterationCounter extends AbstractFunction {
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
 
-        Integer.valueOf(1);
         globalCounter++;
 
         JMeterVariables vars = getVariables();
