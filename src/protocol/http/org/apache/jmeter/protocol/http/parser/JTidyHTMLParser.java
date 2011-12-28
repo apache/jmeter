@@ -53,10 +53,10 @@ class JTidyHTMLParser extends HTMLParser {
      * {@inheritDoc}
      */
     @Override
-    public Iterator<URL> getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection urls) throws HTMLParseException {
+    public Iterator<URL> getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection urls, String encoding) throws HTMLParseException {
         Document dom = null;
         try {
-            dom = (Document) getDOM(html);
+            dom = (Document) getDOM(html, encoding);
         } catch (SAXException se) {
             throw new HTMLParseException(se);
         }
@@ -194,10 +194,10 @@ class JTidyHTMLParser extends HTMLParser {
      *
      * @return a <code>tidy</code> HTML parser
      */
-    private static Tidy getTidyParser() {
+    private static Tidy getTidyParser(String encoding) {
         log.debug("Start : getParser");
         Tidy tidy = new Tidy();
-        tidy.setInputEncoding("UTF8");
+        tidy.setInputEncoding(encoding);
         tidy.setOutputEncoding("UTF8");
         tidy.setQuiet(true);
         tidy.setShowWarnings(false);
@@ -218,9 +218,9 @@ class JTidyHTMLParser extends HTMLParser {
      * @throws SAXException
      *             indicates an error parsing the xml document
      */
-    private static Node getDOM(byte[] text) throws SAXException {
+    private static Node getDOM(byte[] text, String encoding) throws SAXException {
         log.debug("Start : getDOM");
-        Node node = getTidyParser().parseDOM(new ByteArrayInputStream(text), null);
+        Node node = getTidyParser(encoding).parseDOM(new ByteArrayInputStream(text), null);
         if (log.isDebugEnabled()) {
             log.debug("node : " + node);
         }

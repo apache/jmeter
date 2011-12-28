@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.protocol.http.parser;
 
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
@@ -31,6 +32,7 @@ import org.apache.log.Logger;
 // trivial. Performance did not improve -- at least not significantly.
 // Finally decided for ORO following advise from Stefan Bodewig (message
 // to jmeter-dev dated 25 Nov 2003 8:52 CET) [Jordi]
+import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.regex.MatchResult;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.PatternMatcherInput;
@@ -140,56 +142,63 @@ class RegexpHTMLParser extends HTMLParser {
 
     /**
      * {@inheritDoc}
+     * @throws HTMLParseException 
      */
     @Override
-    public Iterator<URL> getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection urls) {
+    public Iterator<URL> getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection urls, String encoding) throws HTMLParseException {
 
-        Perl5Matcher matcher = JMeterUtils.getMatcher();
-        PatternMatcherInput input = localInput.get();
-        // TODO: find a way to avoid the cost of creating a String here --
-        // probably a new PatternMatcherInput working on a byte[] would do
-        // better.
-        input.setInput(new String(html)); // TODO - charset?
-        Pattern pattern=JMeterUtils.getPatternCache().getPattern(
-                REGEXP,
-                Perl5Compiler.CASE_INSENSITIVE_MASK
-                | Perl5Compiler.SINGLELINE_MASK
-                | Perl5Compiler.READ_ONLY_MASK);
+        try {
+			Perl5Matcher matcher = JMeterUtils.getMatcher();
+			PatternMatcherInput input = localInput.get();
+			// TODO: find a way to avoid the cost of creating a String here --
+			// probably a new PatternMatcherInput working on a byte[] would do
+			// better.
+			input.setInput(new String(html, encoding)); 
+			Pattern pattern=JMeterUtils.getPatternCache().getPattern(
+			        REGEXP,
+			        Perl5Compiler.CASE_INSENSITIVE_MASK
+			        | Perl5Compiler.SINGLELINE_MASK
+			        | Perl5Compiler.READ_ONLY_MASK);
 
-        while (matcher.contains(input, pattern)) {
-            MatchResult match = matcher.getMatch();
-            String s;
-            if (log.isDebugEnabled()) {
-                log.debug("match groups " + match.groups() + " " + match.toString());
-            }
-            // Check for a BASE HREF:
-            for (int g = 1; g <= NUM_BASE_GROUPS && g <= match.groups(); g++) {
-                s = match.group(g);
-                if (s != null) {
-                    if (log.isDebugEnabled()) {
-                        log.debug("new baseUrl: " + s + " - " + baseUrl.toString());
-                    }
-                    try {
-                        baseUrl = ConversionUtils.makeRelativeURL(baseUrl, s);
-                    } catch (MalformedURLException e) {
-                        // Doesn't even look like a URL?
-                        // Maybe it isn't: Ignore the exception.
-                        if (log.isDebugEnabled()) {
-                            log.debug("Can't build base URL from RL " + s + " in page " + baseUrl, e);
-                        }
-                    }
-                }
-            }
-            for (int g = NUM_BASE_GROUPS + 1; g <= match.groups(); g++) {
-                s = match.group(g);
-                if (s != null) {
-                    if (log.isDebugEnabled()) {
-                        log.debug("group " + g + " - " + match.group(g));
-                    }
-                    urls.addURL(s, baseUrl);
-                }
-            }
-        }
-        return urls.iterator();
+			while (matcher.contains(input, pattern)) {
+			    MatchResult match = matcher.getMatch();
+			    String s;
+			    if (log.isDebugEnabled()) {
+			        log.debug("match groups " + match.groups() + " " + match.toString());
+			    }
+			    // Check for a BASE HREF:
+			    for (int g = 1; g <= NUM_BASE_GROUPS && g <= match.groups(); g++) {
+			        s = match.group(g);
+			        if (s != null) {
+			            if (log.isDebugEnabled()) {
+			                log.debug("new baseUrl: " + s + " - " + baseUrl.toString());
+			            }
+			            try {
+			                baseUrl = ConversionUtils.makeRelativeURL(baseUrl, s);
+			            } catch (MalformedURLException e) {
+			                // Doesn't even look like a URL?
+			                // Maybe it isn't: Ignore the exception.
+			                if (log.isDebugEnabled()) {
+			                    log.debug("Can't build base URL from RL " + s + " in page " + baseUrl, e);
+			                }
+			            }
+			        }
+			    }
+			    for (int g = NUM_BASE_GROUPS + 1; g <= match.groups(); g++) {
+			        s = match.group(g);
+			        if (s != null) {
+			            if (log.isDebugEnabled()) {
+			                log.debug("group " + g + " - " + match.group(g));
+			            }
+			            urls.addURL(s, baseUrl);
+			        }
+			    }
+			}
+			return urls.iterator();
+		} catch (UnsupportedEncodingException e) {
+			throw new HTMLParseException(e.getMessage(), e);
+		} catch (MalformedCachePatternException e) {
+			throw new HTMLParseException(e.getMessage(), e);
+		}
     }
 }

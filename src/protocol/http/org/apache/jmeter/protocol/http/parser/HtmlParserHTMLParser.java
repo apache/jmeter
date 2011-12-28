@@ -64,7 +64,7 @@ class HtmlParserHTMLParser extends HTMLParser {
      * {@inheritDoc}
      */
     @Override
-    public Iterator<URL> getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection urls) throws HTMLParseException {
+    public Iterator<URL> getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection urls, String encoding) throws HTMLParseException {
 
         if (log.isDebugEnabled()) {
             log.debug("Parsing html of: " + baseUrl);
@@ -72,7 +72,7 @@ class HtmlParserHTMLParser extends HTMLParser {
 
         Parser htmlParser = null;
         try {
-            String contents = new String(html); // TODO - charset?
+            String contents = new String(html,encoding); 
             htmlParser = new Parser();
             htmlParser.setInputHTML(contents);
         } catch (Exception e) {

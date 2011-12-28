@@ -264,9 +264,9 @@ public class TestHTMLParser extends JMeterTestCase {
             }
             Iterator<URL> result;
             if (c == null) {
-                result = p.getEmbeddedResourceURLs(buffer, new URL(url));
+                result = p.getEmbeddedResourceURLs(buffer, new URL(url), System.getProperty("file.encoding"));
             } else {
-                result = p.getEmbeddedResourceURLs(buffer, new URL(url), c);
+                result = p.getEmbeddedResourceURLs(buffer, new URL(url), c,System.getProperty("file.encoding"));
             }
             /*
              * TODO: Exact ordering is only required for some tests; change the
