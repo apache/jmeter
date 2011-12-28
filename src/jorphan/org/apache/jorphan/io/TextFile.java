@@ -172,4 +172,36 @@ public class TextFile extends File {
     public void setEncoding(String string) {
         encoding = string;
     }
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result
+				+ ((encoding == null) ? 0 : encoding.hashCode());
+		return result;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (!(obj instanceof TextFile))
+			return false;
+		TextFile other = (TextFile) obj;
+		if (encoding == null) {
+			if (other.encoding != null)
+				return false;
+		} else if (!encoding.equals(other.encoding))
+			return false;
+		return true;
+	}
 }
