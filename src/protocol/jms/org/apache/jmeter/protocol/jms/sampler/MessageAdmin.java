@@ -62,6 +62,7 @@ public class MessageAdmin {
         if (holder != null) {
             holder.setReply(reply);
             Object obj = holder.getRequest();
+            // Findbugs : False positive
             synchronized (obj) {
                 obj.notify();
             }
