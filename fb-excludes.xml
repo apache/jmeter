@@ -20,7 +20,7 @@
 	 </Match>
 	 <Match classregex=".*\$Test">
 	 	<BugCode name="OS"/>
-	 </Match>
+	 </Match> 
      <Match classregex=".*" >
      	<!-- 
      	EI,EI2 - may expose internal representation
@@ -29,7 +29,42 @@
      	Se - serialisation
      	SIC - should be static inner class?
 		HE - hashcode/equals
-     	-->
-       <BugCode name="EI,EI2,IS2,HE" />
+     	-->  
+       <BugCode name="EI,EI2,HE" />
      </Match>
+    
+     <Match>
+          <Class name="org.apache.jmeter.protocol.jms.sampler.MessageAdmin" />
+          <Method name="putRequest" />
+          <Bug pattern="NN_NAKED_NOTIFY" />
+    </Match>
+     <Match>
+	      <Class name="org.apache.jmeter.JMeter" />
+	      <Method name="start" />
+	      <Bug pattern="DM_EXIT" />
+    </Match>
+     <Match>
+          <Class name="org.apache.jmeter.JMeterReport" />
+          <Method name="start" />
+          <Bug pattern="DM_EXIT" />
+    </Match>
+    <Match>
+          <Class name="org.apache.jmeter.engine.StandardJMeterEngine$1" />
+          <Method name="run" />
+          <Bug pattern="DM_EXIT" />
+    </Match>
+     <Match>
+          <Class name="org.apache.jmeter.engine.StandardJMeterEngine$StopTest" />
+          <Method name="run" />
+          <Bug pattern="DM_EXIT" />
+    </Match>
+     <Match>
+          <Class name="org.apache.jmeter.gui.action.ExitCommand" />
+          <Bug pattern="DM_EXIT" />
+    </Match>
+     <Match>
+          <Class name="org.apache.jmeter.report.gui.action.ReportExitCommand" />
+          <Bug pattern="DM_EXIT" />
+    </Match>
+    -->
 </FindBugsFilter>
