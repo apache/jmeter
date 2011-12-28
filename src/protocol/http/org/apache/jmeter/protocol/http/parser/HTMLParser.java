@@ -121,9 +121,10 @@ public abstract class HTMLParser {
      *            HTML code
      * @param baseUrl
      *            Base URL from which the HTML code was obtained
+     * @param encoding Charset
      * @return an Iterator for the resource URLs
      */
-    public Iterator<URL> getEmbeddedResourceURLs(byte[] html, URL baseUrl) throws HTMLParseException {
+    public Iterator<URL> getEmbeddedResourceURLs(byte[] html, URL baseUrl, String encoding) throws HTMLParseException {
         // The Set is used to ignore duplicated binary files.
         // Using a LinkedHashSet to avoid unnecessary overhead in iterating
         // the elements in the set later on. As a side-effect, this will keep
@@ -131,7 +132,7 @@ public abstract class HTMLParser {
         // behaviour.
 
         Collection<URLString> col = new LinkedHashSet<URLString>();
-        return getEmbeddedResourceURLs(html, baseUrl, new URLCollection(col));
+        return getEmbeddedResourceURLs(html, baseUrl, new URLCollection(col),encoding);
 
         // An additional note on using HashSets to store URLs: I just
         // discovered that obtaining the hashCode of a java.net.URL implies
@@ -167,9 +168,10 @@ public abstract class HTMLParser {
      *            Base URL from which the HTML code was obtained
      * @param coll
      *            URLCollection
+     * @param encoding Charset
      * @return an Iterator for the resource URLs
      */
-    public abstract Iterator<URL> getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection coll)
+    public abstract Iterator<URL> getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection coll, String encoding)
             throws HTMLParseException;
 
     /**
@@ -186,10 +188,11 @@ public abstract class HTMLParser {
      *            Base URL from which the HTML code was obtained
      * @param coll
      *            Collection - will contain URLString objects, not URLs
+     * @param encoding Charset
      * @return an Iterator for the resource URLs
      */
-    public Iterator<URL> getEmbeddedResourceURLs(byte[] html, URL baseUrl, Collection<URLString> coll) throws HTMLParseException {
-        return getEmbeddedResourceURLs(html, baseUrl, new URLCollection(coll));
+    public Iterator<URL> getEmbeddedResourceURLs(byte[] html, URL baseUrl, Collection<URLString> coll, String encoding) throws HTMLParseException {
+        return getEmbeddedResourceURLs(html, baseUrl, new URLCollection(coll), encoding);
     }
 
     /**

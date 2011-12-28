@@ -1103,7 +1103,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                         HTMLParser.getParser(parserName)
                         :
                         HTMLParser.getParser(); // we don't; use the default parser
-                    urls = parser.getEmbeddedResourceURLs(responseData, res.getURL());
+                    urls = parser.getEmbeddedResourceURLs(responseData, res.getURL(), res.getDataEncodingWithDefault());
                 }
             }
         } catch (HTMLParseException e) {
