@@ -32,12 +32,27 @@
      	-->  
        <BugCode name="EI,EI2,HE" />
      </Match>
-    
+   
+     <Match>
+          <Class name="org.apache.jmeter.engine.RemoteJMeterEngineImpl" />
+          <Method name="rexit" />
+          <Bug pattern="DM_GC" />
+     </Match>
+     <Match>
+          <Class name="org.apache.jmeter.engine.StandardJMeterEngine" />
+          <Method name="run" />
+          <Bug pattern="DM_GC" />
+     </Match>
+     <Match>
+          <Class name="org.apache.jmeter.protocol.jdbc.AbstractJDBCTestElement" />
+          <Method name="getPreparedStatement" />
+          <Bug pattern="OBL_UNSATISFIED_OBLIGATION" />
+     </Match>
      <Match>
           <Class name="org.apache.jmeter.protocol.jms.sampler.MessageAdmin" />
-          <Method name="putRequest" />
+          <Method name="putReply" />
           <Bug pattern="NN_NAKED_NOTIFY" />
-    </Match>
+     </Match>
      <Match>
 	      <Class name="org.apache.jmeter.JMeter" />
 	      <Method name="start" />
