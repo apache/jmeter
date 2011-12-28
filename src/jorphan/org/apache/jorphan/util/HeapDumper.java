@@ -52,8 +52,6 @@ public class HeapDumper {
     private static final String HOTSPOT_BEAN_NAME =
          "com.sun.management:type=HotSpotDiagnostic";
 
-    private static final SimpleDateFormat TIME_STAMP_FORMAT = new SimpleDateFormat("yyyyMMdd_hhmmss_SSS");
-
     // These are needed for invoking the method
     private final MBeanServer server;
     private final ObjectName hotspotDiagnosticBean;
@@ -167,7 +165,8 @@ public class HeapDumper {
      * @throws Exception if the MXBean cannot be found, or if there is a problem during invocation
      */
     public static String dumpHeap(File basedir, boolean live) throws Exception {
-        String stamp = TIME_STAMP_FORMAT.format(new Date());
+    	SimpleDateFormat timestampFormat = new SimpleDateFormat("yyyyMMdd_hhmmss_SSS");
+        String stamp = timestampFormat.format(new Date());
         File temp = new File(basedir,"dump_"+stamp+".hprof");
         final String path = temp.getPath();
         dumpHeap(path, live);
