@@ -46,7 +46,7 @@ public class JTLData implements Serializable, DataSet {
     private String jtl_file = null;
     private long startTimestamp = 0;
     private long endTimestamp = 0;
-    private File inputFile = null;
+    private transient File inputFile = null;
 
     /**
      *
