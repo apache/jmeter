@@ -45,6 +45,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 import org.bouncycastle.asn1.x509.GeneralName;
+import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.cms.CMSException;
 import org.bouncycastle.cms.SignerInformation;
 import org.bouncycastle.cms.SignerInformationStore;
@@ -318,7 +319,7 @@ class SMIMEAssertion {
         List<String> res = new ArrayList<String>();
 
         X509Principal subject = PrincipalUtil.getSubjectX509Principal(cert);
-        Iterator<?> addressIt = subject.getValues(X509Principal.EmailAddress).iterator();
+        Iterator<?> addressIt = subject.getValues(X509Name.EmailAddress).iterator();
         while (addressIt.hasNext()) {
             String address = (String) addressIt.next();
             res.add(address);
