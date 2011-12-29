@@ -98,6 +98,7 @@ public class TestAction extends AbstractSampler {
         try {
             Thread.sleep(milis);
         } catch (InterruptedException e) {
+        	// NOOP
         }
     }
 
