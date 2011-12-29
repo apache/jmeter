@@ -29,6 +29,8 @@ import org.apache.jmeter.testelement.property.FloatProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * This class represents a controller that can control the number of times that
@@ -44,6 +46,7 @@ public class ThroughputController extends GenericController implements Serializa
 
     private static final long serialVersionUID = 233L;
 
+    private static final Logger log = LoggingManager.getLoggerForClass();
     public static final int BYNUMBER = 0;
 
     public static final int BYPERCENT = 1;
@@ -138,6 +141,7 @@ public class ThroughputController extends GenericController implements Serializa
             try {
                 retVal = Integer.parseInt(prop.getStringValue());
             } catch (NumberFormatException e) {
+            	log.warn("Error parsing "+prop.getStringValue(),e);
             }
         }
         return retVal;
@@ -164,6 +168,7 @@ public class ThroughputController extends GenericController implements Serializa
             try {
                 retVal = Float.parseFloat(prop.getStringValue());
             } catch (NumberFormatException e) {
+            	log.warn("Error parsing "+prop.getStringValue(),e);
             }
         }
         return retVal;
@@ -257,11 +262,14 @@ public class ThroughputController extends GenericController implements Serializa
     }
 
     public void testEnded() {
+    	// NOOP
     }
 
     public void testEnded(String host) {
+    	// NOOP
     }
 
     public void testIterationStart(LoopIterationEvent event) {
+    	// NOOP
     }
 }
