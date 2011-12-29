@@ -29,6 +29,8 @@ import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * Provides a counter per-thread(user) or per-thread group.
@@ -63,6 +65,8 @@ public class CounterConfig extends AbstractTestElement
 
     // Used for per-thread/user storage of increment in Thread Group Main loop
     private transient ThreadLocal<Long> perTheadLastIterationNumber;
+
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
     private void init() {
         perTheadNumber = new ThreadLocal<Long>() {
@@ -134,7 +138,9 @@ public class CounterConfig extends AbstractTestElement
                 DecimalFormat myFormatter = new DecimalFormat(format);
                 return myFormatter.format(value);
             } catch (NumberFormatException ignored) {
+            	log.warn("Error formating "+value + " at format:"+format+", using default");
             } catch (IllegalArgumentException ignored) {
+            	log.warn("Error formating "+value + " at format:"+format+", using default");
             }
         }
         return Long.toString(value);
