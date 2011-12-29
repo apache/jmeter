@@ -30,6 +30,7 @@ import javax.swing.JTextField;
 
 import org.apache.jmeter.gui.util.FocusRequester;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.timers.ConstantTimer;
 import org.apache.jmeter.timers.GaussianRandomTimer;
 import org.apache.jmeter.timers.RandomTimer;
 import org.apache.jmeter.util.JMeterUtils;
@@ -104,7 +105,7 @@ public class GaussianRandomTimerGui extends AbstractTimerGui {
     @Override
     public void configure(TestElement el) {
         super.configure(el);
-        delayField.setText(el.getPropertyAsString(RandomTimer.DELAY));
+        delayField.setText(el.getPropertyAsString(ConstantTimer.DELAY));
         rangeField.setText(el.getPropertyAsString(RandomTimer.RANGE));
     }
 
