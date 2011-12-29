@@ -308,7 +308,7 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListene
      * @see java.awt.event.FocusListener#focusGained(java.awt.event.FocusEvent)
      */
     public void focusGained(FocusEvent e) {
-
+    	// NOOP
     }
 
     /**
@@ -327,6 +327,7 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListene
     }
 
     public void keyPressed(KeyEvent e) {
+    	// NOOP
     }
 
     public void keyReleased(KeyEvent e) {
@@ -356,6 +357,7 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListene
 
     }
     public void keyTyped(KeyEvent e) {
+    	// NOOP
     }
 
 }
