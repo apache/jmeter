@@ -55,6 +55,7 @@ public class CounterConfig extends AbstractTestElement
 	private static final boolean RESET_ON_THREAD_GROUP_ITERATION_DEFAULT = false;
 
     // This class is not cloned per thread, so this is shared
+	//@GuardedBy("this")
     private long globalCounter = Long.MIN_VALUE;
 
     // Used for per-thread/user numbers
@@ -91,20 +92,24 @@ public class CounterConfig extends AbstractTestElement
     /**
      * @see LoopIterationListener#iterationStart(LoopIterationEvent)
      */
-    public synchronized void iterationStart(LoopIterationEvent event) {
+    public void iterationStart(LoopIterationEvent event) {
         // Cannot use getThreadContext() as not cloned per thread
         JMeterVariables variables = JMeterContextService.getContext().getVariables();
-        long start = getStart(), end = getEnd(), increment = getIncrement();
+        long start = getStart();
+        long end = getEnd();
+        long increment = getIncrement();
         if (!isPerUser()) {
-            if (globalCounter == Long.MIN_VALUE || globalCounter > end) {
-                globalCounter = start;
-            }
-            variables.put(getVarName(), formatNumber(globalCounter));
-            globalCounter += increment;
+        	synchronized (this) {
+                if (globalCounter == Long.MIN_VALUE || globalCounter > end) {
+                    globalCounter = start;
+                }
+                variables.put(getVarName(), formatNumber(globalCounter));
+                globalCounter += increment;				
+			}
         } else {
         	long current = perTheadNumber.get().longValue();
         	if(isResetOnThreadGroupIteration()) {
-            	int iteration = JMeterContextService.getContext().getVariables().getIteration();
+            	int iteration = variables.getIteration();
 	        	Long lastIterationNumber = perTheadLastIterationNumber.get();
 	        	if(iteration != lastIterationNumber.longValue()) {
 	        		// reset 
