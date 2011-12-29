@@ -115,28 +115,28 @@ public class Cookie extends AbstractTestElement implements Serializable {
     /**
      * get the value for this object.
      */
-    public synchronized String getValue() {
+    public String getValue() {
         return getPropertyAsString(VALUE);
     }
 
     /**
      * set the value for this object.
      */
-    public synchronized void setValue(String value) {
+    public void setValue(String value) {
         this.setProperty(VALUE, value);
     }
 
     /**
      * get the domain for this object.
      */
-    public synchronized String getDomain() {
+    public String getDomain() {
         return getPropertyAsString(DOMAIN);
     }
 
     /**
      * set the domain for this object.
      */
-    public synchronized void setDomain(String domain) {
+    public void setDomain(String domain) {
         setProperty(DOMAIN, domain);
     }
 
@@ -145,7 +145,7 @@ public class Cookie extends AbstractTestElement implements Serializable {
      *
      * @return Expiry time in seconds since the Java epoch
      */
-    public synchronized long getExpires() {
+    public long getExpires() {
         return getPropertyAsLong(EXPIRES);
     }
 
@@ -155,7 +155,7 @@ public class Cookie extends AbstractTestElement implements Serializable {
      * @return Expiry time in milli-seconds since the Java epoch,
      * i.e. same as System.currentTimeMillis()
      */
-    public synchronized long getExpiresMillis() {
+    public long getExpiresMillis() {
         return getPropertyAsLong(EXPIRES)*1000;
     }
 
@@ -163,35 +163,35 @@ public class Cookie extends AbstractTestElement implements Serializable {
      * set the expiry time for the cookie
      * @param expires - expiry time in seconds since the Java epoch
      */
-    public synchronized void setExpires(long expires) {
+    public void setExpires(long expires) {
         setProperty(new LongProperty(EXPIRES, expires));
     }
 
     /**
      * get the secure for this object.
      */
-    public synchronized boolean getSecure() {
+    public boolean getSecure() {
         return getPropertyAsBoolean(SECURE);
     }
 
     /**
      * set the secure for this object.
      */
-    public synchronized void setSecure(boolean secure) {
+    public void setSecure(boolean secure) {
         setProperty(new BooleanProperty(SECURE, secure));
     }
 
     /**
      * get the path for this object.
      */
-    public synchronized String getPath() {
+    public String getPath() {
         return getPropertyAsString(PATH);
     }
 
     /**
      * set the path for this object.
      */
-    public synchronized void setPath(String path) {
+    public void setPath(String path) {
         setProperty(PATH, path);
     }
 
@@ -232,14 +232,14 @@ public class Cookie extends AbstractTestElement implements Serializable {
     /**
      * @return the version
      */
-    public synchronized int getVersion() {
+    public int getVersion() {
         return getPropertyAsInt(VERSION, DEFAULT_VERSION);
     }
 
     /**
      * @param version the version to set
      */
-    public synchronized void setVersion(int version) {
+    public void setVersion(int version) {
         setProperty(VERSION, version, DEFAULT_VERSION);
     }
 
