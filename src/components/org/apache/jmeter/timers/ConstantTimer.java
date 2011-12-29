@@ -57,6 +57,7 @@ public class ConstantTimer extends AbstractTestElement implements Timer, Seriali
      *
      */
     public void setRange(double range) {
+    	// NOOP
     }
 
     /**
