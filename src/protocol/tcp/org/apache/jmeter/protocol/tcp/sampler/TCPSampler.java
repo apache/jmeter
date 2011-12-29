@@ -144,7 +144,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
         Map<String, Object> cp = tp.get();
         Socket con = null;
         if (isReUseConnection()) {
-            con = (Socket) cp.get(TCPKEY);
+            con = (Socket) cp.get(getSocketKey());
             if (con != null) {
                 log.debug(this + " Reusing connection " + con); //$NON-NLS-1$
             }
@@ -159,7 +159,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
                 if(log.isDebugEnabled()) {
                     log.debug("Created new connection " + con); //$NON-NLS-1$
                 }
-                cp.put(TCPKEY, con);
+                cp.put(getSocketKey(), con);
             } catch (UnknownHostException e) {
                 log.warn("Unknown host for " + getLabel(), e);//$NON-NLS-1$
                 cp.put(ERRKEY, e.toString());
@@ -184,7 +184,14 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
         return con;
     }
 
-    public String getUsername() {
+    /**
+     * @return String socket key in cache Map
+     */
+    private final String getSocketKey() {
+		return TCPKEY+"#"+getServer()+"#"+getPort()+"#"+getUsername()+"#"+getPassword();
+	}
+
+	public String getUsername() {
         return getPropertyAsString(ConfigTestElement.USERNAME);
     }
 
@@ -437,7 +444,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 
     private void closeSocket() {
         Map<String, Object> cp = tp.get();
-        Socket con = (Socket) cp.remove(TCPKEY);
+        Socket con = (Socket) cp.remove(getSocketKey());
         if (con != null) {
             log.debug(this + " Closing connection " + con); //$NON-NLS-1$
             try {
