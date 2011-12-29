@@ -234,6 +234,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
      * {@inheritDoc}
      */
     public void testEnded() {
+    	//NOOP
     }
 
     /**
@@ -247,11 +248,13 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
      * {@inheritDoc}
      */
     public void testEnded(String host) {
+    	//NOOP
     }
 
     /**
      * {@inheritDoc}
      */
     public void testIterationStart(LoopIterationEvent event) {
+    	//NOOP
     }
 }
