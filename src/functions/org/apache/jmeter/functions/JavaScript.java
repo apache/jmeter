@@ -35,6 +35,9 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.RhinoException;
 import org.mozilla.javascript.Scriptable;
 
+/**
+ * javaScript function implementation that executes a piece of JavaScript (not Java!) code and returns its value
+ */
 public class JavaScript extends AbstractFunction {
 
     private static final List<String> desc = new LinkedList<String>();
