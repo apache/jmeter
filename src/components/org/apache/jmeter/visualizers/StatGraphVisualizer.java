@@ -391,7 +391,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             }
             FileWriter writer = null;
             try {
-                writer = new FileWriter(chooser.getSelectedFile());
+                writer = new FileWriter(chooser.getSelectedFile()); // TODO Charset ?
                 CSVSaveService.saveCSVStats(getAllTableData(),writer,saveHeaders.isSelected() ? COLUMNS : null);
             } catch (FileNotFoundException e) {
                 log.warn(e.getMessage());
