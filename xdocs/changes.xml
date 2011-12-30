@@ -159,6 +159,7 @@ This behaviour can be changed with property sample_sender_client_configured (set
 <li>Bug 52280 - The menu item Options / Choose Language does not change all the displayed text to the new language</li>
 <li>Bug 52376 - StatCalculator#addValue(T val, int sampleCount) should use long, not int</li>
 <li>Bug 49374 - Encoding of embedded element URLs depend on the file.encoding property</li>
+<li>Bug 52399 - URLRewritingModifier uses default file.encoding to match text content</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
