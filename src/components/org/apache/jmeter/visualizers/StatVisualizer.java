@@ -253,7 +253,7 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
             }
             FileWriter writer = null;
             try {
-                writer = new FileWriter(chooser.getSelectedFile());
+                writer = new FileWriter(chooser.getSelectedFile()); // TODO Charset ?
                 CSVSaveService.saveCSVStats(model,writer, saveHeaders.isSelected());
             } catch (FileNotFoundException e) {
                 log.warn(e.getMessage());
