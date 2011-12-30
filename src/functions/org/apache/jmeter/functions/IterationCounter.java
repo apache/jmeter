@@ -28,6 +28,10 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 
+/**
+ * Counter that can be referenced anywhere in the Thread Group. It can be configured per User (Thread Local)
+ * or globally.
+ */
 public class IterationCounter extends AbstractFunction {
 
     private static final List<String> desc = new LinkedList<String>();
