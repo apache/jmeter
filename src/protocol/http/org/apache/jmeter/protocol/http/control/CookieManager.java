@@ -146,7 +146,7 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
             file = new File(System.getProperty("user.dir") // $NON-NLS-1$
                     + File.separator + authFile);
         }
-        PrintWriter writer = new PrintWriter(new FileWriter(file));
+        PrintWriter writer = new PrintWriter(new FileWriter(file)); // TODO Charset ?
         writer.println("# JMeter generated Cookie file");// $NON-NLS-1$
         PropertyIterator cookies = getCookies().iterator();
         long now = System.currentTimeMillis();
@@ -172,7 +172,7 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
         }
         BufferedReader reader = null;
         if (file.canRead()) {
-            reader = new BufferedReader(new FileReader(file));
+            reader = new BufferedReader(new FileReader(file)); // TODO Charset ?
         } else {
             throw new IOException("The file you specified cannot be read.");
         }

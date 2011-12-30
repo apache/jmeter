@@ -107,7 +107,7 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
             file = new File(System.getProperty("user.dir")// $NON-NLS-1$
                     + File.separator + headFile);
         }
-        PrintWriter writer = new PrintWriter(new FileWriter(file));
+        PrintWriter writer = new PrintWriter(new FileWriter(file)); // TODO Charset ?
         writer.println("# JMeter generated Header file");// $NON-NLS-1$
         final CollectionProperty hdrs = getHeaders();
         for (int i = 0; i < hdrs.size(); i++) {
@@ -134,7 +134,7 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
 
         BufferedReader reader = null;
         try {
-            reader = new BufferedReader(new FileReader(file));
+            reader = new BufferedReader(new FileReader(file)); // TODO Charset ?
             String line;
             while ((line = reader.readLine()) != null) {
                 try {
