@@ -54,12 +54,15 @@ public class JSR223Listener extends JSR223TestElement
     }
 
     public void sampleStarted(SampleEvent e) {
+    	// NOOP
     }
 
     public void sampleStopped(SampleEvent e) {
+    	// NOOP
     }
 
     public void add(SampleResult sample) {
+    	// NOOP
     }
 
     public boolean isStats() {
