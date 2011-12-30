@@ -128,7 +128,7 @@ public abstract class JSR223TestElement extends AbstractTestElement
         if (scriptFile.exists()) {
             BufferedReader fileReader = null;
             try {
-                fileReader = new BufferedReader(new FileReader(scriptFile));
+                fileReader = new BufferedReader(new FileReader(scriptFile)); // TODO Charset ?
                 return scriptEngine.eval(fileReader);
             } finally {
                 IOUtils.closeQuietly(fileReader);

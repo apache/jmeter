@@ -128,7 +128,7 @@ public final class CSVSaveService {
         final boolean errorsOnly = resultCollector.isErrorLogging();
         final boolean successOnly = resultCollector.isSuccessOnlyLogging();
         try {
-            dataReader = new BufferedReader(new FileReader(filename));
+            dataReader = new BufferedReader(new FileReader(filename)); // TODO Charset ?
             dataReader.mark(400);// Enough to read the header column names
             // Get the first line, and see if it is the header
             String line = dataReader.readLine();
