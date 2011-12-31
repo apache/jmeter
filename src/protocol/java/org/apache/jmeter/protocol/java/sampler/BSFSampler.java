@@ -27,6 +27,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.util.BSFTestElement;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -35,7 +36,7 @@ import org.apache.log.Logger;
  * A sampler which understands BSF
  *
  */
-public class BSFSampler extends BSFTestElement implements Sampler {
+public class BSFSampler extends BSFTestElement implements Sampler, TestBean {
 
     private static final long serialVersionUID = 240L;
 
