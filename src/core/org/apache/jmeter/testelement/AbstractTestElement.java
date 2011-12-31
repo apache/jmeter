@@ -55,6 +55,9 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
     private final Map<String, JMeterProperty> propMap =
         Collections.synchronizedMap(new LinkedHashMap<String, JMeterProperty>());
 
+    /**
+     * Holds properties added when isRunningVersion is true
+     */
     private transient Set<JMeterProperty> temporaryProperties;
 
     private transient boolean runningVersion = false;
@@ -288,6 +291,10 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
         addProperty(property, false);
     }
 
+    /**
+     * Remove property from temporaryProperties
+     * @param property {@link JMeterProperty}
+     */
     protected void clearTemporary(JMeterProperty property) {
         if (temporaryProperties != null) {
             temporaryProperties.remove(property);
@@ -395,6 +402,10 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
         return new PropertyIteratorImpl(propMap.values());
     }
 
+    /**
+     * Add to this the properties of element (by reference)
+     * @param element {@link TestElement}
+     */
     protected void mergeIn(TestElement element) {
         PropertyIterator iter = element.propertyIterator();
         while (iter.hasNext()) {
@@ -424,6 +435,9 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void recoverRunningVersion() {
         Iterator<Map.Entry<String, JMeterProperty>>  iter = propMap.entrySet().iterator();
         while (iter.hasNext()) {
@@ -439,6 +453,9 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
         emptyTemporary();
     }
 
+    /**
+     * Clears temporaryProperties
+     */
     protected void emptyTemporary() {
         if (temporaryProperties != null) {
             temporaryProperties.clear();
