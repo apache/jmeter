@@ -19,28 +19,14 @@
 package org.apache.jmeter.util;
 
 import java.beans.PropertyDescriptor;
-import java.util.Properties;
 
 import org.apache.jmeter.testbeans.BeanInfoSupport;
-import org.apache.jmeter.testbeans.gui.FileEditor;
 import org.apache.jmeter.testbeans.gui.TextAreaEditor;
 
 /**
  * Parent class to handle common GUI design
  */
 public abstract class BSFBeanInfoSupport extends BeanInfoSupport {
-
-    private final static String[] LANGUAGE_TAGS;
-
-    static {
-        Properties languages = JMeterUtils.loadProperties("org/apache/bsf/Languages.properties"); // $NON-NLS-1$
-        LANGUAGE_TAGS = new String[languages.size() + 1];
-        int i = 0;
-        for (Object language : languages.keySet()) {
-            LANGUAGE_TAGS[i++] = language.toString();
-        }
-        LANGUAGE_TAGS[i] = "jexl";
-    }
 
     protected BSFBeanInfoSupport(Class<?> beanClass) {
         super(beanClass);
@@ -49,7 +35,6 @@ public abstract class BSFBeanInfoSupport extends BeanInfoSupport {
         p = property("scriptLanguage"); // $NON-NLS-1$
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, ""); // $NON-NLS-1$
-        p.setValue(TAGS, LANGUAGE_TAGS);
 
         createPropertyGroup("scriptingLanguage", // $NON-NLS-1$
                 new String[] { "scriptLanguage" }); // $NON-NLS-1$
@@ -64,7 +49,6 @@ public abstract class BSFBeanInfoSupport extends BeanInfoSupport {
         p = property("filename"); // $NON-NLS-1$
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, ""); // $NON-NLS-1$
-        p.setPropertyEditorClass(FileEditor.class);
 
         createPropertyGroup("filenameGroup",  // $NON-NLS-1$
                 new String[] { "filename" }); // $NON-NLS-1$
