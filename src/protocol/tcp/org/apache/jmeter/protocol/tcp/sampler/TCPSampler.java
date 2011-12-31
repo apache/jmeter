@@ -442,6 +442,9 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
         }
     }
 
+    /**
+     * Close socket of current sampler
+     */
     private void closeSocket() {
         Map<String, Object> cp = tp.get();
         Socket con = (Socket) cp.remove(getSocketKey());
@@ -455,11 +458,32 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void threadFinished() {
         log.debug("Thread Finished"); //$NON-NLS-1$
-        closeSocket();
+        tearDown();
         if (protocolHandler != null){
             protocolHandler.teardownTest();
         }
     }
+
+    /**
+     * Closes all connections, clears Map and remove thread local Map
+     */
+	private void tearDown() {
+		Map<String, Object> cp = tp.get();
+		for (Map.Entry<String, Object> element : cp.entrySet()) {
+			if(element.getKey().startsWith(TCPKEY)) {
+				try {
+					((Socket)element.getValue()).close();
+				} catch (IOException e) {
+					// NOOP
+				}
+			}
+		}
+		cp.clear();
+		tp.remove();
+	}
 }
