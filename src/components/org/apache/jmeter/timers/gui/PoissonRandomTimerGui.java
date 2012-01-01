@@ -18,26 +18,28 @@
 
 package org.apache.jmeter.timers.gui;
 
-import org.apache.jmeter.timers.GaussianRandomTimer;
+import org.apache.jmeter.timers.PoissonRandomTimer;
 import org.apache.jmeter.timers.RandomTimer;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * Implementation of a gaussian random timer.
+ * Implementation of a Poisson random timer.
  */
-public class GaussianRandomTimerGui extends AbstractRandomTimerGui {
+public class PoissonRandomTimerGui extends AbstractRandomTimerGui {
 
-    private static final long serialVersionUID = 240L;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3218002787832805275L;
 
-    private static final String DEFAULT_DELAY = "300"; // $NON-NLS-1$
+	private static final String DEFAULT_DELAY = "300"; // $NON-NLS-1$
 
-    private static final String DEFAULT_RANGE = "100.0"; // $NON-NLS-1$
-
+    private static final String DEFAULT_RANGE = "100"; // $NON-NLS-1$
 
     /**
      * No-arg constructor.
      */
-    public GaussianRandomTimerGui() {
+    public PoissonRandomTimerGui() {
         super();
     }
 
@@ -46,7 +48,7 @@ public class GaussianRandomTimerGui extends AbstractRandomTimerGui {
      */
     @Override
     public String getLabelResource() {
-        return "gaussian_timer_title";//$NON-NLS-1$
+        return "poisson_timer_title";//$NON-NLS-1$
     }
 
     /**
@@ -54,7 +56,7 @@ public class GaussianRandomTimerGui extends AbstractRandomTimerGui {
      */
 	@Override
 	protected RandomTimer createRandomTimer() {
-		return new GaussianRandomTimer();
+		return new PoissonRandomTimer();
 	}
 
 	/**
@@ -62,7 +64,7 @@ public class GaussianRandomTimerGui extends AbstractRandomTimerGui {
      */
 	@Override
 	protected String getTimerDelayLabelKey() {
-		return JMeterUtils.getResString("gaussian_timer_delay");
+		return JMeterUtils.getResString("poisson_timer_delay");
 	}
 
 	/**
@@ -70,7 +72,7 @@ public class GaussianRandomTimerGui extends AbstractRandomTimerGui {
      */
 	@Override
 	protected String getTimerRangeLabelKey() {
-		return JMeterUtils.getResString("gaussian_timer_range");
+		return JMeterUtils.getResString("poisson_timer_range");
 	}
 
 	/**
