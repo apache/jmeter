@@ -537,7 +537,7 @@ public class SampleResult implements Serializable {
         if (assertionResults == null) {
             return EMPTY_AR;
         }
-        return assertionResults.toArray(new AssertionResult[0]);
+        return assertionResults.toArray(new AssertionResult[assertionResults.size()]);
     }
 
     /**
@@ -598,7 +598,7 @@ public class SampleResult implements Serializable {
         if (subResults == null) {
             return EMPTY_SR;
         }
-        return subResults.toArray(new SampleResult[0]);
+        return subResults.toArray(new SampleResult[subResults.size()]);
     }
 
     /**

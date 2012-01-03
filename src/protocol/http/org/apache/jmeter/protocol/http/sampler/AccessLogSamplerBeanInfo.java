@@ -62,14 +62,15 @@ public class AccessLogSamplerBeanInfo extends BeanInfoSupport {
             if (log.isDebugEnabled()) {
                 log.debug("found parsers: " + logParserClasses);
             }
-            p.setValue(TAGS, logParserClasses.toArray(new String[0]));
+            p.setValue(TAGS, logParserClasses.toArray(new String[logParserClasses.size()]));
 
             p = property("filterClassName"); // $NON-NLS-1$
             p.setValue(NOT_UNDEFINED, Boolean.FALSE);
             p.setValue(DEFAULT, ""); // $NON-NLS-1$
             p.setValue(NOT_EXPRESSION, Boolean.TRUE);
-            p.setValue(TAGS, ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(),
-                    new Class[] { Filter.class }, false).toArray(new String[0]));
+            List<String> classes = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(),
+                    new Class[] { Filter.class }, false);
+            p.setValue(TAGS, classes.toArray(new String[classes.size()]));
 
             p = property("logFile"); // $NON-NLS-1$
             p.setValue(NOT_UNDEFINED, Boolean.TRUE);

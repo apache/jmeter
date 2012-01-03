@@ -648,7 +648,8 @@ public class JMeterUtils implements UnitTestManager {
      * @return The TestSamples value
      */
     public static String[] getTestSamples(Properties properties, String name) {
-        return getVector(properties, name + ".testsample").toArray(new String[0]); // $NON-NLS-1$
+        Vector<String> vector = getVector(properties, name + ".testsample"); // $NON-NLS-1$
+        return vector.toArray(new String[vector.size()]);
     }
 
     /**
