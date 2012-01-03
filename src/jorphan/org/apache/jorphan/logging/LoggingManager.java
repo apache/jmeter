@@ -78,14 +78,8 @@ public final class LoggingManager {
 
     public static final String LOG_PRIORITY = "log_level";  //$NON_NLS-1$
 
-    //@GuardedBy("this")
-    private static LoggingManager logManager = null;
-
     private LoggingManager() {
-    }
-
-    public static synchronized LoggingManager getLogManager() {
-        return logManager;
+        // non-instantiable - static methods only
     }
 
     /**
@@ -98,12 +92,6 @@ public final class LoggingManager {
      *
      */
     public static void initializeLogging(Properties properties) {
-        synchronized(LoggingManager.class){
-            if (logManager == null) {
-                logManager = new LoggingManager();
-            }
-        }
-
         setFormat(properties);
 
         // Set the top-level defaults
