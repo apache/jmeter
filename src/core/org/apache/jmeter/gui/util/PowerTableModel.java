@@ -172,7 +172,7 @@ public class PowerTableModel extends DefaultTableModel {
             }
             try {
                 Constructor<?> constr = colClass.getConstructor(new Class[] { Float.TYPE });
-                return constr.newInstance(new Object[] { new Float(0F) });
+                return constr.newInstance(new Object[] { Float.valueOf(0F) });
             } catch (NoSuchMethodException err) {
             } catch (InstantiationException err) {
             } catch (IllegalAccessException err) {
@@ -180,7 +180,7 @@ public class PowerTableModel extends DefaultTableModel {
             }
             try {
                 Constructor<?> constr = colClass.getConstructor(new Class[] { Double.TYPE });
-                return constr.newInstance(new Object[] { new Double(0D) });
+                return constr.newInstance(new Object[] { Double.valueOf(0D) });
             } catch (NoSuchMethodException err) {
             } catch (InstantiationException err) {
             } catch (IllegalAccessException err) {

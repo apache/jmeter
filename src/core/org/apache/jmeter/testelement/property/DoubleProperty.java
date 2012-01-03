@@ -69,7 +69,7 @@ public class DoubleProperty extends NumberProperty {
      * {@inheritDoc}
      */
     public Object getObjectValue() {
-        return new Double(value);
+        return Double.valueOf(value);
     }
 
     /**

@@ -46,7 +46,7 @@ public class ConstantThroughputTimerBeanInfo extends BeanInfoSupport {
 
         PropertyDescriptor p = property("throughput"); //$NON-NLS-1$
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, new Double(0.0));
+        p.setValue(DEFAULT, Double.valueOf(0.0));
 
         p = property("calcMode"); //$NON-NLS-1$
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
