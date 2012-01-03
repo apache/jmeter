@@ -96,7 +96,7 @@ public class PackageTest extends JMeterTestCase {
     }
 
     // Create the SplitFile function and set its parameters.
-    private static SplitFunction SplitParams(String p1, String p2, String p3) throws Exception {
+    private static SplitFunction splitParams(String p1, String p2, String p3) throws Exception {
         SplitFunction split = new SplitFunction();
         Collection<CompoundVariable> parms = new LinkedList<CompoundVariable>();
         parms.add(new CompoundVariable(p1));
@@ -113,11 +113,11 @@ public class PackageTest extends JMeterTestCase {
     // Create the BeanShell function and set its parameters.
     private static BeanShell BSHFParams(String p1, String p2, String p3) throws Exception {
         BeanShell bsh = new BeanShell();
-        bsh.setParameters(MakeParams(p1, p2, p3));
+        bsh.setParameters(makeParams(p1, p2, p3));
         return bsh;
     }
 
-    private static Collection<CompoundVariable> MakeParams(String p1, String p2, String p3) {
+    private static Collection<CompoundVariable> makeParams(String p1, String p2, String p3) {
         Collection<CompoundVariable> parms = new LinkedList<CompoundVariable>();
         if (p1 != null) {
             parms.add(new CompoundVariable(p1));
@@ -304,13 +304,13 @@ public class PackageTest extends JMeterTestCase {
         String src = "";
 
         try {
-            split = SplitParams("a,b,c", null, null);
+            split = splitParams("a,b,c", null, null);
             fail("Expected InvalidVariableException (wrong number of parameters)");
         } catch (InvalidVariableException e) {
             // OK
         }
         src = "a,b,c";
-        split = SplitParams(src, "VAR1", null);
+        split = splitParams(src, "VAR1", null);
         assertEquals(src, split.execute());
         assertEquals(src, vars.get("VAR1"));
         assertEquals("3", vars.get("VAR1_n"));
@@ -319,7 +319,7 @@ public class PackageTest extends JMeterTestCase {
         assertEquals("c", vars.get("VAR1_3"));
         assertNull(vars.get("VAR1_4"));
 
-        split = SplitParams(src, "VAR2", ",");
+        split = splitParams(src, "VAR2", ",");
         assertEquals(src, split.execute());
         assertEquals(src, vars.get("VAR2"));
         assertEquals("3", vars.get("VAR2_n"));
@@ -329,7 +329,7 @@ public class PackageTest extends JMeterTestCase {
         assertNull(vars.get("VAR2_4"));
 
         src = "a|b|c";
-        split = SplitParams(src, "VAR3", "|");
+        split = splitParams(src, "VAR3", "|");
         assertEquals(src, split.execute());
         assertEquals(src, vars.get("VAR3"));
         assertEquals("3", vars.get("VAR3_n"));
@@ -339,7 +339,7 @@ public class PackageTest extends JMeterTestCase {
         assertNull(vars.get("VAR3_4"));
 
         src = "a|b||";
-        split = SplitParams(src, "VAR4", "|");
+        split = splitParams(src, "VAR4", "|");
         assertEquals(src, split.execute());
         assertEquals(src, vars.get("VAR4"));
         assertEquals("4", vars.get("VAR4_n"));
@@ -350,7 +350,7 @@ public class PackageTest extends JMeterTestCase {
 
         src = "a,,c";
         vars.put("VAR", src);
-        split = SplitParams("${VAR}", "VAR", null);
+        split = splitParams("${VAR}", "VAR", null);
         assertEquals(src, split.execute());
         assertEquals("3", vars.get("VAR_n"));
         assertEquals("a", vars.get("VAR_1"));
@@ -360,7 +360,7 @@ public class PackageTest extends JMeterTestCase {
 
         src = "a,b";
         vars.put("VAR", src);
-        split = SplitParams("${VAR}", "VAR", null);
+        split = splitParams("${VAR}", "VAR", null);
         assertEquals(src, split.execute());
         assertEquals("2", vars.get("VAR_n"));
         assertEquals("a", vars.get("VAR_1"));
@@ -369,7 +369,7 @@ public class PackageTest extends JMeterTestCase {
 
         src = "a,,c,";
         vars.put("VAR", src);
-        split = SplitParams("${VAR}", "VAR5", null);
+        split = splitParams("${VAR}", "VAR5", null);
         assertEquals(src, split.execute());
         assertEquals("4", vars.get("VAR5_n"));
         assertEquals("a", vars.get("VAR5_1"));
@@ -835,7 +835,7 @@ public class PackageTest extends JMeterTestCase {
     
     public void randomTest1() throws Exception {
         Random r = new Random();
-        Collection<CompoundVariable> parms = MakeParams("0","10000000000","VAR");
+        Collection<CompoundVariable> parms = makeParams("0","10000000000","VAR");
         r.setParameters(parms);
         //String s = 
             r.execute(null,null);
@@ -851,37 +851,37 @@ public class PackageTest extends JMeterTestCase {
         Collection<CompoundVariable> parms;
         String s;
         
-        parms = MakeParams("V",null,null);
+        parms = makeParams("V",null,null);
         r.setParameters(parms);
         s = r.execute(null,null);
         assertEquals("A",s);
         
-        parms = MakeParams("X",null,null);
+        parms = makeParams("X",null,null);
         r.setParameters(parms);
         s = r.execute(null,null);
         assertEquals("X",s);
         
-        parms = MakeParams("A${X}",null,null);
+        parms = makeParams("A${X}",null,null);
         r.setParameters(parms);
         s = r.execute(null,null);
         assertEquals("A${X}",s);
         
-        parms = MakeParams("A_1",null,null);
+        parms = makeParams("A_1",null,null);
         r.setParameters(parms);
         s = r.execute(null,null);
         assertEquals("a1",s);
         
-        parms = MakeParams("A_2",null,null);
+        parms = makeParams("A_2",null,null);
         r.setParameters(parms);
         s = r.execute(null,null);
         assertEquals("a2",s);
         
-        parms = MakeParams("A_${two}",null,null);
+        parms = makeParams("A_${two}",null,null);
         r.setParameters(parms);
         s = r.execute(null,null);
         assertEquals("a2",s);
         
-        parms = MakeParams("${V}_${one}",null,null);
+        parms = makeParams("${V}_${one}",null,null);
         r.setParameters(parms);
         s = r.execute(null,null);
         assertEquals("a1",s);
@@ -895,7 +895,7 @@ public class PackageTest extends JMeterTestCase {
         Collection<CompoundVariable> parms;
         String s;
         
-        parms = MakeParams("${query}",null,null);
+        parms = makeParams("${query}",null,null);
         eval.setParameters(parms);
         s = eval.execute(null,null);
         assertEquals("select name from customers",s);
@@ -910,7 +910,7 @@ public class PackageTest extends JMeterTestCase {
         Collection<CompoundVariable> parms;
         String s;
         
-        parms = MakeParams("query",null,null);
+        parms = makeParams("query",null,null);
         evalVar.setParameters(parms);
         s = evalVar.execute(null,null);
         assertEquals("select name from customers",s);
