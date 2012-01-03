@@ -86,6 +86,8 @@
   <!-- The version of this file -->
   <property name="version.build" value="$Revision$"/>
 
+  <property file="build-local.properties"/> <!-- allow local overrides -->
+
    <!-- Findbugs task and target -->
    <!--
    Findbugs is licensed under the Lesser GNU Public License
