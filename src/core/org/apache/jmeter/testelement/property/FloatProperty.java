@@ -85,7 +85,7 @@ public class FloatProperty extends NumberProperty {
      * {@inheritDoc}
      */
     public Object getObjectValue() {
-        return new Float(value);
+        return Float.valueOf(value);
     }
 
     /**

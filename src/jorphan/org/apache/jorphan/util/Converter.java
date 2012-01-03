@@ -44,9 +44,9 @@ public class Converter {
         } else if (toType.isAssignableFrom(value.getClass())) {
             return value;
         } else if (toType.equals(float.class) || toType.equals(Float.class)) {
-            return new Float(getFloat(value));
+            return Float.valueOf(getFloat(value));
         } else if (toType.equals(double.class) || toType.equals(Double.class)) {
-            return new Double(getDouble(value));
+            return Double.valueOf(getDouble(value));
         } else if (toType.equals(String.class)) {
             return getString(value);
         } else if (toType.equals(int.class) || toType.equals(Integer.class)) {
