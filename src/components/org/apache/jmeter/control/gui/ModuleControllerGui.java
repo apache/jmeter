@@ -186,8 +186,7 @@ public class ModuleControllerGui extends AbstractControllerGui
         if (selected != null) {
             for (int i = 0; i < nodesModel.getSize(); i++) {
                 current = (TreeNodeWrapper) nodesModel.getElementAt(i);
-                if ((current.getTreeNode() == null && selected == null)
-                        || (current.getTreeNode() != null && current.getTreeNode().equals(selected))) {
+                if (current.getTreeNode() != null && current.getTreeNode().equals(selected)) {
                     nodesModel.setSelectedItem(current);
                     break;
                 }

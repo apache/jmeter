@@ -319,7 +319,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
             Object obj = context.lookup(getQueueConnectionFactory());
             if (!(obj instanceof QueueConnectionFactory)) {
                 String msg = "QueueConnectionFactory expected, but got "
-                    + obj == null ? "null" :  obj.getClass().getName();
+                    + obj.getClass().getName();
                 LOGGER.fatalError(msg);
                 throw new IllegalStateException(msg);
             }

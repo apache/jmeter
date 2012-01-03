@@ -35,7 +35,6 @@ public class BSFPostProcessor extends BSFTestElement implements Cloneable, PostP
     public void process(){
         try {
             BSFManager mgr = getManager();
-            if (mgr == null) { return; }
             processFileOrScript(mgr);
             mgr.terminate();
         } catch (BSFException e) {

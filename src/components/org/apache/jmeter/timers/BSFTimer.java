@@ -35,9 +35,6 @@ public class BSFTimer extends BSFTestElement implements Cloneable, Timer, TestBe
         long delay = 0;
         try {
             BSFManager mgr = getManager();
-            if (mgr == null) {
-                return 0; 
-            }
             Object o = evalFileOrScript(mgr);
             if (o == null) {
                 log.warn("Script did not return a value");

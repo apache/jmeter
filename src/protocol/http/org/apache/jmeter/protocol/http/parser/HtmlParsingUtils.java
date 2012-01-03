@@ -82,9 +82,6 @@ public final class HtmlParsingUtils {
         }
 
         final Arguments arguments = config.getArguments();
-        if (query == null && arguments.getArgumentCount() > 0) {
-            return false;// failed to convert query, so assume no match
-        }
 
         final Perl5Matcher matcher = JMeterUtils.getMatcher();
         final PatternCacheLRU patternCache = JMeterUtils.getPatternCache();
