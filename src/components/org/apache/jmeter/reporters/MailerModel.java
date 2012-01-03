@@ -267,7 +267,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
         InternetAddress[] address = new InternetAddress[vEmails.size()];
 
         for (int k = 0; k < vEmails.size(); k++) {
-            address[k] = new InternetAddress(vEmails.get(k).toString());
+            address[k] = new InternetAddress(vEmails.get(k));
         }
 
         // create some properties and get the default Session
