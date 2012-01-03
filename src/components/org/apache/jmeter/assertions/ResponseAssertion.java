@@ -222,23 +222,23 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
     }
 
     public boolean isEqualsType() {
-        return (getTestType() & EQUALS) > 0;
+        return (getTestType() & EQUALS) != 0;
     }
 
     public boolean isSubstringType() {
-        return (getTestType() & SUBSTRING) > 0;
+        return (getTestType() & SUBSTRING) != 0;
     }
 
     public boolean isContainsType() {
-        return (getTestType() & CONTAINS) > 0;
+        return (getTestType() & CONTAINS) != 0;
     }
 
     public boolean isMatchType() {
-        return (getTestType() & MATCH) > 0;
+        return (getTestType() & MATCH) != 0;
     }
 
     public boolean isNotType() {
-        return (getTestType() & NOT) > 0;
+        return (getTestType() & NOT) != 0;
     }
 
     public void setToContainsType() {
