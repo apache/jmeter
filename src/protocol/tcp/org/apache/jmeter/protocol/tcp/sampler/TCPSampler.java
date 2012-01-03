@@ -140,11 +140,11 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
         return (String) cp.get(ERRKEY);
     }
 
-    private Socket getSocket() {
+    private Socket getSocket(String socketKey) {
         Map<String, Object> cp = tp.get();
         Socket con = null;
         if (isReUseConnection()) {
-            con = (Socket) cp.get(getSocketKey());
+            con = (Socket) cp.get(socketKey);
             if (con != null) {
                 log.debug(this + " Reusing connection " + con); //$NON-NLS-1$
             }
@@ -152,14 +152,14 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
         if (con == null) {
             // Not in cache, so create new one and cache it
             try {
-                closeSocket(); // Bug 44910 - close previous socket (if any)
+                closeSocket(socketKey); // Bug 44910 - close previous socket (if any)
                 SocketAddress sockaddr = new InetSocketAddress(getServer(), getPort());
                 con = new Socket();
                 con.connect(sockaddr, getConnectTimeout());
                 if(log.isDebugEnabled()) {
                     log.debug("Created new connection " + con); //$NON-NLS-1$
                 }
-                cp.put(getSocketKey(), con);
+                cp.put(socketKey, con);
             } catch (UnknownHostException e) {
                 log.warn("Unknown host for " + getLabel(), e);//$NON-NLS-1$
                 cp.put(ERRKEY, e.toString());
@@ -325,6 +325,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
             initSampling();
             firstSample=false;
         }
+        String socketKey = getSocketKey();
         log.debug(getLabel() + " " + getFilename() + " " + getUsername() + " " + getPassword());
         SampleResult res = new SampleResult();
         boolean isSuccessful = false;
@@ -332,7 +333,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
         res.setSamplerData("Host: " + getServer() + " Port: " + getPort()); //$NON-NLS-1$ $NON-NLS-2$
         res.sampleStart();
         try {
-            Socket sock = getSocket();
+            Socket sock = getSocket(socketKey);
             if (sock == null) {
                 res.setResponseCode("500"); //$NON-NLS-1$
                 res.setResponseMessage(getError());
@@ -352,11 +353,11 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
         } catch (ReadException ex) {
             log.error("", ex);
             isSuccessful=setupSampleResult(res, ex.getPartialResponse(), ex);
-            closeSocket();
+            closeSocket(socketKey);
         } catch (Exception ex) {
             log.error("", ex);
             isSuccessful=setupSampleResult(res, "", ex);
-            closeSocket();
+            closeSocket(socketKey);
         } finally {
             // Calculate response time
             res.sampleEnd();
@@ -365,7 +366,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
             res.setSuccessful(isSuccessful);
 
             if (!isReUseConnection()) {
-                closeSocket();
+                closeSocket(socketKey);
             }
         }
         return res;
@@ -445,9 +446,9 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
     /**
      * Close socket of current sampler
      */
-    private void closeSocket() {
+    private void closeSocket(String socketKey) {
         Map<String, Object> cp = tp.get();
-        Socket con = (Socket) cp.remove(getSocketKey());
+        Socket con = (Socket) cp.remove(socketKey);
         if (con != null) {
             log.debug(this + " Closing connection " + con); //$NON-NLS-1$
             try {
