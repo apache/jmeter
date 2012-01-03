@@ -44,7 +44,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  * GraphVisualizer.
  *
  */
-public class SplineVisualizer extends AbstractVisualizer implements ImageVisualizer, GraphListener, Clearable {
+public class SplineVisualizer extends AbstractVisualizer implements ImageVisualizer, GraphListener {
 
     private static final long serialVersionUID = 240L;
 
