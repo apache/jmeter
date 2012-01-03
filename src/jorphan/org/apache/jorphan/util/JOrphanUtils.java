@@ -158,7 +158,7 @@ public final class JOrphanUtils {
         if (lastWasDelim) {
             strList.add(def);
         }
-        return strList.toArray(new String[0]);
+        return strList.toArray(new String[strList.size()]);
     }
 
 

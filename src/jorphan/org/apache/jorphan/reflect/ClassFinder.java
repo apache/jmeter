@@ -179,7 +179,7 @@ public final class ClassFinder {
                 }
             }
         }
-        return fullList.toArray(new String[0]);
+        return fullList.toArray(new String[fullList.size()]);
     }
 
     /**

@@ -1546,7 +1546,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
 
     public static String[] getValidMethodsAsArray(){
-        return METHODLIST.toArray(new String[0]);
+        return METHODLIST.toArray(new String[METHODLIST.size()]);
     }
 
     public static boolean isSecure(String protocol){
