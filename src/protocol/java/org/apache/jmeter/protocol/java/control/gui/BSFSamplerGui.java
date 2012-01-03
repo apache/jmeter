@@ -149,7 +149,7 @@ public class BSFSamplerGui extends AbstractSamplerGui {
         p.put("jexl", ""); // $NON-NLS-1$
         Set<Object> keySet = p.keySet();
         // TODO - perhaps weed out ones which don't exist?
-        String [] items = keySet.toArray(new String[]{});
+        String [] items = keySet.toArray(new String[keySet.size()]);
         Arrays.sort(items);
 
         langField = new JComboBox(items);
