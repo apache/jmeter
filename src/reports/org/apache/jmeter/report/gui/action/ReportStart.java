@@ -60,14 +60,14 @@ public class ReportStart extends AbstractAction {
         if (e.getActionCommand().equals(ActionNames.ACTION_START)) {
             popupShouldSave(e);
             startEngine();
-        } else if (e.getActionCommand().equals(ActionNames.ACTION_STOP)) {
+//        } else if (e.getActionCommand().equals(ActionNames.ACTION_STOP)) {
         	// FIXME engine is always null
 //            if (engine != null) {
 //                ReportGuiPackage.getInstance().getMainFrame().showStoppingMessage("");
 //                engine.stopTest();
 //                engine = null;
 //            }
-        } else if (e.getActionCommand().equals(ActionNames.ACTION_SHUTDOWN)) {
+//        } else if (e.getActionCommand().equals(ActionNames.ACTION_SHUTDOWN)) {
         	// FIXME engine is always null
 //            if (engine != null) {
 //                ReportGuiPackage.getInstance().getMainFrame().showStoppingMessage("");
