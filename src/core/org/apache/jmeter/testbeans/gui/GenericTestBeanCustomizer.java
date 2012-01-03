@@ -199,7 +199,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 
         // Get and sort the property descriptors:
         descriptors = beanInfo.getPropertyDescriptors();
-        Arrays.sort(descriptors, new PropertyComparator());
+        Arrays.sort(descriptors, new PropertyComparator(beanInfo));
 
         // Obtain the propertyEditors:
         editors = new PropertyEditor[descriptors.length];
@@ -605,7 +605,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
      * @param descriptor
      * @return the group String.
      */
-    private String group(PropertyDescriptor d) {
+    private static String group(PropertyDescriptor d) {
         String group = (String) d.getValue(GROUP);
         if (group == null){
             group = DEFAULT_GROUP;
@@ -631,8 +631,13 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
     /**
      * Comparator used to sort properties for presentation in the GUI.
      */
-    private class PropertyComparator implements Comparator<PropertyDescriptor>, Serializable {
+    private static class PropertyComparator implements Comparator<PropertyDescriptor>, Serializable {
         private static final long serialVersionUID = 240L;
+
+        private final BeanInfo beanInfo;
+        public PropertyComparator(BeanInfo beanInfo) {
+            this.beanInfo = beanInfo;
+        }
 
         public int compare(PropertyDescriptor d1, PropertyDescriptor d2) {
             int result;
