@@ -268,17 +268,17 @@ private static class GraphPanel extends JPanel {
         c.gridx = 1;
         c.gridy = 1;
         g.setConstraints(count, c);
-        JLabel min = new JLabel("Min: " + df.format(new Float(minValue)));
+        JLabel min = new JLabel("Min: " + df.format(Float.valueOf(minValue)));
 
         c.gridx = 1;
         c.gridy = 2;
         g.setConstraints(min, c);
-        JLabel max = new JLabel("Max: " + df.format(new Float(maxValue)));
+        JLabel max = new JLabel("Max: " + df.format(Float.valueOf(maxValue)));
 
         c.gridx = 1;
         c.gridy = 3;
         g.setConstraints(max, c);
-        JLabel average = new JLabel("Average: " + df.format(new Float(averageValue)));
+        JLabel average = new JLabel("Average: " + df.format(Float.valueOf(averageValue)));
 
         c.gridx = 1;
         c.gridy = 4;
