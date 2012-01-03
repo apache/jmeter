@@ -74,7 +74,7 @@ public final class CLOptionDescriptor {
         m_name = name;
         m_flags = flags;
         m_description = description;
-        m_incompatible = ((flags & DUPLICATES_ALLOWED) > 0) ? new int[0] : new int[] { id };
+        m_incompatible = ((flags & DUPLICATES_ALLOWED) != 0) ? new int[0] : new int[] { id };
     }
 
 
