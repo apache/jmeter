@@ -233,12 +233,12 @@ public class SampleResult implements Serializable {
     }
 
 
-    private transient final long nanoTimeOffset;
+    private final long nanoTimeOffset;
 
     // Allow testcode access to the settings
-    transient final boolean useNanoTime;
+    final boolean useNanoTime;
     
-    transient final long nanoThreadSleep;
+    final long nanoThreadSleep;
     
     private long initOffset(){
         if (useNanoTime){
