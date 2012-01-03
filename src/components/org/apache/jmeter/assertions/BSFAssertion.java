@@ -36,12 +36,6 @@ public class BSFAssertion extends BSFTestElement implements Cloneable, Assertion
         AssertionResult result = new AssertionResult(getName());
         try {
             BSFManager mgr = getManager();
-            if (mgr == null) {
-                result.setFailure(true);
-                result.setError(true);
-                result.setFailureMessage("BSF Manager not found");
-                return result;
-            }
             mgr.declareBean("SampleResult", response, SampleResult.class);
             mgr.declareBean("AssertionResult", result, AssertionResult.class);
             processFileOrScript(mgr);
@@ -49,6 +43,7 @@ public class BSFAssertion extends BSFTestElement implements Cloneable, Assertion
             result.setError(false);
         } catch (BSFException e) {
             log.warn("Problem in BSF script "+e);
+            result.setFailure(true);
             result.setError(true);
             result.setFailureMessage(e.toString());
         }
