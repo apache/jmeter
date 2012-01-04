@@ -160,8 +160,8 @@ public class TCPClientDecoratorTest extends TestCase {
         } catch (IllegalArgumentException iae) {
         }
         try {
-            ba = TCPClientDecorator.intToByteArray(0, 5);
-            fail();
+            TCPClientDecorator.intToByteArray(0, 5);
+            fail("Expected IllegalArgumentException");
         } catch (IllegalArgumentException iae) {
         }
     }
