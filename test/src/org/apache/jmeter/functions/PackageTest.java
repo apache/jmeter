@@ -917,19 +917,20 @@ public class PackageTest extends JMeterTestCase {
     }
     
     public void sumTest() throws Exception {
+        String maxIntVal = Integer.toString(Integer.MAX_VALUE);
+        String minIntVal = Integer.toString(Integer.MIN_VALUE);
+
+        { // prevent accidental use of is below
         IntSum is = new IntSum();
         checkInvalidParameterCounts(is,2);
         checkSum(is,"3", new String[]{"1","2"});
         checkSumNoVar(is,"3", new String[]{"1","2"});
         checkSum(is,"1", new String[]{"-1","1","1","1","-2","1"});
         checkSumNoVar(is,"1", new String[]{"-1","1","1","1","-2","1"});
-        String maxIntVal = Integer.toString(Integer.MAX_VALUE);
-        String minIntVal = Integer.toString(Integer.MIN_VALUE);
         checkSum(is,maxIntVal, new String[]{maxIntVal,"0"});
         checkSum(is,minIntVal, new String[]{maxIntVal,"1"}); // wrap-round check
+        }
 
-        is = null; // prevent accidental use below
-        
         LongSum ls = new LongSum();
         checkInvalidParameterCounts(ls,2);
         checkSum(ls,"3", new String[]{"1","2"});

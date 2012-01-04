@@ -254,7 +254,6 @@ public class TCLogParser implements LogParser {
             }
             if (line == null) {
                 breader.close();
-                breader = null;
                 this.READER = null;
                 // this.READER = new BufferedReader(new
                 // FileReader(this.SOURCE));
