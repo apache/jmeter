@@ -179,7 +179,6 @@ public class JTLData implements Serializable, DataSet {
             // no slow leaks
             rc.clear();
             rc.setListener(null);
-            rc = null;
         }
     }
 
