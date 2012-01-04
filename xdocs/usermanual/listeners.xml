@@ -161,7 +161,7 @@ sampleresult.timestamp.start=true
 #sampleresult.useNanoTime=true
 
 # Use a background thread to calculate the nanoTime offset
-# Set this to <= 0 to disable the background thread
+# Set this to &lt;= 0 to disable the background thread
 #sampleresult.nanoThreadSleep=5000
 
 # legitimate values: none, first, all
