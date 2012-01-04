@@ -2358,7 +2358,7 @@ Note that cookies, method and the query string are saved as part of the "Sampler
 <description>No Description</description>
 </component>
 
-<component name="Graph Results" index="&sect-num;.3.3" width="905" height="489" screenshot="graph_results.png">
+<component name="Graph Results" index="&sect-num;.3.3" width="915" height="686" screenshot="graph_results.png">
 <description><p>The Graph Results listener generates a simple graph that plots all sample times.  Along
 the bottom of the graph, the current sample (black), the current average of all samples(blue), the
 current standard deviation (red), and the current throughput rate (green) are displayed in milliseconds.</p>
@@ -3262,7 +3262,7 @@ but if the button is on, a later element cannot set it off.
 </note>
 </component>
 
-<component name="HTTP Header Manager" index="&sect-num;.4.6"  width="" height="" screenshot="http-config/http-header-manager.gif">
+<component name="HTTP Header Manager" index="&sect-num;.4.6"  width="342" height="256" screenshot="http-config/http-header-manager.png">
 <description>
 <p>The Header Manager lets you add or override HTTP request headers.</p>
 <p>
@@ -3294,7 +3294,7 @@ header table entries.</property>
 
 <p><a href="../demos/HeaderManagerTestPlan.jmx">Download</a> this example.  In this example, we created a Test Plan
 that tells JMeter to override the default "User-Agent" request header and use a particular Internet Explorer agent string
-instead. (see figures 9 and 10).</p>
+instead. (see figures 12 and 13).</p>
 
 <figure width="203" height="141" image="http-config/header-manager-example1a.gif">Figure 12 - Test Plan</figure>
 <figure image="http-config/header-manager-example1b.png">Figure 13 - Header Manager Control Panel</figure>
@@ -4015,7 +4015,7 @@ please ensure that you select "Store the message using MIME (raw)" otherwise the
 	child of a <complink name="Test Action"/> Sampler.
 	</p>
 </description>
-<component name="Constant Timer" index="&sect-num;.6.1" anchor="constant" screenshot="timers/constant_timer.png">
+<component name="Constant Timer" index="&sect-num;.6.1" anchor="constant" width="372" height="100" screenshot="timers/constant_timer.png">
 <description>
 <p>If you want to have each thread pause for the same amount of time between
 requests, use this timer.</p></description>
@@ -4026,7 +4026,7 @@ requests, use this timer.</p></description>
 </properties>
 </component>
 
-<component name="Gaussian Random Timer" index="&sect-num;.6.2" screenshot="timers/gauss_random_timer.png">
+<component name="Gaussian Random Timer" index="&sect-num;.6.2" width="372" height="156" screenshot="timers/gauss_random_timer.png">
 
 <description><p>This timer pauses each thread request for a random amount of time, with most
 of the time intervals ocurring near a particular value.  The total delay is the
@@ -4043,7 +4043,7 @@ to the random delay.</property>
 
 </component>
 
-<component name="Uniform Random Timer" index="&sect-num;.6.3" screenshot="timers/uniform_random_timer.png">
+<component name="Uniform Random Timer" index="&sect-num;.6.3" width="372" height="157" screenshot="timers/uniform_random_timer.png">
 
 <description><p>This timer pauses each thread request for a random amount of time, with
 each time interval having the same probability of occurring. The total delay
@@ -4059,7 +4059,7 @@ to the random delay.</property>
 
 </component>
 
-<component name="Constant Throughput Timer" index="&sect-num;.6.4" screenshot="timers/constant_throughput_timer.png">
+<component name="Constant Throughput Timer" index="&sect-num;.6.4" width="636" height="146" screenshot="timers/constant_throughput_timer.png">
 
 <description><p>This timer introduces variable pauses, calculated to keep the total throughput (in terms of samples per minute) as close as possible to a give figure. Of course the throughput will be lower if the server is not capable of handling it, or if other timers or time-consuming test elements prevent it.</p>
 <p>
@@ -4098,7 +4098,7 @@ Note that the throughput value should not be changed too often during a test
 </properties>
 </component>
 
-<component name="Synchronizing Timer" index="&sect-num;.6.5" screenshot="timers/sync_timer.png">
+<component name="Synchronizing Timer" index="&sect-num;.6.5" width="415" height="125" screenshot="timers/sync_timer.png">
 
 <description>
 <p>
