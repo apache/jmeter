@@ -4215,6 +4215,22 @@ For details, see <complink name="BSF Timer"/>.
 </description>
 </component>
 
+<component name="Poisson Random Timer" index="&sect-num;.6.9" width="341" height="182" screenshot="timers/poisson_random_timer.png">
+
+<description><p>This timer pauses each thread request for a random amount of time, with most
+of the time intervals ocurring near a particular value.  The total delay is the
+sum of the Poisson distributed value, and the offset value.</p></description>
+
+
+<properties>
+        <property name="Name" required="No">Descriptive name for this timer that is shown in the tree</property>
+  <property name="Lambda" required="Yes">Lambda value in milliseconds.</property>
+  <property name="Constant Delay Offset" required="Yes">Number of milliseconds to pause in addition
+to the random delay.</property>
+</properties>
+
+</component>
+
 <a href="#">^</a>
 
 </section>
