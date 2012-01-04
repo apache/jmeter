@@ -300,16 +300,16 @@ public class PackageTest extends JMeterTestCase {
     }
 
     public void splitTest1() throws Exception {
-        SplitFunction split = null;
         String src = "";
 
         try {
-            split = splitParams("a,b,c", null, null);
+            splitParams("a,b,c", null, null);
             fail("Expected InvalidVariableException (wrong number of parameters)");
         } catch (InvalidVariableException e) {
             // OK
         }
         src = "a,b,c";
+        SplitFunction split;
         split = splitParams(src, "VAR1", null);
         assertEquals(src, split.execute());
         assertEquals(src, vars.get("VAR1"));
