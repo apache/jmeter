@@ -27,6 +27,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import org.apache.jmeter.samplers.SampleResult;
+
 /*
  * Socket that reads back from the output
  */
@@ -66,7 +68,7 @@ public class LoopbackHTTPSocket extends Socket {
     private LoopbackHTTPSocket() throws IOException{
         os=new LoopbackOutputStream();
         // Preload the output so that can be read back as HTTP
-        os.write("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n".getBytes()); // TODO - charset?
+        os.write("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n".getBytes(SampleResult.DEFAULT_HTTP_ENCODING));
     }
 
     public LoopbackHTTPSocket(String host, int port, InetAddress localAddress, int localPort, int timeout) throws IOException {
