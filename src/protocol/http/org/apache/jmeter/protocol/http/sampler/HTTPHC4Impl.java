@@ -100,6 +100,7 @@ import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.protocol.http.util.SlowHC4SSLSocketFactory;
 import org.apache.jmeter.protocol.http.util.SlowHC4SocketFactory;
+import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
@@ -965,7 +966,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                         if (contentEncoding != null) {
                             postedBody.append(new String(bos.toByteArray(), contentEncoding));
                         } else {
-                            postedBody.append(new String(bos.toByteArray()));
+                            postedBody.append(new String(bos.toByteArray(), SampleResult.DEFAULT_HTTP_ENCODING));
                         }
                         bos.close();
                     }  else {
