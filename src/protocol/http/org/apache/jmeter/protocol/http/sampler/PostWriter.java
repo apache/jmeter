@@ -31,6 +31,7 @@ import java.net.URLConnection;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
+import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 
 /**
@@ -122,7 +123,7 @@ public class PostWriter {
                 postedBody.append(new String(fileMultipartEndDivider, ENCODING));
                 if(i + 1 < files.length) {
                     out.write(CRLF);
-                    postedBody.append(new String(CRLF)); // TODO - charset?
+                    postedBody.append(new String(CRLF, SampleResult.DEFAULT_HTTP_ENCODING));
                 }
             }
             // Write end of multipart
