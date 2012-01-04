@@ -34,7 +34,7 @@ public class PoissonRandomTimerGui extends AbstractRandomTimerGui {
 
 	private static final String DEFAULT_DELAY = "300"; // $NON-NLS-1$
 
-    private static final String DEFAULT_RANGE = "100"; // $NON-NLS-1$
+    private static final String DEFAULT_RANGE = "100.0"; // $NON-NLS-1$
 
     /**
      * No-arg constructor.
