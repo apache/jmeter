@@ -211,6 +211,9 @@ public class RenderAsXML extends SamplerResultTab
                 case '\"': // $NON-NLS-1$
                     toReturn = "&quot;"; // $NON-NLS-1$
                     break;
+                default:
+                    // ignored
+                    break;
 
                 }
                 return toReturn;

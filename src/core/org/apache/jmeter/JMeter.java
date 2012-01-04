@@ -663,6 +663,9 @@ public class JMeter implements JMeterPlugin {
             case REMOTE_STOP:
                 remoteStop = true;
                 break;
+            default:
+                // ignored
+                break;
             }
         }
 
