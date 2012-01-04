@@ -394,6 +394,9 @@ public class JMeterReport implements JMeterPlugin {
                     LoggingManager.setPriority(name);
                 }
                 break;
+            default:
+                // ignored
+                break;
             }
         }
 
