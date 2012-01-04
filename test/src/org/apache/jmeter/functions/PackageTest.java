@@ -229,19 +229,19 @@ public class PackageTest extends JMeterTestCase {
 
     public void BSH1() throws Exception {
         String fn = "testfiles/BeanShellTest.bsh";
+        try {
+            BSHFParams(null, null, null);
+            fail("Expected InvalidVariableException");
+        } catch (InvalidVariableException e) {
+        }
+
+        try {
+            BSHFParams("", "", "");
+            fail("Expected InvalidVariableException");
+        } catch (InvalidVariableException e) {
+        }
+
         BeanShell bsh;
-        try {
-            bsh = BSHFParams(null, null, null);
-            fail("Expected InvalidVariableException");
-        } catch (InvalidVariableException e) {
-        }
-
-        try {
-            bsh = BSHFParams("", "", "");
-            fail("Expected InvalidVariableException");
-        } catch (InvalidVariableException e) {
-        }
-
         try {
             bsh = BSHFParams("", "", null);
             assertEquals("", bsh.execute());
