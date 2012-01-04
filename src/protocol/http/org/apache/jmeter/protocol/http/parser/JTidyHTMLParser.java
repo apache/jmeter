@@ -170,6 +170,9 @@ class JTidyHTMLParser extends HTMLParser {
         // case Node.TEXT_NODE:
         // break;
 
+        default:
+            // ignored
+            break;
         }
 
         return baseUrl;
