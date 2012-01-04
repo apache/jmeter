@@ -56,7 +56,7 @@ public class BinaryTCPClientImplTest extends TestCase {
             // ignored
         }
         try {
-            ba = BinaryTCPClientImpl.hexStringToByteArray("0f107xxf8081ff"); // invalid
+            BinaryTCPClientImpl.hexStringToByteArray("0f107xxf8081ff"); // invalid
             fail("Expected IllegalArgumentException");
         } catch (IllegalArgumentException expected){
             // ignored
@@ -79,7 +79,7 @@ public class BinaryTCPClientImplTest extends TestCase {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         bi.write(os, "3132333435"); // '12345'
         os.close();
-        assertEquals("12345",os.toString());
+        assertEquals("12345",os.toString("ISO-8859-1"));
         ByteArrayInputStream bis = new ByteArrayInputStream(os.toByteArray());
         assertEquals("3132333435",bi.read(bis));
     }
