@@ -246,9 +246,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         } catch (Exception e) {
             res.sampleStart();
             res.sampleEnd();
-            HTTPSampleResult err = errorResult(e, res);
-            err.setSampleLabel("Error: " + url.toString());
-            return err;
+            errorResult(e, res);
+            return res;
         }
 
         HttpContext localContext = new BasicHttpContext();
@@ -351,14 +350,12 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
         } catch (IOException e) {
             res.sampleEnd();
-            HTTPSampleResult err = errorResult(e, res);
-            err.setSampleLabel("Error: " + url.toString());
-            return err;
+            errorResult(e, res);
+            return res;
         } catch (RuntimeException e) {
             res.sampleEnd();
-            HTTPSampleResult err = errorResult(e, res);
-            err.setSampleLabel("Error: " + url.toString());
-            return err;
+            errorResult(e, res);
+            return res;
         } finally {
             currentRequest = null;
         }

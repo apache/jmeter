@@ -328,17 +328,14 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
 
             log.debug("End : sample");
             return res;
-        } catch (IllegalArgumentException e)// e.g. some kinds of invalid URL
-        {
+        } catch (IllegalArgumentException e) { // e.g. some kinds of invalid URL
             res.sampleEnd();
-            HTTPSampleResult err = errorResult(e, res);
-            err.setSampleLabel("Error: " + url.toString());
-            return err;
+            errorResult(e, res);
+            return res;
         } catch (IOException e) {
             res.sampleEnd();
-            HTTPSampleResult err = errorResult(e, res);
-            err.setSampleLabel("Error: " + url.toString());
-            return err;
+            errorResult(e, res);
+            return res;
         } finally {
             savedClient = null;
             if (httpMethod != null) {
