@@ -803,14 +803,14 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
 
     /**
-     * Obtain a result that will help inform the user that an error has occured
-     * during sampling, and how long it took to detect the error.
-     *
+     * Populates the provided HTTPSampleResult with details from the Exception.
+     * Does not create a new instance, so should not be used directly to add a subsample.
+     * 
      * @param e
      *            Exception representing the error.
      * @param res
-     *            SampleResult
-     * @return a sampling result useful to inform the user about the exception.
+     *            SampleResult to be modified
+     * @return the modified sampling result containing details of the Exception.
      */
     protected HTTPSampleResult errorResult(Throwable e, HTTPSampleResult res) {
         res.setSampleLabel("Error: " + res.getSampleLabel());
@@ -1108,7 +1108,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             }
         } catch (HTMLParseException e) {
             // Don't break the world just because this failed:
-            res.addSubResult(errorResult(e, res));
+            res.addSubResult(errorResult(e, new HTTPSampleResult(res)));
             res.setSuccessful(false);
         }
 
@@ -1152,7 +1152,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                             try {
                                 url = new URL(urlStrEnc);
                             } catch (MalformedURLException e) {
-                                res.addSubResult(errorResult(new Exception(urlStrEnc + " is not a correct URI"), res));
+                                res.addSubResult(errorResult(new Exception(urlStrEnc + " is not a correct URI"), new HTTPSampleResult(res)));
                                 res.setSuccessful(false);
                                 continue;
                             }
@@ -1174,7 +1174,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
                     }
                 } catch (ClassCastException e) { // TODO can this happen?
-                    res.addSubResult(errorResult(new Exception(binURL + " is not a correct URI"), res));
+                    res.addSubResult(errorResult(new Exception(binURL + " is not a correct URI"), new HTTPSampleResult(res)));
                     res.setSuccessful(false);
                     continue;
                 }
@@ -1368,7 +1368,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             try {
                 lastRes = sample(ConversionUtils.makeRelativeURL(lastRes.getURL(), location), GET, true, frameDepth);
             } catch (MalformedURLException e) {
-                lastRes = errorResult(e, lastRes);
+                errorResult(e, lastRes);
                 // The redirect URL we got was not a valid URL
                 invalidRedirectUrl = true;
             }
@@ -1390,7 +1390,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             }
         }
         if (redirect >= MAX_REDIRECTS) {
-            lastRes = errorResult(new IOException("Exceeeded maximum number of redirects: " + MAX_REDIRECTS), lastRes);
+            lastRes = errorResult(new IOException("Exceeeded maximum number of redirects: " + MAX_REDIRECTS), new HTTPSampleResult(lastRes));
             totalRes.addSubResult(lastRes);
         }
 
@@ -1445,7 +1445,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         }
         if (isImageParser() && (HTTPSampleResult.TEXT).equals(res.getDataType()) && res.isSuccessful()) {
             if (frameDepth > MAX_FRAME_DEPTH) {
-                res.addSubResult(errorResult(new Exception("Maximum frame/iframe nesting depth exceeded."), res));
+                res.addSubResult(errorResult(new Exception("Maximum frame/iframe nesting depth exceeded."), new HTTPSampleResult(res)));
             } else {
                 // Only download page resources if we were not redirected.
                 // If we were redirected, the page resources have already been
