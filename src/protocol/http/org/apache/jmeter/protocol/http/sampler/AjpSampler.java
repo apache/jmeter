@@ -118,10 +118,9 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
             return res;
         } catch(IOException iex) {
             res.sampleEnd();
-            HTTPSampleResult err = errorResult(iex, res);
             lastPort = -1; // force reopen on next sample
             channel = null;
-            return err;
+            return errorResult(iex, res);
         } finally {
             activeChannel = null;
         }
