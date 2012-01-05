@@ -347,14 +347,12 @@ public class SoapSampler extends HTTPSampler2 implements Interruptible { // Impl
         } catch (IllegalArgumentException e)// e.g. some kinds of invalid URL
         {
             res.sampleEnd();
-            HTTPSampleResult err = errorResult(e, res);
-            err.setSampleLabel("Error: " + url.toString());
-            return err;
+            errorResult(e, res);
+            return res;
         } catch (IOException e) {
             res.sampleEnd();
-            HTTPSampleResult err = errorResult(e, res);
-            err.setSampleLabel("Error: " + url.toString());
-            return err;
+            errorResult(e, res);
+            return res;
         } finally {
             JOrphanUtils.closeQuietly(instream);
             setSavedClient(null);
