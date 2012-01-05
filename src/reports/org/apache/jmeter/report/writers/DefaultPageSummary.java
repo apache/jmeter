@@ -24,9 +24,9 @@ public class DefaultPageSummary implements PageSummary {
 
     private long START = 0;
     private long END = 0;
-    private String Title;
-    private String FileName;
-    private boolean Success;
+    private String title;
+    private String fileName;
+    private boolean success;
 
     /**
      *
@@ -50,14 +50,14 @@ public class DefaultPageSummary implements PageSummary {
      * @see org.apache.jmeter.report.writers.PageSummary#getFileName()
      */
     public String getFileName() {
-        return FileName;
+        return fileName;
     }
 
     /* (non-Javadoc)
      * @see org.apache.jmeter.report.writers.PageSummary#getPageTitle()
      */
     public String getPageTitle() {
-        return Title;
+        return title;
     }
 
     public long getStartTimeStamp() {
@@ -68,7 +68,7 @@ public class DefaultPageSummary implements PageSummary {
      * @see org.apache.jmeter.report.writers.PageSummary#isSuccessful()
      */
     public boolean isSuccessful() {
-        return Success;
+        return success;
     }
 
     /* (non-Javadoc)
@@ -89,21 +89,21 @@ public class DefaultPageSummary implements PageSummary {
      * @see org.apache.jmeter.report.writers.PageSummary#setFileName(java.lang.String)
      */
     public void setFileName(String file) {
-        this.FileName = file;
+        this.fileName = file;
     }
 
     /* (non-Javadoc)
      * @see org.apache.jmeter.report.writers.PageSummary#setPageTitle(java.lang.String)
      */
     public void setPageTitle(String title) {
-        this.Title = title;
+        this.title = title;
     }
 
     /* (non-Javadoc)
      * @see org.apache.jmeter.report.writers.PageSummary#setSuccessful(boolean)
      */
     public void setSuccessful(boolean success) {
-        this.Success = success;
+        this.success = success;
     }
 
 }
