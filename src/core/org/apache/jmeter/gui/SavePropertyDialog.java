@@ -26,6 +26,7 @@ import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -78,7 +79,7 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
         super(owner, title, modal);
         saveConfig = s;
         log.debug("SampleSaveConfiguration = " + saveConfig);// $NON-NLS-1$
-        dialogInit();
+        initDialog();
     }
 
     private int countMethods(Method[] m) {
@@ -91,52 +92,44 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
         return count;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void dialogInit() {
-        if (saveConfig != null) {
-            super.dialogInit();
-            this.getContentPane().setLayout(new BorderLayout());
-            Method[] methods = SampleSaveConfiguration.class.getMethods();
-            int x = (countMethods(methods) / 3) + 1;
-            log.debug("grid panel is " + 3 + " by " + x);
-            JPanel checkPanel = new JPanel(new GridLayout(x, 3));
-            for (int i = 0; i < methods.length; i++) {
-                String name = methods[i].getName();
-                if (name.startsWith(NAME_SAVE_PFX) && methods[i].getParameterTypes().length == 0) {
-                    try {
-                        name = name.substring(NAME_SAVE_PFX_LEN);
-                        JCheckBox check = new JCheckBox(
-                                JMeterUtils.getResString(RESOURCE_PREFIX + name)// $NON-NLS-1$
-                                ,((Boolean) methods[i].invoke(saveConfig, new Object[0])).booleanValue());
-                        checkPanel.add(check, BorderLayout.NORTH);
-                        check.addActionListener(this);
-                        String actionCommand = NAME_SET_PREFIX + name; // $NON-NLS-1$
-                        check.setActionCommand(actionCommand);
-                        if (!functors.containsKey(actionCommand)) {
-                            functors.put(actionCommand, new Functor(actionCommand));
-                        }
-                    } catch (Exception e) {
-                        log.warn("Problem creating save config dialog", e);
+    private void initDialog() {
+        this.getContentPane().setLayout(new BorderLayout());
+        Method[] methods = SampleSaveConfiguration.class.getMethods();
+        int x = (countMethods(methods) / 3) + 1;
+        log.debug("grid panel is " + 3 + " by " + x);
+        JPanel checkPanel = new JPanel(new GridLayout(x, 3));
+        for (int i = 0; i < methods.length; i++) {
+            String name = methods[i].getName();
+            if (name.startsWith(NAME_SAVE_PFX) && methods[i].getParameterTypes().length == 0) {
+                try {
+                    name = name.substring(NAME_SAVE_PFX_LEN);
+                    JCheckBox check = new JCheckBox(
+                            JMeterUtils.getResString(RESOURCE_PREFIX + name)// $NON-NLS-1$
+                            ,((Boolean) methods[i].invoke(saveConfig, new Object[0])).booleanValue());
+                    checkPanel.add(check, BorderLayout.NORTH);
+                    check.addActionListener(this);
+                    String actionCommand = NAME_SET_PREFIX + name; // $NON-NLS-1$
+                    check.setActionCommand(actionCommand);
+                    if (!functors.containsKey(actionCommand)) {
+                        functors.put(actionCommand, new Functor(actionCommand));
                     }
+                } catch (IllegalAccessException e) {
+                    log.warn("Problem creating save config dialog", e);
+                } catch (InvocationTargetException e) {
+                    log.warn("Problem creating save config dialog", e);
                 }
             }
-            getContentPane().add(checkPanel, BorderLayout.NORTH);
-            JButton exit = new JButton(JMeterUtils.getResString("done")); // $NON-NLS-1$
-            this.getContentPane().add(exit, BorderLayout.SOUTH);
-            exit.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    dispose();
-                }
-            });
         }
+        getContentPane().add(checkPanel, BorderLayout.NORTH);
+        JButton exit = new JButton(JMeterUtils.getResString("done")); // $NON-NLS-1$
+        this.getContentPane().add(exit, BorderLayout.SOUTH);
+        exit.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public void actionPerformed(ActionEvent e) {
         String action = e.getActionCommand();
         Functor f = functors.get(action);
