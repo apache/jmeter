@@ -35,7 +35,7 @@ public class TCPSamplerGui extends AbstractSamplerGui {
 
     private LoginConfigGui loginPanel;
 
-    private TCPConfigGui TcpDefaultPanel;
+    private TCPConfigGui tcpDefaultPanel;
 
     public TCPSamplerGui() {
         init();
@@ -45,7 +45,7 @@ public class TCPSamplerGui extends AbstractSamplerGui {
     public void configure(TestElement element) {
         super.configure(element);
         loginPanel.configure(element);
-        TcpDefaultPanel.configure(element);
+        tcpDefaultPanel.configure(element);
     }
 
     public TestElement createTestElement() {
@@ -61,7 +61,7 @@ public class TCPSamplerGui extends AbstractSamplerGui {
      */
     public void modifyTestElement(TestElement sampler) {
         sampler.clear();
-        sampler.addTestElement(TcpDefaultPanel.createTestElement());
+        sampler.addTestElement(tcpDefaultPanel.createTestElement());
         sampler.addTestElement(loginPanel.createTestElement());
         this.configureTestElement(sampler);
     }
@@ -73,7 +73,7 @@ public class TCPSamplerGui extends AbstractSamplerGui {
     public void clearGui() {
         super.clearGui();
 
-        TcpDefaultPanel.clearGui();
+        tcpDefaultPanel.clearGui();
         loginPanel.clearGui();
     }
 
@@ -89,8 +89,8 @@ public class TCPSamplerGui extends AbstractSamplerGui {
 
         VerticalPanel mainPanel = new VerticalPanel();
 
-        TcpDefaultPanel = new TCPConfigGui(false);
-        mainPanel.add(TcpDefaultPanel);
+        tcpDefaultPanel = new TCPConfigGui(false);
+        mainPanel.add(tcpDefaultPanel);
 
         loginPanel = new LoginConfigGui(false);
         loginPanel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("login_config"))); // $NON-NLS-1$
