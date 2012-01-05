@@ -256,6 +256,8 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 case 5:
                     style = statsDoc.getStyle(STYLE_SERVER_ERROR);
                     break;
+                default: // quieten Findbugs
+                    break; // default - do nothing
                 }
 
                 statsBuff.append(JMeterUtils.getResString("view_results_response_code")).append(responseCode).append(NL); //$NON-NLS-1$
