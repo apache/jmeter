@@ -26,8 +26,6 @@ public class SplineModel implements Clearable {
 
     public static final int DEFAULT_REFRESH_PERIOD = 1;
 
-    protected final boolean SHOW_INCOMING_SAMPLES = true;
-
     // These are not currently updated
     protected int numberOfNodes = DEFAULT_NUMBER_OF_NODES;
 
