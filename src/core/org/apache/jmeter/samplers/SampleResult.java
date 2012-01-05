@@ -225,6 +225,8 @@ public class SampleResult implements Serializable {
         log.info("sampleresult.nanoThreadSleep="+NANOTHREAD_SLEEP);
 
         if (USENANOTIME && NANOTHREAD_SLEEP > 0) {
+            // Make sure we start with a reasonable value
+            NanoOffset.nanoOffset = System.currentTimeMillis() - SampleResult.sampleNsClockInMs();
             NanoOffset nanoOffset = new NanoOffset();
             nanoOffset.setDaemon(true);
             nanoOffset.setName("NanoOffset");
@@ -677,7 +679,7 @@ public class SampleResult implements Serializable {
             return new String(responseData,getDataEncodingWithDefault());
         } catch (UnsupportedEncodingException e) {
             log.warn("Using platform default as "+getDataEncodingWithDefault()+" caused "+e);
-            return new String(responseData);
+            return new String(responseData); // N.B. default charset is used deliberately here
         }
     }
 
@@ -1264,10 +1266,8 @@ public class SampleResult implements Serializable {
 
     private static class NanoOffset extends Thread {
 
-        private static volatile long nanoOffset = 
-                // Make sure we start with a reasonable value
-                System.currentTimeMillis() - SampleResult.sampleNsClockInMs();
-        
+        private static volatile long nanoOffset; 
+
         static long getNanoOffset() {
             return nanoOffset;
         }
