@@ -113,4 +113,15 @@ under the License.
         </plugins>
     </build>
 
+    <!--<distributionManagement>-->
+        <!--<snapshotRepository>-->
+            <!--<id></id>-->
+            <!--<url></url>-->
+        <!--</snapshotRepository>-->
+        <!--<repository>-->
+            <!--<id></id>-->
+            <!--<url></url>-->
+        <!--</repository>-->
+    <!--</distributionManagement>-->
+
 </project>
