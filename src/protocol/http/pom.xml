@@ -74,18 +74,4 @@ under the License.
         </dependency>
     </dependencies>
 
-    <repositories>
-        <repository>
-            <!-- required for htmlparser -->
-            <id>htmlparser</id>
-            <url>http://htmlparser.sourceforge.net/m2-snapshot-repo</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </repository>
-    </repositories>
-
 </project>

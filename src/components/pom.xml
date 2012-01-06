@@ -88,11 +88,6 @@ under the License.
 	</dependencies>
 
     <repositories>
-      <repository>
-        <!-- required to get javamail 1.4.3 - downgrade to 1.4.1 ??? -->
-        <id>java.net</id>
-        <url>http://download.java.net/maven/2</url>
-     </repository>
      <repository>
         <!-- required for jCharts 0.7.5 - Upgrade to 1.0.0-alpha-1 ??? -->
         <id>geotools</id>
