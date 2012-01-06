@@ -30,7 +30,7 @@ under the License.
     <name>Apache JMeter</name>
     <version>2.5.1</version>
     <description>Apache JMeter is open source software, a 100% pure Java desktop application designed to load test functional behavior and measure performance. It was originally designed for testing Web Applications but has since expanded to other test functions.</description>
-    <url>http://jakarta.apache.org/jmeter/</url>
+    <url>http://jmeter.apache.org/</url>
     <issueManagement>
         <system>bugzilla</system>
         <url>https://issues.apache.org/bugzilla/describecomponents.cgi?product=JMeter</url>
