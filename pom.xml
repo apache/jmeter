@@ -67,9 +67,6 @@ under the License.
                     <exclude>**/*.java</exclude>
                     <exclude>*/target/*</exclude>
                 </excludes>
-                <includes>
-                    <include>**/*.properties</include>
-                </includes>
             </resource>
         </resources>
         <testResources>
