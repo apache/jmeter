@@ -36,9 +36,15 @@ under the License.
         <url>https://issues.apache.org/bugzilla/describecomponents.cgi?product=JMeter</url>
     </issueManagement>
     <inceptionYear>1998</inceptionYear>
+    <scm>
+        <connection>http://svn.apache.org/repos/asf/jmeter/trunk/</connection>
+        <developerConnection>https://svn.apache.org/repos/asf/jmeter/trunk/</developerConnection>
+        <url>http://svn.apache.org/viewvc/jmeter/trunk/</url>
+    </scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
     </properties>
 
     <modules>
