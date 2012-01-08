@@ -166,6 +166,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     private static final long AWAIT_TERMINATION_TIMEOUT = 
         JMeterUtils.getPropDefault("httpsampler.await_termination_timeout", 60); // $NON-NLS-1$ // default value: 60 secs 
     
+    private static final boolean IGNORE_FAILED_EMBEDDED_RESOURCES = 
+            JMeterUtils.getPropDefault("httpsampler.ignore_failed_embedded_resources", false); // $NON-NLS-1$ // default value: false
+
     public static final int CONCURRENT_POOL_SIZE = 4; // Default concurrent pool size for download embedded resources
     
     
@@ -1109,7 +1112,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         } catch (HTMLParseException e) {
             // Don't break the world just because this failed:
             res.addSubResult(errorResult(e, new HTTPSampleResult(res)));
-            res.setSuccessful(false);
+            setParentSampleSuccess(res, false);
         }
 
         // Iterate through the URLs and download each image:
@@ -1153,7 +1156,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                                 url = new URL(urlStrEnc);
                             } catch (MalformedURLException e) {
                                 res.addSubResult(errorResult(new Exception(urlStrEnc + " is not a correct URI"), new HTTPSampleResult(res)));
-                                res.setSuccessful(false);
+                                setParentSampleSuccess(res, false);
                                 continue;
                             }
                         }
@@ -1169,13 +1172,13 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                             // default: serial download embedded resources
                             HTTPSampleResult binRes = sample(url, GET, false, frameDepth + 1);
                             res.addSubResult(binRes);
-                            res.setSuccessful(res.isSuccessful() && binRes.isSuccessful());
+                            setParentSampleSuccess(res, res.isSuccessful() && binRes.isSuccessful());
                         }
 
                     }
                 } catch (ClassCastException e) { // TODO can this happen?
                     res.addSubResult(errorResult(new Exception(binURL + " is not a correct URI"), new HTTPSampleResult(res)));
-                    res.setSuccessful(false);
+                    setParentSampleSuccess(res, false);
                     continue;
                 }
             }
@@ -1231,7 +1234,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                                 }
                             }
                             res.addSubResult(binRes.getResult());
-                            res.setSuccessful(res.isSuccessful() && binRes.getResult().isSuccessful());
+                            setParentSampleSuccess(res, res.isSuccessful() && binRes.getResult().isSuccessful());
                         } catch (TimeoutException e) {
                             errorResult(e, res);
                         }
@@ -1251,7 +1254,18 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         return res;
     }
     
-    /*
+    /**
+     * Set parent successful attribute based on IGNORE_FAILED_EMBEDDED_RESOURCES parameter
+     * @param res {@link HTTPSampleResult}
+     * @param initialValue boolean
+     */
+    private void setParentSampleSuccess(HTTPSampleResult res, boolean initialValue) {
+		if(!IGNORE_FAILED_EMBEDDED_RESOURCES) {
+			res.setSuccessful(initialValue);
+		}
+	}
+
+	/*
      * @param res HTTPSampleResult to check
      * @return parser class name (may be "") or null if entry does not exist
      */

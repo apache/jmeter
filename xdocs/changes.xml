@@ -175,6 +175,7 @@ fix code which assumes that a new instance is created (i.e. when adding a sub-sa
 <li>Bug 51981 - Better support for file: protocol in HTTP sampler</li>
 <li>Bug 52033 - Allowing multiple certificates (JKS)</li>
 <li>Bug 52352 - Proxy : Support IPv6 URLs capture</li>
+<li>Bug 44301 - Enable "ignore failed" for embedded resources</li>
 </ul>
 
 <h3>Other samplers</h3>
