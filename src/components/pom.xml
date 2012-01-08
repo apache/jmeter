@@ -89,9 +89,9 @@ under the License.
 
     <repositories>
      <repository>
-        <!-- required for jCharts 0.7.5 - Upgrade to 1.0.0-alpha-1 ??? -->
-        <id>geotools</id>
-        <url>http://maven.geotools.fr/repository</url>
+        <!-- required for jCharts 0.7.5 -->
+        <id>mvnsearch</id>
+        <url>http://www.mvnsearch.org/maven2</url>
      </repository>
     </repositories>
 
