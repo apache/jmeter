@@ -74,8 +74,8 @@ TENURING="-XX:MaxTenuringThreshold=2"
 # should be more than enough:
 RMIGC="-Dsun.rmi.dgc.client.gcInterval=600000 -Dsun.rmi.dgc.server.gcInterval=600000"
 
-# PermSize is a scam. Leave it like this:
-PERM="-XX:PermSize=64m -XX:MaxPermSize=64m"
+# Increase MaxPermSize if you use a lot of Javascript in your Test Plan :
+PERM="-XX:PermSize=64m -XX:MaxPermSize=128m"
 
 # Finally, some tracing to help in case things go astray:
 #DEBUG="-verbose:gc -XX:+PrintTenuringDistribution"
