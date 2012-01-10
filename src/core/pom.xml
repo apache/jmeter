@@ -31,8 +31,11 @@ under the License.
         <sourceDirectory>.</sourceDirectory>
         <resources>
             <resource>
-                <directory>org/apache/jmeter/resources</directory>
+                <directory>${basedir}/org/apache/jmeter/resources</directory>
                 <targetPath>org/apache/jmeter/resources</targetPath>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
             </resource>
         </resources>
     </build>

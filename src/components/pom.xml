@@ -1,4 +1,3 @@
-
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -19,80 +18,132 @@ under the License.
 -->
 
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<parent>
-		<artifactId>ApacheJMeter_parent</artifactId>
-		<groupId>org.apache.jmeter</groupId>
-		<version>2.5.1</version>
-	</parent>
-	<modelVersion>4.0.0</modelVersion>
-	<artifactId>ApacheJMeter_components</artifactId>
+    <parent>
+        <artifactId>ApacheJMeter_parent</artifactId>
+        <groupId>org.apache.jmeter</groupId>
+        <version>2.5.1</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>ApacheJMeter_components</artifactId>
     <name>Apache JMeter Components</name>
 
     <build>
         <sourceDirectory>.</sourceDirectory>
+        <!-- Need to specify each directory that should contain properties -->
+        <resources>
+            <resource>
+                <directory>${basedir}/org/apache/jmeter/assertions</directory>
+                <targetPath>org/apache/jmeter/assertions</targetPath>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>${basedir}/org/apache/jmeter/config</directory>
+                <targetPath>org/apache/jmeter/config</targetPath>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>${basedir}/org/apache/jmeter/extractor</directory>
+                <targetPath>org/apache/jmeter/extractor</targetPath>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>${basedir}/org/apache/jmeter/modifiers</directory>
+                <targetPath>org/apache/jmeter/modifiers</targetPath>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>${basedir}/org/apache/jmeter/sampler</directory>
+                <targetPath>org/apache/jmeter/sampler</targetPath>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>${basedir}/org/apache/jmeter/timers</directory>
+                <targetPath>org/apache/jmeter/timers</targetPath>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>${basedir}/org/apache/jmeter/visualizers</directory>
+                <targetPath>org/apache/jmeter/visualizers</targetPath>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+        </resources>
     </build>
 
-	<dependencies>
-      <dependency>
-        <groupId>${project.groupId}</groupId>
-        <artifactId>jorphan</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>${project.groupId}</groupId>
-        <artifactId>ApacheJMeter_core</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-      	<groupId>jcharts</groupId>
-      	<artifactId>jcharts</artifactId>
-      	<version>0.7.5</version>
-      	<type>jar</type>
-      	<scope>compile</scope>
-      </dependency>
-      <dependency>
-      	<groupId>javax.mail</groupId>
-      	<artifactId>mail</artifactId>
-      	<version>1.4.4</version>
-      	<type>jar</type>
-      	<scope>compile</scope>
-      </dependency>
-      <dependency>
-      	<groupId>xalan</groupId>
-      	<artifactId>xalan</artifactId>
-      	<version>2.7.1</version>
-      	<type>jar</type>
-      	<scope>compile</scope>
-      </dependency>
-      <dependency>
-      	<groupId>jdom</groupId>
-      	<artifactId>jdom</artifactId>
-      	<version>1.1</version>
-      	<type>jar</type>
-      	<scope>compile</scope>
-      </dependency>
-      <dependency>
-      	<groupId>org.bouncycastle</groupId>
-      	<artifactId>bcmail-jdk15</artifactId>
-      	<version>1.45</version>
-      	<type>jar</type>
-      	<scope>compile</scope>
-      </dependency>
-      <dependency>
-      	<groupId>org.bouncycastle</groupId>
-      	<artifactId>bcprov-jdk15</artifactId>
-      	<version>1.45</version>
-      	<type>jar</type>
-      	<scope>compile</scope>
-      </dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>jorphan</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>ApacheJMeter_core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jcharts</groupId>
+            <artifactId>jcharts</artifactId>
+            <version>0.7.5</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4.4</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>xalan</groupId>
+            <artifactId>xalan</artifactId>
+            <version>2.7.1</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>jdom</groupId>
+            <artifactId>jdom</artifactId>
+            <version>1.1</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcmail-jdk15</artifactId>
+            <version>1.45</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk15</artifactId>
+            <version>1.45</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 
     <repositories>
-     <repository>
-        <!-- required for jCharts 0.7.5 -->
-        <id>mvnsearch</id>
-        <url>http://www.mvnsearch.org/maven2</url>
-     </repository>
+        <repository>
+            <!-- required for jCharts 0.7.5 -->
+            <id>mvnsearch</id>
+            <url>http://www.mvnsearch.org/maven2</url>
+        </repository>
     </repositories>
 
 </project>

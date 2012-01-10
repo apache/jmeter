@@ -29,6 +29,22 @@ under the License.
 
     <build>
         <sourceDirectory>.</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>${basedir}/org/apache/jmeter/protocol/jdbc/config</directory>
+                <targetPath>org/apache/jmeter/protocol/jdbc/config</targetPath>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>${basedir}/org/apache/jmeter/protocol/jdbc/sampler</directory>
+                <targetPath>org/apache/jmeter/protocol/jdbc/sampler</targetPath>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+        </resources>
     </build>
 
     <dependencies>

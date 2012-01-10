@@ -29,6 +29,15 @@ under the License.
 
     <build>
         <sourceDirectory>.</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>${basedir}/org/apache/jmeter/protocol/java/sampler</directory>
+                <targetPath>org/apache/jmeter/protocol/java/sampler</targetPath>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+        </resources>
     </build>
 
     <dependencies>

@@ -65,7 +65,7 @@ under the License.
                 <directory>src</directory>
                 <excludes>
                     <exclude>**/*.java</exclude>
-                    <exclude>*/target/*</exclude>
+                    <exclude>**/target/*</exclude>
                 </excludes>
             </resource>
         </resources>
@@ -74,7 +74,7 @@ under the License.
                 <directory>test</directory>
                 <excludes>
                     <exclude>**/*.java</exclude>
-                    <exclude>*/target/*</exclude>
+                    <exclude>**/target/*</exclude>
                 </excludes>
             </testResource>
         </testResources>
@@ -105,6 +105,7 @@ under the License.
                                 <exclude>**/*.jar</exclude>
                                 <exclude>**/*.iml</exclude>
                                 <exclude>**/*.zip</exclude>
+                                <exclude>**/target/**</exclude>
                             </excludes>
                         </configuration>
                     </execution>
