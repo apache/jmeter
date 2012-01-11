@@ -24,7 +24,7 @@ under the License.
         <version>2.5.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>ApachJMeter_examples</artifactId>
+    <artifactId>ApacheJMeter_examples</artifactId>
     <name>Apache JMeter Examples</name>
 
     <build>
