@@ -54,6 +54,9 @@ under the License.
         <module>src/functions</module>
         <module>src/reports</module>
         <module>src/protocol</module>
+        <module>src/junit</module>
+        <module>src/monitor</module>
+        <module>src/examples</module>
     </modules>
 
     <build>
