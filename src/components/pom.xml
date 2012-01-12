@@ -1,0 +1,100 @@
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <parent>
+        <artifactId>ApacheJMeter_parent</artifactId>
+        <groupId>org.apache.jmeter</groupId>
+        <version>SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>ApacheJMeter_components</artifactId>
+    <name>Apache JMeter Components</name>
+
+    <build>
+        <directory>../../build/maven/components</directory>
+        <sourceDirectory>.</sourceDirectory>
+        <!-- Need to specify each directory that should contain properties -->
+        <resources>
+            <resource>
+                <directory>${basedir}/org/apache/jmeter/assertions</directory>
+                <targetPath>org/apache/jmeter/assertions</targetPath>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>${basedir}/org/apache/jmeter/config</directory>
+                <targetPath>org/apache/jmeter/config</targetPath>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>${basedir}/org/apache/jmeter/extractor</directory>
+                <targetPath>org/apache/jmeter/extractor</targetPath>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>${basedir}/org/apache/jmeter/modifiers</directory>
+                <targetPath>org/apache/jmeter/modifiers</targetPath>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>${basedir}/org/apache/jmeter/sampler</directory>
+                <targetPath>org/apache/jmeter/sampler</targetPath>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>${basedir}/org/apache/jmeter/timers</directory>
+                <targetPath>org/apache/jmeter/timers</targetPath>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>${basedir}/org/apache/jmeter/visualizers</directory>
+                <targetPath>org/apache/jmeter/visualizers</targetPath>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>jorphan</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>ApacheJMeter_core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>
