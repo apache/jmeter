@@ -21,13 +21,14 @@ under the License.
     <parent>
         <artifactId>ApacheJMeter_parent</artifactId>
         <groupId>org.apache.jmeter</groupId>
-        <version>2.5.1</version>
+        <version>SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>ApacheJMeter_junit</artifactId>
     <name>Apache JMeter jUnit</name>
 
     <build>
+        <directory>${project.basedir}/target/</directory>
         <sourceDirectory>.</sourceDirectory>
     </build>
 

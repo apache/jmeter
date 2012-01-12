@@ -28,7 +28,7 @@ under the License.
     <artifactId>ApacheJMeter_parent</artifactId>
     <packaging>pom</packaging>
     <name>Apache JMeter</name>
-    <version>2.5.1</version>
+    <version>SNAPSHOT</version>
     <description>Apache JMeter is open source software, a 100% pure Java desktop application designed to load test functional behavior and measure performance. It was originally designed for testing Web Applications but has since expanded to other test functions.</description>
     <url>http://jmeter.apache.org/</url>
     <issueManagement>
