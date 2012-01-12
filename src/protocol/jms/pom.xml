@@ -28,7 +28,7 @@ under the License.
     <name>Apache JMeter JMS</name>
 
     <build>
-        <directory>${project.basedir}/target/</directory>
+        <directory>../../../build/maven/protocol/jms</directory>
         <sourceDirectory>.</sourceDirectory>
     </build>
 

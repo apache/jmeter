@@ -28,7 +28,7 @@ under the License.
     <name>Apache JMeter LDAP</name>
 
     <build>
-        <directory>${project.basedir}/target/</directory>
+        <directory>../../../build/maven/protocol/ldap</directory>
         <sourceDirectory>.</sourceDirectory>
     </build>
 

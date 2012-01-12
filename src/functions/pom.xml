@@ -28,7 +28,7 @@ under the License.
     <name>Apache JMeter Functions</name>
 
     <build>
-        <directory>${project.basedir}/target/</directory>
+        <directory>../../build/maven/functions</directory>
         <sourceDirectory>.</sourceDirectory>
     </build>
 

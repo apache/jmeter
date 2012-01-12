@@ -28,7 +28,7 @@ under the License.
     <name>Apache JMeter JDBC</name>
 
     <build>
-        <directory>${project.basedir}/target/</directory>
+        <directory>../../../build/maven/protocol/jdbc</directory>
         <sourceDirectory>.</sourceDirectory>
         <resources>
             <resource>

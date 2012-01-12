@@ -28,7 +28,7 @@ under the License.
     <name>Apache JMeter jUnit</name>
 
     <build>
-        <directory>${project.basedir}/target/</directory>
+        <directory>../../build/maven/junit</directory>
         <sourceDirectory>.</sourceDirectory>
     </build>
 

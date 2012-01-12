@@ -28,7 +28,7 @@ under the License.
     <name>Apache JMeter Monitors</name>
 
     <build>
-        <directory>${project.basedir}/target/</directory>
+        <directory>../../build/maven/monitor</directory>
         <sourceDirectory>.</sourceDirectory>
     </build>
 

@@ -28,7 +28,7 @@ under the License.
     <name>Apache JMeter Reports</name>
 
     <build>
-        <directory>${project.basedir}/target/</directory>
+        <directory>../../build/maven/reports</directory>
         <sourceDirectory>.</sourceDirectory>
     </build>
 

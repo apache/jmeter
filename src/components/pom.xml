@@ -28,7 +28,7 @@ under the License.
     <name>Apache JMeter Components</name>
 
     <build>
-        <directory>${project.basedir}/target/</directory>
+        <directory>../../build/maven/components</directory>
         <sourceDirectory>.</sourceDirectory>
         <!-- Need to specify each directory that should contain properties -->
         <resources>

@@ -28,7 +28,7 @@ under the License.
     <name>Apache JMeter Mail</name>
 
     <build>
-        <directory>${project.basedir}/target/</directory>
+        <directory>../../../build/maven/protocol/mail</directory>
         <sourceDirectory>.</sourceDirectory>
     </build>
 

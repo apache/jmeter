@@ -28,7 +28,7 @@ under the License.
     <name>Apache JMeter TCP</name>
 
     <build>
-        <directory>${project.basedir}/target/</directory>
+        <directory>../../../build/maven/protocol/tcp</directory>
         <sourceDirectory>.</sourceDirectory>
     </build>
 

@@ -28,7 +28,7 @@ under the License.
     <name>Apache jOrphan</name>
 
     <build>
-        <directory>${project.basedir}/target/</directory>
+        <directory>../../build/maven/jorphan</directory>
         <sourceDirectory>.</sourceDirectory>
     </build>
 

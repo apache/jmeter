@@ -28,7 +28,7 @@ under the License.
     <name>Apache JMeter Java</name>
 
     <build>
-        <directory>${project.basedir}/target/</directory>
+        <directory>../../../build/maven/protocol/java</directory>
         <sourceDirectory>.</sourceDirectory>
         <resources>
             <resource>

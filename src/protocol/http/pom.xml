@@ -28,7 +28,7 @@ under the License.
     <name>Apache JMeter HTTP</name>
 
     <build>
-        <directory>${project.basedir}/target/</directory>
+        <directory>../../../build/maven/protocol/http</directory>
         <sourceDirectory>.</sourceDirectory>
         <resources>
             <resource>

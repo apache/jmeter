@@ -28,7 +28,7 @@ under the License.
     <name>Apache JMeter Core</name>
 
     <build>
-        <directory>${project.basedir}/target/</directory>
+        <directory>../../build/maven/core</directory>
         <sourceDirectory>.</sourceDirectory>
         <resources>
             <resource>

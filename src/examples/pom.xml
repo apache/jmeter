@@ -28,6 +28,7 @@ under the License.
     <name>Apache JMeter Examples</name>
 
     <build>
+        <directory>../../build/maven/examples</directory>
         <sourceDirectory>.</sourceDirectory>
         <resources>
             <resource>
