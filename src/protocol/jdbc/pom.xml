@@ -64,13 +64,6 @@ under the License.
             <artifactId>ApacheJMeter_components</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>excalibur-datasource</groupId>
-            <artifactId>excalibur-datasource</artifactId>
-            <version>1.1.1</version>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 
 </project>

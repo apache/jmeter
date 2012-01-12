@@ -39,4 +39,9 @@ under the License.
         <module>tcp</module>
     </modules>
 
+    <build>
+        <directory>../../../build/maven/protocol</directory>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
+
 </project>
