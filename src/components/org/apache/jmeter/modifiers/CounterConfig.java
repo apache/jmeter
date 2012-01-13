@@ -48,11 +48,11 @@ public class CounterConfig extends AbstractTestElement
 
     private final static String FORMAT = "CounterConfig.format"; // $NON-NLS-1$
 
-    public final static String PER_USER = "CounterConfig.per_user"; // $NON-NLS-1$
+    private final static String PER_USER = "CounterConfig.per_user"; // $NON-NLS-1$
 
-    public final static String VAR_NAME = "CounterConfig.name"; // $NON-NLS-1$
+    private final static String VAR_NAME = "CounterConfig.name"; // $NON-NLS-1$
 
-    public final static String RESET_ON_THREAD_GROUP_ITERATION = "CounterConfig.reset_on_tg_iteration"; // $NON-NLS-1$
+    private final static String RESET_ON_THREAD_GROUP_ITERATION = "CounterConfig.reset_on_tg_iteration"; // $NON-NLS-1$
 
 	private static final boolean RESET_ON_THREAD_GROUP_ITERATION_DEFAULT = false;
 
