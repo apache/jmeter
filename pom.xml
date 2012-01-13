@@ -55,98 +55,98 @@ under the License.
     <developers>
         <developer>
             <id>SebastianBazley</id>
-            <name>SebastianBazley</name>
+            <name>Sebastian Bazley</name>
             <roles>
                 <role>Owner</role>
             </roles>
         </developer>
         <developer>
             <id>JordiSalvat</id>
-            <name>JordiSalvat</name>
+            <name>Jordi Salvat</name>
             <roles>
                 <role>Committer</role>
             </roles>
         </developer>
         <developer>
             <id>MikeStover</id>
-            <name>MikeStover</name>
+            <name>Mike Stover</name>
             <roles>
                 <role>Committer</role>
             </roles>
         </developer>
         <developer>
             <id>OliverRossmueller</id>
-            <name>OliverRossmueller</name>
+            <name>Oliver Rossmueller</name>
             <roles>
                 <role>Committer</role>
             </roles>
         </developer>
         <developer>
             <id>WolframRittmeyer</id>
-            <name>WolframRittmeyer</name>
+            <name>Wolfram Rittmeyer</name>
             <roles>
                 <role>Committer</role>
             </roles>
         </developer>
         <developer>
             <id>DrewGulino</id>
-            <name>DrewGulino</name>
+            <name>Drew Gulino</name>
             <roles>
                 <role>Committer</role>
             </roles>
         </developer>
         <developer>
             <id>MichalKostrzewa</id>
-            <name>MichalKostrzewa</name>
+            <name>Michal Kostrzewa</name>
             <roles>
                 <role>Committer</role>
             </roles>
         </developer>
         <developer>
             <id>KeithCassell</id>
-            <name>KeithCassell</name>
+            <name>Keith Cassell</name>
             <roles>
                 <role>Committer</role>
             </roles>
         </developer>
         <developer>
             <id>JamesBoutcher</id>
-            <name>JamesBoutcher</name>
+            <name>James Boutcher</name>
             <roles>
                 <role>Committer</role>
             </roles>
         </developer>
         <developer>
             <id>JeremyArnold</id>
-            <name>JeremyArnold</name>
+            <name>Jeremy Arnold</name>
             <roles>
                 <role>Committer</role>
             </roles>
         </developer>
         <developer>
             <id>ThadSmith</id>
-            <name>ThadSmith</name>
+            <name>Thad Smith</name>
             <roles>
                 <role>Committer</role>
             </roles>
         </developer>
         <developer>
             <id>PeterLin</id>
-            <name>PeterLin</name>
+            <name>Peter Lin</name>
             <roles>
                 <role>Committer</role>
             </roles>
         </developer>
         <developer>
             <id>ElanChezhiyan</id>
-            <name>ElanChezhiyan</name>
+            <name>Elan Chezhiyan</name>
             <roles>
                 <role>Committer</role>
             </roles>
         </developer>
         <developer>
             <id>AlfHogemark</id>
-            <name>AlfHogemark</name>
+            <name>Alf Hogemark</name>
             <roles>
                 <role>Committer</role>
             </roles>
@@ -159,7 +159,7 @@ under the License.
             </roles>
         </developer>
         <developer>
-            <id>Philippe Mouawad</id>
+            <id>PhilippeMouawad</id>
             <name>Philippe Mouawad</name>
             <roles>
                 <role>Committer</role>
