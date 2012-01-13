@@ -20,8 +20,8 @@ package org.apache.jmeter.protocol.jms.client;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *
@@ -38,7 +38,7 @@ public class ClientPool {
     private static final ArrayList<Closeable> clients = new ArrayList<Closeable>();
 
     //GuardedBy("this")
-    private static final Map<Object, Object> client_map = new HashMap<Object, Object>();
+    private static final Map<Object, Object> client_map = new ConcurrentHashMap<Object, Object>();
 
     /**
      * Add a ReceiveClient to the ClientPool. This is so that we can make sure
@@ -71,11 +71,13 @@ public class ClientPool {
         client_map.clear();
     }
 
-    public static synchronized void put(Object key, Object client) {
+    // TODO Method with 0 reference, really useful ?
+    public static void put(Object key, Object client) {
         client_map.put(key, client);
     }
 
-    public static synchronized Object get(Object key) {
+    // TODO Method with 0 reference, really useful ?
+    public static Object get(Object key) {
         return client_map.get(key);
     }
 }
