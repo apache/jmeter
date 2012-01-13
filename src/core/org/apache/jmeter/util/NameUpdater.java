@@ -116,6 +116,7 @@ public final class NameUpdater {
      * @return new test class name
      */
 
+    // TODO Not used anywhere , see BUG 52466
     public static String getCurrentTestName(String testClassName, String guiClassName) {
         String key = testClassName + "|" + guiClassName;
         if (nameMap.containsKey(key)) {
@@ -126,6 +127,7 @@ public final class NameUpdater {
         return getCurrentName(testClassName);
     }
 
+    // TODO Not used anywhere , see BUG 52466
     public static String getCurrentName(String propertyName, String className) {
         String key = className + "/" + propertyName;
         if (nameMap.containsKey(key)) {
@@ -136,6 +138,7 @@ public final class NameUpdater {
         return propertyName;
     }
 
+    // TODO Not used anywhere , see BUG 52466
     public static String getCurrentName(String value, String propertyName, String className) {
         String key = className + "." + propertyName + "/" + value;
         if (nameMap.containsKey(key)) {
