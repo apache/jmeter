@@ -18,29 +18,154 @@ under the License.
 -->
 
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
     <parent>
         <artifactId>apache</artifactId>
         <groupId>org.apache</groupId>
         <version>7</version>
     </parent>
+
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.jmeter</groupId>
     <artifactId>ApacheJMeter_parent</artifactId>
-    <packaging>pom</packaging>
-    <name>Apache JMeter</name>
     <version>SNAPSHOT</version>
+    <packaging>pom</packaging>
+    
+    <name>Apache JMeter</name>
     <description>Apache JMeter is open source software, a 100% pure Java desktop application designed to load test functional behavior and measure performance. It was originally designed for testing Web Applications but has since expanded to other test functions.</description>
     <url>http://jmeter.apache.org/</url>
+    <inceptionYear>1998</inceptionYear>
+    <licenses>
+        <license>
+            <name>Apache 2</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
     <issueManagement>
         <system>bugzilla</system>
         <url>https://issues.apache.org/bugzilla/describecomponents.cgi?product=JMeter</url>
     </issueManagement>
-    <inceptionYear>1998</inceptionYear>
     <scm>
         <connection>http://svn.apache.org/repos/asf/jmeter/trunk/</connection>
         <developerConnection>https://svn.apache.org/repos/asf/jmeter/trunk/</developerConnection>
         <url>http://svn.apache.org/viewvc/jmeter/trunk/</url>
     </scm>
+    <developers>
+        <developer>
+            <id>SebastianBazley</id>
+            <name>SebastianBazley</name>
+            <roles>
+                <role>Owner</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>JordiSalvat</id>
+            <name>JordiSalvat</name>
+            <roles>
+                <role>Committer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>MikeStover</id>
+            <name>MikeStover</name>
+            <roles>
+                <role>Committer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>OliverRossmueller</id>
+            <name>OliverRossmueller</name>
+            <roles>
+                <role>Committer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>WolframRittmeyer</id>
+            <name>WolframRittmeyer</name>
+            <roles>
+                <role>Committer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>DrewGulino</id>
+            <name>DrewGulino</name>
+            <roles>
+                <role>Committer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>MichalKostrzewa</id>
+            <name>MichalKostrzewa</name>
+            <roles>
+                <role>Committer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>KeithCassell</id>
+            <name>KeithCassell</name>
+            <roles>
+                <role>Committer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>JamesBoutcher</id>
+            <name>JamesBoutcher</name>
+            <roles>
+                <role>Committer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>JeremyArnold</id>
+            <name>JeremyArnold</name>
+            <roles>
+                <role>Committer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>ThadSmith</id>
+            <name>ThadSmith</name>
+            <roles>
+                <role>Committer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>PeterLin</id>
+            <name>PeterLin</name>
+            <roles>
+                <role>Committer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>ElanChezhiyan</id>
+            <name>ElanChezhiyan</name>
+            <roles>
+                <role>Committer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>AlfHogemark</id>
+            <name>AlfHogemark</name>
+            <roles>
+                <role>Committer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>Milamber</id>
+            <name>Milamber</name>
+            <roles>
+                <role>Committer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>Philippe Mouawad</id>
+            <name>Philippe Mouawad</name>
+            <roles>
+                <role>Committer</role>
+            </roles>
+        </developer>
+    </developers>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -444,15 +569,15 @@ under the License.
         </repository>
     </repositories>
 
-    <!--<distributionManagement>-->
-    <!--<snapshotRepository>-->
-    <!--<id></id>-->
-    <!--<url></url>-->
-    <!--</snapshotRepository>-->
-    <!--<repository>-->
-    <!--<id></id>-->
-    <!--<url></url>-->
-    <!--</repository>-->
-    <!--</distributionManagement>-->
+    <distributionManagement>
+        <snapshotRepository>
+            <id>snapshot</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        </snapshotRepository>
+        <repository>
+            <id>release</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
 
 </project>
