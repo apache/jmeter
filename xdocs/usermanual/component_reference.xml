@@ -2625,11 +2625,16 @@ know for sure is to use a profiling tool.</p>
 </description>
 </component>
 
-<component name="Aggregate Graph" index="&sect-num;.3.12"  width="839" height="770" screenshot="aggregate_graph.png">
+<component name="Aggregate Graph" index="&sect-num;.3.12"  width="905" height="657" screenshot="aggregate_graph.png">
 <description>The aggregate graph is similar to the aggregate report. The primary
 difference is the aggregate graph provides an easy way to generate bar graphs and save
-the graph as a PNG file. By default, the aggregate graph will generate a bar chart
-450 x 250 pixels.</description>
+the graph as a PNG file.</description>
+<div align="center">
+<p>
+    The figure below shows an example of settings to draw this graph.
+<figure width="903" height="653" image="aggregate_graph_settings.png">Aggregate graph settings</figure>
+</p>
+</div>
 </component>
 
 <component name="Mailer Visualizer" index="&sect-num;.3.13"  width="645" height="345" screenshot="mailervisualizer.png">

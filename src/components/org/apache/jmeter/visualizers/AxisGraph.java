@@ -19,6 +19,7 @@ package org.apache.jmeter.visualizers;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.LayoutManager;
@@ -27,6 +28,7 @@ import java.math.BigDecimal;
 
 import javax.swing.JPanel;
 
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 import org.jCharts.axisChart.AxisChart;
@@ -42,6 +44,7 @@ import org.jCharts.properties.DataAxisProperties;
 import org.jCharts.properties.LabelAxisProperties;
 import org.jCharts.properties.LegendProperties;
 import org.jCharts.properties.PropertyException;
+import org.jCharts.properties.util.ChartFont;
 import org.jCharts.types.ChartType;
 
 /**
@@ -63,6 +66,22 @@ public class AxisGraph extends JPanel {
     protected int maxLength;
     protected String[] xAxisLabels;
     protected int width, height;
+    
+    protected int maxYAxisScale;
+
+    protected Font titleFont;
+
+    protected Font legendFont;
+
+    protected Color color;
+
+    protected Color foreColor;
+
+    protected boolean outlinesBarFlag = false;
+
+    protected boolean showGrouping = true;
+
+    protected int legendPlacement = LegendProperties.BOTTOM;
 
     /**
      *
@@ -122,13 +141,125 @@ public class AxisGraph extends JPanel {
         this.height = h;
     }
 
+    /**
+     * @return the maxYAxisScale
+     */
+    public int getMaxYAxisScale() {
+        return maxYAxisScale;
+    }
+
+    /**
+     * @param maxYAxisScale the maxYAxisScale to set
+     */
+    public void setMaxYAxisScale(int maxYAxisScale) {
+        this.maxYAxisScale = maxYAxisScale;
+    }
+
+    /**
+     * @return the color
+     */
+    public Color getColor() {
+        return color;
+    }
+
+    /**
+     * @param color the color to set
+     */
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    /**
+     * @return the foreColor
+     */
+    public Color getForeColor() {
+        return foreColor;
+    }
+
+    /**
+     * @param foreColor the foreColor to set
+     */
+    public void setForeColor(Color foreColor) {
+        this.foreColor = foreColor;
+    }
+
+    /**
+     * @return the titleFont
+     */
+    public Font getTitleFont() {
+        return titleFont;
+    }
+
+    /**
+     * @param titleFont the titleFont to set
+     */
+    public void setTitleFont(Font titleFont) {
+        this.titleFont = titleFont;
+    }
+
+    /**
+     * @return the legendFont
+     */
+    public Font getLegendFont() {
+        return legendFont;
+    }
+
+    /**
+     * @param legendFont the legendFont to set
+     */
+    public void setLegendFont(Font legendFont) {
+        this.legendFont = legendFont;
+    }
+
+    /**
+     * @return the legendPlacement
+     */
+    public int getLegendPlacement() {
+        return legendPlacement;
+    }
+
+    /**
+     * @param legendPlacement the legendPlacement to set
+     */
+    public void setLegendPlacement(int legendPlacement) {
+        this.legendPlacement = legendPlacement;
+    }
+
+    /**
+     * @return the outlinesBarFlag
+     */
+    public boolean isOutlinesBarFlag() {
+        return outlinesBarFlag;
+    }
+
+    /**
+     * @param outlinesBarFlag the outlinesBarFlag to set
+     */
+    public void setOutlinesBarFlag(boolean outlinesBarFlag) {
+        this.outlinesBarFlag = outlinesBarFlag;
+    }
+
+    /**
+     * @return the showGrouping
+     */
+    public boolean isShowGrouping() {
+        return showGrouping;
+    }
+
+    /**
+     * @param showGrouping the showGrouping to set
+     */
+    public void setShowGrouping(boolean showGrouping) {
+        this.showGrouping = showGrouping;
+    }
+
     @Override
-    public void paintComponent(Graphics g) {
+    public void paintComponent(Graphics graphics) {
         if (data != null && this.title != null && this.xAxisLabels != null &&
                 this.xAxisTitle != null && this.yAxisLabel != null &&
                 this.yAxisTitle != null) {
             drawSample(this.title,this.maxLength,this.xAxisLabels,this.xAxisTitle,
-                this.yAxisTitle,this.data,this.width,this.height,g);
+                this.yAxisTitle,this.data,this.width,this.height,this.color,this.legendFont,graphics);
         }
     }
 
@@ -154,8 +285,8 @@ public class AxisGraph extends JPanel {
     }
 
     private void drawSample(String _title, int _maxLength, String[] _xAxisLabels, String _xAxisTitle,
-            String _yAxisTitle, double[][] _data, int _width, int _height, Graphics g) {
-        double max = findMax(_data);
+            String _yAxisTitle, double[][] _data, int _width, int _height, Color color, Font font, Graphics g) {
+        double max = maxYAxisScale > 0 ? maxYAxisScale : findMax(_data); // define max scale y axis
         try {
             /** These controls are already done in StatGraphVisualizer
             if (_width == 0) {
@@ -170,7 +301,7 @@ public class AxisGraph extends JPanel {
             }
             // if the "Title of Graph" is empty, we can assume some default
             if (_title.length() == 0 ) {
-                _title = "Graph";
+                _title = JMeterUtils.getResString("aggregate_graph_title"); //$NON-NLS-1$
             }
             // if the labels are too long, they'll be "squeezed" to make the chart viewable.
             for (int i = 0; i < _xAxisLabels.length; i++) {
@@ -181,12 +312,19 @@ public class AxisGraph extends JPanel {
             DataSeries dataSeries = new DataSeries( _xAxisLabels, _xAxisTitle, _yAxisTitle, _title );
 
             String[] legendLabels= { yAxisLabel };
-            Paint[] paints= new Paint[] { Color.yellow };
+
             BarChartProperties barChartProperties= new BarChartProperties();
-            ValueLabelRenderer valueLabelRenderer = new ValueLabelRenderer(false, false, true, 0);
+            barChartProperties.setShowOutlinesFlag(outlinesBarFlag);
+            ValueLabelRenderer valueLabelRenderer = new ValueLabelRenderer(false, false, showGrouping, 0);
             valueLabelRenderer.setValueLabelPosition(ValueLabelPosition.AT_TOP);
             valueLabelRenderer.useVerticalLabels(true);
+            if (legendFont != null) {
+                valueLabelRenderer.setValueChartFont(new ChartFont(legendFont, new Color(foreColor.getRGB())));
+            }
+            
             barChartProperties.addPostRenderEventListener(valueLabelRenderer);
+
+            Paint[] paints = new Paint[] { color };
             AxisChartDataSet axisChartDataSet =
                 new AxisChartDataSet(
                         _data, legendLabels, paints, ChartType.BAR, barChartProperties );
@@ -195,7 +333,19 @@ public class AxisGraph extends JPanel {
             ChartProperties chartProperties= new ChartProperties();
             LabelAxisProperties xaxis = new LabelAxisProperties();
             DataAxisProperties yaxis = new DataAxisProperties();
+            yaxis.setUseCommas(showGrouping);
 
+            if (legendFont != null) {
+                yaxis.setAxisTitleChartFont(new ChartFont(legendFont, new Color(20)));
+                yaxis.setScaleChartFont(new ChartFont(legendFont, new Color(20)));
+                xaxis.setAxisTitleChartFont(new ChartFont(legendFont, new Color(20)));
+                xaxis.setScaleChartFont(new ChartFont(legendFont, new Color(20)));
+            }
+            if (titleFont != null) {
+                chartProperties.setTitleFont(new ChartFont(titleFont, new Color(0)));
+            }
+
+            // Y Axis
             try {
                 BigDecimal round = new BigDecimal(max / 1000d);
                 round = round.setScale(0, BigDecimal.ROUND_UP);
@@ -210,6 +360,11 @@ public class AxisGraph extends JPanel {
             AxisProperties axisProperties= new AxisProperties(xaxis, yaxis);
             axisProperties.setXAxisLabelsAreVertical(true);
             LegendProperties legendProperties= new LegendProperties();
+            legendProperties.setBorderStroke(null);
+            legendProperties.setPlacement(legendPlacement);
+            if (legendFont != null) {
+                legendProperties.setFont(legendFont); //new Font("SansSerif", Font.PLAIN, 10)
+            }
             AxisChart axisChart = new AxisChart(
                     dataSeries, chartProperties, axisProperties,
                     legendProperties, _width, _height );
