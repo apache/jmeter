@@ -47,7 +47,7 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
     
     private transient Thread ownerThread;
 
-    public static final int DEFAULT_RMI_PORT =
+    private static final int DEFAULT_RMI_PORT =
         JMeterUtils.getPropDefault("server.rmi.port", 1099); // $NON-NLS-1$
 
     private static final int DEFAULT_LOCAL_PORT =
@@ -81,9 +81,9 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
     private void init() throws RemoteException {
         log.info("Starting backing engine on " + this.rmiPort);
         InetAddress localHost=null;
+        // Bug 47980 - allow override of local hostname
+        String host = System.getProperties().getProperty("java.rmi.server.hostname"); // $NON-NLS-1$
         try {
-            // Bug 47980 - allow override of local hostname
-            String host = System.getProperties().getProperty("java.rmi.server.hostname"); // $NON-NLS-1$
             if( host==null ) {
                 localHost = InetAddress.getLocalHost();
             } else {
@@ -94,7 +94,8 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
         }
         log.info("IP address="+localHost.getHostAddress());
         String hostName = localHost.getHostName();
-        if (localHost.isLoopbackAddress()){
+        // BUG 52469 : Allow loopback address for SSH Tunneling of RMI traffic
+        if (localHost.isLoopbackAddress() && host == null){
             throw new RemoteException("Cannot start. "+hostName+" is a loopback address.");
         }
         if (localHost.isSiteLocalAddress()){

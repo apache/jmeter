@@ -168,6 +168,7 @@ fix code which assumes that a new instance is created (i.e. when adding a sub-sa
 <li>Bug 49374 - Encoding of embedded element URLs depend on the file.encoding property</li>
 <li>Bug 52399 - URLRewritingModifier uses default file.encoding to match text content</li>
 <li>Bug 50438 - code calculates average with integer math, expecting double value</li>
+<li>Bug 52469 - Changes in Support of SSH-Tunneling of RMI traffic for Remote Testing</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
