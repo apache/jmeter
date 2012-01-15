@@ -42,6 +42,10 @@ public class HttpMirrorControl extends AbstractTestElement {
 
     public static final String PORT = "HttpMirrorControlGui.port"; // $NON-NLS-1$
 
+    public static final String MAX_POOL_SIZE = "HttpMirrorControlGui.maxPoolSize"; // $NON-NLS-1$
+
+    public static final int DEFAULT_MAX_POOL_SIZE = 10;
+
     public HttpMirrorControl() {
         initPort(DEFAULT_PORT);
     }
@@ -69,13 +73,31 @@ public class HttpMirrorControl extends AbstractTestElement {
     public String getPortString() {
         return getPropertyAsString(PORT);
     }
+    
+    /**
+     * @return Max Pool Size
+     */
+    public String getMaxPoolSizeAsString() {
+        return getPropertyAsString(MAX_POOL_SIZE);
+    }
+
+    private int getMaxPoolSize() {
+        return getPropertyAsInt(MAX_POOL_SIZE, DEFAULT_MAX_POOL_SIZE);
+    }
+    
+    /**
+     * @param maxPoolSize Max Thread Pool size
+     */
+    public void setMaxPoolSize(String maxPoolSize) {
+        setProperty(MAX_POOL_SIZE, maxPoolSize);
+    }
 
     public int getDefaultPort() {
         return DEFAULT_PORT;
     }
 
     public void startHttpMirror() {
-        server = new HttpMirrorServer(getPort());
+        server = new HttpMirrorServer(getPort(), getMaxPoolSize());
         server.start();
         GuiPackage instance = GuiPackage.getInstance();
         if (instance != null) {
