@@ -153,7 +153,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 
         GuiPackage.getInstance().setMainFrame(this);
         init();
-
+        initTransferHandler();
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
     }
 
@@ -406,6 +406,13 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
         setIconImage(JMeterUtils.getImage("jmeter.jpg").getImage());// $NON-NLS-1$
     }
 
+    /**
+     * Support for Test Plan Dnd
+     */
+	public void initTransferHandler() {
+    	this.setTransferHandler(new TopLevelTransferHandler());
+    }
+    
     public void setExtendedFrameTitle(String fname) {
         // file New operation may set to null, so just return app name
         if (fname == null) {
