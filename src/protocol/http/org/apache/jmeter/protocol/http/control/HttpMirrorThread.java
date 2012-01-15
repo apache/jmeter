@@ -38,7 +38,7 @@ import org.apache.oro.text.regex.Perl5Matcher;
  * Thread to handle one client request. Gets the request from the client and
  * sends the response back to the client.
  */
-public class HttpMirrorThread extends Thread {
+public class HttpMirrorThread implements Runnable {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final String ISO_8859_1 = "ISO-8859-1"; //$NON-NLS-1$
@@ -54,7 +54,6 @@ public class HttpMirrorThread extends Thread {
     /**
      * Main processing method for the HttpMirror object
      */
-    @Override
     public void run() {
         log.debug("Starting thread");
         BufferedInputStream in = null;

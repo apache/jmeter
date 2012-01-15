@@ -24,6 +24,7 @@ import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.Collection;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -50,6 +51,8 @@ public class HttpMirrorControlGui extends LogicControllerGui
 
     private JTextField portField;
 
+    private JTextField maxPoolSizeField;
+
     private JButton stop, start;
 
     private static final String ACTION_STOP = "stop"; // $NON-NLS-1$
@@ -57,6 +60,7 @@ public class HttpMirrorControlGui extends LogicControllerGui
     private static final String ACTION_START = "start"; // $NON-NLS-1$
 
     private HttpMirrorControl mirrorController;
+
 
     public HttpMirrorControlGui() {
         super();
@@ -83,6 +87,7 @@ public class HttpMirrorControlGui extends LogicControllerGui
         if (el instanceof HttpMirrorControl) {
             mirrorController = (HttpMirrorControl) el;
             mirrorController.setPort(portField.getText());
+            mirrorController.setMaxPoolSize(maxPoolSizeField.getText());
         }
     }
 
@@ -102,6 +107,7 @@ public class HttpMirrorControlGui extends LogicControllerGui
         super.configure(element);
         mirrorController = (HttpMirrorControl) element;
         portField.setText(mirrorController.getPortString());
+        maxPoolSizeField.setText(mirrorController.getMaxPoolSizeAsString());
         repaint();
     }
 
@@ -163,9 +169,21 @@ public class HttpMirrorControlGui extends LogicControllerGui
         label.setLabelFor(portField);
 
 
+        maxPoolSizeField = new JTextField(Integer.toString(HttpMirrorControl.DEFAULT_MAX_POOL_SIZE), 10);
+        maxPoolSizeField.setName(HttpMirrorControl.PORT);
+
+        JLabel mpsLabel = new JLabel(JMeterUtils.getResString("httpmirror_max_pool_size")); // $NON-NLS-1$
+        mpsLabel.setLabelFor(maxPoolSizeField);
+
         HorizontalPanel panel = new HorizontalPanel();
+        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+                JMeterUtils.getResString("httpmirror_settings"))); // $NON-NLS-1$
+        
         panel.add(label);
         panel.add(portField);
+
+        panel.add(mpsLabel);
+        panel.add(maxPoolSizeField);
 
         panel.add(Box.createHorizontalStrut(10));
 
@@ -176,5 +194,6 @@ public class HttpMirrorControlGui extends LogicControllerGui
     public void clearGui(){
         super.clearGui();
         portField.setText(HttpMirrorControl.DEFAULT_PORT_S);
+        maxPoolSizeField.setText(Integer.toString(HttpMirrorControl.DEFAULT_MAX_POOL_SIZE));
     }
 }
