@@ -28,8 +28,8 @@ import org.apache.jmeter.testbeans.BeanInfoSupport;
 public class KeystoreConfigBeanInfo extends BeanInfoSupport {
 
     private static final String ALIASES_GROUP = "aliases";
-    private static final String ALIAS_END_INDEX = "startIndex";
-    private static final String ALIAS_START_INDEX = "endIndex";
+    private static final String ALIAS_END_INDEX = "endIndex";
+    private static final String ALIAS_START_INDEX = "startIndex";
     private static final String PRELOAD = "preload";
 
     /**
