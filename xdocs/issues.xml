@@ -70,11 +70,13 @@ Use the checklist below to guide you.
 <li>Java version (output from java -version)</li>
 <li>OS version</li>
 <li>jmeter.log file (unlikely to contain sensitive information, but check before uploading)</li>
-<li>JMX file if relevant (redact any sensitive information first)</li>
+<li>JMX file if relevant (redact any sensitive information first), providing a simplified Test Plan (using DEBUG sampler) will ensure BUG is fixed much more rapidely than without it</li>
 <li>JTL file if relevant (may need to redact sensitive information)</li>
 <li>For a suspected bug, describe what you did, what happened, and how this differs from what you expected to happen.
-Does it happen every time?
+Does it happen every time?. 
 </li>
+<li>Add yourself in CC List to be notified when JMeter Team requires more information (in this case bug will be marked as NEEDINFO)</li>
+<li>Select accurately the IMPORTANCE level, ENHANCEMENT means it's not a BUG while others mean it's a BUG</li>
 <li>If you are providing a patch to fix a bug, please ensure it is in unified diff format.
 If using Eclipse, please set the patch root to "Project", not the default "Workspace" which is harder to apply.</li>
 <li>New source files can be provided as is; please ensure they have the standard Apache License header (as per other JMeter files).
