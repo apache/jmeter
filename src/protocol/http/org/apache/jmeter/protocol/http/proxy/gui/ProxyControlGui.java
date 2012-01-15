@@ -513,7 +513,11 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         JLabel matchlabel = new JLabel(JMeterUtils.getResString("proxy_httpsspoofing_match")); // $NON-NLS-1$
         matchlabel.setLabelFor(httpsMatch);
 
+        
         HorizontalPanel panel = new HorizontalPanel();
+        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+                JMeterUtils.getResString("proxy_general_settings"))); // $NON-NLS-1$
+
         panel.add(label);
         panel.add(portField);
 
