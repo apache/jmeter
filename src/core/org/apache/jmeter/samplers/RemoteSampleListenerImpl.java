@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Implementation of remote sampler listener, also supports TestListener
@@ -35,9 +36,12 @@ public class RemoteSampleListenerImpl extends java.rmi.server.UnicastRemoteObjec
     private final TestListener testListener;
 
     private final SampleListener sampleListener;
+    
+    private static final int DEFAULT_LOCAL_PORT = 
+        JMeterUtils.getPropDefault("client.rmi.localport", 0); // $NON-NLS-1$
 
     public RemoteSampleListenerImpl(Object listener) throws RemoteException {
-        super();
+        super(DEFAULT_LOCAL_PORT);
         if (listener instanceof TestListener) {
             testListener = (TestListener) listener;
         } else {
