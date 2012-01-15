@@ -23,12 +23,24 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Insets;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
@@ -57,6 +69,7 @@ import javax.swing.tree.TreePath;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
+import org.apache.jmeter.gui.action.LoadDraggedFile;
 import org.apache.jmeter.gui.tree.JMeterCellRenderer;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.util.JMeterMenuBar;
@@ -67,13 +80,15 @@ import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * The main JMeter frame, containing the menu bar, test tree, and an area for
  * JMeter component GUIs.
  *
  */
-public class MainFrame extends JFrame implements TestListener, Remoteable {
+public class MainFrame extends JFrame implements TestListener, Remoteable, DropTargetListener {
 
     private static final long serialVersionUID = 240L;
 
@@ -88,6 +103,8 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
     // Allow display/hide toolbar
     private static final boolean DISPLAY_TOOLBAR =
             JMeterUtils.getPropDefault("jmeter.toolbar.display", true); // $NON-NLS-1$
+
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     /** The menu bar. */
     private JMeterMenuBar menuBar;
@@ -153,7 +170,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 
         GuiPackage.getInstance().setMainFrame(this);
         init();
-        initTransferHandler();
+        initTopLevelDndHandler();
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
     }
 
@@ -408,9 +425,10 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 
     /**
      * Support for Test Plan Dnd
+     * see BUG 52281 (when JDK6 will be minimum JDK target)
      */
-	public void initTransferHandler() {
-    	this.setTransferHandler(new TopLevelTransferHandler());
+	public void initTopLevelDndHandler() {
+	    new DropTarget(this, this);
     }
     
     public void setExtendedFrameTitle(String fname) {
@@ -564,5 +582,61 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
         public void windowClosing(WindowEvent event) {
             ActionRouter.getInstance().actionPerformed(new ActionEvent(this, event.getID(), ActionNames.EXIT));
         }
+    }
+
+    public void dragEnter(DropTargetDragEvent dtde) {
+        // NOOP        
+    }
+
+    public void dragExit(DropTargetEvent dte) {
+        // NOOP        
+    }
+
+    public void dragOver(DropTargetDragEvent dtde) {
+        // NOOP
+    }
+
+    /**
+     * Handler of Top level Dnd
+     */
+    public void drop(DropTargetDropEvent dtde) {
+        try {
+            Transferable tr = dtde.getTransferable();
+            DataFlavor[] flavors = tr.getTransferDataFlavors();
+            for (int i = 0; i < flavors.length; i++) {
+                // Check for file lists specifically
+                if (flavors[i].isFlavorJavaFileListType()) {
+                    dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
+                    try {
+                        @SuppressWarnings("unchecked")
+                        List<File> files = (List<File>) 
+                                tr.getTransferData(DataFlavor.javaFileListFlavor);
+                        if(files.isEmpty()) {
+                            return;
+                        }
+                        File file = files.get(0);
+                        if(!file.getName().endsWith(".jmx")) {
+                            log.warn("Importing file:" + file.getName()+ "from DnD failed because file extension does not end with .jmx");
+                            return;
+                        }
+                        
+                        ActionEvent fakeEvent = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, ActionNames.OPEN);
+                        LoadDraggedFile.loadProject(fakeEvent, file);
+                    } finally {
+                        dtde.dropComplete(true);
+                    }
+                    return;
+                }
+            }
+        } catch (UnsupportedFlavorException e) {
+            log.warn("Dnd failed" , e);
+        } catch (IOException e) {
+            log.warn("Dnd failed" , e);
+        }
+        
+    }
+
+    public void dropActionChanged(DropTargetDragEvent dtde) {
+        // NOOP
     }
 }
