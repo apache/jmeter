@@ -153,9 +153,10 @@ Use the "-s" option with the jmeter startup script ("jmeter -s").</p>
 </subsection>
 <subsection name="&sect-num;.2 Tips" anchor="tips">
 <p>
-JMeter/RMI requires a connection from the client to the server. This will use the port you chose, default 1099.
-JMeter/RMI also requires a reverse connection in order to return sample results from the server to the client.
-This will use a high-numbered port.
+JMeter/RMI requires a connection from the client to the server. This will use the port you chose, default 1099.<br/>
+JMeter/RMI also requires a reverse connection in order to return sample results from the server to the client.<br/>
+This will use a high-numbered port. <br/>
+This port can be controlled by jmeter property called client.rmi.localport in jmeter.properties.<br/>
 If there are any firewalls or other network filters between JMeter client and server,
 you will need to make sure that they are set up to allow the connections through.
 If necessary, use monitoring software to show what traffic is being generated.
@@ -184,6 +185,14 @@ Alternatively the properties can be defined in the system.properties file.
     <li> `dirname $0`/jmeter $HOST -s "$@"</li>
 </ul>
 <p>Also create a policy file and add [computer_name][computer_domain] line to /etc/hosts.</p>
+
+<p>In order to better support SSH-tunneling of the RMI communication channels used
+in remote testing, since JMeter 2.6:</p>
+<ul>
+<li>a new property "client.rmi.localport" can be set to control the RMI port used by the RemoteSampleListenerImpl</li>
+<li>To support tunneling RMI traffic over an SSH tunnel as the remote endpoint using a port on the local machine,
+ loopback interface is now allowed to be used if it has been specified directly using the Java System Property "java.rmi.server.hostname" parameter.</li>
+</ul>
 </subsection>
 <subsection name="&sect-num;.3 Using a different port" anchor="portchange">
 <p>By default, JMeter uses the standard RMI port 1099. It is possible to change this. For this to work successfully, all the following need to agree:</p>
