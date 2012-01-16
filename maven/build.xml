@@ -18,6 +18,10 @@
 <project name="JMeter" default="default" basedir=".">
     <description>
         create maven artifacts yadda yadda
+
+        TODO
+
+        This should depend upon the main ant build.xml to ensure that the jars have been created.
     </description>
 
     <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
@@ -40,38 +44,48 @@
                 <filter token="MAVEN.DEPLOY.VERSION" value="${maven.deploy.version}"/>
             </filterset>
         </copy>
-        <exec executable="mvn" failonerror="true">
-            <arg value="deploy:deploy-file"/>
-            <arg value="-DpomFile=${jorphan.name}.pom.tmp"/>
-            <arg value="-Dfile=${relative.jorphan.directory}/${jorphan.name}.jar"/>
-            <arg value="-Durl=${url}"/>
-            <!-- Enable maven debug output -->
-            <!--<arg value="-X"/>-->
-        </exec>
+
+        <if>
+            <equals arg1="${deploy.jars}" arg2="true"/>
+            <then>
+                <exec executable="mvn" failonerror="true">
+                    <arg value="deploy:deploy-file"/>
+                    <arg value="-DpomFile=${jorphan.name}.pom.tmp"/>
+                    <arg value="-Dfile=${relative.jorphan.directory}/${jorphan.name}.jar"/>
+                    <arg value="-Durl=${url}"/>
+                    <!-- Enable maven debug output -->
+                    <!--<arg value="-X"/>-->
+                </exec>
+            </then>
+        </if>
+
         <delete file="${jorphan.name}.pom.tmp"/>
     </target>
 
     <target name="deploy.components">
         <propertycopy property="component.name" from="component.${component.id}.name"/>
+
         <!--replace the version in the pom-->
         <copy file="${component.name}.pom" tofile="${component.name}.pom.tmp">
             <filterset>
                 <filter token="MAVEN.DEPLOY.VERSION" value="${maven.deploy.version}"/>
             </filterset>
         </copy>
-        <!--<if>-->
-        <!--<exec-->
-        <!---->
-        <!--</if>-->
 
-        <exec executable="mvn" failonerror="true">
-            <arg value="deploy:deploy-file"/>
-            <arg value="-DpomFile=${component.name}.pom.tmp"/>
-            <arg value="-Dfile=${relative.jmeter.component.directory}/${component.name}.jar"/>
-            <arg value="-Durl=${url}"/>
-            <!-- Enable maven debug output -->
-            <!--<arg value="-X"/>-->
-        </exec>
+        <if>
+            <equals arg1="${deploy.jars}" arg2="true"/>
+            <then>
+                <exec executable="mvn" failonerror="true">
+                    <arg value="deploy:deploy-file"/>
+                    <arg value="-DpomFile=${component.name}.pom.tmp"/>
+                    <arg value="-Dfile=${relative.jmeter.component.directory}/${component.name}.jar"/>
+                    <arg value="-Durl=${url}"/>
+                    <!-- Enable maven debug output -->
+                    <!--<arg value="-X"/>-->
+                </exec>
+            </then>
+        </if>
+
         <delete file="${component.name}.pom.tmp"/>
     </target>
 
