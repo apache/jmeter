@@ -97,7 +97,10 @@ public class TestElementConverter extends AbstractCollectionConverter {
                 reader.moveUp();
             }
             return el;
-        } catch (Exception e) {
+        } catch (InstantiationException e) {
+            log.error("TestElement not instantiable: " + type, e);
+            return null;
+        } catch (IllegalAccessException e) {
             log.error("TestElement not instantiable: " + type, e);
             return null;
         }
