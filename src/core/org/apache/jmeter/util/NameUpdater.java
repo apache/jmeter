@@ -99,6 +99,13 @@ public final class NameUpdater {
         }
     }
 
+    /**
+     * Looks up the class name; if that does not exist in the map, 
+     * then defaults to the input name.
+     * 
+     * @param className the classname from the script file
+     * @return the class name to use, possibly updated.
+     */
     public static String getCurrentName(String className) {
         if (nameMap.containsKey(className)) {
             String newName = nameMap.getProperty(className);
@@ -107,6 +114,7 @@ public final class NameUpdater {
         }
         return className;
     }
+
     /**
      * Looks up test element / gui class combination; if that
      * does not exist in the map, then defaults to getCurrentName.
@@ -116,7 +124,7 @@ public final class NameUpdater {
      * @return new test class name
      */
 
-    // TODO Not used anywhere , see BUG 52466
+    // TODO Not used anywhere , see BUG 52466 (previously used by OldSaveService)
     public static String getCurrentTestName(String testClassName, String guiClassName) {
         String key = testClassName + "|" + guiClassName;
         if (nameMap.containsKey(key)) {
@@ -127,7 +135,15 @@ public final class NameUpdater {
         return getCurrentName(testClassName);
     }
 
-    // TODO Not used anywhere , see BUG 52466
+    /**
+     * Looks up class name / property name combination; if that
+     * does not exist in the map, then defaults to input property name.
+     *
+     * @param propertyName - property name to check
+     * @param className - class name containing the property
+     * @return possibly updated property name
+     */
+    // TODO Not used anywhere , see BUG 52466 (previously used by OldSaveService)
     public static String getCurrentName(String propertyName, String className) {
         String key = className + "/" + propertyName;
         if (nameMap.containsKey(key)) {
@@ -138,7 +154,16 @@ public final class NameUpdater {
         return propertyName;
     }
 
-    // TODO Not used anywhere , see BUG 52466
+    /**
+     * Looks up class name . property name / value combination;
+     * if that does not exist in the map, returns the original value.
+     * 
+     * @param value the value to be checked
+     * @param propertyName the name of the property
+     * @param className the class containing the propery.
+     * @return the value, updated if necessary
+     */
+    // TODO Not used anywhere , see BUG 52466 (previously used by OldSaveService)
     public static String getCurrentName(String value, String propertyName, String className) {
         String key = className + "." + propertyName + "/" + value;
         if (nameMap.containsKey(key)) {
