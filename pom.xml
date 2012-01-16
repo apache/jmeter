@@ -21,14 +21,14 @@ under the License.
     <parent>
         <artifactId>apache</artifactId>
         <groupId>org.apache</groupId>
-        <version>7</version>
+        <version>9</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.jmeter</groupId>
     <artifactId>ApacheJMeter_parent</artifactId>
     <packaging>pom</packaging>
     <name>Apache JMeter</name>
-    <version>SNAPSHOT</version>
+    <version>2.6-SNAPSHOT</version>
     <description>Apache JMeter is open source software, a 100% pure Java desktop application designed to load test functional behavior and measure performance. It was originally designed for testing Web Applications but has since expanded to other test functions.</description>
     <url>http://jmeter.apache.org/</url>
     <issueManagement>
