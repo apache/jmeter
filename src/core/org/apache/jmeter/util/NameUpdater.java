@@ -117,7 +117,7 @@ public final class NameUpdater {
 
     /**
      * Looks up test element / gui class combination; if that
-     * does not exist in the map, then defaults to getCurrentName.
+     * does not exist in the map, then defaults to getCurrentName(testClassName).
      *
      * @param testClassName - test element class name
      * @param guiClassName - associated gui class name
