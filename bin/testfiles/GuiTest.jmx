@@ -642,17 +642,12 @@
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
               <collectionProp name="Arguments.arguments"/>
             </elementProp>
-            <stringProp name="AccessLogSampler.parser_class_name">org.apache.jmeter.protocol.http.util.accesslog.TCLogParser</stringProp>
-            <boolProp name="HTTPSampler.image_parser">false</boolProp>
-            <intProp name="HTTPSampler.port">80</intProp>
             <stringProp name="parserClassName">org.apache.jmeter.protocol.http.util.accesslog.TCLogParser</stringProp>
             <stringProp name="portString"></stringProp>
             <stringProp name="logFile"></stringProp>
-            <stringProp name="HTTPSampler.domain"></stringProp>
             <stringProp name="domain"></stringProp>
             <stringProp name="AccessLogSampler.generator_class_name">org.apache.jmeter.protocol.http.util.accesslog.StandardGenerator</stringProp>
             <boolProp name="imageParsing">false</boolProp>
-            <stringProp name="AccessLogSampler.log_file"></stringProp>
           </AccessLogSampler>
           <hashTree/>
         </hashTree>

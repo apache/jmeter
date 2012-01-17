@@ -49,9 +49,12 @@ public class LongPropertyConverter implements Converter {
     }
 
     /** {@inheritDoc} */
-    public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext arg1) {
-        LongProperty prop = new LongProperty(ConversionHelp.decode(reader.getAttribute(ConversionHelp.ATT_NAME)), Long.parseLong(reader
-                .getValue()));
+    public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
+        final String name = ConversionHelp.getPropertyName(reader, context);
+        if (name == null) {
+            return null;
+        }
+        LongProperty prop = new LongProperty(name, Long.parseLong(reader.getValue()));
         return prop;
     }
 }

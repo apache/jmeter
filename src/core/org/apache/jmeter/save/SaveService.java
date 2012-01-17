@@ -61,9 +61,12 @@ public class SaveService {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    // Names of DataHolder entries
+    // Names of DataHolder entries for JTL processing
     public static final String SAMPLE_EVENT_OBJECT = "SampleEvent"; // $NON-NLS-1$
     public static final String RESULTCOLLECTOR_HELPER_OBJECT = "ResultCollectorHelper"; // $NON-NLS-1$
+
+    // Names of DataHolder entries for JMX processing
+    public static final String TEST_CLASS_NAME = "TestClassName"; // $NON-NLS-1$
 
     private static final class XStreamWrapper extends XStream {
         private XStreamWrapper(ReflectionProvider reflectionProvider) {

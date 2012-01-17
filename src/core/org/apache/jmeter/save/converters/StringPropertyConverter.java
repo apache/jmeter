@@ -49,9 +49,13 @@ public class StringPropertyConverter implements Converter {
     }
 
     /** {@inheritDoc} */
-    public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext arg1) {
-        StringProperty prop = new StringProperty(ConversionHelp.decode(reader.getAttribute(ConversionHelp.ATT_NAME)), ConversionHelp
-                .decode(reader.getValue()));
+    public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
+        final String name = ConversionHelp.getPropertyName(reader, context);
+        if (name == null) {
+            return null;
+        }
+        final String value = ConversionHelp.getPropertyValue(reader, context, name);
+        StringProperty prop = new StringProperty(name, value);
         return prop;
     }
 }
