@@ -28,8 +28,6 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 public class BooleanPropertyConverter implements Converter {
 
-    private static final String ATT_NAME = "name"; // $NON-NLS-1$
-
     /**
      * Returns the converter version; used to check for possible
      * incompatibilities
@@ -46,14 +44,14 @@ public class BooleanPropertyConverter implements Converter {
     /** {@inheritDoc} */
     public void marshal(Object obj, HierarchicalStreamWriter writer, MarshallingContext arg2) {
         BooleanProperty prop = (BooleanProperty) obj;
-        writer.addAttribute(ATT_NAME, ConversionHelp.encode(prop.getName()));
+        writer.addAttribute(ConversionHelp.ATT_NAME, ConversionHelp.encode(prop.getName()));
         writer.setValue(prop.getStringValue());
 
     }
 
     /** {@inheritDoc} */
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext arg1) {
-        BooleanProperty prop = new BooleanProperty(ConversionHelp.decode(reader.getAttribute(ATT_NAME)), Boolean.valueOf(
+        BooleanProperty prop = new BooleanProperty(ConversionHelp.decode(reader.getAttribute(ConversionHelp.ATT_NAME)), Boolean.valueOf(
                 reader.getValue()).booleanValue());
         return prop;
     }
