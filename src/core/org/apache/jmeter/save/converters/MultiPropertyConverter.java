@@ -33,8 +33,6 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 public class MultiPropertyConverter extends AbstractCollectionConverter {
 
-    private static final String ATT_NAME = "name";  //$NON-NLS-1$
-
     /**
      * Returns the converter version; used to check for possible
      * incompatibilities
@@ -53,7 +51,7 @@ public class MultiPropertyConverter extends AbstractCollectionConverter {
     @Override
     public void marshal(Object arg0, HierarchicalStreamWriter writer, MarshallingContext context) {
         MultiProperty prop = (MultiProperty) arg0;
-        writer.addAttribute(ATT_NAME, ConversionHelp.encode(prop.getName()));
+        writer.addAttribute(ConversionHelp.ATT_NAME, ConversionHelp.encode(prop.getName()));
         PropertyIterator iter = prop.iterator();
         while (iter.hasNext()) {
             writeItem(iter.next(), context, writer);
@@ -65,7 +63,7 @@ public class MultiPropertyConverter extends AbstractCollectionConverter {
     @Override
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
         MultiProperty prop = (MultiProperty) createCollection(context.getRequiredType());
-        prop.setName(ConversionHelp.decode(reader.getAttribute(ATT_NAME)));
+        prop.setName(ConversionHelp.decode(reader.getAttribute(ConversionHelp.ATT_NAME)));
         while (reader.hasMoreChildren()) {
             reader.moveDown();
             JMeterProperty subProp = (JMeterProperty) readItem(reader, context, prop);
