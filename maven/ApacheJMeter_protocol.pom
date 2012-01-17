@@ -21,22 +21,11 @@ under the License.
     <parent>
         <artifactId>ApacheJMeter_parent</artifactId>
         <groupId>org.apache.jmeter</groupId>
-        <version>SNAPSHOT</version>
+        <version>@MAVEN.DEPLOY.VERSION@</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>ApacheJMeter_protocol</artifactId>
     <name>Apache JMeter Protocol</name>
     <packaging>pom</packaging>
-
-    <modules>
-        <module>ftp</module>
-        <module>http</module>
-        <module>java</module>
-        <module>jdbc</module>
-        <module>jms</module>
-        <module>ldap</module>
-        <module>mail</module>
-        <module>tcp</module>
-    </modules>
 
 </project>

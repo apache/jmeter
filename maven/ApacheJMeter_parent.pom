@@ -19,18 +19,12 @@ under the License.
 
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-    <parent>
-        <artifactId>apache</artifactId>
-        <groupId>org.apache</groupId>
-        <version>7</version>
-    </parent>
-
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.jmeter</groupId>
     <artifactId>ApacheJMeter_parent</artifactId>
-    <version>SNAPSHOT</version>
+    <version>@MAVEN.DEPLOY.VERSION@</version>
     <packaging>pom</packaging>
-    
+
     <name>Apache JMeter</name>
     <description>Apache JMeter is open source software, a 100% pure Java desktop application designed to load test functional behavior and measure performance. It was originally designed for testing Web Applications but has since expanded to other test functions.</description>
     <url>http://jmeter.apache.org/</url>
@@ -169,78 +163,7 @@ under the License.
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
     </properties>
-
-    <modules>
-        <module>src/jorphan</module>
-        <module>src/core</module>
-        <module>src/components</module>
-        <module>src/functions</module>
-        <module>src/reports</module>
-        <module>src/protocol</module>
-        <module>src/junit</module>
-        <module>src/monitor</module>
-        <module>src/examples</module>
-    </modules>
-
-    <build>
-        <!-- override maven conventions to match jMeter ant-build ones -->
-        <sourceDirectory>src</sourceDirectory>
-        <testSourceDirectory>test</testSourceDirectory>
-        <resources>
-            <resource>
-                <directory>src</directory>
-                <excludes>
-                    <exclude>**/*.java</exclude>
-                    <exclude>**/target/*</exclude>
-                </excludes>
-            </resource>
-        </resources>
-        <testResources>
-            <testResource>
-                <directory>test</directory>
-                <excludes>
-                    <exclude>**/*.java</exclude>
-                    <exclude>**/target/*</exclude>
-                </excludes>
-            </testResource>
-        </testResources>
-
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.1</version>
-                <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>2.1.2</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                        <configuration>
-                            <excludes>
-                                <exclude>**/*.jar</exclude>
-                                <exclude>**/*.iml</exclude>
-                                <exclude>**/*.zip</exclude>
-                                <exclude>**/target/**</exclude>
-                            </excludes>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 
     <dependencies>
         <dependency>
@@ -570,13 +493,10 @@ under the License.
     </repositories>
 
     <distributionManagement>
-        <snapshotRepository>
-            <id>snapshot</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-        </snapshotRepository>
         <repository>
             <id>release</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <name>Release Repository</name>
+            <url>@URL@</url>
         </repository>
     </distributionManagement>
 
