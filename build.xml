@@ -73,12 +73,13 @@
     <available file="${maven.ant.tasks.dir}/${maven.ant.tasks.filename}" property="maven.ant.tasks.file.exists"/>
 
     <target name="get.maven.ant.tasks" unless="maven.ant.tasks.file.exists">
+        <echo level="info">Downloading maven-ant-tasks...</echo>
         <mkdir dir="${maven.ant.tasks.dir}"/>
         <get src="${maven.ant.tasks.remote.file}" dest="${maven.ant.tasks.dir}"/>
     </target>
 
     <target name="download_jars" description="Download all the dependant jars" depends="get.maven.ant.tasks,make.required.directories" xmlns:artifact="urn:maven-artifact-ant">
-
+        <echo level="info">Downloading dependecies...</echo>
         <path id="maven.ant.tasks.classpath" path="${maven.ant.tasks.dir}/${maven.ant.tasks.filename}"/>
         <typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="urn:maven-artifact-ant" classpathref="maven.ant.tasks.classpath"/>
 
@@ -103,6 +104,7 @@
     </target>
 
     <target name="make.required.directories" description="Create the lib directory structure">
+        <echo level="info">Creating the lib directory structure.</echo>
         <mkdir dir="${lib.dir}"/>
         <mkdir dir="${lib.opt}"/>
         <mkdir dir="${lib.api}"/>
@@ -365,125 +367,64 @@
         <include name="README"/>
     </patternset>
 
-    <!-- Jars for binary release -->
-    <patternset id="external.jars">
-        <include name="${lib.dir}/${activation.jar}"/>
-        <include name="${lib.dir}/${apache-bsf.jar}"/>
-        <include name="${lib.dir}/${apache-jsr223-api.jar}"/>
-        <include name="${lib.dir}/${beanshell.jar}"/>
-        <include name="${lib.dir}/${avalon-framework.jar}"/>
-        <include name="${lib.dir}/${xmlgraphics-commons.jar}"/>
-        <include name="${lib.dir}/${commons-codec.jar}"/>
-        <include name="${lib.dir}/${commons-collections.jar}"/>
-        <include name="${lib.dir}/${commons-httpclient.jar}"/>
-        <include name="${lib.dir}/${commons-io.jar}"/>
-        <include name="${lib.dir}/${commons-jexl.jar}"/>
-        <include name="${lib.dir}/${commons-jexl2.jar}"/>
-        <include name="${lib.dir}/${commons-lang.jar}"/>
-        <include name="${lib.dir}/${commons-logging.jar}"/>
-        <include name="${lib.dir}/${commons-net.jar}"/>
-        <include name="${lib.dir}/${excalibur-datasource.jar}"/>
-        <include name="${lib.dir}/${excalibur-instrument.jar}"/>
-        <include name="${lib.dir}/${excalibur-logger.jar}"/>
-        <include name="${lib.dir}/${excalibur-pool.jar}"/>
-        <include name="${lib.dir}/${htmllexer.jar}"/>
-        <include name="${lib.dir}/${htmlparser.jar}"/>
-        <include name="${lib.dir}/${httpclient.jar}"/>
-        <include name="${lib.dir}/${httpmime.jar}"/>
-        <include name="${lib.dir}/${httpcore.jar}"/>
-        <include name="${lib.dir}/${jakarta-oro.jar}"/>
-        <include name="${lib.dir}/${javamail.jar}"/>
-        <include name="${lib.dir}/${jcharts.jar}"/>
-        <include name="${lib.dir}/${jdom.jar}"/>
-        <include name="${lib.dir}/${jms.jar}"/>
-        <include name="${lib.dir}/${js_rhino.jar}"/>
-        <include name="${lib.dir}/${junit.jar}"/>
-        <include name="${lib.dir}/${logkit.jar}"/>
-        <include name="${lib.dir}/${serializer.jar}"/>
-        <include name="${lib.dir}/${soap.jar}"/>
-        <include name="${lib.dir}/${tidy.jar}"/>
-        <include name="${lib.dir}/${xalan.jar}"/>
-        <include name="${lib.dir}/${xerces.jar}"/>
-        <include name="${lib.dir}/${xml-apis.jar}"/>
-        <include name="${lib.dir}/${xpp3.jar}"/>
-        <include name="${lib.dir}/${xstream.jar}"/>
-    </patternset>
+    <target name="set.jar.locations" depends="get.maven.ant.tasks" xmlns:artifact="urn:maven-artifact-ant">
 
-    <!--
-    Optional jars, not included in distribution.
-    Any such jars need to be downloaded separately.
-    These can be put into ${lib.dir} or ${lib.opt}
-    - both of these are included in the build classpath
+        <path id="maven.ant.tasks.classpath" path="${maven.ant.tasks.dir}/${maven.ant.tasks.filename}"/>
+        <typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="urn:maven-artifact-ant" classpathref="maven.ant.tasks.classpath"/>
 
-    Any jars put into ${lib.dir} will be included in
-    the classpath used by JMeter to load classes.
-    Jars in ${lib.opt} are NOT normally included by JMeter.
+        <!-- Jars for binary release -->
+        <artifact:pom id="jmeter.core.pom" file="${pom.listing.core.dependencies}"/>
+        <artifact:dependencies filesetId="jmeter.core.dependencies" pomRefId="jmeter.core.pom" />
 
-    Placing an optional jar in ${lib.opt} means that it
-    will be included in the build classpath, but it will
-    not be included in the runtime classpath. This is intended
-    for testing JMeter without the optional Jar file(s).
-    -->
+        <!--<patternset id="external.jars" refid="jmeter.core.dependencies"/>-->
 
-    <!-- Build classpath (includes the optional jar directory) -->
-    <path id="classpath">
-        <!-- Externally produced jars -->
-        <pathelement location="${lib.dir}/${activation.jar}"/>
-        <pathelement location="${lib.dir}/${apache-bsf.jar}"/>
-        <pathelement location="${lib.dir}/${apache-jsr223-api.jar}"/>
-        <pathelement location="${lib.dir}/${beanshell.jar}"/>
-        <pathelement location="${lib.dir}/${avalon-framework.jar}"/>
-        <pathelement location="${lib.dir}/${xmlgraphics-commons.jar}"/>
-        <pathelement location="${lib.dir}/${commons-codec.jar}"/>
-        <pathelement location="${lib.dir}/${commons-collections.jar}"/>
-        <pathelement location="${lib.dir}/${commons-httpclient.jar}"/>
-        <pathelement location="${lib.dir}/${commons-io.jar}"/>
-        <pathelement location="${lib.dir}/${commons-jexl.jar}"/>
-        <pathelement location="${lib.dir}/${commons-jexl2.jar}"/>
-        <pathelement location="${lib.dir}/${commons-lang.jar}"/>
-        <pathelement location="${lib.dir}/${commons-logging.jar}"/>
-        <pathelement location="${lib.dir}/${commons-net.jar}"/>
-        <pathelement location="${lib.dir}/${excalibur-datasource.jar}"/>
-        <pathelement location="${lib.dir}/${excalibur-instrument.jar}"/>
-        <pathelement location="${lib.dir}/${excalibur-logger.jar}"/>
-        <pathelement location="${lib.dir}/${excalibur-pool.jar}"/>
-        <pathelement location="${lib.dir}/${htmllexer.jar}"/>
-        <pathelement location="${lib.dir}/${htmlparser.jar}"/>
-        <pathelement location="${lib.dir}/${httpclient.jar}"/>
-        <pathelement location="${lib.dir}/${httpmime.jar}"/>
-        <pathelement location="${lib.dir}/${httpcore.jar}"/>
-        <pathelement location="${lib.dir}/${jakarta-oro.jar}"/>
-        <pathelement location="${lib.dir}/${javamail.jar}"/>
-        <pathelement location="${lib.dir}/${jcharts.jar}"/>
-        <pathelement location="${lib.dir}/${jdom.jar}"/>
-        <pathelement location="${lib.dir}/${jms.jar}"/>
-        <pathelement location="${lib.dir}/${js_rhino.jar}"/>
-        <pathelement location="${lib.dir}/${junit.jar}"/>
-        <pathelement location="${lib.dir}/${logkit.jar}"/>
-        <pathelement location="${lib.dir}/${serializer.jar}"/>
-        <pathelement location="${lib.dir}/${soap.jar}"/>
-        <pathelement location="${lib.dir}/${tidy.jar}"/>
-        <pathelement location="${lib.dir}/${xalan.jar}"/>
-        <pathelement location="${lib.dir}/${xerces.jar}"/>
-        <pathelement location="${lib.dir}/${xml-apis.jar}"/>
-        <pathelement location="${lib.dir}/${xpp3.jar}"/>
-        <pathelement location="${lib.dir}/${xstream.jar}"/>
-        <!-- Generated jars -->
-        <fileset dir="${lib.dir}" includes="jorphan.jar"/>
-        <!-- API-only jars-->
-        <fileset dir="${lib.api}" includes="*.jar"/>
-        <!-- Optional jars -->
-        <fileset dir="${lib.opt}" includes="*.jar"/>
-    </path>
+        <!--
+        Optional jars, not included in distribution.
+        Any such jars need to be downloaded separately.
+        These can be put into ${lib.dir} or ${lib.opt}
+        - both of these are included in the build classpath
 
-    <!-- Anakia classpath -->
-    <path id="anakia.classpath">
-        <pathelement location="${lib.doc}/${velocity.jar}"/>
-        <pathelement location="${lib.dir}/${jdom.jar}"/>
-        <pathelement location="${lib.dir}/${commons-collections.jar}"/>
-        <pathelement location="${lib.dir}/${commons-lang.jar}"/>
-        <pathelement location="${lib.dir}/${logkit.jar}"/>
-    </path>
+        Any jars put into ${lib.dir} will be included in
+        the classpath used by JMeter to load classes.
+        Jars in ${lib.opt} are NOT normally included by JMeter.
+
+        Placing an optional jar in ${lib.opt} means that it
+        will be included in the build classpath, but it will
+        not be included in the runtime classpath. This is intended
+        for testing JMeter without the optional Jar file(s).
+        -->
+
+        <!-- Build classpath (includes the optional jar directory) -->
+        <path id="classpath">
+            <!-- Externally produced jars -->
+            <fileset refid="jmeter.core.dependencies"/>
+            <!-- Generated jars -->
+            <fileset dir="${lib.dir}" includes="jorphan.jar"/>
+            <!-- API-only jars-->
+            <fileset dir="${lib.api}" includes="*.jar"/>
+            <!-- Optional jars -->
+            <fileset dir="${lib.opt}" includes="*.jar"/>
+        </path>
+
+        <!-- Anakia classpath -->
+        <path id="anakia.classpath">
+            <pathelement location="${lib.doc}/${velocity.jar}"/>
+            <pathelement location="${lib.dir}/${jdom.jar}"/>
+
+            <!--<pathelement location="${lib.doc}/${velocity.jar}"/>-->
+            <!--<pathelement location="${lib.dir}/${jdom.jar}"/>-->
+            <!--<pathelement location="${lib.dir}/${commons-collections.jar}"/>-->
+            <!--<pathelement location="${lib.dir}/${commons-lang.jar}"/>-->
+            <!--<pathelement location="${lib.dir}/${logkit.jar}"/>-->
+        </path>
+
+        <patternset id="dist_bin_files_non_native">
+            <patternset refid="dist.binaries.non.native"/>
+            <patternset refid="external.jars"/>
+            <include name="${dest.docs.api}/resources/**"/>
+        </patternset>
+
+    </target>
 
     <!-- Version info filter set -->
     <tstamp>
@@ -1130,7 +1071,7 @@
         <fail message="Cannot find required classes"/>
     </target>
 
-    <target name="install" depends="package" description="Install JMeter. (Compiles code and creates jars)">
+    <target name="install" depends="set.jar.locations,package" description="Install JMeter. (Compiles code and creates jars)">
         <fixcrlf srcdir="." eol="lf" includes="bin/*.sh bin/jmeter bin/jmeter-server bin/jmeter-report"/>
     </target>
 
@@ -1327,11 +1268,6 @@
         <exclude name="${dest.docs.api}/resources/**"/>
     </patternset>
 
-    <patternset id="dist_bin_files_non_native">
-        <patternset refid="dist.binaries.non.native"/>
-        <patternset refid="external.jars"/>
-        <include name="${dest.docs.api}/resources/**"/>
-    </patternset>
 
     <!-- NOTE: the site documents are not included in either archive -->
 
