@@ -385,13 +385,13 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         graphPanel.setOutlinesBarFlag(drawOutlinesBar.isSelected());
         graphPanel.setShowGrouping(numberShowGrouping.isSelected());
         graphPanel.setLegendPlacement(StatGraphProperties.getPlacementNameMap()
-                .get(legendPlacementList.getSelectedItem()));
+                .get(legendPlacementList.getSelectedItem()).intValue());
 
         graphPanel.setTitleFont(new Font(StatGraphProperties.getFontNameMap().get(titleFontNameList.getSelectedItem()),
-                StatGraphProperties.getFontStyleMap().get(titleFontStyleList.getSelectedItem()),
+                StatGraphProperties.getFontStyleMap().get(titleFontStyleList.getSelectedItem()).intValue(),
                 Integer.parseInt((String) titleFontSizeList.getSelectedItem())));
         graphPanel.setLegendFont(new Font(StatGraphProperties.getFontNameMap().get(fontNameList.getSelectedItem()),
-                StatGraphProperties.getFontStyleMap().get(fontStyleList.getSelectedItem()),
+                StatGraphProperties.getFontStyleMap().get(fontStyleList.getSelectedItem()).intValue(),
                 Integer.parseInt((String) fontSizeList.getSelectedItem())));
 
         graphPanel.setHeight(height);
