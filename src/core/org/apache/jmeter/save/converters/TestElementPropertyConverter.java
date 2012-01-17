@@ -126,7 +126,10 @@ public class TestElementPropertyConverter extends AbstractCollectionConverter {
                 reader.moveUp();
             }
             return prop;
-        } catch (Exception e) {
+        } catch (InstantiationException e) {
+            log.error("Couldn't unmarshall TestElementProperty", e);
+            return new TestElementProperty("ERROR", new ConfigTestElement());// $NON-NLS-1$
+        } catch (IllegalAccessException e) {
             log.error("Couldn't unmarshall TestElementProperty", e);
             return new TestElementProperty("ERROR", new ConfigTestElement());// $NON-NLS-1$
         }
