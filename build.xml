@@ -65,8 +65,10 @@
     <property name="maven.ant.tasks.filename" value="maven-ant-tasks-2.1.3.jar"/>
     <property name="maven.ant.tasks.remote.path" value="http://mirror.catn.com/pub/apache//maven/binaries"/>
     <property name="maven.ant.tasks.remote.file" value="${maven.ant.tasks.remote.path}/${maven.ant.tasks.filename}"/>
-    
-    <property name="pom.listing.dependant.jars" value="maven/ApacheJMeter_parent.pom"/>
+
+    <property name="pom.listing.core.dependencies" value="maven/ApacheJMeter_dependencies_core.pom"/>
+    <property name="pom.listing.api.dependencies" value="maven/ApacheJMeter_dependencies_api.pom"/>
+    <property name="pom.listing.doc.dependencies" value="maven/ApacheJMeter_dependencies_doc.pom"/>
 
     <available file="${maven.ant.tasks.dir}/${maven.ant.tasks.filename}" property="maven.ant.tasks.file.exists"/>
 
@@ -80,12 +82,24 @@
         <path id="maven.ant.tasks.classpath" path="${maven.ant.tasks.dir}/${maven.ant.tasks.filename}"/>
         <typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="urn:maven-artifact-ant" classpathref="maven.ant.tasks.classpath"/>
 
-        <artifact:pom id="jmeter.parent.pom" file="${pom.listing.dependant.jars}"/>
-        <artifact:dependencies filesetId="jmeter.dependencies" pomRefId="jmeter.parent.pom"/>
-        <copy todir="lib">
-            <fileset refid="jmeter.dependencies"/>
-            <mapper type="flatten"/>
+        <artifact:pom id="jmeter.core.pom" file="${pom.listing.core.dependencies}"/>
+        <artifact:pom id="jmeter.api.pom" file="${pom.listing.api.dependencies}"/>
+        <artifact:pom id="jmeter.doc.pom" file="${pom.listing.doc.dependencies}"/>
+
+        <artifact:dependencies filesetId="jmeter.core.dependencies" pomRefId="jmeter.core.pom"/>
+        <artifact:dependencies filesetId="jmeter.api.dependencies" pomRefId="jmeter.api.pom"/>
+        <artifact:dependencies filesetId="jmeter.doc.dependencies" pomRefId="jmeter.doc.pom"/>
+
+        <copy todir="lib" flatten="true">
+            <fileset refid="jmeter.core.dependencies"/>
         </copy>
+        <copy todir="lib/api" flatten="true">
+            <fileset refid="jmeter.api.dependencies"/>
+        </copy>
+        <copy todir="lib/doc" flatten="true">
+            <fileset refid="jmeter.doc.dependencies"/>
+        </copy>
+
     </target>
 
     <!--
