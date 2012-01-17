@@ -77,7 +77,7 @@
         <get src="${maven.ant.tasks.remote.file}" dest="${maven.ant.tasks.dir}"/>
     </target>
 
-    <target name="download_jars" description="Download all the dependant jars" depends="get.maven.ant.tasks" xmlns:artifact="urn:maven-artifact-ant">
+    <target name="download_jars" description="Download all the dependant jars" depends="get.maven.ant.tasks,make.required.directories" xmlns:artifact="urn:maven-artifact-ant">
 
         <path id="maven.ant.tasks.classpath" path="${maven.ant.tasks.dir}/${maven.ant.tasks.filename}"/>
         <typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="urn:maven-artifact-ant" classpathref="maven.ant.tasks.classpath"/>
@@ -90,16 +90,24 @@
         <artifact:dependencies filesetId="jmeter.api.dependencies" pomRefId="jmeter.api.pom"/>
         <artifact:dependencies filesetId="jmeter.doc.dependencies" pomRefId="jmeter.doc.pom"/>
 
-        <copy todir="lib" flatten="true">
+        <copy todir="${lib.dir}" flatten="true">
             <fileset refid="jmeter.core.dependencies"/>
         </copy>
-        <copy todir="lib/api" flatten="true">
+        <copy todir="${lib.api}" flatten="true">
             <fileset refid="jmeter.api.dependencies"/>
         </copy>
-        <copy todir="lib/doc" flatten="true">
+        <copy todir="${lib.doc}" flatten="true">
             <fileset refid="jmeter.doc.dependencies"/>
         </copy>
 
+    </target>
+
+    <target name="make.required.directories" description="Create the lib directory structure">
+        <mkdir dir="${lib.dir}"/>
+        <mkdir dir="${lib.opt}"/>
+        <mkdir dir="${lib.api}"/>
+        <mkdir dir="${lib.doc}"/>
+        <mkdir dir="${maven.ant.tasks.dir}"/>
     </target>
 
     <!--
@@ -347,8 +355,6 @@
     <property name="test.encoding" value="${encoding}"/>
     <property name="includeAntRuntime" value="false"/>
 
-    <!-- 3rd party libraries to be included in the binary distribution -->
-    <property file="build.properties"/>
     <!-- defines the library version numbers -->
 
     <property name="resources.meta-inf" value="${build.res}/META-INF"/>
@@ -1252,7 +1258,6 @@
         <exclude name="${src.docs}/**/*.sxw"/>
         <include name="${src.test}/**"/>
         <include name="build.xml"/>
-        <include name="build.properties"/>
         <include name="${dest.jar.jmeter}/testfiles/**"/>
         <exclude name="${dest.jar.jmeter}/testfiles/*.jmx"/>
         <exclude name="${dest.jar.jmeter}/testfiles/*.jtl"/>
