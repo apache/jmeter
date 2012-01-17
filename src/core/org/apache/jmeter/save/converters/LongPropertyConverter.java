@@ -28,8 +28,6 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 public class LongPropertyConverter implements Converter {
 
-    private static final String ATT_NAME = "name"; // $NON-NLS-1$
-
     /**
      * Returns the converter version; used to check for possible
      * incompatibilities
@@ -46,13 +44,13 @@ public class LongPropertyConverter implements Converter {
     /** {@inheritDoc} */
     public void marshal(Object obj, HierarchicalStreamWriter writer, MarshallingContext arg2) {
         LongProperty prop = (LongProperty) obj;
-        writer.addAttribute(ATT_NAME, ConversionHelp.encode(prop.getName()));
+        writer.addAttribute(ConversionHelp.ATT_NAME, ConversionHelp.encode(prop.getName()));
         writer.setValue(prop.getStringValue());
     }
 
     /** {@inheritDoc} */
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext arg1) {
-        LongProperty prop = new LongProperty(ConversionHelp.decode(reader.getAttribute(ATT_NAME)), Long.parseLong(reader
+        LongProperty prop = new LongProperty(ConversionHelp.decode(reader.getAttribute(ConversionHelp.ATT_NAME)), Long.parseLong(reader
                 .getValue()));
         return prop;
     }
