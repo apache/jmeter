@@ -37,6 +37,7 @@ public class StatGraphProperties {
         return fontNameMap;
     }
 
+    @SuppressWarnings("boxing")
     public static Map<String, Integer> getFontStyleMap() {
         Map<String, Integer> fontStyleMap = new HashMap<String, Integer>();
         fontStyleMap.put(JMeterUtils.getResString("fontstyle.normal"), Font.PLAIN);
@@ -45,6 +46,7 @@ public class StatGraphProperties {
         return fontStyleMap;
     }
 
+    @SuppressWarnings("boxing")
     public static Map<String, Integer> getPlacementNameMap() {
         Map<String, Integer> placementNameMap = new HashMap<String, Integer>();
         placementNameMap.put(JMeterUtils.getResString("aggregate_graph_legend.placement.bottom"), LegendProperties.BOTTOM);
