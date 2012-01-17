@@ -67,7 +67,9 @@ public class MultiPropertyConverter extends AbstractCollectionConverter {
         while (reader.hasMoreChildren()) {
             reader.moveDown();
             JMeterProperty subProp = (JMeterProperty) readItem(reader, context, prop);
-            prop.addProperty(subProp);
+            if (subProp != null) { // could be null if it has been deleted via NameUpdater
+                prop.addProperty(subProp);
+            }
             reader.moveUp();
         }
         return prop;

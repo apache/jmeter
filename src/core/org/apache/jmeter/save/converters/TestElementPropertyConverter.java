@@ -112,15 +112,17 @@ public class TestElementPropertyConverter extends AbstractCollectionConverter {
             while (reader.hasMoreChildren()) {
                 reader.moveDown();
                 JMeterProperty subProp = (JMeterProperty) readItem(reader, context, prop);
-                if (isHeader) {
-                    String name = subProp.getName();
-                    if (TestElement.NAME.equals(name)) {
-                        subProp.setName("Header.name");// $NON-NLS-1$
-                        // Must be same as Header.HNAME - but that is built
-                        // later
+                if (subProp != null) { // could be null if it has been deleted via NameUpdater
+                    if (isHeader) {
+                        String name = subProp.getName();
+                        if (TestElement.NAME.equals(name)) {
+                            subProp.setName("Header.name");// $NON-NLS-1$
+                            // Must be same as Header.HNAME - but that is built
+                            // later
+                        }
                     }
+                    prop.addProperty(subProp);
                 }
-                prop.addProperty(subProp);
                 reader.moveUp();
             }
             return prop;
