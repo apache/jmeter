@@ -105,7 +105,9 @@ public class TestElementConverter extends AbstractCollectionConverter {
             while (reader.hasMoreChildren()) {
                 reader.moveDown();
                 JMeterProperty prop = (JMeterProperty) readItem(reader, context, el);
-                el.setProperty(prop);
+                if (prop != null) { // could be null if it has been deleted via NameUpdater
+                    el.setProperty(prop);
+                }
                 reader.moveUp();
             }
             return el;
