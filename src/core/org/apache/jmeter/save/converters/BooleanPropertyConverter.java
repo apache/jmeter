@@ -50,9 +50,12 @@ public class BooleanPropertyConverter implements Converter {
     }
 
     /** {@inheritDoc} */
-    public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext arg1) {
-        BooleanProperty prop = new BooleanProperty(ConversionHelp.decode(reader.getAttribute(ConversionHelp.ATT_NAME)), Boolean.valueOf(
-                reader.getValue()).booleanValue());
+    public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
+        final String name = ConversionHelp.getPropertyName(reader, context);
+        if (name == null) {
+            return null;
+        }
+        BooleanProperty prop = new BooleanProperty(name, Boolean.valueOf(reader.getValue()).booleanValue());
         return prop;
     }
 }

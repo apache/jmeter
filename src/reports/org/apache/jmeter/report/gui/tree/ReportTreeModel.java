@@ -34,7 +34,6 @@ import org.apache.jmeter.report.gui.tree.ReportTreeNode;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.ReportPlan;
 import org.apache.jmeter.testelement.property.NullProperty;
-import org.apache.jmeter.util.NameUpdater;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
 
@@ -94,9 +93,6 @@ public class ReportTreeModel extends DefaultTreeModel {
             throw new IllegalUserActionException(
                     "This node cannot hold sub-elements");
         }
-        component.setProperty(TestElement.GUI_CLASS, NameUpdater
-                .getCurrentName(component
-                        .getPropertyAsString(TestElement.GUI_CLASS)));
         ReportGuiPackage.getInstance().updateCurrentNode();
         JMeterGUIComponent guicomp = ReportGuiPackage.getInstance().getGui(component);
         guicomp.configure(component);

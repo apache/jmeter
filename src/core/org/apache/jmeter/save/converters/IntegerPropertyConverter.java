@@ -49,9 +49,12 @@ public class IntegerPropertyConverter implements Converter {
     }
 
     /** {@inheritDoc} */
-    public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext arg1) {
-        IntegerProperty prop = new IntegerProperty(ConversionHelp.decode(reader.getAttribute(ConversionHelp.ATT_NAME)), Integer
-                .parseInt(reader.getValue()));
+    public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
+        final String name = ConversionHelp.getPropertyName(reader, context);
+        if (name == null) {
+            return null;
+        }
+        IntegerProperty prop = new IntegerProperty(name, Integer.parseInt(reader.getValue()));
         return prop;
     }
 }
