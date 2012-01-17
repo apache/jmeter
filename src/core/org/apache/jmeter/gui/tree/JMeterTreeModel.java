@@ -35,7 +35,6 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jmeter.testelement.property.NullProperty;
-import org.apache.jmeter.util.NameUpdater;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
 
@@ -120,8 +119,6 @@ public class JMeterTreeModel extends DefaultTreeModel {
         if (node.getUserObject() instanceof AbstractConfigGui) {
             throw new IllegalUserActionException("This node cannot hold sub-elements");
         }
-        component.setProperty(TestElement.GUI_CLASS, NameUpdater.getCurrentName(component
-                .getPropertyAsString(TestElement.GUI_CLASS)));
 
         GuiPackage guiPackage = GuiPackage.getInstance();
         if (guiPackage != null) {

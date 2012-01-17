@@ -29,9 +29,11 @@ import java.util.Map;
 
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.NameUpdater;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
+import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
@@ -47,12 +49,13 @@ public class ConversionHelp {
     // Attributes for TestElement and TestElementProperty
     // Must all be unique
     public static final String ATT_CLASS         = "class"; //$NON-NLS-1$
+    // Also used by PropertyConverter classes
     public static final String ATT_NAME          = "name"; // $NON-NLS-1$
     public static final String ATT_ELEMENT_TYPE  = "elementType"; // $NON-NLS-1$
 
     private static final String ATT_TE_ENABLED   = "enabled"; //$NON-NLS-1$
     private static final String ATT_TE_TESTCLASS = "testclass"; //$NON-NLS-1$
-    private static final String ATT_TE_GUICLASS  = "guiclass"; //$NON-NLS-1$
+            static final String ATT_TE_GUICLASS  = "guiclass"; //$NON-NLS-1$
     private static final String ATT_TE_NAME      = "testname"; //$NON-NLS-1$
 
 
@@ -147,7 +150,11 @@ public class ConversionHelp {
         String att=propertyToAttribute.get(prop);
         String alias=reader.getAttribute(att);
         if (alias!=null){
-            el.setProperty(prop,SaveService.aliasToClass(alias));
+            alias=SaveService.aliasToClass(alias);
+            if (TestElement.GUI_CLASS.equals(prop)) { // mainly for TestElementConverter
+               alias = NameUpdater.getCurrentName(alias);
+            }
+            el.setProperty(prop,alias);
         }
     }
 
@@ -177,6 +184,71 @@ public class ConversionHelp {
     public static boolean isSpecialProperty(String name) {
        return propertyToAttribute.containsKey(name);
     }
+
+    /**
+     * Get the property name, updating it if necessary using {@link NameUpdater}.
+     * @param reader where to read the name attribute
+     * @param context the unmarshalling context
+     * 
+     * @return the property name, may be null if the property has been deleted.
+     * @see #getUpgradePropertyName(String, UnmarshallingContext)
+     */
+    public static String getPropertyName(HierarchicalStreamReader reader, UnmarshallingContext context) {
+        String name = ConversionHelp.decode(reader.getAttribute(ATT_NAME));
+        return getUpgradePropertyName(name, context);
+        
+    }
+
+    /**
+     * Get the property value, updating it if necessary using {@link NameUpdater}.
+     * 
+     * Do not use for GUI_CLASS or TEST_CLASS.
+     * 
+     * @param reader where to read the value
+     * @param context the unmarshalling context
+     * 
+     * @return the property value, updated if necessary.
+     * @see #getUpgradePropertyValue(String, String, UnmarshallingContext)
+     */
+    public static String getPropertyValue(HierarchicalStreamReader reader, UnmarshallingContext context, String name) {
+        String value = ConversionHelp.decode(reader.getValue());
+        return getUpgradePropertyValue(name, value, context);
+        
+    }
+
+    /**
+     * Update a property name using {@link NameUpdater}.
+     * @param name the original property name
+     * @param context the unmarshalling context
+     * 
+     * @return the property name, may be null if the property has been deleted.
+     */
+    public static String getUpgradePropertyName(String name, UnmarshallingContext context) {
+        String testClass = (String) context.get(SaveService.TEST_CLASS_NAME);
+        final String newName = NameUpdater.getCurrentName(name, testClass);
+        // Delete any properties whose name converts to the empty string
+        if (name.length() != 0 && newName.length()==0) {
+            return null;
+        }
+        return name;
+    }
+
+    /**
+     * Update a property value using {@link NameUpdater#getCurrentName(String, String, String)}.
+     * 
+     * Do not use for GUI_CLASS or TEST_CLASS.
+     * 
+     * @param name the original property name
+     * @param value the original property value
+     * @param context the unmarshalling context
+     * 
+     * @return the property value, updated if necessary
+     */
+    public static String getUpgradePropertyValue(String name, String value, UnmarshallingContext context) {
+        String testClass = (String) context.get(SaveService.TEST_CLASS_NAME);
+        return NameUpdater.getCurrentName(value, name, testClass);
+    }
+
 
     /**
      * Save the special properties:

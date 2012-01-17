@@ -23,6 +23,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.util.NameUpdater;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -86,10 +87,21 @@ public class TestElementConverter extends AbstractCollectionConverter {
         } else {
             type = mapper().realClass(classAttribute);
         }
+        // Update the test class name if necessary (Bug 52466)
+        String inputName = type.getName();
+        String targetName = inputName;
+        String guiClassName = SaveService.aliasToClass(reader.getAttribute(ConversionHelp.ATT_TE_GUICLASS));
+        targetName = NameUpdater.getCurrentTestName(inputName, guiClassName);
+        if (!targetName.equals(inputName)) { // remap the class name
+            type = mapper().realClass(targetName);
+        }
+        context.put(SaveService.TEST_CLASS_NAME, targetName); // needed by property converters  (Bug 52466)
         try {
             TestElement el = (TestElement) type.newInstance();
             // No need to check version, just process the attributes if present
             ConversionHelp.restoreSpecialProperties(el, reader);
+            // Slight hack - we need to ensure the TestClass is not reset by the previous call
+            el.setProperty(TestElement.TEST_CLASS, targetName);
             while (reader.hasMoreChildren()) {
                 reader.moveDown();
                 JMeterProperty prop = (JMeterProperty) readItem(reader, context, el);
