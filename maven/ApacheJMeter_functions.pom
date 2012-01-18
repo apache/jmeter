@@ -33,13 +33,11 @@ under the License.
             <groupId>org.apache.jmeter</groupId>
             <artifactId>jorphan</artifactId>
             <version>@MAVEN.DEPLOY.VERSION@</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.jmeter</groupId>
             <artifactId>ApacheJMeter_core</artifactId>
             <version>@MAVEN.DEPLOY.VERSION@</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 

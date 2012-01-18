@@ -25,19 +25,19 @@
     <available file="${basedir}/${ant.contrib.filename}" property="maven.ant.tasks.file.exists"/>
 
     <condition property="is.windows">
-        <os family="windows" />
+        <os family="windows"/>
     </condition>
-    
+
     <condition property="is.linux">
-        <os family="unix" />
+        <os family="unix"/>
     </condition>
-    
+
     <condition property="is.mac">
-        <os family="mac" />
+        <os family="mac"/>
     </condition>
 
     <target name="get.ant.contrib" unless="ant.contrib.exists">
-        <get src="${ant.contrib.url}/${ant.contrib.filename}" dest="ant-contrib-1.0b3.jar"/>
+        <get src="${ant.contrib.url}/${ant.contrib.filename}" dest="${basedir}/${ant.contrib.filename}"/>
     </target>
 
     <target name="clean.working.files">
@@ -57,15 +57,20 @@
     <target name="should.i.use.mvn.command.mac" if="is.mac">
         <property name="mvn.command" value="${mvn.command.mac}"/>
     </target>
-    
+
     <target name="set.mvn.command" depends="should.i.use.mvn.command.windows,should.i.use.mvn.command.unix,should.i.use.mvn.command.mac">
         <echo level="info">Decided to use maven command '${mvn.command}'</echo>
     </target>
 
-    <target name="deploy.maven.artifacts" depends="get.ant.contrib,clean.working.files,set.mvn.command,deploy.jorphan" xmlns:artifact="urn:maven-artifact-ant">
-        <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+    <target name="deploy.maven.artifacts" depends="get.ant.contrib,clean.working.files,set.mvn.command">
+        <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+            <classpath>
+                <pathelement location="${basedir}/${ant.contrib.filename}"/>
+            </classpath>
+        </taskdef>
         <propertyselector property="component.list" delimiter="," match="component\.([^\.]*)\.name" select="\1" casesensitive="true"/>
         <propertyselector property="pom.list" delimiter="," match="pom\.([^\.]*)\.name" select="\1" casesensitive="true"/>
+        <antcall target="deploy.jorphan" inheritall="true"/>
         <foreach list="${component.list}" delimiter="," target="deploy.components" param="component.id" inheritall="true"/>
         <foreach list="${pom.list}" delimiter="," target="deploy.poms" param="pom.id" inheritall="true"/>
         <antcall target="deploy.protocol" inheritall="true"/>
@@ -172,7 +177,7 @@
             </then>
         </if>
 
-        <delete file="${protocol.name}.pom.tmp"/>
+        <delete file="pom.xml"/>
         <delete dir="parent"/>
     </target>
 
