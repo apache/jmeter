@@ -34,6 +34,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.gui.GuiPackage;
@@ -44,6 +45,7 @@ import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.save.CSVSaveService;
+import org.apache.jmeter.save.OldSaveService;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestElement;
@@ -55,6 +57,9 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterError;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
+import org.xml.sax.SAXException;
+
+import com.thoughtworks.xstream.converters.ConversionException;
 
 /**
  * This class handles all saving of samples.
@@ -312,6 +317,15 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                             SaveService.loadTestResults(bufferedInputStream,
                                     new ResultCollectorHelper(this, visualizer));
                             parsedOK = true;
+                        } catch (ConversionException e) {
+                            final String message = e.getShortMessage();
+                            if (message.startsWith("sampleResult")) { // probably Avalon format
+                                log.info("Failed to load "+filename+" using XStream. Assuming Avalon format, as message was: "+message);
+                                OldSaveService.processSamples(filename, visualizer, this);
+                                parsedOK = true;
+                            } else {
+                                log.warn("Failed to load "+filename+" using XStream. Error was: "+e);
+                            }
                         } catch (Exception e) {
                             log.warn("Failed to load "+filename+" using XStream. Error was: "+e);
                         }
@@ -325,6 +339,10 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                 log.warn("Problem reading JTL file: "+file,e);
             } catch (OutOfMemoryError e) {
                 log.warn("Problem reading JTL file: "+file,e);
+            } catch (ConfigurationException e) { // Avalon only
+                log.warn("Problem reading Avalon JTL file: "+file,e);
+            } catch (SAXException e) { // Avalon only
+                log.warn("Problem reading Avalon JTL file: "+file,e);
             } finally {
                 JOrphanUtils.closeQuietly(dataReader);
                 JOrphanUtils.closeQuietly(bufferedInputStream);
