@@ -40,4 +40,13 @@ under the License.
             <scope>compile</scope>
         </dependency>
     </dependencies>
+
+    <distributionManagement>
+        <repository>
+            <id>release</id>
+            <name>Release Repository</name>
+            <url>@URL@</url>
+        </repository>
+    </distributionManagement>
+
 </project>

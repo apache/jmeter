@@ -21,7 +21,7 @@ under the License.
     <parent>
         <artifactId>ApacheJMeter_parent</artifactId>
         <groupId>org.apache.jmeter</groupId>
-        <version>@MAVEN.DEPLOY.VERSION@</version>
+        <version>2.5.1</version>
         <relativePath>parent/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
