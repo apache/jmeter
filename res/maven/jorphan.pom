@@ -20,7 +20,7 @@ under the License.
     <modelVersion>4.0.0</modelVersion>
     <parent>
       <groupId>org.apache.jmeter</groupId>
-      <artifactId>jorphan</artifactId>
+      <artifactId>ApacheJMeter_parent</artifactId>
       <version>@MAVEN.DEPLOY.VERSION@</version>
       <relativePath>.</relativePath>
     </parent>
