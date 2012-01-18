@@ -491,7 +491,12 @@ public class SaveService {
             }
             return wrapper.testPlan;
         } catch (CannotResolveClassException e) {
-            log.warn("Problem loading XML: " + e.getLocalizedMessage());
+            if (e.getMessage().startsWith("node")) {
+                log.info("Problem loading XML, trying Avalon format");
+                reader.reset();
+                return OldSaveService.loadSubTree(reader);                
+            }
+            log.warn("Problem loading XML, cannot determine class for element: " + e.getLocalizedMessage());
             return null;
         } catch (NoClassDefFoundError e) {
             log.error("Missing class "+e);

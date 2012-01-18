@@ -17,6 +17,7 @@ avalon-framework-4.1.4 (org.apache.avalon.framework)
 ----------------------
 - LogKit (LoggingManager)
 - Configuration (DataSourceElement)
+- OldSaveService
 
 bsf-2.4.0.jar (org.apache.bsf)
 -------------
