@@ -15,20 +15,14 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="JMeter" default="default" basedir=".">
+<project name="JMeter" default="deploy.maven.artifacts" basedir=".">
     <description>
         This will take the existing jar files created by Ant and deploy them to a maven repository
     </description>
 
-    <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
-
-    <property name="deploy.jars" value="true"/>
-    <property name="deploy.sources" value="true"/>
-    <property name="deploy.javadoc" value="true"/>
-
     <property file="mvn.properties"/>
-    <propertyselector property="component.list" delimiter="," match="component\.([^\.]*)\.name" select="\1" casesensitive="true"/>
-    <propertyselector property="pom.list" delimiter="," match="pom\.([^\.]*)\.name" select="\1" casesensitive="true"/>
+
+    <available file="${basedir}/${ant.contrib.filename}" property="maven.ant.tasks.file.exists"/>
 
     <condition property="is.windows">
         <os family="windows" />
@@ -41,7 +35,11 @@
     <condition property="is.mac">
         <os family="mac" />
     </condition>
-    
+
+    <target name="get.ant.contrib" unless="ant.contrib.exists">
+        <get src="${ant.contrib.url}/${ant.contrib.filename}" dest="ant-contrib-1.0b3.jar"/>
+    </target>
+
     <target name="clean.working.files">
         <delete file="pom.xml"/>
         <delete file="*.tmp"/>
@@ -64,7 +62,10 @@
         <echo level="info">Decided to use maven command '${mvn.command}'</echo>
     </target>
 
-    <target name="default" depends="clean.working.files,set.mvn.command,deploy.jorphan">
+    <target name="deploy.maven.artifacts" depends="get.ant.contrib,clean.working.files,set.mvn.command,deploy.jorphan" xmlns:artifact="urn:maven-artifact-ant">
+        <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+        <propertyselector property="component.list" delimiter="," match="component\.([^\.]*)\.name" select="\1" casesensitive="true"/>
+        <propertyselector property="pom.list" delimiter="," match="pom\.([^\.]*)\.name" select="\1" casesensitive="true"/>
         <foreach list="${component.list}" delimiter="," target="deploy.components" param="component.id" inheritall="true"/>
         <foreach list="${pom.list}" delimiter="," target="deploy.poms" param="pom.id" inheritall="true"/>
         <antcall target="deploy.protocol" inheritall="true"/>
