@@ -30,18 +30,149 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 </note>
 
 
-<!--  =================== 2.5.2 =================== -->
+<!--  =================== 2.6 =================== -->
 
-<h1>Version 2.5.2</h1>
+<h1>Version 2.6</h1>
 
-<h2>Summary of main changes</h2>
+<h2>New and Noteworthy</h2>
 
-<ul>
-<li>Some improvements on Aggregate Graph Listener: new GUI for settings, dynamic graph size, allow to change fonts for title graph and legend, 
-allow to change bar color (background and text values), allow to draw or not bars outlines, 
-allow to select only some samplers by a regexp filter,  allow to define Y axis maximum scale</li>
+<h3>Toolbar</h3>
+<p>A new toolbar on main JMeter's window
+<figure width="953" height="94" image="changes/01_toolbar.png"></figure>
+</p>
+
+<h3>JMeter start test</h3>
+<p>A new menu option and button allow to start a test ignoring the Pause Timers
+<figure width="232" height="54" image="changes/02_ignore_pause_timers.png"></figure>
+</p>
+
+<h3>JMeter GUI Look and Feel</h3>
+<p>Allow System or CrossPlatform LAF to be set from options menu
+<figure width="373" height="162" image="changes/03_look_and_feel.png"></figure>
+</p>
+
+<h3>JMeter GUI</h3>
+<p>Add "duplicate node" in context menu
+<figure width="323" height="136" image="changes/04_duplicate_context_menu.png"></figure>
+</p>
+
+<h3>JMeter tree view</h3>
+<p>Functionality to search by keyword in Samplers Tree View
+<figure width="560" height="211" image="changes/05_search_tree.png"></figure>
+</p>
+
+<h3>HTTP Request</h3>
+<p>Improve HTTP Request GUI to better show parameters without name (GWT RPC request or SOAP request for example)
+<figure width="759" height="461" image="changes/06_post_data.png"></figure>
+</p>
+
+<h3>HTTP Request</h3>
+<p><ul>
+<li>Allow multiple selection in arguments panel</li>
+<li>Allow to add (paste) entries from the clipboard to an arguments list</li>
+<li>Ability to move up or down variables in HTTP Request</li>
 </ul>
+<figure width="875" height="218" image="changes/07_multiple_selection_params.png"></figure>
+</p>
 
+<h3>HTTP Request</h3>
+<p>Better support for file: protocol in HTTP sampler
+<figure width="489" height="662" image="changes/08_file_protocol.png"></figure>
+</p>
+<p>Retrieve embedded resources with file: protocol
+<figure width="700" height="138" image="changes/09_file_protocol_embedded.png"></figure>
+</p>
+
+<h3>View Results in Table</h3>
+<p>Add option to TableVisualiser to display child samples instead of parent
+<figure width="911" height="619" image="changes/10_child_sampler.png"></figure>
+</p>
+
+<h3>Key Store</h3>
+<p>Allowing multiple certificates (JKS)
+<figure width="324" height="166" image="changes/11_jks_keystore.png"></figure>
+</p>
+
+<h3>Aggregate graph</h3>
+<p>Some improvements on Aggregate Graph Listener: 
+<ul><li>new GUI for settings</li>
+<li>dynamic graph size</li>
+<li>allow to change fonts for title graph and legend</li>
+<li>allow to change bar color (background and text values)</li>
+<li>allow to draw or not bars outlines</li>
+<li>allow to select only some samplers by a regexp filter</li>
+<li>allow to define Y axis maximum scale</li>
+</ul>
+<figure width="850" height="411" image="changes/12_aggregate_graph_settings.png"></figure>
+</p>
+
+<p>Aggregate Graph bar
+<figure width="851" height="506" image="changes/13_aggregate_graph_bar.png"></figure>
+</p>
+
+<h3>Counter</h3>
+<p>Add an option to reset counter on each Thread Group iteration
+<figure width="345" height="257" image="changes/14_reset_counter.png"></figure>
+</p>
+
+<h3>Functions</h3>
+<p><ul>
+<li>Add a new function __RandomString to generate random Strings</li>
+<li>Add a new function __TestPlanName returning the name of the current "Test Plan"</li>
+<li>Add a new function __machineIP returning IP address</li>
+<li>Add a new function  __jexl2 to support Jexl2</li>
+</ul>
+<figure width="697" height="236" image="changes/15_random_string.png"></figure>
+</p>
+
+<h3>User Defined Variable</h3>
+<p><ul><li>Add a comment field in User Defined Variables</li>
+<li>Allow to add (paste) entries from the clipboard to an arguments list</li>
+<li>Ability to move up or down variables in User Defined Variables</li>
+</ul>
+<figure width="543" height="237" image="changes/16_udv_comments.png"></figure>
+</p>
+
+<h3>View Results Tree</h3>
+<p>In View Results Tree rather than showing just a message if the results are to big, show as much of the result as are configured
+<figure width="953" height="98" image="changes/17_vrt_max_size_display.png"></figure>
+</p>
+
+<h3>Controller type</h3>
+<p>Add Ability to Change Controller elements
+<figure width="643" height="112" image="changes/18_change_ctl_type.png"></figure>
+</p>
+
+<h3>JDBC pre- and post-processor</h3>
+<p>Add JDBC pre- and post-processor
+<figure width="535" height="217" image="changes/19_jdbc_pre_post_proc.png"></figure>
+</p>
+
+<h3>JDBC elements</h3>
+<p>Allow to set the transaction isolation in the JDBC Connection Configuration
+<figure width="437" height="351" image="changes/20_jdbc_trans_isolation.png"></figure>
+</p>
+
+<h3>Poisson Timer</h3>
+<p>Add a Poisson based timer
+<figure width="358" height="156" image="changes/21_poisson_timer.png"></figure>
+</p>
+
+<h3>GUI and OS interaction</h3>
+<p>Support for file Drag and Drop. 
+<figure width="742" height="467" image="changes/22_drag_and_drop.png"></figure>
+</p>
+
+<h3>Confirm Remove Dialog box</h3>
+<p>Add a dialog box to confirm removing the element(s) when Remove action is called
+<figure width="590" height="213" image="changes/23_confirm_remove.png"></figure>
+</p>
+
+<h3>Remote batching support</h3>
+<p>Use external store to hold samples during distributed testing, 
+Added DiskStore remote sample sender: like Hold, but saves samples to disk until end of test
+<figure width="998" height="273" image="changes/24_diskstore.png"></figure>
+</p>
 
 <!--  =================== Known bugs =================== -->
 
@@ -74,11 +205,11 @@ This has been corrected; can still revert to the Bug 51939 behaviour by setting 
 Mirror server now uses default port 8081, was 8080 before 2.5.1.
 </p>
 <p>
-TCP Sampler handles SocketTimeoutException, SocketException and InterruptedIOException differently since 2.5.2, when
+TCP Sampler handles SocketTimeoutException, SocketException and InterruptedIOException differently since 2.6, when
 these occurs, Sampler is marked as failed.
 </p>
 <p>
-Sample Sender implementations know resolve their configuration on Client side since 2.5.2.
+Sample Sender implementations know resolve their configuration on Client side since 2.6.
 This behaviour can be changed with property sample_sender_client_configured (set it to false).
 </p>
 <!-- =================== Bug fixes =================== -->
@@ -223,6 +354,7 @@ fix code which assumes that a new instance is created (i.e. when adding a sub-sa
 <li>Bug 52016 - It would be useful to support Jexl2</li>
 <li>__char() function now supports octal values</li>
 <li>New function __machineIP returning IP address</li>
+<li>Bug 51091 - New function returning the name of the current "Test Plan"</li>
 </ul>
 
 <h3>I18N</h3>
@@ -246,7 +378,6 @@ fix code which assumes that a new instance is created (i.e. when adding a sub-sa
 <li>Bug 52085 - Allow multiple selection in arguments panel</li>
 <li>Bug 52099 - Allow to set the transaction isolation in the JDBC Connection Configuration</li>
 <li>Bug 52116 - Allow to add (paste) entries from the clipboard to an arguments list</li>
-<li>Bug 51091 - New function returning the name of the current "Test Plan"</li>
 <li>Bug 52160 - Don't display TestBeanGui items which are flagged as hidden</li>
 <li>Bug 51886 - SampleSender configuration resolved partly on client and partly on server</li>
 <li>Bug 52161 - Enable plugins to add own translation rules in addition to upgrade.properties.
@@ -264,6 +395,7 @@ Loads any additional properties found in META-INF/resources/org.apache.jmeter.na
 <li>Bug 52281 - Support for file Drag and Drop</li>
 <li>Bug 52471 - Improve Mirror Server performance by Using Pool of threads instead of launching a Thread for each request</li>
 <li>Resurrected OldSaveService to allow reading Avalon format JMX files (removed in 2.4)</li>
+<li>Add a dialog box to confirm removing the element(s) when Remove action is called</li>
 </ul>
 
 <h2>Non-functional changes</h2>
