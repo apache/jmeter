@@ -270,6 +270,10 @@ Loads any additional properties found in META-INF/resources/org.apache.jmeter.na
 <li>Bug 51923 - Counter function bug or documentation issue ? (fixed docs)</li>
 <li>Update velocity.jar to 1.7 (from 1.6.2)</li>
 <li>Update js.jar to 1.7R3 (from 1.6R5)</li>
+<li>Update commons-codec 1.5 => 1.6</li>
+<li>Update commons-io 2.0.1 => 2.1</li>
+<li>Update jdom 1.1 => 1.1.2</li>
+<li>Update junit 4.9 => 4.10</li>
 <li>Bug 51954 - Generated documents include &lt;/br&gt; entries which cause extra blank lines </li>
 <li>Bug 52075 - JMeterProperty.clone() currently returns Object; it should return JMeterProperty</li>
 <li>Updated httpcore to 4.1.4</li>
