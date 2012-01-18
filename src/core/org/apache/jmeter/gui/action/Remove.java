@@ -28,6 +28,7 @@ import javax.swing.tree.TreePath;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Implements the Remove menu item.
@@ -56,17 +57,24 @@ public class Remove implements Command {
     }
 
     public void doAction(ActionEvent e) {
-        // TODO - removes the nodes from the CheckDirty map - should it be done later, in case some can't be removed?
-        ActionRouter.getInstance().actionPerformed(new ActionEvent(e.getSource(), e.getID(), ActionNames.CHECK_REMOVE));
-        GuiPackage guiPackage = GuiPackage.getInstance();
-        JMeterTreeNode[] nodes = guiPackage.getTreeListener().getSelectedNodes();
-        TreePath newTreePath = // Save parent node for later
-        guiPackage.getTreeListener().removedSelectedNode();
-        for (int i = nodes.length - 1; i >= 0; i--) {
-            removeNode(nodes[i]);
+        int isConfirm = JOptionPane.showConfirmDialog(null, 
+                JMeterUtils.getResString("remove_confirm_msg"),// $NON-NLS-1$
+                JMeterUtils.getResString("remove_confirm_title"), // $NON-NLS-1$
+                JOptionPane.WARNING_MESSAGE,
+                JOptionPane.YES_NO_OPTION);
+        if (isConfirm == JOptionPane.YES_OPTION) {
+            // TODO - removes the nodes from the CheckDirty map - should it be done later, in case some can't be removed?
+            ActionRouter.getInstance().actionPerformed(new ActionEvent(e.getSource(), e.getID(), ActionNames.CHECK_REMOVE));
+            GuiPackage guiPackage = GuiPackage.getInstance();
+            JMeterTreeNode[] nodes = guiPackage.getTreeListener().getSelectedNodes();
+            TreePath newTreePath = // Save parent node for later
+            guiPackage.getTreeListener().removedSelectedNode();
+            for (int i = nodes.length - 1; i >= 0; i--) {
+                removeNode(nodes[i]);
+            }
+            guiPackage.getTreeListener().getJTree().setSelectionPath(newTreePath);
+            guiPackage.updateCurrentGui();
         }
-        guiPackage.getTreeListener().getJTree().setSelectionPath(newTreePath);
-        guiPackage.updateCurrentGui();
     }
 
     private static void removeNode(JMeterTreeNode node) {
