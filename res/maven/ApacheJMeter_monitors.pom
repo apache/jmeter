@@ -25,8 +25,8 @@ under the License.
       <version>@MAVEN.DEPLOY.VERSION@</version>
       <relativePath>.</relativePath>
     </parent>
-    <artifactId>ApacheJMeter_reports</artifactId>
-    <name>Apache JMeter Reports</name>
+    <artifactId>ApacheJMeter_monitors</artifactId>
+    <name>Apache JMeter Monitor</name>
 
     <dependencies>
         <dependency>
@@ -42,6 +42,11 @@ under the License.
         <dependency>
             <groupId>org.apache.jmeter</groupId>
             <artifactId>ApacheJMeter_components</artifactId>
+            <version>@MAVEN.DEPLOY.VERSION@</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.jmeter</groupId>
+            <artifactId>ApacheJMeter_http</artifactId>
             <version>@MAVEN.DEPLOY.VERSION@</version>
         </dependency>
     </dependencies>
