@@ -230,7 +230,7 @@ under the License.
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcmail-jdk15</artifactId>
-            <version>$(bcmail.version}</version>
+            <version>1.45</version>
         </dependency>
         <dependency>
             <groupId>org.bouncycastle</groupId>
@@ -337,6 +337,16 @@ under the License.
             <groupId>org.jdom</groupId>
             <artifactId>jdom</artifactId>
             <version>${jdom.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>maven-plugins</artifactId>
+                    <groupId>maven-cobertura-plugin</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>maven-plugins</artifactId>
+                    <groupId>maven-findbugs-plugin</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>rhino</groupId>
