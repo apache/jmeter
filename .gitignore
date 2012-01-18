@@ -38,7 +38,16 @@ Thumbs.db
 *.iml
 *.ipr
 *.iws
+.idea
 
 # Maven #
 #########
 */target/*
+
+# Other IDE's#
+##############
+\.classpath
+\.project
+\.settings
+\.dorsync
+/nbactions.xml
