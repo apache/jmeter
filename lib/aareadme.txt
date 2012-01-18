@@ -27,7 +27,7 @@ bsh-2.0b5.jar (org.bsh)
 -------------
 - BeanShell test elements
 
-commons-codec-1.4
+commons-codec-1.6
 -----------------
 http://commons.apache.org/downloads/download_codec.cgi
 - used by commons-httpclient-3.1
@@ -44,7 +44,7 @@ commons-httpclient-3.1
 http://hc.apache.org/downloads.cgi
 - httpclient version of HTTP sampler
 
-commons-io-1.4
+commons-io-2.1
 --------------
 http://commons.apache.org/downloads/download_io.cgi
 - FTPSampler
@@ -54,7 +54,7 @@ commons-jexl-1.1
 http://commons.apache.org/downloads/download_jexl.cgi
 - Jexl function and BSF test elements
 
-commons-lang-2.4
+commons-lang-2.6
 ----------------
 http://commons.apache.org/downloads/download_lang.cgi
 - velocity (Anakia)
@@ -65,7 +65,7 @@ commons-logging-1.1.1
 http://commons.apache.org/downloads/download_logging.cgi
 - httpclient
 
-commons-net-1.4.1
+commons-net-3.0.1
 -----------------
 http://commons.apache.org/downloads/download_net.cgi
 - FTPSampler
@@ -86,8 +86,8 @@ excalibur-pool-1.2 (org.apache.avalon.excalibur.pool)
 ------------------
 - used by excalibur-datasource
 
-htmlparser-2.0-20060923
-htmllexer-2.0-20060923
+htmlparser-2.1
+htmllexer-2.1
 ----------------------
 http://htmlparser.sourceforge.net/
 - http: parsing html
@@ -97,13 +97,13 @@ jCharts-0.7.5 (org.jCharts)
 http://jcharts.sourceforge.net/downloads.html
 - AxisGraph,LineGraph,LineChart
 
-jdom-1.1
+jdom-1.1.2
 --------
 http://www.jdom.org/downloads/index.html
 - XMLAssertion, JMeterTest ONLY
 - Anakia
 
-js-1.6R5
+js-1.7R2
 --------
 http://www.mozilla.org/rhino/download.html
 - javascript function
@@ -115,7 +115,7 @@ jTidy-r938
 - org.xml.sax - various
 - XPathUtil (XPath assertion)
 
-junit 4.8.1
+junit 4.10
 -----------
 - unit tests, JUnit sampler
 
@@ -138,7 +138,7 @@ soap-2.3.1
 ----------
 - WebServiceSampler ONLY
 
-velocity-1.6.2
+velocity-1.7
 --------------
 http://velocity.apache.org/download.cgi
 - Anakia (create documentation) Not used by JMeter runtime
