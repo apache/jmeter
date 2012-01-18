@@ -45,12 +45,12 @@
 	<classpathentry kind="lib" path="lib/bsf-2.4.0.jar"/>
     <classpathentry kind="lib" path="lib/bsf-api-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/bsh-2.0b5.jar"/>
-	<classpathentry kind="lib" path="lib/commons-codec-1.5.jar"/>
+	<classpathentry kind="lib" path="lib/commons-codec-1.6.jar"/>
 	<classpathentry kind="lib" path="lib/commons-collections-3.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-httpclient-3.1.jar"/>
-	<classpathentry kind="lib" path="lib/commons-io-2.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-io-2.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-jexl-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/commons-jexl-2.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-jexl-2.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang-2.6.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-net-3.0.1.jar"/>
@@ -65,10 +65,10 @@
     <classpathentry kind="lib" path="lib/httpcore-4.1.4.jar"/>
     <classpathentry kind="lib" path="lib/httpmime-4.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/jCharts-0.7.5.jar"/>
-	<classpathentry kind="lib" path="lib/jdom-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/jdom-1.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/js-1.7R2.jar"/>
     <classpathentry kind="lib" path="lib/jtidy-r938.jar"/>
-    <classpathentry kind="lib" path="lib/junit-4.9.jar"/>
+    <classpathentry kind="lib" path="lib/junit-4.10.jar"/>
 	<classpathentry kind="lib" path="lib/logkit-2.0.jar"/>
 	<classpathentry kind="lib" path="lib/mail-1.4.4.jar"/>
 	<classpathentry kind="lib" path="lib/oro-2.0.8.jar"/>
