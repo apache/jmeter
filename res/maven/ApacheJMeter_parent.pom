@@ -24,7 +24,33 @@ under the License.
     <name>Apache JMeter parent</name>
     <packaging>pom</packaging>
     
+    <description>Apache JMeter is open source software, a 100% pure Java desktop application designed to load test
+        functional behavior and measure performance. It was originally designed for testing Web Applications but has
+        since expanded to other test functions.
+    </description>
+    <url>http://jmeter.apache.org/</url>
+    <inceptionYear>1998</inceptionYear>
+    <licenses>
+        <license>
+            <name>Apache 2</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+    <issueManagement>
+        <system>bugzilla</system>
+        <url>https://issues.apache.org/bugzilla/describecomponents.cgi?product=JMeter</url>
+    </issueManagement>
+    <scm>
+        <connection>http://svn.apache.org/repos/asf/jmeter/trunk/</connection>
+        <developerConnection>https://svn.apache.org/repos/asf/jmeter/trunk/</developerConnection>
+        <url>http://svn.apache.org/viewvc/jmeter/trunk/</url>
+    </scm>
+
+
     <properties>
+      <!-- these must agree with the definitions in build.properties -->
       <apache-bsf.version>2.4.0</apache-bsf.version>
       <apache-jsr223-api.version>3.1</apache-jsr223-api.version>
       <avalon-framework.version>4.1.4</avalon-framework.version>
@@ -84,7 +110,11 @@ under the License.
         <artifactId>avalon-framework</artifactId>
         <version>${avalon-framework.version}</version>
       </dependency>
-      <!-- bsh-2.0b5.jar -->
+      <dependency>
+        <groupId>org.beanshell</groupId>
+        <artifactId>bsh</artifactId>
+        <version>${beanshell.version}</version>
+      </dependency>
       <dependency>
         <groupId>org.bouncycastle</groupId>
         <artifactId>bcmail-jdk15</artifactId>
@@ -190,7 +220,11 @@ under the License.
         <artifactId>oro</artifactId>
         <version>${jakarta-oro.version}</version>
       </dependency>
-      <!-- jCharts-0.7.5.jar not in repo? -->
+      <dependency>
+        <groupId>jcharts</groupId>
+        <artifactId>jcharts</artifactId>
+        <version>0.7.5</version>
+      </dependency>
       <dependency>
         <groupId>org.jdom</groupId>
         <artifactId>jdom</artifactId>
@@ -287,4 +321,16 @@ under the License.
        -->
     </dependencies>
 
+    <repositories>
+        <repository>
+            <!-- Required for jCharts 0.7.5 -->
+            <id>MVN Search</id>
+            <url>http://www.mvnsearch.org/maven2</url>
+        </repository>
+        <repository>
+            <!--Required for bsh 2.0b5 -->
+            <id>JBoss</id>
+            <url>https://repository.jboss.org/nexus/content/repositories/thirdparty-releases/</url>
+        </repository>
+    </repositories>
 </project>
