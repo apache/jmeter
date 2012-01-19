@@ -195,6 +195,13 @@ under the License.
         <groupId>org.jdom</groupId>
         <artifactId>jdom</artifactId>
         <version>${jdom.version}</version>
+        <!-- Jaxen brings in missing dependencies -->
+        <exclusions>
+          <exclusion>
+            <artifactId>jaxen</artifactId>
+            <groupId>jaxen</groupId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>rhino</groupId>
