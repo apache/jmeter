@@ -180,6 +180,11 @@ Support for reading/writing the original Avalon XML format of JMX (script) and J
 JMeter can now read the Avalon format files again, however there is no support for saving files in the old format.
 </p>
 
+<h3>JMeter jars available from Maven repository</h3>
+<p>
+JMeter jars are now available from Maven repository.
+</p>
+
 <!--  =================== Known bugs =================== -->
 
 <h2>Known bugs</h2>
@@ -418,6 +423,7 @@ Loads any additional properties found in META-INF/resources/org.apache.jmeter.na
 <li>Bug 51954 - Generated documents include &lt;/br&gt; entries which cause extra blank lines </li>
 <li>Bug 52075 - JMeterProperty.clone() currently returns Object; it should return JMeterProperty</li>
 <li>Updated httpcore to 4.1.4</li>
+<li>Bug 49753 - Please publish jMeter artifacts on Maven central repository</li>
 </ul>
 
 </section> 
