@@ -38,12 +38,12 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 
 <h3>Toolbar</h3>
 <p>A new toolbar on JMeter's main window
-<figure width="953" height="94" image="changes/01_toolbar.png"></figure>
+<figure width="986" height="91" image="changes/01_toolbar.png"></figure>
 </p>
 
 <h3>JMeter start test button</h3>
 <p>A new menu option and button allow to start a test ignoring the Pause Timers
-<figure width="232" height="54" image="changes/02_ignore_pause_timers.png"></figure>
+<figure width="201" height="58" image="changes/02_ignore_pause_timers.png"></figure>
 </p>
 
 <h3>JMeter GUI Look and Feel</h3>
@@ -58,7 +58,7 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 
 <h3>JMeter tree view - search facility</h3>
 <p>Functionality to search by keyword in Samplers Tree View
-<figure width="560" height="211" image="changes/05_search_tree.png"></figure>
+<figure width="554" height="219" image="changes/05_search_tree.png"></figure>
 </p>
 
 <h3>HTTP Request - raw request pane</h3>
@@ -160,7 +160,7 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 
 <h3>GUI and OS interaction</h3>
 <p>Support for file Drag and Drop. 
-<figure width="742" height="467" image="changes/22_drag_and_drop.png"></figure>
+<figure width="776" height="508" image="changes/22_drag_and_drop.png"></figure>
 </p>
 
 <h3>Confirm Remove Dialog box</h3>
