@@ -1068,7 +1068,7 @@ Beware however that misuse of any methods can cause subtle faults that may be di
 </component>
 
 
-<component name="BSF Sampler" index="&sect-num;.1.11"  width="622" height="267" screenshot="bsfsampler.png">
+<component name="BSF Sampler" index="&sect-num;.1.11"  width="1228" height="407" screenshot="bsfsampler.png">
 	<description><p>This sampler allows you to write a sampler using a BSF scripting language.<br></br>
 		See the <a href="http://commons.apache.org/bsf/index.html">Apache Bean Scripting Framework</a>
 		website for details of the languages supported.
@@ -5258,7 +5258,7 @@ either by copying the files there or by starting JMeter in the directory contain
 </p>
 </component>
 
-<component name="HTTP Mirror Server" index="&sect-num;.9.6"  width="303" height="139" screenshot="mirrorserver.png">
+<component name="HTTP Mirror Server" index="&sect-num;.9.6"  width="873" height="388" screenshot="mirrorserver.png">
 <description>
 <p>
 The HTTP Mirrror Server is a very simple HTTP server - it simply mirrors the data sent to it.
@@ -5268,6 +5268,11 @@ This is useful for checking the content of HTTP requests.
 It uses default port 8081 since 2.5.2. 
 </p>
 </description>
+<properties>
+        <property name="Port" required="Yes">Port on which Mirror server listens, defaults to 8081.</property>
+        <property name="Max Number of threads" required="No">If set to a value > 0, number of threads serving requests will be limited to the configured number, if set to a value &lt;=0 
+        a new thread will be created to serve incoming requests. Defaults to 0</property>
+</properties>
 </component>
 
 <component name="Property Display" index="&sect-num;.9.7"  width="776" height="502" screenshot="property_display.png">
