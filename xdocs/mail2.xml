@@ -43,22 +43,25 @@ For details of how to subscribe/unsubscribe please read
 
 </section>
 
-<section name="JMeter">
+<section name="JMeter lists and archives at the ASF">
 <table>
 <tr>
-<th>Name</th>
-<th>Comment</th>
+<th>List Name</th>
+<th>Description</th>
 <th>Subscribe</th>
 <th>Unsubscribe</th>
 <th>Archive</th>
 </tr>
 
 <tr>
-<td>JMeter User List</td>
+<td>Apache JMeter User</td>
 <td>
-This is the list where users of JMeter meet and discuss issues. 
+This is the list where users of Apache JMeter meet and discuss issues. 
 <br/>
 Developers are also expected to be lurking on this list to offer support to users of JMeter.
+<br/>
+This list starts part-way through Nov 2011, when JMeter became an independent Apache project.
+For earlier postings, please see the Jakarta JMeter User list, below.
 </td>
 <td><a href="mailto:user-subscribe@jmeter.apache.org">user-subscribe@jmeter.apache.org</a></td>
 <td><a href="mailto:user-unsubscribe@jmeter.apache.org">user-unsubscribe@jmeter.apache.org</a></td>
@@ -66,13 +69,26 @@ Developers are also expected to be lurking on this list to offer support to user
 </tr>
 
 <tr>
-<td>JMeter Developer List</td>
+<td>Jakarta JMeter User</td>
+<td>
+This is the old JMeter user list from when JMeter was a sub-project of Apache Jakarta. 
+</td>
+<td>-</td>
+<td>-</td>
+<td><a href="http://mail-archives.apache.org/mod_mbox/jakarta-jmeter-user/">Archive</a></td>
+</tr>
+
+<tr>
+<td>Apache JMeter Developer</td>
 <td>
 This is the list where participating developers meet and discuss issues, code changes/additions etc.
 <br/>
 <strong>Please do not send usage questions to this list, see user list above.</strong>
 <br/>
 This list also collects Wiki update messages.
+<br/>
+This list starts part-way through Nov 2011, when JMeter became an independent Apache project.
+For earlier postings, please see below.
 </td>
 <td><a href="mailto:dev-subscribe@jmeter.apache.org">dev-subscribe@jmeter.apache.org</a></td>
 <td><a href="mailto:dev-unsubscribe@jmeter.apache.org">dev-unsubscribe@jmeter.apache.org</a></td>
@@ -80,7 +96,7 @@ This list also collects Wiki update messages.
 </tr>
 
 <tr>
-<td>JMeter Commits List</td>
+<td>Apache JMeter Commits</td>
 <td>SVN commit messages are sent here.
 <br/>
 Prior to Nov 2011, they were sent to the Jakarta Notifications list, see below. 
@@ -91,7 +107,7 @@ Prior to Nov 2011, they were sent to the Jakarta Notifications list, see below.
 </tr>
 
 <tr>
-<td>JMeter Issues List</td>
+<td>Apache JMeter Issues</td>
 <td>Bugzilla messages are sent here.
 <br/>
 Prior to Nov 2011, they were sent to the Jakarta Notifications list, see below. 
@@ -102,7 +118,7 @@ Prior to Nov 2011, they were sent to the Jakarta Notifications list, see below.
 </tr>
 
 <tr>
-<td>Jakarta Developer List</td>
+<td>Jakarta Developer</td>
 <td>
 Combined Jakarta developer list, April 2010 to November 2011
 </td>
@@ -112,9 +128,9 @@ Combined Jakarta developer list, April 2010 to November 2011
 </tr>
 
 <tr>
-<td>Original JMeter Developer List</td>
+<td>Jakarta JMeter Developer</td>
 <td>
-Historical list, up to April 2010
+Historical list, up to April 2010.
 </td>
 <td>-</td>
 <td>-</td>
@@ -122,7 +138,7 @@ Historical list, up to April 2010
 </tr>
 
 <tr>
-<td>Old Jakarta Notifications List</td>
+<td>Jakarta Notifications</td>
 <td>
 Combined Jakarta notifications to November 2011.
 Includes Bugzilla, SVN and Wiki commit mails for JMeter.
@@ -135,9 +151,9 @@ Includes Bugzilla, SVN and Wiki commit mails for JMeter.
 </table>
 </section>
 
-<section name="Archives and Searching">
+<section name="Other Archives and Searching">
 <p>
-There are several sites that archive and provide searching for our mailing lists:
+There are several 3rd party sites that archive and provide searching for our mailing lists:
 </p>
 <p>
 <ul>
