@@ -23,40 +23,40 @@
 
         For remote deployment, username/password will need to be set up in the appropriate
         "server" entries in the Maven settings.xml file:
-        
+
         apache.snapshots.https
         apache.releases.https
-        
+
         TODO: Does not currently handle source or javadoc jars.
-        
+
         May be moved to home directory and/or merged into main build file.
-        
+
         Usage:
-        
+
         ant -Dmaven.deploy.version=2.6-SNAPSHOT [-DrepoType=snapshots]
-        
+
         ant -Dmaven.deploy.version=2.6  [-DrepoType=releases]
     </description>
 
     <!-- Configuration items -->
-    
+
     <!-- Top-level JMeter directory -->
     <property name="home.dir" value="../.."/>
-    
+
     <!-- Location of prototype POMs -->
     <property name="pom.dir" value="${home.dir}/res/maven"/>
-    
-    
+
+
     <property environment="env"/>
     <property name="maven.home" value="${env.MAVEN_HOME}"/>
 
 
     <!-- Directory where the 3rd party libraries (and jorphan) live -->
     <property name="lib.dir" value="${home.dir}/lib"/>
-    
+
     <!-- Where the build result .jars will be placed -->
     <property name="dest.jar" value="${lib.dir}/ext"/>
-    
+
     <!-- JMeter main jar -->
     <property name="dest.jar.jmeter" value="${home.dir}/bin"/>
 
@@ -80,26 +80,84 @@
 
     <property name="repoType" value="file"/>
 
-    <target name="default">
-        <deployfile stem="ApacheJMeter_parent"     dir="${pom.dir}" packaging="pom"/>
+    <target name="default"
+        depends="ApacheJMeter_parent,main,protocols">
+    </target>
 
+    <target name="main"
+        depends="jorphan,ApacheJMeter,ApacheJMeter_components,ApacheJMeter_core,ApacheJMeter_functions,ApacheJMeter_junit,ApacheJMeter_monitors,ApacheJMeter_report">
+    </target>
+
+    <target name="protocols"
+        depends="ApacheJMeter_ftp,ApacheJMeter_http,ApacheJMeter_java,ApacheJMeter_jdbc,ApacheJMeter_jms,ApacheJMeter_ldap,ApacheJMeter_mail,ApacheJMeter_tcp">
+    </target>
+
+    <target name="ApacheJMeter_parent">
+        <deployfile stem="ApacheJMeter_parent"     dir="${pom.dir}" packaging="pom"/>
+    </target>
+
+    <target name="jorphan">
         <deployfile stem="jorphan"                 dir="${lib.dir}"/>
+    </target>
+
+    <target name="ApacheJMeter">
         <deployfile stem="ApacheJMeter"            dir="${dest.jar.jmeter}"/>
+    </target>
+
+    <target name="ApacheJMeter_components">
         <deployfile stem="ApacheJMeter_components" dir="${dest.jar}"/>
+    </target>
+
+    <target name="ApacheJMeter_core">
         <deployfile stem="ApacheJMeter_core"       dir="${dest.jar}"/>
+    </target>
+
+    <target name="ApacheJMeter_ftp">
         <deployfile stem="ApacheJMeter_ftp"        dir="${dest.jar}"/>
+    </target>
+
+    <target name="ApacheJMeter_functions">
         <deployfile stem="ApacheJMeter_functions"  dir="${dest.jar}"/>
+    </target>
+
+    <target name="ApacheJMeter_http">
         <deployfile stem="ApacheJMeter_http"       dir="${dest.jar}"/>
+    </target>
+
+    <target name="ApacheJMeter_java">
         <deployfile stem="ApacheJMeter_java"       dir="${dest.jar}"/>
+    </target>
+
+    <target name="ApacheJMeter_jdbc">
         <deployfile stem="ApacheJMeter_jdbc"       dir="${dest.jar}"/>
+    </target>
+
+    <target name="ApacheJMeter_jms">
         <deployfile stem="ApacheJMeter_jms"        dir="${dest.jar}"/>
+    </target>
+
+    <target name="ApacheJMeter_junit">
         <deployfile stem="ApacheJMeter_junit"      dir="${dest.jar}"/>
+    </target>
+
+    <target name="ApacheJMeter_ldap">
         <deployfile stem="ApacheJMeter_ldap"       dir="${dest.jar}"/>
+    </target>
+
+    <target name="ApacheJMeter_mail">
+        <deployfile stem="ApacheJMeter_mail"       dir="${dest.jar}"/>
+    </target>
+
+    <target name="ApacheJMeter_monitors">
         <deployfile stem="ApacheJMeter_monitors"   dir="${dest.jar}"/>
+    </target>
+
+    <target name="ApacheJMeter_report">
         <deployfile stem="ApacheJMeter_report"     dir="${dest.jar}"/>
+    </target>
+
+    <target name="ApacheJMeter_tcp">
         <deployfile stem="ApacheJMeter_tcp"        dir="${dest.jar}"/>
-<!-- 
- -->
     </target>
 
     <macrodef name="deployfile">
@@ -119,10 +177,10 @@
                   <filter token="MAVEN.DEPLOY.VERSION" value="${maven.deploy.version}"/>
               </filterset>
           </copy>
-          <java classname="org.codehaus.classworlds.Launcher" 
+          <java classname="org.codehaus.classworlds.Launcher"
                 fork="true"
                 dir="@{basedir}"
-                failonerror="true" 
+                failonerror="true"
                 resultproperty="@{resultproperty}">
             <jvmarg value="-Xmx512m"/>
             <classpath>
@@ -150,6 +208,5 @@
           <delete file="@{stem}.pom.tmp"/>
         </sequential>
       </macrodef>
-    
-</project>
 
+</project>
