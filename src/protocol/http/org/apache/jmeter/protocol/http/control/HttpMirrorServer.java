@@ -94,13 +94,15 @@ public class HttpMirrorServer extends Thread implements Stoppable {
         except = null;
         running = true;
         ServerSocket mainSocket = null;
-        final ArrayBlockingQueue<Runnable> queue = new ArrayBlockingQueue<Runnable>(
-                25);
-        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(
-                maxThreadPoolSize/2, 
-                maxThreadPoolSize, KEEP_ALIVE_TIME, TimeUnit.SECONDS, queue);
-        threadPoolExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.DiscardOldestPolicy());
-
+        ThreadPoolExecutor threadPoolExecutor = null;
+        if(maxThreadPoolSize>0) {
+            final ArrayBlockingQueue<Runnable> queue = new ArrayBlockingQueue<Runnable>(
+                    25);
+            threadPoolExecutor = new ThreadPoolExecutor(
+                    maxThreadPoolSize/2, 
+                    maxThreadPoolSize, KEEP_ALIVE_TIME, TimeUnit.SECONDS, queue);
+            threadPoolExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.DiscardOldestPolicy());
+        }
         try {
             log.info("Creating HttpMirror ... on port " + daemonPort);
             mainSocket = new ServerSocket(daemonPort);
@@ -112,10 +114,13 @@ public class HttpMirrorServer extends Thread implements Stoppable {
                     Socket clientSocket = mainSocket.accept();
                     if (running) {
                         // Pass request to new thread
-                    	threadPoolExecutor.execute(new HttpMirrorThread(clientSocket));
-                    	//HttpMirrorThread thd = new HttpMirrorThread(clientSocket);
-                        log.debug("Starting new Mirror thread");
-                        //thd.start();
+                        if(threadPoolExecutor != null) {
+                            threadPoolExecutor.execute(new HttpMirrorThread(clientSocket));
+                        } else {
+                            Thread thd = new Thread(new HttpMirrorThread(clientSocket));
+                            log.debug("Starting new Mirror thread");
+                            thd.start();
+                        }
                     } else {
                         log.warn("Server not running");
                         JOrphanUtils.closeQuietly(clientSocket);
@@ -130,7 +135,9 @@ public class HttpMirrorServer extends Thread implements Stoppable {
             except = e;
             log.warn("HttpMirror Server stopped", e);
         } finally {
-        	threadPoolExecutor.shutdownNow();
+            if(threadPoolExecutor != null) {
+                threadPoolExecutor.shutdownNow();
+            }
             JOrphanUtils.closeQuietly(mainSocket);
         }
     }
