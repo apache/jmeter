@@ -100,6 +100,8 @@ Nor does it render the HTML pages as a browser does
 <li><a href="changes.html">Change List</a></li>
 <li><a href="issues.html">Issues</a></li>
 <li><a href="http://www.apache.org/licenses/">License</a></li>
+<li><a href="mail.html">Mailing Lists</a></li>
+<li><a href="svnindex.html">SVN Repositories</a></li>
 <li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a></li>
 </ul>
 </section>
