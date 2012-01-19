@@ -37,11 +37,11 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 <h2>New and Noteworthy</h2>
 
 <h3>Toolbar</h3>
-<p>A new toolbar on main JMeter's window
+<p>A new toolbar on JMeter's main window
 <figure width="953" height="94" image="changes/01_toolbar.png"></figure>
 </p>
 
-<h3>JMeter start test</h3>
+<h3>JMeter start test button</h3>
 <p>A new menu option and button allow to start a test ignoring the Pause Timers
 <figure width="232" height="54" image="changes/02_ignore_pause_timers.png"></figure>
 </p>
@@ -51,31 +51,31 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 <figure width="373" height="162" image="changes/03_look_and_feel.png"></figure>
 </p>
 
-<h3>JMeter GUI</h3>
+<h3>JMeter GUI - duplicate node</h3>
 <p>Add "duplicate node" in context menu
 <figure width="323" height="136" image="changes/04_duplicate_context_menu.png"></figure>
 </p>
 
-<h3>JMeter tree view</h3>
+<h3>JMeter tree view - search facility</h3>
 <p>Functionality to search by keyword in Samplers Tree View
 <figure width="560" height="211" image="changes/05_search_tree.png"></figure>
 </p>
 
-<h3>HTTP Request</h3>
+<h3>HTTP Request - raw request pane</h3>
 <p>Improve HTTP Request GUI to better show parameters without name (GWT RPC request or SOAP request for example)
 <figure width="759" height="461" image="changes/06_post_data.png"></figure>
 </p>
 
-<h3>HTTP Request</h3>
+<h3>HTTP Request - other changes</h3>
 <p><ul>
 <li>Allow multiple selection in arguments panel</li>
 <li>Allow to add (paste) entries from the clipboard to an arguments list</li>
-<li>Ability to move up or down variables in HTTP Request</li>
+<li>Ability to move variables up or down in HTTP Request</li>
 </ul>
 <figure width="875" height="218" image="changes/07_multiple_selection_params.png"></figure>
 </p>
 
-<h3>HTTP Request</h3>
+<h3>HTTP Request - file protocol</h3>
 <p>Better support for file: protocol in HTTP sampler
 <figure width="489" height="662" image="changes/08_file_protocol.png"></figure>
 </p>
@@ -83,17 +83,17 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 <figure width="700" height="138" image="changes/09_file_protocol_embedded.png"></figure>
 </p>
 
-<h3>View Results in Table</h3>
+<h3>View Results in Table - child sample display</h3>
 <p>Add option to TableVisualiser to display child samples instead of parent
 <figure width="911" height="619" image="changes/10_child_sampler.png"></figure>
 </p>
 
-<h3>Key Store</h3>
+<h3>Key Store - multiple certificates</h3>
 <p>Allowing multiple certificates (JKS)
 <figure width="324" height="166" image="changes/11_jks_keystore.png"></figure>
 </p>
 
-<h3>Aggregate graph</h3>
+<h3>Aggregate graph improvements</h3>
 <p>Some improvements on Aggregate Graph Listener: 
 <ul><li>new GUI for settings</li>
 <li>dynamic graph size</li>
@@ -110,7 +110,7 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 <figure width="851" height="506" image="changes/13_aggregate_graph_bar.png"></figure>
 </p>
 
-<h3>Counter</h3>
+<h3>Counter - new reset option</h3>
 <p>Add an option to reset counter on each Thread Group iteration
 <figure width="345" height="257" image="changes/14_reset_counter.png"></figure>
 </p>
@@ -125,7 +125,7 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 <figure width="697" height="236" image="changes/15_random_string.png"></figure>
 </p>
 
-<h3>User Defined Variable</h3>
+<h3>User Defined Variable improvements</h3>
 <p><ul><li>Add a comment field in User Defined Variables</li>
 <li>Allow to add (paste) entries from the clipboard to an arguments list</li>
 <li>Ability to move up or down variables in User Defined Variables</li>
@@ -138,8 +138,8 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 <figure width="953" height="98" image="changes/17_vrt_max_size_display.png"></figure>
 </p>
 
-<h3>Controller type</h3>
-<p>Add Ability to Change Controller elements
+<h3>Controllers - change elements</h3>
+<p>Add ability to Change Controller elements
 <figure width="643" height="112" image="changes/18_change_ctl_type.png"></figure>
 </p>
 
@@ -148,7 +148,7 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 <figure width="535" height="217" image="changes/19_jdbc_pre_post_proc.png"></figure>
 </p>
 
-<h3>JDBC elements</h3>
+<h3>JDBC transaction isolation option</h3>
 <p>Allow to set the transaction isolation in the JDBC Connection Configuration
 <figure width="437" height="351" image="changes/20_jdbc_trans_isolation.png"></figure>
 </p>
@@ -172,6 +172,12 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 <p>Use external store to hold samples during distributed testing, 
 Added DiskStore remote sample sender: like Hold, but saves samples to disk until end of test
 <figure width="998" height="273" image="changes/24_diskstore.png"></figure>
+</p>
+
+<h3>Legacy JMX and JTL Avalon format support restored</h3>
+<p>
+Support for reading/writing the original Avalon XML format of JMX (script) and JTL (sample result) files was dropped in JMeter version 2.4.
+JMeter can now read the Avalon format files again, however there is no support for saving files in the old format.
 </p>
 
 <!--  =================== Known bugs =================== -->
