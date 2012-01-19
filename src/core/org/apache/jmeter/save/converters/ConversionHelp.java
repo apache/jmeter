@@ -230,7 +230,7 @@ public class ConversionHelp {
         if (name.length() != 0 && newName.length()==0) {
             return null;
         }
-        return name;
+        return newName;
     }
 
     /**
