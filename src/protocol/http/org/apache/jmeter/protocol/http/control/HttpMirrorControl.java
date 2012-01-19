@@ -44,7 +44,7 @@ public class HttpMirrorControl extends AbstractTestElement {
 
     public static final String MAX_POOL_SIZE = "HttpMirrorControlGui.maxPoolSize"; // $NON-NLS-1$
 
-    public static final int DEFAULT_MAX_POOL_SIZE = 10;
+    public static final int DEFAULT_MAX_POOL_SIZE = 0;
 
     public HttpMirrorControl() {
         initPort(DEFAULT_PORT);
