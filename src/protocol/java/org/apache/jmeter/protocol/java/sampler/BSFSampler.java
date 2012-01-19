@@ -27,6 +27,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.util.BSFTestElement;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -35,64 +36,14 @@ import org.apache.log.Logger;
  * A sampler which understands BSF
  *
  */
-public class BSFSampler extends BSFTestElement implements Sampler {
+public class BSFSampler extends BSFTestElement implements Sampler, TestBean {
 
     private static final long serialVersionUID = 240L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    //+ JMX file attributes - do not change
-    private static final String FILENAME = "BSFSampler.filename"; //$NON-NLS-1$
-
-    private static final String SCRIPT = "BSFSampler.query"; //$NON-NLS-1$
-
-    private static final String LANGUAGE = "BSFSampler.language"; //$NON-NLS-1$
-
-    private static final String PARAMETERS = "BSFSampler.parameters"; //$NON-NLS-1$
-    //- JMX file attributes
-
     public BSFSampler() {
         super();
-    }
-
-    @Override
-    public String getFilename() {
-        return getPropertyAsString(FILENAME);
-    }
-
-    @Override
-    public void setFilename(String newFilename) {
-        this.setProperty(FILENAME, newFilename);
-    }
-
-    @Override
-    public String getScript() {
-        return this.getPropertyAsString(SCRIPT);
-    }
-
-    @Override
-    public void setScript(String newScript) {
-        this.setProperty(SCRIPT, newScript);
-    }
-
-    @Override
-    public String getParameters() {
-        return this.getPropertyAsString(PARAMETERS);
-    }
-
-    @Override
-    public void setParameters(String newScript) {
-        this.setProperty(PARAMETERS, newScript);
-    }
-
-    @Override
-    public String getScriptLanguage() {
-        return this.getPropertyAsString(LANGUAGE);
-    }
-
-    @Override
-    public void setScriptLanguage(String lang) {
-        this.setProperty(LANGUAGE, lang);
     }
 
     /**
