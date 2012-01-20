@@ -36,6 +36,8 @@
 	 </menu>
 	 <menu name="Documentation">
 		<item name="User Manual"         href="/usermanual/index.html"/>
+        <item name="Component Reference"         href="/usermanual/component_reference.html"/>
+        <item name="Functions Reference"         href="/usermanual/functions.html"/>
 		<item name="Javadocs"		     href="/api/index.html"/>
         <item name="Localisation (Translator's Guide)" href="/localising/index.html"></item>
 		<item name="Building JMeter and Add-Ons"     href="/building.html"/>
