@@ -395,15 +395,18 @@ public class SaveService {
     }
 
     // Allow test code to check for spurious class references
+    // TODO this test is wrong; aliases should never be deleted even if the class is dropped.
+    // It might still be worth checking that missing classes are present in upgrade.properties.
     static boolean checkClasses(){
+        final ClassLoader classLoader = SaveService.class.getClassLoader();
         boolean OK = true;
         for (Object clazz : classToAlias.keySet()) {
             String name = (String) clazz;
-            if (name.endsWith("JMSConfigGui")) { // deliberately kept
+            if (name.endsWith("JMSConfigGui") ||name.endsWith("BSFSamplerGui")) { // deliberately kept 
                 continue;
             }
             try {
-                Class.forName(name, false, SaveService.class.getClassLoader());
+                Class.forName(name, false, classLoader);
             } catch (ClassNotFoundException e) {
                 log.error(e.toString());
                 OK = false;
