@@ -98,12 +98,13 @@
    ant findbugs -Dfindbugs.homedir=/etc/findbugs -Dfindbugs.level=medium
   [The defaults are /findbugs and medium]
    -->
-   <property name="findbugs.homedir" value="/findbugs" />
-   <property name="findbugs.level" value="medium" />
-   <property name="findbugs.xsldir" value="${findbugs.homedir}/src/xsl" />
-   <property name="findbugs.xslname" value="fancy" />
-   <property name="findbugs.outName" value="reports/jmeter-fb" />
-   <target name="findbugs" description="Run the stand-alone Findbugs detector">
+  <property name="findbugs.homedir" value="/findbugs" />
+  <property name="findbugs.level" value="medium" />
+  <property name="findbugs.xsldir" value="${findbugs.homedir}/src/xsl" />
+  <property name="findbugs.xslname" value="fancy" />
+  <property name="findbugs.outName" value="reports/jmeter-fb" />
+
+  <target name="findbugs" description="Run the stand-alone Findbugs detector">
     <echoproperties prefix="findbugs"/>
     <mkdir dir="reports"/>
     <taskdef name="findbugs"
@@ -2127,7 +2128,7 @@ run JMeter unless all the JMeter jars are added.
                 <param name="zipprop" value="@{jarname}.zip"/>
             </antcall>
         </sequential>
-      </macrodef>
+    </macrodef>
 
     <!-- Check if jarfile exists, and set properties for calling zip or jar download -->
     <target name="_check_jarfile" if="_get_file">
