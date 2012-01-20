@@ -150,9 +150,12 @@ public class SaveService {
         = VERSION_2_2.equals(TESTPLAN_FORMAT);
 
     // Holds the mappings from the saveservice properties file
+    // Key: alias Entry: full class name
+    // There may be multiple aliases which map to the same class
     private static final Properties aliasToClass = new Properties();
 
     // Holds the reverse mappings
+    // Key: full class name Entry: primary alias
     private static final Properties classToAlias = new Properties();
 
     // Version information for test plan header
