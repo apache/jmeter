@@ -32,7 +32,7 @@
 <meta name="author" value="Jordi Salvat i Alabart">
 <meta name="email" value="jsalvata@atg.com">
 
-<title>JMeter - JMeter Localisation (Translator's Guide)</title>
+<title>Apache JMeter - JMeter Localisation (Translator's Guide)</title>
 </head>
 
 <body bgcolor="#ffffff" text="#000000" link="#525D76">
@@ -45,10 +45,10 @@
 style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </td>
 <td align="left">
-<a href="http://jakarta.apache.org"><img width="505" height="48" src="../images/jakarta-logo.gif" alt="Jakarta" title="Jakarta" border="0"/></a>
+<a href="http://www.apache.org"><img title="Apache Software Foundation" width="387" height="100" src="../images/asf-logo.gif" border="0"/></a>
 </td>
 <td align="right">
-<a href="http://jakarta.apache.org/jmeter/"><img width="221" height="102" src="../images/logo.jpg" alt="JMeter" title="JMeter" border="0"/></a>
+<a href="http://jmeter.apache.org/"><img width="221" height="102" src="../images/logo.jpg" alt="Apache JMeter" title="Apache JMeter" border="0"/></a>
 </td>
 </tr>
 </table>
@@ -69,12 +69,12 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </li>
 <li><a href="http://www.apache.org/licenses/">License</a>
 </li>
-<li><a href="http://wiki.apache.org/jakarta-jmeter/JMeterCommitters">Contributors</a>
+<li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a>
 </li>
 </ul>
 <p><strong>Download</strong></p>
 <ul>
-<li><a href="http://jakarta.apache.org/site/downloads/downloads_jmeter.cgi">Download Releases</a>
+<li><a href="../download_jmeter.cgi">Download Releases</a>
 </li>
 <li><a href="../nightly.html">Developer (Nightly) Builds</a>
 </li>
@@ -83,15 +83,19 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <ul>
 <li><a href="../usermanual/index.html">User Manual</a>
 </li>
+<li><a href="../usermanual/component_reference.html">Component Reference</a>
+</li>
+<li><a href="../usermanual/functions.html">Functions Reference</a>
+</li>
 <li><a href="../api/index.html">Javadocs</a>
 </li>
 <li><a href="../localising/index.html">Localisation (Translator's Guide)</a>
 </li>
 <li><a href="../building.html">Building JMeter and Add-Ons</a>
 </li>
-<li><a href="http://wiki.apache.org/jakarta-jmeter">JMeter Wiki</a>
+<li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a>
 </li>
-<li><a href="http://wiki.apache.org/jakarta-jmeter/JMeterFAQ">FAQ (Wiki)</a>
+<li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a>
 </li>
 </ul>
 <p><strong>Tutorials (PDF format)</strong></p>
@@ -109,11 +113,11 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </ul>
 <p><strong>Community</strong></p>
 <ul>
-<li><a href="http://jakarta.apache.org/site/getinvolved.html">Get Involved</a>
+<li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved</a>
 </li>
-<li><a href="http://jakarta.apache.org/site/mail.html">Mailing Lists</a>
+<li><a href="../mail.html">Mailing Lists</a>
 </li>
-<li><a href="http://jakarta.apache.org/site/cvsindex.html">SVN Repositories</a>
+<li><a href="../svnindex.html">SVN Repositories</a>
 </li>
 </ul>
 <p><strong>Foundation</strong></p>
@@ -140,7 +144,7 @@ This document describes the process of creating and maintaining translated texts
 other than English. English has been tacitly chosen as the project's primary (or "default") language -- despite its
 obvious inadequacy for reasonably unambiguous communication -- as a tribute to the Power of the Empire :-)
 <br>
-</br>
+
 
 The metropolitan language texts are thus maintained by the software developers, while other project contributors 
 (called "translators" in this document) take care of maintaining the texts in the languages of the
@@ -217,8 +221,8 @@ Merging in new translations [committers].
 <p>
 If you want to help with JMeter's translation process, start by reading this document. Then
 send a message to 
-<a href="mailto:jmeter-dev@jakarta.apache.org">
-jmeter-dev@jakarta.apache.org
+<a href="mailto:dev@jmeter.apache.org">
+dev@jmeter.apache.org
 </a>
 
 stating your intention. The files you need (*.properties and *.metaprop) are included in the source archive.
@@ -227,18 +231,18 @@ from SVN and send them to you. You'll receive a jar, zip, tar or tgz file that y
 local disk.
 </p>
 <p>
-If you are familiar with SVN or you're brave, feel free to anonymously connect to the Jakarta SVN server
+If you are familiar with SVN or you're brave, feel free to anonymously connect to the Apache SVN server
 and obtain the JMeter source yourself, as described in
 
-<a href="http://jakarta.apache.org/site/cvsindex.html">
-http://jakarta.apache.org/site/cvsindex.html
+<a href="http://jmeter.apache.org/svnindex.html">
+http://jmeter.apache.org/svnindex.html
 </a>
 
--- the files necessary to the translation process are all under the jakarta-jmeter/src directory.
+-- the files necessary to the translation process are all under the jmeter/src directory.
 
 </p>
 <p>
-Once you've unpacked or checked out the files, make sure to find file jakarta-jmeter/src/i18nedit.properties in there:
+Once you've unpacked or checked out the files, make sure to find file src/i18nedit.properties in there:
 you'll need to know where it is to start working with i18nEdit.
 </p>
 </blockquote>
@@ -257,16 +261,16 @@ you'll need to know where it is to start working with i18nEdit.
 If you have access to JMeter's SVN repository and you want to pack the files necessary for localisation
 for sending to a translator, just go to the directory above the project root and issue the following command:
 <br>
-</br>
+
 
 
 <code>
 
-tar czf jakarta-jmeter-localisation.tgz `find jakarta-jmeter/src -name "*.properties" -o -name "*.metaprops"`
+tar czf jmeter-localisation.tgz `find jmeter/src -name "*.properties" -o -name "*.metaprops"`
 
 </code>
 
-Of course you could also send the translator the whole jakarta-jmeter directory, but this will make his life easier.
+Of course you could also send the translator the whole jmeter directory, but this will make his life easier.
 
 </p>
 </blockquote>
@@ -294,7 +298,7 @@ Download the binary distribution (i18nedit-1.0.0.jar) and save it locally.
 To run i18nEdit, just make sure to have a reasonably modern Java Runtime Environment in your PATH, change
 to the directory where you saved i18nedit-1.0.0.jar, then issue the following command:
 <br>
-</br>
+
 
 
 <code>
@@ -322,7 +326,7 @@ Select the "Projects" menu, then "Open project...".
 
 
 <li>
-Navigate to jakarta-jmeter/src/, select i18nedit.properties, and press the "Open" button.
+Navigate to jmeter/src/, select i18nedit.properties, and press the "Open" button.
 </li>
 
 
@@ -376,10 +380,10 @@ i18nEdit's on-line help is excellent: read through it for more information and t
 <tr><td>
 <blockquote>
 <p>
-Once you're done translating, just pack up the whole set of files in jakarta-jmeter/src in a jar, zip, tar,
+Once you're done translating, just pack up the whole set of files in jmeter/src in a jar, zip, tar,
 tgz, or alike and attach them to a JMeter bug report
 (follow link to "Known bugs" in 
-<a href="http://jakarta.apache.org/jmeter">
+<a href="http://jmeter.apache.org/">
 JMeter's home page
 </a>
  for that).
@@ -464,7 +468,7 @@ Close i18nEdit and commit to SVN as usual (remember to Refresh your project if y
 </td></tr>
 <tr><td colspan="2">
 <div align="center"><font color="#525D76" size="-1"><em>
-Copyright &copy; 1999-2011, Apache Software Foundation
+Copyright &copy; 1999-2012, Apache Software Foundation
 </em></font></div>
 </td></tr>
 <tr><td colspan="2">
