@@ -1371,7 +1371,7 @@ completed, so the net effect was similar to the MessageListener.onMessage() stra
 </p>
 </component>
 
-<component name="JMS Point-to-Point" index="&sect-num;.1.15"  width="799" height="789" screenshot="jms/JMS_Point-to-Point.png">
+<component name="JMS Point-to-Point" index="&sect-num;.1.15"  width="1182" height="696" screenshot="jms/JMS_Point-to-Point.png">
 <note>BETA CODE - the code is still subject to change</note>
 	<description>
 		<p>

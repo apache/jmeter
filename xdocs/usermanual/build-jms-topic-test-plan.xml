@@ -141,7 +141,7 @@ exhibits zombie threads with one client, try the other.</li>
 </ol>
 </p>
 
-<figure image="jms/jms_sub.png">
+<figure  width="716" height="526" image="jms/jms_sub.png">
 Figure &sect-num;.2. JMS Subscriber</figure>
 
 <p>Next add the sampler <complink name="JMS Publisher"/>
@@ -173,7 +173,7 @@ and select the directory using browse.</li>
 message is generated correctly.</li>
 </ol>
 <p></p>
-<figure image="jms/jms_pub.png">
+<figure width="719" height="650" image="jms/jms_pub.png">
 Figure &sect-num;.3. JMS Publisher</figure>
 
 
