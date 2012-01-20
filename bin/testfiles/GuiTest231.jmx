@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="2.1">
+<jmeterTestPlan version="1.2" properties="2.2">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="GUI231" enabled="true">
       <stringProp name="TestPlan.comments">All GUI test elements in JMeter 2.3.1</stringProp>
@@ -524,11 +524,11 @@
             <stringProp name="filterClassName">org.apache.jmeter.protocol.http.util.accesslog.LogFilter</stringProp>
           </AccessLogSampler>
           <hashTree/>
-          <BSFSampler guiclass="BSFSamplerGui" testclass="BSFSampler" testname="BSF Sampler" enabled="true">
-            <stringProp name="BSFSampler.filename">scriptfile</stringProp>
-            <stringProp name="BSFSampler.language">javascript</stringProp>
-            <stringProp name="BSFSampler.parameters">params</stringProp>
-            <stringProp name="BSFSampler.query">script</stringProp>
+          <BSFSampler guiclass="TestBeanGUI" testclass="BSFSampler" testname="BSF Sampler" enabled="true">
+            <stringProp name="filename">scriptfile</stringProp>
+            <stringProp name="scriptLanguage">javascript</stringProp>
+            <stringProp name="parameters">params</stringProp>
+            <stringProp name="script">script</stringProp>
           </BSFSampler>
           <hashTree/>
           <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="BeanShell Sampler" enabled="true">
