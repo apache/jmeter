@@ -64,13 +64,18 @@ public class HttpMirrorServer extends Thread implements Stoppable {
     private int maxThreadPoolSize;
 
     /**
+     * Max Queue size
+     */
+    private int maxQueueSize;
+
+    /**
      * Create a new Daemon with the specified port and target.
      *
      * @param port
      *            the port to listen on.
      */
     public HttpMirrorServer(int port) {
-       this(port, HttpMirrorControl.DEFAULT_MAX_POOL_SIZE);
+       this(port, HttpMirrorControl.DEFAULT_MAX_POOL_SIZE, HttpMirrorControl.DEFAULT_MAX_QUEUE_SIZE);
     }
     
     /**
@@ -78,11 +83,14 @@ public class HttpMirrorServer extends Thread implements Stoppable {
      *
      * @param port
      *            the port to listen on.
+     * @param maxThreadPoolSize Max Thread pool size
+     * @param maxQueueSize Max Queue size
      */
-    public HttpMirrorServer(int port, int maxThreadPoolSize) {
+    public HttpMirrorServer(int port, int maxThreadPoolSize, int maxQueueSize) {
         super("HttpMirrorServer");
         this.daemonPort = port;
         this.maxThreadPoolSize = maxThreadPoolSize;
+        this.maxQueueSize = maxQueueSize;
     }
 
     /**
@@ -97,11 +105,11 @@ public class HttpMirrorServer extends Thread implements Stoppable {
         ThreadPoolExecutor threadPoolExecutor = null;
         if(maxThreadPoolSize>0) {
             final ArrayBlockingQueue<Runnable> queue = new ArrayBlockingQueue<Runnable>(
-                    25);
+                    maxQueueSize);
             threadPoolExecutor = new ThreadPoolExecutor(
                     maxThreadPoolSize/2, 
                     maxThreadPoolSize, KEEP_ALIVE_TIME, TimeUnit.SECONDS, queue);
-            threadPoolExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.DiscardOldestPolicy());
+            threadPoolExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy());
         }
         try {
             log.info("Creating HttpMirror ... on port " + daemonPort);
