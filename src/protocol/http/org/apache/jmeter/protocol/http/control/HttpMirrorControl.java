@@ -115,7 +115,7 @@ public class HttpMirrorControl extends AbstractTestElement {
     }
     
     /**
-     * @param maxPoolSize Max Queue size
+     * @param maxQueueSize Max Queue size
      */
     public void setMaxQueueSize(String maxQueueSize) {
         setProperty(MAX_QUEUE_SIZE, maxQueueSize);
