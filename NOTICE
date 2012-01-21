@@ -22,7 +22,6 @@ This product includes software developed by the Indiana University
 This project includes HTMLParser (http://htmlparser.sourceforge.net/) 
 under the Common Public License Version 1.0: http://www.opensource.org/licenses/cpl.php
 
-
 This product includes software developed by the jCharts Project.
 See http://jcharts.sourceforge.net/
 
@@ -31,3 +30,6 @@ http://www.beanshell.org/; Source: http://www.beanshell.org/developer.html
 
 This product includes JAF and JavaMail from Oracle(Sun)
 The software is included under the CDDL License.
+
+The product includes icons from Open Icon Library
+http://openiconlibrary.sourceforge.net/
