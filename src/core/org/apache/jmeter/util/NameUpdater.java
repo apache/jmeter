@@ -179,4 +179,16 @@ public final class NameUpdater {
      */
     private NameUpdater() {
     }
+
+    /**
+     * Check if a key is in the map; intended for use by 
+     * {@link org.apache.jmeter.save.SaveService#checkClasses() SaveService#checkClasses()}
+     * only.
+     * 
+     * @param key
+     * @return true if the key is in the map
+     */
+    public static boolean isMapped(String key) {
+        return nameMap.containsKey(key);
+    }
 }

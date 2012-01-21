@@ -35,6 +35,7 @@ import org.apache.jmeter.reporters.ResultCollectorHelper;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.util.NameUpdater;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterError;
@@ -398,21 +399,18 @@ public class SaveService {
     }
 
     // Allow test code to check for spurious class references
-    // TODO this test is wrong; aliases should never be deleted even if the class is dropped.
-    // It might still be worth checking that missing classes are present in upgrade.properties.
     static boolean checkClasses(){
         final ClassLoader classLoader = SaveService.class.getClassLoader();
         boolean OK = true;
         for (Object clazz : classToAlias.keySet()) {
             String name = (String) clazz;
-            if (name.endsWith("JMSConfigGui") ||name.endsWith("BSFSamplerGui")) { // deliberately kept 
-                continue;
-            }
-            try {
-                Class.forName(name, false, classLoader);
-            } catch (ClassNotFoundException e) {
-                log.error(e.toString());
-                OK = false;
+            if (!NameUpdater.isMapped(name)) {// don't bother checking class is present if it is to be updated
+                try {
+                    Class.forName(name, false, classLoader);
+                } catch (ClassNotFoundException e) {
+                        log.error("Unexpected entry in saveservice.properties; class does not exist and is not upgraded: "+name);                    
+                        OK = false;
+                }
             }
         }
         return OK;
