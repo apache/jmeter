@@ -5271,7 +5271,7 @@ It uses default port 8081 since 2.5.2.
 <properties>
         <property name="Port" required="Yes">Port on which Mirror server listens, defaults to 8081.</property>
         <property name="Max Number of threads" required="No">If set to a value > 0, number of threads serving requests will be limited to the configured number, if set to a value &lt;=0 
-        a new thread will be created to serve incoming requests. Defaults to 0</property>
+        a new thread will be created to serve each incoming request. Defaults to 0</property>
         <property name="Max Queue size" required="No">Size of queue used for holding tasks before they are executed by Thread Pool, when Thread pool is exceeded, incoming requests will
         be held in this queue and discarded when this queue is full. This parameter is only used if Max Number of Threads is greater than 0. Defaults to 25</property>
 </properties>
