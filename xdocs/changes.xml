@@ -187,6 +187,12 @@ Added DiskStore remote sample sender: like Hold, but saves samples to disk until
 <figure width="705" height="297" image="changes/25_selector.png"></figure>
 </p>
 
+<h3>The menu item Options / Choose Language is now fully functional</h3>
+<p>
+The menu item Options / Choose Language now changes all the displayed text to the new language provided 
+all messages are translated. You can help on this by translating into your language.
+</p>
+
 <h3>Legacy JMX and JTL Avalon format support restored</h3>
 <p>
 Support for reading/writing the original Avalon XML format of JMX (script) and JTL (sample result) files was dropped in JMeter version 2.4.
