@@ -53,6 +53,8 @@ public class HttpMirrorControlGui extends LogicControllerGui
 
     private JTextField maxPoolSizeField;
 
+    private JTextField maxQueueSizeField;
+
     private JButton stop, start;
 
     private static final String ACTION_STOP = "stop"; // $NON-NLS-1$
@@ -88,6 +90,7 @@ public class HttpMirrorControlGui extends LogicControllerGui
             mirrorController = (HttpMirrorControl) el;
             mirrorController.setPort(portField.getText());
             mirrorController.setMaxPoolSize(maxPoolSizeField.getText());
+            mirrorController.setMaxQueueSize(maxQueueSizeField.getText());
         }
     }
 
@@ -108,6 +111,7 @@ public class HttpMirrorControlGui extends LogicControllerGui
         mirrorController = (HttpMirrorControl) element;
         portField.setText(mirrorController.getPortString());
         maxPoolSizeField.setText(mirrorController.getMaxPoolSizeAsString());
+        maxQueueSizeField.setText(mirrorController.getMaxQueueSizeAsString());
         repaint();
     }
 
@@ -168,12 +172,17 @@ public class HttpMirrorControlGui extends LogicControllerGui
         JLabel label = new JLabel(JMeterUtils.getResString("port")); // $NON-NLS-1$
         label.setLabelFor(portField);
 
-
-        maxPoolSizeField = new JTextField(Integer.toString(HttpMirrorControl.DEFAULT_MAX_POOL_SIZE), 10);
-        maxPoolSizeField.setName(HttpMirrorControl.PORT);
+        maxPoolSizeField = new JTextField(Integer.toString(HttpMirrorControl.DEFAULT_MAX_POOL_SIZE), 8);
+        maxPoolSizeField.setName(HttpMirrorControl.MAX_POOL_SIZE);
 
         JLabel mpsLabel = new JLabel(JMeterUtils.getResString("httpmirror_max_pool_size")); // $NON-NLS-1$
         mpsLabel.setLabelFor(maxPoolSizeField);
+
+        maxQueueSizeField = new JTextField(Integer.toString(HttpMirrorControl.DEFAULT_MAX_QUEUE_SIZE), 8);
+        maxQueueSizeField.setName(HttpMirrorControl.MAX_QUEUE_SIZE);
+
+        JLabel mqsLabel = new JLabel(JMeterUtils.getResString("httpmirror_max_queue_size")); // $NON-NLS-1$
+        mqsLabel.setLabelFor(maxQueueSizeField);
 
         HorizontalPanel panel = new HorizontalPanel();
         panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
@@ -185,6 +194,9 @@ public class HttpMirrorControlGui extends LogicControllerGui
         panel.add(mpsLabel);
         panel.add(maxPoolSizeField);
 
+        panel.add(mqsLabel);
+        panel.add(maxQueueSizeField);
+        
         panel.add(Box.createHorizontalStrut(10));
 
         return panel;
