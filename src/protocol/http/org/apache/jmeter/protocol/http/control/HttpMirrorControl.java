@@ -44,7 +44,12 @@ public class HttpMirrorControl extends AbstractTestElement {
 
     public static final String MAX_POOL_SIZE = "HttpMirrorControlGui.maxPoolSize"; // $NON-NLS-1$
 
+    public static final String MAX_QUEUE_SIZE = "HttpMirrorControlGui.maxQueueSize"; // $NON-NLS-1$
+
     public static final int DEFAULT_MAX_POOL_SIZE = 0;
+
+    public static final int DEFAULT_MAX_QUEUE_SIZE = 25;
+
 
     public HttpMirrorControl() {
         initPort(DEFAULT_PORT);
@@ -75,12 +80,15 @@ public class HttpMirrorControl extends AbstractTestElement {
     }
     
     /**
-     * @return Max Pool Size
+     * @return Max Thread Pool size
      */
     public String getMaxPoolSizeAsString() {
         return getPropertyAsString(MAX_POOL_SIZE);
     }
-
+    
+    /**
+     * @return Max Thread Pool size
+     */
     private int getMaxPoolSize() {
         return getPropertyAsInt(MAX_POOL_SIZE, DEFAULT_MAX_POOL_SIZE);
     }
@@ -92,12 +100,33 @@ public class HttpMirrorControl extends AbstractTestElement {
         setProperty(MAX_POOL_SIZE, maxPoolSize);
     }
 
+    /**
+     * @return Max Queue size
+     */
+    public String getMaxQueueSizeAsString() {
+        return getPropertyAsString(MAX_QUEUE_SIZE);
+    }
+    
+    /**
+     * @return Max Queue size
+     */
+    private int getMaxQueueSize() {
+        return getPropertyAsInt(MAX_QUEUE_SIZE, DEFAULT_MAX_QUEUE_SIZE);
+    }
+    
+    /**
+     * @param maxPoolSize Max Queue size
+     */
+    public void setMaxQueueSize(String maxQueueSize) {
+        setProperty(MAX_QUEUE_SIZE, maxQueueSize);
+    }
+    
     public int getDefaultPort() {
         return DEFAULT_PORT;
     }
 
     public void startHttpMirror() {
-        server = new HttpMirrorServer(getPort(), getMaxPoolSize());
+        server = new HttpMirrorServer(getPort(), getMaxPoolSize(), getMaxQueueSize());
         server.start();
         GuiPackage instance = GuiPackage.getInstance();
         if (instance != null) {
