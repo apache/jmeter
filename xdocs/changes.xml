@@ -83,6 +83,14 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 <figure width="700" height="138" image="changes/09_file_protocol_embedded.png"></figure>
 </p>
 
+<h3>HTTP Request - Ignore embedded resources failed</h3>
+<p>Enable "ignore failed" for embedded resources
+<figure width="820" height="246" image="changes/26_ignore_child_failed.png"></figure>
+</p>
+<p>Parent success with a embedded resource failed
+<figure width="590" height="214" image="changes/27_succes_with_child_failed.png"></figure>
+</p>
+
 <h3>View Results in Table - child sample display</h3>
 <p>Add option to TableVisualiser to display child samples instead of parent
 <figure width="911" height="619" image="changes/10_child_sampler.png"></figure>
@@ -176,7 +184,7 @@ Added DiskStore remote sample sender: like Hold, but saves samples to disk until
 
 <h3>JMS Subscriber sampler</h3>
 <p>With JMS Subscriber, ability to use Selectors
-<figure width="708" height="483" image="changes/25_selector.png"></figure>
+<figure width="705" height="297" image="changes/25_selector.png"></figure>
 </p>
 
 <h3>Legacy JMX and JTL Avalon format support restored</h3>
