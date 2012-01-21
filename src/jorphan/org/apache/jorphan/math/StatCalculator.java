@@ -253,7 +253,7 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
      * Add a single value (normally elapsed time)
      * 
      * @param val the value to add, which should correspond with a single sample
-     * @ss {@link #addValue(Number, long)}
+     * @see #addValue(Number, long)
      */
     public void addValue(T val) {
         addValue(val, 1L);
