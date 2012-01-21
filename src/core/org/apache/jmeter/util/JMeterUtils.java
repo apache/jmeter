@@ -1136,7 +1136,7 @@ public class JMeterUtils implements UnitTestManager {
      * @return the JMeter copyright string
      */
     public static String getJMeterCopyright() {
-        return JMeterVersion.COPYRIGHT;
+        return JMeterVersion.getCopyRight();
     }
 
     /**
