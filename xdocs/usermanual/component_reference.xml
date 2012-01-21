@@ -5258,7 +5258,7 @@ either by copying the files there or by starting JMeter in the directory contain
 </p>
 </component>
 
-<component name="HTTP Mirror Server" index="&sect-num;.9.6"  width="873" height="388" screenshot="mirrorserver.png">
+<component name="HTTP Mirror Server" index="&sect-num;.9.6"  width="672" height="174" screenshot="mirrorserver.png">
 <description>
 <p>
 The HTTP Mirrror Server is a very simple HTTP server - it simply mirrors the data sent to it.
@@ -5272,7 +5272,15 @@ It uses default port 8081 since 2.5.2.
         <property name="Port" required="Yes">Port on which Mirror server listens, defaults to 8081.</property>
         <property name="Max Number of threads" required="No">If set to a value > 0, number of threads serving requests will be limited to the configured number, if set to a value &lt;=0 
         a new thread will be created to serve incoming requests. Defaults to 0</property>
+        <property name="Max Queue size" required="No">Size of queue used for holding tasks before they are executed by Thread Pool, when Thread pool is exceeded, incoming requests will
+        be held in this queue and discarded when this queue is full. This parameter is only used if Max Number of Threads is greater than 0. Defaults to 25</property>
 </properties>
+<note>
+Note that you can make simulate requests response time by adding an HTTP Header Manager with the following name/value pair:
+<ul>
+<li>X-Sleep=Time to sleep in ms </li>
+</ul>
+</note>
 </component>
 
 <component name="Property Display" index="&sect-num;.9.7"  width="776" height="502" screenshot="property_display.png">
