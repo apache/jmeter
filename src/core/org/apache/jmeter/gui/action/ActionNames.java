@@ -60,6 +60,7 @@ public class ActionNames {
     public static final String INSERT_AFTER     = "drag_n_drop.insert_after";//$NON-NLS-1$
     public static final String INSERT_BEFORE    = "drag_n_drop.insert_before";//$NON-NLS-1$
     public static final String LAF_PREFIX       = "laf:"; // Look and Feel prefix
+    public static final String LOGGER_PANEL_ENABLE_DISABLE     = "logger_panel_enable_disable"; // $NON-NLS-1$
     public static final String MERGE            = "merge"; // $NON-NLS-1$
     public static final String OPEN             = "open"; // $NON-NLS-1$
     public static final String OPEN_RECENT      = "open_recent"; // $NON-NLS-1$

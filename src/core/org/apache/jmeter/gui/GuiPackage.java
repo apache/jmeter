@@ -110,6 +110,17 @@ public final class GuiPackage implements LocaleChangeListener {
 
     /** The menu item toolbar. */
     private JCheckBoxMenuItem menuToolBar;
+
+    /**
+     * The LoggerPanel menu item
+     */
+    private JCheckBoxMenuItem menuItemLoggerPanel;
+
+    /**
+     * Logger Panel reference
+     */
+    private LoggerPanel loggerPanel;
+
     
     /**
      * Private constructor to permit instantiation only from within this class.
@@ -728,5 +739,36 @@ public final class GuiPackage implements LocaleChangeListener {
         ArrayList<Stoppable> list = new ArrayList<Stoppable>();
         list.addAll(stoppables);
         return list;
+    }
+
+    /**
+     * Set the menu item LoggerPanel.
+     * @param menuItemLoggerPanel
+     */
+    public void setMenuItemLoggerPanel(JCheckBoxMenuItem menuItemLoggerPanel) {
+        this.menuItemLoggerPanel = menuItemLoggerPanel;
+    }
+    
+    /**
+     * Get the menu item LoggerPanel.
+     *
+     * @return the menu item LoggerPanel
+     */
+    public JCheckBoxMenuItem getMenuItemLoggerPanel() {
+        return menuItemLoggerPanel;
+    }
+
+    /**
+     * @param loggerPanel LoggerPanel
+     */
+    public void setLoggerPanel(LoggerPanel loggerPanel) {
+        this.loggerPanel = loggerPanel;
+    }
+
+    /**
+     * @return the loggerPanel
+     */
+    public LoggerPanel getLoggerPanel() {
+        return loggerPanel;
     }
 }
