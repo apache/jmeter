@@ -188,10 +188,10 @@ Added DiskStore remote sample sender: like Hold, but saves samples to disk until
 </p>
 
 <h3>New Logger Panel</h3>
-<p>A new visual components in the GUI that shows the log events, useful to debug BeanShell script for example:
+<p>A new Log Viewer has been added to the GUI, useful to debug BeanShell scripts for example:
 <figure width="1535" height="915" image="changes/28_loggerpanel.png"></figure>
 </p>
-<p>This panel can be enabled from Options > Enable/Disable Log Viewer:
+<p>This Low Viewer can be enabled from Options > Enable/Disable Log Viewer:
 <figure width="248" height="176" image="changes/28_loggerpanel_option.png"></figure>
 </p>
 
