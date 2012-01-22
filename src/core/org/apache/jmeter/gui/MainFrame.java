@@ -104,6 +104,10 @@ public class MainFrame extends JFrame implements TestListener, Remoteable, DropT
     private static final boolean DISPLAY_TOOLBAR =
             JMeterUtils.getPropDefault("jmeter.toolbar.display", true); // $NON-NLS-1$
 
+    // Allow display/hide LoggerPanel
+    private static final boolean DISPLAY_LOGGER_PANEL =
+            JMeterUtils.getPropDefault("jmeter.loggerpanel.display", false); // $NON-NLS-1$
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     /** The menu bar. */
@@ -114,6 +118,9 @@ public class MainFrame extends JFrame implements TestListener, Remoteable, DropT
 
     /** The panel where the test tree is shown. */
     private JScrollPane treePanel;
+
+    /** The LOG panel. */
+    private LoggerPanel logPanel;
 
     /** The test tree. */
     private JTree tree;
@@ -407,8 +414,20 @@ public class MainFrame extends JFrame implements TestListener, Remoteable, DropT
         treePanel = createTreePanel();
         treeAndMain.setLeftComponent(treePanel);
 
+        JSplitPane topAndDown = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+        topAndDown.setOneTouchExpandable(true);
+        topAndDown.setDividerLocation(0.8);
+        topAndDown.setResizeWeight(.8);
+        topAndDown.setContinuousLayout(true);
+        
         mainPanel = createMainPanel();
-        treeAndMain.setRightComponent(mainPanel);
+        
+        logPanel = createLoggerPanel();
+        
+        topAndDown.setTopComponent(mainPanel);
+        topAndDown.setBottomComponent(logPanel);
+        
+        treeAndMain.setRightComponent(topAndDown);
 
         treeAndMain.setResizeWeight(.2);
         treeAndMain.setContinuousLayout(true);
@@ -422,6 +441,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable, DropT
         setTitle(DEFAULT_TITLE);
         setIconImage(JMeterUtils.getImage("jmeter.jpg").getImage());// $NON-NLS-1$
     }
+
 
     /**
      * Support for Test Plan Dnd
@@ -487,6 +507,22 @@ public class MainFrame extends JFrame implements TestListener, Remoteable, DropT
      */
     private JScrollPane createMainPanel() {
         return new JScrollPane();
+    }
+    
+    /**
+     * Create at the down of the left a Console for Log events
+     * @return {@link LoggerPanel}
+     */
+    private LoggerPanel createLoggerPanel() {
+        LoggerPanel loggerPanel = new LoggerPanel();
+        loggerPanel.setMinimumSize(new Dimension(0, 100));
+        loggerPanel.setPreferredSize(new Dimension(0, 150));
+        LoggingManager.addLogTargetToRootLogger(loggerPanel);
+        GuiPackage guiInstance = GuiPackage.getInstance();
+        guiInstance.setLoggerPanel(loggerPanel);
+        guiInstance.getMenuItemLoggerPanel().getModel().setSelected(DISPLAY_LOGGER_PANEL);
+        loggerPanel.setVisible(DISPLAY_LOGGER_PANEL);
+        return loggerPanel;
     }
 
     /**

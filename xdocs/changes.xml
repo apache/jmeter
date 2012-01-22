@@ -427,6 +427,7 @@ Loads any additional properties found in META-INF/resources/org.apache.jmeter.na
 <li>Bug 52471 - Improve Mirror Server performance by Using Pool of threads instead of launching a Thread for each request</li>
 <li>Resurrected OldSaveService to allow reading Avalon format JMX files (removed in 2.4)</li>
 <li>Add a dialog box to confirm removing the element(s) when Remove action is called</li>
+<li>Bug 41788 - Log viewer (console window) needed as an option</li>
 </ul>
 
 <h2>Non-functional changes</h2>
