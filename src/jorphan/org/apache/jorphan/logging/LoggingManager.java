@@ -52,7 +52,7 @@ public final class LoggingManager {
      * Predefined format patterns, selected by the property log_format_type (see
      * jmeter.properties) The new-line is added later
      */
-    private static final String DEFAULT_PATTERN = "%{time:yyyy/MM/dd HH:mm:ss} %5.5{priority} - "  //$NON_NLS-1$
+    public static final String DEFAULT_PATTERN = "%{time:yyyy/MM/dd HH:mm:ss} %5.5{priority} - "  //$NON_NLS-1$
             + "%{category}: %{message} %{throwable}"; //$NON_NLS-1$
 
     private static final String PATTERN_THREAD_PREFIX = "%{time:yyyy/MM/dd HH:mm:ss} %5.5{priority} "  //$NON_NLS-1$
@@ -329,7 +329,7 @@ public final class LoggingManager {
      * @param targetFile
      *            (Writer)
      */
-    public static synchronized void setTarget(Writer targetFile) {
+    private static synchronized void setTarget(Writer targetFile) {
         if (target == null) {
             target = getTarget(targetFile, getFormat());
             isTargetSystemOut = isWriterSystemOut;
@@ -345,5 +345,15 @@ public final class LoggingManager {
 
     private static LogTarget getTarget(Writer targetFile, PatternFormatter fmt) {
         return new WriterTarget(targetFile, fmt);
+    }
+
+    /**
+     * Add logTarget to root logger
+     * FIXME What's the clean way to add a LogTarget afterwards ?
+     * @param logTarget LogTarget
+     */
+    public static void addLogTargetToRootLogger(LogTarget logTarget) {
+        Hierarchy.getDefaultHierarchy().getRootLogger().setLogTargets(
+                new LogTarget[]{target, logTarget});
     }
 }
