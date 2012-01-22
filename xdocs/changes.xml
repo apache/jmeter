@@ -188,11 +188,11 @@ Added DiskStore remote sample sender: like Hold, but saves samples to disk until
 </p>
 
 <h3>New Logger Panel</h3>
-<p>A new Log Viewer has been added to the GUI, useful to debug BeanShell scripts for example:
-<figure width="1535" height="915" image="changes/28_loggerpanel.png"></figure>
+<p>A new Log Viewer  has been added to the GUI and can be enabled from menu Options > Log Viewer:
+<figure width="326" height="147" image="changes/28_loggerpanel_option.png"></figure>
 </p>
-<p>This Low Viewer can be enabled from Options > Enable/Disable Log Viewer:
-<figure width="248" height="176" image="changes/28_loggerpanel_option.png"></figure>
+<p>This Log Viewer shows the jmeter.log file, and useful (for example) to debug BeanShell/BSF scripts:
+<figure width="953" height="466" image="changes/28_loggerpanel.png"></figure>
 </p>
 
 <h3>The menu item Options / Choose Language is now fully functional</h3>
