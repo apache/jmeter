@@ -1469,6 +1469,19 @@ run JMeter unless all the JMeter jars are added.
       <fileset dir="${dest.jar.jmeter}" includes="ApacheJMeter.jar"/>
       <fileset dir="${lib.dir}" includes="jorphan.jar"/>
     </copy>
+    <jar jarfile="${maven.dir}/ApacheJMeter_parent.jar" manifest="${build.dir}/MANIFEST_SRC.MF">
+        <zipfileset file="${resources.meta-inf}/default.notice"
+          fullpath="META-INF/NOTICE" />
+        <zipfileset file="${resources.meta-inf}/default.license"
+          fullpath="META-INF/LICENSE" />
+      <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="*.bshrc"/>
+      <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="*.parameters"/>
+      <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="log4j.conf"/>
+      <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="logkit.xml"/>
+      <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="proxyserver.jks"/>
+      <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="users.dtd"/>
+      <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="users.xml"/>
+    </jar>
   </target>
 
   <!-- 
@@ -1572,7 +1585,7 @@ run JMeter unless all the JMeter jars are added.
     </macrodef>
 
 
-    <deployfile stem="ApacheJMeter_parent" packaging="pom"/>
+    <deployfile stem="ApacheJMeter_parent"/>
     <deployfile stem="jorphan"/>
     <deployfile stem="ApacheJMeter"/>
     <deployfile stem="ApacheJMeter_components"/>
