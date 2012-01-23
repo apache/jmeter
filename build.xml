@@ -1516,6 +1516,11 @@ run JMeter unless all the JMeter jars are added.
 
     <property environment="env"/>
     <!-- According to http://maven.apache.org/download.html#Installation M2_HOME applies to Maven 2.2.1 and 3.0.x -->
+    <condition property="maven.present">
+      <isset property="env.M2_HOME"/>
+    </condition>
+    <fail unless="${maven.present}" message="The environment variable M2_HOME must point to a Maven installation"/>
+
     <property name="maven.home" value="${env.M2_HOME}"/>
 
     <!-- file repo url -->
