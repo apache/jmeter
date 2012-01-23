@@ -106,4 +106,11 @@ public class LoggerPanel extends JPanel implements LogTarget {
             }
         });
     }
+
+    /**
+     * Clear panel content
+     */
+    public void clear() {
+        this.textArea.setText("");
+    }
 }
