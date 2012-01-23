@@ -67,6 +67,7 @@ public class LoggerPannelEnableDisable implements Command {
                 JSplitPane splitPane = ((JSplitPane)guiInstance.getLoggerPanel().getParent());
                 splitPane.setDividerLocation(0.8);
             } else {
+                guiInstance.getLoggerPanel().clear();
                 guiInstance.getLoggerPanel().setVisible(false);
             }
         }
