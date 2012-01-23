@@ -1469,7 +1469,11 @@ run JMeter unless all the JMeter jars are added.
       <fileset dir="${dest.jar.jmeter}" includes="ApacheJMeter.jar"/>
       <fileset dir="${lib.dir}" includes="jorphan.jar"/>
     </copy>
-    <jar jarfile="${maven.dir}/ApacheJMeter_parent.jar" manifest="${build.dir}/MANIFEST_SRC.MF">
+    <!-- 
+        Create the Maven jar needed to hold configuration data
+        Cannot be added to any of the other jars as that would cause problems for stand-alone JMeter usage.
+    -->
+    <jar jarfile="${maven.dir}/ApacheJMeter_config.jar" manifest="${build.dir}/MANIFEST_SRC.MF">
         <zipfileset file="${resources.meta-inf}/default.notice"
           fullpath="META-INF/NOTICE" />
         <zipfileset file="${resources.meta-inf}/default.license"
@@ -1585,10 +1589,11 @@ run JMeter unless all the JMeter jars are added.
     </macrodef>
 
 
-    <deployfile stem="ApacheJMeter_parent"/>
+    <deployfile stem="ApacheJMeter_parent" packaging="pom"/>
     <deployfile stem="jorphan"/>
     <deployfile stem="ApacheJMeter"/>
     <deployfile stem="ApacheJMeter_components"/>
+    <deployfile stem="ApacheJMeter_config"/>
     <deployfile stem="ApacheJMeter_core"/>
     <deployfile stem="ApacheJMeter_ftp"/>
     <deployfile stem="ApacheJMeter_functions"/>
