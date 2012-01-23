@@ -22,7 +22,7 @@ under the License.
     <artifactId>ApacheJMeter_parent</artifactId>
     <version>@MAVEN.DEPLOY.VERSION@</version>
     <name>Apache JMeter parent</name>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     
     <description>Apache JMeter is open source software, a 100% pure Java desktop application designed to load test
         functional behavior and measure performance. It was originally designed for testing Web Applications but has
