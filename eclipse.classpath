@@ -64,7 +64,7 @@
     <classpathentry kind="lib" path="lib/httpclient-4.1.2.jar"/>
     <classpathentry kind="lib" path="lib/httpcore-4.1.4.jar"/>
     <classpathentry kind="lib" path="lib/httpmime-4.1.2.jar"/>
-	<classpathentry kind="lib" path="lib/jCharts-0.7.5.jar"/>
+	<classpathentry kind="lib" path="lib/jcharts-0.7.5.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-1.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/js-1.7R2.jar"/>
     <classpathentry kind="lib" path="lib/jtidy-r938.jar"/>
