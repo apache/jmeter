@@ -1480,6 +1480,7 @@ run JMeter unless all the JMeter jars are added.
           fullpath="META-INF/LICENSE" />
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="*.bshrc"/>
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="*.parameters"/>
+      <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="*.properties"/>
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="log4j.conf"/>
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="logkit.xml"/>
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="proxyserver.jks"/>
