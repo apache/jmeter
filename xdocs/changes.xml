@@ -304,6 +304,7 @@ fix code which assumes that a new instance is created (i.e. when adding a sub-sa
 
 <h3>Assertions</h3>
 <ul>
+<li>Bug 52519 - XMLSchemaAssertion uses JMeter JVM file.encoding instead of response encoding</li>
 </ul>
 
 <h3>Functions</h3>

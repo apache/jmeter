@@ -28,9 +28,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
-// import org.w3c.dom.Document;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -67,11 +65,10 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
         AssertionResult result = new AssertionResult(getName());
         // Note: initialised with error = failure = false
 
-        byte data[] = response.getResponseData();
-        if (data.length == 0) {
+        String resultData = response.getResponseDataAsString();
+        if (resultData.length() == 0) {
             return result.setResultForNull();
         }
-        String resultData = new String(getResultBody(data)); // TODO - charset?
 
         String xsdFileName = getXsdFileName();
         if (log.isDebugEnabled()) {
@@ -84,18 +81,6 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
             setSchemaResult(result, resultData, xsdFileName);
         }
         return result;
-    }
-
-    /*
-     * TODO move to SampleResult class? Return the body of the http return.
-     */
-    private byte[] getResultBody(byte[] resultData) {
-        for (int i = 0; i < (resultData.length - 1); i++) {
-            if (resultData[i] == '\n' && resultData[i + 1] == '\n') {
-                return JOrphanUtils.getByteArraySlice(resultData, (i + 2), resultData.length - 1);
-            }
-        }
-        return resultData;
     }
 
     public void setXsdFileName(String xmlSchemaFileName) throws IllegalArgumentException {
