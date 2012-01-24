@@ -1469,6 +1469,7 @@ run JMeter unless all the JMeter jars are added.
       <fileset dir="${dest.jar.jmeter}" includes="ApacheJMeter.jar"/>
       <fileset dir="${lib.dir}" includes="jorphan.jar"/>
     </copy>
+    <copy tofile="${maven.dir}/ApacheJMeter_junit-test.jar" file="${lib.dir}/junit/test.jar"/>
     <!-- 
         Create the Maven jar needed to hold configuration data
         Cannot be added to any of the other jars as that would cause problems for stand-alone JMeter usage.
@@ -1608,6 +1609,7 @@ run JMeter unless all the JMeter jars are added.
     <deployfile stem="ApacheJMeter_jdbc"/>
     <deployfile stem="ApacheJMeter_jms"/>
     <deployfile stem="ApacheJMeter_junit"/>
+    <deployfile stem="ApacheJMeter_junit-test"/>
     <deployfile stem="ApacheJMeter_ldap"/>
     <deployfile stem="ApacheJMeter_mail"/>
     <deployfile stem="ApacheJMeter_monitors"/>
