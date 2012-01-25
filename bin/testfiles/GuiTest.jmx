@@ -578,10 +578,6 @@
             <boolProp name="path_extension_no_equals">false</boolProp>
           </URLRewritingModifier>
           <hashTree/>
-          <UserParameterModifier guiclass="UserParameterModifierGui" testclass="UserParameterModifier" testname="User Parameter Modifier" enabled="true">
-            <stringProp name="UserParameterModifier.xmluri">users.xml</stringProp>
-          </UserParameterModifier>
-          <hashTree/>
         </hashTree>
         <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Samplers" enabled="true"/>
         <hashTree>

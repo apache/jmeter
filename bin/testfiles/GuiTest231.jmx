@@ -385,10 +385,6 @@
             <boolProp name="cache_value">true</boolProp>
           </URLRewritingModifier>
           <hashTree/>
-          <UserParameterModifier guiclass="UserParameterModifierGui" testclass="UserParameterModifier" testname="HTTP User Parameter Modifier" enabled="true">
-            <stringProp name="UserParameterModifier.xmluri">users.xml</stringProp>
-          </UserParameterModifier>
-          <hashTree/>
         </hashTree>
         <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Sampler" enabled="true">
           <stringProp name="TestPlan.comments">JMS Sub and JMS P-P not available (JavaMail)	</stringProp>

@@ -248,9 +248,14 @@ TCP Sampler handles SocketTimeoutException, SocketException and InterruptedIOExc
 these occurs, Sampler is marked as failed.
 </p>
 <p>
-Sample Sender implementations know resolve their configuration on Client side since 2.6.
+Sample Sender implementations now resolve their configuration on Client side since 2.6.
 This behaviour can be changed with property sample_sender_client_configured (set it to false).
 </p>
+
+<p>
+The HTTP User Parameter Modifier test element has been removed; it has been deprecated for a long time.
+</p>
+
 <!-- =================== Bug fixes =================== -->
 
 <h2>Bug fixes</h2>
@@ -276,6 +281,7 @@ This behaviour can be changed with property sample_sender_client_configured (set
 <li>Bug 52409 - HttpSamplerBase#errorResult modifies sampleResult passed as parameter;
 fix code which assumes that a new instance is created (i.e. when adding a sub-sample)
 </li>
+<li>Bug 52507 - Delete Http User Parameters modifier (deprecated, obsolete)</li>
 </ul>
 
 <h3>Other Samplers</h3>
