@@ -83,6 +83,9 @@ public class SaveService {
             @Override
             public Class<?> realClass(String alias) {
                 String fullName = aliasToClass(alias);
+                if (fullName != null) {
+                    fullName = NameUpdater.getCurrentName(fullName);
+                }
                 return super.realClass(fullName == null ? alias : fullName);
             }
             // Translate to alias and then delegate to wrapped class
