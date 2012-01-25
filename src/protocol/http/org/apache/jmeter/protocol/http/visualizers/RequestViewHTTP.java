@@ -234,6 +234,12 @@ public class RequestViewHTTP implements RequestView {
         String[] params = query.split(PARAM_CONCATENATE);
         for (String param : params) {
             String[] paramSplit = param.split("="); // $NON-NLS-1$
+            if (paramSplit.length > 2 ) {// detected invalid syntax (Bug 52491)
+                // Return as for SOAP above
+                map.clear();
+                map.put(" ", query); //blank name // $NON-NLS-1$
+                return map;
+            }
             String name = null;
             if (paramSplit.length > 0) {
                 name = paramSplit[0];
