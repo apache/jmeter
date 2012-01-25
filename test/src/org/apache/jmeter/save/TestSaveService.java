@@ -30,6 +30,8 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 
 public class TestSaveService extends JMeterTestCase {
+    
+    // testLoadAndSave test files
     private static final String[] FILES = new String[] {
         "AssertionTestPlan.jmx",
         "AuthManagerTestPlan.jmx",
@@ -44,6 +46,12 @@ public class TestSaveService extends JMeterTestCase {
         "SimpleTestPlan.jmx",
         "GuiTest.jmx", 
         "GuiTest231.jmx",
+        };
+
+    // Test files for testLoad; output will generally be different in size
+    private static final String[] FILES_LOAD_ONLY = new String[] {
+        "GuiTest_original.jmx", 
+        "GuiTest231_original.jmx",
         };
 
     private static final boolean saveOut = JMeterUtils.getPropDefault("testsaveservice.saveout", false);
@@ -122,6 +130,16 @@ public class TestSaveService extends JMeterTestCase {
         }
     }
     
+    public void testLoad() throws Exception {
+        for (int i = 0; i < FILES_LOAD_ONLY.length; i++) {
+            InputStream in = new FileInputStream(findTestFile("testfiles/" + FILES_LOAD_ONLY[i]));
+            HashTree tree =SaveService.loadTree(in);
+            assertNotNull(tree);
+            in.close();
+        }
+
+    }
+
     public void testClasses(){
         assertTrue("One or more classes not found - see log file",SaveService.checkClasses());
     }
