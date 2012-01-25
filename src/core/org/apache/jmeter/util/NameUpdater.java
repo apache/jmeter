@@ -123,8 +123,6 @@ public final class NameUpdater {
      * @param guiClassName - associated gui class name
      * @return new test class name
      */
-
-    // TODO Not used anywhere , see BUG 52466 (previously used by OldSaveService)
     public static String getCurrentTestName(String testClassName, String guiClassName) {
         String key = testClassName + "|" + guiClassName;
         if (nameMap.containsKey(key)) {
@@ -143,7 +141,6 @@ public final class NameUpdater {
      * @param className - class name containing the property
      * @return possibly updated property name
      */
-    // TODO Not used anywhere , see BUG 52466 (previously used by OldSaveService)
     public static String getCurrentName(String propertyName, String className) {
         String key = className + "/" + propertyName;
         if (nameMap.containsKey(key)) {
@@ -163,7 +160,6 @@ public final class NameUpdater {
      * @param className the class containing the propery.
      * @return the value, updated if necessary
      */
-    // TODO Not used anywhere , see BUG 52466 (previously used by OldSaveService)
     public static String getCurrentName(String value, String propertyName, String className) {
         String key = className + "." + propertyName + "/" + value;
         if (nameMap.containsKey(key)) {
