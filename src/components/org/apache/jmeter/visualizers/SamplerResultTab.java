@@ -423,11 +423,13 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 GuiUtils.makeScrollPane(tableResFields));
         topSplit.setOneTouchExpandable(true);
         topSplit.setResizeWeight(0.80); // set split ratio
+        topSplit.setBorder(null); // see bug jdk 4131528
 
         paneParsed = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
                 GuiUtils.makeScrollPane(tableResult), topSplit);
         paneParsed.setOneTouchExpandable(true);
         paneParsed.setResizeWeight(0.40); // set split ratio
+        paneParsed.setBorder(null); // see bug jdk 4131528
 
         // setup bottom tabs, first Raw, second Parsed
         tabbedResult.addTab(JMeterUtils.getResString("view_results_table_result_tab_raw"), paneRaw); //$NON-NLS-1$

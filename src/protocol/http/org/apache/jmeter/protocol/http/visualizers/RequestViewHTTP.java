@@ -315,11 +315,13 @@ public class RequestViewHTTP implements RequestView {
                 GuiUtils.makeScrollPane(tableHeaders));
         topSplit.setOneTouchExpandable(true);
         topSplit.setResizeWeight(0.50); // set split ratio
+        topSplit.setBorder(null); // see bug jdk 4131528
 
         JSplitPane paneParsed = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
                 GuiUtils.makeScrollPane(tableRequest), topSplit);
         paneParsed.setOneTouchExpandable(true);
         paneParsed.setResizeWeight(0.25); // set split ratio (only 5 lines to display)
+        paneParsed.setBorder(null); // see bug jdk 4131528
 
         // Hint to background color on bottom tabs (grey, not blue)
         JPanel panel = new JPanel(new BorderLayout());
