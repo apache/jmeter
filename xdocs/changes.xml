@@ -306,6 +306,7 @@ fix code which assumes that a new instance is created (i.e. when adding a sub-sa
 <h3>Listeners</h3>
 <ul>
 <li>Bug 52357 - View results in Table does not allow for multiple result samples</li>
+<li>Bug 52491 - Incorrect parsing of Post data parameters in Tree Listener / Http Request view</li>
 </ul>
 
 <h3>Assertions</h3>
