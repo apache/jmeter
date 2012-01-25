@@ -19,15 +19,12 @@
 package org.apache.jmeter.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.awt.Insets;
 
-import javax.swing.Box;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -40,11 +37,10 @@ import org.apache.log.format.PatternFormatter;
  */
 public class LoggerPanel extends JPanel implements LogTarget {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 6911128494402594429L;
+
     private JTextArea textArea;
+
     private PatternFormatter format;
 
     // Limit length of log content
@@ -52,35 +48,26 @@ public class LoggerPanel extends JPanel implements LogTarget {
             JMeterUtils.getPropDefault("jmeter.loggerpanel.maxlength", 80000); // $NON-NLS-1$
 
     /**
-     * 
+     * Pane for display JMeter log file
      */
     public LoggerPanel() {
         init();
-        format = new PatternFormatter(LoggingManager.DEFAULT_PATTERN + "\n");
+        format = new PatternFormatter(LoggingManager.DEFAULT_PATTERN + "\n"); // $NON-NLS-1$
     }
 
     private void init() {
         this.setLayout(new BorderLayout());
 
-        // MAIN PANEL
-        Border margin = new EmptyBorder(5, 5, 5, 5);
-
-        this.setBorder(margin);
-        
         // TEXTAREA
         textArea = new JTextArea();
         textArea.setEditable(false);
         textArea.setLineWrap(false);
+        textArea.setMargin(new Insets(2, 2, 2, 2)); // space between borders and text
         JScrollPane areaScrollPane = new JScrollPane(textArea);
 
         areaScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         areaScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-
-        Box mainPanel = Box.createVerticalBox();
-        
-        areaScrollPane.setPreferredSize(new Dimension(mainPanel.getWidth(),mainPanel.getHeight()));
-        mainPanel.add(areaScrollPane);
-        this.add(mainPanel, BorderLayout.CENTER); 
+        this.add(areaScrollPane, BorderLayout.CENTER); 
     }
 
     /* (non-Javadoc)
@@ -111,6 +98,6 @@ public class LoggerPanel extends JPanel implements LogTarget {
      * Clear panel content
      */
     public void clear() {
-        this.textArea.setText("");
+        this.textArea.setText(""); // $NON-NLS-1$
     }
 }
