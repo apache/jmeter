@@ -4354,24 +4354,6 @@ user_4, etc.</p></description>
 </properties>
 </component>
 
-<component name="HTTP User Parameter Modifier" index="&sect-num;.7.4" useinstead="User Parameters"  width="514" height="251" screenshot="user_param_modifier.gif">
-<description>
-<p>See also the <complink name="CSV Data Set Config"/> element, which is more suitable for large numbers of parameters</p>
-<p>The User Parameter Modifier uses an XML file get values for HTTP arguments.  Any
-HTTP Request that this modifier modifies will be checked for the existence of the specified
-arguments.  If found, the values for those arguments will be replaced by the values found in the
-xml file.  The XML file can have multiple sets of the same values.  This modifier will iterate
-through these values in a round-robin style, thus each request will get a different set of values
-until the last set of values is reached, at which point it will begin again at the first set.</p>
-</description>
-
-<properties>
-        <property name="Name" required="No">Descriptive name given to this element in the test tree.</property>
-        <property name="File Name" required="Yes">Name of the XML file in JMeter's /bin directory
-        that holds the value sets.</property>
-</properties>
-</component>
-
 <component name="User Parameters" index="&sect-num;.7.5"  width="638" height="274" screenshot="user_params.png">
 <description><p>Allows the user to specify values for User Variables specific to individual threads.</p>
 <p>User Variables can also be specified in the Test Plan but not specific to individual threads. This panel allows
