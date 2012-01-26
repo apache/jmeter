@@ -5295,15 +5295,22 @@ The values can be seen in the <complink name="View Results Tree"/> Listener Resp
 </properties>
 </component>
 
-<component name="Debug PostProcessor" index="&sect-num;.9.8"  width="341" height="134" screenshot="debug_postprocessor.png">
+<component name="Debug PostProcessor" index="&sect-num;.9.8"  width="344" height="193" screenshot="debug_postprocessor.png">
 <description>
 <p>
-The Debug PostProcessor creates a subSample with the details of the previous sampler properties.
-This is intended for developer use only.
+The Debug PostProcessor creates a subSample with the details of the previous Sampler properties, 
+JMeter variables, properties and/or System Properties.
+</p>
+<p>
+The values can be seen in the <complink name="View Results Tree"/> Listener Response Data pane.
 </p>
 </description>
 <properties>
         <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
+        <property name="JMeter Properties" required="Yes">Whether to show JMeter properties (default false).</property>
+        <property name="JMeter Variables" required="Yes">Whether to show JMeter variables (default false).</property>
+        <property name="Sampler Properties" required="Yes">Whether to show Sampler properties (default true).</property>
+        <property name="System Properties" required="Yes">Whether to show System properties (default false).</property>
 </properties>
 </component>
 
