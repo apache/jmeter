@@ -396,6 +396,7 @@ fix code which assumes that a new instance is created (i.e. when adding a sub-sa
 <li>Bug 52183 - SyncTimer could be improved (performance+reliability)</li>
 <li>Bug 52317 - Counter : Add option to reset counter on each Thread Group iteration</li>
 <li>Bug 37073 - Add a Poisson based timer</li>
+<li>Bug 52497 - Improve DebugSampler and DebugPostProcessor</li>
 </ul>
 
 <h3>Functions</h3>
