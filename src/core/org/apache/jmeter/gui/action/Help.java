@@ -57,21 +57,11 @@ public class Help implements Command {
 
     private static final JScrollPane scroller;
 
-    private static String currentPage;
-
     static {
         commands.add(ActionNames.HELP);
         helpDoc = new HtmlPane();
         scroller = new JScrollPane(helpDoc);
         helpDoc.setEditable(false);
-        try {
-            helpDoc.setPage(HELP_PAGE);
-            currentPage = HELP_PAGE;
-        } catch (Exception err) {
-            String msg = "Couldn't load help file " + err.toString();
-            log.error(msg);
-            currentPage = "";// Avoid NPE in resetPage() // $NON-NLS-1$
-        }
     }
 
     /**
@@ -85,32 +75,29 @@ public class Help implements Command {
                     JMeterUtils.getResString("help"),//$NON-NLS-1$
                     false);
             helpWindow.getContentPane().setLayout(new GridLayout(1, 1));
+            helpWindow.getContentPane().removeAll();
+            helpWindow.getContentPane().add(scroller);
             ComponentUtil.centerComponentInWindow(helpWindow, 60);
         }
-        helpWindow.getContentPane().removeAll();
-        helpWindow.getContentPane().add(scroller);
-        helpWindow.setVisible(true);
+        helpWindow.setVisible(true); // set the window visible immediately
+        /*
+         * This means that a new page will be shown before rendering is complete,
+         * however the correct location will be displayed.
+         * Attempts to use a "page" PropertyChangeListener to detect when the page
+         * has been loaded failed to work any better. 
+         */
+        StringBuilder url=new StringBuilder();
         if (e.getSource() instanceof String[]) {
             String[] source = (String[]) e.getSource();
-            resetPage(source[0]);
-            helpDoc.scrollToReference(source[1]);
+            url.append(source[0]).append('#').append(source[1]);
         } else {
-            resetPage(HELP_PAGE);
-            helpDoc.scrollToReference(GuiPackage.getInstance().getTreeListener().getCurrentNode().getDocAnchor());
-
+            url.append(HELP_PAGE).append('#').append(GuiPackage.getInstance().getTreeListener().getCurrentNode().getDocAnchor());
         }
-    }
-
-    private void resetPage(String source) {
-        if (!currentPage.equals(source)) {
-            try {
-                helpDoc.setPage(source);
-                currentPage = source;
-            } catch (IOException err) {
-                log.error(err.toString());
-                JMeterUtils.reportErrorToUser("Problem loading a help page - see log for details");
-                currentPage = ""; // $NON-NLS-1$
-            }
+        try {
+            helpDoc.setPage(url.toString()); // N.B. this only reloads if necessary (ignores the reference)
+        } catch (IOException ioe) {
+            log.error(ioe.toString());
+            JMeterUtils.reportErrorToUser("Problem loading a help page - see log for details");
         }
     }
 
