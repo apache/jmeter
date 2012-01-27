@@ -448,6 +448,9 @@ Loads any additional properties found in META-INF/resources/org.apache.jmeter.na
 <li>Resurrected OldSaveService to allow reading Avalon format JMX files (removed in 2.4)</li>
 <li>Add a dialog box to confirm removing the element(s) when Remove action is called</li>
 <li>Bug 41788 - Log viewer (console window) needed as an option</li>
+<li>Add option to change the pause time (default 2000ms) in the daemon thread which checks for successful JVM exit.
+The thread is not now started unless the pause time is greater than 0.
+</li>
 </ul>
 
 <h2>Non-functional changes</h2>
