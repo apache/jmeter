@@ -299,6 +299,11 @@ the following command options</p>
 <p>-H [proxy server hostname or ip address]<br/>
 -P [proxy server port]</p>
 <p><b>Example</b>: jmeter -n -t my_test.jmx -l log.jtl -H my.proxy.server -P 8000</p>
+<p>
+If the property <code>jmeterengine.stopfail.system.exit</code> is set to true (default is false), 
+then JMeter will invoke System.exit(1) if it cannot stop all threads.
+Normally this is not necessary.
+</p>
 </subsection>
 
 <subsection name="&sect-num;.4.4 Server Mode" anchor="server">
@@ -320,6 +325,11 @@ where:
 -Rserver1,server2 - can be used instead of -r to provide a list of servers to start
   Overrides remote_hosts, but does not define the property.
 </pre>
+<p>
+If the property <code>jmeterengine.remote.system.exit</code> is set to true (default is false), 
+then JMeter will invoke System.exit(0) after stopping RMI at the end of a test.
+Normally this is not necessary.
+</p>
 </subsection>
 
 <subsection name="&sect-num;.4.5 Overriding Properties Via The Command Line" anchor="override">
@@ -443,6 +453,24 @@ If the special name LAST is used for the -t, -j or -l flags, then JMeter takes t
 that was run in interactive mode.
 </p>
 </subsection>
+
+<subsection name="&sect-num;.4.8 non-GUI shutdown" anchor="shutdown">
+<p>
+Prior to version 2.5.1, JMeter invoked System.exit() when a non-GUI test completed.
+This caused problems for applications that invoke JMeter directly, so JMeter no longer invokes System.exit() 
+for a normal test completion. [Some fatal errors may still invoke System.exit()]
+JMeter will exit all the non-daemon threads it starts, but it is possible that some non-daemon threads
+may still remain; these will prevent the JVM from exitting.
+To detect this situation, JMeter starts a new daemon thread just before it exits.
+This daemon thread waits a short while; if it returns from the wait, then clearly the
+JVM has not been able to exit, and the thread prints a message to say why.
+</p>
+<p>
+The property <code>jmeter.exit.check.pause</code> can be used to override the default pause of 2000ms (2secs).
+If set to 0, then JMeter does not start the daemon thread.
+</p>
+</subsection>
+
 </section>
 
 
