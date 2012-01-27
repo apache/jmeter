@@ -61,11 +61,12 @@ public class Remove implements Command {
 
     public void doAction(ActionEvent e) {
         
-        int isConfirm = SKIP_CONFIRM ? JOptionPane.YES_OPTION : JOptionPane.showConfirmDialog(null, 
+        int isConfirm = SKIP_CONFIRM ? JOptionPane.YES_OPTION : 
+            JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(), 
                 JMeterUtils.getResString("remove_confirm_msg"),// $NON-NLS-1$
                 JMeterUtils.getResString("remove_confirm_title"), // $NON-NLS-1$
-                JOptionPane.WARNING_MESSAGE,
-                JOptionPane.YES_NO_OPTION);
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
         if (isConfirm == JOptionPane.YES_OPTION) {
             // TODO - removes the nodes from the CheckDirty map - should it be done later, in case some can't be removed?
             ActionRouter.getInstance().actionPerformed(new ActionEvent(e.getSource(), e.getID(), ActionNames.CHECK_REMOVE));
