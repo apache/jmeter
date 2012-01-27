@@ -173,7 +173,7 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 
 <h3>Confirm Remove Dialog box</h3>
 <p>Add a dialog box to confirm removing the element(s) when Remove action is called
-<figure width="606" height="229" image="changes/23_confirm_remove.png"></figure>
+<figure width="583" height="210" image="changes/23_confirm_remove.png"></figure>
 The dialogue can be skipped by setting the JMeter property <code>confirm.delete.skip=true</code> 
 </p>
 
