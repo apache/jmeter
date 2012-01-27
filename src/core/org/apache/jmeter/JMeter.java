@@ -983,22 +983,30 @@ public class JMeter implements JMeterPlugin {
          * if JVM does not exit, lists remaining non-daemon threads on stdout.
          */
         private void checkForRemainingThreads() {
-            Thread daemon = new Thread(){
-                @Override
-                public void run(){
-                    try {
-                        Thread.sleep(2000); // Allow enough time for JVM to exit
-                    } catch (InterruptedException ignored) {
+            // This cannot be a JMeter class variable, because properties
+            // are not initialised until later.
+            final int REMAIN_THREAD_PAUSE = 
+                    JMeterUtils.getPropDefault("jmeter.exit.check.pause", 2000); // $NON-NLS-1$ 
+            
+            if (REMAIN_THREAD_PAUSE > 0) {
+                Thread daemon = new Thread(){
+                    @Override
+                    public void run(){
+                        try {
+                            Thread.sleep(REMAIN_THREAD_PAUSE); // Allow enough time for JVM to exit
+                        } catch (InterruptedException ignored) {
+                        }
+                        // This is a daemon thread, which should only reach here if there are other
+                        // non-daemon threads still active
+                        System.out.println("The JVM should have exitted but did not.");
+                        System.out.println("The following non-daemon threads are still running (DestroyJavaVM is OK):");
+                        JOrphanUtils.displayThreads(false);
                     }
-                    // This is a daemon thread, which should only reach here if there are other
-                    // no-daemon threads still active
-                    System.out.println("JVM did not exit; following threads are still running (DestroyJavaVM is OK):");
-                    JOrphanUtils.displayThreads(false);
-                }
-
-            };
-            daemon.setDaemon(true);
-            daemon.start();
+    
+                };
+                daemon.setDaemon(true);
+                daemon.start();
+            }
         }
 
     }
