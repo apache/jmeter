@@ -1934,6 +1934,9 @@ run JMeter unless all the JMeter jars are added.
     <copy todir="${dest.docs}/extending">
       <fileset file="${src.docs}/extending/jmeter_tutorial.pdf"/>
     </copy>
+    <copy todir="${dest.docs}/">
+      <fileset file="${src.docs}/download_jmeter.cgi"/>
+    </copy>
   </target>
 
   <target name="docs-printable" depends="init-docs" if="AnakiaTask.present" description="Generate printable HTML documentation.">
