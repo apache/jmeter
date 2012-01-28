@@ -2462,4 +2462,58 @@ run JMeter unless all the JMeter jars are added.
         </checkstyle>
 
     </target>
+  
+    <target name="sign_dist"
+      description="Sign release artifacts in dist and dist/maven.  Usage: ant sign_dist -Dgpg.keyname=key-id [-Dgpg.secretKeyring=path-to-keyring]      ">
+      <scriptdef name="gpg" language="beanshell">
+        <classpath path="${lib.dir}/${beanshell.jar}"/>
+        <element name="fileset" type="fileset"/>
+        <![CDATA[
+        int execcode( String command ) // helper 
+        {
+            StringTokenizer st = new StringTokenizer(command);
+            String[] cmdarray = new String[st.countTokens()];
+            for (int i = 0; st.hasMoreTokens(); i++)
+                cmdarray[i] = st.nextToken();
+            proc = new ProcessBuilder(cmdarray).redirectErrorStream(true).start();
+            din = new DataInputStream( proc.getInputStream() );
+            while( (line=din.readLine()) != null )
+                print(line);
+            return this.proc.exitValue();
+        }
+          keyname = project.getProperty("gpg.keyname");
+          if (keyname == void) {
+            self.fail("Please provide the gpg.keyname property");
+          }
+          keyring = project.getProperty("gpg.secretKeyring");
+          if (keyring == void) {
+            keyring = "secring.gpg"; // the default
+          }
+          sep=java.io.File.separator;
+          cmd="gpg2 --batch --yes -ba -u " + keyname + " --secret-keyring " + keyring;
+          self.log("Command: "+cmd);
+          filesets = elements.get("fileset");
+          for (i = 0; i < filesets.size(); ++i) {
+            fileset = filesets.get(i);
+            basedir = fileset.getDir();
+            self.log("Processing "+basedir);
+            ds = fileset.getDirectoryScanner();
+            srcFiles = ds.getIncludedFiles();
+            for (j=0; j < srcFiles.length; j++) {
+              srcFile=srcFiles[j];
+              file=basedir + sep + srcFile;
+              self.log("Signing "+srcFile);
+              ret=execcode(cmd+ " " + file);
+              if (ret != 0) {
+                 self.fail("Command failed: "+ret);
+              }
+            }
+          }
+        ]]>
+      </scriptdef>
+      <gpg>
+        <fileset dir="${dist.dir}"  includes="*.*" excludes="*.asc *.md5 *.sha1"/>
+        <fileset dir="${maven.dir}" includes="*.*" excludes="*.asc *.md5 *.sha1"/>
+      </gpg>
+    </target>
 </project>
