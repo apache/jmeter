@@ -96,7 +96,7 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
 
 </component>
 
-<component name="HTTP Request" index="&sect-num;.1.2" width="959" height="828" screenshot="http-request.png">
+<component name="HTTP Request" index="&sect-num;.1.2" width="907" height="674" screenshot="http-request.png">
 
 <description>
         <p>This sampler lets you send an HTTP/HTTPS request to a web server.  It
@@ -339,13 +339,14 @@ then the parameter is ignored. This allows the use of optional parameters define
 (versions of JMeter after 2.3)
 </p>
 <br/>
-<p>Since JMeter 2.5.2, you have the option to switch to Post Body when a request has only unnamed parameters
+<p>Since JMeter 2.6, you have the option to switch to Post Body when a request has only unnamed parameters
 (or no parameters at all).
 This option is useful in the following cases (amongst others):
 <ul>
 <li>GWT RPC HTTP Request</li>
 <li>JSON REST HTTP Request</li>
 <li>XML REST HTTP Request</li>
+<li>SOAP HTTP Request</li>
 </ul>
 Note that once you leave the Tree node, you cannot switch back to the parameter tab unless you clear the Post Body tab of data.
 </p>
@@ -354,9 +355,9 @@ In Post Body mode, each line will be sent with CRLF appended, apart from the las
 To send a CRLF after the last line of data, just ensure that there is an empty line following it.
 (This cannot be seen, except by noting whether the cursor can be placed on the subsequent line.)
 </p>
-<figure width="956" height="830" image="http-request-raw-single-parameter.png">Figure 1 - HTTP Request with one unnamed parameter</figure>
-<figure width="958" height="833" image="http-request-confirm-raw-body.png">Figure 2 - Confirm dialog to switch</figure>
-<figure width="957" height="831" image="http-request-raw-body.png">Figure 3 - HTTP Request using RAW Post body</figure>
+<figure width="902" height="421" image="http-request-raw-single-parameter.png">Figure 1 - HTTP Request with one unnamed parameter</figure>
+<figure width="908" height="212" image="http-request-confirm-raw-body.png">Figure 2 - Confirm dialog to switch</figure>
+<figure width="905" height="423" image="http-request-raw-body.png">Figure 3 - HTTP Request using RAW Post body</figure>
 
 <p>
 <b>Method Handling:</b><br></br>
@@ -1307,7 +1308,7 @@ The following table shows some values which may be useful when configuring JMS:
 </p>
 </component>
 
-<component name="JMS Subscriber" index="&sect-num;.1.14"  width="746" height="634" screenshot="jmssubscriber.png">
+<component name="JMS Subscriber" index="&sect-num;.1.14"  width="709" height="498" screenshot="jmssubscriber.png">
 <note>BETA CODE - the code is still subject to change</note>
 	<description>
 		<p>
@@ -1371,7 +1372,7 @@ completed, so the net effect was similar to the MessageListener.onMessage() stra
 </p>
 </component>
 
-<component name="JMS Point-to-Point" index="&sect-num;.1.15"  width="1182" height="696" screenshot="jms/JMS_Point-to-Point.png">
+<component name="JMS Point-to-Point" index="&sect-num;.1.15"  width="746" height="662" screenshot="jms/JMS_Point-to-Point.png">
 <note>BETA CODE - the code is still subject to change</note>
 	<description>
 		<p>
@@ -1704,7 +1705,7 @@ processes the controller(s) you add to it.  So, in this example, JMeter sends th
 following order: Ant Home Page, Ant News Page, Log4J Home Page, Log4J History Page.
 Note, the File Reporter
 is configured to store the results in a file named "simple-test.dat" in the current directory.</p>
-<figure width="337" height="233" image="logic-controller/simple-example.gif">Figure 6 Simple Controller Example</figure>
+<figure width="546" height="222" image="logic-controller/simple-example.png">Figure 6 Simple Controller Example</figure>
 
 </example>
 </component>
@@ -1733,7 +1734,7 @@ count to three, JMeter will send a total of 2 * 3 = 6 HTTP Requests.
 In this example, we created a Test Plan that sends a particular HTTP Request
 only once and sends another HTTP Request five times.</p>
 
-<figure width="362" height="178" image="logic-controller/loop-example.gif">Figure 4 - Loop Controller Example</figure>
+<figure width="548" height="160" image="logic-controller/loop-example.png">Figure 4 - Loop Controller Example</figure>
 
 <p>We configured the Thread Group for a single thread and a loop count value of
 one. Instead of letting the Thread Group control the looping, we used a Loop
@@ -3435,7 +3436,7 @@ This component is typically used in HTTPs scenarios where you don't want to take
 </properties>
 </component>
 
-<component name="User Defined Variables" index="&sect-num;.4.14"  width="700" height="351" screenshot="user_defined_variables.png">
+<component name="User Defined Variables" index="&sect-num;.4.14"  width="741" height="266" screenshot="user_defined_variables.png">
 <description><p>The User Defined Variables element lets you define an <b>initial set of variables</b>, just as in the <complink name="Test Plan" />.
 <b>
 Note that all the UDV elements in a test plan - no matter where they are - are processed at the start.
@@ -4486,7 +4487,7 @@ See the following Test plan:
 In the linked test plan,"Create Price Cut-Off" JDBC PreProcessor calls a stored procedure to create a Price Cut-Off in Database,
 this one will be used by "Calculate Price cut off".
 
-<figure width="1343" height="631" image="jdbc-pre-processor.png">Create Price Cut-Off Preprocessor</figure>
+<figure width="818" height="394" image="jdbc-pre-processor.png">Create Price Cut-Off Preprocessor</figure>
 
 </p>
 </description>
@@ -4831,7 +4832,7 @@ This can be useful if your JDBC Sample changes some data and you want to reset s
 </links>
 <p>
 In the linked test plan,"JDBC PostProcessor" JDBC PostProcessor calls a stored procedure to delete from Database the Price Cut-Off that was created by PreProcessor.
-<figure width="1346" height="636" image="jdbc-post-processor.png">JDBC PostProcessor</figure>
+<figure width="818" height="399" image="jdbc-post-processor.png">JDBC PostProcessor</figure>
 </p>
 </section>
 
@@ -4839,7 +4840,7 @@ In the linked test plan,"JDBC PostProcessor" JDBC PostProcessor calls a stored p
 <description>
 		<br></br>
 </description>
-<component name="Test Plan" index="&sect-num;.9.1"  width="558" height="465" screenshot="testplan.png">
+<component name="Test Plan" index="&sect-num;.9.1"  width="529" height="422" screenshot="testplan.png">
 <description>
 <p>
 The Test Plan is where the overall settings for a test are specified.
@@ -5247,7 +5248,7 @@ The HTTP Mirrror Server is a very simple HTTP server - it simply mirrors the dat
 This is useful for checking the content of HTTP requests.
 </p>
 <p>
-It uses default port 8081 since 2.5.2. 
+It uses default port 8081 since 2.6. 
 </p>
 </description>
 <properties>
