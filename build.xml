@@ -475,7 +475,7 @@
         JMeter version
         This is overridden for formal releases.
     -->
-    <property name="jmeter.version" value="2.6-SNAPSHOT"/>
+    <property name="jmeter.version" value="2.6.${DSTAMP}"/>
     <!-- Remember to change "docversion" below if necessary -->
     <condition property="implementation.version"
           value="${jmeter.version} r${svn.revision}" else="${jmeter.version}.${DSTAMP}">
