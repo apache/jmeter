@@ -30,7 +30,7 @@
 
 
 
-<title>JMeter - User's Manual: Component Reference</title>
+<title>Apache JMeter - User's Manual: Component Reference</title>
 </head>
 
 <body bgcolor="#ffffff" text="#000000" link="#525D76">
@@ -43,10 +43,10 @@
 style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </td>
 <td align="left">
-<a href="http://jakarta.apache.org"><img width="505" height="48" src="../images/jakarta-logo.gif" alt="Jakarta" title="Jakarta" border="0"/></a>
+<a href="http://www.apache.org"><img title="Apache Software Foundation" width="387" height="100" src="../images/asf-logo.gif" border="0"/></a>
 </td>
 <td align="right">
-<a href="http://jakarta.apache.org/jmeter/"><img width="221" height="102" src="../images/logo.jpg" alt="JMeter" title="JMeter" border="0"/></a>
+<a href="http://jmeter.apache.org/"><img width="221" height="102" src="../images/logo.jpg" alt="Apache JMeter" title="Apache JMeter" border="0"/></a>
 </td>
 </tr>
 </table>
@@ -67,12 +67,12 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </li>
 <li><a href="http://www.apache.org/licenses/">License</a>
 </li>
-<li><a href="http://wiki.apache.org/jakarta-jmeter/JMeterCommitters">Contributors</a>
+<li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a>
 </li>
 </ul>
 <p><strong>Download</strong></p>
 <ul>
-<li><a href="http://jakarta.apache.org/site/downloads/downloads_jmeter.cgi">Download Releases</a>
+<li><a href="../download_jmeter.cgi">Download Releases</a>
 </li>
 <li><a href="../nightly.html">Developer (Nightly) Builds</a>
 </li>
@@ -81,15 +81,19 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <ul>
 <li><a href="../usermanual/index.html">User Manual</a>
 </li>
+<li><a href="../usermanual/component_reference.html">Component Reference</a>
+</li>
+<li><a href="../usermanual/functions.html">Functions Reference</a>
+</li>
 <li><a href="../api/index.html">Javadocs</a>
 </li>
 <li><a href="../localising/index.html">Localisation (Translator's Guide)</a>
 </li>
 <li><a href="../building.html">Building JMeter and Add-Ons</a>
 </li>
-<li><a href="http://wiki.apache.org/jakarta-jmeter">JMeter Wiki</a>
+<li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a>
 </li>
-<li><a href="http://wiki.apache.org/jakarta-jmeter/JMeterFAQ">FAQ (Wiki)</a>
+<li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a>
 </li>
 </ul>
 <p><strong>Tutorials (PDF format)</strong></p>
@@ -107,11 +111,11 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </ul>
 <p><strong>Community</strong></p>
 <ul>
-<li><a href="http://jakarta.apache.org/site/getinvolved.html">Get Involved</a>
+<li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved</a>
 </li>
-<li><a href="http://jakarta.apache.org/site/mail.html">Mailing Lists</a>
+<li><a href="../mail.html">Mailing Lists</a>
 </li>
-<li><a href="http://jakarta.apache.org/site/cvsindex.html">SVN Repositories</a>
+<li><a href="../svnindex.html">SVN Repositories</a>
 </li>
 </ul>
 <p><strong>Foundation</strong></p>
@@ -219,6 +223,7 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <li><a href="#HTTP_Header_Manager">HTTP Header Manager</a></li>
 <li><a href="#Java_Request_Defaults">Java Request Defaults</a></li>
 <li><a href="#JDBC_Connection_Configuration">JDBC Connection Configuration</a></li>
+<li><a href="#Keystore_Configuration">Keystore Configuration</a></li>
 <li><a href="#Login_Config_Element">Login Config Element</a></li>
 <li><a href="#LDAP_Request_Defaults">LDAP Request Defaults</a></li>
 <li><a href="#LDAP_Extended_Request_Defaults">LDAP Extended Request Defaults</a></li>
@@ -254,17 +259,18 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <li><a href="#BeanShell_Timer">BeanShell Timer</a></li>
 <li><a href="#BSF_Timer">BSF Timer</a></li>
 <li><a href="#JSR223_Timer">JSR223 Timer</a></li>
+<li><a href="#Poisson_Random_Timer">Poisson Random Timer</a></li>
 </ul>
 <li><a href="#preprocessors">18.7 Pre Processors</a></li>
 <ul>
 <li><a href="#HTML_Link_Parser">HTML Link Parser</a></li>
 <li><a href="#HTTP_URL_Re-writing_Modifier">HTTP URL Re-writing Modifier</a></li>
 <li><a href="#HTML_Parameter_Mask">HTML Parameter Mask</a></li>
-<li><a href="#HTTP_User_Parameter_Modifier">HTTP User Parameter Modifier</a></li>
 <li><a href="#User_Parameters">User Parameters</a></li>
 <li><a href="#BeanShell_PreProcessor">BeanShell PreProcessor</a></li>
 <li><a href="#BSF_PreProcessor">BSF PreProcessor</a></li>
 <li><a href="#JSR223_PreProcessor">JSR223 PreProcessor</a></li>
+<li><a href="#JDBC_PreProcessor">JDBC PreProcessor</a></li>
 </ul>
 <li><a href="#postprocessors">18.8 Post-Processors</a></li>
 <ul>
@@ -274,6 +280,7 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <li><a href="#BeanShell_PostProcessor">BeanShell PostProcessor</a></li>
 <li><a href="#BSF_PostProcessor">BSF PostProcessor</a></li>
 <li><a href="#JSR223_PostProcessor">JSR223 PostProcessor</a></li>
+<li><a href="#JDBC_PostProcessor">JDBC PostProcessor</a></li>
 </ul>
 <li><a href="#Miscellaneous_Features">18.9 Miscellaneous Features</a></li>
 <ul>
@@ -772,7 +779,7 @@ If the request uses a technique called "URL Rewriting" to maintain sessions,
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='911' height='642' src="../images/screenshots/http-request.png"></div>
+<div align="center"><img width='907' height='674' src="../images/screenshots/http-request.png"></div>
 <p>
 <b>Parameters</b>
 <a name="HTTP_Request_parms"/>
@@ -848,7 +855,7 @@ No
 </tr>
 <tr>
 <td>Password</td>
-<td>(Optional) password for proxy server.
+<td>(Optional) password for proxy server. (N.B. this is stored unencrypted in the test plan)
 </td>
 <td>
 No
@@ -921,16 +928,16 @@ No
         The latency is taken from the initial response (versions of JMeter after 2.3.4 - previously it was zero).
 		Note that the HttpClient sampler may log the following message:
 <br>
-</br>
+
 
 		"Redirect requested but followRedirects is disabled"
 <br>
-</br>
+
 
 		This can be ignored.
         
 <br>
-</br>
+
 
         In versions after 2.3.4, JMeter will collapse paths of the form '/../segment' in
         both absolute and relative redirect URLs. For example http://host/one/../two => http://host/two.
@@ -949,7 +956,7 @@ No
 <tr>
 <td>Use KeepAlive</td>
 <td>JMeter sets the Connection: keep-alive header. This does not work properly with the default HTTP implementation, as connection re-use is not under user-control. 
-                  It does work with the Jakarta httpClient implementation.
+                  It does work with the Apache HttpComponents HttpClient implementations.
 </td>
 <td>
 No
@@ -1180,22 +1187,75 @@ as a test plan created using a recorder would continue from the redirected URL.
 Parameter Handling:
 </b>
 <br>
-</br>
+
 
 For the POST and PUT method, if there is no file to send, and the name(s) of the parameter(s) are omitted,
 then the body is created by concatenating all the value(s) of the parameters.
+Note that the values are concatenated without adding any end-of-line characters.
+These can be added by using the __char() function in the value fields.
 This allows arbitrary bodies to be sent.
 The values are encoded if the encoding flag is set (versions of JMeter after 2.3).
 See also the MIME Type above how you can control the content-type request header that is sent.
 
 <br>
-</br>
+
 
 For other methods, if the name of the parameter is missing,
 then the parameter is ignored. This allows the use of optional parameters defined by variables.
 (versions of JMeter after 2.3)
 
 </p>
+<br>
+
+<p>
+Since JMeter 2.6, you have the option to switch to Post Body when a request has only unnamed parameters
+(or no parameters at all).
+This option is useful in the following cases (amongst others):
+
+<ul>
+
+
+<li>
+GWT RPC HTTP Request
+</li>
+
+
+<li>
+JSON REST HTTP Request
+</li>
+
+
+<li>
+XML REST HTTP Request
+</li>
+
+
+<li>
+SOAP HTTP Request
+</li>
+
+
+</ul>
+
+Note that once you leave the Tree node, you cannot switch back to the parameter tab unless you clear the Post Body tab of data.
+
+</p>
+<p>
+
+In Post Body mode, each line will be sent with CRLF appended, apart from the last line.
+To send a CRLF after the last line of data, just ensure that there is an empty line following it.
+(This cannot be seen, except by noting whether the cursor can be placed on the subsequent line.)
+
+</p>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='902' height='421' src="../images/screenshots/http-request-raw-single-parameter.png"><br>
+<font size="-1">Figure 1 - HTTP Request with one unnamed parameter
+</font></td></tr></table></p>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='908' height='212' src="../images/screenshots/http-request-confirm-raw-body.png"><br>
+<font size="-1">Figure 2 - Confirm dialog to switch
+</font></td></tr></table></p>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='905' height='423' src="../images/screenshots/http-request-raw-body.png"><br>
+<font size="-1">Figure 3 - HTTP Request using RAW Post body
+</font></td></tr></table></p>
 <p>
 
 
@@ -1203,7 +1263,7 @@ then the parameter is ignored. This allows the use of optional parameters define
 Method Handling:
 </b>
 <br>
-</br>
+
 
 The POST and PUT request methods work similarly, except that the PUT method does not support multipart requests.
 The PUT method body must be provided as one of the following:
@@ -1269,7 +1329,7 @@ See jmeter.properties file for the details of the settings.
 Emulating slow connections (HttpClient only):
 </b>
 <br>
-</br>
+
 <pre>
 
 # Define characters per second > 0 to emulate slow connections
@@ -1282,11 +1342,11 @@ Emulating slow connections (HttpClient only):
 Response size calculation
 </b>
 <br>
-</br>
+
 
 Optional properties to allow change the method to get response size:
 <br>
-</br>
+
 
 
 <ul>
@@ -1314,7 +1374,7 @@ sampleresult.getbytes.headers_size=true
 <tr><td>Versions of JMeter before 2.5 returns only data response size (uncompressed if request uses gzip/defate mode).
 
 <br>
-</br>
+
 To return to settings before version 2.5, set the two properties to false.
 </td></tr>
 </table>
@@ -1329,7 +1389,7 @@ To return to settings before version 2.5, set the two properties to false.
 Retry handling
 </b>
 <br>
-</br>
+
 
 In version 2.5 of JMeter, the HttpClient4 and Commons HttpClient 3.1 samplers used the default retry count, which was 3.
 In later versions, the retry count has been set to 1, which is what the Java implementation appears to do.
@@ -1573,7 +1633,7 @@ Yes
         (If required, the null string can be changed by defining the property "jdbcsampler.nullmarker".)
         
 <br>
-</br>
+
 
         The list must be enclosed in double-quotes if any of the values contain a comma or double-quote,
         and any embedded double-quotes must be doubled-up, for example:
@@ -1606,13 +1666,13 @@ Javadoc for java.sql.Types
         If not specified, "IN" is assumed, i.e. "DATE" is the same as "IN DATE".
         
 <br>
-</br>
+
 
         If the type is not one of the fields found in java.sql.Types, versions of JMeter after 2.3.2 also
         accept the corresponding integer number, e.g. since INTEGER == 4, you can use "INOUT 4".
         
 <br>
-</br>
+
 
         There must be as many types as there are placeholders in the statement.
         
@@ -1635,7 +1695,7 @@ No
         If specified, this will create an Object variable containing a list of row maps.
         Each map contains the column name as the key and the column data as the value. Usage:
 <br>
-</br>
+
 
         
 <code>
@@ -1791,20 +1851,20 @@ SOAP 1.1.
 <table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
 <tr><td>For versions of JMeter later than 2.2, the sampler no longer uses chunked encoding by default.
 <br>
-</br>
+
 
 For screen input, it now always uses the size of the data.
 <br>
-</br>
+
 
 File input uses the file length as determined by Java.
 <br>
-</br>
+
 
 On some OSes this may not work for all files, in which case add a child Header Manager
 with Content-Length set to the actual length of the file.
 <br>
-</br>
+
 
 Or set Content-Length to -1 to force chunked encoding.
 
@@ -1814,7 +1874,7 @@ Or set Content-Length to -1 to force chunked encoding.
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='474' height='236' src="../images/screenshots/soap_sampler.png"></div>
+<div align="center"><img width='426' height='276' src="../images/screenshots/soap_sampler.png"></div>
 <p>
 <b>Parameters</b>
 <a name="SOAP/XML-RPC_Request_parms"/>
@@ -1840,6 +1900,14 @@ Yes
 <tr>
 <td>Send SOAP action</td>
 <td>Send a SOAP action header? (overrides the Header Manager)
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Use KeepAlive</td>
+<td>If set, sends Connection: keep-alive, else sends Connection: close
 </td>
 <td>
 No
@@ -2324,7 +2392,7 @@ Usually
 </tr>
 <tr>
 <td>Password</td>
-<td>LDAP server password.
+<td>LDAP server password. (N.B. this is stored unencrypted in the test plan)
 </td>
 <td>
 Usually
@@ -2436,6 +2504,7 @@ Any LDAP request is part of an LDAP session, so the first thing that should be d
        which will be used to initiate a session.
        When no password, or the wrong password is specified, an anonymous session is started. Take care,
        omitting the password will not fail this test, a wrong password will. 
+       (N.B. this is stored unencrypted in the test plan)
 </p>
 
      
@@ -2488,7 +2557,7 @@ No
 <tr>
 <td>Password</td>
 <td>Password for the above user. If omitted it will result in an anonymous bind. 
-     If is is incorrect, the sampler will return an error and revert to an anonymous bind.
+     If is is incorrect, the sampler will return an error and revert to an anonymous bind. (N.B. this is stored unencrypted in the test plan)
 </td>
 <td>
 No
@@ -2499,7 +2568,7 @@ No
 
  
 <br>
-</br>
+
        
       
 <li>
@@ -2533,7 +2602,7 @@ No
      
  
 <br>
-</br>
+
        
       
 <li>
@@ -2573,7 +2642,7 @@ Yes
 <tr>
 <td>Password</td>
 <td>Password for the above user. If omitted it will result in an anonymous bind. 
-     If is is incorrect, the sampler will return an error.
+     If is is incorrect, the sampler will return an error. (N.B. this is stored unencrypted in the test plan)
 </td>
 <td>
 No
@@ -2585,7 +2654,7 @@ No
 		
  
 <br>
-</br>
+
        
       
 <li>
@@ -2638,7 +2707,7 @@ Yes
        
  
 <br>
-</br>
+
        
         
 <li>
@@ -2690,7 +2759,7 @@ Yes
        
  
 <br>
-</br>
+
        
       
 <li>
@@ -2732,7 +2801,7 @@ Yes
        
  
 <br>
-</br>
+
        
       
 <li>
@@ -2830,7 +2899,7 @@ No
 
  
 <br>
-</br>
+
        
       
 <li>
@@ -2884,7 +2953,7 @@ Yes
        
  
 <br>
-</br>
+
        
       
 <li>
@@ -3389,7 +3458,7 @@ return null;
 <p>
 Another example:
 <br>
-</br>
+
  ensure that the property 
 <b>
 beanshell.sampler.init=BeanShellSampler.bshrc
@@ -3425,10 +3494,10 @@ Beware however that misuse of any methods can cause subtle faults that may be di
 <p>
 This sampler allows you to write a sampler using a BSF scripting language.
 <br>
-</br>
+
 
 		See the 
-<a href="http://jakarta.apache.org/bsf/index.html">
+<a href="http://commons.apache.org/bsf/index.html">
 Apache Bean Scripting Framework
 </a>
 
@@ -3467,9 +3536,17 @@ xslt
 		
 </ul>
 
+        
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>Unlike the BeanShell sampler, the interpreter is not saved between invocations.
+</td></tr>
+</table>
+</p>
+
 	
 <p><b>Control Panel</b></p>
-<div align="center"><img width='622' height='267' src="../images/screenshots/bsfsampler.png"></div>
+<div align="center"><img width='1228' height='407' src="../images/screenshots/bsfsampler.png"></div>
 <p>
 <b>Parameters</b>
 <a name="BSF_Sampler_parms"/>
@@ -3658,6 +3735,14 @@ For details, see
 </p>
 
 
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>Unlike the BeanShell sampler, the interpreter is not saved between invocations.
+</td></tr>
+</table>
+</p>
+
+
 </td></tr>
 <tr><td><br></td></tr>
 </table>
@@ -3679,20 +3764,20 @@ For details, see
 		It then sends the text, and waits for a response.
 		
 <br>
-</br>
+
 
 		If "Re-use connection" is selected, connections are shared between Samplers in the same thread,
 		provided that the exact same host name string and port are used. 
 		Different hosts/port combinations will use different connections, as will different threads. 
 		
 <br>
-</br>
+
 
 		If an error is detected - or "Re-use connection" is not selected - the socket is closed. 
 		Another socket will be reopened on the next sample.
 		
 <br>
-</br>
+
 
 		The following properties can be used to control its operation:
 		
@@ -3769,7 +3854,7 @@ LengthPrefixedBinaryTCPClientImpl
 TCPClientImpl
 </b>
 <br>
-</br>
+
 
 		This implementation is fairly basic.
         When reading the response, it reads until the end of line byte, if this is defined
@@ -3787,7 +3872,7 @@ tcp.eolByte
 BinaryTCPClientImpl
 </b>
 <br>
-</br>
+
 
         This implementation converts the GUI input, which must be a hex-encoded string, into binary,
         and performs the reverse when reading the response.
@@ -3806,7 +3891,7 @@ tcp.BinaryTCPClient.eomByte
 LengthPrefixedBinaryTCPClientImpl
 </b>
 <br>
-</br>
+
 
         This implementation extends BinaryTCPClientImpl by prefixing the binary message data with a binary length byte.
         The length prefix defaults to 2 bytes.
@@ -3838,29 +3923,29 @@ Response handling
 
 		
 <br>
-</br>
+
 
 		If tcp.status.prefix is defined, then the response message is searched for the text following
 		that up to the suffix. If any such text is found, it is used to set the response code.
 		The response message is then fetched from the properties file (if provided).
 		
 <br>
-</br>
+
 
 		For example, if the prefix = "[" and the suffix = "]", then the following repsonse:
 		
 <br>
-</br>
+
 
 		[J28] XI123,23,GBP,CR
 		
 <br>
-</br>
+
 
 		would have the response code J28.
 		
 <br>
-</br>
+
 
 		Response codes in the range "400"-"499" and "500"-"599" are currently regarded as failures;
 		all others are successful. [This needs to be made configurable!]
@@ -3877,7 +3962,7 @@ Response handling
 
 		
 <br>
-</br>
+
 
 		Sockets are disconnected at the end of a test run.
 
@@ -3971,7 +4056,7 @@ No
 </tr>
 <tr>
 <td>Password</td>
-<td>Password - not used by default implementation
+<td>Password - not used by default implementation (N.B. this is stored unencrypted in the test plan)
 </td>
 <td>
 No
@@ -4010,7 +4095,7 @@ No
 
 		
 <br>
-</br>
+
 
 
 <p>
@@ -4098,7 +4183,7 @@ No
 </tr>
 <tr>
 <td>Password</td>
-<td>Password
+<td>Password (N.B. this is stored unencrypted in the test plan)
 </td>
 <td>
 No
@@ -4321,7 +4406,7 @@ dynamicTopics/TOPICNAME
 
 		
 <br>
-</br>
+
 
 
 <p>
@@ -4333,7 +4418,7 @@ dynamicTopics/TOPICNAME
 
 	
 <p><b>Control Panel</b></p>
-<div align="center"><img width='682' height='439' src="../images/screenshots/jmssubscriber.png"></div>
+<div align="center"><img width='709' height='498' src="../images/screenshots/jmssubscriber.png"></div>
 <p>
 <b>Parameters</b>
 <a name="JMS_Subscriber_parms"/>
@@ -4393,6 +4478,24 @@ No
 </td>
 </tr>
 <tr>
+<td>Client ID</td>
+<td>The Client ID to use when you you use a durable subscription. 
+  Be sure to add a variable like ${__threadNum} when you have more than one Thread.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>JMS Selector</td>
+<td>Message Selector as defined by JMS specification to extract only 
+  messages that respect the Selector condition. Syntax uses subpart of SQL 92.
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
 <td>Setup</td>
 <td>The destination setup type. With At startup, the destination name is static (i.e. always same name during the test), with Each sample, the destination name is dynamic and is evaluate at each sample (i.e. the destination name may be a variable)
 </td>
@@ -4418,7 +4521,7 @@ No
 </tr>
 <tr>
 <td>Password</td>
-<td>Password
+<td>Password (N.B. this is stored unencrypted in the test plan)
 </td>
 <td>
 No
@@ -4492,6 +4595,17 @@ Yes
 Yes
 </td>
 </tr>
+<tr>
+<td>Separator</td>
+<td>
+  Separator used to separate messages when there is more than one (related to setting Number of samples to aggregate).
+  Note that \n, \r, \t are accepted.
+  
+</td>
+<td>
+No
+</td>
+</tr>
 </table>
 </p>
 <p>
@@ -4548,7 +4662,7 @@ JMSSampler.useSecurity.properties=false
 
 		
 <br>
-</br>
+
 
 
 <p>
@@ -4560,7 +4674,7 @@ JMSSampler.useSecurity.properties=false
 
 	
 <p><b>Control Panel</b></p>
-<div align="center"><img width='684' height='698' src="../images/screenshots/jms/JMS_Point-to-Point.png"></div>
+<div align="center"><img width='746' height='662' src="../images/screenshots/jms/JMS_Point-to-Point.png"></div>
 <p>
 <b>Parameters</b>
 <a name="JMS_Point-to-Point_parms"/>
@@ -4599,6 +4713,17 @@ Yes
 <td>
     The JNDI name of the receiving queue. If a value is provided here and the communication style is Request Response
     this queue will be monitored for responses to the requests sent.
+  
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>JMS Selector</td>
+<td>
+    Message Selector as defined by JMS specification to extract only 
+    messages that respect the Selector condition. Syntax uses subpart of SQL 92.
   
 </td>
 <td>
@@ -4777,39 +4902,39 @@ includes extensions like oneTimeSetUp and oneTimeTearDown. The sampler works lik
 JavaSampler with some differences.
 
 <br>
-</br>
+
 1. rather than use Jmeter's test interface, it scans the jar files for classes extending junit's TestCase class. That includes any class or subclass.
 
 <br>
-</br>
+
 2. Junit test jar files should be placed in jmeter/lib/junit instead of /lib directory.
 In versions of JMeter after 2.3.1, you can also use the "user.classpath" property to specify where to look for TestCase classes. 
 
 <br>
-</br>
+
 3. Junit sampler does not use name/value pairs for configuration like the JavaSampler. The sampler assumes setUp and tearDown will configure the test correctly.
 
 <br>
-</br>
+
 4. The sampler measures the elapsed time only for the test method and does not include setUp and tearDown.
 
 <br>
-</br>
+
 5. Each time the test method is called, Jmeter will pass the result to the listeners.
 
 <br>
-</br>
+
 6. Support for oneTimeSetUp and oneTimeTearDown is done as a method. Since Jmeter is multi-threaded, we cannot call oneTimeSetUp/oneTimeTearDown the same way Maven does it.
 
 <br>
-</br>
+
 7. The sampler reports unexpected exceptions as errors.
 There are some important differences between standard JUnit test runners and JMeter's
 implementation. Rather than make a new instance of the class for each test, JMeter
 creates 1 instance per sampler and reuses it.
 This can be changed with checkbox "Create a new instance per sample".
 <br>
-</br>
+
 
 The current implementation of the sampler will try to create an instance using the string constructor first. If the test class does not declare a string constructor, the sampler will look for an empty constructor. Example below:<br>
 <br>
@@ -4827,12 +4952,12 @@ public class myTestCase {<br>
 By default, Jmeter will provide some default values for the success/failure code and message. Users should define a set of unique success and failure codes and use them uniformly across all tests.<br>
 General Guidelines
 <br>
-</br>
+
 
 If you use setUp and tearDown, make sure the methods are declared public. If you do not, the test may not run properly.
 
 <br>
-</br>
+
 
 Here are some general guidelines for writing Junit tests so they work well with Jmeter. Since Jmeter runs multi-threaded, it is important to keep certain things in mind.<br>
 <br>
@@ -5211,7 +5336,7 @@ No
 Relative paths are resolved against the current directory.
 
 <br>
-</br>
+
 Failing that, against the directory containing the test script (JMX file).
 
 </td>
@@ -5234,7 +5359,7 @@ In versions of JMeter after 2.3.4, multipart message parts are stored as subsamp
 Special handling for "file" protocol:
 </b>
 <br>
-</br>
+
 
 The 
 <code>
@@ -5370,11 +5495,11 @@ The SMTP Sampler can send mail messages using SMTP/SMTPS protocol.
 It is possible to set security propocols for the connection (SSL and TLS), as well as user authentication. 
 If a security protocol is used a verification on the server certificate will occur. 
 <br>
-</br>
+
 
 Two alternatives to handle this verification are available:
 <br>
-</br>
+
 
 
 <ul>
@@ -5543,7 +5668,7 @@ No
 Relative paths are resolved against the current directory.
 
 <br>
-</br>
+
 Failing that, against the directory containing the test script (JMX file).
 
 </td>
@@ -5662,7 +5787,7 @@ No
 	
 <br>
 Logic Controllers determine the order in which Samplers are processed.
-</br>
+
 
 
 </description>
@@ -5720,7 +5845,7 @@ is configured to store the results in a file named "simple-test.dat" in the curr
 </p>
 
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='337' height='233' src="../images/screenshots/logic-controller/simple-example.gif"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='546' height='222' src="../images/screenshots/logic-controller/simple-example.png"><br>
 <font size="-1">Figure 6 Simple Controller Example
 </font></td></tr></table></p>
 
@@ -5803,7 +5928,7 @@ only once and sends another HTTP Request five times.
 
 
 
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='362' height='178' src="../images/screenshots/logic-controller/loop-example.gif"><br>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='548' height='160' src="../images/screenshots/logic-controller/loop-example.png"><br>
 <font size="-1">Figure 4 - Loop Controller Example
 </font></td></tr></table></p>
 
@@ -6071,7 +6196,7 @@ Log Page
 </td>
 <td bgcolor="#a0ddf0"   valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-Because there are no more requests in the controller,<br> </br> JMeter starts over and sends the first HTTP Request, which is the News Page.
+Because there are no more requests in the controller,<br>  JMeter starts over and sends the first HTTP Request, which is the News Page.
 </font>
 </td>
 </tr>
@@ -6613,7 +6738,22 @@ This allows the use of JavaScript, BeanShell, properties or variables as needed.
 
 
 <br>
-</br>
+
+
+
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>
+Note that the is evaluated twice, once before starting sampling children and once at end of children sampling, so putting
+non idempotent functions in Condition (like __counter) can introduce issues.
+
+</td></tr>
+</table>
+</p>
+
+
+<br>
+
 
 For example:
 
@@ -7103,7 +7243,7 @@ test plan, not the included file, otherwise they are not guaranteed to work.
 <tr><td>
 This element does not support variables/functions in the filename field.
 <br>
-</br>
+
 
 However, if the property 
 <b>
@@ -7259,10 +7399,11 @@ Yes
 </td>
 </tr>
 <tr>
-<td>Include timer duration in generated sample</td>
+<td>Include duration of timer and pre-post processors in generated sample</td>
 <td>
 	Whether to include timer, pre- and post-processing delays in the generated sample.
 	Default is true to be compatible with the behaviour in previous versions of JMeter.
+	Setting it to false is a better option to get only response time of the sample.
 	
 </td>
 <td>
@@ -7337,7 +7478,7 @@ No
 
 	
 <br>
-</br>
+
 
 Most of the listeners perform several roles in addition to "listening"
 to the test results.  
@@ -7396,7 +7537,7 @@ used to clear any current data
 </b>
  before loading the new file.
 <br>
-</br>
+
 
 This is no longer done, thus 
 <b>
@@ -7708,7 +7849,7 @@ that factored out delays and JMeter's processing, it would be unclear what you c
 number.
 </p>
 <p><b>Control Panel</b></p>
-<div align="center"><img width='853' height='453' src="../images/screenshots/graph_results.png"></div>
+<div align="center"><img width='915' height='686' src="../images/screenshots/graph_results.png"></div>
 <p>
 The following table briefly describes the items on the graph. 
 Further details on the precise meaning of the statistical terms can be found on the web
@@ -8215,6 +8356,15 @@ Like the
 <a href="../usermanual/component_reference.html#View_Results_Tree">View Results Tree</a>
 , this visualizer uses a lot of memory.
 
+<p>
+
+By default, it only displays the main (parent) samples; it does not display the sub-samples (child samples).
+Versions of JMeter after 2.5.1 have a "Child Samples?" check-box.
+If this is selected, then the sub-samples are displayed instead of the main samples.  
+
+</p>
+
+
 <p><b>Control Panel</b></p>
 <div align="center"><img width='658' height='700' src="../images/screenshots/table_results.png"></div>
 </td></tr>
@@ -8358,10 +8508,25 @@ know for sure is to use a profiling tool.
 <tr><td>
 The aggregate graph is similar to the aggregate report. The primary
 difference is the aggregate graph provides an easy way to generate bar graphs and save
-the graph as a PNG file. By default, the aggregate graph will generate a bar chart
-450 x 250 pixels.
+the graph as a PNG file.
 <p><b>Control Panel</b></p>
-<div align="center"><img width='839' height='770' src="../images/screenshots/aggregate_graph.png"></div>
+<div align="center"><img width='905' height='657' src="../images/screenshots/aggregate_graph.png"></div>
+<div align="center">
+
+
+<p>
+
+    The figure below shows an example of settings to draw this graph.
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='903' height='653' src="../images/screenshots/aggregate_graph_settings.png"><br>
+<font size="-1">Aggregate graph settings
+</font></td></tr></table></p>
+
+
+</p>
+
+
+</div>
 </td></tr>
 <tr><td><br></td></tr>
 </table>
@@ -9235,14 +9400,14 @@ Yes
 
 	
 <br>
-</br>
+
 
 	Configuration elements can be used to set up defaults and variables for later use by samplers.
 	Note that these elements are processed at the start of the scope in which they are found, 
 	i.e. before any samplers in the same scope.
 	
 <br>
-</br>
+
 
 
 </description>
@@ -9602,9 +9767,9 @@ No
 <tr>
 <td>Base URL</td>
 <td>A partial or complete URL that matches one or more HTTP Request URLs.  As an example,
-say you specify a Base URL of "http://jakarta.apache.org/restricted/" with a username of "jmeter" and
+say you specify a Base URL of "http://jmeter.apache.org/restricted/" with a username of "jmeter" and
 a password of "jmeter".  If you send an HTTP request to the URL
-"http://jakarta.apache.org/restricted/ant/myPage.html", the Authorization Manager sends the login
+"http://jmeter.apache.org/restricted/ant/myPage.html", the Authorization Manager sends the login
 information for the user named, "jmeter".
 </td>
 <td>
@@ -9621,7 +9786,7 @@ Yes
 </tr>
 <tr>
 <td>Password</td>
-<td>The password for the user.
+<td>The password for the user. (N.B. this is stored unencrypted in the test plan)
 </td>
 <td>
 Yes
@@ -9657,7 +9822,7 @@ This was an experimental feature and has been removed.
 </table>
 </p>
 <br>
-</br>
+
 <b>
 Controls:
 </b>
@@ -9789,6 +9954,14 @@ Note that the Cache-Control header must be "public" and only the "max-age" expir
 
 <p>
 
+By default, Cache Manager will store up to 5000 items in cache using LRU algorithm. Use property to modify this value.
+Note that the more you increase this value the more HTTP Cache Manager will consume memory, so be sure to adapt -Xmx option.
+
+</p>
+
+
+<p>
+
 If the requested document has not changed since it was cached, then the response body will be empty.
 Likewise if the Expires date is in the future.
 This may cause problems for Assertions.
@@ -9798,7 +9971,7 @@ This may cause problems for Assertions.
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='424' height='159' src="../images/screenshots/http-config/http-cache-manager.png"></div>
+<div align="center"><img width='511' height='196' src="../images/screenshots/http-config/http-cache-manager.png"></div>
 <p>
 <b>Parameters</b>
 <a name="HTTP_Cache_Manager_parms"/>
@@ -9824,6 +9997,14 @@ Yes
 </tr>
 <tr>
 <td>Use Cache Control/Expires header when processing GET requests</td>
+<td>See description above.
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>Max Number of elements in cache</td>
 <td>See description above.
 </td>
 <td>
@@ -9857,7 +10038,7 @@ so use multiple Cookie Managers with care.
 <p>
 The Cookie Manager element has two functions:
 <br>
-</br>
+
 
 First, it stores and sends cookies just like a web browser. If you have an HTTP Request and
 the response contains a cookie, the Cookie Manager automatically stores that cookie and will
@@ -9943,8 +10124,8 @@ Yes
 <td>Cookie Policy</td>
 <td>The cookie policy that will be used to manage the cookies. 
   "compatibility" is the default, and should work in most cases.
-  See http://jakarta.apache.org/httpcomponents/httpclient-3.x/cookies.html and 
-  http://jakarta.apache.org/httpcomponents/httpclient-3.x/apidocs/org/apache/commons/httpclient/cookie/CookiePolicy.html
+  See http://hc.apache.org/httpclient-3.x/cookies.html and 
+  http://hc.apache.org/httpclient-3.x/apidocs/org/apache/commons/httpclient/cookie/CookiePolicy.html
   [Note: "ignoreCookies" is equivalent to omitting the CookieManager.]
     
 </td>
@@ -9958,7 +10139,7 @@ Yes
   gives you the opportunity to use hardcoded cookies that will be used by all threads during the test execution.
   
 <br>
-</br>
+
 
   The "domain" is the hostname of the server (without http://); the port is currently ignored.
   
@@ -10174,7 +10355,7 @@ No
 </tr>
 <tr>
 <td>Password</td>
-<td>(Optional) password for proxy server.
+<td>(Optional) password for proxy server. (N.B. this is stored unencrypted in the test plan)
 </td>
 <td>
 No
@@ -10264,7 +10445,7 @@ This allows one to set up a default set of headers, and apply adjustments to par
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img  src="../images/screenshots/http-config/http-header-manager.gif"></div>
+<div align="center"><img width='342' height='256' src="../images/screenshots/http-config/http-header-manager.png"></div>
 <p>
 <b>Parameters</b>
 <a name="HTTP_Header_Manager_parms"/>
@@ -10342,7 +10523,7 @@ Download
 </a>
  this example.  In this example, we created a Test Plan
 that tells JMeter to override the default "User-Agent" request header and use a particular Internet Explorer agent string
-instead. (see figures 9 and 10).
+instead. (see figures 12 and 13).
 </p>
 
 
@@ -10445,7 +10626,7 @@ set this to zero (0)
         the connections are not shared betweeen threads.
         
 <br>
-</br>
+
 
 		If you really want to use shared pooling (why?), then set the max count to the same as the number of threads
         to ensure threads don't wait on each other.
@@ -10532,7 +10713,7 @@ No
 </tr>
 <tr>
 <td>Password</td>
-<td>Password to connect with.
+<td>Password to connect with. (N.B. this is stored unencrypted in the test plan)
 </td>
 <td>
 No
@@ -10716,7 +10897,67 @@ jdbc:derby://server[:port]/databaseName[;URLAttributes=value[;...]]
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="Login_Config_Element">18.4.9 Login Config Element</a>
+<a name="Keystore_Configuration">18.4.9 Keystore Configuration</a>
+<a class="sectionlink" href="#Keystore_Configuration" title="Link to here">&para;</a></h3>
+</font>
+</td></tr>
+<tr><td>
+<p>
+The Keystore Config Element lets you configure how Keystore will be loaded and which keys it will use.
+This component is typically used in HTTPs scenarios where you don't want to take into account keystore initialization into account in response time.
+</p>
+
+
+<p><b>Control Panel</b></p>
+<div align="center"><img width='530' height='171' src="../images/screenshots/keystore_config.png"></div>
+<p>
+<b>Parameters</b>
+<a name="Keystore_Configuration_parms"/>
+<a class="sectionlink" href="#Keystore_Configuration_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
+<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+<tr>
+<td>Name</td>
+<td>Descriptive name for this element that is shown in the tree. 
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Preload</td>
+<td>Wether or not to preload Keystore.
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>Alias Start Index</td>
+<td>The index of the first key to use in Keystore.
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>Alias End Index</td>
+<td>The index of the last key to use in Keystore.
+</td>
+<td>
+Yes
+</td>
+</tr>
+</table>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<hr>
+<table border="0" cellspacing="0" cellpadding="2">
+<tr><td>
+<font face="arial,helvetica,sanserif">
+<h3>
+<a name="Login_Config_Element">18.4.10 Login Config Element</a>
 <a class="sectionlink" href="#Login_Config_Element" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
@@ -10751,7 +10992,7 @@ No
 </tr>
 <tr>
 <td>Password</td>
-<td>The default password to use.
+<td>The default password to use. (N.B. this is stored unencrypted in the test plan)
 </td>
 <td>
 No
@@ -10767,7 +11008,7 @@ No
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="LDAP_Request_Defaults">18.4.10 LDAP Request Defaults</a>
+<a name="LDAP_Request_Defaults">18.4.11 LDAP Request Defaults</a>
 <a class="sectionlink" href="#LDAP_Request_Defaults" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
@@ -10789,7 +11030,7 @@ The LDAP Request Defaults component lets you set default values for LDAP testing
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="LDAP_Extended_Request_Defaults">18.4.11 LDAP Extended Request Defaults</a>
+<a name="LDAP_Extended_Request_Defaults">18.4.12 LDAP Extended Request Defaults</a>
 <a class="sectionlink" href="#LDAP_Extended_Request_Defaults" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
@@ -10811,7 +11052,7 @@ The LDAP Extended Request Defaults component lets you set default values for ext
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="TCP_Sampler_Config">18.4.12 TCP Sampler Config</a>
+<a name="TCP_Sampler_Config">18.4.13 TCP Sampler Config</a>
 <a class="sectionlink" href="#TCP_Sampler_Config" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
@@ -10914,7 +11155,7 @@ No
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="User_Defined_Variables">18.4.13 User Defined Variables</a>
+<a name="User_Defined_Variables">18.4.14 User Defined Variables</a>
 <a class="sectionlink" href="#User_Defined_Variables" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
@@ -10998,7 +11239,7 @@ elements in the thread will see the updated value.
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='690' height='394' src="../images/screenshots/user_defined_variables.png"></div>
+<div align="center"><img width='741' height='266' src="../images/screenshots/user_defined_variables.png"></div>
 <p>
 <table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
 <tr><td>
@@ -11043,7 +11284,7 @@ No
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="Random_Variable">18.4.14 Random Variable</a>
+<a name="Random_Variable">18.4.15 Random Variable</a>
 <a class="sectionlink" href="#Random_Variable" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
@@ -11153,7 +11394,7 @@ Yes
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="Counter">18.4.15 Counter</a>
+<a name="Counter">18.4.16 Counter</a>
 <a class="sectionlink" href="#Counter" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
@@ -11253,6 +11494,15 @@ Yes
 No
 </td>
 </tr>
+<tr>
+<td>Reset counter on each Thread Group Iteration</td>
+<td>This option is only available when counter is tracked per User, if checked, 
+        counter will be reset to Start value on each Thread Group iteration. This can be useful when Counter is inside a Loop Controller.
+</td>
+<td>
+No
+</td>
+</tr>
 </table>
 </p>
 </td></tr>
@@ -11263,7 +11513,7 @@ No
 <tr><td>
 <font face="arial,helvetica,sanserif">
 <h3>
-<a name="Simple_Config_Element">18.4.16 Simple Config Element</a>
+<a name="Simple_Config_Element">18.4.17 Simple Config Element</a>
 <a class="sectionlink" href="#Simple_Config_Element" title="Link to here">&para;</a></h3>
 </font>
 </td></tr>
@@ -12401,6 +12651,49 @@ The non-tolerant parser can be quite slow, as it may need to download the DTD et
 </td></tr>
 </table>
 </p>
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>
+To overcome Xalan XPath parser implementation on which JMeter is based, you can help the parsing by 
+providing a Properties file which will contain:
+
+<ul>
+
+
+<li>
+prefix1=Full Namespace 1
+</li>
+
+
+<li>
+prefix2=Full Namespace 2
+</li>
+
+
+<li>
+...
+</li>
+
+
+</ul>
+
+
+You reference this file in jmeter.properties file using the property:
+
+<ul>
+
+    
+<li>
+xpath.namespace.config
+</li>
+
+
+</ul>
+
+
+</td></tr>
+</table>
+</p>
 </td></tr>
 <tr><td><br></td></tr>
 </table>
@@ -12717,7 +13010,7 @@ The SMIME Assertion can be used to evaluate the sample results from the Mail Rea
 This assertion verifies if the body of a mime message is signed or not. The signature can also be verified against a specific signer certificate.
 As this is a functionality that is not necessarily needed by most users, additional jars need to be downloaded and added to JMETER_HOME/lib :
 <br>
-</br>
+
  
 
 <ul>
@@ -12828,7 +13121,7 @@ Yes
 
 	
 <br>
-</br>
+
 
 	
 <p>
@@ -12850,13 +13143,13 @@ before
  sampler.
 	
 <br>
-</br>
+
 
 	Timers are only processed in conjunction with a sampler.
 	A timer which is not in the same scope as a sampler will not be processed at all.
 	
 <br>
-</br>
+
 
 	To apply a timer to a single sampler, add the timer as a child element of the sampler.
 	The timer will be applied before the sampler is executed.
@@ -12885,7 +13178,7 @@ If you want to have each thread pause for the same amount of time between
 requests, use this timer.
 </p>
 <p><b>Control Panel</b></p>
-<div align="center"><img  src="../images/screenshots/timers/constant_timer.png"></div>
+<div align="center"><img width='372' height='100' src="../images/screenshots/timers/constant_timer.png"></div>
 <p>
 <b>Parameters</b>
 <a name="Constant_Timer_parms"/>
@@ -12929,7 +13222,7 @@ sum of the Gaussian distributed value (with mean 0.0 and standard deviation 1.0)
 the deviation value you specify, and the offset value.
 </p>
 <p><b>Control Panel</b></p>
-<div align="center"><img  src="../images/screenshots/timers/gauss_random_timer.png"></div>
+<div align="center"><img width='372' height='156' src="../images/screenshots/timers/gauss_random_timer.png"></div>
 <p>
 <b>Parameters</b>
 <a name="Gaussian_Random_Timer_parms"/>
@@ -12981,7 +13274,7 @@ each time interval having the same probability of occurring. The total delay
 is the sum of the random value and the offset value.
 </p>
 <p><b>Control Panel</b></p>
-<div align="center"><img  src="../images/screenshots/timers/uniform_random_timer.png"></div>
+<div align="center"><img width='372' height='157' src="../images/screenshots/timers/uniform_random_timer.png"></div>
 <p>
 <b>Parameters</b>
 <a name="Uniform_Random_Timer_parms"/>
@@ -13076,7 +13369,7 @@ Note that the throughput value should not be changed too often during a test
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img  src="../images/screenshots/timers/constant_throughput_timer.png"></div>
+<div align="center"><img width='636' height='146' src="../images/screenshots/timers/constant_throughput_timer.png"></div>
 <p>
 <b>Parameters</b>
 <a name="Constant_Throughput_Timer_parms"/>
@@ -13168,7 +13461,7 @@ points of the test plan.
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img  src="../images/screenshots/timers/sync_timer.png"></div>
+<div align="center"><img width='415' height='125' src="../images/screenshots/timers/sync_timer.png"></div>
 <p>
 <b>Parameters</b>
 <a name="Synchronizing_Timer_parms"/>
@@ -13184,7 +13477,7 @@ No
 </tr>
 <tr>
 <td>Number of Simultaneous Users to Group by</td>
-<td>Number of threads to release at once.
+<td>Number of threads to release at once. Setting it to 0 is equivalent to setting it to Number of threads in Thread Group.
 </td>
 <td>
 Yes
@@ -13536,6 +13829,58 @@ For details, see
 <tr><td><br></td></tr>
 </table>
 <hr>
+<table border="0" cellspacing="0" cellpadding="2">
+<tr><td>
+<font face="arial,helvetica,sanserif">
+<h3>
+<a name="Poisson_Random_Timer">18.6.9 Poisson Random Timer</a>
+<a class="sectionlink" href="#Poisson_Random_Timer" title="Link to here">&para;</a></h3>
+</font>
+</td></tr>
+<tr><td>
+<p>
+This timer pauses each thread request for a random amount of time, with most
+of the time intervals ocurring near a particular value.  The total delay is the
+sum of the Poisson distributed value, and the offset value.
+</p>
+<p><b>Control Panel</b></p>
+<div align="center"><img width='341' height='182' src="../images/screenshots/timers/poisson_random_timer.png"></div>
+<p>
+<b>Parameters</b>
+<a name="Poisson_Random_Timer_parms"/>
+<a class="sectionlink" href="#Poisson_Random_Timer_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
+<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+<tr>
+<td>Name</td>
+<td>Descriptive name for this timer that is shown in the tree
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Lambda</td>
+<td>Lambda value in milliseconds.
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>Constant Delay Offset</td>
+<td>Number of milliseconds to pause in addition
+to the random delay.
+</td>
+<td>
+Yes
+</td>
+</tr>
+</table>
+</p>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<hr>
 <a href="#">
 ^
 </a>
@@ -13555,12 +13900,12 @@ For details, see
 
 	
 <br>
-</br>
+
 
 		Preprocessors are used to modify the Samplers in their scope.
 	
 <br>
-</br>
+
 
 	
 </description>
@@ -13793,19 +14138,19 @@ Modifier to replace it.
 As an example, the username for a login script could be modified to send a series of values
 such as:
 <br>
-</br>
+
 
 user_1
 <br>
-</br>
+
 
 user_2
 <br>
-</br>
+
 
 user_3
 <br>
-</br>
+
 
 user_4, etc.
 </p>
@@ -13872,65 +14217,6 @@ Yes
 </td>
 <td>
 No
-</td>
-</tr>
-</table>
-</p>
-</td></tr>
-<tr><td><br></td></tr>
-</table>
-<hr>
-<table border="0" cellspacing="0" cellpadding="2">
-<tr><td>
-<font face="arial,helvetica,sanserif">
-<h3>
-<a name="HTTP_User_Parameter_Modifier">18.7.4 HTTP User Parameter Modifier</a>
-<a class="sectionlink" href="#HTTP_User_Parameter_Modifier" title="Link to here">&para;</a></h3>
-</font>
-</td></tr>
-<tr><td bgcolor="#bbbb00"><div align="center"><b>*** This element is deprecated.  Use <a href="../usermanual/component_reference.html#User_Parameters">User Parameters</a> instead ***</b></div></td></tr>
-<tr><td>
-
-
-<p>
-See also the 
-<a href="../usermanual/component_reference.html#CSV_Data_Set_Config">CSV Data Set Config</a>
- element, which is more suitable for large numbers of parameters
-</p>
-
-
-<p>
-The User Parameter Modifier uses an XML file get values for HTTP arguments.  Any
-HTTP Request that this modifier modifies will be checked for the existence of the specified
-arguments.  If found, the values for those arguments will be replaced by the values found in the
-xml file.  The XML file can have multiple sets of the same values.  This modifier will iterate
-through these values in a round-robin style, thus each request will get a different set of values
-until the last set of values is reached, at which point it will begin again at the first set.
-</p>
-
-
-<p><b>Control Panel</b></p>
-<div align="center"><img width='514' height='251' src="../images/screenshots/user_param_modifier.gif"></div>
-<p>
-<b>Parameters</b>
-<a name="HTTP_User_Parameter_Modifier_parms"/>
-<a class="sectionlink" href="#HTTP_User_Parameter_Modifier_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
-<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
-<tr>
-<td>Name</td>
-<td>Descriptive name given to this element in the test tree.
-</td>
-<td>
-No
-</td>
-</tr>
-<tr>
-<td>File Name</td>
-<td>Name of the XML file in JMeter's /bin directory
-        that holds the value sets.
-</td>
-<td>
-Yes
 </td>
 </tr>
 </table>
@@ -14358,6 +14644,58 @@ The JSR223 PreProcessor allows JSR223 script code to be applied before taking a 
 For details, see 
 <a href="../usermanual/component_reference.html#BSF_PreProcessor">BSF PreProcessor</a>
 .
+
+</p>
+
+
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<hr>
+<table border="0" cellspacing="0" cellpadding="2">
+<tr><td>
+<font face="arial,helvetica,sanserif">
+<h3>
+<a name="JDBC_PreProcessor">18.7.9 JDBC PreProcessor</a>
+<a class="sectionlink" href="#JDBC_PreProcessor" title="Link to here">&para;</a></h3>
+</font>
+</td></tr>
+<tr><td>
+
+
+<p>
+
+The JDBC PreProcessor enables you to run some SQL statement just before a sample runs.
+This can be useful if your JDBC Sample requires some data to be in DataBase and you cannot compute this in a setup Thread group.
+
+</p>
+
+
+<p>
+
+See the following Test plan:
+
+</p>
+
+
+<p><b>See Also:</b>
+<ul>
+<li><a href="../demos/JDBC-Pre-Post-Processor.jmx">Test Plan using JDBC Pre/Post Processor</a></li>
+</ul>
+</p>
+
+
+<p>
+
+In the linked test plan,"Create Price Cut-Off" JDBC PreProcessor calls a stored procedure to create a Price Cut-Off in Database,
+this one will be used by "Calculate Price cut off".
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='818' height='394' src="../images/screenshots/jdbc-pre-processor.png"><br>
+<font size="-1">Create Price Cut-Off Preprocessor
+</font></td></tr></table></p>
+
+
 
 </p>
 
@@ -14855,22 +15193,22 @@ If Tidy is selected
         Meanwhile, a work-round is to replace: 
         
 <br>
-</br>
+
 
         //mynamespace:tagname
         
 <br>
-</br>
+
 
         by
         
 <br>
-</br>
+
 
         //*[local-name()='tagname' and namespace-uri()='uri-for-namespace']
         
 <br>
-</br>
+
 
         where "uri-for-namespace" is the uri for the "mynamespace" namespace.
         
@@ -14910,11 +15248,11 @@ If Tidy is not selected
 <td>
     If selected, the fragment will be returned rather than the text content.
 <br>
-</br>
+
 
     For example //title would return "&lt;title>Apache JMeter&lt;/title>" rather than "Apache JMeter".
 <br>
-</br>
+
 
     In this case, //title/text() would return "Apache JMeter".
     
@@ -15502,9 +15840,44 @@ For details, see the
 <tr><td><br></td></tr>
 </table>
 <hr>
-<a href="#">
-^
-</a>
+<table border="0" cellspacing="0" cellpadding="2">
+<tr><td>
+<font face="arial,helvetica,sanserif">
+<h3>
+<a name="JDBC_PostProcessor">18.8.7 JDBC PostProcessor</a>
+<a class="sectionlink" href="#JDBC_PostProcessor" title="Link to here">&para;</a></h3>
+</font>
+</td></tr>
+<tr><td>
+
+
+<p>
+
+The JDBC PostProcessor enables you to run some SQL statement just after a sample has run.
+This can be useful if your JDBC Sample changes some data and you want to reset state to what it was before the JDBC sample run.
+
+</p>
+
+
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<hr>
+<p><b>See Also:</b>
+<ul>
+<li><a href="../demos/JDBC-Pre-Post-Processor.jmx">Test Plan using JDBC Pre/Post Processor</a></li>
+</ul>
+</p>
+<p>
+
+In the linked test plan,"JDBC PostProcessor" JDBC PostProcessor calls a stored procedure to delete from Database the Price Cut-Off that was created by PreProcessor.
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='818' height='399' src="../images/screenshots/jdbc-post-processor.png"><br>
+<font size="-1">JDBC PostProcessor
+</font></td></tr></table></p>
+
+
+</p>
 </blockquote>
 </p>
 </td></tr>
@@ -15521,7 +15894,7 @@ For details, see the
 
 		
 <br>
-</br>
+
 
 
 </description>
@@ -15617,7 +15990,7 @@ In jmeter.properties, edit "user.classpath" to include additional libraries.
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='491' height='439' src="../images/screenshots/testplan.png"></div>
+<div align="center"><img width='529' height='422' src="../images/screenshots/testplan.png"></div>
 </td></tr>
 <tr><td><br></td></tr>
 </table>
@@ -16331,31 +16704,31 @@ include and exclude patterns
 They will be matched against the host name, port (actual or implied) path and query (if any) of each browser request.
 If the URL you are browsing is 
 <br>
-</br>
+
  
 
 <b>
-"http://jakarta.apache.org/jmeter/index.html?username=xxxx"
+"http://jmeter.apache.org/jmeter/index.html?username=xxxx"
 </b>
 ,
 <br>
-</br>
+
  
 then the regular expression will be tested against the string:
 <br>
-</br>
+
  
 
 <b>
-"jakarta.apache.org:80/jmeter/index.html?username=xxxx"
+"jmeter.apache.org:80/jmeter/index.html?username=xxxx"
 </b>
 .
 <br>
-</br>
+
    
 Thus, if you want to include all .html files, your regular expression might look like: 
 <br>
-</br>
+
  
 
 <b>
@@ -16395,7 +16768,7 @@ whole
 </b>
  host+path string.
 <br>
-</br>
+
 Thus 
 <b>
 "\.html"
@@ -16524,12 +16897,12 @@ To avoid this happening everywhere, set the "Regex Matching" check-box.
 This tells the proxy server to treat values as Regexes (using ORO).
 
 <br>
-</br>
+
 
 If you want to match a whole string only, enclose it in ^$, e.g. "^thus$".
 
 <br>
-</br>
+
 
 If you want to match /images at the start of a string only, use the value "^/images".
 Jakarta ORO also supports zero-width look-ahead, so one can match /images/... 
@@ -16537,7 +16910,7 @@ but retain the trailing / in the output by using "^/images(?=/)".
 Note that the current version of Jakara ORO does not support look-behind - i.e. "(?&lt;=...) or (?&lt;!...)".
 
 <br>
-</br>
+
 
 If there are any problems interpreting any variables as patterns, these are reported in jmeter.log,
 so be sure to check this if UDVs are not working as expected.
@@ -16626,8 +16999,67 @@ This is useful for checking the content of HTTP requests.
 </p>
 
 
+<p>
+
+It uses default port 8081 since 2.6. 
+
+</p>
+
+
 <p><b>Control Panel</b></p>
-<div align="center"><img width='303' height='139' src="../images/screenshots/mirrorserver.png"></div>
+<div align="center"><img width='672' height='174' src="../images/screenshots/mirrorserver.png"></div>
+<p>
+<b>Parameters</b>
+<a name="HTTP_Mirror_Server_parms"/>
+<a class="sectionlink" href="#HTTP_Mirror_Server_parms" title="Link to here">&para;</a><table border="1" cellspacing="0" cellpadding="2">
+<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+<tr>
+<td>Port</td>
+<td>Port on which Mirror server listens, defaults to 8081.
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>Max Number of threads</td>
+<td>If set to a value > 0, number of threads serving requests will be limited to the configured number, if set to a value <=0 
+        a new thread will be created to serve each incoming request. Defaults to 0
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>Max Queue size</td>
+<td>Size of queue used for holding tasks before they are executed by Thread Pool, when Thread pool is exceeded, incoming requests will
+        be held in this queue and discarded when this queue is full. This parameter is only used if Max Number of Threads is greater than 0. Defaults to 25
+</td>
+<td>
+No
+</td>
+</tr>
+</table>
+</p>
+<p>
+<table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+<tr><td>
+Note that you can make simulate requests response time by adding an HTTP Header Manager with the following name/value pair:
+
+<ul>
+
+
+<li>
+X-Sleep=Time to sleep in ms 
+</li>
+
+
+</ul>
+
+
+</td></tr>
+</table>
+</p>
 </td></tr>
 <tr><td><br></td></tr>
 </table>
@@ -16758,14 +17190,23 @@ Yes
 
 <p>
 
-The Debug PostProcessor creates a subSample with the details of the previous sampler properties.
-This is intended for developer use only.
+The Debug PostProcessor creates a subSample with the details of the previous Sampler properties, 
+JMeter variables, properties and/or System Properties.
+
+</p>
+
+
+<p>
+
+The values can be seen in the 
+<a href="../usermanual/component_reference.html#View_Results_Tree">View Results Tree</a>
+ Listener Response Data pane.
 
 </p>
 
 
 <p><b>Control Panel</b></p>
-<div align="center"><img width='341' height='134' src="../images/screenshots/debug_postprocessor.png"></div>
+<div align="center"><img width='344' height='193' src="../images/screenshots/debug_postprocessor.png"></div>
 <p>
 <b>Parameters</b>
 <a name="Debug_PostProcessor_parms"/>
@@ -16777,6 +17218,38 @@ This is intended for developer use only.
 </td>
 <td>
 No
+</td>
+</tr>
+<tr>
+<td>JMeter Properties</td>
+<td>Whether to show JMeter properties (default false).
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>JMeter Variables</td>
+<td>Whether to show JMeter variables (default false).
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>Sampler Properties</td>
+<td>Whether to show Sampler properties (default true).
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>System Properties</td>
+<td>Whether to show System properties (default false).
+</td>
+<td>
+Yes
 </td>
 </tr>
 </table>
@@ -16903,7 +17376,7 @@ Yes
 
 		
 <br>
-</br>
+
 
 
 </description>
@@ -17026,7 +17499,7 @@ Yes
 </td></tr>
 <tr><td colspan="2">
 <div align="center"><font color="#525D76" size="-1"><em>
-Copyright &copy; 1999-2011, Apache Software Foundation
+Copyright &copy; 1999-2012, Apache Software Foundation
 </em></font></div>
 </td></tr>
 <tr><td colspan="2">

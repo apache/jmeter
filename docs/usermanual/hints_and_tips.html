@@ -30,7 +30,7 @@
 
 
 
-<title>JMeter - User's Manual: Hints and Tips</title>
+<title>Apache JMeter - User's Manual: Hints and Tips</title>
 </head>
 
 <body bgcolor="#ffffff" text="#000000" link="#525D76">
@@ -43,10 +43,10 @@
 style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </td>
 <td align="left">
-<a href="http://jakarta.apache.org"><img width="505" height="48" src="../images/jakarta-logo.gif" alt="Jakarta" title="Jakarta" border="0"/></a>
+<a href="http://www.apache.org"><img title="Apache Software Foundation" width="387" height="100" src="../images/asf-logo.gif" border="0"/></a>
 </td>
 <td align="right">
-<a href="http://jakarta.apache.org/jmeter/"><img width="221" height="102" src="../images/logo.jpg" alt="JMeter" title="JMeter" border="0"/></a>
+<a href="http://jmeter.apache.org/"><img width="221" height="102" src="../images/logo.jpg" alt="Apache JMeter" title="Apache JMeter" border="0"/></a>
 </td>
 </tr>
 </table>
@@ -67,12 +67,12 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </li>
 <li><a href="http://www.apache.org/licenses/">License</a>
 </li>
-<li><a href="http://wiki.apache.org/jakarta-jmeter/JMeterCommitters">Contributors</a>
+<li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a>
 </li>
 </ul>
 <p><strong>Download</strong></p>
 <ul>
-<li><a href="http://jakarta.apache.org/site/downloads/downloads_jmeter.cgi">Download Releases</a>
+<li><a href="../download_jmeter.cgi">Download Releases</a>
 </li>
 <li><a href="../nightly.html">Developer (Nightly) Builds</a>
 </li>
@@ -81,15 +81,19 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <ul>
 <li><a href="../usermanual/index.html">User Manual</a>
 </li>
+<li><a href="../usermanual/component_reference.html">Component Reference</a>
+</li>
+<li><a href="../usermanual/functions.html">Functions Reference</a>
+</li>
 <li><a href="../api/index.html">Javadocs</a>
 </li>
 <li><a href="../localising/index.html">Localisation (Translator's Guide)</a>
 </li>
 <li><a href="../building.html">Building JMeter and Add-Ons</a>
 </li>
-<li><a href="http://wiki.apache.org/jakarta-jmeter">JMeter Wiki</a>
+<li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a>
 </li>
-<li><a href="http://wiki.apache.org/jakarta-jmeter/JMeterFAQ">FAQ (Wiki)</a>
+<li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a>
 </li>
 </ul>
 <p><strong>Tutorials (PDF format)</strong></p>
@@ -107,11 +111,11 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </ul>
 <p><strong>Community</strong></p>
 <ul>
-<li><a href="http://jakarta.apache.org/site/getinvolved.html">Get Involved</a>
+<li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved</a>
 </li>
-<li><a href="http://jakarta.apache.org/site/mail.html">Mailing Lists</a>
+<li><a href="../mail.html">Mailing Lists</a>
 </li>
-<li><a href="http://jakarta.apache.org/site/cvsindex.html">SVN Repositories</a>
+<li><a href="../svnindex.html">SVN Repositories</a>
 </li>
 </ul>
 <p><strong>Foundation</strong></p>
@@ -150,7 +154,7 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 
 This section is a collection of various hints and tips that have been suggested by various questions on the JMeter User list.
 If you don't find what you are looking for here, please check the 
-<a href="http://wiki.apache.org/jakarta-jmeter">
+<a href="http://wiki.apache.org/jmeter">
 JMeter Wiki
 </a>
 .
@@ -228,6 +232,53 @@ You can use these to determine the correct property setting to change the loggin
 </td></tr>
 <tr><td><br></td></tr>
 </table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="searching"><strong>21.3 Searching</strong></a>
+<a class="sectionlink" href="#searching" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+
+It is sometimes hard to find in a Test Plan tree and elements using a variable or containing a certain URL or parameter.
+A new feature is now available since 2.6, you can access it in Menu Search.
+It provides search with following options:
+
+<ul>
+
+
+<li>
+Case Sensitive : Makes search case sensitive
+</li>
+
+
+<li>
+Regexp : Is text to search a regexp, if so Regexp will be searched in Tree of components, example "\btest\b" will match any component that contains test in searchable elements of the component
+</li>
+
+
+</ul>
+
+
+</p>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='950' height='802' src="../images/screenshots/searching/raw-search.png"><br>
+<font size="-1">Figure 1 - Search raw text in TreeView
+</font></td></tr></table></p>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='336' height='153' src="../images/screenshots/searching/raw-search-result.png"><br>
+<font size="-1">Figure 2 - Result in TreeView
+</font></td></tr></table></p>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='336' height='153' src="../images/screenshots/searching/regexp-search.png"><br>
+<font size="-1">Figure 3 - Search Regexp in TreeView (in this example we search whole word)
+</font></td></tr></table></p>
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='336' height='153' src="../images/screenshots/searching/regexp-search-result.png"><br>
+<font size="-1">Figure 4 - Result in TreeView
+</font></td></tr></table></p>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
 </blockquote>
 </p>
 </td></tr>
@@ -254,7 +305,7 @@ You can use these to determine the correct property setting to change the loggin
 </td></tr>
 <tr><td colspan="2">
 <div align="center"><font color="#525D76" size="-1"><em>
-Copyright &copy; 1999-2011, Apache Software Foundation
+Copyright &copy; 1999-2012, Apache Software Foundation
 </em></font></div>
 </td></tr>
 <tr><td colspan="2">

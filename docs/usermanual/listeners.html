@@ -30,7 +30,7 @@
 
 
 
-<title>JMeter - User's Manual: Listeners</title>
+<title>Apache JMeter - User's Manual: Listeners</title>
 </head>
 
 <body bgcolor="#ffffff" text="#000000" link="#525D76">
@@ -43,10 +43,10 @@
 style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </td>
 <td align="left">
-<a href="http://jakarta.apache.org"><img width="505" height="48" src="../images/jakarta-logo.gif" alt="Jakarta" title="Jakarta" border="0"/></a>
+<a href="http://www.apache.org"><img title="Apache Software Foundation" width="387" height="100" src="../images/asf-logo.gif" border="0"/></a>
 </td>
 <td align="right">
-<a href="http://jakarta.apache.org/jmeter/"><img width="221" height="102" src="../images/logo.jpg" alt="JMeter" title="JMeter" border="0"/></a>
+<a href="http://jmeter.apache.org/"><img width="221" height="102" src="../images/logo.jpg" alt="Apache JMeter" title="Apache JMeter" border="0"/></a>
 </td>
 </tr>
 </table>
@@ -67,12 +67,12 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </li>
 <li><a href="http://www.apache.org/licenses/">License</a>
 </li>
-<li><a href="http://wiki.apache.org/jakarta-jmeter/JMeterCommitters">Contributors</a>
+<li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a>
 </li>
 </ul>
 <p><strong>Download</strong></p>
 <ul>
-<li><a href="http://jakarta.apache.org/site/downloads/downloads_jmeter.cgi">Download Releases</a>
+<li><a href="../download_jmeter.cgi">Download Releases</a>
 </li>
 <li><a href="../nightly.html">Developer (Nightly) Builds</a>
 </li>
@@ -81,15 +81,19 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <ul>
 <li><a href="../usermanual/index.html">User Manual</a>
 </li>
+<li><a href="../usermanual/component_reference.html">Component Reference</a>
+</li>
+<li><a href="../usermanual/functions.html">Functions Reference</a>
+</li>
 <li><a href="../api/index.html">Javadocs</a>
 </li>
 <li><a href="../localising/index.html">Localisation (Translator's Guide)</a>
 </li>
 <li><a href="../building.html">Building JMeter and Add-Ons</a>
 </li>
-<li><a href="http://wiki.apache.org/jakarta-jmeter">JMeter Wiki</a>
+<li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a>
 </li>
-<li><a href="http://wiki.apache.org/jakarta-jmeter/JMeterFAQ">FAQ (Wiki)</a>
+<li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a>
 </li>
 </ul>
 <p><strong>Tutorials (PDF format)</strong></p>
@@ -107,11 +111,11 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </ul>
 <p><strong>Community</strong></p>
 <ul>
-<li><a href="http://jakarta.apache.org/site/getinvolved.html">Get Involved</a>
+<li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved</a>
 </li>
-<li><a href="http://jakarta.apache.org/site/mail.html">Mailing Lists</a>
+<li><a href="../mail.html">Mailing Lists</a>
 </li>
-<li><a href="http://jakarta.apache.org/site/cvsindex.html">SVN Repositories</a>
+<li><a href="../svnindex.html">SVN Repositories</a>
 </li>
 </ul>
 <p><strong>Foundation</strong></p>
@@ -334,6 +338,12 @@ The full set of properties that affect result file output is shown below.
 # Put the start time stamp in logs instead of the end
 sampleresult.timestamp.start=true
 
+# Whether to use System.nanoTime() - otherwise only use System.currentTimeMillis()
+#sampleresult.useNanoTime=true
+
+# Use a background thread to calculate the nanoTime offset
+# Set this to <= 0 to disable the background thread
+#sampleresult.nanoThreadSleep=5000
 
 # legitimate values: none, first, all
 #jmeter.save.saveservice.assertion_results=none
@@ -427,7 +437,7 @@ CSV format cannot currently be used to save any items that include line-breaks.
 </p>
 <p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/sample_result_config.png"><br>
 <font size="-1"><br>
-</br>
+
 <b>
 Configuration dialogue
 </b>
@@ -1115,7 +1125,7 @@ However, this can make the file rather large, and the text has to be encoded so
 that it is still valid XML. Also, images cannot be included.
 
 <br>
-</br>
+
 
 Another solution is to use the Post-Processor 
 <a href="../usermanual/component_reference.html#Save_Responses_to_a_file">Save_Responses_to_a_file</a>
@@ -1218,7 +1228,7 @@ e.g. a spreadsheet or text editor.
 </td></tr>
 <tr><td colspan="2">
 <div align="center"><font color="#525D76" size="-1"><em>
-Copyright &copy; 1999-2011, Apache Software Foundation
+Copyright &copy; 1999-2012, Apache Software Foundation
 </em></font></div>
 </td></tr>
 <tr><td colspan="2">

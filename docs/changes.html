@@ -30,9 +30,9 @@
 
 
 <meta name="author" value="JMeter developers">
-<meta name="email" value="dev AT jakarta.apache.org">
+<meta name="email" value="dev AT jmeter.apache.org">
 
-<title>JMeter - Changes</title>
+<title>Apache JMeter - Changes</title>
 </head>
 
 <body bgcolor="#ffffff" text="#000000" link="#525D76">
@@ -45,10 +45,10 @@
 style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </td>
 <td align="left">
-<a href="http://jakarta.apache.org"><img width="505" height="48" src="./images/jakarta-logo.gif" alt="Jakarta" title="Jakarta" border="0"/></a>
+<a href="http://www.apache.org"><img title="Apache Software Foundation" width="387" height="100" src="./images/asf-logo.gif" border="0"/></a>
 </td>
 <td align="right">
-<a href="http://jakarta.apache.org/jmeter/"><img width="221" height="102" src="./images/logo.jpg" alt="JMeter" title="JMeter" border="0"/></a>
+<a href="http://jmeter.apache.org/"><img width="221" height="102" src="./images/logo.jpg" alt="Apache JMeter" title="Apache JMeter" border="0"/></a>
 </td>
 </tr>
 </table>
@@ -69,12 +69,12 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </li>
 <li><a href="http://www.apache.org/licenses/">License</a>
 </li>
-<li><a href="http://wiki.apache.org/jakarta-jmeter/JMeterCommitters">Contributors</a>
+<li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a>
 </li>
 </ul>
 <p><strong>Download</strong></p>
 <ul>
-<li><a href="http://jakarta.apache.org/site/downloads/downloads_jmeter.cgi">Download Releases</a>
+<li><a href="./download_jmeter.cgi">Download Releases</a>
 </li>
 <li><a href="./nightly.html">Developer (Nightly) Builds</a>
 </li>
@@ -83,15 +83,19 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <ul>
 <li><a href="./usermanual/index.html">User Manual</a>
 </li>
+<li><a href="./usermanual/component_reference.html">Component Reference</a>
+</li>
+<li><a href="./usermanual/functions.html">Functions Reference</a>
+</li>
 <li><a href="./api/index.html">Javadocs</a>
 </li>
 <li><a href="./localising/index.html">Localisation (Translator's Guide)</a>
 </li>
 <li><a href="./building.html">Building JMeter and Add-Ons</a>
 </li>
-<li><a href="http://wiki.apache.org/jakarta-jmeter">JMeter Wiki</a>
+<li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a>
 </li>
-<li><a href="http://wiki.apache.org/jakarta-jmeter/JMeterFAQ">FAQ (Wiki)</a>
+<li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a>
 </li>
 </ul>
 <p><strong>Tutorials (PDF format)</strong></p>
@@ -109,11 +113,11 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </ul>
 <p><strong>Community</strong></p>
 <ul>
-<li><a href="http://jakarta.apache.org/site/getinvolved.html">Get Involved</a>
+<li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved</a>
 </li>
-<li><a href="http://jakarta.apache.org/site/mail.html">Mailing Lists</a>
+<li><a href="./mail.html">Mailing Lists</a>
 </li>
-<li><a href="http://jakarta.apache.org/site/cvsindex.html">SVN Repositories</a>
+<li><a href="./svnindex.html">SVN Repositories</a>
 </li>
 </ul>
 <p><strong>Foundation</strong></p>
@@ -145,7 +149,7 @@ This page details the changes made in the current version only.
 
 
 <br>
-</br>
+
 
 Earlier changes are detailed in the 
 <a href="changes_history.html">
@@ -157,46 +161,455 @@ History of Previous Changes
 </table>
 </p>
 <h1>
-Version 2.5.1
+Version 2.6
 </h1>
 <h2>
-Summary of main changes
+New and Noteworthy
 </h2>
+<h3>
+Toolbar
+</h3>
+<p>
+A new toolbar on JMeter's main window
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='986' height='91' src="./images/screenshots/changes/01_toolbar.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h3>
+JMeter start test button
+</h3>
+<p>
+A new menu option and button allow to start a test ignoring the Pause Timers
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='201' height='58' src="./images/screenshots/changes/02_ignore_pause_timers.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h3>
+JMeter GUI Look and Feel
+</h3>
+<p>
+Allow System or CrossPlatform LAF to be set from options menu
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='373' height='162' src="./images/screenshots/changes/03_look_and_feel.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h3>
+JMeter GUI - duplicate node
+</h3>
+<p>
+Add "duplicate node" in context menu
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='323' height='136' src="./images/screenshots/changes/04_duplicate_context_menu.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h3>
+JMeter tree view - search facility
+</h3>
+<p>
+Functionality to search by keyword in Samplers Tree View
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='554' height='219' src="./images/screenshots/changes/05_search_tree.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h3>
+HTTP Request - raw request pane
+</h3>
+<p>
+Improve HTTP Request GUI to better show parameters without name (GWT RPC request or SOAP request for example)
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='759' height='461' src="./images/screenshots/changes/06_post_data.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h3>
+HTTP Request - other changes
+</h3>
+<p>
 <ul>
 
 
 <li>
-HttpClient4 sampler now re-uses connections properly (previously it would use one per sample, which could quickly cause resource exhaustion).
+Allow multiple selection in arguments panel
 </li>
 
 
 <li>
-Various fixes to JMS samplers
+Allow to add (paste) entries from the clipboard to an arguments list
 </li>
 
 
 <li>
-Functions are no longer spuriously invoked when used with a Configuration element
-</li>
-
-
-<li>
-WebService sampler GUI has been re-organized for better design and more user-friendliness. Some improments on WSDL configuration assistant
-</li>
-
-
-<li>
-Better handling of test shutdown. System.exit now only called if there is no other option; even this can be disabled.
+Ability to move variables up or down in HTTP Request
 </li>
 
 
 </ul>
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='875' height='218' src="./images/screenshots/changes/07_multiple_selection_params.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h3>
+HTTP Request - file protocol
+</h3>
+<p>
+Better support for file: protocol in HTTP sampler
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='489' height='662' src="./images/screenshots/changes/08_file_protocol.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<p>
+Retrieve embedded resources with file: protocol
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='700' height='138' src="./images/screenshots/changes/09_file_protocol_embedded.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h3>
+HTTP Request - Ignore embedded resources failed
+</h3>
+<p>
+Enable "ignore failed" for embedded resources
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='820' height='246' src="./images/screenshots/changes/26_ignore_child_failed.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<p>
+Parent success with a embedded resource failed
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='590' height='214' src="./images/screenshots/changes/27_succes_with_child_failed.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h3>
+View Results in Table - child sample display
+</h3>
+<p>
+Add option to TableVisualiser to display child samples instead of parent
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='911' height='619' src="./images/screenshots/changes/10_child_sampler.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h3>
+Key Store - multiple certificates
+</h3>
+<p>
+Allowing multiple certificates (JKS)
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='324' height='166' src="./images/screenshots/changes/11_jks_keystore.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h3>
+Aggregate graph improvements
+</h3>
+<p>
+Some improvements on Aggregate Graph Listener: 
+
+<ul>
+<li>
+new GUI for settings
+</li>
+
+
+<li>
+dynamic graph size
+</li>
+
+
+<li>
+allow to change fonts for title graph and legend
+</li>
+
+
+<li>
+allow to change bar color (background and text values)
+</li>
+
+
+<li>
+allow to draw or not bars outlines
+</li>
+
+
+<li>
+allow to select only some samplers by a regexp filter
+</li>
+
+
+<li>
+allow to define Y axis maximum scale
+</li>
+
+
+</ul>
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='850' height='411' src="./images/screenshots/changes/12_aggregate_graph_settings.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<p>
+Aggregate Graph bar
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='851' height='506' src="./images/screenshots/changes/13_aggregate_graph_bar.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h3>
+Counter - new reset option
+</h3>
+<p>
+Add an option to reset counter on each Thread Group iteration
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='345' height='257' src="./images/screenshots/changes/14_reset_counter.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h3>
+Functions
+</h3>
+<p>
+<ul>
+
+
+<li>
+Add a new function __RandomString to generate random Strings
+</li>
+
+
+<li>
+Add a new function __TestPlanName returning the name of the current "Test Plan"
+</li>
+
+
+<li>
+Add a new function __machineIP returning IP address
+</li>
+
+
+<li>
+Add a new function  __jexl2 to support Jexl2
+</li>
+
+
+</ul>
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='697' height='236' src="./images/screenshots/changes/15_random_string.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h3>
+User Defined Variable improvements
+</h3>
+<p>
+<ul>
+<li>
+Add a comment field in User Defined Variables
+</li>
+
+
+<li>
+Allow to add (paste) entries from the clipboard to an arguments list
+</li>
+
+
+<li>
+Ability to move up or down variables in User Defined Variables
+</li>
+
+
+</ul>
+
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='543' height='237' src="./images/screenshots/changes/16_udv_comments.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h3>
+View Results Tree
+</h3>
+<p>
+In View Results Tree rather than showing just a message if the results are to big, show as much of the result as are configured
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='953' height='98' src="./images/screenshots/changes/17_vrt_max_size_display.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h3>
+Controllers - change elements
+</h3>
+<p>
+Add ability to Change Controller elements
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='643' height='112' src="./images/screenshots/changes/18_change_ctl_type.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h3>
+JDBC pre- and post-processor
+</h3>
+<p>
+Add JDBC pre- and post-processor
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='535' height='217' src="./images/screenshots/changes/19_jdbc_pre_post_proc.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h3>
+JDBC transaction isolation option
+</h3>
+<p>
+Allow to set the transaction isolation in the JDBC Connection Configuration
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='437' height='351' src="./images/screenshots/changes/20_jdbc_trans_isolation.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h3>
+Poisson Timer
+</h3>
+<p>
+Add a Poisson based timer
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='358' height='156' src="./images/screenshots/changes/21_poisson_timer.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h3>
+GUI and OS interaction
+</h3>
+<p>
+Support for file Drag and Drop. 
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='776' height='508' src="./images/screenshots/changes/22_drag_and_drop.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h3>
+Confirm Remove Dialog box
+</h3>
+<p>
+Add a dialog box to confirm removing the element(s) when Remove action is called
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='583' height='210' src="./images/screenshots/changes/23_confirm_remove.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+The dialogue can be skipped by setting the JMeter property 
+<code>
+confirm.delete.skip=true
+</code>
+ 
+
+</p>
+<h3>
+Remote batching support
+</h3>
+<p>
+Use external store to hold samples during distributed testing, 
+Added DiskStore remote sample sender: like Hold, but saves samples to disk until end of test
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='998' height='273' src="./images/screenshots/changes/24_diskstore.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h3>
+JMS Subscriber sampler
+</h3>
+<p>
+With JMS Subscriber, ability to use Selectors
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='705' height='297' src="./images/screenshots/changes/25_selector.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h3>
+New Logger Panel
+</h3>
+<p>
+A new Log Viewer  has been added to the GUI and can be enabled from menu Options > Log Viewer:
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='326' height='147' src="./images/screenshots/changes/28_loggerpanel_option.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<p>
+This Log Viewer shows the jmeter.log file, and useful (for example) to debug BeanShell/BSF scripts:
+
+<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img width='953' height='466' src="./images/screenshots/changes/28_loggerpanel.png"><br>
+<font size="-1"></font></td></tr></table></p>
+
+
+</p>
+<h3>
+The menu item Options / Choose Language is now fully functional
+</h3>
+<p>
+
+The menu item Options / Choose Language now changes all the displayed text to the new language provided 
+all messages are translated. You can help on this by translating into your language.
+
+</p>
+<h3>
+Legacy JMX and JTL Avalon format support restored
+</h3>
+<p>
+
+Support for reading/writing the original Avalon XML format of JMX (script) and JTL (sample result) files was dropped in JMeter version 2.4.
+JMeter can now read the Avalon format files again, however there is no support for saving files in the old format.
+
+</p>
+<h3>
+JMeter jars available from Maven repository
+</h3>
+<p>
+
+JMeter jars are now available from Maven repository.
+
+</p>
 <h2>
 Known bugs
 </h2>
 <p>
 
-The Include Controller has some problems in non-GUI mode. 
+The Include Controller has some problems in non-GUI mode (see Bugs 40671, 41286, 44973, 50898). 
 In particular, it can cause a NullPointerException if there are two include controllers with the same name.
 
 </p>
@@ -205,17 +618,10 @@ The Once Only controller behaves correctly under a Thread Group or Loop Controll
 but otherwise its behaviour is not consistent (or clearly specified).
 </p>
 <p>
-The If Controller may cause an infinite loop if the condition is always false from the first iteration. 
+Listeners don't show iteration counts when a If Controller has a condition which is always false from the first iteration (see Bug 52496).  
 A workaround is to add a sampler at the same level as (or superior to) the If Controller.
 For example a Test Action sampler with 0 wait time (which doesn't generate a sample),
 or a Debug Sampler with all fields set to False (to reduce the sample size).
-
-</p>
-<p>
-
-The menu item Options / Choose Language does not change all the displayed text to the new language.
-[The behaviour has improved, but language change is still not fully working]
-To override the default local language fully, set the JMeter property "language" before starting JMeter. 
 
 </p>
 <h2>
@@ -223,17 +629,35 @@ Incompatible changes
 </h2>
 <p>
 
-The HttpClient4 and Commons HttpClient 3.1 samplers previously used a retry count of 3.
-This has been changed to default to 1, to be compatible with the Java implementation.
-The retry count can be overridden by setting the relevant JMeter property, for example:
+JMeter versions since 2.1 failed to create a container sample when loading embedded resources.
+This has been corrected; can still revert to the Bug 51939 behaviour by setting the following property:
 
-<pre>
+<code>
+httpsampler.separate.container=false
+</code>
 
-httpclient4.retrycount=3
-httpclient3.retrycount=3
 
-</pre>
+</p>
+<p>
 
+Mirror server now uses default port 8081, was 8080 before 2.5.1.
+
+</p>
+<p>
+
+TCP Sampler handles SocketTimeoutException, SocketException and InterruptedIOException differently since 2.6, when
+these occurs, Sampler is marked as failed.
+
+</p>
+<p>
+
+Sample Sender implementations now resolve their configuration on Client side since 2.6.
+This behaviour can be changed with property sample_sender_client_configured (set it to false).
+
+</p>
+<p>
+
+The HTTP User Parameter Modifier test element has been removed; it has been deprecated for a long time.
 
 </p>
 <h2>
@@ -246,42 +670,94 @@ HTTP Samplers and Proxy
 
 
 <li>
-Fix HttpClient 4 sampler so it reuses HttpClient instances and connections where possible.
+Bug 51932 - CacheManager does not handle cache-control header with any attributes after max-age
 </li>
 
 
 <li>
-Temporary fix to HC4 sampler to work round HTTPCLIENT-1120.
+Bug 51918 - GZIP compressed traffic produces errors, when multiple connections allowed
 </li>
 
 
 <li>
-Bug 51863 - Lots of ESTABLISHED connections with HttpClient 4 implementation (vs HttpClient 3.1 impl)
+Bug 51939 - Should generate new parent sample if necessary when retrieving embedded resources
 </li>
 
 
 <li>
-Bug 51750 - Retrieve all embedded resources doesn't follow IFRAME
+Bug 51942 - Synchronisation issue on CacheManager when Concurrent Download is used
 </li>
 
 
 <li>
-Bug 51752 - HTTP Cache is broken when using "Retrieve all embedded resources" with concurrent pool
+Bug 51957 - Concurrent get can hang if a task does not complete
 </li>
 
 
 <li>
-Bug 39219 - HTTP Server: You can't stop it after File->Open
+Bug 51925 - Calling Stop on Test leaks executor threads when concurrent download of resources is on
 </li>
 
 
 <li>
-Bug 51775 - Port number duplicates in Host header when capturing by HttpClient (3.1 and 4.x)
+Bug 51980 - HtmlParserHTMLParser double-counts images used in links
 </li>
 
 
 <li>
-Bug 50617 - Monitor Results legend show "dead" server although values from the server are retrieved
+Bug 52064 - OutOfMemory Risk in CacheManager
+</li>
+
+
+<li>
+Bug 51919 - Random ConcurrentModificationException or NoSuchElementException in CookieManager#removeMatchingCookies when using Concurrent Download
+</li>
+
+
+<li>
+Bug 52126 - HttpClient4 does not clear cookies between iterations
+</li>
+
+
+<li>
+Bug 52129 - Reported Body Size is wrong when using HTTP Client 4 and Keep Alive connection
+</li>
+
+
+<li>
+Bug 52137 - Problems with HTTP Cache Manager
+</li>
+
+
+<li>
+Bug 52221 - Nullpointer Exception with use Retrieve Embedded Resource without HTTP Cache Manager
+</li>
+
+
+<li>
+Bug 52310 - variable in IPSource failed HTTP request if "Concurrent Pool Size" is enabled
+</li>
+
+
+<li>
+Bug 52371 - API Incompatibility - Methods in HTTPSampler2 now require PostMethod instead of HttpMethod[Base]. Reverted to original types.
+</li>
+
+
+<li>
+Bug 49950 - Proxy : IndexOutOfBoundsException when recording with Proxy server
+</li>
+
+
+<li>
+Bug 52409 - HttpSamplerBase#errorResult modifies sampleResult passed as parameter;
+fix code which assumes that a new instance is created (i.e. when adding a sub-sample)
+
+</li>
+
+
+<li>
+Bug 52507 - Delete Http User Parameters modifier (deprecated, obsolete)
 </li>
 
 
@@ -293,27 +769,7 @@ Other Samplers
 
 
 <li>
-Bug 50424 - Web Methods drop down list box inconsistent
-</li>
-
-
-<li>
-Bug 43293 - Java Request fields not cleared when creating new sampler
-</li>
-
-
-<li>
-Bug 51830 - Webservice Soap Request triggers too many popups when Webservice WSDL URL is down
-</li>
-
-
-<li>
-WebService(SOAP) request - add a connect timeout to get the wsdl used to populate Web Methods when server doesn't response
-</li>
-
-
-<li>
-Bug 51841 - JMS : If an error occurs in ReceiveSubscriber constructor or Publisher, then Connections will stay open
+Bug 51996 - JMS Initial Context leak newly created Context when Multiple Thread enter InitialContextFactory#lookupContext at the same time
 </li>
 
 
@@ -323,12 +779,22 @@ Bug 51691 - Authorization does not work for JMS Publisher and JMS Subscriber
 
 
 <li>
-Bug 51840 - JMS : Cache of InitialContext has some issues
+Bug 52036 - Durable Subscription fails with ActiveMQ due to missing clientId field
 </li>
 
 
 <li>
-Bug 47888 - JUnit Sampler re-uses test object
+Bug 52044 - JMS Subscriber used with many threads leads to javax.naming.NamingException: Something already bound with ActiveMQ
+</li>
+
+
+<li>
+Bug 52072 - LengthPrefixedBinaryTcpClientImpl may end a sample prematurely
+</li>
+
+
+<li>
+Bug 52390 - AbstractJDBCTestElement:Memory leak and synchronization issue in perConnCache
 </li>
 
 
@@ -340,17 +806,27 @@ Controllers
 
 
 <li>
-If Controller - Fixed two regressions introduced by bug 50032 (see bug 50618 too)
+Bug 51865 - Infinite loop inside thread group does not work properly if "Start next loop after a Sample error" option set
 </li>
 
 
 <li>
-If Controller - Catches a StackOverflowError when a condition returns always false (after at least one iteration with return true) See bug 50618
+Bug 51868 - A lot of exceptions in jmeter.log while using option "Start next loop" for thread
 </li>
 
 
 <li>
-Bug 51869 - NullPointer Exception when using Include Controller
+Bug 51866 - Counter under loop doesn't work properly if "Start next loop on error" option set for thread group
+</li>
+
+
+<li>
+Bug 52296 - TransactionController + Children ThrouputController or InterleaveController leads to ERROR sampleEnd called twice java.lang.Throwable: Invalid call sequence when TPC does not run sample
+</li>
+
+
+<li>
+Bug 52330 - With next-Loop-On-Error after error samples are not executed in next loop
 </li>
 
 
@@ -361,11 +837,26 @@ Listeners
 <ul>
 
 
+<li>
+Bug 52357 - View results in Table does not allow for multiple result samples
+</li>
+
+
+<li>
+Bug 52491 - Incorrect parsing of Post data parameters in Tree Listener / Http Request view
+</li>
+
+
 </ul>
 <h3>
 Assertions
 </h3>
 <ul>
+
+
+<li>
+Bug 52519 - XMLSchemaAssertion uses JMeter JVM file.encoding instead of response encoding
+</li>
 
 
 </ul>
@@ -376,7 +867,7 @@ Functions
 
 
 <li>
-Bug 48943 - Functions are invoked additional times when used in combination with a Config Element
+The CRLF example for the char function was wrong; CRLF=(0xD,0xA), not (0xC,0xA)
 </li>
 
 
@@ -387,11 +878,6 @@ I18N
 <ul>
 
 
-<li>
-WebService(SOAP) request - add I18N for some labels
-</li>
-
-
 </ul>
 <h3>
 General
@@ -400,47 +886,127 @@ General
 
 
 <li>
-Bug 51831 - Cannot disable UDP server or change the maximum UDP port
+Bug 51937 - JMeter does not handle missing TestPlan entry well
 </li>
 
 
 <li>
-Bug 51821 - Add short-cut for Enabling / Disabling (sub)tree or branches in test plan.
+Bug 51988 - CSV Data Set Configuration does not resolve default delimiter for header parsing when variables field is empty
 </li>
 
 
 <li>
-Bug 47921 - Variables not released for GC after JMeterThread exits.
+Bug 52003 - View Results Tree "Scroll automatically" does not scroll properly in case nodes are expanded
 </li>
 
 
 <li>
-Bug 51839 - "... end of run" printed prematurely
+Bug 27112 - User Parameters should use scrollbars
 </li>
 
 
 <li>
-Bug 51847 - Some Junit tests are Locale sensitive and fail if Locale is different from US
+Bug 52029 - Command-line shutdown only gets sent to last engine that was started
 </li>
 
 
 <li>
-Bug 51855 - Parent samples may have slightly inaccurate elapsed times
+Bug 52093 - Toolbar ToolTips don't switch language
 </li>
 
 
 <li>
-Bug 51880 - The shutdown command is not working if I invoke it before all the thread are started
+Bug 51733 - SyncTimer is messed up if you a interrupt a test plan
 </li>
 
 
 <li>
-Remote Shut host menu item was not being enabled.
+Bug 52118 - New toolbar : shutdown and stop buttons not disabled when no test is running
 </li>
 
 
 <li>
-Bug 51888 - Occasional deadlock when stopping a testplan
+Bug 52125 - StatCalculator.addAll(StatCalculator calc) joins incorrect if there are more samples with the same response time in one of the TreeMap
+</li>
+
+
+<li>
+Bug 52339 - JMeter Statistical mode in distributed testing shows wrong response time
+</li>
+
+
+<li>
+Bug 52215 - Confusing synchronization in StatVisualizer, SummaryReport ,Summariser and issue in StatGraphVisualizer
+</li>
+
+
+<li>
+Bug 52216 - TableVisualizer : currentData field is badly synchronized
+</li>
+
+
+<li>
+Bug 52217 - ViewResultsFullVisualizer : Synchronization issues on root and treeModel
+</li>
+
+
+<li>
+Bug 43294 - XPath Extractor namespace problems
+</li>
+
+
+<li>
+Bug 52224 - TestBeanHelper does not support NOT_UNDEFINED == Boolean.FALSE
+</li>
+
+
+<li>
+Bug 52279 - Switching to another language loses icons in Tree and logs error Can't obtain GUI class from ...
+</li>
+
+
+<li>
+Bug 52280 - The menu item Options / Choose Language does not change all the displayed text to the new language
+</li>
+
+
+<li>
+Bug 52376 - StatCalculator#addValue(T val, int sampleCount) should use long, not int
+</li>
+
+
+<li>
+Bug 49374 - Encoding of embedded element URLs depend on the file.encoding property
+</li>
+
+
+<li>
+Bug 52399 - URLRewritingModifier uses default file.encoding to match text content
+</li>
+
+
+<li>
+Bug 50438 - code calculates average with integer math, expecting double value
+</li>
+
+
+<li>
+Bug 52469 - Changes in Support of SSH-Tunneling of RMI traffic for Remote Testing
+</li>
+
+
+<li>
+Bug 52466 - Upgrade Test Plan feature : NameUpdater does not upgrade properties
+</li>
+
+
+<li>
+Bug 52503 - Unify File->Close and Window close file saving behaviour
+</li>
+
+
+<li>
+Bug 52537 - Help does not scroll to correct anchor when file is first loaded
 </li>
 
 
@@ -455,17 +1021,22 @@ HTTP Samplers
 
 
 <li>
-Bug 51380 - Control reuse of cached SSL Context from iteration to iteration
+Bug 51981 - Better support for file: protocol in HTTP sampler
 </li>
 
 
 <li>
-Bug 51882 - HTTPHC3Client uses a default retry count of 3, make it configurable; default is now 1
+Bug 52033 - Allowing multiple certificates (JKS)
 </li>
 
 
 <li>
-Change the default HttpClient 4 sampler retry count to 1
+Bug 52352 - Proxy : Support IPv6 URLs capture
+</li>
+
+
+<li>
+Bug 44301 - Enable "ignore failed" for embedded resources
 </li>
 
 
@@ -477,17 +1048,42 @@ Other samplers
 
 
 <li>
-Beanshell Sampler now supports Interruptible interface
+Bug 51419 - JMS Subscriber: ability to use Selectors
 </li>
 
 
 <li>
-Bug 51605 - WebService(SOAP) Request - WebMethod field value changes surreptitiously for all the requests when a value is selected in a request
+Bug 52088 - JMS Sampler : Add a selector when REQUEST / RESPONSE is chosen
 </li>
 
 
 <li>
-WebService(SOAP) Request - Reorganized GUI for better design and more user-friendliness
+Bug 52104 - TCP Sampler handles badly errors
+</li>
+
+
+<li>
+Bug 52087 - TCPClient interface does not allow for partial reads
+</li>
+
+
+<li>
+Bug 52115 - SOAP/XML-RPC should not send a POST request when file to send is not found
+</li>
+
+
+<li>
+Bug 40750 - TCPSampler : Behaviour when sockets are closed by remote host
+</li>
+
+
+<li>
+Bug 52396 - TCP Sampler in "reuse connection mode" reuses previous sampler's connection even if it's configured with other host, port, user or password
+</li>
+
+
+<li>
+Bug 52048 - BSFSampler, BSFPreProcessor and BSFPostProcessor should share the same GUI
 </li>
 
 
@@ -506,12 +1102,32 @@ Listeners
 
 
 <li>
-Bug 42246 - Need for a 'auto-scroll' option in "View Results Tree" and "Assertion Results"
+Bug 52022 - In View Results Tree rather than showing just a message if the results are to big, show as much of the result as are configured
 </li>
 
 
 <li>
-View Results Tree: Regexp Tester - little improvements on user interface
+Bug 52201 - Add option to TableVisualiser to display child samples instead of parent 
+</li>
+
+
+<li>
+Bug 52214 - Save Responses to a file - improve naming algorithm
+</li>
+
+
+<li>
+Bug 52340 - Allow remote sampling mode to be changed at run-time
+</li>
+
+
+<li>
+Bug 52452 - Improvements on Aggregate Graph Listener (GUI and settings)
+</li>
+
+
+<li>
+Resurrected OldSaveService to allow reading Avalon format JTL (result) files
 </li>
 
 
@@ -523,7 +1139,27 @@ Timers, Assertions, Config, Pre- & Post-Processors
 
 
 <li>
-Bug 51885 - Allow a JMeter Variable as input to XPathExtractor
+Bug 52128 - Add JDBC pre- and post-processor
+</li>
+
+
+<li>
+Bug 52183 - SyncTimer could be improved (performance+reliability)
+</li>
+
+
+<li>
+Bug 52317 - Counter : Add option to reset counter on each Thread Group iteration
+</li>
+
+
+<li>
+Bug 37073 - Add a Poisson based timer
+</li>
+
+
+<li>
+Bug 52497 - Improve DebugSampler and DebugPostProcessor
 </li>
 
 
@@ -532,6 +1168,31 @@ Bug 51885 - Allow a JMeter Variable as input to XPathExtractor
 Functions
 </h3>
 <ul>
+
+
+<li>
+Bug 52006 - Create a function RandomString to generate random Strings
+</li>
+
+
+<li>
+Bug 52016 - It would be useful to support Jexl2
+</li>
+
+
+<li>
+__char() function now supports octal values
+</li>
+
+
+<li>
+New function __machineIP returning IP address
+</li>
+
+
+<li>
+Bug 51091 - New function returning the name of the current "Test Plan"
+</li>
 
 
 </ul>
@@ -549,17 +1210,175 @@ General
 
 
 <li>
-Bug 51822 - (part 1) save 1 invocation of GuiPackage#getCurrentGui
+Bug 51892 - Default mirror port should be different from default proxy port
 </li>
 
 
 <li>
-Added AsynchSampleSender which sends samples from server to client asynchronously.
+Bug 51817 - Moving variables up and down in User Defined Variables control
 </li>
 
 
 <li>
-Upgraded to htmlparser 2.1; JavaMail 1.4.4; JUnit 4.9
+Bug 51876 - Functionality to search in Samplers TreeView
+</li>
+
+
+<li>
+Bug 52019 - Add menu option to Start a test ignoring Pause Timers
+</li>
+
+
+<li>
+Bug 52027 - Allow System or CrossPlatform LAF to be set from options menu
+</li>
+
+
+<li>
+Bug 52037 - Remember user-set LaF over restarts.
+</li>
+
+
+<li>
+Bug 51861 - Improve HTTP Request GUI to better show parameters without name (GWT RPC requests for example) (UNDER DEVELOPMENT)
+</li>
+
+
+<li>
+Bug 52040 - Add a toolbar in JMeter main window
+</li>
+
+
+<li>
+Bug 51816 - Comment Field in User Defined Variables control.
+</li>
+
+
+<li>
+Bug 52052 - Using a delimiter to separate result-messages for JMS Subscriber
+</li>
+
+
+<li>
+Bug 52103 - Add automatic scrolling option to table visualizer
+</li>
+
+
+<li>
+Bug 52097 - Save As should point to same folder that was used to open a file if MRU list is used
+</li>
+
+
+<li>
+Bug 52085 - Allow multiple selection in arguments panel
+</li>
+
+
+<li>
+Bug 52099 - Allow to set the transaction isolation in the JDBC Connection Configuration
+</li>
+
+
+<li>
+Bug 52116 - Allow to add (paste) entries from the clipboard to an arguments list
+</li>
+
+
+<li>
+Bug 52160 - Don't display TestBeanGui items which are flagged as hidden
+</li>
+
+
+<li>
+Bug 51886 - SampleSender configuration resolved partly on client and partly on server
+</li>
+
+
+<li>
+Bug 52161 - Enable plugins to add own translation rules in addition to upgrade.properties.
+Loads any additional properties found in META-INF/resources/org.apache.jmeter.nameupdater.properties files
+</li>
+
+
+<li>
+Bug 42538 - Add "duplicate node" in context menu
+</li>
+
+
+<li>
+Bug 46921 - Add Ability to Change Controller elements
+</li>
+
+
+<li>
+Bug 52240 - TestBeans should support Boolean, Integer and Long
+</li>
+
+
+<li>
+Bug 52241 - GenericTestBeanCustomizer assumes that the default value is the empty string
+</li>
+
+
+<li>
+Bug 52242 - FileEditor does not allow output to be saved in a File 
+</li>
+
+
+<li>
+Bug 51093 - when loading a selection previously stored by "Save Selection As", show the file name in the blue window bar
+</li>
+
+
+<li>
+Bug 50086 - Password fields not Hidden in JMS Publisher, JMS Subscriber, Mail Reader sampler, SMTP sampler and Database Configuration
+</li>
+
+
+<li>
+Bug 29352 - Use external store to hold samples during distributed testing, Added DiskStore remote sample sender: like Hold, but saves samples to disk until end of test.
+</li>
+
+
+<li>
+Bug 52333 - Reduce overhead in calculating SampleResult#nanoTimeOffset
+</li>
+
+
+<li>
+Bug 52346 - Shutdown detects if there are any non-daemon threads left which prevent JVM exit.
+</li>
+
+
+<li>
+Bug 52281 - Support for file Drag and Drop
+</li>
+
+
+<li>
+Bug 52471 - Improve Mirror Server performance by Using Pool of threads instead of launching a Thread for each request
+</li>
+
+
+<li>
+Resurrected OldSaveService to allow reading Avalon format JMX files (removed in 2.4)
+</li>
+
+
+<li>
+Add a dialog box to confirm removing the element(s) when Remove action is called
+</li>
+
+
+<li>
+Bug 41788 - Log viewer (console window) needed as an option
+</li>
+
+
+<li>
+Add option to change the pause time (default 2000ms) in the daemon thread which checks for successful JVM exit.
+The thread is not now started unless the pause time is greater than 0.
+
 </li>
 
 
@@ -571,22 +1390,67 @@ Non-functional changes
 
 
 <li>
-Bug 49976 - FormCharSetFinder visibility is default instead of public. 
+fixes to build.xml: support scripts; localise re-usable property names
 </li>
 
 
 <li>
-Bug 50917 - Property CookieManager.save.cookies not honored when set from test plan
+Bug 51923 - Counter function bug or documentation issue ? (fixed docs)
 </li>
 
 
 <li>
-Improve error logging when Javascript errors are detected.
+Update velocity.jar to 1.7 (from 1.6.2)
 </li>
 
 
 <li>
-Updated documentation footer
+Update js.jar to 1.7R3 (from 1.6R5)
+</li>
+
+
+<li>
+Update commons-codec 1.5 => 1.6
+</li>
+
+
+<li>
+Update commons-io 2.0.1 => 2.1
+</li>
+
+
+<li>
+Update commons-jexl 2.0.1 => 2.1.1
+</li>
+
+
+<li>
+Update jdom 1.1 => 1.1.2
+</li>
+
+
+<li>
+Update junit 4.9 => 4.10
+</li>
+
+
+<li>
+Bug 51954 - Generated documents include  entries which cause extra blank lines 
+</li>
+
+
+<li>
+Bug 52075 - JMeterProperty.clone() currently returns Object; it should return JMeterProperty
+</li>
+
+
+<li>
+Updated httpcore to 4.1.4
+</li>
+
+
+<li>
+Bug 49753 - Please publish jMeter artifacts on Maven central repository
 </li>
 
 
@@ -604,7 +1468,7 @@ Updated documentation footer
 </td></tr>
 <tr><td colspan="2">
 <div align="center"><font color="#525D76" size="-1"><em>
-Copyright &copy; 1999-2011, Apache Software Foundation
+Copyright &copy; 1999-2012, Apache Software Foundation
 </em></font></div>
 </td></tr>
 <tr><td colspan="2">

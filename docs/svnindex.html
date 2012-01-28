@@ -29,8 +29,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
 
 
+<meta name="author" value="Apache JMeter Project">
+<meta name="email" value="dev.AT.jmeter.DOT.apache.DOT.org">
 
-<title>Apache JMeter - Nightly builds for developers</title>
+<title>Apache JMeter - Source Repositories</title>
 </head>
 
 <body bgcolor="#ffffff" text="#000000" link="#525D76">
@@ -133,158 +135,122 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr><td bgcolor="#525D76">
 <font color="#ffffff" face="arial,helvetica,sanserif">
-<strong>Nightly builds for developers</strong></font>
+<strong>Download the Source</strong></font>
 </td></tr>
 <tr><td>
 <blockquote>
 <p>
-</p>
-<h2>
-What are the nightly builds?
-</h2>
-<p>
-
-	The nightly builds are interim builds that are 
-<b>
-untested and unsupported
-</b>
-.
-	
-<i>
-Use at your own risk!
-</i>
-
-	
-<br>
-
-
-	These unreleased builds may not even load, may have undocumented features, 
-	known defects, and any number of other issues.
-	
-<br>
-
-
-	They are intended for use by developers and others wishing to help with resolving JMeter bugs.
-	
-</p>
-<p>
-
-	
-<span style="font-size : x-large">
-<b>
-These builds should not be used in production.
-</b>
-</span>
-
-	
-</p>
-<h2>
-Where are the nightly builds?
-</h2>
-<p>
-There are currently no regular nightly builds - sorry.
-</p>
-<p>
-However, occasional builds are made available from 
-    
-<a href="http://people.apache.org/builds/jmeter/nightly/">
-Nightly builds (use at your own risk)
+Most users of the source code probably don't need to have day to
+day access to the source code as it changes. For these users we
+provide easy to unpack source code downloads via our 
+<a href="download_jmeter.cgi">
+download page
 </a>
- 
-    
+.  
 </p>
-<h2>
-What do they consist of?
-</h2>
-<p>
-
-JMeter is distributed as a set of zip (or tar-gz) archive files.
-
-The files are called:
-
-<ul>
-
-
-<li>
-apache-jmeter-{version}_bin.zip - JMeter binaries
-</li>
-
-
-<li>
-apache-jmeter-{version}_lib.zip - 3rd party jar files (rarely changes)
-</li>
-
-
-<li>
-apache-jmeter-{version}_src.zip - JMeter source
-</li>
-
-
-<li>
-apache-jmeter-{version}_api.zip - JMeter Javadoc (if available)
-</li>
-
-
-</ul>
-
-
-<h2>
-Installing JMeter runtime
-</h2>
-
-Download the _bin and _lib files
-
-<br>
-
-
-Unpack the archives into the same directory structure
-
-<br>
-
-
-The other archives are not needed to run JMeter.
-
-
-<h2>
-Building JMeter
-</h2>
-
-Download the _src, _bin and _lib files
-
-<br>
-
-
-Unpack all the archives into the same directory structure
-
-<br>
-
-
-
+</blockquote>
 </p>
-<h2>
-Warning - please note!
-</h2>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#525D76">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<strong>Access the Version Controlled Source Code</strong></font>
+</td></tr>
+<tr><td>
+<blockquote>
 <p>
-
-	
-<span style="font-size : large">
-
-	
+For information on connecting to the ASF Subversion repositories, see the 
+<a href="http://www.apache.org/dev/version-control.html">
+version control
+page
+</a>
+. 
+</p>
+<p>
+Modules available for access are listed below.
+</p>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td bgcolor="#828DA6">
+<font color="#ffffff" face="arial,helvetica,sanserif">
+<a name="subversion"><strong>Subversion</strong></a>
+<a class="sectionlink" href="#subversion" title="Link to here">&para;</a></font>
+</td></tr>
+<tr><td>
+<blockquote>
+<p>
+<a href="http://subversion.apache.org">
+Subversion
+</a>
+ is an open-source version control system. The root url of the
+ASF Subversion repository is 
+<a href="http://svn.apache.org/repos/asf/">
+http://svn.apache.org/repos/asf/
+</a>
+ for non-committers and 
+<a href="https://svn.apache.org/repos/asf/">
+https://svn.apache.org/repos/asf/
+</a>
+ for committers. 
+</p>
+<p>
 <b>
-The nightly builds may or may not work properly - or at all.
+NOTE
 </b>
-
-	
-</span>
-
-
+: 
+When checking out a subproject using Subversion, ensure that you are checking out a tag, a branch or trunk (the main-line) and not all tags and branches to avoid filling up your hard-disk and wasting bandwidth. 
 </p>
-<p>
-
-	If there is a problem with a particular version, 
-    it may be worth reporting this on the JMeter-dev mailing list and/or trying again in a day or two.
-
-</p>
+<table>
+<tr>
+<td bgcolor="#039acc"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+Project
+</font>
+</td>
+<td bgcolor="#039acc"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+http (read-only)
+</font>
+</td>
+<td bgcolor="#039acc"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+https (committers)
+</font>
+</td>
+<td bgcolor="#039acc"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+View-SVN
+</font>
+</td>
+</tr>
+<tr>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+Apache JMeter
+</font>
+</td>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+<a href="http://svn.apache.org/repos/asf/jmeter/trunk">http://svn.apache.org/repos/asf/jmeter/trunk</a>
+</font>
+</td>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+<a href="https://svn.apache.org/repos/asf/jmeter/trunk">https://svn.apache.org/repos/asf/jmeter/trunk</a>
+</font>
+</td>
+<td bgcolor="#a0ddf0"   valign="top" align="left">
+<font color="#000000" size="-1" face="arial,helvetica,sanserif">
+<a href="http://svn.apache.org/viewcvs.cgi/jmeter/">http://svn.apache.org/viewcvs.cgi/jmeter/</a>
+</font>
+</td>
+</tr>
+</table>
+</blockquote>
+</td></tr>
+<tr><td><br></td></tr>
+</table>
 </blockquote>
 </p>
 </td></tr>

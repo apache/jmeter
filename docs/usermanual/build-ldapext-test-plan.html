@@ -30,7 +30,7 @@
 
 
 
-<title>JMeter - User's Manual: Building an Extended LDAP Test Plan</title>
+<title>Apache JMeter - User's Manual: Building an Extended LDAP Test Plan</title>
 </head>
 
 <body bgcolor="#ffffff" text="#000000" link="#525D76">
@@ -43,10 +43,10 @@
 style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </td>
 <td align="left">
-<a href="http://jakarta.apache.org"><img width="505" height="48" src="../images/jakarta-logo.gif" alt="Jakarta" title="Jakarta" border="0"/></a>
+<a href="http://www.apache.org"><img title="Apache Software Foundation" width="387" height="100" src="../images/asf-logo.gif" border="0"/></a>
 </td>
 <td align="right">
-<a href="http://jakarta.apache.org/jmeter/"><img width="221" height="102" src="../images/logo.jpg" alt="JMeter" title="JMeter" border="0"/></a>
+<a href="http://jmeter.apache.org/"><img width="221" height="102" src="../images/logo.jpg" alt="Apache JMeter" title="Apache JMeter" border="0"/></a>
 </td>
 </tr>
 </table>
@@ -67,12 +67,12 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </li>
 <li><a href="http://www.apache.org/licenses/">License</a>
 </li>
-<li><a href="http://wiki.apache.org/jakarta-jmeter/JMeterCommitters">Contributors</a>
+<li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a>
 </li>
 </ul>
 <p><strong>Download</strong></p>
 <ul>
-<li><a href="http://jakarta.apache.org/site/downloads/downloads_jmeter.cgi">Download Releases</a>
+<li><a href="../download_jmeter.cgi">Download Releases</a>
 </li>
 <li><a href="../nightly.html">Developer (Nightly) Builds</a>
 </li>
@@ -81,15 +81,19 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 <ul>
 <li><a href="../usermanual/index.html">User Manual</a>
 </li>
+<li><a href="../usermanual/component_reference.html">Component Reference</a>
+</li>
+<li><a href="../usermanual/functions.html">Functions Reference</a>
+</li>
 <li><a href="../api/index.html">Javadocs</a>
 </li>
 <li><a href="../localising/index.html">Localisation (Translator's Guide)</a>
 </li>
 <li><a href="../building.html">Building JMeter and Add-Ons</a>
 </li>
-<li><a href="http://wiki.apache.org/jakarta-jmeter">JMeter Wiki</a>
+<li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a>
 </li>
-<li><a href="http://wiki.apache.org/jakarta-jmeter/JMeterFAQ">FAQ (Wiki)</a>
+<li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a>
 </li>
 </ul>
 <p><strong>Tutorials (PDF format)</strong></p>
@@ -107,11 +111,11 @@ style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
 </ul>
 <p><strong>Community</strong></p>
 <ul>
-<li><a href="http://jakarta.apache.org/site/getinvolved.html">Get Involved</a>
+<li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved</a>
 </li>
-<li><a href="http://jakarta.apache.org/site/mail.html">Mailing Lists</a>
+<li><a href="../mail.html">Mailing Lists</a>
 </li>
-<li><a href="http://jakarta.apache.org/site/cvsindex.html">SVN Repositories</a>
+<li><a href="../svnindex.html">SVN Repositories</a>
 </li>
 </ul>
 <p><strong>Foundation</strong></p>
@@ -164,7 +168,7 @@ You will create four users that send requests for four tests on the LDAP server.
 the users to run their tests twice. So,  the total number of requests is (4 users) x (4 requests) x
 repeat 2 times) = 32 LDAP requests. To construct the Test Plan, you will use the following elements:
 <br>
-</br>
+
 
 
 <a href="test_plan.html#thread_group">
@@ -172,19 +176,19 @@ Thread Group
 </a>
 ,
 <br>
-</br>
+
 
 
 <a href="../usermanual/component_reference.html#Adding_LDAP_Extended_Request_Defaults">Adding LDAP Extended Request Defaults</a>
 ,
 <br>
-</br>
+
 
 
 <a href="../usermanual/component_reference.html#Adding_LDAP_Requests">Adding LDAP Requests</a>
 , and
 <br>
-</br>
+
 
 
 <a href="../usermanual/component_reference.html#Adding_a_Listener_to_View/Store_the_Test_Results">Adding a Listener to View/Store the Test Results</a>
@@ -280,7 +284,7 @@ field that you can modify. In this example, leave this field with the default va
 <p>
 <p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/ldaptest/extrequestdefaults.png"><br>
 <font size="-1"><br>
-</br>
+
 						
   Figure 9b.2 LDAP Defaults for our Test Plan
 </font></td></tr></table></p>
@@ -388,7 +392,7 @@ JMeter sends requests in the order that you add them to the tree.
 
 Adding a requests always start by:
 <br>
-</br>
+
 
 Adding the LDAP Extended Request to the Thread Group element (Add -->
 Sampler --> LDAP Ext Request). Then, select the LDAP Ext Request element in the tree
@@ -433,15 +437,15 @@ Enter the portnumber from the LDAP server (389) in the port field
 
 (optional) enter the baseDN in the DN field, this baseDN will be used as thestarting point for searches, add, deletes etc.
 <br>
-</br>
+
 
 take care that this must be the uppermost shared level for all your request, eg When all information is stored under ou=people, dc=siemens, dc=com, you can use this value in the basedn.
 <br>
-</br>
+
 
 You cannot search or rename anymore in the subtree ou=users,dc=siemens,dc=com!
 <br>
-</br>
+
 
 If you need to search or rename objects in both subtrees, use the common denominator (dc=siemens,dc=com) as the baseDN.
 
@@ -506,7 +510,7 @@ Select the "Search Test" button.
 
 (Optional) enter the searchbase under which you want to perform the search, relative to the basedn, used in the thread bind request.
 <br>
-</br>
+
 
 When left empty, the basedn is used as a search base, this files is important if you want to use a "base-entry" or "one-level" search (see below)
 
@@ -530,7 +534,7 @@ Enter the searchfilter, any decent LDAP serach filter will do, but for now, use 
 <li>
 Base level, Enter the value 0
 <br>
-</br>
+
 only the given searchbase is used, only for checking attributes or existence.
      
 </li>
@@ -539,7 +543,7 @@ only the given searchbase is used, only for checking attributes or existence.
 <li>
 One level, Enter the value 1
 <br>
-</br>
+
 Only search in one level below given searchbase is used
      
 </li>
@@ -548,7 +552,7 @@ Only search in one level below given searchbase is used
 <li>
 Subtree, Enter the value 2
 <br>
-</br>
+
  Searches for object at any point below the given basedn
      
 </li>
@@ -569,7 +573,7 @@ Subtree, Enter the value 2
 
 (optional) Timelimit, psecifies the maximum number of miliseconds, the SERVER can use for performing the search. it is NOT the maximun time the application will wait!
 <br>
-</br>
+
 
 When a very large returnset is returned, from a very fast server, over a very slow line, you may have to wait for ages for the completion of the search request, but this parameter will not influence this.
 
@@ -604,7 +608,7 @@ Put in the attributes, seperated by a semi-colon. It will return only the reques
 
 (Optional) Return object, possible values are "true" and "false". True will return all java-object attributes, it will add these to the requested attributes, as specified above.
 <br>
-</br>
+
 
 false will mean no java-object attributes will be returned.
 
@@ -714,7 +718,7 @@ Select the "Single bind/unbind" button.
 
 Enter the FULL distinghuised name from the user you want to use for authentication.
 <br>
-</br>
+
 
 eg. cn=john doe,ou=people,dc=siemens,dc=com
 When this field is kept empty, an anonymous bind will be established.
@@ -786,15 +790,15 @@ Enter the distinghuised name for the object to add, relative to the basedn.
 
 Add a line in the "add test" table, fill in the attribute and value.
 <br>
-</br>
+
 
 When you need the same attribute more than once, just add a new line, add the attribute again, and a different value.
 <br>
-</br>
+
 
 All necessary attributes and values must be specified to pass the test, see picture!
 <br>
-</br>
+
 
 (sometimes the server adds the attribute "objectClass=top", this might give a problem.
 
@@ -862,18 +866,18 @@ You need to enter the attribute you want to modify, (optional) a value, and the 
 <li>
 add
 <br>
-</br>
+
  this will mean that the attribute value (not optional in this case) willbe added to the attribute.
 <br>
-</br>
+
 
 When the attribute is not existing, it will be created and the value added
 <br>
-</br>
+
 
 When it is existing, and defined multi-valued, the new value is added.
 <br>
-</br>
+
 
 when it is existing, but single valued, it will fail.
 </li>
@@ -882,15 +886,15 @@ when it is existing, but single valued, it will fail.
 <li>
 replace
 <br>
-</br>
+
 
 This will overwrite the attribute with the given new value (not optional here)
 <br>
-</br>
+
 
 When the attribute is not existing, it will be created and the value added
 <br>
-</br>
+
 
 When it is existing, old values are removed, the new value is added.
 </li>
@@ -899,15 +903,15 @@ When it is existing, old values are removed, the new value is added.
 <li>
 delete
 <br>
-</br>
+
 
 When no value is given, all values will be removed
 <br>
-</br>
+
 
 When a value is given, only that value will be removed
 <br>
-</br>
+
 
  when the given value is not existing, the test will fail
 
@@ -922,7 +926,7 @@ When a value is given, only that value will be removed
 
 (Optional) Add more modifications in the "modify test" table.
 <br>
-</br>
+
 
 All modifications which are specified must succeed, to let the modification test pass. When one modification fails, NO modifications at all will be made and the entry will remain unchanged.
 
@@ -972,7 +976,7 @@ Select the "Delete" button.
 
 enter the name of the entry, relative to the baseDN, in the Delete-Field.
 <br>
-</br>
+
 
 that is, if you want to remove "cn=john doe,ou=people,dc=siemens,dc=com", and you set the baseDN to "dc=siemens,dc=com",
 you need to enter "cn=john doe,ou=people" in the Delete-field.
@@ -1023,7 +1027,7 @@ Select the "Rename Entry" button.
 
 enter the name of the entry, relative to the baseDN, in the "old entry name-Field".
 <br>
-</br>
+
 
 that is, if you want to rename "cn=john doe,ou=people,dc=siemens,dc=com", and you set the baseDN to "dc=siemens,dc=com",
 you need to enter "cn=john doe,ou=people" in the old entry name-field.
@@ -1035,11 +1039,11 @@ you need to enter "cn=john doe,ou=people" in the old entry name-field.
 
 enter the new name of the entry, relative to the baseDN, in the "new distinghuised name-Field".
 <br>
-</br>
+
 
 whne you only change the RDN, it will simply rename the entry
 <br>
-</br>
+
 
 when you also add a differten subtree, eg you change from cn=john doe,ou=people to cn=john doe,ou=users, it will move the entry.
 You can also move a complete subtree (If your LDAP server supports this!!!!), eg ou=people,ou=retired, to ou=oldusers,ou=users, this will move the complete subtee, plus all retired people in the subtree to the new place in the tree.
@@ -1203,7 +1207,7 @@ The full description can be found here.
 </td></tr>
 <tr><td colspan="2">
 <div align="center"><font color="#525D76" size="-1"><em>
-Copyright &copy; 1999-2011, Apache Software Foundation
+Copyright &copy; 1999-2012, Apache Software Foundation
 </em></font></div>
 </td></tr>
 <tr><td colspan="2">
