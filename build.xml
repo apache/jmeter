@@ -2473,12 +2473,15 @@ run JMeter unless all the JMeter jars are added.
         {
             StringTokenizer st = new StringTokenizer(command);
             String[] cmdarray = new String[st.countTokens()];
-            for (int i = 0; st.hasMoreTokens(); i++)
+            for (int i = 0; st.hasMoreTokens(); i++) {
                 cmdarray[i] = st.nextToken();
+            }
+            // Merge stderr with stdout so only have to fetch one stream
             proc = new ProcessBuilder(cmdarray).redirectErrorStream(true).start();
             din = new DataInputStream( proc.getInputStream() );
-            while( (line=din.readLine()) != null )
+            while( (line=din.readLine()) != null ) {
                 print(line);
+            }
             return this.proc.exitValue();
         }
           keyname = project.getProperty("gpg.keyname");
