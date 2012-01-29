@@ -1219,9 +1219,9 @@ run JMeter unless all the JMeter jars are added.
     <include name="README"/>
     <include name="${src.dir}/**"/>
     <!-- Exclude binary types -->
-    <exclude name="${src.dir}/**/*.gif"/>
-    <exclude name="${src.dir}/**/*.jpg"/>
-    <exclude name="${src.dir}/**/*.png"/>
+    <exclude name="**/*.gif"/>
+    <exclude name="**/*.jpg"/>
+    <exclude name="**/*.png"/>
     <include name="${src.docs}/**"/>
   	<!-- Include some resources -->
   	<include name="${res.dir}/**"/>
@@ -1267,6 +1267,10 @@ run JMeter unless all the JMeter jars are added.
     <include name="${dest.jar.jmeter}/testfiles/*.jtl"/>
     <!-- This one is generated with EOL=LF -->
     <include name="${dest.jar.jmeter}/testfiles/BatchTestLocal.xml"/>
+    <!-- Include the image files used in parsing / embedded download tests -->
+    <include name="${dest.jar.jmeter}/testfiles/**/*.gif"/>
+    <include name="${dest.jar.jmeter}/testfiles/**/*.jpg"/>
+    <include name="${dest.jar.jmeter}/testfiles/**/*.png"/>
   </patternset>
 
     <!-- Convert eol:native source files to appropriate format if required -->
