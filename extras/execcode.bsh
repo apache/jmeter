@@ -19,7 +19,8 @@
 /**
 	Start an external application using the Java Runtime exec() method.
 	Display any output to the standard BeanShell output using print().
-	Return the process exit code
+	Return the process exit code.
+	Note: does not display stderr.
 */
 
 bsh.help.execcode = "usage: execcode( String arg )";
@@ -28,7 +29,8 @@ int execcode( String arg )
 {
 	this.proc = Runtime.getRuntime().exec(arg);
 	this.din = new DataInputStream( proc.getInputStream() );
-	while( (line=din.readLine()) != null )
+	while( (line=din.readLine()) != null ) {
 		print(line);
-	return this.proc.exitValue();
+    }
+	return this.proc.waitFor();
 }
