@@ -1549,6 +1549,10 @@ run JMeter unless all the JMeter jars are added.
       <and>
         <available file="${maven.dir}/jorphan.jar.asc"/>
         <available file="${maven.dir}/jorphan.pom.asc"/>
+        <!-- Don't upload sigs to snapshots repo (might mislead users) -->
+        <not>
+          <equals arg1="snapshots" arg2="@repoType"/>
+        </not>
       </and>
     </condition>
 
