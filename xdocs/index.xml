@@ -54,14 +54,14 @@ behavior under heavy concurrent load.
 	</li>
 	<li>Complete portability and <b>100% Java purity</b>.</li>
 	<li>Full <b>multithreading</b> framework allows concurrent sampling by many threads and
-		simultaneous sampling of different functions by seperate thread groups.</li>
+		simultaneous sampling of different functions by separate thread groups.</li>
 	<li>Careful <b>GUI</b> design allows faster operation and more precise timings.</li>
 	<li>Caching and offline analysis/replaying of test results.</li>
 	<li><b>Highly Extensible:</b>
 	  <ul>
 		<li>Pluggable Samplers allow unlimited testing capabilities.</li>
 		<li>Several load statistics may be choosen with <b>pluggable timers</b>.</li>
-		<li>Data analysis and <b>visualization plugins</b> allow great extendibility
+		<li>Data analysis and <b>visualization plugins</b> allow great extensibility
 		as well as personalization.</li>
 		<li>Functions can be used to provide dynamic input to a test or provide data manipulation.</li>
 		<li>Scriptable Samplers (BeanShell is fully supported; and there is a sampler which supports BSF-compatible languages)</li>
