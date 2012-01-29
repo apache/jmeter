@@ -1238,8 +1238,10 @@ run JMeter unless all the JMeter jars are added.
     <include name="${dest.jar.jmeter}/testfiles/**"/>
     <exclude name="${dest.jar.jmeter}/testfiles/*.jmx"/>
     <exclude name="${dest.jar.jmeter}/testfiles/*.jtl"/>
-    <!-- This one is generated with EOL=LF -->
+    <!-- These are generated with EOL=LF -->
     <exclude name="${dest.jar.jmeter}/testfiles/BatchTestLocal.xml"/>
+    <exclude name="${dest.jar.jmeter}/testfiles/Bug50898.xml"/>
+    <exclude name="${dest.jar.jmeter}/testfiles/Bug52310.xml"/>
     <!-- Ignore unit test output -->
     <exclude name="${dest.jar.jmeter}/testfiles/*.out"/>
     <exclude name="${dest.jar.jmeter}/testfiles/Sample_*.png"/>
@@ -1265,8 +1267,10 @@ run JMeter unless all the JMeter jars are added.
     <include name="${src.docs}/**/*.sxw"/>
     <include name="${dest.jar.jmeter}/testfiles/*.jmx"/>
     <include name="${dest.jar.jmeter}/testfiles/*.jtl"/>
-    <!-- This one is generated with EOL=LF -->
+    <!-- These are generated with EOL=LF -->
     <include name="${dest.jar.jmeter}/testfiles/BatchTestLocal.xml"/>
+    <include name="${dest.jar.jmeter}/testfiles/Bug50898.xml"/>
+    <include name="${dest.jar.jmeter}/testfiles/Bug52310.xml"/>
     <!-- Include the image files used in parsing / embedded download tests -->
     <include name="${dest.jar.jmeter}/testfiles/**/*.gif"/>
     <include name="${dest.jar.jmeter}/testfiles/**/*.jpg"/>
