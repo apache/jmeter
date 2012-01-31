@@ -289,6 +289,9 @@
   <property name="dest.docs" value="docs"/>
   <property name="dest.printable_docs" value="printable_docs"/>
 
+  <!-- Default is for Anakia to only rebuild if the target file is older than the source -->
+  <property name="anakia.lastModifiedCheck" value="true"/>
+
   <!-- Directory where jars needed for creating documentation live -->
   <property name="lib.doc" value="lib/doc"/>
 
@@ -1925,7 +1928,7 @@ run JMeter unless all the JMeter jars are added.
     <!-- The extending pages are rather out of date (and not linked from elsewhere) -->
     <anakia basedir="${src.docs}" destdir="${dest.docs}/" extension=".html" style="${eclipse.anakia}/xdocs/stylesheets/site.vsl" projectFile="./stylesheets/project.xml"
         excludes="**/stylesheets/** extending.xml extending/*.xml"
-        includes="**/*.xml" lastModifiedCheck="true" velocityPropertiesFile="${src.docs}/velocity.properties"/>
+        includes="**/*.xml" lastModifiedCheck="${anakia.lastModifiedCheck}" velocityPropertiesFile="${src.docs}/velocity.properties"/>
     <echo level="info">Fixing EOL</echo>
     <fixcrlf encoding="iso-8859-1" srcdir="${dest.docs}/" includes="**/*.html" excludes="api/**" fixlast="false"/>
     <echo level="info">Removing unnecessary &lt;/br> tags</echo>
@@ -1956,7 +1959,7 @@ run JMeter unless all the JMeter jars are added.
     <!-- The extending pages are rather out of date (and not linked from elsewhere) -->
     <anakia basedir="${src.docs}" destdir="${dest.printable_docs}/" extension=".html" style="${eclipse.anakia}/xdocs/stylesheets/site_printable.vsl" projectFile="./stylesheets/printable_project.xml"
         excludes="**/stylesheets/** extending.xml extending/*.xml"
-        includes="**/*.xml" lastModifiedCheck="true" velocityPropertiesFile="${src.docs}/velocity.properties"/>
+        includes="**/*.xml" lastModifiedCheck="${anakia.lastModifiedCheck}" velocityPropertiesFile="${src.docs}/velocity.properties"/>
     <echo level="info">Fixing EOL</echo>
     <fixcrlf encoding="iso-8859-1" srcdir="${dest.printable_docs}/" includes="**/*.html" fixlast="false"/>
     <echo level="info">Removing unnecessary &lt;/br> tags</echo>
