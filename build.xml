@@ -1927,7 +1927,7 @@ run JMeter unless all the JMeter jars are added.
         excludes="**/stylesheets/** extending.xml extending/*.xml"
         includes="**/*.xml" lastModifiedCheck="true" velocityPropertiesFile="${src.docs}/velocity.properties"/>
     <echo level="info">Fixing EOL</echo>
-    <fixcrlf srcdir="${dest.docs}/" includes="**/*.html" excludes="api/**" fixlast="false"/>
+    <fixcrlf encoding="iso-8859-1" srcdir="${dest.docs}/" includes="**/*.html" excludes="api/**" fixlast="false"/>
     <echo level="info">Removing unnecessary &lt;/br> tags</echo>
     <replace dir="${dest.docs}/" includes="**/*.html" token="&lt;/br>" value=""/>
     <echo level="info">Copying files</echo>
@@ -1958,7 +1958,7 @@ run JMeter unless all the JMeter jars are added.
         excludes="**/stylesheets/** extending.xml extending/*.xml"
         includes="**/*.xml" lastModifiedCheck="true" velocityPropertiesFile="${src.docs}/velocity.properties"/>
     <echo level="info">Fixing EOL</echo>
-    <fixcrlf srcdir="${dest.printable_docs}/" includes="**/*.html" fixlast="false"/>
+    <fixcrlf encoding="iso-8859-1" srcdir="${dest.printable_docs}/" includes="**/*.html" fixlast="false"/>
     <echo level="info">Removing unnecessary &lt;/br> tags</echo>
     <replace dir="${dest.printable_docs}/" includes="**/*.html" token="&lt;/br>" value=""/>
     <!--
