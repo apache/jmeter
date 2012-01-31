@@ -1932,7 +1932,7 @@ run JMeter unless all the JMeter jars are added.
     <echo level="info">Fixing EOL</echo>
     <fixcrlf encoding="iso-8859-1" srcdir="${dest.docs}/" includes="**/*.html" excludes="api/**" fixlast="false"/>
     <echo level="info">Removing unnecessary &lt;/br> tags</echo>
-    <replace dir="${dest.docs}/" includes="**/*.html" token="&lt;/br>" value=""/>
+    <replace encoding="iso-8859-1" dir="${dest.docs}/" includes="**/*.html" token="&lt;/br>" value=""/>
     <echo level="info">Copying files</echo>
     <copy todir="${dest.docs}/css">
       <fileset dir="${src.css}"/>
@@ -1963,7 +1963,7 @@ run JMeter unless all the JMeter jars are added.
     <echo level="info">Fixing EOL</echo>
     <fixcrlf encoding="iso-8859-1" srcdir="${dest.printable_docs}/" includes="**/*.html" fixlast="false"/>
     <echo level="info">Removing unnecessary &lt;/br> tags</echo>
-    <replace dir="${dest.printable_docs}/" includes="**/*.html" token="&lt;/br>" value=""/>
+    <replace encoding="iso-8859-1" dir="${dest.printable_docs}/" includes="**/*.html" token="&lt;/br>" value=""/>
     <!--
     Share images with non-printable version
     Means printable version won't work on web-site
