@@ -52,6 +52,8 @@ public class TestActionGui extends AbstractSamplerGui {
 
     private JRadioButton stopNowButton;
 
+    private JRadioButton restartNextLoopButton;
+    
     private JTextField durationField;
 
     // State variables
@@ -76,6 +78,8 @@ public class TestActionGui extends AbstractSamplerGui {
     private final String stopAction = JMeterUtils.getResString("test_action_stop"); // $NON-NLS-1$
 
     private final String stopNowAction = JMeterUtils.getResString("test_action_stop_now"); // $NON-NLS-1$
+
+    private final String restartNextLoopAction = JMeterUtils.getResString("test_action_restart_next_loop"); // $NON-NLS-1$
 
     private final String durationLabel = JMeterUtils.getResString("test_action_duration"); // $NON-NLS-1$
 
@@ -107,8 +111,10 @@ public class TestActionGui extends AbstractSamplerGui {
             pauseButton.setSelected(true);
         } else if (action == TestAction.STOP_NOW) {
             stopNowButton.setSelected(true);
-        } else {
+        } else if(action == TestAction.STOP ){
             stopButton.setSelected(true);
+        } else {
+            restartNextLoopButton.setSelected(true);
         }
 
         durationString = ta.getDurationAsString();
@@ -186,6 +192,7 @@ public class TestActionGui extends AbstractSamplerGui {
                 if (pauseButton.isSelected()) {
                     action = TestAction.PAUSE;
                     durationField.setEnabled(true);
+                    targetBox.setEnabled(true);
                 }
 
             }
@@ -196,6 +203,7 @@ public class TestActionGui extends AbstractSamplerGui {
                 if (stopButton.isSelected()) {
                     action = TestAction.STOP;
                     durationField.setEnabled(false);
+                    targetBox.setEnabled(true);
                 }
             }
         });
@@ -205,16 +213,33 @@ public class TestActionGui extends AbstractSamplerGui {
                 if (stopNowButton.isSelected()) {
                     action = TestAction.STOP_NOW;
                     durationField.setEnabled(false);
+                    targetBox.setEnabled(true);
                 }
             }
         });
+        
+        restartNextLoopButton = new JRadioButton(restartNextLoopAction, false);
+        restartNextLoopButton.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                if (restartNextLoopButton.isSelected()) {
+                    action = TestAction.RESTART_NEXT_LOOP;
+                    durationField.setEnabled(false);
+                    targetBox.setSelectedIndex(TestAction.THREAD);
+                    targetBox.setEnabled(false);
+                }
+            }
+        });
+        
         actionButtons.add(pauseButton);
         actionButtons.add(stopButton);
         actionButtons.add(stopNowButton);
+        actionButtons.add(restartNextLoopButton);
+
         actionPanel.add(new JLabel(actionLabel));
         actionPanel.add(pauseButton);
         actionPanel.add(stopButton);
         actionPanel.add(stopNowButton);
+        actionPanel.add(restartNextLoopButton);
         add(actionPanel);
 
         // Duration
