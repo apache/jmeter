@@ -319,9 +319,6 @@
   <!-- Where the Maven template poms are located -->
   <property name="maven.poms" value="res/maven"/>
 
-  <!-- Where the web-site packages will be created -->
-  <property name="site.dir" value="site"/>
-
   <!-- Compilation parameters -->
   <property name="optimize" value="on"/>
   <property name="deprecation" value="off"/>
@@ -1846,7 +1843,7 @@ run JMeter unless all the JMeter jars are added.
   </target>
 
   <target name="clean" description="Clean up to force a build from source.">
-    <delete quiet="true">
+    <delete quiet="false">
         <fileset dir="${dest.jar.jmeter}" includes="ApacheJMeter.jar"/>
         <fileset dir="${lib.dir}" includes="jorphan.jar"/>
         <fileset dir="${lib.dir}" includes="bshclient.jar"/>
@@ -1854,7 +1851,6 @@ run JMeter unless all the JMeter jars are added.
         <fileset dir="${build.dir}"/>
         <fileset dir="${dest.printable_docs}"/>
         <fileset dir="${dist.dir}"/>
-        <fileset dir="${site.dir}"/>
     </delete>
   </target>
 
