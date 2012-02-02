@@ -92,6 +92,7 @@ or a Debug Sampler with all fields set to False (to reduce the sample size).
 <h3>I18N</h3>
 <ul>
 <li>Bug 52551 - Function Helper Dialog does not switch language correctly</li>
+<li>Bug 52552 - Help reference only works in English</li>
 </ul>
 
 <h3>General</h3>

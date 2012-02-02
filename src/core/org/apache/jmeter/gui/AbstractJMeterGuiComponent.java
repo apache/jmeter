@@ -21,6 +21,7 @@ package org.apache.jmeter.gui;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
+import java.util.Locale;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
@@ -314,8 +315,14 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
         return JMeterUtils.getResString(getLabelResource());
     }
 
+    /**
+     * Compute Anchor value to find reference in documentation for a particular component
+     * @return String anchor
+     */
     public String getDocAnchor() {
-        return getStaticLabel().replace(' ', '_');
+        // Ensure we use default bundle
+        String label =  JMeterUtils.getResString(getLabelResource(), new Locale("",""));
+        return label.replace(' ', '_');
     }
 
     /**
