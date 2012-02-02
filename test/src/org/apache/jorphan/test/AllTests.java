@@ -157,7 +157,9 @@ public final class AllTests {
         logprop("user.region");
         logprop("user.country");
         logprop("user.variant");
-        log.info("Locale="+Locale.getDefault().toString());
+        final String showLocale = "Locale="+Locale.getDefault().toString();
+        log.info(showLocale);
+        System.out.println(showLocale);
         logprop("os.name", true);
         logprop("os.version", true);
         logprop("os.arch");
