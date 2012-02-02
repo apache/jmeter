@@ -1843,7 +1843,8 @@ run JMeter unless all the JMeter jars are added.
   </target>
 
   <target name="clean" description="Clean up to force a build from source.">
-    <delete quiet="false">
+    <!-- Unfortunately Ant reports failure if a directory does not exist -->
+    <delete quiet="false" failonerror="false">
         <fileset dir="${dest.jar.jmeter}" includes="ApacheJMeter.jar"/>
         <fileset dir="${lib.dir}" includes="jorphan.jar"/>
         <fileset dir="${lib.dir}" includes="bshclient.jar"/>
