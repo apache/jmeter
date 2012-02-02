@@ -23,8 +23,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.jmeter.functions.gui.FunctionHelper;
+import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.util.LocaleChangeEvent;
+import org.apache.jmeter.util.LocaleChangeListener;
 
-public class CreateFunctionDialog extends AbstractAction {
+public class CreateFunctionDialog extends AbstractAction implements LocaleChangeListener {
     private FunctionHelper helper = null;
 
     private static final Set<String> commands;
@@ -34,6 +37,7 @@ public class CreateFunctionDialog extends AbstractAction {
     }
 
     public CreateFunctionDialog() {
+        JMeterUtils.addLocaleChangeListener(this);
         helper = new FunctionHelper();
     }
 
@@ -48,5 +52,12 @@ public class CreateFunctionDialog extends AbstractAction {
     @Override
     public void doAction(ActionEvent arg0) {
         helper.setVisible(true);
+    }
+
+    /**
+     * {@inheritDoc}}
+     */
+    public void localeChanged(LocaleChangeEvent event) {
+        helper = new FunctionHelper();
     }
 }
