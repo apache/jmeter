@@ -18,9 +18,9 @@
 
 package org.apache.jmeter.threads;
 
+import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
-import org.apache.jmeter.engine.StandardJMeterEngine;
 
 /**
  * Holds context for a thread.
@@ -48,6 +48,8 @@ public class JMeterContext {
     private int threadNum;
 
     private boolean isReinitSubControllers = false;
+
+    private boolean restartNextLoop = false;
 
     JMeterContext() {
         clear0();
@@ -186,5 +188,21 @@ public class JMeterContext {
      */
     public boolean isReinitializingSubControllers() {
         return isReinitSubControllers;
+    }
+
+    /**
+     * if set to true a restart of the loop will occurs
+     * @param restartNextLoop
+     */
+    public void setRestartNextLoop(boolean restartNextLoop) {
+        this.restartNextLoop = restartNextLoop;
+    }
+
+    /**
+     * a restart of the loop was required ?
+     * @return the restartNextLoop
+     */
+    public boolean isRestartNextLoop() {
+        return restartNextLoop;
     }
 }
