@@ -42,12 +42,14 @@ import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.Help;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.util.LocaleChangeEvent;
+import org.apache.jmeter.util.LocaleChangeListener;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.JLabeledChoice;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.reflect.ClassFinder;
 
-public class FunctionHelper extends JDialog implements ActionListener, ChangeListener {
+public class FunctionHelper extends JDialog implements ActionListener, ChangeListener, LocaleChangeListener {
     private static final long serialVersionUID = 240L;
 
     private JLabeledChoice functionList;
@@ -64,6 +66,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
     public FunctionHelper() {
         super((JFrame) null, JMeterUtils.getResString("function_helper_title"), false); //$NON-NLS-1$
         init();
+        JMeterUtils.addLocaleChangeListener(this);
     }
 
     private void init() {
@@ -158,5 +161,11 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
             ActionEvent helpEvent = new ActionEvent(source, e.getID(), "help"); //$NON-NLS-1$
             ActionRouter.getInstance().actionPerformed(helpEvent);
         }
+    }
+
+    public void localeChanged(LocaleChangeEvent event) {
+        setTitle(JMeterUtils.getResString("function_helper_title"));
+        this.getContentPane().removeAll(); // so we can add them again in init
+        init();
     }
 }
