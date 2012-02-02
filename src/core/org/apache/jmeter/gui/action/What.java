@@ -28,6 +28,7 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  *
@@ -38,6 +39,7 @@ import org.apache.jorphan.logging.LoggingManager;
  *
  */
 public class What implements Command {
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final Set<String> commandSet;
 
@@ -57,6 +59,7 @@ public class What implements Command {
             String guiClassName = te.getPropertyAsString(TestElement.GUI_CLASS);
             System.out.println(te.getClass().getName());
             System.out.println(guiClassName);
+            log.info("TestElement:"+te.getClass().getName()+", guiClassName:"+guiClassName);
         } else if (ActionNames.DEBUG_ON.equals(e.getActionCommand())){
             LoggingManager.setPriorityFullName("DEBUG",te.getClass().getName());//$NON-NLS-1$
         } else if (ActionNames.DEBUG_OFF.equals(e.getActionCommand())){
