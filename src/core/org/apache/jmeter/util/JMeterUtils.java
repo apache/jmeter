@@ -427,6 +427,22 @@ public class JMeterUtils implements UnitTestManager {
     public static String getResString(String key) {
         return getResStringDefault(key, RES_KEY_PFX + key + "]"); // $NON-NLS-1$
     }
+    
+    /**
+     * Gets the resource string for this key in Locale.
+     *
+     * If the resource is not found, a warning is logged
+     *
+     * @param key
+     *            the key in the resource file
+     * @param forcedLocale Force a particular locale
+     * @return the resource string if the key is found; otherwise, return
+     *         "[res_key="+key+"]"
+     */
+    public static String getResString(String key, Locale forcedLocale) {
+        return getResStringDefault(key, RES_KEY_PFX + key + "]", // $NON-NLS-1$
+                forcedLocale); 
+    }
 
     public static final String RES_KEY_PFX = "[res_key="; // $NON-NLS-1$
 
@@ -455,6 +471,13 @@ public class JMeterUtils implements UnitTestManager {
      * getResString(S,S) to be deprecated without affecting getResString(S);
      */
     private static String getResStringDefault(String key, String defaultValue) {
+        return getResStringDefault(key, defaultValue, null);
+    }
+    /*
+     * Helper method to do the actual work of fetching resources; allows
+     * getResString(S,S) to be deprecated without affecting getResString(S);
+     */
+    private static String getResStringDefault(String key, String defaultValue, Locale forcedLocale) {
         if (key == null) {
             return null;
         }
@@ -463,7 +486,11 @@ public class JMeterUtils implements UnitTestManager {
         resKey = resKey.toLowerCase(java.util.Locale.ENGLISH);
         String resString = null;
         try {
-            resString = resources.getString(resKey);
+            ResourceBundle bundle = resources;
+            if(forcedLocale != null) {
+                bundle = ResourceBundle.getBundle("org.apache.jmeter.resources.messages", forcedLocale); // $NON-NLS-1$
+            }
+            resString = bundle.getString(resKey);
             if (ignoreResorces ){ // Special mode for debugging resource handling
                 return "["+key+"]";
             }
