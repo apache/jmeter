@@ -31,7 +31,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.swing.JPopupMenu;
 
@@ -481,4 +483,18 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
             JMeterUtils.reportErrorToUser("Can't get beanInfo for " + testBeanClass.getName());
         }
 	}
+
+    /**
+     * {@inheritDoc}}
+     * @see org.apache.jmeter.gui.AbstractJMeterGuiComponent#getDocAnchor()
+     */
+    @Override
+    public String getDocAnchor() {
+        ResourceBundle resourceBundle = ResourceBundle.getBundle(
+                testBeanClass.getName() + "Resources",  // $NON-NLS-1$
+                new Locale("",""));
+
+        String name = resourceBundle.getString("displayName");
+        return name.replace(' ', '_');
+    }
 }
