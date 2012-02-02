@@ -42,6 +42,7 @@ public class TestAction extends AbstractSampler {
     public final static int STOP = 0;
     public final static int PAUSE = 1;
     public final static int STOP_NOW = 2;
+    public final static int RESTART_NEXT_LOOP = 3;
 
     // Action targets
     public final static int THREAD = 0;
@@ -67,10 +68,15 @@ public class TestAction extends AbstractSampler {
         int action = getAction();
         if (action == PAUSE) {
             pause(getDurationAsString());
-        } else if (action == STOP || action == STOP_NOW) {
+        } else if (action == STOP || action == STOP_NOW || action == RESTART_NEXT_LOOP) {
             if (target == THREAD) {
-                log.info("Stopping current thread");
-                context.getThread().stop();
+                if(action == STOP || action == STOP_NOW) {
+                    log.info("Stopping current thread");
+                    context.getThread().stop();                    
+                } else {
+                    log.info("Restarting next loop");
+                    context.setRestartNextLoop(true);
+                }
 //             //Not yet implemented
 //            } else if (target==THREAD_GROUP) {
             } else if (target == TEST) {
