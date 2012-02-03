@@ -248,6 +248,7 @@ public class FileServer {
      * @param charsetName - the character set encoding to use for the file (may be null)
      * @param alias - the name to be used to access the object (must not be null)
      * @param hasHeader true if the file has a header line describing the contents
+     * @return the header line; may be null
      */
     public synchronized String reserveFile(String filename, String charsetName, String alias, boolean hasHeader) {
         if (filename == null){
