@@ -122,9 +122,6 @@ public class PropertyControlGui extends AbstractConfigGui
 
     }
 
-    public void add(SampleResult sample) {
-    }
-
     public TestElement createTestElement() {
         TestElement el = new ConfigTestElement();
         modifyTestElement(el);
