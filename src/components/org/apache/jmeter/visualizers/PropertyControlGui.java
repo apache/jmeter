@@ -48,7 +48,6 @@ import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.UnsharedComponent;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.gui.util.MenuFactory;
-import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
