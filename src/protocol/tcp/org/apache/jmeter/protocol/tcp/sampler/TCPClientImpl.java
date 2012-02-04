@@ -30,7 +30,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -46,6 +48,7 @@ public class TCPClientImpl extends AbstractTCPClient {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private int eolInt = JMeterUtils.getPropDefault("tcp.eolByte", 1000); // $NON-NLS-1$
+    private String charset = JMeterUtils.getPropDefault("tcp.charset", Charset.defaultCharset().name()); // $NON-NLS-1$
     // default is not in range of a byte
 
     public TCPClientImpl() {
@@ -54,13 +57,19 @@ public class TCPClientImpl extends AbstractTCPClient {
         if (useEolByte) {
             log.info("Using eolByte=" + eolByte);
         }
+        String charset = JMeterUtils.getProperty("tcp.charset");
+        if(StringUtils.isEmpty(charset)) {
+            log.info("Using platform default charset:"+charset);
+        } else {
+            log.info("Using charset:"+charset);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     public void write(OutputStream os, String s)  throws IOException{
-        os.write(s.getBytes()); // TODO - charset?
+        os.write(s.getBytes(charset)); 
         os.flush();
         if(log.isDebugEnabled()) {
             log.debug("Wrote: " + s);
@@ -99,7 +108,7 @@ public class TCPClientImpl extends AbstractTCPClient {
 			if(log.isDebugEnabled()) {
 			    log.debug("Read: " + w.size() + "\n" + w.toString());
 			}
-			return w.toString();
+			return w.toString(charset);
 		} catch (IOException e) {
 			throw new ReadException("", e, w.toString());
 		}
