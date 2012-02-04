@@ -37,8 +37,9 @@ public class BSFListener extends BSFTestElement
     private static final long serialVersionUID = 234L;
 
     public void sampleOccurred(SampleEvent event) {
+        BSFManager mgr =null;
         try {
-            BSFManager mgr = getManager();
+            mgr = getManager();
             if (mgr == null) {
                 log.error("Problem creating BSF manager");
                 return;
@@ -47,9 +48,12 @@ public class BSFListener extends BSFTestElement
             SampleResult result = event.getResult();
             mgr.declareBean("sampleResult", result, SampleResult.class);
             processFileOrScript(mgr);
-            mgr.terminate();
         } catch (BSFException e) {
             log.warn("Problem in BSF script "+e);
+        } finally {
+            if (mgr != null) {
+                mgr.terminate();
+            }
         }
     }
 
