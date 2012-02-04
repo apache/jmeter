@@ -33,12 +33,16 @@ public class BSFPostProcessor extends BSFTestElement implements Cloneable, PostP
     private static final long serialVersionUID = 232L;
 
     public void process(){
+        BSFManager mgr =null;
         try {
-            BSFManager mgr = getManager();
+            mgr = getManager();
             processFileOrScript(mgr);
-            mgr.terminate();
         } catch (BSFException e) {
             log.warn("Problem in BSF script "+e);
+        } finally {
+            if (mgr != null) {
+                mgr.terminate();
+            }
         }
     }
 }
