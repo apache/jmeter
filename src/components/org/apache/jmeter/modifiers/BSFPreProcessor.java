@@ -33,13 +33,17 @@ public class BSFPreProcessor extends BSFTestElement implements Cloneable, PrePro
     private static final long serialVersionUID = 232L;
 
     public void process(){
+        BSFManager mgr =null;
         try {
-            BSFManager mgr = getManager();
+            mgr = getManager();
             if (mgr == null) { return; }
             processFileOrScript(mgr);
-            mgr.terminate();
         } catch (BSFException e) {
             log.warn("Problem in BSF script "+e);
+        } finally {
+            if (mgr != null) {
+                mgr.terminate();
+            }
         }
     }
 }
