@@ -22,7 +22,7 @@ package org.apache.jmeter.protocol.tcp.sampler;
  * Basic implementation of TCPClient interface.
  */
 public abstract class AbstractTCPClient implements TCPClient {
-    protected String charset;
+    private String charset;
     protected byte eolByte;
     protected boolean useEolByte = false;
 
