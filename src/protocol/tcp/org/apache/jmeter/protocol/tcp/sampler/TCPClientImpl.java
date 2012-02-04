@@ -57,11 +57,12 @@ public class TCPClientImpl extends AbstractTCPClient {
         if (useEolByte) {
             log.info("Using eolByte=" + eolByte);
         }
-        String charset = JMeterUtils.getProperty("tcp.charset");
-        if(StringUtils.isEmpty(charset)) {
+        setCharset(charset);
+        String configuredCharset = JMeterUtils.getProperty("tcp.charset");
+        if(StringUtils.isEmpty(configuredCharset)) {
             log.info("Using platform default charset:"+charset);
         } else {
-            log.info("Using charset:"+charset);
+            log.info("Using charset:"+configuredCharset);
         }
     }
 

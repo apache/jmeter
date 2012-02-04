@@ -348,15 +348,15 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
                 res.setSamplerData(req);
                 protocolHandler.write(os, req);
                 String in = protocolHandler.read(is);
-                isSuccessful = setupSampleResult(res, in, null);
+                isSuccessful = setupSampleResult(res, in, null, protocolHandler.getCharset());
             }
         } catch (ReadException ex) {
             log.error("", ex);
-            isSuccessful=setupSampleResult(res, ex.getPartialResponse(), ex);
+            isSuccessful=setupSampleResult(res, ex.getPartialResponse(), ex,protocolHandler.getCharset());
             closeSocket(socketKey);
         } catch (Exception ex) {
             log.error("", ex);
-            isSuccessful=setupSampleResult(res, "", ex);
+            isSuccessful=setupSampleResult(res, "", ex, protocolHandler.getCharset());
             closeSocket(socketKey);
         } finally {
             // Calculate response time
@@ -377,12 +377,14 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 	 * @param sampleResult {@link SampleResult}
 	 * @param readResponse Response read until error occured
 	 * @param exception Source exception
+     * @param encoding sample encoding
 	 * @return boolean if sample is considered as successful
 	 */
 	private boolean setupSampleResult(SampleResult sampleResult,
 			String readResponse, 
-			Exception exception) {
-		sampleResult.setResponseData(readResponse, null);
+			Exception exception,
+			String encoding) {
+		sampleResult.setResponseData(readResponse, encoding);
 		sampleResult.setDataType(SampleResult.TEXT);
 		if(exception==null) {
 			sampleResult.setResponseCodeOK();

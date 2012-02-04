@@ -75,6 +75,13 @@ public interface TCPClient {
      * @return Returns the eolByte.
      */
     public byte getEolByte();
+    
+
+    /**
+     * Get the charset.
+     * @return Returns the charset.
+     */
+    public String getCharset();
 
     /**
      * Set the end-of-line/end-of-message byte.
