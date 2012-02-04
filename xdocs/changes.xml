@@ -71,6 +71,7 @@ or a Debug Sampler with all fields set to False (to reduce the sample size).
 
 <h3>Other Samplers</h3>
 <ul>
+<li>Bug 51737 - TCPSampler : Packet gets converted/corrupted</li>
 </ul>
 
 <h3>Controllers</h3>
