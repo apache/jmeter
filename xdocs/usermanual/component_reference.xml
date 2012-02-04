@@ -1186,6 +1186,7 @@ For details, see <complink name="BSF Sampler"/>.
 		This implementation is fairly basic.
         When reading the response, it reads until the end of line byte, if this is defined
         by setting the property <b>tcp.eolByte</b>, otherwise until the end of the input stream.
+        You can control charset encoding by setting <b>tcp.charset</b>, which will default to Platform default encoding.
         </p>
         <p><b>BinaryTCPClientImpl</b><br></br>
         This implementation converts the GUI input, which must be a hex-encoded string, into binary,
