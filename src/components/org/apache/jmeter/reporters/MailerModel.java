@@ -107,7 +107,13 @@ public class MailerModel extends AbstractTestElement implements Serializable {
 
     private static final String DEFAULT_LIMIT = "2"; //$NON-NLS-1$
 
-    private static final int DEFAULT_SMTP_PORT = 25;
+    private static final String DEFAULT_SMTP_PORT = "25";
+
+    private static final String DEFAULT_PASSWORD_VALUE = ""; //$NON-NLS-1$
+
+    private static final String DEFAULT_MAIL_AUTH_TYPE_VALUE = MailAuthType.NONE.toString(); //$NON-NLS-1$
+
+    private static final String DEFAULT_LOGIN_VALUE = ""; //$NON-NLS-1$
 
     /** The listener for changes. */
     private transient ChangeListener changeListener;
@@ -299,7 +305,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
      */
     public void sendMail(String from, List<String> vEmails, String subject, String attText, String smtpHost) 
             throws AddressException, MessagingException {
-        sendMail(from, vEmails, subject, attText, smtpHost, null, null, null, null);   
+        sendMail(from, vEmails, subject, attText, smtpHost, Integer.parseInt(DEFAULT_SMTP_PORT), null, null, null);   
     }
     
     /**
@@ -325,7 +331,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
      */
     public void sendMail(String from, List<String> vEmails, String subject,
             String attText, String smtpHost, 
-            Integer smtpPort,
+            int smtpPort,
             final String user,
             final String password,
             MailAuthType mailAuthType)
@@ -344,9 +350,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
         Properties props = new Properties();
 
         props.put(MAIL_SMTP_HOST, host);
-        if(smtpPort != null) {
-            props.put(MAIL_SMTP_PORT, smtpPort);
-        }
+        props.put(MAIL_SMTP_PORT, smtpPort);
         Authenticator authenticator = null;
         if(mailAuthType != MailAuthType.NONE) {
             props.put(MAIL_SMTP_AUTH, "true");
@@ -374,9 +378,6 @@ public class MailerModel extends AbstractTestElement implements Serializable {
                     };
         }
         Session session = Session.getInstance(props, authenticator);
-        // N.B. properties are only used when the default session is first
-        // created
-        // so check if the mail host needs to be reset...
         session.setDebug(debug);
 
         // create a message
@@ -430,24 +431,23 @@ public class MailerModel extends AbstractTestElement implements Serializable {
         setProperty(HOST_KEY, str);
     }
 
-    public void setSmtpPort(Integer str) {
-        if(str== null) {
-            setProperty(PORT_KEY, DEFAULT_SMTP_PORT);
-        } else {
-            setProperty(PORT_KEY, str);            
+    public void setSmtpPort(String value) {
+        if(StringUtils.isEmpty(value)) {
+            value = DEFAULT_SMTP_PORT;
         }
+        setProperty(PORT_KEY, value, DEFAULT_SMTP_PORT);
     }
     
     public void setLogin(String login) {
-        setProperty(LOGIN, login);
+        setProperty(LOGIN, login, DEFAULT_LOGIN_VALUE);
     }
     
     public void setPassword(String password) {
-        setProperty(PASSWORD, password);
+        setProperty(PASSWORD, password, DEFAULT_PASSWORD_VALUE);
     }
     
     public void setMailAuthType(String value) {
-        setProperty(MAIL_AUTH_TYPE, value, "");
+        setProperty(MAIL_AUTH_TYPE, value, DEFAULT_MAIL_AUTH_TYPE_VALUE);
     }
     
     public void setFailureSubject(String str) {
@@ -489,7 +489,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
     }
 
     public int getSmtpPort() {
-        return getPropertyAsInt(PORT_KEY, DEFAULT_SMTP_PORT);
+        return getPropertyAsInt(PORT_KEY, Integer.parseInt(DEFAULT_SMTP_PORT));
     }
 
     public String getFailureSubject() {
@@ -517,15 +517,15 @@ public class MailerModel extends AbstractTestElement implements Serializable {
     }
 
     public String getLogin() {
-        return getPropertyAsString(LOGIN);
+        return getPropertyAsString(LOGIN, DEFAULT_LOGIN_VALUE);
     }
 
     public String getPassword() {
-        return getPropertyAsString(PASSWORD);
+        return getPropertyAsString(PASSWORD, DEFAULT_PASSWORD_VALUE);
     }
 
     public MailAuthType getMailAuthType() {
-        String authType = getPropertyAsString(MAIL_AUTH_TYPE, MailAuthType.NONE.toString());
+        String authType = getPropertyAsString(MAIL_AUTH_TYPE, DEFAULT_MAIL_AUTH_TYPE_VALUE);
         return MailAuthType.valueOf(authType);
     }
 }
