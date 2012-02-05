@@ -372,6 +372,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
         if(!StringUtils.isEmpty(user)) {
             authenticator = 
                     new javax.mail.Authenticator() {
+                        @Override
                         protected PasswordAuthentication getPasswordAuthentication() {
                             return new PasswordAuthentication(user,password);
                         }
