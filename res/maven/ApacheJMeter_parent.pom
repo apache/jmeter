@@ -77,7 +77,7 @@ under the License.
       <jakarta-oro.version>2.0.8</jakarta-oro.version>
       <jcharts.version>0.7.5</jcharts.version>
       <jdom.version>1.1.2</jdom.version>
-      <js_rhino.version>1.7R2</js_rhino.version>
+      <js_rhino.version>1.7R3</js_rhino.version>
       <junit.version>4.10</junit.version>
       <logkit.version>2.0</logkit.version>
       <soap.version>2.3.1</soap.version>
@@ -239,8 +239,8 @@ under the License.
         </exclusions>
       </dependency>
       <dependency>
-        <groupId>rhino</groupId>
-        <artifactId>js</artifactId>
+        <groupId>org.mozilla</groupId>
+        <artifactId>rhino</artifactId>
         <version>${js_rhino.version}</version>
       </dependency>
       <dependency>

@@ -140,6 +140,7 @@ or a Debug Sampler with all fields set to False (to reduce the sample size).
 
 <h2>Non-functional changes</h2>
 <ul>
+<li>Upgraded to rhino 1.7R3 (was js-1.7R2.jar)</li>
 </ul>
 
 </section> 
