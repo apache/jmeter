@@ -24,8 +24,10 @@ import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
+import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
@@ -34,6 +36,7 @@ import javax.mail.internet.MimeMessage;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -45,13 +48,31 @@ import org.apache.log.Logger;
  *
  */
 public class MailerModel extends AbstractTestElement implements Serializable {
-
+    public static enum MailAuthType {
+        SSL("SSL"),
+        TLS("TLS"), 
+        NONE("");
+        
+        final private String value;
+        MailAuthType(String value) {
+            this.value = value;
+        }
+    }
+    
     private static final long serialVersionUID = 233L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final String MAIL_SMTP_HOST = "mail.smtp.host"; //$NON-NLS-1$
 
+    private static final String MAIL_SMTP_PORT = "mail.smtp.port"; //$NON-NLS-1$
+
+    private static final String MAIL_SMTP_AUTH = "mail.smtp.auth"; //$NON-NLS-1$
+
+    private static final String MAIL_SMTP_SOCKETFACTORY_CLASS = "mail.smtp.socketFactory.class"; //$NON-NLS-1$
+    
+    private static final String MAIL_SMTP_STARTTLS = "mail.smtp.starttls.enable"; //$NON-NLS-1$
+    
     private long failureCount = 0;
 
     private long successCount = 0;
@@ -68,6 +89,8 @@ public class MailerModel extends AbstractTestElement implements Serializable {
 
     private static final String HOST_KEY = "MailerModel.smtpHost"; //$NON-NLS-1$
 
+    private static final String PORT_KEY = "MailerModel.smtpPort"; //$NON-NLS-1$
+
     private static final String SUCCESS_SUBJECT = "MailerModel.successSubject"; //$NON-NLS-1$
 
     private static final String FAILURE_SUBJECT = "MailerModel.failureSubject"; //$NON-NLS-1$
@@ -76,7 +99,15 @@ public class MailerModel extends AbstractTestElement implements Serializable {
 
     private static final String SUCCESS_LIMIT_KEY = "MailerModel.successLimit"; //$NON-NLS-1$
 
+    private static final String LOGIN = "MailerModel.login"; //$NON-NLS-1$
+
+    private static final String PASSWORD = "MailerModel.password"; //$NON-NLS-1$
+
+    private static final String MAIL_AUTH_TYPE = "MailerModel.authType"; //$NON-NLS-1$
+
     private static final String DEFAULT_LIMIT = "2"; //$NON-NLS-1$
+
+    private static final int DEFAULT_SMTP_PORT = 25;
 
     /** The listener for changes. */
     private transient ChangeListener changeListener;
@@ -180,7 +211,9 @@ public class MailerModel extends AbstractTestElement implements Serializable {
             if (addressList.size() != 0) {
                 try {
                     sendMail(getFromAddress(), addressList, getFailureSubject(), "URL Failed: "
-                            + sample.getSampleLabel(), getSmtpHost());
+                            + sample.getSampleLabel(), getSmtpHost(),
+                            getSmtpPort(), getLogin(), getPassword(),
+                            getMailAuthType());
                 } catch (Exception e) {
                     log.error("Problem sending mail: "+e);
                 }
@@ -214,6 +247,8 @@ public class MailerModel extends AbstractTestElement implements Serializable {
         }
         notifyChangeListeners();
     }
+
+    
 
     /**
      * Resets the state of this object to its default. But: This method does not
@@ -257,8 +292,35 @@ public class MailerModel extends AbstractTestElement implements Serializable {
      *            the message-body.
      * @param smtpHost
      *            the smtp-server used to send the mail.
+     * @throws MessagingException 
+     * @throws AddressException 
      */
-    public void sendMail(String from, List<String> vEmails, String subject, String attText, String smtpHost)
+    public void sendMail(String from, List<String> vEmails, String subject, String attText, String smtpHost) 
+            throws AddressException, MessagingException {
+        sendMail(from, vEmails, subject, attText, smtpHost, null, null, null, null);   
+    }
+    
+    /**
+     * Sends a mail with the given parameters using SMTP.
+     *
+     * @param from
+     *            the sender of the mail as shown in the mail-client.
+     * @param vEmails
+     *            all receivers of the mail. The receivers are seperated by
+     *            commas.
+     * @param subject
+     *            the subject of the mail.
+     * @param attText
+     *            the message-body.
+     * @param smtpHost
+     *            the smtp-server used to send the mail.
+     */
+    public void sendMail(String from, List<String> vEmails, String subject,
+            String attText, String smtpHost, 
+            Integer smtpPort,
+            final String user,
+            final String password,
+            MailAuthType mailAuthType)
             throws AddressException, MessagingException {
         String host = smtpHost;
         boolean debug = Boolean.valueOf(host).booleanValue();
@@ -274,15 +336,39 @@ public class MailerModel extends AbstractTestElement implements Serializable {
         Properties props = new Properties();
 
         props.put(MAIL_SMTP_HOST, host);
-        Session session = Session.getDefaultInstance(props, null);
+        if(smtpPort != null) {
+            props.put(MAIL_SMTP_PORT, smtpPort);
+        }
+        Authenticator authenticator = null;
+        if(mailAuthType != MailAuthType.NONE) {
+            props.put(MAIL_SMTP_AUTH, "true");
+            switch (mailAuthType) {
+                case SSL:
+                    props.put(MAIL_SMTP_SOCKETFACTORY_CLASS, 
+                            "javax.net.ssl.SSLSocketFactory");
+                    break;
+                case TLS:
+                    props.put(MAIL_SMTP_STARTTLS, 
+                            "true");
+                    break;
+    
+                default:
+                    break;
+                }
+        }
+        
+        if(!StringUtils.isEmpty(user)) {
+            authenticator = 
+                    new javax.mail.Authenticator() {
+                        protected PasswordAuthentication getPasswordAuthentication() {
+                            return new PasswordAuthentication(user,password);
+                        }
+                    };
+        }
+        Session session = Session.getInstance(props, authenticator);
         // N.B. properties are only used when the default session is first
         // created
         // so check if the mail host needs to be reset...
-        props = session.getProperties();
-        if (!host.equalsIgnoreCase(props.getProperty(MAIL_SMTP_HOST))) {
-            props.setProperty(MAIL_SMTP_HOST, host);
-        }
-
         session.setDebug(debug);
 
         // create a message
@@ -305,7 +391,11 @@ public class MailerModel extends AbstractTestElement implements Serializable {
 
         log.info(attText);
 
-        sendMail(from, getAddressList(), subject, attText, smtpHost);
+        sendMail(from, getAddressList(), subject, attText, smtpHost,
+                getSmtpPort(), 
+                getLogin(), 
+                getPassword(),
+                getMailAuthType());
         log.info("Test mail sent successfully!!");
     }
 
@@ -327,6 +417,26 @@ public class MailerModel extends AbstractTestElement implements Serializable {
         setProperty(HOST_KEY, str);
     }
 
+    public void setSmtpPort(Integer str) {
+        if(str== null) {
+            setProperty(PORT_KEY, DEFAULT_SMTP_PORT);
+        } else {
+            setProperty(PORT_KEY, str);            
+        }
+    }
+    
+    public void setLogin(String login) {
+        setProperty(LOGIN, login);
+    }
+    
+    public void setPassword(String password) {
+        setProperty(PASSWORD, password);
+    }
+    
+    public void setMailAuthType(String value) {
+        setProperty(MAIL_AUTH_TYPE, value, "");
+    }
+    
     public void setFailureSubject(String str) {
         setProperty(FAILURE_SUBJECT, str);
     }
@@ -365,6 +475,10 @@ public class MailerModel extends AbstractTestElement implements Serializable {
         return getPropertyAsString(HOST_KEY);
     }
 
+    public int getSmtpPort() {
+        return getPropertyAsInt(PORT_KEY, DEFAULT_SMTP_PORT);
+    }
+
     public String getFailureSubject() {
         return getPropertyAsString(FAILURE_SUBJECT);
     }
@@ -387,5 +501,18 @@ public class MailerModel extends AbstractTestElement implements Serializable {
 
     public long getFailureCount() {
         return this.failureCount;
+    }
+
+    public String getLogin() {
+        return getPropertyAsString(LOGIN);
+    }
+
+    public String getPassword() {
+        return getPropertyAsString(PASSWORD);
+    }
+
+    public MailAuthType getMailAuthType() {
+        String authType = getPropertyAsString(MAIL_AUTH_TYPE, MailAuthType.NONE.toString());
+        return MailAuthType.valueOf(authType);
     }
 }
