@@ -24,19 +24,23 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.reporters.MailerModel;
 import org.apache.jmeter.reporters.MailerResultCollector;
@@ -72,6 +76,8 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
 
     private JTextField smtpHostField;
 
+    private JTextField smtpPortField;
+
     private JTextField failureSubjectField;
 
     private JTextField successSubjectField;
@@ -81,6 +87,13 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
     private JTextField failureLimitField;
 
     private JTextField successLimitField;
+
+    private JTextField smtpLoginField;
+
+    private JTextField smtpPasswordField;
+
+    private JComboBox authTypeCombo;
+
 
     // private JPanel mainPanel;
     // private JLabel panelTitleLabel;
@@ -179,6 +192,45 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
         g.setConstraints(smtpHostField, c);
         mailerPanel.add(smtpHostField);
 
+        c.gridwidth = 1;
+        mailerPanel.add(new JLabel("SMTP Port:"));
+
+        smtpPortField = new JTextField(25);
+        smtpPortField.setEditable(true);
+        c.gridwidth = GridBagConstraints.REMAINDER;
+        g.setConstraints(smtpPortField, c);
+        mailerPanel.add(smtpPortField);
+
+        c.gridwidth = 1;
+        mailerPanel.add(new JLabel("SMTP Login:"));
+
+        smtpLoginField = new JTextField(25);
+        smtpLoginField.setEditable(true);
+        c.gridwidth = GridBagConstraints.REMAINDER;
+        g.setConstraints(smtpLoginField, c);
+        mailerPanel.add(smtpLoginField);
+
+        c.gridwidth = 1;
+        mailerPanel.add(new JLabel("SMTP Password:"));
+
+        smtpPasswordField = new JPasswordField(25);
+        smtpPasswordField.setEditable(true);
+        c.gridwidth = GridBagConstraints.REMAINDER;
+        g.setConstraints(smtpPasswordField, c);
+        mailerPanel.add(smtpPasswordField);
+
+        c.gridwidth = 1;
+        mailerPanel.add(new JLabel("AUTH TYPE"));
+        
+        authTypeCombo = new JComboBox(new Object[] { 
+                MailerModel.MailAuthType.NONE.toString(), 
+                MailerModel.MailAuthType.SSL.toString(),
+                MailerModel.MailAuthType.TLS.toString()});
+        c.gridwidth = GridBagConstraints.REMAINDER;
+        g.setConstraints(authTypeCombo, c);
+        mailerPanel.add(authTypeCombo);
+        
+        
         c.gridwidth = 1;
         mailerPanel.add(new JLabel("Failure Subject:"));
 
@@ -322,6 +374,13 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
         mailerModel.setFailureSubject(failureSubjectField.getText());
         mailerModel.setFromAddress(fromField.getText());
         mailerModel.setSmtpHost(smtpHostField.getText());
+        mailerModel.setSmtpPort(
+                StringUtils.isEmpty(smtpPortField.getText()) ?
+                        null : Integer.valueOf(smtpPortField.getText()));
+        mailerModel.setLogin(smtpLoginField.getText());
+        mailerModel.setPassword(smtpPasswordField.getText());
+        mailerModel.setMailAuthType(
+                authTypeCombo.getSelectedItem().toString());
         mailerModel.setSuccessLimit(successLimitField.getText());
         mailerModel.setSuccessSubject(successSubjectField.getText());
         mailerModel.setToAddress(addressField.getText());
@@ -341,6 +400,10 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
         addressField.setText(model.getToAddress());
         fromField.setText(model.getFromAddress());
         smtpHostField.setText(model.getSmtpHost());
+        smtpPortField.setText(Integer.toString(model.getSmtpPort()));
+        smtpLoginField.setText(model.getLogin());
+        smtpPasswordField.setText(model.getPassword());
+        authTypeCombo.setSelectedItem(model.getMailAuthType().toString());
         successSubjectField.setText(model.getSuccessSubject());
         failureSubjectField.setText(model.getFailureSubject());
         failureLimitField.setText(String.valueOf(model.getFailureLimit()));
