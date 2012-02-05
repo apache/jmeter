@@ -104,7 +104,7 @@ http://www.jdom.org/downloads/index.html
 - XMLAssertion, JMeterTest ONLY
 - Anakia
 
-js-1.7R2
+rhino-1.7R3
 --------
 http://www.mozilla.org/rhino/download.html
 - javascript function
