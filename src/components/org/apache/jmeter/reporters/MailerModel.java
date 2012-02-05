@@ -320,8 +320,8 @@ public class MailerModel extends AbstractTestElement implements Serializable {
      * @param user the login used to authenticate
      * @param password the password used to authenticate
      * @param mailAuthType {@link MailAuthType} Security policy
-     * @throws AddressException
-     * @throws MessagingException
+     * @throws AddressException If mail address is wrong
+     * @throws MessagingException If building MimeMessage fails
      */
     public void sendMail(String from, List<String> vEmails, String subject,
             String attText, String smtpHost, 
@@ -329,7 +329,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
             final String user,
             final String password,
             MailAuthType mailAuthType)
-            throws AddressException, MessagingException {
+            throws AddressException, MessagingException{
         String host = smtpHost;
         boolean debug = Boolean.valueOf(host).booleanValue();
         // InetAddress remote = InetAddress.getByName(host);
@@ -391,8 +391,8 @@ public class MailerModel extends AbstractTestElement implements Serializable {
 
     /**
      * Send a Test Mail to check configuration
-     * @throws AddressException
-     * @throws MessagingException
+     * @throws AddressException If mail address is wrong
+     * @throws MessagingException If building MimeMessage fails
      */
     public synchronized void sendTestMail() throws AddressException, MessagingException {
         String to = getToAddress();
