@@ -2639,7 +2639,7 @@ the graph as a PNG file.</description>
 </div>
 </component>
 
-<component name="Mailer Visualizer" index="&sect-num;.3.13"  width="645" height="345" screenshot="mailervisualizer.png">
+<component name="Mailer Visualizer" index="&sect-num;.3.13"  width="807" height="415" screenshot="mailervisualizer.png">
 <description><p>The mailer visualizer can be set up to send email if a test run receives too many
 failed responses from the server.</p></description>
 <properties>
@@ -2648,6 +2648,11 @@ failed responses from the server.</p></description>
         <property name="Addressee(s)" required="Yes">Email address to send messages to, comma-separated.</property>
         <property name="SMTP Host" required="No">IP address or host name of SMTP (email redirector)
         server.</property>
+        <property name="SMTP Port" required="No">Port of SMTP server (defaults to 25).</property>
+        <property name="SMTP Login" required="No">Login used to authenticate.</property>
+        <property name="SMTP Password" required="No">Password used to authenticate.</property>
+        <property name="Auth Type" required="No">Type of encryption for SMTP authentication (SSL, TLS or none).</property>
+
         <property name="Failure Subject" required="No">Email subject line for fail messages.</property>
         <property name="Success Subject" required="No">Email subject line for success messages.</property>
         <property name="Failure Limit" required="Yes">Once this number of failed responses is exceeded, a failure
