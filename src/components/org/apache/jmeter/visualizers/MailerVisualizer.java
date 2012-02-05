@@ -40,7 +40,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.reporters.MailerModel;
 import org.apache.jmeter.reporters.MailerResultCollector;
@@ -374,9 +373,7 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
         mailerModel.setFailureSubject(failureSubjectField.getText());
         mailerModel.setFromAddress(fromField.getText());
         mailerModel.setSmtpHost(smtpHostField.getText());
-        mailerModel.setSmtpPort(
-                StringUtils.isEmpty(smtpPortField.getText()) ?
-                        null : Integer.valueOf(smtpPortField.getText()));
+        mailerModel.setSmtpPort(smtpPortField.getText());
         mailerModel.setLogin(smtpLoginField.getText());
         mailerModel.setPassword(smtpPasswordField.getText());
         mailerModel.setMailAuthType(
