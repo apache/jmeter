@@ -395,6 +395,12 @@ Optional properties to allow change the method to get response size:<br></br>
 <pre>sampleresult.getbytes.body_real_size=true</pre></li>
 <li>Add HTTP headers to full response size
 <pre>sampleresult.getbytes.headers_size=true</pre></li></ul>
+
+<note>
+The HttpClient3 doesn't include the size of chunk counters in response body size<br></br>
+The HttpClient4 included this size (35 bytes added)
+</note>
+
 <note>Versions of JMeter before 2.5 returns only data response size (uncompressed if request uses gzip/defate mode).
 <br></br>To return to settings before version 2.5, set the two properties to false.</note>
 </p>
