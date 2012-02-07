@@ -336,9 +336,8 @@ public class MailerModel extends AbstractTestElement implements Serializable {
             final String password,
             MailAuthType mailAuthType)
             throws AddressException, MessagingException{
-        String host = smtpHost;
-        boolean debug = Boolean.valueOf(host).booleanValue();
-        // InetAddress remote = InetAddress.getByName(host);
+
+        boolean debug = Boolean.valueOf(smtpHost).booleanValue(); // TODO See Bug 52614
 
         InternetAddress[] address = new InternetAddress[vEmails.size()];
 
@@ -349,7 +348,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
         // create some properties and get the default Session
         Properties props = new Properties();
 
-        props.put(MAIL_SMTP_HOST, host);
+        props.put(MAIL_SMTP_HOST, smtpHost);
         props.put(MAIL_SMTP_PORT, Integer.toString(smtpPort)); // property values are strings
         Authenticator authenticator = null;
         if(mailAuthType != MailAuthType.NONE) {
