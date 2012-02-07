@@ -140,7 +140,11 @@ or a Debug Sampler with all fields set to False (to reduce the sample size).
 
 <h2>Non-functional changes</h2>
 <ul>
-<li>Upgraded to rhino 1.7R3 (was js-1.7R2.jar)</li>
+<li>Upgraded to rhino 1.7R3 (was js-1.7R2.jar). 
+Note: the Maven coordinates for the jar were changed from rhino:js to org.mozilla:rhino.
+This does not affect JMeter directly, but might cause problems if using JMeter in a Maven project
+with other code that depends on an earlier version of the Rhino Javascript jar.
+</li>
 </ul>
 
 </section> 
