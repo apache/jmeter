@@ -67,6 +67,7 @@ or a Debug Sampler with all fields set to False (to reduce the sample size).
 
 <h3>HTTP Samplers and Proxy</h3>
 <ul>
+<li>Bug 52613 - Using Raw Post Body option, text gets encoded</li>
 </ul>
 
 <h3>Other Samplers</h3>
