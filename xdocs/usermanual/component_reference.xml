@@ -397,8 +397,10 @@ Optional properties to allow change the method to get response size:<br></br>
 <pre>sampleresult.getbytes.headers_size=true</pre></li></ul>
 
 <note>
-The HttpClient3 doesn't include the size of chunk counters in response body size<br></br>
-The HttpClient4 included this size (35 bytes added)
+The Java and HttpClient3 inplementations do not include transport overhead such as
+chunk headers in the response body size.<br></br>
+The HttpClient4 implementation does include the overhead in the response body size,
+so the value may be greater than the number of bytes in the response content.
 </note>
 
 <note>Versions of JMeter before 2.5 returns only data response size (uncompressed if request uses gzip/defate mode).
