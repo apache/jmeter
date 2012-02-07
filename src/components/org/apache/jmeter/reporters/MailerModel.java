@@ -350,7 +350,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
         Properties props = new Properties();
 
         props.put(MAIL_SMTP_HOST, host);
-        props.put(MAIL_SMTP_PORT, smtpPort);
+        props.put(MAIL_SMTP_PORT, Integer.toString(smtpPort)); // property values are strings
         Authenticator authenticator = null;
         if(mailAuthType != MailAuthType.NONE) {
             props.put(MAIL_SMTP_AUTH, "true");
