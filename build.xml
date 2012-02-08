@@ -475,7 +475,7 @@
         JMeter version
         This is overridden for formal releases.
     -->
-    <property name="jmeter.version" value="2.6-SNAPSHOT"/>
+    <property name="jmeter.version" value="2.7-SNAPSHOT"/>
     <!-- Remember to change "docversion" below if necessary -->
     <condition property="implementation.version"
           value="${jmeter.version} r${svn.revision}" else="${jmeter.version}.${DSTAMP}">
@@ -1515,7 +1515,7 @@ run JMeter unless all the JMeter jars are added.
         The jars and poms need to be made available. If this has not already been done as part of
         creating the distribution (e.g. a snapshot release is desired), then invoke the following:
 
-              ant _dist_maven -Djmeter.version=2.6-SNAPSHOT
+              ant _dist_maven -Djmeter.version=2.7-SNAPSHOT
 
         For non-SNAPSHOT releases, the jars and poms need to be signed (TODO document how!!)
 
