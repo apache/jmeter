@@ -49,17 +49,12 @@ import org.apache.log.Logger;
  */
 public class MailerModel extends AbstractTestElement implements Serializable {
     public static enum MailAuthType {
-        SSL("SSL"),
-        TLS("TLS"), 
-        NONE("");
-        
-        final private String value;
-        MailAuthType(String value) {
-            this.value = value;
-        }
+        SSL,
+        TLS, 
+        NONE;
     }
     
-    private static final long serialVersionUID = 233L;
+    private static final long serialVersionUID = 270L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
