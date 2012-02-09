@@ -305,7 +305,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
      */
     public void sendMail(String from, List<String> vEmails, String subject, String attText, String smtpHost) 
             throws AddressException, MessagingException {
-        sendMail(from, vEmails, subject, attText, smtpHost, Integer.parseInt(DEFAULT_SMTP_PORT), null, null, null);   
+        sendMail(from, vEmails, subject, attText, smtpHost, DEFAULT_SMTP_PORT, null, null, null);   
     }
     
     /**
@@ -331,7 +331,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
      */
     public void sendMail(String from, List<String> vEmails, String subject,
             String attText, String smtpHost, 
-            int smtpPort,
+            String smtpPort,
             final String user,
             final String password,
             MailAuthType mailAuthType)
@@ -349,7 +349,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
         Properties props = new Properties();
 
         props.put(MAIL_SMTP_HOST, smtpHost);
-        props.put(MAIL_SMTP_PORT, Integer.toString(smtpPort)); // property values are strings
+        props.put(MAIL_SMTP_PORT, smtpPort); // property values are strings
         Authenticator authenticator = null;
         if(mailAuthType != MailAuthType.NONE) {
             props.put(MAIL_SMTP_AUTH, "true");
@@ -488,8 +488,8 @@ public class MailerModel extends AbstractTestElement implements Serializable {
         return getPropertyAsString(HOST_KEY);
     }
 
-    public int getSmtpPort() {
-        return getPropertyAsInt(PORT_KEY, Integer.parseInt(DEFAULT_SMTP_PORT));
+    public String getSmtpPort() {
+        return getPropertyAsString(PORT_KEY, DEFAULT_SMTP_PORT);
     }
 
     public String getFailureSubject() {
