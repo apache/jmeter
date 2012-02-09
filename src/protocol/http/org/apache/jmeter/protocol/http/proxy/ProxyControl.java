@@ -546,7 +546,7 @@ public class ProxyControl extends GenericController {
      * Called from Application Thread that needs to update GUI (JMeterTreeModel)
      */
     private void addDivider(final JMeterTreeModel model, final JMeterTreeNode node) 
-    		throws IllegalUserActionException, InterruptedException, InvocationTargetException {
+    		throws InterruptedException, InvocationTargetException {
         final GenericController sc = new GenericController();
         sc.setProperty(TestElement.GUI_CLASS, LOGIC_CONTROLLER_GUI);
         sc.setName("-------------------"); // $NON-NLS-1$
@@ -575,7 +575,7 @@ public class ProxyControl extends GenericController {
      * @throws InterruptedException 
      */
     private void addSimpleController(final JMeterTreeModel model, final JMeterTreeNode node, String name)
-            throws IllegalUserActionException, InterruptedException, InvocationTargetException {
+            throws InterruptedException, InvocationTargetException {
     	final GenericController sc = new GenericController();
         sc.setProperty(TestElement.GUI_CLASS, LOGIC_CONTROLLER_GUI);
         sc.setName(name);
@@ -604,7 +604,7 @@ public class ProxyControl extends GenericController {
      * @throws InterruptedException 
      */
     private void addTransactionController(final JMeterTreeModel model, final JMeterTreeNode node, String name)
-            throws IllegalUserActionException, InterruptedException, InvocationTargetException {
+            throws InterruptedException, InvocationTargetException {
         final TransactionController sc = new TransactionController();
         sc.setProperty(TestElement.GUI_CLASS, TRANSACTION_CONTROLLER_GUI);
         sc.setName(name);
