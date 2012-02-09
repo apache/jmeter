@@ -214,7 +214,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
                     sendMail(getFromAddress(), addressList, getFailureSubject(), "URL Failed: "
                             + sample.getSampleLabel(), getSmtpHost(),
                             getSmtpPort(), getLogin(), getPassword(),
-                            getMailAuthType());
+                            getMailAuthType(), false);
                 } catch (Exception e) {
                     log.error("Problem sending mail: "+e);
                 }
@@ -234,7 +234,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
                     sendMail(getFromAddress(), addressList, getSuccessSubject(), "URL Restarted: "
                             + sample.getSampleLabel(), getSmtpHost(),
                             getSmtpPort(), getLogin(), getPassword(),
-                            getMailAuthType());
+                            getMailAuthType(), false);
                 } catch (Exception e) {
                     log.error("Problem sending mail", e);
                 }
@@ -300,7 +300,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
      */
     public void sendMail(String from, List<String> vEmails, String subject, String attText, String smtpHost) 
             throws AddressException, MessagingException {
-        sendMail(from, vEmails, subject, attText, smtpHost, DEFAULT_SMTP_PORT, null, null, null);   
+        sendMail(from, vEmails, subject, attText, smtpHost, DEFAULT_SMTP_PORT, null, null, null, false);   
     }
     
     /**
@@ -329,10 +329,9 @@ public class MailerModel extends AbstractTestElement implements Serializable {
             String smtpPort,
             final String user,
             final String password,
-            MailAuthType mailAuthType)
+            MailAuthType mailAuthType,
+            boolean debug)
             throws AddressException, MessagingException{
-
-        boolean debug = Boolean.valueOf(smtpHost).booleanValue(); // TODO See Bug 52614
 
         InternetAddress[] address = new InternetAddress[vEmails.size()];
 
@@ -404,7 +403,8 @@ public class MailerModel extends AbstractTestElement implements Serializable {
                 getSmtpPort(), 
                 getLogin(), 
                 getPassword(),
-                getMailAuthType());
+                getMailAuthType(),
+                true);
         log.info("Test mail sent successfully!!");
     }
 

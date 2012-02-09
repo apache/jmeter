@@ -137,6 +137,7 @@ or a Debug Sampler with all fields set to False (to reduce the sample size).
 <h3>General</h3>
 <ul>
 <li>Bug 45839 - Test Action : Allow premature exit from a loop</li>
+<li>Bug 52614 - MailerModel.sendMail has strange way to calculate debug setting</li>
 </ul>
 
 <h2>Non-functional changes</h2>
