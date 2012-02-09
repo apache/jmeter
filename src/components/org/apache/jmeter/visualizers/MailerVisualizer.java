@@ -397,7 +397,7 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
         addressField.setText(model.getToAddress());
         fromField.setText(model.getFromAddress());
         smtpHostField.setText(model.getSmtpHost());
-        smtpPortField.setText(Integer.toString(model.getSmtpPort()));
+        smtpPortField.setText(model.getSmtpPort());
         smtpLoginField.setText(model.getLogin());
         smtpPasswordField.setText(model.getPassword());
         authTypeCombo.setSelectedItem(model.getMailAuthType().toString());
