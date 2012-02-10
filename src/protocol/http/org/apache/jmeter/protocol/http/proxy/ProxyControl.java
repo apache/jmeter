@@ -466,7 +466,7 @@ public class ProxyControl extends GenericController {
      * Filter the response based on the content type.
      * If no include nor exclude filter is specified, the result will be included
      *
-     * @param result the sample result to check
+     * @param result the sample result to check, true means result will be kept
      */
     boolean filterContentType(SampleResult result) {
         String includeExp = getContentTypeInclude();
@@ -492,43 +492,46 @@ public class ProxyControl extends GenericController {
         if(log.isDebugEnabled()) {
             log.debug("Content-type to filter : " + sampleContentType);
         }
+        
         // Check if the include pattern is matched
-        if(includeExp != null && includeExp.length() > 0) {
-            if(log.isDebugEnabled()) {
-                log.debug("Include expression : " + includeExp);
-            }
-
-            Pattern pattern = null;
-            try {
-                pattern = JMeterUtils.getPatternCache().getPattern(includeExp, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.SINGLELINE_MASK);
-                if(!JMeterUtils.getMatcher().contains(sampleContentType, pattern)) {
-                    return false;
-                }
-            } catch (MalformedCachePatternException e) {
-                log.warn("Skipped invalid content include pattern: " + includeExp, e);
-            }
+        boolean matched = testPattern(includeExp, sampleContentType, true);
+        if(!matched) {
+            return false;
         }
-
+        
         // Check if the exclude pattern is matched
-        if(excludeExp != null && excludeExp.length() > 0) {
-            if(log.isDebugEnabled()) {
-                log.debug("Exclude expression : " + excludeExp);
-            }
-
-            Pattern pattern = null;
-            try {
-                pattern = JMeterUtils.getPatternCache().getPattern(excludeExp, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.SINGLELINE_MASK);
-                if(JMeterUtils.getMatcher().contains(sampleContentType, pattern)) {
-                    return false;
-                }
-            } catch (MalformedCachePatternException e) {
-                log.warn("Skipped invalid content exclude pattern: " + excludeExp, e);
-            }
+        matched = testPattern(excludeExp, sampleContentType, false);
+        if(!matched) {
+            return false;
         }
 
         return true;
     }
 
+    /**
+     * Returns true if matching pattern was different from expectedToMatch
+     * @param expression Expression to match
+     * @param sampleContentType
+     * @return boolean true if Matching expression 
+     */
+    private final boolean testPattern(String expression, String sampleContentType, boolean expectedToMatch) {
+        if(expression != null && expression.length() > 0) {
+            if(log.isDebugEnabled()) {
+                log.debug("Testing Expression : " + expression + " on sampleContentType:"+sampleContentType+", expected to match:"+expectedToMatch);
+            }
+
+            Pattern pattern = null;
+            try {
+                pattern = JMeterUtils.getPatternCache().getPattern(expression, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.SINGLELINE_MASK);
+                if(JMeterUtils.getMatcher().contains(sampleContentType, pattern) != expectedToMatch) {
+                    return false;
+                }
+            } catch (MalformedCachePatternException e) {
+                log.warn("Skipped invalid content pattern: " + expression, e);
+            }
+        }
+        return true;
+    }
     /**
      * Helper method to add a Response Assertion
      * Called from AWT Event thread
