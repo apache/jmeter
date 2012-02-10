@@ -420,7 +420,9 @@ public class MainFrame extends JFrame implements TestListener, Remoteable, DropT
         topAndDown.setResizeWeight(.8);
         topAndDown.setContinuousLayout(true);
         topAndDown.setBorder(null); // see bug jdk 4131528
-        
+        if(!DISPLAY_LOGGER_PANEL) {
+            topAndDown.setDividerSize(0);
+        }
         mainPanel = createMainPanel();
         logPanel = createLoggerPanel();
         

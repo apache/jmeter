@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.JSplitPane;
+import javax.swing.UIManager;
 
 import org.apache.jmeter.gui.GuiPackage;
 
@@ -60,15 +61,17 @@ public class LoggerPanelEnableDisable implements Command {
      *            the generic UI action event
      */
     public void doAction(ActionEvent e) {
+        GuiPackage guiInstance = GuiPackage.getInstance();
+        JSplitPane splitPane = ((JSplitPane)guiInstance.getLoggerPanel().getParent());
         if (ActionNames.LOGGER_PANEL_ENABLE_DISABLE.equals(e.getActionCommand())) {
-            GuiPackage guiInstance = GuiPackage.getInstance();
             if (guiInstance.getMenuItemLoggerPanel().getModel().isSelected()) {
+                splitPane.setDividerSize(UIManager.getInt("SplitPane.dividerSize"));
                 guiInstance.getLoggerPanel().setVisible(true);
-                JSplitPane splitPane = ((JSplitPane)guiInstance.getLoggerPanel().getParent());
                 splitPane.setDividerLocation(0.8);
             } else {
                 guiInstance.getLoggerPanel().clear();
                 guiInstance.getLoggerPanel().setVisible(false);
+                splitPane.setDividerSize(0);
             }
         }
     }
