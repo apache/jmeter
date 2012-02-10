@@ -99,6 +99,7 @@ or a Debug Sampler with all fields set to False (to reduce the sample size).
 
 <h3>General</h3>
 <ul>
+<li>Bug 52639 - JSplitPane divider for log panel should be hidden if log is not activated</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
