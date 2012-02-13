@@ -430,7 +430,7 @@ public class Proxy extends Thread {
      */
     private void writeToClient(SampleResult res, OutputStream out, boolean forcedHTTPS) throws IOException {
         try {
-            String responseHeaders = massageResponseHeaders(res, forcedHTTPS);
+            String responseHeaders = messageResponseHeaders(res, forcedHTTPS);
             out.write(responseHeaders.getBytes(SampleResult.DEFAULT_HTTP_ENCODING));
             out.write(CRLF_BYTES);
             out.write(res.getResponseData());
@@ -459,7 +459,7 @@ public class Proxy extends Thread {
      *
      * @return updated headers to be sent to client
      */
-    private String massageResponseHeaders(SampleResult res, boolean forcedHTTPS) {
+    private String messageResponseHeaders(SampleResult res, boolean forcedHTTPS) {
         String headers = res.getResponseHeaders();
         String [] headerLines=headers.split(NEW_LINE, 0); // drop empty trailing content
         int contentLengthIndex=-1;
