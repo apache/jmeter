@@ -176,13 +176,11 @@ public class Proxy extends Thread {
     public void run() {
         // Check which HTTPSampler class we should use
         String httpSamplerName = target.getSamplerTypeName();
-        // Instantiate the sampler
-        HTTPSamplerBase sampler = HTTPSamplerFactory.newInstance(httpSamplerName);
 
-        HttpRequestHdr request = new HttpRequestHdr(sampler);
+        HttpRequestHdr request = new HttpRequestHdr(httpSamplerName);
         SampleResult result = null;
         HeaderManager headers = null;
-
+        HTTPSamplerBase sampler = null;
         try {
             // Now, parse only first line
             request.parse(new BufferedInputStream(clientSocket.getInputStream()));
@@ -207,7 +205,7 @@ public class Proxy extends Thread {
 
             // Populate the sampler. It is the same sampler as we sent into
             // the constructor of the HttpRequestHdr instance above
-            request.getSampler(pageEncodings, formEncodings);
+            sampler = request.getSampler(pageEncodings, formEncodings);
 
             /*
              * Create a Header Manager to ensure that the browsers headers are
@@ -279,8 +277,11 @@ public class Proxy extends Thread {
             writeErrorToClient(HttpReplyHdr.formInternalError());
             result = generateErrorResult(result, e); // Generate result (if nec.) and populate it
         } finally {
+            boolean samplerAvailable = sampler != null;
             if (log.isDebugEnabled()) {
-                log.debug("Will deliver sample " + sampler.getName());
+                if(samplerAvailable) {
+                    log.debug("Will deliver sample " + sampler.getName());
+                }
             }
             /*
              * We don't want to store any cookies in the generated test plan
@@ -293,13 +294,17 @@ public class Proxy extends Thread {
                     headers.removeHeaderNamed(hdr);
                 }
             }
-            target.deliverSampler(sampler, new TestElement[] { captureHttpHeaders ? headers : null }, result);
+            if(samplerAvailable) {
+                target.deliverSampler(sampler, new TestElement[] { captureHttpHeaders ? headers : null }, result);
+            }
             try {
                 clientSocket.close();
             } catch (Exception e) {
                 log.error("", e);
             }
-            sampler.threadFinished(); // Needed for HTTPSampler2
+            if(samplerAvailable) {
+                sampler.threadFinished(); // Needed for HTTPSampler2
+            }
         }
     }
 

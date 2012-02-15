@@ -110,7 +110,7 @@ public class HttpRequestHdr {
 
     private final Map<String, Header> headers = new HashMap<String, Header>();
 
-    private final HTTPSamplerBase sampler;
+    private final String httpSamplerName;
 
     private HeaderManager headerManager;
 
@@ -123,14 +123,14 @@ public class HttpRequestHdr {
     private static volatile int requestNumber = 0;// running number
 
     public HttpRequestHdr() {
-        this.sampler = HTTPSamplerFactory.newInstance();
+        this.httpSamplerName = ""; // $NON-NLS-1$
     }
 
     /**
-     * @param sampler the http sampler
+     * @param httpSamplerName the http sampler name
      */
-    public HttpRequestHdr(HTTPSamplerBase sampler) {
-        this.sampler = sampler;
+    public HttpRequestHdr(String httpSamplerName) {
+        this.httpSamplerName = httpSamplerName;
     }
 
     /**
@@ -253,6 +253,8 @@ public class HttpRequestHdr {
 
     public HTTPSamplerBase getSampler(Map<String, String> pageEncodings, Map<String, String> formEncodings)
             throws MalformedURLException, IOException {
+        // Instantiate the sampler
+        HTTPSamplerBase sampler = HTTPSamplerFactory.newInstance(httpSamplerName);
         // Damn! A whole new GUI just to instantiate a test element?
         // Isn't there a beter way?
         HttpTestSampleGui tempGui = new HttpTestSampleGui();
@@ -260,7 +262,7 @@ public class HttpRequestHdr {
         sampler.setProperty(TestElement.GUI_CLASS, tempGui.getClass().getName());
 
         // Populate the sampler
-        populateSampler(pageEncodings, formEncodings);
+        populateSampler(sampler, pageEncodings, formEncodings);
 
         tempGui.configure(sampler);
         tempGui.modifyTestElement(sampler);
@@ -298,7 +300,9 @@ public class HttpRequestHdr {
         return null;
     }
 
-    private void populateSampler(Map<String, String> pageEncodings, Map<String, String> formEncodings)
+    private void populateSampler(
+            HTTPSamplerBase sampler,
+            Map<String, String> pageEncodings, Map<String, String> formEncodings)
             throws MalformedURLException, UnsupportedEncodingException {
         sampler.setDomain(serverName());
         if (log.isDebugEnabled()) {
