@@ -149,6 +149,7 @@ Note: the Maven coordinates for the jar were changed from rhino:js to org.mozill
 This does not affect JMeter directly, but might cause problems if using JMeter in a Maven project
 with other code that depends on an earlier version of the Rhino Javascript jar.
 </li>
+<li>Bug 52675 - Refactor Proxy and HttpRequestHdr to allow Sampler Creation by Proxy</li>
 </ul>
 
 </section> 
