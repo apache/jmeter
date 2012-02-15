@@ -21,7 +21,6 @@ package org.apache.jmeter.gui.action;
 import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -78,13 +77,12 @@ public class ChangeParent implements Command {
         int index = parentNode.getIndex(currentNode);
         treeModel.insertNodeInto(newNode, parentNode, index);
         treeModel.removeNodeFromParent(currentNode);
-        Enumeration<JMeterTreeNode> nodes = currentNode.children();
-        while(nodes.hasMoreElements()) {
-            JMeterTreeNode node = nodes.nextElement();
+        int childCount = currentNode.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            JMeterTreeNode node = (JMeterTreeNode) currentNode.getChildAt(0);
             treeModel.removeNodeFromParent(node);
             treeModel.insertNodeInto(node, newNode, newNode.getChildCount());
         }
-        
     }
 
 }
