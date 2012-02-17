@@ -5107,7 +5107,7 @@ This setting will also be needed when running the generated test plan.
         as a comma-separated list of headers.
         </property>
 		<property name="Add Assertions" required="Yes">Add a blank assertion to each sampler?</property>
-		<property name="Regex Matching" required="Yes">Use Regex Matching when replacing variables?</property>
+		<property name="Regex Matching" required="Yes">Use Regex Matching when replacing variables? If checked replacement will use word boundaries, ie it will only replace word matching values of variable, not part of a word. A word boundary follows Perl5 definition and is equivalent to \b.</property>
         <property name="Type" required="Yes">Which type of sampler to generate (the Java default or HTTPClient)</property>
         <property name="Redirect Automatically" required="Yes">Set Redirect Automatically in the generated samplers?</property>
         <property name="Follow Redirects" required="Yes">Set Follow Redirects in the generated samplers?</property>
