@@ -159,28 +159,32 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
         return "summary_report";  //$NON-NLS-1$
     }
 
-    public void add(SampleResult res) {
-        Calculator row = null;
+    public void add(final SampleResult res) {
         final String sampleLabel = res.getSampleLabel(useGroupName.isSelected());
-        synchronized (lock) {
-            row = tableRows.get(sampleLabel);
-            if (row == null) {
-                row = new Calculator(sampleLabel);
-                tableRows.put(row.getLabel(), row);
-                model.insertRow(row, model.getRowCount() - 1);
+        JMeterUtils.runSafe(new Runnable() {
+            public void run() {
+                Calculator row = null;
+                synchronized (lock) {
+                    row = tableRows.get(sampleLabel);
+                    if (row == null) {
+                        row = new Calculator(sampleLabel);
+                        tableRows.put(row.getLabel(), row);
+                        model.insertRow(row, model.getRowCount() - 1);
+                    }
+                }
+                /*
+                 * Synch is needed because multiple threads can update the counts.
+                 */
+                synchronized(row) {
+                    row.addSample(res);
+                }
+                Calculator tot = tableRows.get(TOTAL_ROW_LABEL);
+                synchronized(tot) {
+                    tot.addSample(res);
+                }
+                model.fireTableDataChanged();                
             }
-        }
-        /*
-         * Synch is needed because multiple threads can update the counts.
-         */
-        synchronized(row) {
-            row.addSample(res);
-        }
-        Calculator tot = tableRows.get(TOTAL_ROW_LABEL);
-        synchronized(tot) {
-            tot.addSample(res);
-        }
-        model.fireTableDataChanged();
+        });
     }
 
     /**

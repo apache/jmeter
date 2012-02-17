@@ -103,9 +103,14 @@ public class DistributionGraphVisualizer extends AbstractVisualizer implements I
         }
     }
 
-    public synchronized void add(SampleResult res) {
-        model.addSample(res);
-        updateGui(model.getCurrentSample());
+    public void add(final SampleResult res) {
+        JMeterUtils.runSafe(new Runnable() {
+            public void run() {
+                // made currentSample volatile
+                model.addSample(res);
+                updateGui(model.getCurrentSample());                
+            }
+        });
     }
 
     public String getLabelResource() {

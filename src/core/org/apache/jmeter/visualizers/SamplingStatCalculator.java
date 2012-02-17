@@ -38,7 +38,7 @@ public class SamplingStatCalculator {
 
     private String label;
 
-    private Sample currentSample;
+    private volatile Sample currentSample;
 
     public SamplingStatCalculator(){ // Only for use by test code
         this("");
