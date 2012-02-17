@@ -40,7 +40,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * - the property value, but if not found:
  * - the default value, but if not defined:
  * - the property name itself
- *
+ * @since 2.0
  */
 public class Property extends AbstractFunction {
 

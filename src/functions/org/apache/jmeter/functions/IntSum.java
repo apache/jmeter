@@ -32,6 +32,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * Provides an intSum function that adds two or more integer values.
  *
  * @see LongSum
+ * @since 1.8.1
  */
 public class IntSum extends AbstractFunction {
 

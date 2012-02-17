@@ -37,6 +37,7 @@ import org.mozilla.javascript.Scriptable;
 
 /**
  * javaScript function implementation that executes a piece of JavaScript (not Java!) code and returns its value
+ * @since 1.9
  */
 public class JavaScript extends AbstractFunction {
 

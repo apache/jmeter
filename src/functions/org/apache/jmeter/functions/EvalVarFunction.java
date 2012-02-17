@@ -38,7 +38,7 @@ import org.apache.log.Logger;
  * Parameter: string to be evaluated
  *
  * Returns: the evaluated value
- *
+ * @since 2.3.1
  */
 public class EvalVarFunction extends AbstractFunction {
 

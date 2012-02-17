@@ -31,7 +31,7 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * Provides a Random function which returns a random long integer between a min
  * (first argument) and a max (second argument).
- *
+ * @since 1.9
  */
 public class Random extends AbstractFunction {
 

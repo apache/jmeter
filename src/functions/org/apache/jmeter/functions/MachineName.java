@@ -22,6 +22,7 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Return Machine Host
+ * @since 1.X
  */
 public class MachineName extends AbstractHostIPName {
 

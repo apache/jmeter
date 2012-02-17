@@ -35,6 +35,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * unless the '\' is preceded by another '\'.
  * 
  * @see StringEscapeUtils#unescapeJava(String)
+ * @since 2.3.3
  */
 public class UnEscape extends AbstractFunction {
 

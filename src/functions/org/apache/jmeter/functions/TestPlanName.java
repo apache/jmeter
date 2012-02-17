@@ -29,6 +29,7 @@ import org.apache.jmeter.services.FileServer;
 
 /**
  * Returns Test Plan name
+ * @since 2.6
  */
 public class TestPlanName extends AbstractFunction {
 

@@ -39,7 +39,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * ${__setProperty(propname,propvalue[,returnvalue?])}
  *
  * Returns: nothing or original value if the 3rd parameter is true
- *
+ * @since 2.1
  */
 public class SetProperty extends AbstractFunction {
 
