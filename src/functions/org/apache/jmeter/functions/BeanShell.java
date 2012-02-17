@@ -35,7 +35,7 @@ import org.apache.log.Logger;
 
 /**
  * A function which understands BeanShell
- *
+ * @since 1.X
  */
 public class BeanShell extends AbstractFunction {
 

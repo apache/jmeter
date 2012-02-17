@@ -41,6 +41,7 @@ import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Util;
 /**
  * Implements regular expression parsing of sample results and variables
+ * @since 1.X
  */
 
 // @see TestRegexFunction for unit tests

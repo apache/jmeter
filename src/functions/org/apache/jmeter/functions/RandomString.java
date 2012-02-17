@@ -35,7 +35,7 @@ import org.apache.log.Logger;
 /**
  * Provides a RandomString function which returns a random String of length (first argument) 
  * using characters (second argument)
- *
+ * @since 2.6
  */
 public class RandomString extends AbstractFunction {
     private static final Logger log = LoggingManager.getLoggerForClass();

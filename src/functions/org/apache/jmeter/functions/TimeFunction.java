@@ -36,6 +36,7 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * __time() function - returns the current time in milliseconds
+ * @since 2.2
  */
 public class TimeFunction extends AbstractFunction {
 

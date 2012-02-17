@@ -46,7 +46,7 @@ import org.apache.log.Logger;
  * - the whole text from a file
  * - or **ERR** if an error occurs
  * - value is also optionally saved in the variable for later re-use.
- *
+ * @since 2.4
  */
 public class FileToString extends AbstractFunction {
     private static final Logger log = LoggingManager.getLoggerForClass();

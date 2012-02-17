@@ -37,7 +37,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * Returns:
  * - the variable value, but if not found
  * - the variable name itself
- *
+ * @since 2.3RC3
  */
 public class Variable extends AbstractFunction {
 

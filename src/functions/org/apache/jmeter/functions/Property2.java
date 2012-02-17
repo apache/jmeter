@@ -45,7 +45,7 @@ import org.apache.jmeter.util.JMeterUtils;
  *
  * Returns: - the property value, but if not found - the default value, but if
  * not present - "1" (suitable for use in ThreadGroup GUI)
- *
+ * @since 2.0
  */
 public class Property2 extends AbstractFunction {
 
