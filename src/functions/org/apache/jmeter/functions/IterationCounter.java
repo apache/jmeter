@@ -31,6 +31,7 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * Counter that can be referenced anywhere in the Thread Group. It can be configured per User (Thread Local)
  * or globally.
+ * @since 1.X
  */
 public class IterationCounter extends AbstractFunction {
 

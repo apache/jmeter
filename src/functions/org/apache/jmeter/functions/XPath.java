@@ -43,7 +43,7 @@ import org.apache.log.Logger;
  *
  * NOTE: A single instance of each different file/expression combination
  * is opened and used for all threads.
- *
+ * @since 2.0.3
  */
 public class XPath extends AbstractFunction {
     private static final Logger log = LoggingManager.getLoggerForClass();

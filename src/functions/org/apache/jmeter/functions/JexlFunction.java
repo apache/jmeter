@@ -37,6 +37,7 @@ import org.apache.log.Logger;
 
 /**
  * A function which understands Commons JEXL
+ * @since 2.2
  */
 // For unit tests, see TestJexlFunction
 public class JexlFunction extends AbstractFunction {

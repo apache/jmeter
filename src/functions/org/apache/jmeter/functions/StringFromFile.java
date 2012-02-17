@@ -62,6 +62,7 @@ import org.apache.log.Logger;
  * <li>the output variable name is resolved every time the function is invoked</li>
  * </ul>
  * Because function instances are shared, it does not make sense to use the thread number as part of the file name.
+ * @since 1.9
  */
 public class StringFromFile extends AbstractFunction implements TestListener {
     private static final Logger log = LoggingManager.getLoggerForClass();

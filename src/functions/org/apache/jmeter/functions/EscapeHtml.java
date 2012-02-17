@@ -45,6 +45,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * is not a legal entity and so is not supported). </p>
  * 
  * @see StringEscapeUtils#escapeHtml(String) (Commons Lang)
+ * @since 2.3.3
  */
 public class EscapeHtml extends AbstractFunction {
 

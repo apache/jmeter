@@ -35,7 +35,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * Parameter: string to be evaluated
  *
  * Returns: the evaluated value
- *
+ * @since 2.3.1
  */
 public class EvalFunction extends AbstractFunction {
 

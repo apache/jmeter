@@ -53,7 +53,7 @@ import org.apache.log.Logger;
  * <li>VARNAME_n - number of fields found</li>
  * <li>VARNAME_1..n - fields</li>
  * </ul>
- *
+ * @since 2.0.2
  */
 public class SplitFunction extends AbstractFunction {
     private static final Logger log = LoggingManager.getLoggerForClass();

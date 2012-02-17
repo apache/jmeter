@@ -31,6 +31,7 @@ import org.apache.log.Logger;
 
 /**
  * Function to generate chars from a list of decimal or hex values
+ * @since 2.3.3
  */
 public class CharFunction extends AbstractFunction {
 

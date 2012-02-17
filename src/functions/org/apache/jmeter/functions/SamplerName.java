@@ -30,6 +30,7 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Function to return the name of the current sampler.
+ * @since 2.5
  */
 public class SamplerName extends AbstractFunction {
 

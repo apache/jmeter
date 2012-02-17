@@ -28,6 +28,7 @@ import org.apache.jmeter.samplers.Sampler;
 
 /**
  * Function to return the current thread number.
+ * @since 1.X
  */
 public class ThreadNumber extends AbstractFunction {
 

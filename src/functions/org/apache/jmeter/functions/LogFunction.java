@@ -45,7 +45,7 @@ import org.apache.log.Priority;
  * </ul>
  * </p>
  * Returns: - the input string
- *
+ * @since 2.2
  */
 public class LogFunction extends AbstractFunction {
     private static final Logger log = LoggingManager.getLoggerForClass();

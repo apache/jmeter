@@ -41,6 +41,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * e.g. "&amp;gt;&amp;zzzz;x" will become "&gt;&amp;zzzz;x".
  * </p>
  * @see org.apache.commons.lang.StringEscapeUtils#unescapeHtml(String)
+ * @since 2.3.3
  */
 public class UnEscapeHtml extends AbstractFunction {
 
