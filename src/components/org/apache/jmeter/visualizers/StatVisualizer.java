@@ -163,28 +163,32 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
         return "aggregate_report";  //$NON-NLS-1$
     }
 
-    public void add(SampleResult res) {
-        SamplingStatCalculator row = null;
-        final String sampleLabel = res.getSampleLabel(useGroupName.isSelected());
-        synchronized (lock) {
-            row = tableRows.get(sampleLabel);
-            if (row == null) {
-                row = new SamplingStatCalculator(sampleLabel);
-                tableRows.put(row.getLabel(), row);
-                model.insertRow(row, model.getRowCount() - 1);
+    public void add(final SampleResult res) {
+        JMeterUtils.runSafe(new Runnable() {
+            public void run() {
+                SamplingStatCalculator row = null;
+                final String sampleLabel = res.getSampleLabel(useGroupName.isSelected());
+                synchronized (lock) {
+                    row = tableRows.get(sampleLabel);
+                    if (row == null) {
+                        row = new SamplingStatCalculator(sampleLabel);
+                        tableRows.put(row.getLabel(), row);
+                        model.insertRow(row, model.getRowCount() - 1);
+                    }
+                }
+                /*
+                 * Synch is needed because multiple threads can update the counts.
+                 */
+                synchronized(row) {
+                    row.addSample(res);
+                }
+                SamplingStatCalculator tot = tableRows.get(TOTAL_ROW_LABEL);
+                synchronized(tot) {
+                    tot.addSample(res);
+                }
+                model.fireTableDataChanged();                
             }
-        }
-        /*
-         * Synch is needed because multiple threads can update the counts.
-         */
-        synchronized(row) {
-            row.addSample(res);
-        }
-        SamplingStatCalculator tot = tableRows.get(TOTAL_ROW_LABEL);
-        synchronized(tot) {
-            tot.addSample(res);
-        }
-        model.fireTableDataChanged();
+        });
     }
 
     /**

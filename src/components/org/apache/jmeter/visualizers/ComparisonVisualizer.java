@@ -58,13 +58,16 @@ public class ComparisonVisualizer extends AbstractVisualizer implements Clearabl
         init();
     }
 
-    public void add(SampleResult sample) {
-
-        DefaultMutableTreeNode currNode = new DefaultMutableTreeNode(sample);
-        treeModel.insertNodeInto(currNode, root, root.getChildCount());
-        if (root.getChildCount() == 1) {
-            resultsTree.expandPath(new TreePath(root));
-        }
+    public void add(final SampleResult sample) {
+        JMeterUtils.runSafe(new Runnable() {
+            public void run() {
+                DefaultMutableTreeNode currNode = new DefaultMutableTreeNode(sample);
+                treeModel.insertNodeInto(currNode, root, root.getChildCount());
+                if (root.getChildCount() == 1) {
+                    resultsTree.expandPath(new TreePath(root));
+                }                
+            }
+        });
     }
 
     public String getLabelResource() {
