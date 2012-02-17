@@ -91,8 +91,12 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
         setGUI();
     }
 
-    public void add(SampleResult res) {
-        model.add(res);
+    public void add(final SampleResult res) {
+        JMeterUtils.runSafe(new Runnable() {            
+            public void run() {
+                model.add(res);
+            }
+        });
     }
 
     public String getLabelResource() {

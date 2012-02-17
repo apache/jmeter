@@ -126,8 +126,12 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
         updateYAxis();
     }
 
-    public void add(SampleResult res) {
-        updateGui(model.addSample(res));
+    public void add(final SampleResult res) {
+        JMeterUtils.runSafe(new Runnable() {            
+            public void run() {
+                updateGui(model.addSample(res));
+            }
+        });
     }
 
     public String getLabelResource() {

@@ -27,6 +27,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
@@ -45,6 +46,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.gui.GuiPackage;
@@ -1264,5 +1266,23 @@ public class JMeterUtils implements UnitTestManager {
         }
         return linkedHeaders;
     }
-    
+
+    /**
+     * Run the runnable in AWT Thread if current thread is not AWT thread
+     * otherwise runs call {@link SwingUtilities#invokeAndWait(Runnable)}
+     * @param runnable {@link Runnable}
+     */
+    public static final void runSafe(Runnable runnable) {
+        if(SwingUtilities.isEventDispatchThread()) {
+            runnable.run();
+        } else {
+            try {
+                SwingUtilities.invokeAndWait(runnable);
+            } catch (InterruptedException e) {
+                throw new Error(e);
+            } catch (InvocationTargetException e) {
+                throw new Error(e);
+            }
+        }
+    }
 }

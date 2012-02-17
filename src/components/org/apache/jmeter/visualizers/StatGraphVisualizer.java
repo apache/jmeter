@@ -268,8 +268,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         return "aggregate_graph_title";                        //$NON-NLS-1$
     }
 
-    public void add(SampleResult res) {
-        SamplingStatCalculator row = null;
+    public void add(final SampleResult res) {
         final String sampleLabel = res.getSampleLabel();
         Matcher matcher = null;
         if (columnSelection.isSelected() && columnMatchLabel.getText() != null && columnMatchLabel.getText().length() > 0) {
@@ -277,17 +276,22 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
                 matcher = pattern.matcher(sampleLabel);
         }
         if ((matcher == null) || (matcher.find())) {
-            synchronized (lock) {
-                row = tableRows.get(sampleLabel);
-                if (row == null) {
-                    row = new SamplingStatCalculator(sampleLabel);
-                    tableRows.put(row.getLabel(), row);
-                    model.insertRow(row, model.getRowCount() - 1);
+            JMeterUtils.runSafe(new Runnable() {
+                public void run() {
+                    SamplingStatCalculator row = null;
+                    synchronized (lock) {
+                        row = tableRows.get(sampleLabel);
+                        if (row == null) {
+                            row = new SamplingStatCalculator(sampleLabel);
+                            tableRows.put(row.getLabel(), row);
+                            model.insertRow(row, model.getRowCount() - 1);
+                        }
+                    }
+                    row.addSample(res);
+                    tableRows.get(TOTAL_ROW_LABEL).addSample(res);
+                    model.fireTableDataChanged();                    
                 }
-            }
-            row.addSample(res);
-            tableRows.get(TOTAL_ROW_LABEL).addSample(res);
-            model.fireTableDataChanged();
+            });
         }
     }
 

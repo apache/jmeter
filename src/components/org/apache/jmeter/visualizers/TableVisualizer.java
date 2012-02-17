@@ -155,34 +155,38 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
         deviationField.setText(Long.toString((long) calc.getStandardDeviation()));
     }
 
-    public void add(SampleResult res) {
-        if (childSamples.isSelected()) {
-            SampleResult[] subResults = res.getSubResults();
-            if (subResults.length > 0) {
-                for (SampleResult sr : subResults) {
-                    add(sr);
+    public void add(final SampleResult res) {
+        JMeterUtils.runSafe(new Runnable() {
+            public void run() {
+                if (childSamples.isSelected()) {
+                    SampleResult[] subResults = res.getSubResults();
+                    if (subResults.length > 0) {
+                        for (SampleResult sr : subResults) {
+                            add(sr);
+                        }
+                        return;
+                    }
                 }
-                return;
+                synchronized (calc) {
+                    calc.addSample(res);
+                    int count = calc.getCount();
+                    TableSample newS = new TableSample(
+                            count, 
+                            res.getSampleCount(), 
+                            res.getStartTime(), 
+                            res.getThreadName(), 
+                            res.getSampleLabel(),
+                            res.getTime(),
+                            res.isSuccessful(),
+                            res.getBytes());
+                    model.addRow(newS);
+                }
+                updateTextFields(res);
+                if (autoscroll.isSelected()) {
+                    table.scrollRectToVisible(table.getCellRect(table.getRowCount() - 1, 0, true));
+                }
             }
-        }
-        synchronized (calc) {
-            calc.addSample(res);
-            int count = calc.getCount();
-            TableSample newS = new TableSample(
-                    count, 
-                    res.getSampleCount(), 
-                    res.getStartTime(), 
-                    res.getThreadName(), 
-                    res.getSampleLabel(),
-                    res.getTime(),
-                    res.isSuccessful(),
-                    res.getBytes());
-            model.addRow(newS);
-        }
-        updateTextFields(res);
-        if (autoscroll.isSelected()) {
-            table.scrollRectToVisible(table.getCellRect(table.getRowCount() - 1, 0, true));
-        }
+        });
     }
 
     public synchronized void clearData() {
