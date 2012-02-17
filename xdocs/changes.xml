@@ -102,6 +102,7 @@ or a Debug Sampler with all fields set to False (to reduce the sample size).
 <li>Bug 52639 - JSplitPane divider for log panel should be hidden if log is not activated</li>
 <li>Bug 52672 - Change Controller action deletes all but one child samplers</li>
 <li>Bug 52694 - Deadlock in GUI related to non AWT Threads updating GUI</li>
+<li>Bug 52678 - Proxy : When doing replacement of UserDefinedVariables, partial values should not be substituted</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
