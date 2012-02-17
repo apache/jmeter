@@ -75,7 +75,7 @@ public class ReplaceFunctionsWithStrings extends AbstractTransformer {
             String value = entry.getValue();
             if (regexMatch) {
                 try {
-                    pattern = compiler.compile(value);
+                    pattern = compiler.compile("\\b("+value+")\\b");
                     input = Util.substitute(pm, pattern,
                             new StringSubstitution(FUNCTION_REF_PREFIX + key + FUNCTION_REF_SUFFIX),
                             input, Util.SUBSTITUTE_ALL);
