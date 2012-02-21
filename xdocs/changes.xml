@@ -59,6 +59,9 @@ or a Debug Sampler with all fields set to False (to reduce the sample size).
 
 <h2>Incompatible changes</h2>
 
+<p>
+When doing replacement of User Defined Variables, Proxy will not substitute partial values anymore when "Regexp matching" is used. It will use Perl 5 word matching ("\b")
+</p>
 
 
 <!-- =================== Bug fixes =================== -->
