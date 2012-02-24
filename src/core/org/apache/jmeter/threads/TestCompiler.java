@@ -289,7 +289,6 @@ public class TestCompiler implements HashTreeTraverser {
             if (!(config instanceof NoConfigMerge)) 
             {
                 sam.addTestElement(config);
-                System.out.println(config.getName()+" "+config.getPropertyAsString(TestElement.GUI_CLASS));
             }
         }
     }
