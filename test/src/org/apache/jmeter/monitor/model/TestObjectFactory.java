@@ -32,9 +32,34 @@ public class TestObjectFactory extends JMeterTestCase {
         of = ObjectFactory.getInstance();
     }
 
+    private String formatStatus(Status s) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(s.getClass().getName());
+        sb.append(" ");
+        sb.append(s.getConnectorPrefix());
+        final Jvm jvm = s.getJvm();
+        if (jvm != null) {
+            sb.append(' ');
+            sb.append(jvm.toString());
+            final Memory memory = jvm.getMemory();
+            if (memory != null) {
+                sb.append(' ');
+                sb.append(memory.toString());
+                sb.append(memory.getFree());
+                sb.append(' ');
+                sb.append(memory.getMax());
+                sb.append(' ');
+                sb.append(memory.getTotal());
+            }
+        }
+        return sb.toString();
+    }
+
     public void testNoStatus() throws Exception {
         status = of.parseString("<a></a>");
-        assertNull(status);
+        if (status != null) {
+            fail("Expected null status, but was "+formatStatus(status));
+        }
     }
 
     public void testStatus() throws Exception {
