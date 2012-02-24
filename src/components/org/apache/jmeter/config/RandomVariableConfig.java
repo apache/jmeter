@@ -24,6 +24,7 @@ import java.util.Random;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
+import org.apache.jmeter.engine.util.NoConfigMerge;
 import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.threads.JMeterContextService;
@@ -32,7 +33,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 public class RandomVariableConfig extends ConfigTestElement
-    implements TestBean, LoopIterationListener, NoThreadClone
+    implements TestBean, LoopIterationListener, NoThreadClone, NoConfigMerge
 {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
