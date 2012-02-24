@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
+import org.apache.jmeter.engine.util.NoConfigMerge;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testbeans.TestBean;
@@ -59,7 +60,8 @@ import org.apache.log.Logger;
  * threads with the same suffix.
  *
  */
-public class CSVDataSet extends ConfigTestElement implements TestBean, LoopIterationListener {
+public class CSVDataSet extends ConfigTestElement 
+    implements TestBean, LoopIterationListener, NoConfigMerge {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final long serialVersionUID = 232L;
