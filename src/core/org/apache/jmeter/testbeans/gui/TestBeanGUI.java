@@ -213,6 +213,13 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
    public TestElement createTestElement() {
         try {
             TestElement element = (TestElement) testBeanClass.newInstance();
+            // In other GUI component, clearGUI resets the value to defaults one as there is one GUI per Element
+            // With TestBeanGUI as it's shared, its default values are only known here, we must call setValues with 
+            // element (as it holds default values)
+            // otherwise we will get values as computed by customizer reset and not default ones
+            if(initialized) {
+                setValues(element);
+            }
             // configure(element);
             // super.clear(); // set name, enabled.
             modifyTestElement(element); // put the default values back into the
@@ -318,12 +325,22 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 
         super.configure(element);
 
+        setValues(element);
+
+        initialized = true;
+    }
+    
+    /**
+     * Get values from element to fill propertyMap and setup customizer 
+     * @param element TestElement
+     */
+    private void setValues(TestElement element) {
         // Copy all property values into the map:
         for (PropertyIterator jprops = element.propertyIterator(); jprops.hasNext();) {
             JMeterProperty jprop = jprops.next();
             propertyMap.put(jprop.getName(), jprop.getObjectValue());
         }
-
+        
         if (customizer != null) {
             customizer.setObject(propertyMap);
         } else {
@@ -338,8 +355,6 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
             }
             add((Component) c, BorderLayout.CENTER);
         }
-
-        initialized = true;
     }
 
     /** {@inheritDoc} */
@@ -460,6 +475,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
             GenericTestBeanCustomizer gtbc = (GenericTestBeanCustomizer) customizer;
             gtbc.clearGuiFields();
         }
+        propertyMap.clear();
     }
 
     public boolean isHidden() {
