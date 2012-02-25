@@ -140,7 +140,7 @@ public class JmeterKeyStore {
         if (length == 0) { // i.e. is == null
             return null;
         }
-        return this.names[getNextIndex(length)];
+        return this.names[getIndexAndIncrement(length)];
     }
 
     public int getAliasCount() {
@@ -200,13 +200,17 @@ public class JmeterKeyStore {
         return -1;
     }
 
-    private int getNextIndex(int length) {
+    /**
+     * Gets current index and increment by rolling if index is equal to length
+     * @param length Number of keys to roll
+     */
+    private int getIndexAndIncrement(int length) {
         synchronized(this) {
-            last_user ++;
+            int result = last_user++;
             if (last_user >= length) {
                 last_user = 0;
             }
-            return last_user;
+            return result;
         }
     }
 
