@@ -107,6 +107,7 @@ When doing replacement of User Defined Variables, Proxy will not substitute part
 <li>Bug 52694 - Deadlock in GUI related to non AWT Threads updating GUI</li>
 <li>Bug 52678 - Proxy : When doing replacement of UserDefinedVariables, partial values should not be substituted</li>
 <li>Bug 52728 - CSV Data Set Config element cannot coexist with BSF Sampler in same Thread Plan</li>
+<li>Bug 52762 - Problem with multiples certificates: first index not used until indexes are restarted</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
