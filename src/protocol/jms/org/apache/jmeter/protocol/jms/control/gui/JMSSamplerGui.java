@@ -46,7 +46,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
 
     private static final long serialVersionUID = 240L;
 
-    private JLabeledTextField queueuConnectionFactory = new JLabeledTextField(
+    private JLabeledTextField queueConnectionFactory = new JLabeledTextField(
             JMeterUtils.getResString("jms_queue_connection_factory")); //$NON-NLS-1$
 
     private JLabeledTextField sendQueue = new JLabeledTextField(JMeterUtils.getResString("jms_send_queue")); //$NON-NLS-1$
@@ -89,7 +89,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
     @Override
     public void clearGui() {// renamed from clear
         super.clearGui();
-        queueuConnectionFactory.setText(""); // $NON-NLS-1$
+        queueConnectionFactory.setText(""); // $NON-NLS-1$
         sendQueue.setText(""); // $NON-NLS-1$
         receiveQueue.setText(""); // $NON-NLS-1$
         ((JComboBox) oneWay.getComponentList().get(1)).setSelectedItem(JMeterUtils.getResString("jms_request")); //$NON-NLS-1$
@@ -110,7 +110,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
     }
 
     private void transfer(JMSSampler element) {
-        element.setQueueConnectionFactory(queueuConnectionFactory.getText());
+        element.setQueueConnectionFactory(queueConnectionFactory.getText());
         element.setSendQueue(sendQueue.getText());
         element.setReceiveQueue(receiveQueue.getText());
 
@@ -150,7 +150,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         super.configure(el);
         if (!(el instanceof JMSSampler)) return;
         JMSSampler sampler = (JMSSampler) el;
-        queueuConnectionFactory.setText(sampler.getQueueConnectionFactory());
+        queueConnectionFactory.setText(sampler.getQueueConnectionFactory());
         sendQueue.setText(sampler.getSendQueue());
         receiveQueue.setText(sampler.getReceiveQueue());
 
@@ -196,7 +196,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
                 JMeterUtils.getResString("jms_queueing"))); //$NON-NLS-1$
 
         JPanel qcfPanel = new JPanel(new BorderLayout(5, 0));
-        qcfPanel.add(queueuConnectionFactory, BorderLayout.CENTER);
+        qcfPanel.add(queueConnectionFactory, BorderLayout.CENTER);
         jmsQueueingPanel.add(qcfPanel, BorderLayout.NORTH);
 
         JPanel sendQueuePanel = new JPanel(new BorderLayout(5, 0));
