@@ -60,6 +60,8 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
     private static final String CONFIG_CHOICE = "jms.config_choice"; //$NON-NLS-1$
 
     private static final String MESSAGE_CHOICE = "jms.config_msg_type"; //$NON-NLS-1$
+    
+    private static final String NON_PERSISTENT_DELIVERY = "jms.non_persistent"; //$NON-NLS-1$
     //--
 
     // Does not need to be synch. because it is only accessed from the sampler thread
@@ -117,7 +119,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
     private void initClient() throws JMSException, NamingException {
         publisher = new Publisher(getUseJNDIPropertiesAsBoolean(), getJNDIInitialContextFactory(), 
                 getProviderUrl(), getConnectionFactory(), getDestination(), isUseAuth(), getUsername(),
-                getPassword(), isDestinationStatic());
+                getPassword(), isDestinationStatic(), getUseNonPersistentDelivery());
         ClientPool.addClient(publisher);
         log.debug("PublisherSampler.initClient called");
     }
@@ -343,5 +345,19 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
      */
     public String getTextMessage() {
         return getPropertyAsString(TEXT_MSG);
+    }
+
+    /**
+     * @param value boolean use NON_PERSISTENT
+     */
+    public void setUseNonPersistentDelivery(boolean value) {
+        setProperty(NON_PERSISTENT_DELIVERY, value, false);
+    }
+    
+    /**
+     * @return true if NON_PERSISTENT delivery must be used
+     */
+    public boolean getUseNonPersistentDelivery() {
+        return getPropertyAsBoolean(NON_PERSISTENT_DELIVERY, false);
     }
 }

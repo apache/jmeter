@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.jms.Connection;
+import javax.jms.DeliveryMode;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.MapMessage;
@@ -54,6 +55,29 @@ public class Publisher implements Closeable {
 
     /**
      * Create a publisher using either the jndi.properties file or the provided parameters.
+     * Uses a static destination and persistent messages(for backward compatibility)
+     * 
+     * @param useProps true if a jndi.properties file is to be used
+     * @param initialContextFactory the (ignored if useProps is true)
+     * @param providerUrl (ignored if useProps is true)
+     * @param connfactory
+     * @param destinationName
+     * @param useAuth (ignored if useProps is true)
+     * @param securityPrincipal (ignored if useProps is true)
+     * @param securityCredentials (ignored if useProps is true) 
+     * @throws JMSException if the context could not be initialised, or there was some other error
+     * @throws NamingException 
+     */
+    public Publisher(boolean useProps, String initialContextFactory, String providerUrl, 
+            String connfactory, String destinationName, boolean useAuth,
+            String securityPrincipal, String securityCredentials) throws JMSException, NamingException {
+        this(useProps, initialContextFactory, providerUrl, connfactory,
+                destinationName, useAuth, securityPrincipal,
+                securityCredentials, true, false);
+    }
+    
+    /**
+     * Create a publisher using either the jndi.properties file or the provided parameters.
      * Uses a static destination (for backward compatibility)
      * 
      * @param useProps true if a jndi.properties file is to be used
@@ -64,15 +88,16 @@ public class Publisher implements Closeable {
      * @param useAuth (ignored if useProps is true)
      * @param securityPrincipal (ignored if useProps is true)
      * @param securityCredentials (ignored if useProps is true)
+     * @param useNonPersistentMessages Flag Delivery Mode as Non persistent if true
      * @throws JMSException if the context could not be initialised, or there was some other error
      * @throws NamingException 
      */
     public Publisher(boolean useProps, String initialContextFactory, String providerUrl, 
             String connfactory, String destinationName, boolean useAuth,
-            String securityPrincipal, String securityCredentials) throws JMSException, NamingException {
+            String securityPrincipal, String securityCredentials, boolean useNonPersistentMessages) throws JMSException, NamingException {
         this(useProps, initialContextFactory, providerUrl, connfactory,
                 destinationName, useAuth, securityPrincipal,
-                securityCredentials, true);
+                securityCredentials, true, useNonPersistentMessages);
     }
     
     /**
@@ -86,13 +111,14 @@ public class Publisher implements Closeable {
      * @param securityPrincipal (ignored if useProps is true)
      * @param securityCredentials (ignored if useProps is true)
      * @param staticDestination true is the destination is not to change between loops
+     * @param useNonPersistentMessages Flag Delivery Mode as Non persistent if true
      * @throws JMSException if the context could not be initialised, or there was some other error
      * @throws NamingException 
      */
     public Publisher(boolean useProps, String initialContextFactory, String providerUrl, 
             String connfactory, String destinationName, boolean useAuth,
             String securityPrincipal, String securityCredentials,
-            boolean staticDestination) throws JMSException, NamingException {
+            boolean staticDestination,  boolean useNonPersistentMessages) throws JMSException, NamingException {
         super();
         boolean initSuccess = false;
         try{
@@ -106,6 +132,9 @@ public class Publisher implements Closeable {
                 producer = session.createProducer(dest);
             } else {
                 producer = session.createProducer(null);
+            }
+            if(useNonPersistentMessages) {
+                producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
             }
             initSuccess = true;
         } finally {
