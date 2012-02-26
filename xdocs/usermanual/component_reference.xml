@@ -1247,7 +1247,7 @@ For details, see <complink name="BSF Sampler"/>.
 </properties>
 </component>
 
-<component name="JMS Publisher" index="&sect-num;.1.13" width="636" height="628" screenshot="jmspublisher.png">
+<component name="JMS Publisher" index="&sect-num;.1.13" width="803" height="633" screenshot="jmspublisher.png">
 <note>BETA CODE - the code is still subject to change</note>
 	<description>
 		<p>
@@ -1275,6 +1275,9 @@ For details, see <complink name="BSF Sampler"/>.
   <property name="Number of samples to aggregate" required="Yes">Number of samples to aggregate</property>
   <property name="Message source" required="Yes">Where to obtain the message</property>
   <property name="Message type" required="Yes">Text, Map or Object message</property>
+  <property name="Use non-persistent delivery mode?" required="No">
+      Whether to set DeliveryMode.NON_PERSISTENT (defaults to false)
+  </property>
 </properties>
 <p>
 For the MapMessage type, JMeter reads the source as lines of text.
