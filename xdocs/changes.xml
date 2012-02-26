@@ -121,6 +121,7 @@ When doing replacement of User Defined Variables, Proxy will not substitute part
 
 <h3>Other samplers</h3>
 <ul>
+<li>Bug 52775 - JMS Publisher : Add Non Persistent Delivery option</li>
 </ul>
 
 <h3>Controllers</h3>

@@ -99,6 +99,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
 
     private final JLabeledRadioI18N msgChoice = new JLabeledRadioI18N("jms_message_type", MSGTYPES_ITEMS, TEXT_MSG_RSC); //$NON-NLS-1$
     
+    private JCheckBox useNonPersistentDelivery;
 
     // These are the names of properties used to define the labels
     private final static String DEST_SETUP_STATIC = "jms_dest_setup_static"; // $NON-NLS-1$
@@ -141,6 +142,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         sampler.setMessageChoice(msgChoice.getText());
         sampler.setIterations(iterations.getText());
         sampler.setUseAuth(useAuth.isSelected());
+        sampler.setUseNonPersistentDelivery(useNonPersistentDelivery.isSelected());
         return sampler;
     }
 
@@ -167,6 +169,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         sampler.setIterations(iterations.getText());
         sampler.setUseAuth(useAuth.isSelected());
         sampler.setDestinationStatic(destSetup.getText().equals(DEST_SETUP_STATIC));
+        sampler.setUseNonPersistentDelivery(useNonPersistentDelivery.isSelected());
     }
 
     /**
@@ -228,6 +231,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         jmsUser.setEnabled(false);
         jmsPwd.setEnabled(false);
         destSetup.setText(DEST_SETUP_STATIC);
+        useNonPersistentDelivery.setSelected(false);
     }
 
     /**
@@ -255,6 +259,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         jmsUser.setEnabled(useAuth.isSelected());
         jmsPwd.setEnabled(useAuth.isSelected());
         destSetup.setText(sampler.isDestinationStatic() ? DEST_SETUP_STATIC : DEST_SETUP_DYNAMIC);
+        useNonPersistentDelivery.setSelected(sampler.getUseNonPersistentDelivery());
     }
 
     /**
@@ -314,9 +319,11 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
     
     private JPanel createDestinationPane() {
         JPanel pane = new JPanel(new BorderLayout(3, 0));
-        pane.add(jmsDestination, BorderLayout.CENTER);
+        pane.add(jmsDestination, BorderLayout.WEST);
         destSetup.setLayout(new BoxLayout(destSetup, BoxLayout.X_AXIS));
-        pane.add(destSetup, BorderLayout.EAST);
+        pane.add(destSetup, BorderLayout.CENTER);
+        useNonPersistentDelivery = new JCheckBox(JMeterUtils.getResString("jms_use_non_persistent_delivery"),false); //$NON-NLS-1$
+        pane.add(useNonPersistentDelivery, BorderLayout.EAST);
         return pane;
     }
 }
