@@ -395,31 +395,43 @@ public class ProxyControl extends GenericController {
      * test tree. param serverResponse to be added to allow saving of the
      * server's response while recording. A future consideration.
      */
-    public synchronized void deliverSampler(HTTPSamplerBase sampler, TestElement[] subConfigs, SampleResult result) {
-        if (filterContentType(result) && filterUrl(sampler)) {
-            JMeterTreeNode myTarget = findTargetControllerNode();
-            @SuppressWarnings("unchecked") // OK, because find only returns correct element types
-            Collection<ConfigTestElement> defaultConfigurations = (Collection<ConfigTestElement>) findApplicableElements(myTarget, ConfigTestElement.class, false);
-            @SuppressWarnings("unchecked") // OK, because find only returns correct element types
-            Collection<Arguments> userDefinedVariables = (Collection<Arguments>) findApplicableElements(myTarget, Arguments.class, true);
+    public synchronized void deliverSampler(final HTTPSamplerBase sampler, final TestElement[] subConfigs, final SampleResult result) {
+        try {
+            SwingUtilities.invokeAndWait(new Runnable() {
+                public void run() {
+                    if (filterContentType(result) && filterUrl(sampler)) {
+                        JMeterTreeNode myTarget = findTargetControllerNode();
+                        @SuppressWarnings("unchecked") // OK, because find only returns correct element types
+                        Collection<ConfigTestElement> defaultConfigurations = (Collection<ConfigTestElement>) findApplicableElements(myTarget, ConfigTestElement.class, false);
+                        @SuppressWarnings("unchecked") // OK, because find only returns correct element types
+                        Collection<Arguments> userDefinedVariables = (Collection<Arguments>) findApplicableElements(myTarget, Arguments.class, true);
 
-            removeValuesFromSampler(sampler, defaultConfigurations);
-            replaceValues(sampler, subConfigs, userDefinedVariables);
-            sampler.setAutoRedirects(samplerRedirectAutomatically);
-            sampler.setFollowRedirects(samplerFollowRedirects);
-            sampler.setUseKeepAlive(useKeepAlive);
-            sampler.setImageParser(samplerDownloadImages);
+                        removeValuesFromSampler(sampler, defaultConfigurations);
+                        replaceValues(sampler, subConfigs, userDefinedVariables);
+                        sampler.setAutoRedirects(samplerRedirectAutomatically);
+                        sampler.setFollowRedirects(samplerFollowRedirects);
+                        sampler.setUseKeepAlive(useKeepAlive);
+                        sampler.setImageParser(samplerDownloadImages);
 
-            placeSampler(sampler, subConfigs, myTarget);
+                        placeSampler(sampler, subConfigs, myTarget);
+                    }
+                    else {
+                        if(log.isDebugEnabled()) {
+                            log.debug("Sample excluded based on url or content-type: " + result.getUrlAsString() + " - " + result.getContentType());
+                        }
+                        result.setSampleLabel("["+result.getSampleLabel()+"]");
+                    }
+                    // SampleEvent is not passed JMeterVariables, because they don't make sense for Proxy Recording
+                    notifySampleListeners(new SampleEvent(result, "WorkBench")); // TODO - is this the correct threadgroup name?
+                }
+            });
+        } catch (InterruptedException e) {
+            log.error("Program error", e);
+            throw new Error(e);
+        } catch (InvocationTargetException e) {
+            log.error("Program error", e);
+            throw new Error(e);
         }
-        else {
-            if(log.isDebugEnabled()) {
-                log.debug("Sample excluded based on url or content-type: " + result.getUrlAsString() + " - " + result.getContentType());
-            }
-            result.setSampleLabel("["+result.getSampleLabel()+"]");
-        }
-        // SampleEvent is not passed JMeterVariables, because they don't make sense for Proxy Recording
-        notifySampleListeners(new SampleEvent(result, "WorkBench")); // TODO - is this the correct threadgroup name?
     }
 
     public void stopProxy() {
@@ -553,7 +565,7 @@ public class ProxyControl extends GenericController {
         final GenericController sc = new GenericController();
         sc.setProperty(TestElement.GUI_CLASS, LOGIC_CONTROLLER_GUI);
         sc.setName("-------------------"); // $NON-NLS-1$
-        SwingUtilities.invokeAndWait(new Runnable() {
+        JMeterUtils.runSafe(new Runnable() {
 			public void run() {
 				try {
 					model.addComponent(sc, node);
@@ -582,7 +594,7 @@ public class ProxyControl extends GenericController {
     	final GenericController sc = new GenericController();
         sc.setProperty(TestElement.GUI_CLASS, LOGIC_CONTROLLER_GUI);
         sc.setName(name);
-        SwingUtilities.invokeAndWait(new Runnable() {
+        JMeterUtils.runSafe(new Runnable() {
 			public void run() {
 		        try {
 					model.addComponent(sc, node);
@@ -611,7 +623,7 @@ public class ProxyControl extends GenericController {
         final TransactionController sc = new TransactionController();
         sc.setProperty(TestElement.GUI_CLASS, TRANSACTION_CONTROLLER_GUI);
         sc.setName(name);
-        SwingUtilities.invokeAndWait(new Runnable() {
+        JMeterUtils.runSafe(new Runnable() {
 			public void run() {
 				 try {
 					model.addComponent(sc, node);
@@ -847,7 +859,7 @@ public class ProxyControl extends GenericController {
             final long deltaTFinal = deltaT;
             final boolean firstInBatchFinal = firstInBatch;
             final JMeterTreeNode myTargetFinal = myTarget;
-            SwingUtilities.invokeAndWait(new Runnable() {
+            JMeterUtils.runSafe(new Runnable() {
 				public void run() {
 					try {
 			            final JMeterTreeNode newNode = treeModel.addComponent(sampler, myTargetFinal);
