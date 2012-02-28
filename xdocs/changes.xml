@@ -111,6 +111,7 @@ When doing replacement of User Defined Variables, Proxy will not substitute part
 <li>Bug 52762 - Problem with multiples certificates: first index not used until indexes are restarted</li>
 <li>Bug 52741 - TestBeanGUI default values do not work at second time or later</li>
 <li>Bug 52783 - oro.patterncache.size property never used due to early init</li>
+<li>Bug 52789 - Proxy with Regexp Matching can fail with NullPointerException in Value Replacement if value is null</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
